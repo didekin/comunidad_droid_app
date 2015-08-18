@@ -1,0 +1,19 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context="com.didekindroid.usuario.UserDataAc">
+    <item
+            android:id="@+id/modificar_datos_mn"
+            android:title="@string/modificar_datos_usuario_mn"
+            android:orderInCategory="100"
+            android:showAsAction="never|withText"/>
+    <item
+            android:id="@+id/recordar_contraseña_mn"
+            android:title="@string/recordar_contraseña_mn"
+            android:orderInCategory="100"
+            android:showAsAction="never|withText"/>
+    <item
+            android:id="@+id/nueva_contraseña_mn"
+            android:title="@string/nueva_contraseña_mn"
+            android:orderInCategory="100"
+            android:showAsAction="never|withText"/>
+</menu>

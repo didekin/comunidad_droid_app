@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none"
+            android:orientation="vertical"
+        >
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:tools="http://schemas.android.com/tools"
+                    android:id="@+id/reg_comu_usuario_usuariocomu_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:context="com.didekindroid.usuario.comunidad.RegComuAndUserAndUserComuAc">
+
+        <fragment
+                android:id="@+id/reg_comunidad_frg"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_alignParentLeft="true"
+                android:name="com.didekindroid.usuario.comunidad.RegComuFr"
+                tools:layout="@layout/reg_comunidad"/>
+
+        <fragment
+                android:id="@+id/reg_usuariocomunidad_frg"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@id/reg_comunidad_frg"
+                android:name="com.didekindroid.usuario.comunidad.RegUserComuFr"
+                tools:layout="@layout/reg_usuariocomunidad"/>
+
+        <fragment
+                android:id="@+id/reg_usuario_frg"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@id/reg_usuariocomunidad_frg"
+                android:name="com.didekindroid.usuario.comunidad.RegUserFr"
+                tools:layout="@layout/reg_usuario"/>
+        <Button
+                android:id="@+id/reg_com_usuario_usuariocomu_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_decription_widget"
+                android:text="@string/button_registro_en_comunidad"
+                android:layout_below="@id/reg_usuario_frg"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_double_margin"
+                android:layout_alignParentLeft="true"
+                />
+
+    </RelativeLayout>
+</ScrollView>

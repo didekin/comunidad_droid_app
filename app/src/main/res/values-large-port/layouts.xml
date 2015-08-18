@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="comunidades_see_layout" type="layout">@layout/comu_search_results_ac_one_pane</item>
+    <item name="ofertas_layout" type="layout">@layout/ofertas_one_pane</item>
+    <bool name="has_two_panes">false</bool>
+</resources>

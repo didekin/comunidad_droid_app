@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools"
+           tools:locale="ES">
+    <string name="app_name">didekin</string>
+    <!--****************************************************************-->
+    <!--                    GENERIC                                     -->
+    <!--****************************************************************-->
+    <!--Input controls-->
+    <string name="search_button">Buscar</string>
+    <string name="checkbox_si">Sí</string>
+    <string name="checkbox_no">No</string>
+    <!--Menús-->
+    <string name="mn_search">Buscar</string>
+    <string name="mn_budgets">Mis presupuestos</string>
+    <string name="mn_incidents">Mis incidencias</string>
+    <string name="mn_alerts">Mis alertas</string>
+    <string name="mn_data">Mis datos</string>
+    <string name="mn_settings">Mi configuración</string>
+    <!--Toasts-->
+    <string name="no_internet_conn_toast">No hay conexión de red disponible.</string>
+    <!--****************************************************************-->
+    <!--                    OFERTA                                      -->
+    <!--****************************************************************-->
+    <string name="ofertas_label">Ofertas</string>
+    <!--Settings-->
+    <string name="ofertas_settings_label">Configuración ofertas</string>
+    <string name="maxOffers_keyPref">maxOffers_pref</string>
+    <string name="maxOffers_titlePref">Número de ofertas por búsqueda.</string>
+    <string name="maxOffers_summaryPref">Número de ofertas por descarga.</string>
+    <!--****************************************************************-->
+    <!--                    PRESUPUESTO                                 -->
+    <!--****************************************************************-->
+    <string name="mi_presupuesto_label">Mis presupuestos</string>
+    <!--****************************************************************-->
+    <!--                    USUARIO                                     -->
+    <!--****************************************************************-->
+    <!--Messages-->
+    <string name="error_validation_msg">Los siguientes datos no son válidos: </string>
+    <!--Menús-->
+    <string name="usercomu_list_ac_mn">Mis comunidades</string>
+    <string name="reg_comu_user_usercomu_ac_mn">Nueva comunidad</string>
+    <!-- ========= ComunidadSearchActivity ========= -->
+    <string name="comu_search_ac_label">Buscar comunidad</string>
+    <string name="nombre_comunidad">Nombre de la comunidad</string> <!--TODO: a borrar.-->
+    <string name="tipo_via">Tipo vía</string>
+    <string name="nombre_via_hint">Nombre de la vía, sin número</string>
+    <string name="nombre_via">Nombre de la vía</string>
+    <string name="numero_en_via">Número</string>
+    <string name="sufijo_numero_en_via_hint">Sufijo (op.)</string>
+    <string name="sufijo_numero">Sufijo</string>
+    <!-- ================ ComuSearchResultsAc =========== -->
+    <string name="comu_search_results_ac_label">didekin: comunidades encontradas</string>
+    <string name="no_result_search_comunidad">No se ha encontrado ninguna comunidad</string>
+    <!-- ........ ComuListFr ......... -->
+    <string name="rotulo_comunidad">Comunidad:</string>
+    <string name="reg_usuario_comunidad_rot_vivienda">Mi vivienda:</string>
+    <string name="vivienda_portal_hint">Portal</string>
+    <string name="vivienda_escalera_hint">escalera</string>
+    <string name="vivienda_planta_hint">Planta</string>
+    <string name="vivienda_puerta_hint">Puerta</string>
+    <string name="comunidad_role_checkbox_rotulo">Vínculo (uno o más):</string>
+    <string name="comunidad_role">Vínculo con la comunidad</string>
+    <!--para mensaje de error validación-->
+    <string name="checkbox_presidente">Presidente</string>
+    <string name="checkbox_admin">Administrador</string>
+    <string name="checkbox_propietario">Propietario</string>
+    <string name="checkbox_inquilino">Arrendatario</string>
+    <string name="button_registro_en_comunidad">Adherirme a la comunidad</string>
+    <!-- .......... RegUserAndUserComuFr ............ -->
+    <string name="reg_usuario_rotulo">Mis datos en didekin:</string>
+    <string name="usuario_password_hint">contraseña (letras,números,_)</string>
+    <string name="usuario_password_confirm_hint">verificación de la contraseña</string>
+    <string name="alias">Alias</string>
+    <string name="usuario_nombre_hint">nombre o alias (max. 30 caracteres: letras,números,_)</string>
+    <string name="usuario_phone_number_hint">número de este teléfono</string>
+    <string name="telefono_numero">Teléfono</string>
+    <string name="telefono_aclaracion">Número de teléfono con prefijo internacional:</string>
+    <string name="telefono_prefix_rotulo">Prefijo</string>
+    <string name="email_hint">Correo electrónico</string>
+    <string name="password_hint">Tu contraseña</string>
+    <string name="password">Contraseña</string>
+    <string name="password_different"> (las contraseñas no coinciden)</string>
+    <!-- ============= RegUserComuAc =============-->
+    <string name="regusuario_comu_ac_label">didekin: comunidad seleccionada</string>
+    <!-- ============ ComusByUserListAc ================-->
+    <string name="comunidades_usuario_acc_label">didekin: mis comunidades</string>
+    <!--============== LoginActivity ================-->
+    <string name="login_label">Registro en didekin</string>
+    <string name="textLogin_no">Registra tus datos.</string>
+    <string name="textLogin_yes">Haz login.</string>
+    <string name="loginButtonLabel">Login</string>
+    <string name="municipio">Municipio</string>
+
+</resources>

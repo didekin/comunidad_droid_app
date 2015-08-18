@@ -1,0 +1,9 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">8dp</dimen>
+    <dimen name="activity_vertical_margin">7dp</dimen>
+    <dimen name="activity_vertical_double_margin">16dp</dimen>
+    <dimen name="text_hint_size">10sp</dimen>
+    <dimen name="text_rotulo_fragment">12sp</dimen>
+    <dimen name="text_decription_widget">13sp</dimen>
+</resources>

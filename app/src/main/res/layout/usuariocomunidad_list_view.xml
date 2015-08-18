@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+    <include
+            layout="@layout/comu_list_adapter_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:id="@+id/comunidades_list_include"
+            />
+
+    <TextView
+            android:id="@+id/usuariocomunidad_vivienda_rot"
+            android:text="@string/reg_usuario_comunidad_rot_vivienda"
+            android:textStyle="bold"
+            android:textSize="@dimen/text_rotulo_fragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/comunidades_list_include"/>
+
+    <TextView
+            android:id="@+id/usuariocomunidad_portal_rot"
+            android:text="@string/vivienda_portal_hint"
+            android:textStyle="normal"
+            android:visibility="gone"
+            android:textSize="@dimen/text_decription_widget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/usuariocomunidad_vivienda_rot"/>
+
+    <TextView
+            android:id="@+id/usuariocomunidad_portal"
+            android:textStyle="normal"
+            android:visibility="gone"
+            android:textSize="@dimen/text_hint_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_toRightOf="@id/usuariocomunidad_portal_rot"
+            android:layout_alignTop="@id/usuariocomunidad_portal_rot"
+            android:layout_alignBottom="@id/usuariocomunidad_portal_rot"/>
+
+    <TextView
+            android:id="@+id/usuariocomunidad_escalera_rot"
+            android:text="@string/vivienda_escalera_hint"
+            android:textStyle="normal"
+            android:visibility="gone"
+            android:textSize="@dimen/text_decription_widget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_toRightOf="@id/usuariocomunidad_portal"
+            android:layout_alignTop="@id/usuariocomunidad_portal_rot"
+            android:layout_alignBottom="@id/usuariocomunidad_portal_rot"/>
+
+    <TextView
+            android:id="@+id/usuariocomunidad_escalera"
+            android:textStyle="normal"
+            android:visibility="gone"
+            android:textSize="@dimen/text_hint_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_toRightOf="@id/usuariocomunidad_escalera_rot"
+            android:layout_alignTop="@id/usuariocomunidad_escalera_rot"
+            android:layout_alignBottom="@id/usuariocomunidad_escalera_rot"/>
+
+    <TextView
+            android:id="@+id/usuariocomunidad_planta_rot"
+            android:text="@string/vivienda_planta_hint"
+            android:textStyle="normal"
+            android:visibility="gone"
+            android:textSize="@dimen/text_decription_widget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/usuariocomunidad_portal_rot"/>
+
+    <TextView
+            android:id="@+id/usuariocomunidad_planta"
+            android:textStyle="normal"
+            android:visibility="gone"
+            android:textSize="@dimen/text_hint_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_toRightOf="@id/usuariocomunidad_planta_rot"
+            android:layout_alignTop="@id/usuariocomunidad_planta_rot"
+            android:layout_alignBottom="@id/usuariocomunidad_planta_rot"/>
+
+    <TextView
+            android:id="@+id/usuariocomunidad_puerta_rot"
+            android:text="@string/vivienda_puerta_hint"
+            android:textStyle="normal"
+            android:visibility="gone"
+            android:textSize="@dimen/text_decription_widget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_toRightOf="@id/usuariocomunidad_planta"
+            android:layout_alignTop="@id/usuariocomunidad_planta_rot"
+            android:layout_alignBottom="@id/usuariocomunidad_planta_rot"/>
+
+    <TextView
+            android:id="@+id/usuariocomunidad_puerta"
+            android:textStyle="normal"
+            android:visibility="gone"
+            android:textSize="@dimen/text_hint_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_toRightOf="@id/usuariocomunidad_puerta_rot"
+            android:layout_alignTop="@id/usuariocomunidad_puerta_rot"
+            android:layout_alignBottom="@id/usuariocomunidad_puerta_rot"/>
+
+    <TextView
+            android:id="@+id/usuariocomunidad_roles_rotulo"
+            android:text="@string/comunidad_role_rotulo"
+            android:textStyle="normal"
+            android:visibility="visible"
+            android:textSize="@dimen/text_decription_widget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/usuariocomunidad_planta_rot"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_alignParentLeft="true"/>
+
+    <TextView
+            android:id="@+id/usuariocomunidad_roles"
+            android:textStyle="normal"
+            android:visibility="visible"
+            android:textSize="@dimen/text_hint_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_toRightOf="@id/usuariocomunidad_roles_rotulo"
+            android:layout_alignTop="@id/usuariocomunidad_roles_rotulo"
+            android:layout_alignBottom="@id/usuariocomunidad_roles_rotulo"/>
+
+</RelativeLayout>
