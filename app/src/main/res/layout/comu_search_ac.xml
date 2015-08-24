@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scrollbars="none">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:tools="http://schemas.android.com/tools"
-                    android:id="@+id/comunidad_search_form_root"
+    <RelativeLayout android:id="@+id/comu_search_ac_layout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    tools:context="com.didekindroid.usuario.comunidad.RegComuAndUserAndUserComuAc">
+                    tools:context="com.didekindroid.usuario.activity.ComuSearchAc">
 
         <fragment
                 android:id="@+id/reg_comunidad_frg"
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
                 android:layout_alignParentLeft="true"
-                android:name="com.didekindroid.usuario.comunidad.RegComuFr"
+                android:name="com.didekindroid.usuario.activity.RegComuFr"
                 tools:layout="@layout/reg_comunidad"/>
 
         <Button

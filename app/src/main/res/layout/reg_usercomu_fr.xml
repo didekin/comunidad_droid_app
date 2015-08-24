@@ -88,7 +88,6 @@
             android:id="@+id/reg_usuariocomunidad_roles_checbox_presi"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:imeOptions="actionNext"
             android:text="@string/checkbox_presidente"
             android:textSize="@dimen/text_decription_widget"
             android:layout_below="@id/reg_usuariocomunidad_roles_checkbox_rotulo"

@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import com.didekindroid.usuario.comunidad.dominio.Comunidad;
+import com.didekindroid.usuario.dominio.Comunidad;
 
 import java.util.List;
 

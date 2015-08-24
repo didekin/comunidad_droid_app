@@ -13,8 +13,8 @@ import android.widget.Button;
 import com.didekindroid.R;
 import com.didekindroid.common.ui.CommonPatterns;
 import com.didekindroid.common.ui.UIutils;
-import com.didekindroid.usuario.comunidad.dominio.ComunidadBean;
-import com.didekindroid.usuario.login.dominio.AccessToken;
+import com.didekindroid.usuario.dominio.ComunidadBean;
+import com.didekindroid.usuario.dominio.AccessToken;
 
 import static com.didekindroid.common.ui.UIutils.updateIsRegistered;
 import static com.didekindroid.usuario.common.UserIntentExtras.COMUNIDAD_SEARCH;
@@ -22,7 +22,7 @@ import static com.didekindroid.usuario.common.UserMenu.COMU_BY_USER_LIST_AC;
 import static com.didekindroid.usuario.common.UserMenu.REG_COMU_USER_USERCOMU_AC;
 import static com.didekindroid.usuario.common.UserMenu.USER_DATA_AC;
 import static com.didekindroid.usuario.beanfiller.UserAndComuFiller.makeComunidadBeanFromView;
-import static com.didekindroid.usuario.login.TokenHandler.TKhandler;
+import static com.didekindroid.usuario.common.TokenHandler.TKhandler;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class ComuSearchAc extends Activity {

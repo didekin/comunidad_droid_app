@@ -57,8 +57,11 @@ public enum TokenHandler {
         Log.d(TAG, "initKeyCacheAndBackupFile()");
 
         IoHelper.writeFileFromString(checkNotNull(accessToken).getRefresh_token(), refreshTokenFile);
+        if (refreshTokenKey != null){
+            tokensCache.invalidate(refreshTokenKey);
+        }
         refreshTokenKey = accessToken.getRefresh_token();
-        tokensCache.asMap().putIfAbsent(refreshTokenKey, accessToken);
+        tokensCache.put(refreshTokenKey, accessToken);
     }
 
     public AccessToken getAccessTokenInCache()

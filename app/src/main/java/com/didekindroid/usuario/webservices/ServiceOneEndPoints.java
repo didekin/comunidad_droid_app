@@ -1,9 +1,9 @@
 package com.didekindroid.usuario.webservices;
 
-import com.didekindroid.usuario.comunidad.dominio.Comunidad;
-import com.didekindroid.usuario.comunidad.dominio.Usuario;
-import com.didekindroid.usuario.comunidad.dominio.UsuarioComunidad;
-import com.didekindroid.usuario.login.dominio.AccessToken;
+import com.didekindroid.usuario.dominio.AccessToken;
+import com.didekindroid.usuario.dominio.Comunidad;
+import com.didekindroid.usuario.dominio.Usuario;
+import com.didekindroid.usuario.dominio.UsuarioComunidad;
 import retrofit.client.Response;
 import retrofit.http.*;
 
@@ -17,15 +17,24 @@ import java.util.List;
 public interface ServiceOneEndPoints {
 
     //    ......... PATHS ........
+
     String OPEN = "/open";
     String SIGNUP = "/signup";
     String TOKEN_PATH = "/oauth/token";
-    String USER_READ = "/users/read";
-    String USER_WRITE = "/users/write";
+
     String COMUNIDAD_WRITE = "/comunidad/write";
     String COMUNIDAD_READ = "/comunidad/read";
     String COMUNIDAD_DELETE = COMUNIDAD_WRITE + "/delete";
-    String COMUNIDAD_SEARCH = OPEN + "/comus_search";
+    String COMUNIDAD_SEARCH = OPEN + "/comunidad_search";
+
+    String USER_READ = "/users/read";
+    String USER_WRITE = "/users/write";
+
+    String REG_COMU_USERCOMU = USER_WRITE + "/reg_comu_usercomu";
+    String REG_USERCOMU = USER_WRITE + "/reg_usercomu";
+    String USER_COMUNIDADES = USER_READ + "/comunidades";
+    String USER_DELETE = USER_WRITE + "/delete";
+    String USER_USERCOMUNIDADES = USER_READ + "/usuario_comunidades";
 
     //    ........... PARAMETERS ..........
     String USER_PARAM = "username";
@@ -39,7 +48,7 @@ public interface ServiceOneEndPoints {
     String OAUTH_CLIENT_ID = "user";
     String OAUTH_CLIENT_SECRET = "";
 
-    @DELETE(USER_WRITE)
+    @DELETE(USER_DELETE)
     boolean deleteUser(@Header("Authorization") String accessToken);
 
     @DELETE(COMUNIDAD_DELETE + "/{comunidadId}")
@@ -51,12 +60,18 @@ public interface ServiceOneEndPoints {
     @GET(USER_READ)
     Usuario getUserData(@Header("Authorization") String accessToken);
 
-    @GET(COMUNIDAD_READ)
+    @GET(USER_COMUNIDADES)
+    List<Comunidad> getComunidadesByUser(@Header("Authorization") String accessToken);
+
+    @GET(USER_USERCOMUNIDADES)
     List<UsuarioComunidad> getUsuariosComunidad(@Header("Authorization") String accessToken);
 
-    @POST(COMUNIDAD_WRITE)
-    Usuario insertUserOldComunidadNew(@Header("Authorization") String accessToken,
-                                      @Body UsuarioComunidad usuarioCom);
+    @POST(REG_USERCOMU)
+    int regUserComu(@Header("Authorization") String accessToken, @Body UsuarioComunidad usuarioComunidad);
+
+    @POST(REG_COMU_USERCOMU)
+    Usuario regComuAndUserComu(@Header("Authorization") String accessToken,
+                               @Body UsuarioComunidad usuarioCom);
 
     @POST(COMUNIDAD_SEARCH)
     List<Comunidad> searchComunidades(@Body Comunidad comunidad);
@@ -87,11 +102,9 @@ public interface ServiceOneEndPoints {
     @GET(USER_READ + "/hello")
     BodyText getHelloUserRead(@Header("Authorization") String accessToken);
 
-
 //  ....... UTILITIES ........
 
     class BodyText {
-
 
         private String text;
 

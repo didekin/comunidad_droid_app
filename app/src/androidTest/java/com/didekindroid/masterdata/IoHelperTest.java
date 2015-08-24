@@ -1,11 +1,8 @@
 package com.didekindroid.masterdata;
 
-import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import com.didekindroid.DidekindroidApp;
 import com.didekindroid.common.IoHelper;
-import com.didekindroid.usuario.comunidad.ComuSearchAc;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 

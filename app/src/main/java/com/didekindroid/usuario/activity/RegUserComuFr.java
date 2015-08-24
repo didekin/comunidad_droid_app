@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.didekindroid.R;
 import com.didekindroid.usuario.common.UserIntentExtras;
-import com.didekindroid.usuario.comunidad.dominio.Comunidad;
+import com.didekindroid.usuario.dominio.Comunidad;
 
 public class RegUserComuFr extends Fragment {
 
@@ -56,12 +56,6 @@ public class RegUserComuFr extends Fragment {
     {
         Log.d(TAG, "onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
-        Comunidad comunidad = null;
-        if (getActivity().getIntent().getExtras() != null) {
-            comunidad = (Comunidad) getActivity().getIntent().getExtras()
-                    .getSerializable(UserIntentExtras.COMUNIDAD_LIST_INDEX.name());
-        }
-        // TODO: initialize the view.
     }
 
     @Override

@@ -28,19 +28,18 @@ public enum UserMenuTest {
 
     USER_DATA_AC {
         @Override
-        public void checkMenuItem_NTk(Activity activity)
+        public void checkMenuItem_NTk(Activity activity) throws InterruptedException
         {
             onView(withText(R.string.user_data_ac_mn)).check(doesNotExist());
             openActionBarOverflowOrOptionsMenu(activity);
+
             onView(withText(R.string.user_data_ac_mn)).check(matches(isDisplayed())).perform(click());
-
-
-//            Thread.sleep(3000);// Según el orden de ejecución, hay esperar a que desaparezca otro token previo.
-
             ViewInteraction toastViewInteraction = onView(withText(
                     containsString(activity.getResources().getText(R.string.user_without_signedUp).toString())));
             toastViewInteraction.inRoot(withDecorView(not(activity.getWindow().getDecorView())))
                     .check(matches(isDisplayed()));
+
+            Thread.sleep(4000);
         }
 
         @Override
@@ -59,7 +58,7 @@ public enum UserMenuTest {
 
     COMU_BY_USER_LIST_AC {
         @Override
-        public void checkMenuItem_NTk(Activity activity)
+        public void checkMenuItem_NTk(Activity activity) throws InterruptedException
         {
             onView(withText(R.string.usercomu_list_ac_mn)).check(doesNotExist());
 
@@ -70,10 +69,11 @@ public enum UserMenuTest {
             toastViewInteraction.inRoot(withDecorView(not(activity.getWindow().getDecorView())))
                     .check(matches(isDisplayed()));
 
+            Thread.sleep(4000);
         }
 
         @Override
-        public void checkMenuItem_WTk(Activity activity)
+        public void checkMenuItem_WTk(Activity activity) throws InterruptedException
         {
             onView(withText(R.string.usercomu_list_ac_mn)).check(doesNotExist());
 
@@ -87,9 +87,10 @@ public enum UserMenuTest {
                     .check(doesNotExist());
 
             onView(withId(COMUNIDADES_USER.idView)).check(matches(isDisplayed()));
-
             // User clean up.
             assertThat(ServOne.deleteUser(), is(true));
+
+            Thread.sleep(4000);
         }
     },
 
@@ -120,6 +121,6 @@ public enum UserMenuTest {
 
     public abstract void checkMenuItem_NTk(Activity activity) throws InterruptedException;
 
-    public abstract void checkMenuItem_WTk(Activity activity);
+    public abstract void checkMenuItem_WTk(Activity activity) throws InterruptedException;
 
 }

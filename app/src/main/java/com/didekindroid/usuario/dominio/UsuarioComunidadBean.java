@@ -72,7 +72,7 @@ public class UsuarioComunidadBean implements Serializable {
         usuarioComunidad.setRoles(rolesBuilder.toString());
     }
 
-    public boolean validate(Resources resources, StringBuilder errorMsg)
+    public boolean validate(Resources resources, StringBuilder errorMsg, boolean isComunidadToValid)
     {
         return validatePortal(resources, errorMsg)
                 & validateEscalera(resources, errorMsg)
@@ -80,7 +80,7 @@ public class UsuarioComunidadBean implements Serializable {
                 & validatePuerta(resources, errorMsg)
                 & validateRoles(resources, errorMsg)
                 & validateUsuario(resources, errorMsg)
-                & validateComunidad(resources, errorMsg);
+                & (!isComunidadToValid || validateComunidad(resources, errorMsg));
     }
 
     protected boolean validatePortal(Resources resources, StringBuilder errorMsg)

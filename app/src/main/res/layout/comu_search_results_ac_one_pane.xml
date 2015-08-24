@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:tools="http://schemas.android.com/tools"
-             android:id="@+id/comunidades_see_one_pane_frg_container"
+             android:id="@+id/comu_search_results_ac_one_pane_frg_container"
              android:layout_width="match_parent"
              android:layout_height="match_parent">
     <fragment
-            android:id="@+id/comunidades_summary_frg"
+            android:id="@+id/comu_list_frg"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
-            android:name="com.didekindroid.usuario.comunidad.ComuListFr"
-            tools:layout="@layout/comu_list_adapter_view"/>
+            android:name="com.didekindroid.usuario.activity.ComuListFr"/>
 </FrameLayout>

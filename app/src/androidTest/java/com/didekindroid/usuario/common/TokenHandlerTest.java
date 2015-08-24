@@ -3,7 +3,6 @@ package com.didekindroid.usuario.common;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
-import com.didekindroid.usuario.common.DataUsuarioTestUtils;
 import com.didekindroid.usuario.dominio.AccessToken;
 import org.junit.After;
 import org.junit.Before;
@@ -13,6 +12,7 @@ import org.junit.runner.RunWith;
 import java.io.File;
 import java.io.IOException;
 
+import static com.didekindroid.usuario.common.DataUsuarioTestUtils.USUARIO_COMUNIDAD_1;
 import static com.didekindroid.usuario.common.TokenHandler.TKhandler;
 import static com.didekindroid.usuario.common.TokenHandler.refresh_token_filename;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
@@ -86,7 +86,7 @@ public class TokenHandlerTest {
 
         // Registers user and initializes cache.
         // Case 1: there is a token in cache.
-        DataUsuarioTestUtils.insertOneUserOneComu();
+        DataUsuarioTestUtils.signUpAndUpdateTk(USUARIO_COMUNIDAD_1);
         AccessToken token_1 = TKhandler.getAccessTokenInCache();
         String accessToken_1 = token_1.getAccess_token();
         assertThat(accessToken_1, not(isEmptyOrNullString()));

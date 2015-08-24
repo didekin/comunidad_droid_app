@@ -28,20 +28,15 @@ public class Comunidad implements Serializable {
     {
     }
 
-    public Comunidad(String tipoVia, String nombreVia, short numero, String sufijoNumero, Municipio municipio)
+    public Comunidad(long c_Id)
     {
-        this.tipoVia = tipoVia;
-        this.nombreVia = nombreVia;
-        this.numero = numero;
-        this.sufijoNumero = sufijoNumero;
-        this.municipio = municipio;
+        this.c_Id = c_Id;
     }
 
-    public Comunidad(long c_id, String tipoVia, String nombreVia, short numero,
-                     String sufijoNumero, Municipio municipio)
+    public Comunidad(String tipoVia, String nombreVia, short numero, String sufijoNumero, Municipio municipio)
     {
-        this(tipoVia, nombreVia, numero, sufijoNumero, municipio);
-        this.c_Id = c_id;
+        this(tipoVia,nombreVia,sufijoNumero,municipio);
+        this.numero = numero;
     }
 
     public Comunidad(String tipoVia, String nombreVia, String sufijoNumero, Municipio municipio)

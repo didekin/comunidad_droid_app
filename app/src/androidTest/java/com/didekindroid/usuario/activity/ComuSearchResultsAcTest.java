@@ -9,12 +9,9 @@ import com.didekindroid.DidekindroidApp;
 import com.didekindroid.R;
 import com.didekindroid.masterdata.dominio.Municipio;
 import com.didekindroid.masterdata.dominio.Provincia;
-import com.didekindroid.usuario.activity.ComuListAdapter;
-import com.didekindroid.usuario.activity.ComuListFr;
-import com.didekindroid.usuario.activity.ComuSearchResultsAc;
-import com.didekindroid.usuario.comunidad.dominio.Comunidad;
-import com.didekindroid.usuario.comunidad.dominio.Usuario;
-import com.didekindroid.usuario.comunidad.dominio.UsuarioComunidad;
+import com.didekindroid.usuario.dominio.Comunidad;
+import com.didekindroid.usuario.dominio.Usuario;
+import com.didekindroid.usuario.dominio.UsuarioComunidad;
 import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
@@ -23,6 +20,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
+import java.util.List;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
@@ -34,10 +32,10 @@ import static com.didekindroid.common.ui.UIutils.isRegisteredUser;
 import static com.didekindroid.common.ui.UIutils.updateIsRegistered;
 import static com.didekindroid.common.ui.ViewsIDs.COMUNIDADES_FOUND;
 import static com.didekindroid.usuario.common.DataUsuarioTestUtils.*;
+import static com.didekindroid.usuario.common.TokenHandler.TKhandler;
 import static com.didekindroid.usuario.common.UserIntentExtras.COMUNIDAD_SEARCH;
 import static com.didekindroid.usuario.common.UserMenuTest.*;
-import static com.didekindroid.usuario.comunidad.dominio.Roles.PROPIETARIO;
-import static com.didekindroid.usuario.login.TokenHandler.TKhandler;
+import static com.didekindroid.usuario.dominio.Roles.PROPIETARIO;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 import static com.google.android.apps.common.testing.ui.espresso.sample.LongListMatchers.withAdaptedData;
 import static org.hamcrest.Matchers.*;
@@ -97,7 +95,7 @@ public class ComuSearchResultsAcTest {
     public void testOnCreate_2()
     {
         // Inserto comunidades en DB.
-        insertOneUserTwoComu();
+        regComuAndUserComuWith2Comu(makeListTwoUserComu());
         activity = mActivityRule.launchActivity(intent);
         onView(withId(R.id.comu_search_results_ac_one_pane_frg_container)).check(matches(isDisplayed()));
         onView(withId(R.id.comu_list_frg)).check(matches(isDisplayed()));
@@ -120,7 +118,7 @@ public class ComuSearchResultsAcTest {
     public void testComunidadesUsuarioGetter_2()
     {
         // Usuario registrado.
-        insertOneUserTwoComu();
+        regComuAndUserComuWith2Comu(makeListTwoUserComu());
 
         activity = mActivityRule.launchActivity(intent);
         assertThat(isRegisteredUser(activity), is(true));
@@ -154,7 +152,7 @@ public class ComuSearchResultsAcTest {
     public void testGetDatosUsuarioNoToken_2() throws InterruptedException
     {
         //Usuario no registrado. La búsqueda devuelve una comunidad.
-        insertOneUserTwoComu();
+        regComuAndUserComuWith2Comu(makeListTwoUserComu());
         // Borro los datos del usuario.
         cleanData();
         activity = mActivityRule.launchActivity(intent);
@@ -163,15 +161,16 @@ public class ComuSearchResultsAcTest {
         USER_DATA_AC.checkMenuItem_NTk(activity);
 
         // User cleanup. We update user credentiasl first.
-        updateSecurityData(USUARIO.getUserName(), "psw_juan");
+        updateSecurityData(USUARIO_1.getUserName(), "psw_juan");
         boolean isDeleted = ServOne.deleteUser();
         assertThat(isDeleted, is(true));
     }
+
     @Test
     public void testGetDatosUsuarioWithToken() throws InterruptedException
     {
         //With token.
-        insertOneUserTwoComu();
+        regComuAndUserComuWith2Comu(makeListTwoUserComu());
         activity = mActivityRule.launchActivity(intent);
         assertThat(isRegisteredUser(activity), is(true));
         USER_DATA_AC.checkMenuItem_WTk(activity);
@@ -198,7 +197,7 @@ public class ComuSearchResultsAcTest {
     public void testMenuNuevaComunidad_noToken_2() throws InterruptedException
     {
         //Usuario no registrado. La búsqueda devuelve una comunidad.
-        insertOneUserTwoComu();
+        regComuAndUserComuWith2Comu(makeListTwoUserComu());
         // Borro los datos del usuario.
         cleanData();
         activity = mActivityRule.launchActivity(intent);
@@ -207,7 +206,7 @@ public class ComuSearchResultsAcTest {
         REG_COMU_USER_USERCOMU_AC.checkMenuItem_NTk(activity);
 
         // User cleanup. We update user credentiasl first.
-        updateSecurityData(USUARIO.getUserName(), "psw_juan");
+        updateSecurityData(USUARIO_1.getUserName(), "psw_juan");
         boolean isDeleted = ServOne.deleteUser();
         assertThat(isDeleted, is(true));
     }
@@ -215,7 +214,7 @@ public class ComuSearchResultsAcTest {
     @Test
     public void testMenuNuevaComunidad_withToken() throws InterruptedException
     {
-        insertOneUserTwoComu();
+        regComuAndUserComuWith2Comu(makeListTwoUserComu());
         activity = mActivityRule.launchActivity(intent);
         assertThat(isRegisteredUser(activity), is(true));
         REG_COMU_USER_USERCOMU_AC.checkMenuItem_WTk(activity);
@@ -224,7 +223,7 @@ public class ComuSearchResultsAcTest {
     @Test
     public void testComunidadesByUsuario_withToken() throws InterruptedException
     {
-        insertOneUserTwoComu();
+        regComuAndUserComuWith2Comu(makeListTwoUserComu());
         activity = mActivityRule.launchActivity(intent);
         assertThat(isRegisteredUser(activity), is(true));
         COMU_BY_USER_LIST_AC.checkMenuItem_WTk(activity);
@@ -252,7 +251,7 @@ public class ComuSearchResultsAcTest {
     public void tesComunidadesByUsuario_noToken_2() throws InterruptedException
     {
         //Usuario no registrado. La búsqueda devuelve una comunidad.
-        insertOneUserTwoComu();
+        regComuAndUserComuWith2Comu(makeListTwoUserComu());
         // Borro los datos del usuario.
         cleanData();
         activity = mActivityRule.launchActivity(intent);
@@ -261,7 +260,7 @@ public class ComuSearchResultsAcTest {
         COMU_BY_USER_LIST_AC.checkMenuItem_NTk(activity);
 
         // User cleanup. We update user credentiasl first.
-        updateSecurityData(USUARIO.getUserName(), "psw_juan");
+        updateSecurityData(USUARIO_1.getUserName(), "psw_juan");
         boolean isDeleted = ServOne.deleteUser();
         assertThat(isDeleted, is(true));
     }
@@ -270,7 +269,7 @@ public class ComuSearchResultsAcTest {
     public void testSearchComunidades_1()
     {
         // User with 2 comunidades. We search with one of them exactly.
-        insertOneUserTwoComu();
+        regComuAndUserComuWith2Comu(makeListTwoUserComu());
         activity = mActivityRule.launchActivity(intent);
         assertThat(isRegisteredUser(activity), is(true));
         mComunidadSummaryFrg = (ComuListFr) activity.getFragmentManager().findFragmentById(R.id.comu_list_frg);
@@ -293,7 +292,7 @@ public class ComuSearchResultsAcTest {
 
         Comunidad comunidadNew = new Comunidad("Ronda", "del Norte", (short) 5, null,
                 new Municipio(new Provincia((short) 27), (short) 2));
-        insertOnePlusComu(comunidadNew);
+        regComuAndUserComuWith3Comu(makeListTwoUserComu(), comunidadNew);
 
         // Criterio de búsqueda.
         Comunidad comunidad = new Comunidad("Ronda", "de la Plazuela del Norte", (short) 5, null,
@@ -347,7 +346,7 @@ public class ComuSearchResultsAcTest {
     public void testSearchComunidades_4() throws InterruptedException
     {
         // No existe la comunidad en DB. El usuario está registrado.
-        insertOneUserOneComu();
+        signUpAndUpdateTk(USUARIO_COMUNIDAD_1);
         // Criterio de búsqueda.
         Comunidad comunidad = new Comunidad("Rincón", "del No Existente", (short) 123, null,
                 new Municipio(new Provincia((short) 27), (short) 2));
@@ -379,7 +378,7 @@ public class ComuSearchResultsAcTest {
     public void testOnListItemClick_1()
     {
         //Usuario no registrado. La búsqueda devuelve una comunidad.
-        insertOneUserTwoComu();
+        regComuAndUserComuWith2Comu(makeListTwoUserComu());
         // Borro los datos del usuario.
         cleanData();
         activity = mActivityRule.launchActivity(intent);
@@ -393,7 +392,7 @@ public class ComuSearchResultsAcTest {
         onView(withId(R.id.reg_user_and_usercomu_ac_layout)).check(matches(isDisplayed()));
 
         // User cleanup. We update user credentiasl first.
-        updateSecurityData(USUARIO.getUserName(), "psw_juan");
+        updateSecurityData(USUARIO_1.getUserName(), "psw_juan");
         boolean isDeleted = ServOne.deleteUser();
         assertThat(isDeleted, is(true));
     }
@@ -402,7 +401,7 @@ public class ComuSearchResultsAcTest {
     public void testOnListItemClick_2()
     {
         // Usuario registrado. La búsqueda devuelve una comunidad a la que él ya está asociado.
-        insertOneUserTwoComu();
+        regComuAndUserComuWith2Comu(makeListTwoUserComu());
         activity = mActivityRule.launchActivity(intent);
         mComunidadSummaryFrg = (ComuListFr) activity.getFragmentManager().findFragmentById(R.id.comu_list_frg);
         ComuListAdapter adapter = (ComuListAdapter) mComunidadSummaryFrg.getListAdapter();
@@ -423,7 +422,7 @@ public class ComuSearchResultsAcTest {
     {
         // Usuario registrado. La búsqueda devuelve una comunidad a la que él NO está asociado.
         // Insertamos la comunidad a devolver y borramos credenciales de seguridad.
-        insertOneUserTwoComu();
+        regComuAndUserComuWith2Comu(makeListTwoUserComu());
         cleanData();
         // Insertamos al usuario que hace la búsqueda.
         Comunidad comunidadIn = new Comunidad("Calle", "de la Torre", (short) 115, null,
@@ -447,7 +446,7 @@ public class ComuSearchResultsAcTest {
         assertThat(isDeleted, is(true));
 
         // User1 cleanup. We update user credentiasl first.
-        updateSecurityData(USUARIO.getUserName(), "psw_juan");
+        updateSecurityData(USUARIO_1.getUserName(), "psw_juan");
         isDeleted = ServOne.deleteUser();
         assertThat(isDeleted, is(true));
     }

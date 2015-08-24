@@ -4,10 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
 import com.didekindroid.R;
-import com.didekindroid.usuario.UserDataAc;
-import com.didekindroid.usuario.comunidad.RegComuAndUserAndUserComuAc;
-import com.didekindroid.usuario.comunidad.RegComuAndUserComuAc;
-import com.didekindroid.usuario.comunidad.ComusByUserListAc;
+import com.didekindroid.usuario.activity.UserDataAc;
+import com.didekindroid.usuario.activity.RegComuAndUserAndUserComuAc;
+import com.didekindroid.usuario.activity.RegComuAndUserComuAc;
+import com.didekindroid.usuario.activity.ComusByUserListAc;
 
 import static com.didekindroid.common.ui.UIutils.*;
 import static com.didekindroid.common.ui.UIutils.isRegisteredUser;
@@ -20,6 +20,7 @@ import static com.didekindroid.common.ui.UIutils.isRegisteredUser;
 public enum UserMenu {
 
     USER_DATA_AC {
+        @Override
         public void doMenuItem(Activity activity)
         {
             Log.d(TAG, "user_data_ac_mn.doMenuItem()");
@@ -35,7 +36,8 @@ public enum UserMenu {
         }
     },
 
-    COMU_BY_USER_LIST_AC {
+    COMU_BY_USER_LIST_AC {  // Comunidades de un usuario.
+        @Override
         public void doMenuItem(Activity activity)
         {
             Log.i(TAG, "comu_by_user.doMenuItem()");
@@ -52,6 +54,7 @@ public enum UserMenu {
     },
 
     REG_COMU_USER_USERCOMU_AC { // Menu: nueva comunidad.
+        @Override
         public void doMenuItem(Activity activity)
         {
             Log.d(TAG, "reg_comu_user_usercomu.doMenuItem()");

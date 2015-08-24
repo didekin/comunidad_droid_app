@@ -5,9 +5,9 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import com.didekindroid.R;
-import com.didekindroid.usuario.comunidad.dominio.ComunidadBean;
-import com.didekindroid.usuario.comunidad.dominio.UsuarioBean;
-import com.didekindroid.usuario.comunidad.dominio.UsuarioComunidadBean;
+import com.didekindroid.usuario.dominio.ComunidadBean;
+import com.didekindroid.usuario.dominio.UsuarioBean;
+import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
 
 /**
  * User: pedro@didekin

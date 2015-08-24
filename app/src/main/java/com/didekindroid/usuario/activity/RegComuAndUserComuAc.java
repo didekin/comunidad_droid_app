@@ -10,8 +10,8 @@ import com.didekindroid.R;
 import com.didekindroid.common.ui.CommonPatterns;
 import com.didekindroid.common.ConnectionUtils;
 import com.didekindroid.common.ui.UIutils;
-import com.didekindroid.usuario.comunidad.dominio.ComunidadBean;
-import com.didekindroid.usuario.comunidad.dominio.UsuarioComunidadBean;
+import com.didekindroid.usuario.dominio.ComunidadBean;
+import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
 
 import static com.didekindroid.usuario.common.UserIntentExtras.USUARIO_COMUNIDAD_REG;
 import static com.didekindroid.usuario.beanfiller.UserAndComuFiller.makeComunidadBeanFromView;
@@ -60,7 +60,7 @@ public class RegComuAndUserComuAc extends Activity {
         StringBuilder errorMsg = new StringBuilder(getResources().getText(R.string.error_validation_msg))
                 .append(CommonPatterns.LINE_BREAK.literal);
 
-        if (!usuarioComunidadBean.validate(getResources(), errorMsg)) {
+        if (!usuarioComunidadBean.validate(getResources(), errorMsg, true)) {
             UIutils.makeToast(this, errorMsg.toString());
 
         } else if (ConnectionUtils.isInternetConnected(this)) {

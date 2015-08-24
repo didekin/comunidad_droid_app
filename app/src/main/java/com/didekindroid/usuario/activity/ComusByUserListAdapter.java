@@ -9,8 +9,8 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import com.didekindroid.R;
 import com.didekindroid.usuario.activity.ComuListAdapter.ComunidadViewHolder;
-import com.didekindroid.usuario.comunidad.dominio.Comunidad;
-import com.didekindroid.usuario.comunidad.dominio.UsuarioComunidad;
+import com.didekindroid.usuario.dominio.Comunidad;
+import com.didekindroid.usuario.dominio.UsuarioComunidad;
 
 import static com.didekindroid.usuario.activity.ComuListAdapter.doComunidadViewHolder;
 import static com.didekindroid.usuario.activity.ComuListAdapter.initializeComuViewHolder;

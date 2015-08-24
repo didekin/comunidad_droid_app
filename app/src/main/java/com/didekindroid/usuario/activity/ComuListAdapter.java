@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import com.didekindroid.R;
-import com.didekindroid.usuario.comunidad.dominio.Comunidad;
+import com.didekindroid.usuario.dominio.Comunidad;
 
 /**
  * User: pedro@didekin

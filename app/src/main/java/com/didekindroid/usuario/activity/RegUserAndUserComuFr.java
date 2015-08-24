@@ -13,8 +13,8 @@ import android.widget.Toast;
 import com.didekindroid.R;
 import com.didekindroid.common.ui.CommonPatterns;
 import com.didekindroid.usuario.beanfiller.UserAndComuFiller;
-import com.didekindroid.usuario.comunidad.dominio.ComunidadBean;
-import com.didekindroid.usuario.comunidad.dominio.UsuarioComunidadBean;
+import com.didekindroid.usuario.dominio.ComunidadBean;
+import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
 
 /**
  * User: pedro@didekin
@@ -79,7 +79,7 @@ public class RegUserAndUserComuFr extends Fragment {
         StringBuilder errorMsg = new StringBuilder(getResources().getText(R.string.error_validation_msg))
                 .append(CommonPatterns.LINE_BREAK.literal);
 
-        if (!usuarioComunidadBean.validate(getResources(), errorMsg)) {
+        if (!usuarioComunidadBean.validate(getResources(), errorMsg, true)) {
             Toast clickToast = new Toast(getActivity()).makeText(getActivity(), errorMsg, Toast.LENGTH_LONG);
             clickToast.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL, 0, 0);
             clickToast.show();

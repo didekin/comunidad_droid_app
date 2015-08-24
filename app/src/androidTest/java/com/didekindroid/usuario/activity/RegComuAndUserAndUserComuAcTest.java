@@ -6,11 +6,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.view.View;
 import com.didekindroid.R;
-import com.didekindroid.usuario.activity.RegComuAndUserAndUserComuAc;
-import com.didekindroid.usuario.activity.RegComuFr;
-import com.didekindroid.usuario.activity.RegUserComuFr;
-import com.didekindroid.usuario.activity.RegUserFr;
-import com.didekindroid.usuario.comunidad.dominio.*;
+import com.didekindroid.usuario.dominio.*;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -147,7 +143,7 @@ public class RegComuAndUserAndUserComuAcTest {
                 (mRegUserComuFrg.getFragmentView(), comunidadBean, usuarioBean);
 
         StringBuilder errors = new StringBuilder("");
-        assertThat(usuarioComunidadBean.validate(resources, errors), is(true));
+        assertThat(usuarioComunidadBean.validate(resources, errors, true), is(true));
         assertThat(errors.toString().trim().length(), is(0));
 
         UsuarioComunidad usuarioComunidad = usuarioComunidadBean.getUsuarioComunidad();
@@ -192,7 +188,7 @@ public class RegComuAndUserAndUserComuAcTest {
         UsuarioComunidadBean usuarioComunidadBean =
                 makeUsuarioComunidadBeanFromView(mRegUserComuFrg.getFragmentView(),
                         comunidadBean, usuarioBean);
-        assertThat(usuarioComunidadBean.validate(resources, errors), is(false));
+        assertThat(usuarioComunidadBean.validate(resources, errors, true), is(false));
         assertThat(usuarioComunidadBean.getUsuarioComunidad(), notNullValue());
         assertThat(usuarioComunidadBean.getUsuarioComunidad().getComunidad(), notNullValue());
         assertThat(usuarioComunidadBean.getUsuarioComunidad().getUsuario(), notNullValue());

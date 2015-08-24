@@ -11,7 +11,7 @@ import android.view.MenuItem;
 import com.didekindroid.R;
 import com.didekindroid.common.ui.UIutils;
 import com.didekindroid.usuario.common.UserMenu;
-import com.didekindroid.usuario.comunidad.dominio.Comunidad;
+import com.didekindroid.usuario.dominio.Comunidad;
 
 import java.util.List;
 

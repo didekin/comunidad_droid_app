@@ -8,8 +8,8 @@ package com.didekindroid.usuario.common;
 public enum UserIntentExtras {
 
     USUARIO_COMUNIDAD_REG,
-    COMUNIDAD_INDEX_LIST,
-    COMUNIDAD_BEAN_LIST,
+    COMUNIDAD_LIST_INDEX,
+    COMUNIDAD_LIST_OBJECT,
     IS_COMUNIDADES_BY_USER,
     COMUNIDAD_SEARCH,
     ;

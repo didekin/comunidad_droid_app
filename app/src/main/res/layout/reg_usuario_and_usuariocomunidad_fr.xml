@@ -12,7 +12,7 @@
                     android:layout_height="match_parent"
                     android:id="@+id/reg_usuariocomunidad_usuario_form_root"
                     android:visibility="visible"
-                    tools:context="com.didekindroid.usuario.comunidad.RegUserAndUserComuFr">
+                    tools:context="com.didekindroid.usuario.activity.RegUserAndUserComuFr">
 
         <TextView
                 android:id="@+id/rotulo_comunidad"
@@ -38,7 +38,7 @@
                 />
 
         <include
-                layout="@layout/reg_usuariocomunidad"
+                layout="@layout/reg_usercomu_fr"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/reg_usuariocomunidad_include"

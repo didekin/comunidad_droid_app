@@ -5,7 +5,6 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
 import com.didekindroid.R;
-import com.didekindroid.usuario.comunidad.dominio.UsuarioBean;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

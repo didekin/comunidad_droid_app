@@ -8,12 +8,9 @@ import android.view.View;
 import com.didekindroid.R;
 import com.didekindroid.masterdata.dominio.Municipio;
 import com.didekindroid.masterdata.dominio.Provincia;
-import com.didekindroid.usuario.activity.RegComuAndUserComuAc;
-import com.didekindroid.usuario.activity.RegComuFr;
-import com.didekindroid.usuario.activity.RegUserComuFr;
-import com.didekindroid.usuario.comunidad.dominio.ComunidadBean;
-import com.didekindroid.usuario.comunidad.dominio.UsuarioComunidad;
-import com.didekindroid.usuario.comunidad.dominio.UsuarioComunidadBean;
+import com.didekindroid.usuario.dominio.ComunidadBean;
+import com.didekindroid.usuario.dominio.UsuarioComunidad;
+import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -97,7 +94,7 @@ public class RegComuAndUserComuAcTest {
         assertThat(usuarioComunidadBean.isPropietario, is(false));
         assertThat(usuarioComunidadBean.isInquilino, is(true));
 
-        usuarioComunidadBean.validate(resources, new StringBuilder(resources.getString(R.string.error_validation_msg)));
+        usuarioComunidadBean.validate(resources, new StringBuilder(resources.getString(R.string.error_validation_msg)), true);
         UsuarioComunidad usuarioComunidad = usuarioComunidadBean.getUsuarioComunidad();
         assertThat(usuarioComunidad.getPortal(), is("port2"));
         assertThat(usuarioComunidad.getEscalera(), is("escale_b"));

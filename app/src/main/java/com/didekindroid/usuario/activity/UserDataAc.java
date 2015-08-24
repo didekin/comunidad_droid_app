@@ -7,12 +7,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import com.didekindroid.R;
-import com.didekindroid.usuario.comunidad.dominio.Usuario;
-import com.didekindroid.usuario.comunidad.dominio.UsuarioComunidad;
-import com.didekindroid.usuario.login.dominio.AccessToken;
+import com.didekindroid.usuario.dominio.Usuario;
+import com.didekindroid.usuario.dominio.UsuarioComunidad;
+import com.didekindroid.usuario.dominio.AccessToken;
 
 import static com.didekindroid.usuario.common.UserIntentExtras.USUARIO_COMUNIDAD_REG;
-import static com.didekindroid.usuario.login.TokenHandler.TKhandler;
+import static com.didekindroid.usuario.common.TokenHandler.TKhandler;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 
 public class UserDataAc extends Activity {

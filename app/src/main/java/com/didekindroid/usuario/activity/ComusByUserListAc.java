@@ -8,8 +8,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 import com.didekindroid.R;
-import com.didekindroid.usuario.comunidad.dominio.Usuario;
-import com.didekindroid.usuario.comunidad.dominio.UsuarioComunidad;
+import com.didekindroid.usuario.dominio.Usuario;
+import com.didekindroid.usuario.dominio.UsuarioComunidad;
 
 import java.util.List;
 
@@ -70,7 +70,7 @@ public class ComusByUserListAc extends ListActivity {
 
             // El usuario está registrando una nueva comunidad.
             if (usuarioComunidad[0] != null) {
-                Usuario usuarioDb = ServOne.insertUserOldComunidadNew(usuarioComunidad[0]);
+                Usuario usuarioDb = ServOne.regComuAndUserComu(usuarioComunidad[0]);
                 usuarioComunidades = usuarioDb.getUsuariosComunidad();
             } else {
                 usuarioComunidades = ServOne.getUsuariosComunidad();

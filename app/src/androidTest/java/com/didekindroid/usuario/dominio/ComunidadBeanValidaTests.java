@@ -7,7 +7,6 @@ import android.util.Log;
 import com.didekindroid.R;
 import com.didekindroid.masterdata.dominio.Municipio;
 import com.didekindroid.masterdata.dominio.Provincia;
-import com.didekindroid.usuario.comunidad.dominio.ComunidadBean;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

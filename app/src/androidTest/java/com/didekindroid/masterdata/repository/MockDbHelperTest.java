@@ -2,14 +2,11 @@ package com.didekindroid.masterdata.repository;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
 import com.didekindroid.DidekindroidApp;
-import com.didekindroid.usuario.comunidad.ComuSearchAc;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 

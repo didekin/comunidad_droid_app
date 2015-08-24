@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/comu_search_results_ac_two_pane_frg_container"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="horizontal">
 
     <fragment
-            android:id="@+id/comunidades_summary_frg"
+            android:id="@+id/comu_list_frg"
             android:layout_weight="1"
             android:layout_height="match_parent"
             android:layout_width="0dp"
             android:layout_alignParentLeft="true"
-            android:name="com.didekindroid.usuario.comunidad.ComuListFr"
+            android:name="com.didekindroid.usuario.activity.ComuListFr"
             tools:layout="@layout/comu_list_adapter_view"/>
 
     <fragment
@@ -19,8 +20,8 @@
             android:layout_weight="2"
             android:layout_height="match_parent"
             android:layout_width="0dp"
-            android:layout_toRightOf="@id/comunidades_summary_frg"
+            android:layout_toRightOf="@id/comu_list_frg"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:name="com.didekindroid.usuario.comunidad.RegUserAndUserComuFr"
+            android:name="com.didekindroid.usuario.activity.RegUserAndUserComuFr"
             tools:layout="@layout/reg_usuario_and_usuariocomunidad_fr"/>
 </LinearLayout>

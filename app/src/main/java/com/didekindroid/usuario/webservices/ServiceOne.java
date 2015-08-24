@@ -3,16 +3,16 @@ package com.didekindroid.usuario.webservices;
 import android.util.Base64;
 import android.util.Log;
 import com.didekindroid.R;
-import com.didekindroid.usuario.comunidad.dominio.Comunidad;
-import com.didekindroid.usuario.comunidad.dominio.Usuario;
-import com.didekindroid.usuario.comunidad.dominio.UsuarioComunidad;
-import com.didekindroid.usuario.login.dominio.AccessToken;
+import com.didekindroid.usuario.dominio.AccessToken;
+import com.didekindroid.usuario.dominio.Comunidad;
+import com.didekindroid.usuario.dominio.Usuario;
+import com.didekindroid.usuario.dominio.UsuarioComunidad;
 
 import java.util.List;
 
 import static com.didekindroid.DidekindroidApp.getContext;
 import static com.didekindroid.common.RetrofitRestBuilder.getService;
-import static com.didekindroid.usuario.login.TokenHandler.TKhandler;
+import static com.didekindroid.usuario.common.TokenHandler.TKhandler;
 import static com.didekindroid.usuario.webservices.ServiceOneEndPoints.*;
 
 /**
@@ -22,7 +22,8 @@ import static com.didekindroid.usuario.webservices.ServiceOneEndPoints.*;
  */
 public enum ServiceOne {
 
-    ServOne,;
+    ServOne,
+    ;
 
     private static final String TAG = ServiceOne.class.getCanonicalName();
 
@@ -67,6 +68,13 @@ public enum ServiceOne {
                 REFRESH_TOKEN_GRANT);
     }
 
+    public List<Comunidad> getComunidadesByUser()
+    {
+        Log.d(TAG, "getComunidadesByUser()");
+        String bearerAccessTkHeader = TKhandler.doBearerAccessTkHeader();
+        return (bearerAccessTkHeader != null ? endPoints.getComunidadesByUser(bearerAccessTkHeader) : null);
+    }
+
     public List<UsuarioComunidad> getUsuariosComunidad()
     {
         Log.d(TAG, "getUsuariosComunidad()");
@@ -80,15 +88,22 @@ public enum ServiceOne {
         return endPoints.getUserData(TKhandler.doBearerAccessTkHeader());
     }
 
-    public Usuario insertUserOldComunidadNew(UsuarioComunidad usuarioComunidad)
+    /* It returns the number of rows inserted: 1. */
+    public int regUserComu(UsuarioComunidad usuarioComunidad)
     {
-        Log.d(TAG, "insertUserOldComunidadNew()");
-        return endPoints.insertUserOldComunidadNew(TKhandler.doBearerAccessTkHeader(), usuarioComunidad);
+        Log.d(TAG, "regUserComu()");
+        return endPoints.regUserComu(TKhandler.doBearerAccessTkHeader(), usuarioComunidad);
+    }
+
+    public Usuario regComuAndUserComu(UsuarioComunidad usuarioComunidad)
+    {
+        Log.d(TAG, "regComuAndUserComu()");
+        return endPoints.regComuAndUserComu(TKhandler.doBearerAccessTkHeader(), usuarioComunidad);
     }
 
     public List<Comunidad> searchComunidades(Comunidad comunidad)
     {
-        Log.d(TAG,"searchComunidades()");
+        Log.d(TAG, "searchComunidades()");
         return endPoints.searchComunidades(comunidad);
     }
 

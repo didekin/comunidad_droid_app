@@ -11,14 +11,14 @@
                     android:id="@+id/reg_comu_usuario_usuariocomu_layout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    tools:context="com.didekindroid.usuario.comunidad.RegComuAndUserAndUserComuAc">
+                    tools:context="com.didekindroid.usuario.activity.RegComuAndUserAndUserComuAc">
 
         <fragment
                 android:id="@+id/reg_comunidad_frg"
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
                 android:layout_alignParentLeft="true"
-                android:name="com.didekindroid.usuario.comunidad.RegComuFr"
+                android:name="com.didekindroid.usuario.activity.RegComuFr"
                 tools:layout="@layout/reg_comunidad"/>
 
         <fragment
@@ -27,8 +27,8 @@
                 android:layout_width="match_parent"
                 android:layout_alignParentLeft="true"
                 android:layout_below="@id/reg_comunidad_frg"
-                android:name="com.didekindroid.usuario.comunidad.RegUserComuFr"
-                tools:layout="@layout/reg_usuariocomunidad"/>
+                android:name="com.didekindroid.usuario.activity.RegUserComuFr"
+                tools:layout="@layout/reg_usercomu_fr"/>
 
         <fragment
                 android:id="@+id/reg_usuario_frg"
@@ -36,7 +36,7 @@
                 android:layout_width="match_parent"
                 android:layout_alignParentLeft="true"
                 android:layout_below="@id/reg_usuariocomunidad_frg"
-                android:name="com.didekindroid.usuario.comunidad.RegUserFr"
+                android:name="com.didekindroid.usuario.activity.RegUserFr"
                 tools:layout="@layout/reg_usuario"/>
         <Button
                 android:id="@+id/reg_com_usuario_usuariocomu_button"

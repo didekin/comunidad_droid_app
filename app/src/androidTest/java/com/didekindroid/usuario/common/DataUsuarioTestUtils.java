@@ -3,10 +3,13 @@ package com.didekindroid.usuario.common;
 import com.didekindroid.R;
 import com.didekindroid.masterdata.dominio.Municipio;
 import com.didekindroid.masterdata.dominio.Provincia;
-import com.didekindroid.usuario.comunidad.dominio.Comunidad;
-import com.didekindroid.usuario.comunidad.dominio.Usuario;
-import com.didekindroid.usuario.comunidad.dominio.UsuarioComunidad;
-import com.didekindroid.usuario.login.dominio.AccessToken;
+import com.didekindroid.usuario.dominio.AccessToken;
+import com.didekindroid.usuario.dominio.Comunidad;
+import com.didekindroid.usuario.dominio.Usuario;
+import com.didekindroid.usuario.dominio.UsuarioComunidad;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
@@ -16,9 +19,8 @@ import static android.support.test.espresso.matcher.CursorMatchers.withRowString
 import static android.support.test.espresso.matcher.ViewMatchers.*;
 import static com.didekindroid.DidekindroidApp.getContext;
 import static com.didekindroid.common.ui.UIutils.updateIsRegistered;
-import static com.didekindroid.usuario.comunidad.dominio.Roles.ADMINISTRADOR;
-import static com.didekindroid.usuario.comunidad.dominio.Roles.PROPIETARIO;
-import static com.didekindroid.usuario.login.TokenHandler.TKhandler;
+import static com.didekindroid.usuario.common.TokenHandler.TKhandler;
+import static com.didekindroid.usuario.dominio.Roles.*;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 import static org.hamcrest.CoreMatchers.*;
 
@@ -33,14 +35,25 @@ public final class DataUsuarioTestUtils {
             new Municipio(new Provincia((short) 3), (short) 13));
     public static final Comunidad COMUNIDAD_2 = new Comunidad("Ronda", "de la Plazuela", (short) 5, null,
             new Municipio(new Provincia((short) 27), (short) 2));
-    public static final Usuario USUARIO = new Usuario("juan@juan.us", "juan", "psw_juan", (short) 0, 0);
-    public static final UsuarioComunidad USUARIO_COMUNIDAD_1 = new UsuarioComunidad(COMUNIDAD_1, USUARIO, "portal", "esc",
+    public static final Usuario USUARIO_1 = new Usuario("juan@juan.us", "juan", "psw_juan", (short) 0, 0);
+    public static final Usuario USUARIO_2 = new Usuario("pepe@pepe.org", "pepe", "psw_pepe", (short) 34, 234432123);
+    public static final UsuarioComunidad USUARIO_COMUNIDAD_1 = new UsuarioComunidad(COMUNIDAD_1, USUARIO_1, "portal", "esc",
             "plantaX", "door12", PROPIETARIO.getFunction());
-    public static final UsuarioComunidad USUARIO_COMUNIDAD_2 = new UsuarioComunidad(COMUNIDAD_2, USUARIO, null,
+    public static final UsuarioComunidad USUARIO_COMUNIDAD_2 = new UsuarioComunidad(COMUNIDAD_2, USUARIO_1, null,
             null, "planta3", "doorA", ADMINISTRADOR.getFunction());
+    public static final UsuarioComunidad USUARIO_COMUNIDAD_3 = new UsuarioComunidad(COMUNIDAD_2, USUARIO_2, "portalA",
+            null, "planta2", null, INQUILINO.getFunction());
 
     private DataUsuarioTestUtils()
     {
+    }
+
+    public static List<UsuarioComunidad> makeListTwoUserComu()
+    {
+        List<UsuarioComunidad> userComuList = new ArrayList<UsuarioComunidad>(2);
+        userComuList.add(USUARIO_COMUNIDAD_1);
+        userComuList.add(USUARIO_COMUNIDAD_2);
+        return userComuList;
     }
 
     public static void updateSecurityData(String userName, String password)
@@ -50,32 +63,33 @@ public final class DataUsuarioTestUtils {
         updateIsRegistered(true, getContext());
     }
 
-    public static void insertOneUserOneComu()
+    public static Usuario signUpAndUpdateTk(UsuarioComunidad usuarioComunidad)
     {
-        Usuario usuario = ServOne.signUp(USUARIO_COMUNIDAD_1);
-        updateSecurityData(USUARIO.getUserName(), "psw_juan");
+        Usuario usuario = ServOne.signUp(usuarioComunidad);
+        updateSecurityData(usuarioComunidad.getUsuario().getUserName(), usuarioComunidad.getUsuario().getPassword());
+        return usuario;
     }
 
-    public static void insertOneUserTwoComu()
+    public static void regComuAndUserComuWith2Comu(List<UsuarioComunidad> usuarioComunidadList)
     {
-        insertOneUserOneComu();
-        ServOne.insertUserOldComunidadNew(USUARIO_COMUNIDAD_2);
+        signUpAndUpdateTk(usuarioComunidadList.get(0));
+        ServOne.regComuAndUserComu(usuarioComunidadList.get(1));
     }
 
-    public static void insertOnePlusComu(Comunidad comunidad)
+    public static void regComuAndUserComuWith3Comu(List<UsuarioComunidad> usuarioComunidadList, Comunidad comunidad)
     {
-        UsuarioComunidad usuarioComunidad = new UsuarioComunidad(comunidad, USUARIO, null, null, "plan-5", null,
-                ADMINISTRADOR.getFunction());
-        insertOneUserTwoComu();
-        ServOne.insertUserOldComunidadNew(usuarioComunidad);
+        UsuarioComunidad usuarioComunidad = new UsuarioComunidad(comunidad, usuarioComunidadList.get(0).getUsuario(),
+                null, null, "plan-5", null, ADMINISTRADOR.getFunction());
+        regComuAndUserComuWith2Comu(usuarioComunidadList);
+        ServOne.regComuAndUserComu(usuarioComunidad);
     }
 
     public static void typeComunidadData()
     {
         onView(allOf(withId(R.id.tipo_via_spinner))).perform(click());
-        onData(allOf(is(instanceOf(String.class)), is("Callejon"))).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is("Calle"))).perform(click());
         onView(allOf(withId(R.id.reg_comunidad_spinner_dropdown_item), withParent(withId(R.id.tipo_via_spinner))))
-                .check(matches(withText(containsString("Callejon"))));
+                .check(matches(withText(containsString("Calle"))));
 
         onView(withId(R.id.autonoma_comunidad_spinner)).perform(click());
         onData(withRowString(1, "Valencia")).perform(click());
@@ -83,18 +97,20 @@ public final class DataUsuarioTestUtils {
                 .check(matches(withText(containsString("Valencia"))));
 
         onView(withId(R.id.provincia_spinner)).perform(click());
-        onData(withRowString(1, "Castellón/Castelló")).perform(click());
+        onData(withRowString(1, "Alicante/Alacant")).perform(click());
         onView(allOf(withId(R.id.reg_comunidad_spinner_dropdown_item), withParent(withId(R.id.provincia_spinner))))
-                .check(matches(withText(containsString("Castellón/Castelló"))));
+                .check(matches(withText(containsString("Alicante/Alacant"))));
 
         onView(withId(R.id.municipio_spinner)).perform(click());
-        onData(withRowString(3, "Chilches/Xilxes")).perform(click());
+        onData(withRowString(3, "Algueña")).perform(click());
         onView(allOf(withId(R.id.reg_comunidad_spinner_dropdown_item), withParent(withId(R.id.municipio_spinner))))
-                .check(matches(withText(containsString("Chilches/Xilxes"))));
+                .check(matches(withText(containsString("Algueña"))));
 
 
-        onView(withId(R.id.comunidad_nombre_via_editT)).perform(typeText("nombre via One"));
-        onView(withId(R.id.comunidad_numero_editT)).perform(typeText("123"));
-        onView(withId(R.id.comunidad_sufijo_numero_editT)).perform(typeText("Tris"), closeSoftKeyboard());
+        onView(withId(R.id.comunidad_nombre_via_editT)).perform(typeText("Real"));
+        onView(withId(R.id.comunidad_numero_editT)).perform(typeText("5"));
+        onView(withId(R.id.comunidad_sufijo_numero_editT)).perform(typeText("Bis"), closeSoftKeyboard());
     }
+
+
 }

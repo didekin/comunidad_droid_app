@@ -41,7 +41,7 @@
         <!-- **************************************************************** -->
         <!-- =========== Comunidad ========== -->
         <activity
-                android:name=".usuario.comunidad.ComuSearchAc"
+                android:name=".usuario.activity.ComuSearchAc"
                 android:label="@string/comu_search_ac_label"
                 android:launchMode="singleTop"
                 android:windowSoftInputMode="stateVisible|adjustResize">
@@ -51,48 +51,48 @@
             </intent-filter>
         </activity>
         <activity
-                android:name=".usuario.comunidad.ComuSearchResultsAc"
+                android:name=".usuario.activity.ComuSearchResultsAc"
                 android:label="@string/comu_search_results_ac_label"
-                android:parentActivityName=".usuario.comunidad.ComuSearchAc">
+                android:parentActivityName=".usuario.activity.ComuSearchAc">
         </activity>
         <activity
-                android:name=".usuario.comunidad.SeeComuAndUserComuAc"
+                android:name=".usuario.activity.SeeComuAndUserComuAc"
                 android:label="@string/see_comu_and_usercomu_ac_label"
-                android:parentActivityName=".usuario.comunidad.ComuSearchResultsAc">
+                android:parentActivityName=".usuario.activity.ComuSearchResultsAc">
         </activity>
         <activity
-                android:name=".usuario.comunidad.RegUserAndUserComuAc"
+                android:name=".usuario.activity.RegUserAndUserComuAc"
                 android:label="@string/reg_user_and_usercomu_ac_label"
-                android:parentActivityName=".usuario.comunidad.ComuSearchResultsAc">
+                android:parentActivityName=".usuario.activity.ComuSearchResultsAc">
         </activity>
         <activity
-                android:name=".usuario.comunidad.RegUserComuAc"
+                android:name=".usuario.activity.RegUserComuAc"
                 android:label="@string/regusuario_comu_ac_label"
-                android:parentActivityName=".usuario.comunidad.ComuSearchAc"/>
+                android:parentActivityName=".usuario.activity.ComuSearchAc"/>
         <activity
-                android:name=".usuario.comunidad.RegComuAndUserAndUserComuAc"
+                android:name=".usuario.activity.RegComuAndUserAndUserComuAc"
                 android:label="@string/reg_comunidad_ac_label"
                 android:launchMode="singleTask"
-                android:parentActivityName=".usuario.comunidad.ComuSearchAc">
+                android:parentActivityName=".usuario.activity.ComuSearchAc">
         </activity>
         <activity
-                android:name=".usuario.comunidad.RegComuAndUserComuAc"
+                android:name=".usuario.activity.RegComuAndUserComuAc"
                 android:label="@string/reg_comunidad_ac_label"
                 android:launchMode="singleTask"
-                android:parentActivityName=".usuario.comunidad.ComuSearchAc">
+                android:parentActivityName=".usuario.activity.ComuSearchAc">
         </activity>
         <activity
-                android:name=".usuario.comunidad.ComusByUserListAc"
+                android:name=".usuario.activity.ComusByUserListAc"
                 android:label="@string/comunidades_usuario_acc_label"
-                android:parentActivityName=".usuario.comunidad.ComuSearchAc">
+                android:parentActivityName=".usuario.activity.ComuSearchAc">
         </activity>
         <!-- =========== Login ========== -->
         <activity
-                android:name=".usuario.login.LoginActivity"
+                android:name=".usuario.activity.LoginActivity"
                 android:label="@string/login_label">
         </activity>
         <activity
-                android:name=".usuario.UserDataAc"
+                android:name=".usuario.activity.UserDataAc"
                 android:label="@string/user_data_ac_label">
         </activity>
     </application>

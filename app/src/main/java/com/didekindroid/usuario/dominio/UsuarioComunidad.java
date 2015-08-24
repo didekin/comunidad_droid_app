@@ -160,7 +160,6 @@ public class UsuarioComunidad implements Serializable {
         if (escalera != null ? !escalera.equals(that.escalera) : that.escalera != null) return false;
         if (planta != null ? !planta.equals(that.planta) : that.planta != null) return false;
         if (puerta != null ? !puerta.equals(that.puerta) : that.puerta != null) return false;
-        if (!roles.equals(that.roles)) return false;
         if (!usuario.equals(that.usuario)) return false;
         if (!comunidad.equals(that.comunidad)) return false;
 
@@ -174,7 +173,6 @@ public class UsuarioComunidad implements Serializable {
         result = 31 * result + (escalera != null ? escalera.hashCode() : 0);
         result = 31 * result + (planta != null ? planta.hashCode() : 0);
         result = 31 * result + (puerta != null ? puerta.hashCode() : 0);
-        result = 31 * result + roles.hashCode();
         result = 31 * result + usuario.hashCode();
         result = 31 * result + comunidad.hashCode();
         return result;

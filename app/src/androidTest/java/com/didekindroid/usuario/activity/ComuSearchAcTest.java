@@ -9,8 +9,6 @@ import android.support.test.espresso.action.ViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import com.didekindroid.R;
-import com.didekindroid.usuario.activity.ComuSearchAc;
-import com.didekindroid.usuario.activity.RegComuFr;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -25,11 +23,12 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.*;
 import static com.didekindroid.common.ui.UIutils.isRegisteredUser;
-import static com.didekindroid.usuario.common.DataUsuarioTestUtils.insertOneUserOneComu;
+import static com.didekindroid.usuario.common.DataUsuarioTestUtils.USUARIO_COMUNIDAD_1;
+import static com.didekindroid.usuario.common.DataUsuarioTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.usuario.common.DataUsuarioTestUtils.typeComunidadData;
 import static com.didekindroid.usuario.common.UserMenuTest.*;
 import static com.didekindroid.usuario.beanfiller.UserAndComuFiller.makeComunidadBeanFromView;
-import static com.didekindroid.usuario.login.TokenHandler.TKhandler;
+import static com.didekindroid.usuario.common.TokenHandler.TKhandler;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -89,7 +88,7 @@ public class ComuSearchAcTest {
     public void testUpdateIsRegistered_2()
     {
         //With token.
-        insertOneUserOneComu();
+        signUpAndUpdateTk(USUARIO_COMUNIDAD_1);
         assertThat(refreshTkFile.exists(), is(true));
 
         activity = mActivityRule.launchActivity(new Intent());
@@ -168,7 +167,7 @@ public class ComuSearchAcTest {
     public void searchComunidadOK_2() throws InterruptedException
     {
         //With token.
-        insertOneUserOneComu();
+        signUpAndUpdateTk(USUARIO_COMUNIDAD_1);
 
         activity = mActivityRule.launchActivity(new Intent());
         assertThat(isRegisteredUser(activity), is(true));
@@ -197,7 +196,7 @@ public class ComuSearchAcTest {
     public void testGetDatosUsuarioWithToken() throws InterruptedException
     {
         //With token.
-        insertOneUserOneComu();
+        signUpAndUpdateTk(USUARIO_COMUNIDAD_1);
         activity = mActivityRule.launchActivity(new Intent());
         assertThat(isRegisteredUser(activity), is(true));
         USER_DATA_AC.checkMenuItem_WTk(activity);
@@ -215,7 +214,7 @@ public class ComuSearchAcTest {
     @Test
     public void testMenuNuevaComunidad_withToken() throws InterruptedException
     {
-        insertOneUserOneComu();
+        signUpAndUpdateTk(USUARIO_COMUNIDAD_1);
         activity = mActivityRule.launchActivity(new Intent());
         assertThat(isRegisteredUser(activity), is(true));
         REG_COMU_USER_USERCOMU_AC.checkMenuItem_WTk(activity);
@@ -224,7 +223,7 @@ public class ComuSearchAcTest {
     @Test
     public void testComunidadesByUsuario_withToken() throws InterruptedException
     {
-        insertOneUserOneComu();
+        signUpAndUpdateTk(USUARIO_COMUNIDAD_1);
         activity = mActivityRule.launchActivity(new Intent());
         assertThat(isRegisteredUser(activity), is(true));
         COMU_BY_USER_LIST_AC.checkMenuItem_WTk(activity);

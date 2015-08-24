@@ -17,8 +17,8 @@ import com.didekindroid.masterdata.dominio.Municipio;
 import com.didekindroid.masterdata.dominio.Provincia;
 import com.didekindroid.masterdata.repository.MasterDataDb;
 import com.didekindroid.masterdata.repository.MasterDataDbHelper;
-import com.didekindroid.usuario.comunidad.dominio.Comunidad;
-import com.didekindroid.usuario.comunidad.dominio.ComunidadBean;
+import com.didekindroid.usuario.dominio.Comunidad;
+import com.didekindroid.usuario.dominio.ComunidadBean;
 
 import java.util.List;
 

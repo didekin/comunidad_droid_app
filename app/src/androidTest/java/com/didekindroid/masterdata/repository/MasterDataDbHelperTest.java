@@ -4,15 +4,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteCursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import com.didekindroid.DidekindroidApp;
 import com.didekindroid.masterdata.dominio.ComunidadAutonoma;
 import com.didekindroid.masterdata.dominio.Provincia;
-import com.didekindroid.usuario.comunidad.ComuSearchAc;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
