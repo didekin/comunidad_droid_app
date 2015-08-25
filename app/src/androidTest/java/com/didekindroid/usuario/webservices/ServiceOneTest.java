@@ -19,7 +19,7 @@ import java.util.List;
 
 import static com.didekindroid.usuario.common.DataUsuarioTestUtils.*;
 import static com.didekindroid.usuario.common.TokenHandler.TKhandler;
-import static com.didekindroid.usuario.dominio.Roles.PROPIETARIO;
+import static com.didekindroid.common.dominio.Rol.PROPIETARIO;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 import static com.didekindroid.usuario.webservices.ServiceOneEndPoints.OAUTH_CLIENT_ID;
 import static com.didekindroid.usuario.webservices.ServiceOneEndPoints.OAUTH_CLIENT_SECRET;
@@ -205,7 +205,7 @@ public class ServiceOneTest {
 
         // Añado comunidad del primer usuario al segundo.
         UsuarioComunidad userComu = new UsuarioComunidad(comunidad,null,"portal",
-                "esc", "planta2", "doorJ", PROPIETARIO.getFunction());
+                "esc", "planta2", "doorJ", PROPIETARIO.function);
         int rowInserted = ServOne.regUserComu(userComu);
         assertThat(rowInserted, is(1));
 

@@ -55,21 +55,21 @@ public class UserAndComuFiller {
         UsuarioComunidadBean usuarioComunidadBean = new UsuarioComunidadBean(
                 comunidadBean,
                 usuarioBean,
-                ((TextView) usuarioComunidadRegView.findViewById(R.id.reg_usuariocomunidad_portal_editT)).getText()
+                ((TextView) usuarioComunidadRegView.findViewById(R.id.reg_usercomu_portal_ed)).getText()
                         .toString(),
-                ((TextView) usuarioComunidadRegView.findViewById(R.id.reg_usuariocomunidad_escalera_editT)).getText()
+                ((TextView) usuarioComunidadRegView.findViewById(R.id.reg_usercomu_escalera_ed)).getText()
                         .toString(),
-                ((TextView) usuarioComunidadRegView.findViewById(R.id.reg_usuariocomunidad_planta_editT)).getText()
+                ((TextView) usuarioComunidadRegView.findViewById(R.id.reg_usercomu_planta_ed)).getText()
                         .toString(),
-                ((TextView) usuarioComunidadRegView.findViewById(R.id.reg_usuariocomunidad_puerta_editT)).getText()
+                ((TextView) usuarioComunidadRegView.findViewById(R.id.reg_usercomu_puerta_ed)).getText()
                         .toString(),
-                ((CheckBox) usuarioComunidadRegView.findViewById(R.id.reg_usuariocomunidad_roles_checbox_presi))
+                ((CheckBox) usuarioComunidadRegView.findViewById(R.id.reg_usercomu_checbox_pre))
                         .isChecked(),
-                ((CheckBox) usuarioComunidadRegView.findViewById(R.id.reg_usuariocomunidad_roles_checbox_admin))
+                ((CheckBox) usuarioComunidadRegView.findViewById(R.id.reg_usercomu_checbox_admin))
                         .isChecked(),
-                ((CheckBox) usuarioComunidadRegView.findViewById(R.id.reg_usuariocomunidad_roles_checbox_propietario))
+                ((CheckBox) usuarioComunidadRegView.findViewById(R.id.reg_usercomu_checbox_pro))
                         .isChecked(),
-                ((CheckBox) usuarioComunidadRegView.findViewById(R.id.reg_usuariocomunidad_roles_checbox_inquilino))
+                ((CheckBox) usuarioComunidadRegView.findViewById(R.id.reg_usercomu_checbox_inq))
                         .isChecked()
         );
 

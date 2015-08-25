@@ -37,8 +37,7 @@
     <!--****************************************************************-->
     <!--Messages-->
     <string name="error_validation_msg">Los siguientes datos no son válidos: </string>
-    <string name="user_without_signedUp">"No te has registrado aún.\nBusca tu comunidad y regístrate en ella.\n
-        Si no existe, regístrala en 'Nueva comunidad'."</string>
+    <string name="user_without_signedUp">"No te has registrado aún.\nBusca tu comunidad y regístrate en ella.\nSi no existe, regístrala en 'Nueva comunidad'."</string>
     <string name="no_result_search_comunidad">No hemos encontrado tu comunidad.\n
             Puedes registrarla aquí. </string>
     <!--Menús-->
@@ -85,20 +84,19 @@
     <!-- ============= RegComuAndUserAndUserComuAc =============-->
     <string name="reg_comunidad_ac_label">Nueva comunidad</string>
     <!-- ============= RegComuAndUserComuAc =============-->
-    <string name="reg_usuario_comunidad_rot_vivienda">Mi vivienda</string>
-    <string name="vivienda_portal_hint">Portal</string>
-    <string name="vivienda_escalera_hint">Escalera</string>
-    <string name="vivienda_planta_hint">Planta</string>
-    <string name="vivienda_puerta_hint">Puerta</string>
-    <string name="comunidad_role_checkbox_rotulo">Vínculo (uno o más):</string>
-    <string name="comunidad_role_rotulo">Vínculo</string>
-    <string name="comunidad_role">Vínculo con la comunidad</string>
-    <string name="button_registro_en_comunidad">Adherirme a la comunidad</string>
-    <!--para mensaje de error validación-->
-    <string name="checkbox_presidente">Presidente</string>
-    <string name="checkbox_admin">Administrador</string>
-    <string name="checkbox_propietario">Propietario</string>
-    <string name="checkbox_inquilino">Arrendatario</string>
+    <string name="reg_usercomu_vivienda_rot">Mi vivienda</string>
+    <string name="reg_usercomu_portal_hint">Portal</string>
+    <string name="reg_usercomu_escalera_hint">Escalera</string>
+    <string name="reg_usercomu_planta_hint">Planta</string>
+    <string name="reg_usercomu_puerta_hint">Puerta</string>
+    <string name="reg_usercomu_role_checkbox_rot">Vínculo (uno o más):</string>
+    <string name="reg_usercomu_role_rot">Vínculo con la comunidad</string>
+    <string name="reg_usercomu_ac_button_rot">Adherirme a la comunidad</string>
+    <!--para mensaje de error validación y rótulos de campos  -->
+    <string name="reg_usercomu_checkbox_pre_rot">Presidente</string>
+    <string name="reg_usercomu_checbox_admin_rot">Administrador</string>
+    <string name="reg_usercomu_checbox_pro_rot">Propietario</string>
+    <string name="reg_usercomu_checbox_inq_rot">Arrendatario</string>
     <string name="comunidad_null">Comunidad</string>
     <!-- ============= RegUserComuAc =============-->
     <string name="regusuario_comu_ac_label">Comunidad seleccionada</string>

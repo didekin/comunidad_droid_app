@@ -2,6 +2,7 @@ package com.didekindroid.usuario.dominio;
 
 import android.content.res.Resources;
 import com.didekindroid.R;
+import com.didekindroid.common.dominio.Rol;
 import com.didekindroid.common.dominio.SerialNumbers;
 import com.google.common.primitives.Booleans;
 
@@ -53,16 +54,16 @@ public class UsuarioComunidadBean implements Serializable {
         StringBuilder rolesBuilder = new StringBuilder();
 
         if (isAdministrador) {
-            rolesBuilder.append(Roles.ADMINISTRADOR.getFunction()).append(",");
+            rolesBuilder.append(Rol.ADMINISTRADOR.function).append(",");
         }
         if (isPresidente) {
-            rolesBuilder.append(Roles.PRESIDENTE.getFunction()).append(",");
+            rolesBuilder.append(Rol.PRESIDENTE.function).append(",");
         }
         if (isPropietario) {
-            rolesBuilder.append(Roles.PROPIETARIO.getFunction()).append(",");
+            rolesBuilder.append(Rol.PROPIETARIO.function).append(",");
         }
         if (isInquilino) {
-            rolesBuilder.append(Roles.INQUILINO.getFunction());
+            rolesBuilder.append(Rol.INQUILINO.function);
         }
 
         if (rolesBuilder.charAt(rolesBuilder.length() - 1) == ',') {
@@ -83,59 +84,63 @@ public class UsuarioComunidadBean implements Serializable {
                 & (!isComunidadToValid || validateComunidad(resources, errorMsg));
     }
 
-    protected boolean validatePortal(Resources resources, StringBuilder errorMsg)
+    /*  [\\w_ñÑáéíóúüÜ\\.\\-\\s]{1,10}  */
+    boolean validatePortal(Resources resources, StringBuilder errorMsg)
     {
         if (usuarioComunidad.getPortal().trim().isEmpty()) return true;
 
         boolean isValid = PORTAL.pattern.matcher(usuarioComunidad.getPortal()).matches()
                 && !SELECT.pattern.matcher(usuarioComunidad.getPortal()).find();
         if (!isValid) {
-            errorMsg.append(resources.getText(R.string.vivienda_portal_hint) + LINE_BREAK.literal);
+            errorMsg.append(resources.getText(R.string.reg_usercomu_portal_hint) + LINE_BREAK.literal);
             usuarioComunidad.setPortal(null);
         }
         return isValid;
     }
 
-    protected boolean validateEscalera(Resources resources, StringBuilder errorMsg)
+    /*  [\\w_ñÑáéíóúüÜ\\.\\-\\s]{1,10}  */
+    boolean validateEscalera(Resources resources, StringBuilder errorMsg)
     {
         if (usuarioComunidad.getEscalera().trim().isEmpty()) return true;
 
         boolean isValid = ESCALERA.pattern.matcher(usuarioComunidad.getEscalera()).matches()
                 && !SELECT.pattern.matcher(usuarioComunidad.getEscalera()).find();
         if (!isValid) {
-            errorMsg.append(resources.getText(R.string.vivienda_escalera_hint) + LINE_BREAK.literal);
+            errorMsg.append(resources.getText(R.string.reg_usercomu_escalera_hint) + LINE_BREAK.literal);
             usuarioComunidad.setEscalera(null);
         }
         return isValid;
     }
 
-    protected boolean validatePlanta(Resources resources, StringBuilder errorMsg)
+    /*  [\\w_ñÑáéíóúüÜ\\.\\-\\s]{1,10}  */
+    boolean validatePlanta(Resources resources, StringBuilder errorMsg)
     {
         if (usuarioComunidad.getPlanta().trim().isEmpty()) return true;
 
         boolean isValid = PLANTA.pattern.matcher(usuarioComunidad.getPlanta()).matches()
                 && !SELECT.pattern.matcher(usuarioComunidad.getPlanta()).find();
         if (!isValid) {
-            errorMsg.append(resources.getText(R.string.vivienda_planta_hint) + LINE_BREAK.literal);
+            errorMsg.append(resources.getText(R.string.reg_usercomu_planta_hint) + LINE_BREAK.literal);
             usuarioComunidad.setPlanta(null);
         }
         return isValid;
     }
 
-    protected boolean validatePuerta(Resources resources, StringBuilder errorMsg)
+    /*  [\\w_ñÑáéíóúüÜ\\.\\-]{1,10}  */
+    boolean validatePuerta(Resources resources, StringBuilder errorMsg)
     {
         if (usuarioComunidad.getPuerta().trim().isEmpty()) return true;
 
         boolean isValid = PUERTA.pattern.matcher(usuarioComunidad.getPuerta()).matches()
                 && !SELECT.pattern.matcher(usuarioComunidad.getPuerta()).find();
         if (!isValid) {
-            errorMsg.append(resources.getText(R.string.vivienda_puerta_hint) + LINE_BREAK.literal);
+            errorMsg.append(resources.getText(R.string.reg_usercomu_puerta_hint) + LINE_BREAK.literal);
             usuarioComunidad.setPuerta(null);
         }
         return isValid;
     }
 
-    protected boolean validateRoles(Resources resources, StringBuilder errorMsg)
+    boolean validateRoles(Resources resources, StringBuilder errorMsg)
     {
         int rolesSize = Booleans.countTrue(isAdministrador, isPropietario, isPresidente, isInquilino);
         boolean isValid = false;
@@ -145,12 +150,12 @@ public class UsuarioComunidadBean implements Serializable {
             setRoles();
             isValid = true;
         } else {
-            errorMsg.append(resources.getText(R.string.comunidad_role) + LINE_BREAK.literal);
+            errorMsg.append(resources.getText(R.string.reg_usercomu_role_rot) + LINE_BREAK.literal);
         }
         return isValid;
     }
 
-    protected boolean validateUsuario(Resources resources, StringBuilder errorMsg)
+    boolean validateUsuario(Resources resources, StringBuilder errorMsg)
     {
         // The user is authenticated by an accessToken. usuarioBean may be null.
         if (usuarioBean == null) {
@@ -159,7 +164,7 @@ public class UsuarioComunidadBean implements Serializable {
         return usuarioBean.validate(resources, errorMsg);
     }
 
-    protected boolean validateComunidad(Resources resources, StringBuilder errorMsg)
+    boolean validateComunidad(Resources resources, StringBuilder errorMsg)
     {
         if (comunidadBean == null) {
             errorMsg.append(resources.getText(R.string.comunidad_null) + LINE_BREAK.literal);
