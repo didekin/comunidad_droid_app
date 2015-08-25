@@ -9,6 +9,7 @@ import android.support.test.espresso.action.ViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import com.didekindroid.R;
+import com.didekindroid.usuario.common.DataUsuarioTestUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -23,9 +24,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.*;
 import static com.didekindroid.common.ui.UIutils.isRegisteredUser;
-import static com.didekindroid.usuario.common.DataUsuarioTestUtils.USUARIO_COMUNIDAD_1;
-import static com.didekindroid.usuario.common.DataUsuarioTestUtils.signUpAndUpdateTk;
-import static com.didekindroid.usuario.common.DataUsuarioTestUtils.typeComunidadData;
+import static com.didekindroid.usuario.common.DataUsuarioTestUtils.*;
 import static com.didekindroid.usuario.common.UserMenuTest.*;
 import static com.didekindroid.usuario.beanfiller.UserAndComuFiller.makeComunidadBeanFromView;
 import static com.didekindroid.usuario.common.TokenHandler.TKhandler;
@@ -132,16 +131,7 @@ public class ComuSearchAcTest {
         onView(withId(R.id.comunidad_sufijo_numero_editT)).perform(ViewActions.typeText("Tris"), ViewActions.closeSoftKeyboard());
 
         onView(withId(R.id.searchComunidad_Bton)).perform(ViewActions.click());
-
-        ViewInteraction toastViewInteraction = onView(withText(
-                containsString(resources.getText(R.string.error_validation_msg).toString())
-        ));
-
-        toastViewInteraction.inRoot(withDecorView(not(activity.getWindow().getDecorView())))
-                .check(matches(isDisplayed()))
-                .check(matches(withText(containsString(resources.getText(R.string.tipo_via).toString()))))
-                .check(matches(withText(containsString(resources.getText(R.string.nombre_via).toString()))))
-                .check(matches(withText(containsString(resources.getText(R.string.municipio).toString()))));
+        makeErrorValidationToast(activity,R.string.tipo_via,R.string.nombre_via,R.string.municipio);
     }
 
     @Test

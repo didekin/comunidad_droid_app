@@ -20,7 +20,7 @@ import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 public class ComusByUserListAc extends ListActivity {
 
     private static final String TAG = ComusByUserListAc.class.getCanonicalName();
-    private ComusByUserListAdapter listAdapter;
+    private ComuAndUserComuListAdapter listAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -83,7 +83,7 @@ public class ComusByUserListAc extends ListActivity {
         {
             Log.d(TAG, "RegComuAndUserComuHttp.onPostExecute()");
 
-            listAdapter = new ComusByUserListAdapter(ComusByUserListAc.this);
+            listAdapter = new ComuAndUserComuListAdapter(ComusByUserListAc.this);
             listAdapter.addAll(usuarioComunidades);
             setListAdapter(listAdapter);
         }

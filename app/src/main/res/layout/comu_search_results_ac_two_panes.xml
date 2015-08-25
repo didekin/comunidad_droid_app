@@ -13,7 +13,7 @@
             android:layout_width="0dp"
             android:layout_alignParentLeft="true"
             android:name="com.didekindroid.usuario.activity.ComuListFr"
-            tools:layout="@layout/comu_list_adapter_view"/>
+            tools:layout="@layout/comu_list_item_view"/>
 
     <fragment
             android:id="@+id/usuario_comunidad_reg_frg"

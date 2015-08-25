@@ -20,7 +20,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
-import java.util.List;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
@@ -35,7 +34,7 @@ import static com.didekindroid.usuario.common.DataUsuarioTestUtils.*;
 import static com.didekindroid.usuario.common.TokenHandler.TKhandler;
 import static com.didekindroid.usuario.common.UserIntentExtras.COMUNIDAD_SEARCH;
 import static com.didekindroid.usuario.common.UserMenuTest.*;
-import static com.didekindroid.usuario.dominio.Roles.PROPIETARIO;
+import static com.didekindroid.common.dominio.Rol.PROPIETARIO;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 import static com.google.android.apps.common.testing.ui.espresso.sample.LongListMatchers.withAdaptedData;
 import static org.hamcrest.Matchers.*;
@@ -429,7 +428,7 @@ public class ComuSearchResultsAcTest {
                 new Municipio(new Provincia((short) 2), (short) 22));
         Usuario usuarioIn = new Usuario("newuser@jnew.us", "newuser", "psw_newuser", (short) 34, 600151515);
         UsuarioComunidad usuarioComunidad = new UsuarioComunidad(comunidadIn, usuarioIn, null,
-                null, "3pl", "A_puerta", PROPIETARIO.getFunction());
+                null, "3pl", "A_puerta", PROPIETARIO.function);
         Usuario usuario = ServOne.signUp(usuarioComunidad);
         updateSecurityData(usuario.getUserName(), "psw_newuser");
 

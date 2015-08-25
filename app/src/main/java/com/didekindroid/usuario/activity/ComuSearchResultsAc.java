@@ -132,7 +132,6 @@ public class ComuSearchResultsAc extends Activity implements ComuListFr.ComuList
                 startActivity(intent);
             } else {
                 Log.d(TAG, "onComunidadSelected(). User is registered and not associated to the comunidad.");
-                // Comunidad data are shown as not modifiable.
                 Intent intent = new Intent(this, RegUserComuAc.class);
                 intent.putExtra(COMUNIDAD_LIST_OBJECT.extra, comunidad);
                 startActivity(intent);

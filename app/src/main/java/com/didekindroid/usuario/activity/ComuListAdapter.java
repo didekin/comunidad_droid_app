@@ -21,7 +21,7 @@ public class ComuListAdapter extends ArrayAdapter<Comunidad> {
 
     public ComuListAdapter(Context context)
     {
-        super(context, R.layout.comu_list_adapter_view, R.id.nombreComunidad_view);
+        super(context, R.layout.comu_list_item_view, R.id.nombreComunidad_view);
     }
 
     @Override
@@ -31,26 +31,23 @@ public class ComuListAdapter extends ArrayAdapter<Comunidad> {
 
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        ComunidadViewHolder viewHolder;
+        ComuViewHolder viewHolder;
 
         if (convertView == null) {
-
             Log.d(TAG, "getView(), convertView == null");
-
-            convertView = LayoutInflater.from(getContext())
-                    .inflate(R.layout.comu_list_adapter_view, parent, false);
-            viewHolder = doComunidadViewHolder(convertView);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.comu_list_item_view, parent, false);
+            viewHolder = initViewsInComuVwHolder(convertView);
             convertView.setTag(viewHolder);
         }
 
-        viewHolder = (ComunidadViewHolder) convertView.getTag();
+        viewHolder = (ComuViewHolder) convertView.getTag();
         final Comunidad comunidad = getItem(position);
-        initializeComuViewHolder(viewHolder, comunidad);
+        initTextsInComuVwHolder(viewHolder, comunidad);
 
         return convertView;
     }
 
-    static void initializeComuViewHolder(ComunidadViewHolder viewHolder, Comunidad comunidad)
+    static void initTextsInComuVwHolder(ComuViewHolder viewHolder, Comunidad comunidad)
     {
         viewHolder.mTipoViaView.setText(comunidad.getTipoVia());
         viewHolder.mNombreViaView.setText(comunidad.getNombreVia());
@@ -60,14 +57,14 @@ public class ComuListAdapter extends ArrayAdapter<Comunidad> {
         viewHolder.mProvinciaView.setText(comunidad.getMunicipio().getProvincia().getNombre());
     }
 
-    static ComunidadViewHolder doComunidadViewHolder(View convertView)
+    static ComuViewHolder initViewsInComuVwHolder(View convertView)
     {
-        ComunidadViewHolder viewHolder;
-        viewHolder = new ComunidadViewHolder();
-        viewHolder.mNombreViaView = (TextView) convertView.findViewById(R.id.nombreVia_view);
-        viewHolder.mMunicipioView = (TextView) convertView.findViewById(R.id.municipio_view);
-        viewHolder.mNumeroEnViaView = (TextView) convertView.findViewById(R.id.numeroEnVia_view);
+        ComuViewHolder viewHolder;
+        viewHolder = new ComuViewHolder();
         viewHolder.mTipoViaView = (TextView) convertView.findViewById(R.id.tipoVia_view);
+        viewHolder.mNombreViaView = (TextView) convertView.findViewById(R.id.nombreVia_view);
+        viewHolder.mNumeroEnViaView = (TextView) convertView.findViewById(R.id.numeroEnVia_view);
+        viewHolder.mMunicipioView = (TextView) convertView.findViewById(R.id.municipio_view);
         viewHolder.mProvinciaView = (TextView) convertView.findViewById(R.id.provincia_view);
         return viewHolder;
     }
@@ -75,7 +72,7 @@ public class ComuListAdapter extends ArrayAdapter<Comunidad> {
 
     // ......... Inner classes .................
 
-    public static class ComunidadViewHolder {
+    static class ComuViewHolder {
 
         TextView mNombreViaView;
         TextView mNumeroEnViaView;

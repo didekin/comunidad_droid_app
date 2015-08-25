@@ -124,12 +124,12 @@ public class RegComuAndUserAndUserComuAcTest {
 
         makeComunidadBeanFromView(mRegComuFrg.getFragmentView(), comunidadBean);
 
-        onView(withId(R.id.reg_usuariocomunidad_portal_editT)).perform(scrollTo(), typeText("port2"));
-        onView(withId(R.id.reg_usuariocomunidad_escalera_editT)).perform(scrollTo(), typeText("escale_b"));
-        onView(withId(R.id.reg_usuariocomunidad_planta_editT)).perform(scrollTo(), typeText("planta-N"));
-        onView(withId(R.id.reg_usuariocomunidad_puerta_editT)).perform(scrollTo(), typeText("puerta5"));
-        onView(withId(R.id.reg_usuariocomunidad_roles_checbox_presi)).perform(scrollTo(), click());
-        onView(withId(R.id.reg_usuariocomunidad_roles_checbox_inquilino)).perform(scrollTo(), click());
+        onView(withId(R.id.reg_usercomu_portal_ed)).perform(scrollTo(), typeText("port2"));
+        onView(withId(R.id.reg_usercomu_escalera_ed)).perform(scrollTo(), typeText("escale_b"));
+        onView(withId(R.id.reg_usercomu_planta_ed)).perform(scrollTo(), typeText("planta-N"));
+        onView(withId(R.id.reg_usercomu_puerta_ed)).perform(scrollTo(), typeText("puerta5"));
+        onView(withId(R.id.reg_usercomu_checbox_pre)).perform(scrollTo(), click());
+        onView(withId(R.id.reg_usercomu_checbox_inq)).perform(scrollTo(), click());
 
         onView(withId(R.id.reg_usuario_email_editT)).perform(scrollTo(), typeText("yo@email.com"));
         onView(withId(R.id.reg_usuario_alias_ediT)).perform(scrollTo(), typeText("alias1"));
@@ -204,7 +204,7 @@ public class RegComuAndUserAndUserComuAcTest {
                 .check(matches(withText(containsString(resources.getText(R.string.tipo_via).toString()))))
                 .check(matches(withText(containsString(resources.getText(R.string.nombre_via).toString()))))
                 .check(matches(withText(containsString(resources.getText(R.string.municipio).toString()))))
-                .check(matches(withText(containsString(resources.getText(R.string.comunidad_role).toString()))))
+                .check(matches(withText(containsString(resources.getText(R.string.reg_usercomu_role_rot).toString()))))
                 .check(matches(withText(containsString(resources.getText(R.string.alias).toString()))))
                 .check(matches(withText(containsString(resources.getText(R.string.email_hint).toString()))))
                 .check(matches(withText(containsString(resources.getText(R.string.telefono_prefix_rotulo).toString()))))
@@ -236,12 +236,12 @@ public class RegComuAndUserAndUserComuAcTest {
         onView(withId(R.id.comunidad_numero_editT)).perform(scrollTo(), typeText("123"));
         onView(withId(R.id.comunidad_sufijo_numero_editT)).perform(scrollTo(), typeText("Tris"));
 
-        onView(withId(R.id.reg_usuariocomunidad_portal_editT)).perform(scrollTo(), typeText("port2"));
-        onView(withId(R.id.reg_usuariocomunidad_escalera_editT)).perform(scrollTo(), typeText("escale_b"));
-        onView(withId(R.id.reg_usuariocomunidad_planta_editT)).perform(scrollTo(), typeText("planta-N"));
-        onView(withId(R.id.reg_usuariocomunidad_puerta_editT)).perform(scrollTo(), typeText("puerta5"));
-        onView(withId(R.id.reg_usuariocomunidad_roles_checbox_presi)).perform(scrollTo(), click());
-        onView(withId(R.id.reg_usuariocomunidad_roles_checbox_inquilino)).perform(scrollTo(), click());
+        onView(withId(R.id.reg_usercomu_portal_ed)).perform(scrollTo(), typeText("port2"));
+        onView(withId(R.id.reg_usercomu_escalera_ed)).perform(scrollTo(), typeText("escale_b"));
+        onView(withId(R.id.reg_usercomu_planta_ed)).perform(scrollTo(), typeText("planta-N"));
+        onView(withId(R.id.reg_usercomu_puerta_ed)).perform(scrollTo(), typeText("puerta5"));
+        onView(withId(R.id.reg_usercomu_checbox_pre)).perform(scrollTo(), click());
+        onView(withId(R.id.reg_usercomu_checbox_inq)).perform(scrollTo(), click());
 
         onView(withId(R.id.reg_usuario_email_editT)).perform(scrollTo(), typeText("yo@email.com"));
         onView(withId(R.id.reg_usuario_alias_ediT)).perform(scrollTo(), typeText("alias1"));

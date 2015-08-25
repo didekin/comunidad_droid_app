@@ -59,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
                 android:textSize="@dimen/text_decription_widget"
-                android:text="@string/button_registro_en_comunidad"
+                android:text="@string/reg_usercomu_ac_button_rot"
                 android:layout_below="@id/reg_usuario_include"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/activity_vertical_double_margin"

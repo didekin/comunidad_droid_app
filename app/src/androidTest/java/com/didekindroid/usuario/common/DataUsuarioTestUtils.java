@@ -1,6 +1,11 @@
 package com.didekindroid.usuario.common;
 
+import android.app.Activity;
+import android.content.res.Resources;
+import android.support.test.espresso.ViewInteraction;
+import com.didekindroid.DidekindroidApp;
 import com.didekindroid.R;
+import com.didekindroid.common.dominio.Rol;
 import com.didekindroid.masterdata.dominio.Municipio;
 import com.didekindroid.masterdata.dominio.Provincia;
 import com.didekindroid.usuario.dominio.AccessToken;
@@ -16,13 +21,16 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.*;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.CursorMatchers.withRowString;
+import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.*;
 import static com.didekindroid.DidekindroidApp.getContext;
+import static com.didekindroid.common.dominio.Rol.*;
 import static com.didekindroid.common.ui.UIutils.updateIsRegistered;
 import static com.didekindroid.usuario.common.TokenHandler.TKhandler;
-import static com.didekindroid.usuario.dominio.Roles.*;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.not;
 
 /**
  * User: pedro
@@ -35,14 +43,16 @@ public final class DataUsuarioTestUtils {
             new Municipio(new Provincia((short) 3), (short) 13));
     public static final Comunidad COMUNIDAD_2 = new Comunidad("Ronda", "de la Plazuela", (short) 5, null,
             new Municipio(new Provincia((short) 27), (short) 2));
+
     public static final Usuario USUARIO_1 = new Usuario("juan@juan.us", "juan", "psw_juan", (short) 0, 0);
     public static final Usuario USUARIO_2 = new Usuario("pepe@pepe.org", "pepe", "psw_pepe", (short) 34, 234432123);
+
     public static final UsuarioComunidad USUARIO_COMUNIDAD_1 = new UsuarioComunidad(COMUNIDAD_1, USUARIO_1, "portal", "esc",
-            "plantaX", "door12", PROPIETARIO.getFunction());
+            "plantaX", "door12", PROPIETARIO.function);
     public static final UsuarioComunidad USUARIO_COMUNIDAD_2 = new UsuarioComunidad(COMUNIDAD_2, USUARIO_1, null,
-            null, "planta3", "doorA", ADMINISTRADOR.getFunction());
+            null, "planta3", "doorA", ADMINISTRADOR.function);
     public static final UsuarioComunidad USUARIO_COMUNIDAD_3 = new UsuarioComunidad(COMUNIDAD_2, USUARIO_2, "portalA",
-            null, "planta2", null, INQUILINO.getFunction());
+            null, "planta2", null, INQUILINO.function);
 
     private DataUsuarioTestUtils()
     {
@@ -79,7 +89,7 @@ public final class DataUsuarioTestUtils {
     public static void regComuAndUserComuWith3Comu(List<UsuarioComunidad> usuarioComunidadList, Comunidad comunidad)
     {
         UsuarioComunidad usuarioComunidad = new UsuarioComunidad(comunidad, usuarioComunidadList.get(0).getUsuario(),
-                null, null, "plan-5", null, ADMINISTRADOR.getFunction());
+                null, null, "plan-5", null, ADMINISTRADOR.function);
         regComuAndUserComuWith2Comu(usuarioComunidadList);
         ServOne.regComuAndUserComu(usuarioComunidad);
     }
@@ -112,5 +122,34 @@ public final class DataUsuarioTestUtils {
         onView(withId(R.id.comunidad_sufijo_numero_editT)).perform(typeText("Bis"), closeSoftKeyboard());
     }
 
+    public static void typeRegUserComuData(String portal, String escalera, String planta, String puerta, Rol...
+            roles)
+    {
+        onView(withId(R.id.reg_usercomu_portal_ed)).perform(typeText(portal));
+        onView(withId(R.id.reg_usercomu_escalera_ed)).perform(typeText(escalera));
+        onView(withId(R.id.reg_usercomu_planta_ed)).perform(typeText(planta));
+        onView(withId(R.id.reg_usercomu_puerta_ed)).perform(typeText(puerta), closeSoftKeyboard());
 
+        if (roles != null) {
+            for (Rol rol : roles) {
+                onView(withId(rol.resourceViewId)).perform(scrollTo(), click());
+            }
+        }
+    }
+
+    public static void makeErrorValidationToast(Activity activity, int... fieldsErrors)
+    {
+        Resources resources = DidekindroidApp.getContext().getResources();
+
+        ViewInteraction toast = onView(
+                withText(containsString(resources.getText(R.string.error_validation_msg).toString())))
+                .inRoot(withDecorView(not(activity.getWindow().getDecorView())))
+                .check(matches(isDisplayed()));
+
+        if (fieldsErrors != null){
+            for (int field : fieldsErrors) {
+                toast.check(matches(withText(containsString(resources.getText(field).toString()))));
+            }
+        }
+    }
 }

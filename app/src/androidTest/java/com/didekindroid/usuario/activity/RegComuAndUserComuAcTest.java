@@ -72,13 +72,13 @@ public class RegComuAndUserComuAcTest {
     {
         View usuarioComunidadRegView = activity.findViewById(R.id.reg_usuariocomunidad_frg);
 
-        onView(withId(R.id.reg_usuariocomunidad_portal_editT)).perform(typeText("port2"));
-        onView(withId(R.id.reg_usuariocomunidad_escalera_editT)).perform(typeText("escale_b"));
-        onView(withId(R.id.reg_usuariocomunidad_planta_editT)).perform(typeText("planta-N"));
-        onView(withId(R.id.reg_usuariocomunidad_puerta_editT)).perform(typeText("puerta5"), closeSoftKeyboard());
-        onView(withId(R.id.reg_usuariocomunidad_roles_checbox_presi)).perform(scrollTo(), click());
-        onView(withId(R.id.reg_usuariocomunidad_roles_checbox_admin)).perform(scrollTo(), click());
-        onView(withId(R.id.reg_usuariocomunidad_roles_checbox_inquilino)).perform(scrollTo(), click());
+        onView(withId(R.id.reg_usercomu_portal_ed)).perform(typeText("port2"));
+        onView(withId(R.id.reg_usercomu_escalera_ed)).perform(typeText("escale_b"));
+        onView(withId(R.id.reg_usercomu_planta_ed)).perform(typeText("planta-N"));
+        onView(withId(R.id.reg_usercomu_puerta_ed)).perform(typeText("puerta5"), closeSoftKeyboard());
+        onView(withId(R.id.reg_usercomu_checbox_pre)).perform(scrollTo(), click());
+        onView(withId(R.id.reg_usercomu_checbox_admin)).perform(scrollTo(), click());
+        onView(withId(R.id.reg_usercomu_checbox_inq)).perform(scrollTo(), click());
 
         ComunidadBean comunidadBean = new ComunidadBean("ataxo", "24 de Otoño", "001", "bis",
                 new Municipio(new Provincia((short) 10), (short) 162));
@@ -118,18 +118,18 @@ public class RegComuAndUserComuAcTest {
                 .check(matches(withText(containsString(resources.getText(R.string.tipo_via).toString()))))
                 .check(matches(withText(containsString(resources.getText(R.string.nombre_via).toString()))))
                 .check(matches(withText(containsString(resources.getText(R.string.municipio).toString()))))
-                .check(matches(withText(containsString(resources.getText(R.string.comunidad_role).toString()))));
+                .check(matches(withText(containsString(resources.getText(R.string.reg_usercomu_role_rot).toString()))));
     }
 
     @Test
     public void tesWrongUsuarioComunidad_2()
     {
-        onView(withId(R.id.reg_usuariocomunidad_roles_checbox_presi)).perform(scrollTo(), click());
-        onView(withId(R.id.reg_usuariocomunidad_roles_checbox_admin)).perform(scrollTo(), click());
-        onView(withId(R.id.reg_usuariocomunidad_roles_checbox_inquilino)).perform(scrollTo(), click());
-        onView(withId(R.id.reg_usuariocomunidad_roles_checbox_propietario)).perform(scrollTo(), click());
+        onView(withId(R.id.reg_usercomu_checbox_pre)).perform(scrollTo(), click());
+        onView(withId(R.id.reg_usercomu_checbox_admin)).perform(scrollTo(), click());
+        onView(withId(R.id.reg_usercomu_checbox_inq)).perform(scrollTo(), click());
+        onView(withId(R.id.reg_usercomu_checbox_pro)).perform(scrollTo(), click());
 
-        onView(withId(R.id.reg_usuariocomunidad_escalera_editT)).perform(typeText("esca??_b"));
+        onView(withId(R.id.reg_usercomu_escalera_ed)).perform(typeText("esca??_b"));
 
         onView(withId(R.id.reg_comu_usuariocomunidad_button)).perform(scrollTo(), click());
 
@@ -140,10 +140,10 @@ public class RegComuAndUserComuAcTest {
         toastViewInteraction.inRoot(withDecorView(not(activity.getWindow().getDecorView())))
                 .check(matches(isDisplayed()))
                 .check(matches(withText(containsString(resources.getText(R.string.tipo_via).toString()))))
-                .check(matches(withText(containsString(resources.getText(R.string.vivienda_escalera_hint).toString()))))
+                .check(matches(withText(containsString(resources.getText(R.string.reg_usercomu_escalera_hint).toString()))))
                 .check(matches(withText(containsString(resources.getText(R.string.nombre_via).toString()))))
                 .check(matches(withText(containsString(resources.getText(R.string.municipio).toString()))))
-                .check(matches(withText(containsString(resources.getText(R.string.comunidad_role).toString()))));
+                .check(matches(withText(containsString(resources.getText(R.string.reg_usercomu_role_rot).toString()))));
     }
 
     @Test
@@ -169,13 +169,13 @@ public class RegComuAndUserComuAcTest {
         onView(withId(R.id.comunidad_numero_editT)).perform(typeText("123"));
         onView(withId(R.id.comunidad_sufijo_numero_editT)).perform(typeText("Tris"), closeSoftKeyboard());
 
-        onView(withId(R.id.reg_usuariocomunidad_portal_editT)).perform(typeText("port2"));
-        onView(withId(R.id.reg_usuariocomunidad_escalera_editT)).perform(typeText("escale_b"));
-        onView(withId(R.id.reg_usuariocomunidad_planta_editT)).perform(typeText("planta-N"));
-        onView(withId(R.id.reg_usuariocomunidad_puerta_editT)).perform(typeText("puerta5"), closeSoftKeyboard());
-        onView(withId(R.id.reg_usuariocomunidad_roles_checbox_presi)).perform(scrollTo(), click());
-        onView(withId(R.id.reg_usuariocomunidad_roles_checbox_admin)).perform(scrollTo(), click());
-        onView(withId(R.id.reg_usuariocomunidad_roles_checbox_inquilino)).perform(scrollTo(), click());
+        onView(withId(R.id.reg_usercomu_portal_ed)).perform(typeText("port2"));
+        onView(withId(R.id.reg_usercomu_escalera_ed)).perform(typeText("escale_b"));
+        onView(withId(R.id.reg_usercomu_planta_ed)).perform(typeText("planta-N"));
+        onView(withId(R.id.reg_usercomu_puerta_ed)).perform(typeText("puerta5"), closeSoftKeyboard());
+        onView(withId(R.id.reg_usercomu_checbox_pre)).perform(scrollTo(), click());
+        onView(withId(R.id.reg_usercomu_checbox_admin)).perform(scrollTo(), click());
+        onView(withId(R.id.reg_usercomu_checbox_inq)).perform(scrollTo(), click());
 
         onView(withId(R.id.reg_comu_usuariocomunidad_button)).perform(scrollTo(), click());
 

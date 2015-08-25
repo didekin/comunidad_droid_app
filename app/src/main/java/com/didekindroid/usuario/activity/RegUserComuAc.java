@@ -42,7 +42,6 @@ public class RegUserComuAc extends Activity {
 
         // Preconditions: a user registered and an existing comunidad passed as intent.
         mComunidad = (Comunidad) getIntent().getExtras().getSerializable(COMUNIDAD_LIST_OBJECT.extra);
-//        checkNotNull(mComunidad,"Extra %s cannot be null", COMUNIDAD_LIST_OBJECT.extra);
 
         setContentView(R.layout.reg_usercomu_ac);
         mRegUserComuFr = (RegUserComuFr) getFragmentManager().findFragmentById(R.id.reg_usercomu_fr);
