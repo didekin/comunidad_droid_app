@@ -8,5 +8,5 @@
             android:id="@+id/comu_list_frg"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
-            android:name="com.didekindroid.usuario.activity.ComuListFr"/>
+            android:name="com.didekindroid.usuario.activity.ComuSearchResultsListFr"/>
 </FrameLayout>

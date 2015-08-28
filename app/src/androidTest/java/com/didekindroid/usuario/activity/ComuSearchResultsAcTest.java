@@ -1,11 +1,9 @@
 package com.didekindroid.usuario.activity;
 
 import android.content.Intent;
-import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
-import com.didekindroid.DidekindroidApp;
 import com.didekindroid.R;
 import com.didekindroid.masterdata.dominio.Municipio;
 import com.didekindroid.masterdata.dominio.Provincia;
@@ -25,17 +23,15 @@ import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
-import static android.support.test.espresso.matcher.ViewMatchers.*;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static com.didekindroid.common.dominio.Rol.PROPIETARIO;
 import static com.didekindroid.common.ui.UIutils.isRegisteredUser;
-import static com.didekindroid.common.ui.UIutils.updateIsRegistered;
-import static com.didekindroid.common.ui.ViewsIDs.COMUNIDADES_FOUND;
+import static com.didekindroid.common.ui.ViewsIDs.COMU_SEARCH_RESULTS;
 import static com.didekindroid.usuario.common.DataUsuarioTestUtils.*;
 import static com.didekindroid.usuario.common.TokenHandler.TKhandler;
 import static com.didekindroid.usuario.common.UserIntentExtras.COMUNIDAD_SEARCH;
-import static com.didekindroid.usuario.common.UserMenuTest.*;
-import static com.didekindroid.common.dominio.Rol.PROPIETARIO;
-import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
+import static com.didekindroid.usuario.common.UserMenuTestUtils.*;
 import static com.google.android.apps.common.testing.ui.espresso.sample.LongListMatchers.withAdaptedData;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
@@ -51,7 +47,7 @@ public class ComuSearchResultsAcTest {
     private static final String TAG = "ComunidadSeeActivTest";
 
     private ComuSearchResultsAc activity;
-    ComuListFr mComunidadSummaryFrg;
+    ComuSearchResultsListFr mComunidadSummaryFrg;
     File refreshTkFile;
     Intent intent;
 
@@ -64,7 +60,7 @@ public class ComuSearchResultsAcTest {
     {
         Log.d(TAG, "In getFixture()");
         refreshTkFile = TKhandler.getRefreshTokenFile();
-        Comunidad comunidad = new Comunidad("Ronda", "de la Plazuela", (short) 5, null,
+        Comunidad comunidad = new Comunidad("Ronda", "de la Plazuela", (short) 5, "",
                 new Municipio(new Provincia((short) 27), (short) 2));
         intent = new Intent();
         intent.putExtra(COMUNIDAD_SEARCH.extra, comunidad);
@@ -74,17 +70,14 @@ public class ComuSearchResultsAcTest {
     public void testOnCreate_1() throws Exception
     {
         activity = mActivityRule.launchActivity(intent);
-        mComunidadSummaryFrg = (ComuListFr) activity.getFragmentManager().findFragmentById(R.id.comu_list_frg);
+        mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getFragmentManager().findFragmentById(R.id.comu_list_frg);
 
         assertThat(activity, notNullValue());
         assertThat(mComunidadSummaryFrg, notNullValue());
 
         // No results in DB. The user is invited to register.
-        ViewInteraction toastViewInteraction = onView(withText(
-                containsString(activity.getResources().getText(R.string.no_result_search_comunidad).toString())
-        ));
-        toastViewInteraction.inRoot(withDecorView(not(activity.getWindow().getDecorView())))
-                .check(matches(isDisplayed()));
+        checkToastInTest(R.string.no_result_search_comunidad, activity);
+
         onView(withId(R.id.reg_comu_usuario_usuariocomu_layout)).check(matches(isDisplayed()));
 
         Thread.sleep(4000);
@@ -94,14 +87,12 @@ public class ComuSearchResultsAcTest {
     public void testOnCreate_2()
     {
         // Inserto comunidades en DB.
-        regComuAndUserComuWith2Comu(makeListTwoUserComu());
+        regTwoUserComuSameUser(makeListTwoUserComu());
         activity = mActivityRule.launchActivity(intent);
         onView(withId(R.id.comu_search_results_ac_one_pane_frg_container)).check(matches(isDisplayed()));
         onView(withId(R.id.comu_list_frg)).check(matches(isDisplayed()));
 
-        // User cleanup.
-        boolean isDeleted = ServOne.deleteUser();
-        assertThat(isDeleted, is(true));
+        cleanOneUser(USUARIO_1);
     }
 
     @Test
@@ -117,16 +108,14 @@ public class ComuSearchResultsAcTest {
     public void testComunidadesUsuarioGetter_2()
     {
         // Usuario registrado.
-        regComuAndUserComuWith2Comu(makeListTwoUserComu());
+        regTwoUserComuSameUser(makeListTwoUserComu());
 
         activity = mActivityRule.launchActivity(intent);
         assertThat(isRegisteredUser(activity), is(true));
         assertThat(activity.mUsuarioComunidades.size(), is(2));
         assertThat(activity.mUsuarioComunidades, hasItems(COMUNIDAD_1, COMUNIDAD_2));
 
-        // User cleanup.
-        boolean isDeleted = ServOne.deleteUser();
-        assertThat(isDeleted, is(true));
+        cleanOneUser(USUARIO_1);
     }
 
     @Test
@@ -136,12 +125,8 @@ public class ComuSearchResultsAcTest {
         activity = mActivityRule.launchActivity(intent);
         assertThat(isRegisteredUser(activity), is(false));
 
-        // No results in DB. The user is invited to register.
-        ViewInteraction toastViewInteraction = onView(withText(
-                containsString(activity.getResources().getText(R.string.no_result_search_comunidad).toString())
-        ));
-        toastViewInteraction.inRoot(withDecorView(not(activity.getWindow().getDecorView())))
-                .check(matches(isDisplayed()));
+        checkToastInTest(R.string.no_result_search_comunidad, activity);
+
         onView(withId(R.id.reg_comu_usuario_usuariocomu_layout)).check(matches(isDisplayed()));
 
         Thread.sleep(4000);
@@ -151,28 +136,28 @@ public class ComuSearchResultsAcTest {
     public void testGetDatosUsuarioNoToken_2() throws InterruptedException
     {
         //Usuario no registrado. La búsqueda devuelve una comunidad.
-        regComuAndUserComuWith2Comu(makeListTwoUserComu());
-        // Borro los datos del usuario.
-        cleanData();
+        regTwoUserComuSameUser(makeListTwoUserComu());
+        // Borro los datos del token.
+        cleanWithTkhandler();
+
         activity = mActivityRule.launchActivity(intent);
         assertThat(isRegisteredUser(activity), is(false));
 
         USER_DATA_AC.checkMenuItem_NTk(activity);
 
-        // User cleanup. We update user credentiasl first.
-        updateSecurityData(USUARIO_1.getUserName(), "psw_juan");
-        boolean isDeleted = ServOne.deleteUser();
-        assertThat(isDeleted, is(true));
+        cleanOneUser(USUARIO_1);
     }
 
     @Test
     public void testGetDatosUsuarioWithToken() throws InterruptedException
     {
         //With token.
-        regComuAndUserComuWith2Comu(makeListTwoUserComu());
+        regTwoUserComuSameUser(makeListTwoUserComu());
         activity = mActivityRule.launchActivity(intent);
         assertThat(isRegisteredUser(activity), is(true));
         USER_DATA_AC.checkMenuItem_WTk(activity);
+
+        cleanOneUser(USUARIO_1);
     }
 
     @Test
@@ -183,12 +168,10 @@ public class ComuSearchResultsAcTest {
         assertThat(isRegisteredUser(activity), is(false));
 
         // No results in DB. The user is invited to register.
-        ViewInteraction toastViewInteraction = onView(withText(
-                containsString(activity.getResources().getText(R.string.no_result_search_comunidad).toString())
-        ));
-        toastViewInteraction.inRoot(withDecorView(not(activity.getWindow().getDecorView())))
-                .check(matches(isDisplayed()));
+        checkToastInTest(R.string.no_result_search_comunidad, activity);
+
         onView(withId(R.id.reg_comu_usuario_usuariocomu_layout)).check(matches(isDisplayed()));
+
         Thread.sleep(4000);
     }
 
@@ -196,36 +179,38 @@ public class ComuSearchResultsAcTest {
     public void testMenuNuevaComunidad_noToken_2() throws InterruptedException
     {
         //Usuario no registrado. La búsqueda devuelve una comunidad.
-        regComuAndUserComuWith2Comu(makeListTwoUserComu());
+        regTwoUserComuSameUser(makeListTwoUserComu());
         // Borro los datos del usuario.
-        cleanData();
+        cleanWithTkhandler();
+
         activity = mActivityRule.launchActivity(intent);
         assertThat(isRegisteredUser(activity), is(false));
 
         REG_COMU_USER_USERCOMU_AC.checkMenuItem_NTk(activity);
 
-        // User cleanup. We update user credentiasl first.
-        updateSecurityData(USUARIO_1.getUserName(), "psw_juan");
-        boolean isDeleted = ServOne.deleteUser();
-        assertThat(isDeleted, is(true));
+        cleanOneUser(USUARIO_1);
     }
 
     @Test
     public void testMenuNuevaComunidad_withToken() throws InterruptedException
     {
-        regComuAndUserComuWith2Comu(makeListTwoUserComu());
+        regTwoUserComuSameUser(makeListTwoUserComu());
         activity = mActivityRule.launchActivity(intent);
         assertThat(isRegisteredUser(activity), is(true));
+
         REG_COMU_USER_USERCOMU_AC.checkMenuItem_WTk(activity);
+        cleanOneUser(USUARIO_1);
     }
 
     @Test
     public void testComunidadesByUsuario_withToken() throws InterruptedException
     {
-        regComuAndUserComuWith2Comu(makeListTwoUserComu());
+        regTwoUserComuSameUser(makeListTwoUserComu());
         activity = mActivityRule.launchActivity(intent);
         assertThat(isRegisteredUser(activity), is(true));
-        COMU_BY_USER_LIST_AC.checkMenuItem_WTk(activity);
+        SEE_COMU_AND_USERCOMU_BY_USER_AC.checkMenuItem_WTk(activity);
+
+        cleanOneUser(USUARIO_1);
     }
 
     @Test
@@ -236,11 +221,8 @@ public class ComuSearchResultsAcTest {
         assertThat(isRegisteredUser(activity), is(false));
 
         // No results in DB. The user is invited to register.
-        ViewInteraction toastViewInteraction = onView(withText(
-                containsString(activity.getResources().getText(R.string.no_result_search_comunidad).toString())
-        ));
-        toastViewInteraction.inRoot(withDecorView(not(activity.getWindow().getDecorView())))
-                .check(matches(isDisplayed()));
+        checkToastInTest(R.string.no_result_search_comunidad, activity);
+
         onView(withId(R.id.reg_comu_usuario_usuariocomu_layout)).check(matches(isDisplayed()));
 
         Thread.sleep(4000);
@@ -250,38 +232,32 @@ public class ComuSearchResultsAcTest {
     public void tesComunidadesByUsuario_noToken_2() throws InterruptedException
     {
         //Usuario no registrado. La búsqueda devuelve una comunidad.
-        regComuAndUserComuWith2Comu(makeListTwoUserComu());
+        regTwoUserComuSameUser(makeListTwoUserComu());
         // Borro los datos del usuario.
-        cleanData();
+        cleanWithTkhandler();
         activity = mActivityRule.launchActivity(intent);
         assertThat(isRegisteredUser(activity), is(false));
 
-        COMU_BY_USER_LIST_AC.checkMenuItem_NTk(activity);
+        SEE_COMU_AND_USERCOMU_BY_USER_AC.checkMenuItem_NTk(activity);
 
-        // User cleanup. We update user credentiasl first.
-        updateSecurityData(USUARIO_1.getUserName(), "psw_juan");
-        boolean isDeleted = ServOne.deleteUser();
-        assertThat(isDeleted, is(true));
+        cleanOneUser(USUARIO_1);
     }
 
     @Test
     public void testSearchComunidades_1()
     {
         // User with 2 comunidades. We search with one of them exactly.
-        regComuAndUserComuWith2Comu(makeListTwoUserComu());
+        regTwoUserComuSameUser(makeListTwoUserComu());
         activity = mActivityRule.launchActivity(intent);
         assertThat(isRegisteredUser(activity), is(true));
-        mComunidadSummaryFrg = (ComuListFr) activity.getFragmentManager().findFragmentById(R.id.comu_list_frg);
-        ComuListAdapter adapter = (ComuListAdapter) mComunidadSummaryFrg.getListAdapter();
 
+        mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getFragmentManager().findFragmentById(R.id.comu_list_frg);
+        ComuSearchResultsListAdapter adapter = (ComuSearchResultsListAdapter) mComunidadSummaryFrg.getListAdapter();
         assertThat(adapter.getCount(), is(1));
-        onView(withId(COMUNIDADES_FOUND.idView)).check(
-                matches(withAdaptedData(
-                        equalTo((Object) intent.getSerializableExtra(COMUNIDAD_SEARCH.extra)))));
+        onView(withId(COMU_SEARCH_RESULTS.idView)).check(matches(
+                withAdaptedData(equalTo((Object) intent.getSerializableExtra(COMUNIDAD_SEARCH.extra)))));
 
-        // User cleanup.
-        boolean isDeleted = ServOne.deleteUser();
-        assertThat(isDeleted, is(true));
+        cleanOneUser(USUARIO_1);
     }
 
     @Test
@@ -289,52 +265,48 @@ public class ComuSearchResultsAcTest {
     {
         // Caso: existen dos comunidades para el criterio de búsqueda.
 
-        Comunidad comunidadNew = new Comunidad("Ronda", "del Norte", (short) 5, null,
+        Comunidad comunidadNew = new Comunidad("Ronda", "del Norte", (short) 5, "",
                 new Municipio(new Provincia((short) 27), (short) 2));
-        regComuAndUserComuWith3Comu(makeListTwoUserComu(), comunidadNew);
+        regThreeUserComuSameUser(makeListTwoUserComu(), comunidadNew);
 
         // Criterio de búsqueda.
-        Comunidad comunidad = new Comunidad("Ronda", "de la Plazuela del Norte", (short) 5, null,
+        Comunidad comunidad = new Comunidad("Ronda", "de la Plazuela del Norte", (short) 5, "",
                 new Municipio(new Provincia((short) 27), (short) 2));
         Intent intent = new Intent();
         intent.putExtra(COMUNIDAD_SEARCH.extra, comunidad);
         activity = mActivityRule.launchActivity(intent);
         assertThat(isRegisteredUser(activity), is(true));
 
-        mComunidadSummaryFrg = (ComuListFr) activity.getFragmentManager().findFragmentById(R.id.comu_list_frg);
-        ComuListAdapter adapter = (ComuListAdapter) mComunidadSummaryFrg.getListAdapter();
+        mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getFragmentManager().findFragmentById(R.id.comu_list_frg);
+        ComuSearchResultsListAdapter adapter = (ComuSearchResultsListAdapter) mComunidadSummaryFrg.getListAdapter();
         assertThat(adapter.getCount(), is(2));
-        onView(withId(COMUNIDADES_FOUND.idView)).check(
+        onView(withId(COMU_SEARCH_RESULTS.idView)).check(
                 matches(withAdaptedData(hasProperty("nombreVia", is("del Norte")))));
-        onView(withId(COMUNIDADES_FOUND.idView)).check(
+        onView(withId(COMU_SEARCH_RESULTS.idView)).check(
                 matches(withAdaptedData(hasProperty("nombreVia", is("de la Plazuela")))));
 
-        // User cleanup.
-        boolean isDeleted = ServOne.deleteUser();
-        assertThat(isDeleted, is(true));
+        cleanOneUser(USUARIO_1);
     }
 
     @Test
     public void testSearchComunidades_3() throws InterruptedException
     {
         // No existe la comunidad en DB. El usuario no está registrado.
+
         assertThat(refreshTkFile.exists(), is(false));
         // Criterio de búsqueda.
-        Comunidad comunidad = new Comunidad("Rincón", "del No Existente", (short) 123, null,
+        Comunidad comunidad = new Comunidad("Rincón", "del No Existente", (short) 123, "",
                 new Municipio(new Provincia((short) 27), (short) 2));
         Intent intent = new Intent();
         intent.putExtra(COMUNIDAD_SEARCH.extra, comunidad);
         activity = mActivityRule.launchActivity(intent);
         assertThat(isRegisteredUser(activity), is(false));
-        mComunidadSummaryFrg = (ComuListFr) activity.getFragmentManager().findFragmentById(R.id.comu_list_frg);
-        ComuListAdapter adapter = (ComuListAdapter) mComunidadSummaryFrg.getListAdapter();
+
+        mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getFragmentManager().findFragmentById(R.id.comu_list_frg);
+        ComuSearchResultsListAdapter adapter = (ComuSearchResultsListAdapter) mComunidadSummaryFrg.getListAdapter();
         assertThat(adapter.getCount(), is(0));
 
-        ViewInteraction toastViewInteraction = onView(withText(
-                containsString(activity.getResources().getText(R.string.no_result_search_comunidad).toString())
-        ));
-        toastViewInteraction.inRoot(withDecorView(not(activity.getWindow().getDecorView())))
-                .check(matches(isDisplayed()));
+        checkToastInTest(R.string.no_result_search_comunidad, activity);
 
         onView(withId(R.id.reg_comu_usuario_usuariocomu_layout)).check(matches(isDisplayed()));
 
@@ -345,30 +317,26 @@ public class ComuSearchResultsAcTest {
     public void testSearchComunidades_4() throws InterruptedException
     {
         // No existe la comunidad en DB. El usuario está registrado.
+
         signUpAndUpdateTk(USUARIO_COMUNIDAD_1);
         // Criterio de búsqueda.
-        Comunidad comunidad = new Comunidad("Rincón", "del No Existente", (short) 123, null,
+        Comunidad comunidad = new Comunidad("Rincón", "del No Existente", (short) 123, "",
                 new Municipio(new Provincia((short) 27), (short) 2));
         Intent intent = new Intent();
         intent.putExtra(COMUNIDAD_SEARCH.extra, comunidad);
         activity = mActivityRule.launchActivity(intent);
         assertThat(isRegisteredUser(activity), is(true));
 
-        mComunidadSummaryFrg = (ComuListFr) activity.getFragmentManager().findFragmentById(R.id.comu_list_frg);
-        ComuListAdapter adapter = (ComuListAdapter) mComunidadSummaryFrg.getListAdapter();
+        mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getFragmentManager().findFragmentById(R.id.comu_list_frg);
+        ComuSearchResultsListAdapter adapter = (ComuSearchResultsListAdapter) mComunidadSummaryFrg.getListAdapter();
         assertThat(adapter.getCount(), is(0));
 
-        ViewInteraction toastViewInteraction = onView(withText(
-                containsString(activity.getResources().getText(R.string.no_result_search_comunidad).toString())
-        ));
-        toastViewInteraction.inRoot(withDecorView(not(activity.getWindow().getDecorView())))
-                .check(matches((isDisplayed())));
-        // This is the difference with the not registered user case.
-        onView(withId(R.id.reg_comu_usuariocomu_layout)).check(matches(isDisplayed()));
+        checkToastInTest(R.string.no_result_search_comunidad, activity);
 
-        // User cleanup.
-        boolean isDeleted = ServOne.deleteUser();
-        assertThat(isDeleted, is(true));
+        // This is the difference with the not registered user case.
+        onView(withId(R.id.reg_comu_and_usercomu_layout)).check(matches(isDisplayed()));
+
+        cleanOneUser(USUARIO_1);
 
         Thread.sleep(4000);
     }
@@ -377,87 +345,75 @@ public class ComuSearchResultsAcTest {
     public void testOnListItemClick_1()
     {
         //Usuario no registrado. La búsqueda devuelve una comunidad.
-        regComuAndUserComuWith2Comu(makeListTwoUserComu());
+
+        regTwoUserComuSameUser(makeListTwoUserComu());
         // Borro los datos del usuario.
-        cleanData();
+        cleanWithTkhandler();
+
         activity = mActivityRule.launchActivity(intent);
         assertThat(isRegisteredUser(activity), is(false));
 
-        mComunidadSummaryFrg = (ComuListFr) activity.getFragmentManager().findFragmentById(R.id.comu_list_frg);
-        ComuListAdapter adapter = (ComuListAdapter) mComunidadSummaryFrg.getListAdapter();
+        mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getFragmentManager().findFragmentById(R.id.comu_list_frg);
+        ComuSearchResultsListAdapter adapter = (ComuSearchResultsListAdapter) mComunidadSummaryFrg.getListAdapter();
         assertThat(adapter.getCount(), is(1));
         onView(withAdaptedData(hasProperty("nombreVia", is("de la Plazuela")))).check(matches(isDisplayed()));
+
         onData(allOf(is(instanceOf(Comunidad.class)), hasProperty("nombreVia", is("de la Plazuela")))).perform(click());
         onView(withId(R.id.reg_user_and_usercomu_ac_layout)).check(matches(isDisplayed()));
 
-        // User cleanup. We update user credentiasl first.
-        updateSecurityData(USUARIO_1.getUserName(), "psw_juan");
-        boolean isDeleted = ServOne.deleteUser();
-        assertThat(isDeleted, is(true));
+        cleanOneUser(USUARIO_1);
     }
 
     @Test
     public void testOnListItemClick_2()
     {
         // Usuario registrado. La búsqueda devuelve una comunidad a la que él ya está asociado.
-        regComuAndUserComuWith2Comu(makeListTwoUserComu());
+
+        regTwoUserComuSameUser(makeListTwoUserComu());
         activity = mActivityRule.launchActivity(intent);
-        mComunidadSummaryFrg = (ComuListFr) activity.getFragmentManager().findFragmentById(R.id.comu_list_frg);
-        ComuListAdapter adapter = (ComuListAdapter) mComunidadSummaryFrg.getListAdapter();
+        mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getFragmentManager().findFragmentById(R.id.comu_list_frg);
+        ComuSearchResultsListAdapter adapter = (ComuSearchResultsListAdapter) mComunidadSummaryFrg.getListAdapter();
         assertThat(adapter.getCount(), is(1));
 
-        Comunidad comunidadAdapter = adapter.getItem(0);
-        onView(withAdaptedData(Matchers.<Object>equalTo(comunidadAdapter))).check(matches(isDisplayed()));
+        Comunidad comunidadInAdapter = adapter.getItem(0);
+        onView(withAdaptedData(Matchers.<Object>equalTo(comunidadInAdapter))).check(matches(isDisplayed()));
         onData(allOf(is(instanceOf(Comunidad.class)), hasProperty("nombreVia", is("de la Plazuela")))).perform(click());
-        onView(withId(R.id.see_comu_and_usercomu_ac_layout)).check(matches(isDisplayed()));
 
-        // User cleanup.
-        boolean isDeleted = ServOne.deleteUser();
-        assertThat(isDeleted, is(true));
+        onView(withId(R.id.see_comu_and_usercomu_by_user_ac_layout)).check(matches(isDisplayed()));
+
+        cleanOneUser(USUARIO_1);
     }
 
     @Test
     public void testOnListItemClick_3()
     {
         // Usuario registrado. La búsqueda devuelve una comunidad a la que él NO está asociado.
-        // Insertamos la comunidad a devolver y borramos credenciales de seguridad.
-        regComuAndUserComuWith2Comu(makeListTwoUserComu());
-        cleanData();
+
+        regTwoUserComuSameUser(makeListTwoUserComu());
+        cleanWithTkhandler();
+
         // Insertamos al usuario que hace la búsqueda.
-        Comunidad comunidadIn = new Comunidad("Calle", "de la Torre", (short) 115, null,
+        Comunidad comunidadIn = new Comunidad("Calle", "de la Torre", (short) 115, "",
                 new Municipio(new Provincia((short) 2), (short) 22));
         Usuario usuarioIn = new Usuario("newuser@jnew.us", "newuser", "psw_newuser", (short) 34, 600151515);
         UsuarioComunidad usuarioComunidad = new UsuarioComunidad(comunidadIn, usuarioIn, null,
                 null, "3pl", "A_puerta", PROPIETARIO.function);
-        Usuario usuario = ServOne.signUp(usuarioComunidad);
-        updateSecurityData(usuario.getUserName(), "psw_newuser");
+        signUpAndUpdateTk(usuarioComunidad);
 
         // Búsqueda con comunidad/intent por defecto.
         activity = mActivityRule.launchActivity(intent);
-        mComunidadSummaryFrg = (ComuListFr) activity.getFragmentManager().findFragmentById(R.id.comu_list_frg);
-        ComuListAdapter adapter = (ComuListAdapter) mComunidadSummaryFrg.getListAdapter();
+        mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getFragmentManager().findFragmentById(R.id.comu_list_frg);
+        ComuSearchResultsListAdapter adapter = (ComuSearchResultsListAdapter) mComunidadSummaryFrg.getListAdapter();
         assertThat(adapter.getCount(), is(1));
+
         onData(allOf(is(instanceOf(Comunidad.class)), hasProperty("nombreVia", is("de la Plazuela")))).perform(click());
         onView(withId(R.id.reg_usercomu_ac_layout)).check(matches(isDisplayed()));
 
-        // User2 cleanup.
-        boolean isDeleted = ServOne.deleteUser();
-        assertThat(isDeleted, is(true));
-
-        // User1 cleanup. We update user credentiasl first.
-        updateSecurityData(USUARIO_1.getUserName(), "psw_juan");
-        isDeleted = ServOne.deleteUser();
-        assertThat(isDeleted, is(true));
+        cleanTwoUsers(USUARIO_1, usuarioIn);
     }
 
     @After
     public void cleanData()
     {
-        if (refreshTkFile.exists()) {
-            refreshTkFile.delete();
-        }
-        TKhandler.getTokensCache().invalidateAll();
-        TKhandler.updateRefreshToken(null);
-        updateIsRegistered(false, DidekindroidApp.getContext());
     }
 }

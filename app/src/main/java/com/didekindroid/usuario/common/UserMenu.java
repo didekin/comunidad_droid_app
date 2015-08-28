@@ -4,13 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
 import com.didekindroid.R;
-import com.didekindroid.usuario.activity.UserDataAc;
-import com.didekindroid.usuario.activity.RegComuAndUserAndUserComuAc;
-import com.didekindroid.usuario.activity.RegComuAndUserComuAc;
-import com.didekindroid.usuario.activity.ComusByUserListAc;
+import com.didekindroid.usuario.activity.*;
 
-import static com.didekindroid.common.ui.UIutils.*;
 import static com.didekindroid.common.ui.UIutils.isRegisteredUser;
+import static com.didekindroid.common.ui.UIutils.makeToast;
 
 /**
  * User: pedro@didekin
@@ -19,41 +16,18 @@ import static com.didekindroid.common.ui.UIutils.isRegisteredUser;
  */
 public enum UserMenu {
 
-    USER_DATA_AC {
+    COMU_SEARCH_AC {
         @Override
         public void doMenuItem(Activity activity)
         {
-            Log.d(TAG, "user_data_ac_mn.doMenuItem()");
-
-            if (!isRegisteredUser(activity)) {
-                Log.i(TAG, "user_data_ac_mn.doMenuItem(), user not registered.");
-                makeToast(activity, R.string.user_without_signedUp);
-            } else {
-                Log.i(TAG, "user_data_ac_mn.doMenuItem(), user registered.");
-                Intent intent = new Intent(activity, UserDataAc.class);
-                activity.startActivity(intent);
-            }
+            Log.d(TAG, "doMenuItem()");
+            Intent intent = new Intent(activity, ComuSearchAc.class);
+            activity.startActivity(intent);
         }
     },
 
-    COMU_BY_USER_LIST_AC {  // Comunidades de un usuario.
-        @Override
-        public void doMenuItem(Activity activity)
-        {
-            Log.i(TAG, "comu_by_user.doMenuItem()");
+    REG_COMU_USER_USERCOMU_AC { // Menu: Nueva comunidad.
 
-            if (!isRegisteredUser(activity)) {
-                Log.i(TAG, "comu_by_user.doMenuItem(), user not registered.");
-                makeToast(activity, R.string.user_without_signedUp);
-            } else {
-                Log.i(TAG, "comu_by_user.doMenuItem(), user registered.");
-                Intent intent = new Intent(activity, ComusByUserListAc.class);
-                activity.startActivity(intent);
-            }
-        }
-    },
-
-    REG_COMU_USER_USERCOMU_AC { // Menu: nueva comunidad.
         @Override
         public void doMenuItem(Activity activity)
         {
@@ -72,7 +46,62 @@ public enum UserMenu {
             }
 
         }
-    };
+    },
+
+    REG_USER_AND_USERCOMU_AC { // Menú: Unirme (a la comunidad).
+
+        @Override
+        public void doMenuItem(Activity activity)
+        {
+            Log.d(TAG, "reg_user_and_usercomu.doMenuItem()");
+            if (isRegisteredUser(activity)) {
+                Log.d(TAG, "reg_user_and_usercomu.doMenuItem(); user is registered.");
+                Intent intent = new Intent(activity, RegUserComuAc.class);
+                activity.startActivity(intent);
+            } else {
+                Log.d(TAG, "reg_user_and_usercomu.doMenuItem(); user is not registered.");
+                Intent intent = new Intent(activity, RegUserAndUserComuAc.class);
+            }
+        }
+    },
+
+    SEE_COMU_AND_USERCOMU_BY_USER_AC {  // Comunidades de un usuario: Mis comunidades.
+
+        @Override
+        public void doMenuItem(Activity activity)
+        {
+            Log.i(TAG, "comu_by_user.doMenuItem()");
+
+            if (!isRegisteredUser(activity)) {
+                Log.i(TAG, "comu_by_user.doMenuItem(), user not registered.");
+                makeToast(activity, R.string.user_without_signedUp);
+            } else {
+                Log.i(TAG, "comu_by_user.doMenuItem(), user registered.");
+                Intent intent = new Intent(activity, ComusByUserListAc.class);
+                activity.startActivity(intent);
+            }
+        }
+    },
+
+    USER_DATA_AC {  // menú: Mi usuario.
+
+        @Override
+        public void doMenuItem(Activity activity)
+        {
+            Log.d(TAG, "user_data_ac_mn.doMenuItem()");
+
+            if (!isRegisteredUser(activity)) {
+                Log.i(TAG, "user_data_ac_mn.doMenuItem(), user not registered.");
+                makeToast(activity, R.string.user_without_signedUp);
+            } else {
+                Log.i(TAG, "user_data_ac_mn.doMenuItem(), user registered.");
+                Intent intent = new Intent(activity, UserDataAc.class);
+                activity.startActivity(intent);
+            }
+        }
+    },
+
+    ;
 
     private static final String TAG = UserMenu.class.getCanonicalName();
 

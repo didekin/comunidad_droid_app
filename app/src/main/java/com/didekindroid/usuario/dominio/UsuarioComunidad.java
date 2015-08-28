@@ -10,7 +10,7 @@ import java.sql.Timestamp;
  * Date: 10/06/15
  * Time: 10:54
  */
-public class UsuarioComunidad implements Serializable {
+public class UsuarioComunidad implements Serializable, Comparable<UsuarioComunidad> {
 
     private static final long serialVersionUID = SerialNumbers.USUARIO_COMUNIDAD.number;
 
@@ -176,5 +176,32 @@ public class UsuarioComunidad implements Serializable {
         result = 31 * result + usuario.hashCode();
         result = 31 * result + comunidad.hashCode();
         return result;
+    }
+
+    @Override
+    public int compareTo(UsuarioComunidad o)
+    {
+        int result;
+
+        if ((result = usuario.compareTo(o.getUsuario())) != 0) {
+            return result;
+        }
+        if ((result = comunidad.compareTo(o.getComunidad())) != 0) {
+            return result;
+        }
+
+        if (portal != null && o.getPortal() != null && (result = portal.compareToIgnoreCase(o.getPortal())) != 0) {
+            return result;
+        }
+        if (escalera != null && o.getEscalera() != null && (result = escalera.compareToIgnoreCase(o.getEscalera())) != 0) {
+            return result;
+        }
+        if (planta != null && o.getPlanta() != null && (result = planta.compareToIgnoreCase(o.getPlanta())) != 0) {
+            return result;
+        }
+        if (puerta != null && o.getPuerta() != null && (result = puerta.compareToIgnoreCase(o.getPuerta())) != 0) {
+            return result;
+        }
+        return 0;
     }
 }

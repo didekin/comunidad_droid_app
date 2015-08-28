@@ -10,7 +10,7 @@ import java.io.Serializable;
  * Time: 15:14
  */
 /* TODO: a incluir en el .jar común.*/
-public class Municipio implements Serializable {
+public class Municipio implements Serializable, Comparable<Municipio> {
 
     private static final long serialVersionUID = SerialNumbers.MUNICIPIO.number;
 
@@ -99,5 +99,22 @@ public class Municipio implements Serializable {
         int result = (int) codInProvincia;
         result = 31 * result + provincia.hashCode();
         return result;
+    }
+
+    @Override
+    public int compareTo(Municipio o)
+    {
+        int result;
+
+        if ((result = provincia.compareTo(o.getProvincia())) != 0) {
+            return result;
+        }
+        if (codInProvincia < o.getCodInProvincia()) {
+            return -1;
+        }
+        if (codInProvincia > o.getCodInProvincia()) {
+            return 1;
+        }
+        return 0;
     }
 }

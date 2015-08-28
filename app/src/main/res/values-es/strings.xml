@@ -37,7 +37,7 @@
     <!--Messages-->
     <string name="error_validation_msg">Los siguientes datos no son válidos: </string>
     <!--Menús-->
-    <string name="usercomu_list_ac_mn">Mis comunidades</string>
+    <string name="see_comu_and_usercomu_by_user_ac_mn">Mis comunidades</string>
     <string name="reg_comu_user_usercomu_ac_mn">Nueva comunidad</string>
     <!-- ========= ComunidadSearchActivity ========= -->
     <string name="comu_search_ac_label">Buscar comunidad</string>
@@ -51,7 +51,7 @@
     <!-- ================ ComuSearchResultsAc =========== -->
     <string name="comu_search_results_ac_label">didekin: comunidades encontradas</string>
     <string name="no_result_search_comunidad">No se ha encontrado ninguna comunidad</string>
-    <!-- ........ ComuListFr ......... -->
+    <!-- ........ ComuSearchResultsListFr ......... -->
     <string name="rotulo_comunidad">Comunidad:</string>
     <string name="reg_usercomu_vivienda_rot">Mi vivienda:</string>
     <string name="reg_usercomu_portal_hint">Portal</string>

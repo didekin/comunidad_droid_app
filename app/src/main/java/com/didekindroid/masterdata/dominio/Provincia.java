@@ -9,7 +9,7 @@ import java.io.Serializable;
  * Date: 10/06/15
  * Time: 13:08
  */
-public class Provincia implements Serializable {
+public class Provincia implements Serializable, Comparable<Provincia> {
 
     private static final long serialVersionUID = SerialNumbers.PROVINCIA.number;
 
@@ -58,5 +58,17 @@ public class Provincia implements Serializable {
     public int hashCode()
     {
         return (int) provinciaId;
+    }
+
+    @Override
+    public int compareTo(Provincia o)
+    {
+        if (provinciaId < o.getProvinciaId()) {
+            return -1;
+        } else if (provinciaId > o.getProvinciaId()) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 }

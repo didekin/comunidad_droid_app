@@ -61,7 +61,7 @@ public class RegComuAndUserComuAcTest {
         assertThat(resources, notNullValue());
         assertThat(regComuFr, notNullValue());
         assertThat(regUserComuFr, notNullValue());
-        onView(withId(R.id.reg_comu_usuariocomu_layout));
+        onView(withId(R.id.reg_comu_and_usercomu_layout));
         onView(withId(R.id.reg_comunidad_frg)).check(matches(isDisplayed()));
         onView(withId(R.id.reg_usuariocomunidad_frg)).check(matches(isDisplayed()));
         onView(withId(R.id.reg_comu_usuariocomunidad_button)).perform(scrollTo()).check(matches(isDisplayed()));

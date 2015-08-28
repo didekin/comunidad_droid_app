@@ -11,9 +11,12 @@ package com.didekindroid.common.ui;
 public enum ViewsIDs {
 
     /* User's comunidades view. */
-    COMUNIDADES_USER(-1321),
+    SEE_COMU_AND_USER_COMU_BY_USER(-1321),
     /* Comunidades found-searched view */
-    COMUNIDADES_FOUND(-1323),
+    COMU_SEARCH_RESULTS(-1323),
+    /* Users signed-up in a comunidad */
+    SEE_USERCOMU_BY_COMU(-1325),
+
     ;
 
     public int idView;
@@ -21,10 +24,5 @@ public enum ViewsIDs {
     ViewsIDs(int idView)
     {
         this.idView = idView;
-    }
-
-    public int getIdView()
-    {
-        return idView;
     }
 }

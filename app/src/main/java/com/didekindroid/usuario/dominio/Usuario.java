@@ -11,7 +11,7 @@ import java.util.List;
  * Date: 09/06/15
  * Time: 18:32
  */
-public final class Usuario implements Serializable {
+public final class Usuario implements Serializable, Comparable<Usuario> {
 
     private static final long serialVersionUID = SerialNumbers.USUARIO.number;
 
@@ -149,5 +149,11 @@ public final class Usuario implements Serializable {
     public int hashCode()
     {
         return userName.hashCode();
+    }
+
+    @Override
+    public int compareTo(Usuario o)
+    {
+        return userName.compareToIgnoreCase(o.getUserName());
     }
 }

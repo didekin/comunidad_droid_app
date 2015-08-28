@@ -21,7 +21,6 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.usuario.common.DataUsuarioTestUtils.*;
-import static com.didekindroid.usuario.common.TokenHandler.TKhandler;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
@@ -45,7 +44,7 @@ public class RegUserComuAcTest {
     public void setUp() throws Exception
     {
         // User and comunidad are already registered.
-        // Comunidad was registered by another user.
+        // Comunidad was registered by user1.
         signUpAndUpdateTk(USUARIO_COMUNIDAD_1);
         List<Comunidad> comunidadesUserOne = ServOne.getComunidadesByUser();
         Comunidad comunidad = comunidadesUserOne.get(0);
@@ -53,7 +52,7 @@ public class RegUserComuAcTest {
         // We use that comunidad as the one to associate to the present user.
         intent = new Intent();
         intent.putExtra(UserIntentExtras.COMUNIDAD_LIST_OBJECT.extra, comunidad);
-        // Segundo usuarioComunidad, con diferente usuario y comunidad.
+        // Segundo usuarioComunidad, con user2 y comunidad2.
         signUpAndUpdateTk(USUARIO_COMUNIDAD_3);
     }
 
@@ -81,10 +80,10 @@ public class RegUserComuAcTest {
         // Validation errors.
         activity = mActivityRule.launchActivity(intent);
 
-        typeRegUserComuData("portal?", "select *", "planta!", "puerta_1", null);
+        typeRegUserComuData("portal?", "select *", "planta!", "puerta_1");
         onView(withId(R.id.reg_usercomu_button)).check(matches(isDisplayed())).perform(click());
 
-        makeErrorValidationToast(activity, R.string.reg_usercomu_portal_hint, R.string.reg_usercomu_escalera_hint, R
+        checkToastInTest(R.string.error_validation_msg, activity, R.string.reg_usercomu_portal_hint, R.string.reg_usercomu_escalera_hint, R
                 .string.reg_usercomu_planta_hint, R.string.reg_usercomu_role_rot);
     }
 
@@ -97,19 +96,6 @@ public class RegUserComuAcTest {
     @After
     public void tearDown() throws Exception
     {
-        // User2 cleanup.
-        boolean isDeleted = ServOne.deleteUser();
-        assertThat(isDeleted, is(true));
-
-        // User1 cleanup. We update user credentiasl first.
-        updateSecurityData(USUARIO_1.getUserName(), USUARIO_1.getPassword());
-        isDeleted = ServOne.deleteUser();
-        assertThat(isDeleted, is(true));
-
-        if (TKhandler.getRefreshTokenFile().exists()) {
-            TKhandler.getRefreshTokenFile().delete();
-        }
-        TKhandler.getTokensCache().invalidateAll();
-        TKhandler.updateRefreshToken(null);
+        cleanTwoUsers(USUARIO_1, USUARIO_2);
     }
 }

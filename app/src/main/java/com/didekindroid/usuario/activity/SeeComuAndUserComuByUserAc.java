@@ -6,13 +6,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import com.didekindroid.R;
 
-public class SeeComuAndUserComuAc extends Activity {
+public class SeeComuAndUserComuByUserAc extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.see_comu_and_usercomu_ac);
+        setContentView(R.layout.see_comu_and_usercomu_by_user_ac);
     }
 
 

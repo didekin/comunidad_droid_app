@@ -36,7 +36,13 @@ public enum RetrofitRestBuilder {
         return endPoint;
     }
 
-    private static class TimeStampGsonAdapter implements JsonDeserializer<Timestamp> {
+    private static class TimeStampGsonAdapter implements JsonDeserializer<Timestamp>, JsonSerializer<Timestamp> {
+
+        @Override
+        public JsonElement serialize(Timestamp src, Type srcType, JsonSerializationContext context)
+        {
+            return new JsonPrimitive(src.getTime());
+        }
 
         @Override
         public Timestamp deserialize(JsonElement jsonElement, Type typeOfT, JsonDeserializationContext context) throws

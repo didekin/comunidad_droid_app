@@ -18,7 +18,7 @@ import com.didekindroid.usuario.dominio.AccessToken;
 
 import static com.didekindroid.common.ui.UIutils.updateIsRegistered;
 import static com.didekindroid.usuario.common.UserIntentExtras.COMUNIDAD_SEARCH;
-import static com.didekindroid.usuario.common.UserMenu.COMU_BY_USER_LIST_AC;
+import static com.didekindroid.usuario.common.UserMenu.SEE_COMU_AND_USERCOMU_BY_USER_AC;
 import static com.didekindroid.usuario.common.UserMenu.REG_COMU_USER_USERCOMU_AC;
 import static com.didekindroid.usuario.common.UserMenu.USER_DATA_AC;
 import static com.didekindroid.usuario.beanfiller.UserAndComuFiller.makeComunidadBeanFromView;
@@ -42,7 +42,7 @@ public class ComuSearchAc extends Activity {
         Log.d(TAG, "In onCreate()");
 
         // To initilize the token cache. This is the launch activity.
-        new CheckerTokenInCache().execute();
+        new CheckerTokenInCache().execute(); // TODO: hay que moverlo al sign-up.
 
         mMainView = getLayoutInflater().inflate(R.layout.comu_search_ac, null);
         setContentView(mMainView);
@@ -115,7 +115,7 @@ public class ComuSearchAc extends Activity {
                 USER_DATA_AC.doMenuItem(this);
                 return true;
             case R.id.comu_by_user_list_ac_mn:
-                COMU_BY_USER_LIST_AC.doMenuItem(this);
+                SEE_COMU_AND_USERCOMU_BY_USER_AC.doMenuItem(this);
                 return true;
             case R.id.reg_comu_user_usercomu_ac_mn:
                 REG_COMU_USER_USERCOMU_AC.doMenuItem(this);

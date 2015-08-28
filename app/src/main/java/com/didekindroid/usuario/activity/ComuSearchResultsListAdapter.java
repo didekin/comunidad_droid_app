@@ -15,11 +15,11 @@ import com.didekindroid.usuario.dominio.Comunidad;
  * Date: 12/05/15
  * Time: 17:22
  */
-public class ComuListAdapter extends ArrayAdapter<Comunidad> {
+public class ComuSearchResultsListAdapter extends ArrayAdapter<Comunidad> {
 
-    private static final String TAG = "ComuListAdapter";
+    private static final String TAG = ComuSearchResultsListAdapter.class.getCanonicalName();
 
-    public ComuListAdapter(Context context)
+    public ComuSearchResultsListAdapter(Context context)
     {
         super(context, R.layout.comu_list_item_view, R.id.nombreComunidad_view);
     }

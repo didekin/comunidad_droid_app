@@ -14,13 +14,13 @@ import com.didekindroid.usuario.dominio.UsuarioComunidad;
 import java.util.List;
 
 import static com.didekindroid.usuario.common.UserIntentExtras.USUARIO_COMUNIDAD_REG;
-import static com.didekindroid.common.ui.ViewsIDs.COMUNIDADES_USER;
+import static com.didekindroid.common.ui.ViewsIDs.SEE_COMU_AND_USER_COMU_BY_USER;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 
 public class ComusByUserListAc extends ListActivity {
 
     private static final String TAG = ComusByUserListAc.class.getCanonicalName();
-    private ComuAndUserComuListAdapter listAdapter;
+    private ComuAndUserComuListByUserAdapter listAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -35,7 +35,7 @@ public class ComusByUserListAc extends ListActivity {
         final ListView listView = getListView();
         //listView.setEmptyView();   Asumimos que, al ser un usuario registrado, tiene comuniades asociadas.
         //noinspection ResourceType . Asignamos un id arbitrario para facilitar los tests.
-        listView.setId(COMUNIDADES_USER.idView);
+        listView.setId(SEE_COMU_AND_USER_COMU_BY_USER.idView);
         /* listView.setItemsCanFocus(false);
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         */
@@ -45,7 +45,7 @@ public class ComusByUserListAc extends ListActivity {
     public boolean onCreateOptionsMenu(Menu menu)
     {
         Log.d(TAG, "onCreateOptionsMenu()");
-        getMenuInflater().inflate(R.menu.comunidades_usuario_menu, menu);
+        getMenuInflater().inflate(R.menu.see_comu_and_usercomu_ac_menu, menu);
         return true;
     }
 
@@ -83,7 +83,7 @@ public class ComusByUserListAc extends ListActivity {
         {
             Log.d(TAG, "RegComuAndUserComuHttp.onPostExecute()");
 
-            listAdapter = new ComuAndUserComuListAdapter(ComusByUserListAc.this);
+            listAdapter = new ComuAndUserComuListByUserAdapter(ComusByUserListAc.this);
             listAdapter.addAll(usuarioComunidades);
             setListAdapter(listAdapter);
         }

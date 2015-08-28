@@ -12,7 +12,7 @@
             android:layout_height="match_parent"
             android:layout_width="0dp"
             android:layout_alignParentLeft="true"
-            android:name="com.didekindroid.usuario.activity.ComuListFr"
+            android:name="com.didekindroid.usuario.activity.ComuSearchResultsListFr"
             tools:layout="@layout/comu_list_item_view"/>
 
     <fragment
@@ -23,5 +23,5 @@
             android:layout_toRightOf="@id/comu_list_frg"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:name="com.didekindroid.usuario.activity.RegUserAndUserComuFr"
-            tools:layout="@layout/reg_usuario_and_usuariocomunidad_fr"/>
+            tools:layout="@layout/reg_user_and_usercomu_fr"/>
 </LinearLayout>

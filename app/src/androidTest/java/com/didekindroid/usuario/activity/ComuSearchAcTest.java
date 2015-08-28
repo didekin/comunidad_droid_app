@@ -9,7 +9,6 @@ import android.support.test.espresso.action.ViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import com.didekindroid.R;
-import com.didekindroid.usuario.common.DataUsuarioTestUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -25,7 +24,7 @@ import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.*;
 import static com.didekindroid.common.ui.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.common.DataUsuarioTestUtils.*;
-import static com.didekindroid.usuario.common.UserMenuTest.*;
+import static com.didekindroid.usuario.common.UserMenuTestUtils.*;
 import static com.didekindroid.usuario.beanfiller.UserAndComuFiller.makeComunidadBeanFromView;
 import static com.didekindroid.usuario.common.TokenHandler.TKhandler;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
@@ -93,8 +92,7 @@ public class ComuSearchAcTest {
         activity = mActivityRule.launchActivity(new Intent());
         assertThat(isRegisteredUser(activity), is(true));
 
-        // User clean up.
-        assertThat(ServOne.deleteUser(), is(true));
+        cleanOneUser(USUARIO_COMUNIDAD_1.getUsuario());
     }
 
     @Test
@@ -120,7 +118,6 @@ public class ComuSearchAcTest {
         assertThat(regComuFr.getComunidadBean().getSufijoNumero(), is("Bis"));
     }
 
-
     @Test
     public void searchComunidadWrong()
     {
@@ -131,7 +128,7 @@ public class ComuSearchAcTest {
         onView(withId(R.id.comunidad_sufijo_numero_editT)).perform(ViewActions.typeText("Tris"), ViewActions.closeSoftKeyboard());
 
         onView(withId(R.id.searchComunidad_Bton)).perform(ViewActions.click());
-        makeErrorValidationToast(activity,R.string.tipo_via,R.string.nombre_via,R.string.municipio);
+        checkToastInTest(R.string.error_validation_msg, activity, R.string.tipo_via, R.string.nombre_via, R.string.municipio);
     }
 
     @Test
@@ -145,11 +142,8 @@ public class ComuSearchAcTest {
 
         onView(withId(R.id.searchComunidad_Bton)).perform(click());
         // No results in DB. The user is invited to register.
-        ViewInteraction toastViewInteraction = onView(withText(
-                containsString(activity.getResources().getText(R.string.no_result_search_comunidad).toString())
-        ));
-        toastViewInteraction.inRoot(withDecorView(not(activity.getWindow().getDecorView())))
-                .check(matches(isDisplayed()));
+        checkToastInTest(R.string.no_result_search_comunidad,activity);
+
         onView(withId(R.id.reg_comu_usuario_usuariocomu_layout)).check(matches(isDisplayed()));
     }
 
@@ -169,8 +163,7 @@ public class ComuSearchAcTest {
         onView(withId(R.id.comu_search_results_ac_one_pane_frg_container)).check(matches(isDisplayed()));
         onView(withId(R.id.comu_list_frg)).check(matches(isDisplayed()));
 
-        // User clean up.
-        assertThat(ServOne.deleteUser(), is(true));
+        cleanOneUser(USUARIO_COMUNIDAD_1.getUsuario());
     }
 
     @Test
@@ -190,6 +183,8 @@ public class ComuSearchAcTest {
         activity = mActivityRule.launchActivity(new Intent());
         assertThat(isRegisteredUser(activity), is(true));
         USER_DATA_AC.checkMenuItem_WTk(activity);
+
+        cleanOneUser(USUARIO_COMUNIDAD_1.getUsuario());
     }
 
     @Test
@@ -208,6 +203,8 @@ public class ComuSearchAcTest {
         activity = mActivityRule.launchActivity(new Intent());
         assertThat(isRegisteredUser(activity), is(true));
         REG_COMU_USER_USERCOMU_AC.checkMenuItem_WTk(activity);
+
+        cleanOneUser(USUARIO_COMUNIDAD_1.getUsuario());
     }
 
     @Test
@@ -216,7 +213,9 @@ public class ComuSearchAcTest {
         signUpAndUpdateTk(USUARIO_COMUNIDAD_1);
         activity = mActivityRule.launchActivity(new Intent());
         assertThat(isRegisteredUser(activity), is(true));
-        COMU_BY_USER_LIST_AC.checkMenuItem_WTk(activity);
+        SEE_COMU_AND_USERCOMU_BY_USER_AC.checkMenuItem_WTk(activity);
+
+        cleanOneUser(USUARIO_COMUNIDAD_1.getUsuario());
     }
 
     @Test
@@ -225,17 +224,12 @@ public class ComuSearchAcTest {
         assertThat(refreshTkFile.exists(), is(false));
         activity = mActivityRule.launchActivity(new Intent());
         assertThat(isRegisteredUser(activity), is(false));
-        COMU_BY_USER_LIST_AC.checkMenuItem_NTk(activity);
+        SEE_COMU_AND_USERCOMU_BY_USER_AC.checkMenuItem_NTk(activity);
     }
 
     @After
     public void cleanData()
     {
-        if (refreshTkFile.exists()) {
-            refreshTkFile.delete();
-        }
-        TKhandler.getTokensCache().invalidateAll();
-        TKhandler.updateRefreshToken(null);
     }
 
 //    ................ UTILIDADES .....................

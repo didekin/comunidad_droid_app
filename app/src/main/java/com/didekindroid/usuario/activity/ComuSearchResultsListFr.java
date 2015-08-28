@@ -13,16 +13,16 @@ import com.didekindroid.usuario.dominio.Comunidad;
 
 import java.util.List;
 
-import static com.didekindroid.common.ui.ViewsIDs.COMUNIDADES_FOUND;
+import static com.didekindroid.common.ui.ViewsIDs.COMU_SEARCH_RESULTS;
 import static com.didekindroid.usuario.common.UserIntentExtras.COMUNIDAD_SEARCH;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 
-public class ComuListFr extends ListFragment {
+public class ComuSearchResultsListFr extends ListFragment {
 
-    public static final String TAG = "ComuListFr";
+    public static final String TAG = ComuSearchResultsListFr.class.getCanonicalName();
 
     //The Adapter which will be used to populate the ListView.
-    private ComuListAdapter mAdapter;
+    private ComuSearchResultsListAdapter mAdapter;
 
     // The listener for dealing with the selection event of a line item (comunidad).
     private ComuListListener mComuListListener;
@@ -33,7 +33,7 @@ public class ComuListFr extends ListFragment {
         Log.d(TAG, "onAttach()");
         super.onAttach(activity);
         mComuListListener = (ComuListListener) activity;
-        mAdapter = new ComuListAdapter(activity);
+        mAdapter = new ComuSearchResultsListAdapter(activity);
         Comunidad comunidadSearch = (Comunidad) activity.getIntent()
                 .getSerializableExtra(COMUNIDAD_SEARCH.extra);
         new SearchComunidadesLoader().execute(comunidadSearch);
@@ -62,7 +62,7 @@ public class ComuListFr extends ListFragment {
 
         final ListView listView = getListView();
 
-        listView.setId(COMUNIDADES_FOUND.idView);
+        listView.setId(COMU_SEARCH_RESULTS.idView);
         listView.setItemsCanFocus(false);
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         // Text for no result OR view for no result.
@@ -148,17 +148,19 @@ public class ComuListFr extends ListFragment {
 
     private class SearchComunidadesLoader extends AsyncTask<Comunidad, Void, List<Comunidad>> {
 
+        private final String TAG = SearchComunidadesLoader.class.getCanonicalName();
+
         @Override
         protected List<Comunidad> doInBackground(Comunidad... comunidades)
         {
-            Log.d(TAG,"SearchComunidadesLoader.doInBackground(); comunidades_parameter.size = " + comunidades.length);
+            Log.d(TAG,"doInBackground()");
             return ServOne.searchComunidades(comunidades[0]);
         }
 
         @Override
         protected void onPostExecute(List<Comunidad> comunidadList)
         {
-            Log.d(TAG,"SearchComunidadesLoader.onPostExecute(); comunidadList.size = " +
+            Log.d(TAG,"onPostExecute(); comunidadList.size = " +
                     (comunidadList != null ? String.valueOf(comunidadList.size()) : "null"));
             mAdapter.addAll(comunidadList);
             mComuListListener.onComunidadListLoaded(comunidadList.size());

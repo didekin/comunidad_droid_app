@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
+
     <instrumentation
             android:name="android.support.test.runner.AndroidJUnitRunner"
             android:targetPackage="com.didekindroid"/>
@@ -40,6 +41,12 @@
         <!-- USUARIO -->
         <!-- **************************************************************** -->
         <!-- =========== Comunidad ========== -->
+        <!-- ¿La eliminamos?-->
+        <activity
+                android:name=".usuario.activity.ComusByUserListAc"
+                android:label="@string/comunidades_usuario_acc_label"
+                android:parentActivityName=".usuario.activity.ComuSearchAc">
+        </activity>
         <activity
                 android:name=".usuario.activity.ComuSearchAc"
                 android:label="@string/comu_search_ac_label"
@@ -56,9 +63,10 @@
                 android:parentActivityName=".usuario.activity.ComuSearchAc">
         </activity>
         <activity
-                android:name=".usuario.activity.SeeComuAndUserComuAc"
-                android:label="@string/see_comu_and_usercomu_ac_label"
-                android:parentActivityName=".usuario.activity.ComuSearchResultsAc">
+                android:name=".usuario.activity.RegComuAndUserAndUserComuAc"
+                android:label="@string/reg_comunidad_ac_label"
+                android:launchMode="singleTask"
+                android:parentActivityName=".usuario.activity.ComuSearchAc">
         </activity>
         <activity
                 android:name=".usuario.activity.RegUserAndUserComuAc"
@@ -68,13 +76,8 @@
         <activity
                 android:name=".usuario.activity.RegUserComuAc"
                 android:label="@string/regusuario_comu_ac_label"
-                android:parentActivityName=".usuario.activity.ComuSearchAc"/>
-        <activity
-                android:name=".usuario.activity.RegComuAndUserAndUserComuAc"
-                android:label="@string/reg_comunidad_ac_label"
                 android:launchMode="singleTask"
-                android:parentActivityName=".usuario.activity.ComuSearchAc">
-        </activity>
+                android:parentActivityName=".usuario.activity.ComuSearchAc"/>
         <activity
                 android:name=".usuario.activity.RegComuAndUserComuAc"
                 android:label="@string/reg_comunidad_ac_label"
@@ -82,9 +85,12 @@
                 android:parentActivityName=".usuario.activity.ComuSearchAc">
         </activity>
         <activity
-                android:name=".usuario.activity.ComusByUserListAc"
-                android:label="@string/comunidades_usuario_acc_label"
-                android:parentActivityName=".usuario.activity.ComuSearchAc">
+                android:name=".usuario.activity.SeeComuAndUserComuByUserAc"
+                android:label="@string/see_comu_and_usercomu_ac_label"
+                android:parentActivityName=".usuario.activity.ComuSearchResultsAc">
+        </activity>
+        <activity android:name=".usuario.activity.SeeUserComuByComuAc"
+                  android:label="see_usercomu_by_comu_ac_label">
         </activity>
         <!-- =========== Login ========== -->
         <activity

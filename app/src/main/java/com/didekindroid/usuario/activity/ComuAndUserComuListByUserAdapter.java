@@ -7,24 +7,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import com.didekindroid.R;
-import com.didekindroid.usuario.activity.ComuListAdapter.ComuViewHolder;
-import com.didekindroid.usuario.activity.UserComuListAdapter.UserComuVwHolder;
+import com.didekindroid.usuario.activity.ComuSearchResultsListAdapter.ComuViewHolder;
+import com.didekindroid.usuario.activity.UserComuListByComuAdapter.UserComuVwHolder;
 import com.didekindroid.usuario.dominio.Comunidad;
 import com.didekindroid.usuario.dominio.UsuarioComunidad;
 
-import static com.didekindroid.usuario.activity.ComuListAdapter.initTextsInComuVwHolder;
-import static com.didekindroid.usuario.activity.ComuListAdapter.initViewsInComuVwHolder;
+import static com.didekindroid.usuario.activity.ComuSearchResultsListAdapter.initTextsInComuVwHolder;
+import static com.didekindroid.usuario.activity.ComuSearchResultsListAdapter.initViewsInComuVwHolder;
 
 /**
  * User: pedro
  * Date: 10/07/15
  * Time: 18:01
  */
-public class ComuAndUserComuListAdapter extends ArrayAdapter<UsuarioComunidad> {
+public class ComuAndUserComuListByUserAdapter extends ArrayAdapter<UsuarioComunidad> {
 
-    private static final String TAG = ComuAndUserComuListAdapter.class.getCanonicalName();
+    private static final String TAG = ComuAndUserComuListByUserAdapter.class.getCanonicalName();
 
-    public ComuAndUserComuListAdapter(Context context)
+    public ComuAndUserComuListByUserAdapter(Context context)
     {
         super(context, R.layout.comu_and_usercomu_list_item_view, R.id.nombreComunidad_view);
     }

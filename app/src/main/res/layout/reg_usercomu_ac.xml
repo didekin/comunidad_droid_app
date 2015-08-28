@@ -15,17 +15,17 @@
                     tools:context="com.didekindroid.usuario.activity.RegUserComuAc">
 
         <fragment
-                    android:id="@+id/reg_usercomu_fr"
-                    android:layout_height="match_parent"
-                    android:layout_width="match_parent"
-                    android:name="com.didekindroid.usuario.activity.RegUserComuFr"/>
-
-       <!-- <include
-                layout="@layout/reg_usercomu_fr"
-                android:layout_width="match_parent"
+                android:id="@+id/reg_usercomu_fr"
                 android:layout_height="match_parent"
-                android:id="@+id/reg_usuariocomunidad_include"
-                />-->
+                android:layout_width="match_parent"
+                android:name="com.didekindroid.usuario.activity.RegUserComuFr"/>
+
+        <!-- <include
+                 layout="@layout/reg_usercomu_fr"
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+                 android:id="@+id/reg_usuariocomunidad_include"
+                 />-->
 
         <Button
                 android:id="@+id/reg_usercomu_button"

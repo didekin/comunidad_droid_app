@@ -35,7 +35,7 @@ public class RegUserAndUserComuFr extends Fragment {
     {
         Log.d(TAG, "onCreateView().");
 
-        mRegUsuarioComunidadRegView = inflater.inflate(R.layout.reg_usuario_and_usuariocomunidad_fr, container, false);
+        mRegUsuarioComunidadRegView = inflater.inflate(R.layout.reg_user_and_usercomu_fr, container, false);
         mRegUsuarioComunidadRegView.findViewById(R.id.reg_usuariocomunidad_usuario_form_root).setVisibility(IS_VISIBLE);
         mComunidadNombreText = (TextView) mRegUsuarioComunidadRegView.findViewById(R.id.descripcion_comunidad_text);
 

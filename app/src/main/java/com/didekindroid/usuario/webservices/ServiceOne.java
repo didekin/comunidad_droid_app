@@ -22,8 +22,7 @@ import static com.didekindroid.usuario.webservices.ServiceOneEndPoints.*;
  */
 public enum ServiceOne {
 
-    ServOne,
-    ;
+    ServOne,;
 
     private static final String TAG = ServiceOne.class.getCanonicalName();
 
@@ -70,16 +69,16 @@ public enum ServiceOne {
 
     public List<Comunidad> getComunidadesByUser()
     {
-        Log.d(TAG, "getComunidadesByUser()");
+        Log.d(TAG, "getComusByUser()");
         String bearerAccessTkHeader = TKhandler.doBearerAccessTkHeader();
-        return (bearerAccessTkHeader != null ? endPoints.getComunidadesByUser(bearerAccessTkHeader) : null);
+        return (bearerAccessTkHeader != null ? endPoints.getComusByUser(bearerAccessTkHeader) : null);
     }
 
     public List<UsuarioComunidad> getUsuariosComunidad()
     {
-        Log.d(TAG, "getUsuariosComunidad()");
+        Log.d(TAG, "getUserComusByUser()");
         String bearerAccessTkHeader = TKhandler.doBearerAccessTkHeader();
-        return (bearerAccessTkHeader != null ? endPoints.getUsuariosComunidad(bearerAccessTkHeader) : null);
+        return (bearerAccessTkHeader != null ? endPoints.getUserComusByUser(bearerAccessTkHeader) : null);
     }
 
     public Usuario getUserData()
@@ -107,6 +106,12 @@ public enum ServiceOne {
         return endPoints.searchComunidades(comunidad);
     }
 
+    public List<UsuarioComunidad> seeUserComuByComu(long idComunidad)
+    {
+        Log.d(TAG, "seeUserComuByComu()");
+        return endPoints.seeUserComuByComu(TKhandler.doBearerAccessTkHeader(), idComunidad);
+    }
+
     public Usuario signUp(UsuarioComunidad usuarioComunidad)
     {
         Log.d(TAG, ("signUp()"));
@@ -130,4 +135,6 @@ public enum ServiceOne {
     {
         return hostAndPort;
     }
+
+
 }

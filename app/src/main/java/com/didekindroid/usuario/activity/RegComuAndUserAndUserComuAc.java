@@ -32,7 +32,7 @@ public class RegComuAndUserAndUserComuAc extends Activity {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate()");
 
-        setContentView(R.layout.reg_comu_and_usuario_and_usuariocomu_ac);
+        setContentView(R.layout.reg_comu_and_user_and_usercomu_ac);
         mRegComuFrg = (RegComuFr) getFragmentManager().findFragmentById(R.id.reg_comunidad_frg);
         mRegUserComuFrg = (RegUserComuFr) getFragmentManager().findFragmentById(R.id
                 .reg_usuariocomunidad_frg);

@@ -22,12 +22,12 @@ import static com.didekindroid.usuario.common.UserMenu.*;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class ComuSearchResultsAc extends Activity implements ComuListFr.ComuListListener {
+public class ComuSearchResultsAc extends Activity implements ComuSearchResultsListFr.ComuListListener {
 
     private static final String TAG = ComuSearchResultsAc.class.getCanonicalName();
 
     // The fragment where the summary data are displayed.
-    ComuListFr mComunidadesSummaryFrg;
+    ComuSearchResultsListFr mComunidadesSummaryFrg;
 
     // The comunidad index currently being displayed.
     int mIndex;
@@ -48,7 +48,7 @@ public class ComuSearchResultsAc extends Activity implements ComuListFr.ComuList
         setContentView(R.layout.comu_search_results_layout);
 
         // Find our fragments.
-        mComunidadesSummaryFrg = (ComuListFr) getFragmentManager()
+        mComunidadesSummaryFrg = (ComuSearchResultsListFr) getFragmentManager()
                 .findFragmentById(R.id.comu_list_frg);
     }
 
@@ -101,7 +101,7 @@ public class ComuSearchResultsAc extends Activity implements ComuListFr.ComuList
                 USER_DATA_AC.doMenuItem(this);
                 return true;
             case R.id.comu_by_user_list_ac_mn:
-                COMU_BY_USER_LIST_AC.doMenuItem(this);
+                SEE_COMU_AND_USERCOMU_BY_USER_AC.doMenuItem(this);
                 return true;
             case R.id.reg_comu_user_usercomu_ac_mn:
                 REG_COMU_USER_USERCOMU_AC.doMenuItem(this);
@@ -127,7 +127,7 @@ public class ComuSearchResultsAc extends Activity implements ComuListFr.ComuList
         } else {
             if (mUsuarioComunidades.contains(comunidad)) {
                 Log.d(TAG, "onComunidadSelected(). User is registered and associated to the comunidad.");
-                Intent intent = new Intent(this, SeeComuAndUserComuAc.class);
+                Intent intent = new Intent(this, SeeComuAndUserComuByUserAc.class);
                 intent.putExtra(COMUNIDAD_LIST_OBJECT.extra, comunidad);
                 startActivity(intent);
             } else {

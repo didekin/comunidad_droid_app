@@ -11,8 +11,14 @@ import android.view.ViewGroup;
 import com.didekindroid.R;
 import com.didekindroid.usuario.dominio.Comunidad;
 import com.didekindroid.usuario.dominio.UsuarioComunidad;
+import com.didekindroid.usuario.webservices.ServiceOne;
 
 import java.util.List;
+
+import static com.didekindroid.common.ui.ViewsIDs.SEE_USERCOMU_BY_COMU;
+import static com.didekindroid.usuario.common.UserIntentExtras.COMUNIDAD_LIST_OBJECT;
+import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
+
 
 /**
  * User: pedro@didekin
@@ -21,9 +27,10 @@ import java.util.List;
  */
 public class SeeUserComuByComuFr extends ListFragment {
 
-    Comunidad mComunidad;
-
     private static final String TAG = SeeUserComuByComuFr.class.getCanonicalName();
+
+    SeeUserComuByComuAc mActivity;
+    UserComuListByComuAdapter mAdapter;
 
     public SeeUserComuByComuFr()
     {
@@ -34,6 +41,13 @@ public class SeeUserComuByComuFr extends ListFragment {
     {
         Log.d(TAG, "onAttach()");
         super.onAttach(context);
+        mActivity = (SeeUserComuByComuAc) context;
+        mAdapter = new UserComuListByComuAdapter(context);
+
+        // Preconditions: an existing comunidad passed as intent. The comunidad has necessarily users already signed-up.
+        Comunidad mComunidad = (Comunidad) mActivity.getIntent().getExtras()
+                .getSerializable(COMUNIDAD_LIST_OBJECT.extra);
+        new UserComuByComuLoader().execute(mComunidad);
     }
 
     @Override
@@ -62,6 +76,8 @@ public class SeeUserComuByComuFr extends ListFragment {
     {
         Log.d(TAG, "onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
+        getListView().setId(SEE_USERCOMU_BY_COMU.idView);
+        setListAdapter(mAdapter);
     }
 
     @Override
@@ -118,26 +134,22 @@ public class SeeUserComuByComuFr extends ListFragment {
     //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
     //    ============================================================
 
-    private class UserComuByComuLoader extends AsyncTask<UsuarioComunidad, Void, List<UsuarioComunidad>> {
+    private class UserComuByComuLoader extends AsyncTask<Comunidad, Void, List<UsuarioComunidad>> {
 
         private final String TAG = UserComuByComuLoader.class.getCanonicalName();
 
         @Override
-        protected List<UsuarioComunidad> doInBackground(UsuarioComunidad... usuarioComunidad)
+        protected List<UsuarioComunidad> doInBackground(Comunidad... comunidad)
         {
             Log.d(TAG, "doInBackground()");
-                /*int rowInserted = ServOne.regUserComu(usuarioComunidad[0]);
-                if (rowInserted != 1) {
-                    Log.e(TAG, getResources().getString(R.string.error_action_in_DB));
-                }*/
-            return null;
+            return ServOne.seeUserComuByComu(comunidad[0].getC_Id());
         }
 
         @Override
         protected void onPostExecute(List<UsuarioComunidad> userComuList)
         {
             Log.d(TAG, "onPostExecute()");
-            // añadir lista al adapter.
+            mAdapter.addAll(userComuList);
         }
     }
 }

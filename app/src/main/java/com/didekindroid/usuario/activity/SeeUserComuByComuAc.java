@@ -1,25 +1,24 @@
 package com.didekindroid.usuario.activity;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Button;
 import com.didekindroid.R;
+import com.didekindroid.common.ui.UIutils;
+import com.didekindroid.usuario.common.UserMenu;
 import com.didekindroid.usuario.dominio.Comunidad;
-import com.didekindroid.usuario.dominio.ComunidadBean;
-import com.didekindroid.usuario.dominio.UsuarioComunidad;
-import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
+import com.google.common.base.Preconditions;
 
-import java.util.List;
-
-import static com.didekindroid.common.ui.CommonPatterns.LINE_BREAK;
-import static com.didekindroid.common.ui.UIutils.makeToast;
-import static com.didekindroid.usuario.beanfiller.UserAndComuFiller.makeUsuarioComunidadBeanFromView;
+import static com.didekindroid.common.ui.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.common.UserIntentExtras.COMUNIDAD_LIST_OBJECT;
-import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
+import static com.didekindroid.usuario.common.UserMenu.COMU_SEARCH_AC;
+import static com.didekindroid.usuario.common.UserMenu.SEE_COMU_AND_USERCOMU_BY_USER_AC;
+import static com.didekindroid.usuario.common.UserMenu.USER_DATA_AC;
+import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkState;
 
 /**
  * User: pedro@didekin
@@ -30,6 +29,8 @@ public class SeeUserComuByComuAc extends Activity {
 
     public static final String TAG = SeeUserComuByComuAc.class.getCanonicalName();
     Comunidad mComunidad;
+    SeeUserComuByComuFr mFragment;
+    private Button mRegisterButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -37,11 +38,12 @@ public class SeeUserComuByComuAc extends Activity {
         super.onCreate(savedInstanceState);
         Log.i(TAG, "onCreate()");
 
-        // Preconditions: a user registered and an existing comunidad passed as intent.
+        // Preconditions: the user is registeres; an existing comunidad passed as intent.
         mComunidad = (Comunidad) getIntent().getExtras().getSerializable(COMUNIDAD_LIST_OBJECT.extra);
+        checkState(isRegisteredUser(this));
 
         setContentView(R.layout.see_usercomu_by_comu_ac);
-
+        mFragment = (SeeUserComuByComuFr) getFragmentManager().findFragmentById(R.id.see_usercomu_by_comu_frg);
     }
 
     @Override
@@ -98,5 +100,39 @@ public class SeeUserComuByComuAc extends Activity {
     {
         Log.d(TAG, "onDestroy()");
         super.onDestroy();
+    }
+
+    // ============================================================
+    //    ..... ACTION BAR ....
+    // ============================================================
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        Log.d(TAG, "onCreateOptionsMenu()");
+        getMenuInflater().inflate(R.menu.see_usercomu_by_comu_ac_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        Log.d(TAG, "onOptionsItemSelected()");
+
+        int resourceId = checkNotNull(item.getItemId());
+
+        switch (resourceId) {
+            case R.id.comu_by_user_list_ac_mn:
+                SEE_COMU_AND_USERCOMU_BY_USER_AC.doMenuItem(this);
+                return true;
+            case R.id.user_data_ac_mn:
+                USER_DATA_AC.doMenuItem(this);
+                return true;
+            case R.id.comu_search_ac_mn:
+                COMU_SEARCH_AC.doMenuItem(this);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

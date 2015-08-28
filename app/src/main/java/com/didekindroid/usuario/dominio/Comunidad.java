@@ -11,7 +11,7 @@ import java.sql.Timestamp;
  * Date: 09/06/15
  * Time: 20:17
  */
-public class Comunidad implements Serializable {
+public class Comunidad implements Serializable, Comparable<Comunidad>{
 
     private static final long serialVersionUID = SerialNumbers.COMUNIDAD.number;
 
@@ -35,7 +35,7 @@ public class Comunidad implements Serializable {
 
     public Comunidad(String tipoVia, String nombreVia, short numero, String sufijoNumero, Municipio municipio)
     {
-        this(tipoVia,nombreVia,sufijoNumero,municipio);
+        this(tipoVia, nombreVia, sufijoNumero, municipio);
         this.numero = numero;
     }
 
@@ -172,6 +172,37 @@ public class Comunidad implements Serializable {
         result = 31 * result + (sufijoNumero != null ? sufijoNumero.hashCode() : 0);
         result = 31 * result + municipio.hashCode();
         return result;
+    }
+
+    @Override
+    public int compareTo(Comunidad o)
+    {
+        int result;
+
+        if ((result = municipio.compareTo(o.getMunicipio())) != 0) {
+            return result;
+        }
+        if ((result = nombreVia.compareToIgnoreCase(o.getNombreVia())) != 0) {
+            return result;
+        }
+        if ((result = tipoVia.compareToIgnoreCase(o.getTipoVia())) != 0) {
+            return result;
+        }
+        if (numero < o.getNumero()) {
+            return -1;
+        }
+        if (numero > o.getNumero()) {
+            return 1;
+        }
+
+        if (sufijoNumero != null && o.getSufijoNumero() != null) {
+            return sufijoNumero.compareToIgnoreCase(o.getSufijoNumero());
+        }
+        if (sufijoNumero == null && o.getSufijoNumero() == null) {
+            return 0;
+        }
+
+        return sufijoNumero != null ? 1 : -1;
     }
 }
 

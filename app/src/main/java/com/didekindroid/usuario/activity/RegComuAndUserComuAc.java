@@ -29,7 +29,7 @@ public class RegComuAndUserComuAc extends Activity {
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.reg_comunidad_and_usuariocomunidad_ac);
+        setContentView(R.layout.reg_comu_and_usercomu_ac);
 
         mRegComuFrg = (RegComuFr) getFragmentManager().findFragmentById(R.id.reg_comunidad_frg);
         mRegUserComuFrg = (RegUserComuFr) getFragmentManager().findFragmentById(R.id

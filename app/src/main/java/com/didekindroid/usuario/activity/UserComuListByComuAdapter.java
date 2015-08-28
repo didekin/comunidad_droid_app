@@ -18,11 +18,11 @@ import static com.didekindroid.common.dominio.Rol.getResourceStringId;
  * Date: 25/08/15
  * Time: 17:50
  */
-public class UserComuListAdapter extends ArrayAdapter<UsuarioComunidad> {
+public class UserComuListByComuAdapter extends ArrayAdapter<UsuarioComunidad> {
 
-    private static final String TAG = UserComuListAdapter.class.getCanonicalName();
+    private static final String TAG = UserComuListByComuAdapter.class.getCanonicalName();
 
-    public UserComuListAdapter(Context context)
+    public UserComuListByComuAdapter(Context context)
     {
         super(context, R.layout.usercomu_list_item_view, R.id.usercomu_item_portal_rot);
     }
@@ -54,6 +54,8 @@ public class UserComuListAdapter extends ArrayAdapter<UsuarioComunidad> {
 
     static class UserComuVwHolder {
 
+        static final String TAG = UserComuVwHolder.class.getCanonicalName();
+
         final TextView mPortalRotView;
         final TextView mPortalView;
         final TextView mEscaleraRotView;
@@ -79,12 +81,15 @@ public class UserComuListAdapter extends ArrayAdapter<UsuarioComunidad> {
             mPuertaView = (TextView) convertView.findViewById(R.id.usercomu_item_puerta_txt);
             mRolesRotView = (TextView) convertView.findViewById(R.id.usercomu_item_roles_rotulo);
             mRolesView = (TextView) convertView.findViewById(R.id.usercomu_item_roles_txt);
+
             this.resources = resources;
 
         }
 
         void initializeTextInViews(UsuarioComunidad userComu)
         {
+            Log.d(TAG,"initializeTextInViews()");
+
             if (userComu.getPortal() != null && !userComu.getPortal().isEmpty()) {
                 mPortalView.setVisibility(View.VISIBLE);
                 mPortalView.setText(userComu.getPortal());
@@ -110,15 +115,17 @@ public class UserComuListAdapter extends ArrayAdapter<UsuarioComunidad> {
 
         private String formatRol(String rolesString)
         {
+            Log.d(TAG,"formatRol()");
+
             String[] rolesPieces = rolesString.split(",");
             StringBuilder builder = new StringBuilder();
             String resourceString;
 
-            for (int i = 0; i < rolesPieces.length - 1; i++) {
+            for (int i = 0; i < rolesPieces.length; i++) {
                 resourceString = resources.getString(getResourceStringId(rolesPieces[i]));
                 builder.append(resourceString).append(",");
             }
-            builder.deleteCharAt(builder.length() - 1);
+            builder.deleteCharAt(builder.length()-1);
             return builder.toString();
         }
     }

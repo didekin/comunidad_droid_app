@@ -90,7 +90,7 @@ public class RegComuFr extends Fragment {
                              Bundle savedInstanceState)
     {
         Log.d(TAG, "onCreateView()");
-        mRegComunidadFrView = inflater.inflate(R.layout.reg_comunidad, container, false);
+        mRegComunidadFrView = inflater.inflate(R.layout.reg_comu, container, false);
         return mRegComunidadFrView;
     }
 
@@ -238,7 +238,7 @@ public class RegComuFr extends Fragment {
 
         int[] toViews = new int[]{R.id.reg_comunidad_spinner_dropdown_item};
         SimpleCursorAdapter cursorAdapter = new SimpleCursorAdapter(getActivity(),
-                R.layout.reg_comunidad_spinner_dropdown_item, cursor, fromColDB, toViews, 0);
+                R.layout.reg_comu_spinner_dropdown_item, cursor, fromColDB, toViews, 0);
         return cursorAdapter;
     }
 
@@ -258,10 +258,10 @@ public class RegComuFr extends Fragment {
         ArrayAdapter<String> tiposViaAdapter =
                 new ArrayAdapter<String>(
                         RegComuFr.this.getActivity(),
-                        R.layout.reg_comunidad_spinner_dropdown_item,
+                        R.layout.reg_comu_spinner_dropdown_item,
                         TIPOS_VIA);
 
-        tiposViaAdapter.setDropDownViewResource(R.layout.reg_comunidad_spinner_dropdown_item);
+        tiposViaAdapter.setDropDownViewResource(R.layout.reg_comu_spinner_dropdown_item);
         mTipoViaSpinner.setAdapter(tiposViaAdapter);
         mTipoViaSpinner.setSelection(mMunicipioPointer);
     }

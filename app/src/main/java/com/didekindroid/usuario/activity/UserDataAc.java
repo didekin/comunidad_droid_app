@@ -36,7 +36,7 @@ public class UserDataAc extends Activity {
     public boolean onCreateOptionsMenu(Menu menu)
     {
         Log.d(TAG, "onCreateOptionsMenu()");
-        getMenuInflater().inflate(R.menu.usuario_datos_menu, menu);
+        getMenuInflater().inflate(R.menu.user_data_ac_menu, menu);
         return true;
     }
 

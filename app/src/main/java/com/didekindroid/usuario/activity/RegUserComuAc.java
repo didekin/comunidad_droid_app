@@ -8,18 +8,17 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import com.didekindroid.R;
+import com.didekindroid.usuario.common.UserIntentExtras;
 import com.didekindroid.usuario.dominio.Comunidad;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
-import com.google.common.base.Preconditions;
 
 import static com.didekindroid.common.ui.CommonPatterns.LINE_BREAK;
 import static com.didekindroid.common.ui.UIutils.makeToast;
 import static com.didekindroid.usuario.beanfiller.UserAndComuFiller.makeUsuarioComunidadBeanFromView;
 import static com.didekindroid.usuario.common.UserIntentExtras.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * User: pedro@didekin
@@ -137,28 +136,28 @@ public class RegUserComuAc extends Activity {
     //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
     //    ============================================================
 
-    private class UserComuRegister extends AsyncTask<UsuarioComunidad, Void, Void> {
+    private class UserComuRegister extends AsyncTask<UsuarioComunidad, Void, Integer> {
 
         private final String TAG = UserComuRegister.class.getCanonicalName();
 
         @Override
-        protected Void doInBackground(UsuarioComunidad... usuarioComunidad)
+        protected Integer doInBackground(UsuarioComunidad... usuarioComunidad)
         {
             Log.d(TAG, "doInBackground()");
-            int rowInserted = ServOne.regUserComu(usuarioComunidad[0]);
-            if (rowInserted != 1) {
-                Log.e(TAG, getResources().getString(R.string.error_action_in_DB));
-            }
-            return null;
+            return ServOne.regUserComu(usuarioComunidad[0]);
         }
 
         @Override
-        protected void onPostExecute(Void avoid)
+        protected void onPostExecute(Integer rowInserted)
         {
             Log.d(TAG, "onPostExecute()");
-
-            Intent intent = new Intent(RegUserComuAc.this, ComusByUserListAc.class);
-            startActivity(intent);
+            if (rowInserted != 1) {
+                Log.e(TAG, getResources().getString(R.string.error_action_in_DB)); // TODO: testar.
+            } else {
+                Intent intent = new Intent(RegUserComuAc.this, SeeUserComuByComuAc.class);
+                intent.putExtra(COMUNIDAD_LIST_OBJECT.extra,mComunidad);
+                startActivity(intent);
+            }
         }
     }
 }

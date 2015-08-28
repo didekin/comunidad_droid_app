@@ -22,19 +22,21 @@ public interface ServiceOneEndPoints {
     String SIGNUP = "/signup";
     String TOKEN_PATH = "/oauth/token";
 
-    String COMUNIDAD_WRITE = "/comunidad/write";
     String COMUNIDAD_READ = "/comunidad/read";
+    String COMUNIDAD_WRITE = "/comunidad/write";
+
     String COMUNIDAD_DELETE = COMUNIDAD_WRITE + "/delete";
     String COMUNIDAD_SEARCH = OPEN + "/comunidad_search";
 
     String USER_READ = "/users/read";
     String USER_WRITE = "/users/write";
 
+    String COMUS_BY_USER = USER_READ + "/comus_by_user";
     String REG_COMU_USERCOMU = USER_WRITE + "/reg_comu_usercomu";
     String REG_USERCOMU = USER_WRITE + "/reg_usercomu";
-    String USER_COMUNIDADES = USER_READ + "/comunidades";
+    String USERCOMUS_BY_COMU = USER_READ + "/usercomus_by_comu";
+    String USERCOMUS_BY_USER = USER_READ + "/usercomus_by_user";
     String USER_DELETE = USER_WRITE + "/delete";
-    String USER_USERCOMUNIDADES = USER_READ + "/usuario_comunidades";
 
     //    ........... PARAMETERS ..........
     String USER_PARAM = "username";
@@ -48,11 +50,15 @@ public interface ServiceOneEndPoints {
     String OAUTH_CLIENT_ID = "user";
     String OAUTH_CLIENT_SECRET = "";
 
-    @DELETE(USER_DELETE)
-    boolean deleteUser(@Header("Authorization") String accessToken);
 
     @DELETE(COMUNIDAD_DELETE + "/{comunidadId}")
     boolean deleteComunidad(@Header("Authorization") String accessToken, @Path("comunidadId") long comunidadId);
+
+    @DELETE(USER_DELETE)
+    boolean deleteUser(@Header("Authorization") String accessToken);
+
+    @GET(COMUS_BY_USER)
+    List<Comunidad> getComusByUser(@Header("Authorization") String accessToken);
 
     @GET("/open/not_found")
     Response getNotFoundMsg();
@@ -60,11 +66,8 @@ public interface ServiceOneEndPoints {
     @GET(USER_READ)
     Usuario getUserData(@Header("Authorization") String accessToken);
 
-    @GET(USER_COMUNIDADES)
-    List<Comunidad> getComunidadesByUser(@Header("Authorization") String accessToken);
-
-    @GET(USER_USERCOMUNIDADES)
-    List<UsuarioComunidad> getUsuariosComunidad(@Header("Authorization") String accessToken);
+    @GET(USERCOMUS_BY_USER)
+    List<UsuarioComunidad> getUserComusByUser(@Header("Authorization") String accessToken);
 
     @POST(REG_USERCOMU)
     int regUserComu(@Header("Authorization") String accessToken, @Body UsuarioComunidad usuarioComunidad);
@@ -75,6 +78,10 @@ public interface ServiceOneEndPoints {
 
     @POST(COMUNIDAD_SEARCH)
     List<Comunidad> searchComunidades(@Body Comunidad comunidad);
+
+    @GET(USERCOMUS_BY_COMU + "/{comunidadId}")
+    List<UsuarioComunidad> seeUserComuByComu(@Header("Authorization") String accessToken,
+                                             @Path("comunidadId") long comunidadId);
 
     @POST(SIGNUP)
     Usuario signUp(@Body UsuarioComunidad usuarioCom);
