@@ -1,48 +1,67 @@
 package com.didekindroid.usuario.dominio;
 
 import android.content.res.Resources;
+import com.didekin.serviceone.domain.Comunidad;
+import com.didekin.serviceone.domain.Municipio;
+import com.didekin.serviceone.domain.Provincia;
 import com.didekindroid.R;
-import com.didekindroid.common.dominio.SerialNumbers;
-import com.didekindroid.masterdata.dominio.Municipio;
-import com.didekindroid.masterdata.dominio.Provincia;
 
-import java.io.Serializable;
-import java.sql.Timestamp;
-
-import static com.didekindroid.common.ui.CommonPatterns.LINE_BREAK;
-import static com.didekindroid.common.ui.CommonPatterns.SELECT;
+import static com.didekindroid.uiutils.CommonPatterns.LINE_BREAK;
+import static com.didekindroid.uiutils.CommonPatterns.SELECT;
 
 /**
  * User: pedro@didekin
  * Date: 12/05/15
  * Time: 16:55
  */
-public class ComunidadBean implements Serializable {
+public class ComunidadBean {
 
-    private static final long serialVersionUID = SerialNumbers.COMUNIDAD_BEAN.number;
-
-    private transient String numeroString;
+    private String tipoVia;
+    private String nombreVia;
+    private String numeroString;
+    private short numero;
+    private String sufijoNumero;
     private Comunidad comunidad;
+    private Municipio municipio;
+
+    public ComunidadBean()
+    {
+    }
+
+    public ComunidadBean(String tipoVia, String nombreVia, String numeroEnVia,
+                         String sufijoNumero, Municipio municipio)
+    {
+        this.tipoVia = tipoVia;
+        this.nombreVia = nombreVia;
+        this.numeroString = numeroEnVia;
+        this.sufijoNumero = sufijoNumero;
+        this.municipio = municipio;
+    }
 
     public ComunidadBean(Comunidad comunidad)
     {
         this.comunidad = comunidad;
     }
 
-    public ComunidadBean(String tipoVia, String nombreVia, String numeroEnVia,
-                         String sufijoNumero, Municipio municipio)
-    {
-        comunidad = new Comunidad(tipoVia, nombreVia, sufijoNumero, municipio);
-        this.numeroString = numeroEnVia;
-    }
-
     public boolean validate(Resources resources, StringBuilder errorMsg)
     {
-        return validateTipoVia(resources, errorMsg)
+        boolean isValid = validateTipoVia(resources, errorMsg)
                 & validateNombreVia(resources.getText(R.string.nombre_via), errorMsg)
                 & validateNumeroEnVia(resources.getText(R.string.numero_en_via), errorMsg)
                 & validateSufijo(resources.getText(R.string.sufijo_numero), errorMsg)
                 & validateMunicipio(resources, errorMsg);
+
+        if (isValid) {
+            comunidad = new Comunidad.ComunidadBuilder()
+                    .tipoVia(tipoVia)
+                    .nombreVia(nombreVia)
+                    .numero(numero)
+                    .sufijoNumero(sufijoNumero)
+                    .municipio(municipio)
+                    .build();
+        }
+
+        return isValid;
     }
 
     boolean validateTipoVia(Resources resources, StringBuilder errorMsg)
@@ -69,14 +88,14 @@ public class ComunidadBean implements Serializable {
     public boolean validateNumeroEnVia(CharSequence resources, StringBuilder errorMsg)
     {
         // Si no se cubre en el formulario, numeroString es "". Ponemos 0 como valor por defecto.
-        if (numeroString == null || numeroString.trim().isEmpty()){
-            comunidad.setNumero((short)0);
+        if (numeroString == null || numeroString.trim().isEmpty()) {
+            numeroString = String.valueOf((short) 0);
             return true;
         }
 
         boolean isValid = true;
         try {
-            comunidad.setNumero(Short.parseShort(numeroString));
+            numero = Short.parseShort(numeroString);
         } catch (NumberFormatException ne) {
             errorMsg.append(resources + LINE_BREAK.literal);
             isValid = false;
@@ -159,9 +178,15 @@ public class ComunidadBean implements Serializable {
         return comunidad.getMunicipio().getProvincia();
     }
 
-    public void setNumeroEnVia(short numeroEnVia)
+    public void setMunicipio(Municipio municipio)
     {
-        comunidad.setNumero(numeroEnVia);
+        this.municipio = municipio;
+    }
+
+
+    public void setNombreVia(String nombreVia)
+    {
+        this.nombreVia = nombreVia;
     }
 
     public void setNumeroString(String numeroString)
@@ -169,37 +194,13 @@ public class ComunidadBean implements Serializable {
         this.numeroString = numeroString;
     }
 
-    public void setNombreVia(String nombreVia)
-    {
-        comunidad.setNombreVia(nombreVia);
-    }
-
     public void setSufijoNumero(String sufijoNumero)
     {
-        comunidad.setSufijoNumero(sufijoNumero);
-    }
-
-    public void setFechaAlta(Timestamp fechaAlta)
-    {
-        comunidad.setFechaAlta(fechaAlta);
+        this.sufijoNumero = sufijoNumero;
     }
 
     public void setTipoVia(String tipoVia)
     {
-        comunidad.setTipoVia(tipoVia);
+        this.tipoVia = tipoVia;
     }
-
-    public void setMunicipio(Municipio municipio)
-    {
-        comunidad.setMunicipio(municipio);
-    }
-
-    public void setProvincia(Provincia provincia)
-    {
-        if (comunidad.getMunicipio() == null) {
-            comunidad.setMunicipio(new Municipio());
-        }
-        comunidad.getMunicipio().setProvincia(provincia);
-    }
-
 }

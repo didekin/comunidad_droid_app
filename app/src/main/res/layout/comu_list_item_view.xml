@@ -15,7 +15,7 @@
             android:layout_marginTop="@dimen/activity_vertical_margin"
             />
 
-    <TextView
+    <!--<TextView
             android:id="@+id/tipoVia_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -46,7 +46,7 @@
             android:layout_toRightOf="@id/nombreVia_view"
             android:layout_alignTop="@id/tipoVia_view"
             android:layout_alignBottom="@id/nombreVia_view"/>
-
+-->
     <TextView
             android:id="@+id/municipio_view"
             android:layout_width="wrap_content"
@@ -55,7 +55,7 @@
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:layout_alignParentLeft="true"
-            android:layout_below="@id/tipoVia_view"/>
+            android:layout_below="@id/nombreComunidad_view"/>
 
     <TextView
             android:id="@+id/provincia_view"

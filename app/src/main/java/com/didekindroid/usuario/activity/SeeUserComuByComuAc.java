@@ -7,16 +7,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import com.didekindroid.R;
-import com.didekindroid.common.ui.UIutils;
-import com.didekindroid.usuario.common.UserMenu;
-import com.didekindroid.usuario.dominio.Comunidad;
-import com.google.common.base.Preconditions;
 
-import static com.didekindroid.common.ui.UIutils.isRegisteredUser;
-import static com.didekindroid.usuario.common.UserIntentExtras.COMUNIDAD_LIST_OBJECT;
-import static com.didekindroid.usuario.common.UserMenu.COMU_SEARCH_AC;
-import static com.didekindroid.usuario.common.UserMenu.SEE_COMU_AND_USERCOMU_BY_USER_AC;
-import static com.didekindroid.usuario.common.UserMenu.USER_DATA_AC;
+import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
+import static com.didekindroid.usuario.activity.utils.UserMenu.COMU_SEARCH_AC;
+import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_COMU_AND_USERCOMU_BY_USER_AC;
+import static com.didekindroid.usuario.activity.utils.UserMenu.USER_DATA_AC;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
@@ -25,10 +20,14 @@ import static com.google.common.base.Preconditions.checkState;
  * Date: 25/08/15
  * Time: 16:30
  */
+/**
+ *  Preconditions:
+ *  1. a long comunidadId is passed as an intent extra.
+ *  2. the user is registered.
+ */
 public class SeeUserComuByComuAc extends Activity {
 
     public static final String TAG = SeeUserComuByComuAc.class.getCanonicalName();
-    Comunidad mComunidad;
     SeeUserComuByComuFr mFragment;
     private Button mRegisterButton;
 
@@ -39,7 +38,6 @@ public class SeeUserComuByComuAc extends Activity {
         Log.i(TAG, "onCreate()");
 
         // Preconditions: the user is registeres; an existing comunidad passed as intent.
-        mComunidad = (Comunidad) getIntent().getExtras().getSerializable(COMUNIDAD_LIST_OBJECT.extra);
         checkState(isRegisteredUser(this));
 
         setContentView(R.layout.see_usercomu_by_comu_ac);

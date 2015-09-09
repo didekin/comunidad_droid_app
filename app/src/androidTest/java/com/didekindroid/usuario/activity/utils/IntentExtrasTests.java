@@ -2,11 +2,9 @@ package com.didekindroid.usuario.activity.utils;
 
 import org.junit.Test;
 
-import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_LIST_OBJECT;
-import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_LIST_INDEX;
-import static com.didekindroid.usuario.activity.utils.UserIntentExtras.IS_COMUNIDADES_BY_USER;
+import static com.didekindroid.usuario.activity.utils.UserIntentExtras.*;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 /**
  * User: pedro@didekin
@@ -16,10 +14,22 @@ import static org.junit.Assert.*;
 public class IntentExtrasTests {
 
     @Test
-    public void testGetExtra(){
-        assertThat(COMUNIDAD_LIST_OBJECT.extra,is("com.didekindroid.ui.COMUNIDAD_LIST_OBJECT"));
-        assertThat(COMUNIDAD_LIST_INDEX.extra,is("com.didekindroid.ui.COMUNIDAD_LIST_INDEX"));
-        assertThat(IS_COMUNIDADES_BY_USER.extra,is("com.didekindroid.ui.IS_COMUNIDADES_BY_USER"));
+    public void testGetExtra()
+    {
+        assertThat(COMUNIDAD_LIST_OBJECT.extra, is(UserIntentExtras.class.getName()
+                .concat(".")
+                .concat(COMUNIDAD_LIST_OBJECT.name())));
+        assertThat(COMUNIDAD_LIST_INDEX.extra, is(UserIntentExtras.class.getName()
+                .concat(".")
+                .concat(COMUNIDAD_LIST_INDEX.name())));
+        assertThat(COMUNIDAD_SEARCH.extra, is(UserIntentExtras.class.getName()
+                .concat(".")
+                .concat(COMUNIDAD_SEARCH.name())));
+        assertThat(COMUNIDAD_ID.extra, is(UserIntentExtras.class.getName()
+                .concat(".")
+                .concat(COMUNIDAD_ID.name())));
+        assertThat(USUARIO_COMUNIDAD_REG.extra, is(UserIntentExtras.class.getName()
+                .concat(".")
+                .concat(USUARIO_COMUNIDAD_REG.name())));
     }
-
 }

@@ -11,11 +11,10 @@ public enum UserIntentExtras {
     COMUNIDAD_LIST_INDEX,
     COMUNIDAD_LIST_OBJECT,
     COMUNIDAD_ID,
-    IS_COMUNIDADES_BY_USER,
     COMUNIDAD_SEARCH,
     ;
 
-    private static final String intentPackage =  "com.didekindroid.ui.";
+    private static final String intentPackage =  "com.didekindroid.usuario.activity.utils.UserIntentExtras.";
 
     public final String extra;
 

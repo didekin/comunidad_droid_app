@@ -1,6 +1,7 @@
 package com.didekindroid.usuario.webservices;
 
-import com.didekin.security.OauthToken;
+import com.didekin.retrofitcl.Oauth2EndPoints.BodyText;
+import com.didekin.security.OauthToken.AccessToken;
 
 /**
  * User: pedro@didekin
@@ -8,7 +9,12 @@ import com.didekin.security.OauthToken;
  * Time: 11:05
  */
 public interface Oauth2ServiceIf {
-    OauthToken.AccessToken getPasswordUserToken(String userName, String password);
 
-    OauthToken.AccessToken getRefreshUserToken(String refreshTokenKey);
+    BodyText getHello();
+
+    BodyText getHelloUserRead(String accessToken);
+
+    AccessToken getPasswordUserToken(String userName, String password);
+
+    AccessToken getRefreshUserToken(String refreshTokenKey);
 }

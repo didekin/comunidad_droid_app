@@ -4,9 +4,9 @@ import android.content.res.Resources;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
+import com.didekin.serviceone.domain.Municipio;
+import com.didekin.serviceone.domain.Provincia;
 import com.didekindroid.R;
-import com.didekindroid.masterdata.dominio.Municipio;
-import com.didekindroid.masterdata.dominio.Provincia;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -135,22 +135,22 @@ public class UsuarioComunidadBeanValidaTests {
     {
         UsuarioComunidadBean usuarioComunidadBean = new UsuarioComunidadBean(comunidad, usuarioBean, "poÑr6ta_1",
                 "escalera-2", "plantaB_Ñ", "puerta12", true, false, false, false);
-        usuarioComunidadBean.setRoles();
+        usuarioComunidadBean.rolesInBean();
         assertThat(usuarioComunidadBean.getRoles(), is("pre"));
 
         usuarioComunidadBean = new UsuarioComunidadBean(comunidad, usuarioBean, "poÑr6ta_1",
                 "escalera-2", "plantaB_Ñ", "puerta12", true, false, true, false);
-        usuarioComunidadBean.setRoles();
+        usuarioComunidadBean.rolesInBean();
         assertThat(usuarioComunidadBean.getRoles(), is("pre,pro"));
 
         usuarioComunidadBean = new UsuarioComunidadBean(comunidad, usuarioBean, "poÑr6ta_1",
                 "escalera-2", "plantaB_Ñ", "puerta12",true, true, true, false);
-        usuarioComunidadBean.setRoles();
+        usuarioComunidadBean.rolesInBean();
         assertThat(usuarioComunidadBean.getRoles(), is("adm,pre,pro"));
 
         usuarioComunidadBean = new UsuarioComunidadBean(comunidad, usuarioBean, "poÑr6ta_1",
                 "escalera-2", "plantaB_Ñ", "puerta12", true, true, true, true);
-        usuarioComunidadBean.setRoles();
+        usuarioComunidadBean.rolesInBean();
         assertThat(usuarioComunidadBean.getRoles(), is("adm,pre,pro,inq"));
     }
 

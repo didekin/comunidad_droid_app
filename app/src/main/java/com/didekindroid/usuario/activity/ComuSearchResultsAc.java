@@ -8,20 +8,29 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import com.didekin.serviceone.domain.Comunidad;
 import com.didekindroid.R;
-import com.didekindroid.common.ui.UIutils;
-import com.didekindroid.usuario.common.UserMenu;
-import com.didekindroid.usuario.dominio.Comunidad;
+import com.didekindroid.uiutils.UIutils;
+import com.didekindroid.usuario.activity.utils.UserMenu;
 
 import java.util.List;
 
-import static com.didekindroid.common.ui.UIutils.isRegisteredUser;
-import static com.didekindroid.usuario.common.UserIntentExtras.COMUNIDAD_LIST_INDEX;
-import static com.didekindroid.usuario.common.UserIntentExtras.COMUNIDAD_LIST_OBJECT;
-import static com.didekindroid.usuario.common.UserMenu.*;
+import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
+import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_LIST_INDEX;
+import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_LIST_OBJECT;
+import static com.didekindroid.usuario.activity.utils.UserMenu.*;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 import static com.google.common.base.Preconditions.checkNotNull;
 
+/**
+ * Postconditions:
+ * <p/>
+ * 1. An object comunidad is passed as an intent extra with the fields:
+ * -- comunidadId.
+ * -- nombreComunidad (with tipoVia,nombreVia, numero and sufijoNumero).
+ * -- municipio, with codInProvincia and nombre.
+ * -- provincia, with provinciaId and nombre.
+ */
 public class ComuSearchResultsAc extends Activity implements ComuSearchResultsListFr.ComuListListener {
 
     private static final String TAG = ComuSearchResultsAc.class.getCanonicalName();

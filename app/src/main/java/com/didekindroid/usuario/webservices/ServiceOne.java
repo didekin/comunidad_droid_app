@@ -1,140 +1,168 @@
 package com.didekindroid.usuario.webservices;
 
-import android.util.Base64;
 import android.util.Log;
-import com.didekindroid.R;
-import com.didekindroid.usuario.dominio.AccessToken;
-import com.didekindroid.usuario.dominio.Comunidad;
-import com.didekindroid.usuario.dominio.Usuario;
-import com.didekindroid.usuario.dominio.UsuarioComunidad;
+import com.didekin.retrofitcl.ServiceOneEndPoints;
+import com.didekin.serviceone.domain.Comunidad;
+import com.didekin.serviceone.domain.Usuario;
+import com.didekin.serviceone.domain.UsuarioComunidad;
+import com.didekindroid.DidekindroidApp;
+import retrofit.client.Response;
 
 import java.util.List;
 
-import static com.didekindroid.DidekindroidApp.getContext;
-import static com.didekindroid.common.RetrofitRestBuilder.getService;
-import static com.didekindroid.usuario.common.TokenHandler.TKhandler;
-import static com.didekindroid.usuario.webservices.ServiceOneEndPoints.*;
+import static com.didekin.retrofitcl.RetrofitRestBuilder.BUILDER;
+import static com.didekindroid.DidekindroidApp.getBaseURL;
+import static com.didekindroid.usuario.security.TokenHandler.TKhandler;
 
 /**
  * User: pedro@didekin
  * Date: 07/06/15
  * Time: 15:06
  */
-public enum ServiceOne {
+public enum ServiceOne implements ServiceOneEndPoints, ServiceOneIf {
 
-    ServOne,;
+    ServOne(BUILDER.getService(ServiceOneEndPoints.class, getBaseURL())) {
+        @Override
+        public boolean deleteComunidad(String accessToken, long comunidadId)
+        {
+            return ServOne.endPoint.deleteComunidad(accessToken, comunidadId);
+        }
+
+        @Override
+        public boolean deleteUser(String accessToken)
+        {
+            return ServOne.endPoint.deleteUser(accessToken);
+        }
+
+        @Override
+        public List<Comunidad> getComusByUser(String accessToken)
+        {
+            return ServOne.endPoint.getComusByUser(accessToken);
+        }
+
+        @Override
+        public Response getNotFoundMsg()
+        {
+            return ServOne.endPoint.getNotFoundMsg();
+        }
+
+        @Override
+        public Usuario getUserData(String accessToken)
+        {
+            return ServOne.endPoint.getUserData(accessToken);
+        }
+
+        @Override
+        public List<UsuarioComunidad> getUserComusByUser(String accessToken)
+        {
+            return ServOne.endPoint.getUserComusByUser(accessToken);
+        }
+
+        @Override
+        public int regUserComu(String accessToken, UsuarioComunidad usuarioComunidad)
+        {
+            return ServOne.endPoint.regUserComu(accessToken, usuarioComunidad);
+        }
+
+        @Override
+        public boolean regComuAndUserAndUserComu(UsuarioComunidad usuarioCom)
+        {
+            Log.d(TAG, ("signUp()"));
+            return ServOne.endPoint.regComuAndUserAndUserComu(usuarioCom);
+        }
+
+        @Override
+        public boolean regComuAndUserComu(String accessToken, UsuarioComunidad usuarioCom)
+        {
+            return ServOne.endPoint.regComuAndUserComu(accessToken, usuarioCom);
+        }
+
+        /**
+         * An object comunidad is used as search criterium, with the fields:
+         * -- tipoVia.
+         * -- nombreVia.
+         * -- numero.
+         * -- sufijoNumero (it can be an empty string).
+         * -- municipio with codInProvincia and provinciaId.
+         */
+        @Override
+        public List<Comunidad> searchComunidades(Comunidad comunidad)
+        {
+            Log.d(TAG, "searchComunidades()");
+            return ServOne.endPoint.searchComunidades(comunidad);
+        }
+
+        @Override
+        public List<UsuarioComunidad> seeUserComuByComu(String accessToken, long comunidadId)
+        {
+            return ServOne.endPoint.seeUserComuByComu(accessToken, comunidadId);
+        }
+    },;
 
     private static final String TAG = ServiceOne.class.getCanonicalName();
 
-    private final String hostAndPort;
-    private final ServiceOneEndPoints endPoints;
+    private final ServiceOneEndPoints endPoint;
 
-    ServiceOne()
+    ServiceOne(ServiceOneEndPoints retrofitEndPoint)
     {
-        hostAndPort = getContext().getResources().getString(R.string.service_one_host)
-                .concat(getContext().getResources().getString(R.string.service_one_port));
-        endPoints = getService(ServiceOneEndPoints.class, hostAndPort);
+        endPoint = retrofitEndPoint;
     }
 
-    public boolean deleteUser()
-    {
-        Log.d(TAG, "deleteUser()");
-        return endPoints.deleteUser(TKhandler.doBearerAccessTkHeader());
-    }
-
+    @Override
     public boolean deleteComunidad(long comunidadId)
     {
         Log.d(TAG, "deleteComunidad()");
-        return endPoints.deleteComunidad(TKhandler.doBearerAccessTkHeader(), comunidadId);
+        return deleteComunidad(TKhandler.doBearerAccessTkHeader(), comunidadId);
     }
 
-    public AccessToken getPasswordUserToken(String userName, String password)
+    @Override
+    public boolean deleteUser()
     {
-        Log.d(TAG, "getPasswordUserToken()");
-        return endPoints.getPasswordUserToken(
-                doAuthBasicHeader(OAUTH_CLIENT_ID, OAUTH_CLIENT_SECRET),
-                userName,
-                password,
-                PASSWORD_GRANT);
+        Log.d(TAG, "deleteUser()");
+        return deleteUser(TKhandler.doBearerAccessTkHeader());
     }
 
-    public AccessToken getRefreshUserToken(String refreshTokenKey)
-    {
-        Log.d(TAG, "getRefreshUserToken()");
-        return endPoints.getRefreshUserToken(
-                doAuthBasicHeader(OAUTH_CLIENT_ID, OAUTH_CLIENT_SECRET),
-                refreshTokenKey,
-                REFRESH_TOKEN_GRANT);
-    }
-
-    public List<Comunidad> getComunidadesByUser()
+    @Override
+    public List<Comunidad> getComunidadesByUser()  // TODO: ¿a desaparecer?
     {
         Log.d(TAG, "getComusByUser()");
         String bearerAccessTkHeader = TKhandler.doBearerAccessTkHeader();
-        return (bearerAccessTkHeader != null ? endPoints.getComusByUser(bearerAccessTkHeader) : null);
+        return (bearerAccessTkHeader != null ? endPoint.getComusByUser(bearerAccessTkHeader) : null);
     }
 
+    @Override
     public List<UsuarioComunidad> getUsuariosComunidad()
     {
         Log.d(TAG, "getUserComusByUser()");
         String bearerAccessTkHeader = TKhandler.doBearerAccessTkHeader();
-        return (bearerAccessTkHeader != null ? endPoints.getUserComusByUser(bearerAccessTkHeader) : null);
+        return (bearerAccessTkHeader != null ? endPoint.getUserComusByUser(bearerAccessTkHeader) : null);
     }
 
+    @Override
     public Usuario getUserData()
     {
         Log.d(TAG, ("getUserData()"));
-        return endPoints.getUserData(TKhandler.doBearerAccessTkHeader());
+        return endPoint.getUserData(TKhandler.doBearerAccessTkHeader());
     }
 
-    /* It returns the number of rows inserted: 1. */
+    @Override
+    public boolean regComuAndUserComu(UsuarioComunidad usuarioComunidad)
+    {
+        Log.d(TAG, "regComuAndUserComu()");
+        return endPoint.regComuAndUserComu(TKhandler.doBearerAccessTkHeader(), usuarioComunidad);
+    }
+
+    @Override
     public int regUserComu(UsuarioComunidad usuarioComunidad)
     {
         Log.d(TAG, "regUserComu()");
-        return endPoints.regUserComu(TKhandler.doBearerAccessTkHeader(), usuarioComunidad);
+        return endPoint.regUserComu(TKhandler.doBearerAccessTkHeader(), usuarioComunidad);
     }
 
-    public Usuario regComuAndUserComu(UsuarioComunidad usuarioComunidad)
-    {
-        Log.d(TAG, "regComuAndUserComu()");
-        return endPoints.regComuAndUserComu(TKhandler.doBearerAccessTkHeader(), usuarioComunidad);
-    }
-
-    public List<Comunidad> searchComunidades(Comunidad comunidad)
-    {
-        Log.d(TAG, "searchComunidades()");
-        return endPoints.searchComunidades(comunidad);
-    }
-
+    @Override
     public List<UsuarioComunidad> seeUserComuByComu(long idComunidad)
     {
         Log.d(TAG, "seeUserComuByComu()");
-        return endPoints.seeUserComuByComu(TKhandler.doBearerAccessTkHeader(), idComunidad);
+        return endPoint.seeUserComuByComu(TKhandler.doBearerAccessTkHeader(), idComunidad);
     }
-
-    public Usuario signUp(UsuarioComunidad usuarioComunidad)
-    {
-        Log.d(TAG, ("signUp()"));
-        return endPoints.signUp(usuarioComunidad);
-    }
-
-//    .......... Utilities ..........
-
-    String doAuthBasicHeader(String clientId, String clientSecret)
-    {
-        Log.d(TAG, "doAuthBasicHeader()");
-
-        String base64AuthData = Base64.encodeToString(new String(clientId + ":" + clientSecret)
-                .getBytes(), Base64.DEFAULT);
-        // We cut the final \n character of the base64AuthData string.
-        String header = new String("Basic " + base64AuthData.substring(0, base64AuthData.length() - 1));
-        return header;
-    }
-
-    public String getHostAndPort()
-    {
-        return hostAndPort;
-    }
-
-
 }

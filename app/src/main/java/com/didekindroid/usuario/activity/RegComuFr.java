@@ -11,23 +11,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+import com.didekin.serviceone.domain.Comunidad;
+import com.didekin.serviceone.domain.Municipio;
+import com.didekin.serviceone.domain.Provincia;
 import com.didekindroid.R;
-import com.didekindroid.common.IoHelper;
-import com.didekindroid.masterdata.dominio.Municipio;
-import com.didekindroid.masterdata.dominio.Provincia;
-import com.didekindroid.masterdata.repository.MasterDataDb;
-import com.didekindroid.masterdata.repository.MasterDataDbHelper;
-import com.didekindroid.usuario.dominio.Comunidad;
+import com.didekindroid.ioutils.IoHelper;
+import com.didekindroid.repository.MasterDataDbHelper;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 
 import java.util.List;
 
-import static com.didekindroid.masterdata.repository.MasterDataDb.ComunidadAutonoma.cu_nombre;
-import static com.didekindroid.masterdata.repository.MasterDataDb.Provincia.pr_nombre;
+import static com.didekindroid.repository.MasterDataDb.ComunidadAutonoma.cu_nombre;
+import static com.didekindroid.repository.MasterDataDb.Provincia.pr_nombre;
+import static com.didekindroid.repository.MasterDataDb.Municipio.mu_nombre;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class RegComuFr extends Fragment {
 
     private static final String TAG = RegComuFr.class.getCanonicalName();
@@ -107,7 +104,7 @@ public class RegComuFr extends Fragment {
         autonomaComuSpinner = (Spinner) getView().findViewById(R.id.autonoma_comunidad_spinner);
         provinciaSpinner = (Spinner) getView().findViewById(R.id.provincia_spinner);
         municipioSpinner = (Spinner) getView().findViewById(R.id.municipio_spinner);
-        comunidadBean = new ComunidadBean(new Comunidad());
+        comunidadBean = new ComunidadBean();
 
         setTipoViaSpinnerAdapter();  // Initialize with TIPOS_VIA array.
 
@@ -135,7 +132,7 @@ public class RegComuFr extends Fragment {
             {
                 Log.d(TAG, "In autonomaComuSpinner.setOnItemSelectedListener, onItemSelected()");
 
-                comunidadBean.setProvincia(null);
+//                comunidadBean.setProvincia(null);
                 short cu_id = (short) id;
                 new SpinnerProvinciasLoader().execute(cu_id);
                 mCApointer = position;
@@ -157,7 +154,7 @@ public class RegComuFr extends Fragment {
                 comunidadBean.setMunicipio(null);
                 short prId = (short) id;
                 new SpinnerMunicipioLoader().execute(prId);
-                comunidadBean.setProvincia(new Provincia((short) id));
+//                comunidadBean.setProvincia(new Provincia((short) id));
                 mProvinciaPointer = position;
             }
 
@@ -177,13 +174,13 @@ public class RegComuFr extends Fragment {
                 Cursor cursor = ((CursorAdapter) parent.getAdapter()).getCursor();
                 cursor.moveToPosition(position);
 
-                Provincia provincia = comunidadBean.getProvincia();
+                /*Provincia provincia = comunidadBean.getProvincia();
 
                 if (provincia == null) {
                     provincia = new Provincia(cursor.getShort(1));
                     comunidadBean.setProvincia(provincia);
-                }
-                Municipio municipio = new Municipio(provincia, cursor.getShort(2));
+                }*/
+                Municipio municipio = new Municipio(cursor.getShort(2),new Provincia(cursor.getShort(2)));
                 comunidadBean.setMunicipio(municipio);
                 mMunicipioPointer = position;
             }
@@ -231,6 +228,9 @@ public class RegComuFr extends Fragment {
     {
         return comunidadBean;
     }
+
+//  :::::::::::::::::::: SPINNERS :::::::::::::::::::::
+//  ---------------------------------------------------
 
     private SimpleCursorAdapter doAdapterSpinner(Cursor cursor, String[] fromColDB)
     {
@@ -328,7 +328,7 @@ public class RegComuFr extends Fragment {
         @Override
         protected void onPostExecute(Cursor municipiosCursor)
         {
-            String[] fromColDb = new String[]{MasterDataDb.Municipio.mu_nombre};
+            String[] fromColDb = new String[]{mu_nombre};
             municipioSpinner.setAdapter(doAdapterSpinner(municipiosCursor, fromColDb));
             municipioSpinner.setSelection(mMunicipioPointer);
         }

@@ -4,11 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.action.ViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import com.didekindroid.R;
+import com.didekindroid.usuario.dominio.DomainDataUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -20,17 +20,14 @@ import java.io.File;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.*;
-import static com.didekindroid.common.ui.UIutils.isRegisteredUser;
-import static com.didekindroid.usuario.common.DataUsuarioTestUtils.*;
-import static com.didekindroid.usuario.common.UserMenuTestUtils.*;
-import static com.didekindroid.usuario.beanfiller.UserAndComuFiller.makeComunidadBeanFromView;
-import static com.didekindroid.usuario.common.TokenHandler.TKhandler;
-import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
+import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
+import static com.didekindroid.usuario.UsuarioTestUtils.*;
+import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.*;
+import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeComunidadBeanFromView;
+import static com.didekindroid.usuario.security.TokenHandler.TKhandler;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
 
@@ -72,7 +69,7 @@ public class ComuSearchAcTest {
         onView(withId(R.id.tipo_via_spinner)).check(matches(isDisplayed()));
     }
 
-    @Test
+    @Test   // TODO: ¿están afectados por los cambios en la tarea asíncrona?
     public void testUpdateIsRegistered_1()
     {
         activity = mActivityRule.launchActivity(new Intent());
@@ -86,13 +83,13 @@ public class ComuSearchAcTest {
     public void testUpdateIsRegistered_2()
     {
         //With token.
-        signUpAndUpdateTk(USUARIO_COMUNIDAD_1);
+        signUpAndUpdateTk(DomainDataUtils.COMU_REAL_JUAN);
         assertThat(refreshTkFile.exists(), is(true));
 
         activity = mActivityRule.launchActivity(new Intent());
         assertThat(isRegisteredUser(activity), is(true));
 
-        cleanOneUser(USUARIO_COMUNIDAD_1.getUsuario());
+        cleanOneUser(DomainDataUtils.COMU_REAL_JUAN.getUsuario());
     }
 
     @Test
@@ -151,7 +148,7 @@ public class ComuSearchAcTest {
     public void searchComunidadOK_2() throws InterruptedException
     {
         //With token.
-        signUpAndUpdateTk(USUARIO_COMUNIDAD_1);
+        signUpAndUpdateTk(DomainDataUtils.COMU_REAL_JUAN);
 
         activity = mActivityRule.launchActivity(new Intent());
         assertThat(isRegisteredUser(activity), is(true));
@@ -163,7 +160,7 @@ public class ComuSearchAcTest {
         onView(withId(R.id.comu_search_results_ac_one_pane_frg_container)).check(matches(isDisplayed()));
         onView(withId(R.id.comu_list_frg)).check(matches(isDisplayed()));
 
-        cleanOneUser(USUARIO_COMUNIDAD_1.getUsuario());
+        cleanOneUser(DomainDataUtils.COMU_REAL_JUAN.getUsuario());
     }
 
     @Test
@@ -179,12 +176,12 @@ public class ComuSearchAcTest {
     public void testGetDatosUsuarioWithToken() throws InterruptedException
     {
         //With token.
-        signUpAndUpdateTk(USUARIO_COMUNIDAD_1);
+        signUpAndUpdateTk(DomainDataUtils.COMU_REAL_JUAN);
         activity = mActivityRule.launchActivity(new Intent());
         assertThat(isRegisteredUser(activity), is(true));
         USER_DATA_AC.checkMenuItem_WTk(activity);
 
-        cleanOneUser(USUARIO_COMUNIDAD_1.getUsuario());
+        cleanOneUser(DomainDataUtils.COMU_REAL_JUAN.getUsuario());
     }
 
     @Test
@@ -199,23 +196,23 @@ public class ComuSearchAcTest {
     @Test
     public void testMenuNuevaComunidad_withToken() throws InterruptedException
     {
-        signUpAndUpdateTk(USUARIO_COMUNIDAD_1);
+        signUpAndUpdateTk(DomainDataUtils.COMU_REAL_JUAN);
         activity = mActivityRule.launchActivity(new Intent());
         assertThat(isRegisteredUser(activity), is(true));
         REG_COMU_USER_USERCOMU_AC.checkMenuItem_WTk(activity);
 
-        cleanOneUser(USUARIO_COMUNIDAD_1.getUsuario());
+        cleanOneUser(DomainDataUtils.COMU_REAL_JUAN.getUsuario());
     }
 
     @Test
     public void testComunidadesByUsuario_withToken() throws InterruptedException
     {
-        signUpAndUpdateTk(USUARIO_COMUNIDAD_1);
+        signUpAndUpdateTk(DomainDataUtils.COMU_REAL_JUAN);
         activity = mActivityRule.launchActivity(new Intent());
         assertThat(isRegisteredUser(activity), is(true));
         SEE_COMU_AND_USERCOMU_BY_USER_AC.checkMenuItem_WTk(activity);
 
-        cleanOneUser(USUARIO_COMUNIDAD_1.getUsuario());
+        cleanOneUser(DomainDataUtils.COMU_REAL_JUAN.getUsuario());
     }
 
     @Test

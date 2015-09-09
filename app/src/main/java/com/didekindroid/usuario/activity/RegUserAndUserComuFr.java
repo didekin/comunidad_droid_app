@@ -11,8 +11,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.didekindroid.R;
-import com.didekindroid.common.ui.CommonPatterns;
-import com.didekindroid.usuario.beanfiller.UserAndComuFiller;
+import com.didekindroid.uiutils.CommonPatterns;
+import com.didekindroid.usuario.activity.utils.UserAndComuFiller;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
 

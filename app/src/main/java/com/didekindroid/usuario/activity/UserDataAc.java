@@ -6,13 +6,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import com.didekin.serviceone.domain.Usuario;
+import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
-import com.didekindroid.usuario.dominio.Usuario;
-import com.didekindroid.usuario.dominio.UsuarioComunidad;
-import com.didekindroid.usuario.dominio.AccessToken;
+import com.google.common.base.Preconditions;
 
-import static com.didekindroid.usuario.common.UserIntentExtras.USUARIO_COMUNIDAD_REG;
-import static com.didekindroid.usuario.common.TokenHandler.TKhandler;
+import static com.didekindroid.usuario.activity.utils.UserIntentExtras.USUARIO_COMUNIDAD_REG;
+import static com.didekindroid.usuario.security.TokenHandler.TKhandler;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 
 public class UserDataAc extends Activity {
@@ -23,11 +23,7 @@ public class UserDataAc extends Activity {
     {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate()");
-
-        /* usuarioComunidad == null is the activity is called from the menu option USER_DATA_AC*/
-        UsuarioComunidad usuarioComunidad = (UsuarioComunidad) getIntent().getSerializableExtra(USUARIO_COMUNIDAD_REG
-                .toString());
-        new RegComuAndUserComuAndUserHttp().execute(usuarioComunidad);
+        new UserDataGetter().execute();
         setContentView(R.layout.reg_usuario);
     }
 
@@ -61,28 +57,14 @@ public class UserDataAc extends Activity {
     //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
     //    ============================================================
 
-    private class RegComuAndUserComuAndUserHttp extends AsyncTask<UsuarioComunidad, Void, Usuario> {
-
-        UserDataAc mActivity = UserDataAc.this;
-        boolean isNewUser = false;
+    private class UserDataGetter extends AsyncTask<Void, Void, Usuario> {
 
         @Override
-        protected Usuario doInBackground(UsuarioComunidad... usuarioComunidad)
+        protected Usuario doInBackground(Void... aVoid)
         {
             Log.d(TAG, "RegComuAndUserComuHttp.doInBackground()");
 
-            Usuario usuarioBack;
-
-            if (usuarioComunidad[0] == null) { // El usuario está registrado y utilizo su token.
-                Log.d(TAG, "RegComuAndUserComuHttp.doInBackground(), usuario registrado.");
-                usuarioBack = ServOne.getUserData();
-            } else {
-                Log.d(TAG, "RegComuAndUserComuHttp.doInBackground(), usuario no registrado signing up.");
-                String passwordOrigin = usuarioComunidad[0].getUsuario().getPassword();
-                usuarioBack = ServOne.signUp(usuarioComunidad[0]);
-                isNewUser = true;
-                usuarioBack.setPassword(passwordOrigin); // Password comes back from DB encrypted.
-            }
+            Usuario usuarioBack = ServOne.getUserData();
             return usuarioBack;
         }
 
@@ -90,33 +72,7 @@ public class UserDataAc extends Activity {
         protected void onPostExecute(Usuario usuario)
         {
             Log.d(TAG, "RegComuAndUserComuHttp.onPostExecute()");
-            if (isNewUser){
-                new TkCacheActivatorHttp().execute(usuario);
-            }
-
             //TODO: pinto los datos del usuario.
-        }
-    }
-
-    private class TkCacheActivatorHttp extends AsyncTask<Usuario, Void, Void> {
-
-        UserDataAc mActivity = UserDataAc.this;
-
-        @Override
-        protected Void doInBackground(Usuario... params)
-        {
-            Log.d(TAG, "TkCacheActivatorHttp.doInBackground()");
-            String userName = params[0].getUserName();
-            String password = params[0].getPassword();
-            AccessToken token = ServOne.getPasswordUserToken(userName, password);
-            TKhandler.initKeyCacheAndBackupFile(token);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void nothing)
-        {
-            Log.d(TAG, "TkCacheActivatorHttp.onPostExecute()");
         }
     }
 }

@@ -7,14 +7,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
+import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
-import com.didekindroid.usuario.dominio.Usuario;
-import com.didekindroid.usuario.dominio.UsuarioComunidad;
 
 import java.util.List;
 
-import static com.didekindroid.usuario.common.UserIntentExtras.USUARIO_COMUNIDAD_REG;
-import static com.didekindroid.common.ui.ViewsIDs.SEE_COMU_AND_USER_COMU_BY_USER;
+import static com.didekindroid.uiutils.ViewsIDs.SEE_COMU_AND_USER_COMU_BY_USER;
+import static com.didekindroid.usuario.activity.utils.UserIntentExtras.USUARIO_COMUNIDAD_REG;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 
 public class ComusByUserListAc extends ListActivity {
@@ -70,11 +69,9 @@ public class ComusByUserListAc extends ListActivity {
 
             // El usuario está registrando una nueva comunidad.
             if (usuarioComunidad[0] != null) {
-                Usuario usuarioDb = ServOne.regComuAndUserComu(usuarioComunidad[0]);
-                usuarioComunidades = usuarioDb.getUsuariosComunidad();
-            } else {
-                usuarioComunidades = ServOne.getUsuariosComunidad();
+                ServOne.regComuAndUserComu(usuarioComunidad[0]);
             }
+            usuarioComunidades = ServOne.getUsuariosComunidad();
             return usuarioComunidades;
         }
 

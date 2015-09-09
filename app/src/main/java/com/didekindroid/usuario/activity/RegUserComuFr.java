@@ -8,14 +8,24 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import com.didekin.serviceone.domain.Comunidad;
 import com.didekindroid.R;
-import com.didekindroid.usuario.common.UserIntentExtras;
-import com.didekindroid.usuario.dominio.Comunidad;
 
+import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_LIST_OBJECT;
+
+/**
+ * Preconditions:
+ * 1. The activity associated receives a comunidad object, as an intent extra, with the following fields:
+ * -- comunidadId.
+ * -- nombreComunidad (with tipoVia,nombreVia, numero and sufijoNumero).
+ * -- municipio, with codInProvincia and nombre.
+ * -- provincia, with provinciaId and nombre.
+ */
 public class RegUserComuFr extends Fragment {
 
     private static final String TAG = RegUserComuFr.class.getCanonicalName();
     private View mRegUserComuFrView;
+    private Comunidad mComunidad;
 
     public RegUserComuFr()
     {
@@ -45,17 +55,13 @@ public class RegUserComuFr extends Fragment {
         return mRegUserComuFrView;
     }
 
-    public View getFragmentView()
-    {
-        Log.d(TAG, "getFragmentView()");
-        return mRegUserComuFrView;
-    }
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState)
     {
         Log.d(TAG, "onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
+        mComunidad = (Comunidad) getActivity().getIntent().getExtras()
+                .getSerializable(COMUNIDAD_LIST_OBJECT.extra);
     }
 
     @Override
@@ -105,6 +111,19 @@ public class RegUserComuFr extends Fragment {
     {
         Log.d(TAG, "onDetach()");
         super.onDetach();
+    }
+
+//    ........... AUXILIARY METHODS ...........
+
+    public Comunidad getmComunidad()
+    {
+        return mComunidad;
+    }
+
+    public View getFragmentView()
+    {
+        Log.d(TAG, "getFragmentView()");
+        return mRegUserComuFrView;
     }
 }
 

@@ -12,12 +12,12 @@ import java.util.List;
  * Time: 10:46
  */
 public interface ServiceOneIf {
+
     boolean deleteComunidad(long comunidadId);
 
     boolean deleteUser();
 
-    List<Comunidad> getComunidadesByUser()  // TODO: ¿a desaparecer?
-    ;
+    List<Comunidad> getComunidadesByUser();  // TODO: ¿a desaparecer?
 
     List<UsuarioComunidad> getUsuariosComunidad();
 
@@ -25,7 +25,11 @@ public interface ServiceOneIf {
 
     boolean regComuAndUserComu(UsuarioComunidad usuarioComunidad);
 
+    boolean regComuAndUserAndUserComu(UsuarioComunidad usuarioCom);
+
     int regUserComu(UsuarioComunidad usuarioComunidad);
+
+    List<Comunidad> searchComunidades(Comunidad comunidad);
 
     List<UsuarioComunidad> seeUserComuByComu(long idComunidad);
 }

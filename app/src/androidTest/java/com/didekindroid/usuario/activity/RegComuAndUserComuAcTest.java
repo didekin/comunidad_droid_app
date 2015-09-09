@@ -5,11 +5,11 @@ import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.view.View;
+import com.didekin.serviceone.domain.Municipio;
+import com.didekin.serviceone.domain.Provincia;
+import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
-import com.didekindroid.masterdata.dominio.Municipio;
-import com.didekindroid.masterdata.dominio.Provincia;
 import com.didekindroid.usuario.dominio.ComunidadBean;
-import com.didekindroid.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
 import org.junit.Before;
 import org.junit.Rule;
@@ -23,7 +23,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.CursorMatchers.withRowString;
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.*;
-import static com.didekindroid.usuario.beanfiller.UserAndComuFiller.makeUsuarioComunidadBeanFromView;
+import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUsuarioComunidadBeanFromView;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.junit.Assert.assertThat;
@@ -81,7 +81,7 @@ public class RegComuAndUserComuAcTest {
         onView(withId(R.id.reg_usercomu_checbox_inq)).perform(scrollTo(), click());
 
         ComunidadBean comunidadBean = new ComunidadBean("ataxo", "24 de Otoño", "001", "bis",
-                new Municipio(new Provincia((short) 10), (short) 162));
+                new Municipio((short) 162,new Provincia((short) 10)));
 
         UsuarioComunidadBean usuarioComunidadBean =
                 makeUsuarioComunidadBeanFromView(usuarioComunidadRegView, comunidadBean, null);
@@ -89,10 +89,10 @@ public class RegComuAndUserComuAcTest {
         assertThat(usuarioComunidadBean.getEscalera(), is("escale_b"));
         assertThat(usuarioComunidadBean.getPlanta(), is("planta-N"));
         assertThat(usuarioComunidadBean.getPuerta(), is("puerta5"));
-        assertThat(usuarioComunidadBean.isPresidente, is(true));
-        assertThat(usuarioComunidadBean.isAdministrador, is(true));
-        assertThat(usuarioComunidadBean.isPropietario, is(false));
-        assertThat(usuarioComunidadBean.isInquilino, is(true));
+        assertThat(usuarioComunidadBean.isPresidente(), is(true));
+        assertThat(usuarioComunidadBean.isAdministrador(), is(true));
+        assertThat(usuarioComunidadBean.isPropietario(), is(false));
+        assertThat(usuarioComunidadBean.isInquilino(), is(true));
 
         usuarioComunidadBean.validate(resources, new StringBuilder(resources.getString(R.string.error_validation_msg)), true);
         UsuarioComunidad usuarioComunidad = usuarioComunidadBean.getUsuarioComunidad();

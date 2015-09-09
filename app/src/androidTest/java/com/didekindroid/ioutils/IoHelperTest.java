@@ -2,7 +2,6 @@ package com.didekindroid.ioutils;
 
 import android.support.test.runner.AndroidJUnit4;
 import com.didekindroid.DidekindroidApp;
-import com.didekindroid.common.IoHelper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 

@@ -6,8 +6,8 @@ import android.util.Log;
 import com.didekindroid.R;
 import com.didekindroid.usuario.activity.*;
 
-import static com.didekindroid.ui.UIutils.isRegisteredUser;
-import static com.didekindroid.ui.UIutils.makeToast;
+import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
+import static com.didekindroid.uiutils.UIutils.makeToast;
 
 /**
  * User: pedro@didekin

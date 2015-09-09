@@ -8,8 +8,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.text.TextUtils;
 import android.util.Log;
+import com.didekin.serviceone.domain.ComunidadAutonoma;
+import com.didekin.serviceone.domain.Municipio;
+import com.didekin.serviceone.domain.Provincia;
 import com.didekindroid.R;
-import com.didekindroid.common.IoHelper;
+import com.didekindroid.ioutils.IoHelper;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -186,8 +189,8 @@ public class MasterDataDbHelper extends SQLiteOpenHelper {
         }
 
         int nombreIndex = cursor.getColumnIndex(mu_nombre);
-        Municipio municipio = new Municipio(codMunicipio, cursor.getString(nombreIndex), new Provincia(provinciaId));
-        municipio.setmId((int) cursor.getLong(0));
+        Municipio municipio = new Municipio((int) cursor.getLong(0), codMunicipio, cursor.getString(nombreIndex), new
+                Provincia(provinciaId));
         cursor.close();
         return municipio;
     }

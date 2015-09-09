@@ -3,7 +3,10 @@ package com.didekindroid.usuario;
 import android.app.Activity;
 import android.content.res.Resources;
 import android.support.test.espresso.ViewInteraction;
-import com.didekin.serviceone.domain.*;
+import com.didekin.security.OauthToken.AccessToken;
+import com.didekin.serviceone.domain.Comunidad;
+import com.didekin.serviceone.domain.Usuario;
+import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.DidekindroidApp;
 import com.didekindroid.R;
 import com.didekindroid.usuario.activity.utils.RolCheckBox;
@@ -20,9 +23,11 @@ import static android.support.test.espresso.matcher.CursorMatchers.withRowString
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.*;
 import static com.didekindroid.DidekindroidApp.getContext;
-import static com.didekindroid.usuario.activity.utils.RolCheckBox.*;
 import static com.didekindroid.uiutils.UIutils.updateIsRegistered;
+import static com.didekindroid.usuario.activity.utils.RolCheckBox.ADMINISTRADOR;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.*;
 import static com.didekindroid.usuario.security.TokenHandler.TKhandler;
+import static com.didekindroid.usuario.webservices.Oauth2Service.Oauth2;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.instanceOf;
@@ -36,49 +41,24 @@ import static org.junit.Assert.assertThat;
  */
 public final class UsuarioTestUtils {
 
-    public static final Comunidad COMUNIDAD_1 = new Comunidad("Calle", "Real", (short) 5, "Bis",
-            new Municipio(new Provincia((short) 3), (short) 13));
-    public static final Comunidad COMUNIDAD_2 = new Comunidad("Ronda", "de la Plazuela", (short) 5, "",
-            new Municipio(new Provincia((short) 27), (short) 2));
-    public static final Comunidad COMUNIDAD_3 = new Comunidad("Travesía", "de la Plazuela", (short) 11, "",
-                new Municipio(new Provincia((short) 3), (short) 13));
-
-    public static final Usuario USUARIO_1 = new Usuario("juan@juan.us", "juan", "psw_juan", (short) 0, 0);
-    public static final Usuario USUARIO_2 = new Usuario("pepe@pepe.org", "pepe", "psw_pepe", (short) 34, 234432123);
-
-    public static final UsuarioComunidad USUARIO_COMUNIDAD_1 = new UsuarioComunidad(COMUNIDAD_1, USUARIO_1, "portal", "esc",
-            "plantaX", "door12", PROPIETARIO.function);
-    public static final UsuarioComunidad USUARIO_COMUNIDAD_2 = new UsuarioComunidad(COMUNIDAD_2, USUARIO_1, null,
-            null, "planta3", "doorA", ADMINISTRADOR.function);
-    public static final UsuarioComunidad USUARIO_COMUNIDAD_3 = new UsuarioComunidad(COMUNIDAD_3, USUARIO_2, "portalA",
-            null, "planta2", null, INQUILINO.function);
-    public static final UsuarioComunidad USUARIO_COMUNIDAD_4 = new UsuarioComunidad(COMUNIDAD_1, USUARIO_2, "portal",
-                "esc", "plantaY", "door21", PROPIETARIO.function);
-
     private UsuarioTestUtils()
     {
     }
 
-    public static List<UsuarioComunidad> makeListTwoUserComu()
-    {
-        List<UsuarioComunidad> userComuList = new ArrayList<UsuarioComunidad>(2);
-        userComuList.add(USUARIO_COMUNIDAD_1);
-        userComuList.add(USUARIO_COMUNIDAD_2);
-        return userComuList;
-    }
+//    =========================== REGISTERING USERS ==============================
 
     public static void updateSecurityData(String userName, String password)
     {
-        BasicToken.AccessToken token = ServOne.getPasswordUserToken(userName, password);
+        AccessToken token = Oauth2.getPasswordUserToken(userName, password);
         TKhandler.initKeyCacheAndBackupFile(token);
         updateIsRegistered(true, getContext());
     }
 
     public static Usuario signUpAndUpdateTk(UsuarioComunidad usuarioComunidad)
     {
-        Usuario usuario = ServOne.signUp(usuarioComunidad);
+        boolean isRegisterd = ServOne.regComuAndUserAndUserComu(usuarioComunidad);
         updateSecurityData(usuarioComunidad.getUsuario().getUserName(), usuarioComunidad.getUsuario().getPassword());
-        return usuario;
+        return ServOne.getUserData();
     }
 
     public static void regTwoUserComuSameUser(List<UsuarioComunidad> usuarioComunidadList)
@@ -90,10 +70,12 @@ public final class UsuarioTestUtils {
     public static void regThreeUserComuSameUser(List<UsuarioComunidad> usuarioComunidadList, Comunidad comunidad)
     {
         regTwoUserComuSameUser(usuarioComunidadList);
-        UsuarioComunidad usuarioComunidad = new UsuarioComunidad(comunidad, usuarioComunidadList.get(0).getUsuario(),
+        UsuarioComunidad usuarioComunidad = makeUsuarioComunidad(comunidad, usuarioComunidadList.get(0).getUsuario(),
                 null, null, "plan-5", null, ADMINISTRADOR.function);
         ServOne.regComuAndUserComu(usuarioComunidad);
     }
+
+//    ==================== TYPING DATA =====================
 
     public static void typeComunidadData()
     {
@@ -137,6 +119,8 @@ public final class UsuarioTestUtils {
             }
         }
     }
+
+//    ================== CLEANING ===================
 
     public static void checkToastInTest(int resourceStringId, Activity activity, int... fieldsErrors)
     {
@@ -195,5 +179,27 @@ public final class UsuarioTestUtils {
         TKhandler.getTokensCache().invalidateAll();
         TKhandler.updateRefreshToken(null);
         updateIsRegistered(false, getContext());
+    }
+
+    public static void cleanOptions(CleanEnum whatClean)
+    {
+        switch (whatClean) {
+            case CLEAN_TK_HANDLER:
+                cleanWithTkhandler();
+                break;
+            case CLEAN_JUAN:
+                cleanOneUser(USER_JUAN);
+                break;
+            case CLEAN_PEPE:
+                cleanOneUser(USER_PEPE);
+                break;
+            case CLEAN_JUAN_AND_PEPE:
+                cleanTwoUsers(USER_JUAN, USER_PEPE);
+                break;
+            case CLEAN_NOTHING:
+                break;
+            default:
+                throw new IllegalStateException("Wrong cleanUp");
+        }
     }
 }

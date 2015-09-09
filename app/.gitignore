@@ -1,3 +1,10 @@
 /build
+/gradle
+/libs
+app.iml
+gradlew
+gradlew.bat
+*.pro
 *.iml
 proguard-rules.pro
+.gitignore

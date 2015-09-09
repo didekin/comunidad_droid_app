@@ -10,8 +10,8 @@ import static android.support.test.espresso.assertion.ViewAssertions.doesNotExis
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.*;
 import static com.didekindroid.uiutils.ViewsIDs.SEE_COMU_AND_USER_COMU_BY_USER;
-import static com.didekindroid.usuario.common.DataUsuarioTestUtils.checkNoToastInTest;
-import static com.didekindroid.usuario.common.DataUsuarioTestUtils.checkToastInTest;
+import static com.didekindroid.usuario.UsuarioTestUtils.checkNoToastInTest;
+import static com.didekindroid.usuario.UsuarioTestUtils.checkToastInTest;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 

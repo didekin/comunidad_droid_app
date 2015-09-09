@@ -2,7 +2,9 @@ package com.didekindroid.usuario.security;
 
 import android.util.Log;
 import com.didekin.security.OauthToken.AccessToken;
+import com.didekin.security.OauthTokenHelper;
 import com.didekindroid.ioutils.IoHelper;
+import com.didekindroid.usuario.webservices.Oauth2Service;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 
@@ -11,7 +13,9 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
+import static com.didekin.security.OauthTokenHelper.HELPER;
 import static com.didekindroid.DidekindroidApp.getContext;
+import static com.didekindroid.usuario.webservices.Oauth2Service.Oauth2;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -55,11 +59,11 @@ public enum TokenHandler {
     {
         Log.d(TAG, "initKeyCacheAndBackupFile()");
 
-        IoHelper.writeFileFromString(checkNotNull(accessToken).getRefresh_token(), refreshTokenFile);
+        IoHelper.writeFileFromString(checkNotNull(accessToken).getRefreshToken().getValue(), refreshTokenFile);
         if (refreshTokenKey != null){
             tokensCache.invalidate(refreshTokenKey);
         }
-        refreshTokenKey = accessToken.getRefresh_token();
+        refreshTokenKey = accessToken.getRefreshToken().getValue();
         tokensCache.put(refreshTokenKey, accessToken);
     }
 
@@ -79,7 +83,7 @@ public enum TokenHandler {
                 @Override
                 public AccessToken call() throws Exception
                 {
-                    return ServOne.getRefreshUserToken(refreshTokenKey);
+                    return Oauth2.getRefreshUserToken(refreshTokenKey);
                 }
             });
         } catch (ExecutionException e) {
@@ -97,20 +101,12 @@ public enum TokenHandler {
 
     //    ...................  UTILITIES .....................
 
-    /*String doBearerAccessTkHeader(AccessToken accessToken)
-    {
-        Log.d(TAG, "doBearerAccessTkHeader(AccessToken accessToken)");
-
-        return BEARER_TOKEN_TYPE.substring(0, 1).toUpperCase() + BEARER_TOKEN_TYPE.substring(1)
-                + " " + accessToken.getAccess_token();
-    }*/
-
     public String doBearerAccessTkHeader()
     {
         Log.d(TAG, "doBearerAccessTkHeader()");
         AccessToken accessToken = getAccessTokenInCache();
         if (accessToken != null) {
-            return doBearerAccessTkHeader(accessToken);
+            return HELPER.doBearerAccessTkHeader(accessToken);
         }
         return null;
     }

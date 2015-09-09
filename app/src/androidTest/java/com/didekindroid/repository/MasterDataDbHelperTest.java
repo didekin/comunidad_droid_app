@@ -5,6 +5,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteCursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.test.runner.AndroidJUnit4;
+import com.didekin.serviceone.domain.ComunidadAutonoma;
+import com.didekin.serviceone.domain.Provincia;
 import com.didekindroid.DidekindroidApp;
 import org.junit.After;
 import org.junit.Before;

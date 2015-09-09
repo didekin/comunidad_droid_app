@@ -7,15 +7,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import com.didekindroid.R;
-import com.didekindroid.common.ui.CommonPatterns;
-import com.didekindroid.common.ConnectionUtils;
-import com.didekindroid.common.ui.UIutils;
+import com.didekindroid.uiutils.CommonPatterns;
+import com.didekindroid.ioutils.ConnectionUtils;
+import com.didekindroid.uiutils.UIutils;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
 
-import static com.didekindroid.usuario.common.UserIntentExtras.USUARIO_COMUNIDAD_REG;
-import static com.didekindroid.usuario.beanfiller.UserAndComuFiller.makeComunidadBeanFromView;
-import static com.didekindroid.usuario.beanfiller.UserAndComuFiller.makeUsuarioComunidadBeanFromView;
+import static com.didekindroid.usuario.activity.utils.UserIntentExtras.USUARIO_COMUNIDAD_REG;
+import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeComunidadBeanFromView;
+import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUsuarioComunidadBeanFromView;
 
 public class RegComuAndUserComuAc extends Activity {
 

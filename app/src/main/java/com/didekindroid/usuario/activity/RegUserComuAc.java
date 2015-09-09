@@ -7,31 +7,47 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import com.didekin.serviceone.domain.Comunidad;
+import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
-import com.didekindroid.usuario.common.UserIntentExtras;
-import com.didekindroid.usuario.dominio.Comunidad;
 import com.didekindroid.usuario.dominio.ComunidadBean;
-import com.didekindroid.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
 
-import static com.didekindroid.common.ui.CommonPatterns.LINE_BREAK;
-import static com.didekindroid.common.ui.UIutils.makeToast;
-import static com.didekindroid.usuario.beanfiller.UserAndComuFiller.makeUsuarioComunidadBeanFromView;
-import static com.didekindroid.usuario.common.UserIntentExtras.COMUNIDAD_LIST_OBJECT;
+import static com.didekindroid.uiutils.CommonPatterns.LINE_BREAK;
+import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
+import static com.didekindroid.uiutils.UIutils.makeToast;
+import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUsuarioComunidadBeanFromView;
+import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_ID;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
+import static com.google.common.base.Preconditions.checkState;
 
 /**
  * User: pedro@didekin
  * Date: 11/05/15
  * Time: 19:13
  */
+
+/**
+ * Preconditions:
+ * 1. The user is already registered.
+ * 2. The activity receives a comunidad object, as an intent extra, with the following fields:
+ * -- comunidadId.
+ * -- nombreComunidad (with tipoVia,nombreVia, numero and sufijoNumero).
+ * -- municipio, with codInProvincia and nombre.
+ * -- provincia, with provinciaId and nombre.
+ * The comunidad already exists in BD.
+ * <p/>
+ * Postconditions:
+ * 1. A long comunidadId is passed as an intent extra.
+ * 2. The activity SeeUserComuByComuAc is started.
+ */
 public class RegUserComuAc extends Activity {
 
     public static final String TAG = RegUserComuAc.class.getCanonicalName();
 
     RegUserComuFr mRegUserComuFr;
-    Comunidad mComunidad;
     private Button mRegisterButton;
+    private Comunidad mComunidad;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -39,8 +55,7 @@ public class RegUserComuAc extends Activity {
         super.onCreate(savedInstanceState);
         Log.i(TAG, "onCreate()");
 
-        // Preconditions: a user registered and an existing comunidad passed as intent.
-        mComunidad = (Comunidad) getIntent().getExtras().getSerializable(COMUNIDAD_LIST_OBJECT.extra);
+        checkState(isRegisteredUser(this));
 
         setContentView(R.layout.reg_usercomu_ac);
         mRegUserComuFr = (RegUserComuFr) getFragmentManager().findFragmentById(R.id.reg_usercomu_fr);
@@ -61,10 +76,13 @@ public class RegUserComuAc extends Activity {
         Log.d(TAG, "doOnclick()");
 
         // We don't need the user: it is already registered. As to comunidad, it is enough with its id in DB.
+        mComunidad = new Comunidad.ComunidadBuilder()
+                .c_id(mRegUserComuFr.getmComunidad().getC_Id()).build();
         UsuarioComunidadBean usuarioComunidadBean = makeUsuarioComunidadBeanFromView(
                 mRegUserComuFr.getFragmentView(),
-                new ComunidadBean(new Comunidad(mComunidad.getC_Id())),
+                new ComunidadBean(mComunidad),
                 null);
+
         StringBuilder errorMsg = new StringBuilder(getResources().getText(R.string.error_validation_msg))
                 .append(LINE_BREAK.literal);
 
@@ -152,10 +170,10 @@ public class RegUserComuAc extends Activity {
         {
             Log.d(TAG, "onPostExecute()");
             if (rowInserted != 1) {
-                Log.e(TAG, getResources().getString(R.string.error_action_in_DB)); // TODO: testar.
+                Log.e(TAG, getResources().getString(R.string.error_action_in_DB));
             } else {
                 Intent intent = new Intent(RegUserComuAc.this, SeeUserComuByComuAc.class);
-                intent.putExtra(COMUNIDAD_LIST_OBJECT.extra,mComunidad);
+                intent.putExtra(COMUNIDAD_ID.extra, mComunidad.getC_Id());
                 startActivity(intent);
             }
         }

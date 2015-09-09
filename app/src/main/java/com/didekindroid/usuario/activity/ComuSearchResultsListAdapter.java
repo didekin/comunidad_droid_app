@@ -7,8 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import com.didekin.serviceone.domain.Comunidad;
 import com.didekindroid.R;
-import com.didekindroid.usuario.dominio.Comunidad;
 
 /**
  * User: pedro@didekin
@@ -36,48 +36,51 @@ public class ComuSearchResultsListAdapter extends ArrayAdapter<Comunidad> {
         if (convertView == null) {
             Log.d(TAG, "getView(), convertView == null");
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.comu_list_item_view, parent, false);
-            viewHolder = initViewsInComuVwHolder(convertView);
+            viewHolder = new ComuViewHolder(convertView);
             convertView.setTag(viewHolder);
         }
 
         viewHolder = (ComuViewHolder) convertView.getTag();
         final Comunidad comunidad = getItem(position);
-        initTextsInComuVwHolder(viewHolder, comunidad);
+        viewHolder.initializeTextInViews(comunidad);
 
         return convertView;
     }
-
-    static void initTextsInComuVwHolder(ComuViewHolder viewHolder, Comunidad comunidad)
-    {
-        viewHolder.mTipoViaView.setText(comunidad.getTipoVia());
-        viewHolder.mNombreViaView.setText(comunidad.getNombreVia());
-        viewHolder.mNumeroEnViaView
-                .setText(String.valueOf(comunidad.getNumero()) + " " + comunidad.getSufijoNumero());
-        viewHolder.mMunicipioView.setText(comunidad.getMunicipio().getNombre());
-        viewHolder.mProvinciaView.setText(comunidad.getMunicipio().getProvincia().getNombre());
-    }
-
-    static ComuViewHolder initViewsInComuVwHolder(View convertView)
-    {
-        ComuViewHolder viewHolder;
-        viewHolder = new ComuViewHolder();
-        viewHolder.mTipoViaView = (TextView) convertView.findViewById(R.id.tipoVia_view);
-        viewHolder.mNombreViaView = (TextView) convertView.findViewById(R.id.nombreVia_view);
-        viewHolder.mNumeroEnViaView = (TextView) convertView.findViewById(R.id.numeroEnVia_view);
-        viewHolder.mMunicipioView = (TextView) convertView.findViewById(R.id.municipio_view);
-        viewHolder.mProvinciaView = (TextView) convertView.findViewById(R.id.provincia_view);
-        return viewHolder;
-    }
-
 
     // ......... Inner classes .................
 
     static class ComuViewHolder {
 
-        TextView mNombreViaView;
+        private static final String TAG = ComuViewHolder.class.getCanonicalName();
+
+        TextView mNombreComunidadView;
+        /*TextView mNombreViaView;
         TextView mNumeroEnViaView;
-        TextView mTipoViaView;
+        TextView mTipoViaView;*/
         TextView mMunicipioView;
         TextView mProvinciaView;
+
+        public ComuViewHolder(View convertView)
+        {
+            mNombreComunidadView = (TextView) convertView.findViewById(R.id.nombreComunidad_view);
+            /*mTipoViaView = (TextView) convertView.findViewById(R.id.tipoVia_view);
+            mNombreViaView = (TextView) convertView.findViewById(R.id.nombreVia_view);
+            mNumeroEnViaView = (TextView) convertView.findViewById(R.id.numeroEnVia_view);*/
+            mMunicipioView = (TextView) convertView.findViewById(R.id.municipio_view);
+            mProvinciaView = (TextView) convertView.findViewById(R.id.provincia_view);
+        }
+
+        void initializeTextInViews(Comunidad comunidad)
+        {
+            Log.d(TAG, "initializeTextInViews()");
+
+            mNombreComunidadView.setText(comunidad.getNombreComunidad());
+            /*mTipoViaView.setText(comunidad.getTipoVia());
+            mNombreViaView.setText(comunidad.getNombreVia());
+            mNumeroEnViaView
+                    .setText(String.valueOf(comunidad.getNumero()) + " " + comunidad.getSufijoNumero());*/
+            mMunicipioView.setText(comunidad.getMunicipio().getNombre());
+            mProvinciaView.setText(comunidad.getMunicipio().getProvincia().getNombre());
+        }
     }
 }

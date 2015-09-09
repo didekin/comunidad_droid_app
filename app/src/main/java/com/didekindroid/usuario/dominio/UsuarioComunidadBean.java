@@ -1,15 +1,14 @@
 package com.didekindroid.usuario.dominio;
 
 import android.content.res.Resources;
+import com.didekin.serviceone.domain.Usuario;
+import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
-import com.didekindroid.common.dominio.Rol;
-import com.didekindroid.common.dominio.SerialNumbers;
+import com.didekindroid.usuario.activity.utils.RolCheckBox;
 import com.google.common.primitives.Booleans;
 
-import java.io.Serializable;
-
-import static com.didekindroid.common.ui.CommonPatterns.LINE_BREAK;
-import static com.didekindroid.common.ui.CommonPatterns.SELECT;
+import static com.didekindroid.uiutils.CommonPatterns.LINE_BREAK;
+import static com.didekindroid.uiutils.CommonPatterns.SELECT;
 import static com.didekindroid.usuario.dominio.UserPatterns.*;
 
 /**
@@ -17,71 +16,92 @@ import static com.didekindroid.usuario.dominio.UserPatterns.*;
  * Date: 01/06/15
  * Time: 16:59
  */
-public class UsuarioComunidadBean implements Serializable {
+public final class UsuarioComunidadBean {
 
-    private static final long serialVersionUID = SerialNumbers.USUARIO_COMUNIDAD_BEAN.number;
 
-    public transient final boolean isPresidente;
-    public transient final boolean isAdministrador;
-    public transient final boolean isPropietario;
-    public transient final boolean isInquilino;
-
-    private UsuarioComunidad usuarioComunidad;
+    private final boolean isPresidente;
+    private final boolean isAdministrador;
+    private final boolean isPropietario;
+    private final boolean isInquilino;
+    private final String portal;
+    private final String escalera;
+    private final String planta;
+    private final String puerta;
     private final UsuarioBean usuarioBean;
     private final ComunidadBean comunidadBean;
+
+    private UsuarioComunidad usuarioComunidad;
 
     public UsuarioComunidadBean(ComunidadBean comunidadBean, UsuarioBean usuarioBean,
                                 String portal, String escalera, String planta, String puerta,
                                 boolean isPresidente, boolean isAdministrador, boolean isPropietario,
                                 boolean isInquilino)
     {
-        Usuario usuario = usuarioBean != null ? usuarioBean.getUsuario() : null;
-
-        usuarioComunidad = new UsuarioComunidad(comunidadBean.getComunidad(), usuario,
-                portal, escalera, planta, puerta);
-
         this.comunidadBean = comunidadBean;
         this.usuarioBean = usuarioBean;
-
+        this.portal = portal;
+        this.escalera = escalera;
+        this.planta = planta;
+        this.puerta = puerta;
         this.isPresidente = isPresidente;
         this.isAdministrador = isAdministrador;
         this.isPropietario = isPropietario;
         this.isInquilino = isInquilino;
     }
 
-    public void setRoles()
+    String rolesInBean()
     {
         StringBuilder rolesBuilder = new StringBuilder();
 
         if (isAdministrador) {
-            rolesBuilder.append(Rol.ADMINISTRADOR.function).append(",");
+            rolesBuilder.append(RolCheckBox.ADMINISTRADOR.function).append(",");
         }
         if (isPresidente) {
-            rolesBuilder.append(Rol.PRESIDENTE.function).append(",");
+            rolesBuilder.append(RolCheckBox.PRESIDENTE.function).append(",");
         }
         if (isPropietario) {
-            rolesBuilder.append(Rol.PROPIETARIO.function).append(",");
+            rolesBuilder.append(RolCheckBox.PROPIETARIO.function).append(",");
         }
         if (isInquilino) {
-            rolesBuilder.append(Rol.INQUILINO.function);
+            rolesBuilder.append(RolCheckBox.INQUILINO.function);
         }
 
         if (rolesBuilder.charAt(rolesBuilder.length() - 1) == ',') {
             rolesBuilder.deleteCharAt(rolesBuilder.length() - 1);
         }
 
-        usuarioComunidad.setRoles(rolesBuilder.toString());
+        return rolesBuilder.toString();
     }
 
+    /**
+     * The boolean flag isComunidadToValid controls for comunidad instances only with id, which are not to be
+     * validated.
+     */
     public boolean validate(Resources resources, StringBuilder errorMsg, boolean isComunidadToValid)
     {
-        return validatePortal(resources, errorMsg)
+        boolean isValid = validatePortal(resources, errorMsg)
                 & validateEscalera(resources, errorMsg)
                 & validatePlanta(resources, errorMsg)
                 & validatePuerta(resources, errorMsg)
                 & validateRoles(resources, errorMsg)
                 & validateUsuario(resources, errorMsg)
                 & (!isComunidadToValid || validateComunidad(resources, errorMsg));
+
+        if (isValid) {
+
+            Usuario usuario = usuarioBean != null ? usuarioBean.getUsuario() : null;
+
+            usuarioComunidad = new UsuarioComunidad
+                    .UserComuBuilder(comunidadBean.getComunidad(), usuario)
+                    .portal(portal)
+                    .escalera(escalera)
+                    .planta(planta)
+                    .puerta(puerta)
+                    .roles(rolesInBean())
+                    .build();
+        }
+
+        return isValid;
     }
 
     /*  [\\w_ñÑáéíóúüÜ\\.\\-\\s]{1,10}  */
@@ -93,7 +113,6 @@ public class UsuarioComunidadBean implements Serializable {
                 && !SELECT.pattern.matcher(usuarioComunidad.getPortal()).find();
         if (!isValid) {
             errorMsg.append(resources.getText(R.string.reg_usercomu_portal_hint) + LINE_BREAK.literal);
-            usuarioComunidad.setPortal(null);
         }
         return isValid;
     }
@@ -107,7 +126,6 @@ public class UsuarioComunidadBean implements Serializable {
                 && !SELECT.pattern.matcher(usuarioComunidad.getEscalera()).find();
         if (!isValid) {
             errorMsg.append(resources.getText(R.string.reg_usercomu_escalera_hint) + LINE_BREAK.literal);
-            usuarioComunidad.setEscalera(null);
         }
         return isValid;
     }
@@ -121,7 +139,6 @@ public class UsuarioComunidadBean implements Serializable {
                 && !SELECT.pattern.matcher(usuarioComunidad.getPlanta()).find();
         if (!isValid) {
             errorMsg.append(resources.getText(R.string.reg_usercomu_planta_hint) + LINE_BREAK.literal);
-            usuarioComunidad.setPlanta(null);
         }
         return isValid;
     }
@@ -135,7 +152,6 @@ public class UsuarioComunidadBean implements Serializable {
                 && !SELECT.pattern.matcher(usuarioComunidad.getPuerta()).find();
         if (!isValid) {
             errorMsg.append(resources.getText(R.string.reg_usercomu_puerta_hint) + LINE_BREAK.literal);
-            usuarioComunidad.setPuerta(null);
         }
         return isValid;
     }
@@ -145,9 +161,8 @@ public class UsuarioComunidadBean implements Serializable {
         int rolesSize = Booleans.countTrue(isAdministrador, isPropietario, isPresidente, isInquilino);
         boolean isValid = false;
 
-        /*No son compatibles los roles de propietario e inquilino en una misma comunidad y vivienda.*/
+        /*No son compatibles los rolesInBean de propietario e inquilino en una misma comunidad y vivienda.*/
         if (rolesSize > 0 && !(isPropietario && isInquilino)) {
-            setRoles();
             isValid = true;
         } else {
             errorMsg.append(resources.getText(R.string.reg_usercomu_role_rot) + LINE_BREAK.literal);
@@ -161,6 +176,7 @@ public class UsuarioComunidadBean implements Serializable {
         if (usuarioBean == null) {
             return true;
         }
+        // In this point the instance of usuario in usuarioBean is created.
         return usuarioBean.validate(resources, errorMsg);
     }
 
@@ -170,7 +186,7 @@ public class UsuarioComunidadBean implements Serializable {
             errorMsg.append(resources.getText(R.string.comunidad_null) + LINE_BREAK.literal);
             return false;
         }
-
+        // In this point the instance of comunidad in usuarioBean is created.
         return comunidadBean.validate(resources, errorMsg);
     }
 
@@ -202,6 +218,26 @@ public class UsuarioComunidadBean implements Serializable {
     public String getRoles()
     {
         return usuarioComunidad.getRoles();
+    }
+
+    public boolean isAdministrador()
+    {
+        return isAdministrador;
+    }
+
+    public boolean isInquilino()
+    {
+        return isInquilino;
+    }
+
+    public boolean isPresidente()
+    {
+        return isPresidente;
+    }
+
+    public boolean isPropietario()
+    {
+        return isPropietario;
     }
 
     public UsuarioBean getUsuarioBean()

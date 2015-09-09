@@ -1,7 +1,7 @@
 package com.didekindroid.oferta.db;
 
 import android.provider.BaseColumns;
-import com.didekindroid.common.dominio.SqLiteTypes;
+import com.didekindroid.repository.SqLiteTypes;
 
 /**
  * User: pedro

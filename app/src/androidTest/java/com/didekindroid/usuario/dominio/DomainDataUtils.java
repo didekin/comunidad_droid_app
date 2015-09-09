@@ -1,10 +1,11 @@
 package com.didekindroid.usuario.dominio;
 
-import com.didekin.serviceone.domain.Municipio;
-import com.didekin.serviceone.domain.Provincia;
-import com.didekin.serviceone.domain.Comunidad;
-import com.didekin.serviceone.domain.Usuario;
-import com.didekin.serviceone.domain.UsuarioComunidad;
+import com.didekin.serviceone.domain.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.didekindroid.usuario.activity.utils.RolCheckBox.*;
 
 /**
  * User: pedro@didekin
@@ -17,12 +18,12 @@ public final class DomainDataUtils {
     {
     }
 
-    public static final Usuario USER_PACO = new Usuario.UsuarioBuilder()
-            .userName("paco@paco.com")
-            .alias("paco")
-            .password("pwswd00")
+    public static final Usuario USER_PEPE = new Usuario.UsuarioBuilder()
+            .userName("pepe@pepe.org")
+            .alias("pepe")
+            .password("psw_pepe")
             .prefixTf((short) 34)
-            .numeroTf(615221110)
+            .numeroTf(234432123)
             .build();
 
     public static final Usuario USER_JUAN_with_TF = new Usuario.UsuarioBuilder()
@@ -34,9 +35,9 @@ public final class DomainDataUtils {
             .build();
 
     public static final Usuario USER_JUAN = new Usuario.UsuarioBuilder()
-            .userName("juan@juan.com")
+            .userName("juan@juan.us")
             .alias("juan")
-            .password("password11")
+            .password("psw_juan")
             .build();
 
     public static final Comunidad COMU_LA_FUENTE = new Comunidad.ComunidadBuilder()
@@ -44,6 +45,13 @@ public final class DomainDataUtils {
             .nombreVia("de la Fuente")
             .numero((short) 11)
             .municipio(new Municipio((short) 66, new Provincia((short) 3)))
+            .build();
+
+    public static final Comunidad COMU_LA_PLAZUELA_5 = new Comunidad.ComunidadBuilder()
+            .tipoVia("Ronda")
+            .nombreVia("de la Plazuela")
+            .numero((short) 5)
+            .municipio(new Municipio((short) 2, new Provincia((short) 27)))
             .build();
 
     public static final Comunidad COMU_LA_PLAZUELA_10bis = new Comunidad.ComunidadBuilder()
@@ -54,11 +62,11 @@ public final class DomainDataUtils {
             .municipio(new Municipio((short) 52, new Provincia((short) 2)))
             .build();
 
-    public static final Comunidad COMU_LA_PLAZUELA_10 = new Comunidad.ComunidadBuilder()
-            .tipoVia("Ronda")
+    public static final Comunidad COMU_TRAV_PLAZUELA_11 = new Comunidad.ComunidadBuilder()
+            .tipoVia("Travesía")
             .nombreVia("de la Plazuela")
-            .numero((short) 10)
-            .municipio(new Municipio((short) 52, new Provincia((short) 2)))
+            .numero((short) 11)
+            .municipio(new Municipio((short) 13, new Provincia((short) 3)))
             .build();
 
     public static final Comunidad COMU_EL_ESCORIAL = new Comunidad.ComunidadBuilder()
@@ -83,6 +91,42 @@ public final class DomainDataUtils {
             .municipio(new Municipio((short) 14, new Provincia((short) 45)))
             .build();
 
+    public static final UsuarioComunidad COMU_REAL_JUAN = makeUsuarioComunidad(COMU_REAL, USER_JUAN, "portal", "esc",
+            "plantaX", "door12", PROPIETARIO.function);
+
+    public static final UsuarioComunidad COMU_PLAZUELA5_JUAN = makeUsuarioComunidad(COMU_LA_PLAZUELA_5, USER_JUAN, null,
+            null, "planta3", "doorA", ADMINISTRADOR.function);
+
+    public static final UsuarioComunidad COMU_REAL_PEPE = makeUsuarioComunidad(COMU_REAL, USER_PEPE, "portal",
+            "esc", "plantaY", "door21", PROPIETARIO.function);
+
+    public static final UsuarioComunidad COMU_TRAV_PLAZUELA_PEPE = makeUsuarioComunidad(COMU_TRAV_PLAZUELA_11, USER_PEPE,
+            "portalA",
+            null, "planta2", null, INQUILINO.function);
+
+
+    public static Comunidad makeComunidad(String tipoVia, String nombreVia, short numero, String sufijoNumero,
+                                          Municipio municipio)
+    {
+        return new Comunidad.ComunidadBuilder().tipoVia(tipoVia)
+                .nombreVia(nombreVia)
+                .numero(numero)
+                .sufijoNumero(sufijoNumero)
+                .municipio(municipio)
+                .build();
+    }
+
+    public static Usuario makeUsuario(String userName,String alias,String password,short prefixTf,int numeroTf)
+    {
+        return new Usuario.UsuarioBuilder()
+                .userName(userName)
+                .alias(alias)
+                .password(password)
+                .prefixTf(prefixTf)
+                .numeroTf(numeroTf)
+                .build();
+    }
+
     public static UsuarioComunidad makeUsuarioComunidad(Comunidad comunidad, Usuario usuario, String portal, String escalera,
                                                         String planta,
                                                         String puerta,
@@ -95,4 +139,18 @@ public final class DomainDataUtils {
                 .puerta(puerta)
                 .roles(roles).build();
     }
+
+    public static List<UsuarioComunidad> makeListTwoUserComu()
+    {
+        List<UsuarioComunidad> userComuList = new ArrayList<UsuarioComunidad>(2);
+        userComuList.add(COMU_REAL_JUAN);
+        userComuList.add(COMU_PLAZUELA5_JUAN);
+        return userComuList;
+    }
 }
+/*private final long uId;
+    private final String userName;  //email of the user.
+    private final String alias;
+    private final String password;
+    private final short prefixTf;
+    private final int numeroTf;*/

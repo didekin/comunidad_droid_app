@@ -10,21 +10,33 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import com.didekin.security.OauthToken;
+import com.didekin.security.OauthToken.AccessToken;
 import com.didekindroid.R;
-import com.didekindroid.common.ui.CommonPatterns;
-import com.didekindroid.common.ui.UIutils;
+import com.didekindroid.uiutils.CommonPatterns;
+import com.didekindroid.uiutils.UIutils;
 import com.didekindroid.usuario.dominio.ComunidadBean;
-import com.didekindroid.usuario.dominio.AccessToken;
 
-import static com.didekindroid.common.ui.UIutils.updateIsRegistered;
-import static com.didekindroid.usuario.common.UserIntentExtras.COMUNIDAD_SEARCH;
-import static com.didekindroid.usuario.common.UserMenu.SEE_COMU_AND_USERCOMU_BY_USER_AC;
-import static com.didekindroid.usuario.common.UserMenu.REG_COMU_USER_USERCOMU_AC;
-import static com.didekindroid.usuario.common.UserMenu.USER_DATA_AC;
-import static com.didekindroid.usuario.beanfiller.UserAndComuFiller.makeComunidadBeanFromView;
-import static com.didekindroid.usuario.common.TokenHandler.TKhandler;
+import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
+import static com.didekindroid.uiutils.UIutils.updateIsRegistered;
+import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_SEARCH;
+import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_COMU_AND_USERCOMU_BY_USER_AC;
+import static com.didekindroid.usuario.activity.utils.UserMenu.REG_COMU_USER_USERCOMU_AC;
+import static com.didekindroid.usuario.activity.utils.UserMenu.USER_DATA_AC;
+import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeComunidadBeanFromView;
+import static com.didekindroid.usuario.security.TokenHandler.TKhandler;
 import static com.google.common.base.Preconditions.checkNotNull;
 
+/**
+ *  Postconditions:
+ *
+ *  1. An object comunidad, to be used as search criterium, is passed as an intent extra with the following fields:
+ *      -- tipoVia.
+ *      -- nombreVia.
+ *      -- numero.
+ *      -- sufijoNumero (it can be an empty string).
+ *      -- municipio with codInProvincia and provinciaId.
+ */
 public class ComuSearchAc extends Activity {
 
     private static final String TAG = ComuSearchAc.class.getCanonicalName();
@@ -32,7 +44,6 @@ public class ComuSearchAc extends Activity {
     RegComuFr mRegComuFrg;
     protected View mMainView;
     private Button mSearchButton;
-    private boolean isRegisteredUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -129,12 +140,8 @@ public class ComuSearchAc extends Activity {
     //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
     //    ============================================================
 
-    boolean isTokenInCache()
-    {
-        return isRegisteredUser;
-    }
 
-    /* This class should be in the launcher activity */ // TODO: esta tarea hay que moverla al signup.
+    /* This class should be in the launcher activity */
     private class CheckerTokenInCache extends AsyncTask<Void, Void, AccessToken> {
 
         protected AccessToken doInBackground(Void... params)
@@ -145,9 +152,11 @@ public class ComuSearchAc extends Activity {
         @Override
         protected void onPostExecute(AccessToken accessToken)
         {
-            isRegisteredUser = (accessToken != null ? true : false);
+            boolean isRegisteredUser = (accessToken != null ? true : false);
             Log.d(TAG, "CheckerTokenInCache.onPostExecute(): isRegisteredUser = " + isRegisteredUser);
-            updateIsRegistered(isRegisteredUser, ComuSearchAc.this);
+            if (!isRegisteredUser){
+                updateIsRegistered(isRegisteredUser, ComuSearchAc.this);
+            }
         }
     }
 }

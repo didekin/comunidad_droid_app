@@ -5,6 +5,9 @@ import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.view.View;
+import com.didekin.serviceone.domain.Comunidad;
+import com.didekin.serviceone.domain.Usuario;
+import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.usuario.dominio.*;
 import org.junit.Before;
@@ -19,7 +22,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.CursorMatchers.withRowString;
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.*;
-import static com.didekindroid.usuario.beanfiller.UserAndComuFiller.*;
+import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.*;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.junit.Assert.assertThat;
@@ -253,4 +256,6 @@ public class RegComuAndUserAndUserComuAcTest {
         onView(withId(R.id.reg_com_usuario_usuariocomu_button)).perform(scrollTo(), click());
         onView(withId(R.id.usuario_datos_layout)).check(matches(isDisplayed()));
     }
+
+    // TODO: ver cómo afecta la introducción de la task asíncrona.
 }

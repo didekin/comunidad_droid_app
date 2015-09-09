@@ -3,7 +3,9 @@ package com.didekindroid.usuario.security;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
-import com.didekindroid.usuario.common.DataUsuarioTestUtils;
+import com.didekin.security.OauthToken;
+import com.didekin.security.OauthToken.AccessToken;
+import com.didekindroid.usuario.UsuarioTestUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,8 +13,11 @@ import org.junit.runner.RunWith;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.Date;
 
-import static com.didekindroid.usuario.common.DataUsuarioTestUtils.USUARIO_COMUNIDAD_1;
+import static com.didekin.security.OauthTokenHelper.HELPER;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_JUAN;
 import static com.didekindroid.usuario.security.TokenHandler.TKhandler;
 import static com.didekindroid.usuario.security.TokenHandler.refresh_token_filename;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
@@ -29,14 +34,19 @@ import static org.junit.Assert.assertThat;
 public class TokenHandlerTest {
 
     private Context context;
-    private BasicToken.AccessToken accessToken;
+    private AccessToken accessToken;
 
     @Before
     public void getFixture()
     {
         context = InstrumentationRegistry.getTargetContext();
-        accessToken = new BasicToken.AccessToken("50d3cdaa-0d2e-4cfd-b259-82b3a0b1edef", 239,
-                "50d3cdaa-0d2e-4cfd-b259-82b3a0b1edef", "readwrite", "bearer");
+        accessToken = new AccessToken(
+                "50d3cdaa-0d2e-4cfd-b259-82b3a0b1edef",
+                new Timestamp(new Date().getTime() + 7200000),
+                "bearer",
+                new OauthToken("50d3cdaa-0d2e-4cfd-b259-82b3a0b1edef",new Timestamp(new Date().getTime() + 7200000)),
+                new String[]{"readwrite"}
+        );
     }
 
     @Test
@@ -45,7 +55,7 @@ public class TokenHandlerTest {
         assertThat(TKhandler.getRefreshTokenFile(), notNullValue());
         assertThat(TKhandler.getRefreshTokenFile().exists(), is(false));
         assertThat(TKhandler.getRefreshTokenKey(), nullValue());
-        com.google.common.cache.Cache<String, BasicToken.AccessToken> tokenCache = TKhandler.getTokensCache();
+        com.google.common.cache.Cache<String, AccessToken> tokenCache = TKhandler.getTokensCache();
         assertThat(tokenCache, notNullValue());
         // No accessToken entry in cache. The key is null.
         assertThat(tokenCache.asMap().containsKey(TKhandler.getRefreshTokenKey()), is(false));
@@ -59,11 +69,11 @@ public class TokenHandlerTest {
 
         TKhandler.initKeyCacheAndBackupFile(accessToken);
         assertThat(TKhandler.getRefreshTokenFile().exists(), is(true));
-        assertThat(TKhandler.getRefreshTokenKey(), is(accessToken.getRefresh_token()));
+        assertThat(TKhandler.getRefreshTokenKey(), is(accessToken.getRefreshToken().getValue()));
         assertThat(TKhandler.getTokensCache().asMap().containsKey(TKhandler.getRefreshTokenKey()), is(true));
         assertThat(TKhandler.getTokensCache().getIfPresent(TKhandler.getRefreshTokenKey()), notNullValue());
-        assertThat(TKhandler.getTokensCache().getIfPresent(TKhandler.getRefreshTokenKey()).getAccess_token(),
-                is(accessToken.getAccess_token()));
+        assertThat(TKhandler.getTokensCache().getIfPresent(TKhandler.getRefreshTokenKey()).getValue(),
+                is(accessToken.getValue()));
     }
 
     @Test
@@ -74,7 +84,7 @@ public class TokenHandlerTest {
         assertThat(TKhandler.getRefreshTokenFile().exists(), is(false));
         assertThat(TKhandler.getRefreshTokenKey(), nullValue());
 
-        BasicToken.AccessToken token = TKhandler.getAccessTokenInCache();
+        AccessToken token = TKhandler.getAccessTokenInCache();
         assertThat(token, nullValue());
     }
 
@@ -86,26 +96,26 @@ public class TokenHandlerTest {
 
         // Registers user and initializes cache.
         // Case 1: there is a token in cache.
-        DataUsuarioTestUtils.signUpAndUpdateTk(USUARIO_COMUNIDAD_1);
-        BasicToken.AccessToken token_1 = TKhandler.getAccessTokenInCache();
-        String accessToken_1 = token_1.getAccess_token();
+        UsuarioTestUtils.signUpAndUpdateTk(COMU_REAL_JUAN);
+        AccessToken token_1 = TKhandler.getAccessTokenInCache();
+        String accessToken_1 = token_1.getValue();
         assertThat(accessToken_1, not(isEmptyOrNullString()));
-        String refreshToken_1 = token_1.getRefresh_token();
+        String refreshToken_1 = token_1.getRefreshToken().getValue();
         assertThat(refreshToken_1, not(isEmptyOrNullString()));
 
         // Case 2: there is not token in cache, but there exists file with refreshToken.
-        com.google.common.cache.Cache<String, BasicToken.AccessToken> tokenCache = TKhandler.getTokensCache();
+        com.google.common.cache.Cache<String, AccessToken> tokenCache = TKhandler.getTokensCache();
         tokenCache.invalidate(refreshToken_1);
         assertThat(tokenCache.getIfPresent(refreshToken_1), nullValue());
         File refreshTkFile = new File(context.getFilesDir(), refresh_token_filename);
         assertThat(refreshTkFile.exists(), is(true));
 
         // The application must get another accessToken with the same refreshToken.
-        BasicToken.AccessToken token_2 = TKhandler.getAccessTokenInCache();
-        String accessToken_2 = token_2.getAccess_token();
+        AccessToken token_2 = TKhandler.getAccessTokenInCache();
+        String accessToken_2 = token_2.getValue();
         assertThat(accessToken_2, not(isEmptyOrNullString()));
         assertThat(accessToken_2, not(equalTo(accessToken_1)));
-        String refreshToken_2 = token_2.getRefresh_token();
+        String refreshToken_2 = token_2.getRefreshToken().getValue();
         assertThat(refreshToken_2, not(isEmptyOrNullString()));
         assertThat(refreshToken_2, equalTo(refreshToken_1));
 
@@ -119,8 +129,8 @@ public class TokenHandlerTest {
         // Precondition for initialization of the enum: no file with refreshToken.
         assertThat(TKhandler.getRefreshTokenKey(), nullValue());
 
-        String bearerTk = TKhandler.doBearerAccessTkHeader(accessToken);
-        assertThat(bearerTk, equalTo("Bearer " + accessToken.getAccess_token()));
+        String bearerTk = HELPER.doBearerAccessTkHeader(accessToken);
+        assertThat(bearerTk, equalTo("Bearer " + accessToken.getValue()));
     }
 
     @Test

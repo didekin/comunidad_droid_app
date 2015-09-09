@@ -8,15 +8,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.didekindroid.R;
-import com.didekindroid.usuario.dominio.Comunidad;
-import com.didekindroid.usuario.dominio.UsuarioComunidad;
-import com.didekindroid.usuario.webservices.ServiceOne;
+import com.didekin.serviceone.domain.UsuarioComunidad;
+import com.didekindroid.usuario.activity.utils.UserIntentExtras;
 
 import java.util.List;
 
-import static com.didekindroid.common.ui.ViewsIDs.SEE_USERCOMU_BY_COMU;
-import static com.didekindroid.usuario.common.UserIntentExtras.COMUNIDAD_LIST_OBJECT;
+import static com.didekindroid.uiutils.ViewsIDs.SEE_USERCOMU_BY_COMU;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 
 
@@ -41,13 +38,12 @@ public class SeeUserComuByComuFr extends ListFragment {
     {
         Log.d(TAG, "onAttach()");
         super.onAttach(context);
-        mActivity = (SeeUserComuByComuAc) context;
+        mActivity = (SeeUserComuByComuAc) getActivity();
         mAdapter = new UserComuListByComuAdapter(context);
 
         // Preconditions: an existing comunidad passed as intent. The comunidad has necessarily users already signed-up.
-        Comunidad mComunidad = (Comunidad) mActivity.getIntent().getExtras()
-                .getSerializable(COMUNIDAD_LIST_OBJECT.extra);
-        new UserComuByComuLoader().execute(mComunidad);
+        long comunidadId = mActivity.getIntent().getExtras().getLong(UserIntentExtras.COMUNIDAD_ID.extra);
+        new UserComuByComuLoader().execute(comunidadId);
     }
 
     @Override
@@ -134,15 +130,15 @@ public class SeeUserComuByComuFr extends ListFragment {
     //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
     //    ============================================================
 
-    private class UserComuByComuLoader extends AsyncTask<Comunidad, Void, List<UsuarioComunidad>> {
+    private class UserComuByComuLoader extends AsyncTask<Long, Void, List<UsuarioComunidad>> {
 
         private final String TAG = UserComuByComuLoader.class.getCanonicalName();
 
         @Override
-        protected List<UsuarioComunidad> doInBackground(Comunidad... comunidad)
+        protected List<UsuarioComunidad> doInBackground(Long... comunidadId)
         {
             Log.d(TAG, "doInBackground()");
-            return ServOne.seeUserComuByComu(comunidad[0].getC_Id());
+            return ServOne.seeUserComuByComu(comunidadId[0]);
         }
 
         @Override

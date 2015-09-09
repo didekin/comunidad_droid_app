@@ -6,14 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import com.didekin.serviceone.domain.Comunidad;
+import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.usuario.activity.ComuSearchResultsListAdapter.ComuViewHolder;
 import com.didekindroid.usuario.activity.UserComuListByComuAdapter.UserComuVwHolder;
-import com.didekindroid.usuario.dominio.Comunidad;
-import com.didekindroid.usuario.dominio.UsuarioComunidad;
-
-import static com.didekindroid.usuario.activity.ComuSearchResultsListAdapter.initTextsInComuVwHolder;
-import static com.didekindroid.usuario.activity.ComuSearchResultsListAdapter.initViewsInComuVwHolder;
 
 /**
  * User: pedro
@@ -46,7 +43,7 @@ public class ComuAndUserComuListByUserAdapter extends ArrayAdapter<UsuarioComuni
                     .inflate(R.layout.comu_and_usercomu_list_item_view, parent, false);
 
             usuarioComuViewHolder = new UsuarioComunidadViewHolder();
-            usuarioComuViewHolder.comuViewHolder = initViewsInComuVwHolder(convertView);
+            usuarioComuViewHolder.comuViewHolder = new ComuViewHolder(convertView);
             usuarioComuViewHolder.userComuVwHolder = new UserComuVwHolder(convertView, getContext().getResources());
 
             convertView.setTag(usuarioComuViewHolder);
@@ -59,7 +56,7 @@ public class ComuAndUserComuListByUserAdapter extends ArrayAdapter<UsuarioComuni
         ComuViewHolder comuViewHolder = usuarioComuViewHolder.comuViewHolder;
         UserComuVwHolder userComuVwHolder = usuarioComuViewHolder.userComuVwHolder;
 
-        initTextsInComuVwHolder(comuViewHolder, comunidad);
+        comuViewHolder.initializeTextInViews(comunidad);
         userComuVwHolder.initializeTextInViews(usuarioComunidad);
 
         return convertView;

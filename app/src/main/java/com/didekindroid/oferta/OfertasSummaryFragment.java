@@ -12,8 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import com.didekindroid.R;
-import com.didekindroid.common.ConnectionUtils;
-import com.didekindroid.common.IoHelper;
+import com.didekindroid.ioutils.IoHelper;
 
 import java.io.IOException;
 import java.io.InputStream;

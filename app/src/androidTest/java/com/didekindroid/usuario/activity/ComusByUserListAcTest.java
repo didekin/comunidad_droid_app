@@ -3,16 +3,19 @@ package com.didekindroid.usuario.activity;
 import android.content.Intent;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import com.didekindroid.masterdata.dominio.Municipio;
-import com.didekindroid.masterdata.dominio.Provincia;
-import com.didekindroid.usuario.dominio.Comunidad;
-import com.didekindroid.usuario.dominio.UsuarioComunidad;
+import com.didekin.serviceone.domain.Comunidad;
+import com.didekin.serviceone.domain.Municipio;
+import com.didekin.serviceone.domain.Provincia;
+import com.didekin.serviceone.domain.UsuarioComunidad;
+import com.didekindroid.usuario.dominio.DomainDataUtils;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static com.didekindroid.usuario.common.UserIntentExtras.USUARIO_COMUNIDAD_REG;
+import static com.didekindroid.usuario.activity.utils.UserIntentExtras.USUARIO_COMUNIDAD_REG;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.makeComunidad;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.makeUsuarioComunidad;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
@@ -33,9 +36,9 @@ public class ComusByUserListAcTest {
     @Before
     public void setUp() throws Exception
     {
-        Comunidad comunidad = new Comunidad("Calle", "Real", (short) 5, "Bis",
-                new Municipio(new Provincia((short) 3), (short) 13));
-        UsuarioComunidad usuarioComunidad = new UsuarioComunidad(comunidad, null, "portal", "esc", "plantaX",
+        Comunidad comunidad = makeComunidad("Calle", "Real", (short) 5, "Bis",
+                new Municipio( (short) 13,new Provincia((short) 3)));
+        UsuarioComunidad usuarioComunidad = makeUsuarioComunidad(comunidad, null, "portal", "esc", "plantaX",
                 "door", "pro");
         Intent intent = new Intent();
         intent.putExtra(USUARIO_COMUNIDAD_REG.toString(), usuarioComunidad);
