@@ -1,2 +1,3 @@
 rootProject.name = 'didekindroid'
-include ':app', ':javabeans'
+include ':app', ':javabeans', ':retrofit_cl'
+
