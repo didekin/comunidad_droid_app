@@ -18,11 +18,11 @@ import static com.didekindroid.usuario.activity.utils.RolCheckBox.getResourceStr
  * Date: 25/08/15
  * Time: 17:50
  */
-public class UserComuListByComuAdapter extends ArrayAdapter<UsuarioComunidad> {
+public class SeeUserComutByComuListAdapter extends ArrayAdapter<UsuarioComunidad> {
 
-    private static final String TAG = UserComuListByComuAdapter.class.getCanonicalName();
+    private static final String TAG = SeeUserComutByComuListAdapter.class.getCanonicalName();
 
-    public UserComuListByComuAdapter(Context context)
+    public SeeUserComutByComuListAdapter(Context context)
     {
         super(context, R.layout.usercomu_list_item_view, R.id.usercomu_item_portal_rot);
     }

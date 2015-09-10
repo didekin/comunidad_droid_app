@@ -1,10 +1,12 @@
 .gradle
 /administracion
-/gradle
-/local.properties
+/**/gradle
+/**/local.properties
 /.idea
 .DS_Store
-/build
-*.iml
-*.txt
+/**/build
+/**/libs
+/**/*.iml
+/**/*.txt
+/**/.gitignore
 

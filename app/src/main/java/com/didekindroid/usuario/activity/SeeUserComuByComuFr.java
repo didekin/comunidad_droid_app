@@ -27,7 +27,7 @@ public class SeeUserComuByComuFr extends ListFragment {
     private static final String TAG = SeeUserComuByComuFr.class.getCanonicalName();
 
     SeeUserComuByComuAc mActivity;
-    UserComuListByComuAdapter mAdapter;
+    SeeUserComutByComuListAdapter mAdapter;
 
     public SeeUserComuByComuFr()
     {
@@ -39,7 +39,7 @@ public class SeeUserComuByComuFr extends ListFragment {
         Log.d(TAG, "onAttach()");
         super.onAttach(context);
         mActivity = (SeeUserComuByComuAc) getActivity();
-        mAdapter = new UserComuListByComuAdapter(context);
+        mAdapter = new SeeUserComutByComuListAdapter(context);
 
         // Preconditions: an existing comunidad passed as intent. The comunidad has necessarily users already signed-up.
         long comunidadId = mActivity.getIntent().getExtras().getLong(UserIntentExtras.COMUNIDAD_ID.extra);

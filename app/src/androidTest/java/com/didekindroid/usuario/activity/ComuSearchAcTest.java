@@ -8,6 +8,7 @@ import android.support.test.espresso.action.ViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import com.didekindroid.R;
+import com.didekindroid.usuario.CleanEnum;
 import com.didekindroid.usuario.dominio.DomainDataUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -20,15 +21,14 @@ import java.io.File;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.*;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.UsuarioTestUtils.*;
-import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.*;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeComunidadBeanFromView;
+import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.*;
 import static com.didekindroid.usuario.security.TokenHandler.TKhandler;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.Matchers.not;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -44,6 +44,7 @@ public class ComuSearchAcTest {
     private Resources resources;
     private RegComuFr regComuFr;
     File refreshTkFile;
+    CleanEnum whatClean;
 
     @Rule
     public ActivityTestRule<ComuSearchAc> mActivityRule = new ActivityTestRule<>(ComuSearchAc.class, true, false);
@@ -54,6 +55,7 @@ public class ComuSearchAcTest {
         context = InstrumentationRegistry.getTargetContext();
         refreshTkFile = TKhandler.getRefreshTokenFile();
         resources = context.getResources();
+        whatClean = CleanEnum.CLEAN_NOTHING;
     }
 
     @Test
@@ -69,14 +71,15 @@ public class ComuSearchAcTest {
         onView(withId(R.id.tipo_via_spinner)).check(matches(isDisplayed()));
     }
 
-    @Test   // TODO: ¿están afectados por los cambios en la tarea asíncrona?
+    @Test
     public void testUpdateIsRegistered_1()
     {
         activity = mActivityRule.launchActivity(new Intent());
 
         //No token.
-        assertThat(isRegisteredUser(activity), is(false));
         assertThat(refreshTkFile.exists(), is(false));
+        assertThat(TKhandler.getAccessTokenInCache(), nullValue());
+        assertThat(isRegisteredUser(activity), is(false));
     }
 
     @Test
@@ -87,9 +90,10 @@ public class ComuSearchAcTest {
         assertThat(refreshTkFile.exists(), is(true));
 
         activity = mActivityRule.launchActivity(new Intent());
+        assertThat(TKhandler.getAccessTokenInCache(), notNullValue());
         assertThat(isRegisteredUser(activity), is(true));
 
-        cleanOneUser(DomainDataUtils.COMU_REAL_JUAN.getUsuario());
+        whatClean = CleanEnum.CLEAN_JUAN;
     }
 
     @Test
@@ -139,7 +143,7 @@ public class ComuSearchAcTest {
 
         onView(withId(R.id.searchComunidad_Bton)).perform(click());
         // No results in DB. The user is invited to register.
-        checkToastInTest(R.string.no_result_search_comunidad,activity);
+        checkToastInTest(R.string.no_result_search_comunidad, activity);
 
         onView(withId(R.id.reg_comu_usuario_usuariocomu_layout)).check(matches(isDisplayed()));
     }
@@ -160,7 +164,7 @@ public class ComuSearchAcTest {
         onView(withId(R.id.comu_search_results_ac_one_pane_frg_container)).check(matches(isDisplayed()));
         onView(withId(R.id.comu_list_frg)).check(matches(isDisplayed()));
 
-        cleanOneUser(DomainDataUtils.COMU_REAL_JUAN.getUsuario());
+        whatClean = CleanEnum.CLEAN_JUAN;
     }
 
     @Test
@@ -181,7 +185,7 @@ public class ComuSearchAcTest {
         assertThat(isRegisteredUser(activity), is(true));
         USER_DATA_AC.checkMenuItem_WTk(activity);
 
-        cleanOneUser(DomainDataUtils.COMU_REAL_JUAN.getUsuario());
+        whatClean = CleanEnum.CLEAN_JUAN;
     }
 
     @Test
@@ -201,7 +205,7 @@ public class ComuSearchAcTest {
         assertThat(isRegisteredUser(activity), is(true));
         REG_COMU_USER_USERCOMU_AC.checkMenuItem_WTk(activity);
 
-        cleanOneUser(DomainDataUtils.COMU_REAL_JUAN.getUsuario());
+        whatClean = CleanEnum.CLEAN_JUAN;
     }
 
     @Test
@@ -212,7 +216,7 @@ public class ComuSearchAcTest {
         assertThat(isRegisteredUser(activity), is(true));
         SEE_COMU_AND_USERCOMU_BY_USER_AC.checkMenuItem_WTk(activity);
 
-        cleanOneUser(DomainDataUtils.COMU_REAL_JUAN.getUsuario());
+        whatClean = CleanEnum.CLEAN_JUAN;
     }
 
     @Test
@@ -227,6 +231,8 @@ public class ComuSearchAcTest {
     @After
     public void cleanData()
     {
+        cleanOptions(whatClean);
+
     }
 
 //    ................ UTILIDADES .....................

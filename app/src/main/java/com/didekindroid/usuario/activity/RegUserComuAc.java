@@ -47,7 +47,6 @@ public class RegUserComuAc extends Activity {
 
     RegUserComuFr mRegUserComuFr;
     private Button mRegisterButton;
-    private Comunidad mComunidad;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -76,17 +75,16 @@ public class RegUserComuAc extends Activity {
         Log.d(TAG, "doOnclick()");
 
         // We don't need the user: it is already registered. As to comunidad, it is enough with its id in DB.
-        mComunidad = new Comunidad.ComunidadBuilder()
-                .c_id(mRegUserComuFr.getmComunidad().getC_Id()).build();
         UsuarioComunidadBean usuarioComunidadBean = makeUsuarioComunidadBeanFromView(
                 mRegUserComuFr.getFragmentView(),
-                new ComunidadBean(mComunidad),
+                new ComunidadBean(mRegUserComuFr.getmComunidad().getC_Id(),
+                        null,null,null,null,null),
                 null);
 
         StringBuilder errorMsg = new StringBuilder(getResources().getText(R.string.error_validation_msg))
                 .append(LINE_BREAK.literal);
 
-        if (!usuarioComunidadBean.validate(getResources(), errorMsg, false)) {  // error validation.
+        if (!usuarioComunidadBean.validate(getResources(), errorMsg)) {  // error validation.
             makeToast(this, errorMsg.toString());
         } else {
             // Insert usuarioComunidad and go to ComusByUserListAc activity.
@@ -157,11 +155,13 @@ public class RegUserComuAc extends Activity {
     private class UserComuRegister extends AsyncTask<UsuarioComunidad, Void, Integer> {
 
         private final String TAG = UserComuRegister.class.getCanonicalName();
+        private long idComunidad;
 
         @Override
         protected Integer doInBackground(UsuarioComunidad... usuarioComunidad)
         {
             Log.d(TAG, "doInBackground()");
+            idComunidad = usuarioComunidad[0].getComunidad().getC_Id();
             return ServOne.regUserComu(usuarioComunidad[0]);
         }
 
@@ -173,7 +173,7 @@ public class RegUserComuAc extends Activity {
                 Log.e(TAG, getResources().getString(R.string.error_action_in_DB));
             } else {
                 Intent intent = new Intent(RegUserComuAc.this, SeeUserComuByComuAc.class);
-                intent.putExtra(COMUNIDAD_ID.extra, mComunidad.getC_Id());
+                intent.putExtra(COMUNIDAD_ID.extra, idComunidad);
                 startActivity(intent);
             }
         }

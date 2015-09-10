@@ -16,6 +16,7 @@ import static com.didekindroid.uiutils.CommonPatterns.SELECT;
  */
 public class ComunidadBean {
 
+    private long comunidadId;
     private String tipoVia;
     private String nombreVia;
     private String numeroString;
@@ -36,16 +37,30 @@ public class ComunidadBean {
         this.numeroString = numeroEnVia;
         this.sufijoNumero = sufijoNumero;
         this.municipio = municipio;
+        comunidadId = 0L;
     }
 
-    public ComunidadBean(Comunidad comunidad)
+    public ComunidadBean(long comunidadId, String tipoVia, String nombreVia, String numeroEnVia,
+                         String sufijoNumero, Municipio municipio)
     {
-        this.comunidad = comunidad;
+        this(tipoVia, nombreVia, numeroEnVia, sufijoNumero, municipio);
+        this.comunidadId = comunidadId;
     }
 
     public boolean validate(Resources resources, StringBuilder errorMsg)
     {
-        boolean isValid = validateTipoVia(resources, errorMsg)
+        boolean isValid;
+
+        if ((tipoVia == null || tipoVia.isEmpty())
+                && (nombreVia == null || nombreVia.isEmpty())
+                && (numeroString == null || numeroString.isEmpty())
+                && (sufijoNumero == null || sufijoNumero.isEmpty())
+                && (municipio == null)
+                && comunidadId > 0) {
+            return(isValid = true);
+        }
+
+        isValid = validateTipoVia(resources, errorMsg)
                 & validateNombreVia(resources.getText(R.string.nombre_via), errorMsg)
                 & validateNumeroEnVia(resources.getText(R.string.numero_en_via), errorMsg)
                 & validateSufijo(resources.getText(R.string.sufijo_numero), errorMsg)
@@ -66,8 +81,6 @@ public class ComunidadBean {
 
     boolean validateTipoVia(Resources resources, StringBuilder errorMsg)
     {
-        String tipoVia = comunidad.getTipoVia();
-
         if (tipoVia == null || tipoVia.trim().equals(resources.getString(R.string.tipo_via_spinner))) {
             errorMsg.append(resources.getString(R.string.tipo_via) + LINE_BREAK.literal);
             return false;
@@ -77,8 +90,8 @@ public class ComunidadBean {
 
     public boolean validateNombreVia(CharSequence resources, StringBuilder errorMsg)
     {
-        boolean isValid = UserPatterns.NOMBRE_VIA.pattern.matcher(comunidad.getNombreVia()).matches()
-                && !SELECT.pattern.matcher(comunidad.getNombreVia()).find();
+        boolean isValid = UserPatterns.NOMBRE_VIA.pattern.matcher(nombreVia).matches()
+                && !SELECT.pattern.matcher(nombreVia).find();
         if (!isValid) {
             errorMsg.append(resources + LINE_BREAK.literal);
         }
@@ -105,10 +118,10 @@ public class ComunidadBean {
 
     public boolean validateSufijo(CharSequence resources, StringBuilder errorMsg)
     {
-        if (comunidad.getSufijoNumero().trim().isEmpty()) return true;
+        if (sufijoNumero == null || sufijoNumero.trim().isEmpty()) return true;
 
-        boolean isValid = UserPatterns.SUFIJO_NUMERO.pattern.matcher(comunidad.getSufijoNumero()).matches()
-                && !SELECT.pattern.matcher(comunidad.getSufijoNumero()).find();
+        boolean isValid = UserPatterns.SUFIJO_NUMERO.pattern.matcher(sufijoNumero).matches()
+                && !SELECT.pattern.matcher(sufijoNumero).find();
         if (!isValid) {
             errorMsg.append(resources + LINE_BREAK.literal);
         }
@@ -117,7 +130,6 @@ public class ComunidadBean {
 
     public boolean validateMunicipio(Resources resources, StringBuilder errorMsg)
     {
-        Municipio municipio = comunidad.getMunicipio();
         if (municipio == null) {
             return false;
         }
@@ -130,29 +142,29 @@ public class ComunidadBean {
         return isValid;
     }
 
+    public long getComunidadId()
+    {
+        return comunidadId;
+    }
+
     public Comunidad getComunidad()
     {
         return comunidad;
     }
 
-    public long getC_Id()
+    public Municipio getMunicipio()
     {
-        return comunidad.getC_Id();
+        return municipio;
     }
 
     public String getNombreVia()
     {
-        return comunidad.getNombreVia();
+        return nombreVia;
     }
 
-    public short getNumeroEnVia()
+    public short getNumero()
     {
-        return comunidad.getNumero();
-    }
-
-    public String getSufijoNumero()
-    {
-        return comunidad.getSufijoNumero();
+        return numero;
     }
 
     public String getNumeroString()
@@ -160,29 +172,28 @@ public class ComunidadBean {
         return numeroString;
     }
 
-    public String getTipoVia()
+    public String getSufijoNumero()
     {
-        return comunidad.getTipoVia();
+        return sufijoNumero;
     }
 
-    public Municipio getMunicipio()
+    public String getTipoVia()
     {
-        return comunidad.getMunicipio();
+        return tipoVia;
     }
 
     public Provincia getProvincia()
     {
-        if (comunidad.getMunicipio() == null) {
+        if (municipio == null) {
             return null;
         }
-        return comunidad.getMunicipio().getProvincia();
+        return municipio.getProvincia();
     }
 
     public void setMunicipio(Municipio municipio)
     {
         this.municipio = municipio;
     }
-
 
     public void setNombreVia(String nombreVia)
     {

@@ -180,7 +180,7 @@ public class RegComuFr extends Fragment {
                     provincia = new Provincia(cursor.getShort(1));
                     comunidadBean.setProvincia(provincia);
                 }*/
-                Municipio municipio = new Municipio(cursor.getShort(2),new Provincia(cursor.getShort(2)));
+                Municipio municipio = new Municipio(cursor.getShort(2),new Provincia(cursor.getShort(1)));
                 comunidadBean.setMunicipio(municipio);
                 mMunicipioPointer = position;
             }

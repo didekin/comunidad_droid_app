@@ -79,7 +79,7 @@ public class RegUserAndUserComuFr extends Fragment {
         StringBuilder errorMsg = new StringBuilder(getResources().getText(R.string.error_validation_msg))
                 .append(CommonPatterns.LINE_BREAK.literal);
 
-        if (!usuarioComunidadBean.validate(getResources(), errorMsg, true)) {
+        if (!usuarioComunidadBean.validate(getResources(), errorMsg)) {
             Toast clickToast = new Toast(getActivity()).makeText(getActivity(), errorMsg, Toast.LENGTH_LONG);
             clickToast.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL, 0, 0);
             clickToast.show();

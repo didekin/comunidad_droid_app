@@ -10,7 +10,7 @@ import com.didekin.serviceone.domain.Comunidad;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.usuario.activity.ComuSearchResultsListAdapter.ComuViewHolder;
-import com.didekindroid.usuario.activity.UserComuListByComuAdapter.UserComuVwHolder;
+import com.didekindroid.usuario.activity.SeeUserComutByComuListAdapter.UserComuVwHolder;
 
 /**
  * User: pedro

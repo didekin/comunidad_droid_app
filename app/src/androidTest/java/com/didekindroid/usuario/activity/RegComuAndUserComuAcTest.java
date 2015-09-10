@@ -94,7 +94,7 @@ public class RegComuAndUserComuAcTest {
         assertThat(usuarioComunidadBean.isPropietario(), is(false));
         assertThat(usuarioComunidadBean.isInquilino(), is(true));
 
-        usuarioComunidadBean.validate(resources, new StringBuilder(resources.getString(R.string.error_validation_msg)), true);
+        usuarioComunidadBean.validate(resources, new StringBuilder(resources.getString(R.string.error_validation_msg)));
         UsuarioComunidad usuarioComunidad = usuarioComunidadBean.getUsuarioComunidad();
         assertThat(usuarioComunidad.getPortal(), is("port2"));
         assertThat(usuarioComunidad.getEscalera(), is("escale_b"));

@@ -5,12 +5,10 @@ import android.util.Log;
 import com.didekin.retrofitcl.Oauth2EndPoints;
 import com.didekin.security.OauthClient;
 import com.didekin.security.OauthToken.AccessToken;
-import com.didekin.security.OauthTokenHelper;
 
 import static com.didekin.retrofitcl.RetrofitRestBuilder.BUILDER;
 import static com.didekin.security.OauthClient.CL_USER;
 import static com.didekin.security.OauthTokenHelper.BASIC_AND_SPACE;
-import static com.didekin.security.OauthTokenHelper.HELPER;
 import static com.didekin.security.SecurityConstant.PASSWORD_GRANT;
 import static com.didekin.security.SecurityConstant.REFRESH_TOKEN_GRANT;
 import static com.didekindroid.DidekindroidApp.getBaseURL;
@@ -92,8 +90,11 @@ public enum Oauth2Service implements Oauth2EndPoints, Oauth2ServiceIf {
                 .append(":")
                 .append(cliente.getSecret()).toString();
 
-        String base64AuthData = Base64.encodeToString(baseString.getBytes(),Base64.DEFAULT);
-        String header = new StringBuilder(BASIC_AND_SPACE).append(base64AuthData).toString();
+        String base64AuthData = Base64.encodeToString(baseString.getBytes(), Base64.DEFAULT);
+
+        String header = new StringBuilder(BASIC_AND_SPACE)
+                .append(base64AuthData.substring(0, base64AuthData.length() - 1))  // To take care of the trailing \n.
+                .toString();
         return header;
     }
 }

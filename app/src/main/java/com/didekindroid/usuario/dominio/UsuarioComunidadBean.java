@@ -77,7 +77,7 @@ public final class UsuarioComunidadBean {
      * The boolean flag isComunidadToValid controls for comunidad instances only with id, which are not to be
      * validated.
      */
-    public boolean validate(Resources resources, StringBuilder errorMsg, boolean isComunidadToValid)
+    public boolean validate(Resources resources, StringBuilder errorMsg)
     {
         boolean isValid = validatePortal(resources, errorMsg)
                 & validateEscalera(resources, errorMsg)
@@ -85,7 +85,7 @@ public final class UsuarioComunidadBean {
                 & validatePuerta(resources, errorMsg)
                 & validateRoles(resources, errorMsg)
                 & validateUsuario(resources, errorMsg)
-                & (!isComunidadToValid || validateComunidad(resources, errorMsg));
+                & validateComunidad(resources, errorMsg);
 
         if (isValid) {
 
@@ -107,10 +107,10 @@ public final class UsuarioComunidadBean {
     /*  [\\w_ñÑáéíóúüÜ\\.\\-\\s]{1,10}  */
     boolean validatePortal(Resources resources, StringBuilder errorMsg)
     {
-        if (usuarioComunidad.getPortal().trim().isEmpty()) return true;
+        if (portal.trim().isEmpty()) return true;
 
-        boolean isValid = PORTAL.pattern.matcher(usuarioComunidad.getPortal()).matches()
-                && !SELECT.pattern.matcher(usuarioComunidad.getPortal()).find();
+        boolean isValid = PORTAL.pattern.matcher(portal).matches()
+                && !SELECT.pattern.matcher(portal).find();
         if (!isValid) {
             errorMsg.append(resources.getText(R.string.reg_usercomu_portal_hint) + LINE_BREAK.literal);
         }
@@ -120,10 +120,10 @@ public final class UsuarioComunidadBean {
     /*  [\\w_ñÑáéíóúüÜ\\.\\-\\s]{1,10}  */
     boolean validateEscalera(Resources resources, StringBuilder errorMsg)
     {
-        if (usuarioComunidad.getEscalera().trim().isEmpty()) return true;
+        if (escalera.trim().isEmpty()) return true;
 
-        boolean isValid = ESCALERA.pattern.matcher(usuarioComunidad.getEscalera()).matches()
-                && !SELECT.pattern.matcher(usuarioComunidad.getEscalera()).find();
+        boolean isValid = ESCALERA.pattern.matcher(escalera).matches()
+                && !SELECT.pattern.matcher(escalera).find();
         if (!isValid) {
             errorMsg.append(resources.getText(R.string.reg_usercomu_escalera_hint) + LINE_BREAK.literal);
         }
@@ -133,10 +133,10 @@ public final class UsuarioComunidadBean {
     /*  [\\w_ñÑáéíóúüÜ\\.\\-\\s]{1,10}  */
     boolean validatePlanta(Resources resources, StringBuilder errorMsg)
     {
-        if (usuarioComunidad.getPlanta().trim().isEmpty()) return true;
+        if (planta.trim().isEmpty()) return true;
 
-        boolean isValid = PLANTA.pattern.matcher(usuarioComunidad.getPlanta()).matches()
-                && !SELECT.pattern.matcher(usuarioComunidad.getPlanta()).find();
+        boolean isValid = PLANTA.pattern.matcher(planta).matches()
+                && !SELECT.pattern.matcher(planta).find();
         if (!isValid) {
             errorMsg.append(resources.getText(R.string.reg_usercomu_planta_hint) + LINE_BREAK.literal);
         }
@@ -146,10 +146,10 @@ public final class UsuarioComunidadBean {
     /*  [\\w_ñÑáéíóúüÜ\\.\\-]{1,10}  */
     boolean validatePuerta(Resources resources, StringBuilder errorMsg)
     {
-        if (usuarioComunidad.getPuerta().trim().isEmpty()) return true;
+        if (puerta.trim().isEmpty()) return true;
 
-        boolean isValid = PUERTA.pattern.matcher(usuarioComunidad.getPuerta()).matches()
-                && !SELECT.pattern.matcher(usuarioComunidad.getPuerta()).find();
+        boolean isValid = PUERTA.pattern.matcher(puerta).matches()
+                && !SELECT.pattern.matcher(puerta).find();
         if (!isValid) {
             errorMsg.append(resources.getText(R.string.reg_usercomu_puerta_hint) + LINE_BREAK.literal);
         }
@@ -197,27 +197,22 @@ public final class UsuarioComunidadBean {
 
     public String getEscalera()
     {
-        return usuarioComunidad.getEscalera();
+        return escalera;
     }
 
     public String getPlanta()
     {
-        return usuarioComunidad.getPlanta();
+        return planta;
     }
 
     public String getPortal()
     {
-        return usuarioComunidad.getPortal();
+        return portal;
     }
 
     public String getPuerta()
     {
-        return usuarioComunidad.getPuerta();
-    }
-
-    public String getRoles()
-    {
-        return usuarioComunidad.getRoles();
+        return puerta;
     }
 
     public boolean isAdministrador()

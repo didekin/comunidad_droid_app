@@ -56,10 +56,6 @@ public class ComuSearchResultsListFr extends ListFragment {
     {
         Log.d(TAG, "onAttach()");
         super.onAttach(context);
-        mComuListListener = (ComuListListener) getActivity();
-        mAdapter = new ComuSearchResultsListAdapter(getActivity());
-        Comunidad comunidadSearch = (Comunidad) getActivity().getIntent().getSerializableExtra(COMUNIDAD_SEARCH.extra);
-        new SearchComunidadesLoader().execute(comunidadSearch);
     }
 
     @Override
@@ -67,6 +63,10 @@ public class ComuSearchResultsListFr extends ListFragment {
     {
         Log.d(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
+        mComuListListener = (ComuListListener) getActivity();
+        mAdapter = new ComuSearchResultsListAdapter(getActivity());
+        Comunidad comunidadSearch = (Comunidad) getActivity().getIntent().getSerializableExtra(COMUNIDAD_SEARCH.extra);
+        new SearchComunidadesLoader().execute(comunidadSearch);
     }
 
     @Override

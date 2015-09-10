@@ -32,6 +32,4 @@ public class RegUserFr extends Fragment {
         Log.d(TAG, "getFragmentView()");
         return mRegUsuarioFrView;
     }
-
-
 }

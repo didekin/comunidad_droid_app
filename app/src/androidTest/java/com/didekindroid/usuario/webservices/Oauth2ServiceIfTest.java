@@ -1,22 +1,27 @@
 package com.didekindroid.usuario.webservices;
 
 import android.support.test.runner.AndroidJUnit4;
+import com.didekin.retrofitcl.Oauth2EndPoints.BodyText;
 import com.didekin.security.OauthToken;
+import com.didekin.security.OauthToken.AccessToken;
 import com.didekindroid.usuario.CleanEnum;
+import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static com.didekin.security.OauthClient.CL_USER;
-import static com.didekindroid.usuario.CleanEnum.CLEAN_JUAN;
+import static com.didekindroid.usuario.CleanEnum.*;
 import static com.didekindroid.usuario.UsuarioTestUtils.cleanOptions;
 import static com.didekindroid.usuario.UsuarioTestUtils.signUpAndUpdateTk;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_JUAN;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_JUAN;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.*;
+import static com.didekindroid.usuario.security.TokenHandler.TKhandler;
 import static com.didekindroid.usuario.webservices.Oauth2Service.Oauth2;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -32,18 +37,25 @@ public class Oauth2ServiceIfTest {
     @Before
     public void setUp() throws Exception
     {
+        whatClean = CLEAN_NOTHING;
     }
 
     @Test
     public void testGetHello() throws Exception
     {
-        // TODO: implementar.
+        BodyText textJson = Oauth2.getHello();
+        assertThat(textJson.getText(), equalTo("Hello Open"));
     }
 
     @Test
     public void testGetHelloUserRead() throws Exception
     {
-        // TODO: implementar.
+        //Inserta usuario, comunidad, usuariocomunidad y actuliza tokenCache.
+        signUpAndUpdateTk(COMU_REAL_PEPE);
+        BodyText bodyText = Oauth2.getHelloUserRead(TKhandler.doBearerAccessTkHeader());
+        assertThat(bodyText.getText(), equalTo("Hello UserRead"));
+
+        whatClean = CLEAN_PEPE;
     }
 
     @Test
@@ -52,7 +64,7 @@ public class Oauth2ServiceIfTest {
         //Inserta usuario, comunidad, usuariocomunidad y actuliza tokenCache.
         signUpAndUpdateTk(COMU_REAL_JUAN);
 
-        OauthToken.AccessToken token = Oauth2.getPasswordUserToken(USER_JUAN.getUserName(), USER_JUAN.getPassword());
+        AccessToken token = Oauth2.getPasswordUserToken(USER_JUAN.getUserName(), USER_JUAN.getPassword());
         assertThat(token, notNullValue());
         assertThat(token.getValue(), notNullValue());
         assertThat(token.getRefreshToken().getValue(), notNullValue());
@@ -63,11 +75,22 @@ public class Oauth2ServiceIfTest {
     @Test
     public void testGetRefreshUserToken() throws Exception
     {
-        // TODO: implementar.
+        //Inserta usuario, comunidad, usuariocomunidad y actuliza tokenCache.
+        signUpAndUpdateTk(COMU_REAL_PEPE);
+        AccessToken tokenOld = TKhandler.getAccessTokenInCache();
+        String accessTkOldValue = tokenOld.getValue();
+        String refreshTkOldValue = tokenOld.getRefreshToken().getValue();
+
+        AccessToken tokenNew = Oauth2.getRefreshUserToken(TKhandler.getRefreshTokenKey());
+        assertThat(tokenNew, notNullValue());
+        assertThat(tokenNew.getRefreshToken().getValue(),is(refreshTkOldValue));
+        assertThat(tokenNew.getValue(), not(is(accessTkOldValue)));
+
+        whatClean = CLEAN_PEPE;
     }
 
     @Test
-    public void testDoAuthBasicHeade()
+    public void testDoAuthBasicHeader()
     {
         String encodedHeader = Oauth2.doAuthBasicHeader(CL_USER);
         assertThat(encodedHeader, equalTo("Basic dXNlcjo="));

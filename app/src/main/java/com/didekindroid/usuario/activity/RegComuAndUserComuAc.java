@@ -60,7 +60,7 @@ public class RegComuAndUserComuAc extends Activity {
         StringBuilder errorMsg = new StringBuilder(getResources().getText(R.string.error_validation_msg))
                 .append(CommonPatterns.LINE_BREAK.literal);
 
-        if (!usuarioComunidadBean.validate(getResources(), errorMsg, true)) {
+        if (!usuarioComunidadBean.validate(getResources(), errorMsg)) {
             UIutils.makeToast(this, errorMsg.toString());
 
         } else if (ConnectionUtils.isInternetConnected(this)) {

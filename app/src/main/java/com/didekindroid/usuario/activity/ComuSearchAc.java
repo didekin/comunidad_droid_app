@@ -144,6 +144,7 @@ public class ComuSearchAc extends Activity {
     /* This class should be in the launcher activity */
     private class CheckerTokenInCache extends AsyncTask<Void, Void, AccessToken> {
 
+        @Override
         protected AccessToken doInBackground(Void... params)
         {
             return TKhandler.getAccessTokenInCache();

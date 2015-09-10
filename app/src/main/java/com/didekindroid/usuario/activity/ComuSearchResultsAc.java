@@ -26,7 +26,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Postconditions:
  * <p/>
  * 1. An object comunidad is passed as an intent extra with the fields:
- * -- comunidadId.
+ * -- comunidadId of the comunidad selected.
  * -- nombreComunidad (with tipoVia,nombreVia, numero and sufijoNumero).
  * -- municipio, with codInProvincia and nombre.
  * -- provincia, with provinciaId and nombre.
@@ -151,6 +151,7 @@ public class ComuSearchResultsAc extends Activity implements ComuSearchResultsLi
     @Override
     public void onComunidadListLoaded(int listSize)
     {
+        Log.d(TAG, "onComunidadListLoaded. ListSize = " + listSize);
         if (listSize == 0) {
             UIutils.makeToast(this, R.string.no_result_search_comunidad);
             UserMenu.REG_COMU_USER_USERCOMU_AC.doMenuItem(this);
@@ -161,6 +162,11 @@ public class ComuSearchResultsAc extends Activity implements ComuSearchResultsLi
 //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
 //    ============================================================
 
+    /**
+     * Task to obtain the comunidades associtated to a user.
+     * Those are used when she selects a comunidad: the actions performed by the app are
+     * different following the different possibilities.
+     */
     private class ComunidadesUsuarioGetter extends AsyncTask<Void, Void, List<Comunidad>> {
 
         @Override

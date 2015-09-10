@@ -1,11 +1,8 @@
 package com.didekindroid.usuario.dominio;
 
 import android.content.res.Resources;
-import com.didekin.serviceone.domain.SerialNumbers;
 import com.didekin.serviceone.domain.Usuario;
 import com.didekindroid.R;
-
-import java.io.Serializable;
 
 import static com.didekindroid.uiutils.CommonPatterns.LINE_BREAK;
 import static com.didekindroid.uiutils.CommonPatterns.SELECT;
@@ -45,7 +42,7 @@ public final class UsuarioBean {
                 & validateNumeroTf(resources.getText(R.string.telefono_numero), errorMsg)
                 & validateUserName(resources.getText(R.string.email_hint), errorMsg);
 
-        if (isValide){
+        if (isValide) {
             usuario = new Usuario.UsuarioBuilder()
                     .userName(userName)
                     .alias(alias)
@@ -60,8 +57,8 @@ public final class UsuarioBean {
 
     private boolean validateAlias(CharSequence text, StringBuilder errorMsg)
     {
-        boolean isValid = ALIAS.pattern.matcher(usuario.getAlias()).matches()
-                && !SELECT.pattern.matcher(usuario.getAlias()).find();
+        boolean isValid = ALIAS.pattern.matcher(alias).matches()
+                && !SELECT.pattern.matcher(alias).find();
         if (!isValid) {
             errorMsg.append(text + LINE_BREAK.literal);
         }
@@ -70,8 +67,6 @@ public final class UsuarioBean {
 
     protected boolean validatePassword(Resources resources, StringBuilder errorMsg)
     {
-        String password = usuario.getPassword();
-
         if (!password.trim().equals(verificaPassword.toString())) {
             errorMsg.append(resources.getText(R.string.password).toString() + resources.getText(R.string
                     .password_different).toString() + LINE_BREAK.literal);
@@ -109,27 +104,27 @@ public final class UsuarioBean {
 
     protected boolean validateUserName(CharSequence text, StringBuilder errorMsg)
     {
-        boolean isValid = EMAIL.pattern.matcher(usuario.getUserName()).matches()
-                && !SELECT.pattern.matcher(usuario.getUserName()).find();
+        boolean isValid = EMAIL.pattern.matcher(userName).matches()
+                && !SELECT.pattern.matcher(userName).find();
         if (!isValid) {
             errorMsg.append(text + LINE_BREAK.literal);
         }
         return isValid;
     }
 
-    public String getUserName()
-    {
-        return usuario.getUserName();
-    }
-
     public String getAlias()
     {
-        return usuario.getAlias();
+        return alias;
     }
 
     public String getPassword()
     {
-        return usuario.getPassword();
+        return password;
+    }
+
+    public String getUserName()
+    {
+        return userName;
     }
 
     public String getVerificaPassword()

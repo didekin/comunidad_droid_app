@@ -146,7 +146,7 @@ public class RegComuAndUserAndUserComuAcTest {
                 (mRegUserComuFrg.getFragmentView(), comunidadBean, usuarioBean);
 
         StringBuilder errors = new StringBuilder("");
-        assertThat(usuarioComunidadBean.validate(resources, errors, true), is(true));
+        assertThat(usuarioComunidadBean.validate(resources, errors), is(true));
         assertThat(errors.toString().trim().length(), is(0));
 
         UsuarioComunidad usuarioComunidad = usuarioComunidadBean.getUsuarioComunidad();
@@ -191,7 +191,7 @@ public class RegComuAndUserAndUserComuAcTest {
         UsuarioComunidadBean usuarioComunidadBean =
                 makeUsuarioComunidadBeanFromView(mRegUserComuFrg.getFragmentView(),
                         comunidadBean, usuarioBean);
-        assertThat(usuarioComunidadBean.validate(resources, errors, true), is(false));
+        assertThat(usuarioComunidadBean.validate(resources, errors), is(false));
         assertThat(usuarioComunidadBean.getUsuarioComunidad(), notNullValue());
         assertThat(usuarioComunidadBean.getUsuarioComunidad().getComunidad(), notNullValue());
         assertThat(usuarioComunidadBean.getUsuarioComunidad().getUsuario(), notNullValue());
