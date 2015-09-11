@@ -10,7 +10,7 @@ import com.didekindroid.R;
 
 import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.UserMenu.COMU_SEARCH_AC;
-import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_COMU_AND_USERCOMU_BY_USER_AC;
+import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_USERCOMU_BY_USER_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.USER_DATA_AC;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
@@ -120,8 +120,8 @@ public class SeeUserComuByComuAc extends Activity {
         int resourceId = checkNotNull(item.getItemId());
 
         switch (resourceId) {
-            case R.id.comu_by_user_list_ac_mn:
-                SEE_COMU_AND_USERCOMU_BY_USER_AC.doMenuItem(this);
+            case R.id.see_usercomu_by_user_ac_mn:
+                SEE_USERCOMU_BY_USER_AC.doMenuItem(this);
                 return true;
             case R.id.user_data_ac_mn:
                 USER_DATA_AC.doMenuItem(this);

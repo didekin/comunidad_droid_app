@@ -18,6 +18,7 @@ import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
 import static com.didekindroid.uiutils.UIutils.makeToast;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUsuarioComunidadBeanFromView;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_ID;
+import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 import static com.google.common.base.Preconditions.checkState;
 
@@ -47,6 +48,7 @@ public class RegUserComuAc extends Activity {
 
     RegUserComuFr mRegUserComuFr;
     private Button mRegisterButton;
+    private Comunidad mComunidad;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -55,6 +57,8 @@ public class RegUserComuAc extends Activity {
         Log.i(TAG, "onCreate()");
 
         checkState(isRegisteredUser(this));
+        mComunidad = (Comunidad) getIntent().getExtras()
+                .getSerializable(COMUNIDAD_LIST_OBJECT.extra);
 
         setContentView(R.layout.reg_usercomu_ac);
         mRegUserComuFr = (RegUserComuFr) getFragmentManager().findFragmentById(R.id.reg_usercomu_fr);
@@ -77,8 +81,8 @@ public class RegUserComuAc extends Activity {
         // We don't need the user: it is already registered. As to comunidad, it is enough with its id in DB.
         UsuarioComunidadBean usuarioComunidadBean = makeUsuarioComunidadBeanFromView(
                 mRegUserComuFr.getFragmentView(),
-                new ComunidadBean(mRegUserComuFr.getmComunidad().getC_Id(),
-                        null,null,null,null,null),
+                new ComunidadBean(mComunidad.getC_Id(),
+                        null, null, null, null, null),
                 null);
 
         StringBuilder errorMsg = new StringBuilder(getResources().getText(R.string.error_validation_msg))

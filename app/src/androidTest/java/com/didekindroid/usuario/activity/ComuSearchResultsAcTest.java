@@ -59,7 +59,7 @@ public class ComuSearchResultsAcTest {
         Log.d(TAG, "In getFixture()");
         refreshTkFile = TKhandler.getRefreshTokenFile();
         intent = new Intent();
-        intent.putExtra(COMUNIDAD_SEARCH.extra, DomainDataUtils.COMU_LA_PLAZUELA_5);
+        intent.putExtra(COMUNIDAD_SEARCH.extra, COMU_LA_PLAZUELA_5);
     }
 
     @Test
@@ -109,7 +109,7 @@ public class ComuSearchResultsAcTest {
         activity = mActivityRule.launchActivity(intent);
         assertThat(isRegisteredUser(activity), is(true));
         assertThat(activity.mUsuarioComunidades.size(), is(2));
-        assertThat(activity.mUsuarioComunidades, hasItems(DomainDataUtils.COMU_REAL, DomainDataUtils.COMU_LA_PLAZUELA_5));
+        assertThat(activity.mUsuarioComunidades, hasItems(DomainDataUtils.COMU_REAL, COMU_LA_PLAZUELA_5));
 
         cleanOneUser(USER_JUAN);
     }
@@ -204,7 +204,7 @@ public class ComuSearchResultsAcTest {
         regTwoUserComuSameUser(DomainDataUtils.makeListTwoUserComu());
         activity = mActivityRule.launchActivity(intent);
         assertThat(isRegisteredUser(activity), is(true));
-        SEE_COMU_AND_USERCOMU_BY_USER_AC.checkMenuItem_WTk(activity);
+        SEE_USERCOMU_BY_USER_AC.checkMenuItem_WTk(activity);
 
         cleanOneUser(USER_JUAN);
     }
@@ -234,7 +234,7 @@ public class ComuSearchResultsAcTest {
         activity = mActivityRule.launchActivity(intent);
         assertThat(isRegisteredUser(activity), is(false));
 
-        SEE_COMU_AND_USERCOMU_BY_USER_AC.checkMenuItem_NTk(activity);
+        SEE_USERCOMU_BY_USER_AC.checkMenuItem_NTk(activity);
 
         cleanOneUser(USER_JUAN);
     }

@@ -4,8 +4,8 @@
       tools:context="com.didekindroid.usuario.activity.SeeUserComuByComuAc">
 
     <item
-            android:id="@+id/see_comu_and_usercomu_by_user_ac_mn"
-            android:title="@string/see_comu_and_usercomu_by_user_ac_mn"
+            android:id="@+id/see_usercomu_by_user_ac_mn"
+            android:title="@string/see_usercomu_by_user_ac_mn"
             android:orderInCategory="100"
             app:showAsAction="never|withText"/>
     <item

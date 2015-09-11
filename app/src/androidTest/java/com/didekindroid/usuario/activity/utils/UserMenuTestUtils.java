@@ -81,14 +81,14 @@ public enum UserMenuTestUtils {
         }
     },
 
-    SEE_COMU_AND_USERCOMU_BY_USER_AC {
+    SEE_USERCOMU_BY_USER_AC {
         @Override
         public void checkMenuItem_NTk(Activity activity) throws InterruptedException
         {
-            onView(withText(R.string.see_comu_and_usercomu_by_user_ac_mn)).check(doesNotExist());
+            onView(withText(R.string.see_usercomu_by_user_ac_mn)).check(doesNotExist());
 
             openActionBarOverflowOrOptionsMenu(activity);
-            onView(withText(R.string.see_comu_and_usercomu_by_user_ac_mn)).check(matches(isDisplayed())).perform(click());
+            onView(withText(R.string.see_usercomu_by_user_ac_mn)).check(matches(isDisplayed())).perform(click());
             checkToastInTest(R.string.user_without_signedUp, activity);
 
             Thread.sleep(4000);
@@ -97,10 +97,10 @@ public enum UserMenuTestUtils {
         @Override
         public void checkMenuItem_WTk(Activity activity) throws InterruptedException
         {
-            onView(withText(R.string.see_comu_and_usercomu_by_user_ac_mn)).check(doesNotExist());
+            onView(withText(R.string.see_usercomu_by_user_ac_mn)).check(doesNotExist());
 
             openActionBarOverflowOrOptionsMenu(activity);
-            onView(withText(R.string.see_comu_and_usercomu_by_user_ac_mn)).check(matches(isDisplayed())).perform(click());
+            onView(withText(R.string.see_usercomu_by_user_ac_mn)).check(matches(isDisplayed())).perform(click());
 
             // No muestra toast de error.
             checkNoToastInTest(R.string.user_without_signedUp, activity);

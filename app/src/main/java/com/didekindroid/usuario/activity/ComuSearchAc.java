@@ -10,17 +10,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import com.didekin.security.OauthToken;
 import com.didekin.security.OauthToken.AccessToken;
 import com.didekindroid.R;
 import com.didekindroid.uiutils.CommonPatterns;
 import com.didekindroid.uiutils.UIutils;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 
-import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
 import static com.didekindroid.uiutils.UIutils.updateIsRegistered;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_SEARCH;
-import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_COMU_AND_USERCOMU_BY_USER_AC;
+import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_USERCOMU_BY_USER_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.REG_COMU_USER_USERCOMU_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.USER_DATA_AC;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeComunidadBeanFromView;
@@ -125,8 +123,8 @@ public class ComuSearchAc extends Activity {
             case R.id.user_data_ac_mn:
                 USER_DATA_AC.doMenuItem(this);
                 return true;
-            case R.id.comu_by_user_list_ac_mn:
-                SEE_COMU_AND_USERCOMU_BY_USER_AC.doMenuItem(this);
+            case R.id.see_usercomu_by_user_ac_mn:
+                SEE_USERCOMU_BY_USER_AC.doMenuItem(this);
                 return true;
             case R.id.reg_comu_user_usercomu_ac_mn:
                 REG_COMU_USER_USERCOMU_AC.doMenuItem(this);

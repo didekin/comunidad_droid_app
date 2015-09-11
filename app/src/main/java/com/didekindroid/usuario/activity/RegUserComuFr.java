@@ -13,19 +13,11 @@ import com.didekindroid.R;
 
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_LIST_OBJECT;
 
-/**
- * Preconditions:
- * 1. The activity associated receives a comunidad object, as an intent extra, with the following fields:
- * -- comunidadId.
- * -- nombreComunidad (with tipoVia,nombreVia, numero and sufijoNumero).
- * -- municipio, with codInProvincia and nombre.
- * -- provincia, with provinciaId and nombre.
- */
 public class RegUserComuFr extends Fragment {
 
     private static final String TAG = RegUserComuFr.class.getCanonicalName();
+
     private View mRegUserComuFrView;
-    private Comunidad mComunidad;
 
     public RegUserComuFr()
     {
@@ -60,8 +52,7 @@ public class RegUserComuFr extends Fragment {
     {
         Log.d(TAG, "onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
-        mComunidad = (Comunidad) getActivity().getIntent().getExtras()
-                .getSerializable(COMUNIDAD_LIST_OBJECT.extra);
+
     }
 
     @Override
@@ -114,11 +105,6 @@ public class RegUserComuFr extends Fragment {
     }
 
 //    ........... AUXILIARY METHODS ...........
-
-    public Comunidad getmComunidad()
-    {
-        return mComunidad;
-    }
 
     public View getFragmentView()
     {

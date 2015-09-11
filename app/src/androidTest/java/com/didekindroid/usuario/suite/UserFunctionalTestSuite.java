@@ -11,6 +11,6 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ComuSearchAcTest.class, ComuSearchAcTest_intent.class, ComuSearchResultsAcTest.class,
-        RegUserComuAcTest.class, SeeUserComuByComuAcTest.class})
+        RegUserComuAcTest.class, RegUserAndUserComuAc.class, SeeUserComuByComuAcTest.class})
 public class UserFunctionalTestSuite {
 }

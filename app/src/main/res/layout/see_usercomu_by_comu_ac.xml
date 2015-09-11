@@ -11,16 +11,4 @@
             android:layout_width="match_parent"
             android:name="com.didekindroid.usuario.activity.SeeUserComuByComuFr"/>
 
-    <Button
-            android:id="@+id/see_usercomu_by_comu_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textSize="@dimen/text_decription_widget"
-            android:text="@string/reg_usercomu_ac_button_rot"
-            android:layout_below="@id/see_usercomu_by_comu_frg"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="@dimen/activity_vertical_double_margin"
-            android:layout_alignParentStart="true"
-            />
 </FrameLayout>

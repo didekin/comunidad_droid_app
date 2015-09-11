@@ -85,7 +85,7 @@
                 android:parentActivityName=".usuario.activity.ComuSearchAc">
         </activity>
         <activity
-                android:name=".usuario.activity.SeeComuAndUserComuByUserAc"
+                android:name=".usuario.activity.SeeUserComuByUserAc"
                 android:label="@string/see_comu_and_usercomu_ac_label"
                 android:parentActivityName=".usuario.activity.ComuSearchResultsAc">
         </activity>

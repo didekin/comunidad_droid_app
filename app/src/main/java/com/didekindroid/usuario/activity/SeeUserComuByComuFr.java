@@ -38,12 +38,7 @@ public class SeeUserComuByComuFr extends ListFragment {
     {
         Log.d(TAG, "onAttach()");
         super.onAttach(context);
-        mActivity = (SeeUserComuByComuAc) getActivity();
-        mAdapter = new SeeUserComutByComuListAdapter(context);
 
-        // Preconditions: an existing comunidad passed as intent. The comunidad has necessarily users already signed-up.
-        long comunidadId = mActivity.getIntent().getExtras().getLong(UserIntentExtras.COMUNIDAD_ID.extra);
-        new UserComuByComuLoader().execute(comunidadId);
     }
 
     @Override
@@ -51,6 +46,12 @@ public class SeeUserComuByComuFr extends ListFragment {
     {
         Log.d(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
+        mActivity = (SeeUserComuByComuAc) getActivity();
+        mAdapter = new SeeUserComutByComuListAdapter(mActivity);
+
+        // Preconditions: an existing comunidad passed as intent. The comunidad has necessarily users already signed-up.
+        long comunidadId = mActivity.getIntent().getExtras().getLong(UserIntentExtras.COMUNIDAD_ID.extra);
+        new UserComuByComuLoader().execute(comunidadId);
     }
 
     @Override
@@ -95,6 +96,12 @@ public class SeeUserComuByComuFr extends ListFragment {
     {
         Log.d(TAG, "onPause()");
         super.onPause();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState)
+    {
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -144,7 +151,7 @@ public class SeeUserComuByComuFr extends ListFragment {
         @Override
         protected void onPostExecute(List<UsuarioComunidad> userComuList)
         {
-            Log.d(TAG, "onPostExecute()");
+            Log.d(TAG, "onPostExecute(); userComuList size = " + userComuList.size());
             mAdapter.addAll(userComuList);
         }
     }

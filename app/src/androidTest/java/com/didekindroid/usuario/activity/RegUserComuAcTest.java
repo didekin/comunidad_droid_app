@@ -103,9 +103,6 @@ public class RegUserComuAcTest {
         onView(withId(R.id.reg_usercomu_button)).check(matches(isDisplayed())).perform(click());
 
         onView(withId(R.id.see_usercomu_by_comu_ac_frg_container)).check(matches(isDisplayed()));
-
-        // Check on data in DB.
-
     }
 
     @After

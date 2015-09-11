@@ -43,7 +43,7 @@
     <!--Menús-->
     <string name="comu_search_ac_mn">Buscar comunidad</string>
     <string name="user_data_ac_mn">Mi usuario</string>
-    <string name="see_comu_and_usercomu_by_user_ac_mn">Mis comunidades</string>
+    <string name="see_usercomu_by_user_ac_mn">Mis comunidades</string>
     <string name="reg_comu_user_usercomu_ac_mn">Nueva comunidad</string> <!--Válido para reg_comu_usercomu-->
     <string name="reg_user_and_usercomu_ac_mn">Unirme</string> <!--Válido para reg_usercomu-->
     <string name="modificar_datos_usuario_mn">Modificar datos</string>
@@ -64,7 +64,7 @@
     <string name="comu_search_results_ac_label">Comunidades encontradas</string>
     <!-- ........ ComuSearchResultsListFr ......... -->
     <string name="rotulo_comunidad">Mi comunidad</string>
-    <!-- ================ SeeComuAndUserComuByUserAc =========== -->
+    <!-- ================ SeeUserComuByUserAc =========== -->
     <string name="see_comu_and_usercomu_ac_label">Mis datos en la comunidad</string>
     <!-- ================ RegUserAndUserComuAc =========== -->
     <string name="reg_user_and_usercomu_ac_label">Asociarme a la comunidad</string>

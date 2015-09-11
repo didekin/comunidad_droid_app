@@ -214,7 +214,7 @@ public class ComuSearchAcTest {
         signUpAndUpdateTk(DomainDataUtils.COMU_REAL_JUAN);
         activity = mActivityRule.launchActivity(new Intent());
         assertThat(isRegisteredUser(activity), is(true));
-        SEE_COMU_AND_USERCOMU_BY_USER_AC.checkMenuItem_WTk(activity);
+        SEE_USERCOMU_BY_USER_AC.checkMenuItem_WTk(activity);
 
         whatClean = CleanEnum.CLEAN_JUAN;
     }
@@ -225,7 +225,7 @@ public class ComuSearchAcTest {
         assertThat(refreshTkFile.exists(), is(false));
         activity = mActivityRule.launchActivity(new Intent());
         assertThat(isRegisteredUser(activity), is(false));
-        SEE_COMU_AND_USERCOMU_BY_USER_AC.checkMenuItem_NTk(activity);
+        SEE_USERCOMU_BY_USER_AC.checkMenuItem_NTk(activity);
     }
 
     @After

@@ -44,7 +44,7 @@ public class ComusByUserListAc extends ListActivity {
     public boolean onCreateOptionsMenu(Menu menu)
     {
         Log.d(TAG, "onCreateOptionsMenu()");
-        getMenuInflater().inflate(R.menu.see_comu_and_usercomu_ac_menu, menu);
+        getMenuInflater().inflate(R.menu.see_usercomu_by_user_ac_menu, menu);
         return true;
     }
 

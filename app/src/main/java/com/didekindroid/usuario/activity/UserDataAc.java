@@ -42,12 +42,12 @@ public class UserDataAc extends Activity {
         Log.d(TAG, "onOptionsItemSelected()");
 
         switch (item.getItemId()) {
-            case R.id.recordar_contraseña_mn:
+            /*case R.id.recordar_contraseña_mn:
                 //TODO: implementar.
                 return true;
             case R.id.nueva_contraseña_mn:
                 //TODO: implementar.
-                return true;
+                return true;*/
             default:
                 return super.onOptionsItemSelected(item);
         }

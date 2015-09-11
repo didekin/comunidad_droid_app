@@ -57,7 +57,8 @@ public class ComunidadBean {
                 && (sufijoNumero == null || sufijoNumero.isEmpty())
                 && (municipio == null)
                 && comunidadId > 0) {
-            return(isValid = true);
+            comunidad = new Comunidad.ComunidadBuilder().c_id(comunidadId).build();
+            return (isValid = true);
         }
 
         isValid = validateTipoVia(resources, errorMsg)

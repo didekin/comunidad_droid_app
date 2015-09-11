@@ -109,8 +109,8 @@ public class ComuSearchResultsAc extends Activity implements ComuSearchResultsLi
             case R.id.user_data_ac_mn:
                 USER_DATA_AC.doMenuItem(this);
                 return true;
-            case R.id.comu_by_user_list_ac_mn:
-                SEE_COMU_AND_USERCOMU_BY_USER_AC.doMenuItem(this);
+            case R.id.see_usercomu_by_user_ac_mn:
+                SEE_USERCOMU_BY_USER_AC.doMenuItem(this);
                 return true;
             case R.id.reg_comu_user_usercomu_ac_mn:
                 REG_COMU_USER_USERCOMU_AC.doMenuItem(this);
@@ -136,7 +136,7 @@ public class ComuSearchResultsAc extends Activity implements ComuSearchResultsLi
         } else {
             if (mUsuarioComunidades.contains(comunidad)) {
                 Log.d(TAG, "onComunidadSelected(). User is registered and associated to the comunidad.");
-                Intent intent = new Intent(this, SeeComuAndUserComuByUserAc.class);
+                Intent intent = new Intent(this, SeeUserComuByUserAc.class);
                 intent.putExtra(COMUNIDAD_LIST_OBJECT.extra, comunidad);
                 startActivity(intent);
             } else {

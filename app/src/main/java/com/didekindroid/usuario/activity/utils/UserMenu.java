@@ -65,7 +65,7 @@ public enum UserMenu {
         }
     },
 
-    SEE_COMU_AND_USERCOMU_BY_USER_AC {  // Comunidades de un usuario: Mis comunidades.
+    SEE_USERCOMU_BY_USER_AC {  // Comunidades de un usuario: Mis comunidades.
 
         @Override
         public void doMenuItem(Activity activity)

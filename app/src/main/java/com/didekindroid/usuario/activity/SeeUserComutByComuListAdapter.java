@@ -56,6 +56,7 @@ public class SeeUserComutByComuListAdapter extends ArrayAdapter<UsuarioComunidad
 
         static final String TAG = UserComuVwHolder.class.getCanonicalName();
 
+        final TextView mNombreComunidad;
         final TextView mPortalRotView;
         final TextView mPortalView;
         final TextView mEscaleraRotView;
@@ -71,6 +72,7 @@ public class SeeUserComutByComuListAdapter extends ArrayAdapter<UsuarioComunidad
 
         public UserComuVwHolder(View convertView, Resources resources)
         {
+            mNombreComunidad = (TextView) convertView.findViewById(R.id.usercomu_item_nombreComunidad_txt);
             mPortalRotView = (TextView) convertView.findViewById(R.id.usercomu_item_portal_rot);
             mPortalView = (TextView) convertView.findViewById(R.id.usercomu_item_portal_txt);
             mEscaleraRotView = (TextView) convertView.findViewById(R.id.usercomu_item_escalera_rot);
@@ -90,23 +92,23 @@ public class SeeUserComutByComuListAdapter extends ArrayAdapter<UsuarioComunidad
         {
             Log.d(TAG,"initializeTextInViews()");
 
+            mNombreComunidad.setText(userComu.getComunidad().getNombreComunidad());
+
             if (userComu.getPortal() != null && !userComu.getPortal().isEmpty()) {
-                mPortalView.setVisibility(View.VISIBLE);
+//                mPortalRotView.setVisibility(View.VISIBLE);
+//                mPortalView.setVisibility(View.VISIBLE);
                 mPortalView.setText(userComu.getPortal());
             }
 
             if (userComu.getEscalera() != null && !userComu.getEscalera().isEmpty()) {
-                mEscaleraView.setVisibility(View.VISIBLE);
                 mEscaleraView.setText(userComu.getEscalera());
             }
 
             if (userComu.getPlanta() != null && !userComu.getPlanta().isEmpty()) {
-                mPlantaView.setVisibility(View.VISIBLE);
                 mPlantaView.setText(userComu.getPlanta());
             }
 
             if (userComu.getPuerta() != null && !userComu.getPuerta().isEmpty()) {
-                mPuertaView.setVisibility(View.VISIBLE);
                 mPuertaView.setText(userComu.getPuerta());
             }
 
