@@ -17,7 +17,7 @@
 
     <TextView
             android:id="@+id/usercomu_item_portal_rot"
-            android:text="@string/reg_usercomu_portal_hint"
+            android:text="@string/usercomu_portal_rot"
             android:textStyle="normal"
             android:visibility="visible"
             android:textSize="@dimen/text_decription_widget"
@@ -42,7 +42,7 @@
 
     <TextView
             android:id="@+id/usercomu_item_escalera_rot"
-            android:text="@string/reg_usercomu_escalera_hint"
+            android:text="@string/usercomu_escalera_rot"
             android:textStyle="normal"
             android:visibility="visible"
             android:textSize="@dimen/text_decription_widget"
@@ -67,7 +67,7 @@
 
     <TextView
             android:id="@+id/usercomu_item_planta_rot"
-            android:text="@string/reg_usercomu_planta_hint"
+            android:text="@string/usercomu_planta_rot"
             android:textStyle="normal"
             android:visibility="visible"
             android:textSize="@dimen/text_decription_widget"
@@ -92,7 +92,7 @@
 
     <TextView
             android:id="@+id/usercomu_item_puerta_rot"
-            android:text="@string/reg_usercomu_puerta_hint"
+            android:text="@string/usercomu_puerta_rot"
             android:textStyle="normal"
             android:visibility="visible"
             android:textSize="@dimen/text_decription_widget"
@@ -117,7 +117,7 @@
 
     <TextView
             android:id="@+id/usercomu_item_roles_rotulo"
-            android:text="@string/reg_usercomu_role_rot"
+            android:text="@string/usercomu_role_rot"
             android:textStyle="normal"
             android:visibility="visible"
             android:textSize="@dimen/text_decription_widget"

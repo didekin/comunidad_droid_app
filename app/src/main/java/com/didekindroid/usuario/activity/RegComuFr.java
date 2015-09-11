@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
-import com.didekin.serviceone.domain.Comunidad;
 import com.didekin.serviceone.domain.Municipio;
 import com.didekin.serviceone.domain.Provincia;
 import com.didekindroid.R;
@@ -22,20 +21,20 @@ import com.didekindroid.usuario.dominio.ComunidadBean;
 import java.util.List;
 
 import static com.didekindroid.repository.MasterDataDb.ComunidadAutonoma.cu_nombre;
-import static com.didekindroid.repository.MasterDataDb.Provincia.pr_nombre;
 import static com.didekindroid.repository.MasterDataDb.Municipio.mu_nombre;
+import static com.didekindroid.repository.MasterDataDb.Provincia.pr_nombre;
 
 public class RegComuFr extends Fragment {
 
     private static final String TAG = RegComuFr.class.getCanonicalName();
 
     private static final String CA_POINTER_POS = RegComuFr.class.getSimpleName().concat(".mCApointer");
-    private static final String PROV_POINTER_POS = RegComuFr.class.getSimpleName().concat("" +
-            ".mProvinciaPointer");
-    private static final String MUNI_POINTER_POS = RegComuFr.class.getSimpleName().concat("" +
-            ".mMunicipioPointer");
-    private static final String TIPO_VIA_POINTER_POS = RegComuFr.class.getSimpleName().concat("" +
-            ".mTipoViaPointer");
+    private static final String PROV_POINTER_POS =
+            RegComuFr.class.getSimpleName().concat(".mProvinciaPointer");
+    private static final String MUNI_POINTER_POS =
+            RegComuFr.class.getSimpleName().concat(".mMunicipioPointer");
+    private static final String TIPO_VIA_POINTER_POS =
+            RegComuFr.class.getSimpleName().concat(".mTipoViaPointer");
 
     private static List<String> TIPOS_VIA;
 
@@ -180,7 +179,7 @@ public class RegComuFr extends Fragment {
                     provincia = new Provincia(cursor.getShort(1));
                     comunidadBean.setProvincia(provincia);
                 }*/
-                Municipio municipio = new Municipio(cursor.getShort(2),new Provincia(cursor.getShort(1)));
+                Municipio municipio = new Municipio(cursor.getShort(2), new Provincia(cursor.getShort(1)));
                 comunidadBean.setMunicipio(municipio);
                 mMunicipioPointer = position;
             }

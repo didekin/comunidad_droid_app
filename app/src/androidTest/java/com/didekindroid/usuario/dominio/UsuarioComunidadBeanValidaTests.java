@@ -122,12 +122,12 @@ public class UsuarioComunidadBeanValidaTests {
         usuarioComunidadBean = new UsuarioComunidadBean(comunidad, usuarioBean, "poÑr6ta_1",
                 "escalera-2", "plantaB_Ñ", "puerta12", false, false, false, false);
         assertThat(usuarioComunidadBean.validate(resources, errors), is(false));
-        assertThat(errors.toString(), containsString(resources.getText(R.string.reg_usercomu_role_rot).toString()));
+        assertThat(errors.toString(), containsString(resources.getText(R.string.usercomu_role_rot).toString()));
 
         usuarioComunidadBean = new UsuarioComunidadBean(comunidad, usuarioBean, "poÑr6ta_1",
                 "escalera-2", "plantaB_Ñ", "puerta12", false, false, true, true);
         assertThat(usuarioComunidadBean.validate(resources, errors), is(false));
-        assertThat(errors.toString(), containsString(resources.getText(R.string.reg_usercomu_role_rot).toString()));
+        assertThat(errors.toString(), containsString(resources.getText(R.string.usercomu_role_rot).toString()));
     }
 
     @Test

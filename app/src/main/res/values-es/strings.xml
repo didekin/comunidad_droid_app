@@ -59,7 +59,7 @@
     <string name="reg_usercomu_planta_hint">Planta</string>
     <string name="reg_usercomu_puerta_hint">Puerta</string>
     <string name="reg_usercomu_role_checkbox_rot">Vínculo (uno o más):</string>
-    <string name="reg_usercomu_role_rot">Vínculo con la comunidad</string>
+    <string name="usercomu_role_rot">Vínculo con la comunidad</string>
     <!--para mensaje de error validación-->
     <string name="reg_usercomu_checkbox_pre_rot">Presidente</string>
     <string name="reg_usercomu_checbox_admin_rot">Administrador</string>

@@ -44,8 +44,10 @@
     <string name="comu_search_ac_mn">Buscar comunidad</string>
     <string name="user_data_ac_mn">Mi usuario</string>
     <string name="see_usercomu_by_user_ac_mn">Mis comunidades</string>
-    <string name="reg_comu_user_usercomu_ac_mn">Nueva comunidad</string> <!--Válido para reg_comu_usercomu-->
-    <string name="reg_user_and_usercomu_ac_mn">Unirme</string> <!--Válido para reg_usercomu-->
+    <string name="reg_comu_user_usercomu_ac_mn">Nueva comunidad</string>
+    <!--Válido para reg_comu_usercomu-->
+    <string name="reg_user_and_usercomu_ac_mn">Unirme</string>
+    <!--Válido para reg_usercomu-->
     <string name="modificar_datos_usuario_mn">Modificar datos</string>
     <string name="recordar_contraseña_mn">Recordar contraseña</string>
     <string name="nueva_contraseña_mn">Renovar contraseña</string>
@@ -64,8 +66,6 @@
     <string name="comu_search_results_ac_label">Comunidades encontradas</string>
     <!-- ........ ComuSearchResultsListFr ......... -->
     <string name="rotulo_comunidad">Mi comunidad</string>
-    <!-- ================ SeeUserComuByUserAc =========== -->
-    <string name="see_comu_and_usercomu_ac_label">Mis datos en la comunidad</string>
     <!-- ================ RegUserAndUserComuAc =========== -->
     <string name="reg_user_and_usercomu_ac_label">Asociarme a la comunidad</string>
     <!-- ================ RegUserAndUserComuFr =========== -->
@@ -91,7 +91,6 @@
     <string name="reg_usercomu_planta_hint">Planta</string>
     <string name="reg_usercomu_puerta_hint">Puerta</string>
     <string name="reg_usercomu_role_checkbox_rot">Vínculo (uno o más):</string>
-    <string name="reg_usercomu_role_rot">Vínculo con la comunidad</string>
     <string name="reg_usercomu_ac_button_rot">Adherirme a la comunidad</string>
     <!--para mensaje de error validación y rótulos de campos  -->
     <string name="reg_usercomu_checkbox_pre_rot">Presidente</string>
@@ -101,6 +100,14 @@
     <string name="comunidad_null">Comunidad</string>
     <!-- ============= RegUserComuAc =============-->
     <string name="regusuario_comu_ac_label">Comunidad seleccionada</string>
+    <!-- ================ SeeUserComuByComuAc =========== -->
+    <string name="usercomu_portal_rot">Portal:</string>
+    <string name="usercomu_escalera_rot">Escalera:</string>
+    <string name="usercomu_planta_rot">Planta:</string>
+    <string name="usercomu_puerta_rot">Puerta:</string>
+    <string name="usercomu_role_rot">Vínculo con la comunidad:</string>
+    <!-- ================ SeeUserComuByUserAc =========== -->
+    <string name="see_comu_and_usercomu_ac_label">Mis datos en la comunidad</string>
     <!-- ============= UserDataAc =============-->
     <string name="user_data_ac_label">Mis datos</string>
     <!-- ============ ComusByUserListAc ================-->
@@ -110,8 +117,5 @@
     <string name="textLogin_no">Registra tus datos.</string>
     <string name="textLogin_yes">Haz login.</string>
     <string name="loginButtonLabel">Login</string>
-
-
-
 
 </resources>

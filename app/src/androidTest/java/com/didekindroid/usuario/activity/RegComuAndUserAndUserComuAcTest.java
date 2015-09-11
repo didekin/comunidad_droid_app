@@ -207,7 +207,7 @@ public class RegComuAndUserAndUserComuAcTest {
                 .check(matches(withText(containsString(resources.getText(R.string.tipo_via).toString()))))
                 .check(matches(withText(containsString(resources.getText(R.string.nombre_via).toString()))))
                 .check(matches(withText(containsString(resources.getText(R.string.municipio).toString()))))
-                .check(matches(withText(containsString(resources.getText(R.string.reg_usercomu_role_rot).toString()))))
+                .check(matches(withText(containsString(resources.getText(R.string.usercomu_role_rot).toString()))))
                 .check(matches(withText(containsString(resources.getText(R.string.alias).toString()))))
                 .check(matches(withText(containsString(resources.getText(R.string.email_hint).toString()))))
                 .check(matches(withText(containsString(resources.getText(R.string.telefono_prefix_rotulo).toString()))))

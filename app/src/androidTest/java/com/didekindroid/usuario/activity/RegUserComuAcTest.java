@@ -91,7 +91,7 @@ public class RegUserComuAcTest {
 
         checkToastInTest(R.string.error_validation_msg, activity, R.string.reg_usercomu_portal_hint,
                 R.string.reg_usercomu_escalera_hint,
-                R.string.reg_usercomu_planta_hint, R.string.reg_usercomu_role_rot);
+                R.string.reg_usercomu_planta_hint, R.string.usercomu_role_rot);
     }
 
     @Test

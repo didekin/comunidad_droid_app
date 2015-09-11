@@ -165,7 +165,7 @@ public final class UsuarioComunidadBean {
         if (rolesSize > 0 && !(isPropietario && isInquilino)) {
             isValid = true;
         } else {
-            errorMsg.append(resources.getText(R.string.reg_usercomu_role_rot) + LINE_BREAK.literal);
+            errorMsg.append(resources.getText(R.string.usercomu_role_rot) + LINE_BREAK.literal);
         }
         return isValid;
     }

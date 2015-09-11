@@ -118,7 +118,7 @@ public class RegComuAndUserComuAcTest {
                 .check(matches(withText(containsString(resources.getText(R.string.tipo_via).toString()))))
                 .check(matches(withText(containsString(resources.getText(R.string.nombre_via).toString()))))
                 .check(matches(withText(containsString(resources.getText(R.string.municipio).toString()))))
-                .check(matches(withText(containsString(resources.getText(R.string.reg_usercomu_role_rot).toString()))));
+                .check(matches(withText(containsString(resources.getText(R.string.usercomu_role_rot).toString()))));
     }
 
     @Test
@@ -143,7 +143,7 @@ public class RegComuAndUserComuAcTest {
                 .check(matches(withText(containsString(resources.getText(R.string.reg_usercomu_escalera_hint).toString()))))
                 .check(matches(withText(containsString(resources.getText(R.string.nombre_via).toString()))))
                 .check(matches(withText(containsString(resources.getText(R.string.municipio).toString()))))
-                .check(matches(withText(containsString(resources.getText(R.string.reg_usercomu_role_rot).toString()))));
+                .check(matches(withText(containsString(resources.getText(R.string.usercomu_role_rot).toString()))));
     }
 
     @Test
