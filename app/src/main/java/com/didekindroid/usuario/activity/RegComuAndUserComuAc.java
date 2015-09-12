@@ -2,21 +2,29 @@ package com.didekindroid.usuario.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
-import com.didekindroid.uiutils.CommonPatterns;
 import com.didekindroid.ioutils.ConnectionUtils;
+import com.didekindroid.uiutils.CommonPatterns;
 import com.didekindroid.uiutils.UIutils;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
+import com.google.common.base.Preconditions;
 
-import static com.didekindroid.usuario.activity.utils.UserIntentExtras.USUARIO_COMUNIDAD_REG;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeComunidadBeanFromView;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUsuarioComunidadBeanFromView;
+import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
+import static com.google.common.base.Preconditions.checkState;
 
+/**
+ * Preconditions:
+ * 1. The user is registered with a different comunidad.
+ */
 public class RegComuAndUserComuAc extends Activity {
 
     private static final String TAG = RegComuAndUserComuAc.class.getCanonicalName();
@@ -42,14 +50,14 @@ public class RegComuAndUserComuAc extends Activity {
             public void onClick(View v)
             {
                 Log.d(TAG, "View.OnClickListener().onClick()");
-                registerComuAndUsuarioComu();
+                registerComuAndUserComu();
             }
         });
     }
 
-    private void registerComuAndUsuarioComu()
+    private void registerComuAndUserComu()
     {
-        Log.d(TAG, "registerComuAndUsuarioComu()");
+        Log.d(TAG, "registerComuAndUserComu()");
 
         ComunidadBean comunidadBean = mRegComuFrg.getComunidadBean();
         makeComunidadBeanFromView(mRegComuFrg.getFragmentView(), comunidadBean);
@@ -63,11 +71,11 @@ public class RegComuAndUserComuAc extends Activity {
         if (!usuarioComunidadBean.validate(getResources(), errorMsg)) {
             UIutils.makeToast(this, errorMsg.toString());
 
-        } else if (ConnectionUtils.isInternetConnected(this)) {
+        } else if (!ConnectionUtils.isInternetConnected(this)) {
             UIutils.makeToast(this, R.string.no_internet_conn_toast);
         } else {
-            Intent intent = new Intent(this, ComusByUserListAc.class);
-            intent.putExtra(USUARIO_COMUNIDAD_REG.toString(),usuarioComunidadBean.getUsuarioComunidad());
+            new ComuAndUserComuRegister().execute(usuarioComunidadBean.getUsuarioComunidad());
+            Intent intent = new Intent(this, SeeUserComuByUserAc.class);
             startActivity(intent);
         }
     }
@@ -77,6 +85,29 @@ public class RegComuAndUserComuAc extends Activity {
     {
         Log.d(TAG, "onDestroy()");
         super.onDestroy();
+    }
+
+    //    ============================================================
+    //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
+    //    ============================================================
+
+    private class ComuAndUserComuRegister extends AsyncTask<UsuarioComunidad, Void, Boolean> {
+
+        private final String TAG = ComuAndUserComuRegister.class.getCanonicalName();
+
+        @Override
+        protected Boolean doInBackground(UsuarioComunidad... usuarioComunidad)
+        {
+            Log.d(TAG, "doInBackground()");
+            return ServOne.regComuAndUserComu(usuarioComunidad[0]);
+        }
+
+        @Override
+        protected void onPostExecute(Boolean rowInserted)
+        {
+            Log.d(TAG, "onPostExecute()");
+            checkState(rowInserted);
+        }
     }
 }
 

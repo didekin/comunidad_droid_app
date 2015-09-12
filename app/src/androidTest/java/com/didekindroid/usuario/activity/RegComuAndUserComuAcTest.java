@@ -1,7 +1,6 @@
 package com.didekindroid.usuario.activity;
 
 import android.content.res.Resources;
-import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.view.View;
@@ -9,8 +8,10 @@ import com.didekin.serviceone.domain.Municipio;
 import com.didekin.serviceone.domain.Provincia;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
+import com.didekindroid.usuario.activity.utils.UsuarioTestUtils;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -21,10 +22,17 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.*;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.CursorMatchers.withRowString;
-import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
-import static android.support.test.espresso.matcher.ViewMatchers.*;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUsuarioComunidadBeanFromView;
-import static org.hamcrest.CoreMatchers.*;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.*;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_TRAV_PLAZUELA_PEPE;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_PEPE;
+import static com.didekindroid.usuario.security.TokenHandler.TKhandler;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.junit.Assert.assertThat;
 
@@ -47,6 +55,9 @@ public class RegComuAndUserComuAcTest {
     @Before
     public void setUp() throws Exception
     {
+        // Preconditions: the user is already registered.
+        signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
+
         activity = mActivityRule.getActivity();
         resources = activity.getResources();
         regComuFr = (RegComuFr) activity.getFragmentManager().findFragmentById(R.id.reg_comunidad_frg);
@@ -54,13 +65,24 @@ public class RegComuAndUserComuAcTest {
                 .reg_usuariocomunidad_frg);
     }
 
+    @After
+    public void tearDown() throws Exception
+    {
+        cleanOneUser(USER_PEPE);
+    }
+
     @Test
     public void testPreconditions()
     {
         assertThat(activity, notNullValue());
+
+        assertThat(isRegisteredUser(activity), is(true));
+        assertThat(TKhandler.getAccessTokenInCache(), notNullValue());
+
         assertThat(resources, notNullValue());
         assertThat(regComuFr, notNullValue());
         assertThat(regUserComuFr, notNullValue());
+
         onView(withId(R.id.reg_comu_and_usercomu_layout));
         onView(withId(R.id.reg_comunidad_frg)).check(matches(isDisplayed()));
         onView(withId(R.id.reg_usuariocomunidad_frg)).check(matches(isDisplayed()));
@@ -72,6 +94,7 @@ public class RegComuAndUserComuAcTest {
     {
         View usuarioComunidadRegView = activity.findViewById(R.id.reg_usuariocomunidad_frg);
 
+        //UsuarioComunidadBean data.
         onView(withId(R.id.reg_usercomu_portal_ed)).perform(typeText("port2"));
         onView(withId(R.id.reg_usercomu_escalera_ed)).perform(typeText("escale_b"));
         onView(withId(R.id.reg_usercomu_planta_ed)).perform(typeText("planta-N"));
@@ -80,8 +103,9 @@ public class RegComuAndUserComuAcTest {
         onView(withId(R.id.reg_usercomu_checbox_admin)).perform(scrollTo(), click());
         onView(withId(R.id.reg_usercomu_checbox_inq)).perform(scrollTo(), click());
 
+        // ComunidadBean data: we do not introduce the data in the screen.
         ComunidadBean comunidadBean = new ComunidadBean("ataxo", "24 de Otoño", "001", "bis",
-                new Municipio((short) 162,new Provincia((short) 10)));
+                new Municipio((short) 162, new Provincia((short) 10)));
 
         UsuarioComunidadBean usuarioComunidadBean =
                 makeUsuarioComunidadBeanFromView(usuarioComunidadRegView, comunidadBean, null);
@@ -101,29 +125,29 @@ public class RegComuAndUserComuAcTest {
         assertThat(usuarioComunidad.getPlanta(), is("planta-N"));
         assertThat(usuarioComunidad.getPuerta(), is("puerta5"));
         assertThat(usuarioComunidad.getRoles(), is("adm,pre,inq"));
-
     }
 
     @Test
-    public void testWrongUsuarioComunidad_1()
+    public void testRegisterComuAndUserComu_1() throws InterruptedException
     {
+        // NO data.
+
         onView(withId(R.id.reg_comu_usuariocomunidad_button)).perform(scrollTo(), click());
 
-        ViewInteraction toastViewInteraction = onView(withText(
-                containsString(resources.getText(R.string.error_validation_msg).toString())
-        ));
+        UsuarioTestUtils.checkToastInTest(R.string.error_validation_msg, activity,
+                R.string.tipo_via,
+                R.string.nombre_via,
+                R.string.municipio,
+                R.string.usercomu_role_rot);
 
-        toastViewInteraction.inRoot(withDecorView(not(activity.getWindow().getDecorView())))
-                .check(matches(isDisplayed()))
-                .check(matches(withText(containsString(resources.getText(R.string.tipo_via).toString()))))
-                .check(matches(withText(containsString(resources.getText(R.string.nombre_via).toString()))))
-                .check(matches(withText(containsString(resources.getText(R.string.municipio).toString()))))
-                .check(matches(withText(containsString(resources.getText(R.string.usercomu_role_rot).toString()))));
+        Thread.sleep(2000);
     }
 
     @Test
-    public void tesWrongUsuarioComunidad_2()
+    public void testRegisterComuAndUserComu_2()
     {
+        // Wrong data.
+
         onView(withId(R.id.reg_usercomu_checbox_pre)).perform(scrollTo(), click());
         onView(withId(R.id.reg_usercomu_checbox_admin)).perform(scrollTo(), click());
         onView(withId(R.id.reg_usercomu_checbox_inq)).perform(scrollTo(), click());
@@ -132,24 +156,19 @@ public class RegComuAndUserComuAcTest {
         onView(withId(R.id.reg_usercomu_escalera_ed)).perform(typeText("esca??_b"));
 
         onView(withId(R.id.reg_comu_usuariocomunidad_button)).perform(scrollTo(), click());
-
-        ViewInteraction toastViewInteraction = onView(withText(
-                containsString(resources.getText(R.string.error_validation_msg).toString())
-        ));
-
-        toastViewInteraction.inRoot(withDecorView(not(activity.getWindow().getDecorView())))
-                .check(matches(isDisplayed()))
-                .check(matches(withText(containsString(resources.getText(R.string.tipo_via).toString()))))
-                .check(matches(withText(containsString(resources.getText(R.string.reg_usercomu_escalera_hint).toString()))))
-                .check(matches(withText(containsString(resources.getText(R.string.nombre_via).toString()))))
-                .check(matches(withText(containsString(resources.getText(R.string.municipio).toString()))))
-                .check(matches(withText(containsString(resources.getText(R.string.usercomu_role_rot).toString()))));
+        checkToastInTest(R.string.error_validation_msg, activity,
+                R.string.tipo_via,
+                R.string.nombre_via,
+                R.string.municipio,
+                R.string.usercomu_role_rot,
+                R.string.reg_usercomu_escalera_hint);
     }
 
     @Test
-    public void testOkUsuarioComunidad()
+    public void testRegisterComuAndUserComu_3()
     {
 
+        onView(withId(R.id.tipo_via_spinner)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is("Callejon")))
                 .perform(click());
 
@@ -178,7 +197,6 @@ public class RegComuAndUserComuAcTest {
         onView(withId(R.id.reg_usercomu_checbox_inq)).perform(scrollTo(), click());
 
         onView(withId(R.id.reg_comu_usuariocomunidad_button)).perform(scrollTo(), click());
-
-        //TODO: assertions sobre la nueva actividad.
+        onView(withId(R.id.see_usercomu_by_user_ac_layout)).check(matches(isDisplayed()));
     }
 }

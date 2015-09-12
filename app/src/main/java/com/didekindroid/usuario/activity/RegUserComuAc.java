@@ -12,6 +12,7 @@ import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
+import com.google.common.base.Preconditions;
 
 import static com.didekindroid.uiutils.CommonPatterns.LINE_BREAK;
 import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
@@ -91,8 +92,11 @@ public class RegUserComuAc extends Activity {
         if (!usuarioComunidadBean.validate(getResources(), errorMsg)) {  // error validation.
             makeToast(this, errorMsg.toString());
         } else {
-            // Insert usuarioComunidad and go to ComusByUserListAc activity.
+            // Insert usuarioComunidad and go to SeeUserComuByComuAc activity.
             new UserComuRegister().execute(usuarioComunidadBean.getUsuarioComunidad());
+            Intent intent = new Intent(RegUserComuAc.this, SeeUserComuByComuAc.class);
+            intent.putExtra(COMUNIDAD_ID.extra, mComunidad.getC_Id());
+            startActivity(intent);
         }
     }
 
@@ -159,13 +163,11 @@ public class RegUserComuAc extends Activity {
     private class UserComuRegister extends AsyncTask<UsuarioComunidad, Void, Integer> {
 
         private final String TAG = UserComuRegister.class.getCanonicalName();
-        private long idComunidad;
 
         @Override
         protected Integer doInBackground(UsuarioComunidad... usuarioComunidad)
         {
             Log.d(TAG, "doInBackground()");
-            idComunidad = usuarioComunidad[0].getComunidad().getC_Id();
             return ServOne.regUserComu(usuarioComunidad[0]);
         }
 
@@ -173,13 +175,7 @@ public class RegUserComuAc extends Activity {
         protected void onPostExecute(Integer rowInserted)
         {
             Log.d(TAG, "onPostExecute()");
-            if (rowInserted != 1) {
-                Log.e(TAG, getResources().getString(R.string.error_action_in_DB));
-            } else {
-                Intent intent = new Intent(RegUserComuAc.this, SeeUserComuByComuAc.class);
-                intent.putExtra(COMUNIDAD_ID.extra, idComunidad);
-                startActivity(intent);
-            }
+            checkState(rowInserted == 1);
         }
     }
 }

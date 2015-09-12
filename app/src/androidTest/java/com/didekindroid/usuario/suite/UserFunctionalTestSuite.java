@@ -10,8 +10,13 @@ import org.junit.runners.Suite;
  * Time: 09:49
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ComuSearchAcTest.class, ComuSearchAcTest_intent.class, ComuSearchResultsAcTest.class,
-        RegUserComuAcTest.class, RegUserComuAcTest_intent.class, RegComuAndUserAndUserComuAcTest.class,
+@Suite.SuiteClasses({ComuSearchAcTest.class,
+        ComuSearchAcTest_intent.class,
+        ComuSearchResultsAcTest.class,
+        RegUserComuAcTest.class,
+        RegUserComuAcTest_intent.class,
+        RegComuAndUserComuAcTest.class,
+        RegComuAndUserAndUserComuAcTest.class,
         SeeUserComuByComuAcTest.class})
 public class UserFunctionalTestSuite {
 }
