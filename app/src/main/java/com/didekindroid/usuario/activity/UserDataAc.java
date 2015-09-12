@@ -24,7 +24,7 @@ public class UserDataAc extends Activity {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate()");
         new UserDataGetter().execute();
-        setContentView(R.layout.reg_usuario);
+        setContentView(R.layout.user_data_ac);
     }
 
 
@@ -62,7 +62,7 @@ public class UserDataAc extends Activity {
         @Override
         protected Usuario doInBackground(Void... aVoid)
         {
-            Log.d(TAG, "RegComuAndUserComuHttp.doInBackground()");
+            Log.d(TAG, "UserDataGetter.doInBackground()");
 
             Usuario usuarioBack = ServOne.getUserData();
             return usuarioBack;
@@ -71,7 +71,7 @@ public class UserDataAc extends Activity {
         @Override
         protected void onPostExecute(Usuario usuario)
         {
-            Log.d(TAG, "RegComuAndUserComuHttp.onPostExecute()");
+            Log.d(TAG, "UserDataGetter.onPostExecute()");
             //TODO: pinto los datos del usuario.
         }
     }

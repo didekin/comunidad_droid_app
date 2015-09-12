@@ -5,7 +5,7 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import com.didekin.security.OauthToken;
 import com.didekin.security.OauthToken.AccessToken;
-import com.didekindroid.usuario.UsuarioTestUtils;
+import com.didekindroid.usuario.activity.utils.UsuarioTestUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

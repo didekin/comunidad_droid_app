@@ -65,7 +65,7 @@
             android:textSize="@dimen/text_hint_size"
             android:imeOptions="actionNext"
             android:maxEms="30"
-            android:hint="@string/usuario_nombre_hint"
+            android:hint="@string/usuario_alias_hint"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:layout_alignParentLeft="true"

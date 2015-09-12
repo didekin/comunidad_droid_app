@@ -51,7 +51,7 @@ public class ComuSearchAc extends Activity {
         Log.d(TAG, "In onCreate()");
 
         // To initilize the token cache. This is the launch activity.
-        new CheckerTokenInCache().execute(); // TODO: hay que moverlo al sign-up.
+        new CheckerTokenInCache().execute();
 
         mMainView = getLayoutInflater().inflate(R.layout.comu_search_ac, null);
         setContentView(mMainView);

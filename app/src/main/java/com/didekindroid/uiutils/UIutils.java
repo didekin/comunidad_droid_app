@@ -44,7 +44,6 @@ public final class UIutils {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putBoolean(SharedPreferencesKeys.IS_USER_REG.toString(), isRegisteredUser);
         editor.apply();
-
     }
 
     public static boolean isRegisteredUser(Activity activity)

@@ -71,7 +71,7 @@
     <string name="usuario_password_hint">contraseña (letras,números,_)</string>
     <string name="usuario_password_confirm_hint">verificación de la contraseña</string>
     <string name="alias">Alias</string>
-    <string name="usuario_nombre_hint">nombre o alias (max. 30 caracteres: letras,números,_)</string>
+    <string name="usuario_alias_hint">nombre o alias (max. 30 caracteres: letras,números,_)</string>
     <string name="usuario_phone_number_hint">número de este teléfono</string>
     <string name="telefono_numero">Teléfono</string>
     <string name="telefono_aclaracion">Número de teléfono con prefijo internacional:</string>

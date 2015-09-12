@@ -10,8 +10,8 @@ import static android.support.test.espresso.assertion.ViewAssertions.doesNotExis
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.*;
 import static com.didekindroid.uiutils.ViewsIDs.SEE_COMU_AND_USER_COMU_BY_USER;
-import static com.didekindroid.usuario.UsuarioTestUtils.checkNoToastInTest;
-import static com.didekindroid.usuario.UsuarioTestUtils.checkToastInTest;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.checkNoToastInTest;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.checkToastInTest;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -130,7 +130,7 @@ public enum UserMenuTestUtils {
             onView(withText(R.string.user_data_ac_mn)).check(matches(isDisplayed())).perform(click());
 
             // Show the data in modifiable state.
-            onView(withId(R.id.reg_usuario_layout)).check(matches(isDisplayed()));
+            onView(withId(R.id.user_data_ac_layout)).check(matches(isDisplayed()));
         }
     },
 

@@ -21,7 +21,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRESIDENTE;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PROPIETARIO;
-import static com.didekindroid.usuario.UsuarioTestUtils.*;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.*;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.*;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
@@ -47,8 +47,6 @@ public class RegUserComuAcTest {
     @Before
     public void setUp() throws Exception
     {
-        // User and comunidad are already registered.
-        // Comunidad was registered by user1.
         signUpAndUpdateTk(COMU_REAL_JUAN);
         List<Comunidad> comunidadesUserOne = ServOne.getComunidadesByUser();
         comunidad = comunidadesUserOne.get(0);
@@ -56,7 +54,7 @@ public class RegUserComuAcTest {
         // We use that comunidad as the one to associate to the present user.
         intent = new Intent();
         intent.putExtra(COMUNIDAD_LIST_OBJECT.extra, comunidad);
-        // Segundo usuarioComunidad, con user2 y comunidad2.
+        // Segundo usuarioComunidad.
         signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
     }
 

@@ -8,7 +8,7 @@ import android.support.test.espresso.action.ViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import com.didekindroid.R;
-import com.didekindroid.usuario.CleanEnum;
+import com.didekindroid.usuario.activity.utils.CleanEnum;
 import com.didekindroid.usuario.dominio.DomainDataUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -24,7 +24,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
-import static com.didekindroid.usuario.UsuarioTestUtils.*;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.*;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeComunidadBeanFromView;
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.*;
 import static com.didekindroid.usuario.security.TokenHandler.TKhandler;
@@ -179,13 +179,13 @@ public class ComuSearchAcTest {
     @Test
     public void testGetDatosUsuarioWithToken() throws InterruptedException
     {
+        whatClean = CleanEnum.CLEAN_JUAN;
+
         //With token.
         signUpAndUpdateTk(DomainDataUtils.COMU_REAL_JUAN);
         activity = mActivityRule.launchActivity(new Intent());
         assertThat(isRegisteredUser(activity), is(true));
         USER_DATA_AC.checkMenuItem_WTk(activity);
-
-        whatClean = CleanEnum.CLEAN_JUAN;
     }
 
     @Test
@@ -200,23 +200,23 @@ public class ComuSearchAcTest {
     @Test
     public void testMenuNuevaComunidad_withToken() throws InterruptedException
     {
+        whatClean = CleanEnum.CLEAN_JUAN;
+
         signUpAndUpdateTk(DomainDataUtils.COMU_REAL_JUAN);
         activity = mActivityRule.launchActivity(new Intent());
         assertThat(isRegisteredUser(activity), is(true));
         REG_COMU_USER_USERCOMU_AC.checkMenuItem_WTk(activity);
-
-        whatClean = CleanEnum.CLEAN_JUAN;
     }
 
     @Test
     public void testComunidadesByUsuario_withToken() throws InterruptedException
     {
+        whatClean = CleanEnum.CLEAN_JUAN;
+
         signUpAndUpdateTk(DomainDataUtils.COMU_REAL_JUAN);
         activity = mActivityRule.launchActivity(new Intent());
         assertThat(isRegisteredUser(activity), is(true));
         SEE_USERCOMU_BY_USER_AC.checkMenuItem_WTk(activity);
-
-        whatClean = CleanEnum.CLEAN_JUAN;
     }
 
     @Test

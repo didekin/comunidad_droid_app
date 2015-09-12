@@ -2,19 +2,17 @@ package com.didekindroid.usuario.webservices;
 
 import android.support.test.runner.AndroidJUnit4;
 import com.didekin.retrofitcl.Oauth2EndPoints.BodyText;
-import com.didekin.security.OauthToken;
 import com.didekin.security.OauthToken.AccessToken;
-import com.didekindroid.usuario.CleanEnum;
-import org.hamcrest.Matchers;
+import com.didekindroid.usuario.activity.utils.CleanEnum;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static com.didekin.security.OauthClient.CL_USER;
-import static com.didekindroid.usuario.CleanEnum.*;
-import static com.didekindroid.usuario.UsuarioTestUtils.cleanOptions;
-import static com.didekindroid.usuario.UsuarioTestUtils.signUpAndUpdateTk;
+import static com.didekindroid.usuario.activity.utils.CleanEnum.*;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.*;
 import static com.didekindroid.usuario.security.TokenHandler.TKhandler;
 import static com.didekindroid.usuario.webservices.Oauth2Service.Oauth2;

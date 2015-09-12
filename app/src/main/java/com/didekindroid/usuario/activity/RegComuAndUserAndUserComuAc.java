@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import com.didekin.security.OauthToken.AccessToken;
+import com.didekin.serviceone.domain.Comunidad;
 import com.didekin.serviceone.domain.Usuario;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
@@ -17,13 +18,21 @@ import com.didekindroid.uiutils.UIutils;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
+import com.didekindroid.usuario.security.TokenHandler;
 
 import static com.didekindroid.uiutils.UIutils.updateIsRegistered;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.*;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.USUARIO_COMUNIDAD_REG;
+import static com.didekindroid.usuario.security.TokenHandler.TKhandler;
 import static com.didekindroid.usuario.webservices.Oauth2Service.Oauth2;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 
+/**
+ * Preconditions:
+ * 1. The user is not registered.
+ * 2. The comunidad has not been registered either, by other users.
+ * 3. There is not extras in the activity intent.
+ */
 public class RegComuAndUserAndUserComuAc extends Activity {
 
     private static final String TAG = RegComuAndUserAndUserComuAc.class.getCanonicalName();
@@ -72,15 +81,10 @@ public class RegComuAndUserAndUserComuAc extends Activity {
 
         if (!usuarioComunidadBean.validate(getResources(), errorMsg)) {
             UIutils.makeToast(this, errorMsg.toString());
-
         } else if (!ConnectionUtils.isInternetConnected(this)) {
             UIutils.makeToast(this, R.string.no_internet_conn_toast);
         } else {
-
-
-            Intent intent = new Intent(this, UserDataAc.class);
-            intent.putExtra(USUARIO_COMUNIDAD_REG.toString(), usuarioComunidadBean.getUsuarioComunidad());
-            startActivity(intent);
+            new ComuAndUserComuAndUserRegister().execute(usuarioComunidadBean.getUsuarioComunidad());
         }
     }
 
@@ -95,17 +99,18 @@ public class RegComuAndUserAndUserComuAc extends Activity {
     //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
     //    ============================================================
 
-    private class RegComuAndUserComuAndUserHttp extends AsyncTask<UsuarioComunidad, Void, Void> {
+    private class ComuAndUserComuAndUserRegister extends AsyncTask<UsuarioComunidad, Void, Void> {
 
         @Override
         protected Void doInBackground(UsuarioComunidad... usuarioComunidad)
         {
-            Log.d(TAG, "RegComuAndUserComuAndUserHttp.doInBackground()");
+            Log.d(TAG, "ComuAndUserComuAndUserRegister.doInBackground()");
             Usuario newUser = usuarioComunidad[0].getUsuario();
-            Log.d(TAG, "RegComuAndUserComuAndUserHttp.doInBackground(): calling ServOne.regComuAndUserAndUserComu()");
+            Log.d(TAG, "ComuAndUserComuAndUserRegister.doInBackground(): calling ServOne.regComuAndUserAndUserComu()");
             ServOne.regComuAndUserAndUserComu(usuarioComunidad[0]);
-            Log.d(TAG, "RegComuAndUserComuAndUserHttp.doInBackground(): calling Oauth2.getPasswordUserToken()");
+            Log.d(TAG, "ComuAndUserComuAndUserRegister.doInBackground(): calling Oauth2.getPasswordUserToken()");
             AccessToken token = Oauth2.getPasswordUserToken(newUser.getUserName(), newUser.getPassword());
+            TKhandler.initKeyCacheAndBackupFile(token);
             return null;
         }
 
@@ -113,7 +118,7 @@ public class RegComuAndUserAndUserComuAc extends Activity {
         protected void onPostExecute(Void aVoid)
         {
             Log.d(TAG, "RegComuAndUserComuHttp.onPostExecute()");
-            Intent intent = new Intent(RegComuAndUserAndUserComuAc.this, UserDataAc.class);
+            Intent intent = new Intent(RegComuAndUserAndUserComuAc.this, SeeUserComuByUserAc.class);
             startActivity(intent);
             updateIsRegistered(true, RegComuAndUserAndUserComuAc.this);
         }

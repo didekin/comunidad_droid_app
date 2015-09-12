@@ -28,7 +28,7 @@ public final class DomainDataUtils {
 
     public static final Usuario USER_JUAN_with_TF = new Usuario.UsuarioBuilder()
             .userName("juan@juan.com")
-            .alias("juan")
+            .alias("alias_juan")
             .password("pswd01")
             .prefixTf((short) 34)
             .numeroTf(600121233)
@@ -148,9 +148,3 @@ public final class DomainDataUtils {
         return userComuList;
     }
 }
-/*private final long uId;
-    private final String userName;  //email of the user.
-    private final String alias;
-    private final String password;
-    private final short prefixTf;
-    private final int numeroTf;*/

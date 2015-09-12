@@ -1,4 +1,4 @@
-package com.didekindroid.usuario;
+package com.didekindroid.usuario.activity.utils;
 
 import android.app.Activity;
 import android.content.res.Resources;
@@ -9,9 +9,7 @@ import com.didekin.serviceone.domain.Usuario;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.DidekindroidApp;
 import com.didekindroid.R;
-import com.didekindroid.usuario.activity.utils.RolCheckBox;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static android.support.test.espresso.Espresso.onData;
@@ -122,17 +120,17 @@ public final class UsuarioTestUtils {
 
 //    ================== CLEANING ===================
 
-    public static void checkToastInTest(int resourceStringId, Activity activity, int... fieldsErrors)
+    public static void checkToastInTest(int resourceMsgRotuloErrorId, Activity activity, int... resourceFieldsErrorId)
     {
         Resources resources = DidekindroidApp.getContext().getResources();
 
         ViewInteraction toast = onView(
-                withText(containsString(resources.getText(resourceStringId).toString())))
+                withText(containsString(resources.getText(resourceMsgRotuloErrorId).toString())))
                 .inRoot(withDecorView(not(activity.getWindow().getDecorView())))
                 .check(matches(isDisplayed()));
 
-        if (fieldsErrors != null) {
-            for (int field : fieldsErrors) {
+        if (resourceFieldsErrorId != null) {
+            for (int field : resourceFieldsErrorId) {
                 toast.check(matches(withText(containsString(resources.getText(field).toString()))));
             }
         }
@@ -192,6 +190,9 @@ public final class UsuarioTestUtils {
                 break;
             case CLEAN_PEPE:
                 cleanOneUser(USER_PEPE);
+                break;
+            case CLEAN_JUAN_with_TF:
+                cleanOneUser(USER_JUAN_with_TF);
                 break;
             case CLEAN_JUAN_AND_PEPE:
                 cleanTwoUsers(USER_JUAN, USER_PEPE);

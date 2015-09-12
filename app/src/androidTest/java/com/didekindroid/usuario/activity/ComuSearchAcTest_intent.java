@@ -17,8 +17,8 @@ import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExt
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.*;
 import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
-import static com.didekindroid.usuario.UsuarioTestUtils.cleanWithTkhandler;
-import static com.didekindroid.usuario.UsuarioTestUtils.typeComunidadData;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanWithTkhandler;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.typeComunidadData;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_SEARCH;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;

@@ -1,4 +1,4 @@
-package com.didekindroid.usuario;
+package com.didekindroid.usuario.activity.utils;
 
 /**
  * User: pedro@didekin
@@ -12,5 +12,6 @@ public enum CleanEnum {
     CLEAN_JUAN_AND_PEPE,
     CLEAN_TK_HANDLER,
     CLEAN_NOTHING,
+    CLEAN_JUAN_with_TF,
     ;
 }
