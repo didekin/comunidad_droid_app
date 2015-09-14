@@ -8,11 +8,11 @@ import com.didekin.security.OauthToken.AccessToken;
  * Date: 07/09/15
  * Time: 11:05
  */
+
+/**
+ * Convenience methods for those in Oath2EndPoints.
+ */
 public interface Oauth2ServiceIf {
-
-    BodyText getHello();
-
-    BodyText getHelloUserRead(String accessToken);
 
     AccessToken getPasswordUserToken(String userName, String password);
 

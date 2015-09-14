@@ -15,6 +15,7 @@ import org.junit.runners.Suite;
         ComuSearchResultsAcTest.class,
         RegUserComuAcTest.class,
         RegUserComuAcTest_intent.class,
+        RegUserAndUserComuAcTest_intent.class, // In progress.
         RegComuAndUserComuAcTest.class,
         RegComuAndUserAndUserComuAcTest.class,
         SeeUserComuByComuAcTest.class})

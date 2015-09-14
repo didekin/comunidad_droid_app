@@ -37,15 +37,18 @@ public interface ServiceOneEndPoints {
     @GET(USERCOMUS_BY_USER)
     List<UsuarioComunidad> getUserComusByUser(@Header("Authorization") String accessToken);
 
-    @POST(REG_USERCOMU)
-    int regUserComu(@Header("Authorization") String accessToken, @Body UsuarioComunidad usuarioComunidad);
-
     @POST(REG_COMU_AND_USER_AND_USERCOMU)
     boolean regComuAndUserAndUserComu(@Body UsuarioComunidad usuarioCom);
 
     @POST(REG_COMU_USERCOMU)
     boolean regComuAndUserComu(@Header("Authorization") String accessToken,
                                @Body UsuarioComunidad usuarioCom);
+
+    @POST(REG_USER_USERCOMU)
+    boolean regUserAndUserComu(@Body UsuarioComunidad userCom);
+
+    @POST(REG_USERCOMU)
+    int regUserComu(@Header("Authorization") String accessToken, @Body UsuarioComunidad usuarioComunidad);
 
     @POST(COMUNIDAD_SEARCH)
     List<Comunidad> searchComunidades(@Body Comunidad comunidad);

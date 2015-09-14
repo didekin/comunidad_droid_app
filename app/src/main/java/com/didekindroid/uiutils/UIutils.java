@@ -57,8 +57,9 @@ public final class UIutils {
 //  ..............  INNER CLASSES ............
 
     private enum SharedPreferencesFiles {
-        USER_PREF,;
 
+        USER_PREF,
+        ;
 
         @Override
         public String toString()

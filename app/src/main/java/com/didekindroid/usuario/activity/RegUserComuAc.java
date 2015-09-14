@@ -10,9 +10,10 @@ import android.widget.Button;
 import com.didekin.serviceone.domain.Comunidad;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
+import com.didekindroid.ioutils.ConnectionUtils;
+import com.didekindroid.uiutils.UIutils;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
-import com.google.common.base.Preconditions;
 
 import static com.didekindroid.uiutils.CommonPatterns.LINE_BREAK;
 import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
@@ -91,6 +92,8 @@ public class RegUserComuAc extends Activity {
 
         if (!usuarioComunidadBean.validate(getResources(), errorMsg)) {  // error validation.
             makeToast(this, errorMsg.toString());
+        } else if (!ConnectionUtils.isInternetConnected(this)) {
+            UIutils.makeToast(this, R.string.no_internet_conn_toast);
         } else {
             // Insert usuarioComunidad and go to SeeUserComuByComuAc activity.
             new UserComuRegister().execute(usuarioComunidadBean.getUsuarioComunidad());

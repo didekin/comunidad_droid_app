@@ -5,8 +5,8 @@ import com.didekin.retrofitcl.ServiceOneEndPoints;
 import com.didekin.serviceone.domain.Comunidad;
 import com.didekin.serviceone.domain.Usuario;
 import com.didekin.serviceone.domain.UsuarioComunidad;
-import com.didekindroid.DidekindroidApp;
 import retrofit.client.Response;
+import retrofit.http.Body;
 
 import java.util.List;
 
@@ -59,12 +59,6 @@ public enum ServiceOne implements ServiceOneEndPoints, ServiceOneIf {
         }
 
         @Override
-        public int regUserComu(String accessToken, UsuarioComunidad usuarioComunidad)
-        {
-            return ServOne.endPoint.regUserComu(accessToken, usuarioComunidad);
-        }
-
-        @Override
         public boolean regComuAndUserAndUserComu(UsuarioComunidad usuarioCom)
         {
             Log.d(TAG, ("signUp()"));
@@ -75,6 +69,19 @@ public enum ServiceOne implements ServiceOneEndPoints, ServiceOneIf {
         public boolean regComuAndUserComu(String accessToken, UsuarioComunidad usuarioCom)
         {
             return ServOne.endPoint.regComuAndUserComu(accessToken, usuarioCom);
+        }
+
+        @Override
+        public boolean regUserAndUserComu(UsuarioComunidad userCom)
+        {
+            Log.d(TAG,"regUserAndUserComu()");
+            return ServOne.endPoint.regUserAndUserComu(userCom);
+        }
+
+        @Override
+        public int regUserComu(String accessToken, UsuarioComunidad usuarioComunidad)
+        {
+            return ServOne.endPoint.regUserComu(accessToken, usuarioComunidad);
         }
 
         /**

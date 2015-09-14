@@ -50,7 +50,7 @@ public class UserAndComuFiller {
             , ComunidadBean comunidadBean, UsuarioBean usuarioBean)
     {
 
-        View usuarioRegView = usuarioComunidadRegView.findViewById(R.id.reg_usuario_include);
+        View usuarioRegView = usuarioComunidadRegView.findViewById(R.id.reg_user_frg);
 
         UsuarioComunidadBean usuarioComunidadBean = new UsuarioComunidadBean(
                 comunidadBean,

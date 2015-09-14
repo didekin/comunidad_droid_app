@@ -28,9 +28,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.*;
-import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOneUser;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
-import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanTwoUsers;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.*;
 import static com.didekindroid.usuario.security.TokenHandler.TKhandler;
 import static org.hamcrest.CoreMatchers.instanceOf;
@@ -69,7 +67,7 @@ public class RegComuAndUserAndUserComuAcTest {
         mRegComuFrg = (RegComuFr) mActivity.getFragmentManager().findFragmentById(R.id.reg_comunidad_frg);
         mRegUserComuFrg = (RegUserComuFr) mActivity.getFragmentManager().findFragmentById(R.id
                 .reg_usuariocomunidad_frg);
-        mRegUserFr = (RegUserFr) mActivity.getFragmentManager().findFragmentById(R.id.reg_usuario_frg);
+        mRegUserFr = (RegUserFr) mActivity.getFragmentManager().findFragmentById(R.id.reg_user_frg);
     }
 
     @After
@@ -92,7 +90,7 @@ public class RegComuAndUserAndUserComuAcTest {
         onView(withId(R.id.reg_comu_usuario_usuariocomu_layout)).check(matches(isDisplayed()));
         onView(withId(R.id.reg_comunidad_frg)).check(matches(isDisplayed()));
         onView(withId(R.id.reg_usuariocomunidad_frg)).check(matches(isDisplayed()));
-        onView(withId(R.id.reg_usuario_frg)).perform(scrollTo()).check(matches(isDisplayed()));
+        onView(withId(R.id.reg_user_frg)).perform(scrollTo()).check(matches(isDisplayed()));
     }
 
     @Test
@@ -106,7 +104,7 @@ public class RegComuAndUserAndUserComuAcTest {
         onView(withId(R.id.reg_usuario_phone_prefix_ediT)).perform(scrollTo(), typeText("001"));
         onView(withId(R.id.reg_usuario_phone_editT)).perform(scrollTo(), typeText("123456789"), closeSoftKeyboard());
 
-        View usuarioRegView = mActivity.findViewById(R.id.reg_usuario_frg);
+        View usuarioRegView = mActivity.findViewById(R.id.reg_user_frg);
 
         // Test assertions about UsuarioBean.
         UsuarioBean usuarioBean = makeUsuarioBeanFromView(usuarioRegView);

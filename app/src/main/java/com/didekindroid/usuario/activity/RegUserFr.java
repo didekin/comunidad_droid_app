@@ -39,7 +39,7 @@ public class RegUserFr extends Fragment {
                              Bundle savedInstanceState)
     {
         Log.d(TAG, "onCreateView()");
-        mRegUsuarioFrView = inflater.inflate(R.layout.reg_usuario, container, false);
+        mRegUsuarioFrView = inflater.inflate(R.layout.reg_user_fr, container, false);
         return mRegUsuarioFrView;
     }
 

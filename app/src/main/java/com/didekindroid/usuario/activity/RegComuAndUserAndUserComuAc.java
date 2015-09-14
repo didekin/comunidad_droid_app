@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import com.didekin.security.OauthToken.AccessToken;
-import com.didekin.serviceone.domain.Comunidad;
 import com.didekin.serviceone.domain.Usuario;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
@@ -18,11 +17,9 @@ import com.didekindroid.uiutils.UIutils;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
-import com.didekindroid.usuario.security.TokenHandler;
 
 import static com.didekindroid.uiutils.UIutils.updateIsRegistered;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.*;
-import static com.didekindroid.usuario.activity.utils.UserIntentExtras.USUARIO_COMUNIDAD_REG;
 import static com.didekindroid.usuario.security.TokenHandler.TKhandler;
 import static com.didekindroid.usuario.webservices.Oauth2Service.Oauth2;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
@@ -52,7 +49,7 @@ public class RegComuAndUserAndUserComuAc extends Activity {
         mRegComuFrg = (RegComuFr) getFragmentManager().findFragmentById(R.id.reg_comunidad_frg);
         mRegUserComuFrg = (RegUserComuFr) getFragmentManager().findFragmentById(R.id
                 .reg_usuariocomunidad_frg);
-        mRegUserFr = (RegUserFr) getFragmentManager().findFragmentById(R.id.reg_usuario_frg);
+        mRegUserFr = (RegUserFr) getFragmentManager().findFragmentById(R.id.reg_user_frg);
         mRegistroButton = (Button) findViewById(R.id.reg_com_usuario_usuariocomu_button);
 
         mRegistroButton.setOnClickListener(new View.OnClickListener() {

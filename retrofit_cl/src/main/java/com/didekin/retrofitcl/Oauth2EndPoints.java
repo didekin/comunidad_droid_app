@@ -11,7 +11,7 @@ import static com.didekin.security.SecurityConstant.*;
  * Date: 04/09/15
  * Time: 13:40
  */
-public interface Oauth2EndPoints {
+public interface Oauth2EndPoints{
 
     @FormUrlEncoded
     @POST(TOKEN_PATH)
