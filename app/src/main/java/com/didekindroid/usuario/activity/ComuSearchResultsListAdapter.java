@@ -54,18 +54,12 @@ public class ComuSearchResultsListAdapter extends ArrayAdapter<Comunidad> {
         private static final String TAG = ComuViewHolder.class.getCanonicalName();
 
         TextView mNombreComunidadView;
-        /*TextView mNombreViaView;
-        TextView mNumeroEnViaView;
-        TextView mTipoViaView;*/
         TextView mMunicipioView;
         TextView mProvinciaView;
 
         public ComuViewHolder(View convertView)
         {
             mNombreComunidadView = (TextView) convertView.findViewById(R.id.nombreComunidad_view);
-            /*mTipoViaView = (TextView) convertView.findViewById(R.id.tipoVia_view);
-            mNombreViaView = (TextView) convertView.findViewById(R.id.nombreVia_view);
-            mNumeroEnViaView = (TextView) convertView.findViewById(R.id.numeroEnVia_view);*/
             mMunicipioView = (TextView) convertView.findViewById(R.id.municipio_view);
             mProvinciaView = (TextView) convertView.findViewById(R.id.provincia_view);
         }
@@ -75,10 +69,6 @@ public class ComuSearchResultsListAdapter extends ArrayAdapter<Comunidad> {
             Log.d(TAG, "initializeTextInViews()");
 
             mNombreComunidadView.setText(comunidad.getNombreComunidad());
-            /*mTipoViaView.setText(comunidad.getTipoVia());
-            mNombreViaView.setText(comunidad.getNombreVia());
-            mNumeroEnViaView
-                    .setText(String.valueOf(comunidad.getNumero()) + " " + comunidad.getSufijoNumero());*/
             mMunicipioView.setText(comunidad.getMunicipio().getNombre());
             mProvinciaView.setText(comunidad.getMunicipio().getProvincia().getNombre());
         }

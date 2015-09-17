@@ -18,17 +18,18 @@ import java.util.List;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.*;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
 import static com.didekindroid.uiutils.ViewsIDs.SEE_USERCOMU_BY_COMU;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_JUAN_AND_PEPE;
+import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_ID;
+import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.*;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAndUpdateTk;
-import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_ID;
-import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.COMU_SEARCH_AC;
-import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.SEE_USERCOMU_BY_USER_AC;
-import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.USER_DATA_AC;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_PLAZUELA5_JUAN;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_JUAN;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 import static com.google.android.apps.common.testing.ui.espresso.sample.LongListMatchers.withAdaptedData;
 import static org.hamcrest.Matchers.*;
@@ -56,7 +57,7 @@ public class SeeUserComuByComuAcTest {
     {
         // User is registered, with a comunidad in the intent.
         signUpAndUpdateTk(DomainDataUtils.COMU_TRAV_PLAZUELA_PEPE);
-        // We insert a secondo user with the same comunidad.
+        // We insert a second user with the same comunidad.
         signUpAndUpdateTk(DomainDataUtils.COMU_PLAZUELA5_JUAN);
 
         // We get the id of the comunidad we will put in the intent.
@@ -75,7 +76,7 @@ public class SeeUserComuByComuAcTest {
     {
         assertThat(mActivity, notNullValue());
         assertThat(isRegisteredUser(mActivity), is(true));
-        assertThat(mActivity.getIntent().getLongExtra(COMUNIDAD_ID.extra,0L),is(comunidadId));
+        assertThat(mActivity.getIntent().getLongExtra(COMUNIDAD_ID.extra, 0L), is(comunidadId));
         assertThat(mFragment, notNullValue());
 
         onView(withId(R.id.see_usercomu_by_comu_ac_frg_container)).check(matches(isDisplayed()));
@@ -101,12 +102,17 @@ public class SeeUserComuByComuAcTest {
         onView(withId(SEE_USERCOMU_BY_COMU.idView)).check(matches(
                 withAdaptedData(Matchers.<Object>equalTo(COMU_PLAZUELA5_JUAN))));
 
-        onView(withId(R.id.usercomu_item_nombreComunidad_txt))
+        // Header.
+        onView(withId(R.id.usercomu_list_header_nombrecomu_txt))
                 .check(matches(withText(containsString(COMU_PLAZUELA5_JUAN.getComunidad().getNombreComunidad()))));
+
         onData(allOf(
                 is(instanceOf(UsuarioComunidad.class)),
                 hasProperty("comunidad", is(COMU_PLAZUELA5_JUAN.getComunidad()))))
                 .check(matches(isDisplayed()));
+        onData(allOf(
+                is(instanceOf(UsuarioComunidad.class)),
+                hasProperty("usuario", is(USER_JUAN)))).check(matches(isDisplayed()));
     }
 
     @Test

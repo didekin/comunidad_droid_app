@@ -4,11 +4,16 @@ import android.app.ListFragment;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.VisibleForTesting;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+import android.widget.TextView;
+import com.didekin.serviceone.domain.Comunidad;
 import com.didekin.serviceone.domain.UsuarioComunidad;
+import com.didekindroid.R;
 import com.didekindroid.usuario.activity.utils.UserIntentExtras;
 
 import java.util.List;
@@ -26,8 +31,13 @@ public class SeeUserComuByComuFr extends ListFragment {
 
     private static final String TAG = SeeUserComuByComuFr.class.getCanonicalName();
 
+    @VisibleForTesting
+    public static final String HEADER = "HEADER";
+
     SeeUserComuByComuAc mActivity;
     SeeUserComutByComuListAdapter mAdapter;
+    ListView fragmentListView;
+    TextView nombreComuView;
 
     public SeeUserComuByComuFr()
     {
@@ -38,7 +48,6 @@ public class SeeUserComuByComuFr extends ListFragment {
     {
         Log.d(TAG, "onAttach()");
         super.onAttach(context);
-
     }
 
     @Override
@@ -46,11 +55,11 @@ public class SeeUserComuByComuFr extends ListFragment {
     {
         Log.d(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
-        mActivity = (SeeUserComuByComuAc) getActivity();
-        mAdapter = new SeeUserComutByComuListAdapter(mActivity);
 
+        mActivity = (SeeUserComuByComuAc) getActivity();
         // Preconditions: an existing comunidad passed as intent. The comunidad has necessarily users already signed-up.
         long comunidadId = mActivity.getIntent().getExtras().getLong(UserIntentExtras.COMUNIDAD_ID.extra);
+        // Loading the data...
         new UserComuByComuLoader().execute(comunidadId);
     }
 
@@ -73,7 +82,16 @@ public class SeeUserComuByComuFr extends ListFragment {
     {
         Log.d(TAG, "onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
-        getListView().setId(SEE_USERCOMU_BY_COMU.idView);
+
+        fragmentListView = getListView();
+        fragmentListView.setId(SEE_USERCOMU_BY_COMU.idView);
+
+        // Header.
+        View headerView = getActivity().getLayoutInflater()
+                .inflate(R.layout.usercomu_list_header_view, fragmentListView, false);
+        nombreComuView = (TextView) headerView.findViewById(R.id.usercomu_list_header_nombrecomu_txt);
+        // Adapter.
+        mAdapter = new SeeUserComutByComuListAdapter(mActivity);
         setListAdapter(mAdapter);
     }
 
@@ -132,7 +150,6 @@ public class SeeUserComuByComuFr extends ListFragment {
         super.onDetach();
     }
 
-
     //    ============================================================
     //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
     //    ============================================================
@@ -152,7 +169,11 @@ public class SeeUserComuByComuFr extends ListFragment {
         protected void onPostExecute(List<UsuarioComunidad> userComuList)
         {
             Log.d(TAG, "onPostExecute(); userComuList size = " + userComuList.size());
+
             mAdapter.addAll(userComuList);
+            Comunidad comunidad = userComuList.get(0).getComunidad();
+            fragmentListView.addHeaderView(nombreComuView);
+            nombreComuView.setText(comunidad.getNombreComunidad());
         }
     }
 }

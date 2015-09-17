@@ -56,7 +56,8 @@ public class SeeUserComutByComuListAdapter extends ArrayAdapter<UsuarioComunidad
 
         static final String TAG = UserComuVwHolder.class.getCanonicalName();
 
-        final TextView mNombreComunidad;
+        final TextView mUserName;
+        final TextView mUserAlias;
         final TextView mPortalRotView;
         final TextView mPortalView;
         final TextView mEscaleraRotView;
@@ -72,7 +73,8 @@ public class SeeUserComutByComuListAdapter extends ArrayAdapter<UsuarioComunidad
 
         public UserComuVwHolder(View convertView, Resources resources)
         {
-            mNombreComunidad = (TextView) convertView.findViewById(R.id.usercomu_item_nombreComunidad_txt);
+            mUserName = (TextView) convertView.findViewById(R.id.usercomu_item_username_txt);
+            mUserAlias = (TextView) convertView.findViewById(R.id.usercomu_item_alias_txt);
             mPortalRotView = (TextView) convertView.findViewById(R.id.usercomu_item_portal_rot);
             mPortalView = (TextView) convertView.findViewById(R.id.usercomu_item_portal_txt);
             mEscaleraRotView = (TextView) convertView.findViewById(R.id.usercomu_item_escalera_rot);
@@ -90,9 +92,10 @@ public class SeeUserComutByComuListAdapter extends ArrayAdapter<UsuarioComunidad
 
         void initializeTextInViews(UsuarioComunidad userComu)
         {
-            Log.d(TAG,"initializeTextInViews()");
+            Log.d(TAG, "initializeTextInViews()");
 
-            mNombreComunidad.setText(userComu.getComunidad().getNombreComunidad());
+            mUserName.setText(userComu.getUsuario().getUserName());
+            mUserAlias.setText(userComu.getUsuario().getAlias());
 
             if (userComu.getPortal() != null && !userComu.getPortal().isEmpty()) {
 //                mPortalRotView.setVisibility(View.VISIBLE);

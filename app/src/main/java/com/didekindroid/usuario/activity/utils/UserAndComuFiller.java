@@ -19,13 +19,13 @@ public class UserAndComuFiller {
     public static UsuarioBean makeUsuarioBeanFromView(View usuarioRegView)
     {
         UsuarioBean usuarioBean = new UsuarioBean(
-                ((TextView) usuarioRegView.findViewById(R.id.reg_usuario_email_editT)).getText()
+                ((EditText) usuarioRegView.findViewById(R.id.reg_usuario_email_editT)).getText()
                         .toString(),
-                ((TextView) usuarioRegView.findViewById(R.id.reg_usuario_alias_ediT)).getText()
+                ((EditText) usuarioRegView.findViewById(R.id.reg_usuario_alias_ediT)).getText()
                         .toString(),
-                ((TextView) usuarioRegView.findViewById(R.id.reg_usuario_password_ediT)).getText()
+                ((EditText) usuarioRegView.findViewById(R.id.reg_usuario_password_ediT)).getText()
                         .toString(),
-                ((TextView) usuarioRegView.findViewById(R.id.reg_usuario_password_confirm_ediT)).getText()
+                ((EditText) usuarioRegView.findViewById(R.id.reg_usuario_password_confirm_ediT)).getText()
                         .toString()
         );
 
