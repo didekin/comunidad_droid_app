@@ -5,6 +5,7 @@ import android.util.Log;
 import com.didekin.retrofitcl.Oauth2EndPoints;
 import com.didekin.security.OauthClient;
 import com.didekin.security.OauthToken.AccessToken;
+import retrofit.client.Response;
 
 import static com.didekin.retrofitcl.RetrofitRestBuilder.BUILDER;
 import static com.didekin.security.OauthClient.CL_USER;
@@ -45,6 +46,12 @@ public enum Oauth2Service implements Oauth2EndPoints, Oauth2ServiceIf {
         {
             Log.d(TAG, "getHelloUserRead()");
             return Oauth2.endPoint.getHelloUserRead(accessToken);
+        }
+
+        @Override
+        public Response getNotFoundMsg()
+        {
+            return Oauth2.endPoint.getNotFoundMsg();
         }
     },;
 

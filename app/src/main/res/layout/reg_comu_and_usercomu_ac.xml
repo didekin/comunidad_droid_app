@@ -22,7 +22,7 @@
                 tools:layout="@layout/reg_comu"/>
 
         <fragment
-                android:id="@+id/reg_usuariocomunidad_frg"
+                android:id="@+id/reg_usercomu_frg"
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
                 android:layout_alignParentLeft="true"
@@ -37,7 +37,7 @@
                 android:textStyle="bold"
                 android:textSize="@dimen/text_decription_widget"
                 android:text="@string/reg_usercomu_ac_button_rot"
-                android:layout_below="@id/reg_usuariocomunidad_frg"
+                android:layout_below="@id/reg_usercomu_frg"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/activity_vertical_double_margin"
                 android:layout_alignParentLeft="true"

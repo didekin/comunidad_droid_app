@@ -79,11 +79,11 @@ public class RegUserComuAcTest_intent {
         assertThat(comunidad2, is(COMU_TRAV_PLAZUELA_PEPE.getComunidad()));
 
         assertThat(activity, notNullValue());
-        assertThat(activity.getFragmentManager().findFragmentById(R.id.reg_usercomu_fr), notNullValue());
+        assertThat(activity.getFragmentManager().findFragmentById(R.id.reg_usercomu_frg), notNullValue());
         assertThat(((Comunidad) intent.getSerializableExtra(COMUNIDAD_LIST_OBJECT.extra)).getC_Id(), is(comunidad
                 .getC_Id()));
         onView(withId(R.id.reg_usercomu_ac_layout)).check(matches(isDisplayed()));
-        onView(withId(R.id.reg_usercomu_fr)).check(matches(isDisplayed()));
+        onView(withId(R.id.reg_usercomu_frg)).check(matches(isDisplayed()));
     }
 
     @Test

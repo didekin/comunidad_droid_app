@@ -28,6 +28,8 @@ public interface ServiceOneIf {
 
     Usuario getUserData();
 
+    int modifyUser(Usuario usuario);
+
     boolean regComuAndUserComu(UsuarioComunidad usuarioComunidad);
 
     boolean regUserAndUserComu(UsuarioComunidad userCom);

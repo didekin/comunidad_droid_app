@@ -7,9 +7,9 @@ import com.didekindroid.R;
 import com.didekindroid.usuario.activity.utils.RolCheckBox;
 import com.google.common.primitives.Booleans;
 
+import static com.didekin.serviceone.domain.DataPatterns.*;
 import static com.didekindroid.uiutils.CommonPatterns.LINE_BREAK;
 import static com.didekindroid.uiutils.CommonPatterns.SELECT;
-import static com.didekindroid.usuario.dominio.UserPatterns.*;
 
 /**
  * User: pedro@didekin

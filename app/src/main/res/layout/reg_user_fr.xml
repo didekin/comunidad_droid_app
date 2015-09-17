@@ -11,9 +11,9 @@
             android:textSize="@dimen/text_rotulo_fragment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_alignParentLeft="true"/>
+            android:layout_alignParentStart="true"/>
 
     <EditText
             android:id="@+id/reg_usuario_password_ediT"
@@ -24,9 +24,9 @@
             android:imeOptions="actionNext"
             android:maxEms="50"
             android:hint="@string/usuario_password_hint"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_below="@id/reg_usuario_rotulo"/>
 
     <EditText
@@ -38,9 +38,9 @@
             android:imeOptions="actionNext"
             android:maxEms="50"
             android:hint="@string/usuario_password_confirm_hint"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_below="@id/reg_usuario_password_ediT"/>
 
     <EditText
@@ -52,9 +52,9 @@
             android:imeOptions="actionNext"
             android:maxEms="60"
             android:hint="@string/email_hint"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_below="@id/reg_usuario_password_confirm_ediT"/>
 
     <EditText
@@ -66,12 +66,12 @@
             android:imeOptions="actionNext"
             android:maxEms="30"
             android:hint="@string/usuario_alias_hint"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_below="@id/reg_usuario_email_editT"/>
 
-    <TextView
+    <!--<TextView
             android:id="@+id/reg_usuario_phone_aclaracion"
             android:text="@string/telefono_aclaracion"
             android:textStyle="normal"
@@ -79,9 +79,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/reg_usuario_alias_ediT"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_alignParentLeft="true"/>
+            android:layout_alignParentStart="true"/>
 
     <TextView
             android:id="@+id/reg_usuario_phone_prefix_rotulo"
@@ -91,9 +91,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/reg_usuario_phone_aclaracion"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_alignParentLeft="true"/>
+            android:layout_alignParentStart="true"/>
 
     <EditText
             android:id="@+id/reg_usuario_phone_prefix_ediT"
@@ -103,8 +103,8 @@
             android:textSize="@dimen/text_hint_size"
             android:imeOptions="actionNext"
             android:maxEms="4"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_toRightOf="@id/reg_usuario_phone_prefix_rotulo"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_toEndOf="@id/reg_usuario_phone_prefix_rotulo"
             android:layout_below="@id/reg_usuario_phone_aclaracion"
             />
 
@@ -117,9 +117,9 @@
             android:imeOptions="actionNext"
             android:maxEms="15"
             android:hint="@string/usuario_phone_number_hint"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_toRightOf="@id/reg_usuario_phone_prefix_ediT"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_toEndOf="@id/reg_usuario_phone_prefix_ediT"
             android:layout_below="@id/reg_usuario_phone_aclaracion"
-            />
+            />-->
 
 </RelativeLayout>

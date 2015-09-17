@@ -19,9 +19,11 @@ import org.junit.runner.RunWith;
 import java.io.File;
 import java.util.List;
 
+import static com.didekin.exception.ExceptionMessage.ENTITY_DUPLICATE;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.*;
-import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.*;
+import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRESIDENTE;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PROPIETARIO;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.*;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.*;
 import static com.didekindroid.usuario.security.TokenHandler.TKhandler;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
@@ -145,10 +147,46 @@ public class ServiceOneIfTest {
 
         Usuario usuario = ServOne.getUserData();
         assertThat(usuario.getUserName(), is(USER_JUAN.getUserName()));
-        assertThat(usuario.getPrefixTf(), is(USER_JUAN.getPrefixTf()));
-        assertThat(usuario.getNumeroTf(), is(USER_JUAN.getNumeroTf()));
 
         whatClean = CLEAN_JUAN;
+    }
+
+    @Test
+    public void testModifyUser_1()
+    {
+        whatClean = CLEAN_NOTHING;
+
+        // Changed password; not user.
+        Usuario usuario_1 = signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
+        Usuario usuarioIn = new Usuario.UsuarioBuilder()
+                .userName(usuario_1.getUserName())
+                .password("new_psw_juan")
+                .alias(usuario_1.getAlias())
+                .build();
+
+        int rowUpdated = ServOne.modifyUser(usuarioIn);
+        assertThat(rowUpdated, is(1));
+
+        cleanOneUser(usuarioIn);
+    }
+
+    @Test
+    public void testModifyUser_2()
+    {
+        whatClean = CLEAN_NOTHING;
+
+        // Changed user; not password.
+        Usuario usuario_1 = signUpAndUpdateTk(COMU_REAL_PEPE);
+        Usuario usuarioIn = new Usuario.UsuarioBuilder()
+                .userName("new_user_pepe")
+                .password(USER_PEPE.getPassword())
+                .alias("new_alias_pepe")
+                .build();
+
+        int rowUpdated = ServOne.modifyUser(usuarioIn);
+        assertThat(rowUpdated, is(1));
+
+        cleanOneUser(usuarioIn);
     }
 
     @Test
@@ -167,10 +205,47 @@ public class ServiceOneIfTest {
     @Test
     public void testRegComuAndUserAndUserComu() throws Exception
     {
-        boolean isInserted = ServOne.regComuAndUserAndUserComu(COMU_REAL_JUAN);
-        assertThat(isInserted,is(true));
-
         whatClean = CLEAN_JUAN;
+
+        boolean isInserted = ServOne.regComuAndUserAndUserComu(COMU_REAL_JUAN);
+        assertThat(isInserted, is(true));
+    }
+
+    @Test
+    public void testRegUserAndUserComu_1()
+    {
+        whatClean = CLEAN_JUAN2_AND_PEPE;
+
+        // Comunidad is associated to other user.
+        Usuario pepe = signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
+        Comunidad comunidad = ServOne.getComunidadesByUser().get(0);
+        cleanWithTkhandler();
+
+        UsuarioComunidad userComu = makeUsuarioComunidad(comunidad, USER_JUAN2,
+                "portalB", null, "planta1", null, PROPIETARIO.function.concat(",").concat(PRESIDENTE.function));
+        boolean isInserted = ServOne.regUserAndUserComu(userComu);
+        assertThat(isInserted, is(true));
+    }
+
+    @Test
+    public void testRegUserAndUserComu_2()
+    {
+        whatClean = CLEAN_PEPE;
+
+        // Duplicated usuarioComunidad.
+        Usuario pepe = signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
+        Comunidad comunidad = ServOne.getComunidadesByUser().get(0);
+        cleanWithTkhandler();
+
+        try {
+            UsuarioComunidad userComu = makeUsuarioComunidad(comunidad, pepe,
+                    "portalB", null, "planta1", null, PROPIETARIO.function.concat(",").concat(PRESIDENTE.function));
+            ServOne.regUserAndUserComu(userComu);
+            fail();
+        } catch (ServiceOneException e) {
+            assertThat(e.getMessage(), is(ENTITY_DUPLICATE.getMessage()));
+            assertThat(e.getHttpStatus(), is(ENTITY_DUPLICATE.getHttpStatus()));
+        }
     }
 
     @Test

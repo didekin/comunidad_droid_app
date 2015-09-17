@@ -66,7 +66,7 @@ public class RegComuAndUserAndUserComuAcTest {
         resources = mActivity.getResources();
         mRegComuFrg = (RegComuFr) mActivity.getFragmentManager().findFragmentById(R.id.reg_comunidad_frg);
         mRegUserComuFrg = (RegUserComuFr) mActivity.getFragmentManager().findFragmentById(R.id
-                .reg_usuariocomunidad_frg);
+                .reg_usercomu_frg);
         mRegUserFr = (RegUserFr) mActivity.getFragmentManager().findFragmentById(R.id.reg_user_frg);
     }
 
@@ -89,7 +89,7 @@ public class RegComuAndUserAndUserComuAcTest {
 
         onView(withId(R.id.reg_comu_usuario_usuariocomu_layout)).check(matches(isDisplayed()));
         onView(withId(R.id.reg_comunidad_frg)).check(matches(isDisplayed()));
-        onView(withId(R.id.reg_usuariocomunidad_frg)).check(matches(isDisplayed()));
+        onView(withId(R.id.reg_usercomu_frg)).check(matches(isDisplayed()));
         onView(withId(R.id.reg_user_frg)).perform(scrollTo()).check(matches(isDisplayed()));
     }
 
@@ -100,9 +100,8 @@ public class RegComuAndUserAndUserComuAcTest {
         onView(withId(R.id.reg_usuario_email_editT)).perform(scrollTo(), typeText("yo@email.com"));
         onView(withId(R.id.reg_usuario_alias_ediT)).perform(scrollTo(), typeText("alias1"));
         onView(withId(R.id.reg_usuario_password_ediT)).perform(scrollTo(), typeText("password1"));
-        onView(withId(R.id.reg_usuario_password_confirm_ediT)).perform(scrollTo(), typeText("password1"));
-        onView(withId(R.id.reg_usuario_phone_prefix_ediT)).perform(scrollTo(), typeText("001"));
-        onView(withId(R.id.reg_usuario_phone_editT)).perform(scrollTo(), typeText("123456789"), closeSoftKeyboard());
+        onView(withId(R.id.reg_usuario_password_confirm_ediT)).perform(scrollTo(),
+                typeText("password1"),closeSoftKeyboard());
 
         View usuarioRegView = mActivity.findViewById(R.id.reg_user_frg);
 
@@ -112,8 +111,6 @@ public class RegComuAndUserAndUserComuAcTest {
         assertThat(usuarioBean.getAlias(), is("alias1"));
         assertThat(usuarioBean.getPassword(), is("password1"));
         assertThat(usuarioBean.getVerificaPassword(), is("password1"));
-        assertThat(usuarioBean.getPrefixTf(), is("001"));
-        assertThat(usuarioBean.getNumeroTf(), is("123456789"));
 
         // Test assertions about Usuario.
         usuarioBean.validate(resources, new StringBuilder(resources.getText(R.string.error_validation_msg)));
@@ -121,8 +118,6 @@ public class RegComuAndUserAndUserComuAcTest {
         assertThat(usuario.getUserName(), is("yo@email.com"));
         assertThat(usuario.getAlias(), is("alias1"));
         assertThat(usuario.getPassword(), is("password1"));
-        assertThat(usuario.getPrefixTf(), is(Short.parseShort("001")));
-        assertThat(usuario.getNumeroTf(), is(Integer.parseInt("123456789")));
     }
 
     @Test
@@ -166,9 +161,8 @@ public class RegComuAndUserAndUserComuAcTest {
         onView(withId(R.id.reg_usuario_email_editT)).perform(scrollTo(), typeText("yo@email.com"));
         onView(withId(R.id.reg_usuario_alias_ediT)).perform(scrollTo(), typeText("alias1"));
         onView(withId(R.id.reg_usuario_password_ediT)).perform(scrollTo(), typeText("password1"));
-        onView(withId(R.id.reg_usuario_password_confirm_ediT)).perform(scrollTo(), typeText("password1"));
-        onView(withId(R.id.reg_usuario_phone_prefix_ediT)).perform(scrollTo(), typeText("001"));
-        onView(withId(R.id.reg_usuario_phone_editT)).perform(scrollTo(), typeText("123456789"), closeSoftKeyboard());
+        onView(withId(R.id.reg_usuario_password_confirm_ediT)).perform(scrollTo(),
+                typeText("password1"), closeSoftKeyboard());
 
         // Make UsuarioBean.
         UsuarioBean usuarioBean = makeUsuarioBeanFromView(mRegUserFr.getFragmentView());
@@ -204,8 +198,6 @@ public class RegComuAndUserAndUserComuAcTest {
         assertThat(usuario.getUserName(), is("yo@email.com"));
         assertThat(usuario.getAlias(), is("alias1"));
         assertThat(usuario.getPassword(), is("password1"));
-        assertThat(usuario.getPrefixTf(), is((short) 1));
-        assertThat(usuario.getNumeroTf(), is(123456789));
     }
 
     @Test
@@ -241,15 +233,13 @@ public class RegComuAndUserAndUserComuAcTest {
                 R.string.reg_usercomu_role_rot,
                 R.string.alias,
                 R.string.email_hint,
-                R.string.telefono_prefix_rotulo,
-                R.string.telefono_numero,
                 R.string.password);
     }
 
     @Test
     public void testRegisterComuAndUserComuAndUser_2()
     {
-        whatToClean = CleanEnum.CLEAN_JUAN_with_TF;
+        whatToClean = CleanEnum.CLEAN_JUAN2;
 
         // Comunidad data.
         onView(withId(R.id.tipo_via_spinner)).perform(click());
@@ -281,15 +271,11 @@ public class RegComuAndUserAndUserComuAcTest {
         onView(withId(R.id.reg_usercomu_checbox_inq)).perform(scrollTo(), click());
 
         // Usuario.
-        onView(withId(R.id.reg_usuario_email_editT)).perform(scrollTo(), typeText(USER_JUAN_with_TF.getUserName()));
-        onView(withId(R.id.reg_usuario_alias_ediT)).perform(scrollTo(), typeText(USER_JUAN_with_TF.getAlias()));
-        onView(withId(R.id.reg_usuario_password_ediT)).perform(scrollTo(), typeText(USER_JUAN_with_TF.getPassword()));
-        onView(withId(R.id.reg_usuario_password_confirm_ediT)).perform(scrollTo(), typeText(USER_JUAN_with_TF.getPassword()));
-        onView(withId(R.id.reg_usuario_phone_prefix_ediT)).perform(scrollTo(),
-                typeText(String.valueOf(USER_JUAN_with_TF.getPrefixTf())));
-        onView(withId(R.id.reg_usuario_phone_editT)).perform(scrollTo(),
-                typeText(String.valueOf(USER_JUAN_with_TF.getNumeroTf())),
-                closeSoftKeyboard());
+        onView(withId(R.id.reg_usuario_email_editT)).perform(scrollTo(), typeText(USER_JUAN2.getUserName()));
+        onView(withId(R.id.reg_usuario_alias_ediT)).perform(scrollTo(), typeText(USER_JUAN2.getAlias()));
+        onView(withId(R.id.reg_usuario_password_ediT)).perform(scrollTo(), typeText(USER_JUAN2.getPassword()));
+        onView(withId(R.id.reg_usuario_password_confirm_ediT)).perform(scrollTo(),
+                typeText(USER_JUAN2.getPassword()), closeSoftKeyboard());
 
         onView(withId(R.id.reg_com_usuario_usuariocomu_button)).perform(scrollTo(), click());
         onView(withId(R.id.see_usercomu_by_user_ac_layout)).check(matches(isDisplayed()));

@@ -71,7 +71,7 @@ public class RegUserAndUserComuAc extends Activity {
 
         setContentView(R.layout.reg_user_and_usercomu_ac);
         mRegUserComuFrg = (RegUserComuFr) getFragmentManager().findFragmentById(R.id
-                .reg_usuariocomunidad_frg);
+                .reg_usercomu_frg);
         mRegUserFr = (RegUserFr) getFragmentManager().findFragmentById(R.id.reg_user_frg);
         mRegistroButton = (Button) findViewById(R.id.reg_user_usercomu_button);
 

@@ -39,7 +39,7 @@ public class UsuarioComunidadBeanValidaTests {
         comunidad = new ComunidadBean("ataxo", "24 de Otoño", "001", "bis",new Municipio
                 ((short)5, "Municipio2",new Provincia((short)35,"Las Palmas"))
         );
-        usuarioBean = new UsuarioBean("user@name.com", "alias1", "password1", "password1", "001", "12345678");
+        usuarioBean = new UsuarioBean("user@name.com", "alias1", "password1", "password1");
     }
 
     @Test

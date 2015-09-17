@@ -56,7 +56,7 @@ public class TokenHandlerTest_B {
         assertThat(TKhandler.getRefreshTokenKey(), notNullValue());
         com.google.common.cache.Cache<String, AccessToken> tokenCache = TKhandler.getTokensCache();
         assertThat(tokenCache, notNullValue());
-        // No accessToken entry in cache. The key is not null.
+        // No accessToken entry in cache. The key is null.
         assertThat(tokenCache.getIfPresent(TKhandler.getRefreshTokenKey()), nullValue());
         assertThat(tokenCache.asMap().containsKey(TKhandler.getRefreshTokenKey()), is(false));
     }

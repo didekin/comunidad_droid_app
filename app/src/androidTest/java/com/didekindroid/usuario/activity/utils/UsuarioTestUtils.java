@@ -30,7 +30,6 @@ import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
 
 /**
  * User: pedro
@@ -148,34 +147,20 @@ public final class UsuarioTestUtils {
 
     public static void cleanOneUser(Usuario usuario)
     {
-        // User1 cleanup.
         updateSecurityData(usuario.getUserName(), usuario.getPassword());
-        boolean isDeleted = ServOne.deleteUser();
-        assertThat(isDeleted, is(true));
-
+        ServOne.deleteUser();
         cleanWithTkhandler();
     }
 
     public static void cleanTwoUsers(Usuario usuarioOne, Usuario usuarioTwo)
     {
-        // User1 cleanup.
         cleanOneUser(usuarioOne);
-
-        // User2 cleanup. We update user credentiasl first.
-        updateSecurityData(usuarioTwo.getUserName(), usuarioTwo.getPassword());
-        boolean isDeleted = ServOne.deleteUser();
-        assertThat(isDeleted, is(true));
-
-        cleanWithTkhandler();
+        cleanOneUser(usuarioTwo);
     }
 
     public static void cleanWithTkhandler()
     {
-        if (TKhandler.getRefreshTokenFile().exists()) {
-            TKhandler.getRefreshTokenFile().delete();
-        }
-        TKhandler.getTokensCache().invalidateAll();
-        TKhandler.updateRefreshToken(null);
+        TKhandler.cleanCacheAndBckFile();
         updateIsRegistered(false, getContext());
     }
 
@@ -191,11 +176,14 @@ public final class UsuarioTestUtils {
             case CLEAN_PEPE:
                 cleanOneUser(USER_PEPE);
                 break;
-            case CLEAN_JUAN_with_TF:
-                cleanOneUser(USER_JUAN_with_TF);
+            case CLEAN_JUAN2:
+                cleanOneUser(USER_JUAN2);
                 break;
             case CLEAN_JUAN_AND_PEPE:
                 cleanTwoUsers(USER_JUAN, USER_PEPE);
+                break;
+            case CLEAN_JUAN2_AND_PEPE:
+                cleanTwoUsers(USER_JUAN2,USER_PEPE);
                 break;
             case CLEAN_NOTHING:
                 break;

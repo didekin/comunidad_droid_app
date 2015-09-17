@@ -5,8 +5,12 @@ import com.google.gson.*;
 import retrofit.ErrorHandler;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
+import retrofit.client.Request;
+import retrofit.client.UrlConnectionClient;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
 import java.sql.Timestamp;
 
 /**
@@ -16,8 +20,7 @@ import java.sql.Timestamp;
  */
 public enum RetrofitRestBuilder {
 
-    BUILDER,
-    ;
+    BUILDER,;
 
     // .......... INSTANCE METHODS ..........
 
@@ -37,8 +40,22 @@ public enum RetrofitRestBuilder {
         return endPoint;
     }
 
+    public <T> T getServiceDebug(Class<T> endPointInterface, String hostAndPort)
+    {
+        RestAdapter restAdapter = new RestAdapter.Builder()
+                .setLogLevel(RestAdapter.LogLevel.FULL)
+                .setEndpoint(hostAndPort)
+                .setClient(new MyUrlConnectionClient())
+                .setErrorHandler(new ServiceOneExceptionHandler())
+                .build();
 
-     // ............. HELPER CLASSES ..............
+        T endPoint = restAdapter.create(endPointInterface);
+
+        return endPoint;
+    }
+
+
+    // ............. HELPER CLASSES ..............
 
     private static class TimeStampGsonAdapter implements JsonDeserializer<Timestamp>, JsonSerializer<Timestamp> {
 
@@ -63,7 +80,7 @@ public enum RetrofitRestBuilder {
         @Override
         public Throwable handleError(RetrofitError retrofitError)
         {
-           ErrorBean errorBean = null;
+            ErrorBean errorBean = null;
             try {
                 errorBean = (ErrorBean) retrofitError.getBodyAs(ErrorBean.class);
             } catch (RuntimeException e) { /* To catch conversion exception.*/
@@ -77,6 +94,18 @@ public enum RetrofitRestBuilder {
                 }
             }
             return new ServiceOneException(errorBean, retrofitError);
+        }
+    }
+
+    public static final class MyUrlConnectionClient extends UrlConnectionClient {
+
+        @Override
+        protected java.net.HttpURLConnection openConnection(Request request) throws IOException
+        {
+            HttpURLConnection connection = super.openConnection(request);
+            connection.setConnectTimeout(30 * 1000);
+            connection.setReadTimeout(300 * 1000);
+            return connection;
         }
     }
 }

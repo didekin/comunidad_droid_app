@@ -26,10 +26,6 @@ public class UserAndComuFiller {
                 ((TextView) usuarioRegView.findViewById(R.id.reg_usuario_password_ediT)).getText()
                         .toString(),
                 ((TextView) usuarioRegView.findViewById(R.id.reg_usuario_password_confirm_ediT)).getText()
-                        .toString(),
-                ((TextView) usuarioRegView.findViewById(R.id.reg_usuario_phone_prefix_ediT)).getText()
-                        .toString(),
-                ((TextView) usuarioRegView.findViewById(R.id.reg_usuario_phone_editT)).getText()
                         .toString()
         );
 

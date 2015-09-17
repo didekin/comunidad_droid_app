@@ -2,6 +2,7 @@ package com.didekin.retrofitcl;
 
 import com.didekin.security.OauthToken;
 import com.didekin.security.SecurityConstant;
+import retrofit.client.Response;
 import retrofit.http.*;
 
 import static com.didekin.security.SecurityConstant.*;
@@ -11,7 +12,7 @@ import static com.didekin.security.SecurityConstant.*;
  * Date: 04/09/15
  * Time: 13:40
  */
-public interface Oauth2EndPoints{
+public interface Oauth2EndPoints {
 
     @FormUrlEncoded
     @POST(TOKEN_PATH)
@@ -33,6 +34,9 @@ public interface Oauth2EndPoints{
 
     @GET(USER_READ + "/hello")
     BodyText getHelloUserRead(@Header("Authorization") String accessToken);
+
+    @GET("/open/not_found")
+    Response getNotFoundMsg();
 
     //  ....... UTILITIES ........
 

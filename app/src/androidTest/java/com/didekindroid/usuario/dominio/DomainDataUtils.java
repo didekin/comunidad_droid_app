@@ -22,16 +22,12 @@ public final class DomainDataUtils {
             .userName("pepe@pepe.org")
             .alias("pepe")
             .password("psw_pepe")
-            .prefixTf((short) 34)
-            .numeroTf(234432123)
             .build();
 
-    public static final Usuario USER_JUAN_with_TF = new Usuario.UsuarioBuilder()
+    public static final Usuario USER_JUAN2 = new Usuario.UsuarioBuilder()
             .userName("juan@juan.com")
             .alias("alias_juan")
             .password("pswd01")
-            .prefixTf((short) 34)
-            .numeroTf(600121233)
             .build();
 
     public static final Usuario USER_JUAN = new Usuario.UsuarioBuilder()
@@ -101,8 +97,7 @@ public final class DomainDataUtils {
             "esc", "plantaY", "door21", PROPIETARIO.function);
 
     public static final UsuarioComunidad COMU_TRAV_PLAZUELA_PEPE = makeUsuarioComunidad(COMU_TRAV_PLAZUELA_11, USER_PEPE,
-            "portalA",
-            null, "planta2", null, INQUILINO.function);
+            "portalA", null, "planta2", null, INQUILINO.function);
 
 
     public static Comunidad makeComunidad(String tipoVia, String nombreVia, short numero, String sufijoNumero,
@@ -122,8 +117,6 @@ public final class DomainDataUtils {
                 .userName(userName)
                 .alias(alias)
                 .password(password)
-                .prefixTf(prefixTf)
-                .numeroTf(numeroTf)
                 .build();
     }
 

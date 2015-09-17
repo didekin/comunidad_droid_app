@@ -1,8 +1,8 @@
 package com.didekindroid.usuario.activity;
 
 
-import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -58,13 +58,10 @@ public class RegComuFr extends Fragment {
     }
 
     @Override
-    public void onAttach(Activity activity)
+    public void onAttach(Context context)
     {
-        super.onAttach(activity);
+        super.onAttach(context);
         Log.d(TAG, "onAttach()");
-
-        dbHelper = new MasterDataDbHelper(getActivity());
-        new SpinnerCAutonomasLoader().execute();
     }
 
     @Override
@@ -95,6 +92,9 @@ public class RegComuFr extends Fragment {
     {
         super.onActivityCreated(savedInstanceState);
         Log.d(TAG, "onActivityCreated()");
+
+        dbHelper = new MasterDataDbHelper(getActivity());
+        new SpinnerCAutonomasLoader().execute();
 
         mTipoViaSpinner = (Spinner) getView().findViewById(R.id.tipo_via_spinner);
         mTipoViaSpinner.setFocusable(true);

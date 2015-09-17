@@ -2,13 +2,16 @@ package com.didekindroid.usuario.webservices;
 
 import android.support.test.runner.AndroidJUnit4;
 import com.didekin.retrofitcl.Oauth2EndPoints.BodyText;
+import com.didekin.retrofitcl.ServiceOneException;
 import com.didekin.security.OauthToken.AccessToken;
 import com.didekindroid.usuario.activity.utils.CleanEnum;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import retrofit.client.Response;
 
+import static com.didekin.exception.ExceptionMessage.NOT_FOUND;
 import static com.didekin.security.OauthClient.CL_USER;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.*;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
@@ -17,10 +20,11 @@ import static com.didekindroid.usuario.dominio.DomainDataUtils.*;
 import static com.didekindroid.usuario.security.TokenHandler.TKhandler;
 import static com.didekindroid.usuario.webservices.Oauth2Service.Oauth2;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -57,6 +61,18 @@ public class Oauth2ServiceIfTest {
     }
 
     @Test
+    public void testGetNotFoundMsg()
+    {
+        try {
+            Response errorMessage = Oauth2.getNotFoundMsg();
+            fail();
+        } catch (ServiceOneException e) {
+            assertThat(e.getMessage(), is(NOT_FOUND.getMessage()));
+            assertThat(e.getHttpStatus(), is(NOT_FOUND.getHttpStatus()));
+        }
+    }
+
+    @Test
     public void testGetPasswordUserToken() throws Exception
     {
         //Inserta usuario, comunidad, usuariocomunidad y actuliza tokenCache.
@@ -81,7 +97,7 @@ public class Oauth2ServiceIfTest {
 
         AccessToken tokenNew = Oauth2.getRefreshUserToken(TKhandler.getRefreshTokenKey());
         assertThat(tokenNew, notNullValue());
-        assertThat(tokenNew.getRefreshToken().getValue(),is(refreshTkOldValue));
+        assertThat(tokenNew.getRefreshToken().getValue(), is(refreshTkOldValue));
         assertThat(tokenNew.getValue(), not(is(accessTkOldValue)));
 
         whatClean = CLEAN_PEPE;

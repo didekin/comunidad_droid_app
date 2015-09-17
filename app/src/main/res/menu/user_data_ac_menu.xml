@@ -3,18 +3,13 @@
       xmlns:tools="http://schemas.android.com/tools"
       tools:context="com.didekindroid.usuario.activity.UserDataAc">
     <item
-            android:id="@+id/modificar_datos_mn"
-            android:title="@string/modificar_datos_usuario_mn"
+            android:id="@+id/see_usercomu_by_user_ac_mn"
+            android:title="@string/see_usercomu_by_user_ac_mn"
             android:orderInCategory="100"
             app:showAsAction="never|withText"/>
     <item
-            android:id="@+id/recordar_contraseña_mn"
-            android:title="@string/recordar_contraseña_mn"
-            android:orderInCategory="100"
-            app:showAsAction="never|withText"/>
-    <item
-            android:id="@+id/nueva_contraseña_mn"
-            android:title="@string/nueva_contraseña_mn"
+            android:id="@+id/comu_search_ac_mn"
+            android:title="@string/comu_search_ac_mn"
             android:orderInCategory="100"
             app:showAsAction="never|withText"/>
 </menu>

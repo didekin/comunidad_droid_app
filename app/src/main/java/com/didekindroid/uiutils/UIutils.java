@@ -1,6 +1,5 @@
 package com.didekindroid.uiutils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -46,11 +45,11 @@ public final class UIutils {
         editor.apply();
     }
 
-    public static boolean isRegisteredUser(Activity activity)
+    public static boolean isRegisteredUser(Context context)
     {
         Log.d(TAG, "isRegisteredUser()");
 
-        SharedPreferences sharedPref = activity.getSharedPreferences
+        SharedPreferences sharedPref = context.getSharedPreferences
                 (SharedPreferencesFiles.USER_PREF.toString(), Context.MODE_PRIVATE);
         return sharedPref.getBoolean(SharedPreferencesKeys.IS_USER_REG.toString(),false);
     }

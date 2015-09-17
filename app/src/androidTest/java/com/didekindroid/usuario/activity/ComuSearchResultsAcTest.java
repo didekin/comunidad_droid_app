@@ -8,6 +8,8 @@ import com.didekin.serviceone.domain.*;
 import com.didekindroid.R;
 import com.didekindroid.usuario.activity.utils.CleanEnum;
 import com.didekindroid.usuario.dominio.DomainDataUtils;
+import com.didekindroid.usuario.security.TokenHandler;
+import com.google.common.base.Preconditions;
 import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
@@ -33,6 +35,7 @@ import static com.didekindroid.usuario.security.TokenHandler.TKhandler;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_SEARCH;
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.*;
 import static com.google.android.apps.common.testing.ui.espresso.sample.LongListMatchers.withAdaptedData;
+import static com.google.common.base.Preconditions.checkState;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
@@ -48,7 +51,6 @@ public class ComuSearchResultsAcTest {
 
     private ComuSearchResultsAc activity;
     ComuSearchResultsListFr mComunidadSummaryFrg;
-    File refreshTkFile;
     Intent intent;
     CleanEnum whatClean;
 
@@ -61,7 +63,6 @@ public class ComuSearchResultsAcTest {
     {
         Log.d(TAG, "In getFixture()");
         whatClean = CleanEnum.CLEAN_NOTHING;
-        refreshTkFile = TKhandler.getRefreshTokenFile();
         intent = new Intent();
         intent.putExtra(COMUNIDAD_SEARCH.extra, COMU_LA_PLAZUELA_5);
     }
@@ -89,7 +90,7 @@ public class ComuSearchResultsAcTest {
         whatClean = CLEAN_JUAN;
 
         // Inserto comunidades en DB.
-        regTwoUserComuSameUser(DomainDataUtils.makeListTwoUserComu());
+        regTwoUserComuSameUser(makeListTwoUserComu());
         activity = mActivityRule.launchActivity(intent);
         onView(withId(R.id.comu_search_results_ac_one_pane_frg_container)).check(matches(isDisplayed()));
         onView(withId(R.id.comu_list_frg)).check(matches(isDisplayed()));
@@ -110,7 +111,7 @@ public class ComuSearchResultsAcTest {
         whatClean = CLEAN_JUAN;
 
         // Usuario registrado.
-        regTwoUserComuSameUser(DomainDataUtils.makeListTwoUserComu());
+        regTwoUserComuSameUser(makeListTwoUserComu());
 
         activity = mActivityRule.launchActivity(intent);
         assertThat(isRegisteredUser(activity), is(true));
@@ -121,7 +122,7 @@ public class ComuSearchResultsAcTest {
     @Test
     public void testGetDatosUsuarioNoToken_1() throws InterruptedException
     {
-        assertThat(refreshTkFile.exists(), is(false));
+        assertThat(TKhandler.getAccessTokenInCache(),nullValue());
         activity = mActivityRule.launchActivity(intent);
         assertThat(isRegisteredUser(activity), is(false));
 
@@ -138,7 +139,7 @@ public class ComuSearchResultsAcTest {
         whatClean = CLEAN_JUAN;
 
         //Usuario no registrado. La búsqueda devuelve una comunidad.
-        regTwoUserComuSameUser(DomainDataUtils.makeListTwoUserComu());
+        regTwoUserComuSameUser(makeListTwoUserComu());
         // Borro los datos del token.
         cleanWithTkhandler();
 
@@ -154,7 +155,7 @@ public class ComuSearchResultsAcTest {
         whatClean = CLEAN_JUAN;
 
         //With token.
-        regTwoUserComuSameUser(DomainDataUtils.makeListTwoUserComu());
+        regTwoUserComuSameUser(makeListTwoUserComu());
         activity = mActivityRule.launchActivity(intent);
         assertThat(isRegisteredUser(activity), is(true));
         USER_DATA_AC.checkMenuItem_WTk(activity);
@@ -163,7 +164,7 @@ public class ComuSearchResultsAcTest {
     @Test
     public void testMenuNuevaComunidad_noToken_1() throws InterruptedException
     {
-        assertThat(refreshTkFile.exists(), is(false));
+        assertThat(TKhandler.getAccessTokenInCache(),nullValue());
         activity = mActivityRule.launchActivity(intent);
         assertThat(isRegisteredUser(activity), is(false));
 
@@ -181,7 +182,7 @@ public class ComuSearchResultsAcTest {
         whatClean = CLEAN_JUAN;
 
         //Usuario no registrado. La búsqueda devuelve una comunidad.
-        regTwoUserComuSameUser(DomainDataUtils.makeListTwoUserComu());
+        regTwoUserComuSameUser(makeListTwoUserComu());
         // Borro los datos del usuario.
         cleanWithTkhandler();
 
@@ -196,7 +197,7 @@ public class ComuSearchResultsAcTest {
     {
         whatClean = CLEAN_JUAN;
 
-        regTwoUserComuSameUser(DomainDataUtils.makeListTwoUserComu());
+        regTwoUserComuSameUser(makeListTwoUserComu());
         activity = mActivityRule.launchActivity(intent);
         assertThat(isRegisteredUser(activity), is(true));
 
@@ -208,7 +209,7 @@ public class ComuSearchResultsAcTest {
     {
         whatClean = CLEAN_JUAN;
 
-        regTwoUserComuSameUser(DomainDataUtils.makeListTwoUserComu());
+        regTwoUserComuSameUser(makeListTwoUserComu());
         activity = mActivityRule.launchActivity(intent);
         assertThat(isRegisteredUser(activity), is(true));
         SEE_USERCOMU_BY_USER_AC.checkMenuItem_WTk(activity);
@@ -217,7 +218,7 @@ public class ComuSearchResultsAcTest {
     @Test
     public void tesComunidadesByUsuario_noToken_1() throws InterruptedException
     {
-        assertThat(refreshTkFile.exists(), is(false));
+        assertThat(TKhandler.getAccessTokenInCache(),nullValue());
         activity = mActivityRule.launchActivity(intent);
         assertThat(isRegisteredUser(activity), is(false));
 
@@ -235,7 +236,7 @@ public class ComuSearchResultsAcTest {
         whatClean = CLEAN_JUAN;
 
         //Usuario no registrado. La búsqueda devuelve una comunidad.
-        regTwoUserComuSameUser(DomainDataUtils.makeListTwoUserComu());
+        regTwoUserComuSameUser(makeListTwoUserComu());
         // Borro los datos del usuario.
         cleanWithTkhandler();
         activity = mActivityRule.launchActivity(intent);
@@ -250,7 +251,7 @@ public class ComuSearchResultsAcTest {
         whatClean = CLEAN_JUAN;
 
         // User with 2 comunidades. We search with one of them exactly.
-        regTwoUserComuSameUser(DomainDataUtils.makeListTwoUserComu());
+        regTwoUserComuSameUser(makeListTwoUserComu());
         activity = mActivityRule.launchActivity(intent);
         assertThat(isRegisteredUser(activity), is(true));
 
@@ -270,7 +271,7 @@ public class ComuSearchResultsAcTest {
 
         Comunidad comunidadNew = makeComunidad("Ronda", "del Norte", (short) 5, "",
                 new Municipio((short) 2,new Provincia((short) 27)));
-        regThreeUserComuSameUser(DomainDataUtils.makeListTwoUserComu(), comunidadNew);
+        regThreeUserComuSameUser(makeListTwoUserComu(), comunidadNew);
 
         // Criterio de búsqueda.
         Comunidad comunidad = makeComunidad("Ronda", "de la Plazuela del Norte", (short) 5, "",
@@ -293,8 +294,8 @@ public class ComuSearchResultsAcTest {
     public void testSearchComunidades_3() throws InterruptedException
     {
         // No existe la comunidad en DB. El usuario no está registrado.
+        assertThat(TKhandler.getAccessTokenInCache(),nullValue());
 
-        assertThat(refreshTkFile.exists(), is(false));
         // Criterio de búsqueda.
         Comunidad comunidad = makeComunidad("Rincón", "del No Existente", (short) 123, "",
                 new Municipio((short) 2, new Provincia((short) 27)));
@@ -349,7 +350,7 @@ public class ComuSearchResultsAcTest {
 
         //Usuario no registrado. La búsqueda devuelve una comunidad.
 
-        regTwoUserComuSameUser(DomainDataUtils.makeListTwoUserComu());
+        regTwoUserComuSameUser(makeListTwoUserComu());
         // Borro los datos del usuario.
         cleanWithTkhandler();
 
@@ -372,7 +373,7 @@ public class ComuSearchResultsAcTest {
 
         // Usuario registrado. La búsqueda devuelve una comunidad a la que él ya está asociado.
 
-        regTwoUserComuSameUser(DomainDataUtils.makeListTwoUserComu());
+        regTwoUserComuSameUser(makeListTwoUserComu());
         activity = mActivityRule.launchActivity(intent);
         mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getFragmentManager().findFragmentById(R.id.comu_list_frg);
         ComuSearchResultsListAdapter adapter = (ComuSearchResultsListAdapter) mComunidadSummaryFrg.getListAdapter();
@@ -390,7 +391,7 @@ public class ComuSearchResultsAcTest {
     {
         // Usuario registrado. La búsqueda devuelve una comunidad a la que él NO está asociado.
 
-        regTwoUserComuSameUser(DomainDataUtils.makeListTwoUserComu());
+        regTwoUserComuSameUser(makeListTwoUserComu());
         cleanWithTkhandler();
 
         // Insertamos al usuario que hace la búsqueda.
@@ -417,5 +418,6 @@ public class ComuSearchResultsAcTest {
     public void cleanData()
     {
         cleanOptions(whatClean);
+        checkState(!isRegisteredUser(activity.getBaseContext()));
     }
 }

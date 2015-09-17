@@ -63,7 +63,7 @@ public class RegUserComuAc extends Activity {
                 .getSerializable(COMUNIDAD_LIST_OBJECT.extra);
 
         setContentView(R.layout.reg_usercomu_ac);
-        mRegUserComuFr = (RegUserComuFr) getFragmentManager().findFragmentById(R.id.reg_usercomu_fr);
+        mRegUserComuFr = (RegUserComuFr) getFragmentManager().findFragmentById(R.id.reg_usercomu_frg);
 
         mRegisterButton = (Button) findViewById(R.id.reg_usercomu_button);
         mRegisterButton.setOnClickListener(new View.OnClickListener() {

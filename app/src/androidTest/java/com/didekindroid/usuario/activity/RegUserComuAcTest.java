@@ -5,7 +5,6 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import com.didekin.serviceone.domain.Comunidad;
 import com.didekindroid.R;
-import com.didekindroid.uiutils.UIutils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -72,11 +71,11 @@ public class RegUserComuAcTest {
         assertThat(comunidad2, is(COMU_TRAV_PLAZUELA_PEPE.getComunidad()));
 
         assertThat(activity, notNullValue());
-        assertThat(activity.getFragmentManager().findFragmentById(R.id.reg_usercomu_fr), notNullValue());
+        assertThat(activity.getFragmentManager().findFragmentById(R.id.reg_usercomu_frg), notNullValue());
         assertThat(((Comunidad)intent.getSerializableExtra(COMUNIDAD_LIST_OBJECT.extra)).getC_Id(), is(comunidad
                 .getC_Id()));
         onView(withId(R.id.reg_usercomu_ac_layout)).check(matches(isDisplayed()));
-        onView(withId(R.id.reg_usercomu_fr)).check(matches(isDisplayed()));
+        onView(withId(R.id.reg_usercomu_frg)).check(matches(isDisplayed()));
     }
 
     @Test

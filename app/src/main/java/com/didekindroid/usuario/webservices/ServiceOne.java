@@ -6,7 +6,7 @@ import com.didekin.serviceone.domain.Comunidad;
 import com.didekin.serviceone.domain.Usuario;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import retrofit.client.Response;
-import retrofit.http.Body;
+import retrofit.http.Header;
 
 import java.util.List;
 
@@ -41,12 +41,6 @@ public enum ServiceOne implements ServiceOneEndPoints, ServiceOneIf {
         }
 
         @Override
-        public Response getNotFoundMsg()
-        {
-            return ServOne.endPoint.getNotFoundMsg();
-        }
-
-        @Override
         public Usuario getUserData(String accessToken)
         {
             return ServOne.endPoint.getUserData(accessToken);
@@ -56,6 +50,12 @@ public enum ServiceOne implements ServiceOneEndPoints, ServiceOneIf {
         public List<UsuarioComunidad> getUserComusByUser(String accessToken)
         {
             return ServOne.endPoint.getUserComusByUser(accessToken);
+        }
+
+        @Override
+        public int modifyUser(@Header("Authorization") String accessToken, Usuario usuario)
+        {
+            return ServOne.endPoint.modifyUser(accessToken, usuario);
         }
 
         @Override
@@ -74,7 +74,7 @@ public enum ServiceOne implements ServiceOneEndPoints, ServiceOneIf {
         @Override
         public boolean regUserAndUserComu(UsuarioComunidad userCom)
         {
-            Log.d(TAG,"regUserAndUserComu()");
+            Log.d(TAG, "regUserAndUserComu()");
             return ServOne.endPoint.regUserAndUserComu(userCom);
         }
 
@@ -104,6 +104,8 @@ public enum ServiceOne implements ServiceOneEndPoints, ServiceOneIf {
         {
             return ServOne.endPoint.seeUserComuByComu(accessToken, comunidadId);
         }
+
+
     },;
 
     private static final String TAG = ServiceOne.class.getCanonicalName();
@@ -150,6 +152,13 @@ public enum ServiceOne implements ServiceOneEndPoints, ServiceOneIf {
     {
         Log.d(TAG, ("getUserData()"));
         return endPoint.getUserData(TKhandler.doBearerAccessTkHeader());
+    }
+
+    @Override
+    public int modifyUser(Usuario usuario)
+    {
+        Log.d(TAG, "modifyUser()");
+        return endPoint.modifyUser(TKhandler.doBearerAccessTkHeader(), usuario);
     }
 
     @Override

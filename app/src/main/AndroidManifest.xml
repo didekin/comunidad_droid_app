@@ -89,18 +89,20 @@
                 android:label="@string/see_comu_and_usercomu_ac_label"
                 android:parentActivityName=".usuario.activity.ComuSearchResultsAc">
         </activity>
-        <activity android:name=".usuario.activity.SeeUserComuByComuAc"
-                  android:label="see_usercomu_by_comu_ac_label">
+        <activity
+                android:name=".usuario.activity.SeeUserComuByComuAc"
+                android:label="see_usercomu_by_comu_ac_label">
+        </activity>
+        <activity
+                android:name=".usuario.activity.UserDataAc"
+                android:label="@string/user_data_ac_label">
         </activity>
         <!-- =========== Login ========== -->
         <activity
                 android:name=".usuario.activity.LoginActivity"
                 android:label="@string/login_label">
         </activity>
-        <activity
-                android:name=".usuario.activity.UserDataAc"
-                android:label="@string/user_data_ac_label">
-        </activity>
+
     </application>
 
 </manifest>

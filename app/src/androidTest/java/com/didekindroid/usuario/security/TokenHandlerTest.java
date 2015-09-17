@@ -44,7 +44,7 @@ public class TokenHandlerTest {
                 "50d3cdaa-0d2e-4cfd-b259-82b3a0b1edef",
                 new Timestamp(new Date().getTime() + 7200000),
                 "bearer",
-                new OauthToken("50d3cdaa-0d2e-4cfd-b259-82b3a0b1edef",new Timestamp(new Date().getTime() + 7200000)),
+                new OauthToken("50d3cdaa-0d2e-4cfd-b259-82b3a0b1edef", new Timestamp(new Date().getTime() + 7200000)),
                 new String[]{"readwrite"}
         );
     }
@@ -144,20 +144,20 @@ public class TokenHandlerTest {
     }
 
     @Test
-    public void testCleanUp()
+    public void testCleanCacheAndBckFile()
     {
-        // Precondition for initialization of the enum: no file with refreshToken.
+        // Precondition for initialization of TKhandler: no file with refreshToken.
         assertThat(TKhandler.getRefreshTokenKey(), nullValue());
 
-        if (TKhandler.getRefreshTokenFile().exists()) {
-            TKhandler.getRefreshTokenFile().delete();
-        }
-        TKhandler.getTokensCache().invalidateAll();
-//        TKhandler.updateRefreshToken(null);
+        // Preconditions: the user is registered.
+        TKhandler.initKeyCacheAndBackupFile(accessToken);
+        assertThat(TKhandler.getRefreshTokenKey(), notNullValue());
 
+        TKhandler.cleanCacheAndBckFile();
+        assertThat(TKhandler.getRefreshTokenKey(), nullValue());
         assertThat(TKhandler.getRefreshTokenFile().exists(), is(false));
-        assertThat(TKhandler.getRefreshTokenKey(), nullValue());
         assertThat(TKhandler.getAccessTokenInCache(), nullValue());
+
     }
 
     @After

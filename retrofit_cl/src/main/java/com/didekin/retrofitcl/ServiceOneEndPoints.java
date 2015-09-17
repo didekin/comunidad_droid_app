@@ -28,14 +28,14 @@ public interface ServiceOneEndPoints {
     @GET(COMUS_BY_USER)
     List<Comunidad> getComusByUser(@Header("Authorization") String accessToken);
 
-    @GET("/open/not_found")
-    Response getNotFoundMsg();
-
     @GET(USER_READ)
     Usuario getUserData(@Header("Authorization") String accessToken);
 
     @GET(USERCOMUS_BY_USER)
     List<UsuarioComunidad> getUserComusByUser(@Header("Authorization") String accessToken);
+
+    @PUT(USER_MODIFY)
+    int modifyUser(@Header("Authorization") String accessToken, @Body Usuario usuario);
 
     @POST(REG_COMU_AND_USER_AND_USERCOMU)
     boolean regComuAndUserAndUserComu(@Body UsuarioComunidad usuarioCom);
@@ -56,5 +56,4 @@ public interface ServiceOneEndPoints {
     @GET(USERCOMUS_BY_COMU + "/{comunidadId}")
     List<UsuarioComunidad> seeUserComuByComu(@Header("Authorization") String accessToken,
                                              @Path("comunidadId") long comunidadId);
-
 }

@@ -1,8 +1,6 @@
 subprojects {
     apply plugin: 'idea'
 
-//    compileJava.options.compilerArgs = ['-Xlint:unchecked']
-
     repositories {
         jcenter()
     }

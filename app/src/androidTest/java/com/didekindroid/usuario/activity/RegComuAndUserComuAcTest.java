@@ -62,7 +62,7 @@ public class RegComuAndUserComuAcTest {
         resources = activity.getResources();
         regComuFr = (RegComuFr) activity.getFragmentManager().findFragmentById(R.id.reg_comunidad_frg);
         regUserComuFr = (RegUserComuFr) activity.getFragmentManager().findFragmentById(R.id
-                .reg_usuariocomunidad_frg);
+                .reg_usercomu_frg);
     }
 
     @After
@@ -85,14 +85,14 @@ public class RegComuAndUserComuAcTest {
 
         onView(withId(R.id.reg_comu_and_usercomu_layout));
         onView(withId(R.id.reg_comunidad_frg)).check(matches(isDisplayed()));
-        onView(withId(R.id.reg_usuariocomunidad_frg)).check(matches(isDisplayed()));
+        onView(withId(R.id.reg_usercomu_frg)).check(matches(isDisplayed()));
         onView(withId(R.id.reg_comu_usuariocomunidad_button)).perform(scrollTo()).check(matches(isDisplayed()));
     }
 
     @Test
     public void testMakeUsuarioComunidadBeanFromView() throws Exception
     {
-        View usuarioComunidadRegView = activity.findViewById(R.id.reg_usuariocomunidad_frg);
+        View usuarioComunidadRegView = activity.findViewById(R.id.reg_usercomu_frg);
 
         //UsuarioComunidadBean data.
         onView(withId(R.id.reg_usercomu_portal_ed)).perform(typeText("port2"));

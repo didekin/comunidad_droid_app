@@ -2,9 +2,7 @@ package com.didekindroid.usuario.security;
 
 import android.util.Log;
 import com.didekin.security.OauthToken.AccessToken;
-import com.didekin.security.OauthTokenHelper;
 import com.didekindroid.ioutils.IoHelper;
-import com.didekindroid.usuario.webservices.Oauth2Service;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 
@@ -15,8 +13,8 @@ import java.util.concurrent.TimeUnit;
 
 import static com.didekin.security.OauthTokenHelper.HELPER;
 import static com.didekindroid.DidekindroidApp.getContext;
+import static com.didekindroid.uiutils.UIutils.updateIsRegistered;
 import static com.didekindroid.usuario.webservices.Oauth2Service.Oauth2;
-import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -60,11 +58,20 @@ public enum TokenHandler {
         Log.d(TAG, "initKeyCacheAndBackupFile()");
 
         IoHelper.writeFileFromString(checkNotNull(accessToken).getRefreshToken().getValue(), refreshTokenFile);
-        if (refreshTokenKey != null){
+        if (refreshTokenKey != null) {
             tokensCache.invalidate(refreshTokenKey);
         }
         refreshTokenKey = accessToken.getRefreshToken().getValue();
         tokensCache.put(refreshTokenKey, accessToken);
+    }
+
+    public synchronized void cleanCacheAndBckFile()
+    {
+        Log.d(TAG, "cleanCacheAndBckFile()");
+
+        TKhandler.getRefreshTokenFile().delete();
+        TKhandler.getTokensCache().invalidateAll();
+        TKhandler.updateRefreshToken(null);
     }
 
     public AccessToken getAccessTokenInCache()
@@ -92,7 +99,7 @@ public enum TokenHandler {
         return accessToken;
     }
 
-    public synchronized void updateRefreshToken(String refreshToken)
+    public void updateRefreshToken(String refreshToken)
     {
         Log.d(TAG, "updateRefreshToken()");
         refreshTokenKey = refreshToken;

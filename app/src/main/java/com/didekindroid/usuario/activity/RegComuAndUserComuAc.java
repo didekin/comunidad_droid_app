@@ -14,7 +14,6 @@ import com.didekindroid.uiutils.CommonPatterns;
 import com.didekindroid.uiutils.UIutils;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
-import com.google.common.base.Preconditions;
 
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeComunidadBeanFromView;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUsuarioComunidadBeanFromView;
@@ -41,7 +40,7 @@ public class RegComuAndUserComuAc extends Activity {
 
         mRegComuFrg = (RegComuFr) getFragmentManager().findFragmentById(R.id.reg_comunidad_frg);
         mRegUserComuFrg = (RegUserComuFr) getFragmentManager().findFragmentById(R.id
-                .reg_usuariocomunidad_frg);
+                .reg_usercomu_frg);
 
         mRegistroButton = (Button) findViewById(R.id.reg_comu_usuariocomunidad_button);
 

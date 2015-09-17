@@ -69,15 +69,11 @@
     <!-- =========== RegComuAndUserAndUserComuAc ========= -->
     <string name="reg_comunidad_ac_label">Nueva comunidad</string>
     <!-- ........... RegUserFr ......... -->
-    <string name="reg_usuario_rotulo">Mis datos en didekin</string>
+    <string name="reg_usuario_rotulo">Mis datos</string>
     <string name="usuario_password_hint">contraseña (letras,números,_)</string>
     <string name="usuario_password_confirm_hint">verificación de la contraseña</string>
     <string name="alias">Alias</string>
     <string name="usuario_alias_hint">nombre o alias (6-30 caracteres: letras,números, y _)</string>
-    <string name="usuario_phone_number_hint">número de este teléfono</string>
-    <string name="telefono_numero">Teléfono</string>
-    <string name="telefono_aclaracion">Número de teléfono con prefijo internacional:</string>
-    <string name="telefono_prefix_rotulo">Prefijo</string>
     <string name="email_hint">Correo electrónico</string>
     <string name="password_hint">Tu contraseña</string>
     <string name="password">Contraseña</string>
@@ -120,5 +116,8 @@
     <string name="see_comu_and_usercomu_ac_label">Mis datos en la comunidad</string>
     <!-- ================= UserDataAc ===================== -->
     <string name="user_data_ac_label">Mis datos</string>
+    <string name="user_data_modif_button_txt">Sí, modifico mis datos.</string>
+    <string name="user_data_ac_unreg_rot_txt">Para borrar todos sus datos personales y en comunidades:</string>
+    <string name="user_data_unreg_button_txt">Sí, borro todos mis datos.</string>
 
 </resources>

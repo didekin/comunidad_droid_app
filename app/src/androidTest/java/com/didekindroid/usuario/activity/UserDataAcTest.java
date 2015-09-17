@@ -1,38 +1,27 @@
 package com.didekindroid.usuario.activity;
 
-import android.content.Context;
-import android.content.Intent;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import com.didekin.security.OauthToken;
-import com.didekin.security.OauthToken.AccessToken;
-import com.didekin.serviceone.domain.*;
 import com.didekindroid.R;
-import com.didekindroid.ioutils.IoHelper;
-import com.didekindroid.usuario.dominio.DomainDataUtils;
-import com.didekindroid.usuario.webservices.Oauth2Service;
+import com.didekindroid.uiutils.UIutils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.File;
-
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekindroid.usuario.activity.utils.UserIntentExtras.USUARIO_COMUNIDAD_REG;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.makeComunidad;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.makeUsuario;
-import static com.didekindroid.usuario.security.TokenHandler.TKhandler;
-import static com.didekindroid.usuario.security.TokenHandler.refresh_token_filename;
-import static com.didekindroid.usuario.webservices.Oauth2Service.Oauth2;
-import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
+import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_JUAN;
+import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.COMU_SEARCH_AC;
+import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.SEE_USERCOMU_BY_USER_AC;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAndUpdateTk;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_JUAN;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -44,80 +33,69 @@ import static org.junit.Assert.assertThat;
 public class UserDataAcTest {
 
     UserDataAc mActivity;
-    Context context;
-    File refreshTkFile;
-
-    // TODO: ver cómo le afecta la simplificación de la tarea asíncrona.
+    RegUserFr mRegUserFr;
 
     @Rule
-    public ActivityTestRule<UserDataAc> mActivityRule = new ActivityTestRule<>(UserDataAc.class, true, false);
+    public ActivityTestRule<UserDataAc> mActivityRule = new ActivityTestRule<UserDataAc>(UserDataAc.class) {
+        @Override
+        protected void beforeActivityLaunched()
+        {
+            // Precondition: the user is registered.
+            signUpAndUpdateTk(COMU_REAL_JUAN);
+        }
+    };
 
     @Before
     public void setUp() throws Exception
     {
-        context = InstrumentationRegistry.getTargetContext();
-        refreshTkFile = new File(context.getFilesDir(), refresh_token_filename);
-    }
-
-    @Test
-    public void testWithUserComunidad()
-    {
-        UsuarioComunidad usuarioComunidad = makeUsuarioComunidad("pedro@pedro.us", "psw_pedro", "pedro");
-        Intent intent = new Intent();
-        intent.putExtra(USUARIO_COMUNIDAD_REG.extra, usuarioComunidad);
-
-        assertThat(refreshTkFile.exists(), is(false));
-        mActivity = mActivityRule.launchActivity(intent);
-
-        assertThat(mActivity, notNullValue());
-        onView(withId(R.id.reg_usuario_layout)).check(matches(isDisplayed()));
-
-        assertThat(refreshTkFile.exists(), is(true));
-        AccessToken tokenPedro = TKhandler.getAccessTokenInCache();
-        assertThat(tokenPedro, notNullValue());
-        assertThat(IoHelper.readStringFromFile(refreshTkFile), is(tokenPedro.getRefreshToken().getValue()));
-    }
-
-    @Test
-    public void testWithoutUserComunidad()
-    {
-        UsuarioComunidad usuarioComunidad = makeUsuarioComunidad("juan@juan.us", "psw_juan", "juan");
-        ServOne.regComuAndUserAndUserComu(usuarioComunidad);
-
-        AccessToken token = Oauth2.getPasswordUserToken(usuarioComunidad.getUsuario().getUserName(),
-                usuarioComunidad.getUsuario().getPassword());
-
-        assertThat(refreshTkFile.exists(), is(false));
-        TKhandler.initKeyCacheAndBackupFile(token);
-
-        assertThat(refreshTkFile.exists(), is(true));
-        AccessToken tokenJuan = TKhandler.getAccessTokenInCache();
-        assertThat(tokenJuan, notNullValue());
-        assertThat(IoHelper.readStringFromFile(refreshTkFile), is(tokenJuan.getRefreshToken().getValue()));
-
-        mActivity = mActivityRule.launchActivity(new Intent());
-        onView(withId(R.id.reg_usuario_layout)).check(matches(isDisplayed()));
-
-        // TODO: lanzar la actividad y hacer aserciones.
+        mActivity = mActivityRule.getActivity();
+        mRegUserFr = (RegUserFr) mActivity.getFragmentManager().findFragmentById(R.id.reg_user_frg);
     }
 
     @After
     public void tearDown() throws Exception
     {
-        if (refreshTkFile.exists()) {
-            refreshTkFile.delete();
-        }
-        boolean isDeleted = ServOne.deleteUser();
+        cleanOptions(CLEAN_JUAN);
     }
 
-//    ...........  AUXLIARY METHODS ............
-
-    private UsuarioComunidad makeUsuarioComunidad(String userName, String password, String alias)
+    @Test
+    public void testOncreate_1()
     {
-        Comunidad comunidad = makeComunidad("Calle", "Real", (short) 5, "Bis",
-                new Municipio((short) 13, new Provincia((short) 3)));
-        Usuario usuario = makeUsuario(userName, alias, password, (short) 0, 0);
-        return DomainDataUtils.makeUsuarioComunidad(comunidad, usuario, "portal", "esc", "plantaX",
-                "door", "pro");
+        assertThat(mActivity, notNullValue());
+        assertThat(mRegUserFr, notNullValue());
+        assertThat(UIutils.isRegisteredUser(mActivity), is(true));
+
+        onView(withId(R.id.user_data_ac_layout)).check(matches(isDisplayed()));
+        onView(withId(R.id.reg_user_frg)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testOncreate_2()
+    {
+        // Aserciones sobre los datos mostrados en función del usuario en sesión. Primera asyncTask.
+    }
+
+    @Test
+    public void testUserComuByUserMn_withToken() throws InterruptedException
+    {
+        SEE_USERCOMU_BY_USER_AC.checkMenuItem_WTk(mActivity);
+    }
+
+    @Test
+    public void testComuSearchMn_withToken() throws InterruptedException
+    {
+        COMU_SEARCH_AC.checkMenuItem_WTk(mActivity);
+    }
+
+    @Test
+    public void testModifyUserData()
+    {
+
+    }
+
+    @Test
+    public void testUnregisterUser()
+    {
+
     }
 }

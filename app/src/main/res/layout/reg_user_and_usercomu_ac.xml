@@ -12,10 +12,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     tools:context="com.didekindroid.usuario.activity.RegUserAndUserComuAc">
-        <!--android:paddingLeft="@dimen/activity_horizontal_margin"
-                        android:paddingRight="@dimen/activity_horizontal_margin"
-                        android:paddingTop="@dimen/activity_vertical_margin"
-                        android:paddingBottom="@dimen/activity_vertical_margin"-->
         <TextView
                 android:id="@+id/rotulo_comunidad"
                 android:text="@string/rotulo_comunidad"
@@ -23,9 +19,9 @@
                 android:textSize="@dimen/text_rotulo_fragment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:layout_alignParentLeft="true"/>
+                android:layout_alignParentStart="true"/>
 
         <TextView
                 android:id="@+id/descripcion_comunidad_text"
@@ -33,17 +29,17 @@
                 android:textSize="@dimen/text_decription_widget"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_toRightOf="@id/rotulo_comunidad"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_toEndOf="@id/rotulo_comunidad"
                 android:layout_alignTop="@id/rotulo_comunidad"
                 android:layout_alignBottom="@id/rotulo_comunidad"
                 />
 
         <fragment
-                android:id="@+id/reg_usuariocomunidad_frg"
+                android:id="@+id/reg_usercomu_frg"
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
-                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:layout_below="@id/rotulo_comunidad"
                 android:name="com.didekindroid.usuario.activity.RegUserComuFr"
                 tools:layout="@layout/reg_usercomu_fr"/>
@@ -52,8 +48,8 @@
                 android:id="@+id/reg_user_frg"
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
-                android:layout_alignParentLeft="true"
-                android:layout_below="@id/reg_usuariocomunidad_frg"
+                android:layout_alignParentStart="true"
+                android:layout_below="@id/reg_usercomu_frg"
                 android:name="com.didekindroid.usuario.activity.RegUserFr"
                 tools:layout="@layout/reg_user_fr"/>
 
@@ -65,9 +61,9 @@
                 android:textSize="@dimen/text_decription_widget"
                 android:text="@string/reg_usercomu_ac_button_rot"
                 android:layout_below="@id/reg_user_frg"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/activity_vertical_double_margin"
-                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 />
 
     </RelativeLayout>

@@ -2,10 +2,13 @@ package com.didekindroid.usuario.dominio;
 
 import android.content.res.Resources;
 import com.didekin.serviceone.domain.Comunidad;
+import com.didekin.serviceone.domain.DataPatterns;
 import com.didekin.serviceone.domain.Municipio;
 import com.didekin.serviceone.domain.Provincia;
 import com.didekindroid.R;
 
+import static com.didekin.serviceone.domain.DataPatterns.NOMBRE_VIA;
+import static com.didekin.serviceone.domain.DataPatterns.SUFIJO_NUMERO;
 import static com.didekindroid.uiutils.CommonPatterns.LINE_BREAK;
 import static com.didekindroid.uiutils.CommonPatterns.SELECT;
 
@@ -91,7 +94,7 @@ public class ComunidadBean {
 
     public boolean validateNombreVia(CharSequence resources, StringBuilder errorMsg)
     {
-        boolean isValid = UserPatterns.NOMBRE_VIA.pattern.matcher(nombreVia).matches()
+        boolean isValid = NOMBRE_VIA.pattern.matcher(nombreVia).matches()
                 && !SELECT.pattern.matcher(nombreVia).find();
         if (!isValid) {
             errorMsg.append(resources + LINE_BREAK.literal);
@@ -121,7 +124,7 @@ public class ComunidadBean {
     {
         if (sufijoNumero == null || sufijoNumero.trim().isEmpty()) return true;
 
-        boolean isValid = UserPatterns.SUFIJO_NUMERO.pattern.matcher(sufijoNumero).matches()
+        boolean isValid = SUFIJO_NUMERO.pattern.matcher(sufijoNumero).matches()
                 && !SELECT.pattern.matcher(sufijoNumero).find();
         if (!isValid) {
             errorMsg.append(resources + LINE_BREAK.literal);
