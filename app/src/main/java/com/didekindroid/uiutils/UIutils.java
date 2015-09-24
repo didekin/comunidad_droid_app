@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.Gravity;
 import android.widget.Toast;
+import com.didekindroid.R;
 
 /**
  * User: pedro
@@ -17,6 +18,21 @@ public final class UIutils {
 
     private UIutils()
     {
+    }
+
+    public static StringBuilder getErrorMsgBuilder(Context context)
+    {
+        return new StringBuilder(context.getResources().getText(R.string.error_validation_msg))
+                .append(CommonPatterns.LINE_BREAK.literal);
+    }
+
+    public static boolean isRegisteredUser(Context context)
+    {
+        Log.d(TAG, "isRegisteredUser()");
+
+        SharedPreferences sharedPref = context.getSharedPreferences
+                (SharedPreferencesFiles.USER_PREF.toString(), Context.MODE_PRIVATE);
+        return sharedPref.getBoolean(SharedPreferencesKeys.IS_USER_REG.toString(), false);
     }
 
     public static void makeToast(Context context, int resourceStringId)
@@ -45,20 +61,11 @@ public final class UIutils {
         editor.apply();
     }
 
-    public static boolean isRegisteredUser(Context context)
-    {
-        Log.d(TAG, "isRegisteredUser()");
-
-        SharedPreferences sharedPref = context.getSharedPreferences
-                (SharedPreferencesFiles.USER_PREF.toString(), Context.MODE_PRIVATE);
-        return sharedPref.getBoolean(SharedPreferencesKeys.IS_USER_REG.toString(),false);
-    }
 //  ..............  INNER CLASSES ............
 
     private enum SharedPreferencesFiles {
 
-        USER_PREF,
-        ;
+        USER_PREF,;
 
         @Override
         public String toString()

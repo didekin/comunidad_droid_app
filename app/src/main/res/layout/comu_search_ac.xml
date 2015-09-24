@@ -16,7 +16,7 @@
                 android:layout_width="match_parent"
                 android:layout_alignParentLeft="true"
                 android:name="com.didekindroid.usuario.activity.RegComuFr"
-                tools:layout="@layout/reg_comu"/>
+                tools:layout="@layout/reg_comu_fr"/>
 
         <Button
                 android:id="@+id/searchComunidad_Bton"

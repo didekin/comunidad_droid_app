@@ -4,6 +4,8 @@ import android.util.Base64;
 import android.util.Log;
 import com.didekin.retrofitcl.Oauth2EndPoints;
 import com.didekin.security.OauthClient;
+import com.didekin.security.OauthEndPointsIf;
+import com.didekin.security.OauthEndPointsIf.BodyText;
 import com.didekin.security.OauthToken.AccessToken;
 import retrofit.client.Response;
 
@@ -19,7 +21,7 @@ import static com.didekindroid.DidekindroidApp.getBaseURL;
  * Date: 07/09/15
  * Time: 10:52
  */
-public enum Oauth2Service implements Oauth2EndPoints, Oauth2ServiceIf {
+public enum Oauth2Service implements OauthEndPointsIf {
 
     Oauth2(BUILDER.getService(Oauth2EndPoints.class, getBaseURL())) {
         @Override
@@ -48,7 +50,6 @@ public enum Oauth2Service implements Oauth2EndPoints, Oauth2ServiceIf {
             return Oauth2.endPoint.getHelloUserRead(accessToken);
         }
 
-        @Override
         public Response getNotFoundMsg()
         {
             return Oauth2.endPoint.getNotFoundMsg();
@@ -64,7 +65,10 @@ public enum Oauth2Service implements Oauth2EndPoints, Oauth2ServiceIf {
         endPoint = oauth2EndPoints;
     }
 
-    @Override
+//    ::::::::::::::::::::::::::::::::::::::::::
+//                 CONVENIENCE METHODS
+//    ::::::::::::::::::::::::::::::::::::::::::
+
     public AccessToken getPasswordUserToken(String userName, String password)
     {
         Log.d(TAG, "getPasswordUserToken()");
@@ -76,7 +80,6 @@ public enum Oauth2Service implements Oauth2EndPoints, Oauth2ServiceIf {
                 PASSWORD_GRANT);
     }
 
-    @Override
     public AccessToken getRefreshUserToken(String refreshTokenKey)
     {
         Log.d(TAG, "getRefreshUserToken()");
@@ -86,6 +89,8 @@ public enum Oauth2Service implements Oauth2EndPoints, Oauth2ServiceIf {
                 refreshTokenKey,
                 REFRESH_TOKEN_GRANT);
     }
+
+    public abstract Response getNotFoundMsg();
 
 //    ::::::::::::::::::::::::::::::::::::::::::
 //                  HELPER METHODS

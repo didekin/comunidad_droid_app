@@ -68,7 +68,7 @@ public class RegComuAndUserAndUserComuAc extends Activity {
 
         ComunidadBean comunidadBean = mRegComuFrg.getComunidadBean();
         makeComunidadBeanFromView(mRegComuFrg.getFragmentView(), comunidadBean);
-        UsuarioBean usuarioBean = makeUsuarioBeanFromView(mRegUserFr.getFragmentView());
+        UsuarioBean usuarioBean = makeUsuarioBeanFromRegUserFrView(mRegUserFr.getFragmentView());
         UsuarioComunidadBean usuarioComunidadBean = makeUsuarioComunidadBeanFromView(mRegUserComuFrg
                 .getFragmentView(), comunidadBean, usuarioBean);
 

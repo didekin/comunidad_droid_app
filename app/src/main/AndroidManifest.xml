@@ -8,6 +8,7 @@
     <instrumentation
             android:name="android.support.test.runner.AndroidJUnitRunner"
             android:targetPackage="com.didekindroid"/>
+
     <supports-screens
             android:largeScreens="true"
             android:normalScreens="true"
@@ -33,6 +34,7 @@
                 android:parentActivityName=".oferta.OfertaActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MANAGE_NETWORK_USAGE"/>
+
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
@@ -41,7 +43,7 @@
         <!-- USUARIO -->
         <!-- **************************************************************** -->
         <!-- =========== Comunidad ========== -->
-        <!-- ¿La eliminamos?-->
+        <!-- ¿La eliminamos? -->
         <activity
                 android:name=".usuario.activity.ComusByUserListAc"
                 android:label="@string/comunidades_usuario_acc_label"
@@ -54,6 +56,7 @@
                 android:windowSoftInputMode="stateVisible|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
+
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
@@ -61,6 +64,16 @@
                 android:name=".usuario.activity.ComuSearchResultsAc"
                 android:label="@string/comu_search_results_ac_label"
                 android:parentActivityName=".usuario.activity.ComuSearchAc">
+        </activity>
+        <activity
+                android:name=".usuario.activity.DeleteMeAc"
+                android:label="@string/delete_me_ac_label"
+                android:parentActivityName=".usuario.activity.UserDataAc">
+        </activity>
+        <activity
+                android:name=".usuario.activity.PasswordChangeAc"
+                android:label="@string/title_activity_password_change"
+                android:parentActivityName=".usuario.activity.UserDataAc">
         </activity>
         <activity
                 android:name=".usuario.activity.RegComuAndUserAndUserComuAc"
@@ -102,7 +115,6 @@
                 android:name=".usuario.activity.LoginActivity"
                 android:label="@string/login_label">
         </activity>
-
     </application>
 
 </manifest>

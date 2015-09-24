@@ -43,18 +43,11 @@ public class RegUserFr extends Fragment {
         return mRegUsuarioFrView;
     }
 
-    public View getFragmentView()
-    {
-        Log.d(TAG, "getFragmentView()");
-        return mRegUsuarioFrView;
-    }
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState)
     {
         Log.d(TAG, "onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
-
     }
 
     @Override
@@ -105,4 +98,13 @@ public class RegUserFr extends Fragment {
         Log.d(TAG, "onDetach()");
         super.onDetach();
     }
+
+    //    ......... GETTER/ SETTER METHODS ..........
+
+    public View getFragmentView()
+    {
+        Log.d(TAG, "getFragmentView()");
+        return mRegUsuarioFrView;
+    }
+
 }

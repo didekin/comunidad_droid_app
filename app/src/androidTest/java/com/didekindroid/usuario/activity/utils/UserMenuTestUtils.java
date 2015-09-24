@@ -12,8 +12,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.*;
 import static com.didekindroid.uiutils.ViewsIDs.SEE_COMU_AND_USER_COMU_BY_USER;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.checkNoToastInTest;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.checkToastInTest;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
 
 /**
  * User: pedro@didekin
@@ -22,7 +20,7 @@ import static org.junit.Assert.assertThat;
  */
 public enum UserMenuTestUtils {
 
-    COMU_SEARCH_AC{
+    COMU_SEARCH_AC {
         @Override
         public void checkMenuItem_NTk(Activity activity) throws InterruptedException
         {
@@ -36,6 +34,40 @@ public enum UserMenuTestUtils {
             openActionBarOverflowOrOptionsMenu(activity);
             onView(withText(R.string.comu_search_ac_mn)).check(matches(isDisplayed())).perform(click());
             onView(withId(R.id.comu_search_ac_layout)).check(matches(isDisplayed()));
+        }
+    },
+
+    DELETE_ME_AC {
+        @Override
+        public void checkMenuItem_NTk(Activity activity) throws InterruptedException
+        {
+            throw new UnsupportedOperationException(DELETE_ME_AC.name() + "requires registered user");
+        }
+
+        @Override
+        public void checkMenuItem_WTk(Activity activity) throws InterruptedException
+        {
+            onView(withText(R.string.delete_me_ac_mn)).check(doesNotExist());
+            openActionBarOverflowOrOptionsMenu(activity);
+            onView(withText(R.string.delete_me_ac_mn)).check(matches(isDisplayed())).perform(click());
+            onView(withId(R.id.delete_me_ac_layout)).check(matches(isDisplayed()));
+        }
+    },
+
+    PASSWORD_CHANGE_AC {
+        @Override
+        public void checkMenuItem_NTk(Activity activity) throws InterruptedException
+        {
+            throw new UnsupportedOperationException(PASSWORD_CHANGE_AC.name() + "requires registered user");
+        }
+
+        @Override
+        public void checkMenuItem_WTk(Activity activity) throws InterruptedException
+        {
+            onView(withText(R.string.password_change_ac_mn)).check(doesNotExist());
+            openActionBarOverflowOrOptionsMenu(activity);
+            onView(withText(R.string.password_change_ac_mn)).check(matches(isDisplayed())).perform(click());
+            onView(withId(R.id.password_change_ac_layout)).check(matches(isDisplayed()));
         }
     },
 
@@ -132,9 +164,7 @@ public enum UserMenuTestUtils {
             // Show the data in modifiable state.
             onView(withId(R.id.user_data_ac_layout)).check(matches(isDisplayed()));
         }
-    },
-
-    ;
+    },;
 
     public abstract void checkMenuItem_NTk(Activity activity) throws InterruptedException;
 

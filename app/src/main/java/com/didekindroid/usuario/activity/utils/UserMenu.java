@@ -20,8 +20,28 @@ public enum UserMenu {
         @Override
         public void doMenuItem(Activity activity)
         {
-            Log.d(TAG, "doMenuItem()");
+            Log.d(TAG, "comu_search_ac.doMenuItem()");
             Intent intent = new Intent(activity, ComuSearchAc.class);
+            activity.startActivity(intent);
+        }
+    },
+
+    DELETE_ME_AC {
+        @Override
+        public void doMenuItem(Activity activity)
+        {
+            Log.d(TAG, "delete_me_ac.doMenuItem()");
+            Intent intent = new Intent(activity, DeleteMeAc.class);
+            activity.startActivity(intent);
+        }
+    },
+
+    PASSWORD_CHANGE_AC {
+        @Override
+        public void doMenuItem(Activity activity)
+        {
+            Log.d(TAG, "password_change_ac.doMenuItem()");
+            Intent intent = new Intent(activity, PasswordChangeAc.class);
             activity.startActivity(intent);
         }
     },
@@ -99,9 +119,7 @@ public enum UserMenu {
                 activity.startActivity(intent);
             }
         }
-    },
-
-    ;
+    },;
 
     private static final String TAG = UserMenu.class.getCanonicalName();
 

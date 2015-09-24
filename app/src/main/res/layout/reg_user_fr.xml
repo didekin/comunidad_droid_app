@@ -15,59 +15,18 @@
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:layout_alignParentStart="true"/>
 
-    <EditText
-            android:id="@+id/reg_usuario_password_ediT"
-            android:layout_width="wrap_content"
+    <include
+            layout="@layout/password_include"
+            android:id="@+id/reg_user_fr_password_include"
+            android:layout_below="@id/reg_usuario_rotulo"
             android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:textSize="@dimen/text_hint_size"
-            android:imeOptions="actionNext"
-            android:maxEms="50"
-            android:hint="@string/usuario_password_hint"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_alignParentStart="true"
-            android:layout_below="@id/reg_usuario_rotulo"/>
+            android:layout_width="wrap_content"/>
 
-    <EditText
-            android:id="@+id/reg_usuario_password_confirm_ediT"
-            android:layout_width="wrap_content"
+    <include
+            layout="@layout/user_data_include"
+            android:id="@+id/reg_user_fr_user_data_include"
+            android:layout_below="@id/reg_user_fr_password_include"
             android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:textSize="@dimen/text_hint_size"
-            android:imeOptions="actionNext"
-            android:maxEms="50"
-            android:hint="@string/usuario_password_confirm_hint"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_alignParentStart="true"
-            android:layout_below="@id/reg_usuario_password_ediT"/>
+            android:layout_width="wrap_content"/>
 
-    <EditText
-            android:id="@+id/reg_usuario_email_editT"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
-            android:textSize="@dimen/text_hint_size"
-            android:imeOptions="actionNext"
-            android:maxEms="60"
-            android:hint="@string/email_hint"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_alignParentStart="true"
-            android:layout_below="@id/reg_usuario_password_confirm_ediT"/>
-
-    <EditText
-            android:id="@+id/reg_usuario_alias_ediT"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:textSize="@dimen/text_hint_size"
-            android:imeOptions="actionNext"
-            android:maxEms="30"
-            android:hint="@string/usuario_alias_hint"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_alignParentStart="true"
-            android:layout_below="@id/reg_usuario_email_editT"/>
 </RelativeLayout>

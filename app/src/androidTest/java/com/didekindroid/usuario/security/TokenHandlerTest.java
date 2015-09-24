@@ -110,14 +110,14 @@ public class TokenHandlerTest {
         File refreshTkFile = new File(context.getFilesDir(), refresh_token_filename);
         assertThat(refreshTkFile.exists(), is(true));
 
-        // The application must get another accessToken with the same refreshToken.
+        // The application must get another accessToken with a different refreshToken.
         AccessToken token_2 = TKhandler.getAccessTokenInCache();
         String accessToken_2 = token_2.getValue();
         assertThat(accessToken_2, not(isEmptyOrNullString()));
         assertThat(accessToken_2, not(equalTo(accessToken_1)));
         String refreshToken_2 = token_2.getRefreshToken().getValue();
         assertThat(refreshToken_2, not(isEmptyOrNullString()));
-        assertThat(refreshToken_2, equalTo(refreshToken_1));
+        assertThat(refreshToken_2, not(is(refreshToken_1)));
 
         // User clean up.
         assertThat(ServOne.deleteUser(), is(true));
@@ -163,11 +163,7 @@ public class TokenHandlerTest {
     @After
     public void cleanFileToken()
     {
-        if (TKhandler.getRefreshTokenFile().exists()) {
-            TKhandler.getRefreshTokenFile().delete();
-        }
-        TKhandler.getTokensCache().invalidateAll();
-        TKhandler.updateRefreshToken(null);
+        TKhandler.cleanCacheAndBckFile();
     }
 
 //    .................... UTILITIES .......................

@@ -54,6 +54,23 @@ public class UsuarioBeanValidaTests {
     }
 
     @Test
+    public void testValidateModified_1()
+    {
+        UsuarioBean usuarioBean = new UsuarioBean("user@name.com", "alias1", "", "");
+        assertThat(usuarioBean.validateModified(resources, errors), is(false));
+        assertThat(errors.toString(), containsString(resources.getText(R.string.password).toString()));
+
+        usuarioBean = new UsuarioBean("user@name.com", "alias1", "password", "");
+        assertThat(usuarioBean.validateModified(resources, errors), is(true));
+        assertThat(usuarioBean.getUsuario().getUserName(), is("user@name.com"));
+        assertThat(usuarioBean.getUsuario().getAlias(), is("alias1"));
+        assertThat(usuarioBean.getUsuario().getPassword(), is("password"));
+
+        usuarioBean = new UsuarioBean("user@name.com", "alias1", "password", "hola");
+        assertThat(usuarioBean.validateModified(resources, errors), is(true));
+    }
+
+    @Test
     public void testValidatePassword() throws Exception
     {
         /*PASSWORD("[0-9a-zA-Z_]{6,60}")*/
@@ -65,8 +82,7 @@ public class UsuarioBeanValidaTests {
         assertThat(usuarioBean.validate(resources, errors), is(false));
         usuarioBean = new UsuarioBean("user@name.com", "alias1", "23AB_s_word1", "23AB*_s_word1");
         assertThat(usuarioBean.validate(resources, errors), is(false));
-        assertThat(errors.toString(), allOf(containsString(resources.getText(R.string.password_different).toString())
-                , containsString(resources.getText(R.string.password_different).toString())));
+        assertThat(errors.toString(), containsString(resources.getText(R.string.password_different).toString()));
     }
 
     @Test

@@ -14,9 +14,13 @@ import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
  * Date: 03/06/15
  * Time: 10:55
  */
-public class UserAndComuFiller {
+public final class UserAndComuFiller {
 
-    public static UsuarioBean makeUsuarioBeanFromView(View usuarioRegView)
+    private UserAndComuFiller()
+    {
+    }
+
+    public static UsuarioBean makeUsuarioBeanFromRegUserFrView(View usuarioRegView)
     {
         UsuarioBean usuarioBean = new UsuarioBean(
                 ((EditText) usuarioRegView.findViewById(R.id.reg_usuario_email_editT)).getText()
@@ -32,10 +36,24 @@ public class UserAndComuFiller {
         return usuarioBean;
     }
 
+    public static UsuarioBean makeUserBeanFromUserDataAcView(View userDataAcView)
+    {
+        UsuarioBean usuarioBean = new UsuarioBean(
+                ((EditText) userDataAcView.findViewById(R.id.reg_usuario_email_editT)).getText()
+                        .toString(),
+                ((EditText) userDataAcView.findViewById(R.id.reg_usuario_alias_ediT)).getText()
+                        .toString(),
+                ((EditText) userDataAcView.findViewById(R.id.user_data_ac_password_ediT)).getText()
+                        .toString(),
+                null
+        );
+        return usuarioBean;
+    }
+
     public static void makeComunidadBeanFromView(View comunidadSearchView, ComunidadBean comunidadBean)
     {
-       comunidadBean.setNombreVia(((EditText) comunidadSearchView
-               .findViewById(R.id.comunidad_nombre_via_editT)).getText().toString());
+        comunidadBean.setNombreVia(((EditText) comunidadSearchView
+                .findViewById(R.id.comunidad_nombre_via_editT)).getText().toString());
         comunidadBean.setNumeroString(((EditText) comunidadSearchView
                 .findViewById(R.id.comunidad_numero_editT)).getText().toString());
         comunidadBean.setSufijoNumero(((EditText) comunidadSearchView

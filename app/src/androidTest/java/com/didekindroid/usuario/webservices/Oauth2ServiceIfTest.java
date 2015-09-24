@@ -1,8 +1,8 @@
 package com.didekindroid.usuario.webservices;
 
 import android.support.test.runner.AndroidJUnit4;
-import com.didekin.retrofitcl.Oauth2EndPoints.BodyText;
 import com.didekin.retrofitcl.ServiceOneException;
+import com.didekin.security.OauthEndPointsIf;
 import com.didekin.security.OauthToken.AccessToken;
 import com.didekindroid.usuario.activity.utils.CleanEnum;
 import org.junit.After;
@@ -45,7 +45,7 @@ public class Oauth2ServiceIfTest {
     @Test
     public void testGetHello() throws Exception
     {
-        BodyText textJson = Oauth2.getHello();
+        OauthEndPointsIf.BodyText textJson = Oauth2.getHello();
         assertThat(textJson.getText(), equalTo("Hello Open"));
     }
 
@@ -54,7 +54,7 @@ public class Oauth2ServiceIfTest {
     {
         //Inserta usuario, comunidad, usuariocomunidad y actuliza tokenCache.
         signUpAndUpdateTk(COMU_REAL_PEPE);
-        BodyText bodyText = Oauth2.getHelloUserRead(TKhandler.doBearerAccessTkHeader());
+        OauthEndPointsIf.BodyText bodyText = Oauth2.getHelloUserRead(TKhandler.doBearerAccessTkHeader());
         assertThat(bodyText.getText(), equalTo("Hello UserRead"));
 
         whatClean = CLEAN_PEPE;
@@ -75,6 +75,8 @@ public class Oauth2ServiceIfTest {
     @Test
     public void testGetPasswordUserToken() throws Exception
     {
+        whatClean = CLEAN_JUAN;
+
         //Inserta usuario, comunidad, usuariocomunidad y actuliza tokenCache.
         signUpAndUpdateTk(COMU_REAL_JUAN);
 
@@ -82,13 +84,13 @@ public class Oauth2ServiceIfTest {
         assertThat(token, notNullValue());
         assertThat(token.getValue(), notNullValue());
         assertThat(token.getRefreshToken().getValue(), notNullValue());
-
-        whatClean = CLEAN_JUAN;
     }
 
     @Test
     public void testGetRefreshUserToken() throws Exception
     {
+        whatClean = CLEAN_PEPE;
+
         //Inserta usuario, comunidad, usuariocomunidad y actuliza tokenCache.
         signUpAndUpdateTk(COMU_REAL_PEPE);
         AccessToken tokenOld = TKhandler.getAccessTokenInCache();
@@ -97,10 +99,9 @@ public class Oauth2ServiceIfTest {
 
         AccessToken tokenNew = Oauth2.getRefreshUserToken(TKhandler.getRefreshTokenKey());
         assertThat(tokenNew, notNullValue());
-        assertThat(tokenNew.getRefreshToken().getValue(), is(refreshTkOldValue));
+        assertThat(tokenNew.getRefreshToken().getValue(), not(is(refreshTkOldValue)));
         assertThat(tokenNew.getValue(), not(is(accessTkOldValue)));
 
-        whatClean = CLEAN_PEPE;
     }
 
     @Test

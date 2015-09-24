@@ -2,6 +2,18 @@
       xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
       tools:context="com.didekindroid.usuario.activity.UserDataAc">
+
+    <item
+            android:id="@+id/password_change_ac_mn"
+            android:title="@string/password_change_ac_mn"
+            android:orderInCategory="100"
+            app:showAsAction="never|withText"/>
+    <item
+            android:id="@+id/delete_me_ac_mn"
+            android:title="@string/delete_me_ac_mn"
+            android:orderInCategory="100"
+            app:showAsAction="never|withText"/>
+
     <item
             android:id="@+id/see_usercomu_by_user_ac_mn"
             android:title="@string/see_usercomu_by_user_ac_mn"

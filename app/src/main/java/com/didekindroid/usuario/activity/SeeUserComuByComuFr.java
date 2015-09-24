@@ -150,6 +150,7 @@ public class SeeUserComuByComuFr extends ListFragment {
         super.onDetach();
     }
 
+
     //    ============================================================
     //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
     //    ============================================================

@@ -64,11 +64,7 @@ public class TokenHandlerTest_B {
     @After
     public void cleanFileToken()
     {
-        if (TKhandler.getRefreshTokenFile().exists()) {
-            TKhandler.getRefreshTokenFile().delete();
-        }
-        TKhandler.getTokensCache().invalidateAll();
-        TKhandler.updateRefreshToken(null);
+       TKhandler.cleanCacheAndBckFile();
     }
 }
 

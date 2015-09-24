@@ -83,7 +83,7 @@ public class RegComuFr extends Fragment {
                              Bundle savedInstanceState)
     {
         Log.d(TAG, "onCreateView()");
-        mRegComunidadFrView = inflater.inflate(R.layout.reg_comu, container, false);
+        mRegComunidadFrView = inflater.inflate(R.layout.reg_comu_fr, container, false);
         return mRegComunidadFrView;
     }
 

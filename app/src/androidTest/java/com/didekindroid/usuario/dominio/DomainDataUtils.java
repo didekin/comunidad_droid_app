@@ -32,7 +32,7 @@ public final class DomainDataUtils {
 
     public static final Usuario USER_JUAN = new Usuario.UsuarioBuilder()
             .userName("juan@juan.us")
-            .alias("juan")
+            .alias("alias_juan")
             .password("psw_juan")
             .build();
 

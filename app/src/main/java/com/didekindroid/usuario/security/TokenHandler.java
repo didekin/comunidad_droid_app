@@ -57,10 +57,10 @@ public enum TokenHandler {
     {
         Log.d(TAG, "initKeyCacheAndBackupFile()");
 
+        cleanCacheAndBckFile();
+
         IoHelper.writeFileFromString(checkNotNull(accessToken).getRefreshToken().getValue(), refreshTokenFile);
-        if (refreshTokenKey != null) {
-            tokensCache.invalidate(refreshTokenKey);
-        }
+
         refreshTokenKey = accessToken.getRefreshToken().getValue();
         tokensCache.put(refreshTokenKey, accessToken);
     }
@@ -71,7 +71,7 @@ public enum TokenHandler {
 
         TKhandler.getRefreshTokenFile().delete();
         TKhandler.getTokensCache().invalidateAll();
-        TKhandler.updateRefreshToken(null);
+        refreshTokenKey = null;
     }
 
     public AccessToken getAccessTokenInCache()
@@ -97,13 +97,6 @@ public enum TokenHandler {
             IoHelper.doRuntimeException(e, e.getLocalizedMessage());
         }
         return accessToken;
-    }
-
-    public void updateRefreshToken(String refreshToken)
-    {
-        Log.d(TAG, "updateRefreshToken()");
-        refreshTokenKey = refreshToken;
-        // TODO. implementar después de ver cómo conseguir un nuevo refreshToken de Spring Oauth.
     }
 
     //    ...................  UTILITIES .....................

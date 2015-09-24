@@ -1,9 +1,9 @@
 package com.didekin.retrofitcl;
 
+import com.didekin.serviceone.controllers.ServiceOneEndPointsIf;
 import com.didekin.serviceone.domain.Comunidad;
 import com.didekin.serviceone.domain.Usuario;
 import com.didekin.serviceone.domain.UsuarioComunidad;
-import retrofit.client.Response;
 import retrofit.http.*;
 
 import java.util.List;
@@ -16,8 +16,11 @@ import static com.didekin.serviceone.controllers.ControllerConstant.*;
  * Date: 07/06/15
  * Time: 14:13
  */
-public interface ServiceOneEndPoints {
+public interface ServiceOneEndPoints{
 
+
+    @DELETE(ACCESS_TOKEN_DELETE)
+    int deleteAccessToken(@Header("Authorization") String accessToken);
 
     @DELETE(COMUNIDAD_DELETE + "/{comunidadId}")
     boolean deleteComunidad(@Header("Authorization") String accessToken, @Path("comunidadId") long comunidadId);

@@ -28,6 +28,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.*;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.checkToastInTest;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.*;
 import static com.didekindroid.usuario.security.TokenHandler.TKhandler;
@@ -106,7 +107,7 @@ public class RegComuAndUserAndUserComuAcTest {
         View usuarioRegView = mActivity.findViewById(R.id.reg_user_frg);
 
         // Test assertions about UsuarioBean.
-        UsuarioBean usuarioBean = makeUsuarioBeanFromView(usuarioRegView);
+        UsuarioBean usuarioBean = makeUsuarioBeanFromRegUserFrView(usuarioRegView);
         assertThat(usuarioBean.getUserName(), is("yo@email.com"));
         assertThat(usuarioBean.getAlias(), is("alias1"));
         assertThat(usuarioBean.getPassword(), is("password1"));
@@ -165,7 +166,7 @@ public class RegComuAndUserAndUserComuAcTest {
                 typeText("password1"), closeSoftKeyboard());
 
         // Make UsuarioBean.
-        UsuarioBean usuarioBean = makeUsuarioBeanFromView(mRegUserFr.getFragmentView());
+        UsuarioBean usuarioBean = makeUsuarioBeanFromRegUserFrView(mRegUserFr.getFragmentView());
         // Make UsuarioComunidadBean.
         UsuarioComunidadBean usuarioComunidadBean =
                 makeUsuarioComunidadBeanFromView(mRegUserComuFrg.getFragmentView(), comunidadBean, usuarioBean);
@@ -213,7 +214,7 @@ public class RegComuAndUserAndUserComuAcTest {
         assertThat(comunidadBean.getComunidad(), nullValue());
 
         // Empty UsuarioBean: no input data. UsuarioBean is not null. Usuario is null.
-        UsuarioBean usuarioBean = makeUsuarioBeanFromView(mRegUserFr.getFragmentView());
+        UsuarioBean usuarioBean = makeUsuarioBeanFromRegUserFrView(mRegUserFr.getFragmentView());
         assertThat(usuarioBean, notNullValue());
         assertThat(usuarioBean.getUsuario(), nullValue());
 
@@ -226,7 +227,7 @@ public class RegComuAndUserAndUserComuAcTest {
 
         onView(withId(R.id.reg_com_usuario_usuariocomu_button)).perform(scrollTo(), click());
 
-        UsuarioTestUtils.checkToastInTest(R.string.error_validation_msg, mActivity,
+        checkToastInTest(R.string.error_validation_msg, mActivity,
                 R.string.tipo_via,
                 R.string.nombre_via,
                 R.string.municipio,

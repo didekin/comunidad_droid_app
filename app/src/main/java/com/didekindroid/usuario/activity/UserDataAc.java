@@ -9,14 +9,22 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import com.didekin.retrofitcl.ServiceOneException;
+import com.didekin.security.OauthToken.AccessToken;
 import com.didekin.serviceone.domain.Usuario;
 import com.didekindroid.R;
+import com.didekindroid.ioutils.ConnectionUtils;
+import com.didekindroid.usuario.activity.utils.UserMenu;
+import com.didekindroid.usuario.dominio.UsuarioBean;
 
-import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
-import static com.didekindroid.uiutils.UIutils.updateIsRegistered;
+import static com.didekin.exception.ExceptionMessage.BAD_REQUEST;
+import static com.didekindroid.uiutils.UIutils.*;
+import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUserBeanFromUserDataAcView;
 import static com.didekindroid.usuario.activity.utils.UserMenu.COMU_SEARCH_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_USERCOMU_BY_USER_AC;
 import static com.didekindroid.usuario.security.TokenHandler.TKhandler;
+import static com.didekindroid.usuario.webservices.Oauth2Service.Oauth2;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
@@ -32,9 +40,9 @@ public class UserDataAc extends Activity {
 
     private static final String TAG = UserDataAc.class.getCanonicalName();
 
-    RegUserFr mRegUserFr;
+    private View mAcView;
     private Button mModifyButton;
-    private Button mUnregisterButton;
+    private Usuario mOldUser;
 
 
     @Override
@@ -46,27 +54,17 @@ public class UserDataAc extends Activity {
         // Preconditions.
         checkState(isRegisteredUser(this));
         new UserDataGetter().execute();
-        setContentView(R.layout.user_data_ac);
-        mRegUserFr = (RegUserFr) getFragmentManager().findFragmentById(R.id.reg_user_frg);
+
+        mAcView = getLayoutInflater().inflate(R.layout.user_data_ac, null);
+        setContentView(mAcView);
 
         mModifyButton = (Button) findViewById(R.id.user_data_modif_button);
         mModifyButton.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v)
             {
                 Log.d(TAG, "mModifyButton.OnClickListener().onClick()");
                 modifyUserData();
-            }
-        });
-
-        mUnregisterButton = (Button) findViewById(R.id.user_data_unreg_button);
-        mUnregisterButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                Log.d(TAG, "mUnregisterButton.OnClickListener().onClick()");
-                unregisterUser();
             }
         });
     }
@@ -78,9 +76,22 @@ public class UserDataAc extends Activity {
         // Only for changes of password.
 
         Log.d(TAG, "modifyUserData()");
-        Usuario usuario = null;
-        new UserDataModifyer().execute(usuario);
-        Intent intent = new Intent(this, SeeUserComuByComuAc.class);
+
+        UsuarioBean usuarioBean = makeUserBeanFromUserDataAcView(mAcView);
+
+        StringBuilder errorBuilder = getErrorMsgBuilder(this);
+
+        if (!usuarioBean.validateModified(getResources(), errorBuilder)) {
+            makeToast(this, errorBuilder.toString());
+        } else if (!ConnectionUtils.isInternetConnected(this)) {
+            makeToast(this, R.string.no_internet_conn_toast);
+        } else {
+            Usuario newUser = new Usuario.UsuarioBuilder().copyUsuario(usuarioBean.getUsuario())
+                    .uId(mOldUser.getuId())
+                    .build();
+            new UserDataModifyer().execute(newUser);
+        }
+        Intent intent = new Intent(this, SeeUserComuByUserAc.class);
         startActivity(intent);
     }
 
@@ -109,6 +120,12 @@ public class UserDataAc extends Activity {
         int resourceId = checkNotNull(item.getItemId());
 
         switch (resourceId) {
+            case R.id.password_change_ac_mn:
+                UserMenu.PASSWORD_CHANGE_AC.doMenuItem(this);
+                return true;
+            case R.id.delete_me_ac_mn:
+                UserMenu.DELETE_ME_AC.doMenuItem(this);
+                return true;
             case R.id.see_usercomu_by_user_ac_mn:
                 SEE_USERCOMU_BY_USER_AC.doMenuItem(this);
                 return true;
@@ -124,41 +141,84 @@ public class UserDataAc extends Activity {
     //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
     //    ============================================================
 
-    private class UserDataGetter extends AsyncTask<Void, Void, Usuario> {
+    private class UserDataGetter extends AsyncTask<Void, Void, Void> {
 
-        @Override
-        protected Usuario doInBackground(Void... aVoid)
+        final String TAG = UserDataGetter.class.getCanonicalName();
+
+        protected Void doInBackground(Void... aVoid)
         {
             Log.d(TAG, "UserDataGetter.doInBackground()");
-
-            Usuario usuarioBack = ServOne.getUserData();
-            return usuarioBack;
+            mOldUser = ServOne.getUserData();
+            return null;
         }
 
         @Override
-        protected void onPostExecute(Usuario usuario)
+        protected void onPostExecute(Void aVoid)
         {
             Log.d(TAG, "UserDataGetter.onPostExecute()");
-            //TODO: pinto los datos del usuario.
+
+            ((EditText) mAcView.findViewById(R.id.reg_usuario_email_editT)).setText(mOldUser.getUserName());
+            ((EditText) mAcView.findViewById(R.id.reg_usuario_alias_ediT)).setText(mOldUser.getAlias());
+            ((EditText) mAcView.findViewById(R.id.user_data_ac_password_ediT))
+                    .setHint(R.string.user_data_ac_password_hint);
         }
     }
 
-    private class UserDataModifyer extends AsyncTask<Usuario, Void, Integer> {
+    private class UserDataModifyer extends AsyncTask<Usuario, Void, Boolean> {
 
         final String TAG = UserDataModifyer.class.getCanonicalName();
 
         @Override
-        protected Integer doInBackground(Usuario... usuarios)
+        protected Boolean doInBackground(Usuario... usuarios)
         {
             Log.d(TAG, "doInBackground()");
-            return ServOne.modifyUser(usuarios[0]);
+
+            boolean isSameUserName = mOldUser.getUserName().equals(usuarios[0].getUserName());
+            boolean isSameAlias = mOldUser.getAlias().equals(usuarios[0].getAlias());
+            boolean isPasswordWrong = false;
+
+            if (isSameAlias && isSameUserName) {
+                return isPasswordWrong;
+            }
+
+            AccessToken token = null;
+            try {
+                token = Oauth2.getPasswordUserToken(mOldUser.getUserName(), mOldUser.getPassword());
+                TKhandler.initKeyCacheAndBackupFile(token);
+            } catch (ServiceOneException e) {
+                checkState(e.getMessage().equals(BAD_REQUEST.getMessage()));
+                isPasswordWrong = true;
+                return isPasswordWrong;
+            }
+
+            if (!isSameUserName) {
+                Usuario usuarioIn = new Usuario.UsuarioBuilder()
+                        .userName(usuarios[0].getUserName())
+                        .alias(usuarios[0].getAlias())
+                        .uId(usuarios[0].getuId())
+                        .build();
+                checkState(ServOne.modifyUser(usuarioIn) > 0);
+                token = Oauth2.getPasswordUserToken(usuarioIn.getUserName(), mOldUser.getPassword());
+                TKhandler.initKeyCacheAndBackupFile(token);
+                checkState(ServOne.deleteAccessToken() == 1);
+                return isPasswordWrong;
+            }
+
+            Usuario usuarioIn = new Usuario.UsuarioBuilder()
+                    .alias(usuarios[0].getAlias())
+                    .uId(usuarios[0].getuId())
+                    .build();
+            checkState(ServOne.modifyUser(usuarioIn) > 0);
+            return isPasswordWrong;
         }
 
         @Override
-        protected void onPostExecute(Integer rowsUpdated)
+        protected void onPostExecute(Boolean passwordWrong)
         {
-            Log.d(TAG, "onPostExecute()");
-            checkState(rowsUpdated > 0);
+            Log.d(TAG, "onPostExecute(): DONE");
+            if (passwordWrong) {
+                makeToast(UserDataAc.this, R.string.password_not_valid);
+            }
         }
     }
 

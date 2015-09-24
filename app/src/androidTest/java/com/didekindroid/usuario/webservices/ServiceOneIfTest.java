@@ -19,7 +19,7 @@ import org.junit.runner.RunWith;
 import java.io.File;
 import java.util.List;
 
-import static com.didekin.exception.ExceptionMessage.ENTITY_DUPLICATE;
+import static com.didekin.exception.ExceptionMessage.USER_DUPLICATE;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.*;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRESIDENTE;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PROPIETARIO;
@@ -154,20 +154,17 @@ public class ServiceOneIfTest {
     @Test
     public void testModifyUser_1()
     {
-        whatClean = CLEAN_NOTHING;
+        whatClean = CLEAN_JUAN;
 
-        // Changed password; not user.
+        // Changed alias; not user.
         Usuario usuario_1 = signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
         Usuario usuarioIn = new Usuario.UsuarioBuilder()
-                .userName(usuario_1.getUserName())
-                .password("new_psw_juan")
-                .alias(usuario_1.getAlias())
+                .alias("new_alias_juan")
+                .uId(usuario_1.getuId())
                 .build();
 
         int rowUpdated = ServOne.modifyUser(usuarioIn);
         assertThat(rowUpdated, is(1));
-
-        cleanOneUser(usuarioIn);
     }
 
     @Test
@@ -175,18 +172,22 @@ public class ServiceOneIfTest {
     {
         whatClean = CLEAN_NOTHING;
 
-        // Changed user; not password.
+        // Changed user.
         Usuario usuario_1 = signUpAndUpdateTk(COMU_REAL_PEPE);
         Usuario usuarioIn = new Usuario.UsuarioBuilder()
-                .userName("new_user_pepe")
-                .password(USER_PEPE.getPassword())
+                .userName("new_pepe@pepe.com")
                 .alias("new_alias_pepe")
+                .uId(usuario_1.getuId())
                 .build();
 
         int rowUpdated = ServOne.modifyUser(usuarioIn);
         assertThat(rowUpdated, is(1));
 
-        cleanOneUser(usuarioIn);
+        cleanOneUser(new Usuario.UsuarioBuilder()
+                .copyUsuario(usuarioIn)
+                .password(USER_PEPE.getPassword())
+                .build()
+        );
     }
 
     @Test
@@ -243,8 +244,8 @@ public class ServiceOneIfTest {
             ServOne.regUserAndUserComu(userComu);
             fail();
         } catch (ServiceOneException e) {
-            assertThat(e.getMessage(), is(ENTITY_DUPLICATE.getMessage()));
-            assertThat(e.getHttpStatus(), is(ENTITY_DUPLICATE.getHttpStatus()));
+            assertThat(e.getMessage(), is(USER_DUPLICATE.getMessage()));
+            assertThat(e.getHttpStatus(), is(USER_DUPLICATE.getHttpStatus()));
         }
     }
 

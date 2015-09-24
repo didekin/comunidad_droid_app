@@ -78,6 +78,8 @@ public class SeeUserComuByComuAcTest {
         assertThat(isRegisteredUser(mActivity), is(true));
         assertThat(mActivity.getIntent().getLongExtra(COMUNIDAD_ID.extra, 0L), is(comunidadId));
         assertThat(mFragment, notNullValue());
+        assertThat(mFragment.fragmentListView,notNullValue());
+        assertThat(mFragment.nombreComuView,notNullValue());
 
         onView(withId(R.id.see_usercomu_by_comu_ac_frg_container)).check(matches(isDisplayed()));
         onView(withId(R.id.see_usercomu_by_comu_frg)).check(matches(isDisplayed()));

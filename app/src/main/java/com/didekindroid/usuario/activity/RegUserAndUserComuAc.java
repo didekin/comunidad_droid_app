@@ -13,15 +13,15 @@ import com.didekin.serviceone.domain.Usuario;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.ioutils.ConnectionUtils;
-import com.didekindroid.uiutils.CommonPatterns;
 import com.didekindroid.uiutils.UIutils;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
 
+import static com.didekindroid.uiutils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
 import static com.didekindroid.uiutils.UIutils.updateIsRegistered;
-import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUsuarioBeanFromView;
+import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUsuarioBeanFromRegUserFrView;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUsuarioComunidadBeanFromView;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_ID;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_LIST_OBJECT;
@@ -89,18 +89,16 @@ public class RegUserAndUserComuAc extends Activity {
     {
         Log.d(TAG, "registerComuAndUsuarioComu()");
 
-        UsuarioBean usuarioBean = makeUsuarioBeanFromView(mRegUserFr.getFragmentView());
+        UsuarioBean usuarioBean = makeUsuarioBeanFromRegUserFrView(mRegUserFr.getFragmentView());
         UsuarioComunidadBean usuarioComunidadBean = makeUsuarioComunidadBeanFromView(
                 mRegUserComuFrg.getFragmentView(),
                 new ComunidadBean(mComunidad.getC_Id(), null, null, null, null, null),
                 usuarioBean);
 
-        // Validation of data.
-        StringBuilder errorMsg = new StringBuilder(getResources().getText(R.string.error_validation_msg))
-                .append(CommonPatterns.LINE_BREAK.literal);
+        StringBuilder errorBuilder =  getErrorMsgBuilder(this);
 
-        if (!usuarioComunidadBean.validate(getResources(), errorMsg)) {
-            UIutils.makeToast(this, errorMsg.toString());
+        if (!usuarioComunidadBean.validate(getResources(), errorBuilder)) {
+            UIutils.makeToast(this, errorBuilder.toString());
         } else if (!ConnectionUtils.isInternetConnected(this)) {
             UIutils.makeToast(this, R.string.no_internet_conn_toast);
         } else {
