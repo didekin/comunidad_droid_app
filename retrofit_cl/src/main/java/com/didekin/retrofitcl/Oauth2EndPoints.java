@@ -19,14 +19,14 @@ public interface Oauth2EndPoints{
     @POST(TOKEN_PATH)
     OauthToken.AccessToken getPasswordUserToken(@Header("Authorization") String authClient
             , @Field(USER_PARAM) String username
-            , @Field(SecurityConstant.PSWD_PARAM) String password
-            , @Field(SecurityConstant.GRANT_TYPE_PARAM) String grantType);
+            , @Field(PSWD_PARAM) String password
+            , @Field(GRANT_TYPE_PARAM) String grantType);
 
     @FormUrlEncoded
     @POST(TOKEN_PATH)
     OauthToken.AccessToken getRefreshUserToken(@Header("Authorization") String authClient
             , @Field(SecurityConstant.REFRESH_TK_PARAM) String refreshToken
-            , @Field(SecurityConstant.GRANT_TYPE_PARAM) String grantType);
+            , @Field(GRANT_TYPE_PARAM) String grantType);
 
     //    .............  TESTS ...........
 

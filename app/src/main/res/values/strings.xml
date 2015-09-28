@@ -39,7 +39,9 @@
     <string name="user_without_signedUp">"No te has registrado aún.\nBusca tu comunidad y regístrate en ella.\nSi no existe, regístrala en 'Nueva comunidad'."</string>
     <string name="no_result_search_comunidad">No hemos encontrado tu comunidad.\n
             Puedes registrarla aquí. </string>
-    <string name="password_not_valid">La contraseña no se corresponde con el usuario.</string>
+    <string name="password_not_valid">La contraseña no se corresponde con el usuario.\nSi no la recuerdas,
+        selecciona en el menú la opción para renovarla.</string>
+    <string name="wrong_user">El correo no se corresponde con tu usuario. Haz login nuevamente.</string>
     <!-- ============================= MENUS ================================= -->
     <string name="comu_search_ac_mn">Buscar comunidad</string>
     <string name="user_data_ac_mn">Mi usuario</string>
@@ -49,9 +51,6 @@
     <string name="delete_me_ac_mn">Borrar mis datos</string>
     <!--Válido para reg_comu_usercomu-->
     <string name="reg_user_and_usercomu_ac_mn">Unirme</string>
-    <!--Válido para reg_usercomu-->
-    <string name="modificar_datos_usuario_mn">Modificar datos</string>
-    <string name="recordar_contraseña_mn">Recordar contraseña</string>
     <string name="nueva_contraseña_mn">Renovar contraseña</string>
     <!-- ============================= ACTIVITIES ============================= -->
     <!-- ============ ComunidadSearchActivity ============ -->
@@ -64,7 +63,7 @@
     <string name="comunidades_usuario_acc_label">Mis comunidades</string>
     <!-- ================= DeleteMeAc ===================== -->
     <string name="delete_me_ac_label">Borrar mis datos</string>
-    <string name="delete_me_ac_unreg_rot_txt">¿Desea eliminar sus datos en didekin?</string>
+    <string name="delete_me_ac_unreg_rot_txt">¿Deseas eliminar tus datos en didekin?</string>
     <string name="delete_me_ac_unreg_button_txt">Sí, borro todos mis datos</string>
     <!--================= LoginActivity =================== -->
     <string name="login_label">Registro en didekin</string>
@@ -72,7 +71,7 @@
     <string name="textLogin_yes">Haz login.</string>
     <string name="loginButtonLabel">Login</string>
     <!-- ================ PasswordChangeAc =========== -->
-    <string name="title_activity_password_change">didekin</string>
+    <string name="password_change_ac_label">didekin</string>
     <string name="password_change_ac_rotulo">Nueva contraseña</string>
     <string name="password_change_ac_button_txt">Cambio mi contraseña</string>
     <!-- ================ RegUserAndUserComuAc =========== -->
@@ -118,19 +117,20 @@
     <!-- ================== RegUserComuAc ================= -->
     <string name="regusuario_comu_ac_label">Comunidad seleccionada</string>
     <!-- ================= SeeUserComuByComuAc ============ -->
+    <string name="see_usercomu_by_comu_ac_label"></string>
     <string name="usercomu_portal_rot">Portal:</string>
     <string name="usercomu_escalera_rot">Escalera:</string>
     <string name="usercomu_planta_rot">Planta:</string>
     <string name="usercomu_puerta_rot">Puerta:</string>
     <string name="usercomu_role_rot">Vínculo con la comunidad:</string>
     <!-- ================= SeeUserComuByUserAc ============ -->
-    <string name="see_comu_and_usercomu_ac_label">Mis datos en la comunidad</string>
+    <string name="see_usercomu_by_user_ac_label">Mis comunidades</string>
     <!-- ================= UserDataAc ===================== -->
     <string name="user_data_ac_label">Mis datos</string>
     <string name="user_data_ac_rotulo">Mis datos</string>
-    <string name="user_data_ac_cambios_text">Puedes cambiarlos sobreescribiendo las dos casillas siguientes.</string>
+    <string name="user_data_ac_cambios_text">Sobreescribe el dato que quieras modificar.</string>
     <string name="user_data_ac_password_txt">Valida los cambios introduciendo tu contraseña:</string>
-    <string name="user_data_ac_password_hint">contraseña</string>
+    <string name="user_data_ac_password_hint">contraseña actual</string>
     <string name="user_data_modif_button_txt">Modifico mis datos</string>
 
 </resources>

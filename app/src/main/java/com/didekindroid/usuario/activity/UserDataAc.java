@@ -33,8 +33,7 @@ import static com.google.common.base.Preconditions.checkState;
  * Preconditions:
  * 1. Registered user.
  * Postconditions:
- * 1a. Unregistered user, if she chooses so. ComuSearchAc is to be showed.
- * 1b. Regitered user with modified data. Once done, it goes to SeeUserComuByUserAc.
+ * 1. Regitered user with modified data. Once done, it goes to SeeUserComuByUserAc.
  */
 public class UserDataAc extends Activity {
 
@@ -43,7 +42,6 @@ public class UserDataAc extends Activity {
     private View mAcView;
     private Button mModifyButton;
     private Usuario mOldUser;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -81,7 +79,7 @@ public class UserDataAc extends Activity {
 
         StringBuilder errorBuilder = getErrorMsgBuilder(this);
 
-        if (!usuarioBean.validateModified(getResources(), errorBuilder)) {
+        if (!usuarioBean.validateWithOnePassword(getResources(), errorBuilder)) {
             makeToast(this, errorBuilder.toString());
         } else if (!ConnectionUtils.isInternetConnected(this)) {
             makeToast(this, R.string.no_internet_conn_toast);
@@ -94,15 +92,6 @@ public class UserDataAc extends Activity {
         Intent intent = new Intent(this, SeeUserComuByUserAc.class);
         startActivity(intent);
     }
-
-    private void unregisterUser()
-    {
-        Log.d(TAG, "unregisterUser()");
-        new UserDataEraser().execute();
-        Intent intent = new Intent(this, ComuSearchAc.class);
-        startActivity(intent);
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
@@ -181,10 +170,10 @@ public class UserDataAc extends Activity {
                 return isPasswordWrong;
             }
 
-            AccessToken token = null;
+            AccessToken token_1 = null;
             try {
-                token = Oauth2.getPasswordUserToken(mOldUser.getUserName(), mOldUser.getPassword());
-                TKhandler.initKeyCacheAndBackupFile(token);
+                token_1 = Oauth2.getPasswordUserToken(mOldUser.getUserName(), usuarios[0].getPassword());
+                TKhandler.initKeyCacheAndBackupFile(token_1);
             } catch (ServiceOneException e) {
                 checkState(e.getMessage().equals(BAD_REQUEST.getMessage()));
                 isPasswordWrong = true;
@@ -198,9 +187,9 @@ public class UserDataAc extends Activity {
                         .uId(usuarios[0].getuId())
                         .build();
                 checkState(ServOne.modifyUser(usuarioIn) > 0);
-                token = Oauth2.getPasswordUserToken(usuarioIn.getUserName(), mOldUser.getPassword());
-                TKhandler.initKeyCacheAndBackupFile(token);
-                checkState(ServOne.deleteAccessToken() == 1);
+                AccessToken token_2 = Oauth2.getPasswordUserToken(usuarioIn.getUserName(), usuarios[0].getPassword());
+                TKhandler.initKeyCacheAndBackupFile(token_2);
+                checkState(ServOne.deleteAccessToken(token_1.getValue()));
                 return isPasswordWrong;
             }
 
@@ -219,28 +208,6 @@ public class UserDataAc extends Activity {
             if (passwordWrong) {
                 makeToast(UserDataAc.this, R.string.password_not_valid);
             }
-        }
-    }
-
-    private class UserDataEraser extends AsyncTask<Void, Void, Boolean> {
-
-        final String TAG = UserDataEraser.class.getCanonicalName();
-
-        @Override
-        protected Boolean doInBackground(Void... params)
-        {
-            Log.d(TAG, "doInBackground()");
-            boolean isDeleted = ServOne.deleteUser();
-            TKhandler.cleanCacheAndBckFile();
-            updateIsRegistered(false, UserDataAc.this);
-            return isDeleted;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean isDeleted)
-        {
-            Log.d(TAG, "onPostExecute()");
-            checkState(isDeleted);
         }
     }
 }

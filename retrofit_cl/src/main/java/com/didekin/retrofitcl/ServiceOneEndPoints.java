@@ -1,5 +1,7 @@
 package com.didekin.retrofitcl;
 
+import com.didekin.security.SecurityConstant;
+import com.didekin.serviceone.controllers.ControllerConstant;
 import com.didekin.serviceone.controllers.ServiceOneEndPointsIf;
 import com.didekin.serviceone.domain.Comunidad;
 import com.didekin.serviceone.domain.Usuario;
@@ -8,6 +10,8 @@ import retrofit.http.*;
 
 import java.util.List;
 
+import static com.didekin.security.SecurityConstant.PSWD_PARAM;
+import static com.didekin.security.SecurityConstant.USER_PARAM;
 import static com.didekin.security.SecurityConstant.USER_READ;
 import static com.didekin.serviceone.controllers.ControllerConstant.*;
 
@@ -19,8 +23,8 @@ import static com.didekin.serviceone.controllers.ControllerConstant.*;
 public interface ServiceOneEndPoints{
 
 
-    @DELETE(ACCESS_TOKEN_DELETE)
-    int deleteAccessToken(@Header("Authorization") String accessToken);
+    @DELETE(ACCESS_TOKEN_DELETE + "/{oldTk}")
+    boolean deleteAccessToken(@Header("Authorization") String accessToken, @Path("oldTk") String oldAccessToken);
 
     @DELETE(COMUNIDAD_DELETE + "/{comunidadId}")
     boolean deleteComunidad(@Header("Authorization") String accessToken, @Path("comunidadId") long comunidadId);
@@ -39,6 +43,10 @@ public interface ServiceOneEndPoints{
 
     @PUT(USER_MODIFY)
     int modifyUser(@Header("Authorization") String accessToken, @Body Usuario usuario);
+
+    @FormUrlEncoded
+    @POST(PASSWORD_MODIFY)
+    int passwordChange(@Header("Authorization") String accessToken, @Field(PSWD_PARAM) String password);
 
     @POST(REG_COMU_AND_USER_AND_USERCOMU)
     boolean regComuAndUserAndUserComu(@Body UsuarioComunidad usuarioCom);

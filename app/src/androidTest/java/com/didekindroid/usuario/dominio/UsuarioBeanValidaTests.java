@@ -57,17 +57,17 @@ public class UsuarioBeanValidaTests {
     public void testValidateModified_1()
     {
         UsuarioBean usuarioBean = new UsuarioBean("user@name.com", "alias1", "", "");
-        assertThat(usuarioBean.validateModified(resources, errors), is(false));
+        assertThat(usuarioBean.validateWithOnePassword(resources, errors), is(false));
         assertThat(errors.toString(), containsString(resources.getText(R.string.password).toString()));
 
         usuarioBean = new UsuarioBean("user@name.com", "alias1", "password", "");
-        assertThat(usuarioBean.validateModified(resources, errors), is(true));
+        assertThat(usuarioBean.validateWithOnePassword(resources, errors), is(true));
         assertThat(usuarioBean.getUsuario().getUserName(), is("user@name.com"));
         assertThat(usuarioBean.getUsuario().getAlias(), is("alias1"));
         assertThat(usuarioBean.getUsuario().getPassword(), is("password"));
 
         usuarioBean = new UsuarioBean("user@name.com", "alias1", "password", "hola");
-        assertThat(usuarioBean.validateModified(resources, errors), is(true));
+        assertThat(usuarioBean.validateWithOnePassword(resources, errors), is(true));
     }
 
     @Test

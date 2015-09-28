@@ -15,14 +15,16 @@ import org.junit.runners.Suite;
                 ComuSearchAcTest.class,
                 ComuSearchAcTest_intent.class,
                 ComuSearchResultsAcTest.class,
+                DeleteMeAcTest.class,
+                PasswordChangeAcTest.class,
                 RegUserComuAcTest.class,
                 RegUserComuAcTest_intent.class,
                 RegUserAndUserComuAcTest_intent.class,
                 RegComuAndUserComuAcTest.class,
                 RegComuAndUserAndUserComuAcTest.class,
-                UserDataAcTest.class, // In progress.
+                UserDataAcTest.class,
                 SeeUserComuByComuAcTest.class,
-                SeeUserComuByUserAcTest.class // In progress.
+                SeeUserComuByUserAcTest.class
         }
 )
 public class UserFunctionalTestSuite {

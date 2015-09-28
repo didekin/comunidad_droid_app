@@ -61,6 +61,16 @@ public class ServiceOneIfTest {
 //    ========================= INTERFACE TESTS =======================
 
     @Test
+    public void testDeleteAccessToken()
+    {
+        whatClean = CLEAN_PEPE;
+
+        signUpAndUpdateTk(COMU_REAL_PEPE);
+        boolean isDeleted = ServOne.deleteAccessToken(TKhandler.getAccessTokenInCache().getValue());
+        assertThat(isDeleted, is(true));
+    }
+
+    @Test
     public void testDeleteComunidad() throws Exception
     {
         // Comunidad with one user.
@@ -184,10 +194,25 @@ public class ServiceOneIfTest {
         assertThat(rowUpdated, is(1));
 
         cleanOneUser(new Usuario.UsuarioBuilder()
-                .copyUsuario(usuarioIn)
-                .password(USER_PEPE.getPassword())
-                .build()
+                        .copyUsuario(usuarioIn)
+                        .password(USER_PEPE.getPassword())
+                        .build()
         );
+    }
+
+    @Test
+    public void testPasswordChange()
+    {
+        whatClean = CLEAN_NOTHING;
+
+        Usuario usuario_1 = signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
+        String passwordClear_2 = "new_juan_password";
+        assertThat(ServOne.passwordChange(passwordClear_2),is(1));
+
+        cleanOneUser(new Usuario.UsuarioBuilder()
+        .userName(USER_JUAN.getUserName())
+        .password(passwordClear_2)
+        .build());
     }
 
     @Test

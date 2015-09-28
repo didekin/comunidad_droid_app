@@ -22,9 +22,9 @@ public enum ServiceOne implements ServiceOneEndPointsIf {
 
     ServOne(BUILDER.getService(ServiceOneEndPoints.class, getBaseURL())) {
         @Override
-        public int deleteAccessToken(String accessToken)
+        public boolean deleteAccessToken(String accessToken, String oldAccessToken)
         {
-            return ServOne.endPoint.deleteAccessToken(accessToken);
+            return ServOne.endPoint.deleteAccessToken(accessToken, oldAccessToken);
         }
 
         @Override
@@ -61,6 +61,12 @@ public enum ServiceOne implements ServiceOneEndPointsIf {
         public int modifyUser(String accessToken, Usuario usuario)
         {
             return ServOne.endPoint.modifyUser(accessToken, usuario);
+        }
+
+        @Override
+        public int passwordChange(String accessToken, String newPassword)
+        {
+            return ServOne.endPoint.passwordChange(accessToken, newPassword);
         }
 
         @Override
@@ -109,8 +115,6 @@ public enum ServiceOne implements ServiceOneEndPointsIf {
         {
             return ServOne.endPoint.seeUserComuByComu(accessToken, comunidadId);
         }
-
-
     },;
 
     private static final String TAG = ServiceOne.class.getCanonicalName();
@@ -122,14 +126,14 @@ public enum ServiceOne implements ServiceOneEndPointsIf {
         endPoint = retrofitEndPoint;
     }
 
-    //    ::::::::::::::::::::::::::::::::::::::::::
-    //                  CONVENIENCE METHODS
-    //    ::::::::::::::::::::::::::::::::::::::::::
+// :::::::::::::::::::::::::::::::::::::::::::::::::::::
+//                  CONVENIENCE METHODS
+// :::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-    public int deleteAccessToken()
+    public boolean deleteAccessToken(String oldAccessToken)
     {
         Log.d(TAG, "deleteAccessToken()");
-        return deleteAccessToken(TKhandler.doBearerAccessTkHeader());
+        return deleteAccessToken(TKhandler.doBearerAccessTkHeader(), oldAccessToken);
     }
 
     public boolean deleteComunidad(long comunidadId)
@@ -154,37 +158,43 @@ public enum ServiceOne implements ServiceOneEndPointsIf {
     public Usuario getUserData()
     {
         Log.d(TAG, ("getUserData()"));
-        return endPoint.getUserData(TKhandler.doBearerAccessTkHeader());
+        return getUserData(TKhandler.doBearerAccessTkHeader());
     }
 
     public List<UsuarioComunidad> getUsuariosComunidad()
     {
         Log.d(TAG, "getUserComusByUser()");
         String bearerAccessTkHeader = TKhandler.doBearerAccessTkHeader();
-        return (bearerAccessTkHeader != null ? endPoint.getUserComusByUser(bearerAccessTkHeader) : null);
+        return (bearerAccessTkHeader != null ? getUserComusByUser(bearerAccessTkHeader) : null);
     }
 
     public int modifyUser(Usuario usuario)
     {
         Log.d(TAG, "modifyUser()");
-        return endPoint.modifyUser(TKhandler.doBearerAccessTkHeader(), usuario);
+        return modifyUser(TKhandler.doBearerAccessTkHeader(), usuario);
+    }
+
+    public int passwordChange(String newPassword)
+    {
+        Log.d(TAG, "passwordChange()");
+        return passwordChange(TKhandler.doBearerAccessTkHeader(), newPassword);
     }
 
     public boolean regComuAndUserComu(UsuarioComunidad usuarioComunidad)
     {
         Log.d(TAG, "regComuAndUserComu()");
-        return endPoint.regComuAndUserComu(TKhandler.doBearerAccessTkHeader(), usuarioComunidad);
+        return regComuAndUserComu(TKhandler.doBearerAccessTkHeader(), usuarioComunidad);
     }
 
     public int regUserComu(UsuarioComunidad usuarioComunidad)
     {
         Log.d(TAG, "regUserComu()");
-        return endPoint.regUserComu(TKhandler.doBearerAccessTkHeader(), usuarioComunidad);
+        return regUserComu(TKhandler.doBearerAccessTkHeader(), usuarioComunidad);
     }
 
     public List<UsuarioComunidad> seeUserComuByComu(long idComunidad)
     {
         Log.d(TAG, "seeUserComuByComu()");
-        return endPoint.seeUserComuByComu(TKhandler.doBearerAccessTkHeader(), idComunidad);
+        return seeUserComuByComu(TKhandler.doBearerAccessTkHeader(), idComunidad);
     }
 }

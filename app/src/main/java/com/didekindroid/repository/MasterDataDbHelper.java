@@ -427,20 +427,3 @@ public class MasterDataDbHelper extends SQLiteOpenHelper {
         }
     }
 }
-
-
-    /*private void loadCustomers(final SQLiteDatabase db)  // TODO: async call. en vez de new Thread.
-    {
-        Log.i(TAG, "In loadCustomers()");
-
-        new Thread(new Runnable() {
-            public void run()
-            {
-                try {
-                    loadCustomerFile(db);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }).start();
-    }*/

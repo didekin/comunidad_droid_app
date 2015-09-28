@@ -45,7 +45,7 @@ public final class UsuarioBean {
         return isValide;
     }
 
-    public boolean validateModified(Resources resources, StringBuilder errorMsg)
+    public boolean validateWithOnePassword(Resources resources, StringBuilder errorMsg)
     {
         boolean isValid = validateAlias(resources.getText(R.string.alias), errorMsg)
                 & validateUserName(resources.getText(R.string.email_hint), errorMsg)
@@ -81,7 +81,7 @@ public final class UsuarioBean {
         return isValid;
     }
 
-    protected boolean validateDoublePassword(Resources resources, StringBuilder errorMsg)
+    public boolean validateDoublePassword(Resources resources, StringBuilder errorMsg)
     {
         if (!password.trim().equals(verificaPassword.toString())) {
             errorMsg.append(resources.getText(R.string.password).toString() + resources.getText(R.string

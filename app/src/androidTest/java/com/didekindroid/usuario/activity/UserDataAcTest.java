@@ -3,9 +3,11 @@ package com.didekindroid.usuario.activity;
 import android.content.res.Resources;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import com.didekin.security.OauthToken.AccessToken;
+import com.didekin.security.OauthToken;
+import com.didekin.serviceone.domain.Usuario;
 import com.didekindroid.R;
 import com.didekindroid.usuario.activity.utils.CleanEnum;
+import com.didekindroid.usuario.webservices.ServiceOne;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -21,8 +23,7 @@ import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_NOTHING;
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.*;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.*;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_JUAN;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_JUAN;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.*;
 import static com.didekindroid.usuario.security.TokenHandler.TKhandler;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 import static org.hamcrest.Matchers.*;
@@ -38,7 +39,7 @@ public class UserDataAcTest {
 
     UserDataAc mActivity;
     Resources resources;
-    CleanEnum whatToClean = CLEAN_NOTHING;
+    CleanEnum whatToClean = CLEAN_JUAN;
 
     @Rule
     public ActivityTestRule<UserDataAc> mActivityRule = new ActivityTestRule<UserDataAc>(UserDataAc.class) {
@@ -66,8 +67,6 @@ public class UserDataAcTest {
     @Test
     public void testOncreate_1()
     {
-        whatToClean = CLEAN_JUAN;
-
         assertThat(mActivity, notNullValue());
         assertThat(isRegisteredUser(mActivity), is(true));
 
@@ -86,8 +85,6 @@ public class UserDataAcTest {
     @Test
     public void testOncreate_2()
     {
-        whatToClean = CLEAN_JUAN;
-
         // Aserciones sobre los datos mostrados en función del usuario en sesión.
         onView(withId(R.id.reg_usuario_email_editT))
                 .check(matches(withText(containsString(USER_JUAN.getUserName()))));
@@ -101,68 +98,59 @@ public class UserDataAcTest {
     public void testComuSearchMn_withToken() throws InterruptedException
     {
         COMU_SEARCH_AC.checkMenuItem_WTk(mActivity);
-
-        whatToClean = CLEAN_JUAN;
     }
 
     @Test
     public void testDeleteMeMn_withToken() throws InterruptedException
     {
         DELETE_ME_AC.checkMenuItem_WTk(mActivity);
-
-        whatToClean = CLEAN_JUAN;
     }
 
     @Test
     public void testPasswordChangeMn_withToken() throws InterruptedException
     {
         PASSWORD_CHANGE_AC.checkMenuItem_WTk(mActivity);
-
-        whatToClean = CLEAN_JUAN;
     }
 
     @Test
     public void testUserComuByUserMn_withToken() throws InterruptedException
     {
         SEE_USERCOMU_BY_USER_AC.checkMenuItem_WTk(mActivity);
-
-        whatToClean = CLEAN_JUAN;
     }
 
     /* Datos erróneos: formato de email y password vacío. */
     @Test
-    public void testModifyUserData_1()
+    public void testModifyUserData_1() throws InterruptedException
     {
-        whatToClean = CLEAN_JUAN;
-
-        onView(withId(R.id.reg_usuario_alias_ediT)).perform(scrollTo(),
-                replaceText("new_alias"));
-        onView(withId(R.id.reg_usuario_email_editT)).perform(scrollTo(),
-                replaceText("new_user_wrong"), closeSoftKeyboard());
+        onView(withId(R.id.reg_usuario_alias_ediT)).perform(replaceText("new_alias"));
+        onView(withId(R.id.reg_usuario_email_editT)).perform(replaceText("new_user_wrong"), closeSoftKeyboard());
         onView(withId(R.id.user_data_modif_button)).perform(scrollTo())
                 .check(matches(isDisplayed())).perform(click());
 
         checkToastInTest(R.string.error_validation_msg, mActivity,
                 R.string.password,
                 R.string.email_hint);
+
+        Thread.sleep(3000);
     }
 
     /* Alias y userName sin cambios. */
     @Test
-    public  void testModifyUserData_2(){
+    public void testModifyUserData_2() throws InterruptedException
+    {
+        onView(withId(R.id.user_data_modif_button)).perform(scrollTo())
+                .check(matches(isDisplayed())).perform(click());
+        onView(withId(R.id.see_usercomu_by_user_ac_layout)).check(matches(isDisplayed()));
 
+        Thread.sleep(2000);
     }
 
     /* Password erróneo en servidor.*/
     @Test
-    public void testModifyUserData_3()
+    public void testModifyUserData_3() throws InterruptedException
     {
-        whatToClean = CLEAN_JUAN;
-
-        onView(withId(R.id.reg_usuario_email_editT)).perform(scrollTo(),
-                replaceText("new_juan@juan.es"));
-        onView(withId(R.id.user_data_ac_password_ediT)).perform(scrollTo(),
-                typeText("wrong_password"), closeSoftKeyboard());
+        onView(withId(R.id.reg_usuario_email_editT)).perform(replaceText("new_juan@juan.es"));
+        onView(withId(R.id.user_data_ac_password_ediT)).perform(typeText("wrong_password"), closeSoftKeyboard());
         onView(withId(R.id.user_data_modif_button)).perform(scrollTo())
                 .check(matches(isDisplayed())).perform(click());
 
@@ -173,31 +161,48 @@ public class UserDataAcTest {
     @Test
     public void testModifyUserData_4()
     {
-        whatToClean = CLEAN_JUAN;
+        // Check security data: old data.
+        OauthToken.AccessToken tokenBefore = TKhandler.getAccessTokenInCache();
+        String accessTkValue = tokenBefore.getValue();
+        String refreshTkValue = tokenBefore.getRefreshToken().getValue();
 
-        // Old security data.
-        AccessToken token = TKhandler.getAccessTokenInCache();
-        String accessTkValue = token.getValue();
-        String refreshTkValue = token.getRefreshToken().getValue();
+        onView(withId(R.id.reg_usuario_alias_ediT)).perform(replaceText("new_alias_juan"));
+        onView(withId(R.id.user_data_ac_password_ediT)).perform(typeText(USER_JUAN.getPassword()), closeSoftKeyboard());
 
-        // New usuario data.
-        onView(withId(R.id.reg_usuario_alias_ediT)).perform(scrollTo(),
-                replaceText("new_juan_alias"), closeSoftKeyboard());
         onView(withId(R.id.user_data_modif_button)).perform(scrollTo())
                 .check(matches(isDisplayed())).perform(click());
-
         onView(withId(R.id.see_usercomu_by_user_ac_layout)).check(matches(isDisplayed()));
-        AccessToken tokenAfter = TKhandler.getAccessTokenInCache();
+
+        // New security data: same as the old one.
+        OauthToken.AccessToken tokenAfter = TKhandler.getAccessTokenInCache();
         assertThat(tokenAfter.getValue(), is(accessTkValue));  // same accessToken.
-        assertThat(refreshTkValue, is(tokenAfter.getRefreshToken().getValue()));  //same refreshToken.
+        assertThat(tokenAfter.getRefreshToken().getValue(), is(refreshTkValue));  //same refreshToken.
     }
 
     @Test
-    public void testUnregisterUser()
+    public void testModifyUserData_5()
     {
-        assertThat(ServOne.deleteUser(), is(true));
-        assertThat(isRegisteredUser(mActivity), is(false));
-        assertThat(TKhandler.getAccessTokenInCache(), nullValue());
-        assertThat(TKhandler.getRefreshTokenFile().exists(), is(false));
+        whatToClean = CLEAN_NOTHING;
+
+        // Check security data: old data.
+        OauthToken.AccessToken tokenBefore = TKhandler.getAccessTokenInCache();
+        String accessTkValue = tokenBefore.getValue();
+        String refreshTkValue = tokenBefore.getRefreshToken().getValue();
+
+        onView(withId(R.id.reg_usuario_alias_ediT)).perform(replaceText("new_alias_juan"));
+        onView(withId(R.id.reg_usuario_email_editT)).perform(replaceText("new_juan@mail.org"));
+        onView(withId(R.id.user_data_ac_password_ediT)).perform(typeText(USER_JUAN.getPassword()), closeSoftKeyboard());
+
+        onView(withId(R.id.user_data_modif_button)).perform(scrollTo())
+                .check(matches(isDisplayed())).perform(click());
+        onView(withId(R.id.see_usercomu_by_user_ac_layout)).check(matches(isDisplayed()));
+
+        // New security data.
+        OauthToken.AccessToken tokenAfter = TKhandler.getAccessTokenInCache();
+        assertThat(tokenAfter, notNullValue());
+        assertThat(tokenAfter.getValue(), not(is(accessTkValue)));  // differtent accessToken.
+        assertThat(tokenAfter.getRefreshToken().getValue(), not(is(refreshTkValue)));  //different refreshToken.
+
+        ServOne.deleteUser();
     }
 }

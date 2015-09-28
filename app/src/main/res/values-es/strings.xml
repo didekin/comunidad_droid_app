@@ -72,7 +72,7 @@
     <string name="textLogin_yes">Haz login.</string>
     <string name="loginButtonLabel">Login</string>
     <!-- ================ PasswordChangeAc =========== -->
-    <string name="title_activity_password_change">didekin</string>
+    <string name="password_change_ac_label">didekin</string>
     <string name="password_change_ac_rotulo">Nueva contraseña</string>
     <string name="password_change_ac_button_txt">Cambio mi contraseña</string>
     <!-- ================ RegUserAndUserComuAc =========== -->
@@ -124,7 +124,7 @@
     <string name="usercomu_puerta_rot">Puerta:</string>
     <string name="usercomu_role_rot">Vínculo con la comunidad:</string>
     <!-- ================= SeeUserComuByUserAc ============ -->
-    <string name="see_comu_and_usercomu_ac_label">Mis datos en la comunidad</string>
+    <string name="see_usercomu_by_user_ac_label">Mis datos en la comunidad</string>
     <!-- ================= UserDataAc ===================== -->
     <string name="user_data_ac_label">Mis datos</string>
     <string name="user_data_ac_rotulo">Mis datos</string>
