@@ -28,8 +28,8 @@ public class IntentExtrasTests {
         assertThat(COMUNIDAD_ID.extra, is(UserIntentExtras.class.getName()
                 .concat(".")
                 .concat(COMUNIDAD_ID.name())));
-        assertThat(USUARIO_COMUNIDAD_REG.extra, is(UserIntentExtras.class.getName()
+        assertThat(USERCOMU_LIST_OBJECT.extra, is(UserIntentExtras.class.getName()
                 .concat(".")
-                .concat(USUARIO_COMUNIDAD_REG.name())));
+                .concat(USERCOMU_LIST_OBJECT.name())));
     }
 }

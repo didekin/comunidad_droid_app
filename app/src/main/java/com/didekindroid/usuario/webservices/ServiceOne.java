@@ -28,15 +28,15 @@ public enum ServiceOne implements ServiceOneEndPointsIf {
         }
 
         @Override
-        public boolean deleteComunidad(String accessToken, long comunidadId)
-        {
-            return ServOne.endPoint.deleteComunidad(accessToken, comunidadId);
-        }
-
-        @Override
         public boolean deleteUser(String accessToken)
         {
             return ServOne.endPoint.deleteUser(accessToken);
+        }
+
+        @Override
+        public int deleteUserComu(String accessToken, long comunidadId)
+        {
+            return ServOne.endPoint.deleteUserComu(accessToken, comunidadId);
         }
 
         @Override
@@ -61,6 +61,12 @@ public enum ServiceOne implements ServiceOneEndPointsIf {
         public int modifyUser(String accessToken, Usuario usuario)
         {
             return ServOne.endPoint.modifyUser(accessToken, usuario);
+        }
+
+        @Override
+        public int modifyUserComu(String accessToken, UsuarioComunidad userComu)
+        {
+            return ServOne.endPoint.modifyUserComu(accessToken, userComu);
         }
 
         @Override
@@ -136,16 +142,16 @@ public enum ServiceOne implements ServiceOneEndPointsIf {
         return deleteAccessToken(TKhandler.doBearerAccessTkHeader(), oldAccessToken);
     }
 
-    public boolean deleteComunidad(long comunidadId)
-    {
-        Log.d(TAG, "deleteComunidad()");
-        return deleteComunidad(TKhandler.doBearerAccessTkHeader(), comunidadId);
-    }
-
     public boolean deleteUser()
     {
         Log.d(TAG, "deleteUser()");
         return deleteUser(TKhandler.doBearerAccessTkHeader());
+    }
+
+    public int deleteUserComu(long comunidadId)
+    {
+        Log.d(TAG, "deleteUserComu()");
+        return deleteUserComu(TKhandler.doBearerAccessTkHeader(), comunidadId);
     }
 
     public List<Comunidad> getComunidadesByUser()  // TODO: ¿a desaparecer?
@@ -161,7 +167,7 @@ public enum ServiceOne implements ServiceOneEndPointsIf {
         return getUserData(TKhandler.doBearerAccessTkHeader());
     }
 
-    public List<UsuarioComunidad> getUsuariosComunidad()
+    public List<UsuarioComunidad> getUserComusByUser()
     {
         Log.d(TAG, "getUserComusByUser()");
         String bearerAccessTkHeader = TKhandler.doBearerAccessTkHeader();
@@ -172,6 +178,12 @@ public enum ServiceOne implements ServiceOneEndPointsIf {
     {
         Log.d(TAG, "modifyUser()");
         return modifyUser(TKhandler.doBearerAccessTkHeader(), usuario);
+    }
+
+    public int modifyUserComu(UsuarioComunidad userComu)
+    {
+        Log.d(TAG, "modifyUserComu()");
+        return modifyUserComu(TKhandler.doBearerAccessTkHeader(), userComu);
     }
 
     public int passwordChange(String newPassword)

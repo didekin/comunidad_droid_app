@@ -114,7 +114,7 @@ public class ComuSearchResultsListFr extends ListFragment {
     {
         Log.d(TAG, "onListItemClick()");
 
-        getListView().setItemChecked(position, true); // ¿Necesito ésta o la sig. línea?
+        getListView().setItemChecked(position, true);
         v.setSelected(true);
 
         if (mComuListListener != null) {

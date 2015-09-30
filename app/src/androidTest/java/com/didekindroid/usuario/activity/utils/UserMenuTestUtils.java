@@ -20,6 +20,23 @@ import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.checkToas
  */
 public enum UserMenuTestUtils {
 
+    COMU_DATA_AC {
+        @Override
+        public void checkMenuItem_NTk(Activity activity) throws InterruptedException
+        {
+            throw new UnsupportedOperationException(COMU_DATA_AC.name() + "requires registered user");
+        }
+
+        @Override
+        public void checkMenuItem_WTk(Activity activity) throws InterruptedException
+        {
+            onView(withText(R.string.comu_data_ac_mn)).check(doesNotExist());
+            openActionBarOverflowOrOptionsMenu(activity);
+            onView(withText(R.string.comu_data_ac_mn)).check(matches(isDisplayed())).perform(click());
+            onView(withId(R.id.comu_data_ac_layout)).check(matches(isDisplayed()));
+        }
+    },
+
     COMU_SEARCH_AC {
         @Override
         public void checkMenuItem_NTk(Activity activity) throws InterruptedException
@@ -110,6 +127,23 @@ public enum UserMenuTestUtils {
             openActionBarOverflowOrOptionsMenu(activity);
             onView(withText(R.string.reg_user_and_usercomu_ac_mn)).check(matches(isDisplayed())).perform(click());
             onView(withId(R.id.reg_usercomu_ac_layout)).check(matches(isDisplayed()));
+        }
+    },
+
+    SEE_USERCOMU_BY_COMU_AC {
+        @Override
+        public void checkMenuItem_NTk(Activity activity) throws InterruptedException
+        {
+            throw new UnsupportedOperationException(SEE_USERCOMU_BY_COMU_AC.name() + "requires registered user");
+        }
+
+        @Override
+        public void checkMenuItem_WTk(Activity activity) throws InterruptedException
+        {
+            onView(withText(R.string.see_usercomu_by_comu_ac_mn)).check(doesNotExist());
+            openActionBarOverflowOrOptionsMenu(activity);
+            onView(withText(R.string.see_usercomu_by_comu_ac_mn)).check(matches(isDisplayed())).perform(click());
+            onView(withId(R.id.see_usercomu_by_comu_ac_frg_container)).check(matches(isDisplayed()));
         }
     },
 

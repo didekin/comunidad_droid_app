@@ -16,6 +16,16 @@ import static com.didekindroid.uiutils.UIutils.makeToast;
  */
 public enum UserMenu {
 
+    COMU_DATA_AC {
+        @Override
+        public void doMenuItem(Activity activity)
+        {
+            Log.d(TAG,"comu_data_ac.doMenuItem()");
+            Intent intent = new Intent(activity, ComuDataAc.class);
+            activity.startActivity(intent);
+        }
+    },
+
     COMU_SEARCH_AC {
         @Override
         public void doMenuItem(Activity activity)
@@ -82,6 +92,16 @@ public enum UserMenu {
                 Log.d(TAG, "reg_user_and_usercomu.doMenuItem(); user is not registered.");
                 Intent intent = new Intent(activity, RegUserAndUserComuAc.class);
             }
+        }
+    },
+
+    SEE_USERCOMU_BY_COMU_AC {
+
+        @Override
+        public void doMenuItem(Activity activity)
+        {
+            Log.d(TAG, "see_usercomu_by_comu_ac.doMenuItem()");
+            activity.startActivity(activity.getIntent());
         }
     },
 

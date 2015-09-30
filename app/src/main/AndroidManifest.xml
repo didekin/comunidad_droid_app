@@ -42,7 +42,11 @@
         <!-- **************************************************************** -->
         <!-- USUARIO -->
         <!-- **************************************************************** -->
-        <!-- =========== Comunidad ========== -->
+        <activity
+                android:name=".usuario.activity.ComuDataAc"
+                android:label="@string/comu_data_ac_label"
+                android:parentActivityName=".usuario.activity.UserComuDataAc">
+        </activity>
         <!-- ¿La eliminamos? -->
         <activity
                 android:name=".usuario.activity.ComusByUserListAc"
@@ -105,6 +109,11 @@
                 android:name=".usuario.activity.SeeUserComuByUserAc"
                 android:label="@string/see_usercomu_by_user_ac_label"
                 android:parentActivityName=".usuario.activity.ComuSearchResultsAc">
+        </activity>
+        <activity
+                android:name=".usuario.activity.UserComuDataAc"
+                android:label="@string/usercomu_data_ac_label"
+                android:parentActivityName=".usuario.activity.SeeUserComuByUserAc">
         </activity>
         <activity
                 android:name=".usuario.activity.UserDataAc"

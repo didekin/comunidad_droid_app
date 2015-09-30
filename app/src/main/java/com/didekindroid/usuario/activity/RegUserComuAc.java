@@ -18,7 +18,7 @@ import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
 import static com.didekindroid.uiutils.CommonPatterns.LINE_BREAK;
 import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
 import static com.didekindroid.uiutils.UIutils.makeToast;
-import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUsuarioComunidadBeanFromView;
+import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUserComuBeanFromView;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_ID;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
@@ -81,7 +81,7 @@ public class RegUserComuAc extends Activity {
         Log.d(TAG, "doOnclick()");
 
         // We don't need the user: it is already registered. As to comunidad, it is enough with its id in DB.
-        UsuarioComunidadBean usuarioComunidadBean = makeUsuarioComunidadBeanFromView(
+        UsuarioComunidadBean usuarioComunidadBean = makeUserComuBeanFromView(
                 mRegUserComuFr.getFragmentView(),
                 new ComunidadBean(mComunidad.getC_Id(),
                         null, null, null, null, null),

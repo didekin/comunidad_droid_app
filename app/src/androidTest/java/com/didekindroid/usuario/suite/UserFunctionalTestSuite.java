@@ -24,7 +24,7 @@ import org.junit.runners.Suite;
                 RegComuAndUserAndUserComuAcTest.class,
                 UserDataAcTest.class,
                 SeeUserComuByComuAcTest.class,
-                SeeUserComuByUserAcTest.class
+                SeeUserComuByUserAcTest.class  // En trámite.
         }
 )
 public class UserFunctionalTestSuite {

@@ -61,7 +61,7 @@ public class SeeUserComuByComuAcTest {
         signUpAndUpdateTk(DomainDataUtils.COMU_PLAZUELA5_JUAN);
 
         // We get the id of the comunidad we will put in the intent.
-        List<UsuarioComunidad> usuariosComu = ServOne.getUsuariosComunidad();
+        List<UsuarioComunidad> usuariosComu = ServOne.getUserComusByUser();
         comunidadId = usuariosComu.get(0).getComunidad().getC_Id(); // COMU_PLAZUELA5_JUAN.
         // We put the comunidad in the intent.
         intent = new Intent();

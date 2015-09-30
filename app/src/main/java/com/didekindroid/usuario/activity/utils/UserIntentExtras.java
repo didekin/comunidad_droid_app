@@ -7,7 +7,7 @@ package com.didekindroid.usuario.activity.utils;
  */
 public enum UserIntentExtras {
 
-    USUARIO_COMUNIDAD_REG,  // TODO: verificar si es necesario después de quitar  ComusByUserListAc.
+    USERCOMU_LIST_OBJECT,
     COMUNIDAD_LIST_INDEX,
     COMUNIDAD_LIST_OBJECT,
     COMUNIDAD_ID,

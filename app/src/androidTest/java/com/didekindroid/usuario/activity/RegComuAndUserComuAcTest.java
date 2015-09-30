@@ -25,7 +25,7 @@ import static android.support.test.espresso.matcher.CursorMatchers.withRowString
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
-import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUsuarioComunidadBeanFromView;
+import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUserComuBeanFromView;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.*;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_TRAV_PLAZUELA_PEPE;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_PEPE;
@@ -108,7 +108,7 @@ public class RegComuAndUserComuAcTest {
                 new Municipio((short) 162, new Provincia((short) 10)));
 
         UsuarioComunidadBean usuarioComunidadBean =
-                makeUsuarioComunidadBeanFromView(usuarioComunidadRegView, comunidadBean, null);
+                makeUserComuBeanFromView(usuarioComunidadRegView, comunidadBean, null);
         assertThat(usuarioComunidadBean.getPortal(), is("port2"));
         assertThat(usuarioComunidadBean.getEscalera(), is("escale_b"));
         assertThat(usuarioComunidadBean.getPlanta(), is("planta-N"));

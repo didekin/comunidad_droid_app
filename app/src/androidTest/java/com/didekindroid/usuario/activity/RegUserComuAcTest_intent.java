@@ -20,6 +20,7 @@ import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRESIDENTE;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PROPIETARIO;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.*;
@@ -71,7 +72,7 @@ public class RegUserComuAcTest_intent {
     {
         activity = intentRule.getActivity();
 
-        assertThat(UIutils.isRegisteredUser(activity), is(true));
+        assertThat(isRegisteredUser(activity), is(true));
         List<Comunidad> comunidadesUserOne = ServOne.getComunidadesByUser();
         assertThat(comunidadesUserOne.size(), is(1));
         Comunidad comunidad2 = comunidadesUserOne.get(0);

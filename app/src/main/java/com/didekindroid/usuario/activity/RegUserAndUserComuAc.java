@@ -21,8 +21,8 @@ import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
 import static com.didekindroid.uiutils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
 import static com.didekindroid.uiutils.UIutils.updateIsRegistered;
-import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUsuarioBeanFromRegUserFrView;
-import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUsuarioComunidadBeanFromView;
+import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUserBeanFromRegUserFrView;
+import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUserComuBeanFromView;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_ID;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.usuario.security.TokenHandler.TKhandler;
@@ -89,8 +89,8 @@ public class RegUserAndUserComuAc extends Activity {
     {
         Log.d(TAG, "registerComuAndUsuarioComu()");
 
-        UsuarioBean usuarioBean = makeUsuarioBeanFromRegUserFrView(mRegUserFr.getFragmentView());
-        UsuarioComunidadBean usuarioComunidadBean = makeUsuarioComunidadBeanFromView(
+        UsuarioBean usuarioBean = makeUserBeanFromRegUserFrView(mRegUserFr.getFragmentView());
+        UsuarioComunidadBean usuarioComunidadBean = makeUserComuBeanFromView(
                 mRegUserComuFrg.getFragmentView(),
                 new ComunidadBean(mComunidad.getC_Id(), null, null, null, null, null),
                 usuarioBean);

@@ -7,13 +7,12 @@ import com.didekin.serviceone.domain.Comunidad;
 import com.didekin.serviceone.domain.Municipio;
 import com.didekin.serviceone.domain.Provincia;
 import com.didekin.serviceone.domain.UsuarioComunidad;
-import com.didekindroid.usuario.dominio.DomainDataUtils;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static com.didekindroid.usuario.activity.utils.UserIntentExtras.USUARIO_COMUNIDAD_REG;
+import static com.didekindroid.usuario.activity.utils.UserIntentExtras.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.makeComunidad;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.makeUsuarioComunidad;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -41,7 +40,7 @@ public class ComusByUserListAcTest {
         UsuarioComunidad usuarioComunidad = makeUsuarioComunidad(comunidad, null, "portal", "esc", "plantaX",
                 "door", "pro");
         Intent intent = new Intent();
-        intent.putExtra(USUARIO_COMUNIDAD_REG.toString(), usuarioComunidad);
+        intent.putExtra(USERCOMU_LIST_OBJECT.toString(), usuarioComunidad);
         mActivity = mActivityRule.launchActivity(intent);
     }
 

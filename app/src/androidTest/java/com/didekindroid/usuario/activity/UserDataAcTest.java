@@ -138,6 +138,7 @@ public class UserDataAcTest {
     @Test
     public void testModifyUserData_2() throws InterruptedException
     {
+        onView(withId(R.id.user_data_ac_password_ediT)).perform(typeText(USER_JUAN.getPassword()), closeSoftKeyboard());
         onView(withId(R.id.user_data_modif_button)).perform(scrollTo())
                 .check(matches(isDisplayed())).perform(click());
         onView(withId(R.id.see_usercomu_by_user_ac_layout)).check(matches(isDisplayed()));

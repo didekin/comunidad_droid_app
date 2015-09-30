@@ -19,6 +19,7 @@ import com.didekindroid.usuario.activity.utils.UserIntentExtras;
 import java.util.List;
 
 import static com.didekindroid.uiutils.ViewsIDs.SEE_USERCOMU_BY_COMU;
+import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_ID;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 
 
@@ -58,7 +59,7 @@ public class SeeUserComuByComuFr extends ListFragment {
 
         mActivity = (SeeUserComuByComuAc) getActivity();
         // Preconditions: an existing comunidad passed as intent. The comunidad has necessarily users already signed-up.
-        long comunidadId = mActivity.getIntent().getExtras().getLong(UserIntentExtras.COMUNIDAD_ID.extra);
+        long comunidadId = mActivity.getIntent().getExtras().getLong(COMUNIDAD_ID.extra);
         // Loading the data...
         new UserComuByComuLoader().execute(comunidadId);
     }

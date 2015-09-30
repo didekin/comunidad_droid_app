@@ -9,7 +9,6 @@ import com.didekin.serviceone.domain.Usuario;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.usuario.activity.utils.CleanEnum;
-import com.didekindroid.usuario.activity.utils.UsuarioTestUtils;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
@@ -107,7 +106,7 @@ public class RegComuAndUserAndUserComuAcTest {
         View usuarioRegView = mActivity.findViewById(R.id.reg_user_frg);
 
         // Test assertions about UsuarioBean.
-        UsuarioBean usuarioBean = makeUsuarioBeanFromRegUserFrView(usuarioRegView);
+        UsuarioBean usuarioBean = makeUserBeanFromRegUserFrView(usuarioRegView);
         assertThat(usuarioBean.getUserName(), is("yo@email.com"));
         assertThat(usuarioBean.getAlias(), is("alias1"));
         assertThat(usuarioBean.getPassword(), is("password1"));
@@ -166,10 +165,10 @@ public class RegComuAndUserAndUserComuAcTest {
                 typeText("password1"), closeSoftKeyboard());
 
         // Make UsuarioBean.
-        UsuarioBean usuarioBean = makeUsuarioBeanFromRegUserFrView(mRegUserFr.getFragmentView());
+        UsuarioBean usuarioBean = makeUserBeanFromRegUserFrView(mRegUserFr.getFragmentView());
         // Make UsuarioComunidadBean.
         UsuarioComunidadBean usuarioComunidadBean =
-                makeUsuarioComunidadBeanFromView(mRegUserComuFrg.getFragmentView(), comunidadBean, usuarioBean);
+                makeUserComuBeanFromView(mRegUserComuFrg.getFragmentView(), comunidadBean, usuarioBean);
 
         // Validate UsuarioComunidadBean.
         StringBuilder errors = new StringBuilder("");
@@ -214,13 +213,13 @@ public class RegComuAndUserAndUserComuAcTest {
         assertThat(comunidadBean.getComunidad(), nullValue());
 
         // Empty UsuarioBean: no input data. UsuarioBean is not null. Usuario is null.
-        UsuarioBean usuarioBean = makeUsuarioBeanFromRegUserFrView(mRegUserFr.getFragmentView());
+        UsuarioBean usuarioBean = makeUserBeanFromRegUserFrView(mRegUserFr.getFragmentView());
         assertThat(usuarioBean, notNullValue());
         assertThat(usuarioBean.getUsuario(), nullValue());
 
         // Empty UsuarioComunidadBean: UsuarioBean not null. Usuario, Comunidad and UsuarioComunidad null.
         UsuarioComunidadBean usuarioComunidadBean =
-                makeUsuarioComunidadBeanFromView(mRegUserComuFrg.getFragmentView(), comunidadBean, usuarioBean);
+                makeUserComuBeanFromView(mRegUserComuFrg.getFragmentView(), comunidadBean, usuarioBean);
         assertThat(usuarioComunidadBean.validate(resources, errors), is(false));
         assertThat(usuarioComunidadBean, notNullValue());
         assertThat(usuarioComunidadBean.getUsuarioComunidad(), nullValue());

@@ -13,7 +13,7 @@ import com.didekindroid.R;
 import java.util.List;
 
 import static com.didekindroid.uiutils.ViewsIDs.SEE_COMU_AND_USER_COMU_BY_USER;
-import static com.didekindroid.usuario.activity.utils.UserIntentExtras.USUARIO_COMUNIDAD_REG;
+import static com.didekindroid.usuario.activity.utils.UserIntentExtras.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 
 public class ComusByUserListAc extends ListActivity {
@@ -27,7 +27,7 @@ public class ComusByUserListAc extends ListActivity {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate()");
 
-        UsuarioComunidad usuarioComunidad = (UsuarioComunidad) getIntent().getSerializableExtra(USUARIO_COMUNIDAD_REG
+        UsuarioComunidad usuarioComunidad = (UsuarioComunidad) getIntent().getSerializableExtra(USERCOMU_LIST_OBJECT
                 .toString());
         new RegComuAndUserComuHttp().execute(usuarioComunidad);
 
@@ -71,7 +71,7 @@ public class ComusByUserListAc extends ListActivity {
             if (usuarioComunidad[0] != null) {
                 ServOne.regComuAndUserComu(usuarioComunidad[0]);
             }
-            usuarioComunidades = ServOne.getUsuariosComunidad();
+            usuarioComunidades = ServOne.getUserComusByUser();
             return usuarioComunidades;
         }
 

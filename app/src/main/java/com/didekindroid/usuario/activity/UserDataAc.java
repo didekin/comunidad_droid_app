@@ -88,9 +88,9 @@ public class UserDataAc extends Activity {
                     .uId(mOldUser.getuId())
                     .build();
             new UserDataModifyer().execute(newUser);
+            Intent intent = new Intent(this, SeeUserComuByUserAc.class);
+            startActivity(intent);
         }
-        Intent intent = new Intent(this, SeeUserComuByUserAc.class);
-        startActivity(intent);
     }
 
     @Override

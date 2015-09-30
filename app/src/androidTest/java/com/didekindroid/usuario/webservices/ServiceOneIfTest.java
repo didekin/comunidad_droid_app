@@ -5,9 +5,11 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import com.didekin.retrofitcl.ServiceOneException;
 import com.didekin.security.OauthToken;
+import com.didekin.serviceone.controllers.ControllerConstant;
 import com.didekin.serviceone.domain.*;
 import com.didekindroid.DidekindroidApp;
 import com.didekindroid.ioutils.IoHelper;
+import com.didekindroid.uiutils.UIutils;
 import com.didekindroid.usuario.activity.utils.CleanEnum;
 import com.didekindroid.usuario.dominio.DomainDataUtils;
 import org.hamcrest.CoreMatchers;
@@ -20,6 +22,7 @@ import java.io.File;
 import java.util.List;
 
 import static com.didekin.exception.ExceptionMessage.USER_DUPLICATE;
+import static com.didekin.serviceone.controllers.ControllerConstant.IS_USER_DELETED;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.*;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRESIDENTE;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PROPIETARIO;
@@ -71,26 +74,6 @@ public class ServiceOneIfTest {
     }
 
     @Test
-    public void testDeleteComunidad() throws Exception
-    {
-        // Comunidad with one user.
-
-        assertThat(refreshTkFile.exists(), is(false));
-        signUpAndUpdateTk(COMU_REAL_JUAN);
-
-        List<UsuarioComunidad> usuarioComunidades = ServOne.getUsuariosComunidad();
-
-        boolean isDeleted = ServOne.deleteComunidad(usuarioComunidades.get(0).getComunidad().getC_Id());
-        assertThat(isDeleted, is(true));
-
-        // User cleanup. He/she has not got any role associated, althought the access token is still valid.
-        isDeleted = ServOne.deleteUser();
-        assertThat(isDeleted, is(true));
-
-        whatClean = CLEAN_TK_HANDLER;
-    }
-
-    @Test
     public void testDeleteUser() throws Exception
     {
         // No file with refreshToken.
@@ -99,6 +82,19 @@ public class ServiceOneIfTest {
         signUpAndUpdateTk(COMU_REAL_JUAN);
 
         whatClean = CLEAN_JUAN;
+    }
+
+    @Test
+    public void testDeleteUserComu()
+    {
+        whatClean = CLEAN_NOTHING;
+
+        Usuario usuario_1 = signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
+        List<UsuarioComunidad> userComus = ServOne.getUserComusByUser();
+        UsuarioComunidad uc_1 = userComus.get(0);
+
+        assertThat(ServOne.deleteUserComu(uc_1.getComunidad().getC_Id()),is(IS_USER_DELETED));
+        cleanWithTkhandler();
     }
 
     @Test
@@ -129,7 +125,7 @@ public class ServiceOneIfTest {
     {
         // No token in cache.
         assertThat(TKhandler.doBearerAccessTkHeader(), nullValue());
-        assertThat(ServOne.getUsuariosComunidad(), nullValue());
+        assertThat(ServOne.getUserComusByUser(), nullValue());
     }
 
     @Test
@@ -138,12 +134,12 @@ public class ServiceOneIfTest {
         //Inserta usuario, comunidad, usuariocomunidad y actuliza tokenCache.
         signUpAndUpdateTk(COMU_REAL_JUAN);
 
-        List<UsuarioComunidad> comunidadesUser = ServOne.getUsuariosComunidad();
+        List<UsuarioComunidad> comunidadesUser = ServOne.getUserComusByUser();
         assertThat(comunidadesUser.size(), is(1));
         assertThat(comunidadesUser, hasItem(COMU_REAL_JUAN));
 
         ServOne.regComuAndUserComu(COMU_PLAZUELA5_JUAN);
-        comunidadesUser = ServOne.getUsuariosComunidad();
+        comunidadesUser = ServOne.getUserComusByUser();
         assertThat(comunidadesUser.size(), is(2));
 
         whatClean = CLEAN_JUAN;
@@ -201,18 +197,39 @@ public class ServiceOneIfTest {
     }
 
     @Test
+    public void testModifyUserComu()
+    {
+
+        whatClean = CLEAN_PEPE;
+
+        Usuario usuario_1 = signUpAndUpdateTk(COMU_REAL_PEPE);
+        List<UsuarioComunidad> userComus = ServOne.getUserComusByUser();
+        UsuarioComunidad uc_1 = makeUsuarioComunidad(userComus.get(0).getComunidad(), usuario_1,
+                "portal3", "esc_2", "planta-ñ", "puerta2", "pre");
+        assertThat(ServOne.modifyUserComu(uc_1), is(1));
+
+        List<UsuarioComunidad> userComus_2 = ServOne.getUserComusByUser();
+        UsuarioComunidad uc_2 = userComus_2.get(0);
+        assertThat(uc_2.getPortal(), is(uc_1.getPortal()));
+        assertThat(uc_2.getEscalera(), is(uc_1.getEscalera()));
+        assertThat(uc_2.getPlanta(), is(uc_1.getPlanta()));
+        assertThat(uc_2.getPuerta(), is(uc_1.getPuerta()));
+        assertThat(uc_2.getRoles(), is(uc_1.getRoles()));
+    }
+
+    @Test
     public void testPasswordChange()
     {
         whatClean = CLEAN_NOTHING;
 
         Usuario usuario_1 = signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
         String passwordClear_2 = "new_juan_password";
-        assertThat(ServOne.passwordChange(passwordClear_2),is(1));
+        assertThat(ServOne.passwordChange(passwordClear_2), is(1));
 
         cleanOneUser(new Usuario.UsuarioBuilder()
-        .userName(USER_JUAN.getUserName())
-        .password(passwordClear_2)
-        .build());
+                .userName(USER_JUAN.getUserName())
+                .password(passwordClear_2)
+                .build());
     }
 
     @Test
