@@ -16,8 +16,6 @@ import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.ioutils.ConnectionUtils;
 import com.didekindroid.usuario.activity.utils.UserAndComuFiller;
-import com.didekindroid.usuario.activity.utils.UserIntentExtras;
-import com.didekindroid.usuario.activity.utils.UserMenu;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
 import com.didekindroid.usuario.security.TokenHandler;
@@ -25,7 +23,8 @@ import com.didekindroid.usuario.security.TokenHandler;
 import static com.didekin.serviceone.controllers.ControllerConstant.IS_USER_DELETED;
 import static com.didekindroid.uiutils.UIutils.*;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.*;
-import static com.didekindroid.usuario.activity.utils.UserIntentExtras.*;
+import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_ID;
+import static com.didekindroid.usuario.activity.utils.UserIntentExtras.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.usuario.activity.utils.UserMenu.COMU_DATA_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_USERCOMU_BY_COMU_AC;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
@@ -50,6 +49,7 @@ public class UserComuDataAc extends Activity {
     private Button mModifyButton;
     private Button mDeleteButton;
     private UsuarioComunidad mOldUserComu;
+    private MenuItem mComuDataItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -136,12 +136,20 @@ public class UserComuDataAc extends Activity {
         startActivity(intent);
     }
 
-
+    /**
+     * Option 'comu_data_ac_mn' is only visible if the user is the oldest (oldest fecha_alta) UsuarioComunidad in
+     * this comunidad.
+     * <p/>
+     * TODO: change it for a consensus procedure among all of the usuariosComunidad.
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
         Log.d(TAG, "onCreateOptionsMenu()");
         getMenuInflater().inflate(R.menu.usercomu_data_ac_mn, menu);
+        mComuDataItem = menu.findItem(R.id.comu_data_ac_mn);
+        // Is the oldest userComu?
+        new ComuDataMenuSetter().execute();
         return true;
     }
 
@@ -171,10 +179,31 @@ public class UserComuDataAc extends Activity {
     //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
     //    ============================================================
 
+    private class ComuDataMenuSetter extends AsyncTask<Void, Void, Boolean> {
+
+        final String TAG = ComuDataMenuSetter.class.getCanonicalName();
+
+        @Override
+        protected Boolean doInBackground(Void... aVoid)
+        {
+            Log.d(TAG, "doInBackground()");
+            return ServOne.isOldestUserComu(mOldUserComu.getComunidad().getC_Id());
+        }
+
+        @Override
+        protected void onPostExecute(Boolean isOldestUserComu)
+        {
+            Log.d(TAG, "onPostExecute()");
+            mComuDataItem.setVisible(isOldestUserComu);
+            mComuDataItem.setEnabled(isOldestUserComu);
+        }
+    }
+
     private class UserComuModifyer extends AsyncTask<UsuarioComunidad, Void, Integer> {
 
         final String TAG = UserComuModifyer.class.getCanonicalName();
 
+        @Override
         protected Integer doInBackground(UsuarioComunidad... userComus)
         {
             Log.d(TAG, "doInBackground()");

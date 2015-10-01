@@ -7,8 +7,7 @@ import retrofit.http.*;
 
 import java.util.List;
 
-import static com.didekin.security.SecurityConstant.PSWD_PARAM;
-import static com.didekin.security.SecurityConstant.USER_READ;
+import static com.didekin.security.SecurityConstant.*;
 import static com.didekin.serviceone.controllers.ControllerConstant.*;
 
 /**
@@ -37,7 +36,13 @@ public interface ServiceOneEndPoints {
     @GET(USER_READ)
     Usuario getUserData(@Header("Authorization") String accessToken);
 
-    @PUT(USER_MODIFY)
+    @GET(COMUNIDAD_READ + "/{comunidadId}")
+    boolean isOldestUserComu(@Header("Authorization") String accessToken, @Path("comunidadId") long comunidadId);
+
+    @PUT(COMUNIDAD_WRITE)
+    int modifyComuData(@Header("Authorization") String accessToken, @Body Comunidad comunidad);
+
+    @PUT(USER_WRITE)
     int modifyUser(@Header("Authorization") String accessToken, @Body Usuario usuario);
 
     @PUT(USERCOMU_MODIFY)

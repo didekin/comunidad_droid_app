@@ -58,6 +58,18 @@ public enum ServiceOne implements ServiceOneEndPointsIf {
         }
 
         @Override
+        public boolean isOldestUserComu(String accessToken, long comunidadId)
+        {
+            return ServOne.endPoint.isOldestUserComu(accessToken, comunidadId);
+        }
+
+        @Override
+        public int modifyComuData(String currentAccessToken, Comunidad comunidad)
+        {
+            return ServOne.endPoint.modifyComuData(currentAccessToken, comunidad);
+        }
+
+        @Override
         public int modifyUser(String accessToken, Usuario usuario)
         {
             return ServOne.endPoint.modifyUser(accessToken, usuario);
@@ -172,6 +184,18 @@ public enum ServiceOne implements ServiceOneEndPointsIf {
         Log.d(TAG, "getUserComusByUser()");
         String bearerAccessTkHeader = TKhandler.doBearerAccessTkHeader();
         return (bearerAccessTkHeader != null ? getUserComusByUser(bearerAccessTkHeader) : null);
+    }
+
+    public boolean isOldestUserComu(long comunidadId)
+    {
+        Log.d(TAG, "isOldestUserComu()");
+        return isOldestUserComu(TKhandler.doBearerAccessTkHeader(), comunidadId);
+    }
+
+    public int modifyComuData(Comunidad comunidad)
+    {
+        Log.d(TAG, "modifyComuData()");
+        return modifyComuData(TKhandler.doBearerAccessTkHeader(), comunidad);
     }
 
     public int modifyUser(Usuario usuario)

@@ -12,6 +12,7 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses(
         {
+                ComuDataAcTest.class, // En trámite.
                 ComuSearchAcTest.class,
                 ComuSearchAcTest_intent.class,
                 ComuSearchResultsAcTest.class,

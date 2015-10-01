@@ -203,5 +203,4 @@ public enum UserMenuTestUtils {
     public abstract void checkMenuItem_NTk(Activity activity) throws InterruptedException;
 
     public abstract void checkMenuItem_WTk(Activity activity) throws InterruptedException;
-
 }

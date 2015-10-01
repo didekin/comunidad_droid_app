@@ -135,6 +135,7 @@ public final class DomainDataUtils {
 
     public static List<UsuarioComunidad> makeListTwoUserComu()
     {
+        // Dos comunidades diferentes con un mismo usuario.
         List<UsuarioComunidad> userComuList = new ArrayList<UsuarioComunidad>(2);
         userComuList.add(COMU_REAL_JUAN);
         userComuList.add(COMU_PLAZUELA5_JUAN);

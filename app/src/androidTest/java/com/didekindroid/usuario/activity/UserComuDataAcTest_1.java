@@ -8,7 +8,6 @@ import com.didekin.security.Rol;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.usuario.activity.utils.CleanEnum;
-import com.didekindroid.usuario.security.TokenHandler;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -27,17 +26,18 @@ import static android.support.test.espresso.matcher.ViewMatchers.*;
 import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_NOTHING;
+import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRESIDENTE;
+import static com.didekindroid.usuario.activity.utils.RolCheckBox.PROPIETARIO;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_ID;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.COMU_DATA_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.SEE_USERCOMU_BY_COMU_AC;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.*;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_JUAN;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.*;
 import static com.didekindroid.usuario.security.TokenHandler.TKhandler;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThat;
 
 /**
  * User: pedro@didekin
@@ -45,7 +45,7 @@ import static org.hamcrest.Matchers.nullValue;
  * Time: 11:32
  */
 @RunWith(AndroidJUnit4.class)
-public class UserComuDataAcTest {
+public class UserComuDataAcTest_1 {
 
     private UserComuDataAc mActivity;
     private UsuarioComunidad mUsuarioComunidad;
@@ -135,8 +135,9 @@ public class UserComuDataAcTest {
     }
 
     @Test
-    public void testComuDataMn_withToken() throws InterruptedException
+    public void testComuDataMn_withToken_1() throws InterruptedException
     {
+        // Only one user associated to the comunidad: the menu shows the item.
         COMU_DATA_AC.checkMenuItem_WTk(mActivity);
     }
 
@@ -175,7 +176,7 @@ public class UserComuDataAcTest {
         onView(withId(R.id.usercomu_data_ac_delete_button)).perform(click());
         onView(withId(R.id.comu_search_ac_layout)).check(matches(isDisplayed()));
         assertThat(TKhandler.getAccessTokenInCache(), nullValue());
-        assertThat(TKhandler.getRefreshTokenFile().exists(),is(false));
-        assertThat(isRegisteredUser(mActivity),is(false));
+        assertThat(TKhandler.getRefreshTokenFile().exists(), is(false));
+        assertThat(isRegisteredUser(mActivity), is(false));
     }
 }
