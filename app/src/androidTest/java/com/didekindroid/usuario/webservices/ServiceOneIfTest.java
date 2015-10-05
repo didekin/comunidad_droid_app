@@ -5,11 +5,9 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import com.didekin.retrofitcl.ServiceOneException;
 import com.didekin.security.OauthToken;
-import com.didekin.serviceone.controllers.ControllerConstant;
 import com.didekin.serviceone.domain.*;
 import com.didekindroid.DidekindroidApp;
 import com.didekindroid.ioutils.IoHelper;
-import com.didekindroid.uiutils.UIutils;
 import com.didekindroid.usuario.activity.utils.CleanEnum;
 import com.didekindroid.usuario.dominio.DomainDataUtils;
 import org.hamcrest.CoreMatchers;
@@ -93,8 +91,19 @@ public class ServiceOneIfTest {
         List<UsuarioComunidad> userComus = ServOne.getUserComusByUser();
         UsuarioComunidad uc_1 = userComus.get(0);
 
-        assertThat(ServOne.deleteUserComu(uc_1.getComunidad().getC_Id()),is(IS_USER_DELETED));
+        assertThat(ServOne.deleteUserComu(uc_1.getComunidad().getC_Id()), is(IS_USER_DELETED));
         cleanWithTkhandler();
+    }
+
+    @Test
+    public void testGetComuData()
+    {
+        whatClean = CLEAN_PEPE;
+
+        Usuario u1 = signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
+        Comunidad cDB = ServOne.getComusByUser().get(0);
+        Comunidad c1 = ServOne.getComuData(cDB.getC_Id());
+        assertThat(c1, is(cDB));
     }
 
     @Test
@@ -103,7 +112,7 @@ public class ServiceOneIfTest {
         // No token in cache.
         assertThat(TKhandler.doBearerAccessTkHeader(), nullValue());
         try {
-            assertThat(ServOne.getComunidadesByUser(), nullValue());
+            assertThat(ServOne.getComusByUser(), nullValue());
         } catch (ServiceOneException se) { // NO hay excepción; ServiceOne devuelve null.
             fail();
         }
@@ -113,7 +122,7 @@ public class ServiceOneIfTest {
     public void testGetComunidadesByUser_2()
     {
         regTwoUserComuSameUser(DomainDataUtils.makeListTwoUserComu());
-        List<Comunidad> comunidades = ServOne.getComunidadesByUser();
+        List<Comunidad> comunidades = ServOne.getComusByUser();
         assertThat(comunidades.size(), is(2));
         assertThat(comunidades, hasItems(COMU_REAL, DomainDataUtils.COMU_LA_PLAZUELA_5));
 
@@ -121,7 +130,19 @@ public class ServiceOneIfTest {
     }
 
     @Test
-    public void testGetUsuariosComunidad_1() throws Exception
+    public void testGetUserData() throws Exception
+    {
+        //Inserta usuario, comunidad, usuariocomunidad y actuliza tokenCache.
+        signUpAndUpdateTk(COMU_REAL_JUAN);
+
+        Usuario usuario = ServOne.getUserData();
+        assertThat(usuario.getUserName(), is(USER_JUAN.getUserName()));
+
+        whatClean = CLEAN_JUAN;
+    }
+
+    @Test
+    public void testGetUserComusByUser_1() throws Exception
     {
         // No token in cache.
         assertThat(TKhandler.doBearerAccessTkHeader(), nullValue());
@@ -129,7 +150,7 @@ public class ServiceOneIfTest {
     }
 
     @Test
-    public void testGetUsuariosComunidad__2() throws Exception
+    public void testGetUserComusByUser__2() throws Exception
     {
         //Inserta usuario, comunidad, usuariocomunidad y actuliza tokenCache.
         signUpAndUpdateTk(COMU_REAL_JUAN);
@@ -146,15 +167,39 @@ public class ServiceOneIfTest {
     }
 
     @Test
-    public void testGetUserData() throws Exception
+    public void testIsOldestUser()
     {
-        //Inserta usuario, comunidad, usuariocomunidad y actuliza tokenCache.
-        signUpAndUpdateTk(COMU_REAL_JUAN);
+        whatClean = CLEAN_JUAN2_AND_PEPE;
 
-        Usuario usuario = ServOne.getUserData();
-        assertThat(usuario.getUserName(), is(USER_JUAN.getUserName()));
+        Usuario u1 = signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
+        Comunidad cDb = ServOne.getComusByUser().get(0);
+        assertThat(ServOne.isOldestUserComu(cDb.getC_Id()), is(true));
 
-        whatClean = CLEAN_JUAN;
+        cleanWithTkhandler();
+        UsuarioComunidad userComu = makeUsuarioComunidad(cDb, USER_JUAN2,
+                "portalB", null, "planta1", null, PROPIETARIO.function.concat(",").concat(PRESIDENTE.function));
+        ServOne.regUserAndUserComu(userComu);
+        updateSecurityData(USER_JUAN2.getUserName(), USER_JUAN2.getPassword());
+
+        assertThat(ServOne.isOldestUserComu(cDb.getC_Id()), is(false));
+    }
+
+    @Test
+    public void testModifyComuData()
+    {
+        whatClean = CLEAN_PEPE;
+
+        Usuario u1 = signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
+        Comunidad cDb = ServOne.getComusByUser().get(0);
+        Comunidad cNew = new Comunidad.ComunidadBuilder()
+                .c_id(cDb.getC_Id())
+                .nombreVia("new_nombreVia")
+                .tipoVia("new_tipoVia")
+                .numero(cDb.getNumero())
+                .municipio(cDb.getMunicipio())
+                .build();
+        assertThat(ServOne.modifyComuData(cNew),is(1));
+        assertThat(ServOne.getComusByUser().get(0).getNombreVia(),is(cNew.getNombreVia()));
     }
 
     @Test
@@ -261,7 +306,7 @@ public class ServiceOneIfTest {
 
         // Comunidad is associated to other user.
         Usuario pepe = signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
-        Comunidad comunidad = ServOne.getComunidadesByUser().get(0);
+        Comunidad comunidad = ServOne.getComusByUser().get(0);
         cleanWithTkhandler();
 
         UsuarioComunidad userComu = makeUsuarioComunidad(comunidad, USER_JUAN2,
@@ -277,7 +322,7 @@ public class ServiceOneIfTest {
 
         // Duplicated usuarioComunidad.
         Usuario pepe = signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
-        Comunidad comunidad = ServOne.getComunidadesByUser().get(0);
+        Comunidad comunidad = ServOne.getComusByUser().get(0);
         cleanWithTkhandler();
 
         try {
@@ -298,7 +343,7 @@ public class ServiceOneIfTest {
 
         // First usuarioComunidad.
         Usuario usuario_1 = signUpAndUpdateTk(COMU_REAL_JUAN);
-        List<Comunidad> comunidadesUserOne = ServOne.getComunidadesByUser();
+        List<Comunidad> comunidadesUserOne = ServOne.getComusByUser();
         Comunidad comunidad = new Comunidad.ComunidadBuilder().c_id(comunidadesUserOne.get(0).getC_Id()).build();
 
         // Segundo usuarioComunidad, con diferente usuario y comunidad.
@@ -309,7 +354,7 @@ public class ServiceOneIfTest {
                 "esc", "planta2", "doorJ", PROPIETARIO.function);
         int rowInserted = ServOne.regUserComu(userComu);
         assertThat(rowInserted, is(1));
-        assertThat(ServOne.getComunidadesByUser().size(), is(2));
+        assertThat(ServOne.getComusByUser().size(), is(2));
 
         whatClean = CLEAN_JUAN_AND_PEPE;
     }
@@ -341,14 +386,14 @@ public class ServiceOneIfTest {
     public void testSeeUserComuByComu() throws Exception
     {
         regTwoUserComuSameUser(makeListTwoUserComu()); // User1, comunidades 1 y 2, userComu 1 y 2.
-        Comunidad comunidad1 = ServOne.getComunidadesByUser().get(0); // User1 in session.
+        Comunidad comunidad1 = ServOne.getComusByUser().get(0); // User1 in session.
         assertThat(comunidad1.getNombreComunidad(), is(COMU_REAL.getNombreComunidad()));
 
         signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE); // User2, comunidad3, userComu 3.
         ServOne.regUserComu(makeUsuarioComunidad(comunidad1, null, "portal", "esc", "plantaY", "door21",
                 PROPIETARIO.function)); // User2 in session, comunidad1, userComu4.
         // Obtengo los id de las dos comunidades en DB, user2 in session.
-        List<Comunidad> comunidades = ServOne.getComunidadesByUser(); // comunidades 1 y 3.
+        List<Comunidad> comunidades = ServOne.getComusByUser(); // comunidades 1 y 3.
         assertThat(comunidades.size(), is(2));
         // Busco por comunidad 1, segunda por orden.
         List<UsuarioComunidad> usuarioComusDB = ServOne.seeUserComuByComu(comunidades.get(1).getC_Id());

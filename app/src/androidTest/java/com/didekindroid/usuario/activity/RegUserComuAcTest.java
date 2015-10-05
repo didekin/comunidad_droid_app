@@ -48,7 +48,7 @@ public class RegUserComuAcTest {
     public void setUp() throws Exception
     {
         signUpAndUpdateTk(COMU_REAL_JUAN);
-        List<Comunidad> comunidadesUserOne = ServOne.getComunidadesByUser();
+        List<Comunidad> comunidadesUserOne = ServOne.getComusByUser();
         comunidad = comunidadesUserOne.get(0);
 
         // We use that comunidad as the one to associate to the present user.
@@ -64,7 +64,7 @@ public class RegUserComuAcTest {
         activity = mActivityRule.launchActivity(intent);
 
         assertThat(isRegisteredUser(activity), is(true));
-        List<Comunidad> comunidadesUserOne = ServOne.getComunidadesByUser();
+        List<Comunidad> comunidadesUserOne = ServOne.getComusByUser();
         assertThat(comunidadesUserOne.size(), is(1));
         Comunidad comunidad2 = comunidadesUserOne.get(0);
         assertThat(comunidad2, not(is(COMU_REAL_JUAN.getComunidad())));

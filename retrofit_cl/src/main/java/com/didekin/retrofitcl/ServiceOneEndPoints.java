@@ -27,6 +27,9 @@ public interface ServiceOneEndPoints {
     @DELETE(USERCOMU_DELETE + "/{comunidadId}")
     int deleteUserComu(@Header("Authorization") String accessToken, @Path("comunidadId") long comunidadId);
 
+    @GET(COMUNIDAD_READ + "/{comunidadId}")
+    Comunidad getComuData(@Header("Authorization") String accessToken, @Path("comunidadId") long comunidadId);
+
     @GET(COMUS_BY_USER)
     List<Comunidad> getComusByUser(@Header("Authorization") String accessToken);
 
@@ -36,7 +39,7 @@ public interface ServiceOneEndPoints {
     @GET(USER_READ)
     Usuario getUserData(@Header("Authorization") String accessToken);
 
-    @GET(COMUNIDAD_READ + "/{comunidadId}")
+    @GET(COMUNIDAD_OLDEST_USER + "/{comunidadId}")
     boolean isOldestUserComu(@Header("Authorization") String accessToken, @Path("comunidadId") long comunidadId);
 
     @PUT(COMUNIDAD_WRITE)

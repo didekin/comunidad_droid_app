@@ -66,7 +66,7 @@ public class RegUserAndUserComuAcTest_intent {
         {
             // Precondition 2: the comunidad already exists.
             signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
-            List<Comunidad> comunidadesUserOne = ServOne.getComunidadesByUser();
+            List<Comunidad> comunidadesUserOne = ServOne.getComusByUser();
             comunidad = comunidadesUserOne.get(0);
             // We pass the comunidad as an intent.
             intent = new Intent();

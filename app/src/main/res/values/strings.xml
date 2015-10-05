@@ -56,6 +56,7 @@
     <!-- ============================= ACTIVITIES ============================= -->
     <!-- =============== ComuDataActivity =============== -->
     <string name="comu_data_ac_label">Datos comunidad</string>
+    <string name="comu_data_ac_button_txt">Modifico datos comunidad</string>
     <!-- ================= ComuSearchAc ================= -->
     <string name="comu_search_ac_label">Buscar comunidad</string>
     <!-- =============== ComuSearchResultsAc ============ -->

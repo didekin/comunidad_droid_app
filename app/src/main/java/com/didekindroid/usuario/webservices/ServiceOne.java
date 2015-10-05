@@ -39,6 +39,11 @@ public enum ServiceOne implements ServiceOneEndPointsIf {
             return ServOne.endPoint.deleteUserComu(accessToken, comunidadId);
         }
 
+        public Comunidad getComuData(String accessToken, long idComunidad)
+        {
+            return ServOne.endPoint.getComuData(accessToken, idComunidad);
+        }
+
         @Override
         public List<Comunidad> getComusByUser(String accessToken)
         {
@@ -166,7 +171,13 @@ public enum ServiceOne implements ServiceOneEndPointsIf {
         return deleteUserComu(TKhandler.doBearerAccessTkHeader(), comunidadId);
     }
 
-    public List<Comunidad> getComunidadesByUser()  // TODO: ¿a desaparecer?
+    public Comunidad getComuData(long idComunidad)
+    {
+        Log.d(TAG, "getComuData()");
+        return getComuData(TKhandler.doBearerAccessTkHeader(), idComunidad);
+    }
+
+    public List<Comunidad> getComusByUser()  // TODO: ¿a desaparecer?
     {
         Log.d(TAG, "getComusByUser()");
         String bearerAccessTkHeader = TKhandler.doBearerAccessTkHeader();

@@ -72,7 +72,6 @@ public class UserComuDataAcTest_1 {
         }
     };
 
-
     @Before
     public void setUp() throws Exception
     {
@@ -139,6 +138,7 @@ public class UserComuDataAcTest_1 {
     {
         // Only one user associated to the comunidad: the menu shows the item.
         COMU_DATA_AC.checkMenuItem_WTk(mActivity);
+        intended(hasExtra(COMUNIDAD_ID.extra, mUsuarioComunidad.getComunidad().getC_Id()));
     }
 
     @Test

@@ -41,17 +41,17 @@ public class RegComuFr extends Fragment {
     private MasterDataDbHelper dbHelper;
 
     private View mRegComunidadFrView;
-    private Spinner mTipoViaSpinner;
-    private Spinner autonomaComuSpinner;
-    private Spinner provinciaSpinner;
-    private Spinner municipioSpinner;
+    Spinner mTipoViaSpinner;
+    Spinner autonomaComuSpinner;
+    Spinner provinciaSpinner;
+    Spinner municipioSpinner;
 
-    private int mCApointer;
-    private int mProvinciaPointer;
-    private int mMunicipioPointer;
-    private int mTipoViaPointer;
+    int mCApointer;
+    int mProvinciaPointer;
+    int mMunicipioPointer;
+    int mTipoViaPointer;
 
-    private ComunidadBean comunidadBean;
+    ComunidadBean comunidadBean;
 
     public RegComuFr()
     {
@@ -131,7 +131,6 @@ public class RegComuFr extends Fragment {
             {
                 Log.d(TAG, "In autonomaComuSpinner.setOnItemSelectedListener, onItemSelected()");
 
-//                comunidadBean.setProvincia(null);
                 short cu_id = (short) id;
                 new SpinnerProvinciasLoader().execute(cu_id);
                 mCApointer = position;
@@ -153,7 +152,6 @@ public class RegComuFr extends Fragment {
                 comunidadBean.setMunicipio(null);
                 short prId = (short) id;
                 new SpinnerMunicipioLoader().execute(prId);
-//                comunidadBean.setProvincia(new Provincia((short) id));
                 mProvinciaPointer = position;
             }
 
@@ -172,13 +170,6 @@ public class RegComuFr extends Fragment {
 
                 Cursor cursor = ((CursorAdapter) parent.getAdapter()).getCursor();
                 cursor.moveToPosition(position);
-
-                /*Provincia provincia = comunidadBean.getProvincia();
-
-                if (provincia == null) {
-                    provincia = new Provincia(cursor.getShort(1));
-                    comunidadBean.setProvincia(provincia);
-                }*/
                 Municipio municipio = new Municipio(cursor.getShort(2), new Provincia(cursor.getShort(1)));
                 comunidadBean.setMunicipio(municipio);
                 mMunicipioPointer = position;
@@ -262,12 +253,12 @@ public class RegComuFr extends Fragment {
 
         tiposViaAdapter.setDropDownViewResource(R.layout.reg_comu_spinner_dropdown_item);
         mTipoViaSpinner.setAdapter(tiposViaAdapter);
-        mTipoViaSpinner.setSelection(mMunicipioPointer);
+        mTipoViaSpinner.setSelection(mTipoViaPointer);
     }
 
 ///    ::::::::::::::: COMUNIDAD AUTÓNOMA ::::::::::::::::
 
-    protected class SpinnerCAutonomasLoader extends AsyncTask<Void, Void, Cursor> {
+    class SpinnerCAutonomasLoader extends AsyncTask<Void, Void, Cursor> {
 
         @Override
         protected Cursor doInBackground(Void... params)
@@ -291,7 +282,7 @@ public class RegComuFr extends Fragment {
 
 ///    :::::::::::::::: PROVINCIA :::::::::::::::
 
-    protected class SpinnerProvinciasLoader extends AsyncTask<Short, Void, Cursor> {
+    class SpinnerProvinciasLoader extends AsyncTask<Short, Void, Cursor> {
 
         @Override
         protected Cursor doInBackground(Short... params)
@@ -315,7 +306,7 @@ public class RegComuFr extends Fragment {
 
 ///   :::::::::::::::::  MUNICIPIO ::::::::::::::::::::
 
-    protected class SpinnerMunicipioLoader extends AsyncTask<Short, Void, Cursor> {
+    class SpinnerMunicipioLoader extends AsyncTask<Short, Void, Cursor> {
 
         @Override
         protected Cursor doInBackground(Short... params)

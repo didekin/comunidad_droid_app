@@ -58,8 +58,6 @@ public final class MasterDataDb {
 
     public interface Municipio extends BaseColumns {
 
-        int NUMBER_RECORDS = 8120;
-
         String TB_MUNICIPIO = "municipio";
         String pr_id = "pr_id";
         String m_cd = "m_cd";

@@ -168,6 +168,9 @@ public class UserComuDataAc extends Activity {
                 SEE_USERCOMU_BY_COMU_AC.doMenuItem(this);
                 return true;
             case R.id.comu_data_ac_mn:
+                intent = new Intent(this, ComuDataAc.class);
+                intent.putExtra(COMUNIDAD_ID.extra, mOldUserComu.getComunidad().getC_Id());
+                this.setIntent(intent);
                 COMU_DATA_AC.doMenuItem(this);
                 return true;
             default:

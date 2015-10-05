@@ -5,7 +5,6 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import com.didekin.serviceone.domain.Comunidad;
 import com.didekindroid.R;
-import com.didekindroid.uiutils.UIutils;
 import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
@@ -57,7 +56,7 @@ public class RegUserComuAcTest_intent {
         protected Intent getActivityIntent()
         {
             signUpAndUpdateTk(COMU_REAL_JUAN);
-            List<Comunidad> comunidadesUserOne = ServOne.getComunidadesByUser();
+            List<Comunidad> comunidadesUserOne = ServOne.getComusByUser();
             comunidad = comunidadesUserOne.get(0);
 
             // We use that comunidad as the one to associate to the present user.
@@ -73,7 +72,7 @@ public class RegUserComuAcTest_intent {
         activity = intentRule.getActivity();
 
         assertThat(isRegisteredUser(activity), is(true));
-        List<Comunidad> comunidadesUserOne = ServOne.getComunidadesByUser();
+        List<Comunidad> comunidadesUserOne = ServOne.getComusByUser();
         assertThat(comunidadesUserOne.size(), is(1));
         Comunidad comunidad2 = comunidadesUserOne.get(0);
         assertThat(comunidad2, not(is(COMU_REAL_JUAN.getComunidad())));

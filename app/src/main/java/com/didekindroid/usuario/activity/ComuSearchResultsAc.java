@@ -174,7 +174,7 @@ public class ComuSearchResultsAc extends Activity implements ComuSearchResultsLi
         protected List<Comunidad> doInBackground(Void... params)
         {
             Log.d(ComuSearchResultsAc.TAG, ".ComunidadesUsuarioGetter.doInBackground()");
-            return ServOne.getComunidadesByUser();
+            return ServOne.getComusByUser();
         }
 
         @Override

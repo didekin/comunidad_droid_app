@@ -21,8 +21,7 @@ public enum UserMenu {
         public void doMenuItem(Activity activity)
         {
             Log.d(TAG,"comu_data_ac.doMenuItem()");
-            Intent intent = new Intent(activity, ComuDataAc.class);
-            activity.startActivity(intent);
+            activity.startActivity(activity.getIntent());
         }
     },
 
