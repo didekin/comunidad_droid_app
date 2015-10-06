@@ -36,13 +36,11 @@ public class RegComuFr extends Fragment {
     private static final String TIPO_VIA_POINTER_POS =
             RegComuFr.class.getSimpleName().concat(".mTipoViaPointer");
 
-    private static List<String> TIPOS_VIA;
-
     private MasterDataDbHelper dbHelper;
 
     private View mRegComunidadFrView;
     Spinner mTipoViaSpinner;
-    Spinner autonomaComuSpinner;
+    Spinner mAutonomaComuSpinner;
     Spinner provinciaSpinner;
     Spinner municipioSpinner;
 
@@ -51,7 +49,9 @@ public class RegComuFr extends Fragment {
     int mMunicipioPointer;
     int mTipoViaPointer;
 
-    ComunidadBean comunidadBean;
+    RegComuFrListener mActivityListener;
+
+    private ComunidadBean comunidadBean;
 
     public RegComuFr()
     {
@@ -94,20 +94,19 @@ public class RegComuFr extends Fragment {
         Log.d(TAG, "onActivityCreated()");
 
         dbHelper = new MasterDataDbHelper(getActivity());
-        new SpinnerCAutonomasLoader().execute();
+        new TipoViaSpinnerSetter().execute();
+        new CAutonomaSpinnerSetter().execute();
 
         mTipoViaSpinner = (Spinner) getView().findViewById(R.id.tipo_via_spinner);
         mTipoViaSpinner.setFocusable(true);
         mTipoViaSpinner.setFocusableInTouchMode(true);
         mTipoViaSpinner.requestFocus();
-        autonomaComuSpinner = (Spinner) getView().findViewById(R.id.autonoma_comunidad_spinner);
+        mAutonomaComuSpinner = (Spinner) getView().findViewById(R.id.autonoma_comunidad_spinner);
         provinciaSpinner = (Spinner) getView().findViewById(R.id.provincia_spinner);
         municipioSpinner = (Spinner) getView().findViewById(R.id.municipio_spinner);
         comunidadBean = new ComunidadBean();
 
-        setTipoViaSpinnerAdapter();  // Initialize with TIPOS_VIA array.
-
-        // ............... LISTENERS ...................
+        // ................................ LISTENERS ............................................
 
         mTipoViaSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -125,11 +124,11 @@ public class RegComuFr extends Fragment {
             }
         });
 
-        autonomaComuSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        mAutonomaComuSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
-                Log.d(TAG, "In autonomaComuSpinner.setOnItemSelectedListener, onItemSelected()");
+                Log.d(TAG, "In mAutonomaComuSpinner.setOnItemSelectedListener, onItemSelected()");
 
                 short cu_id = (short) id;
                 new SpinnerProvinciasLoader().execute(cu_id);
@@ -139,7 +138,7 @@ public class RegComuFr extends Fragment {
             @Override
             public void onNothingSelected(AdapterView<?> parent)
             {
-                Log.d(TAG, "In autonomaComuSpinner.setOnItemSelectedListener, onNothingSelected()");
+                Log.d(TAG, "In mAutonomaComuSpinner.setOnItemSelectedListener, onNothingSelected()");
             }
         });
 
@@ -204,10 +203,27 @@ public class RegComuFr extends Fragment {
         super.onDestroy();
     }
 
+// ================ Interface to communicate with the Activity ================
+
+    public interface RegComuFrListener {
+
+        void onTipoViaSpinnerLoaded();
+
+        void onCAutonomaSpinnerLoaded();
+
+        void onProvinciaSpinnerLoaded();
+
+        void onMunicipioSpinnerLoaded();
+    }
+
+    void setmActivityListener(RegComuFrListener mActivityListener)
+    {
+        this.mActivityListener = mActivityListener;
+    }
+
 //    ============================================================
 //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
 //    ============================================================
-
 
     public View getFragmentView()
     {
@@ -218,53 +234,66 @@ public class RegComuFr extends Fragment {
     {
         return comunidadBean;
     }
-
-//  :::::::::::::::::::: SPINNERS :::::::::::::::::::::
-//  ---------------------------------------------------
+//  --------------------------------------------------------------------
+//                               SPINNERS
+//  --------------------------------------------------------------------
 
     private SimpleCursorAdapter doAdapterSpinner(Cursor cursor, String[] fromColDB)
     {
         Log.d(TAG, "In doAdapterSpinner()");
 
         int[] toViews = new int[]{R.id.reg_comunidad_spinner_dropdown_item};
-        SimpleCursorAdapter cursorAdapter = new SimpleCursorAdapter(getActivity(),
-                R.layout.reg_comu_spinner_dropdown_item, cursor, fromColDB, toViews, 0);
+        SimpleCursorAdapter cursorAdapter = new SimpleCursorAdapter(
+                getActivity(),
+                R.layout.reg_comu_spinner_dropdown_item,
+                cursor,
+                fromColDB,
+                toViews,
+                0);
         return cursorAdapter;
     }
 
-//    :::::::::::: TIPO DE VÍA :::::::::::
+///    ::::::::::::::: TIPO DE VÍA ::::::::::::::::
 
-    private void setTipoViaSpinnerAdapter()
-    {
-        Log.d(TAG, "setTipoViaSpinnerAdapter()");
+    class TipoViaSpinnerSetter extends AsyncTask<Void, Void, List<String>> {
 
-        List<String> tiposVia = IoHelper.doArrayFromFile(RegComuFr.this.getActivity());
-        tiposVia.add(0, getResources().getString(R.string.tipo_via_spinner));
+        @Override
+        protected List<String> doInBackground(Void... params)
+        {
+            Log.d(TAG, "In TipoViaSpinnerSetter.doInBackground()");
 
-        synchronized (this) {
-            TIPOS_VIA = tiposVia;
+            List<String> tiposVia = IoHelper.doArrayFromFile(RegComuFr.this.getActivity());
+            tiposVia.add(0, getResources().getString(R.string.tipo_via_spinner));
+            return tiposVia;
         }
 
-        ArrayAdapter<String> tiposViaAdapter =
-                new ArrayAdapter<String>(
-                        RegComuFr.this.getActivity(),
-                        R.layout.reg_comu_spinner_dropdown_item,
-                        TIPOS_VIA);
+        @Override
+        protected void onPostExecute(List<String> tiposViaList)
+        {
+            Log.d(TAG, "In TipoViaSpinnerSetter.onPostExecute()");
 
-        tiposViaAdapter.setDropDownViewResource(R.layout.reg_comu_spinner_dropdown_item);
-        mTipoViaSpinner.setAdapter(tiposViaAdapter);
-        mTipoViaSpinner.setSelection(mTipoViaPointer);
+            ArrayAdapter<String> tiposViaAdapter = new ArrayAdapter<String>(
+                    RegComuFr.this.getActivity(),
+                    R.layout.reg_comu_spinner_dropdown_item,
+                    tiposViaList);
+
+            tiposViaAdapter.setDropDownViewResource(R.layout.reg_comu_spinner_dropdown_item);
+            mTipoViaSpinner.setAdapter(tiposViaAdapter);
+
+            if (mActivityListener != null) {
+                mActivityListener.onTipoViaSpinnerLoaded();
+            }
+        }
     }
 
-///    ::::::::::::::: COMUNIDAD AUTÓNOMA ::::::::::::::::
+///    :::::::::::::::: COMUNIDAD AUTONOMA :::::::::::::::
 
-    class SpinnerCAutonomasLoader extends AsyncTask<Void, Void, Cursor> {
+    class CAutonomaSpinnerSetter extends AsyncTask<Void, Void, Cursor> {
 
         @Override
         protected Cursor doInBackground(Void... params)
         {
-            Log.d(TAG, "In SpinnerCAutonomasLoader.doInBackground()");
-
+            Log.d(TAG, "In CAutonomaSpinnerSetter.doInBackground()");
             Cursor comunidadesCursor = dbHelper.doComunidadesCursor();
             return comunidadesCursor;
         }
@@ -272,15 +301,18 @@ public class RegComuFr extends Fragment {
         @Override
         protected void onPostExecute(Cursor comunidadesCursor)
         {
-            Log.d(TAG, "In SpinnerCAutonomasLoader.onPostExecute()");
+            Log.d(TAG, "In CAutonomaSpinnerSetter.onPostExecute()");
 
             String[] fromColDb = new String[]{cu_nombre};
-            autonomaComuSpinner.setAdapter(doAdapterSpinner(comunidadesCursor, fromColDb));
-            autonomaComuSpinner.setSelection(mCApointer);
+            mAutonomaComuSpinner.setAdapter(doAdapterSpinner(comunidadesCursor, fromColDb));
+
+            if (mActivityListener != null) {
+                mActivityListener.onCAutonomaSpinnerLoaded();
+            }
         }
     }
 
-///    :::::::::::::::: PROVINCIA :::::::::::::::
+///    :::::::::::::::::: PROVINCIA ::::::::::::::::::::::
 
     class SpinnerProvinciasLoader extends AsyncTask<Short, Void, Cursor> {
 
@@ -290,6 +322,7 @@ public class RegComuFr extends Fragment {
             Log.d(TAG, "In SpinnerProvinciasLoader.doInBackground()");
 
             Cursor provinciasCAcursor = dbHelper.getProvinciasByCA(params[0]);
+            Log.d(TAG, "In SpinnerProvinciasLoader.doInBackground() : cursor count = " + provinciasCAcursor.getCount());
             return provinciasCAcursor;
         }
 
@@ -300,7 +333,9 @@ public class RegComuFr extends Fragment {
 
             String[] fromColDb = new String[]{pr_nombre};
             provinciaSpinner.setAdapter(doAdapterSpinner(provinciasCursor, fromColDb));
-            provinciaSpinner.setSelection(mProvinciaPointer);
+            if (mActivityListener != null) {
+                mActivityListener.onProvinciaSpinnerLoaded();
+            }
         }
     }
 
@@ -311,16 +346,23 @@ public class RegComuFr extends Fragment {
         @Override
         protected Cursor doInBackground(Short... params)
         {
+            Log.d(TAG, "In SpinnerMunicipioLoader.doInBackground()");
             Cursor municipiosCursor = dbHelper.getMunicipiosByPrId(params[0]);
+            Log.d(TAG, "In SpinnerMunicipiosLoader.doInBackground() : cursor count = " + municipiosCursor.getCount());
             return municipiosCursor;
         }
 
         @Override
         protected void onPostExecute(Cursor municipiosCursor)
         {
+            Log.d(TAG, "In SpinnerMunicipioLoader.onPostExecute()");
+
             String[] fromColDb = new String[]{mu_nombre};
             municipioSpinner.setAdapter(doAdapterSpinner(municipiosCursor, fromColDb));
-            municipioSpinner.setSelection(mMunicipioPointer);
+
+            if (mActivityListener != null) {
+                mActivityListener.onMunicipioSpinnerLoaded();
+            }
         }
     }
 }

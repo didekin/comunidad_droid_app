@@ -79,7 +79,7 @@ public final class UsuarioTestUtils {
         onView(allOf(withId(R.id.tipo_via_spinner))).perform(click());
         onData(allOf(is(instanceOf(String.class)), is("Calle"))).perform(click());
         onView(allOf(withId(R.id.reg_comunidad_spinner_dropdown_item), withParent(withId(R.id.tipo_via_spinner))))
-                .check(matches(withText(containsString("Calle"))));
+                .check(matches(withText(containsString("Calle")))).check(matches(isDisplayed()));
 
         onView(withId(R.id.autonoma_comunidad_spinner)).perform(click());
         onData(withRowString(1, "Valencia")).perform(click());

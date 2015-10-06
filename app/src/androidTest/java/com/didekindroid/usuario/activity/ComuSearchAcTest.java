@@ -120,7 +120,7 @@ public class ComuSearchAcTest {
     }
 
     @Test
-    public void searchComunidadWrong()
+    public void searchComunidadWrong() throws InterruptedException
     {
         activity = mActivityRule.launchActivity(new Intent());
 
@@ -130,10 +130,11 @@ public class ComuSearchAcTest {
 
         onView(withId(R.id.searchComunidad_Bton)).perform(ViewActions.click());
         checkToastInTest(R.string.error_validation_msg, activity, R.string.tipo_via, R.string.nombre_via, R.string.municipio);
+        Thread.sleep(1000);
     }
 
     @Test
-    public void searchComunidadOK_1()
+    public void searchComunidadOK_1() throws InterruptedException
     {
         // Without token.
         activity = mActivityRule.launchActivity(new Intent());
@@ -144,8 +145,9 @@ public class ComuSearchAcTest {
         onView(withId(R.id.searchComunidad_Bton)).perform(click());
         // No results in DB. The user is invited to register.
         checkToastInTest(R.string.no_result_search_comunidad, activity);
-
         onView(withId(R.id.reg_comu_usuario_usuariocomu_layout)).check(matches(isDisplayed()));
+
+        Thread.sleep(1000);
     }
 
     @Test

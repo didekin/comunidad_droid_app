@@ -15,6 +15,7 @@ import com.didekindroid.uiutils.UIutils;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
 
+import static com.didekindroid.uiutils.UIutils.makeToast;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeComunidadBeanFromView;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUserComuBeanFromView;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
@@ -68,10 +69,9 @@ public class RegComuAndUserComuAc extends Activity {
                 .append(CommonPatterns.LINE_BREAK.literal);
 
         if (!usuarioComunidadBean.validate(getResources(), errorMsg)) {
-            UIutils.makeToast(this, errorMsg.toString());
-
+            makeToast(this, errorMsg.toString());
         } else if (!ConnectionUtils.isInternetConnected(this)) {
-            UIutils.makeToast(this, R.string.no_internet_conn_toast);
+            makeToast(this, R.string.no_internet_conn_toast);
         } else {
             new ComuAndUserComuRegister().execute(usuarioComunidadBean.getUsuarioComunidad());
             Intent intent = new Intent(this, SeeUserComuByUserAc.class);

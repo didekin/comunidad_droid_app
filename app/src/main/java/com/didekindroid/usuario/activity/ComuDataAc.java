@@ -2,6 +2,7 @@ package com.didekindroid.usuario.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,11 +10,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CursorAdapter;
 import android.widget.EditText;
 import com.didekin.serviceone.domain.Comunidad;
 import com.didekindroid.R;
+import com.didekindroid.ioutils.ConnectionUtils;
+import com.didekindroid.usuario.dominio.ComunidadBean;
 
-import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
+import static com.didekindroid.uiutils.UIutils.*;
+import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeComunidadBeanFromView;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_ID;
 import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_USERCOMU_BY_COMU_AC;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
@@ -28,14 +33,21 @@ import static com.google.common.base.Preconditions.checkState;
  * Postconditions:
  * 1.
  */
-public class ComuDataAc extends Activity {
+public class ComuDataAc extends Activity implements RegComuFr.RegComuFrListener {
 
     private static final String TAG = ComuDataAc.class.getCanonicalName();
 
-    private long mIdComunidad;
-    private View mAcView;
-    private Button mModifyButton;
+    long mIdComunidad;
+    View mAcView;
+    Button mModifyButton;
     RegComuFr mRegComuFrg;
+    ComuDataSetter mComuDataSetter;
+    private Comunidad mComunidad;
+
+    private boolean isTipoViaSpinnerSet;
+    private boolean isCASpinnerSet;
+    private boolean isProvinciaSpinnerSet;
+    private boolean isMunicipioSpinnerSet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -46,13 +58,16 @@ public class ComuDataAc extends Activity {
         // Preconditions.
         checkState(isRegisteredUser(this));
         mIdComunidad = getIntent().getLongExtra(COMUNIDAD_ID.extra, 0L);
-        checkNotNull(mIdComunidad);
+        checkState(mIdComunidad > 0L);
 
         mAcView = getLayoutInflater().inflate(R.layout.comu_data_ac, null);
         setContentView(mAcView);
         mRegComuFrg = (RegComuFr) getFragmentManager().findFragmentById(R.id.reg_comunidad_frg);
-        mModifyButton = (Button) findViewById(R.id.comu_data_ac_button);
+        mRegComuFrg.setmActivityListener(this);
 
+        mComuDataSetter = (ComuDataSetter) new ComuDataSetter().execute();
+
+        mModifyButton = (Button) findViewById(R.id.comu_data_ac_button);
         mModifyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
@@ -66,75 +81,123 @@ public class ComuDataAc extends Activity {
     private void modifyComuData()
     {
         Log.d(TAG, "modifyComuData()");
+
+        ComunidadBean comuBean = mRegComuFrg.getComunidadBean();
+        makeComunidadBeanFromView(mRegComuFrg.getFragmentView(), comuBean);
+        StringBuilder errorBuilder = getErrorMsgBuilder(this);
+
+        if (!comuBean.validate(getResources(), errorBuilder)) {
+            makeToast(this, errorBuilder.toString());
+        } else if (!ConnectionUtils.isInternetConnected(this)) {
+            makeToast(this, R.string.no_internet_conn_toast);
+        } else {
+            Comunidad comunidadIn = new Comunidad.ComunidadBuilder()
+                    .c_id(mComunidad.getC_Id())
+                    .tipoVia(comuBean.getComunidad().getTipoVia())
+                    .nombreVia(comuBean.getComunidad().getNombreVia())
+                    .numero(comuBean.getComunidad().getNumero())
+                    .sufijoNumero(comuBean.getComunidad().getSufijoNumero())
+                    .municipio(comuBean.getComunidad().getMunicipio())
+                    .build();
+            new ComuDataModifier().execute(comunidadIn);
+            Intent intent = new Intent(this, SeeUserComuByUserAc.class);
+            startActivity(intent);
+        }
     }
 
-//    =============================== Painting the default comunidad data ================================
+//  ================================= Painting the default comunidad data ================================
 
-    private void paintComuDataView(Comunidad comunidad)
+    private void setEditTextComuData()
     {
-        Log.d(TAG, "paintComuDataView()");
+        Log.d(TAG, "setEditTextComuData()");
 
         View comuFrView = mRegComuFrg.getFragmentView();
 
-        ((EditText) comuFrView.findViewById(R.id.comunidad_nombre_via_editT)).setText(comunidad.getNombreVia());
-        ((EditText) comuFrView.findViewById(R.id.comunidad_numero_editT)).setText(comunidad.getNumero());
-        ((EditText) comuFrView.findViewById(R.id.comunidad_sufijo_numero_editT)).setText(comunidad.getSufijoNumero());
-
-        // TipoVia spinner.
-        setTipoViaSpinner(comunidad);
-        // ComunidadAutonoma spinner.
-        setCASpinner(comunidad);
-        // Provincia spinner.
-        setProvinciaSpinner(comunidad);
-        //Municipio spinner.
-        setMunicipioSpinner(comunidad);
-
-        mRegComuFrg.new SpinnerProvinciasLoader().execute(comunidad.getMunicipio().getProvincia().getProvinciaId());
+        ((EditText) comuFrView.findViewById(R.id.comunidad_nombre_via_editT)).setText(mComunidad.getNombreVia());
+        ((EditText) comuFrView.findViewById(R.id.comunidad_numero_editT)).setText(String.valueOf(mComunidad.getNumero()));
+        ((EditText) comuFrView.findViewById(R.id.comunidad_sufijo_numero_editT)).setText(mComunidad.getSufijoNumero());
     }
 
-    /**
-     * 1. It fixes the current tipoVia as the default value of the spinner.
-     * 2. It sets the current tipoVia in the comunidadBean associated to the comunidad fragment.
-     * 3. It assign the position of the current tipoVia to the mRegComuFrg.mTipoViaPointer.
-     *
-     * @param comunidad
-     */
-    private void setTipoViaSpinner(Comunidad comunidad)
+    @Override
+    public void onTipoViaSpinnerLoaded()
     {
-        Log.d(TAG, "setTipoViaSpinner()");
+        Log.d(TAG, "onTipoViaSpinnerLoaded()");
 
-        int position = 0;
-        for (int i = 0; i < mRegComuFrg.mTipoViaSpinner.getCount(); i++) {
-            if (mRegComuFrg.mTipoViaSpinner.getItemAtPosition(i).equals(comunidad.getTipoVia())) {
-                position = i;
+        if (!isTipoViaSpinnerSet) {
+            Log.d(TAG, "onTipoViaSpinnerLoaded(): spinner not set");
+            int position = 0;
+            for (int i = 0; i < mRegComuFrg.mTipoViaSpinner.getCount(); i++) {
+                if (mRegComuFrg.mTipoViaSpinner.getItemAtPosition(i).equals(mComunidad.getTipoVia())) {
+                    position = i;
+                }
             }
+            mRegComuFrg.mTipoViaSpinner.setSelection(position);
+            isTipoViaSpinnerSet = true;
         }
-        mRegComuFrg.mTipoViaPointer = position;
-        mRegComuFrg.mTipoViaSpinner.setSelection(mRegComuFrg.mTipoViaPointer);
-        mRegComuFrg.comunidadBean.setTipoVia(
-                (String) mRegComuFrg.mTipoViaSpinner.getItemAtPosition(mRegComuFrg.mTipoViaPointer));
     }
 
-    /**
-     * */
-    private void setCASpinner(Comunidad comunidad)
+    @Override
+    public void onCAutonomaSpinnerLoaded()
     {
-        Log.d(TAG,"setCASpinner()");
-            /*R.id.autonoma_comunidad_spinner)*/
+        Log.d(TAG, "onCAutonomaSpinnerLoaded()");
 
+        if (!isCASpinnerSet) {
+            Log.d(TAG, "onCAutonomaSpinnerLoaded(): spinner not set");
+            short cAutonomaId = mComunidad.getMunicipio().getProvincia().getComunidadAutonoma().getCuId();
+
+            int position = 0;
+            int itemsLength = mRegComuFrg.mAutonomaComuSpinner.getCount();
+            for (int i = 0; i < itemsLength; i++) {
+                if ((short) mRegComuFrg.mAutonomaComuSpinner.getItemIdAtPosition(i) == cAutonomaId) {
+                    position = i;
+                }
+            }
+            mRegComuFrg.mAutonomaComuSpinner.setSelection(position);
+            isCASpinnerSet = true;
+        }
     }
 
-    private void setProvinciaSpinner(Comunidad comunidad)
+    @Override
+    public void onProvinciaSpinnerLoaded()
     {
-        Log.d(TAG,"setProvinciaSpinner()");
-            /*R.id.provincia_spinner*/
+        Log.d(TAG, "onProvinciaSpinnerLoaded()");
+
+        if (!isProvinciaSpinnerSet) {
+            Log.d(TAG, "onProvinciaSpinnerLoaded(): spinner not set");
+            short provinciaId = mComunidad.getMunicipio().getProvincia().getProvinciaId();
+            int position = 0;
+            int itemsLength = mRegComuFrg.provinciaSpinner.getCount();
+            for (int i = 0; i < itemsLength; i++) {
+                if ((short) mRegComuFrg.provinciaSpinner.getItemIdAtPosition(i) == provinciaId) {
+                    position = i;
+                }
+            }
+            mRegComuFrg.provinciaSpinner.setSelection(position);
+            isProvinciaSpinnerSet = true;
+        }
     }
 
-    private void setMunicipioSpinner(Comunidad comunidad)
+    @Override
+    public void onMunicipioSpinnerLoaded()
     {
-        Log.d(TAG,"setMunicipioSpinner()");
-           /*R.id.municipio_spinner*/
+        Log.d(TAG, "onMunicipioSpinnerLoaded()");
 
+        if (!isMunicipioSpinnerSet) {
+            Log.d(TAG, "onMunicipioSpinnerLoaded(): spinner not set");
+            int municipioCP = mComunidad.getMunicipio().getCodInProvincia();
+            short provinciaId = mComunidad.getMunicipio().getProvincia().getProvinciaId();
+            int position = 0;
+            Cursor cursor = ((CursorAdapter) mRegComuFrg.municipioSpinner.getAdapter()).getCursor();
+            do {
+                if (cursor.getShort(2) == municipioCP && cursor.getShort(1) == provinciaId) {
+                    position = cursor.getPosition();
+//                    cursor.close();
+                    break;
+                }
+            } while (cursor.moveToNext());
+            mRegComuFrg.municipioSpinner.setSelection(position);
+            isMunicipioSpinnerSet = true;
+        }
     }
 
 //    ============================================================================================
@@ -185,7 +248,27 @@ public class ComuDataAc extends Activity {
         protected void onPostExecute(Comunidad comunidad)
         {
             Log.d(TAG, "onPostExecute()");
-            paintComuDataView(comunidad);
+            mComunidad = comunidad;
+            setEditTextComuData();
+        }
+    }
+
+    private class ComuDataModifier extends AsyncTask<Comunidad, Void, Integer> {
+
+        final String TAG = ComuDataModifier.class.getCanonicalName();
+
+        @Override
+        protected Integer doInBackground(Comunidad... comunidades)
+        {
+            Log.d(TAG, "doInBackground()");
+            return ServOne.modifyComuData(comunidades[0]);
+        }
+
+        @Override
+        protected void onPostExecute(Integer rowsUpdated)
+        {
+            Log.d(TAG, "onPostExecute()");
+            checkState(rowsUpdated == 1);
         }
     }
 }

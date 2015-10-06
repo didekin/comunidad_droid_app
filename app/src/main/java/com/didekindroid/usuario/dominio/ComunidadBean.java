@@ -138,8 +138,8 @@ public class ComunidadBean {
             return false;
         }
         Provincia provincia = municipio.getProvincia();
-        boolean isValid = (provincia == null || municipio.getCodInProvincia() == 0 || provincia.getProvinciaId() ==
-                0) ? false : true;
+        boolean isValid = !(provincia == null || municipio.getCodInProvincia() == 0
+                || provincia.getProvinciaId() == 0);
         if (!isValid) {
             errorMsg.append(resources.getString(R.string.municipio) + LINE_BREAK.literal);
         }

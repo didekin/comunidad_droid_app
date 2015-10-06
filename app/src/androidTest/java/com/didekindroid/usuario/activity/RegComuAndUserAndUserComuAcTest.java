@@ -201,7 +201,7 @@ public class RegComuAndUserAndUserComuAcTest {
     }
 
     @Test
-    public void testRegisterComuAndUserComuAndUser_1()
+    public void testRegisterComuAndUserComuAndUser_1() throws InterruptedException
     {
         // Empty ComunidadBean: no input data. ComunidadBean is not null.
         ComunidadBean comunidadBean = mRegComuFrg.getComunidadBean();
@@ -234,6 +234,8 @@ public class RegComuAndUserAndUserComuAcTest {
                 R.string.alias,
                 R.string.email_hint,
                 R.string.password);
+
+        Thread.sleep(2000);
     }
 
     @Test

@@ -195,11 +195,18 @@ public class ServiceOneIfTest {
                 .c_id(cDb.getC_Id())
                 .nombreVia("new_nombreVia")
                 .tipoVia("new_tipoVia")
-                .numero(cDb.getNumero())
+                .numero((short) 23)
+                .sufijoNumero("sufi")
                 .municipio(cDb.getMunicipio())
                 .build();
         assertThat(ServOne.modifyComuData(cNew),is(1));
-        assertThat(ServOne.getComusByUser().get(0).getNombreVia(),is(cNew.getNombreVia()));
+        assertThat(ServOne.getComusByUser().get(0), allOf(
+                hasProperty("tipoVia",equalTo(cNew.getTipoVia())),
+                hasProperty("nombreVia",equalTo(cNew.getNombreVia())),
+                hasProperty("numero",equalTo((short)23)),
+                hasProperty("sufijoNumero",equalTo(cNew.getSufijoNumero())),
+                hasProperty("municipio",equalTo(cNew.getMunicipio()))
+        ));
     }
 
     @Test

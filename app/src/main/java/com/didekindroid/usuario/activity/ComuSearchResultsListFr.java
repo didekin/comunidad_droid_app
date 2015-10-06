@@ -162,7 +162,6 @@ public class ComuSearchResultsListFr extends ListFragment {
 
     public interface ComuListListener {
         void onComunidadSelected(Comunidad comunidad, int lineItemIndex);
-
         void onComunidadListLoaded(int listSize);
     }
 

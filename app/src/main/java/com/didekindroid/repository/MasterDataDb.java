@@ -12,6 +12,10 @@ import static com.didekindroid.repository.MasterDataDb.Provincia.TB_PROVINCIA;
  */
 public final class MasterDataDb {
 
+    private MasterDataDb()
+    {
+    }
+
     private static final String TAG = MasterDataDb.class.getCanonicalName();
 
     public static final String SQL_ENABLE_FK = "PRAGMA foreign_keys=ON;";
