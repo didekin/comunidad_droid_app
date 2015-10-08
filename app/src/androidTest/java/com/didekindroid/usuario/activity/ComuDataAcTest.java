@@ -133,7 +133,7 @@ public class ComuDataAcTest {
         onData(withRowString(3, "Ènova, l'")).perform(click());
 
         onView(withId(R.id.comu_data_ac_button)).check(matches(isDisplayed())).perform(click());
-        onView(withId(R.id.see_usercomu_by_user_ac_layout)).check(matches(isDisplayed()));
+        onView(withId(R.id.see_usercomu_by_user_ac_frg_container)).check(matches(isDisplayed()));
 
         Comunidad comunidadDb = ServOne.getComuData(mComunidad.getC_Id());
         assertThat(comunidadDb, Matchers.allOf(
@@ -148,7 +148,7 @@ public class ComuDataAcTest {
     public void testModifyComuData_2()
     {
         onView(withId(R.id.comu_data_ac_button)).check(matches(isDisplayed())).perform(click());
-        onView(withId(R.id.see_usercomu_by_user_ac_layout)).check(matches(isDisplayed()));
+        onView(withId(R.id.see_usercomu_by_user_ac_frg_container)).check(matches(isDisplayed()));
 
         Comunidad comunidadDb = ServOne.getComuData(mComunidad.getC_Id());
         assertThat(comunidadDb, Matchers.allOf(

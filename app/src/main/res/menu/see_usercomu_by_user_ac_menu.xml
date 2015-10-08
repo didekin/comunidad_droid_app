@@ -1,4 +1,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
       tools:context="com.didekindroid.usuario.activity.SeeUserComuByUserAc">
+    <item
+            android:id="@+id/user_data_ac_mn"
+            android:title="@string/user_data_ac_mn"
+            android:orderInCategory="100"
+            app:showAsAction="never|withText"/>
+    <item
+            android:id="@+id/comu_search_ac_mn"
+            android:title="@string/comu_search_ac_mn"
+            android:orderInCategory="100"
+            app:showAsAction="never|withText"/>
 </menu>

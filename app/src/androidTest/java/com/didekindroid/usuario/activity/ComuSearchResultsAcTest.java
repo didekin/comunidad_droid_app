@@ -383,7 +383,7 @@ public class ComuSearchResultsAcTest {
         onView(withAdaptedData(Matchers.<Object>equalTo(comunidadInAdapter))).check(matches(isDisplayed()));
         onData(allOf(is(instanceOf(Comunidad.class)), hasProperty("nombreVia", is("de la Plazuela")))).perform(click());
 
-        onView(withId(R.id.see_usercomu_by_user_ac_layout)).check(matches(isDisplayed()));
+        onView(withId(R.id.see_usercomu_by_user_ac_frg_container)).check(matches(isDisplayed()));
     }
 
     @Test

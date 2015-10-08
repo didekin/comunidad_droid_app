@@ -54,6 +54,10 @@ public enum RetrofitRestBuilder {
         return endPoint;
     }
 
+//    .............. STATIC FIELDS/ METHODS ..............
+
+    final String TAG = RetrofitRestBuilder.class.getCanonicalName();
+
 
     // ............. HELPER CLASSES ..............
 
@@ -78,22 +82,18 @@ public enum RetrofitRestBuilder {
         private static final String TAG = ServiceOneExceptionHandler.class.getCanonicalName();
 
         @Override
-        public Throwable handleError(RetrofitError retrofitError)
+        public Throwable handleError(RetrofitError rErr)
         {
             ErrorBean errorBean = null;
             try {
-                errorBean = (ErrorBean) retrofitError.getBodyAs(ErrorBean.class);
+                errorBean = (ErrorBean) rErr.getBodyAs(ErrorBean.class);
             } catch (RuntimeException e) { /* To catch conversion exception.*/
             } finally {
                 if (errorBean == null || errorBean.getMessage() == null) {
-                    errorBean = new ErrorBean(
-                            retrofitError.getCause() != null ?
-                                    retrofitError.getCause().getMessage() :
-                                    retrofitError.getResponse().getReason(),
-                            retrofitError.getResponse().getStatus());
+                    errorBean = new ErrorBean(rErr.getResponse().getReason(), rErr.getResponse().getStatus());
                 }
             }
-            return new ServiceOneException(errorBean, retrofitError);
+            return new ServiceOneException(errorBean, rErr);
         }
     }
 

@@ -63,13 +63,11 @@
     <string name="comu_search_results_ac_label">Comunidades encontradas</string>
     <!-- ........ ComuSearchResultsListFr ......... -->
     <string name="rotulo_comunidad">Mi comunidad</string>
-    <!-- ============== ComusByUserListAc ================= -->
-    <string name="comunidades_usuario_acc_label">Mis comunidades</string>
     <!-- ================= DeleteMeAc ===================== -->
     <string name="delete_me_ac_label">Borrar mis datos</string>
     <string name="delete_me_ac_unreg_rot_txt">¿Deseas eliminar tus datos en didekin?</string>
     <string name="delete_me_ac_unreg_button_txt">Sí, borro todos mis datos</string>
-    <!--================= LoginActivity =================== -->
+    <!--================= LoginAc =================== -->
     <string name="login_label">Registro en didekin</string>
     <string name="textLogin_no">Registra tus datos.</string>
     <string name="textLogin_yes">Haz login.</string>

@@ -37,7 +37,7 @@ public class SeeUserComuByComuAc extends Activity {
         super.onCreate(savedInstanceState);
         Log.i(TAG, "onCreate()");
 
-        // Preconditions: the user is registered; an existing comunidad passed as intent.
+        // Preconditions: the user is registered.
         checkState(isRegisteredUser(this));
 
         setContentView(R.layout.see_usercomu_by_comu_ac);

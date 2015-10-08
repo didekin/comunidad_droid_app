@@ -141,7 +141,7 @@ public class UserDataAcTest {
         onView(withId(R.id.user_data_ac_password_ediT)).perform(typeText(USER_JUAN.getPassword()), closeSoftKeyboard());
         onView(withId(R.id.user_data_modif_button)).perform(scrollTo())
                 .check(matches(isDisplayed())).perform(click());
-        onView(withId(R.id.see_usercomu_by_user_ac_layout)).check(matches(isDisplayed()));
+        onView(withId(R.id.see_usercomu_by_user_ac_frg_container)).check(matches(isDisplayed()));
 
         Thread.sleep(2000);
     }
@@ -172,7 +172,7 @@ public class UserDataAcTest {
 
         onView(withId(R.id.user_data_modif_button)).perform(scrollTo())
                 .check(matches(isDisplayed())).perform(click());
-        onView(withId(R.id.see_usercomu_by_user_ac_layout)).check(matches(isDisplayed()));
+        onView(withId(R.id.see_usercomu_by_user_ac_frg_container)).check(matches(isDisplayed()));
 
         // New security data: same as the old one.
         OauthToken.AccessToken tokenAfter = TKhandler.getAccessTokenInCache();
@@ -196,7 +196,7 @@ public class UserDataAcTest {
 
         onView(withId(R.id.user_data_modif_button)).perform(scrollTo())
                 .check(matches(isDisplayed())).perform(click());
-        onView(withId(R.id.see_usercomu_by_user_ac_layout)).check(matches(isDisplayed()));
+        onView(withId(R.id.see_usercomu_by_user_ac_frg_container)).check(matches(isDisplayed()));
 
         // New security data.
         OauthToken.AccessToken tokenAfter = TKhandler.getAccessTokenInCache();

@@ -19,7 +19,6 @@ import com.didekindroid.usuario.activity.utils.UserIntentExtras;
 import java.util.List;
 
 import static com.didekindroid.uiutils.ViewsIDs.SEE_USERCOMU_BY_COMU;
-import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_ID;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 
 
@@ -27,6 +26,11 @@ import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
  * User: pedro@didekin
  * Date: 25/08/15
  * Time: 16:38
+ */
+
+/**
+ * Preconditions:
+ * 1. a long comunidadId is passed as an intent extra.
  */
 public class SeeUserComuByComuFr extends ListFragment {
 
@@ -39,6 +43,7 @@ public class SeeUserComuByComuFr extends ListFragment {
     SeeUserComutByComuListAdapter mAdapter;
     ListView fragmentListView;
     TextView nombreComuView;
+    long comunidadId;
 
     public SeeUserComuByComuFr()
     {
@@ -59,23 +64,14 @@ public class SeeUserComuByComuFr extends ListFragment {
 
         mActivity = (SeeUserComuByComuAc) getActivity();
         // Preconditions: an existing comunidad passed as intent. The comunidad has necessarily users already signed-up.
-        long comunidadId = mActivity.getIntent().getExtras().getLong(COMUNIDAD_ID.extra);
-        // Loading the data...
-        new UserComuByComuLoader().execute(comunidadId);
+        comunidadId = mActivity.getIntent().getExtras().getLong(UserIntentExtras.COMUNIDAD_ID.extra);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState)
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         Log.d(TAG, "onCreateView()");
         return super.onCreateView(inflater, container, savedInstanceState);
-    }
-
-    public View getFragmentView()
-    {
-        Log.d(TAG, "getFragmentView()");
-        return getListView();
     }
 
     @Override
@@ -93,7 +89,8 @@ public class SeeUserComuByComuFr extends ListFragment {
         nombreComuView = (TextView) headerView.findViewById(R.id.usercomu_list_header_nombrecomu_txt);
         // Adapter.
         mAdapter = new SeeUserComutByComuListAdapter(mActivity);
-        setListAdapter(mAdapter);
+        // Loading the data...
+        new UserComuByComuLoader().execute(comunidadId);
     }
 
     @Override
@@ -152,19 +149,28 @@ public class SeeUserComuByComuFr extends ListFragment {
     }
 
 
-    //    ============================================================
-    //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
-    //    ============================================================
+//    ============================================================
+//    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
+//    ============================================================
+
+    View getFragmentView()
+    {
+        Log.d(TAG, "getFragmentView()");
+        return fragmentListView;
+    }
 
     private class UserComuByComuLoader extends AsyncTask<Long, Void, List<UsuarioComunidad>> {
 
         private final String TAG = UserComuByComuLoader.class.getCanonicalName();
 
+        private Comunidad comunidadIn;
+
         @Override
         protected List<UsuarioComunidad> doInBackground(Long... comunidadId)
         {
             Log.d(TAG, "doInBackground()");
-            return ServOne.seeUserComuByComu(comunidadId[0]);
+            comunidadIn = ServOne.getComuData(comunidadId[0]);
+            return ServOne.seeUserComusByComu(comunidadId[0]);
         }
 
         @Override
@@ -173,9 +179,9 @@ public class SeeUserComuByComuFr extends ListFragment {
             Log.d(TAG, "onPostExecute(); userComuList size = " + userComuList.size());
 
             mAdapter.addAll(userComuList);
-            Comunidad comunidad = userComuList.get(0).getComunidad();
+            setListAdapter(mAdapter);
+            nombreComuView.setText(comunidadIn.getNombreComunidad());
             fragmentListView.addHeaderView(nombreComuView);
-            nombreComuView.setText(comunidad.getNombreComunidad());
         }
     }
 }

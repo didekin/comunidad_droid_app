@@ -33,9 +33,6 @@ public interface ServiceOneEndPoints {
     @GET(COMUS_BY_USER)
     List<Comunidad> getComusByUser(@Header("Authorization") String accessToken);
 
-    @GET(USERCOMUS_BY_USER)
-    List<UsuarioComunidad> getUserComusByUser(@Header("Authorization") String accessToken);
-
     @GET(USER_READ)
     Usuario getUserData(@Header("Authorization") String accessToken);
 
@@ -72,6 +69,9 @@ public interface ServiceOneEndPoints {
     List<Comunidad> searchComunidades(@Body Comunidad comunidad);
 
     @GET(USERCOMUS_BY_COMU + "/{comunidadId}")
-    List<UsuarioComunidad> seeUserComuByComu(@Header("Authorization") String accessToken,
-                                             @Path("comunidadId") long comunidadId);
+    List<UsuarioComunidad> seeUserComusByComu(@Header("Authorization") String accessToken,
+                                              @Path("comunidadId") long comunidadId);
+
+    @GET(USERCOMUS_BY_USER)
+    List<UsuarioComunidad> seeUserComusByUser(@Header("Authorization") String accessToken);
 }

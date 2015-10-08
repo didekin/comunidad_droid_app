@@ -9,7 +9,7 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.*;
-import static com.didekindroid.uiutils.ViewsIDs.SEE_COMU_AND_USER_COMU_BY_USER;
+import static com.didekindroid.uiutils.ViewsIDs.SEE_USER_COMU_BY_USER;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.checkNoToastInTest;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.checkToastInTest;
 
@@ -170,7 +170,7 @@ public enum UserMenuTestUtils {
 
             // No muestra toast de error.
             checkNoToastInTest(R.string.user_without_signedUp, activity);
-            onView(withId(SEE_COMU_AND_USER_COMU_BY_USER.idView)).check(matches(isDisplayed()));
+            onView(withId(SEE_USER_COMU_BY_USER.idView)).check(matches(isDisplayed()));
 
             Thread.sleep(4000);
         }

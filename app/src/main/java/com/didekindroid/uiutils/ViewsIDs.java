@@ -11,7 +11,7 @@ package com.didekindroid.uiutils;
 public enum ViewsIDs {
 
     /* User's comunidades view. */
-    SEE_COMU_AND_USER_COMU_BY_USER(-1321),
+    SEE_USER_COMU_BY_USER(-1321),
     /* Comunidades found-searched view */
     COMU_SEARCH_RESULTS(-1323),
     /* Users signed-up in a comunidad */

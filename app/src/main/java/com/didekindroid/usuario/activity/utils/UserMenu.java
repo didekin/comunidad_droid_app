@@ -116,7 +116,7 @@ public enum UserMenu {
                 makeToast(activity, R.string.user_without_signedUp);
             } else {
                 Log.i(TAG, "comu_by_user.doMenuItem(), user registered.");
-                Intent intent = new Intent(activity, ComusByUserListAc.class);
+                Intent intent = new Intent(activity, SeeUserComuByUserAc.class);
                 activity.startActivity(intent);
             }
         }

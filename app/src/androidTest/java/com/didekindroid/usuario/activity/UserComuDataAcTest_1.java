@@ -26,8 +26,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.*;
 import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_NOTHING;
-import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRESIDENTE;
-import static com.didekindroid.usuario.activity.utils.RolCheckBox.PROPIETARIO;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_ID;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.COMU_DATA_AC;
@@ -62,7 +60,7 @@ public class UserComuDataAcTest_1 {
         protected Intent getActivityIntent()
         {
             signUpAndUpdateTk(COMU_REAL_JUAN);
-            List<UsuarioComunidad> comunidadesUserOne = ServOne.getUserComusByUser();
+            List<UsuarioComunidad> comunidadesUserOne = ServOne.seeUserComusByUser();
             mUsuarioComunidad = comunidadesUserOne.get(0);
 
             // We use that comunidad as the one to associate to the present user.
@@ -165,7 +163,7 @@ public class UserComuDataAcTest_1 {
         onView(withId(R.id.reg_usercomu_checbox_inq)).perform(click()).check(matches(isChecked()));
 
         onView(withId(R.id.usercomu_data_ac_modif_button)).perform(click());
-        onView(withId(R.id.see_usercomu_by_user_ac_layout)).check(matches(isDisplayed()));
+        onView(withId(R.id.see_usercomu_by_user_ac_frg_container)).check(matches(isDisplayed()));
     }
 
     @Test

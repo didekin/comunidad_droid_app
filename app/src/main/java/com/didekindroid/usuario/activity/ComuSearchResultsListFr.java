@@ -88,11 +88,9 @@ public class ComuSearchResultsListFr extends ListFragment {
         listView.setId(COMU_SEARCH_RESULTS.idView);
         listView.setItemsCanFocus(false);
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        // Text for no result OR view for no result.
-//        setEmptyText(getResources().getText(R.string.no_result_search_comunidad));
-//        listView.setEmptyView();
-
-        setListAdapter(mAdapter);
+        /* Text for no result OR view for no result.
+        setEmptyText(getResources().getText(R.string.no_result_search_comunidad));
+        listView.setEmptyView();   */
     }
 
     @Override
@@ -186,6 +184,7 @@ public class ComuSearchResultsListFr extends ListFragment {
             Log.d(TAG, "onPostExecute(); comunidadList.size = " +
                     (comunidadList != null ? String.valueOf(comunidadList.size()) : "null"));
             mAdapter.addAll(comunidadList);
+            setListAdapter(mAdapter);
             mComuListListener.onComunidadListLoaded(comunidadList.size());
         }
     }

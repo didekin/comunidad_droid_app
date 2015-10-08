@@ -3,10 +3,10 @@ package com.didekindroid.usuario.activity;
 import android.content.Intent;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import com.didekin.serviceone.domain.Comunidad;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.usuario.dominio.DomainDataUtils;
-import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -18,9 +18,7 @@ import java.util.List;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static android.support.test.espresso.matcher.ViewMatchers.*;
 import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
 import static com.didekindroid.uiutils.ViewsIDs.SEE_USERCOMU_BY_COMU;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_JUAN_AND_PEPE;
@@ -61,7 +59,7 @@ public class SeeUserComuByComuAcTest {
         signUpAndUpdateTk(DomainDataUtils.COMU_PLAZUELA5_JUAN);
 
         // We get the id of the comunidad we will put in the intent.
-        List<UsuarioComunidad> usuariosComu = ServOne.getUserComusByUser();
+        List<UsuarioComunidad> usuariosComu = ServOne.seeUserComusByUser();
         comunidadId = usuariosComu.get(0).getComunidad().getC_Id(); // COMU_PLAZUELA5_JUAN.
         // We put the comunidad in the intent.
         intent = new Intent();
@@ -71,6 +69,14 @@ public class SeeUserComuByComuAcTest {
         mFragment = (SeeUserComuByComuFr) mActivity.getFragmentManager().findFragmentById(R.id.see_usercomu_by_comu_frg);
     }
 
+    @After
+    public void tearDown() throws Exception
+    {
+        cleanOptions(CLEAN_JUAN_AND_PEPE);
+    }
+
+//    =================================================================================================================
+
     @Test
     public void testOnCreate() throws Exception
     {
@@ -78,8 +84,8 @@ public class SeeUserComuByComuAcTest {
         assertThat(isRegisteredUser(mActivity), is(true));
         assertThat(mActivity.getIntent().getLongExtra(COMUNIDAD_ID.extra, 0L), is(comunidadId));
         assertThat(mFragment, notNullValue());
-        assertThat(mFragment.fragmentListView,notNullValue());
-        assertThat(mFragment.nombreComuView,notNullValue());
+        assertThat(mFragment.fragmentListView, notNullValue());
+        assertThat(mFragment.nombreComuView, notNullValue());
 
         onView(withId(R.id.see_usercomu_by_comu_ac_frg_container)).check(matches(isDisplayed()));
         onView(withId(R.id.see_usercomu_by_comu_frg)).check(matches(isDisplayed()));
@@ -101,8 +107,6 @@ public class SeeUserComuByComuAcTest {
                 matches(withAdaptedData(hasProperty("puerta", is(COMU_PLAZUELA5_JUAN.getPuerta())))));
         onView(withId(SEE_USERCOMU_BY_COMU.idView)).check(
                 matches(withAdaptedData(hasProperty("roles", is(COMU_PLAZUELA5_JUAN.getRoles())))));
-        onView(withId(SEE_USERCOMU_BY_COMU.idView)).check(matches(
-                withAdaptedData(Matchers.<Object>equalTo(COMU_PLAZUELA5_JUAN))));
 
         // Header.
         onView(withId(R.id.usercomu_list_header_nombrecomu_txt))
@@ -110,7 +114,7 @@ public class SeeUserComuByComuAcTest {
 
         onData(allOf(
                 is(instanceOf(UsuarioComunidad.class)),
-                hasProperty("comunidad", is(COMU_PLAZUELA5_JUAN.getComunidad()))))
+                hasProperty("comunidad", is(new Comunidad.ComunidadBuilder().c_id(comunidadId).build()))))
                 .check(matches(isDisplayed()));
         onData(allOf(
                 is(instanceOf(UsuarioComunidad.class)),
@@ -133,11 +137,5 @@ public class SeeUserComuByComuAcTest {
     public void testComuSearchMn_withToken() throws InterruptedException
     {
         COMU_SEARCH_AC.checkMenuItem_WTk(mActivity);
-    }
-
-    @After
-    public void tearDown() throws Exception
-    {
-        cleanOptions(CLEAN_JUAN_AND_PEPE);
     }
 }

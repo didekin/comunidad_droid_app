@@ -280,7 +280,7 @@ public class RegComuAndUserAndUserComuAcTest {
                 typeText(USER_JUAN2.getPassword()), closeSoftKeyboard());
 
         onView(withId(R.id.reg_com_usuario_usuariocomu_button)).perform(scrollTo(), click());
-        onView(withId(R.id.see_usercomu_by_user_ac_layout)).check(matches(isDisplayed()));
+        onView(withId(R.id.see_usercomu_by_user_ac_frg_container)).check(matches(isDisplayed()));
         assertThat(TKhandler.getAccessTokenInCache(), notNullValue());
         assertThat(TKhandler.getRefreshTokenKey(), is(TKhandler.getAccessTokenInCache().getRefreshToken().getValue()));
         assertThat(isRegisteredUser(mActivity), is(true));

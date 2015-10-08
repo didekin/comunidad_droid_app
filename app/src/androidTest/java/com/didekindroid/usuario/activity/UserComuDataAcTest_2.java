@@ -57,7 +57,7 @@ public class UserComuDataAcTest_2 {
         protected Intent getActivityIntent()
         {
             signUpAndUpdateTk(COMU_REAL_JUAN);
-            List<UsuarioComunidad> comunidadesUserOne = ServOne.getUserComusByUser();
+            List<UsuarioComunidad> comunidadesUserOne = ServOne.seeUserComusByUser();
             mUsuarioComunidad = comunidadesUserOne.get(0);
 
             // We use that comunidad as the one to associate to the present user.

@@ -1,11 +1,14 @@
 package com.didekindroid.uiutils;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.Gravity;
 import android.widget.Toast;
 import com.didekindroid.R;
+import com.didekindroid.usuario.activity.LoginAc;
 
 /**
  * User: pedro
@@ -18,6 +21,14 @@ public final class UIutils {
 
     private UIutils()
     {
+    }
+
+    public static void callLogin(Activity activity)
+    {
+        Log.d(TAG,"callLogin()");
+        Intent intent = new Intent(activity, LoginAc.class);
+        activity.startActivity(intent);
+        activity.finish();
     }
 
     public static StringBuilder getErrorMsgBuilder(Context context)

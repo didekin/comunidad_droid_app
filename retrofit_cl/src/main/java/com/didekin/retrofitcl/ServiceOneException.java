@@ -19,7 +19,7 @@ public class ServiceOneException extends RuntimeException {
         this.retrofitError = retrofitError;
     }
 
-    public String getMessage()
+    public String getServiceMessage()
     {
         return errorBean.getMessage();
     }

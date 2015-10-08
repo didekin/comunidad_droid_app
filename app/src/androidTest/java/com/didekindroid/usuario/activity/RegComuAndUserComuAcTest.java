@@ -197,6 +197,6 @@ public class RegComuAndUserComuAcTest {
         onView(withId(R.id.reg_usercomu_checbox_inq)).perform(scrollTo(), click());
 
         onView(withId(R.id.reg_comu_usuariocomunidad_button)).perform(scrollTo(), click());
-        onView(withId(R.id.see_usercomu_by_user_ac_layout)).check(matches(isDisplayed()));
+        onView(withId(R.id.see_usercomu_by_user_ac_frg_container)).check(matches(isDisplayed()));
     }
 }

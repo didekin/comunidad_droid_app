@@ -49,11 +49,6 @@
         </activity>
         <!-- ¿La eliminamos? -->
         <activity
-                android:name=".usuario.activity.ComusByUserListAc"
-                android:label="@string/comunidades_usuario_acc_label"
-                android:parentActivityName=".usuario.activity.ComuSearchAc">
-        </activity>
-        <activity
                 android:name=".usuario.activity.ComuSearchAc"
                 android:label="@string/comu_search_ac_label"
                 android:launchMode="singleTop"
@@ -121,7 +116,7 @@
         </activity>
         <!-- =========== Login ========== -->
         <activity
-                android:name=".usuario.activity.LoginActivity"
+                android:name=".usuario.activity.LoginAc"
                 android:label="@string/login_label">
         </activity>
     </application>

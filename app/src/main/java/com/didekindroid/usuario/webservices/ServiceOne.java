@@ -51,12 +51,6 @@ public enum ServiceOne implements ServiceOneEndPointsIf {
         }
 
         @Override
-        public List<UsuarioComunidad> getUserComusByUser(String accessToken)
-        {
-            return ServOne.endPoint.getUserComusByUser(accessToken);
-        }
-
-        @Override
         public Usuario getUserData(String accessToken)
         {
             return ServOne.endPoint.getUserData(accessToken);
@@ -134,9 +128,15 @@ public enum ServiceOne implements ServiceOneEndPointsIf {
         }
 
         @Override
-        public List<UsuarioComunidad> seeUserComuByComu(String accessToken, long comunidadId)
+        public List<UsuarioComunidad> seeUserComusByComu(String accessToken, long comunidadId)
         {
-            return ServOne.endPoint.seeUserComuByComu(accessToken, comunidadId);
+            return ServOne.endPoint.seeUserComusByComu(accessToken, comunidadId);
+        }
+
+        @Override
+        public List<UsuarioComunidad> seeUserComusByUser(String accessToken)
+        {
+            return ServOne.endPoint.seeUserComusByUser(accessToken);
         }
     },;
 
@@ -177,7 +177,7 @@ public enum ServiceOne implements ServiceOneEndPointsIf {
         return getComuData(TKhandler.doBearerAccessTkHeader(), idComunidad);
     }
 
-    public List<Comunidad> getComusByUser()  // TODO: ¿a desaparecer?
+    public List<Comunidad> getComusByUser()
     {
         Log.d(TAG, "getComusByUser()");
         String bearerAccessTkHeader = TKhandler.doBearerAccessTkHeader();
@@ -188,13 +188,6 @@ public enum ServiceOne implements ServiceOneEndPointsIf {
     {
         Log.d(TAG, ("getUserData()"));
         return getUserData(TKhandler.doBearerAccessTkHeader());
-    }
-
-    public List<UsuarioComunidad> getUserComusByUser()
-    {
-        Log.d(TAG, "getUserComusByUser()");
-        String bearerAccessTkHeader = TKhandler.doBearerAccessTkHeader();
-        return (bearerAccessTkHeader != null ? getUserComusByUser(bearerAccessTkHeader) : null);
     }
 
     public boolean isOldestUserComu(long comunidadId)
@@ -239,9 +232,16 @@ public enum ServiceOne implements ServiceOneEndPointsIf {
         return regUserComu(TKhandler.doBearerAccessTkHeader(), usuarioComunidad);
     }
 
-    public List<UsuarioComunidad> seeUserComuByComu(long idComunidad)
+    public List<UsuarioComunidad> seeUserComusByComu(long idComunidad)
     {
-        Log.d(TAG, "seeUserComuByComu()");
-        return seeUserComuByComu(TKhandler.doBearerAccessTkHeader(), idComunidad);
+        Log.d(TAG, "seeUserComusByComu()");
+        return seeUserComusByComu(TKhandler.doBearerAccessTkHeader(), idComunidad);
+    }
+
+    public List<UsuarioComunidad> seeUserComusByUser()
+    {
+        Log.d(TAG, "seeUserComusByUser()");
+        String bearerAccessTkHeader = TKhandler.doBearerAccessTkHeader();
+        return (bearerAccessTkHeader != null ? seeUserComusByUser(bearerAccessTkHeader) : null);
     }
 }

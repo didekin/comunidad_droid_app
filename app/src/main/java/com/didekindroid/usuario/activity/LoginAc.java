@@ -18,9 +18,9 @@ import com.didekindroid.R;
  * Date: 15/12/14
  * Time: 10:04
  */
-public class LoginActivity extends Activity {
+public class LoginAc extends Activity {
 
-    private static final String TAG = "LoginActivity";
+    private static final String TAG = "LoginAc";
 
     public static final String EMAIL_PREF = "email";
     public static final String PASSWORD_PREF = "password";

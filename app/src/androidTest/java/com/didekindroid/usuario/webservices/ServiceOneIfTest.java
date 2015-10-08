@@ -88,7 +88,7 @@ public class ServiceOneIfTest {
         whatClean = CLEAN_NOTHING;
 
         Usuario usuario_1 = signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
-        List<UsuarioComunidad> userComus = ServOne.getUserComusByUser();
+        List<UsuarioComunidad> userComus = ServOne.seeUserComusByUser();
         UsuarioComunidad uc_1 = userComus.get(0);
 
         assertThat(ServOne.deleteUserComu(uc_1.getComunidad().getC_Id()), is(IS_USER_DELETED));
@@ -146,7 +146,7 @@ public class ServiceOneIfTest {
     {
         // No token in cache.
         assertThat(TKhandler.doBearerAccessTkHeader(), nullValue());
-        assertThat(ServOne.getUserComusByUser(), nullValue());
+        assertThat(ServOne.seeUserComusByUser(), nullValue());
     }
 
     @Test
@@ -155,12 +155,12 @@ public class ServiceOneIfTest {
         //Inserta usuario, comunidad, usuariocomunidad y actuliza tokenCache.
         signUpAndUpdateTk(COMU_REAL_JUAN);
 
-        List<UsuarioComunidad> comunidadesUser = ServOne.getUserComusByUser();
+        List<UsuarioComunidad> comunidadesUser = ServOne.seeUserComusByUser();
         assertThat(comunidadesUser.size(), is(1));
         assertThat(comunidadesUser, hasItem(COMU_REAL_JUAN));
 
         ServOne.regComuAndUserComu(COMU_PLAZUELA5_JUAN);
-        comunidadesUser = ServOne.getUserComusByUser();
+        comunidadesUser = ServOne.seeUserComusByUser();
         assertThat(comunidadesUser.size(), is(2));
 
         whatClean = CLEAN_JUAN;
@@ -255,12 +255,12 @@ public class ServiceOneIfTest {
         whatClean = CLEAN_PEPE;
 
         Usuario usuario_1 = signUpAndUpdateTk(COMU_REAL_PEPE);
-        List<UsuarioComunidad> userComus = ServOne.getUserComusByUser();
+        List<UsuarioComunidad> userComus = ServOne.seeUserComusByUser();
         UsuarioComunidad uc_1 = makeUsuarioComunidad(userComus.get(0).getComunidad(), usuario_1,
                 "portal3", "esc_2", "planta-ñ", "puerta2", "pre");
         assertThat(ServOne.modifyUserComu(uc_1), is(1));
 
-        List<UsuarioComunidad> userComus_2 = ServOne.getUserComusByUser();
+        List<UsuarioComunidad> userComus_2 = ServOne.seeUserComusByUser();
         UsuarioComunidad uc_2 = userComus_2.get(0);
         assertThat(uc_2.getPortal(), is(uc_1.getPortal()));
         assertThat(uc_2.getEscalera(), is(uc_1.getEscalera()));
@@ -403,7 +403,7 @@ public class ServiceOneIfTest {
         List<Comunidad> comunidades = ServOne.getComusByUser(); // comunidades 1 y 3.
         assertThat(comunidades.size(), is(2));
         // Busco por comunidad 1, segunda por orden.
-        List<UsuarioComunidad> usuarioComusDB = ServOne.seeUserComuByComu(comunidades.get(1).getC_Id());
+        List<UsuarioComunidad> usuarioComusDB = ServOne.seeUserComusByComu(comunidades.get(1).getC_Id());
         assertThat(usuarioComusDB.size(), is(2)); // userComu 2 y 4; users 1 y 2.
         assertThat(usuarioComusDB.get(0).getUsuario().getUserName(), is(COMU_PLAZUELA5_JUAN.getUsuario().getUserName()));
         assertThat(usuarioComusDB.get(0).getComunidad().getNombreComunidad(),
