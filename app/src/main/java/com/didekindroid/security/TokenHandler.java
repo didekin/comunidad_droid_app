@@ -1,8 +1,9 @@
-package com.didekindroid.usuario.security;
+package com.didekindroid.security;
 
 import android.util.Log;
-import com.didekin.security.OauthToken.AccessToken;
+import com.didekin.retrofitcl.OauthToken.AccessToken;
 import com.didekindroid.ioutils.IoHelper;
+import com.didekindroid.uiutils.UIutils;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 
@@ -11,9 +12,8 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
-import static com.didekin.security.OauthTokenHelper.HELPER;
+import static com.didekin.retrofitcl.OauthTokenHelper.HELPER;
 import static com.didekindroid.DidekindroidApp.getContext;
-import static com.didekindroid.uiutils.UIutils.updateIsRegistered;
 import static com.didekindroid.usuario.webservices.Oauth2Service.Oauth2;
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -50,7 +50,6 @@ public enum TokenHandler {
     /*  Called from the signup activity which does a password flow authentication:
         1. login.
         2. password or user modifications.
-
         Initialize the accessToken associated to the refreshToken and write to file this token.
     */
     public synchronized void initKeyCacheAndBackupFile(AccessToken accessToken)
@@ -69,8 +68,8 @@ public enum TokenHandler {
     {
         Log.d(TAG, "cleanCacheAndBckFile()");
 
-        TKhandler.getRefreshTokenFile().delete();
-        TKhandler.getTokensCache().invalidateAll();
+        getRefreshTokenFile().delete();
+        getTokensCache().invalidateAll();
         refreshTokenKey = null;
     }
 
@@ -94,7 +93,7 @@ public enum TokenHandler {
                 }
             });
         } catch (ExecutionException e) {
-            IoHelper.doRuntimeException(e, e.getLocalizedMessage());
+            UIutils.doRuntimeException(e, e.getLocalizedMessage());
         }
         return accessToken;
     }

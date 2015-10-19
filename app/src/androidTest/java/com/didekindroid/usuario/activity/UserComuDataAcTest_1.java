@@ -4,14 +4,12 @@ import android.content.Intent;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import com.didekin.security.Rol;
 import com.didekin.serviceone.domain.UsuarioComunidad;
+import com.didekin.serviceone.security.Rol;
 import com.didekindroid.R;
+import com.didekindroid.security.UiException;
 import com.didekindroid.usuario.activity.utils.CleanEnum;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 
 import java.util.List;
@@ -23,6 +21,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.matcher.ViewMatchers.*;
+import static com.didekindroid.security.TokenHandler.TKhandler;
 import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_NOTHING;
@@ -31,8 +30,7 @@ import static com.didekindroid.usuario.activity.utils.UserIntentExtras.USERCOMU_
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.COMU_DATA_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.SEE_USERCOMU_BY_COMU_AC;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.*;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.*;
-import static com.didekindroid.usuario.security.TokenHandler.TKhandler;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_JUAN;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
@@ -60,7 +58,11 @@ public class UserComuDataAcTest_1 {
         protected Intent getActivityIntent()
         {
             signUpAndUpdateTk(COMU_REAL_JUAN);
-            List<UsuarioComunidad> comunidadesUserOne = ServOne.seeUserComusByUser();
+            List<UsuarioComunidad> comunidadesUserOne = null;
+            try {
+                comunidadesUserOne = ServOne.seeUserComusByUser();
+            } catch (UiException e) {
+            }
             mUsuarioComunidad = comunidadesUserOne.get(0);
 
             // We use that comunidad as the one to associate to the present user.
@@ -69,6 +71,12 @@ public class UserComuDataAcTest_1 {
             return intent;
         }
     };
+
+    @BeforeClass
+    public static void slowSeconds() throws InterruptedException
+    {
+        Thread.sleep(5000);
+    }
 
     @Before
     public void setUp() throws Exception

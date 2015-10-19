@@ -7,20 +7,21 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import com.didekin.security.OauthToken.AccessToken;
+import android.widget.Toast;
+import com.didekin.retrofitcl.OauthToken.AccessToken;
+import com.didekin.serviceone.domain.DataPatterns;
 import com.didekin.serviceone.domain.Usuario;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.ioutils.ConnectionUtils;
-import com.didekindroid.uiutils.CommonPatterns;
 import com.didekindroid.uiutils.UIutils;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
 
+import static com.didekindroid.security.TokenHandler.TKhandler;
 import static com.didekindroid.uiutils.UIutils.updateIsRegistered;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.*;
-import static com.didekindroid.usuario.security.TokenHandler.TKhandler;
 import static com.didekindroid.usuario.webservices.Oauth2Service.Oauth2;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 
@@ -74,12 +75,12 @@ public class RegComuAndUserAndUserComuAc extends Activity {
 
         // Validation of data.
         StringBuilder errorMsg = new StringBuilder(getResources().getText(R.string.error_validation_msg))
-                .append(CommonPatterns.LINE_BREAK.literal);
+                .append(DataPatterns.LINE_BREAK.getRegexp());
 
         if (!usuarioComunidadBean.validate(getResources(), errorMsg)) {
             UIutils.makeToast(this, errorMsg.toString());
         } else if (!ConnectionUtils.isInternetConnected(this)) {
-            UIutils.makeToast(this, R.string.no_internet_conn_toast);
+            UIutils.makeToast(this, R.string.no_internet_conn_toast, Toast.LENGTH_LONG);
         } else {
             new ComuAndUserComuAndUserRegister().execute(usuarioComunidadBean.getUsuarioComunidad());
         }
@@ -109,6 +110,11 @@ public class RegComuAndUserAndUserComuAc extends Activity {
             AccessToken token = Oauth2.getPasswordUserToken(newUser.getUserName(), newUser.getPassword());
             TKhandler.initKeyCacheAndBackupFile(token);
             return null;
+
+            // TODO: si la comunidad ya existe y el usuario no, hacer un regUserAndUserComu.
+            // TODO: si el usuario existe y la comunidad no, hacer un regComuAndUserComu.
+            // TODO: si existen ambos, pero el usuario no pertenece a la comunidad, hacer un RegUserComu.
+            // TODO: algo similar hay que hacer en el resto de acciones de registro.
         }
 
         @Override

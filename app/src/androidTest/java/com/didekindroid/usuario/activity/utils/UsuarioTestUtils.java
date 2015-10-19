@@ -3,7 +3,8 @@ package com.didekindroid.usuario.activity.utils;
 import android.app.Activity;
 import android.content.res.Resources;
 import android.support.test.espresso.ViewInteraction;
-import com.didekin.security.OauthToken.AccessToken;
+import android.support.test.espresso.core.deps.guava.base.Preconditions;
+import com.didekin.retrofitcl.OauthToken.AccessToken;
 import com.didekin.serviceone.domain.Comunidad;
 import com.didekin.serviceone.domain.Usuario;
 import com.didekin.serviceone.domain.UsuarioComunidad;
@@ -21,10 +22,10 @@ import static android.support.test.espresso.matcher.CursorMatchers.withRowString
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.*;
 import static com.didekindroid.DidekindroidApp.getContext;
+import static com.didekindroid.security.TokenHandler.TKhandler;
 import static com.didekindroid.uiutils.UIutils.updateIsRegistered;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.ADMINISTRADOR;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.*;
-import static com.didekindroid.usuario.security.TokenHandler.TKhandler;
 import static com.didekindroid.usuario.webservices.Oauth2Service.Oauth2;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 import static org.hamcrest.CoreMatchers.allOf;
@@ -70,6 +71,15 @@ public final class UsuarioTestUtils {
         UsuarioComunidad usuarioComunidad = makeUsuarioComunidad(comunidad, usuarioComunidadList.get(0).getUsuario(),
                 null, null, "plan-5", null, ADMINISTRADOR.function);
         ServOne.regComuAndUserComu(usuarioComunidad);
+    }
+
+    public static void regThreeUserComuSameUser_2(UsuarioComunidad... userComus)
+    {
+        Preconditions.checkArgument(userComus.length > 0);
+        signUpAndUpdateTk(userComus[0]);
+        for (int i = 1; i < userComus.length; i++) {
+            ServOne.regComuAndUserComu(userComus[i]);
+        }
     }
 
 //    ==================== TYPING DATA =====================
@@ -119,12 +129,12 @@ public final class UsuarioTestUtils {
 
 //    ================== CLEANING ===================
 
-    public static void checkToastInTest(int resourceMsgRotuloErrorId, Activity activity, int... resourceFieldsErrorId)
+    public static void checkToastInTest(int resourceId, Activity activity, int... resourceFieldsErrorId)
     {
         Resources resources = DidekindroidApp.getContext().getResources();
 
         ViewInteraction toast = onView(
-                withText(containsString(resources.getText(resourceMsgRotuloErrorId).toString())))
+                withText(containsString(resources.getText(resourceId).toString())))
                 .inRoot(withDecorView(not(activity.getWindow().getDecorView())))
                 .check(matches(isDisplayed()));
 
@@ -183,7 +193,7 @@ public final class UsuarioTestUtils {
                 cleanTwoUsers(USER_JUAN, USER_PEPE);
                 break;
             case CLEAN_JUAN2_AND_PEPE:
-                cleanTwoUsers(USER_JUAN2,USER_PEPE);
+                cleanTwoUsers(USER_JUAN2, USER_PEPE);
                 break;
             case CLEAN_NOTHING:
                 break;

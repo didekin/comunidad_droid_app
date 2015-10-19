@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 import com.didekin.serviceone.domain.Comunidad;
 import com.didekindroid.R;
 import com.didekindroid.uiutils.UIutils;
@@ -153,7 +154,7 @@ public class ComuSearchResultsAc extends Activity implements ComuSearchResultsLi
     {
         Log.d(TAG, "onComunidadListLoaded. ListSize = " + listSize);
         if (listSize == 0) {
-            UIutils.makeToast(this, R.string.no_result_search_comunidad);
+            UIutils.makeToast(this, R.string.no_result_search_comunidad, Toast.LENGTH_LONG);
             UserMenu.REG_COMU_USER_USERCOMU_AC.doMenuItem(this);
         }
     }

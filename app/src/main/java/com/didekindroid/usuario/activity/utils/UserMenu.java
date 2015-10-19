@@ -3,6 +3,7 @@ package com.didekindroid.usuario.activity.utils;
 import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 import com.didekindroid.R;
 import com.didekindroid.usuario.activity.*;
 
@@ -113,7 +114,7 @@ public enum UserMenu {
 
             if (!isRegisteredUser(activity)) {
                 Log.i(TAG, "comu_by_user.doMenuItem(), user not registered.");
-                makeToast(activity, R.string.user_without_signedUp);
+                makeToast(activity, R.string.user_without_signedUp, Toast.LENGTH_SHORT);
             } else {
                 Log.i(TAG, "comu_by_user.doMenuItem(), user registered.");
                 Intent intent = new Intent(activity, SeeUserComuByUserAc.class);
@@ -131,7 +132,7 @@ public enum UserMenu {
 
             if (!isRegisteredUser(activity)) {
                 Log.i(TAG, "user_data_ac_mn.doMenuItem(), user not registered.");
-                makeToast(activity, R.string.user_without_signedUp);
+                makeToast(activity, R.string.user_without_signedUp, Toast.LENGTH_SHORT);
             } else {
                 Log.i(TAG, "user_data_ac_mn.doMenuItem(), user registered.");
                 Intent intent = new Intent(activity, UserDataAc.class);

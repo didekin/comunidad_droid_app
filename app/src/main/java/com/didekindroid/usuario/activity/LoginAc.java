@@ -1,43 +1,73 @@
 package com.didekindroid.usuario.activity;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
+import com.didekin.retrofitcl.OauthToken.AccessToken;
+import com.didekin.serviceone.domain.Usuario;
 import com.didekindroid.R;
+import com.didekindroid.ioutils.ConnectionUtils;
+import com.didekindroid.security.UiException;
+import com.didekindroid.uiutils.UIutils;
+import com.didekindroid.usuario.dominio.UsuarioBean;
+
+import static android.widget.Toast.LENGTH_LONG;
+import static com.didekindroid.security.TokenHandler.TKhandler;
+import static com.didekindroid.security.UiException.UiAction.SEARCH_COMU;
+import static com.didekindroid.uiutils.UIutils.*;
+import static com.didekindroid.usuario.webservices.Oauth2Service.Oauth2;
+import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 
 /**
  * User: pedro
  * Date: 15/12/14
  * Time: 10:04
  */
+
+/**
+ * Preconditions:
+ * 1. The user is not necessarily registered: she might have erased the security app data.
+ * Results:
+ * 1a. If successful, the activity ComuSearchAc is presented and the security data are updated.
+ * 1b. If the userName doesn't exist, the user is invited to register.
+ * 1c. If the userName exists, but the passowrd is not correct, after three failed intents,  a new passord is sent
+ * by mail, after her confirmation.
+ */
 public class LoginAc extends Activity {
 
-    private static final String TAG = "LoginAc";
+    private static final String TAG = LoginAc.class.getCanonicalName();
 
-    public static final String EMAIL_PREF = "email";
-    public static final String PASSWORD_PREF = "password";
-    private static final String HAS_LOGIN_DATA_PREF = "loginData";
-    private TextView textLogin;
-    private EditText mEmail;
-    private EditText mPassword;
+    View mAcView;
     private Button mLoginButton;
-    private SharedPreferences sharedPref;
+    short counterWrong;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         Log.i(TAG, "Entered onCreate()");
         super.onCreate(savedInstanceState);
-        sharedPref = getPreferences(Context.MODE_PRIVATE);
-        initializeView();
+
+        mAcView = getLayoutInflater().inflate(R.layout.login_ac, null);
+        setContentView(mAcView);
+        mLoginButton = (Button) findViewById(R.id.login_ac_button);
+        mLoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                Log.d(TAG, "View.OnClickListener().onClick()");
+                doLogin();
+            }
+        });
     }
 
     @Override
@@ -47,98 +77,169 @@ public class LoginAc extends Activity {
         super.onPause();
     }
 
-    private void initializeView()
-    {
-        Log.i(TAG, "Entered doLogin()");
-
-        setContentView(R.layout.login_activity);
-
-        textLogin = (TextView) findViewById(R.id.textLogin);
-
-        if (sharedPref.getBoolean(HAS_LOGIN_DATA_PREF, false)) {
-            textLogin.setText(R.string.textLogin_yes);
-        } else {
-            textLogin.setText(R.string.textLogin_no);
-        }
-
-        mEmail = (EditText) findViewById(R.id.mailAddress);
-        mPassword = (EditText) findViewById(R.id.password);
-        mLoginButton = (Button) findViewById(R.id.loginButton);
-
-        mLoginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                doLogin();
-            }
-        });
-    }
-
     private void doLogin()
     {
-        Log.i(TAG, "Entered doLogin()");
-        SharedPreferences.Editor editor = sharedPref.edit();
-        String email = mEmail.getText().toString();
-        String password = mPassword.getText().toString();
+        Log.i(TAG, "doLogin()");
 
-        String emailWrong = "";
-        String passwordWrong = "";
+        UsuarioBean usuarioBean = new UsuarioBean(
+                ((EditText) mAcView.findViewById(R.id.reg_usuario_email_editT)).getText().toString(),
+                null,
+                ((EditText) mAcView.findViewById(R.id.reg_usuario_password_ediT)).getText().toString(),
+                null
+        );
 
-        boolean isValid = true;
-
-        if (email.isEmpty() || !email.contains("@")) {
-            emailWrong = "Invalid email address.\n";
-            isValid = false;
-        }
-        if (password.isEmpty() || password.length() > 25) {
-            passwordWrong = "Invalid password: number of characteres must be" +
-                    " in the range 1-25.\n";
-        }
-
-        if (!isValid) {
-            Toast clickToast = new Toast(this)
-                    .makeText(
-                            this,
-                            new StringBuilder().append(emailWrong).append(passwordWrong),
-                            Toast.LENGTH_LONG);
-
-            clickToast.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL, 0, 0);
-            clickToast.show();
-        } else if (sharedPref.getBoolean(HAS_LOGIN_DATA_PREF, false)) {
-            Log.i(TAG, "Entered doLogin() with login data.");
-            if (email.contentEquals(sharedPref.getString(EMAIL_PREF, ""))
-                    && password.contentEquals(sharedPref.getString(PASSWORD_PREF, ""))) {
-                goToInvoiceActivity();
-                finish();
-            } else {
-                Toast clickToast = new Toast(this).makeText(
-                        this,
-                        new StringBuilder("Invalid email or password: authentication error"),
-                        Toast.LENGTH_LONG);
-                clickToast.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL, 0, 0);
-                clickToast.show();
-            }
+        StringBuilder errorBuilder = getErrorMsgBuilder(this);
+        if (!usuarioBean.validateLoginData(getResources(), errorBuilder)) {
+            makeToast(this, errorBuilder.toString());
+        } else if (!ConnectionUtils.isInternetConnected(this)) {
+            makeToast(this, R.string.no_internet_conn_toast, LENGTH_LONG);
         } else {
-            editor.putString(EMAIL_PREF, mEmail.getText().toString());
-            editor.putString(PASSWORD_PREF, mPassword.getText().toString());
-            editor.putBoolean(HAS_LOGIN_DATA_PREF, true);
-            editor.apply();
-            goToInvoiceActivity();
-            finish();
+            new LoginValidator().execute(usuarioBean.getUsuario());
         }
     }
 
-    private void goToInvoiceActivity()
-    {
-        Log.i(TAG, "Entered goToInvoiceActivity()");
+//    ........................ Helper methods in the activity for the dialog .............................
 
-        /*Intent invoiceIntent = new Intent(this, SearchActivity.class);
-        invoiceIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        invoiceIntent.setAction(Intent.ACTION_VIEW);
-        startActivity(invoiceIntent);*/
-        finish();
+    void showDialog(String userName)
+    {
+        Log.d(TAG, "showDialog()");
+        DialogFragment newFragment = PasswordMailDialog.newInstance(userName);
+        newFragment.show(getFragmentManager(), "passwordMailDialog");
+    }
+
+    void doPositiveClick(String email)
+    {
+        Log.d(TAG, "doPositiveClick()");
+        new LoginMailSender().execute(email);
+    }
+
+    void doNegativeClick()
+    {
+        Log.d(TAG, "doNegativeClick()");
+        SEARCH_COMU.doAction(this,R.string.login_wrong_no_mail);
+    }
+
+//    =====================================================================================================
+//    .................................... INNER CLASSES .................................
+//    =====================================================================================================
+
+    private class LoginValidator extends AsyncTask<Usuario, Void, Boolean> {
+
+
+        UiException uiException;
+        private String userName;
+        private String password;
+
+
+        @Override
+        protected Boolean doInBackground(Usuario... usuarios)
+        {
+            Log.d(TAG, "LoginValidator.doInBackground()");
+
+            // Activity field mUserName is initialized. It is reused by LoginMailSender.
+            userName = usuarios[0].getUserName();
+            password = usuarios[0].getPassword();
+            boolean isLoginOk = false;
+
+            try {
+                if (ServOne.loginInternal(userName, password)) {
+                    AccessToken token = Oauth2.getPasswordUserToken(userName, password);
+                    TKhandler.initKeyCacheAndBackupFile(token);
+                    updateIsRegistered(true, LoginAc.this);
+                    isLoginOk = true;
+                }
+            } catch (UiException e) {
+                uiException = e;
+            }
+            return isLoginOk;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean isOk)
+        {
+            Log.d(TAG, "LoginValidator.onPostExecute()");
+            if (isOk) {
+                Log.d(TAG, "LoginValidator.onPostExecute(): login OK");
+                Intent intent = new Intent(LoginAc.this, ComuSearchAc.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                LoginAc.this.finish();
+            } else if (uiException != null) {  // userName no existe en BD. Action: LOGIN.
+                Log.d(TAG, "LoginValidator.onPostExecute(): UiException");
+                uiException.getAction().doAction(LoginAc.this, uiException.getResourceId());
+            } else if (++counterWrong > 3) { // Password wrong
+                showDialog(userName);
+            } else {
+                Log.d(TAG, "LoginValidator.onPostExecute(): password wrong, counterWrong =" + counterWrong);
+                makeToast(LoginAc.this, R.string.password_wrong_in_login, Toast.LENGTH_SHORT);
+            }
+        }
+    }
+
+
+//  ======================================================================================================
+
+    public static class PasswordMailDialog extends DialogFragment {
+
+        private static final String TAG = PasswordMailDialog.class.getCanonicalName();
+
+        public static final PasswordMailDialog newInstance(String emailUser)
+        {
+            Log.d(TAG, "newInstance()");
+
+            PasswordMailDialog mailDialog = new PasswordMailDialog();
+            Bundle args = new Bundle();
+            args.putString("email", emailUser);
+            mailDialog.setArguments(args);
+            return mailDialog;
+        }
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState)
+        {
+            Log.d(TAG, "onCreateDialog()");
+
+            int message = R.string.send_password_by_mail_dialog;
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+            builder.setMessage(message)
+                    .setPositiveButton(R.string.send_password_by_mail_YES, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id)
+                        {
+                            dismiss();
+                            ((LoginAc) getActivity()).doPositiveClick(getArguments().getString("email"));
+                        }
+                    })
+                    .setNegativeButton(R.string.send_password_by_mail_NO, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id)
+                        {
+                            dismiss();
+                            ((LoginAc) getActivity()).doNegativeClick();
+                        }
+                    });
+            return builder.create();
+        }
+    }
+
+//  ======================================================================================================
+
+    private class LoginMailSender extends AsyncTask<String,Void,Boolean>{
+
+        @Override
+        protected Boolean doInBackground(String... emails)
+        {
+            Log.d(TAG, "LoginMailSender.doInBackground()");
+            return ServOne.passwordSend(emails[0]);
+        }
+
+        @Override
+        protected void onPostExecute(Boolean isOk)
+        {
+            Log.d(TAG, "LoginMailSender.onPostExecute()");
+            if (isOk){
+                makeToast(LoginAc.this, R.string.password_new_in_login, LENGTH_LONG);
+                LoginAc.this.recreate();
+            }
+        }
     }
 }
-
-/* Cada vez que haga login (introduzca password) cambiamos su refresh token en el servidor.*/
-/*Intent.FLAG_ACTIVITY_NEW_TASK*/

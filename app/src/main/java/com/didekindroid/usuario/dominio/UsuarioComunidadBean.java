@@ -8,8 +8,6 @@ import com.didekindroid.usuario.activity.utils.RolCheckBox;
 import com.google.common.primitives.Booleans;
 
 import static com.didekin.serviceone.domain.DataPatterns.*;
-import static com.didekindroid.uiutils.CommonPatterns.LINE_BREAK;
-import static com.didekindroid.uiutils.CommonPatterns.SELECT;
 
 /**
  * User: pedro@didekin
@@ -109,10 +107,9 @@ public final class UsuarioComunidadBean {
     {
         if (portal.trim().isEmpty()) return true;
 
-        boolean isValid = PORTAL.pattern.matcher(portal).matches()
-                && !SELECT.pattern.matcher(portal).find();
+        boolean isValid = PORTAL.isPatternOk(portal);
         if (!isValid) {
-            errorMsg.append(resources.getText(R.string.reg_usercomu_portal_hint) + LINE_BREAK.literal);
+            errorMsg.append(resources.getText(R.string.reg_usercomu_portal_hint) + LINE_BREAK.getRegexp());
         }
         return isValid;
     }
@@ -122,10 +119,9 @@ public final class UsuarioComunidadBean {
     {
         if (escalera.trim().isEmpty()) return true;
 
-        boolean isValid = ESCALERA.pattern.matcher(escalera).matches()
-                && !SELECT.pattern.matcher(escalera).find();
+        boolean isValid = ESCALERA.isPatternOk(escalera);
         if (!isValid) {
-            errorMsg.append(resources.getText(R.string.reg_usercomu_escalera_hint) + LINE_BREAK.literal);
+            errorMsg.append(resources.getText(R.string.reg_usercomu_escalera_hint) + LINE_BREAK.getRegexp());
         }
         return isValid;
     }
@@ -135,10 +131,9 @@ public final class UsuarioComunidadBean {
     {
         if (planta.trim().isEmpty()) return true;
 
-        boolean isValid = PLANTA.pattern.matcher(planta).matches()
-                && !SELECT.pattern.matcher(planta).find();
+        boolean isValid = PLANTA.isPatternOk(planta);
         if (!isValid) {
-            errorMsg.append(resources.getText(R.string.reg_usercomu_planta_hint) + LINE_BREAK.literal);
+            errorMsg.append(resources.getText(R.string.reg_usercomu_planta_hint) + LINE_BREAK.getRegexp());
         }
         return isValid;
     }
@@ -148,10 +143,9 @@ public final class UsuarioComunidadBean {
     {
         if (puerta.trim().isEmpty()) return true;
 
-        boolean isValid = PUERTA.pattern.matcher(puerta).matches()
-                && !SELECT.pattern.matcher(puerta).find();
+        boolean isValid = PUERTA.isPatternOk(puerta);
         if (!isValid) {
-            errorMsg.append(resources.getText(R.string.reg_usercomu_puerta_hint) + LINE_BREAK.literal);
+            errorMsg.append(resources.getText(R.string.reg_usercomu_puerta_hint) + LINE_BREAK.getRegexp());
         }
         return isValid;
     }
@@ -165,7 +159,7 @@ public final class UsuarioComunidadBean {
         if (rolesSize > 0 && !(isPropietario && isInquilino)) {
             isValid = true;
         } else {
-            errorMsg.append(resources.getText(R.string.reg_usercomu_role_rot) + LINE_BREAK.literal);
+            errorMsg.append(resources.getText(R.string.reg_usercomu_role_rot) + LINE_BREAK.getRegexp());
         }
         return isValid;
     }
@@ -183,7 +177,7 @@ public final class UsuarioComunidadBean {
     boolean validateComunidad(Resources resources, StringBuilder errorMsg)
     {
         if (comunidadBean == null) {
-            errorMsg.append(resources.getText(R.string.comunidad_null) + LINE_BREAK.literal);
+            errorMsg.append(resources.getText(R.string.comunidad_null) + LINE_BREAK.getRegexp());
             return false;
         }
         // In this point the instance of comunidad in usuarioBean is created.

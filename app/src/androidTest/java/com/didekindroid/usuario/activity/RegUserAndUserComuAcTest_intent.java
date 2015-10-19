@@ -8,6 +8,7 @@ import com.didekindroid.R;
 import com.didekindroid.uiutils.UIutils;
 import com.didekindroid.usuario.activity.utils.CleanEnum;
 import org.junit.After;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +22,7 @@ import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static com.didekindroid.security.TokenHandler.TKhandler;
 import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_JUAN2_AND_PEPE;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_PEPE;
@@ -29,8 +31,8 @@ import static com.didekindroid.usuario.activity.utils.RolCheckBox.PROPIETARIO;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_ID;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.*;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.*;
-import static com.didekindroid.usuario.security.TokenHandler.TKhandler;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_TRAV_PLAZUELA_PEPE;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_JUAN2;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -74,6 +76,12 @@ public class RegUserAndUserComuAcTest_intent {
             return intent;
         }
     };
+
+    @BeforeClass
+    public static void slowSeconds() throws InterruptedException
+    {
+        Thread.sleep(5000);
+    }
 
     @Test
     public void testOnCreate() throws Exception

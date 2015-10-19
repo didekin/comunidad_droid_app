@@ -11,10 +11,7 @@ import com.didekindroid.R;
 import com.didekindroid.usuario.activity.utils.UsuarioTestUtils;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onData;
@@ -24,12 +21,12 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.CursorMatchers.withRowString;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static com.didekindroid.security.TokenHandler.TKhandler;
 import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUserComuBeanFromView;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.*;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_TRAV_PLAZUELA_PEPE;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_PEPE;
-import static com.didekindroid.usuario.security.TokenHandler.TKhandler;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.is;
@@ -51,6 +48,12 @@ public class RegComuAndUserComuAcTest {
 
     @Rule
     public ActivityTestRule<RegComuAndUserComuAc> mActivityRule = new ActivityTestRule<>(RegComuAndUserComuAc.class);
+
+    @BeforeClass
+    public static void slowSeconds() throws InterruptedException
+    {
+        Thread.sleep(5000);
+    }
 
     @Before
     public void setUp() throws Exception

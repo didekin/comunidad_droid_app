@@ -5,11 +5,9 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
+import com.didekindroid.security.UiException;
 import com.didekindroid.usuario.activity.utils.CleanEnum;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 
 import java.util.List;
@@ -27,7 +25,6 @@ import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.*;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.*;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.not;
 
 /**
  * User: pedro@didekin
@@ -57,7 +54,11 @@ public class UserComuDataAcTest_2 {
         protected Intent getActivityIntent()
         {
             signUpAndUpdateTk(COMU_REAL_JUAN);
-            List<UsuarioComunidad> comunidadesUserOne = ServOne.seeUserComusByUser();
+            List<UsuarioComunidad> comunidadesUserOne = null;
+            try {
+                comunidadesUserOne = ServOne.seeUserComusByUser();
+            } catch (UiException e) {
+            }
             mUsuarioComunidad = comunidadesUserOne.get(0);
 
             // We use that comunidad as the one to associate to the present user.
@@ -73,6 +74,12 @@ public class UserComuDataAcTest_2 {
             return intent;
         }
     };
+
+    @BeforeClass
+    public static void slowSeconds() throws InterruptedException
+    {
+        Thread.sleep(5000);
+    }
 
     @Before
     public void setUp() throws Exception

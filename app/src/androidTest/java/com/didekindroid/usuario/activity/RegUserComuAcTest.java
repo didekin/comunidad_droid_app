@@ -5,10 +5,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import com.didekin.serviceone.domain.Comunidad;
 import com.didekindroid.R;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 
 import java.util.List;
@@ -21,8 +18,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRESIDENTE;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PROPIETARIO;
-import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.*;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_LIST_OBJECT;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.*;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.*;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 import static org.hamcrest.Matchers.*;
@@ -43,6 +40,12 @@ public class RegUserComuAcTest {
     @Rule
     public ActivityTestRule<RegUserComuAc> mActivityRule =
             new ActivityTestRule<>(RegUserComuAc.class, true, false);
+
+    @BeforeClass
+    public static void slowSeconds() throws InterruptedException
+    {
+        Thread.sleep(5000);
+    }
 
     @Before
     public void setUp() throws Exception
@@ -72,7 +75,7 @@ public class RegUserComuAcTest {
 
         assertThat(activity, notNullValue());
         assertThat(activity.getFragmentManager().findFragmentById(R.id.reg_usercomu_frg), notNullValue());
-        assertThat(((Comunidad)intent.getSerializableExtra(COMUNIDAD_LIST_OBJECT.extra)).getC_Id(), is(comunidad
+        assertThat(((Comunidad) intent.getSerializableExtra(COMUNIDAD_LIST_OBJECT.extra)).getC_Id(), is(comunidad
                 .getC_Id()));
         onView(withId(R.id.reg_usercomu_ac_layout)).check(matches(isDisplayed()));
         onView(withId(R.id.reg_usercomu_frg)).check(matches(isDisplayed()));

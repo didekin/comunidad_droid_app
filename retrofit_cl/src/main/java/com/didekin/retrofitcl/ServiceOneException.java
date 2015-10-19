@@ -1,6 +1,6 @@
 package com.didekin.retrofitcl;
 
-import com.didekin.exception.ErrorBean;
+import com.didekin.serviceone.exception.ErrorBean;
 import retrofit.RetrofitError;
 
 /**

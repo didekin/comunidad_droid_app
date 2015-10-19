@@ -2,14 +2,11 @@ package com.didekindroid.usuario.activity;
 
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import com.didekin.security.OauthToken.AccessToken;
+import com.didekin.retrofitcl.OauthToken.AccessToken;
 import com.didekin.serviceone.domain.Usuario;
 import com.didekindroid.R;
 import com.didekindroid.usuario.activity.utils.CleanEnum;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -17,14 +14,13 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.*;
+import static com.didekindroid.security.TokenHandler.TKhandler;
 import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_NOTHING;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.*;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_TRAV_PLAZUELA_PEPE;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_JUAN;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_PEPE;
-import static com.didekindroid.usuario.security.TokenHandler.TKhandler;
 import static com.didekindroid.usuario.webservices.Oauth2Service.Oauth2;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
@@ -50,6 +46,12 @@ public class PasswordChangeAcTest {
                     signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
                 }
             };
+
+    @BeforeClass
+    public static void slowSeconds() throws InterruptedException
+    {
+        Thread.sleep(5000);
+    }
 
     @Before
     public void setUp() throws Exception

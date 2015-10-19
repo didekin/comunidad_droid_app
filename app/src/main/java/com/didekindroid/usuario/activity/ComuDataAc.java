@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.EditText;
+import android.widget.Toast;
 import com.didekin.serviceone.domain.Comunidad;
 import com.didekindroid.R;
 import com.didekindroid.ioutils.ConnectionUtils;
@@ -89,7 +90,7 @@ public class ComuDataAc extends Activity implements RegComuFr.RegComuFrListener 
         if (!comuBean.validate(getResources(), errorBuilder)) {
             makeToast(this, errorBuilder.toString());
         } else if (!ConnectionUtils.isInternetConnected(this)) {
-            makeToast(this, R.string.no_internet_conn_toast);
+            makeToast(this, R.string.no_internet_conn_toast, Toast.LENGTH_LONG);
         } else {
             Comunidad comunidadIn = new Comunidad.ComunidadBuilder()
                     .c_id(mComunidad.getC_Id())

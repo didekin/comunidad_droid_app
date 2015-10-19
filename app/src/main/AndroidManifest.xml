@@ -70,6 +70,11 @@
                 android:parentActivityName=".usuario.activity.UserDataAc">
         </activity>
         <activity
+                android:name=".usuario.activity.LoginAc"
+                android:label="@string/login_label"
+                android:launchMode="singleInstance">
+        </activity>
+        <activity
                 android:name=".usuario.activity.PasswordChangeAc"
                 android:label="@string/password_change_ac_label"
                 android:parentActivityName=".usuario.activity.UserDataAc">
@@ -113,11 +118,6 @@
         <activity
                 android:name=".usuario.activity.UserDataAc"
                 android:label="@string/user_data_ac_label">
-        </activity>
-        <!-- =========== Login ========== -->
-        <activity
-                android:name=".usuario.activity.LoginAc"
-                android:label="@string/login_label">
         </activity>
     </application>
 

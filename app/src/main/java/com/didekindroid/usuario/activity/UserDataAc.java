@@ -10,20 +10,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 import com.didekin.retrofitcl.ServiceOneException;
-import com.didekin.security.OauthToken.AccessToken;
+import com.didekin.retrofitcl.OauthToken.AccessToken;
 import com.didekin.serviceone.domain.Usuario;
 import com.didekindroid.R;
 import com.didekindroid.ioutils.ConnectionUtils;
 import com.didekindroid.usuario.activity.utils.UserMenu;
 import com.didekindroid.usuario.dominio.UsuarioBean;
 
-import static com.didekin.exception.ExceptionMessage.BAD_REQUEST;
+import static com.didekin.serviceone.exception.ExceptionMessage.BAD_REQUEST;
 import static com.didekindroid.uiutils.UIutils.*;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUserBeanFromUserDataAcView;
 import static com.didekindroid.usuario.activity.utils.UserMenu.COMU_SEARCH_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_USERCOMU_BY_USER_AC;
-import static com.didekindroid.usuario.security.TokenHandler.TKhandler;
+import static com.didekindroid.security.TokenHandler.TKhandler;
 import static com.didekindroid.usuario.webservices.Oauth2Service.Oauth2;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -82,7 +83,7 @@ public class UserDataAc extends Activity {
         if (!usuarioBean.validateWithOnePassword(getResources(), errorBuilder)) {
             makeToast(this, errorBuilder.toString());
         } else if (!ConnectionUtils.isInternetConnected(this)) {
-            makeToast(this, R.string.no_internet_conn_toast);
+            makeToast(this, R.string.no_internet_conn_toast, Toast.LENGTH_LONG);
         } else {
             Usuario newUser = new Usuario.UsuarioBuilder().copyUsuario(usuarioBean.getUsuario())
                     .uId(mOldUser.getuId())
@@ -175,7 +176,7 @@ public class UserDataAc extends Activity {
                 token_1 = Oauth2.getPasswordUserToken(mOldUser.getUserName(), usuarios[0].getPassword());
                 TKhandler.initKeyCacheAndBackupFile(token_1);
             } catch (ServiceOneException e) {
-                checkState(e.getMessage().equals(BAD_REQUEST.getMessage()));
+                checkState(e.getServiceMessage().equals(BAD_REQUEST.getMessage()));
                 isPasswordWrong = true;
                 return isPasswordWrong;
             }
@@ -206,7 +207,7 @@ public class UserDataAc extends Activity {
         {
             Log.d(TAG, "onPostExecute(): DONE");
             if (passwordWrong) {
-                makeToast(UserDataAc.this, R.string.password_not_valid);
+                makeToast(UserDataAc.this, R.string.password_wrong, Toast.LENGTH_LONG);
             }
         }
     }

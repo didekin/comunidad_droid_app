@@ -7,7 +7,7 @@
         >
     <TextView
             android:id="@+id/nombreComunidad_view"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/text_decription_widget"
             android:layout_marginStart="@dimen/activity_horizontal_margin"

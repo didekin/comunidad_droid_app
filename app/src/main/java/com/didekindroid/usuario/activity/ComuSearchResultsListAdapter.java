@@ -21,7 +21,7 @@ public class ComuSearchResultsListAdapter extends ArrayAdapter<Comunidad> {
 
     public ComuSearchResultsListAdapter(Context context)
     {
-        super(context, R.layout.comu_list_item_view, R.id.nombreComunidad_view);
+        super(context, R.layout.comu_include, R.id.nombreComunidad_view);
     }
 
     @Override
@@ -35,7 +35,7 @@ public class ComuSearchResultsListAdapter extends ArrayAdapter<Comunidad> {
 
         if (convertView == null) {
             Log.d(TAG, "getView(), convertView == null");
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.comu_list_item_view, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.comu_include, parent, false);
             viewHolder = new ComuViewHolder(convertView);
             convertView.setTag(viewHolder);
         }

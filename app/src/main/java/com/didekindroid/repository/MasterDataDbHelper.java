@@ -12,7 +12,7 @@ import com.didekin.serviceone.domain.ComunidadAutonoma;
 import com.didekin.serviceone.domain.Municipio;
 import com.didekin.serviceone.domain.Provincia;
 import com.didekindroid.R;
-import com.didekindroid.ioutils.IoHelper;
+import com.didekindroid.uiutils.UIutils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -72,19 +72,19 @@ public class MasterDataDbHelper extends SQLiteOpenHelper {
         try {
             mComunidadesCounter = loadComunidadesAutonomas();
         } catch (IOException e) {
-            IoHelper.doRuntimeException(e,TAG);
+            UIutils.doRuntimeException(e, TAG);
         }
 
         try {
             mProvinciasCounter = loadProvincias();
         } catch (IOException e) {
-            IoHelper.doRuntimeException(e,TAG);
+            UIutils.doRuntimeException(e, TAG);
         }
 
         try {
             mMunicipiosCounter = loadMunicipios();
         } catch (IOException e) {
-            IoHelper.doRuntimeException(e,TAG);
+            UIutils.doRuntimeException(e, TAG);
         }
     }
 

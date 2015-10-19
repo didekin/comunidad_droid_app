@@ -1,18 +1,17 @@
 package com.didekindroid.usuario.suite;
 
+import com.didekindroid.usuario.activity.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 /**
  * User: pedro@didekin
- * Date: 20/08/15
- * Time: 09:43
+ * Date: 16/10/15
+ * Time: 18:13
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        UserSupportTestSuite.class,
-        UserFunctionalTestSuite.class,
-        UserFunctionalSlowTestSuite.class
+        ComuSearchResultsAcTest_2.class
 })
-public class UserFullTestSuite {
+public class UserFunctionalSlowTestSuite {
 }

@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 import com.didekindroid.R;
 import com.didekindroid.ioutils.ConnectionUtils;
 import com.didekindroid.usuario.dominio.UsuarioBean;
@@ -72,7 +73,7 @@ public class PasswordChangeAc extends Activity {
         if (!usuarioBean.validateDoublePassword(getResources(), errorBuilder)) {
             makeToast(this, errorBuilder.toString());
         } else if (!ConnectionUtils.isInternetConnected(this)) {
-            makeToast(this, R.string.no_internet_conn_toast);
+            makeToast(this, R.string.no_internet_conn_toast, Toast.LENGTH_LONG);
         } else {
             new PasswordModifyer().execute(usuarioBean.getPassword());
         }

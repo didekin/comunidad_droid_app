@@ -9,6 +9,7 @@
             android:id="@+id/see_usercomu_by_comu_frg"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
-            android:name="com.didekindroid.usuario.activity.SeeUserComuByComuFr"/>
+            android:name="com.didekindroid.usuario.activity.SeeUserComuByComuFr"
+            tools:layout="@layout/usercomu_list_header_view"/>
 
 </FrameLayout>

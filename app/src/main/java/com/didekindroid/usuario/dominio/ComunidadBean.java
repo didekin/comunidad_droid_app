@@ -2,15 +2,11 @@ package com.didekindroid.usuario.dominio;
 
 import android.content.res.Resources;
 import com.didekin.serviceone.domain.Comunidad;
-import com.didekin.serviceone.domain.DataPatterns;
 import com.didekin.serviceone.domain.Municipio;
 import com.didekin.serviceone.domain.Provincia;
 import com.didekindroid.R;
 
-import static com.didekin.serviceone.domain.DataPatterns.NOMBRE_VIA;
-import static com.didekin.serviceone.domain.DataPatterns.SUFIJO_NUMERO;
-import static com.didekindroid.uiutils.CommonPatterns.LINE_BREAK;
-import static com.didekindroid.uiutils.CommonPatterns.SELECT;
+import static com.didekin.serviceone.domain.DataPatterns.*;
 
 /**
  * User: pedro@didekin
@@ -86,7 +82,7 @@ public class ComunidadBean {
     boolean validateTipoVia(Resources resources, StringBuilder errorMsg)
     {
         if (tipoVia == null || tipoVia.trim().equals(resources.getString(R.string.tipo_via_spinner))) {
-            errorMsg.append(resources.getString(R.string.tipo_via) + LINE_BREAK.literal);
+            errorMsg.append(resources.getString(R.string.tipo_via) + LINE_BREAK.getRegexp());
             return false;
         }
         return true;
@@ -94,10 +90,9 @@ public class ComunidadBean {
 
     public boolean validateNombreVia(CharSequence resources, StringBuilder errorMsg)
     {
-        boolean isValid = NOMBRE_VIA.pattern.matcher(nombreVia).matches()
-                && !SELECT.pattern.matcher(nombreVia).find();
+        boolean isValid = NOMBRE_VIA.isPatternOk(nombreVia);
         if (!isValid) {
-            errorMsg.append(resources + LINE_BREAK.literal);
+            errorMsg.append(resources + LINE_BREAK.getRegexp());
         }
         return isValid;
     }
@@ -114,7 +109,7 @@ public class ComunidadBean {
         try {
             numero = Short.parseShort(numeroString);
         } catch (NumberFormatException ne) {
-            errorMsg.append(resources + LINE_BREAK.literal);
+            errorMsg.append(resources + LINE_BREAK.getRegexp());
             isValid = false;
         }
         return isValid;
@@ -124,10 +119,9 @@ public class ComunidadBean {
     {
         if (sufijoNumero == null || sufijoNumero.trim().isEmpty()) return true;
 
-        boolean isValid = SUFIJO_NUMERO.pattern.matcher(sufijoNumero).matches()
-                && !SELECT.pattern.matcher(sufijoNumero).find();
+        boolean isValid = SUFIJO_NUMERO.isPatternOk(sufijoNumero);
         if (!isValid) {
-            errorMsg.append(resources + LINE_BREAK.literal);
+            errorMsg.append(resources + LINE_BREAK.getRegexp());
         }
         return isValid;
     }
@@ -141,7 +135,7 @@ public class ComunidadBean {
         boolean isValid = !(provincia == null || municipio.getCodInProvincia() == 0
                 || provincia.getProvinciaId() == 0);
         if (!isValid) {
-            errorMsg.append(resources.getString(R.string.municipio) + LINE_BREAK.literal);
+            errorMsg.append(resources.getString(R.string.municipio) + LINE_BREAK.getRegexp());
         }
         return isValid;
     }

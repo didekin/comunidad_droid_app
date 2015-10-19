@@ -3,28 +3,24 @@ package com.didekindroid.usuario.activity;
 import android.content.res.Resources;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import com.didekin.security.OauthToken;
-import com.didekin.serviceone.domain.Usuario;
+import com.didekin.retrofitcl.OauthToken;
 import com.didekindroid.R;
 import com.didekindroid.usuario.activity.utils.CleanEnum;
-import com.didekindroid.usuario.webservices.ServiceOne;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.*;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.*;
+import static com.didekindroid.security.TokenHandler.TKhandler;
 import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_NOTHING;
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.*;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.*;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.*;
-import static com.didekindroid.usuario.security.TokenHandler.TKhandler;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_JUAN;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_JUAN;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
@@ -50,6 +46,12 @@ public class UserDataAcTest {
             signUpAndUpdateTk(COMU_REAL_JUAN);
         }
     };
+
+    @BeforeClass
+    public static void slowSeconds() throws InterruptedException
+    {
+        Thread.sleep(5000);
+    }
 
     @Before
     public void setUp() throws Exception
@@ -143,7 +145,7 @@ public class UserDataAcTest {
                 .check(matches(isDisplayed())).perform(click());
         onView(withId(R.id.see_usercomu_by_user_ac_frg_container)).check(matches(isDisplayed()));
 
-        Thread.sleep(2000);
+        Thread.sleep(3000);
     }
 
     /* Password erróneo en servidor.*/
@@ -155,7 +157,7 @@ public class UserDataAcTest {
         onView(withId(R.id.user_data_modif_button)).perform(scrollTo())
                 .check(matches(isDisplayed())).perform(click());
 
-        checkToastInTest(R.string.password_not_valid, mActivity);
+        checkToastInTest(R.string.password_wrong, mActivity);
     }
 
     /* Change alias.*/

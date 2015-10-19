@@ -24,7 +24,7 @@ public class SeeUserComutByComuListAdapter extends ArrayAdapter<UsuarioComunidad
 
     public SeeUserComutByComuListAdapter(Context context)
     {
-        super(context, R.layout.usercomu_list_item_view, R.id.usercomu_item_portal_rot);
+        super(context, R.layout.user_usercomu_list_item, R.id.usercomu_item_portal_rot);
     }
 
     @Override
@@ -34,16 +34,16 @@ public class SeeUserComutByComuListAdapter extends ArrayAdapter<UsuarioComunidad
 
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        UserComuVwHolder viewHolder;
+        UserAndUserComuVwHolder viewHolder;
 
         if (convertView == null) {
             Log.d(TAG, "getView(), convertView == null");
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.usercomu_list_item_view, parent, false);
-            viewHolder = new UserComuVwHolder(convertView, getContext().getResources());
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.user_usercomu_list_item, parent, false);
+            viewHolder = new UserAndUserComuVwHolder(convertView, getContext().getResources());
             convertView.setTag(viewHolder);
         }
 
-        viewHolder = (UserComuVwHolder) convertView.getTag();
+        viewHolder = (UserAndUserComuVwHolder) convertView.getTag();
         final UsuarioComunidad userComu = getItem(position);
         viewHolder.initializeTextInViews(userComu);
 
@@ -52,12 +52,32 @@ public class SeeUserComutByComuListAdapter extends ArrayAdapter<UsuarioComunidad
 
     // ......... Inner classes .................
 
+    static class UserVwHolder {
+
+        static final String TAG = UserVwHolder.class.getCanonicalName();
+
+        final TextView mUserName;
+        final TextView mUserAlias;
+
+        UserVwHolder(View convertView)
+        {
+            mUserName = (TextView) convertView.findViewById(R.id.usercomu_item_username_txt);
+            mUserAlias = (TextView) convertView.findViewById(R.id.usercomu_item_alias_txt);
+        }
+
+        void initializeTextInViews(UsuarioComunidad userComu)
+        {
+            Log.d(TAG, "initializeTextInViews()");
+
+            mUserName.setText(userComu.getUsuario().getUserName());
+            mUserAlias.setText(userComu.getUsuario().getAlias());
+        }
+    }
+
     static class UserComuVwHolder {
 
         static final String TAG = UserComuVwHolder.class.getCanonicalName();
 
-        final TextView mUserName;
-        final TextView mUserAlias;
         final TextView mPortalRotView;
         final TextView mPortalView;
         final TextView mEscaleraRotView;
@@ -70,11 +90,8 @@ public class SeeUserComutByComuListAdapter extends ArrayAdapter<UsuarioComunidad
         final TextView mRolesView;
         final Resources resources;
 
-
         public UserComuVwHolder(View convertView, Resources resources)
         {
-            mUserName = (TextView) convertView.findViewById(R.id.usercomu_item_username_txt);
-            mUserAlias = (TextView) convertView.findViewById(R.id.usercomu_item_alias_txt);
             mPortalRotView = (TextView) convertView.findViewById(R.id.usercomu_item_portal_rot);
             mPortalView = (TextView) convertView.findViewById(R.id.usercomu_item_portal_txt);
             mEscaleraRotView = (TextView) convertView.findViewById(R.id.usercomu_item_escalera_rot);
@@ -87,19 +104,13 @@ public class SeeUserComutByComuListAdapter extends ArrayAdapter<UsuarioComunidad
             mRolesView = (TextView) convertView.findViewById(R.id.usercomu_item_roles_txt);
 
             this.resources = resources;
-
         }
 
         void initializeTextInViews(UsuarioComunidad userComu)
         {
             Log.d(TAG, "initializeTextInViews()");
 
-            mUserName.setText(userComu.getUsuario().getUserName());
-            mUserAlias.setText(userComu.getUsuario().getAlias());
-
             if (userComu.getPortal() != null && !userComu.getPortal().isEmpty()) {
-//                mPortalRotView.setVisibility(View.VISIBLE);
-//                mPortalView.setVisibility(View.VISIBLE);
                 mPortalView.setText(userComu.getPortal());
             }
 
@@ -120,7 +131,7 @@ public class SeeUserComutByComuListAdapter extends ArrayAdapter<UsuarioComunidad
 
         private String formatRol(String rolesString)
         {
-            Log.d(TAG,"formatRol()");
+            Log.d(TAG, "formatRol()");
 
             String[] rolesPieces = rolesString.split(",");
             StringBuilder builder = new StringBuilder();
@@ -130,8 +141,30 @@ public class SeeUserComutByComuListAdapter extends ArrayAdapter<UsuarioComunidad
                 resourceString = resources.getString(getResourceStringId(rolesPieces[i]));
                 builder.append(resourceString).append(",");
             }
-            builder.deleteCharAt(builder.length()-1);
+            builder.deleteCharAt(builder.length() - 1);
             return builder.toString();
+        }
+    }
+
+    static class UserAndUserComuVwHolder {
+
+        static final String TAG = UserAndUserComuVwHolder.class.getCanonicalName();
+
+        final UserVwHolder userVwHolder;
+        final UserComuVwHolder userComuVwHolder;
+
+        public UserAndUserComuVwHolder(View convertView, Resources resources)
+        {
+            userVwHolder = new UserVwHolder(convertView);
+            userComuVwHolder = new UserComuVwHolder(convertView, resources);
+        }
+
+        void initializeTextInViews(UsuarioComunidad userComu)
+        {
+            Log.d(TAG, "initializeTextInViews()");
+
+            userVwHolder.initializeTextInViews(userComu);
+            userComuVwHolder.initializeTextInViews(userComu);
         }
     }
 }

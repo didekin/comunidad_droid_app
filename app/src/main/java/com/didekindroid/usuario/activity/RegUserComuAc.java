@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 import com.didekin.serviceone.domain.Comunidad;
+import com.didekin.serviceone.domain.DataPatterns;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.ioutils.ConnectionUtils;
@@ -15,7 +17,6 @@ import com.didekindroid.uiutils.UIutils;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
 
-import static com.didekindroid.uiutils.CommonPatterns.LINE_BREAK;
 import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
 import static com.didekindroid.uiutils.UIutils.makeToast;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUserComuBeanFromView;
@@ -88,12 +89,12 @@ public class RegUserComuAc extends Activity {
                 null);
 
         StringBuilder errorMsg = new StringBuilder(getResources().getText(R.string.error_validation_msg))
-                .append(LINE_BREAK.literal);
+                .append(DataPatterns.LINE_BREAK.getRegexp());
 
         if (!usuarioComunidadBean.validate(getResources(), errorMsg)) {  // error validation.
             makeToast(this, errorMsg.toString());
         } else if (!ConnectionUtils.isInternetConnected(this)) {
-            UIutils.makeToast(this, R.string.no_internet_conn_toast);
+            UIutils.makeToast(this, R.string.no_internet_conn_toast, Toast.LENGTH_LONG);
         } else {
             // Insert usuarioComunidad and go to SeeUserComuByComuAc activity.
             new UserComuRegister().execute(usuarioComunidadBean.getUsuarioComunidad());

@@ -9,10 +9,7 @@ import com.didekin.serviceone.domain.Provincia;
 import com.didekindroid.R;
 import com.didekindroid.usuario.activity.utils.CleanEnum;
 import org.hamcrest.Matchers;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onData;
@@ -24,9 +21,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.*;
 import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_ID;
-import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.checkToastInTest;
-import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
-import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAndUpdateTk;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.*;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_LA_PLAZUELA_5;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_PLAZUELA5_JUAN;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
@@ -64,6 +59,12 @@ public class ComuDataAcTest {
             return intent;
         }
     };
+
+    @BeforeClass
+    public static void slowSeconds() throws InterruptedException
+    {
+        Thread.sleep(5000);
+    }
 
     @Before
     public void setUp() throws Exception
@@ -139,8 +140,8 @@ public class ComuDataAcTest {
         assertThat(comunidadDb, Matchers.allOf(
                 hasProperty("municipio", equalTo(new Municipio((short) 119, new Provincia((short) 46)))),
                 hasProperty("nombreVia", equalTo("nombre via One")),
-                hasProperty("numero",equalTo((short)123)),
-                hasProperty("sufijoNumero",equalTo("Tris"))
+                hasProperty("numero", equalTo((short) 123)),
+                hasProperty("sufijoNumero", equalTo("Tris"))
         ));
     }
 
@@ -171,6 +172,6 @@ public class ComuDataAcTest {
                 .check(matches(withText(is("municipio")))).check(matches(isDisplayed()));
 
         onView(withId(R.id.comu_data_ac_button)).check(matches(isDisplayed())).perform(click());
-        checkToastInTest(R.string.error_validation_msg, mActivity,R.string.municipio);
+        checkToastInTest(R.string.error_validation_msg, mActivity, R.string.municipio);
     }
 }

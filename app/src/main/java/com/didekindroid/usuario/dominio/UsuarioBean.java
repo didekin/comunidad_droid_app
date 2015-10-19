@@ -5,8 +5,6 @@ import com.didekin.serviceone.domain.Usuario;
 import com.didekindroid.R;
 
 import static com.didekin.serviceone.domain.DataPatterns.*;
-import static com.didekindroid.uiutils.CommonPatterns.LINE_BREAK;
-import static com.didekindroid.uiutils.CommonPatterns.SELECT;
 
 /**
  * User: pedro@didekin
@@ -49,7 +47,7 @@ public final class UsuarioBean {
     {
         boolean isValid = validateAlias(resources.getText(R.string.alias), errorMsg)
                 & validateUserName(resources.getText(R.string.email_hint), errorMsg)
-                & validateSinglePassword(resources,errorMsg);
+                & validateSinglePassword(resources, errorMsg);
 
         if (isValid) {
             usuario = new Usuario.UsuarioBuilder()
@@ -61,22 +59,34 @@ public final class UsuarioBean {
         return isValid;
     }
 
+    public boolean validateLoginData(Resources resources, StringBuilder errorBuilder)
+    {
+        boolean isValid = validateUserName(resources.getText(R.string.email_hint), errorBuilder)
+                & validateSinglePassword(resources, errorBuilder);
+
+        if (isValid) {
+            usuario = new Usuario.UsuarioBuilder()
+                    .userName(userName)
+                    .password(password)
+                    .build();
+        }
+        return isValid;
+    }
+
     private boolean validateAlias(CharSequence text, StringBuilder errorMsg)
     {
-        boolean isValid = ALIAS.pattern.matcher(alias).matches()
-                && !SELECT.pattern.matcher(alias).find();
+        boolean isValid = ALIAS.isPatternOk(alias);
         if (!isValid) {
-            errorMsg.append(text + LINE_BREAK.literal);
+            errorMsg.append(text + LINE_BREAK.getRegexp());
         }
         return isValid;
     }
 
     boolean validateSinglePassword(Resources resources, StringBuilder errorMsg)
     {
-        boolean isValid = PASSWORD.pattern.matcher(password).matches()
-                && !SELECT.pattern.matcher(password).find();
+        boolean isValid = PASSWORD.isPatternOk(password);
         if (!isValid) {
-            errorMsg.append(resources.getText(R.string.password).toString() + LINE_BREAK.literal);
+            errorMsg.append(resources.getText(R.string.password).toString() + LINE_BREAK.getRegexp());
         }
         return isValid;
     }
@@ -85,7 +95,7 @@ public final class UsuarioBean {
     {
         if (!password.trim().equals(verificaPassword.toString())) {
             errorMsg.append(resources.getText(R.string.password).toString() + resources.getText(R.string
-                    .password_different).toString() + LINE_BREAK.literal);
+                    .password_different).toString() + LINE_BREAK.getRegexp());
             return false;
         }
         return validateSinglePassword(resources, errorMsg);
@@ -93,10 +103,9 @@ public final class UsuarioBean {
 
     protected boolean validateUserName(CharSequence text, StringBuilder errorMsg)
     {
-        boolean isValid = EMAIL.pattern.matcher(userName).matches()
-                && !SELECT.pattern.matcher(userName).find();
+        boolean isValid = EMAIL.isPatternOk(userName);
         if (!isValid) {
-            errorMsg.append(text + LINE_BREAK.literal);
+            errorMsg.append(text + LINE_BREAK.getRegexp());
         }
         return isValid;
     }

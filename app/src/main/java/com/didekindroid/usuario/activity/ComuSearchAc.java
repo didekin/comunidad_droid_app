@@ -10,30 +10,28 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import com.didekin.security.OauthToken.AccessToken;
+import com.didekin.retrofitcl.OauthToken.AccessToken;
+import com.didekin.serviceone.domain.DataPatterns;
 import com.didekindroid.R;
-import com.didekindroid.uiutils.CommonPatterns;
 import com.didekindroid.uiutils.UIutils;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 
+import static com.didekindroid.security.TokenHandler.TKhandler;
 import static com.didekindroid.uiutils.UIutils.updateIsRegistered;
-import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_SEARCH;
-import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_USERCOMU_BY_USER_AC;
-import static com.didekindroid.usuario.activity.utils.UserMenu.REG_COMU_USER_USERCOMU_AC;
-import static com.didekindroid.usuario.activity.utils.UserMenu.USER_DATA_AC;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeComunidadBeanFromView;
-import static com.didekindroid.usuario.security.TokenHandler.TKhandler;
+import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_SEARCH;
+import static com.didekindroid.usuario.activity.utils.UserMenu.*;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- *  Postconditions:
- *
- *  1. An object comunidad, to be used as search criterium, is passed as an intent extra with the following fields:
- *      -- tipoVia.
- *      -- nombreVia.
- *      -- numero.
- *      -- sufijoNumero (it can be an empty string).
- *      -- municipio with codInProvincia and provinciaId.
+ * Postconditions:
+ * <p/>
+ * 1. An object comunidad, to be used as search criterium, is passed as an intent extra with the following fields:
+ * -- tipoVia.
+ * -- nombreVia.
+ * -- numero.
+ * -- sufijoNumero (it can be an empty string).
+ * -- municipio with codInProvincia and provinciaId.
  */
 public class ComuSearchAc extends Activity {
 
@@ -79,14 +77,14 @@ public class ComuSearchAc extends Activity {
 
         // Validation of data.
         StringBuilder errorMsg = new StringBuilder(getResources().getText(R.string.error_validation_msg))
-                .append(CommonPatterns.LINE_BREAK.literal);
+                .append(DataPatterns.LINE_BREAK.getRegexp());
 
         if (!comunidadBean.validate(getResources(), errorMsg)) {
             UIutils.makeToast(this, errorMsg.toString());
 
         } else {
             Intent intent = new Intent(this, ComuSearchResultsAc.class);
-            intent.putExtra(COMUNIDAD_SEARCH.extra,comunidadBean.getComunidad());
+            intent.putExtra(COMUNIDAD_SEARCH.extra, comunidadBean.getComunidad());
             startActivity(intent);
         }
     }
@@ -153,7 +151,7 @@ public class ComuSearchAc extends Activity {
         {
             boolean isRegisteredUser = (accessToken != null ? true : false);
             Log.d(TAG, "CheckerTokenInCache.onPostExecute(): isRegisteredUser = " + isRegisteredUser);
-            if (!isRegisteredUser){
+            if (!isRegisteredUser) {
                 updateIsRegistered(isRegisteredUser, ComuSearchAc.this);
             }
         }

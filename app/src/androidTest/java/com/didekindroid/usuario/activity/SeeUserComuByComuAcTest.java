@@ -7,10 +7,7 @@ import com.didekin.serviceone.domain.Comunidad;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.usuario.dominio.DomainDataUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 
 import java.util.List;
@@ -49,6 +46,12 @@ public class SeeUserComuByComuAcTest {
     @Rule
     public ActivityTestRule<SeeUserComuByComuAc> mActivityRule =
             new ActivityTestRule<>(SeeUserComuByComuAc.class, true, false);
+
+    @BeforeClass
+    public static void slowSeconds() throws InterruptedException
+    {
+        Thread.sleep(5000);
+    }
 
     @Before
     public void setUp() throws Exception

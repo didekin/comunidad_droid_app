@@ -64,13 +64,14 @@ dependencies {
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.android.support:appcompat-v7:23.0.1'
     compile project(':retrofit_cl')
-    compile files('../libs/common_lib-0.2.jar')
+    compile files('../libs/serv_one_lib-0.2.jar')
     androidTestCompile 'com.android.support:support-annotations:23.0.1'
     androidTestCompile 'com.android.support.test:runner:0.3'
     androidTestCompile 'com.android.support.test:rules:0.3'
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2'
     androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2'
     androidTestCompile project(':javabeans')
+    androidTestCompile files('../retrofit_cl/build/libs/retrofit_cl_tests.jar')
 }
 
 task wrapper(type: Wrapper) {

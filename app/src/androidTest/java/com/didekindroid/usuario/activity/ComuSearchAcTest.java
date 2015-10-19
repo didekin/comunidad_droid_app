@@ -27,7 +27,7 @@ import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.*;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeComunidadBeanFromView;
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.*;
-import static com.didekindroid.usuario.security.TokenHandler.TKhandler;
+import static com.didekindroid.security.TokenHandler.TKhandler;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 

@@ -2,23 +2,29 @@ package com.didekindroid.usuario.webservices;
 
 import android.util.Log;
 import com.didekin.retrofitcl.ServiceOneEndPoints;
-import com.didekin.serviceone.controllers.ServiceOneEndPointsIf;
+import com.didekin.retrofitcl.ServiceOneException;
 import com.didekin.serviceone.domain.Comunidad;
 import com.didekin.serviceone.domain.Usuario;
 import com.didekin.serviceone.domain.UsuarioComunidad;
+import com.didekin.serviceone.exception.ExceptionMessage;
+import com.didekindroid.R;
+import com.didekindroid.security.UiException;
 
 import java.util.List;
 
 import static com.didekin.retrofitcl.RetrofitRestBuilder.BUILDER;
+import static com.didekin.serviceone.exception.ExceptionMessage.*;
 import static com.didekindroid.DidekindroidApp.getBaseURL;
-import static com.didekindroid.usuario.security.TokenHandler.TKhandler;
+import static com.didekindroid.security.TokenHandler.TKhandler;
+import static com.didekindroid.security.UiException.UiAction.LOGIN;
+import static com.didekindroid.security.UiException.UiAction.SEARCH_COMU;
 
 /**
  * User: pedro@didekin
  * Date: 07/06/15
  * Time: 15:06
  */
-public enum ServiceOne implements ServiceOneEndPointsIf {
+public enum ServiceOne implements ServiceOneEndPoints {
 
     ServOne(BUILDER.getService(ServiceOneEndPoints.class, getBaseURL())) {
         @Override
@@ -39,6 +45,7 @@ public enum ServiceOne implements ServiceOneEndPointsIf {
             return ServOne.endPoint.deleteUserComu(accessToken, comunidadId);
         }
 
+        @Override
         public Comunidad getComuData(String accessToken, long idComunidad)
         {
             return ServOne.endPoint.getComuData(accessToken, idComunidad);
@@ -63,6 +70,12 @@ public enum ServiceOne implements ServiceOneEndPointsIf {
         }
 
         @Override
+        public boolean login(String userName, String password)
+        {
+            return ServOne.endPoint.login(userName, password);
+        }
+
+        @Override
         public int modifyComuData(String currentAccessToken, Comunidad comunidad)
         {
             return ServOne.endPoint.modifyComuData(currentAccessToken, comunidad);
@@ -84,6 +97,13 @@ public enum ServiceOne implements ServiceOneEndPointsIf {
         public int passwordChange(String accessToken, String newPassword)
         {
             return ServOne.endPoint.passwordChange(accessToken, newPassword);
+        }
+
+        @Override
+        public boolean passwordSend(String userName)
+        {
+            Log.d(TAG, "passwordSend()");
+            return ServOne.endPoint.passwordSend(userName);
         }
 
         @Override
@@ -165,6 +185,7 @@ public enum ServiceOne implements ServiceOneEndPointsIf {
         return deleteUser(TKhandler.doBearerAccessTkHeader());
     }
 
+
     public int deleteUserComu(long comunidadId)
     {
         Log.d(TAG, "deleteUserComu()");
@@ -194,6 +215,21 @@ public enum ServiceOne implements ServiceOneEndPointsIf {
     {
         Log.d(TAG, "isOldestUserComu()");
         return isOldestUserComu(TKhandler.doBearerAccessTkHeader(), comunidadId);
+    }
+
+    public boolean loginInternal(String userName, String password) throws UiException
+    {
+        Log.d(TAG, "loginInternal()");
+
+        boolean isLoginOk = false;
+        try {
+            isLoginOk = login(userName, password);
+        } catch (ServiceOneException e) {
+            if (e.getServiceMessage().equals(USER_NOT_FOUND.getMessage())) {
+                throw new UiException(SEARCH_COMU, R.string.user_without_signedUp);
+            }
+        }
+        return isLoginOk;
     }
 
     public int modifyComuData(Comunidad comunidad)
@@ -238,10 +274,39 @@ public enum ServiceOne implements ServiceOneEndPointsIf {
         return seeUserComusByComu(TKhandler.doBearerAccessTkHeader(), idComunidad);
     }
 
-    public List<UsuarioComunidad> seeUserComusByUser()
+    public List<UsuarioComunidad> seeUserComusByUser() throws UiException
     {
         Log.d(TAG, "seeUserComusByUser()");
+
+        List<UsuarioComunidad> userComuList = null;
+
+        try {
+            userComuList = seeUserComusByUser(checkBearerToken());
+        } catch (ServiceOneException e) {
+            catchAuthenticationException(e);
+        }
+        return userComuList;
+    }
+
+//    ============================ HELPER METHODS ============================
+
+    String checkBearerToken() throws UiException
+    {
         String bearerAccessTkHeader = TKhandler.doBearerAccessTkHeader();
-        return (bearerAccessTkHeader != null ? seeUserComusByUser(bearerAccessTkHeader) : null);
+
+        if (bearerAccessTkHeader == null) { // No token in cache.
+            throw new UiException(LOGIN, R.string.user_without_signedUp);
+        }
+        return bearerAccessTkHeader;
+    }
+
+    void catchAuthenticationException(ServiceOneException e) throws UiException
+    {
+        Log.e(TAG, e.getServiceMessage());
+
+        ExceptionMessage eM = getExceptionMsgFromMessage(e.getServiceMessage());
+        if (getLoginRequestMsgs().contains(eM)) {  // Problema de identificación.
+            throw new UiException(LOGIN, R.string.user_without_signedUp);
+        }
     }
 }

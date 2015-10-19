@@ -1,14 +1,24 @@
 package com.didekindroid.uiutils;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.Gravity;
 import android.widget.Toast;
+import com.didekin.serviceone.exception.ExceptionMessage;
+import com.didekin.retrofitcl.ServiceOneException;
+import com.didekin.serviceone.domain.DataPatterns;
+import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
-import com.didekindroid.usuario.activity.LoginAc;
+import com.didekindroid.security.UiException;
+import com.didekindroid.security.UiException.UiAction;
+
+import java.util.List;
+
+import static com.didekin.serviceone.exception.ExceptionMessage.getExceptionMsgFromMessage;
+import static com.didekin.serviceone.exception.ExceptionMessage.getLoginRequestMsgs;
+import static com.didekindroid.security.TokenHandler.TKhandler;
+import static com.didekindroid.security.UiException.UiAction.LOGIN;
 
 /**
  * User: pedro
@@ -23,18 +33,16 @@ public final class UIutils {
     {
     }
 
-    public static void callLogin(Activity activity)
+    public static void doRuntimeException(Exception e, String tagClass)
     {
-        Log.d(TAG,"callLogin()");
-        Intent intent = new Intent(activity, LoginAc.class);
-        activity.startActivity(intent);
-        activity.finish();
+        Log.e(tagClass, e.getMessage());
+        throw new RuntimeException(e);
     }
 
     public static StringBuilder getErrorMsgBuilder(Context context)
     {
         return new StringBuilder(context.getResources().getText(R.string.error_validation_msg))
-                .append(CommonPatterns.LINE_BREAK.literal);
+                .append(DataPatterns.LINE_BREAK.getRegexp());
     }
 
     public static boolean isRegisteredUser(Context context)
@@ -46,7 +54,7 @@ public final class UIutils {
         return sharedPref.getBoolean(SharedPreferencesKeys.IS_USER_REG.toString(), false);
     }
 
-    public static void makeToast(Context context, int resourceStringId)
+    public static void makeToast(Context context, int resourceStringId, int toastLength)
     {
         Toast clickToast = new Toast(context).makeText(context, resourceStringId, Toast.LENGTH_LONG);
         clickToast.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL, 0, 0);

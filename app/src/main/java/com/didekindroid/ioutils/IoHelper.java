@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.util.Log;
 import com.didekindroid.R;
+import com.didekindroid.uiutils.UIutils;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -52,12 +53,12 @@ public class IoHelper {
             }
 
         } catch (IOException e) {
-            doRuntimeException(e, TAG);
+            UIutils.doRuntimeException(e, TAG);
         } finally {
             try {
                 reader.close();
             } catch (IOException e) {
-                doRuntimeException(e, TAG);
+                UIutils.doRuntimeException(e, TAG);
             }
         }
 
@@ -78,9 +79,9 @@ public class IoHelper {
             readableRefreshTkFile.readFully(bytesRefreshToken);
             readableRefreshTkFile.close();
         } catch (FileNotFoundException e) {
-            IoHelper.doRuntimeException(e, e.getLocalizedMessage());
+            UIutils.doRuntimeException(e, e.getLocalizedMessage());
         } catch (IOException e) {
-            IoHelper.doRuntimeException(e, e.getLocalizedMessage());
+            UIutils.doRuntimeException(e, e.getLocalizedMessage());
         }
         return new String(bytesRefreshToken);
     }
@@ -94,18 +95,12 @@ public class IoHelper {
             stringFileStream.write(stringToWrite.getBytes());
             stringFileStream.close();
         } catch (FileNotFoundException e) {
-            IoHelper.doRuntimeException(e, e.getLocalizedMessage());
+            UIutils.doRuntimeException(e, e.getLocalizedMessage());
         } catch (IOException e) {
-            IoHelper.doRuntimeException(e, e.getLocalizedMessage());
+            UIutils.doRuntimeException(e, e.getLocalizedMessage());
         }
     }
 
-
-    public static void doRuntimeException(Exception e, String tagClass)
-    {
-        Log.e(tagClass, e.getMessage());
-        throw new RuntimeException(e);
-    }
 
     /**
      * Given a string representation of a URL, sets up a connection and gets

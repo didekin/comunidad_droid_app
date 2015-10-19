@@ -3,12 +3,13 @@ package com.didekin.retrofitcl;
 import com.didekin.serviceone.domain.Comunidad;
 import com.didekin.serviceone.domain.Usuario;
 import com.didekin.serviceone.domain.UsuarioComunidad;
+import retrofit.client.Response;
 import retrofit.http.*;
 
 import java.util.List;
 
-import static com.didekin.security.SecurityConstant.*;
 import static com.didekin.serviceone.controllers.ControllerConstant.*;
+import static com.didekin.serviceone.security.SecurityConstant.*;
 
 /**
  * User: pedro@didekin
@@ -39,6 +40,10 @@ public interface ServiceOneEndPoints {
     @GET(COMUNIDAD_OLDEST_USER + "/{comunidadId}")
     boolean isOldestUserComu(@Header("Authorization") String accessToken, @Path("comunidadId") long comunidadId);
 
+    @FormUrlEncoded
+    @POST(LOGIN)
+    boolean login(@Field(USER_PARAM) String userName, @Field(PSWD_PARAM) String password);
+
     @PUT(COMUNIDAD_WRITE)
     int modifyComuData(@Header("Authorization") String accessToken, @Body Comunidad comunidad);
 
@@ -51,6 +56,10 @@ public interface ServiceOneEndPoints {
     @FormUrlEncoded
     @POST(PASSWORD_MODIFY)
     int passwordChange(@Header("Authorization") String accessToken, @Field(PSWD_PARAM) String password);
+
+    @FormUrlEncoded
+    @POST(PASSWORD_SEND)
+    boolean passwordSend(@Field(USER_PARAM) String userName);
 
     @POST(REG_COMU_AND_USER_AND_USERCOMU)
     boolean regComuAndUserAndUserComu(@Body UsuarioComunidad usuarioCom);

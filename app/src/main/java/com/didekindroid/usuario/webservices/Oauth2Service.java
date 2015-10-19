@@ -3,17 +3,15 @@ package com.didekindroid.usuario.webservices;
 import android.util.Base64;
 import android.util.Log;
 import com.didekin.retrofitcl.Oauth2EndPoints;
-import com.didekin.security.OauthClient;
-import com.didekin.security.OauthEndPointsIf;
-import com.didekin.security.OauthEndPointsIf.BodyText;
-import com.didekin.security.OauthToken.AccessToken;
+import com.didekin.retrofitcl.OauthToken.AccessToken;
+import com.didekin.serviceone.security.OauthClient;
 import retrofit.client.Response;
 
 import static com.didekin.retrofitcl.RetrofitRestBuilder.BUILDER;
-import static com.didekin.security.OauthClient.CL_USER;
-import static com.didekin.security.OauthTokenHelper.BASIC_AND_SPACE;
-import static com.didekin.security.SecurityConstant.PASSWORD_GRANT;
-import static com.didekin.security.SecurityConstant.REFRESH_TOKEN_GRANT;
+import static com.didekin.serviceone.security.OauthClient.CL_USER;
+import static com.didekin.retrofitcl.OauthTokenHelper.BASIC_AND_SPACE;
+import static com.didekin.serviceone.security.SecurityConstant.PASSWORD_GRANT;
+import static com.didekin.serviceone.security.SecurityConstant.REFRESH_TOKEN_GRANT;
 import static com.didekindroid.DidekindroidApp.getBaseURL;
 
 /**
@@ -21,11 +19,12 @@ import static com.didekindroid.DidekindroidApp.getBaseURL;
  * Date: 07/09/15
  * Time: 10:52
  */
-public enum Oauth2Service implements OauthEndPointsIf {
+public enum Oauth2Service implements Oauth2EndPoints {
 
     Oauth2(BUILDER.getService(Oauth2EndPoints.class, getBaseURL())) {
         @Override
-        public AccessToken getPasswordUserToken(String authClient, String username, String password, String grantType)
+        public AccessToken getPasswordUserToken(String authClient, String username, String password, String
+                grantType)
         {
             return Oauth2.endPoint.getPasswordUserToken(authClient, username, password, grantType);
         }
@@ -34,20 +33,6 @@ public enum Oauth2Service implements OauthEndPointsIf {
         public AccessToken getRefreshUserToken(String authClient, String refreshToken, String grantType)
         {
             return Oauth2.endPoint.getRefreshUserToken(authClient, refreshToken, grantType);
-        }
-
-        @Override
-        public BodyText getHello()
-        {
-            Log.d(TAG, "getHello()");
-            return Oauth2.endPoint.getHello();
-        }
-
-        @Override
-        public BodyText getHelloUserRead(String accessToken)
-        {
-            Log.d(TAG, "getHelloUserRead()");
-            return Oauth2.endPoint.getHelloUserRead(accessToken);
         }
 
         public Response getNotFoundMsg()

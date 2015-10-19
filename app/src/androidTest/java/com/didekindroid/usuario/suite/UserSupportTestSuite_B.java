@@ -1,6 +1,6 @@
 package com.didekindroid.usuario.suite;
 
-import com.didekindroid.usuario.security.TokenHandlerTest_B;
+import com.didekindroid.security.TokenHandlerTest_B;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 

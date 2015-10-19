@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 import com.didekin.serviceone.domain.Comunidad;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
@@ -18,7 +19,7 @@ import com.didekindroid.ioutils.ConnectionUtils;
 import com.didekindroid.usuario.activity.utils.UserAndComuFiller;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
-import com.didekindroid.usuario.security.TokenHandler;
+import com.didekindroid.security.TokenHandler;
 
 import static com.didekin.serviceone.controllers.ControllerConstant.IS_USER_DELETED;
 import static com.didekindroid.uiutils.UIutils.*;
@@ -119,7 +120,7 @@ public class UserComuDataAc extends Activity {
         if (!userComuBean.validate(getResources(), errorBuilder)) {
             makeToast(this, errorBuilder.toString());
         } else if (!ConnectionUtils.isInternetConnected(this)) {
-            makeToast(this, R.string.no_internet_conn_toast);
+            makeToast(this, R.string.no_internet_conn_toast, Toast.LENGTH_LONG);
         } else {
             UsuarioComunidad newUserComu = userComuBean.getUsuarioComunidad();
             new UserComuModifyer().execute(newUserComu);

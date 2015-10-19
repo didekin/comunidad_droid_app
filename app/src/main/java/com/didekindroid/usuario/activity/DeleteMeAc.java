@@ -11,7 +11,7 @@ import com.didekindroid.R;
 
 import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
 import static com.didekindroid.uiutils.UIutils.updateIsRegistered;
-import static com.didekindroid.usuario.security.TokenHandler.TKhandler;
+import static com.didekindroid.security.TokenHandler.TKhandler;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 import static com.google.common.base.Preconditions.checkState;
 

@@ -1,10 +1,10 @@
-package com.didekindroid.usuario.security;
+package com.didekindroid.security;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
-import com.didekin.security.OauthToken;
-import com.didekin.security.OauthToken.AccessToken;
+import com.didekin.retrofitcl.OauthToken;
+import com.didekin.retrofitcl.OauthToken.AccessToken;
 import com.didekindroid.usuario.activity.utils.UsuarioTestUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -16,10 +16,10 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Date;
 
-import static com.didekin.security.OauthTokenHelper.HELPER;
+import static com.didekin.retrofitcl.OauthTokenHelper.HELPER;
+import static com.didekindroid.security.TokenHandler.TKhandler;
+import static com.didekindroid.security.TokenHandler.refresh_token_filename;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_JUAN;
-import static com.didekindroid.usuario.security.TokenHandler.TKhandler;
-import static com.didekindroid.usuario.security.TokenHandler.refresh_token_filename;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.text.IsEmptyString.isEmptyOrNullString;

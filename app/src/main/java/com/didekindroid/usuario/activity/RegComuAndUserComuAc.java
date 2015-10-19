@@ -7,11 +7,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
+import com.didekin.serviceone.domain.DataPatterns;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.ioutils.ConnectionUtils;
-import com.didekindroid.uiutils.CommonPatterns;
-import com.didekindroid.uiutils.UIutils;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
 
@@ -66,12 +66,12 @@ public class RegComuAndUserComuAc extends Activity {
 
         // Validation of data.
         StringBuilder errorMsg = new StringBuilder(getResources().getText(R.string.error_validation_msg))
-                .append(CommonPatterns.LINE_BREAK.literal);
+                .append(DataPatterns.LINE_BREAK.getRegexp());
 
         if (!usuarioComunidadBean.validate(getResources(), errorMsg)) {
             makeToast(this, errorMsg.toString());
         } else if (!ConnectionUtils.isInternetConnected(this)) {
-            makeToast(this, R.string.no_internet_conn_toast);
+            makeToast(this, R.string.no_internet_conn_toast, Toast.LENGTH_LONG);
         } else {
             new ComuAndUserComuRegister().execute(usuarioComunidadBean.getUsuarioComunidad());
             Intent intent = new Intent(this, SeeUserComuByUserAc.class);

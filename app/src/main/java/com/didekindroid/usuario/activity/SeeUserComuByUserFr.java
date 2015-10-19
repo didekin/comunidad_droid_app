@@ -9,15 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import com.didekin.exception.ExceptionMessage;
-import com.didekin.retrofitcl.ServiceOneException;
 import com.didekin.serviceone.domain.UsuarioComunidad;
+import com.didekindroid.security.UiException;
 
 import java.util.List;
 
-import static com.didekin.exception.ExceptionMessage.getExceptionMsgFromMessage;
-import static com.didekin.exception.ExceptionMessage.getLoginRequestMsgs;
-import static com.didekindroid.uiutils.UIutils.callLogin;
 import static com.didekindroid.uiutils.ViewsIDs.SEE_USER_COMU_BY_USER;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 import static com.google.common.base.Preconditions.checkState;
@@ -37,7 +33,7 @@ public class SeeUserComuByUserFr extends ListFragment {
     private static final String TAG = SeeUserComuByUserFr.class.getCanonicalName();
 
     private SeeUserComuByUserFrListener mListener;
-    private ComuAndUserComuListByUserAdapter mAdapter;
+    private SeeUserComuByUserAdapter mAdapter;
     ListView fragmentView;
 
     @Override
@@ -55,7 +51,7 @@ public class SeeUserComuByUserFr extends ListFragment {
 
         mListener = (SeeUserComuByUserFrListener) getActivity();
         // Adapter
-        mAdapter = new ComuAndUserComuListByUserAdapter(getActivity());
+        mAdapter = new SeeUserComuByUserAdapter(getActivity());
         // Loading the data...
         new UserComuByUserLoader().execute();
     }
@@ -165,22 +161,18 @@ public class SeeUserComuByUserFr extends ListFragment {
 
     private class UserComuByUserLoader extends AsyncTask<Void, Void, List<UsuarioComunidad>> {
 
-        private boolean isCatchException;
+        UiException uiException;
 
         @Override
         protected List<UsuarioComunidad> doInBackground(Void... aVoid)
         {
             Log.d(TAG, "UserComuByUserLoader.doInBackground()");
+
             List<UsuarioComunidad> usuarioComunidades = null;
             try {
                 usuarioComunidades = ServOne.seeUserComusByUser();
-            } catch (ServiceOneException e) {
-                Log.d(TAG, e.getMessage());
-                ExceptionMessage eM = getExceptionMsgFromMessage(e.getServiceMessage());
-                if (getLoginRequestMsgs().contains(eM)) {
-                    isCatchException = true;
-                    return null;
-                }
+            } catch (UiException e) {
+                uiException = e;
             }
             return usuarioComunidades;
         }
@@ -193,10 +185,10 @@ public class SeeUserComuByUserFr extends ListFragment {
                 mAdapter.addAll(usuarioComunidades);
                 setListAdapter(mAdapter);
             }
-            if (isCatchException){
-                Log.d(TAG, "UserComuByUserLoader.onPostExecute(): isCatchException == true");
+            if (uiException != null) {  // action: LOGIN.
+                Log.d(TAG, "UserComuByUserLoader.onPostExecute(): uiException != null");
                 checkState(usuarioComunidades == null);
-                callLogin(getActivity());
+                uiException.getAction().doAction(getActivity(),uiException.getResourceId());
             }
         }
     }

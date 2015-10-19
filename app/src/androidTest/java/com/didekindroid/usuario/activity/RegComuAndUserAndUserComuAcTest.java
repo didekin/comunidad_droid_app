@@ -12,10 +12,7 @@ import com.didekindroid.usuario.activity.utils.CleanEnum;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onData;
@@ -25,12 +22,12 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.CursorMatchers.withRowString;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static com.didekindroid.security.TokenHandler.TKhandler;
 import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.*;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.checkToastInTest;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.*;
-import static com.didekindroid.usuario.security.TokenHandler.TKhandler;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_JUAN2;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.is;
@@ -56,6 +53,12 @@ public class RegComuAndUserAndUserComuAcTest {
     RegComuFr mRegComuFrg;
     RegUserComuFr mRegUserComuFrg;
     RegUserFr mRegUserFr;
+
+    @BeforeClass
+    public static void slowSeconds() throws InterruptedException
+    {
+        Thread.sleep(5000);
+    }
 
     @Before
     public void setUp() throws Exception
@@ -101,7 +104,7 @@ public class RegComuAndUserAndUserComuAcTest {
         onView(withId(R.id.reg_usuario_alias_ediT)).perform(scrollTo(), typeText("alias1"));
         onView(withId(R.id.reg_usuario_password_ediT)).perform(scrollTo(), typeText("password1"));
         onView(withId(R.id.reg_usuario_password_confirm_ediT)).perform(scrollTo(),
-                typeText("password1"),closeSoftKeyboard());
+                typeText("password1"), closeSoftKeyboard());
 
         View usuarioRegView = mActivity.findViewById(R.id.reg_user_frg);
 

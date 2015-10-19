@@ -6,6 +6,7 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekin.serviceone.domain.Comunidad;
 import com.didekindroid.R;
 import org.junit.After;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,9 +23,9 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRESIDENTE;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PROPIETARIO;
-import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.*;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_ID;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_LIST_OBJECT;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.*;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.*;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 import static org.hamcrest.Matchers.*;
@@ -66,6 +67,12 @@ public class RegUserComuAcTest_intent {
         }
     };
 
+    @BeforeClass
+    public static void slowSeconds() throws InterruptedException
+    {
+        Thread.sleep(5000);
+    }
+
     @Test
     public void testOnCreate() throws Exception
     {
@@ -92,7 +99,7 @@ public class RegUserComuAcTest_intent {
         typeRegUserComuData("portalA", "escC", "plantaB", "puerta_1", PROPIETARIO, PRESIDENTE);
         onView(withId(R.id.reg_usercomu_button)).check(matches(isDisplayed())).perform(click());
 
-        intended(hasExtra(COMUNIDAD_ID.extra,comunidad.getC_Id()));
+        intended(hasExtra(COMUNIDAD_ID.extra, comunidad.getC_Id()));
         onView(withId(R.id.see_usercomu_by_comu_ac_frg_container)).check(matches(isDisplayed()));
     }
 

@@ -35,14 +35,14 @@ public final class DomainDataUtils {
             .alias("alias_juan")
             .password("psw_juan")
             .build();
-
+    // Municipio: Elda   Provincia: Alicante/Alacant
     public static final Comunidad COMU_LA_FUENTE = new Comunidad.ComunidadBuilder()
             .tipoVia("Calle")
             .nombreVia("de la Fuente")
             .numero((short) 11)
             .municipio(new Municipio((short) 66, new Provincia((short) 3)))
             .build();
-
+    // Municipio: Alfoz   Provincia: Lugo
     public static final Comunidad COMU_LA_PLAZUELA_5 = new Comunidad.ComunidadBuilder()
             .tipoVia("Ronda")
             .nombreVia("de la Plazuela")
@@ -58,6 +58,7 @@ public final class DomainDataUtils {
             .municipio(new Municipio((short) 52, new Provincia((short) 2)))
             .build();
 
+    // Municipio:  Algueña   Provincia: Alicante/Alacant
     public static final Comunidad COMU_TRAV_PLAZUELA_11 = new Comunidad.ComunidadBuilder()
             .tipoVia("Travesía")
             .nombreVia("de la Plazuela")
@@ -65,6 +66,7 @@ public final class DomainDataUtils {
             .municipio(new Municipio((short) 13, new Provincia((short) 3)))
             .build();
 
+    // Municipio: Benizalón  Provincia: Almería
     public static final Comunidad COMU_EL_ESCORIAL = new Comunidad.ComunidadBuilder()
             .tipoVia("Calle")
             .nombreVia("de El Escorial")
@@ -72,6 +74,7 @@ public final class DomainDataUtils {
             .municipio(new Municipio((short) 27, new Provincia((short) 4)))
             .build();
 
+    // Municipio: Algueña  Provincia: Alicante/Alacant
     public static final Comunidad COMU_REAL = new Comunidad.ComunidadBuilder()
             .tipoVia("Calle")
             .nombreVia("Real")
@@ -99,6 +102,17 @@ public final class DomainDataUtils {
     public static final UsuarioComunidad COMU_TRAV_PLAZUELA_PEPE = makeUsuarioComunidad(COMU_TRAV_PLAZUELA_11, USER_PEPE,
             "portalA", null, "planta2", null, INQUILINO.function);
 
+    public static final UsuarioComunidad COMU_ESCORIAL_PEPE = makeUsuarioComunidad(COMU_EL_ESCORIAL, USER_PEPE,
+            "portal22", "esc22", "planta22", "door22", new StringBuilder(PRESIDENTE.function.concat(",")
+                    .concat(INQUILINO.function)).toString());
+
+    public static final UsuarioComunidad COMU_PLAZUELA5_PEPE = makeUsuarioComunidad(COMU_LA_PLAZUELA_5, USER_PEPE,
+            "portal11", "esc11", "planta11", "door11", new StringBuilder(PRESIDENTE.function.concat(",")
+                    .concat(PROPIETARIO.function)).toString());
+
+    public static final UsuarioComunidad COMU_LA_FUENTE_PEPE = makeUsuarioComunidad(COMU_LA_FUENTE, USER_PEPE,
+            "portal33", "esc33", "planta33", "door33", new StringBuilder(ADMINISTRADOR.function.concat(",")
+                    .concat(PRESIDENTE.function)).toString());
 
     public static Comunidad makeComunidad(String tipoVia, String nombreVia, short numero, String sufijoNumero,
                                           Municipio municipio)
@@ -111,7 +125,7 @@ public final class DomainDataUtils {
                 .build();
     }
 
-    public static Usuario makeUsuario(String userName,String alias,String password,short prefixTf,int numeroTf)
+    public static Usuario makeUsuario(String userName, String alias, String password, short prefixTf, int numeroTf)
     {
         return new Usuario.UsuarioBuilder()
                 .userName(userName)
