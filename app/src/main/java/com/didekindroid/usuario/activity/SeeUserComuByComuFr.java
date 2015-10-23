@@ -4,7 +4,6 @@ import android.app.ListFragment;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.VisibleForTesting;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,9 +34,6 @@ import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 public class SeeUserComuByComuFr extends ListFragment {
 
     private static final String TAG = SeeUserComuByComuFr.class.getCanonicalName();
-
-    @VisibleForTesting
-    public static final String HEADER = "HEADER";
 
     SeeUserComuByComuAc mActivity;
     SeeUserComutByComuListAdapter mAdapter;

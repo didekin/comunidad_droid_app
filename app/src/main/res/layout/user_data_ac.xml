@@ -1,35 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="none"
-            android:orientation="vertical"
+            style="@style/baseLayout.scroll"
             tools:context="com.didekindroid.usuario.activity.UserDataAc">
 
     <RelativeLayout android:id="@+id/user_data_ac_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    style="@style/baseLayout">
         <TextView
                 android:id="@+id/user_data_ac_rotulo"
-                android:text="@string/user_data_ac_rotulo"
-                android:textStyle="bold"
-                android:textSize="@dimen/text_rotulo_fragment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
+                style="@style/textBase.textPageLabel1"
+                android:text="@string/user_data_ac_label"
                 android:layout_alignParentStart="true"/>
 
         <TextView
                 android:id="@+id/user_data_ac_cambios_rot"
+                style="@style/textBase.textFieldLabel2"
                 android:text="@string/user_data_ac_cambios_text"
-                android:textStyle="normal"
-                android:textSize="@dimen/text_hint_size"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:layout_alignParentStart="true"
                 android:layout_below="@id/user_data_ac_rotulo"/>
 
@@ -42,42 +28,23 @@
 
         <TextView
                 android:id="@+id/user_data_ac_password_rot"
+                style="@style/textBase.textFieldLabel2"
                 android:text="@string/user_data_ac_password_txt"
-                android:textStyle="normal"
-                android:textSize="@dimen/text_hint_size"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:layout_alignParentStart="true"
                 android:layout_below="@id/user_data_ac_include"/>
 
         <EditText
                 android:id="@+id/user_data_ac_password_ediT"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                android:textSize="@dimen/text_hint_size"
-                android:imeOptions="actionNext"
-                android:maxEms="50"
+                style="@style/textBase.editField.password"
                 android:hint="@string/user_data_ac_password_hint"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:layout_alignParentStart="true"
                 android:layout_below="@id/user_data_ac_password_rot"/>
 
         <Button
                 android:id="@+id/user_data_modif_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textSize="@dimen/text_decription_widget"
+                style="@style/textBase.acButton1"
                 android:text="@string/user_data_modif_button_txt"
-                android:layout_below="@id/user_data_ac_password_ediT"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="@dimen/activity_vertical_double_margin"
-                android:layout_alignParentStart="true"
-                />
+                android:layout_below="@id/user_data_ac_password_ediT"/>
 
     </RelativeLayout>
 </ScrollView>

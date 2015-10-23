@@ -1,5 +1,6 @@
 package com.didekindroid.usuario.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -52,6 +53,7 @@ public class UserComuDataAc extends Activity {
     private UsuarioComunidad mOldUserComu;
     private MenuItem mComuDataItem;
 
+    @SuppressLint("InflateParams")
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {

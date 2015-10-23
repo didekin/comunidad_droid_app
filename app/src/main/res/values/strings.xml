@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools"
            tools:locale="ES">
-    <string name="app_name">didekin</string>
+    <string name="app_name">Didekin</string>
     <!--*****************************************************************************-->
     <!--                                 GENERIC                                     -->
     <!--*****************************************************************************-->
@@ -10,27 +10,9 @@
     <string name="checkbox_si">Sí</string>
     <string name="checkbox_no">No</string>
     <!--Menús-->
-    <string name="mn_search">Buscar</string>
-    <string name="mn_budgets">Mis presupuestos</string>
-    <string name="mn_incidents">Mis incidencias</string>
-    <string name="mn_alerts">Mis alertas</string>
-    <string name="mn_settings">Mi configuración</string>
     <!--Messages-->
     <string name="no_internet_conn_toast">No hay conexión de red disponible.</string>
     <string name="error_action_in_DB">Error en conexión a base de datos.</string>
-    <!--******************************************************************************-->
-    <!--                                  OFERTA                                      -->
-    <!--******************************************************************************-->
-    <string name="ofertas_label">Ofertas</string>
-    <!--Settings-->
-    <string name="ofertas_settings_label">Configuración ofertas</string>
-    <string name="maxOffers_keyPref">maxOffers_pref</string>
-    <string name="maxOffers_titlePref">Número de ofertas por búsqueda.</string>
-    <string name="maxOffers_summaryPref">Número de ofertas por descarga.</string>
-    <!--******************************************************************************-->
-    <!--                                  PRESUPUESTO                                 -->
-    <!--******************************************************************************-->
-    <string name="mi_presupuesto_label">Mis presupuestos</string>
     <!--******************************************************************************-->
     <!--                                  USUARIO                                     -->
     <!--******************************************************************************-->
@@ -51,57 +33,57 @@
     <!-- ============================= MENUS ================================= -->
     <string name="comu_data_ac_mn">Datos comunidad</string>
     <string name="comu_search_ac_mn">Buscar comunidad</string>
-    <string name="delete_me_ac_mn">Borrar mis datos</string>
+    <string name="delete_me_ac_mn">Borrar tus datos</string>
     <string name="password_change_ac_mn">Renovar contraseña</string>
     <string name="reg_comu_user_usercomu_ac_mn">Nueva comunidad</string>
     <!--Válido para reg_comu_usercomu-->
-    <string name="reg_user_and_usercomu_ac_mn">Unirme</string>
+    <string name="reg_user_and_usercomu_ac_mn">Unirte</string>
     <string name="see_usercomu_by_comu_ac_mn">Vecinos</string>
-    <string name="see_usercomu_by_user_ac_mn">Mis comunidades</string>
-    <string name="user_data_ac_mn">Mi usuario</string>
+    <string name="see_usercomu_by_user_ac_mn">Tus comunidades</string>
+    <string name="user_data_ac_mn">Tu usuario</string>
     <!-- ============================= ACTIVITIES ============================= -->
     <!-- =============== ComuDataActivity =============== -->
     <string name="comu_data_ac_label">Datos comunidad</string>
-    <string name="comu_data_ac_button_txt">Modifico datos comunidad</string>
+    <string name="comu_data_ac_button_txt">Modificar datos</string>
     <!-- ================= ComuSearchAc ================= -->
     <string name="comu_search_ac_label">Buscar comunidad</string>
     <!-- =============== ComuSearchResultsAc ============ -->
     <string name="comu_search_results_ac_label">Comunidades encontradas</string>
     <!-- ........ ComuSearchResultsListFr ......... -->
-    <string name="rotulo_comunidad">Mi comunidad</string>
+    <string name="rotulo_comunidad">Tu comunidad</string>
     <!-- ================= DeleteMeAc ===================== -->
-    <string name="delete_me_ac_label">Borrar mis datos</string>
-    <string name="delete_me_ac_unreg_rot_txt">¿Deseas eliminar tus datos en didekin?</string>
-    <string name="delete_me_ac_unreg_button_txt">Sí, borro todos mis datos</string>
+    <string name="delete_me_ac_label">Borrar tus datos</string>
+    <string name="delete_me_ac_unreg_rot_txt">¿Deseas eliminar tus datos en Didekin?</string>
+    <string name="delete_me_ac_unreg_button_txt">Sí, borrad todos mis datos</string>
     <!--================= LoginAc =================== -->
     <string name="login_label">Login</string>
-    <string name="login_ac_rotulo">Inicio de sesión:</string>
-    <string name="login_ac_button_txt">Valido mis datos</string>
+    <string name="login_ac_rotulo">Inicio de sesión</string>
+    <string name="login_ac_button_txt">Valida tus datos</string>
     <!-- ================== PasswordChangeAc ============== -->
     <string name="password_change_ac_label">didekin</string>
     <string name="password_change_ac_rotulo">Nueva contraseña</string>
-    <string name="password_change_ac_button_txt">Cambio mi contraseña</string>
+    <string name="password_change_ac_button_txt">Cambia tu contraseña</string>
     <!-- ================ RegUserAndUserComuAc =========== -->
-    <string name="reg_user_and_usercomu_ac_label">Asociarme a la comunidad</string>
+    <string name="reg_user_and_usercomu_ac_label">Asociarte a la comunidad</string>
     <!-- =========== RegComuAndUserAndUserComuAc ========= -->
     <string name="reg_comunidad_ac_label">Nueva comunidad</string>
     <!-- ........... RegUserFr ......... -->
-    <string name="reg_usuario_rotulo">Mis datos</string>
-    <string name="usuario_password_hint">contraseña (letras,números,_)</string>
-    <string name="usuario_password_confirm_hint">confirmación de la contraseña</string>
-    <string name="alias">Alias</string>
-    <string name="usuario_alias_hint">nombre o alias (6-30 caracteres: letras,números, y _)</string>
+    <string name="reg_usuario_rotulo">Tus datos</string>
+    <string name="usuario_password_hint">Contraseña (letras,números,_)</string>
+    <string name="usuario_password_confirm_hint">Confirmación contraseña</string>
+    <string name="alias">Nombre</string>
+    <string name="usuario_alias_hint">Nombre (6-30 caracteres: letras, números, _)</string>
     <string name="email_hint">Correo electrónico</string>
     <string name="password">Contraseña</string>
     <string name="password_different"> (las contraseñas no coinciden)</string>
     <!-- .......... RegUserComuFr ....... -->
-    <string name="reg_usercomu_vivienda_rot">Mi vivienda</string>
+    <string name="reg_usercomu_vivienda_rot">Tu vivienda</string>
     <string name="reg_usercomu_portal_hint">Portal</string>
     <string name="reg_usercomu_escalera_hint">Escalera</string>
     <string name="reg_usercomu_planta_hint">Planta</string>
     <string name="reg_usercomu_puerta_hint">Puerta</string>
     <string name="reg_usercomu_role_checkbox_rot">Vínculo (uno o más):</string>
-    <string name="reg_usercomu_ac_button_rot">Adherirme a la comunidad</string>
+    <string name="reg_usercomu_ac_button_rot">Adherirte a la comunidad</string>
     <!--para mensaje de error validación y rótulos de campos  -->
     <string name="reg_usercomu_checkbox_pre_rot">Presidente</string>
     <string name="reg_usercomu_checbox_admin_rot">Administrador</string>
@@ -128,19 +110,18 @@
     <string name="usercomu_escalera_rot">Escalera:</string>
     <string name="usercomu_planta_rot">Planta:</string>
     <string name="usercomu_puerta_rot">Puerta:</string>
-    <string name="usercomu_role_rot">Vínculo con la comunidad:</string>
+    <string name="usercomu_role_rot">Vínculo:</string>
     <!-- ================= SeeUserComuByUserAc ============ -->
     <string name="see_usercomu_by_user_ac_label">Mis comunidades</string>
     <!-- ================= UserDataAc ===================== -->
-    <string name="user_data_ac_label">Mis datos</string>
-    <string name="user_data_ac_rotulo">Mis datos</string>
-    <string name="user_data_ac_cambios_text">Sobrescribe el dato que quieras modificar.</string>
-    <string name="user_data_ac_password_txt">Valida los cambios introduciendo tu contraseña:</string>
-    <string name="user_data_ac_password_hint">contraseña actual</string>
-    <string name="user_data_modif_button_txt">Modifico mis datos</string>
+    <string name="user_data_ac_label">Tus datos</string>
+    <string name="user_data_ac_cambios_text">Sobrescribe el dato a modificar</string>
+    <string name="user_data_ac_password_txt">Valida los cambios introduciendo tu contraseña</string>
+    <string name="user_data_ac_password_hint">Contraseña actual</string>
+    <string name="user_data_modif_button_txt">Modifica tus datos</string>
     <!-- ================= UserComuDataAc ===================== -->
     <string name="usercomu_data_ac_label">En la comunidad</string>
-    <string name="usercomu_data_ac_delete_txt">Para borrar mis datos en esta comunidad:</string>
-    <string name="usercomu_data_ac_delete_button_txt">Me doy de baja en la comunidad</string>
+    <string name="usercomu_data_ac_delete_txt">Para borrar tus datos en esta comunidad:</string>
+    <string name="usercomu_data_ac_delete_button_txt">Date de baja en la comunidad</string>
 
 </resources>

@@ -40,6 +40,9 @@ public class RegComuAndUserAndUserComuAc extends Activity {
     RegUserFr mRegUserFr;
     private Button mRegistroButton;
 
+    // TODO: añadir un campo de número de vecinos en la comunidad (aprox.).
+    // TODO: recoger dato de localización en el alta. Control de altas masivas y remotas. Excluir Administrador.
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {

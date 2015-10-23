@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
 
+    <!--suppress AndroidDomInspection -->
     <instrumentation
             android:name="android.support.test.runner.AndroidJUnitRunner"
             android:targetPackage="com.didekindroid"/>
@@ -20,24 +21,7 @@
             android:allowBackup="false"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.Holo">
-
-        <!-- ================ OFERTA =============== -->
-        <!-- .......... Oferta ......... -->
-        <activity
-                android:name=".oferta.OfertaActivity"
-                android:label="@string/ofertas_label">
-        </activity>
-        <activity
-                android:name=".oferta.OfertaSettingsActivity"
-                android:label="@string/ofertas_settings_label"
-                android:parentActivityName=".oferta.OfertaActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MANAGE_NETWORK_USAGE"/>
-
-                <category android:name="android.intent.category.DEFAULT"/>
-            </intent-filter>
-        </activity>
+            android:theme="@style/Theme.AppCompat.Light">
 
         <!-- **************************************************************** -->
         <!-- USUARIO -->
@@ -84,7 +68,8 @@
                 android:label="@string/reg_comunidad_ac_label"
                 android:launchMode="singleTask"
                 android:parentActivityName=".usuario.activity.ComuSearchAc">
-        </activity>
+        </activity>º
+
         <activity
                 android:name=".usuario.activity.RegUserAndUserComuAc"
                 android:label="@string/reg_user_and_usercomu_ac_label"

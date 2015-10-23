@@ -1,5 +1,6 @@
 package com.didekindroid.usuario.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -44,6 +45,7 @@ public class UserDataAc extends Activity {
     private Button mModifyButton;
     private Usuario mOldUser;
 
+    @SuppressLint("InflateParams")
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {

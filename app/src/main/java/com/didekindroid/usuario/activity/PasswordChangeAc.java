@@ -1,5 +1,6 @@
 package com.didekindroid.usuario.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -32,6 +33,7 @@ public class PasswordChangeAc extends Activity {
     private View mAcView;
     private Button mModifyButton;
 
+    @SuppressLint("InflateParams")
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {

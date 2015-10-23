@@ -14,13 +14,12 @@ apply plugin: 'idea'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.0"
+    buildToolsVersion "23.0.1"
     sourceCompatibility = 1.7
     targetCompatibility = 1.7
-
     defaultConfig {
         applicationId "com.didekindroid"
-        minSdkVersion 19
+        minSdkVersion 18
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -30,14 +29,12 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
     }
-
     lintOptions {
         checkReleaseBuilds false
         // Or, if you prefer, you can continue to check for errors in release builds,
         // but continue the build even when errors are found:
         abortOnError false
     }
-
     buildTypes {
         release {
             minifyEnabled false
@@ -48,13 +45,13 @@ android {
             applicationIdSuffix ".debug"
         }
     }
-
     dexOptions {
         preDexLibraries = false
     }
-
     project.tasks.withType(Dex) {
         additionalParameters = ['--core-library']
+    }
+    productFlavors {
     }
 }
 
@@ -62,16 +59,16 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.google.guava:guava:18.0'
     compile 'com.squareup.retrofit:retrofit:1.9.0'
-    compile 'com.android.support:appcompat-v7:23.0.1'
+    compile 'com.android.support:design:23.1.0'
+    compile 'com.android.support:appcompat-v7:23.1.0'
     compile project(':retrofit_cl')
     compile files('../libs/serv_one_lib-0.2.jar')
-    androidTestCompile 'com.android.support:support-annotations:23.0.1'
-    androidTestCompile 'com.android.support.test:runner:0.3'
-    androidTestCompile 'com.android.support.test:rules:0.3'
-    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2'
-    androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2'
+    androidTestCompile 'com.android.support:support-annotations:23.1.0'
+    androidTestCompile 'com.android.support.test:runner:0.4.1'
+    androidTestCompile 'com.android.support.test:rules:0.4.1'
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
+    androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2.1'
     androidTestCompile project(':javabeans')
-    androidTestCompile files('../retrofit_cl/build/libs/retrofit_cl_tests.jar')
 }
 
 task wrapper(type: Wrapper) {

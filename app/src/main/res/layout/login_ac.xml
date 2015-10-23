@@ -1,59 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                style="@style/baseLayout"
                 android:id="@+id/login_ac_layout">
 
     <TextView
             android:id="@+id/reg_usuario_rotulo"
             android:text="@string/login_ac_rotulo"
-            android:textStyle="bold"
-            android:textSize="@dimen/text_decription_widget"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
+            style="@style/textBase.textPageLabel1"
             android:layout_alignParentStart="true"/>
 
     <EditText
             android:id="@+id/reg_usuario_email_editT"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
-            android:textSize="@dimen/text_hint_size"
-            android:imeOptions="actionNext"
-            android:maxEms="60"
-            android:hint="@string/email_hint"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
+            style="@style/textBase.editField.email"
             android:layout_alignParentStart="true"
             android:layout_below="@id/reg_usuario_rotulo"/>
 
     <EditText
             android:id="@+id/reg_usuario_password_ediT"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:textSize="@dimen/text_hint_size"
-            android:imeOptions="actionNext"
-            android:maxEms="50"
-            android:hint="@string/password"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
+            style="@style/textBase.editField.password"
             android:layout_alignParentStart="true"
             android:layout_below="@id/reg_usuario_email_editT"/>
 
     <Button
             android:id="@+id/login_ac_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textSize="@dimen/text_decription_widget"
+            style="@style/textBase.acButton1"
             android:text="@string/login_ac_button_txt"
             android:layout_below="@id/reg_usuario_password_ediT"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="@dimen/activity_vertical_double_margin"
-            android:layout_alignParentStart="true"
             />
 </RelativeLayout>

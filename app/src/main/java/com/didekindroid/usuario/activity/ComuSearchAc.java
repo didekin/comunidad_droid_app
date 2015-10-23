@@ -1,9 +1,9 @@
 package com.didekindroid.usuario.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,13 +33,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * -- sufijoNumero (it can be an empty string).
  * -- municipio with codInProvincia and provinciaId.
  */
-public class ComuSearchAc extends Activity {
+public class ComuSearchAc extends AppCompatActivity {
 
     private static final String TAG = ComuSearchAc.class.getCanonicalName();
 
     RegComuFr mRegComuFrg;
     protected View mMainView;
-    private Button mSearchButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -55,7 +54,7 @@ public class ComuSearchAc extends Activity {
         setContentView(mMainView);
         mRegComuFrg = (RegComuFr) getFragmentManager().findFragmentById(R.id.reg_comunidad_frg);
 
-        mSearchButton = (Button) findViewById(R.id.searchComunidad_Bton);
+        Button mSearchButton = (Button) findViewById(R.id.searchComunidad_Bton);
 
         mSearchButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -149,10 +148,9 @@ public class ComuSearchAc extends Activity {
         @Override
         protected void onPostExecute(AccessToken accessToken)
         {
-            boolean isRegisteredUser = (accessToken != null ? true : false);
-            Log.d(TAG, "CheckerTokenInCache.onPostExecute(): isRegisteredUser = " + isRegisteredUser);
-            if (!isRegisteredUser) {
-                updateIsRegistered(isRegisteredUser, ComuSearchAc.this);
+            Log.d(TAG, "CheckerTokenInCache.onPostExecute()");
+            if (accessToken == null) {
+                updateIsRegistered(false, ComuSearchAc.this);
             }
         }
     }

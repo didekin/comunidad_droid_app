@@ -1,28 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                style="@style/baseLayout"
                 android:id="@+id/usercomu_include_layout">
+
     <TextView
             android:id="@+id/usercomu_item_portal_rot"
+            style="@style/textBase.textFieldLabel2"
             android:text="@string/usercomu_portal_rot"
-            android:textStyle="normal"
-            android:visibility="visible"
-            android:textSize="@dimen/text_hint_size"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
             android:layout_alignParentStart="true"/>
 
     <TextView
             android:id="@+id/usercomu_item_portal_txt"
-            android:textStyle="normal"
-            android:visibility="visible"
-            android:textSize="@dimen/text_decription_widget"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            style="@style/textBase.textFieldLabel1"
+            android:layout_marginTop="0dp"
             android:layout_toEndOf="@id/usercomu_item_portal_rot"
             android:layout_alignTop="@id/usercomu_item_portal_rot"
             android:layout_alignBottom="@id/usercomu_item_portal_rot"/>
@@ -30,24 +20,17 @@
     <TextView
             android:id="@+id/usercomu_item_escalera_rot"
             android:text="@string/usercomu_escalera_rot"
-            android:textStyle="normal"
-            android:visibility="visible"
-            android:textSize="@dimen/text_hint_size"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            style="@style/textBase.textFieldLabel2"
+            android:layout_marginStart="@dimen/activity_horizontal_double_margin"
+            android:layout_marginTop="0dp"
             android:layout_toEndOf="@id/usercomu_item_portal_txt"
             android:layout_alignTop="@id/usercomu_item_portal_rot"
             android:layout_alignBottom="@id/usercomu_item_portal_rot"/>
 
     <TextView
             android:id="@+id/usercomu_item_escalera_txt"
-            android:textStyle="normal"
-            android:visibility="visible"
-            android:textSize="@dimen/text_decription_widget"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            style="@style/textBase.textFieldLabel1"
+            android:layout_marginTop="0dp"
             android:layout_toEndOf="@id/usercomu_item_escalera_rot"
             android:layout_alignTop="@id/usercomu_item_escalera_rot"
             android:layout_alignBottom="@id/usercomu_item_escalera_rot"/>
@@ -55,24 +38,14 @@
     <TextView
             android:id="@+id/usercomu_item_planta_rot"
             android:text="@string/usercomu_planta_rot"
-            android:textStyle="normal"
-            android:visibility="visible"
-            android:textSize="@dimen/text_hint_size"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
+            style="@style/textBase.textFieldLabel2"
             android:layout_alignParentStart="true"
             android:layout_below="@id/usercomu_item_portal_rot"/>
 
     <TextView
             android:id="@+id/usercomu_item_planta_txt"
-            android:textStyle="normal"
-            android:visibility="visible"
-            android:textSize="@dimen/text_decription_widget"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            style="@style/textBase.textFieldLabel1"
+            android:layout_marginTop="0dp"
             android:layout_toEndOf="@id/usercomu_item_planta_rot"
             android:layout_alignTop="@id/usercomu_item_planta_rot"
             android:layout_alignBottom="@id/usercomu_item_planta_rot"/>
@@ -80,24 +53,17 @@
     <TextView
             android:id="@+id/usercomu_item_puerta_rot"
             android:text="@string/usercomu_puerta_rot"
-            android:textStyle="normal"
-            android:visibility="visible"
-            android:textSize="@dimen/text_hint_size"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            style="@style/textBase.textFieldLabel2"
+            android:layout_marginTop="0dp"
+            android:layout_marginStart="@dimen/activity_horizontal_double_margin"
             android:layout_toEndOf="@id/usercomu_item_planta_txt"
             android:layout_alignTop="@id/usercomu_item_planta_rot"
             android:layout_alignBottom="@id/usercomu_item_planta_rot"/>
 
     <TextView
             android:id="@+id/usercomu_item_puerta_txt"
-            android:textStyle="normal"
-            android:visibility="visible"
-            android:textSize="@dimen/text_decription_widget"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            style="@style/textBase.textFieldLabel1"
+            android:layout_marginTop="0dp"
             android:layout_toEndOf="@id/usercomu_item_puerta_rot"
             android:layout_alignTop="@id/usercomu_item_puerta_rot"
             android:layout_alignBottom="@id/usercomu_item_puerta_rot"/>
@@ -105,24 +71,14 @@
     <TextView
             android:id="@+id/usercomu_item_roles_rotulo"
             android:text="@string/usercomu_role_rot"
-            android:textStyle="normal"
-            android:visibility="visible"
-            android:textSize="@dimen/text_hint_size"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
+            style="@style/textBase.textFieldLabel2"
             android:layout_alignParentStart="true"
             android:layout_below="@id/usercomu_item_planta_rot"/>
 
     <TextView
             android:id="@+id/usercomu_item_roles_txt"
-            android:textStyle="normal"
-            android:visibility="visible"
-            android:textSize="@dimen/text_decription_widget"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            style="@style/textBase.textFieldLabel1"
+            android:layout_marginTop="0dp"
             android:layout_toEndOf="@id/usercomu_item_roles_rotulo"
             android:layout_alignTop="@id/usercomu_item_roles_rotulo"
             android:layout_alignBottom="@id/usercomu_item_roles_rotulo"/>

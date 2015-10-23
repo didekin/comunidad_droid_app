@@ -1,23 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="none"
-            android:orientation="vertical"
-        >
+            style="@style/baseLayout.scroll">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                     xmlns:tools="http://schemas.android.com/tools"
                     android:id="@+id/reg_comu_usuario_usuariocomu_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    style="@style/baseLayout"
                     tools:context="com.didekindroid.usuario.activity.RegComuAndUserAndUserComuAc">
 
         <fragment
                 android:id="@+id/reg_comunidad_frg"
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
-                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:name="com.didekindroid.usuario.activity.RegComuFr"
                 tools:layout="@layout/reg_comu_fr"/>
 
@@ -25,7 +20,7 @@
                 android:id="@+id/reg_usercomu_frg"
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
-                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:layout_below="@id/reg_comunidad_frg"
                 android:name="com.didekindroid.usuario.activity.RegUserComuFr"
                 tools:layout="@layout/reg_usercomu_fr"/>
@@ -34,21 +29,16 @@
                 android:id="@+id/reg_user_frg"
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
-                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:layout_below="@id/reg_usercomu_frg"
                 android:name="com.didekindroid.usuario.activity.RegUserFr"
                 tools:layout="@layout/reg_user_fr"/>
+
         <Button
                 android:id="@+id/reg_com_usuario_usuariocomu_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textSize="@dimen/text_decription_widget"
+                style="@style/textBase.acButton1"
                 android:text="@string/reg_usercomu_ac_button_rot"
                 android:layout_below="@id/reg_user_frg"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="@dimen/activity_vertical_double_margin"
-                android:layout_alignParentLeft="true"
                 />
 
     </RelativeLayout>

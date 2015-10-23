@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -42,7 +41,6 @@ public class ComuSearchResultsAc extends Activity implements ComuSearchResultsLi
     // The comunidad index currently being displayed.
     int mIndex;
 
-    @Nullable
     List<Comunidad> mUsuarioComunidades;
 
     @Override
@@ -171,7 +169,6 @@ public class ComuSearchResultsAc extends Activity implements ComuSearchResultsLi
     private class ComunidadesUsuarioGetter extends AsyncTask<Void, Void, List<Comunidad>> {
 
         @Override
-        @Nullable
         protected List<Comunidad> doInBackground(Void... params)
         {
             Log.d(ComuSearchResultsAc.TAG, ".ComunidadesUsuarioGetter.doInBackground()");

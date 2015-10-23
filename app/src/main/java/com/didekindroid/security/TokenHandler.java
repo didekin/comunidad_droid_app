@@ -33,7 +33,7 @@ public enum TokenHandler {
     public static final String refresh_token_filename = "tk_file";
 
     private final Cache<String, AccessToken> tokensCache;
-    private String refreshTokenKey;
+    private volatile String refreshTokenKey;
     private final File refreshTokenFile;
 
     TokenHandler()
@@ -47,11 +47,6 @@ public enum TokenHandler {
         refreshTokenKey = refreshTokenFile.exists() ? IoHelper.readStringFromFile(refreshTokenFile) : null;
     }
 
-    /*  Called from the signup activity which does a password flow authentication:
-        1. login.
-        2. password or user modifications.
-        Initialize the accessToken associated to the refreshToken and write to file this token.
-    */
     public synchronized void initKeyCacheAndBackupFile(AccessToken accessToken)
     {
         Log.d(TAG, "initKeyCacheAndBackupFile()");
@@ -64,12 +59,12 @@ public enum TokenHandler {
         tokensCache.put(refreshTokenKey, accessToken);
     }
 
-    public synchronized void cleanCacheAndBckFile()
+    public void cleanCacheAndBckFile()
     {
         Log.d(TAG, "cleanCacheAndBckFile()");
 
-        getRefreshTokenFile().delete();
-        getTokensCache().invalidateAll();
+        refreshTokenFile.delete();
+        tokensCache.invalidateAll();
         refreshTokenKey = null;
     }
 

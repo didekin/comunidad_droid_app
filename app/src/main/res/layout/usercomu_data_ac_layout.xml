@@ -1,26 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="none"
-            android:orientation="vertical"
+            style="@style/baseLayout.scroll"
             tools:context="com.didekindroid.usuario.activity.UserComuDataAc">
 
     <RelativeLayout
             android:id="@+id/usercomu_data_ac_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            style="@style/baseLayout">
 
         <TextView
                 android:id="@+id/usercomu_data_ac_modif_txt"
+                style="@style/textBase.textFieldLabel2"
                 android:text="@string/user_data_ac_cambios_text"
-                android:textStyle="normal"
-                android:textSize="@dimen/text_hint_size"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:layout_alignParentStart="true"/>
 
         <include
@@ -33,40 +24,20 @@
 
         <Button
                 android:id="@+id/usercomu_data_ac_modif_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textSize="@dimen/text_decription_widget"
+                style="@style/textBase.acButton1"
                 android:text="@string/user_data_modif_button_txt"
-                android:layout_below="@id/usercomu_data_ac_reg_usercomu_include"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="@dimen/activity_vertical_double_margin"
-                android:layout_alignParentStart="true"
-                />
+                android:layout_below="@id/usercomu_data_ac_reg_usercomu_include" />
 
         <TextView
                 android:id="@+id/usercomu_data_ac_delete_txt"
+                style="@style/textBase.textFieldLabel2"
                 android:text="@string/usercomu_data_ac_delete_txt"
-                android:textStyle="normal"
-                android:textSize="@dimen/text_hint_size"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="@dimen/activity_vertical_double_margin"
-                android:layout_alignParentStart="true"
                 android:layout_below="@id/usercomu_data_ac_modif_button"/>
 
         <Button
                 android:id="@+id/usercomu_data_ac_delete_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textSize="@dimen/text_decription_widget"
+                style="@style/textBase.acButton1"
                 android:text="@string/usercomu_data_ac_delete_button_txt"
-                android:layout_below="@id/usercomu_data_ac_delete_txt"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="@dimen/activity_vertical_double_margin"
-                android:layout_alignParentStart="true"
-                />
+                android:layout_below="@id/usercomu_data_ac_delete_txt"/>
     </RelativeLayout>
 </ScrollView>
