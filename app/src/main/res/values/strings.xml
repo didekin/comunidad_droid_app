@@ -72,7 +72,7 @@
     <string name="usuario_password_hint">Contraseña (letras,números,_)</string>
     <string name="usuario_password_confirm_hint">Confirmación contraseña</string>
     <string name="alias">Nombre</string>
-    <string name="usuario_alias_hint">Nombre (6-30 caracteres: letras, números, _)</string>
+    <string name="usuario_alias_hint">Nombre (6–30 caracteres: letras, números, _)</string>
     <string name="email_hint">Correo electrónico</string>
     <string name="password">Contraseña</string>
     <string name="password_different"> (las contraseñas no coinciden)</string>
@@ -83,13 +83,13 @@
     <string name="reg_usercomu_planta_hint">Planta</string>
     <string name="reg_usercomu_puerta_hint">Puerta</string>
     <string name="reg_usercomu_role_checkbox_rot">Vínculo (uno o más):</string>
-    <string name="reg_usercomu_ac_button_rot">Adherirte a la comunidad</string>
+    <string name="reg_usercomu_ac_button_rot">Adhiérete a la comunidad</string>
     <!--para mensaje de error validación y rótulos de campos  -->
     <string name="reg_usercomu_checkbox_pre_rot">Presidente</string>
     <string name="reg_usercomu_checbox_admin_rot">Administrador</string>
     <string name="reg_usercomu_checbox_pro_rot">Propietario</string>
     <string name="reg_usercomu_checbox_inq_rot">Arrendatario</string>
-    <string name="reg_usercomu_role_rot">Vínculo con la comunidad:</string>
+    <string name="reg_usercomu_role_rot">Vínculo con la comunidad</string>
     <string name="comunidad_null">Comunidad</string>
     <!-- .......... RegComuFr ........... -->
     <string name="municipio_spinner">municipio</string>
@@ -105,12 +105,12 @@
     <!-- ================== RegUserComuAc ================= -->
     <string name="regusuario_comu_ac_label">Comunidad seleccionada</string>
     <!-- ================= SeeUserComuByComuAc ============ -->
-    <string name="see_usercomu_by_comu_ac_label"></string>
+    <string name="see_usercomu_by_comu_ac_label">Vecinos</string>
     <string name="usercomu_portal_rot">Portal:</string>
     <string name="usercomu_escalera_rot">Escalera:</string>
     <string name="usercomu_planta_rot">Planta:</string>
     <string name="usercomu_puerta_rot">Puerta:</string>
-    <string name="usercomu_role_rot">Vínculo:</string>
+    <string name="usercomu_role_rot">Vínculo: </string>
     <!-- ================= SeeUserComuByUserAc ============ -->
     <string name="see_usercomu_by_user_ac_label">Mis comunidades</string>
     <!-- ================= UserDataAc ===================== -->

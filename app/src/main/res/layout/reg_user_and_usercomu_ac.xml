@@ -1,51 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            style="@style/baseLayout.scroll">
+    style="@style/baseLayout.scroll">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:tools="http://schemas.android.com/tools"
-                    android:id="@+id/reg_user_and_usercomu_ac_layout"
-                    style="@style/baseLayout"
-                    tools:context="com.didekindroid.usuario.activity.RegUserAndUserComuAc">
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/reg_user_and_usercomu_ac_layout"
+        style="@style/baseLayout"
+        tools:context="com.didekindroid.usuario.activity.RegUserAndUserComuAc">
+
+        <include layout="@layout/appbar_include" />
 
         <TextView
-                android:id="@+id/rotulo_comunidad"
-                style="@style/textBase.textPageLabel2"
-                android:text="@string/rotulo_comunidad"
-                android:layout_alignParentStart="true"/>
+            android:id="@+id/rotulo_comunidad"
+            style="@style/textBase.textPageLabel2"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="?attr/actionBarSize"
+            android:text="@string/rotulo_comunidad" />
 
         <TextView
-                android:id="@+id/descripcion_comunidad_text"
-                style="@style/textBase.textFieldLabel1"
-                android:layout_marginTop="0dp"
-                android:layout_toEndOf="@id/rotulo_comunidad"
-                android:layout_alignTop="@id/rotulo_comunidad"
-                android:layout_alignBottom="@id/rotulo_comunidad"
-                />
+            android:id="@+id/descripcion_comunidad_text"
+            style="@style/textBase.textFieldLabel1"
+            android:layout_alignBottom="@id/rotulo_comunidad"
+            android:layout_alignTop="@id/rotulo_comunidad"
+            android:layout_marginTop="0dp"
+            android:layout_toEndOf="@id/rotulo_comunidad" />
 
         <fragment
-                android:id="@+id/reg_usercomu_frg"
-                android:layout_height="match_parent"
-                android:layout_width="match_parent"
-                android:layout_alignParentStart="true"
-                android:layout_below="@id/rotulo_comunidad"
-                android:name="com.didekindroid.usuario.activity.RegUserComuFr"
-                tools:layout="@layout/reg_usercomu_fr"/>
+            android:id="@+id/reg_usercomu_frg"
+            android:name="com.didekindroid.usuario.activity.RegUserComuFr"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/rotulo_comunidad"
+            tools:layout="@layout/reg_usercomu_fr" />
 
         <fragment
-                android:id="@+id/reg_user_frg"
-                android:layout_height="match_parent"
-                android:layout_width="match_parent"
-                android:layout_alignParentStart="true"
-                android:layout_below="@id/reg_usercomu_frg"
-                android:name="com.didekindroid.usuario.activity.RegUserFr"
-                tools:layout="@layout/reg_user_fr"/>
+            android:id="@+id/reg_user_frg"
+            android:name="com.didekindroid.usuario.activity.RegUserFr"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/reg_usercomu_frg"
+            tools:layout="@layout/reg_user_fr" />
 
         <Button
-                android:id="@+id/reg_user_usercomu_button"
-                style="@style/textBase.acButton1"
-                android:text="@string/reg_usercomu_ac_button_rot"
-                android:layout_below="@id/reg_user_frg"/>
+            android:id="@+id/reg_user_usercomu_button"
+            style="@style/textBase.acButton1"
+            android:layout_below="@id/reg_user_frg"
+            android:text="@string/reg_usercomu_ac_button_rot" />
 
     </RelativeLayout>
 </ScrollView>

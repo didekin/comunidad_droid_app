@@ -4,31 +4,63 @@ import android.content.Intent;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
-import com.didekin.serviceone.domain.*;
+
+import com.didekin.serviceone.domain.Comunidad;
+import com.didekin.serviceone.domain.Municipio;
+import com.didekin.serviceone.domain.Provincia;
+import com.didekin.serviceone.domain.Usuario;
+import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.usuario.activity.utils.CleanEnum;
 import com.didekindroid.usuario.dominio.DomainDataUtils;
+
+import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matchers;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Rule;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.security.TokenHandler.TKhandler;
-import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
-import static com.didekindroid.uiutils.ViewsIDs.COMU_SEARCH_RESULTS;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PROPIETARIO;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_SEARCH;
-import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.*;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.*;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.checkToastInTest;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanTwoUsers;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanWithTkhandler;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.regThreeUserComuSameUser;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.regTwoUserComuSameUser;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAndUpdateTk;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_LA_PLAZUELA_5;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_JUAN;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.makeComunidad;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.makeListTwoUserComu;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.makeUsuario;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.makeUsuarioComunidad;
+import static com.didekindroid.utils.UIutils.isRegisteredUser;
+import static com.didekindroid.utils.ViewsIDs.COMU_SEARCH_RESULTS;
 import static com.google.android.apps.common.testing.ui.espresso.sample.LongListMatchers.withAdaptedData;
 import static com.google.common.base.Preconditions.checkState;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -63,6 +95,21 @@ public class ComuSearchResultsAcTest_1 {
         whatClean = CleanEnum.CLEAN_NOTHING;
         intent = new Intent();
         intent.putExtra(COMUNIDAD_SEARCH.extra, COMU_LA_PLAZUELA_5);
+    }
+
+    @Test
+    public void testOnCreate_0()
+    {
+        whatClean = CLEAN_JUAN;
+
+        // Inserto comunidades en DB.
+        regTwoUserComuSameUser(makeListTwoUserComu());
+        activity = mActivityRule.launchActivity(intent);
+
+        onView(withId(R.id.appbar)).check(matches(isDisplayed()));
+        onView(withContentDescription("Navigate up")).check(matches(isDisplayed()));
+        onView(CoreMatchers.allOf(withContentDescription(containsString("Navigate up")),
+                isClickable())).check(matches(isDisplayed())).perform(click());
     }
 
     @Test

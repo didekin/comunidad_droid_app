@@ -68,6 +68,9 @@ dependencies {
     androidTestCompile 'com.android.support.test:rules:0.4.1'
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
     androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2.1'
+    compile 'com.android.support.test.espresso:espresso-contrib:2.2.1'
+    compile 'com.android.support.test.espresso:espresso-idling-resource:2.2.1'
+    androidTestCompile 'com.android.support.test.espresso:espresso-web:2.2.1'
     androidTestCompile project(':javabeans')
 }
 

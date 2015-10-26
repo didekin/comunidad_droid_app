@@ -1,9 +1,11 @@
 package com.didekindroid.usuario.activity;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.view.View;
+
 import com.didekin.serviceone.domain.Municipio;
 import com.didekin.serviceone.domain.Provincia;
 import com.didekin.serviceone.domain.UsuarioComunidad;
@@ -11,26 +13,36 @@ import com.didekindroid.R;
 import com.didekindroid.usuario.activity.utils.UsuarioTestUtils;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
-import org.junit.*;
+
+import org.hamcrest.CoreMatchers;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Rule;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.*;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
+import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.CursorMatchers.withRowString;
+import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.security.TokenHandler.TKhandler;
-import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUserComuBeanFromView;
-import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.*;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.checkToastInTest;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOneUser;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAndUpdateTk;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.typeComunidadData;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_TRAV_PLAZUELA_PEPE;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_PEPE;
-import static org.hamcrest.CoreMatchers.instanceOf;
+import static com.didekindroid.utils.UIutils.isRegisteredUser;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.core.AllOf.allOf;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -42,12 +54,10 @@ import static org.junit.Assert.assertThat;
 public class RegComuAndUserComuAcTest {
 
     private RegComuAndUserComuAc activity;
-    private Resources resources;
-    private RegComuFr regComuFr;
     private RegUserComuFr regUserComuFr;
 
     @Rule
-    public ActivityTestRule<RegComuAndUserComuAc> mActivityRule = new ActivityTestRule<>(RegComuAndUserComuAc.class);
+    public ActivityTestRule<RegComuAndUserComuAc> mActivityRule = new ActivityTestRule<>(RegComuAndUserComuAc.class, true, false);
 
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
@@ -60,12 +70,6 @@ public class RegComuAndUserComuAcTest {
     {
         // Preconditions: the user is already registered.
         signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
-
-        activity = mActivityRule.getActivity();
-        resources = activity.getResources();
-        regComuFr = (RegComuFr) activity.getFragmentManager().findFragmentById(R.id.reg_comunidad_frg);
-        regUserComuFr = (RegUserComuFr) activity.getFragmentManager().findFragmentById(R.id
-                .reg_usercomu_frg);
     }
 
     @After
@@ -77,12 +81,16 @@ public class RegComuAndUserComuAcTest {
     @Test
     public void testPreconditions()
     {
+        activity = mActivityRule.launchActivity(new Intent());
+        RegComuFr regComuFr = (RegComuFr) activity.getFragmentManager().findFragmentById(R.id.reg_comunidad_frg);
+        regUserComuFr = (RegUserComuFr) activity.getFragmentManager().findFragmentById(R.id
+                .reg_usercomu_frg);
+
         assertThat(activity, notNullValue());
 
         assertThat(isRegisteredUser(activity), is(true));
         assertThat(TKhandler.getAccessTokenInCache(), notNullValue());
 
-        assertThat(resources, notNullValue());
         assertThat(regComuFr, notNullValue());
         assertThat(regUserComuFr, notNullValue());
 
@@ -90,11 +98,23 @@ public class RegComuAndUserComuAcTest {
         onView(withId(R.id.reg_comunidad_frg)).check(matches(isDisplayed()));
         onView(withId(R.id.reg_usercomu_frg)).check(matches(isDisplayed()));
         onView(withId(R.id.reg_comu_usuariocomunidad_button)).perform(scrollTo()).check(matches(isDisplayed()));
+
+        onView(withId(R.id.appbar)).perform(scrollTo()).check(matches(isDisplayed()));
+        onView(withContentDescription("Navigate up")).check(matches(isDisplayed()));
+        onView(CoreMatchers.allOf(
+                        withContentDescription("Navigate up"),
+                        isClickable())
+        ).check(matches(isDisplayed())).perform(click());
     }
 
     @Test
     public void testMakeUsuarioComunidadBeanFromView() throws Exception
     {
+        activity = mActivityRule.launchActivity(new Intent());
+        Resources resources = activity.getResources();
+        regUserComuFr = (RegUserComuFr) activity.getFragmentManager().findFragmentById(R.id
+                .reg_usercomu_frg);
+
         View usuarioComunidadRegView = activity.findViewById(R.id.reg_usercomu_frg);
 
         //UsuarioComunidadBean data.
@@ -121,7 +141,7 @@ public class RegComuAndUserComuAcTest {
         assertThat(usuarioComunidadBean.isPropietario(), is(false));
         assertThat(usuarioComunidadBean.isInquilino(), is(true));
 
-        usuarioComunidadBean.validate(resources, new StringBuilder(resources.getString(R.string.error_validation_msg)));
+        usuarioComunidadBean.validate(resources, new StringBuilder(resources.getText(R.string.error_validation_msg)));
         UsuarioComunidad usuarioComunidad = usuarioComunidadBean.getUsuarioComunidad();
         assertThat(usuarioComunidad.getPortal(), is("port2"));
         assertThat(usuarioComunidad.getEscalera(), is("escale_b"));
@@ -133,15 +153,16 @@ public class RegComuAndUserComuAcTest {
     @Test
     public void testRegisterComuAndUserComu_1() throws InterruptedException
     {
-        // NO data.
+        activity = mActivityRule.launchActivity(new Intent());
 
+        // NO data.
         onView(withId(R.id.reg_comu_usuariocomunidad_button)).perform(scrollTo(), click());
 
         UsuarioTestUtils.checkToastInTest(R.string.error_validation_msg, activity,
                 R.string.tipo_via,
                 R.string.nombre_via,
                 R.string.municipio,
-                R.string.usercomu_role_rot);
+                R.string.reg_usercomu_role_rot);
 
         Thread.sleep(2000);
     }
@@ -149,8 +170,9 @@ public class RegComuAndUserComuAcTest {
     @Test
     public void testRegisterComuAndUserComu_2()
     {
-        // Wrong data.
+        activity = mActivityRule.launchActivity(new Intent());
 
+        // Wrong data.
         onView(withId(R.id.reg_usercomu_checbox_pre)).perform(scrollTo(), click());
         onView(withId(R.id.reg_usercomu_checbox_admin)).perform(scrollTo(), click());
         onView(withId(R.id.reg_usercomu_checbox_inq)).perform(scrollTo(), click());
@@ -163,33 +185,16 @@ public class RegComuAndUserComuAcTest {
                 R.string.tipo_via,
                 R.string.nombre_via,
                 R.string.municipio,
-                R.string.usercomu_role_rot,
+                R.string.reg_usercomu_role_rot,
                 R.string.reg_usercomu_escalera_hint);
     }
 
     @Test
     public void testRegisterComuAndUserComu_3()
     {
+        activity = mActivityRule.launchActivity(new Intent());
 
-        onView(withId(R.id.tipo_via_spinner)).perform(click());
-        onData(allOf(is(instanceOf(String.class)), is("Callejon")))
-                .perform(click());
-
-        onView(withId(R.id.autonoma_comunidad_spinner)).perform(click());
-        onData(withRowString(1, "Valencia"))
-                .perform(click());
-
-        onView(withId(R.id.provincia_spinner)).perform(click());
-        onData(withRowString(1, "Castellón/Castelló"))
-                .perform(click());
-
-        onView(withId(R.id.municipio_spinner)).perform(click());
-        onData(withRowString(3, "Chilches/Xilxes"))
-                .perform(click());
-
-        onView(withId(R.id.comunidad_nombre_via_editT)).perform(typeText("nombre via One"));
-        onView(withId(R.id.comunidad_numero_editT)).perform(typeText("123"));
-        onView(withId(R.id.comunidad_sufijo_numero_editT)).perform(typeText("Tris"), closeSoftKeyboard());
+        typeComunidadData();
 
         onView(withId(R.id.reg_usercomu_portal_ed)).perform(typeText("port2"));
         onView(withId(R.id.reg_usercomu_escalera_ed)).perform(typeText("escale_b"));

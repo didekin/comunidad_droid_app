@@ -1,4 +1,4 @@
-package com.didekindroid.ioutils;
+package com.didekindroid.utils;
 
 import android.support.test.runner.AndroidJUnit4;
 import com.didekindroid.DidekindroidApp;

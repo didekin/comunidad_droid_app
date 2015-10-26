@@ -1,10 +1,9 @@
-package com.didekindroid.ioutils;
+package com.didekindroid.utils;
 
 import android.content.Context;
 import android.content.res.Resources;
 import android.util.Log;
 import com.didekindroid.R;
-import com.didekindroid.uiutils.UIutils;
 
 import java.io.*;
 import java.net.HttpURLConnection;

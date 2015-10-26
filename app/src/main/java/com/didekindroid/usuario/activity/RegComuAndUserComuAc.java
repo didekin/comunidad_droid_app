@@ -1,50 +1,51 @@
 package com.didekindroid.usuario.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
 import com.didekin.serviceone.domain.DataPatterns;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
-import com.didekindroid.ioutils.ConnectionUtils;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
+import com.didekindroid.utils.ConnectionUtils;
 
-import static com.didekindroid.uiutils.UIutils.makeToast;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeComunidadBeanFromView;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUserComuBeanFromView;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
+import static com.didekindroid.utils.UIutils.doToolBar;
+import static com.didekindroid.utils.UIutils.makeToast;
 import static com.google.common.base.Preconditions.checkState;
 
 /**
  * Preconditions:
  * 1. The user is registered with a different comunidad.
  */
-public class RegComuAndUserComuAc extends Activity {
+public class RegComuAndUserComuAc extends AppCompatActivity {
 
     private static final String TAG = RegComuAndUserComuAc.class.getCanonicalName();
 
     RegComuFr mRegComuFrg;
     RegUserComuFr mRegUserComuFrg;
-    private Button mRegistroButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.reg_comu_and_usercomu_ac);
+        doToolBar(this, true);
 
         mRegComuFrg = (RegComuFr) getFragmentManager().findFragmentById(R.id.reg_comunidad_frg);
         mRegUserComuFrg = (RegUserComuFr) getFragmentManager().findFragmentById(R.id
                 .reg_usercomu_frg);
 
-        mRegistroButton = (Button) findViewById(R.id.reg_comu_usuariocomunidad_button);
-
+        Button mRegistroButton = (Button) findViewById(R.id.reg_comu_usuariocomunidad_button);
         mRegistroButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
@@ -90,7 +91,7 @@ public class RegComuAndUserComuAc extends Activity {
     //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
     //    ============================================================
 
-    private class ComuAndUserComuRegister extends AsyncTask<UsuarioComunidad, Void, Boolean> {
+    class ComuAndUserComuRegister extends AsyncTask<UsuarioComunidad, Void, Boolean> {
 
         private final String TAG = ComuAndUserComuRegister.class.getCanonicalName();
 

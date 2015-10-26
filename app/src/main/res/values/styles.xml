@@ -12,6 +12,7 @@
     <style name="textBase.acButton1">
         <item name="android:textSize">@dimen/text_decription_widget</item>
         <item name="android:textStyle">normal</item>
+        <item name="android:textAllCaps">false</item>
         <item name="android:layout_marginTop">@dimen/activity_vertical_double_margin</item>
         <item name="android:layout_marginBottom">@dimen/activity_vertical_margin</item>
         <item name="android:layout_alignParentStart">true</item>
@@ -33,7 +34,7 @@
     <style name="textBase.editField.password">
         <item name="android:maxEms">50</item>
         <item name="android:inputType">textPassword</item>
-        <item name="android:hint">@string/password</item>
+        <item name="android:hint">@string/usuario_password_hint</item>
     </style>
 
     <style name="textBase.editField.alias">
@@ -58,6 +59,7 @@
     <style name="spinnerBase">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">@dimen/spinner_horizontal_margin</item>
         <item name="android:drawSelectorOnTop">true</item>
         <item name="android:imeOptions">actionNext</item>
         <item name="android:inputType">textNoSuggestions</item>
@@ -67,7 +69,7 @@
     <style name="textBase">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginStart">@dimen/activity_horizontal_margin</item>
+        <item name="android:layout_marginStart">@dimen/simple_horizontal_margin</item>
         <item name="android:layout_marginTop">@dimen/activity_vertical_margin</item>
         <item name="android:visibility">visible</item>
     </style>

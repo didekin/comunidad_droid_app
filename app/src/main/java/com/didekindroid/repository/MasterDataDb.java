@@ -16,8 +16,6 @@ public final class MasterDataDb {
     {
     }
 
-    private static final String TAG = MasterDataDb.class.getCanonicalName();
-
     public static final String SQL_ENABLE_FK = "PRAGMA foreign_keys=ON;";
 
     public interface ComunidadAutonoma extends BaseColumns {
@@ -35,8 +33,6 @@ public final class MasterDataDb {
                 + ");";
 
         String DROP_C_AUTONOMA = "DROP TABLE IF EXISTS " + TB_C_AUTONOMA;
-
-        String SQL_DUMMY_COMUNIDADES = "SELECT 1 FROM " + TB_C_AUTONOMA + ";";
     }
 
     public interface Provincia extends BaseColumns {
@@ -80,6 +76,7 @@ public final class MasterDataDb {
 
         String CREATE_INDEX_PROV_FK = "CREATE INDEX provincia_index ON " + TB_MUNICIPIO + "(" + pr_id + ");";
 
+        @SuppressWarnings("unused")
         String CREATE_INDEX_UNIQUE_MUN = "CREATE UNIQUE INDEX municipio_unico ON "
                 + TB_MUNICIPIO + "(" + pr_id + "," + m_cd + ");";
     }

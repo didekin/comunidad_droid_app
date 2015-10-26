@@ -3,10 +3,13 @@ package com.didekindroid.usuario.activity;
 import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
+
 import com.didekin.serviceone.domain.Comunidad;
 import com.didekindroid.R;
-import com.didekindroid.uiutils.UIutils;
 import com.didekindroid.usuario.activity.utils.CleanEnum;
+import com.didekindroid.utils.UIutils;
+
+import org.hamcrest.CoreMatchers;
 import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -16,24 +19,32 @@ import org.junit.runner.RunWith;
 import java.util.List;
 
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.*;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
+import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
+import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.security.TokenHandler.TKhandler;
-import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_JUAN2_AND_PEPE;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRESIDENTE;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PROPIETARIO;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_ID;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_LIST_OBJECT;
-import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.*;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanWithTkhandler;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAndUpdateTk;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.typeRegUserComuData;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_TRAV_PLAZUELA_PEPE;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_JUAN2;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
+import static com.didekindroid.utils.UIutils.isRegisteredUser;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -101,6 +112,13 @@ public class RegUserAndUserComuAcTest_intent {
         onView(withId(R.id.reg_user_and_usercomu_ac_layout)).check(matches(isDisplayed()));
         onView(withId(R.id.reg_user_frg)).check(matches(isDisplayed()));
         onView(withId(R.id.reg_usercomu_frg)).check(matches(isDisplayed()));
+
+        onView(withId(R.id.appbar)).perform(scrollTo()).check(matches(isDisplayed()));
+        onView(withContentDescription("Navigate up")).check(matches(isDisplayed()));
+        onView(CoreMatchers.allOf(
+                        withContentDescription("Navigate up"),
+                        isClickable())
+        ).check(matches(isDisplayed())).perform(click());
     }
 
     @Test

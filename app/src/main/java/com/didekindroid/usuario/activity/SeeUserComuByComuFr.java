@@ -17,7 +17,7 @@ import com.didekindroid.usuario.activity.utils.UserIntentExtras;
 
 import java.util.List;
 
-import static com.didekindroid.uiutils.ViewsIDs.SEE_USERCOMU_BY_COMU;
+import static com.didekindroid.utils.ViewsIDs.SEE_USERCOMU_BY_COMU;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 
 
@@ -155,7 +155,7 @@ public class SeeUserComuByComuFr extends ListFragment {
         return fragmentListView;
     }
 
-    private class UserComuByComuLoader extends AsyncTask<Long, Void, List<UsuarioComunidad>> {
+    class UserComuByComuLoader extends AsyncTask<Long, Void, List<UsuarioComunidad>> {
 
         private final String TAG = UserComuByComuLoader.class.getCanonicalName();
 

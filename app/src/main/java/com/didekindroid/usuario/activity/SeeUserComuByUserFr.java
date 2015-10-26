@@ -14,7 +14,7 @@ import com.didekindroid.security.UiException;
 
 import java.util.List;
 
-import static com.didekindroid.uiutils.ViewsIDs.SEE_USER_COMU_BY_USER;
+import static com.didekindroid.utils.ViewsIDs.SEE_USER_COMU_BY_USER;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 import static com.google.common.base.Preconditions.checkState;
 
@@ -159,7 +159,7 @@ public class SeeUserComuByUserFr extends ListFragment {
         return fragmentView;
     }
 
-    private class UserComuByUserLoader extends AsyncTask<Void, Void, List<UsuarioComunidad>> {
+    class UserComuByUserLoader extends AsyncTask<Void, Void, List<UsuarioComunidad>> {
 
         UiException uiException;
 

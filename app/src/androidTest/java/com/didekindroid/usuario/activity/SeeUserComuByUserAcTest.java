@@ -2,23 +2,45 @@ package com.didekindroid.usuario.activity;
 
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
+
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
-import org.junit.*;
+
+import org.hamcrest.CoreMatchers;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Rule;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.*;
-import static com.didekindroid.uiutils.ViewsIDs.SEE_USER_COMU_BY_USER;
+import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
+import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.COMU_SEARCH_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.USER_DATA_AC;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.regThreeUserComuSameUser_2;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.*;
-import static org.hamcrest.Matchers.*;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_EL_ESCORIAL;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_ESCORIAL_PEPE;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_LA_FUENTE;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_LA_FUENTE_PEPE;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_LA_PLAZUELA_5;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_PLAZUELA5_PEPE;
+import static com.didekindroid.utils.ViewsIDs.SEE_USER_COMU_BY_USER;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -72,6 +94,13 @@ public class SeeUserComuByUserAcTest {
         onView(withId(R.id.see_usercomu_by_user_ac_frg_container)).check(matches(isDisplayed()));
         onView(withId(R.id.see_usercomu_by_user_frg)).check(matches(isDisplayed()));
         onView(withId(SEE_USER_COMU_BY_USER.idView)).check(matches(isDisplayed()));
+
+        onView(withId(R.id.appbar)).check(matches(isDisplayed()));
+        onView(withContentDescription("Navigate up")).check(matches(isDisplayed()));
+        onView(CoreMatchers.allOf(
+                        withContentDescription("Navigate up"),
+                        isClickable())
+        ).check(matches(isDisplayed())).perform(click());
     }
 
     @Test

@@ -5,17 +5,18 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import com.didekindroid.R;
-import com.didekindroid.ioutils.ConnectionUtils;
+import com.didekindroid.utils.ConnectionUtils;
 import com.didekindroid.usuario.dominio.UsuarioBean;
 import com.google.common.base.Preconditions;
 
-import static com.didekindroid.uiutils.UIutils.*;
+import static com.didekindroid.utils.UIutils.*;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 import static com.google.common.base.Preconditions.checkState;
 
@@ -26,7 +27,7 @@ import static com.google.common.base.Preconditions.checkState;
  * 1. Password changed and tokenCache updated.
  * 2. It goes to UserDataAc activity.
  */
-public class PasswordChangeAc extends Activity {
+public class PasswordChangeAc extends AppCompatActivity {
 
     private static final String TAG = PasswordChangeAc.class.getCanonicalName();
 
@@ -45,6 +46,7 @@ public class PasswordChangeAc extends Activity {
 
         mAcView = getLayoutInflater().inflate(R.layout.password_change_ac, null);
         setContentView(mAcView);
+        doToolBar(this, true);
 
         mModifyButton = (Button) findViewById(R.id.password_change_ac_button);
         mModifyButton.setOnClickListener(new View.OnClickListener() {
@@ -88,7 +90,7 @@ public class PasswordChangeAc extends Activity {
     //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
     //    ============================================================
 
-    private class PasswordModifyer extends AsyncTask<String, Void, Integer> {
+    class PasswordModifyer extends AsyncTask<String, Void, Integer> {
 
         private final String TAG = PasswordModifyer.class.getCanonicalName();
 

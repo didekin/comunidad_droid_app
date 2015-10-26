@@ -7,8 +7,8 @@ import android.widget.Toast;
 import com.didekindroid.R;
 import com.didekindroid.usuario.activity.*;
 
-import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
-import static com.didekindroid.uiutils.UIutils.makeToast;
+import static com.didekindroid.utils.UIutils.isRegisteredUser;
+import static com.didekindroid.utils.UIutils.makeToast;
 
 /**
  * User: pedro@didekin

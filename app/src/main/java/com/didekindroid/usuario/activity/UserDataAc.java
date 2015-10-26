@@ -1,10 +1,10 @@
 package com.didekindroid.usuario.activity;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,22 +12,26 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import com.didekin.retrofitcl.ServiceOneException;
+
 import com.didekin.retrofitcl.OauthToken.AccessToken;
+import com.didekin.retrofitcl.ServiceOneException;
 import com.didekin.serviceone.domain.Usuario;
 import com.didekindroid.R;
-import com.didekindroid.ioutils.ConnectionUtils;
 import com.didekindroid.usuario.activity.utils.UserMenu;
 import com.didekindroid.usuario.dominio.UsuarioBean;
+import com.didekindroid.utils.ConnectionUtils;
 
 import static com.didekin.serviceone.exception.ExceptionMessage.BAD_REQUEST;
-import static com.didekindroid.uiutils.UIutils.*;
+import static com.didekindroid.security.TokenHandler.TKhandler;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUserBeanFromUserDataAcView;
 import static com.didekindroid.usuario.activity.utils.UserMenu.COMU_SEARCH_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_USERCOMU_BY_USER_AC;
-import static com.didekindroid.security.TokenHandler.TKhandler;
 import static com.didekindroid.usuario.webservices.Oauth2Service.Oauth2;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
+import static com.didekindroid.utils.UIutils.doToolBar;
+import static com.didekindroid.utils.UIutils.getErrorMsgBuilder;
+import static com.didekindroid.utils.UIutils.isRegisteredUser;
+import static com.didekindroid.utils.UIutils.makeToast;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
@@ -37,12 +41,11 @@ import static com.google.common.base.Preconditions.checkState;
  * Postconditions:
  * 1. Regitered user with modified data. Once done, it goes to SeeUserComuByUserAc.
  */
-public class UserDataAc extends Activity {
+public class UserDataAc extends AppCompatActivity {
 
     private static final String TAG = UserDataAc.class.getCanonicalName();
 
     private View mAcView;
-    private Button mModifyButton;
     private Usuario mOldUser;
 
     @SuppressLint("InflateParams")
@@ -58,8 +61,9 @@ public class UserDataAc extends Activity {
 
         mAcView = getLayoutInflater().inflate(R.layout.user_data_ac, null);
         setContentView(mAcView);
+        doToolBar(this, true);
 
-        mModifyButton = (Button) findViewById(R.id.user_data_modif_button);
+        Button mModifyButton = (Button) findViewById(R.id.user_data_modif_button);
         mModifyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
@@ -133,7 +137,7 @@ public class UserDataAc extends Activity {
     //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
     //    ============================================================
 
-    private class UserDataGetter extends AsyncTask<Void, Void, Void> {
+    class UserDataGetter extends AsyncTask<Void, Void, Void> {
 
         final String TAG = UserDataGetter.class.getCanonicalName();
 
@@ -156,7 +160,7 @@ public class UserDataAc extends Activity {
         }
     }
 
-    private class UserDataModifyer extends AsyncTask<Usuario, Void, Boolean> {
+    class UserDataModifyer extends AsyncTask<Usuario, Void, Boolean> {
 
         final String TAG = UserDataModifyer.class.getCanonicalName();
 
@@ -173,7 +177,7 @@ public class UserDataAc extends Activity {
                 return isPasswordWrong;
             }
 
-            AccessToken token_1 = null;
+            AccessToken token_1;
             try {
                 token_1 = Oauth2.getPasswordUserToken(mOldUser.getUserName(), usuarios[0].getPassword());
                 TKhandler.initKeyCacheAndBackupFile(token_1);

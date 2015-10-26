@@ -4,13 +4,15 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import com.didekindroid.R;
 
-import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
-import static com.didekindroid.uiutils.UIutils.updateIsRegistered;
+import static com.didekindroid.utils.UIutils.doToolBar;
+import static com.didekindroid.utils.UIutils.isRegisteredUser;
+import static com.didekindroid.utils.UIutils.updateIsRegistered;
 import static com.didekindroid.security.TokenHandler.TKhandler;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 import static com.google.common.base.Preconditions.checkState;
@@ -21,12 +23,9 @@ import static com.google.common.base.Preconditions.checkState;
  * Postconditions:
  * 1. Unregistered user, if she chooses so. ComuSearchAc is to be showed.
  */
-public class DeleteMeAc extends Activity {
+public class DeleteMeAc extends AppCompatActivity {
 
     private static final String TAG = DeleteMeAc.class.getCanonicalName();
-
-    private View mAcView;
-    private Button mUnregisterButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -37,10 +36,11 @@ public class DeleteMeAc extends Activity {
         // Preconditions.
         checkState(isRegisteredUser(this));
 
-        mAcView = getLayoutInflater().inflate(R.layout.delete_me_ac, null);
+        View mAcView = getLayoutInflater().inflate(R.layout.delete_me_ac, null);
         setContentView(mAcView);
+        doToolBar(this, true);
 
-        mUnregisterButton = (Button) findViewById(R.id.delete_me_ac_unreg_button);
+        Button mUnregisterButton = (Button) findViewById(R.id.delete_me_ac_unreg_button);
         mUnregisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
@@ -63,7 +63,7 @@ public class DeleteMeAc extends Activity {
     //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
     //    ============================================================
 
-    private class UserDataEraser extends AsyncTask<Void, Void, Boolean> {
+    class UserDataEraser extends AsyncTask<Void, Void, Boolean> {
 
         final String TAG = UserDataEraser.class.getCanonicalName();
 

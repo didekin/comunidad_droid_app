@@ -3,13 +3,13 @@ package com.didekindroid.usuario.webservices;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
-import com.didekin.retrofitcl.OauthToken;
+
 import com.didekin.retrofitcl.OauthToken.AccessToken;
 import com.didekin.retrofitcl.ServiceOneException;
 import com.didekin.serviceone.domain.*;
 import com.didekindroid.DidekindroidApp;
 import com.didekindroid.R;
-import com.didekindroid.ioutils.IoHelper;
+import com.didekindroid.utils.IoHelper;
 import com.didekindroid.security.UiException;
 import com.didekindroid.usuario.activity.utils.CleanEnum;
 import com.didekindroid.usuario.dominio.DomainDataUtils;
@@ -27,7 +27,7 @@ import static com.didekin.serviceone.controllers.ControllerConstant.IS_USER_DELE
 import static com.didekin.serviceone.exception.ExceptionMessage.USER_DUPLICATE;
 import static com.didekindroid.security.TokenHandler.TKhandler;
 import static com.didekindroid.security.UiException.UiAction.SEARCH_COMU;
-import static com.didekindroid.uiutils.UIutils.updateIsRegistered;
+import static com.didekindroid.utils.UIutils.updateIsRegistered;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.*;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRESIDENTE;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PROPIETARIO;
@@ -273,7 +273,7 @@ public class ServiceOneIfTest {
     @Test
     public void testPasswordChange()
     {
-        Usuario usuario_1 = signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
+        signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
         String passwordClear_2 = "new_juan_password";
         assertThat(ServOne.passwordChange(passwordClear_2), is(1));
 

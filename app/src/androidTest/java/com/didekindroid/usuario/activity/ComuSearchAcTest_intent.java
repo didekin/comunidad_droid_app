@@ -3,7 +3,10 @@ package com.didekindroid.usuario.activity;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
+
 import com.didekindroid.R;
+
+import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -12,15 +15,17 @@ import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtraWithKey;
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.*;
-import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
+import static com.didekindroid.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_SEARCH;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanWithTkhandler;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.typeComunidadData;
+import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.containsString;
@@ -41,6 +46,15 @@ public class ComuSearchAcTest_intent {
     public static void slowSeconds() throws InterruptedException
     {
         Thread.sleep(5000);
+    }
+
+    @Test
+    public void testOnCreateToolBar()
+    {
+        onView(withId(R.id.appbar)).check(matches(isDisplayed()));
+        onView(withContentDescription("Navigate up")).check(doesNotExist());
+        onView(allOf(withContentDescription(containsString("Navigate up")),
+                isClickable())).check(doesNotExist());
     }
 
     @Test

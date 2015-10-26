@@ -15,10 +15,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 import com.didekin.serviceone.domain.Comunidad;
 import com.didekindroid.R;
-import com.didekindroid.ioutils.ConnectionUtils;
+import com.didekindroid.utils.ConnectionUtils;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 
-import static com.didekindroid.uiutils.UIutils.*;
+import static com.didekindroid.utils.UIutils.*;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeComunidadBeanFromView;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_ID;
 import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_USERCOMU_BY_COMU_AC;
@@ -234,7 +234,7 @@ public class ComuDataAc extends Activity implements RegComuFr.RegComuFrListener 
     //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
     //    ============================================================
 
-    private class ComuDataSetter extends AsyncTask<Void, Void, Comunidad> {
+    class ComuDataSetter extends AsyncTask<Void, Void, Comunidad> {
 
         final String TAG = ComuDataSetter.class.getCanonicalName();
 
@@ -254,7 +254,7 @@ public class ComuDataAc extends Activity implements RegComuFr.RegComuFrListener 
         }
     }
 
-    private class ComuDataModifier extends AsyncTask<Comunidad, Void, Integer> {
+    class ComuDataModifier extends AsyncTask<Comunidad, Void, Integer> {
 
         final String TAG = ComuDataModifier.class.getCanonicalName();
 

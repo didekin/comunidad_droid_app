@@ -3,9 +3,12 @@ package com.didekindroid.usuario.activity;
 import android.content.res.Resources;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+
 import com.didekin.retrofitcl.OauthToken;
 import com.didekindroid.R;
 import com.didekindroid.usuario.activity.utils.CleanEnum;
+
+import org.hamcrest.CoreMatchers;
 import org.junit.*;
 import org.junit.runner.RunWith;
 
@@ -14,7 +17,7 @@ import static android.support.test.espresso.action.ViewActions.*;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.*;
 import static com.didekindroid.security.TokenHandler.TKhandler;
-import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
+import static com.didekindroid.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_NOTHING;
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.*;
@@ -82,6 +85,13 @@ public class UserDataAcTest {
                 .check(matches(isDisplayed()));
 
         onView(withId(R.id.user_data_modif_button)).check(matches(isDisplayed()));
+
+        onView(withId(R.id.appbar)).check(matches(isDisplayed()));
+        onView(withContentDescription("Navigate up")).check(matches(isDisplayed()));
+        onView(CoreMatchers.allOf(
+                        withContentDescription("Navigate up"),
+                        isClickable())
+        ).check(matches(isDisplayed())).perform(click());
     }
 
     @Test

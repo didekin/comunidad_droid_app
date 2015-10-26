@@ -137,12 +137,12 @@ public class SeeUserComutByComuListAdapter extends ArrayAdapter<UsuarioComunidad
             StringBuilder builder = new StringBuilder();
             String resourceString;
 
-            for (int i = 0; i < rolesPieces.length; i++) {
-                resourceString = resources.getString(getResourceStringId(rolesPieces[i]));
-                builder.append(resourceString).append(",");
+            for (String rolesPiece : rolesPieces) {
+                resourceString = resources.getString(getResourceStringId(rolesPiece));
+                builder.append(resourceString).append(", ");
             }
-            builder.deleteCharAt(builder.length() - 1);
-            return builder.toString();
+            builder.deleteCharAt(builder.length() - 2);
+            return builder.toString().trim();
         }
     }
 

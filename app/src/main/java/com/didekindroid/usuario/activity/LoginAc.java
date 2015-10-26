@@ -1,6 +1,5 @@
 package com.didekindroid.usuario.activity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -8,25 +7,29 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import com.didekin.retrofitcl.OauthToken.AccessToken;
 import com.didekin.serviceone.domain.Usuario;
 import com.didekindroid.R;
-import com.didekindroid.ioutils.ConnectionUtils;
 import com.didekindroid.security.UiException;
-import com.didekindroid.uiutils.UIutils;
 import com.didekindroid.usuario.dominio.UsuarioBean;
+import com.didekindroid.utils.ConnectionUtils;
 
 import static android.widget.Toast.LENGTH_LONG;
 import static com.didekindroid.security.TokenHandler.TKhandler;
 import static com.didekindroid.security.UiException.UiAction.SEARCH_COMU;
-import static com.didekindroid.uiutils.UIutils.*;
 import static com.didekindroid.usuario.webservices.Oauth2Service.Oauth2;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
+import static com.didekindroid.utils.UIutils.doToolBar;
+import static com.didekindroid.utils.UIutils.getErrorMsgBuilder;
+import static com.didekindroid.utils.UIutils.makeToast;
+import static com.didekindroid.utils.UIutils.updateIsRegistered;
 
 /**
  * User: pedro
@@ -43,12 +46,11 @@ import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
  * 1c. If the userName exists, but the passowrd is not correct, after three failed intents,  a new passord is sent
  * by mail, after her confirmation.
  */
-public class LoginAc extends Activity {
+public class LoginAc extends AppCompatActivity {
 
     private static final String TAG = LoginAc.class.getCanonicalName();
 
     View mAcView;
-    private Button mLoginButton;
     short counterWrong;
 
     @Override
@@ -59,7 +61,9 @@ public class LoginAc extends Activity {
 
         mAcView = getLayoutInflater().inflate(R.layout.login_ac, null);
         setContentView(mAcView);
-        mLoginButton = (Button) findViewById(R.id.login_ac_button);
+        doToolBar(this, false);
+
+        Button mLoginButton = (Button) findViewById(R.id.login_ac_button);
         mLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
@@ -123,7 +127,7 @@ public class LoginAc extends Activity {
 //    .................................... INNER CLASSES .................................
 //    =====================================================================================================
 
-    private class LoginValidator extends AsyncTask<Usuario, Void, Boolean> {
+    class LoginValidator extends AsyncTask<Usuario, Void, Boolean> {
 
 
         UiException uiException;
@@ -183,6 +187,7 @@ public class LoginAc extends Activity {
 
         private static final String TAG = PasswordMailDialog.class.getCanonicalName();
 
+        @SuppressWarnings("FinalStaticMethod")
         public static final PasswordMailDialog newInstance(String emailUser)
         {
             Log.d(TAG, "newInstance()");
@@ -223,7 +228,7 @@ public class LoginAc extends Activity {
 
 //  ======================================================================================================
 
-    private class LoginMailSender extends AsyncTask<String,Void,Boolean>{
+    class LoginMailSender extends AsyncTask<String,Void,Boolean>{
 
         @Override
         protected Boolean doInBackground(String... emails)

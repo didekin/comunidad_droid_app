@@ -1,43 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
-            style="@style/baseLayout.scroll"
-            tools:context="com.didekindroid.usuario.activity.UserComuDataAc">
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/baseLayout.scroll"
+    tools:context="com.didekindroid.usuario.activity.UserComuDataAc">
 
     <RelativeLayout
-            android:id="@+id/usercomu_data_ac_layout"
-            style="@style/baseLayout">
+        android:id="@+id/usercomu_data_ac_layout"
+        style="@style/baseLayout">
+
+        <include layout="@layout/appbar_include" />
 
         <TextView
-                android:id="@+id/usercomu_data_ac_modif_txt"
-                style="@style/textBase.textFieldLabel2"
-                android:text="@string/user_data_ac_cambios_text"
-                android:layout_alignParentStart="true"/>
+            android:id="@+id/usercomu_data_ac_modif_txt"
+            style="@style/textBase.textFieldLabel2"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="?attr/actionBarSize"
+            android:text="@string/user_data_ac_cambios_text" />
 
         <include
-                layout="@layout/reg_usercomu_fr"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:layout_below="@+id/usercomu_data_ac_modif_txt"
-                android:id="@+id/usercomu_data_ac_reg_usercomu_include"/>
+            android:id="@+id/usercomu_data_ac_reg_usercomu_include"
+            layout="@layout/reg_usercomu_fr"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/usercomu_data_ac_modif_txt"
+            android:layout_marginTop="@dimen/activity_vertical_margin" />
 
         <Button
-                android:id="@+id/usercomu_data_ac_modif_button"
-                style="@style/textBase.acButton1"
-                android:text="@string/user_data_modif_button_txt"
-                android:layout_below="@id/usercomu_data_ac_reg_usercomu_include" />
+            android:id="@+id/usercomu_data_ac_modif_button"
+            style="@style/textBase.acButton1"
+            android:layout_below="@id/usercomu_data_ac_reg_usercomu_include"
+            android:text="@string/user_data_modif_button_txt" />
 
         <TextView
-                android:id="@+id/usercomu_data_ac_delete_txt"
-                style="@style/textBase.textFieldLabel2"
-                android:text="@string/usercomu_data_ac_delete_txt"
-                android:layout_below="@id/usercomu_data_ac_modif_button"/>
+            android:id="@+id/usercomu_data_ac_delete_txt"
+            style="@style/textBase.textFieldLabel2"
+            android:layout_below="@id/usercomu_data_ac_modif_button"
+            android:text="@string/usercomu_data_ac_delete_txt" />
 
         <Button
-                android:id="@+id/usercomu_data_ac_delete_button"
-                style="@style/textBase.acButton1"
-                android:text="@string/usercomu_data_ac_delete_button_txt"
-                android:layout_below="@id/usercomu_data_ac_delete_txt"/>
+            android:id="@+id/usercomu_data_ac_delete_button"
+            style="@style/textBase.acButton1"
+            android:layout_below="@id/usercomu_data_ac_delete_txt"
+            android:text="@string/usercomu_data_ac_delete_button_txt" />
     </RelativeLayout>
 </ScrollView>

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -13,14 +14,14 @@ import com.didekin.serviceone.domain.Comunidad;
 import com.didekin.serviceone.domain.Usuario;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
-import com.didekindroid.ioutils.ConnectionUtils;
-import com.didekindroid.uiutils.UIutils;
+import com.didekindroid.utils.ConnectionUtils;
+import com.didekindroid.utils.UIutils;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
 
 import static com.didekindroid.security.TokenHandler.TKhandler;
-import static com.didekindroid.uiutils.UIutils.*;
+import static com.didekindroid.utils.UIutils.*;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUserBeanFromRegUserFrView;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUserComuBeanFromView;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_ID;
@@ -49,13 +50,12 @@ import static com.google.common.base.Preconditions.checkState;
  * 1. A long comunidadId is passed as an intent extra.
  * 2. The activity SeeUserComuByComuAc is started.
  */
-public class RegUserAndUserComuAc extends Activity {
+public class RegUserAndUserComuAc extends AppCompatActivity {
     private static final String TAG = RegComuAndUserAndUserComuAc.class.getCanonicalName();
 
     RegUserComuFr mRegUserComuFrg;
     RegUserFr mRegUserFr;
     private Comunidad mComunidad;
-    private Button mRegistroButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -69,11 +69,13 @@ public class RegUserAndUserComuAc extends Activity {
                 .getSerializable(COMUNIDAD_LIST_OBJECT.extra);
 
         setContentView(R.layout.reg_user_and_usercomu_ac);
+        doToolBar(this, true);
+
         mRegUserComuFrg = (RegUserComuFr) getFragmentManager().findFragmentById(R.id
                 .reg_usercomu_frg);
         mRegUserFr = (RegUserFr) getFragmentManager().findFragmentById(R.id.reg_user_frg);
-        mRegistroButton = (Button) findViewById(R.id.reg_user_usercomu_button);
 
+        Button mRegistroButton = (Button) findViewById(R.id.reg_user_usercomu_button);
         mRegistroButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
@@ -116,7 +118,7 @@ public class RegUserAndUserComuAc extends Activity {
     //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
     //    ============================================================
 
-    private class UserAndUserComuRegister extends AsyncTask<UsuarioComunidad, Void, Void> {
+    class UserAndUserComuRegister extends AsyncTask<UsuarioComunidad, Void, Void> {
 
         @Override
         protected Void doInBackground(UsuarioComunidad... usuarioComunidad)

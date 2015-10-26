@@ -1,24 +1,18 @@
-package com.didekindroid.uiutils;
+package com.didekindroid.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.widget.Toast;
-import com.didekin.serviceone.exception.ExceptionMessage;
-import com.didekin.retrofitcl.ServiceOneException;
+
 import com.didekin.serviceone.domain.DataPatterns;
-import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
-import com.didekindroid.security.UiException;
-import com.didekindroid.security.UiException.UiAction;
 
-import java.util.List;
-
-import static com.didekin.serviceone.exception.ExceptionMessage.getExceptionMsgFromMessage;
-import static com.didekin.serviceone.exception.ExceptionMessage.getLoginRequestMsgs;
-import static com.didekindroid.security.TokenHandler.TKhandler;
-import static com.didekindroid.security.UiException.UiAction.LOGIN;
+import static android.widget.Toast.makeText;
 
 /**
  * User: pedro
@@ -28,6 +22,7 @@ import static com.didekindroid.security.UiException.UiAction.LOGIN;
 public final class UIutils {
 
     private static final String TAG = UIutils.class.getCanonicalName();
+    public static final int APPBAR_ID = R.id.appbar;
 
     private UIutils()
     {
@@ -37,6 +32,27 @@ public final class UIutils {
     {
         Log.e(tagClass, e.getMessage());
         throw new RuntimeException(e);
+    }
+
+    public static void doToolBar(AppCompatActivity activity, int resourceIdView, boolean hasParentAc)
+    {
+
+        Log.d(TAG, "doToolBar()");
+
+        Toolbar myToolbar = (Toolbar) activity.findViewById(resourceIdView);
+        activity.setSupportActionBar(myToolbar);
+        if (hasParentAc) {
+            ActionBar actionBar = activity.getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setDisplayHomeAsUpEnabled(true);
+            }
+        }
+    }
+
+    public static void doToolBar(AppCompatActivity activity, boolean hasParentAc)
+    {
+        Log.d(TAG, "doToolBar()");
+        doToolBar(activity, APPBAR_ID, hasParentAc);
     }
 
     public static StringBuilder getErrorMsgBuilder(Context context)
@@ -50,58 +66,47 @@ public final class UIutils {
         Log.d(TAG, "isRegisteredUser()");
 
         SharedPreferences sharedPref = context.getSharedPreferences
-                (SharedPreferencesFiles.USER_PREF.toString(), Context.MODE_PRIVATE);
-        return sharedPref.getBoolean(SharedPreferencesKeys.IS_USER_REG.toString(), false);
+                (SharedPrefFiles.USER_PREF.toString(), Context.MODE_PRIVATE);
+        return sharedPref.getBoolean(SharedPrefFiles.IS_USER_REG, false);
     }
 
     public static void makeToast(Context context, int resourceStringId, int toastLength)
     {
-        Toast clickToast = new Toast(context).makeText(context, resourceStringId, Toast.LENGTH_LONG);
+        Toast clickToast = makeText(context, resourceStringId, toastLength);
         clickToast.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL, 0, 0);
         clickToast.show();
     }
 
     public static void makeToast(Context context, String toastMessage)
     {
-        Toast clickToast = new Toast(context).makeText(context, toastMessage, Toast.LENGTH_LONG);
+        Toast clickToast = makeText(context, toastMessage, Toast.LENGTH_LONG);
         clickToast.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL, 0, 0);
         clickToast.show();
     }
-
 
     public static void updateIsRegistered(boolean isRegisteredUser, Context context)
     {
         Log.d(TAG, "updateIsRegistered()");
 
         SharedPreferences sharedPref = context.getSharedPreferences
-                (SharedPreferencesFiles.USER_PREF.toString(), Context.MODE_PRIVATE);
+                (SharedPrefFiles.USER_PREF.toString(), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putBoolean(SharedPreferencesKeys.IS_USER_REG.toString(), isRegisteredUser);
+        editor.putBoolean(SharedPrefFiles.IS_USER_REG, isRegisteredUser);
         editor.apply();
     }
 
 //  ..............  INNER CLASSES ............
 
-    private enum SharedPreferencesFiles {
+    enum SharedPrefFiles {
 
         USER_PREF,;
+
+        private static final String IS_USER_REG = "isRegisteredUser";
 
         @Override
         public String toString()
         {
-            return getClass().getCanonicalName().concat(this.name());
-        }
-    }
-
-    private enum SharedPreferencesKeys {
-
-        IS_USER_REG(SharedPreferencesFiles.USER_PREF),;
-
-        private final SharedPreferencesFiles preferencesFile;
-
-        SharedPreferencesKeys(SharedPreferencesFiles preferencesFile)
-        {
-            this.preferencesFile = preferencesFile;
+            return getClass().getCanonicalName().concat(".").concat(this.name());
         }
     }
 }

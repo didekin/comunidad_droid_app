@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -13,14 +14,15 @@ import com.didekin.serviceone.domain.DataPatterns;
 import com.didekin.serviceone.domain.Usuario;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
-import com.didekindroid.ioutils.ConnectionUtils;
-import com.didekindroid.uiutils.UIutils;
+import com.didekindroid.utils.ConnectionUtils;
+import com.didekindroid.utils.UIutils;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
 
 import static com.didekindroid.security.TokenHandler.TKhandler;
-import static com.didekindroid.uiutils.UIutils.updateIsRegistered;
+import static com.didekindroid.utils.UIutils.doToolBar;
+import static com.didekindroid.utils.UIutils.updateIsRegistered;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.*;
 import static com.didekindroid.usuario.webservices.Oauth2Service.Oauth2;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
@@ -31,14 +33,13 @@ import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
  * 2. The comunidad has not been registered either, by other users.
  * 3. There is not extras in the activity intent.
  */
-public class RegComuAndUserAndUserComuAc extends Activity {
+public class RegComuAndUserAndUserComuAc extends AppCompatActivity {
 
     private static final String TAG = RegComuAndUserAndUserComuAc.class.getCanonicalName();
 
     RegComuFr mRegComuFrg;
     RegUserComuFr mRegUserComuFrg;
     RegUserFr mRegUserFr;
-    private Button mRegistroButton;
 
     // TODO: añadir un campo de número de vecinos en la comunidad (aprox.).
     // TODO: recoger dato de localización en el alta. Control de altas masivas y remotas. Excluir Administrador.
@@ -50,12 +51,14 @@ public class RegComuAndUserAndUserComuAc extends Activity {
         Log.d(TAG, "onCreate()");
 
         setContentView(R.layout.reg_comu_and_user_and_usercomu_ac);
+        doToolBar(this, true);
+
         mRegComuFrg = (RegComuFr) getFragmentManager().findFragmentById(R.id.reg_comunidad_frg);
         mRegUserComuFrg = (RegUserComuFr) getFragmentManager().findFragmentById(R.id
                 .reg_usercomu_frg);
         mRegUserFr = (RegUserFr) getFragmentManager().findFragmentById(R.id.reg_user_frg);
-        mRegistroButton = (Button) findViewById(R.id.reg_com_usuario_usuariocomu_button);
 
+        Button mRegistroButton = (Button) findViewById(R.id.reg_com_usuario_usuariocomu_button);
         mRegistroButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
@@ -100,7 +103,7 @@ public class RegComuAndUserAndUserComuAc extends Activity {
     //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
     //    ============================================================
 
-    private class ComuAndUserComuAndUserRegister extends AsyncTask<UsuarioComunidad, Void, Void> {
+    class ComuAndUserComuAndUserRegister extends AsyncTask<UsuarioComunidad, Void, Void> {
 
         @Override
         protected Void doInBackground(UsuarioComunidad... usuarioComunidad)

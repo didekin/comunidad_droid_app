@@ -14,7 +14,7 @@ import android.widget.*;
 import com.didekin.serviceone.domain.Municipio;
 import com.didekin.serviceone.domain.Provincia;
 import com.didekindroid.R;
-import com.didekindroid.ioutils.IoHelper;
+import com.didekindroid.utils.IoHelper;
 import com.didekindroid.repository.MasterDataDbHelper;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 
@@ -87,6 +87,7 @@ public class RegComuFr extends Fragment {
         return mRegComunidadFrView;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public void onActivityCreated(Bundle savedInstanceState)
     {
@@ -243,14 +244,13 @@ public class RegComuFr extends Fragment {
         Log.d(TAG, "In doAdapterSpinner()");
 
         int[] toViews = new int[]{R.id.reg_comunidad_spinner_dropdown_item};
-        SimpleCursorAdapter cursorAdapter = new SimpleCursorAdapter(
+        return new SimpleCursorAdapter(
                 getActivity(),
                 R.layout.reg_comu_spinner_dropdown_item,
                 cursor,
                 fromColDB,
                 toViews,
                 0);
-        return cursorAdapter;
     }
 
 ///    ::::::::::::::: TIPO DE VÍA ::::::::::::::::
@@ -272,7 +272,7 @@ public class RegComuFr extends Fragment {
         {
             Log.d(TAG, "In TipoViaSpinnerSetter.onPostExecute()");
 
-            ArrayAdapter<String> tiposViaAdapter = new ArrayAdapter<String>(
+            ArrayAdapter<String> tiposViaAdapter = new ArrayAdapter<>(
                     RegComuFr.this.getActivity(),
                     R.layout.reg_comu_spinner_dropdown_item,
                     tiposViaList);
@@ -294,8 +294,7 @@ public class RegComuFr extends Fragment {
         protected Cursor doInBackground(Void... params)
         {
             Log.d(TAG, "In CAutonomaSpinnerSetter.doInBackground()");
-            Cursor comunidadesCursor = dbHelper.doComunidadesCursor();
-            return comunidadesCursor;
+            return dbHelper.doComunidadesCursor();
         }
 
         @Override

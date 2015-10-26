@@ -12,7 +12,7 @@ import com.didekin.serviceone.domain.ComunidadAutonoma;
 import com.didekin.serviceone.domain.Municipio;
 import com.didekin.serviceone.domain.Provincia;
 import com.didekindroid.R;
-import com.didekindroid.uiutils.UIutils;
+import com.didekindroid.utils.UIutils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -163,10 +163,10 @@ public class MasterDataDbHelper extends SQLiteOpenHelper {
         values.put(m_cd, codMunicipioInProv);
         values.put(mu_nombre, nombre);
 
-        long municipioPk = mDataBase.insert(TB_MUNICIPIO, null, values);
-        return municipioPk;
+        return mDataBase.insert(TB_MUNICIPIO, null, values);
     }
 
+    @SuppressWarnings("unused")
     protected Municipio getMunicipioFromDb(short codMunicipio, short provinciaId)
     {
         Log.d(TAG, "In getMunicipioFromDb()");
@@ -207,8 +207,7 @@ public class MasterDataDbHelper extends SQLiteOpenHelper {
         String whereClause = pr_id + " = ?";
         String[] wherClauseArgs = new String[]{String.valueOf(prId)};
 
-        Cursor cursor = mDataBase.query(TB_MUNICIPIO, columns, whereClause, wherClauseArgs, null, null, null);
-        return cursor;
+        return mDataBase.query(TB_MUNICIPIO, columns, whereClause, wherClauseArgs, null, null, null);
     }
 
 //    ............. PROVINCIAS ..................
@@ -260,8 +259,7 @@ public class MasterDataDbHelper extends SQLiteOpenHelper {
         values.put(ca_id, comunidadPk);
         values.put(pr_nombre, nombre);
 
-        long provinciaPk = mDataBase.insert(TB_PROVINCIA, null, values);
-        return provinciaPk;
+        return mDataBase.insert(TB_PROVINCIA, null, values);
     }
 
     public List<Provincia> getProvincias()
@@ -309,8 +307,7 @@ public class MasterDataDbHelper extends SQLiteOpenHelper {
         String whereClause = MasterDataDb.Provincia.ca_id + " = ?";
         String[] wherClauseArgs = new String[]{String.valueOf(caId)};
 
-        Cursor cursor = mDataBase.query(TB_PROVINCIA, columns, whereClause, wherClauseArgs, null, null, null);
-        return cursor;
+        return mDataBase.query(TB_PROVINCIA, columns, whereClause, wherClauseArgs, null, null, null);
 
     }
 
@@ -361,8 +358,7 @@ public class MasterDataDbHelper extends SQLiteOpenHelper {
         values.put(_ID, pk);
         values.put(cu_nombre, nombre);
 
-        long comunidadPk = mDataBase.insert(TB_C_AUTONOMA, null, values);
-        return comunidadPk;
+        return mDataBase.insert(TB_C_AUTONOMA, null, values);
     }
 
     public List<ComunidadAutonoma> getComunidadesAu()

@@ -1,4 +1,4 @@
-package com.didekindroid.ioutils;
+package com.didekindroid.utils;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

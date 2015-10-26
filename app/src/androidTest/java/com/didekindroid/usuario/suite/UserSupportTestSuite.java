@@ -1,6 +1,6 @@
 package com.didekindroid.usuario.suite;
 
-import com.didekindroid.ioutils.IoHelperTest;
+import com.didekindroid.utils.IoHelperTest;
 import com.didekindroid.repository.MasterDataDbHelperTest;
 import com.didekindroid.repository.MockDbHelperTest;
 import com.didekindroid.usuario.activity.utils.IntentExtrasTests;
@@ -10,6 +10,8 @@ import com.didekindroid.usuario.dominio.UsuarioComunidadBeanValidaTests;
 import com.didekindroid.security.TokenHandlerTest;
 import com.didekindroid.usuario.webservices.Oauth2ServiceIfTest;
 import com.didekindroid.usuario.webservices.ServiceOneIfTest;
+import com.didekindroid.utils.UIutilsTest;
+
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -29,7 +31,8 @@ import org.junit.runners.Suite;
         UsuarioBeanValidaTests.class,
         UsuarioComunidadBeanValidaTests.class,
         ServiceOneIfTest.class,
-        Oauth2ServiceIfTest.class
+        Oauth2ServiceIfTest.class,
+        UIutilsTest.class
 })
 public class UserSupportTestSuite {
 }

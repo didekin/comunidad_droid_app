@@ -11,7 +11,9 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        ComuSearchResultsAcTest_2.class
+        ComuSearchResultsAcTest_2.class,
+        LoginAcTest_2.class,
+        LoginAcTest_3.class
 })
 public class UserFunctionalSlowTestSuite {
 }

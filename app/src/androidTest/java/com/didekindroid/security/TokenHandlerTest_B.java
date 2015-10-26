@@ -5,7 +5,7 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import com.didekin.retrofitcl.OauthToken;
 import com.didekin.retrofitcl.OauthToken.AccessToken;
-import com.didekindroid.ioutils.IoHelper;
+import com.didekindroid.utils.IoHelper;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

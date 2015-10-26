@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:id="@+id/see_usercomu_by_comu_ac_frg_container"
-             style="@style/baseLayout">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/see_usercomu_by_comu_ac_frg_container"
+    style="@style/baseLayout">
+
+    <include layout="@layout/appbar_include" />
 
     <fragment
-            android:id="@+id/see_usercomu_by_comu_frg"
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"
-            android:name="com.didekindroid.usuario.activity.SeeUserComuByComuFr"
-            tools:layout="@layout/usercomu_list_header_view"/>
+        android:id="@+id/see_usercomu_by_comu_frg"
+        android:name="com.didekindroid.usuario.activity.SeeUserComuByComuFr"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        tools:layout="@layout/usercomu_list_header_view" />
 
 </FrameLayout>

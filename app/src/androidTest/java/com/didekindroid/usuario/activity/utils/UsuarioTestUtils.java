@@ -23,7 +23,7 @@ import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.*;
 import static com.didekindroid.DidekindroidApp.getContext;
 import static com.didekindroid.security.TokenHandler.TKhandler;
-import static com.didekindroid.uiutils.UIutils.updateIsRegistered;
+import static com.didekindroid.utils.UIutils.updateIsRegistered;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.ADMINISTRADOR;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.*;
 import static com.didekindroid.usuario.webservices.Oauth2Service.Oauth2;
@@ -37,6 +37,7 @@ import static org.hamcrest.Matchers.*;
  * Date: 21/07/15
  * Time: 11:19
  */
+@SuppressWarnings("unchecked")
 public final class UsuarioTestUtils {
 
     private UsuarioTestUtils()
@@ -54,7 +55,7 @@ public final class UsuarioTestUtils {
 
     public static Usuario signUpAndUpdateTk(UsuarioComunidad usuarioComunidad)
     {
-        boolean isRegisterd = ServOne.regComuAndUserAndUserComu(usuarioComunidad);
+        ServOne.regComuAndUserAndUserComu(usuarioComunidad);
         updateSecurityData(usuarioComunidad.getUsuario().getUserName(), usuarioComunidad.getUsuario().getPassword());
         return ServOne.getUserData();
     }
@@ -145,11 +146,11 @@ public final class UsuarioTestUtils {
         }
     }
 
-    public static void checkNoToastInTest(int resourceStringId, Activity activity, int... fieldsErrors)
+    public static void checkNoToastInTest(int resourceStringId, Activity activity)
     {
         Resources resources = DidekindroidApp.getContext().getResources();
 
-        ViewInteraction toast = onView(
+        onView(
                 withText(containsString(resources.getText(resourceStringId).toString())))
                 .inRoot(withDecorView(not(activity.getWindow().getDecorView())))
                 .check(doesNotExist());

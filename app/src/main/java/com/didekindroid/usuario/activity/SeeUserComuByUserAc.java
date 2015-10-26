@@ -1,19 +1,20 @@
 package com.didekindroid.usuario.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
-import com.didekindroid.usuario.activity.utils.UserIntentExtras;
 
-import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.usuario.activity.utils.UserMenu.COMU_SEARCH_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.USER_DATA_AC;
+import static com.didekindroid.utils.UIutils.doToolBar;
+import static com.didekindroid.utils.UIutils.isRegisteredUser;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
@@ -26,7 +27,8 @@ import static com.google.common.base.Preconditions.checkState;
  * -- an object Usuario fully initialized.
  * -- the rest of data of an object UsuarioComunidad fully initialized.
  */
-public class SeeUserComuByUserAc extends Activity implements SeeUserComuByUserFr.SeeUserComuByUserFrListener {
+public class SeeUserComuByUserAc extends AppCompatActivity implements
+        SeeUserComuByUserFr.SeeUserComuByUserFrListener {
 
     public static final String TAG = SeeUserComuByUserAc.class.getCanonicalName();
 
@@ -42,6 +44,7 @@ public class SeeUserComuByUserAc extends Activity implements SeeUserComuByUserFr
         checkState(isRegisteredUser(this));
 
         setContentView(R.layout.see_usercomu_by_user_ac);
+        doToolBar(this, true);
         mFragment = (SeeUserComuByUserFr) getFragmentManager().findFragmentById(R.id.see_usercomu_by_user_frg);
     }
 
@@ -139,9 +142,9 @@ public class SeeUserComuByUserAc extends Activity implements SeeUserComuByUserFr
     @Override
     public void onUserComuSelected(UsuarioComunidad userComu, int position)
     {
-        Log.d(TAG,"onUserComuSelected()");
-        Intent intent = new Intent(this,UserComuDataAc.class);
-        intent.putExtra(USERCOMU_LIST_OBJECT.extra,userComu);
+        Log.d(TAG, "onUserComuSelected()");
+        Intent intent = new Intent(this, UserComuDataAc.class);
+        intent.putExtra(USERCOMU_LIST_OBJECT.extra, userComu);
         startActivity(intent);
     }
 }

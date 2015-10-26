@@ -12,8 +12,8 @@ import android.widget.Toast;
 import com.didekindroid.usuario.activity.ComuSearchAc;
 import com.didekindroid.usuario.activity.LoginAc;
 
-import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
-import static com.didekindroid.uiutils.UIutils.makeToast;
+import static com.didekindroid.utils.UIutils.isRegisteredUser;
+import static com.didekindroid.utils.UIutils.makeToast;
 
 /**
  * Exceptions to be dealt with in the user interface

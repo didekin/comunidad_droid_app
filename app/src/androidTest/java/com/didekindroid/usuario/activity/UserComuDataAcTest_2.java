@@ -3,10 +3,13 @@ package com.didekindroid.usuario.activity;
 import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
+
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.security.UiException;
 import com.didekindroid.usuario.activity.utils.CleanEnum;
+
+import org.hamcrest.CoreMatchers;
 import org.junit.*;
 import org.junit.runner.RunWith;
 
@@ -14,6 +17,7 @@ import java.util.List;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
+import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.*;
@@ -106,6 +110,13 @@ public class UserComuDataAcTest_2 {
                 .check(matches(isDisplayed()));
         onView(withId(R.id.reg_usercomu_puerta_ed)).check(matches(withText(containsString(mUsuarioComunidad.getPuerta()))))
                 .check(matches(isDisplayed()));
+
+        onView(withId(R.id.appbar)).check(matches(isDisplayed()));
+        onView(withContentDescription("Navigate up")).check(matches(isDisplayed()));
+        onView(CoreMatchers.allOf(
+                        withContentDescription("Navigate up"),
+                        isClickable())
+        ).check(matches(isDisplayed())).perform(click());
     }
 
     @Test

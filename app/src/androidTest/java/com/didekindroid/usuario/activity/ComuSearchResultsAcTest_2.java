@@ -4,12 +4,10 @@ import android.content.Intent;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
-import com.didekin.serviceone.domain.Comunidad;
-import com.didekin.serviceone.domain.Municipio;
-import com.didekin.serviceone.domain.Provincia;
+
 import com.didekindroid.R;
 import com.didekindroid.usuario.activity.utils.CleanEnum;
-import com.didekindroid.usuario.dominio.DomainDataUtils;
+
 import org.junit.*;
 import org.junit.runner.RunWith;
 
@@ -18,7 +16,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.security.TokenHandler.TKhandler;
-import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
+import static com.didekindroid.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_SEARCH;
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.*;

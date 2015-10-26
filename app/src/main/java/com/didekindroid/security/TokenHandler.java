@@ -1,9 +1,10 @@
 package com.didekindroid.security;
 
 import android.util.Log;
+
 import com.didekin.retrofitcl.OauthToken.AccessToken;
-import com.didekindroid.ioutils.IoHelper;
-import com.didekindroid.uiutils.UIutils;
+import com.didekindroid.utils.IoHelper;
+import com.didekindroid.utils.UIutils;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 
@@ -41,7 +42,7 @@ public enum TokenHandler {
         tokensCache = CacheBuilder.newBuilder()
                 .maximumSize(1)
                 .expireAfterWrite(120, TimeUnit.MINUTES)
-                .<String, AccessToken>build();
+                .build();
 
         refreshTokenFile = new File(getContext().getFilesDir(), refresh_token_filename);
         refreshTokenKey = refreshTokenFile.exists() ? IoHelper.readStringFromFile(refreshTokenFile) : null;
@@ -63,6 +64,7 @@ public enum TokenHandler {
     {
         Log.d(TAG, "cleanCacheAndBckFile()");
 
+        //noinspection ResultOfMethodCallIgnored
         refreshTokenFile.delete();
         tokensCache.invalidateAll();
         refreshTokenKey = null;
@@ -110,11 +112,6 @@ public enum TokenHandler {
     public Cache<String, AccessToken> getTokensCache()
     {
         return tokensCache;
-    }
-
-    public static String getRefresh_token_filename()
-    {
-        return refresh_token_filename;
     }
 
     public File getRefreshTokenFile()

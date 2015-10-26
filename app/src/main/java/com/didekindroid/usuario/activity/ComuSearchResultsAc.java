@@ -1,25 +1,29 @@
 package com.didekindroid.usuario.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+
 import com.didekin.serviceone.domain.Comunidad;
 import com.didekindroid.R;
-import com.didekindroid.uiutils.UIutils;
 import com.didekindroid.usuario.activity.utils.UserMenu;
+import com.didekindroid.utils.UIutils;
 
 import java.util.List;
 
-import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_LIST_INDEX;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_LIST_OBJECT;
-import static com.didekindroid.usuario.activity.utils.UserMenu.*;
+import static com.didekindroid.usuario.activity.utils.UserMenu.REG_COMU_USER_USERCOMU_AC;
+import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_USERCOMU_BY_USER_AC;
+import static com.didekindroid.usuario.activity.utils.UserMenu.USER_DATA_AC;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
+import static com.didekindroid.utils.UIutils.doToolBar;
+import static com.didekindroid.utils.UIutils.isRegisteredUser;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -31,7 +35,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * -- municipio, with codInProvincia and nombre.
  * -- provincia, with provinciaId and nombre.
  */
-public class ComuSearchResultsAc extends Activity implements ComuSearchResultsListFr.ComuListListener {
+public class ComuSearchResultsAc extends AppCompatActivity implements ComuSearchResultsListFr.ComuListListener {
 
     private static final String TAG = ComuSearchResultsAc.class.getCanonicalName();
 
@@ -54,6 +58,7 @@ public class ComuSearchResultsAc extends Activity implements ComuSearchResultsLi
         }
 
         setContentView(R.layout.comu_search_results_layout);
+        doToolBar(this, true);
 
         // Find our fragments.
         mComunidadesSummaryFrg = (ComuSearchResultsListFr) getFragmentManager()
@@ -166,7 +171,7 @@ public class ComuSearchResultsAc extends Activity implements ComuSearchResultsLi
      * Those are used when she selects a comunidad: the actions performed by the app are
      * different following the different possibilities.
      */
-    private class ComunidadesUsuarioGetter extends AsyncTask<Void, Void, List<Comunidad>> {
+    class ComunidadesUsuarioGetter extends AsyncTask<Void, Void, List<Comunidad>> {
 
         @Override
         protected List<Comunidad> doInBackground(Void... params)
@@ -183,11 +188,4 @@ public class ComuSearchResultsAc extends Activity implements ComuSearchResultsLi
             mUsuarioComunidades = comunidades;
         }
     }
-
-    List<Comunidad> getmUsuarioComunidades()
-    {
-        Log.d(TAG, "getmUsuarioComunidades()");
-        return mUsuarioComunidades;
-    }
-
 }

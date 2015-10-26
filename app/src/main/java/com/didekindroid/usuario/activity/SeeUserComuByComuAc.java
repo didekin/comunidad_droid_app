@@ -1,17 +1,18 @@
 package com.didekindroid.usuario.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
+
 import com.didekindroid.R;
 
-import static com.didekindroid.uiutils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.UserMenu.COMU_SEARCH_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_USERCOMU_BY_USER_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.USER_DATA_AC;
+import static com.didekindroid.utils.UIutils.doToolBar;
+import static com.didekindroid.utils.UIutils.isRegisteredUser;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
@@ -25,11 +26,10 @@ import static com.google.common.base.Preconditions.checkState;
  *  1. a long comunidadId is passed as an intent extra.
  *  2. the user is registered.
  */
-public class SeeUserComuByComuAc extends Activity {
+public class SeeUserComuByComuAc extends AppCompatActivity {
 
     public static final String TAG = SeeUserComuByComuAc.class.getCanonicalName();
     SeeUserComuByComuFr mFragment;
-    private Button mRegisterButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -41,6 +41,7 @@ public class SeeUserComuByComuAc extends Activity {
         checkState(isRegisteredUser(this));
 
         setContentView(R.layout.see_usercomu_by_comu_ac);
+        doToolBar(this, true);
         mFragment = (SeeUserComuByComuFr) getFragmentManager().findFragmentById(R.id.see_usercomu_by_comu_frg);
     }
 

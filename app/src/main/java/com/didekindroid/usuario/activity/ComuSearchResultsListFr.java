@@ -13,7 +13,7 @@ import com.didekin.serviceone.domain.Comunidad;
 
 import java.util.List;
 
-import static com.didekindroid.uiutils.ViewsIDs.COMU_SEARCH_RESULTS;
+import static com.didekindroid.utils.ViewsIDs.COMU_SEARCH_RESULTS;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_SEARCH;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 
@@ -167,7 +167,7 @@ public class ComuSearchResultsListFr extends ListFragment {
     //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
     //    ============================================================
 
-    private class SearchComunidadesLoader extends AsyncTask<Comunidad, Void, List<Comunidad>> {
+    class SearchComunidadesLoader extends AsyncTask<Comunidad, Void, List<Comunidad>> {
 
         private final String TAG = SearchComunidadesLoader.class.getCanonicalName();
 

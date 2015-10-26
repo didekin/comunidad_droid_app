@@ -1,10 +1,10 @@
 package com.didekindroid.usuario.activity;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,23 +13,31 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import com.didekin.serviceone.domain.Comunidad;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
-import com.didekindroid.ioutils.ConnectionUtils;
+import com.didekindroid.security.TokenHandler;
 import com.didekindroid.usuario.activity.utils.UserAndComuFiller;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
-import com.didekindroid.security.TokenHandler;
+import com.didekindroid.utils.ConnectionUtils;
 
 import static com.didekin.serviceone.controllers.ControllerConstant.IS_USER_DELETED;
-import static com.didekindroid.uiutils.UIutils.*;
-import static com.didekindroid.usuario.activity.utils.RolCheckBox.*;
+import static com.didekindroid.usuario.activity.utils.RolCheckBox.ADMINISTRADOR;
+import static com.didekindroid.usuario.activity.utils.RolCheckBox.INQUILINO;
+import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRESIDENTE;
+import static com.didekindroid.usuario.activity.utils.RolCheckBox.PROPIETARIO;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_ID;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.usuario.activity.utils.UserMenu.COMU_DATA_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_USERCOMU_BY_COMU_AC;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
+import static com.didekindroid.utils.UIutils.doToolBar;
+import static com.didekindroid.utils.UIutils.getErrorMsgBuilder;
+import static com.didekindroid.utils.UIutils.isRegisteredUser;
+import static com.didekindroid.utils.UIutils.makeToast;
+import static com.didekindroid.utils.UIutils.updateIsRegistered;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
@@ -43,13 +51,11 @@ import static com.google.common.base.Preconditions.checkState;
  * 1c. Unregistered user, once she has deleted the data of the one comunidad associated to ther. It goes to
  * ComuSearchAc.
  */
-public class UserComuDataAc extends Activity {
+public class UserComuDataAc extends AppCompatActivity {
 
     private static final String TAG = UserComuDataAc.class.getCanonicalName();
 
     private View mAcView;
-    private Button mModifyButton;
-    private Button mDeleteButton;
     private UsuarioComunidad mOldUserComu;
     private MenuItem mComuDataItem;
 
@@ -68,8 +74,9 @@ public class UserComuDataAc extends Activity {
         mAcView = getLayoutInflater().inflate(R.layout.usercomu_data_ac_layout, null);
         setContentView(mAcView);
         paintUserComuView();
+        doToolBar(this, true);
 
-        mModifyButton = (Button) findViewById(R.id.usercomu_data_ac_modif_button);
+        Button mModifyButton = (Button) findViewById(R.id.usercomu_data_ac_modif_button);
         mModifyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
@@ -79,7 +86,7 @@ public class UserComuDataAc extends Activity {
             }
         });
 
-        mDeleteButton = (Button) findViewById(R.id.usercomu_data_ac_delete_button);
+        Button mDeleteButton = (Button) findViewById(R.id.usercomu_data_ac_delete_button);
         mDeleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
@@ -185,7 +192,7 @@ public class UserComuDataAc extends Activity {
     //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
     //    ============================================================
 
-    private class ComuDataMenuSetter extends AsyncTask<Void, Void, Boolean> {
+    class ComuDataMenuSetter extends AsyncTask<Void, Void, Boolean> {
 
         final String TAG = ComuDataMenuSetter.class.getCanonicalName();
 
@@ -205,7 +212,7 @@ public class UserComuDataAc extends Activity {
         }
     }
 
-    private class UserComuModifyer extends AsyncTask<UsuarioComunidad, Void, Integer> {
+    class UserComuModifyer extends AsyncTask<UsuarioComunidad, Void, Integer> {
 
         final String TAG = UserComuModifyer.class.getCanonicalName();
 
@@ -224,7 +231,7 @@ public class UserComuDataAc extends Activity {
         }
     }
 
-    private class UserComuEraser extends AsyncTask<Comunidad, Void, Integer> {
+    class UserComuEraser extends AsyncTask<Comunidad, Void, Integer> {
 
         final String TAG = UserComuEraser.class.getCanonicalName();
 
