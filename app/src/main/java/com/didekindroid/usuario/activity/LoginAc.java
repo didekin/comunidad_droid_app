@@ -1,7 +1,7 @@
 package com.didekindroid.usuario.activity;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
+import android.support.v7.app.AlertDialog;
+import 	android.support.v7.app.AppCompatDialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,13 +17,13 @@ import android.widget.Toast;
 import com.didekin.retrofitcl.OauthToken.AccessToken;
 import com.didekin.serviceone.domain.Usuario;
 import com.didekindroid.R;
-import com.didekindroid.security.UiException;
+import com.didekindroid.exception.UiException;
 import com.didekindroid.usuario.dominio.UsuarioBean;
 import com.didekindroid.utils.ConnectionUtils;
 
 import static android.widget.Toast.LENGTH_LONG;
 import static com.didekindroid.security.TokenHandler.TKhandler;
-import static com.didekindroid.security.UiException.UiAction.SEARCH_COMU;
+import static com.didekindroid.exception.UiException.UiAction.SEARCH_COMU;
 import static com.didekindroid.usuario.webservices.Oauth2Service.Oauth2;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 import static com.didekindroid.utils.UIutils.doToolBar;
@@ -94,7 +94,7 @@ public class LoginAc extends AppCompatActivity {
 
         StringBuilder errorBuilder = getErrorMsgBuilder(this);
         if (!usuarioBean.validateLoginData(getResources(), errorBuilder)) {
-            makeToast(this, errorBuilder.toString());
+            makeToast(this, errorBuilder.toString(), Toast.LENGTH_SHORT);
         } else if (!ConnectionUtils.isInternetConnected(this)) {
             makeToast(this, R.string.no_internet_conn_toast, LENGTH_LONG);
         } else {
@@ -200,12 +200,12 @@ public class LoginAc extends AppCompatActivity {
         }
 
         @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState)
+        public AppCompatDialog onCreateDialog(Bundle savedInstanceState)
         {
             Log.d(TAG, "onCreateDialog()");
 
             int message = R.string.send_password_by_mail_dialog;
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.alertDialogTheme);
 
             builder.setMessage(message)
                     .setPositiveButton(R.string.send_password_by_mail_YES, new DialogInterface.OnClickListener() {

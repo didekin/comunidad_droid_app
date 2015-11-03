@@ -7,7 +7,7 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekin.serviceone.security.Rol;
 import com.didekindroid.R;
-import com.didekindroid.security.UiException;
+import com.didekindroid.exception.UiException;
 import com.didekindroid.usuario.activity.utils.CleanEnum;
 import org.junit.*;
 import org.junit.runner.RunWith;

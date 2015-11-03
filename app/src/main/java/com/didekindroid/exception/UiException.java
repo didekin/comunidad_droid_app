@@ -1,4 +1,4 @@
-package com.didekindroid.security;
+package com.didekindroid.exception;
 
 /**
  * User: pedro@didekin

@@ -25,7 +25,7 @@ import org.junit.runners.Suite;
         RegUserComuAcTest_intent.class,
         RegUserAndUserComuAcTest_intent.class,
         SeeUserComuByComuAcTest.class,
-        SeeUserComuByUserAcTest.class,  // En trámite.
+        SeeUserComuByUserAcTest.class,
         UserComuDataAcTest_1.class,
         UserComuDataAcTest_2.class,
         UserDataAcTest.class

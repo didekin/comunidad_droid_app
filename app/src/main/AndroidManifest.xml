@@ -1,28 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.didekindroid"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.didekindroid" >
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <!--suppress AndroidDomInspection -->
     <instrumentation
         android:name="android.support.test.runner.AndroidJUnitRunner"
-        android:targetPackage="com.didekindroid"/>
+        android:targetPackage="com.didekindroid" />
 
     <supports-screens
         android:largeScreens="true"
         android:normalScreens="true"
         android:smallScreens="true"
-        android:xlargeScreens="true"/>
+        android:xlargeScreens="true" />
 
     <application
         android:name=".DidekindroidApp"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        android:theme="@style/themeOne" >
 
+        <!-- **************************************************************** -->
+        <!-- INCIDENCIA -->
+        <!-- **************************************************************** -->
+        <activity android:name=".incidencia.activity.IncidRegAc"
+                  android:label="@string/incid_reg_ac_label">
+        </activity>
         <!-- **************************************************************** -->
         <!-- USUARIO -->
         <!-- **************************************************************** -->
@@ -30,115 +36,115 @@
         <activity
             android:name=".usuario.activity.ComuDataAc"
             android:label="@string/comu_data_ac_label"
-            android:parentActivityName=".usuario.activity.UserComuDataAc">
+            android:parentActivityName=".usuario.activity.UserComuDataAc" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".usuario.activity.UserComuDataAc"/>
+                android:value=".usuario.activity.UserComuDataAc" />
         </activity>
         <activity
             android:name=".usuario.activity.ComuSearchAc"
             android:label="@string/comu_search_ac_label"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop" >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".usuario.activity.ComuSearchResultsAc"
             android:label="@string/comu_search_results_ac_label"
-            android:parentActivityName=".usuario.activity.ComuSearchAc">
+            android:parentActivityName=".usuario.activity.ComuSearchAc" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".usuario.activity.ComuSearchAc"/>
-
+                android:value=".usuario.activity.ComuSearchAc" />
         </activity>
         <activity
             android:name=".usuario.activity.DeleteMeAc"
             android:label="@string/delete_me_ac_label"
-            android:parentActivityName=".usuario.activity.UserDataAc">
+            android:parentActivityName=".usuario.activity.UserDataAc" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".usuario.activity.UserDataAc"/>
+                android:value=".usuario.activity.UserDataAc" />
         </activity>
         <activity
             android:name=".usuario.activity.LoginAc"
             android:label="@string/login_label"
-            android:launchMode="singleInstance"/>
+            android:launchMode="singleInstance" />
         <activity
             android:name=".usuario.activity.PasswordChangeAc"
             android:label="@string/password_change_ac_label"
-            android:parentActivityName=".usuario.activity.UserDataAc">
+            android:parentActivityName=".usuario.activity.UserDataAc" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".usuario.activity.UserDataAc"/>
+                android:value=".usuario.activity.UserDataAc" />
         </activity>
         <activity
             android:name=".usuario.activity.RegComuAndUserAndUserComuAc"
             android:label="@string/reg_comunidad_ac_label"
             android:launchMode="singleTask"
-            android:parentActivityName=".usuario.activity.ComuSearchAc">
+            android:parentActivityName=".usuario.activity.ComuSearchAc" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".usuario.activity.ComuSearchAc"/>
+                android:value=".usuario.activity.ComuSearchAc" />
         </activity>
         <activity
             android:name=".usuario.activity.RegComuAndUserComuAc"
             android:label="@string/reg_comunidad_ac_label"
             android:launchMode="singleTask"
-            android:parentActivityName=".usuario.activity.ComuSearchAc">
+            android:parentActivityName=".usuario.activity.ComuSearchAc" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".usuario.activity.ComuSearchAc"/>
+                android:value=".usuario.activity.ComuSearchAc" />
         </activity>
         <activity
             android:name=".usuario.activity.RegUserAndUserComuAc"
             android:label="@string/reg_user_and_usercomu_ac_label"
-            android:parentActivityName=".usuario.activity.ComuSearchResultsAc">
+            android:parentActivityName=".usuario.activity.ComuSearchResultsAc" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".usuario.activity.ComuSearchResultsAc"/>
+                android:value=".usuario.activity.ComuSearchResultsAc" />
         </activity>
         <activity
             android:name=".usuario.activity.RegUserComuAc"
             android:label="@string/regusuario_comu_ac_label"
             android:launchMode="singleTask"
-            android:parentActivityName=".usuario.activity.ComuSearchAc">
+            android:parentActivityName=".usuario.activity.ComuSearchAc" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".usuario.activity.ComuSearchAc"/>
+                android:value=".usuario.activity.ComuSearchAc" />
         </activity>
         <activity
             android:name=".usuario.activity.SeeUserComuByComuAc"
             android:label="@string/see_usercomu_by_comu_ac_label"
-            android:parentActivityName=".usuario.activity.UserComuDataAc">
+            android:parentActivityName=".usuario.activity.UserComuDataAc" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".usuario.activity.UserComuDataAc"/>
+                android:value=".usuario.activity.UserComuDataAc" />
         </activity>
         <activity
             android:name=".usuario.activity.SeeUserComuByUserAc"
             android:label="@string/see_usercomu_by_user_ac_label"
-            android:parentActivityName=".usuario.activity.ComuSearchResultsAc">
+            android:parentActivityName=".usuario.activity.ComuSearchResultsAc" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".usuario.activity.ComuSearchResultsAc"/>
+                android:value=".usuario.activity.ComuSearchResultsAc" />
         </activity>
         <activity
             android:name=".usuario.activity.UserComuDataAc"
             android:label="@string/usercomu_data_ac_label"
-            android:parentActivityName=".usuario.activity.SeeUserComuByUserAc">
+            android:parentActivityName=".usuario.activity.SeeUserComuByUserAc" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".usuario.activity.SeeUserComuByUserAc"/>
+                android:value=".usuario.activity.SeeUserComuByUserAc" />
         </activity>
         <activity
             android:name=".usuario.activity.UserDataAc"
             android:label="@string/user_data_ac_label"
-            android:parentActivityName=".usuario.activity.SeeUserComuByUserAc">
+            android:parentActivityName=".usuario.activity.SeeUserComuByUserAc" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".usuario.activity.SeeUserComuByUserAc"/>
+                android:value=".usuario.activity.SeeUserComuByUserAc" />
         </activity>
     </application>
 

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <ListPreference
+    <!--<ListPreference
             android:title="@string/maxOffers_titlePref"
             android:summary="@string/maxOffers_summaryPref"
             android:key="@string/maxOffers_keyPref"
             android:defaultValue="25"
             android:entries="@array/MaxOffersArray"
             android:entryValues="@array/MaxOffersValues"
-            />
+            />-->
     <!--<CheckBoxPreference
             android:title="Show Summaries"
             android:defaultValue="false"

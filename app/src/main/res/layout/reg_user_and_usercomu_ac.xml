@@ -14,7 +14,7 @@
             android:id="@+id/rotulo_comunidad"
             style="@style/textBase.textPageLabel2"
             android:layout_alignParentStart="true"
-            android:layout_marginTop="?attr/actionBarSize"
+            android:layout_marginTop="@dimen/app_bar_bottom_margin"
             android:text="@string/rotulo_comunidad" />
 
         <TextView

@@ -1,7 +1,6 @@
 package com.didekindroid.usuario.activity;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -32,7 +31,6 @@ public class PasswordChangeAc extends AppCompatActivity {
     private static final String TAG = PasswordChangeAc.class.getCanonicalName();
 
     private View mAcView;
-    private Button mModifyButton;
 
     @SuppressLint("InflateParams")
     @Override
@@ -48,7 +46,7 @@ public class PasswordChangeAc extends AppCompatActivity {
         setContentView(mAcView);
         doToolBar(this, true);
 
-        mModifyButton = (Button) findViewById(R.id.password_change_ac_button);
+        Button mModifyButton = (Button) findViewById(R.id.password_change_ac_button);
         mModifyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
@@ -75,7 +73,7 @@ public class PasswordChangeAc extends AppCompatActivity {
         StringBuilder errorBuilder = getErrorMsgBuilder(this);
 
         if (!usuarioBean.validateDoublePassword(getResources(), errorBuilder)) {
-            makeToast(this, errorBuilder.toString());
+            makeToast(this, errorBuilder.toString(), Toast.LENGTH_SHORT);
         } else if (!ConnectionUtils.isInternetConnected(this)) {
             makeToast(this, R.string.no_internet_conn_toast, Toast.LENGTH_LONG);
         } else {

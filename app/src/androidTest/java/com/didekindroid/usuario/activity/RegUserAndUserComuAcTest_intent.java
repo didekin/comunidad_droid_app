@@ -32,22 +32,29 @@ import static android.support.test.espresso.matcher.ViewMatchers.withContentDesc
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.security.TokenHandler.TKhandler;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_JUAN2_AND_PEPE;
+import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRESIDENTE;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PROPIETARIO;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_ID;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_LIST_OBJECT;
+import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.LOGIN_AC;
+import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.REQUIRES_USER_NO_TOKEN;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanWithTkhandler;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.typeRegUserComuData;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_JUAN;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_TRAV_PLAZUELA_PEPE;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_JUAN2;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 import static com.didekindroid.utils.UIutils.isRegisteredUser;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -92,6 +99,12 @@ public class RegUserAndUserComuAcTest_intent {
     public static void slowSeconds() throws InterruptedException
     {
         Thread.sleep(5000);
+    }
+
+    @After
+    public void tearDown() throws Exception
+    {
+        cleanOptions(whatToClean);
     }
 
     @Test
@@ -148,10 +161,37 @@ public class RegUserAndUserComuAcTest_intent {
         assertThat(isRegisteredUser(activity), is(true));
     }
 
-    @After
-    public void tearDown() throws Exception
+    //    =================================== MENU ===================================
+
+    @Test
+    public void testLoginMn_1() throws InterruptedException
     {
-        cleanOptions(whatToClean);
+        whatToClean = CLEAN_PEPE;
+
+        activity = intentRule.getActivity();
+        assertThat(isRegisteredUser(activity), CoreMatchers.is(false));
+        assertThat(TKhandler.getAccessTokenInCache(), nullValue());
+
+        LOGIN_AC.checkMenuItem_NTk(activity);
+    }
+
+    @Test
+    public void testLoginMn_2() throws InterruptedException
+    {
+        whatToClean = CLEAN_JUAN_AND_PEPE;
+        //With token.
+        signUpAndUpdateTk(COMU_REAL_JUAN);
+
+        activity = intentRule.getActivity();
+        assertThat(isRegisteredUser(activity), CoreMatchers.is(true));
+        assertThat(TKhandler.getAccessTokenInCache(), not(nullValue()));
+
+        try {
+            LOGIN_AC.checkMenuItem_WTk(activity);
+            fail();
+        } catch (UnsupportedOperationException e) {
+            assertThat(e.getMessage(), CoreMatchers.is(LOGIN_AC.name() + REQUIRES_USER_NO_TOKEN));
+        }
     }
 }
 

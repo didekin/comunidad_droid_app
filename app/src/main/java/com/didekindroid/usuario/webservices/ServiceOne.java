@@ -8,7 +8,7 @@ import com.didekin.serviceone.domain.Usuario;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekin.serviceone.exception.ExceptionMessage;
 import com.didekindroid.R;
-import com.didekindroid.security.UiException;
+import com.didekindroid.exception.UiException;
 
 import java.util.List;
 
@@ -16,8 +16,8 @@ import static com.didekin.retrofitcl.RetrofitRestBuilder.BUILDER;
 import static com.didekin.serviceone.exception.ExceptionMessage.*;
 import static com.didekindroid.DidekindroidApp.getBaseURL;
 import static com.didekindroid.security.TokenHandler.TKhandler;
-import static com.didekindroid.security.UiException.UiAction.LOGIN;
-import static com.didekindroid.security.UiException.UiAction.SEARCH_COMU;
+import static com.didekindroid.exception.UiException.UiAction.LOGIN;
+import static com.didekindroid.exception.UiException.UiAction.SEARCH_COMU;
 
 /**
  * User: pedro@didekin

@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/comu_list_frg"
         android:name="com.didekindroid.usuario.activity.ComuSearchResultsListFr"
-        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_marginTop="@dimen/app_bar_bottom_margin"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </FrameLayout>

@@ -6,7 +6,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
-import com.didekindroid.security.UiException;
+import com.didekindroid.exception.UiException;
 import com.didekindroid.usuario.activity.utils.CleanEnum;
 
 import org.hamcrest.CoreMatchers;

@@ -26,7 +26,6 @@ import org.junit.runner.RunWith;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -296,7 +295,7 @@ public class ComuSearchResultsAcTest_1 {
         // Insertamos al usuario que hace la búsqueda.
         Comunidad comunidadIn = makeComunidad("Calle", "de la Torre", (short) 115, "",
                 new Municipio((short) 22, new Provincia((short) 2)));
-        Usuario usuarioIn = makeUsuario("newuser@jnew.us", "newuser", "psw_newuser", (short) 34, 600151515);
+        Usuario usuarioIn = makeUsuario("newuser@jnew.us", "newuser", "psw_newuser");
         UsuarioComunidad usuarioComunidad = makeUsuarioComunidad(comunidadIn, usuarioIn, null,
                 null, "3pl", "A_puerta", PROPIETARIO.function);
         signUpAndUpdateTk(usuarioComunidad);

@@ -127,7 +127,7 @@ public class UserComuDataAc extends AppCompatActivity {
         StringBuilder errorBuilder = getErrorMsgBuilder(this);
 
         if (!userComuBean.validate(getResources(), errorBuilder)) {
-            makeToast(this, errorBuilder.toString());
+            makeToast(this, errorBuilder.toString(), Toast.LENGTH_SHORT);
         } else if (!ConnectionUtils.isInternetConnected(this)) {
             makeToast(this, R.string.no_internet_conn_toast, Toast.LENGTH_LONG);
         } else {
@@ -142,8 +142,6 @@ public class UserComuDataAc extends AppCompatActivity {
     {
         Log.d(TAG, "deleteUserComuData()");
         new UserComuEraser().execute(mOldUserComu.getComunidad());
-        Intent intent = new Intent(this, ComuSearchAc.class);
-        startActivity(intent);
     }
 
     /**
@@ -245,12 +243,17 @@ public class UserComuDataAc extends AppCompatActivity {
         @Override
         protected void onPostExecute(Integer isDeleted)
         {
-            Log.d(TAG, "onPostExecute()");
+            Log.d(TAG, "onPostExecute() entering.");
+
             checkState(isDeleted != 0);
+
             if (isDeleted == IS_USER_DELETED) {
                 TokenHandler.TKhandler.cleanCacheAndBckFile();
                 updateIsRegistered(false, UserComuDataAc.this);
             }
+
+            Intent intent = new Intent(UserComuDataAc.this, ComuSearchAc.class);
+            startActivity(intent);
         }
     }
 }

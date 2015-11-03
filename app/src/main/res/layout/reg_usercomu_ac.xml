@@ -15,7 +15,7 @@
             android:name="com.didekindroid.usuario.activity.RegUserComuFr"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="?attr/actionBarSize"
+            android:layout_marginTop="@dimen/app_bar_bottom_margin"
             tools:layout="@layout/reg_usercomu_fr" />
 
         <Button

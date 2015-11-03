@@ -46,6 +46,16 @@ public enum UserMenu {
         }
     },
 
+    LOGIN_AC {
+        @Override
+        public void doMenuItem(Activity activity)
+        {
+            Log.d(TAG, "login_ac.doMenuItem()");
+            Intent intent = new Intent(activity, LoginAc.class);
+            activity.startActivity(intent);
+        }
+    },
+
     PASSWORD_CHANGE_AC {
         @Override
         public void doMenuItem(Activity activity)
@@ -75,23 +85,6 @@ public enum UserMenu {
                 activity.startActivity(intent);
             }
 
-        }
-    },
-
-    REG_USER_AND_USERCOMU_AC { // Menú: Unirme (a la comunidad).
-
-        @Override
-        public void doMenuItem(Activity activity)
-        {
-            Log.d(TAG, "reg_user_and_usercomu.doMenuItem()");
-            if (isRegisteredUser(activity)) {
-                Log.d(TAG, "reg_user_and_usercomu.doMenuItem(); user is registered.");
-                Intent intent = new Intent(activity, RegUserComuAc.class);
-                activity.startActivity(intent);
-            } else {
-                Log.d(TAG, "reg_user_and_usercomu.doMenuItem(); user is not registered.");
-                Intent intent = new Intent(activity, RegUserAndUserComuAc.class);
-            }
         }
     },
 

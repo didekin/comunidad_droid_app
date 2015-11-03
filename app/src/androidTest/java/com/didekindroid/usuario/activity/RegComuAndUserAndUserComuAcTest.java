@@ -40,16 +40,22 @@ import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_NOTHING;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeComunidadBeanFromView;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUserBeanFromRegUserFrView;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUserComuBeanFromView;
+import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.LOGIN_AC;
+import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.REQUIRES_USER_NO_TOKEN;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.checkToastInTest;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAndUpdateTk;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_JUAN;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_JUAN2;
 import static com.didekindroid.utils.UIutils.isRegisteredUser;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * User: pedro
@@ -88,6 +94,7 @@ public class RegComuAndUserAndUserComuAcTest {
     public void tearDown() throws Exception
     {
         cleanOptions(whatToClean);
+        Thread.sleep(1000);
     }
 
     @Test
@@ -323,5 +330,36 @@ public class RegComuAndUserAndUserComuAcTest {
         assertThat(TKhandler.getAccessTokenInCache(), notNullValue());
         assertThat(TKhandler.getRefreshTokenKey(), is(TKhandler.getAccessTokenInCache().getRefreshToken().getValue()));
         assertThat(isRegisteredUser(mActivity), is(true));
+    }
+
+    //    =================================== MENU ===================================
+
+    @Test
+    public void testLoginMn_1() throws InterruptedException
+    {
+        mActivity = mActivityRule.launchActivity(new Intent());
+        assertThat(isRegisteredUser(mActivity),is(false));
+        assertThat(TKhandler.getAccessTokenInCache(),nullValue());
+
+        LOGIN_AC.checkMenuItem_NTk(mActivity);
+    }
+
+    @Test
+    public void testLoginMn_2() throws InterruptedException
+    {
+        whatToClean = CleanEnum.CLEAN_JUAN;
+        //With token.
+        signUpAndUpdateTk(COMU_REAL_JUAN);
+
+        mActivity = mActivityRule.launchActivity(new Intent());
+        assertThat(isRegisteredUser(mActivity), is(true));
+        assertThat(TKhandler.getAccessTokenInCache(),not(nullValue()));
+
+        try {
+            LOGIN_AC.checkMenuItem_WTk(mActivity);
+            fail();
+        } catch (UnsupportedOperationException e) {
+            assertThat(e.getMessage(),is(LOGIN_AC.name() + REQUIRES_USER_NO_TOKEN));
+        }
     }
 }

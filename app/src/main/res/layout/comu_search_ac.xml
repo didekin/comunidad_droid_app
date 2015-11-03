@@ -8,7 +8,7 @@
         style="@style/baseLayout"
         tools:context="com.didekindroid.usuario.activity.ComuSearchAc">
 
-        <include layout="@layout/appbar_include" />
+        <include layout="@layout/appbar_include"/>
 
         <fragment
             android:id="@+id/reg_comunidad_frg"
@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentStart="true"
-            android:layout_marginTop="?attr/actionBarSize"
+            android:layout_marginTop="@dimen/app_bar_bottom_margin"
             tools:layout="@layout/reg_comu_fr" />
 
         <Button

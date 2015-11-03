@@ -4,26 +4,29 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.didekin.retrofitcl.OauthToken.AccessToken;
 import com.didekin.serviceone.domain.DataPatterns;
 import com.didekindroid.R;
-import com.didekindroid.utils.UIutils;
 import com.didekindroid.usuario.dominio.ComunidadBean;
+import com.didekindroid.utils.UIutils;
 
 import static com.didekindroid.security.TokenHandler.TKhandler;
-import static com.didekindroid.utils.UIutils.doToolBar;
-import static com.didekindroid.utils.UIutils.updateIsRegistered;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeComunidadBeanFromView;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_SEARCH;
-import static com.didekindroid.usuario.activity.utils.UserMenu.*;
+import static com.didekindroid.usuario.activity.utils.UserMenu.LOGIN_AC;
+import static com.didekindroid.usuario.activity.utils.UserMenu.REG_COMU_USER_USERCOMU_AC;
+import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_USERCOMU_BY_USER_AC;
+import static com.didekindroid.usuario.activity.utils.UserMenu.USER_DATA_AC;
+import static com.didekindroid.utils.UIutils.doToolBar;
+import static com.didekindroid.utils.UIutils.updateIsRegistered;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -40,11 +43,14 @@ public class ComuSearchAc extends AppCompatActivity {
 
     private static final String TAG = ComuSearchAc.class.getCanonicalName();
 
+    private Menu mMenu;
     RegComuFr mRegComuFrg;
     protected View mMainView;
+    private boolean hasLoginToRemove;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
 
         Log.d(TAG, "In onCreate()");
@@ -61,14 +67,16 @@ public class ComuSearchAc extends AppCompatActivity {
         Button mSearchButton = (Button) findViewById(R.id.searchComunidad_Bton);
         mSearchButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 Log.d(TAG, "View.OnClickListener().onClick()");
                 searchComunidad();
             }
         });
     }
 
-    void searchComunidad() {
+    void searchComunidad()
+    {
         Log.i(TAG, "In searchComunidad()");
 
         ComunidadBean comunidadBean = mRegComuFrg.getComunidadBean();
@@ -80,7 +88,7 @@ public class ComuSearchAc extends AppCompatActivity {
                 .append(DataPatterns.LINE_BREAK.getRegexp());
 
         if (!comunidadBean.validate(getResources(), errorMsg)) {
-            UIutils.makeToast(this, errorMsg.toString());
+            UIutils.makeToast(this, errorMsg.toString(), Toast.LENGTH_SHORT);
 
         } else {
             Intent intent = new Intent(this, ComuSearchResultsAc.class);
@@ -90,7 +98,8 @@ public class ComuSearchAc extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onDestroy()
+    {
         Log.d(TAG, "onDestroy()");
         super.onDestroy();
     }
@@ -100,16 +109,23 @@ public class ComuSearchAc extends AppCompatActivity {
 //    ============================================================
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         Log.d(TAG, "onCreateOptionsMenu()");
+        super.onCreateOptionsMenu(menu);
 
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.comu_search_ac_menu, menu);
-        return super.onCreateOptionsMenu(menu);
+        mMenu = menu;
+        if(hasLoginToRemove){
+            mMenu.removeItem(R.id.login_ac_mn);
+        }
+        return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
         Log.d(TAG, "onOptionsItemSelected()");
 
         int resourceId = checkNotNull(item.getItemId());
@@ -123,6 +139,9 @@ public class ComuSearchAc extends AppCompatActivity {
                 return true;
             case R.id.reg_comu_user_usercomu_ac_mn:
                 REG_COMU_USER_USERCOMU_AC.doMenuItem(this);
+                return true;
+            case R.id.login_ac_mn:
+                LOGIN_AC.doMenuItem(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -138,15 +157,25 @@ public class ComuSearchAc extends AppCompatActivity {
     class CheckerTokenInCache extends AsyncTask<Void, Void, AccessToken> {
 
         @Override
-        protected AccessToken doInBackground(Void... params) {
+        protected AccessToken doInBackground(Void... params)
+        {
+            Log.d(TAG, "CheckerTokenInCache.doInBackground");
             return TKhandler.getAccessTokenInCache();
         }
 
         @Override
-        protected void onPostExecute(AccessToken accessToken) {
-            Log.d(TAG, "CheckerTokenInCache.onPostExecute()");
-            if (accessToken == null) {
-                updateIsRegistered(false, ComuSearchAc.this);
+        protected void onPostExecute(AccessToken accessToken)
+        {
+            Log.d(TAG, "CheckerTokenInCache.onPostExecute() accessToken null = "
+                    + (accessToken == null));
+
+            if (accessToken != null) {
+                updateIsRegistered(true, ComuSearchAc.this);
+                if (mMenu != null) {
+                    mMenu.removeItem(R.id.login_ac_mn);
+                }else{
+                    hasLoginToRemove = true;
+                }
             }
         }
     }

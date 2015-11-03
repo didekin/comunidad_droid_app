@@ -87,7 +87,7 @@ public class UserDataAc extends AppCompatActivity {
         StringBuilder errorBuilder = getErrorMsgBuilder(this);
 
         if (!usuarioBean.validateWithOnePassword(getResources(), errorBuilder)) {
-            makeToast(this, errorBuilder.toString());
+            makeToast(this, errorBuilder.toString(), Toast.LENGTH_SHORT);
         } else if (!ConnectionUtils.isInternetConnected(this)) {
             makeToast(this, R.string.no_internet_conn_toast, Toast.LENGTH_LONG);
         } else {

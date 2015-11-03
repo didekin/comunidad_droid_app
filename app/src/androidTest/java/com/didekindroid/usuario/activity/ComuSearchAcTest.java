@@ -7,9 +7,13 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.action.ViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+
 import com.didekindroid.R;
 import com.didekindroid.usuario.activity.utils.CleanEnum;
 import com.didekindroid.usuario.dominio.DomainDataUtils;
+
+import junit.framework.AssertionFailedError;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -19,10 +23,13 @@ import org.junit.runner.RunWith;
 import java.io.File;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_JUAN;
 import static com.didekindroid.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.*;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeComunidadBeanFromView;
@@ -86,7 +93,7 @@ public class ComuSearchAcTest {
     public void testUpdateIsRegistered_2()
     {
         //With token.
-        signUpAndUpdateTk(DomainDataUtils.COMU_REAL_JUAN);
+        signUpAndUpdateTk(COMU_REAL_JUAN);
         assertThat(refreshTkFile.exists(), is(true));
 
         activity = mActivityRule.launchActivity(new Intent());
@@ -154,7 +161,7 @@ public class ComuSearchAcTest {
     public void searchComunidadOK_2() throws InterruptedException
     {
         //With token.
-        signUpAndUpdateTk(DomainDataUtils.COMU_REAL_JUAN);
+        signUpAndUpdateTk(COMU_REAL_JUAN);
 
         activity = mActivityRule.launchActivity(new Intent());
         assertThat(isRegisteredUser(activity), is(true));
@@ -184,7 +191,7 @@ public class ComuSearchAcTest {
         whatClean = CleanEnum.CLEAN_JUAN;
 
         //With token.
-        signUpAndUpdateTk(DomainDataUtils.COMU_REAL_JUAN);
+        signUpAndUpdateTk(COMU_REAL_JUAN);
         activity = mActivityRule.launchActivity(new Intent());
         assertThat(isRegisteredUser(activity), is(true));
         USER_DATA_AC.checkMenuItem_WTk(activity);
@@ -204,7 +211,7 @@ public class ComuSearchAcTest {
     {
         whatClean = CleanEnum.CLEAN_JUAN;
 
-        signUpAndUpdateTk(DomainDataUtils.COMU_REAL_JUAN);
+        signUpAndUpdateTk(COMU_REAL_JUAN);
         activity = mActivityRule.launchActivity(new Intent());
         assertThat(isRegisteredUser(activity), is(true));
         REG_COMU_USER_USERCOMU_AC.checkMenuItem_WTk(activity);
@@ -215,7 +222,7 @@ public class ComuSearchAcTest {
     {
         whatClean = CleanEnum.CLEAN_JUAN;
 
-        signUpAndUpdateTk(DomainDataUtils.COMU_REAL_JUAN);
+        signUpAndUpdateTk(COMU_REAL_JUAN);
         activity = mActivityRule.launchActivity(new Intent());
         assertThat(isRegisteredUser(activity), is(true));
         SEE_USERCOMU_BY_USER_AC.checkMenuItem_WTk(activity);
@@ -229,6 +236,35 @@ public class ComuSearchAcTest {
         assertThat(isRegisteredUser(activity), is(false));
         SEE_USERCOMU_BY_USER_AC.checkMenuItem_NTk(activity);
     }
+
+    @Test
+    public void testLogin_withToken() throws InterruptedException
+    {
+
+        whatClean = CleanEnum.CLEAN_JUAN;
+        signUpAndUpdateTk(COMU_REAL_JUAN);
+        activity = mActivityRule.launchActivity(new Intent());
+
+        onView(withId(R.id.login_ac_mn)).check(doesNotExist());
+        openActionBarOverflowOrOptionsMenu(activity);
+        onView(withId(R.id.login_ac_mn)).check(doesNotExist());
+    }
+
+    @Test
+    public void testLogin_withoutToken() throws InterruptedException
+    {
+        activity = mActivityRule.launchActivity(new Intent());
+
+        try {
+            onView(withId(R.id.login_ac_mn)).check(matches(isDisplayed()));
+        } catch (AssertionFailedError e) {
+            openActionBarOverflowOrOptionsMenu(activity);
+            onView(withId(R.id.login_ac_mn)).check(matches(isDisplayed()));
+        }
+
+        LOGIN_AC.checkMenuItem_NTk(activity);
+    }
+
 
     @After
     public void cleanData()

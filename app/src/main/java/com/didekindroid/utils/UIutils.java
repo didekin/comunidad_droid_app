@@ -7,12 +7,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.didekin.serviceone.domain.DataPatterns;
 import com.didekindroid.R;
 
 import static android.widget.Toast.makeText;
+import static com.didekindroid.R.color.deep_purple_100;
 
 /**
  * User: pedro
@@ -49,6 +53,13 @@ public final class UIutils {
         }
     }
 
+/*
+    When inflating anything to be displayed on the action bar (such as a SpinnerAdapter for
+    list navigation in the toolbar), make sure you use the action bar’s themed context, retrieved
+    via getSupportActionBar().getThemedContext().
+    You must use the static methods in MenuItemCompat for any action-related calls on a MenuItem.
+*/
+
     public static void doToolBar(AppCompatActivity activity, boolean hasParentAc)
     {
         Log.d(TAG, "doToolBar()");
@@ -72,14 +83,22 @@ public final class UIutils {
 
     public static void makeToast(Context context, int resourceStringId, int toastLength)
     {
-        Toast clickToast = makeText(context, resourceStringId, toastLength);
-        clickToast.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL, 0, 0);
-        clickToast.show();
+        makeToast(context, context.getResources().getText(resourceStringId), toastLength);
+        /*makeToast(context, context.getResources().getText(resourceStringId), Toast.LENGTH_LONG);*/
     }
 
-    public static void makeToast(Context context, String toastMessage)
+    @SuppressWarnings("deprecation")
+    public static void makeToast(Context context, CharSequence toastMessage, int toastLength)
     {
-        Toast clickToast = makeText(context, toastMessage, Toast.LENGTH_LONG);
+        Toast clickToast = makeText(context, toastMessage, toastLength);
+        View toastView = clickToast.getView();
+        toastView.setBackgroundColor(context.getResources().getColor(deep_purple_100));
+        TextView textView = new TextView(context);
+        textView.setTextSize(context.getResources().getDimension(R.dimen.text_decription_widget));
+        textView.setText(toastMessage);
+        textView.setTextColor(context.getResources().getColor(R.color.black));
+        ((ViewGroup) toastView).removeAllViews();
+        ((ViewGroup) toastView).addView(textView, ViewGroup.LayoutParams.WRAP_CONTENT);
         clickToast.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL, 0, 0);
         clickToast.show();
     }

@@ -3,18 +3,23 @@
       xmlns:tools="http://schemas.android.com/tools"
       tools:context="com.didekindroid.usuario.activity.ComuSearchAc">
     <item
-            android:id="@+id/user_data_ac_mn"
-            android:title="@string/user_data_ac_mn"
-            android:orderInCategory="100"
-            app:showAsAction="never|withText"/>
+        android:id="@+id/login_ac_mn"
+        android:orderInCategory="100"
+        android:title="@string/login_ac_mn"
+        app:showAsAction="ifRoom|withText"/>
     <item
-            android:id="@+id/see_usercomu_by_user_ac_mn"
-            android:title="@string/see_usercomu_by_user_ac_mn"
-            android:orderInCategory="100"
-            app:showAsAction="never|withText"/>
+        android:id="@+id/user_data_ac_mn"
+        android:orderInCategory="200"
+        android:title="@string/user_data_ac_mn"
+        app:showAsAction="never|withText"/>
     <item
-            android:id="@+id/reg_comu_user_usercomu_ac_mn"
-            android:title="@string/reg_comu_user_usercomu_ac_mn"
-            android:orderInCategory="100"
-            app:showAsAction="never|withText"/>
+        android:id="@+id/see_usercomu_by_user_ac_mn"
+        android:orderInCategory="200"
+        android:title="@string/see_usercomu_by_user_ac_mn"
+        app:showAsAction="never|withText"/>
+    <item
+        android:id="@+id/reg_comu_user_usercomu_ac_mn"
+        android:orderInCategory="200"
+        android:title="@string/reg_comu_user_usercomu_ac_mn"
+        app:showAsAction="never|withText"/>
 </menu>

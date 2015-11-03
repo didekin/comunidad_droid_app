@@ -50,14 +50,6 @@ public final class DomainDataUtils {
             .municipio(new Municipio((short) 2, new Provincia((short) 27)))
             .build();
 
-    public static final Comunidad COMU_LA_PLAZUELA_10bis = new Comunidad.ComunidadBuilder()
-            .tipoVia("Ronda")
-            .nombreVia("de la Plazuela")
-            .numero((short) 10)
-            .sufijoNumero("bis")
-            .municipio(new Municipio((short) 52, new Provincia((short) 2)))
-            .build();
-
     // Municipio:  Algueña   Provincia: Alicante/Alacant
     public static final Comunidad COMU_TRAV_PLAZUELA_11 = new Comunidad.ComunidadBuilder()
             .tipoVia("Travesía")
@@ -83,13 +75,6 @@ public final class DomainDataUtils {
             .municipio(new Municipio((short) 13, new Provincia((short) 3)))
             .build();
 
-    public static final Comunidad COMU_OTRA = new Comunidad.ComunidadBuilder()
-            .tipoVia("Calle")
-            .nombreVia("Otra")
-            .numero((short) 3)
-            .municipio(new Municipio((short) 14, new Provincia((short) 45)))
-            .build();
-
     public static final UsuarioComunidad COMU_REAL_JUAN = makeUsuarioComunidad(COMU_REAL, USER_JUAN, "portal", "esc",
             "plantaX", "door12", PROPIETARIO.function);
 
@@ -103,16 +88,16 @@ public final class DomainDataUtils {
             "portalA", null, "planta2", null, INQUILINO.function);
 
     public static final UsuarioComunidad COMU_ESCORIAL_PEPE = makeUsuarioComunidad(COMU_EL_ESCORIAL, USER_PEPE,
-            "portal22", "esc22", "planta22", "door22", new StringBuilder(PRESIDENTE.function.concat(",")
-                    .concat(INQUILINO.function)).toString());
+            "portal22", "esc22", "planta22", "door22", PRESIDENTE.function.concat(",")
+                    .concat(INQUILINO.function));
 
     public static final UsuarioComunidad COMU_PLAZUELA5_PEPE = makeUsuarioComunidad(COMU_LA_PLAZUELA_5, USER_PEPE,
-            "portal11", "esc11", "planta11", "door11", new StringBuilder(PRESIDENTE.function.concat(",")
-                    .concat(PROPIETARIO.function)).toString());
+            "portal11", "esc11", "planta11", "door11", PRESIDENTE.function.concat(",")
+                    .concat(PROPIETARIO.function));
 
     public static final UsuarioComunidad COMU_LA_FUENTE_PEPE = makeUsuarioComunidad(COMU_LA_FUENTE, USER_PEPE,
-            "portal33", "esc33", "planta33", "door33", new StringBuilder(ADMINISTRADOR.function.concat(",")
-                    .concat(PRESIDENTE.function)).toString());
+            "portal33", "esc33", "planta33", "door33", ADMINISTRADOR.function.concat(",")
+                    .concat(PRESIDENTE.function));
 
     public static Comunidad makeComunidad(String tipoVia, String nombreVia, short numero, String sufijoNumero,
                                           Municipio municipio)
@@ -125,7 +110,7 @@ public final class DomainDataUtils {
                 .build();
     }
 
-    public static Usuario makeUsuario(String userName, String alias, String password, short prefixTf, int numeroTf)
+    public static Usuario makeUsuario(String userName, String alias, String password)
     {
         return new Usuario.UsuarioBuilder()
                 .userName(userName)
@@ -150,7 +135,7 @@ public final class DomainDataUtils {
     public static List<UsuarioComunidad> makeListTwoUserComu()
     {
         // Dos comunidades diferentes con un mismo usuario.
-        List<UsuarioComunidad> userComuList = new ArrayList<UsuarioComunidad>(2);
+        List<UsuarioComunidad> userComuList = new ArrayList<>(2);
         userComuList.add(COMU_REAL_JUAN);
         userComuList.add(COMU_PLAZUELA5_JUAN);
         return userComuList;

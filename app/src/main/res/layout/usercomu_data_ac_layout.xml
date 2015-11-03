@@ -14,7 +14,7 @@
             android:id="@+id/usercomu_data_ac_modif_txt"
             style="@style/textBase.textFieldLabel2"
             android:layout_alignParentStart="true"
-            android:layout_marginTop="?attr/actionBarSize"
+            android:layout_marginTop="@dimen/app_bar_bottom_margin"
             android:text="@string/user_data_ac_cambios_text" />
 
         <include
@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/usercomu_data_ac_modif_txt"
-            android:layout_marginTop="@dimen/activity_vertical_margin" />
+            android:layout_marginTop="@dimen/vertical_margin" />
 
         <Button
             android:id="@+id/usercomu_data_ac_modif_button"

@@ -70,7 +70,7 @@ public class RegComuAndUserComuAc extends AppCompatActivity {
                 .append(DataPatterns.LINE_BREAK.getRegexp());
 
         if (!usuarioComunidadBean.validate(getResources(), errorMsg)) {
-            makeToast(this, errorMsg.toString());
+            makeToast(this, errorMsg.toString(), Toast.LENGTH_SHORT);
         } else if (!ConnectionUtils.isInternetConnected(this)) {
             makeToast(this, R.string.no_internet_conn_toast, Toast.LENGTH_LONG);
         } else {

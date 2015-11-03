@@ -1,6 +1,7 @@
 package com.didekindroid.usuario.activity.utils;
 
 import android.app.Activity;
+
 import com.didekindroid.R;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -24,7 +25,7 @@ public enum UserMenuTestUtils {
         @Override
         public void checkMenuItem_NTk(Activity activity) throws InterruptedException
         {
-            throw new UnsupportedOperationException(COMU_DATA_AC.name() + "requires registered user");
+            throw new UnsupportedOperationException(COMU_DATA_AC.name() + REGISTERED_USER);
         }
 
         @Override
@@ -60,7 +61,7 @@ public enum UserMenuTestUtils {
         @Override
         public void checkMenuItem_NTk(Activity activity) throws InterruptedException
         {
-            throw new UnsupportedOperationException(DELETE_ME_AC.name() + "requires registered user");
+            throw new UnsupportedOperationException(DELETE_ME_AC.name() + REGISTERED_USER);
         }
 
         @Override
@@ -74,11 +75,26 @@ public enum UserMenuTestUtils {
         }
     },
 
+    LOGIN_AC {
+        @Override
+        public void checkMenuItem_NTk(Activity activity) throws InterruptedException
+        {
+            onView(withText(R.string.login_ac_mn)).check(matches(isDisplayed())).perform(click());
+            onView(withId(R.id.login_ac_layout)).check(matches(isDisplayed()));
+        }
+
+        @Override
+        public void checkMenuItem_WTk(Activity activity) throws InterruptedException
+        {
+            throw new UnsupportedOperationException(LOGIN_AC.name() + REQUIRES_USER_NO_TOKEN);
+        }
+    },
+
     PASSWORD_CHANGE_AC {
         @Override
         public void checkMenuItem_NTk(Activity activity) throws InterruptedException
         {
-            throw new UnsupportedOperationException(PASSWORD_CHANGE_AC.name() + "requires registered user");
+            throw new UnsupportedOperationException(PASSWORD_CHANGE_AC.name() + REGISTERED_USER);
         }
 
         @Override
@@ -114,35 +130,11 @@ public enum UserMenuTestUtils {
         }
     },
 
-    REG_USER_AND_USERCOMU_AC {
-        @Override
-        public void checkMenuItem_NTk(Activity activity) throws InterruptedException
-        {
-            onView(withText(R.string.reg_user_and_usercomu_ac_mn)).check(doesNotExist());
-
-            openActionBarOverflowOrOptionsMenu(activity);
-            Thread.sleep(1000);
-            onView(withText(R.string.reg_user_and_usercomu_ac_mn)).check(matches(isDisplayed())).perform(click());
-            onView(withId(R.id.reg_user_and_usercomu_ac_layout)).check(matches(isDisplayed()));
-        }
-
-        @Override
-        public void checkMenuItem_WTk(Activity activity) throws InterruptedException
-        {
-            onView(withText(R.string.reg_user_and_usercomu_ac_mn)).check(doesNotExist());
-
-            openActionBarOverflowOrOptionsMenu(activity);
-            Thread.sleep(1000);
-            onView(withText(R.string.reg_user_and_usercomu_ac_mn)).check(matches(isDisplayed())).perform(click());
-            onView(withId(R.id.reg_usercomu_ac_layout)).check(matches(isDisplayed()));
-        }
-    },
-
     SEE_USERCOMU_BY_COMU_AC {
         @Override
         public void checkMenuItem_NTk(Activity activity) throws InterruptedException
         {
-            throw new UnsupportedOperationException(SEE_USERCOMU_BY_COMU_AC.name() + "requires registered user");
+            throw new UnsupportedOperationException(SEE_USERCOMU_BY_COMU_AC.name() + REGISTERED_USER);
         }
 
         @Override
@@ -209,4 +201,7 @@ public enum UserMenuTestUtils {
     public abstract void checkMenuItem_NTk(Activity activity) throws InterruptedException;
 
     public abstract void checkMenuItem_WTk(Activity activity) throws InterruptedException;
+
+    public static final String REGISTERED_USER = "requires registered user";
+    public static final String REQUIRES_USER_NO_TOKEN = "requires user without token";
 }

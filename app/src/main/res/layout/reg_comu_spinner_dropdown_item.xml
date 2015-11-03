@@ -4,6 +4,11 @@
                  android:singleLine="true"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
+                 android:paddingStart="4dp"
+                 android:paddingEnd="2dp"
+                 android:paddingBottom="1dp"
+                 android:paddingTop="1dp"
+                 android:textColor="@color/black"
                  android:ellipsize="marquee"
-                 android:textSize="@dimen/text_hint_size"
+                 android:textSize="@dimen/text_decription_widget"
         />

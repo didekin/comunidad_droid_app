@@ -94,7 +94,7 @@ public class RegUserComuAc extends AppCompatActivity {
                 .append(DataPatterns.LINE_BREAK.getRegexp());
 
         if (!usuarioComunidadBean.validate(getResources(), errorMsg)) {  // error validation.
-            makeToast(this, errorMsg.toString());
+            makeToast(this, errorMsg.toString(), Toast.LENGTH_SHORT);
         } else if (!ConnectionUtils.isInternetConnected(this)) {
             UIutils.makeToast(this, R.string.no_internet_conn_toast, Toast.LENGTH_LONG);
         } else {

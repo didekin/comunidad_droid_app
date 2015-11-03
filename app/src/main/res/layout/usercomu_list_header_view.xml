@@ -6,7 +6,7 @@
     <TextView
             android:id="@+id/usercomu_list_header_nombrecomu_txt"
             style="@style/textBase.textPageLabel2"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginTop="@dimen/vertical_margin"
             android:layout_alignParentStart="true"/>
 
 </RelativeLayout>
