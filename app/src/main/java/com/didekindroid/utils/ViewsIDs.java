@@ -19,7 +19,7 @@ public enum ViewsIDs {
 
     ;
 
-    public int idView;
+    public final int idView;
 
     ViewsIDs(int idView)
     {

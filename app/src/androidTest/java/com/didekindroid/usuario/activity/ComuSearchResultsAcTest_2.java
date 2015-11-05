@@ -79,48 +79,6 @@ public class ComuSearchResultsAcTest_2 {
     }
 
     @Test
-    public void testGetDatosUsuarioNoToken_1() throws InterruptedException
-    {
-        assertThat(TKhandler.getAccessTokenInCache(), nullValue());
-        activity = mActivityRule.launchActivity(intent);
-        assertThat(isRegisteredUser(activity), is(false));
-
-        checkToastInTest(R.string.no_result_search_comunidad, activity);
-        onView(withId(R.id.reg_comu_usuario_usuariocomu_layout)).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void testGetDatosUsuarioNoToken_2() throws InterruptedException
-    {
-        whatClean = CLEAN_JUAN;
-
-        //Usuario no registrado. La búsqueda devuelve una comunidad.
-        regTwoUserComuSameUser(makeListTwoUserComu());
-        // Borro los datos del token.
-        cleanWithTkhandler();
-
-        activity = mActivityRule.launchActivity(intent);
-        assertThat(isRegisteredUser(activity), is(false));
-
-        Thread.sleep(2000);
-        USER_DATA_AC.checkMenuItem_NTk(activity);
-    }
-
-    @Test
-    public void testGetDatosUsuarioWithToken() throws InterruptedException
-    {
-        whatClean = CLEAN_JUAN;
-
-        //With token.
-        regTwoUserComuSameUser(makeListTwoUserComu());
-        activity = mActivityRule.launchActivity(intent);
-        assertThat(isRegisteredUser(activity), is(true));
-
-        Thread.sleep(2000);
-        USER_DATA_AC.checkMenuItem_WTk(activity);
-    }
-
-    @Test
     public void testMenuNuevaComunidad_noToken_1() throws InterruptedException
     {
         assertThat(TKhandler.getAccessTokenInCache(), nullValue());

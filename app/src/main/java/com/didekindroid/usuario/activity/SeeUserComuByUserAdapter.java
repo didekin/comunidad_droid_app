@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import com.didekin.serviceone.domain.Comunidad;
+
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.usuario.activity.ComuSearchResultsListAdapter.ComuViewHolder;
@@ -31,8 +31,6 @@ public class SeeUserComuByUserAdapter extends ArrayAdapter<UsuarioComunidad> {
     public View getView(int position, View convertView, ViewGroup parent)
     {
         Log.d(TAG, "getView(), position= " + position);
-
-        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         ComuAndUserComuViewHolder comuAnduserComuViewHolder;
 

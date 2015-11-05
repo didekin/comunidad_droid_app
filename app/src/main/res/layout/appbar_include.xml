@@ -12,3 +12,8 @@
     app:titleTextAppearance="@style/appBarTitle"
     app:contentInsetStart="10dp"
     tools:ignore="UnusedAttribute"/>
+
+<!--
+To include as an attribute:
+app:layout_scrollFlags="scroll|enterAlways"
+-->

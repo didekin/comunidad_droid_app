@@ -2,14 +2,16 @@ package com.didekindroid.usuario.webservices;
 
 import android.util.Base64;
 import android.util.Log;
+
 import com.didekin.retrofitcl.Oauth2EndPoints;
 import com.didekin.retrofitcl.OauthToken.AccessToken;
 import com.didekin.serviceone.security.OauthClient;
+
 import retrofit.client.Response;
 
+import static com.didekin.retrofitcl.OauthTokenHelper.BASIC_AND_SPACE;
 import static com.didekin.retrofitcl.RetrofitRestBuilder.BUILDER;
 import static com.didekin.serviceone.security.OauthClient.CL_USER;
-import static com.didekin.retrofitcl.OauthTokenHelper.BASIC_AND_SPACE;
 import static com.didekin.serviceone.security.SecurityConstant.PASSWORD_GRANT;
 import static com.didekin.serviceone.security.SecurityConstant.REFRESH_TOKEN_GRANT;
 import static com.didekindroid.DidekindroidApp.getBaseURL;
@@ -83,15 +85,10 @@ public enum Oauth2Service implements Oauth2EndPoints {
 
     String doAuthBasicHeader(OauthClient cliente)
     {
-        String baseString = new StringBuilder(new String(cliente.getId()))
-                .append(":")
-                .append(cliente.getSecret()).toString();
+        String baseString = cliente.getId() + ":" + cliente.getSecret();
 
         String base64AuthData = Base64.encodeToString(baseString.getBytes(), Base64.DEFAULT);
 
-        String header = new StringBuilder(BASIC_AND_SPACE)
-                .append(base64AuthData.substring(0, base64AuthData.length() - 1))  // To take care of the trailing \n.
-                .toString();
-        return header;
+        return BASIC_AND_SPACE + base64AuthData.substring(0, base64AuthData.length() - 1);
     }
 }

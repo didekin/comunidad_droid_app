@@ -32,8 +32,6 @@ public class SeeUserComutByComuListAdapter extends ArrayAdapter<UsuarioComunidad
     {
         Log.d(TAG, "getView(), position= " + position);
 
-        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
         UserAndUserComuVwHolder viewHolder;
 
         if (convertView == null) {

@@ -3,13 +3,42 @@ package com.didekin.retrofitcl;
 import com.didekin.serviceone.domain.Comunidad;
 import com.didekin.serviceone.domain.Usuario;
 import com.didekin.serviceone.domain.UsuarioComunidad;
-import retrofit.client.Response;
-import retrofit.http.*;
 
 import java.util.List;
 
-import static com.didekin.serviceone.controllers.ControllerConstant.*;
-import static com.didekin.serviceone.security.SecurityConstant.*;
+import retrofit.http.Body;
+import retrofit.http.DELETE;
+import retrofit.http.Field;
+import retrofit.http.FormUrlEncoded;
+import retrofit.http.GET;
+import retrofit.http.Header;
+import retrofit.http.POST;
+import retrofit.http.PUT;
+import retrofit.http.Path;
+
+import static com.didekin.serviceone.controllers.ControllerConstant.ACCESS_TOKEN_DELETE;
+import static com.didekin.serviceone.controllers.ControllerConstant.COMUNIDAD_OLDEST_USER;
+import static com.didekin.serviceone.controllers.ControllerConstant.COMUNIDAD_SEARCH;
+import static com.didekin.serviceone.controllers.ControllerConstant.COMUS_BY_USER;
+import static com.didekin.serviceone.controllers.ControllerConstant.LOGIN;
+import static com.didekin.serviceone.controllers.ControllerConstant.PASSWORD_MODIFY;
+import static com.didekin.serviceone.controllers.ControllerConstant.PASSWORD_SEND;
+import static com.didekin.serviceone.controllers.ControllerConstant.REG_COMU_AND_USER_AND_USERCOMU;
+import static com.didekin.serviceone.controllers.ControllerConstant.REG_COMU_USERCOMU;
+import static com.didekin.serviceone.controllers.ControllerConstant.REG_USERCOMU;
+import static com.didekin.serviceone.controllers.ControllerConstant.REG_USER_USERCOMU;
+import static com.didekin.serviceone.controllers.ControllerConstant.USERCOMUS_BY_COMU;
+import static com.didekin.serviceone.controllers.ControllerConstant.USERCOMUS_BY_USER;
+import static com.didekin.serviceone.controllers.ControllerConstant.USERCOMU_DELETE;
+import static com.didekin.serviceone.controllers.ControllerConstant.USERCOMU_MODIFY;
+import static com.didekin.serviceone.controllers.ControllerConstant.USERCOMU_READ;
+import static com.didekin.serviceone.controllers.ControllerConstant.USER_DELETE;
+import static com.didekin.serviceone.security.SecurityConstant.COMUNIDAD_READ;
+import static com.didekin.serviceone.security.SecurityConstant.COMUNIDAD_WRITE;
+import static com.didekin.serviceone.security.SecurityConstant.PSWD_PARAM;
+import static com.didekin.serviceone.security.SecurityConstant.USER_PARAM;
+import static com.didekin.serviceone.security.SecurityConstant.USER_READ;
+import static com.didekin.serviceone.security.SecurityConstant.USER_WRITE;
 
 /**
  * User: pedro@didekin
@@ -33,6 +62,9 @@ public interface ServiceOneEndPoints {
 
     @GET(COMUS_BY_USER)
     List<Comunidad> getComusByUser(@Header("Authorization") String accessToken);
+
+    @GET(USERCOMU_READ + "/{comunidadId}")
+    UsuarioComunidad getUserComuByUserAndComu(@Header("Authorization") String accessToken, @Path("comunidadId") long comunidadId);
 
     @GET(USER_READ)
     Usuario getUserData(@Header("Authorization") String accessToken);

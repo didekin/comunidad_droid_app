@@ -4,11 +4,13 @@ import android.content.Intent;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
+
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekin.serviceone.security.Rol;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.usuario.activity.utils.CleanEnum;
+
 import org.junit.*;
 import org.junit.runner.RunWith;
 
@@ -49,11 +51,13 @@ public class UserComuDataAcTest_1 {
 
     @Rule
     public IntentsTestRule<UserComuDataAc> intentRule = new IntentsTestRule<UserComuDataAc>(UserComuDataAc.class) {
+
         @Override
         protected void beforeActivityLaunched()
         {
         }
 
+        @SuppressWarnings("EmptyCatchBlock")
         @Override
         protected Intent getActivityIntent()
         {

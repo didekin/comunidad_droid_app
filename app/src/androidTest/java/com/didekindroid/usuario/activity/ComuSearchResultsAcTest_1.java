@@ -55,7 +55,6 @@ import static com.google.common.base.Preconditions.checkState;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
@@ -121,29 +120,6 @@ public class ComuSearchResultsAcTest_1 {
         activity = mActivityRule.launchActivity(intent);
         onView(withId(R.id.comu_search_results_ac_one_pane_frg_container)).check(matches(isDisplayed()));
         onView(withId(R.id.comu_list_frg)).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void testComunidadesUsuarioGetter_1()
-    {
-        // No token in cache.
-        activity = mActivityRule.launchActivity(intent);
-        assertThat(isRegisteredUser(activity), is(false));
-        assertThat(activity.mUsuarioComunidades, nullValue());
-    }
-
-    @Test
-    public void testComunidadesUsuarioGetter_2()
-    {
-        whatClean = CLEAN_JUAN;
-
-        // Usuario registrado.
-        regTwoUserComuSameUser(makeListTwoUserComu());
-
-        activity = mActivityRule.launchActivity(intent);
-        assertThat(isRegisteredUser(activity), is(true));
-        assertThat(activity.mUsuarioComunidades.size(), is(2));
-        assertThat(activity.mUsuarioComunidades, hasItems(DomainDataUtils.COMU_REAL, COMU_LA_PLAZUELA_5));
     }
 
     @Test
@@ -281,7 +257,7 @@ public class ComuSearchResultsAcTest_1 {
         onView(withAdaptedData(Matchers.<Object>equalTo(comunidadInAdapter))).check(matches(isDisplayed()));
         onData(allOf(is(instanceOf(Comunidad.class)), hasProperty("nombreVia", is("de la Plazuela")))).perform(click());
 
-        onView(withId(R.id.see_usercomu_by_user_ac_frg_container)).check(matches(isDisplayed()));
+        onView(withId(R.id.usercomu_data_ac_layout)).check(matches(isDisplayed()));
     }
 
     @Test

@@ -20,18 +20,17 @@ public final class DidekindroidApp extends Application {
         super.onCreate();
         Log.d(TAG, "onCreate()");
         mContext = this;
-        mBaseURL = new StringBuilder(mContext.getResources().getString(R.string.service_one_host))
-                .append(getContext().getResources().getString(R.string.service_one_port))
-                .toString();
+        mBaseURL = mContext.getResources().getString(R.string.service_one_host)
+                + getContext().getResources().getString(R.string.service_one_port);
     }
 
-    public final static Context getContext()
+    public static Context getContext()
     {
         Log.d(TAG, "getContext()");
         return mContext;
     }
 
-    public final static String getBaseURL()
+    public static String getBaseURL()
     {
         Log.d(TAG, "getBaseURL()");
         return mBaseURL;

@@ -13,9 +13,11 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         ComuDataAcTest.class,
-        ComuSearchResultsAcTest_1.class,
         ComuSearchAcTest_intent.class,
         ComuSearchTest_spinner.class,
+        ComuSearchResultsAcTest_1.class,
+        ComuSearchResultsAcTest_intent_1.class,
+        ComuSearchResultsAcTest_intent_2.class,
         DeleteMeAcTest.class,
         LoginAcTest_1.class,
         PasswordChangeAcTest.class,

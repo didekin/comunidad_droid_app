@@ -29,8 +29,6 @@ public class ComuSearchResultsListAdapter extends ArrayAdapter<Comunidad> {
     {
         Log.d(TAG, "getView(), position= " + position);
 
-        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
         ComuViewHolder viewHolder;
 
         if (convertView == null) {

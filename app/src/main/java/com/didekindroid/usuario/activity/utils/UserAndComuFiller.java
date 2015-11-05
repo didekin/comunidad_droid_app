@@ -22,7 +22,8 @@ public final class UserAndComuFiller {
 
     public static UsuarioBean makeUserBeanFromRegUserFrView(View usuarioRegView)
     {
-        UsuarioBean usuarioBean = new UsuarioBean(
+
+        return new UsuarioBean(
                 ((EditText) usuarioRegView.findViewById(R.id.reg_usuario_email_editT)).getText()
                         .toString(),
                 ((EditText) usuarioRegView.findViewById(R.id.reg_usuario_alias_ediT)).getText()
@@ -32,13 +33,11 @@ public final class UserAndComuFiller {
                 ((EditText) usuarioRegView.findViewById(R.id.reg_usuario_password_confirm_ediT)).getText()
                         .toString()
         );
-
-        return usuarioBean;
     }
 
     public static UsuarioBean makeUserBeanFromUserDataAcView(View userDataAcView)
     {
-        UsuarioBean usuarioBean = new UsuarioBean(
+        return new UsuarioBean(
                 ((EditText) userDataAcView.findViewById(R.id.reg_usuario_email_editT)).getText()
                         .toString(),
                 ((EditText) userDataAcView.findViewById(R.id.reg_usuario_alias_ediT)).getText()
@@ -47,7 +46,6 @@ public final class UserAndComuFiller {
                         .toString(),
                 null
         );
-        return usuarioBean;
     }
 
     public static void makeComunidadBeanFromView(View comunidadSearchView, ComunidadBean comunidadBean)
@@ -64,9 +62,7 @@ public final class UserAndComuFiller {
             , ComunidadBean comunidadBean, UsuarioBean usuarioBean)
     {
 
-        View usuarioRegView = usuarioComunidadRegView.findViewById(R.id.reg_user_frg);
-
-        UsuarioComunidadBean usuarioComunidadBean = new UsuarioComunidadBean(
+        return new UsuarioComunidadBean(
                 comunidadBean,
                 usuarioBean,
                 ((TextView) usuarioComunidadRegView.findViewById(R.id.reg_usercomu_portal_ed)).getText()
@@ -86,7 +82,5 @@ public final class UserAndComuFiller {
                 ((CheckBox) usuarioComunidadRegView.findViewById(R.id.reg_usercomu_checbox_inq))
                         .isChecked()
         );
-
-        return usuarioComunidadBean;
     }
 }

@@ -77,7 +77,7 @@ public final class UsuarioBean {
     {
         boolean isValid = ALIAS.isPatternOk(alias);
         if (!isValid) {
-            errorMsg.append(text + LINE_BREAK.getRegexp());
+            errorMsg.append(text).append(LINE_BREAK.getRegexp());
         }
         return isValid;
     }
@@ -86,16 +86,18 @@ public final class UsuarioBean {
     {
         boolean isValid = PASSWORD.isPatternOk(password);
         if (!isValid) {
-            errorMsg.append(resources.getText(R.string.password).toString() + LINE_BREAK.getRegexp());
+            errorMsg.append(resources.getText(R.string.password).toString()).append(LINE_BREAK.getRegexp());
         }
         return isValid;
     }
 
     public boolean validateDoublePassword(Resources resources, StringBuilder errorMsg)
     {
-        if (!password.trim().equals(verificaPassword.toString())) {
-            errorMsg.append(resources.getText(R.string.password).toString() + resources.getText(R.string
-                    .password_different).toString() + LINE_BREAK.getRegexp());
+        if (!password.trim().equals(verificaPassword)) {
+            errorMsg.append(resources.getText(R.string.password).toString())
+                    .append(resources.getText(R.string
+                            .password_different).toString())
+                    .append(LINE_BREAK.getRegexp());
             return false;
         }
         return validateSinglePassword(resources, errorMsg);
@@ -105,7 +107,7 @@ public final class UsuarioBean {
     {
         boolean isValid = EMAIL.isPatternOk(userName);
         if (!isValid) {
-            errorMsg.append(text + LINE_BREAK.getRegexp());
+            errorMsg.append(text).append(LINE_BREAK.getRegexp());
         }
         return isValid;
     }

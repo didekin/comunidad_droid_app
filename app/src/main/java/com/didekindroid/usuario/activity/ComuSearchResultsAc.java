@@ -10,14 +10,14 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.didekin.serviceone.domain.Comunidad;
+import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.usuario.activity.utils.UserMenu;
 import com.didekindroid.utils.UIutils;
 
-import java.util.List;
-
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_LIST_INDEX;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_LIST_OBJECT;
+import static com.didekindroid.usuario.activity.utils.UserIntentExtras.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.usuario.activity.utils.UserMenu.REG_COMU_USER_USERCOMU_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_USERCOMU_BY_USER_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.USER_DATA_AC;
@@ -29,13 +29,18 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * Postconditions:
  * <p/>
- * 1. An object comunidad is passed as an intent extra with the fields:
+ * 1. If the user is not registered, an object comunidad is passed as an intent extra with the fields:
  * -- comunidadId of the comunidad selected.
  * -- nombreComunidad (with tipoVia,nombreVia, numero and sufijoNumero).
  * -- municipio, with codInProvincia and nombre.
  * -- provincia, with provinciaId and nombre.
+ * 2. If the user is registered but not with the comunidad selected, an object comunidad is passed
+ * as an intent extra.
+ * 3. If the user is registered with the comunidad selected, an object usuarioComunidad is passed
+ * with its data fully initialized.
  */
-public class ComuSearchResultsAc extends AppCompatActivity implements ComuSearchResultsListFr.ComuListListener {
+public class ComuSearchResultsAc extends AppCompatActivity implements
+        ComuSearchResultsListFr.ComuListListener {
 
     private static final String TAG = ComuSearchResultsAc.class.getCanonicalName();
 
@@ -45,17 +50,11 @@ public class ComuSearchResultsAc extends AppCompatActivity implements ComuSearch
     // The comunidad index currently being displayed.
     int mIndex;
 
-    List<Comunidad> mUsuarioComunidades;
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         Log.d(TAG, "onCreate().");
         super.onCreate(savedInstanceState);
-
-        if (isRegisteredUser(this)) {
-            new ComunidadesUsuarioGetter().execute();
-        }
 
         setContentView(R.layout.comu_search_results_layout);
         doToolBar(this, true);
@@ -110,9 +109,6 @@ public class ComuSearchResultsAc extends AppCompatActivity implements ComuSearch
         int resourceId = checkNotNull(item.getItemId());
 
         switch (resourceId) {
-            case R.id.user_data_ac_mn:
-                USER_DATA_AC.doMenuItem(this);
-                return true;
             case R.id.see_usercomu_by_user_ac_mn:
                 SEE_USERCOMU_BY_USER_AC.doMenuItem(this);
                 return true;
@@ -138,17 +134,7 @@ public class ComuSearchResultsAc extends AppCompatActivity implements ComuSearch
             intent.putExtra(COMUNIDAD_LIST_OBJECT.extra, comunidad);
             startActivity(intent);
         } else {
-            if (mUsuarioComunidades.contains(comunidad)) {
-                Log.d(TAG, "onComunidadSelected(). User is registered and associated to the comunidad.");
-                Intent intent = new Intent(this, SeeUserComuByUserAc.class);
-                intent.putExtra(COMUNIDAD_LIST_OBJECT.extra, comunidad);
-                startActivity(intent);
-            } else {
-                Log.d(TAG, "onComunidadSelected(). User is registered and not associated to the comunidad.");
-                Intent intent = new Intent(this, RegUserComuAc.class);
-                intent.putExtra(COMUNIDAD_LIST_OBJECT.extra, comunidad);
-                startActivity(intent);
-            }
+            new UsuarioComunidadGetter().execute(comunidad);
         }
     }
 
@@ -167,25 +153,36 @@ public class ComuSearchResultsAc extends AppCompatActivity implements ComuSearch
 //    ============================================================
 
     /**
-     * Task to obtain the comunidades associtated to a user.
-     * Those are used when she selects a comunidad: the actions performed by the app are
-     * different following the different possibilities.
+     * Task to check if the comunidad selected has the user as associated.
      */
-    class ComunidadesUsuarioGetter extends AsyncTask<Void, Void, List<Comunidad>> {
+    class UsuarioComunidadGetter extends AsyncTask<Comunidad, Void, UsuarioComunidad> {
+
+        private Comunidad comunidadSelected;
 
         @Override
-        protected List<Comunidad> doInBackground(Void... params)
+        protected UsuarioComunidad doInBackground(Comunidad... comunidades)
         {
-            Log.d(ComuSearchResultsAc.TAG, ".ComunidadesUsuarioGetter.doInBackground()");
-            return ServOne.getComusByUser();
+            Log.d(ComuSearchResultsAc.TAG, ".UsuarioComunidadGetter.doInBackground()");
+            comunidadSelected = comunidades[0];
+            return ServOne.getUserComuByUserAndComu(comunidadSelected.getC_Id());
         }
 
         @Override
-        protected void onPostExecute(List<Comunidad> comunidades)
+        protected void onPostExecute(UsuarioComunidad userComu)
         {
-            Log.d(TAG, ".ComunidadesUsuarioGetter.onPostExecute(), size comunidades = " +
-                    (comunidades != null ? comunidades.size() : 0));
-            mUsuarioComunidades = comunidades;
+            boolean isUserComuNull = (userComu == null);
+            Log.d(TAG, ".UsuarioComunidadGetter.onPostExecute(), isUserComu == null : " +
+                    isUserComuNull);
+
+            if (isUserComuNull) {
+                Intent intent = new Intent(ComuSearchResultsAc.this, RegUserComuAc.class);
+                intent.putExtra(COMUNIDAD_LIST_OBJECT.extra, comunidadSelected);
+                startActivity(intent);
+            } else {
+                Intent intent = new Intent(ComuSearchResultsAc.this, UserComuDataAc.class);
+                intent.putExtra(USERCOMU_LIST_OBJECT.extra, userComu);
+                startActivity(intent);
+            }
         }
     }
 }

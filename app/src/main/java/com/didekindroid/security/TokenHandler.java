@@ -75,6 +75,7 @@ public enum TokenHandler {
         Log.d(TAG, "getAccessTokenInCache()");
 
         // The user has not been registered.
+        // TODO: decidir si es necesario sincronizar (en el getter).
         if (refreshTokenKey == null) {
             return null;
         }

@@ -1,6 +1,7 @@
 package com.didekindroid.usuario.webservices;
 
 import android.util.Log;
+
 import com.didekin.retrofitcl.ServiceOneEndPoints;
 import com.didekin.retrofitcl.ServiceOneException;
 import com.didekin.serviceone.domain.Comunidad;
@@ -11,6 +12,9 @@ import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 
 import java.util.List;
+
+import retrofit.http.Header;
+import retrofit.http.Path;
 
 import static com.didekin.retrofitcl.RetrofitRestBuilder.BUILDER;
 import static com.didekin.serviceone.exception.ExceptionMessage.*;
@@ -55,6 +59,12 @@ public enum ServiceOne implements ServiceOneEndPoints {
         public List<Comunidad> getComusByUser(String accessToken)
         {
             return ServOne.endPoint.getComusByUser(accessToken);
+        }
+
+        @Override
+        public UsuarioComunidad getUserComuByUserAndComu(@Header("Authorization") String accessToken, @Path("comunidadId") long comunidadId)
+        {
+            return ServOne.endPoint.getUserComuByUserAndComu(accessToken, comunidadId);
         }
 
         @Override
@@ -203,6 +213,12 @@ public enum ServiceOne implements ServiceOneEndPoints {
         Log.d(TAG, "getComusByUser()");
         String bearerAccessTkHeader = TKhandler.doBearerAccessTkHeader();
         return (bearerAccessTkHeader != null ? endPoint.getComusByUser(bearerAccessTkHeader) : null);
+    }
+
+    public UsuarioComunidad getUserComuByUserAndComu(long comunidadId)
+    {
+        Log.d(TAG,"getUserComuByUserAndComu()");
+        return getUserComuByUserAndComu(TKhandler.doBearerAccessTkHeader(), comunidadId);
     }
 
     public Usuario getUserData()

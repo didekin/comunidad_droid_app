@@ -13,6 +13,7 @@ import com.didekindroid.utils.IoHelper;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.usuario.activity.utils.CleanEnum;
 import com.didekindroid.usuario.dominio.DomainDataUtils;
+
 import org.hamcrest.CoreMatchers;
 import org.junit.After;
 import org.junit.Before;
@@ -92,7 +93,7 @@ public class ServiceOneIfTest {
     @Test
     public void testDeleteUserComu() throws UiException
     {
-        Usuario usuario_1 = signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
+        signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
         List<UsuarioComunidad> userComus = ServOne.seeUserComusByUser();
         UsuarioComunidad uc_1 = userComus.get(0);
 
@@ -126,12 +127,23 @@ public class ServiceOneIfTest {
     @Test
     public void testGetComunidadesByUser_2()
     {
-        regTwoUserComuSameUser(DomainDataUtils.makeListTwoUserComu());
+        regTwoUserComuSameUser(makeListTwoUserComu());
         List<Comunidad> comunidades = ServOne.getComusByUser();
         assertThat(comunidades.size(), is(2));
         assertThat(comunidades, hasItems(COMU_REAL, DomainDataUtils.COMU_LA_PLAZUELA_5));
 
         whatClean = CLEAN_JUAN;
+    }
+
+    @Test
+    public void testGetUserComuByUserAndComu()
+    {
+        whatClean = CLEAN_JUAN;
+
+        signUpAndUpdateTk(COMU_REAL_JUAN);
+        Comunidad comunidad = ServOne.getComusByUser().get(0);
+        assertThat(ServOne.getUserComuByUserAndComu(comunidad.getC_Id()),is(COMU_REAL_JUAN));
+        assertThat(ServOne.getUserComuByUserAndComu(comunidad.getC_Id() + 1L),nullValue());
     }
 
     @Test
@@ -287,7 +299,7 @@ public class ServiceOneIfTest {
     public void testPasswordSend()
     {
         signUpAndUpdateTk(COMU_REAL_PEPE);
-        assertThat(ServOne.passwordSend(USER_PEPE.getUserName()),is(true));
+        assertThat(ServOne.passwordSend(USER_PEPE.getUserName()), is(true));
         // Es necesario conseguir un nuevo token. La validación del antiguo falla por el cambio de password.
         AccessToken token = Oauth2.getRefreshUserToken(TKhandler.getRefreshTokenKey());
         ServOne.deleteUser(HELPER.doBearerAccessTkHeader(token));

@@ -26,11 +26,11 @@ public enum RolCheckBox {
         }
     }
 
-    public String function;
+    public final String function;
     /*Resource id of the related checbox in reg_usercomu_fr.xml layout file*/
-    public int resourceViewId;
+    public final int resourceViewId;
     /* Resource string of the related checkbox in reg_usercomu_fr.xml and usercomu_list_item_view.xml layout files. */
-    private int resourceStringId;
+    private final int resourceStringId;
 
     RolCheckBox(String function, int resourceViewId, int resourceStringId)
     {
