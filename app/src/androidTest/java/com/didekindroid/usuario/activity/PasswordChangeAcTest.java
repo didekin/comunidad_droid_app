@@ -3,7 +3,7 @@ package com.didekindroid.usuario.activity;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.retrofitcl.OauthToken.AccessToken;
+import com.didekin.common.oauth2.OauthToken.AccessToken;
 import com.didekin.serviceone.domain.Usuario;
 import com.didekindroid.R;
 import com.didekindroid.usuario.activity.utils.CleanEnum;
@@ -25,7 +25,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withContentDesc
 import static android.support.test.espresso.matcher.ViewMatchers.withHint;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.security.TokenHandler.TKhandler;
+import static com.didekindroid.common.TokenHandler.TKhandler;
+import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_NOTHING;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.checkToastInTest;
@@ -35,7 +36,6 @@ import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAnd
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_TRAV_PLAZUELA_PEPE;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_PEPE;
 import static com.didekindroid.usuario.webservices.Oauth2Service.Oauth2;
-import static com.didekindroid.utils.UIutils.isRegisteredUser;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
@@ -124,8 +124,8 @@ public class PasswordChangeAcTest {
 
         // Check security data: old data.
         AccessToken tokenBefore = TKhandler.getAccessTokenInCache();
-        String accessTkValue = tokenBefore.getValue();
-        String refreshTkValue = tokenBefore.getRefreshToken().getValue();
+        String accessTkValue = tokenBefore != null ? tokenBefore.getValue() : null;
+        String refreshTkValue = tokenBefore != null ? tokenBefore.getRefreshToken().getValue() : null;
 
         onView(withId(R.id.reg_usuario_password_ediT)).perform(replaceText("new_pepe_password"));
         onView(withId(R.id.reg_usuario_password_confirm_ediT)).perform(replaceText("new_pepe_password"));

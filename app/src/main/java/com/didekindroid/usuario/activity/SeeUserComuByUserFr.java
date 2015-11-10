@@ -9,13 +9,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+
 import com.didekin.serviceone.domain.UsuarioComunidad;
-import com.didekindroid.exception.UiException;
+import com.didekindroid.common.UiException;
 
 import java.util.List;
 
-import static com.didekindroid.utils.ViewsIDs.SEE_USER_COMU_BY_USER;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
+import static com.didekindroid.common.utils.ViewsIDs.SEE_USER_COMU_BY_USER;
 import static com.google.common.base.Preconditions.checkState;
 
 /**

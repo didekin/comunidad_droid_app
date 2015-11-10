@@ -12,6 +12,7 @@ import com.didekin.serviceone.domain.Usuario;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.usuario.activity.utils.CleanEnum;
+import com.didekindroid.usuario.dominio.ComunidadIntent;
 import com.didekindroid.usuario.dominio.DomainDataUtils;
 
 import org.hamcrest.CoreMatchers;
@@ -31,7 +32,9 @@ import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekindroid.security.TokenHandler.TKhandler;
+import static com.didekindroid.common.TokenHandler.TKhandler;
+import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
+import static com.didekindroid.common.utils.ViewsIDs.COMU_SEARCH_RESULTS;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PROPIETARIO;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_SEARCH;
@@ -48,13 +51,10 @@ import static com.didekindroid.usuario.dominio.DomainDataUtils.makeComunidad;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.makeListTwoUserComu;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.makeUsuario;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.makeUsuarioComunidad;
-import static com.didekindroid.utils.UIutils.isRegisteredUser;
-import static com.didekindroid.utils.ViewsIDs.COMU_SEARCH_RESULTS;
 import static com.google.android.apps.common.testing.ui.espresso.sample.LongListMatchers.withAdaptedData;
 import static com.google.common.base.Preconditions.checkState;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
@@ -92,7 +92,7 @@ public class ComuSearchResultsAcTest_1 {
         Log.d(TAG, "In getFixture()");
         whatClean = CleanEnum.CLEAN_NOTHING;
         intent = new Intent();
-        intent.putExtra(COMUNIDAD_SEARCH.extra, COMU_LA_PLAZUELA_5);
+        intent.putExtra(COMUNIDAD_SEARCH.extra, new ComunidadIntent(COMU_LA_PLAZUELA_5));
     }
 
     @Test
@@ -135,8 +135,9 @@ public class ComuSearchResultsAcTest_1 {
         mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getFragmentManager().findFragmentById(R.id.comu_list_frg);
         ComuSearchResultsListAdapter adapter = (ComuSearchResultsListAdapter) mComunidadSummaryFrg.getListAdapter();
         assertThat(adapter.getCount(), is(1));
+        ComunidadIntent comunidadIntent = (ComunidadIntent) intent.getSerializableExtra(COMUNIDAD_SEARCH.extra);
         onView(withId(COMU_SEARCH_RESULTS.idView)).check(matches(
-                withAdaptedData(equalTo((Object) intent.getSerializableExtra(COMUNIDAD_SEARCH.extra)))));
+                withAdaptedData(Matchers.<Object>equalTo(comunidadIntent.getComunidad()))));
     }
 
     @Test
@@ -154,7 +155,7 @@ public class ComuSearchResultsAcTest_1 {
         Comunidad comunidad = makeComunidad("Ronda", "de la Plazuela del Norte", (short) 5, "",
                 new Municipio((short) 2, new Provincia((short) 27)));
         Intent intent = new Intent();
-        intent.putExtra(COMUNIDAD_SEARCH.extra, comunidad);
+        intent.putExtra(COMUNIDAD_SEARCH.extra, new ComunidadIntent(comunidad));
         activity = mActivityRule.launchActivity(intent);
         assertThat(isRegisteredUser(activity), is(true));
 
@@ -177,7 +178,7 @@ public class ComuSearchResultsAcTest_1 {
         Comunidad comunidad = makeComunidad("Rincón", "del No Existente", (short) 123, "",
                 new Municipio((short) 2, new Provincia((short) 27)));
         Intent intent = new Intent();
-        intent.putExtra(COMUNIDAD_SEARCH.extra, comunidad);
+        intent.putExtra(COMUNIDAD_SEARCH.extra, new ComunidadIntent(comunidad));
         activity = mActivityRule.launchActivity(intent);
         assertThat(isRegisteredUser(activity), is(false));
 
@@ -202,7 +203,7 @@ public class ComuSearchResultsAcTest_1 {
         Comunidad comunidad = makeComunidad("Rincón", "del No Existente", (short) 123, "",
                 new Municipio((short) 2, new Provincia((short) 27)));
         Intent intent = new Intent();
-        intent.putExtra(COMUNIDAD_SEARCH.extra, comunidad);
+        intent.putExtra(COMUNIDAD_SEARCH.extra, new ComunidadIntent(comunidad));
         activity = mActivityRule.launchActivity(intent);
         assertThat(isRegisteredUser(activity), is(true));
 

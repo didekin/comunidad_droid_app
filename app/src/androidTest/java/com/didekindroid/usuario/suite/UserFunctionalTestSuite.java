@@ -1,6 +1,24 @@
 package com.didekindroid.usuario.suite;
 
-import com.didekindroid.usuario.activity.*;
+import com.didekindroid.usuario.activity.ComuDataAcTest;
+import com.didekindroid.usuario.activity.ComuSearchAcTest_intent;
+import com.didekindroid.usuario.activity.ComuSearchResultsAcTest_1;
+import com.didekindroid.usuario.activity.ComuSearchResultsAcTest_intent_1;
+import com.didekindroid.usuario.activity.ComuSearchResultsAcTest_intent_2;
+import com.didekindroid.usuario.activity.ComuSearchTest_spinner;
+import com.didekindroid.usuario.activity.DeleteMeAcTest;
+import com.didekindroid.usuario.activity.LoginAcTest_1;
+import com.didekindroid.usuario.activity.PasswordChangeAcTest;
+import com.didekindroid.usuario.activity.RegComuAndUserAndUserComuAcTest;
+import com.didekindroid.usuario.activity.RegComuAndUserComuAcTest;
+import com.didekindroid.usuario.activity.RegUserAndUserComuAcTest_intent;
+import com.didekindroid.usuario.activity.RegUserComuAcTest;
+import com.didekindroid.usuario.activity.RegUserComuAcTest_intent;
+import com.didekindroid.usuario.activity.SeeUserComuByComuAcTest;
+import com.didekindroid.usuario.activity.SeeUserComuByUserAcTest;
+import com.didekindroid.usuario.activity.UserComuDataAcTest_1;
+import com.didekindroid.usuario.activity.UserComuDataAcTest_2;
+import com.didekindroid.usuario.activity.UserDataAcTest;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;

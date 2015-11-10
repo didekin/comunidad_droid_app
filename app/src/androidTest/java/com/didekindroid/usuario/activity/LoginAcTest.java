@@ -3,7 +3,6 @@ package com.didekindroid.usuario.activity;
 import android.support.test.rule.ActivityTestRule;
 
 import com.didekindroid.R;
-import com.didekindroid.usuario.activity.LoginAc;
 import com.didekindroid.usuario.activity.utils.CleanEnum;
 
 import org.junit.After;

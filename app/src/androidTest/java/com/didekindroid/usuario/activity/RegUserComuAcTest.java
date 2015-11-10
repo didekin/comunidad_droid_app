@@ -6,6 +6,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.serviceone.domain.Comunidad;
 import com.didekindroid.R;
+import com.didekindroid.usuario.dominio.FullComunidadIntent;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.After;
@@ -37,7 +38,7 @@ import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_TRAV_PLAZUEL
 import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_JUAN;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_PEPE;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
-import static com.didekindroid.utils.UIutils.isRegisteredUser;
+import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
@@ -74,7 +75,7 @@ public class RegUserComuAcTest {
 
         // We use that comunidad as the one to associate to the present user.
         intent = new Intent();
-        intent.putExtra(COMUNIDAD_LIST_OBJECT.extra, comunidad);
+        intent.putExtra(COMUNIDAD_LIST_OBJECT.extra, new FullComunidadIntent(comunidad));
         // Segundo usuarioComunidad.
         signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
     }
@@ -93,8 +94,8 @@ public class RegUserComuAcTest {
 
         assertThat(activity, notNullValue());
         assertThat(activity.getFragmentManager().findFragmentById(R.id.reg_usercomu_frg), notNullValue());
-        assertThat(((Comunidad) intent.getSerializableExtra(COMUNIDAD_LIST_OBJECT.extra)).getC_Id(), is(comunidad
-                .getC_Id()));
+        FullComunidadIntent comunidadIntent = (FullComunidadIntent) intent.getSerializableExtra(COMUNIDAD_LIST_OBJECT.extra);
+        assertThat(comunidadIntent.getComunidad().getC_Id(), is(comunidad.getC_Id()));
         onView(withId(R.id.reg_usercomu_ac_layout)).check(matches(isDisplayed()));
         onView(withId(R.id.reg_usercomu_frg)).check(matches(isDisplayed()));
 

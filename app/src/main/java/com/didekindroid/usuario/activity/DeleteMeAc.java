@@ -1,6 +1,5 @@
 package com.didekindroid.usuario.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -8,13 +7,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+
 import com.didekindroid.R;
 
-import static com.didekindroid.utils.UIutils.doToolBar;
-import static com.didekindroid.utils.UIutils.isRegisteredUser;
-import static com.didekindroid.utils.UIutils.updateIsRegistered;
-import static com.didekindroid.security.TokenHandler.TKhandler;
+import static com.didekindroid.common.TokenHandler.TKhandler;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
+import static com.didekindroid.common.utils.UIutils.doToolBar;
+import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
+import static com.didekindroid.common.utils.UIutils.updateIsRegistered;
 import static com.google.common.base.Preconditions.checkState;
 
 /**

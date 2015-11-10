@@ -12,24 +12,28 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.didekin.retrofitcl.OauthToken;
+import com.didekin.common.oauth2.OauthToken.AccessToken;
 import com.didekin.serviceone.domain.Comunidad;
 import com.didekin.serviceone.domain.Usuario;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
-import com.didekindroid.utils.ConnectionUtils;
-import com.didekindroid.utils.UIutils;
+import com.didekindroid.common.utils.ConnectionUtils;
+import com.didekindroid.common.utils.UIutils;
 import com.didekindroid.usuario.dominio.ComunidadBean;
+import com.didekindroid.usuario.dominio.FullComunidadIntent;
 import com.didekindroid.usuario.dominio.UsuarioBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
 
-import static com.didekindroid.security.TokenHandler.TKhandler;
-import static com.didekindroid.usuario.activity.utils.UserMenu.LOGIN_AC;
-import static com.didekindroid.utils.UIutils.*;
+import static com.didekindroid.common.TokenHandler.TKhandler;
+import static com.didekindroid.common.utils.UIutils.doToolBar;
+import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
+import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
+import static com.didekindroid.common.utils.UIutils.updateIsRegistered;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUserBeanFromRegUserFrView;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUserComuBeanFromView;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_ID;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_LIST_OBJECT;
+import static com.didekindroid.usuario.activity.utils.UserMenu.LOGIN_AC;
 import static com.didekindroid.usuario.webservices.Oauth2Service.Oauth2;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -70,8 +74,9 @@ public class RegUserAndUserComuAc extends AppCompatActivity {
 
         // Preconditions.
         checkState(!isRegisteredUser(this));
-        mComunidad = (Comunidad) getIntent().getExtras()
+        FullComunidadIntent comunidadIntent = (FullComunidadIntent) getIntent().getExtras()
                 .getSerializable(COMUNIDAD_LIST_OBJECT.extra);
+        mComunidad = comunidadIntent != null ? comunidadIntent.getComunidad() : null;
 
         setContentView(R.layout.reg_user_and_usercomu_ac);
         doToolBar(this, true);
@@ -163,7 +168,7 @@ public class RegUserAndUserComuAc extends AppCompatActivity {
             Log.d(TAG, "UserAndUserComuRegister.doInBackground(): calling ServOne.regComuAndUserAndUserComu()");
             ServOne.regUserAndUserComu(usuarioComunidad[0]);
             Log.d(TAG, "UserAndUserComuRegister.doInBackground(): calling Oauth2.getPasswordUserToken()");
-            OauthToken.AccessToken token = Oauth2.getPasswordUserToken(newUser.getUserName(), newUser.getPassword());
+            AccessToken token = Oauth2.getPasswordUserToken(newUser.getUserName(), newUser.getPassword());
             TKhandler.initKeyCacheAndBackupFile(token);
             return null;
         }

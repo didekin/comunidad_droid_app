@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.didekindroid.R;
 
-import static com.didekindroid.utils.UIutils.doToolBar;
+import static com.didekindroid.common.utils.UIutils.doToolBar;
 
 public class IncidRegAc extends AppCompatActivity {
 

@@ -1,6 +1,9 @@
 package com.didekindroid.usuario.suite;
 
-import com.didekindroid.usuario.activity.*;
+import com.didekindroid.usuario.activity.ComuSearchResultsAcTest_2;
+import com.didekindroid.usuario.activity.LoginAcTest_2;
+import com.didekindroid.usuario.activity.LoginAcTest_3;
+
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 

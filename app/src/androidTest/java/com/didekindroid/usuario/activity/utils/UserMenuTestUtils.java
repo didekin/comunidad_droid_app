@@ -10,9 +10,9 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.*;
-import static com.didekindroid.utils.ViewsIDs.SEE_USER_COMU_BY_USER;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.checkNoToastInTest;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.checkToastInTest;
+import static com.didekindroid.common.utils.ViewsIDs.SEE_USER_COMU_BY_USER;
 
 /**
  * User: pedro@didekin
@@ -190,7 +190,7 @@ public enum UserMenuTestUtils {
         public void checkMenuItem_WTk(Activity activity) throws InterruptedException
         {
             openActionBarOverflowOrOptionsMenu(activity);
-            Thread.sleep(2000);
+            Thread.sleep(1000);
             onView(withText(R.string.user_data_ac_mn)).check(matches(isDisplayed())).perform(click());
 
             // Show the data in modifiable state.

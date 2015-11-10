@@ -1,10 +1,14 @@
 package com.didekindroid.usuario.dominio;
 
 import android.content.res.Resources;
+
 import com.didekin.serviceone.domain.Usuario;
 import com.didekindroid.R;
 
-import static com.didekin.serviceone.domain.DataPatterns.*;
+import static com.didekin.serviceone.domain.DataPatterns.ALIAS;
+import static com.didekin.serviceone.domain.DataPatterns.EMAIL;
+import static com.didekin.serviceone.domain.DataPatterns.LINE_BREAK;
+import static com.didekin.serviceone.domain.DataPatterns.PASSWORD;
 
 /**
  * User: pedro@didekin
@@ -29,7 +33,8 @@ public final class UsuarioBean {
 
     public boolean validate(Resources resources, StringBuilder errorMsg)
     {
-        boolean isValide = validateAlias(resources.getText(R.string.alias), errorMsg)
+        boolean isValide = validateAlias(resources.getText(
+                R.string.alias), errorMsg)
                 & validateDoublePassword(resources, errorMsg)
                 & validateUserName(resources.getText(R.string.email_hint), errorMsg);
 

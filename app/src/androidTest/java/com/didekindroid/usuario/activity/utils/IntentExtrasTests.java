@@ -2,7 +2,11 @@ package com.didekindroid.usuario.activity.utils;
 
 import org.junit.Test;
 
-import static com.didekindroid.usuario.activity.utils.UserIntentExtras.*;
+import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_ID;
+import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_LIST_INDEX;
+import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_LIST_OBJECT;
+import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_SEARCH;
+import static com.didekindroid.usuario.activity.utils.UserIntentExtras.USERCOMU_LIST_OBJECT;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 

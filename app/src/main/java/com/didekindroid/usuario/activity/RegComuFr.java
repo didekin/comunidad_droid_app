@@ -10,19 +10,24 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.CursorAdapter;
+import android.widget.SimpleCursorAdapter;
+import android.widget.Spinner;
+
 import com.didekin.serviceone.domain.Municipio;
 import com.didekin.serviceone.domain.Provincia;
 import com.didekindroid.R;
-import com.didekindroid.utils.IoHelper;
-import com.didekindroid.repository.MasterDataDbHelper;
+import com.didekindroid.usuario.repository.MasterDataDbHelper;
 import com.didekindroid.usuario.dominio.ComunidadBean;
+import com.didekindroid.common.utils.IoHelper;
 
 import java.util.List;
 
-import static com.didekindroid.repository.MasterDataDb.ComunidadAutonoma.cu_nombre;
-import static com.didekindroid.repository.MasterDataDb.Municipio.mu_nombre;
-import static com.didekindroid.repository.MasterDataDb.Provincia.pr_nombre;
+import static com.didekindroid.usuario.repository.MasterDataDb.ComunidadAutonoma.cu_nombre;
+import static com.didekindroid.usuario.repository.MasterDataDb.Municipio.mu_nombre;
+import static com.didekindroid.usuario.repository.MasterDataDb.Provincia.pr_nombre;
 
 public class RegComuFr extends Fragment {
 
@@ -286,7 +291,7 @@ public class RegComuFr extends Fragment {
         }
     }
 
-///    :::::::::::::::: COMUNIDAD AUTONOMA :::::::::::::::
+///    :::::::::::::::: COMUNIDAD_INTENT AUTONOMA :::::::::::::::
 
     class CAutonomaSpinnerSetter extends AsyncTask<Void, Void, Cursor> {
 

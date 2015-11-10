@@ -32,7 +32,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekindroid.security.TokenHandler.TKhandler;
+import static com.didekindroid.common.TokenHandler.TKhandler;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUserComuBeanFromView;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.checkToastInTest;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOneUser;
@@ -40,7 +40,7 @@ import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAnd
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.typeComunidadData;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_TRAV_PLAZUELA_PEPE;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_PEPE;
-import static com.didekindroid.utils.UIutils.isRegisteredUser;
+import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;

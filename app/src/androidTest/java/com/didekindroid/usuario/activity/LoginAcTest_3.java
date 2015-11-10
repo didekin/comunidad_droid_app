@@ -3,7 +3,8 @@ package com.didekindroid.usuario.activity;
 import android.content.Intent;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.retrofitcl.OauthToken;
+import com.didekin.common.oauth2.OauthToken.AccessToken;
+import com.didekin.common.oauth2.OauthTokenHelper;
 import com.didekindroid.R;
 
 import org.junit.BeforeClass;
@@ -17,7 +18,6 @@ import static android.support.test.espresso.matcher.RootMatchers.isDialog;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekin.retrofitcl.OauthTokenHelper.HELPER;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.checkToastInTest;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanWithTkhandler;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_TRAV_PLAZUELA_PEPE;
@@ -46,7 +46,7 @@ public class LoginAcTest_3 extends LoginAcTest {
     {
         // User in DB: wrong password three consecutive times. Choice "yes mail" in dialog.
         assertThat(ServOne.regComuAndUserAndUserComu(COMU_TRAV_PLAZUELA_PEPE), is(true));
-        OauthToken.AccessToken token = Oauth2.getPasswordUserToken(USER_PEPE.getUserName(), USER_PEPE.getPassword());
+        AccessToken token = Oauth2.getPasswordUserToken(USER_PEPE.getUserName(), USER_PEPE.getPassword());
         mActivity = mActivityRule.launchActivity(new Intent());
 
         getDialogFragment();
@@ -63,7 +63,7 @@ public class LoginAcTest_3 extends LoginAcTest {
         checkToastInTest(R.string.password_new_in_login, mActivity);
 
         token = Oauth2.getRefreshUserToken(token.getRefreshToken().getValue());
-        ServOne.deleteUser(HELPER.doBearerAccessTkHeader(token));
+        ServOne.deleteUser(OauthTokenHelper.HELPER.doBearerAccessTkHeader(token));
         cleanWithTkhandler();
     }
 }

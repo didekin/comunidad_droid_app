@@ -13,17 +13,18 @@ import com.didekin.serviceone.domain.Comunidad;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.usuario.activity.utils.UserMenu;
-import com.didekindroid.utils.UIutils;
+import com.didekindroid.common.utils.UIutils;
+import com.didekindroid.usuario.dominio.FullComunidadIntent;
+import com.didekindroid.usuario.dominio.FullUsuarioComuidadIntent;
 
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_LIST_INDEX;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.usuario.activity.utils.UserMenu.REG_COMU_USER_USERCOMU_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_USERCOMU_BY_USER_AC;
-import static com.didekindroid.usuario.activity.utils.UserMenu.USER_DATA_AC;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
-import static com.didekindroid.utils.UIutils.doToolBar;
-import static com.didekindroid.utils.UIutils.isRegisteredUser;
+import static com.didekindroid.common.utils.UIutils.doToolBar;
+import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -37,7 +38,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * 2. If the user is registered but not with the comunidad selected, an object comunidad is passed
  * as an intent extra.
  * 3. If the user is registered with the comunidad selected, an object usuarioComunidad is passed
- * with its data fully initialized.
+ * with its data fully initialized:
+ * -- usuario: id, alias, userName.
+ * -- comunidad: id, tipoVia, nombreVia, numero, sufijoNumero, fechaAlta,
+ * ---- municipio: codInProvincia, nombre.
+ * ------ provincia: provinciaId, nombre.
+ * -- usuarioComunidad: portal, escalera, planta, puerta, roles.
  */
 public class ComuSearchResultsAc extends AppCompatActivity implements
         ComuSearchResultsListFr.ComuListListener {
@@ -131,7 +137,7 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
         if (!isRegisteredUser(this)) {
             Log.d(TAG, "onComunidadSelected(). User is not registered.");
             Intent intent = new Intent(this, RegUserAndUserComuAc.class);
-            intent.putExtra(COMUNIDAD_LIST_OBJECT.extra, comunidad);
+            intent.putExtra(COMUNIDAD_LIST_OBJECT.extra, new FullComunidadIntent(comunidad));
             startActivity(intent);
         } else {
             new UsuarioComunidadGetter().execute(comunidad);
@@ -176,11 +182,11 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
 
             if (isUserComuNull) {
                 Intent intent = new Intent(ComuSearchResultsAc.this, RegUserComuAc.class);
-                intent.putExtra(COMUNIDAD_LIST_OBJECT.extra, comunidadSelected);
+                intent.putExtra(COMUNIDAD_LIST_OBJECT.extra, new FullComunidadIntent(comunidadSelected));
                 startActivity(intent);
             } else {
                 Intent intent = new Intent(ComuSearchResultsAc.this, UserComuDataAc.class);
-                intent.putExtra(USERCOMU_LIST_OBJECT.extra, userComu);
+                intent.putExtra(USERCOMU_LIST_OBJECT.extra, new FullUsuarioComuidadIntent(userComu));
                 startActivity(intent);
             }
         }

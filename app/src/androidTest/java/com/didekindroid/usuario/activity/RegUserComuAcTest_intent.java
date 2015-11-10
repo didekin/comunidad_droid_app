@@ -3,8 +3,11 @@ package com.didekindroid.usuario.activity;
 import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
+
 import com.didekin.serviceone.domain.Comunidad;
 import com.didekindroid.R;
+import com.didekindroid.usuario.dominio.FullComunidadIntent;
+
 import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -20,15 +23,22 @@ import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekindroid.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRESIDENTE;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PROPIETARIO;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_ID;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_LIST_OBJECT;
-import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.*;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.*;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanTwoUsers;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAndUpdateTk;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.typeRegUserComuData;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_JUAN;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_TRAV_PLAZUELA_PEPE;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_JUAN;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_PEPE;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
-import static org.hamcrest.Matchers.*;
+import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -39,7 +49,6 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class RegUserComuAcTest_intent {
 
-    private RegUserComuAc activity;
     private Intent intent;
     Comunidad comunidad;
 
@@ -62,7 +71,7 @@ public class RegUserComuAcTest_intent {
 
             // We use that comunidad as the one to associate to the present user.
             intent = new Intent();
-            intent.putExtra(COMUNIDAD_LIST_OBJECT.extra, comunidad);
+            intent.putExtra(COMUNIDAD_LIST_OBJECT.extra, new FullComunidadIntent(comunidad));
             return intent;
         }
     };
@@ -76,7 +85,7 @@ public class RegUserComuAcTest_intent {
     @Test
     public void testOnCreate() throws Exception
     {
-        activity = intentRule.getActivity();
+        RegUserComuAc activity = intentRule.getActivity();
 
         assertThat(isRegisteredUser(activity), is(true));
         List<Comunidad> comunidadesUserOne = ServOne.getComusByUser();
@@ -87,8 +96,8 @@ public class RegUserComuAcTest_intent {
 
         assertThat(activity, notNullValue());
         assertThat(activity.getFragmentManager().findFragmentById(R.id.reg_usercomu_frg), notNullValue());
-        assertThat(((Comunidad) intent.getSerializableExtra(COMUNIDAD_LIST_OBJECT.extra)).getC_Id(), is(comunidad
-                .getC_Id()));
+        FullComunidadIntent comunidadIntent = (FullComunidadIntent) intent.getSerializableExtra(COMUNIDAD_LIST_OBJECT.extra);
+        assertThat(comunidadIntent.getComunidad().getC_Id(), is(comunidad.getC_Id()));
         onView(withId(R.id.reg_usercomu_ac_layout)).check(matches(isDisplayed()));
         onView(withId(R.id.reg_usercomu_frg)).check(matches(isDisplayed()));
     }

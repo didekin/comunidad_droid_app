@@ -10,13 +10,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import com.didekindroid.R;
-import com.didekindroid.utils.ConnectionUtils;
 import com.didekindroid.usuario.dominio.UsuarioBean;
+import com.didekindroid.common.utils.ConnectionUtils;
 import com.google.common.base.Preconditions;
 
-import static com.didekindroid.utils.UIutils.*;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
+import static com.didekindroid.common.utils.UIutils.doToolBar;
+import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
+import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
+import static com.didekindroid.common.utils.UIutils.makeToast;
 import static com.google.common.base.Preconditions.checkState;
 
 /**

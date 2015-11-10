@@ -61,21 +61,22 @@ dependencies {
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.android.support:design:23.1.0'
     compile 'com.android.support:appcompat-v7:23.1.0'
-    compile project(':retrofit_cl')
-    compile files('../libs/serv_one_lib-0.2.jar')
+
+    compile files('../libs/client_lib-0.2.jar')
+    androidTestCompile project(':javabeans')
+
     androidTestCompile 'com.android.support:support-annotations:23.1.0'
     androidTestCompile 'com.android.support.test:runner:0.4.1'
     androidTestCompile 'com.android.support.test:rules:0.4.1'
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
     androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2.1'
-    androidTestCompile ('com.android.support.test.espresso:espresso-contrib:2.2.1') {
+    androidTestCompile('com.android.support.test.espresso:espresso-contrib:2.2.1') {
         exclude group: 'com.android.support', module: 'appcompat'
         exclude group: 'com.android.support', module: 'support-v4'
-       /* exclude module: 'recyclerview-v7'*/
+        /* exclude module: 'recyclerview-v7'*/
     }
     androidTestCompile 'com.android.support.test.espresso:espresso-idling-resource:2.2.1'
     androidTestCompile 'com.android.support.test.espresso:espresso-web:2.2.1'
-    androidTestCompile project(':javabeans')
 }
 
 task wrapper(type: Wrapper) {

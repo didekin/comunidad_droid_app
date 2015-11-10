@@ -3,17 +3,17 @@ package com.didekindroid.usuario.webservices;
 import android.util.Base64;
 import android.util.Log;
 
-import com.didekin.retrofitcl.Oauth2EndPoints;
-import com.didekin.retrofitcl.OauthToken.AccessToken;
-import com.didekin.serviceone.security.OauthClient;
+import com.didekin.common.oauth2.Oauth2EndPoints;
+import com.didekin.common.oauth2.OauthClient;
+import com.didekin.common.oauth2.OauthToken.AccessToken;
 
 import retrofit.client.Response;
 
-import static com.didekin.retrofitcl.OauthTokenHelper.BASIC_AND_SPACE;
-import static com.didekin.retrofitcl.RetrofitRestBuilder.BUILDER;
-import static com.didekin.serviceone.security.OauthClient.CL_USER;
-import static com.didekin.serviceone.security.SecurityConstant.PASSWORD_GRANT;
-import static com.didekin.serviceone.security.SecurityConstant.REFRESH_TOKEN_GRANT;
+import static com.didekin.common.RetrofitRestBuilder.BUILDER;
+import static com.didekin.common.oauth2.OauthClient.CL_USER;
+import static com.didekin.common.oauth2.OauthConstant.PASSWORD_GRANT;
+import static com.didekin.common.oauth2.OauthConstant.REFRESH_TOKEN_GRANT;
+import static com.didekin.common.oauth2.OauthTokenHelper.BASIC_AND_SPACE;
 import static com.didekindroid.DidekindroidApp.getBaseURL;
 
 /**

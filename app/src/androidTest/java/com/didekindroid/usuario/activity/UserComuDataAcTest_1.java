@@ -6,12 +6,16 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.serviceone.domain.UsuarioComunidad;
-import com.didekin.serviceone.security.Rol;
 import com.didekindroid.R;
-import com.didekindroid.exception.UiException;
+import com.didekindroid.common.UiException;
 import com.didekindroid.usuario.activity.utils.CleanEnum;
+import com.didekindroid.usuario.dominio.FullUsuarioComuidadIntent;
 
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Rule;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.List;
@@ -22,19 +26,31 @@ import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
-import static android.support.test.espresso.matcher.ViewMatchers.*;
-import static com.didekindroid.security.TokenHandler.TKhandler;
-import static com.didekindroid.utils.UIutils.isRegisteredUser;
+import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isNotChecked;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.didekin.common.oauth2.Rol.ADMINISTRADOR;
+import static com.didekin.common.oauth2.Rol.INQUILINO;
+import static com.didekin.common.oauth2.Rol.PRESIDENTE;
+import static com.didekin.common.oauth2.Rol.PROPIETARIO;
+import static com.didekindroid.common.TokenHandler.TKhandler;
+import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_NOTHING;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_ID;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.COMU_DATA_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.SEE_USERCOMU_BY_COMU_AC;
-import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.*;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.checkToastInTest;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_JUAN;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -67,11 +83,11 @@ public class UserComuDataAcTest_1 {
                 comunidadesUserOne = ServOne.seeUserComusByUser();
             } catch (UiException e) {
             }
-            mUsuarioComunidad = comunidadesUserOne.get(0);
+            mUsuarioComunidad = comunidadesUserOne != null ? comunidadesUserOne.get(0) : null;
 
             // We use that comunidad as the one to associate to the present user.
             Intent intent = new Intent();
-            intent.putExtra(USERCOMU_LIST_OBJECT.extra, mUsuarioComunidad);
+            intent.putExtra(USERCOMU_LIST_OBJECT.extra, new FullUsuarioComuidadIntent(mUsuarioComunidad));
             return intent;
         }
     };
@@ -117,16 +133,16 @@ public class UserComuDataAcTest_1 {
         ViewInteraction viewInteraction_4 =
                 onView(withId(R.id.reg_usercomu_checbox_inq)).check(matches(isDisplayed()));
 
-        if (mUsuarioComunidad.getRoles().contains(Rol.PRESIDENTE.function)) {
+        if (mUsuarioComunidad.getRoles().contains(PRESIDENTE.function)) {
             viewInteraction_1.check(matches(isChecked()));
         }
-        if (mUsuarioComunidad.getRoles().contains(Rol.PROPIETARIO.function)) {
+        if (mUsuarioComunidad.getRoles().contains(PROPIETARIO.function)) {
             viewInteraction_2.check(matches(isChecked()));
         }
-        if (mUsuarioComunidad.getRoles().contains(Rol.ADMINISTRADOR.function)) {
+        if (mUsuarioComunidad.getRoles().contains(ADMINISTRADOR.function)) {
             viewInteraction_3.check(matches(isChecked()));
         }
-        if (mUsuarioComunidad.getRoles().contains(Rol.INQUILINO.function)) {
+        if (mUsuarioComunidad.getRoles().contains(INQUILINO.function)) {
             viewInteraction_4.check(matches(isChecked()));
         }
 

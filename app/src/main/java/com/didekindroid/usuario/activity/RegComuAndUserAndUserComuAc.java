@@ -12,26 +12,26 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.didekin.retrofitcl.OauthToken.AccessToken;
-import com.didekin.serviceone.domain.DataPatterns;
+import com.didekin.common.oauth2.OauthToken.AccessToken;
 import com.didekin.serviceone.domain.Usuario;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
+import com.didekindroid.common.utils.ConnectionUtils;
+import com.didekindroid.common.utils.UIutils;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
-import com.didekindroid.utils.ConnectionUtils;
-import com.didekindroid.utils.UIutils;
 
-import static com.didekindroid.security.TokenHandler.TKhandler;
+import static com.didekin.serviceone.domain.DataPatterns.LINE_BREAK;
+import static com.didekindroid.common.TokenHandler.TKhandler;
+import static com.didekindroid.common.utils.UIutils.doToolBar;
+import static com.didekindroid.common.utils.UIutils.updateIsRegistered;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeComunidadBeanFromView;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUserBeanFromRegUserFrView;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUserComuBeanFromView;
 import static com.didekindroid.usuario.activity.utils.UserMenu.LOGIN_AC;
 import static com.didekindroid.usuario.webservices.Oauth2Service.Oauth2;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
-import static com.didekindroid.utils.UIutils.doToolBar;
-import static com.didekindroid.utils.UIutils.updateIsRegistered;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -88,7 +88,7 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity {
 
         // Validation of data.
         StringBuilder errorMsg = new StringBuilder(getResources().getText(R.string.error_validation_msg))
-                .append(DataPatterns.LINE_BREAK.getRegexp());
+                .append(LINE_BREAK.getRegexp());
 
         if (!usuarioComunidadBean.validate(getResources(), errorMsg)) {
             UIutils.makeToast(this, errorMsg.toString(), Toast.LENGTH_SHORT);

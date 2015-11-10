@@ -5,12 +5,9 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.serviceone.domain.Comunidad;
-import com.didekin.serviceone.domain.Municipio;
-import com.didekin.serviceone.domain.Provincia;
-import com.didekin.serviceone.domain.Usuario;
-import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
-import com.didekindroid.usuario.activity.utils.CleanEnum;
+import com.didekindroid.usuario.dominio.ComunidadIntent;
+import com.didekindroid.usuario.dominio.FullComunidadIntent;
 
 import org.junit.After;
 import org.junit.Before;
@@ -27,32 +24,19 @@ import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_JUAN_AND_PEPE;
-import static com.didekindroid.usuario.activity.utils.RolCheckBox.PROPIETARIO;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_SEARCH;
-import static com.didekindroid.usuario.activity.utils.UserIntentExtras.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
-import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanTwoUsers;
-import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanWithTkhandler;
-import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.regTwoUserComuSameUser;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_LA_PLAZUELA_5;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_PLAZUELA5_PEPE;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_JUAN;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_JUAN;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.makeComunidad;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.makeListTwoUserComu;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.makeUsuario;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.makeUsuarioComunidad;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
 
 /**
  * User: pedro@didekin
@@ -80,7 +64,7 @@ public class ComuSearchResultsAcTest_intent_2 {
         protected Intent getActivityIntent()
         {
             Intent intent = new Intent();
-            intent.putExtra(COMUNIDAD_SEARCH.extra, COMU_LA_PLAZUELA_5);
+            intent.putExtra(COMUNIDAD_SEARCH.extra, new ComunidadIntent(COMU_LA_PLAZUELA_5));
             return intent;
         }
     };
@@ -109,7 +93,8 @@ public class ComuSearchResultsAcTest_intent_2 {
         // Usuario registrado. La búsqueda devuelve una comunidad a la que él NO está asociado.
 
         onData(allOf(is(instanceOf(Comunidad.class)), hasProperty("nombreVia", is("de la Plazuela")))).perform(click());
-        intended(hasExtra(COMUNIDAD_LIST_OBJECT.extra,comuIntent));
+        FullComunidadIntent comunidadIntent = new FullComunidadIntent(comuIntent);
+        intended(hasExtra(COMUNIDAD_LIST_OBJECT.extra,comunidadIntent));
         onView(withId(R.id.reg_usercomu_ac_layout)).check(matches(isDisplayed()));
     }
 }

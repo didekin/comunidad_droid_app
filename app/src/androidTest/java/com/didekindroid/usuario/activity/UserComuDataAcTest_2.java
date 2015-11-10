@@ -6,11 +6,16 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
-import com.didekindroid.exception.UiException;
+import com.didekindroid.common.UiException;
 import com.didekindroid.usuario.activity.utils.CleanEnum;
+import com.didekindroid.usuario.dominio.FullUsuarioComuidadIntent;
 
 import org.hamcrest.CoreMatchers;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Rule;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.List;
@@ -20,13 +25,21 @@ import static android.support.test.espresso.Espresso.openActionBarOverflowOrOpti
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.*;
+import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRESIDENTE;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PROPIETARIO;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.USERCOMU_LIST_OBJECT;
-import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.*;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.*;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAndUpdateTk;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.updateSecurityData;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_JUAN;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_PEPE;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.makeUsuarioComunidad;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 import static org.hamcrest.Matchers.containsString;
 
@@ -35,6 +48,7 @@ import static org.hamcrest.Matchers.containsString;
  * Date: 01/10/15
  * Time: 18:57
  */
+@SuppressWarnings("EmptyCatchBlock")
 @RunWith(AndroidJUnit4.class)
 public class UserComuDataAcTest_2 {
 
@@ -63,11 +77,11 @@ public class UserComuDataAcTest_2 {
                 comunidadesUserOne = ServOne.seeUserComusByUser();
             } catch (UiException e) {
             }
-            mUsuarioComunidad = comunidadesUserOne.get(0);
+            mUsuarioComunidad = comunidadesUserOne != null ? comunidadesUserOne.get(0) : null;
 
             // We use that comunidad as the one to associate to the present user.
             Intent intent = new Intent();
-            intent.putExtra(USERCOMU_LIST_OBJECT.extra, mUsuarioComunidad);
+            intent.putExtra(USERCOMU_LIST_OBJECT.extra, new FullUsuarioComuidadIntent(mUsuarioComunidad));
 
             try {
                 Thread.sleep(900);

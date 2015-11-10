@@ -35,7 +35,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekindroid.security.TokenHandler.TKhandler;
+import static com.didekindroid.common.TokenHandler.TKhandler;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_NOTHING;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeComunidadBeanFromView;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUserBeanFromRegUserFrView;
@@ -47,7 +47,7 @@ import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOpti
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_JUAN;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_JUAN2;
-import static com.didekindroid.utils.UIutils.isRegisteredUser;
+import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -62,7 +62,7 @@ import static org.junit.Assert.fail;
  * Date: 07/07/15
  * Time: 10:26
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "ConstantConditions"})
 @RunWith(AndroidJUnit4.class)
 public class RegComuAndUserAndUserComuAcTest {
 
@@ -120,7 +120,7 @@ public class RegComuAndUserAndUserComuAcTest {
         onView(withId(R.id.reg_usercomu_frg)).check(matches(isDisplayed()));
         onView(withId(R.id.reg_user_frg)).perform(scrollTo()).check(matches(isDisplayed()));
 
-        onView(withId(R.id.appbar)).perform(scrollTo()).check(matches(isDisplayed()));
+        onView(withId(R.id.appbar)).check(matches(isDisplayed()));
         onView(withContentDescription("Navigate up")).check(matches(isDisplayed()));
         onView(allOf(
                         withContentDescription("Navigate up"),

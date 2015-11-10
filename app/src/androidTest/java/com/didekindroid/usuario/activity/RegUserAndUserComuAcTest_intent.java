@@ -6,8 +6,9 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.serviceone.domain.Comunidad;
 import com.didekindroid.R;
+import com.didekindroid.common.utils.UIutils;
 import com.didekindroid.usuario.activity.utils.CleanEnum;
-import com.didekindroid.utils.UIutils;
+import com.didekindroid.usuario.dominio.FullComunidadIntent;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.After;
@@ -30,7 +31,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekindroid.security.TokenHandler.TKhandler;
+import static com.didekindroid.common.TokenHandler.TKhandler;
+import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_JUAN2_AND_PEPE;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_PEPE;
@@ -48,7 +50,6 @@ import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_JUAN;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_TRAV_PLAZUELA_PEPE;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_JUAN2;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
-import static com.didekindroid.utils.UIutils.isRegisteredUser;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.is;
@@ -61,6 +62,7 @@ import static org.junit.Assert.fail;
  * Date: 13/09/15
  * Time: 11:30
  */
+@SuppressWarnings("ConstantConditions")
 @RunWith(AndroidJUnit4.class)
 public class RegUserAndUserComuAcTest_intent {
 
@@ -90,7 +92,7 @@ public class RegUserAndUserComuAcTest_intent {
             comunidad = comunidadesUserOne.get(0);
             // We pass the comunidad as an intent.
             intent = new Intent();
-            intent.putExtra(COMUNIDAD_LIST_OBJECT.extra, comunidad);
+            intent.putExtra(COMUNIDAD_LIST_OBJECT.extra, new FullComunidadIntent(comunidad));
             return intent;
         }
     };
@@ -115,9 +117,9 @@ public class RegUserAndUserComuAcTest_intent {
         activity = intentRule.getActivity();
 
         assertThat(UIutils.isRegisteredUser(activity), is(false));
-        assertThat(((Comunidad) intent.getSerializableExtra(COMUNIDAD_LIST_OBJECT.extra)), is(comunidad));
-        assertThat(((Comunidad) intent.getSerializableExtra(COMUNIDAD_LIST_OBJECT.extra)).getC_Id(), is(comunidad
-                .getC_Id()));
+        FullComunidadIntent comunidadIntent = (FullComunidadIntent) intent.getSerializableExtra(COMUNIDAD_LIST_OBJECT.extra);
+        assertThat(comunidadIntent.getComunidad(), is(comunidad));
+        assertThat(comunidadIntent.getComunidad().getC_Id(), is(comunidad.getC_Id()));
 
         assertThat(activity, notNullValue());
         assertThat(activity.getFragmentManager().findFragmentById(R.id.reg_usercomu_frg), notNullValue());

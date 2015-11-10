@@ -9,18 +9,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.didekin.serviceone.domain.DataPatterns;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
+import com.didekindroid.common.utils.ConnectionUtils;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
-import com.didekindroid.utils.ConnectionUtils;
 
+import static com.didekin.serviceone.domain.DataPatterns.LINE_BREAK;
+import static com.didekindroid.common.utils.UIutils.doToolBar;
+import static com.didekindroid.common.utils.UIutils.makeToast;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeComunidadBeanFromView;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUserComuBeanFromView;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
-import static com.didekindroid.utils.UIutils.doToolBar;
-import static com.didekindroid.utils.UIutils.makeToast;
 import static com.google.common.base.Preconditions.checkState;
 
 /**
@@ -67,7 +67,7 @@ public class RegComuAndUserComuAc extends AppCompatActivity {
 
         // Validation of data.
         StringBuilder errorMsg = new StringBuilder(getResources().getText(R.string.error_validation_msg))
-                .append(DataPatterns.LINE_BREAK.getRegexp());
+                .append(LINE_BREAK.getRegexp());
 
         if (!usuarioComunidadBean.validate(getResources(), errorMsg)) {
             makeToast(this, errorMsg.toString(), Toast.LENGTH_SHORT);

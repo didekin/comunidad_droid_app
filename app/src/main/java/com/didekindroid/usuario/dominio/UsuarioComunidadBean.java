@@ -1,13 +1,15 @@
 package com.didekindroid.usuario.dominio;
 
 import android.content.res.Resources;
+
+import com.didekin.serviceone.domain.DataPatterns;
 import com.didekin.serviceone.domain.Usuario;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.usuario.activity.utils.RolCheckBox;
 import com.google.common.primitives.Booleans;
 
-import static com.didekin.serviceone.domain.DataPatterns.*;
+import static com.didekin.serviceone.domain.DataPatterns.PORTAL;
 
 /**
  * User: pedro@didekin
@@ -109,7 +111,7 @@ public final class UsuarioComunidadBean {
 
         boolean isValid = PORTAL.isPatternOk(portal);
         if (!isValid) {
-            errorMsg.append(resources.getText(R.string.reg_usercomu_portal_hint) + LINE_BREAK.getRegexp());
+            errorMsg.append(resources.getText(R.string.reg_usercomu_portal_hint)).append(DataPatterns.LINE_BREAK.getRegexp());
         }
         return isValid;
     }
@@ -119,9 +121,9 @@ public final class UsuarioComunidadBean {
     {
         if (escalera.trim().isEmpty()) return true;
 
-        boolean isValid = ESCALERA.isPatternOk(escalera);
+        boolean isValid = DataPatterns.ESCALERA.isPatternOk(escalera);
         if (!isValid) {
-            errorMsg.append(resources.getText(R.string.reg_usercomu_escalera_hint) + LINE_BREAK.getRegexp());
+            errorMsg.append(resources.getText(R.string.reg_usercomu_escalera_hint)).append(DataPatterns.LINE_BREAK.getRegexp());
         }
         return isValid;
     }
@@ -131,10 +133,9 @@ public final class UsuarioComunidadBean {
     {
         if (planta.trim().isEmpty()) return true;
 
-        boolean isValid = PLANTA.isPatternOk(planta);
-        if (!isValid) {
-            errorMsg.append(resources.getText(R.string.reg_usercomu_planta_hint) + LINE_BREAK.getRegexp());
-        }
+        boolean isValid = DataPatterns.PLANTA.isPatternOk(planta);
+        if (!isValid)
+            errorMsg.append(resources.getText(R.string.reg_usercomu_planta_hint)).append(DataPatterns.LINE_BREAK.getRegexp());
         return isValid;
     }
 
@@ -143,9 +144,9 @@ public final class UsuarioComunidadBean {
     {
         if (puerta.trim().isEmpty()) return true;
 
-        boolean isValid = PUERTA.isPatternOk(puerta);
+        boolean isValid = DataPatterns.PUERTA.isPatternOk(puerta);
         if (!isValid) {
-            errorMsg.append(resources.getText(R.string.reg_usercomu_puerta_hint) + LINE_BREAK.getRegexp());
+            errorMsg.append(resources.getText(R.string.reg_usercomu_puerta_hint)).append(DataPatterns.LINE_BREAK.getRegexp());
         }
         return isValid;
     }
@@ -159,7 +160,7 @@ public final class UsuarioComunidadBean {
         if (rolesSize > 0 && !(isPropietario && isInquilino)) {
             isValid = true;
         } else {
-            errorMsg.append(resources.getText(R.string.reg_usercomu_role_rot) + LINE_BREAK.getRegexp());
+            errorMsg.append(resources.getText(R.string.reg_usercomu_role_rot)).append(DataPatterns.LINE_BREAK.getRegexp());
         }
         return isValid;
     }
@@ -177,16 +178,11 @@ public final class UsuarioComunidadBean {
     boolean validateComunidad(Resources resources, StringBuilder errorMsg)
     {
         if (comunidadBean == null) {
-            errorMsg.append(resources.getText(R.string.comunidad_null) + LINE_BREAK.getRegexp());
+            errorMsg.append(resources.getText(R.string.comunidad_null)).append(DataPatterns.LINE_BREAK.getRegexp());
             return false;
         }
         // In this point the instance of comunidad in usuarioBean is created.
         return comunidadBean.validate(resources, errorMsg);
-    }
-
-    public ComunidadBean getComunidadBean()
-    {
-        return comunidadBean;
     }
 
     public String getEscalera()
@@ -229,11 +225,6 @@ public final class UsuarioComunidadBean {
         return isPropietario;
     }
 
-    public UsuarioBean getUsuarioBean()
-    {
-        return usuarioBean;
-    }
-
     public UsuarioComunidad getUsuarioComunidad()
     {
         return usuarioComunidad;
@@ -247,10 +238,8 @@ public final class UsuarioComunidadBean {
 
         UsuarioComunidadBean that = (UsuarioComunidadBean) o;
 
-        if (!usuarioBean.equals(that.usuarioBean)) return false;
-        if (!comunidadBean.equals(that.comunidadBean)) return false;
+        return usuarioBean.equals(that.usuarioBean) && comunidadBean.equals(that.comunidadBean);
 
-        return true;
     }
 
     @Override

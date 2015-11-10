@@ -13,25 +13,25 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.didekin.retrofitcl.OauthToken.AccessToken;
-import com.didekin.retrofitcl.ServiceOneException;
+import com.didekin.common.exception.InServiceException;
+import com.didekin.common.oauth2.OauthToken.AccessToken;
 import com.didekin.serviceone.domain.Usuario;
 import com.didekindroid.R;
+import com.didekindroid.common.utils.ConnectionUtils;
 import com.didekindroid.usuario.activity.utils.UserMenu;
 import com.didekindroid.usuario.dominio.UsuarioBean;
-import com.didekindroid.utils.ConnectionUtils;
 
-import static com.didekin.serviceone.exception.ExceptionMessage.BAD_REQUEST;
-import static com.didekindroid.security.TokenHandler.TKhandler;
+import static com.didekin.common.exception.DidekinExceptionMsg.BAD_REQUEST;
+import static com.didekindroid.common.TokenHandler.TKhandler;
+import static com.didekindroid.common.utils.UIutils.doToolBar;
+import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
+import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
+import static com.didekindroid.common.utils.UIutils.makeToast;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUserBeanFromUserDataAcView;
 import static com.didekindroid.usuario.activity.utils.UserMenu.COMU_SEARCH_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_USERCOMU_BY_USER_AC;
 import static com.didekindroid.usuario.webservices.Oauth2Service.Oauth2;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
-import static com.didekindroid.utils.UIutils.doToolBar;
-import static com.didekindroid.utils.UIutils.getErrorMsgBuilder;
-import static com.didekindroid.utils.UIutils.isRegisteredUser;
-import static com.didekindroid.utils.UIutils.makeToast;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
@@ -171,20 +171,18 @@ public class UserDataAc extends AppCompatActivity {
 
             boolean isSameUserName = mOldUser.getUserName().equals(usuarios[0].getUserName());
             boolean isSameAlias = mOldUser.getAlias().equals(usuarios[0].getAlias());
-            boolean isPasswordWrong = false;
 
             if (isSameAlias && isSameUserName) {
-                return isPasswordWrong;
+                return false;
             }
 
             AccessToken token_1;
             try {
                 token_1 = Oauth2.getPasswordUserToken(mOldUser.getUserName(), usuarios[0].getPassword());
                 TKhandler.initKeyCacheAndBackupFile(token_1);
-            } catch (ServiceOneException e) {
-                checkState(e.getServiceMessage().equals(BAD_REQUEST.getMessage()));
-                isPasswordWrong = true;
-                return isPasswordWrong;
+            } catch (InServiceException e) {
+                checkState(e.getHttpMessage().equals(BAD_REQUEST.getHttpMessage()));
+                return true;
             }
 
             if (!isSameUserName) {
@@ -197,7 +195,7 @@ public class UserDataAc extends AppCompatActivity {
                 AccessToken token_2 = Oauth2.getPasswordUserToken(usuarioIn.getUserName(), usuarios[0].getPassword());
                 TKhandler.initKeyCacheAndBackupFile(token_2);
                 checkState(ServOne.deleteAccessToken(token_1.getValue()));
-                return isPasswordWrong;
+                return false;
             }
 
             Usuario usuarioIn = new Usuario.UsuarioBuilder()
@@ -205,7 +203,7 @@ public class UserDataAc extends AppCompatActivity {
                     .uId(usuarios[0].getuId())
                     .build();
             checkState(ServOne.modifyUser(usuarioIn) > 0);
-            return isPasswordWrong;
+            return false;
         }
 
         @Override

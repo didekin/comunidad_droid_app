@@ -4,28 +4,49 @@ import android.content.res.Resources;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.retrofitcl.OauthToken;
+import com.didekin.common.oauth2.OauthToken.AccessToken;
 import com.didekindroid.R;
 import com.didekindroid.usuario.activity.utils.CleanEnum;
 
-import org.hamcrest.CoreMatchers;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Rule;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.*;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.replaceText;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
+import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.*;
-import static com.didekindroid.security.TokenHandler.TKhandler;
-import static com.didekindroid.utils.UIutils.isRegisteredUser;
+import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
+import static android.support.test.espresso.matcher.ViewMatchers.withHint;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.didekindroid.common.TokenHandler.TKhandler;
+import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_NOTHING;
-import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.*;
-import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.*;
+import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.COMU_SEARCH_AC;
+import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.DELETE_ME_AC;
+import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.PASSWORD_CHANGE_AC;
+import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.SEE_USERCOMU_BY_USER_AC;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.checkToastInTest;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_JUAN;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_JUAN;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -88,7 +109,7 @@ public class UserDataAcTest {
 
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
         onView(withContentDescription("Navigate up")).check(matches(isDisplayed()));
-        onView(CoreMatchers.allOf(
+        onView(allOf(
                         withContentDescription("Navigate up"),
                         isClickable())
         ).check(matches(isDisplayed())).perform(click());
@@ -175,9 +196,9 @@ public class UserDataAcTest {
     public void testModifyUserData_4()
     {
         // Check security data: old data.
-        OauthToken.AccessToken tokenBefore = TKhandler.getAccessTokenInCache();
-        String accessTkValue = tokenBefore.getValue();
-        String refreshTkValue = tokenBefore.getRefreshToken().getValue();
+        AccessToken tokenBefore = TKhandler.getAccessTokenInCache();
+        String accessTkValue = tokenBefore != null ? tokenBefore.getValue() : null;
+        String refreshTkValue = tokenBefore != null ? tokenBefore.getRefreshToken().getValue() : null;
 
         onView(withId(R.id.reg_usuario_alias_ediT)).perform(replaceText("new_alias_juan"));
         onView(withId(R.id.user_data_ac_password_ediT)).perform(typeText(USER_JUAN.getPassword()), closeSoftKeyboard());
@@ -187,9 +208,9 @@ public class UserDataAcTest {
         onView(withId(R.id.see_usercomu_by_user_ac_frg_container)).check(matches(isDisplayed()));
 
         // New security data: same as the old one.
-        OauthToken.AccessToken tokenAfter = TKhandler.getAccessTokenInCache();
-        assertThat(tokenAfter.getValue(), is(accessTkValue));  // same accessToken.
-        assertThat(tokenAfter.getRefreshToken().getValue(), is(refreshTkValue));  //same refreshToken.
+        AccessToken tokenAfter = TKhandler.getAccessTokenInCache();
+        assertThat(tokenAfter != null ? tokenAfter.getValue() : null, is(accessTkValue));  // same accessToken.
+        assertThat(tokenAfter != null ? tokenAfter.getRefreshToken().getValue() : null, is(refreshTkValue));  //same refreshToken.
     }
 
     @Test
@@ -198,9 +219,9 @@ public class UserDataAcTest {
         whatToClean = CLEAN_NOTHING;
 
         // Check security data: old data.
-        OauthToken.AccessToken tokenBefore = TKhandler.getAccessTokenInCache();
-        String accessTkValue = tokenBefore.getValue();
-        String refreshTkValue = tokenBefore.getRefreshToken().getValue();
+        AccessToken tokenBefore = TKhandler.getAccessTokenInCache();
+        String accessTkValue = tokenBefore != null ? tokenBefore.getValue() : null;
+        String refreshTkValue = tokenBefore != null ? tokenBefore.getRefreshToken().getValue() : null;
 
         onView(withId(R.id.reg_usuario_alias_ediT)).perform(replaceText("new_alias_juan"));
         onView(withId(R.id.reg_usuario_email_editT)).perform(replaceText("new_juan@mail.org"));
@@ -211,7 +232,7 @@ public class UserDataAcTest {
         onView(withId(R.id.see_usercomu_by_user_ac_frg_container)).check(matches(isDisplayed()));
 
         // New security data.
-        OauthToken.AccessToken tokenAfter = TKhandler.getAccessTokenInCache();
+        AccessToken tokenAfter = TKhandler.getAccessTokenInCache();
         assertThat(tokenAfter, notNullValue());
         assertThat(tokenAfter.getValue(), not(is(accessTkValue)));  // differtent accessToken.
         assertThat(tokenAfter.getRefreshToken().getValue(), not(is(refreshTkValue)));  //different refreshToken.

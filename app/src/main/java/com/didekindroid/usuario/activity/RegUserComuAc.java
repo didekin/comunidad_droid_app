@@ -10,21 +10,22 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.didekin.serviceone.domain.Comunidad;
-import com.didekin.serviceone.domain.DataPatterns;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
+import com.didekindroid.common.utils.ConnectionUtils;
+import com.didekindroid.common.utils.UIutils;
 import com.didekindroid.usuario.dominio.ComunidadBean;
+import com.didekindroid.usuario.dominio.FullComunidadIntent;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
-import com.didekindroid.utils.ConnectionUtils;
-import com.didekindroid.utils.UIutils;
 
+import static com.didekin.serviceone.domain.DataPatterns.LINE_BREAK;
+import static com.didekindroid.common.utils.UIutils.doToolBar;
+import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
+import static com.didekindroid.common.utils.UIutils.makeToast;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUserComuBeanFromView;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_ID;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
-import static com.didekindroid.utils.UIutils.doToolBar;
-import static com.didekindroid.utils.UIutils.isRegisteredUser;
-import static com.didekindroid.utils.UIutils.makeToast;
 import static com.google.common.base.Preconditions.checkState;
 
 /**
@@ -61,8 +62,9 @@ public class RegUserComuAc extends AppCompatActivity {
         Log.i(TAG, "onCreate()");
 
         checkState(isRegisteredUser(this));
-        mComunidad = (Comunidad) getIntent().getExtras()
+        FullComunidadIntent fullComunidadIntent =  (FullComunidadIntent) getIntent().getExtras()
                 .getSerializable(COMUNIDAD_LIST_OBJECT.extra);
+        mComunidad = fullComunidadIntent != null ? fullComunidadIntent.getComunidad() : null;
 
         setContentView(R.layout.reg_usercomu_ac);
         doToolBar(this, true);
@@ -91,7 +93,7 @@ public class RegUserComuAc extends AppCompatActivity {
                 null);
 
         StringBuilder errorMsg = new StringBuilder(getResources().getText(R.string.error_validation_msg))
-                .append(DataPatterns.LINE_BREAK.getRegexp());
+                .append(LINE_BREAK.getRegexp());
 
         if (!usuarioComunidadBean.validate(getResources(), errorMsg)) {  // error validation.
             makeToast(this, errorMsg.toString(), Toast.LENGTH_SHORT);

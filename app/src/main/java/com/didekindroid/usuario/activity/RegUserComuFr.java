@@ -8,10 +8,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.didekin.serviceone.domain.Comunidad;
-import com.didekindroid.R;
 
-import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_LIST_OBJECT;
+import com.didekindroid.R;
 
 public class RegUserComuFr extends Fragment {
 

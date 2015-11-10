@@ -1,35 +1,35 @@
 package com.didekindroid.usuario.activity;
 
-import android.support.v7.app.AlertDialog;
-import 	android.support.v7.app.AppCompatDialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.didekin.retrofitcl.OauthToken.AccessToken;
+import com.didekin.common.oauth2.OauthToken.AccessToken;
 import com.didekin.serviceone.domain.Usuario;
 import com.didekindroid.R;
-import com.didekindroid.exception.UiException;
+import com.didekindroid.common.UiException;
+import com.didekindroid.common.utils.ConnectionUtils;
 import com.didekindroid.usuario.dominio.UsuarioBean;
-import com.didekindroid.utils.ConnectionUtils;
 
 import static android.widget.Toast.LENGTH_LONG;
-import static com.didekindroid.security.TokenHandler.TKhandler;
-import static com.didekindroid.exception.UiException.UiAction.SEARCH_COMU;
+import static com.didekindroid.common.TokenHandler.TKhandler;
+import static com.didekindroid.common.UiException.UiAction.SEARCH_COMU;
+import static com.didekindroid.common.utils.UIutils.doToolBar;
+import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
+import static com.didekindroid.common.utils.UIutils.makeToast;
+import static com.didekindroid.common.utils.UIutils.updateIsRegistered;
 import static com.didekindroid.usuario.webservices.Oauth2Service.Oauth2;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
-import static com.didekindroid.utils.UIutils.doToolBar;
-import static com.didekindroid.utils.UIutils.getErrorMsgBuilder;
-import static com.didekindroid.utils.UIutils.makeToast;
-import static com.didekindroid.utils.UIutils.updateIsRegistered;
 
 /**
  * User: pedro

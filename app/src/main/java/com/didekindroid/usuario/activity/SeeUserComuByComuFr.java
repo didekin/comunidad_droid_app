@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import com.didekin.serviceone.domain.Comunidad;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
@@ -17,8 +18,8 @@ import com.didekindroid.usuario.activity.utils.UserIntentExtras;
 
 import java.util.List;
 
-import static com.didekindroid.utils.ViewsIDs.SEE_USERCOMU_BY_COMU;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
+import static com.didekindroid.common.utils.ViewsIDs.SEE_USERCOMU_BY_COMU;
 
 
 /**

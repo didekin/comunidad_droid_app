@@ -2,8 +2,8 @@ package com.didekindroid.usuario.webservices;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.retrofitcl.OauthToken.AccessToken;
-import com.didekin.retrofitcl.ServiceOneException;
+import com.didekin.common.exception.InServiceException;
+import com.didekin.common.oauth2.OauthToken.AccessToken;
 import com.didekindroid.usuario.activity.utils.CleanEnum;
 
 import org.junit.After;
@@ -11,11 +11,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static com.didekin.retrofitcl.OauthTokenHelper.HELPER;
-import static com.didekin.serviceone.exception.ExceptionMessage.BAD_REQUEST;
-import static com.didekin.serviceone.exception.ExceptionMessage.NOT_FOUND;
-import static com.didekin.serviceone.security.OauthClient.CL_USER;
-import static com.didekindroid.security.TokenHandler.TKhandler;
+import static com.didekin.common.exception.DidekinExceptionMsg.BAD_REQUEST;
+import static com.didekin.common.exception.DidekinExceptionMsg.NOT_FOUND;
+import static com.didekin.common.oauth2.OauthClient.CL_USER;
+import static com.didekin.common.oauth2.OauthTokenHelper.HELPER;
+import static com.didekindroid.common.TokenHandler.TKhandler;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_NOTHING;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_PEPE;
@@ -58,8 +58,8 @@ public class Oauth2ServiceIfTest {
         try {
             Oauth2.getNotFoundMsg();
             fail();
-        } catch (ServiceOneException e) {
-            assertThat(e.getServiceMessage(), is(NOT_FOUND.getMessage()));
+        } catch (InServiceException e) {
+            assertThat(e.getHttpMessage(), is(NOT_FOUND.getHttpMessage()));
             assertThat(e.getHttpStatus(), is(NOT_FOUND.getHttpStatus()));
         }
     }
@@ -91,8 +91,8 @@ public class Oauth2ServiceIfTest {
         try {
             Oauth2.getPasswordUserToken(USER_PEPE.getUserName(), USER_PEPE.getPassword());
             fail();
-        } catch (ServiceOneException e) {
-            assertThat(e.getServiceMessage(), is(BAD_REQUEST.getMessage()));
+        } catch (InServiceException e) {
+            assertThat(e.getHttpMessage(), is(BAD_REQUEST.getHttpMessage()));
             assertThat(e.getHttpStatus(), is(BAD_REQUEST.getHttpStatus()));
         }
 
@@ -114,8 +114,8 @@ public class Oauth2ServiceIfTest {
         //Inserta usuario, comunidad, usuariocomunidad y actuliza tokenCache.
         signUpAndUpdateTk(COMU_REAL_PEPE);
         AccessToken tokenOld = TKhandler.getAccessTokenInCache();
-        String accessTkOldValue = tokenOld.getValue();
-        String refreshTkOldValue = tokenOld.getRefreshToken().getValue();
+        String accessTkOldValue = tokenOld != null ? tokenOld.getValue() : null;
+        String refreshTkOldValue = tokenOld != null ? tokenOld.getRefreshToken().getValue() : null;
 
         AccessToken tokenNew = Oauth2.getRefreshUserToken(TKhandler.getRefreshTokenKey());
         assertThat(tokenNew, notNullValue());

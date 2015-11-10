@@ -4,11 +4,19 @@ import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
-import com.didekindroid.R;
-import com.didekindroid.usuario.activity.*;
 
-import static com.didekindroid.utils.UIutils.isRegisteredUser;
-import static com.didekindroid.utils.UIutils.makeToast;
+import com.didekindroid.R;
+import com.didekindroid.usuario.activity.ComuSearchAc;
+import com.didekindroid.usuario.activity.DeleteMeAc;
+import com.didekindroid.usuario.activity.LoginAc;
+import com.didekindroid.usuario.activity.PasswordChangeAc;
+import com.didekindroid.usuario.activity.RegComuAndUserAndUserComuAc;
+import com.didekindroid.usuario.activity.RegComuAndUserComuAc;
+import com.didekindroid.usuario.activity.SeeUserComuByUserAc;
+import com.didekindroid.usuario.activity.UserDataAc;
+
+import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
+import static com.didekindroid.common.utils.UIutils.makeToast;
 
 /**
  * User: pedro@didekin

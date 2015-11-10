@@ -2,26 +2,26 @@ package com.didekindroid.usuario.webservices;
 
 import android.util.Log;
 
-import com.didekin.retrofitcl.ServiceOneEndPoints;
-import com.didekin.retrofitcl.ServiceOneException;
+import com.didekin.common.exception.InServiceException;
+import com.didekin.serviceone.controller.ServiceOneEndPoints;
 import com.didekin.serviceone.domain.Comunidad;
 import com.didekin.serviceone.domain.Usuario;
 import com.didekin.serviceone.domain.UsuarioComunidad;
-import com.didekin.serviceone.exception.ExceptionMessage;
 import com.didekindroid.R;
-import com.didekindroid.exception.UiException;
+import com.didekindroid.common.UiException;
 
 import java.util.List;
 
 import retrofit.http.Header;
 import retrofit.http.Path;
 
-import static com.didekin.retrofitcl.RetrofitRestBuilder.BUILDER;
-import static com.didekin.serviceone.exception.ExceptionMessage.*;
+import static com.didekin.common.RetrofitRestBuilder.BUILDER;
+import static com.didekin.common.exception.DidekinExceptionMsg.USER_NAME_NOT_FOUND;
+import static com.didekin.common.exception.DidekinExceptionMsg.isMessageToLogin;
 import static com.didekindroid.DidekindroidApp.getBaseURL;
-import static com.didekindroid.security.TokenHandler.TKhandler;
-import static com.didekindroid.exception.UiException.UiAction.LOGIN;
-import static com.didekindroid.exception.UiException.UiAction.SEARCH_COMU;
+import static com.didekindroid.common.UiException.UiAction.LOGIN;
+import static com.didekindroid.common.UiException.UiAction.SEARCH_COMU;
+import static com.didekindroid.common.TokenHandler.TKhandler;
 
 /**
  * User: pedro@didekin
@@ -240,8 +240,8 @@ public enum ServiceOne implements ServiceOneEndPoints {
         boolean isLoginOk = false;
         try {
             isLoginOk = login(userName, password);
-        } catch (ServiceOneException e) {
-            if (e.getServiceMessage().equals(USER_NOT_FOUND.getMessage())) {
+        } catch (InServiceException e) {
+            if (e.getHttpMessage().equals(USER_NAME_NOT_FOUND.getHttpMessage())) {
                 throw new UiException(SEARCH_COMU, R.string.user_without_signedUp);
             }
         }
@@ -298,7 +298,7 @@ public enum ServiceOne implements ServiceOneEndPoints {
 
         try {
             userComuList = seeUserComusByUser(checkBearerToken());
-        } catch (ServiceOneException e) {
+        } catch (InServiceException e) {
             catchAuthenticationException(e);
         }
         return userComuList;
@@ -316,12 +316,11 @@ public enum ServiceOne implements ServiceOneEndPoints {
         return bearerAccessTkHeader;
     }
 
-    void catchAuthenticationException(ServiceOneException e) throws UiException
+    void catchAuthenticationException(InServiceException e) throws UiException
     {
-        Log.e(TAG, e.getServiceMessage());
+        Log.e(TAG,"catchAuthenticationException():" + e.getHttpMessage());
 
-        ExceptionMessage eM = getExceptionMsgFromMessage(e.getServiceMessage());
-        if (getLoginRequestMsgs().contains(eM)) {  // Problema de identificación.
+        if (isMessageToLogin(e.getHttpMessage())) {  // Problema de identificación.
             throw new UiException(LOGIN, R.string.user_without_signedUp);
         }
     }

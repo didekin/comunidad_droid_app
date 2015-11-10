@@ -9,11 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+
 import com.didekin.serviceone.domain.Comunidad;
+import com.didekindroid.usuario.dominio.ComunidadIntent;
 
 import java.util.List;
 
-import static com.didekindroid.utils.ViewsIDs.COMU_SEARCH_RESULTS;
+import static com.didekindroid.common.utils.ViewsIDs.COMU_SEARCH_RESULTS;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_SEARCH;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 
@@ -65,8 +67,9 @@ public class ComuSearchResultsListFr extends ListFragment {
         super.onCreate(savedInstanceState);
         mComuListListener = (ComuListListener) getActivity();
         mAdapter = new ComuSearchResultsListAdapter(getActivity());
-        Comunidad comunidadSearch = (Comunidad) getActivity().getIntent().getSerializableExtra(COMUNIDAD_SEARCH.extra);
-        new SearchComunidadesLoader().execute(comunidadSearch);
+        ComunidadIntent comunidadSearch = (ComunidadIntent) getActivity().getIntent()
+                .getSerializableExtra(COMUNIDAD_SEARCH.extra);
+        new SearchComunidadesLoader().execute(comunidadSearch.getComunidad());
     }
 
     @Override
@@ -185,7 +188,7 @@ public class ComuSearchResultsListFr extends ListFragment {
                     (comunidadList != null ? String.valueOf(comunidadList.size()) : "null"));
             mAdapter.addAll(comunidadList);
             setListAdapter(mAdapter);
-            mComuListListener.onComunidadListLoaded(comunidadList.size());
+            mComuListListener.onComunidadListLoaded(comunidadList != null ? comunidadList.size() : 0);
         }
     }
 }

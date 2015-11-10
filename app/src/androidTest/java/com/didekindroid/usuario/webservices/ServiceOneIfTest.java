@@ -4,13 +4,17 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.retrofitcl.OauthToken.AccessToken;
-import com.didekin.retrofitcl.ServiceOneException;
-import com.didekin.serviceone.domain.*;
+import com.didekin.common.exception.InServiceException;
+import com.didekin.common.oauth2.OauthToken.AccessToken;
+import com.didekin.serviceone.domain.Comunidad;
+import com.didekin.serviceone.domain.Municipio;
+import com.didekin.serviceone.domain.Provincia;
+import com.didekin.serviceone.domain.Usuario;
+import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.DidekindroidApp;
 import com.didekindroid.R;
-import com.didekindroid.utils.IoHelper;
-import com.didekindroid.exception.UiException;
+import com.didekindroid.common.UiException;
+import com.didekindroid.common.utils.IoHelper;
 import com.didekindroid.usuario.activity.utils.CleanEnum;
 import com.didekindroid.usuario.dominio.DomainDataUtils;
 
@@ -23,20 +27,48 @@ import org.junit.runner.RunWith;
 import java.io.File;
 import java.util.List;
 
-import static com.didekin.retrofitcl.OauthTokenHelper.HELPER;
-import static com.didekin.serviceone.controllers.ControllerConstant.IS_USER_DELETED;
-import static com.didekin.serviceone.exception.ExceptionMessage.USER_DUPLICATE;
-import static com.didekindroid.security.TokenHandler.TKhandler;
-import static com.didekindroid.exception.UiException.UiAction.SEARCH_COMU;
-import static com.didekindroid.utils.UIutils.updateIsRegistered;
-import static com.didekindroid.usuario.activity.utils.CleanEnum.*;
+import static com.didekin.common.exception.DidekinExceptionMsg.USER_NAME_DUPLICATE;
+import static com.didekin.common.oauth2.OauthTokenHelper.HELPER;
+import static com.didekin.serviceone.controller.ServOneConstant.IS_USER_DELETED;
+import static com.didekindroid.common.TokenHandler.TKhandler;
+import static com.didekindroid.common.UiException.UiAction.SEARCH_COMU;
+import static com.didekindroid.common.utils.UIutils.updateIsRegistered;
+import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_JUAN;
+import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_JUAN2_AND_PEPE;
+import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_JUAN_AND_PEPE;
+import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_NOTHING;
+import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRESIDENTE;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PROPIETARIO;
-import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.*;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.*;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOneUser;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanTwoUsers;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanWithTkhandler;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.regTwoUserComuSameUser;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAndUpdateTk;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.updateSecurityData;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_LA_PLAZUELA_5;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_PLAZUELA5_JUAN;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_JUAN;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_PEPE;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_TRAV_PLAZUELA_PEPE;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_JUAN;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_JUAN2;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_PEPE;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.makeListTwoUserComu;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.makeUsuarioComunidad;
 import static com.didekindroid.usuario.webservices.Oauth2Service.Oauth2;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.text.IsEmptyString.isEmptyOrNullString;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
@@ -46,6 +78,7 @@ import static org.junit.Assert.fail;
  * Date: 07/09/15
  * Time: 11:08
  */
+@SuppressWarnings("ConstantConditions")
 @RunWith(AndroidJUnit4.class)
 public class ServiceOneIfTest {
 
@@ -95,7 +128,7 @@ public class ServiceOneIfTest {
     {
         signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
         List<UsuarioComunidad> userComus = ServOne.seeUserComusByUser();
-        UsuarioComunidad uc_1 = userComus.get(0);
+        UsuarioComunidad       uc_1 = userComus.get(0);
 
         assertThat(ServOne.deleteUserComu(uc_1.getComunidad().getC_Id()), is(IS_USER_DELETED));
         cleanWithTkhandler();
@@ -106,7 +139,7 @@ public class ServiceOneIfTest {
     {
         whatClean = CLEAN_PEPE;
 
-        Usuario u1 = signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
+        signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
         Comunidad cDB = ServOne.getComusByUser().get(0);
         Comunidad c1 = ServOne.getComuData(cDB.getC_Id());
         assertThat(c1, is(cDB));
@@ -119,7 +152,7 @@ public class ServiceOneIfTest {
         assertThat(TKhandler.doBearerAccessTkHeader(), nullValue());
         try {
             assertThat(ServOne.getComusByUser(), nullValue());
-        } catch (ServiceOneException se) { // NO hay excepción; ServiceOne devuelve null.
+        } catch (InServiceException se) { // NO hay excepción; ServiceOne devuelve null.
             fail();
         }
     }
@@ -130,7 +163,7 @@ public class ServiceOneIfTest {
         regTwoUserComuSameUser(makeListTwoUserComu());
         List<Comunidad> comunidades = ServOne.getComusByUser();
         assertThat(comunidades.size(), is(2));
-        assertThat(comunidades, hasItems(COMU_REAL, DomainDataUtils.COMU_LA_PLAZUELA_5));
+        assertThat(comunidades, hasItems(COMU_REAL, COMU_LA_PLAZUELA_5));
 
         whatClean = CLEAN_JUAN;
     }
@@ -163,7 +196,7 @@ public class ServiceOneIfTest {
     {
         whatClean = CLEAN_JUAN2_AND_PEPE;
 
-        Usuario u1 = signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
+        signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
         Comunidad cDb = ServOne.getComusByUser().get(0);
         assertThat(ServOne.isOldestUserComu(cDb.getC_Id()), is(true));
 
@@ -202,7 +235,7 @@ public class ServiceOneIfTest {
     {
         whatClean = CLEAN_PEPE;
 
-        Usuario u1 = signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
+        signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
         Comunidad cDb = ServOne.getComusByUser().get(0);
         Comunidad cNew = new Comunidad.ComunidadBuilder()
                 .c_id(cDb.getC_Id())
@@ -334,7 +367,7 @@ public class ServiceOneIfTest {
         whatClean = CLEAN_JUAN2_AND_PEPE;
 
         // Comunidad is associated to other user.
-        Usuario pepe = signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
+        signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
         Comunidad comunidad = ServOne.getComusByUser().get(0);
         cleanWithTkhandler();
 
@@ -359,9 +392,9 @@ public class ServiceOneIfTest {
                     "portalB", null, "planta1", null, PROPIETARIO.function.concat(",").concat(PRESIDENTE.function));
             ServOne.regUserAndUserComu(userComu);
             fail();
-        } catch (ServiceOneException e) {
-            assertThat(e.getServiceMessage(), is(USER_DUPLICATE.getMessage()));
-            assertThat(e.getHttpStatus(), is(USER_DUPLICATE.getHttpStatus()));
+        } catch (InServiceException e) {
+            assertThat(e.getHttpMessage(), is(USER_NAME_DUPLICATE.getHttpMessage()));
+            assertThat(e.getHttpStatus(), is(USER_NAME_DUPLICATE.getHttpStatus()));
         }
     }
 
@@ -371,7 +404,7 @@ public class ServiceOneIfTest {
         // User and comunidad are already registered.
 
         // First usuarioComunidad.
-        Usuario usuario_1 = signUpAndUpdateTk(COMU_REAL_JUAN);
+        signUpAndUpdateTk(COMU_REAL_JUAN);
         List<Comunidad> comunidadesUserOne = ServOne.getComusByUser();
         Comunidad comunidad = new Comunidad.ComunidadBuilder().c_id(comunidadesUserOne.get(0).getC_Id()).build();
 
@@ -398,8 +431,6 @@ public class ServiceOneIfTest {
 
         List<Comunidad> comunidades = ServOne.searchComunidades(comunidadSearch);
 
-        cleanTwoUsers(USER_JUAN, USER_PEPE);  // anticipated cleaning.
-
         assertThat(comunidades.size(), is(1));
 
         assertThat(comunidades.get(0).getNombreComunidad(), is("Travesía de la Plazuela 11"));
@@ -409,6 +440,8 @@ public class ServiceOneIfTest {
         assertThat(comunidades.get(0).getMunicipio().getProvincia().getNombre(), is("Alicante/Alacant"));
         assertThat(comunidades.get(0).getMunicipio().getCodInProvincia(), is((short) 13));
         assertThat(comunidades.get(0).getMunicipio().getNombre(), is("Algueña"));
+
+        cleanTwoUsers(USER_JUAN, USER_PEPE);
     }
 
     @Test

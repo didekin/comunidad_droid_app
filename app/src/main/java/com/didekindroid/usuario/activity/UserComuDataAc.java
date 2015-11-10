@@ -17,13 +17,19 @@ import android.widget.Toast;
 import com.didekin.serviceone.domain.Comunidad;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
-import com.didekindroid.security.TokenHandler;
+import com.didekindroid.common.TokenHandler;
+import com.didekindroid.common.utils.ConnectionUtils;
 import com.didekindroid.usuario.activity.utils.UserAndComuFiller;
 import com.didekindroid.usuario.dominio.ComunidadBean;
+import com.didekindroid.usuario.dominio.FullUsuarioComuidadIntent;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
-import com.didekindroid.utils.ConnectionUtils;
 
-import static com.didekin.serviceone.controllers.ControllerConstant.IS_USER_DELETED;
+import static com.didekin.serviceone.controller.ServOneConstant.IS_USER_DELETED;
+import static com.didekindroid.common.utils.UIutils.doToolBar;
+import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
+import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
+import static com.didekindroid.common.utils.UIutils.makeToast;
+import static com.didekindroid.common.utils.UIutils.updateIsRegistered;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.ADMINISTRADOR;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.INQUILINO;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRESIDENTE;
@@ -33,18 +39,18 @@ import static com.didekindroid.usuario.activity.utils.UserIntentExtras.USERCOMU_
 import static com.didekindroid.usuario.activity.utils.UserMenu.COMU_DATA_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_USERCOMU_BY_COMU_AC;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
-import static com.didekindroid.utils.UIutils.doToolBar;
-import static com.didekindroid.utils.UIutils.getErrorMsgBuilder;
-import static com.didekindroid.utils.UIutils.isRegisteredUser;
-import static com.didekindroid.utils.UIutils.makeToast;
-import static com.didekindroid.utils.UIutils.updateIsRegistered;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
 /**
  * Preconditions:
  * 1. Registered user.
- * 2. An intent with a UsuarioComunidad extra.
+ * 2. An intent with a UsuarioComunidad extra, with:
+ * -- usuario: id, alias, userName.
+ * -- comunidad: id, tipoVia, nombreVia, numero, sufijoNumero, fechaAlta,
+ * ---- municipio: codInProvincia, nombre.
+ * ------ provincia: provinciaId, nombre.
+ * -- usuarioComunidad: portal, escalera, planta, puerta, roles.
  * Postconditions:
  * 1a. Registered user with modified data in a comunidad. Once done, it goes to SeeUserComuByUserAc.
  * 1b. Registered user with data deleted in the comunidad chosen. Once done, it goes to SeeUserComuByUserAc.
@@ -68,7 +74,9 @@ public class UserComuDataAc extends AppCompatActivity {
 
         // Preconditions.
         checkState(isRegisteredUser(this));
-        mOldUserComu = (UsuarioComunidad) getIntent().getSerializableExtra(USERCOMU_LIST_OBJECT.extra);
+        FullUsuarioComuidadIntent usuarioComuidadIntent =
+                (FullUsuarioComuidadIntent) getIntent().getSerializableExtra(USERCOMU_LIST_OBJECT.extra);
+        mOldUserComu = usuarioComuidadIntent.getUsuarioComunidad();
         checkNotNull(mOldUserComu);
 
         mAcView = getLayoutInflater().inflate(R.layout.usercomu_data_ac_layout, null);

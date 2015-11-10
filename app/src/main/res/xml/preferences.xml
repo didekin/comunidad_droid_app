@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen>
     <!--<ListPreference
             android:title="@string/maxOffers_titlePref"
             android:summary="@string/maxOffers_summaryPref"

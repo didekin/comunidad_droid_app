@@ -7,23 +7,35 @@ import android.util.Log;
 
 import com.didekindroid.R;
 import com.didekindroid.usuario.activity.utils.CleanEnum;
+import com.didekindroid.usuario.dominio.ComunidadIntent;
 
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Rule;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekindroid.security.TokenHandler.TKhandler;
-import static com.didekindroid.utils.UIutils.isRegisteredUser;
+import static com.didekindroid.common.TokenHandler.TKhandler;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_SEARCH;
-import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.*;
-import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.*;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.*;
+import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.REG_COMU_USER_USERCOMU_AC;
+import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.SEE_USERCOMU_BY_USER_AC;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.checkToastInTest;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanWithTkhandler;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.regTwoUserComuSameUser;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_LA_PLAZUELA_5;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.makeListTwoUserComu;
+import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.google.common.base.Preconditions.checkState;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -62,7 +74,7 @@ public class ComuSearchResultsAcTest_2 {
         Thread.sleep(3000);
 
         intent = new Intent();
-        intent.putExtra(COMUNIDAD_SEARCH.extra, COMU_LA_PLAZUELA_5);
+        intent.putExtra(COMUNIDAD_SEARCH.extra, new ComunidadIntent(COMU_LA_PLAZUELA_5));
     }
 
     @Test

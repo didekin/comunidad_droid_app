@@ -1,11 +1,18 @@
 package com.didekindroid.usuario.dominio;
 
-import com.didekin.serviceone.domain.*;
+import com.didekin.serviceone.domain.Comunidad;
+import com.didekin.serviceone.domain.Municipio;
+import com.didekin.serviceone.domain.Provincia;
+import com.didekin.serviceone.domain.UsuarioComunidad;
+import com.didekin.serviceone.domain.Usuario;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.didekindroid.usuario.activity.utils.RolCheckBox.*;
+import static com.didekindroid.usuario.activity.utils.RolCheckBox.ADMINISTRADOR;
+import static com.didekindroid.usuario.activity.utils.RolCheckBox.INQUILINO;
+import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRESIDENTE;
+import static com.didekindroid.usuario.activity.utils.RolCheckBox.PROPIETARIO;
 
 /**
  * User: pedro@didekin
