@@ -11,6 +11,7 @@ import com.didekin.serviceone.domain.Usuario;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.DidekindroidApp;
 import com.didekindroid.R;
+import com.didekindroid.common.UiException;
 
 import java.util.List;
 
@@ -58,27 +59,27 @@ public final class UsuarioTestUtils {
 
 //    =========================== REGISTERING USERS ==============================
 
-    public static void updateSecurityData(String userName, String password)
+    public static void updateSecurityData(String userName, String password) throws UiException
     {
         AccessToken token = Oauth2.getPasswordUserToken(userName, password);
         TKhandler.initKeyCacheAndBackupFile(token);
         updateIsRegistered(true, getContext());
     }
 
-    public static Usuario signUpAndUpdateTk(UsuarioComunidad usuarioComunidad)
+    public static Usuario signUpAndUpdateTk(UsuarioComunidad usuarioComunidad) throws UiException
     {
         ServOne.regComuAndUserAndUserComu(usuarioComunidad);
         updateSecurityData(usuarioComunidad.getUsuario().getUserName(), usuarioComunidad.getUsuario().getPassword());
         return ServOne.getUserData();
     }
 
-    public static void regTwoUserComuSameUser(List<UsuarioComunidad> usuarioComunidadList)
+    public static void regTwoUserComuSameUser(List<UsuarioComunidad> usuarioComunidadList) throws UiException
     {
         signUpAndUpdateTk(usuarioComunidadList.get(0));
         ServOne.regComuAndUserComu(usuarioComunidadList.get(1));
     }
 
-    public static void regThreeUserComuSameUser(List<UsuarioComunidad> usuarioComunidadList, Comunidad comunidad)
+    public static void regThreeUserComuSameUser(List<UsuarioComunidad> usuarioComunidadList, Comunidad comunidad) throws UiException
     {
         regTwoUserComuSameUser(usuarioComunidadList);
         UsuarioComunidad usuarioComunidad = makeUsuarioComunidad(comunidad, usuarioComunidadList.get(0).getUsuario(),
@@ -86,7 +87,7 @@ public final class UsuarioTestUtils {
         ServOne.regComuAndUserComu(usuarioComunidad);
     }
 
-    public static void regThreeUserComuSameUser_2(UsuarioComunidad... userComus)
+    public static void regThreeUserComuSameUser_2(UsuarioComunidad... userComus) throws UiException
     {
         Preconditions.checkArgument(userComus.length > 0);
         signUpAndUpdateTk(userComus[0]);
@@ -168,14 +169,14 @@ public final class UsuarioTestUtils {
                 .check(doesNotExist());
     }
 
-    public static void cleanOneUser(Usuario usuario)
+    public static void cleanOneUser(Usuario usuario) throws UiException
     {
         updateSecurityData(usuario.getUserName(), usuario.getPassword());
         ServOne.deleteUser();
         cleanWithTkhandler();
     }
 
-    public static void cleanTwoUsers(Usuario usuarioOne, Usuario usuarioTwo)
+    public static void cleanTwoUsers(Usuario usuarioOne, Usuario usuarioTwo) throws UiException
     {
         cleanOneUser(usuarioOne);
         cleanOneUser(usuarioTwo);
@@ -187,7 +188,7 @@ public final class UsuarioTestUtils {
         updateIsRegistered(false, getContext());
     }
 
-    public static void cleanOptions(CleanEnum whatClean)
+    public static void cleanOptions(CleanEnum whatClean) throws UiException
     {
         switch (whatClean) {
             case CLEAN_TK_HANDLER:

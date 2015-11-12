@@ -1,0 +1,18 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+
+sourceCompatibility = JavaVersion.VERSION_1_7
+targetCompatibility = JavaVersion.VERSION_1_7
+
+dependencies {
+    compile 'com.squareup.retrofit:retrofit:1.9.0'
+}
+
+jar {
+    baseName = 'client_lib'
+    version = '0.2'
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.8'
+}

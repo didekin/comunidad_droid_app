@@ -11,6 +11,7 @@ import com.didekin.serviceone.domain.Provincia;
 import com.didekin.serviceone.domain.Usuario;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
+import com.didekindroid.common.UiException;
 import com.didekindroid.usuario.activity.utils.CleanEnum;
 import com.didekindroid.usuario.dominio.ComunidadIntent;
 import com.didekindroid.usuario.dominio.DomainDataUtils;
@@ -96,7 +97,7 @@ public class ComuSearchResultsAcTest_1 {
     }
 
     @Test
-    public void testOnCreate_0()
+    public void testOnCreate_0() throws UiException
     {
         whatClean = CLEAN_JUAN;
 
@@ -111,7 +112,7 @@ public class ComuSearchResultsAcTest_1 {
     }
 
     @Test
-    public void testOnCreate_2()
+    public void testOnCreate_2() throws UiException
     {
         whatClean = CLEAN_JUAN;
 
@@ -123,7 +124,7 @@ public class ComuSearchResultsAcTest_1 {
     }
 
     @Test
-    public void testSearchComunidades_1()
+    public void testSearchComunidades_1() throws UiException
     {
         whatClean = CLEAN_JUAN;
 
@@ -141,7 +142,7 @@ public class ComuSearchResultsAcTest_1 {
     }
 
     @Test
-    public void testSearchComunidades_2()
+    public void testSearchComunidades_2() throws UiException
     {
         whatClean = CLEAN_JUAN;
 
@@ -169,7 +170,7 @@ public class ComuSearchResultsAcTest_1 {
     }
 
     @Test
-    public void testSearchComunidades_3() throws InterruptedException
+    public void testSearchComunidades_3() throws InterruptedException, UiException
     {
         // No existe la comunidad en DB. El usuario no está registrado.
         assertThat(TKhandler.getAccessTokenInCache(), nullValue());
@@ -192,7 +193,7 @@ public class ComuSearchResultsAcTest_1 {
     }
 
     @Test
-    public void testSearchComunidades_4() throws InterruptedException
+    public void testSearchComunidades_4() throws InterruptedException, UiException
     {
         whatClean = CLEAN_JUAN;
 
@@ -219,7 +220,7 @@ public class ComuSearchResultsAcTest_1 {
 
 
     @Test
-    public void testOnListItemClick_1()
+    public void testOnListItemClick_1() throws UiException
     {
         whatClean = CLEAN_JUAN;
 
@@ -242,7 +243,7 @@ public class ComuSearchResultsAcTest_1 {
     }
 
     @Test
-    public void testOnListItemClick_2()
+    public void testOnListItemClick_2() throws UiException
     {
         whatClean = CLEAN_JUAN;
 
@@ -262,7 +263,7 @@ public class ComuSearchResultsAcTest_1 {
     }
 
     @Test
-    public void testOnListItemClick_3()
+    public void testOnListItemClick_3() throws UiException
     {
         // Usuario registrado. La búsqueda devuelve una comunidad a la que él NO está asociado.
 
@@ -290,7 +291,7 @@ public class ComuSearchResultsAcTest_1 {
     }
 
     @After
-    public void cleanData()
+    public void cleanData() throws UiException
     {
         cleanOptions(whatClean);
         checkState(!isRegisteredUser(activity));

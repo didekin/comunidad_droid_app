@@ -8,6 +8,7 @@ import com.didekin.serviceone.domain.Comunidad;
 import com.didekin.serviceone.domain.Usuario;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
+import com.didekindroid.common.UiException;
 import com.didekindroid.usuario.dominio.ComunidadIntent;
 import com.didekindroid.usuario.dominio.FullUsuarioComuidadIntent;
 
@@ -57,8 +58,12 @@ public class ComuSearchResultsAcTest_intent_1 {
         @Override
         protected void beforeActivityLaunched()
         {
-            userIntent = signUpAndUpdateTk(COMU_REAL_JUAN);
-            comuIntent = ServOne.getComusByUser().get(0);
+            try {
+                userIntent = signUpAndUpdateTk(COMU_REAL_JUAN);
+                comuIntent = ServOne.getComusByUser().get(0);
+            } catch (UiException e) {
+                e.printStackTrace();
+            }
         }
 
         @Override

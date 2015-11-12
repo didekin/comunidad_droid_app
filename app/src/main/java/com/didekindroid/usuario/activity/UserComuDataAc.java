@@ -18,6 +18,7 @@ import com.didekin.serviceone.domain.Comunidad;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.TokenHandler;
+import com.didekindroid.common.UiException;
 import com.didekindroid.common.utils.ConnectionUtils;
 import com.didekindroid.usuario.activity.utils.UserAndComuFiller;
 import com.didekindroid.usuario.dominio.ComunidadBean;
@@ -201,51 +202,86 @@ public class UserComuDataAc extends AppCompatActivity {
     class ComuDataMenuSetter extends AsyncTask<Void, Void, Boolean> {
 
         final String TAG = ComuDataMenuSetter.class.getCanonicalName();
+        UiException uiException;
 
         @Override
         protected Boolean doInBackground(Void... aVoid)
         {
             Log.d(TAG, "doInBackground()");
-            return ServOne.isOldestUserComu(mOldUserComu.getComunidad().getC_Id());
+
+            boolean isOldestUserComu = false;
+            try {
+                isOldestUserComu = ServOne.isOldestUserComu(mOldUserComu.getComunidad().getC_Id());
+            } catch (UiException e) {
+                uiException = e;
+            }
+            return isOldestUserComu;
         }
 
         @Override
         protected void onPostExecute(Boolean isOldestUserComu)
         {
             Log.d(TAG, "onPostExecute()");
-            mComuDataItem.setVisible(isOldestUserComu);
-            mComuDataItem.setEnabled(isOldestUserComu);
+
+            if (uiException != null) {
+                Log.d(TAG, "onPostExecute(): uiException " + (uiException.getInServiceException() != null ? uiException.getInServiceException().getHttpMessage() : "Token null"));
+                uiException.getAction().doAction(UserComuDataAc.this, uiException.getResourceId());
+            } else {
+                mComuDataItem.setVisible(isOldestUserComu);
+                mComuDataItem.setEnabled(isOldestUserComu);
+            }
         }
     }
 
     class UserComuModifyer extends AsyncTask<UsuarioComunidad, Void, Integer> {
 
         final String TAG = UserComuModifyer.class.getCanonicalName();
+        UiException uiException;
 
         @Override
         protected Integer doInBackground(UsuarioComunidad... userComus)
         {
             Log.d(TAG, "doInBackground()");
-            return ServOne.modifyUserComu(userComus[0]);
+
+            int modifyUserComu = 0;
+            try {
+                modifyUserComu = ServOne.modifyUserComu(userComus[0]);
+            } catch (UiException e) {
+                uiException = e;
+            }
+            return modifyUserComu;
         }
 
         @Override
         protected void onPostExecute(Integer rowsUpdated)
         {
             Log.d(TAG, "onPostExecute()");
-            checkState(rowsUpdated == 1);
+            if (uiException != null) {
+                Log.d(TAG, "onPostExecute(): uiException " + (uiException.getInServiceException() != null ? uiException.getInServiceException().getHttpMessage() : "Token null"));
+                uiException.getAction().doAction(UserComuDataAc.this, uiException.getResourceId());
+            } else {
+                checkState(rowsUpdated == 1);
+            }
         }
     }
 
     class UserComuEraser extends AsyncTask<Comunidad, Void, Integer> {
 
         final String TAG = UserComuEraser.class.getCanonicalName();
+        UiException uiException;
 
         @Override
         protected Integer doInBackground(Comunidad... comunidades)
         {
             Log.d(TAG, "doInBackground()");
-            return ServOne.deleteUserComu(comunidades[0].getC_Id());
+
+            int deleteUserComu = 0;
+            try {
+                deleteUserComu = ServOne.deleteUserComu(comunidades[0].getC_Id());
+            } catch (UiException e) {
+                uiException = e;
+            }
+            return deleteUserComu;
         }
 
         @Override
@@ -253,15 +289,22 @@ public class UserComuDataAc extends AppCompatActivity {
         {
             Log.d(TAG, "onPostExecute() entering.");
 
-            checkState(isDeleted != 0);
+            if (uiException == null) {
 
-            if (isDeleted == IS_USER_DELETED) {
-                TokenHandler.TKhandler.cleanCacheAndBckFile();
-                updateIsRegistered(false, UserComuDataAc.this);
+                checkState(isDeleted != 0);
+
+                if (isDeleted == IS_USER_DELETED) {
+                    TokenHandler.TKhandler.cleanCacheAndBckFile();
+                    updateIsRegistered(false, UserComuDataAc.this);
+                }
+
+                Intent intent = new Intent(UserComuDataAc.this, ComuSearchAc.class);
+                startActivity(intent);
+            } else {
+                Log.d(TAG, "onPostExecute(): uiException " + (uiException.getInServiceException() != null ?
+                        uiException.getInServiceException().getHttpMessage() : "Token null"));
+                uiException.getAction().doAction(UserComuDataAc.this, uiException.getResourceId());
             }
-
-            Intent intent = new Intent(UserComuDataAc.this, ComuSearchAc.class);
-            startActivity(intent);
         }
     }
 }

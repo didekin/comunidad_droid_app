@@ -6,6 +6,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
 
 import com.didekindroid.R;
+import com.didekindroid.common.UiException;
 import com.didekindroid.usuario.activity.utils.CleanEnum;
 import com.didekindroid.usuario.dominio.ComunidadIntent;
 
@@ -91,7 +92,7 @@ public class ComuSearchResultsAcTest_2 {
     }
 
     @Test
-    public void testMenuNuevaComunidad_noToken_1() throws InterruptedException
+    public void testMenuNuevaComunidad_noToken_1() throws InterruptedException, UiException
     {
         assertThat(TKhandler.getAccessTokenInCache(), nullValue());
         activity = mActivityRule.launchActivity(intent);
@@ -103,7 +104,7 @@ public class ComuSearchResultsAcTest_2 {
     }
 
     @Test
-    public void testMenuNuevaComunidad_noToken_2() throws InterruptedException
+    public void testMenuNuevaComunidad_noToken_2() throws InterruptedException, UiException
     {
         whatClean = CLEAN_JUAN;
 
@@ -118,7 +119,7 @@ public class ComuSearchResultsAcTest_2 {
     }
 
     @Test
-    public void testMenuNuevaComunidad_withToken() throws InterruptedException
+    public void testMenuNuevaComunidad_withToken() throws InterruptedException, UiException
     {
         whatClean = CLEAN_JUAN;
 
@@ -131,7 +132,7 @@ public class ComuSearchResultsAcTest_2 {
     }
 
     @Test
-    public void tesComunidadesByUsuario_noToken_1() throws InterruptedException
+    public void tesComunidadesByUsuario_noToken_1() throws InterruptedException, UiException
     {
         assertThat(TKhandler.getAccessTokenInCache(), nullValue());
         activity = mActivityRule.launchActivity(intent);
@@ -143,7 +144,7 @@ public class ComuSearchResultsAcTest_2 {
     }
 
     @Test
-    public void tesComunidadesByUsuario_noToken_2() throws InterruptedException
+    public void tesComunidadesByUsuario_noToken_2() throws InterruptedException, UiException
     {
         whatClean = CLEAN_JUAN;
 
@@ -158,7 +159,7 @@ public class ComuSearchResultsAcTest_2 {
     }
 
     @Test
-    public void testComunidadesByUsuario_withToken() throws InterruptedException
+    public void testComunidadesByUsuario_withToken() throws InterruptedException, UiException
     {
         whatClean = CLEAN_JUAN;
 
@@ -169,7 +170,7 @@ public class ComuSearchResultsAcTest_2 {
         SEE_USERCOMU_BY_USER_AC.checkMenuItem_WTk(activity);
     }
     @After
-    public void cleanData()
+    public void cleanData() throws UiException
     {
         cleanOptions(whatClean);
         checkState(!isRegisteredUser(activity));

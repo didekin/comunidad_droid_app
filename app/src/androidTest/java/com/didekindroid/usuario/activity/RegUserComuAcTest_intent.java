@@ -6,6 +6,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.serviceone.domain.Comunidad;
 import com.didekindroid.R;
+import com.didekindroid.common.UiException;
 import com.didekindroid.usuario.dominio.FullComunidadIntent;
 
 import org.junit.After;
@@ -59,15 +60,28 @@ public class RegUserComuAcTest_intent {
         protected void beforeActivityLaunched()
         {
             // Segundo usuarioComunidad, con user2 y comunidad2.
-            signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
+            try {
+                signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
+            } catch (UiException e) {
+                e.printStackTrace();
+            }
         }
 
         @Override
         protected Intent getActivityIntent()
         {
-            signUpAndUpdateTk(COMU_REAL_JUAN);
-            List<Comunidad> comunidadesUserOne = ServOne.getComusByUser();
-            comunidad = comunidadesUserOne.get(0);
+            try {
+                signUpAndUpdateTk(COMU_REAL_JUAN);
+            } catch (UiException e) {
+                e.printStackTrace();
+            }
+            List<Comunidad> comunidadesUserOne = null;
+            try {
+                comunidadesUserOne = ServOne.getComusByUser();
+            } catch (UiException e) {
+                e.printStackTrace();
+            }
+            comunidad = comunidadesUserOne != null ? comunidadesUserOne.get(0) : null;
 
             // We use that comunidad as the one to associate to the present user.
             intent = new Intent();

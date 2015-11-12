@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
+import com.didekindroid.common.UiException;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -91,7 +92,7 @@ public class LoginAcTest_1 extends LoginAcTest{
     }
 
     @Test
-    public void testValidate_2()
+    public void testValidate_2() throws UiException
     {
         // User in DB.
         assertThat(ServOne.regComuAndUserAndUserComu(COMU_TRAV_PLAZUELA_PEPE), is(true));

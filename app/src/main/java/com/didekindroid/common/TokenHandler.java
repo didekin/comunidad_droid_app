@@ -3,8 +3,8 @@ package com.didekindroid.common;
 import android.util.Log;
 
 import com.didekin.common.oauth2.OauthToken.AccessToken;
+import com.didekindroid.R;
 import com.didekindroid.common.utils.IoHelper;
-import com.didekindroid.common.utils.UIutils;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 
@@ -15,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 
 import static com.didekin.common.oauth2.OauthTokenHelper.HELPER;
 import static com.didekindroid.DidekindroidApp.getContext;
+import static com.didekindroid.common.UiException.UiAction.LOGIN;
 import static com.didekindroid.usuario.webservices.Oauth2Service.Oauth2;
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -31,8 +32,8 @@ public enum TokenHandler {
     TKhandler,;
 
     private static final String TAG = TokenHandler.class.getCanonicalName();
-    public static final String refresh_token_filename = "tk_file";
 
+    public static final String refresh_token_filename = "tk_file";
     private final Cache<String, AccessToken> tokensCache;
     private volatile String refreshTokenKey;
     private final File refreshTokenFile;
@@ -48,7 +49,7 @@ public enum TokenHandler {
         refreshTokenKey = refreshTokenFile.exists() ? IoHelper.readStringFromFile(refreshTokenFile) : null;
     }
 
-    public synchronized void initKeyCacheAndBackupFile(AccessToken accessToken)
+    public final synchronized void initKeyCacheAndBackupFile(AccessToken accessToken)
     {
         Log.d(TAG, "initKeyCacheAndBackupFile()");
 
@@ -60,7 +61,7 @@ public enum TokenHandler {
         tokensCache.put(refreshTokenKey, accessToken);
     }
 
-    public void cleanCacheAndBckFile()
+    public final synchronized void cleanCacheAndBckFile()
     {
         Log.d(TAG, "cleanCacheAndBckFile()");
 
@@ -70,35 +71,36 @@ public enum TokenHandler {
         refreshTokenKey = null;
     }
 
-    public AccessToken getAccessTokenInCache()
+    public final AccessToken getAccessTokenInCache() throws UiException
     {
         Log.d(TAG, "getAccessTokenInCache()");
 
-        // The user has not been registered.
-        // TODO: decidir si es necesario sincronizar (en el getter).
-        if (refreshTokenKey == null) {
+        final String refreshTokenKeyLocal = refreshTokenKey;
+
+        if (refreshTokenKeyLocal == null) {
             return null;
         }
-        AccessToken accessToken = null;
+        AccessToken accessToken;
 
         try {
-            accessToken = tokensCache.get(refreshTokenKey, new Callable<AccessToken>() {
+            accessToken = tokensCache.get(refreshTokenKeyLocal, new Callable<AccessToken>() {
 
                 @Override
                 public AccessToken call() throws Exception
                 {
-                    return Oauth2.getRefreshUserToken(refreshTokenKey);
+                    return Oauth2.getRefreshUserToken(refreshTokenKeyLocal);
                 }
             });
         } catch (ExecutionException e) {
-            UIutils.doRuntimeException(e, e.getLocalizedMessage());
+            throw new UiException(LOGIN, R.string.user_without_signedUp, null);
         }
+
         return accessToken;
     }
 
     //    ...................  UTILITIES .....................
 
-    public String doBearerAccessTkHeader()
+    public String doBearerAccessTkHeader() throws UiException
     {
         Log.d(TAG, "doBearerAccessTkHeader()");
         AccessToken accessToken = getAccessTokenInCache();

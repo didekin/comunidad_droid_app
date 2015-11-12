@@ -6,6 +6,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.serviceone.domain.Comunidad;
 import com.didekindroid.R;
+import com.didekindroid.common.UiException;
 import com.didekindroid.usuario.dominio.ComunidadIntent;
 import com.didekindroid.usuario.dominio.FullComunidadIntent;
 
@@ -55,9 +56,13 @@ public class ComuSearchResultsAcTest_intent_2 {
         @Override
         protected void beforeActivityLaunched()
         {
-            signUpAndUpdateTk(COMU_PLAZUELA5_PEPE);
-            comuIntent = ServOne.getComusByUser().get(0);
-            signUpAndUpdateTk(COMU_REAL_JUAN);
+            try {
+                signUpAndUpdateTk(COMU_PLAZUELA5_PEPE);
+                comuIntent = ServOne.getComusByUser().get(0);
+                signUpAndUpdateTk(COMU_REAL_JUAN);
+            } catch (UiException e) {
+                e.printStackTrace();
+            }
         }
 
         @Override

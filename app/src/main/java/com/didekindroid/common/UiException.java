@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.widget.Toast;
 
+import com.didekin.common.exception.InServiceException;
 import com.didekindroid.usuario.activity.ComuSearchAc;
 import com.didekindroid.usuario.activity.LoginAc;
 
@@ -23,11 +24,13 @@ public class UiException extends Exception {
 
     private final UiAction action;
     private final int resourceId;
+    private final InServiceException inServiceException;
 
-    public UiException(UiAction uiAction, int resourceId)
+    public UiException(UiAction uiAction, int resourceId, InServiceException inServiceException)
     {
         action = uiAction;
         this.resourceId = resourceId;
+        this.inServiceException = inServiceException;
     }
 
     public UiAction getAction()
@@ -38,6 +41,11 @@ public class UiException extends Exception {
     public int getResourceId()
     {
         return resourceId;
+    }
+
+    public InServiceException getInServiceException()
+    {
+        return inServiceException;
     }
 
     public enum UiAction {
@@ -65,7 +73,16 @@ public class UiException extends Exception {
                 activity.startActivity(intent);
                 activity.finish();
             }
-        },;
+        },
+        TOKEN_TO_ERASE {
+            @Override
+            public void doAction(Activity activity, int toastResource)
+            {
+                // TODO: 1. store in local DB the refresh token.
+                //       2. service to erase tokens stored locally.
+                // Llamar activiy for result, to do the local storage. ??
+            }
+        };
 
         public abstract void doAction(Activity activity, int toastResource);
     }

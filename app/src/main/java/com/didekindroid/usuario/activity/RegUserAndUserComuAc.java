@@ -17,6 +17,7 @@ import com.didekin.serviceone.domain.Comunidad;
 import com.didekin.serviceone.domain.Usuario;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
+import com.didekindroid.common.UiException;
 import com.didekindroid.common.utils.ConnectionUtils;
 import com.didekindroid.common.utils.UIutils;
 import com.didekindroid.usuario.dominio.ComunidadBean;
@@ -160,6 +161,8 @@ public class RegUserAndUserComuAc extends AppCompatActivity {
 
     class UserAndUserComuRegister extends AsyncTask<UsuarioComunidad, Void, Void> {
 
+        UiException uiException;
+
         @Override
         protected Void doInBackground(UsuarioComunidad... usuarioComunidad)
         {
@@ -168,8 +171,13 @@ public class RegUserAndUserComuAc extends AppCompatActivity {
             Log.d(TAG, "UserAndUserComuRegister.doInBackground(): calling ServOne.regComuAndUserAndUserComu()");
             ServOne.regUserAndUserComu(usuarioComunidad[0]);
             Log.d(TAG, "UserAndUserComuRegister.doInBackground(): calling Oauth2.getPasswordUserToken()");
-            AccessToken token = Oauth2.getPasswordUserToken(newUser.getUserName(), newUser.getPassword());
-            TKhandler.initKeyCacheAndBackupFile(token);
+            AccessToken token;
+            try {
+                token = Oauth2.getPasswordUserToken(newUser.getUserName(), newUser.getPassword());
+                TKhandler.initKeyCacheAndBackupFile(token);
+            } catch (UiException e) {
+                uiException = e;
+            }
             return null;
         }
 
@@ -177,10 +185,18 @@ public class RegUserAndUserComuAc extends AppCompatActivity {
         protected void onPostExecute(Void aVoid)
         {
             Log.d(TAG, "UserAndUserComuRegister.onPostExecute()");
-            Intent intent = new Intent(RegUserAndUserComuAc.this, SeeUserComuByComuAc.class);
-            intent.putExtra(COMUNIDAD_ID.extra, mComunidad.getC_Id());
-            startActivity(intent);
-            updateIsRegistered(true, RegUserAndUserComuAc.this);
+
+            if (uiException != null) {
+                Log.d(TAG, "onPostExecute(): uiException " + (uiException.getInServiceException() != null ?
+                        uiException.getInServiceException().getHttpMessage() : "Token null"));
+                uiException.getAction().doAction(RegUserAndUserComuAc.this, uiException.getResourceId());
+            } else {
+                Intent intent = new Intent(RegUserAndUserComuAc.this, SeeUserComuByComuAc.class);
+                intent.putExtra(COMUNIDAD_ID.extra, mComunidad.getC_Id());
+                startActivity(intent);
+                updateIsRegistered(true, RegUserAndUserComuAc.this);
+            }
+
         }
     }
 }

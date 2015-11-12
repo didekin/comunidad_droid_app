@@ -62,7 +62,7 @@ dependencies {
     compile 'com.android.support:design:23.1.0'
     compile 'com.android.support:appcompat-v7:23.1.0'
 
-    compile files('../libs/client_lib-0.2.jar')
+    compile project(':client_lib')
     androidTestCompile project(':javabeans')
 
     androidTestCompile 'com.android.support:support-annotations:23.1.0'

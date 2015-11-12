@@ -14,12 +14,16 @@ import android.widget.Toast;
 
 import com.didekin.common.oauth2.OauthToken.AccessToken;
 import com.didekindroid.R;
+import com.didekindroid.common.UiException;
+import com.didekindroid.common.utils.ConnectionUtils;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.common.utils.UIutils;
 import com.didekindroid.usuario.dominio.ComunidadIntent;
 
+import static android.widget.Toast.LENGTH_SHORT;
 import static com.didekin.serviceone.domain.DataPatterns.LINE_BREAK;
 import static com.didekindroid.common.TokenHandler.TKhandler;
+import static com.didekindroid.common.utils.UIutils.makeToast;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeComunidadBeanFromView;
 import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_SEARCH;
 import static com.didekindroid.usuario.activity.utils.UserMenu.LOGIN_AC;
@@ -56,6 +60,8 @@ public class ComuSearchAc extends AppCompatActivity {
 
         Log.d(TAG, "In onCreate()");
 
+        // TODO: cuadro de dialogo con la necesidad de habilitar internet.
+
         // To initilize the token cache. This is the launch activity.
         new CheckerTokenInCache().execute();
 
@@ -90,7 +96,8 @@ public class ComuSearchAc extends AppCompatActivity {
 
         if (!comunidadBean.validate(getResources(), errorMsg)) {
             UIutils.makeToast(this, errorMsg.toString(), Toast.LENGTH_SHORT);
-
+        } else if (!ConnectionUtils.isInternetConnected(this)) {
+            makeToast(this, R.string.no_internet_conn_toast, LENGTH_SHORT);
         } else {
             Intent intent = new Intent(this, ComuSearchResultsAc.class);
             intent.putExtra(COMUNIDAD_SEARCH.extra, new ComunidadIntent(comunidadBean.getComunidad()));
@@ -118,7 +125,7 @@ public class ComuSearchAc extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.comu_search_ac_menu, menu);
         mMenu = menu;
-        if(hasLoginToRemove){
+        if (hasLoginToRemove) {
             mMenu.removeItem(R.id.login_ac_mn);
         }
         return true;
@@ -157,11 +164,20 @@ public class ComuSearchAc extends AppCompatActivity {
     /* This class should be in the launcher activity */
     class CheckerTokenInCache extends AsyncTask<Void, Void, AccessToken> {
 
+        UiException uiException;
+
         @Override
         protected AccessToken doInBackground(Void... params)
         {
             Log.d(TAG, "CheckerTokenInCache.doInBackground");
-            return TKhandler.getAccessTokenInCache();
+
+            AccessToken accessTokenInCache = null;
+            try {
+                accessTokenInCache = TKhandler.getAccessTokenInCache();
+            } catch (UiException e) {
+                uiException = e;
+            }
+            return accessTokenInCache;
         }
 
         @Override
@@ -170,11 +186,11 @@ public class ComuSearchAc extends AppCompatActivity {
             Log.d(TAG, "CheckerTokenInCache.onPostExecute() accessToken null = "
                     + (accessToken == null));
 
-            if (accessToken != null) {
+            if (uiException == null && accessToken != null) {
                 updateIsRegistered(true, ComuSearchAc.this);
                 if (mMenu != null) {
                     mMenu.removeItem(R.id.login_ac_mn);
-                }else{
+                } else {
                     hasLoginToRemove = true;
                 }
             }

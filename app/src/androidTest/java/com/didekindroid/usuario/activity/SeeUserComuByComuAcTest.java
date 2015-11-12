@@ -95,7 +95,7 @@ public class SeeUserComuByComuAcTest {
     public void tearDown() throws Exception
     {
         cleanOptions(CLEAN_JUAN_AND_PEPE);
-        Thread.sleep(2000);
+        Thread.sleep(3000);
     }
 
 //    =================================================================================================================

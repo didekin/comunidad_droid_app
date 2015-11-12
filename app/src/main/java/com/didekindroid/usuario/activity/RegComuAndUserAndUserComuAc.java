@@ -16,6 +16,7 @@ import com.didekin.common.oauth2.OauthToken.AccessToken;
 import com.didekin.serviceone.domain.Usuario;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
+import com.didekindroid.common.UiException;
 import com.didekindroid.common.utils.ConnectionUtils;
 import com.didekindroid.common.utils.UIutils;
 import com.didekindroid.usuario.dominio.ComunidadBean;
@@ -142,6 +143,8 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity {
 
     class ComuAndUserComuAndUserRegister extends AsyncTask<UsuarioComunidad, Void, Void> {
 
+        UiException uiException;
+
         @Override
         protected Void doInBackground(UsuarioComunidad... usuarioComunidad)
         {
@@ -150,8 +153,13 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity {
             Log.d(TAG, "ComuAndUserComuAndUserRegister.doInBackground(): calling ServOne.regComuAndUserAndUserComu()");
             ServOne.regComuAndUserAndUserComu(usuarioComunidad[0]);
             Log.d(TAG, "ComuAndUserComuAndUserRegister.doInBackground(): calling Oauth2.getPasswordUserToken()");
-            AccessToken token = Oauth2.getPasswordUserToken(newUser.getUserName(), newUser.getPassword());
-            TKhandler.initKeyCacheAndBackupFile(token);
+            AccessToken token;
+            try {
+                token = Oauth2.getPasswordUserToken(newUser.getUserName(), newUser.getPassword());
+                TKhandler.initKeyCacheAndBackupFile(token);
+            } catch (UiException e) {
+                uiException = e;
+            }
             return null;
 
             // TODO: si la comunidad ya existe y el usuario no, hacer un regUserAndUserComu.
@@ -164,9 +172,16 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity {
         protected void onPostExecute(Void aVoid)
         {
             Log.d(TAG, "RegComuAndUserComuHttp.onPostExecute()");
-            Intent intent = new Intent(RegComuAndUserAndUserComuAc.this, SeeUserComuByUserAc.class);
-            startActivity(intent);
-            updateIsRegistered(true, RegComuAndUserAndUserComuAc.this);
+
+            if (uiException != null) {
+                Log.d(TAG, "onPostExecute(): uiException " + (uiException.getInServiceException() != null ?
+                        uiException.getInServiceException().getHttpMessage() : "Token null"));
+                uiException.getAction().doAction(RegComuAndUserAndUserComuAc.this, uiException.getResourceId());
+            } else {
+                Intent intent = new Intent(RegComuAndUserAndUserComuAc.this, SeeUserComuByUserAc.class);
+                startActivity(intent);
+                updateIsRegistered(true, RegComuAndUserAndUserComuAc.this);
+            }
         }
     }
 }

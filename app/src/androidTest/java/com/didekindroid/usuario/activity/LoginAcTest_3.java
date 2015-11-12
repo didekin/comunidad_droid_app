@@ -6,6 +6,7 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekin.common.oauth2.OauthToken.AccessToken;
 import com.didekin.common.oauth2.OauthTokenHelper;
 import com.didekindroid.R;
+import com.didekindroid.common.UiException;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -42,7 +43,7 @@ public class LoginAcTest_3 extends LoginAcTest {
     }
 
     @Test
-    public void testValidate_6() throws InterruptedException
+    public void testValidate_6() throws InterruptedException, UiException
     {
         // User in DB: wrong password three consecutive times. Choice "yes mail" in dialog.
         assertThat(ServOne.regComuAndUserAndUserComu(COMU_TRAV_PLAZUELA_PEPE), is(true));

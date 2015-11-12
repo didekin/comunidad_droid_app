@@ -10,6 +10,7 @@ import com.didekin.serviceone.domain.Municipio;
 import com.didekin.serviceone.domain.Provincia;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
+import com.didekindroid.common.UiException;
 import com.didekindroid.usuario.activity.utils.UsuarioTestUtils;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
@@ -79,7 +80,7 @@ public class RegComuAndUserComuAcTest {
     }
 
     @Test
-    public void testPreconditions()
+    public void testPreconditions() throws UiException
     {
         activity = mActivityRule.launchActivity(new Intent());
         RegComuFr regComuFr = (RegComuFr) activity.getFragmentManager().findFragmentById(R.id.reg_comunidad_frg);

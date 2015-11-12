@@ -13,10 +13,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.didekin.common.exception.InServiceException;
 import com.didekin.common.oauth2.OauthToken.AccessToken;
 import com.didekin.serviceone.domain.Usuario;
 import com.didekindroid.R;
+import com.didekindroid.common.UiException;
 import com.didekindroid.common.utils.ConnectionUtils;
 import com.didekindroid.usuario.activity.utils.UserMenu;
 import com.didekindroid.usuario.dominio.UsuarioBean;
@@ -140,11 +140,17 @@ public class UserDataAc extends AppCompatActivity {
     class UserDataGetter extends AsyncTask<Void, Void, Void> {
 
         final String TAG = UserDataGetter.class.getCanonicalName();
+        UiException uiException;
 
         protected Void doInBackground(Void... aVoid)
         {
             Log.d(TAG, "UserDataGetter.doInBackground()");
-            mOldUser = ServOne.getUserData();
+
+            try {
+                mOldUser = ServOne.getUserData();
+            } catch (UiException e) {
+                uiException = e;
+            }
             return null;
         }
 
@@ -153,16 +159,22 @@ public class UserDataAc extends AppCompatActivity {
         {
             Log.d(TAG, "UserDataGetter.onPostExecute()");
 
-            ((EditText) mAcView.findViewById(R.id.reg_usuario_email_editT)).setText(mOldUser.getUserName());
-            ((EditText) mAcView.findViewById(R.id.reg_usuario_alias_ediT)).setText(mOldUser.getAlias());
-            ((EditText) mAcView.findViewById(R.id.user_data_ac_password_ediT))
-                    .setHint(R.string.user_data_ac_password_hint);
+            if (uiException != null) {
+                Log.d(TAG, "onPostExecute(): uiException " + (uiException.getInServiceException() != null ? uiException.getInServiceException().getHttpMessage() : "Token null"));
+                uiException.getAction().doAction(UserDataAc.this, uiException.getResourceId());
+            } else {
+                ((EditText) mAcView.findViewById(R.id.reg_usuario_email_editT)).setText(mOldUser.getUserName());
+                ((EditText) mAcView.findViewById(R.id.reg_usuario_alias_ediT)).setText(mOldUser.getAlias());
+                ((EditText) mAcView.findViewById(R.id.user_data_ac_password_ediT))
+                        .setHint(R.string.user_data_ac_password_hint);
+            }
         }
     }
 
     class UserDataModifyer extends AsyncTask<Usuario, Void, Boolean> {
 
         final String TAG = UserDataModifyer.class.getCanonicalName();
+        UiException uiException;
 
         @Override
         protected Boolean doInBackground(Usuario... usuarios)
@@ -173,16 +185,24 @@ public class UserDataAc extends AppCompatActivity {
             boolean isSameAlias = mOldUser.getAlias().equals(usuarios[0].getAlias());
 
             if (isSameAlias && isSameUserName) {
+                Log.d(TAG, "sameAlias && sameUserName");
                 return false;
             }
 
+            // Token with the old credentials.
             AccessToken token_1;
             try {
                 token_1 = Oauth2.getPasswordUserToken(mOldUser.getUserName(), usuarios[0].getPassword());
                 TKhandler.initKeyCacheAndBackupFile(token_1);
-            } catch (InServiceException e) {
-                checkState(e.getHttpMessage().equals(BAD_REQUEST.getHttpMessage()));
-                return true;
+            } catch (UiException e) {
+                if (e.getInServiceException().getHttpMessage().equals(BAD_REQUEST.getHttpMessage())) {
+                    Log.d(TAG, " exception: " + BAD_REQUEST.getHttpMessage());
+                    return true;  // Password/user matching error.
+                } else {
+                    uiException = e;
+                    Log.d(TAG, e.getInServiceException().getHttpMessage());
+                    return false; // Other authentication error.
+                }
             }
 
             if (!isSameUserName) {
@@ -191,10 +211,31 @@ public class UserDataAc extends AppCompatActivity {
                         .alias(usuarios[0].getAlias())
                         .uId(usuarios[0].getuId())
                         .build();
-                checkState(ServOne.modifyUser(usuarioIn) > 0);
-                AccessToken token_2 = Oauth2.getPasswordUserToken(usuarioIn.getUserName(), usuarios[0].getPassword());
-                TKhandler.initKeyCacheAndBackupFile(token_2);
-                checkState(ServOne.deleteAccessToken(token_1.getValue()));
+
+                try {
+                    ServOne.modifyUser(usuarioIn);
+                    TKhandler.cleanCacheAndBckFile();
+                } catch (UiException e) {
+                    uiException = e;
+                    Log.d(TAG, (e.getInServiceException() != null ?
+                            e.getInServiceException().getHttpMessage() : "token null in cache"));
+                    return false; // Authentication error with old credentials.
+                }
+
+                try {
+                    AccessToken token_2 = Oauth2.getPasswordUserToken(usuarioIn.getUserName(), usuarios[0].getPassword());
+                    TKhandler.initKeyCacheAndBackupFile(token_2);
+                } catch (UiException e) {
+                    // Authentication error with new credentials.
+                    Log.d(TAG, e.getInServiceException().getHttpMessage());
+                }
+                try {
+                    ServOne.deleteAccessToken(token_1.getValue());
+                } catch (UiException e) {
+                    // No token in cache
+                    Log.d(TAG, e.getInServiceException().getHttpMessage());
+                    e.getAction().doAction(UserDataAc.this, e.getResourceId());
+                }
                 return false;
             }
 
@@ -202,16 +243,32 @@ public class UserDataAc extends AppCompatActivity {
                     .alias(usuarios[0].getAlias())
                     .uId(usuarios[0].getuId())
                     .build();
-            checkState(ServOne.modifyUser(usuarioIn) > 0);
+            try {
+                ServOne.modifyUser(usuarioIn);
+            } catch (UiException e) {
+                uiException = e;
+                Log.d(TAG, (e.getInServiceException() != null ?
+                        e.getInServiceException().getHttpMessage() : "token null in cache"));
+                return false;
+            }
             return false;
         }
 
         @Override
         protected void onPostExecute(Boolean passwordWrong)
         {
-            Log.d(TAG, "onPostExecute(): DONE");
+            Log.d(TAG, "onPostExecute()");
+
             if (passwordWrong) {
+                Log.d(TAG, "onPostExecute(): password wrong");
+                checkState(uiException == null);
                 makeToast(UserDataAc.this, R.string.password_wrong, Toast.LENGTH_LONG);
+            }
+            if (uiException != null) {
+                Log.d(TAG, "onPostExecute(): uiException " + (uiException.getInServiceException() != null ?
+                        uiException.getInServiceException().getHttpMessage() : "Token null"));
+                checkState(!passwordWrong);
+                uiException.getAction().doAction(UserDataAc.this, uiException.getResourceId());
             }
         }
     }

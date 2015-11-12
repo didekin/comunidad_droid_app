@@ -84,7 +84,7 @@ public class TokenHandlerTest {
     }
 
     @Test
-    public void testGetTkInCacheOnlyRefreshTk_1()
+    public void testGetTkInCacheOnlyRefreshTk_1() throws UiException
     {
         // No file with refreshToken.
         assertThat(TKhandler.getRefreshTokenFile(), notNullValue());
@@ -96,7 +96,7 @@ public class TokenHandlerTest {
     }
 
     @Test
-    public void testGetTkInCacheOnlyRefreshTk_2() throws IOException
+    public void testGetTkInCacheOnlyRefreshTk_2() throws IOException, UiException
     {
         // Precondition for initialization of the enum: no file with refreshToken.
         assertThat(TKhandler.getRefreshTokenKey(), nullValue());
@@ -151,7 +151,7 @@ public class TokenHandlerTest {
     }
 
     @Test
-    public void testCleanCacheAndBckFile()
+    public void testCleanCacheAndBckFile() throws UiException
     {
         // Precondition for initialization of TKhandler: no file with refreshToken.
         assertThat(TKhandler.getRefreshTokenKey(), nullValue());

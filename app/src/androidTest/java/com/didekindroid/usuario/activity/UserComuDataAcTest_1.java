@@ -77,7 +77,11 @@ public class UserComuDataAcTest_1 {
         @Override
         protected Intent getActivityIntent()
         {
-            signUpAndUpdateTk(COMU_REAL_JUAN);
+            try {
+                signUpAndUpdateTk(COMU_REAL_JUAN);
+            } catch (UiException e) {
+                e.printStackTrace();
+            }
             List<UsuarioComunidad> comunidadesUserOne = null;
             try {
                 comunidadesUserOne = ServOne.seeUserComusByUser();
@@ -195,7 +199,7 @@ public class UserComuDataAcTest_1 {
     }
 
     @Test
-    public void testDeleteUserComu_1()
+    public void testDeleteUserComu_1() throws UiException
     {
         whatToClean = CLEAN_NOTHING;
 

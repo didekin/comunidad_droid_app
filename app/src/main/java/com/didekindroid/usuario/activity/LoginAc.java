@@ -22,6 +22,7 @@ import com.didekindroid.common.utils.ConnectionUtils;
 import com.didekindroid.usuario.dominio.UsuarioBean;
 
 import static android.widget.Toast.LENGTH_LONG;
+import static android.widget.Toast.LENGTH_SHORT;
 import static com.didekindroid.common.TokenHandler.TKhandler;
 import static com.didekindroid.common.UiException.UiAction.SEARCH_COMU;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
@@ -96,7 +97,7 @@ public class LoginAc extends AppCompatActivity {
         if (!usuarioBean.validateLoginData(getResources(), errorBuilder)) {
             makeToast(this, errorBuilder.toString(), Toast.LENGTH_SHORT);
         } else if (!ConnectionUtils.isInternetConnected(this)) {
-            makeToast(this, R.string.no_internet_conn_toast, LENGTH_LONG);
+            makeToast(this, R.string.no_internet_conn_toast, LENGTH_SHORT);
         } else {
             new LoginValidator().execute(usuarioBean.getUsuario());
         }
@@ -187,8 +188,7 @@ public class LoginAc extends AppCompatActivity {
 
         private static final String TAG = PasswordMailDialog.class.getCanonicalName();
 
-        @SuppressWarnings("FinalStaticMethod")
-        public static final PasswordMailDialog newInstance(String emailUser)
+        public static PasswordMailDialog newInstance(String emailUser)
         {
             Log.d(TAG, "newInstance()");
 

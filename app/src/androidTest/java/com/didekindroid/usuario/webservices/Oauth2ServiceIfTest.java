@@ -2,10 +2,13 @@ package com.didekindroid.usuario.webservices;
 
 import android.support.test.runner.AndroidJUnit4;
 
+import com.didekin.common.exception.DidekinExceptionMsg;
 import com.didekin.common.exception.InServiceException;
 import com.didekin.common.oauth2.OauthToken.AccessToken;
+import com.didekindroid.common.UiException;
 import com.didekindroid.usuario.activity.utils.CleanEnum;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -91,9 +94,9 @@ public class Oauth2ServiceIfTest {
         try {
             Oauth2.getPasswordUserToken(USER_PEPE.getUserName(), USER_PEPE.getPassword());
             fail();
-        } catch (InServiceException e) {
-            assertThat(e.getHttpMessage(), is(BAD_REQUEST.getHttpMessage()));
-            assertThat(e.getHttpStatus(), is(BAD_REQUEST.getHttpStatus()));
+        } catch (UiException e) {
+            assertThat(e.getInServiceException(), CoreMatchers.notNullValue());
+            assertThat(e.getInServiceException().getHttpMessage(), is(BAD_REQUEST.getHttpMessage()));
         }
 
         // Es necesario conseguir un nuevo token.
@@ -132,7 +135,7 @@ public class Oauth2ServiceIfTest {
     }
 
     @After
-    public void cleaningUp()
+    public void cleaningUp() throws UiException
     {
         cleanOptions(whatClean);
     }

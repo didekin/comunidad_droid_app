@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.didekindroid.R;
+import com.didekindroid.common.UiException;
 
 import static com.didekindroid.common.TokenHandler.TKhandler;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
@@ -66,14 +67,21 @@ public class DeleteMeAc extends AppCompatActivity {
     class UserDataEraser extends AsyncTask<Void, Void, Boolean> {
 
         final String TAG = UserDataEraser.class.getCanonicalName();
+        UiException uiException;
 
         @Override
         protected Boolean doInBackground(Void... params)
         {
             Log.d(TAG, "doInBackground()");
-            boolean isDeleted = ServOne.deleteUser();
-            TKhandler.cleanCacheAndBckFile();
-            updateIsRegistered(false, DeleteMeAc.this);
+
+            boolean isDeleted = false;
+            try {
+                isDeleted = ServOne.deleteUser();
+                TKhandler.cleanCacheAndBckFile();
+                updateIsRegistered(false, DeleteMeAc.this);
+            } catch (UiException e) {
+                uiException = e;
+            }
             return isDeleted;
         }
 
@@ -81,7 +89,14 @@ public class DeleteMeAc extends AppCompatActivity {
         protected void onPostExecute(Boolean isDeleted)
         {
             Log.d(TAG, "onPostExecute()");
-            checkState(isDeleted);
+
+            if (uiException != null) {
+                Log.d(TAG, "onPostExecute(): uiException " + (uiException.getInServiceException() != null ?
+                        uiException.getInServiceException().getHttpMessage() : "Token null"));
+                uiException.getAction().doAction(DeleteMeAc.this, uiException.getResourceId());
+            } else {
+                checkState(isDeleted);
+            }
         }
     }
 }

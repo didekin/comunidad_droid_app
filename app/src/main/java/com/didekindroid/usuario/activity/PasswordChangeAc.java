@@ -12,15 +12,15 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.didekindroid.R;
-import com.didekindroid.usuario.dominio.UsuarioBean;
+import com.didekindroid.common.UiException;
 import com.didekindroid.common.utils.ConnectionUtils;
-import com.google.common.base.Preconditions;
+import com.didekindroid.usuario.dominio.UsuarioBean;
 
-import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.utils.UIutils.makeToast;
+import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 import static com.google.common.base.Preconditions.checkState;
 
 /**
@@ -95,19 +95,31 @@ public class PasswordChangeAc extends AppCompatActivity {
     class PasswordModifyer extends AsyncTask<String, Void, Integer> {
 
         private final String TAG = PasswordModifyer.class.getCanonicalName();
+        UiException uiException;
 
         @Override
         protected Integer doInBackground(String... params)
         {
             Log.d(TAG, "doInBackground()");
-            return ServOne.passwordChange(params[0]);
+            int passwordChange = 0;
+            try {
+                passwordChange = ServOne.passwordChange(params[0]);
+            } catch (UiException e) {
+                uiException = e;
+            }
+            return passwordChange;
         }
 
         @Override
         protected void onPostExecute(Integer passwordUpdate)
         {
             Log.d(TAG, "onPostExecute(): DONE");
-            Preconditions.checkState(passwordUpdate == 1);
+            if (uiException != null){
+                Log.d(TAG, "onPostExecute(): uiException " + (uiException.getInServiceException() != null ?
+                        uiException.getInServiceException().getHttpMessage() : "Token null"));
+                uiException.getAction().doAction(PasswordChangeAc.this, uiException.getResourceId());
+            } else{checkState(passwordUpdate == 1);}
+
         }
     }
 }

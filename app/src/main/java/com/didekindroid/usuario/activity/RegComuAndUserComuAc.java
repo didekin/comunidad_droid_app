@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
+import com.didekindroid.common.UiException;
 import com.didekindroid.common.utils.ConnectionUtils;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
@@ -94,19 +95,32 @@ public class RegComuAndUserComuAc extends AppCompatActivity {
     class ComuAndUserComuRegister extends AsyncTask<UsuarioComunidad, Void, Boolean> {
 
         private final String TAG = ComuAndUserComuRegister.class.getCanonicalName();
+        UiException uiException;
 
         @Override
         protected Boolean doInBackground(UsuarioComunidad... usuarioComunidad)
         {
             Log.d(TAG, "doInBackground()");
-            return ServOne.regComuAndUserComu(usuarioComunidad[0]);
+            boolean isRegistered = false;
+            try {
+                isRegistered = ServOne.regComuAndUserComu(usuarioComunidad[0]);
+            } catch (UiException e) {
+                uiException = e;
+            }
+            return isRegistered;
         }
 
         @Override
         protected void onPostExecute(Boolean rowInserted)
         {
             Log.d(TAG, "onPostExecute()");
-            checkState(rowInserted);
+            if (uiException != null) {
+                Log.d(TAG, "onPostExecute(): uiException " + (uiException.getInServiceException() != null ?
+                        uiException.getInServiceException().getHttpMessage() : "Token null"));
+                uiException.getAction().doAction(RegComuAndUserComuAc.this, uiException.getResourceId());
+            } else {
+                checkState(rowInserted);
+            }
         }
     }
 }

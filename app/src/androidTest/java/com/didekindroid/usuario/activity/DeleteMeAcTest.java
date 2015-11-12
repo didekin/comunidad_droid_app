@@ -4,6 +4,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
+import com.didekindroid.common.UiException;
 import com.didekindroid.usuario.activity.utils.CleanEnum;
 
 import org.junit.After;
@@ -50,7 +51,11 @@ public class DeleteMeAcTest {
         protected void beforeActivityLaunched()
         {
             // Precondition: the user is registered.
-            signUpAndUpdateTk(COMU_REAL_PEPE);
+            try {
+                signUpAndUpdateTk(COMU_REAL_PEPE);
+            } catch (UiException e) {
+                e.printStackTrace();
+            }
         }
     };
 
@@ -89,7 +94,7 @@ public class DeleteMeAcTest {
     }
 
     @Test
-    public void testUnregisterUser()
+    public void testUnregisterUser() throws UiException
     {
         whatToClean = CLEAN_NOTHING;
 

@@ -65,13 +65,21 @@ public class UserComuDataAcTest_2 {
             UsuarioComunidad userComu = makeUsuarioComunidad(mUsuarioComunidad.getComunidad(), USER_PEPE,
                     "portalB", null, "planta1", null, PROPIETARIO.function.concat(",").concat(PRESIDENTE.function));
             ServOne.regUserAndUserComu(userComu);
-            updateSecurityData(USER_PEPE.getUserName(), USER_PEPE.getPassword());
+            try {
+                updateSecurityData(USER_PEPE.getUserName(), USER_PEPE.getPassword());
+            } catch (UiException e) {
+                e.printStackTrace();
+            }
         }
 
         @Override
         protected Intent getActivityIntent()
         {
-            signUpAndUpdateTk(COMU_REAL_JUAN);
+            try {
+                signUpAndUpdateTk(COMU_REAL_JUAN);
+            } catch (UiException e) {
+                e.printStackTrace();
+            }
             List<UsuarioComunidad> comunidadesUserOne = null;
             try {
                 comunidadesUserOne = ServOne.seeUserComusByUser();

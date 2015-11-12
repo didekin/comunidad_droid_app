@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.didekin.serviceone.domain.Comunidad;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
+import com.didekindroid.common.UiException;
 import com.didekindroid.usuario.activity.utils.UserIntentExtras;
 
 import java.util.List;
@@ -161,13 +162,21 @@ public class SeeUserComuByComuFr extends ListFragment {
         private final String TAG = UserComuByComuLoader.class.getCanonicalName();
 
         private Comunidad comunidadIn;
+        private UiException uiException;
 
         @Override
         protected List<UsuarioComunidad> doInBackground(Long... comunidadId)
         {
             Log.d(TAG, "doInBackground()");
-            comunidadIn = ServOne.getComuData(comunidadId[0]);
-            return ServOne.seeUserComusByComu(comunidadId[0]);
+
+            List<UsuarioComunidad> usuarioComunidades = null;
+            try {
+                comunidadIn = ServOne.getComuData(comunidadId[0]);
+                usuarioComunidades = ServOne.seeUserComusByComu(comunidadId[0]);
+            } catch (UiException e) {
+                uiException = e;
+            }
+            return usuarioComunidades;
         }
 
         @Override
@@ -175,10 +184,16 @@ public class SeeUserComuByComuFr extends ListFragment {
         {
             Log.d(TAG, "onPostExecute(); userComuList size = " + userComuList.size());
 
-            mAdapter.addAll(userComuList);
-            setListAdapter(mAdapter);
-            nombreComuView.setText(comunidadIn.getNombreComunidad());
-            fragmentListView.addHeaderView(nombreComuView);
+            if (uiException != null) {
+                Log.d(TAG, "onPostExecute(): uiException " + (uiException.getInServiceException() != null ?
+                        uiException.getInServiceException().getHttpMessage() : "Token null"));
+                uiException.getAction().doAction(getActivity(), uiException.getResourceId());
+            } else {
+                mAdapter.addAll(userComuList);
+                setListAdapter(mAdapter);
+                nombreComuView.setText(comunidadIn.getNombreComunidad());
+                fragmentListView.addHeaderView(nombreComuView);
+            }
         }
     }
 }

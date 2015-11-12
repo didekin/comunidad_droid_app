@@ -6,6 +6,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.serviceone.domain.Comunidad;
 import com.didekindroid.R;
+import com.didekindroid.common.UiException;
 import com.didekindroid.common.utils.UIutils;
 import com.didekindroid.usuario.activity.utils.CleanEnum;
 import com.didekindroid.usuario.dominio.FullComunidadIntent;
@@ -87,8 +88,13 @@ public class RegUserAndUserComuAcTest_intent {
         protected Intent getActivityIntent()
         {
             // Precondition 2: the comunidad already exists.
-            signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
-            List<Comunidad> comunidadesUserOne = ServOne.getComusByUser();
+            List<Comunidad> comunidadesUserOne = null;
+            try {
+                signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
+                comunidadesUserOne = ServOne.getComusByUser();
+            } catch (UiException e) {
+                e.printStackTrace();
+            }
             comunidad = comunidadesUserOne.get(0);
             // We pass the comunidad as an intent.
             intent = new Intent();
@@ -137,7 +143,7 @@ public class RegUserAndUserComuAcTest_intent {
     }
 
     @Test
-    public void testRegisterUserAndUserComu_1()
+    public void testRegisterUserAndUserComu_1() throws UiException
     {
         whatToClean = CLEAN_JUAN2_AND_PEPE;
 
@@ -166,7 +172,7 @@ public class RegUserAndUserComuAcTest_intent {
     //    =================================== MENU ===================================
 
     @Test
-    public void testLoginMn_1() throws InterruptedException
+    public void testLoginMn_1() throws InterruptedException, UiException
     {
         whatToClean = CLEAN_PEPE;
 
@@ -178,7 +184,7 @@ public class RegUserAndUserComuAcTest_intent {
     }
 
     @Test
-    public void testLoginMn_2() throws InterruptedException
+    public void testLoginMn_2() throws InterruptedException, UiException
     {
         whatToClean = CLEAN_JUAN_AND_PEPE;
         //With token.

@@ -22,6 +22,7 @@ import static com.didekindroid.DidekindroidApp.getBaseURL;
 import static com.didekindroid.common.UiException.UiAction.LOGIN;
 import static com.didekindroid.common.UiException.UiAction.SEARCH_COMU;
 import static com.didekindroid.common.TokenHandler.TKhandler;
+import static com.didekindroid.common.UiException.UiAction.TOKEN_TO_ERASE;
 
 /**
  * User: pedro@didekin
@@ -183,54 +184,108 @@ public enum ServiceOne implements ServiceOneEndPoints {
 //                  CONVENIENCE METHODS
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-    public boolean deleteAccessToken(String oldAccessToken)
+    public boolean deleteAccessToken(String oldAccessToken) throws UiException
     {
         Log.d(TAG, "deleteAccessToken()");
-        return deleteAccessToken(TKhandler.doBearerAccessTkHeader(), oldAccessToken);
+
+        boolean isDeleted;
+        try {
+            isDeleted = deleteAccessToken(checkBearerToken(), oldAccessToken);
+        } catch (InServiceException e) {
+            throw new UiException(TOKEN_TO_ERASE,0,e);
+        }
+        return isDeleted;
     }
 
-    public boolean deleteUser()
+    public boolean deleteUser() throws UiException
     {
         Log.d(TAG, "deleteUser()");
-        return deleteUser(TKhandler.doBearerAccessTkHeader());
+        boolean isDeleted = false;
+        try {
+            isDeleted = deleteUser(checkBearerToken());
+        } catch (InServiceException e) {
+            catchAuthenticationException(e);
+        }
+        return isDeleted;
     }
 
 
-    public int deleteUserComu(long comunidadId)
+    public int deleteUserComu(long comunidadId) throws UiException
     {
         Log.d(TAG, "deleteUserComu()");
-        return deleteUserComu(TKhandler.doBearerAccessTkHeader(), comunidadId);
+
+        int deleted = 0;
+        try {
+            deleted = deleteUserComu(checkBearerToken(), comunidadId);
+        } catch (InServiceException e) {
+            catchAuthenticationException(e);
+        }
+        return deleted;
     }
 
-    public Comunidad getComuData(long idComunidad)
+    public Comunidad getComuData(long idComunidad) throws UiException
     {
         Log.d(TAG, "getComuData()");
-        return getComuData(TKhandler.doBearerAccessTkHeader(), idComunidad);
+
+        Comunidad comunidad = null;
+        try {
+            comunidad = getComuData(checkBearerToken(), idComunidad);
+        } catch (InServiceException e) {
+            catchAuthenticationException(e);
+        }
+        return comunidad;
     }
 
-    public List<Comunidad> getComusByUser()
+    public List<Comunidad> getComusByUser() throws UiException
     {
         Log.d(TAG, "getComusByUser()");
-        String bearerAccessTkHeader = TKhandler.doBearerAccessTkHeader();
-        return (bearerAccessTkHeader != null ? endPoint.getComusByUser(bearerAccessTkHeader) : null);
+
+        List<Comunidad> comusByUser = null;
+        try {
+            comusByUser = endPoint.getComusByUser(checkBearerToken());
+        }catch (InServiceException e) {
+            catchAuthenticationException(e);
+        }
+        return comusByUser;
     }
 
-    public UsuarioComunidad getUserComuByUserAndComu(long comunidadId)
+    public UsuarioComunidad getUserComuByUserAndComu(long comunidadId) throws UiException
     {
-        Log.d(TAG,"getUserComuByUserAndComu()");
-        return getUserComuByUserAndComu(TKhandler.doBearerAccessTkHeader(), comunidadId);
+        Log.d(TAG, "getUserComuByUserAndComu()");
+
+        UsuarioComunidad userComuByUserAndComu = null;
+        try {
+            userComuByUserAndComu = getUserComuByUserAndComu(checkBearerToken(), comunidadId);
+        }catch (InServiceException e) {
+            catchAuthenticationException(e);
+        }
+        return userComuByUserAndComu;
     }
 
-    public Usuario getUserData()
+    public Usuario getUserData() throws UiException
     {
         Log.d(TAG, ("getUserData()"));
-        return getUserData(TKhandler.doBearerAccessTkHeader());
+
+        Usuario userData = null;
+        try {
+            userData = getUserData(checkBearerToken());
+        }catch (InServiceException e) {
+            catchAuthenticationException(e);
+        }
+        return userData;
     }
 
-    public boolean isOldestUserComu(long comunidadId)
+    public boolean isOldestUserComu(long comunidadId) throws UiException
     {
         Log.d(TAG, "isOldestUserComu()");
-        return isOldestUserComu(TKhandler.doBearerAccessTkHeader(), comunidadId);
+
+        boolean isOldestUserComu = false;
+        try {
+            isOldestUserComu = isOldestUserComu(checkBearerToken(), comunidadId);
+        }catch (InServiceException e) {
+            catchAuthenticationException(e);
+        }
+        return isOldestUserComu;
     }
 
     public boolean loginInternal(String userName, String password) throws UiException
@@ -242,52 +297,101 @@ public enum ServiceOne implements ServiceOneEndPoints {
             isLoginOk = login(userName, password);
         } catch (InServiceException e) {
             if (e.getHttpMessage().equals(USER_NAME_NOT_FOUND.getHttpMessage())) {
-                throw new UiException(SEARCH_COMU, R.string.user_without_signedUp);
+                throw new UiException(SEARCH_COMU, R.string.user_without_signedUp, null);
             }
         }
         return isLoginOk;
     }
 
-    public int modifyComuData(Comunidad comunidad)
+    public int modifyComuData(Comunidad comunidad) throws UiException
     {
         Log.d(TAG, "modifyComuData()");
-        return modifyComuData(TKhandler.doBearerAccessTkHeader(), comunidad);
+
+        int modifyComuData = 0;
+        try {
+            modifyComuData = modifyComuData(checkBearerToken(), comunidad);
+        }catch (InServiceException e) {
+            catchAuthenticationException(e);
+        }
+        return modifyComuData;
     }
 
-    public int modifyUser(Usuario usuario)
+    public int modifyUser(Usuario usuario) throws UiException
     {
         Log.d(TAG, "modifyUser()");
-        return modifyUser(TKhandler.doBearerAccessTkHeader(), usuario);
+
+        int modifyUser = 0;
+        try {
+            modifyUser = modifyUser(checkBearerToken(), usuario);
+        }catch (InServiceException e) {
+            catchAuthenticationException(e);
+        }
+        return modifyUser;
     }
 
-    public int modifyUserComu(UsuarioComunidad userComu)
+    public int modifyUserComu(UsuarioComunidad userComu) throws UiException
     {
         Log.d(TAG, "modifyUserComu()");
-        return modifyUserComu(TKhandler.doBearerAccessTkHeader(), userComu);
+
+        int modifyUserComu = 0;
+        try {
+            modifyUserComu = modifyUserComu(checkBearerToken(), userComu);
+        }catch (InServiceException e) {
+            catchAuthenticationException(e);
+        }
+        return modifyUserComu;
     }
 
-    public int passwordChange(String newPassword)
+    public int passwordChange(String newPassword) throws UiException
     {
         Log.d(TAG, "passwordChange()");
-        return passwordChange(TKhandler.doBearerAccessTkHeader(), newPassword);
+
+        int passwordChange = 0;
+        try {
+            passwordChange = passwordChange(checkBearerToken(), newPassword);
+        }catch (InServiceException e) {
+            catchAuthenticationException(e);
+        }
+        return passwordChange;
     }
 
-    public boolean regComuAndUserComu(UsuarioComunidad usuarioComunidad)
+    public boolean regComuAndUserComu(UsuarioComunidad usuarioComunidad) throws UiException
     {
         Log.d(TAG, "regComuAndUserComu()");
-        return regComuAndUserComu(TKhandler.doBearerAccessTkHeader(), usuarioComunidad);
+
+        boolean isRegistered = false;
+        try {
+            isRegistered = regComuAndUserComu(checkBearerToken(), usuarioComunidad);
+        }catch (InServiceException e) {
+            catchAuthenticationException(e);
+        }
+        return isRegistered;
     }
 
-    public int regUserComu(UsuarioComunidad usuarioComunidad)
+    public int regUserComu(UsuarioComunidad usuarioComunidad) throws UiException
     {
         Log.d(TAG, "regUserComu()");
-        return regUserComu(TKhandler.doBearerAccessTkHeader(), usuarioComunidad);
+
+        int regUserComu = 0;
+        try {
+            regUserComu = regUserComu(checkBearerToken(), usuarioComunidad);
+        }catch (InServiceException e) {
+            catchAuthenticationException(e);
+        }
+        return regUserComu;
     }
 
-    public List<UsuarioComunidad> seeUserComusByComu(long idComunidad)
+    public List<UsuarioComunidad> seeUserComusByComu(long idComunidad) throws UiException
     {
         Log.d(TAG, "seeUserComusByComu()");
-        return seeUserComusByComu(TKhandler.doBearerAccessTkHeader(), idComunidad);
+
+        List<UsuarioComunidad> usuarioComunidadList = null;
+        try {
+            usuarioComunidadList = seeUserComusByComu(checkBearerToken(), idComunidad);
+        }catch (InServiceException e) {
+            catchAuthenticationException(e);
+        }
+        return usuarioComunidadList;
     }
 
     public List<UsuarioComunidad> seeUserComusByUser() throws UiException
@@ -311,17 +415,17 @@ public enum ServiceOne implements ServiceOneEndPoints {
         String bearerAccessTkHeader = TKhandler.doBearerAccessTkHeader();
 
         if (bearerAccessTkHeader == null) { // No token in cache.
-            throw new UiException(LOGIN, R.string.user_without_signedUp);
+            throw new UiException(LOGIN, R.string.user_without_signedUp, null);
         }
         return bearerAccessTkHeader;
     }
 
     void catchAuthenticationException(InServiceException e) throws UiException
     {
-        Log.e(TAG,"catchAuthenticationException():" + e.getHttpMessage());
+        Log.e(TAG, "catchAuthenticationException():" + e.getHttpMessage());
 
         if (isMessageToLogin(e.getHttpMessage())) {  // Problema de identificación.
-            throw new UiException(LOGIN, R.string.user_without_signedUp);
+            throw new UiException(LOGIN, R.string.user_without_signedUp, e);
         }
     }
 }

@@ -11,6 +11,7 @@ import com.didekin.serviceone.domain.Comunidad;
 import com.didekin.serviceone.domain.Usuario;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
+import com.didekindroid.common.UiException;
 import com.didekindroid.usuario.activity.utils.CleanEnum;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioBean;
@@ -283,7 +284,7 @@ public class RegComuAndUserAndUserComuAcTest {
     }
 
     @Test
-    public void testRegisterComuAndUserComuAndUser_2()
+    public void testRegisterComuAndUserComuAndUser_2() throws UiException
     {
         whatToClean = CleanEnum.CLEAN_JUAN2;
 
@@ -335,7 +336,7 @@ public class RegComuAndUserAndUserComuAcTest {
     //    =================================== MENU ===================================
 
     @Test
-    public void testLoginMn_1() throws InterruptedException
+    public void testLoginMn_1() throws InterruptedException, UiException
     {
         mActivity = mActivityRule.launchActivity(new Intent());
         assertThat(isRegisteredUser(mActivity),is(false));
@@ -345,7 +346,7 @@ public class RegComuAndUserAndUserComuAcTest {
     }
 
     @Test
-    public void testLoginMn_2() throws InterruptedException
+    public void testLoginMn_2() throws InterruptedException, UiException
     {
         whatToClean = CleanEnum.CLEAN_JUAN;
         //With token.

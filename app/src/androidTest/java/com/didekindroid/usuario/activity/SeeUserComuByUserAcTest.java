@@ -5,6 +5,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
+import com.didekindroid.common.UiException;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.After;
@@ -60,7 +61,11 @@ public class SeeUserComuByUserAcTest {
         @Override
         protected void beforeActivityLaunched()
         {
-            regThreeUserComuSameUser_2(COMU_ESCORIAL_PEPE, COMU_PLAZUELA5_PEPE, COMU_LA_FUENTE_PEPE);
+            try {
+                regThreeUserComuSameUser_2(COMU_ESCORIAL_PEPE, COMU_PLAZUELA5_PEPE, COMU_LA_FUENTE_PEPE);
+            } catch (UiException e) {
+                e.printStackTrace();
+            }
         }
     };
 

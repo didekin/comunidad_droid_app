@@ -6,6 +6,7 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekin.common.oauth2.OauthToken.AccessToken;
 import com.didekin.serviceone.domain.Usuario;
 import com.didekindroid.R;
+import com.didekindroid.common.UiException;
 import com.didekindroid.usuario.activity.utils.CleanEnum;
 
 import org.junit.After;
@@ -61,7 +62,11 @@ public class PasswordChangeAcTest {
                 protected void beforeActivityLaunched()
                 {
                     // Precondition: the user is registered.
-                    signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
+                    try {
+                        signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
+                    } catch (UiException e) {
+                        e.printStackTrace();
+                    }
                 }
             };
 
@@ -118,7 +123,7 @@ public class PasswordChangeAcTest {
     }
 
     @Test
-    public void testPasswordChange_2()
+    public void testPasswordChange_2() throws UiException
     {
         whatToClean = CLEAN_NOTHING;
 

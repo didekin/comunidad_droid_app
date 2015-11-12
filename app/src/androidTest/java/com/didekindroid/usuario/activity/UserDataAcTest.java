@@ -6,6 +6,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.common.oauth2.OauthToken.AccessToken;
 import com.didekindroid.R;
+import com.didekindroid.common.UiException;
 import com.didekindroid.usuario.activity.utils.CleanEnum;
 
 import org.junit.After;
@@ -67,7 +68,11 @@ public class UserDataAcTest {
         protected void beforeActivityLaunched()
         {
             // Precondition: the user is registered.
-            signUpAndUpdateTk(COMU_REAL_JUAN);
+            try {
+                signUpAndUpdateTk(COMU_REAL_JUAN);
+            } catch (UiException e) {
+                e.printStackTrace();
+            }
         }
     };
 
@@ -193,7 +198,7 @@ public class UserDataAcTest {
 
     /* Change alias.*/
     @Test
-    public void testModifyUserData_4()
+    public void testModifyUserData_4() throws UiException
     {
         // Check security data: old data.
         AccessToken tokenBefore = TKhandler.getAccessTokenInCache();
@@ -214,7 +219,7 @@ public class UserDataAcTest {
     }
 
     @Test
-    public void testModifyUserData_5()
+    public void testModifyUserData_5() throws UiException
     {
         whatToClean = CLEAN_NOTHING;
 

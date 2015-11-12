@@ -1,0 +1,41 @@
+package com.didekin.common.oauth2;
+
+import java.lang.String;
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * User: pedro@didekin
+ * Date: 29/05/15
+ * Time: 13:28
+ */
+@SuppressWarnings("unused")
+public enum Rol {
+
+    ADMINISTRADOR("adm","admon"),
+    PRESIDENTE("pre","admon"),
+    PROPIETARIO("pro","user"),
+    INQUILINO("inq","user"),
+    ;
+
+    private static final Map<String,Rol> mapFuntionToRol = new HashMap<>();
+
+    static{
+        for(Rol rol : values()){
+            mapFuntionToRol.put(rol.function, rol);
+        }
+    }
+
+    public final String function;
+    public final String authority;
+
+    Rol(String function, String authority)
+    {
+        this.function = function;
+        this.authority = authority;
+    }
+
+    public static Rol getRolFromFunction(String rolFunction){
+        return mapFuntionToRol.get(rolFunction);
+    }
+}

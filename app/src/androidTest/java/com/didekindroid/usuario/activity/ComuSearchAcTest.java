@@ -9,6 +9,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
+import com.didekindroid.common.UiException;
 import com.didekindroid.usuario.activity.utils.CleanEnum;
 
 import junit.framework.AssertionFailedError;
@@ -86,7 +87,7 @@ public class ComuSearchAcTest {
     }
 
     @Test
-    public void testUpdateIsRegistered_1()
+    public void testUpdateIsRegistered_1() throws UiException
     {
         activity = mActivityRule.launchActivity(new Intent());
 
@@ -97,7 +98,7 @@ public class ComuSearchAcTest {
     }
 
     @Test
-    public void testUpdateIsRegistered_2()
+    public void testUpdateIsRegistered_2() throws UiException
     {
         //With token.
         signUpAndUpdateTk(COMU_REAL_JUAN);
@@ -165,7 +166,7 @@ public class ComuSearchAcTest {
     }
 
     @Test
-    public void searchComunidadOK_2() throws InterruptedException
+    public void searchComunidadOK_2() throws InterruptedException, UiException
     {
         //With token.
         signUpAndUpdateTk(COMU_REAL_JUAN);
@@ -193,7 +194,7 @@ public class ComuSearchAcTest {
     }
 
     @Test
-    public void testGetDatosUsuarioWithToken() throws InterruptedException
+    public void testGetDatosUsuarioWithToken() throws InterruptedException, UiException
     {
         whatClean = CleanEnum.CLEAN_JUAN;
 
@@ -214,7 +215,7 @@ public class ComuSearchAcTest {
     }
 
     @Test
-    public void testMenuNuevaComunidad_withToken() throws InterruptedException
+    public void testMenuNuevaComunidad_withToken() throws InterruptedException, UiException
     {
         whatClean = CleanEnum.CLEAN_JUAN;
 
@@ -225,7 +226,7 @@ public class ComuSearchAcTest {
     }
 
     @Test
-    public void testComunidadesByUsuario_withToken() throws InterruptedException
+    public void testComunidadesByUsuario_withToken() throws InterruptedException, UiException
     {
         whatClean = CleanEnum.CLEAN_JUAN;
 
@@ -245,7 +246,7 @@ public class ComuSearchAcTest {
     }
 
     @Test
-    public void testLogin_withToken() throws InterruptedException
+    public void testLogin_withToken() throws InterruptedException, UiException
     {
 
         whatClean = CleanEnum.CLEAN_JUAN;
@@ -274,7 +275,7 @@ public class ComuSearchAcTest {
 
 
     @After
-    public void cleanData()
+    public void cleanData() throws UiException
     {
         cleanOptions(whatClean);
 

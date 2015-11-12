@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.didekin.serviceone.domain.Comunidad;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
+import com.didekindroid.common.UiException;
 import com.didekindroid.usuario.activity.utils.UserMenu;
 import com.didekindroid.common.utils.UIutils;
 import com.didekindroid.usuario.dominio.FullComunidadIntent;
@@ -164,23 +165,36 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
     class UsuarioComunidadGetter extends AsyncTask<Comunidad, Void, UsuarioComunidad> {
 
         private Comunidad comunidadSelected;
+        UiException uiException;
 
         @Override
         protected UsuarioComunidad doInBackground(Comunidad... comunidades)
         {
             Log.d(ComuSearchResultsAc.TAG, ".UsuarioComunidadGetter.doInBackground()");
+
             comunidadSelected = comunidades[0];
-            return ServOne.getUserComuByUserAndComu(comunidadSelected.getC_Id());
+            UsuarioComunidad userComuByUserAndComu = null;
+            try {
+                userComuByUserAndComu = ServOne.getUserComuByUserAndComu(comunidadSelected.getC_Id());
+            } catch (UiException e) {
+                uiException = e;
+            }
+            return userComuByUserAndComu;
         }
 
         @Override
         protected void onPostExecute(UsuarioComunidad userComu)
         {
             boolean isUserComuNull = (userComu == null);
+
             Log.d(TAG, ".UsuarioComunidadGetter.onPostExecute(), isUserComu == null : " +
                     isUserComuNull);
 
-            if (isUserComuNull) {
+            if (uiException != null) {
+                Log.d(TAG, ".UsuarioComunidadGetter.onPostExecute(), uiException " +
+                        (uiException.getInServiceException() != null ? uiException.getInServiceException().getHttpMessage() : "Token null"));
+                uiException.getAction().doAction(ComuSearchResultsAc.this, uiException.getResourceId());
+            } else if (isUserComuNull) {
                 Intent intent = new Intent(ComuSearchResultsAc.this, RegUserComuAc.class);
                 intent.putExtra(COMUNIDAD_LIST_OBJECT.extra, new FullComunidadIntent(comunidadSelected));
                 startActivity(intent);

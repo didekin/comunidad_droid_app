@@ -8,6 +8,7 @@ import com.didekin.serviceone.domain.Comunidad;
 import com.didekin.serviceone.domain.Municipio;
 import com.didekin.serviceone.domain.Provincia;
 import com.didekindroid.R;
+import com.didekindroid.common.UiException;
 import com.didekindroid.usuario.activity.utils.CleanEnum;
 
 import org.hamcrest.Matchers;
@@ -69,8 +70,12 @@ public class ComuDataAcTest {
         @Override
         protected Intent getActivityIntent()
         {
-            signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
-            mComunidad = ServOne.getComusByUser().get(0);
+            try {
+                signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
+                mComunidad = ServOne.getComusByUser().get(0);
+            } catch (UiException e) {
+                e.printStackTrace();
+            }
             Intent intent = new Intent();
             intent.putExtra(COMUNIDAD_ID.extra, mComunidad.getC_Id());
             return intent;
@@ -134,7 +139,7 @@ public class ComuDataAcTest {
     }
 
     @Test
-    public void testModifyComuData_1()
+    public void testModifyComuData_1() throws UiException
     {
         // Comunidad data.
         onView(withId(R.id.comunidad_nombre_via_editT)).perform(scrollTo(), replaceText("nombre via One"));
@@ -163,7 +168,7 @@ public class ComuDataAcTest {
     }
 
     @Test
-    public void testModifyComuData_2()
+    public void testModifyComuData_2() throws UiException
     {
         onView(withId(R.id.comu_data_ac_button)).check(matches(isDisplayed())).perform(click());
         onView(withId(R.id.see_usercomu_by_user_ac_frg_container)).check(matches(isDisplayed()));

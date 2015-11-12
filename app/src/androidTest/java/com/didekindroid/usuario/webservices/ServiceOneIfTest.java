@@ -95,7 +95,7 @@ public class ServiceOneIfTest {
     }
 
     @After
-    public void cleaningUp()
+    public void cleaningUp() throws UiException
     {
         cleanOptions(whatClean);
     }
@@ -103,7 +103,7 @@ public class ServiceOneIfTest {
 //    ========================= INTERFACE TESTS =======================
 
     @Test
-    public void testDeleteAccessToken()
+    public void testDeleteAccessToken() throws UiException
     {
         whatClean = CLEAN_PEPE;
 
@@ -135,7 +135,7 @@ public class ServiceOneIfTest {
     }
 
     @Test
-    public void testGetComuData()
+    public void testGetComuData() throws UiException
     {
         whatClean = CLEAN_PEPE;
 
@@ -152,13 +152,16 @@ public class ServiceOneIfTest {
         assertThat(TKhandler.doBearerAccessTkHeader(), nullValue());
         try {
             assertThat(ServOne.getComusByUser(), nullValue());
-        } catch (InServiceException se) { // NO hay excepción; ServiceOne devuelve null.
             fail();
+        } catch (UiException se) {
+            assertThat(se.getResourceId(), is(R.string.user_without_signedUp));
+            assertThat(se.getAction(),is(UiException.UiAction.LOGIN));
+            assertThat(se.getInServiceException(),nullValue());
         }
     }
 
     @Test
-    public void testGetComunidadesByUser_2()
+    public void testGetComunidadesByUser_2() throws UiException
     {
         regTwoUserComuSameUser(makeListTwoUserComu());
         List<Comunidad> comunidades = ServOne.getComusByUser();
@@ -169,7 +172,7 @@ public class ServiceOneIfTest {
     }
 
     @Test
-    public void testGetUserComuByUserAndComu()
+    public void testGetUserComuByUserAndComu() throws UiException
     {
         whatClean = CLEAN_JUAN;
 
@@ -192,7 +195,7 @@ public class ServiceOneIfTest {
     }
 
     @Test
-    public void testIsOldestUser()
+    public void testIsOldestUser() throws UiException
     {
         whatClean = CLEAN_JUAN2_AND_PEPE;
 
@@ -231,7 +234,7 @@ public class ServiceOneIfTest {
     }
 
     @Test
-    public void testModifyComuData()
+    public void testModifyComuData() throws UiException
     {
         whatClean = CLEAN_PEPE;
 
@@ -256,7 +259,7 @@ public class ServiceOneIfTest {
     }
 
     @Test
-    public void testModifyUser_1()
+    public void testModifyUser_1() throws UiException
     {
         whatClean = CLEAN_JUAN;
 
@@ -272,7 +275,7 @@ public class ServiceOneIfTest {
     }
 
     @Test
-    public void testModifyUser_2()
+    public void testModifyUser_2() throws UiException
     {
         whatClean = CLEAN_NOTHING;
 
@@ -316,7 +319,7 @@ public class ServiceOneIfTest {
     }
 
     @Test
-    public void testPasswordChange()
+    public void testPasswordChange() throws UiException
     {
         signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
         String passwordClear_2 = "new_juan_password";
@@ -329,7 +332,7 @@ public class ServiceOneIfTest {
     }
 
     @Test
-    public void testPasswordSend()
+    public void testPasswordSend() throws UiException
     {
         signUpAndUpdateTk(COMU_REAL_PEPE);
         assertThat(ServOne.passwordSend(USER_PEPE.getUserName()), is(true));
@@ -362,7 +365,7 @@ public class ServiceOneIfTest {
     }
 
     @Test
-    public void testRegUserAndUserComu_1()
+    public void testRegUserAndUserComu_1() throws UiException
     {
         whatClean = CLEAN_JUAN2_AND_PEPE;
 
@@ -378,7 +381,7 @@ public class ServiceOneIfTest {
     }
 
     @Test
-    public void testRegUserAndUserComu_2()
+    public void testRegUserAndUserComu_2() throws UiException
     {
         whatClean = CLEAN_PEPE;
 
@@ -517,7 +520,7 @@ public class ServiceOneIfTest {
 //    ====================== NON INTERFACE TESTS =========================
 
     @Test
-    public void testSignedUp()
+    public void testSignedUp() throws UiException
     {
         assertThat(refreshTkFile.exists(), is(false));
 

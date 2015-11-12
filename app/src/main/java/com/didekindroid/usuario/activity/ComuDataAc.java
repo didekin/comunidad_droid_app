@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.didekin.serviceone.domain.Comunidad;
 import com.didekindroid.R;
+import com.didekindroid.common.UiException;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.common.utils.ConnectionUtils;
 
@@ -195,7 +196,6 @@ public class ComuDataAc extends Activity implements RegComuFr.RegComuFrListener 
             do {
                 if (cursor.getShort(2) == municipioCP && cursor.getShort(1) == provinciaId) {
                     position = cursor.getPosition();
-//                    cursor.close();
                     break;
                 }
             } while (cursor.moveToNext());
@@ -241,38 +241,67 @@ public class ComuDataAc extends Activity implements RegComuFr.RegComuFrListener 
 
         final String TAG = ComuDataSetter.class.getCanonicalName();
 
+        UiException uiException;
+
         @Override
         protected Comunidad doInBackground(Void... aVoid)
         {
             Log.d(TAG, "doInBackground()");
-            return ServOne.getComuData(mIdComunidad);
+
+            Comunidad comuData = null;
+            try {
+                comuData = ServOne.getComuData(mIdComunidad);
+            } catch (UiException e) {
+                uiException = e;
+            }
+            return comuData;
         }
 
         @Override
         protected void onPostExecute(Comunidad comunidad)
         {
             Log.d(TAG, "onPostExecute()");
-            mComunidad = comunidad;
-            setEditTextComuData();
+
+            if (uiException != null) {
+                Log.d(TAG, "UiException" + (uiException.getInServiceException() != null ? uiException.getInServiceException().getHttpMessage() : "Token null"));
+                uiException.getAction().doAction(ComuDataAc.this, uiException.getResourceId());
+            } else {
+                mComunidad = comunidad;
+                setEditTextComuData();
+            }
         }
     }
 
     class ComuDataModifier extends AsyncTask<Comunidad, Void, Integer> {
 
         final String TAG = ComuDataModifier.class.getCanonicalName();
+        UiException uiException;
 
         @Override
         protected Integer doInBackground(Comunidad... comunidades)
         {
             Log.d(TAG, "doInBackground()");
-            return ServOne.modifyComuData(comunidades[0]);
+
+            int modifyComuData = 0;
+            try {
+                modifyComuData = ServOne.modifyComuData(comunidades[0]);
+            } catch (UiException e) {
+                uiException = e;
+            }
+            return modifyComuData;
         }
 
         @Override
         protected void onPostExecute(Integer rowsUpdated)
         {
             Log.d(TAG, "onPostExecute()");
-            checkState(rowsUpdated == 1);
+            if (uiException != null) {
+                Log.d(TAG, "onPostExecute(): uiException " + (uiException.getInServiceException() != null ?
+                        uiException.getInServiceException().getHttpMessage() : "Token null"));
+                uiException.getAction().doAction(ComuDataAc.this, uiException.getResourceId());
+            } else {
+                checkState(rowsUpdated == 1);
+            }
         }
     }
 }
