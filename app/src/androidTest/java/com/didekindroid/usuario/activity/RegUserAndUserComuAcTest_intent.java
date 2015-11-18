@@ -39,8 +39,8 @@ import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_JUAN_AND_P
 import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRESIDENTE;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PROPIETARIO;
-import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_ID;
-import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_LIST_OBJECT;
+import static com.didekindroid.common.utils.AppIntentExtras.COMUNIDAD_ID;
+import static com.didekindroid.common.utils.AppIntentExtras.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.LOGIN_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.REQUIRES_USER_NO_TOKEN;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;

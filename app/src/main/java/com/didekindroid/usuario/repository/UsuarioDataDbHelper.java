@@ -23,24 +23,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.provider.BaseColumns._ID;
-import static com.didekindroid.usuario.repository.MasterDataDb.ComunidadAutonoma.CREATE_C_AUTONOMA;
-import static com.didekindroid.usuario.repository.MasterDataDb.ComunidadAutonoma.DROP_C_AUTONOMA;
-import static com.didekindroid.usuario.repository.MasterDataDb.ComunidadAutonoma.TB_C_AUTONOMA;
-import static com.didekindroid.usuario.repository.MasterDataDb.ComunidadAutonoma.cu_nombre;
-import static com.didekindroid.usuario.repository.MasterDataDb.Municipio.CREATE_INDEX_PROV_FK;
-import static com.didekindroid.usuario.repository.MasterDataDb.Municipio.CREATE_MUNICIPIO;
-import static com.didekindroid.usuario.repository.MasterDataDb.Municipio.DROP_MUNICIPIO;
-import static com.didekindroid.usuario.repository.MasterDataDb.Municipio.TB_MUNICIPIO;
-import static com.didekindroid.usuario.repository.MasterDataDb.Municipio.m_cd;
-import static com.didekindroid.usuario.repository.MasterDataDb.Municipio.mu_nombre;
-import static com.didekindroid.usuario.repository.MasterDataDb.Municipio.pr_id;
-import static com.didekindroid.usuario.repository.MasterDataDb.Provincia.CREATE_INDEX_CA_FK;
-import static com.didekindroid.usuario.repository.MasterDataDb.Provincia.CREATE_PROVINCIA;
-import static com.didekindroid.usuario.repository.MasterDataDb.Provincia.DROP_PROVINCIA;
-import static com.didekindroid.usuario.repository.MasterDataDb.Provincia.TB_PROVINCIA;
-import static com.didekindroid.usuario.repository.MasterDataDb.Provincia.ca_id;
-import static com.didekindroid.usuario.repository.MasterDataDb.Provincia.pr_nombre;
-import static com.didekindroid.usuario.repository.MasterDataDb.SQL_ENABLE_FK;
+import static com.didekindroid.usuario.repository.UsuarioDataDb.ComunidadAutonoma.CREATE_C_AUTONOMA;
+import static com.didekindroid.usuario.repository.UsuarioDataDb.ComunidadAutonoma.DROP_C_AUTONOMA;
+import static com.didekindroid.usuario.repository.UsuarioDataDb.ComunidadAutonoma.TB_C_AUTONOMA;
+import static com.didekindroid.usuario.repository.UsuarioDataDb.ComunidadAutonoma.cu_nombre;
+import static com.didekindroid.usuario.repository.UsuarioDataDb.Municipio.CREATE_INDEX_PROV_FK;
+import static com.didekindroid.usuario.repository.UsuarioDataDb.Municipio.CREATE_MUNICIPIO;
+import static com.didekindroid.usuario.repository.UsuarioDataDb.Municipio.DROP_MUNICIPIO;
+import static com.didekindroid.usuario.repository.UsuarioDataDb.Municipio.TB_MUNICIPIO;
+import static com.didekindroid.usuario.repository.UsuarioDataDb.Municipio.m_cd;
+import static com.didekindroid.usuario.repository.UsuarioDataDb.Municipio.mu_nombre;
+import static com.didekindroid.usuario.repository.UsuarioDataDb.Municipio.pr_id;
+import static com.didekindroid.usuario.repository.UsuarioDataDb.Provincia.CREATE_INDEX_CA_FK;
+import static com.didekindroid.usuario.repository.UsuarioDataDb.Provincia.CREATE_PROVINCIA;
+import static com.didekindroid.usuario.repository.UsuarioDataDb.Provincia.DROP_PROVINCIA;
+import static com.didekindroid.usuario.repository.UsuarioDataDb.Provincia.TB_PROVINCIA;
+import static com.didekindroid.usuario.repository.UsuarioDataDb.Provincia.ca_id;
+import static com.didekindroid.usuario.repository.UsuarioDataDb.Provincia.pr_nombre;
+import static com.didekindroid.usuario.repository.UsuarioDataDb.SQL_ENABLE_FK;
 import static java.lang.String.valueOf;
 
 /**
@@ -48,20 +48,20 @@ import static java.lang.String.valueOf;
  * Date: 16/12/14
  * Time: 18:30
  */
-public class MasterDataDbHelper extends SQLiteOpenHelper {
+public class UsuarioDataDbHelper extends SQLiteOpenHelper {
 
-    private static final String TAG = MasterDataDbHelper.class.getCanonicalName();
-    public static final String DB_NAME = "masterdata.db";
+    private static final String TAG = UsuarioDataDbHelper.class.getCanonicalName();
+    public static final String DB_NAME = "usuario.db";
     /*This number has to be changed in future versions, to get executed onUpgrade() method.*/
     public static final int DB_VERSION = 1;
 
     private final Context mContext;
     private SQLiteDatabase mDataBase;
-    protected int mMunicipiosCounter;
-    protected int mComunidadesCounter;
-    protected int mProvinciasCounter;
+    int mMunicipiosCounter;
+    int mComunidadesCounter;
+    int mProvinciasCounter;
 
-    public MasterDataDbHelper(Context context)
+    public UsuarioDataDbHelper(Context context)
     {
         super(context, DB_NAME, null, DB_VERSION);
         mContext = context;
@@ -127,7 +127,9 @@ public class MasterDataDbHelper extends SQLiteOpenHelper {
         onCreate(mDataBase);
     }
 
+//    ======================================
 //    ........... MUNICIPIOS ...............
+//    ======================================
 
     private int loadMunicipios() throws IOException
     {
@@ -218,14 +220,16 @@ public class MasterDataDbHelper extends SQLiteOpenHelper {
             mDataBase = getReadableDatabase();
         }
 
-        String[] columns = new String[]{_ID,pr_id,m_cd,mu_nombre};
+        String[] columns = new String[]{_ID, pr_id, m_cd, mu_nombre};
         String whereClause = pr_id + " = ?";
         String[] wherClauseArgs = new String[]{String.valueOf(prId)};
 
         return mDataBase.query(TB_MUNICIPIO, columns, whereClause, wherClauseArgs, null, null, null);
     }
 
-//    ............. PROVINCIAS ..................
+//    ======================================
+//    ............. PROVINCIAS .............
+//    ======================================
 
     private int loadProvincias() throws IOException
     {
@@ -250,7 +254,6 @@ public class MasterDataDbHelper extends SQLiteOpenHelper {
                         strings[2].trim());
 
                 if (id < 0) {
-                    --pkCounter;
                     Log.e(TAG, "Unable to add provincia: " + strings[0].trim());
                 } else {
                     ++pkCounter;
@@ -267,7 +270,7 @@ public class MasterDataDbHelper extends SQLiteOpenHelper {
 
     private long addProvincia(short pk, short comunidadPk, String nombre)
     {
-//        Log.i(TAG, "En addProvincia()");
+        Log.d(TAG, "En addProvincia()");
 
         ContentValues values = new ContentValues();
         values.put(_ID, pk);
@@ -319,15 +322,16 @@ public class MasterDataDbHelper extends SQLiteOpenHelper {
         }
 
         String[] columns = new String[]{_ID, pr_nombre};
-        String whereClause = MasterDataDb.Provincia.ca_id + " = ?";
+        String whereClause = UsuarioDataDb.Provincia.ca_id + " = ?";
         String[] wherClauseArgs = new String[]{String.valueOf(caId)};
 
         return mDataBase.query(TB_PROVINCIA, columns, whereClause, wherClauseArgs, null, null, null);
 
     }
 
-
+//    =====================================================
 //    ............. COMUNIDADES AUTÓNOMAS .................
+//    =====================================================
 
     private int loadComunidadesAutonomas() throws IOException
     {
@@ -350,7 +354,6 @@ public class MasterDataDbHelper extends SQLiteOpenHelper {
                 long id = addComunidad(Short.parseShort(strings[0].trim()), strings[1].trim());
 
                 if (id < 0) {
-                    --pkCounter;
                     Log.e(TAG, "Unable to add comunidad: " + strings[0].trim() + " " + strings[1].trim());
                 } else {
                     ++pkCounter;
@@ -361,13 +364,12 @@ public class MasterDataDbHelper extends SQLiteOpenHelper {
         }
 
         Log.i(TAG, "Done loading comunidades file in DB.");
-
         return pkCounter;
     }
 
     private long addComunidad(short pk, String nombre)
     {
-        Log.i(TAG, "En addComunidad()");
+        Log.d(TAG, "En addComunidad()");
 
         ContentValues values = new ContentValues();
         values.put(_ID, pk);
@@ -424,7 +426,7 @@ public class MasterDataDbHelper extends SQLiteOpenHelper {
 
 //    ................ UTILITIES ...............
 
-    protected void dropAllTables()
+    void dropAllTables()
     {
         Log.d(TAG, "In dropAllTables()");
 

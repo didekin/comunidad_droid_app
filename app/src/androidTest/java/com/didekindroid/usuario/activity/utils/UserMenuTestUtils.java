@@ -12,7 +12,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.*;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.checkNoToastInTest;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.checkToastInTest;
-import static com.didekindroid.common.utils.ViewsIDs.SEE_USER_COMU_BY_USER;
+import static com.didekindroid.usuario.activity.utils.ViewsIDs.SEE_USER_COMU_BY_USER;
 
 /**
  * User: pedro@didekin
@@ -72,6 +72,24 @@ public enum UserMenuTestUtils {
             Thread.sleep(1000);
             onView(withText(R.string.delete_me_ac_mn)).check(matches(isDisplayed())).perform(click());
             onView(withId(R.id.delete_me_ac_layout)).check(matches(isDisplayed()));
+        }
+    },
+
+    INCID_REG_AC {
+        @Override
+        public void checkMenuItem_NTk(Activity activity) throws InterruptedException
+        {
+            throw new UnsupportedOperationException(INCID_REG_AC.name() + REGISTERED_USER);
+        }
+
+        @Override
+        public void checkMenuItem_WTk(Activity activity) throws InterruptedException
+        {
+            onView(withText(R.string.incid_reg_ac_mn)).check(doesNotExist());
+            openActionBarOverflowOrOptionsMenu(activity);
+            Thread.sleep(1000);
+            onView(withText(R.string.incid_reg_ac_mn)).check(matches(isDisplayed())).perform(click());
+            onView(withId(R.id.incid_reg_ac_layout)).check(matches(isDisplayed()));
         }
     },
 

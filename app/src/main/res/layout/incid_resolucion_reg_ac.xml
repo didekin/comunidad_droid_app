@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    style="@style/baseLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:fitsSystemWindows="true">
+
+    <include layout="@layout/appbar_include_design"/>
+
+    <ScrollView style="@style/baseLayout.scroll">
+
+        <RelativeLayout
+            android:id="@+id/incid_resolucion_reg_ac_layout"
+            style="@style/baseLayout"
+            android:layout_marginTop="@dimen/app_bar_bottom_margin">
+
+            <fragment
+                android:id="@+id/incid_reg_frg"
+                android:name="com.didekindroid.incidencia.activity.IncidRegAcFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                tools:layout="@layout/incid_reg_frg"/>
+            <fragment
+                android:id="@+id/incid_resolucion_reg_frg"
+                android:name="com.didekindroid.incidencia.activity.IncidResolucionRegAcFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/incid_reg_frg"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                tools:layout="@layout/incid_resolucion_reg_frg"/>
+            <Button
+                android:id="@+id/incid_resolucion_reg_ac_button"
+                style="@style/textBase.acButton1"
+                android:layout_below="@id/incid_resolucion_reg_frg"
+                android:text="@string/incid_resolucion_reg_ac_button_rot"/>
+        </RelativeLayout>
+    </ScrollView>
+</android.support.design.widget.CoordinatorLayout>

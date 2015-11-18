@@ -1,4 +1,4 @@
-package com.didekindroid.usuario.webservices;
+package com.didekindroid.common.webservices;
 
 import android.util.Base64;
 import android.util.Log;

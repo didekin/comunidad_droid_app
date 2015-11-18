@@ -58,11 +58,11 @@ public class ComuSearchTest_spinner {
         onView(withId(R.id.provincia_spinner)).check(matches(isDisplayed()));
         onView(withId(R.id.municipio_spinner)).check(matches(isDisplayed()));
 
-        onView(allOf(withId(R.id.reg_comunidad_spinner_dropdown_item), withParent(withId(R.id.autonoma_comunidad_spinner))))
+        onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.autonoma_comunidad_spinner))))
                 .check(matches(withText(is("comunidad autónoma")))).check(matches(isDisplayed()));
-        onView(allOf(withId(R.id.reg_comunidad_spinner_dropdown_item), withParent(withId(R.id.provincia_spinner))))
+        onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.provincia_spinner))))
                 .check(matches(withText(is("provincia")))).check(matches(isDisplayed()));
-        onView(allOf(withId(R.id.reg_comunidad_spinner_dropdown_item), withParent(withId(R.id.municipio_spinner))))
+        onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.municipio_spinner))))
                 .check(matches(withText(is("municipio")))).check(matches(isDisplayed()));
     }
 
@@ -74,11 +74,11 @@ public class ComuSearchTest_spinner {
         onView(withId(R.id.autonoma_comunidad_spinner)).perform(click());
         onData(withRowString(1, "comunidad autónoma")).perform(click());
 
-        onView(allOf(withId(R.id.reg_comunidad_spinner_dropdown_item), withParent(withId(R.id.autonoma_comunidad_spinner))))
+        onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.autonoma_comunidad_spinner))))
                 .check(matches(withText(is("comunidad autónoma")))).check(matches(isDisplayed()));
-        onView(allOf(withId(R.id.reg_comunidad_spinner_dropdown_item), withParent(withId(R.id.provincia_spinner))))
+        onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.provincia_spinner))))
                 .check(matches(withText(is("provincia")))).check(matches(isDisplayed()));
-        onView(allOf(withId(R.id.reg_comunidad_spinner_dropdown_item), withParent(withId(R.id.municipio_spinner))))
+        onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.municipio_spinner))))
                 .check(matches(withText(is("municipio")))).check(matches(isDisplayed()));
     }
 
@@ -90,21 +90,21 @@ public class ComuSearchTest_spinner {
         onView(withId(R.id.autonoma_comunidad_spinner)).perform(click());
         onData(withRowString(1, "Valencia")).perform(click());
 
-        onView(allOf(withId(R.id.reg_comunidad_spinner_dropdown_item), withParent(withId(R.id.autonoma_comunidad_spinner))))
+        onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.autonoma_comunidad_spinner))))
                 .check(matches(withText(is("Valencia")))).check(matches(isDisplayed()));
 
         onView(withId(R.id.provincia_spinner)).perform(click());
         onData(withRowString(1, "Valencia/València")).perform(click());
-        onView(allOf(withId(R.id.reg_comunidad_spinner_dropdown_item), withParent(withId(R.id.provincia_spinner))))
+        onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.provincia_spinner))))
                 .check(matches(withText(is("Valencia/València")))).check(matches(isDisplayed()));
 
         onView(withId(R.id.autonoma_comunidad_spinner)).perform(click());
         onData(withRowString(1, "comunidad autónoma")).perform(click());
-        onView(allOf(withId(R.id.reg_comunidad_spinner_dropdown_item), withParent(withId(R.id.autonoma_comunidad_spinner))))
+        onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.autonoma_comunidad_spinner))))
                 .check(matches(withText(is("comunidad autónoma")))).check(matches(isDisplayed()));
-        onView(allOf(withId(R.id.reg_comunidad_spinner_dropdown_item), withParent(withId(R.id.provincia_spinner))))
+        onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.provincia_spinner))))
                 .check(matches(withText(is("provincia")))).check(matches(isDisplayed()));
-        onView(allOf(withId(R.id.reg_comunidad_spinner_dropdown_item), withParent(withId(R.id.municipio_spinner))))
+        onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.municipio_spinner))))
                 .check(matches(withText(is("municipio")))).check(matches(isDisplayed()));
     }
 }

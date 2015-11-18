@@ -19,13 +19,13 @@ import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.FullComunidadIntent;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
 
-import static com.didekin.serviceone.domain.DataPatterns.LINE_BREAK;
+import static com.didekin.serviceone.domain.UserDataPatterns.LINE_BREAK;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.utils.UIutils.makeToast;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUserComuBeanFromView;
-import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_ID;
-import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_LIST_OBJECT;
+import static com.didekindroid.common.utils.AppIntentExtras.COMUNIDAD_ID;
+import static com.didekindroid.common.utils.AppIntentExtras.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 import static com.google.common.base.Preconditions.checkState;
 
@@ -103,7 +103,7 @@ public class RegUserComuAc extends AppCompatActivity {
         } else {
             // Insert usuarioComunidad and go to SeeUserComuByComuAc activity.
             new UserComuRegister().execute(usuarioComunidadBean.getUsuarioComunidad());
-            Intent intent = new Intent(RegUserComuAc.this, SeeUserComuByComuAc.class);
+            Intent intent = new Intent(this, SeeUserComuByComuAc.class);
             intent.putExtra(COMUNIDAD_ID.extra, mComunidad.getC_Id());
             startActivity(intent);
         }

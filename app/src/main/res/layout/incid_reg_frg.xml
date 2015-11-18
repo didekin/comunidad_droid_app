@@ -1,13 +1,24 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                android:paddingTop="@dimen/activity_vertical_margin"
-                android:paddingBottom="@dimen/activity_vertical_margin"
-                tools:showIn="@layout/incid_reg_ac"
-                tools:context="com.didekindroid.incidencia.activity.IncidRegAcFragment">
+<RelativeLayout
+    android:id="@+id/incid_reg_frg_layout"
+    style="@style/baseLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.didekindroid.incidencia.activity.IncidRegAcFragment">
 
+    <EditText
+        android:id="@+id/incid_reg_desc_ed"
+        style="@style/textBase.editField.description"
+        android:hint="@string/incid_reg_hint"
+        />
+
+    <Spinner
+        android:id="@+id/incid_reg_tipo_spinner"
+        style="@style/spinnerBase"
+        android:layout_below="@+id/incid_reg_desc_ed"/>
+
+    <Spinner
+        android:id="@+id/incid_reg_importancia_spinner"
+        style="@style/spinnerBase"
+        android:layout_below="@+id/incid_reg_tipo_spinner"/>
 
 </RelativeLayout>

@@ -32,7 +32,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_JUAN;
-import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_ID;
+import static com.didekindroid.common.utils.AppIntentExtras.COMUNIDAD_ID;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.checkToastInTest;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAndUpdateTk;
@@ -125,11 +125,11 @@ public class ComuDataAcTest {
                 .check(matches(isDisplayed()));
         assertThat(mActivity.mRegComuFrg.getComunidadBean().getTipoVia(), is(mComunidad.getTipoVia()));
 
-        onView(allOf(withId(R.id.reg_comunidad_spinner_dropdown_item), withParent(withId(R.id.autonoma_comunidad_spinner))))
+        onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.autonoma_comunidad_spinner))))
                 .check(matches(withText(is("Galicia")))).check(matches(isDisplayed()));
-        onView(allOf(withId(R.id.reg_comunidad_spinner_dropdown_item), withParent(withId(R.id.provincia_spinner))))
+        onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.provincia_spinner))))
                 .check(matches(withText(is("Lugo")))).check(matches(isDisplayed()));
-        onView(allOf(withId(R.id.reg_comunidad_spinner_dropdown_item), withParent(withId(R.id.municipio_spinner))))
+        onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.municipio_spinner))))
                 .check(matches(withText(is("Alfoz")))).check(matches(isDisplayed()));
 
         assertThat(mActivity.mRegComuFrg.getComunidadBean().getMunicipio().getProvincia().getProvinciaId(), is
@@ -186,11 +186,11 @@ public class ComuDataAcTest {
         onView(withId(R.id.autonoma_comunidad_spinner)).perform(click());
         onData(withRowString(1, "comunidad autónoma")).perform(click());
 
-        onView(allOf(withId(R.id.reg_comunidad_spinner_dropdown_item), withParent(withId(R.id.autonoma_comunidad_spinner))))
+        onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.autonoma_comunidad_spinner))))
                 .check(matches(withText(is("comunidad autónoma")))).check(matches(isDisplayed()));
-        onView(allOf(withId(R.id.reg_comunidad_spinner_dropdown_item), withParent(withId(R.id.provincia_spinner))))
+        onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.provincia_spinner))))
                 .check(matches(withText(is("provincia")))).check(matches(isDisplayed()));
-        onView(allOf(withId(R.id.reg_comunidad_spinner_dropdown_item), withParent(withId(R.id.municipio_spinner))))
+        onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.municipio_spinner))))
                 .check(matches(withText(is("municipio")))).check(matches(isDisplayed()));
 
         onView(withId(R.id.comu_data_ac_button)).check(matches(isDisplayed())).perform(click());

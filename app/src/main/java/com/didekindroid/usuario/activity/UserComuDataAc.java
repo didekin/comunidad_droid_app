@@ -20,6 +20,7 @@ import com.didekindroid.R;
 import com.didekindroid.common.TokenHandler;
 import com.didekindroid.common.UiException;
 import com.didekindroid.common.utils.ConnectionUtils;
+import com.didekindroid.incidencia.activity.IncidRegAc;
 import com.didekindroid.usuario.activity.utils.UserAndComuFiller;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.FullUsuarioComuidadIntent;
@@ -35,9 +36,10 @@ import static com.didekindroid.usuario.activity.utils.RolCheckBox.ADMINISTRADOR;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.INQUILINO;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRESIDENTE;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PROPIETARIO;
-import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_ID;
-import static com.didekindroid.usuario.activity.utils.UserIntentExtras.USERCOMU_LIST_OBJECT;
+import static com.didekindroid.common.utils.AppIntentExtras.COMUNIDAD_ID;
+import static com.didekindroid.common.utils.AppIntentExtras.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.usuario.activity.utils.UserMenu.COMU_DATA_AC;
+import static com.didekindroid.usuario.activity.utils.UserMenu.INCID_REG_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_USERCOMU_BY_COMU_AC;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -165,7 +167,7 @@ public class UserComuDataAc extends AppCompatActivity {
         Log.d(TAG, "onCreateOptionsMenu()");
         getMenuInflater().inflate(R.menu.usercomu_data_ac_mn, menu);
         mComuDataItem = menu.findItem(R.id.comu_data_ac_mn);
-        // Is the oldest userComu?
+        // Is the oldest userComu? // TODO: incluir presidente y administrador.
         new ComuDataMenuSetter().execute();
         return true;
     }
@@ -189,6 +191,12 @@ public class UserComuDataAc extends AppCompatActivity {
                 intent.putExtra(COMUNIDAD_ID.extra, mOldUserComu.getComunidad().getC_Id());
                 this.setIntent(intent);
                 COMU_DATA_AC.doMenuItem(this);
+                return true;
+            case R.id.incid_reg_ac_mn:
+                intent = new Intent(this, IncidRegAc.class);
+                intent.putExtra(COMUNIDAD_ID.extra, mOldUserComu.getComunidad().getC_Id());
+                this.setIntent(intent);
+                INCID_REG_AC.doMenuItem(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -224,7 +232,8 @@ public class UserComuDataAc extends AppCompatActivity {
             Log.d(TAG, "onPostExecute()");
 
             if (uiException != null) {
-                Log.d(TAG, "onPostExecute(): uiException " + (uiException.getInServiceException() != null ? uiException.getInServiceException().getHttpMessage() : "Token null"));
+                Log.d(TAG, "onPostExecute(): uiException " + (uiException.getInServiceException() != null ?
+                        uiException.getInServiceException().getHttpMessage() : "Token null"));
                 uiException.getAction().doAction(UserComuDataAc.this, uiException.getResourceId());
             } else {
                 mComuDataItem.setVisible(isOldestUserComu);
@@ -257,7 +266,8 @@ public class UserComuDataAc extends AppCompatActivity {
         {
             Log.d(TAG, "onPostExecute()");
             if (uiException != null) {
-                Log.d(TAG, "onPostExecute(): uiException " + (uiException.getInServiceException() != null ? uiException.getInServiceException().getHttpMessage() : "Token null"));
+                Log.d(TAG, "onPostExecute(): uiException " + (uiException.getInServiceException() != null ?
+                        uiException.getInServiceException().getHttpMessage() : "Token null"));
                 uiException.getAction().doAction(UserComuDataAc.this, uiException.getResourceId());
             } else {
                 checkState(rowsUpdated == 1);

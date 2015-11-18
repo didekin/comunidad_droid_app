@@ -1,10 +1,13 @@
 package com.didekindroid.usuario.dominio;
 
+import android.support.test.runner.AndroidJUnit4;
+
 import com.didekin.serviceone.domain.Comunidad;
 import com.didekin.serviceone.domain.Municipio;
 import com.didekin.serviceone.domain.Provincia;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -14,6 +17,7 @@ import static org.junit.Assert.assertThat;
  * Date: 23/08/15
  * Time: 12:06
  */
+@RunWith(AndroidJUnit4.class)
 public class ComunidadTest {
 
     @Test

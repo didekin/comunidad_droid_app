@@ -2,17 +2,17 @@ package com.didekindroid.usuario.repository;
 
 import android.provider.BaseColumns;
 
-import static com.didekindroid.usuario.repository.MasterDataDb.ComunidadAutonoma.TB_C_AUTONOMA;
-import static com.didekindroid.usuario.repository.MasterDataDb.Provincia.TB_PROVINCIA;
+import static com.didekindroid.usuario.repository.UsuarioDataDb.ComunidadAutonoma.TB_C_AUTONOMA;
+import static com.didekindroid.usuario.repository.UsuarioDataDb.Provincia.TB_PROVINCIA;
 
 /**
  * User: pedro
  * Date: 16/12/14
  * Time: 16:22
  */
-public final class MasterDataDb {
+public final class UsuarioDataDb {
 
-    private MasterDataDb()
+    private UsuarioDataDb()
     {
     }
 
@@ -80,4 +80,5 @@ public final class MasterDataDb {
         String CREATE_INDEX_UNIQUE_MUN = "CREATE UNIQUE INDEX municipio_unico ON "
                 + TB_MUNICIPIO + "(" + pr_id + "," + m_cd + ");";
     }
+
 }

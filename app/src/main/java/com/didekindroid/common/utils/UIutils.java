@@ -15,7 +15,7 @@ import android.widget.Toast;
 import com.didekindroid.R;
 
 import static android.widget.Toast.makeText;
-import static com.didekin.serviceone.domain.DataPatterns.LINE_BREAK;
+import static com.didekin.serviceone.domain.UserDataPatterns.LINE_BREAK;
 import static com.didekindroid.R.color.deep_purple_100;
 
 /**

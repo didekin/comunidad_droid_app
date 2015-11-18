@@ -16,7 +16,7 @@ import com.didekindroid.common.UiException;
 import java.util.List;
 
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
-import static com.didekindroid.common.utils.ViewsIDs.SEE_USER_COMU_BY_USER;
+import static com.didekindroid.usuario.activity.utils.ViewsIDs.SEE_USER_COMU_BY_USER;
 import static com.google.common.base.Preconditions.checkState;
 
 /**

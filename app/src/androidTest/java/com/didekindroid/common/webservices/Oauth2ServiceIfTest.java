@@ -1,8 +1,7 @@
-package com.didekindroid.usuario.webservices;
+package com.didekindroid.common.webservices;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.common.exception.DidekinExceptionMsg;
 import com.didekin.common.exception.InServiceException;
 import com.didekin.common.oauth2.OauthToken.AccessToken;
 import com.didekindroid.common.UiException;
@@ -30,7 +29,7 @@ import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_JUAN;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_PEPE;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_JUAN;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_PEPE;
-import static com.didekindroid.usuario.webservices.Oauth2Service.Oauth2;
+import static com.didekindroid.common.webservices.Oauth2Service.Oauth2;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;

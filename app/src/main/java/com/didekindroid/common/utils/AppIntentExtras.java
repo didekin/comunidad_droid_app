@@ -1,11 +1,11 @@
-package com.didekindroid.usuario.activity.utils;
+package com.didekindroid.common.utils;
 
 /**
  * User: pedro
  * Date: 10/07/15
  * Time: 10:22
  */
-public enum UserIntentExtras {
+public enum AppIntentExtras {
 
     USERCOMU_LIST_OBJECT,
     COMUNIDAD_LIST_INDEX,
@@ -14,11 +14,11 @@ public enum UserIntentExtras {
     COMUNIDAD_SEARCH,
     ;
 
-    private static final String intentPackage =  "com.didekindroid.usuario.activity.utils.UserIntentExtras.";
+    private static final String intentPackage =  "com.didekindroid.common.utils.AppIntentExtras.";
 
     public final String extra;
 
-    UserIntentExtras()
+    AppIntentExtras()
     {
         extra = intentPackage.concat(this.name());
     }

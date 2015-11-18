@@ -15,12 +15,12 @@ import com.didekin.serviceone.domain.Comunidad;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
-import com.didekindroid.usuario.activity.utils.UserIntentExtras;
+import com.didekindroid.common.utils.AppIntentExtras;
 
 import java.util.List;
 
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
-import static com.didekindroid.common.utils.ViewsIDs.SEE_USERCOMU_BY_COMU;
+import static com.didekindroid.usuario.activity.utils.ViewsIDs.SEE_USERCOMU_BY_COMU;
 
 
 /**
@@ -62,7 +62,7 @@ public class SeeUserComuByComuFr extends ListFragment {
 
         mActivity = (SeeUserComuByComuAc) getActivity();
         // Preconditions: an existing comunidad passed as intent. The comunidad has necessarily users already signed-up.
-        comunidadId = mActivity.getIntent().getExtras().getLong(UserIntentExtras.COMUNIDAD_ID.extra);
+        comunidadId = mActivity.getIntent().getExtras().getLong(AppIntentExtras.COMUNIDAD_ID.extra);
     }
 
     @Override

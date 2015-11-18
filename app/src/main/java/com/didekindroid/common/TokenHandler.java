@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 import static com.didekin.common.oauth2.OauthTokenHelper.HELPER;
 import static com.didekindroid.DidekindroidApp.getContext;
 import static com.didekindroid.common.UiException.UiAction.LOGIN;
-import static com.didekindroid.usuario.webservices.Oauth2Service.Oauth2;
+import static com.didekindroid.common.webservices.Oauth2Service.Oauth2;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -24,9 +24,19 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Date: 25/06/15
  * Time: 17:28
  */
-/*
-Un cambio en el userName o en el password implica un cambio en la composición del TokenRequester.
-*/
+/**
+ *  Synchronization policy:
+ *  - Synchronization of cache (put/get/invalidate) is delegated to the implementation.
+ *  - To avoid a race condition 'locally' on the value of the refreshTokenKey, its value
+ *    is thread confined at the beginning of the getter method in a local variable. It is also
+ *    declared volatile.
+ *  - The invariant 'a refreshTokenFile not empty implies a refreshTokenKey not null' is maintained
+ *    synchronizing, on the intrinsic lock of the object, the method cleanCacheBckFile().
+ *  - The invariants 'the same refreshToken is assigned to refreshTokenKey and written to a file' and
+ *    'the refreshTokenKey and the accessToken in cache both corresponds to the same instance of
+ *    an AccessToken' assignment, file writting and caching are synchronized on the intrinsic lock
+ *    of the object.
+ * */
 public enum TokenHandler {
 
     TKhandler,;
@@ -49,23 +59,24 @@ public enum TokenHandler {
         refreshTokenKey = refreshTokenFile.exists() ? IoHelper.readStringFromFile(refreshTokenFile) : null;
     }
 
-    public final synchronized void initKeyCacheAndBackupFile(AccessToken accessToken)
+    public final void initKeyCacheAndBackupFile(final AccessToken accessToken)
     {
         Log.d(TAG, "initKeyCacheAndBackupFile()");
 
+        // Not stricty necessary; just convenient.
         cleanCacheAndBckFile();
 
-        IoHelper.writeFileFromString(checkNotNull(accessToken).getRefreshToken().getValue(), refreshTokenFile);
-
-        refreshTokenKey = accessToken.getRefreshToken().getValue();
-        tokensCache.put(refreshTokenKey, accessToken);
+        synchronized (this) {
+            refreshTokenKey = checkNotNull(accessToken).getRefreshToken().getValue();
+            IoHelper.writeFileFromString(refreshTokenKey, refreshTokenFile);
+            tokensCache.put(refreshTokenKey, accessToken);
+        }
     }
 
     public final synchronized void cleanCacheAndBckFile()
     {
         Log.d(TAG, "cleanCacheAndBckFile()");
 
-        //noinspection ResultOfMethodCallIgnored
         refreshTokenFile.delete();
         tokensCache.invalidateAll();
         refreshTokenKey = null;

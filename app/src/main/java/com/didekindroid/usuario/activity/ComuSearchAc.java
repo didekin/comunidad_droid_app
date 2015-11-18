@@ -21,11 +21,11 @@ import com.didekindroid.common.utils.UIutils;
 import com.didekindroid.usuario.dominio.ComunidadIntent;
 
 import static android.widget.Toast.LENGTH_SHORT;
-import static com.didekin.serviceone.domain.DataPatterns.LINE_BREAK;
+import static com.didekin.serviceone.domain.UserDataPatterns.LINE_BREAK;
 import static com.didekindroid.common.TokenHandler.TKhandler;
 import static com.didekindroid.common.utils.UIutils.makeToast;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeComunidadBeanFromView;
-import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_SEARCH;
+import static com.didekindroid.common.utils.AppIntentExtras.COMUNIDAD_SEARCH;
 import static com.didekindroid.usuario.activity.utils.UserMenu.LOGIN_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.REG_COMU_USER_USERCOMU_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_USERCOMU_BY_USER_AC;

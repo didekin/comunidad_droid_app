@@ -19,15 +19,15 @@ import android.widget.Spinner;
 import com.didekin.serviceone.domain.Municipio;
 import com.didekin.serviceone.domain.Provincia;
 import com.didekindroid.R;
-import com.didekindroid.usuario.repository.MasterDataDbHelper;
+import com.didekindroid.usuario.repository.UsuarioDataDbHelper;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.common.utils.IoHelper;
 
 import java.util.List;
 
-import static com.didekindroid.usuario.repository.MasterDataDb.ComunidadAutonoma.cu_nombre;
-import static com.didekindroid.usuario.repository.MasterDataDb.Municipio.mu_nombre;
-import static com.didekindroid.usuario.repository.MasterDataDb.Provincia.pr_nombre;
+import static com.didekindroid.usuario.repository.UsuarioDataDb.ComunidadAutonoma.cu_nombre;
+import static com.didekindroid.usuario.repository.UsuarioDataDb.Municipio.mu_nombre;
+import static com.didekindroid.usuario.repository.UsuarioDataDb.Provincia.pr_nombre;
 
 public class RegComuFr extends Fragment {
 
@@ -41,7 +41,7 @@ public class RegComuFr extends Fragment {
     private static final String TIPO_VIA_POINTER_POS =
             RegComuFr.class.getSimpleName().concat(".mTipoViaPointer");
 
-    private MasterDataDbHelper dbHelper;
+    private UsuarioDataDbHelper dbHelper;
 
     private View mRegComunidadFrView;
     Spinner mTipoViaSpinner;
@@ -99,7 +99,7 @@ public class RegComuFr extends Fragment {
         super.onActivityCreated(savedInstanceState);
         Log.d(TAG, "onActivityCreated()");
 
-        dbHelper = new MasterDataDbHelper(getActivity());
+        dbHelper = new UsuarioDataDbHelper(getActivity());
         new TipoViaSpinnerSetter().execute();
         new CAutonomaSpinnerSetter().execute();
 
@@ -240,6 +240,7 @@ public class RegComuFr extends Fragment {
     {
         return comunidadBean;
     }
+
 //  --------------------------------------------------------------------
 //                               SPINNERS
 //  --------------------------------------------------------------------
@@ -248,10 +249,10 @@ public class RegComuFr extends Fragment {
     {
         Log.d(TAG, "In doAdapterSpinner()");
 
-        int[] toViews = new int[]{R.id.reg_comunidad_spinner_dropdown_item};
+        int[] toViews = new int[]{R.id.app_spinner_1_dropdown_item};
         return new SimpleCursorAdapter(
                 getActivity(),
-                R.layout.reg_comu_spinner_dropdown_item,
+                R.layout.app_spinner_1_dropdown_item,
                 cursor,
                 fromColDB,
                 toViews,
@@ -278,11 +279,11 @@ public class RegComuFr extends Fragment {
             Log.d(TAG, "In TipoViaSpinnerSetter.onPostExecute()");
 
             ArrayAdapter<String> tiposViaAdapter = new ArrayAdapter<>(
-                    RegComuFr.this.getActivity(),
-                    R.layout.reg_comu_spinner_dropdown_item,
+                    getActivity(),
+                    R.layout.app_spinner_1_dropdown_item,
                     tiposViaList);
 
-            tiposViaAdapter.setDropDownViewResource(R.layout.reg_comu_spinner_dropdown_item);
+            tiposViaAdapter.setDropDownViewResource(R.layout.app_spinner_1_dropdown_item);
             mTipoViaSpinner.setAdapter(tiposViaAdapter);
 
             if (mActivityListener != null) {

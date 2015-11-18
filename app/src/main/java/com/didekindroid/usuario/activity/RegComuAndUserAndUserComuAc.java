@@ -23,7 +23,7 @@ import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
 
-import static com.didekin.serviceone.domain.DataPatterns.LINE_BREAK;
+import static com.didekin.serviceone.domain.UserDataPatterns.LINE_BREAK;
 import static com.didekindroid.common.TokenHandler.TKhandler;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.updateIsRegistered;
@@ -31,7 +31,7 @@ import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeComu
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUserBeanFromRegUserFrView;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUserComuBeanFromView;
 import static com.didekindroid.usuario.activity.utils.UserMenu.LOGIN_AC;
-import static com.didekindroid.usuario.webservices.Oauth2Service.Oauth2;
+import static com.didekindroid.common.webservices.Oauth2Service.Oauth2;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 import static com.google.common.base.Preconditions.checkNotNull;
 

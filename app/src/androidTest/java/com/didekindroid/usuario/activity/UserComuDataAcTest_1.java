@@ -39,9 +39,10 @@ import static com.didekindroid.common.TokenHandler.TKhandler;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_NOTHING;
-import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_ID;
-import static com.didekindroid.usuario.activity.utils.UserIntentExtras.USERCOMU_LIST_OBJECT;
+import static com.didekindroid.common.utils.AppIntentExtras.COMUNIDAD_ID;
+import static com.didekindroid.common.utils.AppIntentExtras.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.COMU_DATA_AC;
+import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.INCID_REG_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.SEE_USERCOMU_BY_COMU_AC;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.checkToastInTest;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
@@ -50,6 +51,7 @@ import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_JUAN;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
@@ -73,7 +75,6 @@ public class UserComuDataAcTest_1 {
         {
         }
 
-        @SuppressWarnings("EmptyCatchBlock")
         @Override
         protected Intent getActivityIntent()
         {
@@ -117,7 +118,7 @@ public class UserComuDataAcTest_1 {
 //  ===========================================================================
 
     @Test
-    public void testOnCreate() throws Exception
+    public void testOnCreate_1() throws Exception
     {
         onView(withId(R.id.reg_usercomu_portal_ed)).check(matches(withText(containsString(mUsuarioComunidad.getPortal()))))
                 .check(matches(isDisplayed()));
@@ -157,6 +158,15 @@ public class UserComuDataAcTest_1 {
     }
 
     @Test
+    public void testOnCreate_2()
+    {
+        FullUsuarioComuidadIntent usuarioComuidadIntent =
+                (FullUsuarioComuidadIntent) mActivity.getIntent().getSerializableExtra(USERCOMU_LIST_OBJECT.extra);
+        assertThat(usuarioComuidadIntent, notNullValue());
+        assertThat(usuarioComuidadIntent.getUsuarioComunidad().getComunidad(),is(mUsuarioComunidad.getComunidad()));
+    }
+
+    @Test
     public void testSeeUserComuByComuMn_withToken() throws InterruptedException
     {
         SEE_USERCOMU_BY_COMU_AC.checkMenuItem_WTk(mActivity);
@@ -169,6 +179,16 @@ public class UserComuDataAcTest_1 {
         // Only one user associated to the comunidad: the menu shows the item.
         COMU_DATA_AC.checkMenuItem_WTk(mActivity);
         intended(hasExtra(COMUNIDAD_ID.extra, mUsuarioComunidad.getComunidad().getC_Id()));
+    }
+
+    @Test
+    public void testIncidRegMn_withToken_1() throws InterruptedException
+    {
+        FullUsuarioComuidadIntent usuarioComuidadIntent = (FullUsuarioComuidadIntent) mActivity.getIntent()
+                .getSerializableExtra(USERCOMU_LIST_OBJECT.extra);
+        INCID_REG_AC.checkMenuItem_WTk(mActivity);
+        intended(hasExtra(COMUNIDAD_ID.extra,
+                usuarioComuidadIntent.getUsuarioComunidad().getComunidad().getC_Id()));
     }
 
     @Test

@@ -6,15 +6,18 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.common.oauth2.OauthToken;
 import com.didekin.common.oauth2.OauthToken.AccessToken;
+import com.didekindroid.common.utils.IoHelper;
 import com.didekindroid.usuario.activity.utils.UsuarioTestUtils;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Timestamp;
 import java.util.Date;
 

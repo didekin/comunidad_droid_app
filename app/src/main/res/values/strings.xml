@@ -20,6 +20,16 @@
     <!-- ============================= ACTIVITIES ============================= -->
     <!-- =============== IncidRegAc =============== -->
     <string name="incid_reg_ac_label">Nueva incidencia</string>
+    <string name="incid_reg_hint"> -- describe la incidencia (max. 250 caracteres) -- </string>
+    <string name="incid_resolucion_hint"> -- actuación para resolver la incidencia -- </string>
+    <string name="incid_resolucion_presupuesto_rot">Coste estimado (euros, sin céntimos)</string>
+    <string name="incid_resolucion_coste_rot">Coste final (euros, sin céntimos)</string>
+    <string name="incid_reg_ac_button_rot">Registrar incidencia</string>
+    <string name="incid_resolucion_reg_ac_button_rot">Actualizar información</string>
+    <string name="incid_resolucion_rot">Datos resolución incidencia</string>
+    <string name="incid_reg_importancia">Importancia</string>
+    <string name="incid_reg_tipoIncidencia">Tipo de incidencia</string>
+    <string name="incid_reg_descripcion">Descripcion</string>
     <!--******************************************************************************-->
     <!--                                  USUARIO                                     -->
     <!--******************************************************************************-->
@@ -40,6 +50,7 @@
     <string name="comu_data_ac_mn">Datos comunidad</string>
     <string name="comu_search_ac_mn">Buscar comunidad</string>
     <string name="delete_me_ac_mn">Borrar tus datos</string>
+    <string name="incid_reg_ac_mn">Incidencias</string>
     <string name="login_ac_mn">Login</string>
     <string name="password_change_ac_mn">Renovar contraseña</string>
     <string name="reg_comu_user_usercomu_ac_mn">Nueva comunidad</string>
@@ -129,5 +140,6 @@
     <string name="usercomu_data_ac_label">En la comunidad</string>
     <string name="usercomu_data_ac_delete_txt">Para borrar tus datos en esta comunidad:</string>
     <string name="usercomu_data_ac_delete_button_txt">Date de baja en la comunidad</string>
+    <string name="title_activity_incid_see_by_user_comu">Incidencias en la comunidad</string>
 
 </resources>

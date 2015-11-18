@@ -58,8 +58,14 @@
         <Spinner
                 android:id="@+id/municipio_spinner"
                 style="@style/spinnerBase"
-                android:gravity="start|center_vertical"
-                android:dropDownWidth="200dp"
                 android:layout_below="@+id/provincia_spinner"/>
     </RelativeLayout>
 </ScrollView>
+
+<!-- <Spinner
+                android:id="@+id/municipio_spinner"
+                style="@style/spinnerBase"
+                android:gravity="start|center_vertical"
+                android:dropDownWidth="200dp"
+                android:layout_below="@+id/provincia_spinner"/>
+                -->

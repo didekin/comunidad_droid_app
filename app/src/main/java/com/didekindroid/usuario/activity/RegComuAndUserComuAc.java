@@ -16,8 +16,8 @@ import com.didekindroid.common.utils.ConnectionUtils;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
 
-import static com.didekin.serviceone.domain.DataPatterns.LINE_BREAK;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
+import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.common.utils.UIutils.makeToast;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeComunidadBeanFromView;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUserComuBeanFromView;
@@ -38,6 +38,8 @@ public class RegComuAndUserComuAc extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        Log.d(TAG, "onCreate()");
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.reg_comu_and_usercomu_ac);
         doToolBar(this, true);
@@ -67,8 +69,7 @@ public class RegComuAndUserComuAc extends AppCompatActivity {
                 .getFragmentView(), comunidadBean, null);
 
         // Validation of data.
-        StringBuilder errorMsg = new StringBuilder(getResources().getText(R.string.error_validation_msg))
-                .append(LINE_BREAK.getRegexp());
+        StringBuilder errorMsg = getErrorMsgBuilder(this);
 
         if (!usuarioComunidadBean.validate(getResources(), errorMsg)) {
             makeToast(this, errorMsg.toString(), Toast.LENGTH_SHORT);

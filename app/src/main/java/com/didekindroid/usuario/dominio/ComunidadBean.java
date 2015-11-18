@@ -3,10 +3,14 @@ package com.didekindroid.usuario.dominio;
 import android.content.res.Resources;
 
 import com.didekin.serviceone.domain.Comunidad;
-import com.didekin.serviceone.domain.DataPatterns;
+import com.didekin.serviceone.domain.UserDataPatterns;
 import com.didekin.serviceone.domain.Municipio;
 import com.didekin.serviceone.domain.Provincia;
 import com.didekindroid.R;
+
+import static com.didekin.serviceone.domain.UserDataPatterns.LINE_BREAK;
+import static com.didekin.serviceone.domain.UserDataPatterns.NOMBRE_VIA;
+import static com.didekin.serviceone.domain.UserDataPatterns.SUFIJO_NUMERO;
 
 /**
  * User: pedro@didekin
@@ -82,7 +86,7 @@ public class ComunidadBean {
     boolean validateTipoVia(Resources resources, StringBuilder errorMsg)
     {
         if (tipoVia == null || tipoVia.trim().equals(resources.getString(R.string.tipo_via_spinner))) {
-            errorMsg.append(resources.getString(R.string.tipo_via)).append(DataPatterns.LINE_BREAK.getRegexp());
+            errorMsg.append(resources.getString(R.string.tipo_via)).append(LINE_BREAK.getRegexp());
             return false;
         }
         return true;
@@ -90,9 +94,9 @@ public class ComunidadBean {
 
     public boolean validateNombreVia(CharSequence resources, StringBuilder errorMsg)
     {
-        boolean isValid = DataPatterns.NOMBRE_VIA.isPatternOk(nombreVia);
+        boolean isValid = NOMBRE_VIA.isPatternOk(nombreVia);
         if (!isValid) {
-            errorMsg.append(resources).append(DataPatterns.LINE_BREAK.getRegexp());
+            errorMsg.append(resources).append(LINE_BREAK.getRegexp());
         }
         return isValid;
     }
@@ -109,7 +113,7 @@ public class ComunidadBean {
         try {
             numero = Short.parseShort(numeroString);
         } catch (NumberFormatException ne) {
-            errorMsg.append(resources).append(DataPatterns.LINE_BREAK.getRegexp());
+            errorMsg.append(resources).append(LINE_BREAK.getRegexp());
             isValid = false;
         }
         return isValid;
@@ -119,9 +123,9 @@ public class ComunidadBean {
     {
         if (sufijoNumero == null || sufijoNumero.trim().isEmpty()) return true;
 
-        boolean isValid = DataPatterns.SUFIJO_NUMERO.isPatternOk(sufijoNumero);
+        boolean isValid = SUFIJO_NUMERO.isPatternOk(sufijoNumero);
         if (!isValid) {
-            errorMsg.append(resources).append(DataPatterns.LINE_BREAK.getRegexp());
+            errorMsg.append(resources).append(LINE_BREAK.getRegexp());
         }
         return isValid;
     }
@@ -135,7 +139,7 @@ public class ComunidadBean {
         boolean isValid = !(provincia == null || municipio.getCodInProvincia() == 0
                 || provincia.getProvinciaId() == 0);
         if (!isValid) {
-            errorMsg.append(resources.getString(R.string.municipio)).append(DataPatterns.LINE_BREAK.getRegexp());
+            errorMsg.append(resources.getString(R.string.municipio)).append(LINE_BREAK.getRegexp());
         }
         return isValid;
     }

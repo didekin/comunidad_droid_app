@@ -19,7 +19,7 @@ import java.io.File;
 import java.util.List;
 
 import static android.database.sqlite.SQLiteDatabase.deleteDatabase;
-import static com.didekindroid.usuario.repository.MasterDataDb.ComunidadAutonoma.NUMBER_RECORDS;
+import static com.didekindroid.usuario.repository.UsuarioDataDb.ComunidadAutonoma.NUMBER_RECORDS;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -31,9 +31,9 @@ import static org.junit.Assert.assertThat;
  * Time: 13:14
  */
 @RunWith(AndroidJUnit4.class)
-public class MasterDataDbHelperTest {
+public class UsuarioDataDbHelperTest {
 
-    private MasterDataDbHelper dbHelper;
+    private UsuarioDataDbHelper dbHelper;
     Context context;
     SQLiteDatabase database;
 
@@ -41,7 +41,7 @@ public class MasterDataDbHelperTest {
     public void getFixture() throws Exception
     {
         context = DidekindroidApp.getContext();
-        dbHelper = new MasterDataDbHelper(context);
+        dbHelper = new UsuarioDataDbHelper(context);
         Thread.sleep(2500);
         database = dbHelper.getWritableDatabase();
     }
@@ -78,7 +78,7 @@ public class MasterDataDbHelperTest {
     public void testGetProvincias()
     {
         List<Provincia> provincias = dbHelper.getProvincias();
-        assertThat(provincias.size(), is(MasterDataDb.Provincia.NUMBER_RECORDS));
+        assertThat(provincias.size(), is(UsuarioDataDb.Provincia.NUMBER_RECORDS));
         Provincia provincia1 = new Provincia((short) 12, "Castellón/Castelló");
         Provincia provincia2 = new Provincia((short) 46, "Valencia/València");
         Provincia provincia3 = new Provincia((short) 38, "Santa Cruz de Tenerife");
@@ -111,6 +111,7 @@ public class MasterDataDbHelperTest {
     {
         dbHelper.dropAllTables();
         dbHelper.close();
-        deleteDatabase(new File("data/data/com.didekindroid.debug/databases/masterdata.db"));
+        String dBFileName =  "data/data/com.didekindroid.debug/databases/".concat(UsuarioDataDbHelper.DB_NAME);
+        deleteDatabase(new File(dBFileName));
     }
 }

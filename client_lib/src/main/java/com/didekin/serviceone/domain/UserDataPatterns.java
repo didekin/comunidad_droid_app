@@ -1,5 +1,7 @@
 package com.didekin.serviceone.domain;
 
+import com.didekin.common.domain.DataPatternsIf;
+
 import java.util.regex.Pattern;
 
 import static java.util.regex.Pattern.*;
@@ -9,8 +11,7 @@ import static java.util.regex.Pattern.*;
  * Date: 10/06/15
  * Time: 10:13
  */
-@SuppressWarnings("unused")
-public enum DataPatterns {
+public enum UserDataPatterns implements DataPatternsIf {
 
     MUNICIPIO_DESC("[0-9a-zA-ZñÑáéíóúüÜ[\\s]]{2,100}"),
     PROVINCIA_DESC("[a-zA-ZñÑáéíóúüÜ[\\s]]{2,100}"),
@@ -35,29 +36,31 @@ public enum DataPatterns {
     PUERTA("[\\w_ñÑáéíóúüÜ\\.\\-]{1,10}"),
 
     /* GENERIC */
-    SELECT("\\bselect\\b"),
     LINE_BREAK("\n"),
     ;
 
     private final Pattern pattern;
     private final String regexp;
 
-    DataPatterns(String patternString)
+    UserDataPatterns(String patternString)
     {
         pattern = compile(patternString, UNICODE_CASE | CASE_INSENSITIVE);
         regexp = patternString;
     }
 
+    @Override
     public boolean isPatternOk(String fieldToCheck)
     {
-        return pattern.matcher(fieldToCheck).matches() && !SELECT.pattern.matcher(fieldToCheck).find();
+        return pattern.matcher(fieldToCheck).matches();
     }
 
+    @Override
     public Pattern getPattern()
     {
         return pattern;
     }
 
+    @Override
     public String getRegexp()
     {
         return regexp;

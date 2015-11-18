@@ -29,7 +29,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withContentDesc
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_JUAN_AND_PEPE;
-import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_ID;
+import static com.didekindroid.common.utils.AppIntentExtras.COMUNIDAD_ID;
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.COMU_SEARCH_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.SEE_USERCOMU_BY_USER_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.USER_DATA_AC;
@@ -39,7 +39,7 @@ import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_PLAZUELA5_JU
 import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_JUAN;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
-import static com.didekindroid.common.utils.ViewsIDs.SEE_USERCOMU_BY_COMU;
+import static com.didekindroid.usuario.activity.utils.ViewsIDs.SEE_USERCOMU_BY_COMU;
 import static com.google.android.apps.common.testing.ui.espresso.sample.LongListMatchers.withAdaptedData;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;

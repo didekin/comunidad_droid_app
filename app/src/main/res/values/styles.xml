@@ -68,6 +68,16 @@
         <item name="android:hint">@string/usuario_alias_hint</item>
     </style>
 
+    <style name="textBase.editField.description">
+        <item name="android:paddingStart">10dp</item>
+        <item name="android:paddingEnd">10dp</item>
+        <item name="android:minLines">1</item>
+        <item name="android:maxLines">10</item>
+        <item name="android:scrollHorizontally">false</item>
+        <item name="android:maxEms">230</item>
+        <item name="android:inputType">textCapSentences|textMultiLine</item>
+    </style>
+
     <!-- ................... Layouts .......... -->
     <style name="baseLayout">
         <item name="android:layout_width">match_parent</item>

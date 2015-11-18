@@ -36,7 +36,7 @@ import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOpti
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_TRAV_PLAZUELA_PEPE;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_PEPE;
-import static com.didekindroid.usuario.webservices.Oauth2Service.Oauth2;
+import static com.didekindroid.common.webservices.Oauth2Service.Oauth2;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;

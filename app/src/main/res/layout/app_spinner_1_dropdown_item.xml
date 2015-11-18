@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <CheckedTextView xmlns:android="http://schemas.android.com/apk/res/android"
-                 android:id="@+id/reg_comunidad_spinner_dropdown_item"
+                 android:id="@+id/app_spinner_1_dropdown_item"
                  android:singleLine="true"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"

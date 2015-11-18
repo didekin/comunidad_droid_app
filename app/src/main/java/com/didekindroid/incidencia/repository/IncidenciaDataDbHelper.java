@@ -1,0 +1,166 @@
+package com.didekindroid.incidencia.repository;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.res.Resources;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.text.TextUtils;
+import android.util.Log;
+
+import com.didekindroid.R;
+import com.didekindroid.common.utils.UIutils;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+import static android.provider.BaseColumns._ID;
+import static com.didekindroid.incidencia.repository.IncidenciaDataDb.TipoIncidencia.CREATE_TIPOINCIDENCIA;
+import static com.didekindroid.incidencia.repository.IncidenciaDataDb.TipoIncidencia.DROP_TIPOINCIDENCIA;
+import static com.didekindroid.incidencia.repository.IncidenciaDataDb.TipoIncidencia.TB_TIPO_INCIDENCIA;
+import static com.didekindroid.incidencia.repository.IncidenciaDataDb.TipoIncidencia.tipo;
+
+/**
+ * User: pedro@didekin
+ * Date: 16/11/15
+ * Time: 16:43
+ */
+public class IncidenciaDataDbHelper extends SQLiteOpenHelper {
+
+    private static final String TAG = IncidenciaDataDbHelper.class.getCanonicalName();
+    public static final String DB_NAME = "incidencia.db";
+    public static final int DB_VERSION = 1;
+
+    private final Context mContext;
+    private SQLiteDatabase mDataBase;
+    int mTipoIncidenciaCounter;
+
+    public IncidenciaDataDbHelper(Context context)
+    {
+        super(context, DB_NAME, null, DB_VERSION);
+        mContext = context;
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase db)
+    {
+        Log.i(TAG, "onCreate()");
+        mDataBase = db;
+        mDataBase.execSQL(CREATE_TIPOINCIDENCIA);
+
+        try {
+            mTipoIncidenciaCounter = loadTipoIncidencia();
+        } catch (Exception e) {
+            UIutils.doRuntimeException(e, TAG);
+        }
+
+    }
+
+    @Override
+    public void onOpen(SQLiteDatabase db)
+    {
+        Log.d(TAG, "In onOpen()");
+
+        if (mDataBase == null) {
+            mDataBase = db;
+        }
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
+    {
+        Log.d(TAG, "In onUpgrade()");
+        Log.w(TAG, "Upgrading database from version " + oldVersion + " to " + newVersion);
+
+        if (mDataBase == null) {
+            mDataBase = db;
+        }
+        dropAllTables();
+        onCreate(mDataBase);
+    }
+
+    void dropAllTables()
+    {
+        Log.d(TAG, "dropAllTables()");
+        if (mDataBase != null) {
+            dropTipoIncidencia();
+        }
+    }
+
+//    =====================================================
+//    ............. TIPOS DE INCIDENCIAS ..................
+//    =====================================================
+
+    int loadTipoIncidencia() throws IOException
+    {
+        Log.i(TAG, "In loadTipoIncidencia()");
+
+        final Resources resources = mContext.getResources();
+        InputStream inputStream = resources.openRawResource(R.raw.tipo_incidencia);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        int pkCounter = 0;
+
+        try {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] strings = TextUtils.split(line, ":");
+                if (strings.length < 2) {
+                    continue;
+                }
+                long id = addTipoIncidencia(Short.parseShort(strings[0].trim()), strings[1].trim());
+                if (id < 0) {
+                    Log.e(TAG, "Unable to add tipo de incidencia: " + strings[0].trim() + " " + strings[1].trim());
+                } else {
+                    ++pkCounter;
+                }
+            }
+        } finally {
+            reader.close();
+        }
+
+        Log.i(TAG, "Done loading tipos de incidencia file in DB.");
+        return pkCounter;
+    }
+
+    private long addTipoIncidencia(short pk, String nombre)
+    {
+        Log.d(TAG, "En addTipoIncidencia()");
+
+        ContentValues values = new ContentValues();
+        values.put(_ID, pk);
+        values.put(tipo, nombre);
+        return mDataBase.insert(TB_TIPO_INCIDENCIA, null, values);
+    }
+
+    public Cursor doTipoIncidenciaCursor()
+    {
+        Log.d(TAG, "En doTipoIncidenciaCursor()");
+
+        if (mDataBase == null) {
+            mDataBase = getReadableDatabase();
+        }
+
+        String[] tableColumns = new String[]{_ID, tipo};
+        Cursor cursor = mDataBase.query(TB_TIPO_INCIDENCIA, tableColumns, null, null, null, null, null);
+
+        if (cursor == null) {
+            return null;
+        }
+        if (!cursor.moveToFirst()) {
+            cursor.close();
+            return null;
+        }
+
+        return cursor;
+    }
+
+    void dropTipoIncidencia()
+    {
+        Log.d(TAG, "dropTipoIncidencia()");
+        mDataBase.execSQL(DROP_TIPOINCIDENCIA);
+        mTipoIncidenciaCounter = 0;
+    }
+}

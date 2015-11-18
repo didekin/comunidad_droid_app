@@ -18,9 +18,9 @@ import com.didekindroid.common.utils.UIutils;
 import com.didekindroid.usuario.dominio.FullComunidadIntent;
 import com.didekindroid.usuario.dominio.FullUsuarioComuidadIntent;
 
-import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_LIST_INDEX;
-import static com.didekindroid.usuario.activity.utils.UserIntentExtras.COMUNIDAD_LIST_OBJECT;
-import static com.didekindroid.usuario.activity.utils.UserIntentExtras.USERCOMU_LIST_OBJECT;
+import static com.didekindroid.common.utils.AppIntentExtras.COMUNIDAD_LIST_INDEX;
+import static com.didekindroid.common.utils.AppIntentExtras.COMUNIDAD_LIST_OBJECT;
+import static com.didekindroid.common.utils.AppIntentExtras.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.usuario.activity.utils.UserMenu.REG_COMU_USER_USERCOMU_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_USERCOMU_BY_USER_AC;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;

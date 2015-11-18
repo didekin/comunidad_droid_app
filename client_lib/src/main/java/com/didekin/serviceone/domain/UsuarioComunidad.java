@@ -175,6 +175,7 @@ public final class UsuarioComunidad implements Comparable<UsuarioComunidad> {
             this.usuario = usuario;
         }
 
+        @SuppressWarnings("unused")
         public UserComuBuilder userComuRest(UsuarioComunidad initValue)
         {
             portal = initValue.getPortal();

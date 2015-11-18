@@ -7,7 +7,11 @@ import java.sql.Timestamp;
  * Date: 02/09/15
  * Time: 14:25
  */
-@SuppressWarnings("unused")
+/**
+ *  Oauth token encapsulates the String and the time validity of an Oauth2 Spring token.
+ *  Access token encapsulates both the acces token and refresh token associated with it.
+ *  Refresh tokens are not reused.
+ * */
 public class OauthToken {
 
     private final String value;
@@ -19,6 +23,7 @@ public class OauthToken {
         this.value = value;
     }
 
+    @SuppressWarnings("unused")
     public Timestamp getExpiration()
     {
         return new Timestamp(expiration.getTime());

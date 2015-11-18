@@ -53,6 +53,8 @@ public class TokenHandlerTest_B {
     @Test
     public void testInstanceWithFile() throws IOException
     {
+        // Precondition for initialization of TKhandler: file with refreshToken.
+
         IoHelper.writeFileFromString(accessToken.getRefreshToken().getValue(),
                 new File(context.getFilesDir(), refresh_token_filename));
         assertThat(TKhandler.getRefreshTokenFile(), notNullValue());

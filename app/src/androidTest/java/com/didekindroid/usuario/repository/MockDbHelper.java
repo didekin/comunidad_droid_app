@@ -16,8 +16,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import static android.provider.BaseColumns._ID;
-import static com.didekindroid.usuario.repository.MasterDataDb.ComunidadAutonoma.TB_C_AUTONOMA;
-import static com.didekindroid.usuario.repository.MasterDataDb.ComunidadAutonoma.cu_nombre;
+import static com.didekindroid.usuario.repository.UsuarioDataDb.ComunidadAutonoma.TB_C_AUTONOMA;
+import static com.didekindroid.usuario.repository.UsuarioDataDb.ComunidadAutonoma.cu_nombre;
 
 /**
  * User: pedro@didekin
@@ -42,7 +42,7 @@ public class MockDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db)
     {
         Log.i(TAG, "In onCreate()");
-        db.execSQL(MasterDataDb.ComunidadAutonoma.CREATE_C_AUTONOMA);
+        db.execSQL(UsuarioDataDb.ComunidadAutonoma.CREATE_C_AUTONOMA);
         try {
             loadComunidadesAutonomas(db);
         } catch (IOException e) {
