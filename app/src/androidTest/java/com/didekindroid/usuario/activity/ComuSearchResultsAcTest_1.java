@@ -12,7 +12,7 @@ import com.didekin.serviceone.domain.Usuario;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
-import com.didekindroid.usuario.activity.utils.CleanEnum;
+import com.didekindroid.usuario.activity.utils.CleanUserEnum;
 import com.didekindroid.usuario.dominio.ComunidadIntent;
 import com.didekindroid.usuario.dominio.DomainDataUtils;
 
@@ -36,10 +36,10 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.common.TokenHandler.TKhandler;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.ViewsIDs.COMU_SEARCH_RESULTS;
-import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_JUAN;
+import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PROPIETARIO;
 import static com.didekindroid.common.utils.AppIntentExtras.COMUNIDAD_SEARCH;
-import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.checkToastInTest;
+import static com.didekindroid.common.utils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanTwoUsers;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanWithTkhandler;
@@ -75,7 +75,7 @@ public class ComuSearchResultsAcTest_1 {
     private ComuSearchResultsAc activity;
     ComuSearchResultsListFr mComunidadSummaryFrg;
     Intent intent;
-    CleanEnum whatClean;
+    CleanUserEnum whatClean;
 
     @Rule
     public ActivityTestRule<ComuSearchResultsAc> mActivityRule =
@@ -91,7 +91,7 @@ public class ComuSearchResultsAcTest_1 {
     public void getFixture() throws Exception
     {
         Log.d(TAG, "In getFixture()");
-        whatClean = CleanEnum.CLEAN_NOTHING;
+        whatClean = CleanUserEnum.CLEAN_NOTHING;
         intent = new Intent();
         intent.putExtra(COMUNIDAD_SEARCH.extra, new ComunidadIntent(COMU_LA_PLAZUELA_5));
     }

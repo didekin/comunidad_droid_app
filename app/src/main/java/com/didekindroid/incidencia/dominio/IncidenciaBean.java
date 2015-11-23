@@ -6,7 +6,7 @@ import android.widget.EditText;
 
 import com.didekin.incidservice.domain.IncidUserComu;
 import com.didekin.incidservice.domain.Incidencia;
-import com.didekin.incidservice.domain.TipoIncidencia;
+import com.didekin.incidservice.domain.AmbitoIncidencia;
 import com.didekin.serviceone.domain.Comunidad;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
@@ -14,7 +14,7 @@ import com.didekindroid.R;
 import static com.didekin.incidservice.domain.IncidDataPatterns.INCID_DESC;
 import static com.didekin.serviceone.domain.UserDataPatterns.LINE_BREAK;
 import static com.didekindroid.DidekindroidApp.getContext;
-import static com.didekindroid.incidencia.repository.IncidenciaDataDb.TipoIncidencia.TIPOINCID_COUNT;
+import static com.didekindroid.incidencia.repository.IncidenciaDataDb.AmbitoIncidencia.AMBITO_INCID_COUNT;
 
 /**
  * User: pedro@didekin
@@ -24,26 +24,29 @@ import static com.didekindroid.incidencia.repository.IncidenciaDataDb.TipoIncide
 public class IncidenciaBean {
 
     private short importanciaIncid;
-    private short codTipoIncid;
+    private short codAmbitoIncid;
     private String descripcion;
 
     public IncidenciaBean()
     {
     }
 
-    public void setImportanciaIncid(short importanciaIncid)
+    public IncidenciaBean setImportanciaIncid(short importanciaIncid)
     {
         this.importanciaIncid = importanciaIncid;
+        return this;
     }
 
-    public void setCodTipoIncid(short codTipoIncid)
+    public IncidenciaBean setCodAmbitoIncid(short codAmbitoIncid)
     {
-        this.codTipoIncid = codTipoIncid;
+        this.codAmbitoIncid = codAmbitoIncid;
+        return this;
     }
 
-    public void setDescripcion(String descripcion)
+    public IncidenciaBean setDescripcion(String descripcion)
     {
         this.descripcion = descripcion;
+        return this;
     }
 
     public IncidUserComu makeIncidUserComu(final View mFragmentView, StringBuilder errorMsg, long comunidadId)
@@ -53,7 +56,7 @@ public class IncidenciaBean {
         validateBean(errorMsg);
         if (validateBean(errorMsg)) {
             Incidencia incidencia = new Incidencia.IncidenciaBuilder()
-                    .tipoIncid(new TipoIncidencia(codTipoIncid, null))
+                    .ambitoIncid(new AmbitoIncidencia(codAmbitoIncid))
                     .descripcion(descripcion).build();
             UsuarioComunidad userComu = new UsuarioComunidad
                     .UserComuBuilder(new Comunidad.ComunidadBuilder().c_id(comunidadId).build(), null)
@@ -64,10 +67,10 @@ public class IncidenciaBean {
         }
     }
 
-    private boolean validateBean(StringBuilder errorMsg)
+    boolean validateBean(StringBuilder errorMsg)
     {
         Resources resources = getContext().getResources();
-        return validateImportancia(errorMsg, resources) & validateCodTipo(errorMsg, resources) & validateDescripcion(errorMsg, resources);
+        return validateImportancia(errorMsg, resources) & validateCodAmbito(errorMsg, resources) & validateDescripcion(errorMsg, resources);
     }
 
     private boolean validateDescripcion(StringBuilder errorMsg, Resources resources)
@@ -79,10 +82,10 @@ public class IncidenciaBean {
         return true;
     }
 
-    private boolean validateCodTipo(StringBuilder errorMsg, Resources resources)
+    boolean validateCodAmbito(StringBuilder errorMsg, Resources resources)
     {
-        if (codTipoIncid > 0 && codTipoIncid < TIPOINCID_COUNT) {
-            errorMsg.append(resources.getString(R.string.incid_reg_tipoIncidencia)).append(LINE_BREAK.getRegexp());
+        if (codAmbitoIncid < 0 || codAmbitoIncid > AMBITO_INCID_COUNT) {
+            errorMsg.append(resources.getString(R.string.incid_reg_ambitoIncidencia)).append(LINE_BREAK.getRegexp());
             return false;
         }
         return true;

@@ -19,7 +19,7 @@ import static android.support.test.espresso.matcher.RootMatchers.isDialog;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.checkToastInTest;
+import static com.didekindroid.common.utils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanWithTkhandler;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_TRAV_PLAZUELA_PEPE;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_PEPE;

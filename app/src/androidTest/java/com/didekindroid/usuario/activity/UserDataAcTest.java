@@ -7,7 +7,7 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekin.common.oauth2.OauthToken.AccessToken;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
-import com.didekindroid.usuario.activity.utils.CleanEnum;
+import com.didekindroid.usuario.activity.utils.CleanUserEnum;
 
 import org.junit.After;
 import org.junit.Before;
@@ -31,13 +31,13 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.TokenHandler.TKhandler;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
-import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_JUAN;
-import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_NOTHING;
+import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_JUAN;
+import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_NOTHING;
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.COMU_SEARCH_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.DELETE_ME_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.PASSWORD_CHANGE_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.SEE_USERCOMU_BY_USER_AC;
-import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.checkToastInTest;
+import static com.didekindroid.common.utils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_JUAN;
@@ -60,7 +60,7 @@ public class UserDataAcTest {
 
     UserDataAc mActivity;
     Resources resources;
-    CleanEnum whatToClean = CLEAN_JUAN;
+    CleanUserEnum whatToClean = CLEAN_JUAN;
 
     @Rule
     public ActivityTestRule<UserDataAc> mActivityRule = new ActivityTestRule<UserDataAc>(UserDataAc.class) {

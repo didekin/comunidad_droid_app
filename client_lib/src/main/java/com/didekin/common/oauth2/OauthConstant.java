@@ -32,11 +32,12 @@ public final class OauthConstant {
     public static final String USER_PATH = "/users";
     public static final String USER_WRITE = USER_PATH + "/write";
     public static final String USER_READ = USER_PATH + "/read";
-    public static final String SUJETOS_AREA = "/users/**";
-    public static final String COMUNIDAD_AREA = "/comunidad/**";
     public static final String COMUNIDAD_PATH = "/comunidad";
     public static final String COMUNIDAD_WRITE = COMUNIDAD_PATH + "/write";
     public static final String COMUNIDAD_READ = COMUNIDAD_PATH + "/read";
+    public static final String INCID_PATH = "/incid";
+    public static final String INCID_READ = INCID_PATH + "/read";
+    public static final String INCID_WRITE = INCID_PATH + "/write";
 
     /*Common paths out of the control of both authorization and resource servers.*/
     public static final String ERROR = "/error";

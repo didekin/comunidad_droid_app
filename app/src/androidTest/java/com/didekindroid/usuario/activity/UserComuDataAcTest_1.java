@@ -8,7 +8,7 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
-import com.didekindroid.usuario.activity.utils.CleanEnum;
+import com.didekindroid.usuario.activity.utils.CleanUserEnum;
 import com.didekindroid.usuario.dominio.FullUsuarioComuidadIntent;
 
 import org.junit.After;
@@ -36,15 +36,15 @@ import static com.didekin.common.oauth2.Rol.INQUILINO;
 import static com.didekin.common.oauth2.Rol.PRESIDENTE;
 import static com.didekin.common.oauth2.Rol.PROPIETARIO;
 import static com.didekindroid.common.TokenHandler.TKhandler;
-import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
-import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_JUAN;
-import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_NOTHING;
+import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_JUAN;
+import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_NOTHING;
 import static com.didekindroid.common.utils.AppIntentExtras.COMUNIDAD_ID;
 import static com.didekindroid.common.utils.AppIntentExtras.USERCOMU_LIST_OBJECT;
+import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
+import static com.didekindroid.incidencia.activity.utils.IncidenciaMenuTestUtils.INCID_REG_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.COMU_DATA_AC;
-import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.INCID_REG_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.SEE_USERCOMU_BY_COMU_AC;
-import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.checkToastInTest;
+import static com.didekindroid.common.utils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_JUAN;
@@ -65,7 +65,7 @@ public class UserComuDataAcTest_1 {
 
     private UserComuDataAc mActivity;
     private UsuarioComunidad mUsuarioComunidad;
-    CleanEnum whatToClean = CLEAN_JUAN;
+    CleanUserEnum whatToClean = CLEAN_JUAN;
 
     @Rule
     public IntentsTestRule<UserComuDataAc> intentRule = new IntentsTestRule<UserComuDataAc>(UserComuDataAc.class) {

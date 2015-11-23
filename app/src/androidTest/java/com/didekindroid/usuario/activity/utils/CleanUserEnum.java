@@ -5,7 +5,7 @@ package com.didekindroid.usuario.activity.utils;
  * Date: 07/09/15
  * Time: 16:57
  */
-public enum CleanEnum {
+public enum CleanUserEnum {
 
     CLEAN_JUAN,
     CLEAN_PEPE,

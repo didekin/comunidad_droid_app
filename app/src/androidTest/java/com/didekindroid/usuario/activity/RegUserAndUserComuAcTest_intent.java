@@ -8,7 +8,7 @@ import com.didekin.serviceone.domain.Comunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
 import com.didekindroid.common.utils.UIutils;
-import com.didekindroid.usuario.activity.utils.CleanEnum;
+import com.didekindroid.usuario.activity.utils.CleanUserEnum;
 import com.didekindroid.usuario.dominio.FullComunidadIntent;
 
 import org.hamcrest.CoreMatchers;
@@ -34,9 +34,9 @@ import static android.support.test.espresso.matcher.ViewMatchers.withContentDesc
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.common.TokenHandler.TKhandler;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
-import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_JUAN2_AND_PEPE;
-import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_JUAN_AND_PEPE;
-import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_PEPE;
+import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_JUAN2_AND_PEPE;
+import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
+import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRESIDENTE;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PROPIETARIO;
 import static com.didekindroid.common.utils.AppIntentExtras.COMUNIDAD_ID;
@@ -71,7 +71,7 @@ public class RegUserAndUserComuAcTest_intent {
     private Intent intent;
     Comunidad comunidad;
 
-    CleanEnum whatToClean;
+    CleanUserEnum whatToClean;
 
     @Rule
     public IntentsTestRule<RegUserAndUserComuAc> intentRule = new IntentsTestRule<RegUserAndUserComuAc>

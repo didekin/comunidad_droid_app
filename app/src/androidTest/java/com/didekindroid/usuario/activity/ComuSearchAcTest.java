@@ -10,7 +10,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
-import com.didekindroid.usuario.activity.utils.CleanEnum;
+import com.didekindroid.usuario.activity.utils.CleanUserEnum;
 
 import junit.framework.AssertionFailedError;
 
@@ -35,7 +35,7 @@ import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.LOGIN_AC
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.REG_COMU_USER_USERCOMU_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.SEE_USERCOMU_BY_USER_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.USER_DATA_AC;
-import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.checkToastInTest;
+import static com.didekindroid.common.utils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.typeComunidadData;
@@ -59,7 +59,7 @@ public class ComuSearchAcTest {
     private Resources resources;
     private RegComuFr regComuFr;
     File refreshTkFile;
-    CleanEnum whatClean;
+    CleanUserEnum whatClean;
 
     @Rule
     public ActivityTestRule<ComuSearchAc> mActivityRule = new ActivityTestRule<>(ComuSearchAc.class, true, false);
@@ -70,7 +70,7 @@ public class ComuSearchAcTest {
         context = InstrumentationRegistry.getTargetContext();
         refreshTkFile = TKhandler.getRefreshTokenFile();
         resources = context.getResources();
-        whatClean = CleanEnum.CLEAN_NOTHING;
+        whatClean = CleanUserEnum.CLEAN_NOTHING;
     }
 
     @Test
@@ -108,7 +108,7 @@ public class ComuSearchAcTest {
         assertThat(TKhandler.getAccessTokenInCache(), notNullValue());
         assertThat(isRegisteredUser(activity), is(true));
 
-        whatClean = CleanEnum.CLEAN_JUAN;
+        whatClean = CleanUserEnum.CLEAN_JUAN;
     }
 
     @Test
@@ -181,7 +181,7 @@ public class ComuSearchAcTest {
         onView(withId(R.id.comu_search_results_ac_one_pane_frg_container)).check(matches(isDisplayed()));
         onView(withId(R.id.comu_list_frg)).check(matches(isDisplayed()));
 
-        whatClean = CleanEnum.CLEAN_JUAN;
+        whatClean = CleanUserEnum.CLEAN_JUAN;
     }
 
     @Test
@@ -196,7 +196,7 @@ public class ComuSearchAcTest {
     @Test
     public void testGetDatosUsuarioWithToken() throws InterruptedException, UiException
     {
-        whatClean = CleanEnum.CLEAN_JUAN;
+        whatClean = CleanUserEnum.CLEAN_JUAN;
 
         //With token.
         signUpAndUpdateTk(COMU_REAL_JUAN);
@@ -217,7 +217,7 @@ public class ComuSearchAcTest {
     @Test
     public void testMenuNuevaComunidad_withToken() throws InterruptedException, UiException
     {
-        whatClean = CleanEnum.CLEAN_JUAN;
+        whatClean = CleanUserEnum.CLEAN_JUAN;
 
         signUpAndUpdateTk(COMU_REAL_JUAN);
         activity = mActivityRule.launchActivity(new Intent());
@@ -228,7 +228,7 @@ public class ComuSearchAcTest {
     @Test
     public void testComunidadesByUsuario_withToken() throws InterruptedException, UiException
     {
-        whatClean = CleanEnum.CLEAN_JUAN;
+        whatClean = CleanUserEnum.CLEAN_JUAN;
 
         signUpAndUpdateTk(COMU_REAL_JUAN);
         activity = mActivityRule.launchActivity(new Intent());
@@ -249,7 +249,7 @@ public class ComuSearchAcTest {
     public void testLogin_withToken() throws InterruptedException, UiException
     {
 
-        whatClean = CleanEnum.CLEAN_JUAN;
+        whatClean = CleanUserEnum.CLEAN_JUAN;
         signUpAndUpdateTk(COMU_REAL_JUAN);
         activity = mActivityRule.launchActivity(new Intent());
 

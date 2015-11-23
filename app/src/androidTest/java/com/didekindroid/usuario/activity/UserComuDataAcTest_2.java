@@ -7,7 +7,7 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
-import com.didekindroid.usuario.activity.utils.CleanEnum;
+import com.didekindroid.usuario.activity.utils.CleanUserEnum;
 import com.didekindroid.usuario.dominio.FullUsuarioComuidadIntent;
 
 import org.hamcrest.CoreMatchers;
@@ -30,13 +30,13 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_JUAN_AND_PEPE;
+import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRESIDENTE;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PROPIETARIO;
 import static com.didekindroid.common.utils.AppIntentExtras.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAndUpdateTk;
-import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.updateSecurityData;
+import static com.didekindroid.common.utils.ActivityTestUtils.updateSecurityData;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_JUAN;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_PEPE;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.makeUsuarioComunidad;
@@ -54,7 +54,7 @@ public class UserComuDataAcTest_2 {
 
     private UserComuDataAc mActivity;
     private UsuarioComunidad mUsuarioComunidad;
-    CleanEnum whatToClean = CLEAN_JUAN_AND_PEPE;
+    CleanUserEnum whatToClean = CLEAN_JUAN_AND_PEPE;
 
     @Rule
     public IntentsTestRule<UserComuDataAc> intentRule = new IntentsTestRule<UserComuDataAc>(UserComuDataAc.class) {

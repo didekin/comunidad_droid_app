@@ -1,15 +1,10 @@
 package com.didekindroid.usuario.activity.utils;
 
-import android.app.Activity;
-import android.content.res.Resources;
-import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.core.deps.guava.base.Preconditions;
 
-import com.didekin.common.oauth2.OauthToken.AccessToken;
 import com.didekin.serviceone.domain.Comunidad;
 import com.didekin.serviceone.domain.Usuario;
 import com.didekin.serviceone.domain.UsuarioComunidad;
-import com.didekindroid.DidekindroidApp;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
 
@@ -21,29 +16,26 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.typeText;
-import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.CursorMatchers.withRowString;
-import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.DidekindroidApp.getContext;
 import static com.didekindroid.common.TokenHandler.TKhandler;
+import static com.didekindroid.common.utils.ActivityTestUtils.updateSecurityData;
 import static com.didekindroid.common.utils.UIutils.updateIsRegistered;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.ADMINISTRADOR;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_JUAN;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_JUAN2;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_PEPE;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.makeUsuarioComunidad;
-import static com.didekindroid.common.webservices.Oauth2Service.Oauth2;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
 
 /**
  * User: pedro
@@ -58,13 +50,6 @@ public final class UsuarioTestUtils {
     }
 
 //    =========================== REGISTERING USERS ==============================
-
-    public static void updateSecurityData(String userName, String password) throws UiException
-    {
-        AccessToken token = Oauth2.getPasswordUserToken(userName, password);
-        TKhandler.initKeyCacheAndBackupFile(token);
-        updateIsRegistered(true, getContext());
-    }
 
     public static Usuario signUpAndUpdateTk(UsuarioComunidad usuarioComunidad) throws UiException
     {
@@ -141,33 +126,7 @@ public final class UsuarioTestUtils {
         }
     }
 
-//    ================== CLEANING ===================
-
-    public static void checkToastInTest(int resourceId, Activity activity, int... resourceFieldsErrorId)
-    {
-        Resources resources = DidekindroidApp.getContext().getResources();
-
-        ViewInteraction toast = onView(
-                withText(containsString(resources.getText(resourceId).toString())))
-                .inRoot(withDecorView(not(activity.getWindow().getDecorView())))
-                .check(matches(isDisplayed()));
-
-        if (resourceFieldsErrorId != null) {
-            for (int field : resourceFieldsErrorId) {
-                toast.check(matches(withText(containsString(resources.getText(field).toString()))));
-            }
-        }
-    }
-
-    public static void checkNoToastInTest(int resourceStringId, Activity activity)
-    {
-        Resources resources = DidekindroidApp.getContext().getResources();
-
-        onView(
-                withText(containsString(resources.getText(resourceStringId).toString())))
-                .inRoot(withDecorView(not(activity.getWindow().getDecorView())))
-                .check(doesNotExist());
-    }
+    //    ============================ CLEANING ============================
 
     public static void cleanOneUser(Usuario usuario) throws UiException
     {
@@ -188,7 +147,7 @@ public final class UsuarioTestUtils {
         updateIsRegistered(false, getContext());
     }
 
-    public static void cleanOptions(CleanEnum whatClean) throws UiException
+    public static void cleanOptions(CleanUserEnum whatClean) throws UiException
     {
         switch (whatClean) {
             case CLEAN_TK_HANDLER:

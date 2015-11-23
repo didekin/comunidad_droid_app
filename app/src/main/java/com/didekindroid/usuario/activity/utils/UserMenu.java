@@ -54,14 +54,6 @@ public enum UserMenu {
         }
     },
 
-    INCID_REG_AC {
-        @Override
-        public void doMenuItem(Activity activity)
-        {
-            Log.d(TAG, "incid_reg_ac.doMenuItem()");
-            activity.startActivity(activity.getIntent());
-        }
-    },
 
     LOGIN_AC {
         @Override

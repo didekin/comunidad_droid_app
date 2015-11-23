@@ -2,15 +2,10 @@ package com.didekindroid.incidencia.repository;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteCursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.serviceone.domain.ComunidadAutonoma;
-import com.didekin.serviceone.domain.Provincia;
 import com.didekindroid.DidekindroidApp;
-import com.didekindroid.usuario.repository.UsuarioDataDb;
-import com.didekindroid.usuario.repository.UsuarioDataDbHelper;
 
 import org.junit.After;
 import org.junit.Before;
@@ -19,15 +14,11 @@ import org.junit.runner.RunWith;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 import static android.database.sqlite.SQLiteDatabase.deleteDatabase;
-import static com.didekindroid.incidencia.repository.IncidenciaDataDb.TipoIncidencia.CREATE_TIPOINCIDENCIA;
-import static com.didekindroid.incidencia.repository.IncidenciaDataDb.TipoIncidencia.TIPOINCID_COUNT;
-import static com.didekindroid.usuario.repository.UsuarioDataDb.ComunidadAutonoma.NUMBER_RECORDS;
-import static org.hamcrest.CoreMatchers.hasItems;
+import static com.didekindroid.incidencia.repository.IncidenciaDataDb.AmbitoIncidencia.CREATE_AMBITO_INCIDENCIA;
+import static com.didekindroid.incidencia.repository.IncidenciaDataDb.AmbitoIncidencia.AMBITO_INCID_COUNT;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
@@ -56,44 +47,44 @@ public class IncidenciaDataDbHelperTest {
     {
         assertThat(context, notNullValue());
         assertThat(dbHelper, notNullValue());
-        assertThat(dbHelper.mTipoIncidenciaCounter, is(TIPOINCID_COUNT));
+        assertThat(dbHelper.mAmbitoIncidenciaCounter, is(AMBITO_INCID_COUNT));
     }
 
     @Test
     public void testDropTipoIncidencia() throws Exception
     {
-        dbHelper.dropTipoIncidencia();
-        assertThat(dbHelper.mTipoIncidenciaCounter, is(0));
+        dbHelper.dropAmbitoIncidencia();
+        assertThat(dbHelper.mAmbitoIncidenciaCounter, is(0));
     }
 
     @Test
     public void testDropAllTables() throws Exception
     {
         dbHelper.dropAllTables();
-        assertThat(dbHelper.mTipoIncidenciaCounter, is(0));
+        assertThat(dbHelper.mAmbitoIncidenciaCounter, is(0));
     }
 
     @Test
     public void testLoadTipoIncidencia() throws IOException
     {
-        dbHelper.dropTipoIncidencia();
-        assertThat(dbHelper.mTipoIncidenciaCounter, is(0));
-        database.execSQL(CREATE_TIPOINCIDENCIA);
-        assertThat(dbHelper.loadTipoIncidencia(), is(TIPOINCID_COUNT));
+        dbHelper.dropAmbitoIncidencia();
+        assertThat(dbHelper.mAmbitoIncidenciaCounter, is(0));
+        database.execSQL(CREATE_AMBITO_INCIDENCIA);
+        assertThat(dbHelper.loadAmbitoIncidencia(), is(AMBITO_INCID_COUNT));
     }
 
     @Test
     public void testDoTipoIncidenciaCursor()
     {
-       Cursor cursor = dbHelper.doTipoIncidenciaCursor();
+       Cursor cursor = dbHelper.doAmbitoIncidenciaCursor();
         assertThat(cursor,notNullValue());
-        assertThat(cursor.getCount(),is(TIPOINCID_COUNT));
+        assertThat(cursor.getCount(),is(AMBITO_INCID_COUNT));
         assertThat(cursor.getColumnCount(),is(2));
         cursor.moveToFirst();
         assertThat(cursor.getShort(0),is((short) 0));
-        assertThat(cursor.getString(1), is("tipo de incidencia"));
+        assertThat(cursor.getString(1), is("ámbito de incidencia"));
         cursor.moveToLast();
-        assertThat(cursor.getShort(0), is((short) (TIPOINCID_COUNT - 1)));
+        assertThat(cursor.getShort(0), is((short) (AMBITO_INCID_COUNT - 1)));
         assertThat(cursor.getString(1), is("Otros"));
     }
 

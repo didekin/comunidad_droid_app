@@ -14,7 +14,7 @@ public final class Incidencia {
 
     private final long incidenciaId;
     private final String descripcion;
-    private final TipoIncidencia tipoIncid;
+    private final AmbitoIncidencia ambitoIncidencia;
     private final Timestamp fechaAlta;
     private final Timestamp fechaCierre;
     private final ResolucionIncid resolucionIncid;
@@ -23,17 +23,52 @@ public final class Incidencia {
     {
         incidenciaId = incidenciaBuilder.incidenciaId;
         descripcion = incidenciaBuilder.descripcion;
-        tipoIncid = incidenciaBuilder.tipoIncid;
+        ambitoIncidencia = incidenciaBuilder.ambitoIncidencia;
         fechaAlta = incidenciaBuilder.fechaAlta;
         fechaCierre = incidenciaBuilder.fechaCierre;
         resolucionIncid = incidenciaBuilder.resolucionIncid;
     }
 
+    public long getIncidenciaId()
+    {
+        return incidenciaId;
+    }
+
+    public String getDescripcion()
+    {
+        return descripcion;
+    }
+
+    public AmbitoIncidencia getAmbitoIncidencia()
+    {
+        return ambitoIncidencia;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Incidencia that = (Incidencia) o;
+
+        return incidenciaId == that.incidenciaId;
+
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return (int) (incidenciaId ^ (incidenciaId >>> 32));
+    }
+
+//    ==================== BUILDER ====================
+
     public final static class IncidenciaBuilder implements BeanBuilder<Incidencia> {
 
         private long incidenciaId;
         private String descripcion;
-        private TipoIncidencia tipoIncid;
+        private AmbitoIncidencia ambitoIncidencia;
         private Timestamp fechaAlta;
         private Timestamp fechaCierre;
         private ResolucionIncid resolucionIncid;
@@ -54,9 +89,9 @@ public final class Incidencia {
             return this;
         }
 
-        public IncidenciaBuilder tipoIncid(TipoIncidencia initValue)
+        public IncidenciaBuilder ambitoIncid(AmbitoIncidencia initValue)
         {
-            tipoIncid = initValue;
+            ambitoIncidencia = initValue;
             return this;
         }
 
@@ -76,7 +111,6 @@ public final class Incidencia {
             resolucionIncid = initValue;
             return this;
         }
-
 
         @Override
         public Incidencia build()

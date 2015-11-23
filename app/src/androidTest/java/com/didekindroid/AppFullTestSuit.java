@@ -22,9 +22,9 @@ import org.junit.runners.Suite;
         IncidFunctionalTestSuite.class,
         IncidFunctionalSlowTestSuite.class,
         IncidSupportTestSuite.class,
-        UserSupportTestSuite.class,
         UserFunctionalTestSuite.class,
         UserFunctionalSlowTestSuite.class,
+        UserSupportTestSuite.class,
 })
 public class AppFullTestSuit {
 }

@@ -12,7 +12,7 @@ import com.didekin.serviceone.domain.Usuario;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
-import com.didekindroid.usuario.activity.utils.CleanEnum;
+import com.didekindroid.usuario.activity.utils.CleanUserEnum;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
@@ -37,13 +37,13 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.common.TokenHandler.TKhandler;
-import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_NOTHING;
+import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_NOTHING;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeComunidadBeanFromView;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUserBeanFromRegUserFrView;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUserComuBeanFromView;
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.LOGIN_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.REQUIRES_USER_NO_TOKEN;
-import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.checkToastInTest;
+import static com.didekindroid.common.utils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_JUAN;
@@ -72,7 +72,7 @@ public class RegComuAndUserAndUserComuAcTest {
 
     RegComuAndUserAndUserComuAc mActivity;
     Resources resources;
-    CleanEnum whatToClean;
+    CleanUserEnum whatToClean;
 
     RegComuFr mRegComuFrg;
     RegUserComuFr mRegUserComuFrg;
@@ -279,14 +279,12 @@ public class RegComuAndUserAndUserComuAcTest {
                 R.string.alias,
                 R.string.email_hint,
                 R.string.password);
-
-        Thread.sleep(2000);
     }
 
     @Test
     public void testRegisterComuAndUserComuAndUser_2() throws UiException
     {
-        whatToClean = CleanEnum.CLEAN_JUAN2;
+        whatToClean = CleanUserEnum.CLEAN_JUAN2;
 
         mActivity = mActivityRule.launchActivity(new Intent());
 
@@ -348,7 +346,7 @@ public class RegComuAndUserAndUserComuAcTest {
     @Test
     public void testLoginMn_2() throws InterruptedException, UiException
     {
-        whatToClean = CleanEnum.CLEAN_JUAN;
+        whatToClean = CleanUserEnum.CLEAN_JUAN;
         //With token.
         signUpAndUpdateTk(COMU_REAL_JUAN);
 

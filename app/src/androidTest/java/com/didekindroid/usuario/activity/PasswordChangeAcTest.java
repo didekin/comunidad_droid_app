@@ -7,7 +7,7 @@ import com.didekin.common.oauth2.OauthToken.AccessToken;
 import com.didekin.serviceone.domain.Usuario;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
-import com.didekindroid.usuario.activity.utils.CleanEnum;
+import com.didekindroid.usuario.activity.utils.CleanUserEnum;
 
 import org.junit.After;
 import org.junit.Before;
@@ -28,9 +28,9 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.TokenHandler.TKhandler;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
-import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_NOTHING;
-import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_PEPE;
-import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.checkToastInTest;
+import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_NOTHING;
+import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.common.utils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOneUser;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAndUpdateTk;
@@ -53,7 +53,7 @@ import static org.junit.Assert.assertThat;
 public class PasswordChangeAcTest {
 
     PasswordChangeAc mActivity;
-    CleanEnum whatToClean = CLEAN_PEPE;
+    CleanUserEnum whatToClean = CLEAN_PEPE;
 
     @Rule
     public ActivityTestRule<PasswordChangeAc> mActivityRule =

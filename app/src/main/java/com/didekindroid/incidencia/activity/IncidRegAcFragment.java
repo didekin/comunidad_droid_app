@@ -19,7 +19,7 @@ import com.didekindroid.R;
 import com.didekindroid.incidencia.dominio.IncidenciaBean;
 import com.didekindroid.incidencia.repository.IncidenciaDataDbHelper;
 
-import static com.didekindroid.incidencia.repository.IncidenciaDataDb.TipoIncidencia.tipo;
+import static com.didekindroid.incidencia.repository.IncidenciaDataDb.AmbitoIncidencia.ambito;
 
 /**
  *
@@ -73,7 +73,7 @@ public class IncidRegAcFragment extends Fragment {
         mImportanciaSpinner = (Spinner) getView().findViewById(R.id.incid_reg_importancia_spinner);
         doImportanciaSpinner();
 
-        mTipoIncidenciaSpinner = (Spinner) getView().findViewById(R.id.incid_reg_tipo_spinner);
+        mTipoIncidenciaSpinner = (Spinner) getView().findViewById(R.id.incid_reg_ambito_spinner);
         new TipoIncidenciaSpinnerSetter().execute();
 
         mIncidenciaBean = new IncidenciaBean();
@@ -99,7 +99,7 @@ public class IncidRegAcFragment extends Fragment {
             {
                 Log.d(TAG, "onItemSelected()");
                 Cursor cursor = ((CursorAdapter) parent.getAdapter()).getCursor();
-                mIncidenciaBean.setCodTipoIncid(cursor.getShort(0)); // _ID.
+                mIncidenciaBean.setCodAmbitoIncid(cursor.getShort(0)); // _ID.
             }
 
             @Override
@@ -136,7 +136,6 @@ public class IncidRegAcFragment extends Fragment {
         mImportanciaSpinner.setAdapter(adapter);
     }
 
-
 //    ============================================================
 //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
 //    ============================================================
@@ -149,7 +148,7 @@ public class IncidRegAcFragment extends Fragment {
         protected Cursor doInBackground(Void... params)
         {
             Log.d(TAG,"doInBackground()");
-            return dbHelper.doTipoIncidenciaCursor();
+            return dbHelper.doAmbitoIncidenciaCursor();
         }
 
         @Override
@@ -157,7 +156,7 @@ public class IncidRegAcFragment extends Fragment {
         {
             Log.d(TAG,"onPostExecute()");
 
-            String[] fromColDB = new String[]{tipo};
+            String[] fromColDB = new String[]{ambito};
             int[] toViews = new int[]{R.id.app_spinner_1_dropdown_item};
             CursorAdapter cursorAdapter = new SimpleCursorAdapter(
                     getActivity(),

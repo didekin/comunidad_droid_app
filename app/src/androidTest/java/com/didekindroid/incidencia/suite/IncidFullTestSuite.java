@@ -1,5 +1,7 @@
 package com.didekindroid.incidencia.suite;
 
+import com.didekindroid.common.suite.CommonSuite_1;
+
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -10,6 +12,10 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
+        IncidFunctionalTestSuite.class,
+        IncidFunctionalSlowTestSuite.class,
+        IncidSupportTestSuite.class,
+        CommonSuite_1.class,
 })
 public class IncidFullTestSuite {
 }

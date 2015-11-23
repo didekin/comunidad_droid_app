@@ -9,7 +9,7 @@ import com.didekin.serviceone.domain.Municipio;
 import com.didekin.serviceone.domain.Provincia;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
-import com.didekindroid.usuario.activity.utils.CleanEnum;
+import com.didekindroid.usuario.activity.utils.CleanUserEnum;
 
 import org.hamcrest.Matchers;
 import org.junit.After;
@@ -31,9 +31,9 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_JUAN;
+import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.common.utils.AppIntentExtras.COMUNIDAD_ID;
-import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.checkToastInTest;
+import static com.didekindroid.common.utils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_LA_PLAZUELA_5;
@@ -57,7 +57,7 @@ import static org.junit.Assert.assertThat;
 public class ComuDataAcTest {
 
     private ComuDataAc mActivity;
-    CleanEnum whatToClean = CLEAN_JUAN;
+    CleanUserEnum whatToClean = CLEAN_JUAN;
     Comunidad mComunidad;
 
     @Rule

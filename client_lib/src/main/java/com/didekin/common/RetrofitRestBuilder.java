@@ -105,7 +105,7 @@ public enum RetrofitRestBuilder {
         {
             HttpURLConnection connection = super.openConnection(request);
             connection.setConnectTimeout(30 * 1000);
-            connection.setReadTimeout(300 * 1000);
+            connection.setReadTimeout(1800 * 1000);
             return connection;
         }
     }

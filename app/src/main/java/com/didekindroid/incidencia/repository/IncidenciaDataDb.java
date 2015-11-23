@@ -12,19 +12,19 @@ public final class IncidenciaDataDb {
     private IncidenciaDataDb(){}
 
 
-    public interface TipoIncidencia extends BaseColumns {
+    public interface AmbitoIncidencia extends BaseColumns {
 
-        String TB_TIPO_INCIDENCIA = "tipo_incidencia";
-        String tipo = "tipo";
+        String TB_AMBITO_INCIDENCIA = "ambito_incidencia";
+        String ambito = "ambito";
 
-        String CREATE_TIPOINCIDENCIA = "CREATE TABLE " + TB_TIPO_INCIDENCIA
+        String CREATE_AMBITO_INCIDENCIA = "CREATE TABLE " + TB_AMBITO_INCIDENCIA
                 + " ("
                 + _ID + " INTEGER PRIMARY KEY,"
-                + tipo + " TEXT"
+                + ambito + " TEXT"
                 + ");";
 
-        String DROP_TIPOINCIDENCIA = "DROP TABLE IF EXISTS " + TB_TIPO_INCIDENCIA;
+        String DROP_AMBITO_INCIDENCIA = "DROP TABLE IF EXISTS " + TB_AMBITO_INCIDENCIA;
 
-        int TIPOINCID_COUNT = 53;
+        int AMBITO_INCID_COUNT = 53;
     }
 }

@@ -9,6 +9,7 @@ import com.didekin.serviceone.domain.Usuario;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
+import com.didekindroid.common.utils.UIutils;
 
 import java.util.List;
 
@@ -17,12 +18,11 @@ import retrofit.http.Path;
 
 import static com.didekin.common.RetrofitRestBuilder.BUILDER;
 import static com.didekin.common.exception.DidekinExceptionMsg.USER_NAME_NOT_FOUND;
-import static com.didekin.common.exception.DidekinExceptionMsg.isMessageToLogin;
 import static com.didekindroid.DidekindroidApp.getBaseURL;
-import static com.didekindroid.common.UiException.UiAction.LOGIN;
 import static com.didekindroid.common.UiException.UiAction.SEARCH_COMU;
-import static com.didekindroid.common.TokenHandler.TKhandler;
 import static com.didekindroid.common.UiException.UiAction.TOKEN_TO_ERASE;
+import static com.didekindroid.common.utils.UIutils.catchAuthenticationException;
+import static com.didekindroid.common.utils.UIutils.checkBearerToken;
 
 /**
  * User: pedro@didekin
@@ -410,22 +410,4 @@ public enum ServiceOne implements ServiceOneEndPoints {
 
 //    ============================ HELPER METHODS ============================
 
-    String checkBearerToken() throws UiException
-    {
-        String bearerAccessTkHeader = TKhandler.doBearerAccessTkHeader();
-
-        if (bearerAccessTkHeader == null) { // No token in cache.
-            throw new UiException(LOGIN, R.string.user_without_signedUp, null);
-        }
-        return bearerAccessTkHeader;
-    }
-
-    void catchAuthenticationException(InServiceException e) throws UiException
-    {
-        Log.e(TAG, "catchAuthenticationException():" + e.getHttpMessage());
-
-        if (isMessageToLogin(e.getHttpMessage())) {  // Problema de identificación.
-            throw new UiException(LOGIN, R.string.user_without_signedUp, e);
-        }
-    }
 }

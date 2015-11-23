@@ -21,12 +21,15 @@ import com.didekindroid.common.TokenHandler;
 import com.didekindroid.common.UiException;
 import com.didekindroid.common.utils.ConnectionUtils;
 import com.didekindroid.incidencia.activity.IncidRegAc;
+import com.didekindroid.incidencia.activity.utils.IncidenciaMenu;
 import com.didekindroid.usuario.activity.utils.UserAndComuFiller;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.FullUsuarioComuidadIntent;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
 
 import static com.didekin.serviceone.controller.ServOneConstant.IS_USER_DELETED;
+import static com.didekindroid.common.utils.AppIntentExtras.COMUNIDAD_ID;
+import static com.didekindroid.common.utils.AppIntentExtras.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
@@ -36,10 +39,7 @@ import static com.didekindroid.usuario.activity.utils.RolCheckBox.ADMINISTRADOR;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.INQUILINO;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRESIDENTE;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PROPIETARIO;
-import static com.didekindroid.common.utils.AppIntentExtras.COMUNIDAD_ID;
-import static com.didekindroid.common.utils.AppIntentExtras.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.usuario.activity.utils.UserMenu.COMU_DATA_AC;
-import static com.didekindroid.usuario.activity.utils.UserMenu.INCID_REG_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_USERCOMU_BY_COMU_AC;
 import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -196,7 +196,7 @@ public class UserComuDataAc extends AppCompatActivity {
                 intent = new Intent(this, IncidRegAc.class);
                 intent.putExtra(COMUNIDAD_ID.extra, mOldUserComu.getComunidad().getC_Id());
                 this.setIntent(intent);
-                INCID_REG_AC.doMenuItem(this);
+                IncidenciaMenu.INCID_REG_AC.doMenuItem(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -15,7 +15,7 @@ import com.didekindroid.DidekindroidApp;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
 import com.didekindroid.common.utils.IoHelper;
-import com.didekindroid.usuario.activity.utils.CleanEnum;
+import com.didekindroid.usuario.activity.utils.CleanUserEnum;
 import com.didekindroid.usuario.dominio.DomainDataUtils;
 
 import org.hamcrest.CoreMatchers;
@@ -33,11 +33,11 @@ import static com.didekin.serviceone.controller.ServOneConstant.IS_USER_DELETED;
 import static com.didekindroid.common.TokenHandler.TKhandler;
 import static com.didekindroid.common.UiException.UiAction.SEARCH_COMU;
 import static com.didekindroid.common.utils.UIutils.updateIsRegistered;
-import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_JUAN;
-import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_JUAN2_AND_PEPE;
-import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_JUAN_AND_PEPE;
-import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_NOTHING;
-import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_PEPE;
+import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_JUAN;
+import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_JUAN2_AND_PEPE;
+import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
+import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_NOTHING;
+import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRESIDENTE;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PROPIETARIO;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOneUser;
@@ -46,7 +46,7 @@ import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanTwoU
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanWithTkhandler;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.regTwoUserComuSameUser;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAndUpdateTk;
-import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.updateSecurityData;
+import static com.didekindroid.common.utils.ActivityTestUtils.updateSecurityData;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_LA_PLAZUELA_5;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_PLAZUELA5_JUAN;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL;
@@ -84,7 +84,7 @@ public class ServiceOneIfTest {
 
     Context context;
     File refreshTkFile;
-    CleanEnum whatClean;
+    CleanUserEnum whatClean;
 
     @Before
     public void setUp() throws Exception

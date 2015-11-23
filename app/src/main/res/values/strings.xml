@@ -28,7 +28,7 @@
     <string name="incid_resolucion_reg_ac_button_rot">Actualizar información</string>
     <string name="incid_resolucion_rot">Datos resolución incidencia</string>
     <string name="incid_reg_importancia">Importancia</string>
-    <string name="incid_reg_tipoIncidencia">Tipo de incidencia</string>
+    <string name="incid_reg_ambitoIncidencia">Ámbito de incidencia</string>
     <string name="incid_reg_descripcion">Descripcion</string>
     <!--******************************************************************************-->
     <!--                                  USUARIO                                     -->

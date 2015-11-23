@@ -14,6 +14,7 @@ import com.didekin.common.exception.InServiceException;
 import com.didekindroid.usuario.activity.ComuSearchAc;
 import com.didekindroid.usuario.activity.LoginAc;
 
+import static com.didekindroid.common.TokenHandler.TKhandler;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.utils.UIutils.makeToast;
 
@@ -78,9 +79,8 @@ public class UiException extends Exception {
             @Override
             public void doAction(Activity activity, int toastResource)
             {
-                // TODO: 1. store in local DB the refresh token.
-                //       2. service to erase tokens stored locally.
-                // Llamar activiy for result, to do the local storage. ??
+//              Problem: an invalid token may remain in server DB, if delete of the token failed.
+                // TODO: Erase in server the invalid tokens.
             }
         };
 

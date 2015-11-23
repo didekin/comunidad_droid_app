@@ -25,7 +25,7 @@ import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_JUAN_AND_PEPE;
+import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.common.utils.AppIntentExtras.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.common.utils.AppIntentExtras.COMUNIDAD_SEARCH;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;

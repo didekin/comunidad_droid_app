@@ -3,7 +3,7 @@ package com.didekindroid.usuario.activity;
 import android.support.test.rule.ActivityTestRule;
 
 import com.didekindroid.R;
-import com.didekindroid.usuario.activity.utils.CleanEnum;
+import com.didekindroid.usuario.activity.utils.CleanUserEnum;
 
 import org.junit.After;
 import org.junit.Before;
@@ -16,8 +16,8 @@ import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_NOTHING;
-import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.checkToastInTest;
+import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_NOTHING;
+import static com.didekindroid.common.utils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_PEPE;
 
@@ -29,7 +29,7 @@ import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_PEPE;
 public class LoginAcTest {
 
     LoginAc mActivity;
-    CleanEnum whatToClean = CLEAN_NOTHING;
+    CleanUserEnum whatToClean = CLEAN_NOTHING;
 
     @Rule
     public ActivityTestRule<LoginAc> mActivityRule = new ActivityTestRule<>(LoginAc.class, true, false);

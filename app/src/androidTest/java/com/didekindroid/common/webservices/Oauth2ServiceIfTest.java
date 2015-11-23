@@ -5,7 +5,7 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekin.common.exception.InServiceException;
 import com.didekin.common.oauth2.OauthToken.AccessToken;
 import com.didekindroid.common.UiException;
-import com.didekindroid.usuario.activity.utils.CleanEnum;
+import com.didekindroid.usuario.activity.utils.CleanUserEnum;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.After;
@@ -18,13 +18,13 @@ import static com.didekin.common.exception.DidekinExceptionMsg.NOT_FOUND;
 import static com.didekin.common.oauth2.OauthClient.CL_USER;
 import static com.didekin.common.oauth2.OauthTokenHelper.HELPER;
 import static com.didekindroid.common.TokenHandler.TKhandler;
-import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_JUAN;
-import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_NOTHING;
-import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_PEPE;
+import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_JUAN;
+import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_NOTHING;
+import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanWithTkhandler;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAndUpdateTk;
-import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.updateSecurityData;
+import static com.didekindroid.common.utils.ActivityTestUtils.updateSecurityData;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_JUAN;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_PEPE;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_JUAN;
@@ -46,7 +46,7 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class Oauth2ServiceIfTest {
 
-    CleanEnum whatClean;
+    CleanUserEnum whatClean;
 
     @Before
     public void setUp() throws Exception

@@ -5,7 +5,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
-import com.didekindroid.usuario.activity.utils.CleanEnum;
+import com.didekindroid.usuario.activity.utils.CleanUserEnum;
 
 import org.junit.After;
 import org.junit.Before;
@@ -22,8 +22,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.common.TokenHandler.TKhandler;
-import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_NOTHING;
-import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_PEPE;
+import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_NOTHING;
+import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_PEPE;
@@ -43,7 +43,7 @@ import static org.junit.Assert.assertThat;
 public class DeleteMeAcTest {
 
     DeleteMeAc mActivity;
-    CleanEnum whatToClean = CLEAN_PEPE;
+    CleanUserEnum whatToClean = CLEAN_PEPE;
 
     @Rule
     public ActivityTestRule<DeleteMeAc> mActivityRule = new ActivityTestRule<DeleteMeAc>(DeleteMeAc.class) {

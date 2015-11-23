@@ -10,13 +10,13 @@
     <string-array name="IncidImportanciaArray">
         <!--0-->
         <item>importancia</item>
-        <item>Baja</item>
         <!--1-->
-        <item>Media</item>
+        <item>Baja</item>
         <!--2-->
-        <item>Alta</item>
+        <item>Media</item>
         <!--3-->
-        <item>Urgente</item>
+        <item>Alta</item>
         <!--4-->
+        <item>Urgente</item>
     </string-array>
 </resources>

@@ -25,7 +25,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.usuario.activity.utils.CleanEnum.CLEAN_PEPE;
+import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.COMU_SEARCH_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.USER_DATA_AC;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;

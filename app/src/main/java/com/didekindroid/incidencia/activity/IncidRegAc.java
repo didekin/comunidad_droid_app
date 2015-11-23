@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.didekin.incidservice.domain.IncidUserComu;
 import com.didekindroid.R;
+import com.didekindroid.common.UiException;
 import com.didekindroid.common.utils.ConnectionUtils;
 import com.didekindroid.common.utils.UIutils;
 
@@ -18,6 +19,8 @@ import static com.didekindroid.common.utils.AppIntentExtras.COMUNIDAD_ID;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.common.utils.UIutils.makeToast;
+import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
+import static com.google.common.base.Preconditions.checkState;
 
 /**
  * Preconditions:
@@ -79,15 +82,37 @@ public class IncidRegAc extends AppCompatActivity {
     //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
     //    ============================================================
 
-    class IncidenciaRegister extends AsyncTask<IncidUserComu,Void,Void> {
+    class IncidenciaRegister extends AsyncTask<IncidUserComu, Void, Integer> {
 
         private final String TAG = IncidenciaRegister.class.getCanonicalName();
+        UiException uiException;
 
         @Override
-        protected Void doInBackground(IncidUserComu... params)
+        protected Integer doInBackground(IncidUserComu... incidUserComus)
         {
             Log.d(TAG, "doInBackground()");
-            return null;
+            int rowInserted = 0;
+
+            try {
+                rowInserted = IncidenciaServ.regIncidenciaUserComu(incidUserComus[0]);
+            } catch (UiException e) {
+                uiException = e;
+            }
+            return rowInserted;
+        }
+
+        @Override
+        protected void onPostExecute(Integer rowInserted)
+        {
+            Log.d(TAG, "onPostExecute()");
+
+            if (uiException != null) {
+                Log.d(TAG, "onPostExecute(): uiException " + (uiException.getInServiceException() != null ?
+                        uiException.getInServiceException().getHttpMessage() : "Token null"));
+                uiException.getAction().doAction(IncidRegAc.this, uiException.getResourceId());
+            } else {
+                checkState(rowInserted == 1);
+            }
         }
     }
 
