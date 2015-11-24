@@ -53,7 +53,6 @@ public class IncidenciaBean {
     {
         setDescripcion(((EditText) mFragmentView.findViewById(R.id.incid_reg_desc_ed)).getText().toString());
 
-        validateBean(errorMsg);
         if (validateBean(errorMsg)) {
             Incidencia incidencia = new Incidencia.IncidenciaBuilder()
                     .ambitoIncid(new AmbitoIncidencia(codAmbitoIncid))
@@ -84,7 +83,7 @@ public class IncidenciaBean {
 
     boolean validateCodAmbito(StringBuilder errorMsg, Resources resources)
     {
-        if (codAmbitoIncid < 0 || codAmbitoIncid > AMBITO_INCID_COUNT) {
+        if (codAmbitoIncid <= 0 || codAmbitoIncid > AMBITO_INCID_COUNT) {
             errorMsg.append(resources.getString(R.string.incid_reg_ambitoIncidencia)).append(LINE_BREAK.getRegexp());
             return false;
         }

@@ -19,6 +19,7 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         CommonSuite_1.class,
+//        CommonSuite_2.class, out of this suite.
         IncidFunctionalTestSuite.class,
         IncidFunctionalSlowTestSuite.class,
         IncidSupportTestSuite.class,

@@ -115,7 +115,7 @@ public final class UIutils {
 
     public static void makeToast(Context context, CharSequence toastMessage, int toastLength)
     {
-        Toast clickToast = makeText(context, toastMessage, toastLength);
+        Toast clickToast = makeText(context, null, toastLength);
         View toastView = clickToast.getView();
         toastView.setBackgroundColor(ContextCompat.getColor(context, deep_purple_100));
         TextView textView = new TextView(context);
