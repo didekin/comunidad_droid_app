@@ -19,7 +19,7 @@ import com.didekindroid.common.utils.AppIntentExtras;
 
 import java.util.List;
 
-import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
+import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static com.didekindroid.usuario.activity.utils.ViewsIDs.SEE_USERCOMU_BY_COMU;
 
 

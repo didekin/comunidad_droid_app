@@ -20,7 +20,7 @@ import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.utils.UIutils.makeToast;
-import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
+import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static com.google.common.base.Preconditions.checkState;
 
 /**

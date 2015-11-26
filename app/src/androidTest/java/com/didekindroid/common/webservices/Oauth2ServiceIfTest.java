@@ -30,7 +30,7 @@ import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_PEPE;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_JUAN;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_PEPE;
 import static com.didekindroid.common.webservices.Oauth2Service.Oauth2;
-import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
+import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.not;

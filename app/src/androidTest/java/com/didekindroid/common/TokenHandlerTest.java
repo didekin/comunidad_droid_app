@@ -6,18 +6,15 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.common.oauth2.OauthToken;
 import com.didekin.common.oauth2.OauthToken.AccessToken;
-import com.didekindroid.common.utils.IoHelper;
 import com.didekindroid.usuario.activity.utils.UsuarioTestUtils;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -25,7 +22,7 @@ import static com.didekin.common.oauth2.OauthTokenHelper.HELPER;
 import static com.didekindroid.common.TokenHandler.TKhandler;
 import static com.didekindroid.common.TokenHandler.refresh_token_filename;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_JUAN;
-import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
+import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;

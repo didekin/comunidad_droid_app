@@ -17,7 +17,7 @@ import java.util.List;
 
 import static com.didekindroid.usuario.activity.utils.ViewsIDs.COMU_SEARCH_RESULTS;
 import static com.didekindroid.common.utils.AppIntentExtras.COMUNIDAD_SEARCH;
-import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
+import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 
 /**
  * Preconditions:

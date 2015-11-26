@@ -174,12 +174,12 @@ public class RegComuAndUserComuAcTest {
         activity = mActivityRule.launchActivity(new Intent());
 
         // Wrong data.
-        onView(withId(R.id.reg_usercomu_checbox_pre)).perform(scrollTo(), click());
-        onView(withId(R.id.reg_usercomu_checbox_admin)).perform(scrollTo(), click());
-        onView(withId(R.id.reg_usercomu_checbox_inq)).perform(scrollTo(), click());
-        onView(withId(R.id.reg_usercomu_checbox_pro)).perform(scrollTo(), click());
+        onView(withId(R.id.reg_usercomu_checbox_pre)).perform(click());
+        onView(withId(R.id.reg_usercomu_checbox_admin)).perform(click());
+        onView(withId(R.id.reg_usercomu_checbox_inq)).perform(click());
+        onView(withId(R.id.reg_usercomu_checbox_pro)).perform(click());
 
-        onView(withId(R.id.reg_usercomu_escalera_ed)).perform(typeText("esca??_b"));
+        onView(withId(R.id.reg_usercomu_escalera_ed)).perform(typeText("escal ?? b"), closeSoftKeyboard());
 
         onView(withId(R.id.reg_comu_usuariocomunidad_button)).perform(scrollTo(), click());
         checkToastInTest(R.string.error_validation_msg, activity,

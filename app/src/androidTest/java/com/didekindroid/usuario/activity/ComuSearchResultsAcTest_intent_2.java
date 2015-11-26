@@ -33,7 +33,7 @@ import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAnd
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_LA_PLAZUELA_5;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_PLAZUELA5_PEPE;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_JUAN;
-import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
+import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.instanceOf;
@@ -97,7 +97,7 @@ public class ComuSearchResultsAcTest_intent_2 {
     {
         // Usuario registrado. La búsqueda devuelve una comunidad a la que él NO está asociado.
 
-        onData(allOf(is(instanceOf(Comunidad.class)), hasProperty("nombreVia", is("de la Plazuela")))).perform(click());
+        onData(is(COMU_LA_PLAZUELA_5)).perform(click());
         FullComunidadIntent comunidadIntent = new FullComunidadIntent(comuIntent);
         intended(hasExtra(COMUNIDAD_LIST_OBJECT.extra,comunidadIntent));
         onView(withId(R.id.reg_usercomu_ac_layout)).check(matches(isDisplayed()));

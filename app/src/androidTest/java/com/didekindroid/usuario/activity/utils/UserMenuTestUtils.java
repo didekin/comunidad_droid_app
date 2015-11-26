@@ -181,7 +181,7 @@ public enum UserMenuTestUtils {
         {
             onView(withText(R.string.user_data_ac_mn)).check(doesNotExist());
             openActionBarOverflowOrOptionsMenu(activity);
-            Thread.sleep(2000);
+            Thread.sleep(1000);
             onView(withText(R.string.user_data_ac_mn)).check(matches(isDisplayed())).perform(click());
             checkToastInTest(R.string.user_without_signedUp, activity);
         }

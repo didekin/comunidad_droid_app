@@ -11,7 +11,6 @@ import com.didekindroid.R;
 import com.didekindroid.common.UiException;
 import com.didekindroid.usuario.activity.utils.CleanUserEnum;
 
-import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -31,19 +30,17 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_JUAN;
-import static com.didekindroid.common.utils.AppIntentExtras.COMUNIDAD_ID;
 import static com.didekindroid.common.utils.ActivityTestUtils.checkToastInTest;
+import static com.didekindroid.common.utils.AppIntentExtras.COMUNIDAD_ID;
+import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
+import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_LA_PLAZUELA_5;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_PLAZUELA5_JUAN;
-import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
-import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
+import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static org.hamcrest.CoreMatchers.allOf;
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -159,12 +156,10 @@ public class ComuDataAcTest {
         onView(withId(R.id.see_usercomu_by_user_ac_frg_container)).check(matches(isDisplayed()));
 
         Comunidad comunidadDb = ServOne.getComuData(mComunidad.getC_Id());
-        assertThat(comunidadDb, Matchers.allOf(
-                hasProperty("municipio", equalTo(new Municipio((short) 119, new Provincia((short) 46)))),
-                hasProperty("nombreVia", equalTo("nombre via One")),
-                hasProperty("numero", equalTo((short) 123)),
-                hasProperty("sufijoNumero", equalTo("Tris"))
-        ));
+        assertThat(comunidadDb.getMunicipio(),is(new Municipio((short) 119, new Provincia((short) 46))));
+        assertThat(comunidadDb.getNombreVia(),is("nombre via One"));
+        assertThat(comunidadDb.getNumero(),is((short) 123));
+        assertThat(comunidadDb.getSufijoNumero(),is("Tris"));
     }
 
     @Test
@@ -174,10 +169,8 @@ public class ComuDataAcTest {
         onView(withId(R.id.see_usercomu_by_user_ac_frg_container)).check(matches(isDisplayed()));
 
         Comunidad comunidadDb = ServOne.getComuData(mComunidad.getC_Id());
-        assertThat(comunidadDb, Matchers.allOf(
-                hasProperty("municipio", equalTo(COMU_LA_PLAZUELA_5.getMunicipio())),
-                hasProperty("nombreVia", equalTo(COMU_LA_PLAZUELA_5.getNombreVia()))
-        ));
+        assertThat(comunidadDb.getMunicipio(), is(COMU_LA_PLAZUELA_5.getMunicipio()));
+        assertThat(comunidadDb.getNombreVia(), is(COMU_LA_PLAZUELA_5.getNombreVia()));
     }
 
     @Test

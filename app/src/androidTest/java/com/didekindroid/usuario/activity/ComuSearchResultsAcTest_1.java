@@ -33,6 +33,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.TokenHandler.TKhandler;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.ViewsIDs.COMU_SEARCH_RESULTS;
@@ -47,12 +48,14 @@ import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.regThreeU
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.regTwoUserComuSameUser;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_LA_PLAZUELA_5;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_TRAV_PLAZUELA_11;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_JUAN;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.makeComunidad;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.makeListTwoUserComu;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.makeUsuario;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.makeUsuarioComunidad;
 import static com.google.android.apps.common.testing.ui.espresso.sample.LongListMatchers.withAdaptedData;
+import static com.google.android.apps.common.testing.ui.espresso.sample.LongListMatchers.withItemContent;
 import static com.google.common.base.Preconditions.checkState;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
@@ -164,9 +167,9 @@ public class ComuSearchResultsAcTest_1 {
         ComuSearchResultsListAdapter adapter = (ComuSearchResultsListAdapter) mComunidadSummaryFrg.getListAdapter();
         assertThat(adapter.getCount(), is(2));
         onView(withId(COMU_SEARCH_RESULTS.idView)).check(
-                matches(withAdaptedData(hasProperty("nombreVia", is("del Norte")))));
+                matches(withAdaptedData(Matchers.<Object>is(comunidadNew))));
         onView(withId(COMU_SEARCH_RESULTS.idView)).check(
-                matches(withAdaptedData(hasProperty("nombreVia", is("de la Plazuela")))));
+                matches(withAdaptedData(Matchers.<Object>is(COMU_LA_PLAZUELA_5))));
     }
 
     @Test
@@ -236,9 +239,12 @@ public class ComuSearchResultsAcTest_1 {
         mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getFragmentManager().findFragmentById(R.id.comu_list_frg);
         ComuSearchResultsListAdapter adapter = (ComuSearchResultsListAdapter) mComunidadSummaryFrg.getListAdapter();
         assertThat(adapter.getCount(), is(1));
-        onView(withAdaptedData(hasProperty("nombreVia", is("de la Plazuela")))).check(matches(isDisplayed()));
+        onView(withAdaptedData(Matchers.<Object>is(COMU_LA_PLAZUELA_5))).check(matches(isDisplayed()));
+        onData(is(instanceOf(Comunidad.class))).onChildView(allOf(
+                withId(R.id.nombreComunidad_view),
+                withText(COMU_LA_PLAZUELA_5.getNombreComunidad())
+        )).perform(click());
 
-        onData(allOf(is(instanceOf(Comunidad.class)), hasProperty("nombreVia", is("de la Plazuela")))).perform(click());
         onView(withId(R.id.reg_user_and_usercomu_ac_layout)).check(matches(isDisplayed()));
     }
 
@@ -255,10 +261,12 @@ public class ComuSearchResultsAcTest_1 {
         ComuSearchResultsListAdapter adapter = (ComuSearchResultsListAdapter) mComunidadSummaryFrg.getListAdapter();
         assertThat(adapter.getCount(), is(1));
 
-        Comunidad comunidadInAdapter = adapter.getItem(0);
-        onView(withAdaptedData(Matchers.<Object>equalTo(comunidadInAdapter))).check(matches(isDisplayed()));
-        onData(allOf(is(instanceOf(Comunidad.class)), hasProperty("nombreVia", is("de la Plazuela")))).perform(click());
-
+        Comunidad comunidad = adapter.getItem(0);
+        onView(withAdaptedData(Matchers.<Object>equalTo(comunidad))).check(matches(isDisplayed()));
+        onData(is(instanceOf(Comunidad.class))).onChildView(allOf(
+                withId(R.id.nombreComunidad_view),
+                withText(COMU_LA_PLAZUELA_5.getNombreComunidad())
+        )).perform(click());
         onView(withId(R.id.usercomu_data_ac_layout)).check(matches(isDisplayed()));
     }
 
@@ -283,8 +291,10 @@ public class ComuSearchResultsAcTest_1 {
         mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getFragmentManager().findFragmentById(R.id.comu_list_frg);
         ComuSearchResultsListAdapter adapter = (ComuSearchResultsListAdapter) mComunidadSummaryFrg.getListAdapter();
         assertThat(adapter.getCount(), is(1));
+        Comunidad comunidad = adapter.getItem(0);
+        assertThat(comunidad.getNombreVia(),is("de la Plazuela"));
 
-        onData(allOf(is(instanceOf(Comunidad.class)), hasProperty("nombreVia", is("de la Plazuela")))).perform(click());
+        onData(is(comunidad)).perform(click());
         onView(withId(R.id.reg_usercomu_ac_layout)).check(matches(isDisplayed()));
 
         cleanTwoUsers(USER_JUAN, usuarioIn);

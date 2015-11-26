@@ -40,8 +40,8 @@ public class UIutilsTest extends TestCase {
 
     @Test
     public void testNameFile() throws Exception {
-        assertThat(UIutils.SharedPrefFiles.USER_PREF.toString(),
-                is("com.didekindroid.common.utils.UIutils.SharedPrefFiles.USER_PREF"));
+        assertThat(UIutils.SharedPrefFiles.app_preferences_file.toString(),
+                is("com.didekindroid.common.utils.UIutils.SharedPrefFiles.app_preferences_file"));
     }
 
     @Test

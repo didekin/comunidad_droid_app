@@ -10,6 +10,7 @@ import com.didekindroid.R;
 import com.didekindroid.usuario.dominio.DomainDataUtils;
 
 import org.hamcrest.CoreMatchers;
+import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -27,6 +28,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.common.utils.AppIntentExtras.COMUNIDAD_ID;
@@ -35,9 +37,11 @@ import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.SEE_USER
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.USER_DATA_AC;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAndUpdateTk;
+import static com.didekindroid.usuario.activity.utils.ViewsIDs.SEE_USER_COMU_BY_USER;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_PLAZUELA5_JUAN;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_JUAN;
-import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.makeComunidad;
+import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.ViewsIDs.SEE_USERCOMU_BY_COMU;
 import static com.google.android.apps.common.testing.ui.espresso.sample.LongListMatchers.withAdaptedData;
@@ -127,28 +131,19 @@ public class SeeUserComuByComuAcTest {
         SeeUserComutByComuListAdapter mAdapter = (SeeUserComutByComuListAdapter) mFragment.getListAdapter();
         assertThat(mAdapter.getCount(), is(1));
 
-        onView(withId(SEE_USERCOMU_BY_COMU.idView)).check(
-                matches(withAdaptedData(hasProperty("escalera", is(COMU_PLAZUELA5_JUAN.getEscalera())))));
-        onView(withId(SEE_USERCOMU_BY_COMU.idView)).check(
-                matches(withAdaptedData(hasProperty("portal", is(COMU_PLAZUELA5_JUAN.getPortal())))));
-        onView(withId(SEE_USERCOMU_BY_COMU.idView)).check(
-                matches(withAdaptedData(hasProperty("planta", is(COMU_PLAZUELA5_JUAN.getPlanta())))));
-        onView(withId(SEE_USERCOMU_BY_COMU.idView)).check(
-                matches(withAdaptedData(hasProperty("puerta", is(COMU_PLAZUELA5_JUAN.getPuerta())))));
-        onView(withId(SEE_USERCOMU_BY_COMU.idView)).check(
-                matches(withAdaptedData(hasProperty("roles", is(COMU_PLAZUELA5_JUAN.getRoles())))));
+        UsuarioComunidad userComu = mAdapter.getItem(0);
+        assertThat(userComu.getEscalera(), is(COMU_PLAZUELA5_JUAN.getEscalera()));
+        assertThat(userComu.getPortal(), is(COMU_PLAZUELA5_JUAN.getPortal()));
+        assertThat(userComu.getPlanta(), is(COMU_PLAZUELA5_JUAN.getPlanta()));
+        assertThat(userComu.getPuerta(), is(COMU_PLAZUELA5_JUAN.getPuerta()));
+        assertThat(userComu.getRoles(), is(COMU_PLAZUELA5_JUAN.getRoles()));
+        assertThat(userComu.getComunidad(),is(new Comunidad.ComunidadBuilder().c_id(comunidadId).build()));
+
+        onView(withAdaptedData(Matchers.<Object>is(userComu))).check(matches(isDisplayed()));
 
         // Header.
         onView(withId(R.id.usercomu_list_header_nombrecomu_txt))
                 .check(matches(withText(containsString(COMU_PLAZUELA5_JUAN.getComunidad().getNombreComunidad()))));
-
-        onData(allOf(
-                is(instanceOf(UsuarioComunidad.class)),
-                hasProperty("comunidad", is(new Comunidad.ComunidadBuilder().c_id(comunidadId).build()))))
-                .check(matches(isDisplayed()));
-        onData(allOf(
-                is(instanceOf(UsuarioComunidad.class)),
-                hasProperty("usuario", is(USER_JUAN)))).check(matches(isDisplayed()));
     }
 
     @Test

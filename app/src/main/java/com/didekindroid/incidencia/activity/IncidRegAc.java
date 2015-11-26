@@ -14,10 +14,13 @@ import com.didekindroid.R;
 import com.didekindroid.common.UiException;
 import com.didekindroid.common.utils.ConnectionUtils;
 import com.didekindroid.common.utils.UIutils;
+import com.didekindroid.incidencia.gcm.AppGcmRegistrationServ;
 
 import static com.didekindroid.common.utils.AppIntentExtras.COMUNIDAD_ID;
+import static com.didekindroid.common.utils.UIutils.checkPlayServices;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
+import static com.didekindroid.common.utils.UIutils.isGcmTokenSentServer;
 import static com.didekindroid.common.utils.UIutils.makeToast;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.google.common.base.Preconditions.checkState;
@@ -29,6 +32,9 @@ import static com.google.common.base.Preconditions.checkState;
  * Postconditions:
  * 1. No intent passed.
  */
+/**
+ * This activity is a point of registration for receiving notifications of new incidencias.
+ */
 public class IncidRegAc extends AppCompatActivity {
 
     private static final String TAG = IncidRegAc.class.getCanonicalName();
@@ -39,6 +45,11 @@ public class IncidRegAc extends AppCompatActivity {
     {
         Log.d(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
+
+        if (checkPlayServices(this) && !isGcmTokenSentServer(this)){
+            Intent intent = new Intent(this, AppGcmRegistrationServ.class);
+            startService(intent);
+        }
 
         final long comunidadId = getIntent().getLongExtra(COMUNIDAD_ID.extra, 0);
 
@@ -75,7 +86,6 @@ public class IncidRegAc extends AppCompatActivity {
             Intent intent = new Intent(this, IncidSeeByUserComuAc.class);
             startActivity(intent);
         }
-
     }
 
     //    ============================================================

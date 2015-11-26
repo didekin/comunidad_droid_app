@@ -32,7 +32,7 @@ import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUser
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUserComuBeanFromView;
 import static com.didekindroid.usuario.activity.utils.UserMenu.LOGIN_AC;
 import static com.didekindroid.common.webservices.Oauth2Service.Oauth2;
-import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
+import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**

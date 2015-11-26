@@ -192,7 +192,7 @@ public class RegComuAndUserAndUserComuAcTest {
         onView(withId(R.id.reg_usercomu_portal_ed)).perform(scrollTo(), typeText("port2"));
         onView(withId(R.id.reg_usercomu_escalera_ed)).perform(scrollTo(), typeText("escale_b"));
         onView(withId(R.id.reg_usercomu_planta_ed)).perform(scrollTo(), typeText("planta-N"));
-        onView(withId(R.id.reg_usercomu_puerta_ed)).perform(scrollTo(), typeText("puerta5"));
+        onView(withId(R.id.reg_usercomu_puerta_ed)).perform(scrollTo(), typeText("puerta5"), closeSoftKeyboard());
         onView(withId(R.id.reg_usercomu_checbox_pre)).perform(scrollTo(), click());
         onView(withId(R.id.reg_usercomu_checbox_inq)).perform(scrollTo(), click());
 
@@ -305,15 +305,15 @@ public class RegComuAndUserAndUserComuAcTest {
         onData(withRowString(3, "Chilches/Xilxes"))
                 .perform(click());
 
-        onView(withId(R.id.comunidad_nombre_via_editT)).perform(scrollTo(), typeText("nombre via One"));
-        onView(withId(R.id.comunidad_numero_editT)).perform(scrollTo(), typeText("123"));
-        onView(withId(R.id.comunidad_sufijo_numero_editT)).perform(scrollTo(), typeText("Tris"));
+        onView(withId(R.id.comunidad_nombre_via_editT)).perform(typeText("nombre via One"));
+        onView(withId(R.id.comunidad_numero_editT)).perform(typeText("123"));
+        onView(withId(R.id.comunidad_sufijo_numero_editT)).perform(typeText("Tris"), closeSoftKeyboard());
 
         // UsuarioComunidad.
-        onView(withId(R.id.reg_usercomu_portal_ed)).perform(scrollTo(), typeText("port2"));
-        onView(withId(R.id.reg_usercomu_escalera_ed)).perform(scrollTo(), typeText("escale_b"));
-        onView(withId(R.id.reg_usercomu_planta_ed)).perform(scrollTo(), typeText("planta-N"));
-        onView(withId(R.id.reg_usercomu_puerta_ed)).perform(scrollTo(), typeText("puerta5"));
+        onView(withId(R.id.reg_usercomu_portal_ed)).perform(typeText("port2"));
+        onView(withId(R.id.reg_usercomu_escalera_ed)).perform(typeText("escale_b"));
+        onView(withId(R.id.reg_usercomu_planta_ed)).perform(typeText("planta-N"));
+        onView(withId(R.id.reg_usercomu_puerta_ed)).perform(typeText("puerta5"), closeSoftKeyboard());
         onView(withId(R.id.reg_usercomu_checbox_pre)).perform(scrollTo(), click());
         onView(withId(R.id.reg_usercomu_checbox_inq)).perform(scrollTo(), click());
 

@@ -23,7 +23,7 @@ import static com.didekindroid.common.utils.AppIntentExtras.COMUNIDAD_LIST_OBJEC
 import static com.didekindroid.common.utils.AppIntentExtras.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.usuario.activity.utils.UserMenu.REG_COMU_USER_USERCOMU_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_USERCOMU_BY_USER_AC;
-import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
+import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.google.common.base.Preconditions.checkNotNull;

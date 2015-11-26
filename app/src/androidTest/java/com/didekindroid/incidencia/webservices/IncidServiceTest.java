@@ -5,7 +5,7 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekin.incidservice.domain.IncidUserComu;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.usuario.activity.utils.CleanUserEnum;
-import com.didekindroid.usuario.webservices.ServiceOne;
+import com.didekindroid.usuario.webservices.UsuarioService;
 
 import org.junit.After;
 import org.junit.Before;
@@ -38,7 +38,7 @@ public class IncidServiceTest {
     {
         whatClean = CLEAN_PEPE;
         signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
-        pepeUserComu = ServiceOne.ServOne.seeUserComusByUser().get(0);
+        pepeUserComu = UsuarioService.ServOne.seeUserComusByUser().get(0);
     }
 
     @After

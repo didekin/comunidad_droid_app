@@ -34,7 +34,7 @@ import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOpti
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_JUAN;
-import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
+import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.instanceOf;
@@ -98,7 +98,8 @@ public class ComuSearchResultsAcTest_intent_1 {
     {
         // Usuario registrado. La búsqueda devuelve una comunidad a la que él ya está asociado.
 
-        onData(allOf(is(instanceOf(Comunidad.class)), hasProperty("nombreVia", is("Real")))).perform(click());
+        onData(is(COMU_REAL)).perform(click());
+
         FullUsuarioComuidadIntent usuarioComuidadIntent = new FullUsuarioComuidadIntent(new UsuarioComunidad.UserComuBuilder(comuIntent, userIntent)
                 .portal(COMU_REAL_JUAN.getPortal())
                 .escalera(COMU_REAL_JUAN.getEscalera())

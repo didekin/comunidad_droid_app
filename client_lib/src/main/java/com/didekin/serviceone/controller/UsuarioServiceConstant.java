@@ -11,7 +11,7 @@ import static com.didekin.common.oauth2.OauthConstant.USER_WRITE;
  * Time: 11:10
  */
 @SuppressWarnings({"unused"})
-public final class ServOneConstant {
+public final class UsuarioServiceConstant {
 
     // Paths.
     public static final String ACCESS_TOKEN_DELETE = USER_WRITE + "/token/delete";
@@ -31,6 +31,7 @@ public final class ServOneConstant {
     public static final String USERCOMUS_BY_COMU = USER_READ + "/usercomus_by_comu";
     public static final String USERCOMUS_BY_USER = USER_READ + "/usercomus_by_user";
     public static final String USER_DELETE = USER_WRITE + "/delete";
+    public static final String USER_WRITE_GCM_TOKEN = USER_WRITE + "/gcm_token";
 
     // Mime types.
     public static final String MIME_JSON = "application/json";
@@ -39,7 +40,7 @@ public final class ServOneConstant {
     // Code constants.
     public static final int IS_USER_DELETED = -1;
 
-    private ServOneConstant()
+    private UsuarioServiceConstant()
     {
     }
 }

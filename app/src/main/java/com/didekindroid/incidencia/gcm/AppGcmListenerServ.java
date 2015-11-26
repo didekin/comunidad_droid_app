@@ -1,18 +1,6 @@
 package com.didekindroid.incidencia.gcm;
 
-import android.app.Service;
-import android.content.Intent;
-import android.os.IBinder;
+import com.google.android.gms.gcm.GcmListenerService;
 
-public class AppGcmListenerServ extends Service {
-    public AppGcmListenerServ()
-    {
-    }
-
-    @Override
-    public IBinder onBind(Intent intent)
-    {
-        // TODO: Return the communication channel to the service.
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
+public class AppGcmListenerServ extends GcmListenerService {
 }

@@ -7,4 +7,5 @@ gradlew.bat
 *.pro
 *.iml
 proguard-rules.pro
+google-services.json
 .gitignore

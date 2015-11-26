@@ -29,7 +29,7 @@ import java.util.List;
 
 import static com.didekin.common.exception.DidekinExceptionMsg.USER_NAME_DUPLICATE;
 import static com.didekin.common.oauth2.OauthTokenHelper.HELPER;
-import static com.didekin.serviceone.controller.ServOneConstant.IS_USER_DELETED;
+import static com.didekin.serviceone.controller.UsuarioServiceConstant.IS_USER_DELETED;
 import static com.didekindroid.common.TokenHandler.TKhandler;
 import static com.didekindroid.common.UiException.UiAction.SEARCH_COMU;
 import static com.didekindroid.common.utils.UIutils.updateIsRegistered;
@@ -59,7 +59,7 @@ import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_PEPE;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.makeListTwoUserComu;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.makeUsuarioComunidad;
 import static com.didekindroid.common.webservices.Oauth2Service.Oauth2;
-import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
+import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
@@ -249,13 +249,12 @@ public class ServiceOneIfTest {
                 .municipio(cDb.getMunicipio())
                 .build();
         assertThat(ServOne.modifyComuData(cNew), is(1));
-        assertThat(ServOne.getComusByUser().get(0), allOf(
-                hasProperty("tipoVia", equalTo(cNew.getTipoVia())),
-                hasProperty("nombreVia", equalTo(cNew.getNombreVia())),
-                hasProperty("numero", equalTo((short) 23)),
-                hasProperty("sufijoNumero", equalTo(cNew.getSufijoNumero())),
-                hasProperty("municipio", equalTo(cNew.getMunicipio()))
-        ));
+        Comunidad cNewDb =  ServOne.getComusByUser().get(0);
+        assertThat(cNewDb.getNombreVia(),is(cNew.getNombreVia()));
+        assertThat(cNewDb.getTipoVia(),is(cNew.getTipoVia()));
+        assertThat(cNewDb.getNumero(),is(cNew.getNumero()));
+        assertThat(cNewDb.getSufijoNumero(),is(cNew.getSufijoNumero()));
+        assertThat(cNewDb.getMunicipio(),is(cNew.getMunicipio()));
     }
 
     @Test

@@ -50,7 +50,7 @@ import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.typeRegUs
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_JUAN;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_TRAV_PLAZUELA_PEPE;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_JUAN2;
-import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
+import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.is;
@@ -150,11 +150,11 @@ public class RegUserAndUserComuAcTest_intent {
         activity = intentRule.getActivity();
 
         // Usuario data.
-        onView(withId(R.id.reg_usuario_email_editT)).perform(scrollTo(), typeText(USER_JUAN2.getUserName()));
-        onView(withId(R.id.reg_usuario_alias_ediT)).perform(scrollTo(), typeText(USER_JUAN2.getAlias()));
-        onView(withId(R.id.reg_usuario_password_ediT)).perform(scrollTo(), typeText(USER_JUAN2.getPassword()));
-        onView(withId(R.id.reg_usuario_password_confirm_ediT)).perform(scrollTo(),
-                typeText(USER_JUAN2.getPassword()), closeSoftKeyboard());
+        onView(withId(R.id.reg_usuario_email_editT)).perform(typeText(USER_JUAN2.getUserName()), closeSoftKeyboard());
+        onView(withId(R.id.reg_usuario_alias_ediT)).perform(typeText(USER_JUAN2.getAlias()));
+        onView(withId(R.id.reg_usuario_password_ediT)).perform(typeText(USER_JUAN2.getPassword()));
+        onView(withId(R.id.reg_usuario_password_confirm_ediT))
+                .perform(typeText(USER_JUAN2.getPassword()), closeSoftKeyboard());
 
         // UsurioComunidad data.
         typeRegUserComuData("portalA", "escC", "plantaB", "puerta_1", PROPIETARIO, PRESIDENTE);

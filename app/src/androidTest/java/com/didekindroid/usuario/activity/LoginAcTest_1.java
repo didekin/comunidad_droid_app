@@ -26,7 +26,7 @@ import static com.didekindroid.common.utils.ActivityTestUtils.checkNoToastInTest
 import static com.didekindroid.common.utils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_TRAV_PLAZUELA_PEPE;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_PEPE;
-import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
+import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;

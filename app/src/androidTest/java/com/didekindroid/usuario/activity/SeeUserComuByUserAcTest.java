@@ -3,7 +3,6 @@ package com.didekindroid.usuario.activity;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
 
@@ -30,16 +29,14 @@ import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.COMU_SEA
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.USER_DATA_AC;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.regThreeUserComuSameUser_2;
+import static com.didekindroid.usuario.activity.utils.ViewsIDs.SEE_USER_COMU_BY_USER;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_EL_ESCORIAL;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_LA_FUENTE;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_LA_FUENTE_PEPE;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_LA_PLAZUELA_5;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_PLAZUELA5_PEPE;
-import static com.didekindroid.usuario.activity.utils.ViewsIDs.SEE_USER_COMU_BY_USER;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -126,39 +123,25 @@ public class SeeUserComuByUserAcTest {
     {
         SeeUserComuByUserAdapter adapter = (SeeUserComuByUserAdapter) mFragment.getListAdapter();
         assertThat(adapter.getCount(), is(3));
+        // Orden es provinciaId, municipioCd.
+        assertThat(adapter.getItem(0), is(COMU_LA_FUENTE_PEPE));
+        assertThat(adapter.getItem(1), is(COMU_ESCORIAL_PEPE));
+        assertThat(adapter.getItem(2), is(COMU_PLAZUELA5_PEPE));
 
-        onData(allOf(
-                is(instanceOf(UsuarioComunidad.class)),
-                hasProperty("portal", is(COMU_PLAZUELA5_PEPE.getPortal())),
-                hasProperty("escalera", is(COMU_PLAZUELA5_PEPE.getEscalera())),
-                hasProperty("planta", is(COMU_PLAZUELA5_PEPE.getPlanta())),
-                hasProperty("puerta", is(COMU_PLAZUELA5_PEPE.getPuerta())),
-                hasProperty("roles", is(COMU_PLAZUELA5_PEPE.getRoles()))
-        )).onChildView(allOf(
-                withId(R.id.nombreComunidad_view),
-                withText(COMU_LA_PLAZUELA_5.getNombreComunidad()))).check(matches(isDisplayed()));
+        onData(is(COMU_LA_FUENTE_PEPE)).onChildView(allOf(
+                        withId(R.id.nombreComunidad_view),
+                        withText(COMU_LA_FUENTE.getNombreComunidad()))
+        ).check(matches(isDisplayed()));
 
-        onData(allOf(
-                is(instanceOf(UsuarioComunidad.class)),
-                hasProperty("portal", is(COMU_LA_FUENTE_PEPE.getPortal())),
-                hasProperty("escalera", is(COMU_LA_FUENTE_PEPE.getEscalera())),
-                hasProperty("planta", is(COMU_LA_FUENTE_PEPE.getPlanta())),
-                hasProperty("puerta", is(COMU_LA_FUENTE_PEPE.getPuerta())),
-                hasProperty("roles", is(COMU_LA_FUENTE_PEPE.getRoles()))
-        )).onChildView(allOf(
-                withId(R.id.nombreComunidad_view),
-                withText(COMU_LA_FUENTE.getNombreComunidad()))).check(matches(isDisplayed()));
+        onData(is(COMU_ESCORIAL_PEPE)).onChildView(allOf(
+                        withId(R.id.nombreComunidad_view),
+                        withText(COMU_EL_ESCORIAL.getNombreComunidad()))
+        ).check(matches(isDisplayed()));
 
-        onData(allOf(
-                is(instanceOf(UsuarioComunidad.class)),
-                hasProperty("portal", is(COMU_ESCORIAL_PEPE.getPortal())),
-                hasProperty("escalera", is(COMU_ESCORIAL_PEPE.getEscalera())),
-                hasProperty("planta", is(COMU_ESCORIAL_PEPE.getPlanta())),
-                hasProperty("puerta", is(COMU_ESCORIAL_PEPE.getPuerta())),
-                hasProperty("roles", is(COMU_ESCORIAL_PEPE.getRoles()))
-        )).onChildView(allOf(
-                withId(R.id.nombreComunidad_view),
-                withText(COMU_EL_ESCORIAL.getNombreComunidad()))).check(matches(isDisplayed()));
+        onData(is(COMU_PLAZUELA5_PEPE)).onChildView(allOf(
+                        withId(R.id.nombreComunidad_view),
+                        withText(COMU_LA_PLAZUELA_5.getNombreComunidad()))
+        ).check(matches(isDisplayed()));
     }
 
     @Test

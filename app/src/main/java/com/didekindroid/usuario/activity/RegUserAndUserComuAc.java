@@ -36,7 +36,7 @@ import static com.didekindroid.common.utils.AppIntentExtras.COMUNIDAD_ID;
 import static com.didekindroid.common.utils.AppIntentExtras.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.usuario.activity.utils.UserMenu.LOGIN_AC;
 import static com.didekindroid.common.webservices.Oauth2Service.Oauth2;
-import static com.didekindroid.usuario.webservices.ServiceOne.ServOne;
+import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 

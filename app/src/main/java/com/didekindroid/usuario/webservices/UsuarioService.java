@@ -3,13 +3,12 @@ package com.didekindroid.usuario.webservices;
 import android.util.Log;
 
 import com.didekin.common.exception.InServiceException;
-import com.didekin.serviceone.controller.ServiceOneEndPoints;
+import com.didekin.serviceone.controller.UsuarioEndPoints;
 import com.didekin.serviceone.domain.Comunidad;
 import com.didekin.serviceone.domain.Usuario;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
-import com.didekindroid.common.utils.UIutils;
 
 import java.util.List;
 
@@ -29,9 +28,9 @@ import static com.didekindroid.common.utils.UIutils.checkBearerToken;
  * Date: 07/06/15
  * Time: 15:06
  */
-public enum ServiceOne implements ServiceOneEndPoints {
+public enum UsuarioService implements UsuarioEndPoints {
 
-    ServOne(BUILDER.getService(ServiceOneEndPoints.class, getBaseURL())) {
+    ServOne(BUILDER.getService(UsuarioEndPoints.class, getBaseURL())) {
         @Override
         public boolean deleteAccessToken(String accessToken, String oldAccessToken)
         {
@@ -69,7 +68,7 @@ public enum ServiceOne implements ServiceOneEndPoints {
         }
 
         @Override
-        public Usuario getUserData(String accessToken)
+        public com.didekin.serviceone.domain.Usuario getUserData(String accessToken)
         {
             return ServOne.endPoint.getUserData(accessToken);
         }
@@ -93,7 +92,13 @@ public enum ServiceOne implements ServiceOneEndPoints {
         }
 
         @Override
-        public int modifyUser(String accessToken, Usuario usuario)
+        public int modifyUserGcmToken(String accessToken, String gcmToken)
+        {
+            return ServOne.endPoint.modifyUserGcmToken(accessToken, gcmToken);
+        }
+
+        @Override
+        public int modifyUser(String accessToken, com.didekin.serviceone.domain.Usuario usuario)
         {
             return ServOne.endPoint.modifyUser(accessToken, usuario);
         }
@@ -171,11 +176,11 @@ public enum ServiceOne implements ServiceOneEndPoints {
         }
     },;
 
-    private static final String TAG = ServiceOne.class.getCanonicalName();
+    private static final String TAG = UsuarioService.class.getCanonicalName();
 
-    private final ServiceOneEndPoints endPoint;
+    private final UsuarioEndPoints endPoint;
 
-    ServiceOne(ServiceOneEndPoints retrofitEndPoint)
+    UsuarioService(UsuarioEndPoints retrofitEndPoint)
     {
         endPoint = retrofitEndPoint;
     }
@@ -192,7 +197,7 @@ public enum ServiceOne implements ServiceOneEndPoints {
         try {
             isDeleted = deleteAccessToken(checkBearerToken(), oldAccessToken);
         } catch (InServiceException e) {
-            throw new UiException(TOKEN_TO_ERASE,0,e);
+            throw new UiException(TOKEN_TO_ERASE, 0, e);
         }
         return isDeleted;
     }
@@ -243,7 +248,7 @@ public enum ServiceOne implements ServiceOneEndPoints {
         List<Comunidad> comusByUser = null;
         try {
             comusByUser = endPoint.getComusByUser(checkBearerToken());
-        }catch (InServiceException e) {
+        } catch (InServiceException e) {
             catchAuthenticationException(e);
         }
         return comusByUser;
@@ -256,20 +261,20 @@ public enum ServiceOne implements ServiceOneEndPoints {
         UsuarioComunidad userComuByUserAndComu = null;
         try {
             userComuByUserAndComu = getUserComuByUserAndComu(checkBearerToken(), comunidadId);
-        }catch (InServiceException e) {
+        } catch (InServiceException e) {
             catchAuthenticationException(e);
         }
         return userComuByUserAndComu;
     }
 
-    public Usuario getUserData() throws UiException
+    public com.didekin.serviceone.domain.Usuario getUserData() throws UiException
     {
         Log.d(TAG, ("getUserData()"));
 
-        Usuario userData = null;
+        com.didekin.serviceone.domain.Usuario userData = null;
         try {
             userData = getUserData(checkBearerToken());
-        }catch (InServiceException e) {
+        } catch (InServiceException e) {
             catchAuthenticationException(e);
         }
         return userData;
@@ -282,7 +287,7 @@ public enum ServiceOne implements ServiceOneEndPoints {
         boolean isOldestUserComu = false;
         try {
             isOldestUserComu = isOldestUserComu(checkBearerToken(), comunidadId);
-        }catch (InServiceException e) {
+        } catch (InServiceException e) {
             catchAuthenticationException(e);
         }
         return isOldestUserComu;
@@ -310,10 +315,16 @@ public enum ServiceOne implements ServiceOneEndPoints {
         int modifyComuData = 0;
         try {
             modifyComuData = modifyComuData(checkBearerToken(), comunidad);
-        }catch (InServiceException e) {
+        } catch (InServiceException e) {
             catchAuthenticationException(e);
         }
         return modifyComuData;
+    }
+
+    public int modifyUserGcmToken(String gcmToken) throws InServiceException, UiException
+    {
+        Log.d(TAG, "modifyUserGcmToken()");
+        return modifyUserGcmToken(checkBearerToken(), gcmToken);
     }
 
     public int modifyUser(Usuario usuario) throws UiException
@@ -323,7 +334,7 @@ public enum ServiceOne implements ServiceOneEndPoints {
         int modifyUser = 0;
         try {
             modifyUser = modifyUser(checkBearerToken(), usuario);
-        }catch (InServiceException e) {
+        } catch (InServiceException e) {
             catchAuthenticationException(e);
         }
         return modifyUser;
@@ -336,7 +347,7 @@ public enum ServiceOne implements ServiceOneEndPoints {
         int modifyUserComu = 0;
         try {
             modifyUserComu = modifyUserComu(checkBearerToken(), userComu);
-        }catch (InServiceException e) {
+        } catch (InServiceException e) {
             catchAuthenticationException(e);
         }
         return modifyUserComu;
@@ -349,7 +360,7 @@ public enum ServiceOne implements ServiceOneEndPoints {
         int passwordChange = 0;
         try {
             passwordChange = passwordChange(checkBearerToken(), newPassword);
-        }catch (InServiceException e) {
+        } catch (InServiceException e) {
             catchAuthenticationException(e);
         }
         return passwordChange;
@@ -362,7 +373,7 @@ public enum ServiceOne implements ServiceOneEndPoints {
         boolean isRegistered = false;
         try {
             isRegistered = regComuAndUserComu(checkBearerToken(), usuarioComunidad);
-        }catch (InServiceException e) {
+        } catch (InServiceException e) {
             catchAuthenticationException(e);
         }
         return isRegistered;
@@ -375,7 +386,7 @@ public enum ServiceOne implements ServiceOneEndPoints {
         int regUserComu = 0;
         try {
             regUserComu = regUserComu(checkBearerToken(), usuarioComunidad);
-        }catch (InServiceException e) {
+        } catch (InServiceException e) {
             catchAuthenticationException(e);
         }
         return regUserComu;
@@ -388,7 +399,7 @@ public enum ServiceOne implements ServiceOneEndPoints {
         List<UsuarioComunidad> usuarioComunidadList = null;
         try {
             usuarioComunidadList = seeUserComusByComu(checkBearerToken(), idComunidad);
-        }catch (InServiceException e) {
+        } catch (InServiceException e) {
             catchAuthenticationException(e);
         }
         return usuarioComunidadList;

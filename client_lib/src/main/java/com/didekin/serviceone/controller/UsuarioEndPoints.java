@@ -22,31 +22,31 @@ import static com.didekin.common.oauth2.OauthConstant.PSWD_PARAM;
 import static com.didekin.common.oauth2.OauthConstant.USER_PARAM;
 import static com.didekin.common.oauth2.OauthConstant.USER_READ;
 import static com.didekin.common.oauth2.OauthConstant.USER_WRITE;
-import static com.didekin.serviceone.controller.ServOneConstant.ACCESS_TOKEN_DELETE;
-import static com.didekin.serviceone.controller.ServOneConstant.COMUNIDAD_OLDEST_USER;
-import static com.didekin.serviceone.controller.ServOneConstant.COMUNIDAD_SEARCH;
-import static com.didekin.serviceone.controller.ServOneConstant.COMUS_BY_USER;
-import static com.didekin.serviceone.controller.ServOneConstant.LOGIN;
-import static com.didekin.serviceone.controller.ServOneConstant.PASSWORD_MODIFY;
-import static com.didekin.serviceone.controller.ServOneConstant.PASSWORD_SEND;
-import static com.didekin.serviceone.controller.ServOneConstant.REG_COMU_AND_USER_AND_USERCOMU;
-import static com.didekin.serviceone.controller.ServOneConstant.REG_COMU_USERCOMU;
-import static com.didekin.serviceone.controller.ServOneConstant.REG_USERCOMU;
-import static com.didekin.serviceone.controller.ServOneConstant.REG_USER_USERCOMU;
-import static com.didekin.serviceone.controller.ServOneConstant.USERCOMUS_BY_COMU;
-import static com.didekin.serviceone.controller.ServOneConstant.USERCOMUS_BY_USER;
-import static com.didekin.serviceone.controller.ServOneConstant.USERCOMU_DELETE;
-import static com.didekin.serviceone.controller.ServOneConstant.USERCOMU_MODIFY;
-import static com.didekin.serviceone.controller.ServOneConstant.USERCOMU_READ;
-import static com.didekin.serviceone.controller.ServOneConstant.USER_DELETE;
+import static com.didekin.serviceone.controller.UsuarioServiceConstant.ACCESS_TOKEN_DELETE;
+import static com.didekin.serviceone.controller.UsuarioServiceConstant.COMUNIDAD_OLDEST_USER;
+import static com.didekin.serviceone.controller.UsuarioServiceConstant.COMUNIDAD_SEARCH;
+import static com.didekin.serviceone.controller.UsuarioServiceConstant.COMUS_BY_USER;
+import static com.didekin.serviceone.controller.UsuarioServiceConstant.LOGIN;
+import static com.didekin.serviceone.controller.UsuarioServiceConstant.PASSWORD_MODIFY;
+import static com.didekin.serviceone.controller.UsuarioServiceConstant.PASSWORD_SEND;
+import static com.didekin.serviceone.controller.UsuarioServiceConstant.REG_COMU_AND_USER_AND_USERCOMU;
+import static com.didekin.serviceone.controller.UsuarioServiceConstant.REG_COMU_USERCOMU;
+import static com.didekin.serviceone.controller.UsuarioServiceConstant.REG_USERCOMU;
+import static com.didekin.serviceone.controller.UsuarioServiceConstant.REG_USER_USERCOMU;
+import static com.didekin.serviceone.controller.UsuarioServiceConstant.USERCOMUS_BY_COMU;
+import static com.didekin.serviceone.controller.UsuarioServiceConstant.USERCOMUS_BY_USER;
+import static com.didekin.serviceone.controller.UsuarioServiceConstant.USERCOMU_DELETE;
+import static com.didekin.serviceone.controller.UsuarioServiceConstant.USERCOMU_MODIFY;
+import static com.didekin.serviceone.controller.UsuarioServiceConstant.USERCOMU_READ;
+import static com.didekin.serviceone.controller.UsuarioServiceConstant.USER_DELETE;
+import static com.didekin.serviceone.controller.UsuarioServiceConstant.USER_WRITE_GCM_TOKEN;
 
 /**
  * User: pedro@didekin
  * Date: 07/06/15
  * Time: 14:13
  */
-public interface ServiceOneEndPoints {
-
+public interface UsuarioEndPoints {
 
     @DELETE(ACCESS_TOKEN_DELETE + "/{oldTk}")
     boolean deleteAccessToken(@Header("Authorization") String accessToken, @Path("oldTk") String oldAccessToken);
@@ -78,6 +78,9 @@ public interface ServiceOneEndPoints {
 
     @PUT(COMUNIDAD_WRITE)
     int modifyComuData(@Header("Authorization") String accessToken, @Body Comunidad comunidad);
+
+    @PUT(USER_WRITE_GCM_TOKEN)
+    int modifyUserGcmToken(@Header("Authorization") String accessToken, @Body String gcmToken);
 
     @PUT(USER_WRITE)
     int modifyUser(@Header("Authorization") String accessToken, @Body Usuario usuario);

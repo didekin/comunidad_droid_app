@@ -1,4 +1,7 @@
+.gitignore
 .gradle
+gradlew
+gradlew.bat
 .navigation
 /administracion
 /**/gradle
@@ -9,6 +12,7 @@
 /**/libs
 /**/*.iml
 /**/*.txt
-/**/.gitignore
-.gitignore
+
+
+
 
