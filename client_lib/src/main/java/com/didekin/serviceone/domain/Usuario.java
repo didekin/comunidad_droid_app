@@ -11,12 +11,14 @@ import static com.didekin.common.exception.DidekinExceptionMsg.USER_NOT_HASHABLE
  * Date: 29/03/15
  * Time: 12:02
  */
+@SuppressWarnings("unused")
 public final class Usuario implements Comparable<Usuario> {
 
     private final long uId;
     private final String userName;  //email of the user.
     private final String alias;
     private final String password;
+    private final String gcmToken;
 
     private Usuario(UsuarioBuilder builder)
     {
@@ -24,6 +26,7 @@ public final class Usuario implements Comparable<Usuario> {
         userName = builder.userName;
         alias = builder.alias;
         password = builder.password;
+        gcmToken = builder.gcmToken;
     }
 
     public String getUserName()
@@ -44,6 +47,11 @@ public final class Usuario implements Comparable<Usuario> {
     public long getuId()
     {
         return uId;
+    }
+
+    public String getGcmToken()
+    {
+        return gcmToken;
     }
 
     @Override
@@ -92,6 +100,7 @@ public final class Usuario implements Comparable<Usuario> {
         private String userName = null;  //email of the user.
         private String alias = null;
         private String password = null;
+        private String gcmToken;
 
         public UsuarioBuilder()
         {
@@ -121,6 +130,11 @@ public final class Usuario implements Comparable<Usuario> {
             return this;
         }
 
+        public UsuarioBuilder gcmToken(String gcmToken){
+            this.gcmToken = gcmToken;
+            return this;
+        }
+
         @Override
         public Usuario build()
         {
@@ -132,13 +146,13 @@ public final class Usuario implements Comparable<Usuario> {
             return usuario;
         }
 
-        @SuppressWarnings("unused")
         public UsuarioBuilder copyUsuario(Usuario usuario)
         {
-            uId = usuario.getuId();
-            password = usuario.getPassword();
-            userName = usuario.getUserName();
-            alias = usuario.getAlias();
+            uId = usuario.uId;
+            password = usuario.password;
+            userName = usuario.userName;
+            alias = usuario.alias;
+            gcmToken = usuario.gcmToken;
             return this;
         }
     }

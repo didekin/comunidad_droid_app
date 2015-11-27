@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.didekindroid.R;
-import com.didekindroid.incidencia.gcm.AppGcmRegistrationServ;
+import com.didekindroid.incidencia.gcm.GcmRegistrationIntentServ;
 
 import static com.didekindroid.common.utils.UIutils.checkPlayServices;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
@@ -22,7 +22,7 @@ public class IncidSeeByUserComuAc extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         if (checkPlayServices(this) && !isGcmTokenSentServer(this)){
-            Intent intent = new Intent(this, AppGcmRegistrationServ.class);
+            Intent intent = new Intent(this, GcmRegistrationIntentServ.class);
             startService(intent);
         }
 

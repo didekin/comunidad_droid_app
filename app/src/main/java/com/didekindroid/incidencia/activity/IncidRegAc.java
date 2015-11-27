@@ -14,7 +14,7 @@ import com.didekindroid.R;
 import com.didekindroid.common.UiException;
 import com.didekindroid.common.utils.ConnectionUtils;
 import com.didekindroid.common.utils.UIutils;
-import com.didekindroid.incidencia.gcm.AppGcmRegistrationServ;
+import com.didekindroid.incidencia.gcm.GcmRegistrationIntentServ;
 
 import static com.didekindroid.common.utils.AppIntentExtras.COMUNIDAD_ID;
 import static com.didekindroid.common.utils.UIutils.checkPlayServices;
@@ -47,7 +47,7 @@ public class IncidRegAc extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         if (checkPlayServices(this) && !isGcmTokenSentServer(this)){
-            Intent intent = new Intent(this, AppGcmRegistrationServ.class);
+            Intent intent = new Intent(this, GcmRegistrationIntentServ.class);
             startService(intent);
         }
 

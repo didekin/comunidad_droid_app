@@ -8,7 +8,6 @@ import com.didekin.common.exception.InServiceException;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
 import com.didekindroid.usuario.webservices.UsuarioService;
-import com.google.android.gms.gcm.GcmPubSub;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 
@@ -19,12 +18,12 @@ import static com.didekindroid.common.utils.UIutils.updateIsGcmTokenSentServer;
 /**
  *
  */
-public class AppGcmRegistrationServ extends IntentService {
+public class GcmRegistrationIntentServ extends IntentService {
 
-    private static final String TAG = AppGcmRegistrationServ.class.getCanonicalName();
-    private static final String[] TOPICS = {"global"};
+    private static final String TAG = GcmRegistrationIntentServ.class.getCanonicalName();
+//    private static final String[] TOPICS = {"global"};
 
-    public AppGcmRegistrationServ()
+    public GcmRegistrationIntentServ()
     {
         super(TAG);
     }
@@ -40,7 +39,7 @@ public class AppGcmRegistrationServ extends IntentService {
         try {
             token = instanceID.getToken(getString(R.string.gcm_defaultSenderId),
                     GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
-            subscribeTopics(token);
+//            subscribeTopics(token);
             sendRegistrationToServer(token);
             updateIsGcmTokenSentServer(true, this);
             Log.i(TAG, "onHandleIntent(), GCM token registered: " + token);
@@ -67,14 +66,12 @@ public class AppGcmRegistrationServ extends IntentService {
      * @param token GCM token
      * @throws IOException if unable to reach the GCM PubSub service
      */
-    // [START subscribe_topics]
-    private void subscribeTopics(String token) throws IOException
+    /*private void subscribeTopics(String token) throws IOException
     {
         GcmPubSub pubSub = GcmPubSub.getInstance(this);
         for (String topic : TOPICS) {
             pubSub.subscribe(token, "/topics/" + topic, null);
         }
-    }
-    // [END subscribe_topics]
+    }*/
 
 }

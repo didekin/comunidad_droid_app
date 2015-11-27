@@ -34,11 +34,9 @@
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
-
                 <category android:name="com.didekindroid.incidencia.gcm"/>
             </intent-filter>
         </receiver>
-
         <service
             android:name=".incidencia.gcm.AppGcmListenerServ"
             android:enabled="true"
@@ -56,7 +54,7 @@
             </intent-filter>
         </service>
         <service
-            android:name=".incidencia.gcm.AppGcmRegistrationServ"
+            android:name=".incidencia.gcm.GcmRegistrationIntentServ"
             android:exported="false">
         </service>
         <!-- ......... -->

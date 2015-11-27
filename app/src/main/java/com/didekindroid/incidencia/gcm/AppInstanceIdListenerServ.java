@@ -21,7 +21,7 @@ public class AppInstanceIdListenerServ extends InstanceIDListenerService {
     public void onTokenRefresh() {
         Log.d(TAG,"onTokenRefresh()");
         // Fetch updated Instance ID token and notify our app's server of any changes (if applicable).
-        Intent intent = new Intent(this, AppGcmRegistrationServ.class);
+        Intent intent = new Intent(this, GcmRegistrationIntentServ.class);
         startService(intent);
     }
 }

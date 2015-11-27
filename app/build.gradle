@@ -35,6 +35,10 @@ android {
         // but continue the build even when errors are found:
         abortOnError false
     }
+    packagingOptions {
+        exclude 'META-INF/maven/com.google.guava/guava/pom.properties'
+        exclude 'META-INF/maven/com.google.guava/guava/pom.xml'
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -42,7 +46,7 @@ android {
         }
         debug {
             debuggable true
-            applicationIdSuffix ".debug"
+            applicationIdSuffix ""
         }
     }
     productFlavors {
@@ -50,8 +54,9 @@ android {
 }
 
 dependencies {
+
     testCompile 'junit:junit:4.12'
-    //    androidTestCompile project(':javabeans')
+
     androidTestCompile 'com.android.support:support-annotations:23.1.1'
     androidTestCompile 'com.android.support.test:runner:0.4.1'
     androidTestCompile 'com.android.support.test:rules:0.4.1'
@@ -60,9 +65,13 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-contrib:2.2.1') {
         exclude group: 'com.android.support', module: 'appcompat'
         exclude group: 'com.android.support', module: 'support-v4'
-        /* exclude module: 'recyclerview-v7'*/
+        exclude module: 'recyclerview-v7'
     }
     androidTestCompile 'com.android.support.test.espresso:espresso-idling-resource:2.2.1'
+    androidTestCompile ('com.android.support.test.espresso:espresso-web:2.2.1'){
+        exclude group: 'com.google.guava'
+    }
+
     compile project(':client_lib')
     compile 'com.google.guava:guava:18.0'
     compile 'com.squareup.retrofit:retrofit:1.9.0'

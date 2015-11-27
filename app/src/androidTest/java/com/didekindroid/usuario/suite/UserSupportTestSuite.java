@@ -9,7 +9,7 @@ import com.didekindroid.usuario.dominio.UsuarioComunidadTest;
 import com.didekindroid.usuario.dominio.UsuarioTest;
 import com.didekindroid.usuario.repository.MockDbHelperTest;
 import com.didekindroid.usuario.repository.UsuarioDataDbHelperTest;
-import com.didekindroid.usuario.webservices.ServiceOneIfTest;
+import com.didekindroid.usuario.webservices.UsuarioServiceTest;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -26,7 +26,7 @@ import org.junit.runners.Suite;
         UsuarioDataDbHelperTest.class,
         MockDbHelperTest.class,
         MunicipioTest.class,
-        ServiceOneIfTest.class,
+        UsuarioServiceTest.class,
         UsuarioBeanValidaTests.class,
         UsuarioComunidadBeanValidaTests.class,
         UsuarioComunidadTest.class,
