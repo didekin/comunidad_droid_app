@@ -49,13 +49,13 @@ public class LoginAcTest_2 extends LoginAcTest {
         getDialogFragment();
         onView(withText(R.string.send_password_by_mail_dialog)).inRoot(isDialog())
                 .check(matches(isDisplayed()));
+        Thread.sleep(7000);
         onView(withText(R.string.send_password_by_mail_NO)).inRoot(isDialog())
                 .check(matches(isDisplayed()))
                 .perform(click());
 
         //Invitación a buscar su comunidad y registrarse.
         onView(withId(R.id.comu_search_ac_layout)).check(matches(isDisplayed()));
-        Thread.sleep(5000);
         checkToastInTest(R.string.login_wrong_no_mail, mActivity);
     }
 }

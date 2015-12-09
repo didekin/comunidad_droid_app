@@ -31,7 +31,7 @@ import static org.junit.Assert.assertThat;
  * Time: 16:28
  */
 @RunWith(AndroidJUnit4.class)
-public class ComuSearchTest_spinner {
+public class ComuSearchAcTest_spinner {
 
     private ComuSearchAc activity;
 

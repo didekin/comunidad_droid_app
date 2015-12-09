@@ -47,7 +47,7 @@ import static org.junit.Assert.assertThat;
 
 
 @RunWith(AndroidJUnit4.class)
-public class ComuSearchResultsAcTest_2 {
+public class ComuSearchResultsAcTest_slow {
 
     private static final String TAG = "ComunidadSeeActivTest";
 
@@ -69,10 +69,10 @@ public class ComuSearchResultsAcTest_2 {
     @Before
     public void getFixture() throws Exception
     {
+        Thread.sleep(6000);
+
         Log.d(TAG, "In getFixture()");
         whatClean = CleanUserEnum.CLEAN_NOTHING;
-
-        Thread.sleep(3000);
 
         intent = new Intent();
         intent.putExtra(COMUNIDAD_SEARCH.extra, new ComunidadIntent(COMU_LA_PLAZUELA_5));

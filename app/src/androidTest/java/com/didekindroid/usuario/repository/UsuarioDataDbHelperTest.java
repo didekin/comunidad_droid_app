@@ -111,7 +111,7 @@ public class UsuarioDataDbHelperTest {
     {
         dbHelper.dropAllTables();
         dbHelper.close();
-        String dBFileName =  "data/data/com.didekindroid.debug/databases/".concat(UsuarioDataDbHelper.DB_NAME);
+        String dBFileName =  "data/data/com.didekindroid/databases/".concat(UsuarioDataDbHelper.DB_NAME);
         deleteDatabase(new File(dBFileName));
     }
 }

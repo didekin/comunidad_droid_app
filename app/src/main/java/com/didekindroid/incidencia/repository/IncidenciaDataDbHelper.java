@@ -52,7 +52,7 @@ public class IncidenciaDataDbHelper extends SQLiteOpenHelper {
         mDataBase.execSQL(CREATE_AMBITO_INCIDENCIA);
 
         try {
-            mAmbitoIncidenciaCounter = loadAmbitoIncidencia();
+            loadAmbitoIncidencia();
         } catch (Exception e) {
             UIutils.doRuntimeException(e, TAG);
         }
@@ -122,6 +122,7 @@ public class IncidenciaDataDbHelper extends SQLiteOpenHelper {
         }
 
         Log.i(TAG, "Done loading tipos de incidencia file in DB.");
+        mAmbitoIncidenciaCounter = pkCounter;
         return pkCounter;
     }
 

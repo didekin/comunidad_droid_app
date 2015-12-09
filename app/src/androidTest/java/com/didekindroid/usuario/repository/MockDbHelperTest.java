@@ -53,7 +53,7 @@ public class MockDbHelperTest {
 
         dbHelper.getWritableDatabase();
         dbHelper.close();
-        boolean isClosedDb =  deleteDatabase(new File("data/data/com.didekindroid.debug/databases/mock.db"));
+        boolean isClosedDb =  deleteDatabase(new File("data/data/com.didekindroid/databases/mock.db"));
         assertThat(isClosedDb,is(true));
     }
 

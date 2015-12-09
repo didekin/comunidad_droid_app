@@ -74,7 +74,7 @@ public class IncidRegAcFragment extends Fragment {
         doImportanciaSpinner();
 
         mTipoIncidenciaSpinner = (Spinner) getView().findViewById(R.id.incid_reg_ambito_spinner);
-        new TipoIncidenciaSpinnerSetter().execute();
+        new AmbitoIncidenciaSpinnerSetter().execute();
 
         mIncidenciaBean = new IncidenciaBean();
 
@@ -140,9 +140,9 @@ public class IncidRegAcFragment extends Fragment {
 //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
 //    ============================================================
 
-    class TipoIncidenciaSpinnerSetter extends AsyncTask<Void,Void, Cursor> {
+    class AmbitoIncidenciaSpinnerSetter extends AsyncTask<Void,Void, Cursor> {
 
-        private final String TAG = TipoIncidenciaSpinnerSetter.class.getCanonicalName();
+        private final String TAG = AmbitoIncidenciaSpinnerSetter.class.getCanonicalName();
 
         @Override
         protected Cursor doInBackground(Void... params)

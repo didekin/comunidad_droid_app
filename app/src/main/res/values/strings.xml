@@ -30,14 +30,17 @@
     <string name="incid_reg_importancia">Importancia</string>
     <string name="incid_reg_ambitoIncidencia">Ámbito de incidencia</string>
     <string name="incid_reg_descripcion">Descripcion</string>
+    <!-- =========================== Google Cloud Messages ========================== -->
+    <string name="incid_gcm_nueva_incidencia_body">Nueva incidencia en tu comunidad.</string>
+    <string name="incid_gcm_nueva_incidencia_title">Dídekin</string>
+    <string name="incid_gcm_nueva_incidencia_subtext">Pulsa aquí para verla.</string>
     <!--******************************************************************************-->
     <!--                                  USUARIO                                     -->
     <!--******************************************************************************-->
     <!-- ============================ MESSAGES ============================== -->
     <string name="error_validation_msg">Los siguientes datos no son válidos: </string>
-    <string name="login_wrong_no_mail">"Busca tu comunidad y regístrate en ella.\nSi no existe, regístrala en 'Nueva comunidad'."</string>
-    <string name="no_result_search_comunidad">No hemos encontrado tu comunidad.\n
-            Puedes registrarla aquí. </string>
+    <string name="login_wrong_no_mail">"Busca tu comunidad y regístrate.\nSi no existe, regístrala en 'Nueva comunidad'."</string>
+    <string name="no_result_search_comunidad">No hemos encontrado tu comunidad.\nPuedes registrarla aquí. </string>
     <string name="password_new_in_login">Te hemos enviado tu nueva contraseña. Haz login, nuevamente, con ella.</string>
     <string name="password_wrong">La contraseña no se corresponde con tu usuario.\nSi no la recuerdas,
         selecciona en el menú la opción para renovarla.</string>
@@ -45,7 +48,7 @@
     <string name="send_password_by_mail_dialog">¿Deseas que te enviemos una nueva contraseña por correo electrónico?</string>
     <string name="send_password_by_mail_YES">Enviádmela</string>
     <string name="send_password_by_mail_NO">No la enviéis</string>
-    <string name="user_without_signedUp">"Haz login.\nO busca tu comunidad y regístrate.\n Si no existe, regístrala en 'Nueva comunidad'."</string>
+    <string name="user_without_signedUp">"Haz login. O busca tu comunidad y regístrate.\nSi no existe, regístrala en 'Nueva comunidad'."</string>
     <!-- ============================= MENUS ================================= -->
     <string name="comu_data_ac_mn">Datos comunidad</string>
     <string name="comu_search_ac_mn">Buscar comunidad</string>

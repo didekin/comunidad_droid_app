@@ -25,8 +25,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withContentDesc
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.COMU_SEARCH_AC;
-import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.USER_DATA_AC;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.regThreeUserComuSameUser_2;
 import static com.didekindroid.usuario.activity.utils.ViewsIDs.SEE_USER_COMU_BY_USER;
@@ -104,18 +102,6 @@ public class SeeUserComuByUserAcTest {
                         withContentDescription("Navigate up"),
                         isClickable())
         ).check(matches(isDisplayed())).perform(click());
-    }
-
-    @Test
-    public void testUserDataMn_withToken() throws InterruptedException
-    {
-        USER_DATA_AC.checkMenuItem_WTk(mActivity);
-    }
-
-    @Test
-    public void testComuSearchMn_withToken() throws InterruptedException
-    {
-        COMU_SEARCH_AC.checkMenuItem_WTk(mActivity);
     }
 
     @Test

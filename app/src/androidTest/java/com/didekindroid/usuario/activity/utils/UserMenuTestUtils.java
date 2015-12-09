@@ -50,8 +50,8 @@ public enum UserMenuTestUtils {
         public void checkMenuItem_WTk(Activity activity) throws InterruptedException
         {
             onView(withText(R.string.comu_search_ac_mn)).check(doesNotExist());
+            Thread.sleep(2000);
             openActionBarOverflowOrOptionsMenu(activity);
-            Thread.sleep(1000);
             onView(withText(R.string.comu_search_ac_mn)).check(matches(isDisplayed())).perform(click());
             onView(withId(R.id.comu_search_ac_layout)).check(matches(isDisplayed()));
         }
@@ -113,9 +113,9 @@ public enum UserMenuTestUtils {
         public void checkMenuItem_NTk(Activity activity) throws InterruptedException
         {
             onView(withText(R.string.reg_comu_user_usercomu_ac_mn)).check(doesNotExist());
+            Thread.sleep(2000);
 
             openActionBarOverflowOrOptionsMenu(activity);
-            Thread.sleep(1000);
             onView(withText(R.string.reg_comu_user_usercomu_ac_mn)).check(matches(isDisplayed())).perform(click());
             onView(withId(R.id.reg_comu_usuario_usuariocomu_layout)).check(matches(isDisplayed()));
         }
@@ -124,7 +124,7 @@ public enum UserMenuTestUtils {
         public void checkMenuItem_WTk(Activity activity) throws InterruptedException
         {
             openActionBarOverflowOrOptionsMenu(activity);
-            Thread.sleep(1000);
+            Thread.sleep(2000);
             onView(withText(R.string.reg_comu_user_usercomu_ac_mn)).check(matches(isDisplayed())).perform(click());
             onView(withId(R.id.reg_comu_and_usercomu_layout)).check(matches(isDisplayed()));
         }
@@ -153,9 +153,9 @@ public enum UserMenuTestUtils {
         public void checkMenuItem_NTk(Activity activity) throws InterruptedException
         {
             onView(withText(R.string.see_usercomu_by_user_ac_mn)).check(doesNotExist());
+            Thread.sleep(2000);
 
             openActionBarOverflowOrOptionsMenu(activity);
-            Thread.sleep(3000);
             onView(withText(R.string.see_usercomu_by_user_ac_mn)).check(matches(isDisplayed())).perform(click());
             checkToastInTest(R.string.user_without_signedUp, activity);
         }
@@ -164,9 +164,9 @@ public enum UserMenuTestUtils {
         public void checkMenuItem_WTk(Activity activity) throws InterruptedException
         {
             onView(withText(R.string.see_usercomu_by_user_ac_mn)).check(doesNotExist());
+            Thread.sleep(2000);
 
             openActionBarOverflowOrOptionsMenu(activity);
-            Thread.sleep(2000);
             onView(withText(R.string.see_usercomu_by_user_ac_mn)).check(matches(isDisplayed())).perform(click());
 
             // No muestra toast de error.
@@ -189,10 +189,10 @@ public enum UserMenuTestUtils {
         @Override
         public void checkMenuItem_WTk(Activity activity) throws InterruptedException
         {
-            openActionBarOverflowOrOptionsMenu(activity);
-            Thread.sleep(1000);
-            onView(withText(R.string.user_data_ac_mn)).check(matches(isDisplayed())).perform(click());
 
+            Thread.sleep(1000);
+            openActionBarOverflowOrOptionsMenu(activity);
+            onView(withText(R.string.user_data_ac_mn)).check(matches(isDisplayed())).perform(click());
             // Show the data in modifiable state.
             onView(withId(R.id.user_data_ac_layout)).check(matches(isDisplayed()));
         }

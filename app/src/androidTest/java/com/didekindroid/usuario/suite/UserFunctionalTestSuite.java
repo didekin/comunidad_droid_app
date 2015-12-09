@@ -5,7 +5,7 @@ import com.didekindroid.usuario.activity.ComuSearchAcTest_intent;
 import com.didekindroid.usuario.activity.ComuSearchResultsAcTest_1;
 import com.didekindroid.usuario.activity.ComuSearchResultsAcTest_intent_1;
 import com.didekindroid.usuario.activity.ComuSearchResultsAcTest_intent_2;
-import com.didekindroid.usuario.activity.ComuSearchTest_spinner;
+import com.didekindroid.usuario.activity.ComuSearchAcTest_spinner;
 import com.didekindroid.usuario.activity.DeleteMeAcTest;
 import com.didekindroid.usuario.activity.LoginAcTest_1;
 import com.didekindroid.usuario.activity.PasswordChangeAcTest;
@@ -31,8 +31,8 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         ComuDataAcTest.class,
-        ComuSearchAcTest_intent.class,
-        ComuSearchTest_spinner.class,
+        ComuSearchAcTest_intent.class, // Falla en api 18.
+        ComuSearchAcTest_spinner.class,
         ComuSearchResultsAcTest_1.class,
         ComuSearchResultsAcTest_intent_1.class,
         ComuSearchResultsAcTest_intent_2.class,
@@ -40,11 +40,11 @@ import org.junit.runners.Suite;
         LoginAcTest_1.class,
         PasswordChangeAcTest.class,
         RegComuAndUserComuAcTest.class,
-        RegComuAndUserAndUserComuAcTest.class,
-        RegUserComuAcTest.class,
+        RegComuAndUserAndUserComuAcTest.class,  //+
+        RegUserComuAcTest.class,  //+
         RegUserComuAcTest_intent.class,
-        RegUserAndUserComuAcTest_intent.class,
-        SeeUserComuByComuAcTest.class,
+        RegUserAndUserComuAcTest_intent.class, //+
+        SeeUserComuByComuAcTest.class, //+
         SeeUserComuByUserAcTest.class,
         UserComuDataAcTest_1.class,
         UserComuDataAcTest_2.class,

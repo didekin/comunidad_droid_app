@@ -71,6 +71,7 @@ public class IncidenciaDataDbHelperTest {
         assertThat(dbHelper.mAmbitoIncidenciaCounter, is(0));
         database.execSQL(CREATE_AMBITO_INCIDENCIA);
         assertThat(dbHelper.loadAmbitoIncidencia(), is(AMBITO_INCID_COUNT));
+        assertThat(dbHelper.mAmbitoIncidenciaCounter, is(AMBITO_INCID_COUNT));
     }
 
     @Test
@@ -93,7 +94,7 @@ public class IncidenciaDataDbHelperTest {
     {
         dbHelper.dropAllTables();
         dbHelper.close();
-        String dBFileName = "data/data/com.didekindroid.debug/databases/".concat(IncidenciaDataDbHelper.DB_NAME);
+        String dBFileName = "data/data/com.didekindroid/databases/".concat(IncidenciaDataDbHelper.DB_NAME);
         deleteDatabase(new File(dBFileName));
     }
 }

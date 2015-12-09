@@ -41,7 +41,7 @@ public enum RetrofitRestBuilder {
                 .setLogLevel(RestAdapter.LogLevel.FULL)
                 .setEndpoint(hostAndPort)
 //                .setConverter(new GsonConverter(gson))
-                .setErrorHandler(new ServiceOneExceptionHandler())
+                .setErrorHandler(new ServicesExceptionHandler())
                 .build();
 
         return restAdapter.create(endPointInterface);
@@ -53,7 +53,7 @@ public enum RetrofitRestBuilder {
                 .setLogLevel(RestAdapter.LogLevel.FULL)
                 .setEndpoint(hostAndPort)
                 .setClient(new MyUrlConnectionClient())
-                .setErrorHandler(new ServiceOneExceptionHandler())
+                .setErrorHandler(new ServicesExceptionHandler())
                 .build();
 
         return restAdapter.create(endPointInterface);
@@ -62,7 +62,7 @@ public enum RetrofitRestBuilder {
 //    .............. EXCEPTION HANDLER ..............
 
 
-    public static class ServiceOneExceptionHandler implements ErrorHandler {
+    public static class ServicesExceptionHandler implements ErrorHandler {
 
         @Override
         public Throwable handleError(RetrofitError rErr)

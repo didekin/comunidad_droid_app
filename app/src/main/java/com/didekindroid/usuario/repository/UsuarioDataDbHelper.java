@@ -85,19 +85,19 @@ public class UsuarioDataDbHelper extends SQLiteOpenHelper {
         }
 
         try {
-            mComunidadesCounter = loadComunidadesAutonomas();
+            loadComunidadesAutonomas();
         } catch (IOException e) {
             UIutils.doRuntimeException(e, TAG);
         }
 
         try {
-            mProvinciasCounter = loadProvincias();
+            loadProvincias();
         } catch (IOException e) {
             UIutils.doRuntimeException(e, TAG);
         }
 
         try {
-            mMunicipiosCounter = loadMunicipios();
+            loadMunicipios();
         } catch (IOException e) {
             UIutils.doRuntimeException(e, TAG);
         }
@@ -165,7 +165,7 @@ public class UsuarioDataDbHelper extends SQLiteOpenHelper {
         }
 
         Log.i(TAG, "Done loading municipios file in DB.");
-
+        mMunicipiosCounter = pkCounter;
         return pkCounter;
     }
 
@@ -264,7 +264,7 @@ public class UsuarioDataDbHelper extends SQLiteOpenHelper {
         }
 
         Log.i(TAG, "Done loading provincias file in DB.");
-
+        mProvinciasCounter = pkCounter;
         return pkCounter;
     }
 
@@ -364,6 +364,7 @@ public class UsuarioDataDbHelper extends SQLiteOpenHelper {
         }
 
         Log.i(TAG, "Done loading comunidades file in DB.");
+        mComunidadesCounter = pkCounter;
         return pkCounter;
     }
 

@@ -158,11 +158,13 @@ public final class UIutils {
 
         Toolbar myToolbar = (Toolbar) activity.findViewById(resourceIdView);
         activity.setSupportActionBar(myToolbar);
-        if (hasParentAc) {
-            ActionBar actionBar = activity.getSupportActionBar();
-            if (actionBar != null) {
+        ActionBar actionBar = activity.getSupportActionBar();
+        if (actionBar != null) {
+            if (hasParentAc) {
                 actionBar.setDisplayHomeAsUpEnabled(true);
             }
+            /*actionBar.setDisplayUseLogoEnabled(true);
+            actionBar.setLogo(R.mipmap.ic_launcher);*/
         }
     }
 
