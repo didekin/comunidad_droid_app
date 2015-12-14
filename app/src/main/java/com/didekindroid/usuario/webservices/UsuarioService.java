@@ -12,9 +12,6 @@ import com.didekindroid.common.UiException;
 
 import java.util.List;
 
-import retrofit.http.Header;
-import retrofit.http.Path;
-
 import static com.didekin.common.RetrofitRestBuilder.BUILDER;
 import static com.didekin.common.exception.DidekinExceptionMsg.USER_NAME_NOT_FOUND;
 import static com.didekindroid.DidekindroidApp.getBaseURL;
@@ -62,7 +59,13 @@ public enum UsuarioService implements UsuarioEndPoints {
         }
 
         @Override
-        public UsuarioComunidad getUserComuByUserAndComu(@Header("Authorization") String accessToken, @Path("comunidadId") long comunidadId)
+        public String getGcmToken(String accessToken)
+        {
+            return ServOne.endPoint.getGcmToken(accessToken);
+        }
+
+        @Override
+        public UsuarioComunidad getUserComuByUserAndComu(String accessToken, long comunidadId)
         {
             return ServOne.endPoint.getUserComuByUserAndComu(accessToken, comunidadId);
         }
@@ -252,6 +255,18 @@ public enum UsuarioService implements UsuarioEndPoints {
             catchAuthenticationException(e);
         }
         return comusByUser;
+    }
+
+    public String getGcmToken() throws UiException
+    {
+        Log.d(TAG, "getGcmToken()");
+        String gcmToken = null;
+        try {
+            gcmToken = endPoint.getGcmToken(checkBearerToken());
+        } catch (InServiceException e) {
+            catchAuthenticationException(e);
+        }
+        return gcmToken;
     }
 
     public UsuarioComunidad getUserComuByUserAndComu(long comunidadId) throws UiException

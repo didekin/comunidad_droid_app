@@ -48,6 +48,7 @@ import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanTwoU
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanWithTkhandler;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.regTwoUserComuSameUser;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAndUpdateTk;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_LA_PLAZUELA_5;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_PLAZUELA5_JUAN;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL;
@@ -167,6 +168,16 @@ public class UsuarioServiceTest {
         assertThat(comunidades, hasItems(COMU_REAL, COMU_LA_PLAZUELA_5));
 
         whatClean = CLEAN_JUAN;
+    }
+
+    @Test
+    public void testGetGcmToken() throws UiException
+    {
+        whatClean = CLEAN_PEPE;
+
+        signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
+        assertThat(ServOne.modifyUserGcmToken("pepe_test_gcm_token"), is(1));
+        assertThat(ServOne.getGcmToken(), is("pepe_test_gcm_token"));
     }
 
     @Test
@@ -321,7 +332,7 @@ public class UsuarioServiceTest {
         whatClean = CLEAN_JUAN;
         signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
         assertThat(ServOne.modifyUserGcmToken("GCMToken12345X"), is(1));
-        assertThat(ServOne.modifyUserGcmToken("GCMToken98765Z"),is(1));
+        assertThat(ServOne.modifyUserGcmToken("GCMToken98765Z"), is(1));
     }
 
     @Test

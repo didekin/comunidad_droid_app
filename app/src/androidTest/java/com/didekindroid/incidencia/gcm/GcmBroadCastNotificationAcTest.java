@@ -9,16 +9,24 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.NotificationCompat.Builder;
 
 import com.didekindroid.R;
 import com.didekindroid.incidencia.activity.IncidSeeByUserComuAc;
 
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.concurrent.TimeoutException;
+
+import static com.didekindroid.incidencia.gcm.GcmNotificationListenerServ.GCM_NOTIFICATION_action;
+import static com.didekindroid.incidencia.gcm.GcmNotificationListenerServ.notification_extra;
+import static com.didekindroid.incidencia.gcm.GcmNotificationListenerServ.notification_id_extra;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -28,15 +36,24 @@ import static org.junit.Assert.assertThat;
  * Time: 13:50
  */
 @RunWith(AndroidJUnit4.class)
-public class GcmServerTests {
+public class GcmBroadCastNotificationAcTest {
 
     Context context = InstrumentationRegistry.getTargetContext();
+    GcmBroadCastNotificationAc mActivity;
+
+    @Rule
+    public ActivityTestRule<GcmBroadCastNotificationAc> mActivityRule = new ActivityTestRule<>(GcmBroadCastNotificationAc.class, true, false);
 
     @Test
-    public void testNotification_1()
+    public void testNotification_1() throws TimeoutException, InterruptedException
     {
+        mActivity = mActivityRule.launchActivity(new Intent());
         sendNotification();
-        assertThat(1, is(1));
+        Thread.sleep(3000);
+        assertThat(mActivity.notificationId, is(1));
+        assertThat(mActivity.title,is(context.getString(R.string.incid_gcm_nueva_incidencia_title)));
+        assertThat(mActivity.text,is(context.getString(R.string.incid_gcm_nueva_incidencia_body)));
+        assertThat(mActivity.subText, is(context.getString(R.string.incid_gcm_nueva_incidencia_subtext)));
     }
 
 
@@ -67,5 +84,15 @@ public class GcmServerTests {
         NotificationManager mNotifyMgr =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         mNotifyMgr.notify(/* notification ID*/1, notification);
+
+        sendBroadcastMsg(notification, 1);
+    }
+
+    private void sendBroadcastMsg(Notification notification, int notificationId)
+    {
+        Intent intent = new Intent(GCM_NOTIFICATION_action);
+        intent.putExtra(notification_id_extra, notificationId);
+        intent.putExtra(notification_extra, notification);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 }

@@ -7,5 +7,16 @@ package com.didekin.incidservice.gcm;
  */
 @SuppressWarnings("unused")
 public interface GcmMsgData {
+
+    String incidencia_type = "incidencia";
+
+    /**
+     * It corresponds to the class implementations field 'typeMsg'.
+     */
+    String type_message_extra = "typeMsg";
+
+    /**
+     * It returns one of the constant type in this class.
+     */
     String getTypeMsg();
 }

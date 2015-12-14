@@ -1,17 +1,18 @@
-package com.didekindroid.incidencia.activity;
+package com.didekindroid.incidencia.gcm;
 
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;
-import android.support.test.espresso.core.deps.guava.base.Preconditions;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.serviceone.domain.Comunidad;
+import com.didekin.incidservice.domain.IncidUserComu;
+import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.common.IdlingResourceForIntentServ;
 import com.didekindroid.common.UiException;
-import com.didekindroid.incidencia.gcm.GcmRegistrationIntentServ;
+import com.didekindroid.incidencia.activity.IncidRegAc;
 import com.didekindroid.usuario.activity.utils.CleanUserEnum;
 
 import org.junit.After;
@@ -21,18 +22,20 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.List;
-
+import static android.support.test.espresso.core.deps.guava.base.Preconditions.checkState;
 import static com.didekindroid.common.utils.AppIntentExtras.COMUNIDAD_ID;
 import static com.didekindroid.common.utils.UIutils.checkPlayServices;
 import static com.didekindroid.common.utils.UIutils.isGcmTokenSentServer;
 import static com.didekindroid.common.utils.UIutils.updateIsGcmTokenSentServer;
-import static com.didekindroid.common.utils.UIutils.updateIsRegistered;
+import static com.didekindroid.incidencia.dominio.IncidenciaDomainTestUtils.doIncidencia;
+import static com.didekindroid.incidencia.gcm.AppGcmListenerServ.TypeMsgHandler.INCIDENCIA;
+import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -46,6 +49,9 @@ public class IncidRegAcTest_gcm1 {
     private IncidRegAc mActivity;
     private CleanUserEnum whatToClean = CleanUserEnum.CLEAN_PEPE;
     IdlingResourceForIntentServ idlingResource;
+    private UsuarioComunidad pepeUserComu;
+    NotificationManager mNotifyManager;
+    private int messageId = INCIDENCIA.getTitleRsc();
 
     @Rule
     public IntentsTestRule<IncidRegAc> intentRule = new IntentsTestRule<IncidRegAc>(IncidRegAc.class) {
@@ -54,7 +60,13 @@ public class IncidRegAcTest_gcm1 {
         protected void beforeActivityLaunched()
         {
             Context context = InstrumentationRegistry.getTargetContext();
-            Preconditions.checkState(!isGcmTokenSentServer(context));
+//            updateIsGcmTokenSentServer(false, context);
+            checkState(!isGcmTokenSentServer(context));
+            try {
+                checkState(ServOne.getGcmToken() == null);
+            } catch (UiException e) {
+                e.printStackTrace();
+            }
         }
 
         @Override
@@ -65,13 +77,12 @@ public class IncidRegAcTest_gcm1 {
             } catch (UiException e) {
                 e.printStackTrace();
             }
-            List<Comunidad> comunidadesUserOne = null;
             try {
-                comunidadesUserOne = ServOne.getComusByUser();
+                pepeUserComu = ServOne.seeUserComusByUser().get(0);
             } catch (UiException e) {
             }
             Intent intent = new Intent();
-            long comunidadIdIntent = comunidadesUserOne != null ? comunidadesUserOne.get(0).getC_Id() : 0;
+            long comunidadIdIntent = pepeUserComu.getComunidad().getC_Id();
             intent.putExtra(COMUNIDAD_ID.extra, comunidadIdIntent);
             return intent;
         }
@@ -87,6 +98,7 @@ public class IncidRegAcTest_gcm1 {
     public void setUp() throws Exception
     {
         mActivity = intentRule.getActivity();
+        mNotifyManager = (NotificationManager) mActivity.getSystemService(Context.NOTIFICATION_SERVICE);
         idlingResource = new IdlingResourceForIntentServ(mActivity, new GcmRegistrationIntentServ());
         Espresso.registerIdlingResources(idlingResource);
     }
@@ -96,17 +108,36 @@ public class IncidRegAcTest_gcm1 {
     {
         Espresso.unregisterIdlingResources(idlingResource);
         updateIsGcmTokenSentServer(false, mActivity);
+        mNotifyManager.cancel(messageId);
         cleanOptions(whatToClean);
     }
 
     //  ===========================================================================
 
+    /**
+     * Test para GcmRegistrationIntentServ methods.
+     */
     @Test
     public void testOnCreate() throws Exception
     {
-        // Precondition for the test.
+        // Preconditions for the test.
         assertThat(checkPlayServices(mActivity), is(true));
 
         assertThat(isGcmTokenSentServer(mActivity), is(true));
+        String gcmToken = ServOne.getGcmToken();
+        assertThat(gcmToken, notNullValue());
+    }
+
+    /**
+     * Test para AppGcmListenerServ.onMessageReceived().
+     */
+    @Test
+    public void testOnSendNotification() throws UiException
+    {
+        // Precondition: a gcmToken  in server database.
+        assertThat(ServOne.getGcmToken(), notNullValue());
+
+        IncidUserComu incidPepeUserComu = new IncidUserComu(doIncidencia("Incidencia One",(short) 43), pepeUserComu, (short) 3);
+        assertThat(IncidenciaServ.regIncidenciaUserComu(incidPepeUserComu), is(1));
     }
 }

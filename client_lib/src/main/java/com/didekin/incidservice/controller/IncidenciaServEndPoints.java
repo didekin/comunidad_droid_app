@@ -16,4 +16,5 @@ public interface IncidenciaServEndPoints {
     @POST(IncidServConstant.REG_INCID_USERCOMU)
     int regIncidenciaUserComu(@Header("Authorization") String accessToken,
                               @Body IncidUserComu incidUserComu);
+
 }

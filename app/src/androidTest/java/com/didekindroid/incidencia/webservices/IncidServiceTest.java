@@ -3,7 +3,9 @@ package com.didekindroid.incidencia.webservices;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.incidservice.domain.IncidUserComu;
+import com.didekin.serviceone.domain.Usuario;
 import com.didekin.serviceone.domain.UsuarioComunidad;
+import com.didekindroid.common.UiException;
 import com.didekindroid.usuario.activity.utils.CleanUserEnum;
 import com.didekindroid.usuario.webservices.UsuarioService;
 
@@ -18,6 +20,8 @@ import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_ESCORIAL_PEPE;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_PEPE;
+import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.*;
@@ -38,7 +42,7 @@ public class IncidServiceTest {
     {
         whatClean = CLEAN_PEPE;
         signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
-        pepeUserComu = UsuarioService.ServOne.seeUserComusByUser().get(0);
+        pepeUserComu = ServOne.seeUserComusByUser().get(0);
     }
 
     @After
@@ -53,6 +57,6 @@ public class IncidServiceTest {
         assertThat(pepeUserComu, notNullValue());
         UsuarioComunidad usuarioComunidad = new UsuarioComunidad.UserComuBuilder(pepeUserComu.getComunidad(),null).userComuRest(pepeUserComu).build();
         IncidUserComu incidPepeUserComu = new IncidUserComu(doIncidencia("Incidencia One",(short) 43), usuarioComunidad, (short) 3);
-        assertThat(IncidenciaServ.regIncidenciaUserComu(incidPepeUserComu),is(1));
+        assertThat(IncidenciaServ.regIncidenciaUserComu(incidPepeUserComu), is(1));
     }
 }

@@ -7,9 +7,6 @@ import com.didekin.incidservice.controller.IncidenciaServEndPoints;
 import com.didekin.incidservice.domain.IncidUserComu;
 import com.didekindroid.common.UiException;
 
-import retrofit.http.Body;
-import retrofit.http.Header;
-
 import static com.didekin.common.RetrofitRestBuilder.BUILDER;
 import static com.didekindroid.DidekindroidApp.getBaseURL;
 import static com.didekindroid.common.utils.UIutils.catchAuthenticationException;
@@ -56,5 +53,6 @@ public enum IncidService implements IncidenciaServEndPoints {
         }
         return regIncidencia;
     }
+
 
 }

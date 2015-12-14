@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    package="com.didekindroid"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest package="com.didekindroid"
+          xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
@@ -13,6 +12,7 @@
     <permission
         android:name="com.didekindroid.permission.C2D_MESSAGE"
         android:protectionLevel="signature"/>
+
     <uses-permission android:name="com.didekindroid.permission.C2D_MESSAGE"/>
     <!-- .......... -->
 
@@ -36,6 +36,7 @@
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
+
                 <category android:name="com.didekindroid.incidencia.gcm"/>
             </intent-filter>
         </receiver>
@@ -60,7 +61,6 @@
             android:name=".incidencia.gcm.GcmRegistrationIntentServ"
             android:exported="false">
         </service>
-        <!-- ......... -->
 
         <!-- **************************************************************** -->
         <!-- INCIDENCIA -->
@@ -78,7 +78,8 @@
             android:name=".incidencia.activity.IncidSeeByUserComuAc"
             android:label="@string/title_activity_incid_see_by_user_comu"
             android:parentActivityName=".usuario.activity.UserComuDataAc">
-            <!-- TODO: Lo referente a parentActivity hay que cambiarlo.-->
+
+            <!-- TODO: Lo referente a parentActivity hay que cambiarlo. -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".usuario.activity.UserComuDataAc"/>
