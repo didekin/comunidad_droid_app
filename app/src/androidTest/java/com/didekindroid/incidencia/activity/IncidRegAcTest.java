@@ -36,7 +36,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.utils.ActivityTestUtils.checkToastInTest;
-import static com.didekindroid.common.utils.AppIntentExtras.COMUNIDAD_ID;
+import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_ID;
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.incidencia.repository.IncidenciaDataDb.AmbitoIncidencia.AMBITO_INCID_COUNT;
@@ -199,6 +199,6 @@ public class IncidRegAcTest {
         onView(withId(R.id.incid_reg_desc_ed)).perform(typeText("descripcion is valid"));
         onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
 
-        onView(withId(R.id.incid_see_by_user_comu_ac)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_see_by_user_ac)).check(matches(isDisplayed()));
     }
 }

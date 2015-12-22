@@ -6,6 +6,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.common.exception.InServiceException;
 import com.didekin.common.oauth2.OauthToken.AccessToken;
+import com.didekin.common.oauth2.Rol;
 import com.didekin.serviceone.domain.Comunidad;
 import com.didekin.serviceone.domain.Municipio;
 import com.didekin.serviceone.domain.Provincia;
@@ -40,8 +41,8 @@ import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_JUAN2_
 import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_NOTHING;
 import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRESIDENTE;
-import static com.didekindroid.usuario.activity.utils.RolCheckBox.PROPIETARIO;
+import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRE;
+import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRO;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOneUser;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanTwoUsers;
@@ -51,6 +52,7 @@ import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAnd
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_LA_PLAZUELA_5;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_PLAZUELA5_JUAN;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_PLAZUELA5_PEPE;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_JUAN;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_PEPE;
@@ -69,6 +71,7 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.text.IsEmptyString.isEmptyOrNullString;
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
@@ -181,6 +184,15 @@ public class UsuarioServiceTest {
     }
 
     @Test
+    public  void testGetHighestRoleFunction() throws UiException
+    {
+        whatClean = CLEAN_PEPE;
+        signUpAndUpdateTk(COMU_PLAZUELA5_PEPE);
+        List<Comunidad> comunidades = ServOne.getComusByUser();
+        assertThat(ServOne.getHighestRoleFunction(comunidades.get(0).getC_Id()),is(Rol.PRESIDENTE.function));
+    }
+
+    @Test
     public void testGetUserComuByUserAndComu() throws UiException
     {
         whatClean = CLEAN_JUAN;
@@ -214,7 +226,7 @@ public class UsuarioServiceTest {
 
         cleanWithTkhandler();
         UsuarioComunidad userComu = makeUsuarioComunidad(cDb, USER_JUAN2,
-                "portalB", null, "planta1", null, PROPIETARIO.function.concat(",").concat(PRESIDENTE.function));
+                "portalB", null, "planta1", null, PRO.function.concat(",").concat(PRE.function));
         ServOne.regUserAndUserComu(userComu);
         updateSecurityData(USER_JUAN2.getUserName(), USER_JUAN2.getPassword());
 
@@ -392,7 +404,7 @@ public class UsuarioServiceTest {
         cleanWithTkhandler();
 
         UsuarioComunidad userComu = makeUsuarioComunidad(comunidad, USER_JUAN2,
-                "portalB", null, "planta1", null, PROPIETARIO.function.concat(",").concat(PRESIDENTE.function));
+                "portalB", null, "planta1", null, PRO.function.concat(",").concat(PRE.function));
         boolean isInserted = ServOne.regUserAndUserComu(userComu);
         assertThat(isInserted, is(true));
     }
@@ -409,7 +421,7 @@ public class UsuarioServiceTest {
 
         try {
             UsuarioComunidad userComu = makeUsuarioComunidad(comunidad, pepe,
-                    "portalB", null, "planta1", null, PROPIETARIO.function.concat(",").concat(PRESIDENTE.function));
+                    "portalB", null, "planta1", null, PRO.function.concat(",").concat(PRE.function));
             ServOne.regUserAndUserComu(userComu);
             fail();
         } catch (InServiceException e) {
@@ -433,7 +445,7 @@ public class UsuarioServiceTest {
 
         // Añado comunidad del primer usuario al segundo.
         UsuarioComunidad userComu = makeUsuarioComunidad(comunidad, null, "portal",
-                "esc", "planta2", "doorJ", PROPIETARIO.function);
+                "esc", "planta2", "doorJ", PRO.function);
         int rowInserted = ServOne.regUserComu(userComu);
         assertThat(rowInserted, is(1));
         assertThat(ServOne.getComusByUser().size(), is(2));
@@ -473,7 +485,7 @@ public class UsuarioServiceTest {
 
         signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE); // User2, comunidad3, userComu 3.
         ServOne.regUserComu(makeUsuarioComunidad(comunidad1, null, "portal", "esc", "plantaY", "door21",
-                PROPIETARIO.function)); // User2 in session, comunidad1, userComu4.
+                PRO.function)); // User2 in session, comunidad1, userComu4.
         // Obtengo los id de las dos comunidades en DB, user2 in session.
         List<Comunidad> comunidades = ServOne.getComusByUser(); // comunidades 1 y 3.
         assertThat(comunidades.size(), is(2));

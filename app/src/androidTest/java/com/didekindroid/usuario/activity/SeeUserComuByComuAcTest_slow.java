@@ -17,7 +17,7 @@ import org.junit.runner.RunWith;
 
 import java.util.List;
 
-import static com.didekindroid.common.utils.AppIntentExtras.COMUNIDAD_ID;
+import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_ID;
 import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.COMU_SEARCH_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.SEE_USERCOMU_BY_USER_AC;

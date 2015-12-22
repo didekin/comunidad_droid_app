@@ -27,7 +27,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.regThreeUserComuSameUser_2;
-import static com.didekindroid.usuario.activity.utils.ViewsIDs.SEE_USER_COMU_BY_USER;
+import static com.didekindroid.usuario.activity.utils.ViewsIDs.SEE_USERCOMU_BY_USER;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_EL_ESCORIAL;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_LA_FUENTE;
@@ -94,7 +94,7 @@ public class SeeUserComuByUserAcTest {
 
         onView(withId(R.id.see_usercomu_by_user_ac_frg_container)).check(matches(isDisplayed()));
         onView(withId(R.id.see_usercomu_by_user_frg)).check(matches(isDisplayed()));
-        onView(withId(SEE_USER_COMU_BY_USER.idView)).check(matches(isDisplayed()));
+        onView(withId(SEE_USERCOMU_BY_USER.idView)).check(matches(isDisplayed()));
 
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
         onView(withContentDescription("Navigate up")).check(matches(isDisplayed()));

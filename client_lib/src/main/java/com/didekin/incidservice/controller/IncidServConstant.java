@@ -1,5 +1,6 @@
 package com.didekin.incidservice.controller;
 
+import static com.didekin.common.oauth2.OauthConstant.INCID_READ;
 import static com.didekin.common.oauth2.OauthConstant.INCID_WRITE;
 
 /**
@@ -14,5 +15,6 @@ public final class IncidServConstant {
     }
 
     // Paths.
+    public static final String SEE_INCID_BY_USER = INCID_READ;
     public static final String REG_INCID_USERCOMU = INCID_WRITE + "/reg_incidusercomu";
 }

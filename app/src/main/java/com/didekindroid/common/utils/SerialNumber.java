@@ -9,7 +9,9 @@ public enum SerialNumber {
 
     COMUNIDAD_INTENT(11L),
     COMUNIDAD_FULL_INTENT(12L),
-    USUARIO_COMUNIDAD(13L),
+    INCIDENCIA_INTENT(15L),
+    INCID_USERCOMU_INTENT(14L),
+    USUARIO_COMUNIDAD_INTENT(13L),
     ;
 
     public final long number;

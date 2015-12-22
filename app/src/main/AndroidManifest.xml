@@ -65,7 +65,22 @@
         <!-- **************************************************************** -->
         <!-- INCIDENCIA -->
         <!-- **************************************************************** -->
-        <!-- TODO: Cambiar el encadenamiento de activities. Empezar por listado. -->
+        <activity
+            android:name=".incidencia.activity.IncidClosedByUserAc"
+            android:label="@string/incid_closed_by_user_ac_label"
+            android:parentActivityName=".incidencia.activity.IncidSeeByUserAc">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".incidencia.activity.IncidSeeByUserAc"/>
+        </activity>
+        <activity
+            android:name=".incidencia.activity.IncidEditAc"
+            android:label="@string/incid_edit_ac_label"
+            android:parentActivityName=".incidencia.activity.IncidSeeByUserAc">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".incidencia.activity.IncidSeeByUserAc"/>
+        </activity>
         <activity
             android:name=".incidencia.activity.IncidRegAc"
             android:label="@string/incid_reg_ac_label"
@@ -75,10 +90,9 @@
                 android:value=".usuario.activity.UserComuDataAc"/>
         </activity>
         <activity
-            android:name=".incidencia.activity.IncidSeeByUserComuAc"
-            android:label="@string/title_activity_incid_see_by_user_comu"
+            android:name=".incidencia.activity.IncidSeeByUserAc"
+            android:label="@string/incid_see_by_user_ac_label"
             android:parentActivityName=".usuario.activity.UserComuDataAc">
-
             <!-- TODO: Lo referente a parentActivity hay que cambiarlo. -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

@@ -92,7 +92,7 @@ public class DeleteMeAc extends AppCompatActivity {
 
             if (uiException != null) {
                 Log.d(TAG, "onPostExecute(): uiException " + (uiException.getInServiceException() != null ?
-                        uiException.getInServiceException().getHttpMessage() : "Token null"));
+                        uiException.getInServiceException().getHttpMessage() : UiException.TOKEN_NULL));
                 uiException.getAction().doAction(DeleteMeAc.this, uiException.getResourceId());
             } else {
                 checkState(isDeleted);

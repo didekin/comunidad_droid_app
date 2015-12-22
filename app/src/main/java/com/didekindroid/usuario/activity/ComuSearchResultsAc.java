@@ -18,9 +18,9 @@ import com.didekindroid.common.utils.UIutils;
 import com.didekindroid.usuario.dominio.FullComunidadIntent;
 import com.didekindroid.usuario.dominio.FullUsuarioComuidadIntent;
 
-import static com.didekindroid.common.utils.AppIntentExtras.COMUNIDAD_LIST_INDEX;
-import static com.didekindroid.common.utils.AppIntentExtras.COMUNIDAD_LIST_OBJECT;
-import static com.didekindroid.common.utils.AppIntentExtras.USERCOMU_LIST_OBJECT;
+import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_LIST_INDEX;
+import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_LIST_OBJECT;
+import static com.didekindroid.common.utils.AppKeysForBundle.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.usuario.activity.utils.UserMenu.REG_COMU_USER_USERCOMU_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_USERCOMU_BY_USER_AC;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
@@ -159,9 +159,6 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
 //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
 //    ============================================================
 
-    /**
-     * Task to check if the comunidad selected has the user as associated.
-     */
     class UsuarioComunidadGetter extends AsyncTask<Comunidad, Void, UsuarioComunidad> {
 
         private Comunidad comunidadSelected;
@@ -192,7 +189,7 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
 
             if (uiException != null) {
                 Log.d(TAG, ".UsuarioComunidadGetter.onPostExecute(), uiException " +
-                        (uiException.getInServiceException() != null ? uiException.getInServiceException().getHttpMessage() : "Token null"));
+                        (uiException.getInServiceException() != null ? uiException.getInServiceException().getHttpMessage() : UiException.TOKEN_NULL));
                 uiException.getAction().doAction(ComuSearchResultsAc.this, uiException.getResourceId());
             } else if (isUserComuNull) {
                 Intent intent = new Intent(ComuSearchResultsAc.this, RegUserComuAc.class);

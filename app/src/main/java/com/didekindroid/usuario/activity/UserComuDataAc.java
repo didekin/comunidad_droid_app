@@ -20,25 +20,24 @@ import com.didekindroid.R;
 import com.didekindroid.common.TokenHandler;
 import com.didekindroid.common.UiException;
 import com.didekindroid.common.utils.ConnectionUtils;
-import com.didekindroid.incidencia.activity.IncidRegAc;
-import com.didekindroid.incidencia.activity.utils.IncidenciaMenu;
 import com.didekindroid.usuario.activity.utils.UserAndComuFiller;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.FullUsuarioComuidadIntent;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
 
 import static com.didekin.serviceone.controller.UsuarioServiceConstant.IS_USER_DELETED;
-import static com.didekindroid.common.utils.AppIntentExtras.COMUNIDAD_ID;
-import static com.didekindroid.common.utils.AppIntentExtras.USERCOMU_LIST_OBJECT;
+import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_ID;
+import static com.didekindroid.common.utils.AppKeysForBundle.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.utils.UIutils.makeToast;
 import static com.didekindroid.common.utils.UIutils.updateIsRegistered;
-import static com.didekindroid.usuario.activity.utils.RolCheckBox.ADMINISTRADOR;
-import static com.didekindroid.usuario.activity.utils.RolCheckBox.INQUILINO;
-import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRESIDENTE;
-import static com.didekindroid.usuario.activity.utils.RolCheckBox.PROPIETARIO;
+import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_REG_AC;
+import static com.didekindroid.usuario.activity.utils.RolCheckBox.ADM;
+import static com.didekindroid.usuario.activity.utils.RolCheckBox.INQ;
+import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRE;
+import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRO;
 import static com.didekindroid.usuario.activity.utils.UserMenu.COMU_DATA_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_USERCOMU_BY_COMU_AC;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
@@ -118,13 +117,13 @@ public class UserComuDataAc extends AppCompatActivity {
         ((EditText) mAcView.findViewById(R.id.reg_usercomu_puerta_ed)).setText(mOldUserComu.getPuerta());
 
         ((CheckBox) mAcView.findViewById(R.id.reg_usercomu_checbox_pre))
-                .setChecked(mOldUserComu.getRoles().contains(PRESIDENTE.function));
+                .setChecked(mOldUserComu.getRoles().contains(PRE.function));
         ((CheckBox) mAcView.findViewById(R.id.reg_usercomu_checbox_admin))
-                .setChecked(mOldUserComu.getRoles().contains(ADMINISTRADOR.function));
+                .setChecked(mOldUserComu.getRoles().contains(ADM.function));
         ((CheckBox) mAcView.findViewById(R.id.reg_usercomu_checbox_pro))
-                .setChecked(mOldUserComu.getRoles().contains(PROPIETARIO.function));
+                .setChecked(mOldUserComu.getRoles().contains(PRO.function));
         ((CheckBox) mAcView.findViewById(R.id.reg_usercomu_checbox_inq))
-                .setChecked(mOldUserComu.getRoles().contains(INQUILINO.function));
+                .setChecked(mOldUserComu.getRoles().contains(INQ.function));
     }
 
     private void modifyUserComuData()
@@ -193,10 +192,7 @@ public class UserComuDataAc extends AppCompatActivity {
                 COMU_DATA_AC.doMenuItem(this);
                 return true;
             case R.id.incid_reg_ac_mn:
-                intent = new Intent(this, IncidRegAc.class);
-                intent.putExtra(COMUNIDAD_ID.extra, mOldUserComu.getComunidad().getC_Id());
-                this.setIntent(intent);
-                IncidenciaMenu.INCID_REG_AC.doMenuItem(this);
+                INCID_REG_AC.doMenuItem(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -233,7 +229,7 @@ public class UserComuDataAc extends AppCompatActivity {
 
             if (uiException != null) {
                 Log.d(TAG, "onPostExecute(): uiException " + (uiException.getInServiceException() != null ?
-                        uiException.getInServiceException().getHttpMessage() : "Token null"));
+                        uiException.getInServiceException().getHttpMessage() : UiException.TOKEN_NULL));
                 uiException.getAction().doAction(UserComuDataAc.this, uiException.getResourceId());
             } else {
                 mComuDataItem.setVisible(isOldestUserComu);
@@ -267,7 +263,7 @@ public class UserComuDataAc extends AppCompatActivity {
             Log.d(TAG, "onPostExecute()");
             if (uiException != null) {
                 Log.d(TAG, "onPostExecute(): uiException " + (uiException.getInServiceException() != null ?
-                        uiException.getInServiceException().getHttpMessage() : "Token null"));
+                        uiException.getInServiceException().getHttpMessage() : UiException.TOKEN_NULL));
                 uiException.getAction().doAction(UserComuDataAc.this, uiException.getResourceId());
             } else {
                 checkState(rowsUpdated == 1);
@@ -312,7 +308,7 @@ public class UserComuDataAc extends AppCompatActivity {
                 startActivity(intent);
             } else {
                 Log.d(TAG, "onPostExecute(): uiException " + (uiException.getInServiceException() != null ?
-                        uiException.getInServiceException().getHttpMessage() : "Token null"));
+                        uiException.getInServiceException().getHttpMessage() : UiException.TOKEN_NULL));
                 uiException.getAction().doAction(UserComuDataAc.this, uiException.getResourceId());
             }
         }

@@ -26,9 +26,9 @@ import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRESIDENTE;
-import static com.didekindroid.usuario.activity.utils.RolCheckBox.PROPIETARIO;
-import static com.didekindroid.common.utils.AppIntentExtras.COMUNIDAD_LIST_OBJECT;
+import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRE;
+import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRO;
+import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.common.utils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanTwoUsers;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAndUpdateTk;
@@ -126,7 +126,7 @@ public class RegUserComuAcTest {
     {
         // Data input OK; the next activity is initiated.
         activity = mActivityRule.launchActivity(intent);
-        typeRegUserComuData("portalA", "escC", "plantaB", "puerta_1", PROPIETARIO, PRESIDENTE);
+        typeRegUserComuData("portalA", "escC", "plantaB", "puerta_1", PRO, PRE);
         onView(withId(R.id.reg_usercomu_button)).check(matches(isDisplayed())).perform(click());
 
         onView(withId(R.id.see_usercomu_by_comu_ac_frg_container)).check(matches(isDisplayed()));

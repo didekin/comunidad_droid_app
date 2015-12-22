@@ -1,7 +1,7 @@
 package com.didekindroid.incidencia.suite;
 
 import com.didekindroid.incidencia.activity.IncidRegAcTest;
-import com.didekindroid.incidencia.activity.IncidSeeByUserComuAcTest;
+import com.didekindroid.incidencia.activity.IncidSeeByUserAcTest;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -14,7 +14,7 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         IncidRegAcTest.class,
-        IncidSeeByUserComuAcTest.class,
+        IncidSeeByUserAcTest.class,
 })
 public class IncidFunctionalTestSuite {
 }

@@ -24,8 +24,8 @@ import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.utils.UIutils.makeToast;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUserComuBeanFromView;
-import static com.didekindroid.common.utils.AppIntentExtras.COMUNIDAD_ID;
-import static com.didekindroid.common.utils.AppIntentExtras.COMUNIDAD_LIST_OBJECT;
+import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_ID;
+import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static com.google.common.base.Preconditions.checkState;
 
@@ -194,7 +194,7 @@ public class RegUserComuAc extends AppCompatActivity {
             Log.d(TAG, "onPostExecute()");
             if (uiException != null){
                 Log.d(TAG, "onPostExecute(): uiException " + (uiException.getInServiceException() != null ?
-                        uiException.getInServiceException().getHttpMessage() : "Token null"));
+                        uiException.getInServiceException().getHttpMessage() : UiException.TOKEN_NULL));
                 uiException.getAction().doAction(RegUserComuAc.this, uiException.getResourceId());
             } else{
                 checkState(rowInserted == 1);

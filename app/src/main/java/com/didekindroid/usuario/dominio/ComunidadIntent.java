@@ -74,6 +74,7 @@ public final class ComunidadIntent implements Serializable {
         return provinciaId;
     }
 
+    @SuppressWarnings("SimplifiableIfStatement")
     @Override
     public boolean equals(Object o)
     {

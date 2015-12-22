@@ -60,7 +60,7 @@ public class IncidenciaBean {
             UsuarioComunidad userComu = new UsuarioComunidad
                     .UserComuBuilder(new Comunidad.ComunidadBuilder().c_id(comunidadId).build(), null)
                     .build();
-            return new IncidUserComu(incidencia, userComu, importanciaIncid);
+            return new IncidUserComu(incidencia, userComu, importanciaIncid, null);
         } else {
             return null;
         }

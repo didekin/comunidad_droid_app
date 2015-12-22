@@ -9,7 +9,7 @@ import java.sql.Timestamp;
  * Date: 12/11/15
  * Time: 17:07
  */
-@SuppressWarnings("FieldCanBeLocal")
+@SuppressWarnings({"FieldCanBeLocal", "unused"})
 public final class Incidencia {
 
     private final long incidenciaId;
@@ -19,7 +19,7 @@ public final class Incidencia {
     private final Timestamp fechaCierre;
     private final ResolucionIncid resolucionIncid;
 
-    private Incidencia(IncidenciaBuilder incidenciaBuilder)
+    protected Incidencia(IncidenciaBuilder incidenciaBuilder)
     {
         incidenciaId = incidenciaBuilder.incidenciaId;
         descripcion = incidenciaBuilder.descripcion;
@@ -42,6 +42,21 @@ public final class Incidencia {
     public AmbitoIncidencia getAmbitoIncidencia()
     {
         return ambitoIncidencia;
+    }
+
+    public Timestamp getFechaAlta()
+    {
+        return fechaAlta;
+    }
+
+    public Timestamp getFechaCierre()
+    {
+        return fechaCierre;
+    }
+
+    public ResolucionIncid getResolucionIncid()
+    {
+        return resolucionIncid;
     }
 
     @Override
@@ -101,7 +116,8 @@ public final class Incidencia {
             return this;
         }
 
-        public IncidenciaBuilder fechaCierre(Timestamp initValue){
+        public IncidenciaBuilder fechaCierre(Timestamp initValue)
+        {
             fechaCierre = initValue;
             return this;
         }
@@ -112,10 +128,24 @@ public final class Incidencia {
             return this;
         }
 
+        public IncidenciaBuilder copyIncidencia(Incidencia incidencia)
+        {
+            incidenciaId(incidencia.getIncidenciaId());
+            descripcion(incidencia.getDescripcion());
+            ambitoIncid(incidencia.getAmbitoIncidencia());
+            fechaAlta(incidencia.getFechaAlta());
+            fechaCierre(incidencia.getFechaCierre());
+            resolucion(incidencia.getResolucionIncid());
+            return this;
+        }
+
         @Override
         public Incidencia build()
         {
             return new Incidencia(this);
         }
+
+//        ........................ HELPER METHODS ......................
+
     }
 }

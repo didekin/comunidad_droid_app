@@ -16,7 +16,7 @@ import com.didekindroid.common.UiException;
 import java.util.List;
 
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
-import static com.didekindroid.usuario.activity.utils.ViewsIDs.SEE_USER_COMU_BY_USER;
+import static com.didekindroid.usuario.activity.utils.ViewsIDs.SEE_USERCOMU_BY_USER;
 import static com.google.common.base.Preconditions.checkState;
 
 /**
@@ -71,7 +71,7 @@ public class SeeUserComuByUserFr extends ListFragment {
         super.onActivityCreated(savedInstanceState);
 
         fragmentView = getListView();
-        fragmentView.setId(SEE_USER_COMU_BY_USER.idView);
+        fragmentView.setId(SEE_USERCOMU_BY_USER.idView);
         fragmentView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
     }
 

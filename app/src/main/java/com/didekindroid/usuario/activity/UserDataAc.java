@@ -23,6 +23,7 @@ import com.didekindroid.usuario.dominio.UsuarioBean;
 
 import static com.didekin.common.exception.DidekinExceptionMsg.BAD_REQUEST;
 import static com.didekindroid.common.TokenHandler.TKhandler;
+import static com.didekindroid.common.UiException.TOKEN_NULL;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
@@ -160,7 +161,7 @@ public class UserDataAc extends AppCompatActivity {
             Log.d(TAG, "UserDataGetter.onPostExecute()");
 
             if (uiException != null) {
-                Log.d(TAG, "onPostExecute(): uiException " + (uiException.getInServiceException() != null ? uiException.getInServiceException().getHttpMessage() : "Token null"));
+                Log.d(TAG, "onPostExecute(): uiException " + (uiException.getInServiceException() != null ? uiException.getInServiceException().getHttpMessage() : TOKEN_NULL));
                 uiException.getAction().doAction(UserDataAc.this, uiException.getResourceId());
             } else {
                 ((EditText) mAcView.findViewById(R.id.reg_usuario_email_editT)).setText(mOldUser.getUserName());
@@ -266,7 +267,7 @@ public class UserDataAc extends AppCompatActivity {
             }
             if (uiException != null) {
                 Log.d(TAG, "onPostExecute(): uiException " + (uiException.getInServiceException() != null ?
-                        uiException.getInServiceException().getHttpMessage() : "Token null"));
+                        uiException.getInServiceException().getHttpMessage() : TOKEN_NULL));
                 checkState(!passwordWrong);
                 uiException.getAction().doAction(UserDataAc.this, uiException.getResourceId());
             }

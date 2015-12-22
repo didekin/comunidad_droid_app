@@ -21,7 +21,7 @@ import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.common.utils.ConnectionUtils;
 
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeComunidadBeanFromView;
-import static com.didekindroid.common.utils.AppIntentExtras.COMUNIDAD_ID;
+import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_ID;
 import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_USERCOMU_BY_COMU_AC;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
@@ -263,7 +263,7 @@ public class ComuDataAc extends Activity implements RegComuFr.RegComuFrListener 
             Log.d(TAG, "onPostExecute()");
 
             if (uiException != null) {
-                Log.d(TAG, "UiException" + (uiException.getInServiceException() != null ? uiException.getInServiceException().getHttpMessage() : "Token null"));
+                Log.d(TAG, "UiException" + (uiException.getInServiceException() != null ? uiException.getInServiceException().getHttpMessage() : UiException.TOKEN_NULL));
                 uiException.getAction().doAction(ComuDataAc.this, uiException.getResourceId());
             } else {
                 mComunidad = comunidad;
@@ -297,7 +297,7 @@ public class ComuDataAc extends Activity implements RegComuFr.RegComuFrListener 
             Log.d(TAG, "onPostExecute()");
             if (uiException != null) {
                 Log.d(TAG, "onPostExecute(): uiException " + (uiException.getInServiceException() != null ?
-                        uiException.getInServiceException().getHttpMessage() : "Token null"));
+                        uiException.getInServiceException().getHttpMessage() : UiException.TOKEN_NULL));
                 uiException.getAction().doAction(ComuDataAc.this, uiException.getResourceId());
             } else {
                 checkState(rowsUpdated == 1);

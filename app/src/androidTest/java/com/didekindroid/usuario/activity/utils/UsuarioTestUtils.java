@@ -26,7 +26,7 @@ import static com.didekindroid.DidekindroidApp.getContext;
 import static com.didekindroid.common.TokenHandler.TKhandler;
 import static com.didekindroid.common.utils.ActivityTestUtils.updateSecurityData;
 import static com.didekindroid.common.utils.UIutils.updateIsRegistered;
-import static com.didekindroid.usuario.activity.utils.RolCheckBox.ADMINISTRADOR;
+import static com.didekindroid.usuario.activity.utils.RolCheckBox.ADM;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_JUAN;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_JUAN2;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_PEPE;
@@ -68,7 +68,7 @@ public final class UsuarioTestUtils {
     {
         regTwoUserComuSameUser(usuarioComunidadList);
         UsuarioComunidad usuarioComunidad = makeUsuarioComunidad(comunidad, usuarioComunidadList.get(0).getUsuario(),
-                null, null, "plan-5", null, ADMINISTRADOR.function);
+                null, null, "plan-5", null, ADM.function);
         ServOne.regComuAndUserComu(usuarioComunidad);
     }
 

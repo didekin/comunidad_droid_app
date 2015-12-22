@@ -5,6 +5,11 @@ import com.didekindroid.R;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.didekin.common.oauth2.Rol.ADMINISTRADOR;
+import static com.didekin.common.oauth2.Rol.INQUILINO;
+import static com.didekin.common.oauth2.Rol.PRESIDENTE;
+import static com.didekin.common.oauth2.Rol.PROPIETARIO;
+
 /**
  * User: pedro@didekin
  * Date: 08/06/15
@@ -12,10 +17,10 @@ import java.util.Map;
  */
 public enum RolCheckBox {
 
-    ADMINISTRADOR("adm", R.id.reg_usercomu_checbox_admin, R.string.reg_usercomu_checbox_admin_rot),
-    PRESIDENTE("pre", R.id.reg_usercomu_checbox_pre, R.string.reg_usercomu_checkbox_pre_rot),
-    PROPIETARIO("pro", R.id.reg_usercomu_checbox_pro, R.string.reg_usercomu_checbox_pro_rot),
-    INQUILINO("inq", R.id.reg_usercomu_checbox_inq, R.string.reg_usercomu_checbox_inq_rot),
+    ADM(ADMINISTRADOR.function, R.id.reg_usercomu_checbox_admin, R.string.reg_usercomu_checbox_admin_rot),
+    PRE(PRESIDENTE.function, R.id.reg_usercomu_checbox_pre, R.string.reg_usercomu_checkbox_pre_rot),
+    PRO(PROPIETARIO.function, R.id.reg_usercomu_checbox_pro, R.string.reg_usercomu_checbox_pro_rot),
+    INQ(INQUILINO.function, R.id.reg_usercomu_checbox_inq, R.string.reg_usercomu_checbox_inq_rot),
     ;
 
     private static final Map<String,RolCheckBox> functionToResorceString = new HashMap<>();

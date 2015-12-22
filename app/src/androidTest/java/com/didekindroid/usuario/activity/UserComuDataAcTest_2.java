@@ -31,9 +31,9 @@ import static android.support.test.espresso.matcher.ViewMatchers.withContentDesc
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
-import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRESIDENTE;
-import static com.didekindroid.usuario.activity.utils.RolCheckBox.PROPIETARIO;
-import static com.didekindroid.common.utils.AppIntentExtras.USERCOMU_LIST_OBJECT;
+import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRE;
+import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRO;
+import static com.didekindroid.common.utils.AppKeysForBundle.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.utils.ActivityTestUtils.updateSecurityData;
@@ -63,7 +63,7 @@ public class UserComuDataAcTest_2 {
         protected void beforeActivityLaunched()
         {
             UsuarioComunidad userComu = makeUsuarioComunidad(mUsuarioComunidad.getComunidad(), USER_PEPE,
-                    "portalB", null, "planta1", null, PROPIETARIO.function.concat(",").concat(PRESIDENTE.function));
+                    "portalB", null, "planta1", null, PRO.function.concat(",").concat(PRE.function));
             ServOne.regUserAndUserComu(userComu);
             try {
                 updateSecurityData(USER_PEPE.getUserName(), USER_PEPE.getPassword());

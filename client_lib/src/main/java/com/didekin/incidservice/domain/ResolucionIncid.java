@@ -10,7 +10,7 @@ import java.sql.Timestamp;
  * Time: 18:30
  */
 @SuppressWarnings("FieldCanBeLocal")
-final class ResolucionIncid {
+public final class ResolucionIncid {
 
     private final String descripcion;
     private final String faseResolucion;

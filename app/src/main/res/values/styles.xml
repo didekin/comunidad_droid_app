@@ -87,7 +87,7 @@
     </style>
 
     <style name="baseLayout.scroll">
-        <item name="android:scrollbars">none</item>
+        <item name="android:scrollbars">vertical</item>
     </style>
 
     <!-- ................ Spinners ............. -->

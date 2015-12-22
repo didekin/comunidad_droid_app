@@ -116,7 +116,7 @@ public class PasswordChangeAc extends AppCompatActivity {
             Log.d(TAG, "onPostExecute(): DONE");
             if (uiException != null){
                 Log.d(TAG, "onPostExecute(): uiException " + (uiException.getInServiceException() != null ?
-                        uiException.getInServiceException().getHttpMessage() : "Token null"));
+                        uiException.getInServiceException().getHttpMessage() : UiException.TOKEN_NULL));
                 uiException.getAction().doAction(PasswordChangeAc.this, uiException.getResourceId());
             } else{checkState(passwordUpdate == 1);}
 

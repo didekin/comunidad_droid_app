@@ -16,7 +16,8 @@ import com.didekindroid.common.utils.ConnectionUtils;
 import com.didekindroid.common.utils.UIutils;
 import com.didekindroid.incidencia.gcm.GcmRegistrationIntentServ;
 
-import static com.didekindroid.common.utils.AppIntentExtras.COMUNIDAD_ID;
+import static com.didekindroid.common.UiException.TOKEN_NULL;
+import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_ID;
 import static com.didekindroid.common.utils.UIutils.checkPlayServices;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
@@ -28,7 +29,6 @@ import static com.google.common.base.Preconditions.checkState;
 /**
  * Preconditions:
  * 1. The user is registered.
- * 2. An intent is received with a comunidad ID.
  * Postconditions:
  * 1. No intent passed.
  */
@@ -51,11 +51,15 @@ public class IncidRegAc extends AppCompatActivity {
             startService(intent);
         }
 
+        // TODO: añadir un spinner con la comunidad para la que se da de alta la incidencia.
+        // ComunidadId lo proporciona el spinner. Suprimir este intent.
         final long comunidadId = getIntent().getLongExtra(COMUNIDAD_ID.extra, 0);
 
         View mAcView = getLayoutInflater().inflate(R.layout.incid_reg_ac, null);
         setContentView(mAcView);
         doToolBar(this, true);
+
+
 
         mRegAcFragment = (IncidRegAcFragment) getFragmentManager().findFragmentById(R.id.incid_reg_frg);
         Button mRegisterButton = (Button) findViewById(R.id.incid_reg_ac_button);
@@ -83,7 +87,7 @@ public class IncidRegAc extends AppCompatActivity {
             UIutils.makeToast(this, R.string.no_internet_conn_toast, Toast.LENGTH_LONG);
         } else {
             new IncidenciaRegister().execute(incidUserComu);
-            Intent intent = new Intent(this, IncidSeeByUserComuAc.class);
+            Intent intent = new Intent(this, IncidSeeByUserAc.class);
             startActivity(intent);
         }
     }
@@ -117,13 +121,10 @@ public class IncidRegAc extends AppCompatActivity {
             Log.d(TAG, "onPostExecute()");
 
             if (uiException != null) {
-                Log.d(TAG, "onPostExecute(): uiException " + (uiException.getInServiceException() != null ?
-                        uiException.getInServiceException().getHttpMessage() : "Token null"));
                 uiException.getAction().doAction(IncidRegAc.this, uiException.getResourceId());
             } else {
                 checkState(rowInserted == 1);
             }
         }
     }
-
 }

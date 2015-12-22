@@ -32,8 +32,8 @@ import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.utils.UIutils.updateIsRegistered;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUserBeanFromRegUserFrView;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUserComuBeanFromView;
-import static com.didekindroid.common.utils.AppIntentExtras.COMUNIDAD_ID;
-import static com.didekindroid.common.utils.AppIntentExtras.COMUNIDAD_LIST_OBJECT;
+import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_ID;
+import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.usuario.activity.utils.UserMenu.LOGIN_AC;
 import static com.didekindroid.common.webservices.Oauth2Service.Oauth2;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
@@ -188,7 +188,7 @@ public class RegUserAndUserComuAc extends AppCompatActivity {
 
             if (uiException != null) {
                 Log.d(TAG, "onPostExecute(): uiException " + (uiException.getInServiceException() != null ?
-                        uiException.getInServiceException().getHttpMessage() : "Token null"));
+                        uiException.getInServiceException().getHttpMessage() : UiException.TOKEN_NULL));
                 uiException.getAction().doAction(RegUserAndUserComuAc.this, uiException.getResourceId());
             } else {
                 Intent intent = new Intent(RegUserAndUserComuAc.this, SeeUserComuByComuAc.class);

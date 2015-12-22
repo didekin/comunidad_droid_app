@@ -65,6 +65,12 @@ public enum UsuarioService implements UsuarioEndPoints {
         }
 
         @Override
+        public String getHighestRolFunction(String accessToken, long mComunidadId)
+        {
+            return ServOne.endPoint.getHighestRolFunction(accessToken, mComunidadId);
+        }
+
+        @Override
         public UsuarioComunidad getUserComuByUserAndComu(String accessToken, long comunidadId)
         {
             return ServOne.endPoint.getUserComuByUserAndComu(accessToken, comunidadId);
@@ -177,7 +183,8 @@ public enum UsuarioService implements UsuarioEndPoints {
         {
             return ServOne.endPoint.seeUserComusByUser(accessToken);
         }
-    },;
+    },
+    ;
 
     private static final String TAG = UsuarioService.class.getCanonicalName();
 
@@ -250,7 +257,7 @@ public enum UsuarioService implements UsuarioEndPoints {
 
         List<Comunidad> comusByUser = null;
         try {
-            comusByUser = endPoint.getComusByUser(checkBearerToken());
+            comusByUser = getComusByUser(checkBearerToken());
         } catch (InServiceException e) {
             catchAuthenticationException(e);
         }
@@ -262,11 +269,23 @@ public enum UsuarioService implements UsuarioEndPoints {
         Log.d(TAG, "getGcmToken()");
         String gcmToken = null;
         try {
-            gcmToken = endPoint.getGcmToken(checkBearerToken());
+            gcmToken = getGcmToken(checkBearerToken());
         } catch (InServiceException e) {
             catchAuthenticationException(e);
         }
         return gcmToken;
+    }
+
+    public String getHighestRoleFunction(long mComunidadId) throws UiException
+    {
+        Log.d(TAG, "getHighestRolFunction()");
+        String function = null;
+        try {
+            function = getHighestRolFunction(checkBearerToken(), mComunidadId);
+        } catch (InServiceException e) {
+            catchAuthenticationException(e);
+        }
+        return function;
     }
 
     public UsuarioComunidad getUserComuByUserAndComu(long comunidadId) throws UiException

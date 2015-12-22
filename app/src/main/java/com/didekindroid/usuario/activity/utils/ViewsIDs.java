@@ -10,13 +10,10 @@ package com.didekindroid.usuario.activity.utils;
  */
 public enum ViewsIDs {
 
-    /* User's comunidades view. */
-    SEE_USER_COMU_BY_USER(-1321),
-    /* Comunidades found-searched view */
     COMU_SEARCH_RESULTS(-1323),
-    /* Users signed-up in a comunidad */
+    INCID_SEE_BY_USER(-1327),
     SEE_USERCOMU_BY_COMU(-1325),
-
+    SEE_USERCOMU_BY_USER(-1321),
     ;
 
     public final int idView;

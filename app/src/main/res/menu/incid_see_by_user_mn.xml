@@ -1,0 +1,21 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context=".incidencia.activity.IncidSeeByUserAc">
+      <item
+          android:id="@+id/incid_see_by_user_ac_mn"
+          android:title="@string/incid_see_by_user_ac_mn"
+          android:orderInCategory="100"
+          app:showAsAction="never|withText"/>
+      <item
+          android:id="@+id/incid_closed_see_by_useromu_ac_mn"
+          android:title="@string/incid_closed_see_by_useromu_ac_mn"
+          android:orderInCategory="100"
+          app:showAsAction="never|withText"/>
+      <item
+          android:id="@+id/incid_reg_ac_mn"
+          android:title="@string/incid_reg_ac_mn"
+          android:orderInCategory="100"
+          app:showAsAction="never|withText"/>
+
+</menu>

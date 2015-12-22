@@ -7,10 +7,13 @@ import com.didekin.incidservice.controller.IncidenciaServEndPoints;
 import com.didekin.incidservice.domain.IncidUserComu;
 import com.didekindroid.common.UiException;
 
+import java.util.List;
+
 import static com.didekin.common.RetrofitRestBuilder.BUILDER;
 import static com.didekindroid.DidekindroidApp.getBaseURL;
 import static com.didekindroid.common.utils.UIutils.catchAuthenticationException;
 import static com.didekindroid.common.utils.UIutils.checkBearerToken;
+import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 
 /**
  * User: pedro@didekin
@@ -25,8 +28,13 @@ public enum IncidService implements IncidenciaServEndPoints {
         {
             return IncidenciaServ.endPoint.regIncidenciaUserComu(accessToken, incidUserComu);
         }
-    },;
 
+        @Override
+        public List<IncidUserComu> incidSeeByUser(String accessToken)
+        {
+            return IncidenciaServ.endPoint.incidSeeByUser(accessToken);
+        }
+    },;
 
     private static final String TAG = IncidService.class.getCanonicalName();
 
@@ -54,5 +62,25 @@ public enum IncidService implements IncidenciaServEndPoints {
         return regIncidencia;
     }
 
+    /**
+     * This method encapsulates the call to the UsuarioService.ServOne method.
+     *
+     * @param mComunidadId identifies the comunidad wherein the user has the role returned.*/
+    public String getHighestRolFunction(long mComunidadId) throws UiException
+    {
+        Log.d(TAG, "getHighestRolFunction()");
+        return ServOne.getHighestRoleFunction(mComunidadId);
+    }
 
+    public List<IncidUserComu> incidSeeByUser() throws UiException
+    {
+        Log.d(TAG, "incidSeeByUser()");
+        List<IncidUserComu> incidUserComuList = null;
+        try {
+            incidUserComuList = incidSeeByUser(checkBearerToken());
+        } catch (InServiceException e) {
+            catchAuthenticationException(e);
+        }
+        return incidUserComuList;
+    }
 }

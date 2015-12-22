@@ -38,8 +38,8 @@ import static com.didekindroid.common.TokenHandler.TKhandler;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.ViewsIDs.COMU_SEARCH_RESULTS;
 import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_JUAN;
-import static com.didekindroid.usuario.activity.utils.RolCheckBox.PROPIETARIO;
-import static com.didekindroid.common.utils.AppIntentExtras.COMUNIDAD_SEARCH;
+import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRO;
+import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_SEARCH;
 import static com.didekindroid.common.utils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanTwoUsers;
@@ -48,7 +48,6 @@ import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.regThreeU
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.regTwoUserComuSameUser;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_LA_PLAZUELA_5;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_TRAV_PLAZUELA_11;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_JUAN;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.makeComunidad;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.makeListTwoUserComu;
@@ -283,7 +282,7 @@ public class ComuSearchResultsAcTest_1 {
                 new Municipio((short) 22, new Provincia((short) 2)));
         Usuario usuarioIn = makeUsuario("newuser@jnew.us", "newuser", "psw_newuser");
         UsuarioComunidad usuarioComunidad = makeUsuarioComunidad(comunidadIn, usuarioIn, null,
-                null, "3pl", "A_puerta", PROPIETARIO.function);
+                null, "3pl", "A_puerta", PRO.function);
         signUpAndUpdateTk(usuarioComunidad);
 
         // Búsqueda con comunidad/intent por defecto.

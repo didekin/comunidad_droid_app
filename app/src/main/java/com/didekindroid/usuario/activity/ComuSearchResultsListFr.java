@@ -16,7 +16,7 @@ import com.didekindroid.usuario.dominio.ComunidadIntent;
 import java.util.List;
 
 import static com.didekindroid.usuario.activity.utils.ViewsIDs.COMU_SEARCH_RESULTS;
-import static com.didekindroid.common.utils.AppIntentExtras.COMUNIDAD_SEARCH;
+import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_SEARCH;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 
 /**

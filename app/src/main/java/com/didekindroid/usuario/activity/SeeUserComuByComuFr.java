@@ -15,7 +15,7 @@ import com.didekin.serviceone.domain.Comunidad;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
-import com.didekindroid.common.utils.AppIntentExtras;
+import com.didekindroid.common.utils.AppKeysForBundle;
 
 import java.util.List;
 
@@ -62,7 +62,7 @@ public class SeeUserComuByComuFr extends ListFragment {
 
         mActivity = (SeeUserComuByComuAc) getActivity();
         // Preconditions: an existing comunidad passed as intent. The comunidad has necessarily users already signed-up.
-        comunidadId = mActivity.getIntent().getExtras().getLong(AppIntentExtras.COMUNIDAD_ID.extra);
+        comunidadId = mActivity.getIntent().getExtras().getLong(AppKeysForBundle.COMUNIDAD_ID.extra);
     }
 
     @Override
@@ -186,7 +186,7 @@ public class SeeUserComuByComuFr extends ListFragment {
 
             if (uiException != null) {
                 Log.d(TAG, "onPostExecute(): uiException " + (uiException.getInServiceException() != null ?
-                        uiException.getInServiceException().getHttpMessage() : "Token null"));
+                        uiException.getInServiceException().getHttpMessage() : UiException.TOKEN_NULL));
                 uiException.getAction().doAction(getActivity(), uiException.getResourceId());
             } else {
                 mAdapter.addAll(userComuList);

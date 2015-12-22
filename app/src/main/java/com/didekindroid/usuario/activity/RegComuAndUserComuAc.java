@@ -117,7 +117,7 @@ public class RegComuAndUserComuAc extends AppCompatActivity {
             Log.d(TAG, "onPostExecute()");
             if (uiException != null) {
                 Log.d(TAG, "onPostExecute(): uiException " + (uiException.getInServiceException() != null ?
-                        uiException.getInServiceException().getHttpMessage() : "Token null"));
+                        uiException.getInServiceException().getHttpMessage() : UiException.TOKEN_NULL));
                 uiException.getAction().doAction(RegComuAndUserComuAc.this, uiException.getResourceId());
             } else {
                 checkState(rowInserted);

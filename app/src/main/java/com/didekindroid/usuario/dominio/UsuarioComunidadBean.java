@@ -54,16 +54,16 @@ public final class UsuarioComunidadBean {
         StringBuilder rolesBuilder = new StringBuilder();
 
         if (isAdministrador) {
-            rolesBuilder.append(RolCheckBox.ADMINISTRADOR.function).append(",");
+            rolesBuilder.append(RolCheckBox.ADM.function).append(",");
         }
         if (isPresidente) {
-            rolesBuilder.append(RolCheckBox.PRESIDENTE.function).append(",");
+            rolesBuilder.append(RolCheckBox.PRE.function).append(",");
         }
         if (isPropietario) {
-            rolesBuilder.append(RolCheckBox.PROPIETARIO.function).append(",");
+            rolesBuilder.append(RolCheckBox.PRO.function).append(",");
         }
         if (isInquilino) {
-            rolesBuilder.append(RolCheckBox.INQUILINO.function);
+            rolesBuilder.append(RolCheckBox.INQ.function);
         }
 
         if (rolesBuilder.charAt(rolesBuilder.length() - 1) == ',') {

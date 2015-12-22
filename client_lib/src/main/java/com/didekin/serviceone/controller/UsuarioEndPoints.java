@@ -39,6 +39,7 @@ import static com.didekin.serviceone.controller.UsuarioServiceConstant.USERCOMU_
 import static com.didekin.serviceone.controller.UsuarioServiceConstant.USERCOMU_MODIFY;
 import static com.didekin.serviceone.controller.UsuarioServiceConstant.USERCOMU_READ;
 import static com.didekin.serviceone.controller.UsuarioServiceConstant.USER_DELETE;
+import static com.didekin.serviceone.controller.UsuarioServiceConstant.USER_HIGHEST_FUNCTION;
 import static com.didekin.serviceone.controller.UsuarioServiceConstant.USER_READ_GCM_TOKEN;
 import static com.didekin.serviceone.controller.UsuarioServiceConstant.USER_WRITE_GCM_TOKEN;
 
@@ -66,6 +67,9 @@ public interface UsuarioEndPoints {
 
     @GET(USER_READ_GCM_TOKEN)
     String getGcmToken(@Header("Authorization") String accessToken);
+
+    @GET(USER_HIGHEST_FUNCTION + "/{comunidadId}")
+    String getHighestRolFunction(@Header("Authorization") String accessToken, @Path("comunidadId") long mComunidadId);
 
     @GET(USERCOMU_READ + "/{comunidadId}")
     UsuarioComunidad getUserComuByUserAndComu(@Header("Authorization") String accessToken, @Path("comunidadId") long comunidadId);

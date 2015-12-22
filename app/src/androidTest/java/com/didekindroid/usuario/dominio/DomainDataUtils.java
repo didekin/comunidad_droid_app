@@ -9,10 +9,10 @@ import com.didekin.serviceone.domain.Usuario;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.didekindroid.usuario.activity.utils.RolCheckBox.ADMINISTRADOR;
-import static com.didekindroid.usuario.activity.utils.RolCheckBox.INQUILINO;
-import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRESIDENTE;
-import static com.didekindroid.usuario.activity.utils.RolCheckBox.PROPIETARIO;
+import static com.didekindroid.usuario.activity.utils.RolCheckBox.ADM;
+import static com.didekindroid.usuario.activity.utils.RolCheckBox.INQ;
+import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRE;
+import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRO;
 
 /**
  * User: pedro@didekin
@@ -83,28 +83,28 @@ public final class DomainDataUtils {
             .build();
 
     public static final UsuarioComunidad COMU_REAL_JUAN = makeUsuarioComunidad(COMU_REAL, USER_JUAN, "portal", "esc",
-            "plantaX", "door12", PROPIETARIO.function);
+            "plantaX", "door12", PRO.function);
 
     public static final UsuarioComunidad COMU_PLAZUELA5_JUAN = makeUsuarioComunidad(COMU_LA_PLAZUELA_5, USER_JUAN, null,
-            null, "planta3", "doorA", ADMINISTRADOR.function);
+            null, "planta3", "doorA", ADM.function);
 
     public static final UsuarioComunidad COMU_REAL_PEPE = makeUsuarioComunidad(COMU_REAL, USER_PEPE, "portal",
-            "esc", "plantaY", "door21", PROPIETARIO.function);
+            "esc", "plantaY", "door21", PRO.function);
 
     public static final UsuarioComunidad COMU_TRAV_PLAZUELA_PEPE = makeUsuarioComunidad(COMU_TRAV_PLAZUELA_11, USER_PEPE,
-            "portalA", null, "planta2", null, INQUILINO.function);
+            "portalA", null, "planta2", null, INQ.function);
 
     public static final UsuarioComunidad COMU_ESCORIAL_PEPE = makeUsuarioComunidad(COMU_EL_ESCORIAL, USER_PEPE,
-            "portal22", "esc22", "planta22", "door22", PRESIDENTE.function.concat(",")
-                    .concat(INQUILINO.function));
+            "portal22", "esc22", "planta22", "door22", PRE.function.concat(",")
+                    .concat(INQ.function));
 
     public static final UsuarioComunidad COMU_PLAZUELA5_PEPE = makeUsuarioComunidad(COMU_LA_PLAZUELA_5, USER_PEPE,
-            "portal11", "esc11", "planta11", "door11", PRESIDENTE.function.concat(",")
-                    .concat(PROPIETARIO.function));
+            "portal11", "esc11", "planta11", "door11", PRE.function.concat(",")
+                    .concat(PRO.function));
 
     public static final UsuarioComunidad COMU_LA_FUENTE_PEPE = makeUsuarioComunidad(COMU_LA_FUENTE, USER_PEPE,
-            "portal33", "esc33", "planta33", "door33", ADMINISTRADOR.function.concat(",")
-                    .concat(PRESIDENTE.function));
+            "portal33", "esc33", "planta33", "door33", ADM.function.concat(",")
+                    .concat(PRE.function));
 
     public static Comunidad makeComunidad(String tipoVia, String nombreVia, short numero, String sufijoNumero,
                                           Municipio municipio)

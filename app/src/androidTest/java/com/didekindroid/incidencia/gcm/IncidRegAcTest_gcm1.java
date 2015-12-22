@@ -23,7 +23,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.core.deps.guava.base.Preconditions.checkState;
-import static com.didekindroid.common.utils.AppIntentExtras.COMUNIDAD_ID;
+import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_ID;
 import static com.didekindroid.common.utils.UIutils.checkPlayServices;
 import static com.didekindroid.common.utils.UIutils.isGcmTokenSentServer;
 import static com.didekindroid.common.utils.UIutils.updateIsGcmTokenSentServer;
@@ -137,7 +137,7 @@ public class IncidRegAcTest_gcm1 {
         // Precondition: a gcmToken  in server database.
         assertThat(ServOne.getGcmToken(), notNullValue());
 
-        IncidUserComu incidPepeUserComu = new IncidUserComu(doIncidencia("Incidencia One",(short) 43), pepeUserComu, (short) 3);
+        IncidUserComu incidPepeUserComu = new IncidUserComu(doIncidencia("Incidencia One",(short) 43), pepeUserComu, (short) 3, null);
         assertThat(IncidenciaServ.regIncidenciaUserComu(incidPepeUserComu), is(1));
     }
 }

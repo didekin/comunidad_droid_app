@@ -5,7 +5,7 @@ import com.didekin.serviceone.domain.UsuarioComunidad;
 
 import java.io.Serializable;
 
-import static com.didekindroid.common.utils.SerialNumber.USUARIO_COMUNIDAD;
+import static com.didekindroid.common.utils.SerialNumber.USUARIO_COMUNIDAD_INTENT;
 
 /**
  * User: pedro@didekin
@@ -14,7 +14,7 @@ import static com.didekindroid.common.utils.SerialNumber.USUARIO_COMUNIDAD;
  */
 public final class FullUsuarioComuidadIntent implements Serializable {
 
-    private static final long serialVersionUID = USUARIO_COMUNIDAD.number;
+    private static final long serialVersionUID = USUARIO_COMUNIDAD_INTENT.number;
 
     private final FullComunidadIntent comunidadIntent;
     private final long usuarioId;

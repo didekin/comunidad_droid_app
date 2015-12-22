@@ -11,7 +11,7 @@ import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.usuario.dominio.FullUsuarioComuidadIntent;
 
-import static com.didekindroid.common.utils.AppIntentExtras.USERCOMU_LIST_OBJECT;
+import static com.didekindroid.common.utils.AppKeysForBundle.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.usuario.activity.utils.UserMenu.COMU_SEARCH_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.USER_DATA_AC;
 import static com.didekindroid.common.utils.UIutils.doToolBar;

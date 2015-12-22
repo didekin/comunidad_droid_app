@@ -23,6 +23,8 @@ import static com.didekindroid.common.utils.UIutils.makeToast;
  */
 public class UiException extends Exception {
 
+    public static final String TOKEN_NULL = "Token null";
+
     private final UiAction action;
     private final int resourceId;
     private final InServiceException inServiceException;

@@ -15,7 +15,7 @@ import android.util.Log;
 
 import com.didekin.incidservice.gcm.GcmMsgData;
 import com.didekindroid.R;
-import com.didekindroid.incidencia.activity.IncidSeeByUserComuAc;
+import com.didekindroid.incidencia.activity.IncidSeeByUserAc;
 import com.google.android.gms.gcm.GcmListenerService;
 
 import java.util.HashMap;
@@ -106,7 +106,7 @@ public class AppGcmListenerServ extends GcmListenerService {
             @Override
             Class<?> getActivityClass()
             {
-                return  IncidSeeByUserComuAc.class;
+                return  IncidSeeByUserAc.class;
             }
 
             @Override

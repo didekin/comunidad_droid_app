@@ -175,7 +175,7 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity {
 
             if (uiException != null) {
                 Log.d(TAG, "onPostExecute(): uiException " + (uiException.getInServiceException() != null ?
-                        uiException.getInServiceException().getHttpMessage() : "Token null"));
+                        uiException.getInServiceException().getHttpMessage() : UiException.TOKEN_NULL));
                 uiException.getAction().doAction(RegComuAndUserAndUserComuAc.this, uiException.getResourceId());
             } else {
                 Intent intent = new Intent(RegComuAndUserAndUserComuAc.this, SeeUserComuByUserAc.class);

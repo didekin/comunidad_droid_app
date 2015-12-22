@@ -24,10 +24,10 @@ import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRESIDENTE;
-import static com.didekindroid.usuario.activity.utils.RolCheckBox.PROPIETARIO;
-import static com.didekindroid.common.utils.AppIntentExtras.COMUNIDAD_ID;
-import static com.didekindroid.common.utils.AppIntentExtras.COMUNIDAD_LIST_OBJECT;
+import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRE;
+import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRO;
+import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_ID;
+import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanTwoUsers;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.typeRegUserComuData;
@@ -119,7 +119,7 @@ public class RegUserComuAcTest_intent {
     @Test
     public void testWithExtra_1()
     {
-        typeRegUserComuData("portalA", "escC", "plantaB", "puerta_1", PROPIETARIO, PRESIDENTE);
+        typeRegUserComuData("portalA", "escC", "plantaB", "puerta_1", PRO, PRE);
         onView(withId(R.id.reg_usercomu_button)).check(matches(isDisplayed())).perform(click());
 
         intended(hasExtra(COMUNIDAD_ID.extra, comunidad.getC_Id()));

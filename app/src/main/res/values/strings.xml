@@ -16,8 +16,17 @@
     <!--******************************************************************************-->
     <!--                                 INCIDENCIAS                                  -->
     <!--******************************************************************************-->
+    <!-- ============================ MESSAGES ============================== -->
+    <string name="no_incidencia_by_user">No existen incidencias</string>
     <!-- ============================== MENUS ================================= -->
+    <string name="incid_reg_ac_mn">Nueva incidencia</string>
+    <string name="incid_see_by_user_ac_mn">Tus incidencias</string>
+    <string name="incid_closed_see_by_useromu_ac_mn">Incidencias cerradas</string>
     <!-- ============================= ACTIVITIES ============================= -->
+    <!-- ============ IncidClosedByUserAc ========== -->
+    <string name="incid_closed_by_user_ac_label">Incidencias cerradas</string>
+    <!-- =============== IncidEditAc =============== -->
+    <string name="incid_edit_ac_label">Una incidencia</string>
     <!-- =============== IncidRegAc =============== -->
     <string name="incid_reg_ac_label">Nueva incidencia</string>
     <string name="incid_reg_hint"> -- describe la incidencia (max. 250 caracteres) -- </string>
@@ -30,6 +39,8 @@
     <string name="incid_reg_importancia">Importancia</string>
     <string name="incid_reg_ambitoIncidencia">Ámbito de incidencia</string>
     <string name="incid_reg_descripcion">Descripcion</string>
+    <!-- =============== IncidSeeByUserAc =============== -->
+    <string name="incid_see_by_user_ac_label">Tus incidencias</string>
     <!-- =========================== Google Cloud Messages ========================== -->
     <string name="incid_gcm_nueva_incidencia_body">Nueva incidencia en tu comunidad.</string>
     <string name="incid_gcm_nueva_incidencia_title">Dídekin</string>
@@ -53,7 +64,6 @@
     <string name="comu_data_ac_mn">Datos comunidad</string>
     <string name="comu_search_ac_mn">Buscar comunidad</string>
     <string name="delete_me_ac_mn">Borrar tus datos</string>
-    <string name="incid_reg_ac_mn">Incidencias</string>
     <string name="login_ac_mn">Login</string>
     <string name="password_change_ac_mn">Renovar contraseña</string>
     <string name="reg_comu_user_usercomu_ac_mn">Nueva comunidad</string>
@@ -143,6 +153,5 @@
     <string name="usercomu_data_ac_label">En la comunidad</string>
     <string name="usercomu_data_ac_delete_txt">Para borrar tus datos en esta comunidad:</string>
     <string name="usercomu_data_ac_delete_button_txt">Date de baja en la comunidad</string>
-    <string name="title_activity_incid_see_by_user_comu">Incidencias en la comunidad</string>
 
 </resources>

@@ -5,20 +5,23 @@ package com.didekindroid.common.utils;
  * Date: 10/07/15
  * Time: 10:22
  */
-public enum AppIntentExtras {
+public enum AppKeysForBundle {
 
-    USERCOMU_LIST_OBJECT,
     COMUNIDAD_LIST_INDEX,
     COMUNIDAD_LIST_OBJECT,
     COMUNIDAD_ID,
     COMUNIDAD_SEARCH,
+    INCIDENCIA_LIST_INDEX,
+    INCID_USERCOMU_LIST_OBJECT,
+    INCIDENCIA_ROL,
+    USERCOMU_LIST_OBJECT,
     ;
 
-    private static final String intentPackage =  "com.didekindroid.common.utils.AppIntentExtras.";
+    private static final String intentPackage =  "com.didekindroid.common.utils.AppKeysForBundle.";
 
     public final String extra;
 
-    AppIntentExtras()
+    AppKeysForBundle()
     {
         extra = intentPackage.concat(this.name());
     }

@@ -37,10 +37,10 @@ import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_JUAN2_AND_PEPE;
 import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRESIDENTE;
-import static com.didekindroid.usuario.activity.utils.RolCheckBox.PROPIETARIO;
-import static com.didekindroid.common.utils.AppIntentExtras.COMUNIDAD_ID;
-import static com.didekindroid.common.utils.AppIntentExtras.COMUNIDAD_LIST_OBJECT;
+import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRE;
+import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRO;
+import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_ID;
+import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.LOGIN_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.REQUIRES_USER_NO_TOKEN;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
@@ -157,7 +157,7 @@ public class RegUserAndUserComuAcTest_intent {
                 .perform(typeText(USER_JUAN2.getPassword()), closeSoftKeyboard());
 
         // UsurioComunidad data.
-        typeRegUserComuData("portalA", "escC", "plantaB", "puerta_1", PROPIETARIO, PRESIDENTE);
+        typeRegUserComuData("portalA", "escC", "plantaB", "puerta_1", PRO, PRE);
         onView(withId(R.id.reg_user_usercomu_button)).perform(scrollTo())
                 .check(matches(isDisplayed())).perform(click());
 

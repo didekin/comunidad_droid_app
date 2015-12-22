@@ -12,16 +12,15 @@ import java.util.Map;
 @SuppressWarnings("unused")
 public enum Rol {
 
-    ADMINISTRADOR("adm","admon"),
-    PRESIDENTE("pre","admon"),
-    PROPIETARIO("pro","user"),
-    INQUILINO("inq","user"),
-    ;
+    ADMINISTRADOR("adm", "admon"),
+    PRESIDENTE("pre", ADMINISTRADOR.authority),
+    PROPIETARIO("pro", "user"),
+    INQUILINO("inq", PROPIETARIO.authority),;
 
-    private static final Map<String,Rol> mapFuntionToRol = new HashMap<>();
+    private static final Map<String, Rol> mapFuntionToRol = new HashMap<>();
 
-    static{
-        for(Rol rol : values()){
+    static {
+        for (Rol rol : values()) {
             mapFuntionToRol.put(rol.function, rol);
         }
     }
@@ -35,7 +34,8 @@ public enum Rol {
         this.authority = authority;
     }
 
-    public static Rol getRolFromFunction(String rolFunction){
+    public static Rol getRolFromFunction(String rolFunction)
+    {
         return mapFuntionToRol.get(rolFunction);
     }
 }
