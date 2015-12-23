@@ -21,6 +21,7 @@ import static com.didekindroid.incidencia.repository.IncidenciaDataDb.AmbitoInci
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -65,6 +66,32 @@ public class IncidenciaDataDbHelperTest {
     }
 
     @Test
+    public void testDoTipoIncidenciaCursor()
+    {
+        Cursor cursor = dbHelper.doAmbitoIncidenciaCursor();
+        assertThat(cursor, notNullValue());
+        assertThat(cursor.getCount(), is(AMBITO_INCID_COUNT));
+        assertThat(cursor.getColumnCount(), is(2));
+        cursor.moveToFirst();
+        assertThat(cursor.getShort(0), is((short) 0));
+        assertThat(cursor.getString(1), is("ámbito de incidencia"));
+        cursor.moveToLast();
+        assertThat(cursor.getShort(0), is((short) (AMBITO_INCID_COUNT - 1)));
+        assertThat(cursor.getString(1), is("Otros"));
+    }
+
+    @Test
+    public void testGetAmbitoDescByPk(){
+        assertThat(dbHelper.getAmbitoDescByPk((short) 9), is("Buzones"));
+        try{
+            dbHelper.getAmbitoDescByPk((short) 55);
+            fail();
+        } catch (IllegalStateException ie){
+            assertThat(ie.getMessage(), is(IncidenciaDataDbHelper.PK_AMBITO_NULL_MSG));
+        }
+    }
+
+    @Test
     public void testLoadTipoIncidencia() throws IOException
     {
         dbHelper.dropAmbitoIncidencia();
@@ -72,21 +99,6 @@ public class IncidenciaDataDbHelperTest {
         database.execSQL(CREATE_AMBITO_INCIDENCIA);
         assertThat(dbHelper.loadAmbitoIncidencia(), is(AMBITO_INCID_COUNT));
         assertThat(dbHelper.mAmbitoIncidenciaCounter, is(AMBITO_INCID_COUNT));
-    }
-
-    @Test
-    public void testDoTipoIncidenciaCursor()
-    {
-       Cursor cursor = dbHelper.doAmbitoIncidenciaCursor();
-        assertThat(cursor,notNullValue());
-        assertThat(cursor.getCount(),is(AMBITO_INCID_COUNT));
-        assertThat(cursor.getColumnCount(),is(2));
-        cursor.moveToFirst();
-        assertThat(cursor.getShort(0),is((short) 0));
-        assertThat(cursor.getString(1), is("ámbito de incidencia"));
-        cursor.moveToLast();
-        assertThat(cursor.getShort(0), is((short) (AMBITO_INCID_COUNT - 1)));
-        assertThat(cursor.getString(1), is("Otros"));
     }
 
     @After

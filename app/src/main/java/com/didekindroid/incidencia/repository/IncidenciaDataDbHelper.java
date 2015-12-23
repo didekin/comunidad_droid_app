@@ -33,6 +33,7 @@ public class IncidenciaDataDbHelper extends SQLiteOpenHelper {
     private static final String TAG = IncidenciaDataDbHelper.class.getCanonicalName();
     public static final String DB_NAME = "incidencia.db";
     public static final int DB_VERSION = 1;
+    public static final String PK_AMBITO_NULL_MSG = TAG + " getAmbitoDescByPk(), ambitoPk == null";
 
     private final Context mContext;
     private SQLiteDatabase mDataBase;
@@ -91,7 +92,7 @@ public class IncidenciaDataDbHelper extends SQLiteOpenHelper {
     }
 
 //    =====================================================
-//    ............. TIPOS DE INCIDENCIAS ..................
+//    ............. ÁMBITO DE INCIDENCIAS ..................
 //    =====================================================
 
     int loadAmbitoIncidencia() throws IOException
@@ -156,6 +157,32 @@ public class IncidenciaDataDbHelper extends SQLiteOpenHelper {
         }
 
         return cursor;
+    }
+
+    public String getAmbitoDescByPk(short pkAmbito)
+    {
+        Log.d(TAG, "getAmbitoDescByPk()");
+
+        if (mDataBase == null) {
+            mDataBase = getReadableDatabase();
+        }
+
+        String[] tableColumns = new String[]{ambito};
+        String whereClause = _ID + " = ?";
+        String[] whereClauseArgs = new String[]{String.valueOf(pkAmbito)};
+        Cursor cursor = mDataBase.query(TB_AMBITO_INCIDENCIA,tableColumns,whereClause,whereClauseArgs,null,null,null);
+
+        if (cursor == null){
+            throw new IllegalStateException(PK_AMBITO_NULL_MSG);
+        }
+        if (!cursor.moveToFirst()){
+            cursor.close();
+            throw new IllegalStateException(PK_AMBITO_NULL_MSG);
+        }
+
+        String ambitoDesc = cursor.getString(0);
+        cursor.close();
+        return ambitoDesc;
     }
 
     void dropAmbitoIncidencia()

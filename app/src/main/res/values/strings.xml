@@ -41,6 +41,10 @@
     <string name="incid_reg_descripcion">Descripcion</string>
     <!-- =============== IncidSeeByUserAc =============== -->
     <string name="incid_see_by_user_ac_label">Tus incidencias</string>
+    <string name="incid_fecha_alta_rot">Desde:</string>
+    <string name="incid_importancia_user_rot">Importancia:</string>
+    <string name="incid_importancia_comunidad_rot">En la comunidad:</string>
+    <string name="incid_ambito_rot">Ámbito:</string>
     <!-- =========================== Google Cloud Messages ========================== -->
     <string name="incid_gcm_nueva_incidencia_body">Nueva incidencia en tu comunidad.</string>
     <string name="incid_gcm_nueva_incidencia_title">Dídekin</string>
