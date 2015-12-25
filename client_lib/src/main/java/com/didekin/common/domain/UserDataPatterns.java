@@ -1,10 +1,10 @@
-package com.didekin.serviceone.domain;
-
-import com.didekin.common.domain.DataPatternsIf;
+package com.didekin.common.domain;
 
 import java.util.regex.Pattern;
 
-import static java.util.regex.Pattern.*;
+import static java.util.regex.Pattern.CASE_INSENSITIVE;
+import static java.util.regex.Pattern.UNICODE_CASE;
+import static java.util.regex.Pattern.compile;
 
 /**
  * User: pedro@didekin
@@ -52,12 +52,6 @@ public enum UserDataPatterns implements DataPatternsIf {
     public boolean isPatternOk(String fieldToCheck)
     {
         return pattern.matcher(fieldToCheck).matches();
-    }
-
-    @Override
-    public Pattern getPattern()
-    {
-        return pattern;
     }
 
     @Override

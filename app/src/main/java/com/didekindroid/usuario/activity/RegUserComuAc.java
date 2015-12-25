@@ -19,7 +19,7 @@ import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.FullComunidadIntent;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
 
-import static com.didekin.serviceone.domain.UserDataPatterns.LINE_BREAK;
+import static com.didekin.common.domain.UserDataPatterns.LINE_BREAK;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.utils.UIutils.makeToast;

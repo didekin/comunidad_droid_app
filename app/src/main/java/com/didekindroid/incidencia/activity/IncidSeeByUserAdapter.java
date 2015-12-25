@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.didekin.incidservice.domain.IncidUserComu;
 import com.didekindroid.R;
+import com.didekindroid.common.utils.UIutils;
 import com.didekindroid.incidencia.repository.IncidenciaDataDbHelper;
 
 /**
@@ -69,7 +70,7 @@ public class IncidSeeByUserAdapter extends ArrayAdapter<IncidUserComu> {
             Log.d(TAG, "initializeTextInViews()");
             mNombreComunidadView.setText(incidUserComu.getUsuarioComunidad().getComunidad().getNombreComunidad());
             mDescripcionView.setText(incidUserComu.getIncidencia().getDescripcion());
-            // TODO: fecha.
+            mFechaAltaView.setText(UIutils.formatTimeStampToString(incidUserComu.getFechaAlta()));
             short ambitoPk = incidUserComu.getIncidencia().getAmbitoIncidencia().getAmbitoId();
             mAmbitoView.setText(new IncidenciaDataDbHelper(getContext()).getAmbitoDescByPk(ambitoPk));
             mImportanciaUserView.setText(incidUserComu.getImportancia());

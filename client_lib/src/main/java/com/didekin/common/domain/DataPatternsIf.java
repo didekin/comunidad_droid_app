@@ -11,7 +11,5 @@ public interface DataPatternsIf {
 
     boolean isPatternOk(String fieldToCheck);
 
-    Pattern getPattern();
-
     String getRegexp();
 }

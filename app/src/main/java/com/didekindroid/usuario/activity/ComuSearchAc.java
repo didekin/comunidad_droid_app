@@ -21,7 +21,7 @@ import com.didekindroid.common.utils.UIutils;
 import com.didekindroid.usuario.dominio.ComunidadIntent;
 
 import static android.widget.Toast.LENGTH_SHORT;
-import static com.didekin.serviceone.domain.UserDataPatterns.LINE_BREAK;
+import static com.didekin.common.domain.UserDataPatterns.LINE_BREAK;
 import static com.didekindroid.common.TokenHandler.TKhandler;
 import static com.didekindroid.common.utils.UIutils.makeToast;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeComunidadBeanFromView;

@@ -13,6 +13,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.regex.Pattern;
+
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.utils.UIutils.updateIsRegistered;
 import static org.hamcrest.CoreMatchers.is;
@@ -36,6 +40,19 @@ public class UIutilsTest extends TestCase {
     @After
     public void clean(){
         UsuarioTestUtils.cleanWithTkhandler();
+    }
+
+    @Test
+    public void testFormatTimeStampToString(){
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        String timeString = UIutils.formatTimeStampToString(timestamp);
+        String[] timeStrings = Pattern.compile("-").split(timeString);
+        assertThat(timeStrings.length, is(3));
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(timestamp);
+        assertThat(timeStrings[0], is(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH))));
+        assertThat(timeStrings[1],is(String.valueOf(calendar.get(Calendar.MONTH))));
+        assertThat(timeStrings[2], is(String.valueOf(calendar.get(Calendar.YEAR))));
     }
 
     @Test

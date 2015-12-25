@@ -12,7 +12,7 @@ import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
 
 import static com.didekin.incidservice.domain.IncidDataPatterns.INCID_DESC;
-import static com.didekin.serviceone.domain.UserDataPatterns.LINE_BREAK;
+import static com.didekin.common.domain.UserDataPatterns.LINE_BREAK;
 import static com.didekindroid.DidekindroidApp.getContext;
 import static com.didekindroid.incidencia.repository.IncidenciaDataDb.AmbitoIncidencia.AMBITO_INCID_COUNT;
 

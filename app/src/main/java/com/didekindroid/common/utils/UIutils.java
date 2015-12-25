@@ -14,14 +14,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.didekin.common.exception.InServiceException;
+import com.didekindroid.DidekindroidApp;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
+import java.sql.Timestamp;
+import java.util.Calendar;
+
 import static android.widget.Toast.makeText;
 import static com.didekin.common.exception.DidekinExceptionMsg.isMessageToLogin;
-import static com.didekin.serviceone.domain.UserDataPatterns.LINE_BREAK;
+import static com.didekin.common.domain.UserDataPatterns.LINE_BREAK;
 import static com.didekindroid.R.color.deep_purple_100;
 import static com.didekindroid.common.TokenHandler.TKhandler;
 import static com.didekindroid.common.UiException.UiAction.LOGIN;
@@ -40,6 +44,8 @@ public final class UIutils {
     private UIutils()
     {
     }
+
+//    ===========================  AUTHENTICATION ==============================
 
     public static void catchAuthenticationException(InServiceException e) throws UiException
     {
@@ -60,6 +66,27 @@ public final class UIutils {
         return bearerAccessTkHeader;
     }
 
+//    ================================ DATES ==========================================
+
+    public static String formatTimeStampToString(Timestamp timestamp){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(timestamp);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        int month = calendar.get(Calendar.MONTH);
+        int year = calendar.get(Calendar.YEAR);
+        return String.format(DidekindroidApp.getContext().getResources().getString(R.string.date_local_format),day,month,year);
+    }
+
+//    ============================== EXCEPTIONS =======================================
+
+    public static void doRuntimeException(Exception e, String tagClass)
+    {
+        Log.e(tagClass, e.getMessage());
+        throw new RuntimeException(e);
+    }
+
+//    =============================== GOOGLE SERVICES =================================
+
     /**
      * Check the availability of Google Play Services.
      */
@@ -67,12 +94,6 @@ public final class UIutils {
     {
         GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
         return apiAvailability.isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS;
-    }
-
-    public static void doRuntimeException(Exception e, String tagClass)
-    {
-        Log.e(tagClass, e.getMessage());
-        throw new RuntimeException(e);
     }
 
 //    ================================== SHARED PREFERENCES ======================================

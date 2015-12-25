@@ -5,6 +5,8 @@
     <!--*****************************************************************************-->
     <!--                                 GENERIC                                     -->
     <!--*****************************************************************************-->
+    <!-- Formats-->
+    <string name="date_local_format">%1$d-%2$d-%3$d</string>
     <!--Input controls-->
     <string name="search_button">Buscar</string>
     <string name="checkbox_si">Sí</string>

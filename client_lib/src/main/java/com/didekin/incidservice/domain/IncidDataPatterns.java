@@ -34,12 +34,6 @@ public enum IncidDataPatterns implements DataPatternsIf {
     }
 
     @Override
-    public Pattern getPattern()
-    {
-        return pattern;
-    }
-
-    @Override
     public String getRegexp()
     {
         return regexp;
