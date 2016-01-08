@@ -15,6 +15,7 @@ import org.junit.runner.RunWith;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.regex.Pattern;
 
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
@@ -33,17 +34,20 @@ public class UIutilsTest extends TestCase {
     Context context;
 
     @Before
-    public void setUp(){
+    public void setUp()
+    {
         context = InstrumentationRegistry.getTargetContext();
     }
 
     @After
-    public void clean(){
+    public void clean()
+    {
         UsuarioTestUtils.cleanWithTkhandler();
     }
 
     @Test
-    public void testFormatTimeStampToString(){
+    public void testFormatTimeStampToString()
+    {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         String timeString = UIutils.formatTimeStampToString(timestamp);
         String[] timeStrings = Pattern.compile("-").split(timeString);
@@ -51,18 +55,33 @@ public class UIutilsTest extends TestCase {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(timestamp);
         assertThat(timeStrings[0], is(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH))));
-        assertThat(timeStrings[1],is(String.valueOf(calendar.get(Calendar.MONTH))));
+        assertThat(timeStrings[1], is(String.valueOf(calendar.get(Calendar.MONTH))));
         assertThat(timeStrings[2], is(String.valueOf(calendar.get(Calendar.YEAR))));
     }
 
     @Test
-    public void testNameFile() throws Exception {
+    public void testFormatDoubleToZeroDecimal()
+    {
+        assertThat(UIutils.formatDoubleZeroDecimal(12.34), is("12"));
+    }
+
+    @Test
+    public void testFormatDoubleToTwoDecimal()
+    {
+        assertThat(Locale.getDefault().getLanguage(), is("en"));
+        assertThat(UIutils.formatDoubleTwoDecimals(12.34), is("12.34"));
+    }
+
+    @Test
+    public void testNameFile() throws Exception
+    {
         assertThat(UIutils.SharedPrefFiles.app_preferences_file.toString(),
                 is("com.didekindroid.common.utils.UIutils.SharedPrefFiles.app_preferences_file"));
     }
 
     @Test
-    public void testUpdateIsRegistered() throws Exception {
+    public void testUpdateIsRegistered() throws Exception
+    {
         updateIsRegistered(false, context);
         assertThat(isRegisteredUser(context), is(false));
         updateIsRegistered(true, context);

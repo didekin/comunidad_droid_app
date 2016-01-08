@@ -1,7 +1,5 @@
 package com.didekin.common.domain;
 
-import java.util.regex.Pattern;
-
 /**
  * User: pedro@didekin
  * Date: 17/11/15

@@ -29,8 +29,13 @@ import static com.google.common.base.Preconditions.checkState;
 /**
  * Preconditions:
  * 1. The user is registered.
+ * 2. The user is the original author of the incidencia or has commented on the importancia of the incidencia.
  * Postconditions:
- * 1. The detailed description of the incidencia selected on the list is shown to the user.
+ * 1. The incidencia selected on the list is shown to the user in mode edition:
+ *    -- If the user was the original author of the incidencia, it can modified its description.
+ *    -- Every user can modify the importancia assigned by her to the incidencia.
+ *    -- Only the original author can erase an incidencia, if the rest of the users have assigned an importancia
+ *       equal o lower than 'baja'.
  */
 public class IncidSeeByUserAc extends AppCompatActivity implements
         IncidSeeByUserListFr.IncidListListener {

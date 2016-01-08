@@ -14,13 +14,15 @@ public class IncidUserComu {
     private final Incidencia incidencia;
     private final UsuarioComunidad usuarioComunidad;
     private final short importancia;
+    private final float importanciaAvgInComu;
     private final Timestamp fechaAlta;
 
-    public IncidUserComu(Incidencia incidencia, UsuarioComunidad usuarioComunidad, short importancia, Timestamp fechaAlta)
+    public IncidUserComu(Incidencia incidencia, UsuarioComunidad usuarioComunidad, short importancia, float importanciaAvgInComu, Timestamp fechaAlta)
     {
         this.incidencia = incidencia;
         this.usuarioComunidad = usuarioComunidad;
         this.importancia = importancia;
+        this.importanciaAvgInComu = importanciaAvgInComu;
         this.fechaAlta = fechaAlta;
     }
 
@@ -37,6 +39,10 @@ public class IncidUserComu {
     public short getImportancia()
     {
         return importancia;
+    }
+
+    public float getImportanciaAvgInComu() {
+        return importanciaAvgInComu;
     }
 
     public Timestamp getFechaAlta()

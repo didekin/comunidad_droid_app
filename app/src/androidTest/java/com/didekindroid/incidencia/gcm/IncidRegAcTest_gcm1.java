@@ -137,7 +137,8 @@ public class IncidRegAcTest_gcm1 {
         // Precondition: a gcmToken  in server database.
         assertThat(ServOne.getGcmToken(), notNullValue());
 
-        IncidUserComu incidPepeUserComu = new IncidUserComu(doIncidencia("Incidencia One",(short) 43), pepeUserComu, (short) 3, null);
+        IncidUserComu incidPepeUserComu = new IncidUserComu(doIncidencia("Incidencia One",(short) 43), pepeUserComu,
+                (short) 3, 0, null);
         assertThat(IncidenciaServ.regIncidenciaUserComu(incidPepeUserComu), is(1));
     }
 }

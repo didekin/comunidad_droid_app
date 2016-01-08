@@ -21,11 +21,14 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
 import java.util.Calendar;
 
 import static android.widget.Toast.makeText;
+import static com.didekin.common.domain.DataPatterns.DECIMAL_ZERO;
+import static com.didekin.common.domain.DataPatterns.DECIMAL_TWO;
 import static com.didekin.common.exception.DidekinExceptionMsg.isMessageToLogin;
-import static com.didekin.common.domain.UserDataPatterns.LINE_BREAK;
+import static com.didekin.common.domain.DataPatterns.LINE_BREAK;
 import static com.didekindroid.R.color.deep_purple_100;
 import static com.didekindroid.common.TokenHandler.TKhandler;
 import static com.didekindroid.common.UiException.UiAction.LOGIN;
@@ -66,23 +69,37 @@ public final class UIutils {
         return bearerAccessTkHeader;
     }
 
-//    ================================ DATES ==========================================
-
-    public static String formatTimeStampToString(Timestamp timestamp){
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(timestamp);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-        int month = calendar.get(Calendar.MONTH);
-        int year = calendar.get(Calendar.YEAR);
-        return String.format(DidekindroidApp.getContext().getResources().getString(R.string.date_local_format),day,month,year);
-    }
-
 //    ============================== EXCEPTIONS =======================================
 
     public static void doRuntimeException(Exception e, String tagClass)
     {
         Log.e(tagClass, e.getMessage());
         throw new RuntimeException(e);
+    }
+
+
+//    ================================ DATA FORMATS ==========================================
+
+    public static String formatTimeStampToString(Timestamp timestamp)
+    {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(timestamp);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        int month = calendar.get(Calendar.MONTH);
+        int year = calendar.get(Calendar.YEAR);
+        return String.format(DidekindroidApp.getContext().getResources().getString(R.string.date_local_format), day, month, year);
+    }
+
+    public static String formatDoubleZeroDecimal(Double myDouble)
+    {
+        DecimalFormat myFormatter = new DecimalFormat(DECIMAL_ZERO.getRegexp());
+        return myFormatter.format(myDouble);
+    }
+
+    public static String formatDoubleTwoDecimals(Double myDouble)
+    {
+        DecimalFormat myFormatter = new DecimalFormat(DECIMAL_TWO.getRegexp());
+        return myFormatter.format(myDouble);
     }
 
 //    =============================== GOOGLE SERVICES =================================

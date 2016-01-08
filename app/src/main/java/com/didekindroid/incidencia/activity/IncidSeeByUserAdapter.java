@@ -1,6 +1,7 @@
 package com.didekindroid.incidencia.activity;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,6 +55,8 @@ public class IncidSeeByUserAdapter extends ArrayAdapter<IncidUserComu> {
         final TextView mImportanciaUserView;
         final TextView mImportanciaComuView;
 
+        final Resources resources;
+
 
         public IncidenciaViewHolder(View convertView)
         {
@@ -63,6 +66,8 @@ public class IncidSeeByUserAdapter extends ArrayAdapter<IncidUserComu> {
             mAmbitoView = (TextView) convertView.findViewById(R.id.incid_ambito_view);
             mImportanciaUserView = (TextView) convertView.findViewById(R.id.incid_importancia_user_view);
             mImportanciaComuView = (TextView) convertView.findViewById(R.id.incid_importancia_comunidad_view);
+
+            resources = convertView.getContext().getResources();
         }
 
         void initializeTextInViews(IncidUserComu incidUserComu)
@@ -74,7 +79,8 @@ public class IncidSeeByUserAdapter extends ArrayAdapter<IncidUserComu> {
             short ambitoPk = incidUserComu.getIncidencia().getAmbitoIncidencia().getAmbitoId();
             mAmbitoView.setText(new IncidenciaDataDbHelper(getContext()).getAmbitoDescByPk(ambitoPk));
             mImportanciaUserView.setText(incidUserComu.getImportancia());
-            // TODO: mImportanciaComunidadView.
+            int mImportanciaAvg = Math.round(incidUserComu.getImportanciaAvgInComu());
+            mImportanciaComuView.setText(resources.getStringArray(R.array.IncidImportanciaArray)[mImportanciaAvg]);
         }
     }
 }

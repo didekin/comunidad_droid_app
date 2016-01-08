@@ -14,7 +14,9 @@ import static com.didekindroid.common.utils.AppKeysForBundle.INCID_USERCOMU_LIST
  * Preconditions:
  * 1. An intent extra is passed with the functional role of the user.
  * 2. An intent extra is passed with the object IncidUserComu to be edited.
- * 3. Edition capabilities are dependent on the functional role of the user.
+ * 3. Edition capabilities are dependent on:
+ *      -- the functional role of the user.
+ *      -- the rol of the user as original author or futher comentator.
  * Postconditions:
  * 1. An incidencia is updated and persisted, once edited.
  */

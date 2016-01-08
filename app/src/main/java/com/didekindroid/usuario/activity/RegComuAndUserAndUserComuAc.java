@@ -23,7 +23,7 @@ import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
 
-import static com.didekin.common.domain.UserDataPatterns.LINE_BREAK;
+import static com.didekin.common.domain.DataPatterns.LINE_BREAK;
 import static com.didekindroid.common.TokenHandler.TKhandler;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.updateIsRegistered;

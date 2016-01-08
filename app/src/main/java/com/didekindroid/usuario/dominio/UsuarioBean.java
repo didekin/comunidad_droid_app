@@ -5,10 +5,10 @@ import android.content.res.Resources;
 import com.didekin.serviceone.domain.Usuario;
 import com.didekindroid.R;
 
-import static com.didekin.common.domain.UserDataPatterns.ALIAS;
-import static com.didekin.common.domain.UserDataPatterns.EMAIL;
-import static com.didekin.common.domain.UserDataPatterns.LINE_BREAK;
-import static com.didekin.common.domain.UserDataPatterns.PASSWORD;
+import static com.didekin.common.domain.DataPatterns.ALIAS;
+import static com.didekin.common.domain.DataPatterns.EMAIL;
+import static com.didekin.common.domain.DataPatterns.LINE_BREAK;
+import static com.didekin.common.domain.DataPatterns.PASSWORD;
 
 /**
  * User: pedro@didekin

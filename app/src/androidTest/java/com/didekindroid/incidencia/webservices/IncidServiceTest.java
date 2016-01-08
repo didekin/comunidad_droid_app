@@ -58,9 +58,11 @@ public class IncidServiceTest {
     @Test
     public void testIncidSeeByUser() throws UiException
     {
-        IncidUserComu incidPepeUserComu1 = new IncidUserComu(doIncidencia("Incidencia One", (short) 43), pepeUserComu, (short) 3, null);
+        IncidUserComu incidPepeUserComu1 = new IncidUserComu(doIncidencia("Incidencia One", (short) 43),
+                pepeUserComu, (short) 3, 0, null);
         assertThat(IncidenciaServ.regIncidenciaUserComu(incidPepeUserComu1), is(1));
-        IncidUserComu incidPepeUserComu2 = new IncidUserComu(doIncidencia("Incidencia Two", (short) 11), pepeUserComu, (short) 2, null);
+        IncidUserComu incidPepeUserComu2 = new IncidUserComu(doIncidencia("Incidencia Two", (short) 11),
+                pepeUserComu, (short) 2, 0, null);
         assertThat(IncidenciaServ.regIncidenciaUserComu(incidPepeUserComu2), is(1));
 
         assertThat(IncidenciaServ.incidSeeByUser().size(),is(2));
@@ -71,7 +73,8 @@ public class IncidServiceTest {
     {
         assertThat(pepeUserComu, notNullValue());
         UsuarioComunidad usuarioComunidad = new UsuarioComunidad.UserComuBuilder(pepeUserComu.getComunidad(), null).userComuRest(pepeUserComu).build();
-        IncidUserComu incidPepeUserComu = new IncidUserComu(doIncidencia("Incidencia One", (short) 43), usuarioComunidad, (short) 3, null);
+        IncidUserComu incidPepeUserComu = new IncidUserComu(doIncidencia("Incidencia One", (short) 43),
+                usuarioComunidad, (short) 3, 0, null);
         assertThat(IncidenciaServ.regIncidenciaUserComu(incidPepeUserComu), is(1));
     }
 }

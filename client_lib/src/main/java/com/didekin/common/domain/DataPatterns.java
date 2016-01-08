@@ -11,7 +11,7 @@ import static java.util.regex.Pattern.compile;
  * Date: 10/06/15
  * Time: 10:13
  */
-public enum UserDataPatterns implements DataPatternsIf {
+public enum DataPatterns implements DataPatternsIf {
 
     MUNICIPIO_DESC("[0-9a-zA-ZñÑáéíóúüÜ[\\s]]{2,100}"),
     PROVINCIA_DESC("[a-zA-ZñÑáéíóúüÜ[\\s]]{2,100}"),
@@ -37,12 +37,14 @@ public enum UserDataPatterns implements DataPatternsIf {
 
     /* GENERIC */
     LINE_BREAK("\n"),
+    DECIMAL_ZERO("###,###"),
+    DECIMAL_TWO("###,###.##"),
     ;
 
     private final Pattern pattern;
     private final String regexp;
 
-    UserDataPatterns(String patternString)
+    DataPatterns(String patternString)
     {
         pattern = compile(patternString, UNICODE_CASE | CASE_INSENSITIVE);
         regexp = patternString;

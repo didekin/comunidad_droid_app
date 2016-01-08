@@ -45,6 +45,7 @@ public class IncidUserComuIntent implements Serializable {
         private final IncidenciaIntent incidenciaIntent;
         private final FullUsuarioComuidadIntent usuarioComunidadIntent;
         private final short importancia;
+        private final float importanciAvgInComu;
         private final Timestamp fechaAlta;
 
         public InnerSerial(IncidUserComu incidUserComu)
@@ -52,6 +53,7 @@ public class IncidUserComuIntent implements Serializable {
             incidenciaIntent = new IncidenciaIntent(incidUserComu.getIncidencia());
             usuarioComunidadIntent = new FullUsuarioComuidadIntent(incidUserComu.getUsuarioComunidad());
             importancia = incidUserComu.getImportancia();
+            importanciAvgInComu = incidUserComu.getImportanciaAvgInComu();
             fechaAlta = incidUserComu.getFechaAlta();
         }
 
@@ -61,6 +63,7 @@ public class IncidUserComuIntent implements Serializable {
                     incidenciaIntent.getIncidencia(),
                     usuarioComunidadIntent.getUsuarioComunidad(),
                     importancia,
+                    importanciAvgInComu,
                     fechaAlta);
             return new IncidUserComuIntent(incidUserComu);
         }

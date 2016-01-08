@@ -12,7 +12,7 @@ import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
 
 import static com.didekin.incidservice.domain.IncidDataPatterns.INCID_DESC;
-import static com.didekin.common.domain.UserDataPatterns.LINE_BREAK;
+import static com.didekin.common.domain.DataPatterns.LINE_BREAK;
 import static com.didekindroid.DidekindroidApp.getContext;
 import static com.didekindroid.incidencia.repository.IncidenciaDataDb.AmbitoIncidencia.AMBITO_INCID_COUNT;
 
@@ -60,7 +60,7 @@ public class IncidenciaBean {
             UsuarioComunidad userComu = new UsuarioComunidad
                     .UserComuBuilder(new Comunidad.ComunidadBuilder().c_id(comunidadId).build(), null)
                     .build();
-            return new IncidUserComu(incidencia, userComu, importanciaIncid, null);
+            return new IncidUserComu(incidencia, userComu, importanciaIncid, 0, null);
         } else {
             return null;
         }
