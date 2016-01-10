@@ -40,11 +40,11 @@ import org.junit.runners.Suite;
         LoginAcTest_1.class,
         PasswordChangeAcTest.class,
         RegComuAndUserComuAcTest.class,
-        RegComuAndUserAndUserComuAcTest.class,  //+
-        RegUserComuAcTest.class,  //+
+        RegComuAndUserAndUserComuAcTest.class,
+        RegUserComuAcTest.class,
         RegUserComuAcTest_intent.class,
-        RegUserAndUserComuAcTest_intent.class, //+
-        SeeUserComuByComuAcTest.class, //+
+        RegUserAndUserComuAcTest_intent.class,
+        SeeUserComuByComuAcTest.class,
         SeeUserComuByUserAcTest.class,
         UserComuDataAcTest_1.class,
         UserComuDataAcTest_2.class,

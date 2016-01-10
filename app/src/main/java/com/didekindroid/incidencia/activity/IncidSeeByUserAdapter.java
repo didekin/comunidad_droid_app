@@ -78,7 +78,7 @@ public class IncidSeeByUserAdapter extends ArrayAdapter<IncidUserComu> {
             mFechaAltaView.setText(UIutils.formatTimeStampToString(incidUserComu.getFechaAlta()));
             short ambitoPk = incidUserComu.getIncidencia().getAmbitoIncidencia().getAmbitoId();
             mAmbitoView.setText(new IncidenciaDataDbHelper(getContext()).getAmbitoDescByPk(ambitoPk));
-            mImportanciaUserView.setText(incidUserComu.getImportancia());
+            mImportanciaUserView.setText(resources.getStringArray(R.array.IncidImportanciaArray)[incidUserComu.getImportancia()]);
             int mImportanciaAvg = Math.round(incidUserComu.getImportanciaAvgInComu());
             mImportanciaComuView.setText(resources.getStringArray(R.array.IncidImportanciaArray)[mImportanciaAvg]);
         }

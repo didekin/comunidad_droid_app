@@ -1,9 +1,9 @@
 package com.didekindroid.incidencia.activity;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.widget.ArrayAdapter;
 import android.widget.CursorAdapter;
 
 import com.didekin.serviceone.domain.Comunidad;
@@ -18,8 +18,6 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.util.List;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
@@ -36,14 +34,14 @@ import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.utils.ActivityTestUtils.checkToastInTest;
-import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_ID;
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.incidencia.repository.IncidenciaDataDb.AmbitoIncidencia.AMBITO_INCID_COUNT;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
-import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAndUpdateTk;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.regThreeUserComuSameUser_2;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_ESCORIAL_PEPE;
-import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_LA_FUENTE_PEPE;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_PEPE;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -56,13 +54,12 @@ import static org.junit.Assert.assertThat;
  * Date: 17/11/15
  * Time: 10:07
  */
-@SuppressWarnings("ConstantConditions")
+@SuppressWarnings({"ConstantConditions", "unchecked"})
 @RunWith(AndroidJUnit4.class)
 public class IncidRegAcTest {
 
     private IncidRegAc mActivity;
     private CleanUserEnum whatToClean = CleanUserEnum.CLEAN_PEPE;
-    private long comunidadIdIntent;
 
     @Rule
     public IntentsTestRule<IncidRegAc> intentRule = new IntentsTestRule<IncidRegAc>(IncidRegAc.class) {
@@ -70,25 +67,11 @@ public class IncidRegAcTest {
         @Override
         protected void beforeActivityLaunched()
         {
-        }
-
-        @Override
-        protected Intent getActivityIntent()
-        {
             try {
-                signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
+                regThreeUserComuSameUser_2(COMU_ESCORIAL_PEPE, COMU_REAL_PEPE, COMU_LA_FUENTE_PEPE);
             } catch (UiException e) {
                 e.printStackTrace();
             }
-            List<Comunidad> comunidadesUserOne = null;
-            try {
-                comunidadesUserOne = ServOne.getComusByUser();
-            } catch (UiException e) {
-            }
-            Intent intent = new Intent();
-            comunidadIdIntent =  comunidadesUserOne.get(0).getC_Id();
-            intent.putExtra(COMUNIDAD_ID.extra, comunidadIdIntent);
-            return intent;
         }
     };
 
@@ -118,12 +101,19 @@ public class IncidRegAcTest {
         assertThat(isRegisteredUser(mActivity), is(true));
         assertThat(mActivity, notNullValue());
 
-        long comunidadId = mActivity.getIntent().getLongExtra(COMUNIDAD_ID.extra, 0L);
-        assertThat(comunidadId > 0, is(true));
-
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_reg_ac_layout)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_reg_frg)).check(matches(isDisplayed()));
+
+        ArrayAdapter<Comunidad> comunidadesAdapter = (ArrayAdapter<Comunidad>) mActivity.mRegAcFragment.mComunidadSpinner.getAdapter();
+        assertThat(comunidadesAdapter.getCount(),is(3));
+        Comunidad comunidad_0 = comunidadesAdapter.getItem(0);
+
+        onView(allOf(
+                withId(R.id.app_spinner_1_dropdown_item),
+                withParent(withId(R.id.incid_reg_comunidad_spinner))))
+                .check(matches(withText(is(comunidad_0.getNombreComunidad()))))
+                .check(matches(isDisplayed()));
 
         onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.incid_reg_ambito_spinner))))
                 .check(matches(withText(is("ámbito de incidencia")))).check(matches(isDisplayed()));
@@ -178,7 +168,7 @@ public class IncidRegAcTest {
         IncidenciaBean incidenciaBean = new IncidenciaBean();
 
         assertThat(incidenciaBean.makeIncidUserComu(mActivity.mRegAcFragment.mFragmentView,
-                getErrorMsgBuilder(mActivity), comunidadIdIntent), nullValue());
+                getErrorMsgBuilder(mActivity)), nullValue());
 
         onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
         checkToastInTest(R.string.error_validation_msg, mActivity, R.string.incid_reg_descripcion);

@@ -12,9 +12,14 @@
         />
 
     <Spinner
-        android:id="@+id/incid_reg_ambito_spinner"
+        android:id="@+id/incid_reg_comunidad_spinner"
         style="@style/spinnerBase"
         android:layout_below="@+id/incid_reg_desc_ed"/>
+
+    <Spinner
+        android:id="@+id/incid_reg_ambito_spinner"
+        style="@style/spinnerBase"
+        android:layout_below="@+id/incid_reg_comunidad_spinner"/>
 
     <Spinner
         android:id="@+id/incid_reg_importancia_spinner"

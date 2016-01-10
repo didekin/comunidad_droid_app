@@ -13,7 +13,7 @@ import android.widget.ListView;
 import com.didekin.incidservice.domain.IncidUserComu;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
-import com.didekindroid.usuario.activity.utils.ViewsIDs;
+import com.didekindroid.common.utils.ViewsIDs;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ import static com.google.common.base.Preconditions.checkState;
 
 /**
  * Preconditions:
- *
+ * <p/>
  * Postconditions:
  */
 public class IncidSeeByUserListFr extends ListFragment {
@@ -47,10 +47,6 @@ public class IncidSeeByUserListFr extends ListFragment {
     {
         Log.d(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
-        mListener = (IncidListListener) getActivity();
-        mAdapter = new IncidSeeByUserAdapter(getActivity());
-        // Loading data ...
-        new IncidByUserComuLoader().execute();
     }
 
     @Override
@@ -67,13 +63,18 @@ public class IncidSeeByUserListFr extends ListFragment {
         Log.d(TAG, "onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
 
+        mListener = (IncidListListener) getActivity();
+        mAdapter = new IncidSeeByUserAdapter(getActivity());
+        // Loading data ...
+//        new IncidByUserComuLoader().execute();
+
         mView = getListView();
         mView.setId(ViewsIDs.INCID_SEE_BY_USER.idView);
         mView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         //Text for no result.
         setEmptyText(getResources().getText(R.string.no_incidencia_by_user));
         //View for no result
-        /*listView.setEmptyView();   */
+        /*mView.setEmptyView(myView);*/
     }
 
     @Override
@@ -97,9 +98,9 @@ public class IncidSeeByUserListFr extends ListFragment {
 
         mView.setItemChecked(position, true);
         v.setSelected(true);
-        if (mListener != null){
+        if (mListener != null) {
             IncidUserComu incidUserComu = (IncidUserComu) mView.getItemAtPosition(position);
-            mListener.onIncidenciaSelected(incidUserComu,position);
+            mListener.onIncidenciaSelected(incidUserComu, position);
         }
     }
 
@@ -170,13 +171,15 @@ public class IncidSeeByUserListFr extends ListFragment {
         protected void onPostExecute(List<IncidUserComu> incidUserComuList)
         {
             Log.d(TAG, "onPostExecute()");
-            if (incidUserComuList != null && incidUserComuList.size() > 0){
+            if (incidUserComuList != null && incidUserComuList.size() > 0) {
+                Log.d(TAG, "onPostExecute(): incidUserComuList != null");
                 mAdapter.addAll(incidUserComuList);
                 setListAdapter(mAdapter);
             }
             if (uiException != null) {  // action: LOGIN.
+                Log.d(TAG, "onPostExecute(): uiException != null");
                 checkState(incidUserComuList == null);
-                uiException.getAction().doAction(getActivity(),uiException.getResourceId());
+                uiException.getAction().doAction(getActivity(), uiException.getResourceId());
             }
         }
     }

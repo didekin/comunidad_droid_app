@@ -184,11 +184,7 @@ public class UserComuDataAcTest_1 {
     @Test
     public void testIncidRegMn_withToken_1() throws InterruptedException
     {
-        FullUsuarioComuidadIntent usuarioComuidadIntent = (FullUsuarioComuidadIntent) mActivity.getIntent()
-                .getSerializableExtra(USERCOMU_LIST_OBJECT.extra);
         INCID_REG_AC.checkMenuItem_WTk(mActivity);
-        intended(hasExtra(COMUNIDAD_ID.extra,
-                usuarioComuidadIntent.getUsuarioComunidad().getComunidad().getC_Id()));
     }
 
     @Test

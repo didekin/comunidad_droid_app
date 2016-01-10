@@ -12,7 +12,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.*;
 import static com.didekindroid.common.utils.ActivityTestUtils.checkNoToastInTest;
 import static com.didekindroid.common.utils.ActivityTestUtils.checkToastInTest;
-import static com.didekindroid.usuario.activity.utils.ViewsIDs.SEE_USERCOMU_BY_USER;
+import static com.didekindroid.common.utils.ViewsIDs.SEE_USERCOMU_BY_USER;
 
 /**
  * User: pedro@didekin

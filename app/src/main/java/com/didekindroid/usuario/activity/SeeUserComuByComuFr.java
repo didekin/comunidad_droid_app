@@ -20,7 +20,7 @@ import com.didekindroid.common.utils.AppKeysForBundle;
 import java.util.List;
 
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
-import static com.didekindroid.usuario.activity.utils.ViewsIDs.SEE_USERCOMU_BY_COMU;
+import static com.didekindroid.common.utils.ViewsIDs.SEE_USERCOMU_BY_COMU;
 
 
 /**

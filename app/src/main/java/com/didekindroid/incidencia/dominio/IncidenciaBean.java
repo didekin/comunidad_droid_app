@@ -26,6 +26,7 @@ public class IncidenciaBean {
     private short importanciaIncid;
     private short codAmbitoIncid;
     private String descripcion;
+    private long comunidadId;
 
     public IncidenciaBean()
     {
@@ -49,7 +50,13 @@ public class IncidenciaBean {
         return this;
     }
 
-    public IncidUserComu makeIncidUserComu(final View mFragmentView, StringBuilder errorMsg, long comunidadId)
+    public IncidenciaBean setComunidadId(long comunidadId)
+    {
+        this.comunidadId = comunidadId;
+        return this;
+    }
+
+    public IncidUserComu makeIncidUserComu(final View mFragmentView, StringBuilder errorMsg)
     {
         setDescripcion(((EditText) mFragmentView.findViewById(R.id.incid_reg_desc_ed)).getText().toString());
 
@@ -69,7 +76,10 @@ public class IncidenciaBean {
     boolean validateBean(StringBuilder errorMsg)
     {
         Resources resources = getContext().getResources();
-        return validateImportancia(errorMsg, resources) & validateCodAmbito(errorMsg, resources) & validateDescripcion(errorMsg, resources);
+        return validateImportancia(errorMsg, resources)
+                & validateCodAmbito(errorMsg, resources)
+                & validateDescripcion(errorMsg, resources)
+                & validateComunidadId(errorMsg, resources);
     }
 
     private boolean validateDescripcion(StringBuilder errorMsg, Resources resources)
@@ -95,6 +105,14 @@ public class IncidenciaBean {
         short upperBound = (short) resources.getStringArray(R.array.IncidImportanciaArray).length;
         if (!(importanciaIncid > 0 && importanciaIncid < upperBound)) {
             errorMsg.append(resources.getString(R.string.incid_reg_importancia)).append(LINE_BREAK.getRegexp());
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validateComunidadId(StringBuilder errorMsg, Resources resources){
+        if (comunidadId <= 0){
+            errorMsg.append(resources.getString(R.string.reg_usercomu_comunidad_null)).append(LINE_BREAK.getRegexp());
             return false;
         }
         return true;

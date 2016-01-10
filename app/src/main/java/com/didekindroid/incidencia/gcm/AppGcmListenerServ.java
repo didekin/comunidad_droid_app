@@ -76,7 +76,7 @@ public class AppGcmListenerServ extends GcmListenerService {
 
     //    ======================== HELPER CLASSES AND METHODS ==========================
 
-    enum TypeMsgHandler {
+    public enum TypeMsgHandler {
 
         INCIDENCIA {
             @Override
@@ -86,7 +86,7 @@ public class AppGcmListenerServ extends GcmListenerService {
             }
 
             @Override
-            int getTitleRsc()
+            public int getTitleRsc()
             {
                 return R.string.incid_gcm_nueva_incidencia_title;
             }
@@ -118,7 +118,7 @@ public class AppGcmListenerServ extends GcmListenerService {
 
         abstract String getType();
 
-        abstract int getTitleRsc();
+        public abstract int getTitleRsc();
 
         abstract int getContentTextRsc();
 

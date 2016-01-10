@@ -36,6 +36,7 @@ import static com.google.common.base.Preconditions.checkState;
  *    -- Every user can modify the importancia assigned by her to the incidencia.
  *    -- Only the original author can erase an incidencia, if the rest of the users have assigned an importancia
  *       equal o lower than 'baja'.
+ * 2. An intent is passed with the incidenciaId of the incidencia selected.
  */
 public class IncidSeeByUserAc extends AppCompatActivity implements
         IncidSeeByUserListFr.IncidListListener {
@@ -60,7 +61,7 @@ public class IncidSeeByUserAc extends AppCompatActivity implements
         }
 
         setContentView(R.layout.incid_see_by_user_ac);
-        doToolBar(this, false);
+        doToolBar(this, true);
         mFragment = (IncidSeeByUserListFr) getFragmentManager()
                 .findFragmentById(R.id.incid_see_by_user_frg);
     }

@@ -5,6 +5,7 @@ import android.util.Log;
 import com.didekin.common.exception.InServiceException;
 import com.didekin.incidservice.controller.IncidenciaServEndPoints;
 import com.didekin.incidservice.domain.IncidUserComu;
+import com.didekin.serviceone.domain.Comunidad;
 import com.didekindroid.common.UiException;
 
 import java.util.List;
@@ -64,6 +65,15 @@ public enum IncidService implements IncidenciaServEndPoints {
 
     /**
      * This method encapsulates the call to the UsuarioService.ServOne method.
+     */
+    public List<Comunidad> getComusByUser() throws UiException
+    {
+        Log.d(TAG, "getComusByUser()");
+        return ServOne.getComusByUser();
+    }
+
+    /**
+     * This method encapsulates the call to the UsuarioService.ServOne method.
      *
      * @param mComunidadId identifies the comunidad wherein the user has the role returned.*/
     public String getHighestRolFunction(long mComunidadId) throws UiException
@@ -83,4 +93,6 @@ public enum IncidService implements IncidenciaServEndPoints {
         }
         return incidUserComuList;
     }
+
+
 }

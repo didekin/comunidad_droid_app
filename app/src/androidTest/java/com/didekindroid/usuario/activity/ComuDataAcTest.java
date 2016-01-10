@@ -21,6 +21,7 @@ import org.junit.runner.RunWith;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -127,7 +128,7 @@ public class ComuDataAcTest {
         onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.provincia_spinner))))
                 .check(matches(withText(is("Lugo")))).check(matches(isDisplayed()));
         onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.municipio_spinner))))
-                .check(matches(withText(is("Alfoz")))).check(matches(isDisplayed()));
+                .check(matches(withText(is("Alfoz")))).check(matches(isDisplayed())).perform(closeSoftKeyboard());
 
         assertThat(mActivity.mRegComuFrg.getComunidadBean().getMunicipio().getProvincia().getProvinciaId(), is
                 (COMU_LA_PLAZUELA_5.getMunicipio().getProvincia().getProvinciaId()));
@@ -156,8 +157,8 @@ public class ComuDataAcTest {
         onView(withId(R.id.see_usercomu_by_user_ac_frg_container)).check(matches(isDisplayed()));
 
         Comunidad comunidadDb = ServOne.getComuData(mComunidad.getC_Id());
-        assertThat(comunidadDb.getMunicipio(),is(new Municipio((short) 119, new Provincia((short) 46))));
-        assertThat(comunidadDb.getNombreVia(),is("nombre via One"));
+        assertThat(comunidadDb.getMunicipio(), is(new Municipio((short) 119, new Provincia((short) 46))));
+        assertThat(comunidadDb.getNombreVia(), is("nombre via One"));
         assertThat(comunidadDb.getNumero(),is((short) 123));
         assertThat(comunidadDb.getSufijoNumero(),is("Tris"));
     }
@@ -165,8 +166,8 @@ public class ComuDataAcTest {
     @Test
     public void testModifyComuData_2() throws UiException
     {
-        onView(withId(R.id.comu_data_ac_button)).check(matches(isDisplayed())).perform(click());
-        onView(withId(R.id.see_usercomu_by_user_ac_frg_container)).check(matches(isDisplayed()));
+        onView(withId(R.id.comu_data_ac_button)).check(matches(isDisplayed())).perform(scrollTo(), click());
+        onView(withId(R.id.see_usercomu_by_user_ac_frg_container)).check(matches(isDisplayed())).perform(closeSoftKeyboard());
 
         Comunidad comunidadDb = ServOne.getComuData(mComunidad.getC_Id());
         assertThat(comunidadDb.getMunicipio(), is(COMU_LA_PLAZUELA_5.getMunicipio()));
@@ -186,7 +187,7 @@ public class ComuDataAcTest {
         onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.municipio_spinner))))
                 .check(matches(withText(is("municipio")))).check(matches(isDisplayed()));
 
-        onView(withId(R.id.comu_data_ac_button)).check(matches(isDisplayed())).perform(click());
+        onView(withId(R.id.comu_data_ac_button)).check(matches(isDisplayed())).perform(scrollTo(), click());
         checkToastInTest(R.string.error_validation_msg, mActivity, R.string.municipio);
     }
 }

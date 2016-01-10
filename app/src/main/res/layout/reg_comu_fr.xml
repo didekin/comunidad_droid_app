@@ -15,7 +15,7 @@
         <EditText
                 android:id="@+id/comunidad_nombre_via_editT"
                 style="@style/textBase.editField"
-                android:inputType="textCapWords"
+                android:inputType="textCapWords|textNoSuggestions"
                 android:maxEms="80"
                 android:hint="@string/nombre_via_hint"
                 android:layout_below="@+id/tipo_via_spinner"/>
@@ -39,7 +39,7 @@
             <EditText
                     android:id="@+id/comunidad_sufijo_numero_editT"
                     style="@style/textBase.editField"
-                    android:inputType="text"
+                    android:inputType="textNoSuggestions"
                     android:maxEms="6"
                     android:hint="@string/sufijo_numero_en_via_hint"
                     />

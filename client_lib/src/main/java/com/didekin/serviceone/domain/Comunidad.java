@@ -132,6 +132,12 @@ public final class Comunidad implements Comparable<Comunidad> {
     }
 
     @Override
+    public String toString()
+    {
+        return getNombreComunidad();
+    }
+
+    @Override
     public int hashCode()
     {
         if (tipoVia == null || nombreVia == null || municipio == null) {

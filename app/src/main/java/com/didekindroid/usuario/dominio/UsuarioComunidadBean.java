@@ -73,10 +73,6 @@ public final class UsuarioComunidadBean {
         return rolesBuilder.toString();
     }
 
-    /**
-     * The boolean flag isComunidadToValid controls for comunidad instances only with id, which are not to be
-     * validated.
-     */
     public boolean validate(Resources resources, StringBuilder errorMsg)
     {
         boolean isValid = validatePortal(resources, errorMsg)
@@ -178,7 +174,7 @@ public final class UsuarioComunidadBean {
     boolean validateComunidad(Resources resources, StringBuilder errorMsg)
     {
         if (comunidadBean == null) {
-            errorMsg.append(resources.getText(R.string.comunidad_null)).append(DataPatterns.LINE_BREAK.getRegexp());
+            errorMsg.append(resources.getText(R.string.reg_usercomu_comunidad_null)).append(DataPatterns.LINE_BREAK.getRegexp());
             return false;
         }
         // In this point the instance of comunidad in usuarioBean is created.

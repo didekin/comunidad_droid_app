@@ -27,7 +27,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.regThreeUserComuSameUser_2;
-import static com.didekindroid.usuario.activity.utils.ViewsIDs.SEE_USERCOMU_BY_USER;
+import static com.didekindroid.common.utils.ViewsIDs.SEE_USERCOMU_BY_USER;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_EL_ESCORIAL;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_LA_FUENTE;

@@ -16,8 +16,6 @@ import com.didekindroid.common.utils.ConnectionUtils;
 import com.didekindroid.common.utils.UIutils;
 import com.didekindroid.incidencia.gcm.GcmRegistrationIntentServ;
 
-import static com.didekindroid.common.UiException.TOKEN_NULL;
-import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_ID;
 import static com.didekindroid.common.utils.UIutils.checkPlayServices;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
@@ -51,15 +49,9 @@ public class IncidRegAc extends AppCompatActivity {
             startService(intent);
         }
 
-        // TODO: añadir un spinner con la comunidad para la que se da de alta la incidencia.
-        // ComunidadId lo proporciona el spinner. Suprimir este intent.
-        final long comunidadId = getIntent().getLongExtra(COMUNIDAD_ID.extra, 0);
-
         View mAcView = getLayoutInflater().inflate(R.layout.incid_reg_ac, null);
         setContentView(mAcView);
         doToolBar(this, true);
-
-
 
         mRegAcFragment = (IncidRegAcFragment) getFragmentManager().findFragmentById(R.id.incid_reg_frg);
         Button mRegisterButton = (Button) findViewById(R.id.incid_reg_ac_button);
@@ -68,17 +60,17 @@ public class IncidRegAc extends AppCompatActivity {
             public void onClick(View v)
             {
                 Log.d(TAG, "View.OnClickListener().onClick()");
-                registerIncidencia(comunidadId);
+                registerIncidencia();
             }
         });
     }
 
-    private void registerIncidencia(long comunidadId)
+    private void registerIncidencia()
     {
         Log.d(TAG, "registerIncidencia()");
 
         StringBuilder errorMsg = getErrorMsgBuilder(this);
-        final IncidUserComu incidUserComu = mRegAcFragment.mIncidenciaBean.makeIncidUserComu(mRegAcFragment.mFragmentView, errorMsg, comunidadId);
+        final IncidUserComu incidUserComu = mRegAcFragment.mIncidenciaBean.makeIncidUserComu(mRegAcFragment.mFragmentView, errorMsg);
 
         if (incidUserComu == null) {
             Log.d(TAG, "registerIncidencia(), incidUserComu == null");

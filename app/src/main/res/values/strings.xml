@@ -126,7 +126,7 @@
     <string name="reg_usercomu_checbox_pro_rot">Propietario</string>
     <string name="reg_usercomu_checbox_inq_rot">Arrendatario</string>
     <string name="reg_usercomu_role_rot">Vínculo con la comunidad</string>
-    <string name="comunidad_null">Comunidad</string>
+    <string name="reg_usercomu_comunidad_null">Comunidad</string>
     <!-- .......... RegComuFr ........... -->
     <string name="municipio_spinner">municipio</string>
     <string name="municipio">Municipio</string>
