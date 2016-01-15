@@ -32,14 +32,13 @@ import static com.didekindroid.common.utils.UIutils.checkPlayServices;
 import static com.didekindroid.common.utils.UIutils.isGcmTokenSentServer;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.utils.UIutils.updateIsGcmTokenSentServer;
-import static com.didekindroid.common.utils.ViewsIDs.INCID_SEE_BY_USER;
+import static com.didekindroid.incidencia.activity.utils.IncidenciaMenuTestUtils.INCID_SEE_CLOSED_BY_USER_AC;
+import static com.didekindroid.incidencia.activity.utils.IncidenciaMenuTestUtils.INCID_REG_AC;
 import static com.didekindroid.incidencia.gcm.AppGcmListenerServ.TypeMsgHandler.INCIDENCIA;
 import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
-import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.regThreeUserComuSameUser_2;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_ESCORIAL_PEPE;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_LA_FUENTE_PEPE;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_PEPE;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -52,26 +51,24 @@ import static org.junit.Assert.assertThat;
  * Time: 18:45
  */
 @RunWith(AndroidJUnit4.class)
-public class IncidSeeByUserAcTest_1 {
+public class IncidSeeByComuAcTest_1 {
 
-    private IncidSeeByUserAc mActivity;
+    private IncidSeeByComuAc mActivity;
     private CleanUserEnum whatToClean = CLEAN_PEPE;
     IdlingResourceForIntentServ idlingResource;
     NotificationManager mNotifyManager;
     private int messageId = INCIDENCIA.getTitleRsc();
 
     @Rule
-    public IntentsTestRule<IncidSeeByUserAc> activityRule = new IntentsTestRule<IncidSeeByUserAc>(IncidSeeByUserAc.class) {
+    public IntentsTestRule<IncidSeeByComuAc> activityRule = new IntentsTestRule<IncidSeeByComuAc>(IncidSeeByComuAc.class) {
 
         @Override
         protected void beforeActivityLaunched()
         {
             try {
-                regThreeUserComuSameUser_2(COMU_ESCORIAL_PEPE, COMU_REAL_PEPE, COMU_LA_FUENTE_PEPE);
-
+                signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
                 Context context = InstrumentationRegistry.getTargetContext();
-//                updateIsGcmTokenSentServer(false, context);
-                checkState(!isGcmTokenSentServer(context));
+                updateIsGcmTokenSentServer(false, context);
                 checkState(ServOne.getGcmToken() == null);
 
             } catch (UiException e) {
@@ -112,10 +109,11 @@ public class IncidSeeByUserAcTest_1 {
         assertThat(mActivity, notNullValue());
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
 
-        onView(withId(R.id.incid_see_by_user_ac)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_see_by_user_frg)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_see_by_comu_ac)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_see_by_comu_frg)).check(matches(isDisplayed()));
         // No hay incidencias registradas. La vista forma parte de la jerarquía de vistas de la página.
-        onView(withId(INCID_SEE_BY_USER.idView)).check(matches(not(isDisplayed())));
+        onView(withId(android.R.id.list)).check(matches(not(isDisplayed())));
+        onView(withId(android.R.id.empty)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -136,5 +134,17 @@ public class IncidSeeByUserAcTest_1 {
                         withContentDescription("Navigate up"),
                         isClickable())
         ).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testIncidSeeClosedByComuMn() throws InterruptedException
+    {
+        INCID_SEE_CLOSED_BY_USER_AC.checkMenuItem_WTk(mActivity);
+    }
+
+    @Test
+    public void testIncidRegMn() throws InterruptedException
+    {
+        INCID_REG_AC.checkMenuItem_WTk(mActivity);
     }
 }

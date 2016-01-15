@@ -13,7 +13,6 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         IncidFunctionalTestSuite.class,
-        IncidFunctionalSlowTestSuite.class,
         IncidSupportTestSuite.class,
         CommonSuite_1.class,
 })

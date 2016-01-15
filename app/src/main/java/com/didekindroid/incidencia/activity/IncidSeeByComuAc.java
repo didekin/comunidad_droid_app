@@ -8,10 +8,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.didekin.incidservice.domain.IncidUserComu;
+import com.didekin.incidservice.domain.Incidencia;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
-import com.didekindroid.incidencia.dominio.IncidUserComuIntent;
+import com.didekindroid.incidencia.dominio.IncidenciaIntent;
 import com.didekindroid.incidencia.gcm.GcmRegistrationIntentServ;
 
 import static com.didekindroid.common.utils.AppKeysForBundle.INCIDENCIA_LIST_INDEX;
@@ -20,7 +20,7 @@ import static com.didekindroid.common.utils.AppKeysForBundle.INCID_USERCOMU_LIST
 import static com.didekindroid.common.utils.UIutils.checkPlayServices;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.isGcmTokenSentServer;
-import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_CLOSED_BY_USER_AC;
+import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_CLOSED_BY_COMU_AC;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_REG_AC;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -29,7 +29,7 @@ import static com.google.common.base.Preconditions.checkState;
 /**
  * Preconditions:
  * 1. The user is registered.
- * 2. The user is the original author of the incidencia or has commented on the importancia of the incidencia.
+ * 2. The user is registered NOW in the comunidad whose open incidencias are shown.
  * Postconditions:
  * 1. The incidencia selected on the list is shown to the user in mode edition:
  *    -- If the user was the original author of the incidencia, it can modified its description.
@@ -38,12 +38,12 @@ import static com.google.common.base.Preconditions.checkState;
  *       equal o lower than 'baja'.
  * 2. An intent is passed with the incidenciaId of the incidencia selected.
  */
-public class IncidSeeByUserAc extends AppCompatActivity implements
-        IncidSeeByUserListFr.IncidListListener {
+public class IncidSeeByComuAc extends AppCompatActivity implements
+        IncidListListener {
 
-    private static final String TAG = IncidSeeByUserAc.class.getCanonicalName();
+    private static final String TAG = IncidSeeByComuAc.class.getCanonicalName();
 
-    IncidSeeByUserListFr mFragment;
+    IncidSeeByComuListFr mFragment;
     int mIncidenciaIndex;
 
     /**
@@ -60,17 +60,17 @@ public class IncidSeeByUserAc extends AppCompatActivity implements
             startService(intent);
         }
 
-        setContentView(R.layout.incid_see_by_user_ac);
+        setContentView(R.layout.incid_see_by_comu_ac);
         doToolBar(this, true);
-        mFragment = (IncidSeeByUserListFr) getFragmentManager()
-                .findFragmentById(R.id.incid_see_by_user_frg);
+        mFragment = (IncidSeeByComuListFr) getFragmentManager()
+                .findFragmentById(R.id.incid_see_by_comu_frg);
     }
 
     @Override
     protected void onSaveInstanceState(Bundle savedInstanceState)
     {
         Log.d(TAG, "onSaveInstanceState()");
-        savedInstanceState.putInt(INCIDENCIA_LIST_INDEX.name(), mIncidenciaIndex);
+        savedInstanceState.putInt(INCIDENCIA_LIST_INDEX.extra, mIncidenciaIndex);
         super.onSaveInstanceState(savedInstanceState);
     }
 
@@ -79,7 +79,7 @@ public class IncidSeeByUserAc extends AppCompatActivity implements
     {
         Log.d(TAG, "onRestoreInstanceState()");
         if (savedInstanceState != null) {
-            mIncidenciaIndex = savedInstanceState.getInt(INCIDENCIA_LIST_INDEX.name(), 0);
+            mIncidenciaIndex = savedInstanceState.getInt(INCIDENCIA_LIST_INDEX.extra, 0);
             mFragment.setSelection(mIncidenciaIndex); // Only for linearFragments.
         }
     }
@@ -92,7 +92,7 @@ public class IncidSeeByUserAc extends AppCompatActivity implements
     public boolean onCreateOptionsMenu(Menu menu)
     {
         Log.d(TAG, "onCreateOptionsMenu()");
-        getMenuInflater().inflate(R.menu.incid_see_by_user_mn, menu);
+        getMenuInflater().inflate(R.menu.incid_see_by_comu_ac_mn, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -104,8 +104,8 @@ public class IncidSeeByUserAc extends AppCompatActivity implements
         int resourceId = checkNotNull(item.getItemId());
 
         switch (resourceId) {
-            case R.id.incid_closed_see_by_useromu_ac_mn:
-                INCID_CLOSED_BY_USER_AC.doMenuItem(this);
+            case R.id.incid_see_closed_by_comu_ac_mn:
+                INCID_CLOSED_BY_COMU_AC.doMenuItem(this);
                 return true;
             case R.id.incid_reg_ac_mn:
                 INCID_REG_AC.doMenuItem(this);
@@ -118,32 +118,32 @@ public class IncidSeeByUserAc extends AppCompatActivity implements
     //  ........... HELPER INTERFACES AND CLASSES ..................
 
     @Override
-    public void onIncidenciaSelected(final IncidUserComu incidUserComu, int position)
+    public void onIncidenciaSelected(final Incidencia incidencia, int position)
     {
         Log.d(TAG, "onIncidenciaSelected()");
         mIncidenciaIndex = position;
-        new FunctionalRoleGetter().execute(incidUserComu);
+        new FunctionalRoleGetter().execute(incidencia);
     }
 
 //    ============================================================
 //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
 //    ============================================================
 
-    private class FunctionalRoleGetter extends AsyncTask<IncidUserComu, Void, String> {
+    private class FunctionalRoleGetter extends AsyncTask<Incidencia, Void, String> {
 
         private final String TAG = FunctionalRoleGetter.class.getCanonicalName();
-        private IncidUserComu incidUserComu;
+        private Incidencia incidencia;
         UiException uiException;
 
         @Override
-        protected String doInBackground(final IncidUserComu... params)
+        protected String doInBackground(final Incidencia... params)
         {
             Log.d(TAG, "doInBackground()");
-            incidUserComu = params[0];
+            incidencia = params[0];
             String function = null;
             try {
                 function = IncidenciaServ.getHighestRolFunction(
-                        incidUserComu.getUsuarioComunidad().getComunidad().getC_Id());
+                        incidencia.getComunidad().getC_Id());
             } catch (UiException e) {
                 uiException = e;
             }
@@ -156,12 +156,12 @@ public class IncidSeeByUserAc extends AppCompatActivity implements
             Log.d(TAG, "onPostExecute(): functionalRole = " + functionalRole);
 
             if (uiException != null) {
-                uiException.getAction().doAction(IncidSeeByUserAc.this, uiException.getResourceId());
+                uiException.getAction().doAction(IncidSeeByComuAc.this, uiException.getResourceId());
             } else {
                 checkState(functionalRole != null);
-                Intent intent = new Intent(IncidSeeByUserAc.this, IncidEditAc.class);
+                Intent intent = new Intent(IncidSeeByComuAc.this, IncidEditAc.class);
                 intent.putExtra(INCIDENCIA_ROL.extra, functionalRole);
-                intent.putExtra(INCID_USERCOMU_LIST_OBJECT.extra, new IncidUserComuIntent(incidUserComu));
+                intent.putExtra(INCID_USERCOMU_LIST_OBJECT.extra, new IncidenciaIntent(incidencia));
                 startActivity(intent);
             }
         }

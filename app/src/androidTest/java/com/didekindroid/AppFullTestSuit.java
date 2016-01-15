@@ -1,7 +1,6 @@
 package com.didekindroid;
 
 import com.didekindroid.common.suite.CommonSuite_1;
-import com.didekindroid.incidencia.suite.IncidFunctionalSlowTestSuite;
 import com.didekindroid.incidencia.suite.IncidFunctionalTestSuite;
 import com.didekindroid.incidencia.suite.IncidSupportTestSuite;
 import com.didekindroid.usuario.suite.UserFunctionalSlowTestSuite;
@@ -21,7 +20,6 @@ import org.junit.runners.Suite;
         CommonSuite_1.class,
 //        CommonSuite_2.class, out of this suite.
         IncidFunctionalTestSuite.class,
-        IncidFunctionalSlowTestSuite.class,
         IncidSupportTestSuite.class,
         UserFunctionalTestSuite.class,
         UserFunctionalSlowTestSuite.class,

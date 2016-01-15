@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.didekin.incidservice.domain.IncidUserComu;
+import com.didekin.incidservice.domain.IncidenciaUser;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
 import com.didekindroid.common.utils.ConnectionUtils;
@@ -70,16 +70,16 @@ public class IncidRegAc extends AppCompatActivity {
         Log.d(TAG, "registerIncidencia()");
 
         StringBuilder errorMsg = getErrorMsgBuilder(this);
-        final IncidUserComu incidUserComu = mRegAcFragment.mIncidenciaBean.makeIncidUserComu(mRegAcFragment.mFragmentView, errorMsg);
+        final IncidenciaUser incidenciaUser = mRegAcFragment.mIncidenciaBean.makeIncidenciaUser(mRegAcFragment.mFragmentView, errorMsg);
 
-        if (incidUserComu == null) {
-            Log.d(TAG, "registerIncidencia(), incidUserComu == null");
+        if (incidenciaUser == null) {
+            Log.d(TAG, "registerIncidencia(), incidenciaUser == null");
             makeToast(this, errorMsg.toString(), Toast.LENGTH_SHORT);
         } else if (!ConnectionUtils.isInternetConnected(this)) {
             UIutils.makeToast(this, R.string.no_internet_conn_toast, Toast.LENGTH_LONG);
         } else {
-            new IncidenciaRegister().execute(incidUserComu);
-            Intent intent = new Intent(this, IncidSeeByUserAc.class);
+            new IncidenciaRegister().execute(incidenciaUser);
+            Intent intent = new Intent(this, IncidSeeByComuAc.class);
             startActivity(intent);
         }
     }
@@ -88,19 +88,19 @@ public class IncidRegAc extends AppCompatActivity {
     //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
     //    ============================================================
 
-    class IncidenciaRegister extends AsyncTask<IncidUserComu, Void, Integer> {
+    class IncidenciaRegister extends AsyncTask<IncidenciaUser, Void, Integer> {
 
         private final String TAG = IncidenciaRegister.class.getCanonicalName();
         UiException uiException;
 
         @Override
-        protected Integer doInBackground(IncidUserComu... incidUserComus)
+        protected Integer doInBackground(IncidenciaUser... incidenciaUsers)
         {
             Log.d(TAG, "doInBackground()");
             int rowInserted = 0;
 
             try {
-                rowInserted = IncidenciaServ.regIncidenciaUserComu(incidUserComus[0]);
+                rowInserted = IncidenciaServ.regIncidenciaUser(incidenciaUsers[0]);
             } catch (UiException e) {
                 uiException = e;
             }

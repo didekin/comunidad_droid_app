@@ -1,11 +1,13 @@
 package com.didekin.incidservice.domain;
 
+import java.io.Serializable;
+
 /**
  * User: pedro@didekin
  * Date: 12/11/15
  * Time: 18:20
  */
-public class AmbitoIncidencia {
+public class AmbitoIncidencia implements Serializable {
 
     private final short ambitoId;
     private final String descripcion;

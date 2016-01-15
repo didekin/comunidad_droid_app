@@ -4,15 +4,14 @@ import android.content.res.Resources;
 import android.view.View;
 import android.widget.EditText;
 
-import com.didekin.incidservice.domain.IncidUserComu;
-import com.didekin.incidservice.domain.Incidencia;
 import com.didekin.incidservice.domain.AmbitoIncidencia;
+import com.didekin.incidservice.domain.Incidencia;
+import com.didekin.incidservice.domain.IncidenciaUser;
 import com.didekin.serviceone.domain.Comunidad;
-import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
 
-import static com.didekin.incidservice.domain.IncidDataPatterns.INCID_DESC;
 import static com.didekin.common.domain.DataPatterns.LINE_BREAK;
+import static com.didekin.incidservice.domain.IncidDataPatterns.INCID_DESC;
 import static com.didekindroid.DidekindroidApp.getContext;
 import static com.didekindroid.incidencia.repository.IncidenciaDataDb.AmbitoIncidencia.AMBITO_INCID_COUNT;
 
@@ -56,18 +55,19 @@ public class IncidenciaBean {
         return this;
     }
 
-    public IncidUserComu makeIncidUserComu(final View mFragmentView, StringBuilder errorMsg)
+    public IncidenciaUser makeIncidenciaUser(final View mFragmentView, StringBuilder errorMsg)
     {
         setDescripcion(((EditText) mFragmentView.findViewById(R.id.incid_reg_desc_ed)).getText().toString());
 
         if (validateBean(errorMsg)) {
             Incidencia incidencia = new Incidencia.IncidenciaBuilder()
+                    .comunidad(new Comunidad.ComunidadBuilder().c_id(comunidadId).build())
                     .ambitoIncid(new AmbitoIncidencia(codAmbitoIncid))
-                    .descripcion(descripcion).build();
-            UsuarioComunidad userComu = new UsuarioComunidad
-                    .UserComuBuilder(new Comunidad.ComunidadBuilder().c_id(comunidadId).build(), null)
+                    .descripcion(descripcion)
                     .build();
-            return new IncidUserComu(incidencia, userComu, importanciaIncid, 0, null);
+            return new IncidenciaUser.IncidenciaUserBuilder(incidencia)
+                    .importancia(importanciaIncid)
+                    .build();
         } else {
             return null;
         }

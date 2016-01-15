@@ -17,20 +17,15 @@ import android.widget.Spinner;
 
 import com.didekin.serviceone.domain.Comunidad;
 import com.didekindroid.R;
-import com.didekindroid.common.UiException;
 import com.didekindroid.incidencia.dominio.IncidenciaBean;
 import com.didekindroid.incidencia.repository.IncidenciaDataDbHelper;
-import com.didekindroid.incidencia.webservices.IncidService;
-
-import java.util.List;
 
 import static com.didekindroid.incidencia.repository.IncidenciaDataDb.AmbitoIncidencia.ambito;
-import static com.google.common.base.Preconditions.checkState;
 
 /**
  *
  */
-public class IncidRegAcFragment extends Fragment {
+public class IncidRegAcFragment extends Fragment implements ComuSpinnerSettable {
 
     private static final String TAG = IncidRegAcFragment.class.getCanonicalName();
 
@@ -78,7 +73,7 @@ public class IncidRegAcFragment extends Fragment {
         dbHelper = new IncidenciaDataDbHelper(getActivity());
 
         mComunidadSpinner = (Spinner) getView().findViewById(R.id.incid_reg_comunidad_spinner);
-        new ComunidadSpinnerSetter().execute();
+        new ComunidadSpinnerSetter<>(this).execute();
 
         mImportanciaSpinner = (Spinner) getView().findViewById(R.id.incid_reg_importancia_spinner);
         doImportanciaSpinner();
@@ -161,50 +156,23 @@ public class IncidRegAcFragment extends Fragment {
         mImportanciaSpinner.setAdapter(adapter);
     }
 
+    @Override
+    public void setComunidadSpinnerAdapter(ArrayAdapter<Comunidad> comunidades)
+    {
+        Log.d(TAG, "setComunidadSpinnerAdapter()");
+        mComunidadSpinner.setAdapter(comunidades);
+    }
+
+    @Override
+    public void onComunidadSpinnerLoaded()
+    {
+        Log.d(TAG, "onComunidadSpinnerLoaded()");
+        mComunidadSpinner.setSelection(0);
+    }
+
 //    ============================================================
 //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
 //    ============================================================
-
-    class ComunidadSpinnerSetter extends AsyncTask<Void, Void, List<Comunidad>> {
-
-        UiException uiException;
-
-        @Override
-        protected List<Comunidad> doInBackground(Void... aVoid)
-        {
-            Log.d(TAG, "ComunidadSpinnerSetter.doInBackground()");
-            List<Comunidad> comunidadesByUser = null;
-            try {
-                comunidadesByUser = IncidService.IncidenciaServ.getComusByUser();
-            } catch (UiException e) {
-                uiException = e;
-            }
-            return comunidadesByUser;
-        }
-
-        @Override
-        protected void onPostExecute(List<Comunidad> comunidades)
-        {
-            if (comunidades != null) {
-                Log.d(TAG, "ComunidadSpinnerSetter.onPostExecute(): comunidades != null");
-                ArrayAdapter<Comunidad> comunidadesAdapter = new ArrayAdapter<>(
-                        getActivity(),
-                        R.layout.app_spinner_1_dropdown_item,
-                        R.id.app_spinner_1_dropdown_item,
-                        comunidades);
-                mComunidadSpinner.setAdapter(comunidadesAdapter);
-                /*tiposViaAdapter.setDropDownViewResource(R.layout.app_spinner_1_dropdown_item);*/
-                /*if (mActivityListener != null) {
-                    mActivityListener.onComunidadesSpinnerLoaded();
-                }*/
-            }
-            if (uiException != null) {
-                Log.d(TAG, "ComunidadSpinnerSetter.onPostExecute(): uiException != null");
-                checkState(comunidades == null);
-                uiException.getAction().doAction(getActivity(), uiException.getResourceId());
-            }
-        }
-    }
 
     class AmbitoIncidenciaSpinnerSetter extends AsyncTask<Void, Void, Cursor> {
 

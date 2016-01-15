@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.didekin.incidservice.domain.IncidUserComu;
+import com.didekin.incidservice.domain.Incidencia;
 import com.didekindroid.R;
 import com.didekindroid.common.utils.UIutils;
 import com.didekindroid.incidencia.repository.IncidenciaDataDbHelper;
@@ -19,13 +19,13 @@ import com.didekindroid.incidencia.repository.IncidenciaDataDbHelper;
  * Date: 18/12/15
  * Time: 13:21
  */
-public class IncidSeeByUserAdapter extends ArrayAdapter<IncidUserComu> {
+public class IncidSeeByComuAdapter extends ArrayAdapter<Incidencia> {
 
-    private static final String TAG = IncidSeeByUserAdapter.class.getCanonicalName();
+    private static final String TAG = IncidSeeByComuAdapter.class.getCanonicalName();
 
-    public IncidSeeByUserAdapter(Context context)
+    public IncidSeeByComuAdapter(Context context)
     {
-        super(context, R.layout.incid_see_by_user_list_item, R.id.nombreComunidad_view);
+        super(context, R.layout.incid_see_by_comu_list_item, R.id.nombreComunidad_view);
     }
 
     @Override
@@ -36,13 +36,13 @@ public class IncidSeeByUserAdapter extends ArrayAdapter<IncidUserComu> {
 
         if (convertView == null){
             Log.d(TAG, "getView(), convertView == null");
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.incid_see_by_user_list_item, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.incid_see_by_comu_list_item, parent, false);
             viewHolder = new IncidenciaViewHolder(convertView);
             convertView.setTag(viewHolder);
         }
         viewHolder = (IncidenciaViewHolder) convertView.getTag();
-        final IncidUserComu incidUserComu = getItem(position);
-        viewHolder.initializeTextInViews(incidUserComu);
+        final Incidencia incidencia = getItem(position);
+        viewHolder.initializeTextInViews(incidencia);
         return convertView;
     }
 
@@ -70,16 +70,15 @@ public class IncidSeeByUserAdapter extends ArrayAdapter<IncidUserComu> {
             resources = convertView.getContext().getResources();
         }
 
-        void initializeTextInViews(IncidUserComu incidUserComu)
+        void initializeTextInViews(Incidencia incidencia)
         {
             Log.d(TAG, "initializeTextInViews()");
-            mNombreComunidadView.setText(incidUserComu.getUsuarioComunidad().getComunidad().getNombreComunidad());
-            mDescripcionView.setText(incidUserComu.getIncidencia().getDescripcion());
-            mFechaAltaView.setText(UIutils.formatTimeStampToString(incidUserComu.getFechaAlta()));
-            short ambitoPk = incidUserComu.getIncidencia().getAmbitoIncidencia().getAmbitoId();
+            mNombreComunidadView.setText(incidencia.getComunidad().getNombreComunidad());
+            mDescripcionView.setText(incidencia.getDescripcion());
+            mFechaAltaView.setText(UIutils.formatTimeStampToString(incidencia.getFechaAlta()));
+            short ambitoPk = incidencia.getAmbitoIncidencia().getAmbitoId();
             mAmbitoView.setText(new IncidenciaDataDbHelper(getContext()).getAmbitoDescByPk(ambitoPk));
-            mImportanciaUserView.setText(resources.getStringArray(R.array.IncidImportanciaArray)[incidUserComu.getImportancia()]);
-            int mImportanciaAvg = Math.round(incidUserComu.getImportanciaAvgInComu());
+            int mImportanciaAvg = Math.round(incidencia.getImportanciaAvg());
             mImportanciaComuView.setText(resources.getStringArray(R.array.IncidImportanciaArray)[mImportanciaAvg]);
         }
     }

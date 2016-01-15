@@ -31,7 +31,31 @@ public enum IncidenciaMenuTestUtils {
             onView(withText(R.string.incid_reg_ac_mn)).check(matches(isDisplayed())).perform(click());
             onView(withId(R.id.incid_reg_ac_layout)).check(matches(isDisplayed()));
         }
-    },;
+    },
+
+    INCID_SEE_BY_COMU_AC {
+        @Override
+        public void checkMenuItem_WTk(Activity activity) throws InterruptedException
+        {
+            onView(withText(R.string.incid_see_by_comu_ac_mn)).check(doesNotExist());
+            openActionBarOverflowOrOptionsMenu(activity);
+            onView(withText(R.string.incid_see_by_comu_ac_mn)).check(matches(isDisplayed())).perform(click());
+            onView(withId(R.id.incid_see_by_comu_ac)).check(matches(isDisplayed()));
+        }
+    },
+
+    INCID_SEE_CLOSED_BY_USER_AC {
+        @Override
+        public void checkMenuItem_WTk(Activity activity) throws InterruptedException
+        {
+            onView(withText(R.string.incid_closed_see_by_usercomu_ac_mn)).check(doesNotExist());
+            openActionBarOverflowOrOptionsMenu(activity);
+            Thread.sleep(1000);
+            onView(withText(R.string.incid_closed_see_by_usercomu_ac_mn)).check(matches(isDisplayed())).perform(click());
+            onView(withId(R.id.incid_see_closed_by_comu_ac)).check(matches(isDisplayed()));
+        }
+    },
+    ;
 
     public abstract void checkMenuItem_WTk(Activity activity) throws InterruptedException;
 }

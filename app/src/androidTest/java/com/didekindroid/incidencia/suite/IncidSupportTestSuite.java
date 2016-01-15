@@ -1,5 +1,6 @@
 package com.didekindroid.incidencia.suite;
 
+import com.didekindroid.incidencia.dominio.IncidenciaBeanTest;
 import com.didekindroid.incidencia.repository.IncidenciaDataDbHelperTest;
 import com.didekindroid.incidencia.webservices.IncidServiceTest;
 
@@ -13,6 +14,7 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
+        IncidenciaBeanTest.class,
         IncidenciaDataDbHelperTest.class,
         IncidServiceTest.class,
 })

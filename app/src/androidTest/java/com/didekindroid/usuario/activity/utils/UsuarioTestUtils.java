@@ -72,7 +72,7 @@ public final class UsuarioTestUtils {
         ServOne.regComuAndUserComu(usuarioComunidad);
     }
 
-    public static void regThreeUserComuSameUser_2(UsuarioComunidad... userComus) throws UiException
+    public static void regSeveralUserComuSameUser(UsuarioComunidad... userComus) throws UiException
     {
         Preconditions.checkArgument(userComus.length > 0);
         signUpAndUpdateTk(userComus[0]);

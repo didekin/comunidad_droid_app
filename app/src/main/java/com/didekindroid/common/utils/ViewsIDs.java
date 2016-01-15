@@ -11,7 +11,6 @@ package com.didekindroid.common.utils;
 public enum ViewsIDs {
 
     COMU_SEARCH_RESULTS(-1323),
-    INCID_SEE_BY_USER(-1327),
     SEE_USERCOMU_BY_COMU(-1325),
     SEE_USERCOMU_BY_USER(-1321),
     ;

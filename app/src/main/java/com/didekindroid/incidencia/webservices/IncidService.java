@@ -4,7 +4,8 @@ import android.util.Log;
 
 import com.didekin.common.exception.InServiceException;
 import com.didekin.incidservice.controller.IncidenciaServEndPoints;
-import com.didekin.incidservice.domain.IncidUserComu;
+import com.didekin.incidservice.domain.IncidenciaUser;
+import com.didekin.incidservice.domain.Incidencia;
 import com.didekin.serviceone.domain.Comunidad;
 import com.didekindroid.common.UiException;
 
@@ -25,15 +26,21 @@ public enum IncidService implements IncidenciaServEndPoints {
 
     IncidenciaServ(BUILDER.getService(IncidenciaServEndPoints.class, getBaseURL())) {
         @Override
-        public int regIncidenciaUserComu(String accessToken, IncidUserComu incidUserComu)
+        public List<Incidencia> incidSeeByComu(String accessToken, long comunidadId)
         {
-            return IncidenciaServ.endPoint.regIncidenciaUserComu(accessToken, incidUserComu);
+            return IncidenciaServ.endPoint.incidSeeByComu(accessToken, comunidadId);
         }
 
         @Override
-        public List<IncidUserComu> incidSeeByUser(String accessToken)
+        public List<Incidencia> incidSeeClosedByComu(String accessToken, long comunidadId)
         {
-            return IncidenciaServ.endPoint.incidSeeByUser(accessToken);
+            return IncidenciaServ.endPoint.incidSeeClosedByComu(accessToken, comunidadId);
+        }
+
+        @Override
+        public int regIncidenciaUser(String accessToken, IncidenciaUser incidenciaUser)
+        {
+            return IncidenciaServ.endPoint.regIncidenciaUser(accessToken, incidenciaUser);
         }
     },;
 
@@ -50,19 +57,6 @@ public enum IncidService implements IncidenciaServEndPoints {
 //                  CONVENIENCE METHODS
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-    public int regIncidenciaUserComu(IncidUserComu incidUserComu) throws UiException
-    {
-        Log.d(TAG, "regIncidenciaUserComu()");
-
-        int regIncidencia = 0;
-        try {
-            regIncidencia = regIncidenciaUserComu(checkBearerToken(), incidUserComu);
-        } catch (InServiceException e) {
-            catchAuthenticationException(e);
-        }
-        return regIncidencia;
-    }
-
     /**
      * This method encapsulates the call to the UsuarioService.ServOne method.
      */
@@ -75,24 +69,48 @@ public enum IncidService implements IncidenciaServEndPoints {
     /**
      * This method encapsulates the call to the UsuarioService.ServOne method.
      *
-     * @param mComunidadId identifies the comunidad wherein the user has the role returned.*/
+     * @param mComunidadId identifies the comunidad wherein the user has the role returned.
+     */
     public String getHighestRolFunction(long mComunidadId) throws UiException
     {
         Log.d(TAG, "getHighestRolFunction()");
         return ServOne.getHighestRoleFunction(mComunidadId);
     }
 
-    public List<IncidUserComu> incidSeeByUser() throws UiException
+    public List<Incidencia> incidSeeByComu(long comunidadId) throws UiException
     {
-        Log.d(TAG, "incidSeeByUser()");
-        List<IncidUserComu> incidUserComuList = null;
+        Log.d(TAG, "incidSeeByComu()");
+        List<Incidencia> incidencias = null;
         try {
-            incidUserComuList = incidSeeByUser(checkBearerToken());
+            incidencias = incidSeeByComu(checkBearerToken(), comunidadId);
         } catch (InServiceException e) {
             catchAuthenticationException(e);
         }
-        return incidUserComuList;
+        return incidencias;
     }
 
+    public List<Incidencia> incidSeeClosedByComu(long comunidadId) throws UiException
+    {
+        Log.d(TAG, "incidSeeClosedByComu()");
+        List<Incidencia> incidencias = null;
+        try {
+            incidencias = incidSeeClosedByComu(checkBearerToken(), comunidadId);
+        } catch (InServiceException e) {
+            catchAuthenticationException(e);
+        }
+        return incidencias;
+    }
 
+    public int regIncidenciaUser(IncidenciaUser incidenciaUser) throws UiException
+    {
+        Log.d(TAG, "regIncidenciaUser()");
+
+        int regIncidencia = 0;
+        try {
+            regIncidencia = regIncidenciaUser(checkBearerToken(), incidenciaUser);
+        } catch (InServiceException e) {
+            catchAuthenticationException(e);
+        }
+        return regIncidencia;
+    }
 }

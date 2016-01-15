@@ -43,6 +43,8 @@ public class IncidenciaIntent implements Serializable {
 
     private static class InnerSerial implements Serializable {
 
+        // TODO: ResolucionId no es serializable. Hay que hacer tests de la serialización en todas las clases intent.
+
         private final long incidenciaId;
         private final String descripcion;
         private final AmbitoIncidencia ambitoIncidencia;

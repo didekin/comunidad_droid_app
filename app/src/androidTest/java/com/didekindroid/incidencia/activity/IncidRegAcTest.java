@@ -38,7 +38,7 @@ import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.incidencia.repository.IncidenciaDataDb.AmbitoIncidencia.AMBITO_INCID_COUNT;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
-import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.regThreeUserComuSameUser_2;
+import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.regSeveralUserComuSameUser;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_LA_FUENTE_PEPE;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_PEPE;
@@ -68,7 +68,7 @@ public class IncidRegAcTest {
         protected void beforeActivityLaunched()
         {
             try {
-                regThreeUserComuSameUser_2(COMU_ESCORIAL_PEPE, COMU_REAL_PEPE, COMU_LA_FUENTE_PEPE);
+                regSeveralUserComuSameUser(COMU_ESCORIAL_PEPE, COMU_REAL_PEPE, COMU_LA_FUENTE_PEPE);
             } catch (UiException e) {
                 e.printStackTrace();
             }
@@ -167,7 +167,7 @@ public class IncidRegAcTest {
         onView(withId(R.id.incid_reg_desc_ed)).perform(typeText("descripcion = not valid"));
         IncidenciaBean incidenciaBean = new IncidenciaBean();
 
-        assertThat(incidenciaBean.makeIncidUserComu(mActivity.mRegAcFragment.mFragmentView,
+        assertThat(incidenciaBean.makeIncidenciaUser(mActivity.mRegAcFragment.mFragmentView,
                 getErrorMsgBuilder(mActivity)), nullValue());
 
         onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
@@ -189,6 +189,6 @@ public class IncidRegAcTest {
         onView(withId(R.id.incid_reg_desc_ed)).perform(typeText("descripcion is valid"));
         onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
 
-        onView(withId(R.id.incid_see_by_user_ac)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_see_by_comu_ac)).check(matches(isDisplayed()));
     }
 }

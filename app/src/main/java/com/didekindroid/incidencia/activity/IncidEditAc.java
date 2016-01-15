@@ -4,8 +4,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import com.didekin.incidservice.domain.IncidUserComu;
-import com.didekindroid.incidencia.dominio.IncidUserComuIntent;
+import com.didekin.incidservice.domain.IncidenciaUser;
+import com.didekindroid.incidencia.dominio.IncidenciaUserIntent;
 
 import static com.didekindroid.common.utils.AppKeysForBundle.INCIDENCIA_ROL;
 import static com.didekindroid.common.utils.AppKeysForBundle.INCID_USERCOMU_LIST_OBJECT;
@@ -13,7 +13,7 @@ import static com.didekindroid.common.utils.AppKeysForBundle.INCID_USERCOMU_LIST
 /**
  * Preconditions:
  * 1. An intent extra is passed with the functional role of the user.
- * 2. An intent extra is passed with the object IncidUserComu to be edited.
+ * 2. An intent extra is passed with the object IncidenciaUser to be edited.
  * 3. Edition capabilities are dependent on:
  *      -- the functional role of the user.
  *      -- the rol of the user as original author or futher comentator.
@@ -23,7 +23,7 @@ import static com.didekindroid.common.utils.AppKeysForBundle.INCID_USERCOMU_LIST
 public class IncidEditAc extends AppCompatActivity {
 
     private static final String TAG = IncidEditAc.class.getCanonicalName();
-    private IncidUserComu mIncidUserComu;
+    private IncidenciaUser mIncidenciaUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -31,9 +31,9 @@ public class IncidEditAc extends AppCompatActivity {
         Log.d(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
 
-        final IncidUserComuIntent incidUserComuIntent =
-                (IncidUserComuIntent) getIntent().getSerializableExtra(INCID_USERCOMU_LIST_OBJECT.extra);
-        mIncidUserComu = incidUserComuIntent.getIncidUserComu();
+        final IncidenciaUserIntent incidenciaUserIntent =
+                (IncidenciaUserIntent) getIntent().getSerializableExtra(INCID_USERCOMU_LIST_OBJECT.extra);
+        mIncidenciaUser = incidenciaUserIntent.getIncidenciaUser();
         final String functionalRole = getIntent().getStringExtra(INCIDENCIA_ROL.extra);
     }
 

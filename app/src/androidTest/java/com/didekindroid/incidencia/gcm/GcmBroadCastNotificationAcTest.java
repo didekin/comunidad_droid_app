@@ -16,7 +16,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.NotificationCompat.Builder;
 
 import com.didekindroid.R;
-import com.didekindroid.incidencia.activity.IncidSeeByUserAc;
+import com.didekindroid.incidencia.activity.IncidSeeByComuAc;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -71,9 +71,9 @@ public class GcmBroadCastNotificationAcTest {
                 .setContentText(context.getString(R.string.incid_gcm_nueva_incidencia_body))
                 .setSubText(context.getString(R.string.incid_gcm_nueva_incidencia_subtext));
 
-        Intent resultIntent = new Intent(context, IncidSeeByUserAc.class);
+        Intent resultIntent = new Intent(context, IncidSeeByComuAc.class);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-        stackBuilder.addParentStack(IncidSeeByUserAc.class);
+        stackBuilder.addParentStack(IncidSeeByComuAc.class);
         stackBuilder.addNextIntent(resultIntent);
         PendingIntent resultPendingIntent =
                 stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);

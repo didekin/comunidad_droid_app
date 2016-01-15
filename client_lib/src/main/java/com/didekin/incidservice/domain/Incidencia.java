@@ -1,8 +1,11 @@
 package com.didekin.incidservice.domain;
 
 import com.didekin.common.BeanBuilder;
+import com.didekin.serviceone.domain.Comunidad;
 
 import java.sql.Timestamp;
+
+import static com.didekin.common.exception.DidekinExceptionMsg.INCIDENCIA_WRONG_INIT;
 
 /**
  * User: pedro@didekin
@@ -13,25 +16,34 @@ import java.sql.Timestamp;
 public final class Incidencia {
 
     private final long incidenciaId;
+    private final Comunidad comunidad;
     private final String descripcion;
     private final AmbitoIncidencia ambitoIncidencia;
     private final Timestamp fechaAlta;
     private final Timestamp fechaCierre;
+    private final float importanciaAvg;
     private final ResolucionIncid resolucionIncid;
 
     protected Incidencia(IncidenciaBuilder incidenciaBuilder)
     {
         incidenciaId = incidenciaBuilder.incidenciaId;
+        comunidad = incidenciaBuilder.comunidad;
         descripcion = incidenciaBuilder.descripcion;
         ambitoIncidencia = incidenciaBuilder.ambitoIncidencia;
         fechaAlta = incidenciaBuilder.fechaAlta;
         fechaCierre = incidenciaBuilder.fechaCierre;
+        importanciaAvg = incidenciaBuilder.importanciaAvg;
         resolucionIncid = incidenciaBuilder.resolucionIncid;
     }
 
     public long getIncidenciaId()
     {
         return incidenciaId;
+    }
+
+    public Comunidad getComunidad()
+    {
+        return comunidad;
     }
 
     public String getDescripcion()
@@ -54,6 +66,11 @@ public final class Incidencia {
         return fechaCierre;
     }
 
+    public float getImportanciaAvg()
+    {
+        return importanciaAvg;
+    }
+
     public ResolucionIncid getResolucionIncid()
     {
         return resolucionIncid;
@@ -68,7 +85,6 @@ public final class Incidencia {
         Incidencia that = (Incidencia) o;
 
         return incidenciaId == that.incidenciaId;
-
     }
 
     @Override
@@ -82,10 +98,12 @@ public final class Incidencia {
     public final static class IncidenciaBuilder implements BeanBuilder<Incidencia> {
 
         private long incidenciaId;
+        private Comunidad comunidad;
         private String descripcion;
         private AmbitoIncidencia ambitoIncidencia;
         private Timestamp fechaAlta;
         private Timestamp fechaCierre;
+        private float importanciaAvg;
         private ResolucionIncid resolucionIncid;
 
         public IncidenciaBuilder()
@@ -95,6 +113,12 @@ public final class Incidencia {
         public IncidenciaBuilder incidenciaId(long initValue)
         {
             incidenciaId = initValue;
+            return this;
+        }
+
+        public IncidenciaBuilder comunidad(Comunidad initValue)
+        {
+            comunidad = initValue;
             return this;
         }
 
@@ -122,6 +146,12 @@ public final class Incidencia {
             return this;
         }
 
+        public IncidenciaBuilder importanciaAvg(float initValue)
+        {
+            importanciaAvg = initValue;
+            return this;
+        }
+
         public IncidenciaBuilder resolucion(ResolucionIncid initValue)
         {
             resolucionIncid = initValue;
@@ -131,10 +161,12 @@ public final class Incidencia {
         public IncidenciaBuilder copyIncidencia(Incidencia incidencia)
         {
             incidenciaId(incidencia.getIncidenciaId());
+            comunidad(incidencia.getComunidad());
             descripcion(incidencia.getDescripcion());
             ambitoIncid(incidencia.getAmbitoIncidencia());
             fechaAlta(incidencia.getFechaAlta());
             fechaCierre(incidencia.getFechaCierre());
+            importanciaAvg(incidencia.getImportanciaAvg());
             resolucion(incidencia.getResolucionIncid());
             return this;
         }
@@ -142,10 +174,13 @@ public final class Incidencia {
         @Override
         public Incidencia build()
         {
-            return new Incidencia(this);
+            Incidencia incidencia = new Incidencia(this);
+            if (incidencia.getComunidad() == null ||
+                    (incidencia.getIncidenciaId() <= 0 &&
+                            (incidencia.getDescripcion() == null || incidencia.getAmbitoIncidencia() == null))) {
+                throw new IllegalStateException(INCIDENCIA_WRONG_INIT.toString());
+            }
+            return incidencia;
         }
-
-//        ........................ HELPER METHODS ......................
-
     }
 }

@@ -4,11 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
 
-import com.didekindroid.incidencia.activity.IncidClosedByUserAc;
+import com.didekindroid.incidencia.activity.IncidSeeByComuAc;
+import com.didekindroid.incidencia.activity.IncidSeeClosedByComuAc;
 import com.didekindroid.incidencia.activity.IncidRegAc;
-import com.didekindroid.usuario.activity.ComuSearchAc;
-
-import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_ID;
 
 /**
  * User: pedro@didekin
@@ -17,12 +15,22 @@ import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_ID;
  */
 public enum IncidenciaMenu {
 
-    INCID_CLOSED_BY_USER_AC {
+    INCID_SEE_BY_COMU_AC {
         @Override
         public void doMenuItem(Activity activity)
         {
-            Log.d(TAG, "incid_reg_ac.doMenuItem()");
-            Intent intent = new Intent(activity, IncidClosedByUserAc.class);
+            Log.d(TAG, "incid_see_by_comu.doMenuItem()");
+            Intent intent = new Intent(activity, IncidSeeByComuAc.class);
+            activity.startActivity(intent);
+        }
+    },
+
+    INCID_CLOSED_BY_COMU_AC {
+        @Override
+        public void doMenuItem(Activity activity)
+        {
+            Log.d(TAG, "incid_closed_by_comu.doMenuItem()");
+            Intent intent = new Intent(activity, IncidSeeClosedByComuAc.class);
             activity.startActivity(intent);
         }
     },

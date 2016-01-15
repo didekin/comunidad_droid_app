@@ -66,20 +66,20 @@
         <!-- INCIDENCIA -->
         <!-- **************************************************************** -->
         <activity
-            android:name=".incidencia.activity.IncidClosedByUserAc"
+            android:name=".incidencia.activity.IncidSeeClosedByComuAc"
             android:label="@string/incid_closed_by_user_ac_label"
-            android:parentActivityName=".incidencia.activity.IncidSeeByUserAc">
+            android:parentActivityName=".incidencia.activity.IncidSeeByComuAc">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".incidencia.activity.IncidSeeByUserAc"/>
+                android:value=".incidencia.activity.IncidSeeByComuAc"/>
         </activity>
         <activity
             android:name=".incidencia.activity.IncidEditAc"
             android:label="@string/incid_edit_ac_label"
-            android:parentActivityName=".incidencia.activity.IncidSeeByUserAc">
+            android:parentActivityName=".incidencia.activity.IncidSeeByComuAc">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".incidencia.activity.IncidSeeByUserAc"/>
+                android:value=".incidencia.activity.IncidSeeByComuAc"/>
         </activity>
         <activity
             android:name=".incidencia.activity.IncidRegAc"
@@ -90,7 +90,7 @@
                 android:value=".usuario.activity.UserComuDataAc"/>
         </activity>
         <activity
-            android:name=".incidencia.activity.IncidSeeByUserAc"
+            android:name=".incidencia.activity.IncidSeeByComuAc"
             android:label="@string/incid_see_by_user_ac_label"
             android:parentActivityName=".usuario.activity.UserComuDataAc">
             <meta-data

@@ -57,7 +57,7 @@ public class IncidRegAcTest_gcm1 {
         protected void beforeActivityLaunched()
         {
             Context context = InstrumentationRegistry.getTargetContext();
-//            updateIsGcmTokenSentServer(false, context);
+            updateIsGcmTokenSentServer(false, context);
             checkState(!isGcmTokenSentServer(context));
             try {
                 checkState(ServOne.getGcmToken() == null);

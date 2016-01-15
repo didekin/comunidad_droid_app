@@ -10,10 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.didekin.incidservice.domain.IncidUserComu;
+import com.didekin.incidservice.domain.Incidencia;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
-import com.didekindroid.common.utils.ViewsIDs;
 
 import java.util.List;
 
@@ -25,15 +24,16 @@ import static com.google.common.base.Preconditions.checkState;
  * <p/>
  * Postconditions:
  */
-public class IncidSeeByUserListFr extends ListFragment {
+public class IncidSeeClosedByComuListFr extends ListFragment {
 
-    public static final String TAG = IncidSeeByUserListFr.class.getCanonicalName();
+    public static final String TAG = IncidSeeClosedByComuListFr.class.getCanonicalName();
 
     //The Adapter which will be used to populate the ListView.
-    IncidSeeByUserAdapter mAdapter;
+    IncidSeeByComuAdapter mAdapter;
     // The listener for dealing with the selection event of a line item (comunidad).
     IncidListListener mListener;
-    ListView mView;
+    View mView;
+    ListView mListView;
 
     @Override
     public void onAttach(Context context)
@@ -54,7 +54,8 @@ public class IncidSeeByUserListFr extends ListFragment {
                              Bundle savedInstanceState)
     {
         Log.d(TAG, "onCreateView()");
-        return super.onCreateView(inflater, container, savedInstanceState);
+        mView = inflater.inflate(R.layout.incid_see_generic_fr_layout, container, false);
+        return mView;
     }
 
     @Override
@@ -64,17 +65,14 @@ public class IncidSeeByUserListFr extends ListFragment {
         super.onActivityCreated(savedInstanceState);
 
         mListener = (IncidListListener) getActivity();
-        mAdapter = new IncidSeeByUserAdapter(getActivity());
+        mAdapter = new IncidSeeByComuAdapter(getActivity());
         // Loading data ...
-//        new IncidByUserComuLoader().execute();
+//        new IncidClosedByUserComuLoader().execute();
 
-        mView = getListView();
-        mView.setId(ViewsIDs.INCID_SEE_BY_USER.idView);
-        mView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        //Text for no result.
-        setEmptyText(getResources().getText(R.string.no_incidencia_by_user));
-        //View for no result
-        /*mView.setEmptyView(myView);*/
+        mListView = (ListView) mView.findViewById(android.R.id.list);
+        mListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        //TextView for no result.
+        mListView.setEmptyView(mView.findViewById(android.R.id.empty));
     }
 
     @Override
@@ -96,11 +94,11 @@ public class IncidSeeByUserListFr extends ListFragment {
     {
         Log.d(TAG, "onListItemClick()");
 
-        mView.setItemChecked(position, true);
+        mListView.setItemChecked(position, true);
         v.setSelected(true);
         if (mListener != null) {
-            IncidUserComu incidUserComu = (IncidUserComu) mView.getItemAtPosition(position);
-            mListener.onIncidenciaSelected(incidUserComu, position);
+            Incidencia incidencia = (Incidencia) mListView.getItemAtPosition(position);
+            mListener.onIncidenciaSelected(incidencia, position);
         }
     }
 
@@ -139,46 +137,40 @@ public class IncidSeeByUserListFr extends ListFragment {
         super.onDetach();
     }
 
-    // .......... Interface to communicate with the Activity ...................
-
-    public interface IncidListListener {
-        void onIncidenciaSelected(IncidUserComu incidencia, int position);
-    }
-
     //    ============================================================
     //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
     //    ============================================================
 
-    class IncidByUserComuLoader extends AsyncTask<Void, Void, List<IncidUserComu>> {
+    class IncidClosedByUserComuLoader extends AsyncTask<Long, Void, List<Incidencia>> {
 
-        private final String TAG = IncidByUserComuLoader.class.getCanonicalName();
+        private final String TAG = IncidClosedByUserComuLoader.class.getCanonicalName();
         UiException uiException;
 
         @Override
-        protected List<IncidUserComu> doInBackground(Void... aVoid)
+        protected List<Incidencia> doInBackground(Long... comunidades)
         {
             Log.d(TAG, "doInBackground()");
-            List<IncidUserComu> incidUserComuList = null;
+            List<Incidencia> incidencias = null;
             try {
-                incidUserComuList = IncidenciaServ.incidSeeByUser();
+                incidencias = IncidenciaServ.incidSeeClosedByComu(comunidades[0]);
             } catch (UiException e) {
                 uiException = e;
             }
-            return incidUserComuList;
+            return incidencias;
         }
 
         @Override
-        protected void onPostExecute(List<IncidUserComu> incidUserComuList)
+        protected void onPostExecute(List<Incidencia> incidencias)
         {
             Log.d(TAG, "onPostExecute()");
-            if (incidUserComuList != null && incidUserComuList.size() > 0) {
+            if (incidencias != null && incidencias.size() > 0) {
                 Log.d(TAG, "onPostExecute(): incidUserComuList != null");
-                mAdapter.addAll(incidUserComuList);
+                mAdapter.addAll(incidencias);
                 setListAdapter(mAdapter);
             }
             if (uiException != null) {  // action: LOGIN.
                 Log.d(TAG, "onPostExecute(): uiException != null");
-                checkState(incidUserComuList == null);
+                checkState(incidencias == null);
                 uiException.getAction().doAction(getActivity(), uiException.getResourceId());
             }
         }

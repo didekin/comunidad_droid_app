@@ -22,10 +22,10 @@
     <string name="no_incidencia_by_user">No existen incidencias</string>
     <!-- ============================== MENUS ================================= -->
     <string name="incid_reg_ac_mn">Nueva incidencia</string>
-    <string name="incid_see_by_user_ac_mn">Tus incidencias</string>
-    <string name="incid_closed_see_by_useromu_ac_mn">Incidencias cerradas</string>
+    <string name="incid_see_by_comu_ac_mn">Incidencias abiertas</string>
+    <string name="incid_closed_see_by_usercomu_ac_mn">Incidencias cerradas</string>
     <!-- ============================= ACTIVITIES ============================= -->
-    <!-- ============ IncidClosedByUserAc ========== -->
+    <!-- ============ IncidSeeClosedByComuAc ========== -->
     <string name="incid_closed_by_user_ac_label">Incidencias cerradas</string>
     <!-- =============== IncidEditAc =============== -->
     <string name="incid_edit_ac_label">Una incidencia</string>
@@ -41,7 +41,7 @@
     <string name="incid_reg_importancia">Importancia</string>
     <string name="incid_reg_ambitoIncidencia">Ámbito de incidencia</string>
     <string name="incid_reg_descripcion">Descripcion</string>
-    <!-- =============== IncidSeeByUserAc =============== -->
+    <!-- =============== IncidSeeByComuAc =============== -->
     <string name="incid_see_by_user_ac_label">Tus incidencias</string>
     <string name="incid_fecha_alta_rot">Desde:</string>
     <string name="incid_importancia_user_rot">Importancia:</string>
