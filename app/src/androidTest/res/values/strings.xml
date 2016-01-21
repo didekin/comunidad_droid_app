@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <!--URLs-->
-    <string name="webservice_url_test">http://10.0.3.2:9000/hello-world</string>
-</resources>

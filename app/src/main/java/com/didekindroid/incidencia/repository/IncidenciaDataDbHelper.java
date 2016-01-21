@@ -83,7 +83,7 @@ public class IncidenciaDataDbHelper extends SQLiteOpenHelper {
         onCreate(mDataBase);
     }
 
-    void dropAllTables()
+    public void dropAllTables()
     {
         Log.d(TAG, "dropAllTables()");
         if (mDataBase != null) {

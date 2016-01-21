@@ -6,7 +6,6 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.common.exception.InServiceException;
 import com.didekin.common.oauth2.OauthToken.AccessToken;
-import com.didekin.common.oauth2.Rol;
 import com.didekin.serviceone.domain.Comunidad;
 import com.didekin.serviceone.domain.Municipio;
 import com.didekin.serviceone.domain.Provincia;
@@ -52,7 +51,6 @@ import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAnd
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_LA_PLAZUELA_5;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_PLAZUELA5_JUAN;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_PLAZUELA5_PEPE;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_JUAN;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_PEPE;
@@ -71,7 +69,6 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.text.IsEmptyString.isEmptyOrNullString;
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
@@ -184,15 +181,6 @@ public class UsuarioServiceTest {
     }
 
     @Test
-    public  void testGetHighestRoleFunction() throws UiException
-    {
-        whatClean = CLEAN_PEPE;
-        signUpAndUpdateTk(COMU_PLAZUELA5_PEPE);
-        List<Comunidad> comunidades = ServOne.getComusByUser();
-        assertThat(ServOne.getHighestRoleFunction(comunidades.get(0).getC_Id()),is(Rol.PRESIDENTE.function));
-    }
-
-    @Test
     public void testGetUserComuByUserAndComu() throws UiException
     {
         whatClean = CLEAN_JUAN;
@@ -200,7 +188,6 @@ public class UsuarioServiceTest {
         signUpAndUpdateTk(COMU_REAL_JUAN);
         Comunidad comunidad = ServOne.getComusByUser().get(0);
         assertThat(ServOne.getUserComuByUserAndComu(comunidad.getC_Id()), is(COMU_REAL_JUAN));
-        assertThat(ServOne.getUserComuByUserAndComu(comunidad.getC_Id() + 1L), nullValue());
     }
 
     @Test

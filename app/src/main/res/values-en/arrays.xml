@@ -1,13 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-        <string-array name="MaxOffersArray">
-            <item>25</item>
-            <item>50</item>
-            <item>100</item>
-        </string-array>
-        <string-array name="MaxOffersValues">
-            <item>25</item>
-            <item>50</item>
-            <item>100</item>
-        </string-array>
+    <string-array name="IncidResolucionFaseArray">
+        <item>En estudio</item>
+        <item>Planificada</item>
+        <item>En ejecución</item>
+        <item>Resuelta</item>
+        <item>Cerrada</item>
+    </string-array>
+    <string-array name="IncidImportanciaArray">
+        <!--0-->
+        <item>importancia</item>
+        <!--1-->
+        <item>Baja</item>
+        <!--2-->
+        <item>Media</item>
+        <!--3-->
+        <item>Alta</item>
+        <!--4-->
+        <item>Urgente</item>
+    </string-array>
 </resources>

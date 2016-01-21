@@ -14,6 +14,8 @@ import com.didekindroid.R;
 import com.didekindroid.common.utils.UIutils;
 import com.didekindroid.incidencia.repository.IncidenciaDataDbHelper;
 
+import static com.didekindroid.common.utils.UIutils.formatTimeStampToString;
+
 /**
  * User: pedro@didekin
  * Date: 18/12/15
@@ -47,24 +49,18 @@ public class IncidSeeByComuAdapter extends ArrayAdapter<Incidencia> {
     }
 
     private class IncidenciaViewHolder {
-
-        final TextView mNombreComunidadView;
         final TextView mDescripcionView;
         final TextView mFechaAltaView;
         final TextView mAmbitoView;
-        final TextView mImportanciaUserView;
         final TextView mImportanciaComuView;
 
         final Resources resources;
 
-
         public IncidenciaViewHolder(View convertView)
         {
-            mNombreComunidadView = (TextView) convertView.findViewById(R.id.nombreComunidad_view);
             mDescripcionView = (TextView) convertView.findViewById(R.id.incid_descripcion_view);
             mFechaAltaView = (TextView) convertView.findViewById(R.id.incid_fecha_alta_view);
             mAmbitoView = (TextView) convertView.findViewById(R.id.incid_ambito_view);
-            mImportanciaUserView = (TextView) convertView.findViewById(R.id.incid_importancia_user_view);
             mImportanciaComuView = (TextView) convertView.findViewById(R.id.incid_importancia_comunidad_view);
 
             resources = convertView.getContext().getResources();
@@ -73,9 +69,8 @@ public class IncidSeeByComuAdapter extends ArrayAdapter<Incidencia> {
         void initializeTextInViews(Incidencia incidencia)
         {
             Log.d(TAG, "initializeTextInViews()");
-            mNombreComunidadView.setText(incidencia.getComunidad().getNombreComunidad());
             mDescripcionView.setText(incidencia.getDescripcion());
-            mFechaAltaView.setText(UIutils.formatTimeStampToString(incidencia.getFechaAlta()));
+            mFechaAltaView.setText(formatTimeStampToString(incidencia.getFechaAlta()));
             short ambitoPk = incidencia.getAmbitoIncidencia().getAmbitoId();
             mAmbitoView.setText(new IncidenciaDataDbHelper(getContext()).getAmbitoDescByPk(ambitoPk));
             int mImportanciaAvg = Math.round(incidencia.getImportanciaAvg());

@@ -215,6 +215,7 @@ public class IncidSeeByComuListFr extends ListFragment implements ComuSpinnerSet
             Log.d(TAG, "onPostExecute()");
             if (incidencias != null && incidencias.size() > 0) {
                 Log.d(TAG, "onPostExecute(): incidUserComuList != null");
+                mAdapter.clear();
                 mAdapter.addAll(incidencias);
                 setListAdapter(mAdapter);
             }

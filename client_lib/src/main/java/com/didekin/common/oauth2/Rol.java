@@ -38,4 +38,8 @@ public enum Rol {
     {
         return mapFuntionToRol.get(rolFunction);
     }
+
+    public static boolean hasFunctionAdmonPowers(String function){
+        return getRolFromFunction(function).authority.equals("admon");
+    }
 }

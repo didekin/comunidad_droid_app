@@ -5,9 +5,19 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_marginTop="@dimen/app_bar_bottom_margin">
 
+    <TextView
+        android:id="@+id/incid_comunidad_rot"
+        style="@style/textBase.textFieldLabel1"
+        android:text="@string/incid_comunidad_rot"/>
+
     <Spinner
         android:id="@+id/incid_reg_comunidad_spinner"
         style="@style/spinnerBase"/>
+
+    <TextView
+        android:id="@+id/incid_incidencias_rot"
+        style="@style/textBase.ListLabelColor"
+        android:text="@string/incid_incidencias_rot"/>
 
     <ListView
         android:id="@id/android:list"

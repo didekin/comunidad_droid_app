@@ -35,12 +35,12 @@ import static android.support.test.espresso.matcher.ViewMatchers.withContentDesc
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.TokenHandler.TKhandler;
+import static com.didekindroid.common.utils.ActivityTestUtils.checkToastInTest;
+import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_SEARCH;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.utils.ViewsIDs.COMU_SEARCH_RESULTS;
 import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRO;
-import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_SEARCH;
-import static com.didekindroid.common.utils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanTwoUsers;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanWithTkhandler;
@@ -54,11 +54,9 @@ import static com.didekindroid.usuario.dominio.DomainDataUtils.makeListTwoUserCo
 import static com.didekindroid.usuario.dominio.DomainDataUtils.makeUsuario;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.makeUsuarioComunidad;
 import static com.google.android.apps.common.testing.ui.espresso.sample.LongListMatchers.withAdaptedData;
-import static com.google.android.apps.common.testing.ui.espresso.sample.LongListMatchers.withItemContent;
 import static com.google.common.base.Preconditions.checkState;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;

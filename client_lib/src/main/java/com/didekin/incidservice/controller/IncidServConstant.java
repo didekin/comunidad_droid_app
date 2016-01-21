@@ -17,5 +17,6 @@ public final class IncidServConstant {
     // Paths.
     public static final String SEE_INCID_BY_COMU = INCID_READ;
     public static final String SEE_INCID_CLOSED_BY_COMU = INCID_READ + "/closed";
-    public static final String REG_INCID_USERCOMU = INCID_WRITE + "/reg_incidusercomu";
+    public static final String GET_INCID_USER_BY_INCID = INCID_READ + "/incidenciaUser";
+    public static final String REG_INCID_USER = INCID_WRITE + "/reg_incidenciaUser";
 }

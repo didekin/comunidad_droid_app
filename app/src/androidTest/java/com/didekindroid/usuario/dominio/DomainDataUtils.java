@@ -95,16 +95,13 @@ public final class DomainDataUtils {
             "portalA", null, "planta2", null, INQ.function);
 
     public static final UsuarioComunidad COMU_ESCORIAL_PEPE = makeUsuarioComunidad(COMU_EL_ESCORIAL, USER_PEPE,
-            "portal22", "esc22", "planta22", "door22", PRE.function.concat(",")
-                    .concat(INQ.function));
+            "portal22", "esc22", "planta22", "door22", PRE.function.concat(",").concat(INQ.function));
 
     public static final UsuarioComunidad COMU_PLAZUELA5_PEPE = makeUsuarioComunidad(COMU_LA_PLAZUELA_5, USER_PEPE,
-            "portal11", "esc11", "planta11", "door11", PRE.function.concat(",")
-                    .concat(PRO.function));
+            "portal11", "esc11", "planta11", "door11", PRE.function.concat(",").concat(PRO.function));
 
     public static final UsuarioComunidad COMU_LA_FUENTE_PEPE = makeUsuarioComunidad(COMU_LA_FUENTE, USER_PEPE,
-            "portal33", "esc33", "planta33", "door33", ADM.function.concat(",")
-                    .concat(PRE.function));
+            "portal33", "esc33", "planta33", "door33", ADM.function.concat(",").concat(PRE.function));
 
     public static Comunidad makeComunidad(String tipoVia, String nombreVia, short numero, String sufijoNumero,
                                           Municipio municipio)

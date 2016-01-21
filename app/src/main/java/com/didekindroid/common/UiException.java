@@ -11,9 +11,11 @@ import android.content.Intent;
 import android.widget.Toast;
 
 import com.didekin.common.exception.InServiceException;
+import com.didekindroid.incidencia.activity.IncidSeeByComuAc;
 import com.didekindroid.usuario.activity.ComuSearchAc;
 import com.didekindroid.usuario.activity.LoginAc;
 
+import static android.widget.Toast.LENGTH_SHORT;
 import static com.didekindroid.common.TokenHandler.TKhandler;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.utils.UIutils.makeToast;
@@ -70,9 +72,19 @@ public class UiException extends Exception {
             @Override
             public void doAction(Activity activity, int toastResource)
             {
-                makeToast(activity, toastResource, Toast.LENGTH_SHORT);
+                makeToast(activity, toastResource, LENGTH_SHORT);
                 Intent intent = new Intent(activity, ComuSearchAc.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                activity.startActivity(intent);
+                activity.finish();
+            }
+        },
+        INCID_SEE_BY_COMU {
+            @Override
+            public void doAction(Activity activity, int toastResource)
+            {
+                makeToast(activity, toastResource, LENGTH_SHORT);
+                Intent intent = new Intent(activity, IncidSeeByComuAc.class);
                 activity.startActivity(intent);
                 activity.finish();
             }

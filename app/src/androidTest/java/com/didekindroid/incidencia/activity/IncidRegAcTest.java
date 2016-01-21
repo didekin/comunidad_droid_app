@@ -6,10 +6,12 @@ import android.support.test.runner.AndroidJUnit4;
 import android.widget.ArrayAdapter;
 import android.widget.CursorAdapter;
 
+import com.didekin.incidservice.domain.Incidencia;
 import com.didekin.serviceone.domain.Comunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
 import com.didekindroid.incidencia.dominio.IncidenciaBean;
+import com.didekindroid.incidencia.webservices.IncidService;
 import com.didekindroid.usuario.activity.utils.CleanUserEnum;
 
 import org.junit.After;
@@ -18,6 +20,8 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.List;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
@@ -40,6 +44,7 @@ import static com.didekindroid.incidencia.repository.IncidenciaDataDb.AmbitoInci
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.regSeveralUserComuSameUser;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_ESCORIAL_PEPE;
+import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_LA_FUENTE;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_LA_FUENTE_PEPE;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_PEPE;
 import static org.hamcrest.CoreMatchers.instanceOf;
@@ -60,6 +65,8 @@ public class IncidRegAcTest {
 
     private IncidRegAc mActivity;
     private CleanUserEnum whatToClean = CleanUserEnum.CLEAN_PEPE;
+    private Comunidad comunidadByDefault;
+    ArrayAdapter<Comunidad> comunidadesAdapter;
 
     @Rule
     public IntentsTestRule<IncidRegAc> intentRule = new IntentsTestRule<IncidRegAc>(IncidRegAc.class) {
@@ -85,6 +92,8 @@ public class IncidRegAcTest {
     public void setUp() throws Exception
     {
         mActivity = intentRule.getActivity();
+        comunidadesAdapter = (ArrayAdapter<Comunidad>) mActivity.mRegAcFragment.mComunidadSpinner.getAdapter();
+        comunidadByDefault = comunidadesAdapter.getItem(0);
     }
 
     @After
@@ -105,14 +114,12 @@ public class IncidRegAcTest {
         onView(withId(R.id.incid_reg_ac_layout)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_reg_frg)).check(matches(isDisplayed()));
 
-        ArrayAdapter<Comunidad> comunidadesAdapter = (ArrayAdapter<Comunidad>) mActivity.mRegAcFragment.mComunidadSpinner.getAdapter();
-        assertThat(comunidadesAdapter.getCount(),is(3));
-        Comunidad comunidad_0 = comunidadesAdapter.getItem(0);
+        assertThat(comunidadesAdapter.getCount(), is(3));
 
         onView(allOf(
                 withId(R.id.app_spinner_1_dropdown_item),
                 withParent(withId(R.id.incid_reg_comunidad_spinner))))
-                .check(matches(withText(is(comunidad_0.getNombreComunidad()))))
+                .check(matches(withText(is(comunidadByDefault.getNombreComunidad()))))
                 .check(matches(isDisplayed()));
 
         onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.incid_reg_ambito_spinner))))
@@ -175,13 +182,13 @@ public class IncidRegAcTest {
     }
 
     @Test
-    public void testRegisterIncidencia_2()
+    public void testRegisterIncidencia_2() throws UiException
     {
         onView(withId(R.id.incid_reg_importancia_spinner)).perform(click());
         onData
                 (allOf(
-                                is(instanceOf(String.class)),
-                                is(mActivity.getResources().getStringArray(R.array.IncidImportanciaArray)[4]))
+                        is(instanceOf(String.class)),
+                        is(mActivity.getResources().getStringArray(R.array.IncidImportanciaArray)[4]))
                 )
                 .perform(click());
         onView(withId(R.id.incid_reg_ambito_spinner)).perform(click());
@@ -190,5 +197,37 @@ public class IncidRegAcTest {
         onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
 
         onView(withId(R.id.incid_see_by_comu_ac)).check(matches(isDisplayed()));
+        List<Incidencia> incidencias = IncidService.IncidenciaServ.incidSeeByComu(comunidadByDefault.getC_Id());
+        assertThat(incidencias.size(), is(1));
+        assertThat(incidencias.get(0).getComunidad(), is(comunidadByDefault));
+    }
+
+    @Test
+    public void testRegisterIncidencia_3() throws UiException
+    {
+        // Probamos cambio de comunidad en spinner: Calle La Fuente.
+        Comunidad comunidadFuente = comunidadesAdapter.getItem(1);
+        assertThat(comunidadFuente.getNombreComunidad(), is(COMU_LA_FUENTE.getNombreComunidad()));
+        onView(withId(R.id.incid_reg_comunidad_spinner)).perform(click());
+        onData(allOf(is(instanceOf(Comunidad.class)), is(COMU_LA_FUENTE))).perform(click()).check(matches(isDisplayed()));
+
+        // Registro de incidencia.
+        onView(withId(R.id.incid_reg_importancia_spinner)).perform(click());
+        onData
+                (allOf(
+                                is(instanceOf(String.class)),
+                                is(mActivity.getResources().getStringArray(R.array.IncidImportanciaArray)[4]))
+                )
+                .perform(click());
+
+        onView(withId(R.id.incid_reg_ambito_spinner)).perform(click());
+        onData(withRowString(1, "Calefacción comunitaria")).perform(click());
+        onView(withId(R.id.incid_reg_desc_ed)).perform(typeText("Incidencia La Fuente"));
+        onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
+
+        onView(withId(R.id.incid_see_by_comu_ac)).check(matches(isDisplayed()));
+        List<Incidencia> incidencias = IncidService.IncidenciaServ.incidSeeByComu(comunidadFuente.getC_Id());
+        assertThat(incidencias.size(), is(1));
+        assertThat(incidencias.get(0).getComunidad().getNombreComunidad(), is(COMU_LA_FUENTE.getNombreComunidad()));
     }
 }

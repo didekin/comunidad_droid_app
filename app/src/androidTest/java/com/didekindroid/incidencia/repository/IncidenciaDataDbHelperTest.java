@@ -31,6 +31,7 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class IncidenciaDataDbHelperTest {
 
+    public static final String DB_PATH = "data/data/com.didekindroid/databases/";
     private IncidenciaDataDbHelper dbHelper;
     Context context;
     SQLiteDatabase database;
@@ -106,7 +107,7 @@ public class IncidenciaDataDbHelperTest {
     {
         dbHelper.dropAllTables();
         dbHelper.close();
-        String dBFileName = "data/data/com.didekindroid/databases/".concat(IncidenciaDataDbHelper.DB_NAME);
+        String dBFileName = DB_PATH.concat(IncidenciaDataDbHelper.DB_NAME);
         deleteDatabase(new File(dBFileName));
     }
 }

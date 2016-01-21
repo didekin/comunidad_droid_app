@@ -6,6 +6,7 @@ import java.util.Set;
 
 import static com.didekin.common.exception.DidekinExceptionMsg.HttpStatus.bad_request_status;
 import static com.didekin.common.exception.DidekinExceptionMsg.HttpStatus.conflict_status;
+import static com.didekin.common.exception.DidekinExceptionMsg.HttpStatus.entity_not_found_status;
 import static com.didekin.common.exception.DidekinExceptionMsg.HttpStatus.forbidden_status;
 import static com.didekin.common.exception.DidekinExceptionMsg.HttpStatus.not_found_status;
 import static com.didekin.common.exception.DidekinExceptionMsg.HttpStatus.postcondition_fail_status;
@@ -47,6 +48,7 @@ public enum DidekinExceptionMsg {
 
         bad_request_status("Bad Request", 400),
         conflict_status(null, 409),
+        entity_not_found_status(null, 404),
         forbidden_status(null, 403),
         not_found_status("Not Found", 404),
         precondition_fail_status(null, 412),
@@ -72,21 +74,21 @@ public enum DidekinExceptionMsg {
         messageToStatusCode.put(BAD_REQUEST, bad_request_status);
         messageToStatusCode.put(COMUNIDAD_NOT_COMPARABLE, precondition_fail_status);
         messageToStatusCode.put(COMUNIDAD_DUPLICATE, conflict_status);
-        messageToStatusCode.put(COMUNIDAD_NOT_FOUND, not_found_status);
+        messageToStatusCode.put(COMUNIDAD_NOT_FOUND, entity_not_found_status);
         messageToStatusCode.put(COMUNIDAD_NOT_HASHABLE, precondition_fail_status);
         messageToStatusCode.put(COMUNIDAD_WRONG_INIT, precondition_fail_status);
-        messageToStatusCode.put(INCIDENCIA_NOT_FOUND,not_found_status);
-        messageToStatusCode.put(INCIDENCIA_WRONG_INIT,precondition_fail_status);
+        messageToStatusCode.put(INCIDENCIA_NOT_FOUND, entity_not_found_status);
+        messageToStatusCode.put(INCIDENCIA_WRONG_INIT, precondition_fail_status);
         messageToStatusCode.put(NOT_FOUND, not_found_status);
         messageToStatusCode.put(ROLES_NOT_FOUND, not_found_status);
         messageToStatusCode.put(SUFIJO_NUM_IN_COMUNIDAD_NULL, precondition_fail_status);
         messageToStatusCode.put(TOKEN_NOT_DELETED, postcondition_fail_status);
         messageToStatusCode.put(UNAUTHORIZED, unauthorized_status);
         messageToStatusCode.put(UNAUTHORIZED_TX_TO_USER, forbidden_status);
-        messageToStatusCode.put(USER_COMU_NOT_FOUND, not_found_status);
-        messageToStatusCode.put(USER_DATA_NOT_MODIFIED,postcondition_fail_status);
+        messageToStatusCode.put(USER_COMU_NOT_FOUND, entity_not_found_status);
+        messageToStatusCode.put(USER_DATA_NOT_MODIFIED, postcondition_fail_status);
         messageToStatusCode.put(USER_NOT_COMPARABLE, precondition_fail_status);
-        messageToStatusCode.put(USER_NAME_NOT_FOUND, not_found_status);
+        messageToStatusCode.put(USER_NAME_NOT_FOUND, entity_not_found_status);
         messageToStatusCode.put(USER_NAME_DUPLICATE, conflict_status);
         messageToStatusCode.put(USER_NOT_HASHABLE, precondition_fail_status);
         messageToStatusCode.put(USER_WRONG_INIT, precondition_fail_status);
@@ -98,9 +100,10 @@ public enum DidekinExceptionMsg {
         loginHttpMessages.add(UNAUTHORIZED.getHttpMessage());
         loginHttpMessages.add(UNAUTHORIZED_TX_TO_USER.getHttpMessage());
         loginHttpMessages.add(USER_COMU_NOT_FOUND.getHttpMessage());
+        loginHttpMessages.add(USERCOMU_WRONG_INIT.getHttpMessage());
         loginHttpMessages.add(USER_NAME_NOT_FOUND.getHttpMessage());
+        loginHttpMessages.add(USER_WRONG_INIT.getHttpMessage());
     }
-
 
     public static int getStatusCode(DidekinExceptionMsg didekinExceptionMsg)
     {

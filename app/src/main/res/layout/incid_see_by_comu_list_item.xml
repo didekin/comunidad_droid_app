@@ -5,14 +5,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <TextView
-        android:id="@+id/nombreComunidad_view"
-        style="@style/textBase.textFieldLabel1"/>
-
-    <TextView
         android:id="@+id/incid_descripcion_view"
         style="@style/textBase.textFieldLabel2"
-        android:layout_alignParentStart="true"
-        android:layout_below="@id/nombreComunidad_view"/>
+        android:layout_alignParentStart="true"/>
 
     <TextView
         android:id="@+id/incid_fecha_alta_rot"
@@ -35,7 +30,7 @@
         android:layout_alignBottom="@id/incid_fecha_alta_rot"
         android:layout_alignTop="@id/incid_fecha_alta_rot"
         android:layout_marginTop="0dp"
-        android:layout_toEndOf="@id/incid_fecha_alta_rot"
+        android:layout_toEndOf="@id/incid_fecha_alta_view"
         android:text="@string/incid_ambito_rot"/>
 
     <TextView
@@ -46,7 +41,7 @@
         android:layout_marginTop="0dp"
         android:layout_toEndOf="@id/incid_ambito_rot"/>
 
-    <TextView
+    <!--<TextView
         android:id="@+id/incid_importancia_user_rot"
         style="@style/textBase.textFieldLabel1"
         android:layout_alignParentStart="true"
@@ -59,15 +54,13 @@
         android:layout_alignBottom="@id/incid_importancia_user_rot"
         android:layout_alignTop="@id/incid_importancia_user_rot"
         android:layout_marginTop="0dp"
-        android:layout_toEndOf="@id/incid_importancia_user_rot"/>
+        android:layout_toEndOf="@id/incid_importancia_user_rot"/>-->
 
     <TextView
         android:id="@+id/incid_importancia_comunidad_rot"
         style="@style/textBase.textFieldLabel1"
-        android:layout_alignBottom="@id/incid_importancia_user_rot"
-        android:layout_alignTop="@id/incid_importancia_user_rot"
-        android:layout_marginTop="0dp"
-        android:layout_toEndOf="@id/incid_importancia_user_rot"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/incid_fecha_alta_rot"
         android:text="@string/incid_importancia_comunidad_rot"/>
 
     <TextView

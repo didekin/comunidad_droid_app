@@ -2,10 +2,11 @@ package com.didekindroid.incidencia.webservices;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.common.oauth2.Rol;
+import com.didekin.incidservice.domain.Incidencia;
 import com.didekin.incidservice.domain.IncidenciaUser;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.common.UiException;
+import com.didekindroid.common.UiException.UiAction;
 import com.didekindroid.usuario.activity.utils.CleanUserEnum;
 
 import org.junit.After;
@@ -18,13 +19,13 @@ import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaSer
 import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAndUpdateTk;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_EL_ESCORIAL;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_PEPE;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -52,9 +53,30 @@ public class IncidServiceTest {
     }
 
     @Test
-    public void testGetHighestRolFunction() throws UiException
+      public void testGetIncidenciaUserWithPowers_1() throws UiException
     {
-        assertThat(IncidenciaServ.getHighestRolFunction(pepeUserComu.getComunidad().getC_Id()), is(Rol.PRESIDENTE.function));
+        IncidenciaUser incidPepeUserComu = new IncidenciaUser.IncidenciaUserBuilder(doIncidencia("Incidencia One", pepeUserComu.getComunidad().getC_Id(), (short) 43))
+                .usuario(pepeUserComu.getUsuario())
+                .importancia((short) 1)
+                .build();
+        assertThat(IncidenciaServ.regIncidenciaUser(incidPepeUserComu), is(1));
+        Incidencia incidencia = IncidenciaServ.incidSeeByComu(pepeUserComu.getComunidad().getC_Id()).get(0);
+
+        IncidenciaUser incidenciaUser = IncidenciaServ.getIncidenciaUserWithPowers(incidencia.getIncidenciaId());
+        assertThat(incidenciaUser.isModifyDescOrEraseIncid(), is(true));
+    }
+
+    @Test
+    public void testGetIncidenciaUserWithPowers_2() throws UiException
+    {
+        // Incidencia no existe en BD.
+        Incidencia incidencia =  doIncidencia("Incidencia One", pepeUserComu.getComunidad().getC_Id(), (short) 43);
+        try{
+          IncidenciaServ.getIncidenciaUserWithPowers(incidencia.getIncidenciaId());
+            fail();
+        }catch (UiException ue){
+            assertThat(ue.getAction(), is(UiAction.INCID_SEE_BY_COMU));
+        }
     }
 
     @Test
@@ -71,7 +93,7 @@ public class IncidServiceTest {
                 .build();
         assertThat(IncidenciaServ.regIncidenciaUser(incidPepeUserComu2), is(1));
 
-        assertThat(IncidenciaServ.incidSeeByComu(pepeUserComu.getComunidad().getC_Id()).size(),is(2));
+        assertThat(IncidenciaServ.incidSeeByComu(pepeUserComu.getComunidad().getC_Id()).size(), is(2));
     }
 
     @Test

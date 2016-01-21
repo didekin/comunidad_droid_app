@@ -14,6 +14,7 @@ import junit.framework.AssertionFailedError;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -53,6 +54,12 @@ public class ComuSearchAcTest_slow {
 
     @Rule
     public ActivityTestRule<ComuSearchAc> mActivityRule = new ActivityTestRule<>(ComuSearchAc.class, true, false);
+
+    @BeforeClass
+    public static void slowSeconds() throws InterruptedException
+    {
+        Thread.sleep(2000);
+    }
 
     @Before
     public void getFixture() throws Exception

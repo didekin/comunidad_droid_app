@@ -42,9 +42,12 @@ public class IncidenciaBeanTest {
         StringBuilder errors = UIutils.getErrorMsgBuilder(context);
         assertThat(incidenciaBean.validateBean(errors), is(false));
         Assert.assertThat(errors.toString(), allOf(
-                containsString(context.getResources().getText(R.string.incid_reg_descripcion).toString()),
-                containsString(context.getResources().getText(R.string.incid_reg_importancia).toString()),
-                containsString(context.getResources().getText(R.string.incid_reg_ambitoIncidencia).toString())));
+                        containsString(context.getResources().getText(R.string.incid_reg_descripcion).toString()),
+                        containsString(context.getResources().getText(R.string.incid_reg_importancia).toString()),
+                        containsString(context.getResources().getText(R.string.incid_reg_ambitoIncidencia).toString()),
+                        containsString(context.getResources().getText(R.string.reg_usercomu_comunidad_null).toString())
+                )
+        );
     }
 
     @Test
@@ -54,6 +57,22 @@ public class IncidenciaBeanTest {
                 .setDescripcion("Descripcion incidencia ? test")
                 .setImportanciaIncid((short) 1);
         StringBuilder errors = UIutils.getErrorMsgBuilder(context);
+        // No tiene asociada comunidad.
+        assertThat(incidenciaBean.validateBean(errors), is(false));
+        Assert.assertThat(errors.toString(),
+                        containsString(context.getResources().getText(R.string.reg_usercomu_comunidad_null).toString())
+        );
+    }
+
+    @Test
+    public void testValidateBean_3()
+    {
+        IncidenciaBean incidenciaBean = new IncidenciaBean().setCodAmbitoIncid((short) 49)
+                .setComunidadId(2L)
+                .setDescripcion("Descripcion incidencia ? test")
+                .setImportanciaIncid((short) 1);
+        StringBuilder errors = UIutils.getErrorMsgBuilder(context);
+        // No tiene asociada comunidad.
         assertThat(incidenciaBean.validateBean(errors), is(true));
     }
 }

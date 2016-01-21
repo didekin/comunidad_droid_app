@@ -1,5 +1,7 @@
 package com.didekindroid.incidencia.suite;
 
+import com.didekindroid.incidencia.activity.IncidEditAc;
+import com.didekindroid.incidencia.activity.IncidEditAcTest;
 import com.didekindroid.incidencia.activity.IncidRegAcTest;
 import com.didekindroid.incidencia.activity.IncidSeeByComuAcTest_1;
 import com.didekindroid.incidencia.activity.IncidSeeByComuAcTest_2;
@@ -17,10 +19,11 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         GcmBroadCastNotificationAcTest.class,
+        IncidEditAcTest.class,
         IncidRegAcTest.class,
+        IncidRegAcTest_gcm1.class,
         IncidSeeByComuAcTest_1.class,
         IncidSeeByComuAcTest_2.class,
-        IncidRegAcTest_gcm1.class,
 })
 public class IncidFunctionalTestSuite {
 }

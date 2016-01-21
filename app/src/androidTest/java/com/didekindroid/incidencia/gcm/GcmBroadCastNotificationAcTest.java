@@ -51,14 +51,20 @@ public class GcmBroadCastNotificationAcTest {
         sendNotification();
         Thread.sleep(3000);
         assertThat(mActivity.notificationId, is(1));
-        assertThat(mActivity.title,is(context.getString(R.string.incid_gcm_nueva_incidencia_title)));
-        assertThat(mActivity.text,is(context.getString(R.string.incid_gcm_nueva_incidencia_body)));
+        assertThat(mActivity.title, is(context.getString(R.string.incid_gcm_nueva_incidencia_title)));
+        assertThat(mActivity.text, is(context.getString(R.string.incid_gcm_nueva_incidencia_body)));
         assertThat(mActivity.subText, is(context.getString(R.string.incid_gcm_nueva_incidencia_subtext)));
     }
 
 
     //    ======================== HELPER METHODS ==========================
 
+    /**
+     * This method merges the sending of a notification by the NotificationManager,
+     * its reception by the NotificationListener and the final broadcast by it to the corresponding
+     * activity.
+     * It should not be necessary once the new methods of NotificationManager in API 23 can be used.
+     */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void sendNotification()
     {

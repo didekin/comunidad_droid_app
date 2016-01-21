@@ -73,6 +73,8 @@ public class IncidenciaBean {
         }
     }
 
+//    TODO: ¿método validateBeanWithId para añadir IncidenciaUser para incidencias ya existentes. IncidenciaId > 0L.
+
     boolean validateBean(StringBuilder errorMsg)
     {
         Resources resources = getContext().getResources();

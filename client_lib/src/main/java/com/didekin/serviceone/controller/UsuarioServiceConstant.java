@@ -31,7 +31,6 @@ public final class UsuarioServiceConstant {
     public static final String USERCOMUS_BY_COMU = USER_READ + "/usercomus_by_comu";
     public static final String USERCOMUS_BY_USER = USER_READ + "/usercomus_by_user";
     public static final String USER_DELETE = USER_WRITE + "/delete";
-    public static final String USER_HIGHEST_FUNCTION = USER_READ + "/function";
     public static final String USER_READ_GCM_TOKEN = USER_WRITE + "/gcm_token_read";
     public static final String USER_WRITE_GCM_TOKEN = USER_WRITE + "/gcm_token";
 

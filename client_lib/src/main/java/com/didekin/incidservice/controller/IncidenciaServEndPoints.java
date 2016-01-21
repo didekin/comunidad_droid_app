@@ -1,7 +1,7 @@
 package com.didekin.incidservice.controller;
 
-import com.didekin.incidservice.domain.IncidenciaUser;
 import com.didekin.incidservice.domain.Incidencia;
+import com.didekin.incidservice.domain.IncidenciaUser;
 
 import java.util.List;
 
@@ -11,6 +11,8 @@ import retrofit.http.Header;
 import retrofit.http.POST;
 import retrofit.http.Path;
 
+import static com.didekin.incidservice.controller.IncidServConstant.GET_INCID_USER_BY_INCID;
+
 /**
  * User: pedro@didekin
  * Date: 12/11/15
@@ -18,15 +20,18 @@ import retrofit.http.Path;
  */
 public interface IncidenciaServEndPoints {
 
-    @POST(IncidServConstant.REG_INCID_USERCOMU)
-    int regIncidenciaUser(@Header("Authorization") String accessToken,
-                          @Body IncidenciaUser incidenciaUser);
+    @GET(GET_INCID_USER_BY_INCID + "/{incidenciaId}")
+    IncidenciaUser getIncidenciaUserWithPowers(@Header("Authorization") String accessToken, @Path("incidenciaId") long incidenciaId);
 
     @GET(IncidServConstant.SEE_INCID_BY_COMU + "/{comunidadId}")
     List<Incidencia> incidSeeByComu(@Header("Authorization") String accessToken,
-                                       @Path("comunidadId") long comunidadId);
+                                    @Path("comunidadId") long comunidadId);
 
     @GET(IncidServConstant.SEE_INCID_CLOSED_BY_COMU + "/{comunidadId}")
     List<Incidencia> incidSeeClosedByComu(@Header("Authorization") String accessToken,
-                                             @Path("comunidadId") long comunidadId);
+                                          @Path("comunidadId") long comunidadId);
+
+    @POST(IncidServConstant.REG_INCID_USER)
+    int regIncidenciaUser(@Header("Authorization") String accessToken,
+                          @Body IncidenciaUser incidenciaUser);
 }

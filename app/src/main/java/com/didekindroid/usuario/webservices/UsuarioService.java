@@ -65,12 +65,6 @@ public enum UsuarioService implements UsuarioEndPoints {
         }
 
         @Override
-        public String getHighestRolFunction(String accessToken, long mComunidadId)
-        {
-            return ServOne.endPoint.getHighestRolFunction(accessToken, mComunidadId);
-        }
-
-        @Override
         public UsuarioComunidad getUserComuByUserAndComu(String accessToken, long comunidadId)
         {
             return ServOne.endPoint.getUserComuByUserAndComu(accessToken, comunidadId);
@@ -219,7 +213,7 @@ public enum UsuarioService implements UsuarioEndPoints {
         try {
             isDeleted = deleteUser(checkBearerToken());
         } catch (InServiceException e) {
-            catchAuthenticationException(e);
+            catchAuthenticationException(e, TAG);
         }
         return isDeleted;
     }
@@ -233,7 +227,7 @@ public enum UsuarioService implements UsuarioEndPoints {
         try {
             deleted = deleteUserComu(checkBearerToken(), comunidadId);
         } catch (InServiceException e) {
-            catchAuthenticationException(e);
+            catchAuthenticationException(e, TAG);
         }
         return deleted;
     }
@@ -246,7 +240,7 @@ public enum UsuarioService implements UsuarioEndPoints {
         try {
             comunidad = getComuData(checkBearerToken(), idComunidad);
         } catch (InServiceException e) {
-            catchAuthenticationException(e);
+            catchAuthenticationException(e, TAG);
         }
         return comunidad;
     }
@@ -259,7 +253,7 @@ public enum UsuarioService implements UsuarioEndPoints {
         try {
             comusByUser = getComusByUser(checkBearerToken());
         } catch (InServiceException e) {
-            catchAuthenticationException(e);
+            catchAuthenticationException(e, TAG);
         }
         return comusByUser;
     }
@@ -271,21 +265,9 @@ public enum UsuarioService implements UsuarioEndPoints {
         try {
             gcmToken = getGcmToken(checkBearerToken());
         } catch (InServiceException e) {
-            catchAuthenticationException(e);
+            catchAuthenticationException(e, TAG);
         }
         return gcmToken;
-    }
-
-    public String getHighestRoleFunction(long mComunidadId) throws UiException
-    {
-        Log.d(TAG, "getHighestRolFunction()");
-        String function = null;
-        try {
-            function = getHighestRolFunction(checkBearerToken(), mComunidadId);
-        } catch (InServiceException e) {
-            catchAuthenticationException(e);
-        }
-        return function;
     }
 
     public UsuarioComunidad getUserComuByUserAndComu(long comunidadId) throws UiException
@@ -296,7 +278,7 @@ public enum UsuarioService implements UsuarioEndPoints {
         try {
             userComuByUserAndComu = getUserComuByUserAndComu(checkBearerToken(), comunidadId);
         } catch (InServiceException e) {
-            catchAuthenticationException(e);
+            catchAuthenticationException(e, TAG);
         }
         return userComuByUserAndComu;
     }
@@ -309,7 +291,7 @@ public enum UsuarioService implements UsuarioEndPoints {
         try {
             userData = getUserData(checkBearerToken());
         } catch (InServiceException e) {
-            catchAuthenticationException(e);
+            catchAuthenticationException(e, TAG);
         }
         return userData;
     }
@@ -322,7 +304,7 @@ public enum UsuarioService implements UsuarioEndPoints {
         try {
             isOldestUserComu = isOldestUserComu(checkBearerToken(), comunidadId);
         } catch (InServiceException e) {
-            catchAuthenticationException(e);
+            catchAuthenticationException(e, TAG);
         }
         return isOldestUserComu;
     }
@@ -350,7 +332,7 @@ public enum UsuarioService implements UsuarioEndPoints {
         try {
             modifyComuData = modifyComuData(checkBearerToken(), comunidad);
         } catch (InServiceException e) {
-            catchAuthenticationException(e);
+            catchAuthenticationException(e, TAG);
         }
         return modifyComuData;
     }
@@ -369,7 +351,7 @@ public enum UsuarioService implements UsuarioEndPoints {
         try {
             modifyUser = modifyUser(checkBearerToken(), usuario);
         } catch (InServiceException e) {
-            catchAuthenticationException(e);
+            catchAuthenticationException(e, TAG);
         }
         return modifyUser;
     }
@@ -382,7 +364,7 @@ public enum UsuarioService implements UsuarioEndPoints {
         try {
             modifyUserComu = modifyUserComu(checkBearerToken(), userComu);
         } catch (InServiceException e) {
-            catchAuthenticationException(e);
+            catchAuthenticationException(e, TAG);
         }
         return modifyUserComu;
     }
@@ -395,7 +377,7 @@ public enum UsuarioService implements UsuarioEndPoints {
         try {
             passwordChange = passwordChange(checkBearerToken(), newPassword);
         } catch (InServiceException e) {
-            catchAuthenticationException(e);
+            catchAuthenticationException(e, TAG);
         }
         return passwordChange;
     }
@@ -408,7 +390,7 @@ public enum UsuarioService implements UsuarioEndPoints {
         try {
             isRegistered = regComuAndUserComu(checkBearerToken(), usuarioComunidad);
         } catch (InServiceException e) {
-            catchAuthenticationException(e);
+            catchAuthenticationException(e, TAG);
         }
         return isRegistered;
     }
@@ -421,7 +403,7 @@ public enum UsuarioService implements UsuarioEndPoints {
         try {
             regUserComu = regUserComu(checkBearerToken(), usuarioComunidad);
         } catch (InServiceException e) {
-            catchAuthenticationException(e);
+            catchAuthenticationException(e, TAG);
         }
         return regUserComu;
     }
@@ -434,7 +416,7 @@ public enum UsuarioService implements UsuarioEndPoints {
         try {
             usuarioComunidadList = seeUserComusByComu(checkBearerToken(), idComunidad);
         } catch (InServiceException e) {
-            catchAuthenticationException(e);
+            catchAuthenticationException(e, TAG);
         }
         return usuarioComunidadList;
     }
@@ -448,7 +430,7 @@ public enum UsuarioService implements UsuarioEndPoints {
         try {
             userComuList = seeUserComusByUser(checkBearerToken());
         } catch (InServiceException e) {
-            catchAuthenticationException(e);
+            catchAuthenticationException(e, TAG);
         }
         return userComuList;
     }

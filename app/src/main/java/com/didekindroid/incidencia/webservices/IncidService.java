@@ -11,9 +11,13 @@ import com.didekindroid.common.UiException;
 
 import java.util.List;
 
+import retrofit.http.Header;
+import retrofit.http.Path;
+
 import static com.didekin.common.RetrofitRestBuilder.BUILDER;
 import static com.didekindroid.DidekindroidApp.getBaseURL;
 import static com.didekindroid.common.utils.UIutils.catchAuthenticationException;
+import static com.didekindroid.common.utils.UIutils.catchIncidenciaFkException;
 import static com.didekindroid.common.utils.UIutils.checkBearerToken;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 
@@ -25,6 +29,12 @@ import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 public enum IncidService implements IncidenciaServEndPoints {
 
     IncidenciaServ(BUILDER.getService(IncidenciaServEndPoints.class, getBaseURL())) {
+        @Override
+        public IncidenciaUser getIncidenciaUserWithPowers(@Header("Authorization") String accessToken, @Path("comunidadId") long incidenciaId)
+        {
+            return IncidenciaServ.endPoint.getIncidenciaUserWithPowers(accessToken, incidenciaId);
+        }
+
         @Override
         public List<Incidencia> incidSeeByComu(String accessToken, long comunidadId)
         {
@@ -67,14 +77,21 @@ public enum IncidService implements IncidenciaServEndPoints {
     }
 
     /**
-     * This method encapsulates the call to the UsuarioService.ServOne method.
+     * This method returns an incidencia with the powers of the user on the incidence.
      *
-     * @param mComunidadId identifies the comunidad wherein the user has the role returned.
+     * @param incidenciaId identifies the incidencia to be returned.
      */
-    public String getHighestRolFunction(long mComunidadId) throws UiException
+    public IncidenciaUser getIncidenciaUserWithPowers(long incidenciaId) throws UiException
     {
-        Log.d(TAG, "getHighestRolFunction()");
-        return ServOne.getHighestRoleFunction(mComunidadId);
+        Log.d(TAG, "getIncidenciaUserWithPowers()");
+        IncidenciaUser incidenciaUser = null;
+        try {
+            incidenciaUser = getIncidenciaUserWithPowers(checkBearerToken(), incidenciaId);
+        } catch (InServiceException e) {
+            catchAuthenticationException(e, TAG);
+            catchIncidenciaFkException(e, TAG);
+        }
+        return incidenciaUser;
     }
 
     public List<Incidencia> incidSeeByComu(long comunidadId) throws UiException
@@ -84,7 +101,7 @@ public enum IncidService implements IncidenciaServEndPoints {
         try {
             incidencias = incidSeeByComu(checkBearerToken(), comunidadId);
         } catch (InServiceException e) {
-            catchAuthenticationException(e);
+            catchAuthenticationException(e, TAG);
         }
         return incidencias;
     }
@@ -96,7 +113,7 @@ public enum IncidService implements IncidenciaServEndPoints {
         try {
             incidencias = incidSeeClosedByComu(checkBearerToken(), comunidadId);
         } catch (InServiceException e) {
-            catchAuthenticationException(e);
+            catchAuthenticationException(e, TAG);
         }
         return incidencias;
     }
@@ -109,7 +126,7 @@ public enum IncidService implements IncidenciaServEndPoints {
         try {
             regIncidencia = regIncidenciaUser(checkBearerToken(), incidenciaUser);
         } catch (InServiceException e) {
-            catchAuthenticationException(e);
+            catchAuthenticationException(e, TAG);
         }
         return regIncidencia;
     }
