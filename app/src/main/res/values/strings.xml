@@ -58,6 +58,7 @@
     <!--                                  USUARIO                                     -->
     <!--******************************************************************************-->
     <!-- ============================ MESSAGES ============================== -->
+    <string name="comunidad_not_found_message">No podemos mostrarte esta comuniad. Búscala nuevamente.</string>
     <string name="error_validation_msg">Los siguientes datos no son válidos: </string>
     <string name="login_wrong_no_mail">"Busca tu comunidad y regístrate.\nSi no existe, regístrala en 'Nueva comunidad'."</string>
     <string name="no_result_search_comunidad">No hemos encontrado tu comunidad.\nPuedes registrarla aquí. </string>

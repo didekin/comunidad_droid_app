@@ -181,13 +181,30 @@ public class UsuarioServiceTest {
     }
 
     @Test
-    public void testGetUserComuByUserAndComu() throws UiException
+    public void testGetUserComuByUserAndComu_1() throws UiException
     {
         whatClean = CLEAN_JUAN;
 
         signUpAndUpdateTk(COMU_REAL_JUAN);
         Comunidad comunidad = ServOne.getComusByUser().get(0);
         assertThat(ServOne.getUserComuByUserAndComu(comunidad.getC_Id()), is(COMU_REAL_JUAN));
+    }
+
+    @Test
+    public void testGetUserComuByUserAndComu_2() throws UiException
+    {
+        whatClean = CLEAN_JUAN;
+
+        signUpAndUpdateTk(COMU_REAL_JUAN);
+        // La comunidad no existe en BD.
+        Comunidad comunidad = new Comunidad.ComunidadBuilder().c_id(999L).build();
+        try {
+            ServOne.getUserComuByUserAndComu(comunidad.getC_Id());
+            fail();
+        } catch (UiException e) {
+            assertThat(e.getAction(), is(UiException.UiAction.SEARCH_COMU));
+            assertThat(e.getResourceId(),is(R.string.comunidad_not_found_message));
+        }
     }
 
     @Test

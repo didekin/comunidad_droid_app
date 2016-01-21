@@ -28,6 +28,7 @@ import java.util.Calendar;
 import static android.widget.Toast.makeText;
 import static com.didekin.common.domain.DataPatterns.DECIMAL_ZERO;
 import static com.didekin.common.domain.DataPatterns.DECIMAL_TWO;
+import static com.didekin.common.exception.DidekinExceptionMsg.COMUNIDAD_NOT_FOUND;
 import static com.didekin.common.exception.DidekinExceptionMsg.INCIDENCIA_NOT_FOUND;
 import static com.didekin.common.exception.DidekinExceptionMsg.INCIDENCIA_WRONG_INIT;
 import static com.didekin.common.exception.DidekinExceptionMsg.isMessageToLogin;
@@ -36,6 +37,7 @@ import static com.didekindroid.R.color.deep_purple_100;
 import static com.didekindroid.common.TokenHandler.TKhandler;
 import static com.didekindroid.common.UiException.UiAction.LOGIN;
 import static com.didekindroid.common.UiException.UiAction.INCID_SEE_BY_COMU;
+import static com.didekindroid.common.UiException.UiAction.SEARCH_COMU;
 import static com.didekindroid.common.utils.UIutils.SharedPrefFiles.app_preferences_file;
 
 /**
@@ -71,6 +73,14 @@ public final class UIutils {
         Log.e(tagClass, e.getHttpMessage());
         if (isMessageToLogin(e.getHttpMessage())) {  // Problema de identificación.
             throw new UiException(LOGIN, R.string.user_without_signedUp, e);
+        }
+    }
+
+    public static void catchComunidadFkException(InServiceException ie, String tagClass) throws UiException
+    {
+        Log.e(tagClass, ie.getHttpMessage());
+        if (ie.getHttpMessage().equals(COMUNIDAD_NOT_FOUND.getHttpMessage())){
+            throw new UiException(SEARCH_COMU, R.string.comunidad_not_found_message, null);
         }
     }
 

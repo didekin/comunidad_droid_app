@@ -18,6 +18,7 @@ import static com.didekindroid.DidekindroidApp.getBaseURL;
 import static com.didekindroid.common.UiException.UiAction.SEARCH_COMU;
 import static com.didekindroid.common.UiException.UiAction.TOKEN_TO_ERASE;
 import static com.didekindroid.common.utils.UIutils.catchAuthenticationException;
+import static com.didekindroid.common.utils.UIutils.catchComunidadFkException;
 import static com.didekindroid.common.utils.UIutils.checkBearerToken;
 
 /**
@@ -279,6 +280,7 @@ public enum UsuarioService implements UsuarioEndPoints {
             userComuByUserAndComu = getUserComuByUserAndComu(checkBearerToken(), comunidadId);
         } catch (InServiceException e) {
             catchAuthenticationException(e, TAG);
+            catchComunidadFkException(e, TAG);
         }
         return userComuByUserAndComu;
     }

@@ -15,6 +15,7 @@ import com.didekindroid.common.UiException;
 import com.didekindroid.usuario.activity.utils.CleanUserEnum;
 import com.didekindroid.usuario.dominio.ComunidadIntent;
 import com.didekindroid.usuario.dominio.DomainDataUtils;
+import com.didekindroid.usuario.webservices.UsuarioService;
 
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matchers;
@@ -53,6 +54,7 @@ import static com.didekindroid.usuario.dominio.DomainDataUtils.makeComunidad;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.makeListTwoUserComu;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.makeUsuario;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.makeUsuarioComunidad;
+import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static com.google.android.apps.common.testing.ui.espresso.sample.LongListMatchers.withAdaptedData;
 import static com.google.common.base.Preconditions.checkState;
 import static org.hamcrest.Matchers.allOf;
@@ -295,6 +297,29 @@ public class ComuSearchResultsAcTest_1 {
         onView(withId(R.id.reg_usercomu_ac_layout)).check(matches(isDisplayed()));
 
         cleanTwoUsers(USER_JUAN, usuarioIn);
+    }
+
+    @Test
+    public void testOnListItemClick_4() throws UiException
+    {
+        whatClean = CLEAN_JUAN;
+
+        // Usuario registrado. La búsqueda devuelve una comunidad que ya no existe.
+        regTwoUserComuSameUser(makeListTwoUserComu());
+
+        // Búsqueda con comunidad/intent por defecto.
+        activity = mActivityRule.launchActivity(intent);
+        mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getFragmentManager().findFragmentById(R.id.comu_list_frg);
+        ComuSearchResultsListAdapter adapter = (ComuSearchResultsListAdapter) mComunidadSummaryFrg.getListAdapter();
+        assertThat(adapter.getCount(), is(1));
+        Comunidad comunidad = adapter.getItem(0);
+        assertThat(comunidad.getNombreVia(), is("de la Plazuela"));
+
+        // Borramos la comunidad en BD.
+        assertThat(ServOne.deleteUserComu(comunidad.getC_Id()), is(1));
+        onData(is(comunidad)).perform(click());
+        onView(withId(R.id.comu_search_ac_layout)).check(matches(isDisplayed()));
+        checkToastInTest(R.string.comunidad_not_found_message, activity);
     }
 
     @After
