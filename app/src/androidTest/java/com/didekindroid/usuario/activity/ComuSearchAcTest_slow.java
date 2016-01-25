@@ -58,12 +58,13 @@ public class ComuSearchAcTest_slow {
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
     {
-        Thread.sleep(2000);
+        Thread.sleep(4000);
     }
 
     @Before
     public void getFixture() throws Exception
     {
+        Thread.sleep(2000);
         context = InstrumentationRegistry.getTargetContext();
         refreshTkFile = TKhandler.getRefreshTokenFile();
         whatClean = CleanUserEnum.CLEAN_NOTHING;

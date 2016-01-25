@@ -22,7 +22,6 @@ import com.didekindroid.common.UiException;
 import com.didekindroid.common.utils.ConnectionUtils;
 import com.didekindroid.usuario.activity.utils.UserAndComuFiller;
 import com.didekindroid.usuario.dominio.ComunidadBean;
-import com.didekindroid.usuario.dominio.FullUsuarioComuidadIntent;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
 
 import static com.didekin.serviceone.controller.UsuarioServiceConstant.IS_USER_DELETED;
@@ -54,9 +53,9 @@ import static com.google.common.base.Preconditions.checkState;
  * ------ provincia: provinciaId, nombre.
  * -- usuarioComunidad: portal, escalera, planta, puerta, roles.
  * Postconditions:
- * 1a. Registered user with modified data in a comunidad. Once done, it goes to SeeUserComuByUserAc.
- * 1b. Registered user with data deleted in the comunidad chosen. Once done, it goes to SeeUserComuByUserAc.
- * 1c. Unregistered user, once she has deleted the data of the one comunidad associated to ther. It goes to
+ * 1a. Registered user with modified data in a comunidad: once done, it goes to SeeUserComuByUserAc.
+ * 1b. Registered user with data deleted in the comunidad: once done, it goes to SeeUserComuByUserAc.
+ * 1c. Unregistered user, once she has deleted the data of the one comunidad associated to her, it goes to
  * ComuSearchAc.
  */
 public class UserComuDataAc extends AppCompatActivity {
@@ -76,9 +75,7 @@ public class UserComuDataAc extends AppCompatActivity {
 
         // Preconditions.
         checkState(isRegisteredUser(this));
-        FullUsuarioComuidadIntent usuarioComuidadIntent =
-                (FullUsuarioComuidadIntent) getIntent().getSerializableExtra(USERCOMU_LIST_OBJECT.extra);
-        mOldUserComu = usuarioComuidadIntent.getUsuarioComunidad();
+        mOldUserComu = (UsuarioComunidad) getIntent().getSerializableExtra(USERCOMU_LIST_OBJECT.extra);
         checkNotNull(mOldUserComu);
 
         mAcView = getLayoutInflater().inflate(R.layout.usercomu_data_ac_layout, null);

@@ -38,6 +38,7 @@ public enum DidekinExceptionMsg {
     USER_COMU_NOT_FOUND,
     USER_DATA_NOT_MODIFIED,
     USER_NOT_COMPARABLE,
+    USER_NOT_EQUAL_ABLE,
     USER_NAME_NOT_FOUND,
     USER_NAME_DUPLICATE,
     USER_NOT_HASHABLE,
@@ -88,6 +89,7 @@ public enum DidekinExceptionMsg {
         messageToStatusCode.put(USER_COMU_NOT_FOUND, entity_not_found_status);
         messageToStatusCode.put(USER_DATA_NOT_MODIFIED, postcondition_fail_status);
         messageToStatusCode.put(USER_NOT_COMPARABLE, precondition_fail_status);
+        messageToStatusCode.put(USER_NOT_EQUAL_ABLE,precondition_fail_status);
         messageToStatusCode.put(USER_NAME_NOT_FOUND, entity_not_found_status);
         messageToStatusCode.put(USER_NAME_DUPLICATE, conflict_status);
         messageToStatusCode.put(USER_NOT_HASHABLE, precondition_fail_status);

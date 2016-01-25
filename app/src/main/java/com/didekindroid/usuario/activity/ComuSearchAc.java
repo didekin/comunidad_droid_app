@@ -16,22 +16,21 @@ import com.didekin.common.oauth2.OauthToken.AccessToken;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
 import com.didekindroid.common.utils.ConnectionUtils;
-import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.common.utils.UIutils;
-import com.didekindroid.usuario.dominio.ComunidadIntent;
+import com.didekindroid.usuario.dominio.ComunidadBean;
 
 import static android.widget.Toast.LENGTH_SHORT;
 import static com.didekin.common.domain.DataPatterns.LINE_BREAK;
 import static com.didekindroid.common.TokenHandler.TKhandler;
-import static com.didekindroid.common.utils.UIutils.makeToast;
-import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeComunidadBeanFromView;
 import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_SEARCH;
+import static com.didekindroid.common.utils.UIutils.doToolBar;
+import static com.didekindroid.common.utils.UIutils.makeToast;
+import static com.didekindroid.common.utils.UIutils.updateIsRegistered;
+import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeComunidadBeanFromView;
 import static com.didekindroid.usuario.activity.utils.UserMenu.LOGIN_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.REG_COMU_USER_USERCOMU_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_USERCOMU_BY_USER_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.USER_DATA_AC;
-import static com.didekindroid.common.utils.UIutils.doToolBar;
-import static com.didekindroid.common.utils.UIutils.updateIsRegistered;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -100,7 +99,7 @@ public class ComuSearchAc extends AppCompatActivity {
             makeToast(this, R.string.no_internet_conn_toast, LENGTH_SHORT);
         } else {
             Intent intent = new Intent(this, ComuSearchResultsAc.class);
-            intent.putExtra(COMUNIDAD_SEARCH.extra, new ComunidadIntent(comunidadBean.getComunidad()));
+            intent.putExtra(COMUNIDAD_SEARCH.extra, comunidadBean.getComunidad());
             startActivity(intent);
         }
     }

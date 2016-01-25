@@ -29,7 +29,9 @@
     <string name="incid_closed_by_user_ac_label">Incidencias cerradas</string>
     <!-- =============== IncidEditAc =============== -->
     <string name="incid_edit_ac_label">Incidencia</string>
-    <string name="incid_edit_ac_button_rot">Modificar incidencia</string>
+    <string name="incid_edit_modif_button_rot">Modificar incidencia</string>
+    <string name="incid_edit_borrar_txt">Para borrar definitivamente la incidencia:</string>
+    <string name="incid_edit_borrar_button_rot">Borrar incidencia</string>
     <!-- =============== IncidRegAc =============== -->
     <string name="incid_reg_ac_label">Nueva incidencia</string>
     <string name="incid_reg_hint"> -- describe la incidencia (max. 250 caracteres) -- </string>

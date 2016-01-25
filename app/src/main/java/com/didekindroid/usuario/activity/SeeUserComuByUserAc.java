@@ -9,13 +9,12 @@ import android.view.MenuItem;
 
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
-import com.didekindroid.usuario.dominio.FullUsuarioComuidadIntent;
 
 import static com.didekindroid.common.utils.AppKeysForBundle.USERCOMU_LIST_OBJECT;
-import static com.didekindroid.usuario.activity.utils.UserMenu.COMU_SEARCH_AC;
-import static com.didekindroid.usuario.activity.utils.UserMenu.USER_DATA_AC;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
+import static com.didekindroid.usuario.activity.utils.UserMenu.COMU_SEARCH_AC;
+import static com.didekindroid.usuario.activity.utils.UserMenu.USER_DATA_AC;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
@@ -145,7 +144,7 @@ public class SeeUserComuByUserAc extends AppCompatActivity implements
     {
         Log.d(TAG, "onUserComuSelected()");
         Intent intent = new Intent(this, UserComuDataAc.class);
-        intent.putExtra(USERCOMU_LIST_OBJECT.extra, new FullUsuarioComuidadIntent(userComu));
+        intent.putExtra(USERCOMU_LIST_OBJECT.extra, userComu);
         startActivity(intent);
     }
 }

@@ -10,18 +10,10 @@ import java.io.Serializable;
 public class AmbitoIncidencia implements Serializable {
 
     private final short ambitoId;
-    private final String descripcion;
 
     public AmbitoIncidencia(short ambitoId)
     {
         this.ambitoId = ambitoId;
-        descripcion = null;
-    }
-
-    public AmbitoIncidencia(short ambitoId, String descripcion)
-    {
-        this.ambitoId = ambitoId;
-        this.descripcion = descripcion;
     }
 
     public short getAmbitoId()
@@ -29,16 +21,11 @@ public class AmbitoIncidencia implements Serializable {
         return ambitoId;
     }
 
-    public String getDescripcion()
-    {
-        return descripcion;
-    }
-
     @Override
     public boolean equals(Object o)
     {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof AmbitoIncidencia)) return false;
 
         AmbitoIncidencia that = (AmbitoIncidencia) o;
 

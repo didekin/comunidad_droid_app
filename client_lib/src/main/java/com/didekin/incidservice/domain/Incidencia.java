@@ -3,6 +3,9 @@ package com.didekin.incidservice.domain;
 import com.didekin.common.BeanBuilder;
 import com.didekin.serviceone.domain.Comunidad;
 
+import java.io.InvalidObjectException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 import static com.didekin.common.exception.DidekinExceptionMsg.INCIDENCIA_WRONG_INIT;
@@ -13,7 +16,7 @@ import static com.didekin.common.exception.DidekinExceptionMsg.INCIDENCIA_WRONG_
  * Time: 17:07
  */
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
-public final class Incidencia {
+public final class Incidencia implements Serializable{
 
     private final long incidenciaId;
     private final Comunidad comunidad;
@@ -74,6 +77,22 @@ public final class Incidencia {
     public ResolucionIncid getResolucionIncid()
     {
         return resolucionIncid;
+    }
+
+    // .................................... Serializable ...........................
+
+    /**
+     * Return an InnerSerial object that will replace the current IncidenciaIntent object during serialization.
+     * In the deserialization the readResolve() method of the InnerSerial object will be used.
+     */
+    private Object writeReplace()
+    {
+        return new InnerSerial(this);
+    }
+
+    private void readObject(ObjectInputStream inputStream) throws InvalidObjectException
+    {
+        throw new InvalidObjectException("Use innerSerial to serialize");
     }
 
     @Override
@@ -181,6 +200,51 @@ public final class Incidencia {
                 throw new IllegalStateException(INCIDENCIA_WRONG_INIT.toString());
             }
             return incidencia;
+        }
+    }
+
+    /**
+     * Example of serialization proxy.
+     */
+    private static class InnerSerial implements Serializable {
+
+        // TODO: excluida ResolucionId.
+
+        private final long incidenciaId;
+        private final Comunidad comunidad;
+        private final String descripcion;
+        private final AmbitoIncidencia ambitoIncidencia;
+        private final Timestamp fechaAlta;
+        private final Timestamp fechaCierre;
+        private final float importanciaAvg;
+
+
+        public InnerSerial(Incidencia incidencia)
+        {
+            incidenciaId = incidencia.getIncidenciaId();
+            comunidad = incidencia.getComunidad();
+            descripcion = incidencia.getDescripcion();
+            ambitoIncidencia = incidencia.getAmbitoIncidencia();
+            fechaAlta = incidencia.getFechaAlta();
+            fechaCierre = incidencia.getFechaCierre();
+            importanciaAvg = incidencia.getImportanciaAvg();
+        }
+
+        /**
+         * Returns a logically equivalent InnerSerial instance of the enclosing IncidentIntent instance,
+         * that will replace it during deserialization.
+         * */
+        private Object readResolve()
+        {
+            return new IncidenciaBuilder()
+                    .incidenciaId(incidenciaId)
+                    .comunidad(comunidad)
+                    .descripcion(descripcion)
+                    .ambitoIncid(ambitoIncidencia)
+                    .fechaAlta(fechaAlta)
+                    .fechaCierre(fechaCierre)
+                    .importanciaAvg(importanciaAvg)
+                    .build();
         }
     }
 }

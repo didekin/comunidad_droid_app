@@ -1,6 +1,5 @@
 package com.didekindroid.incidencia.suite;
 
-import com.didekindroid.incidencia.activity.IncidEditAc;
 import com.didekindroid.incidencia.activity.IncidEditAcTest;
 import com.didekindroid.incidencia.activity.IncidRegAcTest;
 import com.didekindroid.incidencia.activity.IncidSeeByComuAcTest_1;

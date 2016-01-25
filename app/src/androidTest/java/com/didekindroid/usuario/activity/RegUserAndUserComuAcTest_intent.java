@@ -9,7 +9,6 @@ import com.didekindroid.R;
 import com.didekindroid.common.UiException;
 import com.didekindroid.common.utils.UIutils;
 import com.didekindroid.usuario.activity.utils.CleanUserEnum;
-import com.didekindroid.usuario.dominio.FullComunidadIntent;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.After;
@@ -33,14 +32,14 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.common.TokenHandler.TKhandler;
+import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_ID;
+import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_JUAN2_AND_PEPE;
 import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRE;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRO;
-import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_ID;
-import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.LOGIN_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.REQUIRES_USER_NO_TOKEN;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
@@ -98,7 +97,7 @@ public class RegUserAndUserComuAcTest_intent {
             comunidad = comunidadesUserOne.get(0);
             // We pass the comunidad as an intent.
             intent = new Intent();
-            intent.putExtra(COMUNIDAD_LIST_OBJECT.extra, new FullComunidadIntent(comunidad));
+            intent.putExtra(COMUNIDAD_LIST_OBJECT.extra, comunidad);
             return intent;
         }
     };
@@ -123,9 +122,9 @@ public class RegUserAndUserComuAcTest_intent {
         activity = intentRule.getActivity();
 
         assertThat(UIutils.isRegisteredUser(activity), is(false));
-        FullComunidadIntent comunidadIntent = (FullComunidadIntent) intent.getSerializableExtra(COMUNIDAD_LIST_OBJECT.extra);
-        assertThat(comunidadIntent.getComunidad(), is(comunidad));
-        assertThat(comunidadIntent.getComunidad().getC_Id(), is(comunidad.getC_Id()));
+        Comunidad comunidad = (Comunidad) intent.getSerializableExtra(COMUNIDAD_LIST_OBJECT.extra);
+        assertThat(comunidad, is(this.comunidad));
+        assertThat(comunidad.getC_Id(), is(this.comunidad.getC_Id()));
 
         assertThat(activity, notNullValue());
         assertThat(activity.getFragmentManager().findFragmentById(R.id.reg_usercomu_frg), notNullValue());

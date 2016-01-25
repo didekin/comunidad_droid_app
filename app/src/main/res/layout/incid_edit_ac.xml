@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    style="@style/baseLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:fitsSystemWindows="true"
+    tools:context="com.didekindroid.incidencia.activity.IncidEditAc"
+    android:id="@+id/incid_edit_fragment_container_ac">
+
+    <include layout="@layout/appbar_include_design"/>
+
+</android.support.design.widget.CoordinatorLayout>

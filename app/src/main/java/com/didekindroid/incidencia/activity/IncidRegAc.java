@@ -27,6 +27,7 @@ import static com.google.common.base.Preconditions.checkState;
 /**
  * Preconditions:
  * 1. The user is registered.
+ * 2. No intent received.
  * Postconditions:
  * 1. No intent passed.
  */

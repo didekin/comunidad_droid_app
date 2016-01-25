@@ -1,12 +1,14 @@
 package com.didekin.serviceone.domain;
 
 
+import java.io.Serializable;
+
 /**
  * User: pedro
  * Date: 30/03/15
  * Time: 15:14
  */
-public final class Municipio implements Comparable<Municipio> {
+public final class Municipio implements Comparable<Municipio>, Serializable {
 
     private final int mId;  // PK auto-increment.
     private final  short codInProvincia;  // código intra-provincia de un municipio.

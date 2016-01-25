@@ -34,6 +34,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.utils.AppKeysForBundle.INCIDENCIA_LIST_ID;
+import static com.didekindroid.common.utils.AppKeysForBundle.INCIDENCIA_USER_OBJECT;
 import static com.didekindroid.common.utils.UIutils.formatTimeStampToString;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.incidencia.dominio.IncidenciaDomainTestUtils.doIncidencia;
@@ -214,7 +215,7 @@ public class IncidSeeByComuAcTest_2 {
     }
 
     @Test
-    public void testOnSelected_1()
+    public void testOnSelected_1() throws UiException
     {
 
         // Default comunidad: Real, in position 0.
@@ -223,7 +224,8 @@ public class IncidSeeByComuAcTest_2 {
                 .check(matches(isDisplayed()))
                 .perform(click());
 
-        intended(hasExtra(INCIDENCIA_LIST_ID.extra, incidencia_0.getIncidenciaId()));
-        onView(withId(R.id.incid_reg_ac_layout)).check(matches(isDisplayed()));
+        IncidenciaUser incidenciaUser = IncidenciaServ.getIncidenciaUserWithPowers(incidencia_0.getIncidenciaId());
+        intended(hasExtra(INCIDENCIA_USER_OBJECT.extra, incidenciaUser));
+        onView(withId(R.id.incid_edit_fragment_container_ac)).check(matches(isDisplayed()));
     }
 }

@@ -1,12 +1,14 @@
 package com.didekin.serviceone.domain;
 
+import java.io.Serializable;
+
 /**
  * User: pedro@didekin
  * Date: 16/06/15
  * Time: 15:09
  */
 @SuppressWarnings("unused")
-public class ComunidadAutonoma {
+public class ComunidadAutonoma implements Serializable {
 
 
     private final short cuId;

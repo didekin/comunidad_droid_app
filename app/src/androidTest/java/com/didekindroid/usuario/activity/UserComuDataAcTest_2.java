@@ -8,7 +8,6 @@ import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
 import com.didekindroid.usuario.activity.utils.CleanUserEnum;
-import com.didekindroid.usuario.dominio.FullUsuarioComuidadIntent;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.After;
@@ -30,13 +29,13 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.didekindroid.common.utils.ActivityTestUtils.updateSecurityData;
+import static com.didekindroid.common.utils.AppKeysForBundle.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRE;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRO;
-import static com.didekindroid.common.utils.AppKeysForBundle.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAndUpdateTk;
-import static com.didekindroid.common.utils.ActivityTestUtils.updateSecurityData;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_JUAN;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_PEPE;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.makeUsuarioComunidad;
@@ -89,7 +88,7 @@ public class UserComuDataAcTest_2 {
 
             // We use that comunidad as the one to associate to the present user.
             Intent intent = new Intent();
-            intent.putExtra(USERCOMU_LIST_OBJECT.extra, new FullUsuarioComuidadIntent(mUsuarioComunidad));
+            intent.putExtra(USERCOMU_LIST_OBJECT.extra, mUsuarioComunidad);
 
             try {
                 Thread.sleep(900);

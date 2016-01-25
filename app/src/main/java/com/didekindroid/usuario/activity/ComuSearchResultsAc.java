@@ -13,19 +13,17 @@ import com.didekin.serviceone.domain.Comunidad;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
-import com.didekindroid.usuario.activity.utils.UserMenu;
 import com.didekindroid.common.utils.UIutils;
-import com.didekindroid.usuario.dominio.FullComunidadIntent;
-import com.didekindroid.usuario.dominio.FullUsuarioComuidadIntent;
+import com.didekindroid.usuario.activity.utils.UserMenu;
 
 import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_LIST_INDEX;
 import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.common.utils.AppKeysForBundle.USERCOMU_LIST_OBJECT;
+import static com.didekindroid.common.utils.UIutils.doToolBar;
+import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.UserMenu.REG_COMU_USER_USERCOMU_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_USERCOMU_BY_USER_AC;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
-import static com.didekindroid.common.utils.UIutils.doToolBar;
-import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -138,7 +136,7 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
         if (!isRegisteredUser(this)) {
             Log.d(TAG, "onComunidadSelected(). User is not registered.");
             Intent intent = new Intent(this, RegUserAndUserComuAc.class);
-            intent.putExtra(COMUNIDAD_LIST_OBJECT.extra, new FullComunidadIntent(comunidad));
+            intent.putExtra(COMUNIDAD_LIST_OBJECT.extra, comunidad);
             startActivity(intent);
         } else {
             new UsuarioComunidadGetter().execute(comunidad);
@@ -193,11 +191,11 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
                 uiException.getAction().doAction(ComuSearchResultsAc.this, uiException.getResourceId());
             } else if (isUserComuNull) {
                 Intent intent = new Intent(ComuSearchResultsAc.this, RegUserComuAc.class);
-                intent.putExtra(COMUNIDAD_LIST_OBJECT.extra, new FullComunidadIntent(comunidadSelected));
+                intent.putExtra(COMUNIDAD_LIST_OBJECT.extra, comunidadSelected);
                 startActivity(intent);
             } else {
                 Intent intent = new Intent(ComuSearchResultsAc.this, UserComuDataAc.class);
-                intent.putExtra(USERCOMU_LIST_OBJECT.extra, new FullUsuarioComuidadIntent(userComu));
+                intent.putExtra(USERCOMU_LIST_OBJECT.extra,userComu);
                 startActivity(intent);
             }
         }

@@ -3,7 +3,12 @@ package com.didekin.serviceone.domain;
 import com.didekin.common.BeanBuilder;
 import com.didekin.common.exception.DidekinExceptionMsg;
 
+import java.io.InvalidObjectException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
+
 import static com.didekin.common.exception.DidekinExceptionMsg.USER_NOT_COMPARABLE;
+import static com.didekin.common.exception.DidekinExceptionMsg.USER_NOT_EQUAL_ABLE;
 import static com.didekin.common.exception.DidekinExceptionMsg.USER_NOT_HASHABLE;
 
 /**
@@ -12,7 +17,7 @@ import static com.didekin.common.exception.DidekinExceptionMsg.USER_NOT_HASHABLE
  * Time: 12:02
  */
 @SuppressWarnings("unused")
-public final class Usuario implements Comparable<Usuario> {
+public final class Usuario implements Comparable<Usuario>, Serializable {
 
     private final long uId;
     private final String userName;  //email of the user.
@@ -54,6 +59,24 @@ public final class Usuario implements Comparable<Usuario> {
         return gcmToken;
     }
 
+    // ............................ Serializable ...............................
+
+    /**
+     * Return an InnerSerial object that will replace the current Usuario object during serialization.
+     * In the deserialization the readResolve() method of the InnerSerial object will be used.
+     */
+    private Object writeReplace()
+    {
+        return new InnerSerial(this);
+    }
+
+    private void readObject(ObjectInputStream inputStream) throws InvalidObjectException
+    {
+        throw new InvalidObjectException("Use innerSerial to serialize");
+    }
+
+    // ............................ Equals and hashCode ..........................
+
     @Override
     public boolean equals(Object o)
     {
@@ -66,22 +89,47 @@ public final class Usuario implements Comparable<Usuario> {
 
         Usuario usuario = (Usuario) o;
 
-        if (uId > 0 && usuario.getuId() > 0) {
-            return uId == usuario.getuId();
+        if (usuario.userName != null && userName != null) {
+            if (uId > 0 && usuario.getuId() > 0) {
+                return uId == usuario.uId && userName.equals(usuario.userName);
+            }
+            return userName.equals(usuario.userName);
+        } else {
+            if (uId > 0 && usuario.getuId() > 0) {
+                return uId == usuario.uId;
+            }
+            throw new UnsupportedOperationException(USER_NOT_EQUAL_ABLE.toString());
         }
-
-        return userName.equals(usuario.userName);
-
     }
 
     @Override
     public int hashCode()
     {
-        if (userName == null) {
+        int hash;
+
+        if (userName == null && uId <= 0L) {
+            throw new UnsupportedOperationException(USER_NOT_HASHABLE.toString());
+        } else {
+            if (uId > 0 && userName != null) {
+                hash = ((int) (uId ^ (uId >>> 32))) * 31 + userName.hashCode();
+            } else if (uId > 0 && userName == null) {
+                hash = ((int) (uId ^ (uId >>> 32))) * 31;
+            } else {
+                //noinspection ConstantConditions
+                hash = userName.hashCode();
+            }
+        }
+        return hash;
+    }
+
+    /*
+    * if (userName == null && uId <= 0L) {
             throw new UnsupportedOperationException(USER_NOT_HASHABLE.toString());
         }
-        return userName.hashCode();
-    }
+
+        int result = (int) (uId ^ (uId >>> 32));
+        result = 31 * result + (userName != null ? userName.hashCode() : 0);
+        return result;*/
 
     @Override
     public int compareTo(Usuario o)
@@ -92,6 +140,8 @@ public final class Usuario implements Comparable<Usuario> {
 
         return userName.compareToIgnoreCase(o.getUserName());
     }
+
+    //    ========================== BUILDER ===============================
 
     public static class UsuarioBuilder implements BeanBuilder<Usuario> {
 
@@ -130,7 +180,8 @@ public final class Usuario implements Comparable<Usuario> {
             return this;
         }
 
-        public UsuarioBuilder gcmToken(String gcmToken){
+        public UsuarioBuilder gcmToken(String gcmToken)
+        {
             this.gcmToken = gcmToken;
             return this;
         }
@@ -154,6 +205,37 @@ public final class Usuario implements Comparable<Usuario> {
             alias = usuario.alias;
             gcmToken = usuario.gcmToken;
             return this;
+        }
+    }
+
+//    ============================= SERIALIZATION PROXY ==================================
+
+    private static class InnerSerial implements Serializable {
+
+        private final long usuarioId;
+        private final String userName;
+        private final String userAlias;
+        private final String password;
+        private final String gcmToken;
+
+        public InnerSerial(Usuario usuario)
+        {
+            usuarioId = usuario.uId;
+            userName = usuario.userName;
+            userAlias = usuario.alias;
+            password = usuario.password;
+            gcmToken = usuario.gcmToken;
+        }
+
+        private Object readResolve()
+        {
+            return new UsuarioBuilder()
+                    .uId(usuarioId)
+                    .userName(userName)
+                    .alias(userAlias)
+                    .password(password)
+                    .gcmToken(gcmToken)
+                    .build();
         }
     }
 }

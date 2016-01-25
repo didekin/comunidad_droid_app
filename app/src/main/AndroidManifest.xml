@@ -9,6 +9,8 @@
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
 
+    <!-- TODO: mirar https://developer.android.com/training/permissions/index.html y ajustar los fragments y activities.-->
+
     <permission
         android:name="com.didekindroid.permission.C2D_MESSAGE"
         android:protectionLevel="signature"/>

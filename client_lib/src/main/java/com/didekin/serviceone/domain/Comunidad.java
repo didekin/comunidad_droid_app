@@ -4,6 +4,9 @@ package com.didekin.serviceone.domain;
 import com.didekin.common.BeanBuilder;
 import com.didekin.common.exception.DidekinExceptionMsg;
 
+import java.io.InvalidObjectException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 import static com.didekin.common.exception.DidekinExceptionMsg.COMUNIDAD_NOT_COMPARABLE;
@@ -16,7 +19,8 @@ import static com.didekin.common.exception.DidekinExceptionMsg.COMUNIDAD_WRONG_I
  * Date: 29/03/15
  * Time: 12:02
  */
-public final class Comunidad implements Comparable<Comunidad> {
+@SuppressWarnings("unused")
+public final class Comunidad implements Comparable<Comunidad>, Serializable {
 
     private final long c_Id;
     private final String tipoVia;     // not null.
@@ -38,7 +42,6 @@ public final class Comunidad implements Comparable<Comunidad> {
         fechaAlta = builder.fechaAlta;
         fechaMod = builder.fechaMod;
     }
-
 
     public long getC_Id()
     {
@@ -104,6 +107,22 @@ public final class Comunidad implements Comparable<Comunidad> {
     public String getTipoVia()
     {
         return tipoVia;
+    }
+
+    // .................................... Serializable ...........................
+
+    /**
+     * Return an InnerSerial object that will replace the current Comunidad object during serialization.
+     * In the deserialization the readResolve() method of the InnerSerial object will be used.
+     */
+    private Object writeReplace()
+    {
+        return new InnerSerial(this);
+    }
+
+    private void readObject(ObjectInputStream inputStream) throws InvalidObjectException
+    {
+        throw new InvalidObjectException("Use innerSerial to serialize");
     }
 
     @Override
@@ -178,6 +197,8 @@ public final class Comunidad implements Comparable<Comunidad> {
         }
         return sufijoNumero.compareToIgnoreCase(o.getSufijoNumero());
     }
+
+    //    ==================== BUILDER ====================
 
     public static class ComunidadBuilder implements BeanBuilder<Comunidad> {
 
@@ -257,6 +278,41 @@ public final class Comunidad implements Comparable<Comunidad> {
                 throw new IllegalStateException(DidekinExceptionMsg.SUFIJO_NUM_IN_COMUNIDAD_NULL.toString());
             }
             return comunidad;
+        }
+    }
+
+    //    ================================== SERIALIZATION PROXY ==================================
+
+    private static class InnerSerial implements Serializable {
+
+        private final long c_Id;
+        private final String tipoVia;
+        private final String nombreVia;
+        private final short numero;
+        private final String sufijoNumero;
+        private final Municipio municipio;
+
+        public InnerSerial(Comunidad comunidad)
+        {
+            c_Id = comunidad.c_Id;
+            tipoVia = comunidad.tipoVia;
+            nombreVia = comunidad.nombreVia;
+            numero = comunidad.numero;
+            sufijoNumero = comunidad.sufijoNumero;
+            municipio = comunidad.municipio;
+        }
+
+        private Object readResolve()
+        {
+
+            return new ComunidadBuilder()
+                    .c_id(c_Id)
+                    .tipoVia(tipoVia)
+                    .nombreVia(nombreVia)
+                    .numero(numero)
+                    .sufijoNumero(sufijoNumero)
+                    .municipio(municipio)
+                    .build();
         }
     }
 }

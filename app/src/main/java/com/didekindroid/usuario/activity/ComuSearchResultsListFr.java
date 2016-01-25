@@ -11,12 +11,11 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.didekin.serviceone.domain.Comunidad;
-import com.didekindroid.usuario.dominio.ComunidadIntent;
 
 import java.util.List;
 
-import static com.didekindroid.common.utils.ViewsIDs.COMU_SEARCH_RESULTS;
 import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_SEARCH;
+import static com.didekindroid.common.utils.ViewsIDs.COMU_SEARCH_RESULTS;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 
 /**
@@ -67,9 +66,9 @@ public class ComuSearchResultsListFr extends ListFragment {
         super.onCreate(savedInstanceState);
         mComuListListener = (ComuListListener) getActivity();
         mAdapter = new ComuSearchResultsListAdapter(getActivity());
-        ComunidadIntent comunidadSearch = (ComunidadIntent) getActivity().getIntent()
+        Comunidad comunidad = (Comunidad) getActivity().getIntent()
                 .getSerializableExtra(COMUNIDAD_SEARCH.extra);
-        new SearchComunidadesLoader().execute(comunidadSearch.getComunidad());
+        new SearchComunidadesLoader().execute(comunidad);
     }
 
     @Override

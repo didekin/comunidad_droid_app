@@ -121,6 +121,7 @@
 
     <style name="textBase.ListLabelColor">
         <item name="android:textSize">@dimen/text_rotulo_list</item>
+        <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/purple_900</item>
     </style>
 

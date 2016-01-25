@@ -1,12 +1,14 @@
 package com.didekin.serviceone.domain;
 
 
+import java.io.Serializable;
+
 /**
  * User: pedro@didekin
  * Date: 10/06/15
  * Time: 13:08
  */
-public final class Provincia implements Comparable<Provincia>{
+public final class Provincia implements Comparable<Provincia>, Serializable{
 
     private final short provinciaId; // Es una PK fija, no un campo auto-increment.
     private final String nombre;

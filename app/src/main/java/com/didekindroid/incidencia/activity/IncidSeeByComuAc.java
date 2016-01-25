@@ -1,6 +1,7 @@
 package com.didekindroid.incidencia.activity;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -8,17 +9,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.didekin.incidservice.domain.Incidencia;
+import com.didekin.incidservice.domain.IncidenciaUser;
 import com.didekindroid.R;
+import com.didekindroid.common.UiException;
 import com.didekindroid.incidencia.gcm.GcmRegistrationIntentServ;
 
-import static com.didekindroid.common.utils.AppKeysForBundle.INCIDENCIA_LIST_ID;
 import static com.didekindroid.common.utils.AppKeysForBundle.INCIDENCIA_LIST_INDEX;
+import static com.didekindroid.common.utils.AppKeysForBundle.INCIDENCIA_USER_OBJECT;
 import static com.didekindroid.common.utils.UIutils.checkPlayServices;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.isGcmTokenSentServer;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_CLOSED_BY_COMU_AC;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_REG_AC;
+import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkState;
 
 /**
  * Preconditions:
@@ -26,11 +31,11 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * 2. The user is registered NOW in the comunidad whose open incidencias are shown.
  * Postconditions:
  * 1. The incidencia selected on the list is shown to the user in mode edition:
- *    -- If the user was the original author of the incidencia, it can modified its description.
- *    -- Every user can modify the importancia assigned by her to the incidencia.
- *    -- Only the original author can erase an incidencia, if the rest of the users have assigned an importancia
- *       equal o lower than 'low'.
- * 2. An intent is passed with the incidenciaId of the incidencia selected.
+ * -- If the user was the original author of the incidencia, it can modified its description.
+ * -- Every user can modify the importancia assigned by her to the incidencia.
+ * -- Only the original author can erase an incidencia, if the rest of the users have assigned an importancia
+ * equal o lower than 'low'.
+ * 2. An intent is passed with the incidenciaUser selected.
  */
 public class IncidSeeByComuAc extends AppCompatActivity implements
         IncidListListener {
@@ -116,8 +121,44 @@ public class IncidSeeByComuAc extends AppCompatActivity implements
     {
         Log.d(TAG, "onIncidenciaSelected()");
         mIncidenciaIndex = position;
-        Intent intent = new Intent(IncidSeeByComuAc.this, IncidEditAc.class);
-        intent.putExtra(INCIDENCIA_LIST_ID.extra, incidencia.getIncidenciaId());
-        startActivity(intent);
+        new IncidUserGetter().execute(incidencia.getIncidenciaId());
+    }
+
+    //    ============================================================
+//    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
+//    ============================================================
+
+    private class IncidUserGetter extends AsyncTask<Long, Void, IncidenciaUser> {
+
+        private final String TAG = IncidUserGetter.class.getCanonicalName();
+        UiException uiException;
+
+        @Override
+        protected IncidenciaUser doInBackground(final Long... incidenciaId)
+        {
+            Log.d(TAG, "doInBackground()");
+            IncidenciaUser incidenciaUser = null;
+            try {
+                incidenciaUser = IncidenciaServ.getIncidenciaUserWithPowers(incidenciaId[0]);
+            } catch (UiException e) {
+                uiException = e;
+            }
+            return incidenciaUser;
+        }
+
+        @Override
+        protected void onPostExecute(IncidenciaUser incidenciaUser)
+        {
+            Log.d(TAG, "onPostExecute()");
+
+            if (uiException != null) {
+                uiException.getAction().doAction(IncidSeeByComuAc.this, uiException.getResourceId());
+            } else {
+                checkState(incidenciaUser != null);
+                Intent intent = new Intent(IncidSeeByComuAc.this, IncidEditAc.class);
+                intent.putExtra(INCIDENCIA_USER_OBJECT.extra, incidenciaUser);
+                startActivity(intent);
+            }
+        }
     }
 }

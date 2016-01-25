@@ -3,6 +3,9 @@ package com.didekin.incidservice.domain;
 import com.didekin.common.BeanBuilder;
 import com.didekin.serviceone.domain.Usuario;
 
+import java.io.InvalidObjectException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 import static com.didekin.common.exception.DidekinExceptionMsg.INCIDENCIA_WRONG_INIT;
@@ -14,7 +17,7 @@ import static com.didekin.common.oauth2.Rol.hasFunctionAdmonPowers;
  * Time: 17:08
  */
 @SuppressWarnings("unused")
-public class IncidenciaUser {
+public class IncidenciaUser implements Serializable{
 
     private final Incidencia incidencia;
     private final Usuario usuario;
@@ -73,6 +76,22 @@ public class IncidenciaUser {
                 .copyIncidUser(incidenciaUser)
                 .modifyDescOrEraseIncid(hasFunctionAdmonPowers(functionRol))
                 .build();
+    }
+
+    // ............................ Serializable ...............................
+
+    /**
+     * Return an InnerSerial object that will replace the current IncicenciaUser object during serialization.
+     * In the deserialization the readResolve() method of the InnerSerial object will be used.
+     */
+    private Object writeReplace()
+    {
+        return new InnerSerial(this);
+    }
+
+    private void readObject(ObjectInputStream inputStream) throws InvalidObjectException
+    {
+        throw new InvalidObjectException("Use innerSerial to serialize");
     }
 
     @Override
@@ -156,6 +175,36 @@ public class IncidenciaUser {
                 throw new IllegalStateException(INCIDENCIA_WRONG_INIT.toString());
             }
             return new IncidenciaUser(this);
+        }
+    }
+
+    //    ================================== SERIALIZATION PROXY ==================================
+
+    private static class InnerSerial implements Serializable {
+
+        private final Incidencia incidencia;
+        private final Usuario usuario;
+        private final short importancia;
+        private final Timestamp fechaAlta;
+        private boolean modifyDescOrEraseIncid;
+
+        public InnerSerial(IncidenciaUser incidenciaUser)
+        {
+            incidencia = incidenciaUser.incidencia;
+            usuario = incidenciaUser.usuario;
+            importancia = incidenciaUser.importancia;
+            fechaAlta = incidenciaUser.fechaAlta;
+            modifyDescOrEraseIncid = incidenciaUser.modifyDescOrEraseIncid;
+        }
+
+        private Object readResolve()
+        {
+            return (new IncidenciaUserBuilder(incidencia)
+                    .usuario(usuario)
+                    .importancia(importancia)
+                    .fechaAlta(fechaAlta)
+                    .modifyDescOrEraseIncid(modifyDescOrEraseIncid)
+                    .build());
         }
     }
 }

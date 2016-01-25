@@ -3,6 +3,9 @@ package com.didekin.serviceone.domain;
 
 import com.didekin.common.BeanBuilder;
 
+import java.io.InvalidObjectException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 import static com.didekin.common.exception.DidekinExceptionMsg.USERCOMU_WRONG_INIT;
@@ -12,7 +15,8 @@ import static com.didekin.common.exception.DidekinExceptionMsg.USERCOMU_WRONG_IN
  * Date: 29/03/15
  * Time: 12:02
  */
-public final class UsuarioComunidad implements Comparable<UsuarioComunidad> {
+@SuppressWarnings("unused")
+public final class UsuarioComunidad implements Comparable<UsuarioComunidad>, Serializable {
 
     private final String portal;
     private final String escalera;
@@ -38,7 +42,6 @@ public final class UsuarioComunidad implements Comparable<UsuarioComunidad> {
         usuario = userComuBuilder.usuario;
         comunidad = userComuBuilder.comunidad;
     }
-
 
     public Comunidad getComunidad()
     {
@@ -91,6 +94,22 @@ public final class UsuarioComunidad implements Comparable<UsuarioComunidad> {
     public Usuario getUsuario()
     {
         return usuario;
+    }
+
+    // ............................ Serializable ...............................
+
+    /**
+     * Return an InnerSerial object that will replace the current UsuarioComunidad object during serialization.
+     * In the deserialization the readResolve() method of the InnerSerial object will be used.
+     */
+    private Object writeReplace()
+    {
+        return new InnerSerial(this);
+    }
+
+    private void readObject(ObjectInputStream inputStream) throws InvalidObjectException
+    {
+        throw new InvalidObjectException("Use innerSerial to serialize");
     }
 
     @Override
@@ -153,6 +172,8 @@ public final class UsuarioComunidad implements Comparable<UsuarioComunidad> {
         }
         return 0;
     }
+
+    //    ==================== BUILDER ====================
 
     public static class UserComuBuilder implements BeanBuilder<UsuarioComunidad> {
 
@@ -226,6 +247,41 @@ public final class UsuarioComunidad implements Comparable<UsuarioComunidad> {
                 throw new IllegalStateException(USERCOMU_WRONG_INIT.toString());
             }
             return userComu;
+        }
+    }
+
+    //    ============================= SERIALIZATION PROXY ==================================
+
+    private static class InnerSerial implements Serializable {
+
+        private final Comunidad comunidad;
+        private final Usuario usuario;
+        private final String portal;
+        private final String escalera;
+        private final String planta;
+        private final String puerta;
+        private final String roles;
+
+        public InnerSerial(UsuarioComunidad usuarioComunidad)
+        {
+            comunidad = usuarioComunidad.comunidad;
+            usuario = usuarioComunidad.usuario;
+            portal = usuarioComunidad.getPortal();
+            escalera = usuarioComunidad.getEscalera();
+            planta = usuarioComunidad.getPlanta();
+            puerta = usuarioComunidad.getPuerta();
+            roles = usuarioComunidad.getRoles();
+        }
+
+        private Object readResolve()
+        {
+            return new UserComuBuilder(comunidad, usuario)
+                    .portal(portal)
+                    .escalera(escalera)
+                    .planta(planta)
+                    .puerta(puerta)
+                    .roles(roles)
+                    .build();
         }
     }
 }

@@ -7,8 +7,8 @@
     <!-- Formats-->
     <!--<string name="date_local_format" translatable="false">%1$d-%2$d-%3$d</string>-->
     <!--Input controls-->
-    <string name="search_button">Buscar</string>
-    <string name="checkbox_si">Sí</string>
+    <string name="search_button">Search</string>
+    <string name="checkbox_si">Yes</string>
     <string name="checkbox_no">No</string>
     <!--Menús-->
     <!--Messages-->
@@ -28,7 +28,9 @@
     <string name="incid_closed_by_user_ac_label">Incidencias cerradas</string>
     <!-- =============== IncidEditAc =============== -->
     <string name="incid_edit_ac_label">Incidencia</string>
-    <string name="incid_edit_ac_button_rot">Modificar incidencia</string>
+    <string name="incid_edit_modif_button_rot">Modificar incidencia</string>
+    <string name="incid_edit_borrar_txt">Para borrar definitivamente la incidencia:</string>
+    <string name="incid_edit_borrar_button_rot">Borrar incidencia</string>
     <!-- =============== IncidRegAc =============== -->
     <string name="incid_reg_ac_label">Nueva incidencia</string>
     <string name="incid_reg_hint"> -- describe la incidencia (max. 250 caracteres) -- </string>

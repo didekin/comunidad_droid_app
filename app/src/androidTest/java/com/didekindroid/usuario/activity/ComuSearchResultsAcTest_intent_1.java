@@ -9,8 +9,6 @@ import com.didekin.serviceone.domain.Usuario;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
-import com.didekindroid.usuario.dominio.ComunidadIntent;
-import com.didekindroid.usuario.dominio.FullUsuarioComuidadIntent;
 
 import org.junit.After;
 import org.junit.Before;
@@ -67,7 +65,7 @@ public class ComuSearchResultsAcTest_intent_1 {
         protected Intent getActivityIntent()
         {
             Intent intent = new Intent();
-            intent.putExtra(COMUNIDAD_SEARCH.extra, new ComunidadIntent(COMU_REAL));
+            intent.putExtra(COMUNIDAD_SEARCH.extra, COMU_REAL);
             return intent;
         }
     };
@@ -97,14 +95,14 @@ public class ComuSearchResultsAcTest_intent_1 {
 
         onData(is(COMU_REAL)).perform(click());
 
-        FullUsuarioComuidadIntent usuarioComuidadIntent = new FullUsuarioComuidadIntent(new UsuarioComunidad.UserComuBuilder(comuIntent, userIntent)
+        UsuarioComunidad usuarioComunidad = new UsuarioComunidad.UserComuBuilder(comuIntent, userIntent)
                 .portal(COMU_REAL_JUAN.getPortal())
                 .escalera(COMU_REAL_JUAN.getEscalera())
                 .planta(COMU_REAL_JUAN.getPlanta())
                 .puerta(COMU_REAL_JUAN.getPuerta())
-                .build());
+                .build();
 
-        intended(hasExtra(USERCOMU_LIST_OBJECT.extra, usuarioComuidadIntent));
+        intended(hasExtra(USERCOMU_LIST_OBJECT.extra, usuarioComunidad));
         onView(withId(R.id.usercomu_data_ac_layout)).check(matches(isDisplayed()));
     }
 }
