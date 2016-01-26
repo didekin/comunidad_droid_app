@@ -54,7 +54,6 @@ class ComunidadSpinnerSetter<T extends Fragment & ComuSpinnerSettable> extends A
                     R.id.app_spinner_1_dropdown_item,
                     comunidades);
             mFragment.setComunidadSpinnerAdapter(comunidadesAdapter);
-            /*tiposViaAdapter.setDropDownViewResource(R.layout.app_spinner_1_dropdown_item);*/
             // Notifico al fragmento que los datos del spinner están cargados.
             mFragment.onComunidadSpinnerLoaded();
         }
@@ -64,6 +63,4 @@ class ComunidadSpinnerSetter<T extends Fragment & ComuSpinnerSettable> extends A
             uiException.getAction().doAction(mFragment.getActivity(), uiException.getResourceId());
         }
     }
-
-
 }

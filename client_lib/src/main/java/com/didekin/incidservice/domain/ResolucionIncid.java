@@ -20,6 +20,8 @@ public final class ResolucionIncid {
     private final Timestamp fechaPlanificada;
     private final Timestamp fechaResolucion;
 
+    // TODO. añadir un campo recomendación para otras comunidades o ella misma, en casos futuros similares. Puede ser un texto.
+
     private ResolucionIncid(ResolucionBuilder builder)
     {
         descripcion = builder.descripcion;

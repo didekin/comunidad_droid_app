@@ -18,14 +18,31 @@ import com.didekindroid.R;
 public class IncidEditMaxPowerFr extends Fragment {
 
     private static final String TAG = IncidEditMaxPowerFr.class.getCanonicalName();
-    View mFragmentView;
-    IncidenciaUser mIncidenciaUser;
+    View fFragmentView;
+    IncidenciaUser fIncidenciaUser;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         Log.d(TAG, "onCreateView()");
-        mFragmentView = inflater.inflate(R.layout.incid_edit_maxpower_fr, container, false);
-        return mFragmentView;
+        fFragmentView = inflater.inflate(R.layout.incid_edit_maxpower_fr, container, false);
+        return fFragmentView;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState)
+    {
+        Log.d(TAG, "onActivityCreated()");
+        super.onActivityCreated(savedInstanceState);
+
+        fIncidenciaUser = ((IncidUserDataSupplier) getActivity()).getIncidenciaUser();
+    }
+
+//    ============================================================
+//    ............ INNER CLASSES AND AUXILIARY METHODS ...........
+//    ============================================================
+
+    interface IncidUserDataSupplier{
+        IncidenciaUser getIncidenciaUser();
     }
 }

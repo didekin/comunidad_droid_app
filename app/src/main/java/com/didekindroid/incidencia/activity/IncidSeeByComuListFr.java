@@ -88,6 +88,7 @@ public class IncidSeeByComuListFr extends ListFragment implements ComuSpinnerSet
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
                 Log.d(TAG, "mComunidadSpinner.onItemSelected()");
+                mComunidadSelectedIndex = position;
                 Comunidad comunidad = (Comunidad) parent.getItemAtPosition(position);
                 // Loading data for the comunidad selected.
                 new IncidByUserComuLoader().execute(comunidad.getC_Id());

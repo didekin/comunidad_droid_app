@@ -204,6 +204,10 @@ public class RegComuFr extends Fragment {
     public void onDestroy()
     {
         Log.d(TAG, "onDestroy()");
+
+        if (mActivityListener != null) {
+            mActivityListener.onDestroyFragment();
+        }
         dbHelper.close();
         mRegComunidadFrView = null;
         super.onDestroy();
@@ -220,6 +224,8 @@ public class RegComuFr extends Fragment {
         void onProvinciaSpinnerLoaded();
 
         void onMunicipioSpinnerLoaded();
+
+        void onDestroyFragment();
     }
 
     void setmActivityListener(RegComuFrListener mActivityListener)

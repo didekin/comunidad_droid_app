@@ -70,6 +70,8 @@ public class ComuDataAc extends Activity implements RegComuFr.RegComuFrListener 
         mRegComuFrg = (RegComuFr) getFragmentManager().findFragmentById(R.id.reg_comunidad_frg);
         mRegComuFrg.setmActivityListener(this);
 
+        // Asunción: esta tarea termina antes que la carga de los spinners en RegComuFr.
+        // TODO: cambiar el intent; meter el objeto comunidad e inicializar mComunidad con él.
         mComuDataSetter = (ComuDataSetter) new ComuDataSetter().execute();
 
         mModifyButton = (Button) findViewById(R.id.comu_data_ac_button);
@@ -202,6 +204,15 @@ public class ComuDataAc extends Activity implements RegComuFr.RegComuFrListener 
             mRegComuFrg.municipioSpinner.setSelection(position);
             isMunicipioSpinnerSet = true;
         }
+    }
+
+    @Override
+    public void onDestroyFragment()
+    {
+        isCASpinnerSet = false;
+        isMunicipioSpinnerSet = false;
+        isProvinciaSpinnerSet = false;
+        isTipoViaSpinnerSet = false;
     }
 
 //    ============================================================================================

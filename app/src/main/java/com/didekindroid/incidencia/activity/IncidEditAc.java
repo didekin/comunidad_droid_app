@@ -43,7 +43,7 @@ public class IncidEditAc extends AppCompatActivity implements IncidEditMaxPowerF
         doToolBar(this, true);
 
         if (mIncidenciaUser.isModifyDescOrEraseIncid()) {
-            IncidEditMaxPowerFr mFragmentMax = (IncidEditMaxPowerFr) getFragmentManager().findFragmentById(R.id.incid_edit_maxpower_fr_layout);
+            IncidEditMaxPowerFr mFragmentMax;
             if (savedInstanceState == null) {
                 mFragmentMax = new IncidEditMaxPowerFr();
                 getFragmentManager().beginTransaction().add(R.id.incid_edit_fragment_container_ac, mFragmentMax).commit();

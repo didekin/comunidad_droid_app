@@ -200,7 +200,6 @@ public class IncidRegAcFragment extends Fragment implements ComuSpinnerSettable 
                     toViews,
                     0);
             mTipoIncidenciaSpinner.setAdapter(cursorAdapter);
-            // TODO: pendiente listener como en RegComuFr (para edición incidencia).
         }
     }
 }

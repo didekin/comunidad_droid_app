@@ -33,7 +33,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.common.utils.AppKeysForBundle.INCIDENCIA_LIST_ID;
 import static com.didekindroid.common.utils.AppKeysForBundle.INCIDENCIA_USER_OBJECT;
 import static com.didekindroid.common.utils.UIutils.formatTimeStampToString;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
@@ -69,6 +68,7 @@ public class IncidSeeByComuAcTest_2 {
     IncidenciaUser incidJuanPlazuela1;
     IncidenciaDataDbHelper dBHelper;
     IncidSeeByComuAdapter adapter;
+    IncidSeeByComuListFr mFragment;
 
     @Rule
     public IntentsTestRule<IncidSeeByComuAc> activityRule = new IntentsTestRule<IncidSeeByComuAc>(IncidSeeByComuAc.class) {
@@ -109,7 +109,7 @@ public class IncidSeeByComuAcTest_2 {
     public void setUp() throws Exception
     {
         mActivity = activityRule.getActivity();
-        IncidSeeByComuListFr mFragment = (IncidSeeByComuListFr) mActivity.getFragmentManager().findFragmentById(R.id.incid_see_by_comu_frg);
+        mFragment = (IncidSeeByComuListFr) mActivity.getFragmentManager().findFragmentById(R.id.incid_see_by_comu_frg);
         adapter = mFragment.mAdapter;
         dBHelper = new IncidenciaDataDbHelper(mActivity);
     }
@@ -160,6 +160,7 @@ public class IncidSeeByComuAcTest_2 {
                         is(COMU_LA_PLAZUELA_5))
         ).perform(click()).check(matches(isDisplayed()));
 
+        assertThat(mFragment.mComunidadSelectedIndex,is(1));
         assertThat(adapter.getCount(), is(1));
 
         assertThat(adapter.getItem(0).getComunidad().getNombreComunidad(), is(juanPlazuela.getComunidad().getNombreComunidad()));
