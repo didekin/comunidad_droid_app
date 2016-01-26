@@ -30,7 +30,7 @@ import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOpti
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_JUAN;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
 /**
@@ -44,7 +44,6 @@ public class IncidEditAcTest {
     IncidEditAc mActivity;
     UsuarioComunidad juanReal;
     IncidenciaUser incidJuanReal1;
-    IncidEditMaxPowerFr mFragment;
 
     @Rule
     public IntentsTestRule<IncidEditAc> intentRule = new IntentsTestRule<IncidEditAc>(IncidEditAc.class){
@@ -57,7 +56,7 @@ public class IncidEditAcTest {
 
         /**
          * Preconditions:
-         * 1. An incidenciaUser id with powers to erase and modify is passed.
+         * 1. An fIncidenciaUser id with powers to erase and modify is passed.
          * */
         @Override
         protected Intent getActivityIntent()
@@ -104,7 +103,21 @@ public class IncidEditAcTest {
     public void testOnCreate_1() throws Exception
     {
         assertThat(mActivity, notNullValue());
+        assertThat(mActivity.findViewById(R.id.incid_edit_maxpower_fr_layout), notNullValue());
         onView(withId(R.id.incid_edit_fragment_container_ac)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_edit_maxpower_fr_layout)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_comunidad_rot)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_reg_desc_ed)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_reg_ambito_spinner)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_reg_importancia_spinner)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_edit_fr_modif_button)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_edit_max_fr_borrar_button)).check(matches(isDisplayed()));
+        // Raro: present but not displayed.
+        onView(withId(R.id.incid_comunidad_txt)).check(matches(not(isDisplayed())));
+    }
+
+    @Test
+    public void testOnData_1(){
+
     }
 }

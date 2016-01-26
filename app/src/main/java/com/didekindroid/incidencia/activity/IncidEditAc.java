@@ -13,20 +13,22 @@ import static com.didekindroid.common.utils.UIutils.doToolBar;
 
 /**
  * Preconditions:
- * 1. An intent extra is passed with the incidenciaUser to be edited.
+ * 1. An intent extra is passed with the fIncidenciaUser to be edited.
  * 2. Edition capabilities are dependent on:
  * -- the functional role of the user.
  * -- the ownership of the incident (authorship) by the user.
- * -- the existence of other incidenciaUser associated to the incidencia. See IncidenciaUser.checkPowers().
+ * -- the existence of other fIncidenciaUser associated to the incidencia. See IncidenciaUser.checkPowers().
  * Postconditions:
  * 1. An incidencia is updated in BD, once edited.
  * 3. An intent is passed with the comunidadId of the updated incidencia.
  * 2. La aplicación muestra la lista actualizada de incidencias de la comunidad.
  */
-public class IncidEditAc extends AppCompatActivity {
+public class IncidEditAc extends AppCompatActivity implements IncidEditMaxPowerFr.IncidUserDataSupplier {
 
     private static final String TAG = IncidEditAc.class.getCanonicalName();
     View mAcView;
+    IncidenciaUser mIncidenciaUser;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -34,19 +36,18 @@ public class IncidEditAc extends AppCompatActivity {
         Log.d(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
 
-        final IncidenciaUser incidenciaUser = (IncidenciaUser) getIntent().getSerializableExtra(INCIDENCIA_USER_OBJECT.extra);
+        mIncidenciaUser = (IncidenciaUser) getIntent().getSerializableExtra(INCIDENCIA_USER_OBJECT.extra);
 
         mAcView = getLayoutInflater().inflate(R.layout.incid_edit_ac, null);
         setContentView(mAcView);
         doToolBar(this, true);
 
-        if (incidenciaUser.isModifyDescOrEraseIncid()) {
+        if (mIncidenciaUser.isModifyDescOrEraseIncid()) {
             IncidEditMaxPowerFr mFragmentMax = (IncidEditMaxPowerFr) getFragmentManager().findFragmentById(R.id.incid_edit_maxpower_fr_layout);
-            if (mFragmentMax == null) {
+            if (savedInstanceState == null) {
                 mFragmentMax = new IncidEditMaxPowerFr();
                 getFragmentManager().beginTransaction().add(R.id.incid_edit_fragment_container_ac, mFragmentMax).commit();
             }
-            mFragmentMax.mIncidenciaUser = incidenciaUser;
         } else {
             Log.d(TAG, "No max powers");
         }
@@ -56,6 +57,11 @@ public class IncidEditAc extends AppCompatActivity {
 //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
 //    ============================================================
 
+    @Override
+    public IncidenciaUser getIncidenciaUser()
+    {
+        return mIncidenciaUser;
+    }
 }
 
 
