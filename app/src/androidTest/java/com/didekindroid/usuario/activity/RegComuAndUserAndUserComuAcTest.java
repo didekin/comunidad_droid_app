@@ -44,8 +44,8 @@ import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUser
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.LOGIN_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.REQUIRES_USER_NO_TOKEN;
 import static com.didekindroid.common.utils.ActivityTestUtils.checkToastInTest;
-import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
-import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAndUpdateTk;
+import static com.didekindroid.common.utils.ActivityTestUtils.cleanOptions;
+import static com.didekindroid.common.utils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_JUAN;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_JUAN2;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;

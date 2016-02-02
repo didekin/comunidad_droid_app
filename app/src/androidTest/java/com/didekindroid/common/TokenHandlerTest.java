@@ -6,7 +6,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.common.oauth2.OauthToken;
 import com.didekin.common.oauth2.OauthToken.AccessToken;
-import com.didekindroid.usuario.activity.utils.UsuarioTestUtils;
+import com.didekindroid.common.utils.ActivityTestUtils;
 
 import org.junit.After;
 import org.junit.Before;
@@ -103,7 +103,7 @@ public class TokenHandlerTest {
 
         // Registers user and initializes cache.
         // Case 1: there is a token in cache.
-        UsuarioTestUtils.signUpAndUpdateTk(COMU_REAL_JUAN);
+        ActivityTestUtils.signUpAndUpdateTk(COMU_REAL_JUAN);
         AccessToken token_1 = TKhandler.getAccessTokenInCache();
         String accessToken_1 = token_1.getValue();
         assertThat(accessToken_1, not(isEmptyOrNullString()));

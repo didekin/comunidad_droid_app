@@ -20,6 +20,7 @@
     <!-- ============================ MESSAGES ============================== -->
     <string name="no_incidencia_by_user">No existen incidencias</string>
     <string name="incidencia_wrong_init">No podemos mostrarte la incidencia. Verifica que sigue abierta.</string>
+    <string name="user_without_powers">Haz login y accede nuevamente a la incidencia.</string>
     <!-- ============================== MENUS ================================= -->
     <string name="incid_reg_ac_mn">Nueva incidencia</string>
     <string name="incid_see_by_comu_ac_mn">Incidencias abiertas</string>

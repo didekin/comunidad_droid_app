@@ -28,8 +28,8 @@ import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_LIST_OBJE
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRE;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRO;
-import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanTwoUsers;
-import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAndUpdateTk;
+import static com.didekindroid.common.utils.ActivityTestUtils.cleanTwoUsers;
+import static com.didekindroid.common.utils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.typeRegUserComuData;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_JUAN;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_TRAV_PLAZUELA_PEPE;

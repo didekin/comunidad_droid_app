@@ -19,8 +19,8 @@ import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.COMU_SEA
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.DELETE_ME_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.PASSWORD_CHANGE_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.SEE_USERCOMU_BY_USER_AC;
-import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
-import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAndUpdateTk;
+import static com.didekindroid.common.utils.ActivityTestUtils.cleanOptions;
+import static com.didekindroid.common.utils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_JUAN;
 
 /**

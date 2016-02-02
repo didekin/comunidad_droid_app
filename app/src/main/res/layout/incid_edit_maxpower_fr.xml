@@ -1,7 +1,8 @@
 <ScrollView
     style="@style/baseLayout.scroll"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/incid_edit_maxpower_frg">
 
     <RelativeLayout
         android:id="@+id/incid_edit_maxpower_fr_layout"

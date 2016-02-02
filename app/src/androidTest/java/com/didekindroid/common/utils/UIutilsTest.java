@@ -4,8 +4,6 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekindroid.usuario.activity.utils.UsuarioTestUtils;
-
 import junit.framework.TestCase;
 
 import org.junit.After;
@@ -42,7 +40,7 @@ public class UIutilsTest extends TestCase {
     @After
     public void clean()
     {
-        UsuarioTestUtils.cleanWithTkhandler();
+        ActivityTestUtils.cleanWithTkhandler();
     }
 
     @Test

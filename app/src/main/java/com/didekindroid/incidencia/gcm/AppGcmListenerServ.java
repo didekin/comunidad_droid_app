@@ -55,6 +55,7 @@ public class AppGcmListenerServ extends GcmListenerService {
 
         // This intent is used to make the PendingIntent associated to the taskStack.
         // TODO: hay que meter los extras necesarios para la activity en el back.
+        // Back button:  inserting into the task's back stack the complete upward navigation. Hay que tratar también el retorno a parent activity with UP.
         Intent resultIntent = new Intent(getApplicationContext(), handler.getActivityClass());
         // We create a back stack based on the Intent that starts the Activity.
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(getApplicationContext());

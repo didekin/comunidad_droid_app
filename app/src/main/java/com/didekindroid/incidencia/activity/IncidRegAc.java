@@ -80,6 +80,7 @@ public class IncidRegAc extends AppCompatActivity {
             UIutils.makeToast(this, R.string.no_internet_conn_toast, Toast.LENGTH_LONG);
         } else {
             new IncidenciaRegister().execute(incidenciaUser);
+            //** Esta llamada podría mandarse a onPostExecute().
             Intent intent = new Intent(this, IncidSeeByComuAc.class);
             startActivity(intent);
         }

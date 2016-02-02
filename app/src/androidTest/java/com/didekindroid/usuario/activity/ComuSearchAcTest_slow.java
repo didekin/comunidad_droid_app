@@ -33,8 +33,8 @@ import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.LOGIN_AC
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.REG_COMU_USER_USERCOMU_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.SEE_USERCOMU_BY_USER_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.USER_DATA_AC;
-import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
-import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAndUpdateTk;
+import static com.didekindroid.common.utils.ActivityTestUtils.cleanOptions;
+import static com.didekindroid.common.utils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_JUAN;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;

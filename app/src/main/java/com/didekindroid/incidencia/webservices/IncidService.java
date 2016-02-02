@@ -4,15 +4,13 @@ import android.util.Log;
 
 import com.didekin.common.exception.InServiceException;
 import com.didekin.incidservice.controller.IncidenciaServEndPoints;
-import com.didekin.incidservice.domain.IncidenciaUser;
 import com.didekin.incidservice.domain.Incidencia;
+import com.didekin.incidservice.domain.IncidenciaUser;
 import com.didekin.serviceone.domain.Comunidad;
+import com.didekindroid.R;
 import com.didekindroid.common.UiException;
 
 import java.util.List;
-
-import retrofit.http.Header;
-import retrofit.http.Path;
 
 import static com.didekin.common.RetrofitRestBuilder.BUILDER;
 import static com.didekindroid.DidekindroidApp.getBaseURL;
@@ -30,7 +28,13 @@ public enum IncidService implements IncidenciaServEndPoints {
 
     IncidenciaServ(BUILDER.getService(IncidenciaServEndPoints.class, getBaseURL())) {
         @Override
-        public IncidenciaUser getIncidenciaUserWithPowers(@Header("Authorization") String accessToken, @Path("comunidadId") long incidenciaId)
+        public int deleteIncidencia(String accessToken, long incidenciaId)
+        {
+            return IncidenciaServ.endPoint.deleteIncidencia(accessToken, incidenciaId);
+        }
+
+        @Override
+        public IncidenciaUser getIncidenciaUserWithPowers(String accessToken, long incidenciaId)
         {
             return IncidenciaServ.endPoint.getIncidenciaUserWithPowers(accessToken, incidenciaId);
         }
@@ -48,9 +52,27 @@ public enum IncidService implements IncidenciaServEndPoints {
         }
 
         @Override
+        public int modifyIncidenciaUser(String accessToken, IncidenciaUser incidenciaUser)
+        {
+            return IncidenciaServ.endPoint.modifyIncidenciaUser(accessToken, incidenciaUser);
+        }
+
+        @Override
+        public int modifyUser(String accessToken, IncidenciaUser incidenciaUser)
+        {
+            return IncidenciaServ.endPoint.modifyUser(accessToken, incidenciaUser);
+        }
+
+        @Override
         public int regIncidenciaUser(String accessToken, IncidenciaUser incidenciaUser)
         {
             return IncidenciaServ.endPoint.regIncidenciaUser(accessToken, incidenciaUser);
+        }
+
+        @Override
+        public int regUserInIncidencia(String accessToken, IncidenciaUser incidenciaUser)
+        {
+            return IncidenciaServ.endPoint.regUserInIncidencia(accessToken, incidenciaUser);
         }
     },;
 
@@ -67,6 +89,21 @@ public enum IncidService implements IncidenciaServEndPoints {
 //                  CONVENIENCE METHODS
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+    public int deleteIncidencia(long incidenciaId) throws UiException
+    {
+        Log.d(TAG, "deleteIncidencia()");
+
+        int deleteIncidencias = 0;
+
+        try {
+            deleteIncidencias = deleteIncidencia(checkBearerToken(), incidenciaId);
+        } catch (InServiceException e) {
+            catchAuthenticationException(e, TAG, R.string.user_without_powers);
+            catchIncidenciaFkException(e, TAG);
+        }
+        return deleteIncidencias;
+    }
+
     /**
      * This method encapsulates the call to the UsuarioService.ServOne method.
      */
@@ -77,7 +114,9 @@ public enum IncidService implements IncidenciaServEndPoints {
     }
 
     /**
-     * This method returns an incidencia with the powers of the user on the incidence.
+     * The user has an IncidenciaUser relationship, this method returns an incidencia with the powers of the user on the incidence.
+     * If not, return an IncidenciaUser instance with usuario == null.
+     * If the incidencia doesn't exist, it returns an exception.
      *
      * @param incidenciaId identifies the incidencia to be returned.
      */
@@ -88,7 +127,7 @@ public enum IncidService implements IncidenciaServEndPoints {
         try {
             incidenciaUser = getIncidenciaUserWithPowers(checkBearerToken(), incidenciaId);
         } catch (InServiceException e) {
-            catchAuthenticationException(e, TAG);
+            catchAuthenticationException(e, TAG, R.string.user_without_signedUp);
             catchIncidenciaFkException(e, TAG);
         }
         return incidenciaUser;
@@ -101,7 +140,7 @@ public enum IncidService implements IncidenciaServEndPoints {
         try {
             incidencias = incidSeeByComu(checkBearerToken(), comunidadId);
         } catch (InServiceException e) {
-            catchAuthenticationException(e, TAG);
+            catchAuthenticationException(e, TAG, R.string.user_without_signedUp);
         }
         return incidencias;
     }
@@ -113,9 +152,36 @@ public enum IncidService implements IncidenciaServEndPoints {
         try {
             incidencias = incidSeeClosedByComu(checkBearerToken(), comunidadId);
         } catch (InServiceException e) {
-            catchAuthenticationException(e, TAG);
+            catchAuthenticationException(e, TAG, R.string.user_without_signedUp);
         }
         return incidencias;
+    }
+
+    public int modifyIncidenciaUser(IncidenciaUser incidenciaUser) throws UiException
+    {
+        Log.d(TAG, "modifyIncidenciaUser()");
+
+        int modifyIncidencias = 0;
+
+        try {
+            modifyIncidencias = modifyIncidenciaUser(checkBearerToken(), incidenciaUser);
+        } catch (InServiceException e) {
+            catchAuthenticationException(e, TAG, R.string.user_without_powers);
+            catchIncidenciaFkException(e, TAG);
+        }
+        return modifyIncidencias;
+    }
+
+    public int modifyUser(IncidenciaUser incidenciaUser) throws UiException
+    {
+        Log.d(TAG, "modifyUser()");
+        int rowModified = 0;
+        try {
+            rowModified = modifyUser(checkBearerToken(), incidenciaUser);
+        } catch (InServiceException ue){
+            catchAuthenticationException(ue, TAG, R.string.user_without_powers);
+        }
+        return rowModified;
     }
 
     public int regIncidenciaUser(IncidenciaUser incidenciaUser) throws UiException
@@ -126,8 +192,21 @@ public enum IncidService implements IncidenciaServEndPoints {
         try {
             regIncidencia = regIncidenciaUser(checkBearerToken(), incidenciaUser);
         } catch (InServiceException e) {
-            catchAuthenticationException(e, TAG);
+            catchAuthenticationException(e, TAG, R.string.user_without_signedUp);
         }
         return regIncidencia;
+    }
+
+    public int regUserInIncidencia(IncidenciaUser incidenciaUser) throws UiException
+    {
+        Log.d(TAG, "regUserInIncidencia()");
+        int insertRow = 0;
+        try {
+            insertRow = regUserInIncidencia(checkBearerToken(), incidenciaUser);
+        } catch (InServiceException ie){
+            catchAuthenticationException(ie, TAG, R.string.user_without_powers);
+            catchIncidenciaFkException(ie, TAG);
+        }
+        return insertRow;
     }
 }

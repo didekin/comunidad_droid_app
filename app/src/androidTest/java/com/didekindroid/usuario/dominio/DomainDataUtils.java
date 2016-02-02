@@ -3,12 +3,14 @@ package com.didekindroid.usuario.dominio;
 import com.didekin.serviceone.domain.Comunidad;
 import com.didekin.serviceone.domain.Municipio;
 import com.didekin.serviceone.domain.Provincia;
-import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekin.serviceone.domain.Usuario;
+import com.didekin.serviceone.domain.UsuarioComunidad;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.didekin.common.oauth2.Rol.PRESIDENTE;
+import static com.didekin.common.oauth2.Rol.PROPIETARIO;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.ADM;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.INQ;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRE;
@@ -83,7 +85,7 @@ public final class DomainDataUtils {
             .build();
 
     public static final UsuarioComunidad COMU_REAL_JUAN = makeUsuarioComunidad(COMU_REAL, USER_JUAN, "portal", "esc",
-            "plantaX", "door12", PRO.function);
+            "plantaX", "door12", PROPIETARIO.function);
 
     public static final UsuarioComunidad COMU_PLAZUELA5_JUAN = makeUsuarioComunidad(COMU_LA_PLAZUELA_5, USER_JUAN, null,
             null, "planta3", "doorA", ADM.function);
@@ -95,7 +97,7 @@ public final class DomainDataUtils {
             "portalA", null, "planta2", null, INQ.function);
 
     public static final UsuarioComunidad COMU_ESCORIAL_PEPE = makeUsuarioComunidad(COMU_EL_ESCORIAL, USER_PEPE,
-            "portal22", "esc22", "planta22", "door22", PRE.function.concat(",").concat(INQ.function));
+            "portal22", "esc22", "planta22", "door22", PRESIDENTE.function.concat(",").concat(INQ.function));
 
     public static final UsuarioComunidad COMU_PLAZUELA5_PEPE = makeUsuarioComunidad(COMU_LA_PLAZUELA_5, USER_PEPE,
             "portal11", "esc11", "planta11", "door11", PRE.function.concat(",").concat(PRO.function));

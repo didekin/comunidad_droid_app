@@ -194,10 +194,14 @@ public final class Incidencia implements Serializable{
         public Incidencia build()
         {
             Incidencia incidencia = new Incidencia(this);
-            if (incidencia.getComunidad() == null ||
-                    (incidencia.getIncidenciaId() <= 0 &&
-                            (incidencia.getDescripcion() == null || incidencia.getAmbitoIncidencia() == null))) {
-                throw new IllegalStateException(INCIDENCIA_WRONG_INIT.toString());
+            if (incidencia.getIncidenciaId() <= 0){
+                if(incidencia.getComunidad() == null || incidencia.getDescripcion() == null || incidencia.getAmbitoIncidencia() == null){
+                    throw new IllegalStateException(INCIDENCIA_WRONG_INIT.toString());
+                }
+            } else {
+                if (incidencia.getComunidad() == null){
+                    throw new IllegalStateException(INCIDENCIA_WRONG_INIT.toString());
+                }
             }
             return incidencia;
         }

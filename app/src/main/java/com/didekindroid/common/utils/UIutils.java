@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.didekin.common.exception.DidekinExceptionMsg;
 import com.didekin.common.exception.InServiceException;
 import com.didekindroid.DidekindroidApp;
 import com.didekindroid.R;
@@ -26,17 +25,16 @@ import java.text.DecimalFormat;
 import java.util.Calendar;
 
 import static android.widget.Toast.makeText;
-import static com.didekin.common.domain.DataPatterns.DECIMAL_ZERO;
 import static com.didekin.common.domain.DataPatterns.DECIMAL_TWO;
-import static com.didekin.common.exception.DidekinExceptionMsg.COMUNIDAD_NOT_FOUND;
-import static com.didekin.common.exception.DidekinExceptionMsg.INCIDENCIA_NOT_FOUND;
-import static com.didekin.common.exception.DidekinExceptionMsg.INCIDENCIA_WRONG_INIT;
-import static com.didekin.common.exception.DidekinExceptionMsg.isMessageToLogin;
+import static com.didekin.common.domain.DataPatterns.DECIMAL_ZERO;
 import static com.didekin.common.domain.DataPatterns.LINE_BREAK;
+import static com.didekin.common.exception.DidekinExceptionMsg.COMUNIDAD_NOT_FOUND;
+import static com.didekin.common.exception.DidekinExceptionMsg.isMessageToLogin;
+import static com.didekin.common.exception.DidekinExceptionMsg.isMessageToSeeIncidencia;
 import static com.didekindroid.R.color.deep_purple_100;
 import static com.didekindroid.common.TokenHandler.TKhandler;
-import static com.didekindroid.common.UiException.UiAction.LOGIN;
 import static com.didekindroid.common.UiException.UiAction.INCID_SEE_BY_COMU;
+import static com.didekindroid.common.UiException.UiAction.LOGIN;
 import static com.didekindroid.common.UiException.UiAction.SEARCH_COMU;
 import static com.didekindroid.common.utils.UIutils.SharedPrefFiles.app_preferences_file;
 
@@ -66,38 +64,6 @@ public final class UIutils {
         return bearerAccessTkHeader;
     }
 
-//    ============================== EXCEPTIONS =======================================
-
-    public static void catchAuthenticationException(InServiceException e, String tagClass) throws UiException
-    {
-        Log.e(tagClass, e.getHttpMessage());
-        if (isMessageToLogin(e.getHttpMessage())) {  // Problema de identificación.
-            throw new UiException(LOGIN, R.string.user_without_signedUp, e);
-        }
-    }
-
-    public static void catchComunidadFkException(InServiceException ie, String tagClass) throws UiException
-    {
-        Log.e(tagClass, ie.getHttpMessage());
-        if (ie.getHttpMessage().equals(COMUNIDAD_NOT_FOUND.getHttpMessage())){
-            throw new UiException(SEARCH_COMU, R.string.comunidad_not_found_message, null);
-        }
-    }
-
-    public static void catchIncidenciaFkException(InServiceException ie, String tagClass) throws UiException
-    {
-        Log.e(tagClass, ie.getHttpMessage());
-        if (ie.getHttpMessage().equals(INCIDENCIA_NOT_FOUND.getHttpMessage())){
-            throw new UiException(INCID_SEE_BY_COMU, R.string.incidencia_wrong_init, null);
-        }
-    }
-
-    public static void doRuntimeException(Exception e, String tagClass)
-    {
-        Log.e(tagClass, e.getMessage());
-        throw new RuntimeException(e);
-    }
-
 //    ================================ DATA FORMATS ==========================================
 
     public static String formatTimeStampToString(Timestamp timestamp)
@@ -120,6 +86,46 @@ public final class UIutils {
     {
         DecimalFormat myFormatter = new DecimalFormat(DECIMAL_TWO.getRegexp());
         return myFormatter.format(myDouble);
+    }
+
+//    ================================== ERRORS ======================================
+
+    public static StringBuilder getErrorMsgBuilder(Context context)
+    {
+        return new StringBuilder(context.getResources().getText(R.string.error_validation_msg))
+                .append(LINE_BREAK.getRegexp());
+    }
+
+//    ============================== EXCEPTIONS =======================================
+
+    public static void catchAuthenticationException(InServiceException e, String tagClass, int resourceId) throws UiException
+    {
+        Log.e(tagClass, e.getHttpMessage());
+        if (isMessageToLogin(e.getHttpMessage())) {  // Problema de identificación.
+            throw new UiException(LOGIN, resourceId, e);
+        }
+    }
+
+    public static void catchComunidadFkException(InServiceException ie, String tagClass) throws UiException
+    {
+        Log.e(tagClass, ie.getHttpMessage());
+        if (ie.getHttpMessage().equals(COMUNIDAD_NOT_FOUND.getHttpMessage())){
+            throw new UiException(SEARCH_COMU, R.string.comunidad_not_found_message, null);
+        }
+    }
+
+    public static void catchIncidenciaFkException(InServiceException ie, String tagClass) throws UiException
+    {
+        Log.e(tagClass, ie.getHttpMessage());
+        if (isMessageToSeeIncidencia(ie.getHttpMessage())){
+            throw new UiException(INCID_SEE_BY_COMU, R.string.incidencia_wrong_init, ie);
+        }
+    }
+
+    public static void doRuntimeException(Exception e, String tagClass)
+    {
+        Log.e(tagClass, e.getMessage());
+        throw new RuntimeException(e);
     }
 
 //    =============================== GOOGLE SERVICES =================================
@@ -237,11 +243,5 @@ public final class UIutils {
     {
         Log.d(TAG, "doToolBar()");
         doToolBar(activity, APPBAR_ID, hasParentAc);
-    }
-
-    public static StringBuilder getErrorMsgBuilder(Context context)
-    {
-        return new StringBuilder(context.getResources().getText(R.string.error_validation_msg))
-                .append(LINE_BREAK.getRegexp());
     }
 }

@@ -19,7 +19,7 @@ import static com.google.common.base.Preconditions.checkState;
  * Date: 12/01/16
  * Time: 12:32
  */
-class ComunidadSpinnerSetter<T extends Fragment & ComuSpinnerSettable> extends AsyncTask<Void, Void, List<Comunidad>> {
+public class ComunidadSpinnerSetter<T extends Fragment & ComuSpinnerSettable> extends AsyncTask<Void, Void, List<Comunidad>> {
 
     private static final String TAG = ComunidadSpinnerSetter.class.getCanonicalName();
     UiException uiException;

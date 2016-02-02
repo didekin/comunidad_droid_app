@@ -46,7 +46,6 @@ public class ComuDataAc extends Activity implements RegComuFr.RegComuFrListener 
     View mAcView;
     Button mModifyButton;
     RegComuFr mRegComuFrg;
-    ComuDataSetter mComuDataSetter;
     private Comunidad mComunidad;
 
     private boolean isTipoViaSpinnerSet;
@@ -72,7 +71,7 @@ public class ComuDataAc extends Activity implements RegComuFr.RegComuFrListener 
 
         // Asunción: esta tarea termina antes que la carga de los spinners en RegComuFr.
         // TODO: cambiar el intent; meter el objeto comunidad e inicializar mComunidad con él.
-        mComuDataSetter = (ComuDataSetter) new ComuDataSetter().execute();
+       new ComuDataSetter().execute();
 
         mModifyButton = (Button) findViewById(R.id.comu_data_ac_button);
         mModifyButton.setOnClickListener(new View.OnClickListener() {

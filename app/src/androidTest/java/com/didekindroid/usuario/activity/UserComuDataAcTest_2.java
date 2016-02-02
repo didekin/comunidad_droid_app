@@ -34,8 +34,8 @@ import static com.didekindroid.common.utils.AppKeysForBundle.USERCOMU_LIST_OBJEC
 import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRE;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRO;
-import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
-import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.signUpAndUpdateTk;
+import static com.didekindroid.common.utils.ActivityTestUtils.cleanOptions;
+import static com.didekindroid.common.utils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_JUAN;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_PEPE;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.makeUsuarioComunidad;

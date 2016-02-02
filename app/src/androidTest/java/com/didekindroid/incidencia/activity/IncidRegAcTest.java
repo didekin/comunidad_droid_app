@@ -41,8 +41,8 @@ import static com.didekindroid.common.utils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.incidencia.repository.IncidenciaDataDb.AmbitoIncidencia.AMBITO_INCID_COUNT;
-import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.cleanOptions;
-import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.regSeveralUserComuSameUser;
+import static com.didekindroid.common.utils.ActivityTestUtils.cleanOptions;
+import static com.didekindroid.common.utils.ActivityTestUtils.regSeveralUserComuSameUser;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_LA_FUENTE;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_LA_FUENTE_PEPE;
@@ -148,9 +148,9 @@ public class IncidRegAcTest {
         item = (String) mActivity.mRegAcFragment.mImportanciaSpinner.getItemAtPosition(4);
         assertThat(item, is("Urgente"));
 
-        count = mActivity.mRegAcFragment.mTipoIncidenciaSpinner.getCount();
+        count = mActivity.mRegAcFragment.mAmbitoIncidenciaSpinner.getCount();
         assertThat(count, is(AMBITO_INCID_COUNT));
-        Cursor cursor = ((CursorAdapter) mActivity.mRegAcFragment.mTipoIncidenciaSpinner.getAdapter()).getCursor();
+        Cursor cursor = ((CursorAdapter) mActivity.mRegAcFragment.mAmbitoIncidenciaSpinner.getAdapter()).getCursor();
         cursor.moveToPosition(1);
         assertThat(cursor.getString(1), is("Alarmas comunitarias"));
         cursor.moveToPosition(51);

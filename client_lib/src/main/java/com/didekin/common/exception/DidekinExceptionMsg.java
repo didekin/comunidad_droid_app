@@ -71,6 +71,8 @@ public enum DidekinExceptionMsg {
 
     static final Set<String> loginHttpMessages = new HashSet<>();
 
+    static final Set<String> seeIncidenciaHttpMessages = new HashSet<>();
+
     static {
         messageToStatusCode.put(BAD_REQUEST, bad_request_status);
         messageToStatusCode.put(COMUNIDAD_NOT_COMPARABLE, precondition_fail_status);
@@ -81,7 +83,7 @@ public enum DidekinExceptionMsg {
         messageToStatusCode.put(INCIDENCIA_NOT_FOUND, entity_not_found_status);
         messageToStatusCode.put(INCIDENCIA_WRONG_INIT, precondition_fail_status);
         messageToStatusCode.put(NOT_FOUND, not_found_status);
-        messageToStatusCode.put(ROLES_NOT_FOUND, not_found_status);
+        messageToStatusCode.put(ROLES_NOT_FOUND, entity_not_found_status);
         messageToStatusCode.put(SUFIJO_NUM_IN_COMUNIDAD_NULL, precondition_fail_status);
         messageToStatusCode.put(TOKEN_NOT_DELETED, postcondition_fail_status);
         messageToStatusCode.put(UNAUTHORIZED, unauthorized_status);
@@ -89,7 +91,7 @@ public enum DidekinExceptionMsg {
         messageToStatusCode.put(USER_COMU_NOT_FOUND, entity_not_found_status);
         messageToStatusCode.put(USER_DATA_NOT_MODIFIED, postcondition_fail_status);
         messageToStatusCode.put(USER_NOT_COMPARABLE, precondition_fail_status);
-        messageToStatusCode.put(USER_NOT_EQUAL_ABLE,precondition_fail_status);
+        messageToStatusCode.put(USER_NOT_EQUAL_ABLE, precondition_fail_status);
         messageToStatusCode.put(USER_NAME_NOT_FOUND, entity_not_found_status);
         messageToStatusCode.put(USER_NAME_DUPLICATE, conflict_status);
         messageToStatusCode.put(USER_NOT_HASHABLE, precondition_fail_status);
@@ -105,6 +107,10 @@ public enum DidekinExceptionMsg {
         loginHttpMessages.add(USERCOMU_WRONG_INIT.getHttpMessage());
         loginHttpMessages.add(USER_NAME_NOT_FOUND.getHttpMessage());
         loginHttpMessages.add(USER_WRONG_INIT.getHttpMessage());
+
+        // SeeIncidenciaHttpMessages.
+        seeIncidenciaHttpMessages.add(INCIDENCIA_NOT_FOUND.getHttpMessage());
+        seeIncidenciaHttpMessages.add(INCIDENCIA_WRONG_INIT.getHttpMessage());
     }
 
     public static int getStatusCode(DidekinExceptionMsg didekinExceptionMsg)
@@ -120,6 +126,11 @@ public enum DidekinExceptionMsg {
     public static boolean isMessageToLogin(String httpMessage)
     {
         return loginHttpMessages.contains(httpMessage);
+    }
+
+    public static boolean isMessageToSeeIncidencia(String httMessage)
+    {
+        return seeIncidenciaHttpMessages.contains(httMessage);
     }
 
     public int getHttpStatus()
