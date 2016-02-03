@@ -27,6 +27,8 @@ public enum DidekinExceptionMsg {
     COMUNIDAD_NOT_FOUND,
     COMUNIDAD_NOT_HASHABLE,
     COMUNIDAD_WRONG_INIT,
+    INCIDENCIA_COMMENT_ANSWER_WRONG_INIT,
+    INCIDENCIA_COMMENT_WRONG_INIT,
     INCIDENCIA_NOT_FOUND,
     INCIDENCIA_WRONG_INIT,
     NOT_FOUND,
@@ -80,6 +82,8 @@ public enum DidekinExceptionMsg {
         messageToStatusCode.put(COMUNIDAD_NOT_FOUND, entity_not_found_status);
         messageToStatusCode.put(COMUNIDAD_NOT_HASHABLE, precondition_fail_status);
         messageToStatusCode.put(COMUNIDAD_WRONG_INIT, precondition_fail_status);
+        messageToStatusCode.put(INCIDENCIA_COMMENT_ANSWER_WRONG_INIT, precondition_fail_status);
+        messageToStatusCode.put(INCIDENCIA_COMMENT_WRONG_INIT, precondition_fail_status);
         messageToStatusCode.put(INCIDENCIA_NOT_FOUND, entity_not_found_status);
         messageToStatusCode.put(INCIDENCIA_WRONG_INIT, precondition_fail_status);
         messageToStatusCode.put(NOT_FOUND, not_found_status);

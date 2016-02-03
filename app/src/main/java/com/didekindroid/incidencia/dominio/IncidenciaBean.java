@@ -55,6 +55,11 @@ public class IncidenciaBean {
         return this;
     }
 
+    public short getImportanciaIncid()
+    {
+        return importanciaIncid;
+    }
+
     public IncidenciaUser makeIncidenciaUser(final View mFragmentView, StringBuilder errorMsg)
     {
         setDescripcion(((EditText) mFragmentView.findViewById(R.id.incid_reg_desc_ed)).getText().toString());
@@ -82,7 +87,7 @@ public class IncidenciaBean {
                 & validateComunidadId(errorMsg, resources);
     }
 
-    private boolean validateDescripcion(StringBuilder errorMsg, Resources resources)
+    boolean validateDescripcion(StringBuilder errorMsg, Resources resources)
     {
         if (!INCID_DESC.isPatternOk(descripcion)) {
             errorMsg.append(resources.getString(R.string.incid_reg_descripcion)).append(LINE_BREAK.getRegexp());
@@ -100,7 +105,7 @@ public class IncidenciaBean {
         return true;
     }
 
-    private boolean validateImportancia(StringBuilder errorMsg, Resources resources)
+    public boolean validateImportancia(StringBuilder errorMsg, Resources resources)
     {
         short upperBound = (short) resources.getStringArray(R.array.IncidImportanciaArray).length;
         if (!(importanciaIncid > 0 && importanciaIncid < upperBound)) {
@@ -110,7 +115,7 @@ public class IncidenciaBean {
         return true;
     }
 
-    private boolean validateComunidadId(StringBuilder errorMsg, Resources resources){
+    boolean validateComunidadId(StringBuilder errorMsg, Resources resources){
         if (comunidadId <= 0){
             errorMsg.append(resources.getString(R.string.reg_usercomu_comunidad_null)).append(LINE_BREAK.getRegexp());
             return false;

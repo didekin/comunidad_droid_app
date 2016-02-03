@@ -29,8 +29,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * 2. An intent is passed with the comunidadId of the updated incidencia.
  * 3. An updated incidencias list of the comunidad is showed.
  */
-public class IncidEditAc extends AppCompatActivity implements
-        IncidEditMaxPowerFr.IncidUserDataSupplier {
+public class IncidEditAc extends AppCompatActivity implements IncidUserDataSupplier {
 
     private static final String TAG = IncidEditAc.class.getCanonicalName();
     View mAcView;
@@ -55,11 +54,12 @@ public class IncidEditAc extends AppCompatActivity implements
                 mFragmentMax = new IncidEditMaxPowerFr();
                 getFragmentManager().beginTransaction().add(R.id.incid_edit_fragment_container_ac, mFragmentMax).commit();
             }
-        } else if (mIncidenciaUser.getUsuario() == null) {
-            //TODO: registrar al usuario en la incidencia.
-
-        } else {
-            // TODO: modificar un usuario ya registrado en la incidencia, sin poderes.
+        }  else {
+            IncidEditNoPowerFr mFragmentMin;
+            if (savedInstanceState == null){
+                mFragmentMin = new IncidEditNoPowerFr();
+                getFragmentManager().beginTransaction().add(R.id.incid_edit_fragment_container_ac, mFragmentMin).commit();
+            }
         }
     }
 

@@ -19,6 +19,7 @@
     <!-- ============================ MESSAGES ============================== -->
     <string name="no_incidencia_by_user">No existen incidencias</string>
     <string name="incidencia_wrong_init">No podemos mostrarte la incidencia. Verifica que sigue abierta.</string>
+    <string name="user_without_powers">Haz login y accede nuevamente a la incidencia.</string>
     <!-- ============================== MENUS ================================= -->
     <string name="incid_reg_ac_mn">Nueva incidencia</string>
     <string name="incid_see_by_comu_ac_mn">Incidencias abiertas</string>
@@ -31,6 +32,7 @@
     <string name="incid_edit_modif_button_rot">Modificar incidencia</string>
     <string name="incid_edit_borrar_txt">Para borrar definitivamente la incidencia:</string>
     <string name="incid_edit_borrar_button_rot">Borrar incidencia</string>
+    <string name="incid_regUserInIncid_button_rot">Confirmar</string>
     <!-- =============== IncidRegAc =============== -->
     <string name="incid_reg_ac_label">Nueva incidencia</string>
     <string name="incid_reg_hint"> -- describe la incidencia (max. 250 caracteres) -- </string>
@@ -59,6 +61,7 @@
     <!--                                  USUARIO                                     -->
     <!--******************************************************************************-->
     <!-- ============================ MESSAGES ============================== -->
+    <string name="comunidad_not_found_message">No podemos mostrarte esta comuniad. Búscala nuevamente.</string>
     <string name="error_validation_msg">Los siguientes datos no son válidos: </string>
     <string name="login_wrong_no_mail">"Busca tu comunidad y regístrate.\nSi no existe, regístrala en 'Nueva comunidad'."</string>
     <string name="no_result_search_comunidad">No hemos encontrado tu comunidad.\nPuedes registrarla aquí. </string>

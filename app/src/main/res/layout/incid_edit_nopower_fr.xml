@@ -1,0 +1,65 @@
+<ScrollView
+    style="@style/baseLayout.scroll"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/incid_edit_nopower_frg">
+
+    <RelativeLayout
+        android:id="@+id/incid_edit_nopower_fr_layout"
+        style="@style/baseLayout"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_marginTop="@dimen/app_bar_bottom_margin"
+        tools:context="com.didekindroid.incidencia.activity.IncidEditNoPowerFr">
+
+        <TextView
+            android:id="@+id/incid_comunidad_rot"
+            style="@style/textBase.textFieldLabel1"
+            android:text="@string/incid_comunidad_rot"
+            android:layout_alignParentStart="true"/>
+
+        <TextView
+            android:id="@+id/incid_comunidad_txt"
+            style="@style/textBase.textFieldLabel2"
+            android:layout_alignBottom="@id/incid_comunidad_rot"
+            android:layout_alignTop="@id/incid_comunidad_rot"
+            android:layout_marginTop="0dp"
+            android:layout_toEndOf="@id/incid_comunidad_rot"/>
+
+        <TextView
+            android:id="@+id/incid_reg_desc_txt"
+            style="@style/textBase.editField.description"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/incid_comunidad_rot"
+            tools:ignore="LabelFor"/>
+
+        <TextView
+            android:id="@+id/incid_ambito_rot"
+            style="@style/textBase.textFieldLabel1"
+            android:text="@string/incid_ambito_rot"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/incid_reg_desc_txt"/>
+
+        <TextView
+            android:id="@+id/incid_ambito_view"
+            style="@style/textBase.textFieldLabel2"
+            android:layout_alignBottom="@id/incid_ambito_rot"
+            android:layout_alignTop="@id/incid_ambito_rot"
+            android:layout_marginTop="0dp"
+            android:layout_toEndOf="@id/incid_ambito_rot"/>
+
+        <Spinner
+            android:id="@+id/incid_reg_importancia_spinner"
+            style="@style/spinnerBase"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/incid_ambito_rot"/>
+
+        <Button
+            android:id="@+id/incid_edit_fr_modif_button"
+            style="@style/textBase.acButton1"
+            android:text="@string/incid_edit_modif_button_rot"
+            android:layout_below="@id/incid_reg_importancia_spinner"/>
+
+    </RelativeLayout>
+
+</ScrollView>
