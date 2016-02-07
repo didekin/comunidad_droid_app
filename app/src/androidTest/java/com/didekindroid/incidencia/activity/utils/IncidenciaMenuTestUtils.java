@@ -20,16 +20,27 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
  */
 public enum IncidenciaMenuTestUtils {
 
-    INCID_REG_AC {
-
+    INCID_COMMENT_REG_AC {
         @Override
         public void checkMenuItem_WTk(Activity activity) throws InterruptedException
         {
-            onView(withText(R.string.incid_reg_ac_mn)).check(doesNotExist());
-            openActionBarOverflowOrOptionsMenu(activity);
-            Thread.sleep(1000);
-            onView(withText(R.string.incid_reg_ac_mn)).check(matches(isDisplayed())).perform(click());
-            onView(withId(R.id.incid_reg_ac_layout)).check(matches(isDisplayed()));
+            check(activity, R.string.incid_comment_reg_ac_mn, R.id.incid_comment_reg_ac_layout);
+        }
+    },
+
+    INCID_COMMENTS_SEE_AC {
+        @Override
+        public void checkMenuItem_WTk(Activity activity) throws InterruptedException
+        {
+            check(activity, R.string.incid_comments_see_ac_mn, R.id.incid_comment_see_frg);
+        }
+    },
+
+    INCID_REG_AC {
+        @Override
+        public void checkMenuItem_WTk(Activity activity) throws InterruptedException
+        {
+            check(activity, R.string.incid_reg_ac_mn, R.id.incid_reg_ac_layout);
         }
     },
 
@@ -37,10 +48,7 @@ public enum IncidenciaMenuTestUtils {
         @Override
         public void checkMenuItem_WTk(Activity activity) throws InterruptedException
         {
-            onView(withText(R.string.incid_see_by_comu_ac_mn)).check(doesNotExist());
-            openActionBarOverflowOrOptionsMenu(activity);
-            onView(withText(R.string.incid_see_by_comu_ac_mn)).check(matches(isDisplayed())).perform(click());
-            onView(withId(R.id.incid_see_by_comu_ac)).check(matches(isDisplayed()));
+            check(activity, R.string.incid_see_by_comu_ac_mn, R.id.incid_see_by_comu_ac);
         }
     },
 
@@ -48,14 +56,20 @@ public enum IncidenciaMenuTestUtils {
         @Override
         public void checkMenuItem_WTk(Activity activity) throws InterruptedException
         {
-            onView(withText(R.string.incid_closed_see_by_usercomu_ac_mn)).check(doesNotExist());
-            openActionBarOverflowOrOptionsMenu(activity);
-            Thread.sleep(1000);
-            onView(withText(R.string.incid_closed_see_by_usercomu_ac_mn)).check(matches(isDisplayed())).perform(click());
-            onView(withId(R.id.incid_see_closed_by_comu_ac)).check(matches(isDisplayed()));
+            check(activity, R.string.incid_closed_see_by_usercomu_ac_mn, R.id.incid_see_closed_by_comu_ac);
         }
-    },
-    ;
+    },;
 
     public abstract void checkMenuItem_WTk(Activity activity) throws InterruptedException;
+
+//    ============================= HELPER METHODS ==========================
+
+    private static void check(Activity activity, int menuResourceId, int actionResourceId) throws InterruptedException
+    {
+        onView(withText(menuResourceId)).check(doesNotExist());
+        openActionBarOverflowOrOptionsMenu(activity);
+        Thread.sleep(1000);
+        onView(withText(menuResourceId)).check(matches(isDisplayed())).perform(click());
+        onView(withId(actionResourceId)).check(matches(isDisplayed()));
+    }
 }

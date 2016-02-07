@@ -71,7 +71,7 @@ public class IncidServiceTest_2 {
         // Verificamos la excepción UNAUTHORIZED_TX_TO_USER;
 
         // Insertamos incidencia.
-        Incidencia incidencia_1 = insertGetIncidencia(pepeUserComu, 1);
+        Incidencia incidencia_1 = insertGetIncidencia(pepeUserComu, 1).getIncidencia();
         // Verificamos poderes: true; solo hay una incidenciaUser.
         IncidenciaUser incidUser = IncidenciaServ.getIncidenciaUserWithPowers(incidencia_1.getIncidenciaId());
         assertThat(incidUser.isModifyDescOrEraseIncid(), is(true));
@@ -82,7 +82,7 @@ public class IncidServiceTest_2 {
         assertThat(ServOne.regUserAndUserComu(userComuJuan), is(true));
         updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
         Thread.sleep(1000);
-        Incidencia incidencia_2 = insertGetIncidenciaWithId(incidencia_1.getIncidenciaId(), userComuJuan, 2);
+        Incidencia incidencia_2 = insertGetIncidenciaWithId(incidencia_1.getIncidenciaId(), userComuJuan, 2).getIncidencia();
         // Verificamos poderes de Juan: false, porque no es usuario titular.
         assertThat(incidencia_2, is(incidencia_1));
         incidUser = IncidenciaServ.getIncidenciaUserWithPowers(incidencia_2.getIncidenciaId());
@@ -108,7 +108,7 @@ public class IncidServiceTest_2 {
         // Verificamos la excepción UNAUTHORIZED_TX_TO_USER;
 
         // Insertamos incidencia.
-        Incidencia incidencia_1 = insertGetIncidencia(pepeUserComu, 1);
+        Incidencia incidencia_1 = insertGetIncidencia(pepeUserComu, 1).getIncidencia();
         // Registro usuario en misma comunidad y lo asocio a la incidencia.
         UsuarioComunidad userComuJuan = makeUsuarioComunidad(pepeUserComu.getComunidad(), USER_JUAN,
                 "portal", "esc", "plantaX", "door12", PROPIETARIO.function);
@@ -138,7 +138,7 @@ public class IncidServiceTest_2 {
         // Funcionamiento OK.
 
         // Insertamos incidencia.
-        Incidencia incidencia_1 = insertGetIncidencia(pepeUserComu, 1);
+        Incidencia incidencia_1 = insertGetIncidencia(pepeUserComu, 1).getIncidencia();
         // Registro usuario en misma comunidad y lo asocio a la incidencia.
         UsuarioComunidad userComuJuan = makeUsuarioComunidad(pepeUserComu.getComunidad(), USER_JUAN,
                 "portal", "esc", "plantaX", "door12", PROPIETARIO.function);
@@ -157,7 +157,7 @@ public class IncidServiceTest_2 {
     {
         // UsuarioComunidad incongruente con incidencia_comunidad.
         // Insertamos incidencia.
-        Incidencia incidencia_1 = insertGetIncidencia(pepeUserComu, 1);
+        Incidencia incidencia_1 = insertGetIncidencia(pepeUserComu, 1).getIncidencia();
         // Registramos usuario en otra comunidad.
         Usuario userJuan = signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
         // Intentamos asociar el nuevo usuario a la incidencia.

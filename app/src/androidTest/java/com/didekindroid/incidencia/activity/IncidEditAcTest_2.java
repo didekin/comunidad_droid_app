@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.incidservice.domain.Incidencia;
 import com.didekin.incidservice.domain.IncidenciaUser;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
@@ -83,8 +82,8 @@ public class IncidEditAcTest_2 {
                 signUpAndUpdateTk(COMU_REAL_PEPE);
                 pepeUserComu = ServOne.seeUserComusByUser().get(0);
                 // Insertamos incidencia.
-                Incidencia incidencia_1 = insertGetIncidencia(pepeUserComu, 1);
-                incidPepeReal = IncidenciaServ.getIncidenciaUserWithPowers(incidencia_1.getIncidenciaId());
+                IncidenciaUser incidenciaUser_1 = insertGetIncidencia(pepeUserComu, 1);
+                incidPepeReal = IncidenciaServ.getIncidenciaUserWithPowers(incidenciaUser_1.getIncidencia().getIncidenciaId());
                 // Modificamos los poderes.
                 incidPepeReal = new IncidenciaUser.IncidenciaUserBuilder(incidPepeReal.getIncidencia())
                         .copyIncidUser(incidPepeReal)

@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.didekin.incidservice.domain.Incidencia;
+import com.didekin.serviceone.domain.Comunidad;
 import com.didekindroid.R;
 
 import static com.didekindroid.common.utils.AppKeysForBundle.INCIDENCIA_LIST_INDEX;
@@ -101,6 +102,14 @@ public class IncidSeeClosedByComuAc extends AppCompatActivity implements
         Log.d(TAG, "onIncidenciaSelected()");
         mIncidenciaIndex = position;
 //        new FunctionalRoleGetter().execute(incidenciaUser);
+    }
+
+    @Override
+    public void onComunidadSpinnerSelected(Comunidad comunidadSelected)
+    {
+        Log.d(TAG, "onComunidadSpinnerSelected()");
+        // TODO: implementar el campo en la activity para esta comunidad y utilizarlo en el menú.
+
     }
 
     //    ============================================================

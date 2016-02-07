@@ -1,5 +1,6 @@
 package com.didekindroid.incidencia.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -9,14 +10,18 @@ import android.view.View;
 
 import com.didekin.incidservice.domain.IncidenciaUser;
 import com.didekindroid.R;
+import com.didekindroid.incidencia.activity.utils.IncidenciaMenu;
+import com.didekindroid.usuario.activity.SeeUserComuByComuAc;
 
 import static com.didekindroid.common.utils.AppKeysForBundle.INCIDENCIA_USER_OBJECT;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
+import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_COMMENTS_SEE_AC;
+import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_COMMENT_REG_AC;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Preconditions:
- * 1. An intent extra is passed with the IncidenciaUser to be edited.
+ * 1. An intent extra is received with the IncidenciaUser to be edited.
  * 2. Edition capabilities are dependent on:
  * -- the functional role of the user.
  * -- the ownership of the incident (authorship) by the user.
@@ -71,7 +76,7 @@ public class IncidEditAc extends AppCompatActivity implements IncidUserDataSuppl
     public boolean onCreateOptionsMenu(Menu menu)
     {
         Log.d(TAG, "onCreateOptionsMenu()");
-//        getMenuInflater().inflate(R.menu.incid_edit_ac_mn, menu);   TODO: rematar y probar cuando estén hechos los comentarios.
+        getMenuInflater().inflate(R.menu.incid_edit_ac_mn, menu);
         return true;
     }
 
@@ -81,14 +86,21 @@ public class IncidEditAc extends AppCompatActivity implements IncidUserDataSuppl
         Log.d(TAG, "onOptionsItemSelected()");
 
         int resourceId = checkNotNull(item.getItemId());
+        Intent intent;
 
         switch (resourceId) {
-            /*case R.id.see_usercomu_by_comu_ac_mn:
-                Intent intent = new Intent(this, SeeUserComuByComuAc.class);
-                intent.putExtra(COMUNIDAD_ID.extra, mIdComunidad);
+            case R.id.incid_comment_reg_ac_mn:
+                intent = new Intent();
+                intent.putExtra(INCIDENCIA_USER_OBJECT.extra, mIncidenciaUser);
                 this.setIntent(intent);
-                SEE_USERCOMU_BY_COMU_AC.doMenuItem(this);
-                return true;*/
+                INCID_COMMENT_REG_AC.doMenuItem(this);
+                return true;
+            case R.id.incid_comments_see_ac_mn:
+                intent = new Intent();
+                intent.putExtra(INCIDENCIA_USER_OBJECT.extra, mIncidenciaUser);
+                this.setIntent(intent);
+                INCID_COMMENTS_SEE_AC.doMenuItem(this);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

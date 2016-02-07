@@ -2,10 +2,12 @@ package com.didekindroid.incidencia.webservices;
 
 import android.support.test.runner.AndroidJUnit4;
 
+import com.didekin.incidservice.domain.IncidComment;
 import com.didekin.incidservice.domain.Incidencia;
 import com.didekin.incidservice.domain.IncidenciaUser;
 import com.didekin.serviceone.domain.Usuario;
 import com.didekin.serviceone.domain.UsuarioComunidad;
+import com.didekindroid.R;
 import com.didekindroid.common.UiException;
 import com.didekindroid.common.UiException.UiAction;
 import com.didekindroid.usuario.activity.utils.CleanUserEnum;
@@ -21,6 +23,7 @@ import static com.didekin.common.oauth2.Rol.PROPIETARIO;
 import static com.didekindroid.common.utils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.utils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.utils.ActivityTestUtils.updateSecurityData;
+import static com.didekindroid.incidencia.IncidenciaTestUtils.doComment;
 import static com.didekindroid.incidencia.IncidenciaTestUtils.doIncidencia;
 import static com.didekindroid.incidencia.IncidenciaTestUtils.doIncidenciaWithId;
 import static com.didekindroid.incidencia.IncidenciaTestUtils.insertGetIncidencia;
@@ -69,7 +72,7 @@ public class IncidServiceTest_1 {
     public void testDeleteIncidenciaUser_1() throws UiException
     {
         // Existe la incidencia; la borrarmos.
-        Incidencia incidencia = insertGetIncidencia(pepeUserComu, 1);
+        Incidencia incidencia = insertGetIncidencia(pepeUserComu, 1).getIncidencia();
         assertThat(IncidenciaServ.deleteIncidencia(incidencia.getIncidenciaId()), is(1));
 
         // Intentamos borrarla de nuevo: la app. redirige a la consulta de incidencias.
@@ -84,7 +87,7 @@ public class IncidServiceTest_1 {
     @Test
     public void testGetIncidenciaUserWithPowers_1() throws UiException
     {
-        Incidencia incidencia = insertGetIncidencia(pepeUserComu, 1);
+        Incidencia incidencia = insertGetIncidencia(pepeUserComu, 1).getIncidencia();
         IncidenciaUser incidenciaUser = IncidenciaServ.getIncidenciaUserWithPowers(incidencia.getIncidenciaId());
         assertThat(incidenciaUser.isModifyDescOrEraseIncid(), is(true));
     }
@@ -108,7 +111,7 @@ public class IncidServiceTest_1 {
         whatClean = CLEAN_JUAN_AND_PEPE;
 
         /* Usuario e incidencia en BD, pero no hay relación usuario_incidencia, ni relación usuario_comunidad.*/
-        Incidencia incidencia = insertGetIncidencia(pepeUserComu, 1);
+        Incidencia incidencia = insertGetIncidencia(pepeUserComu, 1).getIncidencia();
         signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
         try {
             IncidenciaServ.getIncidenciaUserWithPowers(incidencia.getIncidenciaId());
@@ -124,7 +127,7 @@ public class IncidServiceTest_1 {
         whatClean = CLEAN_JUAN_AND_PEPE;
 
         /* Usuario e incidencia en BD, pero no hay relación usuario_incidencia, SÍ hay relación usuario_comunidad.*/
-        Incidencia incidencia = insertGetIncidencia(pepeUserComu, 1);
+        Incidencia incidencia = insertGetIncidencia(pepeUserComu, 1).getIncidencia();
         UsuarioComunidad userComuJuan = makeUsuarioComunidad(pepeUserComu.getComunidad(), USER_JUAN,
                 "portal33", "esc22", "planta33", "door33", PROPIETARIO.function);
         ServOne.regUserAndUserComu(userComuJuan);
@@ -161,7 +164,7 @@ public class IncidServiceTest_1 {
     @Test
     public void testModifyIncidenciaUser_1() throws UiException
     {
-        Incidencia incidenciaDb = insertGetIncidencia(pepeUserComu, 3);
+        Incidencia incidenciaDb = insertGetIncidencia(pepeUserComu, 3).getIncidencia();
 
         // Modificamos la incidencia original.
         IncidenciaUser incidPepeUserComu = new IncidenciaUser.IncidenciaUserBuilder(
@@ -183,6 +186,47 @@ public class IncidServiceTest_1 {
         } catch (UiException u) {
             assertThat(u.getAction(), is(UiAction.INCID_SEE_BY_COMU));
             assertThat(u.getInServiceException().getHttpMessage(), is(INCIDENCIA_NOT_FOUND.getHttpMessage()));
+        }
+    }
+
+    @Test
+    public void testRegIncidComment_1() throws UiException
+    {
+        // Caso OK.
+        Incidencia incidencia = insertGetIncidencia(pepeUserComu, 1).getIncidencia();
+        assertThat(IncidenciaServ.regIncidComment(doComment("Comment_DESC", incidencia)),is(1));
+    }
+
+    @Test
+    public void testRegIncidComment_2() throws UiException
+    {
+        whatClean = CLEAN_JUAN_AND_PEPE;
+
+        // Caso EntityException: USERCOMU_WRONG_INIT.
+        Incidencia incidencia = insertGetIncidencia(pepeUserComu, 1).getIncidencia();
+
+        signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
+        try {
+            IncidenciaServ.regIncidComment(doComment("Comment_DESC",incidencia));
+            fail();
+        } catch (UiException ue) {
+            assertThat(ue.getAction(), is(UiAction.LOGIN));
+        }
+    }
+
+    @Test
+    public void testRegIncidComment_3() throws UiException
+    {
+        // Caso EntityException: INCIDENCIA_WRONG_INIT.
+        Incidencia incidencia = insertGetIncidencia(pepeUserComu, 1).getIncidencia();
+        IncidComment comment = doComment("Comment_DESC", new Incidencia.IncidenciaBuilder().copyIncidencia(incidencia).incidenciaId(999L).build());
+
+        try {
+            IncidenciaServ.regIncidComment(comment);
+            fail();
+        } catch (UiException ue) {
+            assertThat(ue.getAction(), is(UiAction.INCID_SEE_BY_COMU));
+            assertThat(ue.getResourceId(), is(R.string.incidencia_wrong_init_in_comment));
         }
     }
 
@@ -217,7 +261,7 @@ public class IncidServiceTest_1 {
     public void testModifyUser() throws UiException
     {
         // Verificamos modificación de importancia.
-        Incidencia incidenciaDb = insertGetIncidencia(pepeUserComu, 3);
+        Incidencia incidenciaDb = insertGetIncidencia(pepeUserComu, 3).getIncidencia();
         IncidenciaUser incidenciaUser = new IncidenciaUser.IncidenciaUserBuilder(incidenciaDb).usuario(pepe).importancia((short) 2).build();
         assertThat(IncidenciaServ.modifyUser(incidenciaUser),is(1));
         incidenciaUser = IncidenciaServ.getIncidenciaUserWithPowers(incidenciaDb.getIncidenciaId());

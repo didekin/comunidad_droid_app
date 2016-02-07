@@ -8,6 +8,7 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
+import com.didekindroid.incidencia.activity.utils.IncidenciaMenuTestUtils;
 import com.didekindroid.usuario.activity.utils.CleanUserEnum;
 
 import org.junit.After;
@@ -40,6 +41,7 @@ import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_ID;
 import static com.didekindroid.common.utils.AppKeysForBundle.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenuTestUtils.INCID_REG_AC;
+import static com.didekindroid.incidencia.activity.utils.IncidenciaMenuTestUtils.INCID_SEE_BY_COMU_AC;
 import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_NOTHING;
 import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.COMU_DATA_AC;
@@ -177,6 +179,12 @@ public class UserComuDataAcTest_1 {
         // Only one user associated to the comunidad: the menu shows the item.
         COMU_DATA_AC.checkMenuItem_WTk(mActivity);
         intended(hasExtra(COMUNIDAD_ID.extra, mUsuarioComunidad.getComunidad().getC_Id()));
+    }
+
+    @Test
+    public void testIncidSeeByComu_withToken_1() throws InterruptedException
+    {
+        INCID_SEE_BY_COMU_AC.checkMenuItem_WTk(mActivity);
     }
 
     @Test

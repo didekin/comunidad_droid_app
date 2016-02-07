@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.incidservice.domain.Incidencia;
 import com.didekin.incidservice.domain.IncidenciaUser;
 import com.didekin.serviceone.domain.UsuarioComunidad;
 import com.didekindroid.R;
@@ -40,7 +39,6 @@ import static com.didekindroid.common.utils.AppKeysForBundle.INCIDENCIA_USER_OBJ
 import static com.didekindroid.incidencia.IncidenciaTestUtils.insertGetIncidencia;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
-import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_PEPE;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_JUAN;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.makeUsuarioComunidad;
@@ -87,13 +85,13 @@ public class IncidEditAcTest_3 {
                 signUpAndUpdateTk(COMU_REAL_PEPE);
                 UsuarioComunidad pepeUserComu = ServOne.seeUserComusByUser().get(0);
                 // Insertamos incidencia.
-                Incidencia incidencia_1 = insertGetIncidencia(pepeUserComu, 1);
+                IncidenciaUser incidenciaUser_1 = insertGetIncidencia(pepeUserComu, 1);
                 // Registro usuario en misma comunidad.
                 UsuarioComunidad userComuJuan = makeUsuarioComunidad(pepeUserComu.getComunidad(), USER_JUAN,
                         "portal", "esc", "plantaX", "door12", PROPIETARIO.function);
                 ServOne.regUserAndUserComu(userComuJuan);
                 updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
-                incidJuanReal = IncidenciaServ.getIncidenciaUserWithPowers(incidencia_1.getIncidenciaId());
+                incidJuanReal = IncidenciaServ.getIncidenciaUserWithPowers(incidenciaUser_1.getIncidencia().getIncidenciaId());
             } catch (UiException e) {
                 e.printStackTrace();
             }

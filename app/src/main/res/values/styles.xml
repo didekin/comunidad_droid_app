@@ -136,7 +136,9 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/purple_900</item>
     </style>
+
     <style name="themeOne.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
     <style name="themeOne.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
 </resources>

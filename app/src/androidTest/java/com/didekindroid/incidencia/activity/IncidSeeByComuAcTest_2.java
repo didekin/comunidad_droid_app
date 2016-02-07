@@ -139,15 +139,15 @@ public class IncidSeeByComuAcTest_2 {
         assertThat(adapter.getCount(), is(2));
 
         // Ordered by fecha_alta of the incidencia.
-        assertThat(adapter.getItem(0).getComunidad().getNombreComunidad(), is(juanReal.getComunidad().getNombreComunidad()));
-        assertThat(adapter.getItem(0).getAmbitoIncidencia().getAmbitoId(), is(incidJuanReal1.getIncidencia().getAmbitoIncidencia().getAmbitoId()));
-        assertThat(adapter.getItem(0).getDescripcion(), is(incidJuanReal1.getIncidencia().getDescripcion()));
-        assertThat(adapter.getItem(0).getImportanciaAvg(), is((float) incidJuanReal1.getImportancia()));
+        assertThat(adapter.getItem(0).getIncidencia().getComunidad(), is(juanReal.getComunidad()));
+        assertThat(adapter.getItem(0).getIncidencia().getAmbitoIncidencia().getAmbitoId(), is(incidJuanReal1.getIncidencia().getAmbitoIncidencia().getAmbitoId()));
+        assertThat(adapter.getItem(0).getIncidencia().getDescripcion(), is(incidJuanReal1.getIncidencia().getDescripcion()));
+        assertThat(adapter.getItem(0).getIncidencia().getImportanciaAvg(), is((float) incidJuanReal1.getImportancia()));
         //
-        assertThat(adapter.getItem(1).getComunidad().getNombreComunidad(), is(juanReal.getComunidad().getNombreComunidad()));
-        assertThat(adapter.getItem(1).getAmbitoIncidencia().getAmbitoId(), is(incidJuanReal2.getIncidencia().getAmbitoIncidencia().getAmbitoId()));
-        assertThat(adapter.getItem(1).getDescripcion(), is(incidJuanReal2.getIncidencia().getDescripcion()));
-        assertThat(adapter.getItem(1).getImportanciaAvg(), is((float) incidJuanReal2.getImportancia()));
+        assertThat(adapter.getItem(1).getIncidencia().getComunidad(), is(juanReal.getComunidad()));
+        assertThat(adapter.getItem(1).getIncidencia().getAmbitoIncidencia().getAmbitoId(), is(incidJuanReal2.getIncidencia().getAmbitoIncidencia().getAmbitoId()));
+        assertThat(adapter.getItem(1).getIncidencia().getDescripcion(), is(incidJuanReal2.getIncidencia().getDescripcion()));
+        assertThat(adapter.getItem(1).getIncidencia().getImportanciaAvg(), is((float) incidJuanReal2.getImportancia()));
     }
 
     @Test
@@ -160,23 +160,28 @@ public class IncidSeeByComuAcTest_2 {
                         is(COMU_LA_PLAZUELA_5))
         ).perform(click()).check(matches(isDisplayed()));
 
+        // Verificamos que la actividad recibe la comunidad seleccionada.
+        assertThat(mActivity.mComunidadSelected, is(COMU_LA_PLAZUELA_5));
+
         assertThat(mFragment.mComunidadSelectedIndex,is(1));
         assertThat(adapter.getCount(), is(1));
 
-        assertThat(adapter.getItem(0).getComunidad().getNombreComunidad(), is(juanPlazuela.getComunidad().getNombreComunidad()));
-        assertThat(adapter.getItem(0).getAmbitoIncidencia().getAmbitoId(), is(incidJuanPlazuela1.getIncidencia().getAmbitoIncidencia().getAmbitoId()));
-        assertThat(adapter.getItem(0).getDescripcion(), is(incidJuanPlazuela1.getIncidencia().getDescripcion()));
-        assertThat(adapter.getItem(0).getImportanciaAvg(), is((float) incidJuanPlazuela1.getImportancia()));
+        assertThat(adapter.getItem(0).getIncidencia().getComunidad(), is(juanPlazuela.getComunidad()));
+        assertThat(adapter.getItem(0).getIncidencia().getAmbitoIncidencia().getAmbitoId(), is(incidJuanPlazuela1.getIncidencia().getAmbitoIncidencia().getAmbitoId()));
+        assertThat(adapter.getItem(0).getIncidencia().getDescripcion(), is(incidJuanPlazuela1.getIncidencia().getDescripcion()));
+        assertThat(adapter.getItem(0).getIncidencia().getImportanciaAvg(), is((float) incidJuanPlazuela1.getImportancia()));
     }
 
     @Test
     public void testOnData_1()
     {
         // Default comunidad: Real, in position 0.
-        Incidencia incidencia_0 = adapter.getItem(0);
-        Incidencia incidencia_1 = adapter.getItem(1);
+        IncidenciaUser incidUser_0 = adapter.getItem(0);
+        IncidenciaUser incidUser_1 = adapter.getItem(1);
+        Incidencia incidencia_0 = incidUser_0.getIncidencia();
+        Incidencia incidencia_1 = incidUser_1.getIncidencia();
 
-        onData(is(incidencia_0)).inAdapterView(withId(android.R.id.list)).check(matches(isDisplayed()));
+        onData(is(incidUser_0)).inAdapterView(withId(android.R.id.list)).check(matches(isDisplayed()));
         onView(allOf(
                 withText(incidJuanReal1.getIncidencia().getDescripcion()),
                 withId(R.id.incid_descripcion_view),
@@ -195,7 +200,7 @@ public class IncidSeeByComuAcTest_2 {
                 ))
         )).check(matches(isDisplayed()));
 
-        onData(is(incidencia_1)).inAdapterView(withId(android.R.id.list)).check(matches(isDisplayed()));
+        onData(is(incidUser_1)).inAdapterView(withId(android.R.id.list)).check(matches(isDisplayed()));
         onView(allOf(
                 withText(incidJuanReal2.getIncidencia().getDescripcion()),
                 withId(R.id.incid_descripcion_view),
@@ -220,8 +225,9 @@ public class IncidSeeByComuAcTest_2 {
     {
 
         // Default comunidad: Real, in position 0.
-        Incidencia incidencia_0 = adapter.getItem(0);
-        onData(is(incidencia_0)).inAdapterView(withId(android.R.id.list))
+        IncidenciaUser incidUser_0 = adapter.getItem(0);
+        Incidencia incidencia_0 = incidUser_0.getIncidencia();
+        onData(is(incidUser_0)).inAdapterView(withId(android.R.id.list))
                 .check(matches(isDisplayed()))
                 .perform(click());
 

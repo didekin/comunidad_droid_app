@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.didekin.common.exception.InServiceException;
 import com.didekin.incidservice.controller.IncidenciaServEndPoints;
-import com.didekin.incidservice.domain.Incidencia;
+import com.didekin.incidservice.domain.IncidComment;
 import com.didekin.incidservice.domain.IncidenciaUser;
 import com.didekin.serviceone.domain.Comunidad;
 import com.didekindroid.R;
@@ -40,13 +40,13 @@ public enum IncidService implements IncidenciaServEndPoints {
         }
 
         @Override
-        public List<Incidencia> incidSeeByComu(String accessToken, long comunidadId)
+        public List<IncidenciaUser> incidSeeByComu(String accessToken, long comunidadId)
         {
             return IncidenciaServ.endPoint.incidSeeByComu(accessToken, comunidadId);
         }
 
         @Override
-        public List<Incidencia> incidSeeClosedByComu(String accessToken, long comunidadId)
+        public List<IncidenciaUser> incidSeeClosedByComu(String accessToken, long comunidadId)
         {
             return IncidenciaServ.endPoint.incidSeeClosedByComu(accessToken, comunidadId);
         }
@@ -61,6 +61,12 @@ public enum IncidService implements IncidenciaServEndPoints {
         public int modifyUser(String accessToken, IncidenciaUser incidenciaUser)
         {
             return IncidenciaServ.endPoint.modifyUser(accessToken, incidenciaUser);
+        }
+
+        @Override
+        public int regIncidComment(String accessToken, IncidComment comment)
+        {
+            return IncidenciaServ.endPoint.regIncidComment(accessToken, comment);
         }
 
         @Override
@@ -99,7 +105,7 @@ public enum IncidService implements IncidenciaServEndPoints {
             deleteIncidencias = deleteIncidencia(checkBearerToken(), incidenciaId);
         } catch (InServiceException e) {
             catchAuthenticationException(e, TAG, R.string.user_without_powers);
-            catchIncidenciaFkException(e, TAG);
+            catchIncidenciaFkException(e, TAG, R.string.incidencia_wrong_init);
         }
         return deleteIncidencias;
     }
@@ -128,15 +134,15 @@ public enum IncidService implements IncidenciaServEndPoints {
             incidenciaUser = getIncidenciaUserWithPowers(checkBearerToken(), incidenciaId);
         } catch (InServiceException e) {
             catchAuthenticationException(e, TAG, R.string.user_without_signedUp);
-            catchIncidenciaFkException(e, TAG);
+            catchIncidenciaFkException(e, TAG, R.string.incidencia_wrong_init);
         }
         return incidenciaUser;
     }
 
-    public List<Incidencia> incidSeeByComu(long comunidadId) throws UiException
+    public List<IncidenciaUser> incidSeeByComu(long comunidadId) throws UiException
     {
         Log.d(TAG, "incidSeeByComu()");
-        List<Incidencia> incidencias = null;
+        List<IncidenciaUser> incidencias = null;
         try {
             incidencias = incidSeeByComu(checkBearerToken(), comunidadId);
         } catch (InServiceException e) {
@@ -145,10 +151,10 @@ public enum IncidService implements IncidenciaServEndPoints {
         return incidencias;
     }
 
-    public List<Incidencia> incidSeeClosedByComu(long comunidadId) throws UiException
+    public List<IncidenciaUser> incidSeeClosedByComu(long comunidadId) throws UiException
     {
         Log.d(TAG, "incidSeeClosedByComu()");
-        List<Incidencia> incidencias = null;
+        List<IncidenciaUser> incidencias = null;
         try {
             incidencias = incidSeeClosedByComu(checkBearerToken(), comunidadId);
         } catch (InServiceException e) {
@@ -167,7 +173,7 @@ public enum IncidService implements IncidenciaServEndPoints {
             modifyIncidencias = modifyIncidenciaUser(checkBearerToken(), incidenciaUser);
         } catch (InServiceException e) {
             catchAuthenticationException(e, TAG, R.string.user_without_powers);
-            catchIncidenciaFkException(e, TAG);
+            catchIncidenciaFkException(e, TAG, R.string.incidencia_wrong_init);
         }
         return modifyIncidencias;
     }
@@ -182,6 +188,19 @@ public enum IncidService implements IncidenciaServEndPoints {
             catchAuthenticationException(ue, TAG, R.string.user_without_powers);
         }
         return rowModified;
+    }
+
+    public int regIncidComment(IncidComment comment) throws UiException
+    {
+        Log.d(TAG, "regIncidComment()");
+        int insertedRow = 0;
+        try {
+            insertedRow = IncidenciaServ.endPoint.regIncidComment(checkBearerToken(), comment);
+        }catch (InServiceException ie){
+            catchAuthenticationException(ie, TAG, R.string.user_without_signedUp);
+            catchIncidenciaFkException(ie, TAG, R.string.incidencia_wrong_init_in_comment);
+        }
+        return insertedRow;
     }
 
     public int regIncidenciaUser(IncidenciaUser incidenciaUser) throws UiException
@@ -205,7 +224,7 @@ public enum IncidService implements IncidenciaServEndPoints {
             insertRow = regUserInIncidencia(checkBearerToken(), incidenciaUser);
         } catch (InServiceException ie){
             catchAuthenticationException(ie, TAG, R.string.user_without_powers);
-            catchIncidenciaFkException(ie, TAG);
+            catchIncidenciaFkException(ie, TAG, R.string.incidencia_wrong_init);
         }
         return insertRow;
     }

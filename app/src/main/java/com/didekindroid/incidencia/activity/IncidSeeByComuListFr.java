@@ -14,6 +14,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 
 import com.didekin.incidservice.domain.Incidencia;
+import com.didekin.incidservice.domain.IncidenciaUser;
 import com.didekin.serviceone.domain.Comunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
@@ -92,6 +93,8 @@ public class IncidSeeByComuListFr extends ListFragment implements ComuSpinnerSet
                 Comunidad comunidad = (Comunidad) parent.getItemAtPosition(position);
                 // Loading data for the comunidad selected.
                 new IncidByUserComuLoader().execute(comunidad.getC_Id());
+                // Informamos a la actividad.
+                mListener.onComunidadSpinnerSelected(comunidad);
             }
 
             @Override
@@ -169,7 +172,7 @@ public class IncidSeeByComuListFr extends ListFragment implements ComuSpinnerSet
         mListView.setItemChecked(position, true);
         v.setSelected(true);
         if (mListener != null) {
-            Incidencia incidencia = (Incidencia) mListView.getItemAtPosition(position);
+            Incidencia incidencia = ((IncidenciaUser) mListView.getItemAtPosition(position)).getIncidencia();
             mListener.onIncidenciaSelected(incidencia, position);
         }
     }
@@ -185,23 +188,23 @@ public class IncidSeeByComuListFr extends ListFragment implements ComuSpinnerSet
     public void onComunidadSpinnerLoaded()
     {
         Log.d(TAG, "onComunidadSpinnerLoaded()");
-        mComunidadSpinner.setSelection(mComunidadSelectedIndex); // TODO: testar que carga correctamente los datos de la comunidad cuando hacemos back.
+        mComunidadSpinner.setSelection(mComunidadSelectedIndex);
     }
 
     //    ============================================================
     //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
     //    ============================================================
 
-    class IncidByUserComuLoader extends AsyncTask<Long, Void, List<Incidencia>> {
+    class IncidByUserComuLoader extends AsyncTask<Long, Void, List<IncidenciaUser>> {
 
         private final String TAG = IncidByUserComuLoader.class.getCanonicalName();
         UiException uiException;
 
         @Override
-        protected List<Incidencia> doInBackground(Long... comunidadId)
+        protected List<IncidenciaUser> doInBackground(Long... comunidadId)
         {
             Log.d(TAG, "doInBackground()");
-            List<Incidencia> incidenciaList = null;
+            List<IncidenciaUser> incidenciaList = null;
             try {
                 incidenciaList = IncidenciaServ.incidSeeByComu(comunidadId[0]);
             } catch (UiException e) {
@@ -211,7 +214,7 @@ public class IncidSeeByComuListFr extends ListFragment implements ComuSpinnerSet
         }
 
         @Override
-        protected void onPostExecute(List<Incidencia> incidencias)
+        protected void onPostExecute(List<IncidenciaUser> incidencias)
         {
             Log.d(TAG, "onPostExecute()");
             if (incidencias != null && incidencias.size() > 0) {

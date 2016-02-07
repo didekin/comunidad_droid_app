@@ -33,6 +33,7 @@ import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.utils.UIutils.makeToast;
 import static com.didekindroid.common.utils.UIutils.updateIsRegistered;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_REG_AC;
+import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_SEE_BY_COMU_AC;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.ADM;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.INQ;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRE;
@@ -177,7 +178,7 @@ public class UserComuDataAc extends AppCompatActivity {
 
         switch (resourceId) {
             case R.id.see_usercomu_by_comu_ac_mn:
-                Intent intent = new Intent(this, SeeUserComuByComuAc.class);
+                Intent intent = new Intent();
                 intent.putExtra(COMUNIDAD_ID.extra, mOldUserComu.getComunidad().getC_Id());
                 this.setIntent(intent);
                 SEE_USERCOMU_BY_COMU_AC.doMenuItem(this);
@@ -187,6 +188,9 @@ public class UserComuDataAc extends AppCompatActivity {
                 intent.putExtra(COMUNIDAD_ID.extra, mOldUserComu.getComunidad().getC_Id());
                 this.setIntent(intent);
                 COMU_DATA_AC.doMenuItem(this);
+                return true;
+            case R.id.incid_see_by_comu_ac_mn:
+                INCID_SEE_BY_COMU_AC.doMenuItem(this);
                 return true;
             case R.id.incid_reg_ac_mn:
                 INCID_REG_AC.doMenuItem(this);

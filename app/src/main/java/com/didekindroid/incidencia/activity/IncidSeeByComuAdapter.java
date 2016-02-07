@@ -9,9 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.didekin.incidservice.domain.Incidencia;
+import com.didekin.incidservice.domain.IncidenciaUser;
 import com.didekindroid.R;
-import com.didekindroid.common.utils.UIutils;
 import com.didekindroid.incidencia.repository.IncidenciaDataDbHelper;
 
 import static com.didekindroid.common.utils.UIutils.formatTimeStampToString;
@@ -21,59 +20,62 @@ import static com.didekindroid.common.utils.UIutils.formatTimeStampToString;
  * Date: 18/12/15
  * Time: 13:21
  */
-public class IncidSeeByComuAdapter extends ArrayAdapter<Incidencia> {
+public class IncidSeeByComuAdapter extends ArrayAdapter<IncidenciaUser> {
 
     private static final String TAG = IncidSeeByComuAdapter.class.getCanonicalName();
 
     public IncidSeeByComuAdapter(Context context)
     {
-        super(context, R.layout.incid_see_by_comu_list_item, R.id.nombreComunidad_view);
+        super(context, R.layout.incid_see_by_comu_list_item, R.id.incid_descripcion_view);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent)
     {
         Log.d(TAG, "getView()");
-        IncidenciaViewHolder viewHolder;
+        IncidenciaUserViewHolder viewHolder;
 
         if (convertView == null){
             Log.d(TAG, "getView(), convertView == null");
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.incid_see_by_comu_list_item, parent, false);
-            viewHolder = new IncidenciaViewHolder(convertView);
+            viewHolder = new IncidenciaUserViewHolder(convertView);
             convertView.setTag(viewHolder);
         }
-        viewHolder = (IncidenciaViewHolder) convertView.getTag();
-        final Incidencia incidencia = getItem(position);
+        viewHolder = (IncidenciaUserViewHolder) convertView.getTag();
+        final IncidenciaUser incidencia = getItem(position);
         viewHolder.initializeTextInViews(incidencia);
         return convertView;
     }
 
-    private class IncidenciaViewHolder {
+    private class IncidenciaUserViewHolder {
         final TextView mDescripcionView;
         final TextView mFechaAltaView;
+        final TextView mIniciador;
         final TextView mAmbitoView;
         final TextView mImportanciaComuView;
 
         final Resources resources;
 
-        public IncidenciaViewHolder(View convertView)
+        public IncidenciaUserViewHolder(View convertView)
         {
             mDescripcionView = (TextView) convertView.findViewById(R.id.incid_descripcion_view);
             mFechaAltaView = (TextView) convertView.findViewById(R.id.incid_fecha_alta_view);
+            mIniciador = (TextView) convertView.findViewById(R.id.incid_see_iniciador_view);
             mAmbitoView = (TextView) convertView.findViewById(R.id.incid_ambito_view);
             mImportanciaComuView = (TextView) convertView.findViewById(R.id.incid_importancia_comunidad_view);
 
             resources = convertView.getContext().getResources();
         }
 
-        void initializeTextInViews(Incidencia incidencia)
+        void initializeTextInViews(IncidenciaUser incidenciaUser)
         {
             Log.d(TAG, "initializeTextInViews()");
-            mDescripcionView.setText(incidencia.getDescripcion());
-            mFechaAltaView.setText(formatTimeStampToString(incidencia.getFechaAlta()));
-            short ambitoPk = incidencia.getAmbitoIncidencia().getAmbitoId();
+            mDescripcionView.setText(incidenciaUser.getIncidencia().getDescripcion());
+            mFechaAltaView.setText(formatTimeStampToString(incidenciaUser.getFechaAlta()));
+            mIniciador.setText(incidenciaUser.getUsuario().getAlias());
+            short ambitoPk = incidenciaUser.getIncidencia().getAmbitoIncidencia().getAmbitoId();
             mAmbitoView.setText(new IncidenciaDataDbHelper(getContext()).getAmbitoDescByPk(ambitoPk));
-            int mImportanciaAvg = Math.round(incidencia.getImportanciaAvg());
+            int mImportanciaAvg = Math.round(incidenciaUser.getIncidencia().getImportanciaAvg());
             mImportanciaComuView.setText(resources.getStringArray(R.array.IncidImportanciaArray)[mImportanciaAvg]);
         }
     }

@@ -79,7 +79,7 @@ public class IncidEditAcTest_1 {
 
         /**
          * Preconditions:
-         * 1. An fIncidenciaUser id with powers to erase and modify is passed.
+         * 1. An fIncidenciaUser with powers to erase and modify is received.
          * */
         @Override
         protected Intent getActivityIntent()
@@ -91,7 +91,7 @@ public class IncidEditAcTest_1 {
                         .usuario(juanReal.getUsuario())
                         .importancia((short) 3).build();
                 IncidenciaServ.regIncidenciaUser(incidJuanReal1);
-                Incidencia incidenciaDb = IncidenciaServ.incidSeeByComu(juanReal.getComunidad().getC_Id()).get(0);
+                Incidencia incidenciaDb = IncidenciaServ.incidSeeByComu(juanReal.getComunidad().getC_Id()).get(0).getIncidencia();
                 incidJuanReal1 = IncidenciaServ.getIncidenciaUserWithPowers(incidenciaDb.getIncidenciaId());
             } catch (UiException e) {
                 e.printStackTrace();

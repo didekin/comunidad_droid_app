@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    android:id="@+id/incid_see_by_comu_list_item"
+    android:id="@+id/incid_comments_see_list_item"
     style="@style/baseLayout"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -25,27 +25,12 @@
         android:layout_toEndOf="@id/incid_fecha_alta_rot"/>
 
     <TextView
-        android:id="@+id/incid_see_iniciador_rot"
-        style="@style/textBase.textFieldLabel2"
-        android:text="@string/incid_see_iniciador_rot"
-        android:layout_alignBottom="@id/incid_fecha_alta_rot"
-        android:layout_alignTop="@id/incid_fecha_alta_rot"
-        android:layout_marginTop="0dp"
-        android:layout_toEndOf="@id/incid_fecha_alta_view"/>
-
-    <TextView
-        android:id="@+id/incid_see_iniciador_view"
-        style="@style/textBase.textFieldLabel2"
-        android:layout_alignBottom="@id/incid_fecha_alta_rot"
-        android:layout_alignTop="@id/incid_fecha_alta_rot"
-        android:layout_marginTop="0dp"
-        android:layout_toEndOf="@id/incid_see_iniciador_rot"/>
-
-    <TextView
         android:id="@+id/incid_ambito_rot"
         style="@style/textBase.textFieldLabel1"
-        android:layout_alignParentStart="true"
-        android:layout_below="@id/incid_fecha_alta_rot"
+        android:layout_alignBottom="@id/incid_fecha_alta_rot"
+        android:layout_alignTop="@id/incid_fecha_alta_rot"
+        android:layout_marginTop="0dp"
+        android:layout_toEndOf="@id/incid_fecha_alta_view"
         android:text="@string/incid_ambito_rot"/>
 
     <TextView
@@ -60,7 +45,7 @@
         android:id="@+id/incid_importancia_comunidad_rot"
         style="@style/textBase.textFieldLabel1"
         android:layout_alignParentStart="true"
-        android:layout_below="@id/incid_ambito_rot"
+        android:layout_below="@id/incid_fecha_alta_rot"
         android:text="@string/incid_importancia_comunidad_rot"/>
 
     <TextView

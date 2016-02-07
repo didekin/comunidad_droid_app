@@ -10,10 +10,12 @@ import android.view.MenuItem;
 
 import com.didekin.incidservice.domain.Incidencia;
 import com.didekin.incidservice.domain.IncidenciaUser;
+import com.didekin.serviceone.domain.Comunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
 import com.didekindroid.incidencia.gcm.GcmRegistrationIntentServ;
 
+import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_ID;
 import static com.didekindroid.common.utils.AppKeysForBundle.INCIDENCIA_LIST_INDEX;
 import static com.didekindroid.common.utils.AppKeysForBundle.INCIDENCIA_USER_OBJECT;
 import static com.didekindroid.common.utils.UIutils.checkPlayServices;
@@ -22,6 +24,7 @@ import static com.didekindroid.common.utils.UIutils.isGcmTokenSentServer;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_CLOSED_BY_COMU_AC;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_REG_AC;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
+import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_USERCOMU_BY_COMU_AC;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
@@ -44,6 +47,7 @@ public class IncidSeeByComuAc extends AppCompatActivity implements
 
     IncidSeeByComuListFr mFragment;
     int mIncidenciaIndex;
+    Comunidad mComunidadSelected;
 
     /**
      * This activity is a point of registration for receiving GCM notifications of new incidents.
@@ -109,6 +113,12 @@ public class IncidSeeByComuAc extends AppCompatActivity implements
             case R.id.incid_reg_ac_mn:
                 INCID_REG_AC.doMenuItem(this);
                 return true;
+            case R.id.see_usercomu_by_comu_ac_mn:
+                Intent intent = new Intent();
+                intent.putExtra(COMUNIDAD_ID.extra, mComunidadSelected.getC_Id());
+                this.setIntent(intent);
+                SEE_USERCOMU_BY_COMU_AC.doMenuItem(this);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -122,6 +132,13 @@ public class IncidSeeByComuAc extends AppCompatActivity implements
         Log.d(TAG, "onIncidenciaSelected()");
         mIncidenciaIndex = position;
         new IncidUserGetter().execute(incidencia.getIncidenciaId());
+    }
+
+    @Override
+    public void onComunidadSpinnerSelected(Comunidad comunidadSelected)
+    {
+        Log.d(TAG, "onComunidadSpinnerSelected()");
+        mComunidadSelected = comunidadSelected;
     }
 
     //    ============================================================

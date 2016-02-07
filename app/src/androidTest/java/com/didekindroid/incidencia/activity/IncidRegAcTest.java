@@ -6,7 +6,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.widget.ArrayAdapter;
 import android.widget.CursorAdapter;
 
-import com.didekin.incidservice.domain.Incidencia;
+import com.didekin.incidservice.domain.IncidenciaUser;
 import com.didekin.serviceone.domain.Comunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
@@ -38,11 +38,12 @@ import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.utils.ActivityTestUtils.checkToastInTest;
+import static com.didekindroid.common.utils.ActivityTestUtils.cleanOptions;
+import static com.didekindroid.common.utils.ActivityTestUtils.regSeveralUserComuSameUser;
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.incidencia.repository.IncidenciaDataDb.AmbitoIncidencia.AMBITO_INCID_COUNT;
-import static com.didekindroid.common.utils.ActivityTestUtils.cleanOptions;
-import static com.didekindroid.common.utils.ActivityTestUtils.regSeveralUserComuSameUser;
+import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_LA_FUENTE;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_LA_FUENTE_PEPE;
@@ -197,9 +198,9 @@ public class IncidRegAcTest {
         onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
 
         onView(withId(R.id.incid_see_by_comu_ac)).check(matches(isDisplayed()));
-        List<Incidencia> incidencias = IncidService.IncidenciaServ.incidSeeByComu(comunidadByDefault.getC_Id());
-        assertThat(incidencias.size(), is(1));
-        assertThat(incidencias.get(0).getComunidad(), is(comunidadByDefault));
+        List<IncidenciaUser> incidenciasUser = IncidenciaServ.incidSeeByComu(comunidadByDefault.getC_Id());
+        assertThat(incidenciasUser.size(), is(1));
+        assertThat(incidenciasUser.get(0).getIncidencia().getComunidad(), is(comunidadByDefault));
     }
 
     @Test
@@ -226,8 +227,8 @@ public class IncidRegAcTest {
         onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
 
         onView(withId(R.id.incid_see_by_comu_ac)).check(matches(isDisplayed()));
-        List<Incidencia> incidencias = IncidService.IncidenciaServ.incidSeeByComu(comunidadFuente.getC_Id());
+        List<IncidenciaUser> incidencias = IncidenciaServ.incidSeeByComu(comunidadFuente.getC_Id());
         assertThat(incidencias.size(), is(1));
-        assertThat(incidencias.get(0).getComunidad().getNombreComunidad(), is(COMU_LA_FUENTE.getNombreComunidad()));
+        assertThat(incidencias.get(0).getIncidencia().getDescripcion(), is("Incidencia La Fuente"));
     }
 }

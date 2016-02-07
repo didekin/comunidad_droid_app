@@ -7,6 +7,7 @@ import android.support.test.espresso.Espresso;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.didekin.serviceone.domain.Comunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.IdlingResourceForIntentServ;
 import com.didekindroid.common.UiException;
@@ -24,25 +25,32 @@ import org.junit.runner.RunWith;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.core.deps.guava.base.Preconditions.checkState;
+import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withParent;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.didekindroid.common.utils.ActivityTestUtils.cleanOptions;
+import static com.didekindroid.common.utils.ActivityTestUtils.signUpAndUpdateTk;
+import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_ID;
 import static com.didekindroid.common.utils.UIutils.checkPlayServices;
 import static com.didekindroid.common.utils.UIutils.isGcmTokenSentServer;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.utils.UIutils.updateIsGcmTokenSentServer;
-import static com.didekindroid.incidencia.activity.utils.IncidenciaMenuTestUtils.INCID_SEE_CLOSED_BY_USER_AC;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenuTestUtils.INCID_REG_AC;
+import static com.didekindroid.incidencia.activity.utils.IncidenciaMenuTestUtils.INCID_SEE_CLOSED_BY_USER_AC;
 import static com.didekindroid.incidencia.gcm.AppGcmListenerServ.TypeMsgHandler.INCIDENCIA;
 import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekindroid.common.utils.ActivityTestUtils.cleanOptions;
-import static com.didekindroid.common.utils.ActivityTestUtils.signUpAndUpdateTk;
+import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.SEE_USERCOMU_BY_COMU_AC;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.core.AllOf.allOf;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -56,6 +64,7 @@ public class IncidSeeByComuAcTest_1 {
     private IncidSeeByComuAc mActivity;
     private CleanUserEnum whatToClean = CLEAN_PEPE;
     IdlingResourceForIntentServ idlingResource;
+    Comunidad mComunidadSelected;
     NotificationManager mNotifyManager;
     private int messageId = INCIDENCIA.getTitleRsc();
 
@@ -67,6 +76,7 @@ public class IncidSeeByComuAcTest_1 {
         {
             try {
                 signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
+                mComunidadSelected = ServOne.getComusByUser().get(0);
                 Context context = InstrumentationRegistry.getTargetContext();
                 updateIsGcmTokenSentServer(false, context);
                 checkState(ServOne.getGcmToken() == null);
@@ -103,7 +113,7 @@ public class IncidSeeByComuAcTest_1 {
     }
 
     @Test
-    public void testOnCreate() throws Exception
+    public void testOnCreate_1() throws Exception
     {
         assertThat(isRegisteredUser(mActivity), is(true));
         assertThat(mActivity, notNullValue());
@@ -114,6 +124,17 @@ public class IncidSeeByComuAcTest_1 {
         // No hay incidencias registradas. La vista forma parte de la jerarquía de vistas de la página.
         onView(withId(android.R.id.list)).check(matches(not(isDisplayed())));
         onView(withId(android.R.id.empty)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testOnCreate_2()
+    {
+        assertThat(mActivity.mComunidadSelected, is(mComunidadSelected));
+        onView(allOf(
+                withId(R.id.app_spinner_1_dropdown_item),
+                withParent(withId(R.id.incid_reg_comunidad_spinner))))
+                .check(matches(withText(is(mComunidadSelected.getNombreComunidad()))))
+                .check(matches(isDisplayed()));
     }
 
     @Test
@@ -140,11 +161,19 @@ public class IncidSeeByComuAcTest_1 {
     public void testIncidSeeClosedByComuMn() throws InterruptedException
     {
         INCID_SEE_CLOSED_BY_USER_AC.checkMenuItem_WTk(mActivity);
+        // TODO: descomentar.
     }
 
     @Test
     public void testIncidRegMn() throws InterruptedException
     {
         INCID_REG_AC.checkMenuItem_WTk(mActivity);
+    }
+
+    @Test
+    public void testSeeUserComuByComuMn() throws InterruptedException
+    {
+        SEE_USERCOMU_BY_COMU_AC.checkMenuItem_WTk(mActivity);
+        intended(hasExtra(COMUNIDAD_ID.extra, mComunidadSelected.getC_Id()));
     }
 }

@@ -28,6 +28,7 @@ import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.utils.UIutils.makeToast;
+import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_SEE_BY_COMU_AC;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUserBeanFromUserDataAcView;
 import static com.didekindroid.usuario.activity.utils.UserMenu.COMU_SEARCH_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_USERCOMU_BY_USER_AC;
@@ -128,6 +129,9 @@ public class UserDataAc extends AppCompatActivity {
                 return true;
             case R.id.comu_search_ac_mn:
                 COMU_SEARCH_AC.doMenuItem(this);
+                return true;
+            case R.id.incid_see_by_comu_ac_mn:
+                INCID_SEE_BY_COMU_AC.doMenuItem(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

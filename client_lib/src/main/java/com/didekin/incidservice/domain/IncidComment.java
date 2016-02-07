@@ -1,10 +1,9 @@
 package com.didekin.incidservice.domain;
 
 import com.didekin.common.BeanBuilder;
-import com.didekin.serviceone.domain.UsuarioComunidad;
+import com.didekin.serviceone.domain.Usuario;
 
 import java.sql.Timestamp;
-import java.util.List;
 
 import static com.didekin.common.exception.DidekinExceptionMsg.INCIDENCIA_COMMENT_WRONG_INIT;
 
@@ -19,10 +18,8 @@ public class IncidComment { // TODO: serializable
     private final long commentId;
     private final String descripcion;
     private final Incidencia incidencia;
-    private final UsuarioComunidad redactor;
+    private final Usuario redactor;
     private final Timestamp fechaAlta;
-    private final Timestamp fechaModificacion;
-    private final List<IncidCommentAnswer> answers;
 
     public IncidComment(IncidCommentBuilder builder)
     {
@@ -31,8 +28,6 @@ public class IncidComment { // TODO: serializable
         incidencia = builder.incidencia;
         redactor = builder.redactor;
         fechaAlta = builder.fechaAlta;
-        fechaModificacion = builder.fechaModificacion;
-        answers = builder.answers;
     }
 
     public long getCommentId()
@@ -50,7 +45,7 @@ public class IncidComment { // TODO: serializable
         return incidencia;
     }
 
-    public UsuarioComunidad getRedactor()
+    public Usuario getRedactor()
     {
         return redactor;
     }
@@ -58,16 +53,6 @@ public class IncidComment { // TODO: serializable
     public Timestamp getFechaAlta()
     {
         return fechaAlta;
-    }
-
-    public Timestamp getFechaModificacion()
-    {
-        return fechaModificacion;
-    }
-
-    public List<IncidCommentAnswer> getAnswers()
-    {
-        return answers;
     }
 
     @Override
@@ -81,7 +66,6 @@ public class IncidComment { // TODO: serializable
         return this.commentId == comment.commentId ||
                 (descripcion.equals(comment.descripcion)
                         && incidencia.equals(comment.incidencia)
-                        && redactor.equals(comment.redactor)
                 );
     }
 
@@ -90,12 +74,11 @@ public class IncidComment { // TODO: serializable
     {
         int result;
 
-        if (commentId > 0){
-           result = (int) (commentId ^ (commentId >>> 32));
+        if (commentId > 0) {
+            result = (int) (commentId ^ (commentId >>> 32));
         } else {
             result = descripcion.hashCode();
             result = 31 * result + incidencia.hashCode();
-            result = 31 * result + redactor.hashCode();
         }
         return result;
     }
@@ -107,10 +90,8 @@ public class IncidComment { // TODO: serializable
         private long commentId;
         private String descripcion;
         private Incidencia incidencia;
-        private UsuarioComunidad redactor;
+        private Usuario redactor;
         private Timestamp fechaAlta;
-        private Timestamp fechaModificacion;
-        private List<IncidCommentAnswer> answers;
 
         public IncidCommentBuilder()
         {
@@ -134,7 +115,7 @@ public class IncidComment { // TODO: serializable
             return this;
         }
 
-        public IncidCommentBuilder redactor(UsuarioComunidad initValue)
+        public IncidCommentBuilder redactor(Usuario initValue)
         {
             redactor = initValue;
             return this;
@@ -146,14 +127,13 @@ public class IncidComment { // TODO: serializable
             return this;
         }
 
-        public IncidCommentBuilder fechaModificacion(Timestamp initValue)
+        public IncidCommentBuilder copyComment(IncidComment initValue)
         {
-            fechaModificacion = initValue;
-            return this;
-        }
-
-        public IncidCommentBuilder answers(List<IncidCommentAnswer> initValue){
-            answers = initValue;
+            commentId = initValue.commentId;
+            descripcion = initValue.descripcion;
+            incidencia = initValue.incidencia;
+            redactor = initValue.redactor;
+            fechaAlta = initValue.fechaAlta;
             return this;
         }
 
@@ -162,7 +142,7 @@ public class IncidComment { // TODO: serializable
         {
             IncidComment comment = new IncidComment(this);
             if (comment.commentId <= 0) {
-                if (comment.descripcion == null || comment.incidencia == null || comment.redactor == null) {
+                if (comment.descripcion == null || comment.incidencia == null) {
                     throw new IllegalStateException(INCIDENCIA_COMMENT_WRONG_INIT.toString());
                 }
             }

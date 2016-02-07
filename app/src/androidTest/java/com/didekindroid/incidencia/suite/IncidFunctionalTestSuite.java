@@ -1,5 +1,6 @@
 package com.didekindroid.incidencia.suite;
 
+import com.didekindroid.incidencia.activity.IncidCommentRegAcTest;
 import com.didekindroid.incidencia.activity.IncidEditAcTest_1;
 import com.didekindroid.incidencia.activity.IncidEditAcTest_2;
 import com.didekindroid.incidencia.activity.IncidEditAcTest_3;
@@ -21,6 +22,7 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         GcmBroadCastNotificationAcTest.class,
+        IncidCommentRegAcTest.class,
         IncidEditAcTest_1.class,
         IncidEditAcTest_2.class,
         IncidEditAcTest_3.class,

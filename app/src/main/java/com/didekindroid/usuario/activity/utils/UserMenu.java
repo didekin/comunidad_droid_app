@@ -12,6 +12,7 @@ import com.didekindroid.usuario.activity.LoginAc;
 import com.didekindroid.usuario.activity.PasswordChangeAc;
 import com.didekindroid.usuario.activity.RegComuAndUserAndUserComuAc;
 import com.didekindroid.usuario.activity.RegComuAndUserComuAc;
+import com.didekindroid.usuario.activity.SeeUserComuByComuAc;
 import com.didekindroid.usuario.activity.SeeUserComuByUserAc;
 import com.didekindroid.usuario.activity.UserDataAc;
 
@@ -103,7 +104,9 @@ public enum UserMenu {
         public void doMenuItem(Activity activity)
         {
             Log.d(TAG, "see_usercomu_by_comu_ac.doMenuItem()");
-            activity.startActivity(activity.getIntent());
+            Intent intent = activity.getIntent();
+            intent.setClass(activity, SeeUserComuByComuAc.class);
+            activity.startActivity(intent);
         }
     },
 

@@ -114,11 +114,11 @@ public final class UIutils {
         }
     }
 
-    public static void catchIncidenciaFkException(InServiceException ie, String tagClass) throws UiException
+    public static void catchIncidenciaFkException(InServiceException ie, String tagClass, int resourceId) throws UiException
     {
         Log.e(tagClass, ie.getHttpMessage());
         if (isMessageToSeeIncidencia(ie.getHttpMessage())){
-            throw new UiException(INCID_SEE_BY_COMU, R.string.incidencia_wrong_init, ie);
+            throw new UiException(INCID_SEE_BY_COMU, resourceId, ie);
         }
     }
 

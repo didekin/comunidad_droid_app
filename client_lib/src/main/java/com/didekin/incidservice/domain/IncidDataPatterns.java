@@ -15,7 +15,8 @@ import static java.util.regex.Pattern.compile;
  */
 public enum IncidDataPatterns implements DataPatternsIf {
 
-    INCID_DESC("[\\w_ñÑáéíóúüÜÁÉÍÓÚ%&ºª@#,:;¿\\?¡\\!\\(\\)\\.\\-\\s]{2,250}"),
+    INCID_DESC("[\\w_ñÑáéíóúüÜÁÉÍÓÚ%&ºª@#,:;¿\\?¡\\!\\(\\)\\.\\-\\s]{2,300}"),
+    INCID_COMMENT_DESC("[\\w_ñÑáéíóúüÜÁÉÍÓÚ%&ºª@#,:;¿\\?¡\\!\\(\\)\\.\\-\\s]{2,250}"),
     ;
 
     private final Pattern pattern;

@@ -2,6 +2,7 @@ package com.didekindroid.incidencia.activity;
 
 import com.didekin.incidservice.domain.Incidencia;
 import com.didekin.incidservice.domain.IncidenciaUser;
+import com.didekin.serviceone.domain.Comunidad;
 
 /**
  * User: pedro@didekin
@@ -10,4 +11,5 @@ import com.didekin.incidservice.domain.IncidenciaUser;
  */
 public interface IncidListListener {
     void onIncidenciaSelected(Incidencia incidencia, int position);
+    void onComunidadSpinnerSelected(Comunidad comunidadSelected);
 }

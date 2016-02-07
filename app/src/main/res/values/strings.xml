@@ -20,14 +20,25 @@
     <!-- ============================ MESSAGES ============================== -->
     <string name="no_incidencia_by_user">No existen incidencias</string>
     <string name="incidencia_wrong_init">No podemos mostrarte la incidencia. Verifica que sigue abierta.</string>
+    <string name="incidencia_wrong_init_in_comment">No podemos añadir tu comentario. Verifica que sigue abierta la incidencia.</string>
     <string name="user_without_powers">Haz login y accede nuevamente a la incidencia.</string>
     <!-- ============================== MENUS ================================= -->
+    <string name="incid_closed_see_by_usercomu_ac_mn">Incidencias cerradas</string>
+    <string name="incid_comment_reg_ac_mn">Comentar</string>
+    <string name="incid_comments_see_ac_mn">Ver comentarios</string>
     <string name="incid_reg_ac_mn">Nueva incidencia</string>
     <string name="incid_see_by_comu_ac_mn">Incidencias abiertas</string>
-    <string name="incid_closed_see_by_usercomu_ac_mn">Incidencias cerradas</string>
     <!-- ============================= ACTIVITIES ============================= -->
-    <!-- ============ IncidSeeClosedByComuAc ========== -->
-    <string name="incid_closed_by_user_ac_label">Incidencias cerradas</string>
+    <!-- =============== IncidCommentRegAc ========= -->
+    <string name="incid_comment_reg_ac_label">Comentar una incidencia</string>
+    <string name="incid_comment_ed_hint">----- Comentario (max. 250 caracteres) ----</string>
+    <string name="incid_comment_ed_button_rot">Comentar</string>
+    <string name="incid_comment_incidencia_rot">Incidencia:</string>
+    <string name="incid_comment_label">Comentario</string>
+    <!-- =============== IncidCommentSeeAc ========= -->
+    <string name="incid_comment_see_ac_label">Comentarios</string>
+    <string name="incid_comment_see_comments_rot">Comentarios:</string>
+    <string name="incid_comments_see_no_comments">No hay comentarios.</string>
     <!-- =============== IncidEditAc =============== -->
     <string name="incid_edit_ac_label">Incidencia</string>
     <string name="incid_edit_modif_button_rot">Modificar incidencia</string>
@@ -36,7 +47,7 @@
     <string name="incid_regUserInIncid_button_rot">Confirmar</string>
     <!-- =============== IncidRegAc =============== -->
     <string name="incid_reg_ac_label">Nueva incidencia</string>
-    <string name="incid_reg_hint"> -- describe la incidencia (max. 250 caracteres) -- </string>
+    <string name="incid_reg_hint"> -- Describe la incidencia (max. 300 caracteres) -- </string>
     <string name="incid_resolucion_hint"> -- actuación para resolver la incidencia -- </string>
     <string name="incid_resolucion_presupuesto_rot">Coste estimado (euros, sin céntimos)</string>
     <string name="incid_resolucion_coste_rot">Coste final (euros, sin céntimos)</string>
@@ -52,8 +63,11 @@
     <string name="incid_importancia_user_rot">Importancia:</string>
     <string name="incid_importancia_comunidad_rot">Importancia en la comunidad:</string>
     <string name="incid_comunidad_rot">Comunidad:</string>
+    <string name="incid_see_iniciador_rot">Iniciador:</string>
     <string name="incid_incidencias_rot">Incidencias:</string>
     <string name="incid_ambito_rot">Ámbito:</string>
+    <!-- ============ IncidSeeClosedByComuAc ========== -->
+    <string name="incid_closed_by_user_ac_label">Incidencias cerradas</string>
     <!-- =========================== Google Cloud Messages ========================== -->
     <string name="incid_gcm_nueva_incidencia_body">Nueva incidencia en tu comunidad.</string>
     <string name="incid_gcm_nueva_incidencia_title">Dídekin</string>

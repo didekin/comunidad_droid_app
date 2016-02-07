@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.didekin.incidservice.domain.Incidencia;
+import com.didekin.incidservice.domain.IncidenciaUser;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
 
@@ -141,16 +142,16 @@ public class IncidSeeClosedByComuListFr extends ListFragment {
     //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
     //    ============================================================
 
-    class IncidClosedByUserComuLoader extends AsyncTask<Long, Void, List<Incidencia>> {
+    class IncidClosedByUserComuLoader extends AsyncTask<Long, Void, List<IncidenciaUser>> {
 
         private final String TAG = IncidClosedByUserComuLoader.class.getCanonicalName();
         UiException uiException;
 
         @Override
-        protected List<Incidencia> doInBackground(Long... comunidades)
+        protected List<IncidenciaUser> doInBackground(Long... comunidades)
         {
             Log.d(TAG, "doInBackground()");
-            List<Incidencia> incidencias = null;
+            List<IncidenciaUser> incidencias = null;
             try {
                 incidencias = IncidenciaServ.incidSeeClosedByComu(comunidades[0]);
             } catch (UiException e) {
@@ -160,7 +161,7 @@ public class IncidSeeClosedByComuListFr extends ListFragment {
         }
 
         @Override
-        protected void onPostExecute(List<Incidencia> incidencias)
+        protected void onPostExecute(List<IncidenciaUser> incidencias)
         {
             Log.d(TAG, "onPostExecute()");
             if (incidencias != null && incidencias.size() > 0) {

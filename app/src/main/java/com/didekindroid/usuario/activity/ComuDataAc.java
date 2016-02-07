@@ -233,7 +233,7 @@ public class ComuDataAc extends Activity implements RegComuFr.RegComuFrListener 
 
         switch (resourceId) {
             case R.id.see_usercomu_by_comu_ac_mn:
-                Intent intent = new Intent(this, SeeUserComuByComuAc.class);
+                Intent intent = new Intent();
                 intent.putExtra(COMUNIDAD_ID.extra, mIdComunidad);
                 this.setIntent(intent);
                 SEE_USERCOMU_BY_COMU_AC.doMenuItem(this);

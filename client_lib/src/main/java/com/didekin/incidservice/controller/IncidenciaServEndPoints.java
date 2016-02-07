@@ -1,5 +1,6 @@
 package com.didekin.incidservice.controller;
 
+import com.didekin.incidservice.domain.IncidComment;
 import com.didekin.incidservice.domain.Incidencia;
 import com.didekin.incidservice.domain.IncidenciaUser;
 
@@ -30,11 +31,11 @@ public interface IncidenciaServEndPoints {
     IncidenciaUser getIncidenciaUserWithPowers(@Header("Authorization") String accessToken, @Path("incidenciaId") long incidenciaId);
 
     @GET(SEE_INCID_BY_COMU + "/{comunidadId}")
-    List<Incidencia> incidSeeByComu(@Header("Authorization") String accessToken,
+    List<IncidenciaUser> incidSeeByComu(@Header("Authorization") String accessToken,
                                     @Path("comunidadId") long comunidadId);
 
     @GET(SEE_INCID_CLOSED_BY_COMU + "/{comunidadId}")
-    List<Incidencia> incidSeeClosedByComu(@Header("Authorization") String accessToken,
+    List<IncidenciaUser> incidSeeClosedByComu(@Header("Authorization") String accessToken,
                                           @Path("comunidadId") long comunidadId);
 
     @PUT(MOD_INCID_USER)
@@ -44,6 +45,10 @@ public interface IncidenciaServEndPoints {
     @PUT(MOD_USER)
     int modifyUser(@Header("Authorization") String accessToken,
                              @Body IncidenciaUser incidenciaUser);
+
+    @POST(REG_INCID_COMMENT)
+    int regIncidComment(@Header("Authorization") String accessToken,
+                        @Body IncidComment comment);
 
     @POST(REG_INCID_USER)
     int regIncidenciaUser(@Header("Authorization") String accessToken,

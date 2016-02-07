@@ -150,11 +150,10 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity {
         {
             Log.d(TAG, "ComuAndUserComuAndUserRegister.doInBackground()");
             Usuario newUser = usuarioComunidad[0].getUsuario();
-            Log.d(TAG, "ComuAndUserComuAndUserRegister.doInBackground(): calling ServOne.regComuAndUserAndUserComu()");
             ServOne.regComuAndUserAndUserComu(usuarioComunidad[0]);
-            Log.d(TAG, "ComuAndUserComuAndUserRegister.doInBackground(): calling Oauth2.getPasswordUserToken()");
             AccessToken token;
             try {
+                Log.d(TAG, "ComuAndUserComuAndUserRegister.doInBackground(): calling Oauth2.getPasswordUserToken()");
                 token = Oauth2.getPasswordUserToken(newUser.getUserName(), newUser.getPassword());
                 TKhandler.initKeyCacheAndBackupFile(token);
             } catch (UiException e) {
@@ -166,6 +165,8 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity {
             // TODO: si el usuario existe y la comunidad no, hacer un regComuAndUserComu.
             // TODO: si existen ambos, pero el usuario no pertenece a la comunidad, hacer un RegUserComu.
             // TODO: algo similar hay que hacer en el resto de acciones de registro.
+            // TODO: hay que validar que una comunidad no tiene más de un presidente o más de un administrador.
+            // TODO: relajar la restricción de solo un usuario por vivienda. Está en el modelo lógico.
         }
 
         @Override
