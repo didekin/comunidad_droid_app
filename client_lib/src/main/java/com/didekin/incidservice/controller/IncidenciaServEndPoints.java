@@ -30,6 +30,10 @@ public interface IncidenciaServEndPoints {
     @GET(GET_INCID_USER_BY_INCID + "/{incidenciaId}")
     IncidenciaUser getIncidenciaUserWithPowers(@Header("Authorization") String accessToken, @Path("incidenciaId") long incidenciaId);
 
+    @POST(SEE_INCID_COMMENTS)
+    List<IncidComment> incidCommentsSee(@Header("Authorization") String accessToken,
+                                        @Body Incidencia incidencia);
+
     @GET(SEE_INCID_BY_COMU + "/{comunidadId}")
     List<IncidenciaUser> incidSeeByComu(@Header("Authorization") String accessToken,
                                     @Path("comunidadId") long comunidadId);

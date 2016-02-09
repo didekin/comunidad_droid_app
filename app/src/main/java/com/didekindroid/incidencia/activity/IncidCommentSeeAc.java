@@ -1,5 +1,6 @@
 package com.didekindroid.incidencia.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -11,7 +12,9 @@ import com.didekindroid.R;
 import com.didekindroid.common.utils.AppKeysForBundle;
 import com.didekindroid.incidencia.activity.utils.IncidenciaMenu;
 
+import static com.didekindroid.common.utils.AppKeysForBundle.INCIDENCIA_USER_OBJECT;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
+import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_COMMENT_REG_AC;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -19,18 +22,16 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * 1. The user is registered.
  * 1. An intent extra is received with an IncidenciaUser instance.
  * Postconditions:
- * 1. An intent extra is passed with an IncidenciaUser instance.
+ * 1. An intent extra is passed with an IncidenciaUser instance on to the option menu 'incid_comment_reg_mn'.
  */
-public class IncidCommentSeeAc extends AppCompatActivity {
+public class IncidCommentSeeAc extends AppCompatActivity implements
+        IncidCommentSeeListFr.IncidUserGiver {
 
     private static final String TAG = IncidCommentSeeAc.class.getCanonicalName();
 
     IncidCommentSeeListFr mFragment;
     IncidenciaUser mIncidenciaUser;
 
-    /**
-     * This activity is a point of registration for receiving GCM notifications of new incidents.
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -40,7 +41,8 @@ public class IncidCommentSeeAc extends AppCompatActivity {
         setContentView(R.layout.incid_comment_see_ac);
         doToolBar(this, true);
 
-        mIncidenciaUser = (IncidenciaUser) getIntent().getExtras().getSerializable(AppKeysForBundle.INCIDENCIA_USER_OBJECT.extra);
+        mIncidenciaUser = (IncidenciaUser) getIntent().getExtras().getSerializable(INCIDENCIA_USER_OBJECT.extra);
+
         mFragment = (IncidCommentSeeListFr) getFragmentManager()
                 .findFragmentById(R.id.incid_comment_see_frg);
     }
@@ -56,6 +58,7 @@ public class IncidCommentSeeAc extends AppCompatActivity {
     protected void onRestoreInstanceState(Bundle savedInstanceState)
     {
         Log.d(TAG, "onRestoreInstanceState()");
+        super.onRestoreInstanceState(savedInstanceState);
     }
 
     // ============================================================
@@ -79,7 +82,9 @@ public class IncidCommentSeeAc extends AppCompatActivity {
 
         switch (resourceId) {
             case R.id.incid_comment_reg_ac_mn:
-                IncidenciaMenu.INCID_COMMENT_REG_AC.doMenuItem(this);
+                Intent intent = new Intent();
+                intent.putExtra(INCIDENCIA_USER_OBJECT.extra, mIncidenciaUser);
+                INCID_COMMENT_REG_AC.doMenuItem(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -88,6 +93,11 @@ public class IncidCommentSeeAc extends AppCompatActivity {
 
 //  ........... HELPER INTERFACES AND CLASSES ....................
 
+    @Override
+    public IncidenciaUser giveIncidUser()
+    {
+        return mIncidenciaUser;
+    }
 
 
 //    ============================================================

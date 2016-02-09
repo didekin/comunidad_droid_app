@@ -5,6 +5,7 @@ import android.util.Log;
 import com.didekin.common.exception.InServiceException;
 import com.didekin.incidservice.controller.IncidenciaServEndPoints;
 import com.didekin.incidservice.domain.IncidComment;
+import com.didekin.incidservice.domain.Incidencia;
 import com.didekin.incidservice.domain.IncidenciaUser;
 import com.didekin.serviceone.domain.Comunidad;
 import com.didekindroid.R;
@@ -37,6 +38,12 @@ public enum IncidService implements IncidenciaServEndPoints {
         public IncidenciaUser getIncidenciaUserWithPowers(String accessToken, long incidenciaId)
         {
             return IncidenciaServ.endPoint.getIncidenciaUserWithPowers(accessToken, incidenciaId);
+        }
+
+        @Override
+        public List<IncidComment> incidCommentsSee(String accessToken, Incidencia incidencia)
+        {
+            return IncidenciaServ.endPoint.incidCommentsSee(accessToken, incidencia);
         }
 
         @Override
@@ -139,6 +146,27 @@ public enum IncidService implements IncidenciaServEndPoints {
         return incidenciaUser;
     }
 
+    public List<IncidComment> incidCommentsSee(Incidencia incidencia) throws UiException
+    {
+        Log.d(TAG, "incidCommentsSee()");
+        List<IncidComment> comments = null;
+        // Extract ids.
+        Incidencia incidenciaIn = new Incidencia.IncidenciaBuilder()
+                .incidenciaId(incidencia.getIncidenciaId())
+                .comunidad(new Comunidad.ComunidadBuilder()
+                        .c_id(incidencia.getComunidad()
+                                .getC_Id())
+                        .build())
+                .build();
+        try {
+            comments = incidCommentsSee(checkBearerToken(), incidenciaIn);
+        } catch (InServiceException ie) {
+            catchAuthenticationException(ie, TAG, R.string.user_without_signedUp);
+            catchIncidenciaFkException(ie, TAG, R.string.incidencia_wrong_init_in_comment);
+        }
+        return comments;
+    }
+
     public List<IncidenciaUser> incidSeeByComu(long comunidadId) throws UiException
     {
         Log.d(TAG, "incidSeeByComu()");
@@ -184,7 +212,7 @@ public enum IncidService implements IncidenciaServEndPoints {
         int rowModified = 0;
         try {
             rowModified = modifyUser(checkBearerToken(), incidenciaUser);
-        } catch (InServiceException ue){
+        } catch (InServiceException ue) {
             catchAuthenticationException(ue, TAG, R.string.user_without_powers);
         }
         return rowModified;
@@ -196,7 +224,7 @@ public enum IncidService implements IncidenciaServEndPoints {
         int insertedRow = 0;
         try {
             insertedRow = IncidenciaServ.endPoint.regIncidComment(checkBearerToken(), comment);
-        }catch (InServiceException ie){
+        } catch (InServiceException ie) {
             catchAuthenticationException(ie, TAG, R.string.user_without_signedUp);
             catchIncidenciaFkException(ie, TAG, R.string.incidencia_wrong_init_in_comment);
         }
@@ -222,7 +250,7 @@ public enum IncidService implements IncidenciaServEndPoints {
         int insertRow = 0;
         try {
             insertRow = regUserInIncidencia(checkBearerToken(), incidenciaUser);
-        } catch (InServiceException ie){
+        } catch (InServiceException ie) {
             catchAuthenticationException(ie, TAG, R.string.user_without_powers);
             catchIncidenciaFkException(ie, TAG, R.string.incidencia_wrong_init);
         }

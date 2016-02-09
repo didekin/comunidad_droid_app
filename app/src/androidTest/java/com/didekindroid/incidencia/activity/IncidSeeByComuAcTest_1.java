@@ -161,7 +161,6 @@ public class IncidSeeByComuAcTest_1 {
     public void testIncidSeeClosedByComuMn() throws InterruptedException
     {
         INCID_SEE_CLOSED_BY_USER_AC.checkMenuItem_WTk(mActivity);
-        // TODO: descomentar.
     }
 
     @Test

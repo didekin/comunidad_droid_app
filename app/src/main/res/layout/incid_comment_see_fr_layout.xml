@@ -11,7 +11,7 @@
         android:text="@string/incid_comment_incidencia_rot"/>
 
     <TextView
-        android:id="@+id/incid_comment_see_commnet_rot"
+        android:id="@+id/incid_comment_see_comment_rot"
         style="@style/textBase.ListLabelColor"
         android:text="@string/incid_comment_see_comments_rot"/>
 

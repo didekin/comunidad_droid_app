@@ -1,6 +1,7 @@
 package com.didekindroid.incidencia.activity;
 
 import android.support.test.espresso.intent.rule.IntentsTestRule;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.incidservice.domain.Incidencia;
@@ -141,10 +142,12 @@ public class IncidSeeByComuAcTest_2 {
         // Ordered by fecha_alta of the incidencia.
         assertThat(adapter.getItem(0).getIncidencia().getComunidad(), is(juanReal.getComunidad()));
         assertThat(adapter.getItem(0).getIncidencia().getAmbitoIncidencia().getAmbitoId(), is(incidJuanReal1.getIncidencia().getAmbitoIncidencia().getAmbitoId()));
+        assertThat(adapter.getItem(0).getUsuario().getAlias(), is(juanReal.getUsuario().getAlias()));
         assertThat(adapter.getItem(0).getIncidencia().getDescripcion(), is(incidJuanReal1.getIncidencia().getDescripcion()));
         assertThat(adapter.getItem(0).getIncidencia().getImportanciaAvg(), is((float) incidJuanReal1.getImportancia()));
         //
         assertThat(adapter.getItem(1).getIncidencia().getComunidad(), is(juanReal.getComunidad()));
+        assertThat(adapter.getItem(0).getUsuario().getAlias(), is(juanReal.getUsuario().getAlias()));
         assertThat(adapter.getItem(1).getIncidencia().getAmbitoIncidencia().getAmbitoId(), is(incidJuanReal2.getIncidencia().getAmbitoIncidencia().getAmbitoId()));
         assertThat(adapter.getItem(1).getIncidencia().getDescripcion(), is(incidJuanReal2.getIncidencia().getDescripcion()));
         assertThat(adapter.getItem(1).getIncidencia().getImportanciaAvg(), is((float) incidJuanReal2.getImportancia()));
@@ -167,6 +170,7 @@ public class IncidSeeByComuAcTest_2 {
         assertThat(adapter.getCount(), is(1));
 
         assertThat(adapter.getItem(0).getIncidencia().getComunidad(), is(juanPlazuela.getComunidad()));
+        assertThat(adapter.getItem(0).getUsuario().getAlias(), is(juanPlazuela.getUsuario().getAlias()));
         assertThat(adapter.getItem(0).getIncidencia().getAmbitoIncidencia().getAmbitoId(), is(incidJuanPlazuela1.getIncidencia().getAmbitoIncidencia().getAmbitoId()));
         assertThat(adapter.getItem(0).getIncidencia().getDescripcion(), is(incidJuanPlazuela1.getIncidencia().getDescripcion()));
         assertThat(adapter.getItem(0).getIncidencia().getImportanciaAvg(), is((float) incidJuanPlazuela1.getImportancia()));
@@ -190,6 +194,10 @@ public class IncidSeeByComuAcTest_2 {
                         withText(formatTimeStampToString(incidencia_0.getFechaAlta()))
                 )),
                 hasSibling(allOf(
+                        withId(R.id.incid_see_iniciador_view),
+                        withText(juanReal.getUsuario().getAlias())
+                )),
+                hasSibling(allOf(
                         withId(R.id.incid_ambito_view),
                         withText(dBHelper.getAmbitoDescByPk(incidJuanReal1.getIncidencia().getAmbitoIncidencia().getAmbitoId()))
                 )),
@@ -207,6 +215,10 @@ public class IncidSeeByComuAcTest_2 {
                 hasSibling(allOf(
                         withId(R.id.incid_fecha_alta_view),
                         withText(formatTimeStampToString(incidencia_1.getFechaAlta()))
+                )),
+                hasSibling(allOf(
+                        withId(R.id.incid_see_iniciador_view),
+                        withText(juanReal.getUsuario().getAlias())
                 )),
                 hasSibling(allOf(
                         withId(R.id.incid_ambito_view),

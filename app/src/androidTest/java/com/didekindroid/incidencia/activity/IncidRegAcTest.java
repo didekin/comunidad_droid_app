@@ -42,6 +42,7 @@ import static com.didekindroid.common.utils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.utils.ActivityTestUtils.regSeveralUserComuSameUser;
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
+import static com.didekindroid.common.utils.UIutils.updateIsGcmTokenSentServer;
 import static com.didekindroid.incidencia.repository.IncidenciaDataDb.AmbitoIncidencia.AMBITO_INCID_COUNT;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_ESCORIAL_PEPE;
@@ -95,12 +96,14 @@ public class IncidRegAcTest {
         mActivity = intentRule.getActivity();
         comunidadesAdapter = (ArrayAdapter<Comunidad>) mActivity.mRegAcFragment.mComunidadSpinner.getAdapter();
         comunidadByDefault = comunidadesAdapter.getItem(0);
+        updateIsGcmTokenSentServer(false, mActivity);
     }
 
     @After
     public void tearDown() throws Exception
     {
         cleanOptions(whatToClean);
+        updateIsGcmTokenSentServer(false, mActivity);
     }
 
     //  ===========================================================================

@@ -92,7 +92,7 @@ public class IncidSeeByComuListFr extends ListFragment implements ComuSpinnerSet
                 mComunidadSelectedIndex = position;
                 Comunidad comunidad = (Comunidad) parent.getItemAtPosition(position);
                 // Loading data for the comunidad selected.
-                new IncidByUserComuLoader().execute(comunidad.getC_Id());
+                new IncidByComuLoader().execute(comunidad.getC_Id());
                 // Informamos a la actividad.
                 mListener.onComunidadSpinnerSelected(comunidad);
             }
@@ -195,9 +195,9 @@ public class IncidSeeByComuListFr extends ListFragment implements ComuSpinnerSet
     //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
     //    ============================================================
 
-    class IncidByUserComuLoader extends AsyncTask<Long, Void, List<IncidenciaUser>> {
+    class IncidByComuLoader extends AsyncTask<Long, Void, List<IncidenciaUser>> {
 
-        private final String TAG = IncidByUserComuLoader.class.getCanonicalName();
+        private final String TAG = IncidByComuLoader.class.getCanonicalName();
         UiException uiException;
 
         @Override
@@ -223,7 +223,7 @@ public class IncidSeeByComuListFr extends ListFragment implements ComuSpinnerSet
                 mAdapter.addAll(incidencias);
                 setListAdapter(mAdapter);
             }
-            if (uiException != null) {  // action: LOGIN.
+            if (uiException != null) {
                 Log.d(TAG, "onPostExecute(): uiException != null");
                 checkState(incidencias == null);
                 uiException.getAction().doAction(getActivity(), uiException.getResourceId());
