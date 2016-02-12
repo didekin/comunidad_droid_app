@@ -5,7 +5,7 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.incidservice.domain.IncidenciaUser;
-import com.didekin.serviceone.domain.UsuarioComunidad;
+import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
 import com.didekindroid.incidencia.repository.IncidenciaDataDbHelper;
@@ -76,7 +76,7 @@ public class IncidEditAcTest_3 {
         /**
          * Preconditions:
          * 1. An fIncidenciaUser id WITHOUT powers to erase OR modify is passed.
-         * 2. fIncidenciaUser.getUsuario() == null.
+         * 2. fIncidenciaUser.getUsuarioComunidad() == null.
          * */
         @Override
         protected Intent getActivityIntent()
@@ -127,8 +127,8 @@ public class IncidEditAcTest_3 {
     {
         assertThat(mActivity, notNullValue());
         IncidenciaUser incidUserInIntent = (IncidenciaUser) mActivity.getIntent().getSerializableExtra(INCIDENCIA_USER_OBJECT.extra);
-        assertThat(incidUserInIntent.getUsuario(), nullValue());
-        assertThat(incidUserInIntent.isModifyDescOrEraseIncid(), is(false));
+        assertThat(incidUserInIntent.getUsuarioComunidad(), nullValue());
+        assertThat(incidUserInIntent.isYetIniciador(), is(false));
 
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
         assertThat(mActivity.findViewById(R.id.incid_edit_nopower_fr_layout), notNullValue());

@@ -1,7 +1,7 @@
 package com.didekin.incidservice.domain;
 
 import com.didekin.common.BeanBuilder;
-import com.didekin.serviceone.domain.Usuario;
+import com.didekin.usuario.dominio.Usuario;
 
 import java.sql.Timestamp;
 
@@ -13,7 +13,7 @@ import static com.didekin.common.exception.DidekinExceptionMsg.INCIDENCIA_COMMEN
  * Time: 10:40
  */
 @SuppressWarnings("unused")
-public class IncidComment { // TODO: serializable
+public class IncidComment {
 
     private final long commentId;
     private final String descripcion;

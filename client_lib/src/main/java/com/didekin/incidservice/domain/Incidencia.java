@@ -1,7 +1,7 @@
 package com.didekin.incidservice.domain;
 
 import com.didekin.common.BeanBuilder;
-import com.didekin.serviceone.domain.Comunidad;
+import com.didekin.usuario.dominio.Comunidad;
 
 import java.io.InvalidObjectException;
 import java.io.ObjectInputStream;
@@ -16,7 +16,7 @@ import static com.didekin.common.exception.DidekinExceptionMsg.INCIDENCIA_WRONG_
  * Time: 17:07
  */
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
-public final class Incidencia implements Serializable{
+public final class Incidencia implements Serializable {
 
     private final long incidenciaId;
     private final Comunidad comunidad;
@@ -179,14 +179,14 @@ public final class Incidencia implements Serializable{
 
         public IncidenciaBuilder copyIncidencia(Incidencia incidencia)
         {
-            incidenciaId(incidencia.getIncidenciaId());
-            comunidad(incidencia.getComunidad());
-            descripcion(incidencia.getDescripcion());
-            ambitoIncid(incidencia.getAmbitoIncidencia());
-            fechaAlta(incidencia.getFechaAlta());
-            fechaCierre(incidencia.getFechaCierre());
-            importanciaAvg(incidencia.getImportanciaAvg());
-            resolucion(incidencia.getResolucionIncid());
+            incidenciaId(incidencia.incidenciaId);
+            comunidad(incidencia.comunidad);
+            descripcion(incidencia.descripcion);
+            ambitoIncid(incidencia.ambitoIncidencia);
+            fechaAlta(incidencia.fechaAlta);
+            fechaCierre(incidencia.fechaCierre);
+            importanciaAvg(incidencia.importanciaAvg);
+            resolucion(incidencia.resolucionIncid);
             return this;
         }
 
@@ -194,12 +194,12 @@ public final class Incidencia implements Serializable{
         public Incidencia build()
         {
             Incidencia incidencia = new Incidencia(this);
-            if (incidencia.getIncidenciaId() <= 0){
-                if(incidencia.getComunidad() == null || incidencia.getDescripcion() == null || incidencia.getAmbitoIncidencia() == null){
+            if (incidencia.getIncidenciaId() <= 0) {
+                if (incidencia.getComunidad() == null || incidencia.getDescripcion() == null || incidencia.getAmbitoIncidencia() == null) {
                     throw new IllegalStateException(INCIDENCIA_WRONG_INIT.toString());
                 }
             } else {
-                if (incidencia.getComunidad() == null){
+                if (incidencia.getComunidad() == null) {
                     throw new IllegalStateException(INCIDENCIA_WRONG_INIT.toString());
                 }
             }
@@ -225,19 +225,19 @@ public final class Incidencia implements Serializable{
 
         public InnerSerial(Incidencia incidencia)
         {
-            incidenciaId = incidencia.getIncidenciaId();
-            comunidad = incidencia.getComunidad();
-            descripcion = incidencia.getDescripcion();
-            ambitoIncidencia = incidencia.getAmbitoIncidencia();
-            fechaAlta = incidencia.getFechaAlta();
-            fechaCierre = incidencia.getFechaCierre();
-            importanciaAvg = incidencia.getImportanciaAvg();
+            incidenciaId = incidencia.incidenciaId;
+            comunidad = incidencia.comunidad;
+            descripcion = incidencia.descripcion;
+            ambitoIncidencia = incidencia.ambitoIncidencia;
+            fechaAlta = incidencia.fechaAlta;
+            fechaCierre = incidencia.fechaCierre;
+            importanciaAvg = incidencia.importanciaAvg;
         }
 
         /**
          * Returns a logically equivalent InnerSerial instance of the enclosing IncidentIntent instance,
          * that will replace it during deserialization.
-         * */
+         */
         private Object readResolve()
         {
             return new IncidenciaBuilder()

@@ -5,11 +5,11 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
 
-import com.didekin.serviceone.domain.Comunidad;
-import com.didekin.serviceone.domain.Municipio;
-import com.didekin.serviceone.domain.Provincia;
-import com.didekin.serviceone.domain.Usuario;
-import com.didekin.serviceone.domain.UsuarioComunidad;
+import com.didekin.usuario.dominio.Comunidad;
+import com.didekin.usuario.dominio.Municipio;
+import com.didekin.usuario.dominio.Provincia;
+import com.didekin.usuario.dominio.Usuario;
+import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
 import com.didekindroid.usuario.activity.utils.CleanUserEnum;
@@ -53,7 +53,7 @@ import static com.didekindroid.usuario.dominio.DomainDataUtils.makeListTwoUserCo
 import static com.didekindroid.usuario.dominio.DomainDataUtils.makeUsuario;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.makeUsuarioComunidad;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
-import static com.google.android.apps.common.testing.ui.espresso.sample.LongListMatchers.withAdaptedData;
+import static com.didekindroid.external.LongListMatchers.withAdaptedData;
 import static com.google.common.base.Preconditions.checkState;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;

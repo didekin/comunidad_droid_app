@@ -1,4 +1,4 @@
-package com.didekin.serviceone.domain;
+package com.didekin.usuario.dominio;
 
 
 import com.didekin.common.BeanBuilder;
@@ -159,16 +159,20 @@ public final class Comunidad implements Comparable<Comunidad>, Serializable {
     @Override
     public int hashCode()
     {
+        if (c_Id > 0){
+            return ((int) (c_Id ^ (c_Id >>> 32))) * 31;
+        }
+
         if (tipoVia == null || nombreVia == null || municipio == null) {
             throw new UnsupportedOperationException(COMUNIDAD_NOT_HASHABLE.toString());
         }
 
-        int result = tipoVia.hashCode();
-        result = 31 * result + nombreVia.hashCode();
-        result = 31 * result + numero;
-        result = 31 * result + sufijoNumero.hashCode();
-        result = 31 * result + municipio.hashCode();
-        return result;
+        int hash  = tipoVia.hashCode();
+        hash = 31 * hash + nombreVia.hashCode();
+        hash = 31 * hash + numero;
+        hash = sufijoNumero != null ? 31 * hash + sufijoNumero.hashCode() : 1;
+        hash = 31 * hash + municipio.hashCode();
+        return hash;
     }
 
     @Override

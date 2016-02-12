@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
-import com.didekin.serviceone.domain.UsuarioComunidad;
+import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.usuario.activity.ComuSearchResultsListAdapter.ComuViewHolder;
 import com.didekindroid.usuario.activity.SeeUserComutByComuListAdapter.UserComuVwHolder;

@@ -6,9 +6,9 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.view.View;
 
-import com.didekin.serviceone.domain.Municipio;
-import com.didekin.serviceone.domain.Provincia;
-import com.didekin.serviceone.domain.UsuarioComunidad;
+import com.didekin.usuario.dominio.Municipio;
+import com.didekin.usuario.dominio.Provincia;
+import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
 import com.didekindroid.common.utils.ActivityTestUtils;

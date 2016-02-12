@@ -1,15 +1,14 @@
 package com.didekin.incidservice.domain;
 
 import com.didekin.common.BeanBuilder;
-import com.didekin.serviceone.domain.Usuario;
+import com.didekin.usuario.dominio.UsuarioComunidad;
 
 import java.io.InvalidObjectException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-import static com.didekin.common.exception.DidekinExceptionMsg.INCIDENCIA_WRONG_INIT;
-import static com.didekin.common.oauth2.Rol.hasFunctionAdmonPowers;
+import static com.didekin.common.exception.DidekinExceptionMsg.INCIDENCIA_USER_WRONG_INIT;
 
 /**
  * User: pedro@didekin
@@ -20,18 +19,27 @@ import static com.didekin.common.oauth2.Rol.hasFunctionAdmonPowers;
 public class IncidenciaUser implements Serializable{
 
     private final Incidencia incidencia;
-    private final Usuario usuario;
+    private final UsuarioComunidad usuario;
     private final short importancia;
+
+    /**
+     * A flag to signal that ...
+     * 1. The incidencia has no IncidenciaUser instances with importancia > 1 associated,
+     *    with the possible exception of that one corresponding to the primal incidenciaUser (iniciador).
+     * 2. This usuarioComunidad corresponds to the user who initiated the incidencia.
+     *
+     * True if both conditions are met.
+     */
+    private final boolean isYetIniciador;
     private final Timestamp fechaAlta;
-    private final boolean modifyDescOrEraseIncid;
 
     public IncidenciaUser(IncidenciaUserBuilder builder) throws IllegalStateException
     {
         incidencia = builder.incidencia;
         usuario = builder.usuario;
         importancia = builder.importancia;
+        isYetIniciador = builder.isYetIniciador;
         fechaAlta = builder.fechaAlta;
-        modifyDescOrEraseIncid = builder.modifyDescOrEraseIncid;
     }
 
     public Incidencia getIncidencia()
@@ -39,7 +47,7 @@ public class IncidenciaUser implements Serializable{
         return incidencia;
     }
 
-    public Usuario getUsuario()
+    public UsuarioComunidad getUsuarioComunidad()
     {
         return usuario;
     }
@@ -49,33 +57,14 @@ public class IncidenciaUser implements Serializable{
         return importancia;
     }
 
+    public boolean isYetIniciador()
+    {
+        return isYetIniciador;
+    }
+
     public Timestamp getFechaAlta()
     {
         return fechaAlta;
-    }
-
-    public boolean isModifyDescOrEraseIncid()
-    {
-        return modifyDescOrEraseIncid;
-    }
-
-    /**
-     * This method returns an IncidenciaUser whose power to modify the description of an incidencia or to erase it depends on:
-     * 1. If it has more incidenciaUsers with importancia greater than 1, only functional roles with "admon" authority can modify or erase.
-     * 2. If not, the user with the oldest incidenciaUser date and "admon" roles can both modify and erase as well.
-     */
-    public static IncidenciaUser checkPowers(boolean hasOthersIncid, String functionRol, IncidenciaUser incidenciaUser)
-    {
-        if (!hasOthersIncid) {
-            return new IncidenciaUserBuilder(incidenciaUser.incidencia)
-                    .copyIncidUser(incidenciaUser)
-                    .modifyDescOrEraseIncid(hasFunctionAdmonPowers(functionRol) || incidenciaUser.isModifyDescOrEraseIncid())
-                    .build();
-        }
-        return new IncidenciaUserBuilder(incidenciaUser.incidencia)
-                .copyIncidUser(incidenciaUser)
-                .modifyDescOrEraseIncid(hasFunctionAdmonPowers(functionRol))
-                .build();
     }
 
     // ............................ Serializable ...............................
@@ -119,10 +108,10 @@ public class IncidenciaUser implements Serializable{
     public final static class IncidenciaUserBuilder implements BeanBuilder<IncidenciaUser> {
 
         private Incidencia incidencia;
-        private Usuario usuario;
+        private UsuarioComunidad usuario;
         private short importancia;
+        private boolean isYetIniciador;
         private Timestamp fechaAlta;
-        private boolean modifyDescOrEraseIncid;
 
         public IncidenciaUserBuilder(Incidencia incidencia)
         {
@@ -140,19 +129,18 @@ public class IncidenciaUser implements Serializable{
             return this;
         }
 
+        public IncidenciaUserBuilder isYetIniciador(boolean initValue){
+            isYetIniciador = initValue;
+            return this;
+        }
+
         public IncidenciaUserBuilder fechaAlta(Timestamp initValue)
         {
             fechaAlta = initValue;
             return this;
         }
 
-        public IncidenciaUserBuilder modifyDescOrEraseIncid(boolean initValue)
-        {
-            modifyDescOrEraseIncid = initValue;
-            return this;
-        }
-
-        public IncidenciaUserBuilder usuario(Usuario initValue)
+        public IncidenciaUserBuilder usuario(UsuarioComunidad initValue)
         {
             usuario = initValue;
             return this;
@@ -161,9 +149,9 @@ public class IncidenciaUser implements Serializable{
         public IncidenciaUserBuilder copyIncidUser(IncidenciaUser initValue)
         {
             importancia = initValue.importancia;
+            isYetIniciador = initValue.isYetIniciador;
             usuario = initValue.usuario;
             fechaAlta = initValue.fechaAlta;
-            modifyDescOrEraseIncid = initValue.modifyDescOrEraseIncid;
             return this;
         }
 
@@ -171,10 +159,22 @@ public class IncidenciaUser implements Serializable{
         public IncidenciaUser build()
         {
             IncidenciaUser incidenciaUser = new IncidenciaUser(this);
-            if (incidenciaUser.incidencia == null) {
-                throw new IllegalStateException(INCIDENCIA_WRONG_INIT.toString());
+            if (hasConditionOne(incidenciaUser) || hasConditionTwo(incidenciaUser)) {
+                throw new IllegalStateException(INCIDENCIA_USER_WRONG_INIT.toString());
             }
             return new IncidenciaUser(this);
+        }
+
+        private boolean hasConditionOne(IncidenciaUser incidenciaUser)
+        {
+            return incidenciaUser.incidencia == null;
+        }
+
+        private boolean hasConditionTwo(IncidenciaUser incidenciaUser)
+        {
+            return incidenciaUser.incidencia != null
+                    && usuario != null
+                    && (!incidenciaUser.incidencia.getComunidad().equals(usuario.getComunidad()));
         }
     }
 
@@ -183,18 +183,18 @@ public class IncidenciaUser implements Serializable{
     private static class InnerSerial implements Serializable {
 
         private final Incidencia incidencia;
-        private final Usuario usuario;
+        private final UsuarioComunidad usuario;
         private final short importancia;
+        private final boolean isYetIniciador;
         private final Timestamp fechaAlta;
-        private boolean modifyDescOrEraseIncid;
 
         public InnerSerial(IncidenciaUser incidenciaUser)
         {
             incidencia = incidenciaUser.incidencia;
             usuario = incidenciaUser.usuario;
             importancia = incidenciaUser.importancia;
+            isYetIniciador = incidenciaUser.isYetIniciador;
             fechaAlta = incidenciaUser.fechaAlta;
-            modifyDescOrEraseIncid = incidenciaUser.modifyDescOrEraseIncid;
         }
 
         private Object readResolve()
@@ -202,8 +202,8 @@ public class IncidenciaUser implements Serializable{
             return (new IncidenciaUserBuilder(incidencia)
                     .usuario(usuario)
                     .importancia(importancia)
+                    .isYetIniciador(isYetIniciador)
                     .fechaAlta(fechaAlta)
-                    .modifyDescOrEraseIncid(modifyDescOrEraseIncid)
                     .build());
         }
     }

@@ -4,8 +4,8 @@ import android.content.Intent;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.serviceone.domain.Comunidad;
-import com.didekin.serviceone.domain.UsuarioComunidad;
+import com.didekin.usuario.dominio.Comunidad;
+import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.usuario.dominio.DomainDataUtils;
 
@@ -35,7 +35,7 @@ import static com.didekindroid.common.utils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.utils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_PLAZUELA5_JUAN;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
-import static com.google.android.apps.common.testing.ui.espresso.sample.LongListMatchers.withAdaptedData;
+import static com.didekindroid.external.LongListMatchers.withAdaptedData;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;

@@ -1,6 +1,6 @@
 package com.didekindroid.usuario.dominio;
 
-import com.didekin.serviceone.domain.Usuario;
+import com.didekin.usuario.dominio.Usuario;
 
 import org.junit.Test;
 

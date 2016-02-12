@@ -9,8 +9,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.didekin.serviceone.domain.Comunidad;
-import com.didekin.serviceone.domain.UsuarioComunidad;
+import com.didekin.usuario.dominio.Comunidad;
+import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
 import com.didekindroid.common.utils.UIutils;

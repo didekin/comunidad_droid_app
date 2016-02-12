@@ -28,6 +28,7 @@
     <string name="incid_comments_see_ac_mn">Ver comentarios</string>
     <string name="incid_reg_ac_mn">Nueva incidencia</string>
     <string name="incid_see_by_comu_ac_mn">Incidencias abiertas</string>
+    <string name="incid_resolucion_ac_mn">Resolver</string>
     <!-- ============================= ACTIVITIES ============================= -->
     <!-- =============== IncidCommentRegAc ========= -->
     <string name="incid_comment_reg_ac_label">Comentar una incidencia</string>

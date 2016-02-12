@@ -5,55 +5,24 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <TextView
-        android:id="@+id/incid_descripcion_view"
+        android:id="@+id/incid_comment_fecha_view"
         style="@style/textBase.textFieldLabel2"
-        android:layout_alignParentStart="true"/>
-
-    <TextView
-        android:id="@+id/incid_fecha_alta_rot"
-        style="@style/textBase.textFieldLabel1"
         android:layout_alignParentStart="true"
-        android:layout_below="@id/incid_descripcion_view"
-        android:text="@string/incid_fecha_alta_rot"/>
+        android:layout_marginBottom="2dp"
+        android:layout_marginEnd="@dimen/simple_horizontal_margin"/>
 
     <TextView
-        android:id="@+id/incid_fecha_alta_view"
+        android:id="@+id/incid_comment_redactor_view"
         style="@style/textBase.textFieldLabel2"
-        android:layout_alignBottom="@id/incid_fecha_alta_rot"
-        android:layout_alignTop="@id/incid_fecha_alta_rot"
+        android:layout_alignBottom="@id/incid_comment_fecha_view"
+        android:layout_alignTop="@id/incid_comment_fecha_view"
         android:layout_marginTop="0dp"
-        android:layout_toEndOf="@id/incid_fecha_alta_rot"/>
+        android:layout_toEndOf="@id/incid_comment_fecha_view"/>
 
     <TextView
-        android:id="@+id/incid_ambito_rot"
-        style="@style/textBase.textFieldLabel1"
-        android:layout_alignBottom="@id/incid_fecha_alta_rot"
-        android:layout_alignTop="@id/incid_fecha_alta_rot"
-        android:layout_marginTop="0dp"
-        android:layout_toEndOf="@id/incid_fecha_alta_view"
-        android:text="@string/incid_ambito_rot"/>
-
-    <TextView
-        android:id="@+id/incid_ambito_view"
+        android:id="@+id/incid_comment_descripcion_view"
         style="@style/textBase.textFieldLabel2"
-        android:layout_alignBottom="@id/incid_ambito_rot"
-        android:layout_alignTop="@id/incid_ambito_rot"
-        android:layout_marginTop="0dp"
-        android:layout_toEndOf="@id/incid_ambito_rot"/>
-
-    <TextView
-        android:id="@+id/incid_importancia_comunidad_rot"
-        style="@style/textBase.textFieldLabel1"
         android:layout_alignParentStart="true"
-        android:layout_below="@id/incid_fecha_alta_rot"
-        android:text="@string/incid_importancia_comunidad_rot"/>
-
-    <TextView
-        android:id="@+id/incid_importancia_comunidad_view"
-        style="@style/textBase.textFieldLabel2"
-        android:layout_alignBottom="@id/incid_importancia_comunidad_rot"
-        android:layout_alignTop="@id/incid_importancia_comunidad_rot"
-        android:layout_marginTop="0dp"
-        android:layout_toEndOf="@id/incid_importancia_comunidad_rot"/>
+        android:layout_below="@id/incid_comment_redactor_view"/>
 
 </RelativeLayout>

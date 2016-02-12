@@ -1,7 +1,7 @@
 package com.didekin.incidservice.domain;
 
-import com.didekin.serviceone.domain.Comunidad;
-import com.didekin.serviceone.domain.Usuario;
+import com.didekin.usuario.dominio.Comunidad;
+import com.didekin.usuario.dominio.Usuario;
 
 import java.sql.Timestamp;
 

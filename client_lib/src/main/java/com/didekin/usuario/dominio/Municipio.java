@@ -1,4 +1,4 @@
-package com.didekin.serviceone.domain;
+package com.didekin.usuario.dominio;
 
 
 import java.io.Serializable;

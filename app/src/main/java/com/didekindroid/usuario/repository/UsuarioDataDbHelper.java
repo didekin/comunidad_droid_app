@@ -9,9 +9,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.didekin.serviceone.domain.ComunidadAutonoma;
-import com.didekin.serviceone.domain.Municipio;
-import com.didekin.serviceone.domain.Provincia;
+import com.didekin.usuario.dominio.ComunidadAutonoma;
+import com.didekin.usuario.dominio.Municipio;
+import com.didekin.usuario.dominio.Provincia;
 import com.didekindroid.R;
 import com.didekindroid.common.utils.UIutils;
 

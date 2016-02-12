@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.didekin.serviceone.domain.UsuarioComunidad;
+import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.getResourceStringId;

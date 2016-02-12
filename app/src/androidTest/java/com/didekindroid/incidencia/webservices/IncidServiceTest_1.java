@@ -5,8 +5,8 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekin.incidservice.domain.IncidComment;
 import com.didekin.incidservice.domain.Incidencia;
 import com.didekin.incidservice.domain.IncidenciaUser;
-import com.didekin.serviceone.domain.Usuario;
-import com.didekin.serviceone.domain.UsuarioComunidad;
+import com.didekin.usuario.dominio.Usuario;
+import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
 import com.didekindroid.common.UiException.UiAction;
@@ -36,7 +36,6 @@ import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_PLAZUELA5_JUAN;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_JUAN;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_PEPE;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.makeUsuarioComunidad;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static org.hamcrest.CoreMatchers.is;
@@ -92,7 +91,7 @@ public class IncidServiceTest_1 {
     {
         Incidencia incidencia = insertGetIncidencia(pepeUserComu, 1).getIncidencia();
         IncidenciaUser incidenciaUser = IncidenciaServ.getIncidenciaUserWithPowers(incidencia.getIncidenciaId());
-        assertThat(incidenciaUser.isModifyDescOrEraseIncid(), is(true));
+        assertThat(incidenciaUser.isYetIniciador(), is(true));
     }
 
     @Test
@@ -137,7 +136,7 @@ public class IncidServiceTest_1 {
         updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
 
         // Devuelve instancia de IncidenciaUser con usuario == null.
-        assertThat(IncidenciaServ.getIncidenciaUserWithPowers(incidencia.getIncidenciaId()).getUsuario(), nullValue());
+        assertThat(IncidenciaServ.getIncidenciaUserWithPowers(incidencia.getIncidenciaId()).getUsuarioComunidad(), nullValue());
     }
 
     @Test
@@ -158,7 +157,7 @@ public class IncidServiceTest_1 {
     public void testIncidCommentsSee_2() throws UiException
     {
         // Incidencia no existe.
-        Incidencia incidencia = doIncidenciaWithId(999L, "incid_no_existe",pepeUserComu.getComunidad().getC_Id(),(short)2);
+        Incidencia incidencia = doIncidenciaWithId(999L, "incid_no_existe", pepeUserComu.getComunidad().getC_Id(), (short) 2);
 
         try{
             IncidenciaServ.incidCommentsSee(incidencia);
@@ -171,6 +170,16 @@ public class IncidServiceTest_1 {
 
     @Test
     public void testIncidCommentsSee_3() throws UiException
+    {
+        // Incidencia existe; no tiene asociada comentarios.
+        Incidencia incid_pepeComu_1 = insertGetIncidencia(pepeUserComu, 1).getIncidencia();
+        List<IncidComment> comments = IncidenciaServ.incidCommentsSee(incid_pepeComu_1);
+        assertThat(comments, notNullValue());
+        assertThat(comments.size(), is(0));
+    }
+
+    @Test
+    public void testIncidCommentsSee_4() throws UiException
     {
         whatClean = CLEAN_JUAN_AND_PEPE;
 
@@ -192,12 +201,12 @@ public class IncidServiceTest_1 {
     public void testIncidSeeByComu_1() throws UiException
     {
         IncidenciaUser incidPepeUserComu1 = new IncidenciaUser.IncidenciaUserBuilder(doIncidencia("Incidencia One", pepeUserComu.getComunidad().getC_Id(), (short) 43))
-                .usuario(pepeUserComu.getUsuario())
+                .usuario(pepeUserComu)
                 .importancia((short) 3)
                 .build();
         assertThat(IncidenciaServ.regIncidenciaUser(incidPepeUserComu1), is(1));
         IncidenciaUser incidPepeUserComu2 = new IncidenciaUser.IncidenciaUserBuilder(doIncidencia("Incidencia Two", pepeUserComu.getComunidad().getC_Id(), (short) 11))
-                .usuario(USER_PEPE)
+                .usuario(pepeUserComu)
                 .importancia((short) 2)
                 .build();
         assertThat(IncidenciaServ.regIncidenciaUser(incidPepeUserComu2), is(1));
@@ -226,7 +235,7 @@ public class IncidServiceTest_1 {
         // Modificamos la incidencia original.
         IncidenciaUser incidPepeUserComu = new IncidenciaUser.IncidenciaUserBuilder(
                 doIncidenciaWithId(incidenciaDb.getIncidenciaId(), "modified_desc", pepeUserComu.getComunidad().getC_Id(), (short) 11))
-                .usuario(pepeUserComu.getUsuario())
+                .usuario(pepeUserComu)
                 .importancia((short) 2)
                 .build();
         assertThat(IncidenciaServ.modifyIncidenciaUser(incidPepeUserComu), is(2));
@@ -234,7 +243,7 @@ public class IncidServiceTest_1 {
         // Cambiamos incidenciaId a una PK inexistente: excepción INCIDENCIA_NOT_FOUND.
         incidPepeUserComu = new IncidenciaUser.IncidenciaUserBuilder(
                 doIncidenciaWithId(999L, "modified_desc", pepeUserComu.getComunidad().getC_Id(), (short) 11))
-                .usuario(pepeUserComu.getUsuario())
+                .usuario(pepeUserComu)
                 .importancia((short) 2)
                 .build();
         try {
@@ -292,7 +301,7 @@ public class IncidServiceTest_1 {
     {
         assertThat(pepeUserComu, notNullValue());
         IncidenciaUser incidPepeUserComu = new IncidenciaUser.IncidenciaUserBuilder(doIncidencia("Incidencia One", pepeUserComu.getComunidad().getC_Id(), (short) 43))
-                .usuario(pepeUserComu.getUsuario())
+                .usuario(pepeUserComu)
                 .importancia((short) 3)
                 .build();
         assertThat(IncidenciaServ.regIncidenciaUser(incidPepeUserComu), is(1));
@@ -304,7 +313,7 @@ public class IncidServiceTest_1 {
     {
         // IncidenciaId == 0 (inicialización por defecto). Existe relación usuario_comunidad.
         Incidencia incidencia = doIncidencia("incidencia sin Id en BD", 2L, (short) 11);
-        IncidenciaUser incidenciaUser = new IncidenciaUser.IncidenciaUserBuilder(incidencia).usuario(pepe).importancia((short) 2).build();
+        IncidenciaUser incidenciaUser = new IncidenciaUser.IncidenciaUserBuilder(incidencia).usuario(pepeUserComu).importancia((short) 2).build();
         try {
             IncidenciaServ.regUserInIncidencia(incidenciaUser);
             fail();
@@ -319,7 +328,7 @@ public class IncidServiceTest_1 {
     {
         // Verificamos modificación de importancia.
         Incidencia incidenciaDb = insertGetIncidencia(pepeUserComu, 3).getIncidencia();
-        IncidenciaUser incidenciaUser = new IncidenciaUser.IncidenciaUserBuilder(incidenciaDb).usuario(pepe).importancia((short) 2).build();
+        IncidenciaUser incidenciaUser = new IncidenciaUser.IncidenciaUserBuilder(incidenciaDb).usuario(pepeUserComu).importancia((short) 2).build();
         assertThat(IncidenciaServ.modifyUser(incidenciaUser), is(1));
         incidenciaUser = IncidenciaServ.getIncidenciaUserWithPowers(incidenciaDb.getIncidenciaId());
         assertThat(incidenciaUser.getImportancia(), is((short) 2));

@@ -1,4 +1,4 @@
-package com.didekin.serviceone.domain;
+package com.didekin.usuario.dominio;
 
 import com.didekin.common.BeanBuilder;
 import com.didekin.common.exception.DidekinExceptionMsg;
@@ -121,15 +121,6 @@ public final class Usuario implements Comparable<Usuario>, Serializable {
         }
         return hash;
     }
-
-    /*
-    * if (userName == null && uId <= 0L) {
-            throw new UnsupportedOperationException(USER_NOT_HASHABLE.toString());
-        }
-
-        int result = (int) (uId ^ (uId >>> 32));
-        result = 31 * result + (userName != null ? userName.hashCode() : 0);
-        return result;*/
 
     @Override
     public int compareTo(Usuario o)

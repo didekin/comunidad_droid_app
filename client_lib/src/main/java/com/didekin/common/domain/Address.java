@@ -1,6 +1,6 @@
 package com.didekin.common.domain;
 
-import com.didekin.serviceone.domain.Municipio;
+import com.didekin.usuario.dominio.Municipio;
 
 /**
  * User: pedro@didekin

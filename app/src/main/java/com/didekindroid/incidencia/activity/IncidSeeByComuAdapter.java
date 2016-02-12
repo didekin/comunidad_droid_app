@@ -72,7 +72,7 @@ public class IncidSeeByComuAdapter extends ArrayAdapter<IncidenciaUser> {
             Log.d(TAG, "initializeTextInViews()");
             mDescripcionView.setText(incidenciaUser.getIncidencia().getDescripcion());
             mFechaAltaView.setText(formatTimeStampToString(incidenciaUser.getFechaAlta()));
-            mIniciador.setText(incidenciaUser.getUsuario().getAlias());
+            mIniciador.setText(incidenciaUser.getUsuarioComunidad().getUsuario().getAlias());
             short ambitoPk = incidenciaUser.getIncidencia().getAmbitoIncidencia().getAmbitoId();
             mAmbitoView.setText(new IncidenciaDataDbHelper(getContext()).getAmbitoDescByPk(ambitoPk));
             int mImportanciaAvg = Math.round(incidenciaUser.getIncidencia().getImportanciaAvg());

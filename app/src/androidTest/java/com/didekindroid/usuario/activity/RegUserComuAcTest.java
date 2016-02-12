@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.serviceone.domain.Comunidad;
+import com.didekin.usuario.dominio.Comunidad;
 import com.didekindroid.R;
 
 import org.hamcrest.CoreMatchers;

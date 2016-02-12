@@ -14,7 +14,7 @@ import android.widget.CursorAdapter;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.didekin.serviceone.domain.Comunidad;
+import com.didekin.usuario.dominio.Comunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
 import com.didekindroid.usuario.dominio.ComunidadBean;

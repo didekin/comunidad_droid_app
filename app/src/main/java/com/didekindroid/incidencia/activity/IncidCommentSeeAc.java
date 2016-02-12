@@ -9,8 +9,6 @@ import android.view.MenuItem;
 
 import com.didekin.incidservice.domain.IncidenciaUser;
 import com.didekindroid.R;
-import com.didekindroid.common.utils.AppKeysForBundle;
-import com.didekindroid.incidencia.activity.utils.IncidenciaMenu;
 
 import static com.didekindroid.common.utils.AppKeysForBundle.INCIDENCIA_USER_OBJECT;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
@@ -38,13 +36,13 @@ public class IncidCommentSeeAc extends AppCompatActivity implements
         Log.d(TAG, "onCreate().");
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.incid_comment_see_ac);
+        setContentView(R.layout.incid_comments_see_ac);
         doToolBar(this, true);
 
         mIncidenciaUser = (IncidenciaUser) getIntent().getExtras().getSerializable(INCIDENCIA_USER_OBJECT.extra);
 
         mFragment = (IncidCommentSeeListFr) getFragmentManager()
-                .findFragmentById(R.id.incid_comment_see_frg);
+                .findFragmentById(R.id.incid_comments_see_frg);
     }
 
     @Override

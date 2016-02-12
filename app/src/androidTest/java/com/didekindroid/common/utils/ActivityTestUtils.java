@@ -6,9 +6,9 @@ import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.core.deps.guava.base.Preconditions;
 
 import com.didekin.common.oauth2.OauthToken;
-import com.didekin.serviceone.domain.Comunidad;
-import com.didekin.serviceone.domain.Usuario;
-import com.didekin.serviceone.domain.UsuarioComunidad;
+import com.didekin.usuario.dominio.Comunidad;
+import com.didekin.usuario.dominio.Usuario;
+import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.DidekindroidApp;
 import com.didekindroid.common.UiException;
 import com.didekindroid.usuario.activity.utils.CleanUserEnum;

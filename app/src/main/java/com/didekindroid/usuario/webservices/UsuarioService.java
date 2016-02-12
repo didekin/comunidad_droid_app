@@ -3,10 +3,10 @@ package com.didekindroid.usuario.webservices;
 import android.util.Log;
 
 import com.didekin.common.exception.InServiceException;
-import com.didekin.serviceone.controller.UsuarioEndPoints;
-import com.didekin.serviceone.domain.Comunidad;
-import com.didekin.serviceone.domain.Usuario;
-import com.didekin.serviceone.domain.UsuarioComunidad;
+import com.didekin.usuario.controller.UsuarioEndPoints;
+import com.didekin.usuario.dominio.Comunidad;
+import com.didekin.usuario.dominio.Usuario;
+import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
 
@@ -72,7 +72,7 @@ public enum UsuarioService implements UsuarioEndPoints {
         }
 
         @Override
-        public com.didekin.serviceone.domain.Usuario getUserData(String accessToken)
+        public Usuario getUserData(String accessToken)
         {
             return ServOne.endPoint.getUserData(accessToken);
         }
@@ -102,7 +102,7 @@ public enum UsuarioService implements UsuarioEndPoints {
         }
 
         @Override
-        public int modifyUser(String accessToken, com.didekin.serviceone.domain.Usuario usuario)
+        public int modifyUser(String accessToken, Usuario usuario)
         {
             return ServOne.endPoint.modifyUser(accessToken, usuario);
         }
@@ -285,11 +285,11 @@ public enum UsuarioService implements UsuarioEndPoints {
         return userComuByUserAndComu;
     }
 
-    public com.didekin.serviceone.domain.Usuario getUserData() throws UiException
+    public Usuario getUserData() throws UiException
     {
         Log.d(TAG, ("getUserData()"));
 
-        com.didekin.serviceone.domain.Usuario userData = null;
+        Usuario userData = null;
         try {
             userData = getUserData(checkBearerToken());
         } catch (InServiceException e) {

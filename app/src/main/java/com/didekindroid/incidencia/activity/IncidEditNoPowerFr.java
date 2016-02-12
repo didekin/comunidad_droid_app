@@ -61,7 +61,7 @@ public class IncidEditNoPowerFr extends Fragment implements ImportanciaSpinnerSe
 
         mIncidenciaBean = new IncidenciaBean();
         fIncidenciaUser = ((IncidUserDataSupplier) getActivity()).getIncidenciaUser();
-        mIsRegUserInIncidencia = fIncidenciaUser.getUsuario() == null;
+        mIsRegUserInIncidencia = fIncidenciaUser.getUsuarioComunidad() == null;
 
         ((TextView) fFragmentView.findViewById(R.id.incid_comunidad_txt)).setText(fIncidenciaUser.getIncidencia().getComunidad().getNombreComunidad());
         ((TextView) fFragmentView.findViewById(R.id.incid_reg_desc_txt)).setText(fIncidenciaUser.getIncidencia().getDescripcion());

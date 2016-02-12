@@ -2,9 +2,9 @@ package com.didekindroid.usuario.dominio;
 
 import android.content.res.Resources;
 
-import com.didekin.serviceone.domain.Comunidad;
-import com.didekin.serviceone.domain.Municipio;
-import com.didekin.serviceone.domain.Provincia;
+import com.didekin.usuario.dominio.Comunidad;
+import com.didekin.usuario.dominio.Municipio;
+import com.didekin.usuario.dominio.Provincia;
 import com.didekindroid.R;
 
 import static com.didekin.common.domain.DataPatterns.LINE_BREAK;

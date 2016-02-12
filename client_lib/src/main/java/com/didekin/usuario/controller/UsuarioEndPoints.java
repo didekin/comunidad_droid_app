@@ -1,8 +1,8 @@
-package com.didekin.serviceone.controller;
+package com.didekin.usuario.controller;
 
-import com.didekin.serviceone.domain.Comunidad;
-import com.didekin.serviceone.domain.Usuario;
-import com.didekin.serviceone.domain.UsuarioComunidad;
+import com.didekin.usuario.dominio.Comunidad;
+import com.didekin.usuario.dominio.Usuario;
+import com.didekin.usuario.dominio.UsuarioComunidad;
 
 import java.util.List;
 
@@ -22,25 +22,25 @@ import static com.didekin.common.oauth2.OauthConstant.PSWD_PARAM;
 import static com.didekin.common.oauth2.OauthConstant.USER_PARAM;
 import static com.didekin.common.oauth2.OauthConstant.USER_READ;
 import static com.didekin.common.oauth2.OauthConstant.USER_WRITE;
-import static com.didekin.serviceone.controller.UsuarioServiceConstant.ACCESS_TOKEN_DELETE;
-import static com.didekin.serviceone.controller.UsuarioServiceConstant.COMUNIDAD_OLDEST_USER;
-import static com.didekin.serviceone.controller.UsuarioServiceConstant.COMUNIDAD_SEARCH;
-import static com.didekin.serviceone.controller.UsuarioServiceConstant.COMUS_BY_USER;
-import static com.didekin.serviceone.controller.UsuarioServiceConstant.LOGIN;
-import static com.didekin.serviceone.controller.UsuarioServiceConstant.PASSWORD_MODIFY;
-import static com.didekin.serviceone.controller.UsuarioServiceConstant.PASSWORD_SEND;
-import static com.didekin.serviceone.controller.UsuarioServiceConstant.REG_COMU_AND_USER_AND_USERCOMU;
-import static com.didekin.serviceone.controller.UsuarioServiceConstant.REG_COMU_USERCOMU;
-import static com.didekin.serviceone.controller.UsuarioServiceConstant.REG_USERCOMU;
-import static com.didekin.serviceone.controller.UsuarioServiceConstant.REG_USER_USERCOMU;
-import static com.didekin.serviceone.controller.UsuarioServiceConstant.USERCOMUS_BY_COMU;
-import static com.didekin.serviceone.controller.UsuarioServiceConstant.USERCOMUS_BY_USER;
-import static com.didekin.serviceone.controller.UsuarioServiceConstant.USERCOMU_DELETE;
-import static com.didekin.serviceone.controller.UsuarioServiceConstant.USERCOMU_MODIFY;
-import static com.didekin.serviceone.controller.UsuarioServiceConstant.USERCOMU_READ;
-import static com.didekin.serviceone.controller.UsuarioServiceConstant.USER_DELETE;
-import static com.didekin.serviceone.controller.UsuarioServiceConstant.USER_READ_GCM_TOKEN;
-import static com.didekin.serviceone.controller.UsuarioServiceConstant.USER_WRITE_GCM_TOKEN;
+import static com.didekin.usuario.controller.UsuarioServiceConstant.ACCESS_TOKEN_DELETE;
+import static com.didekin.usuario.controller.UsuarioServiceConstant.COMUNIDAD_OLDEST_USER;
+import static com.didekin.usuario.controller.UsuarioServiceConstant.COMUNIDAD_SEARCH;
+import static com.didekin.usuario.controller.UsuarioServiceConstant.COMUS_BY_USER;
+import static com.didekin.usuario.controller.UsuarioServiceConstant.LOGIN;
+import static com.didekin.usuario.controller.UsuarioServiceConstant.PASSWORD_MODIFY;
+import static com.didekin.usuario.controller.UsuarioServiceConstant.PASSWORD_SEND;
+import static com.didekin.usuario.controller.UsuarioServiceConstant.REG_COMU_AND_USER_AND_USERCOMU;
+import static com.didekin.usuario.controller.UsuarioServiceConstant.REG_COMU_USERCOMU;
+import static com.didekin.usuario.controller.UsuarioServiceConstant.REG_USERCOMU;
+import static com.didekin.usuario.controller.UsuarioServiceConstant.REG_USER_USERCOMU;
+import static com.didekin.usuario.controller.UsuarioServiceConstant.USERCOMUS_BY_COMU;
+import static com.didekin.usuario.controller.UsuarioServiceConstant.USERCOMUS_BY_USER;
+import static com.didekin.usuario.controller.UsuarioServiceConstant.USERCOMU_DELETE;
+import static com.didekin.usuario.controller.UsuarioServiceConstant.USERCOMU_MODIFY;
+import static com.didekin.usuario.controller.UsuarioServiceConstant.USERCOMU_READ;
+import static com.didekin.usuario.controller.UsuarioServiceConstant.USER_DELETE;
+import static com.didekin.usuario.controller.UsuarioServiceConstant.USER_READ_GCM_TOKEN;
+import static com.didekin.usuario.controller.UsuarioServiceConstant.USER_WRITE_GCM_TOKEN;
 
 /**
  * User: pedro@didekin

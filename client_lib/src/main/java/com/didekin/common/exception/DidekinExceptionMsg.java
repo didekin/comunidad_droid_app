@@ -30,6 +30,7 @@ public enum DidekinExceptionMsg {
     INCIDENCIA_COMMENT_ANSWER_WRONG_INIT,
     INCIDENCIA_COMMENT_WRONG_INIT,
     INCIDENCIA_NOT_FOUND,
+    INCIDENCIA_USER_WRONG_INIT,
     INCIDENCIA_WRONG_INIT,
     NOT_FOUND,
     ROLES_NOT_FOUND,
@@ -85,6 +86,7 @@ public enum DidekinExceptionMsg {
         messageToStatusCode.put(INCIDENCIA_COMMENT_ANSWER_WRONG_INIT, precondition_fail_status);
         messageToStatusCode.put(INCIDENCIA_COMMENT_WRONG_INIT, precondition_fail_status);
         messageToStatusCode.put(INCIDENCIA_NOT_FOUND, entity_not_found_status);
+        messageToStatusCode.put(INCIDENCIA_USER_WRONG_INIT, precondition_fail_status);
         messageToStatusCode.put(INCIDENCIA_WRONG_INIT, precondition_fail_status);
         messageToStatusCode.put(NOT_FOUND, not_found_status);
         messageToStatusCode.put(ROLES_NOT_FOUND, entity_not_found_status);
@@ -104,6 +106,7 @@ public enum DidekinExceptionMsg {
 
         // LogingMessages.
         loginHttpMessages.add(BAD_REQUEST.getHttpMessage());
+        loginHttpMessages.add(INCIDENCIA_USER_WRONG_INIT.getHttpMessage());
         loginHttpMessages.add(ROLES_NOT_FOUND.getHttpMessage());
         loginHttpMessages.add(UNAUTHORIZED.getHttpMessage());
         loginHttpMessages.add(UNAUTHORIZED_TX_TO_USER.getHttpMessage());

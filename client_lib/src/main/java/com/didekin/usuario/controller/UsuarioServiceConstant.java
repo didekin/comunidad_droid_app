@@ -1,4 +1,4 @@
-package com.didekin.serviceone.controller;
+package com.didekin.usuario.controller;
 
 import static com.didekin.common.oauth2.OauthConstant.COMUNIDAD_READ;
 import static com.didekin.common.oauth2.OauthConstant.OPEN;

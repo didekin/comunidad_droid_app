@@ -1,6 +1,8 @@
 package com.didekindroid.incidencia.suite;
 
 import com.didekindroid.incidencia.activity.IncidCommentRegAcTest;
+import com.didekindroid.incidencia.activity.IncidCommentSeeAcTest_1;
+import com.didekindroid.incidencia.activity.IncidCommentSeeAcTest_2;
 import com.didekindroid.incidencia.activity.IncidEditAcTest_1;
 import com.didekindroid.incidencia.activity.IncidEditAcTest_2;
 import com.didekindroid.incidencia.activity.IncidEditAcTest_3;
@@ -8,7 +10,6 @@ import com.didekindroid.incidencia.activity.IncidRegAcTest;
 import com.didekindroid.incidencia.activity.IncidSeeByComuAcTest_1;
 import com.didekindroid.incidencia.activity.IncidSeeByComuAcTest_2;
 import com.didekindroid.incidencia.activity.IncidSeeClosedByComuAcTest_1;
-import com.didekindroid.incidencia.gcm.GcmBroadCastNotificationAcTest;
 import com.didekindroid.incidencia.gcm.IncidRegAcTest_gcm1;
 
 import org.junit.runner.RunWith;
@@ -21,8 +22,9 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        GcmBroadCastNotificationAcTest.class,
         IncidCommentRegAcTest.class,
+        IncidCommentSeeAcTest_1.class,
+        IncidCommentSeeAcTest_2.class,
         IncidEditAcTest_1.class,
         IncidEditAcTest_2.class,
         IncidEditAcTest_3.class,

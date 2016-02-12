@@ -5,8 +5,8 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekin.common.exception.DidekinExceptionMsg;
 import com.didekin.incidservice.domain.Incidencia;
 import com.didekin.incidservice.domain.IncidenciaUser;
-import com.didekin.serviceone.domain.Usuario;
-import com.didekin.serviceone.domain.UsuarioComunidad;
+import com.didekin.usuario.dominio.Usuario;
+import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
 import com.didekindroid.usuario.activity.utils.CleanUserEnum;
@@ -74,7 +74,7 @@ public class IncidServiceTest_2 {
         Incidencia incidencia_1 = insertGetIncidencia(pepeUserComu, 1).getIncidencia();
         // Verificamos poderes: true; solo hay una incidenciaUser.
         IncidenciaUser incidUser = IncidenciaServ.getIncidenciaUserWithPowers(incidencia_1.getIncidenciaId());
-        assertThat(incidUser.isModifyDescOrEraseIncid(), is(true));
+        assertThat(incidUser.isYetIniciador(), is(true));
 
         // Registro usuario en misma comunidad y lo asocio a la incidencia.
         UsuarioComunidad userComuJuan = makeUsuarioComunidad(pepeUserComu.getComunidad(), USER_JUAN,
@@ -86,11 +86,11 @@ public class IncidServiceTest_2 {
         // Verificamos poderes de Juan: false, porque no es usuario titular.
         assertThat(incidencia_2, is(incidencia_1));
         incidUser = IncidenciaServ.getIncidenciaUserWithPowers(incidencia_2.getIncidenciaId());
-        assertThat(incidUser.isModifyDescOrEraseIncid(), is(false));
+        assertThat(incidUser.isYetIniciador(), is(false));
         // Cambiamos de usario y verificamos poderes de Pepe: false, porque existe otra incidencia con importancia > 1.
         updateSecurityData(USER_PEPE.getUserName(), USER_PEPE.getPassword());
         incidUser = IncidenciaServ.getIncidenciaUserWithPowers(incidencia_2.getIncidenciaId());
-        assertThat(incidUser.isModifyDescOrEraseIncid(), is(false));
+        assertThat(incidUser.isYetIniciador(), is(false));
         // Intentamos borrar la incidencia.
         try {
             IncidenciaServ.deleteIncidencia(incidUser.getIncidencia().getIncidenciaId());
@@ -121,7 +121,7 @@ public class IncidServiceTest_2 {
         try {
             IncidenciaServ.modifyIncidenciaUser(new IncidenciaUser.IncidenciaUserBuilder(
                     doIncidenciaWithId(incidencia_1.getIncidenciaId(), "modified_desc", incidencia_1.getComunidad().getC_Id(), (short) 16))
-                    .usuario(pepe)
+                    .usuario(pepeUserComu)
                     .importancia((short) 2)
                     .build());
             fail();
@@ -144,9 +144,9 @@ public class IncidServiceTest_2 {
                 "portal", "esc", "plantaX", "door12", PROPIETARIO.function);
         assertThat(ServOne.regUserAndUserComu(userComuJuan), is(true));
         updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
-        Usuario juanDb = ServOne.getUserData();
+        UsuarioComunidad juanUserComu = ServOne.getUserComuByUserAndComu(pepeUserComu.getComunidad().getC_Id());
         IncidenciaUser newIncidUser = new IncidenciaUser.IncidenciaUserBuilder(incidencia_1)
-                .usuario(juanDb)
+                .usuario(juanUserComu)
                 .importancia((short)2)
                 .build();
         assertThat(IncidenciaServ.regUserInIncidencia(newIncidUser), is(1));
@@ -159,20 +159,26 @@ public class IncidServiceTest_2 {
         // Insertamos incidencia.
         Incidencia incidencia_1 = insertGetIncidencia(pepeUserComu, 1).getIncidencia();
         // Registramos usuario en otra comunidad.
-        Usuario userJuan = signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
+        signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
+        UsuarioComunidad juanUserComu = ServOne.seeUserComusByUser().get(0);
         // Intentamos asociar el nuevo usuario a la incidencia.
-        IncidenciaUser newIncidUser = new IncidenciaUser.IncidenciaUserBuilder(incidencia_1)
-                .usuario(userJuan)
-                .importancia((short)2)
-                .build();
-        try{
+        try {
+            new IncidenciaUser.IncidenciaUserBuilder(incidencia_1)
+                    .usuario(juanUserComu)
+                    .importancia((short) 2)
+                    .build();
+            fail();
+        } catch (IllegalStateException e) {
+            assertThat(e.getMessage(),is(DidekinExceptionMsg.INCIDENCIA_USER_WRONG_INIT.getHttpMessage()));
+        }
+        /*try{
             IncidenciaServ.regUserInIncidencia(newIncidUser);
             fail();
         }catch (UiException ue){
             assertThat(ue.getInServiceException().getHttpMessage(),is(DidekinExceptionMsg.USERCOMU_WRONG_INIT.getHttpMessage()));
             assertThat(ue.getAction(),is(UiException.UiAction.LOGIN));
             assertThat(ue.getResourceId(),is(R.string.user_without_powers));
-        }
+        }*/
     }
 
 //    ============================= HELPER METHODS ===============================

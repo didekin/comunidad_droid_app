@@ -6,11 +6,11 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.common.exception.InServiceException;
 import com.didekin.common.oauth2.OauthToken.AccessToken;
-import com.didekin.serviceone.domain.Comunidad;
-import com.didekin.serviceone.domain.Municipio;
-import com.didekin.serviceone.domain.Provincia;
-import com.didekin.serviceone.domain.Usuario;
-import com.didekin.serviceone.domain.UsuarioComunidad;
+import com.didekin.usuario.dominio.Comunidad;
+import com.didekin.usuario.dominio.Municipio;
+import com.didekin.usuario.dominio.Provincia;
+import com.didekin.usuario.dominio.Usuario;
+import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.DidekindroidApp;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
@@ -29,7 +29,7 @@ import java.util.List;
 
 import static com.didekin.common.exception.DidekinExceptionMsg.USER_NAME_DUPLICATE;
 import static com.didekin.common.oauth2.OauthTokenHelper.HELPER;
-import static com.didekin.serviceone.controller.UsuarioServiceConstant.IS_USER_DELETED;
+import static com.didekin.usuario.controller.UsuarioServiceConstant.IS_USER_DELETED;
 import static com.didekindroid.common.TokenHandler.TKhandler;
 import static com.didekindroid.common.UiException.UiAction.SEARCH_COMU;
 import static com.didekindroid.common.utils.ActivityTestUtils.updateSecurityData;

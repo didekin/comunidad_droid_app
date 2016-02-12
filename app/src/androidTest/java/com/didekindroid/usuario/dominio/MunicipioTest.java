@@ -1,7 +1,7 @@
 package com.didekindroid.usuario.dominio;
 
-import com.didekin.serviceone.domain.Municipio;
-import com.didekin.serviceone.domain.Provincia;
+import com.didekin.usuario.dominio.Municipio;
+import com.didekin.usuario.dominio.Provincia;
 
 import org.junit.Test;
 

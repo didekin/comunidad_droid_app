@@ -16,8 +16,8 @@ import android.widget.CursorAdapter;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 
-import com.didekin.serviceone.domain.Municipio;
-import com.didekin.serviceone.domain.Provincia;
+import com.didekin.usuario.dominio.Municipio;
+import com.didekin.usuario.dominio.Provincia;
 import com.didekindroid.R;
 import com.didekindroid.usuario.repository.UsuarioDataDbHelper;
 import com.didekindroid.usuario.dominio.ComunidadBean;

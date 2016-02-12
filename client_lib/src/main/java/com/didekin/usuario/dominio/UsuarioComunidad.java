@@ -1,12 +1,14 @@
-package com.didekin.serviceone.domain;
+package com.didekin.usuario.dominio;
 
 
 import com.didekin.common.BeanBuilder;
+import com.didekin.common.oauth2.Rol;
 
 import java.io.InvalidObjectException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.regex.Pattern;
 
 import static com.didekin.common.exception.DidekinExceptionMsg.USERCOMU_WRONG_INIT;
 
@@ -94,6 +96,17 @@ public final class UsuarioComunidad implements Comparable<UsuarioComunidad>, Ser
     public Usuario getUsuario()
     {
         return usuario;
+    }
+
+    public boolean hasRoleAdministrador()
+    {
+        String[] rolesArray = Pattern.compile(",").split(roles);
+        for (String rol : rolesArray) {
+            if (rol.equals(Rol.ADMINISTRADOR.function) || rol.equals(Rol.PRESIDENTE.function)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // ............................ Serializable ...............................

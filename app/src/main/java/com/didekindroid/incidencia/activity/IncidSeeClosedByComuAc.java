@@ -7,7 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.didekin.incidservice.domain.Incidencia;
-import com.didekin.serviceone.domain.Comunidad;
+import com.didekin.usuario.dominio.Comunidad;
 import com.didekindroid.R;
 
 import static com.didekindroid.common.utils.AppKeysForBundle.INCIDENCIA_LIST_INDEX;
@@ -25,12 +25,13 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * 4. The incidencias are shown in chronological order, from the most recent to the oldest one.
  * Postconditions:
  * 1. The details of the incidencia selected are shown: resolution, comments, ..
- * 2. Closed incidencias are editable only by administrador o presidente, only in the resolution information.
+ * 2. Closed incidencias are editable only by administrador o presidente, only in the resolution information. // TODO: this line pending.
  */
 public class IncidSeeClosedByComuAc extends AppCompatActivity implements
         IncidListListener {
 
     private static final String TAG = IncidSeeClosedByComuAc.class.getCanonicalName();
+
     IncidSeeClosedByComuListFr mFragment;
     int mIncidenciaIndex;
 

@@ -7,11 +7,10 @@ import android.widget.ArrayAdapter;
 import android.widget.CursorAdapter;
 
 import com.didekin.incidservice.domain.IncidenciaUser;
-import com.didekin.serviceone.domain.Comunidad;
+import com.didekin.usuario.dominio.Comunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
 import com.didekindroid.incidencia.dominio.IncidenciaBean;
-import com.didekindroid.incidencia.webservices.IncidService;
 import com.didekindroid.usuario.activity.utils.CleanUserEnum;
 
 import org.junit.After;

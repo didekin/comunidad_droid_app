@@ -4,9 +4,8 @@ import com.didekin.incidservice.domain.AmbitoIncidencia;
 import com.didekin.incidservice.domain.IncidComment;
 import com.didekin.incidservice.domain.Incidencia;
 import com.didekin.incidservice.domain.IncidenciaUser;
-import com.didekin.serviceone.domain.Comunidad;
-import com.didekin.serviceone.domain.Usuario;
-import com.didekin.serviceone.domain.UsuarioComunidad;
+import com.didekin.usuario.dominio.Comunidad;
+import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.common.UiException;
 
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
@@ -59,7 +58,7 @@ public final class IncidenciaTestUtils {
     public static IncidenciaUser insertGetIncidencia(UsuarioComunidad userComu, int importancia) throws UiException
     {
         IncidenciaUser incidUserComu = new IncidenciaUser.IncidenciaUserBuilder(doIncidencia("Incidencia One", userComu.getComunidad().getC_Id(), (short) 43))
-                .usuario(userComu.getUsuario())
+                .usuario(userComu)
                 .importancia((short) importancia)
                 .build();
         assertThat(IncidenciaServ.regIncidenciaUser(incidUserComu), is(1));
@@ -69,7 +68,7 @@ public final class IncidenciaTestUtils {
     public static IncidenciaUser insertGetIncidenciaWithId(long incidenciaId, UsuarioComunidad userComu, int importancia) throws UiException
     {
         IncidenciaUser incidUserComu = new IncidenciaUser.IncidenciaUserBuilder(doIncidenciaWithId(incidenciaId, "descripcion", userComu.getComunidad().getC_Id(), (short) 43))
-                .usuario(userComu.getUsuario())
+                .usuario(userComu)
                 .importancia((short) importancia)
                 .build();
         assertThat(IncidenciaServ.regUserInIncidencia(incidUserComu), is(1));

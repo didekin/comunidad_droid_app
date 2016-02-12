@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.didekin.serviceone.domain.UsuarioComunidad;
+import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.common.UiException;
 
 import java.util.List;

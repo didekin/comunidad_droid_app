@@ -9,9 +9,8 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.didekin.incidservice.domain.IncidenciaUser;
+import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
-import com.didekindroid.incidencia.activity.utils.IncidenciaMenu;
-import com.didekindroid.usuario.activity.SeeUserComuByComuAc;
 
 import static com.didekindroid.common.utils.AppKeysForBundle.INCIDENCIA_USER_OBJECT;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
@@ -53,7 +52,10 @@ public class IncidEditAc extends AppCompatActivity implements IncidUserDataSuppl
         setContentView(mAcView);
         doToolBar(this, true);
 
-        if (mIncidenciaUser.isModifyDescOrEraseIncid()) {
+        UsuarioComunidad userComu = mIncidenciaUser.getUsuarioComunidad();
+
+        if (mIncidenciaUser.isYetIniciador()
+                || (userComu != null &&  userComu.hasRoleAdministrador())) {
             IncidEditMaxPowerFr mFragmentMax;
             if (savedInstanceState == null) {
                 mFragmentMax = new IncidEditMaxPowerFr();
@@ -81,6 +83,16 @@ public class IncidEditAc extends AppCompatActivity implements IncidUserDataSuppl
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu)
+    {
+        Log.d(TAG, "onPrepareOptionsMenu()");
+
+        MenuItem resolverItem = menu.findItem(R.id.incid_resolucion_ac_mn);
+        resolverItem.setVisible(true); // TODO: continuer.
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
         Log.d(TAG, "onOptionsItemSelected()");
@@ -101,6 +113,8 @@ public class IncidEditAc extends AppCompatActivity implements IncidUserDataSuppl
                 this.setIntent(intent);
                 INCID_COMMENTS_SEE_AC.doMenuItem(this);
                 return true;
+            case R.id.incid_resolucion_ac_mn:
+
             default:
                 return super.onOptionsItemSelected(item);
         }

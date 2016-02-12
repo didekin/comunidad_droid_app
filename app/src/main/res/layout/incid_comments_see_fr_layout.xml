@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    android:id="@+id/incid_comment_see_layout"
+    android:id="@+id/incid_comments_see_fr_layout"
     style="@style/baseLayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_marginTop="@dimen/app_bar_bottom_margin">
-
-    <TextView
-        android:id="@+id/incid_comment_see_incidencia_rot"
-        style="@style/textBase.textFieldLabel1"
-        android:text="@string/incid_comment_incidencia_rot"/>
 
     <TextView
         android:id="@+id/incid_comment_see_comment_rot"

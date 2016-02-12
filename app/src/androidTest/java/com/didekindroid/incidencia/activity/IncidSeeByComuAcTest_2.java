@@ -1,13 +1,12 @@
 package com.didekindroid.incidencia.activity;
 
 import android.support.test.espresso.intent.rule.IntentsTestRule;
-import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.incidservice.domain.Incidencia;
 import com.didekin.incidservice.domain.IncidenciaUser;
-import com.didekin.serviceone.domain.Comunidad;
-import com.didekin.serviceone.domain.UsuarioComunidad;
+import com.didekin.usuario.dominio.Comunidad;
+import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
 import com.didekindroid.incidencia.repository.IncidenciaDataDbHelper;
@@ -34,6 +33,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.didekindroid.common.utils.ActivityTestUtils.cleanOptions;
+import static com.didekindroid.common.utils.ActivityTestUtils.regSeveralUserComuSameUser;
 import static com.didekindroid.common.utils.AppKeysForBundle.INCIDENCIA_USER_OBJECT;
 import static com.didekindroid.common.utils.UIutils.formatTimeStampToString;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
@@ -41,8 +42,6 @@ import static com.didekindroid.incidencia.IncidenciaTestUtils.doIncidencia;
 import static com.didekindroid.incidencia.repository.IncidenciaDataDbHelperTest.DB_PATH;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_JUAN;
-import static com.didekindroid.common.utils.ActivityTestUtils.cleanOptions;
-import static com.didekindroid.common.utils.ActivityTestUtils.regSeveralUserComuSameUser;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_LA_PLAZUELA_5;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_PLAZUELA5_JUAN;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_JUAN;
@@ -82,13 +81,13 @@ public class IncidSeeByComuAcTest_2 {
                 juanReal = ServOne.seeUserComusByUser().get(0);
                 juanPlazuela = ServOne.seeUserComusByUser().get(1);
                 incidJuanReal1 = new IncidenciaUser.IncidenciaUserBuilder(doIncidencia("Incidencia Real One", juanReal.getComunidad().getC_Id(), (short) 43))
-                        .usuario(juanReal.getUsuario())
+                        .usuario(juanReal)
                         .importancia((short) 3).build();
                 incidJuanReal2 = new IncidenciaUser.IncidenciaUserBuilder(doIncidencia("Incidencia Real Two", juanReal.getComunidad().getC_Id(), (short) 11))
-                        .usuario(juanReal.getUsuario())
+                        .usuario(juanReal)
                         .importancia((short) 2).build();
                 incidJuanPlazuela1 = new IncidenciaUser.IncidenciaUserBuilder(doIncidencia("Incidencia Plazuela One", juanPlazuela.getComunidad().getC_Id(), (short) 26))
-                        .usuario(juanPlazuela.getUsuario())
+                        .usuario(juanPlazuela)
                         .importancia((short) 4).build();
                 IncidenciaServ.regIncidenciaUser(incidJuanReal1);
                 IncidenciaServ.regIncidenciaUser(incidJuanReal2);
@@ -142,12 +141,12 @@ public class IncidSeeByComuAcTest_2 {
         // Ordered by fecha_alta of the incidencia.
         assertThat(adapter.getItem(0).getIncidencia().getComunidad(), is(juanReal.getComunidad()));
         assertThat(adapter.getItem(0).getIncidencia().getAmbitoIncidencia().getAmbitoId(), is(incidJuanReal1.getIncidencia().getAmbitoIncidencia().getAmbitoId()));
-        assertThat(adapter.getItem(0).getUsuario().getAlias(), is(juanReal.getUsuario().getAlias()));
+        assertThat(adapter.getItem(0).getUsuarioComunidad().getUsuario().getAlias(), is(juanReal.getUsuario().getAlias()));
         assertThat(adapter.getItem(0).getIncidencia().getDescripcion(), is(incidJuanReal1.getIncidencia().getDescripcion()));
         assertThat(adapter.getItem(0).getIncidencia().getImportanciaAvg(), is((float) incidJuanReal1.getImportancia()));
         //
         assertThat(adapter.getItem(1).getIncidencia().getComunidad(), is(juanReal.getComunidad()));
-        assertThat(adapter.getItem(0).getUsuario().getAlias(), is(juanReal.getUsuario().getAlias()));
+        assertThat(adapter.getItem(0).getUsuarioComunidad().getUsuario().getAlias(), is(juanReal.getUsuario().getAlias()));
         assertThat(adapter.getItem(1).getIncidencia().getAmbitoIncidencia().getAmbitoId(), is(incidJuanReal2.getIncidencia().getAmbitoIncidencia().getAmbitoId()));
         assertThat(adapter.getItem(1).getIncidencia().getDescripcion(), is(incidJuanReal2.getIncidencia().getDescripcion()));
         assertThat(adapter.getItem(1).getIncidencia().getImportanciaAvg(), is((float) incidJuanReal2.getImportancia()));
@@ -170,7 +169,7 @@ public class IncidSeeByComuAcTest_2 {
         assertThat(adapter.getCount(), is(1));
 
         assertThat(adapter.getItem(0).getIncidencia().getComunidad(), is(juanPlazuela.getComunidad()));
-        assertThat(adapter.getItem(0).getUsuario().getAlias(), is(juanPlazuela.getUsuario().getAlias()));
+        assertThat(adapter.getItem(0).getUsuarioComunidad().getUsuario().getAlias(), is(juanPlazuela.getUsuario().getAlias()));
         assertThat(adapter.getItem(0).getIncidencia().getAmbitoIncidencia().getAmbitoId(), is(incidJuanPlazuela1.getIncidencia().getAmbitoIncidencia().getAmbitoId()));
         assertThat(adapter.getItem(0).getIncidencia().getDescripcion(), is(incidJuanPlazuela1.getIncidencia().getDescripcion()));
         assertThat(adapter.getItem(0).getIncidencia().getImportanciaAvg(), is((float) incidJuanPlazuela1.getImportancia()));
@@ -233,10 +232,11 @@ public class IncidSeeByComuAcTest_2 {
     }
 
     @Test
-    public void testOnSelected_1() throws UiException
+    public void testOnSelected_1() throws UiException, InterruptedException
     {
 
         // Default comunidad: Real, in position 0.
+        Thread.sleep(1000);
         IncidenciaUser incidUser_0 = adapter.getItem(0);
         Incidencia incidencia_0 = incidUser_0.getIncidencia();
         onData(is(incidUser_0)).inAdapterView(withId(android.R.id.list))

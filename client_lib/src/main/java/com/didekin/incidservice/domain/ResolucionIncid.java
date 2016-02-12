@@ -2,6 +2,7 @@ package com.didekin.incidservice.domain;
 
 import com.didekin.common.BeanBuilder;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
@@ -10,7 +11,7 @@ import java.sql.Timestamp;
  * Time: 18:30
  */
 @SuppressWarnings("FieldCanBeLocal")
-public final class ResolucionIncid {
+public final class ResolucionIncid implements Serializable{ // TODO: serialization proxy.
 
     private final String descripcion;
     private final String faseResolucion;

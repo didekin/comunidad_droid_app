@@ -23,9 +23,9 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
         ComunidadTest.class,
         ComunidadBeanValidaTests.class,
-        UsuarioDataDbHelperTest.class,
         MockDbHelperTest.class,
         MunicipioTest.class,
+        UsuarioDataDbHelperTest.class,
         UsuarioServiceTest.class,
         UsuarioBeanValidaTests.class,
         UsuarioComunidadBeanValidaTests.class,

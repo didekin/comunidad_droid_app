@@ -1,4 +1,4 @@
-package com.google.android.apps.common.testing.ui.espresso.sample;
+package com.didekindroid.external;
 
 
 import android.support.test.espresso.matcher.BoundedMatcher;
@@ -17,8 +17,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasEntry;
 
-/*import com.google.android.apps.common.testing.ui.testapp.LongListActivity;*/
-
 /**
  * Static utility methods to create {@link Matcher} instances that can be applied to the data
  * objects created by {@link com.google.android.apps.common.testing.ui.testapp.LongListActivity}.
@@ -34,6 +32,7 @@ import static org.hamcrest.Matchers.hasEntry;
  * rendered into a TextView with the id R.id.item_size.
  * </p>
  */
+@SuppressWarnings("JavadocReference")
 public final class LongListMatchers {
 
     private LongListMatchers()

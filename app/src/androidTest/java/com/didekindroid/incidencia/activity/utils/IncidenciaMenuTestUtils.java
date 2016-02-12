@@ -32,7 +32,7 @@ public enum IncidenciaMenuTestUtils {
         @Override
         public void checkMenuItem_WTk(Activity activity) throws InterruptedException
         {
-            check(activity, R.string.incid_comments_see_ac_mn, R.id.incid_comment_see_frg);
+            check(activity, R.string.incid_comments_see_ac_mn, R.id.incid_comments_see_frg);
         }
     },
 

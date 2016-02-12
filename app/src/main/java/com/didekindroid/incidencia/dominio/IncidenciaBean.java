@@ -7,7 +7,7 @@ import android.widget.EditText;
 import com.didekin.incidservice.domain.AmbitoIncidencia;
 import com.didekin.incidservice.domain.Incidencia;
 import com.didekin.incidservice.domain.IncidenciaUser;
-import com.didekin.serviceone.domain.Comunidad;
+import com.didekin.usuario.dominio.Comunidad;
 import com.didekindroid.R;
 
 import static com.didekin.common.domain.DataPatterns.LINE_BREAK;

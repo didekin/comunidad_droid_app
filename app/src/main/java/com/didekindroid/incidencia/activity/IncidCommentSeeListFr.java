@@ -19,6 +19,7 @@ import com.didekindroid.incidencia.webservices.IncidService;
 
 import java.util.List;
 
+import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.google.common.base.Preconditions.checkState;
 
 /**
@@ -56,7 +57,7 @@ public class IncidCommentSeeListFr extends ListFragment {
                              Bundle savedInstanceState)
     {
         Log.d(TAG, "onCreateView()");
-        mView = inflater.inflate(R.layout.incid_comment_see_fr_layout, container, false);
+        mView = inflater.inflate(R.layout.incid_comments_see_fr_layout, container, false);
         return mView;
     }
 
@@ -160,7 +161,7 @@ public class IncidCommentSeeListFr extends ListFragment {
             Log.d(TAG, "doInBackground()");
             List<IncidComment> comments = null;
             try{
-                comments = IncidService.IncidenciaServ.incidCommentsSee(params[0]);
+                comments = IncidenciaServ.incidCommentsSee(params[0]);
             } catch (UiException ue){
                 uiException = ue;
             }

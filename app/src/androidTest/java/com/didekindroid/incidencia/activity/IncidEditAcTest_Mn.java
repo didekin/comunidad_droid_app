@@ -5,7 +5,7 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.incidservice.domain.IncidenciaUser;
-import com.didekin.serviceone.domain.UsuarioComunidad;
+import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.common.UiException;
 
 import org.junit.After;
@@ -64,7 +64,7 @@ public class IncidEditAcTest_Mn {
                 signUpAndUpdateTk(COMU_REAL_JUAN);
                 juanReal = ServOne.seeUserComusByUser().get(0);
                 incidJuanReal1 = new IncidenciaUser.IncidenciaUserBuilder(doIncidencia("Incidencia Real One", juanReal.getComunidad().getC_Id(), (short) 43))
-                        .usuario(juanReal.getUsuario())
+                        .usuario(juanReal)
                         .importancia((short) 3).build();
                 IncidenciaServ.regIncidenciaUser(incidJuanReal1);
                 IncidenciaUser incidenciaUserDb = IncidenciaServ.incidSeeByComu(juanReal.getComunidad().getC_Id()).get(0);

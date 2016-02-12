@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <style name="themeOne.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <style name="themeOne.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
     <!--................ Action bar .............-->
     <style name="appBarTitle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textSize">@dimen/appBar_title</item>
@@ -90,6 +95,13 @@
         <item name="android:scrollbars">vertical</item>
     </style>
 
+    <style name="baseLayout.paddingList">
+        <!-- TODO: incluir valores en dimensiones.-->
+        <item name="android:padding">4dp</item>
+    </style>
+
+    <!-- ................... Lists ............. -->
+
     <!-- ................ Spinners ............. -->
     <style name="spinnerBase">
         <item name="android:layout_width">wrap_content</item>
@@ -123,6 +135,7 @@
         <item name="android:textSize">@dimen/text_rotulo_list</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/purple_900</item>
+        <item name="android:layout_marginBottom">@dimen/vertical_margin</item>
     </style>
 
     <style name="textBase.textPageLabel1">
@@ -136,9 +149,5 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/purple_900</item>
     </style>
-
-    <style name="themeOne.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
-
-    <style name="themeOne.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
 </resources>
