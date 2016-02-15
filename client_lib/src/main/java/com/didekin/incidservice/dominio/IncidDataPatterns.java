@@ -1,6 +1,6 @@
-package com.didekin.incidservice.domain;
+package com.didekin.incidservice.dominio;
 
-import com.didekin.common.domain.DataPatternsIf;
+import com.didekin.common.dominio.DataPatternsIf;
 
 import java.util.regex.Pattern;
 
@@ -17,6 +17,7 @@ public enum IncidDataPatterns implements DataPatternsIf {
 
     INCID_DESC("[\\w_ñÑáéíóúüÜÁÉÍÓÚ%&ºª@#,:;¿\\?¡\\!\\(\\)\\.\\-\\s]{2,300}"),
     INCID_COMMENT_DESC("[\\w_ñÑáéíóúüÜÁÉÍÓÚ%&ºª@#,:;¿\\?¡\\!\\(\\)\\.\\-\\s]{2,250}"),
+    INCID_RESOLUCION_DESC(INCID_DESC.regexp),
     ;
 
     private final Pattern pattern;

@@ -7,9 +7,9 @@ import com.didekin.usuario.dominio.Municipio;
 import com.didekin.usuario.dominio.Provincia;
 import com.didekindroid.R;
 
-import static com.didekin.common.domain.DataPatterns.LINE_BREAK;
-import static com.didekin.common.domain.DataPatterns.NOMBRE_VIA;
-import static com.didekin.common.domain.DataPatterns.SUFIJO_NUMERO;
+import static com.didekin.common.dominio.DataPatterns.LINE_BREAK;
+import static com.didekin.common.dominio.DataPatterns.NOMBRE_VIA;
+import static com.didekin.common.dominio.DataPatterns.SUFIJO_NUMERO;
 
 /**
  * User: pedro@didekin

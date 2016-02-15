@@ -1,8 +1,9 @@
 package com.didekin.incidservice.controller;
 
-import com.didekin.incidservice.domain.IncidComment;
-import com.didekin.incidservice.domain.Incidencia;
-import com.didekin.incidservice.domain.IncidenciaUser;
+import com.didekin.incidservice.dominio.IncidComment;
+import com.didekin.incidservice.dominio.Incidencia;
+import com.didekin.incidservice.dominio.IncidenciaUser;
+import com.didekin.incidservice.dominio.Resolucion;
 
 import java.util.List;
 
@@ -57,6 +58,10 @@ public interface IncidenciaServEndPoints {
     @POST(REG_INCID_USER)
     int regIncidenciaUser(@Header("Authorization") String accessToken,
                           @Body IncidenciaUser incidenciaUser);
+
+    @POST(REG_RESOLUCION)
+    int regResolucion(@Header("Authorization") String accessToken,
+                      @Body Resolucion resolucion);
 
     @POST(REG_USER_IN_INCID)
     int regUserInIncidencia(@Header("Authorization") String accessToken,

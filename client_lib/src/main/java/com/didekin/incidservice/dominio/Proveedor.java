@@ -1,7 +1,7 @@
-package com.didekin.incidservice.domain;
+package com.didekin.incidservice.dominio;
 
 import com.didekin.common.BeanBuilder;
-import com.didekin.common.domain.Address;
+import com.didekin.common.dominio.Address;
 import com.didekin.usuario.dominio.Usuario;
 
 import java.sql.Timestamp;

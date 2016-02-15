@@ -7,6 +7,7 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
+import com.didekindroid.common.utils.ActivityTestUtils;
 import com.didekindroid.common.utils.UIutils;
 import com.didekindroid.usuario.activity.utils.CleanUserEnum;
 
@@ -134,11 +135,7 @@ public class RegUserAndUserComuAcTest_intent {
         onView(withId(R.id.reg_usercomu_frg)).check(matches(isDisplayed()));
 
         onView(withId(R.id.appbar)).perform(scrollTo()).check(matches(isDisplayed()));
-        onView(withContentDescription("Navigate up")).check(matches(isDisplayed()));
-        onView(CoreMatchers.allOf(
-                        withContentDescription("Navigate up"),
-                        isClickable())
-        ).check(matches(isDisplayed())).perform(click());
+        ActivityTestUtils.checkNavigateUp();
     }
 
     @Test

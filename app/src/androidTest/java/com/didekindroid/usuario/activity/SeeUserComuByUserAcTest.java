@@ -5,8 +5,8 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
+import com.didekindroid.common.utils.ActivityTestUtils;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -16,18 +16,15 @@ import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
-import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.common.utils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.utils.ActivityTestUtils.regSeveralUserComuSameUser;
 import static com.didekindroid.common.utils.ViewsIDs.SEE_USERCOMU_BY_USER;
+import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_EL_ESCORIAL;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_LA_FUENTE;
@@ -97,11 +94,7 @@ public class SeeUserComuByUserAcTest {
         onView(withId(SEE_USERCOMU_BY_USER.idView)).check(matches(isDisplayed()));
 
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
-        onView(withContentDescription("Navigate up")).check(matches(isDisplayed()));
-        onView(CoreMatchers.allOf(
-                        withContentDescription("Navigate up"),
-                        isClickable())
-        ).check(matches(isDisplayed())).perform(click());
+        ActivityTestUtils.checkNavigateUp();
     }
 
     @Test

@@ -102,11 +102,7 @@ public class RegComuAndUserComuAcTest {
         onView(withId(R.id.reg_comu_usuariocomunidad_button)).perform(scrollTo()).check(matches(isDisplayed()));
 
         onView(withId(R.id.appbar)).perform(scrollTo()).check(matches(isDisplayed()));
-        onView(withContentDescription("Navigate up")).check(matches(isDisplayed()));
-        onView(CoreMatchers.allOf(
-                        withContentDescription("Navigate up"),
-                        isClickable())
-        ).check(matches(isDisplayed())).perform(click());
+        ActivityTestUtils.checkNavigateUp();
     }
 
     @Test

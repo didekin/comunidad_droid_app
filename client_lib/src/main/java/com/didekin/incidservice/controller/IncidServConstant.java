@@ -20,8 +20,10 @@ public final class IncidServConstant {
     public static final String MOD_USER = INCID_WRITE + "/mod_user";
     public static final String REG_INCID_COMMENT = INCID_WRITE + "/comments";
     public static final String REG_INCID_USER = INCID_WRITE + "/reg_incidenciaUser";
+    public static final String REG_RESOLUCION = INCID_WRITE + "/resolucion";
     public static final String REG_USER_IN_INCID = INCID_WRITE + "/reg_userInIncidencia";
     public static final String SEE_INCID_BY_COMU = INCID_READ;
     public static final String SEE_INCID_CLOSED_BY_COMU = INCID_READ + "/closed";
     public static final String SEE_INCID_COMMENTS = INCID_READ + "/comments";
+    public static final String SEE_INCID_RESOLUCION = INCID_READ + "/resolucion";
 }

@@ -1,4 +1,4 @@
-package com.didekin.incidservice.domain;
+package com.didekin.incidservice.dominio;
 
 import com.didekin.common.BeanBuilder;
 import com.didekin.usuario.dominio.UsuarioComunidad;

@@ -12,6 +12,7 @@ import com.didekin.usuario.dominio.Usuario;
 import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
+import com.didekindroid.common.utils.ActivityTestUtils;
 import com.didekindroid.usuario.activity.utils.CleanUserEnum;
 import com.didekindroid.usuario.dominio.DomainDataUtils;
 
@@ -105,10 +106,7 @@ public class ComuSearchResultsAcTest_1 {
         regTwoUserComuSameUser(makeListTwoUserComu());
         activity = mActivityRule.launchActivity(intent);
 
-        onView(withId(R.id.appbar)).check(matches(isDisplayed()));
-        onView(withContentDescription("Navigate up")).check(matches(isDisplayed()));
-        onView(CoreMatchers.allOf(withContentDescription(containsString("Navigate up")),
-                isClickable())).check(matches(isDisplayed())).perform(click());
+        ActivityTestUtils.checkNavigateUp();
     }
 
     @Test

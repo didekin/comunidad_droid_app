@@ -44,6 +44,14 @@ public enum IncidenciaMenuTestUtils {
         }
     },
 
+    INCID_RESOLUCION_REG_AC {
+        @Override
+        public void checkMenuItem_WTk(Activity activity) throws InterruptedException
+        {
+            check(activity, R.string.incid_resolucion_ac_mn, R.id.incid_resolucion_reg_ac_layout);
+        }
+    },
+
     INCID_SEE_BY_COMU_AC {
         @Override
         public void checkMenuItem_WTk(Activity activity) throws InterruptedException

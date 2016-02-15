@@ -9,67 +9,67 @@
     <TextView
         android:id="@+id/incid_resolucion_rot"
         style="@style/textBase.textPageLabel2"
-        android:text="@string/incid_resolucion_rot"
-        android:layout_alignParentStart="true"/>
+        android:layout_alignParentStart="true"
+        android:text="@string/incid_resolucion_rot"/>
 
     <EditText
         android:id="@+id/incid_resolucion_desc_ed"
         style="@style/textBase.editField.description"
-        android:hint="@string/incid_resolucion_hint"
-        android:layout_below="@+id/incid_resolucion_rot"/>
-
-    <Spinner
-        android:id="@+id/incid_resolucion_fase_spinner"
-        style="@style/spinnerBase"
-        android:layout_below="@+id/incid_resolucion_desc_ed"/>
+        android:layout_below="@+id/incid_resolucion_rot"
+        android:hint="@string/incid_resolucion_hint"/>
 
     <TextView
-        android:id="@+id/incid_resolucion_presupuesto_rot"
-        style="@style/textBase.textFieldLabel2"
+        android:id="@+id/incid_resolucion_coste_prev_rot"
+        style="@style/textBase.textFieldLabel1"
+        android:layout_marginTop="@dimen/vertical_margin"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/incid_resolucion_fase_spinner"
-        android:text="@string/incid_resolucion_presupuesto_rot"/>
+        android:layout_below="@+id/incid_resolucion_desc_ed"
+        android:text="@string/incid_resolucion_coste_prev_rot"/>
 
     <EditText
-        android:id="@+id/incid_resolucion_presupuesto_ed"
+        android:id="@+id/incid_resolucion_coste_prev_ed"
         style="@style/textBase.editField"
-        android:inputType="number"
-        android:maxEms="10"
-        android:minEms="4"
-        android:lines="1"
-        android:scrollHorizontally="false"
+        android:padding="0dp"
         android:layout_marginTop="0dp"
-        android:layout_toEndOf="@id/incid_resolucion_presupuesto_rot"
-        android:layout_alignTop="@id/incid_resolucion_presupuesto_rot"
-        android:layout_alignBottom="@id/incid_resolucion_presupuesto_rot"
+        android:layout_marginBottom="0dp"
+        android:background="@android:color/transparent"
+        android:inputType="numberDecimal"
+        android:lines="1"
+        android:maxEms="4"
+        android:minEms="1"
+        android:scrollHorizontally="true"
+        android:layout_toEndOf="@id/incid_resolucion_coste_prev_rot"
+        android:layout_alignTop="@id/incid_resolucion_coste_prev_rot"
+        android:layout_alignBottom="@id/incid_resolucion_coste_prev_rot"
+        android:hint="@string/incid_resolucion_coste_prev_hint"
         tools:ignore="LabelFor"/>
 
     <TextView
-        android:id="@+id/incid_resolucion_coste_rot"
+        android:id="@+id/incid_resolucion_euros_rot"
         style="@style/textBase.textFieldLabel2"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/incid_resolucion_presupuesto_rot"
-        android:text="@string/incid_resolucion_coste_rot"/>
-
-    <EditText
-        android:id="@+id/incid_resolucion_coste_ed"
-        style="@style/textBase.editField"
-        android:inputType="number"
-        android:maxEms="10"
-        android:minEms="4"
-        android:lines="1"
-        android:scrollHorizontally="false"
+        android:layout_alignBottom="@id/incid_resolucion_coste_prev_rot"
+        android:layout_alignTop="@id/incid_resolucion_coste_prev_rot"
         android:layout_marginTop="0dp"
-        android:layout_toEndOf="@id/incid_resolucion_coste_rot"
-        android:layout_alignTop="@id/incid_resolucion_coste_rot"
-        android:layout_alignBottom="@id/incid_resolucion_coste_rot"
-        tools:ignore="LabelFor"/>
+        android:layout_toEndOf="@id/incid_resolucion_coste_prev_ed"
+        android:text="@string/euros_rot"/>
 
-    <!--Listado de proveedores YA asociados a la comunidad.
-        TODO: Puede darse la opción de búsqueda de proveedor con un enlace. -->
-    <Spinner
-        android:id="@+id/incid_resolucion_proveedor_spinner"
-        style="@style/spinnerBase"
-        android:layout_below="@+id/incid_resolucion_coste_rot"/>
+    <TextView
+        android:id="@+id/incid_resolucion_fecha_prev_rot"
+        style="@style/textBase.textFieldLabel1"
+        android:layout_marginTop="@dimen/vertical_margin"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/incid_resolucion_coste_prev_rot"
+        android:text="@string/incid_resolucion_fecha_prev"/>
+
+    <TextView
+        android:id="@+id/incid_resolucion_fecha_view"
+        style="@style/textBase.textFieldLabel2"
+        android:text="@string/incid_resolucion_fecha_default_txt"
+        android:textColor="@color/deep_orange_600"
+        android:textStyle="bold"
+        android:layout_alignBottom="@id/incid_resolucion_fecha_prev_rot"
+        android:layout_alignTop="@id/incid_resolucion_fecha_prev_rot"
+        android:layout_marginTop="0dp"
+        android:layout_toEndOf="@id/incid_resolucion_fecha_prev_rot"/>
 
 </RelativeLayout>

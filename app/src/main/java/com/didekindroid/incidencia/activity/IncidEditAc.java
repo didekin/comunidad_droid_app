@@ -8,7 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.didekin.incidservice.domain.IncidenciaUser;
+import com.didekin.incidservice.dominio.IncidenciaUser;
 import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 
@@ -16,6 +16,7 @@ import static com.didekindroid.common.utils.AppKeysForBundle.INCIDENCIA_USER_OBJ
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_COMMENTS_SEE_AC;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_COMMENT_REG_AC;
+import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_RESOLUCION_REG_AC;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -87,8 +88,9 @@ public class IncidEditAc extends AppCompatActivity implements IncidUserDataSuppl
     {
         Log.d(TAG, "onPrepareOptionsMenu()");
 
-        MenuItem resolverItem = menu.findItem(R.id.incid_resolucion_ac_mn);
-        resolverItem.setVisible(true); // TODO: continuer.
+        MenuItem resolverItem = menu.findItem(R.id.incid_resolucion_reg_ac_mn);
+        resolverItem.setVisible(mIncidenciaUser.getUsuarioComunidad() != null &&
+                mIncidenciaUser.getUsuarioComunidad().hasRoleAdministrador());
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -113,8 +115,11 @@ public class IncidEditAc extends AppCompatActivity implements IncidUserDataSuppl
                 this.setIntent(intent);
                 INCID_COMMENTS_SEE_AC.doMenuItem(this);
                 return true;
-            case R.id.incid_resolucion_ac_mn:
-
+            case R.id.incid_resolucion_reg_ac_mn:
+                intent = new Intent();
+                intent.putExtra(INCIDENCIA_USER_OBJECT.extra, mIncidenciaUser);
+                this.setIntent(intent);
+                INCID_RESOLUCION_REG_AC.doMenuItem(this);
             default:
                 return super.onOptionsItemSelected(item);
         }

@@ -11,6 +11,7 @@ import com.didekin.usuario.dominio.Comunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.IdlingResourceForIntentServ;
 import com.didekindroid.common.UiException;
+import com.didekindroid.common.utils.ActivityTestUtils;
 import com.didekindroid.incidencia.gcm.GcmRegistrationIntentServ;
 import com.didekindroid.usuario.activity.utils.CleanUserEnum;
 
@@ -150,11 +151,7 @@ public class IncidSeeByComuAcTest_1 {
     @Test
     public void testOnNavigateUp()
     {
-        onView(withContentDescription("Navigate up")).check(matches(isDisplayed()));
-        onView(CoreMatchers.allOf(
-                        withContentDescription("Navigate up"),
-                        isClickable())
-        ).check(matches(isDisplayed()));
+        ActivityTestUtils.checkNavigateUp();
     }
 
     @Test

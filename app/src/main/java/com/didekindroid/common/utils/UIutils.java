@@ -14,20 +14,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.didekin.common.exception.InServiceException;
-import com.didekindroid.DidekindroidApp;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
 import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
-import java.util.Calendar;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.Date;
+import java.util.Locale;
 
 import static android.widget.Toast.makeText;
-import static com.didekin.common.domain.DataPatterns.DECIMAL_TWO;
-import static com.didekin.common.domain.DataPatterns.DECIMAL_ZERO;
-import static com.didekin.common.domain.DataPatterns.LINE_BREAK;
+import static com.didekin.common.dominio.DataPatterns.LINE_BREAK;
 import static com.didekin.common.exception.DidekinExceptionMsg.COMUNIDAD_NOT_FOUND;
 import static com.didekin.common.exception.DidekinExceptionMsg.isMessageToLogin;
 import static com.didekin.common.exception.DidekinExceptionMsg.isMessageToSeeIncidencia;
@@ -37,6 +38,8 @@ import static com.didekindroid.common.UiException.UiAction.INCID_SEE_BY_COMU;
 import static com.didekindroid.common.UiException.UiAction.LOGIN;
 import static com.didekindroid.common.UiException.UiAction.SEARCH_COMU;
 import static com.didekindroid.common.utils.UIutils.SharedPrefFiles.app_preferences_file;
+import static java.text.DateFormat.MEDIUM;
+import static java.util.Locale.getDefault;
 
 /**
  * User: pedro
@@ -47,6 +50,7 @@ public final class UIutils {
 
     private static final String TAG = UIutils.class.getCanonicalName();
     public static final int APPBAR_ID = R.id.appbar;
+    public static final Locale SPAIN_LOCALE = new Locale("es","ES");
 
     private UIutils()
     {
@@ -68,24 +72,29 @@ public final class UIutils {
 
     public static String formatTimeStampToString(Timestamp timestamp)
     {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(timestamp);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-        int month = calendar.get(Calendar.MONTH);
-        int year = calendar.get(Calendar.YEAR);
-        return String.format(DidekindroidApp.getContext().getResources().getString(R.string.date_local_format), day, month, year);
+        return DateFormat.getDateInstance(MEDIUM, getDefault()).format(timestamp);
     }
 
-    public static String formatDoubleZeroDecimal(Double myDouble)
+    public static String formatTimeToString(long time)
     {
-        DecimalFormat myFormatter = new DecimalFormat(DECIMAL_ZERO.getRegexp());
+        return DateFormat.getDateInstance(MEDIUM, getDefault()).format(new Date(time));
+    }
+
+    public static String formatDoubleZeroDecimal(Double myDouble, Context context)
+    {
+        DecimalFormat myFormatter = new DecimalFormat(context.getString(R.string.decimal_zero_regexp));
         return myFormatter.format(myDouble);
     }
 
-    public static String formatDoubleTwoDecimals(Double myDouble)
+    public static String formatDoubleTwoDecimals(Double myDouble, Context context)
     {
-        DecimalFormat myFormatter = new DecimalFormat(DECIMAL_TWO.getRegexp());
+        DecimalFormat myFormatter = new DecimalFormat(context.getString(R.string.decimal_two_regexp));
         return myFormatter.format(myDouble);
+    }
+
+    public static int getIntFromStringDecimal(String stringDecimal) throws ParseException
+    {
+        return NumberFormat.getIntegerInstance().parse(stringDecimal).intValue();
     }
 
 //    ================================== ERRORS ======================================
@@ -109,7 +118,7 @@ public final class UIutils {
     public static void catchComunidadFkException(InServiceException ie, String tagClass) throws UiException
     {
         Log.e(tagClass, ie.getHttpMessage());
-        if (ie.getHttpMessage().equals(COMUNIDAD_NOT_FOUND.getHttpMessage())){
+        if (ie.getHttpMessage().equals(COMUNIDAD_NOT_FOUND.getHttpMessage())) {
             throw new UiException(SEARCH_COMU, R.string.comunidad_not_found_message, null);
         }
     }
@@ -117,7 +126,7 @@ public final class UIutils {
     public static void catchIncidenciaFkException(InServiceException ie, String tagClass, int resourceId) throws UiException
     {
         Log.e(tagClass, ie.getHttpMessage());
-        if (isMessageToSeeIncidencia(ie.getHttpMessage())){
+        if (isMessageToSeeIncidencia(ie.getHttpMessage())) {
             throw new UiException(INCID_SEE_BY_COMU, resourceId, ie);
         }
     }

@@ -6,6 +6,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekindroid.R;
+import com.didekindroid.common.utils.ActivityTestUtils;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.After;
@@ -99,11 +100,7 @@ public class RegUserComuAcTest {
         onView(withId(R.id.reg_usercomu_frg)).check(matches(isDisplayed()));
 
         onView(withId(R.id.appbar)).perform(scrollTo()).check(matches(isDisplayed()));
-        onView(withContentDescription("Navigate up")).check(matches(isDisplayed()));
-        onView(CoreMatchers.allOf(
-                        withContentDescription("Navigate up"),
-                        isClickable())
-        ).check(matches(isDisplayed())).perform(click());
+        ActivityTestUtils.checkNavigateUp();
     }
 
     @Test

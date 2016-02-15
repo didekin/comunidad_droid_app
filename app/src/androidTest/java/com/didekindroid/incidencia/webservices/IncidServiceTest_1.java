@@ -2,9 +2,9 @@ package com.didekindroid.incidencia.webservices;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.incidservice.domain.IncidComment;
-import com.didekin.incidservice.domain.Incidencia;
-import com.didekin.incidservice.domain.IncidenciaUser;
+import com.didekin.incidservice.dominio.IncidComment;
+import com.didekin.incidservice.dominio.Incidencia;
+import com.didekin.incidservice.dominio.IncidenciaUser;
 import com.didekin.usuario.dominio.Usuario;
 import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
@@ -312,7 +312,7 @@ public class IncidServiceTest_1 {
     public void testRegUserInIncidencia_2()
     {
         // IncidenciaId == 0 (inicialización por defecto). Existe relación usuario_comunidad.
-        Incidencia incidencia = doIncidencia("incidencia sin Id en BD", 2L, (short) 11);
+        Incidencia incidencia = doIncidencia("incidencia sin Id en BD", pepeUserComu.getComunidad().getC_Id(), (short) 11);
         IncidenciaUser incidenciaUser = new IncidenciaUser.IncidenciaUserBuilder(incidencia).usuario(pepeUserComu).importancia((short) 2).build();
         try {
             IncidenciaServ.regUserInIncidencia(incidenciaUser);

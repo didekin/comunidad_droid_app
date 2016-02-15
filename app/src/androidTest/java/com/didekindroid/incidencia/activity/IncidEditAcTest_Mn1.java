@@ -4,8 +4,9 @@ import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.incidservice.domain.IncidenciaUser;
+import com.didekin.incidservice.dominio.IncidenciaUser;
 import com.didekin.usuario.dominio.UsuarioComunidad;
+import com.didekindroid.R;
 import com.didekindroid.common.UiException;
 
 import org.junit.After;
@@ -15,8 +16,12 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.utils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.utils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.utils.AppKeysForBundle.INCIDENCIA_USER_OBJECT;
@@ -38,7 +43,7 @@ import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
  * Tests sobre opciones de menú.
  */
 @RunWith(AndroidJUnit4.class)
-public class IncidEditAcTest_Mn {
+public class IncidEditAcTest_Mn1 {
 
     IncidEditAc mActivity;
     UsuarioComunidad juanReal;
@@ -110,5 +115,14 @@ public class IncidEditAcTest_Mn {
     {
         INCID_COMMENTS_SEE_AC.checkMenuItem_WTk(mActivity);
         intended(hasExtra(INCIDENCIA_USER_OBJECT.extra, incidJuanReal1));
+    }
+
+    @Test
+    public void testIncidResolucionReg_Mn() throws Exception
+    {
+        // El usuario no tiene función administrador.
+        onView(withText(R.string.incid_resolucion_ac_mn)).check(doesNotExist());
+        openActionBarOverflowOrOptionsMenu(mActivity);
+        onView(withText(R.string.incid_resolucion_ac_mn)).check(doesNotExist());
     }
 }

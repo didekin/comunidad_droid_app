@@ -33,6 +33,7 @@ public enum DidekinExceptionMsg {
     INCIDENCIA_USER_WRONG_INIT,
     INCIDENCIA_WRONG_INIT,
     NOT_FOUND,
+    RESOLUCION_WRONG_INIT,
     ROLES_NOT_FOUND,
     SUFIJO_NUM_IN_COMUNIDAD_NULL,
     TOKEN_NOT_DELETED,
@@ -89,6 +90,7 @@ public enum DidekinExceptionMsg {
         messageToStatusCode.put(INCIDENCIA_USER_WRONG_INIT, precondition_fail_status);
         messageToStatusCode.put(INCIDENCIA_WRONG_INIT, precondition_fail_status);
         messageToStatusCode.put(NOT_FOUND, not_found_status);
+        messageToStatusCode.put(RESOLUCION_WRONG_INIT, precondition_fail_status);
         messageToStatusCode.put(ROLES_NOT_FOUND, entity_not_found_status);
         messageToStatusCode.put(SUFIJO_NUM_IN_COMUNIDAD_NULL, precondition_fail_status);
         messageToStatusCode.put(TOKEN_NOT_DELETED, postcondition_fail_status);

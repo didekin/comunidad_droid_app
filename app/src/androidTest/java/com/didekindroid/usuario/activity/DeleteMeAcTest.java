@@ -5,6 +5,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
+import com.didekindroid.common.utils.ActivityTestUtils;
 import com.didekindroid.usuario.activity.utils.CleanUserEnum;
 
 import org.junit.After;
@@ -86,11 +87,7 @@ public class DeleteMeAcTest {
         onView(withId(R.id.delete_me_ac_unreg_button)).check(matches(isDisplayed()));
 
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
-        onView(withContentDescription("Navigate up")).check(matches(isDisplayed()));
-        onView(allOf(
-                        withContentDescription("Navigate up"),
-                        isClickable())
-        ).check(matches(isDisplayed())).perform(click());
+        ActivityTestUtils.checkNavigateUp();
     }
 
     @Test

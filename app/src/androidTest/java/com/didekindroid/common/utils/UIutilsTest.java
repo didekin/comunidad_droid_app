@@ -4,6 +4,8 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.didekindroid.R;
+
 import junit.framework.TestCase;
 
 import org.junit.After;
@@ -12,12 +14,17 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.sql.Timestamp;
-import java.util.Calendar;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.Locale;
-import java.util.regex.Pattern;
 
+import static com.didekindroid.common.utils.UIutils.SPAIN_LOCALE;
+import static com.didekindroid.common.utils.UIutils.formatTimeStampToString;
+import static com.didekindroid.common.utils.UIutils.formatTimeToString;
+import static com.didekindroid.common.utils.UIutils.getIntFromStringDecimal;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.utils.UIutils.updateIsRegistered;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -44,30 +51,83 @@ public class UIutilsTest extends TestCase {
     }
 
     @Test
-    public void testFormatTimeStampToString()
+    public void testFormatTimeToString_1()
     {
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        String timeString = UIutils.formatTimeStampToString(timestamp);
-        String[] timeStrings = Pattern.compile("-").split(timeString);
-        assertThat(timeStrings.length, is(3));
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(timestamp);
-        assertThat(timeStrings[0], is(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH))));
-        assertThat(timeStrings[1], is(String.valueOf(calendar.get(Calendar.MONTH))));
-        assertThat(timeStrings[2], is(String.valueOf(calendar.get(Calendar.YEAR))));
+        if (Locale.getDefault().equals(SPAIN_LOCALE)) {
+            assertThat(formatTimeToString(1455301148000L), is("12/2/2016"));
+        }
+        if (Locale.getDefault().equals(Locale.ENGLISH)) {
+            assertThat(formatTimeToString(1455301148000L), is("Feb 12, 2016"));
+        }
+    }
+
+    @Test
+    public void testFormatTimeStampToString_1()
+    {
+        Timestamp timestamp = new Timestamp(1455301148000L);
+
+        if (Locale.getDefault().equals(SPAIN_LOCALE)) {
+            assertThat(formatTimeStampToString(timestamp), is("12/2/2016"));
+        }
+        if (Locale.getDefault().equals(Locale.ENGLISH)) {
+            assertThat(formatTimeStampToString(timestamp), is("Feb 12, 2016"));
+        }
+    }
+
+    @Test
+    public void testFormatTimeStampToString_2()
+    {
+        Timestamp timestamp = new Timestamp(1455301148000L);
+
+        String formatTime = DateFormat.getDateInstance(DateFormat.LONG, SPAIN_LOCALE).format(timestamp);
+        assertThat(formatTime, is("12 de febrero de 2016"));
+
+        formatTime = DateFormat.getDateInstance(DateFormat.MEDIUM, SPAIN_LOCALE).format(timestamp);
+        assertThat(formatTime, is("12/2/2016"));
+
+        formatTime = DateFormat.getDateInstance(DateFormat.LONG, Locale.ENGLISH).format(timestamp);
+        assertThat(formatTime, is("February 12, 2016"));
+
+        formatTime = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.ENGLISH).format(timestamp);
+        assertThat(formatTime, is("Feb 12, 2016"));
     }
 
     @Test
     public void testFormatDoubleToZeroDecimal()
     {
-        assertThat(UIutils.formatDoubleZeroDecimal(12.34), is("12"));
+        if (Locale.getDefault().equals(Locale.ENGLISH)) {
+            assertThat(UIutils.formatDoubleZeroDecimal(12.34, context), is("12"));
+        }
+        if (Locale.getDefault().equals(SPAIN_LOCALE)) {
+            assertThat(UIutils.formatDoubleZeroDecimal(12.34, context), is("12"));
+        }
     }
 
     @Test
     public void testFormatDoubleToTwoDecimal()
     {
-        assertThat(Locale.getDefault().getLanguage(), is("en"));
-        assertThat(UIutils.formatDoubleTwoDecimals(12.34), is("12.34"));
+        assertThat(UIutils.formatDoubleTwoDecimals(12.34, context),
+                is("12".concat(context.getString(R.string.decimal_separator)).concat("34")));
+        assertThat(UIutils.formatDoubleTwoDecimals(12.3422, context),
+                is("12".concat(context.getString(R.string.decimal_separator)).concat("34")));
+    }
+
+    @Test
+    public void testGetIntFromStringDecimal() throws ParseException
+    {
+        if (Locale.getDefault().equals(Locale.ENGLISH)) {
+            assertThat(getIntFromStringDecimal("123.45"), is(123));
+        }
+        if (Locale.getDefault().equals(SPAIN_LOCALE)) {
+            assertThat(getIntFromStringDecimal("123,45"), is(123));
+        }
+
+        try {
+            getIntFromStringDecimal("");
+            fail();
+        } catch (ParseException pe) {
+            assertThat(pe, instanceOf(ParseException.class));
+        }
     }
 
     @Test

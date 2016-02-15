@@ -5,11 +5,15 @@
     <!--                                 GENERIC                                     -->
     <!--*****************************************************************************-->
     <!-- Formats-->
-    <!--<string name="date_local_format" translatable="false">%1$d-%2$d-%3$d</string>-->
     <!--Input controls-->
     <string name="search_button">Search</string>
     <string name="checkbox_si">Yes</string>
     <string name="checkbox_no">No</string>
+    <string name="euros_rot">euros</string>
+    <string name="decimal_separator">.</string>
+    <string name="decimal_zero_regexp">###.###</string>
+    <string name="decimal_two_regexp">###.###,##</string>
+    <string name="navigate_up_txt">Navigate up</string>
     <!--Menús-->
     <!--Messages-->
     <string name="no_internet_conn_toast">No hay conexión de red disponible.</string>
@@ -27,6 +31,7 @@
     <string name="incid_comments_see_ac_mn">Ver comentarios</string>
     <string name="incid_reg_ac_mn">Nueva incidencia</string>
     <string name="incid_see_by_comu_ac_mn">Incidencias abiertas</string>
+    <string name="incid_resolucion_ac_mn">Resolver</string>
     <!-- ============================= ACTIVITIES ============================= -->
     <!-- =============== IncidCommentRegAc ========= -->
     <string name="incid_comment_reg_ac_label">Comentar una incidencia</string>
@@ -47,15 +52,24 @@
     <!-- =============== IncidRegAc =============== -->
     <string name="incid_reg_ac_label">Nueva incidencia</string>
     <string name="incid_reg_hint"> -- Describe la incidencia (max. 300 caracteres) -- </string>
-    <string name="incid_resolucion_hint"> -- actuación para resolver la incidencia -- </string>
-    <string name="incid_resolucion_presupuesto_rot">Coste estimado (euros, sin céntimos)</string>
-    <string name="incid_resolucion_coste_rot">Coste final (euros, sin céntimos)</string>
     <string name="incid_reg_ac_button_rot">Registrar incidencia</string>
-    <string name="incid_resolucion_reg_ac_button_rot">Actualizar información</string>
-    <string name="incid_resolucion_rot">Datos resolución incidencia</string>
     <string name="incid_reg_importancia">Importancia</string>
     <string name="incid_reg_ambitoIncidencia">Ámbito de incidencia</string>
     <string name="incid_reg_descripcion">Descripcion</string>
+    <!-- =============== IncidResolutionEditAc =============== -->
+    <string name="incid_resolucion_coste_final_rot">Coste final:</string>
+    <!-- =============== IncidResolucionRegAc =============== -->
+    <string name="incid_resolution_ac_label">Resolución incidencia</string>
+    <string name="incid_resolucion_descrip_msg">Descripción</string>
+    <string name="incid_resolucion_fecha_prev">Fecha estimada resolución:</string>
+    <string name="incid_resolucion_fecha_prev_msg">Fecha resolución</string>
+    <string name="incid_resolucion_fecha_default_txt">>> Elige una fecha</string>
+    <string name="incid_resolucion_hint"> -- plan para resolver la incidencia -- </string>
+    <string name="incid_resolucion_reg_ac_button_rot">Registro los datos</string>
+    <string name="incid_resolucion_rot">Datos resolución</string>
+    <string name="incid_resolucion_coste_prev_rot">Coste previsto:</string>
+    <string name="incid_resolucion_coste_prev_hint">-- tu estimación --</string>
+    <string name="incid_resolucion_coste_prev_msg">Coste previsto</string>
     <!-- =============== IncidSeeByComuAc =============== -->
     <string name="incid_see_by_user_ac_label">Tus incidencias</string>
     <string name="incid_fecha_alta_rot">Desde:</string>

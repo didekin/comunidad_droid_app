@@ -8,8 +8,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.didekin.incidservice.domain.Incidencia;
-import com.didekin.incidservice.domain.IncidenciaUser;
+import com.didekin.incidservice.dominio.Incidencia;
+import com.didekin.incidservice.dominio.IncidenciaUser;
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;

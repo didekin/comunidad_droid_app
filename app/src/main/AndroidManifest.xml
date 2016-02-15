@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.didekindroid"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest
+    package="com.didekindroid"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
@@ -68,18 +69,10 @@
         <!-- INCIDENCIA -->
         <!-- **************************************************************** -->
         <activity
-            android:name=".incidencia.activity.IncidSeeClosedByComuAc"
-            android:label="@string/incid_closed_by_user_ac_label"
-            android:parentActivityName=".incidencia.activity.IncidSeeByComuAc">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".incidencia.activity.IncidSeeByComuAc"/>
-        </activity>
-        <activity
             android:name=".incidencia.activity.IncidCommentRegAc"
             android:label="@string/incid_comment_reg_ac_label"
-            android:theme="@style/themeOne"
-            android:parentActivityName=".incidencia.activity.IncidEditAc">
+            android:parentActivityName=".incidencia.activity.IncidEditAc"
+            android:theme="@style/themeOne">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".incidencia.activity.IncidEditAc"/>
@@ -87,8 +80,8 @@
         <activity
             android:name=".incidencia.activity.IncidCommentSeeAc"
             android:label="@string/incid_comment_see_ac_label"
-            android:theme="@style/themeOne"
-            android:parentActivityName=".incidencia.activity.IncidEditAc">
+            android:parentActivityName=".incidencia.activity.IncidEditAc"
+            android:theme="@style/themeOne">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".incidencia.activity.IncidEditAc"/>
@@ -110,12 +103,36 @@
                 android:value=".usuario.activity.UserComuDataAc"/>
         </activity>
         <activity
+            android:name=".incidencia.activity.IncidResolucionEditAc"
+            android:label="@string/incid_resolution_ac_label"
+            android:parentActivityName=".incidencia.activity.IncidEditAc">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".incidencia.activity.IncidEditAc"/>
+        </activity>
+        <activity
+            android:name=".incidencia.activity.IncidResolucionRegAc"
+            android:label="@string/incid_resolution_ac_label"
+            android:parentActivityName=".incidencia.activity.IncidEditAc">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".incidencia.activity.IncidEditAc"/>
+        </activity>
+        <activity
             android:name=".incidencia.activity.IncidSeeByComuAc"
             android:label="@string/incid_see_by_user_ac_label"
             android:parentActivityName=".usuario.activity.UserComuDataAc">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".usuario.activity.UserComuDataAc"/>
+        </activity>
+        <activity
+            android:name=".incidencia.activity.IncidSeeClosedByComuAc"
+            android:label="@string/incid_closed_by_user_ac_label"
+            android:parentActivityName=".incidencia.activity.IncidSeeByComuAc">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".incidencia.activity.IncidSeeByComuAc"/>
         </activity>
         <!-- **************************************************************** -->
         <!-- USUARIO -->

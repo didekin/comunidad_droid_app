@@ -4,8 +4,8 @@ import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.incidservice.domain.IncidComment;
-import com.didekin.incidservice.domain.IncidenciaUser;
+import com.didekin.incidservice.dominio.IncidComment;
+import com.didekin.incidservice.dominio.IncidenciaUser;
 import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;

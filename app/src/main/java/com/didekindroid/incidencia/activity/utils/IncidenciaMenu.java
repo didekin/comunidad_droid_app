@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.didekindroid.incidencia.activity.IncidCommentRegAc;
 import com.didekindroid.incidencia.activity.IncidCommentSeeAc;
+import com.didekindroid.incidencia.activity.IncidResolucionRegAc;
 import com.didekindroid.incidencia.activity.IncidSeeByComuAc;
 import com.didekindroid.incidencia.activity.IncidSeeClosedByComuAc;
 import com.didekindroid.incidencia.activity.IncidRegAc;
@@ -55,6 +56,17 @@ public enum IncidenciaMenu {
         {
             Log.d(TAG, "incid_reg_ac.doMenuItem()");
             Intent intent = new Intent(activity, IncidRegAc.class);
+            activity.startActivity(intent);
+        }
+    },
+
+    INCID_RESOLUCION_REG_AC {
+        @Override
+        public void doMenuItem(Activity activity)
+        {
+            Log.d(TAG, "incid_resolucion_ac.doMenuItem()");
+            Intent intent = activity.getIntent();
+            intent.setClass(activity, IncidResolucionRegAc.class);
             activity.startActivity(intent);
         }
     },

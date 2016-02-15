@@ -79,7 +79,7 @@
         <item name="android:minLines">1</item>
         <item name="android:maxLines">10</item>
         <item name="android:scrollHorizontally">false</item>
-        <item name="android:maxEms">230</item>
+        <item name="android:maxEms">250</item>
         <item name="android:inputType">textNoSuggestions|textCapSentences|textMultiLine</item>
     </style>
 

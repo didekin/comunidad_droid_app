@@ -1,4 +1,4 @@
-package com.didekin.incidservice.domain;
+package com.didekin.incidservice.dominio;
 
 /**
  * User: pedro@didekin

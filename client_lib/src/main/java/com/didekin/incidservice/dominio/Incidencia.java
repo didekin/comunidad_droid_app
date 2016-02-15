@@ -1,4 +1,4 @@
-package com.didekin.incidservice.domain;
+package com.didekin.incidservice.dominio;
 
 import com.didekin.common.BeanBuilder;
 import com.didekin.usuario.dominio.Comunidad;
@@ -25,7 +25,6 @@ public final class Incidencia implements Serializable {
     private final Timestamp fechaAlta;
     private final Timestamp fechaCierre;
     private final float importanciaAvg;
-    private final ResolucionIncid resolucionIncid;
 
     protected Incidencia(IncidenciaBuilder incidenciaBuilder)
     {
@@ -36,7 +35,6 @@ public final class Incidencia implements Serializable {
         fechaAlta = incidenciaBuilder.fechaAlta;
         fechaCierre = incidenciaBuilder.fechaCierre;
         importanciaAvg = incidenciaBuilder.importanciaAvg;
-        resolucionIncid = incidenciaBuilder.resolucionIncid;
     }
 
     public long getIncidenciaId()
@@ -72,11 +70,6 @@ public final class Incidencia implements Serializable {
     public float getImportanciaAvg()
     {
         return importanciaAvg;
-    }
-
-    public ResolucionIncid getResolucionIncid()
-    {
-        return resolucionIncid;
     }
 
     // .................................... Serializable ...........................
@@ -123,7 +116,6 @@ public final class Incidencia implements Serializable {
         private Timestamp fechaAlta;
         private Timestamp fechaCierre;
         private float importanciaAvg;
-        private ResolucionIncid resolucionIncid;
 
         public IncidenciaBuilder()
         {
@@ -171,12 +163,6 @@ public final class Incidencia implements Serializable {
             return this;
         }
 
-        public IncidenciaBuilder resolucion(ResolucionIncid initValue)
-        {
-            resolucionIncid = initValue;
-            return this;
-        }
-
         public IncidenciaBuilder copyIncidencia(Incidencia incidencia)
         {
             incidenciaId(incidencia.incidenciaId);
@@ -186,7 +172,6 @@ public final class Incidencia implements Serializable {
             fechaAlta(incidencia.fechaAlta);
             fechaCierre(incidencia.fechaCierre);
             importanciaAvg(incidencia.importanciaAvg);
-            resolucion(incidencia.resolucionIncid);
             return this;
         }
 
@@ -212,8 +197,6 @@ public final class Incidencia implements Serializable {
      */
     private static class InnerSerial implements Serializable {
 
-        // TODO: excluida ResolucionId.
-
         private final long incidenciaId;
         private final Comunidad comunidad;
         private final String descripcion;
@@ -221,7 +204,6 @@ public final class Incidencia implements Serializable {
         private final Timestamp fechaAlta;
         private final Timestamp fechaCierre;
         private final float importanciaAvg;
-
 
         public InnerSerial(Incidencia incidencia)
         {

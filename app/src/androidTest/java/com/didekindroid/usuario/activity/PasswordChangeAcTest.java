@@ -7,6 +7,7 @@ import com.didekin.common.oauth2.OauthToken.AccessToken;
 import com.didekin.usuario.dominio.Usuario;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
+import com.didekindroid.common.utils.ActivityTestUtils;
 import com.didekindroid.usuario.activity.utils.CleanUserEnum;
 
 import org.junit.After;
@@ -104,11 +105,7 @@ public class PasswordChangeAcTest {
                 .check(matches(isDisplayed()));
 
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
-        onView(withContentDescription("Navigate up")).check(matches(isDisplayed()));
-        onView(allOf(
-                        withContentDescription("Navigate up"),
-                        isClickable())
-        ).check(matches(isDisplayed())).perform(click());
+        ActivityTestUtils.checkNavigateUp();
     }
 
     @Test

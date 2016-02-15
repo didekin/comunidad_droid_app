@@ -10,16 +10,22 @@ import com.didekin.usuario.dominio.Comunidad;
 import com.didekin.usuario.dominio.Usuario;
 import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.DidekindroidApp;
+import com.didekindroid.R;
 import com.didekindroid.common.UiException;
 import com.didekindroid.usuario.activity.utils.CleanUserEnum;
+
+import org.hamcrest.core.AllOf;
 
 import java.util.List;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
+import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.DidekindroidApp.getContext;
 import static com.didekindroid.common.TokenHandler.TKhandler;
@@ -92,6 +98,17 @@ public final class ActivityTestUtils {
             default:
                 throw new IllegalStateException("Wrong cleanUp");
         }
+    }
+
+//    ============================= NAVIGATION ===================================
+
+    public static void checkNavigateUp()
+    {
+        onView(withContentDescription(R.string.navigate_up_txt)).check(matches(isDisplayed()));
+        onView(AllOf.allOf(
+                        withContentDescription(R.string.navigate_up_txt),
+                        isClickable())
+        ).check(matches(isDisplayed())).perform(click());
     }
 
 //    =========================== REGISTERING USERS ==============================

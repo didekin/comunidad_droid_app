@@ -59,7 +59,7 @@ public class LoginAcTest_1 extends LoginAcTest{
         onView(withId(R.id.login_ac_button)).check(matches(isDisplayed()));
 
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
-        onView(withContentDescription("Navigate up")).check(doesNotExist());
+        onView(withContentDescription(R.string.navigate_up_txt)).check(doesNotExist());
     }
 
     @Test

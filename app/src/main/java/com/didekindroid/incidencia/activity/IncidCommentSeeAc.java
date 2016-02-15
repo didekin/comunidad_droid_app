@@ -7,7 +7,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.didekin.incidservice.domain.IncidenciaUser;
+import com.didekin.incidservice.dominio.IncidenciaUser;
 import com.didekindroid.R;
 
 import static com.didekindroid.common.utils.AppKeysForBundle.INCIDENCIA_USER_OBJECT;

@@ -13,8 +13,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 
-import com.didekin.incidservice.domain.Incidencia;
-import com.didekin.incidservice.domain.IncidenciaUser;
+import com.didekin.incidservice.dominio.Incidencia;
+import com.didekin.incidservice.dominio.IncidenciaUser;
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;

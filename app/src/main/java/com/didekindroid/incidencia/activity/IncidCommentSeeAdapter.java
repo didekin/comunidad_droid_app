@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.didekin.incidservice.domain.IncidComment;
+import com.didekin.incidservice.dominio.IncidComment;
 import com.didekindroid.R;
 
 import static com.didekindroid.common.utils.UIutils.formatTimeStampToString;

@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.didekin.incidservice.domain.IncidenciaUser;
+import com.didekin.incidservice.dominio.IncidenciaUser;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
 import com.didekindroid.common.utils.ConnectionUtils;
@@ -77,7 +77,7 @@ public class IncidRegAc extends AppCompatActivity {
             Log.d(TAG, "registerIncidencia(), incidenciaUser == null");
             makeToast(this, errorMsg.toString(), Toast.LENGTH_SHORT);
         } else if (!ConnectionUtils.isInternetConnected(this)) {
-            UIutils.makeToast(this, R.string.no_internet_conn_toast, Toast.LENGTH_LONG);
+            UIutils.makeToast(this, R.string.no_internet_conn_toast, Toast.LENGTH_SHORT);
         } else {
             new IncidenciaRegister().execute(incidenciaUser);
         }

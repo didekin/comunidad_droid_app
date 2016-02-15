@@ -89,6 +89,7 @@ public class ComuDataAcTest {
     @Before
     public void setUp() throws Exception
     {
+        Thread.sleep(2000);
         mActivity = intentRule.getActivity();
     }
 

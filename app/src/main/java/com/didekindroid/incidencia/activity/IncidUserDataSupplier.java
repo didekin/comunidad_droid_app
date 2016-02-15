@@ -1,6 +1,6 @@
 package com.didekindroid.incidencia.activity;
 
-import com.didekin.incidservice.domain.IncidenciaUser;
+import com.didekin.incidservice.dominio.IncidenciaUser;
 
 /**
  * User: pedro@didekin

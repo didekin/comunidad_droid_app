@@ -2,14 +2,14 @@ package com.didekindroid.usuario.dominio;
 
 import android.content.res.Resources;
 
-import com.didekin.common.domain.DataPatterns;
+import com.didekin.common.dominio.DataPatterns;
 import com.didekin.usuario.dominio.Usuario;
 import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.usuario.activity.utils.RolCheckBox;
 import com.google.common.primitives.Booleans;
 
-import static com.didekin.common.domain.DataPatterns.PORTAL;
+import static com.didekin.common.dominio.DataPatterns.PORTAL;
 
 /**
  * User: pedro@didekin

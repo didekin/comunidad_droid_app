@@ -18,7 +18,7 @@ import com.didekindroid.common.utils.UIutils;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
 
-import static com.didekin.common.domain.DataPatterns.LINE_BREAK;
+import static com.didekin.common.dominio.DataPatterns.LINE_BREAK;
 import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_ID;
 import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.common.utils.UIutils.doToolBar;

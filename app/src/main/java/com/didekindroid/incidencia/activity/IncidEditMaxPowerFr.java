@@ -15,7 +15,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.didekin.incidservice.domain.IncidenciaUser;
+import com.didekin.incidservice.dominio.IncidenciaUser;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
 import com.didekindroid.common.utils.ConnectionUtils;

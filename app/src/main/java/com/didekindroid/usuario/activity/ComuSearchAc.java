@@ -20,7 +20,7 @@ import com.didekindroid.common.utils.UIutils;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 
 import static android.widget.Toast.LENGTH_SHORT;
-import static com.didekin.common.domain.DataPatterns.LINE_BREAK;
+import static com.didekin.common.dominio.DataPatterns.LINE_BREAK;
 import static com.didekindroid.common.TokenHandler.TKhandler;
 import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_SEARCH;
 import static com.didekindroid.common.utils.UIutils.doToolBar;

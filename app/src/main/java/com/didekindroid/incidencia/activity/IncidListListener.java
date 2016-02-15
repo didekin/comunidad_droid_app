@@ -1,6 +1,6 @@
 package com.didekindroid.incidencia.activity;
 
-import com.didekin.incidservice.domain.Incidencia;
+import com.didekin.incidservice.dominio.Incidencia;
 import com.didekin.usuario.dominio.Comunidad;
 
 /**

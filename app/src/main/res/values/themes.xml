@@ -36,30 +36,3 @@
     </style>
 
 </resources>
-
-<!--
-<style name="AppTheme" parent="AppBaseTheme">
-   <item name="android:actionOverflowButtonStyle">@style/overFlowButtonStyle</item>
- </style>
- <style name="ActionBarStyle" parent="@android:style/Widget.Holo.Light.ActionBar">
-  <item name="android:actionOverflowButtonStyle">@style/overFlowButtonStyle</item>
- </style>
- <style name="overFlowButtonStyle" parent="@android:Widget.ActionButton.Overflow">
-  <item name="android:minWidth">5dip</item>
-  <item name="android:maxWidth">5dip</item>
-  <item name="android:padding">0dip</item>
-  <item name="android:src">@drawable/overflow_menu</item>
-  </style>
--->
-
-<!--
-<style name="Theme.Styled" parent="@style/Theme.AppCompat.Light.DarkActionBar">
-    <item name="actionButtonStyle">@style/Widget.Styled.Base.ActionButton</item>
-</style>
-
-<style name="Widget.Styled.Base.ActionButton" parent="@style/Widget.AppCompat.Base.ActionButton">
-    <item name="android:minWidth">20dp</item>
-    <item name="android:paddingLeft">0dp</item>
-    <item name="android:paddingRight">15dp</item>
-</style>
--->

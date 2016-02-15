@@ -4,10 +4,11 @@ import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.incidservice.domain.IncidenciaUser;
+import com.didekin.incidservice.dominio.IncidenciaUser;
 import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
+import com.didekindroid.common.utils.ActivityTestUtils;
 import com.didekindroid.incidencia.repository.IncidenciaDataDbHelper;
 import com.didekindroid.usuario.activity.utils.CleanUserEnum;
 
@@ -144,11 +145,7 @@ public class IncidEditAcTest_3 {
                 withText(R.string.incid_regUserInIncid_button_rot)
         )).check(matches(isDisplayed()));
 
-        onView(withContentDescription("Navigate up")).check(matches(isDisplayed()));
-        onView(AllOf.allOf(
-                        withContentDescription("Navigate up"),
-                        isClickable())
-        ).check(matches(isDisplayed())).perform(click());
+        ActivityTestUtils.checkNavigateUp();
     }
 
     @Test

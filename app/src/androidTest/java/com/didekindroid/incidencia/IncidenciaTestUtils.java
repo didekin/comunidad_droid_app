@@ -1,9 +1,9 @@
 package com.didekindroid.incidencia;
 
-import com.didekin.incidservice.domain.AmbitoIncidencia;
-import com.didekin.incidservice.domain.IncidComment;
-import com.didekin.incidservice.domain.Incidencia;
-import com.didekin.incidservice.domain.IncidenciaUser;
+import com.didekin.incidservice.dominio.AmbitoIncidencia;
+import com.didekin.incidservice.dominio.IncidComment;
+import com.didekin.incidservice.dominio.Incidencia;
+import com.didekin.incidservice.dominio.IncidenciaUser;
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.common.UiException;

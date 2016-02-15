@@ -4,10 +4,11 @@ import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.incidservice.domain.IncidenciaUser;
+import com.didekin.incidservice.dominio.IncidenciaUser;
 import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
+import com.didekindroid.common.utils.ActivityTestUtils;
 
 import org.hamcrest.core.AllOf;
 import org.junit.After;
@@ -118,11 +119,7 @@ public class IncidCommentRegAcTest {
                 withHint(R.string.incid_comment_ed_hint)
         )).check(matches(isDisplayed()));
 
-        onView(withContentDescription("Navigate up")).check(matches(isDisplayed()));
-        onView(AllOf.allOf(
-                        withContentDescription("Navigate up"),
-                        isClickable())
-        ).check(matches(isDisplayed())).perform(click());
+        ActivityTestUtils.checkNavigateUp();
     }
 
     @Test

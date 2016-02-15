@@ -4,9 +4,10 @@ import android.util.Log;
 
 import com.didekin.common.exception.InServiceException;
 import com.didekin.incidservice.controller.IncidenciaServEndPoints;
-import com.didekin.incidservice.domain.IncidComment;
-import com.didekin.incidservice.domain.Incidencia;
-import com.didekin.incidservice.domain.IncidenciaUser;
+import com.didekin.incidservice.dominio.IncidComment;
+import com.didekin.incidservice.dominio.Incidencia;
+import com.didekin.incidservice.dominio.IncidenciaUser;
+import com.didekin.incidservice.dominio.Resolucion;
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.UiException;
@@ -80,6 +81,12 @@ public enum IncidService implements IncidenciaServEndPoints {
         public int regIncidenciaUser(String accessToken, IncidenciaUser incidenciaUser)
         {
             return IncidenciaServ.endPoint.regIncidenciaUser(accessToken, incidenciaUser);
+        }
+
+        @Override
+        public int regResolucion(String accessToken, Resolucion resolucion)
+        {
+            return IncidenciaServ.endPoint.regResolucion(accessToken, resolucion);
         }
 
         @Override
@@ -242,6 +249,18 @@ public enum IncidService implements IncidenciaServEndPoints {
             catchAuthenticationException(e, TAG, R.string.user_without_signedUp);
         }
         return regIncidencia;
+    }
+
+    public int regResolucion(Resolucion resolucion) throws UiException
+    {
+        Log.d(TAG, "regResolucion()");
+        int regResolucion = 0;
+        try {
+            regResolucion = regResolucion(checkBearerToken(), resolucion);
+        } catch (InServiceException ie){
+            // TODO:
+        }
+        return regResolucion;
     }
 
     public int regUserInIncidencia(IncidenciaUser incidenciaUser) throws UiException
