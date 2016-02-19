@@ -13,9 +13,10 @@ import android.widget.Toast;
 import com.didekin.incidservice.dominio.Incidencia;
 import com.didekin.incidservice.dominio.IncidenciaUser;
 import com.didekin.incidservice.dominio.Resolucion;
+import com.didekin.usuario.dominio.Comunidad;
 import com.didekindroid.R;
-import com.didekindroid.common.UiException;
-import com.didekindroid.common.activity.FechaPickerFr.FragmentForFechaGetter;
+import com.didekindroid.common.activity.UiException;
+import com.didekindroid.common.activity.FechaPickerFr.ActivityForFechaPicker;
 import com.didekindroid.common.utils.ConnectionUtils;
 
 import java.sql.Timestamp;
@@ -36,7 +37,7 @@ import static com.google.common.base.Preconditions.checkState;
  * 3. The edited incidencia is shown.
  */
 public class IncidResolucionRegAc extends AppCompatActivity implements
-        FragmentForFechaGetter<IncidResolucionRegAc> {
+        ActivityForFechaPicker<IncidResolucionRegAc>, IncidUserDataSupplier {
 
     private static final String TAG = IncidResolucionRegAc.class.getCanonicalName();
     IncidResolucionRegAcFragment mRegFragment;
@@ -85,14 +86,18 @@ public class IncidResolucionRegAc extends AppCompatActivity implements
 
     private Resolucion makeResolucionFromBean(IncidResolucionRegAcFragment.ResolucionBean resolucionBean)
     {
-        if (resolucionBean == null){
+        if (resolucionBean == null) {
             return null;
         }
 
         final Incidencia incidencia = new Incidencia.IncidenciaBuilder()
                 .incidenciaId(mIncidUser.getIncidencia().getIncidenciaId())
+                .comunidad(new Comunidad.ComunidadBuilder()
+                        .c_id(mIncidUser.getIncidencia().getComunidad().getC_Id())
+                        .build())
                 .build();
-        return new Resolucion.ResolucionBuilder(incidencia).descripcion(resolucionBean.descripcion)
+        return new Resolucion.ResolucionBuilder(incidencia)
+                .descripcion(resolucionBean.descripcion)
                 .fechaPrevista(new Timestamp(resolucionBean.fechaPrevista))
                 .costeEstimado(resolucionBean.costePrev)
                 .build();
@@ -112,6 +117,13 @@ public class IncidResolucionRegAc extends AppCompatActivity implements
     {
         Log.d(TAG, "getActivity()");
         return this;
+    }
+
+    @Override
+    public IncidenciaUser getIncidenciaUser()
+    {
+        Log.d(TAG, "getIncidenciaUser()");
+        return mIncidUser;
     }
 
 //    ============================================================
@@ -143,7 +155,9 @@ public class IncidResolucionRegAc extends AppCompatActivity implements
             Log.d(TAG, "onPostExecute()");
 
             if (uiException != null) {
-                uiException.getAction().doAction(IncidResolucionRegAc.this, uiException.getResourceId());
+                Intent intent = new Intent();
+                intent.putExtra(INCIDENCIA_USER_OBJECT.extra, mIncidUser);
+                uiException.processMe(IncidResolucionRegAc.this, intent);
             } else {
                 checkState(rowInserted == 1);
                 Intent intent = new Intent(IncidResolucionRegAc.this, IncidResolucionEditAc.class);

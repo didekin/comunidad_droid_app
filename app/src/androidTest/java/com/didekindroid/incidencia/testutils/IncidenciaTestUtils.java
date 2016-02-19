@@ -1,12 +1,15 @@
-package com.didekindroid.incidencia;
+package com.didekindroid.incidencia.testutils;
 
 import com.didekin.incidservice.dominio.AmbitoIncidencia;
 import com.didekin.incidservice.dominio.IncidComment;
 import com.didekin.incidservice.dominio.Incidencia;
 import com.didekin.incidservice.dominio.IncidenciaUser;
+import com.didekin.incidservice.dominio.Resolucion;
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekin.usuario.dominio.UsuarioComunidad;
-import com.didekindroid.common.UiException;
+import com.didekindroid.common.activity.UiException;
+
+import java.sql.Timestamp;
 
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static org.hamcrest.CoreMatchers.is;
@@ -52,6 +55,15 @@ public final class IncidenciaTestUtils {
                 .comunidad(new Comunidad.ComunidadBuilder().c_id(comunidadId).build())
                 .descripcion(descripcion)
                 .ambitoIncid(new AmbitoIncidencia(ambitoId))
+                .build();
+    }
+
+    public static Resolucion doResolucion(Incidencia incidencia, String descripcion, int costeEstimado, Timestamp fechaPrev)
+    {
+        return new Resolucion.ResolucionBuilder(incidencia)
+                .descripcion(descripcion)
+                .costeEstimado(costeEstimado)
+                .fechaPrevista(fechaPrev)
                 .build();
     }
 

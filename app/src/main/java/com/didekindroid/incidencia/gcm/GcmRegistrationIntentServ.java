@@ -6,7 +6,7 @@ import android.util.Log;
 
 import com.didekin.common.exception.InServiceException;
 import com.didekindroid.R;
-import com.didekindroid.common.UiException;
+import com.didekindroid.common.activity.UiException;
 import com.didekindroid.usuario.webservices.UsuarioService;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;

@@ -18,7 +18,7 @@ import com.didekin.usuario.dominio.Comunidad;
 import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.TokenHandler;
-import com.didekindroid.common.UiException;
+import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.utils.ConnectionUtils;
 import com.didekindroid.usuario.activity.utils.UserAndComuFiller;
 import com.didekindroid.usuario.dominio.ComunidadBean;
@@ -229,9 +229,7 @@ public class UserComuDataAc extends AppCompatActivity {
             Log.d(TAG, "onPostExecute()");
 
             if (uiException != null) {
-                Log.d(TAG, "onPostExecute(): uiException " + (uiException.getInServiceException() != null ?
-                        uiException.getInServiceException().getHttpMessage() : UiException.TOKEN_NULL));
-                uiException.getAction().doAction(UserComuDataAc.this, uiException.getResourceId());
+                uiException.processMe(UserComuDataAc.this, new Intent());
             } else {
                 mComuDataItem.setVisible(isOldestUserComu);
                 mComuDataItem.setEnabled(isOldestUserComu);
@@ -263,9 +261,7 @@ public class UserComuDataAc extends AppCompatActivity {
         {
             Log.d(TAG, "onPostExecute()");
             if (uiException != null) {
-                Log.d(TAG, "onPostExecute(): uiException " + (uiException.getInServiceException() != null ?
-                        uiException.getInServiceException().getHttpMessage() : UiException.TOKEN_NULL));
-                uiException.getAction().doAction(UserComuDataAc.this, uiException.getResourceId());
+                uiException.processMe(UserComuDataAc.this, new Intent());
             } else {
                 checkState(rowsUpdated == 1);
             }
@@ -308,9 +304,7 @@ public class UserComuDataAc extends AppCompatActivity {
                 Intent intent = new Intent(UserComuDataAc.this, ComuSearchAc.class);
                 startActivity(intent);
             } else {
-                Log.d(TAG, "onPostExecute(): uiException " + (uiException.getInServiceException() != null ?
-                        uiException.getInServiceException().getHttpMessage() : UiException.TOKEN_NULL));
-                uiException.getAction().doAction(UserComuDataAc.this, uiException.getResourceId());
+                uiException.processMe(UserComuDataAc.this, new Intent());
             }
         }
     }

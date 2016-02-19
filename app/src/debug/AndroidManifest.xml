@@ -25,6 +25,12 @@
             android:label="@string/title_activity_gcm_notification"
             android:theme="@style/themeOne">
         </activity>
+        <!-- Activity for UIException tests. -->
+        <activity
+            android:name=".common.activity.MockActivity"
+            android:label="@string/mockActivity_label"
+            android:theme="@style/themeOne">
+        </activity>
     </application>
 
 </manifest>

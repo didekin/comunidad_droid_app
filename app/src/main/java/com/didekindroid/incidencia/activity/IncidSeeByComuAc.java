@@ -12,7 +12,7 @@ import com.didekin.incidservice.dominio.Incidencia;
 import com.didekin.incidservice.dominio.IncidenciaUser;
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekindroid.R;
-import com.didekindroid.common.UiException;
+import com.didekindroid.common.activity.UiException;
 import com.didekindroid.incidencia.gcm.GcmRegistrationIntentServ;
 
 import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_ID;
@@ -157,6 +157,7 @@ public class IncidSeeByComuAc extends AppCompatActivity implements
             IncidenciaUser incidenciaUser = null;
             try {
                 incidenciaUser = IncidenciaServ.getIncidenciaUserWithPowers(incidenciaId[0]);
+                // TODO: traernos en el objeto la resolución. ¿Meterlo en un extra propio? Serializable. Nos permite mostrar regResolución o editResolucion.
             } catch (UiException e) {
                 uiException = e;
             }
@@ -169,7 +170,7 @@ public class IncidSeeByComuAc extends AppCompatActivity implements
             Log.d(TAG, "onPostExecute()");
 
             if (uiException != null) {
-                uiException.getAction().doAction(IncidSeeByComuAc.this, uiException.getResourceId());
+                uiException.processMe(IncidSeeByComuAc.this, new Intent());
             } else {
                 checkState(incidenciaUser != null);
                 Intent intent = new Intent(IncidSeeByComuAc.this, IncidEditAc.class);

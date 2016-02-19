@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
-import com.didekindroid.common.UiException;
+import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.utils.ConnectionUtils;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
@@ -116,9 +116,7 @@ public class RegComuAndUserComuAc extends AppCompatActivity {
         {
             Log.d(TAG, "onPostExecute()");
             if (uiException != null) {
-                Log.d(TAG, "onPostExecute(): uiException " + (uiException.getInServiceException() != null ?
-                        uiException.getInServiceException().getHttpMessage() : UiException.TOKEN_NULL));
-                uiException.getAction().doAction(RegComuAndUserComuAc.this, uiException.getResourceId());
+                uiException.processMe(RegComuAndUserComuAc.this, new Intent());
             } else {
                 checkState(rowInserted);
             }

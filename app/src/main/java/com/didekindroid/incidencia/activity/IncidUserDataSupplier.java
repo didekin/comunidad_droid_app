@@ -1,5 +1,7 @@
 package com.didekindroid.incidencia.activity;
 
+import android.app.Activity;
+
 import com.didekin.incidservice.dominio.IncidenciaUser;
 
 /**

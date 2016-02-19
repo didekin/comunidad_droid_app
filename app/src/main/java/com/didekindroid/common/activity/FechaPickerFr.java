@@ -9,21 +9,19 @@ import android.app.DialogFragment;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.didekindroid.R;
-
 import java.util.Calendar;
 
 public class FechaPickerFr extends DialogFragment {
 
     private static final String TAG = FechaPickerFr.class.getCanonicalName();
-    FragmentForFechaGetter mActivity;
+    ActivityForFechaPicker mActivity;
 
     @Override
     public void onAttach(Activity activity)
     {
         Log.d(TAG, "onAttach()");
         super.onAttach(activity);
-        mActivity = (FragmentForFechaGetter) activity;
+        mActivity = (ActivityForFechaPicker) activity;
     }
 
     @Override
@@ -45,7 +43,7 @@ public class FechaPickerFr extends DialogFragment {
 //    .................................... INNER CLASSES .................................
 //    ===========================================================================================
 
-    public interface FragmentForFechaGetter<T extends Activity> {
+    public interface ActivityForFechaPicker<T extends Activity> {
         OnDateSetListener giveMyFechaFragment();
         T getActivity();
     }

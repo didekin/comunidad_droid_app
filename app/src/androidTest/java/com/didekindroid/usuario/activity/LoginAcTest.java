@@ -3,7 +3,7 @@ package com.didekindroid.usuario.activity;
 import android.support.test.rule.ActivityTestRule;
 
 import com.didekindroid.R;
-import com.didekindroid.usuario.activity.utils.CleanUserEnum;
+import com.didekindroid.usuario.testutils.CleanUserEnum;
 
 import org.junit.After;
 import org.junit.Before;
@@ -16,10 +16,10 @@ import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_NOTHING;
-import static com.didekindroid.common.utils.ActivityTestUtils.checkToastInTest;
-import static com.didekindroid.common.utils.ActivityTestUtils.cleanOptions;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_PEPE;
+import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_NOTHING;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
+import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_PEPE;
 
 /**
  * User: pedro@didekin

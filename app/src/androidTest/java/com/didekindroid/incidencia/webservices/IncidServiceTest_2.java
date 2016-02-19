@@ -5,31 +5,37 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekin.common.exception.DidekinExceptionMsg;
 import com.didekin.incidservice.dominio.Incidencia;
 import com.didekin.incidservice.dominio.IncidenciaUser;
+import com.didekin.incidservice.dominio.Resolucion;
 import com.didekin.usuario.dominio.Usuario;
 import com.didekin.usuario.dominio.UsuarioComunidad;
-import com.didekindroid.R;
-import com.didekindroid.common.UiException;
-import com.didekindroid.usuario.activity.utils.CleanUserEnum;
+import com.didekindroid.common.activity.UiException;
+import com.didekindroid.usuario.testutils.CleanUserEnum;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.sql.Timestamp;
+import java.util.Date;
+
+import static com.didekin.common.exception.DidekinExceptionMsg.UNAUTHORIZED_TX_TO_USER;
 import static com.didekin.common.oauth2.Rol.PROPIETARIO;
-import static com.didekindroid.common.utils.ActivityTestUtils.cleanOptions;
-import static com.didekindroid.common.utils.ActivityTestUtils.signUpAndUpdateTk;
-import static com.didekindroid.common.utils.ActivityTestUtils.updateSecurityData;
-import static com.didekindroid.incidencia.IncidenciaTestUtils.doIncidenciaWithId;
-import static com.didekindroid.incidencia.IncidenciaTestUtils.insertGetIncidencia;
-import static com.didekindroid.incidencia.IncidenciaTestUtils.insertGetIncidenciaWithId;
+import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
+import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
+import static com.didekindroid.common.testutils.ActivityTestUtils.updateSecurityData;
+import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidenciaWithId;
+import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doResolucion;
+import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidencia;
+import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidenciaWithId;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
-import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_PLAZUELA5_JUAN;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_PEPE;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_JUAN;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_PEPE;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.makeUsuarioComunidad;
+import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
+import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_PLAZUELA5_JUAN;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_PEPE;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_JUAN;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_PEPE;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.makeUsuarioComunidad;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -96,9 +102,7 @@ public class IncidServiceTest_2 {
             IncidenciaServ.deleteIncidencia(incidUser.getIncidencia().getIncidenciaId());
             fail();
         } catch (UiException ue) {
-            assertThat(ue.getAction(), is(UiException.UiAction.LOGIN));
-            assertThat(ue.getInServiceException().getHttpMessage(), is(DidekinExceptionMsg.UNAUTHORIZED_TX_TO_USER.getHttpMessage()));
-            assertThat(ue.getResourceId(), is(R.string.user_without_powers));
+            assertThat(ue.getInServiceException().getHttpMessage(), is(UNAUTHORIZED_TX_TO_USER.getHttpMessage()));
         }
     }
 
@@ -126,9 +130,24 @@ public class IncidServiceTest_2 {
                     .build());
             fail();
         } catch (UiException ue) {
-            assertThat(ue.getAction(), is(UiException.UiAction.LOGIN));
-            assertThat(ue.getInServiceException().getHttpMessage(), is(DidekinExceptionMsg.UNAUTHORIZED_TX_TO_USER.getHttpMessage()));
-            assertThat(ue.getResourceId(), is(R.string.user_without_powers));
+            assertThat(ue.getInServiceException().getHttpMessage(), is(UNAUTHORIZED_TX_TO_USER.getHttpMessage()));
+        }
+    }
+
+    @Test
+    public void testRegResolucion_2() throws UiException, InterruptedException
+    {
+        whatClean = CLEAN_PEPE;
+
+        // Caso: usuario sin funciones administrador.
+        Incidencia incidencia_1 = insertGetIncidencia(pepeUserComu, 1).getIncidencia();
+        Thread.sleep(1000);
+        Resolucion resolucion = doResolucion(incidencia_1, "resol_desc", 1000, new Timestamp(new Date().getTime()));
+        try {
+            IncidenciaServ.regResolucion(resolucion);
+            fail();
+        } catch (UiException ie){
+            assertThat(ie.getInServiceException().getHttpMessage(), is(UNAUTHORIZED_TX_TO_USER.getHttpMessage()));
         }
     }
 
@@ -147,7 +166,7 @@ public class IncidServiceTest_2 {
         UsuarioComunidad juanUserComu = ServOne.getUserComuByUserAndComu(pepeUserComu.getComunidad().getC_Id());
         IncidenciaUser newIncidUser = new IncidenciaUser.IncidenciaUserBuilder(incidencia_1)
                 .usuario(juanUserComu)
-                .importancia((short)2)
+                .importancia((short) 2)
                 .build();
         assertThat(IncidenciaServ.regUserInIncidencia(newIncidUser), is(1));
     }
@@ -169,16 +188,8 @@ public class IncidServiceTest_2 {
                     .build();
             fail();
         } catch (IllegalStateException e) {
-            assertThat(e.getMessage(),is(DidekinExceptionMsg.INCIDENCIA_USER_WRONG_INIT.getHttpMessage()));
+            assertThat(e.getMessage(), is(DidekinExceptionMsg.INCIDENCIA_USER_WRONG_INIT.getHttpMessage()));
         }
-        /*try{
-            IncidenciaServ.regUserInIncidencia(newIncidUser);
-            fail();
-        }catch (UiException ue){
-            assertThat(ue.getInServiceException().getHttpMessage(),is(DidekinExceptionMsg.USERCOMU_WRONG_INIT.getHttpMessage()));
-            assertThat(ue.getAction(),is(UiException.UiAction.LOGIN));
-            assertThat(ue.getResourceId(),is(R.string.user_without_powers));
-        }*/
     }
 
 //    ============================= HELPER METHODS ===============================

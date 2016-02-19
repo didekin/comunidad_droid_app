@@ -2,6 +2,7 @@ package com.didekindroid.incidencia.activity;
 
 import android.app.ListFragment;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,7 +18,7 @@ import com.didekin.incidservice.dominio.Incidencia;
 import com.didekin.incidservice.dominio.IncidenciaUser;
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekindroid.R;
-import com.didekindroid.common.UiException;
+import com.didekindroid.common.activity.UiException;
 
 import java.util.List;
 
@@ -226,7 +227,7 @@ public class IncidSeeByComuListFr extends ListFragment implements ComuSpinnerSet
             if (uiException != null) {
                 Log.d(TAG, "onPostExecute(): uiException != null");
                 checkState(incidencias == null);
-                uiException.getAction().doAction(getActivity(), uiException.getResourceId());
+                uiException.processMe(getActivity(), new Intent());
             }
         }
     }

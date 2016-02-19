@@ -9,8 +9,8 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.common.UiException;
-import com.didekindroid.usuario.activity.utils.CleanUserEnum;
+import com.didekindroid.common.activity.UiException;
+import com.didekindroid.usuario.testutils.CleanUserEnum;
 
 import junit.framework.AssertionFailedError;
 
@@ -31,15 +31,15 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.common.TokenHandler.TKhandler;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeComunidadBeanFromView;
-import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.LOGIN_AC;
-import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.REG_COMU_USER_USERCOMU_AC;
-import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.SEE_USERCOMU_BY_USER_AC;
-import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.USER_DATA_AC;
-import static com.didekindroid.common.utils.ActivityTestUtils.checkToastInTest;
-import static com.didekindroid.common.utils.ActivityTestUtils.cleanOptions;
-import static com.didekindroid.common.utils.ActivityTestUtils.signUpAndUpdateTk;
-import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.typeComunidadData;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_JUAN;
+import static com.didekindroid.usuario.testutils.UserMenuTestUtils.LOGIN_AC;
+import static com.didekindroid.usuario.testutils.UserMenuTestUtils.REG_COMU_USER_USERCOMU_AC;
+import static com.didekindroid.usuario.testutils.UserMenuTestUtils.SEE_USERCOMU_BY_USER_AC;
+import static com.didekindroid.usuario.testutils.UserMenuTestUtils.USER_DATA_AC;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
+import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
+import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.typeComunidadData;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_JUAN;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;

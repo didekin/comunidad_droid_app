@@ -6,7 +6,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
-import com.didekindroid.usuario.dominio.DomainDataUtils;
+import com.didekindroid.usuario.testutils.UsuarioTestUtils;
 
 import org.junit.After;
 import org.junit.Before;
@@ -18,12 +18,12 @@ import org.junit.runner.RunWith;
 import java.util.List;
 
 import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_ID;
-import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
-import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.COMU_SEARCH_AC;
-import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.SEE_USERCOMU_BY_USER_AC;
-import static com.didekindroid.usuario.activity.utils.UserMenuTestUtils.USER_DATA_AC;
-import static com.didekindroid.common.utils.ActivityTestUtils.cleanOptions;
-import static com.didekindroid.common.utils.ActivityTestUtils.signUpAndUpdateTk;
+import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
+import static com.didekindroid.usuario.testutils.UserMenuTestUtils.COMU_SEARCH_AC;
+import static com.didekindroid.usuario.testutils.UserMenuTestUtils.SEE_USERCOMU_BY_USER_AC;
+import static com.didekindroid.usuario.testutils.UserMenuTestUtils.USER_DATA_AC;
+import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
+import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 
 /**
@@ -54,9 +54,9 @@ public class SeeUserComuByComuAcTest_slow {
     {
         Thread.sleep(5000);
         // User is registered, with a comunidad in the intent.
-        signUpAndUpdateTk(DomainDataUtils.COMU_TRAV_PLAZUELA_PEPE);
+        signUpAndUpdateTk(UsuarioTestUtils.COMU_TRAV_PLAZUELA_PEPE);
         // We insert a second user with the same comunidad.
-        signUpAndUpdateTk(DomainDataUtils.COMU_PLAZUELA5_JUAN);
+        signUpAndUpdateTk(UsuarioTestUtils.COMU_PLAZUELA5_JUAN);
 
         // We get the id of the comunidad we will put in the intent.
         List<UsuarioComunidad> usuariosComu = ServOne.seeUserComusByUser();

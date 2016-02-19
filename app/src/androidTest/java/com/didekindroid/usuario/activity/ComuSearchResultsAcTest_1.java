@@ -11,12 +11,11 @@ import com.didekin.usuario.dominio.Provincia;
 import com.didekin.usuario.dominio.Usuario;
 import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
-import com.didekindroid.common.UiException;
-import com.didekindroid.common.utils.ActivityTestUtils;
-import com.didekindroid.usuario.activity.utils.CleanUserEnum;
-import com.didekindroid.usuario.dominio.DomainDataUtils;
+import com.didekindroid.common.activity.UiException;
+import com.didekindroid.common.testutils.ActivityTestUtils;
+import com.didekindroid.usuario.testutils.CleanUserEnum;
+import com.didekindroid.usuario.testutils.UsuarioTestUtils;
 
-import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
@@ -29,35 +28,33 @@ import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.TokenHandler.TKhandler;
-import static com.didekindroid.common.utils.ActivityTestUtils.checkToastInTest;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_SEARCH;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.utils.ViewsIDs.COMU_SEARCH_RESULTS;
-import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_JUAN;
+import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRO;
-import static com.didekindroid.common.utils.ActivityTestUtils.cleanOptions;
-import static com.didekindroid.common.utils.ActivityTestUtils.cleanTwoUsers;
-import static com.didekindroid.common.utils.ActivityTestUtils.cleanWithTkhandler;
-import static com.didekindroid.common.utils.ActivityTestUtils.regThreeUserComuSameUser;
-import static com.didekindroid.common.utils.ActivityTestUtils.regTwoUserComuSameUser;
-import static com.didekindroid.common.utils.ActivityTestUtils.signUpAndUpdateTk;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_LA_PLAZUELA_5;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_JUAN;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.makeComunidad;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.makeListTwoUserComu;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.makeUsuario;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.makeUsuarioComunidad;
+import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
+import static com.didekindroid.common.testutils.ActivityTestUtils.cleanTwoUsers;
+import static com.didekindroid.common.testutils.ActivityTestUtils.cleanWithTkhandler;
+import static com.didekindroid.common.testutils.ActivityTestUtils.regThreeUserComuSameUser;
+import static com.didekindroid.common.testutils.ActivityTestUtils.regTwoUserComuSameUser;
+import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_LA_PLAZUELA_5;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_JUAN;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.makeComunidad;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.makeListTwoUserComu;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.makeUsuario;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.makeUsuarioComunidad;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static com.didekindroid.external.LongListMatchers.withAdaptedData;
 import static com.google.common.base.Preconditions.checkState;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
@@ -197,7 +194,7 @@ public class ComuSearchResultsAcTest_1 {
 
         // No existe la comunidad en DB. El usuario está registrado.
 
-        signUpAndUpdateTk(DomainDataUtils.COMU_REAL_JUAN);
+        signUpAndUpdateTk(UsuarioTestUtils.COMU_REAL_JUAN);
         // Criterio de búsqueda.
         Comunidad comunidad = makeComunidad("Rincón", "del No Existente", (short) 123, "",
                 new Municipio((short) 2, new Provincia((short) 27)));

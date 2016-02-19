@@ -6,7 +6,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekindroid.R;
-import com.didekindroid.common.UiException;
+import com.didekindroid.common.activity.UiException;
 
 import org.junit.After;
 import org.junit.BeforeClass;
@@ -28,13 +28,13 @@ import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_LIST_OBJE
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRE;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRO;
-import static com.didekindroid.common.utils.ActivityTestUtils.cleanTwoUsers;
-import static com.didekindroid.common.utils.ActivityTestUtils.signUpAndUpdateTk;
-import static com.didekindroid.usuario.activity.utils.UsuarioTestUtils.typeRegUserComuData;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_JUAN;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_TRAV_PLAZUELA_PEPE;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_JUAN;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_PEPE;
+import static com.didekindroid.common.testutils.ActivityTestUtils.cleanTwoUsers;
+import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.typeRegUserComuData;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_JUAN;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_TRAV_PLAZUELA_PEPE;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_JUAN;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;

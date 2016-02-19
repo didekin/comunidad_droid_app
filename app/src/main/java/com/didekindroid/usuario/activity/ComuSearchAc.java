@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import com.didekin.common.oauth2.OauthToken.AccessToken;
 import com.didekindroid.R;
-import com.didekindroid.common.UiException;
+import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.utils.ConnectionUtils;
 import com.didekindroid.common.utils.UIutils;
 import com.didekindroid.usuario.dominio.ComunidadBean;

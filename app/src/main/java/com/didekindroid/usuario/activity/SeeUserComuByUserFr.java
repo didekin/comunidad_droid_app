@@ -2,6 +2,7 @@ package com.didekindroid.usuario.activity;
 
 import android.app.ListFragment;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.didekin.usuario.dominio.UsuarioComunidad;
-import com.didekindroid.common.UiException;
+import com.didekindroid.common.activity.UiException;
 
 import java.util.List;
 
@@ -189,7 +190,7 @@ public class SeeUserComuByUserFr extends ListFragment {
             if (uiException != null) {  // action: LOGIN.
                 Log.d(TAG, "UserComuByUserLoader.onPostExecute(): uiException != null");
                 checkState(usuarioComunidades == null);
-                uiException.getAction().doAction(getActivity(),uiException.getResourceId());
+                uiException.processMe(getActivity(), new Intent());
             }
         }
     }

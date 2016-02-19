@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.didekin.common.exception.DidekinExceptionMsg;
 import com.didekin.common.exception.InServiceException;
 import com.didekin.common.oauth2.OauthToken.AccessToken;
 import com.didekin.usuario.dominio.Comunidad;
@@ -12,11 +13,10 @@ import com.didekin.usuario.dominio.Provincia;
 import com.didekin.usuario.dominio.Usuario;
 import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.DidekindroidApp;
-import com.didekindroid.R;
-import com.didekindroid.common.UiException;
+import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.utils.IoHelper;
-import com.didekindroid.usuario.activity.utils.CleanUserEnum;
-import com.didekindroid.usuario.dominio.DomainDataUtils;
+import com.didekindroid.usuario.testutils.CleanUserEnum;
+import com.didekindroid.usuario.testutils.UsuarioTestUtils;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.After;
@@ -27,39 +27,39 @@ import org.junit.runner.RunWith;
 import java.io.File;
 import java.util.List;
 
+import static com.didekin.common.exception.DidekinExceptionMsg.TOKEN_NULL;
 import static com.didekin.common.exception.DidekinExceptionMsg.USER_NAME_DUPLICATE;
 import static com.didekin.common.oauth2.OauthTokenHelper.HELPER;
 import static com.didekin.usuario.controller.UsuarioServiceConstant.IS_USER_DELETED;
 import static com.didekindroid.common.TokenHandler.TKhandler;
-import static com.didekindroid.common.UiException.UiAction.SEARCH_COMU;
-import static com.didekindroid.common.utils.ActivityTestUtils.updateSecurityData;
+import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOneUser;
+import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
+import static com.didekindroid.common.testutils.ActivityTestUtils.cleanTwoUsers;
+import static com.didekindroid.common.testutils.ActivityTestUtils.cleanWithTkhandler;
+import static com.didekindroid.common.testutils.ActivityTestUtils.regTwoUserComuSameUser;
+import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
+import static com.didekindroid.common.testutils.ActivityTestUtils.updateSecurityData;
 import static com.didekindroid.common.utils.UIutils.updateIsRegistered;
 import static com.didekindroid.common.webservices.Oauth2Service.Oauth2;
-import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_JUAN;
-import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_JUAN2_AND_PEPE;
-import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
-import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_NOTHING;
-import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
+import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN2_AND_PEPE;
+import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
+import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_NOTHING;
+import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRE;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRO;
-import static com.didekindroid.common.utils.ActivityTestUtils.cleanOneUser;
-import static com.didekindroid.common.utils.ActivityTestUtils.cleanOptions;
-import static com.didekindroid.common.utils.ActivityTestUtils.cleanTwoUsers;
-import static com.didekindroid.common.utils.ActivityTestUtils.cleanWithTkhandler;
-import static com.didekindroid.common.utils.ActivityTestUtils.regTwoUserComuSameUser;
-import static com.didekindroid.common.utils.ActivityTestUtils.signUpAndUpdateTk;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_ESCORIAL_PEPE;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_LA_PLAZUELA_5;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_PLAZUELA5_JUAN;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_JUAN;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_PEPE;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_TRAV_PLAZUELA_PEPE;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_JUAN;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_JUAN2;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_PEPE;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.makeListTwoUserComu;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.makeUsuarioComunidad;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_ESCORIAL_PEPE;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_LA_PLAZUELA_5;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_PLAZUELA5_JUAN;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_JUAN;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_PEPE;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_TRAV_PLAZUELA_PEPE;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_JUAN;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_JUAN2;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_PEPE;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.makeListTwoUserComu;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.makeUsuarioComunidad;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
@@ -153,9 +153,7 @@ public class UsuarioServiceTest {
             assertThat(ServOne.getComusByUser(), nullValue());
             fail();
         } catch (UiException se) {
-            assertThat(se.getResourceId(), is(R.string.user_without_signedUp));
-            assertThat(se.getAction(), is(UiException.UiAction.LOGIN));
-            assertThat(se.getInServiceException(), nullValue());
+            assertThat(se.getInServiceException().getHttpMessage(), is(TOKEN_NULL.getHttpMessage()));
         }
     }
 
@@ -202,8 +200,7 @@ public class UsuarioServiceTest {
             ServOne.getUserComuByUserAndComu(comunidad.getC_Id());
             fail();
         } catch (UiException e) {
-            assertThat(e.getAction(), is(UiException.UiAction.SEARCH_COMU));
-            assertThat(e.getResourceId(),is(R.string.comunidad_not_found_message));
+            assertThat(e.getInServiceException().getHttpMessage(), is(DidekinExceptionMsg.COMUNIDAD_NOT_FOUND.getHttpMessage()));
         }
     }
 
@@ -244,8 +241,7 @@ public class UsuarioServiceTest {
         try {
             ServOne.loginInternal("user@notfound.com", "password_wrong");
         } catch (UiException ue) {
-            assertThat(ue.getAction(), is(SEARCH_COMU));
-            assertThat(ue.getResourceId(), is(R.string.user_without_signedUp));
+            assertThat(ue.getInServiceException().getHttpMessage(),is(DidekinExceptionMsg.USER_NAME_NOT_FOUND.getHttpMessage()));
         }
     }
 
@@ -462,7 +458,7 @@ public class UsuarioServiceTest {
     {
         signUpAndUpdateTk(COMU_REAL_JUAN);
         signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
-        Comunidad comunidadSearch = DomainDataUtils.makeComunidad("Calle", "de la Plazuela", (short) 11, "",
+        Comunidad comunidadSearch = UsuarioTestUtils.makeComunidad("Calle", "de la Plazuela", (short) 11, "",
                 new Municipio((short) 13, new Provincia((short) 3)));
 
         List<Comunidad> comunidades = ServOne.searchComunidades(comunidadSearch);

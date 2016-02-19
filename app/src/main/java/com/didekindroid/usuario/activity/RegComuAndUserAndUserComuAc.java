@@ -16,7 +16,7 @@ import com.didekin.common.oauth2.OauthToken.AccessToken;
 import com.didekin.usuario.dominio.Usuario;
 import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
-import com.didekindroid.common.UiException;
+import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.utils.ConnectionUtils;
 import com.didekindroid.common.utils.UIutils;
 import com.didekindroid.usuario.dominio.ComunidadBean;
@@ -175,9 +175,7 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity {
             Log.d(TAG, "RegComuAndUserComuHttp.onPostExecute()");
 
             if (uiException != null) {
-                Log.d(TAG, "onPostExecute(): uiException " + (uiException.getInServiceException() != null ?
-                        uiException.getInServiceException().getHttpMessage() : UiException.TOKEN_NULL));
-                uiException.getAction().doAction(RegComuAndUserAndUserComuAc.this, uiException.getResourceId());
+                uiException.processMe(RegComuAndUserAndUserComuAc.this, new Intent());
             } else {
                 Intent intent = new Intent(RegComuAndUserAndUserComuAc.this, SeeUserComuByUserAc.class);
                 startActivity(intent);

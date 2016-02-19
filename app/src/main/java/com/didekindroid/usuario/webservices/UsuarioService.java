@@ -7,18 +7,12 @@ import com.didekin.usuario.controller.UsuarioEndPoints;
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekin.usuario.dominio.Usuario;
 import com.didekin.usuario.dominio.UsuarioComunidad;
-import com.didekindroid.R;
-import com.didekindroid.common.UiException;
+import com.didekindroid.common.activity.UiException;
 
 import java.util.List;
 
 import static com.didekin.common.RetrofitRestBuilder.BUILDER;
-import static com.didekin.common.exception.DidekinExceptionMsg.USER_NAME_NOT_FOUND;
 import static com.didekindroid.DidekindroidApp.getBaseURL;
-import static com.didekindroid.common.UiException.UiAction.SEARCH_COMU;
-import static com.didekindroid.common.UiException.UiAction.TOKEN_TO_ERASE;
-import static com.didekindroid.common.utils.UIutils.catchAuthenticationException;
-import static com.didekindroid.common.utils.UIutils.catchComunidadFkException;
 import static com.didekindroid.common.utils.UIutils.checkBearerToken;
 
 /**
@@ -202,7 +196,7 @@ public enum UsuarioService implements UsuarioEndPoints {
         try {
             isDeleted = deleteAccessToken(checkBearerToken(), oldAccessToken);
         } catch (InServiceException e) {
-            throw new UiException(TOKEN_TO_ERASE, 0, e);
+            throw new UiException(e);
         }
         return isDeleted;
     }
@@ -210,11 +204,11 @@ public enum UsuarioService implements UsuarioEndPoints {
     public boolean deleteUser() throws UiException
     {
         Log.d(TAG, "deleteUser()");
-        boolean isDeleted = false;
+        boolean isDeleted;
         try {
             isDeleted = deleteUser(checkBearerToken());
         } catch (InServiceException e) {
-            catchAuthenticationException(e, TAG, R.string.user_without_signedUp);
+            throw new UiException(e);
         }
         return isDeleted;
     }
@@ -224,11 +218,11 @@ public enum UsuarioService implements UsuarioEndPoints {
     {
         Log.d(TAG, "deleteUserComu()");
 
-        int deleted = 0;
+        int deleted;
         try {
             deleted = deleteUserComu(checkBearerToken(), comunidadId);
         } catch (InServiceException e) {
-            catchAuthenticationException(e, TAG, R.string.user_without_signedUp);
+            throw new UiException(e);
         }
         return deleted;
     }
@@ -237,11 +231,11 @@ public enum UsuarioService implements UsuarioEndPoints {
     {
         Log.d(TAG, "getComuData()");
 
-        Comunidad comunidad = null;
+        Comunidad comunidad;
         try {
             comunidad = getComuData(checkBearerToken(), idComunidad);
         } catch (InServiceException e) {
-            catchAuthenticationException(e, TAG, R.string.user_without_signedUp);
+            throw new UiException(e);
         }
         return comunidad;
     }
@@ -250,11 +244,11 @@ public enum UsuarioService implements UsuarioEndPoints {
     {
         Log.d(TAG, "getComusByUser()");
 
-        List<Comunidad> comusByUser = null;
+        List<Comunidad> comusByUser;
         try {
             comusByUser = getComusByUser(checkBearerToken());
         } catch (InServiceException e) {
-            catchAuthenticationException(e, TAG, R.string.user_without_signedUp);
+            throw new UiException(e);
         }
         return comusByUser;
     }
@@ -262,11 +256,11 @@ public enum UsuarioService implements UsuarioEndPoints {
     public String getGcmToken() throws UiException
     {
         Log.d(TAG, "getGcmToken()");
-        String gcmToken = null;
+        String gcmToken;
         try {
             gcmToken = getGcmToken(checkBearerToken());
         } catch (InServiceException e) {
-            catchAuthenticationException(e, TAG, R.string.user_without_signedUp);
+            throw new UiException(e);
         }
         return gcmToken;
     }
@@ -275,12 +269,11 @@ public enum UsuarioService implements UsuarioEndPoints {
     {
         Log.d(TAG, "getUserComuByUserAndComu()");
 
-        UsuarioComunidad userComuByUserAndComu = null;
+        UsuarioComunidad userComuByUserAndComu;
         try {
             userComuByUserAndComu = getUserComuByUserAndComu(checkBearerToken(), comunidadId);
         } catch (InServiceException e) {
-            catchAuthenticationException(e, TAG, R.string.user_without_signedUp);
-            catchComunidadFkException(e, TAG);
+            throw new UiException(e);
         }
         return userComuByUserAndComu;
     }
@@ -289,11 +282,11 @@ public enum UsuarioService implements UsuarioEndPoints {
     {
         Log.d(TAG, ("getUserData()"));
 
-        Usuario userData = null;
+        Usuario userData;
         try {
             userData = getUserData(checkBearerToken());
         } catch (InServiceException e) {
-            catchAuthenticationException(e, TAG, R.string.user_without_signedUp);
+            throw new UiException(e);
         }
         return userData;
     }
@@ -302,11 +295,11 @@ public enum UsuarioService implements UsuarioEndPoints {
     {
         Log.d(TAG, "isOldestUserComu()");
 
-        boolean isOldestUserComu = false;
+        boolean isOldestUserComu;
         try {
             isOldestUserComu = isOldestUserComu(checkBearerToken(), comunidadId);
         } catch (InServiceException e) {
-            catchAuthenticationException(e, TAG, R.string.user_without_signedUp);
+            throw new UiException(e);
         }
         return isOldestUserComu;
     }
@@ -315,13 +308,11 @@ public enum UsuarioService implements UsuarioEndPoints {
     {
         Log.d(TAG, "loginInternal()");
 
-        boolean isLoginOk = false;
+        boolean isLoginOk;
         try {
             isLoginOk = login(userName, password);
         } catch (InServiceException e) {
-            if (e.getHttpMessage().equals(USER_NAME_NOT_FOUND.getHttpMessage())) {
-                throw new UiException(SEARCH_COMU, R.string.user_without_signedUp, null);
-            }
+            throw new UiException(e);
         }
         return isLoginOk;
     }
@@ -330,11 +321,11 @@ public enum UsuarioService implements UsuarioEndPoints {
     {
         Log.d(TAG, "modifyComuData()");
 
-        int modifyComuData = 0;
+        int modifyComuData;
         try {
             modifyComuData = modifyComuData(checkBearerToken(), comunidad);
         } catch (InServiceException e) {
-            catchAuthenticationException(e, TAG, R.string.user_without_signedUp);
+            throw new UiException(e);
         }
         return modifyComuData;
     }
@@ -349,11 +340,11 @@ public enum UsuarioService implements UsuarioEndPoints {
     {
         Log.d(TAG, "modifyUser()");
 
-        int modifyUser = 0;
+        int modifyUser;
         try {
             modifyUser = modifyUser(checkBearerToken(), usuario);
         } catch (InServiceException e) {
-            catchAuthenticationException(e, TAG, R.string.user_without_signedUp);
+            throw new UiException(e);
         }
         return modifyUser;
     }
@@ -362,11 +353,11 @@ public enum UsuarioService implements UsuarioEndPoints {
     {
         Log.d(TAG, "modifyUserComu()");
 
-        int modifyUserComu = 0;
+        int modifyUserComu;
         try {
             modifyUserComu = modifyUserComu(checkBearerToken(), userComu);
         } catch (InServiceException e) {
-            catchAuthenticationException(e, TAG, R.string.user_without_signedUp);
+            throw new UiException(e);
         }
         return modifyUserComu;
     }
@@ -375,11 +366,11 @@ public enum UsuarioService implements UsuarioEndPoints {
     {
         Log.d(TAG, "passwordChange()");
 
-        int passwordChange = 0;
+        int passwordChange;
         try {
             passwordChange = passwordChange(checkBearerToken(), newPassword);
         } catch (InServiceException e) {
-            catchAuthenticationException(e, TAG, R.string.user_without_signedUp);
+            throw new UiException(e);
         }
         return passwordChange;
     }
@@ -388,11 +379,11 @@ public enum UsuarioService implements UsuarioEndPoints {
     {
         Log.d(TAG, "regComuAndUserComu()");
 
-        boolean isRegistered = false;
+        boolean isRegistered;
         try {
             isRegistered = regComuAndUserComu(checkBearerToken(), usuarioComunidad);
         } catch (InServiceException e) {
-            catchAuthenticationException(e, TAG, R.string.user_without_signedUp);
+            throw new UiException(e);
         }
         return isRegistered;
     }
@@ -401,11 +392,11 @@ public enum UsuarioService implements UsuarioEndPoints {
     {
         Log.d(TAG, "regUserComu()");
 
-        int regUserComu = 0;
+        int regUserComu;
         try {
             regUserComu = regUserComu(checkBearerToken(), usuarioComunidad);
         } catch (InServiceException e) {
-            catchAuthenticationException(e, TAG, R.string.user_without_signedUp);
+            throw new UiException(e);
         }
         return regUserComu;
     }
@@ -414,11 +405,11 @@ public enum UsuarioService implements UsuarioEndPoints {
     {
         Log.d(TAG, "seeUserComusByComu()");
 
-        List<UsuarioComunidad> usuarioComunidadList = null;
+        List<UsuarioComunidad> usuarioComunidadList;
         try {
             usuarioComunidadList = seeUserComusByComu(checkBearerToken(), idComunidad);
         } catch (InServiceException e) {
-            catchAuthenticationException(e, TAG, R.string.user_without_signedUp);
+            throw new UiException(e);
         }
         return usuarioComunidadList;
     }
@@ -427,12 +418,12 @@ public enum UsuarioService implements UsuarioEndPoints {
     {
         Log.d(TAG, "seeUserComusByUser()");
 
-        List<UsuarioComunidad> userComuList = null;
+        List<UsuarioComunidad> userComuList;
 
         try {
             userComuList = seeUserComusByUser(checkBearerToken());
         } catch (InServiceException e) {
-            catchAuthenticationException(e, TAG, R.string.user_without_signedUp);
+            throw new UiException(e);
         }
         return userComuList;
     }

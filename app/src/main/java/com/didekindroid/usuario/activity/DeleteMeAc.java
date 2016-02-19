@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.didekindroid.R;
-import com.didekindroid.common.UiException;
+import com.didekindroid.common.activity.UiException;
 
 import static com.didekindroid.common.TokenHandler.TKhandler;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
@@ -91,9 +91,7 @@ public class DeleteMeAc extends AppCompatActivity {
             Log.d(TAG, "onPostExecute()");
 
             if (uiException != null) {
-                Log.d(TAG, "onPostExecute(): uiException " + (uiException.getInServiceException() != null ?
-                        uiException.getInServiceException().getHttpMessage() : UiException.TOKEN_NULL));
-                uiException.getAction().doAction(DeleteMeAc.this, uiException.getResourceId());
+                uiException.processMe(DeleteMeAc.this, new Intent());
             } else {
                 checkState(isDeleted);
             }

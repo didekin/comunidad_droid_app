@@ -22,8 +22,8 @@
     <!--******************************************************************************-->
     <!-- ============================ MESSAGES ============================== -->
     <string name="no_incidencia_by_user">No existen incidencias</string>
-    <string name="incidencia_wrong_init">No podemos mostrarte la incidencia. Verifica que sigue abierta.</string>
-    <string name="incidencia_wrong_init_in_comment">No podemos añadir tu comentario. Verifica que sigue abierta la incidencia.</string>
+    <string name="incidencia_wrong_init">No podemos continuar. Verifica que sigue abierta la incidencia.</string>
+    <string name="resolucion_duplicada">Ya existe resolución para esta incidencia</string>
     <string name="user_without_powers">Haz login y accede nuevamente a la incidencia.</string>
     <!-- ============================== MENUS ================================= -->
     <string name="incid_closed_see_by_usercomu_ac_mn">Incidencias cerradas</string>
@@ -89,7 +89,7 @@
     <!--                                  USUARIO                                     -->
     <!--******************************************************************************-->
     <!-- ============================ MESSAGES ============================== -->
-    <string name="comunidad_not_found_message">No podemos mostrarte esta comuniad. Búscala nuevamente.</string>
+    <string name="comunidad_not_found_message">No podemos mostrarte esta comunidad. Búscala nuevamente.</string>
     <string name="error_validation_msg">Los siguientes datos no son válidos: </string>
     <string name="login_wrong_no_mail">"Busca tu comunidad y regístrate.\nSi no existe, regístrala en 'Nueva comunidad'."</string>
     <string name="no_result_search_comunidad">No hemos encontrado tu comunidad.\nPuedes registrarla aquí. </string>
@@ -100,6 +100,7 @@
     <string name="send_password_by_mail_dialog">¿Deseas que te enviemos una nueva contraseña por correo electrónico?</string>
     <string name="send_password_by_mail_YES">Enviádmela</string>
     <string name="send_password_by_mail_NO">No la enviéis</string>
+    <string name="user_data_not_modified_msg">No hemos podido modificar tus datos.</string>
     <string name="user_without_signedUp">"Haz login. O busca tu comunidad y regístrate.\nSi no existe, regístrala en 'Nueva comunidad'."</string>
     <!-- ============================= MENUS ================================= -->
     <string name="comu_data_ac_mn">Datos comunidad</string>

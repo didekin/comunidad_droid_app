@@ -3,7 +3,6 @@ package com.didekindroid.usuario.dominio;
 import android.content.res.Resources;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
-import android.util.Log;
 
 import com.didekindroid.R;
 
@@ -25,14 +24,12 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class UsuarioBeanValidaTests {
 
-    private static final String TAG = UsuarioBeanValidaTests.class.getCanonicalName();
     private StringBuilder errors;
     private Resources resources;
 
     @Before
     public void doBefore()
     {
-        Log.d(TAG, "doBefore()");
         resources = InstrumentationRegistry.getTargetContext().getResources();
         errors = new StringBuilder(resources.getText(R.string.error_validation_msg));
     }

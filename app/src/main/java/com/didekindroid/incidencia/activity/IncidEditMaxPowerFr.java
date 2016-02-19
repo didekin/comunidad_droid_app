@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 import com.didekin.incidservice.dominio.IncidenciaUser;
 import com.didekindroid.R;
-import com.didekindroid.common.UiException;
+import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.utils.ConnectionUtils;
 import com.didekindroid.common.utils.UIutils;
 import com.didekindroid.incidencia.dominio.IncidenciaBean;
@@ -217,7 +217,7 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
             Log.d(TAG, "onPostExecute()");
 
             if (uiException != null) {
-                uiException.getAction().doAction(getActivity(), uiException.getResourceId());
+                uiException.processMe(getActivity(), new Intent());
             } else {
                 checkState(rowInserted == 1);
                 Intent intent = new Intent(getActivity(), IncidSeeByComuAc.class);
@@ -250,7 +250,7 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
             Log.d(TAG, "onPostExecute()");
 
             if (uiException != null) {
-                uiException.getAction().doAction(getActivity(), uiException.getResourceId());
+                uiException.processMe(getActivity(), new Intent());
             } else {
                 checkState(rowsDeleted == 1);
                 Intent intent = new Intent(getActivity(), IncidSeeByComuAc.class);

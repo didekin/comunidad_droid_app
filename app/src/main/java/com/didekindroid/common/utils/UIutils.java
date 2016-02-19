@@ -13,9 +13,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.didekin.common.exception.ErrorBean;
 import com.didekin.common.exception.InServiceException;
 import com.didekindroid.R;
-import com.didekindroid.common.UiException;
+import com.didekindroid.common.activity.UiException;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
@@ -29,14 +30,9 @@ import java.util.Locale;
 
 import static android.widget.Toast.makeText;
 import static com.didekin.common.dominio.DataPatterns.LINE_BREAK;
-import static com.didekin.common.exception.DidekinExceptionMsg.COMUNIDAD_NOT_FOUND;
-import static com.didekin.common.exception.DidekinExceptionMsg.isMessageToLogin;
-import static com.didekin.common.exception.DidekinExceptionMsg.isMessageToSeeIncidencia;
+import static com.didekin.common.exception.DidekinExceptionMsg.TOKEN_NULL;
 import static com.didekindroid.R.color.deep_purple_100;
 import static com.didekindroid.common.TokenHandler.TKhandler;
-import static com.didekindroid.common.UiException.UiAction.INCID_SEE_BY_COMU;
-import static com.didekindroid.common.UiException.UiAction.LOGIN;
-import static com.didekindroid.common.UiException.UiAction.SEARCH_COMU;
 import static com.didekindroid.common.utils.UIutils.SharedPrefFiles.app_preferences_file;
 import static java.text.DateFormat.MEDIUM;
 import static java.util.Locale.getDefault;
@@ -50,7 +46,7 @@ public final class UIutils {
 
     private static final String TAG = UIutils.class.getCanonicalName();
     public static final int APPBAR_ID = R.id.appbar;
-    public static final Locale SPAIN_LOCALE = new Locale("es","ES");
+    public static final Locale SPAIN_LOCALE = new Locale("es", "ES");
 
     private UIutils()
     {
@@ -63,7 +59,8 @@ public final class UIutils {
         String bearerAccessTkHeader = TKhandler.doBearerAccessTkHeader();
 
         if (bearerAccessTkHeader == null) { // No token in cache.
-            throw new UiException(LOGIN, R.string.user_without_signedUp, null);
+            ErrorBean errorBean = new ErrorBean(TOKEN_NULL.getHttpMessage(), TOKEN_NULL.getHttpStatus());
+            throw new UiException(new InServiceException(errorBean,null));
         }
         return bearerAccessTkHeader;
     }
@@ -106,30 +103,6 @@ public final class UIutils {
     }
 
 //    ============================== EXCEPTIONS =======================================
-
-    public static void catchAuthenticationException(InServiceException e, String tagClass, int resourceId) throws UiException
-    {
-        Log.e(tagClass, e.getHttpMessage());
-        if (isMessageToLogin(e.getHttpMessage())) {  // Problema de identificación.
-            throw new UiException(LOGIN, resourceId, e);
-        }
-    }
-
-    public static void catchComunidadFkException(InServiceException ie, String tagClass) throws UiException
-    {
-        Log.e(tagClass, ie.getHttpMessage());
-        if (ie.getHttpMessage().equals(COMUNIDAD_NOT_FOUND.getHttpMessage())) {
-            throw new UiException(SEARCH_COMU, R.string.comunidad_not_found_message, null);
-        }
-    }
-
-    public static void catchIncidenciaFkException(InServiceException ie, String tagClass, int resourceId) throws UiException
-    {
-        Log.e(tagClass, ie.getHttpMessage());
-        if (isMessageToSeeIncidencia(ie.getHttpMessage())) {
-            throw new UiException(INCID_SEE_BY_COMU, resourceId, ie);
-        }
-    }
 
     public static void doRuntimeException(Exception e, String tagClass)
     {

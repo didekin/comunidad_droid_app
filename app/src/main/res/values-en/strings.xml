@@ -22,8 +22,7 @@
     <!--******************************************************************************-->
     <!-- ============================ MESSAGES ============================== -->
     <string name="no_incidencia_by_user">No existen incidencias</string>
-    <string name="incidencia_wrong_init">No podemos mostrarte la incidencia. Verifica que sigue abierta.</string>
-    <string name="incidencia_wrong_init_in_comment">No podemos añadir tu comentario. Verifica que sigue abierta la incidencia.</string>
+    <string name="incidencia_wrong_init">No podemos continuar. Verifica que sigue abierta la incidencia.</string>
     <string name="user_without_powers">Haz login y accede nuevamente a la incidencia.</string>
     <!-- ============================== MENUS ================================= -->
     <string name="incid_closed_see_by_usercomu_ac_mn">Incidencias cerradas</string>

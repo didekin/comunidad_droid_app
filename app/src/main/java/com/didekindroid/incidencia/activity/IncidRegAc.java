@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import com.didekin.incidservice.dominio.IncidenciaUser;
 import com.didekindroid.R;
-import com.didekindroid.common.UiException;
+import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.utils.ConnectionUtils;
 import com.didekindroid.common.utils.UIutils;
 import com.didekindroid.incidencia.gcm.GcmRegistrationIntentServ;
@@ -112,7 +112,7 @@ public class IncidRegAc extends AppCompatActivity {
             Log.d(TAG, "onPostExecute()");
 
             if (uiException != null) {
-                uiException.getAction().doAction(IncidRegAc.this, uiException.getResourceId());
+                uiException.processMe(IncidRegAc.this, new Intent());
             } else {
                 checkState(rowInserted == 1);
                 Intent intent = new Intent(IncidRegAc.this, IncidSeeByComuAc.class);

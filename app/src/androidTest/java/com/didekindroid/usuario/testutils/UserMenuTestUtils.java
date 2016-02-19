@@ -1,4 +1,4 @@
-package com.didekindroid.usuario.activity.utils;
+package com.didekindroid.usuario.testutils;
 
 import android.app.Activity;
 
@@ -10,8 +10,8 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.*;
-import static com.didekindroid.common.utils.ActivityTestUtils.checkNoToastInTest;
-import static com.didekindroid.common.utils.ActivityTestUtils.checkToastInTest;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkNoToastInTest;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.common.utils.ViewsIDs.SEE_USERCOMU_BY_USER;
 
 /**

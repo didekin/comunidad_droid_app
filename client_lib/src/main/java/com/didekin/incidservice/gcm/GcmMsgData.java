@@ -9,6 +9,7 @@ package com.didekin.incidservice.gcm;
 public interface GcmMsgData {
 
     String incidencia_type = "incidencia";
+    String resolucion_type = "resolucion";
 
     /**
      * It corresponds to the class implementations field 'typeMsg'.

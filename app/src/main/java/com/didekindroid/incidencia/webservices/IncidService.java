@@ -9,15 +9,12 @@ import com.didekin.incidservice.dominio.Incidencia;
 import com.didekin.incidservice.dominio.IncidenciaUser;
 import com.didekin.incidservice.dominio.Resolucion;
 import com.didekin.usuario.dominio.Comunidad;
-import com.didekindroid.R;
-import com.didekindroid.common.UiException;
+import com.didekindroid.common.activity.UiException;
 
 import java.util.List;
 
 import static com.didekin.common.RetrofitRestBuilder.BUILDER;
 import static com.didekindroid.DidekindroidApp.getBaseURL;
-import static com.didekindroid.common.utils.UIutils.catchAuthenticationException;
-import static com.didekindroid.common.utils.UIutils.catchIncidenciaFkException;
 import static com.didekindroid.common.utils.UIutils.checkBearerToken;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 
@@ -113,13 +110,12 @@ public enum IncidService implements IncidenciaServEndPoints {
     {
         Log.d(TAG, "deleteIncidencia()");
 
-        int deleteIncidencias = 0;
+        int deleteIncidencias;
 
         try {
             deleteIncidencias = deleteIncidencia(checkBearerToken(), incidenciaId);
         } catch (InServiceException e) {
-            catchAuthenticationException(e, TAG, R.string.user_without_powers);
-            catchIncidenciaFkException(e, TAG, R.string.incidencia_wrong_init);
+            throw new UiException(e);
         }
         return deleteIncidencias;
     }
@@ -136,19 +132,16 @@ public enum IncidService implements IncidenciaServEndPoints {
     /**
      * The user has an IncidenciaUser relationship, this method returns an incidencia with the powers of the user on the incidence.
      * If not, return an IncidenciaUser instance with usuario == null.
-     * If the incidencia doesn't exist, it returns an exception.
      *
      * @param incidenciaId identifies the incidencia to be returned.
      */
     public IncidenciaUser getIncidenciaUserWithPowers(long incidenciaId) throws UiException
     {
         Log.d(TAG, "getIncidenciaUserWithPowers()");
-        IncidenciaUser incidenciaUser = null;
+        IncidenciaUser incidenciaUser;
         try {
             incidenciaUser = getIncidenciaUserWithPowers(checkBearerToken(), incidenciaId);
-        } catch (InServiceException e) {
-            catchAuthenticationException(e, TAG, R.string.user_without_signedUp);
-            catchIncidenciaFkException(e, TAG, R.string.incidencia_wrong_init);
+        } catch (InServiceException e) {throw new UiException(e);
         }
         return incidenciaUser;
     }
@@ -156,7 +149,7 @@ public enum IncidService implements IncidenciaServEndPoints {
     public List<IncidComment> incidCommentsSee(Incidencia incidencia) throws UiException
     {
         Log.d(TAG, "incidCommentsSee()");
-        List<IncidComment> comments = null;
+        List<IncidComment> comments;
         // Extract ids.
         Incidencia incidenciaIn = new Incidencia.IncidenciaBuilder()
                 .incidenciaId(incidencia.getIncidenciaId())
@@ -168,8 +161,7 @@ public enum IncidService implements IncidenciaServEndPoints {
         try {
             comments = incidCommentsSee(checkBearerToken(), incidenciaIn);
         } catch (InServiceException ie) {
-            catchAuthenticationException(ie, TAG, R.string.user_without_signedUp);
-            catchIncidenciaFkException(ie, TAG, R.string.incidencia_wrong_init_in_comment);
+            throw new UiException(ie);
         }
         return comments;
     }
@@ -177,11 +169,11 @@ public enum IncidService implements IncidenciaServEndPoints {
     public List<IncidenciaUser> incidSeeByComu(long comunidadId) throws UiException
     {
         Log.d(TAG, "incidSeeByComu()");
-        List<IncidenciaUser> incidencias = null;
+        List<IncidenciaUser> incidencias;
         try {
             incidencias = incidSeeByComu(checkBearerToken(), comunidadId);
         } catch (InServiceException e) {
-            catchAuthenticationException(e, TAG, R.string.user_without_signedUp);
+            throw new UiException(e);
         }
         return incidencias;
     }
@@ -189,11 +181,11 @@ public enum IncidService implements IncidenciaServEndPoints {
     public List<IncidenciaUser> incidSeeClosedByComu(long comunidadId) throws UiException
     {
         Log.d(TAG, "incidSeeClosedByComu()");
-        List<IncidenciaUser> incidencias = null;
+        List<IncidenciaUser> incidencias;
         try {
             incidencias = incidSeeClosedByComu(checkBearerToken(), comunidadId);
         } catch (InServiceException e) {
-            catchAuthenticationException(e, TAG, R.string.user_without_signedUp);
+            throw new UiException(e);
         }
         return incidencias;
     }
@@ -202,13 +194,12 @@ public enum IncidService implements IncidenciaServEndPoints {
     {
         Log.d(TAG, "modifyIncidenciaUser()");
 
-        int modifyIncidencias = 0;
+        int modifyIncidencias;
 
         try {
             modifyIncidencias = modifyIncidenciaUser(checkBearerToken(), incidenciaUser);
         } catch (InServiceException e) {
-            catchAuthenticationException(e, TAG, R.string.user_without_powers);
-            catchIncidenciaFkException(e, TAG, R.string.incidencia_wrong_init);
+            throw new UiException(e);
         }
         return modifyIncidencias;
     }
@@ -216,11 +207,11 @@ public enum IncidService implements IncidenciaServEndPoints {
     public int modifyUser(IncidenciaUser incidenciaUser) throws UiException
     {
         Log.d(TAG, "modifyUser()");
-        int rowModified = 0;
+        int rowModified;
         try {
             rowModified = modifyUser(checkBearerToken(), incidenciaUser);
         } catch (InServiceException ue) {
-            catchAuthenticationException(ue, TAG, R.string.user_without_powers);
+            throw new UiException(ue);
         }
         return rowModified;
     }
@@ -228,12 +219,11 @@ public enum IncidService implements IncidenciaServEndPoints {
     public int regIncidComment(IncidComment comment) throws UiException
     {
         Log.d(TAG, "regIncidComment()");
-        int insertedRow = 0;
+        int insertedRow;
         try {
             insertedRow = IncidenciaServ.endPoint.regIncidComment(checkBearerToken(), comment);
         } catch (InServiceException ie) {
-            catchAuthenticationException(ie, TAG, R.string.user_without_signedUp);
-            catchIncidenciaFkException(ie, TAG, R.string.incidencia_wrong_init_in_comment);
+            throw new UiException(ie);
         }
         return insertedRow;
     }
@@ -242,11 +232,11 @@ public enum IncidService implements IncidenciaServEndPoints {
     {
         Log.d(TAG, "regIncidenciaUser()");
 
-        int regIncidencia = 0;
+        int regIncidencia;
         try {
             regIncidencia = regIncidenciaUser(checkBearerToken(), incidenciaUser);
         } catch (InServiceException e) {
-            catchAuthenticationException(e, TAG, R.string.user_without_signedUp);
+            throw new UiException(e);
         }
         return regIncidencia;
     }
@@ -254,11 +244,11 @@ public enum IncidService implements IncidenciaServEndPoints {
     public int regResolucion(Resolucion resolucion) throws UiException
     {
         Log.d(TAG, "regResolucion()");
-        int regResolucion = 0;
+        int regResolucion;
         try {
             regResolucion = regResolucion(checkBearerToken(), resolucion);
         } catch (InServiceException ie){
-            // TODO:
+            throw new UiException(ie);
         }
         return regResolucion;
     }
@@ -266,12 +256,11 @@ public enum IncidService implements IncidenciaServEndPoints {
     public int regUserInIncidencia(IncidenciaUser incidenciaUser) throws UiException
     {
         Log.d(TAG, "regUserInIncidencia()");
-        int insertRow = 0;
+        int insertRow;
         try {
             insertRow = regUserInIncidencia(checkBearerToken(), incidenciaUser);
         } catch (InServiceException ie) {
-            catchAuthenticationException(ie, TAG, R.string.user_without_powers);
-            catchIncidenciaFkException(ie, TAG, R.string.incidencia_wrong_init);
+            throw new UiException(ie);
         }
         return insertRow;
     }

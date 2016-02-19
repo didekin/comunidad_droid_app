@@ -1,3 +1,4 @@
 <resources>
     <string name="title_activity_gcm_notification" translatable="false">Activity for GcmTests</string>
+    <string name="mockActivity_label" translatable="false">MockActivity</string>
 </resources>

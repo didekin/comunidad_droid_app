@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.common.UiException;
+import com.didekindroid.common.activity.UiException;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -21,11 +21,11 @@ import static android.support.test.espresso.matcher.ViewMatchers.withContentDesc
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.TokenHandler.TKhandler;
-import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekindroid.common.utils.ActivityTestUtils.checkNoToastInTest;
-import static com.didekindroid.common.utils.ActivityTestUtils.checkToastInTest;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_TRAV_PLAZUELA_PEPE;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_PEPE;
+import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkNoToastInTest;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_TRAV_PLAZUELA_PEPE;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static org.hamcrest.Matchers.is;
@@ -86,8 +86,8 @@ public class LoginAcTest_1 extends LoginAcTest{
         onView(withId(R.id.reg_usuario_password_ediT)).perform(typeText("password_ok"));
 
         onView(withId(R.id.login_ac_button)).check(matches(isDisplayed())).perform(click());
-        //Invitación a buscar su comunidad y registrarse.
-        onView(withId(R.id.comu_search_ac_layout)).check(matches(isDisplayed()));
+        //Invitación a hacer login.
+        onView(withId(R.id.login_ac_layout)).check(matches(isDisplayed()));
         checkToastInTest(R.string.user_without_signedUp, mActivity);
     }
 

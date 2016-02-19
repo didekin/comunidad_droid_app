@@ -20,8 +20,9 @@ public final class Resolucion {
     private final int costeFinal;
     private final String moraleja;
     //    private final Proveedor proveedor;
-    private final Timestamp fechaPrevista;
-    private final Timestamp fechaResolucion;
+    private final Timestamp fechaPrev;
+    private final Timestamp fechaReal;
+    private final Timestamp fechaAlta;
     private final Incidencia incidencia;
 
     private Resolucion(ResolucionBuilder builder)
@@ -32,8 +33,9 @@ public final class Resolucion {
         costeFinal = builder.costeFinal;
         moraleja = builder.moraleja;
 //        proveedor = builder.proveedor;
-        fechaPrevista = builder.fechaPrevista;
-        fechaResolucion = builder.fechaResolucion;
+        fechaPrev = builder.fechaPrev;
+        fechaReal = builder.fechaReal;
+        fechaAlta = builder.fechaAlta;
         incidencia = builder.incidencia;
     }
 
@@ -57,14 +59,29 @@ public final class Resolucion {
         return moraleja;
     }
 
-    public Timestamp getFechaPrevista()
+    public Timestamp getFechaPrev()
     {
-        return fechaPrevista;
+        return fechaPrev;
     }
 
-    public Timestamp getFechaResolucion()
+    public Timestamp getFechaReal()
     {
-        return fechaResolucion;
+        return fechaReal;
+    }
+
+    public long getResolucionId()
+    {
+        return resolucionId;
+    }
+
+    public Timestamp getFechaAlta()
+    {
+        return fechaAlta;
+    }
+
+    public Incidencia getIncidencia()
+    {
+        return incidencia;
     }
 
     //    ===============================  BUILDER  ============================
@@ -76,17 +93,19 @@ public final class Resolucion {
         private int costeEstimado;
         private int costeFinal;
         //        private Proveedor proveedor;
-        private Timestamp fechaPrevista;
-        private Timestamp fechaResolucion;
+        private Timestamp fechaPrev;
+        private Timestamp fechaReal;
         public String moraleja;
         public Incidencia incidencia;
+        public Timestamp fechaAlta;
 
         public ResolucionBuilder(Incidencia incidencia)
         {
             this.incidencia = incidencia;
         }
 
-        public ResolucionBuilder resolucionId(long initValue){
+        public ResolucionBuilder resolucionId(long initValue)
+        {
             resolucionId = initValue;
             return this;
         }
@@ -123,13 +142,19 @@ public final class Resolucion {
 
         public ResolucionBuilder fechaPrevista(Timestamp initValue)
         {
-            fechaPrevista = initValue;
+            fechaPrev = initValue;
             return this;
         }
 
-        public ResolucionBuilder fechaResolucion(Timestamp initValue)
+        public ResolucionBuilder fechaReal(Timestamp initValue)
         {
-            fechaResolucion = initValue;
+            fechaReal = initValue;
+            return this;
+        }
+
+        public ResolucionBuilder fechaAlta(Timestamp initValue)
+        {
+            fechaAlta = initValue;
             return this;
         }
 
@@ -137,7 +162,7 @@ public final class Resolucion {
         public Resolucion build()
         {
             Resolucion resolucion = new Resolucion(this);
-            if (resolucion.resolucionId <= 0 && (resolucion.descripcion == null || resolucion.fechaPrevista == null)){
+            if (resolucion.resolucionId <= 0 && (resolucion.descripcion == null || resolucion.fechaPrev == null)) {
                 throw new IllegalStateException(RESOLUCION_WRONG_INIT.toString());
             }
             return resolucion;

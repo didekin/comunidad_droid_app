@@ -36,6 +36,7 @@ public class IncidResolucionRegAcFragment extends Fragment implements OnDateSetL
     private static final String TAG = IncidResolucionRegAcFragment.class.getCanonicalName();
 
     ResolucionBean mResolucionBean;
+    IncidUserDataSupplier mActivitySupplier;
     View mFragmentView;
     TextView fechaView;
 
@@ -69,6 +70,7 @@ public class IncidResolucionRegAcFragment extends Fragment implements OnDateSetL
     public void onActivityCreated(Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
+        mActivitySupplier = (IncidUserDataSupplier) getActivity();
     }
 
     public ResolucionBean makeResolucionBeanFromView(StringBuilder errorMsg)
@@ -129,8 +131,8 @@ public class IncidResolucionRegAcFragment extends Fragment implements OnDateSetL
             String fechaPrevistaVw = fechaView.getText().toString();
 
             if (fechaPrevistaVw.equals(getResources().getString(R.string.incid_resolucion_fecha_default_txt))
-                    || fechaPrevista <= 0L) {
-                errorMsg.append(R.string.incid_resolucion_fecha_prev_msg).append(LINE_BREAK.getRegexp());
+                    || fechaPrevista < mActivitySupplier.getIncidenciaUser().getIncidencia().getFechaAlta().getTime()) {
+                errorMsg.append(getResources().getString(R.string.incid_resolucion_fecha_prev_msg)).append(LINE_BREAK.getRegexp());
                 Log.d(TAG, "validateFechaPrev(): false");
                 return false;
             }

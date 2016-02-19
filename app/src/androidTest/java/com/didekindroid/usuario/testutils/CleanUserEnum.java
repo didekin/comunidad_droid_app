@@ -1,4 +1,4 @@
-package com.didekindroid.usuario.activity.utils;
+package com.didekindroid.usuario.testutils;
 
 /**
  * User: pedro@didekin

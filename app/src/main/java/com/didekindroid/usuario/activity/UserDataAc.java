@@ -16,14 +16,13 @@ import android.widget.Toast;
 import com.didekin.common.oauth2.OauthToken.AccessToken;
 import com.didekin.usuario.dominio.Usuario;
 import com.didekindroid.R;
-import com.didekindroid.common.UiException;
+import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.utils.ConnectionUtils;
 import com.didekindroid.usuario.activity.utils.UserMenu;
 import com.didekindroid.usuario.dominio.UsuarioBean;
 
 import static com.didekin.common.exception.DidekinExceptionMsg.BAD_REQUEST;
 import static com.didekindroid.common.TokenHandler.TKhandler;
-import static com.didekindroid.common.UiException.TOKEN_NULL;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
@@ -165,8 +164,7 @@ public class UserDataAc extends AppCompatActivity {
             Log.d(TAG, "UserDataGetter.onPostExecute()");
 
             if (uiException != null) {
-                Log.d(TAG, "onPostExecute(): uiException " + (uiException.getInServiceException() != null ? uiException.getInServiceException().getHttpMessage() : TOKEN_NULL));
-                uiException.getAction().doAction(UserDataAc.this, uiException.getResourceId());
+                uiException.processMe(UserDataAc.this, new Intent());
             } else {
                 ((EditText) mAcView.findViewById(R.id.reg_usuario_email_editT)).setText(mOldUser.getUserName());
                 ((EditText) mAcView.findViewById(R.id.reg_usuario_alias_ediT)).setText(mOldUser.getAlias());
@@ -239,7 +237,7 @@ public class UserDataAc extends AppCompatActivity {
                 } catch (UiException e) {
                     // No token in cache
                     Log.d(TAG, e.getInServiceException().getHttpMessage());
-                    e.getAction().doAction(UserDataAc.this, e.getResourceId());
+                    e.processMe(UserDataAc.this, new Intent());
                 }
                 return false;
             }
@@ -270,10 +268,8 @@ public class UserDataAc extends AppCompatActivity {
                 makeToast(UserDataAc.this, R.string.password_wrong, Toast.LENGTH_LONG);
             }
             if (uiException != null) {
-                Log.d(TAG, "onPostExecute(): uiException " + (uiException.getInServiceException() != null ?
-                        uiException.getInServiceException().getHttpMessage() : TOKEN_NULL));
                 checkState(!passwordWrong);
-                uiException.getAction().doAction(UserDataAc.this, uiException.getResourceId());
+                uiException.processMe(UserDataAc.this, new Intent());
             }
         }
     }

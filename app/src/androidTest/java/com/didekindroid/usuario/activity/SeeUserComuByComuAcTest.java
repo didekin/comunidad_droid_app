@@ -7,10 +7,8 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
-import com.didekindroid.common.utils.ActivityTestUtils;
-import com.didekindroid.usuario.dominio.DomainDataUtils;
+import com.didekindroid.common.testutils.ActivityTestUtils;
 
-import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
@@ -22,21 +20,19 @@ import org.junit.runner.RunWith;
 import java.util.List;
 
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
+import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_ID;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
-import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
-import static com.didekindroid.common.utils.ActivityTestUtils.cleanOptions;
-import static com.didekindroid.common.utils.ActivityTestUtils.signUpAndUpdateTk;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_PLAZUELA5_JUAN;
-import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static com.didekindroid.external.LongListMatchers.withAdaptedData;
+import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_PLAZUELA5_JUAN;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_TRAV_PLAZUELA_PEPE;
+import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -69,9 +65,9 @@ public class SeeUserComuByComuAcTest {
     public void setUp() throws Exception
     {
         // User is registered, with a comunidad in the intent.
-        signUpAndUpdateTk(DomainDataUtils.COMU_TRAV_PLAZUELA_PEPE);
+        signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
         // We insert a second user with the same comunidad.
-        signUpAndUpdateTk(DomainDataUtils.COMU_PLAZUELA5_JUAN);
+        signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
 
         // We get the id of the comunidad we will put in the intent.
         List<UsuarioComunidad> usuariosComu = ServOne.seeUserComusByUser();

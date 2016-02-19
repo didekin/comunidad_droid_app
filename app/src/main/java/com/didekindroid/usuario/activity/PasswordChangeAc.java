@@ -12,7 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.didekindroid.R;
-import com.didekindroid.common.UiException;
+import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.utils.ConnectionUtils;
 import com.didekindroid.usuario.dominio.UsuarioBean;
 
@@ -115,9 +115,7 @@ public class PasswordChangeAc extends AppCompatActivity {
         {
             Log.d(TAG, "onPostExecute(): DONE");
             if (uiException != null){
-                Log.d(TAG, "onPostExecute(): uiException " + (uiException.getInServiceException() != null ?
-                        uiException.getInServiceException().getHttpMessage() : UiException.TOKEN_NULL));
-                uiException.getAction().doAction(PasswordChangeAc.this, uiException.getResourceId());
+                uiException.processMe(PasswordChangeAc.this, new Intent());
             } else{checkState(passwordUpdate == 1);}
 
         }

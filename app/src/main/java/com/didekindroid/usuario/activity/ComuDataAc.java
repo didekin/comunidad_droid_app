@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekindroid.R;
-import com.didekindroid.common.UiException;
+import com.didekindroid.common.activity.UiException;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.common.utils.ConnectionUtils;
 
@@ -273,8 +273,7 @@ public class ComuDataAc extends Activity implements RegComuFr.RegComuFrListener 
             Log.d(TAG, "onPostExecute()");
 
             if (uiException != null) {
-                Log.d(TAG, "UiException" + (uiException.getInServiceException() != null ? uiException.getInServiceException().getHttpMessage() : UiException.TOKEN_NULL));
-                uiException.getAction().doAction(ComuDataAc.this, uiException.getResourceId());
+                uiException.processMe(ComuDataAc.this, new Intent());
             } else {
                 mComunidad = comunidad;
                 setEditTextComuData();
@@ -306,9 +305,7 @@ public class ComuDataAc extends Activity implements RegComuFr.RegComuFrListener 
         {
             Log.d(TAG, "onPostExecute()");
             if (uiException != null) {
-                Log.d(TAG, "onPostExecute(): uiException " + (uiException.getInServiceException() != null ?
-                        uiException.getInServiceException().getHttpMessage() : UiException.TOKEN_NULL));
-                uiException.getAction().doAction(ComuDataAc.this, uiException.getResourceId());
+                uiException.processMe(ComuDataAc.this, new Intent());
             } else {
                 checkState(rowsUpdated == 1);
             }

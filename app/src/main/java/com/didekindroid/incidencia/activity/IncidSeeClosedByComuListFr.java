@@ -2,6 +2,7 @@ package com.didekindroid.incidencia.activity;
 
 import android.app.ListFragment;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,7 +14,7 @@ import android.widget.ListView;
 import com.didekin.incidservice.dominio.Incidencia;
 import com.didekin.incidservice.dominio.IncidenciaUser;
 import com.didekindroid.R;
-import com.didekindroid.common.UiException;
+import com.didekindroid.common.activity.UiException;
 
 import java.util.List;
 
@@ -169,10 +170,10 @@ public class IncidSeeClosedByComuListFr extends ListFragment {
                 mAdapter.addAll(incidencias);
                 setListAdapter(mAdapter);
             }
-            if (uiException != null) {  // action: LOGIN.
+            if (uiException != null) {  // action: LOGIN.                            Ø
                 Log.d(TAG, "onPostExecute(): uiException != null");
                 checkState(incidencias == null);
-                uiException.getAction().doAction(getActivity(), uiException.getResourceId());
+                uiException.processMe(getActivity(), new Intent());
             }
         }
     }

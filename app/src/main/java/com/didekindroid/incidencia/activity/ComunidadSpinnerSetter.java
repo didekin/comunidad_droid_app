@@ -1,13 +1,14 @@
 package com.didekindroid.incidencia.activity;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekindroid.R;
-import com.didekindroid.common.UiException;
+import com.didekindroid.common.activity.UiException;
 
 import java.util.List;
 
@@ -60,7 +61,7 @@ public class ComunidadSpinnerSetter<T extends Fragment & ComuSpinnerSettable> ex
         if (uiException != null) {
             Log.d(TAG, "onPostExecute(): uiException != null");
             checkState(comunidades == null);
-            uiException.getAction().doAction(mFragment.getActivity(), uiException.getResourceId());
+            uiException.processMe(mFragment.getActivity(), new Intent());
         }
     }
 }

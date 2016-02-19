@@ -1,4 +1,4 @@
-package com.didekindroid.common.utils;
+package com.didekindroid.common.testutils;
 
 import android.app.Activity;
 import android.util.DisplayMetrics;

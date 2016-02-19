@@ -17,14 +17,13 @@ import android.widget.Toast;
 import com.didekin.common.oauth2.OauthToken.AccessToken;
 import com.didekin.usuario.dominio.Usuario;
 import com.didekindroid.R;
-import com.didekindroid.common.UiException;
+import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.utils.ConnectionUtils;
 import com.didekindroid.usuario.dominio.UsuarioBean;
 
 import static android.widget.Toast.LENGTH_LONG;
 import static android.widget.Toast.LENGTH_SHORT;
 import static com.didekindroid.common.TokenHandler.TKhandler;
-import static com.didekindroid.common.UiException.UiAction.SEARCH_COMU;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.common.utils.UIutils.makeToast;
@@ -121,7 +120,12 @@ public class LoginAc extends AppCompatActivity {
     void doNegativeClick()
     {
         Log.d(TAG, "doNegativeClick()");
-        SEARCH_COMU.doAction(this,R.string.login_wrong_no_mail);
+
+        makeToast(this, R.string.login_wrong_no_mail, LENGTH_SHORT);
+        Intent intent = new Intent(this, ComuSearchAc.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
     }
 
 //    =====================================================================================================
@@ -171,7 +175,7 @@ public class LoginAc extends AppCompatActivity {
                 LoginAc.this.finish();
             } else if (uiException != null) {  // userName no existe en BD. Action: LOGIN.
                 Log.d(TAG, "LoginValidator.onPostExecute(): UiException");
-                uiException.getAction().doAction(LoginAc.this, uiException.getResourceId());
+                uiException.processMe(LoginAc.this, new Intent());
             } else if (++counterWrong > 3) { // Password wrong
                 showDialog(userName);
             } else {
@@ -228,7 +232,7 @@ public class LoginAc extends AppCompatActivity {
 
 //  ======================================================================================================
 
-    class LoginMailSender extends AsyncTask<String,Void,Boolean>{
+    class LoginMailSender extends AsyncTask<String, Void, Boolean> {
 
         @Override
         protected Boolean doInBackground(String... emails)
@@ -241,7 +245,7 @@ public class LoginAc extends AppCompatActivity {
         protected void onPostExecute(Boolean isOk)
         {
             Log.d(TAG, "LoginMailSender.onPostExecute()");
-            if (isOk){
+            if (isOk) {
                 makeToast(LoginAc.this, R.string.password_new_in_login, LENGTH_LONG);
                 LoginAc.this.recreate();
             }

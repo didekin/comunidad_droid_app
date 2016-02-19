@@ -7,19 +7,16 @@ import com.didekin.common.exception.InServiceException;
 import com.didekin.common.oauth2.Oauth2EndPoints;
 import com.didekin.common.oauth2.OauthClient;
 import com.didekin.common.oauth2.OauthToken.AccessToken;
-import com.didekindroid.R;
-import com.didekindroid.common.UiException;
+import com.didekindroid.common.activity.UiException;
 
 import retrofit.client.Response;
 
 import static com.didekin.common.RetrofitRestBuilder.BUILDER;
-import static com.didekin.common.exception.DidekinExceptionMsg.isMessageToLogin;
 import static com.didekin.common.oauth2.OauthClient.CL_USER;
 import static com.didekin.common.oauth2.OauthConstant.PASSWORD_GRANT;
 import static com.didekin.common.oauth2.OauthConstant.REFRESH_TOKEN_GRANT;
 import static com.didekin.common.oauth2.OauthTokenHelper.BASIC_AND_SPACE;
 import static com.didekindroid.DidekindroidApp.getBaseURL;
-import static com.didekindroid.common.UiException.UiAction.LOGIN;
 
 /**
  * User: pedro@didekin
@@ -65,7 +62,7 @@ public enum Oauth2Service implements Oauth2EndPoints {
     {
         Log.d(TAG, "getPasswordUserToken()");
 
-        AccessToken token = null;
+        AccessToken token;
 
         try {
             token = getPasswordUserToken(
@@ -74,9 +71,7 @@ public enum Oauth2Service implements Oauth2EndPoints {
                     password,
                     PASSWORD_GRANT);
         } catch (InServiceException e) {
-            if (isMessageToLogin(e.getHttpMessage())) {
-                throw new UiException(LOGIN, R.string.user_without_signedUp, e);
-            }
+            throw new UiException(e);
         }
         return token;
     }
@@ -85,7 +80,7 @@ public enum Oauth2Service implements Oauth2EndPoints {
     {
         Log.d(TAG, "getRefreshUserToken()");
 
-        AccessToken token = null;
+        AccessToken token;
 
         try {
             token = getRefreshUserToken(
@@ -93,9 +88,7 @@ public enum Oauth2Service implements Oauth2EndPoints {
                     refreshTokenKey,
                     REFRESH_TOKEN_GRANT);
         } catch (InServiceException e) {
-            if (isMessageToLogin(e.getHttpMessage())) {
-                throw new UiException(LOGIN, R.string.user_without_signedUp, e);
-            }
+            throw new UiException(e);
         }
 
         return token;

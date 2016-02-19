@@ -40,6 +40,7 @@ public class IncidEditAc extends AppCompatActivity implements IncidUserDataSuppl
     View mAcView;
     IncidenciaUser mIncidenciaUser;
 
+    // TODO: hay que añadir datos sobre última actualización: cuándo, usuario_quién.
 
     @Override
     protected void onCreate(Bundle savedInstanceState)

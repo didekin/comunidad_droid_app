@@ -1,4 +1,4 @@
-package com.didekindroid.common.utils;
+package com.didekindroid.common.testutils;
 
 import android.app.Activity;
 import android.content.res.Resources;
@@ -11,8 +11,8 @@ import com.didekin.usuario.dominio.Usuario;
 import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.DidekindroidApp;
 import com.didekindroid.R;
-import com.didekindroid.common.UiException;
-import com.didekindroid.usuario.activity.utils.CleanUserEnum;
+import com.didekindroid.common.activity.UiException;
+import com.didekindroid.usuario.testutils.CleanUserEnum;
 
 import org.hamcrest.core.AllOf;
 
@@ -32,10 +32,10 @@ import static com.didekindroid.common.TokenHandler.TKhandler;
 import static com.didekindroid.common.utils.UIutils.updateIsRegistered;
 import static com.didekindroid.common.webservices.Oauth2Service.Oauth2;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.ADM;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_JUAN;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_JUAN2;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.USER_PEPE;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.makeUsuarioComunidad;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_JUAN;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_JUAN2;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_PEPE;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.makeUsuarioComunidad;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
@@ -100,7 +100,8 @@ public final class ActivityTestUtils {
         }
     }
 
-//    ============================= NAVIGATION ===================================
+
+    //    ============================= NAVIGATION ===================================
 
     public static void checkNavigateUp()
     {

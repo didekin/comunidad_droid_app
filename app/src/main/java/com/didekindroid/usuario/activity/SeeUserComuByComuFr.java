@@ -2,6 +2,7 @@ package com.didekindroid.usuario.activity;
 
 import android.app.ListFragment;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,7 +15,7 @@ import android.widget.TextView;
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
-import com.didekindroid.common.UiException;
+import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.utils.AppKeysForBundle;
 
 import java.util.List;
@@ -185,9 +186,7 @@ public class SeeUserComuByComuFr extends ListFragment {
             Log.d(TAG, "onPostExecute(); userComuList size = " + userComuList.size());
 
             if (uiException != null) {
-                Log.d(TAG, "onPostExecute(): uiException " + (uiException.getInServiceException() != null ?
-                        uiException.getInServiceException().getHttpMessage() : UiException.TOKEN_NULL));
-                uiException.getAction().doAction(getActivity(), uiException.getResourceId());
+                uiException.processMe(getActivity(), new Intent());
             } else {
                 mAdapter.addAll(userComuList);
                 setListAdapter(mAdapter);

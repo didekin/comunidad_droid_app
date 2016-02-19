@@ -1,6 +1,8 @@
 package com.didekindroid.common.suite;
 
 import com.didekindroid.common.TokenHandlerTest;
+import com.didekindroid.common.activity.UiExceptionTests_1;
+import com.didekindroid.common.activity.UiExceptionTests_2;
 import com.didekindroid.common.utils.AppKeysForBundleTest;
 import com.didekindroid.common.utils.IoHelperTest;
 import com.didekindroid.common.utils.UIutilsTest;
@@ -20,6 +22,8 @@ import org.junit.runners.Suite;
         IoHelperTest.class,
         Oauth2ServiceIfTest.class,
         TokenHandlerTest.class,
+        UiExceptionTests_1.class,
+        UiExceptionTests_2.class,
         UIutilsTest.class,
 })
 public class CommonSuite_1 {

@@ -17,7 +17,7 @@ import static org.junit.Assert.assertThat;
 public class ComunidadTest {
 
     @Test
-    public void testCompareTo() throws Exception
+    public void testCompareTo_1() throws Exception
     {
 
         Municipio municipio_1 = new Municipio((short) 23, new Provincia((short) 11));
@@ -58,7 +58,17 @@ public class ComunidadTest {
                 .sufijoNumero("b")
                 .municipio(municipio_2).build();
 
+        Comunidad comunidad_2B = new Comunidad.ComunidadBuilder().tipoVia("tipo1")
+                .nombreVia("nombreA")
+                .numero((short) 2)
+                .municipio(municipio_1).build();
+
+        // Sufijo null en comunidad2.
         assertThat(comunidad_1.compareTo(comunidad_2), is(1));
+        assertThat(comunidad_2.compareTo(comunidad_1), is(-1));
+        // Sufijo null en ambas comunidades.
+        assertThat(comunidad_2.compareTo(comunidad_2B), is(0));
+
         assertThat(comunidad_1.compareTo(comunidad_3), is(-1));
         assertThat(comunidad_1.compareTo(comunidad_4), is(-1));
         assertThat(comunidad_1.compareTo(comunidad_4), is(-1));

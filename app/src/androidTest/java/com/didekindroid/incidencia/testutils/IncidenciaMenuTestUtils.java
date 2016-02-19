@@ -1,4 +1,4 @@
-package com.didekindroid.incidencia.activity.utils;
+package com.didekindroid.incidencia.testutils;
 
 import android.app.Activity;
 

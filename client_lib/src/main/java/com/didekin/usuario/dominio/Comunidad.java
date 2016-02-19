@@ -176,7 +176,7 @@ public final class Comunidad implements Comparable<Comunidad>, Serializable {
     }
 
     @Override
-    public int compareTo(Comunidad o)
+    public int compareTo(Comunidad comunidadIn)
     {
         if (municipio == null || nombreVia == null || tipoVia == null) {
             throw new UnsupportedOperationException(COMUNIDAD_NOT_COMPARABLE.toString());
@@ -184,22 +184,24 @@ public final class Comunidad implements Comparable<Comunidad>, Serializable {
 
         int result;
 
-        if ((result = municipio.compareTo(o.getMunicipio())) != 0) {
+        if ((result = municipio.compareTo(comunidadIn.getMunicipio())) != 0) {
             return result;
         }
-        if ((result = nombreVia.compareToIgnoreCase(o.getNombreVia())) != 0) {
+        if ((result = nombreVia.compareToIgnoreCase(comunidadIn.getNombreVia())) != 0) {
             return result;
         }
-        if ((result = tipoVia.compareToIgnoreCase(o.getTipoVia())) != 0) {
+        if ((result = tipoVia.compareToIgnoreCase(comunidadIn.getTipoVia())) != 0) {
             return result;
         }
-        if (numero < o.getNumero()) {
+        if (numero < comunidadIn.getNumero()) {
             return -1;
         }
-        if (numero > o.getNumero()) {
+        if (numero > comunidadIn.getNumero()) {
             return 1;
         }
-        return sufijoNumero.compareToIgnoreCase(o.getSufijoNumero());
+        return sufijoNumero != null
+                ? sufijoNumero.compareToIgnoreCase(comunidadIn.getSufijoNumero())
+                : Boolean.compare(comunidadIn.getSufijoNumero() != null, true);
     }
 
     //    ==================== BUILDER ====================

@@ -10,7 +10,7 @@ import com.didekin.incidservice.dominio.Incidencia;
 import com.didekin.incidservice.dominio.IncidenciaUser;
 import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
-import com.didekindroid.common.UiException;
+import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.utils.UIutils;
 
 import org.junit.After;
@@ -20,6 +20,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -27,21 +29,24 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.PickerActions.setDate;
+import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.matcher.RootMatchers.isDialog;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.common.utils.ActivityTestUtils.checkNavigateUp;
-import static com.didekindroid.common.utils.ActivityTestUtils.checkToastInTest;
-import static com.didekindroid.common.utils.ActivityTestUtils.cleanOptions;
-import static com.didekindroid.common.utils.ActivityTestUtils.signUpAndUpdateTk;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkNavigateUp;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
+import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
+import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.utils.AppKeysForBundle.INCIDENCIA_USER_OBJECT;
-import static com.didekindroid.incidencia.IncidenciaTestUtils.doIncidencia;
+import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
-import static com.didekindroid.usuario.activity.utils.CleanUserEnum.CLEAN_JUAN;
-import static com.didekindroid.usuario.dominio.DomainDataUtils.COMU_REAL_JUAN;
+import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_PLAZUELA5_JUAN;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
+import static java.util.Calendar.*;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -53,7 +58,7 @@ import static org.junit.Assert.assertThat;
  * Time: 15:14
  */
 @RunWith(AndroidJUnit4.class)
-public class IncidResolucionRegAcTest {
+public class IncidResolucionRegAcTest_1 {
 
     IncidenciaUser incidJuanReal1;
     IncidResolucionRegAc mActivity;
@@ -76,7 +81,7 @@ public class IncidResolucionRegAcTest {
         protected Intent getActivityIntent()
         {
             try {
-                signUpAndUpdateTk(COMU_REAL_JUAN);
+                signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
                 UsuarioComunidad juanReal = ServOne.seeUserComusByUser().get(0);
                 incidJuanReal1 = new IncidenciaUser.IncidenciaUserBuilder(doIncidencia("Incidencia Real One", juanReal.getComunidad().getC_Id(), (short) 43))
                         .usuario(juanReal)
@@ -197,6 +202,53 @@ public class IncidResolucionRegAcTest {
                 R.string.incid_resolucion_descrip_msg);
     }
 
+    @Test
+    public void testOnEdit_5()
+    {
+        // Fecha inferior a fecha_alta incidencia.
+        Calendar wrongDate = new GregorianCalendar();
+        wrongDate.add(YEAR, -1);
+        assertThat(wrongDate.getTimeInMillis() < incidJuanReal1.getFechaAlta().getTime(), is(true));
+        setFecha(setDate(wrongDate.get(YEAR), wrongDate.get(MONTH), wrongDate.get(DAY_OF_MONTH)));
+
+        onView(withId(R.id.incid_resolucion_reg_ac_button)).perform(click());
+        checkToastInTest(R.string.error_validation_msg, mActivity,
+                R.string.incid_resolucion_fecha_prev_msg,
+                R.string.incid_resolucion_descrip_msg);
+    }
+
+    @Test
+    public void testOnRegister_1()
+    {
+        //Caso: OK
+
+        onView(withId(R.id.incid_resolucion_desc_ed)).perform(replaceText("desc_válida"));
+        onView(withId(R.id.incid_resolucion_coste_prev_ed)).perform(replaceText("1234,5"));
+        Calendar today = new GregorianCalendar();
+        today.add(YEAR, 1);
+        setFecha(setDate(today.get(YEAR), today.get(MONTH), today.get(DAY_OF_MONTH)));
+
+        onView(withId(R.id.incid_resolucion_reg_ac_button)).perform(click());
+//        onView(withId(R.id.incid_resolucion_reg_ac_layout)).check(matches(isDisplayed()));  TODO:
+        intended(hasExtra(INCIDENCIA_USER_OBJECT.extra, incidJuanReal1));
+    }
+
+    @Test
+    public void testOnRegister_2()
+    {
+        // Caso: resolución duplicada.
+
+
+
+        onView(withId(R.id.incid_resolucion_desc_ed)).perform(replaceText("desc_válida"));
+        onView(withId(R.id.incid_resolucion_coste_prev_ed)).perform(replaceText("1234,5"));
+        Calendar today = new GregorianCalendar();
+        today.add(YEAR, 1);
+        setFecha(setDate(today.get(YEAR), today.get(MONTH), today.get(DAY_OF_MONTH)));
+
+        onView(withId(R.id.incid_resolucion_reg_ac_button)).perform(click());
+    }
+
 //    ============================= HELPER METHODS ===========================
 
     private void setFecha(ViewAction viewAction)
@@ -205,5 +257,4 @@ public class IncidResolucionRegAcTest {
         onView(withClassName(is(DatePicker.class.getName()))).perform(viewAction);
         onView(withText(mActivity.getString(android.R.string.ok))).perform(click());
     }
-
 }

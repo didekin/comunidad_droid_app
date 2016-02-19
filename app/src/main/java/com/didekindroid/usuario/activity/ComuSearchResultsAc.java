@@ -12,7 +12,7 @@ import android.widget.Toast;
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
-import com.didekindroid.common.UiException;
+import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.utils.UIutils;
 import com.didekindroid.usuario.activity.utils.UserMenu;
 
@@ -186,9 +186,7 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
                     isUserComuNull);
 
             if (uiException != null) {
-                Log.d(TAG, ".UsuarioComunidadGetter.onPostExecute(), uiException " +
-                        (uiException.getInServiceException() != null ? uiException.getInServiceException().getHttpMessage() : UiException.TOKEN_NULL));
-                uiException.getAction().doAction(ComuSearchResultsAc.this, uiException.getResourceId());
+                uiException.processMe(ComuSearchResultsAc.this, new Intent());
             } else if (isUserComuNull) {
                 Intent intent = new Intent(ComuSearchResultsAc.this, RegUserComuAc.class);
                 intent.putExtra(COMUNIDAD_LIST_OBJECT.extra, comunidadSelected);
