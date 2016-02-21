@@ -162,7 +162,7 @@ public class IncidenciaUser implements Serializable{
             if (hasConditionOne(incidenciaUser) || hasConditionTwo(incidenciaUser)) {
                 throw new IllegalStateException(INCIDENCIA_USER_WRONG_INIT.toString());
             }
-            return new IncidenciaUser(this);
+            return incidenciaUser;
         }
 
         private boolean hasConditionOne(IncidenciaUser incidenciaUser)

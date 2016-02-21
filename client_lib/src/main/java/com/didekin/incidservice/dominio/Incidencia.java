@@ -20,6 +20,7 @@ public final class Incidencia implements Serializable {
 
     private final long incidenciaId;
     private final Comunidad comunidad;
+    private final String userName;
     private final String descripcion;
     private final AmbitoIncidencia ambitoIncidencia;
     private final Timestamp fechaAlta;
@@ -30,6 +31,7 @@ public final class Incidencia implements Serializable {
     {
         incidenciaId = incidenciaBuilder.incidenciaId;
         comunidad = incidenciaBuilder.comunidad;
+        userName = incidenciaBuilder.userName;
         descripcion = incidenciaBuilder.descripcion;
         ambitoIncidencia = incidenciaBuilder.ambitoIncidencia;
         fechaAlta = incidenciaBuilder.fechaAlta;
@@ -50,6 +52,11 @@ public final class Incidencia implements Serializable {
     public String getDescripcion()
     {
         return descripcion;
+    }
+
+    public String getUserName()
+    {
+        return userName;
     }
 
     public AmbitoIncidencia getAmbitoIncidencia()
@@ -111,6 +118,7 @@ public final class Incidencia implements Serializable {
 
         private long incidenciaId;
         private Comunidad comunidad;
+        private String userName;
         private String descripcion;
         private AmbitoIncidencia ambitoIncidencia;
         private Timestamp fechaAlta;
@@ -136,6 +144,12 @@ public final class Incidencia implements Serializable {
         public IncidenciaBuilder descripcion(String initValue)
         {
             descripcion = initValue;
+            return this;
+        }
+
+        public IncidenciaBuilder userName(String userName)
+        {
+            this.userName = userName;
             return this;
         }
 
@@ -168,6 +182,7 @@ public final class Incidencia implements Serializable {
             incidenciaId(incidencia.incidenciaId);
             comunidad(incidencia.comunidad);
             descripcion(incidencia.descripcion);
+            userName(incidencia.userName);
             ambitoIncid(incidencia.ambitoIncidencia);
             fechaAlta(incidencia.fechaAlta);
             fechaCierre(incidencia.fechaCierre);
@@ -200,6 +215,7 @@ public final class Incidencia implements Serializable {
         private final long incidenciaId;
         private final Comunidad comunidad;
         private final String descripcion;
+        private final String userName;
         private final AmbitoIncidencia ambitoIncidencia;
         private final Timestamp fechaAlta;
         private final Timestamp fechaCierre;
@@ -210,6 +226,7 @@ public final class Incidencia implements Serializable {
             incidenciaId = incidencia.incidenciaId;
             comunidad = incidencia.comunidad;
             descripcion = incidencia.descripcion;
+            userName = incidencia.userName;
             ambitoIncidencia = incidencia.ambitoIncidencia;
             fechaAlta = incidencia.fechaAlta;
             fechaCierre = incidencia.fechaCierre;
@@ -226,6 +243,7 @@ public final class Incidencia implements Serializable {
                     .incidenciaId(incidenciaId)
                     .comunidad(comunidad)
                     .descripcion(descripcion)
+                    .userName(userName)
                     .ambitoIncid(ambitoIncidencia)
                     .fechaAlta(fechaAlta)
                     .fechaCierre(fechaCierre)
