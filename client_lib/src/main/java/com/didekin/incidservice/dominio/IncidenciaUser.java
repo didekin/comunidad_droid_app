@@ -20,7 +20,7 @@ public class IncidenciaUser implements Serializable{
 
     private final Incidencia incidencia;
     private final UsuarioComunidad usuario;
-    private final short importancia;
+    private final short importancia;     //TODO: eliminar.
 
     /**
      * A flag to signal that ...
@@ -31,7 +31,7 @@ public class IncidenciaUser implements Serializable{
      * True if both conditions are met.
      */
     private final boolean isYetIniciador;
-    private final Timestamp fechaAlta;
+    private final Timestamp fechaAlta; // TODO: eliminar.
 
     public IncidenciaUser(IncidenciaUserBuilder builder) throws IllegalStateException
     {
