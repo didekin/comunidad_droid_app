@@ -19,6 +19,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekin.common.exception.DidekinExceptionMsg.INCIDENCIA_COMMENT_WRONG_INIT;
+import static com.didekin.common.exception.DidekinExceptionMsg.INCIDENCIA_NOT_REGISTERED;
 import static com.didekin.common.exception.DidekinExceptionMsg.RESOLUCION_DUPLICATE;
 import static com.didekin.common.exception.DidekinExceptionMsg.USER_DATA_NOT_MODIFIED;
 import static com.didekindroid.common.TokenHandler.TKhandler;
@@ -40,7 +41,7 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class UiExceptionTests_2 extends UiExceptionAbstractTest {
 
-//    IncidenciaUser incidJuanReal1;
+    //    IncidenciaUser incidJuanReal1;
     private MockActivity mActivity;
 
     @Rule
@@ -58,12 +59,12 @@ public class UiExceptionTests_2 extends UiExceptionAbstractTest {
             try {
                 signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
                 /*UsuarioComunidad juanReal = ServOne.seeUserComusByUser().get(0);
-                incidJuanReal1 = new IncidenciaUser.IncidenciaUserBuilder(doIncidencia("Incidencia Real One", juanReal.getComunidad().getC_Id(), (short) 43))
-                        .usuario(juanReal)
+                incidJuanReal1 = new IncidenciaUser.IncidenciaUserComuBuilder(doIncidencia("Incidencia Real One", juanReal.getComunidad().getC_Id(), (short) 43))
+                        .userComu(juanReal)
                         .importancia((short) 3).build();
                 IncidenciaServ.regIncidenciaUser(incidJuanReal1);
-                Incidencia incidenciaDb = IncidenciaServ.incidSeeByComu(juanReal.getComunidad().getC_Id()).get(0).getIncidencia();
-                incidJuanReal1 = IncidenciaServ.getIncidenciaUserWithPowers(incidenciaDb.getIncidenciaId());*/
+                Incidencia incidenciaDb = IncidenciaServ.seeIncidsOpenByComu(juanReal.getComunidad().getC_Id()).get(0).getIncidencia();
+                incidJuanReal1 = IncidenciaServ.getIncidenciaUserByIncid(incidenciaDb.getIncidenciaId());*/
             } catch (UiException e) {
                 e.printStackTrace();
             }
@@ -91,6 +92,25 @@ public class UiExceptionTests_2 extends UiExceptionAbstractTest {
 
     //  ===========================================================================
 
+    @Test
+    public void testIncidReg()
+    {
+        // Preconditions.
+        assertThat(isRegisteredUser(mActivity), is(true));
+        assertThat(TKhandler.getTokensCache(), notNullValue());
+
+        final UiException ue = getUiException(INCIDENCIA_NOT_REGISTERED);
+        mActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                ue.processMe(mActivity, new Intent());
+            }
+        });
+
+        checkToastInTest(R.string.incidencia_not_registered, mActivity);
+        onView(withId(R.id.incid_reg_ac_layout)).check(matches(isDisplayed()));
+    }
 
     @Test
     public void testIncidSeeByComu() throws Exception
@@ -125,8 +145,8 @@ public class UiExceptionTests_2 extends UiExceptionAbstractTest {
             }
         });
         // TODO: necesita intent. Añadirlo cuando lo haga en la activity.
-        checkToastInTest(R.string.resolucion_duplicada, mActivity);
-        onView(withId(R.id.incid_resolucion_edit_ac_layout)).check(matches(isDisplayed()));
+       /* checkToastInTest(R.string.resolucion_duplicada, mActivity);
+        onView(withId(R.id.incid_resolucion_edit_ac_layout)).check(matches(isDisplayed()));*/
     }
 
     @Test

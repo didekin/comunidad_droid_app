@@ -21,6 +21,7 @@ public final class OauthConstant {
     /*Params used by the authorization server*/
     public static final String USER_PARAM = "username";
     public static final String PSWD_PARAM = "password";
+    public static final String GCM_TOKEN_PARAM = "gcmtoken";
     public static final String REFRESH_TK_PARAM = "refresh_token";
     public static final String CLIENT_ID_PARAM = "client_id";
     public static final String GRANT_TYPE_PARAM = "grant_type";

@@ -98,7 +98,7 @@ public final class UsuarioComunidad implements Comparable<UsuarioComunidad>, Ser
         return usuario;
     }
 
-    public boolean hasRoleAdministrador()
+    public boolean hasAdministradorAuthority()
     {
         String[] rolesArray = Pattern.compile(",").split(roles);
         for (String rol : rolesArray) {
@@ -128,32 +128,18 @@ public final class UsuarioComunidad implements Comparable<UsuarioComunidad>, Ser
     @Override
     public boolean equals(Object o)
     {
-        if (o != null && this == o) {
-            return true;
-        }
+        if (this == o) return true;
+        if (!(o instanceof UsuarioComunidad)) return false;
 
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        UsuarioComunidad that = (UsuarioComunidad) o;
 
-        UsuarioComunidad userComu = (UsuarioComunidad) o;
-
-        return usuario.equals(userComu.usuario)
-                && comunidad.equals(userComu.comunidad)
-                && !(portal != null ? !portal.equals(userComu.portal) : userComu.portal != null)
-                && !(escalera != null ? !escalera.equals(userComu.escalera) : userComu.escalera != null)
-                && !(planta != null ? !planta.equals(userComu.planta) : userComu.planta != null)
-                && !(puerta != null ? !puerta.equals(userComu.puerta) : userComu.puerta != null);
+        return usuario.equals(that.usuario) && comunidad.equals(that.comunidad);
     }
 
     @Override
     public int hashCode()
     {
-        int result = portal != null ? portal.hashCode() : 0;
-        result = 31 * result + (escalera != null ? escalera.hashCode() : 0);
-        result = 31 * result + (planta != null ? planta.hashCode() : 0);
-        result = 31 * result + (puerta != null ? puerta.hashCode() : 0);
-        result = 31 * result + usuario.hashCode();
+        int result = usuario.hashCode();
         result = 31 * result + comunidad.hashCode();
         return result;
     }

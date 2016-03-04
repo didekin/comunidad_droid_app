@@ -57,6 +57,7 @@ import static org.junit.Assert.assertThat;
  * Date: 23/11/15
  * Time: 18:45
  */
+/* Tests de presentación, navegación y notificaciones GCM. */
 @RunWith(AndroidJUnit4.class)
 public class IncidSeeByComuAcTest_1 {
 

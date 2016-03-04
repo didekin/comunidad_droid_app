@@ -48,7 +48,7 @@ import static com.google.common.base.Preconditions.checkState;
  * Preconditions:
  * 1. Registered user.
  * 2. An intent with a UsuarioComunidad extra, with:
- * -- usuario: id, alias, userName.
+ * -- userComu: id, alias, userName.
  * -- comunidad: id, tipoVia, nombreVia, numero, sufijoNumero, fechaAlta,
  * ---- municipio: codInProvincia, nombre.
  * ------ provincia: provinciaId, nombre.

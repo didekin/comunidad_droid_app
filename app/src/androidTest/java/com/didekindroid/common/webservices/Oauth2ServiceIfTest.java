@@ -71,7 +71,7 @@ public class Oauth2ServiceIfTest {
     {
         whatClean = CLEAN_JUAN;
 
-        //Inserta usuario, comunidad, usuariocomunidad y actuliza tokenCache.
+        //Inserta userComu, comunidad, usuariocomunidad y actuliza tokenCache.
         signUpAndUpdateTk(COMU_REAL_JUAN);
 
         AccessToken token = Oauth2.getPasswordUserToken(USER_JUAN.getUserName(), USER_JUAN.getPassword());
@@ -83,7 +83,7 @@ public class Oauth2ServiceIfTest {
     @Test
     public void testGetPasswordUserToken_2() throws Exception
     {
-        //Inserta usuario, comunidad, usuariocomunidad.
+        //Inserta userComu, comunidad, usuariocomunidad.
         ServOne.regComuAndUserAndUserComu(COMU_REAL_PEPE);
         updateSecurityData(USER_PEPE.getUserName(), USER_PEPE.getPassword());
         // Envía correo.
@@ -113,7 +113,7 @@ public class Oauth2ServiceIfTest {
     {
         whatClean = CLEAN_PEPE;
 
-        //Inserta usuario, comunidad, usuariocomunidad y actuliza tokenCache.
+        //Inserta userComu, comunidad, usuariocomunidad y actuliza tokenCache.
         signUpAndUpdateTk(COMU_REAL_PEPE);
         AccessToken tokenOld = TKhandler.getAccessTokenInCache();
         String accessTkOldValue = tokenOld != null ? tokenOld.getValue() : null;

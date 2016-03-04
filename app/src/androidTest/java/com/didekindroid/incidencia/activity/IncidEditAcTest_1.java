@@ -4,8 +4,8 @@ import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.didekin.incidservice.dominio.IncidImportancia;
 import com.didekin.incidservice.dominio.Incidencia;
-import com.didekin.incidservice.dominio.IncidenciaUser;
 import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
@@ -32,23 +32,23 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.CursorMatchers.withRowString;
 import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
-import static com.didekindroid.common.utils.AppKeysForBundle.INCIDENCIA_USER_OBJECT;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
-import static com.didekindroid.incidencia.repository.IncidenciaDataDbHelperTest.DB_PATH;
-import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
-import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
+import static com.didekindroid.common.utils.AppKeysForBundle.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.repository.IncidenciaDataDbHelperTest.DB_PATH;
+import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
+import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
+import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_JUAN;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
 /**
@@ -58,14 +58,14 @@ import static org.hamcrest.CoreMatchers.notNullValue;
  */
 
 /**
- * Tests genéricos sobre aspecto y tests funcioales para un usuario con permisos para modificar y borrar una incidencia.
+ * Tests genéricos sobre aspecto y tests funcioales para un userComu con permisos para modificar, pero NO borrar una incidencia.
  */
 @RunWith(AndroidJUnit4.class)
 public class IncidEditAcTest_1 {
 
     IncidEditAc mActivity;
     UsuarioComunidad juanReal;
-    IncidenciaUser incidJuanReal1;
+    IncidImportancia incidJuanReal1;
     private IncidenciaDataDbHelper dBHelper;
 
     @Rule
@@ -79,7 +79,7 @@ public class IncidEditAcTest_1 {
 
         /**
          * Preconditions:
-         * 1. An fIncidenciaUser with powers to erase and modify is received.
+         * 1. An fIncidenciaUser with powers to modify, but not to erase, is received.
          * */
         @Override
         protected Intent getActivityIntent()
@@ -87,17 +87,18 @@ public class IncidEditAcTest_1 {
             try {
                 signUpAndUpdateTk(COMU_REAL_JUAN);
                 juanReal = ServOne.seeUserComusByUser().get(0);
-                incidJuanReal1 = new IncidenciaUser.IncidenciaUserBuilder(doIncidencia("Incidencia Real One", juanReal.getComunidad().getC_Id(), (short) 43))
-                        .usuario(juanReal)
+                incidJuanReal1 = new IncidImportancia.IncidImportanciaBuilder(
+                        doIncidencia(juanReal.getUsuario().getUserName(), "Incidencia Real One", juanReal.getComunidad().getC_Id(), (short) 43))
+                        .usuarioComunidad(juanReal)
                         .importancia((short) 3).build();
-                IncidenciaServ.regIncidenciaUser(incidJuanReal1);
-                Incidencia incidenciaDb = IncidenciaServ.incidSeeByComu(juanReal.getComunidad().getC_Id()).get(0).getIncidencia();
-                incidJuanReal1 = IncidenciaServ.getIncidenciaUserWithPowers(incidenciaDb.getIncidenciaId());
+                IncidenciaServ.regIncidImportancia(incidJuanReal1);
+                Incidencia incidenciaDb = IncidenciaServ.seeIncidsOpenByComu(juanReal.getComunidad().getC_Id()).get(0).getIncidencia();
+                incidJuanReal1 = IncidenciaServ.seeIncidImportancia(incidenciaDb.getIncidenciaId());
             } catch (UiException e) {
                 e.printStackTrace();
             }
             Intent intent = new Intent();
-            intent.putExtra(INCIDENCIA_USER_OBJECT.extra, incidJuanReal1);
+            intent.putExtra(INCID_IMPORTANCIA_OBJECT.extra, incidJuanReal1);
             return intent;
         }
     };
@@ -141,7 +142,6 @@ public class IncidEditAcTest_1 {
         onView(withId(R.id.incid_reg_ambito_spinner)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_reg_importancia_spinner)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_edit_fr_modif_button)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_edit_max_fr_borrar_button)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_comunidad_txt)).check(matches(isDisplayed()));
 
         ActivityTestUtils.checkNavigateUp();
@@ -204,10 +204,9 @@ public class IncidEditAcTest_1 {
     @Test
     public void testDeleteIncidencia_1()
     {
-        // Probamos con una incidencia no válida: la borra, no obstante.
-        onView(withId(R.id.incid_reg_desc_ed)).perform(replaceText("descripcion = not valid"));
-        onView(withId(R.id.incid_edit_max_fr_borrar_button)).perform(scrollTo(), click());
-        onView(withId(R.id.incid_see_by_comu_ac)).check(matches(isDisplayed()));
+        // Usuario iniciador sin autoridad adm: la pantalla no presenta el botón de borrar.
+        onView(withId(R.id.incid_edit_fr_borrar_txt)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.incid_edit_max_fr_borrar_button)).check(matches(not(isDisplayed())));
     }
 }
 

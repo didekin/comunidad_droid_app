@@ -109,7 +109,7 @@ public class ComuSearchResultsAcTest_slow {
 
         //Usuario no registrado. La búsqueda devuelve una comunidad.
         regTwoUserComuSameUser(makeListTwoUserComu());
-        // Borro los datos del usuario.
+        // Borro los datos del userComu.
         cleanWithTkhandler();
 
         activity = mActivityRule.launchActivity(intent);
@@ -149,7 +149,7 @@ public class ComuSearchResultsAcTest_slow {
 
         //Usuario no registrado. La búsqueda devuelve una comunidad.
         regTwoUserComuSameUser(makeListTwoUserComu());
-        // Borro los datos del usuario.
+        // Borro los datos del userComu.
         cleanWithTkhandler();
         activity = mActivityRule.launchActivity(intent);
         assertThat(isRegisteredUser(activity), is(false));

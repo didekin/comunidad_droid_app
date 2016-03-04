@@ -167,7 +167,7 @@ public class ComuSearchResultsAcTest_1 {
     @Test
     public void testSearchComunidades_3() throws InterruptedException, UiException
     {
-        // No existe la comunidad en DB. El usuario no está registrado.
+        // No existe la comunidad en DB. El userComu no está registrado.
         assertThat(TKhandler.getAccessTokenInCache(), nullValue());
 
         // Criterio de búsqueda.
@@ -192,7 +192,7 @@ public class ComuSearchResultsAcTest_1 {
     {
         whatClean = CLEAN_JUAN;
 
-        // No existe la comunidad en DB. El usuario está registrado.
+        // No existe la comunidad en DB. El userComu está registrado.
 
         signUpAndUpdateTk(UsuarioTestUtils.COMU_REAL_JUAN);
         // Criterio de búsqueda.
@@ -222,7 +222,7 @@ public class ComuSearchResultsAcTest_1 {
         //Usuario no registrado. La búsqueda devuelve una comunidad.
 
         regTwoUserComuSameUser(makeListTwoUserComu());
-        // Borro los datos del usuario.
+        // Borro los datos del userComu.
         cleanWithTkhandler();
 
         activity = mActivityRule.launchActivity(intent);
@@ -270,7 +270,7 @@ public class ComuSearchResultsAcTest_1 {
         regTwoUserComuSameUser(makeListTwoUserComu());
         cleanWithTkhandler();
 
-        // Insertamos al usuario que hace la búsqueda.
+        // Insertamos al userComu que hace la búsqueda.
         Comunidad comunidadIn = makeComunidad("Calle", "de la Torre", (short) 115, "",
                 new Municipio((short) 22, new Provincia((short) 2)));
         Usuario usuarioIn = makeUsuario("newuser@jnew.us", "newuser", "psw_newuser");

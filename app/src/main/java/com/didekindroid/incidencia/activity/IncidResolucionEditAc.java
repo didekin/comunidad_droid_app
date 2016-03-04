@@ -25,5 +25,5 @@ public class IncidResolucionEditAc extends AppCompatActivity {
     }
 
     // TODO: cuando el coste sea cero, poner un String vacío en pantalla.
-    // TODO: hay que mostrar 'Registro: fecha_alta -- usuario que da el alta'.
+    // TODO: hay que mostrar 'Registro: fecha_alta -- userComu que da el alta'.
 }

@@ -131,7 +131,7 @@ public class IncidResolucionRegAcFragment extends Fragment implements OnDateSetL
             String fechaPrevistaVw = fechaView.getText().toString();
 
             if (fechaPrevistaVw.equals(getResources().getString(R.string.incid_resolucion_fecha_default_txt))
-                    || fechaPrevista < mActivitySupplier.getIncidenciaUser().getIncidencia().getFechaAlta().getTime()) {
+                    || fechaPrevista < mActivitySupplier.getIncidImportancia().getIncidencia().getFechaAlta().getTime()) {
                 errorMsg.append(getResources().getString(R.string.incid_resolucion_fecha_prev_msg)).append(LINE_BREAK.getRegexp());
                 Log.d(TAG, "validateFechaPrev(): false");
                 return false;

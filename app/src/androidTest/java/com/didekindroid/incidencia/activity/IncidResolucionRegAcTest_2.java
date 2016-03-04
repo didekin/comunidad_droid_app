@@ -6,8 +6,8 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.widget.DatePicker;
 
+import com.didekin.incidservice.dominio.IncidImportancia;
 import com.didekin.incidservice.dominio.Incidencia;
-import com.didekin.incidservice.dominio.IncidenciaUser;
 import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
@@ -34,7 +34,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
-import static com.didekindroid.common.utils.AppKeysForBundle.INCIDENCIA_USER_OBJECT;
+import static com.didekindroid.common.utils.AppKeysForBundle.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
@@ -53,7 +53,7 @@ import static org.hamcrest.CoreMatchers.is;
 @RunWith(AndroidJUnit4.class)
 public class IncidResolucionRegAcTest_2 {
 
-    IncidenciaUser incidJuanReal1;
+    IncidImportancia incidJuanReal1;
     IncidResolucionRegAc mActivity;
     IncidResolucionRegAcFragment mFragment;
 
@@ -76,17 +76,18 @@ public class IncidResolucionRegAcTest_2 {
             try {
                 signUpAndUpdateTk(COMU_REAL_JUAN);
                 UsuarioComunidad juanReal = ServOne.seeUserComusByUser().get(0);
-                incidJuanReal1 = new IncidenciaUser.IncidenciaUserBuilder(doIncidencia("Incidencia Real One", juanReal.getComunidad().getC_Id(), (short) 43))
-                        .usuario(juanReal)
+                incidJuanReal1 = new IncidImportancia.IncidImportanciaBuilder(
+                        doIncidencia(juanReal.getUsuario().getUserName(), "Incidencia Real One", juanReal.getComunidad().getC_Id(), (short) 43))
+                        .usuarioComunidad(juanReal)
                         .importancia((short) 3).build();
-                IncidenciaServ.regIncidenciaUser(incidJuanReal1);
-                Incidencia incidenciaDb = IncidenciaServ.incidSeeByComu(juanReal.getComunidad().getC_Id()).get(0).getIncidencia();
-                incidJuanReal1 = IncidenciaServ.getIncidenciaUserWithPowers(incidenciaDb.getIncidenciaId());
+                IncidenciaServ.regIncidImportancia(incidJuanReal1);
+                Incidencia incidenciaDb = IncidenciaServ.seeIncidsOpenByComu(juanReal.getComunidad().getC_Id()).get(0).getIncidencia();
+                incidJuanReal1 = IncidenciaServ.seeIncidImportancia(incidenciaDb.getIncidenciaId());
             } catch (UiException e) {
                 e.printStackTrace();
             }
             Intent intent = new Intent();
-            intent.putExtra(INCIDENCIA_USER_OBJECT.extra, incidJuanReal1);
+            intent.putExtra(INCID_IMPORTANCIA_OBJECT.extra, incidJuanReal1);
             return intent;
         }
     };
@@ -114,7 +115,7 @@ public class IncidResolucionRegAcTest_2 {
     @Test
     public void testOnRegister_2()
     {
-        // CASO: usuario no autorizado a registrar una resolución.
+        // CASO: userComu no autorizado a registrar una resolución.
 
         onView(withId(R.id.incid_resolucion_desc_ed)).perform(replaceText("desc_válida"));
         onView(withId(R.id.incid_resolucion_coste_prev_ed)).perform(replaceText("1234,5"));

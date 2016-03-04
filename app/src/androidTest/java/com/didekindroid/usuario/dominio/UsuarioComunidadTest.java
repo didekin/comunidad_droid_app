@@ -82,25 +82,25 @@ public class UsuarioComunidadTest {
                 .portal("portalA")
                 .roles(Rol.INQUILINO.function)
                 .build();
-        assertThat(usuarioComunidad_1.hasRoleAdministrador(), is(false));
+        assertThat(usuarioComunidad_1.hasAdministradorAuthority(), is(false));
 
         usuarioComunidad_1 = new UsuarioComunidad.UserComuBuilder(comunidad, usuario)
                 .portal("portal B")
                 .roles(Rol.INQUILINO.function.concat(",").concat(Rol.ADMINISTRADOR.function))
                 .build();
-        assertThat(usuarioComunidad_1.hasRoleAdministrador(), is(true));
+        assertThat(usuarioComunidad_1.hasAdministradorAuthority(), is(true));
 
         usuarioComunidad_1 = new UsuarioComunidad.UserComuBuilder(comunidad, usuario)
                 .portal("portal B")
                 .roles(Rol.PROPIETARIO.function)
                 .build();
-        assertThat(usuarioComunidad_1.hasRoleAdministrador(), is(false));
+        assertThat(usuarioComunidad_1.hasAdministradorAuthority(), is(false));
 
         usuarioComunidad_1 = new UsuarioComunidad.UserComuBuilder(comunidad, usuario)
                 .portal("portal B")
                 .roles(Rol.INQUILINO.function.concat(",").concat(Rol.PROPIETARIO.function))
                 .build();
-        assertThat(usuarioComunidad_1.hasRoleAdministrador(), is(false));
+        assertThat(usuarioComunidad_1.hasAdministradorAuthority(), is(false));
 
         usuarioComunidad_1 = new UsuarioComunidad.UserComuBuilder(comunidad, usuario)
                 .portal("portal B")
@@ -108,6 +108,6 @@ public class UsuarioComunidadTest {
                         .concat(Rol.PRESIDENTE.function).concat(",")
                         .concat(Rol.ADMINISTRADOR.function))
                 .build();
-        assertThat(usuarioComunidad_1.hasRoleAdministrador(), is(true));
+        assertThat(usuarioComunidad_1.hasAdministradorAuthority(), is(true));
     }
 }

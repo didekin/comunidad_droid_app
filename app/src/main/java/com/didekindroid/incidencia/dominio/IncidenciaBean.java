@@ -6,13 +6,11 @@ import android.widget.EditText;
 
 import com.didekin.incidservice.dominio.AmbitoIncidencia;
 import com.didekin.incidservice.dominio.Incidencia;
-import com.didekin.incidservice.dominio.IncidenciaUser;
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekindroid.R;
 
 import static com.didekin.common.dominio.DataPatterns.LINE_BREAK;
 import static com.didekin.incidservice.dominio.IncidDataPatterns.INCID_DESC;
-import static com.didekindroid.DidekindroidApp.getContext;
 import static com.didekindroid.incidencia.repository.IncidenciaDataDb.AmbitoIncidencia.AMBITO_INCID_COUNT;
 
 /**
@@ -22,19 +20,12 @@ import static com.didekindroid.incidencia.repository.IncidenciaDataDb.AmbitoInci
  */
 public class IncidenciaBean {
 
-    private short importanciaIncid;
     private short codAmbitoIncid;
     private String descripcion;
     private long comunidadId;
 
     public IncidenciaBean()
     {
-    }
-
-    public IncidenciaBean setImportanciaIncid(short importanciaIncid)
-    {
-        this.importanciaIncid = importanciaIncid;
-        return this;
     }
 
     public IncidenciaBean setCodAmbitoIncid(short codAmbitoIncid)
@@ -55,34 +46,24 @@ public class IncidenciaBean {
         return this;
     }
 
-    public short getImportanciaIncid()
-    {
-        return importanciaIncid;
-    }
-
-    public IncidenciaUser makeIncidenciaUser(final View mFragmentView, StringBuilder errorMsg)
+    public Incidencia makeIncidencia(final View mFragmentView, StringBuilder errorMsg, Resources resources)
     {
         setDescripcion(((EditText) mFragmentView.findViewById(R.id.incid_reg_desc_ed)).getText().toString());
 
-        if (validateBean(errorMsg)) {
-            Incidencia incidencia = new Incidencia.IncidenciaBuilder()
+        if (validateBean(errorMsg, resources)) {
+            return new Incidencia.IncidenciaBuilder()
                     .comunidad(new Comunidad.ComunidadBuilder().c_id(comunidadId).build())
                     .ambitoIncid(new AmbitoIncidencia(codAmbitoIncid))
                     .descripcion(descripcion)
-                    .build();
-            return new IncidenciaUser.IncidenciaUserBuilder(incidencia)
-                    .importancia(importanciaIncid)
                     .build();
         } else {
             return null;
         }
     }
 
-    boolean validateBean(StringBuilder errorMsg)
+    boolean validateBean(StringBuilder errorMsg, Resources resources)
     {
-        Resources resources = getContext().getResources();
-        return validateImportancia(errorMsg, resources)
-                & validateCodAmbito(errorMsg, resources)
+        return validateCodAmbito(errorMsg, resources)
                 & validateDescripcion(errorMsg, resources)
                 & validateComunidadId(errorMsg, resources);
     }
@@ -105,18 +86,9 @@ public class IncidenciaBean {
         return true;
     }
 
-    public boolean validateImportancia(StringBuilder errorMsg, Resources resources)
+    boolean validateComunidadId(StringBuilder errorMsg, Resources resources)
     {
-        short upperBound = (short) resources.getStringArray(R.array.IncidImportanciaArray).length;
-        if (!(importanciaIncid > 0 && importanciaIncid < upperBound)) {
-            errorMsg.append(resources.getString(R.string.incid_reg_importancia)).append(LINE_BREAK.getRegexp());
-            return false;
-        }
-        return true;
-    }
-
-    boolean validateComunidadId(StringBuilder errorMsg, Resources resources){
-        if (comunidadId <= 0){
+        if (comunidadId <= 0) {
             errorMsg.append(resources.getString(R.string.reg_usercomu_comunidad_null)).append(LINE_BREAK.getRegexp());
             return false;
         }

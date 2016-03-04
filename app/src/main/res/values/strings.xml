@@ -22,6 +22,7 @@
     <!--******************************************************************************-->
     <!-- ============================ MESSAGES ============================== -->
     <string name="no_incidencia_by_user">No existen incidencias</string>
+    <string name="incidencia_not_registered">Intenta nuevamente registrar la incidencia.</string>
     <string name="incidencia_wrong_init">No podemos continuar. Verifica que sigue abierta la incidencia.</string>
     <string name="resolucion_duplicada">Ya existe resolución para esta incidencia</string>
     <string name="user_without_powers">Haz login y accede nuevamente a la incidencia.</string>

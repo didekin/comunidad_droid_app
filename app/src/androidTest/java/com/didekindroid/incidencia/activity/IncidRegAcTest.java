@@ -31,7 +31,6 @@ import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.CursorMatchers.withRowString;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
@@ -173,8 +172,8 @@ public class IncidRegAcTest {
         onView(withId(R.id.incid_reg_desc_ed)).perform(typeText("descripcion = not valid"));
         IncidenciaBean incidenciaBean = new IncidenciaBean();
 
-        assertThat(incidenciaBean.makeIncidenciaUser(mActivity.mRegAcFragment.mFragmentView,
-                getErrorMsgBuilder(mActivity)), nullValue());
+        assertThat(incidenciaBean.makeIncidencia(mActivity.mRegAcFragment.mFragmentView,
+                getErrorMsgBuilder(mActivity), mActivity.getResources()), nullValue());
 
         onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
         checkToastInTest(R.string.error_validation_msg, mActivity, R.string.incid_reg_descripcion);
@@ -196,7 +195,7 @@ public class IncidRegAcTest {
         onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
 
         onView(withId(R.id.incid_see_by_comu_ac)).check(matches(isDisplayed()));
-        List<IncidenciaUser> incidenciasUser = IncidenciaServ.incidSeeByComu(comunidadByDefault.getC_Id());
+        List<IncidenciaUser> incidenciasUser = IncidenciaServ.seeIncidsOpenByComu(comunidadByDefault.getC_Id());
         assertThat(incidenciasUser.size(), is(1));
         assertThat(incidenciasUser.get(0).getIncidencia().getComunidad(), is(comunidadByDefault));
     }
@@ -225,7 +224,7 @@ public class IncidRegAcTest {
         onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
 
         onView(withId(R.id.incid_see_by_comu_ac)).check(matches(isDisplayed()));
-        List<IncidenciaUser> incidencias = IncidenciaServ.incidSeeByComu(comunidadFuente.getC_Id());
+        List<IncidenciaUser> incidencias = IncidenciaServ.seeIncidsOpenByComu(comunidadFuente.getC_Id());
         assertThat(incidencias.size(), is(1));
         assertThat(incidencias.get(0).getIncidencia().getDescripcion(), is("Incidencia La Fuente"));
     }

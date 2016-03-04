@@ -6,8 +6,8 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.widget.DatePicker;
 
+import com.didekin.incidservice.dominio.IncidImportancia;
 import com.didekin.incidservice.dominio.Incidencia;
-import com.didekin.incidservice.dominio.IncidenciaUser;
 import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
@@ -40,13 +40,15 @@ import static com.didekindroid.common.testutils.ActivityTestUtils.checkNavigateU
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
-import static com.didekindroid.common.utils.AppKeysForBundle.INCIDENCIA_USER_OBJECT;
+import static com.didekindroid.common.utils.AppKeysForBundle.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_PLAZUELA5_JUAN;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
-import static java.util.Calendar.*;
+import static java.util.Calendar.DAY_OF_MONTH;
+import static java.util.Calendar.MONTH;
+import static java.util.Calendar.YEAR;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -60,7 +62,7 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class IncidResolucionRegAcTest_1 {
 
-    IncidenciaUser incidJuanReal1;
+    IncidImportancia incidJuanReal1;
     IncidResolucionRegAc mActivity;
     IncidResolucionRegAcFragment mFragment;
 
@@ -83,17 +85,18 @@ public class IncidResolucionRegAcTest_1 {
             try {
                 signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
                 UsuarioComunidad juanReal = ServOne.seeUserComusByUser().get(0);
-                incidJuanReal1 = new IncidenciaUser.IncidenciaUserBuilder(doIncidencia("Incidencia Real One", juanReal.getComunidad().getC_Id(), (short) 43))
-                        .usuario(juanReal)
+                incidJuanReal1 = new IncidImportancia.IncidImportanciaBuilder(
+                        doIncidencia(juanReal.getUsuario().getUserName(), "Incidencia Real One", juanReal.getComunidad().getC_Id(), (short) 43))
+                        .usuarioComunidad(juanReal)
                         .importancia((short) 3).build();
-                IncidenciaServ.regIncidenciaUser(incidJuanReal1);
-                Incidencia incidenciaDb = IncidenciaServ.incidSeeByComu(juanReal.getComunidad().getC_Id()).get(0).getIncidencia();
-                incidJuanReal1 = IncidenciaServ.getIncidenciaUserWithPowers(incidenciaDb.getIncidenciaId());
+                IncidenciaServ.regIncidImportancia(incidJuanReal1);
+                Incidencia incidenciaDb = IncidenciaServ.seeIncidsOpenByComu(juanReal.getComunidad().getC_Id()).get(0).getIncidencia();
+                incidJuanReal1 = IncidenciaServ.seeIncidImportancia(incidenciaDb.getIncidenciaId());
             } catch (UiException e) {
                 e.printStackTrace();
             }
             Intent intent = new Intent();
-            intent.putExtra(INCIDENCIA_USER_OBJECT.extra, incidJuanReal1);
+            intent.putExtra(INCID_IMPORTANCIA_OBJECT.extra, incidJuanReal1);
             return intent;
         }
     };
@@ -230,7 +233,7 @@ public class IncidResolucionRegAcTest_1 {
 
         onView(withId(R.id.incid_resolucion_reg_ac_button)).perform(click());
 //        onView(withId(R.id.incid_resolucion_reg_ac_layout)).check(matches(isDisplayed()));  TODO:
-        intended(hasExtra(INCIDENCIA_USER_OBJECT.extra, incidJuanReal1));
+        intended(hasExtra(INCID_IMPORTANCIA_OBJECT.extra, incidJuanReal1));
     }
 
     @Test

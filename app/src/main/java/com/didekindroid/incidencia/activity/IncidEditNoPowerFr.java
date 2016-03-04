@@ -13,12 +13,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.didekin.incidservice.dominio.IncidenciaUser;
+import com.didekin.incidservice.dominio.IncidImportancia;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.utils.ConnectionUtils;
-import com.didekindroid.common.utils.UIutils;
-import com.didekindroid.incidencia.dominio.IncidenciaBean;
+import com.didekindroid.incidencia.dominio.IncidImportanciaBean;
 import com.didekindroid.incidencia.repository.IncidenciaDataDbHelper;
 
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
@@ -39,10 +38,9 @@ public class IncidEditNoPowerFr extends Fragment implements ImportanciaSpinnerSe
     private static final String TAG = IncidEditNoPowerFr.class.getCanonicalName();
 
     View fFragmentView;
-    IncidenciaUser fIncidenciaUser;
+    IncidImportancia mIncidImportancia;
     Spinner mImportanciaSpinner;
-    IncidenciaBean mIncidenciaBean;
-    boolean mIsRegUserInIncidencia;
+    IncidImportanciaBean mIncidImportanciaBean;
     Button mButtonModify;
 
     @Override
@@ -59,28 +57,26 @@ public class IncidEditNoPowerFr extends Fragment implements ImportanciaSpinnerSe
         Log.d(TAG, "onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
 
-        mIncidenciaBean = new IncidenciaBean();
-        fIncidenciaUser = ((IncidUserDataSupplier) getActivity()).getIncidenciaUser();
-        mIsRegUserInIncidencia = fIncidenciaUser.getUsuarioComunidad() == null;
+        mIncidImportanciaBean = new IncidImportanciaBean();
+        mIncidImportancia = ((IncidUserDataSupplier) getActivity()).getIncidImportancia();
 
-        ((TextView) fFragmentView.findViewById(R.id.incid_comunidad_txt)).setText(fIncidenciaUser.getIncidencia().getComunidad().getNombreComunidad());
-        ((TextView) fFragmentView.findViewById(R.id.incid_reg_desc_txt)).setText(fIncidenciaUser.getIncidencia().getDescripcion());
+        ((TextView) fFragmentView.findViewById(R.id.incid_comunidad_txt))
+                .setText(mIncidImportancia.getIncidencia().getComunidad().getNombreComunidad());
+        ((TextView) fFragmentView.findViewById(R.id.incid_reg_desc_txt))
+                .setText(mIncidImportancia.getIncidencia().getDescripcion());
         ((TextView) fFragmentView.findViewById(R.id.incid_ambito_view))
-                .setText(new IncidenciaDataDbHelper(getActivity()).getAmbitoDescByPk(fIncidenciaUser.getIncidencia().getAmbitoIncidencia().getAmbitoId()));
+                .setText(new IncidenciaDataDbHelper(getActivity()).getAmbitoDescByPk(mIncidImportancia.getIncidencia().getAmbitoIncidencia().getAmbitoId()));
 
         mImportanciaSpinner = (Spinner) getView().findViewById(R.id.incid_reg_importancia_spinner);
         HELPER.doImportanciaSpinner(this);
 
         mButtonModify = (Button) getView().findViewById(R.id.incid_edit_fr_modif_button);
-        if (mIsRegUserInIncidencia){
-            mButtonModify.setText(R.string.incid_regUserInIncid_button_rot);
-        }
         mButtonModify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
             {
                 Log.d(TAG, "mButtonModify.onClick()");
-                modifyIncidenciaUser();
+                modifyIncidImportancia();
             }
         });
     }
@@ -96,23 +92,22 @@ public class IncidEditNoPowerFr extends Fragment implements ImportanciaSpinnerSe
 //    ...................... HELPER METHODS ......................
 //    ============================================================
 
-    private void modifyIncidenciaUser()
+    private void modifyIncidImportancia()
     {
-        Log.d(TAG, "modifyIncidenciaUser()");
+        Log.d(TAG, "modifyIncidImportancia()");
 
         StringBuilder errorMsg = getErrorMsgBuilder(getActivity());
-
-        if (!mIncidenciaBean.validateImportancia(errorMsg, getResources())){
-            Log.d(TAG, "modifyIncidenciaUser(), incidenciaUser == null");
+        IncidImportancia incidImportancia = null;
+        try {
+            incidImportancia = mIncidImportanciaBean.makeIncidImportancia(errorMsg, getResources(), mIncidImportancia.getIncidencia());
+        } catch (IllegalStateException e) {
+            Log.d(TAG, "modifyIncidImportancia(), incidImportancia == null");
             makeToast(getActivity(), errorMsg.toString(), Toast.LENGTH_SHORT);
-        } else if (!ConnectionUtils.isInternetConnected(getActivity())) {
-            UIutils.makeToast(getActivity(), R.string.no_internet_conn_toast, Toast.LENGTH_SHORT);
+        }
+        if (!ConnectionUtils.isInternetConnected(getActivity())) {
+            makeToast(getActivity(), R.string.no_internet_conn_toast, Toast.LENGTH_SHORT);
         } else {
-            final IncidenciaUser incidenciaUser = new IncidenciaUser.IncidenciaUserBuilder
-                    (fIncidenciaUser.getIncidencia())
-                    .importancia(mIncidenciaBean.getImportanciaIncid())
-                    .build();
-            new IncidenciaModifyer().execute(incidenciaUser);
+            new ImportanciaModifyer().execute(incidImportancia);
         }
     }
 
@@ -121,10 +116,10 @@ public class IncidEditNoPowerFr extends Fragment implements ImportanciaSpinnerSe
 //    ============================================================
 
     @Override
-    public IncidenciaBean getIncidenciaBean()
+    public IncidImportanciaBean getIncidImportanciaBean()
     {
-        Log.d(TAG, "getIncidenciaBean()");
-        return mIncidenciaBean;
+        Log.d(TAG, "getIncidImportanciaBean()");
+        return mIncidImportanciaBean;
     }
 
     @Override
@@ -137,30 +132,31 @@ public class IncidEditNoPowerFr extends Fragment implements ImportanciaSpinnerSe
     @Override
     public void onImportanciaSpinnerLoaded()
     {
-        Log.d(TAG, "onImportanciaSpinnerLoaded(), importancia= " + fIncidenciaUser.getImportancia());
-        mImportanciaSpinner.setSelection(fIncidenciaUser.getImportancia());
+        Log.d(TAG, "onImportanciaSpinnerLoaded(), importancia= " + mIncidImportancia.getImportancia());
+        mImportanciaSpinner.setSelection(mIncidImportancia.getImportancia());
     }
 
 //    ============================================================
 //    ..................... INNER CLASSES  .......................
 //    ============================================================
 
-    class IncidenciaModifyer extends AsyncTask<IncidenciaUser, Void, Integer> {
+    class ImportanciaModifyer extends AsyncTask<IncidImportancia, Void, Integer> {
 
-        private final String TAG = IncidenciaModifyer.class.getCanonicalName();
+        private final String TAG = ImportanciaModifyer.class.getCanonicalName();
         UiException uiException;
 
         @Override
-        protected Integer doInBackground(IncidenciaUser... incidenciaUsers)
+        protected Integer doInBackground(IncidImportancia... incidImportancias)
         {
             Log.d(TAG, "doInBackground()");
             int rowInserted = 0;
 
             try {
-                if (mIsRegUserInIncidencia){
-                    rowInserted = IncidenciaServ.regUserInIncidencia(incidenciaUsers[0]);
+                // importancia == 0, if there is not an IncidImportancia instance previously persisted.
+                if (mIncidImportancia.getImportancia() == 0) {
+                    rowInserted = IncidenciaServ.regIncidImportancia(incidImportancias[0]);
                 } else {
-                    rowInserted = IncidenciaServ.modifyUser(incidenciaUsers[0]);
+                    rowInserted = IncidenciaServ.modifyIncidImportancia(incidImportancias[0]);
                 }
             } catch (UiException e) {
                 uiException = e;

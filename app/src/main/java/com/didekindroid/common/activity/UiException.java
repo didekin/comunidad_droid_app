@@ -12,6 +12,8 @@ import android.util.Log;
 
 import com.didekin.common.exception.InServiceException;
 import com.didekindroid.R;
+import com.didekindroid.incidencia.activity.IncidEditAc;
+import com.didekindroid.incidencia.activity.IncidRegAc;
 import com.didekindroid.incidencia.activity.IncidResolucionEditAc;
 import com.didekindroid.incidencia.activity.IncidSeeByComuAc;
 import com.didekindroid.usuario.activity.ComuSearchAc;
@@ -30,8 +32,10 @@ import static com.didekin.common.exception.DidekinExceptionMsg.COMUNIDAD_NOT_HAS
 import static com.didekin.common.exception.DidekinExceptionMsg.COMUNIDAD_WRONG_INIT;
 import static com.didekin.common.exception.DidekinExceptionMsg.INCIDENCIA_COMMENT_WRONG_INIT;
 import static com.didekin.common.exception.DidekinExceptionMsg.INCIDENCIA_NOT_FOUND;
+import static com.didekin.common.exception.DidekinExceptionMsg.INCIDENCIA_NOT_REGISTERED;
 import static com.didekin.common.exception.DidekinExceptionMsg.INCIDENCIA_USER_WRONG_INIT;
 import static com.didekin.common.exception.DidekinExceptionMsg.INCIDENCIA_WRONG_INIT;
+import static com.didekin.common.exception.DidekinExceptionMsg.INCID_IMPORTANCIA_NOT_FOUND;
 import static com.didekin.common.exception.DidekinExceptionMsg.INCID_IMPORTANCIA_WRONG_INIT;
 import static com.didekin.common.exception.DidekinExceptionMsg.NOT_FOUND;
 import static com.didekin.common.exception.DidekinExceptionMsg.RESOLUCION_DUPLICATE;
@@ -44,7 +48,6 @@ import static com.didekin.common.exception.DidekinExceptionMsg.UNAUTHORIZED;
 import static com.didekin.common.exception.DidekinExceptionMsg.UNAUTHORIZED_TX_TO_USER;
 import static com.didekin.common.exception.DidekinExceptionMsg.USERCOMU_WRONG_INIT;
 import static com.didekin.common.exception.DidekinExceptionMsg.USER_COMU_NOT_FOUND;
-import static com.didekin.common.exception.DidekinExceptionMsg.USER_COMU_WRONG_INIT;
 import static com.didekin.common.exception.DidekinExceptionMsg.USER_DATA_NOT_MODIFIED;
 import static com.didekin.common.exception.DidekinExceptionMsg.USER_NAME_DUPLICATE;
 import static com.didekin.common.exception.DidekinExceptionMsg.USER_NAME_NOT_FOUND;
@@ -53,6 +56,7 @@ import static com.didekin.common.exception.DidekinExceptionMsg.USER_NOT_EQUAL_AB
 import static com.didekin.common.exception.DidekinExceptionMsg.USER_NOT_HASHABLE;
 import static com.didekin.common.exception.DidekinExceptionMsg.USER_WRONG_INIT;
 import static com.didekindroid.common.activity.UiException.UiAction.GENERIC;
+import static com.didekindroid.common.activity.UiException.UiAction.INCID_REG;
 import static com.didekindroid.common.activity.UiException.UiAction.INCID_SEE_BY_COMU;
 import static com.didekindroid.common.activity.UiException.UiAction.LOGIN;
 import static com.didekindroid.common.activity.UiException.UiAction.LOGIN_INCID;
@@ -98,6 +102,16 @@ public class UiException extends Exception {
             public void doAction(Activity activity, Intent intent)
             {
                 LOGIN.doAction(activity, intent);
+            }
+        },
+        INCID_REG {
+            @Override
+            public void doAction(Activity activity, Intent intent)
+            {
+                makeToast(activity, R.string.incidencia_not_registered, LENGTH_SHORT);
+                intent.setClass(activity, IncidRegAc.class);
+                activity.startActivity(intent);
+                activity.finish();
             }
         },
         INCID_SEE_BY_COMU {
@@ -205,7 +219,9 @@ public class UiException extends Exception {
         messageToAction.put(INCIDENCIA_NOT_FOUND.getHttpMessage(), INCID_SEE_BY_COMU);
         messageToAction.put(INCIDENCIA_USER_WRONG_INIT.getHttpMessage(), LOGIN_INCID);
         messageToAction.put(INCIDENCIA_WRONG_INIT.getHttpMessage(), INCID_SEE_BY_COMU);
-        messageToAction.put(INCID_IMPORTANCIA_WRONG_INIT.getHttpMessage(), GENERIC);
+        messageToAction.put(INCID_IMPORTANCIA_NOT_FOUND.getHttpMessage(), INCID_SEE_BY_COMU);
+        messageToAction.put(INCIDENCIA_NOT_REGISTERED.getHttpMessage(), INCID_REG);
+        messageToAction.put(INCID_IMPORTANCIA_WRONG_INIT.getHttpMessage(), INCID_SEE_BY_COMU);
         messageToAction.put(NOT_FOUND.getHttpMessage(), GENERIC);
         messageToAction.put(RESOLUCION_DUPLICATE.getHttpMessage(), RESOLUCION_DUP);
         messageToAction.put(RESOLUCION_WRONG_INIT.getHttpMessage(), INCID_SEE_BY_COMU);
@@ -216,7 +232,6 @@ public class UiException extends Exception {
         messageToAction.put(UNAUTHORIZED.getHttpMessage(), LOGIN);
         messageToAction.put(UNAUTHORIZED_TX_TO_USER.getHttpMessage(), LOGIN);
         messageToAction.put(USER_COMU_NOT_FOUND.getHttpMessage(), LOGIN);
-        messageToAction.put(USER_COMU_WRONG_INIT.getHttpMessage(), LOGIN);
         messageToAction.put(USER_DATA_NOT_MODIFIED.getHttpMessage(), USER_DATA_AC);
         messageToAction.put(USER_NOT_COMPARABLE.getHttpMessage(), GENERIC);
         messageToAction.put(USER_NOT_EQUAL_ABLE.getHttpMessage(), GENERIC);

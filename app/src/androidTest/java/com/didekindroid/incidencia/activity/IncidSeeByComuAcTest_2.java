@@ -3,6 +3,7 @@ package com.didekindroid.incidencia.activity;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.didekin.incidservice.dominio.IncidImportancia;
 import com.didekin.incidservice.dominio.Incidencia;
 import com.didekin.incidservice.dominio.IncidenciaUser;
 import com.didekin.usuario.dominio.Comunidad;
@@ -35,11 +36,11 @@ import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.regSeveralUserComuSameUser;
-import static com.didekindroid.common.utils.AppKeysForBundle.INCIDENCIA_USER_OBJECT;
+import static com.didekindroid.common.utils.AppKeysForBundle.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.utils.UIutils.formatTimeStampToString;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
 import static com.didekindroid.incidencia.repository.IncidenciaDataDbHelperTest.DB_PATH;
+import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_LA_PLAZUELA_5;
@@ -56,6 +57,7 @@ import static org.junit.Assert.assertThat;
  * Date: 23/11/15
  * Time: 18:45
  */
+/* Tests sobre presentación de datos y selección de una incidencia. */
 @RunWith(AndroidJUnit4.class)
 public class IncidSeeByComuAcTest_2 {
 
@@ -63,9 +65,9 @@ public class IncidSeeByComuAcTest_2 {
     private CleanUserEnum whatToClean = CLEAN_JUAN;
     UsuarioComunidad juanReal;
     UsuarioComunidad juanPlazuela;
-    IncidenciaUser incidJuanReal1;
-    IncidenciaUser incidJuanReal2;
-    IncidenciaUser incidJuanPlazuela1;
+    IncidImportancia incidJuanReal1;
+    IncidImportancia incidJuanReal2;
+    IncidImportancia incidJuanPlazuela1;
     IncidenciaDataDbHelper dBHelper;
     IncidSeeByComuAdapter adapter;
     IncidSeeByComuListFr mFragment;
@@ -80,18 +82,21 @@ public class IncidSeeByComuAcTest_2 {
                 regSeveralUserComuSameUser(COMU_REAL_JUAN, COMU_PLAZUELA5_JUAN);
                 juanReal = ServOne.seeUserComusByUser().get(0);
                 juanPlazuela = ServOne.seeUserComusByUser().get(1);
-                incidJuanReal1 = new IncidenciaUser.IncidenciaUserBuilder(doIncidencia("Incidencia Real One", juanReal.getComunidad().getC_Id(), (short) 43))
-                        .usuario(juanReal)
+                incidJuanReal1 = new IncidImportancia.IncidImportanciaBuilder(
+                        doIncidencia(juanReal.getUsuario().getUserName(), "Incidencia Real One", juanReal.getComunidad().getC_Id(), (short) 43))
+                        .usuarioComunidad(juanReal)
                         .importancia((short) 3).build();
-                incidJuanReal2 = new IncidenciaUser.IncidenciaUserBuilder(doIncidencia("Incidencia Real Two", juanReal.getComunidad().getC_Id(), (short) 11))
-                        .usuario(juanReal)
+                incidJuanReal2 = new IncidImportancia.IncidImportanciaBuilder(
+                        doIncidencia(juanReal.getUsuario().getUserName(), "Incidencia Real Two", juanReal.getComunidad().getC_Id(), (short) 11))
+                        .usuarioComunidad(juanReal)
                         .importancia((short) 2).build();
-                incidJuanPlazuela1 = new IncidenciaUser.IncidenciaUserBuilder(doIncidencia("Incidencia Plazuela One", juanPlazuela.getComunidad().getC_Id(), (short) 26))
-                        .usuario(juanPlazuela)
+                incidJuanPlazuela1 = new IncidImportancia.IncidImportanciaBuilder(
+                        doIncidencia(juanPlazuela.getUsuario().getUserName(), "Incidencia Plazuela One", juanPlazuela.getComunidad().getC_Id(), (short) 26))
+                        .usuarioComunidad(juanPlazuela)
                         .importancia((short) 4).build();
-                IncidenciaServ.regIncidenciaUser(incidJuanReal1);
-                IncidenciaServ.regIncidenciaUser(incidJuanReal2);
-                IncidenciaServ.regIncidenciaUser(incidJuanPlazuela1);
+                IncidenciaServ.regIncidImportancia(incidJuanReal1);
+                IncidenciaServ.regIncidImportancia(incidJuanReal2);
+                IncidenciaServ.regIncidImportancia(incidJuanPlazuela1);
             } catch (UiException e) {
                 e.printStackTrace();
             }
@@ -103,7 +108,6 @@ public class IncidSeeByComuAcTest_2 {
     {
         Thread.sleep(5000);
     }
-
 
     @Before
     public void setUp() throws Exception
@@ -141,12 +145,12 @@ public class IncidSeeByComuAcTest_2 {
         // Ordered by fecha_alta of the incidencia.
         assertThat(adapter.getItem(0).getIncidencia().getComunidad(), is(juanReal.getComunidad()));
         assertThat(adapter.getItem(0).getIncidencia().getAmbitoIncidencia().getAmbitoId(), is(incidJuanReal1.getIncidencia().getAmbitoIncidencia().getAmbitoId()));
-        assertThat(adapter.getItem(0).getUsuarioComunidad().getUsuario().getAlias(), is(juanReal.getUsuario().getAlias()));
+        assertThat(adapter.getItem(0).getUsuario().getAlias(), is(juanReal.getUsuario().getAlias()));
         assertThat(adapter.getItem(0).getIncidencia().getDescripcion(), is(incidJuanReal1.getIncidencia().getDescripcion()));
         assertThat(adapter.getItem(0).getIncidencia().getImportanciaAvg(), is((float) incidJuanReal1.getImportancia()));
         //
         assertThat(adapter.getItem(1).getIncidencia().getComunidad(), is(juanReal.getComunidad()));
-        assertThat(adapter.getItem(0).getUsuarioComunidad().getUsuario().getAlias(), is(juanReal.getUsuario().getAlias()));
+        assertThat(adapter.getItem(1).getUsuario().getAlias(), is(juanReal.getUsuario().getAlias()));
         assertThat(adapter.getItem(1).getIncidencia().getAmbitoIncidencia().getAmbitoId(), is(incidJuanReal2.getIncidencia().getAmbitoIncidencia().getAmbitoId()));
         assertThat(adapter.getItem(1).getIncidencia().getDescripcion(), is(incidJuanReal2.getIncidencia().getDescripcion()));
         assertThat(adapter.getItem(1).getIncidencia().getImportanciaAvg(), is((float) incidJuanReal2.getImportancia()));
@@ -155,7 +159,7 @@ public class IncidSeeByComuAcTest_2 {
     @Test
     public void testOnCreate_2() throws Exception
     {
-        // Second comunidad in the spinner is selected.
+        // Second comunidad (Plazuela) in the comunidad_spinner is selected.
         onView(withId(R.id.incid_reg_comunidad_spinner)).perform(click());
         onData(allOf(
                         is(instanceOf(Comunidad.class)),
@@ -169,7 +173,7 @@ public class IncidSeeByComuAcTest_2 {
         assertThat(adapter.getCount(), is(1));
 
         assertThat(adapter.getItem(0).getIncidencia().getComunidad(), is(juanPlazuela.getComunidad()));
-        assertThat(adapter.getItem(0).getUsuarioComunidad().getUsuario().getAlias(), is(juanPlazuela.getUsuario().getAlias()));
+        assertThat(adapter.getItem(0).getUsuario().getAlias(), is(juanPlazuela.getUsuario().getAlias()));
         assertThat(adapter.getItem(0).getIncidencia().getAmbitoIncidencia().getAmbitoId(), is(incidJuanPlazuela1.getIncidencia().getAmbitoIncidencia().getAmbitoId()));
         assertThat(adapter.getItem(0).getIncidencia().getDescripcion(), is(incidJuanPlazuela1.getIncidencia().getDescripcion()));
         assertThat(adapter.getItem(0).getIncidencia().getImportanciaAvg(), is((float) incidJuanPlazuela1.getImportancia()));
@@ -178,7 +182,7 @@ public class IncidSeeByComuAcTest_2 {
     @Test
     public void testOnData_1()
     {
-        // Default comunidad: Real, in position 0.
+        // Default comunidad (Real) in position 0 in comunidad_spinner.
         IncidenciaUser incidUser_0 = adapter.getItem(0);
         IncidenciaUser incidUser_1 = adapter.getItem(1);
         Incidencia incidencia_0 = incidUser_0.getIncidencia();
@@ -235,7 +239,7 @@ public class IncidSeeByComuAcTest_2 {
     public void testOnSelected_1() throws UiException, InterruptedException
     {
 
-        // Default comunidad: Real, in position 0.
+        // Default comunidad (Real), in position 0, is selected.
         Thread.sleep(1000);
         IncidenciaUser incidUser_0 = adapter.getItem(0);
         Incidencia incidencia_0 = incidUser_0.getIncidencia();
@@ -243,8 +247,8 @@ public class IncidSeeByComuAcTest_2 {
                 .check(matches(isDisplayed()))
                 .perform(click());
 
-        IncidenciaUser incidenciaUser = IncidenciaServ.getIncidenciaUserWithPowers(incidencia_0.getIncidenciaId());
-        intended(hasExtra(INCIDENCIA_USER_OBJECT.extra, incidenciaUser));
+        IncidImportancia incidImportancia = IncidenciaServ.seeIncidImportancia(incidencia_0.getIncidenciaId());
+        intended(hasExtra(INCID_IMPORTANCIA_OBJECT.extra, incidImportancia));
         onView(withId(R.id.incid_edit_fragment_container_ac)).check(matches(isDisplayed()));
     }
 }

@@ -198,12 +198,9 @@ public final class Incidencia implements Serializable {
                 if (incidencia.getComunidad() == null || incidencia.getDescripcion() == null || incidencia.getAmbitoIncidencia() == null) {
                     throw new IllegalStateException(INCIDENCIA_WRONG_INIT.toString());
                 }
-            } else {
-                if (incidencia.getComunidad() == null) {
-                    throw new IllegalStateException(INCIDENCIA_WRONG_INIT.toString());
-                }
             }
             return incidencia;
+            // TODO: meter validaciones de los campos en este método.
         }
     }
 
@@ -234,7 +231,7 @@ public final class Incidencia implements Serializable {
         }
 
         /**
-         * Returns a logically equivalent InnerSerial instance of the enclosing IncidentIntent instance,
+         * Returns a logically equivalent InnerSerial instance of the enclosing class instance,
          * that will replace it during deserialization.
          */
         private Object readResolve()

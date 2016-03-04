@@ -28,6 +28,7 @@ import static com.google.common.base.Preconditions.checkState;
 
 /**
  * Preconditions:
+ * A list of IncidenciaUser instances is retrieved with the incidencia and the registering user data.
  * <p/>
  * Postconditions:
  */
@@ -207,7 +208,7 @@ public class IncidSeeByComuListFr extends ListFragment implements ComuSpinnerSet
             Log.d(TAG, "doInBackground()");
             List<IncidenciaUser> incidenciaList = null;
             try {
-                incidenciaList = IncidenciaServ.incidSeeByComu(comunidadId[0]);
+                incidenciaList = IncidenciaServ.seeIncidsOpenByComu(comunidadId[0]);
             } catch (UiException e) {
                 uiException = e;
             }

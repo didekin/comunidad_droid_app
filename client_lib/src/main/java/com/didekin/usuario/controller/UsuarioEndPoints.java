@@ -18,6 +18,7 @@ import retrofit.http.Path;
 
 import static com.didekin.common.oauth2.OauthConstant.COMUNIDAD_READ;
 import static com.didekin.common.oauth2.OauthConstant.COMUNIDAD_WRITE;
+import static com.didekin.common.oauth2.OauthConstant.GCM_TOKEN_PARAM;
 import static com.didekin.common.oauth2.OauthConstant.PSWD_PARAM;
 import static com.didekin.common.oauth2.OauthConstant.USER_PARAM;
 import static com.didekin.common.oauth2.OauthConstant.USER_READ;
@@ -83,8 +84,9 @@ public interface UsuarioEndPoints {
     @PUT(COMUNIDAD_WRITE)
     int modifyComuData(@Header("Authorization") String accessToken, @Body Comunidad comunidad);
 
-    @PUT(USER_WRITE_GCM_TOKEN)
-    int modifyUserGcmToken(@Header("Authorization") String accessToken, @Body String gcmToken);
+    @FormUrlEncoded
+    @POST(USER_WRITE_GCM_TOKEN)
+    int modifyUserGcmToken(@Header("Authorization") String accessToken, @Field(GCM_TOKEN_PARAM) String gcmToken);
 
     @PUT(USER_WRITE)
     int modifyUser(@Header("Authorization") String accessToken, @Body Usuario usuario);

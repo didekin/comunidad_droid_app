@@ -15,8 +15,10 @@ public enum DidekinExceptionMsg {
     COMUNIDAD_WRONG_INIT(null, 412),
     INCIDENCIA_COMMENT_WRONG_INIT(null, 412),
     INCIDENCIA_NOT_FOUND(null, 404),
+    INCIDENCIA_NOT_REGISTERED(null, 409),
     INCIDENCIA_USER_WRONG_INIT(null, 412),
     INCIDENCIA_WRONG_INIT(null, 412),
+    INCID_IMPORTANCIA_NOT_FOUND(null, 404),
     INCID_IMPORTANCIA_WRONG_INIT(null, 412),
     NOT_FOUND("Not Found", 404),
     RESOLUCION_DUPLICATE(null, 409), // There exists a resolucion for the same incidencia.
@@ -27,8 +29,8 @@ public enum DidekinExceptionMsg {
     TOKEN_NULL(null, 400),
     UNAUTHORIZED("Unauthorized", 401),
     UNAUTHORIZED_TX_TO_USER(null, 401),
+    USERCOMU_WRONG_INIT(null, 412),
     USER_COMU_NOT_FOUND(null, 404),
-    USER_COMU_WRONG_INIT(null, 412),
     USER_DATA_NOT_MODIFIED(null, 417),
     USER_NOT_COMPARABLE(null, 412),
     USER_NOT_EQUAL_ABLE(null, 412),
@@ -36,7 +38,7 @@ public enum DidekinExceptionMsg {
     USER_NAME_DUPLICATE(null, 409),
     USER_NOT_HASHABLE(null, 412),
     USER_WRONG_INIT(null, 412),
-    USERCOMU_WRONG_INIT(null, 412),;
+    ;
 
     private final String httpMessage;
     private final int httpStatus;

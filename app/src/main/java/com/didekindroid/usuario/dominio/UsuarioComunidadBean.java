@@ -167,7 +167,7 @@ public final class UsuarioComunidadBean {
         if (usuarioBean == null) {
             return true;
         }
-        // In this point the instance of usuario in usuarioBean is created.
+        // In this point the instance of userComu in usuarioBean is created.
         return usuarioBean.validate(resources, errorMsg);
     }
 

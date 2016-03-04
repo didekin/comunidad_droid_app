@@ -110,7 +110,7 @@ public enum UserMenu {
         }
     },
 
-    SEE_USERCOMU_BY_USER_AC {  // Comunidades de un usuario: Mis comunidades.
+    SEE_USERCOMU_BY_USER_AC {  // Comunidades de un userComu: Mis comunidades.
 
         @Override
         public void doMenuItem(Activity activity)
@@ -128,7 +128,7 @@ public enum UserMenu {
         }
     },
 
-    USER_DATA_AC {  // menú: Mi usuario.
+    USER_DATA_AC {  // menú: Mi userComu.
 
         @Override
         public void doMenuItem(Activity activity)

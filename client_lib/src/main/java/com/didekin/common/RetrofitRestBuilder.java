@@ -104,8 +104,8 @@ public enum RetrofitRestBuilder {
         protected java.net.HttpURLConnection openConnection(Request request) throws IOException
         {
             HttpURLConnection connection = super.openConnection(request);
-            connection.setConnectTimeout(30 * 1000);
-            connection.setReadTimeout(1800 * 1000);
+            connection.setConnectTimeout(30 * 1000);  //30
+            connection.setReadTimeout(1800 * 1000);   // 1800
             return connection;
         }
     }

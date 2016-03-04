@@ -51,7 +51,7 @@ import static java.lang.String.valueOf;
 public class UsuarioDataDbHelper extends SQLiteOpenHelper {
 
     private static final String TAG = UsuarioDataDbHelper.class.getCanonicalName();
-    public static final String DB_NAME = "usuario.db";
+    public static final String DB_NAME = "userComu.db";
     /*This number has to be changed in future versions, to get executed onUpgrade() method.*/
     public static final int DB_VERSION = 1;
 

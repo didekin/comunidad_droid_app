@@ -14,16 +14,14 @@ public final class IncidServConstant {
     {
     }
 
-    public static final String GET_INCID_USER_BY_INCID = INCID_READ + "/incidenciaUser";
-    public static final String INCIDENCIA_USER_DELETE = INCID_WRITE + "/del_incidenciaUser";
-    public static final String MOD_INCID_USER = INCID_WRITE + "/mod_incidenciaUser";
-    public static final String MOD_USER = INCID_WRITE + "/mod_user";
-    public static final String REG_INCID_COMMENT = INCID_WRITE + "/comments";
-    public static final String REG_INCID_USER = INCID_WRITE + "/reg_incidenciaUser";
-    public static final String REG_RESOLUCION = INCID_WRITE + "/resolucion";
-    public static final String REG_USER_IN_INCID = INCID_WRITE + "/reg_userInIncidencia";
-    public static final String SEE_INCID_BY_COMU = INCID_READ;
-    public static final String SEE_INCID_CLOSED_BY_COMU = INCID_READ + "/closed";
-    public static final String SEE_INCID_COMMENTS = INCID_READ + "/comments";
-    public static final String SEE_INCID_RESOLUCION = INCID_READ + "/resolucion";
+    public static final String DELETE_INCID = INCID_WRITE + "/delete";
+    public static final String MOD_INCID_IMPORTANCIA = INCID_WRITE + "/modify";
+    public static final String REG_INCID_COMMENT = INCID_WRITE + "/comment/reg";
+    public static final String REG_INCID_IMPORTANCIA = INCID_WRITE;
+    public static final String REG_RESOLUCION = INCID_WRITE + "/resolucion/reg";
+    public static final String SEE_INCID_IMPORTANCIA = INCID_READ;
+    public static final String SEE_INCID_OPEN_BY_COMU = INCID_READ + "/see";
+    public static final String SEE_INCID_CLOSED_BY_COMU = INCID_READ + "/see/closed";
+    public static final String SEE_INCID_COMMENTS = INCID_READ + "/comment/see";
+    public static final String SEE_INCID_RESOLUCION = INCID_READ + "/resolucion/see";
 }

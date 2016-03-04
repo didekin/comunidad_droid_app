@@ -9,13 +9,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.didekin.incidservice.dominio.IncidenciaUser;
+import com.didekin.incidservice.dominio.IncidImportancia;
+import com.didekin.incidservice.dominio.Incidencia;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.utils.ConnectionUtils;
-import com.didekindroid.common.utils.UIutils;
 import com.didekindroid.incidencia.gcm.GcmRegistrationIntentServ;
 
+import static com.didekindroid.common.utils.ConnectionUtils.checkInternetConnected;
 import static com.didekindroid.common.utils.UIutils.checkPlayServices;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
@@ -31,6 +32,7 @@ import static com.google.common.base.Preconditions.checkState;
  * Postconditions:
  * 1. No intent passed.
  */
+
 /**
  * This activity is a point of registration for receiving notifications of new incidencias.
  */
@@ -45,7 +47,7 @@ public class IncidRegAc extends AppCompatActivity {
         Log.d(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
 
-        if (checkPlayServices(this) && !isGcmTokenSentServer(this)){
+        if (checkPlayServices(this) && !isGcmTokenSentServer(this)) {
             Intent intent = new Intent(this, GcmRegistrationIntentServ.class);
             startService(intent);
         }
@@ -71,15 +73,18 @@ public class IncidRegAc extends AppCompatActivity {
         Log.d(TAG, "registerIncidencia()");
 
         StringBuilder errorMsg = getErrorMsgBuilder(this);
-        final IncidenciaUser incidenciaUser = mRegAcFragment.mIncidenciaBean.makeIncidenciaUser(mRegAcFragment.mFragmentView, errorMsg);
+        final Incidencia incidencia = mRegAcFragment.mIncidenciaBean.makeIncidencia(mRegAcFragment.mFragmentView, errorMsg, getResources());
+        IncidImportancia incidImportancia = null;
 
-        if (incidenciaUser == null) {
-            Log.d(TAG, "registerIncidencia(), incidenciaUser == null");
+        try {
+            incidImportancia = mRegAcFragment.mIncidImportanciaBean.makeIncidImportancia(errorMsg, getResources(), incidencia);
+        } catch (IllegalStateException e) {
+            Log.d(TAG, "registerIncidencia(), incidImportancia == null");
             makeToast(this, errorMsg.toString(), Toast.LENGTH_SHORT);
-        } else if (!ConnectionUtils.isInternetConnected(this)) {
-            UIutils.makeToast(this, R.string.no_internet_conn_toast, Toast.LENGTH_SHORT);
-        } else {
-            new IncidenciaRegister().execute(incidenciaUser);
+        }
+
+        if(incidImportancia != null && checkInternetConnected(this)){
+            new IncidenciaRegister().execute(incidImportancia);
         }
     }
 
@@ -87,19 +92,19 @@ public class IncidRegAc extends AppCompatActivity {
     //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
     //    ============================================================
 
-    class IncidenciaRegister extends AsyncTask<IncidenciaUser, Void, Integer> {
+    class IncidenciaRegister extends AsyncTask<IncidImportancia, Void, Integer> {
 
         private final String TAG = IncidenciaRegister.class.getCanonicalName();
         UiException uiException;
 
         @Override
-        protected Integer doInBackground(IncidenciaUser... incidenciaUsers)
+        protected Integer doInBackground(IncidImportancia... incidImportancias)
         {
             Log.d(TAG, "doInBackground()");
             int rowInserted = 0;
 
             try {
-                rowInserted = IncidenciaServ.regIncidenciaUser(incidenciaUsers[0]);
+                rowInserted = IncidenciaServ.regIncidImportancia(incidImportancias[0]);
             } catch (UiException e) {
                 uiException = e;
             }
@@ -114,7 +119,7 @@ public class IncidRegAc extends AppCompatActivity {
             if (uiException != null) {
                 uiException.processMe(IncidRegAc.this, new Intent());
             } else {
-                checkState(rowInserted == 1);
+                checkState(rowInserted == 2);
                 Intent intent = new Intent(IncidRegAc.this, IncidSeeByComuAc.class);
                 startActivity(intent);
             }

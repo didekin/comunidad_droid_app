@@ -12,9 +12,9 @@ import static com.didekin.common.exception.DidekinExceptionMsg.RESOLUCION_WRONG_
  * Time: 18:30
  */
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
-public final class Resolucion {
+public final class Resolucion {   // TODO: serial.
 
-    private final long resolucionId;
+    private final String userName;
     private final String descripcion;
     private final int costeEstimado;
     private final int costeFinal;
@@ -27,7 +27,7 @@ public final class Resolucion {
 
     private Resolucion(ResolucionBuilder builder)
     {
-        resolucionId = builder.resolucionId;
+        userName = builder.userName;
         descripcion = builder.descripcion;
         costeEstimado = builder.costeEstimado;
         costeFinal = builder.costeFinal;
@@ -37,6 +37,11 @@ public final class Resolucion {
         fechaReal = builder.fechaReal;
         fechaAlta = builder.fechaAlta;
         incidencia = builder.incidencia;
+    }
+
+    public String getUserName()
+    {
+        return userName;
     }
 
     public String getDescripcion()
@@ -69,11 +74,6 @@ public final class Resolucion {
         return fechaReal;
     }
 
-    public long getResolucionId()
-    {
-        return resolucionId;
-    }
-
     public Timestamp getFechaAlta()
     {
         return fechaAlta;
@@ -88,7 +88,7 @@ public final class Resolucion {
 
     public static final class ResolucionBuilder implements BeanBuilder<Resolucion> {
 
-        public long resolucionId;
+        private String userName;
         private String descripcion;
         private int costeEstimado;
         private int costeFinal;
@@ -104,9 +104,9 @@ public final class Resolucion {
             this.incidencia = incidencia;
         }
 
-        public ResolucionBuilder resolucionId(long initValue)
+        public ResolucionBuilder userName(String initValue)
         {
-            resolucionId = initValue;
+            userName = initValue;
             return this;
         }
 
@@ -158,11 +158,25 @@ public final class Resolucion {
             return this;
         }
 
+        public ResolucionBuilder copyResolucion(Resolucion initValue)
+        {
+            userName = initValue.userName;
+            descripcion = initValue.descripcion;
+            costeEstimado = initValue.costeEstimado;
+            costeFinal = initValue.costeFinal;
+            fechaPrev = initValue.fechaPrev;
+            fechaReal = initValue.fechaReal;
+            moraleja = initValue.moraleja;
+            fechaAlta = initValue.fechaAlta;
+            return this;
+        }
+
         @Override
         public Resolucion build()
         {
             Resolucion resolucion = new Resolucion(this);
-            if (resolucion.resolucionId <= 0 && (resolucion.descripcion == null || resolucion.fechaPrev == null)) {
+            if (resolucion.incidencia == null || resolucion.incidencia.getIncidenciaId() <= 0
+                    || resolucion.descripcion == null || resolucion.fechaPrev == null){
                 throw new IllegalStateException(RESOLUCION_WRONG_INIT.toString());
             }
             return resolucion;

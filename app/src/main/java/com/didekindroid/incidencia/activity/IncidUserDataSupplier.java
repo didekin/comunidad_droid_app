@@ -1,8 +1,6 @@
 package com.didekindroid.incidencia.activity;
 
-import android.app.Activity;
-
-import com.didekin.incidservice.dominio.IncidenciaUser;
+import com.didekin.incidservice.dominio.IncidImportancia;
 
 /**
  * User: pedro@didekin
@@ -10,5 +8,5 @@ import com.didekin.incidservice.dominio.IncidenciaUser;
  * Time: 15:25
  */
 interface IncidUserDataSupplier {
-    IncidenciaUser getIncidenciaUser();
+    IncidImportancia getIncidImportancia();
 }

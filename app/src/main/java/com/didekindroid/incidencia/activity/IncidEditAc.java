@@ -8,11 +8,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.didekin.incidservice.dominio.IncidenciaUser;
-import com.didekin.usuario.dominio.UsuarioComunidad;
+import com.didekin.incidservice.dominio.IncidImportancia;
 import com.didekindroid.R;
 
-import static com.didekindroid.common.utils.AppKeysForBundle.INCIDENCIA_USER_OBJECT;
+import static com.didekindroid.common.utils.AppKeysForBundle.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_COMMENTS_SEE_AC;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_COMMENT_REG_AC;
@@ -21,43 +20,31 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Preconditions:
- * 1. An intent extra is received with the IncidenciaUser to be edited.
- * 2. Edition capabilities are dependent on:
- * -- the functional role of the user.
- * -- the ownership of the incident (authorship) by the user.
- * -- the existence of other IncidenciaUser associated to the incidencia. See IncidenciaUser.checkPowers().
- * 3.
- * -- Users with maximum powers can modify description and ambito of the incidencia, as well as to erase it.
+ * 1. An intent extra is received with the IncidImportancia instance to be edited.
+ * -- Users with maximum powers can modify description and ambito of the incidencia.
  * -- Users with minimum powers can only modify the importance assigned by them.
  * Postconditions:
  * 1. An incidencia is updated in BD, once edited.
- * 2. An intent is passed with the comunidadId of the updated incidencia.
  * 3. An updated incidencias list of the comunidad is showed.
  */
 public class IncidEditAc extends AppCompatActivity implements IncidUserDataSupplier {
 
     private static final String TAG = IncidEditAc.class.getCanonicalName();
     View mAcView;
-    IncidenciaUser mIncidenciaUser;
-
-    // TODO: hay que añadir datos sobre última actualización: cuándo, usuario_quién.
+    IncidImportancia mIncidImportancia;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         Log.d(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
-
-        mIncidenciaUser = (IncidenciaUser) getIntent().getSerializableExtra(INCIDENCIA_USER_OBJECT.extra);
+        mIncidImportancia = (IncidImportancia) getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.extra);
 
         mAcView = getLayoutInflater().inflate(R.layout.incid_edit_ac, null);
         setContentView(mAcView);
         doToolBar(this, true);
 
-        UsuarioComunidad userComu = mIncidenciaUser.getUsuarioComunidad();
-
-        if (mIncidenciaUser.isYetIniciador()
-                || (userComu != null &&  userComu.hasRoleAdministrador())) {
+        if (mIncidImportancia.isIniciadorIncidencia() || mIncidImportancia.getUserComu().hasAdministradorAuthority()) {
             IncidEditMaxPowerFr mFragmentMax;
             if (savedInstanceState == null) {
                 mFragmentMax = new IncidEditMaxPowerFr();
@@ -88,10 +75,8 @@ public class IncidEditAc extends AppCompatActivity implements IncidUserDataSuppl
     public boolean onPrepareOptionsMenu(Menu menu)
     {
         Log.d(TAG, "onPrepareOptionsMenu()");
-
         MenuItem resolverItem = menu.findItem(R.id.incid_resolucion_reg_ac_mn);
-        resolverItem.setVisible(mIncidenciaUser.getUsuarioComunidad() != null &&
-                mIncidenciaUser.getUsuarioComunidad().hasRoleAdministrador());
+        resolverItem.setVisible(mIncidImportancia.getUserComu().hasAdministradorAuthority());
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -106,19 +91,19 @@ public class IncidEditAc extends AppCompatActivity implements IncidUserDataSuppl
         switch (resourceId) {
             case R.id.incid_comment_reg_ac_mn:
                 intent = new Intent();
-                intent.putExtra(INCIDENCIA_USER_OBJECT.extra, mIncidenciaUser);
+                intent.putExtra(INCID_IMPORTANCIA_OBJECT.extra, mIncidImportancia);
                 this.setIntent(intent);
                 INCID_COMMENT_REG_AC.doMenuItem(this);
                 return true;
             case R.id.incid_comments_see_ac_mn:
                 intent = new Intent();
-                intent.putExtra(INCIDENCIA_USER_OBJECT.extra, mIncidenciaUser);
+                intent.putExtra(INCID_IMPORTANCIA_OBJECT.extra, mIncidImportancia);
                 this.setIntent(intent);
                 INCID_COMMENTS_SEE_AC.doMenuItem(this);
                 return true;
             case R.id.incid_resolucion_reg_ac_mn:
                 intent = new Intent();
-                intent.putExtra(INCIDENCIA_USER_OBJECT.extra, mIncidenciaUser);
+                intent.putExtra(INCID_IMPORTANCIA_OBJECT.extra, mIncidImportancia);
                 this.setIntent(intent);
                 INCID_RESOLUCION_REG_AC.doMenuItem(this);
             default:
@@ -131,9 +116,9 @@ public class IncidEditAc extends AppCompatActivity implements IncidUserDataSuppl
 //    ============================================================
 
     @Override
-    public IncidenciaUser getIncidenciaUser()
+    public IncidImportancia getIncidImportancia()
     {
-        return mIncidenciaUser;
+        return mIncidImportancia;
     }
 }
 

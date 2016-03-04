@@ -14,6 +14,7 @@ import android.widget.Spinner;
 
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekindroid.R;
+import com.didekindroid.incidencia.dominio.IncidImportanciaBean;
 import com.didekindroid.incidencia.dominio.IncidenciaBean;
 import com.didekindroid.incidencia.repository.IncidenciaDataDbHelper;
 
@@ -22,6 +23,7 @@ import static com.didekindroid.incidencia.activity.utils.IncidRegEditHelper.HELP
 /**
  *
  */
+@SuppressWarnings("ConstantConditions")
 public class IncidRegAcFragment extends Fragment implements ComuSpinnerSettable,
         AmbitoSpinnerSettable, ImportanciaSpinnerSettable {
 
@@ -33,6 +35,7 @@ public class IncidRegAcFragment extends Fragment implements ComuSpinnerSettable,
     Spinner mAmbitoIncidenciaSpinner;
     IncidenciaDataDbHelper dbHelper;
     View mFragmentView;
+    IncidImportanciaBean mIncidImportanciaBean;
 
     public IncidRegAcFragment()
     {
@@ -69,6 +72,7 @@ public class IncidRegAcFragment extends Fragment implements ComuSpinnerSettable,
         Log.d(TAG, "onActivityCreated()");
 
         mIncidenciaBean = new IncidenciaBean();
+        mIncidImportanciaBean = new IncidImportanciaBean();
         dbHelper = new IncidenciaDataDbHelper(getActivity());
         doComunidadSpinner();
         mAmbitoIncidenciaSpinner = (Spinner) getView().findViewById(R.id.incid_reg_ambito_spinner);
@@ -89,7 +93,6 @@ public class IncidRegAcFragment extends Fragment implements ComuSpinnerSettable,
 //              .......... HELPER METHDOS .......
 //    ============================================================
 
-    @SuppressWarnings("ConstantConditions")
     private void doComunidadSpinner()
     {
         mComunidadSpinner = (Spinner) getView().findViewById(R.id.incid_reg_comunidad_spinner);
@@ -162,6 +165,13 @@ public class IncidRegAcFragment extends Fragment implements ComuSpinnerSettable,
     {
         Log.d(TAG, "getIncidenciaBean()");
         return mIncidenciaBean;
+    }
+
+    @Override
+    public IncidImportanciaBean getIncidImportanciaBean()
+    {
+        Log.d(TAG, "getIncidImportanciaBean()");
+        return mIncidImportanciaBean;
     }
 
     @Override

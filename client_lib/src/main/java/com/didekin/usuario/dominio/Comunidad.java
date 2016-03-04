@@ -2,7 +2,6 @@ package com.didekin.usuario.dominio;
 
 
 import com.didekin.common.BeanBuilder;
-import com.didekin.common.exception.DidekinExceptionMsg;
 
 import java.io.InvalidObjectException;
 import java.io.ObjectInputStream;
@@ -279,9 +278,6 @@ public final class Comunidad implements Comparable<Comunidad>, Serializable {
             if (comunidad.c_Id <= 0 && (comunidad.tipoVia == null || comunidad.nombreVia == null || comunidad
                     .municipio == null)) {
                 throw new IllegalStateException(COMUNIDAD_WRONG_INIT.toString());
-            }
-            if (comunidad.sufijoNumero == null) {
-                throw new IllegalStateException(DidekinExceptionMsg.SUFIJO_NUM_IN_COMUNIDAD_NULL.toString());
             }
             return comunidad;
         }

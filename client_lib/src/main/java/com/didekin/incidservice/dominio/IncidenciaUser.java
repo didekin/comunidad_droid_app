@@ -1,12 +1,12 @@
 package com.didekin.incidservice.dominio;
 
 import com.didekin.common.BeanBuilder;
-import com.didekin.usuario.dominio.UsuarioComunidad;
+import com.didekin.usuario.dominio.Usuario;
 
 import java.io.InvalidObjectException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.util.Objects;
 
 import static com.didekin.common.exception.DidekinExceptionMsg.INCIDENCIA_USER_WRONG_INIT;
 
@@ -15,31 +15,20 @@ import static com.didekin.common.exception.DidekinExceptionMsg.INCIDENCIA_USER_W
  * Date: 12/11/15
  * Time: 17:08
  */
-@SuppressWarnings("unused")
-public class IncidenciaUser implements Serializable{
+
+/**
+ * Holder object for the incidencia and its initiating user data.
+ * Integrity constraint: incidencia.userName == userComu.userName.
+ */
+public class IncidenciaUser implements Serializable {
 
     private final Incidencia incidencia;
-    private final UsuarioComunidad usuario;
-    private final short importancia;     //TODO: eliminar.
-
-    /**
-     * A flag to signal that ...
-     * 1. The incidencia has no IncidenciaUser instances with importancia > 1 associated,
-     *    with the possible exception of that one corresponding to the primal incidenciaUser (iniciador).
-     * 2. This usuarioComunidad corresponds to the user who initiated the incidencia.
-     *
-     * True if both conditions are met.
-     */
-    private final boolean isYetIniciador;
-    private final Timestamp fechaAlta; // TODO: eliminar.
+    private final Usuario usuario;
 
     public IncidenciaUser(IncidenciaUserBuilder builder) throws IllegalStateException
     {
         incidencia = builder.incidencia;
         usuario = builder.usuario;
-        importancia = builder.importancia;
-        isYetIniciador = builder.isYetIniciador;
-        fechaAlta = builder.fechaAlta;
     }
 
     public Incidencia getIncidencia()
@@ -47,24 +36,9 @@ public class IncidenciaUser implements Serializable{
         return incidencia;
     }
 
-    public UsuarioComunidad getUsuarioComunidad()
+    public Usuario getUsuario()
     {
         return usuario;
-    }
-
-    public short getImportancia()
-    {
-        return importancia;
-    }
-
-    public boolean isYetIniciador()
-    {
-        return isYetIniciador;
-    }
-
-    public Timestamp getFechaAlta()
-    {
-        return fechaAlta;
     }
 
     // ............................ Serializable ...............................
@@ -108,39 +82,14 @@ public class IncidenciaUser implements Serializable{
     public final static class IncidenciaUserBuilder implements BeanBuilder<IncidenciaUser> {
 
         private Incidencia incidencia;
-        private UsuarioComunidad usuario;
-        private short importancia;
-        private boolean isYetIniciador;
-        private Timestamp fechaAlta;
+        private Usuario usuario;
 
         public IncidenciaUserBuilder(Incidencia incidencia)
         {
             this.incidencia = incidencia;
         }
 
-        public IncidenciaUserBuilder(IncidenciaUser incidenciaUser)
-        {
-            copyIncidUser(incidenciaUser);
-        }
-
-        public IncidenciaUserBuilder importancia(short initValue)
-        {
-            importancia = initValue;
-            return this;
-        }
-
-        public IncidenciaUserBuilder isYetIniciador(boolean initValue){
-            isYetIniciador = initValue;
-            return this;
-        }
-
-        public IncidenciaUserBuilder fechaAlta(Timestamp initValue)
-        {
-            fechaAlta = initValue;
-            return this;
-        }
-
-        public IncidenciaUserBuilder usuario(UsuarioComunidad initValue)
+        public IncidenciaUserBuilder usuario(Usuario initValue)
         {
             usuario = initValue;
             return this;
@@ -148,10 +97,7 @@ public class IncidenciaUser implements Serializable{
 
         public IncidenciaUserBuilder copyIncidUser(IncidenciaUser initValue)
         {
-            importancia = initValue.importancia;
-            isYetIniciador = initValue.isYetIniciador;
             usuario = initValue.usuario;
-            fechaAlta = initValue.fechaAlta;
             return this;
         }
 
@@ -159,22 +105,11 @@ public class IncidenciaUser implements Serializable{
         public IncidenciaUser build()
         {
             IncidenciaUser incidenciaUser = new IncidenciaUser(this);
-            if (hasConditionOne(incidenciaUser) || hasConditionTwo(incidenciaUser)) {
+            if (incidenciaUser.incidencia == null || incidenciaUser.usuario == null ||
+                    !Objects.equals(incidenciaUser.usuario.getUserName(), incidencia.getUserName())) {
                 throw new IllegalStateException(INCIDENCIA_USER_WRONG_INIT.toString());
             }
             return incidenciaUser;
-        }
-
-        private boolean hasConditionOne(IncidenciaUser incidenciaUser)
-        {
-            return incidenciaUser.incidencia == null;
-        }
-
-        private boolean hasConditionTwo(IncidenciaUser incidenciaUser)
-        {
-            return incidenciaUser.incidencia != null
-                    && usuario != null
-                    && (!incidenciaUser.incidencia.getComunidad().equals(usuario.getComunidad()));
         }
     }
 
@@ -183,27 +118,18 @@ public class IncidenciaUser implements Serializable{
     private static class InnerSerial implements Serializable {
 
         private final Incidencia incidencia;
-        private final UsuarioComunidad usuario;
-        private final short importancia;
-        private final boolean isYetIniciador;
-        private final Timestamp fechaAlta;
+        private final Usuario usuario;
 
         public InnerSerial(IncidenciaUser incidenciaUser)
         {
             incidencia = incidenciaUser.incidencia;
             usuario = incidenciaUser.usuario;
-            importancia = incidenciaUser.importancia;
-            isYetIniciador = incidenciaUser.isYetIniciador;
-            fechaAlta = incidenciaUser.fechaAlta;
         }
 
         private Object readResolve()
         {
             return (new IncidenciaUserBuilder(incidencia)
                     .usuario(usuario)
-                    .importancia(importancia)
-                    .isYetIniciador(isYetIniciador)
-                    .fechaAlta(fechaAlta)
                     .build());
         }
     }

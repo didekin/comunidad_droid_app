@@ -2,6 +2,6 @@
 <resources>
     <!-- ============= web services ====================-->
     <string name="service_one_host" translatable="false">http://10.0.3.2</string>
-    <string name="service_one_port" translatable="false">:9000</string>
+    <string name="service_one_port" translatable="false">:8080</string>
     <!-- ============= oauth profiles ====================-->
 </resources>

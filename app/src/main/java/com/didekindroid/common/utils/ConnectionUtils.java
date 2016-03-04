@@ -4,6 +4,11 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
+import android.widget.Toast;
+
+import com.didekindroid.R;
+
+import static com.didekindroid.common.utils.UIutils.makeToast;
 
 /**
  * User: pedro
@@ -13,6 +18,15 @@ import android.util.Log;
 public class ConnectionUtils {
 
     private static final String TAG = ConnectionUtils.class.getCanonicalName();
+
+    public static boolean checkInternetConnected(Context context)
+    {
+        if (!isInternetConnected(context)) {
+            makeToast(context, R.string.no_internet_conn_toast, Toast.LENGTH_SHORT);
+            return false;
+        }
+        return true;
+    }
 
     public static boolean isInternetConnected(Context context)
     {
@@ -54,5 +68,4 @@ public class ConnectionUtils {
         Log.d(TAG, "isWifiConnected(): " + isWifiConnected);
         return isWifiConnected;
     }
-
 }

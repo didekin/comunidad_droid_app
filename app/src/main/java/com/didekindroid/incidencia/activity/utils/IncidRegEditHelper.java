@@ -57,7 +57,7 @@ public enum IncidRegEditHelper {
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
                 {
                     Log.d(TAG, "mImportanciaSpinner.onItemSelected()");
-                    fragment.getIncidenciaBean().setImportanciaIncid((short) position);
+                    fragment.getIncidImportanciaBean().setImportancia((short) position);
                 }
 
                 @Override

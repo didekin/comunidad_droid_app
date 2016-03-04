@@ -11,14 +11,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.didekin.incidservice.dominio.IncidComment;
-import com.didekin.incidservice.dominio.IncidenciaUser;
+import com.didekin.incidservice.dominio.IncidImportancia;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.utils.ConnectionUtils;
 import com.didekindroid.common.utils.UIutils;
 import com.didekindroid.incidencia.dominio.IncidCommentBean;
 
-import static com.didekindroid.common.utils.AppKeysForBundle.INCIDENCIA_USER_OBJECT;
+import static com.didekindroid.common.utils.AppKeysForBundle.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.common.utils.UIutils.makeToast;
@@ -36,7 +36,7 @@ import static com.google.common.base.Preconditions.checkState;
 public class IncidCommentRegAc extends AppCompatActivity {
 
     private static final String TAG = IncidCommentRegAc.class.getCanonicalName();
-    IncidenciaUser mIncidenciaUser;
+    IncidImportancia mIncidImportancia;
     Button mComentarButton;
     View mAcView;
 
@@ -50,8 +50,8 @@ public class IncidCommentRegAc extends AppCompatActivity {
         setContentView(mAcView);
         doToolBar(this, true);
 
-        mIncidenciaUser = (IncidenciaUser) getIntent().getExtras().getSerializable(INCIDENCIA_USER_OBJECT.extra);
-        ((TextView) findViewById(R.id.incid_reg_desc_txt)).setText(mIncidenciaUser.getIncidencia().getDescripcion());
+        mIncidImportancia = (IncidImportancia) getIntent().getExtras().getSerializable(INCID_IMPORTANCIA_OBJECT.extra);
+        ((TextView) findViewById(R.id.incid_reg_desc_txt)).setText(mIncidImportancia.getIncidencia().getDescripcion());
         mComentarButton = (Button) findViewById(R.id.incid_comment_reg_button);
         mComentarButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,7 +71,7 @@ public class IncidCommentRegAc extends AppCompatActivity {
     {
         Log.d(TAG, "registerComment()");
         StringBuilder errorMsg = getErrorMsgBuilder(this);
-        IncidCommentBean commentBean = new IncidCommentBean(mIncidenciaUser.getIncidencia());
+        IncidCommentBean commentBean = new IncidCommentBean(mIncidImportancia.getIncidencia());
         IncidComment comment = commentBean.makeComment(mAcView ,errorMsg, getResources());
 
         if (comment == null) {
@@ -117,7 +117,7 @@ public class IncidCommentRegAc extends AppCompatActivity {
             } else {
                 checkState(rowInserted == 1);
                 Intent intent = new Intent(IncidCommentRegAc.this, IncidCommentSeeAc.class);
-                intent.putExtra(INCIDENCIA_USER_OBJECT.extra, mIncidenciaUser);
+                intent.putExtra(INCID_IMPORTANCIA_OBJECT.extra, mIncidImportancia);
                 startActivity(intent);
             }
         }

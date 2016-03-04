@@ -2,6 +2,7 @@ package com.didekindroid.incidencia.activity;
 
 import android.widget.Spinner;
 
+import com.didekindroid.incidencia.dominio.IncidImportanciaBean;
 import com.didekindroid.incidencia.dominio.IncidenciaBean;
 
 /**
@@ -11,7 +12,7 @@ import com.didekindroid.incidencia.dominio.IncidenciaBean;
  */
 public interface ImportanciaSpinnerSettable {
 
-    IncidenciaBean getIncidenciaBean();
+    IncidImportanciaBean getIncidImportanciaBean();
 
     Spinner getImportanciaSpinner();
 

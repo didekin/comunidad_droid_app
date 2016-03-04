@@ -10,8 +10,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.didekin.incidservice.dominio.IncidImportancia;
 import com.didekin.incidservice.dominio.Incidencia;
-import com.didekin.incidservice.dominio.IncidenciaUser;
 import com.didekin.incidservice.dominio.Resolucion;
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekindroid.R;
@@ -21,7 +21,7 @@ import com.didekindroid.common.utils.ConnectionUtils;
 
 import java.sql.Timestamp;
 
-import static com.didekindroid.common.utils.AppKeysForBundle.INCIDENCIA_USER_OBJECT;
+import static com.didekindroid.common.utils.AppKeysForBundle.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.common.utils.UIutils.makeToast;
@@ -41,7 +41,7 @@ public class IncidResolucionRegAc extends AppCompatActivity implements
 
     private static final String TAG = IncidResolucionRegAc.class.getCanonicalName();
     IncidResolucionRegAcFragment mRegFragment;
-    IncidenciaUser mIncidUser;
+    IncidImportancia mIncidImportancia;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -53,7 +53,7 @@ public class IncidResolucionRegAc extends AppCompatActivity implements
         setContentView(mAcView);
         doToolBar(this, true);
 
-        mIncidUser = (IncidenciaUser) getIntent().getSerializableExtra(INCIDENCIA_USER_OBJECT.extra);
+        mIncidImportancia = (IncidImportancia) getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.extra);
 
         mRegFragment = (IncidResolucionRegAcFragment) getFragmentManager()
                 .findFragmentById(R.id.incid_resolucion_reg_frg);
@@ -91,9 +91,9 @@ public class IncidResolucionRegAc extends AppCompatActivity implements
         }
 
         final Incidencia incidencia = new Incidencia.IncidenciaBuilder()
-                .incidenciaId(mIncidUser.getIncidencia().getIncidenciaId())
+                .incidenciaId(mIncidImportancia.getIncidencia().getIncidenciaId())
                 .comunidad(new Comunidad.ComunidadBuilder()
-                        .c_id(mIncidUser.getIncidencia().getComunidad().getC_Id())
+                        .c_id(mIncidImportancia.getIncidencia().getComunidad().getC_Id())
                         .build())
                 .build();
         return new Resolucion.ResolucionBuilder(incidencia)
@@ -120,10 +120,10 @@ public class IncidResolucionRegAc extends AppCompatActivity implements
     }
 
     @Override
-    public IncidenciaUser getIncidenciaUser()
+    public IncidImportancia getIncidImportancia()
     {
-        Log.d(TAG, "getIncidenciaUser()");
-        return mIncidUser;
+        Log.d(TAG, "getIncidImportancia()");
+        return mIncidImportancia;
     }
 
 //    ============================================================
@@ -156,12 +156,12 @@ public class IncidResolucionRegAc extends AppCompatActivity implements
 
             if (uiException != null) {
                 Intent intent = new Intent();
-                intent.putExtra(INCIDENCIA_USER_OBJECT.extra, mIncidUser);
+                intent.putExtra(INCID_IMPORTANCIA_OBJECT.extra, mIncidImportancia);
                 uiException.processMe(IncidResolucionRegAc.this, intent);
             } else {
                 checkState(rowInserted == 1);
                 Intent intent = new Intent(IncidResolucionRegAc.this, IncidResolucionEditAc.class);
-                intent.putExtra(INCIDENCIA_USER_OBJECT.extra, mIncidUser);
+                intent.putExtra(INCID_IMPORTANCIA_OBJECT.extra, mIncidImportancia);
                 startActivity(intent);
             }
         }

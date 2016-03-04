@@ -119,7 +119,7 @@ public class UserDataAcTest {
     @Test
     public void testOncreate_2()
     {
-        // Aserciones sobre los datos mostrados en función del usuario en sesión.
+        // Aserciones sobre los datos mostrados en función del userComu en sesión.
         onView(withId(R.id.reg_usuario_email_editT))
                 .check(matches(withText(containsString(USER_JUAN.getUserName()))));
         onView(withId(R.id.reg_usuario_alias_ediT))

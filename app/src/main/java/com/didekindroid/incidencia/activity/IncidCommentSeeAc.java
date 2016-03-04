@@ -7,10 +7,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.didekin.incidservice.dominio.IncidenciaUser;
+import com.didekin.incidservice.dominio.IncidImportancia;
 import com.didekindroid.R;
 
-import static com.didekindroid.common.utils.AppKeysForBundle.INCIDENCIA_USER_OBJECT;
+import static com.didekindroid.common.utils.AppKeysForBundle.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_COMMENT_REG_AC;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -23,12 +23,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * 1. An intent extra is passed with an IncidenciaUser instance on to the option menu 'incid_comment_reg_mn'.
  */
 public class IncidCommentSeeAc extends AppCompatActivity implements
-        IncidCommentSeeListFr.IncidUserGiver {
+        IncidCommentSeeListFr.IncidImportanciaGiver {
 
     private static final String TAG = IncidCommentSeeAc.class.getCanonicalName();
 
     IncidCommentSeeListFr mFragment;
-    IncidenciaUser mIncidenciaUser;
+    IncidImportancia mIncidImportancia;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -39,7 +39,7 @@ public class IncidCommentSeeAc extends AppCompatActivity implements
         setContentView(R.layout.incid_comments_see_ac);
         doToolBar(this, true);
 
-        mIncidenciaUser = (IncidenciaUser) getIntent().getExtras().getSerializable(INCIDENCIA_USER_OBJECT.extra);
+        mIncidImportancia = (IncidImportancia) getIntent().getExtras().getSerializable(INCID_IMPORTANCIA_OBJECT.extra);
 
         mFragment = (IncidCommentSeeListFr) getFragmentManager()
                 .findFragmentById(R.id.incid_comments_see_frg);
@@ -81,7 +81,7 @@ public class IncidCommentSeeAc extends AppCompatActivity implements
         switch (resourceId) {
             case R.id.incid_comment_reg_ac_mn:
                 Intent intent = new Intent();
-                intent.putExtra(INCIDENCIA_USER_OBJECT.extra, mIncidenciaUser);
+                intent.putExtra(INCID_IMPORTANCIA_OBJECT.extra, mIncidImportancia);
                 INCID_COMMENT_REG_AC.doMenuItem(this);
                 return true;
             default:
@@ -89,14 +89,16 @@ public class IncidCommentSeeAc extends AppCompatActivity implements
         }
     }
 
-//  ........... HELPER INTERFACES AND CLASSES ....................
+//    ============================================================
+//    .......... INTERFACE METHODS .......
+//    ============================================================
 
     @Override
-    public IncidenciaUser giveIncidUser()
+    public IncidImportancia giveIncidImportancia()
     {
-        return mIncidenciaUser;
+        Log.d(TAG, "giveIncidImportancia()");
+        return mIncidImportancia;
     }
-
 
 //    ============================================================
 //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......

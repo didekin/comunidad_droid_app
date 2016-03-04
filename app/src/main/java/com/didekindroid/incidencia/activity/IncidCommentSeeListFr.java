@@ -12,8 +12,8 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.didekin.incidservice.dominio.IncidComment;
+import com.didekin.incidservice.dominio.IncidImportancia;
 import com.didekin.incidservice.dominio.Incidencia;
-import com.didekin.incidservice.dominio.IncidenciaUser;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 
@@ -35,8 +35,8 @@ public class IncidCommentSeeListFr extends ListFragment {
     IncidCommentSeeAdapter mAdapter;
     View mView;
     ListView mListView;
-    IncidUserGiver mIncidUserGiver;
-    IncidenciaUser fIncidUser;
+    IncidImportanciaGiver mIncidImportanciaGiver;
+    IncidImportancia mIncidImportancia;
 
     @Override
     public void onAttach(Context context)
@@ -68,9 +68,9 @@ public class IncidCommentSeeListFr extends ListFragment {
         super.onActivityCreated(savedInstanceState);
 
         mAdapter = new IncidCommentSeeAdapter(getActivity());
-        mIncidUserGiver = (IncidUserGiver) getActivity();
-        fIncidUser = mIncidUserGiver.giveIncidUser();
-        new IncidCommentLoader().execute(fIncidUser.getIncidencia());
+        mIncidImportanciaGiver = (IncidImportanciaGiver) getActivity();
+        mIncidImportancia = mIncidImportanciaGiver.giveIncidImportancia();
+        new IncidCommentLoader().execute(mIncidImportancia.getIncidencia());
 
         mListView = (ListView) mView.findViewById(android.R.id.list);
         mListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
@@ -142,8 +142,8 @@ public class IncidCommentSeeListFr extends ListFragment {
         Log.d(TAG, "onListItemClick()");
     }
 
-    public interface IncidUserGiver {
-        IncidenciaUser giveIncidUser();
+    public interface IncidImportanciaGiver {
+        IncidImportancia giveIncidImportancia();
     }
 
     //    ============================================================
@@ -161,7 +161,7 @@ public class IncidCommentSeeListFr extends ListFragment {
             Log.d(TAG, "doInBackground()");
             List<IncidComment> comments = null;
             try{
-                comments = IncidenciaServ.incidCommentsSee(params[0]);
+                comments = IncidenciaServ.seeCommentsByIncid(params[0].getIncidenciaId());
             } catch (UiException ue){
                 uiException = ue;
             }

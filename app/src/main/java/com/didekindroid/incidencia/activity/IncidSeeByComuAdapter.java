@@ -70,9 +70,10 @@ public class IncidSeeByComuAdapter extends ArrayAdapter<IncidenciaUser> {
         void initializeTextInViews(IncidenciaUser incidenciaUser)
         {
             Log.d(TAG, "initializeTextInViews()");
+            // TODO: controlar cuándo no hay importanciaAVG. Enseñar en blanco.
             mDescripcionView.setText(incidenciaUser.getIncidencia().getDescripcion());
-            mFechaAltaView.setText(formatTimeStampToString(incidenciaUser.getFechaAlta()));
-            mIniciador.setText(incidenciaUser.getUsuarioComunidad().getUsuario().getAlias());
+            mFechaAltaView.setText(formatTimeStampToString(incidenciaUser.getIncidencia().getFechaAlta()));
+            mIniciador.setText(incidenciaUser.getUsuario().getAlias());
             short ambitoPk = incidenciaUser.getIncidencia().getAmbitoIncidencia().getAmbitoId();
             mAmbitoView.setText(new IncidenciaDataDbHelper(getContext()).getAmbitoDescByPk(ambitoPk));
             int mImportanciaAvg = Math.round(incidenciaUser.getIncidencia().getImportanciaAvg());

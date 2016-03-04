@@ -15,14 +15,16 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.didekin.incidservice.dominio.IncidenciaUser;
+import com.didekin.incidservice.dominio.IncidImportancia;
+import com.didekin.incidservice.dominio.Incidencia;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
-import com.didekindroid.common.utils.ConnectionUtils;
-import com.didekindroid.common.utils.UIutils;
+import com.didekindroid.incidencia.dominio.IncidImportanciaBean;
 import com.didekindroid.incidencia.dominio.IncidenciaBean;
 import com.didekindroid.incidencia.repository.IncidenciaDataDbHelper;
 
+import static android.view.View.GONE;
+import static com.didekindroid.common.utils.ConnectionUtils.checkInternetConnected;
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.common.utils.UIutils.makeToast;
 import static com.didekindroid.incidencia.activity.utils.IncidRegEditHelper.HELPER;
@@ -34,17 +36,19 @@ import static com.google.common.base.Preconditions.checkState;
  * Date: 22/01/16
  * Time: 16:16
  */
+
 @SuppressWarnings("ConstantConditions")
 public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettable,
         ImportanciaSpinnerSettable {
 
     private static final String TAG = IncidEditMaxPowerFr.class.getCanonicalName();
     View fFragmentView;
-    IncidenciaUser fIncidenciaUser;
+    IncidImportancia mIncidImportancia;
     Spinner mAmbitoIncidSpinner;
     Spinner mImportanciaSpinner;
     IncidenciaDataDbHelper dbHelper;
     IncidenciaBean mIncidenciaBean;
+    IncidImportanciaBean mIncidImportanciaBean;
     Button mButtonModify;
     Button mButtonErase;
 
@@ -61,14 +65,15 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
     {
         Log.d(TAG, "onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
+        mIncidImportancia = ((IncidUserDataSupplier) getActivity()).getIncidImportancia();
 
         mIncidenciaBean = new IncidenciaBean();
+        mIncidImportanciaBean = new IncidImportanciaBean();
         dbHelper = new IncidenciaDataDbHelper(getActivity());
-        fIncidenciaUser = ((IncidUserDataSupplier) getActivity()).getIncidenciaUser();
 
-        mIncidenciaBean.setComunidadId(fIncidenciaUser.getIncidencia().getComunidad().getC_Id());
-        ((TextView) fFragmentView.findViewById(R.id.incid_comunidad_txt)).setText(fIncidenciaUser.getIncidencia().getComunidad().getNombreComunidad());
-        ((EditText) fFragmentView.findViewById(R.id.incid_reg_desc_ed)).setText(fIncidenciaUser.getIncidencia().getDescripcion());
+        mIncidenciaBean.setComunidadId(mIncidImportancia.getIncidencia().getComunidad().getC_Id());
+        ((TextView) fFragmentView.findViewById(R.id.incid_comunidad_txt)).setText(mIncidImportancia.getIncidencia().getComunidad().getNombreComunidad());
+        ((EditText) fFragmentView.findViewById(R.id.incid_reg_desc_ed)).setText(mIncidImportancia.getIncidencia().getDescripcion());
 
         mAmbitoIncidSpinner = (Spinner) getView().findViewById(R.id.incid_reg_ambito_spinner);
         HELPER.doAmbitoIncidenciaSpinner(this);
@@ -81,19 +86,25 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
             public void onClick(View v)
             {
                 Log.d(TAG, "mButtonModify.onClick()");
-                modifyIncidenciaUser();
+                modifyIncidenciaAndImportancia();
             }
         });
 
+        // Erase button doesn't appear when user hasn't adm authority.
         mButtonErase = (Button) getView().findViewById(R.id.incid_edit_max_fr_borrar_button);
+        if (! mIncidImportancia.getUserComu().hasAdministradorAuthority()){
+            mButtonErase.setVisibility(GONE);
+            getView().findViewById(R.id.incid_edit_fr_borrar_txt).setVisibility(GONE);
+        }
         mButtonErase.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
             {
                 Log.d(TAG, "mButtonErase.onClick()");
-                eraseIncidenciaUser();
+                eraseIncidencia();
             }
         });
+
     }
 
     @Override
@@ -108,30 +119,30 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
 //    ...................... HELPER METHODS ......................
 //    ============================================================
 
-    private void modifyIncidenciaUser()
+    private void modifyIncidenciaAndImportancia()
     {
-        Log.d(TAG, "modifyIncidenciaUser()");
+        Log.d(TAG, "modifyIncidenciaAndImportancia()");
 
         StringBuilder errorMsg = getErrorMsgBuilder(getActivity());
-        final IncidenciaUser incidenciaUser = mIncidenciaBean.makeIncidenciaUser(fFragmentView, errorMsg);
-
-        if (incidenciaUser == null) {
-            Log.d(TAG, "modifyIncidenciaUser(), incidenciaUser == null");
+        final Incidencia incidencia = mIncidenciaBean.makeIncidencia(fFragmentView, errorMsg, getResources());
+        IncidImportancia incidImportancia = null;
+        try {
+            incidImportancia = mIncidImportanciaBean.makeIncidImportancia(errorMsg, getResources(), incidencia);
+        } catch (IllegalStateException e) {
             makeToast(getActivity(), errorMsg.toString(), Toast.LENGTH_SHORT);
-        } else if (!ConnectionUtils.isInternetConnected(getActivity())) {
-            UIutils.makeToast(getActivity(), R.string.no_internet_conn_toast, Toast.LENGTH_SHORT);
-        } else {
-            new IncidenciaModifyer().execute(incidenciaUser);
+        }
+        if(incidImportancia != null && checkInternetConnected(getActivity())){
+            new IncidenciaModifyer().execute(incidImportancia);
         }
     }
 
-    private void eraseIncidenciaUser()
+    private void eraseIncidencia()
     {
-        Log.d(TAG, "eraseIncidenciaUser()");
-        if (!ConnectionUtils.isInternetConnected(getActivity())) {
-            UIutils.makeToast(getActivity(), R.string.no_internet_conn_toast, Toast.LENGTH_SHORT);
-        } else {
-            new IncidenciaEraser().execute(fIncidenciaUser);
+        Log.d(TAG, "eraseIncidencia()");
+
+        if (checkInternetConnected(getActivity())){
+            checkState(mIncidImportancia.getUserComu().hasAdministradorAuthority());
+            new IncidenciaEraser().execute(mIncidImportancia.getIncidencia());
         }
     }
 
@@ -143,7 +154,7 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
     public void onAmbitoIncidSpinnerLoaded()
     {
         Log.d(TAG, "onAmbitoIncidSpinnerLoaded()");
-        mAmbitoIncidSpinner.setSelection(fIncidenciaUser.getIncidencia().getAmbitoIncidencia().getAmbitoId());
+        mAmbitoIncidSpinner.setSelection(mIncidImportancia.getIncidencia().getAmbitoIncidencia().getAmbitoId());
     }
 
     @Override
@@ -175,6 +186,13 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
     }
 
     @Override
+    public IncidImportanciaBean getIncidImportanciaBean()
+    {
+        Log.d(TAG, "getIncidImportanciaBean()");
+        return mIncidImportanciaBean;
+    }
+
+    @Override
     public Spinner getImportanciaSpinner()
     {
         Log.d(TAG, "getImportanciaSpinner()");
@@ -184,27 +202,27 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
     @Override
     public void onImportanciaSpinnerLoaded()
     {
-        Log.d(TAG, "onImportanciaSpinnerLoaded(), importancia= " + fIncidenciaUser.getImportancia());
-        mImportanciaSpinner.setSelection(fIncidenciaUser.getImportancia());
+        Log.d(TAG, "onImportanciaSpinnerLoaded(), importancia= " + mIncidImportancia.getImportancia());
+        mImportanciaSpinner.setSelection(mIncidImportancia.getImportancia());
     }
 
 //    ============================================================
 //    ..................... INNER CLASSES  .......................
 //    ============================================================
 
-    class IncidenciaModifyer extends AsyncTask<IncidenciaUser, Void, Integer> {
+    class IncidenciaModifyer extends AsyncTask<IncidImportancia, Void, Integer> {
 
         private final String TAG = IncidenciaModifyer.class.getCanonicalName();
         UiException uiException;
 
         @Override
-        protected Integer doInBackground(IncidenciaUser... incidenciaUsers)
+        protected Integer doInBackground(IncidImportancia... incidImportancias)
         {
             Log.d(TAG, "doInBackground()");
             int rowInserted = 0;
 
             try {
-                rowInserted = IncidenciaServ.modifyIncidenciaUser(incidenciaUsers[0]);
+                rowInserted = IncidenciaServ.modifyIncidImportancia(incidImportancias[0]);
             } catch (UiException e) {
                 uiException = e;
             }
@@ -226,18 +244,18 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
         }
     }
 
-    class IncidenciaEraser extends AsyncTask<IncidenciaUser, Void, Integer> {
+    class IncidenciaEraser extends AsyncTask<Incidencia, Void, Integer> {
 
         private final String TAG = IncidenciaEraser.class.getCanonicalName();
         UiException uiException;
 
         @Override
-        protected Integer doInBackground(IncidenciaUser... params)
+        protected Integer doInBackground(Incidencia... params)
         {
             Log.d(TAG, "doInBackground()");
             int rowsDeleted = 0;
             try {
-                rowsDeleted = IncidenciaServ.deleteIncidencia(params[0].getIncidencia().getIncidenciaId());
+                rowsDeleted = IncidenciaServ.deleteIncidencia(params[0].getIncidenciaId());
             } catch (UiException e) {
                 uiException = e;
             }

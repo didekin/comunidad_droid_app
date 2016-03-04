@@ -108,6 +108,9 @@ public final class UsuarioTestUtils {
     public static final UsuarioComunidad COMU_ESCORIAL_PEPE = makeUsuarioComunidad(COMU_EL_ESCORIAL, USER_PEPE,
             "portal22", "esc22", "planta22", "door22", PRESIDENTE.function.concat(",").concat(INQ.function));
 
+    public static final UsuarioComunidad COMU_ESCORIAL_JUAN = makeUsuarioComunidad(COMU_EL_ESCORIAL, USER_JUAN,
+            "portal21", "esc21", "planta21", "door21", PRO.function);
+
     public static final UsuarioComunidad COMU_LA_FUENTE_PEPE = makeUsuarioComunidad(COMU_LA_FUENTE, USER_PEPE,
             "portal33", "esc33", "planta33", "door33", ADM.function.concat(",").concat(PRE.function));
 
@@ -161,9 +164,15 @@ public final class UsuarioTestUtils {
                 .roles(roles).build();
     }
 
+    public static UsuarioComunidad makeUserComuWithComunidadId(UsuarioComunidad usuarioComunidad, long comunidadId){
+
+        Comunidad comunidad = new Comunidad.ComunidadBuilder().c_id(comunidadId).build();
+        return new UsuarioComunidad.UserComuBuilder(comunidad,usuarioComunidad.getUsuario()).userComuRest(usuarioComunidad).build();
+    }
+
     public static List<UsuarioComunidad> makeListTwoUserComu()
     {
-        // Dos comunidades diferentes con un mismo usuario.
+        // Dos comunidades diferentes con un mismo userComu.
         List<UsuarioComunidad> userComuList = new ArrayList<>(2);
         userComuList.add(COMU_REAL_JUAN);
         userComuList.add(COMU_PLAZUELA5_JUAN);

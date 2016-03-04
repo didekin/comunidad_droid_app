@@ -2,6 +2,7 @@ package com.didekindroid.incidencia.testutils;
 
 import com.didekin.incidservice.dominio.AmbitoIncidencia;
 import com.didekin.incidservice.dominio.IncidComment;
+import com.didekin.incidservice.dominio.IncidImportancia;
 import com.didekin.incidservice.dominio.Incidencia;
 import com.didekin.incidservice.dominio.IncidenciaUser;
 import com.didekin.incidservice.dominio.Resolucion;
@@ -12,8 +13,6 @@ import com.didekindroid.common.activity.UiException;
 import java.sql.Timestamp;
 
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
 
 /**
  * User: pedro@didekin
@@ -39,9 +38,10 @@ public final class IncidenciaTestUtils {
                 .build();
     }
 
-    public static Incidencia doIncidencia(String descripcion, long comunidadId, short ambitoId)
+    public static Incidencia doIncidencia(String userName, String descripcion, long comunidadId, short ambitoId)
     {
         return new Incidencia.IncidenciaBuilder()
+                .userName(userName)
                 .comunidad(new Comunidad.ComunidadBuilder().c_id(comunidadId).build())
                 .descripcion(descripcion)
                 .ambitoIncid(new AmbitoIncidencia(ambitoId))
@@ -67,23 +67,25 @@ public final class IncidenciaTestUtils {
                 .build();
     }
 
-    public static IncidenciaUser insertGetIncidencia(UsuarioComunidad userComu, int importancia) throws UiException
+    public static IncidenciaUser insertGetIncidImportancia(UsuarioComunidad userComu, int importancia) throws UiException
     {
-        IncidenciaUser incidUserComu = new IncidenciaUser.IncidenciaUserBuilder(doIncidencia("Incidencia One", userComu.getComunidad().getC_Id(), (short) 43))
-                .usuario(userComu)
+        IncidImportancia incidImportancia = new IncidImportancia.IncidImportanciaBuilder(
+                doIncidencia(userComu.getUsuario().getUserName(), "Incidencia One", userComu.getComunidad().getC_Id(), (short) 43))
+                .usuarioComunidad(userComu)
                 .importancia((short) importancia)
                 .build();
-        assertThat(IncidenciaServ.regIncidenciaUser(incidUserComu), is(1));
-        return IncidenciaServ.incidSeeByComu(userComu.getComunidad().getC_Id()).get(0);
+
+        IncidenciaServ.regIncidImportancia(incidImportancia);
+        return IncidenciaServ.seeIncidsOpenByComu(userComu.getComunidad().getC_Id()).get(0);
     }
 
     public static IncidenciaUser insertGetIncidenciaWithId(long incidenciaId, UsuarioComunidad userComu, int importancia) throws UiException
     {
-        IncidenciaUser incidUserComu = new IncidenciaUser.IncidenciaUserBuilder(doIncidenciaWithId(incidenciaId, "descripcion", userComu.getComunidad().getC_Id(), (short) 43))
-                .usuario(userComu)
+        IncidImportancia incidImportancia = new IncidImportancia.IncidImportanciaBuilder(doIncidenciaWithId(incidenciaId, "descripcion", userComu.getComunidad().getC_Id(), (short) 43))
+                .usuarioComunidad(userComu)
                 .importancia((short) importancia)
                 .build();
-        assertThat(IncidenciaServ.regUserInIncidencia(incidUserComu), is(1));
-        return IncidenciaServ.incidSeeByComu(userComu.getComunidad().getC_Id()).get(0);
+        IncidenciaServ.regIncidImportancia(incidImportancia);
+        return IncidenciaServ.seeIncidsOpenByComu(userComu.getComunidad().getC_Id()).get(0);
     }
 }

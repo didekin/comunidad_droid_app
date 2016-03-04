@@ -116,7 +116,7 @@ public class UsuarioServiceTest {
     {
         // No file with refreshToken.
         assertThat(refreshTkFile.exists(), is(false));
-        //Inserta usuario, comunidad, usuariocomunidad y actuliza tokenCache.
+        //Inserta userComu, comunidad, usuariocomunidad y actuliza tokenCache.
         signUpAndUpdateTk(COMU_REAL_JUAN);
 
         whatClean = CLEAN_JUAN;
@@ -207,7 +207,7 @@ public class UsuarioServiceTest {
     @Test
     public void testGetUserData() throws Exception
     {
-        //Inserta usuario, comunidad, usuariocomunidad y actuliza tokenCache.
+        //Inserta userComu, comunidad, usuariocomunidad y actuliza tokenCache.
         signUpAndUpdateTk(COMU_REAL_JUAN);
 
         Usuario usuario = ServOne.getUserData();
@@ -377,7 +377,7 @@ public class UsuarioServiceTest {
         whatClean = CLEAN_JUAN;
 
         assertThat(refreshTkFile.exists(), is(false));
-        //Inserta usuario, comunidad, usuariocomunidad y actuliza tokenCache.
+        //Inserta userComu, comunidad, usuariocomunidad y actuliza tokenCache.
         signUpAndUpdateTk(COMU_REAL_JUAN);
 
         boolean isRegistered = ServOne.regComuAndUserComu(COMU_PLAZUELA5_JUAN);
@@ -440,10 +440,10 @@ public class UsuarioServiceTest {
         List<Comunidad> comunidadesUserOne = ServOne.getComusByUser();
         Comunidad comunidad = new Comunidad.ComunidadBuilder().c_id(comunidadesUserOne.get(0).getC_Id()).build();
 
-        // Segundo usuarioComunidad, con diferente usuario y comunidad.
+        // Segundo usuarioComunidad, con diferente userComu y comunidad.
         signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
 
-        // Añado comunidad del primer usuario al segundo.
+        // Añado comunidad del primer userComu al segundo.
         UsuarioComunidad userComu = makeUsuarioComunidad(comunidad, null, "portal",
                 "esc", "planta2", "doorJ", PRO.function);
         int rowInserted = ServOne.regUserComu(userComu);
@@ -532,7 +532,7 @@ public class UsuarioServiceTest {
     @Test
     public void testSeeUserComusByUser_4() throws Exception
     {
-        //Inserta usuario, comunidad, usuariocomunidad y actuliza tokenCache.
+        //Inserta userComu, comunidad, usuariocomunidad y actuliza tokenCache.
         signUpAndUpdateTk(COMU_REAL_JUAN);
 
         List<UsuarioComunidad> comunidadesUser = ServOne.seeUserComusByUser();
@@ -553,7 +553,7 @@ public class UsuarioServiceTest {
     {
         assertThat(refreshTkFile.exists(), is(false));
 
-        //Inserta usuario, comunidad, usuariocomunidad y actuliza tokenCache.
+        //Inserta userComu, comunidad, usuariocomunidad y actuliza tokenCache.
         signUpAndUpdateTk(COMU_REAL_JUAN);
 
         assertThat(refreshTkFile.exists(), is(true));
@@ -569,6 +569,6 @@ public class UsuarioServiceTest {
     public void testBaseURL() throws Exception
     {
         String hostAndPort = DidekindroidApp.getBaseURL();
-        assertThat(hostAndPort, equalTo("http://10.0.3.2:9000"));
+        assertThat(hostAndPort, equalTo("http://10.0.3.2:8080"));
     }
 }

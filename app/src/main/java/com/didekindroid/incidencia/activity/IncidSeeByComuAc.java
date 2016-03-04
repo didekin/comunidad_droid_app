@@ -8,8 +8,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.didekin.incidservice.dominio.IncidImportancia;
 import com.didekin.incidservice.dominio.Incidencia;
-import com.didekin.incidservice.dominio.IncidenciaUser;
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
@@ -17,7 +17,7 @@ import com.didekindroid.incidencia.gcm.GcmRegistrationIntentServ;
 
 import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_ID;
 import static com.didekindroid.common.utils.AppKeysForBundle.INCIDENCIA_LIST_INDEX;
-import static com.didekindroid.common.utils.AppKeysForBundle.INCIDENCIA_USER_OBJECT;
+import static com.didekindroid.common.utils.AppKeysForBundle.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.utils.UIutils.checkPlayServices;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.isGcmTokenSentServer;
@@ -29,16 +29,13 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
 /**
+ * This activity is a point of registration for receiving GCM notifications of new incidents.
+ *
  * Preconditions:
  * 1. The user is registered.
  * 2. The user is registered NOW in the comunidad whose open incidencias are shown.
  * Postconditions:
- * 1. The incidencia selected on the list is shown to the user in mode edition:
- * -- If the user was the original author of the incidencia, it can modified its description.
- * -- Every user can modify the importancia assigned by her to the incidencia.
- * -- Only the original author can erase an incidencia, if the rest of the users have assigned an importancia
- * equal o lower than 'low'.
- * 2. An intent is passed with the incidenciaUser selected.
+ * 1. An intent is passed with an IncidImportancia instance, where the selected incidencia is embedded.
  */
 public class IncidSeeByComuAc extends AppCompatActivity implements
         IncidListListener {
@@ -49,9 +46,6 @@ public class IncidSeeByComuAc extends AppCompatActivity implements
     int mIncidenciaIndex;
     Comunidad mComunidadSelected;
 
-    /**
-     * This activity is a point of registration for receiving GCM notifications of new incidents.
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -145,36 +139,35 @@ public class IncidSeeByComuAc extends AppCompatActivity implements
 //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
 //    ============================================================
 
-    private class IncidUserGetter extends AsyncTask<Long, Void, IncidenciaUser> {
+    private class IncidUserGetter extends AsyncTask<Long, Void, IncidImportancia> {
 
         private final String TAG = IncidUserGetter.class.getCanonicalName();
         UiException uiException;
 
         @Override
-        protected IncidenciaUser doInBackground(final Long... incidenciaId)
+        protected IncidImportancia doInBackground(final Long... incidenciaId)
         {
             Log.d(TAG, "doInBackground()");
-            IncidenciaUser incidenciaUser = null;
+            IncidImportancia incidImportancia = null;
             try {
-                incidenciaUser = IncidenciaServ.getIncidenciaUserWithPowers(incidenciaId[0]);
-                // TODO: traernos en el objeto la resolución. ¿Meterlo en un extra propio? Serializable. Nos permite mostrar regResolución o editResolucion.
+                incidImportancia = IncidenciaServ.seeIncidImportancia(incidenciaId[0]);
             } catch (UiException e) {
                 uiException = e;
             }
-            return incidenciaUser;
+            return incidImportancia;
         }
 
         @Override
-        protected void onPostExecute(IncidenciaUser incidenciaUser)
+        protected void onPostExecute(IncidImportancia incidImportancia)
         {
             Log.d(TAG, "onPostExecute()");
 
             if (uiException != null) {
                 uiException.processMe(IncidSeeByComuAc.this, new Intent());
             } else {
-                checkState(incidenciaUser != null);
+                checkState(incidImportancia != null);
                 Intent intent = new Intent(IncidSeeByComuAc.this, IncidEditAc.class);
-                intent.putExtra(INCIDENCIA_USER_OBJECT.extra, incidenciaUser);
+                intent.putExtra(INCID_IMPORTANCIA_OBJECT.extra, incidImportancia);
                 startActivity(intent);
             }
         }

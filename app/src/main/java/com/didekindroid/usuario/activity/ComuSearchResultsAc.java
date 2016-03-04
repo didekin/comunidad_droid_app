@@ -38,7 +38,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * as an intent extra.
  * 3. If the user is registered with the comunidad selected, an object usuarioComunidad is passed
  * with its data fully initialized:
- * -- usuario: id, alias, userName.
+ * -- userComu: id, alias, userName.
  * -- comunidad: id, tipoVia, nombreVia, numero, sufijoNumero, fechaAlta,
  * ---- municipio: codInProvincia, nombre.
  * ------ provincia: provinciaId, nombre.
