@@ -10,7 +10,6 @@ import com.didekin.incidservice.dominio.IncidenciaUser;
 import com.didekin.incidservice.dominio.Resolucion;
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekindroid.common.activity.UiException;
-import com.google.common.base.Preconditions;
 
 import java.util.List;
 
@@ -35,33 +34,15 @@ public enum IncidService implements IncidenciaServEndPoints {
         }
 
         @Override
-        public IncidImportancia seeIncidImportancia(String accessToken, long incidenciaId)
-        {
-            return IncidenciaServ.endPoint.seeIncidImportancia(accessToken, incidenciaId);
-        }
-
-        @Override
-        public List<IncidComment> seeCommentsByIncid(String accessToken, long incidenciaId)
-        {
-            return IncidenciaServ.endPoint.seeCommentsByIncid(accessToken, incidenciaId);
-        }
-
-        @Override
-        public List<IncidenciaUser> seeIncidsOpenByComu(String accessToken, long comunidadId)
-        {
-            return IncidenciaServ.endPoint.seeIncidsOpenByComu(accessToken, comunidadId);
-        }
-
-        @Override
-        public List<IncidenciaUser> incidSeeClosedByComu(String accessToken, long comunidadId)
-        {
-            return IncidenciaServ.endPoint.incidSeeClosedByComu(accessToken, comunidadId);
-        }
-
-        @Override
         public int modifyIncidImportancia(String accessToken, IncidImportancia incidImportancia)
         {
             return IncidenciaServ.endPoint.modifyIncidImportancia(accessToken, incidImportancia);
+        }
+
+        @Override
+        public int modifyResolucion(String accessToken, Resolucion resolucion)
+        {
+            return IncidenciaServ.endPoint.modifyResolucion(accessToken, resolucion);
         }
 
         @Override
@@ -80,6 +61,36 @@ public enum IncidService implements IncidenciaServEndPoints {
         public int regResolucion(String accessToken, Resolucion resolucion)
         {
             return IncidenciaServ.endPoint.regResolucion(accessToken, resolucion);
+        }
+
+        @Override
+        public List<IncidComment> seeCommentsByIncid(String accessToken, long incidenciaId)
+        {
+            return IncidenciaServ.endPoint.seeCommentsByIncid(accessToken, incidenciaId);
+        }
+
+        @Override
+        public IncidImportancia seeIncidImportancia(String accessToken, long incidenciaId)
+        {
+            return IncidenciaServ.endPoint.seeIncidImportancia(accessToken, incidenciaId);
+        }
+
+        @Override
+        public List<IncidenciaUser> seeIncidsOpenByComu(String accessToken, long comunidadId)
+        {
+            return IncidenciaServ.endPoint.seeIncidsOpenByComu(accessToken, comunidadId);
+        }
+
+        @Override
+        public List<IncidenciaUser> seeIncidsClosedByComu(String accessToken, long comunidadId)
+        {
+            return IncidenciaServ.endPoint.seeIncidsClosedByComu(accessToken, comunidadId);
+        }
+
+        @Override
+        public IncidImportancia seeResolucion(String accessToken, long resolucionId)
+        {
+            return IncidenciaServ.endPoint.seeResolucion(accessToken, resolucionId);
         }
     },;
 
@@ -119,18 +130,6 @@ public enum IncidService implements IncidenciaServEndPoints {
         return ServOne.getComusByUser();
     }
 
-    public List<IncidenciaUser> incidSeeClosedByComu(long comunidadId) throws UiException
-    {
-        Log.d(TAG, "incidSeeClosedByComu()");
-        List<IncidenciaUser> incidencias;
-        try {
-            incidencias = incidSeeClosedByComu(checkBearerToken(), comunidadId);
-        } catch (InServiceException e) {
-            throw new UiException(e);
-        }
-        return incidencias;
-    }
-
     public int modifyIncidImportancia(IncidImportancia incidImportancia) throws UiException
     {
         Log.d(TAG, "modifyUser()");
@@ -142,6 +141,13 @@ public enum IncidService implements IncidenciaServEndPoints {
             throw new UiException(ue);
         }
         return rowModified;
+    }
+
+    public int modifyResolucion(Resolucion resolucion) throws UiException
+    {
+        Log.d(TAG, "modifyResolucion()");
+        // TODO: rematar excepciones.
+        return modifyResolucion(checkBearerToken(), resolucion);
     }
 
     public int regIncidComment(IncidComment comment) throws UiException
@@ -175,7 +181,7 @@ public enum IncidService implements IncidenciaServEndPoints {
         int regResolucion;
         try {
             regResolucion = regResolucion(checkBearerToken(), resolucion);
-        } catch (InServiceException ie){
+        } catch (InServiceException ie) {
             throw new UiException(ie);
         }
         return regResolucion;
@@ -215,5 +221,24 @@ public enum IncidService implements IncidenciaServEndPoints {
             throw new UiException(e);
         }
         return incidencias;
+    }
+
+    public List<IncidenciaUser> seeIncidsClosedByComu(long comunidadId) throws UiException
+    {
+        Log.d(TAG, "seeIncidsClosedByComu()");
+        List<IncidenciaUser> incidencias;
+        try {
+            incidencias = seeIncidsClosedByComu(checkBearerToken(), comunidadId);
+        } catch (InServiceException e) {
+            throw new UiException(e);
+        }
+        return incidencias;
+    }
+
+    public IncidImportancia seeResolucion(long resolucionId) throws UiException
+    {
+        Log.d(TAG, "seeResolucion()");
+        // TODO: rematar excepciones.
+        return seeResolucion(checkBearerToken(), resolucionId);
     }
 }

@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.didekin.common.exception.InServiceException;
+import com.didekin.incidservice.dominio.Incidencia;
 import com.didekindroid.R;
 import com.didekindroid.incidencia.activity.IncidEditAc;
 import com.didekindroid.incidencia.activity.IncidRegAc;
@@ -83,7 +84,7 @@ public class UiException extends Exception {
 
     public void processMe(Activity activity, Intent intent)
     {
-        Log.e(TAG, "processMe(): " + activity.getComponentName().getClassName() + " " + inServiceException.getHttpMessage());
+        Log.d(TAG, "processMe(): " + activity.getComponentName().getClassName() + " " + inServiceException.getHttpMessage());
         checkArgument(intent != null);
         messageToAction.get(inServiceException.getHttpMessage()).doAction(activity, intent);
     }
@@ -111,7 +112,7 @@ public class UiException extends Exception {
                 makeToast(activity, R.string.incidencia_not_registered, LENGTH_SHORT);
                 intent.setClass(activity, IncidRegAc.class);
                 activity.startActivity(intent);
-                activity.finish();
+                finishActivity(activity, intent);
             }
         },
         INCID_SEE_BY_COMU {
@@ -126,7 +127,7 @@ public class UiException extends Exception {
                 makeToast(activity, R.string.incidencia_wrong_init, LENGTH_SHORT);
                 intent.setClass(activity, IncidSeeByComuAc.class);
                 activity.startActivity(intent);
-                activity.finish();
+                finishActivity(activity, intent);
             }
         },
         LOGIN {
@@ -152,7 +153,7 @@ public class UiException extends Exception {
                 makeToast(activity, R.string.resolucion_duplicada, LENGTH_SHORT);
                 intent.setClass(activity, IncidResolucionEditAc.class);
                 activity.startActivity(intent);
-                activity.finish();
+                finishActivity(activity, intent);
             }
         },
         SEARCH_COMU {
@@ -163,7 +164,7 @@ public class UiException extends Exception {
                 intent.setClass(activity, ComuSearchAc.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 activity.startActivity(intent);
-                activity.finish();
+                finishActivity(activity, intent);
             }
         },
         TOKEN_TO_ERASE {
@@ -187,7 +188,7 @@ public class UiException extends Exception {
                 intent.setClass(activity, UserDataAc.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 activity.startActivity(intent);
-                activity.finish();
+                finishActivity(activity, intent);
             }
         };
 
@@ -200,7 +201,14 @@ public class UiException extends Exception {
             intent.setClass(activity, LoginAc.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             activity.startActivity(intent);
-            activity.finish();
+            finishActivity(activity, intent);
+        }
+
+        private static void finishActivity(Activity activity, Intent intent)
+        {
+            if (!activity.getClass().getCanonicalName().equals(intent.getComponent().getClassName())) {
+                activity.finish();
+            }
         }
     }
 

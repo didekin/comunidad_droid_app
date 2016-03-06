@@ -17,6 +17,7 @@ import retrofit.http.Path;
 
 import static com.didekin.incidservice.controller.IncidServConstant.DELETE_INCID;
 import static com.didekin.incidservice.controller.IncidServConstant.MOD_INCID_IMPORTANCIA;
+import static com.didekin.incidservice.controller.IncidServConstant.MOD_RESOLUCION;
 import static com.didekin.incidservice.controller.IncidServConstant.REG_INCID_COMMENT;
 import static com.didekin.incidservice.controller.IncidServConstant.REG_INCID_IMPORTANCIA;
 import static com.didekin.incidservice.controller.IncidServConstant.REG_RESOLUCION;
@@ -24,6 +25,7 @@ import static com.didekin.incidservice.controller.IncidServConstant.SEE_INCID_IM
 import static com.didekin.incidservice.controller.IncidServConstant.SEE_INCID_CLOSED_BY_COMU;
 import static com.didekin.incidservice.controller.IncidServConstant.SEE_INCID_COMMENTS;
 import static com.didekin.incidservice.controller.IncidServConstant.SEE_INCID_OPEN_BY_COMU;
+import static com.didekin.incidservice.controller.IncidServConstant.SEE_RESOLUCION;
 
 /**
  * User: pedro@didekin
@@ -38,6 +40,10 @@ public interface IncidenciaServEndPoints {
     @PUT(MOD_INCID_IMPORTANCIA)
     int modifyIncidImportancia(@Header("Authorization") String accessToken,
                                @Body IncidImportancia incidImportancia);
+
+    @PUT(MOD_RESOLUCION)
+    int modifyResolucion(@Header("Authorization") String accessToken,
+                               @Body Resolucion resolucion);
 
     @POST(REG_INCID_COMMENT)
     int regIncidComment(@Header("Authorization") String accessToken,
@@ -63,6 +69,9 @@ public interface IncidenciaServEndPoints {
                                              @Path("comunidadId") long comunidadId);
 
     @GET(SEE_INCID_CLOSED_BY_COMU + "/{comunidadId}")
-    List<IncidenciaUser> incidSeeClosedByComu(@Header("Authorization") String accessToken,
-                                              @Path("comunidadId") long comunidadId);
+    List<IncidenciaUser> seeIncidsClosedByComu(@Header("Authorization") String accessToken,
+                                               @Path("comunidadId") long comunidadId);
+
+    @GET(SEE_RESOLUCION + "/{resolucionId}")
+    IncidImportancia seeResolucion(@Header("Authorization") String accessToken, @Path("resolucionId") long resolucionId);
 }

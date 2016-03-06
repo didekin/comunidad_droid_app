@@ -93,6 +93,7 @@ public class UsuarioDataDbHelperTest {
         assertThat(cursor.getCount(), is(3));
         cursor = (SQLiteCursor) dbHelper.getProvinciasByCA((short) 1);
         assertThat(cursor.getCount(), is(8));
+        // TODO: probar cerrar cursor.
     }
 
     @Test
@@ -104,6 +105,7 @@ public class UsuarioDataDbHelperTest {
 
         cursor = dbHelper.getMunicipiosByPrId((short) 33);
         assertThat(cursor.getCount(), is(78));
+        // TODO: probar cerrar cursor.
     }
 
     @After

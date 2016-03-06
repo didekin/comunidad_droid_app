@@ -154,7 +154,7 @@ public class IncidSeeClosedByComuListFr extends ListFragment {
             Log.d(TAG, "doInBackground()");
             List<IncidenciaUser> incidencias = null;
             try {
-                incidencias = IncidenciaServ.incidSeeClosedByComu(comunidades[0]);
+                incidencias = IncidenciaServ.seeIncidsClosedByComu(comunidades[0]);
             } catch (UiException e) {
                 uiException = e;
             }
