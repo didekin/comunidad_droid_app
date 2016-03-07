@@ -12,6 +12,7 @@ import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
 import retrofit.http.Header;
+import retrofit.http.Headers;
 import retrofit.http.POST;
 import retrofit.http.PUT;
 import retrofit.http.Path;
@@ -28,6 +29,7 @@ import static com.didekin.usuario.controller.UsuarioServiceConstant.COMUNIDAD_OL
 import static com.didekin.usuario.controller.UsuarioServiceConstant.COMUNIDAD_SEARCH;
 import static com.didekin.usuario.controller.UsuarioServiceConstant.COMUS_BY_USER;
 import static com.didekin.usuario.controller.UsuarioServiceConstant.LOGIN;
+import static com.didekin.usuario.controller.UsuarioServiceConstant.MIME_JSON;
 import static com.didekin.usuario.controller.UsuarioServiceConstant.PASSWORD_MODIFY;
 import static com.didekin.usuario.controller.UsuarioServiceConstant.PASSWORD_SEND;
 import static com.didekin.usuario.controller.UsuarioServiceConstant.REG_COMU_AND_USER_AND_USERCOMU;
@@ -65,8 +67,11 @@ public interface UsuarioEndPoints {
     @GET(COMUS_BY_USER)
     List<Comunidad> getComusByUser(@Header("Authorization") String accessToken);
 
+    @Headers({
+            "Content-Type:" + MIME_JSON
+    })
     @GET(USER_READ_GCM_TOKEN)
-    String getGcmToken(@Header("Authorization") String accessToken);
+    GcmTokenWrapper getGcmToken(@Header("Authorization") String accessToken);
 
     @GET(USERCOMU_READ + "/{comunidadId}")
     UsuarioComunidad getUserComuByUserAndComu(@Header("Authorization") String accessToken, @Path("comunidadId") long comunidadId);
@@ -124,4 +129,17 @@ public interface UsuarioEndPoints {
 
     @GET(USERCOMUS_BY_USER)
     List<UsuarioComunidad> seeUserComusByUser(@Header("Authorization") String accessToken);
+
+    class GcmTokenWrapper{
+        private String token;
+
+        public GcmTokenWrapper(String token)
+        {
+            this.token = token;
+        }
+
+        public String getToken(){
+            return token;
+        }
+    }
 }

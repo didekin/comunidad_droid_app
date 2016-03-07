@@ -9,7 +9,6 @@ import com.didekin.incidservice.dominio.IncidenciaUser;
 import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
-import com.didekindroid.common.testutils.ActivityTestUtils;
 import com.didekindroid.incidencia.repository.IncidenciaDataDbHelper;
 import com.didekindroid.usuario.testutils.CleanUserEnum;
 
@@ -31,6 +30,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekin.common.oauth2.Rol.PROPIETARIO;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkNavigateUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.testutils.ActivityTestUtils.updateSecurityData;
@@ -40,13 +40,13 @@ import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaSer
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_PEPE;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_JUAN;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.makeUsuarioComunidad;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
 
 /**
  * User: pedro@didekin
@@ -89,7 +89,6 @@ public class IncidEditAcTest_3 {
                         "portal", "esc", "plantaX", "door12", PROPIETARIO.function);
                 ServOne.regUserAndUserComu(userComuJuan);
                 updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
-                // TODO: el método siguiente devuelve null.
                 incidJuanReal = IncidenciaServ.seeIncidImportancia(incidenciaUser_1.getIncidencia().getIncidenciaId());
             } catch (UiException e) {
                 e.printStackTrace();
@@ -126,7 +125,9 @@ public class IncidEditAcTest_3 {
     {
         assertThat(mActivity, notNullValue());
         IncidImportancia incidImportanciaInIntent = (IncidImportancia) mActivity.getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.extra);
-        assertThat(incidImportanciaInIntent.getUserComu(), nullValue());
+        assertThat(incidImportanciaInIntent.getUserComu().getUsuario(), is(USER_JUAN));
+        assertThat(incidImportanciaInIntent.getIncidencia().getUserName(), is(USER_PEPE.getUserName()));
+        assertThat(incidImportanciaInIntent.getUserComu().hasAdministradorAuthority(), is(false));
         assertThat(incidImportanciaInIntent.isIniciadorIncidencia(), is(false));
 
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
@@ -140,10 +141,10 @@ public class IncidEditAcTest_3 {
         onView(withId(R.id.incid_reg_importancia_spinner)).check(matches(isDisplayed()));
         onView(allOf(
                 withId(R.id.incid_edit_fr_modif_button),
-                withText(R.string.incid_regUserInIncid_button_rot)
+                withText(R.string.incid_importancia_reg_edit_button_rot)
         )).check(matches(isDisplayed()));
 
-        ActivityTestUtils.checkNavigateUp();
+        checkNavigateUp();
     }
 
     @Test

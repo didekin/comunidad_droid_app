@@ -47,7 +47,7 @@
     <string name="incid_edit_modif_button_rot">Modificar incidencia</string>
     <string name="incid_edit_borrar_txt">Para borrar definitivamente la incidencia:</string>
     <string name="incid_edit_borrar_button_rot">Borrar incidencia</string>
-    <string name="incid_regUserInIncid_button_rot">Confirmar</string>
+    <string name="incid_importancia_reg_edit_button_rot">Confirmar</string>
     <!-- =============== IncidRegAc =============== -->
     <string name="incid_reg_ac_label">Nueva incidencia</string>
     <string name="incid_reg_hint"> -- Describe la incidencia (max. 300 caracteres) -- </string>

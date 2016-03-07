@@ -54,7 +54,7 @@ public enum UsuarioService implements UsuarioEndPoints {
         }
 
         @Override
-        public String getGcmToken(String accessToken)
+        public GcmTokenWrapper getGcmToken(String accessToken)
         {
             return ServOne.endPoint.getGcmToken(accessToken);
         }
@@ -258,7 +258,7 @@ public enum UsuarioService implements UsuarioEndPoints {
         Log.d(TAG, "getGcmToken()");
         String gcmToken;
         try {
-            gcmToken = getGcmToken(checkBearerToken());
+            gcmToken = getGcmToken(checkBearerToken()).getToken();
         } catch (InServiceException e) {
             throw new UiException(e);
         }

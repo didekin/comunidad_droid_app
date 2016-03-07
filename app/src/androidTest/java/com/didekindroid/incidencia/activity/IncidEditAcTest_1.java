@@ -185,7 +185,7 @@ public class IncidEditAcTest_1 {
     @Test
     public void testModifyIncidencia_2()
     {
-        // Incidencia modificada válida.
+        // Caso OK.
         onView(withId(R.id.incid_reg_importancia_spinner)).perform(click());
         onData
                 (AllOf.allOf(

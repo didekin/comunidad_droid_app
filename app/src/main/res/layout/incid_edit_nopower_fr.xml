@@ -57,7 +57,7 @@
         <Button
             android:id="@+id/incid_edit_fr_modif_button"
             style="@style/textBase.acButton1"
-            android:text="@string/incid_edit_modif_button_rot"
+            android:text="@string/incid_importancia_reg_edit_button_rot"
             android:layout_below="@id/incid_reg_importancia_spinner"/>
 
     </RelativeLayout>

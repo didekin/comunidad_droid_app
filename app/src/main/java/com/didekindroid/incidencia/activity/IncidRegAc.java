@@ -13,7 +13,6 @@ import com.didekin.incidservice.dominio.IncidImportancia;
 import com.didekin.incidservice.dominio.Incidencia;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
-import com.didekindroid.common.utils.ConnectionUtils;
 import com.didekindroid.incidencia.gcm.GcmRegistrationIntentServ;
 
 import static com.didekindroid.common.utils.ConnectionUtils.checkInternetConnected;

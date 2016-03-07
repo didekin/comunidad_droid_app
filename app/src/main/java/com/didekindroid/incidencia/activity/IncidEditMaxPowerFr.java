@@ -124,7 +124,8 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
         Log.d(TAG, "modifyIncidenciaAndImportancia()");
 
         StringBuilder errorMsg = getErrorMsgBuilder(getActivity());
-        final Incidencia incidencia = mIncidenciaBean.makeIncidencia(fFragmentView, errorMsg, getResources());
+        final Incidencia incidencia = mIncidenciaBean.makeIncidenciaWithUserName(
+                fFragmentView, errorMsg, getResources(), mIncidImportancia.getIncidencia().getUserName());
         IncidImportancia incidImportancia = null;
         try {
             incidImportancia = mIncidImportanciaBean.makeIncidImportancia(errorMsg, getResources(), incidencia);

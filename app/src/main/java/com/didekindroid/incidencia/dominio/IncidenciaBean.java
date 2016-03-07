@@ -61,6 +61,15 @@ public class IncidenciaBean {
         }
     }
 
+    public Incidencia makeIncidenciaWithUserName(final View mFragmentView, StringBuilder errorMsg, Resources resources, String userName)
+    {
+        final Incidencia incidencia = makeIncidencia(mFragmentView,errorMsg,resources);
+        if (incidencia != null){
+            return new Incidencia.IncidenciaBuilder().copyIncidencia(incidencia).userName(userName).build();
+        }
+        return null;
+    }
+
     boolean validateBean(StringBuilder errorMsg, Resources resources)
     {
         return validateCodAmbito(errorMsg, resources)

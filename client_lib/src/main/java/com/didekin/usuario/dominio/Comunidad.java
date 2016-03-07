@@ -145,7 +145,7 @@ public final class Comunidad implements Comparable<Comunidad>, Serializable {
         return tipoVia.equals(comunidad.tipoVia)
                 && nombreVia.equals(comunidad.nombreVia)
                 && numero == comunidad.numero
-                && sufijoNumero.equals(comunidad.sufijoNumero)
+                && (sufijoNumero != null ? sufijoNumero.equals(comunidad.sufijoNumero): comunidad.sufijoNumero == null)
                 && municipio.equals(comunidad.municipio);
     }
 

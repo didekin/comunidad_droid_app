@@ -26,14 +26,15 @@ import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.common.utils.UIutils.makeToast;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
 
 /**
  * Preconditions:
- * 1. An intent extra is received with an IncidenciaUser belonging to an administrator function role (adm or pre).
+ * 1. An intent extra is received with an IncidImportancia belonging to a user with function 'adm'.
  * Postconditions:
  * 1. An incidencia resolution is registered in BD, associated to its editor.
- * 2. An intent is passed with the incidenciaUser.
+ * 2. An intent is passed with the incidImportancia.
  * 3. The edited incidencia is shown.
  */
 public class IncidResolucionRegAc extends AppCompatActivity implements
@@ -54,6 +55,7 @@ public class IncidResolucionRegAc extends AppCompatActivity implements
         doToolBar(this, true);
 
         mIncidImportancia = (IncidImportancia) getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.extra);
+        checkArgument(mIncidImportancia.getUserComu().hasAdministradorAuthority());
 
         mRegFragment = (IncidResolucionRegAcFragment) getFragmentManager()
                 .findFragmentById(R.id.incid_resolucion_reg_frg);

@@ -37,7 +37,8 @@ public class GcmRegistrationIntentServ extends IntentService {
         String token;
         try {
             token = instanceID.getToken(getString(R.string.gcm_defaultSenderId),
-                    GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+                    GoogleCloudMessaging.INSTANCE_ID_SCOPE, null)
+                    .trim();
             sendRegistrationToServer(token);
             updateIsGcmTokenSentServer(true, this);
             Log.i(TAG, "onHandleIntent(), GCM token registered: " + token);
