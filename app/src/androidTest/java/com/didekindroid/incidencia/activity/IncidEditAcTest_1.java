@@ -58,7 +58,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
  */
 
 /**
- * Tests genéricos sobre aspecto y tests funcioales para un userComu con permisos para modificar, pero NO borrar una incidencia.
+ * Tests genéricos sobre aspecto y tests funcionales para un userComu con permisos para modificar, pero NO borrar una incidencia.
  */
 @RunWith(AndroidJUnit4.class)
 public class IncidEditAcTest_1 {
@@ -73,7 +73,6 @@ public class IncidEditAcTest_1 {
         @Override
         protected void beforeActivityLaunched()
         {
-
             super.beforeActivityLaunched();
         }
 

@@ -73,5 +73,5 @@ public interface IncidenciaServEndPoints {
                                                @Path("comunidadId") long comunidadId);
 
     @GET(SEE_RESOLUCION + "/{resolucionId}")
-    IncidImportancia seeResolucion(@Header("Authorization") String accessToken, @Path("resolucionId") long resolucionId);
+    Resolucion seeResolucion(@Header("Authorization") String accessToken, @Path("resolucionId") long resolucionId);
 }

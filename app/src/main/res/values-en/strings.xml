@@ -57,7 +57,7 @@
     <string name="incid_reg_descripcion">Descripcion</string>
     <!-- =============== IncidResolutionEditAc =============== -->
     <string name="incid_resolucion_coste_final_rot">Coste final:</string>
-    <!-- =============== IncidResolucionRegAc =============== -->
+    <!-- =============== IncidResolucionRegEditAc =============== -->
     <string name="incid_resolution_ac_label">Resolución incidencia</string>
     <string name="incid_resolucion_descrip_msg">Descripción</string>
     <string name="incid_resolucion_fecha_prev">Fecha estimada resolución:</string>

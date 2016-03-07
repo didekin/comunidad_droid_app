@@ -16,7 +16,7 @@
             android:layout_marginTop="@dimen/app_bar_bottom_margin">
             <fragment
                 android:id="@+id/incid_resolucion_reg_frg"
-                android:name="com.didekindroid.incidencia.activity.IncidResolucionRegAcFragment"
+                android:name="com.didekindroid.incidencia.activity.IncidResolucionRegFr"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"

@@ -141,7 +141,7 @@ public class IncidImportancia implements Serializable {
     //    ============================== SERIALIZATION PROXY ==================================
 
     /**
-     * Return an InnerSerial object that will replace the current IncidenciaIntent object during serialization.
+     * Return an InnerSerial object that will replace the current IncidImportancia instance during serialization.
      * In the deserialization the readResolve() method of the InnerSerial object will be used.
      */
     private Object writeReplace()

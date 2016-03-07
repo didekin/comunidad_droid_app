@@ -22,6 +22,7 @@ import com.didekindroid.common.utils.ConnectionUtils;
 import java.sql.Timestamp;
 
 import static com.didekindroid.common.utils.AppKeysForBundle.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.common.utils.AppKeysForBundle.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.common.utils.UIutils.makeToast;
@@ -32,17 +33,24 @@ import static com.google.common.base.Preconditions.checkState;
 /**
  * Preconditions:
  * 1. An intent extra is received with an IncidImportancia belonging to a user with function 'adm'.
+ * 2. An intent extras may or may not be received with a Resolucion instance.
  * Postconditions:
- * 1. An incidencia resolution is registered in BD, associated to its editor.
- * 2. An intent is passed with the incidImportancia.
- * 3. The edited incidencia is shown.
+ * 1. If not Resolucion intent is received:
+ * 1.1. An incidencia resolution is registered in BD, associated to its editor.
+ * 1.2. An intent is passed with the incidImportancia.
+ * 1.3. The edited incidencia is shown.
+ * 2. If a Resolucion intent is received:
+ * 2.1. The resolucion is modified in BD, with a new avance record.
+ * 2.2. If the user choose the 'close the incidencia' option, the incidencia is closed and a new
+ * avance record is inserted too.
  */
-public class IncidResolucionRegAc extends AppCompatActivity implements
-        ActivityForFechaPicker<IncidResolucionRegAc>, IncidUserDataSupplier {
+public class IncidResolucionRegEditAc extends AppCompatActivity implements
+        ActivityForFechaPicker<IncidResolucionRegEditAc>, IncidUserDataSupplier {
 
-    private static final String TAG = IncidResolucionRegAc.class.getCanonicalName();
-    IncidResolucionRegAcFragment mRegFragment;
+    private static final String TAG = IncidResolucionRegEditAc.class.getCanonicalName();
+    IncidResolucionRegFr mRegFragment;
     IncidImportancia mIncidImportancia;
+    Resolucion mResolucion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -56,18 +64,23 @@ public class IncidResolucionRegAc extends AppCompatActivity implements
 
         mIncidImportancia = (IncidImportancia) getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.extra);
         checkArgument(mIncidImportancia.getUserComu().hasAdministradorAuthority());
-
-        mRegFragment = (IncidResolucionRegAcFragment) getFragmentManager()
-                .findFragmentById(R.id.incid_resolucion_reg_frg);
-        Button mConfirmButton = (Button) findViewById(R.id.incid_resolucion_reg_ac_button);
-        mConfirmButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                Log.d(TAG, "View.OnClickListener().onClick()");
-                registerResolucion();
-            }
-        });
+        mResolucion = (Resolucion) getIntent().getSerializableExtra(INCID_RESOLUCION_OBJECT.extra);
+        if (mResolucion != null) {
+            checkArgument(mResolucion.getIncidencia().equals(mIncidImportancia.getIncidencia()));
+            // TODO: fragmento de edición.
+        } else {
+            mRegFragment = (IncidResolucionRegFr) getFragmentManager()
+                    .findFragmentById(R.id.incid_resolucion_reg_frg);
+            Button mConfirmButton = (Button) findViewById(R.id.incid_resolucion_reg_ac_button);
+            mConfirmButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v)
+                {
+                    Log.d(TAG, "View.OnClickListener().onClick()");
+                    registerResolucion();
+                }
+            });
+        }
     }
 
     private void registerResolucion()
@@ -86,7 +99,7 @@ public class IncidResolucionRegAc extends AppCompatActivity implements
         }
     }
 
-    private Resolucion makeResolucionFromBean(IncidResolucionRegAcFragment.ResolucionBean resolucionBean)
+    private Resolucion makeResolucionFromBean(IncidResolucionRegFr.ResolucionBean resolucionBean)
     {
         if (resolucionBean == null) {
             return null;
@@ -115,7 +128,7 @@ public class IncidResolucionRegAc extends AppCompatActivity implements
     }
 
     @Override
-    public IncidResolucionRegAc getActivity()
+    public IncidResolucionRegEditAc getActivity()
     {
         Log.d(TAG, "getActivity()");
         return this;
@@ -159,10 +172,10 @@ public class IncidResolucionRegAc extends AppCompatActivity implements
             if (uiException != null) {
                 Intent intent = new Intent();
                 intent.putExtra(INCID_IMPORTANCIA_OBJECT.extra, mIncidImportancia);
-                uiException.processMe(IncidResolucionRegAc.this, intent);
+                uiException.processMe(IncidResolucionRegEditAc.this, intent);
             } else {
                 checkState(rowInserted == 1);
-                Intent intent = new Intent(IncidResolucionRegAc.this, IncidResolucionEditAc.class);
+                Intent intent = new Intent(IncidResolucionRegEditAc.this, IncidEditAc.class);
                 intent.putExtra(INCID_IMPORTANCIA_OBJECT.extra, mIncidImportancia);
                 startActivity(intent);
             }

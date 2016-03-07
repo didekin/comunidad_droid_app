@@ -99,15 +99,7 @@
                 android:value=".usuario.activity.UserComuDataAc"/>
         </activity>
         <activity
-            android:name=".incidencia.activity.IncidResolucionEditAc"
-            android:label="@string/incid_resolution_ac_label"
-            android:parentActivityName=".incidencia.activity.IncidEditAc">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".incidencia.activity.IncidEditAc"/>
-        </activity>
-        <activity
-            android:name=".incidencia.activity.IncidResolucionRegAc"
+            android:name=".incidencia.activity.IncidResolucionRegEditAc"
             android:label="@string/incid_resolution_ac_label"
             android:parentActivityName=".incidencia.activity.IncidEditAc">
             <meta-data

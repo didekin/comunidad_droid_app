@@ -31,9 +31,9 @@ import static com.didekindroid.common.utils.UIutils.getIntFromStringDecimal;
  * Date: 13/11/15
  * Time: 15:52
  */
-public class IncidResolucionRegAcFragment extends Fragment implements OnDateSetListener {
+public class IncidResolucionRegFr extends Fragment implements OnDateSetListener {
 
-    private static final String TAG = IncidResolucionRegAcFragment.class.getCanonicalName();
+    private static final String TAG = IncidResolucionRegFr.class.getCanonicalName();
 
     ResolucionBean mResolucionBean;
     IncidUserDataSupplier mActivitySupplier;

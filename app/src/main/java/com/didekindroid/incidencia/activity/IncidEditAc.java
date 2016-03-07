@@ -1,6 +1,7 @@
 package com.didekindroid.incidencia.activity;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -9,13 +10,17 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.didekin.incidservice.dominio.IncidImportancia;
+import com.didekin.incidservice.dominio.Resolucion;
 import com.didekindroid.R;
+import com.didekindroid.common.activity.UiException;
 
 import static com.didekindroid.common.utils.AppKeysForBundle.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.common.utils.AppKeysForBundle.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_COMMENTS_SEE_AC;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_COMMENT_REG_AC;
-import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_RESOLUCION_REG_AC;
+import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_RESOLUCION_REG_EDIT_AC;
+import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -102,10 +107,7 @@ public class IncidEditAc extends AppCompatActivity implements IncidUserDataSuppl
                 INCID_COMMENTS_SEE_AC.doMenuItem(this);
                 return true;
             case R.id.incid_resolucion_reg_ac_mn:
-                intent = new Intent();
-                intent.putExtra(INCID_IMPORTANCIA_OBJECT.extra, mIncidImportancia);
-                this.setIntent(intent);
-                INCID_RESOLUCION_REG_AC.doMenuItem(this);
+                new ResolucionGetter().execute();
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -119,6 +121,48 @@ public class IncidEditAc extends AppCompatActivity implements IncidUserDataSuppl
     public IncidImportancia getIncidImportancia()
     {
         return mIncidImportancia;
+    }
+
+//    ============================================================
+//    ..................... INNER CLASSES  .......................
+//    ============================================================
+
+    class ResolucionGetter extends AsyncTask<Void,Void,Resolucion>{
+
+        private final String TAG = ResolucionGetter.class.getCanonicalName();
+        private UiException uiException;
+
+        @Override
+        protected Resolucion doInBackground(Void... aVoid)
+        {
+            Log.d(TAG, "doInBackground()");
+            Resolucion resolucion = null;
+
+            try {
+                resolucion = IncidenciaServ.seeResolucion(mIncidImportancia.getIncidencia().getIncidenciaId());
+            } catch (UiException e) {
+                uiException = e;
+            }
+            return resolucion;
+        }
+
+        @Override
+        protected void onPostExecute(Resolucion resolucion)
+        {
+            Log.d(TAG, "onPostExecute()");
+
+            if (uiException != null) {
+                uiException.processMe(IncidEditAc.this, new Intent());
+            } else {
+                Intent intent = new Intent();
+                intent.putExtra(INCID_IMPORTANCIA_OBJECT.extra, mIncidImportancia);
+                if (resolucion != null){
+                    intent.putExtra(INCID_RESOLUCION_OBJECT.extra, resolucion);
+                }
+                IncidEditAc.this.setIntent(intent);
+                INCID_RESOLUCION_REG_EDIT_AC.doMenuItem(IncidEditAc.this);
+            }
+        }
     }
 }
 

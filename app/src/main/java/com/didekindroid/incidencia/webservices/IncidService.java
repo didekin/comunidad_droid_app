@@ -6,6 +6,7 @@ import com.didekin.common.exception.InServiceException;
 import com.didekin.incidservice.controller.IncidenciaServEndPoints;
 import com.didekin.incidservice.dominio.IncidComment;
 import com.didekin.incidservice.dominio.IncidImportancia;
+import com.didekin.incidservice.dominio.Incidencia;
 import com.didekin.incidservice.dominio.IncidenciaUser;
 import com.didekin.incidservice.dominio.Resolucion;
 import com.didekin.usuario.dominio.Comunidad;
@@ -88,7 +89,7 @@ public enum IncidService implements IncidenciaServEndPoints {
         }
 
         @Override
-        public IncidImportancia seeResolucion(String accessToken, long resolucionId)
+        public Resolucion seeResolucion(String accessToken, long resolucionId)
         {
             return IncidenciaServ.endPoint.seeResolucion(accessToken, resolucionId);
         }
@@ -235,10 +236,11 @@ public enum IncidService implements IncidenciaServEndPoints {
         return incidencias;
     }
 
-    public IncidImportancia seeResolucion(long resolucionId) throws UiException
+    public Resolucion seeResolucion(long resolucionId) throws UiException
     {
         Log.d(TAG, "seeResolucion()");
         // TODO: rematar excepciones.
-        return seeResolucion(checkBearerToken(), resolucionId);
+//        return seeResolucion(checkBearerToken(), resolucionId);
+        return null;
     }
 }

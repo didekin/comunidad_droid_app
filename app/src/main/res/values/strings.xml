@@ -57,20 +57,23 @@
     <string name="incid_reg_importancia">Importancia</string>
     <string name="incid_reg_ambitoIncidencia">Ámbito de incidencia</string>
     <string name="incid_reg_descripcion">Descripcion</string>
-    <!-- =============== IncidResolutionEditAc =============== -->
+    <!-- =============== IncidResolucionEditFr =============== -->
     <string name="incid_resolucion_coste_final_rot">Coste final:</string>
-    <!-- =============== IncidResolucionRegAc =============== -->
+    <string name="incid_resolucion_news_rot">Información adicional</string>
+    <string name="incid_resolucion_modif_button_rot">Modificar</string>
+    <string name="incid_resolucion_close_button_rot">Modificar y cerrar incidencia</string>
+    <!-- =============== IncidResolucionRegEditAc =============== -->
     <string name="incid_resolution_ac_label">Resolución incidencia</string>
     <string name="incid_resolucion_descrip_msg">Descripción</string>
-    <string name="incid_resolucion_fecha_prev">Fecha estimada resolución:</string>
+    <string name="incid_resolucion_fecha_prev">Fecha estimada:</string>
     <string name="incid_resolucion_fecha_prev_msg">Fecha resolución</string>
     <string name="incid_resolucion_fecha_default_txt">>> Elige una fecha</string>
     <string name="incid_resolucion_hint"> -- plan para resolver la incidencia -- </string>
     <string name="incid_resolucion_reg_ac_button_rot">Registro los datos</string>
     <string name="incid_resolucion_rot">Datos resolución</string>
-    <string name="incid_resolucion_coste_prev_rot">Coste previsto:</string>
+    <string name="incid_resolucion_coste_prev_rot">Coste estimado:</string>
     <string name="incid_resolucion_coste_prev_hint">-- tu estimación --</string>
-    <string name="incid_resolucion_coste_prev_msg">Coste previsto</string>
+    <string name="incid_resolucion_coste_prev_msg">Coste estimado</string>
     <!-- =============== IncidSeeByComuAc =============== -->
     <string name="incid_see_by_user_ac_label">Tus incidencias</string>
     <string name="incid_fecha_alta_rot">Desde:</string>

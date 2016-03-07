@@ -2,6 +2,9 @@ package com.didekin.incidservice.dominio;
 
 import com.didekin.common.BeanBuilder;
 
+import java.io.InvalidObjectException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 import static com.didekin.common.exception.DidekinExceptionMsg.RESOLUCION_WRONG_INIT;
@@ -11,8 +14,9 @@ import static com.didekin.common.exception.DidekinExceptionMsg.RESOLUCION_WRONG_
  * Date: 12/11/15
  * Time: 18:30
  */
-@SuppressWarnings({"FieldCanBeLocal", "unused"})
-public final class Resolucion {   // TODO: serial.
+
+@SuppressWarnings("unused")
+public final class Resolucion implements Serializable {
 
     private final String userName;
     private final String descripcion;
@@ -176,10 +180,71 @@ public final class Resolucion {   // TODO: serial.
         {
             Resolucion resolucion = new Resolucion(this);
             if (resolucion.incidencia == null || resolucion.incidencia.getIncidenciaId() <= 0
-                    || resolucion.descripcion == null || resolucion.fechaPrev == null){
+                    || resolucion.descripcion == null || resolucion.fechaPrev == null) {
                 throw new IllegalStateException(RESOLUCION_WRONG_INIT.toString());
             }
             return resolucion;
+        }
+    }
+
+    //    ============================== SERIALIZATION PROXY ==================================
+
+    /**
+     * Return an InnerSerial object that will replace the current IncidImportancia instance during serialization.
+     * In the deserialization the readResolve() method of the InnerSerial object will be used.
+     */
+    private Object writeReplace()
+    {
+        return new InnerSerial(this);
+    }
+
+    private void readObject(ObjectInputStream inputStream) throws InvalidObjectException
+    {
+        throw new InvalidObjectException("Use innerSerial to serialize");
+    }
+
+    private static class InnerSerial implements Serializable {
+
+        private final String userName;
+        private final String descripcion;
+        private final int costeEstimado;
+        private final int costeFinal;
+        private final String moraleja;
+        //    private final Proveedor proveedor;
+        private final Timestamp fechaPrev;
+        private final Timestamp fechaReal;
+        private final Timestamp fechaAlta;
+        private final Incidencia incidencia;
+
+        public InnerSerial(Resolucion resolucion)
+        {
+            userName = resolucion.userName;
+            descripcion = resolucion.descripcion;
+            costeEstimado = resolucion.costeEstimado;
+            costeFinal = resolucion.costeFinal;
+            moraleja = resolucion.moraleja;
+            fechaPrev = resolucion.fechaPrev;
+            fechaAlta = resolucion.fechaAlta;
+            fechaReal = resolucion.fechaReal;
+            incidencia = resolucion.incidencia;
+        }
+
+        /**
+         * Returns a logically equivalent InnerSerial instance of the enclosing class instance,
+         * that will replace it during deserialization.
+         */
+        private Object readResolve()
+        {
+            return new ResolucionBuilder(incidencia)
+                    .userName(userName)
+                    .descripcion(descripcion)
+                    .costeEstimado(costeEstimado)
+                    .costeReal(costeFinal)
+                    .moraleja(moraleja)
+                    .fechaPrevista(fechaPrev)
+                    .fechaAlta(fechaAlta)
+                    .fechaReal(fechaReal)
+                    .build();
         }
     }
 }

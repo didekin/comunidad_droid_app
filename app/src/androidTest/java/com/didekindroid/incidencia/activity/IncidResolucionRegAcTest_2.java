@@ -54,11 +54,11 @@ import static org.hamcrest.CoreMatchers.is;
 public class IncidResolucionRegAcTest_2 {
 
     IncidImportancia incidJuanReal1;
-    IncidResolucionRegAc mActivity;
-    IncidResolucionRegAcFragment mFragment;
+    IncidResolucionRegEditAc mActivity;
+    IncidResolucionRegFr mFragment;
 
     @Rule
-    public IntentsTestRule<IncidResolucionRegAc> intentRule = new IntentsTestRule<IncidResolucionRegAc>(IncidResolucionRegAc.class) {
+    public IntentsTestRule<IncidResolucionRegEditAc> intentRule = new IntentsTestRule<IncidResolucionRegEditAc>(IncidResolucionRegEditAc.class) {
 
         @Override
         protected void beforeActivityLaunched()
@@ -102,7 +102,7 @@ public class IncidResolucionRegAcTest_2 {
     public void setUp() throws Exception
     {
         mActivity = intentRule.getActivity();
-        mFragment = (IncidResolucionRegAcFragment) mActivity.getFragmentManager()
+        mFragment = (IncidResolucionRegFr) mActivity.getFragmentManager()
                 .findFragmentById(R.id.incid_resolucion_reg_frg);
     }
 
