@@ -1,6 +1,7 @@
 package com.didekin.incidservice.dominio;
 
 import com.didekin.common.BeanBuilder;
+import com.didekin.common.dominio.SerialNumber;
 
 import java.io.InvalidObjectException;
 import java.io.ObjectInputStream;
@@ -204,6 +205,8 @@ public final class Resolucion implements Serializable {
     }
 
     private static class InnerSerial implements Serializable {
+
+        private static final long serialVersionUID = SerialNumber.INCID_RESOLUCION.number;
 
         private final String userName;
         private final String descripcion;

@@ -25,8 +25,8 @@ import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
 
 import static com.didekin.usuario.controller.UsuarioServiceConstant.IS_USER_DELETED;
-import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_ID;
-import static com.didekindroid.common.utils.AppKeysForBundle.USERCOMU_LIST_OBJECT;
+import static com.didekindroid.common.activity.IntentExtraKey.COMUNIDAD_ID;
+import static com.didekindroid.common.activity.IntentExtraKey.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;

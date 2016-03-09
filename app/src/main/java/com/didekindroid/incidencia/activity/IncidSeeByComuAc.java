@@ -15,9 +15,9 @@ import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.incidencia.gcm.GcmRegistrationIntentServ;
 
-import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_ID;
-import static com.didekindroid.common.utils.AppKeysForBundle.INCIDENCIA_LIST_INDEX;
-import static com.didekindroid.common.utils.AppKeysForBundle.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.common.activity.IntentExtraKey.COMUNIDAD_ID;
+import static com.didekindroid.common.activity.IntentExtraKey.INCIDENCIA_LIST_INDEX;
+import static com.didekindroid.common.activity.IntentExtraKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.utils.UIutils.checkPlayServices;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.isGcmTokenSentServer;

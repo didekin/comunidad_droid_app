@@ -13,7 +13,7 @@ import android.util.Log;
 import com.didekin.common.exception.InServiceException;
 import com.didekindroid.R;
 import com.didekindroid.incidencia.activity.IncidRegAc;
-import com.didekindroid.incidencia.activity.IncidResolucionRegEditAc;
+import com.didekindroid.incidencia.activity.IncidResolucionRegEditSeeAc;
 import com.didekindroid.incidencia.activity.IncidSeeByComuAc;
 import com.didekindroid.usuario.activity.ComuSearchAc;
 import com.didekindroid.usuario.activity.LoginAc;
@@ -149,7 +149,7 @@ public class UiException extends Exception {
             public void doAction(Activity activity, Intent intent)
             {
                 makeToast(activity, R.string.resolucion_duplicada, LENGTH_SHORT);
-                intent.setClass(activity, IncidResolucionRegEditAc.class);
+                intent.setClass(activity, IncidResolucionRegEditSeeAc.class);
                 activity.startActivity(intent);
                 finishActivity(activity, intent);
             }

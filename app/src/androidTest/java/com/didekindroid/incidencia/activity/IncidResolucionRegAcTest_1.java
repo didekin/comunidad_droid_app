@@ -40,7 +40,7 @@ import static com.didekindroid.common.testutils.ActivityTestUtils.checkNavigateU
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
-import static com.didekindroid.common.utils.AppKeysForBundle.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.common.activity.IntentExtraKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
@@ -63,11 +63,10 @@ import static org.junit.Assert.assertThat;
 public class IncidResolucionRegAcTest_1 {
 
     IncidImportancia incidJuanReal1;
-    IncidResolucionRegEditAc mActivity;
-    IncidResolucionRegFr mFragment;
+    IncidResolucionRegEditSeeAc mActivity;
 
     @Rule
-    public IntentsTestRule<IncidResolucionRegEditAc> intentRule = new IntentsTestRule<IncidResolucionRegEditAc>(IncidResolucionRegEditAc.class) {
+    public IntentsTestRule<IncidResolucionRegEditSeeAc> intentRule = new IntentsTestRule<IncidResolucionRegEditSeeAc>(IncidResolucionRegEditSeeAc.class) {
 
         @Override
         protected void beforeActivityLaunched()
@@ -112,8 +111,6 @@ public class IncidResolucionRegAcTest_1 {
     {
         Thread.sleep(3000);
         mActivity = intentRule.getActivity();
-        mFragment = (IncidResolucionRegFr) mActivity.getFragmentManager()
-                .findFragmentById(R.id.incid_resolucion_reg_frg);
     }
 
     @After
@@ -126,9 +123,10 @@ public class IncidResolucionRegAcTest_1 {
     public void testOnCreate_1() throws Exception
     {
         assertThat(mActivity, notNullValue());
-        assertThat(mFragment, notNullValue());
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_resolucion_reg_ac_layout)).check(matches(isDisplayed()));
+
+        onView(withId(R.id.incid_resolucion_fragment_container_ac)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_resolucion_reg_frg_layout)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_resolucion_reg_ac_button)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_resolucion_desc_ed)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_resolucion_coste_prev_ed)).check(matches(isDisplayed()));
@@ -239,9 +237,7 @@ public class IncidResolucionRegAcTest_1 {
     @Test
     public void testOnRegister_2()
     {
-        // Caso: resolución duplicada.
-
-
+        /* Caso: resolución duplicada.*/
 
         onView(withId(R.id.incid_resolucion_desc_ed)).perform(replaceText("desc_válida"));
         onView(withId(R.id.incid_resolucion_coste_prev_ed)).perform(replaceText("1234,5"));

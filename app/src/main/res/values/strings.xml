@@ -32,7 +32,7 @@
     <string name="incid_comments_see_ac_mn">Ver comentarios</string>
     <string name="incid_reg_ac_mn">Nueva incidencia</string>
     <string name="incid_see_by_comu_ac_mn">Incidencias abiertas</string>
-    <string name="incid_resolucion_ac_mn">Resolver</string>
+    <string name="incid_resolucion_ac_mn">Resolución</string>
     <!-- ============================= ACTIVITIES ============================= -->
     <!-- =============== IncidCommentRegAc ========= -->
     <string name="incid_comment_reg_ac_label">Comentar una incidencia</string>
@@ -62,14 +62,14 @@
     <string name="incid_resolucion_news_rot">Información adicional</string>
     <string name="incid_resolucion_modif_button_rot">Modificar</string>
     <string name="incid_resolucion_close_button_rot">Modificar y cerrar incidencia</string>
-    <!-- =============== IncidResolucionRegEditAc =============== -->
+    <!-- =============== IncidResolucionRegEditSeeAc =============== -->
     <string name="incid_resolution_ac_label">Resolución incidencia</string>
     <string name="incid_resolucion_descrip_msg">Descripción</string>
     <string name="incid_resolucion_fecha_prev">Fecha estimada:</string>
     <string name="incid_resolucion_fecha_prev_msg">Fecha resolución</string>
     <string name="incid_resolucion_fecha_default_txt">>> Elige una fecha</string>
     <string name="incid_resolucion_hint"> -- plan para resolver la incidencia -- </string>
-    <string name="incid_resolucion_reg_ac_button_rot">Registro los datos</string>
+    <string name="incid_resolucion_reg_ac_button_rot">Registrar resolución</string>
     <string name="incid_resolucion_rot">Datos resolución</string>
     <string name="incid_resolucion_coste_prev_rot">Coste estimado:</string>
     <string name="incid_resolucion_coste_prev_hint">-- tu estimación --</string>

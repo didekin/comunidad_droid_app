@@ -3,28 +3,43 @@ package com.didekindroid.incidencia.activity;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.didekin.incidservice.dominio.Incidencia;
+import com.didekin.incidservice.dominio.Resolucion;
+import com.didekin.usuario.dominio.Comunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.FechaPickerFr;
+import com.didekindroid.common.activity.UiException;
+import com.didekindroid.common.utils.ConnectionUtils;
 
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import static com.didekin.common.dominio.DataPatterns.LINE_BREAK;
 import static com.didekin.incidservice.dominio.IncidDataPatterns.INCID_RESOLUCION_DESC;
+import static com.didekindroid.common.activity.IntentExtraKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.utils.UIutils.formatTimeToString;
+import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.common.utils.UIutils.getIntFromStringDecimal;
+import static com.didekindroid.common.utils.UIutils.makeToast;
+import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
+import static com.google.common.base.Preconditions.checkState;
 
 /**
  * User: pedro@didekin
@@ -53,14 +68,25 @@ public class IncidResolucionRegFr extends Fragment implements OnDateSetListener 
     {
         Log.d(TAG, "onCreateView()");
         mFragmentView = inflater.inflate(R.layout.incid_resolucion_reg_frg, container, false);
+
         TextView mFechaView = (TextView) mFragmentView.findViewById(R.id.incid_resolucion_fecha_view);
         mFechaView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
             {
                 Log.d(TAG, "onClick()");
-                FechaPickerFr fechaPicker = new FechaPickerFr();
+                FechaPickerFr fechaPicker = FechaPickerFr.newInstance(IncidResolucionRegFr.this);
                 fechaPicker.show(getActivity().getFragmentManager(), "fechaPicker");
+            }
+        });
+
+        Button mConfirmButton = (Button) mFragmentView.findViewById(R.id.incid_resolucion_reg_ac_button);
+        mConfirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                Log.d(TAG, "View.OnClickListener().onClick()");
+                registerResolucion();
             }
         });
         return mFragmentView;
@@ -73,7 +99,9 @@ public class IncidResolucionRegFr extends Fragment implements OnDateSetListener 
         mActivitySupplier = (IncidUserDataSupplier) getActivity();
     }
 
-    public ResolucionBean makeResolucionBeanFromView(StringBuilder errorMsg)
+//  ================================ HELPER METHODS =======================================
+
+    private ResolucionBean makeResolucionBeanFromView(StringBuilder errorMsg)
     {
         Log.d(TAG, "makeResolucionBeanFromView()");
 
@@ -82,10 +110,46 @@ public class IncidResolucionRegFr extends Fragment implements OnDateSetListener 
                     .append(LINE_BREAK.getRegexp());
             return null;
         }
-        if (!mResolucionBean.validateBean(errorMsg)){
+        if (!mResolucionBean.validateBean(errorMsg)) {
             return null;
         }
         return mResolucionBean;
+    }
+
+    private Resolucion makeResolucionFromBean(IncidResolucionRegFr.ResolucionBean resolucionBean)
+    {
+        if (resolucionBean == null) {
+            return null;
+        }
+
+        final Incidencia incidencia = new Incidencia.IncidenciaBuilder()
+                .incidenciaId(mActivitySupplier.getIncidImportancia().getIncidencia().getIncidenciaId())
+                .comunidad(new Comunidad.ComunidadBuilder()
+                        .c_id(mActivitySupplier.getIncidImportancia().getIncidencia().getComunidad().getC_Id())
+                        .build())
+                .build();
+        return new Resolucion.ResolucionBuilder(incidencia)
+                .descripcion(resolucionBean.descripcion)
+                .fechaPrevista(new Timestamp(resolucionBean.fechaPrevista))
+                .costeEstimado(resolucionBean.costePrev)
+                .build();
+    }
+
+    private void registerResolucion()
+    {
+        Log.d(TAG, "registerResolucion()");
+
+        StringBuilder errorMsg = getErrorMsgBuilder(getActivity());
+        Resolucion resolucion = makeResolucionFromBean(makeResolucionBeanFromView(errorMsg));
+
+        if (resolucion == null) {
+            Log.d(TAG, "registerResolucion(), resolucion == null");
+            makeToast(getActivity(), errorMsg.toString(), Toast.LENGTH_SHORT);
+        } else if (!ConnectionUtils.isInternetConnected(getActivity())) {
+            makeToast(getActivity(), R.string.no_internet_conn_toast, Toast.LENGTH_SHORT);
+        } else {
+            new ResolucionRegister().execute(resolucion);
+        }
     }
 
     //  ======================== INTERFACE COMMUNICATIONS METHODS ==========================
@@ -141,7 +205,7 @@ public class IncidResolucionRegFr extends Fragment implements OnDateSetListener 
 
         boolean validateDescripcion(StringBuilder errorMsg)
         {
-            descripcion = ((EditText)mFragmentView.findViewById(R.id.incid_resolucion_desc_ed)).getText().toString();
+            descripcion = ((EditText) mFragmentView.findViewById(R.id.incid_resolucion_desc_ed)).getText().toString();
 
             if (!INCID_RESOLUCION_DESC.isPatternOk(descripcion)) {
                 errorMsg.append(getResources().getString(R.string.incid_resolucion_descrip_msg)).append(LINE_BREAK.getRegexp());
@@ -168,6 +232,45 @@ public class IncidResolucionRegFr extends Fragment implements OnDateSetListener 
             }
 
             return true;
+        }
+    }
+
+    // .....................................................................................................
+
+    private class ResolucionRegister extends AsyncTask<Resolucion, Void, Integer> {
+
+        private final String TAG = ResolucionRegister.class.getCanonicalName();
+        UiException uiException;
+
+        @Override
+        protected Integer doInBackground(Resolucion... params)
+        {
+            Log.d(TAG, "doInBackground()");
+            int rowInserted = 0;
+
+            try {
+                rowInserted = IncidenciaServ.regResolucion(params[0]);
+            } catch (UiException e) {
+                uiException = e;
+            }
+            return rowInserted;
+        }
+
+        @Override
+        protected void onPostExecute(Integer rowInserted)
+        {
+            Log.d(TAG, "onPostExecute()");
+
+            if (uiException != null) {
+                Intent intent = new Intent();
+                intent.putExtra(INCID_IMPORTANCIA_OBJECT.extra, mActivitySupplier.getIncidImportancia());
+                uiException.processMe(getActivity(), intent);
+            } else {
+                checkState(rowInserted == 1);
+                Intent intent = new Intent(getActivity(), IncidEditAc.class);
+                intent.putExtra(INCID_IMPORTANCIA_OBJECT.extra, mActivitySupplier.getIncidImportancia());
+                startActivity(intent);
+            }
         }
     }
 }

@@ -10,7 +10,7 @@ import com.didekin.incidservice.dominio.Incidencia;
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekindroid.R;
 
-import static com.didekindroid.common.utils.AppKeysForBundle.INCIDENCIA_LIST_INDEX;
+import static com.didekindroid.common.activity.IntentExtraKey.INCIDENCIA_LIST_INDEX;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_REG_AC;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_SEE_BY_COMU_AC;

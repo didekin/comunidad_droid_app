@@ -25,7 +25,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withContentDesc
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanWithTkhandler;
-import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_SEARCH;
+import static com.didekindroid.common.activity.IntentExtraKey.COMUNIDAD_SEARCH;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.typeComunidadData;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.not;

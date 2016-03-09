@@ -1,6 +1,7 @@
 package com.didekin.incidservice.dominio;
 
 import com.didekin.common.BeanBuilder;
+import com.didekin.common.dominio.SerialNumber;
 import com.didekin.usuario.dominio.Comunidad;
 
 import java.io.InvalidObjectException;
@@ -208,6 +209,8 @@ public final class Incidencia implements Serializable {
      * Example of serialization proxy.
      */
     private static class InnerSerial implements Serializable {
+
+        private static final long serialVersionUID = SerialNumber.INCIDENCIA.number;
 
         private final long incidenciaId;
         private final Comunidad comunidad;

@@ -1,5 +1,7 @@
 package com.didekin.usuario.dominio;
 
+import com.didekin.common.dominio.SerialNumber;
+
 import java.io.Serializable;
 
 /**
@@ -10,6 +12,7 @@ import java.io.Serializable;
 @SuppressWarnings("unused")
 public class ComunidadAutonoma implements Serializable {
 
+    private static final long serialVersionUID = SerialNumber.COMUNIDAD_AUTONOMA.number;
 
     private final short cuId;
     private final String nombre;

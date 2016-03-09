@@ -1,6 +1,7 @@
 package com.didekin.incidservice.dominio;
 
 import com.didekin.common.BeanBuilder;
+import com.didekin.common.dominio.SerialNumber;
 import com.didekin.common.exception.DidekinExceptionMsg;
 import com.didekin.usuario.dominio.UsuarioComunidad;
 
@@ -155,6 +156,8 @@ public class IncidImportancia implements Serializable {
     }
 
     private static class InnerSerial implements Serializable{
+
+        private static final long serialVersionUID = SerialNumber.INCID_IMPORTANCIA.number;
 
         private final Incidencia incidencia;
         private final UsuarioComunidad userComu;

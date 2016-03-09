@@ -21,7 +21,7 @@ import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.common.utils.ConnectionUtils;
 
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeComunidadBeanFromView;
-import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_ID;
+import static com.didekindroid.common.activity.IntentExtraKey.COMUNIDAD_ID;
 import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_USERCOMU_BY_COMU_AC;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;

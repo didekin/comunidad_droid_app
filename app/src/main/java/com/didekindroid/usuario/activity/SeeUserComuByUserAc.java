@@ -10,7 +10,7 @@ import android.view.MenuItem;
 import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 
-import static com.didekindroid.common.utils.AppKeysForBundle.USERCOMU_LIST_OBJECT;
+import static com.didekindroid.common.activity.IntentExtraKey.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.UserMenu.COMU_SEARCH_AC;

@@ -10,7 +10,7 @@ import android.view.MenuItem;
 import com.didekin.incidservice.dominio.IncidImportancia;
 import com.didekindroid.R;
 
-import static com.didekindroid.common.utils.AppKeysForBundle.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.common.activity.IntentExtraKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_COMMENT_REG_AC;
 import static com.google.common.base.Preconditions.checkNotNull;

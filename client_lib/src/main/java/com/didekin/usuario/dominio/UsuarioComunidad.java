@@ -2,6 +2,7 @@ package com.didekin.usuario.dominio;
 
 
 import com.didekin.common.BeanBuilder;
+import com.didekin.common.dominio.SerialNumber;
 import com.didekin.common.oauth2.Rol;
 
 import java.io.InvalidObjectException;
@@ -252,6 +253,8 @@ public final class UsuarioComunidad implements Comparable<UsuarioComunidad>, Ser
     //    ============================= SERIALIZATION PROXY ==================================
 
     private static class InnerSerial implements Serializable {
+
+        private static final long serialVersionUID = SerialNumber.USUARIO_COMUNIDAD.number;
 
         private final Comunidad comunidad;
         private final Usuario usuario;

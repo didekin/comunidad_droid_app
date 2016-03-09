@@ -1,4 +1,4 @@
-package com.didekindroid.common.utils;
+package com.didekindroid.common.activity;
 
 /**
  * User: pedro

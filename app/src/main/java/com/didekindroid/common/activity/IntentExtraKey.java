@@ -1,11 +1,11 @@
-package com.didekindroid.common.utils;
+package com.didekindroid.common.activity;
 
 /**
  * User: pedro
  * Date: 10/07/15
  * Time: 10:22
  */
-public enum AppKeysForBundle {
+public enum IntentExtraKey {
 
     COMUNIDAD_LIST_INDEX,
     COMUNIDAD_LIST_OBJECT,
@@ -18,11 +18,11 @@ public enum AppKeysForBundle {
     USERCOMU_LIST_OBJECT,
     ;
 
-    private static final String intentPackage =  "com.didekindroid.common.utils.AppKeysForBundle.";
+    private static final String intentPackage =  "com.didekindroid.common.activity.IntentExtraKey.";
 
     public final String extra;
 
-    AppKeysForBundle()
+    IntentExtraKey()
     {
         extra = intentPackage.concat(this.name());
     }

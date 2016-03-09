@@ -3,7 +3,7 @@ package com.didekindroid.common.suite;
 import com.didekindroid.common.TokenHandlerTest;
 import com.didekindroid.common.activity.UiExceptionTests_1;
 import com.didekindroid.common.activity.UiExceptionTests_2;
-import com.didekindroid.common.utils.AppKeysForBundleTest;
+import com.didekindroid.common.utils.IntentExtraKeyTest;
 import com.didekindroid.common.utils.IoHelperTest;
 import com.didekindroid.common.utils.UIutilsTest;
 import com.didekindroid.common.webservices.Oauth2ServiceIfTest;
@@ -18,7 +18,7 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        AppKeysForBundleTest.class,
+        IntentExtraKeyTest.class,
         IoHelperTest.class,
         Oauth2ServiceIfTest.class,
         TokenHandlerTest.class,

@@ -1,6 +1,7 @@
 package com.didekin.usuario.dominio;
 
 import com.didekin.common.BeanBuilder;
+import com.didekin.common.dominio.SerialNumber;
 import com.didekin.common.exception.DidekinExceptionMsg;
 
 import java.io.InvalidObjectException;
@@ -202,6 +203,8 @@ public final class Usuario implements Comparable<Usuario>, Serializable {
 //    ============================= SERIALIZATION PROXY ==================================
 
     private static class InnerSerial implements Serializable {
+
+        private static final long serialVersionUID = SerialNumber.USUARIO.number;
 
         private final long usuarioId;
         private final String userName;

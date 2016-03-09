@@ -16,9 +16,9 @@ import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.utils.UIutils;
 import com.didekindroid.usuario.activity.utils.UserMenu;
 
-import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_LIST_INDEX;
-import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_LIST_OBJECT;
-import static com.didekindroid.common.utils.AppKeysForBundle.USERCOMU_LIST_OBJECT;
+import static com.didekindroid.common.activity.IntentExtraKey.COMUNIDAD_LIST_INDEX;
+import static com.didekindroid.common.activity.IntentExtraKey.COMUNIDAD_LIST_OBJECT;
+import static com.didekindroid.common.activity.IntentExtraKey.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.UserMenu.REG_COMU_USER_USERCOMU_AC;

@@ -2,6 +2,7 @@ package com.didekin.usuario.dominio;
 
 
 import com.didekin.common.BeanBuilder;
+import com.didekin.common.dominio.SerialNumber;
 
 import java.io.InvalidObjectException;
 import java.io.ObjectInputStream;
@@ -116,7 +117,7 @@ public final class Comunidad implements Comparable<Comunidad>, Serializable {
      */
     private Object writeReplace()
     {
-        return new InnerSerial(this);
+        return new ComunidadSerial(this);
     }
 
     private void readObject(ObjectInputStream inputStream) throws InvalidObjectException
@@ -285,7 +286,9 @@ public final class Comunidad implements Comparable<Comunidad>, Serializable {
 
     //    ================================== SERIALIZATION PROXY ==================================
 
-    private static class InnerSerial implements Serializable {
+    private static class ComunidadSerial implements Serializable {
+
+        private static final long serialVersionUID = SerialNumber.COMUNIDAD.number;
 
         private final long c_Id;
         private final String tipoVia;
@@ -294,7 +297,7 @@ public final class Comunidad implements Comparable<Comunidad>, Serializable {
         private final String sufijoNumero;
         private final Municipio municipio;
 
-        public InnerSerial(Comunidad comunidad)
+        public ComunidadSerial(Comunidad comunidad)
         {
             c_Id = comunidad.c_Id;
             tipoVia = comunidad.tipoVia;

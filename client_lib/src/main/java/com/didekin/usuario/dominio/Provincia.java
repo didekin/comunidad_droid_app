@@ -1,6 +1,8 @@
 package com.didekin.usuario.dominio;
 
 
+import com.didekin.common.dominio.SerialNumber;
+
 import java.io.Serializable;
 
 /**
@@ -9,6 +11,8 @@ import java.io.Serializable;
  * Time: 13:08
  */
 public final class Provincia implements Comparable<Provincia>, Serializable{
+
+    private static final long serialVersionUID = SerialNumber.PROVINCIA.number;
 
     private final short provinciaId; // Es una PK fija, no un campo auto-increment.
     private final String nombre;

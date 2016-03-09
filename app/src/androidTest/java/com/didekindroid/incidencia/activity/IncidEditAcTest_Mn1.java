@@ -19,13 +19,14 @@ import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
-import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
-import static com.didekindroid.common.utils.AppKeysForBundle.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.common.activity.IntentExtraKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_COMMENTS_SEE_AC;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_COMMENT_REG_AC;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
@@ -123,8 +124,8 @@ public class IncidEditAcTest_Mn1 {
     public void testIncidResolucionReg_Mn() throws Exception
     {
         // El userComu no tiene función administrador.
-        onView(withText(R.string.incid_resolucion_ac_mn)).check(doesNotExist());
-        openActionBarOverflowOrOptionsMenu(mActivity);
-        onView(withText(R.string.incid_resolucion_ac_mn)).check(doesNotExist());
+        onView(withText(R.string.incid_resolucion_ac_mn)).check(matches(isDisplayed()));
+
+        // TODO: perform click y verificar layout.
     }
 }

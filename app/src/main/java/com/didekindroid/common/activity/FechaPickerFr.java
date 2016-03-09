@@ -1,7 +1,6 @@
 package com.didekindroid.common.activity;
 
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.Dialog;
@@ -14,14 +13,14 @@ import java.util.Calendar;
 public class FechaPickerFr extends DialogFragment {
 
     private static final String TAG = FechaPickerFr.class.getCanonicalName();
-    ActivityForFechaPicker mActivity;
+    OnDateSetListener fechaFragment;
 
-    @Override
-    public void onAttach(Activity activity)
+    public static FechaPickerFr newInstance(OnDateSetListener onDateSetListener)
     {
-        Log.d(TAG, "onAttach()");
-        super.onAttach(activity);
-        mActivity = (ActivityForFechaPicker) activity;
+        Log.d(TAG, "newInstance()");
+        FechaPickerFr fechaPickerFr = new FechaPickerFr();
+        fechaPickerFr.fechaFragment = onDateSetListener;
+        return fechaPickerFr;
     }
 
     @Override
@@ -35,16 +34,12 @@ public class FechaPickerFr extends DialogFragment {
         int month = c.get(Calendar.MONTH);
         int day = c.get(Calendar.DAY_OF_MONTH);
 
-        OnDateSetListener fechaFragment = mActivity.giveMyFechaFragment();
-        return new DatePickerDialog(mActivity.getActivity(), fechaFragment, year, month, day);
+        return new DatePickerDialog(getActivity(), fechaFragment, year, month, day);
     }
 
 //    ===========================================================================================
 //    .................................... INNER CLASSES .................................
 //    ===========================================================================================
 
-    public interface ActivityForFechaPicker<T extends Activity> {
-        OnDateSetListener giveMyFechaFragment();
-        T getActivity();
-    }
+
 }

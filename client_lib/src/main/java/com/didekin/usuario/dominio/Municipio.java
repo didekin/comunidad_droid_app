@@ -1,6 +1,8 @@
 package com.didekin.usuario.dominio;
 
 
+import com.didekin.common.dominio.SerialNumber;
+
 import java.io.Serializable;
 
 /**
@@ -9,6 +11,8 @@ import java.io.Serializable;
  * Time: 15:14
  */
 public final class Municipio implements Comparable<Municipio>, Serializable {
+
+    private static final long serialVersionUID = SerialNumber.MUNICIPIO.number;
 
     private final int mId;  // PK auto-increment.
     private final  short codInProvincia;  // código intra-provincia de un municipio.

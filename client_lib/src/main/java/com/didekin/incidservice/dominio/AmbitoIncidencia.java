@@ -1,5 +1,7 @@
 package com.didekin.incidservice.dominio;
 
+import com.didekin.common.dominio.SerialNumber;
+
 import java.io.Serializable;
 
 /**
@@ -8,6 +10,8 @@ import java.io.Serializable;
  * Time: 18:20
  */
 public class AmbitoIncidencia implements Serializable {
+
+    private static final long serialVersionUID = SerialNumber.AMBITO_INCIDENCIA.number;
 
     private final short ambitoId;
 

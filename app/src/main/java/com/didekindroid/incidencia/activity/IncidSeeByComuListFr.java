@@ -22,7 +22,7 @@ import com.didekindroid.common.activity.UiException;
 
 import java.util.List;
 
-import static com.didekindroid.common.utils.AppKeysForBundle.COMUNIDAD_LIST_INDEX;
+import static com.didekindroid.common.activity.IntentExtraKey.COMUNIDAD_LIST_INDEX;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.google.common.base.Preconditions.checkState;
 

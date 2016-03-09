@@ -34,7 +34,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
-import static com.didekindroid.common.utils.AppKeysForBundle.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.common.activity.IntentExtraKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
@@ -54,11 +54,11 @@ import static org.hamcrest.CoreMatchers.is;
 public class IncidResolucionRegAcTest_2 {
 
     IncidImportancia incidJuanReal1;
-    IncidResolucionRegEditAc mActivity;
+    IncidResolucionRegEditSeeAc mActivity;
     IncidResolucionRegFr mFragment;
 
     @Rule
-    public IntentsTestRule<IncidResolucionRegEditAc> intentRule = new IntentsTestRule<IncidResolucionRegEditAc>(IncidResolucionRegEditAc.class) {
+    public IntentsTestRule<IncidResolucionRegEditSeeAc> intentRule = new IntentsTestRule<IncidResolucionRegEditSeeAc>(IncidResolucionRegEditSeeAc.class) {
 
         @Override
         protected void beforeActivityLaunched()
@@ -68,7 +68,7 @@ public class IncidResolucionRegAcTest_2 {
 
         /**
          * Preconditions:
-         * 1. An IncidenciaUser with powers to resolve an incidencia is received.
+         * 1. An IncidenciaUser WITHOUT powers to register a resolución is received (no 'adm' authorithy).
          * */
         @Override
         protected Intent getActivityIntent()
@@ -113,7 +113,7 @@ public class IncidResolucionRegAcTest_2 {
     }
 
     @Test
-    public void testOnRegister_2()
+    public void testOnRegister_1()
     {
         // CASO: userComu no autorizado a registrar una resolución.
 
