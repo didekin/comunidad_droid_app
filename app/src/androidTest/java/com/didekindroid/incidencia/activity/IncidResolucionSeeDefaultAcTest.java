@@ -1,10 +1,8 @@
 package com.didekindroid.incidencia.activity;
 
 import android.content.Intent;
-import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.widget.DatePicker;
 
 import com.didekin.incidservice.dominio.IncidImportancia;
 import com.didekin.incidservice.dominio.Incidencia;
@@ -19,31 +17,23 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.contrib.PickerActions.setDate;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
+import static com.didekindroid.common.activity.IntentExtraKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkNavigateUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
-import static com.didekindroid.common.activity.IntentExtraKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_JUAN;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
-import static java.util.Calendar.DAY_OF_MONTH;
-import static java.util.Calendar.MONTH;
-import static java.util.Calendar.YEAR;
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
 /**
  * User: pedro@didekin
@@ -51,11 +41,10 @@ import static org.hamcrest.CoreMatchers.is;
  * Time: 15:14
  */
 @RunWith(AndroidJUnit4.class)
-public class IncidResolucionRegAcTest_2 {
+public class IncidResolucionSeeDefaultAcTest {
 
     IncidImportancia incidJuanReal1;
     IncidResolucionRegEditSeeAc mActivity;
-    IncidResolucionRegFr mFragment;
 
     @Rule
     public IntentsTestRule<IncidResolucionRegEditSeeAc> intentRule = new IntentsTestRule<IncidResolucionRegEditSeeAc>(IncidResolucionRegEditSeeAc.class) {
@@ -68,7 +57,8 @@ public class IncidResolucionRegAcTest_2 {
 
         /**
          * Preconditions:
-         * 1. An IncidenciaUser WITHOUT powers to register a resolución is received (no 'adm' authorithy).
+         * 1. An IncidenciaUser WITHOUT powers to register/edit a resolución is received (no 'adm' authorithy).
+         * 2. There is not a broadcasted resolucion.
          * */
         @Override
         protected Intent getActivityIntent()
@@ -102,8 +92,6 @@ public class IncidResolucionRegAcTest_2 {
     public void setUp() throws Exception
     {
         mActivity = intentRule.getActivity();
-        mFragment = (IncidResolucionRegFr) mActivity.getFragmentManager()
-                .findFragmentById(R.id.incid_resolucion_reg_frg);
     }
 
     @After
@@ -113,27 +101,16 @@ public class IncidResolucionRegAcTest_2 {
     }
 
     @Test
-    public void testOnRegister_1()
+    public void testOnCreate_1()
     {
-        // CASO: userComu no autorizado a registrar una resolución.
+        // CASO OK: se muestra el mensaje por defecto.
 
-        onView(withId(R.id.incid_resolucion_desc_ed)).perform(replaceText("desc_válida"));
-        onView(withId(R.id.incid_resolucion_coste_prev_ed)).perform(replaceText("1234,5"));
-        Calendar today = new GregorianCalendar();
-        today.add(YEAR, 1);
-        setFecha(setDate(today.get(YEAR), today.get(MONTH), today.get(DAY_OF_MONTH)));
+        assertThat(mActivity, notNullValue());
+        onView(withId(R.id.appbar)).check(matches(isDisplayed()));
 
-        onView(withId(R.id.incid_resolucion_reg_ac_button)).perform(click());
-        checkToastInTest(R.string.user_without_powers, mActivity);
-        onView(withId(R.id.login_ac_layout)).check(matches(isDisplayed()));
-    }
+        onView(withId(R.id.incid_resolucion_fragment_container_ac)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_resolucion_see_default_fr)).check(matches(isDisplayed()));
 
-//    ============================= HELPER METHODS ===========================
-
-    private void setFecha(ViewAction viewAction)
-    {
-        onView(withId(R.id.incid_resolucion_fecha_view)).perform(click());
-        onView(withClassName(is(DatePicker.class.getName()))).perform(viewAction);
-        onView(withText(mActivity.getString(android.R.string.ok))).perform(click());
+        checkNavigateUp();
     }
 }

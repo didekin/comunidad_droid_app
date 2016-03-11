@@ -63,7 +63,7 @@ public class UiExceptionTests_2 extends UiExceptionAbstractTest {
                         .userComu(juanReal)
                         .importancia((short) 3).build();
                 IncidenciaServ.regIncidenciaUser(incidJuanReal1);
-                Incidencia incidenciaDb = IncidenciaServ.seeIncidsOpenByComu(juanReal.getComunidad().getC_Id()).get(0).getIncidencia();
+                Incidencia incidenciaDb = IncidenciaServ.seeIncidsOpenByComu(juanReal.getComunidad().getC_Id()).get(0).getResolucion();
                 incidJuanReal1 = IncidenciaServ.getIncidenciaUserByIncid(incidenciaDb.getIncidenciaId());*/
             } catch (UiException e) {
                 e.printStackTrace();

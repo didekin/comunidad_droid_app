@@ -18,7 +18,7 @@ import com.didekindroid.incidencia.dominio.IncidImportanciaBean;
 import com.didekindroid.incidencia.dominio.IncidenciaBean;
 import com.didekindroid.incidencia.repository.IncidenciaDataDbHelper;
 
-import static com.didekindroid.incidencia.activity.utils.IncidRegEditHelper.HELPER;
+import static com.didekindroid.incidencia.activity.utils.IncidSpinnersHelper.HELPER;
 
 /**
  *

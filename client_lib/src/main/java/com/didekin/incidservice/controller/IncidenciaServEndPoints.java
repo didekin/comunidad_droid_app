@@ -15,6 +15,7 @@ import retrofit.http.POST;
 import retrofit.http.PUT;
 import retrofit.http.Path;
 
+import static com.didekin.incidservice.controller.IncidServConstant.CLOSE_INCIDENCIA;
 import static com.didekin.incidservice.controller.IncidServConstant.DELETE_INCID;
 import static com.didekin.incidservice.controller.IncidServConstant.MOD_INCID_IMPORTANCIA;
 import static com.didekin.incidservice.controller.IncidServConstant.MOD_RESOLUCION;
@@ -33,6 +34,10 @@ import static com.didekin.incidservice.controller.IncidServConstant.SEE_RESOLUCI
  * Time: 17:05
  */
 public interface IncidenciaServEndPoints {
+
+    @PUT(CLOSE_INCIDENCIA)
+    int closeIncidencia(@Header("Authorization") String accessToken,
+                        @Body Resolucion resolucion);
 
     @DELETE(DELETE_INCID + "/{incidenciaId}")
     int deleteIncidencia(@Header("Authorization") String accessToken, @Path("incidenciaId") long incidenciaId);

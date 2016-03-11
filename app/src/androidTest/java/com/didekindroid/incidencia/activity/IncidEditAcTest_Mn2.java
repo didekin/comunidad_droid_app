@@ -9,6 +9,7 @@ import com.didekin.incidservice.dominio.IncidenciaUser;
 import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
+import com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils;
 
 import org.hamcrest.Matchers;
 import org.junit.After;
@@ -31,6 +32,7 @@ import static com.didekindroid.common.activity.IntentExtraKey.INCID_RESOLUCION_O
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.activity.IntentExtraKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_RESOLUCION_REG_EDIT_AC;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
@@ -119,8 +121,8 @@ public class IncidEditAcTest_Mn2 {
     @Test
     public void testIncidResolucionReg_Mn() throws Exception
     {
-        onView(withText(R.string.incid_resolucion_ac_mn)).check(matches(isDisplayed())).perform(click());
-        onView(withId(R.id.incid_resolucion_reg_ac_layout)).check(matches(isDisplayed()));
+        INCID_RESOLUCION_REG_EDIT_AC.checkMenuItem_WTk(mActivity);
+        onView(withId(R.id.incid_resolucion_reg_frg_layout)).check(matches(isDisplayed()));
         intended(hasExtra(INCID_IMPORTANCIA_OBJECT.extra, incidJuanPlazuelas));
         // No extra con resolución.
         intended(not(hasExtraWithKey(INCID_RESOLUCION_OBJECT.extra)));

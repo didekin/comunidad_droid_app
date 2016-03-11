@@ -9,7 +9,7 @@
     <string name="search_button">Buscar</string>
     <string name="checkbox_si">Sí</string>
     <string name="checkbox_no">No</string>
-    <string name="euros_rot">euros</string>
+    <string name="euros_rot">EUR</string>
     <string name="decimal_separator">,</string>
     <string name="decimal_zero_regexp">###,###</string>
     <string name="decimal_two_regexp">###,###.##</string>
@@ -57,12 +57,17 @@
     <string name="incid_reg_importancia">Importancia</string>
     <string name="incid_reg_ambitoIncidencia">Ámbito de incidencia</string>
     <string name="incid_reg_descripcion">Descripcion</string>
-    <!-- =============== IncidResolucionEditFr =============== -->
-    <string name="incid_resolucion_coste_final_rot">Coste final:</string>
-    <string name="incid_resolucion_news_rot">Información adicional</string>
+    <!-- =============== IncidResolucionRegEditSeeAc =============== -->
+    <!-- ======== IncidResolucionEditFr ======== -->
+    <string name="incid_resolucion_coste_final_rot">Coste final EUR:</string>
+    <string name="incid_resolucion_avance_rot">Nueva información</string>
     <string name="incid_resolucion_modif_button_rot">Modificar</string>
     <string name="incid_resolucion_close_button_rot">Modificar y cerrar incidencia</string>
-    <!-- =============== IncidResolucionRegEditSeeAc =============== -->
+    <string name="incid_resolucion_plan_rot">Plan:</string>
+    <string name="incid_resolucion_avance_hint">-- avance o cambio en el plan --</string>
+    <string name="incid_resolucion_avances_rot">Historial de avances:</string>
+    <string name="incid_resolucion_no_avances_message">No hay avances registrados</string>
+    <!-- ======== IncidResolucionRegFr ========= -->
     <string name="incid_resolution_ac_label">Resolución incidencia</string>
     <string name="incid_resolucion_descrip_msg">Descripción</string>
     <string name="incid_resolucion_fecha_prev">Fecha estimada:</string>
@@ -71,10 +76,12 @@
     <string name="incid_resolucion_hint"> -- plan para resolver la incidencia -- </string>
     <string name="incid_resolucion_reg_ac_button_rot">Registrar resolución</string>
     <string name="incid_resolucion_rot">Datos resolución</string>
-    <string name="incid_resolucion_coste_prev_rot">Coste estimado:</string>
+    <string name="incid_resolucion_coste_prev_rot">Coste estimado EUR:</string>
     <string name="incid_resolucion_coste_prev_hint">-- tu estimación --</string>
     <string name="incid_resolucion_coste_prev_msg">Coste estimado</string>
-    <!-- =============== IncidSeeByComuAc =============== -->
+    <!-- ====== IncidResolucionSeeDefaultFr ====== -->
+    <string name="incid_resolucion_see_default_txt">No se ha iniciado aún el proceso de resolución</string>
+    <!-- ===================== IncidSeeByComuAc ===================== -->
     <string name="incid_see_by_user_ac_label">Tus incidencias</string>
     <string name="incid_fecha_alta_rot">Desde:</string>
     <string name="incid_importancia_user_rot">Importancia:</string>

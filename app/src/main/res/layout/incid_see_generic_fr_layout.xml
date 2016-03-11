@@ -27,7 +27,7 @@
 
     <TextView
         android:id="@id/android:empty"
-        style="@style/textBase.textFieldLabel1"
+        style="@style/textBase.textPageLabel2.no_item_list_message"
         android:text="@string/no_incidencia_by_user"
         android:visibility="gone">
     </TextView>

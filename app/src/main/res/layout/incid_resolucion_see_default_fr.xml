@@ -1,0 +1,14 @@
+<LinearLayout
+    android:id="@+id/incid_resolucion_see_default_fr"
+    style="@style/baseLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginTop="@dimen/app_bar_bottom_margin"
+    tools:context="com.didekindroid.incidencia.activity.IncidResolucionSeeDefaultFr">
+
+    <TextView
+        android:id="@+id/incid_resolucion_see_default_txt"
+        style="@style/textBase.textPageLabel2.no_item_list_message"
+        android:text="@string/incid_resolucion_see_default_txt"/>
+
+</LinearLayout>

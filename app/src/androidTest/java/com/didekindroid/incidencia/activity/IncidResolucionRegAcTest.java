@@ -60,7 +60,7 @@ import static org.junit.Assert.assertThat;
  * Time: 15:14
  */
 @RunWith(AndroidJUnit4.class)
-public class IncidResolucionRegAcTest_1 {
+public class IncidResolucionRegAcTest {
 
     IncidImportancia incidJuanReal1;
     IncidResolucionRegEditSeeAc mActivity;
@@ -77,6 +77,7 @@ public class IncidResolucionRegAcTest_1 {
         /**
          * Preconditions:
          * 1. An IncidenciaUser with powers to resolve an incidencia is received.
+         * 2. No resolucion broadcasted.
          * */
         @Override
         protected Intent getActivityIntent()
@@ -156,11 +157,11 @@ public class IncidResolucionRegAcTest_1 {
     @Test
     public void testOnEdit_1()
     {
-        // Descripción errónea y fecha sin fijar: error sólo de fecha.
+        // Descripción errónea y fecha sin fijar.
         onView(withId(R.id.incid_resolucion_desc_ed)).perform(replaceText("Desc * no válida"));
         onView(withId(R.id.incid_resolucion_reg_ac_button)).perform(click());
         checkToastInTest(R.string.error_validation_msg, mActivity,
-                R.string.incid_resolucion_fecha_prev_msg);
+                R.string.incid_resolucion_fecha_prev_msg, R.string.incid_resolucion_descrip_msg);
     }
 
     @Test

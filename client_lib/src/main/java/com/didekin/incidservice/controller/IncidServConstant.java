@@ -14,6 +14,7 @@ public final class IncidServConstant {
     {
     }
 
+    public static final String CLOSE_INCIDENCIA = INCID_WRITE + "/close";
     public static final String DELETE_INCID = INCID_WRITE + "/delete";
     public static final String MOD_INCID_IMPORTANCIA = INCID_WRITE + "/modify";
     public static final String MOD_RESOLUCION = INCID_WRITE + "/resolucion/modify";

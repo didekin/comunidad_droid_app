@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static android.widget.Toast.LENGTH_SHORT;
+import static com.didekin.common.exception.DidekinExceptionMsg.AVANCE_WRONG_INIT;
 import static com.didekin.common.exception.DidekinExceptionMsg.BAD_REQUEST;
 import static com.didekin.common.exception.DidekinExceptionMsg.COMUNIDAD_DUPLICATE;
 import static com.didekin.common.exception.DidekinExceptionMsg.COMUNIDAD_NOT_COMPARABLE;
@@ -215,6 +216,7 @@ public class UiException extends Exception {
     static final Map<String, UiAction> messageToAction = new HashMap<>();
 
     static {
+        messageToAction.put(AVANCE_WRONG_INIT.getHttpMessage(), INCID_SEE_BY_COMU);
         messageToAction.put(BAD_REQUEST.getHttpMessage(), LOGIN);
         messageToAction.put(COMUNIDAD_NOT_COMPARABLE.getHttpMessage(), GENERIC);
         messageToAction.put(COMUNIDAD_DUPLICATE.getHttpMessage(), SEARCH_COMU);

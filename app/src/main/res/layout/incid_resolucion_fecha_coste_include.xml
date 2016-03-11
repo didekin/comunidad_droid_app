@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+       xmlns:tools="http://schemas.android.com/tools">
+    <TextView
+        android:id="@+id/incid_resolucion_rot"
+        style="@style/textBase.textPageLabel2"
+        android:text="@string/incid_resolucion_rot"/>
+
+    <!--Fecha estimada-->
+    <LinearLayout
+        android:id="@+id/incid_resolucion_fecha_prev_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:id="@+id/incid_resolucion_fecha_prev_rot"
+            style="@style/textBase.textFieldLabel1"
+            android:text="@string/incid_resolucion_fecha_prev"/>
+        <TextView
+            android:id="@+id/incid_resolucion_fecha_view"
+            style="@style/textBase.textFieldLabel2"
+            android:text="@string/incid_resolucion_fecha_default_txt"
+            android:textColor="@color/deep_orange_600"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+    <!--Coste estimado-->
+    <LinearLayout
+        android:id="@+id/incid_resolucion_coste_prev_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/incid_resolucion_coste_prev_rot"
+            style="@style/textBase.textFieldLabel1"
+            android:text="@string/incid_resolucion_coste_prev_rot"/>
+        <EditText
+            android:id="@+id/incid_resolucion_coste_prev_ed"
+            style="@style/textBase.editField"
+            android:background="@android:color/transparent"
+            android:inputType="numberDecimal"
+            android:lines="1"
+            android:maxEms="4"
+            android:minEms="1"
+            android:padding="0dp"
+            android:scrollHorizontally="true"
+            tools:ignore="LabelFor"/>
+    </LinearLayout>
+</merge>

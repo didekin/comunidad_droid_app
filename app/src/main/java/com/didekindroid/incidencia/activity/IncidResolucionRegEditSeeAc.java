@@ -42,7 +42,8 @@ import static com.google.common.base.Preconditions.checkArgument;
  * 4. If a Resolucion intent is received and the user hasn't got authority 'adm':
  * 4.1 The data are shown.
  */
-public class IncidResolucionRegEditSeeAc extends AppCompatActivity implements IncidUserDataSupplier {
+public class IncidResolucionRegEditSeeAc extends AppCompatActivity implements
+        IncidenciaDataSupplier {
 
     private static final String TAG = IncidResolucionRegEditSeeAc.class.getCanonicalName();
 
@@ -73,21 +74,25 @@ public class IncidResolucionRegEditSeeAc extends AppCompatActivity implements In
         setContentView(mAcView);
         doToolBar(this, true);
 
+        if (savedInstanceState != null) {
+            return;
+        }
+
         if (mIncidImportancia.getUserComu().hasAdministradorAuthority()) {
             if (mResolucion != null) {
-                // TODO: fragmento de edición.
+                IncidResolucionEditFr mRegFragment = new IncidResolucionEditFr();
+                getFragmentManager().beginTransaction().add(R.id.incid_resolucion_fragment_container_ac, mRegFragment).commit();
+
             } else {
-                IncidResolucionRegFr mRegFragment;
-                if(savedInstanceState == null){
-                    mRegFragment = new IncidResolucionRegFr();
-                    getFragmentManager().beginTransaction().add(R.id.incid_resolucion_fragment_container_ac, mRegFragment).commit();
-                }
+                IncidResolucionRegFr mRegFragment = new IncidResolucionRegFr();
+                getFragmentManager().beginTransaction().add(R.id.incid_resolucion_fragment_container_ac, mRegFragment).commit();
             }
-        } else {
+        } else { // User without authority 'adm'
             if (mResolucion != null) {
                 // TODO: fragmento de visión sin edición.
             } else {
-                // TODO: mensaje estático.
+                IncidResolucionSeeDefaultFr mSeeFragment = new IncidResolucionSeeDefaultFr();
+                getFragmentManager().beginTransaction().add(R.id.incid_resolucion_fragment_container_ac, mSeeFragment).commit();
             }
         }
     }
@@ -138,7 +143,15 @@ public class IncidResolucionRegEditSeeAc extends AppCompatActivity implements In
         return mIncidImportancia;
     }
 
+    @Override
+    public Resolucion getResolucion()
+    {
+        Log.d(TAG, "getResolucion()");
+        return mResolucion;
+    }
+
 //    ============================================================
 //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
-/*    ============================================================*/
+//    ============================================================
+
 }

@@ -22,7 +22,7 @@ import com.didekindroid.incidencia.repository.IncidenciaDataDbHelper;
 
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.common.utils.UIutils.makeToast;
-import static com.didekindroid.incidencia.activity.utils.IncidRegEditHelper.HELPER;
+import static com.didekindroid.incidencia.activity.utils.IncidSpinnersHelper.HELPER;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.google.common.base.Preconditions.checkState;
 
@@ -58,7 +58,7 @@ public class IncidEditNoPowerFr extends Fragment implements ImportanciaSpinnerSe
         super.onActivityCreated(savedInstanceState);
 
         mIncidImportanciaBean = new IncidImportanciaBean();
-        mIncidImportancia = ((IncidUserDataSupplier) getActivity()).getIncidImportancia();
+        mIncidImportancia = ((IncidenciaDataSupplier) getActivity()).getIncidImportancia();
 
         ((TextView) fFragmentView.findViewById(R.id.incid_comunidad_txt))
                 .setText(mIncidImportancia.getIncidencia().getComunidad().getNombreComunidad());

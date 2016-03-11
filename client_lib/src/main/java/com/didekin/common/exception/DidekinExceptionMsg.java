@@ -7,6 +7,7 @@ package com.didekin.common.exception;
  */
 public enum DidekinExceptionMsg {
 
+    AVANCE_WRONG_INIT(null, 412),
     BAD_REQUEST("Bad Request", 400),
     COMUNIDAD_NOT_COMPARABLE(null, 412),
     COMUNIDAD_DUPLICATE(null, 409),

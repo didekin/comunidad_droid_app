@@ -18,7 +18,7 @@ import com.didekindroid.incidencia.activity.ImportanciaSpinnerSettable;
  * Date: 27/01/16
  * Time: 10:49
  */
-public enum IncidRegEditHelper {
+public enum IncidSpinnersHelper {
 
     HELPER {
         public <T extends Fragment & AmbitoSpinnerSettable> void doAmbitoIncidenciaSpinner(final T fragment)
@@ -69,7 +69,7 @@ public enum IncidRegEditHelper {
         }
     },;
 
-    private static final String TAG = IncidRegEditHelper.class.getCanonicalName();
+    private static final String TAG = IncidSpinnersHelper.class.getCanonicalName();
     public abstract <T extends Fragment & AmbitoSpinnerSettable> void doAmbitoIncidenciaSpinner(final T fragment);
     public abstract  <T extends Fragment & ImportanciaSpinnerSettable> void doImportanciaSpinner(final T fragment);
 }

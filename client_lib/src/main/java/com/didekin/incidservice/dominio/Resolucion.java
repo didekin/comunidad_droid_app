@@ -7,6 +7,7 @@ import java.io.InvalidObjectException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.List;
 
 import static com.didekin.common.exception.DidekinExceptionMsg.RESOLUCION_WRONG_INIT;
 
@@ -29,6 +30,7 @@ public final class Resolucion implements Serializable {
     private final Timestamp fechaReal;
     private final Timestamp fechaAlta;
     private final Incidencia incidencia;
+    private final List<Avance> avances;
 
     private Resolucion(ResolucionBuilder builder)
     {
@@ -42,6 +44,25 @@ public final class Resolucion implements Serializable {
         fechaReal = builder.fechaReal;
         fechaAlta = builder.fechaAlta;
         incidencia = builder.incidencia;
+        avances = builder.avances;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (!(o instanceof Resolucion)) return false;
+
+        Resolucion that = (Resolucion) o;
+
+        return incidencia.equals(that.incidencia);
+
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return incidencia.hashCode();
     }
 
     public String getUserName()
@@ -89,6 +110,11 @@ public final class Resolucion implements Serializable {
         return incidencia;
     }
 
+    public List<Avance> getAvances()
+    {
+        return avances;
+    }
+
     //    ===============================  BUILDER  ============================
 
     public static final class ResolucionBuilder implements BeanBuilder<Resolucion> {
@@ -103,6 +129,7 @@ public final class Resolucion implements Serializable {
         public String moraleja;
         public Incidencia incidencia;
         public Timestamp fechaAlta;
+        private List<Avance> avances;
 
         public ResolucionBuilder(Incidencia incidencia)
         {
@@ -163,6 +190,11 @@ public final class Resolucion implements Serializable {
             return this;
         }
 
+        public ResolucionBuilder avances(List<Avance> avances){
+            this.avances = avances;
+            return this;
+        }
+
         public ResolucionBuilder copyResolucion(Resolucion initValue)
         {
             userName = initValue.userName;
@@ -173,6 +205,7 @@ public final class Resolucion implements Serializable {
             fechaReal = initValue.fechaReal;
             moraleja = initValue.moraleja;
             fechaAlta = initValue.fechaAlta;
+            avances = initValue.avances;
             return this;
         }
 
@@ -218,6 +251,7 @@ public final class Resolucion implements Serializable {
         private final Timestamp fechaReal;
         private final Timestamp fechaAlta;
         private final Incidencia incidencia;
+        private final List<Avance> avances;
 
         public InnerSerial(Resolucion resolucion)
         {
@@ -230,6 +264,7 @@ public final class Resolucion implements Serializable {
             fechaAlta = resolucion.fechaAlta;
             fechaReal = resolucion.fechaReal;
             incidencia = resolucion.incidencia;
+            avances = resolucion.avances;
         }
 
         /**
@@ -247,6 +282,7 @@ public final class Resolucion implements Serializable {
                     .fechaPrevista(fechaPrev)
                     .fechaAlta(fechaAlta)
                     .fechaReal(fechaReal)
+                    .avances(avances)
                     .build();
         }
     }

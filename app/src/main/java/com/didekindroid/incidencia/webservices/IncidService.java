@@ -6,7 +6,6 @@ import com.didekin.common.exception.InServiceException;
 import com.didekin.incidservice.controller.IncidenciaServEndPoints;
 import com.didekin.incidservice.dominio.IncidComment;
 import com.didekin.incidservice.dominio.IncidImportancia;
-import com.didekin.incidservice.dominio.Incidencia;
 import com.didekin.incidservice.dominio.IncidenciaUser;
 import com.didekin.incidservice.dominio.Resolucion;
 import com.didekin.usuario.dominio.Comunidad;
@@ -28,6 +27,12 @@ import static com.google.common.base.Preconditions.checkArgument;
 public enum IncidService implements IncidenciaServEndPoints {
 
     IncidenciaServ(BUILDER.getService(IncidenciaServEndPoints.class, getBaseURL())) {
+        @Override
+        public int closeIncidencia(String accessToken, Resolucion resolucion)
+        {
+            return IncidenciaServ.endPoint.closeIncidencia(accessToken, resolucion);
+        }
+
         @Override
         public int deleteIncidencia(String accessToken, long incidenciaId)
         {
@@ -108,6 +113,18 @@ public enum IncidService implements IncidenciaServEndPoints {
 //                  CONVENIENCE METHODS
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+    public int closeIncidencia(Resolucion resolucion) throws UiException
+    {
+        Log.d(TAG, "closeIncidencia()");
+        int incidenciasClosed;
+        try {
+            incidenciasClosed = closeIncidencia(checkBearerToken(), resolucion);
+        }catch (InServiceException ie){
+            throw new UiException(ie);
+        }
+        return incidenciasClosed;
+    }
+
     public int deleteIncidencia(long incidenciaId) throws UiException
     {
         Log.d(TAG, "deleteIncidencia()");
@@ -147,8 +164,13 @@ public enum IncidService implements IncidenciaServEndPoints {
     public int modifyResolucion(Resolucion resolucion) throws UiException
     {
         Log.d(TAG, "modifyResolucion()");
-        // TODO: rematar excepciones.
-        return modifyResolucion(checkBearerToken(), resolucion);
+        int resolucionModifyed;
+        try {
+            resolucionModifyed = modifyResolucion(checkBearerToken(), resolucion);
+        }catch(InServiceException ie){
+            throw new UiException(ie);
+        }
+        return resolucionModifyed;
     }
 
     public int regIncidComment(IncidComment comment) throws UiException
@@ -239,8 +261,12 @@ public enum IncidService implements IncidenciaServEndPoints {
     public Resolucion seeResolucion(long resolucionId) throws UiException
     {
         Log.d(TAG, "seeResolucion()");
-        // TODO: rematar excepciones.
-//        return seeResolucion(checkBearerToken(), resolucionId);
-        return null;
+        Resolucion resolucion;
+        try {
+            resolucion = seeResolucion(checkBearerToken(), resolucionId);
+        } catch (InServiceException ie){
+            throw new UiException(ie);
+        }
+        return resolucion;
     }
 }

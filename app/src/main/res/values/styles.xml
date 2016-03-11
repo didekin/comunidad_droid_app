@@ -2,7 +2,6 @@
 <resources>
 
     <style name="themeOne.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
-
     <style name="themeOne.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
     <!--................ Action bar .............-->
@@ -95,13 +94,15 @@
         <item name="android:scrollbars">vertical</item>
     </style>
 
+    <!-- ................... Lists ............. -->
+    <style name="textBase.textPageLabel2.no_item_list_message">
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:padding">15dp</item>
+    </style>
     <style name="baseLayout.paddingList">
         <!-- TODO: incluir valores en dimensiones.-->
         <item name="android:padding">4dp</item>
     </style>
-
-    <!-- ................... Lists ............. -->
-
     <!-- ................ Spinners ............. -->
     <style name="spinnerBase">
         <item name="android:layout_width">wrap_content</item>

@@ -35,9 +35,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * 1. An incidencia is updated in BD, once edited.
  * 3. An updated incidencias list of the comunidad is showed.
  */
-public class IncidEditAc extends AppCompatActivity implements IncidUserDataSupplier {
+public class IncidEditAc extends AppCompatActivity implements IncidenciaDataSupplier {
 
     private static final String TAG = IncidEditAc.class.getCanonicalName();
+    private static final String NO_RESOLUCION_INTENT = "NO resolucion intent in this action";
     View mAcView;
     IncidImportancia mIncidImportancia;
 
@@ -144,7 +145,15 @@ public class IncidEditAc extends AppCompatActivity implements IncidUserDataSuppl
     @Override
     public IncidImportancia getIncidImportancia()
     {
+        Log.d(TAG, "getCallingPackage()");
         return mIncidImportancia;
+    }
+
+    @Override
+    public Resolucion getResolucion()
+    {
+        Log.d(TAG, "getResolucion()");
+        throw new UnsupportedOperationException(NO_RESOLUCION_INTENT);
     }
 
 //    ============================================================
@@ -183,6 +192,7 @@ public class IncidEditAc extends AppCompatActivity implements IncidUserDataSuppl
                 Intent intent = new Intent(GET_INCID_RESOLUCION.action);
                 intent.putExtra(INCID_RESOLUCION_OBJECT.extra, resolucion);
                 LocalBroadcastManager.getInstance(IncidEditAc.this).sendBroadcast(intent);
+                // TODO: testar.
             }
         }
     }
