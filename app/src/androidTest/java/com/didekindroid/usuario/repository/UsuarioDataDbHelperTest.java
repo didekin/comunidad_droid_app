@@ -93,7 +93,7 @@ public class UsuarioDataDbHelperTest {
         assertThat(cursor.getCount(), is(3));
         cursor = (SQLiteCursor) dbHelper.getProvinciasByCA((short) 1);
         assertThat(cursor.getCount(), is(8));
-        // TODO: probar cerrar cursor.
+        cursor.close();
     }
 
     @Test
@@ -105,7 +105,7 @@ public class UsuarioDataDbHelperTest {
 
         cursor = dbHelper.getMunicipiosByPrId((short) 33);
         assertThat(cursor.getCount(), is(78));
-        // TODO: probar cerrar cursor.
+        cursor.close();
     }
 
     @After
@@ -113,7 +113,7 @@ public class UsuarioDataDbHelperTest {
     {
         dbHelper.dropAllTables();
         dbHelper.close();
-        String dBFileName =  "data/data/com.didekindroid/databases/".concat(UsuarioDataDbHelper.DB_NAME);
+        String dBFileName = "data/data/com.didekindroid/databases/".concat(UsuarioDataDbHelper.DB_NAME);
         deleteDatabase(new File(dBFileName));
     }
 }

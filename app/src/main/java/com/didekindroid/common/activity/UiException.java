@@ -11,9 +11,10 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.didekin.common.exception.InServiceException;
+import com.didekin.incidservice.dominio.IncidImportancia;
 import com.didekindroid.R;
+import com.didekindroid.incidencia.activity.IncidEditAc;
 import com.didekindroid.incidencia.activity.IncidRegAc;
-import com.didekindroid.incidencia.activity.IncidResolucionRegEditSeeAc;
 import com.didekindroid.incidencia.activity.IncidSeeByComuAc;
 import com.didekindroid.usuario.activity.ComuSearchAc;
 import com.didekindroid.usuario.activity.LoginAc;
@@ -55,6 +56,7 @@ import static com.didekin.common.exception.DidekinExceptionMsg.USER_NOT_COMPARAB
 import static com.didekin.common.exception.DidekinExceptionMsg.USER_NOT_EQUAL_ABLE;
 import static com.didekin.common.exception.DidekinExceptionMsg.USER_NOT_HASHABLE;
 import static com.didekin.common.exception.DidekinExceptionMsg.USER_WRONG_INIT;
+import static com.didekindroid.common.activity.IntentExtraKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.activity.UiException.UiAction.GENERIC;
 import static com.didekindroid.common.activity.UiException.UiAction.INCID_REG;
 import static com.didekindroid.common.activity.UiException.UiAction.INCID_SEE_BY_COMU;
@@ -64,8 +66,10 @@ import static com.didekindroid.common.activity.UiException.UiAction.RESOLUCION_D
 import static com.didekindroid.common.activity.UiException.UiAction.SEARCH_COMU;
 import static com.didekindroid.common.activity.UiException.UiAction.TOKEN_TO_ERASE;
 import static com.didekindroid.common.activity.UiException.UiAction.USER_DATA_AC;
+import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.utils.UIutils.makeToast;
 import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkState;
 
 /**
  * Exceptions to be dealt with in the user interface
@@ -105,6 +109,11 @@ public class UiException extends Exception {
             }
         },
         INCID_REG {
+            /**
+             * Preconditions:
+             * 1. The user is registered.
+             * 2. There is a token in local cache.
+             */
             @Override
             public void doAction(Activity activity, Intent intent)
             {
@@ -149,8 +158,10 @@ public class UiException extends Exception {
             @Override
             public void doAction(Activity activity, Intent intent)
             {
+                IncidImportancia incidImportancia = (IncidImportancia) intent.getSerializableExtra(INCID_IMPORTANCIA_OBJECT.extra);
+                checkArgument(incidImportancia.getUserComu().hasAdministradorAuthority());
                 makeToast(activity, R.string.resolucion_duplicada, LENGTH_SHORT);
-                intent.setClass(activity, IncidResolucionRegEditSeeAc.class);
+                intent.setClass(activity, IncidEditAc.class);
                 activity.startActivity(intent);
                 finishActivity(activity, intent);
             }
@@ -175,14 +186,10 @@ public class UiException extends Exception {
             }
         },
         USER_DATA_AC {
-            /**
-             * Preconditions:
-             * 1. The user is registered.
-             * 2. There is a token in local cache.
-             */
             @Override
             public void doAction(Activity activity, Intent intent)
             {
+                checkState(isRegisteredUser(activity));
                 makeToast(activity, R.string.user_data_not_modified_msg, LENGTH_SHORT);
                 intent.setClass(activity, UserDataAc.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -232,6 +239,7 @@ public class UiException extends Exception {
         messageToAction.put(INCID_IMPORTANCIA_WRONG_INIT.getHttpMessage(), INCID_SEE_BY_COMU);
         messageToAction.put(NOT_FOUND.getHttpMessage(), GENERIC);
         messageToAction.put(RESOLUCION_DUPLICATE.getHttpMessage(), RESOLUCION_DUP);
+//        messageToAction.put(RESOLUCION_NOT_FOUND.getHttpMessage(), No debiera llegar al cliente Android);
         messageToAction.put(RESOLUCION_WRONG_INIT.getHttpMessage(), INCID_SEE_BY_COMU);
         messageToAction.put(ROLES_NOT_FOUND.getHttpMessage(), LOGIN);
         messageToAction.put(SUFIJO_NUM_IN_COMUNIDAD_NULL.getHttpMessage(), GENERIC);

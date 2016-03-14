@@ -20,7 +20,7 @@ public class Avance implements Serializable{
 
     private final long avanceId;
     private final String avanceDesc;
-    private final String alias;
+    private final String userName;
     private final Resolucion resolucion;
     private final Timestamp fechaAlta;
 
@@ -28,7 +28,7 @@ public class Avance implements Serializable{
     {
         avanceId = builder.avanceId;
         avanceDesc = builder.avanceDesc;
-        alias = builder.avanceDesc;
+        userName = builder.userName;
         resolucion = builder.resolucion;
         fechaAlta = builder.fechaAlta;
     }
@@ -46,7 +46,7 @@ public class Avance implements Serializable{
             return true;
         }
 
-        if (alias != null ? !alias.equals(avance.alias) : avance.alias != null) {
+        if (userName != null ? !userName.equals(avance.userName) : avance.userName != null) {
             return false;
         }
         if (!resolucion.equals(avance.resolucion)) {
@@ -62,7 +62,7 @@ public class Avance implements Serializable{
             return ((int) (avanceId ^ (avanceId >>> 32))) * 31;
         }
 
-        int result = alias != null ? alias.hashCode() : 0;
+        int result = userName != null ? userName.hashCode() : 0;
         result = 31 * result + resolucion.hashCode();
         result = 31 * result + (fechaAlta != null ? fechaAlta.hashCode() : 0);
         return result;
@@ -78,9 +78,9 @@ public class Avance implements Serializable{
         return avanceDesc;
     }
 
-    public String getAlias()
+    public String getUserName()
     {
-        return alias;
+        return userName;
     }
 
     public Resolucion getResolucion()
@@ -99,7 +99,7 @@ public class Avance implements Serializable{
 
         private long avanceId;
         private String avanceDesc;
-        private String alias;
+        private String userName;
         private Resolucion resolucion;
         private Timestamp fechaAlta;
 
@@ -120,9 +120,9 @@ public class Avance implements Serializable{
             return this;
         }
 
-        public AvanceBuilder alias(String initValue)
+        public AvanceBuilder userName(String initValue)
         {
-            alias = initValue;
+            userName = initValue;
             return this;
         }
 
@@ -165,7 +165,7 @@ public class Avance implements Serializable{
 
         private final long avanceId;
         private final String avanceDesc;
-        private final String alias;
+        private final String userName;
         private final Resolucion resolucion;
         private final Timestamp fechaAlta;
 
@@ -174,7 +174,7 @@ public class Avance implements Serializable{
         {
             avanceId = avance.avanceId;
             avanceDesc = avance.avanceDesc;
-            alias = avance.alias;
+            userName = avance.userName;
             resolucion = avance.resolucion;
             fechaAlta = avance.fechaAlta;
         }
@@ -188,7 +188,7 @@ public class Avance implements Serializable{
             return new AvanceBuilder(resolucion)
                     .avanceId(avanceId)
                     .avanceDesc(avanceDesc)
-                    .alias(alias)
+                    .userName(userName)
                     .fechaAlta(fechaAlta)
                     .build();
         }

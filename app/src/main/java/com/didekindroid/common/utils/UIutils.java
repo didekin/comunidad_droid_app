@@ -60,7 +60,7 @@ public final class UIutils {
 
         if (bearerAccessTkHeader == null) { // No token in cache.
             ErrorBean errorBean = new ErrorBean(TOKEN_NULL.getHttpMessage(), TOKEN_NULL.getHttpStatus());
-            throw new UiException(new InServiceException(errorBean,null));
+            throw new UiException(new InServiceException(errorBean, null));
         }
         return bearerAccessTkHeader;
     }
@@ -92,6 +92,11 @@ public final class UIutils {
     public static int getIntFromStringDecimal(String stringDecimal) throws ParseException
     {
         return NumberFormat.getIntegerInstance().parse(stringDecimal).intValue();
+    }
+
+    public static String getStringFromInteger(int number)
+    {
+        return NumberFormat.getIntegerInstance().format(number);
     }
 
 //    ================================== ERRORS ======================================

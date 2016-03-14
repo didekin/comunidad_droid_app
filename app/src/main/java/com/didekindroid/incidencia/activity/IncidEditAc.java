@@ -3,7 +3,6 @@ package com.didekindroid.incidencia.activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -15,7 +14,6 @@ import com.didekin.incidservice.dominio.Resolucion;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 
-import static com.didekindroid.common.activity.IntentAction.GET_INCID_RESOLUCION;
 import static com.didekindroid.common.activity.IntentExtraKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.activity.IntentExtraKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.common.activity.SavedInstanceKey.INCID_IMPORTANCIA;
@@ -128,11 +126,11 @@ public class IncidEditAc extends AppCompatActivity implements IncidenciaDataSupp
                 return true;
             case R.id.incid_resolucion_reg_ac_mn:
                 new ResolucionGetter().execute();
-                intent = new Intent();
+                /*intent = new Intent();
                 intent.putExtra(INCID_IMPORTANCIA_OBJECT.extra, mIncidImportancia);
                 setIntent(intent);
-                INCID_RESOLUCION_REG_EDIT_AC.doMenuItem(IncidEditAc.this);
-                return true;
+                INCID_RESOLUCION_REG_EDIT_AC.doMenuItem(this);*/
+                return false;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -188,12 +186,14 @@ public class IncidEditAc extends AppCompatActivity implements IncidenciaDataSupp
                 uiException.processMe(IncidEditAc.this, new Intent());
                 return;
             }
+
+            Intent intent0 = new Intent();
+            intent0.putExtra(INCID_IMPORTANCIA_OBJECT.extra, mIncidImportancia);
             if (resolucion != null) {
-                Intent intent = new Intent(GET_INCID_RESOLUCION.action);
-                intent.putExtra(INCID_RESOLUCION_OBJECT.extra, resolucion);
-                LocalBroadcastManager.getInstance(IncidEditAc.this).sendBroadcast(intent);
-                // TODO: testar.
+                intent0.putExtra(INCID_RESOLUCION_OBJECT.extra, resolucion);
             }
+            setIntent(intent0);
+            INCID_RESOLUCION_REG_EDIT_AC.doMenuItem(IncidEditAc.this);
         }
     }
 }

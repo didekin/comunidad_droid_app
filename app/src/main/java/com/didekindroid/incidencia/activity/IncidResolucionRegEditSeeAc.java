@@ -1,13 +1,6 @@
 package com.didekindroid.incidencia.activity;
 
-import android.annotation.TargetApi;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -17,12 +10,10 @@ import com.didekin.incidservice.dominio.Resolucion;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.IntentExtraKey;
 
-import static com.didekindroid.common.activity.IntentAction.GET_INCID_RESOLUCION;
 import static com.didekindroid.common.activity.IntentExtraKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.activity.SavedInstanceKey.INCID_IMPORTANCIA;
 import static com.didekindroid.common.activity.SavedInstanceKey.INCID_RESOLUCION;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
-import static com.google.common.base.Preconditions.checkArgument;
 
 /**
  * Preconditions:
@@ -49,7 +40,6 @@ public class IncidResolucionRegEditSeeAc extends AppCompatActivity implements
 
     IncidImportancia mIncidImportancia;
     Resolucion mResolucion;
-    private BroadcastReceiver mReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -58,17 +48,7 @@ public class IncidResolucionRegEditSeeAc extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
 
         mIncidImportancia = (IncidImportancia) getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.extra);
-
-        mReceiver = new BroadcastReceiver() {
-            @TargetApi(Build.VERSION_CODES.KITKAT)
-            @Override
-            public void onReceive(Context context, Intent intent)
-            {
-                Log.d(TAG, "BroadcastReceiver.onReceive()");
-                mResolucion = (Resolucion) intent.getSerializableExtra(IntentExtraKey.INCID_RESOLUCION_OBJECT.extra);
-                checkArgument(mResolucion.getIncidencia().equals(mIncidImportancia.getIncidencia()));
-            }
-        };
+        mResolucion = (Resolucion) getIntent().getSerializableExtra(IntentExtraKey.INCID_RESOLUCION_OBJECT.extra);
 
         View mAcView = getLayoutInflater().inflate(R.layout.incid_resolucion_reg_ac, null);
         setContentView(mAcView);
@@ -89,7 +69,8 @@ public class IncidResolucionRegEditSeeAc extends AppCompatActivity implements
             }
         } else { // User without authority 'adm'
             if (mResolucion != null) {
-                // TODO: fragmento de visión sin edición.
+                IncidResolucionSeeFr mSeeFragment = new IncidResolucionSeeFr();
+                getFragmentManager().beginTransaction().add(R.id.incid_resolucion_fragment_container_ac, mSeeFragment).commit();
             } else {
                 IncidResolucionSeeDefaultFr mSeeFragment = new IncidResolucionSeeDefaultFr();
                 getFragmentManager().beginTransaction().add(R.id.incid_resolucion_fragment_container_ac, mSeeFragment).commit();
@@ -121,8 +102,6 @@ public class IncidResolucionRegEditSeeAc extends AppCompatActivity implements
     protected void onResume()
     {
         Log.d(TAG, "onResume()");
-        LocalBroadcastManager.getInstance(this)
-                .registerReceiver(mReceiver, new IntentFilter(GET_INCID_RESOLUCION.action));
         super.onResume();
     }
 
@@ -130,7 +109,6 @@ public class IncidResolucionRegEditSeeAc extends AppCompatActivity implements
     protected void onPause()
     {
         Log.d(TAG, "onPause()");
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiver);
         super.onPause();
     }
 

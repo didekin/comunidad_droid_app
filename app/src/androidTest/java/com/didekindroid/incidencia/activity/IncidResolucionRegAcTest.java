@@ -52,6 +52,7 @@ import static java.util.Calendar.YEAR;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -76,8 +77,8 @@ public class IncidResolucionRegAcTest {
 
         /**
          * Preconditions:
-         * 1. An IncidenciaUser with powers to resolve an incidencia is received.
-         * 2. No resolucion broadcasted.
+         * 1. An IncidenciaUser WITH powers to resolve an incidencia is received.
+         * 2. NO resolucion en BD.
          * */
         @Override
         protected Intent getActivityIntent()
@@ -112,6 +113,11 @@ public class IncidResolucionRegAcTest {
     {
         Thread.sleep(3000);
         mActivity = intentRule.getActivity();
+        IncidImportancia incidImportancia = (IncidImportancia) mActivity.getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.extra);
+        // Preconditions: a user with powers to erase and modify is received.
+        assertThat(incidImportancia.getUserComu().hasAdministradorAuthority(), is(true));
+        // NO resolución en BD.
+        assertThat(IncidenciaServ.seeResolucion(incidImportancia.getIncidencia().getIncidenciaId()), nullValue());
     }
 
     @After
@@ -231,7 +237,8 @@ public class IncidResolucionRegAcTest {
         setFecha(setDate(today.get(YEAR), today.get(MONTH), today.get(DAY_OF_MONTH)));
 
         onView(withId(R.id.incid_resolucion_reg_ac_button)).perform(click());
-//        onView(withId(R.id.incid_resolucion_reg_ac_layout)).check(matches(isDisplayed()));  TODO:
+        onView(withId(R.id.incid_edit_fragment_container_ac)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_edit_maxpower_frg)).check(matches(isDisplayed()));
         intended(hasExtra(INCID_IMPORTANCIA_OBJECT.extra, incidJuanReal1));
     }
 

@@ -79,7 +79,7 @@ public class IncidenciaDataDbHelperTest {
         cursor.moveToLast();
         assertThat(cursor.getShort(0), is((short) (AMBITO_INCID_COUNT - 1)));
         assertThat(cursor.getString(1), is("Otros"));
-        // TODO: probar cerrar cursor.
+        cursor.close();
     }
 
     @Test

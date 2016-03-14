@@ -5,17 +5,10 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 
-import com.didekin.incidservice.dominio.Incidencia;
-import com.didekin.incidservice.dominio.Resolucion;
-import com.didekin.usuario.dominio.Comunidad;
-import com.didekindroid.R;
 import com.didekindroid.common.activity.FechaPickerUser;
 import com.didekindroid.incidencia.dominio.ResolucionBean;
-
-import java.sql.Timestamp;
 
 /**
  * User: pedro@didekin

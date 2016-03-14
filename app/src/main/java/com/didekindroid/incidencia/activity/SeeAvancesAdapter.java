@@ -61,7 +61,7 @@ public class SeeAvancesAdapter extends ArrayAdapter<Avance> {
         void initializeTextInViews(Avance avance)
         {
             mFechaAltaView.setText(formatTimeStampToString(avance.getFechaAlta()));
-            mAliasView.setText(avance.getAlias());
+            mAliasView.setText(avance.getUserName());
             mDescripcionView.setText(avance.getAvanceDesc());
         }
     }

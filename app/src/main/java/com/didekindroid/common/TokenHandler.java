@@ -96,7 +96,7 @@ public enum TokenHandler {
             accessToken = tokensCache.get(refreshTokenKeyLocal, new Callable<AccessToken>() {
 
                 @Override
-                public AccessToken call() throws Exception
+                public AccessToken call() throws UiException
                 {
                     return Oauth2.getRefreshUserToken(refreshTokenKeyLocal);
                 }
@@ -104,7 +104,6 @@ public enum TokenHandler {
         } catch (ExecutionException e) {
             throw new UiException(null);
         }
-
         return accessToken;
     }
 

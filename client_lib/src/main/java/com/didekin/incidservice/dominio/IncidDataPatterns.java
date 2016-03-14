@@ -18,6 +18,7 @@ public enum IncidDataPatterns implements DataPatternsIf {
     INCID_DESC("[\\w_ñÑáéíóúüÜÁÉÍÓÚ%&ºª@#,:;¿\\?¡\\!\\(\\)\\.\\-\\s]{2,300}"),
     INCID_COMMENT_DESC("[\\w_ñÑáéíóúüÜÁÉÍÓÚ%&ºª@#,:;¿\\?¡\\!\\(\\)\\.\\-\\s]{2,250}"),
     INCID_RESOLUCION_DESC(INCID_DESC.regexp),
+    INCID_RES_AVANCE_DESC("[\\w_ñÑáéíóúüÜÁÉÍÓÚ%&ºª@#,:;¿\\?¡\\!\\(\\)\\.\\-\\s]{0,300}"),
     ;
 
     private final Pattern pattern;

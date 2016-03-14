@@ -23,6 +23,7 @@ public enum DidekinExceptionMsg {
     INCID_IMPORTANCIA_WRONG_INIT(null, 412),
     NOT_FOUND("Not Found", 404),
     RESOLUCION_DUPLICATE(null, 409), // There exists a resolucion for the same incidencia.
+    RESOLUCION_NOT_FOUND(null, 404),
     RESOLUCION_WRONG_INIT(null, 412),
     ROLES_NOT_FOUND(null, 401),
     SUFIJO_NUM_IN_COMUNIDAD_NULL(null, 412),

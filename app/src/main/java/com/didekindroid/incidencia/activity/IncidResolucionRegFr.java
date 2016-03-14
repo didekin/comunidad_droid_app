@@ -94,7 +94,7 @@ public class IncidResolucionRegFr extends IncidResolucionFrAbstract {
                         .build())
                 .build();
         return new Resolucion.ResolucionBuilder(incidencia)
-                .descripcion(mResolucionBean.getPlanOrAvance())
+                .descripcion(mResolucionBean.getPlan())
                 .fechaPrevista(new Timestamp(mResolucionBean.getFechaPrevista()))
                 .costeEstimado(mResolucionBean.getCostePrev())
                 .build();
@@ -104,12 +104,12 @@ public class IncidResolucionRegFr extends IncidResolucionFrAbstract {
     {
         Log.d(TAG, "makeResolucionBeanFromView()");
 
-        mResolucionBean.setPlanOrAvance(((EditText) mFragmentView.findViewById(R.id.incid_resolucion_desc_ed)).getText().toString());
+        mResolucionBean.setPlan(((EditText) mFragmentView.findViewById(R.id.incid_resolucion_desc_ed)).getText().toString());
         mResolucionBean.setCostePrevText(((EditText) mFragmentView.findViewById(R.id.incid_resolucion_coste_prev_ed)).getText().toString());
         mResolucionBean.setFechaPrevistaText(mFechaView.getText().toString());
         // La fecha se inicializa en FechaPickerFr.onDateSet().
 
-        if (!mResolucionBean.validateBean(errorMsg, getResources(), mActivitySupplier.getIncidImportancia())) {
+        if (!mResolucionBean.validateBeanPlan(errorMsg, getResources(), mActivitySupplier.getIncidImportancia())) {
             mResolucionBean = null;
         }
     }
@@ -122,15 +122,17 @@ public class IncidResolucionRegFr extends IncidResolucionFrAbstract {
 
         private final String TAG = ResolucionRegister.class.getCanonicalName();
         UiException uiException;
+        Resolucion resolucion;
 
         @Override
         protected Integer doInBackground(Resolucion... params)
         {
             Log.d(TAG, "doInBackground()");
             int rowInserted = 0;
+            resolucion = params[0];
 
             try {
-                rowInserted = IncidenciaServ.regResolucion(params[0]);
+                rowInserted = IncidenciaServ.regResolucion(resolucion);
             } catch (UiException e) {
                 uiException = e;
             }
@@ -144,6 +146,7 @@ public class IncidResolucionRegFr extends IncidResolucionFrAbstract {
 
             if (uiException != null) {
                 Intent intent = new Intent();
+                // Para el caso resolución duplicada y acceder a IncidEditAc/Resolución.
                 intent.putExtra(INCID_IMPORTANCIA_OBJECT.extra, mActivitySupplier.getIncidImportancia());
                 uiException.processMe(getActivity(), intent);
             } else {

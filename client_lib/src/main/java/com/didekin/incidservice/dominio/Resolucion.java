@@ -7,6 +7,7 @@ import java.io.InvalidObjectException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Collections;
 import java.util.List;
 
 import static com.didekin.common.exception.DidekinExceptionMsg.RESOLUCION_WRONG_INIT;
@@ -27,7 +28,6 @@ public final class Resolucion implements Serializable {
     private final String moraleja;
     //    private final Proveedor proveedor;
     private final Timestamp fechaPrev;
-    private final Timestamp fechaReal;
     private final Timestamp fechaAlta;
     private final Incidencia incidencia;
     private final List<Avance> avances;
@@ -41,7 +41,6 @@ public final class Resolucion implements Serializable {
         moraleja = builder.moraleja;
 //        proveedor = builder.proveedor;
         fechaPrev = builder.fechaPrev;
-        fechaReal = builder.fechaReal;
         fechaAlta = builder.fechaAlta;
         incidencia = builder.incidencia;
         avances = builder.avances;
@@ -95,11 +94,6 @@ public final class Resolucion implements Serializable {
         return fechaPrev;
     }
 
-    public Timestamp getFechaReal()
-    {
-        return fechaReal;
-    }
-
     public Timestamp getFechaAlta()
     {
         return fechaAlta;
@@ -125,7 +119,6 @@ public final class Resolucion implements Serializable {
         private int costeFinal;
         //        private Proveedor proveedor;
         private Timestamp fechaPrev;
-        private Timestamp fechaReal;
         public String moraleja;
         public Incidencia incidencia;
         public Timestamp fechaAlta;
@@ -178,20 +171,17 @@ public final class Resolucion implements Serializable {
             return this;
         }
 
-        public ResolucionBuilder fechaReal(Timestamp initValue)
-        {
-            fechaReal = initValue;
-            return this;
-        }
-
         public ResolucionBuilder fechaAlta(Timestamp initValue)
         {
             fechaAlta = initValue;
             return this;
         }
 
-        public ResolucionBuilder avances(List<Avance> avances){
-            this.avances = avances;
+        @SuppressWarnings("unchecked")
+        public ResolucionBuilder avances(List<Avance> avances)
+        {
+            List<Avance> emptyList = Collections.emptyList();
+            this.avances = (avances == null ? emptyList : Collections.unmodifiableList(avances));
             return this;
         }
 
@@ -202,7 +192,6 @@ public final class Resolucion implements Serializable {
             costeEstimado = initValue.costeEstimado;
             costeFinal = initValue.costeFinal;
             fechaPrev = initValue.fechaPrev;
-            fechaReal = initValue.fechaReal;
             moraleja = initValue.moraleja;
             fechaAlta = initValue.fechaAlta;
             avances = initValue.avances;
@@ -215,6 +204,15 @@ public final class Resolucion implements Serializable {
             Resolucion resolucion = new Resolucion(this);
             if (resolucion.incidencia == null || resolucion.incidencia.getIncidenciaId() <= 0
                     || resolucion.descripcion == null || resolucion.fechaPrev == null) {
+                throw new IllegalStateException(RESOLUCION_WRONG_INIT.toString());
+            }
+            return resolucion;
+        }
+
+        public Resolucion buildAsFk()
+        {
+            Resolucion resolucion = new Resolucion(this);
+            if (resolucion.incidencia == null) {
                 throw new IllegalStateException(RESOLUCION_WRONG_INIT.toString());
             }
             return resolucion;
@@ -248,7 +246,6 @@ public final class Resolucion implements Serializable {
         private final String moraleja;
         //    private final Proveedor proveedor;
         private final Timestamp fechaPrev;
-        private final Timestamp fechaReal;
         private final Timestamp fechaAlta;
         private final Incidencia incidencia;
         private final List<Avance> avances;
@@ -262,7 +259,6 @@ public final class Resolucion implements Serializable {
             moraleja = resolucion.moraleja;
             fechaPrev = resolucion.fechaPrev;
             fechaAlta = resolucion.fechaAlta;
-            fechaReal = resolucion.fechaReal;
             incidencia = resolucion.incidencia;
             avances = resolucion.avances;
         }
@@ -281,7 +277,6 @@ public final class Resolucion implements Serializable {
                     .moraleja(moraleja)
                     .fechaPrevista(fechaPrev)
                     .fechaAlta(fechaAlta)
-                    .fechaReal(fechaReal)
                     .avances(avances)
                     .build();
         }

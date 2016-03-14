@@ -9,6 +9,7 @@ import com.didekindroid.incidencia.activity.IncidEditAcTest_3;
 import com.didekindroid.incidencia.activity.IncidEditAcTest_Mn1;
 import com.didekindroid.incidencia.activity.IncidEditAcTest_Mn2;
 import com.didekindroid.incidencia.activity.IncidEditAcTest_Mn3;
+import com.didekindroid.incidencia.activity.IncidEditAcTest_Mn4;
 import com.didekindroid.incidencia.activity.IncidRegAcTest;
 import com.didekindroid.incidencia.activity.IncidResolucionRegAcTest;
 import com.didekindroid.incidencia.activity.IncidResolucionSeeDefaultAcTest;
@@ -37,6 +38,7 @@ import org.junit.runners.Suite;
         IncidEditAcTest_Mn1.class,
         IncidEditAcTest_Mn2.class,
         IncidEditAcTest_Mn3.class,
+        IncidEditAcTest_Mn4.class,
         IncidRegAcTest.class,
         IncidRegAcTest_gcm1.class,
         IncidResolucionRegAcTest.class,

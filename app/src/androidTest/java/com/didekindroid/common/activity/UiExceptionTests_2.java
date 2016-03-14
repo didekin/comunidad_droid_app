@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.didekin.incidservice.dominio.IncidImportancia;
+import com.didekin.incidservice.dominio.IncidenciaUser;
+import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.usuario.testutils.CleanUserEnum;
 
@@ -23,11 +26,15 @@ import static com.didekin.common.exception.DidekinExceptionMsg.INCIDENCIA_NOT_RE
 import static com.didekin.common.exception.DidekinExceptionMsg.RESOLUCION_DUPLICATE;
 import static com.didekin.common.exception.DidekinExceptionMsg.USER_DATA_NOT_MODIFIED;
 import static com.didekindroid.common.TokenHandler.TKhandler;
+import static com.didekindroid.common.activity.IntentExtraKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
+import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
+import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_PLAZUELA5_JUAN;
+import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -41,7 +48,7 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class UiExceptionTests_2 extends UiExceptionAbstractTest {
 
-    //    IncidenciaUser incidJuanReal1;
+    IncidImportancia mIncidJuanPlazuelas;
     private MockActivity mActivity;
 
     @Rule
@@ -50,24 +57,27 @@ public class UiExceptionTests_2 extends UiExceptionAbstractTest {
         @Override
         protected Intent getActivityIntent()
         {
-            return super.getActivityIntent();
-        }
-
-        @Override
-        protected void beforeActivityLaunched()
-        {
             try {
                 signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
-                /*UsuarioComunidad juanReal = ServOne.seeUserComusByUser().get(0);
-                incidJuanReal1 = new IncidenciaUser.IncidenciaUserComuBuilder(doIncidencia("Incidencia Real One", juanReal.getComunidad().getC_Id(), (short) 43))
-                        .userComu(juanReal)
+                UsuarioComunidad juanPlazuelas = ServOne.seeUserComusByUser().get(0);
+                mIncidJuanPlazuelas = new IncidImportancia.IncidImportanciaBuilder(
+                        doIncidencia(juanPlazuelas.getUsuario().getUserName(), "Incidencia Plazueles", juanPlazuelas.getComunidad().getC_Id(), (short) 43))
+                        .usuarioComunidad(juanPlazuelas)
                         .importancia((short) 3).build();
-                IncidenciaServ.regIncidenciaUser(incidJuanReal1);
-                Incidencia incidenciaDb = IncidenciaServ.seeIncidsOpenByComu(juanReal.getComunidad().getC_Id()).get(0).getResolucion();
-                incidJuanReal1 = IncidenciaServ.getIncidenciaUserByIncid(incidenciaDb.getIncidenciaId());*/
+                IncidenciaServ.regIncidImportancia(mIncidJuanPlazuelas);
+                IncidenciaUser incidenciaUserDb = IncidenciaServ.seeIncidsOpenByComu(juanPlazuelas.getComunidad().getC_Id()).get(0);
+                mIncidJuanPlazuelas = IncidenciaServ.seeIncidImportancia(incidenciaUserDb.getIncidencia().getIncidenciaId());
             } catch (UiException e) {
                 e.printStackTrace();
             }
+            Intent intent = new Intent();
+            intent.putExtra(INCID_IMPORTANCIA_OBJECT.extra, mIncidJuanPlazuelas);
+            return intent;
+        }
+        @Override
+        protected void beforeActivityLaunched()
+        {
+            super.beforeActivityLaunched();
         }
     };
 
@@ -135,18 +145,21 @@ public class UiExceptionTests_2 extends UiExceptionAbstractTest {
     @Test
     public void testResolucionDup() throws Exception
     {
+        // Preconditions.
+        final Intent intentIn = new Intent();
+        intentIn.putExtra(INCID_IMPORTANCIA_OBJECT.extra, mActivity.getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.extra));
+
         final UiException ue = getUiException(RESOLUCION_DUPLICATE);
 
         mActivity.runOnUiThread(new Runnable() {
             @Override
             public void run()
             {
-                ue.processMe(mActivity, new Intent());
+                ue.processMe(mActivity, intentIn);
             }
         });
-        // TODO: necesita intent. Añadirlo cuando lo haga en la activity.
-       /* checkToastInTest(R.string.resolucion_duplicada, mActivity);
-        onView(withId(R.id.incid_resolucion_edit_ac_layout)).check(matches(isDisplayed()));*/
+        checkToastInTest(R.string.resolucion_duplicada, mActivity);
+        onView(withId(R.id.incid_edit_fragment_container_ac)).check(matches(isDisplayed()));
     }
 
     @Test

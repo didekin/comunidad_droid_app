@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.didekindroid.R;
+import com.didekindroid.incidencia.dominio.ResolucionBean;
 
 /**
  * User: pedro@didekin
@@ -57,8 +58,4 @@ public class IncidResolucionSeeFr extends Fragment {
 //    .................................... INNER CLASSES .................................
 //    ============================================================================================
 
-    class ResolucionBean {
-
-
-    }
 }

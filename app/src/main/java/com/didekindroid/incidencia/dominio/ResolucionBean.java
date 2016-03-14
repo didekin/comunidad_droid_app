@@ -9,6 +9,7 @@ import java.text.ParseException;
 
 import static com.didekin.common.dominio.DataPatterns.LINE_BREAK;
 import static com.didekin.incidservice.dominio.IncidDataPatterns.INCID_RESOLUCION_DESC;
+import static com.didekin.incidservice.dominio.IncidDataPatterns.INCID_RES_AVANCE_DESC;
 import static com.didekindroid.common.utils.UIutils.formatTimeToString;
 import static com.didekindroid.common.utils.UIutils.getIntFromStringDecimal;
 
@@ -21,7 +22,8 @@ public class ResolucionBean {
 
     long fechaPrevista;
     String fechaPrevistaText;
-    String planOrAvance;
+    String plan;
+    String avanceDesc;
     String costePrevText;
     int costePrev;
 
@@ -39,14 +41,24 @@ public class ResolucionBean {
         this.fechaPrevista = fechaPrevista;
     }
 
-    public String getPlanOrAvance()
+    public String getPlan()
     {
-        return planOrAvance;
+        return plan;
     }
 
-    public void setPlanOrAvance(String planOrAvance)
+    public void setAvanceDesc(String avanceDesc)
     {
-        this.planOrAvance = planOrAvance;
+        this.avanceDesc = avanceDesc;
+    }
+
+    public String getAvanceDesc()
+    {
+        return avanceDesc;
+    }
+
+    public void setPlan(String plan)
+    {
+        this.plan = plan;
     }
 
     public int getCostePrev()
@@ -66,11 +78,27 @@ public class ResolucionBean {
 
     //  ====================================== Validation methods ======================================
 
-    public boolean validateBean(StringBuilder errorMsg, Resources resources, IncidImportancia incidImportancia)
+    public boolean validateBeanPlan(StringBuilder errorMsg, Resources resources, IncidImportancia incidImportancia)
     {
         return validateFechaPrev(errorMsg, resources, incidImportancia)
-                & validateDescripcion(errorMsg, resources)
+                & validatePlan(errorMsg, resources)
                 & validateCostePrev(errorMsg, resources);
+    }
+
+    public boolean validateBeanAvance(StringBuilder errorMsg, Resources resources, IncidImportancia incidImportancia)
+    {
+        return validateFechaPrev(errorMsg, resources, incidImportancia)
+                & validateAvaceDesc(errorMsg, resources)
+                & validateCostePrev(errorMsg, resources);
+    }
+
+    private boolean validateAvaceDesc(StringBuilder errorMsg, Resources resources)
+    {
+        if(!INCID_RES_AVANCE_DESC.isPatternOk(avanceDesc)){
+            errorMsg.append(resources.getString(R.string.incid_resolucion_avance_rot)).append(LINE_BREAK.getRegexp());
+            return false;
+        }
+        return true;
     }
 
     boolean validateFechaPrev(StringBuilder errorMsg, Resources resources, IncidImportancia incidImportancia)
@@ -83,9 +111,9 @@ public class ResolucionBean {
         return fechaPrevistaText.equals(formatTimeToString(fechaPrevista));
     }
 
-    boolean validateDescripcion(StringBuilder errorMsg, Resources resources)
+    boolean validatePlan(StringBuilder errorMsg, Resources resources)
     {
-        if (!INCID_RESOLUCION_DESC.isPatternOk(planOrAvance)) {
+        if (!INCID_RESOLUCION_DESC.isPatternOk(plan)) {
             errorMsg.append(resources.getString(R.string.incid_resolucion_descrip_msg)).append(LINE_BREAK.getRegexp());
             return false;
         }
