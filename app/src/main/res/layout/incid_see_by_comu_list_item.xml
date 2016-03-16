@@ -6,7 +6,7 @@
 
     <TextView
         android:id="@+id/incid_descripcion_view"
-        style="@style/textBase.textFieldLabel2"
+        style="@style/textBase.textFieldLabel1"
         android:layout_alignParentStart="true"/>
 
     <TextView

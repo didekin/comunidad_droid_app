@@ -67,7 +67,7 @@ public final class UIutils {
 
 //    ================================ DATA FORMATS ==========================================
 
-    public static String formatTimeStampToString(Timestamp timestamp)
+    public static String formatTimeStampToString(Timestamp timestamp)   // TEstar.
     {
         return DateFormat.getDateInstance(MEDIUM, getDefault()).format(timestamp);
     }

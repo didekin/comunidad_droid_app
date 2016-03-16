@@ -16,13 +16,13 @@ import com.didekin.incidservice.dominio.Resolucion;
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
-import com.didekindroid.common.utils.ConnectionUtils;
 import com.didekindroid.incidencia.dominio.ResolucionBean;
 
 import java.sql.Timestamp;
 
 import static com.didekindroid.common.activity.FechaPickerFr.FechaPickerHelper.initFechaSpinnerView;
 import static com.didekindroid.common.activity.IntentExtraKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.common.utils.ConnectionUtils.checkInternetConnected;
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.common.utils.UIutils.makeToast;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
@@ -68,12 +68,11 @@ public class IncidResolucionRegFr extends IncidResolucionFrAbstract {
         Resolucion resolucion = makeResolucionFromBean(errorMsg);
 
         if (resolucion == null) {
-            Log.d(TAG, "registerResolucion(), resolucion == null");
             makeToast(getActivity(), errorMsg.toString(), Toast.LENGTH_SHORT);
-        } else if (!ConnectionUtils.isInternetConnected(getActivity())) {
-            makeToast(getActivity(), R.string.no_internet_conn_toast, Toast.LENGTH_SHORT);
         } else {
-            new ResolucionRegister().execute(resolucion);
+            if (checkInternetConnected(getActivity())) {
+                new ResolucionRegister().execute(resolucion);
+            }
         }
     }
 

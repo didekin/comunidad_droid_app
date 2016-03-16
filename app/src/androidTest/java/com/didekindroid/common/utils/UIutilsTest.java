@@ -78,6 +78,19 @@ public class UIutilsTest extends TestCase {
     @Test
     public void testFormatTimeStampToString_2()
     {
+        // Verifico el método de validación de la fecha prevista por defecto para una resolución.
+        long timestampLong = new Timestamp(1455301148000L).getTime();
+        String fechaViewStr = context.getString(R.string.incid_resolucion_fecha_default_txt);
+        assertThat(fechaViewStr.equals(formatTimeToString(timestampLong)),is(false));
+        assertThat(fechaViewStr.equals(formatTimeToString(0L)),is(false));
+        assertThat(fechaViewStr.equals(formatTimeToString(0)),is(false));
+    }
+
+    @Test
+    public void testFormatTimeStampToString_3()
+    {
+        // Tests genéricos del API Java.
+
         Timestamp timestamp = new Timestamp(1455301148000L);
 
         String formatTime = DateFormat.getDateInstance(DateFormat.LONG, SPAIN_LOCALE).format(timestamp);

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content">
+    <!--Rótulo para plan resolución.-->
+    <TextView
+        android:id="@+id/incid_resolucion_desc_rot"
+        style="@style/textBase.textFieldLabel1"
+        android:text="@string/incid_resolucion_plan_rot"/>
+    <!--Descripción resolución.-->
+    <TextView
+        android:id="@+id/incid_resolucion_txt"
+        style="@style/textBase.textFieldLabel2"/>
+    <!--Rótulo para historial de avances.-->
+    <TextView
+        android:id="@+id/incid_resolucion_hist_avances_rot"
+        style="@style/textBase.textFieldLabel1"
+        android:text="@string/incid_resolucion_avances_rot"/>
+    <!-- Lista de avances.-->
+    <ListView
+        android:id="@id/android:list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp">
+    </ListView>
+    <TextView
+        android:id="@id/android:empty"
+        style="@style/textBase.textPageLabel2.no_item_list_message"
+        android:text="@string/incid_resolucion_no_avances_message"
+        android:visibility="gone">
+    </TextView>
+</merge>

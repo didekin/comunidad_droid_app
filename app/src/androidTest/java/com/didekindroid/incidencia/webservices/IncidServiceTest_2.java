@@ -26,7 +26,7 @@ import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.testutils.ActivityTestUtils.updateSecurityData;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doResolucion;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidImportancia;
+import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidenciaUser;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_PEPE;
@@ -195,6 +195,6 @@ public class IncidServiceTest_2 {
         pepe = signUpAndUpdateTk(COMU_REAL_PEPE);
         pepeUserComu = ServOne.seeUserComusByUser().get(0);
         // Insertamos incidencia.
-        incidencia_1 = insertGetIncidImportancia(pepeUserComu, 1).getIncidencia();
+        incidencia_1 = insertGetIncidenciaUser(pepeUserComu, 1).getIncidencia();
     }
 }

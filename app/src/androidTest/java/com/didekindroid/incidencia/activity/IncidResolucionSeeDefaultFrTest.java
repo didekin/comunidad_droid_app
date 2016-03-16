@@ -21,8 +21,8 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.activity.IntentExtraKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.common.activity.IntentExtraKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkNavigateUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
@@ -31,8 +31,9 @@ import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaSer
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_JUAN;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
-import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -41,7 +42,7 @@ import static org.junit.Assert.assertThat;
  * Time: 15:14
  */
 @RunWith(AndroidJUnit4.class)
-public class IncidResolucionSeeDefaultAcTest {
+public class IncidResolucionSeeDefaultFrTest {
 
     IncidImportancia incidJuanReal1;
     IncidResolucionRegEditSeeAc mActivity;
@@ -58,7 +59,7 @@ public class IncidResolucionSeeDefaultAcTest {
         /**
          * Preconditions:
          * 1. An IncidenciaUser WITHOUT powers to register/edit a resolución is received (no 'adm' authorithy).
-         * 2. There is not a broadcasted resolucion.
+         * 2. There is not resolucion intent.
          * */
         @Override
         protected Intent getActivityIntent()
@@ -92,6 +93,10 @@ public class IncidResolucionSeeDefaultAcTest {
     public void setUp() throws Exception
     {
         mActivity = intentRule.getActivity();
+        // Premisas.
+        IncidImportancia incidImportancia = (IncidImportancia) mActivity.getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.extra);
+        assertThat(incidImportancia.getUserComu().hasAdministradorAuthority(), is(false));
+        assertThat(mActivity.getIntent().getSerializableExtra(INCID_RESOLUCION_OBJECT.extra), nullValue());
     }
 
     @After
@@ -103,11 +108,10 @@ public class IncidResolucionSeeDefaultAcTest {
     @Test
     public void testOnCreate_1()
     {
-        // CASO OK: se muestra el mensaje por defecto.
+        /* CASO OK: se muestra el fragmento/mensaje por defecto.*/
 
         assertThat(mActivity, notNullValue());
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
-
         onView(withId(R.id.incid_resolucion_fragment_container_ac)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_resolucion_see_default_fr)).check(matches(isDisplayed()));
 

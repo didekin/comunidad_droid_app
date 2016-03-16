@@ -34,9 +34,9 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.didekindroid.common.activity.IntentExtraKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.regSeveralUserComuSameUser;
-import static com.didekindroid.common.activity.IntentExtraKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.utils.UIutils.formatTimeStampToString;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.incidencia.repository.IncidenciaDataDbHelperTest.DB_PATH;
@@ -93,7 +93,7 @@ public class IncidSeeByComuAcTest_2 {
                 incidJuanPlazuela1 = new IncidImportancia.IncidImportanciaBuilder(
                         doIncidencia(juanPlazuela.getUsuario().getUserName(), "Incidencia Plazuela One", juanPlazuela.getComunidad().getC_Id(), (short) 26))
                         .usuarioComunidad(juanPlazuela)
-                        .importancia((short) 4).build();
+                        /*.importancia((short) 4)*/.build();
                 IncidenciaServ.regIncidImportancia(incidJuanReal1);
                 IncidenciaServ.regIncidImportancia(incidJuanReal2);
                 IncidenciaServ.regIncidImportancia(incidJuanPlazuela1);
@@ -147,12 +147,14 @@ public class IncidSeeByComuAcTest_2 {
         assertThat(adapter.getItem(0).getIncidencia().getAmbitoIncidencia().getAmbitoId(), is(incidJuanReal1.getIncidencia().getAmbitoIncidencia().getAmbitoId()));
         assertThat(adapter.getItem(0).getUsuario().getAlias(), is(juanReal.getUsuario().getAlias()));
         assertThat(adapter.getItem(0).getIncidencia().getDescripcion(), is(incidJuanReal1.getIncidencia().getDescripcion()));
+        // Solo hay un registro IncidImportancia para la incidencia: importanciaAvg == importancia usuario único.
         assertThat(adapter.getItem(0).getIncidencia().getImportanciaAvg(), is((float) incidJuanReal1.getImportancia()));
         //
         assertThat(adapter.getItem(1).getIncidencia().getComunidad(), is(juanReal.getComunidad()));
         assertThat(adapter.getItem(1).getUsuario().getAlias(), is(juanReal.getUsuario().getAlias()));
         assertThat(adapter.getItem(1).getIncidencia().getAmbitoIncidencia().getAmbitoId(), is(incidJuanReal2.getIncidencia().getAmbitoIncidencia().getAmbitoId()));
         assertThat(adapter.getItem(1).getIncidencia().getDescripcion(), is(incidJuanReal2.getIncidencia().getDescripcion()));
+        // Solo hay un registro IncidImportancia para la incidencia: importanciaAvg == importancia usuario único.
         assertThat(adapter.getItem(1).getIncidencia().getImportanciaAvg(), is((float) incidJuanReal2.getImportancia()));
     }
 
@@ -169,14 +171,18 @@ public class IncidSeeByComuAcTest_2 {
         // Verificamos que la actividad recibe la comunidad seleccionada.
         assertThat(mActivity.mComunidadSelected, is(COMU_LA_PLAZUELA_5));
 
-        assertThat(mFragment.mComunidadSelectedIndex,is(1));
+        assertThat(mFragment.mComunidadSelectedIndex, is(1));
         assertThat(adapter.getCount(), is(1));
 
         assertThat(adapter.getItem(0).getIncidencia().getComunidad(), is(juanPlazuela.getComunidad()));
         assertThat(adapter.getItem(0).getUsuario().getAlias(), is(juanPlazuela.getUsuario().getAlias()));
         assertThat(adapter.getItem(0).getIncidencia().getAmbitoIncidencia().getAmbitoId(), is(incidJuanPlazuela1.getIncidencia().getAmbitoIncidencia().getAmbitoId()));
         assertThat(adapter.getItem(0).getIncidencia().getDescripcion(), is(incidJuanPlazuela1.getIncidencia().getDescripcion()));
-        assertThat(adapter.getItem(0).getIncidencia().getImportanciaAvg(), is((float) incidJuanPlazuela1.getImportancia()));
+        // Solo hay un registro IncidImportancia para la incidencia: importanciaAvg == importancia usuario único.
+        assertThat(adapter.getItem(0).getIncidencia().getImportanciaAvg(), allOf(
+                is((float) incidJuanPlazuela1.getImportancia()),
+                is((float) 0)
+        ));
     }
 
     @Test
@@ -231,6 +237,42 @@ public class IncidSeeByComuAcTest_2 {
                         withId(R.id.incid_importancia_comunidad_view),
                         withText(mActivity.getResources()
                                 .getStringArray(R.array.IncidImportanciaArray)[Math.round(incidJuanReal2.getImportancia())])
+                ))
+        )).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testOnData_2()
+    {
+        // Second comunidad (Plazuela) in the comunidad_spinner is selected.
+        onView(withId(R.id.incid_reg_comunidad_spinner)).perform(click());
+        onData(allOf(
+                        is(instanceOf(Comunidad.class)),
+                        is(COMU_LA_PLAZUELA_5))
+        ).perform(click()).check(matches(isDisplayed()));
+
+        IncidenciaUser incidUser = adapter.getItem(0);
+
+        onData(is(incidUser)).inAdapterView(withId(android.R.id.list)).check(matches(isDisplayed()));
+        onView(allOf(
+                withText(incidJuanPlazuela1.getIncidencia().getDescripcion()),
+                withId(R.id.incid_descripcion_view),
+                hasSibling(allOf(
+                        withId(R.id.incid_fecha_alta_view),
+                        withText(formatTimeStampToString(incidUser.getIncidencia().getFechaAlta()))
+                )),
+                hasSibling(allOf(
+                        withId(R.id.incid_see_iniciador_view),
+                        withText(juanPlazuela.getUsuario().getAlias())
+                )),
+                hasSibling(allOf(
+                        withId(R.id.incid_ambito_view),
+                        withText(dBHelper.getAmbitoDescByPk(incidJuanPlazuela1.getIncidencia().getAmbitoIncidencia().getAmbitoId()))
+                )),
+                hasSibling(allOf(
+                        withId(R.id.incid_importancia_comunidad_view),
+                        // ImportanciaAVG == 0.
+                        withText("")
                 ))
         )).check(matches(isDisplayed()));
     }

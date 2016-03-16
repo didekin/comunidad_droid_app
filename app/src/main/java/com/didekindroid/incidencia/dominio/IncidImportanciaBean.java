@@ -39,7 +39,7 @@ public class IncidImportanciaBean {
     boolean validateImportancia(StringBuilder errorMsg, Resources resources)
     {
         short upperBound = (short) resources.getStringArray(R.array.IncidImportanciaArray).length;
-        if (!(importancia > 0 && importancia < upperBound)) {
+        if (!(importancia >= 0 && importancia < upperBound)) {
             errorMsg.append(resources.getString(R.string.incid_reg_importancia)).append(LINE_BREAK.getRegexp());
             return false;
         }

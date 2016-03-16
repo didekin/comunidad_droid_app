@@ -34,7 +34,7 @@ import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doCommen
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidenciaWithId;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doResolucion;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidImportancia;
+import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidenciaUser;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_PEPE;
@@ -79,7 +79,7 @@ public class IncidServiceTest_1 {
     public void testDeleteIncidencia_1() throws UiException
     {
         // Existe la incidencia; la borrarmos.
-        Incidencia incidencia = insertGetIncidImportancia(pepeUserComu, 1).getIncidencia();
+        Incidencia incidencia = insertGetIncidenciaUser(pepeUserComu, 1).getIncidencia();
         assertThat(IncidenciaServ.deleteIncidencia(incidencia.getIncidenciaId()), is(1));
 
         // Intentamos borrarla de nuevo: la app. redirige a la consulta de incidencias.
@@ -94,7 +94,7 @@ public class IncidServiceTest_1 {
     @Test
     public void testModifyIncidImportancia_1() throws UiException
     {
-        Incidencia incidenciaDb = insertGetIncidImportancia(pepeUserComu, 3).getIncidencia();
+        Incidencia incidenciaDb = insertGetIncidenciaUser(pepeUserComu, 3).getIncidencia();
 
         // Caso OK: usuario iniciador. Modificamos incidencia e importancia.
         IncidImportancia pepeIncidImportancia = new IncidImportancia.IncidImportanciaBuilder(
@@ -126,7 +126,7 @@ public class IncidServiceTest_1 {
     public void testRegIncidComment_1() throws UiException
     {
         // Caso OK.
-        Incidencia incidencia = insertGetIncidImportancia(pepeUserComu, 1).getIncidencia();
+        Incidencia incidencia = insertGetIncidenciaUser(pepeUserComu, 1).getIncidencia();
         assertThat(IncidenciaServ.regIncidComment(doComment("Comment_DESC", incidencia)), is(1));
     }
 
@@ -136,7 +136,7 @@ public class IncidServiceTest_1 {
         whatClean = CLEAN_JUAN_AND_PEPE;
 
         // Caso EntityException: USERCOMU_WRONG_INIT.
-        Incidencia incidencia = insertGetIncidImportancia(pepeUserComu, 1).getIncidencia();
+        Incidencia incidencia = insertGetIncidenciaUser(pepeUserComu, 1).getIncidencia();
 
         signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
         try {
@@ -151,7 +151,7 @@ public class IncidServiceTest_1 {
     public void testRegIncidComment_3() throws UiException
     {
         // Caso: no existe incidencia.
-        Incidencia incidencia = insertGetIncidImportancia(pepeUserComu, 1).getIncidencia();
+        Incidencia incidencia = insertGetIncidenciaUser(pepeUserComu, 1).getIncidencia();
         IncidComment comment = doComment("Comment_DESC", new Incidencia.IncidenciaBuilder().copyIncidencia(incidencia).incidenciaId(999L).build());
 
         try {
@@ -197,7 +197,7 @@ public class IncidServiceTest_1 {
     public void testRegResolucion_1() throws UiException, InterruptedException
     {
         // Caso OK.
-        Incidencia incidencia = insertGetIncidImportancia(pepeUserComu, 2).getIncidencia();
+        Incidencia incidencia = insertGetIncidenciaUser(pepeUserComu, 2).getIncidencia();
         Thread.sleep(1000);
         Resolucion resolucion = doResolucion(incidencia, "resol_desc", 1000, new Timestamp(new Date().getTime()));
         assertThat(IncidenciaServ.regResolucion(resolucion), is(1));
@@ -209,7 +209,7 @@ public class IncidServiceTest_1 {
         whatClean = CLEAN_JUAN_AND_PEPE;
 
         // Caso: usuarioComunidad no relacionado con comunidad de la incidencia.
-        Incidencia incidencia = insertGetIncidImportancia(pepeUserComu, 2).getIncidencia();
+        Incidencia incidencia = insertGetIncidenciaUser(pepeUserComu, 2).getIncidencia();
         Thread.sleep(1000);
         Resolucion resolucion = doResolucion(incidencia, "resol_desc", 1000, new Timestamp(new Date().getTime()));
 
@@ -240,7 +240,7 @@ public class IncidServiceTest_1 {
     public void testRegResolucion_4() throws UiException, InterruptedException
     {
         // Caso: resolución duplicada.
-        Incidencia incidencia = insertGetIncidImportancia(pepeUserComu, 2).getIncidencia();
+        Incidencia incidencia = insertGetIncidenciaUser(pepeUserComu, 2).getIncidencia();
         Thread.sleep(1000);
         Resolucion resolucion = doResolucion(incidencia, "resol_desc", 1000, new Timestamp(new Date().getTime()));
         assertThat(IncidenciaServ.regResolucion(resolucion), is(1));
@@ -258,7 +258,7 @@ public class IncidServiceTest_1 {
     public void testSeeCommentsByIncid_1() throws UiException
     {
         // Caso OK.
-        Incidencia incid_pepeComu_1 = insertGetIncidImportancia(pepeUserComu, 1).getIncidencia();
+        Incidencia incid_pepeComu_1 = insertGetIncidenciaUser(pepeUserComu, 1).getIncidencia();
         assertThat(IncidenciaServ.regIncidComment(doComment("Comment_1_pepeComu_1", incid_pepeComu_1)), is(1));
 
         List<IncidComment> comments = IncidenciaServ.seeCommentsByIncid(incid_pepeComu_1.getIncidenciaId());
@@ -286,7 +286,7 @@ public class IncidServiceTest_1 {
     public void testSeeCommentsByIncid_3() throws UiException
     {
         // Incidencia existe; no tiene asociada comentarios.
-        Incidencia incid_pepeComu_1 = insertGetIncidImportancia(pepeUserComu, 1).getIncidencia();
+        Incidencia incid_pepeComu_1 = insertGetIncidenciaUser(pepeUserComu, 1).getIncidencia();
         List<IncidComment> comments = IncidenciaServ.seeCommentsByIncid(incid_pepeComu_1.getIncidenciaId());
         assertThat(comments, notNullValue());
         assertThat(comments.size(), is(0));
@@ -298,7 +298,7 @@ public class IncidServiceTest_1 {
         whatClean = CLEAN_JUAN_AND_PEPE;
 
         // El userComu no está asociado a la comunidad de la incidencia.
-        Incidencia incid_pepeComu_1 = insertGetIncidImportancia(pepeUserComu, 1).getIncidencia();
+        Incidencia incid_pepeComu_1 = insertGetIncidenciaUser(pepeUserComu, 1).getIncidencia();
         assertThat(IncidenciaServ.regIncidComment(doComment("Comment_1_pepeComu_1", incid_pepeComu_1)), is(1));
 
         signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
@@ -314,7 +314,7 @@ public class IncidServiceTest_1 {
     public void testSeeIncidImportancia_1() throws UiException
     {
         // Caso OK.
-        Incidencia incidencia = insertGetIncidImportancia(pepeUserComu, 1).getIncidencia();
+        Incidencia incidencia = insertGetIncidenciaUser(pepeUserComu, 1).getIncidencia();
         IncidImportancia incidImportancia = IncidenciaServ.seeIncidImportancia(incidencia.getIncidenciaId());
         assertThat(incidImportancia.isIniciadorIncidencia(), is(true));
     }
@@ -339,7 +339,7 @@ public class IncidServiceTest_1 {
 
         /* Caso: usuario e incidencia en BD, pero incidencia.comunidad != usuario.comunidad.*/
 
-        Incidencia incidencia = insertGetIncidImportancia(pepeUserComu, 1).getIncidencia();
+        Incidencia incidencia = insertGetIncidenciaUser(pepeUserComu, 1).getIncidencia();
         signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
         try {
             IncidenciaServ.seeIncidImportancia(incidencia.getIncidenciaId());
@@ -356,7 +356,7 @@ public class IncidServiceTest_1 {
 
         /* Caso: no hay registro incidImportancia.userComu.usuario == usuario, SÍ usuario.comunidad == incidencia.comunidad.*/
 
-        Incidencia incidencia = insertGetIncidImportancia(pepeUserComu, 1).getIncidencia();
+        Incidencia incidencia = insertGetIncidenciaUser(pepeUserComu, 1).getIncidencia();
         ServOne.regUserAndUserComu(makeUserComuWithComunidadId(COMU_ESCORIAL_JUAN, incidencia.getComunidad().getC_Id()));
         updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
 

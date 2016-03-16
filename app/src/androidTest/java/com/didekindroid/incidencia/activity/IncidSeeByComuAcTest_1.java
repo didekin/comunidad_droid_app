@@ -123,6 +123,8 @@ public class IncidSeeByComuAcTest_1 {
         // No hay incidencias registradas. La vista forma parte de la jerarquía de vistas de la página.
         onView(withId(android.R.id.list)).check(matches(not(isDisplayed())));
         onView(withId(android.R.id.empty)).check(matches(isDisplayed()));
+
+        checkNavigateUp();
     }
 
     @Test
@@ -144,12 +146,6 @@ public class IncidSeeByComuAcTest_1 {
 
         assertThat(isGcmTokenSentServer(mActivity), is(true));
         assertThat(ServOne.getGcmToken(), notNullValue());
-    }
-
-    @Test
-    public void testOnNavigateUp()
-    {
-        checkNavigateUp();
     }
 
     @Test

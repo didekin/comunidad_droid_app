@@ -85,6 +85,8 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
 
         mResolucion = mActivitySupplier.getResolucion();
         checkState(mResolucion != null);
+        // Inicialización de la fecha en BD en el bean, para manternela si no la modifica.
+        mResolucionBean.setFechaPrevista(mResolucion.getFechaPrev().getTime());
 
         SeeAvancesAdapter mAdapter = new SeeAvancesAdapter(getActivity());
         mAdapter.clear();
@@ -98,7 +100,8 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
         // Plan (modo lectura).
         ((TextView) mFragmentView.findViewById(R.id.incid_resolucion_txt)).setText(mResolucion.getDescripcion());
         ((EditText) mFragmentView.findViewById(R.id.incid_resolucion_coste_prev_ed)).setText(getStringFromInteger(mResolucion.getCosteEstimado()));
-        mFechaView.setText(formatTimeStampToString(mResolucion.getFechaAlta()));
+        // Fecha texto que se corresponde con la que he utilizado para inicializar el bean.
+        mFechaView.setText(formatTimeStampToString(mResolucion.getFechaPrev()));
     }
 
     //  ================================ HELPER METHODS =======================================
@@ -140,10 +143,12 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
                         .build())
                 .build();
 
-        List<Avance> avances = new ArrayList<>();
+        List<Avance> avances = null;
+
         if(mResolucionBean.getAvanceDesc() != null && !mResolucionBean.getAvanceDesc().trim().isEmpty()){
-            final Avance avance = new Avance.AvanceBuilder(mResolucion)
-                    .avanceDesc(mResolucionBean.getPlan())
+            avances = new ArrayList<>(1);
+            final Avance avance = new Avance.AvanceBuilder()
+                    .avanceDesc(mResolucionBean.getAvanceDesc())
                     .build();
             avances.add(avance);
         }
@@ -152,7 +157,7 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
                 .fechaPrevista(new Timestamp(mResolucionBean.getFechaPrevista()))
                 .costeEstimado(mResolucionBean.getCostePrev())
                 .avances(avances)
-                .build();
+                .buildAsFk();
     }
 
     void makeResolucionBeanFromView(StringBuilder errorMsg)
@@ -162,7 +167,6 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
         mResolucionBean.setAvanceDesc(((EditText) mFragmentView.findViewById(R.id.incid_resolucion_avance_ed)).getText().toString());
         mResolucionBean.setCostePrevText(((EditText) mFragmentView.findViewById(R.id.incid_resolucion_coste_prev_ed)).getText().toString());
         mResolucionBean.setFechaPrevistaText(mFechaView.getText().toString());
-        // La fecha se inicializa en FechaPickerFr.onDateSet().
 
         if (!mResolucionBean.validateBeanAvance(errorMsg, getResources(), mActivitySupplier.getIncidImportancia())) {
             mResolucionBean = null;
@@ -202,7 +206,7 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
                 intent.putExtra(INCID_IMPORTANCIA_OBJECT.extra, mActivitySupplier.getIncidImportancia());
                 uiException.processMe(getActivity(), intent);
             } else {
-                checkState(rowModified == 1);
+                checkState(rowModified >= 1);
                 Intent intent = new Intent(getActivity(), IncidEditAc.class);
                 intent.putExtra(INCID_IMPORTANCIA_OBJECT.extra, mActivitySupplier.getIncidImportancia());
                 startActivity(intent);

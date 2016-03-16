@@ -1,7 +1,6 @@
 package com.didekindroid.incidencia.activity;
 
 import android.app.Fragment;
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -25,15 +24,9 @@ public abstract class IncidResolucionFrAbstract extends Fragment implements Fech
     TextView mFechaView;
 
     @Override
-    public void onAttach(Context context)
-    {
-        super.onAttach(context);
-        Log.d(TAG, "onAttach()");
-    }
-
-    @Override
     public void onActivityCreated(Bundle savedInstanceState)
     {
+        Log.d(TAG, "onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
         mActivitySupplier = (IncidenciaDataSupplier) getActivity();
     }

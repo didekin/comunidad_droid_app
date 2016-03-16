@@ -103,11 +103,11 @@ public class ResolucionBean {
 
     boolean validateFechaPrev(StringBuilder errorMsg, Resources resources, IncidImportancia incidImportancia)
     {
-        if (fechaPrevistaText.equals(resources.getString(R.string.incid_resolucion_fecha_default_txt))
-                || fechaPrevista < incidImportancia.getIncidencia().getFechaAlta().getTime()) {
+        if (fechaPrevista < incidImportancia.getIncidencia().getFechaAlta().getTime()) {
             errorMsg.append(resources.getString(R.string.incid_resolucion_fecha_prev_msg)).append(LINE_BREAK.getRegexp());
             return false;
         }
+        // Aquí controlamos que no ha dejado el texto por defecto en fechaPrevista view.
         return fechaPrevistaText.equals(formatTimeToString(fechaPrevista));
     }
 

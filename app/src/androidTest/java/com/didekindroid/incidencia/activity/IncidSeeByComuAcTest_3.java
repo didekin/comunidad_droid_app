@@ -37,7 +37,7 @@ import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdat
 import static com.didekindroid.common.testutils.ActivityTestUtils.updateSecurityData;
 import static com.didekindroid.common.activity.IntentExtraKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.repository.IncidenciaDataDbHelperTest.DB_PATH;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidImportancia;
+import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidenciaUser;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_PEPE;
@@ -70,7 +70,7 @@ public class IncidSeeByComuAcTest_3 {
                 signUpAndUpdateTk(COMU_REAL_PEPE);
                 UsuarioComunidad pepeUserComu = ServOne.seeUserComusByUser().get(0);
                 // Insertamos incidencia.
-                insertGetIncidImportancia(pepeUserComu, 1);
+                insertGetIncidenciaUser(pepeUserComu, 1);
                 // Registro userComu en misma comunidad.
                 UsuarioComunidad userComuJuan = makeUsuarioComunidad(pepeUserComu.getComunidad(), USER_JUAN,
                         "portal", "esc", "plantaX", "door12", PROPIETARIO.function);
@@ -112,12 +112,14 @@ public class IncidSeeByComuAcTest_3 {
         Thread.sleep(1000);
         IncidenciaUser incidUser_0 = adapter.getItem(0);
         Incidencia incidencia_0 = incidUser_0.getIncidencia();
+        // Usuario Juan ve la incidencia por usuario Pepe.
         onData(is(incidUser_0)).inAdapterView(withId(android.R.id.list))
                 .check(matches(isDisplayed()))
                 .perform(click());
 
         IncidImportancia incidImportancia = IncidenciaServ.seeIncidImportancia(incidencia_0.getIncidenciaId());
         intended(hasExtra(INCID_IMPORTANCIA_OBJECT.extra, incidImportancia));
+        // Juan entra en la pantalla de edición de la incidencia, tras seleccionarla.
         onView(withId(R.id.incid_edit_fragment_container_ac)).check(matches(isDisplayed()));
     }
 }

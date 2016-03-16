@@ -76,7 +76,7 @@ public class LoginAcTest_1 extends LoginAcTest{
     }
 
     @Test
-    public void testValidate_1()   // TODO: falla.
+    public void testValidate_1()
     {
         // User not in DB.
         mActivity = mActivityRule.launchActivity(new Intent());

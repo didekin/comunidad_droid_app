@@ -35,7 +35,7 @@ import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.testutils.ActivityTestUtils.updateSecurityData;
 import static com.didekindroid.common.activity.IntentExtraKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidImportancia;
+import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidenciaUser;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_PEPE;
@@ -55,7 +55,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
  */
 
 /**
- * Tests para un userComu aún no asociado a una incidencia.
+ * Tests para un userComu sin registro IncidImportancia en la incidencia.
  */
 @RunWith(AndroidJUnit4.class)
 public class IncidEditAcTest_3 {
@@ -74,7 +74,7 @@ public class IncidEditAcTest_3 {
 
         /**
          * Preconditions:
-         * 1. An fIncidenciaUser id WITHOUT powers to erase OR modify is passed.
+         * 1. An incidImportancia.userComu WITHOUT powers to erase OR modify is passed.
          * */
         @Override
         protected Intent getActivityIntent()
@@ -83,7 +83,7 @@ public class IncidEditAcTest_3 {
                 signUpAndUpdateTk(COMU_REAL_PEPE);
                 UsuarioComunidad pepeUserComu = ServOne.seeUserComusByUser().get(0);
                 // Insertamos incidencia.
-                IncidenciaUser incidenciaUser_1 = insertGetIncidImportancia(pepeUserComu, 1);
+                IncidenciaUser incidenciaUser_1 = insertGetIncidenciaUser(pepeUserComu, 1);
                 // Registro userComu en misma comunidad.
                 UsuarioComunidad userComuJuan = makeUsuarioComunidad(pepeUserComu.getComunidad(), USER_JUAN,
                         "portal", "esc", "plantaX", "door12", PROPIETARIO.function);
@@ -127,6 +127,7 @@ public class IncidEditAcTest_3 {
         IncidImportancia incidImportanciaInIntent = (IncidImportancia) mActivity.getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.extra);
         assertThat(incidImportanciaInIntent.getUserComu().getUsuario(), is(USER_JUAN));
         assertThat(incidImportanciaInIntent.getIncidencia().getUserName(), is(USER_PEPE.getUserName()));
+        // Premisas.
         assertThat(incidImportanciaInIntent.getUserComu().hasAdministradorAuthority(), is(false));
         assertThat(incidImportanciaInIntent.isIniciadorIncidencia(), is(false));
 

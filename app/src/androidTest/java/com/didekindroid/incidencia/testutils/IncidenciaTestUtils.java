@@ -67,7 +67,7 @@ public final class IncidenciaTestUtils {
                 .build();
     }
 
-    public static IncidenciaUser insertGetIncidImportancia(UsuarioComunidad userComu, int importancia) throws UiException
+    public static IncidenciaUser insertGetIncidenciaUser(UsuarioComunidad userComu, int importancia) throws UiException
     {
         IncidImportancia incidImportancia = new IncidImportancia.IncidImportanciaBuilder(
                 doIncidencia(userComu.getUsuario().getUserName(), "Incidencia One", userComu.getComunidad().getC_Id(), (short) 43))

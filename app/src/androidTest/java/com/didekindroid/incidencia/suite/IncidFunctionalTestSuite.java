@@ -11,8 +11,12 @@ import com.didekindroid.incidencia.activity.IncidEditAcTest_Mn2;
 import com.didekindroid.incidencia.activity.IncidEditAcTest_Mn3;
 import com.didekindroid.incidencia.activity.IncidEditAcTest_Mn4;
 import com.didekindroid.incidencia.activity.IncidRegAcTest;
-import com.didekindroid.incidencia.activity.IncidResolucionRegAcTest;
-import com.didekindroid.incidencia.activity.IncidResolucionSeeDefaultAcTest;
+import com.didekindroid.incidencia.activity.IncidResolucionEditFrTest_1;
+import com.didekindroid.incidencia.activity.IncidResolucionEditFrTest_2;
+import com.didekindroid.incidencia.activity.IncidResolucionEditFrTest_3;
+import com.didekindroid.incidencia.activity.IncidResolucionRegFrTest;
+import com.didekindroid.incidencia.activity.IncidResolucionSeeDefaultFrTest;
+import com.didekindroid.incidencia.activity.IncidResolucionSeeFrTest_1;
 import com.didekindroid.incidencia.activity.IncidSeeByComuAcTest_1;
 import com.didekindroid.incidencia.activity.IncidSeeByComuAcTest_2;
 import com.didekindroid.incidencia.activity.IncidSeeByComuAcTest_3;
@@ -41,8 +45,12 @@ import org.junit.runners.Suite;
         IncidEditAcTest_Mn4.class,
         IncidRegAcTest.class,
         IncidRegAcTest_gcm1.class,
-        IncidResolucionRegAcTest.class,
-        IncidResolucionSeeDefaultAcTest.class,
+        IncidResolucionEditFrTest_1.class,
+        IncidResolucionEditFrTest_2.class,
+        IncidResolucionEditFrTest_3.class,
+        IncidResolucionRegFrTest.class,
+        IncidResolucionSeeFrTest_1.class,
+        IncidResolucionSeeDefaultFrTest.class,
         IncidSeeByComuAcTest_1.class,
         IncidSeeByComuAcTest_2.class,
         IncidSeeByComuAcTest_3.class,

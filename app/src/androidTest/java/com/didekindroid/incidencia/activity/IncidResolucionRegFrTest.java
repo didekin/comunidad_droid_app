@@ -61,7 +61,7 @@ import static org.junit.Assert.assertThat;
  * Time: 15:14
  */
 @RunWith(AndroidJUnit4.class)
-public class IncidResolucionRegAcTest {
+public class IncidResolucionRegFrTest {
 
     IncidImportancia incidJuanReal1;
     IncidResolucionRegEditSeeAc mActivity;
@@ -77,7 +77,7 @@ public class IncidResolucionRegAcTest {
 
         /**
          * Preconditions:
-         * 1. An IncidenciaUser WITH powers to resolve an incidencia is received.
+         * 1. A user WITH powers to resolve an incidencia is received.
          * 2. NO resolucion en BD.
          * */
         @Override
@@ -137,7 +137,6 @@ public class IncidResolucionRegAcTest {
         onView(withId(R.id.incid_resolucion_reg_ac_button)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_resolucion_desc_ed)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_resolucion_coste_prev_ed)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_resolucion_fecha_view)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_resolucion_fecha_view)).check(matches(isDisplayed()));
 
         checkNavigateUp();
@@ -240,20 +239,6 @@ public class IncidResolucionRegAcTest {
         onView(withId(R.id.incid_edit_fragment_container_ac)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_edit_maxpower_frg)).check(matches(isDisplayed()));
         intended(hasExtra(INCID_IMPORTANCIA_OBJECT.extra, incidJuanReal1));
-    }
-
-    @Test
-    public void testOnRegister_2()
-    {
-        /* Caso: resolución duplicada.*/
-
-        onView(withId(R.id.incid_resolucion_desc_ed)).perform(replaceText("desc_válida"));
-        onView(withId(R.id.incid_resolucion_coste_prev_ed)).perform(replaceText("1234,5"));
-        Calendar today = new GregorianCalendar();
-        today.add(YEAR, 1);
-        setFecha(setDate(today.get(YEAR), today.get(MONTH), today.get(DAY_OF_MONTH)));
-
-        onView(withId(R.id.incid_resolucion_reg_ac_button)).perform(click());
     }
 
 //    ============================= HELPER METHODS ===========================

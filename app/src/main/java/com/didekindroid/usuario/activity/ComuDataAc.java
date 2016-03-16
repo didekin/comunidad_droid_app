@@ -64,14 +64,14 @@ public class ComuDataAc extends Activity implements RegComuFr.RegComuFrListener 
         mIdComunidad = getIntent().getLongExtra(COMUNIDAD_ID.extra, 0L);
         checkState(mIdComunidad > 0L);
 
+        // Asunción: esta tarea termina antes que la carga de los spinners en RegComuFr.
+        // Si hay problemas: meter C_Autonoma en la query que obtiene los objetos Comunidad que se usan para el intent inicial de esta actividad.
+        new ComuDataSetter().execute();
+
         mAcView = getLayoutInflater().inflate(R.layout.comu_data_ac, null);
         setContentView(mAcView);
         mRegComuFrg = (RegComuFr) getFragmentManager().findFragmentById(R.id.reg_comunidad_frg);
         mRegComuFrg.setmActivityListener(this);
-
-        // Asunción: esta tarea termina antes que la carga de los spinners en RegComuFr.
-        // TODO: cambiar el intent; meter el objeto comunidad e inicializar mComunidad con él.
-       new ComuDataSetter().execute();
 
         mModifyButton = (Button) findViewById(R.id.comu_data_ac_button);
         mModifyButton.setOnClickListener(new View.OnClickListener() {

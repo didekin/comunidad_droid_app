@@ -185,8 +185,8 @@ public class IncidRegAcTest {
         onView(withId(R.id.incid_reg_importancia_spinner)).perform(click());
         onData
                 (allOf(
-                        is(instanceOf(String.class)),
-                        is(mActivity.getResources().getStringArray(R.array.IncidImportanciaArray)[4]))
+                                is(instanceOf(String.class)),
+                                is(mActivity.getResources().getStringArray(R.array.IncidImportanciaArray)[4]))
                 )
                 .perform(click());
         onView(withId(R.id.incid_reg_ambito_spinner)).perform(click());
@@ -202,6 +202,20 @@ public class IncidRegAcTest {
 
     @Test
     public void testRegisterIncidencia_3() throws UiException
+    {
+        // Caso: no cubro importancia.
+
+        onView(withId(R.id.incid_reg_ambito_spinner)).perform(click());
+        onData(withRowString(1, "Calefacción comunitaria")).perform(click());
+        onView(withId(R.id.incid_reg_desc_ed)).perform(typeText("descripcion is valid"));
+        onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
+
+        onView(withId(R.id.incid_see_by_comu_ac)).check(matches(isDisplayed()));
+        assertThat(IncidenciaServ.seeIncidsOpenByComu(comunidadByDefault.getC_Id()).size(), is(1));
+    }
+
+    @Test
+    public void testRegisterIncidencia_4() throws UiException
     {
         // Probamos cambio de comunidad en spinner: Calle La Fuente.
         Comunidad comunidadFuente = comunidadesAdapter.getItem(1);

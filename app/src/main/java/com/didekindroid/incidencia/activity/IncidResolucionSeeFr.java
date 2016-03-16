@@ -7,9 +7,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TextView;
 
+import com.didekin.incidservice.dominio.Resolucion;
 import com.didekindroid.R;
 import com.didekindroid.incidencia.dominio.ResolucionBean;
+
+import static com.didekindroid.common.utils.UIutils.formatTimeStampToString;
+import static com.didekindroid.common.utils.UIutils.getStringFromInteger;
+import static com.google.common.base.Preconditions.checkState;
 
 /**
  * User: pedro@didekin
@@ -21,13 +29,8 @@ public class IncidResolucionSeeFr extends Fragment {
     private static final String TAG = IncidResolucionSeeFr.class.getCanonicalName();
 
     View mFragmentView;
-
-    @Override
-    public void onAttach(Context context)
-    {
-        super.onAttach(context);
-        Log.d(TAG, "onAttach()");
-    }
+    IncidenciaDataSupplier mActivitySupplier;
+    Resolucion mResolucion;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -35,20 +38,34 @@ public class IncidResolucionSeeFr extends Fragment {
     {
         Log.d(TAG, "onCreateView()");
         mFragmentView = inflater.inflate(R.layout.incid_resolucion_see_fr, container, false);
-
         return mFragmentView;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState)
     {
+        Log.d(TAG, "onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
-    }
+        mActivitySupplier = (IncidenciaDataSupplier) getActivity();
 
-    public ResolucionBean makeResolucionBeanFromView(StringBuilder errorMsg)
-    {
-        Log.d(TAG, "makeResolucionBeanFromView()");
-        return null;
+        mResolucion = mActivitySupplier.getResolucion();
+        checkState(mResolucion != null);
+
+        SeeAvancesAdapter mAdapter = new SeeAvancesAdapter(getActivity());
+        mAdapter.clear();
+        mAdapter.addAll(mResolucion.getAvances());
+
+        // Fecha estimada.
+        ((TextView) mFragmentView.findViewById(R.id.incid_resolucion_fecha_view)).setText(formatTimeStampToString(mResolucion.getFechaPrev()));
+        // Coste estimado.
+        ((TextView) mFragmentView.findViewById(R.id.incid_resolucion_coste_prev_view)).setText(getStringFromInteger(mResolucion.getCosteEstimado()));
+        // Plan.
+        ((TextView) mFragmentView.findViewById(R.id.incid_resolucion_txt)).setText(mResolucion.getDescripcion());
+        // Lista de avances.
+        ListView mListView = (ListView) mFragmentView.findViewById(android.R.id.list);
+        mListView.setChoiceMode(ListView.CHOICE_MODE_NONE);
+        mListView.setEmptyView(mFragmentView.findViewById(android.R.id.empty));
+        mListView.setAdapter(mAdapter);
     }
 
 //    ============================== INTERFACE COMMUNICATIONS METHODS ==========================

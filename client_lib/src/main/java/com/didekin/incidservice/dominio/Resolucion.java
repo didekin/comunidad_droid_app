@@ -202,8 +202,11 @@ public final class Resolucion implements Serializable {
         public Resolucion build()
         {
             Resolucion resolucion = new Resolucion(this);
-            if (resolucion.incidencia == null || resolucion.incidencia.getIncidenciaId() <= 0
-                    || resolucion.descripcion == null || resolucion.fechaPrev == null) {
+            if (resolucion.incidencia == null
+                    || resolucion.incidencia.getIncidenciaId() <= 0
+                    || resolucion.descripcion == null
+                    || resolucion.fechaPrev == null
+                    ) {
                 throw new IllegalStateException(RESOLUCION_WRONG_INIT.toString());
             }
             return resolucion;

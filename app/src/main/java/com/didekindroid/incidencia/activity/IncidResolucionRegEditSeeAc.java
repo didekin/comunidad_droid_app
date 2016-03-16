@@ -8,8 +8,10 @@ import android.view.View;
 import com.didekin.incidservice.dominio.IncidImportancia;
 import com.didekin.incidservice.dominio.Resolucion;
 import com.didekindroid.R;
+import com.didekindroid.common.activity.FragmentTags;
 import com.didekindroid.common.activity.IntentExtraKey;
 
+import static com.didekindroid.common.activity.FragmentTags.incid_resolucion_edit_fr_tag;
 import static com.didekindroid.common.activity.IntentExtraKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.activity.SavedInstanceKey.INCID_IMPORTANCIA;
 import static com.didekindroid.common.activity.SavedInstanceKey.INCID_RESOLUCION;
@@ -18,7 +20,7 @@ import static com.didekindroid.common.utils.UIutils.doToolBar;
 /**
  * Preconditions:
  * 1. An intent extra is received with an IncidImportancia belonging to a user with function 'adm'.
- * 2. An intent extras may or may not be received with a Resolucion instance.
+ * 2. An intent extra with a Resolucion instance MAY be received.
  * Postconditions:
  * 1. If NOT Resolucion intent is received and the user has authority 'adm':
  * 1.1. An incidencia resolution is registered in BD, associated to its editor.
@@ -61,7 +63,9 @@ public class IncidResolucionRegEditSeeAc extends AppCompatActivity implements
         if (mIncidImportancia.getUserComu().hasAdministradorAuthority()) {
             if (mResolucion != null) {
                 IncidResolucionEditFr mRegFragment = new IncidResolucionEditFr();
-                getFragmentManager().beginTransaction().add(R.id.incid_resolucion_fragment_container_ac, mRegFragment).commit();
+                getFragmentManager().beginTransaction()
+                        .add(R.id.incid_resolucion_fragment_container_ac, mRegFragment, incid_resolucion_edit_fr_tag)
+                        .commit();
 
             } else {
                 IncidResolucionRegFr mRegFragment = new IncidResolucionRegFr();

@@ -16,12 +16,11 @@ import static com.didekin.common.exception.DidekinExceptionMsg.AVANCE_WRONG_INIT
  * Time: 12:03
  */
 @SuppressWarnings("unused")
-public class Avance implements Serializable{
+public class Avance implements Serializable {
 
     private final long avanceId;
     private final String avanceDesc;
     private final String userName;
-    private final Resolucion resolucion;
     private final Timestamp fechaAlta;
 
     private Avance(AvanceBuilder builder)
@@ -29,7 +28,6 @@ public class Avance implements Serializable{
         avanceId = builder.avanceId;
         avanceDesc = builder.avanceDesc;
         userName = builder.userName;
-        resolucion = builder.resolucion;
         fechaAlta = builder.fechaAlta;
     }
 
@@ -49,9 +47,6 @@ public class Avance implements Serializable{
         if (userName != null ? !userName.equals(avance.userName) : avance.userName != null) {
             return false;
         }
-        if (!resolucion.equals(avance.resolucion)) {
-            return false;
-        }
         return !(fechaAlta != null ? !fechaAlta.equals(avance.fechaAlta) : avance.fechaAlta != null);
     }
 
@@ -63,7 +58,6 @@ public class Avance implements Serializable{
         }
 
         int result = userName != null ? userName.hashCode() : 0;
-        result = 31 * result + resolucion.hashCode();
         result = 31 * result + (fechaAlta != null ? fechaAlta.hashCode() : 0);
         return result;
     }
@@ -83,11 +77,6 @@ public class Avance implements Serializable{
         return userName;
     }
 
-    public Resolucion getResolucion()
-    {
-        return resolucion;
-    }
-
     public Timestamp getFechaAlta()
     {
         return fechaAlta;
@@ -100,12 +89,10 @@ public class Avance implements Serializable{
         private long avanceId;
         private String avanceDesc;
         private String userName;
-        private Resolucion resolucion;
         private Timestamp fechaAlta;
 
-        public AvanceBuilder(Resolucion resolucion)
+        public AvanceBuilder()
         {
-            this.resolucion = resolucion;
         }
 
         public AvanceBuilder avanceId(long initValue)
@@ -132,11 +119,20 @@ public class Avance implements Serializable{
             return this;
         }
 
+        public AvanceBuilder copyAvance(Avance initValue)
+        {
+            avanceId = initValue.avanceId;
+            avanceDesc = initValue.avanceDesc;
+            userName = initValue.userName;
+            fechaAlta = initValue.fechaAlta;
+            return this;
+        }
+
         @Override
         public Avance build()
         {
             Avance avance = new Avance(this);
-            if (avanceId <= 0L && (avance.resolucion == null || avance.avanceDesc == null)) {
+            if (avanceId <= 0L && avance.avanceDesc == null) {
                 throw new IllegalStateException(AVANCE_WRONG_INIT.toString());
             }
             return avance;
@@ -166,7 +162,6 @@ public class Avance implements Serializable{
         private final long avanceId;
         private final String avanceDesc;
         private final String userName;
-        private final Resolucion resolucion;
         private final Timestamp fechaAlta;
 
 
@@ -175,7 +170,6 @@ public class Avance implements Serializable{
             avanceId = avance.avanceId;
             avanceDesc = avance.avanceDesc;
             userName = avance.userName;
-            resolucion = avance.resolucion;
             fechaAlta = avance.fechaAlta;
         }
 
@@ -185,7 +179,7 @@ public class Avance implements Serializable{
          */
         private Object readResolve()
         {
-            return new AvanceBuilder(resolucion)
+            return new AvanceBuilder()
                     .avanceId(avanceId)
                     .avanceDesc(avanceDesc)
                     .userName(userName)
