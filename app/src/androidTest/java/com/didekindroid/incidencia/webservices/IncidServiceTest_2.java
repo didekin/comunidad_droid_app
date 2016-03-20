@@ -19,17 +19,20 @@ import org.junit.runner.RunWith;
 import java.sql.Timestamp;
 import java.util.Date;
 
-import static com.didekin.common.exception.DidekinExceptionMsg.INCID_IMPORTANCIA_NOT_FOUND;
 import static com.didekin.common.exception.DidekinExceptionMsg.INCID_IMPORTANCIA_WRONG_INIT;
 import static com.didekin.common.exception.DidekinExceptionMsg.UNAUTHORIZED_TX_TO_USER;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.testutils.ActivityTestUtils.updateSecurityData;
+import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.INCID_DEFAULT_DESC;
+import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.RESOLUCION_DEFAULT_DESC;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doResolucion;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidenciaUser;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_ESCORIAL_JUAN;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_PLAZUELA5_JUAN;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_JUAN;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_PEPE;
@@ -55,6 +58,7 @@ public class IncidServiceTest_2 {
     CleanUserEnum whatClean;
     Usuario pepe;
     UsuarioComunidad pepeUserComu;
+    UsuarioComunidad juanUserComu;
     Incidencia incidencia_1;
     IncidImportancia incidImportancia_1;
 
@@ -68,6 +72,22 @@ public class IncidServiceTest_2 {
     public void tearDown() throws Exception
     {
         cleanOptions(whatClean);
+    }
+
+    @Test
+    public void testCloseIncidencia_1() throws InterruptedException, UiException
+    {
+        // Caso NOT OK: usuario no 'adm'.
+
+        whatClean = CLEAN_JUAN_AND_PEPE;
+
+        Resolucion resolucion = signPepeWithResolucion();
+        try {
+            IncidenciaServ.closeIncidencia(resolucion);
+            fail();
+        } catch (UiException ue) {
+            assertThat(ue.getInServiceException().getHttpMessage(), is(UNAUTHORIZED_TX_TO_USER.getHttpMessage()));
+        }
     }
 
     @Test
@@ -88,42 +108,60 @@ public class IncidServiceTest_2 {
     public void testModifyIncidImportancia_1() throws UiException, InterruptedException
     {
         whatClean = CLEAN_JUAN_AND_PEPE;
-        // Caso NOT OK: usuario sin registro de incidImportancia en BD, intenta modificar la incidencia, sin perfil administrador.
+        // Caso OK: usuario sin registro de incidImportancia en BD, intenta modificar la incidencia, sin perfil administrador.
+        // Resultado: inserta nuevo registro con importancia. No altera la incidencia.
 
         signPepeWithIncidencia();
+
         // Registro userComu en misma comunidad.
         UsuarioComunidad userComuJuan = makeUserComuWithComunidadId(COMU_REAL_JUAN, pepeUserComu.getComunidad().getC_Id());
         assertThat(ServOne.regUserAndUserComu(userComuJuan), is(true));
         updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
         Thread.sleep(1000);
-        try {
-            IncidenciaServ.modifyIncidImportancia(new IncidImportancia.IncidImportanciaBuilder(
-                    new Incidencia.IncidenciaBuilder().copyIncidencia(incidencia_1).descripcion("modified_desc").build())
-                    .usuarioComunidad(userComuJuan)
-                    .importancia((short) 2)
-                    .build());
-            fail();
-        } catch (UiException ue) {
-            assertThat(ue.getInServiceException().getHttpMessage(), is(INCID_IMPORTANCIA_NOT_FOUND.getHttpMessage()));
-        }
+        assertThat(IncidenciaServ.modifyIncidImportancia(new IncidImportancia.IncidImportanciaBuilder(
+                        new Incidencia.IncidenciaBuilder().copyIncidencia(incidencia_1).descripcion("modified_desc").build())
+                        .usuarioComunidad(userComuJuan)
+                        .importancia((short) 2)
+                        .build()),
+                is(1));
+
+        IncidImportancia incidImportancia = IncidService.IncidenciaServ.seeIncidImportancia(incidencia_1.getIncidenciaId()).getIncidImportancia();
+        assertThat(incidImportancia.getImportancia(), is((short) 2));
+        assertThat(incidImportancia.getIncidencia().getDescripcion(), is(INCID_DEFAULT_DESC));
     }
 
     @Test
     public void testModifyIncidImportancia_2() throws UiException, InterruptedException
     {
-        // Caso: usuario CON registro de incidImportancia en BD, intenta modificar la incidencia, sin perfil administrador, CON perfil iniciador.
+        // Caso OK: usuario CON registro de incidImportancia en BD, intenta modificar la incidencia, sin perfil administrador, CON perfil iniciador.
         signPepeWithIncidImportancia();
         Thread.sleep(1000);
 
-        IncidenciaServ.modifyIncidImportancia(new IncidImportancia.IncidImportanciaBuilder(
-                 new Incidencia.IncidenciaBuilder().copyIncidencia(incidencia_1).descripcion("modified_desc").ambitoIncid(new AmbitoIncidencia((short) 16)).build())
-                .usuarioComunidad(pepeUserComu)
-                .importancia((short) 2)
-                .build());
-        IncidImportancia incidImportanciaBd = IncidenciaServ.seeIncidImportancia(incidencia_1.getIncidenciaId());
+        assertThat(IncidenciaServ.modifyIncidImportancia(new IncidImportancia.IncidImportanciaBuilder(
+                        new Incidencia.IncidenciaBuilder().copyIncidencia(incidencia_1).descripcion("modified_desc").ambitoIncid(new AmbitoIncidencia((short) 16)).build())
+                        .usuarioComunidad(pepeUserComu)
+                        .importancia((short) 2)
+                        .build()),
+                is(2));
+        IncidImportancia incidImportanciaBd = IncidenciaServ.seeIncidImportancia(incidencia_1.getIncidenciaId()).getIncidImportancia();
         assertThat(incidImportanciaBd.getImportancia(), is((short) 2));
         assertThat(incidImportanciaBd.getIncidencia().getDescripcion(), is("modified_desc"));
         assertThat(incidImportanciaBd.getIncidencia().getAmbitoIncidencia().getAmbitoId(), is((short) 16));
+    }
+
+    @Test
+    public void testModifyResolucion_1() throws InterruptedException, UiException
+    {
+        whatClean = CLEAN_JUAN_AND_PEPE;
+
+        // Caso NOT OK: añadimos un avance a una resolución que no los tenía.
+        Resolucion resolucion = signPepeWithResolucion();
+        try {
+            IncidenciaServ.modifyResolucion(resolucion);
+            fail();
+        } catch (UiException ue) {
+            assertThat(ue.getInServiceException().getHttpMessage(), is(UNAUTHORIZED_TX_TO_USER.getHttpMessage()));
+        }
     }
 
     @Test
@@ -180,21 +218,56 @@ public class IncidServiceTest_2 {
             assertThat(ie.getInServiceException().getHttpMessage(), is(UNAUTHORIZED_TX_TO_USER.getHttpMessage()));
         }
     }
+
+    @Test
+    public void testSeeResolucion_1() throws InterruptedException, UiException
+    {
+        whatClean = CLEAN_JUAN_AND_PEPE;
+
+        Resolucion resolucion = signPepeWithResolucion();
+        assertThat(resolucion.getDescripcion(), is(RESOLUCION_DEFAULT_DESC));
+        assertThat(resolucion.getCosteEstimado(), is(1122));
+    }
+
 //    ============================= HELPER METHODS ===============================
 
     private void signPepeWithIncidImportancia() throws UiException
     {
         signPepeWithIncidencia();
         // Verificamos poderes: true; solo hay una incidenciaUser.
-        incidImportancia_1 = IncidenciaServ.seeIncidImportancia(incidencia_1.getIncidenciaId());
+        incidImportancia_1 = IncidenciaServ.seeIncidImportancia(incidencia_1.getIncidenciaId()).getIncidImportancia();
         assertThat(incidImportancia_1.isIniciadorIncidencia(), is(true));
     }
 
     private void signPepeWithIncidencia() throws UiException
     {
-        pepe = signUpAndUpdateTk(COMU_REAL_PEPE);
+        signPepeWithIncidencia(COMU_REAL_PEPE);
+    }
+
+    private void signPepeWithIncidencia(UsuarioComunidad userComu) throws UiException
+    {
+        pepe = signUpAndUpdateTk(userComu);
         pepeUserComu = ServOne.seeUserComusByUser().get(0);
         // Insertamos incidencia.
         incidencia_1 = insertGetIncidenciaUser(pepeUserComu, 1).getIncidencia();
+    }
+
+    /**
+     * Utiliad para tests donde el usario no tenga poderes adm y necesitemo un usuario que sí los tenga.
+     */
+    private Resolucion signPepeWithResolucion() throws UiException, InterruptedException
+    {
+        signPepeWithIncidencia(COMU_ESCORIAL_PEPE);
+        Thread.sleep(1000);
+        Resolucion resolucion = doResolucion(incidencia_1, RESOLUCION_DEFAULT_DESC, 1122, new Timestamp(new Date().getTime()));
+        assertThat(IncidenciaServ.regResolucion(resolucion), is(1));
+
+        // Registro userComu en misma comunidad y lo asocio a la incidencia.
+        juanUserComu = makeUserComuWithComunidadId(COMU_ESCORIAL_JUAN, pepeUserComu.getComunidad().getC_Id());
+        assertThat(ServOne.regUserAndUserComu(juanUserComu), is(true));
+        updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
+        juanUserComu = ServOne.getUserComuByUserAndComu(juanUserComu.getComunidad().getC_Id());
+        assertThat(juanUserComu.hasAdministradorAuthority(), is(false));
+        return IncidenciaServ.seeResolucion(resolucion.getIncidencia().getIncidenciaId());
     }
 }

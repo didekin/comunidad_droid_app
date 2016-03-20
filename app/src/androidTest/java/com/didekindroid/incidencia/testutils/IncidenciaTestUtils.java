@@ -21,6 +21,10 @@ import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaSer
  */
 public final class IncidenciaTestUtils {
 
+    public static final String INCID_DEFAULT_DESC = "Incidencia_1";
+    public static final String RESOLUCION_DEFAULT_DESC = "Resolucion_1";
+    public static final String AVANCE_DEFAULT_DES = "Avance_1";
+
     private IncidenciaTestUtils()
     {
     }
@@ -70,7 +74,7 @@ public final class IncidenciaTestUtils {
     public static IncidenciaUser insertGetIncidenciaUser(UsuarioComunidad userComu, int importancia) throws UiException
     {
         IncidImportancia incidImportancia = new IncidImportancia.IncidImportanciaBuilder(
-                doIncidencia(userComu.getUsuario().getUserName(), "Incidencia One", userComu.getComunidad().getC_Id(), (short) 43))
+                doIncidencia(userComu.getUsuario().getUserName(), INCID_DEFAULT_DESC, userComu.getComunidad().getC_Id(), (short) 43))
                 .usuarioComunidad(userComu)
                 .importancia((short) importancia)
                 .build();
@@ -81,7 +85,7 @@ public final class IncidenciaTestUtils {
 
     public static IncidenciaUser insertGetIncidenciaWithId(long incidenciaId, UsuarioComunidad userComu, int importancia) throws UiException
     {
-        IncidImportancia incidImportancia = new IncidImportancia.IncidImportanciaBuilder(doIncidenciaWithId(incidenciaId, "descripcion", userComu.getComunidad().getC_Id(), (short) 43))
+        IncidImportancia incidImportancia = new IncidImportancia.IncidImportanciaBuilder(doIncidenciaWithId(incidenciaId, INCID_DEFAULT_DESC, userComu.getComunidad().getC_Id(), (short) 43))
                 .usuarioComunidad(userComu)
                 .importancia((short) importancia)
                 .build();

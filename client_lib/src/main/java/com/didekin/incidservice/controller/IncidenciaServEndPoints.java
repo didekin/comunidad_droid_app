@@ -1,5 +1,6 @@
 package com.didekin.incidservice.controller;
 
+import com.didekin.incidservice.dominio.IncidAndResolBundle;
 import com.didekin.incidservice.dominio.IncidComment;
 import com.didekin.incidservice.dominio.IncidImportancia;
 import com.didekin.incidservice.dominio.IncidenciaUser;
@@ -63,7 +64,7 @@ public interface IncidenciaServEndPoints {
                       @Body Resolucion resolucion);
 
     @GET(SEE_INCID_IMPORTANCIA + "/{incidenciaId}")
-    IncidImportancia seeIncidImportancia(@Header("Authorization") String accessToken, @Path("incidenciaId") long incidenciaId);
+    IncidAndResolBundle seeIncidImportancia(@Header("Authorization") String accessToken, @Path("incidenciaId") long incidenciaId);
 
     @GET(SEE_INCID_COMMENTS + "/{incidenciaId}")
     List<IncidComment> seeCommentsByIncid(@Header("Authorization") String accessToken,

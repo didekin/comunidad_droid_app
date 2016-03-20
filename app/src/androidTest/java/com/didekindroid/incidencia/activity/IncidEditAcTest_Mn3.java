@@ -87,7 +87,7 @@ public class IncidEditAcTest_Mn3 {
                         .importancia((short) 3).build();
                 IncidenciaServ.regIncidImportancia(incidJuanEscorial);
                 IncidenciaUser incidenciaUserDb = IncidenciaServ.seeIncidsOpenByComu(juanEscorial.getComunidad().getC_Id()).get(0);
-                incidJuanEscorial = IncidenciaServ.seeIncidImportancia(incidenciaUserDb.getIncidencia().getIncidenciaId());
+                incidJuanEscorial = IncidenciaServ.seeIncidImportancia(incidenciaUserDb.getIncidencia().getIncidenciaId()).getIncidImportancia();
                 Thread.sleep(1000);
 
                 // Necesitamos usuario con 'adm' para registrar resolución.

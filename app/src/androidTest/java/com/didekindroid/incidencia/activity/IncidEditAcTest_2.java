@@ -85,7 +85,7 @@ public class IncidEditAcTest_2 {
                 pepeUserComu = ServOne.seeUserComusByUser().get(0);
                 // Insertamos incidencia.
                 IncidenciaUser incidenciaUser_1 = insertGetIncidenciaUser(pepeUserComu, 1);
-                incidPepeReal = IncidenciaServ.seeIncidImportancia(incidenciaUser_1.getIncidencia().getIncidenciaId());
+                incidPepeReal = IncidenciaServ.seeIncidImportancia(incidenciaUser_1.getIncidencia().getIncidenciaId()).getIncidImportancia();
 
                 // Registro userComu en misma comunidad y lo asocio a la incidencia.
                 UsuarioComunidad userComuJuan = makeUsuarioComunidad(pepeUserComu.getComunidad(), USER_JUAN,
@@ -95,7 +95,7 @@ public class IncidEditAcTest_2 {
                 Thread.sleep(1000);
                 Incidencia incidencia_2 = insertGetIncidenciaWithId(incidPepeReal.getIncidencia().getIncidenciaId(), userComuJuan, 2).getIncidencia();
                 // Verificamos poderes de Juan: false, porque no es userComu titular.
-                incidJuanReal = IncidenciaServ.seeIncidImportancia(incidencia_2.getIncidenciaId());
+                incidJuanReal = IncidenciaServ.seeIncidImportancia(incidencia_2.getIncidenciaId()).getIncidImportancia();
                 Assert.assertThat(incidJuanReal.isIniciadorIncidencia(), is(false));
             } catch (UiException | InterruptedException e) {
                 e.printStackTrace();

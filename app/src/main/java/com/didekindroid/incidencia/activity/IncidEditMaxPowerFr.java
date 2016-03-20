@@ -66,6 +66,7 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
         Log.d(TAG, "onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
         mIncidImportancia = ((IncidenciaDataSupplier) getActivity()).getIncidImportancia();
+        boolean flagResolucion = ((IncidenciaDataSupplier) getActivity()).getFlagResolucion();
 
         mIncidenciaBean = new IncidenciaBean();
         mIncidImportanciaBean = new IncidImportanciaBean();
@@ -90,10 +91,11 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
             }
         });
 
-        // Erase button doesn't appear when user hasn't adm authority.
+        // Erase button doesn't appear when user hasn't adm authority or there exists a resolucion for the incidencia.
         mButtonErase = (Button) getView().findViewById(R.id.incid_edit_max_fr_borrar_button);
-        if (! mIncidImportancia.getUserComu().hasAdministradorAuthority()){
+        if (!mIncidImportancia.getUserComu().hasAdministradorAuthority() || flagResolucion){
             mButtonErase.setVisibility(GONE);
+            // Texto que acompaña al botón.
             getView().findViewById(R.id.incid_edit_fr_borrar_txt).setVisibility(GONE);
         }
         mButtonErase.setOnClickListener(new View.OnClickListener() {

@@ -8,7 +8,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.didekin.incidservice.dominio.IncidImportancia;
+import com.didekin.incidservice.dominio.IncidAndResolBundle;
 import com.didekin.incidservice.dominio.Incidencia;
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekindroid.R;
@@ -18,6 +18,8 @@ import com.didekindroid.incidencia.gcm.GcmRegistrationIntentServ;
 import static com.didekindroid.common.activity.IntentExtraKey.COMUNIDAD_ID;
 import static com.didekindroid.common.activity.IntentExtraKey.INCIDENCIA_LIST_INDEX;
 import static com.didekindroid.common.activity.IntentExtraKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.common.activity.IntentExtraKey.INCID_RESOLUCION_FLAG;
+import static com.didekindroid.common.activity.IntentExtraKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.common.utils.UIutils.checkPlayServices;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.isGcmTokenSentServer;
@@ -125,7 +127,7 @@ public class IncidSeeByComuAc extends AppCompatActivity implements
     {
         Log.d(TAG, "onIncidenciaSelected()");
         mIncidenciaIndex = position;
-        new IncidUserGetter().execute(incidencia.getIncidenciaId());
+        new IncidImportanciaGetter().execute(incidencia.getIncidenciaId());
     }
 
     @Override
@@ -139,16 +141,16 @@ public class IncidSeeByComuAc extends AppCompatActivity implements
 //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
 //    ============================================================
 
-    private class IncidUserGetter extends AsyncTask<Long, Void, IncidImportancia> {
+    private class IncidImportanciaGetter extends AsyncTask<Long, Void, IncidAndResolBundle> {
 
-        private final String TAG = IncidUserGetter.class.getCanonicalName();
+        private final String TAG = IncidImportanciaGetter.class.getCanonicalName();
         UiException uiException;
 
         @Override
-        protected IncidImportancia doInBackground(final Long... incidenciaId)
+        protected IncidAndResolBundle doInBackground(final Long... incidenciaId)
         {
             Log.d(TAG, "doInBackground()");
-            IncidImportancia incidImportancia = null;
+            IncidAndResolBundle incidImportancia = null;
             try {
                 incidImportancia = IncidenciaServ.seeIncidImportancia(incidenciaId[0]);
             } catch (UiException e) {
@@ -158,16 +160,17 @@ public class IncidSeeByComuAc extends AppCompatActivity implements
         }
 
         @Override
-        protected void onPostExecute(IncidImportancia incidImportancia)
+        protected void onPostExecute(IncidAndResolBundle incidAndResolBundle)
         {
             Log.d(TAG, "onPostExecute()");
 
             if (uiException != null) {
                 uiException.processMe(IncidSeeByComuAc.this, new Intent());
             } else {
-                checkState(incidImportancia != null);
+                checkState(incidAndResolBundle != null);
                 Intent intent = new Intent(IncidSeeByComuAc.this, IncidEditAc.class);
-                intent.putExtra(INCID_IMPORTANCIA_OBJECT.extra, incidImportancia);
+                intent.putExtra(INCID_IMPORTANCIA_OBJECT.extra, incidAndResolBundle.getIncidImportancia());
+                intent.putExtra(INCID_RESOLUCION_FLAG.extra, incidAndResolBundle.hasResolucion());
                 startActivity(intent);
             }
         }

@@ -15,6 +15,7 @@ import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 
 import static com.didekindroid.common.activity.IntentExtraKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.common.activity.IntentExtraKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.common.activity.IntentExtraKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.common.activity.SavedInstanceKey.INCID_IMPORTANCIA;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
@@ -36,9 +37,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class IncidEditAc extends AppCompatActivity implements IncidenciaDataSupplier {
 
     private static final String TAG = IncidEditAc.class.getCanonicalName();
-    private static final String NO_RESOLUCION_INTENT = "NO resolucion intent in this action";
+
     View mAcView;
     IncidImportancia mIncidImportancia;
+    boolean flagResolucion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -46,6 +48,7 @@ public class IncidEditAc extends AppCompatActivity implements IncidenciaDataSupp
         Log.d(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
         mIncidImportancia = (IncidImportancia) getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.extra);
+        flagResolucion = getIntent().getBooleanExtra(INCID_RESOLUCION_FLAG.extra, false);
 
         mAcView = getLayoutInflater().inflate(R.layout.incid_edit_ac, null);
         setContentView(mAcView);
@@ -151,7 +154,12 @@ public class IncidEditAc extends AppCompatActivity implements IncidenciaDataSupp
     public Resolucion getResolucion()
     {
         Log.d(TAG, "getResolucion()");
-        throw new UnsupportedOperationException(NO_RESOLUCION_INTENT);
+        throw new UnsupportedOperationException();
+    }
+
+    public boolean getFlagResolucion(){
+        Log.d(TAG, "getFlagResolucion()");
+        return flagResolucion;
     }
 
 //    ============================================================

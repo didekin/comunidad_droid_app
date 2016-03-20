@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.didekin.common.exception.InServiceException;
 import com.didekin.incidservice.controller.IncidenciaServEndPoints;
+import com.didekin.incidservice.dominio.IncidAndResolBundle;
 import com.didekin.incidservice.dominio.IncidComment;
 import com.didekin.incidservice.dominio.IncidImportancia;
 import com.didekin.incidservice.dominio.IncidenciaUser;
@@ -76,7 +77,7 @@ public enum IncidService implements IncidenciaServEndPoints {
         }
 
         @Override
-        public IncidImportancia seeIncidImportancia(String accessToken, long incidenciaId)
+        public IncidAndResolBundle seeIncidImportancia(String accessToken, long incidenciaId)
         {
             return IncidenciaServ.endPoint.seeIncidImportancia(accessToken, incidenciaId);
         }
@@ -222,10 +223,10 @@ public enum IncidService implements IncidenciaServEndPoints {
         return comments;
     }
 
-    public IncidImportancia seeIncidImportancia(long incidenciaId) throws UiException
+    public IncidAndResolBundle seeIncidImportancia(long incidenciaId) throws UiException
     {
         Log.d(TAG, "seeIncidImportancia()");
-        IncidImportancia incidencia;
+        IncidAndResolBundle incidencia;
         try {
             incidencia = seeIncidImportancia(checkBearerToken(), incidenciaId);
         } catch (InServiceException e) {

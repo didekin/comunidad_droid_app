@@ -92,7 +92,7 @@ public class IncidResolucionRegFrTest {
                         .importancia((short) 3).build();
                 IncidenciaServ.regIncidImportancia(incidJuanReal1);
                 Incidencia incidenciaDb = IncidenciaServ.seeIncidsOpenByComu(juanReal.getComunidad().getC_Id()).get(0).getIncidencia();
-                incidJuanReal1 = IncidenciaServ.seeIncidImportancia(incidenciaDb.getIncidenciaId());
+                incidJuanReal1 = IncidenciaServ.seeIncidImportancia(incidenciaDb.getIncidenciaId()).getIncidImportancia();
             } catch (UiException e) {
                 e.printStackTrace();
             }

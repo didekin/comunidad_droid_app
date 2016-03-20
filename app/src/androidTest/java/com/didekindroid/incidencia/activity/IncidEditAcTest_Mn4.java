@@ -79,7 +79,7 @@ public class IncidEditAcTest_Mn4 {
                         .importancia((short) 3).build();
                 IncidenciaServ.regIncidImportancia(incidJuanPlazuelas);
                 IncidenciaUser incidenciaUserDb = IncidenciaServ.seeIncidsOpenByComu(juanPlazuelas.getComunidad().getC_Id()).get(0);
-                incidJuanPlazuelas = IncidenciaServ.seeIncidImportancia(incidenciaUserDb.getIncidencia().getIncidenciaId());
+                incidJuanPlazuelas = IncidenciaServ.seeIncidImportancia(incidenciaUserDb.getIncidencia().getIncidenciaId()).getIncidImportancia();
                 Thread.sleep(1000);
                 // Preconditions: resolución en BD.
                 resolucion = doResolucion(incidJuanPlazuelas.getIncidencia(), "resol_desc1", 1000, new Timestamp(new Date().getTime()));

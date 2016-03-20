@@ -97,7 +97,7 @@ public class IncidResolucionEditFrTest_2 {
                         .importancia((short) 3).build();
                 IncidenciaServ.regIncidImportancia(incidPepeEscorial);
                 IncidenciaUser incidenciaUserDb = IncidenciaServ.seeIncidsOpenByComu(pepeEscorial.getComunidad().getC_Id()).get(0);
-                incidPepeEscorial = IncidenciaServ.seeIncidImportancia(incidenciaUserDb.getIncidencia().getIncidenciaId());
+                incidPepeEscorial = IncidenciaServ.seeIncidImportancia(incidenciaUserDb.getIncidencia().getIncidenciaId()).getIncidImportancia();
 
                 // Registramos resolución.
                 Thread.sleep(1000);

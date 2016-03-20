@@ -76,7 +76,7 @@ public class IncidEditAcTest_Mn2 {
                         .importancia((short) 3).build();
                 IncidenciaServ.regIncidImportancia(incidJuanPlazuelas);
                 IncidenciaUser incidenciaUserDb = IncidenciaServ.seeIncidsOpenByComu(juanPlazuelas.getComunidad().getC_Id()).get(0);
-                incidJuanPlazuelas = IncidenciaServ.seeIncidImportancia(incidenciaUserDb.getIncidencia().getIncidenciaId());
+                incidJuanPlazuelas = IncidenciaServ.seeIncidImportancia(incidenciaUserDb.getIncidencia().getIncidenciaId()).getIncidImportancia();
             } catch (UiException e) {
                 e.printStackTrace();
             }

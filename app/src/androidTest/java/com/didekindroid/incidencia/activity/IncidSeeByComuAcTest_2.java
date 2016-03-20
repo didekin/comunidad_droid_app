@@ -289,7 +289,7 @@ public class IncidSeeByComuAcTest_2 {
                 .check(matches(isDisplayed()))
                 .perform(click());
 
-        IncidImportancia incidImportancia = IncidenciaServ.seeIncidImportancia(incidencia_0.getIncidenciaId());
+        IncidImportancia incidImportancia = IncidenciaServ.seeIncidImportancia(incidencia_0.getIncidenciaId()).getIncidImportancia();
         intended(hasExtra(INCID_IMPORTANCIA_OBJECT.extra, incidImportancia));
         onView(withId(R.id.incid_edit_fragment_container_ac)).check(matches(isDisplayed()));
     }

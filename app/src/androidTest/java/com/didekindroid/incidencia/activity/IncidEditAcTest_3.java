@@ -89,7 +89,7 @@ public class IncidEditAcTest_3 {
                         "portal", "esc", "plantaX", "door12", PROPIETARIO.function);
                 ServOne.regUserAndUserComu(userComuJuan);
                 updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
-                incidJuanReal = IncidenciaServ.seeIncidImportancia(incidenciaUser_1.getIncidencia().getIncidenciaId());
+                incidJuanReal = IncidenciaServ.seeIncidImportancia(incidenciaUser_1.getIncidencia().getIncidenciaId()).getIncidImportancia();
             } catch (UiException e) {
                 e.printStackTrace();
             }

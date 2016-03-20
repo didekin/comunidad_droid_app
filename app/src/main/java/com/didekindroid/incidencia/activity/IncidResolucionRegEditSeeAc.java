@@ -8,7 +8,6 @@ import android.view.View;
 import com.didekin.incidservice.dominio.IncidImportancia;
 import com.didekin.incidservice.dominio.Resolucion;
 import com.didekindroid.R;
-import com.didekindroid.common.activity.FragmentTags;
 import com.didekindroid.common.activity.IntentExtraKey;
 
 import static com.didekindroid.common.activity.FragmentTags.incid_resolucion_edit_fr_tag;
@@ -130,6 +129,13 @@ public class IncidResolucionRegEditSeeAc extends AppCompatActivity implements
     {
         Log.d(TAG, "getResolucion()");
         return mResolucion;
+    }
+
+    @Override
+    public boolean getFlagResolucion()
+    {
+        Log.d(TAG, "getFlagResolucion()");
+        return !(mResolucion == null);
     }
 
 //    ============================================================

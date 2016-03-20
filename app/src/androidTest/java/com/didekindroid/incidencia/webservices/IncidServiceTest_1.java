@@ -4,6 +4,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.common.exception.DidekinExceptionMsg;
 import com.didekin.incidservice.dominio.AmbitoIncidencia;
+import com.didekin.incidservice.dominio.Avance;
 import com.didekin.incidservice.dominio.IncidComment;
 import com.didekin.incidservice.dominio.IncidImportancia;
 import com.didekin.incidservice.dominio.Incidencia;
@@ -19,6 +20,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -30,6 +32,9 @@ import static com.didekin.common.oauth2.Rol.PROPIETARIO;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.testutils.ActivityTestUtils.updateSecurityData;
+import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.AVANCE_DEFAULT_DES;
+import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.INCID_DEFAULT_DESC;
+import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.RESOLUCION_DEFAULT_DESC;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doComment;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidenciaWithId;
@@ -45,6 +50,7 @@ import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_JUAN;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.makeUserComuWithComunidadId;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
@@ -76,13 +82,40 @@ public class IncidServiceTest_1 {
     }
 
     @Test
+    public void testCloseIncidencia_1() throws InterruptedException, UiException
+    {
+        // CASO OK: cerramos incidencia con resolución sin modificar y avance en blanco.
+        Resolucion resolucion = insertGetDefaultResolucion();
+        Incidencia incidencia = IncidenciaServ.seeIncidImportancia(resolucion.getIncidencia().getIncidenciaId()).getIncidImportancia().getIncidencia();
+        assertThat(incidencia.getFechaCierre(), nullValue());
+        // Nuevos datos.
+        Avance avance = new Avance.AvanceBuilder().avanceDesc("").userName(resolucion.getUserName()).build();
+        List<Avance> avances = new ArrayList<>(1);
+        avances.add(avance);
+        resolucion = new Resolucion.ResolucionBuilder(resolucion.getIncidencia())
+                .copyResolucion(resolucion)
+                .avances(avances)
+                .build();
+
+        assertThat(IncidenciaServ.closeIncidencia(resolucion), is(2)); // Accede a 2 tablas.
+        try {
+            IncidenciaServ.seeIncidImportancia(resolucion.getIncidencia().getIncidenciaId()).getIncidImportancia().getIncidencia();
+            fail();
+        } catch (UiException ue) {
+            // La incidencia no se encuentra por la consulta de incidencias abiertas.
+            // TODO: sustituir con la consulta de incidencias cerradas.
+            assertThat(ue.getInServiceException().getHttpMessage(), is(DidekinExceptionMsg.INCIDENCIA_NOT_FOUND.getHttpMessage()));
+        }
+    }
+
+    @Test
     public void testDeleteIncidencia_1() throws UiException
     {
-        // Existe la incidencia; la borrarmos.
+        // Caso OK: existe la incidencia; la borrarmos.
         Incidencia incidencia = insertGetIncidenciaUser(pepeUserComu, 1).getIncidencia();
         assertThat(IncidenciaServ.deleteIncidencia(incidencia.getIncidenciaId()), is(1));
 
-        // Intentamos borrarla de nuevo: la app. redirige a la consulta de incidencias.
+        // Caso NOT OK: intentamos borrarla de nuevo: la app. redirige a la consulta de incidencias.
         try {
             IncidenciaServ.deleteIncidencia(incidencia.getIncidenciaId());
             fail();
@@ -98,12 +131,12 @@ public class IncidServiceTest_1 {
 
         // Caso OK: usuario iniciador. Modificamos incidencia e importancia.
         IncidImportancia pepeIncidImportancia = new IncidImportancia.IncidImportanciaBuilder(
-                new Incidencia.IncidenciaBuilder().copyIncidencia(incidenciaDb).descripcion("modified_desc").ambitoIncid(new AmbitoIncidencia((short)11)).build())
+                new Incidencia.IncidenciaBuilder().copyIncidencia(incidenciaDb).descripcion("modified_desc").ambitoIncid(new AmbitoIncidencia((short) 11)).build())
                 .usuarioComunidad(pepeUserComu)
                 .importancia((short) 2)
                 .build();
         assertThat(IncidenciaServ.modifyIncidImportancia(pepeIncidImportancia), is(2));
-        pepeIncidImportancia = IncidenciaServ.seeIncidImportancia(incidenciaDb.getIncidenciaId());
+        pepeIncidImportancia = IncidenciaServ.seeIncidImportancia(incidenciaDb.getIncidenciaId()).getIncidImportancia();
         assertThat(pepeIncidImportancia.getImportancia(), is((short) 2));
         assertThat(pepeIncidImportancia.getIncidencia().getDescripcion(), is("modified_desc"));
 
@@ -120,6 +153,28 @@ public class IncidServiceTest_1 {
         } catch (UiException u) {
             assertThat(u.getInServiceException().getHttpMessage(), is(INCIDENCIA_NOT_FOUND.getHttpMessage()));
         }
+    }
+
+    @Test
+    public void testModifyResolucion_1() throws InterruptedException, UiException
+    {
+        // Caso OK: modificamos resolución sin avances previos.
+
+        Resolucion resolucion = insertGetDefaultResolucion();
+        assertThat(resolucion.getAvances().size(), is(0));
+        // Nuevos datos.
+        Avance avance = new Avance.AvanceBuilder().avanceDesc(AVANCE_DEFAULT_DES)
+                .userName(resolucion.getUserName()).build();
+        List<Avance> avances = new ArrayList<>(1);
+        avances.add(avance);
+        resolucion = new Resolucion.ResolucionBuilder(resolucion.getIncidencia())
+                .copyResolucion(resolucion)
+                .descripcion("new_resolucion_1")
+                .avances(avances)
+                .build();
+        assertThat(IncidenciaServ.modifyResolucion(resolucion), is(2));
+        assertThat(resolucion.getAvances().size(), is(1));
+        assertThat(resolucion.getDescripcion(), is("new_resolucion_1"));
     }
 
     @Test
@@ -315,7 +370,7 @@ public class IncidServiceTest_1 {
     {
         // Caso OK.
         Incidencia incidencia = insertGetIncidenciaUser(pepeUserComu, 1).getIncidencia();
-        IncidImportancia incidImportancia = IncidenciaServ.seeIncidImportancia(incidencia.getIncidenciaId());
+        IncidImportancia incidImportancia = IncidenciaServ.seeIncidImportancia(incidencia.getIncidenciaId()).getIncidImportancia();
         assertThat(incidImportancia.isIniciadorIncidencia(), is(true));
     }
 
@@ -360,7 +415,7 @@ public class IncidServiceTest_1 {
         ServOne.regUserAndUserComu(makeUserComuWithComunidadId(COMU_ESCORIAL_JUAN, incidencia.getComunidad().getC_Id()));
         updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
 
-        IncidImportancia incidImportancia = IncidenciaServ.seeIncidImportancia(incidencia.getIncidenciaId());
+        IncidImportancia incidImportancia = IncidenciaServ.seeIncidImportancia(incidencia.getIncidenciaId()).getIncidImportancia();
         assertThat(incidImportancia.getIncidencia(), is(incidencia));
         assertThat(incidImportancia.getImportancia(), is((short) 0));
         assertThat(incidImportancia.getUserComu().getUsuario().getAlias(), is(USER_JUAN.getAlias()));
@@ -374,7 +429,7 @@ public class IncidServiceTest_1 {
     @Test
     public void tesSeeIncidsOpenByComu_1() throws UiException
     {
-        IncidImportancia incidPepe = new IncidImportancia.IncidImportanciaBuilder(doIncidencia(pepe.getUserName(), "Incidencia One", pepeUserComu.getComunidad().getC_Id(), (short) 43))
+        IncidImportancia incidPepe = new IncidImportancia.IncidImportanciaBuilder(doIncidencia(pepe.getUserName(), INCID_DEFAULT_DESC, pepeUserComu.getComunidad().getC_Id(), (short) 43))
                 .usuarioComunidad(pepeUserComu)
                 .importancia((short) 3)
                 .build();
@@ -400,5 +455,41 @@ public class IncidServiceTest_1 {
         }
     }
 
+    @Test
+    public void testSeeResolucion_1() throws UiException, InterruptedException
+    {
+        // Caso OK.
+        Resolucion resolucion = insertGetDefaultResolucion();
+        assertThat(resolucion.getDescripcion(), is(RESOLUCION_DEFAULT_DESC));
+        assertThat(resolucion.getFechaPrev().getTime() > 0L, is(true));
+    }
+
+    @Test
+    public void testSeeResolucion_2() throws UiException, InterruptedException
+    {
+        // Caso NOT OK: incidencia no existe.
+        Incidencia incidencia = insertGetIncidenciaUser(pepeUserComu, 1).getIncidencia();
+        incidencia = new Incidencia.IncidenciaBuilder().copyIncidencia(incidencia).incidenciaId(999L).build();
+        Thread.sleep(1000);
+        Resolucion resolucion = doResolucion(incidencia, RESOLUCION_DEFAULT_DESC, 1122, new Timestamp(new Date().getTime()));
+        try {
+            IncidenciaServ.seeResolucion(resolucion.getIncidencia().getIncidenciaId());
+            fail();
+        } catch (UiException ue) {
+            assertThat(ue.getInServiceException().getHttpMessage(), is(INCIDENCIA_NOT_FOUND.getHttpMessage()));
+        }
+    }
+
     //    ============================= HELPER METHODS ===============================
+
+    private Resolucion insertGetDefaultResolucion() throws UiException, InterruptedException
+    {
+        // Insertamos resolución.
+        Incidencia incidencia = insertGetIncidenciaUser(pepeUserComu, 1).getIncidencia();
+        Thread.sleep(1000);
+        Resolucion resolucion = doResolucion(incidencia, RESOLUCION_DEFAULT_DESC, 1122, new Timestamp(new Date().getTime()));
+        assertThat(IncidenciaServ.regResolucion(resolucion), is(1));
+
+        return IncidenciaServ.seeResolucion(resolucion.getIncidencia().getIncidenciaId());
+    }
 }

@@ -11,4 +11,6 @@ import com.didekin.incidservice.dominio.Resolucion;
 interface IncidenciaDataSupplier {
     IncidImportancia getIncidImportancia();
     Resolucion getResolucion();
+    boolean getFlagResolucion();
+
 }
