@@ -28,10 +28,12 @@ import java.util.Locale;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.pressBack;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtraWithKey;
 import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -40,6 +42,7 @@ import static com.didekindroid.common.activity.FragmentTags.incid_resolucion_edi
 import static com.didekindroid.common.activity.IntentExtraKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.activity.IntentExtraKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkNavigateUp;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.utils.UIutils.SPAIN_LOCALE;
@@ -83,7 +86,8 @@ public class IncidResolucionEditFrTest_2 {
          * Preconditions:
          * 1. A user WITH powers to edit a resolucion is received.
          * 2. A resolucion in BD and intent.
-         * 3. Resolucion with avances.
+         * 3. Resolucion WITH avances.
+         * 4. Incidencia is OPEN.
          * */
         @Override
         protected Intent getActivityIntent()
@@ -226,6 +230,20 @@ public class IncidResolucionEditFrTest_2 {
         Resolucion resolucionDb = IncidenciaServ.seeResolucion(resolucion.getIncidencia().getIncidenciaId());
         assertThat(resolucionDb.getAvances().size(), is(2));
         assertThat(resolucionDb.getAvances().get(1).getAvanceDesc(), is("avance2_desc_válida"));
+    }
+
+    @Test
+    public void testCloseIncidencia_1()
+    {
+        // Caso NOT OK: cerramos la incidencia, damos back y volvemos a intentar cerrarla.
+        onView(withId(R.id.incid_resolucion_edit_fr_close_button)).perform(click());
+        intended(not(hasExtraWithKey(INCID_IMPORTANCIA_OBJECT.extra)));
+
+        onView(withId(R.id.incid_see_closed_by_comu_ac)).check(matches(isDisplayed())).perform(pressBack());
+
+        onView(withId(R.id.incid_resolucion_edit_fr_close_button)).perform(click());
+        checkToastInTest(R.string.incidencia_wrong_init, mActivity);
+        onView(withId(R.id.incid_see_by_comu_ac)).check(matches(isDisplayed()));
     }
 
 /*    ============================= HELPER METHODS ===========================*/

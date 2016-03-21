@@ -58,7 +58,7 @@
             android:text="@string/incid_edit_borrar_txt" />
 
         <Button
-            android:id="@+id/incid_edit_max_fr_borrar_button"
+            android:id="@+id/incid_edit_fr_borrar_button"
             style="@style/textBase.acButton1"
             android:text="@string/incid_edit_borrar_button_rot"
             android:layout_below="@id/incid_edit_fr_borrar_txt"/>

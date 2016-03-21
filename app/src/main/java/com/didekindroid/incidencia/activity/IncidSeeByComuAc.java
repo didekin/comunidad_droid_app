@@ -150,13 +150,13 @@ public class IncidSeeByComuAc extends AppCompatActivity implements
         protected IncidAndResolBundle doInBackground(final Long... incidenciaId)
         {
             Log.d(TAG, "doInBackground()");
-            IncidAndResolBundle incidImportancia = null;
+            IncidAndResolBundle incidAndResolBundle = null;
             try {
-                incidImportancia = IncidenciaServ.seeIncidImportancia(incidenciaId[0]);
+                incidAndResolBundle = IncidenciaServ.seeIncidImportancia(incidenciaId[0]);
             } catch (UiException e) {
                 uiException = e;
             }
-            return incidImportancia;
+            return incidAndResolBundle;
         }
 
         @Override

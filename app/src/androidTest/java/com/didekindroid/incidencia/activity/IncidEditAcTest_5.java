@@ -7,10 +7,10 @@ import android.support.test.espresso.matcher.ViewMatchers;
 import com.didekin.incidservice.dominio.IncidAndResolBundle;
 import com.didekin.incidservice.dominio.IncidImportancia;
 import com.didekin.incidservice.dominio.Incidencia;
+import com.didekin.incidservice.dominio.Resolucion;
 import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
-import com.didekindroid.common.testutils.ActivityTestUtils;
 import com.didekindroid.incidencia.repository.IncidenciaDataDbHelper;
 
 import org.junit.After;
@@ -20,28 +20,30 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import java.io.File;
+import java.sql.Timestamp;
+import java.util.Date;
 
 import static android.database.sqlite.SQLiteDatabase.deleteDatabase;
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.pressBack;
-import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.common.activity.IntentExtraKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.activity.IntentExtraKey.INCID_RESOLUCION_FLAG;
-import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkNavigateUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.incidencia.repository.IncidenciaDataDbHelperTest.DB_PATH;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.INCID_DEFAULT_DESC;
+import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.RESOLUCION_DEFAULT_DESC;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
+import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doResolucion;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
@@ -50,7 +52,7 @@ import static org.junit.Assert.assertThat;
  * Date: 17/03/16
  * Time: 15:51
  */
-public class IncidEditAcTest_4 {
+public class IncidEditAcTest_5 {
 
     IncidEditAc mActivity;
     IncidAndResolBundle incidResolPepeEscorial;
@@ -66,9 +68,9 @@ public class IncidEditAcTest_4 {
         /**
          * Preconditions:
          * 1. An IncidenciaUser with powers to modify and to erase is received.
-         * 2. There isn't resolucion in BD.
+         * 2. There is resolucion in BD.
          * Postconditions:
-         * 1. Erase button is shown.
+         * 1. Erase button is NOT shown.
          * */
         @Override
         protected Intent getActivityIntent()
@@ -83,8 +85,12 @@ public class IncidEditAcTest_4 {
                         .build();
                 IncidenciaServ.regIncidImportancia(incidPepeEscorial);
                 Incidencia incidenciaDb = IncidenciaServ.seeIncidsOpenByComu(pepeEscorial.getComunidad().getC_Id()).get(0).getIncidencia();
+                // Registramos resolución.
+                Thread.sleep(1000);
+                Resolucion resolucion = doResolucion(incidenciaDb, RESOLUCION_DEFAULT_DESC, 1000, new Timestamp(new Date().getTime()));
+                assertThat(IncidenciaServ.regResolucion(resolucion), is(1));
                 incidResolPepeEscorial = IncidenciaServ.seeIncidImportancia(incidenciaDb.getIncidenciaId());
-            } catch (UiException e) {
+            } catch (UiException | InterruptedException e) {
                 e.printStackTrace();
             }
             Intent intent = new Intent();
@@ -107,8 +113,8 @@ public class IncidEditAcTest_4 {
         // Premisas.
         IncidImportancia incidImportancia = (IncidImportancia) mActivity.getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.extra);
         assertThat(incidImportancia.getUserComu().hasAdministradorAuthority(), is(true));
-        boolean hasResolucionInBd = mActivity.getIntent().getBooleanExtra(INCID_RESOLUCION_FLAG.extra, true);
-        assertThat(hasResolucionInBd, is(false));
+        boolean hasResolucionInBd = mActivity.getIntent().getBooleanExtra(INCID_RESOLUCION_FLAG.extra, false);
+        assertThat(hasResolucionInBd, is(true));
     }
 
     @After
@@ -118,7 +124,6 @@ public class IncidEditAcTest_4 {
         deleteDatabase(new File(dBFileName));
         cleanOptions(CLEAN_PEPE);
     }
-
 
     @Test
     public void testOnCreate() throws Exception
@@ -135,30 +140,10 @@ public class IncidEditAcTest_4 {
         onView(withId(R.id.incid_edit_fr_modif_button)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_comunidad_txt)).check(matches(isDisplayed()));
 
-        // Usuario con autoridad adm, no hay resolución en BD: la pantalla presenta el botón de borrar.
-        onView(withId(R.id.incid_edit_fr_borrar_txt)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_edit_fr_borrar_button)).check(matches(isDisplayed()));
+        // Usuario con autoridad adm, hay resolución en BD: la pantalla NO presenta el botón de borrar.
+        onView(withId(R.id.incid_edit_fr_borrar_txt)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.incid_edit_fr_borrar_button)).check(matches(not(isDisplayed())));
 
-        ActivityTestUtils.checkNavigateUp();
-    }
-
-    @Test
-    public void testDeleteIncidencia_1()
-    {
-        /* CASO OK: borramos la incidencia.*/
-        onView(withId(R.id.incid_edit_fr_borrar_button)).perform(scrollTo(), click());
-        onView(withId(R.id.incid_see_by_comu_ac)).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void testDeleteIncidencia_2()
-    {
-        /* CASO NOT OK: intentamos borrar una incidencia ya borrada.*/
-        onView(withId(R.id.incid_edit_fr_borrar_button)).perform(scrollTo(), click());
-        onView(withId(R.id.incid_see_by_comu_ac)).check(matches(isDisplayed())).perform(pressBack());
-
-        onView(withId(R.id.incid_edit_fr_borrar_button)).check(matches(isDisplayed())).perform(click());
-        checkToastInTest(R.string.incidencia_wrong_init, mActivity);
-        onView(withId(R.id.incid_see_by_comu_ac)).check(matches(isDisplayed()));
+        checkNavigateUp();
     }
 }

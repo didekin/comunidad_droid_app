@@ -129,8 +129,6 @@ public class IncidenciaDataDbHelper extends SQLiteOpenHelper {
 
     private long addAmbitoIncidencia(short pk, String nombre)
     {
-        Log.d(TAG, "En addAmbitoIncidencia()");
-
         ContentValues values = new ContentValues();
         values.put(_ID, pk);
         values.put(ambito, nombre);

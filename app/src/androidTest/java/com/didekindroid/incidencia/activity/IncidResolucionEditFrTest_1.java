@@ -26,11 +26,13 @@ import java.util.Locale;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.pressBack;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.PickerActions.setDate;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtraWithKey;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -52,6 +54,7 @@ import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -80,7 +83,7 @@ public class IncidResolucionEditFrTest_1 {
          * Preconditions:
          * 1. A user WITH powers to edit a resolucion is received.
          * 2. A resolucion in BD and intent.
-         * 3. Resolucion without avances.
+         * 3. Resolucion WITHOUT avances.
          * */
         @Override
         protected Intent getActivityIntent()
@@ -163,7 +166,7 @@ public class IncidResolucionEditFrTest_1 {
     {
         // Caso: los datos que se muestran por defecto.
         // Fecha.
-        if (Locale.getDefault().equals(SPAIN_LOCALE)){
+        if (Locale.getDefault().equals(SPAIN_LOCALE)) {
             onView(allOf(
                     withId(R.id.incid_resolucion_fecha_view),
                     withText("25/4/2016")
@@ -240,6 +243,22 @@ public class IncidResolucionEditFrTest_1 {
         onView(withId(R.id.incid_resolucion_fr_modif_button)).perform(click());
 
         checkToastInTest(R.string.error_validation_msg, mActivity, R.string.incid_resolucion_avance_rot);
+    }
+
+    @Test
+    public void testCloseIncidencia_1()
+    {
+        // Caso OK: cerramos incidencia sin cambiar datos en pantalla.
+        onView(withId(R.id.incid_resolucion_edit_fr_close_button)).perform(click());
+
+        onView(withId(R.id.incid_see_closed_by_comu_ac)).check(matches(isDisplayed()));
+        intended(not(hasExtraWithKey(INCID_IMPORTANCIA_OBJECT.extra)));
+
+        // Damos back e intentamos modificar la incidencia. Nos da error.
+        onView(withId(R.id.incid_see_closed_by_comu_ac)).check(matches(isDisplayed())).perform(pressBack());
+        onView(withId(R.id.incid_resolucion_fr_modif_button)).perform(click());
+        checkToastInTest(R.string.incidencia_wrong_init, mActivity);
+        onView(withId(R.id.incid_see_by_comu_ac)).check(matches(isDisplayed()));
     }
 
 //    ============================= HELPER METHODS ===========================

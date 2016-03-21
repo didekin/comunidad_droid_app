@@ -240,11 +240,9 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
 
             if (uiException != null) {
                 Intent intent = new Intent();
-                // TODO: una vez cerrado el trat. de excepciones, ver si me hace falta IncidImportancia.
-                intent.putExtra(INCID_IMPORTANCIA_OBJECT.extra, mActivitySupplier.getIncidImportancia());
                 uiException.processMe(getActivity(), intent);
             } else {
-                checkState(incidenciaCancelled == 1);
+                checkState(incidenciaCancelled >= 2);
                 Intent intent = new Intent(getActivity(), IncidSeeClosedByComuAc.class);
                 startActivity(intent);
             }

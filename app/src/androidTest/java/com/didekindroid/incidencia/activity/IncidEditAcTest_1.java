@@ -9,7 +9,6 @@ import com.didekin.incidservice.dominio.Incidencia;
 import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
-import com.didekindroid.common.testutils.ActivityTestUtils;
 import com.didekindroid.incidencia.repository.IncidenciaDataDbHelper;
 
 import org.hamcrest.core.AllOf;
@@ -35,6 +34,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkNavigateUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
@@ -143,7 +143,11 @@ public class IncidEditAcTest_1 {
         onView(withId(R.id.incid_edit_fr_modif_button)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_comunidad_txt)).check(matches(isDisplayed()));
 
-        ActivityTestUtils.checkNavigateUp();
+        // Usuario iniciador sin autoridad adm: la pantalla no presenta el botón de borrar.
+        onView(withId(R.id.incid_edit_fr_borrar_txt)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.incid_edit_fr_borrar_button)).check(matches(not(isDisplayed())));
+
+        checkNavigateUp();
     }
 
     @Test
@@ -175,7 +179,7 @@ public class IncidEditAcTest_1 {
     @Test
     public void testModifyIncidencia_1()
     {
-        // Descripción de incidencia no válida.
+        // Cason NOT OK: descripción de incidencia no válida.
         onView(withId(R.id.incid_reg_desc_ed)).perform(replaceText("descripcion = not valid"));
         onView(withId(R.id.incid_edit_fr_modif_button)).perform(scrollTo(), click());
         checkToastInTest(R.string.error_validation_msg, mActivity, R.string.incid_reg_descripcion);
@@ -198,14 +202,6 @@ public class IncidEditAcTest_1 {
 
         onView(withId(R.id.incid_edit_fr_modif_button)).perform(scrollTo(), click());
         onView(withId(R.id.incid_see_by_comu_ac)).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void testDeleteIncidencia_1()
-    {
-        // Usuario iniciador sin autoridad adm: la pantalla no presenta el botón de borrar.
-        onView(withId(R.id.incid_edit_fr_borrar_txt)).check(matches(not(isDisplayed())));
-        onView(withId(R.id.incid_edit_max_fr_borrar_button)).check(matches(not(isDisplayed())));
     }
 }
 
