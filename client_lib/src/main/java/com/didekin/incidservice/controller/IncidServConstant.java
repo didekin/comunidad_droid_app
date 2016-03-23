@@ -22,8 +22,8 @@ public final class IncidServConstant {
     public static final String REG_INCID_IMPORTANCIA = INCID_WRITE;
     public static final String REG_RESOLUCION = INCID_WRITE + "/resolucion/reg";
     public static final String SEE_INCID_IMPORTANCIA = INCID_READ;
-    public static final String SEE_INCID_OPEN_BY_COMU = INCID_READ + "/see";
-    public static final String SEE_INCID_CLOSED_BY_COMU = INCID_READ + "/see/closed";
+    public static final String SEE_INCIDS_OPEN_BY_COMU = INCID_READ + "/open";
+    public static final String SEE_INCIDS_CLOSED_BY_COMU = INCID_READ + "/old";
     public static final String SEE_INCID_COMMENTS = INCID_READ + "/comment/see";
     public static final String SEE_RESOLUCION = INCID_READ + "/resolucion/see";
 }

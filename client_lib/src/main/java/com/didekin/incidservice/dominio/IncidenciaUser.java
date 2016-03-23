@@ -7,7 +7,6 @@ import com.didekin.usuario.dominio.Usuario;
 import java.io.InvalidObjectException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
-import java.util.Objects;
 
 import static com.didekin.common.exception.DidekinExceptionMsg.INCIDENCIA_USER_WRONG_INIT;
 
@@ -19,7 +18,7 @@ import static com.didekin.common.exception.DidekinExceptionMsg.INCIDENCIA_USER_W
 
 /**
  * Holder object for the incidencia and its initiating user data.
- * Integrity constraint: incidencia.userName == userComu.userName.
+ * Integrity constraint: incidencia.userName == userComu.userName, if both exists.
  */
 public class IncidenciaUser implements Serializable {
 
@@ -106,8 +105,8 @@ public class IncidenciaUser implements Serializable {
         public IncidenciaUser build()
         {
             IncidenciaUser incidenciaUser = new IncidenciaUser(this);
-            if (incidenciaUser.incidencia == null || incidenciaUser.usuario == null ||
-                    !Objects.equals(incidenciaUser.usuario.getUserName(), incidencia.getUserName())) {
+
+            if (incidenciaUser.incidencia == null || incidenciaUser.incidencia.getUserName() == null){
                 throw new IllegalStateException(INCIDENCIA_USER_WRONG_INIT.toString());
             }
             return incidenciaUser;

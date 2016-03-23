@@ -24,9 +24,9 @@ import static com.didekin.incidservice.controller.IncidServConstant.REG_INCID_CO
 import static com.didekin.incidservice.controller.IncidServConstant.REG_INCID_IMPORTANCIA;
 import static com.didekin.incidservice.controller.IncidServConstant.REG_RESOLUCION;
 import static com.didekin.incidservice.controller.IncidServConstant.SEE_INCID_IMPORTANCIA;
-import static com.didekin.incidservice.controller.IncidServConstant.SEE_INCID_CLOSED_BY_COMU;
+import static com.didekin.incidservice.controller.IncidServConstant.SEE_INCIDS_CLOSED_BY_COMU;
 import static com.didekin.incidservice.controller.IncidServConstant.SEE_INCID_COMMENTS;
-import static com.didekin.incidservice.controller.IncidServConstant.SEE_INCID_OPEN_BY_COMU;
+import static com.didekin.incidservice.controller.IncidServConstant.SEE_INCIDS_OPEN_BY_COMU;
 import static com.didekin.incidservice.controller.IncidServConstant.SEE_RESOLUCION;
 
 /**
@@ -70,13 +70,12 @@ public interface IncidenciaServEndPoints {
     List<IncidComment> seeCommentsByIncid(@Header("Authorization") String accessToken,
                                           @Path("incidenciaId") long incidenciaId);
 
-    @GET(SEE_INCID_OPEN_BY_COMU + "/{comunidadId}")
-    List<IncidenciaUser> seeIncidsOpenByComu(@Header("Authorization") String accessToken,
-                                             @Path("comunidadId") long comunidadId);
-
-    @GET(SEE_INCID_CLOSED_BY_COMU + "/{comunidadId}")
+    @GET(SEE_INCIDS_CLOSED_BY_COMU + "/{comunidadId}")
     List<IncidenciaUser> seeIncidsClosedByComu(@Header("Authorization") String accessToken,
                                                @Path("comunidadId") long comunidadId);
+
+    @GET(SEE_INCIDS_OPEN_BY_COMU + "/{comunidadId}")
+    List<IncidenciaUser> seeIncidsOpenByComu(@Header("Authorization") String accessToken, @Path("comunidadId") long comunidadId);
 
     @GET(SEE_RESOLUCION + "/{resolucionId}")
     Resolucion seeResolucion(@Header("Authorization") String accessToken, @Path("resolucionId") long resolucionId);

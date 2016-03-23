@@ -20,11 +20,11 @@ import static com.didekindroid.common.utils.UIutils.formatTimeStampToString;
  * Date: 18/12/15
  * Time: 13:21
  */
-public class IncidSeeByComuAdapter extends ArrayAdapter<IncidenciaUser> {
+public class IncidSeeClosedByComuAdapter extends ArrayAdapter<IncidenciaUser> {
 
-    private static final String TAG = IncidSeeByComuAdapter.class.getCanonicalName();
+    private static final String TAG = IncidSeeClosedByComuAdapter.class.getCanonicalName();
 
-    public IncidSeeByComuAdapter(Context context)
+    public IncidSeeClosedByComuAdapter(Context context)
     {
         super(context, R.layout.incid_see_by_comu_list_item, R.id.incid_descripcion_view);
     }
@@ -35,7 +35,7 @@ public class IncidSeeByComuAdapter extends ArrayAdapter<IncidenciaUser> {
         Log.d(TAG, "getView()");
         IncidenciaUserViewHolder viewHolder;
 
-        if (convertView == null){
+        if (convertView == null) {
             Log.d(TAG, "getView(), convertView == null");
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.incid_see_by_comu_list_item, parent, false);
             viewHolder = new IncidenciaUserViewHolder(convertView);
@@ -72,7 +72,7 @@ public class IncidSeeByComuAdapter extends ArrayAdapter<IncidenciaUser> {
             Log.d(TAG, "initializeTextInViews()");
             mDescripcionView.setText(incidenciaUser.getIncidencia().getDescripcion());
             mFechaAltaView.setText(formatTimeStampToString(incidenciaUser.getIncidencia().getFechaAlta()));
-            mIniciador.setText(incidenciaUser.getUsuario().getAlias());
+            mIniciador.setText(incidenciaUser.getUsuario() != null ? incidenciaUser.getUsuario().getAlias() : incidenciaUser.getIncidencia().getUserName());
             short ambitoPk = incidenciaUser.getIncidencia().getAmbitoIncidencia().getAmbitoId();
             mAmbitoView.setText(new IncidenciaDataDbHelper(getContext()).getAmbitoDescByPk(ambitoPk));
             int mImportanciaAvg = Math.round(incidenciaUser.getIncidencia().getImportanciaAvg());
