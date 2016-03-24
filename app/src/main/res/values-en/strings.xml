@@ -77,9 +77,9 @@
     <string name="incid_resolucion_coste_prev_msg">Coste estimado</string>
     <!-- ====== IncidResolucionSeeDefaultFr ====== -->
     <string name="incid_resolucion_see_default_txt">No se ha iniciado aún el proceso de resolución</string>
-    <!-- =============== IncidSeeByComuAc =============== -->
+    <!-- =============== IncidSeeOpenByComuAc =============== -->
     <string name="incid_see_by_user_ac_label">Tus incidencias</string>
-    <string name="incid_fecha_alta_rot">Desde:</string>
+    <string name="incid_apertura_rot">Desde:</string>
     <string name="incid_importancia_user_rot">Importancia:</string>
     <string name="incid_importancia_comunidad_rot">Importancia en la comunidad:</string>
     <string name="incid_comunidad_rot">Comunidad:</string>

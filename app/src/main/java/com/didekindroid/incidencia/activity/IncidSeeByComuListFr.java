@@ -19,11 +19,12 @@ import com.didekin.incidservice.dominio.IncidenciaUser;
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
+import com.didekindroid.incidencia.activity.utils.ComuSpinnerSettable;
+import com.didekindroid.incidencia.activity.utils.ComunidadSpinnerSetter;
 
 import java.util.List;
 
 import static com.didekindroid.common.activity.IntentExtraKey.COMUNIDAD_LIST_INDEX;
-import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.google.common.base.Preconditions.checkState;
 
 /**
@@ -36,8 +37,8 @@ public class IncidSeeByComuListFr extends ListFragment implements ComuSpinnerSet
 
     public static final String TAG = IncidSeeByComuListFr.class.getCanonicalName();
 
-    IncidSeeByComuAdapter mAdapter;
-    IncidListListener mListener;
+    ArrayAdapter<IncidenciaUser> mAdapter;
+    IncidSeeListListener mListener;
     View mView;
     ListView mListView;
     Spinner mComunidadSpinner;
@@ -75,8 +76,8 @@ public class IncidSeeByComuListFr extends ListFragment implements ComuSpinnerSet
         Log.d(TAG, "onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
 
-        mListener = (IncidListListener) getActivity();
-        mAdapter = new IncidSeeByComuAdapter(getActivity());
+        mListener = (IncidSeeListListener) getActivity();
+        mAdapter = mListener.getAdapter(getActivity());
 
         mListView = (ListView) mView.findViewById(android.R.id.list);
         mListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
@@ -208,7 +209,7 @@ public class IncidSeeByComuListFr extends ListFragment implements ComuSpinnerSet
             Log.d(TAG, "doInBackground()");
             List<IncidenciaUser> incidenciaList = null;
             try {
-                incidenciaList = IncidenciaServ.seeIncidsOpenByComu(comunidadId[0]);
+                incidenciaList = mListener.getListFromService(comunidadId[0]);
             } catch (UiException e) {
                 uiException = e;
             }

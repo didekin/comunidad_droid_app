@@ -18,11 +18,11 @@ import static com.didekindroid.common.utils.UIutils.formatTimeStampToString;
  * Date: 18/12/15
  * Time: 13:21
  */
-public class SeeAvancesAdapter extends ArrayAdapter<Avance> {
+public class IncidAvanceSeeAdapter extends ArrayAdapter<Avance> {
 
-    private static final String TAG = SeeAvancesAdapter.class.getCanonicalName();
+    private static final String TAG = IncidAvanceSeeAdapter.class.getCanonicalName();
 
-    public SeeAvancesAdapter(Context context)
+    public IncidAvanceSeeAdapter(Context context)
     {
         super(context, R.layout.incid_see_avances_list_item, R.id.incid_avance_fecha_view);
     }

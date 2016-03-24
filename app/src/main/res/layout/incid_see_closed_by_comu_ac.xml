@@ -10,8 +10,8 @@
     <include layout="@layout/appbar_include_design"/>
 
     <fragment
-        android:id="@+id/incid_see_closed_by_user_frg"
-        android:name="com.didekindroid.incidencia.activity.IncidSeeClosedByComuListFr"
+        android:id="@+id/incid_see_by_comu_frg"
+        android:name="com.didekindroid.incidencia.activity.IncidSeeByComuListFr"
         android:layout_marginTop="@dimen/app_bar_bottom_margin"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

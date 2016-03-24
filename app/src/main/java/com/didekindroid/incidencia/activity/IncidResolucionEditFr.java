@@ -88,7 +88,7 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
         // Inicialización de la fecha en BD en el bean, para manternela si no la modifica.
         mResolucionBean.setFechaPrevista(mResolucion.getFechaPrev().getTime());
 
-        SeeAvancesAdapter mAdapter = new SeeAvancesAdapter(getActivity());
+        IncidAvanceSeeAdapter mAdapter = new IncidAvanceSeeAdapter(getActivity());
         mAdapter.clear();
         mAdapter.addAll(mResolucion.getAvances());
 

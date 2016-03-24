@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Para símbolos sin traducción : https://developer.android.com/distribute/tools/localization-checklist.html
+    <string name="countdown">
+        <xliff:g id="time" example="5 days>%1$s</xliff:g>until holiday
+    </string>
+    -->
     <string name="app_name" translatable="false">didekin</string>
     <!--*****************************************************************************-->
     <!--                                 GENERIC                                     -->
@@ -81,13 +86,13 @@
     <string name="incid_resolucion_coste_prev_msg">Coste estimado</string>
     <!-- ====== IncidResolucionSeeDefaultFr ====== -->
     <string name="incid_resolucion_see_default_txt">No se ha iniciado aún el proceso de resolución</string>
-    <!-- ===================== IncidSeeByComuAc ===================== -->
+    <!-- ===================== IncidSeeOpenByComuAc ===================== -->
     <string name="incid_see_by_user_ac_label">Tus incidencias</string>
-    <string name="incid_fecha_alta_rot">Desde:</string>
+    <string name="incid_apertura_rot">Apertura:</string>
+    <string name="incid_cierre_rot">Cierre:</string>
     <string name="incid_importancia_user_rot">Importancia:</string>
     <string name="incid_importancia_comunidad_rot">Importancia en la comunidad:</string>
     <string name="incid_comunidad_rot">Comunidad:</string>
-    <string name="incid_see_iniciador_rot">Iniciador:</string>
     <string name="incid_incidencias_rot">Incidencias:</string>
     <string name="incid_ambito_rot">Ámbito:</string>
     <!-- ============ IncidSeeClosedByComuAc ========== -->

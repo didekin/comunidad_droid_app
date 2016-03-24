@@ -119,7 +119,7 @@ public class IncidRegAc extends AppCompatActivity {
                 uiException.processMe(IncidRegAc.this, new Intent());
             } else {
                 checkState(rowInserted == 2);
-                Intent intent = new Intent(IncidRegAc.this, IncidSeeByComuAc.class);
+                Intent intent = new Intent(IncidRegAc.this, IncidSeeOpenByComuAc.class);
                 startActivity(intent);
             }
         }

@@ -1,5 +1,6 @@
 package com.didekindroid.incidencia.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -7,19 +8,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 
 import com.didekin.incidservice.dominio.IncidAndResolBundle;
 import com.didekin.incidservice.dominio.Incidencia;
+import com.didekin.incidservice.dominio.IncidenciaUser;
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.incidencia.gcm.GcmRegistrationIntentServ;
 
+import java.util.List;
+
 import static com.didekindroid.common.activity.IntentExtraKey.COMUNIDAD_ID;
 import static com.didekindroid.common.activity.IntentExtraKey.INCIDENCIA_LIST_INDEX;
 import static com.didekindroid.common.activity.IntentExtraKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.activity.IntentExtraKey.INCID_RESOLUCION_FLAG;
-import static com.didekindroid.common.activity.IntentExtraKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.common.utils.UIutils.checkPlayServices;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.isGcmTokenSentServer;
@@ -39,10 +43,10 @@ import static com.google.common.base.Preconditions.checkState;
  * Postconditions:
  * 1. An intent is passed with an IncidImportancia instance, where the selected incidencia is embedded.
  */
-public class IncidSeeByComuAc extends AppCompatActivity implements
-        IncidListListener {
+public class IncidSeeOpenByComuAc extends AppCompatActivity implements
+        IncidSeeListListener {
 
-    private static final String TAG = IncidSeeByComuAc.class.getCanonicalName();
+    private static final String TAG = IncidSeeOpenByComuAc.class.getCanonicalName();
 
     IncidSeeByComuListFr mFragment;
     int mIncidenciaIndex;
@@ -59,10 +63,9 @@ public class IncidSeeByComuAc extends AppCompatActivity implements
             startService(intent);
         }
 
-        setContentView(R.layout.incid_see_by_comu_ac);
+        setContentView(R.layout.incid_see_open_by_comu_ac);
         doToolBar(this, true);
-        mFragment = (IncidSeeByComuListFr) getFragmentManager()
-                .findFragmentById(R.id.incid_see_by_comu_frg);
+        mFragment = (IncidSeeByComuListFr) getFragmentManager().findFragmentById(R.id.incid_see_by_comu_frg);
     }
 
     @Override
@@ -137,6 +140,18 @@ public class IncidSeeByComuAc extends AppCompatActivity implements
         mComunidadSelected = comunidadSelected;
     }
 
+    @Override
+    public ArrayAdapter<IncidenciaUser> getAdapter(Activity activity)
+    {
+        return new IncidSeeOpenByComuAdapter(this);
+    }
+
+    @Override
+    public List<IncidenciaUser> getListFromService(long comunidadId) throws UiException
+    {
+        return IncidenciaServ.seeIncidsOpenByComu(comunidadId);
+    }
+
     //    ============================================================
 //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
 //    ============================================================
@@ -165,10 +180,10 @@ public class IncidSeeByComuAc extends AppCompatActivity implements
             Log.d(TAG, "onPostExecute()");
 
             if (uiException != null) {
-                uiException.processMe(IncidSeeByComuAc.this, new Intent());
+                uiException.processMe(IncidSeeOpenByComuAc.this, new Intent());
             } else {
                 checkState(incidAndResolBundle != null);
-                Intent intent = new Intent(IncidSeeByComuAc.this, IncidEditAc.class);
+                Intent intent = new Intent(IncidSeeOpenByComuAc.this, IncidEditAc.class);
                 intent.putExtra(INCID_IMPORTANCIA_OBJECT.extra, incidAndResolBundle.getIncidImportancia());
                 intent.putExtra(INCID_RESOLUCION_FLAG.extra, incidAndResolBundle.hasResolucion());
                 startActivity(intent);

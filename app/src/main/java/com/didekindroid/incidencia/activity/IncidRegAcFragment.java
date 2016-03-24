@@ -14,6 +14,10 @@ import android.widget.Spinner;
 
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekindroid.R;
+import com.didekindroid.incidencia.activity.utils.AmbitoSpinnerSettable;
+import com.didekindroid.incidencia.activity.utils.ComuSpinnerSettable;
+import com.didekindroid.incidencia.activity.utils.ComunidadSpinnerSetter;
+import com.didekindroid.incidencia.activity.utils.ImportanciaSpinnerSettable;
 import com.didekindroid.incidencia.dominio.IncidImportanciaBean;
 import com.didekindroid.incidencia.dominio.IncidenciaBean;
 import com.didekindroid.incidencia.repository.IncidenciaDataDbHelper;

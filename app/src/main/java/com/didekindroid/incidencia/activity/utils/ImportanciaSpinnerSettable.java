@@ -1,4 +1,4 @@
-package com.didekindroid.incidencia.activity;
+package com.didekindroid.incidencia.activity.utils;
 
 import android.widget.Spinner;
 

@@ -1,6 +1,7 @@
 package com.didekindroid.incidencia.activity;
 
 import android.support.test.espresso.intent.rule.IntentsTestRule;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.incidservice.dominio.IncidImportancia;
@@ -29,8 +30,10 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
+import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -47,9 +50,9 @@ import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_LA_PLAZUE
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_PLAZUELA5_JUAN;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_JUAN;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
+import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.core.AllOf.allOf;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -59,9 +62,9 @@ import static org.junit.Assert.assertThat;
  */
 /* Tests sobre presentación de datos y selección de una incidencia. */
 @RunWith(AndroidJUnit4.class)
-public class IncidSeeByComuAcTest_2 {
+public class IncidSeeOpenByComuAcTest_2 {
 
-    private IncidSeeByComuAc mActivity;
+    private IncidSeeOpenByComuAc mActivity;
     private CleanUserEnum whatToClean = CLEAN_JUAN;
     UsuarioComunidad juanReal;
     UsuarioComunidad juanPlazuela;
@@ -69,11 +72,11 @@ public class IncidSeeByComuAcTest_2 {
     IncidImportancia incidJuanReal2;
     IncidImportancia incidJuanPlazuela1;
     IncidenciaDataDbHelper dBHelper;
-    IncidSeeByComuAdapter adapter;
+    IncidSeeOpenByComuAdapter adapter;
     IncidSeeByComuListFr mFragment;
 
     @Rule
-    public IntentsTestRule<IncidSeeByComuAc> activityRule = new IntentsTestRule<IncidSeeByComuAc>(IncidSeeByComuAc.class) {
+    public IntentsTestRule<IncidSeeOpenByComuAc> activityRule = new IntentsTestRule<IncidSeeOpenByComuAc>(IncidSeeOpenByComuAc.class) {
 
         @Override
         protected void beforeActivityLaunched()
@@ -114,7 +117,7 @@ public class IncidSeeByComuAcTest_2 {
     {
         mActivity = activityRule.getActivity();
         mFragment = (IncidSeeByComuListFr) mActivity.getFragmentManager().findFragmentById(R.id.incid_see_by_comu_frg);
-        adapter = mFragment.mAdapter;
+        adapter = (IncidSeeOpenByComuAdapter) mFragment.mAdapter;
         dBHelper = new IncidenciaDataDbHelper(mActivity);
     }
 
@@ -192,53 +195,44 @@ public class IncidSeeByComuAcTest_2 {
         IncidenciaUser incidUser_0 = adapter.getItem(0);
         IncidenciaUser incidUser_1 = adapter.getItem(1);
         Incidencia incidencia_0 = incidUser_0.getIncidencia();
-        Incidencia incidencia_1 = incidUser_1.getIncidencia();
 
         onData(is(incidUser_0)).inAdapterView(withId(android.R.id.list)).check(matches(isDisplayed()));
+        onData(is(incidUser_1)).inAdapterView(withId(android.R.id.list)).check(matches(isDisplayed()));
+
         onView(allOf(
-                withText(incidJuanReal1.getIncidencia().getDescripcion()),
-                withId(R.id.incid_descripcion_view),
+                withId(R.id.incid_see_importancia_block),
+                hasDescendant(allOf(
+                                withId(R.id.incid_importancia_comunidad_view),
+                                withText(mActivity.getResources()
+                                        .getStringArray(R.array.IncidImportanciaArray)[Math.round(incidJuanReal1.getImportancia())]))
+                ),
                 hasSibling(allOf(
-                        withId(R.id.incid_fecha_alta_view),
-                        withText(formatTimeStampToString(incidencia_0.getFechaAlta()))
-                )),
-                hasSibling(allOf(
-                        withId(R.id.incid_see_iniciador_view),
-                        withText(juanReal.getUsuario().getAlias())
+                        withText(incidJuanReal1.getIncidencia().getDescripcion()),
+                        withId(R.id.incid_descripcion_view)
                 )),
                 hasSibling(allOf(
                         withId(R.id.incid_ambito_view),
                         withText(dBHelper.getAmbitoDescByPk(incidJuanReal1.getIncidencia().getAmbitoIncidencia().getAmbitoId()))
                 )),
                 hasSibling(allOf(
-                        withId(R.id.incid_importancia_comunidad_view),
-                        withText(mActivity.getResources()
-                                .getStringArray(R.array.IncidImportanciaArray)[Math.round(incidJuanReal1.getImportancia())])
+                        withId(R.id.incid_see_apertura_block),
+                        hasSibling(withText(dBHelper.getAmbitoDescByPk(incidJuanReal1.getIncidencia().getAmbitoIncidencia().getAmbitoId()))),
+                        hasDescendant(allOf(
+                                withId(R.id.incid_fecha_alta_view),
+                                withText(formatTimeStampToString(incidencia_0.getFechaAlta()))
+                        )),
+                        hasDescendant(allOf(
+                                withId(R.id.incid_see_iniciador_view),
+                                withText(juanReal.getUsuario().getAlias())
+                        ))
                 ))
         )).check(matches(isDisplayed()));
 
-        onData(is(incidUser_1)).inAdapterView(withId(android.R.id.list)).check(matches(isDisplayed()));
+        // Bloque datos de cierre no visible.
         onView(allOf(
-                withText(incidJuanReal2.getIncidencia().getDescripcion()),
-                withId(R.id.incid_descripcion_view),
-                hasSibling(allOf(
-                        withId(R.id.incid_fecha_alta_view),
-                        withText(formatTimeStampToString(incidencia_1.getFechaAlta()))
-                )),
-                hasSibling(allOf(
-                        withId(R.id.incid_see_iniciador_view),
-                        withText(juanReal.getUsuario().getAlias())
-                )),
-                hasSibling(allOf(
-                        withId(R.id.incid_ambito_view),
-                        withText(dBHelper.getAmbitoDescByPk(incidJuanReal2.getIncidencia().getAmbitoIncidencia().getAmbitoId()))
-                )),
-                hasSibling(allOf(
-                        withId(R.id.incid_importancia_comunidad_view),
-                        withText(mActivity.getResources()
-                                .getStringArray(R.array.IncidImportanciaArray)[Math.round(incidJuanReal2.getImportancia())])
-                ))
-        )).check(matches(isDisplayed()));
+                withId(R.id.incid_see_cierre_block),
+                hasSibling(withText(dBHelper.getAmbitoDescByPk(incidJuanReal1.getIncidencia().getAmbitoIncidencia().getAmbitoId())))
+        )).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
     }
 
     @Test
@@ -252,27 +246,18 @@ public class IncidSeeByComuAcTest_2 {
         ).perform(click()).check(matches(isDisplayed()));
 
         IncidenciaUser incidUser = adapter.getItem(0);
-
         onData(is(incidUser)).inAdapterView(withId(android.R.id.list)).check(matches(isDisplayed()));
+
+        // Verificamos la importancia que debiera salir en blanco.
         onView(allOf(
-                withText(incidJuanPlazuela1.getIncidencia().getDescripcion()),
-                withId(R.id.incid_descripcion_view),
-                hasSibling(allOf(
-                        withId(R.id.incid_fecha_alta_view),
-                        withText(formatTimeStampToString(incidUser.getIncidencia().getFechaAlta()))
-                )),
-                hasSibling(allOf(
-                        withId(R.id.incid_see_iniciador_view),
-                        withText(juanPlazuela.getUsuario().getAlias())
-                )),
-                hasSibling(allOf(
-                        withId(R.id.incid_ambito_view),
-                        withText(dBHelper.getAmbitoDescByPk(incidJuanPlazuela1.getIncidencia().getAmbitoIncidencia().getAmbitoId()))
-                )),
-                hasSibling(allOf(
+                withId(R.id.incid_see_importancia_block),
+                hasDescendant(allOf(
                         withId(R.id.incid_importancia_comunidad_view),
-                        // ImportanciaAVG == 0.
                         withText("")
+                )),
+                hasSibling(allOf(
+                        withText(incidJuanPlazuela1.getIncidencia().getDescripcion()),
+                        withId(R.id.incid_descripcion_view)
                 ))
         )).check(matches(isDisplayed()));
     }

@@ -1,19 +1,16 @@
 package com.didekindroid.incidencia.activity;
 
 import android.app.Fragment;
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.didekin.incidservice.dominio.Resolucion;
 import com.didekindroid.R;
-import com.didekindroid.incidencia.dominio.ResolucionBean;
 
 import static com.didekindroid.common.utils.UIutils.formatTimeStampToString;
 import static com.didekindroid.common.utils.UIutils.getStringFromInteger;
@@ -51,7 +48,7 @@ public class IncidResolucionSeeFr extends Fragment {
         mResolucion = mActivitySupplier.getResolucion();
         checkState(mResolucion != null);
 
-        SeeAvancesAdapter mAdapter = new SeeAvancesAdapter(getActivity());
+        IncidAvanceSeeAdapter mAdapter = new IncidAvanceSeeAdapter(getActivity());
         mAdapter.clear();
         mAdapter.addAll(mResolucion.getAvances());
 
@@ -67,12 +64,4 @@ public class IncidResolucionSeeFr extends Fragment {
         mListView.setEmptyView(mFragmentView.findViewById(android.R.id.empty));
         mListView.setAdapter(mAdapter);
     }
-
-//    ============================== INTERFACE COMMUNICATIONS METHODS ==========================
-
-
-//    ============================================================================================
-//    .................................... INNER CLASSES .................................
-//    ============================================================================================
-
 }

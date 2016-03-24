@@ -58,9 +58,9 @@ import static org.junit.Assert.assertThat;
  */
 /* Tests de presentación, navegación y notificaciones GCM. */
 @RunWith(AndroidJUnit4.class)
-public class IncidSeeByComuAcTest_1 {
+public class IncidSeeOpenByComuAcTest_1 {
 
-    private IncidSeeByComuAc mActivity;
+    private IncidSeeOpenByComuAc mActivity;
     private CleanUserEnum whatToClean = CLEAN_PEPE;
     IdlingResourceForIntentServ idlingResource;
     Comunidad mComunidadSelected;
@@ -68,7 +68,7 @@ public class IncidSeeByComuAcTest_1 {
     private int messageId = INCIDENCIA.getTitleRsc();
 
     @Rule
-    public IntentsTestRule<IncidSeeByComuAc> activityRule = new IntentsTestRule<IncidSeeByComuAc>(IncidSeeByComuAc.class) {
+    public IntentsTestRule<IncidSeeOpenByComuAc> activityRule = new IntentsTestRule<IncidSeeOpenByComuAc>(IncidSeeOpenByComuAc.class) {
 
         @Override
         protected void beforeActivityLaunched()

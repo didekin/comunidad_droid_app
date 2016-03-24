@@ -85,10 +85,10 @@
         <activity
             android:name=".incidencia.activity.IncidEditAc"
             android:label="@string/incid_edit_ac_label"
-            android:parentActivityName=".incidencia.activity.IncidSeeByComuAc">
+            android:parentActivityName=".incidencia.activity.IncidSeeOpenByComuAc">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".incidencia.activity.IncidSeeByComuAc"/>
+                android:value=".incidencia.activity.IncidSeeOpenByComuAc"/>
         </activity>
         <activity
             android:name=".incidencia.activity.IncidRegAc"
@@ -107,7 +107,7 @@
                 android:value=".incidencia.activity.IncidEditAc"/>
         </activity>
         <activity
-            android:name=".incidencia.activity.IncidSeeByComuAc"
+            android:name=".incidencia.activity.IncidSeeOpenByComuAc"
             android:label="@string/incid_see_by_user_ac_label"
             android:parentActivityName=".usuario.activity.UserComuDataAc">
             <meta-data
@@ -117,10 +117,10 @@
         <activity
             android:name=".incidencia.activity.IncidSeeClosedByComuAc"
             android:label="@string/incid_closed_by_user_ac_label"
-            android:parentActivityName=".incidencia.activity.IncidSeeByComuAc">
+            android:parentActivityName=".incidencia.activity.IncidSeeOpenByComuAc">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".incidencia.activity.IncidSeeByComuAc"/>
+                android:value=".incidencia.activity.IncidSeeOpenByComuAc"/>
         </activity>
         <!-- **************************************************************** -->
         <!-- USUARIO -->

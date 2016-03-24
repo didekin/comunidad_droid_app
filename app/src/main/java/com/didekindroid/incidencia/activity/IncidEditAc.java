@@ -129,10 +129,6 @@ public class IncidEditAc extends AppCompatActivity implements IncidenciaDataSupp
                 return true;
             case R.id.incid_resolucion_reg_ac_mn:
                 new ResolucionGetter().execute();
-                /*intent = new Intent();
-                intent.putExtra(INCID_IMPORTANCIA_OBJECT.extra, mIncidImportancia);
-                setIntent(intent);
-                INCID_RESOLUCION_REG_EDIT_AC.doMenuItem(this);*/
                 return false;
             default:
                 return super.onOptionsItemSelected(item);

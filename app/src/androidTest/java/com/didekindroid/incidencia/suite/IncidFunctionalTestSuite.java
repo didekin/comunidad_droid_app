@@ -19,10 +19,10 @@ import com.didekindroid.incidencia.activity.IncidResolucionRegFrTest;
 import com.didekindroid.incidencia.activity.IncidResolucionSeeDefaultFrTest;
 import com.didekindroid.incidencia.activity.IncidResolucionSeeFrTest_1;
 import com.didekindroid.incidencia.activity.IncidResolucionSeeFrTest_2;
-import com.didekindroid.incidencia.activity.IncidSeeByComuAcTest_1;
-import com.didekindroid.incidencia.activity.IncidSeeByComuAcTest_2;
-import com.didekindroid.incidencia.activity.IncidSeeByComuAcTest_3;
-import com.didekindroid.incidencia.activity.IncidSeeByComuAcTest_4;
+import com.didekindroid.incidencia.activity.IncidSeeOpenByComuAcTest_1;
+import com.didekindroid.incidencia.activity.IncidSeeOpenByComuAcTest_2;
+import com.didekindroid.incidencia.activity.IncidSeeOpenByComuAcTest_3;
+import com.didekindroid.incidencia.activity.IncidSeeOpenByComuAcTest_4;
 import com.didekindroid.incidencia.activity.IncidSeeClosedByComuAcTest_1;
 import com.didekindroid.incidencia.gcm.IncidRegAcTest_gcm1;
 
@@ -56,10 +56,10 @@ import org.junit.runners.Suite;
         IncidResolucionSeeDefaultFrTest.class,
         IncidResolucionSeeFrTest_1.class,
         IncidResolucionSeeFrTest_2.class,
-        IncidSeeByComuAcTest_1.class,
-        IncidSeeByComuAcTest_2.class,
-        IncidSeeByComuAcTest_3.class,
-        IncidSeeByComuAcTest_4.class,
+        IncidSeeOpenByComuAcTest_1.class,
+        IncidSeeOpenByComuAcTest_2.class,
+        IncidSeeOpenByComuAcTest_3.class,
+        IncidSeeOpenByComuAcTest_4.class,
         IncidSeeClosedByComuAcTest_1.class,
 })
 public class IncidFunctionalTestSuite {

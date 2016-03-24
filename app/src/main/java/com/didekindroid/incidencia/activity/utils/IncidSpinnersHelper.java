@@ -9,9 +9,6 @@ import android.widget.ArrayAdapter;
 import android.widget.CursorAdapter;
 
 import com.didekindroid.R;
-import com.didekindroid.incidencia.activity.AmbitoIncidenciaSpinnerSetter;
-import com.didekindroid.incidencia.activity.AmbitoSpinnerSettable;
-import com.didekindroid.incidencia.activity.ImportanciaSpinnerSettable;
 
 /**
  * User: pedro@didekin

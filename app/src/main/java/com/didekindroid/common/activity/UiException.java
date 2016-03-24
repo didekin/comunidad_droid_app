@@ -15,7 +15,7 @@ import com.didekin.incidservice.dominio.IncidImportancia;
 import com.didekindroid.R;
 import com.didekindroid.incidencia.activity.IncidEditAc;
 import com.didekindroid.incidencia.activity.IncidRegAc;
-import com.didekindroid.incidencia.activity.IncidSeeByComuAc;
+import com.didekindroid.incidencia.activity.IncidSeeOpenByComuAc;
 import com.didekindroid.usuario.activity.ComuSearchAc;
 import com.didekindroid.usuario.activity.LoginAc;
 import com.didekindroid.usuario.activity.UserDataAc;
@@ -133,7 +133,7 @@ public class UiException extends Exception {
             public void doAction(Activity activity, Intent intent)
             {
                 makeToast(activity, R.string.incidencia_wrong_init, LENGTH_SHORT);
-                intent.setClass(activity, IncidSeeByComuAc.class);
+                intent.setClass(activity, IncidSeeOpenByComuAc.class);
                 activity.startActivity(intent);
                 finishActivity(activity, intent);
             }

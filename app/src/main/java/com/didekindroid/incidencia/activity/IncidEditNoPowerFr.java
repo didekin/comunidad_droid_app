@@ -17,6 +17,7 @@ import com.didekin.incidservice.dominio.IncidImportancia;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.utils.ConnectionUtils;
+import com.didekindroid.incidencia.activity.utils.ImportanciaSpinnerSettable;
 import com.didekindroid.incidencia.dominio.IncidImportanciaBean;
 import com.didekindroid.incidencia.repository.IncidenciaDataDbHelper;
 
@@ -173,7 +174,7 @@ public class IncidEditNoPowerFr extends Fragment implements ImportanciaSpinnerSe
                 uiException.processMe(getActivity(), new Intent());
             } else {
                 checkState(rowInserted == 1);
-                Intent intent = new Intent(getActivity(), IncidSeeByComuAc.class);
+                Intent intent = new Intent(getActivity(), IncidSeeOpenByComuAc.class);
                 startActivity(intent);
             }
         }

@@ -5,8 +5,8 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.incidservice.dominio.IncidAndResolBundle;
 import com.didekin.incidservice.dominio.IncidImportancia;
-import com.didekin.incidservice.dominio.Incidencia;
 import com.didekin.incidservice.dominio.IncidenciaUser;
+import com.didekin.incidservice.dominio.Resolucion;
 import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
@@ -21,6 +21,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
+import java.sql.Timestamp;
+import java.util.Date;
 
 import static android.database.sqlite.SQLiteDatabase.deleteDatabase;
 import static android.support.test.espresso.Espresso.onData;
@@ -29,8 +31,6 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtraWithKey;
-import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekin.common.oauth2.Rol.PROPIETARIO;
@@ -40,40 +40,57 @@ import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.testutils.ActivityTestUtils.updateSecurityData;
 import static com.didekindroid.incidencia.repository.IncidenciaDataDbHelperTest.DB_PATH;
+import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.RESOLUCION_DEFAULT_DESC;
+import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doResolucion;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidenciaUser;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
-import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_PEPE;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_JUAN;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.makeUsuarioComunidad;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
 /**
  * User: pedro@didekin
- * Date: 23/11/15
- * Time: 18:45
+ * Date: 17/03/16
+ * Time: 15:41
  */
-/* Tests con usuario sin incidImportancia asociado a la incidencia. */
 @RunWith(AndroidJUnit4.class)
-public class IncidSeeByComuAcTest_3 {
+public class IncidSeeOpenByComuAcTest_4 {
 
     private CleanUserEnum whatToClean = CLEAN_JUAN_AND_PEPE;
-    private IncidSeeByComuAdapter adapter;
+    UsuarioComunidad pepeUserComu;
     UsuarioComunidad userComuJuan;
+    private IncidSeeOpenByComuAdapter adapter;
 
+    private Resolucion resolucion;
     @Rule
-    public IntentsTestRule<IncidSeeByComuAc> activityRule = new IntentsTestRule<IncidSeeByComuAc>(IncidSeeByComuAc.class) {
+    public IntentsTestRule<IncidSeeOpenByComuAc> activityRule = new IntentsTestRule<IncidSeeOpenByComuAc>(IncidSeeOpenByComuAc.class) {
 
+        /**
+         * Preconditions:
+         * 1. Incidencia with resolucion in BD.
+         * 2. User without authority 'adm' sees the incidencia and selects it.
+         * Postconditions:
+         * 1. The incidencia is shown in edit mode.
+         * 2. An intent is passed whith:
+         *    - the incidImportancia instance of the user in session.
+         *    - a true value in the resolucion flag.
+         */
         @Override
         protected void beforeActivityLaunched()
         {
             try {
-                signUpAndUpdateTk(COMU_REAL_PEPE);
-                UsuarioComunidad pepeUserComu = ServOne.seeUserComusByUser().get(0);
+                signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
+                pepeUserComu = ServOne.seeUserComusByUser().get(0);
                 // Insertamos incidencia.
-                insertGetIncidenciaUser(pepeUserComu, 1);
+                IncidenciaUser incidenciaUser = insertGetIncidenciaUser(pepeUserComu, 1);
+                // Insertamos resolución.
+                resolucion = doResolucion(incidenciaUser.getIncidencia(), RESOLUCION_DEFAULT_DESC, 1000, new Timestamp(new Date().getTime()));
+                assertThat(IncidenciaServ.regResolucion(resolucion), is(1));
                 // Registro userComu en misma comunidad.
                 userComuJuan = makeUsuarioComunidad(pepeUserComu.getComunidad(), USER_JUAN,
                         "portal", "esc", "plantaX", "door12", PROPIETARIO.function);
@@ -94,9 +111,12 @@ public class IncidSeeByComuAcTest_3 {
     @Before
     public void setUp() throws Exception
     {
-        IncidSeeByComuAc mActivity = activityRule.getActivity();
+        IncidSeeOpenByComuAc mActivity = activityRule.getActivity();
         IncidSeeByComuListFr mFragment = (IncidSeeByComuListFr) mActivity.getFragmentManager().findFragmentById(R.id.incid_see_by_comu_frg);
-        adapter = mFragment.mAdapter;
+        adapter = (IncidSeeOpenByComuAdapter) mFragment.mAdapter;
+        // Premisas.
+        assertThat(userComuJuan.hasAdministradorAuthority(), is(false));
+        assertThat(IncidenciaServ.seeResolucion(resolucion.getIncidencia().getIncidenciaId()),notNullValue());
     }
 
     @After
@@ -108,24 +128,18 @@ public class IncidSeeByComuAcTest_3 {
     }
 
     @Test
-    public void testOnSelected_1() throws UiException, InterruptedException
+    public void testOnSelected_1() throws Exception
     {
-
-        // CASO OK
-        // Default comunidad (Real), in position 0, is selected.
-        Thread.sleep(1000);
-        IncidenciaUser incidUser_0 = adapter.getItem(0);
-        Incidencia incidencia_0 = incidUser_0.getIncidencia();
-        // Usuario Juan ve la incidencia por usuario Pepe.
-        onData(is(incidUser_0)).inAdapterView(withId(android.R.id.list))
+        // Caso OK: comunidad Escorial es mostrada. El usuario la selecciona.
+        IncidenciaUser incidenciaUser = adapter.getItem(0);
+        onData(is(incidenciaUser)).inAdapterView(withId(android.R.id.list))
                 .check(matches(isDisplayed()))
                 .perform(click());
 
-        // Verificamos intents.
-        IncidAndResolBundle incidAndResolBundle =  IncidenciaServ.seeIncidImportancia(incidencia_0.getIncidenciaId());
+        IncidAndResolBundle incidAndResolBundle = IncidenciaServ.seeIncidImportancia(incidenciaUser.getIncidencia().getIncidenciaId());
         IncidImportancia incidImportancia = incidAndResolBundle.getIncidImportancia();
         assertThat(incidImportancia.getUserComu(), is(userComuJuan));
-        assertThat(incidAndResolBundle.hasResolucion(),is(false));
+        assertThat(incidAndResolBundle.hasResolucion(),is(true));
         intended(hasExtra(INCID_IMPORTANCIA_OBJECT.extra, incidImportancia));
         intended(hasExtra(INCID_RESOLUCION_FLAG.extra, incidAndResolBundle.hasResolucion()));
         // Juan entra en la pantalla de edición de la incidencia, tras seleccionarla.
