@@ -21,6 +21,7 @@ import com.didekindroid.incidencia.activity.utils.ImportanciaSpinnerSettable;
 import com.didekindroid.incidencia.dominio.IncidImportanciaBean;
 import com.didekindroid.incidencia.repository.IncidenciaDataDbHelper;
 
+import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.common.utils.UIutils.makeToast;
 import static com.didekindroid.incidencia.activity.utils.IncidSpinnersHelper.HELPER;
@@ -59,7 +60,7 @@ public class IncidEditNoPowerFr extends Fragment implements ImportanciaSpinnerSe
         super.onActivityCreated(savedInstanceState);
 
         mIncidImportanciaBean = new IncidImportanciaBean();
-        mIncidImportancia = ((IncidenciaDataSupplier) getActivity()).getIncidImportancia();
+        mIncidImportancia = (IncidImportancia) getArguments().getSerializable(INCID_IMPORTANCIA_OBJECT.key);
 
         ((TextView) fFragmentView.findViewById(R.id.incid_comunidad_txt))
                 .setText(mIncidImportancia.getIncidencia().getComunidad().getNombreComunidad());

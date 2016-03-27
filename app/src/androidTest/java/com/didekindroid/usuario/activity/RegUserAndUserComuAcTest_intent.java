@@ -32,8 +32,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.common.TokenHandler.TKhandler;
-import static com.didekindroid.common.activity.IntentExtraKey.COMUNIDAD_ID;
-import static com.didekindroid.common.activity.IntentExtraKey.COMUNIDAD_LIST_OBJECT;
+import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
+import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN2_AND_PEPE;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
@@ -97,7 +97,7 @@ public class RegUserAndUserComuAcTest_intent {
             comunidad = comunidadesUserOne.get(0);
             // We pass the comunidad as an intent.
             intent = new Intent();
-            intent.putExtra(COMUNIDAD_LIST_OBJECT.extra, comunidad);
+            intent.putExtra(COMUNIDAD_LIST_OBJECT.key, comunidad);
             return intent;
         }
     };
@@ -122,7 +122,7 @@ public class RegUserAndUserComuAcTest_intent {
         activity = intentRule.getActivity();
 
         assertThat(UIutils.isRegisteredUser(activity), is(false));
-        Comunidad comunidad = (Comunidad) intent.getSerializableExtra(COMUNIDAD_LIST_OBJECT.extra);
+        Comunidad comunidad = (Comunidad) intent.getSerializableExtra(COMUNIDAD_LIST_OBJECT.key);
         assertThat(comunidad, is(this.comunidad));
         assertThat(comunidad.getC_Id(), is(this.comunidad.getC_Id()));
 
@@ -156,7 +156,7 @@ public class RegUserAndUserComuAcTest_intent {
         onView(withId(R.id.reg_user_usercomu_button)).perform(scrollTo())
                 .check(matches(isDisplayed())).perform(click());
 
-        intended(hasExtra(COMUNIDAD_ID.extra, comunidad.getC_Id()));
+        intended(hasExtra(COMUNIDAD_ID.key, comunidad.getC_Id()));
         onView(withId(R.id.see_usercomu_by_comu_ac_frg_container)).check(matches(isDisplayed()));
 
         assertThat(TKhandler.getAccessTokenInCache(), notNullValue());

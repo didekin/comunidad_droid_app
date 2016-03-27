@@ -14,7 +14,7 @@ import com.didekin.usuario.dominio.Comunidad;
 
 import java.util.List;
 
-import static com.didekindroid.common.activity.IntentExtraKey.COMUNIDAD_SEARCH;
+import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_SEARCH;
 import static com.didekindroid.common.activity.ViewsIDs.COMU_SEARCH_RESULTS;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 
@@ -27,7 +27,7 @@ import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
  * -- municipio, with codInProvincia and nombre.
  * -- provincia, with provinciaId and nombre.
  * <p/>
- * 2. An object comunidad, used as search criterium, is received as an intent extra with the following fields:
+ * 2. An object comunidad, used as search criterium, is received as an intent key with the following fields:
  * -- tipoVia.
  * -- nombreVia.
  * -- numero.
@@ -67,7 +67,7 @@ public class ComuSearchResultsListFr extends ListFragment {
         mComuListListener = (ComuListListener) getActivity();
         mAdapter = new ComuSearchResultsListAdapter(getActivity());
         Comunidad comunidad = (Comunidad) getActivity().getIntent()
-                .getSerializableExtra(COMUNIDAD_SEARCH.extra);
+                .getSerializableExtra(COMUNIDAD_SEARCH.key);
         new SearchComunidadesLoader().execute(comunidad);
     }
 

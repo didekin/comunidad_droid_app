@@ -37,7 +37,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVi
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.common.activity.IntentExtraKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.common.activity.FragmentTags.incid_see_by_comu_list_fr_tag;
+import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.regSeveralUserComuSameUser;
 import static com.didekindroid.common.utils.UIutils.formatTimeStampToString;
@@ -116,7 +117,7 @@ public class IncidSeeOpenByComuAcTest_2 {
     public void setUp() throws Exception
     {
         mActivity = activityRule.getActivity();
-        mFragment = (IncidSeeByComuListFr) mActivity.getFragmentManager().findFragmentById(R.id.incid_see_by_comu_frg);
+        mFragment = (IncidSeeByComuListFr) mActivity.getFragmentManager().findFragmentByTag(incid_see_by_comu_list_fr_tag);
         adapter = (IncidSeeOpenByComuAdapter) mFragment.mAdapter;
         dBHelper = new IncidenciaDataDbHelper(mActivity);
     }
@@ -173,7 +174,6 @@ public class IncidSeeOpenByComuAcTest_2 {
 
         // Verificamos que la actividad recibe la comunidad seleccionada.
         assertThat(mActivity.mComunidadSelected, is(COMU_LA_PLAZUELA_5));
-
         assertThat(mFragment.mComunidadSelectedIndex, is(1));
         assertThat(adapter.getCount(), is(1));
 
@@ -275,7 +275,7 @@ public class IncidSeeOpenByComuAcTest_2 {
                 .perform(click());
 
         IncidImportancia incidImportancia = IncidenciaServ.seeIncidImportancia(incidencia_0.getIncidenciaId()).getIncidImportancia();
-        intended(hasExtra(INCID_IMPORTANCIA_OBJECT.extra, incidImportancia));
+        intended(hasExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia));
         onView(withId(R.id.incid_edit_fragment_container_ac)).check(matches(isDisplayed()));
     }
 }

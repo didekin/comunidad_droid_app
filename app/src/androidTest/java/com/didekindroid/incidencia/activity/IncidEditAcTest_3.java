@@ -34,7 +34,7 @@ import static com.didekindroid.common.testutils.ActivityTestUtils.checkNavigateU
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.testutils.ActivityTestUtils.updateSecurityData;
-import static com.didekindroid.common.activity.IntentExtraKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidenciaUser;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
@@ -94,7 +94,7 @@ public class IncidEditAcTest_3 {
                 e.printStackTrace();
             }
             Intent intent = new Intent();
-            intent.putExtra(INCID_IMPORTANCIA_OBJECT.extra, incidJuanReal);
+            intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, incidJuanReal);
             return intent;
         }
     };
@@ -124,7 +124,7 @@ public class IncidEditAcTest_3 {
     public void testOnCreate_1() throws Exception
     {
         assertThat(mActivity, notNullValue());
-        IncidImportancia incidImportanciaInIntent = (IncidImportancia) mActivity.getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.extra);
+        IncidImportancia incidImportanciaInIntent = (IncidImportancia) mActivity.getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.key);
         assertThat(incidImportanciaInIntent.getUserComu().getUsuario(), is(USER_JUAN));
         assertThat(incidImportanciaInIntent.getIncidencia().getUserName(), is(USER_PEPE.getUserName()));
         // Premisas.
@@ -185,7 +185,7 @@ public class IncidEditAcTest_3 {
                 )
                 .perform(click());
         onView(withId(R.id.incid_edit_fr_modif_button)).perform(scrollTo(), click());
-        onView(withId(R.id.incid_see_by_comu_ac)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed()));
     }
 }
 

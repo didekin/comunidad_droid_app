@@ -32,7 +32,7 @@ public enum IncidenciaMenuTestUtils {
         @Override
         public void checkMenuItem_WTk(Activity activity) throws InterruptedException
         {
-            check(activity, R.string.incid_comments_see_ac_mn, R.id.incid_comments_see_frg);
+            check(activity, R.string.incid_comments_see_ac_mn, R.id.incid_comments_see_fr_layout);
         }
     },
 
@@ -49,19 +49,19 @@ public enum IncidenciaMenuTestUtils {
         public void checkMenuItem_WTk(Activity activity) throws InterruptedException
         {
             onView(withText(R.string.incid_resolucion_ac_mn)).check(matches(isDisplayed())).perform(click());
-            onView(withId(R.id.incid_resolucion_fragment_container_ac)).check(matches(isDisplayed()));;
+            onView(withId(R.id.incid_resolucion_fragment_container_ac)).check(matches(isDisplayed()));
         }
     },
 
-    INCID_SEE_BY_COMU_AC {
+    INCID_SEE_OPEN_BY_COMU_AC {
         @Override
         public void checkMenuItem_WTk(Activity activity) throws InterruptedException
         {
-            check(activity, R.string.incid_see_by_comu_ac_mn, R.id.incid_see_by_comu_ac);
+            check(activity, R.string.incid_see_by_comu_ac_mn, R.id.incid_see_open_by_comu_ac);
         }
     },
 
-    INCID_SEE_CLOSED_BY_USER_AC {
+    INCID_SEE_CLOSED_BY_COMU_AC {
         @Override
         public void checkMenuItem_WTk(Activity activity) throws InterruptedException
         {

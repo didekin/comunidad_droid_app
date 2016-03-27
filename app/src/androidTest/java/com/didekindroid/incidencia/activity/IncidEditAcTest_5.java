@@ -28,8 +28,8 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekindroid.common.activity.IntentExtraKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.common.activity.IntentExtraKey.INCID_RESOLUCION_FLAG;
+import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkNavigateUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
@@ -94,8 +94,8 @@ public class IncidEditAcTest_5 {
                 e.printStackTrace();
             }
             Intent intent = new Intent();
-            intent.putExtra(INCID_IMPORTANCIA_OBJECT.extra, incidResolPepeEscorial.getIncidImportancia());
-            intent.putExtra(INCID_RESOLUCION_FLAG.extra, incidResolPepeEscorial.hasResolucion());
+            intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, incidResolPepeEscorial.getIncidImportancia());
+            intent.putExtra(INCID_RESOLUCION_FLAG.key, incidResolPepeEscorial.hasResolucion());
             return intent;
         }
     };
@@ -111,9 +111,9 @@ public class IncidEditAcTest_5 {
     {
         mActivity = intentRule.getActivity();
         // Premisas.
-        IncidImportancia incidImportancia = (IncidImportancia) mActivity.getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.extra);
+        IncidImportancia incidImportancia = (IncidImportancia) mActivity.getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.key);
         assertThat(incidImportancia.getUserComu().hasAdministradorAuthority(), is(true));
-        boolean hasResolucionInBd = mActivity.getIntent().getBooleanExtra(INCID_RESOLUCION_FLAG.extra, false);
+        boolean hasResolucionInBd = mActivity.getIntent().getBooleanExtra(INCID_RESOLUCION_FLAG.key, false);
         assertThat(hasResolucionInBd, is(true));
     }
 

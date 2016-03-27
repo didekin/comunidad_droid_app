@@ -25,8 +25,8 @@ import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
 
 import static com.didekin.usuario.controller.UsuarioServiceConstant.IS_USER_DELETED;
-import static com.didekindroid.common.activity.IntentExtraKey.COMUNIDAD_ID;
-import static com.didekindroid.common.activity.IntentExtraKey.USERCOMU_LIST_OBJECT;
+import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
+import static com.didekindroid.common.activity.BundleKey.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
@@ -47,7 +47,7 @@ import static com.google.common.base.Preconditions.checkState;
 /**
  * Preconditions:
  * 1. Registered user.
- * 2. An intent with a UsuarioComunidad extra, with:
+ * 2. An intent with a UsuarioComunidad key, with:
  * -- userComu: id, alias, userName.
  * -- comunidad: id, tipoVia, nombreVia, numero, sufijoNumero, fechaAlta,
  * ---- municipio: codInProvincia, nombre.
@@ -76,7 +76,7 @@ public class UserComuDataAc extends AppCompatActivity {
 
         // Preconditions.
         checkState(isRegisteredUser(this));
-        mOldUserComu = (UsuarioComunidad) getIntent().getSerializableExtra(USERCOMU_LIST_OBJECT.extra);
+        mOldUserComu = (UsuarioComunidad) getIntent().getSerializableExtra(USERCOMU_LIST_OBJECT.key);
         checkNotNull(mOldUserComu);
 
         mAcView = getLayoutInflater().inflate(R.layout.usercomu_data_ac_layout, null);
@@ -179,17 +179,17 @@ public class UserComuDataAc extends AppCompatActivity {
         switch (resourceId) {
             case R.id.see_usercomu_by_comu_ac_mn:
                 Intent intent = new Intent();
-                intent.putExtra(COMUNIDAD_ID.extra, mOldUserComu.getComunidad().getC_Id());
+                intent.putExtra(COMUNIDAD_ID.key, mOldUserComu.getComunidad().getC_Id());
                 this.setIntent(intent);
                 SEE_USERCOMU_BY_COMU_AC.doMenuItem(this);
                 return true;
             case R.id.comu_data_ac_mn:
                 intent = new Intent(this, ComuDataAc.class);
-                intent.putExtra(COMUNIDAD_ID.extra, mOldUserComu.getComunidad().getC_Id());
+                intent.putExtra(COMUNIDAD_ID.key, mOldUserComu.getComunidad().getC_Id());
                 this.setIntent(intent);
                 COMU_DATA_AC.doMenuItem(this);
                 return true;
-            case R.id.incid_see_by_comu_ac_mn:
+            case R.id.incid_see_open_by_comu_ac_mn:
                 INCID_SEE_BY_COMU_AC.doMenuItem(this);
                 return true;
             case R.id.incid_reg_ac_mn:

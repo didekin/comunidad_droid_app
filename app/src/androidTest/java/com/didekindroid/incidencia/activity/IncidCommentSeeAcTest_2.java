@@ -26,9 +26,10 @@ import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_OBJECT;
+import static com.didekindroid.common.activity.FragmentTags.incid_comments_see_list_fr_tag;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
-import static com.didekindroid.common.activity.IntentExtraKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.utils.UIutils.formatTimeStampToString;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doComment;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
@@ -88,7 +89,7 @@ public class IncidCommentSeeAcTest_2 {
                 e.printStackTrace();
             }
             Intent intent = new Intent();
-            intent.putExtra(INCID_IMPORTANCIA_OBJECT.extra, incidJuanReal1);
+            intent.putExtra(INCIDENCIA_OBJECT.key, incidJuanReal1.getIncidencia());
             return intent;
         }
     };
@@ -103,7 +104,7 @@ public class IncidCommentSeeAcTest_2 {
     public void setUp() throws Exception
     {
         mActivity = activityRule.getActivity();
-        mAdapter = ((IncidCommentSeeListFr) mActivity.getFragmentManager().findFragmentById(R.id.incid_comments_see_frg)).mAdapter;
+        mAdapter = ((IncidCommentSeeListFr) mActivity.getFragmentManager().findFragmentByTag(incid_comments_see_list_fr_tag)).mAdapter;
     }
 
     @After

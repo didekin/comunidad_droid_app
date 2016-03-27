@@ -21,7 +21,7 @@ import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.common.utils.ConnectionUtils;
 
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeComunidadBeanFromView;
-import static com.didekindroid.common.activity.IntentExtraKey.COMUNIDAD_ID;
+import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
 import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_USERCOMU_BY_COMU_AC;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
@@ -34,7 +34,7 @@ import static com.google.common.base.Preconditions.checkState;
  * Preconditions:
  * 1. Registered user.
  * 2. Oldest user in the comunidad (to be changed in the future).
- * 3. An intent with a comunidad id extra.
+ * 3. An intent with a comunidad id key.
  * Postconditions:
  * 1.
  */
@@ -61,7 +61,7 @@ public class ComuDataAc extends Activity implements RegComuFr.RegComuFrListener 
 
         // Preconditions.
         checkState(isRegisteredUser(this));
-        mIdComunidad = getIntent().getLongExtra(COMUNIDAD_ID.extra, 0L);
+        mIdComunidad = getIntent().getLongExtra(COMUNIDAD_ID.key, 0L);
         checkState(mIdComunidad > 0L);
 
         // Asunción: esta tarea termina antes que la carga de los spinners en RegComuFr.
@@ -234,7 +234,7 @@ public class ComuDataAc extends Activity implements RegComuFr.RegComuFrListener 
         switch (resourceId) {
             case R.id.see_usercomu_by_comu_ac_mn:
                 Intent intent = new Intent();
-                intent.putExtra(COMUNIDAD_ID.extra, mIdComunidad);
+                intent.putExtra(COMUNIDAD_ID.key, mIdComunidad);
                 this.setIntent(intent);
                 SEE_USERCOMU_BY_COMU_AC.doMenuItem(this);
                 return true;

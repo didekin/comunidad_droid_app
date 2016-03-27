@@ -129,7 +129,7 @@ public class UserDataAc extends AppCompatActivity {
             case R.id.comu_search_ac_mn:
                 COMU_SEARCH_AC.doMenuItem(this);
                 return true;
-            case R.id.incid_see_by_comu_ac_mn:
+            case R.id.incid_see_open_by_comu_ac_mn:
                 INCID_SEE_BY_COMU_AC.doMenuItem(this);
                 return true;
             default:

@@ -22,7 +22,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.common.TokenHandler.TKhandler;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
-import static com.didekindroid.common.activity.IntentExtraKey.COMUNIDAD_SEARCH;
+import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_SEARCH;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutils.UserMenuTestUtils.REG_COMU_USER_USERCOMU_AC;
@@ -74,7 +74,7 @@ public class ComuSearchResultsAcTest_slow {
         whatClean = CleanUserEnum.CLEAN_NOTHING;
 
         intent = new Intent();
-        intent.putExtra(COMUNIDAD_SEARCH.extra, COMU_LA_PLAZUELA_5);
+        intent.putExtra(COMUNIDAD_SEARCH.key, COMU_LA_PLAZUELA_5);
     }
 
     @Test

@@ -28,8 +28,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekin.common.oauth2.Rol.PRESIDENTE;
-import static com.didekindroid.common.activity.IntentExtraKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.common.activity.IntentExtraKey.INCID_RESOLUCION_OBJECT;
+import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkNavigateUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
@@ -105,8 +105,8 @@ public class IncidResolucionSeeFrTest_2 {
                 e.printStackTrace();
             }
             Intent intent = new Intent();
-            intent.putExtra(INCID_IMPORTANCIA_OBJECT.extra, incidJuanEscorial);
-            intent.putExtra(INCID_RESOLUCION_OBJECT.extra, resolucion);
+            intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, incidJuanEscorial);
+            intent.putExtra(INCID_RESOLUCION_OBJECT.key, resolucion);
             return intent;
         }
     };
@@ -121,11 +121,11 @@ public class IncidResolucionSeeFrTest_2 {
     public void setUp() throws Exception
     {
         mActivity = intentRule.getActivity();
-        IncidImportancia incidImportancia = (IncidImportancia) mActivity.getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.extra);
+        IncidImportancia incidImportancia = (IncidImportancia) mActivity.getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.key);
         // Preconditions: a user without powers to erase and modify is received.
         assertThat(incidImportancia.getUserComu().hasAdministradorAuthority(), is(false));
         // Precondition: resolución in BD and intent.
-        Resolucion resolucionIntent = (Resolucion) mActivity.getIntent().getSerializableExtra(INCID_RESOLUCION_OBJECT.extra);
+        Resolucion resolucionIntent = (Resolucion) mActivity.getIntent().getSerializableExtra(INCID_RESOLUCION_OBJECT.key);
         assertThat(resolucionIntent, is(resolucion));
     }
 

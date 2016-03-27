@@ -28,8 +28,8 @@ import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static com.didekin.common.oauth2.Rol.PRESIDENTE;
-import static com.didekindroid.common.activity.IntentExtraKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.common.activity.IntentExtraKey.INCID_RESOLUCION_OBJECT;
+import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.testutils.ActivityTestUtils.updateSecurityData;
@@ -102,7 +102,7 @@ public class IncidEditAcTest_Mn3 {
                 e.printStackTrace();
             }
             Intent intent = new Intent();
-            intent.putExtra(INCID_IMPORTANCIA_OBJECT.extra, incidJuanEscorial);
+            intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, incidJuanEscorial);
             return intent;
         }
     };
@@ -117,7 +117,7 @@ public class IncidEditAcTest_Mn3 {
     public void setUp() throws Exception
     {
         mActivity = intentRule.getActivity();
-        IncidImportancia incidImportancia = (IncidImportancia) mActivity.getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.extra);
+        IncidImportancia incidImportancia = (IncidImportancia) mActivity.getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.key);
         // Preconditions: a user without powers to erase and modify is received.
         assertThat(incidImportancia.getUserComu().hasAdministradorAuthority(), is(false));
         // Resolución en BD.
@@ -138,8 +138,8 @@ public class IncidEditAcTest_Mn3 {
         INCID_RESOLUCION_REG_EDIT_AC.checkMenuItem_WTk(mActivity);
         onView(ViewMatchers.withId(R.id.incid_resolucion_see_fr_layout)).check(matches(isDisplayed()));
         // Extra con incidImportancia.
-        intended(hasExtra(INCID_IMPORTANCIA_OBJECT.extra, incidJuanEscorial));
+        intended(hasExtra(INCID_IMPORTANCIA_OBJECT.key, incidJuanEscorial));
         // Extra con resolución.
-        intended(hasExtra(INCID_RESOLUCION_OBJECT.extra, resolucion));
+        intended(hasExtra(INCID_RESOLUCION_OBJECT.key, resolucion));
     }
 }

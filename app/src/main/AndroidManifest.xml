@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    package="com.didekindroid"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest package="com.didekindroid"
+          xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- TODO: mirar https://developer.android.com/training/permissions/index.html y ajustar los fragments y activities. -->
 
@@ -11,9 +10,11 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
+
     <permission
         android:name="com.didekindroid.permission.C2D_MESSAGE"
         android:protectionLevel="signature"/>
+
     <uses-permission android:name="com.didekindroid.permission.C2D_MESSAGE"/>
     <!-- .......... -->
 
@@ -37,9 +38,11 @@
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
+
                 <category android:name="com.didekindroid.incidencia.gcm"/>
             </intent-filter>
         </receiver>
+
         <service
             android:name=".incidencia.gcm.AppGcmListenerServ"
             android:enabled="true"

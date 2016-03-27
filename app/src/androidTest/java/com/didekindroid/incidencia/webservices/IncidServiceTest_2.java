@@ -5,6 +5,7 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekin.incidservice.dominio.AmbitoIncidencia;
 import com.didekin.incidservice.dominio.IncidImportancia;
 import com.didekin.incidservice.dominio.Incidencia;
+import com.didekin.incidservice.dominio.IncidenciaUser;
 import com.didekin.incidservice.dominio.Resolucion;
 import com.didekin.usuario.dominio.Usuario;
 import com.didekin.usuario.dominio.UsuarioComunidad;
@@ -18,6 +19,7 @@ import org.junit.runner.RunWith;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 import static com.didekin.common.exception.DidekinExceptionMsg.INCID_IMPORTANCIA_WRONG_INIT;
 import static com.didekin.common.exception.DidekinExceptionMsg.UNAUTHORIZED_TX_TO_USER;
@@ -36,9 +38,12 @@ import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_ESCORIAL_
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_PLAZUELA5_JUAN;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_JUAN;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_PEPE;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_TRAV_PLAZUELA_PEPE;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_JUAN;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.makeUserComuWithComunidadId;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
+import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
@@ -229,6 +234,26 @@ public class IncidServiceTest_2 {
         assertThat(resolucion.getCosteEstimado(), is(1122));
     }
 
+    @Test
+    public void testSeeIncidClosedByComu() throws UiException, InterruptedException
+    {
+       // CASO OK: consulta por usuario no 'adm'.
+
+        whatClean = CLEAN_JUAN_AND_PEPE;
+        // Este método deja a Juan de usuario.
+        Resolucion resolucion = signPepeWithResolucion();
+
+        // Pepe es adm.
+        updateSecurityData(USER_PEPE.getUserName(), USER_PEPE.getPassword());
+        assertThat(IncidenciaServ.closeIncidencia(resolucion), is(2));
+
+        // Cambiamos a Juan.
+        updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
+        List<IncidenciaUser> incidenciaUsers = IncidenciaServ.seeIncidsClosedByComu(juanUserComu.getComunidad().getC_Id());
+        assertThat(incidenciaUsers.size(),is(1));
+        assertThat(incidenciaUsers.get(0).getIncidencia(), is(resolucion.getIncidencia()));
+    }
+
 //    ============================= HELPER METHODS ===============================
 
     private void signPepeWithIncidImportancia() throws UiException
@@ -253,7 +278,7 @@ public class IncidServiceTest_2 {
     }
 
     /**
-     * Utiliad para tests donde el usario no tenga poderes adm y necesitemo un usuario que sí los tenga.
+     * Utiliad para tests donde el usario no tenga poderes adm y necesitemos un usuario que sí los tenga.
      */
     private Resolucion signPepeWithResolucion() throws UiException, InterruptedException
     {

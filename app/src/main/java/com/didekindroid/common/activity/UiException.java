@@ -56,7 +56,7 @@ import static com.didekin.common.exception.DidekinExceptionMsg.USER_NOT_COMPARAB
 import static com.didekin.common.exception.DidekinExceptionMsg.USER_NOT_EQUAL_ABLE;
 import static com.didekin.common.exception.DidekinExceptionMsg.USER_NOT_HASHABLE;
 import static com.didekin.common.exception.DidekinExceptionMsg.USER_WRONG_INIT;
-import static com.didekindroid.common.activity.IntentExtraKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.activity.UiException.UiAction.GENERIC;
 import static com.didekindroid.common.activity.UiException.UiAction.INCID_REG;
 import static com.didekindroid.common.activity.UiException.UiAction.INCID_SEE_BY_COMU;
@@ -158,7 +158,7 @@ public class UiException extends Exception {
             @Override
             public void doAction(Activity activity, Intent intent)
             {
-                IncidImportancia incidImportancia = (IncidImportancia) intent.getSerializableExtra(INCID_IMPORTANCIA_OBJECT.extra);
+                IncidImportancia incidImportancia = (IncidImportancia) intent.getSerializableExtra(INCID_IMPORTANCIA_OBJECT.key);
                 checkArgument(incidImportancia.getUserComu().hasAdministradorAuthority());
                 makeToast(activity, R.string.resolucion_duplicada, LENGTH_SHORT);
                 intent.setClass(activity, IncidEditAc.class);

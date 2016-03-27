@@ -26,6 +26,8 @@ import com.didekindroid.incidencia.dominio.IncidenciaBean;
 import com.didekindroid.incidencia.repository.IncidenciaDataDbHelper;
 
 import static android.view.View.GONE;
+import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.common.utils.ConnectionUtils.checkInternetConnected;
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.common.utils.UIutils.makeToast;
@@ -67,8 +69,8 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
     {
         Log.d(TAG, "onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
-        mIncidImportancia = ((IncidenciaDataSupplier) getActivity()).getIncidImportancia();
-        boolean flagResolucion = ((IncidenciaDataSupplier) getActivity()).getFlagResolucion();
+        mIncidImportancia = (IncidImportancia) getArguments().getSerializable(INCID_IMPORTANCIA_OBJECT.key);
+        boolean flagResolucion = getArguments().getBoolean(INCID_RESOLUCION_FLAG.key);
 
         mIncidenciaBean = new IncidenciaBean();
         mIncidImportanciaBean = new IncidImportanciaBean();

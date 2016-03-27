@@ -33,8 +33,9 @@ import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekin.common.oauth2.Rol.PROPIETARIO;
-import static com.didekindroid.common.activity.IntentExtraKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.common.activity.IntentExtraKey.INCID_RESOLUCION_FLAG;
+import static com.didekindroid.common.activity.FragmentTags.incid_see_by_comu_list_fr_tag;
+import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.testutils.ActivityTestUtils.updateSecurityData;
@@ -93,7 +94,7 @@ public class IncidSeeOpenByComuAcTest_3 {
     public void setUp() throws Exception
     {
         IncidSeeOpenByComuAc mActivity = activityRule.getActivity();
-        IncidSeeByComuListFr mFragment = (IncidSeeByComuListFr) mActivity.getFragmentManager().findFragmentById(R.id.incid_see_by_comu_frg);
+        IncidSeeByComuListFr mFragment = (IncidSeeByComuListFr) mActivity.getFragmentManager().findFragmentByTag(incid_see_by_comu_list_fr_tag);
         adapter = (IncidSeeOpenByComuAdapter) mFragment.mAdapter;
     }
 
@@ -124,8 +125,8 @@ public class IncidSeeOpenByComuAcTest_3 {
         IncidImportancia incidImportancia = incidAndResolBundle.getIncidImportancia();
         assertThat(incidImportancia.getUserComu(), is(userComuJuan));
         assertThat(incidAndResolBundle.hasResolucion(),is(false));
-        intended(hasExtra(INCID_IMPORTANCIA_OBJECT.extra, incidImportancia));
-        intended(hasExtra(INCID_RESOLUCION_FLAG.extra, incidAndResolBundle.hasResolucion()));
+        intended(hasExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia));
+        intended(hasExtra(INCID_RESOLUCION_FLAG.key, incidAndResolBundle.hasResolucion()));
         // Juan entra en la pantalla de edición de la incidencia, tras seleccionarla.
         onView(withId(R.id.incid_edit_fragment_container_ac)).check(matches(isDisplayed()));
     }

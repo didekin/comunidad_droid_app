@@ -26,7 +26,7 @@ import static com.didekin.common.exception.DidekinExceptionMsg.INCIDENCIA_NOT_RE
 import static com.didekin.common.exception.DidekinExceptionMsg.RESOLUCION_DUPLICATE;
 import static com.didekin.common.exception.DidekinExceptionMsg.USER_DATA_NOT_MODIFIED;
 import static com.didekindroid.common.TokenHandler.TKhandler;
-import static com.didekindroid.common.activity.IntentExtraKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
@@ -71,7 +71,7 @@ public class UiExceptionTests_2 extends UiExceptionAbstractTest {
                 e.printStackTrace();
             }
             Intent intent = new Intent();
-            intent.putExtra(INCID_IMPORTANCIA_OBJECT.extra, mIncidJuanPlazuelas);
+            intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, mIncidJuanPlazuelas);
             return intent;
         }
         @Override
@@ -139,7 +139,7 @@ public class UiExceptionTests_2 extends UiExceptionAbstractTest {
         });
 
         checkToastInTest(R.string.incidencia_wrong_init, mActivity);
-        onView(withId(R.id.incid_see_by_comu_ac)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -147,7 +147,7 @@ public class UiExceptionTests_2 extends UiExceptionAbstractTest {
     {
         // Preconditions.
         final Intent intentIn = new Intent();
-        intentIn.putExtra(INCID_IMPORTANCIA_OBJECT.extra, mActivity.getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.extra));
+        intentIn.putExtra(INCID_IMPORTANCIA_OBJECT.key, mActivity.getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.key));
 
         final UiException ue = getUiException(RESOLUCION_DUPLICATE);
 

@@ -34,7 +34,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.TokenHandler.TKhandler;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
-import static com.didekindroid.common.activity.IntentExtraKey.COMUNIDAD_SEARCH;
+import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_SEARCH;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.activity.ViewsIDs.COMU_SEARCH_RESULTS;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
@@ -91,7 +91,7 @@ public class ComuSearchResultsAcTest_1 {
         Log.d(TAG, "In getFixture()");
         whatClean = CleanUserEnum.CLEAN_NOTHING;
         intent = new Intent();
-        intent.putExtra(COMUNIDAD_SEARCH.extra, COMU_LA_PLAZUELA_5);
+        intent.putExtra(COMUNIDAD_SEARCH.key, COMU_LA_PLAZUELA_5);
     }
 
     @Test
@@ -131,7 +131,7 @@ public class ComuSearchResultsAcTest_1 {
         mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getFragmentManager().findFragmentById(R.id.comu_list_frg);
         ComuSearchResultsListAdapter adapter = (ComuSearchResultsListAdapter) mComunidadSummaryFrg.getListAdapter();
         assertThat(adapter.getCount(), is(1));
-        Comunidad comunidad = (Comunidad) intent.getSerializableExtra(COMUNIDAD_SEARCH.extra);
+        Comunidad comunidad = (Comunidad) intent.getSerializableExtra(COMUNIDAD_SEARCH.key);
         onView(withId(COMU_SEARCH_RESULTS.idView)).check(matches(
                 withAdaptedData(Matchers.<Object>equalTo(comunidad))));
     }
@@ -151,7 +151,7 @@ public class ComuSearchResultsAcTest_1 {
         Comunidad comunidad = makeComunidad("Ronda", "de la Plazuela del Norte", (short) 5, "",
                 new Municipio((short) 2, new Provincia((short) 27)));
         Intent intent = new Intent();
-        intent.putExtra(COMUNIDAD_SEARCH.extra, comunidad);
+        intent.putExtra(COMUNIDAD_SEARCH.key, comunidad);
         activity = mActivityRule.launchActivity(intent);
         assertThat(isRegisteredUser(activity), is(true));
 
@@ -174,7 +174,7 @@ public class ComuSearchResultsAcTest_1 {
         Comunidad comunidad = makeComunidad("Rincón", "del No Existente", (short) 123, "",
                 new Municipio((short) 2, new Provincia((short) 27)));
         Intent intent = new Intent();
-        intent.putExtra(COMUNIDAD_SEARCH.extra, comunidad);
+        intent.putExtra(COMUNIDAD_SEARCH.key, comunidad);
         activity = mActivityRule.launchActivity(intent);
         assertThat(isRegisteredUser(activity), is(false));
 
@@ -199,7 +199,7 @@ public class ComuSearchResultsAcTest_1 {
         Comunidad comunidad = makeComunidad("Rincón", "del No Existente", (short) 123, "",
                 new Municipio((short) 2, new Provincia((short) 27)));
         Intent intent = new Intent();
-        intent.putExtra(COMUNIDAD_SEARCH.extra, comunidad);
+        intent.putExtra(COMUNIDAD_SEARCH.key, comunidad);
         activity = mActivityRule.launchActivity(intent);
         assertThat(isRegisteredUser(activity), is(true));
 

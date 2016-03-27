@@ -19,7 +19,6 @@ public abstract class IncidResolucionFrAbstract extends Fragment implements Fech
     private static final String TAG = IncidResolucionRegFr.class.getCanonicalName();
 
     ResolucionBean mResolucionBean;
-    IncidenciaDataSupplier mActivitySupplier;
     View mFragmentView;
     TextView mFechaView;
 
@@ -28,7 +27,6 @@ public abstract class IncidResolucionFrAbstract extends Fragment implements Fech
     {
         Log.d(TAG, "onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
-        mActivitySupplier = (IncidenciaDataSupplier) getActivity();
     }
 
     //  ======================== INTERFACE COMMUNICATIONS METHODS ==========================

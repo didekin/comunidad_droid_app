@@ -23,8 +23,8 @@ import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekindroid.common.activity.IntentExtraKey.COMUNIDAD_LIST_OBJECT;
-import static com.didekindroid.common.activity.IntentExtraKey.COMUNIDAD_SEARCH;
+import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_LIST_OBJECT;
+import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_SEARCH;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
@@ -64,7 +64,7 @@ public class ComuSearchResultsAcTest_intent_2 {
         protected Intent getActivityIntent()
         {
             Intent intent = new Intent();
-            intent.putExtra(COMUNIDAD_SEARCH.extra, COMU_LA_PLAZUELA_5);
+            intent.putExtra(COMUNIDAD_SEARCH.key, COMU_LA_PLAZUELA_5);
             return intent;
         }
     };
@@ -93,7 +93,7 @@ public class ComuSearchResultsAcTest_intent_2 {
         // Usuario registrado. La búsqueda devuelve una comunidad a la que él NO está asociado.
 
         onData(is(COMU_LA_PLAZUELA_5)).perform(click());
-        intended(hasExtra(COMUNIDAD_LIST_OBJECT.extra,comunidad));
+        intended(hasExtra(COMUNIDAD_LIST_OBJECT.key,comunidad));
         onView(withId(R.id.reg_usercomu_ac_layout)).check(matches(isDisplayed()));
     }
 }

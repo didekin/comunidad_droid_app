@@ -24,7 +24,7 @@ import com.didekindroid.incidencia.activity.utils.ComunidadSpinnerSetter;
 
 import java.util.List;
 
-import static com.didekindroid.common.activity.IntentExtraKey.COMUNIDAD_LIST_INDEX;
+import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_LIST_INDEX;
 import static com.google.common.base.Preconditions.checkState;
 
 /**
@@ -59,13 +59,13 @@ public class IncidSeeByComuListFr extends ListFragment implements ComuSpinnerSet
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState)
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         Log.d(TAG, "onCreateView()");
+
         mView = inflater.inflate(R.layout.incid_see_generic_fr_layout, container, false);
         if (savedInstanceState != null) {
-            mComunidadSelectedIndex = savedInstanceState.getInt(COMUNIDAD_LIST_INDEX.extra, 0);
+            mComunidadSelectedIndex = savedInstanceState.getInt(COMUNIDAD_LIST_INDEX.key, 0);
         }
         return mView;
     }
@@ -126,7 +126,7 @@ public class IncidSeeByComuListFr extends ListFragment implements ComuSpinnerSet
     public void onSaveInstanceState(Bundle savedInstanceState)
     {
         Log.d(TAG, "onSaveInstanceState()");
-        savedInstanceState.putInt(COMUNIDAD_LIST_INDEX.extra, mComunidadSelectedIndex);
+        savedInstanceState.putInt(COMUNIDAD_LIST_INDEX.key, mComunidadSelectedIndex);
         super.onSaveInstanceState(savedInstanceState);
     }
 

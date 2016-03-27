@@ -1,10 +1,10 @@
 <ScrollView
+    android:id="@+id/incid_edit_maxpower_frg"
     style="@style/baseLayout.scroll"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/incid_edit_maxpower_frg">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/incid_edit_maxpower_fr_layout"
         style="@style/baseLayout"
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -12,57 +12,69 @@
         android:layout_marginTop="@dimen/app_bar_bottom_margin"
         tools:context="com.didekindroid.incidencia.activity.IncidEditMaxPowerFr">
 
-        <TextView
-            android:id="@+id/incid_comunidad_rot"
-            style="@style/textBase.textFieldLabel1"
-            android:text="@string/incid_comunidad_rot"
-            android:layout_alignParentStart="true"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/incid_edit_comunidad_block">
+            <TextView
+                android:id="@+id/incid_comunidad_rot"
+                style="@style/textBase.textFieldLabel1"
+                android:text="@string/incid_comunidad_rot"/>
 
-        <TextView
-            android:id="@+id/incid_comunidad_txt"
-            style="@style/textBase.textFieldLabel2"
-            android:layout_alignBottom="@id/incid_comunidad_rot"
-            android:layout_alignTop="@id/incid_comunidad_rot"
-            android:layout_marginTop="0dp"
-            android:layout_toEndOf="@id/incid_comunidad_rot"/>
+            <TextView
+                android:id="@+id/incid_comunidad_txt"
+                style="@style/textBase.textFieldLabel2"/>
+        </LinearLayout>
 
         <EditText
             android:id="@+id/incid_reg_desc_ed"
             style="@style/textBase.editField.description"
-            android:layout_alignParentStart="true"
-            android:layout_below="@id/incid_comunidad_rot"
             tools:ignore="LabelFor"/>
 
-        <Spinner
-            android:id="@+id/incid_reg_ambito_spinner"
-            style="@style/spinnerBase"
-            android:layout_below="@+id/incid_reg_desc_ed"
-            android:layout_alignParentStart="true"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/incid_edit_ambito_block">
+            <TextView
+                android:id="@+id/incid_ambito_rot"
+                style="@style/textBase.textFieldLabel1"
+                android:text="@string/incid_ambito_rot"/>
+            <Spinner
+                android:id="@+id/incid_reg_ambito_spinner"
+                style="@style/spinnerBase"/>
+        </LinearLayout>
 
-        <Spinner
-            android:id="@+id/incid_reg_importancia_spinner"
-            style="@style/spinnerBase"
-            android:layout_below="@+id/incid_reg_ambito_spinner"
-            android:layout_alignParentStart="true"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/incid_edit_importancia_block">
+            <TextView
+                android:id="@+id/incid_importancia_rot"
+                style="@style/textBase.textFieldLabel1"
+                android:text="@string/incid_importancia_user_rot"/>
+            <Spinner
+                android:id="@+id/incid_reg_importancia_spinner"
+                style="@style/spinnerBase"/>
+        </LinearLayout>
 
         <Button
             android:id="@+id/incid_edit_fr_modif_button"
             style="@style/textBase.acButton1"
-            android:text="@string/incid_edit_modif_button_rot"
-            android:layout_below="@id/incid_reg_importancia_spinner"/>
+            android:text="@string/incid_edit_modif_button_rot"/>
 
         <TextView
             android:id="@+id/incid_edit_fr_borrar_txt"
             style="@style/textBase.textFieldLabel2"
-            android:layout_below="@id/incid_edit_fr_modif_button"
-            android:text="@string/incid_edit_borrar_txt" />
+            android:text="@string/incid_edit_borrar_txt"/>
 
         <Button
             android:id="@+id/incid_edit_fr_borrar_button"
             style="@style/textBase.acButton1"
-            android:text="@string/incid_edit_borrar_button_rot"
-            android:layout_below="@id/incid_edit_fr_borrar_txt"/>
+            android:text="@string/incid_edit_borrar_button_rot"/>
 
-    </RelativeLayout>
+    </LinearLayout>
 
 </ScrollView>

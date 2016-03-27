@@ -36,11 +36,11 @@ import static com.didekin.common.oauth2.Rol.PRESIDENTE;
 import static com.didekin.common.oauth2.Rol.PROPIETARIO;
 import static com.didekindroid.common.TokenHandler.TKhandler;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
-import static com.didekindroid.common.activity.IntentExtraKey.COMUNIDAD_ID;
-import static com.didekindroid.common.activity.IntentExtraKey.USERCOMU_LIST_OBJECT;
+import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
+import static com.didekindroid.common.activity.BundleKey.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_REG_AC;
-import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_BY_COMU_AC;
+import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_OPEN_BY_COMU_AC;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_NOTHING;
 import static com.didekindroid.usuario.testutils.UserMenuTestUtils.COMU_DATA_AC;
@@ -92,7 +92,7 @@ public class UserComuDataAcTest_1 {
 
             // We use that comunidad as the one to associate to the present user.
             Intent intent = new Intent();
-            intent.putExtra(USERCOMU_LIST_OBJECT.extra, mUsuarioComunidad);
+            intent.putExtra(USERCOMU_LIST_OBJECT.key, mUsuarioComunidad);
             return intent;
         }
     };
@@ -160,7 +160,7 @@ public class UserComuDataAcTest_1 {
     @Test
     public void testOnCreate_2()
     {
-        UsuarioComunidad usuarioComunidad = (UsuarioComunidad) mActivity.getIntent().getSerializableExtra(USERCOMU_LIST_OBJECT.extra);
+        UsuarioComunidad usuarioComunidad = (UsuarioComunidad) mActivity.getIntent().getSerializableExtra(USERCOMU_LIST_OBJECT.key);
         assertThat(usuarioComunidad, notNullValue());
         assertThat(usuarioComunidad.getComunidad(),is(mUsuarioComunidad.getComunidad()));
     }
@@ -169,7 +169,7 @@ public class UserComuDataAcTest_1 {
     public void testSeeUserComuByComuMn_withToken() throws InterruptedException
     {
         SEE_USERCOMU_BY_COMU_AC.checkMenuItem_WTk(mActivity);
-        intended(hasExtra(COMUNIDAD_ID.extra, mUsuarioComunidad.getComunidad().getC_Id()));
+        intended(hasExtra(COMUNIDAD_ID.key, mUsuarioComunidad.getComunidad().getC_Id()));
     }
 
     @Test
@@ -177,13 +177,13 @@ public class UserComuDataAcTest_1 {
     {
         // Only one user associated to the comunidad: the menu shows the item.
         COMU_DATA_AC.checkMenuItem_WTk(mActivity);
-        intended(hasExtra(COMUNIDAD_ID.extra, mUsuarioComunidad.getComunidad().getC_Id()));
+        intended(hasExtra(COMUNIDAD_ID.key, mUsuarioComunidad.getComunidad().getC_Id()));
     }
 
     @Test
     public void testIncidSeeByComu_withToken_1() throws InterruptedException
     {
-        INCID_SEE_BY_COMU_AC.checkMenuItem_WTk(mActivity);
+        INCID_SEE_OPEN_BY_COMU_AC.checkMenuItem_WTk(mActivity);
     }
 
     @Test

@@ -26,7 +26,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
-import static com.didekindroid.common.activity.IntentExtraKey.COMUNIDAD_ID;
+import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.external.LongListMatchers.withAdaptedData;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
@@ -74,7 +74,7 @@ public class SeeUserComuByComuAcTest {
         comunidadId = usuariosComu.get(0).getComunidad().getC_Id(); // COMU_PLAZUELA5_JUAN.
         // We put the comunidad in the intent.
         intent = new Intent();
-        intent.putExtra(COMUNIDAD_ID.extra, comunidadId);
+        intent.putExtra(COMUNIDAD_ID.key, comunidadId);
 
         mActivity = mActivityRule.launchActivity(intent);
         mFragment = (SeeUserComuByComuFr) mActivity.getFragmentManager().findFragmentById(R.id.see_usercomu_by_comu_frg);
@@ -94,7 +94,7 @@ public class SeeUserComuByComuAcTest {
     {
         assertThat(mActivity, notNullValue());
         assertThat(isRegisteredUser(mActivity), is(true));
-        assertThat(mActivity.getIntent().getLongExtra(COMUNIDAD_ID.extra, 0L), is(comunidadId));
+        assertThat(mActivity.getIntent().getLongExtra(COMUNIDAD_ID.key, 0L), is(comunidadId));
         assertThat(mFragment, notNullValue());
         assertThat(mFragment.fragmentListView, notNullValue());
         assertThat(mFragment.nombreComuView, notNullValue());

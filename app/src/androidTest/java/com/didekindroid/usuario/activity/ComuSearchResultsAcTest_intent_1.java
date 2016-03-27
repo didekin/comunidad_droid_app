@@ -25,8 +25,8 @@ import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekindroid.common.activity.IntentExtraKey.COMUNIDAD_SEARCH;
-import static com.didekindroid.common.activity.IntentExtraKey.USERCOMU_LIST_OBJECT;
+import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_SEARCH;
+import static com.didekindroid.common.activity.BundleKey.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
@@ -65,7 +65,7 @@ public class ComuSearchResultsAcTest_intent_1 {
         protected Intent getActivityIntent()
         {
             Intent intent = new Intent();
-            intent.putExtra(COMUNIDAD_SEARCH.extra, COMU_REAL);
+            intent.putExtra(COMUNIDAD_SEARCH.key, COMU_REAL);
             return intent;
         }
     };
@@ -102,7 +102,7 @@ public class ComuSearchResultsAcTest_intent_1 {
                 .puerta(COMU_REAL_JUAN.getPuerta())
                 .build();
 
-        intended(hasExtra(USERCOMU_LIST_OBJECT.extra, usuarioComunidad));
+        intended(hasExtra(USERCOMU_LIST_OBJECT.key, usuarioComunidad));
         onView(withId(R.id.usercomu_data_ac_layout)).check(matches(isDisplayed()));
     }
 }

@@ -32,7 +32,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
-import static com.didekindroid.common.activity.IntentExtraKey.COMUNIDAD_ID;
+import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
@@ -75,7 +75,7 @@ public class ComuDataAcTest {
                 e.printStackTrace();
             }
             Intent intent = new Intent();
-            intent.putExtra(COMUNIDAD_ID.extra, mComunidad.getC_Id());
+            intent.putExtra(COMUNIDAD_ID.key, mComunidad.getC_Id());
             return intent;
         }
     };

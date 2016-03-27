@@ -21,8 +21,8 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekindroid.common.activity.IntentExtraKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.common.activity.IntentExtraKey.INCID_RESOLUCION_OBJECT;
+import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkNavigateUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
@@ -78,7 +78,7 @@ public class IncidResolucionSeeDefaultFrTest {
                 e.printStackTrace();
             }
             Intent intent = new Intent();
-            intent.putExtra(INCID_IMPORTANCIA_OBJECT.extra, incidJuanReal1);
+            intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, incidJuanReal1);
             return intent;
         }
     };
@@ -94,9 +94,9 @@ public class IncidResolucionSeeDefaultFrTest {
     {
         mActivity = intentRule.getActivity();
         // Premisas.
-        IncidImportancia incidImportancia = (IncidImportancia) mActivity.getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.extra);
+        IncidImportancia incidImportancia = (IncidImportancia) mActivity.getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.key);
         assertThat(incidImportancia.getUserComu().hasAdministradorAuthority(), is(false));
-        assertThat(mActivity.getIntent().getSerializableExtra(INCID_RESOLUCION_OBJECT.extra), nullValue());
+        assertThat(mActivity.getIntent().getSerializableExtra(INCID_RESOLUCION_OBJECT.key), nullValue());
     }
 
     @After

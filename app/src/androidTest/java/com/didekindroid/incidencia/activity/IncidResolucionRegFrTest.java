@@ -40,7 +40,7 @@ import static com.didekindroid.common.testutils.ActivityTestUtils.checkNavigateU
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
-import static com.didekindroid.common.activity.IntentExtraKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
@@ -97,7 +97,7 @@ public class IncidResolucionRegFrTest {
                 e.printStackTrace();
             }
             Intent intent = new Intent();
-            intent.putExtra(INCID_IMPORTANCIA_OBJECT.extra, incidJuanReal1);
+            intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, incidJuanReal1);
             return intent;
         }
     };
@@ -113,7 +113,7 @@ public class IncidResolucionRegFrTest {
     {
         Thread.sleep(3000);
         mActivity = intentRule.getActivity();
-        IncidImportancia incidImportancia = (IncidImportancia) mActivity.getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.extra);
+        IncidImportancia incidImportancia = (IncidImportancia) mActivity.getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.key);
         // Preconditions: a user with powers to erase and modify is received.
         assertThat(incidImportancia.getUserComu().hasAdministradorAuthority(), is(true));
         // NO resolución en BD.
@@ -238,7 +238,7 @@ public class IncidResolucionRegFrTest {
         onView(withId(R.id.incid_resolucion_reg_ac_button)).perform(click());
         onView(withId(R.id.incid_edit_fragment_container_ac)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_edit_maxpower_frg)).check(matches(isDisplayed()));
-        intended(hasExtra(INCID_IMPORTANCIA_OBJECT.extra, incidJuanReal1));
+        intended(hasExtra(INCID_IMPORTANCIA_OBJECT.key, incidJuanReal1));
     }
 
 //    ============================= HELPER METHODS ===========================

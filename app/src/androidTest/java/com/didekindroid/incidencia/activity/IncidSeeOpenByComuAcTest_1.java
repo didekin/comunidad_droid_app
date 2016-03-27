@@ -33,14 +33,14 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkNavigateUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
-import static com.didekindroid.common.activity.IntentExtraKey.COMUNIDAD_ID;
+import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
 import static com.didekindroid.common.utils.UIutils.checkPlayServices;
 import static com.didekindroid.common.utils.UIutils.isGcmTokenSentServer;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.utils.UIutils.updateIsGcmTokenSentServer;
 import static com.didekindroid.incidencia.gcm.AppGcmListenerServ.TypeMsgHandler.INCIDENCIA;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_REG_AC;
-import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_CLOSED_BY_USER_AC;
+import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_CLOSED_BY_COMU_AC;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutils.UserMenuTestUtils.SEE_USERCOMU_BY_COMU_AC;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_ESCORIAL_PEPE;
@@ -118,8 +118,8 @@ public class IncidSeeOpenByComuAcTest_1 {
         assertThat(mActivity, notNullValue());
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
 
-        onView(withId(R.id.incid_see_by_comu_ac)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_see_by_comu_frg)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_see_generic_layout)).check(matches(isDisplayed()));
         // No hay incidencias registradas. La vista forma parte de la jerarquía de vistas de la página.
         onView(withId(android.R.id.list)).check(matches(not(isDisplayed())));
         onView(withId(android.R.id.empty)).check(matches(isDisplayed()));
@@ -133,9 +133,9 @@ public class IncidSeeOpenByComuAcTest_1 {
         assertThat(mActivity.mComunidadSelected, is(mComunidadSelected));
         onView(allOf(
                 withId(R.id.app_spinner_1_dropdown_item),
-                withParent(withId(R.id.incid_reg_comunidad_spinner))))
-                .check(matches(withText(is(mComunidadSelected.getNombreComunidad()))))
-                .check(matches(isDisplayed()));
+                withParent(withId(R.id.incid_reg_comunidad_spinner))
+        )).check(matches(withText(is(mComunidadSelected.getNombreComunidad()))
+        )).check(matches(isDisplayed()));
     }
 
     @Test
@@ -151,7 +151,7 @@ public class IncidSeeOpenByComuAcTest_1 {
     @Test
     public void testIncidSeeClosedByComuMn() throws InterruptedException
     {
-        INCID_SEE_CLOSED_BY_USER_AC.checkMenuItem_WTk(mActivity);
+        INCID_SEE_CLOSED_BY_COMU_AC.checkMenuItem_WTk(mActivity);
     }
 
     @Test
@@ -164,6 +164,6 @@ public class IncidSeeOpenByComuAcTest_1 {
     public void testSeeUserComuByComuMn() throws InterruptedException
     {
         SEE_USERCOMU_BY_COMU_AC.checkMenuItem_WTk(mActivity);
-        intended(hasExtra(COMUNIDAD_ID.extra, mComunidadSelected.getC_Id()));
+        intended(hasExtra(COMUNIDAD_ID.key, mComunidadSelected.getC_Id()));
     }
 }

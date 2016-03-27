@@ -1,5 +1,6 @@
 package com.didekindroid.incidencia.activity;
 
+import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -8,18 +9,19 @@ import android.view.View;
 import com.didekin.incidservice.dominio.IncidImportancia;
 import com.didekin.incidservice.dominio.Resolucion;
 import com.didekindroid.R;
-import com.didekindroid.common.activity.IntentExtraKey;
+import com.didekindroid.common.activity.BundleKey;
 
-import static com.didekindroid.common.activity.FragmentTags.incid_resolucion_edit_fr_tag;
-import static com.didekindroid.common.activity.IntentExtraKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.common.activity.FragmentTags.incid_resolucion_ac_frgs_tag;
+import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.common.activity.SavedInstanceKey.INCID_IMPORTANCIA;
 import static com.didekindroid.common.activity.SavedInstanceKey.INCID_RESOLUCION;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 
 /**
  * Preconditions:
- * 1. An intent extra is received with an IncidImportancia belonging to a user with function 'adm'.
- * 2. An intent extra with a Resolucion instance MAY be received.
+ * 1. An intent key is received with an IncidImportancia belonging to a user with function 'adm'.
+ * 2. An intent key with a Resolucion instance MAY be received.
  * Postconditions:
  * 1. If NOT Resolucion intent is received and the user has authority 'adm':
  * 1.1. An incidencia resolution is registered in BD, associated to its editor.
@@ -34,8 +36,7 @@ import static com.didekindroid.common.utils.UIutils.doToolBar;
  * 4. If a Resolucion intent is received and the user hasn't got authority 'adm':
  * 4.1 The data are shown.
  */
-public class IncidResolucionRegEditSeeAc extends AppCompatActivity implements
-        IncidenciaDataSupplier {
+public class IncidResolucionRegEditSeeAc extends AppCompatActivity {
 
     private static final String TAG = IncidResolucionRegEditSeeAc.class.getCanonicalName();
 
@@ -48,8 +49,8 @@ public class IncidResolucionRegEditSeeAc extends AppCompatActivity implements
         Log.d(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
 
-        mIncidImportancia = (IncidImportancia) getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.extra);
-        mResolucion = (Resolucion) getIntent().getSerializableExtra(IntentExtraKey.INCID_RESOLUCION_OBJECT.extra);
+        mIncidImportancia = (IncidImportancia) getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.key);
+        mResolucion = (Resolucion) getIntent().getSerializableExtra(BundleKey.INCID_RESOLUCION_OBJECT.key);
 
         View mAcView = getLayoutInflater().inflate(R.layout.incid_resolucion_reg_ac, null);
         setContentView(mAcView);
@@ -59,26 +60,28 @@ public class IncidResolucionRegEditSeeAc extends AppCompatActivity implements
             return;
         }
 
+        Bundle argsFragment = new Bundle();
+        argsFragment.putSerializable(INCID_IMPORTANCIA_OBJECT.key, mIncidImportancia);
+        argsFragment.putSerializable(INCID_RESOLUCION_OBJECT.key, mResolucion);
+        Fragment fragmentToAdd;
+
         if (mIncidImportancia.getUserComu().hasAdministradorAuthority()) {
             if (mResolucion != null) {
-                IncidResolucionEditFr mRegFragment = new IncidResolucionEditFr();
-                getFragmentManager().beginTransaction()
-                        .add(R.id.incid_resolucion_fragment_container_ac, mRegFragment, incid_resolucion_edit_fr_tag)
-                        .commit();
-
+                fragmentToAdd = new IncidResolucionEditFr();
             } else {
-                IncidResolucionRegFr mRegFragment = new IncidResolucionRegFr();
-                getFragmentManager().beginTransaction().add(R.id.incid_resolucion_fragment_container_ac, mRegFragment).commit();
+                fragmentToAdd = new IncidResolucionRegFr();
             }
         } else { // User without authority 'adm'
             if (mResolucion != null) {
-                IncidResolucionSeeFr mSeeFragment = new IncidResolucionSeeFr();
-                getFragmentManager().beginTransaction().add(R.id.incid_resolucion_fragment_container_ac, mSeeFragment).commit();
+                fragmentToAdd = new IncidResolucionSeeFr();
             } else {
-                IncidResolucionSeeDefaultFr mSeeFragment = new IncidResolucionSeeDefaultFr();
-                getFragmentManager().beginTransaction().add(R.id.incid_resolucion_fragment_container_ac, mSeeFragment).commit();
+                fragmentToAdd = new IncidResolucionSeeDefaultFr();
             }
         }
+        fragmentToAdd.setArguments(argsFragment);
+        getFragmentManager().beginTransaction()
+                .add(R.id.incid_resolucion_fragment_container_ac, fragmentToAdd, incid_resolucion_ac_frgs_tag)
+                .commit();
     }
 
     @Override
@@ -113,29 +116,6 @@ public class IncidResolucionRegEditSeeAc extends AppCompatActivity implements
     {
         Log.d(TAG, "onPause()");
         super.onPause();
-    }
-
-//  ======================== INTERFACE COMMUNICATIONS METHODS ==========================
-
-    @Override
-    public IncidImportancia getIncidImportancia()
-    {
-        Log.d(TAG, "getIncidImportancia()");
-        return mIncidImportancia;
-    }
-
-    @Override
-    public Resolucion getResolucion()
-    {
-        Log.d(TAG, "getResolucion()");
-        return mResolucion;
-    }
-
-    @Override
-    public boolean getFlagResolucion()
-    {
-        Log.d(TAG, "getFlagResolucion()");
-        return !(mResolucion == null);
     }
 
 //    ============================================================

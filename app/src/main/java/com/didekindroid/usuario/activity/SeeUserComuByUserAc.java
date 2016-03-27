@@ -10,7 +10,7 @@ import android.view.MenuItem;
 import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 
-import static com.didekindroid.common.activity.IntentExtraKey.USERCOMU_LIST_OBJECT;
+import static com.didekindroid.common.activity.BundleKey.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.UserMenu.COMU_SEARCH_AC;
@@ -22,7 +22,7 @@ import static com.google.common.base.Preconditions.checkState;
  * Preconditions:
  * 1. The user is registered.
  * Postconditions:
- * 1. An object UsuarioComunidad is passed as an intent extra with:
+ * 1. An object UsuarioComunidad is passed as an intent key with:
  * -- an object Comunidad fully initialized.
  * -- an object Usuario fully initialized.
  * -- the rest of data of an object UsuarioComunidad fully initialized.
@@ -144,7 +144,7 @@ public class SeeUserComuByUserAc extends AppCompatActivity implements
     {
         Log.d(TAG, "onUserComuSelected()");
         Intent intent = new Intent(this, UserComuDataAc.class);
-        intent.putExtra(USERCOMU_LIST_OBJECT.extra, userComu);
+        intent.putExtra(USERCOMU_LIST_OBJECT.key, userComu);
         startActivity(intent);
     }
 }

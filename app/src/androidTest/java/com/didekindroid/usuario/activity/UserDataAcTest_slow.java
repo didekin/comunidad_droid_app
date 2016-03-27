@@ -16,7 +16,7 @@ import org.junit.runner.RunWith;
 
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
-import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_BY_COMU_AC;
+import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_OPEN_BY_COMU_AC;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutils.UserMenuTestUtils.COMU_SEARCH_AC;
 import static com.didekindroid.usuario.testutils.UserMenuTestUtils.DELETE_ME_AC;
@@ -96,6 +96,6 @@ public class UserDataAcTest_slow {
     @Test
     public void testIncidSeeByComuMn_withToken() throws InterruptedException
     {
-        INCID_SEE_BY_COMU_AC.checkMenuItem_WTk(mActivity);
+        INCID_SEE_OPEN_BY_COMU_AC.checkMenuItem_WTk(mActivity);
     }
 }

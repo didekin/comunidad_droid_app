@@ -23,8 +23,8 @@ import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekindroid.common.activity.IntentExtraKey.COMUNIDAD_ID;
-import static com.didekindroid.common.activity.IntentExtraKey.COMUNIDAD_LIST_OBJECT;
+import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
+import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRE;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRO;
@@ -84,7 +84,7 @@ public class RegUserComuAcTest_intent {
 
             // We use that comunidad as the one to associate to the present user.
             intent = new Intent();
-            intent.putExtra(COMUNIDAD_LIST_OBJECT.extra, comunidad);
+            intent.putExtra(COMUNIDAD_LIST_OBJECT.key, comunidad);
             return intent;
         }
     };
@@ -109,7 +109,7 @@ public class RegUserComuAcTest_intent {
 
         assertThat(activity, notNullValue());
         assertThat(activity.getFragmentManager().findFragmentById(R.id.reg_usercomu_frg), notNullValue());
-        Comunidad comunidadIntent = (Comunidad) intent.getSerializableExtra(COMUNIDAD_LIST_OBJECT.extra);
+        Comunidad comunidadIntent = (Comunidad) intent.getSerializableExtra(COMUNIDAD_LIST_OBJECT.key);
         assertThat(comunidadIntent.getC_Id(), is(comunidad.getC_Id()));
         onView(withId(R.id.reg_usercomu_ac_layout)).check(matches(isDisplayed()));
         onView(withId(R.id.reg_usercomu_frg)).check(matches(isDisplayed()));
@@ -121,7 +121,7 @@ public class RegUserComuAcTest_intent {
         typeRegUserComuData("portalA", "escC", "plantaB", "puerta_1", PRO, PRE);
         onView(withId(R.id.reg_usercomu_button)).check(matches(isDisplayed())).perform(click());
 
-        intended(hasExtra(COMUNIDAD_ID.extra, comunidad.getC_Id()));
+        intended(hasExtra(COMUNIDAD_ID.key, comunidad.getC_Id()));
         onView(withId(R.id.see_usercomu_by_comu_ac_frg_container)).check(matches(isDisplayed()));
     }
 

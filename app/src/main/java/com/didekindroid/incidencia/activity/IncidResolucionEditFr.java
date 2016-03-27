@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.didekin.incidservice.dominio.Avance;
+//import com.didekin.incidservice.dominio.IncidImportancia;
 import com.didekin.incidservice.dominio.IncidImportancia;
 import com.didekin.incidservice.dominio.Incidencia;
 import com.didekin.incidservice.dominio.Resolucion;
@@ -28,7 +29,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.didekindroid.common.activity.FechaPickerFr.FechaPickerHelper.initFechaSpinnerView;
-import static com.didekindroid.common.activity.IntentExtraKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.common.utils.UIutils.formatTimeStampToString;
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.common.utils.UIutils.getStringFromInteger;
@@ -45,6 +47,7 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
 
     private static final String TAG = IncidResolucionEditFr.class.getCanonicalName();
     Resolucion mResolucion;
+    IncidImportancia mIncidImportancia;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -83,7 +86,8 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
         Log.d(TAG, "onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
 
-        mResolucion = mActivitySupplier.getResolucion();
+        mIncidImportancia = (IncidImportancia) getArguments().getSerializable(INCID_IMPORTANCIA_OBJECT.key);
+        mResolucion = (Resolucion) getArguments().getSerializable(INCID_RESOLUCION_OBJECT.key);
         checkState(mResolucion != null);
         // Inicialización de la fecha en BD en el bean, para manternela si no la modifica.
         mResolucionBean.setFechaPrevista(mResolucion.getFechaPrev().getTime());
@@ -124,6 +128,7 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
         }
     }
 
+    @SuppressWarnings("ConstantConditions")
     Resolucion makeResolucionFromBean(StringBuilder errorMsg)
     {
         Log.d(TAG, "makeResolucionFromBean()");
@@ -134,12 +139,10 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
             return null;
         }
 
-        IncidImportancia incidImportancia = mActivitySupplier.getIncidImportancia();
-
         final Incidencia incidencia = new Incidencia.IncidenciaBuilder()
-                .incidenciaId(incidImportancia.getIncidencia().getIncidenciaId())
+                .incidenciaId(mIncidImportancia.getIncidencia().getIncidenciaId())
                 .comunidad(new Comunidad.ComunidadBuilder()
-                        .c_id(incidImportancia.getIncidencia().getComunidad().getC_Id())
+                        .c_id(mIncidImportancia.getIncidencia().getComunidad().getC_Id())
                         .build())
                 .build();
 
@@ -168,7 +171,7 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
         mResolucionBean.setCostePrevText(((EditText) mFragmentView.findViewById(R.id.incid_resolucion_coste_prev_ed)).getText().toString());
         mResolucionBean.setFechaPrevistaText(mFechaView.getText().toString());
 
-        if (!mResolucionBean.validateBeanAvance(errorMsg, getResources(), mActivitySupplier.getIncidImportancia())) {
+        if (!mResolucionBean.validateBeanAvance(errorMsg, getResources(), mIncidImportancia)) {
             mResolucionBean = null;
         }
     }
@@ -203,12 +206,12 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
 
             if (uiException != null) {
                 Intent intent = new Intent();
-                intent.putExtra(INCID_IMPORTANCIA_OBJECT.extra, mActivitySupplier.getIncidImportancia());
+                intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, mIncidImportancia);
                 uiException.processMe(getActivity(), intent);
             } else {
                 checkState(rowModified >= 1);
                 Intent intent = new Intent(getActivity(), IncidEditAc.class);
-                intent.putExtra(INCID_IMPORTANCIA_OBJECT.extra, mActivitySupplier.getIncidImportancia());
+                intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, mIncidImportancia);
                 startActivity(intent);
             }
         }

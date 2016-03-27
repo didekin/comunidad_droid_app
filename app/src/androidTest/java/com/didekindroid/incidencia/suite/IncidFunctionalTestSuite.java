@@ -19,6 +19,7 @@ import com.didekindroid.incidencia.activity.IncidResolucionRegFrTest;
 import com.didekindroid.incidencia.activity.IncidResolucionSeeDefaultFrTest;
 import com.didekindroid.incidencia.activity.IncidResolucionSeeFrTest_1;
 import com.didekindroid.incidencia.activity.IncidResolucionSeeFrTest_2;
+import com.didekindroid.incidencia.activity.IncidSeeClosedByComuAcTest_2;
 import com.didekindroid.incidencia.activity.IncidSeeOpenByComuAcTest_1;
 import com.didekindroid.incidencia.activity.IncidSeeOpenByComuAcTest_2;
 import com.didekindroid.incidencia.activity.IncidSeeOpenByComuAcTest_3;
@@ -61,6 +62,7 @@ import org.junit.runners.Suite;
         IncidSeeOpenByComuAcTest_3.class,
         IncidSeeOpenByComuAcTest_4.class,
         IncidSeeClosedByComuAcTest_1.class,
+        IncidSeeClosedByComuAcTest_2.class
 })
 public class IncidFunctionalTestSuite {
 }

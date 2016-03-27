@@ -25,8 +25,8 @@ import com.didekindroid.usuario.dominio.UsuarioBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
 
 import static com.didekindroid.common.TokenHandler.TKhandler;
-import static com.didekindroid.common.activity.IntentExtraKey.COMUNIDAD_ID;
-import static com.didekindroid.common.activity.IntentExtraKey.COMUNIDAD_LIST_OBJECT;
+import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
+import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
@@ -48,7 +48,7 @@ import static com.google.common.base.Preconditions.checkState;
 /**
  * Preconditions:
  * 1. The user is not registered.
- * 2. The activity receives a comunidad object, as an intent extra, with the following fields:
+ * 2. The activity receives a comunidad object, as an intent key, with the following fields:
  * -- comunidadId.
  * -- nombreComunidad (with tipoVia,nombreVia, numero and sufijoNumero).
  * -- municipio, with codInProvincia and nombre.
@@ -56,7 +56,7 @@ import static com.google.common.base.Preconditions.checkState;
  * The comunidad already exists in BD.
  * <p/>
  * Postconditions:
- * 1. A long comunidadId is passed as an intent extra.
+ * 1. A long comunidadId is passed as an intent key.
  * 2. The activity SeeUserComuByComuAc is started.
  */
 public class RegUserAndUserComuAc extends AppCompatActivity {
@@ -74,7 +74,7 @@ public class RegUserAndUserComuAc extends AppCompatActivity {
 
         // Preconditions.
         checkState(!isRegisteredUser(this));
-        Comunidad comunidad = (Comunidad) getIntent().getExtras().getSerializable(COMUNIDAD_LIST_OBJECT.extra);
+        Comunidad comunidad = (Comunidad) getIntent().getExtras().getSerializable(COMUNIDAD_LIST_OBJECT.key);
         mComunidad = comunidad != null ? comunidad : null;
 
         setContentView(R.layout.reg_user_and_usercomu_ac);
@@ -188,7 +188,7 @@ public class RegUserAndUserComuAc extends AppCompatActivity {
                 uiException.processMe(RegUserAndUserComuAc.this, new Intent());
             } else {
                 Intent intent = new Intent(RegUserAndUserComuAc.this, SeeUserComuByComuAc.class);
-                intent.putExtra(COMUNIDAD_ID.extra, mComunidad.getC_Id());
+                intent.putExtra(COMUNIDAD_ID.key, mComunidad.getC_Id());
                 startActivity(intent);
                 updateIsRegistered(true, RegUserAndUserComuAc.this);
             }

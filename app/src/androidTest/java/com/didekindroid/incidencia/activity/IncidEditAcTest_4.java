@@ -29,8 +29,8 @@ import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekindroid.common.activity.IntentExtraKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.common.activity.IntentExtraKey.INCID_RESOLUCION_FLAG;
+import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
@@ -88,8 +88,8 @@ public class IncidEditAcTest_4 {
                 e.printStackTrace();
             }
             Intent intent = new Intent();
-            intent.putExtra(INCID_IMPORTANCIA_OBJECT.extra, incidResolPepeEscorial.getIncidImportancia());
-            intent.putExtra(INCID_RESOLUCION_FLAG.extra, incidResolPepeEscorial.hasResolucion());
+            intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, incidResolPepeEscorial.getIncidImportancia());
+            intent.putExtra(INCID_RESOLUCION_FLAG.key, incidResolPepeEscorial.hasResolucion());
             return intent;
         }
     };
@@ -105,9 +105,9 @@ public class IncidEditAcTest_4 {
     {
         mActivity = intentRule.getActivity();
         // Premisas.
-        IncidImportancia incidImportancia = (IncidImportancia) mActivity.getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.extra);
+        IncidImportancia incidImportancia = (IncidImportancia) mActivity.getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.key);
         assertThat(incidImportancia.getUserComu().hasAdministradorAuthority(), is(true));
-        boolean hasResolucionInBd = mActivity.getIntent().getBooleanExtra(INCID_RESOLUCION_FLAG.extra, true);
+        boolean hasResolucionInBd = mActivity.getIntent().getBooleanExtra(INCID_RESOLUCION_FLAG.key, true);
         assertThat(hasResolucionInBd, is(false));
     }
 
@@ -147,7 +147,7 @@ public class IncidEditAcTest_4 {
     {
         /* CASO OK: borramos la incidencia.*/
         onView(withId(R.id.incid_edit_fr_borrar_button)).perform(scrollTo(), click());
-        onView(withId(R.id.incid_see_by_comu_ac)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -155,10 +155,10 @@ public class IncidEditAcTest_4 {
     {
         /* CASO NOT OK: intentamos borrar una incidencia ya borrada.*/
         onView(withId(R.id.incid_edit_fr_borrar_button)).perform(scrollTo(), click());
-        onView(withId(R.id.incid_see_by_comu_ac)).check(matches(isDisplayed())).perform(pressBack());
+        onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed())).perform(pressBack());
 
         onView(withId(R.id.incid_edit_fr_borrar_button)).check(matches(isDisplayed())).perform(click());
         checkToastInTest(R.string.incidencia_wrong_init, mActivity);
-        onView(withId(R.id.incid_see_by_comu_ac)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed()));
     }
 }

@@ -23,7 +23,7 @@ import static com.google.common.base.Preconditions.checkState;
  */
 /**
  *  Preconditions:
- *  1. a long comunidadId is passed as an intent extra.
+ *  1. a long comunidadId is passed as an intent key.
  *  2. the user is registered.
  */
 public class SeeUserComuByComuAc extends AppCompatActivity {

@@ -194,7 +194,7 @@ public class IncidRegAcTest {
         onView(withId(R.id.incid_reg_desc_ed)).perform(typeText("descripcion is valid"));
         onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
 
-        onView(withId(R.id.incid_see_by_comu_ac)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed()));
         List<IncidenciaUser> incidenciasUser = IncidenciaServ.seeIncidsOpenByComu(comunidadByDefault.getC_Id());
         assertThat(incidenciasUser.size(), is(1));
         assertThat(incidenciasUser.get(0).getIncidencia().getComunidad(), is(comunidadByDefault));
@@ -210,7 +210,7 @@ public class IncidRegAcTest {
         onView(withId(R.id.incid_reg_desc_ed)).perform(typeText("descripcion is valid"));
         onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
 
-        onView(withId(R.id.incid_see_by_comu_ac)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed()));
         assertThat(IncidenciaServ.seeIncidsOpenByComu(comunidadByDefault.getC_Id()).size(), is(1));
     }
 
@@ -237,7 +237,7 @@ public class IncidRegAcTest {
         onView(withId(R.id.incid_reg_desc_ed)).perform(typeText("Incidencia La Fuente"));
         onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
 
-        onView(withId(R.id.incid_see_by_comu_ac)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed()));
         List<IncidenciaUser> incidencias = IncidenciaServ.seeIncidsOpenByComu(comunidadFuente.getC_Id());
         assertThat(incidencias.size(), is(1));
         assertThat(incidencias.get(0).getIncidencia().getDescripcion(), is("Incidencia La Fuente"));

@@ -12,13 +12,13 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.didekin.incidservice.dominio.IncidComment;
-import com.didekin.incidservice.dominio.IncidImportancia;
 import com.didekin.incidservice.dominio.Incidencia;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 
 import java.util.List;
 
+import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.google.common.base.Preconditions.checkState;
 
@@ -35,8 +35,17 @@ public class IncidCommentSeeListFr extends ListFragment {
     IncidCommentSeeAdapter mAdapter;
     View mView;
     ListView mListView;
-    IncidImportanciaGiver mIncidImportanciaGiver;
-    IncidImportancia mIncidImportancia;
+    Incidencia mIncidencia;
+
+    public static IncidCommentSeeListFr newInstance(Incidencia incidencia)
+    {
+        Log.d(TAG, "newInstance()");
+        IncidCommentSeeListFr commentSeeListFr = new IncidCommentSeeListFr();
+        Bundle args = new Bundle();
+        args.putSerializable(INCIDENCIA_OBJECT.key, incidencia);
+        commentSeeListFr.setArguments(args);
+        return commentSeeListFr;
+    }
 
     @Override
     public void onAttach(Context context)
@@ -68,9 +77,8 @@ public class IncidCommentSeeListFr extends ListFragment {
         super.onActivityCreated(savedInstanceState);
 
         mAdapter = new IncidCommentSeeAdapter(getActivity());
-        mIncidImportanciaGiver = (IncidImportanciaGiver) getActivity();
-        mIncidImportancia = mIncidImportanciaGiver.giveIncidImportancia();
-        new IncidCommentLoader().execute(mIncidImportancia.getIncidencia());
+        mIncidencia = (Incidencia) getArguments().getSerializable(INCIDENCIA_OBJECT.key);
+        new IncidCommentLoader().execute(mIncidencia);
 
         mListView = (ListView) mView.findViewById(android.R.id.list);
         mListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
@@ -142,15 +150,11 @@ public class IncidCommentSeeListFr extends ListFragment {
         Log.d(TAG, "onListItemClick()");
     }
 
-    public interface IncidImportanciaGiver {
-        IncidImportancia giveIncidImportancia();
-    }
-
     //    ============================================================
     //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
     //    ============================================================
 
-    class IncidCommentLoader extends AsyncTask<Incidencia,Void,List<IncidComment>>{
+    class IncidCommentLoader extends AsyncTask<Incidencia, Void, List<IncidComment>> {
 
         private final String TAG = IncidCommentLoader.class.getCanonicalName();
         UiException uiException;
@@ -160,9 +164,9 @@ public class IncidCommentSeeListFr extends ListFragment {
         {
             Log.d(TAG, "doInBackground()");
             List<IncidComment> comments = null;
-            try{
+            try {
                 comments = IncidenciaServ.seeCommentsByIncid(params[0].getIncidenciaId());
-            } catch (UiException ue){
+            } catch (UiException ue) {
                 uiException = ue;
             }
             return comments;
@@ -185,5 +189,4 @@ public class IncidCommentSeeListFr extends ListFragment {
             }
         }
     }
-
 }

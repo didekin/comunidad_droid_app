@@ -16,9 +16,9 @@ import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.utils.UIutils;
 import com.didekindroid.usuario.activity.utils.UserMenu;
 
-import static com.didekindroid.common.activity.IntentExtraKey.COMUNIDAD_LIST_INDEX;
-import static com.didekindroid.common.activity.IntentExtraKey.COMUNIDAD_LIST_OBJECT;
-import static com.didekindroid.common.activity.IntentExtraKey.USERCOMU_LIST_OBJECT;
+import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_LIST_INDEX;
+import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_LIST_OBJECT;
+import static com.didekindroid.common.activity.BundleKey.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.UserMenu.REG_COMU_USER_USERCOMU_AC;
@@ -29,13 +29,13 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * Postconditions:
  * <p/>
- * 1. If the user is not registered, an object comunidad is passed as an intent extra with the fields:
+ * 1. If the user is not registered, an object comunidad is passed as an intent key with the fields:
  * -- comunidadId of the comunidad selected.
  * -- nombreComunidad (with tipoVia,nombreVia, numero and sufijoNumero).
  * -- municipio, with codInProvincia and nombre.
  * -- provincia, with provinciaId and nombre.
  * 2. If the user is registered but not with the comunidad selected, an object comunidad is passed
- * as an intent extra.
+ * as an intent key.
  * 3. If the user is registered with the comunidad selected, an object usuarioComunidad is passed
  * with its data fully initialized:
  * -- userComu: id, alias, userName.
@@ -136,7 +136,7 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
         if (!isRegisteredUser(this)) {
             Log.d(TAG, "onComunidadSelected(). User is not registered.");
             Intent intent = new Intent(this, RegUserAndUserComuAc.class);
-            intent.putExtra(COMUNIDAD_LIST_OBJECT.extra, comunidad);
+            intent.putExtra(COMUNIDAD_LIST_OBJECT.key, comunidad);
             startActivity(intent);
         } else {
             new UsuarioComunidadGetter().execute(comunidad);
@@ -189,11 +189,11 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
                 uiException.processMe(ComuSearchResultsAc.this, new Intent());
             } else if (isUserComuNull) {
                 Intent intent = new Intent(ComuSearchResultsAc.this, RegUserComuAc.class);
-                intent.putExtra(COMUNIDAD_LIST_OBJECT.extra, comunidadSelected);
+                intent.putExtra(COMUNIDAD_LIST_OBJECT.key, comunidadSelected);
                 startActivity(intent);
             } else {
                 Intent intent = new Intent(ComuSearchResultsAc.this, UserComuDataAc.class);
-                intent.putExtra(USERCOMU_LIST_OBJECT.extra,userComu);
+                intent.putExtra(USERCOMU_LIST_OBJECT.key,userComu);
                 startActivity(intent);
             }
         }

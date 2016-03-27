@@ -20,10 +20,11 @@ import com.didekindroid.incidencia.gcm.GcmRegistrationIntentServ;
 
 import java.util.List;
 
-import static com.didekindroid.common.activity.IntentExtraKey.COMUNIDAD_ID;
-import static com.didekindroid.common.activity.IntentExtraKey.INCIDENCIA_LIST_INDEX;
-import static com.didekindroid.common.activity.IntentExtraKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.common.activity.IntentExtraKey.INCID_RESOLUCION_FLAG;
+import static com.didekindroid.common.activity.FragmentTags.incid_see_by_comu_list_fr_tag;
+import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
+import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_LIST_INDEX;
+import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.common.utils.UIutils.checkPlayServices;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.isGcmTokenSentServer;
@@ -36,7 +37,7 @@ import static com.google.common.base.Preconditions.checkState;
 
 /**
  * This activity is a point of registration for receiving GCM notifications of new incidents.
- *
+ * <p/>
  * Preconditions:
  * 1. The user is registered.
  * 2. The user is registered NOW in the comunidad whose open incidencias are shown.
@@ -65,14 +66,22 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements
 
         setContentView(R.layout.incid_see_open_by_comu_ac);
         doToolBar(this, true);
-        mFragment = (IncidSeeByComuListFr) getFragmentManager().findFragmentById(R.id.incid_see_by_comu_frg);
+
+        if (savedInstanceState != null){
+            checkState(getFragmentManager().findFragmentByTag(incid_see_by_comu_list_fr_tag) != null);
+            return;
+        }
+        mFragment = new IncidSeeByComuListFr();
+        getFragmentManager().beginTransaction()
+                .add(R.id.incid_see_open_by_comu_ac, mFragment, incid_see_by_comu_list_fr_tag)
+                .commit();
     }
 
     @Override
     protected void onSaveInstanceState(Bundle savedInstanceState)
     {
         Log.d(TAG, "onSaveInstanceState()");
-        savedInstanceState.putInt(INCIDENCIA_LIST_INDEX.extra, mIncidenciaIndex);
+        savedInstanceState.putInt(INCIDENCIA_LIST_INDEX.key, mIncidenciaIndex);
         super.onSaveInstanceState(savedInstanceState);
     }
 
@@ -81,7 +90,7 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements
     {
         Log.d(TAG, "onRestoreInstanceState()");
         if (savedInstanceState != null) {
-            mIncidenciaIndex = savedInstanceState.getInt(INCIDENCIA_LIST_INDEX.extra, 0);
+            mIncidenciaIndex = savedInstanceState.getInt(INCIDENCIA_LIST_INDEX.key, 0);
             mFragment.setSelection(mIncidenciaIndex); // Only for linearFragments.
         }
     }
@@ -94,7 +103,7 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements
     public boolean onCreateOptionsMenu(Menu menu)
     {
         Log.d(TAG, "onCreateOptionsMenu()");
-        getMenuInflater().inflate(R.menu.incid_see_by_comu_ac_mn, menu);
+        getMenuInflater().inflate(R.menu.incid_see_open_by_comu_ac_mn, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -114,7 +123,7 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements
                 return true;
             case R.id.see_usercomu_by_comu_ac_mn:
                 Intent intent = new Intent();
-                intent.putExtra(COMUNIDAD_ID.extra, mComunidadSelected.getC_Id());
+                intent.putExtra(COMUNIDAD_ID.key, mComunidadSelected.getC_Id());
                 this.setIntent(intent);
                 SEE_USERCOMU_BY_COMU_AC.doMenuItem(this);
                 return true;
@@ -152,7 +161,7 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements
         return IncidenciaServ.seeIncidsOpenByComu(comunidadId);
     }
 
-    //    ============================================================
+//    ============================================================
 //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
 //    ============================================================
 
@@ -184,8 +193,8 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements
             } else {
                 checkState(incidAndResolBundle != null);
                 Intent intent = new Intent(IncidSeeOpenByComuAc.this, IncidEditAc.class);
-                intent.putExtra(INCID_IMPORTANCIA_OBJECT.extra, incidAndResolBundle.getIncidImportancia());
-                intent.putExtra(INCID_RESOLUCION_FLAG.extra, incidAndResolBundle.hasResolucion());
+                intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, incidAndResolBundle.getIncidImportancia());
+                intent.putExtra(INCID_RESOLUCION_FLAG.key, incidAndResolBundle.hasResolucion());
                 startActivity(intent);
             }
         }

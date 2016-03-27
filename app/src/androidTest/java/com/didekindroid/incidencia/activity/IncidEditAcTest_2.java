@@ -36,7 +36,7 @@ import static com.didekin.common.oauth2.Rol.PROPIETARIO;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.testutils.ActivityTestUtils.updateSecurityData;
-import static com.didekindroid.common.activity.IntentExtraKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidenciaUser;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidenciaWithId;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
@@ -101,7 +101,7 @@ public class IncidEditAcTest_2 {
                 e.printStackTrace();
             }
             Intent intent = new Intent();
-            intent.putExtra(INCID_IMPORTANCIA_OBJECT.extra, incidJuanReal);
+            intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, incidJuanReal);
             return intent;
         }
     };
@@ -131,7 +131,7 @@ public class IncidEditAcTest_2 {
     public void testOnCreate_1() throws Exception
     {
         assertThat(mActivity, notNullValue());
-        IncidImportancia incidImportanciaIntent = (IncidImportancia) mActivity.getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.extra);
+        IncidImportancia incidImportanciaIntent = (IncidImportancia) mActivity.getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.key);
         assertThat(incidImportanciaIntent.getUserComu(), notNullValue());
         assertThat(incidImportanciaIntent.isIniciadorIncidencia(), is(false));
 
@@ -186,7 +186,7 @@ public class IncidEditAcTest_2 {
                 )
                 .perform(click());
         onView(withId(R.id.incid_edit_fr_modif_button)).perform(scrollTo(), click());
-        onView(withId(R.id.incid_see_by_comu_ac)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed()));
     }
 }
 

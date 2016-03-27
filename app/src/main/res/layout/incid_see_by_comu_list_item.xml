@@ -40,10 +40,6 @@
             android:layout_marginStart="@dimen/simple_horizontal_margin"
             />
     </LinearLayout>
-    <!-- <TextView
-         android:id="@+id/incid_ambito_rot"
-         style="@style/textBase.textFieldLabel1"
-         android:text="@string/incid_ambito_rot"/>-->
     <LinearLayout
         android:id="@+id/incid_see_importancia_block"
         android:layout_width="match_parent"

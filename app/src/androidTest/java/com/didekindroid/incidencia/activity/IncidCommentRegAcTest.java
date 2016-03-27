@@ -30,10 +30,10 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withHint;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
-import static com.didekindroid.common.activity.IntentExtraKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
@@ -79,7 +79,7 @@ public class IncidCommentRegAcTest {
                 e.printStackTrace();
             }
             Intent intent = new Intent();
-            intent.putExtra(INCID_IMPORTANCIA_OBJECT.extra, incidJuanReal1);
+            intent.putExtra(INCIDENCIA_OBJECT.key, incidJuanReal1.getIncidencia());
             return intent;
         }
     };
@@ -144,6 +144,6 @@ public class IncidCommentRegAcTest {
         onView(withId(R.id.incid_comment_ed)).perform(typeText("Comment is now valid"));
         onView(withId(R.id.incid_comment_reg_button)).perform(scrollTo(), click());
         onView(withId(R.id.incid_comments_see_ac)).check(matches(isDisplayed()));
-        intended(hasExtra(INCID_IMPORTANCIA_OBJECT.extra, incidJuanReal1));
+        intended(hasExtra(INCIDENCIA_OBJECT.key, incidJuanReal1.getIncidencia()));
     }
 }

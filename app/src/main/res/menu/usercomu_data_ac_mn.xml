@@ -14,7 +14,7 @@
         android:title="@string/comu_data_ac_mn"
         app:showAsAction="never|withText"/>
     <item
-        android:id="@+id/incid_see_by_comu_ac_mn"
+        android:id="@+id/incid_see_open_by_comu_ac_mn"
         android:title="@string/incid_see_by_comu_ac_mn"
         android:orderInCategory="100"
         app:showAsAction="never|withText"/>

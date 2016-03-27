@@ -24,8 +24,9 @@ import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExt
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtraWithKey;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekindroid.common.activity.IntentExtraKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.common.activity.IntentExtraKey.INCID_RESOLUCION_OBJECT;
+import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_OBJECT;
+import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_COMMENTS_SEE_AC;
@@ -82,7 +83,7 @@ public class IncidEditAcTest_Mn1 {
                 e.printStackTrace();
             }
             Intent intent = new Intent();
-            intent.putExtra(INCID_IMPORTANCIA_OBJECT.extra, incidJuanReal1);
+            intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, incidJuanReal1);
             return intent;
         }
     };
@@ -97,7 +98,7 @@ public class IncidEditAcTest_Mn1 {
     public void setUp() throws Exception
     {
         mActivity = intentRule.getActivity();
-        IncidImportancia incidImportancia = (IncidImportancia) mActivity.getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.extra);
+        IncidImportancia incidImportancia = (IncidImportancia) mActivity.getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.key);
         // Preconditions: a user without powers to erase and modify is received.
         assertThat(incidImportancia.getUserComu().hasAdministradorAuthority(), is(false));
     }
@@ -114,14 +115,14 @@ public class IncidEditAcTest_Mn1 {
     public void testIncidCommentReg_Mn() throws Exception
     {
         INCID_COMMENT_REG_AC.checkMenuItem_WTk(mActivity);
-        intended(hasExtra(INCID_IMPORTANCIA_OBJECT.extra, incidJuanReal1));
+        intended(hasExtra(INCIDENCIA_OBJECT.key, incidJuanReal1.getIncidencia()));
     }
 
     @Test
     public void testIncidCommentsSee_Mn() throws Exception
     {
         INCID_COMMENTS_SEE_AC.checkMenuItem_WTk(mActivity);
-        intended(hasExtra(INCID_IMPORTANCIA_OBJECT.extra, incidJuanReal1));
+        intended(hasExtra(INCIDENCIA_OBJECT.key, incidJuanReal1.getIncidencia()));
     }
 
     @Test
@@ -130,8 +131,8 @@ public class IncidEditAcTest_Mn1 {
         // El userComu no tiene función administrador. NO hay resolución en BD.
         INCID_RESOLUCION_REG_EDIT_AC.checkMenuItem_WTk(mActivity);
         onView(withId(R.id.incid_resolucion_see_default_fr)).check(matches(isDisplayed()));
-        intended(hasExtra(INCID_IMPORTANCIA_OBJECT.extra, incidJuanReal1));
-        // No extra con resolución.
-        intended(not(hasExtraWithKey(INCID_RESOLUCION_OBJECT.extra)));
+        intended(hasExtra(INCID_IMPORTANCIA_OBJECT.key, incidJuanReal1));
+        // No key con resolución.
+        intended(not(hasExtraWithKey(INCID_RESOLUCION_OBJECT.key)));
     }
 }

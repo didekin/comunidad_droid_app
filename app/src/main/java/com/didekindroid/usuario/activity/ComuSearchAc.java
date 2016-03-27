@@ -22,7 +22,7 @@ import com.didekindroid.usuario.dominio.ComunidadBean;
 import static android.widget.Toast.LENGTH_SHORT;
 import static com.didekin.common.dominio.DataPatterns.LINE_BREAK;
 import static com.didekindroid.common.TokenHandler.TKhandler;
-import static com.didekindroid.common.activity.IntentExtraKey.COMUNIDAD_SEARCH;
+import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_SEARCH;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.makeToast;
 import static com.didekindroid.common.utils.UIutils.updateIsRegistered;
@@ -36,7 +36,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * Postconditions:
  * <p/>
- * 1. An object comunidad, to be used as search criterium, is passed as an intent extra with the following fields:
+ * 1. An object comunidad, to be used as search criterium, is passed as an intent key with the following fields:
  * -- tipoVia.
  * -- nombreVia.
  * -- numero.
@@ -99,7 +99,7 @@ public class ComuSearchAc extends AppCompatActivity {
             makeToast(this, R.string.no_internet_conn_toast, LENGTH_SHORT);
         } else {
             Intent intent = new Intent(this, ComuSearchResultsAc.class);
-            intent.putExtra(COMUNIDAD_SEARCH.extra, comunidadBean.getComunidad());
+            intent.putExtra(COMUNIDAD_SEARCH.key, comunidadBean.getComunidad());
             startActivity(intent);
         }
     }

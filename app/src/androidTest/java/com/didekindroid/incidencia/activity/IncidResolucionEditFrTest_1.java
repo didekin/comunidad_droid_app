@@ -37,8 +37,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.common.activity.IntentExtraKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.common.activity.IntentExtraKey.INCID_RESOLUCION_OBJECT;
+import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkNavigateUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
@@ -108,8 +108,8 @@ public class IncidResolucionEditFrTest_1 {
                 e.printStackTrace();
             }
             Intent intent = new Intent();
-            intent.putExtra(INCID_IMPORTANCIA_OBJECT.extra, incidPepeEscorial);
-            intent.putExtra(INCID_RESOLUCION_OBJECT.extra, resolucion);
+            intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, incidPepeEscorial);
+            intent.putExtra(INCID_RESOLUCION_OBJECT.key, resolucion);
             return intent;
         }
     };
@@ -124,11 +124,11 @@ public class IncidResolucionEditFrTest_1 {
     public void setUp() throws Exception
     {
         mActivity = intentRule.getActivity();
-        IncidImportancia incidImportancia = (IncidImportancia) mActivity.getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.extra);
+        IncidImportancia incidImportancia = (IncidImportancia) mActivity.getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.key);
         // Preconditions: a user with powers to erase and modify is received.
         assertThat(incidImportancia.getUserComu().hasAdministradorAuthority(), is(true));
         // Precondition: resolución in BD and intent.
-        Resolucion resolucionIntent = (Resolucion) mActivity.getIntent().getSerializableExtra(INCID_RESOLUCION_OBJECT.extra);
+        Resolucion resolucionIntent = (Resolucion) mActivity.getIntent().getSerializableExtra(INCID_RESOLUCION_OBJECT.key);
         assertThat(resolucionIntent, is(resolucion));
     }
 
@@ -252,13 +252,13 @@ public class IncidResolucionEditFrTest_1 {
         onView(withId(R.id.incid_resolucion_edit_fr_close_button)).perform(click());
 
         onView(withId(R.id.incid_see_closed_by_comu_ac)).check(matches(isDisplayed()));
-        intended(not(hasExtraWithKey(INCID_IMPORTANCIA_OBJECT.extra)));
+        intended(not(hasExtraWithKey(INCID_IMPORTANCIA_OBJECT.key)));
 
         // Damos back e intentamos modificar la incidencia. Nos da error.
         onView(withId(R.id.incid_see_closed_by_comu_ac)).check(matches(isDisplayed())).perform(pressBack());
         onView(withId(R.id.incid_resolucion_fr_modif_button)).perform(click());
         checkToastInTest(R.string.incidencia_wrong_init, mActivity);
-        onView(withId(R.id.incid_see_by_comu_ac)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed()));
     }
 
 //    ============================= HELPER METHODS ===========================
@@ -267,6 +267,6 @@ public class IncidResolucionEditFrTest_1 {
     {
         onView(withId(R.id.incid_edit_fragment_container_ac)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_edit_maxpower_frg)).check(matches(isDisplayed()));
-        intended(hasExtra(INCID_IMPORTANCIA_OBJECT.extra, incidPepeEscorial));
+        intended(hasExtra(INCID_IMPORTANCIA_OBJECT.key, incidPepeEscorial));
     }
 }

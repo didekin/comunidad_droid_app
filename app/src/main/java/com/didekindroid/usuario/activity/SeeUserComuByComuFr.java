@@ -16,7 +16,7 @@ import com.didekin.usuario.dominio.Comunidad;
 import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
-import com.didekindroid.common.activity.IntentExtraKey;
+import com.didekindroid.common.activity.BundleKey;
 
 import java.util.List;
 
@@ -32,7 +32,7 @@ import static com.didekindroid.common.activity.ViewsIDs.SEE_USERCOMU_BY_COMU;
 
 /**
  * Preconditions:
- * 1. a long comunidadId is passed as an intent extra.
+ * 1. a long comunidadId is passed as an intent key.
  */
 public class SeeUserComuByComuFr extends ListFragment {
 
@@ -63,7 +63,7 @@ public class SeeUserComuByComuFr extends ListFragment {
 
         mActivity = (SeeUserComuByComuAc) getActivity();
         // Preconditions: an existing comunidad passed as intent. The comunidad has necessarily users already signed-up.
-        comunidadId = mActivity.getIntent().getExtras().getLong(IntentExtraKey.COMUNIDAD_ID.extra);
+        comunidadId = mActivity.getIntent().getExtras().getLong(BundleKey.COMUNIDAD_ID.key);
     }
 
     @Override

@@ -22,7 +22,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.core.deps.guava.base.Preconditions.checkState;
-import static com.didekindroid.common.activity.IntentExtraKey.COMUNIDAD_ID;
+import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
 import static com.didekindroid.common.utils.UIutils.checkPlayServices;
 import static com.didekindroid.common.utils.UIutils.isGcmTokenSentServer;
 import static com.didekindroid.common.utils.UIutils.updateIsGcmTokenSentServer;
@@ -80,7 +80,7 @@ public class IncidRegAcTest_gcm1 {
             }
             Intent intent = new Intent();
             long comunidadIdIntent = pepeUserComu.getComunidad().getC_Id();
-            intent.putExtra(COMUNIDAD_ID.extra, comunidadIdIntent);
+            intent.putExtra(COMUNIDAD_ID.key, comunidadIdIntent);
             return intent;
         }
     };

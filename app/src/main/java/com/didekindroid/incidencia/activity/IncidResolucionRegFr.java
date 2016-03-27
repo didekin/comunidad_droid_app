@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.didekin.incidservice.dominio.IncidImportancia;
 import com.didekin.incidservice.dominio.Incidencia;
 import com.didekin.incidservice.dominio.Resolucion;
 import com.didekin.usuario.dominio.Comunidad;
@@ -21,7 +22,7 @@ import com.didekindroid.incidencia.dominio.ResolucionBean;
 import java.sql.Timestamp;
 
 import static com.didekindroid.common.activity.FechaPickerFr.FechaPickerHelper.initFechaSpinnerView;
-import static com.didekindroid.common.activity.IntentExtraKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.utils.ConnectionUtils.checkInternetConnected;
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.common.utils.UIutils.makeToast;
@@ -36,6 +37,7 @@ import static com.google.common.base.Preconditions.checkState;
 public class IncidResolucionRegFr extends IncidResolucionFrAbstract {
 
     private static final String TAG = IncidResolucionRegFr.class.getCanonicalName();
+    IncidImportancia mIncidImportancia;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,7 +60,15 @@ public class IncidResolucionRegFr extends IncidResolucionFrAbstract {
         return mFragmentView;
     }
 
-//  ================================ HELPER METHODS =======================================
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState)
+    {
+        Log.d(TAG,"onActivityCreated()");
+        super.onActivityCreated(savedInstanceState);
+        mIncidImportancia = (IncidImportancia) getArguments().getSerializable(INCID_IMPORTANCIA_OBJECT.key);
+    }
+
+    //  ================================ HELPER METHODS =======================================
 
     void registerResolucion()
     {
@@ -87,9 +97,9 @@ public class IncidResolucionRegFr extends IncidResolucionFrAbstract {
         }
 
         final Incidencia incidencia = new Incidencia.IncidenciaBuilder()
-                .incidenciaId(mActivitySupplier.getIncidImportancia().getIncidencia().getIncidenciaId())
+                .incidenciaId(mIncidImportancia.getIncidencia().getIncidenciaId())
                 .comunidad(new Comunidad.ComunidadBuilder()
-                        .c_id(mActivitySupplier.getIncidImportancia().getIncidencia().getComunidad().getC_Id())
+                        .c_id(mIncidImportancia.getIncidencia().getComunidad().getC_Id())
                         .build())
                 .build();
         return new Resolucion.ResolucionBuilder(incidencia)
@@ -108,7 +118,7 @@ public class IncidResolucionRegFr extends IncidResolucionFrAbstract {
         mResolucionBean.setFechaPrevistaText(mFechaView.getText().toString());
         // La fecha se inicializa en FechaPickerFr.onDateSet().
 
-        if (!mResolucionBean.validateBeanPlan(errorMsg, getResources(), mActivitySupplier.getIncidImportancia())) {
+        if (!mResolucionBean.validateBeanPlan(errorMsg, getResources(),mIncidImportancia)) {
             mResolucionBean = null;
         }
     }
@@ -146,12 +156,12 @@ public class IncidResolucionRegFr extends IncidResolucionFrAbstract {
             if (uiException != null) {
                 Intent intent = new Intent();
                 // Para el caso resolución duplicada y acceder a IncidEditAc/Resolución.
-                intent.putExtra(INCID_IMPORTANCIA_OBJECT.extra, mActivitySupplier.getIncidImportancia());
+                intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, mIncidImportancia);
                 uiException.processMe(getActivity(), intent);
             } else {
                 checkState(rowInserted == 1);
                 Intent intent = new Intent(getActivity(), IncidEditAc.class);
-                intent.putExtra(INCID_IMPORTANCIA_OBJECT.extra, mActivitySupplier.getIncidImportancia());
+                intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, mIncidImportancia);
                 startActivity(intent);
             }
         }

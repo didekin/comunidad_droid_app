@@ -1,9 +1,13 @@
 package com.didekindroid.incidencia.activity;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -12,8 +16,13 @@ import android.widget.TextView;
 import com.didekin.incidservice.dominio.Resolucion;
 import com.didekindroid.R;
 
+import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_OBJECT;
+import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
+import static com.didekindroid.common.activity.BundleKey.IS_MENU_IN_FRAGMENT_FLAG;
 import static com.didekindroid.common.utils.UIutils.formatTimeStampToString;
 import static com.didekindroid.common.utils.UIutils.getStringFromInteger;
+import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_COMMENTS_SEE_AC;
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
 /**
@@ -26,7 +35,6 @@ public class IncidResolucionSeeFr extends Fragment {
     private static final String TAG = IncidResolucionSeeFr.class.getCanonicalName();
 
     View mFragmentView;
-    IncidenciaDataSupplier mActivitySupplier;
     Resolucion mResolucion;
 
     @Override
@@ -43,11 +51,48 @@ public class IncidResolucionSeeFr extends Fragment {
     {
         Log.d(TAG, "onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
-        mActivitySupplier = (IncidenciaDataSupplier) getActivity();
 
-        mResolucion = mActivitySupplier.getResolucion();
+        mResolucion = (Resolucion) getArguments().getSerializable(INCID_RESOLUCION_OBJECT.key);
         checkState(mResolucion != null);
+        // Activamos el menú.
+        setHasOptionsMenu(getArguments().getBoolean(IS_MENU_IN_FRAGMENT_FLAG.key, false));
+        paintViewData();
+    }
 
+    // ============================================================
+    //    ..... ACTION BAR ....
+    // ============================================================
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+    {
+        Log.d(TAG, "onCreateOptionsMenu()");
+        inflater.inflate(R.menu.incid_see_closed_fragments_mn, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        Log.d(TAG, "onOptionsItemSelected()");
+
+        int resourceId = checkNotNull(item.getItemId());
+
+        switch (resourceId) {
+            case R.id.incid_comments_see_ac_mn:
+                Intent intent = new Intent();
+                intent.putExtra(INCIDENCIA_OBJECT.key, getArguments().getSerializable(INCIDENCIA_OBJECT.key));
+                getActivity().setIntent(intent);
+                INCID_COMMENTS_SEE_AC.doMenuItem(getActivity());
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+//  ............................. HELPER METHODS ......................................
+
+    protected void paintViewData()
+    {
         IncidAvanceSeeAdapter mAdapter = new IncidAvanceSeeAdapter(getActivity());
         mAdapter.clear();
         mAdapter.addAll(mResolucion.getAvances());

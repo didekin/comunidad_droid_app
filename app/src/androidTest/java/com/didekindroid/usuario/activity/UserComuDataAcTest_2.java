@@ -29,7 +29,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withContentDesc
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.testutils.ActivityTestUtils.updateSecurityData;
-import static com.didekindroid.common.activity.IntentExtraKey.USERCOMU_LIST_OBJECT;
+import static com.didekindroid.common.activity.BundleKey.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRE;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRO;
@@ -87,7 +87,7 @@ public class UserComuDataAcTest_2 {
 
             // We use that comunidad as the one to associate to the present user.
             Intent intent = new Intent();
-            intent.putExtra(USERCOMU_LIST_OBJECT.extra, mUsuarioComunidad);
+            intent.putExtra(USERCOMU_LIST_OBJECT.key, mUsuarioComunidad);
 
             try {
                 Thread.sleep(900);

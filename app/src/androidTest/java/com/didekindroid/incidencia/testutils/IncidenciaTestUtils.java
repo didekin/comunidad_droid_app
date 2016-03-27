@@ -1,6 +1,7 @@
 package com.didekindroid.incidencia.testutils;
 
 import com.didekin.incidservice.dominio.AmbitoIncidencia;
+import com.didekin.incidservice.dominio.Avance;
 import com.didekin.incidservice.dominio.IncidComment;
 import com.didekin.incidservice.dominio.IncidImportancia;
 import com.didekin.incidservice.dominio.Incidencia;
@@ -11,6 +12,8 @@ import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.common.activity.UiException;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 
@@ -68,6 +71,20 @@ public final class IncidenciaTestUtils {
                 .descripcion(descripcion)
                 .costeEstimado(costeEstimado)
                 .fechaPrevista(fechaPrev)
+                .build();
+    }
+
+    public static Resolucion doResolucionAvances(Incidencia incidencia, String descripcion, int costeEstimado, Timestamp fechaPrev)
+    {
+        Avance avance = new Avance.AvanceBuilder().avanceDesc("").userName(incidencia.getUserName()).build();
+        List<Avance> avances = new ArrayList<>(1);
+        avances.add(avance);
+
+        return new Resolucion.ResolucionBuilder(incidencia)
+                .descripcion(descripcion)
+                .costeEstimado(costeEstimado)
+                .fechaPrevista(fechaPrev)
+                .avances(avances)
                 .build();
     }
 

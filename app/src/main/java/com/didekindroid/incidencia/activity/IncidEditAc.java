@@ -1,5 +1,6 @@
 package com.didekindroid.incidencia.activity;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,27 +15,29 @@ import com.didekin.incidservice.dominio.Resolucion;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 
-import static com.didekindroid.common.activity.IntentExtraKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.common.activity.IntentExtraKey.INCID_RESOLUCION_FLAG;
-import static com.didekindroid.common.activity.IntentExtraKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.common.activity.SavedInstanceKey.INCID_IMPORTANCIA;
+import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_OBJECT;
+import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_FLAG;
+import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
+import static com.didekindroid.common.activity.FragmentTags.incid_edit_ac_frgs_tag;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_COMMENTS_SEE_AC;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_COMMENT_REG_AC;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_RESOLUCION_REG_EDIT_AC;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkState;
 
 /**
  * Preconditions:
- * 1. An intent extra is received with the IncidImportancia instance to be edited.
+ * 1. An intent key is received with the IncidImportancia instance to be edited.
  * -- Users with maximum powers can modify description and ambito of the incidencia.
  * -- Users with minimum powers can only modify the importance assigned by them.
  * Postconditions:
  * 1. An incidencia is updated in BD, once edited.
  * 3. An updated incidencias list of the comunidad is showed.
  */
-public class IncidEditAc extends AppCompatActivity implements IncidenciaDataSupplier {
+public class IncidEditAc extends AppCompatActivity {
 
     private static final String TAG = IncidEditAc.class.getCanonicalName();
 
@@ -47,42 +50,30 @@ public class IncidEditAc extends AppCompatActivity implements IncidenciaDataSupp
     {
         Log.d(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
-        mIncidImportancia = (IncidImportancia) getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.extra);
-        flagResolucion = getIntent().getBooleanExtra(INCID_RESOLUCION_FLAG.extra, false);
+        mIncidImportancia = (IncidImportancia) getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.key);
+        flagResolucion = getIntent().getBooleanExtra(INCID_RESOLUCION_FLAG.key, false);
 
         mAcView = getLayoutInflater().inflate(R.layout.incid_edit_ac, null);
         setContentView(mAcView);
         doToolBar(this, true);
 
-        if (mIncidImportancia.isIniciadorIncidencia() || mIncidImportancia.getUserComu().hasAdministradorAuthority()) {
-            IncidEditMaxPowerFr mFragmentMax;
-            if (savedInstanceState == null) {
-                mFragmentMax = new IncidEditMaxPowerFr();
-                getFragmentManager().beginTransaction().add(R.id.incid_edit_fragment_container_ac, mFragmentMax).commit();
-            }
-        } else {
-            IncidEditNoPowerFr mFragmentMin;
-            if (savedInstanceState == null) {
-                mFragmentMin = new IncidEditNoPowerFr();
-                getFragmentManager().beginTransaction().add(R.id.incid_edit_fragment_container_ac, mFragmentMin).commit();
-            }
+        if (savedInstanceState != null) {
+            checkState(getFragmentManager().findFragmentByTag(incid_edit_ac_frgs_tag) != null);
+            return;
         }
-    }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState)
-    {
-        Log.d(TAG, "onSaveInstanceState()");
-        outState.putSerializable(INCID_IMPORTANCIA.key, mIncidImportancia);
-        super.onSaveInstanceState(outState);
-    }
+        Bundle argsFragment = new Bundle();
+        argsFragment.putSerializable(INCID_IMPORTANCIA_OBJECT.key, mIncidImportancia);
+        argsFragment.putBoolean(INCID_RESOLUCION_FLAG.key, flagResolucion);
+        Fragment fragmentToAdd;
 
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState)
-    {
-        Log.d(TAG, "onRestoreInstanceState()");
-        mIncidImportancia = (IncidImportancia) savedInstanceState.getSerializable(INCID_IMPORTANCIA.key);
-        super.onRestoreInstanceState(savedInstanceState);
+        if (mIncidImportancia.isIniciadorIncidencia() || mIncidImportancia.getUserComu().hasAdministradorAuthority()) {
+            fragmentToAdd = new IncidEditMaxPowerFr();
+        } else {
+            fragmentToAdd = new IncidEditNoPowerFr();
+        }
+        fragmentToAdd.setArguments(argsFragment);
+        getFragmentManager().beginTransaction().add(R.id.incid_edit_fragment_container_ac, fragmentToAdd, incid_edit_ac_frgs_tag).commit();
     }
 
 //    ============================================================
@@ -102,7 +93,7 @@ public class IncidEditAc extends AppCompatActivity implements IncidenciaDataSupp
     {
         Log.d(TAG, "onPrepareOptionsMenu()");
         /*MenuItem resolverItem = menu.findItem(R.id.incid_resolucion_reg_ac_mn);
-        resolverItem.setVisible(mIncidImportancia.getUserComu().hasAdministradorAuthority());*/
+        resolverItem.setVisible(mIncidencia.getUserComu().hasAdministradorAuthority());*/
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -117,13 +108,13 @@ public class IncidEditAc extends AppCompatActivity implements IncidenciaDataSupp
         switch (resourceId) {
             case R.id.incid_comment_reg_ac_mn:
                 intent = new Intent();
-                intent.putExtra(INCID_IMPORTANCIA_OBJECT.extra, mIncidImportancia);
+                intent.putExtra(INCIDENCIA_OBJECT.key, mIncidImportancia.getIncidencia());
                 setIntent(intent);
                 INCID_COMMENT_REG_AC.doMenuItem(this);
                 return true;
             case R.id.incid_comments_see_ac_mn:
                 intent = new Intent();
-                intent.putExtra(INCID_IMPORTANCIA_OBJECT.extra, mIncidImportancia);
+                intent.putExtra(INCIDENCIA_OBJECT.key, mIncidImportancia.getIncidencia());
                 setIntent(intent);
                 INCID_COMMENTS_SEE_AC.doMenuItem(this);
                 return true;
@@ -133,29 +124,6 @@ public class IncidEditAc extends AppCompatActivity implements IncidenciaDataSupp
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-//    ============================================================
-//    .......... INTERFACE METHODS .......
-//    ============================================================
-
-    @Override
-    public IncidImportancia getIncidImportancia()
-    {
-        Log.d(TAG, "getCallingPackage()");
-        return mIncidImportancia;
-    }
-
-    @Override
-    public Resolucion getResolucion()
-    {
-        Log.d(TAG, "getResolucion()");
-        throw new UnsupportedOperationException();
-    }
-
-    public boolean getFlagResolucion(){
-        Log.d(TAG, "getFlagResolucion()");
-        return flagResolucion;
     }
 
 //    ============================================================
@@ -192,9 +160,9 @@ public class IncidEditAc extends AppCompatActivity implements IncidenciaDataSupp
             }
 
             Intent intent0 = new Intent();
-            intent0.putExtra(INCID_IMPORTANCIA_OBJECT.extra, mIncidImportancia);
+            intent0.putExtra(INCID_IMPORTANCIA_OBJECT.key, mIncidImportancia);
             if (resolucion != null) {
-                intent0.putExtra(INCID_RESOLUCION_OBJECT.extra, resolucion);
+                intent0.putExtra(INCID_RESOLUCION_OBJECT.key, resolucion);
             }
             setIntent(intent0);
             INCID_RESOLUCION_REG_EDIT_AC.doMenuItem(IncidEditAc.this);

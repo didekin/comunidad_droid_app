@@ -8,6 +8,7 @@ import com.didekin.incidservice.dominio.Avance;
 import com.didekin.incidservice.dominio.IncidComment;
 import com.didekin.incidservice.dominio.IncidImportancia;
 import com.didekin.incidservice.dominio.Incidencia;
+import com.didekin.incidservice.dominio.IncidenciaUser;
 import com.didekin.incidservice.dominio.Resolucion;
 import com.didekin.usuario.dominio.Usuario;
 import com.didekin.usuario.dominio.UsuarioComunidad;
@@ -424,6 +425,35 @@ public class IncidServiceTest_1 {
         assertThat(incidImportancia.getUserComu().getUsuario().getuId() > 0L, is(true));
         assertThat(incidImportancia.getIncidencia().getComunidad(), is(incidencia.getComunidad()));
         assertThat(incidImportancia.getUserComu().getComunidad(), is(incidencia.getComunidad()));
+    }
+
+    @Test
+    public void testSeeIncidsClosedByComu_1() throws InterruptedException, UiException
+    {
+        // CASO OK: usuario 'adm'.
+        Resolucion resolucion = insertGetDefaultResolucion();
+        assertThat(IncidenciaServ.closeIncidencia(resolucion),is(2));
+        List<IncidenciaUser> incidenciaUsers = IncidenciaServ.seeIncidsClosedByComu(pepeUserComu.getComunidad().getC_Id());
+        assertThat(incidenciaUsers.size(),is(1));
+        assertThat(incidenciaUsers.get(0).getIncidencia(), is(resolucion.getIncidencia()));
+    }
+
+    @Test
+    public void testSeeIncidsClosedByComu_2() throws InterruptedException, UiException
+    {
+        // CASO NOT OK: usuario no pertenece a la comunidad.
+
+        whatClean = CLEAN_JUAN_AND_PEPE;
+
+        Resolucion resolucion = insertGetDefaultResolucion();
+        assertThat(IncidenciaServ.closeIncidencia(resolucion),is(2));
+        signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
+        try {
+            IncidenciaServ.seeIncidsClosedByComu(pepeUserComu.getComunidad().getC_Id());
+            fail();
+        } catch (UiException ue) {
+            assertThat(ue.getInServiceException().getHttpMessage(), is(USERCOMU_WRONG_INIT.getHttpMessage()));
+        }
     }
 
     @Test

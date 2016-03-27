@@ -19,8 +19,8 @@ import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
 
 import static com.didekin.common.dominio.DataPatterns.LINE_BREAK;
-import static com.didekindroid.common.activity.IntentExtraKey.COMUNIDAD_ID;
-import static com.didekindroid.common.activity.IntentExtraKey.COMUNIDAD_LIST_OBJECT;
+import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
+import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.utils.UIutils.makeToast;
@@ -37,7 +37,7 @@ import static com.google.common.base.Preconditions.checkState;
 /**
  * Preconditions:
  * 1. The user is already registered.
- * 2. The activity receives a comunidad object, as an intent extra, with the following fields:
+ * 2. The activity receives a comunidad object, as an intent key, with the following fields:
  * -- comunidadId.
  * -- nombreComunidad (with tipoVia,nombreVia, numero and sufijoNumero).
  * -- municipio, with codInProvincia and nombre.
@@ -45,7 +45,7 @@ import static com.google.common.base.Preconditions.checkState;
  * The comunidad already exists in BD.
  * <p/>
  * Postconditions:
- * 1. A long comunidadId is passed as an intent extra.
+ * 1. A long comunidadId is passed as an intent key.
  * 2. The activity SeeUserComuByComuAc is started.
  */
 public class RegUserComuAc extends AppCompatActivity {
@@ -63,7 +63,7 @@ public class RegUserComuAc extends AppCompatActivity {
 
         checkState(isRegisteredUser(this));
         Comunidad coomunidadIntent =  (Comunidad) getIntent().getExtras()
-                .getSerializable(COMUNIDAD_LIST_OBJECT.extra);
+                .getSerializable(COMUNIDAD_LIST_OBJECT.key);
         mComunidad = coomunidadIntent != null ? coomunidadIntent : null;
 
         setContentView(R.layout.reg_usercomu_ac);
@@ -103,7 +103,7 @@ public class RegUserComuAc extends AppCompatActivity {
             // Insert usuarioComunidad and go to SeeUserComuByComuAc activity.
             new UserComuRegister().execute(usuarioComunidadBean.getUsuarioComunidad());
             Intent intent = new Intent(this, SeeUserComuByComuAc.class);
-            intent.putExtra(COMUNIDAD_ID.extra, mComunidad.getC_Id());
+            intent.putExtra(COMUNIDAD_ID.key, mComunidad.getC_Id());
             startActivity(intent);
         }
     }

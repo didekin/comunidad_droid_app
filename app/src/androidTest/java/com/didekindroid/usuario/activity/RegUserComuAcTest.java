@@ -25,7 +25,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
-import static com.didekindroid.common.activity.IntentExtraKey.COMUNIDAD_LIST_OBJECT;
+import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRE;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRO;
@@ -73,7 +73,7 @@ public class RegUserComuAcTest {
 
         // We use that comunidad as the one to associate to the present user.
         intent = new Intent();
-        intent.putExtra(COMUNIDAD_LIST_OBJECT.extra, comunidad);
+        intent.putExtra(COMUNIDAD_LIST_OBJECT.key, comunidad);
         // Segundo usuarioComunidad.
         signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
     }
@@ -92,7 +92,7 @@ public class RegUserComuAcTest {
 
         assertThat(activity, notNullValue());
         assertThat(activity.getFragmentManager().findFragmentById(R.id.reg_usercomu_frg), notNullValue());
-        Comunidad comunidadIntent = (Comunidad) intent.getSerializableExtra(COMUNIDAD_LIST_OBJECT.extra);
+        Comunidad comunidadIntent = (Comunidad) intent.getSerializableExtra(COMUNIDAD_LIST_OBJECT.key);
         assertThat(comunidadIntent.getC_Id(), is(comunidad.getC_Id()));
         onView(withId(R.id.reg_usercomu_ac_layout)).check(matches(isDisplayed()));
         onView(withId(R.id.reg_usercomu_frg)).check(matches(isDisplayed()));

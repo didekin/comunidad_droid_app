@@ -25,9 +25,9 @@ import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
-import static com.didekindroid.common.activity.IntentExtraKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_COMMENT_REG_AC;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
@@ -79,7 +79,7 @@ public class IncidCommentSeeAcTest_1 {
                 e.printStackTrace();
             }
             Intent intent = new Intent();
-            intent.putExtra(INCID_IMPORTANCIA_OBJECT.extra, incidJuanReal1);
+            intent.putExtra(INCIDENCIA_OBJECT.key, incidJuanReal1.getIncidencia());
             return intent;
         }
     };
@@ -110,7 +110,7 @@ public class IncidCommentSeeAcTest_1 {
         assertThat(mActivity, notNullValue());
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_comments_see_ac)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_comments_see_frg)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_comments_see_fr_layout)).check(matches(isDisplayed()));
 
         // No hay comentarios registrados. La vista forma parte de la jerarquía de vistas de la página.
         onView(withId(android.R.id.list)).check(matches(not(isDisplayed())));
@@ -123,6 +123,6 @@ public class IncidCommentSeeAcTest_1 {
     public void testIncidCommentRegMn() throws InterruptedException
     {
         INCID_COMMENT_REG_AC.checkMenuItem_WTk(mActivity);
-        intended(hasExtra(INCID_IMPORTANCIA_OBJECT.extra, incidJuanReal1));
+        intended(hasExtra(INCIDENCIA_OBJECT.key, incidJuanReal1.getIncidencia()));
     }
 }
