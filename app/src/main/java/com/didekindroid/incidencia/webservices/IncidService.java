@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.didekin.common.exception.InServiceException;
 import com.didekin.incidservice.controller.IncidenciaServEndPoints;
+import com.didekin.incidservice.dominio.ImportanciaUser;
 import com.didekin.incidservice.dominio.IncidAndResolBundle;
 import com.didekin.incidservice.dominio.IncidComment;
 import com.didekin.incidservice.dominio.IncidImportancia;
@@ -99,6 +100,12 @@ public enum IncidService implements IncidenciaServEndPoints {
         {
             return IncidenciaServ.endPoint.seeResolucion(accessToken, resolucionId);
         }
+
+        @Override
+        public List<ImportanciaUser> seeUserComusImportancia(String accessToken, long incidenciaId)
+        {
+            return IncidenciaServ.endPoint.seeUserComusImportancia(accessToken, incidenciaId);
+        }
     },;
 
     private static final String TAG = IncidService.class.getCanonicalName();
@@ -120,7 +127,7 @@ public enum IncidService implements IncidenciaServEndPoints {
         int incidenciasClosed;
         try {
             incidenciasClosed = closeIncidencia(checkBearerToken(), resolucion);
-        }catch (InServiceException ie){
+        } catch (InServiceException ie) {
             throw new UiException(ie);
         }
         return incidenciasClosed;
@@ -168,7 +175,7 @@ public enum IncidService implements IncidenciaServEndPoints {
         int resolucionModifyed;
         try {
             resolucionModifyed = modifyResolucion(checkBearerToken(), resolucion);
-        }catch(InServiceException ie){
+        } catch (InServiceException ie) {
             throw new UiException(ie);
         }
         return resolucionModifyed;
@@ -265,9 +272,21 @@ public enum IncidService implements IncidenciaServEndPoints {
         Resolucion resolucion;
         try {
             resolucion = seeResolucion(checkBearerToken(), resolucionId);
-        } catch (InServiceException ie){
+        } catch (InServiceException ie) {
             throw new UiException(ie);
         }
         return resolucion;
+    }
+
+    public List<ImportanciaUser> seeUserComusImportancia(long incidenciaId) throws UiException
+    {
+        Log.d(TAG, "seeUserComusImportancia()");
+        List<ImportanciaUser> importanciaUsers;
+        try {
+            importanciaUsers = seeUserComusImportancia(checkBearerToken(), incidenciaId);
+        } catch (InServiceException ie) {
+            throw new UiException(ie);
+        }
+        return importanciaUsers;
     }
 }

@@ -27,18 +27,22 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.intent.matcher.BundleMatchers.hasEntry;
 import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekin.common.oauth2.Rol.PROPIETARIO;
+import static com.didekindroid.common.activity.BundleKey.INCID_ACTIVITY_VIEW_ID;
+import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_FLAG;
+import static com.didekindroid.common.activity.FragmentTags.incid_edit_ac_frgs_tag;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.testutils.ActivityTestUtils.updateSecurityData;
 import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidenciaUser;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidenciaWithId;
+import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidImportanciaWithId;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_PEPE;
@@ -49,6 +53,7 @@ import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 
 /**
  * User: pedro@didekin
@@ -58,7 +63,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 
 /**
  * Tests genéricos sobre aspecto y tests funcionales para un userComu SIN permisos para modificar o borrar una incidencia.
- * El userComu ya está asociado con la incidencia que edita.
+ * El userComu ya tiene registrada incidImportancia en BD.
  */
 @RunWith(AndroidJUnit4.class)
 public class IncidEditAcTest_2 {
@@ -87,13 +92,13 @@ public class IncidEditAcTest_2 {
                 IncidenciaUser incidenciaUser_1 = insertGetIncidenciaUser(pepeUserComu, 1);
                 incidPepeReal = IncidenciaServ.seeIncidImportancia(incidenciaUser_1.getIncidencia().getIncidenciaId()).getIncidImportancia();
 
-                // Registro userComu en misma comunidad y lo asocio a la incidencia.
+                // Registro userComu en misma comunidad.
                 UsuarioComunidad userComuJuan = makeUsuarioComunidad(pepeUserComu.getComunidad(), USER_JUAN,
                         "portal", "esc", "plantaX", "door12", PROPIETARIO.function);
                 ServOne.regUserAndUserComu(userComuJuan);
                 updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
                 Thread.sleep(1000);
-                Incidencia incidencia_2 = insertGetIncidenciaWithId(incidPepeReal.getIncidencia().getIncidenciaId(), userComuJuan, 2).getIncidencia();
+                Incidencia incidencia_2 = insertGetIncidImportanciaWithId(incidPepeReal.getIncidencia().getIncidenciaId(), userComuJuan, 2).getIncidencia();
                 // Verificamos poderes de Juan: false, porque no es userComu titular.
                 incidJuanReal = IncidenciaServ.seeIncidImportancia(incidencia_2.getIncidenciaId()).getIncidImportancia();
                 Assert.assertThat(incidJuanReal.isIniciadorIncidencia(), is(false));
@@ -117,6 +122,14 @@ public class IncidEditAcTest_2 {
     {
         whatClean = CLEAN_JUAN_AND_PEPE;
         mActivity = intentRule.getActivity();
+        // Premisas.
+        IncidEditNoPowerFr noPowerFr = (IncidEditNoPowerFr) mActivity.getFragmentManager().findFragmentByTag(incid_edit_ac_frgs_tag);
+        assertThat(noPowerFr, notNullValue());
+        assertThat(noPowerFr.getArguments(), allOf(
+                hasEntry(INCID_IMPORTANCIA_OBJECT.key, is(incidJuanReal)),
+                hasEntry(INCID_ACTIVITY_VIEW_ID.key, is(R.id.incid_edit_fragment_container_ac))
+        ));
+        assertThat(noPowerFr.getArguments().getBoolean(INCID_RESOLUCION_FLAG.key), is(false));
     }
 
     @After

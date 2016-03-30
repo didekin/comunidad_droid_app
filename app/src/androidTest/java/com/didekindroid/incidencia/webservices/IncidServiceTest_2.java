@@ -254,6 +254,11 @@ public class IncidServiceTest_2 {
         assertThat(incidenciaUsers.get(0).getIncidencia(), is(resolucion.getIncidencia()));
     }
 
+    @Test
+    public void testSeeUserComusImportancia(){
+        // TODO: implementar.
+    }
+
 //    ============================= HELPER METHODS ===============================
 
     private void signPepeWithIncidImportancia() throws UiException

@@ -54,7 +54,6 @@ import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -256,6 +255,7 @@ public class IncidResolucionEditFrTest_1 {
 
         // Damos back e intentamos modificar la incidencia. Nos da error.
         onView(withId(R.id.incid_see_closed_by_comu_ac)).check(matches(isDisplayed())).perform(pressBack());
+        // También funcionan con: checkNavigateUp();
         onView(withId(R.id.incid_resolucion_fr_modif_button)).perform(click());
         checkToastInTest(R.string.incidencia_wrong_init, mActivity);
         onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed()));

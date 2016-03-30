@@ -100,7 +100,7 @@ public final class IncidenciaTestUtils {
         return IncidenciaServ.seeIncidsOpenByComu(userComu.getComunidad().getC_Id()).get(0);
     }
 
-    public static IncidenciaUser insertGetIncidenciaWithId(long incidenciaId, UsuarioComunidad userComu, int importancia) throws UiException
+    public static IncidenciaUser insertGetIncidImportanciaWithId(long incidenciaId, UsuarioComunidad userComu, int importancia) throws UiException
     {
         IncidImportancia incidImportancia = new IncidImportancia.IncidImportanciaBuilder(doIncidenciaWithId(incidenciaId, INCID_DEFAULT_DESC, userComu.getComunidad().getC_Id(), (short) 43))
                 .usuarioComunidad(userComu)

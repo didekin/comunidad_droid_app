@@ -26,4 +26,5 @@ public final class IncidServConstant {
     public static final String SEE_INCIDS_CLOSED_BY_COMU = INCID_READ + "/old";
     public static final String SEE_INCID_COMMENTS = INCID_READ + "/comment/see";
     public static final String SEE_RESOLUCION = INCID_READ + "/resolucion/see";
+    public static final String SEE_USERCOMUS_IMPORTANCIA = INCID_READ + "/usercomus";
 }

@@ -37,6 +37,7 @@ import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_JUAN2;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.makeUsuarioComunidad;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
+import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
 
@@ -105,8 +106,7 @@ public final class ActivityTestUtils {
 
     public static void checkNavigateUp()
     {
-        onView(withContentDescription(R.string.navigate_up_txt)).check(matches(isDisplayed()));
-        onView(AllOf.allOf(
+        onView(allOf(
                         withContentDescription(R.string.navigate_up_txt),
                         isClickable())
         ).check(matches(isDisplayed())).perform(click());

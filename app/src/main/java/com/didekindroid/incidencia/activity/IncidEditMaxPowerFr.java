@@ -84,6 +84,7 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
         HELPER.doAmbitoIncidenciaSpinner(this);
         mImportanciaSpinner = (Spinner) getView().findViewById(R.id.incid_reg_importancia_spinner);
         HELPER.doImportanciaSpinner(this);
+        HELPER.initUserComusImportanciaView(this);
 
         mButtonModify = (Button) getView().findViewById(R.id.incid_edit_fr_modif_button);
         mButtonModify.setOnClickListener(new View.OnClickListener() {
@@ -97,7 +98,7 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
 
         // Erase button doesn't appear when user hasn't adm authority or there exists a resolucion for the incidencia.
         mButtonErase = (Button) getView().findViewById(R.id.incid_edit_fr_borrar_button);
-        if (!mIncidImportancia.getUserComu().hasAdministradorAuthority() || flagResolucion){
+        if (!mIncidImportancia.getUserComu().hasAdministradorAuthority() || flagResolucion) {
             mButtonErase.setVisibility(GONE);
             // Texto que acompaña al botón.
             getView().findViewById(R.id.incid_edit_fr_borrar_txt).setVisibility(GONE);
@@ -138,7 +139,7 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
         } catch (IllegalStateException e) {
             makeToast(getActivity(), errorMsg.toString(), Toast.LENGTH_SHORT);
         }
-        if(incidImportancia != null && checkInternetConnected(getActivity())){
+        if (incidImportancia != null && checkInternetConnected(getActivity())) {
             new IncidenciaModifyer().execute(incidImportancia);
         }
     }
@@ -147,7 +148,7 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
     {
         Log.d(TAG, "eraseIncidencia()");
 
-        if (checkInternetConnected(getActivity())){
+        if (checkInternetConnected(getActivity())) {
             checkState(mIncidImportancia.getUserComu().hasAdministradorAuthority());
             new IncidenciaEraser().execute(mIncidImportancia.getIncidencia());
         }
@@ -183,6 +184,13 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
     {
         Log.d(TAG, "getAmbitoSpinner()");
         return mAmbitoIncidSpinner;
+    }
+
+    @Override
+    public Incidencia getIncidencia()
+    {
+        Log.d(TAG, "getIncidencia()");
+        return mIncidImportancia.getIncidencia();
     }
 
     @Override

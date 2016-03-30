@@ -16,6 +16,7 @@ import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 
 import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_OBJECT;
+import static com.didekindroid.common.activity.BundleKey.INCID_ACTIVITY_VIEW_ID;
 import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
@@ -64,16 +65,29 @@ public class IncidEditAc extends AppCompatActivity {
 
         Bundle argsFragment = new Bundle();
         argsFragment.putSerializable(INCID_IMPORTANCIA_OBJECT.key, mIncidImportancia);
-        argsFragment.putBoolean(INCID_RESOLUCION_FLAG.key, flagResolucion);
+        argsFragment.putInt(INCID_ACTIVITY_VIEW_ID.key, R.id.incid_edit_fragment_container_ac);
         Fragment fragmentToAdd;
 
         if (mIncidImportancia.isIniciadorIncidencia() || mIncidImportancia.getUserComu().hasAdministradorAuthority()) {
+            argsFragment.putBoolean(INCID_RESOLUCION_FLAG.key, flagResolucion);
             fragmentToAdd = new IncidEditMaxPowerFr();
         } else {
             fragmentToAdd = new IncidEditNoPowerFr();
         }
         fragmentToAdd.setArguments(argsFragment);
-        getFragmentManager().beginTransaction().add(R.id.incid_edit_fragment_container_ac, fragmentToAdd, incid_edit_ac_frgs_tag).commit();
+        getFragmentManager().beginTransaction()
+                .add(R.id.incid_edit_fragment_container_ac, fragmentToAdd, incid_edit_ac_frgs_tag)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (getFragmentManager().getBackStackEntryCount() > 0 ){
+            getFragmentManager().popBackStack();
+        } else {
+            super.onBackPressed();
+        }
     }
 
 //    ============================================================

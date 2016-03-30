@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:id="@+id/incid_see_usercomu_importancia_layout"
+              style="@style/baseLayout"
+              xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_marginTop="@dimen/app_bar_bottom_margin">
+    <ListView
+        android:id="@id/android:list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </ListView>
+    <TextView
+        android:id="@id/android:empty"
+        style="@style/textBase.textPageLabel2.no_item_list_message"
+        android:text="@string/no_importancia_by_user"
+        android:visibility="gone">
+    </TextView>
+
+</LinearLayout>

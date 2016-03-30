@@ -1,6 +1,7 @@
 package com.didekindroid.incidencia.activity;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -83,6 +84,11 @@ public class IncidResolucionSeeFr extends Fragment {
                 intent.putExtra(INCIDENCIA_OBJECT.key, getArguments().getSerializable(INCIDENCIA_OBJECT.key));
                 getActivity().setIntent(intent);
                 INCID_COMMENTS_SEE_AC.doMenuItem(getActivity());
+                return true;
+            case android.R.id.home:
+                if (getFragmentManager().getBackStackEntryCount() > 0) {
+                    getFragmentManager().popBackStack();
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

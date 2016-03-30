@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.didekin.incidservice.dominio.IncidImportancia;
+import com.didekin.incidservice.dominio.Incidencia;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.utils.ConnectionUtils;
@@ -71,6 +72,7 @@ public class IncidEditNoPowerFr extends Fragment implements ImportanciaSpinnerSe
 
         mImportanciaSpinner = (Spinner) getView().findViewById(R.id.incid_reg_importancia_spinner);
         HELPER.doImportanciaSpinner(this);
+        HELPER.initUserComusImportanciaView(this);
 
         mButtonModify = (Button) getView().findViewById(R.id.incid_edit_fr_modif_button);
         mButtonModify.setOnClickListener(new View.OnClickListener() {
@@ -116,6 +118,13 @@ public class IncidEditNoPowerFr extends Fragment implements ImportanciaSpinnerSe
 //    ============================================================
 //    ..................... INTERFACE METHODS ....................
 //    ============================================================
+
+    @Override
+    public Incidencia getIncidencia()
+    {
+        Log.d(TAG, "getIncidencia()");
+        return mIncidImportancia.getIncidencia();
+    }
 
     @Override
     public IncidImportanciaBean getIncidImportanciaBean()

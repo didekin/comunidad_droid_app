@@ -81,6 +81,7 @@ public class IncidResolucionRegEditSeeAc extends AppCompatActivity {
         fragmentToAdd.setArguments(argsFragment);
         getFragmentManager().beginTransaction()
                 .add(R.id.incid_resolucion_fragment_container_ac, fragmentToAdd, incid_resolucion_ac_frgs_tag)
+                .addToBackStack(null)
                 .commit();
     }
 
@@ -105,17 +106,12 @@ public class IncidResolucionRegEditSeeAc extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume()
-    {
-        Log.d(TAG, "onResume()");
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause()
-    {
-        Log.d(TAG, "onPause()");
-        super.onPause();
+    public void onBackPressed() {
+        if (getFragmentManager().getBackStackEntryCount() > 0 ){
+            getFragmentManager().popBackStack();
+        } else {
+            super.onBackPressed();
+        }
     }
 
 //    ============================================================

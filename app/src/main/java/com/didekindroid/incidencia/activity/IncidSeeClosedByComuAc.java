@@ -69,7 +69,9 @@ public class IncidSeeClosedByComuAc extends AppCompatActivity implements
             return;
         }
         mFragment = new IncidSeeByComuListFr();
-        getFragmentManager().beginTransaction().add(R.id.incid_see_closed_by_comu_ac, mFragment, incid_see_by_comu_list_fr_tag).commit();
+        getFragmentManager().beginTransaction().add(R.id.incid_see_closed_by_comu_ac, mFragment, incid_see_by_comu_list_fr_tag)
+                .addToBackStack(null)
+                .commit();
     }
 
     @Override
@@ -87,6 +89,15 @@ public class IncidSeeClosedByComuAc extends AppCompatActivity implements
         if (savedInstanceState != null) {
             mIncidenciaIndex = savedInstanceState.getInt(INCIDENCIA_LIST_INDEX.key, 0);
             mFragment.setSelection(mIncidenciaIndex);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (getFragmentManager().getBackStackEntryCount() > 0 ){
+            getFragmentManager().popBackStack();
+        } else {
+            super.onBackPressed();
         }
     }
 

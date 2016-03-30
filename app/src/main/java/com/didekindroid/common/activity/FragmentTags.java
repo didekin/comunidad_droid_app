@@ -2,6 +2,7 @@ package com.didekindroid.common.activity;
 
 import com.didekindroid.incidencia.activity.IncidCommentSeeListFr;
 import com.didekindroid.incidencia.activity.IncidEditAc;
+import com.didekindroid.incidencia.activity.IncidSeeUserComuImportanciaFr;
 import com.didekindroid.incidencia.activity.IncidResolucionRegEditSeeAc;
 import com.didekindroid.incidencia.activity.IncidResolucionSeeFr;
 import com.didekindroid.incidencia.activity.IncidSeeByComuListFr;
@@ -18,6 +19,7 @@ public final class FragmentTags {
     public static final String incid_resolucion_ac_frgs_tag = IncidResolucionRegEditSeeAc.class.getCanonicalName();
     public static final String incid_resolucion_see_fr_tag = IncidResolucionSeeFr.class.getCanonicalName();
     public static final String incid_see_by_comu_list_fr_tag = IncidSeeByComuListFr.class.getCanonicalName();
+    public static final String incid_see_usercomus_importancia_fr_tag = IncidSeeUserComuImportanciaFr.class.getCanonicalName();
 
     private FragmentTags()
     {

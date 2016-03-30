@@ -31,6 +31,7 @@ public class IncidCommentSeeAdapter extends ArrayAdapter<IncidComment> {
     public View getView(int position, View convertView, ViewGroup parent)
     {
         Log.d(TAG, "getView()");
+
         IncidCommentViewHolder viewHolder;
 
         if (convertView == null){
@@ -60,7 +61,6 @@ public class IncidCommentSeeAdapter extends ArrayAdapter<IncidComment> {
 
         void initializeTextInViews(IncidComment comment)
         {
-            Log.d(TAG, "initializeTextInViews()");
             mFechaAltaView.setText(formatTimeStampToString(comment.getFechaAlta()));
             mRedactorView.setText(comment.getRedactor().getAlias());
             mDescripcionView.setText(comment.getDescripcion());

@@ -55,11 +55,13 @@
     <string name="incid_edit_borrar_txt">Para borrar definitivamente la incidencia:</string>
     <string name="incid_edit_borrar_button_rot">Borrar</string>
     <string name="incid_importancia_reg_edit_button_rot">Confirmar</string>
+    <string name="no_importancia_by_user">No hay otras valoraciones en la comunidad</string>
     <!-- =============== IncidRegAc =============== -->
     <string name="incid_reg_ac_label">Nueva incidencia</string>
     <string name="incid_reg_hint"> -- Describe la incidencia (max. 300 caracteres) -- </string>
     <string name="incid_reg_ac_button_rot">Registrar incidencia</string>
     <string name="incid_reg_importancia">Importancia</string>
+    <string name="incid_importancia_otros_txt">>> Ver comunidad</string>
     <string name="incid_reg_ambitoIncidencia">Ámbito de incidencia</string>
     <string name="incid_reg_descripcion">Descripcion</string>
     <!-- =============== IncidResolucionRegEditSeeAc =============== -->
@@ -86,7 +88,7 @@
     <string name="incid_resolucion_coste_prev_msg">Coste estimado</string>
     <!-- ====== IncidResolucionSeeDefaultFr ====== -->
     <string name="incid_resolucion_see_default_txt">No se ha iniciado aún el proceso de resolución</string>
-    <!-- =================== IncidSeeImportanByUserFr ================== -->
+    <!-- =================== IncidSeeUserComuImportanciaFr ================== -->
     <string name="incid_see_importancia_by_users_ac_label">Valoración incidencia</string>
     <!-- ===================== IncidSeeOpenByComuAc ===================== -->
     <string name="incid_see_by_user_ac_label">Tus incidencias</string>

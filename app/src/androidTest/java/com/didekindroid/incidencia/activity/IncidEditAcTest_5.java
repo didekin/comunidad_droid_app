@@ -26,10 +26,13 @@ import java.util.Date;
 import static android.database.sqlite.SQLiteDatabase.deleteDatabase;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.intent.matcher.BundleMatchers.hasEntry;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static com.didekindroid.common.activity.BundleKey.INCID_ACTIVITY_VIEW_ID;
 import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_FLAG;
+import static com.didekindroid.common.activity.FragmentTags.incid_edit_ac_frgs_tag;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkNavigateUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
@@ -42,6 +45,7 @@ import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaSer
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
+import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -115,6 +119,14 @@ public class IncidEditAcTest_5 {
         assertThat(incidImportancia.getUserComu().hasAdministradorAuthority(), is(true));
         boolean hasResolucionInBd = mActivity.getIntent().getBooleanExtra(INCID_RESOLUCION_FLAG.key, false);
         assertThat(hasResolucionInBd, is(true));
+        // Premisas.
+        IncidEditMaxPowerFr maxPowerFr = (IncidEditMaxPowerFr) mActivity.getFragmentManager().findFragmentByTag(incid_edit_ac_frgs_tag);
+        ViewMatchers.assertThat(maxPowerFr, notNullValue());
+        ViewMatchers.assertThat(maxPowerFr.getArguments(), allOf(
+                hasEntry(INCID_IMPORTANCIA_OBJECT.key, is(incidImportancia)),
+                hasEntry(INCID_ACTIVITY_VIEW_ID.key, is(R.id.incid_edit_fragment_container_ac)),
+                hasEntry(INCID_RESOLUCION_FLAG.key, is(true))
+        ));
     }
 
     @After

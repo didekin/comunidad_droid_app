@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CursorAdapter;
 import android.widget.Spinner;
 
+import com.didekin.incidservice.dominio.Incidencia;
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekindroid.R;
 import com.didekindroid.incidencia.activity.utils.AmbitoSpinnerSettable;
@@ -190,5 +191,12 @@ public class IncidRegAcFragment extends Fragment implements ComuSpinnerSettable,
     {
         Log.d(TAG, "onImportanciaSpinnerLoaded()");
         mImportanciaSpinner.setSelection(0);
+    }
+
+    @Override
+    public Incidencia getIncidencia()
+    {
+        Log.d(TAG, "getIncidencia()");
+        throw new UnsupportedOperationException("getIncidencia() not supported");
     }
 }

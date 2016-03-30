@@ -37,12 +37,15 @@ public class IncidOpenSeeItemVwHolder {
 
     void initializeTextInViews(IncidenciaUser incidenciaUser)
     {
-
         mDescripcionView.setText(incidenciaUser.getIncidencia().getDescripcion());
         mFechaAltaView.setText(formatTimeStampToString(incidenciaUser.getIncidencia().getFechaAlta()));
         mIniciador.setText(incidenciaUser.getUsuario() != null ? incidenciaUser.getUsuario().getAlias() : incidenciaUser.getIncidencia().getUserName());
         short ambitoPk = incidenciaUser.getIncidencia().getAmbitoIncidencia().getAmbitoId();
-        mAmbitoView.setText(new IncidenciaDataDbHelper(context).getAmbitoDescByPk(ambitoPk));
+
+        IncidenciaDataDbHelper dbHelper = new IncidenciaDataDbHelper(context);
+        mAmbitoView.setText(dbHelper.getAmbitoDescByPk(ambitoPk));
+        dbHelper.close();
+
         int mImportanciaAvg = Math.round(incidenciaUser.getIncidencia().getImportanciaAvg());
         String importanciAvgStr = mImportanciaAvg == 0 ? "" : context.getResources().getStringArray(R.array.IncidImportanciaArray)[mImportanciaAvg];
         mImportanciaComuView.setText(importanciAvgStr);

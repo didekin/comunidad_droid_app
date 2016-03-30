@@ -1,5 +1,6 @@
 package com.didekindroid.incidencia.activity;
 
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
@@ -34,6 +35,7 @@ import static android.database.sqlite.SQLiteDatabase.deleteDatabase;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.pressBack;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
@@ -46,6 +48,7 @@ import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.IS_MENU_IN_FRAGMENT_FLAG;
 import static com.didekindroid.common.activity.FragmentTags.incid_resolucion_see_fr_tag;
 import static com.didekindroid.common.activity.FragmentTags.incid_see_by_comu_list_fr_tag;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkNavigateUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.regSeveralUserComuSameUser;
 import static com.didekindroid.common.utils.UIutils.formatTimeStampToString;
@@ -153,6 +156,7 @@ public class IncidSeeClosedByComuAcTest_2 {
                 IncidenciaServ.closeIncidencia(resolucionToClose);
 
                 Thread.sleep(1000);
+                FragmentManager.enableDebugLogging(true);
 
             } catch (UiException | InterruptedException e) {
                 e.printStackTrace();
@@ -202,39 +206,9 @@ public class IncidSeeClosedByComuAcTest_2 {
         IncidenciaUser incidUser_1 = mAdapter.getItem(0);
         ViewMatchers.assertThat(incidUser_1.getIncidencia(), is(incidPepeLaFuente.getIncidencia()));
         onData(is(incidUser_1)).inAdapterView(withId(android.R.id.list)).check(matches(isDisplayed()));
-        onView(allOf(
-                withId(R.id.incid_see_apertura_block),
-                hasDescendant(allOf(
-                        withId(R.id.incid_fecha_alta_view),
-                        withText(formatTimeStampToString(incidUser_1.getIncidencia().getFechaAlta()))
-                )),
-                hasDescendant(allOf(
-                        withId(R.id.incid_see_iniciador_view),
-                        withText(incidUser_1.getUsuario().getAlias())
-                )),
-                hasSibling(allOf(
-                        withId(R.id.incid_see_cierre_block),
-                        hasDescendant(allOf(
-                                withId(R.id.incid_fecha_cierre_view),
-                                withText(formatTimeStampToString(incidUser_1.getIncidencia().getFechaCierre()))
-                        ))
-                )),
-                hasSibling(allOf(
-                        withId(R.id.incid_see_importancia_block),
-                        hasDescendant(allOf(
-                                        withId(R.id.incid_importancia_comunidad_view),
-                                        withText(mActivity.getResources()
-                                                .getStringArray(R.array.IncidImportanciaArray)[Math.round(incidPepeLaFuente.getImportancia())]))
-                        ))),
-                hasSibling(allOf(
-                        withId(R.id.incid_ambito_view),
-                        withText(dbHelper.getAmbitoDescByPk(incidUser_1.getIncidencia().getAmbitoIncidencia().getAmbitoId()))
-                )),
-                hasSibling(allOf(
-                        withText(incidUser_1.getIncidencia().getDescripcion()),
-                        withId(R.id.incid_descripcion_view)
-                ))
-        )).check(matches(isDisplayed()));
+
+         /* Datos a la vista de IncidSeeByComuListFr.*/
+        showDataIncidList(incidUser_1);
     }
 
     @Test
@@ -281,7 +255,7 @@ public class IncidSeeClosedByComuAcTest_2 {
         assertThat(resolucionSeeFr, notNullValue());
         Bundle args = resolucionSeeFr.getArguments();
         assertThat(args.size(), is(3));
-        assertThat((Incidencia)args.getSerializable(BundleKey.INCIDENCIA_OBJECT.key), is(incidPepePlazuelas5_2.getIncidencia()));
+        assertThat((Incidencia) args.getSerializable(BundleKey.INCIDENCIA_OBJECT.key), is(incidPepePlazuelas5_2.getIncidencia()));
         assertThat((Resolucion) args.getSerializable(BundleKey.INCID_RESOLUCION_OBJECT.key), is(mResolucionToCheck));
         assertThat(args.getBoolean(IS_MENU_IN_FRAGMENT_FLAG.key), is(true));
 
@@ -291,7 +265,85 @@ public class IncidSeeClosedByComuAcTest_2 {
         intended(hasExtra(is(INCIDENCIA_OBJECT.key), is(incidPepePlazuelas5_2.getIncidencia())));
     }
 
+    @Test
+    public void testOnSelected_2() throws InterruptedException
+    {
+        // CASO: verificación de la navegación, Utilizamos PressBack.
+
+        // Comunidad por defecto.
+        Thread.sleep(1000);
+        IncidenciaUser incidUser = mAdapter.getItem(0);
+        // Seleccionamos una incidencia.
+        onData(is(incidUser)).inAdapterView(withId(android.R.id.list))
+                .check(matches(isDisplayed()))
+                .perform(click());
+
+        // BACK.
+        onView(withId(R.id.incid_resolucion_see_fr_layout)).check(matches(isDisplayed())).perform(pressBack());
+
+        /* Datos a la vista de IncidSeeByComuListFr.*/
+        showDataIncidList(incidUser);
+    }
+
+    @Test
+    public void testOnSelected_3() throws InterruptedException
+    {
+        // CASO: verificación de la navegación, Utilizamos PressBack.
+
+        // Comunidad por defecto.
+        Thread.sleep(1000);
+        IncidenciaUser incidUser = mAdapter.getItem(0);
+
+        // Seleccionamos una incidencia.
+        onData(is(incidUser)).inAdapterView(withId(android.R.id.list))
+                .check(matches(isDisplayed()))
+                .perform(click());
+
+        // Up Navigation:
+        checkNavigateUp();
+
+        /* Datos a la vista de IncidSeeByComuListFr.*/
+        showDataIncidList(incidUser);
+    }
+
 //    ===================================== HELPERS =====================================
+
+    private void showDataIncidList(IncidenciaUser incidUser)
+    {
+        onView(allOf(
+                withId(R.id.incid_see_apertura_block),
+                hasDescendant(allOf(
+                        withId(R.id.incid_fecha_alta_view),
+                        withText(formatTimeStampToString(incidUser.getIncidencia().getFechaAlta()))
+                )),
+                hasDescendant(allOf(
+                        withId(R.id.incid_see_iniciador_view),
+                        withText(incidUser.getUsuario().getAlias())
+                )),
+                hasSibling(allOf(
+                        withId(R.id.incid_see_cierre_block),
+                        hasDescendant(allOf(
+                                withId(R.id.incid_fecha_cierre_view),
+                                withText(formatTimeStampToString(incidUser.getIncidencia().getFechaCierre()))
+                        ))
+                )),
+                hasSibling(allOf(
+                        withId(R.id.incid_see_importancia_block),
+                        hasDescendant(allOf(
+                                        withId(R.id.incid_importancia_comunidad_view),
+                                        withText(mActivity.getResources()
+                                                .getStringArray(R.array.IncidImportanciaArray)[Math.round(incidPepeLaFuente.getImportancia())]))
+                        ))),
+                hasSibling(allOf(
+                        withId(R.id.incid_ambito_view),
+                        withText(dbHelper.getAmbitoDescByPk(incidUser.getIncidencia().getAmbitoIncidencia().getAmbitoId()))
+                )),
+                hasSibling(allOf(
+                        withText(incidUser.getIncidencia().getDescripcion()),
+                        withId(R.id.incid_descripcion_view)
+                ))
+        )).check(matches(isDisplayed()));
+    }
 
     private static Timestamp doTimeStamp(int daysToAdd)
     {

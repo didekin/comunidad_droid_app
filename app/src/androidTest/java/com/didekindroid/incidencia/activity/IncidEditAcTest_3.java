@@ -24,12 +24,16 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.intent.matcher.BundleMatchers.hasEntry;
 import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekin.common.oauth2.Rol.PROPIETARIO;
+import static com.didekindroid.common.activity.BundleKey.INCID_ACTIVITY_VIEW_ID;
+import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_FLAG;
+import static com.didekindroid.common.activity.FragmentTags.incid_edit_ac_frgs_tag;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkNavigateUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
@@ -110,6 +114,14 @@ public class IncidEditAcTest_3 {
     {
         whatClean = CLEAN_JUAN_AND_PEPE;
         mActivity = intentRule.getActivity();
+        // Premisas.
+        IncidEditNoPowerFr noPowerFr = (IncidEditNoPowerFr) mActivity.getFragmentManager().findFragmentByTag(incid_edit_ac_frgs_tag);
+        assertThat(noPowerFr, notNullValue());
+        assertThat(noPowerFr.getArguments(), allOf(
+                hasEntry(INCID_IMPORTANCIA_OBJECT.key, is(incidJuanReal)),
+                hasEntry(INCID_ACTIVITY_VIEW_ID.key, is(R.id.incid_edit_fragment_container_ac))
+        ));
+        assertThat(noPowerFr.getArguments().getBoolean(INCID_RESOLUCION_FLAG.key), notNullValue());
     }
 
     @After

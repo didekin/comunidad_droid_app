@@ -25,15 +25,22 @@ import static android.database.sqlite.SQLiteDatabase.deleteDatabase;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.pressBack;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.intent.matcher.BundleMatchers.hasEntry;
 import static android.support.test.espresso.matcher.CursorMatchers.withRowString;
 import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_OBJECT;
+import static com.didekindroid.common.activity.BundleKey.INCID_ACTIVITY_VIEW_ID;
+import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_FLAG;
+import static com.didekindroid.common.activity.FragmentTags.incid_edit_ac_frgs_tag;
+import static com.didekindroid.common.activity.FragmentTags.incid_see_usercomus_importancia_fr_tag;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkNavigateUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
@@ -113,6 +120,14 @@ public class IncidEditAcTest_1 {
     {
         mActivity = intentRule.getActivity();
         dBHelper = new IncidenciaDataDbHelper(mActivity);
+        // Premisas.
+        IncidEditMaxPowerFr maxPowerFr = (IncidEditMaxPowerFr) mActivity.getFragmentManager().findFragmentByTag(incid_edit_ac_frgs_tag);
+        assertThat(maxPowerFr, notNullValue());
+        assertThat(maxPowerFr.getArguments(), allOf(
+                hasEntry(INCID_IMPORTANCIA_OBJECT.key, is(incidJuanReal1)),
+                hasEntry(INCID_ACTIVITY_VIEW_ID.key, is(R.id.incid_edit_fragment_container_ac)),
+                hasEntry(INCID_RESOLUCION_FLAG.key, is(false))
+        ));
     }
 
     @After
@@ -153,27 +168,8 @@ public class IncidEditAcTest_1 {
     @Test
     public void testOnData_1()
     {
-        onView(allOf(
-                withId(R.id.incid_comunidad_txt),
-                withText(incidJuanReal1.getIncidencia().getComunidad().getNombreComunidad())
-        )).check(matches(isDisplayed()));
-
-        onView(allOf(
-                withId(R.id.incid_reg_desc_ed),
-                withText(incidJuanReal1.getIncidencia().getDescripcion())
-        )).check(matches(isDisplayed()));
-
-        onView(allOf(
-                withId(R.id.app_spinner_1_dropdown_item),
-                withParent(withId(R.id.incid_reg_ambito_spinner)),
-                withText(dBHelper.getAmbitoDescByPk(incidJuanReal1.getIncidencia().getAmbitoIncidencia().getAmbitoId()))
-        )).check(matches(isDisplayed()));
-
-        onView(allOf(
-                withId(R.id.app_spinner_1_dropdown_item),
-                withParent(withId(R.id.incid_reg_importancia_spinner)),
-                withText(mActivity.getResources().getStringArray(R.array.IncidImportanciaArray)[incidJuanReal1.getImportancia()])
-        )).check(matches(isDisplayed()));
+        // Datos a la vista de la incidencia.
+        showDataIncidencia();
     }
 
     @Test
@@ -202,5 +198,74 @@ public class IncidEditAcTest_1 {
 
         onView(withId(R.id.incid_edit_fr_modif_button)).perform(scrollTo(), click());
         onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testOnSeeUserComusImportancia_1()
+    {
+        // CASO: presionamos TextView para ver la importancia dada por otros miembros de la comunidad.
+        onView(withId(R.id.incid_importancia_otros_view)).check(matches(isDisplayed())).perform(click());
+
+        // Verificamos nuevo fragmento y sus argumentos.
+        IncidSeeUserComuImportanciaFr seeByUsersFr = (IncidSeeUserComuImportanciaFr) mActivity.getFragmentManager().findFragmentByTag(incid_see_usercomus_importancia_fr_tag);
+        assertThat(seeByUsersFr, notNullValue());
+        assertThat(seeByUsersFr.getArguments(), hasEntry(INCIDENCIA_OBJECT.key, is(incidJuanReal1.getIncidencia())));
+
+        // Datos a la vista: lista vacía.
+        onView(withId(R.id.appbar)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_see_usercomu_importancia_layout)).check(matches(isDisplayed()));
+        onView(withId(android.R.id.list)).check(matches(not(isDisplayed())));
+        onView(withId(android.R.id.empty)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testOnSeeUserComusImportancia_2()
+    {
+        // CASO: presionamos TextView para ver la importancia dada por otros miembros, y luego hacemos BACK.
+
+        onView(withId(R.id.incid_importancia_otros_view)).check(matches(isDisplayed())).perform(click());
+        // BACK.
+        onView(withId(R.id.incid_see_usercomu_importancia_layout)).check(matches(isDisplayed())).perform(pressBack());
+        // Datos a la vista.
+        showDataIncidencia();
+    }
+
+    @Test
+    public void testOnSeeUserComusImportancia_3()
+    {
+        // CASO: presionamos TextView para ver la importancia dada por otros miembros, y luego Up (Volver).
+
+        onView(withId(R.id.incid_importancia_otros_view)).check(matches(isDisplayed())).perform(click());
+        // Up Navigate.
+        checkNavigateUp();
+        // Datos a la vista.
+        showDataIncidencia();
+    }
+
+    // ======================================= HELPER METHODS ====================================
+
+    private void showDataIncidencia()
+    {
+        onView(allOf(
+                withId(R.id.incid_comunidad_txt),
+                withText(incidJuanReal1.getIncidencia().getComunidad().getNombreComunidad())
+        )).check(matches(isDisplayed()));
+
+        onView(allOf(
+                withId(R.id.incid_reg_desc_ed),
+                withText(incidJuanReal1.getIncidencia().getDescripcion())
+        )).check(matches(isDisplayed()));
+
+        onView(allOf(
+                withId(R.id.app_spinner_1_dropdown_item),
+                withParent(withId(R.id.incid_reg_ambito_spinner)),
+                withText(dBHelper.getAmbitoDescByPk(incidJuanReal1.getIncidencia().getAmbitoIncidencia().getAmbitoId()))
+        )).check(matches(isDisplayed()));
+
+        onView(allOf(
+                withId(R.id.app_spinner_1_dropdown_item),
+                withParent(withId(R.id.incid_reg_importancia_spinner)),
+                withText(mActivity.getResources().getStringArray(R.array.IncidImportanciaArray)[incidJuanReal1.getImportancia()])
+        )).check(matches(isDisplayed()));
     }
 }

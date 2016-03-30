@@ -1,5 +1,6 @@
 package com.didekin.incidservice.controller;
 
+import com.didekin.incidservice.dominio.ImportanciaUser;
 import com.didekin.incidservice.dominio.IncidAndResolBundle;
 import com.didekin.incidservice.dominio.IncidComment;
 import com.didekin.incidservice.dominio.IncidImportancia;
@@ -28,6 +29,7 @@ import static com.didekin.incidservice.controller.IncidServConstant.SEE_INCIDS_C
 import static com.didekin.incidservice.controller.IncidServConstant.SEE_INCID_COMMENTS;
 import static com.didekin.incidservice.controller.IncidServConstant.SEE_INCIDS_OPEN_BY_COMU;
 import static com.didekin.incidservice.controller.IncidServConstant.SEE_RESOLUCION;
+import static com.didekin.incidservice.controller.IncidServConstant.SEE_USERCOMUS_IMPORTANCIA;
 
 /**
  * User: pedro@didekin
@@ -79,4 +81,8 @@ public interface IncidenciaServEndPoints {
 
     @GET(SEE_RESOLUCION + "/{resolucionId}")
     Resolucion seeResolucion(@Header("Authorization") String accessToken, @Path("resolucionId") long resolucionId);
+
+    @GET(SEE_USERCOMUS_IMPORTANCIA + "/{incidenciaId}")
+    List<ImportanciaUser> seeUserComusImportancia(@Header("Authorization") String accessToken,
+                                                  @Path("incidenciaId") long incidenciaId);
 }
