@@ -1,10 +1,10 @@
 package com.didekindroid.incidencia.activity;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -65,12 +65,12 @@ public class IncidSeeClosedByComuAc extends AppCompatActivity implements
         setContentView(R.layout.incid_see_closed_by_comu_ac);
         doToolBar(this, true);
         if (savedInstanceState != null) {
-            checkState(getFragmentManager().findFragmentByTag(incid_see_by_comu_list_fr_tag) != null);
+            checkState(getSupportFragmentManager().findFragmentByTag(incid_see_by_comu_list_fr_tag) != null);
             return;
         }
         mFragment = new IncidSeeByComuListFr();
-        getFragmentManager().beginTransaction().add(R.id.incid_see_closed_by_comu_ac, mFragment, incid_see_by_comu_list_fr_tag)
-                .addToBackStack(null)
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.incid_see_closed_by_comu_ac, mFragment, incid_see_by_comu_list_fr_tag)
                 .commit();
     }
 
@@ -89,15 +89,6 @@ public class IncidSeeClosedByComuAc extends AppCompatActivity implements
         if (savedInstanceState != null) {
             mIncidenciaIndex = savedInstanceState.getInt(INCIDENCIA_LIST_INDEX.key, 0);
             mFragment.setSelection(mIncidenciaIndex);
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (getFragmentManager().getBackStackEntryCount() > 0 ){
-            getFragmentManager().popBackStack();
-        } else {
-            super.onBackPressed();
         }
     }
 
@@ -201,9 +192,9 @@ public class IncidSeeClosedByComuAc extends AppCompatActivity implements
                 bundle.putSerializable(INCID_RESOLUCION_OBJECT.key, resolucion);
                 Fragment switchFragment = new IncidResolucionSeeFr();
                 switchFragment.setArguments(bundle);
-                getFragmentManager().beginTransaction()
+                getSupportFragmentManager().beginTransaction()
                         .replace(R.id.incid_see_closed_by_comu_ac, switchFragment, incid_resolucion_see_fr_tag)
-                        .addToBackStack(null)
+                        .addToBackStack(switchFragment.getClass().getName())
                         .commit();
             }
         }

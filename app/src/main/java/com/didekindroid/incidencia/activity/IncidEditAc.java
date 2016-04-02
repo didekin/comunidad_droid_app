@@ -1,9 +1,9 @@
 package com.didekindroid.incidencia.activity;
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -59,7 +59,7 @@ public class IncidEditAc extends AppCompatActivity {
         doToolBar(this, true);
 
         if (savedInstanceState != null) {
-            checkState(getFragmentManager().findFragmentByTag(incid_edit_ac_frgs_tag) != null);
+            checkState(getSupportFragmentManager().findFragmentByTag(incid_edit_ac_frgs_tag) != null);
             return;
         }
 
@@ -74,20 +74,11 @@ public class IncidEditAc extends AppCompatActivity {
         } else {
             fragmentToAdd = new IncidEditNoPowerFr();
         }
-        fragmentToAdd.setArguments(argsFragment);
-        getFragmentManager().beginTransaction()
-                .add(R.id.incid_edit_fragment_container_ac, fragmentToAdd, incid_edit_ac_frgs_tag)
-                .addToBackStack(null)
-                .commit();
-    }
 
-    @Override
-    public void onBackPressed() {
-        if (getFragmentManager().getBackStackEntryCount() > 0 ){
-            getFragmentManager().popBackStack();
-        } else {
-            super.onBackPressed();
-        }
+        fragmentToAdd.setArguments(argsFragment);
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.incid_edit_fragment_container_ac, fragmentToAdd, incid_edit_ac_frgs_tag)
+                .commit();
     }
 
 //    ============================================================

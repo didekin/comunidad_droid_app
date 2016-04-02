@@ -139,7 +139,8 @@ public class IncidResolucionEditFrTest_2 {
     public void setUp() throws Exception
     {
         mActivity = intentRule.getActivity();
-        IncidResolucionEditFr editFr = (IncidResolucionEditFr) mActivity.getFragmentManager().findFragmentByTag(incid_resolucion_ac_frgs_tag);
+        IncidResolucionEditFr editFr = (IncidResolucionEditFr) mActivity.getSupportFragmentManager()
+                .findFragmentByTag(incid_resolucion_ac_frgs_tag);
         assertThat(editFr, notNullValue());
         IncidImportancia incidImportancia = (IncidImportancia) mActivity.getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.key);
         // Preconditions: a user with powers to erase and modify is received.
@@ -233,7 +234,7 @@ public class IncidResolucionEditFrTest_2 {
     }
 
     @Test
-    public void testCloseIncidencia_1()
+    public void testCloseIncidenciaAndBack()
     {
         // Caso NOT OK: cerramos la incidencia, damos back y volvemos a intentar cerrarla.
         onView(withId(R.id.incid_resolucion_edit_fr_close_button)).perform(click());

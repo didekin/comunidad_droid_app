@@ -181,7 +181,8 @@ public class IncidSeeClosedByComuAcTest_2 {
     {
         whatToClean = CLEAN_PEPE;
         mActivity = activityRule.getActivity();
-        mFragment = (IncidSeeByComuListFr) mActivity.getFragmentManager().findFragmentByTag(incid_see_by_comu_list_fr_tag);
+        mFragment = (IncidSeeByComuListFr) mActivity.getSupportFragmentManager()
+                .findFragmentByTag(incid_see_by_comu_list_fr_tag);
         mAdapter = (IncidSeeClosedByComuAdapter) mFragment.mAdapter;
         dbHelper = new IncidenciaDataDbHelper(mActivity);
         assertThat(mActivity.mComunidadSelected, is(mPepeLaFuente.getComunidad()));
@@ -251,7 +252,8 @@ public class IncidSeeClosedByComuAcTest_2 {
         onView(withId(R.id.incid_resolucion_see_fr_layout)).check(matches(isDisplayed()));
 
         // Verificamos argumentos del nuevo fragmento.
-        IncidResolucionSeeFr resolucionSeeFr = (IncidResolucionSeeFr) mActivity.getFragmentManager().findFragmentByTag(incid_resolucion_see_fr_tag);
+        IncidResolucionSeeFr resolucionSeeFr = (IncidResolucionSeeFr) mActivity.getSupportFragmentManager()
+                .findFragmentByTag(incid_resolucion_see_fr_tag);
         assertThat(resolucionSeeFr, notNullValue());
         Bundle args = resolucionSeeFr.getArguments();
         assertThat(args.size(), is(3));
@@ -288,7 +290,7 @@ public class IncidSeeClosedByComuAcTest_2 {
     @Test
     public void testOnSelected_3() throws InterruptedException
     {
-        // CASO: verificación de la navegación, Utilizamos PressBack.
+        // CASO: verificación de la navegación,
 
         // Comunidad por defecto.
         Thread.sleep(1000);

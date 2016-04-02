@@ -1,7 +1,7 @@
 package com.didekindroid.incidencia.activity;
 
-import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -79,9 +79,8 @@ public class IncidResolucionRegEditSeeAc extends AppCompatActivity {
             }
         }
         fragmentToAdd.setArguments(argsFragment);
-        getFragmentManager().beginTransaction()
+        getSupportFragmentManager().beginTransaction()
                 .add(R.id.incid_resolucion_fragment_container_ac, fragmentToAdd, incid_resolucion_ac_frgs_tag)
-                .addToBackStack(null)
                 .commit();
     }
 
@@ -103,15 +102,6 @@ public class IncidResolucionRegEditSeeAc extends AppCompatActivity {
         mResolucion = (Resolucion) savedInstanceState.getSerializable(INCID_RESOLUCION.key);
         mIncidImportancia = (IncidImportancia) savedInstanceState.getSerializable(INCID_IMPORTANCIA.key);
         super.onRestoreInstanceState(savedInstanceState);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (getFragmentManager().getBackStackEntryCount() > 0 ){
-            getFragmentManager().popBackStack();
-        } else {
-            super.onBackPressed();
-        }
     }
 
 //    ============================================================

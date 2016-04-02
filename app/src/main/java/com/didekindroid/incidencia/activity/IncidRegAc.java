@@ -55,7 +55,7 @@ public class IncidRegAc extends AppCompatActivity {
         setContentView(mAcView);
         doToolBar(this, true);
 
-        mRegAcFragment = (IncidRegAcFragment) getFragmentManager().findFragmentById(R.id.incid_reg_frg);
+        mRegAcFragment = (IncidRegAcFragment) getSupportFragmentManager().findFragmentById(R.id.incid_reg_frg);
         Button mRegisterButton = (Button) findViewById(R.id.incid_reg_ac_button);
         mRegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override

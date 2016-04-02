@@ -74,7 +74,9 @@ public class IncidSeeOpenByComuAcTest_4 {
         /**
          * Preconditions:
          * 1. Incidencia with resolucion in BD.
-         * 2. User without authority 'adm' sees the incidencia and selects it.
+         * 2. User without authority 'adm'.
+         * Condition:
+         * 1. User select an incidencia.
          * Postconditions:
          * 1. The incidencia is shown in edit mode.
          * 2. An intent is passed whith:
@@ -113,7 +115,8 @@ public class IncidSeeOpenByComuAcTest_4 {
     public void setUp() throws Exception
     {
         IncidSeeOpenByComuAc mActivity = activityRule.getActivity();
-        IncidSeeByComuListFr mFragment = (IncidSeeByComuListFr) mActivity.getFragmentManager().findFragmentByTag(incid_see_by_comu_list_fr_tag);
+        IncidSeeByComuListFr mFragment = (IncidSeeByComuListFr) mActivity.getSupportFragmentManager()
+                .findFragmentByTag(incid_see_by_comu_list_fr_tag);
         adapter = (IncidSeeOpenByComuAdapter) mFragment.mAdapter;
         // Premisas.
         assertThat(userComuJuan.hasAdministradorAuthority(), is(false));

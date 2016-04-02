@@ -96,10 +96,10 @@
         <activity
             android:name=".incidencia.activity.IncidRegAc"
             android:label="@string/incid_reg_ac_label"
-            android:parentActivityName=".usuario.activity.UserComuDataAc">
+            android:parentActivityName=".incidencia.activity.IncidSeeOpenByComuAc">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".usuario.activity.UserComuDataAc"/>
+                android:value=".incidencia.activity.IncidSeeOpenByComuAc"/>
         </activity>
         <activity
             android:name=".incidencia.activity.IncidResolucionRegEditSeeAc"

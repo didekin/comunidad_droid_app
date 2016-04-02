@@ -9,7 +9,6 @@ import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.usuario.testutils.CleanUserEnum;
 
-import org.hamcrest.core.AllOf;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -94,7 +93,8 @@ public class IncidSeeClosedByComuAcTest_1 {
     {
         whatToClean = CLEAN_PEPE;
         mActivity = activityRule.getActivity();
-        mFragment = (IncidSeeByComuListFr) mActivity.getFragmentManager().findFragmentByTag(incid_see_by_comu_list_fr_tag);
+        mFragment = (IncidSeeByComuListFr) mActivity.getSupportFragmentManager()
+                .findFragmentByTag(incid_see_by_comu_list_fr_tag);
         assertThat(mActivity.mComunidadSelected, is(mComuPlazuelas5));
     }
 

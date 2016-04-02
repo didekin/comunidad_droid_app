@@ -76,6 +76,18 @@ public class IncidSeeOpenByComuAcTest_2 {
     IncidSeeOpenByComuAdapter adapter;
     IncidSeeByComuListFr mFragment;
 
+    /**
+     * Preconditions:
+     * 1. Incidencia without resolucion in BD.
+     * 2. User with and without authority 'adm' and with incidImportancia records in DB.
+     * Condition:
+     * 1. User select an incidencia.
+     * Postconditions:
+     * 1. The incidencia is shown in edit mode (importancia field).
+     * 2. An intent is passed whith:
+     *    - the incidImportancia instance of the user in session.
+     *    - a true value in the resolucion flag.
+     */
     @Rule
     public IntentsTestRule<IncidSeeOpenByComuAc> activityRule = new IntentsTestRule<IncidSeeOpenByComuAc>(IncidSeeOpenByComuAc.class) {
 
@@ -117,7 +129,8 @@ public class IncidSeeOpenByComuAcTest_2 {
     public void setUp() throws Exception
     {
         mActivity = activityRule.getActivity();
-        mFragment = (IncidSeeByComuListFr) mActivity.getFragmentManager().findFragmentByTag(incid_see_by_comu_list_fr_tag);
+        mFragment = (IncidSeeByComuListFr) mActivity.getSupportFragmentManager()
+                .findFragmentByTag(incid_see_by_comu_list_fr_tag);
         adapter = (IncidSeeOpenByComuAdapter) mFragment.mAdapter;
         dBHelper = new IncidenciaDataDbHelper(mActivity);
     }

@@ -41,12 +41,12 @@ public class IncidCommentSeeAc extends AppCompatActivity {
         mIncidencia = (Incidencia) getIntent().getExtras().getSerializable(INCIDENCIA_OBJECT.key);
 
         if (savedInstanceState != null){
-            checkState((mFragment = (IncidCommentSeeListFr) getFragmentManager().findFragmentByTag(incid_comments_see_list_fr_tag)) != null);
+            checkState((mFragment = (IncidCommentSeeListFr) getSupportFragmentManager().findFragmentByTag(incid_comments_see_list_fr_tag)) != null);
             return;
         }
 
         mFragment = IncidCommentSeeListFr.newInstance(mIncidencia);
-        getFragmentManager().beginTransaction().add(R.id.incid_comments_see_ac, mFragment, incid_comments_see_list_fr_tag).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.incid_comments_see_ac, mFragment, incid_comments_see_list_fr_tag).commit();
     }
 
     // ============================================================

@@ -68,11 +68,11 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements
         doToolBar(this, true);
 
         if (savedInstanceState != null){
-            checkState(getFragmentManager().findFragmentByTag(incid_see_by_comu_list_fr_tag) != null);
+            checkState(getSupportFragmentManager().findFragmentByTag(incid_see_by_comu_list_fr_tag) != null);
             return;
         }
         mFragment = new IncidSeeByComuListFr();
-        getFragmentManager().beginTransaction()
+        getSupportFragmentManager().beginTransaction()
                 .add(R.id.incid_see_open_by_comu_ac, mFragment, incid_see_by_comu_list_fr_tag)
                 .commit();
     }

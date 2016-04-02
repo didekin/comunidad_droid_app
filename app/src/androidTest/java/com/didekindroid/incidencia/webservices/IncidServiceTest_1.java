@@ -104,8 +104,9 @@ public class IncidServiceTest_1 {
             fail();
         } catch (UiException ue) {
             // La incidencia no se encuentra por la consulta de incidencias abiertas.
-            // TODO: sustituir con la consulta de incidencias cerradas.
             assertThat(ue.getInServiceException().getHttpMessage(), is(DidekinExceptionMsg.INCIDENCIA_NOT_FOUND.getHttpMessage()));
+            // Sí está en las incidencias cerradas.
+            assertThat(IncidenciaServ.seeIncidsClosedByComu(incidencia.getComunidad().getC_Id()).size(), is(1));
         }
     }
 
@@ -511,8 +512,11 @@ public class IncidServiceTest_1 {
     }
 
     @Test
-    public void testSeeUserComusImportancia(){
-        // TODO: implementar.
+    public void testSeeUserComusImportancia() throws UiException
+    {
+        // Caso OK.
+        Incidencia incidencia = insertGetIncidenciaUser(pepeUserComu, 1).getIncidencia();
+        assertThat(IncidenciaServ.seeUserComusImportancia(incidencia.getIncidenciaId()).size(), is(1));
     }
 
     //    ============================= HELPER METHODS ===============================

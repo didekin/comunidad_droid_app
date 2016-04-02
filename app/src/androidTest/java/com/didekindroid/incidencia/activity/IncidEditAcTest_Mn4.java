@@ -3,18 +3,16 @@ package com.didekindroid.incidencia.activity;
 import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.v4.app.Fragment;
 
+import com.didekin.incidservice.dominio.IncidAndResolBundle;
 import com.didekin.incidservice.dominio.IncidImportancia;
 import com.didekin.incidservice.dominio.IncidenciaUser;
 import com.didekin.incidservice.dominio.Resolucion;
-import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
+import com.didekindroid.usuario.testutils.CleanUserEnum;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -28,8 +26,9 @@ import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExt
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
+import static com.didekindroid.common.activity.FragmentTags.incid_edit_ac_frgs_tag;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_RESOLUCION_REG_EDIT_AC;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
@@ -47,73 +46,87 @@ import static org.junit.Assert.assertThat;
  * Time: 16:57
  */
 
-/**
- * Tests sobre menús, CON un userComu administrador. Resolución en BD != null.
- */
+@SuppressWarnings("UnnecessaryLocalVariable")
 @RunWith(AndroidJUnit4.class)
-public class IncidEditAcTest_Mn4 {
+public class IncidEditAcTest_Mn4 extends IncidEditAbstractTest {
 
-    IncidEditAc mActivity;
-    UsuarioComunidad juanPlazuelas;
-    IncidImportancia incidJuanPlazuelas;
     Resolucion resolucion;
 
-    @Rule
-    public IntentsTestRule<IncidEditAc> intentRule = new IntentsTestRule<IncidEditAc>(IncidEditAc.class) {
-        @Override
-        protected void beforeActivityLaunched()
-        {
+    @Override
+    IntentsTestRule<IncidEditAc> doIntentRule()
+    {
+        return new IntentsTestRule<IncidEditAc>(IncidEditAc.class) {
 
-            super.beforeActivityLaunched();
-        }
+            @Override
+            protected Intent getActivityIntent()
+            {
+                IncidAndResolBundle incidAndResolBundle = null;
 
-        @Override
-        protected Intent getActivityIntent()
-        {
-            try {
-                signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
-                juanPlazuelas = ServOne.seeUserComusByUser().get(0);
-                incidJuanPlazuelas = new IncidImportancia.IncidImportanciaBuilder(
-                        doIncidencia(juanPlazuelas.getUsuario().getUserName(), "Incidencia Plazueles One", juanPlazuelas.getComunidad().getC_Id(), (short) 43))
-                        .usuarioComunidad(juanPlazuelas)
-                        .importancia((short) 3).build();
-                IncidenciaServ.regIncidImportancia(incidJuanPlazuelas);
-                IncidenciaUser incidenciaUserDb = IncidenciaServ.seeIncidsOpenByComu(juanPlazuelas.getComunidad().getC_Id()).get(0);
-                incidJuanPlazuelas = IncidenciaServ.seeIncidImportancia(incidenciaUserDb.getIncidencia().getIncidenciaId()).getIncidImportancia();
-                Thread.sleep(1000);
-                // Preconditions: resolución en BD.
-                resolucion = doResolucion(incidJuanPlazuelas.getIncidencia(), "resol_desc1", 1000, new Timestamp(new Date().getTime()));
-                assertThat(IncidenciaServ.regResolucion(resolucion), is(1));
-            } catch (UiException | InterruptedException e) {
-                e.printStackTrace();
+                try {
+                    signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
+                    juanUserComu = ServOne.seeUserComusByUser().get(0);
+                    incidenciaJuan = new IncidImportancia.IncidImportanciaBuilder(
+                            doIncidencia(juanUserComu.getUsuario().getUserName(), "Incidencia Plazueles One", juanUserComu.getComunidad().getC_Id(), (short) 43))
+                            .usuarioComunidad(juanUserComu)
+                            .importancia((short) 3).build();
+                    IncidenciaServ.regIncidImportancia(incidenciaJuan);
+                    IncidenciaUser incidenciaUserDb = IncidenciaServ.seeIncidsOpenByComu(juanUserComu.getComunidad().getC_Id()).get(0);
+                    incidenciaJuan = IncidenciaServ.seeIncidImportancia(incidenciaUserDb.getIncidencia().getIncidenciaId()).getIncidImportancia();
+                    Thread.sleep(1000);
+                    // Preconditions: resolución en BD.
+                    resolucion = doResolucion(incidenciaJuan.getIncidencia(), "resol_desc1", 1000, new Timestamp(new Date().getTime()));
+                    assertThat(IncidenciaServ.regResolucion(resolucion), is(1));
+                    incidAndResolBundle = IncidenciaServ.seeIncidImportancia(resolucion.getIncidencia().getIncidenciaId());
+                    incidenciaJuan = incidAndResolBundle.getIncidImportancia();
+                } catch (UiException | InterruptedException e) {
+                    e.printStackTrace();
+                }
+                Intent intent = new Intent();
+                intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, incidenciaJuan);
+                intent.putExtra(INCID_RESOLUCION_FLAG.key, incidAndResolBundle != null && incidAndResolBundle.hasResolucion());
+                return intent;
             }
-            Intent intent = new Intent();
-            intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, incidJuanPlazuelas);
-            return intent;
-        }
-    };
-
-    @BeforeClass
-    public static void slowSeconds() throws InterruptedException
-    {
-        Thread.sleep(4000);
+        };
     }
 
-    @Before
-    public void setUp() throws Exception
+    @Override
+    IncidImportancia getIncidImportanciaIntent()
     {
-        mActivity = intentRule.getActivity();
-        IncidImportancia incidImportancia = (IncidImportancia) mActivity.getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.key);
-        // Preconditions: a user with powers to erase and modify is received.
-        assertThat(incidImportancia.getUserComu().hasAdministradorAuthority(), is(true));
-        // Resolución en BD.
-        assertThat(IncidenciaServ.seeResolucion(incidImportancia.getIncidencia().getIncidenciaId()),is(resolucion));
+        return incidenciaJuan;
     }
 
-    @After
-    public void tearDown() throws Exception
+    @Override
+    boolean isResolucionInIntentTrue()
     {
-        cleanOptions(CLEAN_JUAN);
+        assertThat(flagResolucionIntent, is(true));
+        return flagResolucionIntent;
+    }
+
+    @Override
+    boolean isIniciadorUserInSession()
+    {
+        assertThat(incidenciaJuan.isIniciadorIncidencia(), is(true));
+        return incidenciaJuan.isIniciadorIncidencia();
+    }
+
+    @Override
+    boolean hasAdmAuthority()
+    {
+        assertThat(incidenciaJuan.getUserComu().hasAdministradorAuthority(), is(true));
+        return incidenciaJuan.getUserComu().hasAdministradorAuthority();
+    }
+
+    @Override
+    Fragment getIncidEditFr()
+    {
+        IncidEditMaxPowerFr fragmentByTag = (IncidEditMaxPowerFr) mActivity.getSupportFragmentManager().findFragmentByTag(incid_edit_ac_frgs_tag);
+        return fragmentByTag;
+    }
+
+    @Override
+    CleanUserEnum whatToClean()
+    {
+        return CLEAN_JUAN;
     }
 
 //    ============================  TESTS  ===================================
@@ -123,7 +136,7 @@ public class IncidEditAcTest_Mn4 {
     {
         INCID_RESOLUCION_REG_EDIT_AC.checkMenuItem_WTk(mActivity);
         onView(withId(R.id.incid_resolucion_edit_fr_layout)).check(matches(isDisplayed()));
-        intended(hasExtra(INCID_IMPORTANCIA_OBJECT.key, incidJuanPlazuelas));
+        intended(hasExtra(INCID_IMPORTANCIA_OBJECT.key, incidenciaJuan));
         // Extra con resolución.
         intended(hasExtra(INCID_RESOLUCION_OBJECT.key, resolucion));
     }

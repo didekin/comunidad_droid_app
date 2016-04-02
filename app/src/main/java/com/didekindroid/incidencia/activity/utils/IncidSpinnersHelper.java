@@ -1,7 +1,7 @@
 package com.didekindroid.incidencia.activity.utils;
 
-import android.app.Fragment;
 import android.database.Cursor;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -87,9 +87,10 @@ public enum IncidSpinnersHelper {
             {
                 Log.d(TAG, "mSeeImportanciaView.onClick()");
                 IncidSeeUserComuImportanciaFr importanciaSeeByUsersFr = IncidSeeUserComuImportanciaFr.newInstance(fragment.getIncidencia());
-                fragment.getActivity().getFragmentManager().beginTransaction()
+                fragment.getActivity().getSupportFragmentManager()
+                        .beginTransaction()
                         .replace(fragment.getArguments().getInt(INCID_ACTIVITY_VIEW_ID.key), importanciaSeeByUsersFr, incid_see_usercomus_importancia_fr_tag)
-                        .addToBackStack(null)
+                        .addToBackStack(importanciaSeeByUsersFr.getClass().getName())
                         .commit();
             }
         });

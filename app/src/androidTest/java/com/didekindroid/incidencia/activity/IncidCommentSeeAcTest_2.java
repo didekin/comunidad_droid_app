@@ -104,7 +104,7 @@ public class IncidCommentSeeAcTest_2 {
     public void setUp() throws Exception
     {
         mActivity = activityRule.getActivity();
-        mAdapter = ((IncidCommentSeeListFr) mActivity.getFragmentManager().findFragmentByTag(incid_comments_see_list_fr_tag)).mAdapter;
+        mAdapter = ((IncidCommentSeeListFr) mActivity.getSupportFragmentManager().findFragmentByTag(incid_comments_see_list_fr_tag)).mAdapter;
     }
 
     @After

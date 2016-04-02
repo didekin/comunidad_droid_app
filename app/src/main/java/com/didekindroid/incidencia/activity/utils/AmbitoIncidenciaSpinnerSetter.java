@@ -1,8 +1,8 @@
 package com.didekindroid.incidencia.activity.utils;
 
-import android.app.Fragment;
 import android.database.Cursor;
 import android.os.AsyncTask;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.CursorAdapter;
 import android.widget.SimpleCursorAdapter;

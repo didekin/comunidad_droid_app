@@ -255,7 +255,21 @@ public class IncidResolucionEditFrTest_1 {
 
         // Damos back e intentamos modificar la incidencia. Nos da error.
         onView(withId(R.id.incid_see_closed_by_comu_ac)).check(matches(isDisplayed())).perform(pressBack());
-        // También funcionan con: checkNavigateUp();
+        onView(withId(R.id.incid_resolucion_fr_modif_button)).perform(click());
+        checkToastInTest(R.string.incidencia_wrong_init, mActivity);
+        onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testCloseIncidencia_2()
+    {
+        // Caso OK: cerramos incidencia sin cambiar datos en pantalla.
+        onView(withId(R.id.incid_resolucion_edit_fr_close_button)).perform(click());
+
+        onView(withId(R.id.incid_see_closed_by_comu_ac)).check(matches(isDisplayed()));
+        intended(not(hasExtraWithKey(INCID_IMPORTANCIA_OBJECT.key)));
+        // Up Navigate.
+        checkNavigateUp();
         onView(withId(R.id.incid_resolucion_fr_modif_button)).perform(click());
         checkToastInTest(R.string.incidencia_wrong_init, mActivity);
         onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed()));
