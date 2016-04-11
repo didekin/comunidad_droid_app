@@ -3,7 +3,6 @@ package com.didekindroid.incidencia.activity;
 import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.support.v4.app.Fragment;
 
 import com.didekin.incidservice.dominio.IncidAndResolBundle;
 import com.didekin.incidservice.dominio.IncidImportancia;
@@ -28,7 +27,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.common.activity.FragmentTags.incid_edit_ac_frgs_tag;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_RESOLUCION_REG_EDIT_AC;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
@@ -45,8 +43,6 @@ import static org.junit.Assert.assertThat;
  * Date: 19/01/16
  * Time: 16:57
  */
-
-@SuppressWarnings("UnnecessaryLocalVariable")
 @RunWith(AndroidJUnit4.class)
 public class IncidEditAcTest_Mn4 extends IncidEditAbstractTest {
 
@@ -87,40 +83,6 @@ public class IncidEditAcTest_Mn4 extends IncidEditAbstractTest {
                 return intent;
             }
         };
-    }
-
-    @Override
-    IncidImportancia getIncidImportanciaIntent()
-    {
-        return incidenciaJuan;
-    }
-
-    @Override
-    boolean isResolucionInIntentTrue()
-    {
-        assertThat(flagResolucionIntent, is(true));
-        return flagResolucionIntent;
-    }
-
-    @Override
-    boolean isIniciadorUserInSession()
-    {
-        assertThat(incidenciaJuan.isIniciadorIncidencia(), is(true));
-        return incidenciaJuan.isIniciadorIncidencia();
-    }
-
-    @Override
-    boolean hasAdmAuthority()
-    {
-        assertThat(incidenciaJuan.getUserComu().hasAdministradorAuthority(), is(true));
-        return incidenciaJuan.getUserComu().hasAdministradorAuthority();
-    }
-
-    @Override
-    Fragment getIncidEditFr()
-    {
-        IncidEditMaxPowerFr fragmentByTag = (IncidEditMaxPowerFr) mActivity.getSupportFragmentManager().findFragmentByTag(incid_edit_ac_frgs_tag);
-        return fragmentByTag;
     }
 
     @Override

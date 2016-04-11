@@ -6,17 +6,11 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.widget.DatePicker;
 
-import com.didekin.incidservice.dominio.IncidImportancia;
-import com.didekin.incidservice.dominio.Incidencia;
-import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.utils.UIutils;
+import com.didekindroid.usuario.testutils.CleanUserEnum;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -36,23 +30,16 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.common.testutils.ActivityTestUtils.checkNavigateUp;
-import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
-import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
-import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
-import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
+import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_PLAZUELA5_JUAN;
-import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static java.util.Calendar.DAY_OF_MONTH;
 import static java.util.Calendar.MONTH;
 import static java.util.Calendar.YEAR;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -61,85 +48,44 @@ import static org.junit.Assert.assertThat;
  * Time: 15:14
  */
 @RunWith(AndroidJUnit4.class)
-public class IncidResolucionRegFrTest {
+public class IncidResolucionRegFrTest extends IncidResolucionAbstractTest {
 
-    IncidImportancia incidJuanReal1;
-    IncidResolucionRegEditSeeAc mActivity;
-
-    @Rule
-    public IntentsTestRule<IncidResolucionRegEditSeeAc> intentRule = new IntentsTestRule<IncidResolucionRegEditSeeAc>(IncidResolucionRegEditSeeAc.class) {
-
-        @Override
-        protected void beforeActivityLaunched()
-        {
-            super.beforeActivityLaunched();
-        }
-
-        /**
-         * Preconditions:
-         * 1. A user WITH powers to resolve an incidencia is received.
-         * 2. NO resolucion en BD.
-         * */
-        @Override
-        protected Intent getActivityIntent()
-        {
-            try {
-                signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
-                UsuarioComunidad juanReal = ServOne.seeUserComusByUser().get(0);
-                incidJuanReal1 = new IncidImportancia.IncidImportanciaBuilder(
-                        doIncidencia(juanReal.getUsuario().getUserName(), "Incidencia Real One", juanReal.getComunidad().getC_Id(), (short) 43))
-                        .usuarioComunidad(juanReal)
-                        .importancia((short) 3).build();
-                IncidenciaServ.regIncidImportancia(incidJuanReal1);
-                Incidencia incidenciaDb = IncidenciaServ.seeIncidsOpenByComu(juanReal.getComunidad().getC_Id()).get(0).getIncidencia();
-                incidJuanReal1 = IncidenciaServ.seeIncidImportancia(incidenciaDb.getIncidenciaId()).getIncidImportancia();
-            } catch (UiException e) {
-                e.printStackTrace();
+    @Override
+    IntentsTestRule<IncidResolucionRegEditSeeAc> doIntentRule()
+    {
+        return new IntentsTestRule<IncidResolucionRegEditSeeAc>(IncidResolucionRegEditSeeAc.class) {
+            /**
+             * Preconditions:
+             * 1. A user WITH powers 'adm' in session.
+             * 2. Resolucion intent == null.
+             * */
+            @Override
+            protected Intent getActivityIntent()
+            {
+                try {
+                    doIncidImportancia(COMU_PLAZUELA5_JUAN);
+                } catch (UiException e) {
+                    e.printStackTrace();
+                }
+                Intent intent = new Intent();
+                intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia);
+                intent.putExtra(INCID_RESOLUCION_OBJECT.key, resolucion);
+                return intent;
             }
-            Intent intent = new Intent();
-            intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, incidJuanReal1);
-            return intent;
-        }
-    };
-
-    @BeforeClass
-    public static void slowSeconds() throws InterruptedException
-    {
-        Thread.sleep(4000);
+        };
     }
 
-    @Before
-    public void setUp() throws Exception
+    @Override
+    CleanUserEnum whatToClean()
     {
-        Thread.sleep(3000);
-        mActivity = intentRule.getActivity();
-        IncidImportancia incidImportancia = (IncidImportancia) mActivity.getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.key);
-        // Preconditions: a user with powers to erase and modify is received.
-        assertThat(incidImportancia.getUserComu().hasAdministradorAuthority(), is(true));
-        // NO resolución en BD.
-        assertThat(IncidenciaServ.seeResolucion(incidImportancia.getIncidencia().getIncidenciaId()), nullValue());
+        return CLEAN_JUAN;
     }
 
-    @After
-    public void tearDown() throws Exception
-    {
-        cleanOptions(CLEAN_JUAN);
-    }
-
+    //  ===============================  TESTS ================================
     @Test
     public void testOnCreate_1() throws Exception
     {
-        assertThat(mActivity, notNullValue());
-        onView(withId(R.id.appbar)).check(matches(isDisplayed()));
-
-        onView(withId(R.id.incid_resolucion_fragment_container_ac)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_resolucion_reg_frg_layout)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_resolucion_reg_ac_button)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_resolucion_desc_ed)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_resolucion_coste_prev_ed)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_resolucion_fecha_view)).check(matches(isDisplayed()));
-
-        checkNavigateUp();
+        checkScreenResolucionRegFr();
     }
 
     @Test
@@ -215,7 +161,7 @@ public class IncidResolucionRegFrTest {
         // Fecha inferior a fecha_alta incidencia.
         Calendar wrongDate = new GregorianCalendar();
         wrongDate.add(YEAR, -1);
-        assertThat(wrongDate.getTimeInMillis() < incidJuanReal1.getFechaAlta().getTime(), is(true));
+        assertThat(wrongDate.getTimeInMillis() < incidImportancia.getFechaAlta().getTime(), is(true));
         setFecha(setDate(wrongDate.get(YEAR), wrongDate.get(MONTH), wrongDate.get(DAY_OF_MONTH)));
 
         onView(withId(R.id.incid_resolucion_reg_ac_button)).perform(click());
@@ -238,7 +184,7 @@ public class IncidResolucionRegFrTest {
         onView(withId(R.id.incid_resolucion_reg_ac_button)).perform(click());
         onView(withId(R.id.incid_edit_fragment_container_ac)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_edit_maxpower_frg)).check(matches(isDisplayed()));
-        intended(hasExtra(INCID_IMPORTANCIA_OBJECT.key, incidJuanReal1));
+        intended(hasExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia));
     }
 
 //    ============================= HELPER METHODS ===========================

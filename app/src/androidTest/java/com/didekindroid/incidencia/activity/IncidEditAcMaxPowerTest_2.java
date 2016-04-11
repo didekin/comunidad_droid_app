@@ -2,7 +2,6 @@ package com.didekindroid.incidencia.activity;
 
 import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
-import android.support.v4.app.Fragment;
 
 import com.didekin.incidservice.dominio.IncidAndResolBundle;
 import com.didekin.incidservice.dominio.IncidImportancia;
@@ -23,7 +22,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_FLAG;
-import static com.didekindroid.common.activity.FragmentTags.incid_edit_ac_frgs_tag;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.INCID_DEFAULT_DESC;
@@ -32,15 +30,12 @@ import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaSer
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
 
 /**
  * User: pedro@didekin
  * Date: 17/03/16
  * Time: 15:51
  */
-@SuppressWarnings("UnnecessaryLocalVariable")
 public class IncidEditAcMaxPowerTest_2 extends IncidEditAbstractTest {
 
     IncidAndResolBundle incidResolBundlePepe;
@@ -83,41 +78,6 @@ public class IncidEditAcMaxPowerTest_2 extends IncidEditAbstractTest {
     }
 
     @Override
-    IncidImportancia getIncidImportanciaIntent()
-    {
-        return incidenciaPepe;
-    }
-
-    @Override
-    boolean isResolucionInIntentTrue()
-    {
-        assertThat(flagResolucionIntent, is(false));
-        return flagResolucionIntent;
-    }
-
-    @Override
-    boolean isIniciadorUserInSession()
-    {
-        assertThat(incidenciaPepe.isIniciadorIncidencia(), is(true));
-        return incidenciaPepe.isIniciadorIncidencia();
-    }
-
-    @Override
-    boolean hasAdmAuthority()
-    {
-
-        assertThat(incidenciaPepe.getUserComu().hasAdministradorAuthority(), is(true));
-        return incidenciaPepe.getUserComu().hasAdministradorAuthority();
-    }
-
-    @Override
-    Fragment getIncidEditFr()
-    {
-        IncidEditMaxPowerFr fragmentByTag = (IncidEditMaxPowerFr) mActivity.getSupportFragmentManager().findFragmentByTag(incid_edit_ac_frgs_tag);
-        return fragmentByTag;
-    }
-
-    @Override
     CleanUserEnum whatToClean()
     {
         return CLEAN_PEPE;
@@ -129,10 +89,6 @@ public class IncidEditAcMaxPowerTest_2 extends IncidEditAbstractTest {
     public void testOnCreate() throws Exception
     {
         checkScreenEditMaxPowerFr();
-
-        // Usuario con autoridad adm, no hay resolución en BD: la pantalla presenta el botón de borrar.
-        onView(withId(R.id.incid_edit_fr_borrar_txt)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_edit_fr_borrar_button)).check(matches(isDisplayed()));
     }
 
     @Test

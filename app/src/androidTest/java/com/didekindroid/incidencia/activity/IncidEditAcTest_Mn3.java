@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
-import android.support.v4.app.Fragment;
 
 import com.didekin.incidservice.dominio.IncidImportancia;
 import com.didekin.incidservice.dominio.IncidenciaUser;
@@ -29,7 +28,6 @@ import static com.didekin.common.oauth2.Rol.PRESIDENTE;
 import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.common.activity.FragmentTags.incid_edit_ac_frgs_tag;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.testutils.ActivityTestUtils.updateSecurityData;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_RESOLUCION_REG_EDIT_AC;
@@ -54,7 +52,6 @@ import static org.junit.Assert.assertThat;
  * Tests sobre una incidencia CON resolución en BD.
  * El usuario NO tiene autoridad 'adm'; es iniciador de la incidencia.
  */
-@SuppressWarnings("UnnecessaryLocalVariable")
 @RunWith(AndroidJUnit4.class)
 public class IncidEditAcTest_Mn3 extends IncidEditAbstractTest {
 
@@ -103,40 +100,6 @@ public class IncidEditAcTest_Mn3 extends IncidEditAbstractTest {
                 return intent;
             }
         };
-    }
-
-    @Override
-    IncidImportancia getIncidImportanciaIntent()
-    {
-        return incidenciaJuan;
-    }
-
-    @Override
-    boolean isResolucionInIntentTrue()
-    {
-        assertThat(flagResolucionIntent, is(true));
-        return flagResolucionIntent;
-    }
-
-    @Override
-    boolean isIniciadorUserInSession()
-    {
-        assertThat(incidenciaJuan.isIniciadorIncidencia(), is(true));
-        return incidenciaJuan.isIniciadorIncidencia();
-    }
-
-    @Override
-    boolean hasAdmAuthority()
-    {
-        assertThat(incidenciaJuan.getUserComu().hasAdministradorAuthority(), is(false));
-        return incidenciaJuan.getUserComu().hasAdministradorAuthority();
-    }
-
-    @Override
-    Fragment getIncidEditFr()
-    {
-        IncidEditMaxPowerFr fragmentByTag = (IncidEditMaxPowerFr) mActivity.getSupportFragmentManager().findFragmentByTag(incid_edit_ac_frgs_tag);
-        return fragmentByTag;
     }
 
     @Override

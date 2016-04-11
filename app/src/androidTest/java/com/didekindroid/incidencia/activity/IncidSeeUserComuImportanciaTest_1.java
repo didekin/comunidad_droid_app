@@ -3,10 +3,8 @@ package com.didekindroid.incidencia.activity;
 import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.support.v4.app.Fragment;
 
 import com.didekin.incidservice.dominio.ImportanciaUser;
-import com.didekin.incidservice.dominio.IncidImportancia;
 import com.didekindroid.R;
 import com.didekindroid.usuario.testutils.CleanUserEnum;
 
@@ -25,7 +23,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_OBJECT;
-import static com.didekindroid.common.activity.FragmentTags.incid_edit_ac_frgs_tag;
 import static com.didekindroid.common.activity.FragmentTags.incid_see_usercomus_importancia_fr_tag;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkNavigateUp;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
@@ -45,7 +42,6 @@ import static org.hamcrest.CoreMatchers.notNullValue;
  * Dos incidImportancias registradas en BD, para la misma incidencia.
  * Usuario inicial en sesión SIN permisos para modificar o borrar una incidencia.
  */
-@SuppressWarnings("UnnecessaryLocalVariable")
 @RunWith(AndroidJUnit4.class)
 public class IncidSeeUserComuImportanciaTest_1 extends IncidEditAbstractTest {
 
@@ -59,40 +55,6 @@ public class IncidSeeUserComuImportanciaTest_1 extends IncidEditAbstractTest {
                 return getIntentPepeJuanRealNoPower();
             }
         };
-    }
-
-    @Override
-    IncidImportancia getIncidImportanciaIntent()
-    {
-        return incidenciaJuan;
-    }
-
-    @Override
-    boolean isResolucionInIntentTrue()
-    {
-        assertThat(flagResolucionIntent, is(false));
-        return flagResolucionIntent;
-    }
-
-    @Override
-    boolean isIniciadorUserInSession()
-    {
-        assertThat(incidenciaJuan.isIniciadorIncidencia(),is(false));
-        return incidenciaJuan.isIniciadorIncidencia();
-    }
-
-    @Override
-    boolean hasAdmAuthority()
-    {
-        assertThat(incidenciaJuan.getUserComu().hasAdministradorAuthority(),is(false));
-        return incidenciaJuan.getUserComu().hasAdministradorAuthority();
-    }
-
-    @Override
-    Fragment getIncidEditFr()
-    {
-        IncidEditNoPowerFr fragmentByTag = (IncidEditNoPowerFr) mActivity.getSupportFragmentManager().findFragmentByTag(incid_edit_ac_frgs_tag);
-        return fragmentByTag;
     }
 
     @Override

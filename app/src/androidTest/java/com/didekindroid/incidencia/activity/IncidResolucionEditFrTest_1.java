@@ -5,23 +5,15 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.widget.DatePicker;
 
-import com.didekin.incidservice.dominio.IncidImportancia;
-import com.didekin.incidservice.dominio.IncidenciaUser;
 import com.didekin.incidservice.dominio.Resolucion;
-import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.utils.UIutils;
+import com.didekindroid.usuario.testutils.CleanUserEnum;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.sql.Timestamp;
-import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -41,19 +33,12 @@ import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJEC
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkNavigateUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
-import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
-import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
-import static com.didekindroid.common.utils.UIutils.SPAIN_LOCALE;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doResolucion;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
-import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_ESCORIAL_PEPE;
-import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
+import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_PLAZUELA5_JUAN;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -62,79 +47,41 @@ import static org.junit.Assert.assertThat;
  * Time: 17:49
  */
 @RunWith(AndroidJUnit4.class)
-public class IncidResolucionEditFrTest_1 {
+public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
 
-    IncidResolucionRegEditSeeAc mActivity;
-    UsuarioComunidad pepeEscorial;
-    IncidImportancia incidPepeEscorial;
-    Resolucion resolucion;
+    @Override
+    IntentsTestRule<IncidResolucionRegEditSeeAc> doIntentRule()
+    {
+        return new IntentsTestRule<IncidResolucionRegEditSeeAc>(IncidResolucionRegEditSeeAc.class) {
+            /**
+             * Preconditions:
+             * 1. A user WITH powers 'adm' in sesssion.
+             * 2. A resolucion in BD and intent.
+             * 3. Resolucion WITHOUT avances.
+             * */
+            @Override
+            protected Intent getActivityIntent()
+            {
+                try {
+                    doIncidImportancia(COMU_PLAZUELA5_JUAN);
+                    Thread.sleep(1000);
+                    doResolucionNoAdvances();
 
-    @Rule
-    public IntentsTestRule<IncidResolucionRegEditSeeAc> intentRule = new IntentsTestRule<IncidResolucionRegEditSeeAc>(IncidResolucionRegEditSeeAc.class) {
-
-        @Override
-        protected void beforeActivityLaunched()
-        {
-            super.beforeActivityLaunched();
-        }
-
-        /**
-         * Preconditions:
-         * 1. A user WITH powers to edit a resolucion is received.
-         * 2. A resolucion in BD and intent.
-         * 3. Resolucion WITHOUT avances.
-         * */
-        @Override
-        protected Intent getActivityIntent()
-        {
-            try {
-                signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
-                pepeEscorial = ServOne.seeUserComusByUser().get(0);
-                incidPepeEscorial = new IncidImportancia.IncidImportanciaBuilder(
-                        doIncidencia(pepeEscorial.getUsuario().getUserName(), "Incidencia Escorial", pepeEscorial.getComunidad().getC_Id(), (short) 43))
-                        .usuarioComunidad(pepeEscorial)
-                        .importancia((short) 3).build();
-                IncidenciaServ.regIncidImportancia(incidPepeEscorial);
-                IncidenciaUser incidenciaUserDb = IncidenciaServ.seeIncidsOpenByComu(pepeEscorial.getComunidad().getC_Id()).get(0);
-                incidPepeEscorial = IncidenciaServ.seeIncidImportancia(incidenciaUserDb.getIncidencia().getIncidenciaId()).getIncidImportancia();
-                Thread.sleep(1000);
-
-                // Registramos resolución.
-                resolucion = doResolucion(incidPepeEscorial.getIncidencia(), "desc_resolucion", 1000, new Timestamp(new GregorianCalendar(2016, 3, 25).getTimeInMillis()));
-                assertThat(IncidenciaServ.regResolucion(resolucion), is(1));
-                resolucion = IncidenciaServ.seeResolucion(resolucion.getIncidencia().getIncidenciaId());
-            } catch (UiException | InterruptedException e) {
-                e.printStackTrace();
+                } catch (UiException | InterruptedException e) {
+                    e.printStackTrace();
+                }
+                Intent intent = new Intent();
+                intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia);
+                intent.putExtra(INCID_RESOLUCION_OBJECT.key, resolucion);
+                return intent;
             }
-            Intent intent = new Intent();
-            intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, incidPepeEscorial);
-            intent.putExtra(INCID_RESOLUCION_OBJECT.key, resolucion);
-            return intent;
-        }
-    };
-
-    @BeforeClass
-    public static void slowSeconds() throws InterruptedException
-    {
-        Thread.sleep(4000);
+        };
     }
 
-    @Before
-    public void setUp() throws Exception
+    @Override
+    CleanUserEnum whatToClean()
     {
-        mActivity = intentRule.getActivity();
-        IncidImportancia incidImportancia = (IncidImportancia) mActivity.getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.key);
-        // Preconditions: a user with powers to erase and modify is received.
-        assertThat(incidImportancia.getUserComu().hasAdministradorAuthority(), is(true));
-        // Precondition: resolución in BD and intent.
-        Resolucion resolucionIntent = (Resolucion) mActivity.getIntent().getSerializableExtra(INCID_RESOLUCION_OBJECT.key);
-        assertThat(resolucionIntent, is(resolucion));
-    }
-
-    @After
-    public void tearDown() throws Exception
-    {
-        cleanOptions(CLEAN_PEPE);
+        return CLEAN_JUAN;
     }
 
     /*    ============================  TESTS  ===================================*/
@@ -142,45 +89,13 @@ public class IncidResolucionEditFrTest_1 {
     @Test
     public void testOnCreate_1() throws Exception
     {
-        assertThat(mActivity, notNullValue());
-        onView(withId(R.id.appbar)).check(matches(isDisplayed()));
-
-        onView(withId(R.id.incid_resolucion_fragment_container_ac)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_resolucion_edit_fr_layout)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_resolucion_fecha_view)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_resolucion_coste_prev_ed)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_resolucion_avance_ed)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_resolucion_fr_modif_button)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_resolucion_edit_fr_close_button)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_resolucion_txt)).check(matches(isDisplayed()));
-        // Lista vacía.
-        onView(withId(android.R.id.list)).check(matches(not(isDisplayed())));
-        onView(withId(android.R.id.empty)).check(matches(isDisplayed()));
-
-        checkNavigateUp();
+        checkScreenResolucionEditFr();
     }
 
     @Test
     public void testOnData_1()
     {
-        // Caso: los datos que se muestran por defecto.
-        // Fecha.
-        if (Locale.getDefault().equals(SPAIN_LOCALE)) {
-            onView(allOf(
-                    withId(R.id.incid_resolucion_fecha_view),
-                    withText("25/4/2016")
-            )).check(matches(isDisplayed()));
-        }
-        // Coste.
-        onView(allOf(
-                withId(R.id.incid_resolucion_coste_prev_ed),
-                withText("1.000")
-        )).check(matches(isDisplayed()));
-        // Resolución.
-        onView(allOf(
-                withId(R.id.incid_resolucion_txt),
-                withText("desc_resolucion")
-        )).check(matches(isDisplayed()));
+        checkDataResolucionEditFr();
         // Avances.
         onView(allOf(
                 withId(android.R.id.empty),
@@ -245,7 +160,7 @@ public class IncidResolucionEditFrTest_1 {
     }
 
     @Test
-    public void testCloseIncidencia_1()
+    public void testCloseIncidenciaAndBack()
     {
         // Caso OK: cerramos incidencia sin cambiar datos en pantalla.
         onView(withId(R.id.incid_resolucion_edit_fr_close_button)).perform(click());
@@ -261,7 +176,7 @@ public class IncidResolucionEditFrTest_1 {
     }
 
     @Test
-    public void testCloseIncidencia_2()
+    public void testCloseIncidenciaAndUp()
     {
         // Caso OK: cerramos incidencia sin cambiar datos en pantalla.
         onView(withId(R.id.incid_resolucion_edit_fr_close_button)).perform(click());
@@ -281,6 +196,6 @@ public class IncidResolucionEditFrTest_1 {
     {
         onView(withId(R.id.incid_edit_fragment_container_ac)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_edit_maxpower_frg)).check(matches(isDisplayed()));
-        intended(hasExtra(INCID_IMPORTANCIA_OBJECT.key, incidPepeEscorial));
+        intended(hasExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia));
     }
 }

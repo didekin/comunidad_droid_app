@@ -13,8 +13,10 @@ import com.didekindroid.common.activity.UiException;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.List;
 
+import static com.didekindroid.common.utils.UIutils.getStringFromInteger;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 
 /**
@@ -27,6 +29,10 @@ public final class IncidenciaTestUtils {
     public static final String INCID_DEFAULT_DESC = "Incidencia_1";
     public static final String RESOLUCION_DEFAULT_DESC = "Resolucion_1";
     public static final String AVANCE_DEFAULT_DES = "Avance_1";
+    public static final int COSTE_ESTIM_DEFAULT = 1122;
+    public static final String COSTE_ESTIM_DEFAULT_String = getStringFromInteger(COSTE_ESTIM_DEFAULT);
+    public static final GregorianCalendar CALENDAR_DEFAULT = new GregorianCalendar(2016, 3, 25);
+    public static final String CALENDAR_DEFAULT_STRING = "25/4/2016";
 
     private IncidenciaTestUtils()
     {

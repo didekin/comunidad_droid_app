@@ -15,6 +15,7 @@ import com.didekindroid.incidencia.repository.IncidenciaDataDbHelper;
 import com.didekindroid.usuario.testutils.CleanUserEnum;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -35,7 +36,7 @@ import static com.didekin.common.oauth2.Rol.PROPIETARIO;
 import static com.didekindroid.common.activity.BundleKey.INCID_ACTIVITY_VIEW_ID;
 import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_FLAG;
-import static com.didekindroid.common.testutils.ActivityTestUtils.checkNavigateUp;
+import static com.didekindroid.common.activity.FragmentTags.incid_edit_ac_frgs_tag;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.testutils.ActivityTestUtils.updateSecurityData;
@@ -48,6 +49,7 @@ import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_JUAN;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.makeUsuarioComunidad;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -62,7 +64,8 @@ import static org.hamcrest.CoreMatchers.notNullValue;
  * Clase con métodos comunes a los tests de edición de una incidencia sin resolución, con un
  * usuario en sesión sin autoriad 'adm'.
  */
-public abstract class IncidEditAbstractTest<T extends Fragment> {
+@SuppressWarnings("unchecked")
+public abstract class IncidEditAbstractTest {
 
     UsuarioComunidad pepeUserComu;
     @SuppressWarnings("unused")
@@ -70,7 +73,7 @@ public abstract class IncidEditAbstractTest<T extends Fragment> {
     IncidImportancia incidenciaPepe;
     IncidImportancia incidenciaJuan;
     IncidEditAc mActivity;
-    T incidEditFr;
+    Fragment incidEditFr;
     IncidImportancia incidImportanciaIntent;
     boolean flagResolucionIntent;
 
@@ -86,32 +89,46 @@ public abstract class IncidEditAbstractTest<T extends Fragment> {
     @Before
     public void setUp() throws Exception
     {
-        commonSetup();
+        mActivity = intentRule.getActivity();
+        assertThat(mActivity, notNullValue());
+        incidEditFr = mActivity.getSupportFragmentManager().findFragmentByTag(incid_edit_ac_frgs_tag);
+        assertThat(incidEditFr, notNullValue());
+        // Intent extras in activity.
+        incidImportanciaIntent = (IncidImportancia) mActivity.getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.key);
+        flagResolucionIntent = mActivity.getIntent().getBooleanExtra(INCID_RESOLUCION_FLAG.key, false);
+
+        //Premisas.
+        if (incidImportanciaIntent.getUserComu().hasAdministradorAuthority() || incidImportanciaIntent.isIniciadorIncidencia()) {
+            assertThat(incidEditFr, instanceOf(IncidEditMaxPowerFr.class));
+            assertThat(incidEditFr.getArguments(), hasEntry(INCID_RESOLUCION_FLAG.key, is(flagResolucionIntent)));
+        } else {
+            assertThat(incidEditFr, instanceOf(IncidEditNoPowerFr.class));
+            assertThat(incidEditFr.getArguments(), not(hasKey(INCID_RESOLUCION_FLAG.key)));
+        }
+        assertThat(incidEditFr.getArguments(), allOf(
+                hasEntry(INCID_IMPORTANCIA_OBJECT.key, is(incidImportanciaIntent)),
+                hasEntry(INCID_ACTIVITY_VIEW_ID.key, is(R.id.incid_edit_fragment_container_ac))
+        ));
     }
 
     @After
     public void tearDown() throws Exception
     {
         cleanOptions(whatToClean());
+    }
+
+    @AfterClass
+    public static void cleanDbSqlite()
+    {
         String dBFileName = DB_PATH.concat(IncidenciaDataDbHelper.DB_NAME);
         deleteDatabase(new File(dBFileName));
     }
 
-    //  ===============================  HELPER METHODS ================================
-
     abstract IntentsTestRule<IncidEditAc> doIntentRule();
 
-    abstract IncidImportancia getIncidImportanciaIntent();
-
-    abstract boolean isResolucionInIntentTrue();
-
-    abstract boolean isIniciadorUserInSession();
-
-    abstract boolean hasAdmAuthority();
-
-    abstract T getIncidEditFr();
-
     abstract CleanUserEnum whatToClean();
+
+    //  ===============================  HELPER METHODS ================================
 
     @NonNull
     Intent getIntentPepeJuanRealNoPower()
@@ -141,33 +158,6 @@ public abstract class IncidEditAbstractTest<T extends Fragment> {
         return intent;
     }
 
-    @NonNull
-    void commonSetup()
-    {
-        mActivity = intentRule.getActivity();
-        assertThat(mActivity, notNullValue());
-        incidEditFr = getIncidEditFr();
-        assertThat(incidEditFr, notNullValue());
-        // Intent extras in activity.
-        incidImportanciaIntent = (IncidImportancia) mActivity.getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.key);
-        flagResolucionIntent = mActivity.getIntent().getBooleanExtra(INCID_RESOLUCION_FLAG.key, false);
-
-        //Premisas.
-        assertThat(incidImportanciaIntent.getUserComu().hasAdministradorAuthority(), is(hasAdmAuthority()));
-        assertThat(incidImportanciaIntent.isIniciadorIncidencia(), is(isIniciadorUserInSession()));
-
-        // Arguments for fragment initialization.
-        if (isIniciadorUserInSession() || hasAdmAuthority()) {
-            assertThat(incidEditFr.getArguments(), hasEntry(INCID_RESOLUCION_FLAG.key, is(isResolucionInIntentTrue())));
-        } else {
-            assertThat(incidEditFr.getArguments(), not(hasKey(INCID_RESOLUCION_FLAG.key)));
-        }
-        assertThat(incidEditFr.getArguments(), allOf(
-                hasEntry(INCID_IMPORTANCIA_OBJECT.key, is(getIncidImportanciaIntent())),
-                hasEntry(INCID_ACTIVITY_VIEW_ID.key, is(R.id.incid_edit_fragment_container_ac))
-        ));
-    }
-
     void checkScreenEditNoPowerFr()
     {
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
@@ -183,8 +173,6 @@ public abstract class IncidEditAbstractTest<T extends Fragment> {
                 withId(R.id.incid_edit_fr_modif_button),
                 withText(R.string.incid_importancia_reg_edit_button_rot)
         )).check(matches(isDisplayed()));
-
-        checkNavigateUp();
     }
 
     void checkDataEditNoPowerFr()
@@ -224,6 +212,14 @@ public abstract class IncidEditAbstractTest<T extends Fragment> {
         onView(withId(R.id.incid_reg_importancia_spinner)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_edit_fr_modif_button)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_comunidad_txt)).check(matches(isDisplayed()));
+
+        if (incidImportanciaIntent.getUserComu().hasAdministradorAuthority() && !flagResolucionIntent) {
+            onView(withId(R.id.incid_edit_fr_borrar_txt)).check(matches(isDisplayed()));
+            onView(withId(R.id.incid_edit_fr_borrar_button)).check(matches(isDisplayed()));
+        } else {
+            onView(withId(R.id.incid_edit_fr_borrar_txt)).check(matches(not(isDisplayed())));
+            onView(withId(R.id.incid_edit_fr_borrar_button)).check(matches(not(isDisplayed())));
+        }
     }
 
     void checkDataEditMaxPowerFr(IncidenciaDataDbHelper dBHelper)
