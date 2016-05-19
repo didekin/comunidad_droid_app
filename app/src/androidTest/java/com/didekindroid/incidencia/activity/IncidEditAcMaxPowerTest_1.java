@@ -17,6 +17,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
+
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -89,7 +91,7 @@ public class IncidEditAcMaxPowerTest_1 extends IncidEditAbstractTest {
                     IncidenciaServ.regIncidImportancia(incidenciaJuan);
                     Incidencia incidenciaDb = IncidenciaServ.seeIncidsOpenByComu(juanUserComu.getComunidad().getC_Id()).get(0).getIncidencia();
                     incidenciaJuan = IncidenciaServ.seeIncidImportancia(incidenciaDb.getIncidenciaId()).getIncidImportancia();
-                } catch (UiException e) {
+                } catch (UiException | IOException e) {
                     e.printStackTrace();
                 }
                 Intent intent = new Intent();

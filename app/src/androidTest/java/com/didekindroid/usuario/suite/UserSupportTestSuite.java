@@ -25,11 +25,11 @@ import org.junit.runners.Suite;
         ComunidadBeanValidaTests.class,
         MockDbHelperTest.class,
         MunicipioTest.class,
-        UsuarioDataDbHelperTest.class,
-        UsuarioServiceTest.class,
         UsuarioBeanValidaTests.class,
         UsuarioComunidadBeanValidaTests.class,
         UsuarioComunidadTest.class,
+        UsuarioDataDbHelperTest.class,
+        UsuarioServiceTest.class,
         UsuarioTest.class,
 })
 public class UserSupportTestSuite {

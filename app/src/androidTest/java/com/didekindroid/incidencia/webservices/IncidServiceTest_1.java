@@ -20,6 +20,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -104,7 +105,7 @@ public class IncidServiceTest_1 {
             fail();
         } catch (UiException ue) {
             // La incidencia no se encuentra por la consulta de incidencias abiertas.
-            assertThat(ue.getInServiceException().getHttpMessage(), is(DidekinExceptionMsg.INCIDENCIA_NOT_FOUND.getHttpMessage()));
+            assertThat(ue.getErrorBean().getMessage(), is(DidekinExceptionMsg.INCIDENCIA_NOT_FOUND.getHttpMessage()));
             // Sí está en las incidencias cerradas.
             assertThat(IncidenciaServ.seeIncidsClosedByComu(incidencia.getComunidad().getC_Id()).size(), is(1));
         }
@@ -122,7 +123,7 @@ public class IncidServiceTest_1 {
             IncidenciaServ.deleteIncidencia(incidencia.getIncidenciaId());
             fail();
         } catch (UiException ue) {
-            assertThat(ue.getInServiceException().getHttpMessage(), is(INCIDENCIA_NOT_FOUND.getHttpMessage()));
+            assertThat(ue.getErrorBean().getMessage(), is(INCIDENCIA_NOT_FOUND.getHttpMessage()));
         }
     }
 
@@ -153,7 +154,7 @@ public class IncidServiceTest_1 {
             IncidenciaServ.modifyIncidImportancia(pepeIncidImportancia);
             fail();
         } catch (UiException u) {
-            assertThat(u.getInServiceException().getHttpMessage(), is(INCIDENCIA_NOT_FOUND.getHttpMessage()));
+            assertThat(u.getErrorBean().getMessage(), is(INCIDENCIA_NOT_FOUND.getHttpMessage()));
         }
     }
 
@@ -188,7 +189,7 @@ public class IncidServiceTest_1 {
     }
 
     @Test
-    public void testRegIncidComment_2() throws UiException
+    public void testRegIncidComment_2() throws UiException, IOException
     {
         whatClean = CLEAN_JUAN_AND_PEPE;
 
@@ -200,7 +201,7 @@ public class IncidServiceTest_1 {
             IncidenciaServ.regIncidComment(doComment("Comment_DESC", incidencia));
             fail();
         } catch (UiException ue) {
-            assertThat(ue.getInServiceException().getHttpMessage(), is(USERCOMU_WRONG_INIT.getHttpMessage()));
+            assertThat(ue.getErrorBean().getMessage(), is(USERCOMU_WRONG_INIT.getHttpMessage()));
         }
     }
 
@@ -215,7 +216,7 @@ public class IncidServiceTest_1 {
             IncidenciaServ.regIncidComment(comment);
             fail();
         } catch (UiException ue) {
-            assertThat(ue.getInServiceException().getHttpMessage(), is(INCIDENCIA_NOT_FOUND.getHttpMessage()));
+            assertThat(ue.getErrorBean().getMessage(), is(INCIDENCIA_NOT_FOUND.getHttpMessage()));
         }
     }
 
@@ -261,7 +262,7 @@ public class IncidServiceTest_1 {
     }
 
     @Test
-    public void testRegResolucion_2() throws UiException, InterruptedException
+    public void testRegResolucion_2() throws UiException, InterruptedException, IOException
     {
         whatClean = CLEAN_JUAN_AND_PEPE;
 
@@ -275,7 +276,7 @@ public class IncidServiceTest_1 {
             IncidenciaServ.regResolucion(resolucion);
             fail();
         } catch (UiException ue) {
-            assertThat(ue.getInServiceException().getHttpMessage(), is(ROLES_NOT_FOUND.getHttpMessage()));
+            assertThat(ue.getErrorBean().getMessage(), is(ROLES_NOT_FOUND.getHttpMessage()));
         }
     }
 
@@ -289,7 +290,7 @@ public class IncidServiceTest_1 {
             IncidenciaServ.regResolucion(resolucion);
             fail();
         } catch (UiException ie) {
-            assertThat(ie.getInServiceException().getHttpMessage(), is(INCIDENCIA_NOT_FOUND.getHttpMessage()));
+            assertThat(ie.getErrorBean().getMessage(), is(INCIDENCIA_NOT_FOUND.getHttpMessage()));
         }
     }
 
@@ -307,7 +308,7 @@ public class IncidServiceTest_1 {
             IncidenciaServ.regResolucion(resolucion);
             fail();
         } catch (UiException ue) {
-            assertThat(ue.getInServiceException().getHttpMessage(), is(DidekinExceptionMsg.RESOLUCION_DUPLICATE.getHttpMessage()));
+            assertThat(ue.getErrorBean().getMessage(), is(DidekinExceptionMsg.RESOLUCION_DUPLICATE.getHttpMessage()));
         }
     }
 
@@ -335,7 +336,7 @@ public class IncidServiceTest_1 {
             IncidenciaServ.seeCommentsByIncid(incidencia.getIncidenciaId());
             fail();
         } catch (UiException ue) {
-            assertThat(ue.getInServiceException().getHttpMessage(), is(INCIDENCIA_NOT_FOUND.getHttpMessage()));
+            assertThat(ue.getErrorBean().getMessage(), is(INCIDENCIA_NOT_FOUND.getHttpMessage()));
         }
     }
 
@@ -350,7 +351,7 @@ public class IncidServiceTest_1 {
     }
 
     @Test
-    public void testSeeCommentsByIncid_4() throws UiException
+    public void testSeeCommentsByIncid_4() throws UiException, IOException
     {
         whatClean = CLEAN_JUAN_AND_PEPE;
 
@@ -363,7 +364,7 @@ public class IncidServiceTest_1 {
             IncidenciaServ.seeCommentsByIncid(incid_pepeComu_1.getIncidenciaId());
             fail();
         } catch (UiException ue) {
-            assertThat(ue.getInServiceException().getHttpMessage(), is(USERCOMU_WRONG_INIT.getHttpMessage()));
+            assertThat(ue.getErrorBean().getMessage(), is(USERCOMU_WRONG_INIT.getHttpMessage()));
         }
     }
 
@@ -385,12 +386,12 @@ public class IncidServiceTest_1 {
             IncidenciaServ.seeIncidImportancia(incidencia.getIncidenciaId());
             fail();
         } catch (UiException ue) {
-            assertThat(ue.getInServiceException().getHttpMessage(), is(INCIDENCIA_NOT_FOUND.getHttpMessage()));
+            assertThat(ue.getErrorBean().getMessage(), is(INCIDENCIA_NOT_FOUND.getHttpMessage()));
         }
     }
 
     @Test
-    public void testSeeIncidImportancia_3() throws UiException
+    public void testSeeIncidImportancia_3() throws UiException, IOException
     {
         whatClean = CLEAN_JUAN_AND_PEPE;
 
@@ -402,19 +403,19 @@ public class IncidServiceTest_1 {
             IncidenciaServ.seeIncidImportancia(incidencia.getIncidenciaId());
             fail();
         } catch (UiException ue) {
-            assertThat(ue.getInServiceException().getHttpMessage(), is(ROLES_NOT_FOUND.getHttpMessage()));
+            assertThat(ue.getErrorBean().getMessage(), is(ROLES_NOT_FOUND.getHttpMessage()));
         }
     }
 
     @Test
-    public void testSeeIncidImportancia_4() throws UiException
+    public void testSeeIncidImportancia_4() throws UiException, IOException
     {
         whatClean = CLEAN_JUAN_AND_PEPE;
 
         /* Caso: no hay registro incidImportancia.userComu.usuario == usuario, SÍ usuario.comunidad == incidencia.comunidad.*/
 
         Incidencia incidencia = insertGetIncidenciaUser(pepeUserComu, 1).getIncidencia();
-        ServOne.regUserAndUserComu(makeUserComuWithComunidadId(COMU_ESCORIAL_JUAN, incidencia.getComunidad().getC_Id()));
+        ServOne.regUserAndUserComu(makeUserComuWithComunidadId(COMU_ESCORIAL_JUAN, incidencia.getComunidad().getC_Id())).execute();
         updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
 
         IncidImportancia incidImportancia = IncidenciaServ.seeIncidImportancia(incidencia.getIncidenciaId()).getIncidImportancia();
@@ -440,7 +441,7 @@ public class IncidServiceTest_1 {
     }
 
     @Test
-    public void testSeeIncidsClosedByComu_2() throws InterruptedException, UiException
+    public void testSeeIncidsClosedByComu_2() throws InterruptedException, UiException, IOException
     {
         // CASO NOT OK: usuario no pertenece a la comunidad.
 
@@ -453,7 +454,7 @@ public class IncidServiceTest_1 {
             IncidenciaServ.seeIncidsClosedByComu(pepeUserComu.getComunidad().getC_Id());
             fail();
         } catch (UiException ue) {
-            assertThat(ue.getInServiceException().getHttpMessage(), is(USERCOMU_WRONG_INIT.getHttpMessage()));
+            assertThat(ue.getErrorBean().getMessage(), is(USERCOMU_WRONG_INIT.getHttpMessage()));
         }
     }
 
@@ -482,7 +483,7 @@ public class IncidServiceTest_1 {
             IncidenciaServ.seeIncidsOpenByComu(999L);
             fail();
         } catch (UiException ue) {
-            assertThat(ue.getInServiceException().getHttpMessage(), is(USERCOMU_WRONG_INIT.getHttpMessage()));
+            assertThat(ue.getErrorBean().getMessage(), is(USERCOMU_WRONG_INIT.getHttpMessage()));
         }
     }
 
@@ -507,7 +508,7 @@ public class IncidServiceTest_1 {
             IncidenciaServ.seeResolucion(resolucion.getIncidencia().getIncidenciaId());
             fail();
         } catch (UiException ue) {
-            assertThat(ue.getInServiceException().getHttpMessage(), is(INCIDENCIA_NOT_FOUND.getHttpMessage()));
+            assertThat(ue.getErrorBean().getMessage(), is(INCIDENCIA_NOT_FOUND.getHttpMessage()));
         }
     }
 

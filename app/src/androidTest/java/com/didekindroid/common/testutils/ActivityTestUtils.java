@@ -14,8 +14,7 @@ import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.usuario.testutils.CleanUserEnum;
 
-import org.hamcrest.core.AllOf;
-
+import java.io.IOException;
 import java.util.List;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -114,20 +113,20 @@ public final class ActivityTestUtils {
 
 //    =========================== REGISTERING USERS ==============================
 
-    public static Usuario signUpAndUpdateTk(UsuarioComunidad usuarioComunidad) throws UiException
+    public static Usuario signUpAndUpdateTk(UsuarioComunidad usuarioComunidad) throws UiException, IOException
     {
-        ServOne.regComuAndUserAndUserComu(usuarioComunidad);
+        ServOne.regComuAndUserAndUserComu(usuarioComunidad).execute().body();
         updateSecurityData(usuarioComunidad.getUsuario().getUserName(), usuarioComunidad.getUsuario().getPassword());
         return ServOne.getUserData();
     }
 
-    public static void regTwoUserComuSameUser(List<UsuarioComunidad> usuarioComunidadList) throws UiException
+    public static void regTwoUserComuSameUser(List<UsuarioComunidad> usuarioComunidadList) throws UiException, IOException
     {
         signUpAndUpdateTk(usuarioComunidadList.get(0));
         ServOne.regComuAndUserComu(usuarioComunidadList.get(1));
     }
 
-    public static void regThreeUserComuSameUser(List<UsuarioComunidad> usuarioComunidadList, Comunidad comunidad) throws UiException
+    public static void regThreeUserComuSameUser(List<UsuarioComunidad> usuarioComunidadList, Comunidad comunidad) throws UiException, IOException
     {
         regTwoUserComuSameUser(usuarioComunidadList);
         UsuarioComunidad usuarioComunidad = makeUsuarioComunidad(comunidad, usuarioComunidadList.get(0).getUsuario(),
@@ -135,7 +134,7 @@ public final class ActivityTestUtils {
         ServOne.regComuAndUserComu(usuarioComunidad);
     }
 
-    public static void regSeveralUserComuSameUser(UsuarioComunidad... userComus) throws UiException
+    public static void regSeveralUserComuSameUser(UsuarioComunidad... userComus) throws UiException, IOException
     {
         Preconditions.checkArgument(userComus.length > 0);
         signUpAndUpdateTk(userComus[0]);

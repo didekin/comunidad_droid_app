@@ -16,6 +16,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -103,7 +105,7 @@ public class ComuSearchResultsAcTest_slow {
     }
 
     @Test
-    public void testMenuNuevaComunidad_noToken_2() throws InterruptedException, UiException
+    public void testMenuNuevaComunidad_noToken_2() throws InterruptedException, UiException, IOException
     {
         whatClean = CLEAN_JUAN;
 
@@ -118,7 +120,7 @@ public class ComuSearchResultsAcTest_slow {
     }
 
     @Test
-    public void testMenuNuevaComunidad_withToken() throws InterruptedException, UiException
+    public void testMenuNuevaComunidad_withToken() throws InterruptedException, UiException, IOException
     {
         whatClean = CLEAN_JUAN;
 
@@ -143,7 +145,7 @@ public class ComuSearchResultsAcTest_slow {
     }
 
     @Test
-    public void tesComunidadesByUsuario_noToken_2() throws InterruptedException, UiException
+    public void tesComunidadesByUsuario_noToken_2() throws InterruptedException, UiException, IOException
     {
         whatClean = CLEAN_JUAN;
 
@@ -158,7 +160,7 @@ public class ComuSearchResultsAcTest_slow {
     }
 
     @Test
-    public void testComunidadesByUsuario_withToken() throws InterruptedException, UiException
+    public void testComunidadesByUsuario_withToken() throws InterruptedException, UiException, IOException
     {
         whatClean = CLEAN_JUAN;
 

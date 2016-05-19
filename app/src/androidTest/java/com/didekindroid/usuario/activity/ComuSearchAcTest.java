@@ -21,6 +21,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
+import java.io.IOException;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
@@ -98,7 +99,7 @@ public class ComuSearchAcTest {
     }
 
     @Test
-    public void testUpdateIsRegistered_2() throws UiException
+    public void testUpdateIsRegistered_2() throws UiException, IOException
     {
         //With token.
         signUpAndUpdateTk(COMU_REAL_JUAN);
@@ -166,7 +167,7 @@ public class ComuSearchAcTest {
     }
 
     @Test
-    public void searchComunidadOK_2() throws InterruptedException, UiException
+    public void searchComunidadOK_2() throws InterruptedException, UiException, IOException
     {
         //With token.
         signUpAndUpdateTk(COMU_REAL_JUAN);
@@ -194,7 +195,7 @@ public class ComuSearchAcTest {
     }
 
     @Test
-    public void testGetDatosUsuarioWithToken() throws InterruptedException, UiException
+    public void testGetDatosUsuarioWithToken() throws InterruptedException, UiException, IOException
     {
         whatClean = CleanUserEnum.CLEAN_JUAN;
 
@@ -215,7 +216,7 @@ public class ComuSearchAcTest {
     }
 
     @Test
-    public void testMenuNuevaComunidad_withToken() throws InterruptedException, UiException
+    public void testMenuNuevaComunidad_withToken() throws InterruptedException, UiException, IOException
     {
         whatClean = CleanUserEnum.CLEAN_JUAN;
 
@@ -226,7 +227,7 @@ public class ComuSearchAcTest {
     }
 
     @Test
-    public void testComunidadesByUsuario_withToken() throws InterruptedException, UiException
+    public void testComunidadesByUsuario_withToken() throws InterruptedException, UiException, IOException
     {
         whatClean = CleanUserEnum.CLEAN_JUAN;
 
@@ -246,7 +247,7 @@ public class ComuSearchAcTest {
     }
 
     @Test
-    public void testLogin_withToken() throws InterruptedException, UiException
+    public void testLogin_withToken() throws InterruptedException, UiException, IOException
     {
 
         whatClean = CleanUserEnum.CLEAN_JUAN;

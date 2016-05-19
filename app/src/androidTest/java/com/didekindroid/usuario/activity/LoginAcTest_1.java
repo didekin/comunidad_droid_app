@@ -10,6 +10,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
@@ -92,10 +94,10 @@ public class LoginAcTest_1 extends LoginAcTest{
     }
 
     @Test
-    public void testValidate_2() throws UiException
+    public void testValidate_2() throws UiException, IOException
     {
         // User in DB.
-        assertThat(ServOne.regComuAndUserAndUserComu(COMU_TRAV_PLAZUELA_PEPE), is(true));
+        assertThat(ServOne.regComuAndUserAndUserComu(COMU_TRAV_PLAZUELA_PEPE).execute().body(), is(true));
 
         mActivity = mActivityRule.launchActivity(new Intent());
         // Previous state.
@@ -115,24 +117,24 @@ public class LoginAcTest_1 extends LoginAcTest{
     }
 
     @Test
-    public void testValidate_3()
+    public void testValidate_3() throws IOException
     {
         whatToClean = CLEAN_PEPE;
 
         // User in DB: wrong password.
-        assertThat(ServOne.regComuAndUserAndUserComu(COMU_TRAV_PLAZUELA_PEPE), is(true));
+        assertThat(ServOne.regComuAndUserAndUserComu(COMU_TRAV_PLAZUELA_PEPE).execute().body(), is(true));
         mActivity = mActivityRule.launchActivity(new Intent());
 
         typeCheckClickPswdWrong();
     }
 
     @Test
-    public void testValidate_4()
+    public void testValidate_4() throws IOException
     {
         whatToClean = CLEAN_PEPE;
 
         // User in DB: wrong password three consecutive times.
-        assertThat(ServOne.regComuAndUserAndUserComu(COMU_TRAV_PLAZUELA_PEPE), is(true));
+        assertThat(ServOne.regComuAndUserAndUserComu(COMU_TRAV_PLAZUELA_PEPE).execute().body(), is(true));
         mActivity = mActivityRule.launchActivity(new Intent());
 
         getDialogFragment();

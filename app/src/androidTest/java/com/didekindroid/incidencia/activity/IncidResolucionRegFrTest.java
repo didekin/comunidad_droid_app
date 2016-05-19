@@ -14,6 +14,7 @@ import com.didekindroid.usuario.testutils.CleanUserEnum;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
@@ -64,7 +65,7 @@ public class IncidResolucionRegFrTest extends IncidResolucionAbstractTest {
             {
                 try {
                     doIncidImportancia(COMU_PLAZUELA5_JUAN);
-                } catch (UiException e) {
+                } catch (UiException | IOException e) {
                     e.printStackTrace();
                 }
                 Intent intent = new Intent();

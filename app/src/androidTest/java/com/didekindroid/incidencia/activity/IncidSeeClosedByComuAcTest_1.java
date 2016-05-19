@@ -16,6 +16,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
+
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -70,7 +72,7 @@ public class IncidSeeClosedByComuAcTest_1 {
                 regSeveralUserComuSameUser(COMU_PLAZUELA5_PEPE, COMU_REAL_PEPE);
                 mComuPlazuelas5 = ServOne.getComusByUser().get(0);
                 mComuReal = ServOne.getComusByUser().get(1);
-            } catch (UiException e) {
+            } catch (UiException | IOException e) {
                 e.printStackTrace();
             }
         }
@@ -85,7 +87,7 @@ public class IncidSeeClosedByComuAcTest_1 {
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
     {
-        Thread.sleep(5000);
+        Thread.sleep(4000);
     }
 
     @Before
@@ -95,6 +97,7 @@ public class IncidSeeClosedByComuAcTest_1 {
         mActivity = activityRule.getActivity();
         mFragment = (IncidSeeByComuListFr) mActivity.getSupportFragmentManager()
                 .findFragmentByTag(incid_see_by_comu_list_fr_tag);
+        Thread.sleep(2000);
         assertThat(mActivity.mComunidadSelected, is(mComuPlazuelas5));
     }
 

@@ -21,6 +21,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -97,9 +98,9 @@ public class IncidSeeOpenByComuAcTest_4 {
                 // Registro userComu en misma comunidad.
                 userComuJuan = makeUsuarioComunidad(pepeUserComu.getComunidad(), USER_JUAN,
                         "portal", "esc", "plantaX", "door12", PROPIETARIO.function);
-                ServOne.regUserAndUserComu(userComuJuan);
+                ServOne.regUserAndUserComu(userComuJuan).execute();
                 updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
-            } catch (UiException e) {
+            } catch (UiException | IOException e) {
                 e.printStackTrace();
             }
         }
@@ -108,7 +109,7 @@ public class IncidSeeOpenByComuAcTest_4 {
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
     {
-        Thread.sleep(5000);
+        Thread.sleep(4000);
     }
 
     @Before
@@ -117,6 +118,7 @@ public class IncidSeeOpenByComuAcTest_4 {
         IncidSeeOpenByComuAc mActivity = activityRule.getActivity();
         IncidSeeByComuListFr mFragment = (IncidSeeByComuListFr) mActivity.getSupportFragmentManager()
                 .findFragmentByTag(incid_see_by_comu_list_fr_tag);
+        Thread.sleep(2000);
         adapter = (IncidSeeOpenByComuAdapter) mFragment.mAdapter;
         // Premisas.
         assertThat(userComuJuan.hasAdministradorAuthority(), is(false));

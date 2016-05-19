@@ -1,12 +1,14 @@
 package com.didekin.common.oauth2;
 
+import com.didekin.common.exception.ErrorBean;
+import com.didekin.common.oauth2.OauthToken.AccessToken;
 
-import retrofit.client.Response;
-import retrofit.http.Field;
-import retrofit.http.FormUrlEncoded;
-import retrofit.http.GET;
-import retrofit.http.Header;
-import retrofit.http.POST;
+import retrofit2.Call;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
+import retrofit2.http.Header;
+import retrofit2.http.POST;
 
 import static com.didekin.common.oauth2.OauthConstant.GRANT_TYPE_PARAM;
 import static com.didekin.common.oauth2.OauthConstant.PSWD_PARAM;
@@ -23,17 +25,17 @@ public interface Oauth2EndPoints {
 
     @FormUrlEncoded
     @POST(OauthConstant.TOKEN_PATH)
-    OauthToken.AccessToken getPasswordUserToken(@Header("Authorization") String authClient
+    Call<AccessToken> getPasswordUserToken(@Header("Authorization") String authClient
             , @Field(USER_PARAM) String username
             , @Field(PSWD_PARAM) String password
             , @Field(GRANT_TYPE_PARAM) String grantType);
 
     @FormUrlEncoded
     @POST(OauthConstant.TOKEN_PATH)
-    OauthToken.AccessToken getRefreshUserToken(@Header("Authorization") String authClient
+    Call<AccessToken> getRefreshUserToken(@Header("Authorization") String authClient
             , @Field(REFRESH_TK_PARAM) String refreshToken
             , @Field(GRANT_TYPE_PARAM) String grantType);
 
     @GET("/open/not_found")
-    Response getNotFoundMsg();
+    Call<ErrorBean> getNotFoundMsg();
 }

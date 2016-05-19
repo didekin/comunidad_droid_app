@@ -15,6 +15,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
+
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -55,7 +57,7 @@ public class ComuSearchResultsAcTest_intent_2 {
                 signUpAndUpdateTk(COMU_PLAZUELA5_PEPE);
                 comunidad = ServOne.getComusByUser().get(0);
                 signUpAndUpdateTk(COMU_REAL_JUAN);
-            } catch (UiException e) {
+            } catch (UiException | IOException e) {
                 e.printStackTrace();
             }
         }

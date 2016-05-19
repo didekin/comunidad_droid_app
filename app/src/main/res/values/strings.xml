@@ -22,6 +22,7 @@
     <!--Menús-->
     <!--Messages-->
     <string name="no_internet_conn_toast">No hay conexión de red disponible.</string>
+    <string name="exception_generic_message">No podemos continuar. Busca tu comunidad o haz login.</string>
     <!--******************************************************************************-->
     <!--                                 INCIDENCIAS                                  -->
     <!--******************************************************************************-->

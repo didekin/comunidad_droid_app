@@ -17,6 +17,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -67,7 +69,7 @@ public class UiExceptionTests_2 extends UiExceptionAbstractTest {
                 IncidenciaServ.regIncidImportancia(mIncidJuanPlazuelas);
                 IncidenciaUser incidenciaUserDb = IncidenciaServ.seeIncidsOpenByComu(juanPlazuelas.getComunidad().getC_Id()).get(0);
                 mIncidJuanPlazuelas = IncidenciaServ.seeIncidImportancia(incidenciaUserDb.getIncidencia().getIncidenciaId()).getIncidImportancia();
-            } catch (UiException e) {
+            } catch (UiException | IOException e) {
                 e.printStackTrace();
             }
             Intent intent = new Intent();

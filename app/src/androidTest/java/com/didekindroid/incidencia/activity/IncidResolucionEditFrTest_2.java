@@ -13,6 +13,7 @@ import com.didekindroid.usuario.testutils.CleanUserEnum;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,7 +81,7 @@ public class IncidResolucionEditFrTest_2 extends IncidResolucionAbstractTest {
                             .build();
                     assertThat(IncidenciaServ.modifyResolucion(resolucion), is(2));
                     resolucion = IncidenciaServ.seeResolucion(resolucion.getIncidencia().getIncidenciaId());
-                } catch (UiException | InterruptedException e) {
+                } catch (UiException | InterruptedException | IOException e) {
                     e.printStackTrace();
                 }
                 Intent intent = new Intent();

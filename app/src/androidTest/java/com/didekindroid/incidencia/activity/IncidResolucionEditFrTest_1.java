@@ -14,6 +14,9 @@ import com.didekindroid.usuario.testutils.CleanUserEnum;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -33,9 +36,13 @@ import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJEC
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkNavigateUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
+import static com.didekindroid.common.utils.UIutils.SPAIN_LOCALE;
+import static com.didekindroid.common.utils.UIutils.formatTimeToString;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_PLAZUELA5_JUAN;
+import static java.util.Calendar.DAY_OF_MONTH;
+import static java.util.Calendar.MONTH;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -67,7 +74,7 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
                     Thread.sleep(1000);
                     doResolucionNoAdvances();
 
-                } catch (UiException | InterruptedException e) {
+                } catch (UiException | InterruptedException | IOException e) {
                     e.printStackTrace();
                 }
                 Intent intent = new Intent();
@@ -111,7 +118,7 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
         checKOk();
         Resolucion resolucionDb = IncidenciaServ.seeResolucion(resolucion.getIncidencia().getIncidenciaId());
         assertThat(resolucionDb.equals(resolucion), is(true));
-        assertThat(resolucionDb.getFechaPrev().equals(resolucion.getFechaPrev()), is(true));
+        assertThat(Math.abs(resolucionDb.getFechaPrev().getTime() - resolucion.getFechaPrev().getTime()) < 1000, is(true));
     }
 
     @Test
@@ -120,13 +127,17 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
         // Caso: cambiamos la fecha prevista.
 
         onView(withId(R.id.incid_resolucion_fecha_view)).perform(click());
-        // We pick a date.
-        onView(withClassName(is(DatePicker.class.getName()))).perform(setDate(2016, 4, 30));
+        Calendar newCalendar = new GregorianCalendar();
+        newCalendar.setTimeInMillis(resolucion.getFechaPrev().getTime());
+        newCalendar.add(MONTH, 1); // Aumentamos un mes la fecha estimada.
+        // Android PickerActions substract 1 from the month passed to setDate(), so we increased the month parameter value in 1 before passing it.
+        onView(withClassName(is(DatePicker.class.getName())))
+                .perform(setDate(newCalendar.get(Calendar.YEAR), newCalendar.get(MONTH) + 1, newCalendar.get(DAY_OF_MONTH)));
         onView(withText(mActivity.getString(android.R.string.ok))).perform(click());
-        if (Locale.getDefault().equals(UIutils.SPAIN_LOCALE)) {
+        if (Locale.getDefault().equals(SPAIN_LOCALE)) {
             onView(allOf(
                     withId(R.id.incid_resolucion_fecha_view),
-                    withText("30/4/2016")
+                    withText(formatTimeToString(newCalendar.getTimeInMillis()))
             )).check(matches(isDisplayed()));
         }
         onView(withId(R.id.incid_resolucion_fr_modif_button)).perform(click());
@@ -165,7 +176,7 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
         // Caso OK: cerramos incidencia sin cambiar datos en pantalla.
         onView(withId(R.id.incid_resolucion_edit_fr_close_button)).perform(click());
 
-        onView(withId(R.id.incid_see_closed_by_comu_ac)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_see_closed_by_comu_ac)).check(matches(isDisplayed()));   // TODO. fail
         intended(not(hasExtraWithKey(INCID_IMPORTANCIA_OBJECT.key)));
 
         // Damos back e intentamos modificar la incidencia. Nos da error.
@@ -181,7 +192,7 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
         // Caso OK: cerramos incidencia sin cambiar datos en pantalla.
         onView(withId(R.id.incid_resolucion_edit_fr_close_button)).perform(click());
 
-        onView(withId(R.id.incid_see_closed_by_comu_ac)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_see_closed_by_comu_ac)).check(matches(isDisplayed()));    // TODO. fail
         intended(not(hasExtraWithKey(INCID_IMPORTANCIA_OBJECT.key)));
         // Up Navigate.
         checkNavigateUp();

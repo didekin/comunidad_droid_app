@@ -136,7 +136,7 @@ public class UsuarioDataDbHelper extends SQLiteOpenHelper {
         Log.i(TAG, "In loadMunicipios()");
 
         final Resources resources = mContext.getResources();
-        InputStream inputStream = resources.openRawResource(R.raw.municipios);
+        InputStream inputStream = resources.openRawResource(R.raw.municipio);
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         int pkCounter = 0;
 
@@ -164,7 +164,7 @@ public class UsuarioDataDbHelper extends SQLiteOpenHelper {
             reader.close();
         }
 
-        Log.i(TAG, "Done loading municipios file in DB.");
+        Log.i(TAG, "Done loading municipio file in DB.");
         mMunicipiosCounter = pkCounter;
         return pkCounter;
     }

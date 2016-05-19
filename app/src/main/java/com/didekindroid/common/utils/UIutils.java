@@ -14,12 +14,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.didekin.common.exception.ErrorBean;
-import com.didekin.common.exception.InServiceException;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
+import com.didekindroid.usuario.webservices.UsuarioService;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -27,6 +28,8 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.Locale;
+
+import retrofit2.Response;
 
 import static android.widget.Toast.makeText;
 import static com.didekin.common.dominio.DataPatterns.LINE_BREAK;
@@ -60,7 +63,7 @@ public final class UIutils {
 
         if (bearerAccessTkHeader == null) { // No token in cache.
             ErrorBean errorBean = new ErrorBean(TOKEN_NULL.getHttpMessage(), TOKEN_NULL.getHttpStatus());
-            throw new UiException(new InServiceException(errorBean, null));
+            throw new UiException(errorBean);
         }
         return bearerAccessTkHeader;
     }
@@ -97,6 +100,17 @@ public final class UIutils {
     public static String getStringFromInteger(int number)
     {
         return NumberFormat.getIntegerInstance().format(number);
+    }
+
+//    =============================== DIDEDINSPRING SERVICES =================================
+
+    public static <T> T getResponseBody(Response<T> response) throws UiException, IOException
+    {
+        if (response.isSuccessful()){
+            return response.body();
+        } else {
+            throw new UiException(UsuarioService.ServOne.getRetrofitHandler().getErrorBean(response));
+        }
     }
 
 //    ================================== ERRORS ======================================
@@ -160,7 +174,9 @@ public final class UIutils {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putBoolean(SharedPrefFiles.IS_GCM_TOKEN_SENT_TO_SERVER, isSentToServer);
         editor.apply();
+        Log.d(TAG, "updateIsGcmTokenSentServer(), exit. iSentToServer= " + isSentToServer);
     }
+
     //  ..............  INNER CLASSES ............
 
     public enum SharedPrefFiles {

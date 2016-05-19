@@ -14,6 +14,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
 import java.util.List;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -61,7 +62,7 @@ public class RegUserComuAcTest_intent {
             // Segundo usuarioComunidad, con user2 y comunidad2.
             try {
                 signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
-            } catch (UiException e) {
+            } catch (UiException | IOException e) {
                 e.printStackTrace();
             }
         }
@@ -71,7 +72,7 @@ public class RegUserComuAcTest_intent {
         {
             try {
                 signUpAndUpdateTk(COMU_REAL_JUAN);
-            } catch (UiException e) {
+            } catch (UiException | IOException e) {
                 e.printStackTrace();
             }
             List<Comunidad> comunidadesUserOne = null;

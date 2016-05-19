@@ -13,6 +13,8 @@ import com.didekindroid.usuario.testutils.CleanUserEnum;
 
 import org.junit.Test;
 
+import java.io.IOException;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.pressBack;
@@ -66,7 +68,7 @@ public class IncidEditAcMaxPowerTest_2 extends IncidEditAbstractTest {
                     Incidencia incidenciaDb = IncidenciaServ.seeIncidsOpenByComu(pepeEscorial.getComunidad().getC_Id()).get(0).getIncidencia();
                     incidResolBundlePepe = IncidenciaServ.seeIncidImportancia(incidenciaDb.getIncidenciaId());
                     incidenciaPepe = incidResolBundlePepe.getIncidImportancia();
-                } catch (UiException e) {
+                } catch (UiException | IOException e) {
                     e.printStackTrace();
                 }
                 Intent intent = new Intent();

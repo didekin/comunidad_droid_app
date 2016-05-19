@@ -14,6 +14,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
+
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -55,7 +57,7 @@ public class SeeUserComuByUserAcTest {
         {
             try {
                 regSeveralUserComuSameUser(COMU_ESCORIAL_PEPE, COMU_PLAZUELA5_PEPE, COMU_LA_FUENTE_PEPE);
-            } catch (UiException e) {
+            } catch (UiException | IOException e) {
                 e.printStackTrace();
             }
         }
@@ -100,6 +102,8 @@ public class SeeUserComuByUserAcTest {
     @Test
     public void testViewData_1() throws InterruptedException
     {
+
+        Thread.sleep(2000);
         SeeUserComuByUserAdapter adapter = (SeeUserComuByUserAdapter) mFragment.getListAdapter();
         assertThat(adapter.getCount(), is(3));
         // Orden es provinciaId, municipioCd.

@@ -22,6 +22,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
+import java.io.IOException;
 
 import static android.database.sqlite.SQLiteDatabase.deleteDatabase;
 import static android.support.test.espresso.Espresso.onData;
@@ -113,7 +114,7 @@ public class IncidSeeOpenByComuAcTest_2 {
                 IncidenciaServ.regIncidImportancia(incidJuanReal1);
                 IncidenciaServ.regIncidImportancia(incidJuanReal2);
                 IncidenciaServ.regIncidImportancia(incidJuanPlazuela1);
-            } catch (UiException e) {
+            } catch (UiException | IOException e) {
                 e.printStackTrace();
             }
         }
@@ -122,7 +123,7 @@ public class IncidSeeOpenByComuAcTest_2 {
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
     {
-        Thread.sleep(5000);
+        Thread.sleep(4000);
     }
 
     @Before
@@ -131,6 +132,7 @@ public class IncidSeeOpenByComuAcTest_2 {
         mActivity = activityRule.getActivity();
         mFragment = (IncidSeeByComuListFr) mActivity.getSupportFragmentManager()
                 .findFragmentByTag(incid_see_by_comu_list_fr_tag);
+        Thread.sleep(2000);
         adapter = (IncidSeeOpenByComuAdapter) mFragment.mAdapter;
         dBHelper = new IncidenciaDataDbHelper(mActivity);
     }

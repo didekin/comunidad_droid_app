@@ -13,6 +13,8 @@ import com.didekindroid.usuario.testutils.CleanUserEnum;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
@@ -61,7 +63,7 @@ public class IncidEditAcTest_Mn1 extends IncidEditAbstractTest {
                     IncidenciaServ.regIncidImportancia(incidenciaJuan);
                     IncidenciaUser incidenciaUserDb = IncidenciaServ.seeIncidsOpenByComu(juanUserComu.getComunidad().getC_Id()).get(0);
                     incidenciaJuan = IncidenciaServ.seeIncidImportancia(incidenciaUserDb.getIncidencia().getIncidenciaId()).getIncidImportancia();
-                } catch (UiException e) {
+                } catch (UiException | IOException e) {
                     e.printStackTrace();
                 }
                 Intent intent = new Intent();

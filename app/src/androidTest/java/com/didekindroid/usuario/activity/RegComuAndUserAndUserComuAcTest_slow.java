@@ -16,6 +16,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
+
 import static com.didekindroid.common.TokenHandler.TKhandler;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_NOTHING;
@@ -77,7 +79,7 @@ public class RegComuAndUserAndUserComuAcTest_slow {
     }
 
     @Test
-    public void testLoginMn_2() throws InterruptedException, UiException
+    public void testLoginMn_2() throws InterruptedException, UiException, IOException
     {
         whatToClean = CleanUserEnum.CLEAN_JUAN;
         //With token.

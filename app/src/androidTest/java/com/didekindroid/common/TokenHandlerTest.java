@@ -8,6 +8,7 @@ import com.didekin.common.oauth2.OauthToken;
 import com.didekin.common.oauth2.OauthToken.AccessToken;
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.testutils.ActivityTestUtils;
+import com.google.common.cache.Cache;
 
 import org.junit.After;
 import org.junit.Before;
@@ -63,7 +64,7 @@ public class TokenHandlerTest {
         assertThat(TKhandler.getRefreshTokenFile(), notNullValue());
         assertThat(TKhandler.getRefreshTokenFile().exists(), is(false));
         assertThat(TKhandler.getRefreshTokenKey(), nullValue());
-        com.google.common.cache.Cache<String, AccessToken> tokenCache = TKhandler.getTokensCache();
+        Cache<String, AccessToken> tokenCache = TKhandler.getTokensCache();
         assertThat(tokenCache, notNullValue());
         // No accessToken entry in cache. The key is null.
         assertThat(tokenCache.asMap().containsKey(TKhandler.getRefreshTokenKey()), is(false));
@@ -112,7 +113,7 @@ public class TokenHandlerTest {
         assertThat(refreshToken_1, not(isEmptyOrNullString()));
 
         // Case 2: there is not token in cache, but there exists file with refreshToken.
-        com.google.common.cache.Cache<String, AccessToken> tokenCache = TKhandler.getTokensCache();
+        Cache<String, AccessToken> tokenCache = TKhandler.getTokensCache();
         tokenCache.invalidate(refreshToken_1);
         assertThat(tokenCache.getIfPresent(refreshToken_1), nullValue());
         File refreshTkFile = new File(context.getFilesDir(), refresh_token_filename);

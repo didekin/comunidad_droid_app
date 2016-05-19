@@ -20,6 +20,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
+import java.io.IOException;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
@@ -64,7 +65,7 @@ public class ComuSearchAcTest_slow {
     @Before
     public void getFixture() throws Exception
     {
-        Thread.sleep(2000);
+        Thread.sleep(3000);
         context = InstrumentationRegistry.getTargetContext();
         refreshTkFile = TKhandler.getRefreshTokenFile();
         whatClean = CleanUserEnum.CLEAN_NOTHING;
@@ -80,7 +81,7 @@ public class ComuSearchAcTest_slow {
     }
 
     @Test
-    public void testGetDatosUsuarioWithToken() throws InterruptedException, UiException
+    public void testGetDatosUsuarioWithToken() throws InterruptedException, UiException, IOException
     {
         whatClean = CleanUserEnum.CLEAN_JUAN;
 
@@ -101,7 +102,7 @@ public class ComuSearchAcTest_slow {
     }
 
     @Test
-    public void testMenuNuevaComunidad_withToken() throws InterruptedException, UiException
+    public void testMenuNuevaComunidad_withToken() throws InterruptedException, UiException, IOException
     {
         whatClean = CleanUserEnum.CLEAN_JUAN;
 
@@ -112,7 +113,7 @@ public class ComuSearchAcTest_slow {
     }
 
     @Test
-    public void testComunidadesByUsuario_withToken() throws InterruptedException, UiException
+    public void testComunidadesByUsuario_withToken() throws InterruptedException, UiException, IOException
     {
         whatClean = CleanUserEnum.CLEAN_JUAN;
 
@@ -132,7 +133,7 @@ public class ComuSearchAcTest_slow {
     }
 
     @Test
-    public void testLogin_withToken() throws InterruptedException, UiException
+    public void testLogin_withToken() throws InterruptedException, UiException, IOException
     {
 
         whatClean = CleanUserEnum.CLEAN_JUAN;

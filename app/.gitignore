@@ -9,3 +9,8 @@ gradlew.bat
 proguard-rules.pro
 google-services.json
 
+# Certificate jks for tests
+**/res/raw/*
+# URL for tests
+**/res/values/app_test_parameters.*
+

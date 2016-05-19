@@ -21,6 +21,7 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 
 import java.io.File;
+import java.io.IOException;
 
 import static android.database.sqlite.SQLiteDatabase.deleteDatabase;
 import static android.support.test.espresso.Espresso.onView;
@@ -143,13 +144,13 @@ public abstract class IncidEditAbstractTest {
             // Registro userComu en misma comunidad.
             UsuarioComunidad userComuJuan = makeUsuarioComunidad(pepeUserComu.getComunidad(), USER_JUAN,
                     "portal", "esc", "plantaX", "door12", PROPIETARIO.function);
-            ServOne.regUserAndUserComu(userComuJuan);
+            ServOne.regUserAndUserComu(userComuJuan).execute();
             updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
             Thread.sleep(1000);
             Incidencia incidencia_2 = insertGetIncidImportanciaWithId(incidenciaPepe.getIncidencia().getIncidenciaId(), userComuJuan, 2).getIncidencia();
             incidenciaJuan = IncidenciaServ.seeIncidImportancia(incidencia_2.getIncidenciaId()).getIncidImportancia();
 
-        } catch (UiException | InterruptedException e) {
+        } catch (UiException | InterruptedException | IOException e) {
             e.printStackTrace();
         }
         Intent intent = new Intent();

@@ -198,12 +198,12 @@ public class UserDataAc extends AppCompatActivity {
                 token_1 = Oauth2.getPasswordUserToken(mOldUser.getUserName(), usuarios[0].getPassword());
                 TKhandler.initKeyCacheAndBackupFile(token_1);
             } catch (UiException e) {
-                if (e.getInServiceException().getHttpMessage().equals(BAD_REQUEST.getHttpMessage())) {
+                if (e.getErrorBean().getMessage().equals(BAD_REQUEST.getHttpMessage())) {
                     Log.d(TAG, " exception: " + BAD_REQUEST.getHttpMessage());
                     return true;  // Password/user matching error.
                 } else {
                     uiException = e;
-                    Log.d(TAG, e.getInServiceException().getHttpMessage());
+                    Log.d(TAG, e.getErrorBean().getMessage());
                     return false; // Other authentication error.
                 }
             }
@@ -220,8 +220,8 @@ public class UserDataAc extends AppCompatActivity {
                     TKhandler.cleanCacheAndBckFile();
                 } catch (UiException e) {
                     uiException = e;
-                    Log.d(TAG, (e.getInServiceException() != null ?
-                            e.getInServiceException().getHttpMessage() : "token null in cache"));
+                    Log.d(TAG, (e.getErrorBean() != null ?
+                            e.getErrorBean().getMessage() : "token null in cache"));
                     return false; // Authentication error with old credentials.
                 }
 
@@ -230,13 +230,13 @@ public class UserDataAc extends AppCompatActivity {
                     TKhandler.initKeyCacheAndBackupFile(token_2);
                 } catch (UiException e) {
                     // Authentication error with new credentials.
-                    Log.d(TAG, e.getInServiceException().getHttpMessage());
+                    Log.d(TAG, e.getErrorBean().getMessage());
                 }
                 try {
                     ServOne.deleteAccessToken(token_1.getValue());
                 } catch (UiException e) {
                     // No token in cache
-                    Log.d(TAG, e.getInServiceException().getHttpMessage());
+                    Log.d(TAG, e.getErrorBean().getMessage());
                     e.processMe(UserDataAc.this, new Intent());
                 }
                 return false;
@@ -250,8 +250,8 @@ public class UserDataAc extends AppCompatActivity {
                 ServOne.modifyUser(usuarioIn);
             } catch (UiException e) {
                 uiException = e;
-                Log.d(TAG, (e.getInServiceException() != null ?
-                        e.getInServiceException().getHttpMessage() : "token null in cache"));
+                Log.d(TAG, (e.getErrorBean() != null ?
+                        e.getErrorBean().getMessage() : "token null in cache"));
                 return false;
             }
             return false;

@@ -107,8 +107,9 @@ public class SeeUserComuByComuAcTest {
     }
 
     @Test
-    public void testViewData_1()
+    public void testViewData_1() throws InterruptedException
     {
+        Thread.sleep(3000);
         SeeUserComutByComuListAdapter mAdapter = (SeeUserComutByComuListAdapter) mFragment.getListAdapter();
         assertThat(mAdapter.getCount(), is(1));
 

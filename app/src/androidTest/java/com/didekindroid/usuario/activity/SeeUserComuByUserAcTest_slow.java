@@ -13,6 +13,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
+
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutils.UserMenuTestUtils.COMU_SEARCH_AC;
 import static com.didekindroid.usuario.testutils.UserMenuTestUtils.USER_DATA_AC;
@@ -41,7 +43,7 @@ public class SeeUserComuByUserAcTest_slow {
         {
             try {
                 regSeveralUserComuSameUser(COMU_ESCORIAL_PEPE, COMU_PLAZUELA5_PEPE, COMU_LA_FUENTE_PEPE);
-            } catch (UiException e) {
+            } catch (UiException | IOException e) {
                 e.printStackTrace();
             }
         }
@@ -76,7 +78,7 @@ public class SeeUserComuByUserAcTest_slow {
     }
 
     @Test
-    public void testComuSearchMn_withToken() throws InterruptedException
+    public void testComuSearchMn_withToken() throws InterruptedException   // TODO: test failed
     {
         COMU_SEARCH_AC.checkMenuItem_WTk(mActivity);
     }

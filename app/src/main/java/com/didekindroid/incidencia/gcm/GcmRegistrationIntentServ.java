@@ -4,7 +4,6 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
 
-import com.didekin.common.exception.InServiceException;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.usuario.webservices.UsuarioService;
@@ -42,7 +41,7 @@ public class GcmRegistrationIntentServ extends IntentService {
             sendRegistrationToServer(token);
             updateIsGcmTokenSentServer(true, this);
             Log.i(TAG, "onHandleIntent(), GCM token registered: " + token);
-        } catch (IOException | InServiceException | UiException e) {
+        } catch (IOException | UiException e) {
             updateIsGcmTokenSentServer(false, this);
             Log.e(TAG, "onHandleIntent(), exception:", e);
         }
@@ -53,7 +52,7 @@ public class GcmRegistrationIntentServ extends IntentService {
      *
      * @param token The new token.
      */
-    private void sendRegistrationToServer(String token) throws UiException, InServiceException
+    private void sendRegistrationToServer(String token) throws UiException
     {
         Log.d(TAG, "sendRegistrationToServer()");
         UsuarioService.ServOne.modifyUserGcmToken(token);

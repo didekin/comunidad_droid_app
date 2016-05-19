@@ -2,430 +2,426 @@ package com.didekindroid.usuario.webservices;
 
 import android.util.Log;
 
-import com.didekin.common.exception.InServiceException;
+import com.didekin.common.JksInClient;
+import com.didekin.common.RetrofitHandler;
 import com.didekin.usuario.controller.UsuarioEndPoints;
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekin.usuario.dominio.Usuario;
 import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.common.activity.UiException;
+import com.didekindroid.common.webservices.JksInAndroidApp;
 
+import java.io.EOFException;
+import java.io.IOException;
 import java.util.List;
 
-import static com.didekin.common.RetrofitRestBuilder.BUILDER;
+import retrofit2.Call;
+import retrofit2.Response;
+
+import static com.didekin.common.exception.ErrorBean.GENERIC_ERROR;
 import static com.didekindroid.DidekindroidApp.getBaseURL;
+import static com.didekindroid.DidekindroidApp.getJksPassword;
+import static com.didekindroid.DidekindroidApp.getJksResourceId;
 import static com.didekindroid.common.utils.UIutils.checkBearerToken;
+import static com.didekindroid.common.utils.UIutils.getResponseBody;
 
 /**
  * User: pedro@didekin
  * Date: 07/06/15
  * Time: 15:06
  */
-public enum UsuarioService implements UsuarioEndPoints {
-
-    ServOne(BUILDER.getService(UsuarioEndPoints.class, getBaseURL())) {
-        @Override
-        public boolean deleteAccessToken(String accessToken, String oldAccessToken)
-        {
-            return ServOne.endPoint.deleteAccessToken(accessToken, oldAccessToken);
-        }
-
-        @Override
-        public boolean deleteUser(String accessToken)
-        {
-            return ServOne.endPoint.deleteUser(accessToken);
-        }
-
-        @Override
-        public int deleteUserComu(String accessToken, long comunidadId)
-        {
-            return ServOne.endPoint.deleteUserComu(accessToken, comunidadId);
-        }
-
-        @Override
-        public Comunidad getComuData(String accessToken, long idComunidad)
-        {
-            return ServOne.endPoint.getComuData(accessToken, idComunidad);
-        }
-
-        @Override
-        public List<Comunidad> getComusByUser(String accessToken)
-        {
-            return ServOne.endPoint.getComusByUser(accessToken);
-        }
-
-        @Override
-        public GcmTokenWrapper getGcmToken(String accessToken)
-        {
-            return ServOne.endPoint.getGcmToken(accessToken);
-        }
-
-        @Override
-        public UsuarioComunidad getUserComuByUserAndComu(String accessToken, long comunidadId)
-        {
-            return ServOne.endPoint.getUserComuByUserAndComu(accessToken, comunidadId);
-        }
-
-        @Override
-        public Usuario getUserData(String accessToken)
-        {
-            return ServOne.endPoint.getUserData(accessToken);
-        }
-
-        @Override
-        public boolean isOldestUserComu(String accessToken, long comunidadId)
-        {
-            return ServOne.endPoint.isOldestUserComu(accessToken, comunidadId);
-        }
-
-        @Override
-        public boolean login(String userName, String password)
-        {
-            return ServOne.endPoint.login(userName, password);
-        }
-
-        @Override
-        public int modifyComuData(String currentAccessToken, Comunidad comunidad)
-        {
-            return ServOne.endPoint.modifyComuData(currentAccessToken, comunidad);
-        }
-
-        @Override
-        public int modifyUserGcmToken(String accessToken, String gcmToken)
-        {
-            return ServOne.endPoint.modifyUserGcmToken(accessToken, gcmToken);
-        }
-
-        @Override
-        public int modifyUser(String accessToken, Usuario usuario)
-        {
-            return ServOne.endPoint.modifyUser(accessToken, usuario);
-        }
-
-        @Override
-        public int modifyUserComu(String accessToken, UsuarioComunidad userComu)
-        {
-            return ServOne.endPoint.modifyUserComu(accessToken, userComu);
-        }
-
-        @Override
-        public int passwordChange(String accessToken, String newPassword)
-        {
-            return ServOne.endPoint.passwordChange(accessToken, newPassword);
-        }
-
-        @Override
-        public boolean passwordSend(String userName)
-        {
-            Log.d(TAG, "passwordSend()");
-            return ServOne.endPoint.passwordSend(userName);
-        }
-
-        @Override
-        public boolean regComuAndUserAndUserComu(UsuarioComunidad usuarioCom)
-        {
-            Log.d(TAG, ("regComuAndUserAndUserComu()"));
-            return ServOne.endPoint.regComuAndUserAndUserComu(usuarioCom);
-        }
-
-        @Override
-        public boolean regComuAndUserComu(String accessToken, UsuarioComunidad usuarioCom)
-        {
-            return ServOne.endPoint.regComuAndUserComu(accessToken, usuarioCom);
-        }
-
-        @Override
-        public boolean regUserAndUserComu(UsuarioComunidad userCom)
-        {
-            Log.d(TAG, "regUserAndUserComu()");
-            return ServOne.endPoint.regUserAndUserComu(userCom);
-        }
-
-        @Override
-        public int regUserComu(String accessToken, UsuarioComunidad usuarioComunidad)
-        {
-            return ServOne.endPoint.regUserComu(accessToken, usuarioComunidad);
-        }
-
-        /**
-         * An object comunidad is used as search criterium, with the fields:
-         * -- tipoVia.
-         * -- nombreVia.
-         * -- numero.
-         * -- sufijoNumero (it can be an empty string).
-         * -- municipio with codInProvincia and provinciaId.
-         */
-        @Override
-        public List<Comunidad> searchComunidades(Comunidad comunidad)
-        {
-            Log.d(TAG, "searchComunidades()");
-            return ServOne.endPoint.searchComunidades(comunidad);
-        }
-
-        @Override
-        public List<UsuarioComunidad> seeUserComusByComu(String accessToken, long comunidadId)
-        {
-            return ServOne.endPoint.seeUserComusByComu(accessToken, comunidadId);
-        }
-
-        @Override
-        public List<UsuarioComunidad> seeUserComusByUser(String accessToken)
-        {
-            return ServOne.endPoint.seeUserComusByUser(accessToken);
-        }
-    },
-    ;
+@SuppressWarnings("unused")
+public final class UsuarioService implements UsuarioEndPoints {
 
     private static final String TAG = UsuarioService.class.getCanonicalName();
 
+    public static final UsuarioService ServOne = new UsuarioService(getBaseURL(), new JksInAndroidApp(getJksPassword(), getJksResourceId()));
+    private final RetrofitHandler retrofitHandler;
     private final UsuarioEndPoints endPoint;
 
-    UsuarioService(UsuarioEndPoints retrofitEndPoint)
+    private UsuarioService(final String hostPort, final JksInClient jksInAppClient)
     {
-        endPoint = retrofitEndPoint;
+        retrofitHandler = new RetrofitHandler(hostPort, jksInAppClient);
+        endPoint = retrofitHandler.getService(UsuarioEndPoints.class);
     }
 
-// :::::::::::::::::::::::::::::::::::::::::::::::::::::
-//                  CONVENIENCE METHODS
-// :::::::::::::::::::::::::::::::::::::::::::::::::::::
+    public RetrofitHandler getRetrofitHandler()
+    {
+        return retrofitHandler;
+    }
+
+//  ================================== UsuarioEndPoints implementation ============================
+
+    @Override
+    public Call<Boolean> deleteAccessToken(String accessToken, String oldAccessToken)
+    {
+        return endPoint.deleteAccessToken(accessToken, oldAccessToken);
+    }
+
+    @Override
+    public Call<Boolean> deleteUser(String accessToken)
+    {
+        return endPoint.deleteUser(accessToken);
+    }
+
+    @Override
+    public Call<Integer> deleteUserComu(String accessToken, long comunidadId)
+    {
+        return endPoint.deleteUserComu(accessToken, comunidadId);
+    }
+
+    @Override
+    public Call<Comunidad> getComuData(String accessToken, long idComunidad)
+    {
+        return endPoint.getComuData(accessToken, idComunidad);
+    }
+
+    @Override
+    public Call<List<Comunidad>> getComusByUser(String accessToken)
+    {
+        return endPoint.getComusByUser(accessToken);
+    }
+
+    @Override
+    public Call<GcmTokenWrapper> getGcmToken(String accessToken)
+    {
+        return endPoint.getGcmToken(accessToken);
+    }
+
+    @Override
+    public Call<UsuarioComunidad> getUserComuByUserAndComu(String accessToken, long comunidadId)
+    {
+        return endPoint.getUserComuByUserAndComu(accessToken, comunidadId);
+    }
+
+    @Override
+    public Call<Usuario> getUserData(String accessToken)
+    {
+        return endPoint.getUserData(accessToken);
+    }
+
+    @Override
+    public Call<Boolean> isOldestUserComu(String accessToken, long comunidadId)
+    {
+        return endPoint.isOldestUserComu(accessToken, comunidadId);
+    }
+
+    @Override
+    public Call<Boolean> login(String userName, String password)
+    {
+        return endPoint.login(userName, password);
+    }
+
+    @Override
+    public Call<Integer> modifyComuData(String currentAccessToken, Comunidad comunidad)
+    {
+        return endPoint.modifyComuData(currentAccessToken, comunidad);
+    }
+
+    @Override
+    public Call<Integer> modifyUserGcmToken(String accessToken, String gcmToken)
+    {
+        return endPoint.modifyUserGcmToken(accessToken, gcmToken);
+    }
+
+    @Override
+    public Call<Integer> modifyUser(String accessToken, Usuario usuario)
+    {
+        return endPoint.modifyUser(accessToken, usuario);
+    }
+
+    @Override
+    public Call<Integer> modifyUserComu(String accessToken, UsuarioComunidad userComu)
+    {
+        return endPoint.modifyUserComu(accessToken, userComu);
+    }
+
+    @Override
+    public Call<Integer> passwordChange(String accessToken, String newPassword)
+    {
+        return endPoint.passwordChange(accessToken, newPassword);
+    }
+
+    @Override
+    public Call<Boolean> passwordSend(String userName)
+    {
+        Log.d(TAG, "passwordSend()");
+        return endPoint.passwordSend(userName);
+    }
+
+    @Override
+    public Call<Boolean> regComuAndUserAndUserComu(UsuarioComunidad usuarioCom)
+    {
+        Log.d(TAG, ("regComuAndUserAndUserComu()"));
+        return endPoint.regComuAndUserAndUserComu(usuarioCom);
+    }
+
+    @Override
+    public Call<Boolean> regComuAndUserComu(String accessToken, UsuarioComunidad usuarioCom)
+    {
+        return endPoint.regComuAndUserComu(accessToken, usuarioCom);
+    }
+
+    @Override
+    public Call<Boolean> regUserAndUserComu(UsuarioComunidad userCom)
+    {
+        Log.d(TAG, "regUserAndUserComu()");
+        return endPoint.regUserAndUserComu(userCom);
+    }
+
+    @Override
+    public Call<Integer> regUserComu(String accessToken, UsuarioComunidad usuarioComunidad)
+    {
+        return endPoint.regUserComu(accessToken, usuarioComunidad);
+    }
+
+    /**
+     * An object comunidad is used as search criterium, with the fields:
+     * -- tipoVia.
+     * -- nombreVia.
+     * -- numero.
+     * -- sufijoNumero (it can be an empty string).
+     * -- municipio with codInProvincia and provinciaId.
+     */
+    @Override
+    public Call<List<Comunidad>> searchComunidades(Comunidad comunidad)
+    {
+        Log.d(TAG, "searchComunidades()");
+        return endPoint.searchComunidades(comunidad);
+    }
+
+    @Override
+    public Call<List<UsuarioComunidad>> seeUserComusByComu(String accessToken, long comunidadId)
+    {
+        return endPoint.seeUserComusByComu(accessToken, comunidadId);
+    }
+
+    @Override
+    public Call<List<UsuarioComunidad>> seeUserComusByUser(String accessToken)
+    {
+        return endPoint.seeUserComusByUser(accessToken);
+    }
+
+//  =============================================================================
+//                          CONVENIENCE METHODS
+//  =============================================================================
 
     public boolean deleteAccessToken(String oldAccessToken) throws UiException
     {
         Log.d(TAG, "deleteAccessToken()");
 
-        boolean isDeleted;
         try {
-            isDeleted = deleteAccessToken(checkBearerToken(), oldAccessToken);
-        } catch (InServiceException e) {
-            throw new UiException(e);
+            Response<Boolean> response = deleteAccessToken(checkBearerToken(), oldAccessToken).execute();
+            return getResponseBody(response);
+        } catch (IOException e) {
+            throw new UiException(GENERIC_ERROR);
         }
-        return isDeleted;
     }
 
     public boolean deleteUser() throws UiException
     {
         Log.d(TAG, "deleteUser()");
-        boolean isDeleted;
         try {
-            isDeleted = deleteUser(checkBearerToken());
-        } catch (InServiceException e) {
-            throw new UiException(e);
+            Response<Boolean> response = deleteUser(checkBearerToken()).execute();
+            return getResponseBody(response);
+        } catch (IOException e) {
+            throw new UiException(GENERIC_ERROR);
         }
-        return isDeleted;
     }
 
 
     public int deleteUserComu(long comunidadId) throws UiException
     {
         Log.d(TAG, "deleteUserComu()");
-
-        int deleted;
         try {
-            deleted = deleteUserComu(checkBearerToken(), comunidadId);
-        } catch (InServiceException e) {
-            throw new UiException(e);
+            Response<Integer> response = deleteUserComu(checkBearerToken(), comunidadId).execute();
+            return getResponseBody(response);
+        } catch (IOException e) {
+            throw new UiException(GENERIC_ERROR);
         }
-        return deleted;
     }
 
     public Comunidad getComuData(long idComunidad) throws UiException
     {
         Log.d(TAG, "getComuData()");
 
-        Comunidad comunidad;
         try {
-            comunidad = getComuData(checkBearerToken(), idComunidad);
-        } catch (InServiceException e) {
-            throw new UiException(e);
+            Response<Comunidad> response = getComuData(checkBearerToken(), idComunidad).execute();
+            return getResponseBody(response);
+        } catch (EOFException eo) {
+            return null;
+        } catch (IOException e) {
+            throw new UiException(GENERIC_ERROR);
         }
-        return comunidad;
     }
 
     public List<Comunidad> getComusByUser() throws UiException
     {
         Log.d(TAG, "getComusByUser()");
-
-        List<Comunidad> comusByUser;
         try {
-            comusByUser = getComusByUser(checkBearerToken());
-        } catch (InServiceException e) {
-            throw new UiException(e);
+            Response<List<Comunidad>> response = getComusByUser(checkBearerToken()).execute();
+            return getResponseBody(response);
+        } catch (IOException e) {
+            throw new UiException(GENERIC_ERROR);
         }
-        return comusByUser;
     }
 
     public String getGcmToken() throws UiException
     {
         Log.d(TAG, "getGcmToken()");
-        String gcmToken;
         try {
-            gcmToken = getGcmToken(checkBearerToken()).getToken();
-        } catch (InServiceException e) {
-            throw new UiException(e);
+            Response<GcmTokenWrapper> response = getGcmToken(checkBearerToken()).execute();
+            return getResponseBody(response).getToken();
+        } catch (IOException e) {
+            throw new UiException(GENERIC_ERROR);
         }
-        return gcmToken;
     }
 
     public UsuarioComunidad getUserComuByUserAndComu(long comunidadId) throws UiException
     {
         Log.d(TAG, "getUserComuByUserAndComu()");
-
-        UsuarioComunidad userComuByUserAndComu;
         try {
-            userComuByUserAndComu = getUserComuByUserAndComu(checkBearerToken(), comunidadId);
-        } catch (InServiceException e) {
-            throw new UiException(e);
+            Response<UsuarioComunidad> response = getUserComuByUserAndComu(checkBearerToken(), comunidadId).execute();
+            return getResponseBody(response);
+        } catch (EOFException eo) {
+            return null;
+        } catch (IOException e) {
+            throw new UiException(GENERIC_ERROR);
         }
-        return userComuByUserAndComu;
     }
 
     public Usuario getUserData() throws UiException
     {
         Log.d(TAG, ("getUserData()"));
-
-        Usuario userData;
         try {
-            userData = getUserData(checkBearerToken());
-        } catch (InServiceException e) {
-            throw new UiException(e);
+            Response<Usuario> response = getUserData(checkBearerToken()).execute();
+            return getResponseBody(response);
+        } catch (EOFException eo) {
+            return null;
+        } catch (IOException e) {
+            throw new UiException(GENERIC_ERROR);
         }
-        return userData;
     }
 
     public boolean isOldestUserComu(long comunidadId) throws UiException
     {
         Log.d(TAG, "isOldestUserComu()");
-
-        boolean isOldestUserComu;
         try {
-            isOldestUserComu = isOldestUserComu(checkBearerToken(), comunidadId);
-        } catch (InServiceException e) {
-            throw new UiException(e);
+            Response<Boolean> response = isOldestUserComu(checkBearerToken(), comunidadId).execute();
+            return getResponseBody(response);
+        } catch (IOException e) {
+            throw new UiException(GENERIC_ERROR);
         }
-        return isOldestUserComu;
     }
 
     public boolean loginInternal(String userName, String password) throws UiException
     {
         Log.d(TAG, "loginInternal()");
-
-        boolean isLoginOk;
         try {
-            isLoginOk = login(userName, password);
-        } catch (InServiceException e) {
-            throw new UiException(e);
+            Response<Boolean> response = login(userName, password).execute();
+            return getResponseBody(response);
+        } catch (IOException e) {
+            throw new UiException(GENERIC_ERROR);
         }
-        return isLoginOk;
     }
 
     public int modifyComuData(Comunidad comunidad) throws UiException
     {
         Log.d(TAG, "modifyComuData()");
-
-        int modifyComuData;
         try {
-            modifyComuData = modifyComuData(checkBearerToken(), comunidad);
-        } catch (InServiceException e) {
-            throw new UiException(e);
+            Response<Integer> response = modifyComuData(checkBearerToken(), comunidad).execute();
+            return getResponseBody(response);
+        } catch (IOException e) {
+            throw new UiException(GENERIC_ERROR);
         }
-        return modifyComuData;
     }
 
-    public int modifyUserGcmToken(String gcmToken) throws InServiceException, UiException
+    public int modifyUserGcmToken(String gcmToken) throws UiException
     {
         Log.d(TAG, "modifyUserGcmToken()");
-        return modifyUserGcmToken(checkBearerToken(), gcmToken);
+        try {
+            Response<Integer> response = modifyUserGcmToken(checkBearerToken(), gcmToken).execute();
+            return getResponseBody(response);
+        } catch (IOException e) {
+            throw new UiException(GENERIC_ERROR);
+        }
     }
 
     public int modifyUser(Usuario usuario) throws UiException
     {
         Log.d(TAG, "modifyUser()");
-
-        int modifyUser;
         try {
-            modifyUser = modifyUser(checkBearerToken(), usuario);
-        } catch (InServiceException e) {
-            throw new UiException(e);
+            Response<Integer> response = modifyUser(checkBearerToken(), usuario).execute();
+            return getResponseBody(response);
+        } catch (IOException e) {
+            throw new UiException(GENERIC_ERROR);
         }
-        return modifyUser;
     }
 
     public int modifyUserComu(UsuarioComunidad userComu) throws UiException
     {
         Log.d(TAG, "modifyUserComu()");
-
-        int modifyUserComu;
         try {
-            modifyUserComu = modifyUserComu(checkBearerToken(), userComu);
-        } catch (InServiceException e) {
-            throw new UiException(e);
+            Response<Integer> response = modifyUserComu(checkBearerToken(), userComu).execute();
+            return getResponseBody(response);
+        } catch (IOException e) {
+            throw new UiException(GENERIC_ERROR);
         }
-        return modifyUserComu;
     }
 
     public int passwordChange(String newPassword) throws UiException
     {
         Log.d(TAG, "passwordChange()");
-
-        int passwordChange;
         try {
-            passwordChange = passwordChange(checkBearerToken(), newPassword);
-        } catch (InServiceException e) {
-            throw new UiException(e);
+            Response<Integer> response = passwordChange(checkBearerToken(), newPassword).execute();
+            return getResponseBody(response);
+        } catch (IOException e) {
+            throw new UiException(GENERIC_ERROR);
         }
-        return passwordChange;
     }
 
     public boolean regComuAndUserComu(UsuarioComunidad usuarioComunidad) throws UiException
     {
         Log.d(TAG, "regComuAndUserComu()");
-
-        boolean isRegistered;
         try {
-            isRegistered = regComuAndUserComu(checkBearerToken(), usuarioComunidad);
-        } catch (InServiceException e) {
-            throw new UiException(e);
+            Response<Boolean> response = regComuAndUserComu(checkBearerToken(), usuarioComunidad).execute();
+            return getResponseBody(response);
+        } catch (IOException e) {
+            throw new UiException(GENERIC_ERROR);
         }
-        return isRegistered;
     }
 
     public int regUserComu(UsuarioComunidad usuarioComunidad) throws UiException
     {
         Log.d(TAG, "regUserComu()");
-
-        int regUserComu;
         try {
-            regUserComu = regUserComu(checkBearerToken(), usuarioComunidad);
-        } catch (InServiceException e) {
-            throw new UiException(e);
+            Response<Integer> response = regUserComu(checkBearerToken(), usuarioComunidad).execute();
+            return getResponseBody(response);
+        } catch (IOException e) {
+            throw new UiException(GENERIC_ERROR);
         }
-        return regUserComu;
     }
 
     public List<UsuarioComunidad> seeUserComusByComu(long idComunidad) throws UiException
     {
         Log.d(TAG, "seeUserComusByComu()");
-
-        List<UsuarioComunidad> usuarioComunidadList;
         try {
-            usuarioComunidadList = seeUserComusByComu(checkBearerToken(), idComunidad);
-        } catch (InServiceException e) {
-            throw new UiException(e);
+            Response<List<UsuarioComunidad>> response = seeUserComusByComu(checkBearerToken(), idComunidad).execute();
+            return getResponseBody(response);
+        } catch (IOException e) {
+            throw new UiException(GENERIC_ERROR);
         }
-        return usuarioComunidadList;
     }
 
     public List<UsuarioComunidad> seeUserComusByUser() throws UiException
     {
         Log.d(TAG, "seeUserComusByUser()");
-
-        List<UsuarioComunidad> userComuList;
-
         try {
-            userComuList = seeUserComusByUser(checkBearerToken());
-        } catch (InServiceException e) {
-            throw new UiException(e);
+            Response<List<UsuarioComunidad>> response = seeUserComusByUser(checkBearerToken()).execute();
+            return getResponseBody(response);
+        } catch (IOException e) {
+            throw new UiException(GENERIC_ERROR);
         }
-        return userComuList;
     }
 
 //    ============================ HELPER METHODS ============================

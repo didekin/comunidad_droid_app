@@ -19,7 +19,7 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        ComuSearchAcTest_slow.class, // testGetDatosUsuarioWithToken
+        ComuSearchAcTest_slow.class,
         ComuSearchResultsAcTest_slow.class,
         LoginAcTest_2.class,
         LoginAcTest_3.class,

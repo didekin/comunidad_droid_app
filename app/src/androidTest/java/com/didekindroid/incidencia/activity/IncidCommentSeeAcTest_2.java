@@ -19,6 +19,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
+
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -85,7 +87,7 @@ public class IncidCommentSeeAcTest_2 {
                 IncidenciaServ.regIncidImportancia(incidJuanReal1);
                 IncidenciaUser incidenciaUser = IncidenciaServ.seeIncidsOpenByComu(juanReal.getComunidad().getC_Id()).get(0);
                 incidJuanReal1 = IncidenciaServ.seeIncidImportancia(incidenciaUser.getIncidencia().getIncidenciaId()).getIncidImportancia();
-            } catch (UiException e) {
+            } catch (UiException | IOException e) {
                 e.printStackTrace();
             }
             Intent intent = new Intent();
@@ -104,6 +106,7 @@ public class IncidCommentSeeAcTest_2 {
     public void setUp() throws Exception
     {
         mActivity = activityRule.getActivity();
+        Thread.sleep(2000);
         mAdapter = ((IncidCommentSeeListFr) mActivity.getSupportFragmentManager().findFragmentByTag(incid_comments_see_list_fr_tag)).mAdapter;
     }
 

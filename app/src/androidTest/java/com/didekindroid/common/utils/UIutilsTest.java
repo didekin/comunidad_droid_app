@@ -1,6 +1,8 @@
 package com.didekindroid.common.utils;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Build;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -17,7 +19,11 @@ import org.junit.runner.RunWith;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import static com.didekindroid.common.utils.UIutils.SPAIN_LOCALE;
 import static com.didekindroid.common.utils.UIutils.formatTimeStampToString;
@@ -158,5 +164,21 @@ public class UIutilsTest extends TestCase {
         assertThat(isRegisteredUser(context), is(false));
         updateIsRegistered(true, context);
         assertThat(isRegisteredUser(context), is(true));
+    }
+
+    @Test
+    public void testDefaultsEmulator(){
+        TimeZone timeZone = new GregorianCalendar().getTimeZone();
+        assertThat(timeZone.getID(), is("Europe/Brussels"));
+        assertThat(Locale.getDefault(), is(SPAIN_LOCALE));
+    }
+
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    @Test
+    public void testCalendarTime(){
+        Date date1 = new Date();
+        Calendar calendar1 = new GregorianCalendar();
+        calendar1.add(Calendar.MINUTE,1);
+        assertThat(Long.compare(date1.getTime(),calendar1.getTimeInMillis()) < 0, is(true));
     }
 }

@@ -27,6 +27,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -158,7 +159,7 @@ public class IncidSeeClosedByComuAcTest_2 {
                 Thread.sleep(1000);
                 FragmentManager.enableDebugLogging(true);
 
-            } catch (UiException | InterruptedException e) {
+            } catch (UiException | InterruptedException | IOException e) {
                 e.printStackTrace();
             }
         }
@@ -173,7 +174,7 @@ public class IncidSeeClosedByComuAcTest_2 {
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
     {
-        Thread.sleep(5000);
+        Thread.sleep(4000);
     }
 
     @Before
@@ -183,6 +184,7 @@ public class IncidSeeClosedByComuAcTest_2 {
         mActivity = activityRule.getActivity();
         mFragment = (IncidSeeByComuListFr) mActivity.getSupportFragmentManager()
                 .findFragmentByTag(incid_see_by_comu_list_fr_tag);
+        Thread.sleep(2000);
         mAdapter = (IncidSeeClosedByComuAdapter) mFragment.mAdapter;
         dbHelper = new IncidenciaDataDbHelper(mActivity);
         assertThat(mActivity.mComunidadSelected, is(mPepeLaFuente.getComunidad()));

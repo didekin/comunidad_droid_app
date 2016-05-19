@@ -13,6 +13,7 @@ import com.didekindroid.usuario.testutils.CleanUserEnum;
 
 import org.junit.Test;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -70,7 +71,7 @@ public class IncidEditAcMaxPowerTest_3 extends IncidEditAbstractTest {
                     assertThat(IncidenciaServ.regResolucion(resolucion), is(1));
                     incidResolBundlePepe = IncidenciaServ.seeIncidImportancia(incidenciaDb.getIncidenciaId());
                     incidenciaPepe = incidResolBundlePepe.getIncidImportancia();
-                } catch (UiException | InterruptedException e) {
+                } catch (UiException | InterruptedException | IOException e) {
                     e.printStackTrace();
                 }
                 Intent intent = new Intent();

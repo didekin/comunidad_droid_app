@@ -4,15 +4,13 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.common.exception.DidekinExceptionMsg;
-import com.didekin.common.exception.InServiceException;
+import com.didekin.common.exception.ErrorBean;
 import com.didekin.common.oauth2.OauthToken.AccessToken;
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekin.usuario.dominio.Municipio;
 import com.didekin.usuario.dominio.Provincia;
 import com.didekin.usuario.dominio.Usuario;
 import com.didekin.usuario.dominio.UsuarioComunidad;
-import com.didekindroid.DidekindroidApp;
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.utils.IoHelper;
 import com.didekindroid.usuario.testutils.CleanUserEnum;
@@ -25,10 +23,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
+import retrofit2.Response;
+
+import static com.didekin.common.exception.DidekinExceptionMsg.COMUNIDAD_NOT_FOUND;
 import static com.didekin.common.exception.DidekinExceptionMsg.TOKEN_NULL;
 import static com.didekin.common.exception.DidekinExceptionMsg.USER_NAME_DUPLICATE;
+import static com.didekin.common.exception.DidekinExceptionMsg.USER_NAME_NOT_FOUND;
 import static com.didekin.common.oauth2.OauthTokenHelper.HELPER;
 import static com.didekin.usuario.controller.UsuarioServiceConstant.IS_USER_DELETED;
 import static com.didekindroid.common.TokenHandler.TKhandler;
@@ -41,13 +44,13 @@ import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdat
 import static com.didekindroid.common.testutils.ActivityTestUtils.updateSecurityData;
 import static com.didekindroid.common.utils.UIutils.updateIsRegistered;
 import static com.didekindroid.common.webservices.Oauth2Service.Oauth2;
+import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRE;
+import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRO;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN2_AND_PEPE;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_NOTHING;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRE;
-import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRO;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_LA_PLAZUELA_5;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_PLAZUELA5_JUAN;
@@ -61,7 +64,6 @@ import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.makeListTwoUserComu;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.makeUsuarioComunidad;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
@@ -102,7 +104,7 @@ public class UsuarioServiceTest {
 //    ========================= INTERFACE TESTS =======================
 
     @Test
-    public void testDeleteAccessToken() throws UiException
+    public void testDeleteAccessToken() throws UiException, IOException
     {
         whatClean = CLEAN_PEPE;
 
@@ -123,7 +125,7 @@ public class UsuarioServiceTest {
     }
 
     @Test
-    public void testDeleteUserComu() throws UiException
+    public void testDeleteUserComu() throws UiException, IOException
     {
         signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
         List<UsuarioComunidad> userComus = ServOne.seeUserComusByUser();
@@ -134,7 +136,7 @@ public class UsuarioServiceTest {
     }
 
     @Test
-    public void testGetComuData() throws UiException
+    public void testGetComuData() throws UiException, IOException
     {
         whatClean = CLEAN_PEPE;
 
@@ -153,12 +155,12 @@ public class UsuarioServiceTest {
             assertThat(ServOne.getComusByUser(), nullValue());
             fail();
         } catch (UiException se) {
-            assertThat(se.getInServiceException().getHttpMessage(), is(TOKEN_NULL.getHttpMessage()));
+            assertThat(se.getErrorBean().getMessage(), is(TOKEN_NULL.getHttpMessage()));
         }
     }
 
     @Test
-    public void testGetComunidadesByUser_2() throws UiException
+    public void testGetComunidadesByUser_2() throws UiException, IOException
     {
         regTwoUserComuSameUser(makeListTwoUserComu());
         List<Comunidad> comunidades = ServOne.getComusByUser();
@@ -169,7 +171,7 @@ public class UsuarioServiceTest {
     }
 
     @Test
-    public void testGetGcmToken() throws UiException
+    public void testGetGcmToken() throws UiException, IOException
     {
         whatClean = CLEAN_PEPE;
 
@@ -179,7 +181,7 @@ public class UsuarioServiceTest {
     }
 
     @Test
-    public void testGetUserComuByUserAndComu_1() throws UiException
+    public void testGetUserComuByUserAndComu_1() throws UiException, IOException
     {
         whatClean = CLEAN_JUAN;
 
@@ -189,7 +191,7 @@ public class UsuarioServiceTest {
     }
 
     @Test
-    public void testGetUserComuByUserAndComu_2() throws UiException
+    public void testGetUserComuByUserAndComu_2() throws UiException, IOException
     {
         whatClean = CLEAN_JUAN;
 
@@ -200,7 +202,7 @@ public class UsuarioServiceTest {
             ServOne.getUserComuByUserAndComu(comunidad.getC_Id());
             fail();
         } catch (UiException e) {
-            assertThat(e.getInServiceException().getHttpMessage(), is(DidekinExceptionMsg.COMUNIDAD_NOT_FOUND.getHttpMessage()));
+            assertThat(e.getErrorBean().getMessage(), is(COMUNIDAD_NOT_FOUND.getHttpMessage()));
         }
     }
 
@@ -217,7 +219,7 @@ public class UsuarioServiceTest {
     }
 
     @Test
-    public void testIsOldestUser() throws UiException
+    public void testIsOldestUser() throws UiException, IOException
     {
         whatClean = CLEAN_JUAN2_AND_PEPE;
 
@@ -228,7 +230,7 @@ public class UsuarioServiceTest {
         cleanWithTkhandler();
         UsuarioComunidad userComu = makeUsuarioComunidad(cDb, USER_JUAN2,
                 "portalB", null, "planta1", null, PRO.function.concat(",").concat(PRE.function));
-        ServOne.regUserAndUserComu(userComu);
+        ServOne.regUserAndUserComu(userComu).execute().body();
         updateSecurityData(USER_JUAN2.getUserName(), USER_JUAN2.getPassword());
 
         assertThat(ServOne.isOldestUserComu(cDb.getC_Id()), is(false));
@@ -240,13 +242,14 @@ public class UsuarioServiceTest {
         // User not in DB.
         try {
             ServOne.loginInternal("user@notfound.com", "password_wrong");
+            fail();
         } catch (UiException ue) {
-            assertThat(ue.getInServiceException().getHttpMessage(),is(DidekinExceptionMsg.USER_NAME_NOT_FOUND.getHttpMessage()));
+            assertThat(ue.getErrorBean().getMessage(), is(USER_NAME_NOT_FOUND.getHttpMessage()));
         }
     }
 
     @Test
-    public void testLoginInternal_2() throws UiException
+    public void testLoginInternal_2() throws UiException, IOException
     {
         whatClean = CLEAN_JUAN;
         signUpAndUpdateTk(COMU_REAL_JUAN);
@@ -255,7 +258,7 @@ public class UsuarioServiceTest {
     }
 
     @Test
-    public void testModifyComuData() throws UiException
+    public void testModifyComuData() throws UiException, IOException
     {
         whatClean = CLEAN_PEPE;
 
@@ -279,7 +282,7 @@ public class UsuarioServiceTest {
     }
 
     @Test
-    public void testModifyUser_1() throws UiException
+    public void testModifyUser_1() throws UiException, IOException
     {
         whatClean = CLEAN_JUAN;
 
@@ -295,7 +298,7 @@ public class UsuarioServiceTest {
     }
 
     @Test
-    public void testModifyUser_2() throws UiException
+    public void testModifyUser_2() throws UiException, IOException
     {
         whatClean = CLEAN_NOTHING;
 
@@ -311,14 +314,14 @@ public class UsuarioServiceTest {
         assertThat(rowUpdated, is(1));
 
         cleanOneUser(new Usuario.UsuarioBuilder()
-                        .copyUsuario(usuarioIn)
-                        .password(USER_PEPE.getPassword())
-                        .build()
+                .copyUsuario(usuarioIn)
+                .password(USER_PEPE.getPassword())
+                .build()
         );
     }
 
     @Test
-    public void testModifyUserComu() throws UiException
+    public void testModifyUserComu() throws UiException, IOException
     {
 
         whatClean = CLEAN_PEPE;
@@ -339,7 +342,7 @@ public class UsuarioServiceTest {
     }
 
     @Test
-    public void testmodifyUserGcmToken() throws UiException
+    public void testmodifyUserGcmToken() throws UiException, IOException
     {
         whatClean = CLEAN_JUAN;
         signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
@@ -348,7 +351,7 @@ public class UsuarioServiceTest {
     }
 
     @Test
-    public void testPasswordChange() throws UiException
+    public void testPasswordChange() throws UiException, IOException
     {
         signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
         String passwordClear_2 = "new_juan_password";
@@ -361,13 +364,13 @@ public class UsuarioServiceTest {
     }
 
     @Test
-    public void testPasswordSend() throws UiException
+    public void testPasswordSend() throws UiException, IOException
     {
         signUpAndUpdateTk(COMU_REAL_PEPE);
-        assertThat(ServOne.passwordSend(USER_PEPE.getUserName()), is(true));
+        assertThat(ServOne.passwordSend(USER_PEPE.getUserName()).execute().body(), is(true));
         // Es necesario conseguir un nuevo token. La validación del antiguo falla por el cambio de password.
         AccessToken token = Oauth2.getRefreshUserToken(TKhandler.getRefreshTokenKey());
-        ServOne.deleteUser(HELPER.doBearerAccessTkHeader(token));
+        ServOne.deleteUser(HELPER.doBearerAccessTkHeader(token)).execute();
         cleanWithTkhandler();
     }
 
@@ -389,12 +392,12 @@ public class UsuarioServiceTest {
     {
         whatClean = CLEAN_JUAN;
 
-        boolean isInserted = ServOne.regComuAndUserAndUserComu(COMU_REAL_JUAN);
+        boolean isInserted = ServOne.regComuAndUserAndUserComu(COMU_REAL_JUAN).execute().body();
         assertThat(isInserted, is(true));
     }
 
     @Test
-    public void testRegUserAndUserComu_1() throws UiException
+    public void testRegUserAndUserComu_1() throws UiException, IOException
     {
         whatClean = CLEAN_JUAN2_AND_PEPE;
 
@@ -405,12 +408,12 @@ public class UsuarioServiceTest {
 
         UsuarioComunidad userComu = makeUsuarioComunidad(comunidad, USER_JUAN2,
                 "portalB", null, "planta1", null, PRO.function.concat(",").concat(PRE.function));
-        boolean isInserted = ServOne.regUserAndUserComu(userComu);
+        boolean isInserted = ServOne.regUserAndUserComu(userComu).execute().body();
         assertThat(isInserted, is(true));
     }
 
     @Test
-    public void testRegUserAndUserComu_2() throws UiException
+    public void testRegUserAndUserComu_2() throws UiException, IOException
     {
         whatClean = CLEAN_PEPE;
 
@@ -418,16 +421,15 @@ public class UsuarioServiceTest {
         Usuario pepe = signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
         Comunidad comunidad = ServOne.getComusByUser().get(0);
         cleanWithTkhandler();
+        UsuarioComunidad userComu = makeUsuarioComunidad(comunidad, pepe,
+                "portalB", null, "planta1", null, PRO.function.concat(",").concat(PRE.function));
 
-        try {
-            UsuarioComunidad userComu = makeUsuarioComunidad(comunidad, pepe,
-                    "portalB", null, "planta1", null, PRO.function.concat(",").concat(PRE.function));
-            ServOne.regUserAndUserComu(userComu);
-            fail();
-        } catch (InServiceException e) {
-            assertThat(e.getHttpMessage(), is(USER_NAME_DUPLICATE.getHttpMessage()));
-            assertThat(e.getHttpStatus(), is(USER_NAME_DUPLICATE.getHttpStatus()));
-        }
+        Response<Boolean> response = ServOne.regUserAndUserComu(userComu).execute();
+        assertThat(response.isSuccessful(), is(false));
+        ErrorBean errorBean = ServOne.getRetrofitHandler().getErrorBean(response);
+        assertThat(errorBean, notNullValue());
+        assertThat(errorBean.getMessage(), is(USER_NAME_DUPLICATE.getHttpMessage()));
+        assertThat(errorBean.getHttpStatus(), is(USER_NAME_DUPLICATE.getHttpStatus()));
     }
 
     @Test
@@ -461,7 +463,7 @@ public class UsuarioServiceTest {
         Comunidad comunidadSearch = UsuarioTestUtils.makeComunidad("Calle", "de la Plazuela", (short) 11, "",
                 new Municipio((short) 13, new Provincia((short) 3)));
 
-        List<Comunidad> comunidades = ServOne.searchComunidades(comunidadSearch);
+        List<Comunidad> comunidades = ServOne.searchComunidades(comunidadSearch).execute().body();
 
         assertThat(comunidades.size(), is(1));
 
@@ -549,7 +551,7 @@ public class UsuarioServiceTest {
 //    ====================== NON INTERFACE TESTS =========================
 
     @Test
-    public void testSignedUp() throws UiException
+    public void testSignedUp() throws UiException, IOException
     {
         assertThat(refreshTkFile.exists(), is(false));
 
@@ -565,10 +567,10 @@ public class UsuarioServiceTest {
         whatClean = CLEAN_JUAN;
     }
 
-    @Test
+    /*@Test
     public void testBaseURL() throws Exception
     {
         String hostAndPort = DidekindroidApp.getBaseURL();
-        assertThat(hostAndPort, equalTo("http://10.0.3.2:8080"));
-    }
+        assertThat(hostAndPort, equalTo("http://192.168.57.1:8080"));
+    }*/
 }

@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- ============= web services ====================-->
-    <string name="service_one_host" translatable="false">http://10.0.3.2</string>
-    <string name="service_one_port" translatable="false">:8080</string>
-    <!-- ============= oauth profiles ====================-->
+    <!-- Producción -->
+    <!--
+    <string name="didekinspring_host" translatable="false">https://www.didekin.com</string>
+    <string name="didekinspring_port" translatable="false">:443</string>
+    <string name="didekinspring_pswd" translatable="false">didekinspring_pro</string>
+    -->
 </resources>

@@ -12,7 +12,6 @@ import com.didekin.usuario.dominio.Usuario;
 import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
-import com.didekindroid.common.testutils.ActivityTestUtils;
 import com.didekindroid.usuario.testutils.CleanUserEnum;
 import com.didekindroid.usuario.testutils.UsuarioTestUtils;
 
@@ -24,27 +23,30 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
+
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.TokenHandler.TKhandler;
-import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_SEARCH;
-import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.activity.ViewsIDs.COMU_SEARCH_RESULTS;
-import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
-import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRO;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkNavigateUp;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanTwoUsers;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanWithTkhandler;
 import static com.didekindroid.common.testutils.ActivityTestUtils.regThreeUserComuSameUser;
 import static com.didekindroid.common.testutils.ActivityTestUtils.regTwoUserComuSameUser;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
+import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
+import static com.didekindroid.external.LongListMatchers.withAdaptedData;
+import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRO;
+import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_LA_PLAZUELA_5;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_JUAN;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.makeComunidad;
@@ -52,7 +54,6 @@ import static com.didekindroid.usuario.testutils.UsuarioTestUtils.makeListTwoUse
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.makeUsuario;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.makeUsuarioComunidad;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
-import static com.didekindroid.external.LongListMatchers.withAdaptedData;
 import static com.google.common.base.Preconditions.checkState;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.instanceOf;
@@ -72,6 +73,7 @@ public class ComuSearchResultsAcTest_1 {
 
     private ComuSearchResultsAc activity;
     ComuSearchResultsListFr mComunidadSummaryFrg;
+    ComuSearchResultsListAdapter adapter;
     Intent intent;
     CleanUserEnum whatClean;
 
@@ -95,7 +97,7 @@ public class ComuSearchResultsAcTest_1 {
     }
 
     @Test
-    public void testOnCreate_0() throws UiException
+    public void testOnCreate_0() throws UiException, IOException
     {
         whatClean = CLEAN_JUAN;
 
@@ -103,11 +105,11 @@ public class ComuSearchResultsAcTest_1 {
         regTwoUserComuSameUser(makeListTwoUserComu());
         activity = mActivityRule.launchActivity(intent);
 
-        ActivityTestUtils.checkNavigateUp();
+        checkNavigateUp();
     }
 
     @Test
-    public void testOnCreate_2() throws UiException
+    public void testOnCreate_2() throws UiException, IOException
     {
         whatClean = CLEAN_JUAN;
 
@@ -119,7 +121,7 @@ public class ComuSearchResultsAcTest_1 {
     }
 
     @Test
-    public void testSearchComunidades_1() throws UiException
+    public void testSearchComunidades_1() throws UiException, IOException, InterruptedException
     {
         whatClean = CLEAN_JUAN;
 
@@ -129,7 +131,8 @@ public class ComuSearchResultsAcTest_1 {
         assertThat(isRegisteredUser(activity), is(true));
 
         mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getFragmentManager().findFragmentById(R.id.comu_list_frg);
-        ComuSearchResultsListAdapter adapter = (ComuSearchResultsListAdapter) mComunidadSummaryFrg.getListAdapter();
+        Thread.sleep(2000);
+        adapter = (ComuSearchResultsListAdapter) mComunidadSummaryFrg.getListAdapter();
         assertThat(adapter.getCount(), is(1));
         Comunidad comunidad = (Comunidad) intent.getSerializableExtra(COMUNIDAD_SEARCH.key);
         onView(withId(COMU_SEARCH_RESULTS.idView)).check(matches(
@@ -137,7 +140,7 @@ public class ComuSearchResultsAcTest_1 {
     }
 
     @Test
-    public void testSearchComunidades_2() throws UiException
+    public void testSearchComunidades_2() throws UiException, IOException, InterruptedException
     {
         whatClean = CLEAN_JUAN;
 
@@ -156,7 +159,8 @@ public class ComuSearchResultsAcTest_1 {
         assertThat(isRegisteredUser(activity), is(true));
 
         mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getFragmentManager().findFragmentById(R.id.comu_list_frg);
-        ComuSearchResultsListAdapter adapter = (ComuSearchResultsListAdapter) mComunidadSummaryFrg.getListAdapter();
+        Thread.sleep(2000);
+        adapter = (ComuSearchResultsListAdapter) mComunidadSummaryFrg.getListAdapter();
         assertThat(adapter.getCount(), is(2));
         onView(withId(COMU_SEARCH_RESULTS.idView)).check(
                 matches(withAdaptedData(Matchers.<Object>is(comunidadNew))));
@@ -179,16 +183,15 @@ public class ComuSearchResultsAcTest_1 {
         assertThat(isRegisteredUser(activity), is(false));
 
         mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getFragmentManager().findFragmentById(R.id.comu_list_frg);
-        ComuSearchResultsListAdapter adapter = (ComuSearchResultsListAdapter) mComunidadSummaryFrg.getListAdapter();
-        assertThat(adapter.getCount(), is(0));
-
         Thread.sleep(2000);
+        adapter = (ComuSearchResultsListAdapter) mComunidadSummaryFrg.getListAdapter();
+        assertThat(adapter.getCount(), is(0));
         checkToastInTest(R.string.no_result_search_comunidad, activity);
         onView(withId(R.id.reg_comu_usuario_usuariocomu_layout)).check(matches(isDisplayed()));
     }
 
     @Test
-    public void testSearchComunidades_4() throws InterruptedException, UiException
+    public void testSearchComunidades_4() throws InterruptedException, UiException, IOException
     {
         whatClean = CLEAN_JUAN;
 
@@ -204,10 +207,9 @@ public class ComuSearchResultsAcTest_1 {
         assertThat(isRegisteredUser(activity), is(true));
 
         mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getFragmentManager().findFragmentById(R.id.comu_list_frg);
-        ComuSearchResultsListAdapter adapter = (ComuSearchResultsListAdapter) mComunidadSummaryFrg.getListAdapter();
-        assertThat(adapter.getCount(), is(0));
-
         Thread.sleep(2000);
+        adapter = (ComuSearchResultsListAdapter) mComunidadSummaryFrg.getListAdapter();
+        assertThat(adapter.getCount(), is(0));
         checkToastInTest(R.string.no_result_search_comunidad, activity);
         // This is the difference with the not registered user case.
         onView(withId(R.id.reg_comu_and_usercomu_layout)).check(matches(isDisplayed()));
@@ -215,7 +217,7 @@ public class ComuSearchResultsAcTest_1 {
 
 
     @Test
-    public void testOnListItemClick_1() throws UiException
+    public void testOnListItemClick_1() throws UiException, IOException, InterruptedException
     {
         whatClean = CLEAN_JUAN;
 
@@ -229,7 +231,8 @@ public class ComuSearchResultsAcTest_1 {
         assertThat(isRegisteredUser(activity), is(false));
 
         mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getFragmentManager().findFragmentById(R.id.comu_list_frg);
-        ComuSearchResultsListAdapter adapter = (ComuSearchResultsListAdapter) mComunidadSummaryFrg.getListAdapter();
+        Thread.sleep(2000);
+        adapter = (ComuSearchResultsListAdapter) mComunidadSummaryFrg.getListAdapter();
         assertThat(adapter.getCount(), is(1));
         onView(withAdaptedData(Matchers.<Object>is(COMU_LA_PLAZUELA_5))).check(matches(isDisplayed()));
         onData(is(instanceOf(Comunidad.class))).onChildView(allOf(
@@ -241,7 +244,7 @@ public class ComuSearchResultsAcTest_1 {
     }
 
     @Test
-    public void testOnListItemClick_2() throws UiException
+    public void testOnListItemClick_2() throws UiException, IOException, InterruptedException
     {
         whatClean = CLEAN_JUAN;
 
@@ -250,7 +253,8 @@ public class ComuSearchResultsAcTest_1 {
         regTwoUserComuSameUser(makeListTwoUserComu());
         activity = mActivityRule.launchActivity(intent);
         mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getFragmentManager().findFragmentById(R.id.comu_list_frg);
-        ComuSearchResultsListAdapter adapter = (ComuSearchResultsListAdapter) mComunidadSummaryFrg.getListAdapter();
+        Thread.sleep(2000);
+        adapter = (ComuSearchResultsListAdapter) mComunidadSummaryFrg.getListAdapter();
         assertThat(adapter.getCount(), is(1));
 
         Comunidad comunidad = adapter.getItem(0);
@@ -263,7 +267,7 @@ public class ComuSearchResultsAcTest_1 {
     }
 
     @Test
-    public void testOnListItemClick_3() throws UiException
+    public void testOnListItemClick_3() throws UiException, IOException, InterruptedException
     {
         // Usuario registrado. La búsqueda devuelve una comunidad a la que él NO está asociado.
 
@@ -281,7 +285,8 @@ public class ComuSearchResultsAcTest_1 {
         // Búsqueda con comunidad/intent por defecto.
         activity = mActivityRule.launchActivity(intent);
         mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getFragmentManager().findFragmentById(R.id.comu_list_frg);
-        ComuSearchResultsListAdapter adapter = (ComuSearchResultsListAdapter) mComunidadSummaryFrg.getListAdapter();
+        Thread.sleep(2000);
+        adapter = (ComuSearchResultsListAdapter) mComunidadSummaryFrg.getListAdapter();
         assertThat(adapter.getCount(), is(1));
         Comunidad comunidad = adapter.getItem(0);
         assertThat(comunidad.getNombreVia(),is("de la Plazuela"));
@@ -293,7 +298,7 @@ public class ComuSearchResultsAcTest_1 {
     }
 
     @Test
-    public void testOnListItemClick_4() throws UiException
+    public void testOnListItemClick_4() throws UiException, IOException, InterruptedException
     {
         whatClean = CLEAN_JUAN;
 
@@ -303,7 +308,8 @@ public class ComuSearchResultsAcTest_1 {
         // Búsqueda con comunidad/intent por defecto.
         activity = mActivityRule.launchActivity(intent);
         mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getFragmentManager().findFragmentById(R.id.comu_list_frg);
-        ComuSearchResultsListAdapter adapter = (ComuSearchResultsListAdapter) mComunidadSummaryFrg.getListAdapter();
+        Thread.sleep(2000);
+        adapter = (ComuSearchResultsListAdapter) mComunidadSummaryFrg.getListAdapter();
         assertThat(adapter.getCount(), is(1));
         Comunidad comunidad = adapter.getItem(0);
         assertThat(comunidad.getNombreVia(), is("de la Plazuela"));

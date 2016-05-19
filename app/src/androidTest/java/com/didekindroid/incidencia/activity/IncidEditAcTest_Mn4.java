@@ -15,6 +15,7 @@ import com.didekindroid.usuario.testutils.CleanUserEnum;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -74,7 +75,7 @@ public class IncidEditAcTest_Mn4 extends IncidEditAbstractTest {
                     assertThat(IncidenciaServ.regResolucion(resolucion), is(1));
                     incidAndResolBundle = IncidenciaServ.seeIncidImportancia(resolucion.getIncidencia().getIncidenciaId());
                     incidenciaJuan = incidAndResolBundle.getIncidImportancia();
-                } catch (UiException | InterruptedException e) {
+                } catch (UiException | InterruptedException | IOException e) {
                     e.printStackTrace();
                 }
                 Intent intent = new Intent();

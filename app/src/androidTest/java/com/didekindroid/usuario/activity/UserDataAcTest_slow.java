@@ -14,6 +14,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
+
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_OPEN_BY_COMU_AC;
@@ -44,7 +46,7 @@ public class UserDataAcTest_slow {
             // Precondition: the user is registered.
             try {
                 signUpAndUpdateTk(COMU_REAL_JUAN);
-            } catch (UiException e) {
+            } catch (UiException | IOException e) {
                 e.printStackTrace();
             }
         }
@@ -59,6 +61,7 @@ public class UserDataAcTest_slow {
     @Before
     public void setUp() throws Exception
     {
+        Thread.sleep(4000);
         mActivity = mActivityRule.getActivity();
         resources = mActivity.getResources();
     }

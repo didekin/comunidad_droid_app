@@ -14,12 +14,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.didekin.common.exception.ErrorBean;
 import com.didekin.common.oauth2.OauthToken.AccessToken;
 import com.didekin.usuario.dominio.Usuario;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.utils.ConnectionUtils;
 import com.didekindroid.usuario.dominio.UsuarioBean;
+
+import java.io.IOException;
 
 import static android.widget.Toast.LENGTH_LONG;
 import static android.widget.Toast.LENGTH_SHORT;
@@ -234,17 +237,30 @@ public class LoginAc extends AppCompatActivity {
 
     class LoginMailSender extends AsyncTask<String, Void, Boolean> {
 
+        private UiException uiException;
+
         @Override
         protected Boolean doInBackground(String... emails)
         {
             Log.d(TAG, "LoginMailSender.doInBackground()");
-            return ServOne.passwordSend(emails[0]);
+            boolean isPasswordSend = false;
+            try {
+                isPasswordSend = ServOne.passwordSend(emails[0]).execute().body();
+            } catch (IOException e) {
+                 uiException = new UiException(ErrorBean.GENERIC_ERROR);
+            }
+            return isPasswordSend;
         }
 
         @Override
         protected void onPostExecute(Boolean isOk)
         {
             Log.d(TAG, "LoginMailSender.onPostExecute()");
+
+            if (uiException != null) {
+                uiException.processMe(LoginAc.this, new Intent());
+                return;
+            }
             if (isOk) {
                 makeToast(LoginAc.this, R.string.password_new_in_login, LENGTH_LONG);
                 LoginAc.this.recreate();

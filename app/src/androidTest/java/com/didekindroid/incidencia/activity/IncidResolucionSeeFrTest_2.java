@@ -14,6 +14,7 @@ import com.didekindroid.usuario.testutils.CleanUserEnum;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,7 +69,7 @@ public class IncidResolucionSeeFrTest_2 extends IncidResolucionAbstractTest {
                                     new UsuarioComunidad.UserComuBuilder(
                                             incidImportancia.getUserComu().getComunidad(), USER_PEPE)
                                             .roles(PRESIDENTE.function)
-                                            .build()),
+                                            .build()).execute().body(),
                             is(true));
                     updateSecurityData(USER_PEPE.getUserName(), USER_PEPE.getPassword());
                     // Registramos resolución.
@@ -85,7 +86,7 @@ public class IncidResolucionSeeFrTest_2 extends IncidResolucionAbstractTest {
                     resolucion = IncidenciaServ.seeResolucion(resolucion.getIncidencia().getIncidenciaId());
                     // Volvemos a usuario del test.
                     updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
-                } catch (UiException | InterruptedException e) {
+                } catch (UiException | InterruptedException | IOException e) {
                     e.printStackTrace();
                 }
                 Intent intent = new Intent();

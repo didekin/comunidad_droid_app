@@ -9,6 +9,7 @@ import com.didekin.incidservice.dominio.Resolucion;
 import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
+import com.didekindroid.common.utils.UIutils;
 import com.didekindroid.usuario.testutils.CleanUserEnum;
 
 import org.junit.After;
@@ -17,7 +18,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 
-import java.sql.Timestamp;
+import java.io.IOException;
 import java.util.Locale;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -33,8 +34,6 @@ import static com.didekindroid.common.activity.FragmentTags.incid_resolucion_ac_
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.utils.UIutils.SPAIN_LOCALE;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.CALENDAR_DEFAULT;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.CALENDAR_DEFAULT_STRING;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.COSTE_ESTIM_DEFAULT;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.COSTE_ESTIM_DEFAULT_String;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.INCID_DEFAULT_DESC;
@@ -77,6 +76,7 @@ public abstract class IncidResolucionAbstractTest {
     {
         mActivity = intentRule.getActivity();
         assertThat(mActivity, notNullValue());
+        onView(withId(R.id.incid_resolucion_fragment_container_ac)).check(matches(isDisplayed()));
         incidEditFr = mActivity.getSupportFragmentManager().findFragmentByTag(incid_resolucion_ac_frgs_tag);
         assertThat(incidEditFr, notNullValue());
         // Intent extras in activity.
@@ -111,7 +111,7 @@ public abstract class IncidResolucionAbstractTest {
 
     //  ===============================  HELPER METHODS ================================
 
-    void doIncidImportancia(UsuarioComunidad userComu) throws UiException
+    void doIncidImportancia(UsuarioComunidad userComu) throws UiException, IOException
     {
         signUpAndUpdateTk(userComu);
         UsuarioComunidad userComuDb = ServOne.seeUserComusByUser().get(0);
@@ -130,7 +130,7 @@ public abstract class IncidResolucionAbstractTest {
         resolucion = doResolucion(incidImportancia.getIncidencia(),
                 RESOLUCION_DEFAULT_DESC,
                 COSTE_ESTIM_DEFAULT,
-                new Timestamp(CALENDAR_DEFAULT.getTimeInMillis()));
+                incidImportancia.getFechaAlta());
         Assert.assertThat(IncidenciaServ.regResolucion(resolucion), is(1));
         resolucion = IncidenciaServ.seeResolucion(resolucion.getIncidencia().getIncidenciaId());
     }
@@ -163,10 +163,10 @@ public abstract class IncidResolucionAbstractTest {
     {
         // Caso: los datos que se muestran por defecto.
         // Fecha.
-        if (Locale.getDefault().equals(SPAIN_LOCALE)) {
+        if (Locale.getDefault().equals(SPAIN_LOCALE)) {  // TODO: internacionalizar.
             onView(allOf(
                     withId(R.id.incid_resolucion_fecha_view),
-                    withText(CALENDAR_DEFAULT_STRING)
+                    withText(UIutils.formatTimeStampToString(resolucion.getFechaPrev()))
             )).check(matches(isDisplayed()));
         }
         // Coste.
@@ -218,7 +218,7 @@ public abstract class IncidResolucionAbstractTest {
         if (Locale.getDefault().equals(SPAIN_LOCALE)) {
             onView(allOf(
                     withId(R.id.incid_resolucion_fecha_view),
-                    withText(CALENDAR_DEFAULT_STRING)
+                    withText(UIutils.formatTimeStampToString(resolucion.getFechaPrev()))
             )).check(matches(isDisplayed()));
         }
         // Coste.

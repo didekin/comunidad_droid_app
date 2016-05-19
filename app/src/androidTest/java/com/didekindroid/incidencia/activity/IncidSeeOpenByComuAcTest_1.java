@@ -21,6 +21,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.core.deps.guava.base.Preconditions.checkState;
@@ -80,7 +82,7 @@ public class IncidSeeOpenByComuAcTest_1 {
                 updateIsGcmTokenSentServer(false, context);
                 checkState(ServOne.getGcmToken() == null);
 
-            } catch (UiException e) {
+            } catch (UiException | IOException e) {
                 e.printStackTrace();
             }
         }
@@ -89,7 +91,7 @@ public class IncidSeeOpenByComuAcTest_1 {
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
     {
-        Thread.sleep(5000);
+        Thread.sleep(4000);
     }
 
 
@@ -128,8 +130,9 @@ public class IncidSeeOpenByComuAcTest_1 {
     }
 
     @Test
-    public void testOnCreate_2()
+    public void testOnCreate_2() throws InterruptedException
     {
+        Thread.sleep(2000);
         assertThat(mActivity.mComunidadSelected, is(mComunidadSelected));
         onView(allOf(
                 withId(R.id.app_spinner_1_dropdown_item),
@@ -139,11 +142,11 @@ public class IncidSeeOpenByComuAcTest_1 {
     }
 
     @Test
-    public void testOnCreateGcm() throws UiException
+    public void testOnCreateGcm() throws UiException, InterruptedException
     {
         // Preconditions for the test.
         assertThat(checkPlayServices(mActivity), is(true));
-
+        Thread.sleep(3000);
         assertThat(isGcmTokenSentServer(mActivity), is(true));
         assertThat(ServOne.getGcmToken(), notNullValue());
     }

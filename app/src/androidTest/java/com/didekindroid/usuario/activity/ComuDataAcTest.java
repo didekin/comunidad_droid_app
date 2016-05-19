@@ -18,6 +18,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
+
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -71,7 +73,7 @@ public class ComuDataAcTest {
             try {
                 signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
                 mComunidad = ServOne.getComusByUser().get(0);
-            } catch (UiException e) {
+            } catch (UiException | IOException e) {
                 e.printStackTrace();
             }
             Intent intent = new Intent();
@@ -158,10 +160,10 @@ public class ComuDataAcTest {
         onView(withId(R.id.see_usercomu_by_user_ac_frg_container)).check(matches(isDisplayed()));
 
         Comunidad comunidadDb = ServOne.getComuData(mComunidad.getC_Id());
-        assertThat(comunidadDb.getMunicipio(), is(new Municipio((short) 119, new Provincia((short) 46))));
-        assertThat(comunidadDb.getNombreVia(), is("nombre via One"));
-        assertThat(comunidadDb.getNumero(),is((short) 123));
-        assertThat(comunidadDb.getSufijoNumero(),is("Tris"));
+        assertThat(comunidadDb != null ? comunidadDb.getMunicipio() : null, is(new Municipio((short) 119, new Provincia((short) 46))));
+        assertThat(comunidadDb != null ? comunidadDb.getNombreVia() : null, is("nombre via One"));
+        assertThat(comunidadDb != null ? comunidadDb.getNumero() : 0,is((short) 123));
+        assertThat(comunidadDb != null ? comunidadDb.getSufijoNumero() : null,is("Tris"));
     }
 
     @Test
@@ -171,8 +173,8 @@ public class ComuDataAcTest {
         onView(withId(R.id.see_usercomu_by_user_ac_frg_container)).check(matches(isDisplayed())).perform(closeSoftKeyboard());
 
         Comunidad comunidadDb = ServOne.getComuData(mComunidad.getC_Id());
-        assertThat(comunidadDb.getMunicipio(), is(COMU_LA_PLAZUELA_5.getMunicipio()));
-        assertThat(comunidadDb.getNombreVia(), is(COMU_LA_PLAZUELA_5.getNombreVia()));
+        assertThat(comunidadDb != null ? comunidadDb.getMunicipio() : null, is(COMU_LA_PLAZUELA_5.getMunicipio()));
+        assertThat(comunidadDb != null ? comunidadDb.getNombreVia() : null, is(COMU_LA_PLAZUELA_5.getNombreVia()));
     }
 
     @Test

@@ -21,6 +21,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
 import java.util.List;
 
 import static android.support.test.espresso.Espresso.onData;
@@ -76,7 +77,7 @@ public class IncidRegAcTest {
         {
             try {
                 regSeveralUserComuSameUser(COMU_ESCORIAL_PEPE, COMU_REAL_PEPE, COMU_LA_FUENTE_PEPE);
-            } catch (UiException e) {
+            } catch (UiException | IOException e) {
                 e.printStackTrace();
             }
         }
@@ -92,6 +93,7 @@ public class IncidRegAcTest {
     public void setUp() throws Exception
     {
         mActivity = intentRule.getActivity();
+        Thread.sleep(2000);
         comunidadesAdapter = (ArrayAdapter<Comunidad>) mActivity.mRegAcFragment.mComunidadSpinner.getAdapter();
         comunidadByDefault = comunidadesAdapter.getItem(0);
         updateIsGcmTokenSentServer(false, mActivity);
@@ -137,7 +139,7 @@ public class IncidRegAcTest {
     }
 
     @Test
-    public void testOnCreate_2() throws Exception
+    public void testOnCreate_2() throws Exception    //
     {
         int count = mActivity.mRegAcFragment.mImportanciaSpinner.getCount();
         assertThat(count, is(5));

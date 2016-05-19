@@ -52,7 +52,7 @@ public class SeeUserComuByComuAcTest_slow {
     @Before
     public void setUp() throws Exception
     {
-        Thread.sleep(5000);
+        Thread.sleep(6000);
         // User is registered, with a comunidad in the intent.
         signUpAndUpdateTk(UsuarioTestUtils.COMU_TRAV_PLAZUELA_PEPE);
         // We insert a second user with the same comunidad.

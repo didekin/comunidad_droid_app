@@ -13,6 +13,8 @@ public final class DidekindroidApp extends Application {
 
     private static Context mContext;
     private static String mBaseURL;
+    private static String jksPassword;
+    private static int jksResourceId;
     private static final String TAG = DidekindroidApp.class.getCanonicalName();
 
     public void onCreate()
@@ -20,8 +22,10 @@ public final class DidekindroidApp extends Application {
         super.onCreate();
         Log.d(TAG, "onCreate()");
         mContext = this;
-        mBaseURL = mContext.getResources().getString(R.string.service_one_host)
-                + getContext().getResources().getString(R.string.service_one_port);
+        mBaseURL = mContext.getResources().getString(R.string.didekinspring_host)
+                + getContext().getResources().getString(R.string.didekinspring_port);
+        jksPassword = mContext.getResources().getString(R.string.didekinspring_pswd);
+        jksResourceId = R.raw.didekindroid_pre_bks;  // TODO: cambiar en pre y pro.
     }
 
     public static Context getContext()
@@ -34,5 +38,17 @@ public final class DidekindroidApp extends Application {
     {
         Log.d(TAG, "getBaseURL()");
         return mBaseURL;
+    }
+
+    public static String getJksPassword()
+    {
+        Log.d(TAG, "getJksPassword()");
+        return jksPassword;
+    }
+
+    public static int getJksResourceId()
+    {
+        Log.d(TAG, "getJksResourceId()");
+        return jksResourceId;
     }
 }

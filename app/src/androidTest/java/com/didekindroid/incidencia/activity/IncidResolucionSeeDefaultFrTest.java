@@ -10,6 +10,8 @@ import com.didekindroid.usuario.testutils.CleanUserEnum;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
+
 import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
@@ -38,7 +40,7 @@ public class IncidResolucionSeeDefaultFrTest extends IncidResolucionAbstractTest
             {
                 try {
                     doIncidImportancia(COMU_REAL_JUAN);
-                } catch (UiException e) {
+                } catch (UiException | IOException e) {
                     e.printStackTrace();
                 }
                 Intent intent = new Intent();

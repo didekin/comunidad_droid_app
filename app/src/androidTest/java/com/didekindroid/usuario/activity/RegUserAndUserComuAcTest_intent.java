@@ -18,6 +18,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
 import java.util.List;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -29,26 +30,25 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.common.TokenHandler.TKhandler;
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_LIST_OBJECT;
-import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
-import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN2_AND_PEPE;
-import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
-import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRE;
-import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRO;
-import static com.didekindroid.usuario.testutils.UserMenuTestUtils.LOGIN_AC;
-import static com.didekindroid.usuario.testutils.UserMenuTestUtils.REQUIRES_USER_NO_TOKEN;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanWithTkhandler;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
-import static com.didekindroid.usuario.testutils.UsuarioTestUtils.typeRegUserComuData;
+import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
+import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRE;
+import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRO;
+import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN2_AND_PEPE;
+import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
+import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.usuario.testutils.UserMenuTestUtils.LOGIN_AC;
+import static com.didekindroid.usuario.testutils.UserMenuTestUtils.REQUIRES_USER_NO_TOKEN;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_JUAN;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_TRAV_PLAZUELA_PEPE;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_JUAN2;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.typeRegUserComuData;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -91,7 +91,7 @@ public class RegUserAndUserComuAcTest_intent {
             try {
                 signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
                 comunidadesUserOne = ServOne.getComusByUser();
-            } catch (UiException e) {
+            } catch (UiException | IOException e) {
                 e.printStackTrace();
             }
             comunidad = comunidadesUserOne.get(0);
@@ -179,7 +179,7 @@ public class RegUserAndUserComuAcTest_intent {
     }
 
     @Test
-    public void testLoginMn_2() throws InterruptedException, UiException
+    public void testLoginMn_2() throws InterruptedException, UiException, IOException
     {
         whatToClean = CLEAN_JUAN_AND_PEPE;
         //With token.

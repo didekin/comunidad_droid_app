@@ -9,6 +9,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -38,12 +40,12 @@ public class LoginAcTest_2 extends LoginAcTest {
     }
 
     @Test
-    public void testValidate_5() throws InterruptedException
+    public void testValidate_5() throws InterruptedException, IOException
     {
         whatToClean = CLEAN_PEPE;
 
         // User in DB: wrong password three consecutive times. Choice "not mail" in dialog.
-        assertThat(ServOne.regComuAndUserAndUserComu(COMU_TRAV_PLAZUELA_PEPE), is(true));
+        assertThat(ServOne.regComuAndUserAndUserComu(COMU_TRAV_PLAZUELA_PEPE).execute().body(), is(true));
         mActivity = mActivityRule.launchActivity(new Intent());
 
         getDialogFragment();

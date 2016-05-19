@@ -18,9 +18,9 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekin.common.exception.DidekinExceptionMsg.COMUNIDAD_NOT_FOUND;
+import static com.didekin.common.exception.DidekinExceptionMsg.GENERIC_INTERNAL_ERROR;
 import static com.didekin.common.exception.DidekinExceptionMsg.INCIDENCIA_USER_WRONG_INIT;
 import static com.didekin.common.exception.DidekinExceptionMsg.ROLES_NOT_FOUND;
-import static com.didekin.common.exception.DidekinExceptionMsg.USER_NAME_DUPLICATE;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -81,7 +81,7 @@ public class UiExceptionTests_1 extends UiExceptionAbstractTest {
     @Test
     public void testGeneric() throws Exception
     {
-        final UiException ue = getUiException(USER_NAME_DUPLICATE);
+        final UiException ue = getUiException(GENERIC_INTERNAL_ERROR);
 
         mActivity.runOnUiThread(new Runnable() {
             @Override
@@ -91,8 +91,8 @@ public class UiExceptionTests_1 extends UiExceptionAbstractTest {
             }
         });
 
-        checkToastInTest(R.string.user_without_signedUp, mActivity);
-        onView(withId(R.id.login_ac_layout)).check(matches(isDisplayed()));
+        checkToastInTest(R.string.exception_generic_message, mActivity);
+        onView(withId(R.id.comu_search_ac_layout)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -130,7 +130,7 @@ public class UiExceptionTests_1 extends UiExceptionAbstractTest {
     }
 
     @Test
-    public void testSearchComu() throws Exception
+    public void testSearchComu() throws Exception     // FAil
     {
         final UiException ue = getUiException(COMUNIDAD_NOT_FOUND);
 

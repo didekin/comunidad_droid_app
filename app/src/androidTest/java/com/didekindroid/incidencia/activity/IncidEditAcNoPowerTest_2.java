@@ -13,6 +13,8 @@ import com.didekindroid.usuario.testutils.CleanUserEnum;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
+
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -69,10 +71,10 @@ public class IncidEditAcNoPowerTest_2 extends IncidEditAbstractTest {
                     // Registro userComu en misma comunidad.
                     UsuarioComunidad userComuJuan = makeUsuarioComunidad(pepeUserComu.getComunidad(), USER_JUAN,
                             "portal", "esc", "plantaX", "door12", PROPIETARIO.function);
-                    ServOne.regUserAndUserComu(userComuJuan);
+                    ServOne.regUserAndUserComu(userComuJuan).execute();
                     updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
                     incidenciaJuan = IncidenciaServ.seeIncidImportancia(incidenciaUser_1.getIncidencia().getIncidenciaId()).getIncidImportancia();
-                } catch (UiException e) {
+                } catch (UiException | IOException e) {
                     e.printStackTrace();
                 }
                 Intent intent = new Intent();

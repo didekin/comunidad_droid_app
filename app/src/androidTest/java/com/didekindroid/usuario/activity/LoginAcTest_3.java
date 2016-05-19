@@ -12,6 +12,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -43,10 +45,10 @@ public class LoginAcTest_3 extends LoginAcTest {
     }
 
     @Test
-    public void testValidate_6() throws InterruptedException, UiException
+    public void testValidate_6() throws InterruptedException, UiException, IOException
     {
         // User in DB: wrong password three consecutive times. Choice "yes mail" in dialog.
-        assertThat(ServOne.regComuAndUserAndUserComu(COMU_TRAV_PLAZUELA_PEPE), is(true));
+        assertThat(ServOne.regComuAndUserAndUserComu(COMU_TRAV_PLAZUELA_PEPE).execute().body(), is(true));
         AccessToken token = Oauth2.getPasswordUserToken(USER_PEPE.getUserName(), USER_PEPE.getPassword());
         mActivity = mActivityRule.launchActivity(new Intent());
 
@@ -64,7 +66,7 @@ public class LoginAcTest_3 extends LoginAcTest {
         checkToastInTest(R.string.password_new_in_login, mActivity);
 
         token = Oauth2.getRefreshUserToken(token.getRefreshToken().getValue());
-        ServOne.deleteUser(OauthTokenHelper.HELPER.doBearerAccessTkHeader(token));
+        ServOne.deleteUser(OauthTokenHelper.HELPER.doBearerAccessTkHeader(token)).execute();
         cleanWithTkhandler();
     }
 }

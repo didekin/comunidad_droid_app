@@ -45,7 +45,7 @@ import org.junit.runners.Suite;
         RegUserComuAcTest_intent.class,
         RegUserAndUserComuAcTest_intent.class,
         SeeUserComuByComuAcTest.class,
-        SeeUserComuByUserAcTest.class,
+        SeeUserComuByUserAcTest.class,  // Fail.
         UserComuDataAcTest_1.class,
         UserComuDataAcTest_2.class,
         UserDataAcTest.class

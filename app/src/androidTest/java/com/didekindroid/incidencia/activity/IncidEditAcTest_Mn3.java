@@ -16,6 +16,7 @@ import com.didekindroid.usuario.testutils.CleanUserEnum;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -83,7 +84,7 @@ public class IncidEditAcTest_Mn3 extends IncidEditAbstractTest {
                     // Necesitamos usuario con 'adm' para registrar resolución.
                     assertThat(ServOne.regUserAndUserComu(new UsuarioComunidad.UserComuBuilder(juanEscorial.getComunidad(), USER_PEPE)
                             .roles(PRESIDENTE.function)
-                            .build()), is(true));
+                            .build()).execute().body(), is(true));
                     updateSecurityData(USER_PEPE.getUserName(), USER_PEPE.getPassword());
                     resolucion = doResolucion(incidenciaJuan.getIncidencia(), "resol_desc1", 1000, new Timestamp(new Date().getTime()));
                     assertThat(IncidenciaServ.regResolucion(resolucion), is(1));
@@ -91,7 +92,7 @@ public class IncidEditAcTest_Mn3 extends IncidEditAbstractTest {
 
                     // Volvemos a usuario del test.
                     updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
-                } catch (UiException | InterruptedException e) {
+                } catch (UiException | InterruptedException | IOException e) {
                     e.printStackTrace();
                 }
                 Intent intent = new Intent();

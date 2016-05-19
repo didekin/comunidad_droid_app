@@ -25,6 +25,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
+
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -339,7 +341,7 @@ public class RegComuAndUserAndUserComuAcTest {
     }
 
     @Test
-    public void testLoginMn_2() throws InterruptedException, UiException
+    public void testLoginMn_2() throws InterruptedException, UiException, IOException
     {
         whatToClean = CleanUserEnum.CLEAN_JUAN;
         //With token.

@@ -10,7 +10,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
 
-import com.didekin.common.exception.InServiceException;
+import com.didekin.common.exception.ErrorBean;
 import com.didekin.incidservice.dominio.IncidImportancia;
 import com.didekindroid.R;
 import com.didekindroid.incidencia.activity.IncidEditAc;
@@ -31,6 +31,7 @@ import static com.didekin.common.exception.DidekinExceptionMsg.COMUNIDAD_NOT_COM
 import static com.didekin.common.exception.DidekinExceptionMsg.COMUNIDAD_NOT_FOUND;
 import static com.didekin.common.exception.DidekinExceptionMsg.COMUNIDAD_NOT_HASHABLE;
 import static com.didekin.common.exception.DidekinExceptionMsg.COMUNIDAD_WRONG_INIT;
+import static com.didekin.common.exception.DidekinExceptionMsg.GENERIC_INTERNAL_ERROR;
 import static com.didekin.common.exception.DidekinExceptionMsg.INCIDENCIA_COMMENT_WRONG_INIT;
 import static com.didekin.common.exception.DidekinExceptionMsg.INCIDENCIA_NOT_FOUND;
 import static com.didekin.common.exception.DidekinExceptionMsg.INCIDENCIA_NOT_REGISTERED;
@@ -78,23 +79,23 @@ public class UiException extends Exception {
 
     private static final String TAG = UiException.class.getCanonicalName();
 
-    private final InServiceException inServiceException;
+    private final ErrorBean errorBean;
 
-    public UiException(InServiceException inServiceException)
+    public UiException(ErrorBean errorBean)
     {
-        this.inServiceException = inServiceException;
+        this.errorBean = errorBean;
     }
 
     public void processMe(Activity activity, Intent intent)
     {
-        Log.d(TAG, "processMe(): " + activity.getComponentName().getClassName() + " " + inServiceException.getHttpMessage());
+        Log.d(TAG, "processMe(): " + activity.getComponentName().getClassName() + " " + errorBean.getMessage());
         checkArgument(intent != null);
-        messageToAction.get(inServiceException.getHttpMessage()).doAction(activity, intent);
+        messageToAction.get(errorBean.getMessage()).doAction(activity, intent);
     }
 
-    public InServiceException getInServiceException()
+    public ErrorBean getErrorBean()
     {
-        return inServiceException;
+        return errorBean;
     }
 
     // =============================== INNER CLASSES =============================
@@ -105,7 +106,11 @@ public class UiException extends Exception {
             @Override
             public void doAction(Activity activity, Intent intent)
             {
-                LOGIN.doAction(activity, intent);
+                makeToast(activity, R.string.exception_generic_message, LENGTH_SHORT);
+                intent.setClass(activity, ComuSearchAc.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                activity.startActivity(intent);
+                finishActivity(activity, intent);
             }
         },
         INCID_REG {
@@ -228,8 +233,9 @@ public class UiException extends Exception {
         messageToAction.put(COMUNIDAD_NOT_COMPARABLE.getHttpMessage(), GENERIC);
         messageToAction.put(COMUNIDAD_DUPLICATE.getHttpMessage(), SEARCH_COMU);
         messageToAction.put(COMUNIDAD_NOT_FOUND.getHttpMessage(), SEARCH_COMU);
-        messageToAction.put(COMUNIDAD_NOT_HASHABLE.getHttpMessage(), GENERIC);
+        messageToAction.put(COMUNIDAD_NOT_HASHABLE.getHttpMessage(), SEARCH_COMU);
         messageToAction.put(COMUNIDAD_WRONG_INIT.getHttpMessage(), SEARCH_COMU);
+        messageToAction.put(GENERIC_INTERNAL_ERROR.getHttpMessage(), GENERIC);
         messageToAction.put(INCIDENCIA_COMMENT_WRONG_INIT.getHttpMessage(), INCID_SEE_BY_COMU);
         messageToAction.put(INCIDENCIA_NOT_FOUND.getHttpMessage(), INCID_SEE_BY_COMU);
         messageToAction.put(INCIDENCIA_USER_WRONG_INIT.getHttpMessage(), LOGIN_INCID);
@@ -249,11 +255,11 @@ public class UiException extends Exception {
         messageToAction.put(UNAUTHORIZED_TX_TO_USER.getHttpMessage(), LOGIN);
         messageToAction.put(USER_COMU_NOT_FOUND.getHttpMessage(), LOGIN);
         messageToAction.put(USER_DATA_NOT_MODIFIED.getHttpMessage(), USER_DATA_AC);
-        messageToAction.put(USER_NOT_COMPARABLE.getHttpMessage(), GENERIC);
-        messageToAction.put(USER_NOT_EQUAL_ABLE.getHttpMessage(), GENERIC);
+        messageToAction.put(USER_NOT_COMPARABLE.getHttpMessage(), LOGIN);
+        messageToAction.put(USER_NOT_EQUAL_ABLE.getHttpMessage(), LOGIN);
         messageToAction.put(USER_NAME_NOT_FOUND.getHttpMessage(), LOGIN);
-        messageToAction.put(USER_NAME_DUPLICATE.getHttpMessage(), GENERIC);
-        messageToAction.put(USER_NOT_HASHABLE.getHttpMessage(), GENERIC);
+        messageToAction.put(USER_NAME_DUPLICATE.getHttpMessage(), LOGIN);
+        messageToAction.put(USER_NOT_HASHABLE.getHttpMessage(), LOGIN);
         messageToAction.put(USER_WRONG_INIT.getHttpMessage(), LOGIN);
         messageToAction.put(USERCOMU_WRONG_INIT.getHttpMessage(), LOGIN);
     }

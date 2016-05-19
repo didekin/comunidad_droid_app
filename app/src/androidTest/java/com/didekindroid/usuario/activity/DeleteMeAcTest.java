@@ -15,20 +15,20 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.common.TokenHandler.TKhandler;
-import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_NOTHING;
-import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
-import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_PEPE;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
-import static org.hamcrest.CoreMatchers.allOf;
+import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_NOTHING;
+import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_PEPE;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
@@ -53,7 +53,7 @@ public class DeleteMeAcTest {
             // Precondition: the user is registered.
             try {
                 signUpAndUpdateTk(COMU_REAL_PEPE);
-            } catch (UiException e) {
+            } catch (UiException | IOException e) {
                 e.printStackTrace();
             }
         }

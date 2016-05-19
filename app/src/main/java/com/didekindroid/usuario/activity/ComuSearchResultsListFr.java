@@ -2,6 +2,7 @@ package com.didekindroid.usuario.activity;
 
 import android.app.ListFragment;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,8 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.didekin.common.exception.ErrorBean;
 import com.didekin.usuario.dominio.Comunidad;
+import com.didekindroid.common.activity.UiException;
 
+import java.io.IOException;
 import java.util.List;
 
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_SEARCH;
@@ -64,11 +68,6 @@ public class ComuSearchResultsListFr extends ListFragment {
     {
         Log.d(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
-        mComuListListener = (ComuListListener) getActivity();
-        mAdapter = new ComuSearchResultsListAdapter(getActivity());
-        Comunidad comunidad = (Comunidad) getActivity().getIntent()
-                .getSerializableExtra(COMUNIDAD_SEARCH.key);
-        new SearchComunidadesLoader().execute(comunidad);
     }
 
     @Override
@@ -84,6 +83,12 @@ public class ComuSearchResultsListFr extends ListFragment {
     {
         Log.d(TAG, "onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
+
+        mComuListListener = (ComuListListener) getActivity();
+        mAdapter = new ComuSearchResultsListAdapter(getActivity());
+        Comunidad comunidad = (Comunidad) getActivity().getIntent()
+                .getSerializableExtra(COMUNIDAD_SEARCH.key);
+        new SearchComunidadesLoader().execute(comunidad);
 
         final ListView listView = getListView();
 
@@ -172,12 +177,19 @@ public class ComuSearchResultsListFr extends ListFragment {
     class SearchComunidadesLoader extends AsyncTask<Comunidad, Void, List<Comunidad>> {
 
         private final String TAG = SearchComunidadesLoader.class.getCanonicalName();
+        private UiException uiException;
 
         @Override
         protected List<Comunidad> doInBackground(Comunidad... comunidades)
         {
             Log.d(TAG, "doInBackground()");
-            return ServOne.searchComunidades(comunidades[0]);
+            List<Comunidad> comunidadesList = null;
+            try {
+                comunidadesList = ServOne.searchComunidades(comunidades[0]).execute().body();
+            } catch (IOException e) {
+               uiException = new UiException(ErrorBean.GENERIC_ERROR);
+            }
+            return comunidadesList;
         }
 
         @Override
@@ -185,6 +197,11 @@ public class ComuSearchResultsListFr extends ListFragment {
         {
             Log.d(TAG, "onPostExecute(); comunidadList.size = " +
                     (comunidadList != null ? String.valueOf(comunidadList.size()) : "null"));
+
+            if (uiException != null) {
+                uiException.processMe(getActivity(), new Intent());
+                return;
+            }
             mAdapter.addAll(comunidadList);
             setListAdapter(mAdapter);
             mComuListListener.onComunidadListLoaded(comunidadList != null ? comunidadList.size() : 0);

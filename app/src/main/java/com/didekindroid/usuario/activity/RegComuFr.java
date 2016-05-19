@@ -208,6 +208,7 @@ public class RegComuFr extends Fragment {
         if (mActivityListener != null) {
             mActivityListener.onDestroyFragment();
         }
+        // TODO: mover el close to onStop.
         dbHelper.close();
         mRegComunidadFrView = null;
         super.onDestroy();

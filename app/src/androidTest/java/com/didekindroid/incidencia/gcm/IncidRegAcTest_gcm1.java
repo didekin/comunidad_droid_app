@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;
+import android.support.test.espresso.core.deps.guava.util.concurrent.ThreadFactoryBuilder;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -20,6 +21,8 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.io.IOException;
 
 import static android.support.test.espresso.core.deps.guava.base.Preconditions.checkState;
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
@@ -71,7 +74,7 @@ public class IncidRegAcTest_gcm1 {
         {
             try {
                 signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
-            } catch (UiException e) {
+            } catch (UiException | IOException e) {
                 e.printStackTrace();
             }
             try {
@@ -119,8 +122,9 @@ public class IncidRegAcTest_gcm1 {
     {
         // Preconditions for the test.
         assertThat(checkPlayServices(mActivity), is(true));
-
+        Thread.sleep(3000);
         assertThat(isGcmTokenSentServer(mActivity), is(true));
         assertThat(ServOne.getGcmToken(), notNullValue());
+
     }
 }

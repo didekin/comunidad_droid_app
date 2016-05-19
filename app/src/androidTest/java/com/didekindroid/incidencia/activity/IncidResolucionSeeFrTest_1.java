@@ -12,6 +12,8 @@ import com.didekindroid.usuario.testutils.CleanUserEnum;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -56,13 +58,15 @@ public class IncidResolucionSeeFrTest_1 extends IncidResolucionAbstractTest {
                     doIncidImportancia(COMU_ESCORIAL_JUAN);
                     Thread.sleep(1000);
                     // Necesitamos usuario con 'adm' para registrar resolución.
-                    assertThat(ServOne.regUserAndUserComu(new UsuarioComunidad.UserComuBuilder(incidImportancia.getUserComu().getComunidad(), USER_PEPE).roles(PRESIDENTE.function).build()), is(true));
+                    assertThat(ServOne.regUserAndUserComu(new UsuarioComunidad.UserComuBuilder(incidImportancia.getUserComu().getComunidad(), USER_PEPE).roles(PRESIDENTE.function).build())
+                            .execute().body()
+                            , is(true));
                     updateSecurityData(USER_PEPE.getUserName(), USER_PEPE.getPassword());
                     // Registramos resolución.
                     doResolucionNoAdvances();
                     // Volvemos a usuario del test.
                     updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
-                } catch (UiException | InterruptedException e) {
+                } catch (UiException | InterruptedException | IOException e) {
                     e.printStackTrace();
                 }
                 Intent intent = new Intent();

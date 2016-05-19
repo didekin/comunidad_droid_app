@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.didekin.common.exception.ErrorBean;
 import com.didekin.common.oauth2.OauthToken.AccessToken;
 import com.didekin.usuario.dominio.Usuario;
 import com.didekin.usuario.dominio.UsuarioComunidad;
@@ -22,6 +23,8 @@ import com.didekindroid.common.utils.UIutils;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
+
+import java.io.IOException;
 
 import static com.didekin.common.dominio.DataPatterns.LINE_BREAK;
 import static com.didekindroid.common.TokenHandler.TKhandler;
@@ -150,12 +153,14 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity {
         {
             Log.d(TAG, "ComuAndUserComuAndUserRegister.doInBackground()");
             Usuario newUser = usuarioComunidad[0].getUsuario();
-            ServOne.regComuAndUserAndUserComu(usuarioComunidad[0]);
-            AccessToken token;
+
             try {
-                Log.d(TAG, "ComuAndUserComuAndUserRegister.doInBackground(): calling Oauth2.getPasswordUserToken()");
-                token = Oauth2.getPasswordUserToken(newUser.getUserName(), newUser.getPassword());
+                ServOne.regComuAndUserAndUserComu(usuarioComunidad[0]).execute();
+                AccessToken token = Oauth2.getPasswordUserToken(newUser.getUserName(), newUser.getPassword());
                 TKhandler.initKeyCacheAndBackupFile(token);
+            }catch (IOException e) {
+                uiException = new UiException(ErrorBean.GENERIC_ERROR);
+                return null;
             } catch (UiException e) {
                 uiException = e;
             }
