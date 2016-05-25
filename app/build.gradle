@@ -12,7 +12,7 @@ apply plugin: 'idea'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    buildToolsVersion "23.0.3"
     sourceCompatibility = 1.7
     targetCompatibility = 1.7
 
@@ -58,7 +58,7 @@ dependencies {
 
     testCompile 'junit:junit:4.12'
 
-    androidTestCompile 'com.android.support:support-annotations:24.0.0-alpha2'
+    androidTestCompile 'com.android.support:support-annotations:24.0.0-beta1'
     androidTestCompile 'com.android.support.test:runner:0.4.1'
     androidTestCompile 'com.android.support.test:rules:0.4.1'
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
@@ -76,11 +76,11 @@ dependencies {
 
     compile project(':client_lib')
     compile 'com.google.guava:guava:18.0'
-    compile 'com.android.support:design:24.0.0-alpha2'
-    compile 'com.android.support:appcompat-v7:24.0.0-alpha2'
-    compile 'com.google.android.gms:play-services-gcm:8.4.0'
-    compile 'com.android.support:support-v4:24.0.0-alpha2'
-    compile 'com.android.support:recyclerview-v7:24.0.0-alpha2'
+    compile 'com.android.support:design:24.0.0-beta1'
+    compile 'com.android.support:appcompat-v7:24.0.0-beta1'
+    compile 'com.google.firebase:firebase-messaging:9.0.0'
+    compile 'com.android.support:support-v4:24.0.0-beta1'
+    compile 'com.android.support:recyclerview-v7:24.0.0-beta1'
 }
 
 apply plugin: 'com.google.gms.google-services'
