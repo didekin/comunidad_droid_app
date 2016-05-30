@@ -20,6 +20,7 @@ import retrofit2.Response;
 
 import static com.didekin.common.exception.ErrorBean.GENERIC_ERROR;
 import static com.didekindroid.DidekindroidApp.getBaseURL;
+import static com.didekindroid.DidekindroidApp.getHttpTimeOut;
 import static com.didekindroid.DidekindroidApp.getJksPassword;
 import static com.didekindroid.DidekindroidApp.getJksResourceId;
 import static com.didekindroid.common.utils.UIutils.checkBearerToken;
@@ -41,7 +42,7 @@ public final class UsuarioService implements UsuarioEndPoints {
 
     private UsuarioService(final String hostPort, final JksInClient jksInAppClient)
     {
-        retrofitHandler = new RetrofitHandler(hostPort, jksInAppClient);
+        retrofitHandler = new RetrofitHandler(hostPort, jksInAppClient, getHttpTimeOut());
         endPoint = retrofitHandler.getService(UsuarioEndPoints.class);
     }
 

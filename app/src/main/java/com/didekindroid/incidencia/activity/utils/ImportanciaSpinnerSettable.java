@@ -4,7 +4,6 @@ import android.widget.Spinner;
 
 import com.didekin.incidservice.dominio.Incidencia;
 import com.didekindroid.incidencia.dominio.IncidImportanciaBean;
-import com.didekindroid.incidencia.dominio.IncidenciaBean;
 
 /**
  * User: pedro@didekin

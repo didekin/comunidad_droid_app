@@ -36,13 +36,13 @@ import static org.junit.Assert.assertThat;
  * Time: 13:50
  */
 @RunWith(AndroidJUnit4.class)
-public class GcmBroadCastNotificationAcTest {
+public class GcmBroadCastNotificationActivityTest {
 
     Context context = InstrumentationRegistry.getTargetContext();
-    GcmBroadCastNotificationAc mActivity;
+    GcmBroadCastNotificationActivity mActivity;
 
     @Rule
-    public ActivityTestRule<GcmBroadCastNotificationAc> mActivityRule = new ActivityTestRule<>(GcmBroadCastNotificationAc.class, true, false);
+    public ActivityTestRule<GcmBroadCastNotificationActivity> mActivityRule = new ActivityTestRule<>(GcmBroadCastNotificationActivity.class, true, false);
 
     @Test
     public void testNotification_1() throws TimeoutException, InterruptedException

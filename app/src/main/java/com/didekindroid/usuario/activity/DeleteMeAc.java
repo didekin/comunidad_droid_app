@@ -12,10 +12,10 @@ import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 
 import static com.didekindroid.common.TokenHandler.TKhandler;
-import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.utils.UIutils.updateIsRegistered;
+import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static com.google.common.base.Preconditions.checkState;
 
 /**

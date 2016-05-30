@@ -13,11 +13,8 @@ import com.didekindroid.common.activity.UiException;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 
-import static com.didekindroid.common.utils.UIutils.formatTimeToString;
 import static com.didekindroid.common.utils.UIutils.getStringFromInteger;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 

@@ -19,9 +19,9 @@ import android.widget.Spinner;
 import com.didekin.usuario.dominio.Municipio;
 import com.didekin.usuario.dominio.Provincia;
 import com.didekindroid.R;
-import com.didekindroid.usuario.repository.UsuarioDataDbHelper;
-import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.common.utils.IoHelper;
+import com.didekindroid.usuario.dominio.ComunidadBean;
+import com.didekindroid.usuario.repository.UsuarioDataDbHelper;
 
 import java.util.List;
 

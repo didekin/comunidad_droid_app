@@ -21,7 +21,7 @@
         </service>
 
         <activity
-            android:name=".incidencia.gcm.GcmBroadCastNotificationAc"
+            android:name=".incidencia.gcm.GcmBroadCastNotificationActivity"
             android:label="@string/title_activity_gcm_notification"
             android:theme="@style/themeOne">
         </activity>

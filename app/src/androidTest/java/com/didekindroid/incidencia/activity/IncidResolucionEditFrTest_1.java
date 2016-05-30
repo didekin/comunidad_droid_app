@@ -8,7 +8,6 @@ import android.widget.DatePicker;
 import com.didekin.incidservice.dominio.Resolucion;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
-import com.didekindroid.common.utils.UIutils;
 import com.didekindroid.usuario.testutils.CleanUserEnum;
 
 import org.junit.Test;

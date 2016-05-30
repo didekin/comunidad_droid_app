@@ -11,8 +11,9 @@ import com.didekin.usuario.dominio.Comunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.IdlingResourceForIntentServ;
 import com.didekindroid.common.activity.UiException;
-import com.didekindroid.incidencia.gcm.GcmRegistrationIntentServ;
+import com.didekindroid.incidencia.gcm.GcmRegistrationIntentService;
 import com.didekindroid.usuario.testutils.CleanUserEnum;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.junit.After;
 import org.junit.Before;
@@ -32,15 +33,15 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkNavigateUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
-import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
 import static com.didekindroid.common.utils.UIutils.checkPlayServices;
 import static com.didekindroid.common.utils.UIutils.isGcmTokenSentServer;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.utils.UIutils.updateIsGcmTokenSentServer;
-import static com.didekindroid.incidencia.gcm.AppGcmListenerServ.TypeMsgHandler.INCIDENCIA;
+import static com.didekindroid.incidencia.gcm.AppFirebaseMsgService.TypeMsgHandler.INCIDENCIA;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_REG_AC;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_CLOSED_BY_COMU_AC;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_PEPE;
@@ -100,7 +101,7 @@ public class IncidSeeOpenByComuAcTest_1 {
     {
         mActivity = activityRule.getActivity();
         mNotifyManager = (NotificationManager) mActivity.getSystemService(Context.NOTIFICATION_SERVICE);
-        idlingResource = new IdlingResourceForIntentServ(mActivity, new GcmRegistrationIntentServ());
+        idlingResource = new IdlingResourceForIntentServ(mActivity, new GcmRegistrationIntentService());
         Espresso.registerIdlingResources(idlingResource);
     }
 
@@ -111,6 +112,18 @@ public class IncidSeeOpenByComuAcTest_1 {
         updateIsGcmTokenSentServer(false, mActivity);
         mNotifyManager.cancel(messageId);
         cleanOptions(whatToClean);
+    }
+
+    @Test
+    public void testOnCreateGcm() throws UiException, InterruptedException
+    {
+        // Preconditions for the test.
+        assertThat(checkPlayServices(mActivity), is(true));
+
+        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+        assertThat(refreshedToken,notNullValue());
+        assertThat(isGcmTokenSentServer(mActivity), is(true));
+        assertThat(ServOne.getGcmToken(), is(refreshedToken));
     }
 
     @Test
@@ -139,16 +152,6 @@ public class IncidSeeOpenByComuAcTest_1 {
                 withParent(withId(R.id.incid_reg_comunidad_spinner))
         )).check(matches(withText(is(mComunidadSelected.getNombreComunidad()))
         )).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void testOnCreateGcm() throws UiException, InterruptedException
-    {
-        // Preconditions for the test.
-        assertThat(checkPlayServices(mActivity), is(true));
-        Thread.sleep(3000);
-        assertThat(isGcmTokenSentServer(mActivity), is(true));
-        assertThat(ServOne.getGcmToken(), notNullValue());
     }
 
     @Test

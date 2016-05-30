@@ -13,7 +13,7 @@ import com.didekin.incidservice.dominio.IncidImportancia;
 import com.didekin.incidservice.dominio.Incidencia;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
-import com.didekindroid.incidencia.gcm.GcmRegistrationIntentServ;
+import com.didekindroid.incidencia.gcm.GcmRegistrationIntentService;
 
 import static com.didekindroid.common.utils.ConnectionUtils.checkInternetConnected;
 import static com.didekindroid.common.utils.UIutils.checkPlayServices;
@@ -34,7 +34,9 @@ import static com.google.common.base.Preconditions.checkState;
 
 /**
  * This activity is a point of registration for receiving notifications of new incidencias.
+ * TODO: añadir varios tags a la incidencia para facilitar búsquedas.
  */
+@SuppressWarnings("ConstantConditions")
 public class IncidRegAc extends AppCompatActivity {
 
     private static final String TAG = IncidRegAc.class.getCanonicalName();
@@ -46,9 +48,14 @@ public class IncidRegAc extends AppCompatActivity {
         Log.d(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
 
-        if (checkPlayServices(this) && !isGcmTokenSentServer(this)) {
-            Intent intent = new Intent(this, GcmRegistrationIntentServ.class);
-            startService(intent);
+        //noinspection StatementWithEmptyBody
+        if (checkPlayServices(this)) {
+            if (!isGcmTokenSentServer(this)){
+                Log.d(TAG, "onCreate(), isGcmTokenSentServer false");
+                startService(new Intent(this, GcmRegistrationIntentService.class));
+            }
+        } else{
+            // TODO: mostrar cuadro de diálogo para instalar GCM.
         }
 
         View mAcView = getLayoutInflater().inflate(R.layout.incid_reg_ac, null);
@@ -65,6 +72,17 @@ public class IncidRegAc extends AppCompatActivity {
                 registerIncidencia();
             }
         });
+    }
+
+    @Override
+    protected void onResume()
+    {
+        Log.d(TAG, "onResume()");
+        if (checkPlayServices(this) && !isGcmTokenSentServer(this)) {
+            Log.d(TAG, "onResume(), isGcmTokenSentServer false");
+            startService(new Intent(this, GcmRegistrationIntentService.class));
+        }
+        super.onResume();
     }
 
     private void registerIncidencia()

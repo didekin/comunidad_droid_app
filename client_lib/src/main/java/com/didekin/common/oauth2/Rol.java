@@ -1,6 +1,5 @@
 package com.didekin.common.oauth2;
 
-import java.lang.String;
 import java.util.HashMap;
 import java.util.Map;
 

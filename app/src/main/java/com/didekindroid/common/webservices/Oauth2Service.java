@@ -22,6 +22,7 @@ import static com.didekin.common.oauth2.OauthConstant.PASSWORD_GRANT;
 import static com.didekin.common.oauth2.OauthConstant.REFRESH_TOKEN_GRANT;
 import static com.didekin.common.oauth2.OauthTokenHelper.BASIC_AND_SPACE;
 import static com.didekindroid.DidekindroidApp.getBaseURL;
+import static com.didekindroid.DidekindroidApp.getHttpTimeOut;
 import static com.didekindroid.DidekindroidApp.getJksPassword;
 import static com.didekindroid.DidekindroidApp.getJksResourceId;
 import static com.didekindroid.common.utils.UIutils.getResponseBody;
@@ -41,7 +42,7 @@ public class Oauth2Service implements Oauth2EndPoints {
 
     private Oauth2Service(final String hostPort, final JksInClient jksInAppClient)
     {
-        retrofitHandler = new RetrofitHandler(hostPort, jksInAppClient);
+        retrofitHandler = new RetrofitHandler(hostPort, jksInAppClient, getHttpTimeOut());
         endPoint = retrofitHandler.getService(Oauth2EndPoints.class);
     }
 

@@ -15,13 +15,13 @@ import android.widget.TextView;
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
-import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.activity.BundleKey;
+import com.didekindroid.common.activity.UiException;
 
 import java.util.List;
 
-import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static com.didekindroid.common.activity.ViewsIDs.SEE_USERCOMU_BY_COMU;
+import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 
 
 /**

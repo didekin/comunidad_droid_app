@@ -19,12 +19,12 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 
 import static com.didekindroid.common.TokenHandler.TKhandler;
+import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
+import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_NOTHING;
 import static com.didekindroid.usuario.testutils.UserMenuTestUtils.LOGIN_AC;
 import static com.didekindroid.usuario.testutils.UserMenuTestUtils.REQUIRES_USER_NO_TOKEN;
-import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
-import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_JUAN;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;

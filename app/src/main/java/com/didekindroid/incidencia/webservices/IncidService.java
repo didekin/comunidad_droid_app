@@ -24,6 +24,7 @@ import retrofit2.Response;
 
 import static com.didekin.common.exception.ErrorBean.GENERIC_ERROR;
 import static com.didekindroid.DidekindroidApp.getBaseURL;
+import static com.didekindroid.DidekindroidApp.getHttpTimeOut;
 import static com.didekindroid.DidekindroidApp.getJksPassword;
 import static com.didekindroid.DidekindroidApp.getJksResourceId;
 import static com.didekindroid.common.utils.UIutils.checkBearerToken;
@@ -43,7 +44,7 @@ public class IncidService implements IncidenciaServEndPoints {
 
     private IncidService(final String hostPort, final JksInClient jksInAppClient)
     {
-        endPoint = new RetrofitHandler(hostPort, jksInAppClient).getService(IncidenciaServEndPoints.class);
+        endPoint = new RetrofitHandler(hostPort, jksInAppClient,getHttpTimeOut()).getService(IncidenciaServEndPoints.class);
     }
 
     /*  ================================== IncidenciaServEndPoints implementation ============================*/

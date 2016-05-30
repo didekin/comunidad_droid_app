@@ -42,6 +42,13 @@ public class IncidSeeByComuListFr extends ListFragment implements ComuSpinnerSet
     View mView;
     ListView mListView;
     Spinner mComunidadSpinner;
+
+    /**
+     * This index can be set in three ways:
+     * 1. The user selects one item in the spinner.
+     * 2. The index is retrieved from savedInstanceState.
+     * 3. The index is passed from the activity (in FCM notifications).
+     */
     int mComunidadSelectedIndex;
 
     @Override
@@ -191,6 +198,18 @@ public class IncidSeeByComuListFr extends ListFragment implements ComuSpinnerSet
     public void onComunidadSpinnerLoaded()
     {
         Log.d(TAG, "onComunidadSpinnerLoaded()");
+
+        // We check if there is a comunidadId passed from the activity.
+        long comunidadIntent = mListener.getComunidadSelected();
+        if (comunidadIntent > 0) {
+            int position = 0;
+            do {
+                if (((Comunidad) mComunidadSpinner.getItemAtPosition(position)).getC_Id() == comunidadIntent) {
+                    mComunidadSelectedIndex = position;
+                    break;
+                }
+            } while (++position < mComunidadSpinner.getCount());
+        }
         mComunidadSpinner.setSelection(mComunidadSelectedIndex);
     }
 

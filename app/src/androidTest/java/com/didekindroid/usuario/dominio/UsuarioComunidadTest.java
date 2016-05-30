@@ -13,7 +13,6 @@ import static com.didekin.common.oauth2.Rol.ADMINISTRADOR;
 import static com.didekin.common.oauth2.Rol.PROPIETARIO;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin

@@ -1,23 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.didekindroid"
+<manifest xmlns:tools="http://schemas.android.com/tools"
+          package="com.didekindroid"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- TODO: mirar https://developer.android.com/training/permissions/index.html y ajustar los fragments y activities. -->
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-
     <!-- Permissions for GCM services -->
     <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
-
-    <permission
-        android:name="com.didekindroid.permission.C2D_MESSAGE"
-        android:protectionLevel="signature"/>
-
-    <uses-permission android:name="com.didekindroid.permission.C2D_MESSAGE"/>
     <!-- .......... -->
-
     <supports-screens
         android:largeScreens="true"
         android:normalScreens="true"
@@ -30,39 +22,6 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/themeOne">
-
-        <!-- Components for GCM services -->
-        <receiver
-            android:name="com.google.android.gms.gcm.GcmReceiver"
-            android:exported="true"
-            android:permission="com.google.android.c2dm.permission.SEND">
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
-
-                <category android:name="com.didekindroid.incidencia.gcm"/>
-            </intent-filter>
-        </receiver>
-
-        <service
-            android:name=".incidencia.gcm.AppGcmListenerServ"
-            android:enabled="true"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
-            </intent-filter>
-        </service>
-        <service
-            android:name=".incidencia.gcm.AppInstanceIdListenerServ"
-            android:enabled="true"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.android.gms.iid.InstanceID"/>
-            </intent-filter>
-        </service>
-        <service
-            android:name=".incidencia.gcm.GcmRegistrationIntentServ"
-            android:exported="false">
-        </service>
 
         <!-- **************************************************************** -->
         <!-- INCIDENCIA -->
@@ -125,6 +84,27 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".incidencia.activity.IncidSeeOpenByComuAc"/>
         </activity>
+
+        <!-- .......... GCM services ......... -->
+        <!--TODO: exported=false es una posibilidad.-->
+        <service
+            android:name=".incidencia.gcm.AppFirebaseMsgService" android:exported="true"
+            tools:ignore="ExportedService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".incidencia.gcm.AppFirebaseInstanceIdService" android:exported="true"
+            tools:ignore="ExportedService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".incidencia.gcm.GcmRegistrationIntentService"
+            android:exported="false">
+        </service>
         <!-- **************************************************************** -->
         <!-- USUARIO -->
         <!-- **************************************************************** -->

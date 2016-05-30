@@ -24,4 +24,6 @@ public interface IncidSeeListListener {
     ArrayAdapter<IncidenciaUser> getAdapter(Activity activity);
 
     List<IncidenciaUser> getListFromService(long comunidadId) throws UiException;
+
+    long getComunidadSelected();
 }

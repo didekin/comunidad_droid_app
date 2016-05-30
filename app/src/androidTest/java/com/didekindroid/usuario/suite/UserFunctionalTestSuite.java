@@ -2,10 +2,10 @@ package com.didekindroid.usuario.suite;
 
 import com.didekindroid.usuario.activity.ComuDataAcTest;
 import com.didekindroid.usuario.activity.ComuSearchAcTest_intent;
+import com.didekindroid.usuario.activity.ComuSearchAcTest_spinner;
 import com.didekindroid.usuario.activity.ComuSearchResultsAcTest_1;
 import com.didekindroid.usuario.activity.ComuSearchResultsAcTest_intent_1;
 import com.didekindroid.usuario.activity.ComuSearchResultsAcTest_intent_2;
-import com.didekindroid.usuario.activity.ComuSearchAcTest_spinner;
 import com.didekindroid.usuario.activity.DeleteMeAcTest;
 import com.didekindroid.usuario.activity.LoginAcTest_1;
 import com.didekindroid.usuario.activity.PasswordChangeAcTest;

@@ -15,6 +15,7 @@ public final class DidekindroidApp extends Application {
     private static String mBaseURL;
     private static String jksPassword;
     private static int jksResourceId;
+    private static int httpTimeOut;
     private static final String TAG = DidekindroidApp.class.getCanonicalName();
 
     public void onCreate()
@@ -22,10 +23,11 @@ public final class DidekindroidApp extends Application {
         super.onCreate();
         Log.d(TAG, "onCreate()");
         mContext = this;
-        mBaseURL = mContext.getResources().getString(R.string.didekinspring_host)
-                + getContext().getResources().getString(R.string.didekinspring_port);
-        jksPassword = mContext.getResources().getString(R.string.didekinspring_pswd);
-        jksResourceId = R.raw.didekindroid_pre_bks;  // TODO: cambiar en pre y pro.
+        mBaseURL = mContext.getString(R.string.didekinspring_host)
+                + getContext().getString(R.string.didekinspring_port);
+        jksPassword = mContext.getString(R.string.didekinspring_pswd);
+        httpTimeOut = Integer.parseInt(mContext.getString(R.string.timeOut));
+        jksResourceId = mContext.getResources().getIdentifier(mContext.getString(R.string.bks_name),"raw",mContext.getPackageName());
     }
 
     public static Context getContext()
@@ -50,5 +52,10 @@ public final class DidekindroidApp extends Application {
     {
         Log.d(TAG, "getJksResourceId()");
         return jksResourceId;
+    }
+
+    public static int getHttpTimeOut()
+    {
+        return httpTimeOut;
     }
 }

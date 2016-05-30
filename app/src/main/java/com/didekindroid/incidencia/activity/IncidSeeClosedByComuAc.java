@@ -41,6 +41,8 @@ import static com.google.common.base.Preconditions.checkState;
  * 3. All the incidencias closed in a comunidad where the user is NOW registered are shown,
  * even is the user was not registered in the comunidad when incidencia was open or closed.
  * 4. All incidencias closed MUST HAVE a resolucion.
+ * 5. An intent may be passed with a comunidadId, when a notification is sent when the
+ * incidencia has been closed.
  * Postconditions:
  * 1. A list of IncidenciaUSer instances are shown.
  * 2. The incidencias are shown in chronological order, from the most recent to the oldest one.
@@ -150,6 +152,14 @@ public class IncidSeeClosedByComuAc extends AppCompatActivity implements
     public List<IncidenciaUser> getListFromService(long comunidadId) throws UiException
     {
         return IncidenciaServ.seeIncidsClosedByComu(comunidadId);
+    }
+
+    @Override
+    public long getComunidadSelected()
+    {
+        // TODO: recuperar de un intent el id de la comunidad de la que se muestran las incidencias. Puede ser nulo.
+        // Tiene sentido cuando se notifica que una incidencia ha sido cerrada.
+        return 0;
     }
 
     //    ============================================================

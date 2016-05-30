@@ -37,11 +37,11 @@ public class RetrofitHandler {
 
     private final Retrofit retrofit;
 
-    public RetrofitHandler(final String hostPort, final JksInClient jksInAppClient)
+    public RetrofitHandler(final String hostPort, final JksInClient jksInAppClient, int timeOut)
     {
         retrofit = new Retrofit.Builder()
                 .baseUrl(hostPort)
-                .client(getOkHttpClient(jksInAppClient))
+                .client(getOkHttpClient(jksInAppClient, timeOut))
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }
@@ -69,12 +69,12 @@ public class RetrofitHandler {
 
     // ====================== HELPER METHODS ========================
 
-    private OkHttpClient getOkHttpClient(JksInClient jksInAppClient)
+    private OkHttpClient getOkHttpClient(JksInClient jksInAppClient, int timeOut)
     {
         return new OkHttpClient.Builder()
                 .addNetworkInterceptor(doLoggingInterceptor())
-                .connectTimeout(100, SECONDS)  //30
-                .readTimeout(100, SECONDS)     //60
+                .connectTimeout(timeOut, SECONDS)  //30
+                .readTimeout(timeOut * 2, SECONDS)     //60
                 .sslSocketFactory(getSslContext(jksInAppClient).getSocketFactory())
                 .build();
     }

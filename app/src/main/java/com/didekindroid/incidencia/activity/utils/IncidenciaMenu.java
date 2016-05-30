@@ -6,10 +6,10 @@ import android.util.Log;
 
 import com.didekindroid.incidencia.activity.IncidCommentRegAc;
 import com.didekindroid.incidencia.activity.IncidCommentSeeAc;
-import com.didekindroid.incidencia.activity.IncidResolucionRegEditSeeAc;
-import com.didekindroid.incidencia.activity.IncidSeeOpenByComuAc;
-import com.didekindroid.incidencia.activity.IncidSeeClosedByComuAc;
 import com.didekindroid.incidencia.activity.IncidRegAc;
+import com.didekindroid.incidencia.activity.IncidResolucionRegEditSeeAc;
+import com.didekindroid.incidencia.activity.IncidSeeClosedByComuAc;
+import com.didekindroid.incidencia.activity.IncidSeeOpenByComuAc;
 
 /**
  * User: pedro@didekin

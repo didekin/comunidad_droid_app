@@ -25,10 +25,10 @@ import static com.didekin.incidservice.controller.IncidServConstant.MOD_RESOLUCI
 import static com.didekin.incidservice.controller.IncidServConstant.REG_INCID_COMMENT;
 import static com.didekin.incidservice.controller.IncidServConstant.REG_INCID_IMPORTANCIA;
 import static com.didekin.incidservice.controller.IncidServConstant.REG_RESOLUCION;
-import static com.didekin.incidservice.controller.IncidServConstant.SEE_INCID_IMPORTANCIA;
 import static com.didekin.incidservice.controller.IncidServConstant.SEE_INCIDS_CLOSED_BY_COMU;
-import static com.didekin.incidservice.controller.IncidServConstant.SEE_INCID_COMMENTS;
 import static com.didekin.incidservice.controller.IncidServConstant.SEE_INCIDS_OPEN_BY_COMU;
+import static com.didekin.incidservice.controller.IncidServConstant.SEE_INCID_COMMENTS;
+import static com.didekin.incidservice.controller.IncidServConstant.SEE_INCID_IMPORTANCIA;
 import static com.didekin.incidservice.controller.IncidServConstant.SEE_RESOLUCION;
 import static com.didekin.incidservice.controller.IncidServConstant.SEE_USERCOMUS_IMPORTANCIA;
 

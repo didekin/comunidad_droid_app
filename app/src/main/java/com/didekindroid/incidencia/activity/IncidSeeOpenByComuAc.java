@@ -16,15 +16,15 @@ import com.didekin.incidservice.dominio.IncidenciaUser;
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
-import com.didekindroid.incidencia.gcm.GcmRegistrationIntentServ;
+import com.didekindroid.incidencia.gcm.GcmRegistrationIntentService;
 
 import java.util.List;
 
-import static com.didekindroid.common.activity.FragmentTags.incid_see_by_comu_list_fr_tag;
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
 import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_LIST_INDEX;
 import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_FLAG;
+import static com.didekindroid.common.activity.FragmentTags.incid_see_by_comu_list_fr_tag;
 import static com.didekindroid.common.utils.UIutils.checkPlayServices;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.isGcmTokenSentServer;
@@ -41,6 +41,8 @@ import static com.google.common.base.Preconditions.checkState;
  * Preconditions:
  * 1. The user is registered.
  * 2. The user is registered NOW in the comunidad whose open incidencias are shown.
+ * 3. An intent may be passed with a comunidadId, when a notification is sent when the
+ * incidencia has been opened.
  * Postconditions:
  * 1. An intent is passed with an IncidImportancia instance, where the selected incidencia is embedded.
  */
@@ -59,15 +61,19 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements
         Log.d(TAG, "onCreate().");
         super.onCreate(savedInstanceState);
 
-        if (checkPlayServices(this) && !isGcmTokenSentServer(this)) {
-            Intent intent = new Intent(this, GcmRegistrationIntentServ.class);
-            startService(intent);
+        //noinspection StatementWithEmptyBody
+        if (checkPlayServices(this)) {
+            if (!isGcmTokenSentServer(this)){
+                startService(new Intent(this, GcmRegistrationIntentService.class));
+            }
+        } else{
+            // TODO: mostrar cuadro de diálogo para instalar GCM.
         }
 
         setContentView(R.layout.incid_see_open_by_comu_ac);
         doToolBar(this, true);
 
-        if (savedInstanceState != null){
+        if (savedInstanceState != null) {
             checkState(getSupportFragmentManager().findFragmentByTag(incid_see_by_comu_list_fr_tag) != null);
             return;
         }
@@ -75,6 +81,16 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.incid_see_open_by_comu_ac, mFragment, incid_see_by_comu_list_fr_tag)
                 .commit();
+    }
+
+    @Override
+    protected void onResume()
+    {
+        Log.d(TAG, "onResume()");
+        if (checkPlayServices(this) && !isGcmTokenSentServer(this)) {
+            startService(new Intent(this, GcmRegistrationIntentService.class));
+        }
+        super.onResume();
     }
 
     @Override
@@ -152,13 +168,22 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements
     @Override
     public ArrayAdapter<IncidenciaUser> getAdapter(Activity activity)
     {
+        Log.d(TAG, "getAdapter()");
         return new IncidSeeOpenByComuAdapter(this);
     }
 
     @Override
     public List<IncidenciaUser> getListFromService(long comunidadId) throws UiException
     {
+        Log.d(TAG, "getListFromService()");
         return IncidenciaServ.seeIncidsOpenByComu(comunidadId);
+    }
+
+    @Override
+    public long getComunidadSelected()
+    {
+        Log.d(TAG,"getComunidadSelected()");
+        return getIntent().getLongExtra(COMUNIDAD_ID.key, 0);
     }
 
 //    ============================================================

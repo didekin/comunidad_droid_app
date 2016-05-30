@@ -59,6 +59,7 @@ import static com.google.common.base.Preconditions.checkState;
  * 1c. Unregistered user, once she has deleted the data of the one comunidad associated to her, it goes to
  * ComuSearchAc.
  */
+@SuppressWarnings("ConstantConditions")
 public class UserComuDataAc extends AppCompatActivity {
 
     private static final String TAG = UserComuDataAc.class.getCanonicalName();

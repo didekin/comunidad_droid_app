@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;
-import android.support.test.espresso.core.deps.guava.util.concurrent.ThreadFactoryBuilder;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -14,6 +13,7 @@ import com.didekindroid.common.IdlingResourceForIntentServ;
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.incidencia.activity.IncidRegAc;
 import com.didekindroid.usuario.testutils.CleanUserEnum;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.junit.After;
 import org.junit.Before;
@@ -26,12 +26,12 @@ import java.io.IOException;
 
 import static android.support.test.espresso.core.deps.guava.base.Preconditions.checkState;
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
+import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
+import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.utils.UIutils.checkPlayServices;
 import static com.didekindroid.common.utils.UIutils.isGcmTokenSentServer;
 import static com.didekindroid.common.utils.UIutils.updateIsGcmTokenSentServer;
-import static com.didekindroid.incidencia.gcm.AppGcmListenerServ.TypeMsgHandler.INCIDENCIA;
-import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
-import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
+import static com.didekindroid.incidencia.gcm.AppFirebaseMsgService.TypeMsgHandler.INCIDENCIA;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static org.hamcrest.CoreMatchers.is;
@@ -61,7 +61,6 @@ public class IncidRegAcTest_gcm1 {
         {
             Context context = InstrumentationRegistry.getTargetContext();
             updateIsGcmTokenSentServer(false, context);
-            checkState(!isGcmTokenSentServer(context));
             try {
                 checkState(ServOne.getGcmToken() == null);
             } catch (UiException e) {
@@ -74,12 +73,9 @@ public class IncidRegAcTest_gcm1 {
         {
             try {
                 signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
+                pepeUserComu = ServOne.seeUserComusByUser().get(0);
             } catch (UiException | IOException e) {
                 e.printStackTrace();
-            }
-            try {
-                pepeUserComu = ServOne.seeUserComusByUser().get(0);
-            } catch (UiException e) {
             }
             Intent intent = new Intent();
             long comunidadIdIntent = pepeUserComu.getComunidad().getC_Id();
@@ -99,32 +95,40 @@ public class IncidRegAcTest_gcm1 {
     {
         mActivity = intentRule.getActivity();
         mNotifyManager = (NotificationManager) mActivity.getSystemService(Context.NOTIFICATION_SERVICE);
-        idlingResource = new IdlingResourceForIntentServ(mActivity, new GcmRegistrationIntentServ());
+        idlingResource = new IdlingResourceForIntentServ(mActivity, new GcmRegistrationIntentService());
         Espresso.registerIdlingResources(idlingResource);
     }
 
     @After
     public void tearDown() throws Exception
     {
-        Espresso.unregisterIdlingResources(idlingResource);
         updateIsGcmTokenSentServer(false, mActivity);
         mNotifyManager.cancel(messageId);
+        Espresso.unregisterIdlingResources(idlingResource);
         cleanOptions(whatToClean);
     }
 
     //  ===========================================================================
 
     /**
-     * Test para GcmRegistrationIntentServ methods.
+     * Test para GcmRegistrationIntentService methods.
      */
     @Test
     public void testOnCreate() throws Exception
     {
         // Preconditions for the test.
         assertThat(checkPlayServices(mActivity), is(true));
-        Thread.sleep(3000);
-        assertThat(isGcmTokenSentServer(mActivity), is(true));
-        assertThat(ServOne.getGcmToken(), notNullValue());
 
+        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+        assertThat(refreshedToken,notNullValue());
+        assertThat(isGcmTokenSentServer(mActivity), is(true));
+        assertThat(ServOne.getGcmToken(), is(refreshedToken));
+    }
+
+    @Test
+    public void testReceiveNotification() throws Exception
+    {
+        // Preconditions for the test.
+        assertThat(ServOne.getGcmToken(), is(FirebaseInstanceId.getInstance().getToken()));
     }
 }

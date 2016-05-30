@@ -17,9 +17,9 @@ import static com.didekindroid.incidencia.gcm.GcmNotificationListenerServ.notifi
 import static com.didekindroid.incidencia.gcm.GcmNotificationListenerServ.notification_id_extra;
 
 @SuppressWarnings("unused")
-public class GcmBroadCastNotificationAc extends AppCompatActivity {
+public class GcmBroadCastNotificationActivity extends AppCompatActivity {
 
-    private static final String TAG = GcmBroadCastNotificationAc.class.getCanonicalName();
+    private static final String TAG = GcmBroadCastNotificationActivity.class.getCanonicalName();
     private BroadcastReceiver mReceiver;
     Notification notification;
     int notificationId;
@@ -38,7 +38,7 @@ public class GcmBroadCastNotificationAc extends AppCompatActivity {
             @Override
             public void onReceive(Context context, Intent intent)
             {
-                Log.d(TAG, "GcmBroadCastNotificationAc.BroadcastReceiver.onReceive()");
+                Log.d(TAG, "GcmBroadCastNotificationActivity.BroadcastReceiver.onReceive()");
 
                 notificationId = intent.getIntExtra(notification_id_extra, 0);
                 notification = intent.getParcelableExtra(notification_extra);
