@@ -18,21 +18,18 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
-import static com.didekin.common.oauth2.OauthConstant.COMUNIDAD_READ;
-import static com.didekin.common.oauth2.OauthConstant.COMUNIDAD_WRITE;
-import static com.didekin.common.oauth2.OauthConstant.GCM_TOKEN_PARAM;
-import static com.didekin.common.oauth2.OauthConstant.PSWD_PARAM;
-import static com.didekin.common.oauth2.OauthConstant.USER_PARAM;
-import static com.didekin.common.oauth2.OauthConstant.USER_READ;
-import static com.didekin.common.oauth2.OauthConstant.USER_WRITE;
+import static com.didekin.common.controller.CommonServiceConstant.MIME_JSON;
 import static com.didekin.usuario.controller.UsuarioServiceConstant.ACCESS_TOKEN_DELETE;
 import static com.didekin.usuario.controller.UsuarioServiceConstant.COMUNIDAD_OLDEST_USER;
+import static com.didekin.usuario.controller.UsuarioServiceConstant.COMUNIDAD_READ;
 import static com.didekin.usuario.controller.UsuarioServiceConstant.COMUNIDAD_SEARCH;
+import static com.didekin.usuario.controller.UsuarioServiceConstant.COMUNIDAD_WRITE;
 import static com.didekin.usuario.controller.UsuarioServiceConstant.COMUS_BY_USER;
+import static com.didekin.usuario.controller.UsuarioServiceConstant.GCM_TOKEN_PARAM;
 import static com.didekin.usuario.controller.UsuarioServiceConstant.LOGIN;
-import static com.didekin.usuario.controller.UsuarioServiceConstant.MIME_JSON;
 import static com.didekin.usuario.controller.UsuarioServiceConstant.PASSWORD_MODIFY;
 import static com.didekin.usuario.controller.UsuarioServiceConstant.PASSWORD_SEND;
+import static com.didekin.usuario.controller.UsuarioServiceConstant.PSWD_PARAM;
 import static com.didekin.usuario.controller.UsuarioServiceConstant.REG_COMU_AND_USER_AND_USERCOMU;
 import static com.didekin.usuario.controller.UsuarioServiceConstant.REG_COMU_USERCOMU;
 import static com.didekin.usuario.controller.UsuarioServiceConstant.REG_USERCOMU;
@@ -43,7 +40,10 @@ import static com.didekin.usuario.controller.UsuarioServiceConstant.USERCOMU_DEL
 import static com.didekin.usuario.controller.UsuarioServiceConstant.USERCOMU_MODIFY;
 import static com.didekin.usuario.controller.UsuarioServiceConstant.USERCOMU_READ;
 import static com.didekin.usuario.controller.UsuarioServiceConstant.USER_DELETE;
+import static com.didekin.usuario.controller.UsuarioServiceConstant.USER_PARAM;
+import static com.didekin.usuario.controller.UsuarioServiceConstant.USER_READ;
 import static com.didekin.usuario.controller.UsuarioServiceConstant.USER_READ_GCM_TOKEN;
+import static com.didekin.usuario.controller.UsuarioServiceConstant.USER_WRITE;
 import static com.didekin.usuario.controller.UsuarioServiceConstant.USER_WRITE_GCM_TOKEN;
 
 /**
@@ -126,21 +126,9 @@ public interface UsuarioEndPoints {
 
     @GET(USERCOMUS_BY_COMU + "/{comunidadId}")
     Call<List<UsuarioComunidad>> seeUserComusByComu(@Header("Authorization") String accessToken,
-                                              @Path("comunidadId") long comunidadId);
+                                                    @Path("comunidadId") long comunidadId);
 
     @GET(USERCOMUS_BY_USER)
     Call<List<UsuarioComunidad>> seeUserComusByUser(@Header("Authorization") String accessToken);
 
-    class GcmTokenWrapper{
-        private String token;
-
-        public GcmTokenWrapper(String token)
-        {
-            this.token = token;
-        }
-
-        public String getToken(){
-            return token;
-        }
-    }
 }

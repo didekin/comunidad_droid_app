@@ -3,12 +3,12 @@ package com.didekindroid.common.webservices;
 import android.util.Base64;
 import android.util.Log;
 
-import com.didekin.common.JksInClient;
-import com.didekin.common.RetrofitHandler;
+import com.didekin.common.controller.JksInClient;
+import com.didekin.common.controller.RetrofitHandler;
 import com.didekin.common.exception.ErrorBean;
-import com.didekin.common.oauth2.Oauth2EndPoints;
-import com.didekin.common.oauth2.OauthClient;
-import com.didekin.common.oauth2.OauthToken.AccessToken;
+import com.didekin.oauth2.Oauth2EndPoints;
+import com.didekin.oauth2.OauthClient;
+import com.didekin.oauth2.OauthToken.AccessToken;
 import com.didekindroid.common.activity.UiException;
 
 import java.io.IOException;
@@ -17,15 +17,15 @@ import retrofit2.Call;
 import retrofit2.Response;
 
 import static com.didekin.common.exception.ErrorBean.GENERIC_ERROR;
-import static com.didekin.common.oauth2.OauthClient.CL_USER;
-import static com.didekin.common.oauth2.OauthConstant.PASSWORD_GRANT;
-import static com.didekin.common.oauth2.OauthConstant.REFRESH_TOKEN_GRANT;
-import static com.didekin.common.oauth2.OauthTokenHelper.BASIC_AND_SPACE;
+import static com.didekin.oauth2.OauthClient.CL_USER;
+import static com.didekin.oauth2.OauthConstant.PASSWORD_GRANT;
+import static com.didekin.oauth2.OauthConstant.REFRESH_TOKEN_GRANT;
+import static com.didekin.oauth2.OauthTokenHelper.BASIC_AND_SPACE;
 import static com.didekindroid.DidekindroidApp.getBaseURL;
 import static com.didekindroid.DidekindroidApp.getHttpTimeOut;
 import static com.didekindroid.DidekindroidApp.getJksPassword;
 import static com.didekindroid.DidekindroidApp.getJksResourceId;
-import static com.didekindroid.common.utils.UIutils.getResponseBody;
+import static com.didekindroid.usuario.webservices.UsuarioService.getResponseBody;
 
 /**
  * User: pedro@didekin

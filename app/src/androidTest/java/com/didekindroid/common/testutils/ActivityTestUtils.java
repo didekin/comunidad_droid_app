@@ -5,7 +5,7 @@ import android.content.res.Resources;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.core.deps.guava.base.Preconditions;
 
-import com.didekin.common.oauth2.OauthToken;
+import com.didekin.oauth2.OauthToken;
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekin.usuario.dominio.Usuario;
 import com.didekin.usuario.dominio.UsuarioComunidad;

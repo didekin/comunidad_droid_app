@@ -3,7 +3,7 @@ package com.didekindroid.usuario.activity;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.common.oauth2.OauthToken.AccessToken;
+import com.didekin.oauth2.OauthToken.AccessToken;
 import com.didekin.usuario.dominio.Usuario;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;

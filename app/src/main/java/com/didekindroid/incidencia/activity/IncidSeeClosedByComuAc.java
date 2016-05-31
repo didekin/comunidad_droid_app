@@ -20,6 +20,7 @@ import com.didekindroid.common.activity.UiException;
 
 import java.util.List;
 
+import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
 import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_LIST_INDEX;
 import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
@@ -154,12 +155,14 @@ public class IncidSeeClosedByComuAc extends AppCompatActivity implements
         return IncidenciaServ.seeIncidsClosedByComu(comunidadId);
     }
 
+    /**
+     * This method returns a long > 0 if there is a comunidadId in an intent extra.
+     */
     @Override
     public long getComunidadSelected()
     {
-        // TODO: recuperar de un intent el id de la comunidad de la que se muestran las incidencias. Puede ser nulo.
-        // Tiene sentido cuando se notifica que una incidencia ha sido cerrada.
-        return 0;
+        Log.d(TAG,"getComunidadSelected()");
+        return getIntent().getLongExtra(COMUNIDAD_ID.key, 0);
     }
 
     //    ============================================================

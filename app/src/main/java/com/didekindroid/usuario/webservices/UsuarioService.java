@@ -2,8 +2,8 @@ package com.didekindroid.usuario.webservices;
 
 import android.util.Log;
 
-import com.didekin.common.JksInClient;
-import com.didekin.common.RetrofitHandler;
+import com.didekin.common.controller.RetrofitHandler;
+import com.didekin.usuario.controller.GcmTokenWrapper;
 import com.didekin.usuario.controller.UsuarioEndPoints;
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekin.usuario.dominio.Usuario;
@@ -24,7 +24,6 @@ import static com.didekindroid.DidekindroidApp.getHttpTimeOut;
 import static com.didekindroid.DidekindroidApp.getJksPassword;
 import static com.didekindroid.DidekindroidApp.getJksResourceId;
 import static com.didekindroid.common.utils.UIutils.checkBearerToken;
-import static com.didekindroid.common.utils.UIutils.getResponseBody;
 
 /**
  * User: pedro@didekin
@@ -36,19 +35,13 @@ public final class UsuarioService implements UsuarioEndPoints {
 
     private static final String TAG = UsuarioService.class.getCanonicalName();
 
-    public static final UsuarioService ServOne = new UsuarioService(getBaseURL(), new JksInAndroidApp(getJksPassword(), getJksResourceId()));
-    private final RetrofitHandler retrofitHandler;
+    public static final RetrofitHandler retrofitHandler = new RetrofitHandler(getBaseURL(),new JksInAndroidApp(getJksPassword(), getJksResourceId()),getHttpTimeOut());
+    public static final UsuarioService ServOne = new UsuarioService();
     private final UsuarioEndPoints endPoint;
 
-    private UsuarioService(final String hostPort, final JksInClient jksInAppClient)
+    private UsuarioService()
     {
-        retrofitHandler = new RetrofitHandler(hostPort, jksInAppClient, getHttpTimeOut());
         endPoint = retrofitHandler.getService(UsuarioEndPoints.class);
-    }
-
-    public RetrofitHandler getRetrofitHandler()
-    {
-        return retrofitHandler;
     }
 
 //  ================================== UsuarioEndPoints implementation ============================
@@ -425,6 +418,16 @@ public final class UsuarioService implements UsuarioEndPoints {
         }
     }
 
-//    ============================ HELPER METHODS ============================
+//  =============================================================================
+//                          HELPER METHODS
+//  =============================================================================
 
+    private static <T> T getResponseBody(Response<T> response) throws UiException, IOException
+    {
+        if (response.isSuccessful()) {
+            return response.body();
+        } else {
+            throw new UiException(retrofitHandler.getErrorBean(response));
+        }
+    }
 }

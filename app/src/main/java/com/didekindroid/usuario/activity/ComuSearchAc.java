@@ -12,7 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.didekin.common.oauth2.OauthToken.AccessToken;
+import com.didekin.oauth2.OauthToken.AccessToken;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.utils.ConnectionUtils;

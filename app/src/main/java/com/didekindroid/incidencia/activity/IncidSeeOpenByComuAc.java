@@ -179,6 +179,9 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements
         return IncidenciaServ.seeIncidsOpenByComu(comunidadId);
     }
 
+    /**
+     * This method returns a long > 0 if there is a comunidadId in an intent extra.
+     */
     @Override
     public long getComunidadSelected()
     {

@@ -71,11 +71,11 @@ public interface IncidenciaServEndPoints {
 
     @GET(SEE_INCID_COMMENTS + "/{incidenciaId}")
     Call<List<IncidComment>> seeCommentsByIncid(@Header("Authorization") String accessToken,
-                                          @Path("incidenciaId") long incidenciaId);
+                                                @Path("incidenciaId") long incidenciaId);
 
     @GET(SEE_INCIDS_CLOSED_BY_COMU + "/{comunidadId}")
     Call<List<IncidenciaUser>> seeIncidsClosedByComu(@Header("Authorization") String accessToken,
-                                               @Path("comunidadId") long comunidadId);
+                                                     @Path("comunidadId") long comunidadId);
 
     @GET(SEE_INCIDS_OPEN_BY_COMU + "/{comunidadId}")
     Call<List<IncidenciaUser>> seeIncidsOpenByComu(@Header("Authorization") String accessToken, @Path("comunidadId") long comunidadId);
@@ -85,5 +85,5 @@ public interface IncidenciaServEndPoints {
 
     @GET(SEE_USERCOMUS_IMPORTANCIA + "/{incidenciaId}")
     Call<List<ImportanciaUser>> seeUserComusImportancia(@Header("Authorization") String accessToken,
-                                                  @Path("incidenciaId") long incidenciaId);
+                                                        @Path("incidenciaId") long incidenciaId);
 }

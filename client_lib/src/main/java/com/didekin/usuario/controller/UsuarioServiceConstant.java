@@ -1,10 +1,5 @@
 package com.didekin.usuario.controller;
 
-import static com.didekin.common.oauth2.OauthConstant.COMUNIDAD_READ;
-import static com.didekin.common.oauth2.OauthConstant.OPEN;
-import static com.didekin.common.oauth2.OauthConstant.USER_READ;
-import static com.didekin.common.oauth2.OauthConstant.USER_WRITE;
-
 /**
  * User: pedro@didekin
  * Date: 04/09/15
@@ -12,6 +7,22 @@ import static com.didekin.common.oauth2.OauthConstant.USER_WRITE;
  */
 @SuppressWarnings({"unused"})
 public final class UsuarioServiceConstant {
+
+    // Code constants.
+    public static final int IS_USER_DELETED = -1;
+    /*Params used by the authorization server*/
+    public static final String USER_PARAM = "username";
+    public static final String PSWD_PARAM = "password";
+    public static final String GCM_TOKEN_PARAM = "gcmtoken";
+    /*Paths used by the resource server.*/
+    public static final String USER_PATH = "/usuario";
+    public static final String USER_READ = USER_PATH + "/read";
+    public static final String USER_WRITE = USER_PATH + "/write";
+    public static final String COMUNIDAD_PATH = "/comunidad";
+    public static final String COMUNIDAD_READ = COMUNIDAD_PATH + "/read";
+    public static final String COMUNIDAD_WRITE = COMUNIDAD_PATH + "/write";
+    public static final String OPEN = "/open";
+    public static final String OPEN_AREA = OPEN + "/**";
 
     // Paths.
     public static final String ACCESS_TOKEN_DELETE = USER_WRITE + "/token/delete";
@@ -33,13 +44,6 @@ public final class UsuarioServiceConstant {
     public static final String USER_DELETE = USER_WRITE + "/delete";
     public static final String USER_READ_GCM_TOKEN = USER_READ + "/gcm_token";
     public static final String USER_WRITE_GCM_TOKEN = USER_WRITE + "/gcm_token";
-
-    // Mime types.
-    public static final String MIME_JSON = "application/json";
-    public static final String FORM_URLENCODED = "application/x-www-form-urlencoded";
-
-    // Code constants.
-    public static final int IS_USER_DELETED = -1;
 
     private UsuarioServiceConstant()
     {

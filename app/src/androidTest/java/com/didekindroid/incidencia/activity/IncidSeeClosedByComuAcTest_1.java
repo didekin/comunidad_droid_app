@@ -26,6 +26,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
 import static com.didekindroid.common.activity.FragmentTags.incid_see_by_comu_list_fr_tag;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkNavigateUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
@@ -60,6 +61,7 @@ public class IncidSeeClosedByComuAcTest_1 {
     private CleanUserEnum whatToClean;
     Comunidad mComuPlazuelas5;
     Comunidad mComuReal;
+    Comunidad comunidadInIntent;
     IncidSeeByComuListFr mFragment;
 
     @Rule
@@ -68,19 +70,22 @@ public class IncidSeeClosedByComuAcTest_1 {
         @Override
         protected void beforeActivityLaunched()
         {
-            try {
-                regSeveralUserComuSameUser(COMU_PLAZUELA5_PEPE, COMU_REAL_PEPE);
-                mComuPlazuelas5 = ServOne.getComusByUser().get(0);
-                mComuReal = ServOne.getComusByUser().get(1);
-            } catch (UiException | IOException e) {
-                e.printStackTrace();
-            }
         }
 
         @Override
         protected Intent getActivityIntent()
         {
-            return super.getActivityIntent();
+            try {
+                regSeveralUserComuSameUser(COMU_PLAZUELA5_PEPE, COMU_REAL_PEPE);
+                mComuPlazuelas5 = ServOne.getComusByUser().get(0);
+                mComuReal = ServOne.getComusByUser().get(1);
+                comunidadInIntent = mComuReal;
+            } catch (UiException | IOException e) {
+                e.printStackTrace();
+            }
+            Intent intent = new Intent();
+            intent.putExtra(COMUNIDAD_ID.key, comunidadInIntent.getC_Id());
+            return intent;
         }
     };
 
@@ -97,8 +102,6 @@ public class IncidSeeClosedByComuAcTest_1 {
         mActivity = activityRule.getActivity();
         mFragment = (IncidSeeByComuListFr) mActivity.getSupportFragmentManager()
                 .findFragmentByTag(incid_see_by_comu_list_fr_tag);
-        Thread.sleep(2000);
-        assertThat(mActivity.mComunidadSelected, is(mComuPlazuelas5));
     }
 
     @After
@@ -128,31 +131,37 @@ public class IncidSeeClosedByComuAcTest_1 {
     }
 
     @Test
-    public void testOnDataSpinner_1()
+    public void testOnDataSpinner_1() throws InterruptedException
     {
-        // Caso OK: muestra datos de la comunidad que aparece por defecto.
+        // Caso OK: muestra datos de la comunidad en el intent (2ª en el spinner).
+
+        Thread.sleep(2000);
+
+        assertThat(mActivity.mComunidadSelected, is(comunidadInIntent));
         onView(allOf(
                 withId(R.id.app_spinner_1_dropdown_item),
                 withParent(withId(R.id.incid_reg_comunidad_spinner))
-        )).check(matches(withText(is(mComuPlazuelas5.getNombreComunidad()))
+        )).check(matches(withText(is(mComuReal.getNombreComunidad()))
+        )).check(matches(withText(is(comunidadInIntent.getNombreComunidad()))
         )).check(matches(isDisplayed()));
+        assertThat(mFragment.mComunidadSelectedIndex, is(1));
     }
 
     @Test
     public void testOnDataSpinner_2()
     {
-        // Caso OK: seleccionamos 2ª comunidad en spinner.
+        // Caso OK: seleccionamos 1ª comunidad en spinner.
 
         onView(withId(R.id.incid_reg_comunidad_spinner)).perform(click());
         onData(allOf(
-                        is(instanceOf(Comunidad.class)),
-                        is(mComuReal))
+                is(instanceOf(Comunidad.class)),
+                is(mComuPlazuelas5))
         ).perform(click()).check(matches(isDisplayed()));
 
         // Verificamos que la actividad recibe la comunidad seleccionada.
-        assertThat(mActivity.mComunidadSelected, is(mComuReal));
+        assertThat(mActivity.mComunidadSelected, is(mComuPlazuelas5));
         // Se actualiza el índice de comunidad en el fragmento.
-        assertThat(mFragment.mComunidadSelectedIndex, is(1));
+        assertThat(mFragment.mComunidadSelectedIndex, is(0));
     }
 
     @Test

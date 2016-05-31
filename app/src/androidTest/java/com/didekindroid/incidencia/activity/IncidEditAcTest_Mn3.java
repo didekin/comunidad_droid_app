@@ -25,7 +25,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static com.didekin.common.oauth2.Rol.PRESIDENTE;
+import static com.didekin.usuario.dominio.Rol.PRESIDENTE;
 import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;

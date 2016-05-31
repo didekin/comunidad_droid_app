@@ -2,14 +2,14 @@ apply plugin: 'java'
 apply plugin: 'idea'
 
 dependencies {
-    compile 'com.squareup.retrofit2:retrofit:2.0.1'
-    compile 'com.squareup.retrofit2:converter-gson:2.0.1'
+    compile 'com.squareup.retrofit2:retrofit:2.0.2'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
     compile 'com.squareup.okhttp3:logging-interceptor:3.2.0'
 }
 
 jar {
     baseName = 'client_lib'
-    version = '0.2'
+//    version = '0.2'
 }
 
 task wrapper(type: Wrapper) {

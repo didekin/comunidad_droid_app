@@ -16,11 +16,9 @@ import android.widget.Toast;
 import com.didekin.common.exception.ErrorBean;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
-import com.didekindroid.usuario.webservices.UsuarioService;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
-import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -28,8 +26,6 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.Locale;
-
-import retrofit2.Response;
 
 import static android.widget.Toast.makeText;
 import static com.didekin.common.dominio.DataPatterns.LINE_BREAK;
@@ -102,18 +98,7 @@ public final class UIutils {
         return NumberFormat.getIntegerInstance().format(number);
     }
 
-//    =============================== DIDEDINSPRING SERVICES =================================
-
-    public static <T> T getResponseBody(Response<T> response) throws UiException, IOException
-    {
-        if (response.isSuccessful()){
-            return response.body();
-        } else {
-            throw new UiException(UsuarioService.ServOne.getRetrofitHandler().getErrorBean(response));
-        }
-    }
-
-//    ================================== ERRORS ======================================
+    //    ================================== ERRORS ======================================
 
     public static StringBuilder getErrorMsgBuilder(Context context)
     {

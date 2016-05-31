@@ -23,8 +23,8 @@ import java.util.Map;
 import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
-import static com.didekin.incidservice.gcm.GcmMsgData.incidencia_type;
-import static com.didekin.incidservice.gcm.GcmMsgData.type_message_key;
+import static com.didekin.incidservice.gcm.GcmClientConstant.incidencia_type;
+import static com.didekin.incidservice.gcm.GcmClientConstant.type_message_key;
 
 public class AppFirebaseMsgService extends FirebaseMessagingService {
 
@@ -38,6 +38,7 @@ public class AppFirebaseMsgService extends FirebaseMessagingService {
     {
         Log.d(TAG, "onMessageReceived()");
 
+        // Sender ID.
         String from = message.getFrom();
         Map data = message.getData();
         String typeMessage = (String) data.get(type_message_key);

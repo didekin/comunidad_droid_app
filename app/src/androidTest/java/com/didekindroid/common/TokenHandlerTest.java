@@ -4,8 +4,8 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.common.oauth2.OauthToken;
-import com.didekin.common.oauth2.OauthToken.AccessToken;
+import com.didekin.oauth2.OauthToken;
+import com.didekin.oauth2.OauthToken.AccessToken;
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.testutils.ActivityTestUtils;
 import com.google.common.cache.Cache;
@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Date;
 
-import static com.didekin.common.oauth2.OauthTokenHelper.HELPER;
+import static com.didekin.oauth2.OauthTokenHelper.HELPER;
 import static com.didekindroid.common.TokenHandler.TKhandler;
 import static com.didekindroid.common.TokenHandler.refresh_token_filename;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_JUAN;

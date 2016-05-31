@@ -87,7 +87,7 @@ public final class Municipio implements Comparable<Municipio>, Serializable {
             return mId == municipio.getmId();
         }
 
-        return codInProvincia == municipio.codInProvincia && provincia.equals(municipio.provincia);
+        return codInProvincia == municipio.codInProvincia && (provincia != null && provincia.equals(municipio.provincia));
 
     }
 
@@ -95,7 +95,7 @@ public final class Municipio implements Comparable<Municipio>, Serializable {
     public int hashCode()
     {
         int result = (int) codInProvincia;
-        result = 31 * result + provincia.hashCode();
+        result = 31 * result + (provincia != null ? provincia.hashCode() : 0);
         return result;
     }
 
@@ -104,7 +104,7 @@ public final class Municipio implements Comparable<Municipio>, Serializable {
     {
         int result;
 
-        if ( (result = provincia.compareTo(o.getProvincia())) != 0) {
+        if ( (result = provincia != null ? provincia.compareTo(o.getProvincia()) : 0) != 0) {
             return result;
         }
         if (codInProvincia < o.getCodInProvincia()){

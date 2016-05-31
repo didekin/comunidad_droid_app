@@ -77,7 +77,7 @@ public class IncidEditAcMaxPowerTest_1 extends IncidEditAbstractTest {
             /**
              * Preconditions:
              * 1. An fIncidenciaUser with powers to modify, but not to erase, is received.
-             * */
+             */
             @Override
             protected Intent getActivityIntent()
             {

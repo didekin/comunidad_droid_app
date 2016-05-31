@@ -1,6 +1,6 @@
 package com.didekin.incidservice.dominio;
 
-import com.didekin.common.BeanBuilder;
+import com.didekin.common.dominio.BeanBuilder;
 import com.didekin.common.dominio.SerialNumber;
 import com.didekin.usuario.dominio.Comunidad;
 

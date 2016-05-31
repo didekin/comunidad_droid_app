@@ -1,4 +1,4 @@
-package com.didekin.common.oauth2;
+package com.didekin.oauth2;
 
 import java.sql.Timestamp;
 

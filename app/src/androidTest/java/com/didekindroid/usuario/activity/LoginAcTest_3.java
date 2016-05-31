@@ -3,8 +3,8 @@ package com.didekindroid.usuario.activity;
 import android.content.Intent;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.common.oauth2.OauthToken.AccessToken;
-import com.didekin.common.oauth2.OauthTokenHelper;
+import com.didekin.oauth2.OauthToken.AccessToken;
+import com.didekin.oauth2.OauthTokenHelper;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 

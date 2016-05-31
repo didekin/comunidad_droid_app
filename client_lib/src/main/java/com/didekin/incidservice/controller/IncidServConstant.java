@@ -1,7 +1,7 @@
 package com.didekin.incidservice.controller;
 
-import static com.didekin.common.oauth2.OauthConstant.INCID_READ;
-import static com.didekin.common.oauth2.OauthConstant.INCID_WRITE;
+import static com.didekin.oauth2.OauthConstant.INCID_READ;
+import static com.didekin.oauth2.OauthConstant.INCID_WRITE;
 
 /**
  * User: pedro@didekin

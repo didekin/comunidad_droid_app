@@ -1,7 +1,7 @@
 package com.didekin.incidservice.dominio;
 
-import com.didekin.common.BeanBuilder;
-import com.didekin.common.dominio.Address;
+import com.didekin.common.dominio.BeanBuilder;
+import com.didekin.usuario.dominio.Address;
 import com.didekin.usuario.dominio.Usuario;
 
 import java.sql.Timestamp;
@@ -11,7 +11,8 @@ import java.sql.Timestamp;
  * Date: 13/11/15
  * Time: 17:16
  */
-@SuppressWarnings("FieldCanBeLocal")
+
+@SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class Proveedor {
 
     private final long proveedorId;

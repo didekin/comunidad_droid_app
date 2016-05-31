@@ -5,10 +5,10 @@ import com.didekindroid.R;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.didekin.common.oauth2.Rol.ADMINISTRADOR;
-import static com.didekin.common.oauth2.Rol.INQUILINO;
-import static com.didekin.common.oauth2.Rol.PRESIDENTE;
-import static com.didekin.common.oauth2.Rol.PROPIETARIO;
+import static com.didekin.usuario.dominio.Rol.ADMINISTRADOR;
+import static com.didekin.usuario.dominio.Rol.INQUILINO;
+import static com.didekin.usuario.dominio.Rol.PRESIDENTE;
+import static com.didekin.usuario.dominio.Rol.PROPIETARIO;
 
 /**
  * User: pedro@didekin

@@ -30,7 +30,7 @@ import static com.didekin.common.exception.DidekinExceptionMsg.INCIDENCIA_NOT_FO
 import static com.didekin.common.exception.DidekinExceptionMsg.INCID_IMPORTANCIA_WRONG_INIT;
 import static com.didekin.common.exception.DidekinExceptionMsg.ROLES_NOT_FOUND;
 import static com.didekin.common.exception.DidekinExceptionMsg.USERCOMU_WRONG_INIT;
-import static com.didekin.common.oauth2.Rol.PROPIETARIO;
+import static com.didekin.usuario.dominio.Rol.PROPIETARIO;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.testutils.ActivityTestUtils.updateSecurityData;

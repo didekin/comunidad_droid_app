@@ -1,9 +1,8 @@
 package com.didekin.usuario.dominio;
 
 
-import com.didekin.common.BeanBuilder;
+import com.didekin.common.dominio.BeanBuilder;
 import com.didekin.common.dominio.SerialNumber;
-import com.didekin.common.oauth2.Rol;
 
 import java.io.InvalidObjectException;
 import java.io.ObjectInputStream;

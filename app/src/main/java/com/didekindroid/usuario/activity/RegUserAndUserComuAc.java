@@ -13,7 +13,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.didekin.common.exception.ErrorBean;
-import com.didekin.common.oauth2.OauthToken.AccessToken;
+import com.didekin.oauth2.OauthToken.AccessToken;
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekin.usuario.dominio.Usuario;
 import com.didekin.usuario.dominio.UsuarioComunidad;

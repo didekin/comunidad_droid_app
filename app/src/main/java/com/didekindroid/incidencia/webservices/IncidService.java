@@ -2,8 +2,7 @@ package com.didekindroid.incidencia.webservices;
 
 import android.util.Log;
 
-import com.didekin.common.JksInClient;
-import com.didekin.common.RetrofitHandler;
+import com.didekin.common.controller.RetrofitHandler;
 import com.didekin.incidservice.controller.IncidenciaServEndPoints;
 import com.didekin.incidservice.dominio.ImportanciaUser;
 import com.didekin.incidservice.dominio.IncidAndResolBundle;
@@ -28,7 +27,6 @@ import static com.didekindroid.DidekindroidApp.getHttpTimeOut;
 import static com.didekindroid.DidekindroidApp.getJksPassword;
 import static com.didekindroid.DidekindroidApp.getJksResourceId;
 import static com.didekindroid.common.utils.UIutils.checkBearerToken;
-import static com.didekindroid.common.utils.UIutils.getResponseBody;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 
 /**
@@ -39,12 +37,14 @@ import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 public class IncidService implements IncidenciaServEndPoints {
 
     private static final String TAG = IncidService.class.getCanonicalName();
-    public static final IncidService IncidenciaServ = new IncidService(getBaseURL(), new JksInAndroidApp(getJksPassword(), getJksResourceId()));
+
+    public static final RetrofitHandler retrofitHandler = new RetrofitHandler(getBaseURL(),new JksInAndroidApp(getJksPassword(), getJksResourceId()),getHttpTimeOut());
+    public static final IncidService IncidenciaServ = new IncidService();
     private final IncidenciaServEndPoints endPoint;
 
-    private IncidService(final String hostPort, final JksInClient jksInAppClient)
+    private IncidService()
     {
-        endPoint = new RetrofitHandler(hostPort, jksInAppClient,getHttpTimeOut()).getService(IncidenciaServEndPoints.class);
+        endPoint = retrofitHandler.getService(IncidenciaServEndPoints.class);
     }
 
     /*  ================================== IncidenciaServEndPoints implementation ============================*/
@@ -284,6 +284,19 @@ public class IncidService implements IncidenciaServEndPoints {
             return getResponseBody(response);
         } catch (IOException e) {
             throw new UiException(GENERIC_ERROR);
+        }
+    }
+
+//  =============================================================================
+//                          HELPER METHODS
+//  =============================================================================
+
+    private static  <T> T getResponseBody(Response<T> response) throws IOException, UiException
+    {
+        if (response.isSuccessful()){
+            return response.body();
+        } else {
+            throw new UiException(retrofitHandler.getErrorBean(response));
         }
     }
 }

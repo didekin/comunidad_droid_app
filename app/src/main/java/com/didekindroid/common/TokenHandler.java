@@ -2,7 +2,7 @@ package com.didekindroid.common;
 
 import android.util.Log;
 
-import com.didekin.common.oauth2.OauthToken.AccessToken;
+import com.didekin.oauth2.OauthToken.AccessToken;
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.utils.IoHelper;
 import com.google.common.cache.Cache;
@@ -13,7 +13,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
-import static com.didekin.common.oauth2.OauthTokenHelper.HELPER;
+import static com.didekin.oauth2.OauthTokenHelper.HELPER;
 import static com.didekindroid.DidekindroidApp.getContext;
 import static com.didekindroid.common.webservices.Oauth2Service.Oauth2;
 import static com.google.common.base.Preconditions.checkNotNull;

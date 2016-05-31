@@ -8,7 +8,7 @@ package com.didekin.incidservice.gcm;
  * Abstract class with the constants to initialize 'data' payload in firebase gcm messages.
  */
 @SuppressWarnings({"unused"})
-public abstract class GcmMsgData {
+public abstract class GcmClientConstant {
 
 //    ============================== VALUES ==================================
     /**
@@ -25,37 +25,4 @@ public abstract class GcmMsgData {
      * The key to retrieve from the data payload the type of message.
      */
     public static final String type_message_key = "typeMsg";
-
-//    ======================= FIELDS to initialize KEY/VALUE pairs ==========================
-
-    final String typeMsg;
-
-    protected GcmMsgData(String typeMsg)
-    {
-        this.typeMsg = typeMsg;
-    }
-
-//    ======================= INNER CLASSES for implementations ==========================
-
-    /**
-     *  Implementation for 'data' payload in incidencia related messages.
-     */
-    public final static class Incidencia extends GcmMsgData {
-
-        public Incidencia()
-        {
-            super(incidencia_type);
-        }
-    }
-
-    /**
-     *  Implementation for 'data' payload in resolución related messages.
-     */
-    public final static class Resolucion extends GcmMsgData {
-
-        public Resolucion()
-        {
-            super(resolucion_type);
-        }
-    }
 }

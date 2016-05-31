@@ -5,7 +5,7 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.common.exception.ErrorBean;
-import com.didekin.common.oauth2.OauthToken.AccessToken;
+import com.didekin.oauth2.OauthToken.AccessToken;
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekin.usuario.dominio.Municipio;
 import com.didekin.usuario.dominio.Provincia;
@@ -32,7 +32,7 @@ import static com.didekin.common.exception.DidekinExceptionMsg.COMUNIDAD_NOT_FOU
 import static com.didekin.common.exception.DidekinExceptionMsg.TOKEN_NULL;
 import static com.didekin.common.exception.DidekinExceptionMsg.USER_NAME_DUPLICATE;
 import static com.didekin.common.exception.DidekinExceptionMsg.USER_NAME_NOT_FOUND;
-import static com.didekin.common.oauth2.OauthTokenHelper.HELPER;
+import static com.didekin.oauth2.OauthTokenHelper.HELPER;
 import static com.didekin.usuario.controller.UsuarioServiceConstant.IS_USER_DELETED;
 import static com.didekindroid.common.TokenHandler.TKhandler;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOneUser;
@@ -64,6 +64,7 @@ import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.makeListTwoUserComu;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.makeUsuarioComunidad;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
+import static com.didekindroid.usuario.webservices.UsuarioService.retrofitHandler;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
@@ -426,7 +427,7 @@ public class UsuarioServiceTest {
 
         Response<Boolean> response = ServOne.regUserAndUserComu(userComu).execute();
         assertThat(response.isSuccessful(), is(false));
-        ErrorBean errorBean = ServOne.getRetrofitHandler().getErrorBean(response);
+        ErrorBean errorBean = retrofitHandler.getErrorBean(response);
         assertThat(errorBean, notNullValue());
         assertThat(errorBean.getMessage(), is(USER_NAME_DUPLICATE.getHttpMessage()));
         assertThat(errorBean.getHttpStatus(), is(USER_NAME_DUPLICATE.getHttpStatus()));

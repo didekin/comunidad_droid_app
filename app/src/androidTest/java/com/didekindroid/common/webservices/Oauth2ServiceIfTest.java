@@ -3,7 +3,7 @@ package com.didekindroid.common.webservices;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.common.exception.ErrorBean;
-import com.didekin.common.oauth2.OauthToken.AccessToken;
+import com.didekin.oauth2.OauthToken.AccessToken;
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.usuario.testutils.CleanUserEnum;
 
@@ -18,8 +18,8 @@ import retrofit2.Response;
 
 import static com.didekin.common.exception.DidekinExceptionMsg.BAD_REQUEST;
 import static com.didekin.common.exception.DidekinExceptionMsg.NOT_FOUND;
-import static com.didekin.common.oauth2.OauthClient.CL_USER;
-import static com.didekin.common.oauth2.OauthTokenHelper.HELPER;
+import static com.didekin.oauth2.OauthClient.CL_USER;
+import static com.didekin.oauth2.OauthTokenHelper.HELPER;
 import static com.didekindroid.common.TokenHandler.TKhandler;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanWithTkhandler;

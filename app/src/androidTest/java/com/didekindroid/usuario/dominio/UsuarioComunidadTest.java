@@ -1,6 +1,6 @@
 package com.didekindroid.usuario.dominio;
 
-import com.didekin.common.oauth2.Rol;
+import com.didekin.usuario.dominio.Rol;
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekin.usuario.dominio.Municipio;
 import com.didekin.usuario.dominio.Provincia;
@@ -9,8 +9,8 @@ import com.didekin.usuario.dominio.UsuarioComunidad;
 
 import org.junit.Test;
 
-import static com.didekin.common.oauth2.Rol.ADMINISTRADOR;
-import static com.didekin.common.oauth2.Rol.PROPIETARIO;
+import static com.didekin.usuario.dominio.Rol.ADMINISTRADOR;
+import static com.didekin.usuario.dominio.Rol.PROPIETARIO;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 

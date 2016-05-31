@@ -1,4 +1,4 @@
-package com.didekin.common;
+package com.didekin.common.controller;
 
 import com.didekin.common.exception.ErrorBean;
 
@@ -37,6 +37,15 @@ public class RetrofitHandler {
 
     private final Retrofit retrofit;
 
+    public RetrofitHandler(final String hostPort, int timeOut)
+    {
+        retrofit = new Retrofit.Builder()
+                .baseUrl(hostPort)
+                .client(getOkHttpClient(null, timeOut))
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+    }
+
     public RetrofitHandler(final String hostPort, final JksInClient jksInAppClient, int timeOut)
     {
         retrofit = new Retrofit.Builder()
@@ -60,9 +69,9 @@ public class RetrofitHandler {
     {
         Converter<ResponseBody, ErrorBean> converter = retrofit.responseBodyConverter(ErrorBean.class, new Annotation[0]);
         ErrorBean errorBean = converter.convert(response.errorBody());
-        if (errorBean == null || errorBean.getMessage() == null){
+        if (errorBean == null || errorBean.getMessage() == null) {
             okhttp3.Response okhttpResponse = response.raw();
-            errorBean = new ErrorBean(okhttpResponse.message(),okhttpResponse.code());
+            errorBean = new ErrorBean(okhttpResponse.message(), okhttpResponse.code());
         }
         return errorBean;
     }
@@ -71,12 +80,17 @@ public class RetrofitHandler {
 
     private OkHttpClient getOkHttpClient(JksInClient jksInAppClient, int timeOut)
     {
-        return new OkHttpClient.Builder()
+        OkHttpClient.Builder builder = new OkHttpClient.Builder()
                 .addNetworkInterceptor(doLoggingInterceptor())
-                .connectTimeout(timeOut, SECONDS)  //30
-                .readTimeout(timeOut * 2, SECONDS)     //60
-                .sslSocketFactory(getSslContext(jksInAppClient).getSocketFactory())
-                .build();
+                .connectTimeout(timeOut, SECONDS)
+                .readTimeout(timeOut * 2, SECONDS);
+        if (jksInAppClient == null) {
+            return builder.build();
+        } else {
+            return builder
+                    .sslSocketFactory(getSslContext(jksInAppClient).getSocketFactory())
+                    .build();
+        }
     }
 
     protected Interceptor doLoggingInterceptor()

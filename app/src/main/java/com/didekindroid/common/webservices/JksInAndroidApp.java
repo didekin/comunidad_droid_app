@@ -1,6 +1,6 @@
 package com.didekindroid.common.webservices;
 
-import com.didekin.common.JksInClient;
+import com.didekin.common.controller.JksInClient;
 import com.didekindroid.DidekindroidApp;
 
 import java.io.IOException;

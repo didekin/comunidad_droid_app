@@ -22,7 +22,7 @@ import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekin.common.oauth2.Rol.PROPIETARIO;
+import static com.didekin.usuario.dominio.Rol.PROPIETARIO;
 import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;

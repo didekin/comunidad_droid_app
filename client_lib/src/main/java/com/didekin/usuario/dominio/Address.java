@@ -1,4 +1,4 @@
-package com.didekin.common.dominio;
+package com.didekin.usuario.dominio;
 
 import com.didekin.usuario.dominio.Municipio;
 
@@ -7,7 +7,7 @@ import com.didekin.usuario.dominio.Municipio;
  * Date: 13/11/15
  * Time: 19:55
  */
-public final class Address {
+public final class Address {  // TODO: borrar o mover al módulo de proveedor.
 
     private final String tipoVia;
     private final String nombreVia;

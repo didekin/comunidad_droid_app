@@ -1,7 +1,7 @@
 package com.didekin.usuario.dominio;
 
 
-import com.didekin.common.BeanBuilder;
+import com.didekin.common.dominio.BeanBuilder;
 import com.didekin.common.dominio.SerialNumber;
 
 import java.io.InvalidObjectException;
@@ -193,15 +193,14 @@ public final class Comunidad implements Comparable<Comunidad>, Serializable {
         if ((result = tipoVia.compareToIgnoreCase(comunidadIn.getTipoVia())) != 0) {
             return result;
         }
-        if (numero < comunidadIn.getNumero()) {
-            return -1;
+        if(numero != comunidadIn.getNumero()){
+            return numero < comunidadIn.getNumero() ? -1 : 1;
         }
-        if (numero > comunidadIn.getNumero()) {
-            return 1;
+        if (sufijoNumero != null) {
+           return sufijoNumero.compareToIgnoreCase(comunidadIn.getSufijoNumero());
+        } else {
+            return comunidadIn.getSufijoNumero() == null ? 0 : 1;
         }
-        return sufijoNumero != null
-                ? sufijoNumero.compareToIgnoreCase(comunidadIn.getSufijoNumero())
-                : Boolean.compare(comunidadIn.getSufijoNumero() != null, true);
     }
 
     //    ==================== BUILDER ====================

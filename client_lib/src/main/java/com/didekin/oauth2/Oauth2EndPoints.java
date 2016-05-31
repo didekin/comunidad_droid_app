@@ -1,7 +1,7 @@
-package com.didekin.common.oauth2;
+package com.didekin.oauth2;
 
 import com.didekin.common.exception.ErrorBean;
-import com.didekin.common.oauth2.OauthToken.AccessToken;
+import com.didekin.oauth2.OauthToken.AccessToken;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -10,10 +10,10 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 
-import static com.didekin.common.oauth2.OauthConstant.GRANT_TYPE_PARAM;
-import static com.didekin.common.oauth2.OauthConstant.PSWD_PARAM;
-import static com.didekin.common.oauth2.OauthConstant.REFRESH_TK_PARAM;
-import static com.didekin.common.oauth2.OauthConstant.USER_PARAM;
+import static com.didekin.oauth2.OauthConstant.GRANT_TYPE_PARAM;
+import static com.didekin.oauth2.OauthConstant.REFRESH_TK_PARAM;
+import static com.didekin.usuario.controller.UsuarioServiceConstant.PSWD_PARAM;
+import static com.didekin.usuario.controller.UsuarioServiceConstant.USER_PARAM;
 
 /**
  * User: pedro@didekin

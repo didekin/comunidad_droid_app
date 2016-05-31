@@ -4,8 +4,8 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.common.oauth2.OauthToken;
-import com.didekin.common.oauth2.OauthToken.AccessToken;
+import com.didekin.oauth2.OauthToken;
+import com.didekin.oauth2.OauthToken.AccessToken;
 import com.didekindroid.common.utils.IoHelper;
 
 import org.junit.After;

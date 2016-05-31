@@ -71,6 +71,8 @@ dependencies {
         exclude group: 'com.google.guava'
     }
     androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
+    androidTestCompile files('../../didekinspring/server_gcm_lib/build/libs/server_gcm_lib.jar')
+
     compile project(':client_lib')
     compile 'com.google.guava:guava:18.0'
     compile 'com.android.support:design:23.4.0'

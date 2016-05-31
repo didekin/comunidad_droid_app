@@ -1,4 +1,4 @@
-package com.didekin.common.oauth2;
+package com.didekin.usuario.dominio;
 
 import java.util.HashMap;
 import java.util.Map;
