@@ -1,2 +1,2 @@
 rootProject.name = 'didekindroid'
-include 'app', ':client_lib'
+include 'app', ':client_lib', ':server_gcm_lib'

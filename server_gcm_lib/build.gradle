@@ -1,0 +1,16 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+
+dependencies {
+    compile 'com.squareup.retrofit2:retrofit:2.0.2'
+    compile project(':client_lib')
+}
+
+//noinspection GroovyAssignabilityCheck
+jar {
+    baseName = 'server_gcm_lib'
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.13'
+}

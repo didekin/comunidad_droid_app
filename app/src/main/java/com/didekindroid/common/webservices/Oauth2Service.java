@@ -3,7 +3,6 @@ package com.didekindroid.common.webservices;
 import android.util.Base64;
 import android.util.Log;
 
-import com.didekin.common.controller.JksInClient;
 import com.didekin.common.controller.RetrofitHandler;
 import com.didekin.common.exception.ErrorBean;
 import com.didekin.oauth2.Oauth2EndPoints;
@@ -25,7 +24,6 @@ import static com.didekindroid.DidekindroidApp.getBaseURL;
 import static com.didekindroid.DidekindroidApp.getHttpTimeOut;
 import static com.didekindroid.DidekindroidApp.getJksPassword;
 import static com.didekindroid.DidekindroidApp.getJksResourceId;
-import static com.didekindroid.usuario.webservices.UsuarioService.getResponseBody;
 
 /**
  * User: pedro@didekin
@@ -36,13 +34,12 @@ public class Oauth2Service implements Oauth2EndPoints {
 
     private static final String TAG = Oauth2Service.class.getCanonicalName();
 
-    public static final Oauth2Service Oauth2 = new Oauth2Service(getBaseURL(), new JksInAndroidApp(getJksPassword(), getJksResourceId()));
+    public static final RetrofitHandler retrofitHandler = new RetrofitHandler(getBaseURL(), new JksInAndroidApp(getJksPassword(), getJksResourceId()), getHttpTimeOut());
+    public static final Oauth2Service Oauth2 = new Oauth2Service();
     private final Oauth2EndPoints endPoint;
-    private final RetrofitHandler retrofitHandler;
 
-    private Oauth2Service(final String hostPort, final JksInClient jksInAppClient)
+    private Oauth2Service()
     {
-        retrofitHandler = new RetrofitHandler(hostPort, jksInAppClient, getHttpTimeOut());
         endPoint = retrofitHandler.getService(Oauth2EndPoints.class);
     }
 
@@ -114,5 +111,14 @@ public class Oauth2Service implements Oauth2EndPoints {
         String base64AuthData = Base64.encodeToString(baseString.getBytes(), Base64.DEFAULT);
 
         return BASIC_AND_SPACE + base64AuthData.substring(0, base64AuthData.length() - 1);
+    }
+
+    private static <T> T getResponseBody(Response<T> response) throws UiException, IOException
+    {
+        if (response.isSuccessful()) {
+            return response.body();
+        } else {
+            throw new UiException(retrofitHandler.getErrorBean(response));
+        }
     }
 }

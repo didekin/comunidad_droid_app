@@ -26,7 +26,7 @@ import com.didekindroid.incidencia.activity.IncidSeeOpenByComuAcTest_2;
 import com.didekindroid.incidencia.activity.IncidSeeOpenByComuAcTest_3;
 import com.didekindroid.incidencia.activity.IncidSeeOpenByComuAcTest_4;
 import com.didekindroid.incidencia.activity.IncidSeeUserComuImportanciaTest_1;
-import com.didekindroid.incidencia.gcm.IncidRegAcTest_gcm1;
+import com.didekindroid.incidencia.activity.IncidRegAcTest_gcm;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -51,7 +51,7 @@ import org.junit.runners.Suite;
         IncidEditAcTest_Mn3.class,
         IncidEditAcTest_Mn4.class,
         IncidRegAcTest.class,
-        IncidRegAcTest_gcm1.class,
+        IncidRegAcTest_gcm.class,
         IncidResolucionEditFrTest_1.class,
         IncidResolucionEditFrTest_2.class,
         IncidResolucionRegFrTest.class,

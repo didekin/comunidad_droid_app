@@ -1,4 +1,4 @@
-package com.didekindroid.incidencia.gcm;
+package com.didekindroid.incidencia.activity;
 
 import android.app.NotificationManager;
 import android.content.Context;
@@ -12,6 +12,7 @@ import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.common.IdlingResourceForIntentServ;
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.incidencia.activity.IncidRegAc;
+import com.didekindroid.incidencia.gcm.GcmRegistrationIntentService;
 import com.didekindroid.usuario.testutils.CleanUserEnum;
 import com.google.firebase.iid.FirebaseInstanceId;
 
@@ -44,7 +45,7 @@ import static org.junit.Assert.assertThat;
  * Time: 16:38
  */
 @RunWith(AndroidJUnit4.class)
-public class IncidRegAcTest_gcm1 {
+public class IncidRegAcTest_gcm {
 
     private IncidRegAc mActivity;
     private CleanUserEnum whatToClean = CleanUserEnum.CLEAN_PEPE;

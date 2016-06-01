@@ -38,7 +38,8 @@ public class IncidService implements IncidenciaServEndPoints {
 
     private static final String TAG = IncidService.class.getCanonicalName();
 
-    public static final RetrofitHandler retrofitHandler = new RetrofitHandler(getBaseURL(),new JksInAndroidApp(getJksPassword(), getJksResourceId()),getHttpTimeOut());
+    public static final RetrofitHandler retrofitHandler =
+            new RetrofitHandler(getBaseURL(),new JksInAndroidApp(getJksPassword(), getJksResourceId()),getHttpTimeOut());
     public static final IncidService IncidenciaServ = new IncidService();
     private final IncidenciaServEndPoints endPoint;
 
