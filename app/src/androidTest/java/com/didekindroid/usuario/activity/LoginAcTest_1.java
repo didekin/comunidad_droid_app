@@ -22,7 +22,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.common.TokenHandler.TKhandler;
+import static com.didekindroid.common.activity.TokenHandler.TKhandler;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkNoToastInTest;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
@@ -125,7 +125,7 @@ public class LoginAcTest_1 extends LoginAcTest{
         assertThat(ServOne.regComuAndUserAndUserComu(COMU_TRAV_PLAZUELA_PEPE).execute().body(), is(true));
         mActivity = mActivityRule.launchActivity(new Intent());
 
-        typeCheckClickPswdWrong();
+        typeCheckClickPswdWrong(null);
     }
 
     @Test
@@ -137,7 +137,7 @@ public class LoginAcTest_1 extends LoginAcTest{
         assertThat(ServOne.regComuAndUserAndUserComu(COMU_TRAV_PLAZUELA_PEPE).execute().body(), is(true));
         mActivity = mActivityRule.launchActivity(new Intent());
 
-        getDialogFragment();
+        getDialogFragment(USER_PEPE.getUserName());
         onView(withText(R.string.send_password_by_mail_dialog)).inRoot(isDialog()).check(matches(isDisplayed()));
     }
 }

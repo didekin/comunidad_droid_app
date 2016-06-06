@@ -34,7 +34,7 @@ import static com.didekin.common.exception.DidekinExceptionMsg.USER_NAME_DUPLICA
 import static com.didekin.common.exception.DidekinExceptionMsg.USER_NAME_NOT_FOUND;
 import static com.didekin.oauth2.OauthTokenHelper.HELPER;
 import static com.didekin.usuario.controller.UsuarioServiceConstant.IS_USER_DELETED;
-import static com.didekindroid.common.TokenHandler.TKhandler;
+import static com.didekindroid.common.activity.TokenHandler.TKhandler;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOneUser;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanTwoUsers;
@@ -55,9 +55,11 @@ import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_ESCORIAL_
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_LA_PLAZUELA_5;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_PLAZUELA5_JUAN;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_DROID;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_JUAN;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_PEPE;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_TRAV_PLAZUELA_PEPE;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_DROID;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_JUAN;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_JUAN2;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_PEPE;
@@ -367,8 +369,8 @@ public class UsuarioServiceTest {
     @Test
     public void testPasswordSend() throws UiException, IOException
     {
-        signUpAndUpdateTk(COMU_REAL_PEPE);
-        assertThat(ServOne.passwordSend(USER_PEPE.getUserName()).execute().body(), is(true));
+        signUpAndUpdateTk(COMU_REAL_DROID);
+        assertThat(ServOne.passwordSend(USER_DROID.getUserName()).execute().body(), is(true));
         // Es necesario conseguir un nuevo token. La validación del antiguo falla por el cambio de password.
         AccessToken token = Oauth2.getRefreshUserToken(TKhandler.getRefreshTokenKey());
         ServOne.deleteUser(HELPER.doBearerAccessTkHeader(token)).execute();

@@ -27,7 +27,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.DidekindroidApp.getContext;
-import static com.didekindroid.common.TokenHandler.TKhandler;
+import static com.didekindroid.common.activity.TokenHandler.TKhandler;
 import static com.didekindroid.common.utils.UIutils.updateIsRegistered;
 import static com.didekindroid.common.webservices.Oauth2Service.Oauth2;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.ADM;

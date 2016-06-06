@@ -32,7 +32,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.common.TokenHandler.TKhandler;
+import static com.didekindroid.common.activity.TokenHandler.TKhandler;
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_SEARCH;
 import static com.didekindroid.common.activity.ViewsIDs.COMU_SEARCH_RESULTS;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkNavigateUp;

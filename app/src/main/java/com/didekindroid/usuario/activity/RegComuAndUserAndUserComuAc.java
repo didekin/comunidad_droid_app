@@ -27,7 +27,7 @@ import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
 import java.io.IOException;
 
 import static com.didekin.common.dominio.DataPatterns.LINE_BREAK;
-import static com.didekindroid.common.TokenHandler.TKhandler;
+import static com.didekindroid.common.activity.TokenHandler.TKhandler;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.updateIsRegistered;
 import static com.didekindroid.common.webservices.Oauth2Service.Oauth2;

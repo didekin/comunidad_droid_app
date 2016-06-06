@@ -30,7 +30,7 @@ import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekindroid.common.TokenHandler.TKhandler;
+import static com.didekindroid.common.activity.TokenHandler.TKhandler;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOneUser;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
@@ -184,7 +184,7 @@ public class RegComuAndUserComuAcTest {
     }
 
     @Test
-    public void testRegisterComuAndUserComu_3()
+    public void testRegisterComuAndUserComu_3() throws InterruptedException
     {
         activity = mActivityRule.launchActivity(new Intent());
 

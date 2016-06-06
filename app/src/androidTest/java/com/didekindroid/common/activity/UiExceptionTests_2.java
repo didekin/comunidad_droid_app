@@ -27,7 +27,7 @@ import static com.didekin.common.exception.DidekinExceptionMsg.INCIDENCIA_COMMEN
 import static com.didekin.common.exception.DidekinExceptionMsg.INCIDENCIA_NOT_REGISTERED;
 import static com.didekin.common.exception.DidekinExceptionMsg.RESOLUCION_DUPLICATE;
 import static com.didekin.common.exception.DidekinExceptionMsg.USER_DATA_NOT_MODIFIED;
-import static com.didekindroid.common.TokenHandler.TKhandler;
+import static com.didekindroid.common.activity.TokenHandler.TKhandler;
 import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;

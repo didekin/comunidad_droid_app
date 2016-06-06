@@ -21,8 +21,8 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        ComunidadTest.class,
         ComunidadBeanValidaTests.class,
+        ComunidadTest.class,
         MockDbHelperTest.class,
         MunicipioTest.class,
         UsuarioBeanValidaTests.class,

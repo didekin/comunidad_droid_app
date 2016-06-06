@@ -88,21 +88,21 @@
         <!-- .......... GCM services ......... -->
         <!--TODO: exported=false es una posibilidad.-->
         <service
-            android:name=".incidencia.gcm.AppFirebaseMsgService" android:exported="true"
+            android:name=".common.gcm.AppFirebaseMsgService" android:exported="true"
             tools:ignore="ExportedService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
         <service
-            android:name=".incidencia.gcm.AppFirebaseInstanceIdService" android:exported="true"
+            android:name=".common.gcm.AppFirebaseInstanceIdService" android:exported="true"
             tools:ignore="ExportedService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
         <service
-            android:name=".incidencia.gcm.GcmRegistrationIntentService"
+            android:name=".common.gcm.GcmRegistrationIntentService"
             android:exported="false">
         </service>
         <!-- **************************************************************** -->

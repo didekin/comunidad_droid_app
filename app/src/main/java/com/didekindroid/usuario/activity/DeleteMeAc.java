@@ -11,7 +11,7 @@ import android.widget.Button;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 
-import static com.didekindroid.common.TokenHandler.TKhandler;
+import static com.didekindroid.common.activity.TokenHandler.TKhandler;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.utils.UIutils.updateIsRegistered;

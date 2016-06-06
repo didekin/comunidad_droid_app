@@ -16,7 +16,7 @@ import com.didekin.incidservice.dominio.IncidenciaUser;
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
-import com.didekindroid.incidencia.gcm.GcmRegistrationIntentService;
+import com.didekindroid.common.gcm.GcmRegistrationIntentService;
 
 import java.util.List;
 

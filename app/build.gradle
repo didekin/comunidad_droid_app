@@ -72,7 +72,7 @@ dependencies {
         exclude group: 'com.google.guava'
     }
     androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
-    androidTestCompile project(':server_gcm_lib')
+    androidTestCompile project(':client_gcm_lib')
 
     compile project(':client_lib')
     compile 'com.google.guava:guava:18.0'

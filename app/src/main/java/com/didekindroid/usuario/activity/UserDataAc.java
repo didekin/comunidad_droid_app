@@ -22,7 +22,7 @@ import com.didekindroid.usuario.activity.utils.UserMenu;
 import com.didekindroid.usuario.dominio.UsuarioBean;
 
 import static com.didekin.common.exception.DidekinExceptionMsg.BAD_REQUEST;
-import static com.didekindroid.common.TokenHandler.TKhandler;
+import static com.didekindroid.common.activity.TokenHandler.TKhandler;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;

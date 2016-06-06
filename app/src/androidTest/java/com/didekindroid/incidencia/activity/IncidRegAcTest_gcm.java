@@ -1,18 +1,22 @@
 package com.didekindroid.incidencia.activity;
 
+import android.annotation.TargetApi;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
+import android.service.notification.StatusBarNotification;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.didekin.incidservice.dominio.IncidImportancia;
+import com.didekin.usuario.dominio.Usuario;
 import com.didekin.usuario.dominio.UsuarioComunidad;
-import com.didekindroid.common.IdlingResourceForIntentServ;
+import com.didekindroid.common.activity.IdlingResourceForIntentServ;
 import com.didekindroid.common.activity.UiException;
-import com.didekindroid.incidencia.activity.IncidRegAc;
-import com.didekindroid.incidencia.gcm.GcmRegistrationIntentService;
+import com.didekindroid.common.gcm.GcmRegistrationIntentService;
 import com.didekindroid.usuario.testutils.CleanUserEnum;
 import com.google.firebase.iid.FirebaseInstanceId;
 
@@ -32,7 +36,9 @@ import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdat
 import static com.didekindroid.common.utils.UIutils.checkPlayServices;
 import static com.didekindroid.common.utils.UIutils.isGcmTokenSentServer;
 import static com.didekindroid.common.utils.UIutils.updateIsGcmTokenSentServer;
-import static com.didekindroid.incidencia.gcm.AppFirebaseMsgService.TypeMsgHandler.INCIDENCIA;
+import static com.didekindroid.common.gcm.AppFirebaseMsgService.TypeMsgHandler.INCIDENCIA;
+import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
+import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static org.hamcrest.CoreMatchers.is;
@@ -50,7 +56,8 @@ public class IncidRegAcTest_gcm {
     private IncidRegAc mActivity;
     private CleanUserEnum whatToClean = CleanUserEnum.CLEAN_PEPE;
     IdlingResourceForIntentServ idlingResource;
-    private UsuarioComunidad pepeUserComu;
+    Usuario pepe;
+    UsuarioComunidad pepeUserComu;
     NotificationManager mNotifyManager;
     private int messageId = INCIDENCIA.getTitleRsc();
 
@@ -63,6 +70,7 @@ public class IncidRegAcTest_gcm {
             Context context = InstrumentationRegistry.getTargetContext();
             updateIsGcmTokenSentServer(false, context);
             try {
+                // Pepe hasn't got a gcmToken.
                 checkState(ServOne.getGcmToken() == null);
             } catch (UiException e) {
                 e.printStackTrace();
@@ -73,7 +81,7 @@ public class IncidRegAcTest_gcm {
         protected Intent getActivityIntent()
         {
             try {
-                signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
+                pepe = signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
                 pepeUserComu = ServOne.seeUserComusByUser().get(0);
             } catch (UiException | IOException e) {
                 e.printStackTrace();
@@ -115,21 +123,38 @@ public class IncidRegAcTest_gcm {
      * Test para GcmRegistrationIntentService methods.
      */
     @Test
-    public void testOnCreate() throws Exception
+    public void testRegistrationGcmToken() throws Exception
     {
         // Preconditions for the test.
         assertThat(checkPlayServices(mActivity), is(true));
 
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-        assertThat(refreshedToken,notNullValue());
+        assertThat(refreshedToken, notNullValue());
         assertThat(isGcmTokenSentServer(mActivity), is(true));
         assertThat(ServOne.getGcmToken(), is(refreshedToken));
     }
 
+    @TargetApi(Build.VERSION_CODES.M)
     @Test
     public void testReceiveNotification() throws Exception
     {
-        // Preconditions for the test.
-        assertThat(ServOne.getGcmToken(), is(FirebaseInstanceId.getInstance().getToken()));
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            // Preconditions for the test: TOKEN en BD.
+            assertThat(ServOne.getGcmToken(), is(FirebaseInstanceId.getInstance().getToken()));
+
+            IncidImportancia incidPepe =
+                    new IncidImportancia.IncidImportanciaBuilder(doIncidencia(pepe.getUserName(), "Incidencia One", pepeUserComu.getComunidad().getC_Id(), (short) 43))
+                    .usuarioComunidad(pepeUserComu)
+                    .importancia((short) 3)
+                    .build();
+            assertThat(IncidenciaServ.regIncidImportancia(incidPepe), is(2));
+
+            NotificationManager mManager = (NotificationManager) mActivity.getSystemService(Context.NOTIFICATION_SERVICE);
+            // Verifico recepción de notificación.
+            Thread.sleep(2000);
+            assertThat(mManager.getActiveNotifications().length, is(1));
+            StatusBarNotification barNotification = mManager.getActiveNotifications()[0];
+            assertThat(barNotification.getId(), is(INCIDENCIA.getTitleRsc()));
+        }
     }
 }

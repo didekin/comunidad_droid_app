@@ -10,9 +10,9 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekindroid.R;
-import com.didekindroid.common.IdlingResourceForIntentServ;
+import com.didekindroid.common.activity.IdlingResourceForIntentServ;
 import com.didekindroid.common.activity.UiException;
-import com.didekindroid.incidencia.gcm.GcmRegistrationIntentService;
+import com.didekindroid.common.gcm.GcmRegistrationIntentService;
 import com.didekindroid.usuario.testutils.CleanUserEnum;
 import com.google.firebase.iid.FirebaseInstanceId;
 
@@ -42,7 +42,7 @@ import static com.didekindroid.common.utils.UIutils.checkPlayServices;
 import static com.didekindroid.common.utils.UIutils.isGcmTokenSentServer;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.utils.UIutils.updateIsGcmTokenSentServer;
-import static com.didekindroid.incidencia.gcm.AppFirebaseMsgService.TypeMsgHandler.INCIDENCIA;
+import static com.didekindroid.common.gcm.AppFirebaseMsgService.TypeMsgHandler.INCIDENCIA;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_REG_AC;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_CLOSED_BY_COMU_AC;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;

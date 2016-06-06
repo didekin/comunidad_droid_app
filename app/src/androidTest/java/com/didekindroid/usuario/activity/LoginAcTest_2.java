@@ -21,6 +21,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_TRAV_PLAZUELA_PEPE;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -48,7 +49,7 @@ public class LoginAcTest_2 extends LoginAcTest {
         assertThat(ServOne.regComuAndUserAndUserComu(COMU_TRAV_PLAZUELA_PEPE).execute().body(), is(true));
         mActivity = mActivityRule.launchActivity(new Intent());
 
-        getDialogFragment();
+        getDialogFragment(USER_PEPE.getUserName());
         onView(withText(R.string.send_password_by_mail_dialog)).inRoot(isDialog())
                 .check(matches(isDisplayed()));
         Thread.sleep(7000);

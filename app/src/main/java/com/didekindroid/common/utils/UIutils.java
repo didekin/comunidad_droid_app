@@ -31,7 +31,7 @@ import static android.widget.Toast.makeText;
 import static com.didekin.common.dominio.DataPatterns.LINE_BREAK;
 import static com.didekin.common.exception.DidekinExceptionMsg.TOKEN_NULL;
 import static com.didekindroid.R.color.deep_purple_100;
-import static com.didekindroid.common.TokenHandler.TKhandler;
+import static com.didekindroid.common.activity.TokenHandler.TKhandler;
 import static com.didekindroid.common.utils.UIutils.SharedPrefFiles.app_preferences_file;
 import static java.text.DateFormat.MEDIUM;
 import static java.util.Locale.getDefault;

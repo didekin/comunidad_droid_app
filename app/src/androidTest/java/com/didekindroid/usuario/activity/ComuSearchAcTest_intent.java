@@ -58,7 +58,7 @@ public class ComuSearchAcTest_intent {
     }
 
     @Test
-    public void testSearchComusExtra()
+    public void testSearchComusExtra() throws InterruptedException
     {
         // Without token.
         typeComunidadData();

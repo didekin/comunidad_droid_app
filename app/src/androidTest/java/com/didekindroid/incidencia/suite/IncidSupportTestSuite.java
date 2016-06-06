@@ -1,7 +1,7 @@
 package com.didekindroid.incidencia.suite;
 
 import com.didekindroid.incidencia.dominio.IncidenciaBeanTest;
-import com.didekindroid.incidencia.gcm.GcmBroadCastNotificationActivityTest;
+import com.didekindroid.common.gcm.GcmBroadCastNotificationActivityTest;
 import com.didekindroid.incidencia.repository.IncidenciaDataDbHelperTest;
 import com.didekindroid.incidencia.webservices.IncidServiceTest_1;
 import com.didekindroid.incidencia.webservices.IncidServiceTest_2;
@@ -16,7 +16,6 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        GcmBroadCastNotificationActivityTest.class,
         IncidenciaBeanTest.class,
         IncidenciaDataDbHelperTest.class,
         IncidServiceTest_1.class,

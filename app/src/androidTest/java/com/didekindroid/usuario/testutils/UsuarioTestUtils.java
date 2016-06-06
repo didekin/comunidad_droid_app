@@ -46,6 +46,12 @@ public final class UsuarioTestUtils {
     {
     }
 
+    public static final Usuario USER_DROID = new Usuario.UsuarioBuilder()
+            .userName("didekindroid@didekin.es")
+            .alias("didekindroid")
+            .password("psw_droid")
+            .build();
+
     public static final Usuario USER_JUAN = new Usuario.UsuarioBuilder()
             .userName("juan@juan.us")
             .alias("alias_juan")
@@ -129,6 +135,9 @@ public final class UsuarioTestUtils {
     public static final UsuarioComunidad COMU_REAL_PEPE = makeUsuarioComunidad(COMU_REAL, USER_PEPE, "portal",
             "esc", "plantaY", "door21", PRO.function);
 
+    public static final UsuarioComunidad COMU_REAL_DROID = makeUsuarioComunidad(COMU_REAL, USER_DROID, "portal",
+            "esc", "plantaH", "door11", PRO.function);
+
 //  ======================================= ENTITIES METHODS  ==========================================
 
     public static Comunidad makeComunidad(String tipoVia, String nombreVia, short numero, String sufijoNumero,
@@ -164,10 +173,11 @@ public final class UsuarioTestUtils {
                 .roles(roles).build();
     }
 
-    public static UsuarioComunidad makeUserComuWithComunidadId(UsuarioComunidad usuarioComunidad, long comunidadId){
+    public static UsuarioComunidad makeUserComuWithComunidadId(UsuarioComunidad usuarioComunidad, long comunidadId)
+    {
 
         Comunidad comunidad = new Comunidad.ComunidadBuilder().c_id(comunidadId).build();
-        return new UsuarioComunidad.UserComuBuilder(comunidad,usuarioComunidad.getUsuario()).userComuRest(usuarioComunidad).build();
+        return new UsuarioComunidad.UserComuBuilder(comunidad, usuarioComunidad.getUsuario()).userComuRest(usuarioComunidad).build();
     }
 
     public static List<UsuarioComunidad> makeListTwoUserComu()
@@ -181,10 +191,14 @@ public final class UsuarioTestUtils {
 
 //  ======================================= UI TYPING DATA ==========================================
 
-    public static void typeComunidadData()
+    public static void typeComunidadData() throws InterruptedException
     {
         onView(withId(R.id.tipo_via_spinner)).perform(click());
-        onData(allOf(is(instanceOf(String.class)), is("Calle"))).perform(click());
+        Thread.sleep(1000);
+        onData(allOf(
+                is(instanceOf(String.class)),
+                is("Calle")
+        )).perform(click());
         onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.tipo_via_spinner))))
                 .check(matches(withText(containsString("Calle")))).check(matches(isDisplayed()));
 

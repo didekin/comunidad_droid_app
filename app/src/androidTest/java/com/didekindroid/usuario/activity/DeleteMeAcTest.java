@@ -22,7 +22,7 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekindroid.common.TokenHandler.TKhandler;
+import static com.didekindroid.common.activity.TokenHandler.TKhandler;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;

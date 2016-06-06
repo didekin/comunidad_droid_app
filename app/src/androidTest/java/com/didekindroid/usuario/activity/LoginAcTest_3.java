@@ -24,8 +24,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanWithTkhandler;
 import static com.didekindroid.common.webservices.Oauth2Service.Oauth2;
-import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_TRAV_PLAZUELA_PEPE;
-import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_PEPE;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_DROID;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_DROID;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -48,11 +48,11 @@ public class LoginAcTest_3 extends LoginAcTest {
     public void testValidate_6() throws InterruptedException, UiException, IOException
     {
         // User in DB: wrong password three consecutive times. Choice "yes mail" in dialog.
-        assertThat(ServOne.regComuAndUserAndUserComu(COMU_TRAV_PLAZUELA_PEPE).execute().body(), is(true));
-        AccessToken token = Oauth2.getPasswordUserToken(USER_PEPE.getUserName(), USER_PEPE.getPassword());
+        assertThat(ServOne.regComuAndUserAndUserComu(COMU_REAL_DROID).execute().body(), is(true));
+        AccessToken token = Oauth2.getPasswordUserToken(USER_DROID.getUserName(), USER_DROID.getPassword());
         mActivity = mActivityRule.launchActivity(new Intent());
 
-        getDialogFragment();
+        getDialogFragment(USER_DROID.getUserName());
         onView(withText(R.string.send_password_by_mail_dialog)).inRoot(isDialog())
                 .check(matches(isDisplayed()));
         onView(withText(R.string.send_password_by_mail_YES)).inRoot(isDialog())

@@ -26,7 +26,7 @@ import java.io.IOException;
 
 import static android.widget.Toast.LENGTH_LONG;
 import static android.widget.Toast.LENGTH_SHORT;
-import static com.didekindroid.common.TokenHandler.TKhandler;
+import static com.didekindroid.common.activity.TokenHandler.TKhandler;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.common.utils.UIutils.makeToast;

@@ -1,0 +1,24 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+
+dependencies {
+    compile 'com.squareup.retrofit2:retrofit:2.0.2'
+    compile project(':client_lib')
+    testCompile 'com.squareup.okhttp:mockwebserver:2.7.5'
+}
+
+//noinspection GroovyAssignabilityCheck
+jar {
+    baseName = 'client_gcm_lib'
+}
+
+//noinspection GroovyMissingReturnStatement
+test {
+    filter {
+        includeTestsMatching "com.didekinservice.common.gcm.*Test"
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.13'
+}

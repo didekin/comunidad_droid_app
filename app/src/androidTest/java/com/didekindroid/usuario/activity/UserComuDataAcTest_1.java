@@ -35,7 +35,7 @@ import static com.didekin.usuario.dominio.Rol.ADMINISTRADOR;
 import static com.didekin.usuario.dominio.Rol.INQUILINO;
 import static com.didekin.usuario.dominio.Rol.PRESIDENTE;
 import static com.didekin.usuario.dominio.Rol.PROPIETARIO;
-import static com.didekindroid.common.TokenHandler.TKhandler;
+import static com.didekindroid.common.activity.TokenHandler.TKhandler;
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
 import static com.didekindroid.common.activity.BundleKey.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;

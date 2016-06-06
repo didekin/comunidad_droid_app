@@ -21,7 +21,7 @@ import com.didekindroid.usuario.dominio.ComunidadBean;
 
 import static android.widget.Toast.LENGTH_SHORT;
 import static com.didekin.common.dominio.DataPatterns.LINE_BREAK;
-import static com.didekindroid.common.TokenHandler.TKhandler;
+import static com.didekindroid.common.activity.TokenHandler.TKhandler;
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_SEARCH;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.makeToast;

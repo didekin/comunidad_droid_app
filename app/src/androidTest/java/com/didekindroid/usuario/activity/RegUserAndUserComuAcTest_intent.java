@@ -31,7 +31,7 @@ import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekindroid.common.TokenHandler.TKhandler;
+import static com.didekindroid.common.activity.TokenHandler.TKhandler;
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;

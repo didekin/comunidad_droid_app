@@ -27,7 +27,7 @@ import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
 
 import java.io.IOException;
 
-import static com.didekindroid.common.TokenHandler.TKhandler;
+import static com.didekindroid.common.activity.TokenHandler.TKhandler;
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.common.utils.UIutils.doToolBar;

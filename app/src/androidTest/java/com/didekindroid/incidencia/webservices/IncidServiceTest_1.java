@@ -230,7 +230,6 @@ public class IncidServiceTest_1 {
                 .importancia((short) 3)
                 .build();
         assertThat(IncidenciaServ.regIncidImportancia(incidPepe), is(2));
-        // TODO: test con android 6 y NotificationManager métodos.
     }
 
     @Test

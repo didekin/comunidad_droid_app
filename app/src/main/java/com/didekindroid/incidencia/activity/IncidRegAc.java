@@ -13,7 +13,7 @@ import com.didekin.incidservice.dominio.IncidImportancia;
 import com.didekin.incidservice.dominio.Incidencia;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
-import com.didekindroid.incidencia.gcm.GcmRegistrationIntentService;
+import com.didekindroid.common.gcm.GcmRegistrationIntentService;
 
 import static com.didekindroid.common.utils.ConnectionUtils.checkInternetConnected;
 import static com.didekindroid.common.utils.UIutils.checkPlayServices;

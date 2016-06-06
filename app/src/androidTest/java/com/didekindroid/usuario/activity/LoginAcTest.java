@@ -19,7 +19,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_NOTHING;
-import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_PEPE;
 
 /**
  * User: pedro@didekin
@@ -48,9 +47,9 @@ public class LoginAcTest {
 
     //    ========================== Utility methods ============================
 
-    void typeCheckClickPswdWrong()
+    void typeCheckClickPswdWrong(String userName)
     {
-        onView(withId(R.id.reg_usuario_email_editT)).perform(typeText(USER_PEPE.getUserName()));
+        onView(withId(R.id.reg_usuario_email_editT)).perform(typeText(userName));
         onView(withId(R.id.reg_usuario_password_ediT)).perform(typeText("pasword_wrong"));
         onView(withId(R.id.login_ac_button)).check(matches(isDisplayed())).perform(click());
 
@@ -58,9 +57,9 @@ public class LoginAcTest {
         onView(withId(R.id.login_ac_layout)).check(matches(isDisplayed()));
     }
 
-    void reTypeCheckClickPswdWrong()
+    void reTypeCheckClickPswdWrong(String userName)
     {
-        onView(withId(R.id.reg_usuario_email_editT)).perform(replaceText(USER_PEPE.getUserName()));
+        onView(withId(R.id.reg_usuario_email_editT)).perform(replaceText(userName));
         onView(withId(R.id.reg_usuario_password_ediT)).perform(replaceText("pasword_wrong"));
         onView(withId(R.id.login_ac_button)).check(matches(isDisplayed())).perform(click());
 
@@ -68,13 +67,13 @@ public class LoginAcTest {
         onView(withId(R.id.login_ac_layout)).check(matches(isDisplayed()));
     }
 
-    void getDialogFragment()
+    void getDialogFragment(String userName)
     {
-        typeCheckClickPswdWrong();
-        reTypeCheckClickPswdWrong();
-        reTypeCheckClickPswdWrong();
+        typeCheckClickPswdWrong(userName);
+        reTypeCheckClickPswdWrong(userName);
+        reTypeCheckClickPswdWrong(userName);
 
-        onView(withId(R.id.reg_usuario_email_editT)).perform(replaceText(USER_PEPE.getUserName()));
+        onView(withId(R.id.reg_usuario_email_editT)).perform(replaceText(userName));
         onView(withId(R.id.reg_usuario_password_ediT)).perform(replaceText("pasword_wrong"));
         onView(withId(R.id.login_ac_button)).check(matches(isDisplayed())).perform(click());
     }
