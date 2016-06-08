@@ -33,6 +33,7 @@ import static com.didekin.common.exception.DidekinExceptionMsg.TOKEN_NULL;
 import static com.didekindroid.R.color.deep_purple_100;
 import static com.didekindroid.common.activity.TokenHandler.TKhandler;
 import static com.didekindroid.common.utils.UIutils.SharedPrefFiles.app_preferences_file;
+import static com.google.common.base.Preconditions.checkState;
 import static java.text.DateFormat.MEDIUM;
 import static java.util.Locale.getDefault;
 
@@ -145,6 +146,10 @@ public final class UIutils {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putBoolean(SharedPrefFiles.IS_USER_REG, isRegisteredUser);
         editor.apply();
+
+        if (!isRegisteredUser){
+            updateIsGcmTokenSentServer(false,context);
+        }
     }
 
     public static boolean isGcmTokenSentServer(Context context)

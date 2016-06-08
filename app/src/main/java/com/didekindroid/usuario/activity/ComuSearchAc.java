@@ -43,6 +43,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * -- sufijoNumero (it can be an empty string).
  * -- municipio with codInProvincia and provinciaId.
  */
+@SuppressWarnings("ConstantConditions")
 public class ComuSearchAc extends AppCompatActivity {
 
     private static final String TAG = ComuSearchAc.class.getCanonicalName();

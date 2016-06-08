@@ -14,7 +14,7 @@ import android.util.Log;
 import com.didekin.incidservice.gcm.GcmKeyValueIncidData;
 import com.didekindroid.R;
 import com.didekindroid.incidencia.activity.IncidSeeOpenByComuAc;
-import com.didekindroid.usuario.activity.UserComuDataAc;
+import com.didekindroid.usuario.activity.ComuSearchAc;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -24,9 +24,9 @@ import java.util.Map;
 import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+import static com.didekin.common.gcm.GcmKeyValueData.type_message_key;
 import static com.didekin.incidservice.gcm.GcmKeyValueIncidData.comunidadId_key;
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
-import static com.didekin.common.gcm.GcmKeyValueData.type_message_key;
 
 public class AppFirebaseMsgService extends FirebaseMessagingService {
 
@@ -79,7 +79,7 @@ public class AppFirebaseMsgService extends FirebaseMessagingService {
 
         INCIDENCIA {
             @Override
-            String getType()
+            public String getType()
             {
                 return this.toString();
             }
@@ -94,13 +94,13 @@ public class AppFirebaseMsgService extends FirebaseMessagingService {
             }
 
             @Override
-            int getContentTextRsc()
+            public int getContentTextRsc()
             {
                 return R.string.incid_gcm_nueva_incidencia_body;
             }
 
             @Override
-            int getSubTextRsc()
+            public int getSubTextRsc()
             {
                 return R.string.incid_gcm_nueva_incidencia_subtext;
             }
@@ -110,9 +110,8 @@ public class AppFirebaseMsgService extends FirebaseMessagingService {
             {
 
                 TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-                Intent userComuData = new Intent(new Intent(context, UserComuDataAc.class));
-                // TODO: add extra to the intent. NO: buscar los datos en UserComuDataAc a partir de los datos del usuario y la comunidadId del intent.
-                stackBuilder.addNextIntentWithParentStack(userComuData);
+                Intent comuSearch = new Intent(new Intent(context, ComuSearchAc.class));
+                stackBuilder.addNextIntentWithParentStack(comuSearch);
                 Intent incidSeeComu = new Intent(context, IncidSeeOpenByComuAc.class);
                 incidSeeComu.addFlags(FLAG_ACTIVITY_CLEAR_TOP | FLAG_ACTIVITY_NEW_TASK);
                 incidSeeComu.putExtra(COMUNIDAD_ID.key, Long.parseLong(((AppFirebaseMsgService)context).data.get(comunidadId_key)));
@@ -127,13 +126,13 @@ public class AppFirebaseMsgService extends FirebaseMessagingService {
             }
         },;
 
-        abstract String getType();
+        public abstract String getType();
 
         public abstract int getTitleRsc();
 
-        abstract int getContentTextRsc();
+        public abstract int getContentTextRsc();
 
-        abstract int getSubTextRsc();
+        public abstract int getSubTextRsc();
 
         abstract PendingIntent getPendingIntent(Context context);
 

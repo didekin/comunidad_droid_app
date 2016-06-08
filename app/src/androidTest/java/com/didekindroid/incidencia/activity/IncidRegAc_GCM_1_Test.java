@@ -35,6 +35,7 @@ import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.utils.UIutils.checkPlayServices;
 import static com.didekindroid.common.utils.UIutils.isGcmTokenSentServer;
+import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.utils.UIutils.updateIsGcmTokenSentServer;
 import static com.didekindroid.common.gcm.AppFirebaseMsgService.TypeMsgHandler.INCIDENCIA;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
@@ -51,7 +52,7 @@ import static org.junit.Assert.assertThat;
  * Time: 16:38
  */
 @RunWith(AndroidJUnit4.class)
-public class IncidRegAcTest_gcm {
+public class IncidRegAc_GCM_1_Test {
 
     private IncidRegAc mActivity;
     private CleanUserEnum whatToClean = CleanUserEnum.CLEAN_PEPE;
@@ -127,6 +128,7 @@ public class IncidRegAcTest_gcm {
     {
         // Preconditions for the test.
         assertThat(checkPlayServices(mActivity), is(true));
+        assertThat(isRegisteredUser(mActivity), is(true));
 
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         assertThat(refreshedToken, notNullValue());

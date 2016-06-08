@@ -142,6 +142,7 @@ public class UiExceptionTests_1 extends UiExceptionAbstractTest {
             }
         });
 
+        Thread.sleep(1000);
         checkToastInTest(R.string.comunidad_not_found_message, mActivity);
         onView(withId(R.id.comu_search_ac_layout)).check(matches(isDisplayed()));
     }

@@ -7,6 +7,7 @@ import android.util.Log;
 import com.didekindroid.common.activity.UiException;
 import com.google.firebase.iid.FirebaseInstanceId;
 
+import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.utils.UIutils.updateIsGcmTokenSentServer;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 
@@ -28,11 +29,15 @@ public class GcmRegistrationIntentService extends IntentService {
     protected void onHandleIntent(Intent intent)
     {
         Log.d(TAG, "onHandleIntent()");
+
+        if(!isRegisteredUser(this)){
+            return;
+        }
         try {
             String token = FirebaseInstanceId.getInstance().getToken();
-            ServOne.modifyUserGcmToken(token);
-            updateIsGcmTokenSentServer(true, this);
-            Log.i(TAG, "onHandleIntent(), GCM token registered: " + token);
+                ServOne.modifyUserGcmToken(token);
+                updateIsGcmTokenSentServer(true, this);
+                Log.i(TAG, "onHandleIntent(), GCM token registered: " + token);
         } catch (UiException e) {
             updateIsGcmTokenSentServer(false, this);
             Log.e(TAG, "onHandleIntent(), exception:", e);

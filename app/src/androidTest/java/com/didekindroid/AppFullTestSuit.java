@@ -1,7 +1,6 @@
 package com.didekindroid;
 
 import com.didekindroid.common.suite.CommonSuite;
-import com.didekindroid.common.suite.GcmTestSuite;
 import com.didekindroid.incidencia.suite.IncidFunctionalTestSuite;
 import com.didekindroid.incidencia.suite.IncidSupportTestSuite;
 import com.didekindroid.usuario.suite.UserFunctionalSlowTestSuite;
@@ -19,7 +18,6 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         CommonSuite.class,
-        GcmTestSuite.class,
         IncidFunctionalTestSuite.class,
         IncidSupportTestSuite.class,
         UserFunctionalTestSuite.class,

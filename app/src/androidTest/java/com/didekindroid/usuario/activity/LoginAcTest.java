@@ -49,7 +49,9 @@ public class LoginAcTest {
 
     void typeCheckClickPswdWrong(String userName)
     {
-        onView(withId(R.id.reg_usuario_email_editT)).perform(typeText(userName));
+        if (userName != null) {
+            onView(withId(R.id.reg_usuario_email_editT)).perform(typeText(userName));
+        }
         onView(withId(R.id.reg_usuario_password_ediT)).perform(typeText("pasword_wrong"));
         onView(withId(R.id.login_ac_button)).check(matches(isDisplayed())).perform(click());
 

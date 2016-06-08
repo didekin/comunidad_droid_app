@@ -125,7 +125,7 @@ public class LoginAcTest_1 extends LoginAcTest{
         assertThat(ServOne.regComuAndUserAndUserComu(COMU_TRAV_PLAZUELA_PEPE).execute().body(), is(true));
         mActivity = mActivityRule.launchActivity(new Intent());
 
-        typeCheckClickPswdWrong(null);
+        typeCheckClickPswdWrong(USER_PEPE.getUserName());
     }
 
     @Test

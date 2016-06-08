@@ -24,14 +24,15 @@ import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 
 /**
  * Preconditions:
+ * 1. An intent extra with a comunidad object encapsulating the comunidad to search is received.
  * <p/>
- * 1. Every comunidad in the list supplied to the adapter has the following fields:
+ * 2. Every comunidad in the list supplied to the adapter has the following fields:
  * -- comunidadId.
  * -- nombreComunidad (composed internally with tipoVia,nombreVia, numero and sufijoNumero).
  * -- municipio, with codInProvincia and nombre.
  * -- provincia, with provinciaId and nombre.
  * <p/>
- * 2. An object comunidad, used as search criterium, is received as an intent key with the following fields:
+ * 3. An object comunidad, used as search criterium, is received as an intent key with the following fields:
  * -- tipoVia.
  * -- nombreVia.
  * -- numero.

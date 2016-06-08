@@ -12,7 +12,7 @@ public class GcmRequest {
     // OPTIONS in request messages.
     static final String PRIORITY_NORMAL = "normal";
     static final int TIME_TO_LIVE_DEFAULT = 1724; //48h.
-    static final String PACKAGE_DIDEKINDROID = "com.didekindroid";
+    public static final String PACKAGE_DIDEKINDROID = "com.didekindroid";
 
     /**
      * Sets the priority of the message. Valid values are "normal" and "high."

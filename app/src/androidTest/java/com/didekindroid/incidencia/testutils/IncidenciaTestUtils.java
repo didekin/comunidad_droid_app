@@ -105,7 +105,8 @@ public final class IncidenciaTestUtils {
 
     public static IncidenciaUser insertGetIncidImportanciaWithId(long incidenciaId, UsuarioComunidad userComu, int importancia) throws UiException
     {
-        IncidImportancia incidImportancia = new IncidImportancia.IncidImportanciaBuilder(doIncidenciaWithId(incidenciaId, INCID_DEFAULT_DESC, userComu.getComunidad().getC_Id(), (short) 43))
+        IncidImportancia incidImportancia =
+                new IncidImportancia.IncidImportanciaBuilder(doIncidenciaWithId(incidenciaId, INCID_DEFAULT_DESC, userComu.getComunidad().getC_Id(), (short) 43))
                 .usuarioComunidad(userComu)
                 .importancia((short) importancia)
                 .build();

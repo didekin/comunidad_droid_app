@@ -7,6 +7,7 @@ import com.didekindroid.usuario.webservices.UsuarioService;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
+import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.utils.UIutils.updateIsGcmTokenSentServer;
 
 /**
@@ -22,9 +23,14 @@ public class AppFirebaseInstanceIdService extends FirebaseInstanceIdService {
      * the previous token had been compromised.
      */
     @Override
-    public void onTokenRefresh() {
-
+    public void onTokenRefresh()
+    {
         Log.d(TAG, "onTokenRefresh()");
+
+        if (!isRegisteredUser(this)) {
+            return;
+        }
+
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         try {
             UsuarioService.ServOne.modifyUserGcmToken(refreshedToken);

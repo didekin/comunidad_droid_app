@@ -29,7 +29,8 @@
         <activity
             android:name=".common.activity.MockActivity"
             android:label="@string/mockActivity_label"
-            android:theme="@style/themeOne">
+            android:theme="@style/themeOne"
+            android:launchMode="singleTask">
         </activity>
     </application>
 
