@@ -1,13 +1,14 @@
 package com.didekindroid.usuario.suite;
 
-import com.didekindroid.usuario.activity.ComuSearchAcTest_slow;
-import com.didekindroid.usuario.activity.ComuSearchResultsAcTest_slow;
-import com.didekindroid.usuario.activity.LoginAcTest_2;
-import com.didekindroid.usuario.activity.LoginAcTest_3;
-import com.didekindroid.usuario.activity.RegComuAndUserAndUserComuAcTest_slow;
-import com.didekindroid.usuario.activity.SeeUserComuByComuAcTest_slow;
-import com.didekindroid.usuario.activity.SeeUserComuByUserAcTest_slow;
-import com.didekindroid.usuario.activity.UserDataAcTest_slow;
+import com.didekindroid.usuario.activity.ComuSearchAc_1_SlowTest;
+import com.didekindroid.usuario.activity.ComuSearchAc_2_SlowTest;
+import com.didekindroid.usuario.activity.ComuSearchResultsAc_SlowTest;
+import com.didekindroid.usuario.activity.LoginAc_2_SlowTest;
+import com.didekindroid.usuario.activity.LoginAc_3_SlowTest;
+import com.didekindroid.usuario.activity.RegComuAndUserAndUserComuAc_SlowTest;
+import com.didekindroid.usuario.activity.SeeUserComuByComuAc_SlowTest;
+import com.didekindroid.usuario.activity.SeeUserComuByUserAc_SlowTest;
+import com.didekindroid.usuario.activity.UserDataAc_SlowTest;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -19,14 +20,15 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        ComuSearchAcTest_slow.class,
-        ComuSearchResultsAcTest_slow.class,
-        LoginAcTest_2.class,
-        LoginAcTest_3.class,
-        RegComuAndUserAndUserComuAcTest_slow.class,
-        SeeUserComuByComuAcTest_slow.class,
-        SeeUserComuByUserAcTest_slow.class,
-        UserDataAcTest_slow.class,
+        ComuSearchAc_1_SlowTest.class,
+        ComuSearchAc_2_SlowTest.class,
+        ComuSearchResultsAc_SlowTest.class,
+        LoginAc_2_SlowTest.class,
+        LoginAc_3_SlowTest.class,
+        RegComuAndUserAndUserComuAc_SlowTest.class,
+        SeeUserComuByComuAc_SlowTest.class,
+        SeeUserComuByUserAc_SlowTest.class,
+        UserDataAc_SlowTest.class,
 })
 public class UserFunctionalSlowTestSuite {
 }

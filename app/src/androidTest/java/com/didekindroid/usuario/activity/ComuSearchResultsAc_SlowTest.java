@@ -48,7 +48,7 @@ import static org.junit.Assert.assertThat;
 
 
 @RunWith(AndroidJUnit4.class)
-public class ComuSearchResultsAcTest_slow {
+public class ComuSearchResultsAc_SlowTest {
 
     private static final String TAG = "ComunidadSeeActivTest";
 

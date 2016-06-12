@@ -32,7 +32,7 @@ import static org.junit.Assert.assertThat;
  * Time: 13:48
  */
 @RunWith(AndroidJUnit4.class)
-public class LoginAcTest_2 extends LoginAcTest {
+public class LoginAc_2_SlowTest extends LoginAcTest {
 
     @BeforeClass
     public static void slowSeconds() throws InterruptedException

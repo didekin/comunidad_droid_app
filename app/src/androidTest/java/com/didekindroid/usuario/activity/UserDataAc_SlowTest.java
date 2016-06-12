@@ -32,7 +32,7 @@ import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_JUAN
  * Time: 14:25
  */
 @RunWith(AndroidJUnit4.class)
-public class UserDataAcTest_slow {
+public class UserDataAc_SlowTest {
 
     UserDataAc mActivity;
     Resources resources;

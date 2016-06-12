@@ -32,7 +32,7 @@ import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
  * Time: 11:38
  */
 @RunWith(AndroidJUnit4.class)
-public class SeeUserComuByComuAcTest_slow {
+public class SeeUserComuByComuAc_SlowTest {
 
     SeeUserComuByComuAc mActivity;
     SeeUserComuByComuFr mFragment;

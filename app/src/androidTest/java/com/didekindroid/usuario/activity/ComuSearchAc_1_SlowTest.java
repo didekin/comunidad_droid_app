@@ -46,7 +46,7 @@ import static org.junit.Assert.assertThat;
  * Time: 09:53
  */
 @RunWith(AndroidJUnit4.class)
-public class ComuSearchAcTest_slow {
+public class ComuSearchAc_1_SlowTest {
 
     private ComuSearchAc activity;
     Context context;
@@ -111,55 +111,6 @@ public class ComuSearchAcTest_slow {
         assertThat(isRegisteredUser(activity), is(true));
         REG_COMU_USER_USERCOMU_AC.checkMenuItem_WTk(activity);
     }
-
-    @Test
-    public void testComunidadesByUsuario_withToken() throws InterruptedException, UiException, IOException
-    {
-        whatClean = CleanUserEnum.CLEAN_JUAN;
-
-        signUpAndUpdateTk(COMU_REAL_JUAN);
-        activity = mActivityRule.launchActivity(new Intent());
-        assertThat(isRegisteredUser(activity), is(true));
-        SEE_USERCOMU_BY_USER_AC.checkMenuItem_WTk(activity);
-    }
-
-    @Test
-    public void tesComunidadesByUsuario_noToken() throws InterruptedException
-    {
-        assertThat(refreshTkFile.exists(), is(false));
-        activity = mActivityRule.launchActivity(new Intent());
-        assertThat(isRegisteredUser(activity), is(false));
-        SEE_USERCOMU_BY_USER_AC.checkMenuItem_NTk(activity);
-    }
-
-    @Test
-    public void testLogin_withToken() throws InterruptedException, UiException, IOException
-    {
-
-        whatClean = CleanUserEnum.CLEAN_JUAN;
-        signUpAndUpdateTk(COMU_REAL_JUAN);
-        activity = mActivityRule.launchActivity(new Intent());
-
-        onView(withId(R.id.login_ac_mn)).check(doesNotExist());
-        openActionBarOverflowOrOptionsMenu(activity);
-        onView(withId(R.id.login_ac_mn)).check(doesNotExist());
-    }
-
-    @Test
-    public void testLogin_withoutToken() throws InterruptedException
-    {
-        activity = mActivityRule.launchActivity(new Intent());
-
-        try {
-            onView(withId(R.id.login_ac_mn)).check(matches(isDisplayed()));
-        } catch (AssertionFailedError e) {
-            openActionBarOverflowOrOptionsMenu(activity);
-            onView(withId(R.id.login_ac_mn)).check(matches(isDisplayed()));
-        }
-
-        LOGIN_AC.checkMenuItem_NTk(activity);
-    }
-
 
     @After
     public void cleanData() throws UiException

@@ -30,7 +30,7 @@ import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_PLAZUELA5
  * Time: 16:15
  */
 @RunWith(AndroidJUnit4.class)
-public class SeeUserComuByUserAcTest_slow {
+public class SeeUserComuByUserAc_SlowTest {
 
     SeeUserComuByUserAc mActivity;
     SeeUserComuByUserFr mFragment;

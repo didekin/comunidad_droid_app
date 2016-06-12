@@ -36,7 +36,7 @@ import static org.junit.Assert.assertThat;
  * Time: 13:51
  */
 @RunWith(AndroidJUnit4.class)
-public class LoginAcTest_3 extends LoginAcTest {
+public class LoginAc_3_SlowTest extends LoginAcTest {
 
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
@@ -58,11 +58,11 @@ public class LoginAcTest_3 extends LoginAcTest {
         onView(withText(R.string.send_password_by_mail_YES)).inRoot(isDialog())
                 .check(matches(isDisplayed()))
                 .perform(click());
-        Thread.sleep(5000);
 
         onView(withId(R.id.reg_usuario_email_editT)).check(matches(isDisplayed()));
         onView(withId(R.id.reg_usuario_password_ediT)).check(matches(isDisplayed()));
         onView(withId(R.id.login_ac_button)).check(matches(isDisplayed()));
+        Thread.sleep(3000);
         checkToastInTest(R.string.password_new_in_login, mActivity);
 
         token = Oauth2.getRefreshUserToken(token.getRefreshToken().getValue());

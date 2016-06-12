@@ -39,7 +39,7 @@ import static org.junit.Assert.fail;
  */
 @SuppressWarnings({"unchecked", "ConstantConditions"})
 @RunWith(AndroidJUnit4.class)
-public class RegComuAndUserAndUserComuAcTest_slow {
+public class RegComuAndUserAndUserComuAc_SlowTest {
 
     @Rule
     public ActivityTestRule<RegComuAndUserAndUserComuAc> mActivityRule = new ActivityTestRule<>(RegComuAndUserAndUserComuAc.class, true, false);

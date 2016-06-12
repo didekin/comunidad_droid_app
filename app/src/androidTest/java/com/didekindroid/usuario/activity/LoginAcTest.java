@@ -36,7 +36,7 @@ public class LoginAcTest {
     @Before
     public void setUp() throws Exception
     {
-        Thread.sleep(2000);
+        Thread.sleep(3000);
     }
 
     @After
