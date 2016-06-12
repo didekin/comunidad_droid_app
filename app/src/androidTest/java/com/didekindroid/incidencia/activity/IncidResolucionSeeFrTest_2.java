@@ -30,6 +30,8 @@ import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJEC
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.common.testutils.ActivityTestUtils.updateSecurityData;
 import static com.didekindroid.common.utils.UIutils.formatTimeStampToString;
+import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidImportancia;
+import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetResolucionNoAdvances;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_ESCORIAL_JUAN;
@@ -62,7 +64,7 @@ public class IncidResolucionSeeFrTest_2 extends IncidResolucionAbstractTest {
             protected Intent getActivityIntent()
             {
                 try {
-                    doIncidImportancia(COMU_ESCORIAL_JUAN);
+                    incidImportancia = insertGetIncidImportancia(COMU_ESCORIAL_JUAN);
                     Thread.sleep(1000);
                     // Necesitamos usuario con 'adm' para registrar resolución.
                     assertThat(ServOne.regUserAndUserComu(
@@ -73,7 +75,7 @@ public class IncidResolucionSeeFrTest_2 extends IncidResolucionAbstractTest {
                             is(true));
                     updateSecurityData(USER_PEPE.getUserName(), USER_PEPE.getPassword());
                     // Registramos resolución.
-                    doResolucionNoAdvances();
+                    resolucion = insertGetResolucionNoAdvances(incidImportancia);
                     // Modificamos con avances.
                     Avance avance = new Avance.AvanceBuilder().avanceDesc("avance1_desc").build();
                     List<Avance> avances = new ArrayList<>(1);

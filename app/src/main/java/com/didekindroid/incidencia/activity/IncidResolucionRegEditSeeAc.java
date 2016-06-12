@@ -17,8 +17,11 @@ import static com.didekindroid.common.activity.FragmentTags.incid_resolucion_ac_
 import static com.didekindroid.common.activity.SavedInstanceKey.INCID_IMPORTANCIA;
 import static com.didekindroid.common.activity.SavedInstanceKey.INCID_RESOLUCION;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
+import static com.didekindroid.common.utils.UIutils.getGcmToken;
 
 /**
+ * This activity is a point of registration for receiving GCM notifications of new incidents.
+ *
  * Preconditions:
  * 1. An intent key is received with an IncidImportancia belonging to a user with function 'adm'.
  * 2. An intent key with a Resolucion instance MAY be received.
@@ -30,7 +33,7 @@ import static com.didekindroid.common.utils.UIutils.doToolBar;
  * 2. If a Resolucion intent is received and the user has authority 'adm':
  * 2.1. The resolucion is modified in BD, with a new avance record.
  * 2.2. If the user choose the 'close the incidencia' option, the incidencia is closed and a new
- * avance record is inserted too.
+ *      avance record is inserted too.
  * 3. If NOT Resolucion intent is received and the user hasn't got authority 'adm':
  * 3.1. A message informs that there is not resolución for the incidencia.
  * 4. If a Resolucion intent is received and the user hasn't got authority 'adm':
@@ -55,6 +58,8 @@ public class IncidResolucionRegEditSeeAc extends AppCompatActivity {
         View mAcView = getLayoutInflater().inflate(R.layout.incid_resolucion_reg_ac, null);
         setContentView(mAcView);
         doToolBar(this, true);
+
+        getGcmToken(this);
 
         if (savedInstanceState != null) {
             return;
@@ -102,6 +107,14 @@ public class IncidResolucionRegEditSeeAc extends AppCompatActivity {
         mResolucion = (Resolucion) savedInstanceState.getSerializable(INCID_RESOLUCION.key);
         mIncidImportancia = (IncidImportancia) savedInstanceState.getSerializable(INCID_IMPORTANCIA.key);
         super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    @Override
+    protected void onPostResume()
+    {
+        Log.d(TAG, "onResume()");
+        getGcmToken(this);
+        super.onPostResume();
     }
 
 //    ============================================================

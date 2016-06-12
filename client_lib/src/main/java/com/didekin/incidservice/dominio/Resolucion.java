@@ -2,6 +2,7 @@ package com.didekin.incidservice.dominio;
 
 import com.didekin.common.dominio.BeanBuilder;
 import com.didekin.common.dominio.SerialNumber;
+import com.didekin.common.gcm.GcmToComunidadHelper;
 
 import java.io.InvalidObjectException;
 import java.io.ObjectInputStream;
@@ -19,7 +20,7 @@ import static com.didekin.common.exception.DidekinExceptionMsg.RESOLUCION_WRONG_
  */
 
 @SuppressWarnings("unused")
-public final class Resolucion implements Serializable {
+public final class Resolucion implements Serializable, GcmToComunidadHelper {
 
     private final String userName;
     private final String descripcion;
@@ -107,6 +108,12 @@ public final class Resolucion implements Serializable {
     public List<Avance> getAvances()
     {
         return avances;
+    }
+
+    @Override
+    public long getComunidadId()
+    {
+        return incidencia.getComunidad().getC_Id();
     }
 
     //    ===============================  BUILDER  ============================

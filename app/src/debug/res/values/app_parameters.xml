@@ -8,7 +8,8 @@
     <string name="bks_name" translatable="false">didekindroid_pre_bks</string>
     -->
     <!-- Desarrollo-->
-    <string name="didekinspring_host" translatable="false">http://192.168.57.1</string>
+    <string name="didekinspring_host" translatable="false">http://10.0.2.2</string>
+    <!--<string name="didekinspring_host" translatable="false">http://192.168.57.1</string>-->
     <string name="didekinspring_port" translatable="false">:8080</string>
     <string name="didekinspring_pswd" translatable="false">droid_dev</string>
     <string name="bks_name" translatable="false">didekindroid_dev_bks</string>

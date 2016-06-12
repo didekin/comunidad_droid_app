@@ -1,6 +1,7 @@
 package com.didekindroid.incidencia.activity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -9,6 +10,7 @@ import android.widget.DatePicker;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.utils.UIutils;
+import com.didekindroid.incidencia.testutils.IncidenciaTestUtils;
 import com.didekindroid.usuario.testutils.CleanUserEnum;
 
 import org.junit.Test;
@@ -34,6 +36,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
+import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_PLAZUELA5_JUAN;
 import static java.util.Calendar.DAY_OF_MONTH;
@@ -64,7 +67,7 @@ public class IncidResolucionRegFrTest extends IncidResolucionAbstractTest {
             protected Intent getActivityIntent()
             {
                 try {
-                    doIncidImportancia(COMU_PLAZUELA5_JUAN);
+                    incidImportancia = insertGetIncidImportancia(COMU_PLAZUELA5_JUAN);
                 } catch (UiException | IOException e) {
                     e.printStackTrace();
                 }
@@ -98,10 +101,16 @@ public class IncidResolucionRegFrTest extends IncidResolucionAbstractTest {
         // We pick a date.
         onView(withClassName(is(DatePicker.class.getName()))).perform(setDate(2016, 3, 21));
         onView(withText(mActivity.getString(android.R.string.ok))).perform(click());
-        if (Locale.getDefault().equals(UIutils.SPAIN_LOCALE)) {
+        if (Locale.getDefault().equals(UIutils.SPAIN_LOCALE) && Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             onView(allOf(
                     withId(R.id.incid_resolucion_fecha_view),
                     withText("21/3/2016")
+            )).check(matches(isDisplayed()));
+        }
+        if (Locale.getDefault().equals(UIutils.SPAIN_LOCALE) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            onView(allOf(
+                    withId(R.id.incid_resolucion_fecha_view),
+                    withText("21 mar. 2016")
             )).check(matches(isDisplayed()));
         }
     }

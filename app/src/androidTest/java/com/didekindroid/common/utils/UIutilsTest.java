@@ -58,24 +58,17 @@ public class UIutilsTest extends TestCase {
     }
 
     @Test
-    public void testFormatTimeToString_1()
-    {
-        if (Locale.getDefault().equals(SPAIN_LOCALE)) {
-            assertThat(formatTimeToString(1455301148000L), is("12/2/2016"));
-        }
-        if (Locale.getDefault().equals(Locale.ENGLISH)) {
-            assertThat(formatTimeToString(1455301148000L), is("Feb 12, 2016"));
-        }
-    }
-
-    @Test
     public void testFormatTimeStampToString_1()
     {
         Timestamp timestamp = new Timestamp(1455301148000L);
 
-        if (Locale.getDefault().equals(SPAIN_LOCALE)) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Locale.getDefault().equals(SPAIN_LOCALE)) {
+            assertThat(formatTimeStampToString(timestamp), is("12 feb. 2016"));
+        }
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M && Locale.getDefault().equals(SPAIN_LOCALE)) {
             assertThat(formatTimeStampToString(timestamp), is("12/2/2016"));
         }
+
         if (Locale.getDefault().equals(Locale.ENGLISH)) {
             assertThat(formatTimeStampToString(timestamp), is("Feb 12, 2016"));
         }
@@ -87,9 +80,9 @@ public class UIutilsTest extends TestCase {
         // Verifico el método de validación de la fecha prevista por defecto para una resolución.
         long timestampLong = new Timestamp(1455301148000L).getTime();
         String fechaViewStr = context.getString(R.string.incid_resolucion_fecha_default_txt);
-        assertThat(fechaViewStr.equals(formatTimeToString(timestampLong)),is(false));
-        assertThat(fechaViewStr.equals(formatTimeToString(0L)),is(false));
-        assertThat(fechaViewStr.equals(formatTimeToString(0)),is(false));
+        assertThat(fechaViewStr.equals(formatTimeToString(timestampLong)), is(false));
+        assertThat(fechaViewStr.equals(formatTimeToString(0L)), is(false));
+        assertThat(fechaViewStr.equals(formatTimeToString(0)), is(false));
     }
 
     @Test
@@ -102,8 +95,14 @@ public class UIutilsTest extends TestCase {
         String formatTime = DateFormat.getDateInstance(DateFormat.LONG, SPAIN_LOCALE).format(timestamp);
         assertThat(formatTime, is("12 de febrero de 2016"));
 
-        formatTime = DateFormat.getDateInstance(DateFormat.MEDIUM, SPAIN_LOCALE).format(timestamp);
-        assertThat(formatTime, is("12/2/2016"));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            formatTime = DateFormat.getDateInstance(DateFormat.MEDIUM, SPAIN_LOCALE).format(timestamp);
+            assertThat(formatTime, is("12 feb. 2016"));
+        }
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            formatTime = DateFormat.getDateInstance(DateFormat.MEDIUM, SPAIN_LOCALE).format(timestamp);
+            assertThat(formatTime, is("12/2/2016"));
+        }
 
         formatTime = DateFormat.getDateInstance(DateFormat.LONG, Locale.ENGLISH).format(timestamp);
         assertThat(formatTime, is("February 12, 2016"));
@@ -167,7 +166,8 @@ public class UIutilsTest extends TestCase {
     }
 
     @Test
-    public void testDefaultsEmulator(){
+    public void testDefaultsEmulator()
+    {
         TimeZone timeZone = new GregorianCalendar().getTimeZone();
         assertThat(timeZone.getID(), is("Europe/Brussels"));
         assertThat(Locale.getDefault(), is(SPAIN_LOCALE));
@@ -175,10 +175,11 @@ public class UIutilsTest extends TestCase {
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @Test
-    public void testCalendarTime(){
+    public void testCalendarTime()
+    {
         Date date1 = new Date();
         Calendar calendar1 = new GregorianCalendar();
-        calendar1.add(Calendar.MINUTE,1);
-        assertThat(Long.compare(date1.getTime(),calendar1.getTimeInMillis()) < 0, is(true));
+        calendar1.add(Calendar.MINUTE, 1);
+        assertThat(Long.compare(date1.getTime(), calendar1.getTimeInMillis()) < 0, is(true));
     }
 }

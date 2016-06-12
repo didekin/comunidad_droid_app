@@ -25,5 +25,8 @@ public interface IncidSeeListListener {
 
     List<IncidenciaUser> getListFromService(long comunidadId) throws UiException;
 
+    /**
+     *   Implementations provide fragments witn a comunidadId passed in a Notification PendingIntent.
+     */
     long getComunidadSelected();
 }

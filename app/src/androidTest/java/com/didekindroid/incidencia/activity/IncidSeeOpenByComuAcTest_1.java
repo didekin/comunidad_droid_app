@@ -42,7 +42,7 @@ import static com.didekindroid.common.utils.UIutils.checkPlayServices;
 import static com.didekindroid.common.utils.UIutils.isGcmTokenSentServer;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.utils.UIutils.updateIsGcmTokenSentServer;
-import static com.didekindroid.common.gcm.AppFirebaseMsgService.TypeMsgHandler.INCIDENCIA;
+import static com.didekindroid.common.gcm.AppFirebaseMsgService.TypeMsgHandler.INCIDENCIA_OPEN;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_REG_AC;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_CLOSED_BY_COMU_AC;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
@@ -71,7 +71,7 @@ public class IncidSeeOpenByComuAcTest_1 {
     IdlingResourceForIntentServ idlingResource;
     Comunidad comunidadInIntent;
     NotificationManager mNotifyManager;
-    private int messageId = INCIDENCIA.getTitleRsc();
+    private int messageId = INCIDENCIA_OPEN.getTitleRsc();
 
     @Rule
     public IntentsTestRule<IncidSeeOpenByComuAc> activityRule = new IntentsTestRule<IncidSeeOpenByComuAc>(IncidSeeOpenByComuAc.class) {
@@ -133,18 +133,6 @@ public class IncidSeeOpenByComuAcTest_1 {
         updateIsGcmTokenSentServer(false, mActivity);
         mNotifyManager.cancel(messageId);
         cleanOptions(whatToClean);
-    }
-
-    @Test
-    public void testOnCreateGcm() throws UiException, InterruptedException
-    {
-        // Preconditions for the test.
-        assertThat(checkPlayServices(mActivity), is(true));
-
-        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-        assertThat(refreshedToken, notNullValue());
-        assertThat(isGcmTokenSentServer(mActivity), is(true));
-        assertThat(ServOne.getGcmToken(), is(refreshedToken));
     }
 
     @Test

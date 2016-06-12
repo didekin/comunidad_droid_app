@@ -4,6 +4,7 @@ import com.didekindroid.common.activity.TokenHandlerTest;
 import com.didekindroid.common.activity.UiExceptionTests_1;
 import com.didekindroid.common.activity.UiExceptionTests_2;
 import com.didekindroid.common.gcm.GcmBroadCastNotificationActivityTest;
+import com.didekindroid.common.gcm.GcmRegistrationIntentService_Test;
 import com.didekindroid.common.gcm.GcmRequestTest;
 import com.didekindroid.common.utils.BundleKeyTest;
 import com.didekindroid.common.utils.IoHelperTest;
@@ -24,6 +25,7 @@ import org.junit.runners.Suite;
         BundleKeyTest.class,
         GcmBroadCastNotificationActivityTest.class,
         GcmRequestTest.class,
+        GcmRegistrationIntentService_Test.class,
         IoHelperTest.class,
         JceTests.class,
         Oauth2ServiceIfTest.class,

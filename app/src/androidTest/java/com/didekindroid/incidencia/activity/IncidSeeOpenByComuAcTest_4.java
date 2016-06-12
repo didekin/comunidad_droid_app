@@ -32,8 +32,10 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
+import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekin.usuario.dominio.Rol.PROPIETARIO;
 import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_FLAG;
@@ -51,6 +53,7 @@ import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_ESCORIAL_
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_JUAN;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.makeUsuarioComunidad;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
+import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -131,6 +134,21 @@ public class IncidSeeOpenByComuAcTest_4 {
         String dBFileName = DB_PATH.concat(IncidenciaDataDbHelper.DB_NAME);
         deleteDatabase(new File(dBFileName));
         cleanOptions(whatToClean);
+    }
+
+    @Test
+    public void testOnCreate_1(){
+
+        // CASO OK para la visibilidad del bloque de datos de resolución.
+        IncidenciaUser incidenciaUser = adapter.getItem(0);
+        // Bloque datos de fecha alta resolución visible.
+        onView(allOf(
+                withId(R.id.incid_see_resolucion_block),
+                hasSibling(allOf(
+                        withText(incidenciaUser.getIncidencia().getDescripcion()),
+                        withId(R.id.incid_descripcion_view)
+                ))
+        )).check(matches(isDisplayed()));
     }
 
     @Test

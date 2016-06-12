@@ -22,7 +22,7 @@ import java.util.List;
 
 import retrofit2.Response;
 
-import static com.didekin.incidservice.gcm.GcmKeyValueIncidData.incidencia_type;
+import static com.didekin.incidservice.gcm.GcmKeyValueIncidData.incidencia_open_type;
 import static com.didekindroid.DidekindroidApp.getHttpTimeOut;
 import static com.didekinservice.common.GcmEndPoint.ACCEPT_ENCODING_IDENTITY;
 import static com.didekinservice.common.GcmEndPoint.FCM_HOST_PORT;
@@ -84,7 +84,7 @@ public class GcmRequestTest {
     {
         String gcmToken = firebaseInstanceId.getToken();
         GcmSingleRequest request = new GcmSingleRequest.Builder(gcmToken,
-                new GcmRequest.Builder(new GcmIncidRequestData(incidencia_type, 999L)).build())
+                new GcmRequest.Builder(new GcmIncidRequestData(incidencia_open_type, 999L)).build())
                 .build();
         GcmResponse gcmResponse = endPointImp.sendGcmSingleRequest(request).execute().body();
         assertThat(gcmResponse.getResults()[0].getMessage_id().equals(gcmToken), is(false));
@@ -95,7 +95,7 @@ public class GcmRequestTest {
 
         // Probamos con token tablet.
         request = new GcmSingleRequest.Builder(secondToken,
-                new GcmRequest.Builder(new GcmIncidRequestData(incidencia_type, 999L)).build())
+                new GcmRequest.Builder(new GcmIncidRequestData(incidencia_open_type, 999L)).build())
                 .build();
         gcmResponse = endPointImp.sendGcmSingleRequest(request).execute().body();
         assertThat(gcmResponse.getSuccess(), is(1));
@@ -121,7 +121,7 @@ public class GcmRequestTest {
         gcmTokens.add(firebaseInstanceId.getToken());
         gcmTokens.add(secondToken);
         GcmMulticastRequest request = new GcmMulticastRequest.Builder(gcmTokens,
-                new GcmRequest.Builder(new GcmIncidRequestData(incidencia_type, 999L)).build())
+                new GcmRequest.Builder(new GcmIncidRequestData(incidencia_open_type, 999L)).build())
                 .build();
         GcmResponse gcmResponse = endPointImp.sendGcmMulticastRequest(ACCEPT_ENCODING_IDENTITY, request).execute().body();
         assertThat(gcmResponse.getResults()[0].getMessage_id(), notNullValue());
@@ -148,7 +148,7 @@ public class GcmRequestTest {
     {
         gcmTokens.add(firebaseInstanceId.getToken());
         GcmMulticastRequest request = new GcmMulticastRequest.Builder(gcmTokens,
-                new GcmRequest.Builder(new GcmIncidRequestData(incidencia_type, 999L)).build())
+                new GcmRequest.Builder(new GcmIncidRequestData(incidencia_open_type, 999L)).build())
                 .build();
         GcmResponse gcmResponse = endPointImp.sendGcmMulticastRequest(ACCEPT_ENCODING_IDENTITY, request).execute().body();
         assertThat(gcmResponse.getResults()[0].getMessage_id(), notNullValue());
@@ -166,7 +166,7 @@ public class GcmRequestTest {
     {
         gcmTokens.add(firebaseInstanceId.getToken());
         GcmMulticastRequest request = new GcmMulticastRequest.Builder(gcmTokens,
-                new GcmRequest.Builder(new GcmIncidRequestData(incidencia_type, 999L)).build())
+                new GcmRequest.Builder(new GcmIncidRequestData(incidencia_open_type, 999L)).build())
                 .build();
         GcmResponse gcmResponse = endPointImp.sendGcmMulticastRequest(request).execute().body();
         assertThat(gcmResponse.getResults()[0].getMessage_id(), notNullValue());
@@ -191,7 +191,7 @@ public class GcmRequestTest {
     {
         gcmTokens.add("");
         GcmMulticastRequest request = new GcmMulticastRequest.Builder(gcmTokens,
-                new GcmRequest.Builder(new GcmIncidRequestData(incidencia_type, 999L)).build())
+                new GcmRequest.Builder(new GcmIncidRequestData(incidencia_open_type, 999L)).build())
                 .build();
         Response<GcmResponse> response = endPointImp.sendGcmMulticastRequest(request).execute();
         assertThat(response.raw().code(), is(MissingRegistration.httpStatusCode));
@@ -228,7 +228,7 @@ public class GcmRequestTest {
         gcmTokens.add(null);
         gcmTokens.add("wrong_token");
         GcmMulticastRequest request = new GcmMulticastRequest.Builder(gcmTokens,
-                new GcmRequest.Builder(new GcmIncidRequestData(incidencia_type, 999L)).build())
+                new GcmRequest.Builder(new GcmIncidRequestData(incidencia_open_type, 999L)).build())
                 .build();
         Response<GcmResponse> response = endPointImp.sendGcmMulticastRequest(request).execute();
         assertThat(response.raw().code(), is(200));
@@ -256,7 +256,7 @@ public class GcmRequestTest {
     public void testErrorSingle_1() throws Exception
     {
         GcmSingleRequest request = new GcmSingleRequest.Builder(null,
-                new GcmRequest.Builder(new GcmIncidRequestData(incidencia_type, 999L)).build())
+                new GcmRequest.Builder(new GcmIncidRequestData(incidencia_open_type, 999L)).build())
                 .build();
         Response response = endPointImp.sendGcmSingleRequest(request).execute();
         assertThat(response.raw().code(), is(InvalidJson.httpStatusCode));
@@ -271,7 +271,7 @@ public class GcmRequestTest {
     public void testErrorSingle_2() throws Exception
     {
         GcmSingleRequest request = new GcmSingleRequest.Builder("wrong_token",
-                new GcmRequest.Builder(new GcmIncidRequestData(incidencia_type, 999L)).build())
+                new GcmRequest.Builder(new GcmIncidRequestData(incidencia_open_type, 999L)).build())
                 .build();
         Response<GcmResponse> response = endPointImp.sendGcmSingleRequest(request).execute();
         assertThat(response.raw().code(), is(InvalidRegistration.httpStatusCode));

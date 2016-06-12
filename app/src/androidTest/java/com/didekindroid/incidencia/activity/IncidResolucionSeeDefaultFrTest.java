@@ -14,6 +14,7 @@ import java.io.IOException;
 
 import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
+import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_JUAN;
 
@@ -39,7 +40,7 @@ public class IncidResolucionSeeDefaultFrTest extends IncidResolucionAbstractTest
             protected Intent getActivityIntent()
             {
                 try {
-                    doIncidImportancia(COMU_REAL_JUAN);
+                    incidImportancia = insertGetIncidImportancia(COMU_REAL_JUAN);
                 } catch (UiException | IOException e) {
                     e.printStackTrace();
                 }

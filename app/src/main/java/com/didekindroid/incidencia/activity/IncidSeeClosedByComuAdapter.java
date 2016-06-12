@@ -28,17 +28,17 @@ public class IncidSeeClosedByComuAdapter extends ArrayAdapter<IncidenciaUser> {
     public View getView(int position, View convertView, ViewGroup parent)
     {
         Log.d(TAG, "getView()");
-        IncidClosedSeeItemVwHolder viewHolder;
+        IncidClosedSeeVwHolder viewHolder;
 
         if (convertView == null) {
             Log.d(TAG, "getView(), convertView == null");
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.incid_see_by_comu_list_item, parent, false);
             // Hacemos visible el bloque de la fecha de cierre.
             convertView.findViewById(R.id.incid_see_cierre_block).setVisibility(View.VISIBLE);
-            viewHolder = new IncidClosedSeeItemVwHolder(convertView);
+            viewHolder = new IncidClosedSeeVwHolder(convertView);
             convertView.setTag(viewHolder);
         }
-        viewHolder = (IncidClosedSeeItemVwHolder) convertView.getTag();
+        viewHolder = (IncidClosedSeeVwHolder) convertView.getTag();
         final IncidenciaUser incidencia = getItem(position);
         viewHolder.initializeTextInViews(incidencia);
         return convertView;

@@ -1,6 +1,8 @@
 package com.didekindroid.common.utils;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
@@ -16,6 +18,7 @@ import android.widget.Toast;
 import com.didekin.common.exception.ErrorBean;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
+import com.didekindroid.common.gcm.GcmRegistrationIntentService;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
@@ -33,7 +36,6 @@ import static com.didekin.common.exception.DidekinExceptionMsg.TOKEN_NULL;
 import static com.didekindroid.R.color.deep_purple_100;
 import static com.didekindroid.common.activity.TokenHandler.TKhandler;
 import static com.didekindroid.common.utils.UIutils.SharedPrefFiles.app_preferences_file;
-import static com.google.common.base.Preconditions.checkState;
 import static java.text.DateFormat.MEDIUM;
 import static java.util.Locale.getDefault;
 
@@ -124,6 +126,18 @@ public final class UIutils {
     {
         GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
         return apiAvailability.isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS;
+    }
+
+    public static void getGcmToken(Activity incidSeeOpenByComuAc)
+    {
+        //noinspection StatementWithEmptyBody
+        if (checkPlayServices(incidSeeOpenByComuAc)) {
+            if (!isGcmTokenSentServer(incidSeeOpenByComuAc)){
+                incidSeeOpenByComuAc.startService(new Intent(incidSeeOpenByComuAc, GcmRegistrationIntentService.class));
+            }
+        } else{
+            // TODO: mostrar cuadro de diálogo para instalar GCM.
+        }
     }
 
 //    ================================== SHARED PREFERENCES ======================================

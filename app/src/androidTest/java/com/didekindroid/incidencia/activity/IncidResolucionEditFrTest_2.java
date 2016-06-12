@@ -34,6 +34,8 @@ import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJEC
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.common.utils.UIutils.formatTimeStampToString;
+import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidImportancia;
+import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetResolucionNoAdvances;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_PLAZUELA5_JUAN;
@@ -67,10 +69,10 @@ public class IncidResolucionEditFrTest_2 extends IncidResolucionAbstractTest {
             protected Intent getActivityIntent()
             {
                 try {
-                    doIncidImportancia(COMU_PLAZUELA5_JUAN);
+                    incidImportancia = insertGetIncidImportancia(COMU_PLAZUELA5_JUAN);
                     // Registramos resolución.
                     Thread.sleep(1000);
-                    doResolucionNoAdvances();
+                    resolucion = insertGetResolucionNoAdvances(incidImportancia);
                     // Modificamos resolución.
                     Avance avance = new Avance.AvanceBuilder().avanceDesc("avance1_desc").build();
                     List<Avance> avances = new ArrayList<>(1);

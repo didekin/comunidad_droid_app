@@ -1,6 +1,9 @@
 package com.didekindroid.usuario.suite;
 
 import com.didekindroid.usuario.activity.ComuDataAcTest;
+import com.didekindroid.usuario.activity.ComuSearchAcTest_1;
+import com.didekindroid.usuario.activity.ComuSearchAcTest_2;
+import com.didekindroid.usuario.activity.ComuSearchAcTest_3;
 import com.didekindroid.usuario.activity.ComuSearchAcTest_intent;
 import com.didekindroid.usuario.activity.ComuSearchAcTest_spinner;
 import com.didekindroid.usuario.activity.ComuSearchResultsAcTest_1;
@@ -31,6 +34,9 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         ComuDataAcTest.class,
+        ComuSearchAcTest_1.class,
+        ComuSearchAcTest_2.class,
+        ComuSearchAcTest_3.class,
         ComuSearchAcTest_intent.class, // Falla en api 18.
         ComuSearchAcTest_spinner.class,
         ComuSearchResultsAcTest_1.class,
@@ -39,11 +45,11 @@ import org.junit.runners.Suite;
         DeleteMeAcTest.class,
         LoginAcTest_1.class,
         PasswordChangeAcTest.class,
-        RegComuAndUserComuAcTest.class,
         RegComuAndUserAndUserComuAcTest.class,
+        RegComuAndUserComuAcTest.class,
+        RegUserAndUserComuAcTest_intent.class,
         RegUserComuAcTest.class,
         RegUserComuAcTest_intent.class,
-        RegUserAndUserComuAcTest_intent.class,
         SeeUserComuByComuAcTest.class,
         SeeUserComuByUserAcTest.class,  // Fail.
         UserComuDataAcTest_1.class,

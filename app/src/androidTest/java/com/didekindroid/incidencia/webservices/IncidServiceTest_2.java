@@ -31,7 +31,7 @@ import static com.didekindroid.common.testutils.ActivityTestUtils.updateSecurity
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.INCID_DEFAULT_DESC;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.RESOLUCION_DEFAULT_DESC;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doResolucion;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidImportanciaWithId;
+import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidenciaUser;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidenciaUser;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
@@ -267,7 +267,7 @@ public class IncidServiceTest_2 {
         updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
         juanUserComu = ServOne.getUserComuByUserAndComu(juanUserComu.getComunidad().getC_Id());
         // Añado registro incidImportancia de Juan.
-        insertGetIncidImportanciaWithId(incidencia_1.getIncidenciaId(), juanUserComu, 4);
+        insertGetIncidenciaUser(incidencia_1.getIncidenciaId(), juanUserComu, 4);
         assertThat(IncidenciaServ.seeUserComusImportancia(incidencia_1.getIncidenciaId()).size(), is(2));
     }
 

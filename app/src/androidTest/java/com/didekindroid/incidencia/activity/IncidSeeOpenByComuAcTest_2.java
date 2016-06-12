@@ -55,6 +55,7 @@ import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -86,8 +87,8 @@ public class IncidSeeOpenByComuAcTest_2 {
      * Postconditions:
      * 1. The incidencia is shown in edit mode (importancia field).
      * 2. An intent is passed whith:
-     *    - the incidImportancia instance of the user in session.
-     *    - a true value in the resolucion flag.
+     * - the incidImportancia instance of the user in session.
+     * - a true value in the resolucion flag.
      */
     @Rule
     public IntentsTestRule<IncidSeeOpenByComuAc> activityRule = new IntentsTestRule<IncidSeeOpenByComuAc>(IncidSeeOpenByComuAc.class) {
@@ -168,6 +169,9 @@ public class IncidSeeOpenByComuAcTest_2 {
         assertThat(adapter.getItem(0).getIncidencia().getDescripcion(), is(incidJuanReal1.getIncidencia().getDescripcion()));
         // Solo hay un registro IncidImportancia para la incidencia: importanciaAvg == importancia usuario único.
         assertThat(adapter.getItem(0).getIncidencia().getImportanciaAvg(), is((float) incidJuanReal1.getImportancia()));
+        // Fecha alta resolución
+        assertThat(adapter.getItem(0).getFechaAltaResolucion(), nullValue());
+
         //
         assertThat(adapter.getItem(1).getIncidencia().getComunidad(), is(juanReal.getComunidad()));
         assertThat(adapter.getItem(1).getUsuario().getAlias(), is(juanReal.getUsuario().getAlias()));
@@ -175,6 +179,8 @@ public class IncidSeeOpenByComuAcTest_2 {
         assertThat(adapter.getItem(1).getIncidencia().getDescripcion(), is(incidJuanReal2.getIncidencia().getDescripcion()));
         // Solo hay un registro IncidImportancia para la incidencia: importanciaAvg == importancia usuario único.
         assertThat(adapter.getItem(1).getIncidencia().getImportanciaAvg(), is((float) incidJuanReal2.getImportancia()));
+        // Fecha alta resolución
+        assertThat(adapter.getItem(0).getFechaAltaResolucion(), nullValue());
     }
 
     @Test
@@ -183,8 +189,8 @@ public class IncidSeeOpenByComuAcTest_2 {
         // Second comunidad (Plazuela) in the comunidad_spinner is selected.
         onView(withId(R.id.incid_reg_comunidad_spinner)).perform(click());
         onData(allOf(
-                        is(instanceOf(Comunidad.class)),
-                        is(COMU_LA_PLAZUELA_5))
+                is(instanceOf(Comunidad.class)),
+                is(COMU_LA_PLAZUELA_5))
         ).perform(click()).check(matches(isDisplayed()));
 
         // Verificamos que la actividad recibe la comunidad seleccionada.
@@ -217,9 +223,9 @@ public class IncidSeeOpenByComuAcTest_2 {
         onView(allOf(
                 withId(R.id.incid_see_importancia_block),
                 hasDescendant(allOf(
-                                withId(R.id.incid_importancia_comunidad_view),
-                                withText(mActivity.getResources()
-                                        .getStringArray(R.array.IncidImportanciaArray)[Math.round(incidJuanReal1.getImportancia())]))
+                        withId(R.id.incid_importancia_comunidad_view),
+                        withText(mActivity.getResources()
+                                .getStringArray(R.array.IncidImportanciaArray)[Math.round(incidJuanReal1.getImportancia())]))
                 ),
                 hasSibling(allOf(
                         withText(incidJuanReal1.getIncidencia().getDescripcion()),
@@ -248,6 +254,12 @@ public class IncidSeeOpenByComuAcTest_2 {
                 withId(R.id.incid_see_cierre_block),
                 hasSibling(withText(dBHelper.getAmbitoDescByPk(incidJuanReal1.getIncidencia().getAmbitoIncidencia().getAmbitoId())))
         )).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
+
+        // Bloque datos de fecha alta resolución no visible.
+        onView(allOf(
+                withId(R.id.incid_see_resolucion_block),
+                hasSibling(withText(dBHelper.getAmbitoDescByPk(incidJuanReal1.getIncidencia().getAmbitoIncidencia().getAmbitoId())))
+        )).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
     }
 
     @Test
@@ -256,8 +268,8 @@ public class IncidSeeOpenByComuAcTest_2 {
         // Second comunidad (Plazuela) in the comunidad_spinner is selected.
         onView(withId(R.id.incid_reg_comunidad_spinner)).perform(click());
         onData(allOf(
-                        is(instanceOf(Comunidad.class)),
-                        is(COMU_LA_PLAZUELA_5))
+                is(instanceOf(Comunidad.class)),
+                is(COMU_LA_PLAZUELA_5))
         ).perform(click()).check(matches(isDisplayed()));
 
         IncidenciaUser incidUser = adapter.getItem(0);

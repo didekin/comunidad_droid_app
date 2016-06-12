@@ -11,8 +11,8 @@ import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
-import com.didekin.incidservice.gcm.GcmKeyValueIncidData;
 import com.didekindroid.R;
+import com.didekindroid.incidencia.activity.IncidSeeClosedByComuAc;
 import com.didekindroid.incidencia.activity.IncidSeeOpenByComuAc;
 import com.didekindroid.usuario.activity.ComuSearchAc;
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -26,12 +26,15 @@ import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static com.didekin.common.gcm.GcmKeyValueData.type_message_key;
 import static com.didekin.incidservice.gcm.GcmKeyValueIncidData.comunidadId_key;
+import static com.didekin.incidservice.gcm.GcmKeyValueIncidData.incidencia_open_type;
+import static com.didekin.incidservice.gcm.GcmKeyValueIncidData.incidencia_closed_type;
+import static com.didekin.incidservice.gcm.GcmKeyValueIncidData.resolucion_open_type;
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
 
 public class AppFirebaseMsgService extends FirebaseMessagingService {
 
     private static final String TAG = AppFirebaseMsgService.class.getCanonicalName();
-    Map<String,String> data;
+    Map<String, String> data;
 
     /**
      * Called when message is received.
@@ -51,7 +54,7 @@ public class AppFirebaseMsgService extends FirebaseMessagingService {
         PendingIntent resultPendingIntent = handler.getPendingIntent(this);
         NotificationManager mManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        mManager.notify(handler.getTitleRsc(), getNotification(handler, resultPendingIntent));
+        mManager.notify(handler.getContentTextRsc(), getNotification(handler, resultPendingIntent));
 
         Log.d(TAG, "onMessageReceived(), notification sent with ID: " + handler.getTitleRsc());
     }
@@ -77,22 +80,7 @@ public class AppFirebaseMsgService extends FirebaseMessagingService {
 
     public enum TypeMsgHandler {
 
-        INCIDENCIA {
-            @Override
-            public String getType()
-            {
-                return this.toString();
-            }
-
-            /**
-             *  This string is used as the unique identifier for the notification, in the application.
-             */
-            @Override
-            public int getTitleRsc()
-            {
-                return R.string.incid_gcm_nueva_incidencia_title;
-            }
-
+        INCIDENCIA_OPEN {
             @Override
             public int getContentTextRsc()
             {
@@ -100,39 +88,80 @@ public class AppFirebaseMsgService extends FirebaseMessagingService {
             }
 
             @Override
-            public int getSubTextRsc()
+            PendingIntent getPendingIntent(Context context)
             {
-                return R.string.incid_gcm_nueva_incidencia_subtext;
+                Intent comuSearch = new Intent(new Intent(context, ComuSearchAc.class));
+                Intent incidSeeComu = new Intent(context, IncidSeeOpenByComuAc.class);
+                incidSeeComu.putExtra(COMUNIDAD_ID.key, Long.parseLong(((AppFirebaseMsgService) context).data.get(comunidadId_key)));
+                return doBasicPendingIntent(context, incidSeeComu, comuSearch);
+            }
+
+            @Override
+            public String getType()
+            {
+                return incidencia_open_type;
+            }
+        },
+
+        INCIDENCIA_CLOSE {
+            @Override
+            public int getContentTextRsc()
+            {
+                return R.string.incid_gcm_incidencia_closed_body;
             }
 
             @Override
             PendingIntent getPendingIntent(Context context)
             {
-
-                TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
                 Intent comuSearch = new Intent(new Intent(context, ComuSearchAc.class));
-                stackBuilder.addNextIntentWithParentStack(comuSearch);
-                Intent incidSeeComu = new Intent(context, IncidSeeOpenByComuAc.class);
-                incidSeeComu.addFlags(FLAG_ACTIVITY_CLEAR_TOP | FLAG_ACTIVITY_NEW_TASK);
-                incidSeeComu.putExtra(COMUNIDAD_ID.key, Long.parseLong(((AppFirebaseMsgService)context).data.get(comunidadId_key)));
-                stackBuilder.addNextIntent(incidSeeComu);
-                return stackBuilder.getPendingIntent(0, FLAG_UPDATE_CURRENT);
+                Intent incidSeeClosedComu = new Intent(context, IncidSeeClosedByComuAc.class);
+                incidSeeClosedComu.putExtra(COMUNIDAD_ID.key, Long.parseLong(((AppFirebaseMsgService) context).data.get(comunidadId_key)));
+                return doBasicPendingIntent(context, incidSeeClosedComu, comuSearch);
             }
 
             @Override
-            public String toString()
+            public String getType()
             {
-                return GcmKeyValueIncidData.incidencia_type;
+                return incidencia_closed_type;
             }
-        },;
+        },
+
+        RESOLUCION_OPEN {
+            @Override
+            public int getContentTextRsc()
+            {
+                return R.string.incid_gcm_resolucion_open_body;
+            }
+
+            @Override
+            PendingIntent getPendingIntent(Context context)
+            {
+                return INCIDENCIA_OPEN.getPendingIntent(context);
+            }
+
+            @Override
+            public String getType()
+            {
+                return resolucion_open_type;
+            }
+        },
+        ;
+
+        public int getTitleRsc()
+        {
+            return R.string.gcm_message_title;
+        }
 
         public abstract String getType();
 
-        public abstract int getTitleRsc();
-
+        /**
+         * This string is used as the unique identifier for the notification, in the application.
+         */
         public abstract int getContentTextRsc();
 
-        public abstract int getSubTextRsc();
+        public int getSubTextRsc(){
+            return R.string.gcm_message_generic_subtext;
+        }
 
         abstract PendingIntent getPendingIntent(Context context);
 
@@ -147,6 +176,19 @@ public class AppFirebaseMsgService extends FirebaseMessagingService {
         static TypeMsgHandler getHandlerFromType(String handlerType)
         {
             return typeToHandler.get(handlerType);
+        }
+
+        //    ================ HELPER METHODS =============
+
+        PendingIntent doBasicPendingIntent(Context context, Intent firsOutIntent, Intent... lastOutIntents)
+        {
+            TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+            for (Intent intent : lastOutIntents) {
+                stackBuilder.addNextIntentWithParentStack(intent);
+            }
+            firsOutIntent.addFlags(FLAG_ACTIVITY_CLEAR_TOP | FLAG_ACTIVITY_NEW_TASK);
+            stackBuilder.addNextIntent(firsOutIntent);
+            return stackBuilder.getPendingIntent(0, FLAG_UPDATE_CURRENT);
         }
     }
 }

@@ -154,4 +154,10 @@
         <item name="android:textColor">@color/purple_900</item>
     </style>
 
+    <style name="textBase.activityLink1">
+        <item name="android:textSize">@dimen/text_hint_size</item>
+        <item name="android:textColor">@color/deep_orange_600</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>

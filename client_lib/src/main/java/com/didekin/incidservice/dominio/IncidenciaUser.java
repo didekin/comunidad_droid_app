@@ -7,6 +7,7 @@ import com.didekin.usuario.dominio.Usuario;
 import java.io.InvalidObjectException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 import static com.didekin.common.exception.DidekinExceptionMsg.INCIDENCIA_USER_WRONG_INIT;
 
@@ -17,18 +18,21 @@ import static com.didekin.common.exception.DidekinExceptionMsg.INCIDENCIA_USER_W
  */
 
 /**
- * Holder object for the incidencia and its initiating user data.
+ * Holder object for the incidencia and its initiating user data, plus timeStamp for resolucion,
+ * if there is one associated  to the incidencia.
  * Integrity constraint: incidencia.userName == userComu.userName, if both exists.
  */
 public class IncidenciaUser implements Serializable {
 
     private final Incidencia incidencia;
     private final Usuario usuario;
+    private final Timestamp fechaAltaResolucion;
 
     public IncidenciaUser(IncidenciaUserBuilder builder) throws IllegalStateException
     {
         incidencia = builder.incidencia;
         usuario = builder.usuario;
+        fechaAltaResolucion = builder.fechaAltaResolucion;
     }
 
     public Incidencia getIncidencia()
@@ -39,6 +43,11 @@ public class IncidenciaUser implements Serializable {
     public Usuario getUsuario()
     {
         return usuario;
+    }
+
+    public Timestamp getFechaAltaResolucion()
+    {
+        return fechaAltaResolucion;
     }
 
     // ............................ Serializable ...............................
@@ -83,6 +92,7 @@ public class IncidenciaUser implements Serializable {
 
         private Incidencia incidencia;
         private Usuario usuario;
+        private Timestamp fechaAltaResolucion;
 
         public IncidenciaUserBuilder(Incidencia incidencia)
         {
@@ -92,6 +102,12 @@ public class IncidenciaUser implements Serializable {
         public IncidenciaUserBuilder usuario(Usuario initValue)
         {
             usuario = initValue;
+            return this;
+        }
+
+        public IncidenciaUserBuilder fechaAltaResolucion(Timestamp initValue)
+        {
+            fechaAltaResolucion = initValue;
             return this;
         }
 
@@ -121,9 +137,11 @@ public class IncidenciaUser implements Serializable {
 
         private final Incidencia incidencia;
         private final Usuario usuario;
+        private final Timestamp fechaAltaResolucion;
 
         public InnerSerial(IncidenciaUser incidenciaUser)
         {
+            fechaAltaResolucion = incidenciaUser.fechaAltaResolucion;
             incidencia = incidenciaUser.incidencia;
             usuario = incidenciaUser.usuario;
         }
@@ -132,6 +150,7 @@ public class IncidenciaUser implements Serializable {
         {
             return (new IncidenciaUserBuilder(incidencia)
                     .usuario(usuario)
+                    .fechaAltaResolucion(fechaAltaResolucion)
                     .build());
         }
     }

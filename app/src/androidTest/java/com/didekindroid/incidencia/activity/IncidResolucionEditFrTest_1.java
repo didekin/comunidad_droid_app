@@ -37,6 +37,8 @@ import static com.didekindroid.common.testutils.ActivityTestUtils.checkNavigateU
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.common.utils.UIutils.SPAIN_LOCALE;
 import static com.didekindroid.common.utils.UIutils.formatTimeToString;
+import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidImportancia;
+import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetResolucionNoAdvances;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_PLAZUELA5_JUAN;
@@ -69,9 +71,9 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
             protected Intent getActivityIntent()
             {
                 try {
-                    doIncidImportancia(COMU_PLAZUELA5_JUAN);
+                    incidImportancia = insertGetIncidImportancia(COMU_PLAZUELA5_JUAN);
                     Thread.sleep(1000);
-                    doResolucionNoAdvances();
+                    resolucion = insertGetResolucionNoAdvances(incidImportancia);
 
                 } catch (UiException | InterruptedException | IOException e) {
                     e.printStackTrace();
@@ -175,7 +177,7 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
         // Caso OK: cerramos incidencia sin cambiar datos en pantalla.
         onView(withId(R.id.incid_resolucion_edit_fr_close_button)).perform(click());
 
-        onView(withId(R.id.incid_see_closed_by_comu_ac)).check(matches(isDisplayed()));   // TODO. fail
+        onView(withId(R.id.incid_see_closed_by_comu_ac)).check(matches(isDisplayed()));
         intended(not(hasExtraWithKey(INCID_IMPORTANCIA_OBJECT.key)));
 
         // Damos back e intentamos modificar la incidencia. Nos da error.
@@ -191,7 +193,7 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
         // Caso OK: cerramos incidencia sin cambiar datos en pantalla.
         onView(withId(R.id.incid_resolucion_edit_fr_close_button)).perform(click());
 
-        onView(withId(R.id.incid_see_closed_by_comu_ac)).check(matches(isDisplayed()));    // TODO. fail
+        onView(withId(R.id.incid_see_closed_by_comu_ac)).check(matches(isDisplayed()));
         intended(not(hasExtraWithKey(INCID_IMPORTANCIA_OBJECT.key)));
         // Up Navigate.
         checkNavigateUp();

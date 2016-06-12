@@ -21,11 +21,9 @@
         <!-- Enlace a fragmento con importancia asignada por otros miembros de la comunidad.-->
         <TextView
             android:id="@+id/incid_importancia_otros_view"
-            style="@style/textBase.textFieldLabel2"
+            style="@style/textBase.activityLink1"
             android:layout_width="0dp"
             android:layout_weight="2"
-            android:text="@string/incid_importancia_otros_txt"
-            android:textColor="@color/deep_orange_600"
-            android:textStyle="bold"/>
+            android:text="@string/incid_importancia_otros_txt"/>
     </LinearLayout>
 </merge>

@@ -4,9 +4,7 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.v4.app.Fragment;
 
 import com.didekin.incidservice.dominio.IncidImportancia;
-import com.didekin.incidservice.dominio.Incidencia;
 import com.didekin.incidservice.dominio.Resolucion;
-import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.utils.UIutils;
@@ -18,7 +16,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 
-import java.io.IOException;
 import java.util.Locale;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -32,16 +29,12 @@ import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJEC
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.common.activity.FragmentTags.incid_resolucion_ac_frgs_tag;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
-import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.utils.UIutils.SPAIN_LOCALE;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.COSTE_ESTIM_DEFAULT;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.COSTE_ESTIM_DEFAULT_String;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.INCID_DEFAULT_DESC;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.RESOLUCION_DEFAULT_DESC;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doResolucion;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
-import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
@@ -110,30 +103,6 @@ public abstract class IncidResolucionAbstractTest {
     abstract CleanUserEnum whatToClean();
 
     //  ===============================  HELPER METHODS ================================
-
-    void doIncidImportancia(UsuarioComunidad userComu) throws UiException, IOException
-    {
-        signUpAndUpdateTk(userComu);
-        UsuarioComunidad userComuDb = ServOne.seeUserComusByUser().get(0);
-        incidImportancia = new IncidImportancia.IncidImportanciaBuilder(
-                doIncidencia(userComuDb.getUsuario().getUserName(), INCID_DEFAULT_DESC, userComuDb.getComunidad().getC_Id(), (short) 43))
-                .usuarioComunidad(userComuDb)
-                .importancia((short) 3).build();
-        IncidenciaServ.regIncidImportancia(incidImportancia);
-        Incidencia incidenciaDb = IncidenciaServ.seeIncidsOpenByComu(userComuDb.getComunidad().getC_Id()).get(0).getIncidencia();
-        incidImportancia = IncidenciaServ.seeIncidImportancia(incidenciaDb.getIncidenciaId()).getIncidImportancia();
-    }
-
-    void doResolucionNoAdvances() throws UiException
-    {
-        // Registramos resolución.
-        resolucion = doResolucion(incidImportancia.getIncidencia(),
-                RESOLUCION_DEFAULT_DESC,
-                COSTE_ESTIM_DEFAULT,
-                incidImportancia.getFechaAlta());
-        Assert.assertThat(IncidenciaServ.regResolucion(resolucion), is(1));
-        resolucion = IncidenciaServ.seeResolucion(resolucion.getIncidencia().getIncidenciaId());
-    }
 
     void checkScreenResolucionEditFr()
     {

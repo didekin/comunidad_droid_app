@@ -16,6 +16,7 @@ import junit.framework.AssertionFailedError;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -53,7 +54,7 @@ import static org.junit.Assert.assertThat;
  * Time: 09:53
  */
 @RunWith(AndroidJUnit4.class)
-public class ComuSearchAcTest {
+public class ComuSearchAcTest_1 {
 
     private ComuSearchAc activity;
     Context context;
@@ -64,6 +65,12 @@ public class ComuSearchAcTest {
 
     @Rule
     public ActivityTestRule<ComuSearchAc> mActivityRule = new ActivityTestRule<>(ComuSearchAc.class, true, false);
+
+    @BeforeClass
+    public static void slowSeconds() throws InterruptedException
+    {
+        Thread.sleep(4000);
+    }
 
     @Before
     public void getFixture() throws Exception
@@ -146,134 +153,7 @@ public class ComuSearchAcTest {
 
         onView(withId(R.id.searchComunidad_Bton)).perform(ViewActions.click());
         checkToastInTest(R.string.error_validation_msg, activity, R.string.tipo_via, R.string.nombre_via, R.string.municipio);
-        Thread.sleep(1000);
     }
-
-    @Test
-    public void searchComunidadOK_1() throws InterruptedException
-    {
-        // Without token.
-        activity = mActivityRule.launchActivity(new Intent());
-        assertThat(isRegisteredUser(activity), is(false));
-
-        typeComunidadData();
-
-        onView(withId(R.id.searchComunidad_Bton)).perform(click());
-        // No results in DB. The user is invited to register.
-        checkToastInTest(R.string.no_result_search_comunidad, activity);
-        onView(withId(R.id.reg_comu_usuario_usuariocomu_layout)).check(matches(isDisplayed()));
-
-        Thread.sleep(1000);
-    }
-
-    @Test
-    public void searchComunidadOK_2() throws InterruptedException, UiException, IOException
-    {
-        //With token.
-        signUpAndUpdateTk(COMU_REAL_JUAN);
-
-        activity = mActivityRule.launchActivity(new Intent());
-        assertThat(isRegisteredUser(activity), is(true));
-
-        // Data corresponds to a comunidad in DB.
-        typeComunidadData();
-        onView(withId(R.id.searchComunidad_Bton)).perform(ViewActions.click());
-        // Check the view for comunidades list fragment.
-        onView(withId(R.id.comu_search_results_ac_one_pane_frg_container)).check(matches(isDisplayed()));
-        onView(withId(R.id.comu_list_frg)).check(matches(isDisplayed()));
-
-        whatClean = CleanUserEnum.CLEAN_JUAN;
-    }
-
-    @Test
-    public void testGetDatosUsuarioNoToken() throws InterruptedException
-    {
-        assertThat(refreshTkFile.exists(), is(false));
-        activity = mActivityRule.launchActivity(new Intent());
-        assertThat(isRegisteredUser(activity), is(false));
-        USER_DATA_AC.checkMenuItem_NTk(activity);
-    }
-
-    @Test
-    public void testGetDatosUsuarioWithToken() throws InterruptedException, UiException, IOException
-    {
-        whatClean = CleanUserEnum.CLEAN_JUAN;
-
-        //With token.
-        signUpAndUpdateTk(COMU_REAL_JUAN);
-        activity = mActivityRule.launchActivity(new Intent());
-        assertThat(isRegisteredUser(activity), is(true));
-        USER_DATA_AC.checkMenuItem_WTk(activity);
-    }
-
-    @Test
-    public void testMenuNuevaComunidad_noToken() throws InterruptedException
-    {
-        assertThat(refreshTkFile.exists(), is(false));
-        activity = mActivityRule.launchActivity(new Intent());
-        assertThat(isRegisteredUser(activity), is(false));
-        REG_COMU_USER_USERCOMU_AC.checkMenuItem_NTk(activity);
-    }
-
-    @Test
-    public void testMenuNuevaComunidad_withToken() throws InterruptedException, UiException, IOException
-    {
-        whatClean = CleanUserEnum.CLEAN_JUAN;
-
-        signUpAndUpdateTk(COMU_REAL_JUAN);
-        activity = mActivityRule.launchActivity(new Intent());
-        assertThat(isRegisteredUser(activity), is(true));
-        REG_COMU_USER_USERCOMU_AC.checkMenuItem_WTk(activity);
-    }
-
-    @Test
-    public void testComunidadesByUsuario_withToken() throws InterruptedException, UiException, IOException
-    {
-        whatClean = CleanUserEnum.CLEAN_JUAN;
-
-        signUpAndUpdateTk(COMU_REAL_JUAN);
-        activity = mActivityRule.launchActivity(new Intent());
-        assertThat(isRegisteredUser(activity), is(true));
-        SEE_USERCOMU_BY_USER_AC.checkMenuItem_WTk(activity);
-    }
-
-    @Test
-    public void tesComunidadesByUsuario_noToken() throws InterruptedException
-    {
-        assertThat(refreshTkFile.exists(), is(false));
-        activity = mActivityRule.launchActivity(new Intent());
-        assertThat(isRegisteredUser(activity), is(false));
-        SEE_USERCOMU_BY_USER_AC.checkMenuItem_NTk(activity);
-    }
-
-    @Test
-    public void testLogin_withToken() throws InterruptedException, UiException, IOException
-    {
-
-        whatClean = CleanUserEnum.CLEAN_JUAN;
-        signUpAndUpdateTk(COMU_REAL_JUAN);
-        activity = mActivityRule.launchActivity(new Intent());
-
-        onView(withId(R.id.login_ac_mn)).check(doesNotExist());
-        openActionBarOverflowOrOptionsMenu(activity);
-        onView(withId(R.id.login_ac_mn)).check(doesNotExist());
-    }
-
-    @Test
-    public void testLogin_withoutToken() throws InterruptedException
-    {
-        activity = mActivityRule.launchActivity(new Intent());
-
-        try {
-            onView(withId(R.id.login_ac_mn)).check(matches(isDisplayed()));
-        } catch (AssertionFailedError e) {
-            openActionBarOverflowOrOptionsMenu(activity);
-            onView(withId(R.id.login_ac_mn)).check(matches(isDisplayed()));
-        }
-
-        LOGIN_AC.checkMenuItem_NTk(activity);
-    }
-
 
     @After
     public void cleanData() throws UiException

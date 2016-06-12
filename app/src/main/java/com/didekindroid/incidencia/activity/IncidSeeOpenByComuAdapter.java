@@ -28,16 +28,22 @@ public class IncidSeeOpenByComuAdapter extends ArrayAdapter<IncidenciaUser> {
     public View getView(int position, View convertView, ViewGroup parent)
     {
         Log.d(TAG, "getView()");
-        IncidOpenSeeItemVwHolder viewHolder;
+        IncidSeeItemVwHolder viewHolder;
+        final IncidenciaUser incidencia = getItem(position);
 
         if (convertView == null) {
             Log.d(TAG, "getView(), convertView == null");
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.incid_see_by_comu_list_item, parent, false);
-            viewHolder = new IncidOpenSeeItemVwHolder(convertView);
+            // Hacemos visible el bloque de la fecha de alta de la resolución.
+            if (incidencia.getFechaAltaResolucion() != null) {
+                convertView.findViewById(R.id.incid_see_resolucion_block).setVisibility(View.VISIBLE);
+                viewHolder = new IncidSeeOpenVwHolder(convertView);
+            } else {
+                viewHolder = new IncidSeeItemVwHolder(convertView);
+            }
             convertView.setTag(viewHolder);
         }
-        viewHolder = (IncidOpenSeeItemVwHolder) convertView.getTag();
-        final IncidenciaUser incidencia = getItem(position);
+        viewHolder = (IncidSeeItemVwHolder) convertView.getTag();
         viewHolder.initializeTextInViews(incidencia);
         return convertView;
     }

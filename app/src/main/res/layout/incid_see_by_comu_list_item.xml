@@ -63,5 +63,27 @@
         android:id="@+id/incid_descripcion_view"
         style="@style/textBase.textFieldLabel2"
         />
+    <LinearLayout
+        android:id="@+id/incid_see_resolucion_block"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone">
+        <TextView
+            android:id="@+id/incid_see_resolucion_rot"
+            style="@style/textBase.textFieldLabel1"
+            android:text="@string/incid_see_resolucion_label"/>
+        <TextView
+            android:id="@+id/incid_see_is_resolucion_iniciada_view"
+            style="@style/textBase.textFieldLabel2"
+            android:layout_marginStart="@dimen/simple_horizontal_margin"
+            android:text="@string/incid_see_resolucion_fecha_alta_label"
+            />
+        <TextView
+            android:id="@+id/incid_see_fecha_alta_resolucion_view"
+            style="@style/textBase.textFieldLabel2"
+            android:layout_marginStart="@dimen/simple_horizontal_margin"
+            />
+    </LinearLayout>
 
 </LinearLayout>

@@ -23,6 +23,9 @@
     <!--Messages-->
     <string name="no_internet_conn_toast">No hay conexión de red disponible.</string>
     <string name="exception_generic_message">No podemos continuar. Busca tu comunidad o haz login.</string>
+    <!-- Google Cloud Messages -->
+    <string name="gcm_message_title">Dídekin</string>
+    <string name="gcm_message_generic_subtext">Pulsa aquí para ver los detalles.</string>
     <!--******************************************************************************-->
     <!--                                 INCIDENCIAS                                  -->
     <!--******************************************************************************-->
@@ -34,8 +37,8 @@
     <string name="user_without_powers">Haz login y accede nuevamente a la incidencia.</string>
     <!-- ====================== Google Cloud Messages ====================== -->
     <string name="incid_gcm_nueva_incidencia_body">Nueva incidencia en tu comunidad.</string>
-    <string name="incid_gcm_nueva_incidencia_title">Dídekin</string>
-    <string name="incid_gcm_nueva_incidencia_subtext">Pulsa aquí para verla.</string>
+    <string name="incid_gcm_incidencia_closed_body">Incidencia resuelta en tu comunidad.</string>
+    <string name="incid_gcm_resolucion_open_body">Incidencia en tu comunidad en trámite de resolución.</string>
     <!-- ============================== MENUS ================================= -->
     <string name="incid_closed_see_by_usercomu_ac_mn">Incidencias cerradas</string>
     <string name="incid_comment_reg_ac_mn">Comentar</string>
@@ -104,6 +107,8 @@
     <string name="incid_comunidad_rot">Comunidad:</string>
     <string name="incid_incidencias_rot">Incidencias:</string>
     <string name="incid_ambito_rot">Ámbito:</string>
+    <string name="incid_see_resolucion_label">Resolución:</string>
+    <string name="incid_see_resolucion_fecha_alta_label">iniciada</string>
     <!-- ============ IncidSeeClosedByComuAc ========== -->
     <string name="incid_closed_by_user_ac_label">Incidencias cerradas</string>
     <!--******************************************************************************-->

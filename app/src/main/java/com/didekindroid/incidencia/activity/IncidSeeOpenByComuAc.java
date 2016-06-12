@@ -17,6 +17,7 @@ import com.didekin.usuario.dominio.Comunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.gcm.GcmRegistrationIntentService;
+import com.didekindroid.common.utils.UIutils;
 
 import java.util.List;
 
@@ -27,6 +28,7 @@ import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.common.activity.FragmentTags.incid_see_by_comu_list_fr_tag;
 import static com.didekindroid.common.utils.UIutils.checkPlayServices;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
+import static com.didekindroid.common.utils.UIutils.getGcmToken;
 import static com.didekindroid.common.utils.UIutils.isGcmTokenSentServer;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_CLOSED_BY_COMU_AC;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_REG_AC;
@@ -61,14 +63,7 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements
         Log.d(TAG, "onCreate().");
         super.onCreate(savedInstanceState);
 
-        //noinspection StatementWithEmptyBody
-        if (checkPlayServices(this)) {
-            if (!isGcmTokenSentServer(this)){
-                startService(new Intent(this, GcmRegistrationIntentService.class));
-            }
-        } else{
-            // TODO: mostrar cuadro de diálogo para instalar GCM.
-        }
+        getGcmToken(this);
 
         setContentView(R.layout.incid_see_open_by_comu_ac);
         doToolBar(this, true);
@@ -87,9 +82,7 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements
     protected void onResume()
     {
         Log.d(TAG, "onResume()");
-        if (checkPlayServices(this) && !isGcmTokenSentServer(this)) {
-            startService(new Intent(this, GcmRegistrationIntentService.class));
-        }
+        getGcmToken(this);
         super.onResume();
     }
 

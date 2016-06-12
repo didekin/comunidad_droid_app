@@ -23,6 +23,8 @@ import static com.didekin.usuario.dominio.Rol.PRESIDENTE;
 import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.common.testutils.ActivityTestUtils.updateSecurityData;
+import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidImportancia;
+import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetResolucionNoAdvances;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_ESCORIAL_JUAN;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_JUAN;
@@ -55,7 +57,7 @@ public class IncidResolucionSeeFrTest_1 extends IncidResolucionAbstractTest {
             protected Intent getActivityIntent()
             {
                 try {
-                    doIncidImportancia(COMU_ESCORIAL_JUAN);
+                    incidImportancia = insertGetIncidImportancia(COMU_ESCORIAL_JUAN);
                     Thread.sleep(1000);
                     // Necesitamos usuario con 'adm' para registrar resolución.
                     assertThat(ServOne.regUserAndUserComu(new UsuarioComunidad.UserComuBuilder(incidImportancia.getUserComu().getComunidad(), USER_PEPE).roles(PRESIDENTE.function).build())
@@ -63,7 +65,7 @@ public class IncidResolucionSeeFrTest_1 extends IncidResolucionAbstractTest {
                             , is(true));
                     updateSecurityData(USER_PEPE.getUserName(), USER_PEPE.getPassword());
                     // Registramos resolución.
-                    doResolucionNoAdvances();
+                    resolucion = insertGetResolucionNoAdvances(incidImportancia);
                     // Volvemos a usuario del test.
                     updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
                 } catch (UiException | InterruptedException | IOException e) {

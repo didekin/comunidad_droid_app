@@ -13,13 +13,11 @@ import com.didekin.incidservice.dominio.IncidImportancia;
 import com.didekin.incidservice.dominio.Incidencia;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
-import com.didekindroid.common.gcm.GcmRegistrationIntentService;
 
 import static com.didekindroid.common.utils.ConnectionUtils.checkInternetConnected;
-import static com.didekindroid.common.utils.UIutils.checkPlayServices;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
-import static com.didekindroid.common.utils.UIutils.isGcmTokenSentServer;
+import static com.didekindroid.common.utils.UIutils.getGcmToken;
 import static com.didekindroid.common.utils.UIutils.makeToast;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.google.common.base.Preconditions.checkState;
@@ -48,15 +46,7 @@ public class IncidRegAc extends AppCompatActivity {
         Log.d(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
 
-        //noinspection StatementWithEmptyBody
-        if (checkPlayServices(this)) {
-            if (!isGcmTokenSentServer(this)){
-                Log.d(TAG, "onCreate(), isGcmTokenSentServer false");
-                startService(new Intent(this, GcmRegistrationIntentService.class));
-            }
-        } else{
-            // TODO: mostrar cuadro de diálogo para instalar GCM.
-        }
+        getGcmToken(this);
 
         View mAcView = getLayoutInflater().inflate(R.layout.incid_reg_ac, null);
         setContentView(mAcView);
@@ -78,10 +68,7 @@ public class IncidRegAc extends AppCompatActivity {
     protected void onResume()
     {
         Log.d(TAG, "onResume()");
-        if (checkPlayServices(this) && !isGcmTokenSentServer(this)) {
-            Log.d(TAG, "onResume(), isGcmTokenSentServer false");
-            startService(new Intent(this, GcmRegistrationIntentService.class));
-        }
+        getGcmToken(this);
         super.onResume();
     }
 

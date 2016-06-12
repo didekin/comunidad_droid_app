@@ -2,6 +2,7 @@ package com.didekin.incidservice.dominio;
 
 import com.didekin.common.dominio.BeanBuilder;
 import com.didekin.common.dominio.SerialNumber;
+import com.didekin.common.gcm.GcmToComunidadHelper;
 import com.didekin.usuario.dominio.Comunidad;
 
 import java.io.InvalidObjectException;
@@ -17,7 +18,7 @@ import static com.didekin.common.exception.DidekinExceptionMsg.INCIDENCIA_WRONG_
  * Time: 17:07
  */
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
-public final class Incidencia implements Serializable {
+public final class Incidencia implements Serializable, GcmToComunidadHelper {
 
     private final long incidenciaId;
     private final Comunidad comunidad;
@@ -78,6 +79,12 @@ public final class Incidencia implements Serializable {
     public float getImportanciaAvg()
     {
         return importanciaAvg;
+    }
+
+    @Override
+    public long getComunidadId()
+    {
+        return comunidad.getC_Id();
     }
 
     // .................................... Serializable ...........................

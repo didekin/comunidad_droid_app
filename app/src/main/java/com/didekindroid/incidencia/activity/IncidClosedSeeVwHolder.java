@@ -13,11 +13,11 @@ import static com.didekindroid.common.utils.UIutils.formatTimeStampToString;
  * Date: 23/03/16
  * Time: 14:21
  */
-public class IncidClosedSeeItemVwHolder extends IncidOpenSeeItemVwHolder{
+public class IncidClosedSeeVwHolder extends IncidSeeItemVwHolder {
 
     final TextView mFechaCierreView;
 
-    public IncidClosedSeeItemVwHolder(View convertView)
+    public IncidClosedSeeVwHolder(View convertView)
     {
         super(convertView);
         mFechaCierreView = (TextView) convertView.findViewById(R.id.incid_fecha_cierre_view);

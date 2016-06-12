@@ -40,10 +40,10 @@ import static com.google.common.base.Preconditions.checkState;
  * 1. The user is NOW registered in the comunidad whose incidencias are shown.
  * 2. The incidencias shown have been registered in the last 24 months and are closed.
  * 3. All the incidencias closed in a comunidad where the user is NOW registered are shown,
- * even is the user was not registered in the comunidad when incidencia was open or closed.
+ *    even is the user was not registered in the comunidad when incidencia was open or closed.
  * 4. All incidencias closed MUST HAVE a resolucion.
  * 5. An intent may be passed with a comunidadId, when a notification is sent when the
- * incidencia has been closed.
+ *    incidencia has been closed.
  * Postconditions:
  * 1. A list of IncidenciaUSer instances are shown.
  * 2. The incidencias are shown in chronological order, from the most recent to the oldest one.

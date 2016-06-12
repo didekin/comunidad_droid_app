@@ -42,7 +42,7 @@ import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.testutils.ActivityTestUtils.updateSecurityData;
 import static com.didekindroid.incidencia.repository.IncidenciaDataDbHelperTest.DB_PATH;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidImportanciaWithId;
+import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidenciaUser;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidenciaUser;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_PEPE;
@@ -147,7 +147,7 @@ public abstract class IncidEditAbstractTest {
             ServOne.regUserAndUserComu(userComuJuan).execute();
             updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
             Thread.sleep(1000);
-            Incidencia incidencia_2 = insertGetIncidImportanciaWithId(incidenciaPepe.getIncidencia().getIncidenciaId(), userComuJuan, 2).getIncidencia();
+            Incidencia incidencia_2 = insertGetIncidenciaUser(incidenciaPepe.getIncidencia().getIncidenciaId(), userComuJuan, 2).getIncidencia();
             incidenciaJuan = IncidenciaServ.seeIncidImportancia(incidencia_2.getIncidenciaId()).getIncidImportancia();
 
         } catch (UiException | InterruptedException | IOException e) {

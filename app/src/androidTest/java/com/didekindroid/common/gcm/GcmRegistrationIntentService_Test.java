@@ -9,12 +9,10 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.common.activity.IdlingResourceForIntentServ;
 import com.didekindroid.common.activity.MockActivity;
-import com.didekindroid.common.gcm.GcmRegistrationIntentService;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -49,12 +47,6 @@ public class GcmRegistrationIntentService_Test {
             updateIsGcmTokenSentServer(false, context);
         }
     };
-
-    @BeforeClass
-    public static void slowSeconds() throws InterruptedException
-    {
-        Thread.sleep(3000);
-    }
 
     @Before
     public void setUp() throws Exception

@@ -51,9 +51,9 @@ public class GcmBroadCastNotificationActivityTest {
         sendNotification();
         Thread.sleep(3000);
         assertThat(mActivity.notificationId, is(1));
-        assertThat(mActivity.title, is(context.getString(R.string.incid_gcm_nueva_incidencia_title)));
+        assertThat(mActivity.title, is(context.getString(R.string.gcm_message_title)));
         assertThat(mActivity.text, is(context.getString(R.string.incid_gcm_nueva_incidencia_body)));
-        assertThat(mActivity.subText, is(context.getString(R.string.incid_gcm_nueva_incidencia_subtext)));
+        assertThat(mActivity.subText, is(context.getString(R.string.gcm_message_generic_subtext)));
     }
 
 
@@ -73,9 +73,9 @@ public class GcmBroadCastNotificationActivityTest {
                 .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher))
                 .setCategory(Notification.CATEGORY_SOCIAL)
                 .setAutoCancel(true)
-                .setContentTitle(context.getString(R.string.incid_gcm_nueva_incidencia_title))
+                .setContentTitle(context.getString(R.string.gcm_message_title))
                 .setContentText(context.getString(R.string.incid_gcm_nueva_incidencia_body))
-                .setSubText(context.getString(R.string.incid_gcm_nueva_incidencia_subtext));
+                .setSubText(context.getString(R.string.gcm_message_generic_subtext));
 
         Intent resultIntent = new Intent(context, IncidSeeOpenByComuAc.class);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
