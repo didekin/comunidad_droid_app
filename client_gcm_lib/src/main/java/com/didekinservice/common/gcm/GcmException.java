@@ -1,4 +1,4 @@
-package com.didekinservice.common;
+package com.didekinservice.common.gcm;
 
 import com.didekin.common.exception.ErrorBean;
 

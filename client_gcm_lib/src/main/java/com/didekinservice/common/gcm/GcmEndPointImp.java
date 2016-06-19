@@ -1,4 +1,4 @@
-package com.didekinservice.common;
+package com.didekinservice.common.gcm;
 
 import com.didekin.common.controller.RetrofitHandler;
 import com.didekin.common.exception.ErrorBean;
@@ -7,8 +7,6 @@ import java.io.IOException;
 
 import retrofit2.Call;
 import retrofit2.Response;
-
-import static com.didekinservice.common.GcmResponse.GcmErrorMessage.InternalServerError;
 
 /**
  * User: pedro@didekin
@@ -57,7 +55,7 @@ public class GcmEndPointImp implements GcmEndPoint {
             gcmResponse = response.body();
             gcmResponse.setTokensToProcess(multicastRequest.registration_ids);
         } catch (IOException e) {
-            throw new GcmException(new ErrorBean(e.getMessage(), InternalServerError.httpStatusCode));
+            throw new GcmException(new ErrorBean(e.getMessage(), GcmResponse.GcmErrorMessage.InternalServerError.httpStatusCode));
         }
         return gcmResponse;
     }

@@ -11,6 +11,7 @@ gradlew.bat
 /**/libs
 /**/*.iml
 /**/*.txt
+/**/*.log
 terminal_help/**
 
 

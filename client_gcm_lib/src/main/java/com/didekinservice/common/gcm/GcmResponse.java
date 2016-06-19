@@ -1,10 +1,10 @@
-package com.didekinservice.common;
+package com.didekinservice.common.gcm;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static com.didekinservice.common.GcmResponse.GcmErrorMessage.NotRegistered;
+import static com.didekinservice.common.gcm.GcmResponse.GcmErrorMessage.NotRegistered;
 
 /**
  * User: pedro@didekin

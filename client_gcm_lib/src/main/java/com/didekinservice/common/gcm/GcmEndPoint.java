@@ -1,4 +1,4 @@
-package com.didekinservice.common;
+package com.didekinservice.common.gcm;
 
 import retrofit2.Call;
 import retrofit2.http.Body;

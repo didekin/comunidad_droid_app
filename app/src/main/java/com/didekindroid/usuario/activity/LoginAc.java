@@ -49,6 +49,7 @@ import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
  * 1c. If the userName exists, but the passowrd is not correct, after three failed intents,  a new passord is sent
  * by mail, after her confirmation.
  */
+@SuppressWarnings("ConstantConditions")
 public class LoginAc extends AppCompatActivity {
 
     private static final String TAG = LoginAc.class.getCanonicalName();

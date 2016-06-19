@@ -69,10 +69,12 @@ public class LoginAcTest {
         onView(withId(R.id.login_ac_layout)).check(matches(isDisplayed()));
     }
 
-    void getDialogFragment(String userName)
+    void getDialogFragment(String userName) throws InterruptedException
     {
         typeCheckClickPswdWrong(userName);
+        Thread.sleep(1000);
         reTypeCheckClickPswdWrong(userName);
+        Thread.sleep(1000);
         reTypeCheckClickPswdWrong(userName);
 
         onView(withId(R.id.reg_usuario_email_editT)).perform(replaceText(userName));

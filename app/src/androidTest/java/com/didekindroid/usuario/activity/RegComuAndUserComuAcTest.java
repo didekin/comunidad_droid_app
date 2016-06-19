@@ -66,7 +66,7 @@ public class RegComuAndUserComuAcTest {
     @Before
     public void setUp() throws Exception
     {
-        Thread.sleep(4000);
+        Thread.sleep(3000);
         // Preconditions: the user is already registered.
         signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
     }

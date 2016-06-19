@@ -8,9 +8,9 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.common.controller.RetrofitHandler;
 import com.didekindroid.common.activity.MockActivity;
-import com.didekinservice.common.GcmEndPointImp;
-import com.didekinservice.common.GcmMulticastRequest;
-import com.didekinservice.common.GcmRequest;
+import com.didekinservice.common.gcm.GcmEndPointImp;
+import com.didekinservice.common.gcm.GcmMulticastRequest;
+import com.didekinservice.common.gcm.GcmRequest;
 import com.didekinservice.incidservice.gcm.GcmIncidRequestData;
 import com.google.firebase.iid.FirebaseInstanceId;
 
@@ -26,7 +26,7 @@ import static com.didekindroid.DidekindroidApp.getHttpTimeOut;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.utils.UIutils.updateIsGcmTokenSentServer;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekinservice.common.GcmEndPoint.FCM_HOST_PORT;
+import static com.didekinservice.common.gcm.GcmEndPoint.FCM_HOST_PORT;
 
 /**
  * User: pedro@didekin

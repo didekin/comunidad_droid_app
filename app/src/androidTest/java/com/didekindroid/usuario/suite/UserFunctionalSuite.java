@@ -12,7 +12,11 @@ import com.didekindroid.usuario.activity.ComuSearchResultsAcTest_intent_2;
 import com.didekindroid.usuario.activity.DeleteMeAcTest;
 import com.didekindroid.usuario.activity.LoginAcTest_1;
 import com.didekindroid.usuario.activity.PasswordChangeAcTest;
-import com.didekindroid.usuario.activity.RegComuAndUserAndUserComuAcTest;
+import com.didekindroid.usuario.activity.RegComuAndUserAndUserComuAcTest_1;
+import com.didekindroid.usuario.activity.RegComuAndUserAndUserComuAcTest_2;
+import com.didekindroid.usuario.activity.RegComuAndUserAndUserComuAcTest_3;
+import com.didekindroid.usuario.activity.RegComuAndUserAndUserComuAcTest_4;
+import com.didekindroid.usuario.activity.RegComuAndUserAndUserComuAcTest_5;
 import com.didekindroid.usuario.activity.RegComuAndUserComuAcTest;
 import com.didekindroid.usuario.activity.RegUserAndUserComuAcTest_intent;
 import com.didekindroid.usuario.activity.RegUserComuAcTest;
@@ -45,7 +49,11 @@ import org.junit.runners.Suite;
         DeleteMeAcTest.class,
         LoginAcTest_1.class,
         PasswordChangeAcTest.class,
-        RegComuAndUserAndUserComuAcTest.class,
+        RegComuAndUserAndUserComuAcTest_1.class,
+        RegComuAndUserAndUserComuAcTest_2.class,
+        RegComuAndUserAndUserComuAcTest_3.class,
+        RegComuAndUserAndUserComuAcTest_4.class,
+        RegComuAndUserAndUserComuAcTest_5.class,
         RegComuAndUserComuAcTest.class,
         RegUserAndUserComuAcTest_intent.class,
         RegUserComuAcTest.class,
@@ -56,5 +64,5 @@ import org.junit.runners.Suite;
         UserComuDataAcTest_2.class,
         UserDataAcTest.class
 })
-public class UserFunctionalTestSuite {
+public class UserFunctionalSuite {
 }

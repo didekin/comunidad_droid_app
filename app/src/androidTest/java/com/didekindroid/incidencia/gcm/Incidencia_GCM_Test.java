@@ -14,7 +14,7 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekindroid.common.activity.IdlingResourceForIntentServ;
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.gcm.GcmRegistrationIntentService;
-import com.didekinservice.common.GcmRequest;
+import com.didekinservice.common.gcm.GcmRequest;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.junit.After;

@@ -32,5 +32,5 @@ import org.junit.runners.Suite;
         UsuarioServiceTest.class,
         UsuarioTest.class,
 })
-public class UserSupportTestSuite {
+public class UserSupportSuite {
 }

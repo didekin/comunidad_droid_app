@@ -34,5 +34,5 @@ import org.junit.runners.Suite;
         IncidServiceTest_1.class,
         IncidServiceTest_2.class,
 })
-public class IncidSupportTestSuite {
+public class IncidSupportSuite {
 }

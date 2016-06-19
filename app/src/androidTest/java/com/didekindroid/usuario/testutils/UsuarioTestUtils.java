@@ -201,7 +201,7 @@ public final class UsuarioTestUtils {
         onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.tipo_via_spinner))))
                 .check(matches(withText(containsString("Calle")))).check(matches(isDisplayed()));
 
-        Thread.sleep(2000);
+        Thread.sleep(5000);
         onView(withId(R.id.autonoma_comunidad_spinner)).perform(click());
         onData(withRowString(1, "Valencia")).perform(click());
         onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.autonoma_comunidad_spinner))))

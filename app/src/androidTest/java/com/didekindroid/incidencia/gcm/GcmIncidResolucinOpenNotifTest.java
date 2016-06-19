@@ -12,7 +12,7 @@ import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.MockActivity;
 import com.didekindroid.common.activity.UiException;
-import com.didekinservice.common.GcmException;
+import com.didekinservice.common.gcm.GcmException;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -129,7 +129,7 @@ public class LoginAcTest_1 extends LoginAcTest{
     }
 
     @Test
-    public void testValidate_4() throws IOException
+    public void testValidate_4() throws IOException, InterruptedException
     {
         whatToClean = CLEAN_PEPE;
 

@@ -13,10 +13,10 @@ import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.MockActivity;
 import com.didekindroid.common.activity.UiException;
-import com.didekinservice.common.GcmException;
-import com.didekinservice.common.GcmRequest;
-import com.didekinservice.common.GcmResponse;
-import com.didekinservice.common.GcmSingleRequest;
+import com.didekinservice.common.gcm.GcmException;
+import com.didekinservice.common.gcm.GcmRequest;
+import com.didekinservice.common.gcm.GcmResponse;
+import com.didekinservice.common.gcm.GcmSingleRequest;
 import com.didekinservice.incidservice.gcm.GcmIncidRequestData;
 
 import org.junit.Test;

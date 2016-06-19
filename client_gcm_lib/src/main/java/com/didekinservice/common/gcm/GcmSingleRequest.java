@@ -1,4 +1,4 @@
-package com.didekinservice.common;
+package com.didekinservice.common.gcm;
 
 import com.didekin.common.dominio.BeanBuilder;
 
@@ -37,7 +37,7 @@ public final class GcmSingleRequest {
 
     public static class Builder implements BeanBuilder<GcmSingleRequest>{
         private final String to;
-        private final GcmRequest gcmRequest;
+        private final com.didekinservice.common.gcm.GcmRequest gcmRequest;
 
 
         @Override
@@ -46,7 +46,7 @@ public final class GcmSingleRequest {
             return new GcmSingleRequest(this);
         }
 
-        public Builder(String to, GcmRequest gcmRequest)
+        public Builder(String to, com.didekinservice.common.gcm.GcmRequest gcmRequest)
         {
             this.to = to;
             this.gcmRequest = gcmRequest;

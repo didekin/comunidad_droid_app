@@ -3,11 +3,11 @@ package com.didekindroid.common.gcm;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.common.controller.RetrofitHandler;
-import com.didekinservice.common.GcmEndPointImp;
-import com.didekinservice.common.GcmMulticastRequest;
-import com.didekinservice.common.GcmRequest;
-import com.didekinservice.common.GcmResponse;
-import com.didekinservice.common.GcmSingleRequest;
+import com.didekinservice.common.gcm.GcmEndPointImp;
+import com.didekinservice.common.gcm.GcmMulticastRequest;
+import com.didekinservice.common.gcm.GcmRequest;
+import com.didekinservice.common.gcm.GcmResponse;
+import com.didekinservice.common.gcm.GcmSingleRequest;
 import com.didekinservice.incidservice.gcm.GcmIncidRequestData;
 import com.google.firebase.iid.FirebaseInstanceId;
 
@@ -24,11 +24,11 @@ import retrofit2.Response;
 
 import static com.didekin.incidservice.gcm.GcmKeyValueIncidData.incidencia_open_type;
 import static com.didekindroid.DidekindroidApp.getHttpTimeOut;
-import static com.didekinservice.common.GcmEndPoint.ACCEPT_ENCODING_IDENTITY;
-import static com.didekinservice.common.GcmEndPoint.FCM_HOST_PORT;
-import static com.didekinservice.common.GcmResponse.GcmErrorMessage.InvalidJson;
-import static com.didekinservice.common.GcmResponse.GcmErrorMessage.InvalidRegistration;
-import static com.didekinservice.common.GcmResponse.GcmErrorMessage.MissingRegistration;
+import static com.didekinservice.common.gcm.GcmEndPoint.ACCEPT_ENCODING_IDENTITY;
+import static com.didekinservice.common.gcm.GcmEndPoint.FCM_HOST_PORT;
+import static com.didekinservice.common.gcm.GcmResponse.GcmErrorMessage.InvalidJson;
+import static com.didekinservice.common.gcm.GcmResponse.GcmErrorMessage.InvalidRegistration;
+import static com.didekinservice.common.gcm.GcmResponse.GcmErrorMessage.MissingRegistration;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -82,6 +82,7 @@ public class GcmRequestTest {
     @Test
     public void testSuccessSingle_1() throws Exception
     {
+        Thread.sleep(2000);
         String gcmToken = firebaseInstanceId.getToken();
         GcmSingleRequest request = new GcmSingleRequest.Builder(gcmToken,
                 new GcmRequest.Builder(new GcmIncidRequestData(incidencia_open_type, 999L)).build())
@@ -118,6 +119,7 @@ public class GcmRequestTest {
     @Test
     public void testSuccessMulticast_1() throws Exception
     {
+        Thread.sleep(2000);
         gcmTokens.add(firebaseInstanceId.getToken());
         gcmTokens.add(secondToken);
         GcmMulticastRequest request = new GcmMulticastRequest.Builder(gcmTokens,
@@ -146,6 +148,7 @@ public class GcmRequestTest {
     @Test
     public void testSuccessMulticast_2() throws Exception
     {
+        Thread.sleep(2000);
         gcmTokens.add(firebaseInstanceId.getToken());
         GcmMulticastRequest request = new GcmMulticastRequest.Builder(gcmTokens,
                 new GcmRequest.Builder(new GcmIncidRequestData(incidencia_open_type, 999L)).build())
@@ -164,11 +167,12 @@ public class GcmRequestTest {
     @Test
     public void testSuccessMulticast_3() throws Exception
     {
+        Thread.sleep(2000);
         gcmTokens.add(firebaseInstanceId.getToken());
         GcmMulticastRequest request = new GcmMulticastRequest.Builder(gcmTokens,
                 new GcmRequest.Builder(new GcmIncidRequestData(incidencia_open_type, 999L)).build())
                 .build();
-        GcmResponse gcmResponse = endPointImp.sendGcmMulticastRequest(request).execute().body();
+        GcmResponse gcmResponse = endPointImp.sendGcmMulticastRequest(ACCEPT_ENCODING_IDENTITY,request).execute().body();
         assertThat(gcmResponse.getResults()[0].getMessage_id(), notNullValue());
         assertThat(gcmResponse.getFailure(), is(0));
         assertThat(gcmResponse.getSuccess(), is(1));
@@ -193,7 +197,7 @@ public class GcmRequestTest {
         GcmMulticastRequest request = new GcmMulticastRequest.Builder(gcmTokens,
                 new GcmRequest.Builder(new GcmIncidRequestData(incidencia_open_type, 999L)).build())
                 .build();
-        Response<GcmResponse> response = endPointImp.sendGcmMulticastRequest(request).execute();
+        Response<GcmResponse> response = endPointImp.sendGcmMulticastRequest(ACCEPT_ENCODING_IDENTITY,request).execute();
         assertThat(response.raw().code(), is(MissingRegistration.httpStatusCode));
 
         GcmResponse gcmResponse = response.body();
@@ -224,13 +228,14 @@ public class GcmRequestTest {
     public void testErrorMulticast_2() throws Exception
     {
         gcmTokens.add("");
+        Thread.sleep(3000);
         gcmTokens.add(firebaseInstanceId.getToken());
         gcmTokens.add(null);
         gcmTokens.add("wrong_token");
         GcmMulticastRequest request = new GcmMulticastRequest.Builder(gcmTokens,
                 new GcmRequest.Builder(new GcmIncidRequestData(incidencia_open_type, 999L)).build())
                 .build();
-        Response<GcmResponse> response = endPointImp.sendGcmMulticastRequest(request).execute();
+        Response<GcmResponse> response = endPointImp.sendGcmMulticastRequest(ACCEPT_ENCODING_IDENTITY, request).execute();
         assertThat(response.raw().code(), is(200));
 
         GcmResponse gcmResponse = response.body();

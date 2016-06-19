@@ -30,5 +30,5 @@ import org.junit.runners.Suite;
         SeeUserComuByUserAc_SlowTest.class,
         UserDataAc_SlowTest.class,
 })
-public class UserFunctionalSlowTestSuite {
+public class UserFunctionalSlowSuite {
 }

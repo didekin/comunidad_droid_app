@@ -64,5 +64,5 @@ import org.junit.runners.Suite;
         IncidSeeOpenByComuAcTest_4.class,
         IncidSeeUserComuImportanciaTest_1.class,
 })
-public class IncidFunctionalTestSuite {
+public class IncidFunctionalSuite {
 }

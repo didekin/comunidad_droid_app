@@ -30,6 +30,7 @@ import static com.google.common.base.Preconditions.checkState;
  * 1. Password changed and tokenCache updated.
  * 2. It goes to UserDataAc activity.
  */
+@SuppressWarnings("ConstantConditions")
 public class PasswordChangeAc extends AppCompatActivity {
 
     private static final String TAG = PasswordChangeAc.class.getCanonicalName();

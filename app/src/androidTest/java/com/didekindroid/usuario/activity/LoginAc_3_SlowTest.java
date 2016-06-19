@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.oauth2.OauthToken.AccessToken;
-import com.didekin.oauth2.OauthTokenHelper;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 
@@ -21,12 +20,14 @@ import static android.support.test.espresso.matcher.RootMatchers.isDialog;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.didekin.oauth2.OauthTokenHelper.HELPER;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanWithTkhandler;
 import static com.didekindroid.common.webservices.Oauth2Service.Oauth2;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_DROID;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_DROID;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -66,7 +67,13 @@ public class LoginAc_3_SlowTest extends LoginAcTest {
         checkToastInTest(R.string.password_new_in_login, mActivity);
 
         token = Oauth2.getRefreshUserToken(token.getRefreshToken().getValue());
-        ServOne.deleteUser(OauthTokenHelper.HELPER.doBearerAccessTkHeader(token)).execute();
+        // Verificamos cambio de password.
+        Thread.sleep(1500);
+        String newPassword = ServOne.getUserData(HELPER.doBearerAccessTkHeader(token)).execute().body().getPassword();
+        assertThat(newPassword, notNullValue());
+        assertThat(newPassword.length() > 12, is(true));
+
+        ServOne.deleteUser(HELPER.doBearerAccessTkHeader(token)).execute();
         cleanWithTkhandler();
     }
 }
