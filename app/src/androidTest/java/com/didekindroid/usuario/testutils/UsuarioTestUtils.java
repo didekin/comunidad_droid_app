@@ -201,17 +201,19 @@ public final class UsuarioTestUtils {
         onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.tipo_via_spinner))))
                 .check(matches(withText(containsString("Calle")))).check(matches(isDisplayed()));
 
-        Thread.sleep(5000);
+        Thread.sleep(4000);
         onView(withId(R.id.autonoma_comunidad_spinner)).perform(click());
         onData(withRowString(1, "Valencia")).perform(click());
         onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.autonoma_comunidad_spinner))))
                 .check(matches(withText(containsString("Valencia"))));
 
+        Thread.sleep(1000);
         onView(withId(R.id.provincia_spinner)).perform(click());
         onData(withRowString(1, "Alicante/Alacant")).perform(click());
         onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.provincia_spinner))))
                 .check(matches(withText(containsString("Alicante/Alacant"))));
 
+        Thread.sleep(1000);
         onView(withId(R.id.municipio_spinner)).perform(click());
         onData(withRowString(3, "Algueña")).perform(click());
         onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.municipio_spinner))))

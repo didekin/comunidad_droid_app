@@ -139,7 +139,7 @@ public class IncidResolucionRegFrTest extends IncidResolucionAbstractTest {
     }
 
     @Test
-    public void testOnEdit_3()
+    public void testOnEdit_3() throws InterruptedException
     {
         // Coste erróneo.
         setFecha(setDate(2016, 3, 22));
@@ -147,12 +147,13 @@ public class IncidResolucionRegFrTest extends IncidResolucionAbstractTest {
         onView(withId(R.id.incid_resolucion_coste_prev_ed)).perform(replaceText("novalid"));
 
         onView(withId(R.id.incid_resolucion_reg_ac_button)).perform(click());
+        Thread.sleep(1500);
         checkToastInTest(R.string.error_validation_msg, mActivity,
                 R.string.incid_resolucion_coste_prev_msg);
     }
 
     @Test
-    public void testOnEdit_4()
+    public void testOnEdit_4() throws InterruptedException
     {
         // Coste y descripción erróneos.
         setFecha(setDate(2016, 3, 22));
@@ -160,6 +161,7 @@ public class IncidResolucionRegFrTest extends IncidResolucionAbstractTest {
         onView(withId(R.id.incid_resolucion_coste_prev_ed)).perform(replaceText("novalid"));
 
         onView(withId(R.id.incid_resolucion_reg_ac_button)).perform(click());
+        Thread.sleep(1500);
         checkToastInTest(R.string.error_validation_msg, mActivity,
                 R.string.incid_resolucion_coste_prev_msg,
                 R.string.incid_resolucion_descrip_msg);

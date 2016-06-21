@@ -1,3 +1,5 @@
 LOGS
 ====
 - Establecer el nivel de log a info.
+
+-- Pendiente creación de certificados en servidor y bks en cliente.

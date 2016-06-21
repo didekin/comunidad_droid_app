@@ -106,10 +106,10 @@ public class UiException extends Exception {
             @Override
             public void doAction(Activity activity, Intent intent)
             {
-                makeToast(activity, R.string.exception_generic_message, LENGTH_SHORT);
                 intent.setClass(activity, ComuSearchAc.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 activity.startActivity(intent);
+                makeToast(activity, R.string.exception_generic_message, LENGTH_SHORT);
                 finishActivity(activity, intent);
             }
         },
@@ -122,9 +122,9 @@ public class UiException extends Exception {
             @Override
             public void doAction(Activity activity, Intent intent)
             {
-                makeToast(activity, R.string.incidencia_not_registered, LENGTH_SHORT);
                 intent.setClass(activity, IncidRegAc.class);
                 activity.startActivity(intent);
+                makeToast(activity, R.string.incidencia_not_registered, LENGTH_SHORT);
                 finishActivity(activity, intent);
             }
         },
@@ -137,9 +137,9 @@ public class UiException extends Exception {
             @Override
             public void doAction(Activity activity, Intent intent)
             {
-                makeToast(activity, R.string.incidencia_wrong_init, LENGTH_SHORT);
                 intent.setClass(activity, IncidSeeOpenByComuAc.class);
                 activity.startActivity(intent);
+                makeToast(activity, R.string.incidencia_wrong_init, LENGTH_SHORT);
                 finishActivity(activity, intent);
             }
         },
@@ -165,9 +165,9 @@ public class UiException extends Exception {
             {
                 IncidImportancia incidImportancia = (IncidImportancia) intent.getSerializableExtra(INCID_IMPORTANCIA_OBJECT.key);
                 checkArgument(incidImportancia.getUserComu().hasAdministradorAuthority());
-                makeToast(activity, R.string.resolucion_duplicada, LENGTH_SHORT);
                 intent.setClass(activity, IncidEditAc.class);
                 activity.startActivity(intent);
+                makeToast(activity, R.string.resolucion_duplicada, LENGTH_SHORT);
                 finishActivity(activity, intent);
             }
         },
@@ -175,10 +175,10 @@ public class UiException extends Exception {
             @Override
             public void doAction(Activity activity, Intent intent)
             {
-                makeToast(activity, R.string.comunidad_not_found_message, LENGTH_SHORT);
                 intent.setClass(activity, ComuSearchAc.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 activity.startActivity(intent);
+                makeToast(activity, R.string.comunidad_not_found_message, LENGTH_SHORT);
                 finishActivity(activity, intent);
             }
         },
@@ -195,10 +195,10 @@ public class UiException extends Exception {
             public void doAction(Activity activity, Intent intent)
             {
                 checkState(isRegisteredUser(activity));
-                makeToast(activity, R.string.user_data_not_modified_msg, LENGTH_SHORT);
                 intent.setClass(activity, UserDataAc.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 activity.startActivity(intent);
+                makeToast(activity, R.string.user_data_not_modified_msg, LENGTH_SHORT);
                 finishActivity(activity, intent);
             }
         };

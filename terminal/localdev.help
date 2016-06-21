@@ -25,43 +25,10 @@ TESTS
 =====
 -- Arranque del emulador
 
--- $ mysql.server start
-
--- Environment variables for DB in LOCAL:
-   $ export RDS_DB_NAME=didekin
-   $ export RDS_HOSTNAME=localhost
-   $ export RDS_USERNAME=pedro
-   $ export RDS_PASSWORD=pedro
-
-(Si es necesario correr tests en el build)
--- $ nginx -c /usr/local/etc/nginx/nginx_didekinspring_dev.conf
-
--- Arranque de la aplicación.
-   $ java -jar services/build/libs/didekinspring.jar
-   $ ./gradlew build && java -jar services/build/libs/didekinspring.jar
-
-(Si es necesario correr tests en el build)
--- $ nginx -s quit -c /usr/local/etc/nginx/nginx_didekinspring_dev.conf
-
--- $ nginx -c /usr/local/etc/nginx/nginx_didekindroid_dev.conf
-
 -- Generación|Verificación de keystore en src/debug/res/raw:
    $ cp /Users/pedro/keystores/android_dev/didekindroid_dev_bks /Users/pedro/git_projects/didekindroid/app/src/debug/res/raw/
 
 -- Parámetros de conexión a la aplicación en src/debug|main/res/values/app_parameters.xml
-
--- Assemble:
-   $ gradle assembleDebugAndroidTest, $ gradle aDAT
-
--- Test:
-   -- Common
-   $ ./gradlew app:cAT -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.common.suite.CommonSuite
-   -- Incidencias
-   $ ./gradlew app:cAT -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.common.suite.CommonSuite,com.didekindroid.incidencia.suite.IncidSupportSuite,com.didekindroid.incidencia.suite.IncidFunctionalSuite
-   -- Usuario
-   $ ./gradlew app:cAT -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.common.suite.CommonSuite,com.didekindroid.usuario.suite.UserSupportSuite,com.didekindroid.usuario.suite.UserFunctionalSuite,com.didekindroid.usuario.suite.UserFunctionalSlowSuite
-   -- Incidencia + Usuario
-   $ ./gradlew app:cAT -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.AppFullSuite
 
 CERTIFICADOS
 ============

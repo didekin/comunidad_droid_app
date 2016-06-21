@@ -62,8 +62,9 @@ public abstract class GcmIncidNotificationTest {
         endPointImp = new GcmEndPointImp(retrofitHandler);
         context = InstrumentationRegistry.getTargetContext();
         mManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        // Double check.
+        mManager.cancelAll();
         gcmToken = firebaseInstanceId.getToken();
-
     }
 
     @After

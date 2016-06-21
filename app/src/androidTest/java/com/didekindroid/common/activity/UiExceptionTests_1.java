@@ -55,7 +55,7 @@ public class UiExceptionTests_1 extends UiExceptionAbstractTest {
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
     {
-        Thread.sleep(4000);
+//        Thread.sleep(1000);
     }
 
     @Before
@@ -67,7 +67,7 @@ public class UiExceptionTests_1 extends UiExceptionAbstractTest {
     @After
     public void tearDown() throws Exception
     {
-        Thread.sleep(4000);
+        Thread.sleep(3000);
     }
 
     //  ===========================================================================
@@ -130,7 +130,7 @@ public class UiExceptionTests_1 extends UiExceptionAbstractTest {
     }
 
     @Test
-    public void testSearchComu() throws Exception     // FAil
+    public void testSearchComu() throws Exception
     {
         final UiException ue = getUiException(COMUNIDAD_NOT_FOUND);
 
@@ -141,10 +141,8 @@ public class UiExceptionTests_1 extends UiExceptionAbstractTest {
                 ue.processMe(mActivity, new Intent());
             }
         });
-
-        Thread.sleep(1000);
-        checkToastInTest(R.string.comunidad_not_found_message, mActivity);
         onView(withId(R.id.comu_search_ac_layout)).check(matches(isDisplayed()));
+        checkToastInTest(R.string.comunidad_not_found_message, mActivity);
     }
 
     //  ============================== HELPERS  ===================================
