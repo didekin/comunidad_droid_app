@@ -40,15 +40,16 @@ else
 fi
 
 if [ $ENV == $DBPRE ] || [ $ENV == "$LOCAL" ] ; then
+
     cp terminal/resources/local_app_parameters.xml $APP_PARAM_HOME
     nginx -c /usr/local/etc/nginx/nginx_didekindroid_dev.conf
     rm terminal/*log
     export DIDEKINSPRING_HOME=/Users/pedro/Documents/git_projects/didekinspring
     java -jar $DIDEKINSPRING_HOME/services/build/libs/didekinspring.jar > terminal/server.log 2> terminal/server.log &
-fi
 
-if [ $EMULATOR = $GENY ] ; then
-    cp terminal/resources/geny_url.xml $APP_PARAM_HOME
-else
-    cp terminal/resources/google_url.xml $APP_PARAM_HOME
+    if [ $EMULATOR = $GENY ] ; then
+        cp terminal/resources/geny_url.xml $APP_PARAM_HOME
+    else
+        cp terminal/resources/google_url.xml $APP_PARAM_HOME
+    fi
 fi

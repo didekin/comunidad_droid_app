@@ -68,10 +68,11 @@ public abstract class Incidencia_GCM_Test {
 
     protected abstract IntentsTestRule<? extends Activity> doIntentsTestRule();
 
-    void checkToken() throws UiException
+    void checkToken() throws UiException, InterruptedException
     {
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         assertThat(refreshedToken, notNullValue());
+        Thread.sleep(2000);
         assertThat(isGcmTokenSentServer(mActivity), is(true));
         assertThat(ServOne.getGcmToken(), is(refreshedToken));
     }

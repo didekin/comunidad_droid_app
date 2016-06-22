@@ -7,20 +7,21 @@ EMULATOR="$2"
 
 APP_PARAM_HOME=app/src/debug/res/values
 
-if [ $EMULATOR = "geny" ] ; then
-    rm  $APP_PARAM_HOME/geny_url.xml
-else
-    rm  $APP_PARAM_HOME/google_url.xml
-fi
-
 if [ $ENV = "awspre" ] ; then
     rm  $APP_PARAM_HOME/aws_app_parameters.xml
 fi
 
 if [ $ENV = "dbpre" ] || [ $ENV = "local" ] ; then
+
     kill $(ps -l | grep '[d]idekinspring.jar' | awk '{print $2}')
     nginx -s quit  -c /usr/local/etc/nginx/nginx_didekindroid_dev.conf
     rm  $APP_PARAM_HOME/local_app_parameters.xml
+
+    if [ $EMULATOR = "geny" ] ; then
+        rm  $APP_PARAM_HOME/geny_url.xml
+    else
+        rm  $APP_PARAM_HOME/google_url.xml
+    fi
 fi
 
 if [ $ENV = "local" ] ; then

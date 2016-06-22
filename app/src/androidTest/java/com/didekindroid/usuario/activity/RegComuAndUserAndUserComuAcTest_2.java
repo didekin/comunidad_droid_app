@@ -88,13 +88,15 @@ public class RegComuAndUserAndUserComuAcTest_2 {
         onView(withId(R.id.tipo_via_spinner)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is("Callejon"))).perform(click());
 
-        Thread.sleep(5000);
+        Thread.sleep(4000);
         onView(withId(R.id.autonoma_comunidad_spinner)).perform(click());
         onData(withRowString(1, "Valencia")).perform(click());
 
+        Thread.sleep(1000);
         onView(withId(R.id.provincia_spinner)).perform(click());
         onData(withRowString(1, "Castellón/Castelló")).perform(click());
 
+        Thread.sleep(1000);
         onView(withId(R.id.municipio_spinner)).perform(click());
         onData(withRowString(3, "Chilches/Xilxes")).perform(click());
 

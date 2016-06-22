@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <!--Genymotion emulator-->
-    <string name="didekinspring_host" translatable="false">http://192.168.57.1</string>
-</resources>
