@@ -83,7 +83,7 @@ public abstract class Incidencia_GCM_Test {
         NotificationManager mManager = (NotificationManager) mActivity.getSystemService(Context.NOTIFICATION_SERVICE);
 
         // Verifico recepción de notificación.
-        Thread.sleep(2000);
+        Thread.sleep(3000);
         assertThat(mManager.getActiveNotifications().length, is(1));
         StatusBarNotification barNotification = mManager.getActiveNotifications()[0];
         assertThat(barNotification.getId(), is(typeMsgInt));
