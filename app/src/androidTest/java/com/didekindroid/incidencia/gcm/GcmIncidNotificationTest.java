@@ -54,6 +54,8 @@ public abstract class GcmIncidNotificationTest {
     @Before
     public void setUp() throws Exception
     {
+        Thread.sleep(2000);
+
         firebaseInstanceId = FirebaseInstanceId.getInstance();
         retrofitHandler = new RetrofitHandler(FCM_HOST_PORT, getHttpTimeOut());
         mActivity = intentRule.getActivity();

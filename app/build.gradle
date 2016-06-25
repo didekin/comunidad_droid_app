@@ -87,5 +87,5 @@ dependencies {
 apply plugin: 'com.google.gms.google-services'
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.13'
+    gradleVersion = '2.14'
 }
