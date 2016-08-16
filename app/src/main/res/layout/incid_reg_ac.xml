@@ -27,6 +27,7 @@
             <Button
                 android:id="@+id/incid_reg_ac_button"
                 style="@style/textBase.acButton1"
+                android:layout_gravity="center_horizontal"
                 android:text="@string/incid_reg_ac_button_rot"/>
         </LinearLayout>
     </ScrollView>

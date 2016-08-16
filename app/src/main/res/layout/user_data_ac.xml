@@ -4,7 +4,7 @@
             xmlns:tools="http://schemas.android.com/tools"
             tools:context="com.didekindroid.usuario.activity.UserDataAc">
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/user_data_ac_layout"
         style="@style/baseLayout">
 
@@ -13,15 +13,12 @@
         <TextView
             android:id="@+id/user_data_ac_rotulo"
             style="@style/textBase.textPageLabel1"
-            android:layout_alignParentStart="true"
             android:layout_marginTop="@dimen/app_bar_bottom_margin"
             android:text="@string/user_data_ac_label"/>
 
         <TextView
             android:id="@+id/user_data_ac_cambios_rot"
             style="@style/textBase.textFieldLabel2"
-            android:layout_alignParentStart="true"
-            android:layout_below="@id/user_data_ac_rotulo"
             android:text="@string/user_data_ac_cambios_text"/>
 
         <include
@@ -29,27 +26,23 @@
             layout="@layout/user_data_include"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/user_data_ac_cambios_rot"/>
+        />
 
         <TextView
             android:id="@+id/user_data_ac_password_rot"
             style="@style/textBase.textFieldLabel2"
-            android:layout_alignParentStart="true"
-            android:layout_below="@id/user_data_ac_include"
             android:text="@string/user_data_ac_password_txt"/>
 
         <EditText
             android:id="@+id/user_data_ac_password_ediT"
             style="@style/textBase.editField.password"
-            android:layout_alignParentStart="true"
-            android:layout_below="@id/user_data_ac_password_rot"
             android:hint="@string/user_data_ac_password_hint"/>
 
         <Button
             android:id="@+id/user_data_modif_button"
             style="@style/textBase.acButton1"
-            android:layout_below="@id/user_data_ac_password_ediT"
+            android:layout_gravity="center_horizontal"
             android:text="@string/user_data_modif_button_txt"/>
 
-    </RelativeLayout>
+    </LinearLayout>
 </ScrollView>

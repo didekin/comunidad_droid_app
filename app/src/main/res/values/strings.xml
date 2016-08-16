@@ -49,7 +49,7 @@
     <!-- ============================= ACTIVITIES ============================= -->
     <!-- =============== IncidCommentRegAc ========= -->
     <string name="incid_comment_reg_ac_label">Comentar una incidencia</string>
-    <string name="incid_comment_ed_hint">----- Comentario (max. 250 caracteres) ----</string>
+    <string name="incid_comment_ed_hint"> ----- Comentario (max. 250 caracteres) ---- </string>
     <string name="incid_comment_ed_button_rot">Comentar</string>
     <string name="incid_comment_incidencia_rot">Incidencia:</string>
     <string name="incid_comment_label">Comentario</string>

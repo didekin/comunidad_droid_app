@@ -4,7 +4,7 @@
     style="@style/baseLayout.scroll"
     tools:context="com.didekindroid.usuario.activity.UserComuDataAc">
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/usercomu_data_ac_layout"
         style="@style/baseLayout">
 
@@ -13,7 +13,6 @@
         <TextView
             android:id="@+id/usercomu_data_ac_modif_txt"
             style="@style/textBase.textFieldLabel2"
-            android:layout_alignParentStart="true"
             android:layout_marginTop="@dimen/app_bar_bottom_margin"
             android:text="@string/user_data_ac_cambios_text" />
 
@@ -22,25 +21,23 @@
             layout="@layout/reg_usercomu_fr"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/usercomu_data_ac_modif_txt"
             android:layout_marginTop="@dimen/vertical_margin" />
 
         <Button
             android:id="@+id/usercomu_data_ac_modif_button"
             style="@style/textBase.acButton1"
-            android:layout_below="@id/usercomu_data_ac_reg_usercomu_include"
+            android:layout_gravity="center_horizontal"
             android:text="@string/user_data_modif_button_txt" />
 
         <TextView
             android:id="@+id/usercomu_data_ac_delete_txt"
             style="@style/textBase.textFieldLabel2"
-            android:layout_below="@id/usercomu_data_ac_modif_button"
             android:text="@string/usercomu_data_ac_delete_txt" />
 
         <Button
             android:id="@+id/usercomu_data_ac_delete_button"
             style="@style/textBase.acButton1"
-            android:layout_below="@id/usercomu_data_ac_delete_txt"
+            android:layout_gravity="center_horizontal"
             android:text="@string/usercomu_data_ac_delete_button_txt" />
-    </RelativeLayout>
+    </LinearLayout>
 </ScrollView>

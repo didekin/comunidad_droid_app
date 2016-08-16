@@ -205,6 +205,7 @@ public class UserComuDataAc extends AppCompatActivity {
     //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
     //    ============================================================
 
+    // TODO: to persist the task during restarts and properly cancel the task when the activity is destroyed. (Example in Shelves)
     class ComuDataMenuSetter extends AsyncTask<Void, Void, Boolean> {
 
         final String TAG = ComuDataMenuSetter.class.getCanonicalName();

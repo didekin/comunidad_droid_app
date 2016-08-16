@@ -3,8 +3,7 @@
           package="com.didekindroid"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- TODO: mirar https://developer.android.com/training/permissions/index.html y ajustar los fragments y activities. -->
-
+    <!--All of the permissions are non-dangerous permission. No check online.-->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <!-- Permissions for GCM services -->
     <uses-permission android:name="android.permission.INTERNET"/>

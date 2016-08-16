@@ -38,6 +38,7 @@
         <Button
             android:id="@+id/incid_edit_fr_modif_button"
             style="@style/textBase.acButton1"
+            android:layout_gravity="center_horizontal"
             android:text="@string/incid_importancia_reg_edit_button_rot"/>
 
     </LinearLayout>
