@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/baseLayout.scroll">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/reg_usercomu_ac_layout"
         style="@style/baseLayout"
         tools:context="com.didekindroid.usuario.activity.RegUserComuAc">
@@ -21,8 +21,8 @@
         <Button
             android:id="@+id/reg_usercomu_button"
             style="@style/textBase.acButton1"
-            android:layout_below="@id/reg_usercomu_frg"
+            android:layout_gravity="center_horizontal"
             android:text="@string/reg_usercomu_ac_button_rot" />
 
-    </RelativeLayout>
+    </LinearLayout>
 </ScrollView>

@@ -3,8 +3,6 @@
     style="@style/baseLayout.scroll"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!--TODO: app:layout_behavior?  ¿por qué no poner android:layout_marginTop="@dimen/app_bar_bottom_margin" in ScrollView?-->
-
     <LinearLayout
         android:id="@+id/incid_resolucion_reg_frg_layout"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -23,6 +21,7 @@
         <Button
             android:id="@+id/incid_resolucion_reg_ac_button"
             style="@style/textBase.acButton1"
+            android:layout_gravity="center_horizontal"
             android:text="@string/incid_resolucion_reg_ac_button_rot"/>
 
     </LinearLayout>

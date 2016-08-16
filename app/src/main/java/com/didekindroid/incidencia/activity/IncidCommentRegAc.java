@@ -88,6 +88,7 @@ public class IncidCommentRegAc extends AppCompatActivity {
     //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
     //    ============================================================
 
+// TODO: to persist the task during restarts and properly cancel the task when the activity is destroyed. (Example in Shelves)
     class IncidCommentRegister extends AsyncTask<IncidComment, Void, Integer> {
 
         private final String TAG = IncidCommentRegister.class.getCanonicalName();

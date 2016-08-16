@@ -1,4 +1,4 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/delete_me_ac_layout"
     style="@style/baseLayout"
@@ -9,15 +9,15 @@
     <TextView
         android:id="@+id/delete_me_ac_unreg_rot"
         style="@style/textBase.textPageLabel2"
-        android:layout_alignParentStart="true"
+        android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/app_bar_bottom_margin"
         android:text="@string/delete_me_ac_unreg_rot_txt" />
 
     <Button
         android:id="@+id/delete_me_ac_unreg_button"
         style="@style/textBase.acButton1"
-        android:layout_below="@id/delete_me_ac_unreg_rot"
+        android:layout_gravity="center_horizontal"
         android:text="@string/delete_me_ac_unreg_button_txt" />
 
 
-</RelativeLayout>
+</LinearLayout>

@@ -7,6 +7,9 @@ dependencies {
     testCompile 'com.squareup.okhttp:mockwebserver:2.7.5'
 }
 
+targetCompatibility = '1.7'
+sourceCompatibility = '1.7'
+
 //noinspection GroovyAssignabilityCheck
 jar {
     baseName = 'client_gcm_lib'

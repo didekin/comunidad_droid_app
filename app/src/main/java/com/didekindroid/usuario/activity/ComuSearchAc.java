@@ -163,6 +163,7 @@ public class ComuSearchAc extends AppCompatActivity {
 
     /* This class should be in the launcher activity */
     class CheckerTokenInCache extends AsyncTask<Void, Void, AccessToken> {
+    // TODO: to persist the task during restarts and properly cancel the task when the activity is destroyed. (Example in Shelves)
 
         UiException uiException;
 

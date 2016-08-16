@@ -157,6 +157,7 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
 //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
 //    ============================================================
 
+    // TODO: to persist the task during restarts and properly cancel the task when the activity is destroyed. (Example in Shelves)
     class UsuarioComunidadGetter extends AsyncTask<Comunidad, Void, UsuarioComunidad> {
 
         private Comunidad comunidadSelected;

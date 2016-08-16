@@ -21,6 +21,7 @@ import static com.google.common.base.Preconditions.checkState;
  * Time: 12:32
  */
 public class ComunidadSpinnerSetter<T extends Fragment & ComuSpinnerSettable> extends AsyncTask<Void, Void, List<Comunidad>> {
+    // TODO: to persist the task during restarts and properly cancel the task when the activity is destroyed. (Example in Shelves)
 
     private static final String TAG = ComunidadSpinnerSetter.class.getCanonicalName();
     UiException uiException;

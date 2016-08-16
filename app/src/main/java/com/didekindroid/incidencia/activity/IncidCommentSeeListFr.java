@@ -154,6 +154,7 @@ public class IncidCommentSeeListFr extends ListFragment {
     //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
     //    ============================================================
 
+    // TODO: to persist the task during restarts and properly cancel the task when the activity is destroyed. (Example in Shelves)
     class IncidCommentLoader extends AsyncTask<Incidencia, Void, List<IncidComment>> {
 
         private final String TAG = IncidCommentLoader.class.getCanonicalName();

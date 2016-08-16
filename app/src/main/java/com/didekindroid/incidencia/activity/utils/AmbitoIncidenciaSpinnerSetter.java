@@ -18,6 +18,7 @@ import static com.didekindroid.incidencia.repository.IncidenciaDataDb.AmbitoInci
  */
 public class AmbitoIncidenciaSpinnerSetter<T extends Fragment & AmbitoSpinnerSettable> extends AsyncTask<Void, Void, Cursor> {
 
+    // TODO: to persist the task during restarts and properly cancel the task when the activity is destroyed. (Example in Shelves)
     private T mFragment;
     private final String TAG = AmbitoIncidenciaSpinnerSetter.class.getCanonicalName();
 

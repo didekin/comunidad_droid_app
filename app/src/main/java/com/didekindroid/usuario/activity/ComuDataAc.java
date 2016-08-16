@@ -247,6 +247,7 @@ public class ComuDataAc extends Activity implements RegComuFr.RegComuFrListener 
     //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
     //    ============================================================
 
+    // TODO: to persist the task during restarts and properly cancel the task when the activity is destroyed. (Example in Shelves)
     class ComuDataSetter extends AsyncTask<Void, Void, Comunidad> {
 
         final String TAG = ComuDataSetter.class.getCanonicalName();
@@ -281,6 +282,7 @@ public class ComuDataAc extends Activity implements RegComuFr.RegComuFrListener 
         }
     }
 
+    // TODO: to persist the task during restarts and properly cancel the task when the activity is destroyed. (Example in Shelves)
     class ComuDataModifier extends AsyncTask<Comunidad, Void, Integer> {
 
         final String TAG = ComuDataModifier.class.getCanonicalName();

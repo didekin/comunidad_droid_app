@@ -7,6 +7,9 @@ dependencies {
     compile 'com.squareup.okhttp3:logging-interceptor:3.2.0'
 }
 
+targetCompatibility = '1.7'
+sourceCompatibility = '1.7'
+
 jar {
     baseName = 'client_lib'
 //    version = '0.2'

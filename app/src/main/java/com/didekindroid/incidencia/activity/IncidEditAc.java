@@ -135,6 +135,7 @@ public class IncidEditAc extends AppCompatActivity {
 //    ..................... INNER CLASSES  .......................
 //    ============================================================
 
+    // TODO: to persist the task during restarts and properly cancel the task when the activity is destroyed. (Example in Shelves)
     class ResolucionGetter extends AsyncTask<Void, Void, Resolucion> {
 
         private final String TAG = ResolucionGetter.class.getCanonicalName();

@@ -36,6 +36,7 @@
         <Button
             android:id="@+id/incid_edit_fr_modif_button"
             style="@style/textBase.acButton1"
+            android:layout_gravity="center_horizontal"
             android:text="@string/incid_edit_modif_button_rot"/>
 
         <TextView
@@ -46,6 +47,7 @@
         <Button
             android:id="@+id/incid_edit_fr_borrar_button"
             style="@style/textBase.acButton1"
+            android:layout_gravity="center_horizontal"
             android:text="@string/incid_edit_borrar_button_rot"/>
 
     </LinearLayout>
