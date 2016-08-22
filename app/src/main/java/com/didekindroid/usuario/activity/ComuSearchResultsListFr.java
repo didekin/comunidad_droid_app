@@ -13,13 +13,13 @@ import android.widget.ListView;
 
 import com.didekin.common.exception.ErrorBean;
 import com.didekin.usuario.dominio.Comunidad;
+import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 
 import java.io.IOException;
 import java.util.List;
 
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_SEARCH;
-import static com.didekindroid.common.activity.ViewsIDs.COMU_SEARCH_RESULTS;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 
 /**
@@ -51,11 +51,13 @@ public class ComuSearchResultsListFr extends ListFragment {
 
     public static final String TAG = ComuSearchResultsListFr.class.getCanonicalName();
 
-    //The Adapter which will be used to populate the ListView.
     private ComuSearchResultsListAdapter mAdapter;
-
-    // The listener for dealing with the selection event of a line item (comunidad).
+    /**
+     * The listener for dealing with the selection event of a line item (comunidad).
+     */
     private ComuListListener mComuListListener;
+    ListView mListView;
+    View mView;
 
     @Override
     public void onAttach(Context context)
@@ -76,7 +78,8 @@ public class ComuSearchResultsListFr extends ListFragment {
                              Bundle savedInstanceState)
     {
         Log.d(TAG, "onCreateView()");
-        return super.onCreateView(inflater, container, savedInstanceState);
+        mView = inflater.inflate(R.layout.comu_search_results_fr_layout, container, false);
+        return mView;
     }
 
     @Override
@@ -91,14 +94,9 @@ public class ComuSearchResultsListFr extends ListFragment {
                 .getSerializableExtra(COMUNIDAD_SEARCH.key);
         new SearchComunidadesLoader().execute(comunidad);
 
-        final ListView listView = getListView();
-
-        listView.setId(COMU_SEARCH_RESULTS.idView);
-        listView.setItemsCanFocus(false);
-        listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        /* Text for no result OR view for no result.
-        setEmptyText(getResources().getText(R.string.no_result_search_comunidad));
-        listView.setEmptyView();   */
+        mListView = (ListView) mView.findViewById(android.R.id.list);
+        mListView.setItemsCanFocus(false);
+        mListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
     }
 
     @Override
@@ -120,11 +118,11 @@ public class ComuSearchResultsListFr extends ListFragment {
     {
         Log.d(TAG, "onListItemClick()");
 
-        getListView().setItemChecked(position, true);
+        mListView.setItemChecked(position, true);
         v.setSelected(true);
 
         if (mComuListListener != null) {
-            Comunidad comunidad = (Comunidad) getListView().getItemAtPosition(position);
+            Comunidad comunidad = (Comunidad) mListView.getItemAtPosition(position);
             mComuListListener.onComunidadSelected(comunidad, position);
         }
     }

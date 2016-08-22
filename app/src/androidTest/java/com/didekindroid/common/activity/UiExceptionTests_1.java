@@ -92,7 +92,7 @@ public class UiExceptionTests_1 extends UiExceptionAbstractTest {
         });
 
         checkToastInTest(R.string.exception_generic_message, mActivity);
-        onView(withId(R.id.comu_search_ac_layout)).check(matches(isDisplayed()));
+        onView(withId(R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -141,7 +141,7 @@ public class UiExceptionTests_1 extends UiExceptionAbstractTest {
                 ue.processMe(mActivity, new Intent());
             }
         });
-        onView(withId(R.id.comu_search_ac_layout)).check(matches(isDisplayed()));
+        onView(withId(R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));
         checkToastInTest(R.string.comunidad_not_found_message, mActivity);
     }
 

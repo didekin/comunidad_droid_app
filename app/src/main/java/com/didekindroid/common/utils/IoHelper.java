@@ -21,7 +21,7 @@ import java.util.List;
  * Date: 19/06/15
  * Time: 12:30
  */
-public class IoHelper {
+public final class IoHelper {
 
     private static final String TAG = IoHelper.class.getCanonicalName();
     public static final int TIPO_VIA_FILE_SIZE = 322;
@@ -50,9 +50,7 @@ public class IoHelper {
                 if (line.length() < 2) {
                     continue;
                 }
-                line = line.trim();
-
-                tipos.add(line.substring(0, 1) + line.substring(1).toLowerCase());
+                tipos.add(lineToLowerCase(line));
             }
 
         } catch (IOException e) {
@@ -84,7 +82,7 @@ public class IoHelper {
         } catch (IOException e) {
             UIutils.doRuntimeException(e, e.getLocalizedMessage());
         }
-        return new String(bytesRefreshToken);
+        return new String(bytesRefreshToken != null ? bytesRefreshToken : new byte[0]);
     }
 
     public static void writeFileFromString(String stringToWrite, File fileToWrite)
@@ -101,4 +99,9 @@ public class IoHelper {
     }
 
 
+    public static String lineToLowerCase(String line)
+    {
+        String lineTrim = line.trim();
+        return lineTrim.substring(0,1) + lineTrim.substring(1).toLowerCase();
+    }
 }

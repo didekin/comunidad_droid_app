@@ -54,8 +54,8 @@ public class LoginAc extends AppCompatActivity {
 
     private static final String TAG = LoginAc.class.getCanonicalName();
 
-    View mAcView;
-    short counterWrong;
+    private View mAcView;
+    private short counterWrong;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -108,20 +108,20 @@ public class LoginAc extends AppCompatActivity {
 
 //    ........................ Helper methods in the activity for the dialog .............................
 
-    void showDialog(String userName)
+    private void showDialog(String userName)
     {
         Log.d(TAG, "showDialog()");
         DialogFragment newFragment = PasswordMailDialog.newInstance(userName);
         newFragment.show(getFragmentManager(), "passwordMailDialog");
     }
 
-    void doPositiveClick(String email)
+    private void doPositiveClick(String email)
     {
         Log.d(TAG, "doPositiveClick()");
         new LoginMailSender().execute(email);
     }
 
-    void doNegativeClick()
+    private void doNegativeClick()
     {
         Log.d(TAG, "doNegativeClick()");
 

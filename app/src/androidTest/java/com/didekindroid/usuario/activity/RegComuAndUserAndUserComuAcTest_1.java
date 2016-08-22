@@ -7,14 +7,10 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.view.View;
 
-import com.didekin.usuario.dominio.Comunidad;
 import com.didekin.usuario.dominio.Usuario;
-import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.testutils.ActivityTestUtils;
-import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioBean;
-import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
 import com.didekindroid.usuario.testutils.CleanUserEnum;
 
 import org.junit.After;
@@ -24,26 +20,20 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
-import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.CursorMatchers.withRowString;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
-import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeComunidadBeanFromView;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUserBeanFromRegUserFrView;
-import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUserComuBeanFromView;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_NOTHING;
-import static org.hamcrest.CoreMatchers.instanceOf;
+import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_TK_HANDLER;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.typeUserData;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.validaTypedUsuario;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.core.AllOf.allOf;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -60,7 +50,7 @@ public class RegComuAndUserAndUserComuAcTest_1 {
 
     RegComuAndUserAndUserComuAc mActivity;
     Resources resources;
-    CleanUserEnum whatToClean;
+    CleanUserEnum whatToClean = CLEAN_NOTHING;
 
     RegComuFr mRegComuFrg;
     RegUserComuFr mRegUserComuFrg;
@@ -75,7 +65,7 @@ public class RegComuAndUserAndUserComuAcTest_1 {
     @Before
     public void setUp() throws Exception
     {
-        whatToClean = CLEAN_NOTHING;
+        cleanOptions(CLEAN_TK_HANDLER);
         resources = InstrumentationRegistry.getTargetContext().getResources();
     }
 
@@ -117,11 +107,7 @@ public class RegComuAndUserAndUserComuAcTest_1 {
     {
         mActivity = mActivityRule.launchActivity(new Intent());
         // Data for Usuario.
-        onView(withId(R.id.reg_usuario_email_editT)).perform(scrollTo(), typeText("yo@email.com"));
-        onView(withId(R.id.reg_usuario_alias_ediT)).perform(scrollTo(), typeText("alias1"));
-        onView(withId(R.id.reg_usuario_password_ediT)).perform(scrollTo(), typeText("password1"));
-        onView(withId(R.id.reg_usuario_password_confirm_ediT)).perform(scrollTo(),
-                typeText("password1"), closeSoftKeyboard());
+        typeUserData("yo@email.com", "alias1", "password1", "password1");
 
         View usuarioRegView = mActivity.findViewById(R.id.reg_user_frg);
 
@@ -135,8 +121,6 @@ public class RegComuAndUserAndUserComuAcTest_1 {
         // Test assertions about Usuario.
         usuarioBean.validate(resources, new StringBuilder(resources.getText(R.string.error_validation_msg)));
         Usuario usuario = usuarioBean.getUsuario();
-        assertThat(usuario.getUserName(), is("yo@email.com"));
-        assertThat(usuario.getAlias(), is("alias1"));
-        assertThat(usuario.getPassword(), is("password1"));
+        validaTypedUsuario(usuario, "yo@email.com", "alias1", "password1");
     }
 }

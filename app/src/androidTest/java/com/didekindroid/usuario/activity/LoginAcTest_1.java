@@ -109,7 +109,7 @@ public class LoginAcTest_1 extends LoginAcTest{
         onView(withId(R.id.login_ac_button)).check(matches(isDisplayed())).perform(click());
 
         checkNoToastInTest(R.string.user_without_signedUp, mActivity);
-        onView(withId(R.id.comu_search_ac_layout)).check(matches(isDisplayed()));
+        onView(withId(R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));
         assertThat(isRegisteredUser(mActivity), is(true));
         assertThat(TKhandler.getAccessTokenInCache(), notNullValue());
 

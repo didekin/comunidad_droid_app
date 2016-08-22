@@ -33,9 +33,7 @@ import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.testutils.UserMenuTestUtils.LOGIN_AC;
-import static com.didekindroid.usuario.testutils.UserMenuTestUtils.REG_COMU_USER_USERCOMU_AC;
 import static com.didekindroid.usuario.testutils.UserMenuTestUtils.SEE_USERCOMU_BY_USER_AC;
-import static com.didekindroid.usuario.testutils.UserMenuTestUtils.USER_DATA_AC;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_JUAN;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -94,7 +92,6 @@ public class ComuSearchAc_2_SlowTest {
     @Test
     public void testLogin_withToken() throws InterruptedException, UiException, IOException
     {
-
         whatClean = CleanUserEnum.CLEAN_JUAN;
         signUpAndUpdateTk(COMU_REAL_JUAN);
         activity = mActivityRule.launchActivity(new Intent());
@@ -118,7 +115,6 @@ public class ComuSearchAc_2_SlowTest {
 
         LOGIN_AC.checkMenuItem_NTk(activity);
     }
-
 
     @After
     public void cleanData() throws UiException

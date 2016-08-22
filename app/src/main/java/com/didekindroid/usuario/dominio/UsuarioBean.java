@@ -108,7 +108,7 @@ public final class UsuarioBean {
         return validateSinglePassword(resources, errorMsg);
     }
 
-    protected boolean validateUserName(CharSequence text, StringBuilder errorMsg)
+    public boolean validateUserName(CharSequence text, StringBuilder errorMsg)
     {
         boolean isValid = EMAIL.isPatternOk(userName);
         if (!isValid) {

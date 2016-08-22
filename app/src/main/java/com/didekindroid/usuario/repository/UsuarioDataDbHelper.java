@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.provider.BaseColumns._ID;
+import static com.didekindroid.common.utils.IoHelper.lineToLowerCase;
 import static com.didekindroid.usuario.repository.UsuarioDataDb.ComunidadAutonoma.CREATE_C_AUTONOMA;
 import static com.didekindroid.usuario.repository.UsuarioDataDb.ComunidadAutonoma.DROP_C_AUTONOMA;
 import static com.didekindroid.usuario.repository.UsuarioDataDb.ComunidadAutonoma.TB_C_AUTONOMA;
@@ -41,6 +42,10 @@ import static com.didekindroid.usuario.repository.UsuarioDataDb.Provincia.TB_PRO
 import static com.didekindroid.usuario.repository.UsuarioDataDb.Provincia.ca_id;
 import static com.didekindroid.usuario.repository.UsuarioDataDb.Provincia.pr_nombre;
 import static com.didekindroid.usuario.repository.UsuarioDataDb.SQL_ENABLE_FK;
+import static com.didekindroid.usuario.repository.UsuarioDataDb.TipoVia.CREATE_TIPO_VIA;
+import static com.didekindroid.usuario.repository.UsuarioDataDb.TipoVia.DROP_TIPO_VIA;
+import static com.didekindroid.usuario.repository.UsuarioDataDb.TipoVia.TB_TIPO_VIA;
+import static com.didekindroid.usuario.repository.UsuarioDataDb.TipoVia.tipovia;
 import static java.lang.String.valueOf;
 
 /**
@@ -60,6 +65,7 @@ public class UsuarioDataDbHelper extends SQLiteOpenHelper {
     int mMunicipiosCounter;
     int mComunidadesCounter;
     int mProvinciasCounter;
+    int mTipoViaCounter;
 
     public UsuarioDataDbHelper(Context context)
     {
@@ -74,6 +80,7 @@ public class UsuarioDataDbHelper extends SQLiteOpenHelper {
 
         mDataBase = db;
 
+        mDataBase.execSQL(CREATE_TIPO_VIA);
         mDataBase.execSQL(CREATE_C_AUTONOMA);
         mDataBase.execSQL(CREATE_PROVINCIA);
         mDataBase.execSQL(CREATE_INDEX_CA_FK);
@@ -82,6 +89,12 @@ public class UsuarioDataDbHelper extends SQLiteOpenHelper {
 
         if (!mDataBase.isReadOnly()) {
             mDataBase.execSQL(SQL_ENABLE_FK);
+        }
+
+        try {
+            loadTipoVia();
+        } catch (IOException e) {
+            UIutils.doRuntimeException(e, TAG);
         }
 
         try {
@@ -425,6 +438,88 @@ public class UsuarioDataDbHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
+//    =====================================================
+//    .................... TIPOS DE VÍA ...................
+//    =====================================================
+
+    private int loadTipoVia() throws IOException
+    {
+        Log.i(TAG, "In loadTipoVia()");
+
+        final Resources resources = mContext.getResources();
+        int pkCounter = 0;
+
+        try (InputStream inputStream = resources.openRawResource(R.raw.tipos_vias);
+             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+
+            String line;
+            ContentValues values;
+
+            while ((line = reader.readLine()) != null) {
+
+                values = new ContentValues();
+                values.put(_ID, pkCounter);
+                values.put(tipovia, lineToLowerCase(line));
+                long id = mDataBase.insert(TB_TIPO_VIA, null, values);
+
+                if (id < 0) {
+                    Log.e(TAG, "Unable to add tipo de vía: " + line.trim());
+                } else {
+                    ++pkCounter;
+                }
+            }
+        }
+
+        Log.i(TAG, "Done loading tipos de vía file in DB.");
+        mTipoViaCounter = pkCounter;
+        return pkCounter;
+    }
+
+    public Cursor doTipoViaCursor()
+    {
+        Log.d(TAG, "In doTipoViaCursor()");
+
+        if (mDataBase == null) {
+            mDataBase = getWritableDatabase();
+        }
+
+        String[] tableColumns = new String[]{_ID, tipovia};
+        String sortOrder = _ID;
+        Cursor cursor = mDataBase.query(TB_TIPO_VIA, tableColumns, null, null, null, null, sortOrder);
+
+        if (cursor == null) {
+            return null;
+        }
+        if (!cursor.moveToFirst()) {
+            cursor.close();
+            return null;
+        }
+
+        return cursor;
+    }
+
+    public List<String> getTiposVia()
+    {
+        Log.d(TAG, "In getTiposVia()");
+
+        if (mDataBase == null) {
+            mDataBase = getReadableDatabase();
+        }
+
+        Cursor cursor = doTipoViaCursor();
+
+        int pkIndex = cursor.getColumnIndex(_ID);
+        int tipoViaIndex = cursor.getColumnIndex(tipovia);
+        List<String> tiposViaList = new ArrayList<>();
+
+        do {
+            tiposViaList.add(cursor.getString(tipoViaIndex));
+        } while (cursor.moveToNext());
+
+        cursor.close();
+        return tiposViaList;
+    }
+
 //    ................ UTILITIES ...............
 
     void dropAllTables()
@@ -438,6 +533,8 @@ public class UsuarioDataDbHelper extends SQLiteOpenHelper {
             mProvinciasCounter = 0;
             mDataBase.execSQL(DROP_C_AUTONOMA);
             mComunidadesCounter = 0;
+            mDataBase.execSQL(DROP_TIPO_VIA);
+            mTipoViaCounter = 0;
         }
     }
 }

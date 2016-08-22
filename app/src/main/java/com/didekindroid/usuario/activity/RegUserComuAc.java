@@ -48,6 +48,7 @@ import static com.google.common.base.Preconditions.checkState;
  * 1. A long comunidadId is passed as an intent key.
  * 2. The activity SeeUserComuByComuAc is started.
  */
+@SuppressWarnings("ConstantConditions")
 public class RegUserComuAc extends AppCompatActivity {
 
     public static final String TAG = RegUserComuAc.class.getCanonicalName();

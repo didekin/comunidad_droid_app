@@ -7,6 +7,7 @@ import com.didekin.usuario.dominio.Usuario;
 import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.usuario.activity.utils.RolCheckBox;
+import com.didekindroid.usuario.dominio.ComunidadBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,9 +31,10 @@ import static com.didekindroid.usuario.activity.utils.RolCheckBox.INQ;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRE;
 import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRO;
 import static org.hamcrest.CoreMatchers.allOf;
-import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 
 /**
  * User: pedro
@@ -193,36 +195,39 @@ public final class UsuarioTestUtils {
 
     public static void typeComunidadData() throws InterruptedException
     {
+        typeComunidadData("Calle", "Valencia", "Alicante/Alacant", "Algueña", "Real", "5", "Bis");
+    }
+
+    public static void typeComunidadData(String tipoVia, String comunidadAuto, String provincia, String municipio, String nombreVia,
+                                         String numeroEnVia, String sufijoNumero) throws InterruptedException
+    {
         onView(withId(R.id.tipo_via_spinner)).perform(click());
-        onData(allOf(
-                is(instanceOf(String.class)),
-                is("Calle")
-        )).perform(click());
+        Thread.sleep(1000);
+        onData(withRowString(1, tipoVia)).perform(click());
         onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.tipo_via_spinner))))
-                .check(matches(withText(containsString("Calle")))).check(matches(isDisplayed()));
+                .check(matches(withText(containsString(tipoVia)))).check(matches(isDisplayed()));
 
-        Thread.sleep(4000);
+        onView(withId(R.id.comunidad_nombre_via_editT)).perform(typeText(nombreVia));
+        onView(withId(R.id.comunidad_numero_editT)).perform(typeText(numeroEnVia));
+        onView(withId(R.id.comunidad_sufijo_numero_editT)).perform(typeText(sufijoNumero), closeSoftKeyboard());
+
         onView(withId(R.id.autonoma_comunidad_spinner)).perform(click());
-        onData(withRowString(1, "Valencia")).perform(click());
+        Thread.sleep(1000);
+        onData(withRowString(1, comunidadAuto)).perform(click());
         onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.autonoma_comunidad_spinner))))
-                .check(matches(withText(containsString("Valencia"))));
+                .check(matches(withText(containsString(comunidadAuto))));
 
-        Thread.sleep(3000);
         onView(withId(R.id.provincia_spinner)).perform(click());
-        onData(withRowString(1, "Alicante/Alacant")).perform(click());
+        Thread.sleep(1000);
+        onData(withRowString(1, provincia)).perform(click());
         onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.provincia_spinner))))
-                .check(matches(withText(containsString("Alicante/Alacant"))));
+                .check(matches(withText(containsString(provincia))));
 
-        Thread.sleep(3000);
         onView(withId(R.id.municipio_spinner)).perform(click());
-        onData(withRowString(3, "Algueña")).perform(click());
+        Thread.sleep(1000);
+        onData(withRowString(3, municipio)).perform(click());
         onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.municipio_spinner))))
-                .check(matches(withText(containsString("Algueña"))));
-
-
-        onView(withId(R.id.comunidad_nombre_via_editT)).perform(typeText("Real"));
-        onView(withId(R.id.comunidad_numero_editT)).perform(typeText("5"));
-        onView(withId(R.id.comunidad_sufijo_numero_editT)).perform(typeText("Bis"), closeSoftKeyboard());
+                .check(matches(withText(containsString(municipio))));
     }
 
     public static void typeRegUserComuData(String portal, String escalera, String planta, String puerta, RolCheckBox...
@@ -230,7 +235,7 @@ public final class UsuarioTestUtils {
     {
         onView(withId(R.id.reg_usercomu_portal_ed)).perform(typeText(portal));
         onView(withId(R.id.reg_usercomu_escalera_ed)).perform(typeText(escalera));
-        onView(withId(R.id.reg_usercomu_planta_ed)).perform(typeText(planta));
+        onView(withId(R.id.reg_usercomu_planta_ed)).perform(scrollTo(), typeText(planta));
         onView(withId(R.id.reg_usercomu_puerta_ed)).perform(typeText(puerta), closeSoftKeyboard());
 
         if (roles != null) {
@@ -239,4 +244,55 @@ public final class UsuarioTestUtils {
             }
         }
     }
+
+    public static void typeUserData(String email, String alias, String password, String passwordConfirm)
+    {
+        onView(withId(R.id.reg_usuario_password_ediT)).perform(scrollTo(), typeText(password));
+        onView(withId(R.id.reg_usuario_password_confirm_ediT)).perform(scrollTo(), typeText(passwordConfirm));
+        onView(withId(R.id.reg_usuario_email_editT)).perform(scrollTo(), typeText(email));
+        onView(withId(R.id.reg_usuario_alias_ediT)).perform(scrollTo(), typeText(alias), closeSoftKeyboard());
+    }
+
+    public static void validaTypedComunidadBean(final ComunidadBean comunidadBean, String tipoVia, short municipioProvId,
+                                                short municipioCodProv, String nombreVia, String numeroEnVia, String sufijoNumero)
+    {
+        assertThat(comunidadBean.getTipoVia(), is(tipoVia));
+        assertThat(comunidadBean.getMunicipio().getProvincia().getProvinciaId(), is(municipioProvId));
+        assertThat(comunidadBean.getMunicipio().getCodInProvincia(), is(municipioCodProv));
+        assertThat(comunidadBean.getNombreVia(), is(nombreVia));
+        assertThat(comunidadBean.getNumeroString(), is(numeroEnVia));
+        assertThat(comunidadBean.getSufijoNumero(), is(sufijoNumero));
+    }
+
+    public static void validaTypedComunidad(Comunidad comunidad, String tipoVia, short municipioProvId,
+                                            short municipioCodProv, String nombreVia, short numeroEnVia, String sufijoNumero)
+    {
+        assertThat(comunidad, notNullValue());
+        assertThat(comunidad.getTipoVia(), is(tipoVia));
+        assertThat(comunidad.getMunicipio().getProvincia().getProvinciaId(), is(municipioProvId));
+        assertThat(comunidad.getMunicipio().getCodInProvincia(), is(municipioCodProv));
+        assertThat(comunidad.getNombreVia(), is(nombreVia));
+        assertThat(comunidad.getNumero(), is(numeroEnVia));
+        assertThat(comunidad.getSufijoNumero(), is(sufijoNumero));
+    }
+
+    public static void validaTypedUsuarioComunidad(UsuarioComunidad usuarioComunidad, String portal, String escalera, String planta, String puerta, String roles)
+    {
+        assertThat(usuarioComunidad, notNullValue());
+        assertThat(usuarioComunidad.getPortal(), is(portal));
+        assertThat(usuarioComunidad.getEscalera(), is(escalera));
+        assertThat(usuarioComunidad.getPlanta(), is(planta));
+        assertThat(usuarioComunidad.getPuerta(), is(puerta));
+        assertThat(usuarioComunidad.getRoles(), is(roles));
+    }
+
+    public static void validaTypedUsuario(Usuario usuario, String email, String alias1, String password)
+    {
+        assertThat(usuario, notNullValue());
+        assertThat(usuario.getUserName(), is(email));
+        assertThat(usuario.getAlias(), is(alias1));
+        assertThat(usuario.getPassword(), is(password));
+    }
 }
+
+

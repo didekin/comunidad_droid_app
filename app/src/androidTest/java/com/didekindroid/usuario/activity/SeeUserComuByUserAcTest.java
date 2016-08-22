@@ -91,7 +91,7 @@ public class SeeUserComuByUserAcTest {
         assertThat(mActivity, notNullValue());
         assertThat(mFragment, notNullValue());
 
-        onView(withId(R.id.see_usercomu_by_user_ac_frg_container)).check(matches(isDisplayed()));
+        onView(withId(R.id.see_usercomu_by_user_frg)).check(matches(isDisplayed()));
         onView(withId(R.id.see_usercomu_by_user_frg)).check(matches(isDisplayed()));
         onView(withId(SEE_USERCOMU_BY_USER.idView)).check(matches(isDisplayed()));
 

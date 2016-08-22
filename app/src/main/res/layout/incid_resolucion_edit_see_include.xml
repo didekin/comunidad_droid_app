@@ -19,9 +19,7 @@
     <!-- Lista de avances.-->
     <ListView
         android:id="@id/android:list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp">
+        style="@style/basicList">
     </ListView>
     <TextView
         android:id="@id/android:empty"

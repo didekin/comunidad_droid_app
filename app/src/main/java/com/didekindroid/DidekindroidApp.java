@@ -9,6 +9,7 @@ import android.util.Log;
  * Date: 05/08/15
  * Time: 19:19
  */
+@SuppressWarnings({"StaticVariableMayNotBeInitialized", "StaticVariableUsedBeforeInitialization"})
 public final class DidekindroidApp extends Application {
 
     private static Context mContext;
@@ -22,6 +23,7 @@ public final class DidekindroidApp extends Application {
     {
         super.onCreate();
         Log.d(TAG, "onCreate()");
+        // TODO: buscar un sustituto a esta inicialización de una variable estática con una instancia.
         mContext = this;
         mBaseURL = mContext.getString(R.string.didekinspring_host)
                 + getContext().getString(R.string.didekinspring_port);

@@ -18,6 +18,21 @@ public final class UsuarioDataDb {
 
     public static final String SQL_ENABLE_FK = "PRAGMA foreign_keys=ON;";
 
+    public interface TipoVia extends BaseColumns {
+
+        String TB_TIPO_VIA = "tipo_via";
+
+        String tipovia = "tipovia";
+
+        String CREATE_TIPO_VIA = "CREATE TABLE " + TB_TIPO_VIA
+                + " ("
+                + _ID + " INTEGER PRIMARY KEY, "
+                + tipovia + " TEXT"
+                + ");";
+
+        String DROP_TIPO_VIA = "DROP TABLE IF EXISTS " + TB_TIPO_VIA;
+    }
+
     public interface ComunidadAutonoma extends BaseColumns {
 
         int NUMBER_RECORDS = 20;

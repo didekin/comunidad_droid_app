@@ -24,6 +24,7 @@ import static com.google.common.base.Preconditions.checkState;
  * Postconditions:
  * 1. Unregistered user, if she chooses so. ComuSearchAc is to be showed.
  */
+@SuppressWarnings("ConstantConditions")
 public class DeleteMeAc extends AppCompatActivity {
 
     private static final String TAG = DeleteMeAc.class.getCanonicalName();

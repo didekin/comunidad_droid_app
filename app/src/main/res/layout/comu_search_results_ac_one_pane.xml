@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/comu_search_results_ac_one_pane_frg_container"
-    style="@style/baseLayout">
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
 
     <include layout="@layout/appbar_include" />
 
@@ -11,4 +9,4 @@
         android:layout_marginTop="@dimen/app_bar_bottom_margin"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-</FrameLayout>
+</merge>

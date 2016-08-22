@@ -95,7 +95,7 @@ public class DeleteMeAcTest {
         whatToClean = CLEAN_NOTHING;
 
         onView(withId(R.id.delete_me_ac_unreg_button)).check(matches(isDisplayed())).perform(click());
-        onView(withId(R.id.comu_search_ac_layout)).check(matches(isDisplayed()));
+        onView(withId(R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));
 
         assertThat(isRegisteredUser(mActivity), is(false));
         assertThat(TKhandler.getAccessTokenInCache(), nullValue());

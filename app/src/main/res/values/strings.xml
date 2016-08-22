@@ -96,8 +96,6 @@
     <string name="incid_resolucion_coste_prev_msg">Coste estimado</string>
     <!-- ====== IncidResolucionSeeDefaultFr ====== -->
     <string name="incid_resolucion_see_default_txt">No se ha iniciado aún el proceso de resolución</string>
-    <!-- =================== IncidSeeUserComuImportanciaFr ================== -->
-    <string name="incid_see_importancia_by_users_ac_label">Valoración incidencia</string>
     <!-- ===================== IncidSeeOpenByComuAc ===================== -->
     <string name="incid_see_by_user_ac_label">Tus incidencias</string>
     <string name="incid_apertura_rot">Apertura:</string>
@@ -167,20 +165,20 @@
     <string name="reg_comunidad_ac_label">Nueva comunidad</string>
     <!-- ........... RegUserFr ......... -->
     <string name="reg_usuario_rotulo">Tus datos</string>
-    <string name="usuario_password_hint">Contraseña (letras,números,_)</string>
+    <string name="usuario_password_hint">Contraseña: 6–60 letras, números, _ </string>
     <string name="usuario_password_confirm_hint">Confirmación contraseña</string>
     <string name="alias">Nombre</string>
-    <string name="usuario_alias_hint">Nombre (6–30 caracteres: letras, números, _)</string>
+    <string name="usuario_alias_hint">Nombre: 6–30 letras, números, _</string>
     <string name="email_hint">Correo electrónico</string>
     <string name="password">Contraseña</string>
-    <string name="password_different"> (las contraseñas no coinciden)</string>
+    <string name="password_different"> (no coinciden)</string>
     <!-- .......... RegUserComuFr ....... -->
     <string name="reg_usercomu_vivienda_rot">Tu vivienda</string>
-    <string name="reg_usercomu_portal_hint">Portal</string>
-    <string name="reg_usercomu_escalera_hint">Escalera</string>
-    <string name="reg_usercomu_planta_hint">Planta</string>
-    <string name="reg_usercomu_puerta_hint">Puerta</string>
-    <string name="reg_usercomu_role_checkbox_rot">Vínculo (uno o más):</string>
+    <string name="reg_usercomu_portal_hint"> -- Portal --</string>
+    <string name="reg_usercomu_escalera_hint"> -- Escalera --</string>
+    <string name="reg_usercomu_planta_hint"> -- Planta --</string>
+    <string name="reg_usercomu_puerta_hint"> -- Puerta --</string>
+    <string name="reg_usercomu_role_checkbox_rot">Vínculo</string>
     <string name="reg_usercomu_ac_button_rot">Adhiérete a la comunidad</string>
     <!--para mensaje de error validación y rótulos de campos  -->
     <string name="reg_usercomu_checkbox_pre_rot">Presidente</string>

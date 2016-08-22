@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                style="@style/baseLayout"
-                android:id="@+id/user_data_include_layout">
+<LinearLayout
+    style="@style/baseLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <EditText
-            android:id="@+id/reg_usuario_email_editT"
-            style="@style/textBase.editField.email"
-            android:layout_alignParentStart="true"/>
+        android:id="@+id/reg_usuario_email_editT"
+        style="@style/textBase.editField.email"
+        tools:ignore="LabelFor"/>
 
     <EditText
-            android:id="@+id/reg_usuario_alias_ediT"
-            style="@style/textBase.editField.alias"
-            android:layout_alignParentStart="true"
-            android:layout_below="@id/reg_usuario_email_editT"/>
+        android:id="@+id/reg_usuario_alias_ediT"
+        style="@style/textBase.editField.alias"
+        tools:ignore="LabelFor"/>
 
-</RelativeLayout>
+</LinearLayout>

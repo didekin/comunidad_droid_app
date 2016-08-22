@@ -32,7 +32,6 @@ import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.INCID_DE
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.RESOLUCION_DEFAULT_DESC;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doResolucion;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidenciaUser;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidenciaUser;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_PEPE;

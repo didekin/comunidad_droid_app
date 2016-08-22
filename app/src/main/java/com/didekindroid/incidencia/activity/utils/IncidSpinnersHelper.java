@@ -20,6 +20,7 @@ import static com.didekindroid.common.activity.FragmentTags.incid_see_usercomus_
  * Date: 27/01/16
  * Time: 10:49
  */
+@SuppressWarnings("AnonymousInnerClassMayBeStatic")
 public enum IncidSpinnersHelper {
 
     HELPER,;

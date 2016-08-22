@@ -34,11 +34,11 @@ import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
  * Date: 18/11/15
  * Time: 13:11
  */
-public class IncidService implements IncidenciaServEndPoints {
+public final class IncidService implements IncidenciaServEndPoints {
 
     private static final String TAG = IncidService.class.getCanonicalName();
 
-    public static final RetrofitHandler retrofitHandler =
+    private static final RetrofitHandler retrofitHandler =
             new RetrofitHandler(getBaseURL(),new JksInAndroidApp(getJksPassword(), getJksResourceId()),getHttpTimeOut());
     public static final IncidService IncidenciaServ = new IncidService();
     private final IncidenciaServEndPoints endPoint;

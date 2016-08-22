@@ -58,7 +58,7 @@ public class LoginAc_2_SlowTest extends LoginAcTest {
                 .perform(click());
 
         //Invitación a buscar su comunidad y registrarse.
-        onView(withId(R.id.comu_search_ac_layout)).check(matches(isDisplayed()));
+        onView(withId(R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));
         checkToastInTest(R.string.login_wrong_no_mail, mActivity);
     }
 }

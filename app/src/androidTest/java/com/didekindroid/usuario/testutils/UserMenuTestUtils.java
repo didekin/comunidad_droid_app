@@ -55,7 +55,7 @@ public enum UserMenuTestUtils {
             Thread.sleep(2000);
             openActionBarOverflowOrOptionsMenu(activity);
             onView(withText(R.string.comu_search_ac_mn)).check(matches(isDisplayed())).perform(click());
-            onView(withId(R.id.comu_search_ac_layout)).check(matches(isDisplayed()));
+            onView(withId(R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));
         }
     },
 
@@ -191,9 +191,8 @@ public enum UserMenuTestUtils {
         @Override
         public void checkMenuItem_WTk(Activity activity) throws InterruptedException
         {
-
-            Thread.sleep(1000);
             openActionBarOverflowOrOptionsMenu(activity);
+            Thread.sleep(2000);
             onView(withText(R.string.user_data_ac_mn)).check(matches(isDisplayed())).perform(click());
             // Show the data in modifiable state.
             onView(withId(R.id.user_data_ac_layout)).check(matches(isDisplayed()));

@@ -29,6 +29,7 @@ import java.io.IOException;
 import static com.didekin.common.dominio.DataPatterns.LINE_BREAK;
 import static com.didekindroid.common.activity.TokenHandler.TKhandler;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
+import static com.didekindroid.common.utils.UIutils.makeToast;
 import static com.didekindroid.common.utils.UIutils.updateIsRegistered;
 import static com.didekindroid.common.webservices.Oauth2Service.Oauth2;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeComunidadBeanFromView;
@@ -44,13 +45,14 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * 2. The comunidad has not been registered either, by other users.
  * 3. There is not extras in the activity intent.
  */
+@SuppressWarnings("ConstantConditions")
 public class RegComuAndUserAndUserComuAc extends AppCompatActivity {
 
     private static final String TAG = RegComuAndUserAndUserComuAc.class.getCanonicalName();
 
-    RegComuFr mRegComuFrg;
-    RegUserComuFr mRegUserComuFrg;
-    RegUserFr mRegUserFr;
+    private RegComuFr mRegComuFrg;
+    private RegUserComuFr mRegUserComuFrg;
+    private RegUserFr mRegUserFr;
 
     // TODO: añadir un campo de número de vecinos en la comunidad (aprox.).
     // TODO: recoger dato de localización en el alta. Control de altas masivas y remotas. Excluir Administrador.
@@ -95,9 +97,9 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity {
                 .append(LINE_BREAK.getRegexp());
 
         if (!usuarioComunidadBean.validate(getResources(), errorMsg)) {
-            UIutils.makeToast(this, errorMsg.toString(), Toast.LENGTH_SHORT);
+            makeToast(this, errorMsg.toString(), Toast.LENGTH_SHORT);
         } else if (!ConnectionUtils.isInternetConnected(this)) {
-            UIutils.makeToast(this, R.string.no_internet_conn_toast, Toast.LENGTH_LONG);
+            makeToast(this, R.string.no_internet_conn_toast, Toast.LENGTH_LONG);
         } else {
             new ComuAndUserComuAndUserRegister().execute(usuarioComunidadBean.getUsuarioComunidad());
         }

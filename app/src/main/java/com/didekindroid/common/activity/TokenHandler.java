@@ -35,6 +35,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *    an AccessToken' assignment, file writting and caching are synchronized on the intrinsic lock
  *    of the object.
  * */
+@SuppressWarnings("AnonymousInnerClassMayBeStatic")
 public enum TokenHandler {
 
     TKhandler,;

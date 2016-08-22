@@ -40,6 +40,7 @@ public class IncidCommentRegAc extends AppCompatActivity {
     Button mComentarButton;
     View mAcView;
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {

@@ -1,71 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
-            style="@style/baseLayout.scroll">
+<LinearLayout
+    android:id="@+id/reg_comunidad_layout"
+    style="@style/baseLayout.withPadding"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.didekindroid.usuario.activity.ComuSearchAc">
 
-    <RelativeLayout
-            android:id="@+id/reg_comunidad_layout"
-            style="@style/baseLayout"
-            tools:context="com.didekindroid.usuario.activity.ComuSearchAc">
+    <Spinner
+        android:id="@+id/tipo_via_spinner"
+        style="@style/spinnerBase">
+    </Spinner>
 
-        <Spinner
-                android:id="@+id/tipo_via_spinner"
-                style="@style/spinnerBase"/>
+    <EditText
+        android:id="@+id/comunidad_nombre_via_editT"
+        style="@style/textBase.editField"
+        android:hint="@string/nombre_via_hint"
+        android:inputType="textCapWords|textNoSuggestions"
+        android:maxEms="80"/>
+
+    <LinearLayout
+        android:id="@+id/comunidad_number_sufix_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <EditText
-                android:id="@+id/comunidad_nombre_via_editT"
-                style="@style/textBase.editField"
-                android:inputType="textCapWords|textNoSuggestions"
-                android:maxEms="80"
-                android:hint="@string/nombre_via_hint"
-                android:layout_below="@+id/tipo_via_spinner"/>
+            android:id="@+id/comunidad_numero_editT"
+            style="@style/textBase.editField"
+            android:hint="@string/numero_en_via"
+            android:inputType="number"
+            android:maxEms="6"
+        />
 
-        <LinearLayout
-                android:id="@+id/comunidad_number_sufix_edit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:imeOptions="actionNext"
-                android:layout_below="@+id/comunidad_nombre_via_editT">
+        <EditText
+            android:id="@+id/comunidad_sufijo_numero_editT"
+            style="@style/textBase.editField"
+            android:hint="@string/sufijo_numero_en_via_hint"
+            android:inputType="textNoSuggestions"
+            android:maxEms="6"
+        />
+    </LinearLayout>
 
-            <EditText
-                    android:id="@+id/comunidad_numero_editT"
-                    style="@style/textBase.editField"
-                    android:inputType="number"
-                    android:maxEms="6"
-                    android:hint="@string/numero_en_via"
-                    />
+    <Spinner
+        android:id="@+id/autonoma_comunidad_spinner"
+        style="@style/spinnerBase"
+    />
 
-            <EditText
-                    android:id="@+id/comunidad_sufijo_numero_editT"
-                    style="@style/textBase.editField"
-                    android:inputType="textNoSuggestions"
-                    android:maxEms="6"
-                    android:hint="@string/sufijo_numero_en_via_hint"
-                    />
-        </LinearLayout>
+    <Spinner
+        android:id="@+id/provincia_spinner"
+        style="@style/spinnerBase"
+    />
 
-        <Spinner
-                android:id="@+id/autonoma_comunidad_spinner"
-                style="@style/spinnerBase"
-                android:layout_below="@+id/comunidad_number_sufix_edit"/>
-
-        <Spinner
-                android:id="@+id/provincia_spinner"
-                style="@style/spinnerBase"
-                android:layout_below="@+id/autonoma_comunidad_spinner"/>
-
-        <Spinner
-                android:id="@+id/municipio_spinner"
-                style="@style/spinnerBase"
-                android:layout_below="@+id/provincia_spinner"/>
-    </RelativeLayout>
-</ScrollView>
-
-<!-- <Spinner
-                android:id="@+id/municipio_spinner"
-                style="@style/spinnerBase"
-                android:gravity="start|center_vertical"
-                android:dropDownWidth="200dp"
-                android:layout_below="@+id/provincia_spinner"/>
-                -->
+    <Spinner
+        android:id="@+id/municipio_spinner"
+        style="@style/spinnerBase"
+    />
+</LinearLayout>

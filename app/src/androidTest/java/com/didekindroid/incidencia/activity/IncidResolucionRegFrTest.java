@@ -10,7 +10,6 @@ import android.widget.DatePicker;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.utils.UIutils;
-import com.didekindroid.incidencia.testutils.IncidenciaTestUtils;
 import com.didekindroid.usuario.testutils.CleanUserEnum;
 
 import org.junit.Test;

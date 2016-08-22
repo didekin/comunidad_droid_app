@@ -113,7 +113,7 @@ public class GcmIncidResolucinOpenNotifTest extends GcmIncidNotificationTest {
 
             checkNavigateUp();
             // Verificamos que se muestran los datos de búsqueda de comunidad.
-            onView(withId(R.id.comu_search_ac_layout)).check(matches(isDisplayed()));
+            onView(withId(R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));
         }
     }
 
@@ -144,7 +144,7 @@ public class GcmIncidResolucinOpenNotifTest extends GcmIncidNotificationTest {
 
             onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed())).perform(pressBack());
             // Verificamos que se muestran los datos de búsqueda de comunidad.
-            onView(withId(R.id.comu_search_ac_layout)).check(matches(isDisplayed()));
+            onView(withId(R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));
         }
     }
 

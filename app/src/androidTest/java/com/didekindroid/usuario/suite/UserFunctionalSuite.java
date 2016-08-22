@@ -3,7 +3,6 @@ package com.didekindroid.usuario.suite;
 import com.didekindroid.usuario.activity.ComuDataAcTest;
 import com.didekindroid.usuario.activity.ComuSearchAcTest_1;
 import com.didekindroid.usuario.activity.ComuSearchAcTest_2;
-import com.didekindroid.usuario.activity.ComuSearchAcTest_3;
 import com.didekindroid.usuario.activity.ComuSearchAcTest_intent;
 import com.didekindroid.usuario.activity.ComuSearchAcTest_spinner;
 import com.didekindroid.usuario.activity.ComuSearchResultsAcTest_1;
@@ -35,13 +34,13 @@ import org.junit.runners.Suite;
  * Date: 20/08/15
  * Time: 09:49
  */
+@SuppressWarnings("EmptyClass")
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         ComuDataAcTest.class,
         ComuSearchAcTest_1.class,
         ComuSearchAcTest_2.class,
-        ComuSearchAcTest_3.class,
-        ComuSearchAcTest_intent.class, // Falla en api 18.
+        ComuSearchAcTest_intent.class,
         ComuSearchAcTest_spinner.class,
         ComuSearchResultsAcTest_1.class,
         ComuSearchResultsAcTest_intent_1.class,
@@ -59,7 +58,7 @@ import org.junit.runners.Suite;
         RegUserComuAcTest.class,
         RegUserComuAcTest_intent.class,
         SeeUserComuByComuAcTest.class,
-        SeeUserComuByUserAcTest.class,  // Fail.
+        SeeUserComuByUserAcTest.class,
         UserComuDataAcTest_1.class,
         UserComuDataAcTest_2.class,
         UserDataAcTest.class

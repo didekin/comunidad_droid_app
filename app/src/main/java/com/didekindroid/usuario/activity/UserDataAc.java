@@ -1,6 +1,5 @@
 package com.didekindroid.usuario.activity;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -42,6 +41,7 @@ import static com.google.common.base.Preconditions.checkState;
  * Postconditions:
  * 1. Regitered user with modified data. Once done, it goes to SeeUserComuByUserAc.
  */
+@SuppressWarnings("ConstantConditions")
 public class UserDataAc extends AppCompatActivity {
 
     private static final String TAG = UserDataAc.class.getCanonicalName();
@@ -49,7 +49,6 @@ public class UserDataAc extends AppCompatActivity {
     private View mAcView;
     private Usuario mOldUser;
 
-    @SuppressLint("InflateParams")
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {

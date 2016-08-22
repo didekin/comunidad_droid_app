@@ -12,6 +12,7 @@ import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.testutils.ActivityTestUtils;
+import com.didekindroid.usuario.activity.utils.RolCheckBox;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
 
@@ -39,6 +40,7 @@ import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUser
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_TRAV_PLAZUELA_PEPE;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.typeComunidadData;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.typeRegUserComuData;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -189,16 +191,9 @@ public class RegComuAndUserComuAcTest {
         activity = mActivityRule.launchActivity(new Intent());
 
         typeComunidadData();
-
-        onView(withId(R.id.reg_usercomu_portal_ed)).perform(typeText("port2"));
-        onView(withId(R.id.reg_usercomu_escalera_ed)).perform(typeText("escale_b"));
-        onView(withId(R.id.reg_usercomu_planta_ed)).perform(typeText("planta-N"));
-        onView(withId(R.id.reg_usercomu_puerta_ed)).perform(typeText("puerta5"), closeSoftKeyboard());
-        onView(withId(R.id.reg_usercomu_checbox_pre)).perform(scrollTo(), click());
-        onView(withId(R.id.reg_usercomu_checbox_admin)).perform(scrollTo(), click());
-        onView(withId(R.id.reg_usercomu_checbox_inq)).perform(scrollTo(), click());
+        typeRegUserComuData("port2","escale_b","planta-N","puerta5", RolCheckBox.PRE,RolCheckBox.ADM, RolCheckBox.INQ);
 
         onView(withId(R.id.reg_comu_usuariocomunidad_button)).perform(scrollTo(), click());
-        onView(withId(R.id.see_usercomu_by_user_ac_frg_container)).check(matches(isDisplayed()));
+        onView(withId(R.id.see_usercomu_by_user_frg)).check(matches(isDisplayed()));
     }
 }

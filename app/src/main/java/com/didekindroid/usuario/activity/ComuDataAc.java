@@ -132,8 +132,10 @@ public class ComuDataAc extends Activity implements RegComuFr.RegComuFrListener 
         if (!isTipoViaSpinnerSet) {
             Log.d(TAG, "onTipoViaSpinnerLoaded(): spinner not set");
             int position = 0;
+            Cursor cursor;
             for (int i = 0; i < mRegComuFrg.mTipoViaSpinner.getCount(); i++) {
-                if (mRegComuFrg.mTipoViaSpinner.getItemAtPosition(i).equals(mComunidad.getTipoVia())) {
+                cursor = (Cursor) mRegComuFrg.mTipoViaSpinner.getItemAtPosition(i);
+                if (cursor.getString(1).equals(mComunidad.getTipoVia())) {
                     position = i;
                 }
             }
@@ -282,7 +284,6 @@ public class ComuDataAc extends Activity implements RegComuFr.RegComuFrListener 
         }
     }
 
-    // TODO: to persist the task during restarts and properly cancel the task when the activity is destroyed. (Example in Shelves)
     class ComuDataModifier extends AsyncTask<Comunidad, Void, Integer> {
 
         final String TAG = ComuDataModifier.class.getCanonicalName();

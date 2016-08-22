@@ -23,7 +23,6 @@ public final class UserAndComuFiller {
 
     public static UsuarioBean makeUserBeanFromRegUserFrView(View usuarioRegView)
     {
-
         return new UsuarioBean(
                 ((EditText) usuarioRegView.findViewById(R.id.reg_usuario_email_editT)).getText()
                         .toString(),
@@ -62,7 +61,6 @@ public final class UserAndComuFiller {
     public static UsuarioComunidadBean makeUserComuBeanFromView(View usuarioComunidadRegView
             , ComunidadBean comunidadBean, UsuarioBean usuarioBean)
     {
-
         return new UsuarioComunidadBean(
                 comunidadBean,
                 usuarioBean,

@@ -66,7 +66,7 @@ public class UIutilsTest extends TestCase {
             assertThat(formatTimeStampToString(timestamp), is("12 feb. 2016"));
         }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M && Locale.getDefault().equals(SPAIN_LOCALE)) {
-            assertThat(formatTimeStampToString(timestamp), is("12/2/2016"));
+            assertThat(formatTimeStampToString(timestamp), is("12/02/2016"));
         }
 
         if (Locale.getDefault().equals(Locale.ENGLISH)) {
@@ -101,7 +101,7 @@ public class UIutilsTest extends TestCase {
         }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             formatTime = DateFormat.getDateInstance(DateFormat.MEDIUM, SPAIN_LOCALE).format(timestamp);
-            assertThat(formatTime, is("12/2/2016"));
+            assertThat(formatTime, is("12/02/2016"));
         }
 
         formatTime = DateFormat.getDateInstance(DateFormat.LONG, Locale.ENGLISH).format(timestamp);

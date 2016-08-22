@@ -11,35 +11,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.CursorAdapter;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 
 import com.didekin.usuario.dominio.Municipio;
 import com.didekin.usuario.dominio.Provincia;
 import com.didekindroid.R;
-import com.didekindroid.common.utils.IoHelper;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.repository.UsuarioDataDbHelper;
-
-import java.util.List;
 
 import static com.didekindroid.usuario.repository.UsuarioDataDb.ComunidadAutonoma.cu_nombre;
 import static com.didekindroid.usuario.repository.UsuarioDataDb.Municipio.mu_nombre;
 import static com.didekindroid.usuario.repository.UsuarioDataDb.Provincia.pr_nombre;
+import static com.didekindroid.usuario.repository.UsuarioDataDb.TipoVia.tipovia;
 
 public class RegComuFr extends Fragment {
 
     private static final String TAG = RegComuFr.class.getCanonicalName();
-
-    private static final String CA_POINTER_POS = RegComuFr.class.getSimpleName().concat(".mCApointer");
-    private static final String PROV_POINTER_POS =
-            RegComuFr.class.getSimpleName().concat(".mProvinciaPointer");
-    private static final String MUNI_POINTER_POS =
-            RegComuFr.class.getSimpleName().concat(".mMunicipioPointer");
-    private static final String TIPO_VIA_POINTER_POS =
-            RegComuFr.class.getSimpleName().concat(".mTipoViaPointer");
 
     private UsuarioDataDbHelper dbHelper;
 
@@ -74,13 +64,6 @@ public class RegComuFr extends Fragment {
     {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate()");
-
-        if (savedInstanceState != null) {
-            mCApointer = savedInstanceState.getInt(CA_POINTER_POS);
-            mProvinciaPointer = savedInstanceState.getInt(PROV_POINTER_POS);
-            mMunicipioPointer = savedInstanceState.getInt(MUNI_POINTER_POS);
-            mTipoViaPointer = savedInstanceState.getInt(TIPO_VIA_POINTER_POS);
-        }
     }
 
     @Override
@@ -100,13 +83,13 @@ public class RegComuFr extends Fragment {
         Log.d(TAG, "onActivityCreated()");
 
         dbHelper = new UsuarioDataDbHelper(getActivity());
-        new TipoViaSpinnerSetter().execute();
-        new CAutonomaSpinnerSetter().execute();
+        // Asynchronous call: initialize database if necessary.
+        new TipoViaComuAutoSpinnersSetter().execute();
 
         mTipoViaSpinner = (Spinner) getView().findViewById(R.id.tipo_via_spinner);
-        mTipoViaSpinner.setFocusable(true);
-        mTipoViaSpinner.setFocusableInTouchMode(true);
-        mTipoViaSpinner.requestFocus();
+//        mTipoViaSpinner.setFocusable(true);
+//        mTipoViaSpinner.setFocusableInTouchMode(true);
+//        mTipoViaSpinner.requestFocus();
         mAutonomaComuSpinner = (Spinner) getView().findViewById(R.id.autonoma_comunidad_spinner);
         provinciaSpinner = (Spinner) getView().findViewById(R.id.provincia_spinner);
         municipioSpinner = (Spinner) getView().findViewById(R.id.municipio_spinner);
@@ -119,7 +102,7 @@ public class RegComuFr extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
                 Log.d(TAG, "In mTipoViaSpinner.setOnItemSelectedListener, onItemSelected()");
-                comunidadBean.setTipoVia(parent.getItemAtPosition(position).toString());
+                comunidadBean.setTipoVia(((Cursor) parent.getItemAtPosition(position)).getString(1));
                 mTipoViaPointer = position;
             }
 
@@ -193,11 +176,14 @@ public class RegComuFr extends Fragment {
     {
         Log.d(TAG, "onSaveInstanceState()");
         super.onSaveInstanceState(outState);
+    }
 
-        outState.putInt(CA_POINTER_POS, mCApointer);
-        outState.putInt(PROV_POINTER_POS, mProvinciaPointer);
-        outState.putInt(MUNI_POINTER_POS, mMunicipioPointer);
-        outState.putInt(TIPO_VIA_POINTER_POS, mTipoViaPointer);
+    @Override
+    public void onStop()
+    {
+        Log.d(TAG, "onStop()");
+        dbHelper.close();
+        super.onStop();
     }
 
     @Override
@@ -208,8 +194,6 @@ public class RegComuFr extends Fragment {
         if (mActivityListener != null) {
             mActivityListener.onDestroyFragment();
         }
-        // TODO: mover el close to onStop.
-        dbHelper.close();
         mRegComunidadFrView = null;
         super.onDestroy();
     }
@@ -252,7 +236,7 @@ public class RegComuFr extends Fragment {
 //                               SPINNERS
 //  --------------------------------------------------------------------
 
-    private SimpleCursorAdapter doAdapterSpinner(Cursor cursor, String[] fromColDB)
+    private SpinnerAdapter doAdapterSpinner(Cursor cursor, String[] fromColDB)
     {
         Log.d(TAG, "In doAdapterSpinner()");
 
@@ -266,59 +250,35 @@ public class RegComuFr extends Fragment {
                 0);
     }
 
-///    ::::::::::::::: TIPO DE VÍA ::::::::::::::::
+///    ::::::::::::::: TIPO DE VÍA - COMUNIDAD AUTONOMA ::::::::::::::::
 
-    class TipoViaSpinnerSetter extends AsyncTask<Void, Void, List<String>> {
+    class TipoViaComuAutoSpinnersSetter extends AsyncTask<Void, Void, Void> {
+
+        Cursor tipoViaCursor;
+        Cursor comunidadAutonomaCursor;
 
         @Override
-        protected List<String> doInBackground(Void... params)
+        protected Void doInBackground(Void... params)
         {
-            Log.d(TAG, "In TipoViaSpinnerSetter.doInBackground()");
-
-            List<String> tiposVia = IoHelper.doArrayFromFile(RegComuFr.this.getActivity());
-            tiposVia.add(0, getResources().getString(R.string.tipo_via_spinner));
-            return tiposVia;
+            Log.d(TAG, "In TipoViaComuAutoSpinnersSetter.doInBackground()");
+            tipoViaCursor = dbHelper.doTipoViaCursor();
+            comunidadAutonomaCursor = dbHelper.doComunidadesCursor();
+            return null;
         }
 
         @Override
-        protected void onPostExecute(List<String> tiposViaList)
+        protected void onPostExecute(Void aVoid)
         {
-            Log.d(TAG, "In TipoViaSpinnerSetter.onPostExecute()");
+            Log.d(TAG, "In TipoViaComuAutoSpinnersSetter.onPostExecute()");
 
-            ArrayAdapter<String> tiposViaAdapter = new ArrayAdapter<>(
-                    getActivity(),
-                    R.layout.app_spinner_1_dropdown_item,
-                    tiposViaList);
+            String[] fromColumnDb = new String[]{tipovia};
+            mTipoViaSpinner.setAdapter(doAdapterSpinner(tipoViaCursor, fromColumnDb));
 
-            tiposViaAdapter.setDropDownViewResource(R.layout.app_spinner_1_dropdown_item);
-            mTipoViaSpinner.setAdapter(tiposViaAdapter);
+            fromColumnDb = new String[]{cu_nombre};
+            mAutonomaComuSpinner.setAdapter(doAdapterSpinner(comunidadAutonomaCursor, fromColumnDb));
 
             if (mActivityListener != null) {
                 mActivityListener.onTipoViaSpinnerLoaded();
-            }
-        }
-    }
-
-///    :::::::::::::::: COMUNIDAD_INTENT AUTONOMA :::::::::::::::
-
-    class CAutonomaSpinnerSetter extends AsyncTask<Void, Void, Cursor> {
-
-        @Override
-        protected Cursor doInBackground(Void... params)
-        {
-            Log.d(TAG, "In CAutonomaSpinnerSetter.doInBackground()");
-            return dbHelper.doComunidadesCursor();
-        }
-
-        @Override
-        protected void onPostExecute(Cursor comunidadesCursor)
-        {
-            Log.d(TAG, "In CAutonomaSpinnerSetter.onPostExecute()");
-
-            String[] fromColDb = new String[]{cu_nombre};
-            mAutonomaComuSpinner.setAdapter(doAdapterSpinner(comunidadesCursor, fromColDb));
-
-            if (mActivityListener != null) {
                 mActivityListener.onCAutonomaSpinnerLoaded();
             }
         }

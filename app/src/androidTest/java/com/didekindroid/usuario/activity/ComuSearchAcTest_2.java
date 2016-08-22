@@ -2,7 +2,6 @@ package com.didekindroid.usuario.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.action.ViewActions;
 import android.support.test.rule.ActivityTestRule;
@@ -11,8 +10,6 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.usuario.testutils.CleanUserEnum;
-
-import junit.framework.AssertionFailedError;
 
 import org.junit.After;
 import org.junit.Before;
@@ -25,9 +22,7 @@ import java.io.File;
 import java.io.IOException;
 
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -36,16 +31,9 @@ import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTe
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
-import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeComunidadBeanFromView;
-import static com.didekindroid.usuario.testutils.UserMenuTestUtils.LOGIN_AC;
-import static com.didekindroid.usuario.testutils.UserMenuTestUtils.REG_COMU_USER_USERCOMU_AC;
-import static com.didekindroid.usuario.testutils.UserMenuTestUtils.SEE_USERCOMU_BY_USER_AC;
-import static com.didekindroid.usuario.testutils.UserMenuTestUtils.USER_DATA_AC;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_JUAN;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.typeComunidadData;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -108,31 +96,9 @@ public class ComuSearchAcTest_2 {
         typeComunidadData();
         onView(withId(R.id.searchComunidad_Bton)).perform(ViewActions.click());
         // Check the view for comunidades list fragment.
-        onView(withId(R.id.comu_search_results_ac_one_pane_frg_container)).check(matches(isDisplayed()));
         onView(withId(R.id.comu_list_frg)).check(matches(isDisplayed()));
 
         whatClean = CleanUserEnum.CLEAN_JUAN;
-    }
-
-    @Test
-    public void testGetDatosUsuarioNoToken() throws InterruptedException
-    {
-        assertThat(refreshTkFile.exists(), is(false));
-        activity = mActivityRule.launchActivity(new Intent());
-        assertThat(isRegisteredUser(activity), is(false));
-        USER_DATA_AC.checkMenuItem_NTk(activity);
-    }
-
-    @Test
-    public void testGetDatosUsuarioWithToken() throws InterruptedException, UiException, IOException
-    {
-        whatClean = CleanUserEnum.CLEAN_JUAN;
-
-        //With token.
-        signUpAndUpdateTk(COMU_REAL_JUAN);
-        activity = mActivityRule.launchActivity(new Intent());
-        assertThat(isRegisteredUser(activity), is(true));
-        USER_DATA_AC.checkMenuItem_WTk(activity);
     }
 
     @After

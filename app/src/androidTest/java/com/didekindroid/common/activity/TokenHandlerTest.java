@@ -10,7 +10,6 @@ import com.didekindroid.common.testutils.ActivityTestUtils;
 import com.google.common.cache.Cache;
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

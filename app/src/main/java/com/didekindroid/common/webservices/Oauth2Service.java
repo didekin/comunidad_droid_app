@@ -30,11 +30,11 @@ import static com.didekindroid.DidekindroidApp.getJksResourceId;
  * Date: 07/09/15
  * Time: 10:52
  */
-public class Oauth2Service implements Oauth2EndPoints {
+public final class Oauth2Service implements Oauth2EndPoints {
 
     private static final String TAG = Oauth2Service.class.getCanonicalName();
 
-    public static final RetrofitHandler retrofitHandler = new RetrofitHandler(getBaseURL(), new JksInAndroidApp(getJksPassword(), getJksResourceId()), getHttpTimeOut());
+    private static final RetrofitHandler retrofitHandler = new RetrofitHandler(getBaseURL(), new JksInAndroidApp(getJksPassword(), getJksResourceId()), getHttpTimeOut());
     public static final Oauth2Service Oauth2 = new Oauth2Service();
     private final Oauth2EndPoints endPoint;
 

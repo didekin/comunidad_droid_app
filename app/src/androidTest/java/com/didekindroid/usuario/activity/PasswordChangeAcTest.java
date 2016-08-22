@@ -7,7 +7,6 @@ import com.didekin.oauth2.OauthToken.AccessToken;
 import com.didekin.usuario.dominio.Usuario;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
-import com.didekindroid.common.testutils.ActivityTestUtils;
 import com.didekindroid.usuario.testutils.CleanUserEnum;
 
 import org.junit.After;
@@ -28,6 +27,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withHint;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.activity.TokenHandler.TKhandler;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkNavigateUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOneUser;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
@@ -94,6 +94,8 @@ public class PasswordChangeAcTest {
         assertThat(mActivity, notNullValue());
         assertThat(isRegisteredUser(mActivity), is(true));
 
+        onView(withId(R.id.password_change_ac_layout)).check(matches(isDisplayed()));
+
         onView(withId(R.id.reg_usuario_password_ediT)).check(matches(withText(containsString(""))))
                 .check(matches(withHint(R.string.usuario_password_hint)))
                 .check(matches(isDisplayed()));
@@ -104,7 +106,7 @@ public class PasswordChangeAcTest {
                 .check(matches(isDisplayed()));
 
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
-        ActivityTestUtils.checkNavigateUp();
+        checkNavigateUp();
     }
 
     @Test
@@ -115,7 +117,8 @@ public class PasswordChangeAcTest {
         onView(withId(R.id.password_change_ac_button)).check(matches(isDisplayed())).perform(click());
 
         checkToastInTest(R.string.error_validation_msg, mActivity, R.string.password_different);
-        Thread.sleep(3000);
+        // Se queda en la misma actividad.
+        onView(withId(R.id.password_change_ac_layout)).check(matches(isDisplayed()));
     }
 
     @Test

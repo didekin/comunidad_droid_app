@@ -14,13 +14,15 @@
         <item name="android:textSize">@dimen/text_decription_widget</item>
     </style>
 
-    <style name="optionMenuTextLarge" parent="TextAppearance.AppCompat.Light.Widget.PopupMenu.Large">
+    <style name="optionMenuTextLarge"
+           parent="TextAppearance.AppCompat.Light.Widget.PopupMenu.Large">
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">?attr/colorPrimaryDark</item>
         <item name="android:textStyle">normal</item>
     </style>
 
-    <style name="optionMenuTextSmall" parent="TextAppearance.AppCompat.Light.Widget.PopupMenu.Small">
+    <style name="optionMenuTextSmall"
+           parent="TextAppearance.AppCompat.Light.Widget.PopupMenu.Small">
         <item name="android:textSize">@dimen/text_hint_size</item>
         <item name="android:textColor">?attr/colorPrimaryDark</item>
     </style>
@@ -53,7 +55,7 @@
         <item name="android:textSize">@dimen/text_hint_size</item>
         <item name="android:textStyle">normal</item>
         <item name="android:imeOptions">actionNext</item>
-        <item name="android:textColor">@color/black</item>
+        <item name="android:textColor">?attr/android:textColorPrimary</item>
     </style>
 
     <style name="textBase.editField.email">
@@ -98,16 +100,28 @@
         <item name="android:scrollbars">vertical</item>
     </style>
 
+    <style name="baseLayout.withPadding">
+        <item name="android:padding">2dp</item>
+    </style>
+
     <!-- ................... Lists ............. -->
+    <style name="basicList">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:divider">?attr/colorPrimaryDark</item>
+        <item name="android:dividerHeight">@dimen/divider_heigth</item>
+        <item name="android:padding">@dimen/list_padding</item>
+    </style>
+
+    <style name="baseLayout.listItem">
+        <item name="android:padding">@dimen/item_list_padding</item>
+    </style>
+
     <style name="textBase.textPageLabel2.no_item_list_message">
         <item name="android:layout_gravity">center_horizontal</item>
         <item name="android:padding">15dp</item>
     </style>
 
-    <style name="baseLayout.paddingList">
-        <!-- TODO: incluir valores en dimensiones.-->
-        <item name="android:padding">4dp</item>
-    </style>
     <!-- ................ Spinners ............. -->
     <style name="spinnerBase">
         <item name="android:layout_width">wrap_content</item>
@@ -140,7 +154,7 @@
     <style name="textBase.ListLabelColor">
         <item name="android:textSize">@dimen/text_rotulo_list</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/purple_900</item>
+        <item name="android:textColor">?attr/colorPrimaryDark</item>
         <item name="android:layout_marginBottom">@dimen/vertical_margin</item>
     </style>
 
@@ -153,12 +167,12 @@
         <item name="android:textSize">@dimen/text_rotulo_fragment</item>
         <item name="android:layout_marginTop">@dimen/vertical_margin</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/purple_900</item>
+        <item name="android:textColor">?attr/colorPrimaryDark</item>
     </style>
 
     <style name="textBase.activityLink1">
         <item name="android:textSize">@dimen/text_hint_size</item>
-        <item name="android:textColor">@color/deep_orange_600</item>
+        <item name="android:textColor">?attr/colorAccent</item>
         <item name="android:textStyle">bold</item>
     </style>
 

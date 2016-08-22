@@ -122,9 +122,9 @@ public class ComuDataAcTest {
                 .check(matches(withText(is(mComunidad.getSufijoNumero()))))
                 .check(matches(isDisplayed()));
 
-        onView(withId(R.id.tipo_via_spinner)).check(matches(withSpinnerText(mComunidad.getTipoVia())))
-                .check(matches(isDisplayed()));
         assertThat(mActivity.mRegComuFrg.getComunidadBean().getTipoVia(), is(mComunidad.getTipoVia()));
+        onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.tipo_via_spinner))))
+                .check(matches(withText(is(mComunidad.getTipoVia())))).check(matches(isDisplayed()));
 
         onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.autonoma_comunidad_spinner))))
                 .check(matches(withText(is("Galicia")))).check(matches(isDisplayed()));
@@ -157,7 +157,7 @@ public class ComuDataAcTest {
         onData(withRowString(3, "Ènova, l'")).perform(click());
 
         onView(withId(R.id.comu_data_ac_button)).check(matches(isDisplayed())).perform(click());
-        onView(withId(R.id.see_usercomu_by_user_ac_frg_container)).check(matches(isDisplayed()));
+        onView(withId(R.id.see_usercomu_by_user_frg)).check(matches(isDisplayed()));
 
         Comunidad comunidadDb = ServOne.getComuData(mComunidad.getC_Id());
         assertThat(comunidadDb != null ? comunidadDb.getMunicipio() : null, is(new Municipio((short) 119, new Provincia((short) 46))));
@@ -170,7 +170,7 @@ public class ComuDataAcTest {
     public void testModifyComuData_2() throws UiException
     {
         onView(withId(R.id.comu_data_ac_button)).check(matches(isDisplayed())).perform(scrollTo(), click());
-        onView(withId(R.id.see_usercomu_by_user_ac_frg_container)).check(matches(isDisplayed())).perform(closeSoftKeyboard());
+        onView(withId(R.id.see_usercomu_by_user_frg)).check(matches(isDisplayed())).perform(closeSoftKeyboard());
 
         Comunidad comunidadDb = ServOne.getComuData(mComunidad.getC_Id());
         assertThat(comunidadDb != null ? comunidadDb.getMunicipio() : null, is(COMU_LA_PLAZUELA_5.getMunicipio()));

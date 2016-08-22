@@ -84,9 +84,6 @@ public class PasswordChangeAc extends AppCompatActivity {
         } else {
             new PasswordModifyer().execute(usuarioBean.getPassword());
         }
-
-        Intent intent = new Intent(this, UserDataAc.class);
-        startActivity(intent);
     }
 
     //    ============================================================
@@ -115,10 +112,13 @@ public class PasswordChangeAc extends AppCompatActivity {
         protected void onPostExecute(Integer passwordUpdate)
         {
             Log.d(TAG, "onPostExecute(): DONE");
-            if (uiException != null){
+            if (uiException != null) {
                 uiException.processMe(PasswordChangeAc.this, new Intent());
-            } else{checkState(passwordUpdate == 1);}
-
+            } else {
+                checkState(passwordUpdate == 1);
+                Intent intent = new Intent(PasswordChangeAc.this, UserDataAc.class);
+                startActivity(intent);
+            }
         }
     }
 }

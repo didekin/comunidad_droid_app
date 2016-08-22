@@ -32,9 +32,8 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.common.activity.TokenHandler.TKhandler;
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_SEARCH;
-import static com.didekindroid.common.activity.ViewsIDs.COMU_SEARCH_RESULTS;
+import static com.didekindroid.common.activity.TokenHandler.TKhandler;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkNavigateUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
@@ -75,7 +74,7 @@ public class ComuSearchResultsAcTest_1 {
     ComuSearchResultsListFr mComunidadSummaryFrg;
     ComuSearchResultsListAdapter adapter;
     Intent intent;
-    CleanUserEnum whatClean;
+    CleanUserEnum whatClean = CleanUserEnum.CLEAN_NOTHING;
 
     @Rule
     public ActivityTestRule<ComuSearchResultsAc> mActivityRule =
@@ -91,7 +90,6 @@ public class ComuSearchResultsAcTest_1 {
     public void getFixture() throws Exception
     {
         Log.d(TAG, "In getFixture()");
-        whatClean = CleanUserEnum.CLEAN_NOTHING;
         intent = new Intent();
         intent.putExtra(COMUNIDAD_SEARCH.key, COMU_LA_PLAZUELA_5);
     }
@@ -116,7 +114,6 @@ public class ComuSearchResultsAcTest_1 {
         // Inserto comunidades en DB.
         regTwoUserComuSameUser(makeListTwoUserComu());
         activity = mActivityRule.launchActivity(intent);
-        onView(withId(R.id.comu_search_results_ac_one_pane_frg_container)).check(matches(isDisplayed()));
         onView(withId(R.id.comu_list_frg)).check(matches(isDisplayed()));
     }
 
@@ -135,7 +132,7 @@ public class ComuSearchResultsAcTest_1 {
         adapter = (ComuSearchResultsListAdapter) mComunidadSummaryFrg.getListAdapter();
         assertThat(adapter.getCount(), is(1));
         Comunidad comunidad = (Comunidad) intent.getSerializableExtra(COMUNIDAD_SEARCH.key);
-        onView(withId(COMU_SEARCH_RESULTS.idView)).check(matches(
+        onView(withId(android.R.id.list)).check(matches(
                 withAdaptedData(Matchers.<Object>equalTo(comunidad))));
     }
 
@@ -162,9 +159,9 @@ public class ComuSearchResultsAcTest_1 {
         Thread.sleep(2000);
         adapter = (ComuSearchResultsListAdapter) mComunidadSummaryFrg.getListAdapter();
         assertThat(adapter.getCount(), is(2));
-        onView(withId(COMU_SEARCH_RESULTS.idView)).check(
+        onView(withId(android.R.id.list)).check(
                 matches(withAdaptedData(Matchers.<Object>is(comunidadNew))));
-        onView(withId(COMU_SEARCH_RESULTS.idView)).check(
+        onView(withId(android.R.id.list)).check(
                 matches(withAdaptedData(Matchers.<Object>is(COMU_LA_PLAZUELA_5))));
     }
 
@@ -317,7 +314,7 @@ public class ComuSearchResultsAcTest_1 {
         // Borramos la comunidad en BD.
         assertThat(ServOne.deleteUserComu(comunidad.getC_Id()), is(1));
         onData(is(comunidad)).perform(click());
-        onView(withId(R.id.comu_search_ac_layout)).check(matches(isDisplayed()));
+        onView(withId(R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));
         checkToastInTest(R.string.comunidad_not_found_message, activity);
     }
 

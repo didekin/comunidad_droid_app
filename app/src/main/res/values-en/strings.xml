@@ -44,7 +44,7 @@
     <!-- ============================= ACTIVITIES ============================= -->
     <!-- =============== IncidCommentRegAc ========= -->
     <string name="incid_comment_reg_ac_label">Comentar una incidencia</string>
-    <string name="incid_comment_ed_hint">----- Comentario (max. 250 caracteres) ----</string>
+    <string name="incid_comment_ed_hint"> ----- Comentario (max. 250 caracteres) ---- </string>
     <string name="incid_comment_ed_button_rot">Comentar</string>
     <string name="incid_comment_incidencia_rot">Incidencia:</string>
     <string name="incid_comment_label">Comentario</string>
@@ -91,8 +91,6 @@
     <string name="incid_resolucion_coste_prev_msg">Coste estimado</string>
     <!-- ====== IncidResolucionSeeDefaultFr ====== -->
     <string name="incid_resolucion_see_default_txt">No se ha iniciado aún el proceso de resolución</string>
-    <!-- =================== IncidSeeUserComuImportanciaFr ================== -->
-    <string name="incid_see_importancia_by_users_ac_label">Valoración incidencia</string>
     <!-- ===================== IncidSeeOpenByComuAc ===================== -->
     <string name="incid_see_by_user_ac_label">Tus incidencias</string>
     <string name="incid_apertura_rot">Apertura:</string>
@@ -102,7 +100,8 @@
     <string name="incid_comunidad_rot">Comunidad:</string>
     <string name="incid_incidencias_rot">Incidencias:</string>
     <string name="incid_ambito_rot">Ámbito:</string>
-    <string name="incid_see_resolucion_fecha_alta_label">Iniciada</string>
+    <string name="incid_see_resolucion_label">Resolución:</string>
+    <string name="incid_see_resolucion_fecha_alta_label">iniciada</string>
     <!-- ============ IncidSeeClosedByComuAc ========== -->
     <string name="incid_closed_by_user_ac_label">Incidencias cerradas</string>
     <!--******************************************************************************-->

@@ -1,7 +1,5 @@
 package com.didekindroid.common.webservices;
 
-import android.annotation.TargetApi;
-import android.os.Build;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Test;

@@ -23,6 +23,7 @@ import static com.didekindroid.usuario.repository.UsuarioDataDb.ComunidadAutonom
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -40,10 +41,21 @@ public class UsuarioDataDbHelperTest {
     @Before
     public void getFixture() throws Exception
     {
+        String dBFileName = "data/data/com.didekindroid/databases/".concat(UsuarioDataDbHelper.DB_NAME);
+        deleteDatabase(new File(dBFileName));
+
         context = DidekindroidApp.getContext();
         dbHelper = new UsuarioDataDbHelper(context);
-        Thread.sleep(2500);
-        database = dbHelper.getWritableDatabase();
+    }
+
+    @After
+    public void clearTables()
+    {
+        dbHelper.dropAllTables();
+        dbHelper.close();
+
+        String dBFileName = "data/data/com.didekindroid/databases/".concat(UsuarioDataDbHelper.DB_NAME);
+        deleteDatabase(new File(dBFileName));
     }
 
     @Test
@@ -51,20 +63,37 @@ public class UsuarioDataDbHelperTest {
     {
         assertThat(context, notNullValue());
         assertThat(dbHelper, notNullValue());
+        assertThat(database, nullValue());
+        checkNoRecords();
     }
 
     @Test
     public void testDropTables() throws Exception
     {
+        database = dbHelper.getWritableDatabase();
+        checkRecords();
+
         dbHelper.dropAllTables();
-        assertThat(dbHelper.mMunicipiosCounter, is(0));
-        assertThat(dbHelper.mComunidadesCounter, is(0));
-        assertThat(dbHelper.mProvinciasCounter, is(0));
+        checkNoRecords();
+    }
+
+    @Test
+    public void testGetTiposVia()
+    {
+        database = dbHelper.getReadableDatabase();
+        checkRecords();
+
+        List<String> tiposVia = dbHelper.getTiposVia();
+        assertThat(tiposVia.size() > 1, is(true));
+        assertThat(tiposVia, hasItems("tipo de vía", "Avenida", "Calle", "Ronda", "Carretera"));
     }
 
     @Test
     public void testGetComunidadesAu()
     {
+        database = dbHelper.getReadableDatabase();
+        checkRecords();
+
         List<ComunidadAutonoma> comunidades = dbHelper.getComunidadesAu();
         assertThat(comunidades.size(), is(NUMBER_RECORDS));
         ComunidadAutonoma comunidad1 = new ComunidadAutonoma((short) 8, "Castilla - La Mancha");
@@ -77,6 +106,9 @@ public class UsuarioDataDbHelperTest {
     @Test
     public void testGetProvincias()
     {
+        database = dbHelper.getReadableDatabase();
+        checkRecords();
+
         List<Provincia> provincias = dbHelper.getProvincias();
         assertThat(provincias.size(), is(UsuarioDataDb.Provincia.NUMBER_RECORDS));
         Provincia provincia1 = new Provincia((short) 12, "Castellón/Castelló");
@@ -89,6 +121,9 @@ public class UsuarioDataDbHelperTest {
     @Test
     public void testGetProvinciasByCA()
     {
+        database = dbHelper.getReadableDatabase();
+        checkRecords();
+
         SQLiteCursor cursor = (SQLiteCursor) dbHelper.getProvinciasByCA((short) 2);
         assertThat(cursor.getCount(), is(3));
         cursor = (SQLiteCursor) dbHelper.getProvinciasByCA((short) 1);
@@ -99,6 +134,9 @@ public class UsuarioDataDbHelperTest {
     @Test
     public void testGetMunicipiosByPrId()
     {
+        database = dbHelper.getReadableDatabase();
+        checkRecords();
+
         Cursor cursor = dbHelper.getMunicipiosByPrId((short) 1);
         assertThat(cursor.getCount(), is(51));
         assertThat(cursor.getColumnCount(), is(4));
@@ -108,12 +146,21 @@ public class UsuarioDataDbHelperTest {
         cursor.close();
     }
 
-    @After
-    public void clearTables()
+//    ================================ Private methods ====================================
+
+    private void checkRecords()
     {
-        dbHelper.dropAllTables();
-        dbHelper.close();
-        String dBFileName = "data/data/com.didekindroid/databases/".concat(UsuarioDataDbHelper.DB_NAME);
-        deleteDatabase(new File(dBFileName));
+        assertThat(dbHelper.mTipoViaCounter > 1, is(true));
+        assertThat(dbHelper.mMunicipiosCounter > 1, is(true));
+        assertThat(dbHelper.mComunidadesCounter, is(NUMBER_RECORDS));
+        assertThat(dbHelper.mProvinciasCounter, is(UsuarioDataDb.Provincia.NUMBER_RECORDS));
+    }
+
+    private void checkNoRecords()
+    {
+        assertThat(dbHelper.mTipoViaCounter, is(0));
+        assertThat(dbHelper.mMunicipiosCounter, is(0));
+        assertThat(dbHelper.mComunidadesCounter, is(0));
+        assertThat(dbHelper.mProvinciasCounter, is(0));
     }
 }

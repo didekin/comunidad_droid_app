@@ -130,6 +130,7 @@ public final class IncidenciaTestUtils {
                 .importancia((short) 3).build();
         IncidenciaServ.regIncidImportancia(incidImportancia);
         Incidencia incidenciaDb = IncidenciaServ.seeIncidsOpenByComu(userComuDb.getComunidad().getC_Id()).get(0).getIncidencia();
+        //noinspection ConstantConditions
         incidImportancia = IncidenciaServ.seeIncidImportancia(incidenciaDb.getIncidenciaId()).getIncidImportancia();
         return incidImportancia;
     }

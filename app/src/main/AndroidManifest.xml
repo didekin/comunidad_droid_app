@@ -119,7 +119,8 @@
         <activity
             android:name=".usuario.activity.ComuSearchAc"
             android:label="@string/comu_search_ac_label"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -158,6 +159,7 @@
             android:name=".usuario.activity.RegComuAndUserAndUserComuAc"
             android:label="@string/reg_comunidad_ac_label"
             android:launchMode="singleTask"
+            android:windowSoftInputMode="stateHidden"
             android:parentActivityName=".usuario.activity.ComuSearchAc">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

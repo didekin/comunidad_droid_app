@@ -10,7 +10,6 @@ package com.didekindroid.common.activity;
  */
 public enum ViewsIDs {
 
-    COMU_SEARCH_RESULTS(-1323),
     SEE_USERCOMU_BY_COMU(-1325),
     SEE_USERCOMU_BY_USER(-1321),
     ;

@@ -211,7 +211,7 @@ public final class UIutils {
         View toastView = clickToast.getView();
         toastView.setBackgroundColor(ContextCompat.getColor(context, deep_purple_100));
         TextView textView = new TextView(context);
-        textView.setTextSize(context.getResources().getDimension(R.dimen.text_hint_size));
+        textView.setTextSize(context.getResources().getDimension(R.dimen.toast_text_size));
         textView.setText(toastMessage);
         textView.setTextColor(ContextCompat.getColor(context, R.color.black));
         ((ViewGroup) toastView).removeAllViews();

@@ -52,6 +52,7 @@ import static org.junit.Assert.assertThat;
 /**
  * Tests sin comentarios registrados.
  */
+@SuppressWarnings("ConstantConditions")
 @RunWith(AndroidJUnit4.class)
 public class IncidCommentSeeAcTest_2 {
 

@@ -6,11 +6,8 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.usuario.testutils.CleanUserEnum;
-
-import junit.framework.AssertionFailedError;
 
 import org.junit.After;
 import org.junit.Before;
@@ -22,19 +19,11 @@ import org.junit.runner.RunWith;
 import java.io.File;
 import java.io.IOException;
 
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
-import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.common.activity.TokenHandler.TKhandler;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
-import static com.didekindroid.usuario.testutils.UserMenuTestUtils.LOGIN_AC;
 import static com.didekindroid.usuario.testutils.UserMenuTestUtils.REG_COMU_USER_USERCOMU_AC;
-import static com.didekindroid.usuario.testutils.UserMenuTestUtils.SEE_USERCOMU_BY_USER_AC;
 import static com.didekindroid.usuario.testutils.UserMenuTestUtils.USER_DATA_AC;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_JUAN;
 import static org.hamcrest.CoreMatchers.is;

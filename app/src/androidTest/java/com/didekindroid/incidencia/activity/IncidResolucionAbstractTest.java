@@ -6,12 +6,10 @@ import android.support.v4.app.Fragment;
 import com.didekin.incidservice.dominio.IncidImportancia;
 import com.didekin.incidservice.dominio.Resolucion;
 import com.didekindroid.R;
-import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.utils.UIutils;
 import com.didekindroid.usuario.testutils.CleanUserEnum;
 
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -30,11 +28,8 @@ import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT
 import static com.didekindroid.common.activity.FragmentTags.incid_resolucion_ac_frgs_tag;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.utils.UIutils.SPAIN_LOCALE;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.COSTE_ESTIM_DEFAULT;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.COSTE_ESTIM_DEFAULT_String;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.RESOLUCION_DEFAULT_DESC;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doResolucion;
-import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;

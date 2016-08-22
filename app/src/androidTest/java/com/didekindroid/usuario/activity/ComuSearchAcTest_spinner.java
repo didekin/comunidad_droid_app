@@ -33,6 +33,8 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class ComuSearchAcTest_spinner {
 
+    // TODO: internacionalizar textos.
+
     private ComuSearchAc activity;
 
     @Rule
@@ -57,6 +59,12 @@ public class ComuSearchAcTest_spinner {
         onView(withId(R.id.autonoma_comunidad_spinner)).check(matches(isDisplayed()));
         onView(withId(R.id.provincia_spinner)).check(matches(isDisplayed()));
         onView(withId(R.id.municipio_spinner)).check(matches(isDisplayed()));
+
+        assertThat(regComuFr.getComunidadBean().getTipoVia(), is(activity.getResources().getString(R.string.tipo_via_spinner)));
+        onView(allOf(
+                withId(R.id.app_spinner_1_dropdown_item),
+                withParent(withId(R.id.tipo_via_spinner))
+        )).check(matches(withText(is(activity.getResources().getString(R.string.tipo_via_spinner))))).check(matches(isDisplayed()));
 
         onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.autonoma_comunidad_spinner))))
                 .check(matches(withText(is("comunidad autónoma")))).check(matches(isDisplayed()));

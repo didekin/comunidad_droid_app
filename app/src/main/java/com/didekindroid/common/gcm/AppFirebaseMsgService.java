@@ -26,8 +26,8 @@ import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static com.didekin.common.gcm.GcmKeyValueData.type_message_key;
 import static com.didekin.incidservice.gcm.GcmKeyValueIncidData.comunidadId_key;
-import static com.didekin.incidservice.gcm.GcmKeyValueIncidData.incidencia_open_type;
 import static com.didekin.incidservice.gcm.GcmKeyValueIncidData.incidencia_closed_type;
+import static com.didekin.incidservice.gcm.GcmKeyValueIncidData.incidencia_open_type;
 import static com.didekin.incidservice.gcm.GcmKeyValueIncidData.resolucion_open_type;
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
 

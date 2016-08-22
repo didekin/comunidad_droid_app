@@ -1,25 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            style="@style/baseLayout.scroll">
+<android.support.design.widget.CoordinatorLayout
+    android:id="@+id/comu_data_ac_coordinatorlayout"
+    style="@style/baseLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fitsSystemWindows="true">
 
-    <LinearLayout xmlns:tools="http://schemas.android.com/tools"
-                    android:id="@+id/comu_data_ac_layout"
-                    style="@style/baseLayout"
-                    tools:context="com.didekindroid.usuario.activity.ComuDataAc">
+    <include layout="@layout/appbar_include"/>
 
-        <fragment
+    <ScrollView style="@style/baseLayout.scroll">
+
+        <LinearLayout android:id="@+id/comu_data_ac_layout"
+                      style="@style/baseLayout"
+                      android:layout_marginTop="@dimen/app_bar_bottom_margin"
+                      xmlns:tools="http://schemas.android.com/tools"
+                      tools:context="com.didekindroid.usuario.activity.ComuDataAc">
+
+            <fragment
                 android:id="@+id/reg_comunidad_frg"
-                android:layout_height="match_parent"
-                android:layout_width="match_parent"
                 android:name="com.didekindroid.usuario.activity.RegComuFr"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 tools:layout="@layout/reg_comu_fr"/>
 
-        <Button
+            <Button
                 android:id="@+id/comu_data_ac_button"
                 style="@style/textBase.acButton1"
                 android:layout_gravity="center_horizontal"
                 android:text="@string/comu_data_ac_button_txt"
-                />
+            />
 
-    </LinearLayout>
-</ScrollView>
+        </LinearLayout>
+    </ScrollView>
+</android.support.design.widget.CoordinatorLayout>

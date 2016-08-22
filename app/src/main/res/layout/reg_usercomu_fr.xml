@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout android:id="@+id/reg_usuariocomunidad_layout"
-              style="@style/baseLayout"
+              style="@style/baseLayout.withPadding"
               xmlns:android="http://schemas.android.com/apk/res/android">
     <TextView
         android:id="@+id/reg_usercomu_vivienda_rot"
@@ -8,44 +8,46 @@
         android:text="@string/reg_usercomu_vivienda_rot"
     />
 
-    <EditText
-        android:id="@+id/reg_usercomu_portal_ed"
-        style="@style/textBase.editField"
-        android:hint="@string/reg_usercomu_portal_hint"
-        android:inputType="textCapWords"
-        android:maxEms="10"
-    />
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="horizontal">
+        <EditText
+            android:id="@+id/reg_usercomu_portal_ed"
+            style="@style/textBase.editField"
+            android:hint="@string/reg_usercomu_portal_hint"
+            android:inputType="textCapWords"
+            android:maxEms="10"
+        />
 
-    <EditText
-        android:id="@+id/reg_usercomu_escalera_ed"
-        style="@style/textBase.editField"
-        android:layout_marginTop="0dp"
-        android:hint="@string/reg_usercomu_escalera_hint"
-        android:inputType="textCapWords"
-        android:maxEms="10"
-    />
+        <EditText
+            android:id="@+id/reg_usercomu_escalera_ed"
+            style="@style/textBase.editField"
+            android:hint="@string/reg_usercomu_escalera_hint"
+            android:inputType="textCapWords"
+            android:maxEms="10"
+        />
 
-    <EditText
-        android:id="@+id/reg_usercomu_planta_ed"
-        style="@style/textBase.editField"
-        android:layout_marginTop="0dp"
-        android:hint="@string/reg_usercomu_planta_hint"
-        android:inputType="textCapWords"
-        android:maxEms="10"
-    />
+        <EditText
+            android:id="@+id/reg_usercomu_planta_ed"
+            style="@style/textBase.editField"
+            android:hint="@string/reg_usercomu_planta_hint"
+            android:inputType="textCapWords"
+            android:maxEms="10"
+        />
 
-    <EditText
-        android:id="@+id/reg_usercomu_puerta_ed"
-        style="@style/textBase.editField"
-        android:layout_marginTop="0dp"
-        android:hint="@string/reg_usercomu_puerta_hint"
-        android:inputType="textCapWords"
-        android:maxEms="10"
-    />
+        <EditText
+            android:id="@+id/reg_usercomu_puerta_ed"
+            style="@style/textBase.editField"
+            android:hint="@string/reg_usercomu_puerta_hint"
+            android:inputType="textCapWords"
+            android:maxEms="10"
+        />
+    </LinearLayout>
+
 
     <TextView
         android:id="@+id/reg_usercomu_roles_checkbox_rot"
-        style="@style/textBase.textFieldLabel1"
+        style="@style/textBase.textPageLabel2"
         android:text="@string/reg_usercomu_role_checkbox_rot"
     />
 
@@ -61,25 +63,20 @@
         <CheckBox
             android:id="@+id/reg_usercomu_checbox_admin"
             style="@style/textBase.textFieldLabel2"
-            android:layout_gravity="center_horizontal"
             android:text="@string/reg_usercomu_checbox_admin_rot"
         />
 
         <CheckBox
             android:id="@+id/reg_usercomu_checbox_pro"
             style="@style/textBase.textFieldLabel2"
-            android:layout_marginTop="0dp"
             android:text="@string/reg_usercomu_checbox_pro_rot"
         />
 
         <CheckBox
             android:id="@+id/reg_usercomu_checbox_inq"
             style="@style/textBase.textFieldLabel2"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="0dp"
             android:text="@string/reg_usercomu_checbox_inq_rot"
         />
     </GridLayout>
-
 
 </LinearLayout>

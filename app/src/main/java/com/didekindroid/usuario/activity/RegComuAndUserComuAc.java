@@ -28,12 +28,13 @@ import static com.google.common.base.Preconditions.checkState;
  * Preconditions:
  * 1. The user is registered with a different comunidad.
  */
+@SuppressWarnings("ConstantConditions")
 public class RegComuAndUserComuAc extends AppCompatActivity {
 
     private static final String TAG = RegComuAndUserComuAc.class.getCanonicalName();
 
-    RegComuFr mRegComuFrg;
-    RegUserComuFr mRegUserComuFrg;
+    private RegComuFr mRegComuFrg;
+    private RegUserComuFr mRegUserComuFrg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)

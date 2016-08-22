@@ -35,9 +35,9 @@ import static com.didekin.usuario.dominio.Rol.ADMINISTRADOR;
 import static com.didekin.usuario.dominio.Rol.INQUILINO;
 import static com.didekin.usuario.dominio.Rol.PRESIDENTE;
 import static com.didekin.usuario.dominio.Rol.PROPIETARIO;
-import static com.didekindroid.common.activity.TokenHandler.TKhandler;
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
 import static com.didekindroid.common.activity.BundleKey.USERCOMU_LIST_OBJECT;
+import static com.didekindroid.common.activity.TokenHandler.TKhandler;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
@@ -217,7 +217,7 @@ public class UserComuDataAcTest_1 {
         onView(withId(R.id.reg_usercomu_checbox_inq)).perform(click()).check(matches(isChecked()));
 
         onView(withId(R.id.usercomu_data_ac_modif_button)).perform(click());
-        onView(withId(R.id.see_usercomu_by_user_ac_frg_container)).check(matches(isDisplayed()));
+        onView(withId(R.id.see_usercomu_by_user_frg)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -226,7 +226,7 @@ public class UserComuDataAcTest_1 {
         whatToClean = CLEAN_NOTHING;
 
         onView(withId(R.id.usercomu_data_ac_delete_button)).perform(click());
-        onView(withId(R.id.comu_search_ac_layout)).check(matches(isDisplayed()));
+        onView(withId(R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));
         assertThat(TKhandler.getAccessTokenInCache(), nullValue());
         assertThat(TKhandler.getRefreshTokenFile().exists(), is(false));
         assertThat(isRegisteredUser(mActivity), is(false));

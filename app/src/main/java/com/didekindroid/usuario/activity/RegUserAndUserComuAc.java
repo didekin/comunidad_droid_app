@@ -27,9 +27,9 @@ import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
 
 import java.io.IOException;
 
-import static com.didekindroid.common.activity.TokenHandler.TKhandler;
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_LIST_OBJECT;
+import static com.didekindroid.common.activity.TokenHandler.TKhandler;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
@@ -62,6 +62,7 @@ import static com.google.common.base.Preconditions.checkState;
  * 1. A long comunidadId is passed as an intent key.
  * 2. The activity SeeUserComuByComuAc is started.
  */
+@SuppressWarnings("ConstantConditions")
 public class RegUserAndUserComuAc extends AppCompatActivity {
     private static final String TAG = RegComuAndUserAndUserComuAc.class.getCanonicalName();
 

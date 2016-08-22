@@ -43,7 +43,6 @@ import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdat
 import static com.didekindroid.common.testutils.ActivityTestUtils.updateSecurityData;
 import static com.didekindroid.incidencia.repository.IncidenciaDataDbHelperTest.DB_PATH;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidenciaUser;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidenciaUser;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_PEPE;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_JUAN;

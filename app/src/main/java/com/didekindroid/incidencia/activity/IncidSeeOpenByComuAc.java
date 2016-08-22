@@ -16,8 +16,6 @@ import com.didekin.incidservice.dominio.IncidenciaUser;
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
-import com.didekindroid.common.gcm.GcmRegistrationIntentService;
-import com.didekindroid.common.utils.UIutils;
 
 import java.util.List;
 
@@ -26,10 +24,8 @@ import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_LIST_INDEX;
 import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.common.activity.FragmentTags.incid_see_by_comu_list_fr_tag;
-import static com.didekindroid.common.utils.UIutils.checkPlayServices;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.getGcmToken;
-import static com.didekindroid.common.utils.UIutils.isGcmTokenSentServer;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_CLOSED_BY_COMU_AC;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_REG_AC;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;

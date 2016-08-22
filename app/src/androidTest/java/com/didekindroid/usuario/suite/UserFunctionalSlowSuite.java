@@ -18,6 +18,7 @@ import org.junit.runners.Suite;
  * Date: 16/10/15
  * Time: 18:13
  */
+@SuppressWarnings("EmptyClass")
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         ComuSearchAc_1_SlowTest.class,

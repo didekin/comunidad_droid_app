@@ -1,9 +1,9 @@
 package com.didekindroid.usuario.dominio;
 
-import com.didekin.usuario.dominio.Rol;
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekin.usuario.dominio.Municipio;
 import com.didekin.usuario.dominio.Provincia;
+import com.didekin.usuario.dominio.Rol;
 import com.didekin.usuario.dominio.Usuario;
 import com.didekin.usuario.dominio.UsuarioComunidad;
 

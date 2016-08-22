@@ -1,28 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    style="@style/baseLayout.scroll">
-
-    <LinearLayout
-        android:id="@+id/comu_search_ac_layout"
+<ScrollView style="@style/baseLayout.scroll">
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/comu_search_ac_coordinatorlayout"
         style="@style/baseLayout"
-        tools:context="com.didekindroid.usuario.activity.ComuSearchAc">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        >
 
         <include layout="@layout/appbar_include"/>
 
-        <fragment
-            android:id="@+id/reg_comunidad_frg"
-            android:name="com.didekindroid.usuario.activity.RegComuFr"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+        <LinearLayout
+            android:id="@+id/comu_search_ac_linearlayout"
+            style="@style/baseLayout"
             android:layout_marginTop="@dimen/app_bar_bottom_margin"
-            tools:layout="@layout/reg_comu_fr" />
+            tools:context="com.didekindroid.usuario.activity.ComuSearchAc">
 
-        <Button
-            android:id="@+id/searchComunidad_Bton"
-            style="@style/textBase.acButton1"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/search_button" />
+            <fragment
+                android:id="@+id/reg_comunidad_frg"
+                android:name="com.didekindroid.usuario.activity.RegComuFr"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:layout="@layout/reg_comu_fr"/>
 
-    </LinearLayout>
+            <Button
+                android:id="@+id/searchComunidad_Bton"
+                style="@style/textBase.acButton1"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/search_button"/>
+
+        </LinearLayout>
+
+    </android.support.design.widget.CoordinatorLayout>
 </ScrollView>

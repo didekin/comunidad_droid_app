@@ -12,8 +12,6 @@ import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.usuario.testutils.CleanUserEnum;
 
-import junit.framework.AssertionFailedError;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -25,24 +23,19 @@ import java.io.File;
 import java.io.IOException;
 
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.common.activity.TokenHandler.TKhandler;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
+import static com.didekindroid.common.testutils.ActivityTestUtils.cleanWithTkhandler;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeComunidadBeanFromView;
-import static com.didekindroid.usuario.testutils.UserMenuTestUtils.LOGIN_AC;
-import static com.didekindroid.usuario.testutils.UserMenuTestUtils.REG_COMU_USER_USERCOMU_AC;
-import static com.didekindroid.usuario.testutils.UserMenuTestUtils.SEE_USERCOMU_BY_USER_AC;
-import static com.didekindroid.usuario.testutils.UserMenuTestUtils.USER_DATA_AC;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_JUAN;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.typeComunidadData;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.validaTypedComunidadBean;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -61,7 +54,7 @@ public class ComuSearchAcTest_1 {
     private Resources resources;
     private RegComuFr regComuFr;
     File refreshTkFile;
-    CleanUserEnum whatClean;
+    CleanUserEnum whatClean = CleanUserEnum.CLEAN_NOTHING;
 
     @Rule
     public ActivityTestRule<ComuSearchAc> mActivityRule = new ActivityTestRule<>(ComuSearchAc.class, true, false);
@@ -78,7 +71,13 @@ public class ComuSearchAcTest_1 {
         context = InstrumentationRegistry.getTargetContext();
         refreshTkFile = TKhandler.getRefreshTokenFile();
         resources = context.getResources();
-        whatClean = CleanUserEnum.CLEAN_NOTHING;
+        cleanWithTkhandler();
+    }
+
+    @After
+    public void cleanData() throws UiException
+    {
+        cleanOptions(whatClean);
     }
 
     @Test
@@ -125,21 +124,10 @@ public class ComuSearchAcTest_1 {
         activity = mActivityRule.launchActivity(new Intent());
         regComuFr = (RegComuFr) activity.getFragmentManager().findFragmentById(R.id.reg_comunidad_frg);
 
-        // Valor por defecto del spinner.
-        assertThat(regComuFr.getComunidadBean().getTipoVia(), is(activity.getResources().getString(R.string
-                .tipo_via_spinner)));
-
         typeComunidadData();
 
         makeComunidadBeanFromView(regComuFr.getFragmentView(), regComuFr.getComunidadBean());
-
-        assertThat(regComuFr.getComunidadBean().getTipoVia(), is("Calle"));
-        assertThat(regComuFr.getComunidadBean().getMunicipio().getProvincia().getProvinciaId(), is((short) 3));
-        assertThat(regComuFr.getComunidadBean().getMunicipio().getCodInProvincia(), is((short) 13));
-        assertThat(regComuFr.getComunidadBean().getProvincia().getProvinciaId(), is((short) 3));
-        assertThat(regComuFr.getComunidadBean().getNombreVia(), is("Real"));
-        assertThat(regComuFr.getComunidadBean().getNumeroString(), is("5"));
-        assertThat(regComuFr.getComunidadBean().getSufijoNumero(), is("Bis"));
+        validaTypedComunidadBean(regComuFr.getComunidadBean(), "Calle", (short) 3, (short) 13, "Real", "5", "Bis");
     }
 
     @Test
@@ -153,13 +141,6 @@ public class ComuSearchAcTest_1 {
 
         onView(withId(R.id.searchComunidad_Bton)).perform(ViewActions.click());
         checkToastInTest(R.string.error_validation_msg, activity, R.string.tipo_via, R.string.nombre_via, R.string.municipio);
-    }
-
-    @After
-    public void cleanData() throws UiException
-    {
-        cleanOptions(whatClean);
-
     }
 
 //    ................ UTILIDADES .....................
