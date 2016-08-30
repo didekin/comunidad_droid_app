@@ -7,7 +7,6 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekin.incidservice.dominio.IncidImportancia;
 import com.didekin.incidservice.dominio.Incidencia;
 import com.didekin.incidservice.dominio.IncidenciaUser;
-import com.didekin.usuario.dominio.Comunidad;
 import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
@@ -39,11 +38,11 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.common.activity.FragmentTags.incid_see_by_comu_list_fr_tag;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.regSeveralUserComuSameUser;
 import static com.didekindroid.common.utils.UIutils.formatTimeStampToString;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
+import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
 import static com.didekindroid.incidencia.repository.IncidenciaDataDbHelperTest.DB_PATH;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
@@ -53,7 +52,6 @@ import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_PLAZUELA5
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_JUAN;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static org.hamcrest.CoreMatchers.allOf;
-import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
@@ -188,10 +186,7 @@ public class IncidSeeOpenByComuAcTest_2 {
     {
         // Second comunidad (Plazuela) in the comunidad_spinner is selected.
         onView(withId(R.id.incid_reg_comunidad_spinner)).perform(click());
-        onData(allOf(
-                is(instanceOf(Comunidad.class)),
-                is(COMU_LA_PLAZUELA_5))
-        ).perform(click()).check(matches(isDisplayed()));
+        onView(withText(COMU_LA_PLAZUELA_5.getNombreComunidad())).perform(click()).check(matches(isDisplayed()));
 
         // Verificamos que la actividad recibe la comunidad seleccionada.
         assertThat(mActivity.mComunidadSelected, is(COMU_LA_PLAZUELA_5));
@@ -263,14 +258,11 @@ public class IncidSeeOpenByComuAcTest_2 {
     }
 
     @Test
-    public void testOnData_2()
+    public void testOnData_2() throws InterruptedException
     {
         // Second comunidad (Plazuela) in the comunidad_spinner is selected.
         onView(withId(R.id.incid_reg_comunidad_spinner)).perform(click());
-        onData(allOf(
-                is(instanceOf(Comunidad.class)),
-                is(COMU_LA_PLAZUELA_5))
-        ).perform(click()).check(matches(isDisplayed()));
+        onView(withText(COMU_LA_PLAZUELA_5.getNombreComunidad())).perform(click()).check(matches(isDisplayed()));
 
         IncidenciaUser incidUser = adapter.getItem(0);
         onData(is(incidUser)).inAdapterView(withId(android.R.id.list)).check(matches(isDisplayed()));

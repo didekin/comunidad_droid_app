@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <include layout="@layout/appbar_include" />
+    <include layout="@layout/appbar_include_design" />
 
     <fragment
         android:id="@+id/see_usercomu_by_user_frg"

@@ -46,10 +46,9 @@ public class IncidenciaBean {
         return this;
     }
 
-    public Incidencia makeIncidencia(final View mFragmentView, StringBuilder errorMsg, Resources resources)
+    public Incidencia makeIncidenciaFromView(final View mFragmentView, StringBuilder errorMsg, Resources resources)
     {
         setDescripcion(((EditText) mFragmentView.findViewById(R.id.incid_reg_desc_ed)).getText().toString());
-
         if (validateBean(errorMsg, resources)) {
             return new Incidencia.IncidenciaBuilder()
                     .comunidad(new Comunidad.ComunidadBuilder().c_id(comunidadId).build())
@@ -59,15 +58,6 @@ public class IncidenciaBean {
         } else {
             return null;
         }
-    }
-
-    public Incidencia makeIncidenciaWithUserName(final View mFragmentView, StringBuilder errorMsg, Resources resources, String userName)
-    {
-        final Incidencia incidencia = makeIncidencia(mFragmentView,errorMsg,resources);
-        if (incidencia != null){
-            return new Incidencia.IncidenciaBuilder().copyIncidencia(incidencia).userName(userName).build();
-        }
-        return null;
     }
 
     boolean validateBean(StringBuilder errorMsg, Resources resources)

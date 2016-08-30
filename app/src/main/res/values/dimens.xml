@@ -5,7 +5,7 @@
     <dimen name="vertical_margin">4dp</dimen>
     <dimen name="vertical_double_margin">16dp</dimen>
     <!-- Lists -->
-    <dimen name="divider_heigth">0.7dp</dimen>
+    <dimen name="divider_heigth">0.9dp</dimen>
     <dimen name="list_padding">4dp</dimen>
     <dimen name="item_list_padding">4dp</dimen>
     <!-- Widgets -->

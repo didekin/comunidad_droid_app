@@ -11,7 +11,7 @@ import com.didekin.incidservice.dominio.Incidencia;
 import com.didekindroid.R;
 
 import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_OBJECT;
-import static com.didekindroid.common.activity.FragmentTags.incid_comments_see_list_fr_tag;
+import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_comments_see_list_fr_tag;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_COMMENT_REG_AC;
 import static com.google.common.base.Preconditions.checkNotNull;

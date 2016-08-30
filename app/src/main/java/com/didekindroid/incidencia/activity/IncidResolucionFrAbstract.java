@@ -14,6 +14,7 @@ import com.didekindroid.incidencia.dominio.ResolucionBean;
  * Date: 10/03/16
  * Time: 14:25
  */
+@SuppressWarnings("AbstractClassExtendsConcreteClass")
 public abstract class IncidResolucionFrAbstract extends Fragment implements FechaPickerUser {
 
     private static final String TAG = IncidResolucionRegFr.class.getCanonicalName();

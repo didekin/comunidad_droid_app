@@ -19,8 +19,6 @@ import com.didekin.common.exception.ErrorBean;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.gcm.GcmRegistrationIntentService;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
 
 import java.sql.Timestamp;
 import java.text.DateFormat;
@@ -119,24 +117,10 @@ public final class UIutils {
 
 //    =============================== GOOGLE SERVICES =================================
 
-    /**
-     * Check the availability of Google Play Services.
-     */
-    public static boolean checkPlayServices(Context context)
+    public static void getGcmToken(Activity myActivity)
     {
-        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
-        return apiAvailability.isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS;
-    }
-
-    public static void getGcmToken(Activity incidSeeOpenByComuAc)
-    {
-        //noinspection StatementWithEmptyBody
-        if (checkPlayServices(incidSeeOpenByComuAc)) {
-            if (!isGcmTokenSentServer(incidSeeOpenByComuAc)){
-                incidSeeOpenByComuAc.startService(new Intent(incidSeeOpenByComuAc, GcmRegistrationIntentService.class));
-            }
-        } else{
-            // TODO: mostrar cuadro de diálogo para instalar GCM.
+        if (!isGcmTokenSentServer(myActivity)) {
+            myActivity.startService(new Intent(myActivity, GcmRegistrationIntentService.class));
         }
     }
 
@@ -161,8 +145,8 @@ public final class UIutils {
         editor.putBoolean(SharedPrefFiles.IS_USER_REG, isRegisteredUser);
         editor.apply();
 
-        if (!isRegisteredUser){
-            updateIsGcmTokenSentServer(false,context);
+        if (!isRegisteredUser) {
+            updateIsGcmTokenSentServer(false, context);
         }
     }
 

@@ -9,26 +9,43 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.didekin.common.exception.ErrorBean;
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.utils.UIutils;
 import com.didekindroid.usuario.activity.utils.UserMenu;
+import com.didekindroid.usuario.activity.utils.UsuarioFragmentTags;
+
+import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_LIST_INDEX;
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_LIST_OBJECT;
+import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_SEARCH;
 import static com.didekindroid.common.activity.BundleKey.USERCOMU_LIST_OBJECT;
+import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_resolucion_ac_frgs_tag;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.UserMenu.REG_COMU_USER_USERCOMU_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_USERCOMU_BY_USER_AC;
+import static com.didekindroid.usuario.activity.utils.UsuarioFragmentTags.comu_search_results_list_fr_tag;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
+ * Preconditions:
+ * 1. An intent extra with a comunidad object encapsulating the comunidad to search is received.
+ * <p/>
  * Postconditions:
  * <p/>
+ * FRAGMENTS:
+ * 1. If there are results, a fragment with a list is presented.
+ * 2. If not, the user is presented with the activity to register the comunidad.
+ * INTENTS:
+ * When there are results and the user select one of them:
  * 1. If the user is not registered, an object comunidad is passed as an intent key with the fields:
  * -- comunidadId of the comunidad selected.
  * -- nombreComunidad (with tipoVia,nombreVia, numero and sufijoNumero).
@@ -51,9 +68,11 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
 
     // The fragment where the summary data are displayed.
     ComuSearchResultsListFr mComunidadesSummaryFrg;
-
-    // The comunidad index currently being displayed.
+    // The comunidad searched.
+    Comunidad mComunidad;
+    // The comunidad index selected.
     int mIndex;
+    private List<Comunidad> mResultsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -61,12 +80,11 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
         Log.d(TAG, "onCreate().");
         super.onCreate(savedInstanceState);
 
+        Comunidad comunidad = (Comunidad) getIntent().getSerializableExtra(COMUNIDAD_SEARCH.key);
+        new SearchComunidadesLoader().execute(comunidad);
+
         setContentView(R.layout.comu_search_results_layout);
         doToolBar(this, true);
-
-        // Find our fragments.
-        mComunidadesSummaryFrg = (ComuSearchResultsListFr) getFragmentManager()
-                .findFragmentById(R.id.comu_list_frg);
     }
 
     @Override
@@ -81,6 +99,7 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
     {
         Log.d(TAG, "onSaveInstanceState()");
         savedInstanceState.putInt(COMUNIDAD_LIST_INDEX.name(), mIndex);
+        savedInstanceState.putSerializable(COMUNIDAD_SEARCH.key, mComunidad);
         super.onSaveInstanceState(savedInstanceState);
     }
 
@@ -90,7 +109,10 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
         Log.d(TAG, "onRestoreInstanceState()");
         if (savedInstanceState != null) {
             mIndex = savedInstanceState.getInt(COMUNIDAD_LIST_INDEX.name(), 0);
-            mComunidadesSummaryFrg.setSelection(mIndex); // Only for linearFragments.
+            mComunidadesSummaryFrg.mListView.setSelection(mIndex);
+            if (mComunidad == null){
+                mComunidad = (Comunidad) savedInstanceState.getSerializable(COMUNIDAD_SEARCH.key);
+            }
         }
     }
 
@@ -125,7 +147,9 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
         }
     }
 
-    //  .... HELPER INTERFACES AND CLASSES ....
+    //===========================================
+    //  .... COMMUNICATION INTERFACES ....
+    //===========================================
 
     @Override
     public void onComunidadSelected(Comunidad comunidad, int lineItemIndex)
@@ -144,18 +168,58 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
     }
 
     @Override
-    public void onComunidadListLoaded(int listSize)
+    public List<Comunidad> getResultsList()
     {
-        Log.d(TAG, "onComunidadListLoaded. ListSize = " + listSize);
-        if (listSize == 0) {
-            UIutils.makeToast(this, R.string.no_result_search_comunidad, Toast.LENGTH_LONG);
-            UserMenu.REG_COMU_USER_USERCOMU_AC.doMenuItem(this);
-        }
+        Log.d(TAG, "getResultsList()");
+        return Collections.unmodifiableList(mResultsList);
     }
 
 //    ============================================================
 //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
 //    ============================================================
+
+    class SearchComunidadesLoader extends AsyncTask<Comunidad, Void, List<Comunidad>> {
+
+        private final String TAG = SearchComunidadesLoader.class.getCanonicalName();
+        private UiException uiException;
+
+        @Override
+        protected List<Comunidad> doInBackground(Comunidad... comunidades)
+        {
+            Log.d(TAG, "doInBackground()");
+            List<Comunidad> comunidadesList = null;
+            try {
+                comunidadesList = ServOne.searchComunidades(comunidades[0]).execute().body();
+            } catch (IOException e) {
+                uiException = new UiException(ErrorBean.GENERIC_ERROR);
+            }
+            return comunidadesList;
+        }
+
+        @Override
+        protected void onPostExecute(List<Comunidad> comunidadList)
+        {
+            Log.d(TAG, "onPostExecute(); comunidadList.size = " +
+                    (comunidadList != null ? String.valueOf(comunidadList.size()) : "null"));
+
+            if (uiException != null) {
+                Log.d(TAG, "onPostExecute(), uiException = " + uiException.getErrorBean().getMessage());
+                uiException.processMe(ComuSearchResultsAc.this, new Intent());
+                return;
+            }
+            if (comunidadList != null && comunidadList.size() > 0) {
+                mResultsList = comunidadList;
+                mComunidadesSummaryFrg = new ComuSearchResultsListFr();
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.comu_search_results_frg_container_ac, mComunidadesSummaryFrg, comu_search_results_list_fr_tag)
+                        .commit();
+            } else {
+                UIutils.makeToast(ComuSearchResultsAc.this, R.string.no_result_search_comunidad, Toast.LENGTH_LONG);
+                UserMenu.REG_COMU_USER_USERCOMU_AC.doMenuItem(ComuSearchResultsAc.this);
+            }
+        }
+    }
+
 
     // TODO: to persist the task during restarts and properly cancel the task when the activity is destroyed. (Example in Shelves)
     class UsuarioComunidadGetter extends AsyncTask<Comunidad, Void, UsuarioComunidad> {
@@ -194,7 +258,7 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
                 startActivity(intent);
             } else {
                 Intent intent = new Intent(ComuSearchResultsAc.this, UserComuDataAc.class);
-                intent.putExtra(USERCOMU_LIST_OBJECT.key,userComu);
+                intent.putExtra(USERCOMU_LIST_OBJECT.key, userComu);
                 startActivity(intent);
             }
         }

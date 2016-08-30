@@ -60,8 +60,6 @@ public class ComuSearchAc extends AppCompatActivity {
 
         Log.d(TAG, "In onCreate()");
 
-        // TODO: cuadro de dialogo con la necesidad de habilitar internet.
-
         // To initilize the token cache. This is the launch activity.
         new CheckerTokenInCache().execute();
 

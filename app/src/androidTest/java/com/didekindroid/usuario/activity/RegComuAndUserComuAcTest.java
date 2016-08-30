@@ -12,7 +12,6 @@ import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.testutils.ActivityTestUtils;
-import com.didekindroid.usuario.activity.utils.RolCheckBox;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
 
@@ -36,11 +35,16 @@ import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTe
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOneUser;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
+import static com.didekindroid.usuario.activity.utils.RolUi.ADM;
+import static com.didekindroid.usuario.activity.utils.RolUi.INQ;
+import static com.didekindroid.usuario.activity.utils.RolUi.PRE;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUserComuBeanFromView;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_TRAV_PLAZUELA_PEPE;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.typeComunidadData;
-import static com.didekindroid.usuario.testutils.UsuarioTestUtils.typeRegUserComuData;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.typeUserComuData;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.validaTypedUserComuBean;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.validaTypedUsuarioComunidad;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -68,7 +72,6 @@ public class RegComuAndUserComuAcTest {
     @Before
     public void setUp() throws Exception
     {
-        Thread.sleep(3000);
         // Preconditions: the user is already registered.
         signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
     }
@@ -115,36 +118,19 @@ public class RegComuAndUserComuAcTest {
         View usuarioComunidadRegView = activity.findViewById(R.id.reg_usercomu_frg);
 
         //UsuarioComunidadBean data.
-        onView(withId(R.id.reg_usercomu_portal_ed)).perform(typeText("port2"));
-        onView(withId(R.id.reg_usercomu_escalera_ed)).perform(typeText("escale_b"));
-        onView(withId(R.id.reg_usercomu_planta_ed)).perform(typeText("planta-N"));
-        onView(withId(R.id.reg_usercomu_puerta_ed)).perform(typeText("puerta5"), closeSoftKeyboard());
-        onView(withId(R.id.reg_usercomu_checbox_pre)).perform(scrollTo(), click());
-        onView(withId(R.id.reg_usercomu_checbox_admin)).perform(scrollTo(), click());
-        onView(withId(R.id.reg_usercomu_checbox_inq)).perform(scrollTo(), click());
-
+        typeUserComuData("port2","escale_b","planta-N","puerta5", PRE, ADM, INQ);
         // ComunidadBean data: we do not introduce the data in the screen.
         ComunidadBean comunidadBean = new ComunidadBean("ataxo", "24 de Otoño", "001", "bis",
                 new Municipio((short) 162, new Provincia((short) 10)));
-
         UsuarioComunidadBean usuarioComunidadBean =
                 makeUserComuBeanFromView(usuarioComunidadRegView, comunidadBean, null);
-        assertThat(usuarioComunidadBean.getPortal(), is("port2"));
-        assertThat(usuarioComunidadBean.getEscalera(), is("escale_b"));
-        assertThat(usuarioComunidadBean.getPlanta(), is("planta-N"));
-        assertThat(usuarioComunidadBean.getPuerta(), is("puerta5"));
-        assertThat(usuarioComunidadBean.isPresidente(), is(true));
-        assertThat(usuarioComunidadBean.isAdministrador(), is(true));
-        assertThat(usuarioComunidadBean.isPropietario(), is(false));
-        assertThat(usuarioComunidadBean.isInquilino(), is(true));
+        // Verificamos usuarioComunidadBean.
+        validaTypedUserComuBean(usuarioComunidadBean,"port2","escale_b","planta-N","puerta5", true, true, false, true);
 
+        // Verificamos usuarioComunidad.
         usuarioComunidadBean.validate(resources, new StringBuilder(resources.getText(R.string.error_validation_msg)));
         UsuarioComunidad usuarioComunidad = usuarioComunidadBean.getUsuarioComunidad();
-        assertThat(usuarioComunidad.getPortal(), is("port2"));
-        assertThat(usuarioComunidad.getEscalera(), is("escale_b"));
-        assertThat(usuarioComunidad.getPlanta(), is("planta-N"));
-        assertThat(usuarioComunidad.getPuerta(), is("puerta5"));
-        assertThat(usuarioComunidad.getRoles(), is("adm,pre,inq"));
+        validaTypedUsuarioComunidad(usuarioComunidad,"port2","escale_b","planta-N","puerta5","adm,pre,inq");
     }
 
     @Test
@@ -182,7 +168,7 @@ public class RegComuAndUserComuAcTest {
                 R.string.nombre_via,
                 R.string.municipio,
                 R.string.reg_usercomu_role_rot,
-                R.string.reg_usercomu_escalera_hint);
+                R.string.reg_usercomu_escalera_rot);
     }
 
     @Test
@@ -191,7 +177,7 @@ public class RegComuAndUserComuAcTest {
         activity = mActivityRule.launchActivity(new Intent());
 
         typeComunidadData();
-        typeRegUserComuData("port2","escale_b","planta-N","puerta5", RolCheckBox.PRE,RolCheckBox.ADM, RolCheckBox.INQ);
+        typeUserComuData("port2","escale_b","planta-N","puerta5", PRE, ADM, INQ);
 
         onView(withId(R.id.reg_comu_usuariocomunidad_button)).perform(scrollTo(), click());
         onView(withId(R.id.see_usercomu_by_user_frg)).check(matches(isDisplayed()));

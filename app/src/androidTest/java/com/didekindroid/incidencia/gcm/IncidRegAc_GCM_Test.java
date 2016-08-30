@@ -24,7 +24,6 @@ import java.io.IOException;
 import static android.support.test.espresso.core.deps.guava.base.Preconditions.checkState;
 import static com.didekindroid.common.gcm.AppFirebaseMsgService.TypeMsgHandler.INCIDENCIA_OPEN;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
-import static com.didekindroid.common.utils.UIutils.checkPlayServices;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.utils.UIutils.updateIsGcmTokenSentServer;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
@@ -60,7 +59,6 @@ public class IncidRegAc_GCM_Test extends Incidencia_GCM_Test {
     public void testRegistrationGcmToken() throws Exception
     {
         // Preconditions for the test.
-        assertThat(checkPlayServices(mActivity), is(true));
         assertThat(isRegisteredUser(mActivity), is(true));
 
         checkToken();

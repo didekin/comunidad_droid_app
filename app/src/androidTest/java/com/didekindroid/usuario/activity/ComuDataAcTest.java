@@ -91,7 +91,6 @@ public class ComuDataAcTest {
     @Before
     public void setUp() throws Exception
     {
-        Thread.sleep(2000);
         mActivity = intentRule.getActivity();
     }
 
@@ -111,7 +110,6 @@ public class ComuDataAcTest {
         assertThat(mActivity.mAcView, notNullValue());
         assertThat(mActivity.mRegComuFrg, notNullValue());
 
-        onView(withId(R.id.comu_data_ac_button)).check(matches(isDisplayed()));
         onView(withId(R.id.comunidad_nombre_via_editT))
                 .check(matches(withText(is(mComunidad.getNombreVia()))))
                 .check(matches(isDisplayed()));
@@ -123,6 +121,7 @@ public class ComuDataAcTest {
                 .check(matches(isDisplayed()));
 
         assertThat(mActivity.mRegComuFrg.getComunidadBean().getTipoVia(), is(mComunidad.getTipoVia()));
+
         onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.tipo_via_spinner))))
                 .check(matches(withText(is(mComunidad.getTipoVia())))).check(matches(isDisplayed()));
 
@@ -133,6 +132,8 @@ public class ComuDataAcTest {
         onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.municipio_spinner))))
                 .check(matches(withText(is("Alfoz")))).check(matches(isDisplayed())).perform(closeSoftKeyboard());
 
+        onView(withId(R.id.comu_data_ac_button)).check(matches(isDisplayed()));
+
         assertThat(mActivity.mRegComuFrg.getComunidadBean().getMunicipio().getProvincia().getProvinciaId(), is
                 (COMU_LA_PLAZUELA_5.getMunicipio().getProvincia().getProvinciaId()));
         assertThat(mActivity.mRegComuFrg.getComunidadBean().getMunicipio().getCodInProvincia(), is
@@ -140,7 +141,7 @@ public class ComuDataAcTest {
     }
 
     @Test
-    public void testModifyComuData_1() throws UiException
+    public void testModifyComuData_1() throws UiException, InterruptedException
     {
         // Comunidad data.
         onView(withId(R.id.comunidad_nombre_via_editT)).perform(scrollTo(), replaceText("nombre via One"));
@@ -148,12 +149,15 @@ public class ComuDataAcTest {
         onView(withId(R.id.comunidad_sufijo_numero_editT)).perform(scrollTo(), replaceText("Tris"));
 
         onView(withId(R.id.autonoma_comunidad_spinner)).perform(click());
+        Thread.sleep(1000);
         onData(withRowString(1, "Valencia")).perform(click());
 
         onView(withId(R.id.provincia_spinner)).perform(click());
+        Thread.sleep(1000);
         onData(withRowString(1, "Valencia/València")).perform(click());
 
         onView(withId(R.id.municipio_spinner)).perform(click());
+        Thread.sleep(1000);
         onData(withRowString(3, "Ènova, l'")).perform(click());
 
         onView(withId(R.id.comu_data_ac_button)).check(matches(isDisplayed())).perform(click());

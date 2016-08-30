@@ -65,8 +65,8 @@ public class UsuarioComunidadBeanValidaTests {
                 "planta.B-Ñ", "puerta.J", true, true, true, false);
         errors = new StringBuilder(resources.getText(R.string.error_validation_msg));
         assertThat(usuarioComunidadBean.validate(resources, errors), is(false));
-        assertThat(errors.toString(), allOf(containsString(resources.getText(R.string.reg_usercomu_portal_hint).toString())
-                , containsString(resources.getText(R.string.reg_usercomu_escalera_hint).toString())));
+        assertThat(errors.toString(), allOf(containsString(resources.getText(R.string.reg_usercomu_portal_rot).toString())
+                , containsString(resources.getText(R.string.reg_usercomu_escalera_rot).toString())));
     }
 
     @Test
@@ -76,7 +76,7 @@ public class UsuarioComunidadBeanValidaTests {
         UsuarioComunidadBean usuarioComunidadBean = new UsuarioComunidadBean(comunidad, usuarioBean, "por123456tal_1",
                 "escalera-2", "planta.B-Ñ", "puerta.J", true, true, true, false);
         assertThat(usuarioComunidadBean.validate(resources, errors), is(false));
-        assertThat(errors.toString(), containsString(resources.getText(R.string.reg_usercomu_portal_hint).toString()));
+        assertThat(errors.toString(), containsString(resources.getText(R.string.reg_usercomu_portal_rot).toString()));
     }
 
     @Test
@@ -85,7 +85,7 @@ public class UsuarioComunidadBeanValidaTests {
         UsuarioComunidadBean usuarioComunidadBean = new UsuarioComunidadBean(comunidad, usuarioBean, "poÑr6ta_1",
                 "esca le ra-2", "planta.B-Ñ", "puerta.J", true, true, true, false);
         assertThat(usuarioComunidadBean.validate(resources, errors), is(false));
-        assertThat(errors.toString(), containsString(resources.getText(R.string.reg_usercomu_escalera_hint).toString()));
+        assertThat(errors.toString(), containsString(resources.getText(R.string.reg_usercomu_escalera_rot).toString()));
     }
 
     @Test
@@ -101,7 +101,7 @@ public class UsuarioComunidadBeanValidaTests {
                 "escalera-2", "planta.B+Ñ", "puerta.J", true, true, true, false);
         errors = new StringBuilder(resources.getText(R.string.error_validation_msg));
         assertThat(usuarioComunidadBean.validate(resources, errors), is(false));
-        assertThat(errors.toString(), containsString(resources.getText(R.string.reg_usercomu_planta_hint).toString()));
+        assertThat(errors.toString(), containsString(resources.getText(R.string.reg_usercomu_planta_rot).toString()));
     }
 
     @Test
@@ -117,7 +117,7 @@ public class UsuarioComunidadBeanValidaTests {
                 "escalera-2", "planta.BÑ", "puer ta.J", true, true, true, false);
         errors = new StringBuilder(resources.getText(R.string.error_validation_msg));
         assertThat(usuarioComunidadBean.validate(resources, errors), is(false));
-        assertThat(errors.toString(), containsString(resources.getText(R.string.reg_usercomu_puerta_hint).toString()));
+        assertThat(errors.toString(), containsString(resources.getText(R.string.reg_usercomu_puerta_rot).toString()));
     }
 
     @Test

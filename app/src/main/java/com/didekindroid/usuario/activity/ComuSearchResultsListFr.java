@@ -1,38 +1,30 @@
 package com.didekindroid.usuario.activity;
 
-import android.app.ListFragment;
 import android.content.Context;
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.didekin.common.exception.ErrorBean;
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekindroid.R;
-import com.didekindroid.common.activity.UiException;
 
-import java.io.IOException;
 import java.util.List;
-
-import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_SEARCH;
-import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 
 /**
  * Preconditions:
- * 1. An intent extra with a comunidad object encapsulating the comunidad to search is received.
  * <p/>
- * 2. Every comunidad in the list supplied to the adapter has the following fields:
+ * 1. Every comunidad in the list supplied to the adapter has the following fields:
  * -- comunidadId.
  * -- nombreComunidad (composed internally with tipoVia,nombreVia, numero and sufijoNumero).
  * -- municipio, with codInProvincia and nombre.
  * -- provincia, with provinciaId and nombre.
  * <p/>
- * 3. An object comunidad, used as search criterium, is received as an intent key with the following fields:
+ * 2. An object comunidad, used as search criterium, is received as an intent key with the following fields:
  * -- tipoVia.
  * -- nombreVia.
  * -- numero.
@@ -47,15 +39,15 @@ import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
  * -- municipio, with codInProvincia and nombre.
  * -- provincia, with provinciaId and nombre.
  */
-public class ComuSearchResultsListFr extends ListFragment {
+public class ComuSearchResultsListFr extends Fragment {
 
     public static final String TAG = ComuSearchResultsListFr.class.getCanonicalName();
 
-    private ComuSearchResultsListAdapter mAdapter;
+    ComuSearchResultsListAdapter mAdapter;
     /**
      * The listener for dealing with the selection event of a line item (comunidad).
      */
-    private ComuListListener mComuListListener;
+    ComuListListener mComuListListener;
     ListView mListView;
     View mView;
 
@@ -90,13 +82,27 @@ public class ComuSearchResultsListFr extends ListFragment {
 
         mComuListListener = (ComuListListener) getActivity();
         mAdapter = new ComuSearchResultsListAdapter(getActivity());
-        Comunidad comunidad = (Comunidad) getActivity().getIntent()
-                .getSerializableExtra(COMUNIDAD_SEARCH.key);
-        new SearchComunidadesLoader().execute(comunidad);
+        mAdapter.addAll(mComuListListener.getResultsList());
 
         mListView = (ListView) mView.findViewById(android.R.id.list);
-        mListView.setItemsCanFocus(false);
+        mListView.setItemsCanFocus(true);
         mListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        mListView.setAdapter(mAdapter);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            {
+                Log.d(TAG, "onListItemClick()");
+
+                mListView.setItemChecked(position, true);
+                view.setSelected(true);
+
+                if (mComuListListener != null) {
+                    Comunidad comunidad = (Comunidad) mListView.getItemAtPosition(position);
+                    mComuListListener.onComunidadSelected(comunidad, position);
+                }
+            }
+        });
     }
 
     @Override
@@ -111,20 +117,6 @@ public class ComuSearchResultsListFr extends ListFragment {
     {
         Log.d(TAG, "Enters onResume()");
         super.onResume();
-    }
-
-    @Override
-    public void onListItemClick(ListView l, View v, int position, long id)
-    {
-        Log.d(TAG, "onListItemClick()");
-
-        mListView.setItemChecked(position, true);
-        v.setSelected(true);
-
-        if (mComuListListener != null) {
-            Comunidad comunidad = (Comunidad) mListView.getItemAtPosition(position);
-            mComuListListener.onComunidadSelected(comunidad, position);
-        }
     }
 
     @Override
@@ -166,44 +158,12 @@ public class ComuSearchResultsListFr extends ListFragment {
 
     public interface ComuListListener {
         void onComunidadSelected(Comunidad comunidad, int lineItemIndex);
-        void onComunidadListLoaded(int listSize);
+        List<Comunidad> getResultsList();
     }
 
     //    ============================================================
     //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
     //    ============================================================
 
-    class SearchComunidadesLoader extends AsyncTask<Comunidad, Void, List<Comunidad>> {
 
-        private final String TAG = SearchComunidadesLoader.class.getCanonicalName();
-        private UiException uiException;
-
-        @Override
-        protected List<Comunidad> doInBackground(Comunidad... comunidades)
-        {
-            Log.d(TAG, "doInBackground()");
-            List<Comunidad> comunidadesList = null;
-            try {
-                comunidadesList = ServOne.searchComunidades(comunidades[0]).execute().body();
-            } catch (IOException e) {
-               uiException = new UiException(ErrorBean.GENERIC_ERROR);
-            }
-            return comunidadesList;
-        }
-
-        @Override
-        protected void onPostExecute(List<Comunidad> comunidadList)
-        {
-            Log.d(TAG, "onPostExecute(); comunidadList.size = " +
-                    (comunidadList != null ? String.valueOf(comunidadList.size()) : "null"));
-
-            if (uiException != null) {
-                uiException.processMe(getActivity(), new Intent());
-                return;
-            }
-            mAdapter.addAll(comunidadList);
-            setListAdapter(mAdapter);
-            mComuListListener.onComunidadListLoaded(comunidadList != null ? comunidadList.size() : 0);
-        }
-    }
 }

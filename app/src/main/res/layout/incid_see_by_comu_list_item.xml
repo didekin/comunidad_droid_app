@@ -6,23 +6,27 @@
 
     <LinearLayout
         android:id="@+id/incid_see_apertura_block"
-        android:layout_width="match_parent"
+        style="@style/baseLayout"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <TextView
             android:id="@+id/incid_apertura_rot"
             style="@style/textBase.textFieldLabel1"
-            android:text="@string/incid_apertura_rot"/>
+            android:text="@string/incid_apertura_rot"
+            android:layout_weight="0"
+            android:gravity="start"/>
         <TextView
             android:id="@+id/incid_fecha_alta_view"
             style="@style/textBase.textFieldLabel2"
             android:layout_marginStart="@dimen/simple_horizontal_margin"
-            />
+            android:layout_weight="0"
+            android:gravity="start"/>
         <TextView
             android:id="@+id/incid_see_iniciador_view"
             style="@style/textBase.textFieldLabel2"
             android:layout_marginStart="@dimen/double_horizontal_margin"
-            />
+            android:layout_weight="1"
+            android:gravity="start"/>
     </LinearLayout>
     <LinearLayout
         android:id="@+id/incid_see_cierre_block"
@@ -33,12 +37,15 @@
         <TextView
             android:id="@+id/incid_cierre_rot"
             style="@style/textBase.textFieldLabel1"
-            android:text="@string/incid_cierre_rot"/>
+            android:text="@string/incid_cierre_rot"
+            android:layout_weight="0"
+            android:gravity="start"/>
         <TextView
             android:id="@+id/incid_fecha_cierre_view"
             style="@style/textBase.textFieldLabel2"
             android:layout_marginStart="@dimen/simple_horizontal_margin"
-            />
+            android:layout_weight="1"
+            android:gravity="start"/>
     </LinearLayout>
     <LinearLayout
         android:id="@+id/incid_see_importancia_block"
@@ -48,11 +55,15 @@
         <TextView
             android:id="@+id/incid_importancia_comunidad_rot"
             style="@style/textBase.textFieldLabel1"
-            android:text="@string/incid_importancia_comunidad_rot"/>
+            android:text="@string/incid_importancia_comunidad_rot"
+            android:layout_weight="0"
+            android:gravity="start"/>
         <TextView
             android:id="@+id/incid_importancia_comunidad_view"
             style="@style/textBase.textFieldLabel2"
-            />
+            android:layout_marginStart="@dimen/simple_horizontal_margin"
+            android:layout_weight="1"
+            android:gravity="start"/>
     </LinearLayout>
 
     <TextView
@@ -72,16 +83,22 @@
         <TextView
             android:id="@+id/incid_see_resolucion_rot"
             style="@style/textBase.textFieldLabel1"
+            android:layout_weight="0"
+            android:gravity="start"
             android:text="@string/incid_see_resolucion_label"/>
         <TextView
             android:id="@+id/incid_see_is_resolucion_iniciada_view"
             style="@style/textBase.textFieldLabel2"
+            android:layout_weight="0"
+            android:gravity="start"
             android:layout_marginStart="@dimen/simple_horizontal_margin"
             android:text="@string/incid_see_resolucion_fecha_alta_label"
             />
         <TextView
             android:id="@+id/incid_see_fecha_alta_resolucion_view"
             style="@style/textBase.textFieldLabel2"
+            android:layout_weight="1"
+            android:gravity="start"
             android:layout_marginStart="@dimen/simple_horizontal_margin"
             />
     </LinearLayout>

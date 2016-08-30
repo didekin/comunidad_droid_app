@@ -27,7 +27,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
-import static com.didekindroid.common.activity.FragmentTags.incid_see_by_comu_list_fr_tag;
+import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkNavigateUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.regSeveralUserComuSameUser;
@@ -131,11 +131,9 @@ public class IncidSeeClosedByComuAcTest_1 {
     }
 
     @Test
-    public void testOnDataSpinner_1() throws InterruptedException
+    public void testOnDataSpinner_1()
     {
-        // Caso OK: muestra datos de la comunidad en el intent (2ª en el spinner).
-
-        Thread.sleep(2000);
+        /* Caso OK: muestra datos de la comunidad en el intent (2ª en el spinner).*/
 
         assertThat(mActivity.mComunidadSelected, is(comunidadInIntent));
         onView(allOf(

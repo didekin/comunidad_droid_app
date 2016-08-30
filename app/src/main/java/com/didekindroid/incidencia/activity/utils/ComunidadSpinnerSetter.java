@@ -56,7 +56,6 @@ public class ComunidadSpinnerSetter<T extends Fragment & ComuSpinnerSettable> ex
                     R.id.app_spinner_1_dropdown_item,
                     comunidades);
             mFragment.setComunidadSpinnerAdapter(comunidadesAdapter);
-            // Notifico al fragmento que los datos del spinner están cargados.
             mFragment.onComunidadSpinnerLoaded();
         }
         if (uiException != null) {

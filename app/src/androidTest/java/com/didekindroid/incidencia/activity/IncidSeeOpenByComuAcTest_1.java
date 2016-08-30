@@ -113,7 +113,6 @@ public class IncidSeeOpenByComuAcTest_1 {
         Thread.sleep(4000);
     }
 
-
     @Before
     public void setUp() throws Exception
     {
@@ -145,20 +144,14 @@ public class IncidSeeOpenByComuAcTest_1 {
         onView(withId(android.R.id.list)).check(matches(not(isDisplayed())));
         onView(withId(android.R.id.empty)).check(matches(isDisplayed()));
 
-        checkNavigateUp();
-    }
-
-    @Test
-    public void testOnCreate_2() throws InterruptedException
-    {
-        Thread.sleep(2000);
-
         assertThat(mActivity.mComunidadSelected, is(comunidadInIntent));
         onView(allOf(
                 withId(R.id.app_spinner_1_dropdown_item),
                 withParent(withId(R.id.incid_reg_comunidad_spinner))
         )).check(matches(withText(is(comunidadInIntent.getNombreComunidad()))
         )).check(matches(isDisplayed()));
+
+        checkNavigateUp();
     }
 
 //  ================================ MENU ====================================

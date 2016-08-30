@@ -7,12 +7,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
+import com.didekindroid.usuario.activity.utils.RolUi;
 
-import static com.didekindroid.usuario.activity.utils.RolCheckBox.getResourceStringId;
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 
 /**
  * User: pedro@didekin
@@ -25,7 +28,7 @@ public class SeeUserComutByComuListAdapter extends ArrayAdapter<UsuarioComunidad
 
     public SeeUserComutByComuListAdapter(Context context)
     {
-        super(context, R.layout.user_usercomu_list_item, R.id.usercomu_item_portal_rot);
+        super(context, R.layout.user_usercomu_list_item, R.id.usercomu_item_alias_txt);
     }
 
     @Override
@@ -77,20 +80,24 @@ public class SeeUserComutByComuListAdapter extends ArrayAdapter<UsuarioComunidad
 
         static final String TAG = UserComuVwHolder.class.getCanonicalName();
 
+        final LinearLayout mPortalEscaleraBlock;
         final TextView mPortalRotView;
         final TextView mPortalView;
         final TextView mEscaleraRotView;
         final TextView mEscaleraView;
+        final LinearLayout mPlantaPuertaBlock;
         final TextView mPlantaRotView;
         final TextView mPlantaView;
         final TextView mPuertaRotView;
         final TextView mPuertaView;
-        final TextView mRolesRotView;
         final TextView mRolesView;
         final Resources resources;
 
         public UserComuVwHolder(View convertView, Resources resources)
         {
+            mPortalEscaleraBlock = (LinearLayout) convertView.findViewById(R.id.usercomu_portal_escalera_block);
+            mPlantaPuertaBlock = (LinearLayout) convertView.findViewById(R.id.usercomu_planta_puerta_block);
+
             mPortalRotView = (TextView) convertView.findViewById(R.id.usercomu_item_portal_rot);
             mPortalView = (TextView) convertView.findViewById(R.id.usercomu_item_portal_txt);
             mEscaleraRotView = (TextView) convertView.findViewById(R.id.usercomu_item_escalera_rot);
@@ -99,7 +106,6 @@ public class SeeUserComutByComuListAdapter extends ArrayAdapter<UsuarioComunidad
             mPlantaView = (TextView) convertView.findViewById(R.id.usercomu_item_planta_txt);
             mPuertaRotView = (TextView) convertView.findViewById(R.id.usercomu_item_puerta_rot);
             mPuertaView = (TextView) convertView.findViewById(R.id.usercomu_item_puerta_txt);
-            mRolesRotView = (TextView) convertView.findViewById(R.id.usercomu_item_roles_rotulo);
             mRolesView = (TextView) convertView.findViewById(R.id.usercomu_item_roles_txt);
 
             this.resources = resources;
@@ -109,39 +115,45 @@ public class SeeUserComutByComuListAdapter extends ArrayAdapter<UsuarioComunidad
         {
             Log.d(TAG, "initializeTextInViews()");
 
-            if (userComu.getPortal() != null && !userComu.getPortal().isEmpty()) {
+            boolean isBlockPortalEscalera = false;
+            boolean isPlantaPuertaBlock = false;
+
+            if (userComu.getPortal() == null || userComu.getPortal().isEmpty()) {
+                mPortalRotView.setVisibility(GONE);
+                mPortalView.setVisibility(GONE);
+            } else {
                 mPortalView.setText(userComu.getPortal());
+                isBlockPortalEscalera = true;
             }
 
-            if (userComu.getEscalera() != null && !userComu.getEscalera().isEmpty()) {
+            if (userComu.getEscalera() == null || userComu.getEscalera().isEmpty()) {
+                mEscaleraRotView.setVisibility(GONE);
+                mEscaleraView.setVisibility(GONE);
+            } else {
                 mEscaleraView.setText(userComu.getEscalera());
+                isBlockPortalEscalera = true;
             }
 
-            if (userComu.getPlanta() != null && !userComu.getPlanta().isEmpty()) {
+            if (userComu.getPlanta() == null || userComu.getPlanta().isEmpty()) {
+                mPlantaRotView.setVisibility(GONE);
+                mPlantaView.setVisibility(GONE);
+            } else {
                 mPlantaView.setText(userComu.getPlanta());
+                isPlantaPuertaBlock = true;
             }
 
-            if (userComu.getPuerta() != null && !userComu.getPuerta().isEmpty()) {
+            if (userComu.getPuerta() == null || userComu.getPuerta().isEmpty()) {
+                mPuertaRotView.setVisibility(GONE);
+                mPuertaView.setVisibility(GONE);
+            } else {
                 mPuertaView.setText(userComu.getPuerta());
+                isPlantaPuertaBlock = true;
             }
 
-            mRolesView.setText(formatRol(userComu.getRoles()));
-        }
+            mPortalEscaleraBlock.setVisibility(isBlockPortalEscalera ? VISIBLE : GONE);
+            mPlantaPuertaBlock.setVisibility(isPlantaPuertaBlock ? VISIBLE : GONE);
 
-        private String formatRol(String rolesString)
-        {
-            Log.d(TAG, "formatRol()");
-
-            String[] rolesPieces = rolesString.split(",");
-            StringBuilder builder = new StringBuilder();
-            String resourceString;
-
-            for (String rolesPiece : rolesPieces) {
-                resourceString = resources.getString(getResourceStringId(rolesPiece));
-                builder.append(resourceString).append(", ");
-            }
-            builder.deleteCharAt(builder.length() - 2);
-            return builder.toString().trim();
+            mRolesView.setText(RolUi.formatRol(userComu.getRoles(), resources));
         }
     }
 

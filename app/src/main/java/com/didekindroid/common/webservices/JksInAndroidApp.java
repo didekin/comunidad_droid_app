@@ -3,7 +3,6 @@ package com.didekindroid.common.webservices;
 import com.didekin.common.controller.JksInClient;
 import com.didekindroid.DidekindroidApp;
 
-import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -23,7 +22,7 @@ public final class JksInAndroidApp implements JksInClient {
     }
 
     @Override
-    public InputStream getInputStream() throws IOException
+    public InputStream getInputStream()
     {
         return DidekindroidApp.getContext().getResources().openRawResource(jksResourceId);
     }

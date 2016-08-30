@@ -1,86 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                style="@style/baseLayout"
-                android:id="@+id/usercomu_include_layout">
+<merge android:id="@+id/usercomu_include_layout"
+       style="@style/baseLayout"
+       xmlns:android="http://schemas.android.com/apk/res/android">
 
     <TextView
+        android:id="@+id/usercomu_item_roles_txt"
+        style="@style/textBase.textFieldLabel2"/>
+
+    <LinearLayout android:id="@+id/usercomu_portal_escalera_block"
+                  style="@style/baseLayout"
+                  android:orientation="horizontal"
+                  android:visibility="visible">
+        <TextView
             android:id="@+id/usercomu_item_portal_rot"
             style="@style/textBase.textFieldLabel2"
-            android:text="@string/usercomu_portal_rot"
-            android:layout_alignParentStart="true"/>
-
-    <TextView
+            android:layout_weight="0"
+            android:gravity="start"
+            android:text="@string/usercomu_portal_rot"/>
+        <TextView
             android:id="@+id/usercomu_item_portal_txt"
-            style="@style/textBase.textFieldLabel1"
-            android:layout_marginTop="0dp"
-            android:layout_toEndOf="@id/usercomu_item_portal_rot"
-            android:layout_alignTop="@id/usercomu_item_portal_rot"
-            android:layout_alignBottom="@id/usercomu_item_portal_rot"/>
-
-    <TextView
+            style="@style/textBase.textFieldLabel2"
+            android:layout_marginStart="@dimen/simple_horizontal_margin"
+            android:layout_weight="0"
+            android:gravity="start"/>
+        <TextView
             android:id="@+id/usercomu_item_escalera_rot"
-            android:text="@string/usercomu_escalera_rot"
             style="@style/textBase.textFieldLabel2"
             android:layout_marginStart="@dimen/double_horizontal_margin"
-            android:layout_marginTop="0dp"
-            android:layout_toEndOf="@id/usercomu_item_portal_txt"
-            android:layout_alignTop="@id/usercomu_item_portal_rot"
-            android:layout_alignBottom="@id/usercomu_item_portal_rot"/>
-
-    <TextView
+            android:layout_weight="0"
+            android:gravity="start"
+            android:text="@string/usercomu_escalera_rot"/>
+        <TextView
             android:id="@+id/usercomu_item_escalera_txt"
-            style="@style/textBase.textFieldLabel1"
-            android:layout_marginTop="0dp"
-            android:layout_toEndOf="@id/usercomu_item_escalera_rot"
-            android:layout_alignTop="@id/usercomu_item_escalera_rot"
-            android:layout_alignBottom="@id/usercomu_item_escalera_rot"/>
+            style="@style/textBase.textFieldLabel2"
+            android:layout_marginStart="@dimen/simple_horizontal_margin"
+            android:layout_weight="1"
+            android:gravity="start"/>
+    </LinearLayout>
 
-    <TextView
+    <LinearLayout android:id="@+id/usercomu_planta_puerta_block"
+                  style="@style/baseLayout"
+                  android:orientation="horizontal">
+        <TextView
             android:id="@+id/usercomu_item_planta_rot"
-            android:text="@string/usercomu_planta_rot"
             style="@style/textBase.textFieldLabel2"
-            android:layout_alignParentStart="true"
-            android:layout_below="@id/usercomu_item_portal_rot"/>
-
-    <TextView
+            android:layout_weight="0"
+            android:gravity="start"
+            android:text="@string/usercomu_planta_rot"/>
+        <TextView
             android:id="@+id/usercomu_item_planta_txt"
-            style="@style/textBase.textFieldLabel1"
-            android:layout_marginTop="0dp"
-            android:layout_toEndOf="@id/usercomu_item_planta_rot"
-            android:layout_alignTop="@id/usercomu_item_planta_rot"
-            android:layout_alignBottom="@id/usercomu_item_planta_rot"/>
-
-    <TextView
+            style="@style/textBase.textFieldLabel2"
+            android:layout_marginStart="@dimen/simple_horizontal_margin"
+            android:layout_weight="0"
+            android:gravity="start"/>
+        <TextView
             android:id="@+id/usercomu_item_puerta_rot"
-            android:text="@string/usercomu_puerta_rot"
             style="@style/textBase.textFieldLabel2"
-            android:layout_marginTop="0dp"
             android:layout_marginStart="@dimen/double_horizontal_margin"
-            android:layout_toEndOf="@id/usercomu_item_planta_txt"
-            android:layout_alignTop="@id/usercomu_item_planta_rot"
-            android:layout_alignBottom="@id/usercomu_item_planta_rot"/>
+            android:layout_weight="0"
+            android:gravity="start"
+            android:text="@string/usercomu_puerta_rot"/>
 
-    <TextView
+        <TextView
             android:id="@+id/usercomu_item_puerta_txt"
-            style="@style/textBase.textFieldLabel1"
-            android:layout_marginTop="0dp"
-            android:layout_toEndOf="@id/usercomu_item_puerta_rot"
-            android:layout_alignTop="@id/usercomu_item_puerta_rot"
-            android:layout_alignBottom="@id/usercomu_item_puerta_rot"/>
-
-    <TextView
-            android:id="@+id/usercomu_item_roles_rotulo"
-            android:text="@string/usercomu_role_rot"
             style="@style/textBase.textFieldLabel2"
-            android:layout_alignParentStart="true"
-            android:layout_below="@id/usercomu_item_planta_rot"/>
+            android:layout_marginStart="@dimen/simple_horizontal_margin"
+            android:layout_weight="1"
+            android:gravity="start"/>
+    </LinearLayout>
 
-    <TextView
-            android:id="@+id/usercomu_item_roles_txt"
-            style="@style/textBase.textFieldLabel1"
-            android:layout_marginTop="0dp"
-            android:layout_toEndOf="@id/usercomu_item_roles_rotulo"
-            android:layout_alignTop="@id/usercomu_item_roles_rotulo"
-            android:layout_alignBottom="@id/usercomu_item_roles_rotulo"/>
-
-</RelativeLayout>
+</merge>

@@ -119,6 +119,11 @@ public class IncidRegAcFragment extends Fragment implements ComuSpinnerSettable,
         });
     }
 
+    public View getmFragmentView()
+    {
+        return mFragmentView;
+    }
+
 //    ============================================================
 //              .......... INTERFACE METHDOS .......
 //    ============================================================

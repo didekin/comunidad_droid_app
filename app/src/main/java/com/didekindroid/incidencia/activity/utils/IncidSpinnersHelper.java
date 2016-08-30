@@ -13,7 +13,7 @@ import com.didekindroid.R;
 import com.didekindroid.incidencia.activity.IncidSeeUserComuImportanciaFr;
 
 import static com.didekindroid.common.activity.BundleKey.INCID_ACTIVITY_VIEW_ID;
-import static com.didekindroid.common.activity.FragmentTags.incid_see_usercomus_importancia_fr_tag;
+import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_see_usercomus_importancia_fr_tag;
 
 /**
  * User: pedro@didekin
@@ -79,7 +79,7 @@ public enum IncidSpinnersHelper {
     @SuppressWarnings("ConstantConditions")
     public <T extends Fragment & ImportanciaSpinnerSettable> void initUserComusImportanciaView(final T fragment)
     {
-        Log.d(TAG, "setUserComusImportanciaView()");
+        Log.d(TAG, "initUserComusImportanciaView()");
 
         TextView mSeeImportanciaView = (TextView) fragment.getView().findViewById(R.id.incid_importancia_otros_view);
         mSeeImportanciaView.setOnClickListener(new View.OnClickListener() {

@@ -4,7 +4,7 @@
               xmlns:android="http://schemas.android.com/apk/res/android">
     <TextView
         android:id="@+id/reg_usercomu_vivienda_rot"
-        style="@style/textBase.textPageLabel2"
+        style="@style/textBase.textPageLabel1"
         android:text="@string/reg_usercomu_vivienda_rot"
     />
 
@@ -17,6 +17,8 @@
             android:hint="@string/reg_usercomu_portal_hint"
             android:inputType="textCapWords"
             android:maxEms="10"
+            android:layout_weight="1"
+            android:gravity="center"
         />
 
         <EditText
@@ -25,6 +27,8 @@
             android:hint="@string/reg_usercomu_escalera_hint"
             android:inputType="textCapWords"
             android:maxEms="10"
+            android:layout_weight="1"
+            android:gravity="center"
         />
 
         <EditText
@@ -33,6 +37,8 @@
             android:hint="@string/reg_usercomu_planta_hint"
             android:inputType="textCapWords"
             android:maxEms="10"
+            android:layout_weight="1"
+            android:gravity="center"
         />
 
         <EditText
@@ -41,13 +47,15 @@
             android:hint="@string/reg_usercomu_puerta_hint"
             android:inputType="textCapWords"
             android:maxEms="10"
+            android:layout_weight="1"
+            android:gravity="center"
         />
     </LinearLayout>
 
 
     <TextView
         android:id="@+id/reg_usercomu_roles_checkbox_rot"
-        style="@style/textBase.textPageLabel2"
+        style="@style/textBase.textPageLabel1"
         android:text="@string/reg_usercomu_role_checkbox_rot"
     />
 

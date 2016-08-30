@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     android:id="@+id/incid_resolucion_see_fr_layout"
-    style="@style/baseLayout"
+    style="@style/baseLayout.withPadding"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginTop="@dimen/app_bar_bottom_margin"
@@ -9,22 +9,25 @@
     <!--Rótulo de la página-->
     <TextView
         android:id="@+id/incid_resolucion_rot"
-        style="@style/textBase.textPageLabel2"
+        style="@style/textBase.textPageLabel1"
         android:text="@string/incid_resolucion_rot"/>
     <!--Fecha estimada-->
     <LinearLayout
         android:id="@+id/incid_resolucion_fecha_prev_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
+        android:orientation="horizontal">
         <TextView
             android:id="@+id/incid_resolucion_fecha_prev_rot"
             style="@style/textBase.textFieldLabel1"
+            android:layout_weight="0"
             android:text="@string/incid_resolucion_fecha_prev"/>
         <TextView
             android:id="@+id/incid_resolucion_fecha_view"
-            style="@style/textBase.textFieldLabel2"/>
+            style="@style/textBase.textFieldLabel2"
+            android:layout_weight="1"
+            android:gravity="start"
+            android:layout_marginStart="@dimen/simple_horizontal_margin"/>
     </LinearLayout>
     <!--Coste estimado-->
     <LinearLayout
@@ -35,10 +38,14 @@
         <TextView
             android:id="@+id/incid_resolucion_coste_prev_rot"
             style="@style/textBase.textFieldLabel1"
+            android:layout_weight="0"
             android:text="@string/incid_resolucion_coste_prev_rot"/>
         <TextView
             android:id="@+id/incid_resolucion_coste_prev_view"
-            style="@style/textBase.textFieldLabel2"/>
+            style="@style/textBase.textFieldLabel2"
+            android:layout_weight="1"
+            android:gravity="start"
+            android:layout_marginStart="@dimen/simple_horizontal_margin"/>
     </LinearLayout>
     <!-- Descripción plan y lista de avances-->
     <include layout="@layout/incid_resolucion_edit_see_include"/>

@@ -17,7 +17,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static com.didekindroid.common.utils.UIutils.checkPlayServices;
 import static com.didekindroid.common.utils.UIutils.isGcmTokenSentServer;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.utils.UIutils.updateIsGcmTokenSentServer;
@@ -74,7 +73,6 @@ public class GcmRegistrationIntentService_Test {
     public void testRegistrationGcmToken() throws Exception
     {
         // Preconditions for the test.
-        assertThat(checkPlayServices(mActivity), is(true));
         assertThat(isRegisteredUser(mActivity), is(false));
 
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();

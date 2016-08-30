@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:id="@+id/comunidad_list_item_view"
-              style="@style/baseLayout.listItem"
+<LinearLayout style="@style/baseLayout"
               xmlns:android="http://schemas.android.com/apk/res/android">
 
     <TextView
         android:id="@+id/nombreComunidad_view"
         style="@style/textBase.textFieldLabel1"/>
 
-    <TextView
-        android:id="@+id/municipio_view"
-        style="@style/textBase.textFieldLabel2"
-    />
-
-    <TextView
-        android:id="@+id/provincia_view"
-        style="@style/textBase.textFieldLabel2"
-    />
+    <LinearLayout style="@style/baseLayout" android:orientation="horizontal">
+        <TextView
+            android:id="@+id/municipio_view"
+            style="@style/textBase.textFieldLabel2"
+            android:layout_weight="0"/>
+        <TextView
+            android:id="@+id/provincia_view"
+            style="@style/textBase.textFieldLabel2"
+            android:layout_marginStart="@dimen/double_horizontal_margin"
+            android:layout_weight="1"
+            android:gravity="start"/>
+    </LinearLayout>
 
 </LinearLayout>

@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:fitsSystemWindows="true">
 
-    <include layout="@layout/appbar_include"/>
+    <include layout="@layout/appbar_include_design"/>
 
     <LinearLayout android:id="@+id/delete_me_ac_layout"
-                  style="@style/baseLayout"
+                  style="@style/baseLayout.withPadding"
                   tools:context="com.didekindroid.usuario.activity.DeleteMeAc">
 
         <TextView

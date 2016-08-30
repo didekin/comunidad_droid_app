@@ -81,7 +81,7 @@ public interface UsuarioEndPoints {
     Call<Usuario> getUserData(@Header("Authorization") String accessToken);
 
     @GET(COMUNIDAD_OLDEST_USER + "/{comunidadId}")
-    Call<Boolean> isOldestUserComu(@Header("Authorization") String accessToken, @Path("comunidadId") long comunidadId);
+    Call<Boolean> isOldestOrAdmonUserComu(@Header("Authorization") String accessToken, @Path("comunidadId") long comunidadId);
 
     @FormUrlEncoded
     @POST(LOGIN)

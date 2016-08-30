@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    style="@style/basicList"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/vertical_margin">
+    style="@style/baseLayout.withPadding"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <LinearLayout
-        android:layout_width="match_parent"
+        style="@style/baseLayout"
         android:layout_height="wrap_content"
         android:layout_marginBottom="2dp"
         android:orientation="horizontal">
         <TextView
             android:id="@+id/incid_avance_fecha_view"
-            style="@style/textBase.textFieldLabel2"/>
+            style="@style/textBase.textFieldLabel2"
+        android:layout_weight="0"/>
         <TextView
             android:id="@+id/incid_avance_aliasUser_view"
-            style="@style/textBase.textFieldLabel2"/>
+            style="@style/textBase.textFieldLabel2"
+            android:layout_weight="1"
+            android:gravity="start"
+            android:layout_marginStart="@dimen/simple_horizontal_margin"/>
     </LinearLayout>
     <TextView
         android:id="@+id/incid_avance_desc_view"

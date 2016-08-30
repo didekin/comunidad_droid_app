@@ -10,6 +10,7 @@ import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.usuario.testutils.CleanUserEnum;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -86,6 +87,12 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
         };
     }
 
+    @BeforeClass
+    public static void slowSeconds() throws InterruptedException
+    {
+        Thread.sleep(4000);
+    }
+
     @Override
     CleanUserEnum whatToClean()
     {
@@ -98,11 +105,6 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
     public void testOnCreate_1() throws Exception
     {
         checkScreenResolucionEditFr();
-    }
-
-    @Test
-    public void testOnData_1()
-    {
         checkDataResolucionEditFr();
         // Avances.
         onView(allOf(
@@ -114,7 +116,7 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
     @Test
     public void testOnEdit_1() throws UiException
     {
-        // Caso: no cambiamos nada y pulsamos modificar.
+        // Caso: no cambiamos nada y pulsamos modificar. Mantiene los datos de la resolución.
         onView(withId(R.id.incid_resolucion_fr_modif_button)).perform(click());
         checKOk();
         Resolucion resolucionDb = IncidenciaServ.seeResolucion(resolucion.getIncidencia().getIncidenciaId());
@@ -130,7 +132,8 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
         onView(withId(R.id.incid_resolucion_fecha_view)).perform(click());
         Calendar newCalendar = new GregorianCalendar();
         newCalendar.setTimeInMillis(resolucion.getFechaPrev().getTime());
-        newCalendar.add(MONTH, 1); // Aumentamos un mes la fecha estimada.
+        // Aumentamos un mes la fecha estimada.
+        newCalendar.add(MONTH, 1);
         // Android PickerActions substract 1 from the month passed to setDate(), so we increased the month parameter value in 1 before passing it.
         onView(withClassName(is(DatePicker.class.getName())))
                 .perform(setDate(newCalendar.get(Calendar.YEAR), newCalendar.get(MONTH) + 1, newCalendar.get(DAY_OF_MONTH)));

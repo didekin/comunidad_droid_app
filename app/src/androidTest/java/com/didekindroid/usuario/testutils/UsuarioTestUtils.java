@@ -6,8 +6,9 @@ import com.didekin.usuario.dominio.Provincia;
 import com.didekin.usuario.dominio.Usuario;
 import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
-import com.didekindroid.usuario.activity.utils.RolCheckBox;
+import com.didekindroid.usuario.activity.utils.RolUi;
 import com.didekindroid.usuario.dominio.ComunidadBean;
+import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,10 +27,10 @@ import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekin.usuario.dominio.Rol.PRESIDENTE;
 import static com.didekin.usuario.dominio.Rol.PROPIETARIO;
-import static com.didekindroid.usuario.activity.utils.RolCheckBox.ADM;
-import static com.didekindroid.usuario.activity.utils.RolCheckBox.INQ;
-import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRE;
-import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRO;
+import static com.didekindroid.usuario.activity.utils.RolUi.ADM;
+import static com.didekindroid.usuario.activity.utils.RolUi.INQ;
+import static com.didekindroid.usuario.activity.utils.RolUi.PRE;
+import static com.didekindroid.usuario.activity.utils.RolUi.PRO;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.containsString;
@@ -230,7 +231,7 @@ public final class UsuarioTestUtils {
                 .check(matches(withText(containsString(municipio))));
     }
 
-    public static void typeRegUserComuData(String portal, String escalera, String planta, String puerta, RolCheckBox...
+    public static void typeUserComuData(String portal, String escalera, String planta, String puerta, RolUi...
             roles)
     {
         onView(withId(R.id.reg_usercomu_portal_ed)).perform(typeText(portal));
@@ -239,8 +240,8 @@ public final class UsuarioTestUtils {
         onView(withId(R.id.reg_usercomu_puerta_ed)).perform(typeText(puerta), closeSoftKeyboard());
 
         if (roles != null) {
-            for (RolCheckBox rolCheckBox : roles) {
-                onView(withId(rolCheckBox.resourceViewId)).perform(scrollTo(), click());
+            for (RolUi rolUi : roles) {
+                onView(withId(rolUi.resourceViewId)).perform(scrollTo(), click());
             }
         }
     }
@@ -274,6 +275,27 @@ public final class UsuarioTestUtils {
         assertThat(comunidad.getNombreVia(), is(nombreVia));
         assertThat(comunidad.getNumero(), is(numeroEnVia));
         assertThat(comunidad.getSufijoNumero(), is(sufijoNumero));
+    }
+
+    public static void validaTypedComunidadShort(Comunidad comunidad, String nombreComunidad, Municipio municipio)
+    {
+        assertThat(comunidad, notNullValue());
+        assertThat(comunidad.getNombreComunidad(), is(nombreComunidad));
+        assertThat(comunidad.getMunicipio(), is(municipio));
+    }
+
+    public static void validaTypedUserComuBean(UsuarioComunidadBean usuarioComunidadBean, String portal, String escalera, String planta, String puerta,
+                                               boolean isPre, boolean isAdm, boolean isPro, boolean isInq)
+    {
+        assertThat(usuarioComunidadBean, notNullValue());
+        assertThat(usuarioComunidadBean.getPortal(), is(portal));
+        assertThat(usuarioComunidadBean.getEscalera(), is(escalera));
+        assertThat(usuarioComunidadBean.getPlanta(), is(planta));
+        assertThat(usuarioComunidadBean.getPuerta(), is(puerta));
+        assertThat(usuarioComunidadBean.isPresidente(), is(isPre));
+        assertThat(usuarioComunidadBean.isAdministrador(), is(isAdm));
+        assertThat(usuarioComunidadBean.isPropietario(), is(isPro));
+        assertThat(usuarioComunidadBean.isInquilino(), is(isInq));
     }
 
     public static void validaTypedUsuarioComunidad(UsuarioComunidad usuarioComunidad, String portal, String escalera, String planta, String puerta, String roles)

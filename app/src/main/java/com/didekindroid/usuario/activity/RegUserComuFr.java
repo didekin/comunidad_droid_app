@@ -8,8 +8,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.EditText;
 
+import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
+
+import static com.didekindroid.usuario.activity.utils.RolUi.ADM;
+import static com.didekindroid.usuario.activity.utils.RolUi.INQ;
+import static com.didekindroid.usuario.activity.utils.RolUi.PRE;
+import static com.didekindroid.usuario.activity.utils.RolUi.PRO;
 
 public class RegUserComuFr extends Fragment {
 
@@ -108,6 +116,25 @@ public class RegUserComuFr extends Fragment {
     {
         Log.d(TAG, "getFragmentView()");
         return mRegUserComuFrView;
+    }
+
+    void paintUserComuView(UsuarioComunidad initUserComu)
+    {
+        Log.d(TAG, "paintUserComuView()");
+
+        ((EditText) mRegUserComuFrView.findViewById(R.id.reg_usercomu_portal_ed)).setText(initUserComu.getPortal());
+        ((EditText) mRegUserComuFrView.findViewById(R.id.reg_usercomu_escalera_ed)).setText(initUserComu.getEscalera());
+        ((EditText) mRegUserComuFrView.findViewById(R.id.reg_usercomu_planta_ed)).setText(initUserComu.getPlanta());
+        ((EditText) mRegUserComuFrView.findViewById(R.id.reg_usercomu_puerta_ed)).setText(initUserComu.getPuerta());
+
+        ((CheckBox) mRegUserComuFrView.findViewById(R.id.reg_usercomu_checbox_pre))
+                .setChecked(initUserComu.getRoles().contains(PRE.function));
+        ((CheckBox) mRegUserComuFrView.findViewById(R.id.reg_usercomu_checbox_admin))
+                .setChecked(initUserComu.getRoles().contains(ADM.function));
+        ((CheckBox) mRegUserComuFrView.findViewById(R.id.reg_usercomu_checbox_pro))
+                .setChecked(initUserComu.getRoles().contains(PRO.function));
+        ((CheckBox) mRegUserComuFrView.findViewById(R.id.reg_usercomu_checbox_inq))
+                .setChecked(initUserComu.getRoles().contains(INQ.function));
     }
 }
 

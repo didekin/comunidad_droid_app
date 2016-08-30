@@ -68,10 +68,10 @@ public class IncidResolucionSeeFrTest_2 extends IncidResolucionAbstractTest {
                     Thread.sleep(1000);
                     // Necesitamos usuario con 'adm' para registrar resolución.
                     assertThat(ServOne.regUserAndUserComu(
-                                    new UsuarioComunidad.UserComuBuilder(
-                                            incidImportancia.getUserComu().getComunidad(), USER_PEPE)
-                                            .roles(PRESIDENTE.function)
-                                            .build()).execute().body(),
+                            new UsuarioComunidad.UserComuBuilder(
+                                    incidImportancia.getUserComu().getComunidad(), USER_PEPE)
+                                    .roles(PRESIDENTE.function)
+                                    .build()).execute().body(),
                             is(true));
                     updateSecurityData(USER_PEPE.getUserName(), USER_PEPE.getPassword());
                     // Registramos resolución.
@@ -111,12 +111,8 @@ public class IncidResolucionSeeFrTest_2 extends IncidResolucionAbstractTest {
     public void testOnCreate_1() throws Exception
     {
         checkScreenResolucionSeeFr();
-    }
-
-    @Test
-    public void testOnData_1()
-    {
         checkDataResolucionSeeFr();
+
         // Avances.
         Avance avance = resolucion.getAvances().get(0);
         onData(is(avance)).inAdapterView(withId(android.R.id.list)).check(matches(isDisplayed()));

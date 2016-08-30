@@ -13,6 +13,7 @@ import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.usuario.testutils.CleanUserEnum;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -101,6 +102,12 @@ public class IncidEditAcTest_Mn3 extends IncidEditAbstractTest {
                 return intent;
             }
         };
+    }
+
+    @BeforeClass
+    public static void slowSeconds() throws InterruptedException
+    {
+        Thread.sleep(4000);
     }
 
     @Override

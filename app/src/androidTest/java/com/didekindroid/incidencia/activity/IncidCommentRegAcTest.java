@@ -33,6 +33,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withHint;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_OBJECT;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkNavigateUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
@@ -120,16 +121,12 @@ public class IncidCommentRegAcTest {
                 withHint(R.string.incid_comment_ed_hint)
         )).check(matches(isDisplayed()));
 
-        ActivityTestUtils.checkNavigateUp();
-    }
-
-    @Test
-    public void testOnData_1()
-    {
         onView(allOf(
                 withId(R.id.incid_reg_desc_txt),
                 withText(incidJuanReal1.getIncidencia().getDescripcion())
         )).check(matches(isDisplayed()));
+
+        checkNavigateUp();
     }
 
     @Test

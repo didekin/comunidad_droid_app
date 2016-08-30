@@ -23,7 +23,7 @@ import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
 import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_LIST_INDEX;
 import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_FLAG;
-import static com.didekindroid.common.activity.FragmentTags.incid_see_by_comu_list_fr_tag;
+import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.getGcmToken;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_CLOSED_BY_COMU_AC;
@@ -96,7 +96,7 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements
         Log.d(TAG, "onRestoreInstanceState()");
         if (savedInstanceState != null) {
             mIncidenciaIndex = savedInstanceState.getInt(INCIDENCIA_LIST_INDEX.key, 0);
-            mFragment.setSelection(mIncidenciaIndex); // Only for linearFragments.
+            mFragment.getListView().setSelection(mIncidenciaIndex); // Only for linearFragments.
         }
     }
 

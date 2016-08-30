@@ -5,7 +5,7 @@
 
     <TextView
         android:id="@+id/reg_usuario_rotulo"
-        style="@style/textBase.textPageLabel2"
+        style="@style/textBase.textPageLabel1"
         android:text="@string/reg_usuario_rotulo"/>
 
     <include

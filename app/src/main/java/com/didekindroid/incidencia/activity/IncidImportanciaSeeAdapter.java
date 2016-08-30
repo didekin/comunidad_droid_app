@@ -59,7 +59,7 @@ public class IncidImportanciaSeeAdapter extends ArrayAdapter<ImportanciaUser> {
         {
             aliasView.setText(importanciaUser.getUserAlias());
             Resources resources = getContext().getResources();
-            String importancia = importanciaUser.getImportancia() == 0 ? "" : resources.getStringArray(R.array.IncidImportanciaArray)[importanciaUser.getImportancia()];
+            String importancia = importanciaUser.getImportancia() == 0 ? resources.getString(R.string.no_sabe) : resources.getStringArray(R.array.IncidImportanciaArray)[importanciaUser.getImportancia()];
             ratingView.setText(importancia);
         }
     }

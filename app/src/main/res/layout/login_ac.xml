@@ -6,10 +6,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:fitsSystemWindows="true">
 
-    <include layout="@layout/appbar_include"/>
+    <include layout="@layout/appbar_include_design"/>
 
     <LinearLayout android:id="@+id/login_ac_layout"
-                  style="@style/baseLayout"
+                  style="@style/baseLayout.withPadding"
                   android:layout_marginTop="@dimen/app_bar_bottom_margin">
 
         <TextView

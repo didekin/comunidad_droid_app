@@ -7,6 +7,7 @@ package com.didekindroid.common.activity;
  */
 public enum BundleKey {
 
+    COMUNIDAD_LIST,
     COMUNIDAD_LIST_INDEX,
     COMUNIDAD_LIST_OBJECT,
     COMUNIDAD_ID,

@@ -1,48 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView style="@style/baseLayout.scroll"
             xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
+            xmlns:tools="http://schemas.android.com/tools">
+
+    <android.support.design.widget.CoordinatorLayout style="@style/baseLayout">
+
+        <include layout="@layout/appbar_include_design"/>
+
+        <LinearLayout
+            android:id="@+id/user_data_ac_layout"
+            style="@style/baseLayout.withPadding"
+            android:layout_marginTop="@dimen/app_bar_bottom_margin"
             tools:context="com.didekindroid.usuario.activity.UserDataAc">
 
-    <LinearLayout
-        android:id="@+id/user_data_ac_layout"
-        style="@style/baseLayout">
+            <TextView
+                android:id="@+id/user_data_ac_cambios_rot"
+                style="@style/textBase.textFieldLabel2"
+                android:text="@string/user_data_ac_cambios_text"/>
 
-        <include layout="@layout/appbar_include"/>
+            <include
+                android:id="@+id/user_data_ac_include"
+                layout="@layout/user_data_include"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+            />
 
-        <TextView
-            android:id="@+id/user_data_ac_rotulo"
-            style="@style/textBase.textPageLabel1"
-            android:layout_marginTop="@dimen/app_bar_bottom_margin"
-            android:text="@string/user_data_ac_label"/>
+            <TextView
+                android:id="@+id/user_data_ac_password_rot"
+                style="@style/textBase.textFieldLabel2"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="@dimen/vertical_margin"
+                android:text="@string/user_data_ac_password_txt"/>
 
-        <TextView
-            android:id="@+id/user_data_ac_cambios_rot"
-            style="@style/textBase.textFieldLabel2"
-            android:text="@string/user_data_ac_cambios_text"/>
+            <EditText
+                android:id="@+id/user_data_ac_password_ediT"
+                style="@style/textBase.editField.password"
+                android:hint="@string/user_data_ac_password_hint"/>
 
-        <include
-            android:id="@+id/user_data_ac_include"
-            layout="@layout/user_data_include"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-        />
+            <Button
+                android:id="@+id/user_data_modif_button"
+                style="@style/textBase.acButton1"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/user_data_modif_button_rot"/>
 
-        <TextView
-            android:id="@+id/user_data_ac_password_rot"
-            style="@style/textBase.textFieldLabel2"
-            android:text="@string/user_data_ac_password_txt"/>
-
-        <EditText
-            android:id="@+id/user_data_ac_password_ediT"
-            style="@style/textBase.editField.password"
-            android:hint="@string/user_data_ac_password_hint"/>
-
-        <Button
-            android:id="@+id/user_data_modif_button"
-            style="@style/textBase.acButton1"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/user_data_modif_button_txt"/>
-
-    </LinearLayout>
+        </LinearLayout>
+    </android.support.design.widget.CoordinatorLayout>
 </ScrollView>

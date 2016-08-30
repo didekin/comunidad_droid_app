@@ -84,6 +84,7 @@ public class ComunidadBean {
 
     boolean validateTipoVia(Resources resources, StringBuilder errorMsg)
     {
+        // TODO: internacionalizar. Ha de compararse con el primer registro de la tabla de tipo_via.
         if (tipoVia == null || tipoVia.trim().equals(resources.getString(R.string.tipo_via_spinner))) {
             errorMsg.append(resources.getString(R.string.tipo_via)).append(LINE_BREAK.getRegexp());
             return false;

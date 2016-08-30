@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                style="@style/baseLayout"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                style="@style/baseLayout.withPadding"
                 android:id="@+id/comu_usercomu_list_item">
 
     <include
             layout="@layout/comu_include"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
             android:id="@+id/comu_list_include"
             />
 
@@ -15,8 +14,7 @@
             layout="@layout/usercomu_include"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/comu_list_include"
             android:id="@+id/usercomu_include"
             />
 
-</RelativeLayout>
+</LinearLayout>

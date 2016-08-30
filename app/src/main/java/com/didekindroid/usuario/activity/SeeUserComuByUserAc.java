@@ -31,7 +31,6 @@ public class SeeUserComuByUserAc extends AppCompatActivity implements
         SeeUserComuByUserFr.SeeUserComuByUserFrListener {
 
     public static final String TAG = SeeUserComuByUserAc.class.getCanonicalName();
-
     SeeUserComuByUserFr mFragment;
 
     @Override
@@ -45,7 +44,7 @@ public class SeeUserComuByUserAc extends AppCompatActivity implements
 
         setContentView(R.layout.see_usercomu_by_user_ac);
         doToolBar(this, true);
-        mFragment = (SeeUserComuByUserFr) getFragmentManager().findFragmentById(R.id.see_usercomu_by_user_frg);
+        mFragment = (SeeUserComuByUserFr) getSupportFragmentManager().findFragmentById(R.id.see_usercomu_by_user_frg);
     }
 
     @Override

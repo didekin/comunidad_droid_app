@@ -12,7 +12,6 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.common.activity.ViewsIDs.SEE_USERCOMU_BY_USER;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkNoToastInTest;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
 
@@ -25,7 +24,7 @@ public enum UserMenuTestUtils {
 
     COMU_DATA_AC {
         @Override
-        public void checkMenuItem_NTk(Activity activity) throws InterruptedException
+        public void checkMenuItem_NTk(Activity activity)
         {
             throw new UnsupportedOperationException(COMU_DATA_AC.name() + REGISTERED_USER);
         }
@@ -61,7 +60,7 @@ public enum UserMenuTestUtils {
 
     DELETE_ME_AC {
         @Override
-        public void checkMenuItem_NTk(Activity activity) throws InterruptedException
+        public void checkMenuItem_NTk(Activity activity)
         {
             throw new UnsupportedOperationException(DELETE_ME_AC.name() + REGISTERED_USER);
         }
@@ -79,14 +78,14 @@ public enum UserMenuTestUtils {
 
     LOGIN_AC {
         @Override
-        public void checkMenuItem_NTk(Activity activity) throws InterruptedException
+        public void checkMenuItem_NTk(Activity activity)
         {
             onView(withText(R.string.login_ac_mn)).check(matches(isDisplayed())).perform(click());
             onView(withId(R.id.login_ac_layout)).check(matches(isDisplayed()));
         }
 
         @Override
-        public void checkMenuItem_WTk(Activity activity) throws InterruptedException
+        public void checkMenuItem_WTk(Activity activity)
         {
             throw new UnsupportedOperationException(LOGIN_AC.name() + REQUIRES_USER_NO_TOKEN);
         }
@@ -94,7 +93,7 @@ public enum UserMenuTestUtils {
 
     PASSWORD_CHANGE_AC {
         @Override
-        public void checkMenuItem_NTk(Activity activity) throws InterruptedException
+        public void checkMenuItem_NTk(Activity activity)
         {
             throw new UnsupportedOperationException(PASSWORD_CHANGE_AC.name() + REGISTERED_USER);
         }
@@ -134,7 +133,7 @@ public enum UserMenuTestUtils {
 
     SEE_USERCOMU_BY_COMU_AC {
         @Override
-        public void checkMenuItem_NTk(Activity activity) throws InterruptedException
+        public void checkMenuItem_NTk(Activity activity)
         {
             throw new UnsupportedOperationException(SEE_USERCOMU_BY_COMU_AC.name() + REGISTERED_USER);
         }
@@ -146,7 +145,7 @@ public enum UserMenuTestUtils {
             openActionBarOverflowOrOptionsMenu(activity);
             Thread.sleep(1000);
             onView(withText(R.string.see_usercomu_by_comu_ac_mn)).check(matches(isDisplayed())).perform(click());
-            onView(withId(R.id.see_usercomu_by_comu_ac_frg_container)).check(matches(isDisplayed()));
+            onView(withId(R.id.see_usercomu_by_comu_frg)).check(matches(isDisplayed()));
         }
     },
 
@@ -173,7 +172,7 @@ public enum UserMenuTestUtils {
 
             // No muestra toast de error.
             checkNoToastInTest(R.string.user_without_signedUp, activity);
-            onView(withId(SEE_USERCOMU_BY_USER.idView)).check(matches(isDisplayed()));
+            onView(withId(R.id.see_usercomu_by_user_frg)).check(matches(isDisplayed()));
         }
     },
 

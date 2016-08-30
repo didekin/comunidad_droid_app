@@ -33,6 +33,7 @@ import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.common.utils.UIutils.makeToast;
 import static com.didekindroid.incidencia.activity.utils.IncidSpinnersHelper.HELPER;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
 /**
@@ -76,6 +77,7 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
         mIncidImportanciaBean = new IncidImportanciaBean();
         dbHelper = new IncidenciaDataDbHelper(getActivity());
 
+        // Inicializa comunidadId.
         mIncidenciaBean.setComunidadId(mIncidImportancia.getIncidencia().getComunidad().getC_Id());
         ((TextView) fFragmentView.findViewById(R.id.incid_comunidad_txt)).setText(mIncidImportancia.getIncidencia().getComunidad().getNombreComunidad());
         ((EditText) fFragmentView.findViewById(R.id.incid_reg_desc_ed)).setText(mIncidImportancia.getIncidencia().getDescripcion());
@@ -129,18 +131,17 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
     private void modifyIncidenciaAndImportancia()
     {
         Log.d(TAG, "modifyIncidenciaAndImportancia()");
-
         StringBuilder errorMsg = getErrorMsgBuilder(getActivity());
-        final Incidencia incidencia = mIncidenciaBean.makeIncidenciaWithUserName(
-                fFragmentView, errorMsg, getResources(), mIncidImportancia.getIncidencia().getUserName());
-        IncidImportancia incidImportancia = null;
+
         try {
-            incidImportancia = mIncidImportanciaBean.makeIncidImportancia(errorMsg, getResources(), incidencia);
+            IncidImportancia incidImportancia = mIncidImportanciaBean.makeIncidImportancia(
+                    errorMsg, getResources(), fFragmentView, mIncidenciaBean, checkNotNull(mIncidImportancia));
+            if (checkInternetConnected(getActivity())) {
+                new IncidenciaModifyer().execute(incidImportancia);
+            }
         } catch (IllegalStateException e) {
+            Log.e(TAG, e.getMessage());
             makeToast(getActivity(), errorMsg.toString(), Toast.LENGTH_SHORT);
-        }
-        if (incidImportancia != null && checkInternetConnected(getActivity())) {
-            new IncidenciaModifyer().execute(incidImportancia);
         }
     }
 
@@ -252,7 +253,7 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
             if (uiException != null) {
                 uiException.processMe(getActivity(), new Intent());
             } else {
-                checkState(rowInserted == 1);
+                checkState(rowInserted >= 1);
                 Intent intent = new Intent(getActivity(), IncidSeeOpenByComuAc.class);
                 startActivity(intent);
             }

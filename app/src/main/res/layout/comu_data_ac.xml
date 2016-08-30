@@ -5,7 +5,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:fitsSystemWindows="true">
 
-    <include layout="@layout/appbar_include"/>
+    <include layout="@layout/appbar_include_design"/>
 
     <ScrollView style="@style/baseLayout.scroll">
 

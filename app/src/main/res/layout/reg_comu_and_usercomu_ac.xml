@@ -1,35 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/baseLayout.scroll">
+<ScrollView style="@style/baseLayout.scroll"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            tools:context="com.didekindroid.usuario.activity.RegComuAndUserComuAc">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/reg_comu_and_usercomu_layout"
-        style="@style/baseLayout"
-        tools:context="com.didekindroid.usuario.activity.RegComuAndUserComuAc">
+    <android.support.design.widget.CoordinatorLayout style="@style/baseLayout">
 
-        <include layout="@layout/appbar_include" />
+        <include layout="@layout/appbar_include_design"/>
 
-        <fragment
-            android:id="@+id/reg_comunidad_frg"
-            android:name="com.didekindroid.usuario.activity.RegComuFr"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/app_bar_bottom_margin"
-            tools:layout="@layout/reg_comu_fr" />
+        <LinearLayout android:id="@+id/reg_comu_and_usercomu_layout"
+                      style="@style/baseLayout"
+                      android:layout_marginTop="@dimen/app_bar_bottom_margin">
 
-        <fragment
-            android:id="@+id/reg_usercomu_frg"
-            android:name="com.didekindroid.usuario.activity.RegUserComuFr"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:layout="@layout/reg_usercomu_fr" />
+            <fragment
+                android:id="@+id/reg_comunidad_frg"
+                android:name="com.didekindroid.usuario.activity.RegComuFr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:layout="@layout/reg_comu_fr"/>
 
-        <Button
-            android:id="@+id/reg_comu_usuariocomunidad_button"
-            style="@style/textBase.acButton1"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/reg_usercomu_ac_button_rot" />
+            <fragment
+                android:id="@+id/reg_usercomu_frg"
+                android:name="com.didekindroid.usuario.activity.RegUserComuFr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:layout="@layout/reg_usercomu_fr"/>
 
-    </LinearLayout>
+            <Button
+                android:id="@+id/reg_comu_usuariocomunidad_button"
+                style="@style/textBase.acButton1"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/reg_usercomu_ac_button_rot"/>
+
+        </LinearLayout>
+    </android.support.design.widget.CoordinatorLayout>
+
 </ScrollView>

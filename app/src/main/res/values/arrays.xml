@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="IncidResolucionFaseArray" >
-        <item>En estudio</item>
-        <item>Planificada</item>
-        <item>En ejecución</item>
-        <item>Resuelta</item>
-        <item>Cerrada</item>
+        <item>en estudio</item>
+        <item>planificada</item>
+        <item>en ejecución</item>
+        <item>resuelta</item>
+        <item>cerrada</item>
     </string-array>
     <string-array name="IncidImportanciaArray">
         <!--0-->
         <item>importancia</item>
         <!--1-->
-        <item>Baja</item>
+        <item>baja</item>
         <!--2-->
-        <item>Media</item>
+        <item>media</item>
         <!--3-->
-        <item>Alta</item>
+        <item>alta</item>
         <!--4-->
-        <item>Urgente</item>
+        <item>urgente</item>
     </string-array>
 </resources>

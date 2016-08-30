@@ -91,11 +91,6 @@ public class IncidResolucionSeeFrTest_1 extends IncidResolucionAbstractTest {
     public void testOnCreate_1() throws Exception
     {
         checkScreenResolucionSeeFr();
-    }
-
-    @Test
-    public void testOnData_1()
-    {
         checkDataResolucionSeeFr();
         // Avances.
         onView(allOf(

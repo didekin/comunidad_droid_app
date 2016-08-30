@@ -25,13 +25,12 @@ import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_LIST_INDEX;
 import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.IS_MENU_IN_FRAGMENT_FLAG;
-import static com.didekindroid.common.activity.FragmentTags.incid_resolucion_see_fr_tag;
-import static com.didekindroid.common.activity.FragmentTags.incid_see_by_comu_list_fr_tag;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
+import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_resolucion_see_fr_tag;
+import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_REG_AC;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_SEE_BY_COMU_AC;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
-import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
@@ -91,7 +90,7 @@ public class IncidSeeClosedByComuAc extends AppCompatActivity implements
         Log.d(TAG, "onRestoreInstanceState()");
         if (savedInstanceState != null) {
             mIncidenciaIndex = savedInstanceState.getInt(INCIDENCIA_LIST_INDEX.key, 0);
-            mFragment.setSelection(mIncidenciaIndex);
+            mFragment.getListView().setSelection(mIncidenciaIndex);
         }
     }
 
@@ -198,7 +197,7 @@ public class IncidSeeClosedByComuAc extends AppCompatActivity implements
                 uiException.processMe(IncidSeeClosedByComuAc.this, new Intent());
             } else {
                 // Switch fragment here.
-                checkArgument(resolucion != null);
+                checkState(resolucion != null);
                 Bundle bundle = new Bundle();
                 bundle.putBoolean(IS_MENU_IN_FRAGMENT_FLAG.key, true);
                 bundle.putSerializable(INCIDENCIA_OBJECT.key, incidencia);

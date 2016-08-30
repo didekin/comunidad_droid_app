@@ -1,28 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     android:id="@+id/incid_comments_see_list_item"
-    style="@style/baseLayout"
+    style="@style/baseLayout.withPadding"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <TextView
         android:id="@+id/incid_comment_fecha_view"
-        style="@style/textBase.textFieldLabel2"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="2dp"
-        android:layout_marginEnd="@dimen/simple_horizontal_margin"/>
+        style="@style/textBase.textFieldLabel2"/>
 
     <TextView
         android:id="@+id/incid_comment_redactor_view"
         style="@style/textBase.textFieldLabel2"
-        android:layout_alignBottom="@id/incid_comment_fecha_view"
-        android:layout_alignTop="@id/incid_comment_fecha_view"
-        android:layout_marginTop="0dp"
-        android:layout_toEndOf="@id/incid_comment_fecha_view"/>
+    />
 
     <TextView
         android:id="@+id/incid_comment_descripcion_view"
         style="@style/textBase.textFieldLabel2"
-        android:layout_alignParentStart="true"
-        android:layout_below="@id/incid_comment_redactor_view"/>
+    />
 
-</RelativeLayout>
+</LinearLayout>

@@ -1,10 +1,10 @@
 package com.didekindroid.usuario.activity;
 
-import android.app.ListFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +20,6 @@ import com.didekindroid.common.activity.UiException;
 
 import java.util.List;
 
-import static com.didekindroid.common.activity.ViewsIDs.SEE_USERCOMU_BY_COMU;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 
 
@@ -34,12 +33,12 @@ import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
  * Preconditions:
  * 1. a long comunidadId is passed as an intent key.
  */
-public class SeeUserComuByComuFr extends ListFragment {
+public class SeeUserComuByComuFr extends Fragment {
 
     private static final String TAG = SeeUserComuByComuFr.class.getCanonicalName();
 
-    SeeUserComuByComuAc mActivity;
     SeeUserComutByComuListAdapter mAdapter;
+    View mView;
     ListView fragmentListView;
     TextView nombreComuView;
     long comunidadId;
@@ -61,16 +60,17 @@ public class SeeUserComuByComuFr extends ListFragment {
         Log.d(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
 
-        mActivity = (SeeUserComuByComuAc) getActivity();
-        // Preconditions: an existing comunidad passed as intent. The comunidad has necessarily users already signed-up.
-        comunidadId = mActivity.getIntent().getExtras().getLong(BundleKey.COMUNIDAD_ID.key);
+        comunidadId = getActivity().getIntent().getExtras().getLong(BundleKey.COMUNIDAD_ID.key);
+        // Loading the data...
+        new UserComuByComuLoader().execute(comunidadId);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         Log.d(TAG, "onCreateView()");
-        return super.onCreateView(inflater, container, savedInstanceState);
+        mView = inflater.inflate(R.layout.see_usercomu_by_comu_list_fr, container, false);
+        return mView;
     }
 
     @Override
@@ -79,17 +79,10 @@ public class SeeUserComuByComuFr extends ListFragment {
         Log.d(TAG, "onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
 
-        fragmentListView = getListView();
-        fragmentListView.setId(SEE_USERCOMU_BY_COMU.idView);
-
-        // Header.
-        View headerView = getActivity().getLayoutInflater()
-                .inflate(R.layout.usercomu_list_header_view, fragmentListView, false);
-        nombreComuView = (TextView) headerView.findViewById(R.id.usercomu_list_header_nombrecomu_txt);
-        // Adapter.
-        mAdapter = new SeeUserComutByComuListAdapter(mActivity);
-        // Loading the data...
-        new UserComuByComuLoader().execute(comunidadId);
+        fragmentListView = (ListView) mView.findViewById(android.R.id.list);
+        // To get visible a divider on top of the list.
+        fragmentListView.addHeaderView(new View(getContext()), null, true);
+        nombreComuView = (TextView) mView.findViewById(R.id.see_usercomu_by_comu_list_header);
     }
 
     @Override
@@ -188,10 +181,11 @@ public class SeeUserComuByComuFr extends ListFragment {
             if (uiException != null) {
                 uiException.processMe(getActivity(), new Intent());
             } else {
+                // Adapter.
+                mAdapter = new SeeUserComutByComuListAdapter(SeeUserComuByComuFr.this.getActivity());
                 mAdapter.addAll(userComuList);
-                setListAdapter(mAdapter);
+                fragmentListView.setAdapter(mAdapter);
                 nombreComuView.setText(comunidadIn.getNombreComunidad());
-                fragmentListView.addHeaderView(nombreComuView);
             }
         }
     }

@@ -18,6 +18,7 @@ import com.didekindroid.common.activity.UiException;
 
 import java.util.List;
 
+import static android.widget.AbsListView.CHOICE_MODE_NONE;
 import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.google.common.base.Preconditions.checkState;
@@ -81,7 +82,6 @@ public class IncidCommentSeeListFr extends ListFragment {
         new IncidCommentLoader().execute(mIncidencia);
 
         mListView = (ListView) mView.findViewById(android.R.id.list);
-        mListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         //TextView for no result.
         mListView.setEmptyView(mView.findViewById(android.R.id.empty));
     }

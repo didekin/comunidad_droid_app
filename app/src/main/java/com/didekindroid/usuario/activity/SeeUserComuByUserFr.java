@@ -1,22 +1,23 @@
 package com.didekindroid.usuario.activity;
 
-import android.app.ListFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.didekin.usuario.dominio.UsuarioComunidad;
+import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 
 import java.util.List;
 
-import static com.didekindroid.common.activity.ViewsIDs.SEE_USERCOMU_BY_USER;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static com.google.common.base.Preconditions.checkState;
 
@@ -30,13 +31,17 @@ import static com.google.common.base.Preconditions.checkState;
  * <p/>
  * 1. An object UsuarioComunidad is passed to the listener activity.
  */
-public class SeeUserComuByUserFr extends ListFragment {
+public class SeeUserComuByUserFr extends Fragment {
 
     private static final String TAG = SeeUserComuByUserFr.class.getCanonicalName();
 
     private SeeUserComuByUserFrListener mListener;
-    private SeeUserComuByUserAdapter mAdapter;
-    ListView fragmentView;
+    SeeUserComuByUserAdapter mAdapter;
+    private ListView fragmentView;
+
+    public SeeUserComuByUserFr()
+    {
+    }
 
     @Override
     public void onAttach(Context context)
@@ -50,10 +55,6 @@ public class SeeUserComuByUserFr extends ListFragment {
     {
         Log.d(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
-
-        mListener = (SeeUserComuByUserFrListener) getActivity();
-        // Adapter
-        mAdapter = new SeeUserComuByUserAdapter(getActivity());
         // Loading the data...
         new UserComuByUserLoader().execute();
     }
@@ -62,7 +63,11 @@ public class SeeUserComuByUserFr extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         Log.d(TAG, "onCreateView()");
-        return super.onCreateView(inflater, container, savedInstanceState);
+        fragmentView = (ListView) inflater.inflate(R.layout.see_user_by_user_list_fr, container, false);
+        // To get visible a divider on top of the list.
+        fragmentView.addHeaderView(new View(getContext()), null, true);
+        fragmentView.setItemsCanFocus(true);
+        return fragmentView;
     }
 
     @Override
@@ -70,10 +75,21 @@ public class SeeUserComuByUserFr extends ListFragment {
     {
         Log.d(TAG, "onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
+        mListener = (SeeUserComuByUserFrListener) getActivity();
+        fragmentView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            {
+                Log.d(TAG, "onItemClick()");
+                fragmentView.setItemChecked(position, true);
+                view.setSelected(true);
 
-        fragmentView = getListView();
-        fragmentView.setId(SEE_USERCOMU_BY_USER.idView);
-        fragmentView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+                if (mListener != null) {
+                    UsuarioComunidad intentUserComuData = (UsuarioComunidad) fragmentView.getItemAtPosition(position);
+                    mListener.onUserComuSelected(intentUserComuData, position);
+                }
+            }
+        });
     }
 
     @Override
@@ -132,19 +148,6 @@ public class SeeUserComuByUserFr extends ListFragment {
         super.onDetach();
     }
 
-    @Override
-    public void onListItemClick(ListView l, View v, int position, long id)
-    {
-        Log.d(TAG, "onListItemClick()");
-        fragmentView.setItemChecked(position, true);
-        v.setSelected(true);
-
-        if (mListener != null) {
-            UsuarioComunidad intentUserComuData = (UsuarioComunidad) fragmentView.getItemAtPosition(position);
-            mListener.onUserComuSelected(intentUserComuData, position);
-        }
-    }
-
 // .......... Interface to communicate with the Activity ...................
 
     public interface SeeUserComuByUserFrListener {
@@ -163,6 +166,7 @@ public class SeeUserComuByUserFr extends ListFragment {
 
     class UserComuByUserLoader extends AsyncTask<Void, Void, List<UsuarioComunidad>> {
 
+        private final String TAG = UserComuByUserLoader.class.getCanonicalName();
         UiException uiException;
 
         @Override
@@ -182,15 +186,16 @@ public class SeeUserComuByUserFr extends ListFragment {
         @Override
         protected void onPostExecute(List<UsuarioComunidad> usuarioComunidades)
         {
-            if (usuarioComunidades != null) {
-                Log.d(TAG, "UserComuByUserLoader.onPostExecute(): usuarioComunidades != null");
-                mAdapter.addAll(usuarioComunidades);
-                setListAdapter(mAdapter);
-            }
             if (uiException != null) {  // action: LOGIN.
                 Log.d(TAG, "UserComuByUserLoader.onPostExecute(): uiException != null");
                 checkState(usuarioComunidades == null);
                 uiException.processMe(getActivity(), new Intent());
+            }
+            if (usuarioComunidades != null) {
+                Log.d(TAG, "UserComuByUserLoader.onPostExecute(): usuarioComunidades != null");
+                mAdapter = new SeeUserComuByUserAdapter(getActivity());
+                mAdapter.addAll(usuarioComunidades);
+                fragmentView.setAdapter(mAdapter);
             }
         }
     }

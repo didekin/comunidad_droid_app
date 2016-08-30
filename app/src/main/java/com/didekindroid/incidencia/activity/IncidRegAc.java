@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.didekin.incidservice.dominio.IncidImportancia;
-import com.didekin.incidservice.dominio.Incidencia;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 
@@ -77,18 +76,15 @@ public class IncidRegAc extends AppCompatActivity {
         Log.d(TAG, "registerIncidencia()");
 
         StringBuilder errorMsg = getErrorMsgBuilder(this);
-        final Incidencia incidencia = mRegAcFragment.mIncidenciaBean.makeIncidencia(mRegAcFragment.mFragmentView, errorMsg, getResources());
-        IncidImportancia incidImportancia = null;
-
         try {
-            incidImportancia = mRegAcFragment.mIncidImportanciaBean.makeIncidImportancia(errorMsg, getResources(), incidencia);
+            IncidImportancia incidImportancia = mRegAcFragment.getIncidImportanciaBean().makeIncidImportancia(
+                    errorMsg, getResources(), mRegAcFragment.getmFragmentView(), mRegAcFragment.getIncidenciaBean());
+            if (checkInternetConnected(this)) {
+                new IncidenciaRegister().execute(incidImportancia);
+            }
         } catch (IllegalStateException e) {
-            Log.d(TAG, "registerIncidencia(), incidImportancia == null");
+            Log.e(TAG, e.getMessage());
             makeToast(this, errorMsg.toString(), Toast.LENGTH_SHORT);
-        }
-
-        if(incidImportancia != null && checkInternetConnected(this)){
-            new IncidenciaRegister().execute(incidImportancia);
         }
     }
 

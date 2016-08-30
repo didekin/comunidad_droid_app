@@ -138,6 +138,7 @@ public class IncidServiceTest_1 {
                 .usuarioComunidad(pepeUserComu)
                 .importancia((short) 2)
                 .build();
+        // Returns 2.
         assertThat(IncidenciaServ.modifyIncidImportancia(pepeIncidImportancia), is(2));
         pepeIncidImportancia = IncidenciaServ.seeIncidImportancia(incidenciaDb.getIncidenciaId()).getIncidImportancia();
         assertThat(pepeIncidImportancia.getImportancia(), is((short) 2));

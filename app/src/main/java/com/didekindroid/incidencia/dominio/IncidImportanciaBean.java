@@ -1,6 +1,7 @@
 package com.didekindroid.incidencia.dominio;
 
 import android.content.res.Resources;
+import android.view.View;
 
 import com.didekin.incidservice.dominio.IncidImportancia;
 import com.didekin.incidservice.dominio.Incidencia;
@@ -31,12 +32,7 @@ public class IncidImportanciaBean {
         return importancia;
     }
 
-    boolean validateBean(StringBuilder errorMsg, Resources resources)
-    {
-        return validateImportancia(errorMsg, resources);
-    }
-
-    boolean validateImportancia(StringBuilder errorMsg, Resources resources)
+    boolean validateRange(StringBuilder errorMsg, Resources resources)
     {
         short upperBound = (short) resources.getStringArray(R.array.IncidImportanciaArray).length;
         if (!(importancia >= 0 && importancia < upperBound)) {
@@ -46,10 +42,46 @@ public class IncidImportanciaBean {
         return true;
     }
 
-    public IncidImportancia makeIncidImportancia(StringBuilder errorMsg, Resources resources, Incidencia incidencia)
+    public IncidImportancia makeIncidImportancia(StringBuilder errorMsg, Resources resources, View fragmentView, IncidImportancia incidImportancia)
     {
-        if (validateBean(errorMsg, resources)) {
-            return new IncidImportancia.IncidImportanciaBuilder(incidencia).importancia(importancia).build();
+        if (validateRange(errorMsg, resources)) {
+            return new IncidImportancia.IncidImportanciaBuilder(
+                    new Incidencia.IncidenciaBuilder()
+                            .copyIncidencia(incidImportancia.getIncidencia())
+                            .build())
+                    .importancia(importancia)
+                    .build();
+        } else {
+            throw new IllegalStateException(errorMsg.toString());
+        }
+    }
+
+    public IncidImportancia makeIncidImportancia(StringBuilder errorMsg, Resources resources, View fragmentView, IncidenciaBean incidenciaBean)
+    {
+        final Incidencia incidencia = incidenciaBean.makeIncidenciaFromView(fragmentView, errorMsg, resources);
+
+        if (incidencia != null & validateRange(errorMsg, resources)) {
+            return new IncidImportancia.IncidImportanciaBuilder(incidencia)
+                    .importancia(importancia)
+                    .build();
+        } else {
+            throw new IllegalStateException(errorMsg.toString());
+        }
+    }
+
+    public IncidImportancia makeIncidImportancia(StringBuilder errorMsg, Resources resources, View fragmentView, IncidenciaBean incidenciaBean, IncidImportancia incidImportancia)
+    {
+        final Incidencia incidencia = incidenciaBean.makeIncidenciaFromView(fragmentView, errorMsg, resources);
+
+        if (incidencia != null & validateRange(errorMsg, resources)) {
+            return new IncidImportancia.IncidImportanciaBuilder(
+                    new Incidencia.IncidenciaBuilder()
+                            .copyIncidencia(incidImportancia.getIncidencia())
+                            .ambitoIncid(incidencia.getAmbitoIncidencia())
+                            .descripcion(incidencia.getDescripcion())
+                            .build())
+                    .importancia(importancia)
+                    .build();
         } else {
             throw new IllegalStateException(errorMsg.toString());
         }

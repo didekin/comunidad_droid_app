@@ -44,8 +44,8 @@ import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdat
 import static com.didekindroid.common.testutils.ActivityTestUtils.updateSecurityData;
 import static com.didekindroid.common.utils.UIutils.updateIsRegistered;
 import static com.didekindroid.common.webservices.Oauth2Service.Oauth2;
-import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRE;
-import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRO;
+import static com.didekindroid.usuario.activity.utils.RolUi.PRE;
+import static com.didekindroid.usuario.activity.utils.RolUi.PRO;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN2_AND_PEPE;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
@@ -228,15 +228,15 @@ public class UsuarioServiceTest {
 
         signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
         Comunidad cDb = ServOne.getComusByUser().get(0);
-        assertThat(ServOne.isOldestUserComu(cDb.getC_Id()), is(true));
+        assertThat(ServOne.isOldestOrAdmonUserComu(cDb.getC_Id()), is(true));
 
         cleanWithTkhandler();
         UsuarioComunidad userComu = makeUsuarioComunidad(cDb, USER_JUAN2,
-                "portalB", null, "planta1", null, PRO.function.concat(",").concat(PRE.function));
+                "portalB", null, "planta1", null, PRO.function);
         ServOne.regUserAndUserComu(userComu).execute().body();
         updateSecurityData(USER_JUAN2.getUserName(), USER_JUAN2.getPassword());
 
-        assertThat(ServOne.isOldestUserComu(cDb.getC_Id()), is(false));
+        assertThat(ServOne.isOldestOrAdmonUserComu(cDb.getC_Id()), is(false));
     }
 
     @Test

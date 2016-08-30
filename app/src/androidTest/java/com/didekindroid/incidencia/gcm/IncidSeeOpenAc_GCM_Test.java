@@ -19,7 +19,6 @@ import java.io.IOException;
 
 import static android.support.test.espresso.core.deps.guava.base.Preconditions.checkState;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
-import static com.didekindroid.common.utils.UIutils.checkPlayServices;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.utils.UIutils.updateIsGcmTokenSentServer;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_ESCORIAL_PEPE;
@@ -51,7 +50,6 @@ public class IncidSeeOpenAc_GCM_Test extends Incidencia_GCM_Test {
     public void testRegistrationGcmToken() throws Exception
     {
         // Preconditions for the test.
-        assertThat(checkPlayServices(mActivity), is(true));
         assertThat(isRegisteredUser(mActivity), is(true));
 
         checkToken();

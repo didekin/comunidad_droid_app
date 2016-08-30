@@ -96,8 +96,9 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
         mAdapter.addAll(mResolucion.getAvances());
 
         ListView mListView = (ListView) mFragmentView.findViewById(android.R.id.list);
-        mListView.setChoiceMode(ListView.CHOICE_MODE_NONE);
         mListView.setEmptyView(mFragmentView.findViewById(android.R.id.empty));
+        /* To get visible a divider on top of the list.*/
+        mListView.addHeaderView(new View(getContext()), null, true);
         mListView.setAdapter(mAdapter);
 
         // Plan (modo lectura).

@@ -8,7 +8,7 @@
 
     <TextView
         android:id="@+id/incid_resolucion_see_default_txt"
-        style="@style/textBase.textPageLabel2.no_item_list_message"
+        style="@style/textBase.no_item_list_message"
         android:text="@string/incid_resolucion_see_default_txt"/>
 
 </LinearLayout>

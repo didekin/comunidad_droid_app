@@ -92,7 +92,6 @@
     <style name="baseLayout">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_marginTop">0dp</item>
         <item name="android:orientation">vertical</item>
     </style>
 
@@ -101,25 +100,26 @@
     </style>
 
     <style name="baseLayout.withPadding">
-        <item name="android:padding">2dp</item>
+        <item name="android:padding">4dp</item>
     </style>
 
     <!-- ................... Lists ............. -->
     <style name="basicList">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
         <item name="android:divider">?attr/colorPrimaryDark</item>
         <item name="android:dividerHeight">@dimen/divider_heigth</item>
+        <item name="android:headerDividersEnabled">true</item>
+        <item name="android:footerDividersEnabled">true</item>
         <item name="android:padding">@dimen/list_padding</item>
     </style>
 
-    <style name="baseLayout.listItem">
-        <item name="android:padding">@dimen/item_list_padding</item>
-    </style>
-
-    <style name="textBase.textPageLabel2.no_item_list_message">
+    <style name="textBase.no_item_list_message">
         <item name="android:layout_gravity">center_horizontal</item>
-        <item name="android:padding">15dp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textStyle">italic</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:textSize">@dimen/text_rotulo_list</item>
     </style>
 
     <!-- ................ Spinners ............. -->
@@ -136,8 +136,6 @@
     <style name="textBase">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginStart">@dimen/simple_horizontal_margin</item>
-        <item name="android:layout_marginTop">0dp</item>
         <item name="android:visibility">visible</item>
     </style>
 
@@ -151,7 +149,7 @@
         <item name="android:textStyle">normal</item>
     </style>
 
-    <style name="textBase.ListLabelColor">
+    <style name="textBase.textPageLabel2">
         <item name="android:textSize">@dimen/text_rotulo_list</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">?attr/colorPrimaryDark</item>
@@ -159,11 +157,6 @@
     </style>
 
     <style name="textBase.textPageLabel1">
-        <item name="android:textSize">@dimen/text_rotulo_fragment</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-
-    <style name="textBase.textPageLabel2">
         <item name="android:textSize">@dimen/text_rotulo_fragment</item>
         <item name="android:layout_marginTop">@dimen/vertical_margin</item>
         <item name="android:textStyle">bold</item>

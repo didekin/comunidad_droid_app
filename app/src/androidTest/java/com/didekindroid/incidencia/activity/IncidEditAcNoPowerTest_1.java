@@ -7,6 +7,7 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekindroid.R;
 import com.didekindroid.usuario.testutils.CleanUserEnum;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -17,6 +18,7 @@ import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkNoToastInTest;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.instanceOf;
@@ -46,6 +48,12 @@ public class IncidEditAcNoPowerTest_1 extends IncidEditAbstractTest {
                 return getIntentPepeJuanRealNoPower();
             }
         };
+    }
+
+    @BeforeClass
+    public static void slowSeconds() throws InterruptedException
+    {
+        Thread.sleep(4000);
     }
 
     @Override
@@ -80,6 +88,8 @@ public class IncidEditAcNoPowerTest_1 extends IncidEditAbstractTest {
                 )
                 .perform(click());
         onView(withId(R.id.incid_edit_fr_modif_button)).perform(scrollTo(), click());
+        // Verificamos que no ha habido error.
+        checkNoToastInTest(R.string.incidencia_wrong_init,mActivity);
         onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed()));
     }
 }

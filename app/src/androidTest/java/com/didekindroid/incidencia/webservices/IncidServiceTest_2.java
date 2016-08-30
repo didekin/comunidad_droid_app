@@ -123,6 +123,7 @@ public class IncidServiceTest_2 {
         assertThat(ServOne.regUserAndUserComu(userComuJuan).execute().body(), is(true));
         updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
         Thread.sleep(1000);
+        // Return 1: only one record inserted or updated.
         assertThat(IncidenciaServ.modifyIncidImportancia(new IncidImportancia.IncidImportanciaBuilder(
                         new Incidencia.IncidenciaBuilder().copyIncidencia(incidencia_1).descripcion("modified_desc").build())
                         .usuarioComunidad(userComuJuan)
@@ -141,7 +142,7 @@ public class IncidServiceTest_2 {
         // Caso OK: usuario CON registro de incidImportancia en BD, intenta modificar la incidencia, sin perfil administrador, CON perfil iniciador.
         signPepeWithIncidImportancia();
         Thread.sleep(1000);
-
+        // Returns 2 : incidencia and incidImportancia records are both updated.
         assertThat(IncidenciaServ.modifyIncidImportancia(new IncidImportancia.IncidImportanciaBuilder(
                         new Incidencia.IncidenciaBuilder().copyIncidencia(incidencia_1).descripcion("modified_desc").ambitoIncid(new AmbitoIncidencia((short) 16)).build())
                         .usuarioComunidad(pepeUserComu)

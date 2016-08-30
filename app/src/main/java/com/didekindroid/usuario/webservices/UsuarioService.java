@@ -95,9 +95,9 @@ public final class UsuarioService implements UsuarioEndPoints {
     }
 
     @Override
-    public Call<Boolean> isOldestUserComu(String accessToken, long comunidadId)
+    public Call<Boolean> isOldestOrAdmonUserComu(String accessToken, long comunidadId)
     {
-        return endPoint.isOldestUserComu(accessToken, comunidadId);
+        return endPoint.isOldestOrAdmonUserComu(accessToken, comunidadId);
     }
 
     @Override
@@ -297,11 +297,11 @@ public final class UsuarioService implements UsuarioEndPoints {
         }
     }
 
-    public boolean isOldestUserComu(long comunidadId) throws UiException
+    public boolean isOldestOrAdmonUserComu(long comunidadId) throws UiException
     {
-        Log.d(TAG, "isOldestUserComu()");
+        Log.d(TAG, "isOldestOrAdmonUserComu()");
         try {
-            Response<Boolean> response = isOldestUserComu(checkBearerToken(), comunidadId).execute();
+            Response<Boolean> response = isOldestOrAdmonUserComu(checkBearerToken(), comunidadId).execute();
             return getResponseBody(response);
         } catch (IOException e) {
             throw new UiException(GENERIC_ERROR);

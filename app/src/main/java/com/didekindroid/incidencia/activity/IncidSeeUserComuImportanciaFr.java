@@ -3,13 +3,15 @@ package com.didekindroid.incidencia.activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.didekin.incidservice.dominio.ImportanciaUser;
 import com.didekin.incidservice.dominio.Incidencia;
@@ -31,7 +33,7 @@ import static com.google.common.base.Preconditions.checkState;
  * Postconditions:
  * 1. The list of neighbour alias and importancia ratings are shown.
  */
-public class IncidSeeUserComuImportanciaFr extends ListFragment {
+public class IncidSeeUserComuImportanciaFr extends Fragment {
 
     private static final String TAG = IncidSeeUserComuImportanciaFr.class.getCanonicalName();
 
@@ -69,9 +71,8 @@ public class IncidSeeUserComuImportanciaFr extends ListFragment {
         new IncidImportanciaLoader().execute(mIncidencia);
 
         mListView = (ListView) mFrView.findViewById(android.R.id.list);
-        mListView.setChoiceMode(CHOICE_MODE_NONE);
-        //TextView for no result.
         mListView.setEmptyView(mFrView.findViewById(android.R.id.empty));
+        mListView.addHeaderView(new View(getContext()), null, true);
 
         // Necesitamos el menú para Up Navigation.
         setHasOptionsMenu(true);
@@ -129,7 +130,7 @@ public class IncidSeeUserComuImportanciaFr extends ListFragment {
                 Log.d(TAG, "onPostExecute(): importanciaUsers != null");
                 mAdapter.clear();
                 mAdapter.addAll(importanciaUsers);
-                setListAdapter(mAdapter);
+                mListView.setAdapter(mAdapter);
             }
             if (uiException != null) {
                 Log.d(TAG, "onPostExecute(): uiException != null");

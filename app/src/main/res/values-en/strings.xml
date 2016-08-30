@@ -25,7 +25,7 @@
     <!--                                 INCIDENCIAS                                  -->
     <!--******************************************************************************-->
     <!-- ============================ MESSAGES ============================== -->
-    <string name="no_incidencia_by_user">No existen incidencias</string>
+    <string name="no_incidencia_by_user">No hay incidencias que mostrar</string>
     <string name="incidencia_not_registered">Intenta nuevamente registrar la incidencia.</string>
     <string name="incidencia_wrong_init">No podemos continuar. Verifica que sigue abierta la incidencia.</string>
     <string name="resolucion_duplicada">Ya existe resolución para esta incidencia</string>
@@ -42,11 +42,11 @@
     <string name="incid_see_by_comu_ac_mn">Incidencias abiertas</string>
     <string name="incid_resolucion_ac_mn">Resolución</string>
     <!-- ============================= ACTIVITIES ============================= -->
+    <string name="incid_incidencia_rot">Incidencia:</string>
     <!-- =============== IncidCommentRegAc ========= -->
     <string name="incid_comment_reg_ac_label">Comentar una incidencia</string>
     <string name="incid_comment_ed_hint"> ----- Comentario (max. 250 caracteres) ---- </string>
     <string name="incid_comment_ed_button_rot">Comentar</string>
-    <string name="incid_comment_incidencia_rot">Incidencia:</string>
     <string name="incid_comment_label">Comentario</string>
     <!-- =============== IncidCommentSeeAc ========= -->
     <string name="incid_comment_see_ac_label">Comentarios</string>
@@ -104,6 +104,8 @@
     <string name="incid_see_resolucion_fecha_alta_label">iniciada</string>
     <!-- ============ IncidSeeClosedByComuAc ========== -->
     <string name="incid_closed_by_user_ac_label">Incidencias cerradas</string>
+    <!-- ============ IncidSeeUserComuImportanciaFr ========== -->
+    <string name="incid_incidencia_importancia_rot">Importancia en la comunidad:</string>
     <!--******************************************************************************-->
     <!--                                  USUARIO                                     -->
     <!--******************************************************************************-->
@@ -160,20 +162,24 @@
     <string name="reg_comunidad_ac_label">Nueva comunidad</string>
     <!-- ........... RegUserFr ......... -->
     <string name="reg_usuario_rotulo">Tus datos</string>
-    <string name="usuario_password_hint">Contraseña (letras,números,_)</string>
+    <string name="usuario_password_hint">Contraseña: 6–60 letras, números, _ </string>
     <string name="usuario_password_confirm_hint">Confirmación contraseña</string>
     <string name="alias">Nombre</string>
-    <string name="usuario_alias_hint">Nombre (6–30 caracteres: letras, números, _)</string>
+    <string name="usuario_alias_hint">Nombre: 6–30 letras, números, _</string>
     <string name="email_hint">Correo electrónico</string>
     <string name="password">Contraseña</string>
-    <string name="password_different"> (las contraseñas no coinciden)</string>
+    <string name="password_different"> (no coinciden)</string>
     <!-- .......... RegUserComuFr ....... -->
     <string name="reg_usercomu_vivienda_rot">Tu vivienda</string>
-    <string name="reg_usercomu_portal_hint">Portal</string>
-    <string name="reg_usercomu_escalera_hint">Escalera</string>
-    <string name="reg_usercomu_planta_hint">Planta</string>
-    <string name="reg_usercomu_puerta_hint">Puerta</string>
-    <string name="reg_usercomu_role_checkbox_rot">Vínculo (uno o más):</string>
+    <string name="reg_usercomu_portal_hint"> -- Portal --</string>
+    <string name="reg_usercomu_escalera_hint"> -- Escalera --</string>
+    <string name="reg_usercomu_planta_hint"> -- Planta --</string>
+    <string name="reg_usercomu_puerta_hint"> -- Puerta --</string>
+    <string name="reg_usercomu_portal_rot">Portal</string>
+    <string name="reg_usercomu_escalera_rot">Escalera</string>
+    <string name="reg_usercomu_planta_rot">Planta</string>
+    <string name="reg_usercomu_puerta_rot">Puerta</string>
+    <string name="reg_usercomu_role_checkbox_rot">Vínculo</string>
     <string name="reg_usercomu_ac_button_rot">Adhiérete a la comunidad</string>
     <!--para mensaje de error validación y rótulos de campos  -->
     <string name="reg_usercomu_checkbox_pre_rot">Presidente</string>
@@ -186,7 +192,7 @@
     <string name="municipio_spinner">municipio</string>
     <string name="municipio">Municipio</string>
     <string name="tipo_via">Tipo vía</string>
-    <string name="tipo_via_spinner">tipo de vía</string>
+    <string name="tipo_via_spinner">tipo de vía</string>   <!-- TODO: borrar cuando se internacionalicen las referencias a ella.-->
     <string name="nombre_via_hint">Nombre de la vía, sin número</string>
     <string name="nombre_via">Nombre de la vía</string>
     <string name="numero_en_via">Número</string>
@@ -209,7 +215,7 @@
     <string name="user_data_ac_cambios_text">Sobrescribe el dato a modificar</string>
     <string name="user_data_ac_password_txt">Valida los cambios introduciendo tu contraseña</string>
     <string name="user_data_ac_password_hint">Contraseña actual</string>
-    <string name="user_data_modif_button_txt">Modifica tus datos</string>
+    <string name="user_data_modif_button_rot">Modifica tus datos</string>
     <!-- ================= UserComuDataAc ===================== -->
     <string name="usercomu_data_ac_label">En la comunidad</string>
     <string name="usercomu_data_ac_delete_txt">Para borrar tus datos en esta comunidad:</string>

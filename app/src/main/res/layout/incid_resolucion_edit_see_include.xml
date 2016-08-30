@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content">
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
     <!--Rótulo para plan resolución.-->
     <TextView
         android:id="@+id/incid_resolucion_desc_rot"
@@ -14,16 +12,19 @@
     <!--Rótulo para historial de avances.-->
     <TextView
         android:id="@+id/incid_resolucion_hist_avances_rot"
-        style="@style/textBase.textFieldLabel1"
+        style="@style/textBase.textPageLabel2"
+        android:layout_marginTop="2dp"
         android:text="@string/incid_resolucion_avances_rot"/>
     <!-- Lista de avances.-->
     <ListView
         android:id="@id/android:list"
-        style="@style/basicList">
+        style="@style/basicList"
+        android:choiceMode="none"
+        android:listSelector="@color/transparent">
     </ListView>
     <TextView
         android:id="@id/android:empty"
-        style="@style/textBase.textPageLabel2.no_item_list_message"
+        style="@style/textBase.no_item_list_message"
         android:text="@string/incid_resolucion_no_avances_message"
         android:visibility="gone">
     </TextView>

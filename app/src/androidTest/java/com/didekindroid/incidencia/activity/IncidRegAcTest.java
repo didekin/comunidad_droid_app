@@ -36,6 +36,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkNavigateUp;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkNoToastInTest;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.regSeveralUserComuSameUser;
@@ -64,6 +66,8 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class IncidRegAcTest {
 
+//    TODO: internacionalizar textos.
+
     private IncidRegAc mActivity;
     private CleanUserEnum whatToClean = CleanUserEnum.CLEAN_PEPE;
     private Comunidad comunidadByDefault;
@@ -86,14 +90,13 @@ public class IncidRegAcTest {
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
     {
-        Thread.sleep(5000);
+        Thread.sleep(4000);
     }
 
     @Before
     public void setUp() throws Exception
     {
         mActivity = intentRule.getActivity();
-        Thread.sleep(2000);
         comunidadesAdapter = (ArrayAdapter<Comunidad>) mActivity.mRegAcFragment.mComunidadSpinner.getAdapter();
         comunidadByDefault = comunidadesAdapter.getItem(0);
         updateIsGcmTokenSentServer(false, mActivity);
@@ -135,18 +138,18 @@ public class IncidRegAcTest {
                 .check(matches(withSpinnerText(importancias[0])))
                 .check(matches(isDisplayed()));
 
-        ActivityTestUtils.checkNavigateUp();
+        checkNavigateUp();
     }
 
     @Test
-    public void testOnCreate_2() throws Exception    //
+    public void testOnCreate_2() throws Exception
     {
         int count = mActivity.mRegAcFragment.mImportanciaSpinner.getCount();
         assertThat(count, is(5));
         String item = (String) mActivity.mRegAcFragment.mImportanciaSpinner.getItemAtPosition(1);
-        assertThat(item, is("Baja"));
+        assertThat(item, is("baja"));
         item = (String) mActivity.mRegAcFragment.mImportanciaSpinner.getItemAtPosition(4);
-        assertThat(item, is("Urgente"));
+        assertThat(item, is("urgente"));
 
         count = mActivity.mRegAcFragment.mAmbitoIncidenciaSpinner.getCount();
         assertThat(count, is(AMBITO_INCID_COUNT));
@@ -160,21 +163,12 @@ public class IncidRegAcTest {
     @Test
     public void testRegisterIncidencia_1()
     {
-        // Descripción de incidencia no válida.
+        // Caso NOT OK: descripción de incidencia no válida.
 
-        onView(withId(R.id.incid_reg_importancia_spinner)).perform(click());
-        onData
-                (allOf(
-                                is(instanceOf(String.class)),
-                                is(mActivity.getResources().getStringArray(R.array.IncidImportanciaArray)[4]))
-                )
-                .perform(click());
-        onView(withId(R.id.incid_reg_ambito_spinner)).perform(click());
-        onData(withRowString(1, "Calefacción comunitaria")).perform(click());
-        onView(withId(R.id.incid_reg_desc_ed)).perform(typeText("descripcion = not valid"));
-        IncidenciaBean incidenciaBean = new IncidenciaBean();
+        doImportanciaSpinner(4);
+        doAmbitoAndDescripcion("Calefacción comunitaria", "descripcion = not valid");
 
-        assertThat(incidenciaBean.makeIncidencia(mActivity.mRegAcFragment.mFragmentView,
+        assertThat(new IncidenciaBean().makeIncidenciaFromView(mActivity.mRegAcFragment.mFragmentView,
                 getErrorMsgBuilder(mActivity), mActivity.getResources()), nullValue());
 
         onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
@@ -184,32 +178,26 @@ public class IncidRegAcTest {
     @Test
     public void testRegisterIncidencia_2() throws UiException
     {
-        onView(withId(R.id.incid_reg_importancia_spinner)).perform(click());
-        onData
-                (allOf(
-                                is(instanceOf(String.class)),
-                                is(mActivity.getResources().getStringArray(R.array.IncidImportanciaArray)[4]))
-                )
-                .perform(click());
-        onView(withId(R.id.incid_reg_ambito_spinner)).perform(click());
-        onData(withRowString(1, "Calefacción comunitaria")).perform(click());
-        onView(withId(R.id.incid_reg_desc_ed)).perform(typeText("descripcion is valid"));
+        // Precondition.
+        assertThat(IncidenciaServ.seeIncidsOpenByComu(comunidadByDefault.getC_Id()).size(), is(0));
+
+        // Caso OK: incidencia con datos de importancia.
+        doImportanciaSpinner(4);
+        doAmbitoAndDescripcion("Calefacción comunitaria", "descripcion is valid");
         onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
 
         onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed()));
-        List<IncidenciaUser> incidenciasUser = IncidenciaServ.seeIncidsOpenByComu(comunidadByDefault.getC_Id());
-        assertThat(incidenciasUser.size(), is(1));
-        assertThat(incidenciasUser.get(0).getIncidencia().getComunidad(), is(comunidadByDefault));
+        assertThat(IncidenciaServ.seeIncidsOpenByComu(comunidadByDefault.getC_Id()).size(), is(1));
     }
 
     @Test
     public void testRegisterIncidencia_3() throws UiException
     {
-        // Caso: no cubro importancia.
+        // Precondition.
+        assertThat(IncidenciaServ.seeIncidsOpenByComu(comunidadByDefault.getC_Id()).size(), is(0));
 
-        onView(withId(R.id.incid_reg_ambito_spinner)).perform(click());
-        onData(withRowString(1, "Calefacción comunitaria")).perform(click());
-        onView(withId(R.id.incid_reg_desc_ed)).perform(typeText("descripcion is valid"));
+        // Caso OK: no cubro importancia.
+        doAmbitoAndDescripcion("Calefacción comunitaria", "descripcion is valid");
         onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
 
         onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed()));
@@ -225,23 +213,34 @@ public class IncidRegAcTest {
         onView(withId(R.id.incid_reg_comunidad_spinner)).perform(click());
         onData(allOf(is(instanceOf(Comunidad.class)), is(COMU_LA_FUENTE))).perform(click()).check(matches(isDisplayed()));
 
-        // Registro de incidencia.
-        onView(withId(R.id.incid_reg_importancia_spinner)).perform(click());
-        onData
-                (allOf(
-                                is(instanceOf(String.class)),
-                                is(mActivity.getResources().getStringArray(R.array.IncidImportanciaArray)[4]))
-                )
-                .perform(click());
-
-        onView(withId(R.id.incid_reg_ambito_spinner)).perform(click());
-        onData(withRowString(1, "Calefacción comunitaria")).perform(click());
-        onView(withId(R.id.incid_reg_desc_ed)).perform(typeText("Incidencia La Fuente"));
+        // Registro de incidencia con importancia.
+        doImportanciaSpinner(4);
+        doAmbitoAndDescripcion("Calefacción comunitaria", "Incidencia La Fuente");
         onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
 
         onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed()));
         List<IncidenciaUser> incidencias = IncidenciaServ.seeIncidsOpenByComu(comunidadFuente.getC_Id());
         assertThat(incidencias.size(), is(1));
         assertThat(incidencias.get(0).getIncidencia().getDescripcion(), is("Incidencia La Fuente"));
+    }
+
+//    =======================   HELPER METHODS ========================
+
+    private void doImportanciaSpinner(int i)
+    {
+        onView(withId(R.id.incid_reg_importancia_spinner)).perform(click());
+        onData
+                (allOf(
+                        is(instanceOf(String.class)),
+                        is(mActivity.getResources().getStringArray(R.array.IncidImportanciaArray)[i]))
+                )
+                .perform(click());
+    }
+
+    private void doAmbitoAndDescripcion(String ambito, String descripcion)
+    {
+        onView(withId(R.id.incid_reg_ambito_spinner)).perform(click());
+        onData(withRowString(1, ambito)).perform(click());
+        onView(withId(R.id.incid_reg_desc_ed)).perform(typeText(descripcion));
     }
 }

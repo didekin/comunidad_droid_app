@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,7 +33,7 @@ import static com.google.common.base.Preconditions.checkState;
  * <p/>
  * Postconditions:
  */
-public class IncidSeeByComuListFr extends ListFragment implements ComuSpinnerSettable {
+public class IncidSeeByComuListFr extends Fragment implements ComuSpinnerSettable {
 
     public static final String TAG = IncidSeeByComuListFr.class.getCanonicalName();
 
@@ -87,9 +87,22 @@ public class IncidSeeByComuListFr extends ListFragment implements ComuSpinnerSet
         mAdapter = mListener.getAdapter(getActivity());
 
         mListView = (ListView) mView.findViewById(android.R.id.list);
-        mListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        //TextView for no result.
+        // To get visible a divider on top of the list.
+        mListView.addHeaderView(new View(getContext()), null, true);
         mListView.setEmptyView(mView.findViewById(android.R.id.empty));
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            {
+                Log.d(TAG, "onListItemClick()");
+                mListView.setItemChecked(position, true);
+                view.setSelected(true);
+                if (mListener != null) {
+                    Incidencia incidencia = ((IncidenciaUser) mListView.getItemAtPosition(position)).getIncidencia();
+                    mListener.onIncidenciaSelected(incidencia, position);
+                }
+            }
+        });
 
         mComunidadSpinner = (Spinner) mView.findViewById(R.id.incid_reg_comunidad_spinner);
         new ComunidadSpinnerSetter<>(this).execute();
@@ -175,19 +188,6 @@ public class IncidSeeByComuListFr extends ListFragment implements ComuSpinnerSet
 //    ........................ INTERFACE METHODS ..........................
 
     @Override
-    public void onListItemClick(ListView l, View v, int position, long id)
-    {
-        Log.d(TAG, "onListItemClick()");
-
-        mListView.setItemChecked(position, true);
-        v.setSelected(true);
-        if (mListener != null) {
-            Incidencia incidencia = ((IncidenciaUser) mListView.getItemAtPosition(position)).getIncidencia();
-            mListener.onIncidenciaSelected(incidencia, position);
-        }
-    }
-
-    @Override
     public void setComunidadSpinnerAdapter(ArrayAdapter<Comunidad> comunidades)
     {
         Log.d(TAG, "setComunidadSpinnerAdapter()");
@@ -217,6 +217,11 @@ public class IncidSeeByComuListFr extends ListFragment implements ComuSpinnerSet
     //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
     //    ============================================================
 
+    public ListView getListView()
+    {
+        return mListView;
+    }
+
     class IncidByComuLoader extends AsyncTask<Long, Void, List<IncidenciaUser>> {
 
         private final String TAG = IncidByComuLoader.class.getCanonicalName();
@@ -243,7 +248,7 @@ public class IncidSeeByComuListFr extends ListFragment implements ComuSpinnerSet
                 Log.d(TAG, "onPostExecute(): incidUserComuList != null");
                 mAdapter.clear();
                 mAdapter.addAll(incidencias);
-                setListAdapter(mAdapter);
+                mListView.setAdapter(mAdapter);
             }
             if (uiException != null) {
                 Log.d(TAG, "onPostExecute(): uiException != null");

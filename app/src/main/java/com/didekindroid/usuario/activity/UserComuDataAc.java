@@ -10,8 +10,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.didekin.usuario.dominio.Comunidad;
@@ -34,10 +32,6 @@ import static com.didekindroid.common.utils.UIutils.makeToast;
 import static com.didekindroid.common.utils.UIutils.updateIsRegistered;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_REG_AC;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_SEE_BY_COMU_AC;
-import static com.didekindroid.usuario.activity.utils.RolCheckBox.ADM;
-import static com.didekindroid.usuario.activity.utils.RolCheckBox.INQ;
-import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRE;
-import static com.didekindroid.usuario.activity.utils.RolCheckBox.PRO;
 import static com.didekindroid.usuario.activity.utils.UserMenu.COMU_DATA_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_USERCOMU_BY_COMU_AC;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
@@ -66,6 +60,7 @@ public class UserComuDataAc extends AppCompatActivity {
 
     private View mAcView;
     private UsuarioComunidad mOldUserComu;
+    RegUserComuFr mRegUserComuFr;
     private MenuItem mComuDataItem;
 
     @SuppressLint("InflateParams")
@@ -82,8 +77,9 @@ public class UserComuDataAc extends AppCompatActivity {
 
         mAcView = getLayoutInflater().inflate(R.layout.usercomu_data_ac_layout, null);
         setContentView(mAcView);
-        paintUserComuView();
         doToolBar(this, true);
+        mRegUserComuFr = (RegUserComuFr) getFragmentManager().findFragmentById(R.id.reg_usercomu_frg);
+        mRegUserComuFr.paintUserComuView(mOldUserComu);
 
         Button mModifyButton = (Button) findViewById(R.id.usercomu_data_ac_modif_button);
         mModifyButton.setOnClickListener(new View.OnClickListener() {
@@ -106,25 +102,6 @@ public class UserComuDataAc extends AppCompatActivity {
         });
     }
 
-    private void paintUserComuView()
-    {
-        Log.d(TAG, "paintUserComuView()");
-
-        ((EditText) mAcView.findViewById(R.id.reg_usercomu_portal_ed)).setText(mOldUserComu.getPortal());
-        ((EditText) mAcView.findViewById(R.id.reg_usercomu_escalera_ed)).setText(mOldUserComu.getEscalera());
-        ((EditText) mAcView.findViewById(R.id.reg_usercomu_planta_ed)).setText(mOldUserComu.getPlanta());
-        ((EditText) mAcView.findViewById(R.id.reg_usercomu_puerta_ed)).setText(mOldUserComu.getPuerta());
-
-        ((CheckBox) mAcView.findViewById(R.id.reg_usercomu_checbox_pre))
-                .setChecked(mOldUserComu.getRoles().contains(PRE.function));
-        ((CheckBox) mAcView.findViewById(R.id.reg_usercomu_checbox_admin))
-                .setChecked(mOldUserComu.getRoles().contains(ADM.function));
-        ((CheckBox) mAcView.findViewById(R.id.reg_usercomu_checbox_pro))
-                .setChecked(mOldUserComu.getRoles().contains(PRO.function));
-        ((CheckBox) mAcView.findViewById(R.id.reg_usercomu_checbox_inq))
-                .setChecked(mOldUserComu.getRoles().contains(INQ.function));
-    }
-
     private void modifyUserComuData()
     {
         Log.d(TAG, "modifyUserComuData()");
@@ -142,8 +119,6 @@ public class UserComuDataAc extends AppCompatActivity {
         } else {
             UsuarioComunidad newUserComu = userComuBean.getUsuarioComunidad();
             new UserComuModifyer().execute(newUserComu);
-            Intent intent = new Intent(this, SeeUserComuByUserAc.class);
-            startActivity(intent);
         }
     }
 
@@ -155,9 +130,8 @@ public class UserComuDataAc extends AppCompatActivity {
 
     /**
      * Option 'comu_data_ac_mn' is only visible if the user is the oldest (oldest fecha_alta) UsuarioComunidad in
-     * this comunidad.
+     * this comunidad, or has the roles adm or pre.
      * <p/>
-     * TODO: change it for a consensus procedure among all of the usuariosComunidad.
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
@@ -165,7 +139,7 @@ public class UserComuDataAc extends AppCompatActivity {
         Log.d(TAG, "onCreateOptionsMenu()");
         getMenuInflater().inflate(R.menu.usercomu_data_ac_mn, menu);
         mComuDataItem = menu.findItem(R.id.comu_data_ac_mn);
-        // Is the oldest userComu? // TODO: incluir presidente y administrador.
+        // Is the oldest or admon userComu?
         new ComuDataMenuSetter().execute();
         return true;
     }
@@ -218,7 +192,7 @@ public class UserComuDataAc extends AppCompatActivity {
 
             boolean isOldestUserComu = false;
             try {
-                isOldestUserComu = ServOne.isOldestUserComu(mOldUserComu.getComunidad().getC_Id());
+                isOldestUserComu = ServOne.isOldestOrAdmonUserComu(mOldUserComu.getComunidad().getC_Id());
             } catch (UiException e) {
                 uiException = e;
             }
@@ -266,6 +240,8 @@ public class UserComuDataAc extends AppCompatActivity {
                 uiException.processMe(UserComuDataAc.this, new Intent());
             } else {
                 checkState(rowsUpdated == 1);
+                Intent intent = new Intent(UserComuDataAc.this, SeeUserComuByUserAc.class);
+                startActivity(intent);
             }
         }
     }

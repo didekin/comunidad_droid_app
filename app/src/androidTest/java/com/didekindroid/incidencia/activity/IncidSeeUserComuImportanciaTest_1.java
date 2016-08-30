@@ -23,7 +23,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_OBJECT;
-import static com.didekindroid.common.activity.FragmentTags.incid_see_usercomus_importancia_fr_tag;
+import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_see_usercomus_importancia_fr_tag;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkNavigateUp;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static org.hamcrest.CoreMatchers.allOf;
@@ -95,7 +95,7 @@ public class IncidSeeUserComuImportanciaTest_1 extends IncidEditAbstractTest {
                 withText(pepeUserComu.getUsuario().getAlias()),
                 hasSibling(allOf(
                         withId(R.id.incid_importancia_rating_view),
-                        withText("")
+                        withText(R.string.no_sabe)
                 ))
         )).check(matches(isDisplayed()));
     }

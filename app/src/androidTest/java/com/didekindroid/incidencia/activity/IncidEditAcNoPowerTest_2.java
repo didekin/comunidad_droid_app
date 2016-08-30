@@ -10,6 +10,7 @@ import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.usuario.testutils.CleanUserEnum;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -25,6 +26,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekin.usuario.dominio.Rol.PROPIETARIO;
 import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_FLAG;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkNoToastInTest;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.testutils.ActivityTestUtils.updateSecurityData;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidenciaUser;
@@ -85,6 +87,12 @@ public class IncidEditAcNoPowerTest_2 extends IncidEditAbstractTest {
         };
     }
 
+    @BeforeClass
+    public static void slowSeconds() throws InterruptedException
+    {
+        Thread.sleep(4000);
+    }
+
     @Override
     CleanUserEnum whatToClean()
     {
@@ -117,6 +125,8 @@ public class IncidEditAcNoPowerTest_2 extends IncidEditAbstractTest {
                 )
                 .perform(click());
         onView(withId(R.id.incid_edit_fr_modif_button)).perform(scrollTo(), click());
+        // Verificamos que no ha habido error.
+        checkNoToastInTest(R.string.incidencia_wrong_init,mActivity);
         onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed()));
     }
 }

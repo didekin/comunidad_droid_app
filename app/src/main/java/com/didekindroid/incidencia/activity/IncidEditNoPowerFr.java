@@ -17,16 +17,18 @@ import com.didekin.incidservice.dominio.IncidImportancia;
 import com.didekin.incidservice.dominio.Incidencia;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
-import com.didekindroid.common.utils.ConnectionUtils;
 import com.didekindroid.incidencia.activity.utils.ImportanciaSpinnerSettable;
 import com.didekindroid.incidencia.dominio.IncidImportanciaBean;
 import com.didekindroid.incidencia.repository.IncidenciaDataDbHelper;
 
 import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.common.utils.ConnectionUtils.checkInternetConnected;
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.common.utils.UIutils.makeToast;
 import static com.didekindroid.incidencia.activity.utils.IncidSpinnersHelper.HELPER;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
 /**
@@ -101,17 +103,15 @@ public class IncidEditNoPowerFr extends Fragment implements ImportanciaSpinnerSe
         Log.d(TAG, "modifyIncidImportancia()");
 
         StringBuilder errorMsg = getErrorMsgBuilder(getActivity());
-        IncidImportancia incidImportancia = null;
         try {
-            incidImportancia = mIncidImportanciaBean.makeIncidImportancia(errorMsg, getResources(), mIncidImportancia.getIncidencia());
+            IncidImportancia incidImportancia = mIncidImportanciaBean.makeIncidImportancia(
+                    errorMsg, getResources(), fFragmentView, checkNotNull(mIncidImportancia));
+            if (checkInternetConnected(getActivity())) {
+                new ImportanciaModifyer().execute(incidImportancia);
+            }
         } catch (IllegalStateException e) {
-            Log.d(TAG, "modifyIncidImportancia(), incidImportancia == null");
+            Log.e(TAG, e.getMessage());
             makeToast(getActivity(), errorMsg.toString(), Toast.LENGTH_SHORT);
-        }
-        if (!ConnectionUtils.isInternetConnected(getActivity())) {
-            makeToast(getActivity(), R.string.no_internet_conn_toast, Toast.LENGTH_SHORT);
-        } else {
-            new ImportanciaModifyer().execute(incidImportancia);
         }
     }
 

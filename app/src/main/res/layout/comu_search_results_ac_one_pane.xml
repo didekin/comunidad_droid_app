@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android">
+<android.support.design.widget.CoordinatorLayout
+    android:id="@+id/comu_search_results_frg_container_ac"
+    style="@style/baseLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:fitsSystemWindows="true"
+    tools:context="com.didekindroid.usuario.activity.ComuSearchResultsAc">
 
-    <include layout="@layout/appbar_include" />
+    <include layout="@layout/appbar_include_design"/>
 
-    <fragment
-        android:id="@+id/comu_list_frg"
-        android:name="com.didekindroid.usuario.activity.ComuSearchResultsListFr"
-        android:layout_marginTop="@dimen/app_bar_bottom_margin"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-</merge>
+</android.support.design.widget.CoordinatorLayout>

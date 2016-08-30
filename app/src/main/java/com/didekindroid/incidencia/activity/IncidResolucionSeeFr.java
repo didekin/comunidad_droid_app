@@ -78,6 +78,7 @@ public class IncidResolucionSeeFr extends Fragment {
         int resourceId = checkNotNull(item.getItemId());
 
         switch (resourceId) {
+            // TODO: no parece funcionar el back cuando elige esta opción.
             case R.id.incid_comments_see_ac_mn:
                 Intent intent = new Intent();
                 intent.putExtra(INCIDENCIA_OBJECT.key, getArguments().getSerializable(INCIDENCIA_OBJECT.key));
@@ -110,7 +111,6 @@ public class IncidResolucionSeeFr extends Fragment {
         ((TextView) mFragmentView.findViewById(R.id.incid_resolucion_txt)).setText(mResolucion.getDescripcion());
         // Lista de avances.
         ListView mListView = (ListView) mFragmentView.findViewById(android.R.id.list);
-        mListView.setChoiceMode(ListView.CHOICE_MODE_NONE);
         mListView.setEmptyView(mFragmentView.findViewById(android.R.id.empty));
         mListView.setAdapter(mAdapter);
     }

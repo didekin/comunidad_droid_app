@@ -11,6 +11,7 @@ import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.usuario.testutils.CleanUserEnum;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -24,6 +25,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_FLAG;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkNoToastInTest;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.INCID_DEFAULT_DESC;
@@ -79,6 +81,12 @@ public class IncidEditAcMaxPowerTest_2 extends IncidEditAbstractTest {
         };
     }
 
+    @BeforeClass
+    public static void slowSeconds() throws InterruptedException
+    {
+        Thread.sleep(4000);
+    }
+
     @Override
     CleanUserEnum whatToClean()
     {
@@ -94,10 +102,13 @@ public class IncidEditAcMaxPowerTest_2 extends IncidEditAbstractTest {
     }
 
     @Test
-    public void testDeleteIncidencia_1()
+    public void testDeleteIncidencia_1() throws InterruptedException
     {
+        Thread.sleep(4000);
         /* CASO OK: borramos la incidencia.*/
         onView(withId(R.id.incid_edit_fr_borrar_button)).perform(scrollTo(), click());
+        // Verificamos que no ha habido error.
+        checkNoToastInTest(R.string.incidencia_wrong_init,mActivity);
         onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed()));
     }
 

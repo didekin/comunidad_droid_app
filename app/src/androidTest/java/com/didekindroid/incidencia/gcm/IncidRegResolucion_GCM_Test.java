@@ -22,7 +22,6 @@ import java.io.IOException;
 
 import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.gcm.AppFirebaseMsgService.TypeMsgHandler.RESOLUCION_OPEN;
-import static com.didekindroid.common.utils.UIutils.checkPlayServices;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.utils.UIutils.updateIsGcmTokenSentServer;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.COSTE_ESTIM_DEFAULT;
@@ -54,7 +53,6 @@ public class IncidRegResolucion_GCM_Test extends Incidencia_GCM_Test {
     public void testRegistrationGcmToken() throws Exception
     {
         // Preconditions for the test.
-        assertThat(checkPlayServices(mActivity), is(true));
         assertThat(isRegisteredUser(mActivity), is(true));
 
         checkToken();
