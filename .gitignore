@@ -19,9 +19,11 @@ local.properties
 # Certificate jks for tests
 **/res/raw/*
 # Parámetros redundantes
-/**/res/values/app_test_parameters.*
+/**/res/values/geny*.xml
+/**/res/values/local*.xml
 # Parámetros de entornos
 terminal/resources/aws*.xml
+terminal/env_init.sh
 terminal/aws*.help
 terminal/prod*.help
 terminal/local*.help
