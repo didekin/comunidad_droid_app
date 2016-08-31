@@ -1,6 +1,7 @@
 buildscript {
     repositories {
         jcenter()
+        mavenCentral()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.1.3'
@@ -8,18 +9,18 @@ buildscript {
     }
 }
 
-subprojects {
+allprojects {
     repositories {
         jcenter()
+        mavenCentral()
     }
+}
+
+ext {
+    sourceCompatibilityVersion = JavaVersion.VERSION_1_7
+    targetCompatibilityVersion = JavaVersion.VERSION_1_7
 }
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.14.1'
-}
-
-allprojects {
-    repositories {
-        jcenter()
-    }
 }

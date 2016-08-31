@@ -1,5 +1,7 @@
 package com.didekindroid.usuario.testutils;
 
+import android.os.Build;
+
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekin.usuario.dominio.Municipio;
 import com.didekin.usuario.dominio.Provincia;
@@ -13,6 +15,8 @@ import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.os.Build.VERSION.SDK_INT;
+import static android.os.Build.VERSION_CODES.M;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -227,8 +231,11 @@ public final class UsuarioTestUtils {
         onView(withId(R.id.municipio_spinner)).perform(click());
         Thread.sleep(1000);
         onData(withRowString(3, municipio)).perform(click());
-        onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.municipio_spinner))))
-                .check(matches(withText(containsString(municipio))));
+
+        if (SDK_INT >= M) {
+            onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.municipio_spinner))))
+                    .check(matches(withText(containsString(municipio))));
+        }
     }
 
     public static void typeUserComuData(String portal, String escalera, String planta, String puerta, RolUi...
@@ -271,7 +278,9 @@ public final class UsuarioTestUtils {
         assertThat(comunidad, notNullValue());
         assertThat(comunidad.getTipoVia(), is(tipoVia));
         assertThat(comunidad.getMunicipio().getProvincia().getProvinciaId(), is(municipioProvId));
-        assertThat(comunidad.getMunicipio().getCodInProvincia(), is(municipioCodProv));
+        if (SDK_INT >= M) {
+            assertThat(comunidad.getMunicipio().getCodInProvincia(), is(municipioCodProv));
+        }
         assertThat(comunidad.getNombreVia(), is(nombreVia));
         assertThat(comunidad.getNumero(), is(numeroEnVia));
         assertThat(comunidad.getSufijoNumero(), is(sufijoNumero));

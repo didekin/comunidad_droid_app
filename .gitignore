@@ -1,20 +1,33 @@
+# GRADLE
 .gradle
-gradlew
-gradlew.bat
-.navigation
-/administracion
-/**/gradle
-/**/local.properties
-/.idea
+local.properties
+**/build
+**/libs
+
+# IDEA
+.idea
+**/*.iml
+
+# MAC
 .DS_Store
-/**/build
-/**/libs
-/**/*.iml
-/**/*.txt
-/**/*.log
 
-terminal/*.help
+# GOOGLE
+/**/google-services.json
+/**/google_services.txt
 
+# ENTORNOS y PRUEBAS
+# Certificate jks for tests
+**/res/raw/*
+# Parámetros redundantes
+/**/res/values/app_test_parameters.*
+# Parámetros de entornos
+terminal/resources/aws*.xml
+terminal/aws*.help
+terminal/prod*.help
+terminal/local*.help
 
-
+#  MISCELÁNEA
+terminal/server.log
+administracion
+.navigation
 

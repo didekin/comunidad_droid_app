@@ -7,21 +7,15 @@ dependencies {
     testCompile 'com.squareup.okhttp:mockwebserver:2.7.5'
 }
 
-targetCompatibility = '1.7'
-sourceCompatibility = '1.7'
+targetCompatibility = rootProject.ext.targetCompatibilityVersion
+sourceCompatibility = rootProject.ext.sourceCompatibilityVersion
 
-//noinspection GroovyAssignabilityCheck
 jar {
     baseName = 'client_gcm_lib'
 }
 
-//noinspection GroovyMissingReturnStatement
 test {
     filter {
         includeTestsMatching "com.didekinservice.common.gcm.*Test"
     }
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.14'
 }

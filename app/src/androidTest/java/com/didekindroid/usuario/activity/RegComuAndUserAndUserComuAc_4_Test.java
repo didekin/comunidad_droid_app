@@ -76,7 +76,7 @@ public class RegComuAndUserAndUserComuAc_4_Test {
     public void testRegisterComuAndUserComuAndUser_2() throws UiException, InterruptedException
     {
         // Comunidad data.
-        typeComunidadData("Callejon", "Valencia", "Castellón/Castelló", "Chilches/Xilxes", "nombre via One", "123", "Tris");
+        typeComunidadData("Callejon", "Valencia", "Castellón/Castelló", "Chilches/Xilxes", "nombre via One", "123", "Tris");   // TODO: Chilches.
         // Data for UsuarioComunidadBean.
         Thread.sleep(1000);
         typeUserComuData("port2", "escale_b", "planta-N", "puerta5", RolUi.PRE, RolUi.INQ);
