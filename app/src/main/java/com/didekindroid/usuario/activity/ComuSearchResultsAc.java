@@ -69,7 +69,7 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
     Comunidad mComunidad;
     // The comunidad index selected.
     int mIndex;
-    private List<Comunidad> mResultsList;
+    List<Comunidad> mResultsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)

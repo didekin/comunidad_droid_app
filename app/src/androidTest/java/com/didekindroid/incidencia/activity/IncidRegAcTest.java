@@ -95,6 +95,7 @@ public class IncidRegAcTest {
     public void setUp() throws Exception
     {
         mActivity = intentRule.getActivity();
+        Thread.sleep(2000);
         comunidadesAdapter = (ArrayAdapter<Comunidad>) mActivity.mRegAcFragment.mComunidadSpinner.getAdapter();
         comunidadByDefault = comunidadesAdapter.getItem(0);
         updateIsGcmTokenSentServer(false, mActivity);

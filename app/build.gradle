@@ -66,7 +66,6 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-web:2.2.2') {
         exclude group: 'com.google.guava'
     }
-    androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
     /* Esta librería es para probar en terminales las funcionalidades servidor relacionadas con Firebase GCM y JavaMail*/
     androidTestCompile project(':client_gcm_lib')
 
@@ -78,7 +77,6 @@ dependencies {
     compile 'com.android.support:support-v4:24.2.0'
     compile 'com.android.support:recyclerview-v7:24.2.0'
     compile 'com.android.support:gridlayout-v7:24.2.0'
-//    compile 'com.google.android.gms:play-services-gcm:9.4.0'
     compile 'com.google.firebase:firebase-messaging:9.4.0'
 }
 

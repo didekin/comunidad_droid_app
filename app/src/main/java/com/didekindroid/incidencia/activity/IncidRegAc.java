@@ -71,7 +71,7 @@ public class IncidRegAc extends AppCompatActivity {
         super.onResume();
     }
 
-    private void registerIncidencia()
+    void registerIncidencia()
     {
         Timber.d("registerIncidencia()");
 

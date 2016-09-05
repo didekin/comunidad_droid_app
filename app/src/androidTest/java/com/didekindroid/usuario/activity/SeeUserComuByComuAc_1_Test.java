@@ -59,7 +59,7 @@ public class SeeUserComuByComuAc_1_Test {
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
     {
-        Thread.sleep(5000);
+        Thread.sleep(4000);
     }
 
     @Before
@@ -107,6 +107,7 @@ public class SeeUserComuByComuAc_1_Test {
     @Test
     public void testViewData_1() throws InterruptedException
     {
+        Thread.sleep(2000);
         SeeUserComutByComuListAdapter mAdapter = mFragment.mAdapter;
         assertThat(mAdapter.getCount(), is(1));
 

@@ -131,10 +131,10 @@ public class IncidSeeClosedByComuAcTest_1 {
     }
 
     @Test
-    public void testOnDataSpinner_1()
+    public void testOnDataSpinner_1() throws InterruptedException
     {
         /* Caso OK: muestra datos de la comunidad en el intent (2ª en el spinner).*/
-
+        Thread.sleep(2000);
         assertThat(mActivity.mComunidadSelected, is(comunidadInIntent));
         onView(allOf(
                 withId(R.id.app_spinner_1_dropdown_item),

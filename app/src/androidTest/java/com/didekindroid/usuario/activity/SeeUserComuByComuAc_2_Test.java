@@ -69,7 +69,7 @@ public class SeeUserComuByComuAc_2_Test {
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
     {
-        Thread.sleep(5000);
+        Thread.sleep(4000);
     }
 
     @After
@@ -94,7 +94,7 @@ public class SeeUserComuByComuAc_2_Test {
     }
 
     @Test
-    public void testThreeUsersInComunidad() throws IOException, UiException
+    public void testThreeUsersInComunidad() throws IOException, UiException, InterruptedException
     {
         // No portal ni escalera.
         signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
@@ -136,7 +136,7 @@ public class SeeUserComuByComuAc_2_Test {
     }
 
     @Test
-    public void testNoPortalEscalera() throws IOException, UiException
+    public void testNoPortalEscalera() throws IOException, UiException, InterruptedException
     {
         signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
         doSetUp();
@@ -154,7 +154,7 @@ public class SeeUserComuByComuAc_2_Test {
     }
 
     @Test
-    public void testNoEscalera() throws UiException, IOException
+    public void testNoEscalera() throws UiException, IOException, InterruptedException
     {
         UsuarioComunidad usuarioComunidad = new UsuarioComunidad.UserComuBuilder(
                 COMU_LA_PLAZUELA_5,
@@ -181,14 +181,13 @@ public class SeeUserComuByComuAc_2_Test {
     }
 
     @Test
-    public void testTodo() throws IOException, UiException
+    public void testTodo() throws IOException, UiException, InterruptedException
     {
         signUpAndUpdateTk(COMU_PLAZUELA5_PEPE);
         doSetUp();
         launch();
 
-        // No muestra escalera; muestra alias, email, portal, escalera, planta, puerta y roles.
-
+        /* No muestra escalera; muestra alias, email, portal, escalera, planta, puerta y roles.*/
         checkRotulos(R.id.usercomu_item_portal_rot, R.id.usercomu_item_escalera_rot, R.id.usercomu_item_planta_rot, R.id.usercomu_item_puerta_rot);
         checkUser(COMU_PLAZUELA5_PEPE.getUsuario().getAlias(), COMU_PLAZUELA5_PEPE.getUsuario().getUserName());
         checkRole(formatRol(COMU_PLAZUELA5_PEPE.getRoles(), mActivity.getResources()));
@@ -210,10 +209,11 @@ public class SeeUserComuByComuAc_2_Test {
         intent.putExtra(COMUNIDAD_ID.key, comunidadId);
     }
 
-    private void launch()
+    private void launch() throws InterruptedException
     {
         mActivity = mActivityRule.launchActivity(intent);
         mFragment = (SeeUserComuByComuFr) mActivity.getSupportFragmentManager().findFragmentById(R.id.see_usercomu_by_comu_frg);
+        Thread.sleep(3000);
         mAdapter = mFragment.mAdapter;
     }
 

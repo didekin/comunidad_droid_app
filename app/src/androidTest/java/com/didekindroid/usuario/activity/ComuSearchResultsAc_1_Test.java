@@ -81,7 +81,7 @@ public class ComuSearchResultsAc_1_Test {
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
     {
-        Thread.sleep(5000);
+        Thread.sleep(4000);
     }
 
     @Before
@@ -124,6 +124,7 @@ public class ComuSearchResultsAc_1_Test {
         activity = mActivityRule.launchActivity(intent);
         assertThat(isRegisteredUser(activity), is(true));
 
+        Thread.sleep(2000);
         mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getSupportFragmentManager().findFragmentByTag(comu_search_results_list_fr_tag);
         adapter = mComunidadSummaryFrg.mAdapter;
         assertThat(adapter.getCount(), is(1));
@@ -151,8 +152,8 @@ public class ComuSearchResultsAc_1_Test {
         activity = mActivityRule.launchActivity(intent);
         assertThat(isRegisteredUser(activity), is(true));
 
-        mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getSupportFragmentManager().findFragmentByTag(comu_search_results_list_fr_tag);
         Thread.sleep(2000);
+        mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getSupportFragmentManager().findFragmentByTag(comu_search_results_list_fr_tag);
         adapter = mComunidadSummaryFrg.mAdapter;
         assertThat(adapter.getCount(), is(2));
         onView(withId(android.R.id.list)).check(
@@ -222,8 +223,8 @@ public class ComuSearchResultsAc_1_Test {
         activity = mActivityRule.launchActivity(intent);
         assertThat(isRegisteredUser(activity), is(false));
 
+        Thread.sleep(2000);
         mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getSupportFragmentManager().findFragmentByTag(comu_search_results_list_fr_tag);
-        Thread.sleep(4000);
         adapter = mComunidadSummaryFrg.mAdapter;
         assertThat(adapter.getCount(), is(1));
         onView(withAdaptedData(Matchers.<Object>is(COMU_LA_PLAZUELA_5))).check(matches(isDisplayed()));
@@ -244,8 +245,9 @@ public class ComuSearchResultsAc_1_Test {
 
         regTwoUserComuSameUser(makeListTwoUserComu());
         activity = mActivityRule.launchActivity(intent);
-        mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getSupportFragmentManager().findFragmentByTag(comu_search_results_list_fr_tag);
+
         Thread.sleep(2000);
+        mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getSupportFragmentManager().findFragmentByTag(comu_search_results_list_fr_tag);
         adapter = mComunidadSummaryFrg.mAdapter;
         assertThat(adapter.getCount(), is(1));
 
@@ -277,8 +279,9 @@ public class ComuSearchResultsAc_1_Test {
 
         // Búsqueda con comunidad/intent por defecto.
         activity = mActivityRule.launchActivity(intent);
-        mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getSupportFragmentManager().findFragmentByTag(comu_search_results_list_fr_tag);
+
         Thread.sleep(2000);
+        mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getSupportFragmentManager().findFragmentByTag(comu_search_results_list_fr_tag);
         adapter = mComunidadSummaryFrg.mAdapter;
         assertThat(adapter.getCount(), is(1));
         Comunidad comunidad = adapter.getItem(0);
@@ -300,8 +303,9 @@ public class ComuSearchResultsAc_1_Test {
 
         // Búsqueda con comunidad/intent por defecto.
         activity = mActivityRule.launchActivity(intent);
-        mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getSupportFragmentManager().findFragmentByTag(comu_search_results_list_fr_tag);
+
         Thread.sleep(2000);
+        mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getSupportFragmentManager().findFragmentByTag(comu_search_results_list_fr_tag);
         adapter = mComunidadSummaryFrg.mAdapter;
         assertThat(adapter.getCount(), is(1));
         Comunidad comunidad = adapter.getItem(0);
@@ -315,9 +319,10 @@ public class ComuSearchResultsAc_1_Test {
     }
 
     @After
-    public void cleanData() throws UiException
+    public void cleanData() throws UiException, InterruptedException
     {
         cleanOptions(whatClean);
+        Thread.sleep(2000);
         checkState(!isRegisteredUser(activity));
     }
 }
