@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDialog;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,6 +22,8 @@ import com.didekindroid.common.utils.ConnectionUtils;
 import com.didekindroid.usuario.dominio.UsuarioBean;
 
 import java.io.IOException;
+
+import timber.log.Timber;
 
 import static android.widget.Toast.LENGTH_LONG;
 import static android.widget.Toast.LENGTH_SHORT;
@@ -52,15 +53,13 @@ import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 @SuppressWarnings("ConstantConditions")
 public class LoginAc extends AppCompatActivity {
 
-    private static final String TAG = LoginAc.class.getCanonicalName();
-
     private View mAcView;
     private short counterWrong;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
-        Log.i(TAG, "Entered onCreate()");
+        Timber.i("Entered onCreate()");
         super.onCreate(savedInstanceState);
 
         mAcView = getLayoutInflater().inflate(R.layout.login_ac, null);
@@ -72,7 +71,7 @@ public class LoginAc extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                Log.d(TAG, "View.OnClickListener().onClick()");
+                Timber.d("View.OnClickListener().onClick()");
                 doLogin();
             }
         });
@@ -81,13 +80,13 @@ public class LoginAc extends AppCompatActivity {
     @Override
     protected void onPause()
     {
-        Log.i(TAG, "Entered onPause()");
+        Timber.i("Entered onPause()");
         super.onPause();
     }
 
     private void doLogin()
     {
-        Log.i(TAG, "doLogin()");
+        Timber.i("doLogin()");
 
         UsuarioBean usuarioBean = new UsuarioBean(
                 ((EditText) mAcView.findViewById(R.id.reg_usuario_email_editT)).getText().toString(),
@@ -110,20 +109,20 @@ public class LoginAc extends AppCompatActivity {
 
     private void showDialog(String userName)
     {
-        Log.d(TAG, "showDialog()");
+        Timber.d("showDialog()");
         DialogFragment newFragment = PasswordMailDialog.newInstance(userName);
         newFragment.show(getFragmentManager(), "passwordMailDialog");
     }
 
     private void doPositiveClick(String email)
     {
-        Log.d(TAG, "doPositiveClick()");
+        Timber.d("doPositiveClick()");
         new LoginMailSender().execute(email);
     }
 
     private void doNegativeClick()
     {
-        Log.d(TAG, "doNegativeClick()");
+        Timber.d("doNegativeClick()");
 
         makeToast(this, R.string.login_wrong_no_mail, LENGTH_SHORT);
         Intent intent = new Intent(this, ComuSearchAc.class);
@@ -147,7 +146,7 @@ public class LoginAc extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(Usuario... usuarios)
         {
-            Log.d(TAG, "LoginValidator.doInBackground()");
+            Timber.d("LoginValidator.doInBackground()");
 
             // Activity field mUserName is initialized. It is reused by LoginMailSender.
             userName = usuarios[0].getUserName();
@@ -170,20 +169,20 @@ public class LoginAc extends AppCompatActivity {
         @Override
         protected void onPostExecute(Boolean isOk)
         {
-            Log.d(TAG, "LoginValidator.onPostExecute()");
+            Timber.d("LoginValidator.onPostExecute()");
             if (isOk) {
-                Log.d(TAG, "LoginValidator.onPostExecute(): login OK");
+                Timber.d("LoginValidator.onPostExecute(): login OK");
                 Intent intent = new Intent(LoginAc.this, ComuSearchAc.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 LoginAc.this.finish();
             } else if (uiException != null) {  // userName no existe en BD. Action: LOGIN.
-                Log.d(TAG, "LoginValidator.onPostExecute(): UiException");
+                Timber.d("LoginValidator.onPostExecute(): UiException");
                 uiException.processMe(LoginAc.this, new Intent());
             } else if (++counterWrong > 3) { // Password wrong
                 showDialog(userName);
             } else {
-                Log.d(TAG, "LoginValidator.onPostExecute(): password wrong, counterWrong =" + counterWrong);
+                Timber.d("LoginValidator.onPostExecute(): password wrong, counterWrong = %d%n", counterWrong);
                 makeToast(LoginAc.this, R.string.password_wrong_in_login, Toast.LENGTH_SHORT);
             }
         }
@@ -194,11 +193,9 @@ public class LoginAc extends AppCompatActivity {
 
     public static class PasswordMailDialog extends DialogFragment {
 
-        private static final String TAG = PasswordMailDialog.class.getCanonicalName();
-
         public static PasswordMailDialog newInstance(String emailUser)
         {
-            Log.d(TAG, "newInstance()");
+            Timber.d("newInstance()");
 
             PasswordMailDialog mailDialog = new PasswordMailDialog();
             Bundle args = new Bundle();
@@ -210,7 +207,7 @@ public class LoginAc extends AppCompatActivity {
         @Override
         public AppCompatDialog onCreateDialog(Bundle savedInstanceState)
         {
-            Log.d(TAG, "onCreateDialog()");
+            Timber.d("onCreateDialog()");
 
             int message = R.string.send_password_by_mail_dialog;
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.alertDialogTheme);
@@ -243,7 +240,7 @@ public class LoginAc extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(String... emails)
         {
-            Log.d(TAG, "LoginMailSender.doInBackground()");
+            Timber.d("LoginMailSender.doInBackground()");
             boolean isPasswordSend = false;
             try {
                 isPasswordSend = ServOne.passwordSend(emails[0]).execute().body();
@@ -256,7 +253,7 @@ public class LoginAc extends AppCompatActivity {
         @Override
         protected void onPostExecute(Boolean isOk)
         {
-            Log.d(TAG, "LoginMailSender.onPostExecute()");
+            Timber.d("LoginMailSender.onPostExecute()");
 
             if (uiException != null) {
                 uiException.processMe(LoginAc.this, new Intent());

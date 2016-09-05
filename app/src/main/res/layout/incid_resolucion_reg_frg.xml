@@ -1,28 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    style="@style/baseLayout.scroll"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<LinearLayout
+    android:id="@+id/incid_resolucion_reg_frg_layout"
+    style="@style/baseLayout.withPadding"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginTop="@dimen/app_bar_bottom_margin"
+    tools:context=".incidencia.activity.IncidResolucionRegFr">
 
-    <LinearLayout
-        android:id="@+id/incid_resolucion_reg_frg_layout"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        style="@style/baseLayout.withPadding"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_marginTop="@dimen/app_bar_bottom_margin"
-        tools:context=".incidencia.activity.IncidResolucionRegFr">
+    <include layout="@layout/incid_resolucion_fecha_coste_include"/>
 
-        <include layout="@layout/incid_resolucion_fecha_coste_include"/>
+    <EditText
+        android:id="@+id/incid_resolucion_desc_ed"
+        style="@style/textBase.editField.description"
+        android:hint="@string/incid_resolucion_hint"/>
+    <Button
+        android:id="@+id/incid_resolucion_reg_ac_button"
+        style="@style/textBase.acButton1"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/incid_resolucion_reg_ac_button_rot"/>
 
-        <EditText
-            android:id="@+id/incid_resolucion_desc_ed"
-            style="@style/textBase.editField.description"
-            android:hint="@string/incid_resolucion_hint"/>
-        <Button
-            android:id="@+id/incid_resolucion_reg_ac_button"
-            style="@style/textBase.acButton1"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/incid_resolucion_reg_ac_button_rot"/>
-
-    </LinearLayout>
-</ScrollView>
+</LinearLayout>

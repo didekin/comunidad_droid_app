@@ -1,7 +1,5 @@
 package com.didekindroid.common.activity;
 
-import android.util.Log;
-
 import com.didekin.oauth2.OauthToken.AccessToken;
 import com.didekindroid.common.utils.IoHelper;
 import com.google.common.cache.Cache;
@@ -11,6 +9,8 @@ import java.io.File;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+
+import timber.log.Timber;
 
 import static com.didekin.oauth2.OauthTokenHelper.HELPER;
 import static com.didekindroid.DidekindroidApp.getContext;
@@ -40,8 +40,6 @@ public enum TokenHandler {
 
     TKhandler,;
 
-    private static final String TAG = TokenHandler.class.getCanonicalName();
-
     public static final String refresh_token_filename = "tk_file";
     private final Cache<String, AccessToken> tokensCache;
     private volatile String refreshTokenKey;
@@ -60,7 +58,7 @@ public enum TokenHandler {
 
     public final void initKeyCacheAndBackupFile(final AccessToken accessToken)
     {
-        Log.d(TAG, "initKeyCacheAndBackupFile()");
+        Timber.d("initKeyCacheAndBackupFile()");
 
         // Not stricty necessary; just convenient.
         cleanCacheAndBckFile();
@@ -74,7 +72,7 @@ public enum TokenHandler {
 
     public final synchronized void cleanCacheAndBckFile()
     {
-        Log.d(TAG, "cleanCacheAndBckFile()");
+        Timber.d("cleanCacheAndBckFile()");
 
         refreshTokenFile.delete();
         tokensCache.invalidateAll();
@@ -83,7 +81,7 @@ public enum TokenHandler {
 
     public final AccessToken getAccessTokenInCache() throws UiException
     {
-        Log.d(TAG, "getAccessTokenInCache()");
+        Timber.d("getAccessTokenInCache()");
 
         final String refreshTokenKeyLocal = refreshTokenKey;
 
@@ -111,7 +109,7 @@ public enum TokenHandler {
 
     public String doBearerAccessTkHeader() throws UiException
     {
-        Log.d(TAG, "doBearerAccessTkHeader()");
+        Timber.d("doBearerAccessTkHeader()");
         AccessToken accessToken = getAccessTokenInCache();
         if (accessToken != null) {
             return HELPER.doBearerAccessTkHeader(accessToken);

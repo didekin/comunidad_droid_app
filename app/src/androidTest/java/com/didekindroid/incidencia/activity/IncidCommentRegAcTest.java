@@ -9,7 +9,6 @@ import com.didekin.incidservice.dominio.IncidenciaUser;
 import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
-import com.didekindroid.common.testutils.ActivityTestUtils;
 
 import org.junit.After;
 import org.junit.Before;
@@ -54,7 +53,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 public class IncidCommentRegAcTest {
 
     private IncidCommentRegAc mActivity;
-    private IncidImportancia incidJuanReal1;
+    IncidImportancia incidJuanReal1;
 
     @Rule
     public IntentsTestRule<IncidCommentRegAc> intentsRule = new IntentsTestRule<IncidCommentRegAc>(IncidCommentRegAc.class) {
@@ -114,7 +113,7 @@ public class IncidCommentRegAcTest {
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
         assertThat(mActivity.findViewById(R.id.incid_comment_reg_ac_layout), notNullValue());
 
-        onView(withId(R.id.incid_incidencias_rot)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_comment_incidencias_rot)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_comment_reg_button)).check(matches(isDisplayed()));
         onView(allOf(
                 withId(R.id.incid_comment_ed),

@@ -10,7 +10,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+
+import timber.log.Timber;
 
 import static com.didekindroid.common.gcm.GcmNotificationListenerServ.GCM_NOTIFICATION_action;
 import static com.didekindroid.common.gcm.GcmNotificationListenerServ.notification_extra;
@@ -19,7 +20,6 @@ import static com.didekindroid.common.gcm.GcmNotificationListenerServ.notificati
 @SuppressWarnings("unused")
 public class GcmBroadCastNotificationActivity extends AppCompatActivity {
 
-    private static final String TAG = GcmBroadCastNotificationActivity.class.getCanonicalName();
     private BroadcastReceiver mReceiver;
     Notification notification;
     int notificationId;
@@ -30,7 +30,7 @@ public class GcmBroadCastNotificationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        Log.d(TAG, "onCreate()");
+        Timber.d("onCreate()");
         super.onCreate(savedInstanceState);
 
         mReceiver = new BroadcastReceiver() {
@@ -38,7 +38,7 @@ public class GcmBroadCastNotificationActivity extends AppCompatActivity {
             @Override
             public void onReceive(Context context, Intent intent)
             {
-                Log.d(TAG, "GcmBroadCastNotificationActivity.BroadcastReceiver.onReceive()");
+                Timber.d("GcmBroadCastNotificationActivity.BroadcastReceiver.onReceive()");
 
                 notificationId = intent.getIntExtra(notification_id_extra, 0);
                 notification = intent.getParcelableExtra(notification_extra);
@@ -52,7 +52,7 @@ public class GcmBroadCastNotificationActivity extends AppCompatActivity {
     @Override
     protected void onResume()
     {
-        Log.d(TAG, "onResume()");
+        Timber.d("onResume()");
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(mReceiver, new IntentFilter(GCM_NOTIFICATION_action));
         super.onResume();
@@ -61,14 +61,14 @@ public class GcmBroadCastNotificationActivity extends AppCompatActivity {
     @Override
     protected void onPause()
     {
-        Log.d(TAG, "onPause()");
+        Timber.d("onPause()");
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiver);
         super.onPause();
     }
 
     @Override
     protected void onDestroy(){
-        Log.d(TAG,"onDestroy()");
+        Timber.d("onDestroy()");
         super.onDestroy();
     }
 }

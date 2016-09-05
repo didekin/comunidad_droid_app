@@ -1,6 +1,6 @@
 <LinearLayout
     android:id="@+id/incid_resolucion_see_default_fr"
-    style="@style/baseLayout"
+    style="@style/baseLayout.withPadding"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginTop="@dimen/app_bar_bottom_margin"

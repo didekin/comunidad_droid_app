@@ -36,7 +36,7 @@ import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_LA_FUENTE
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_LA_FUENTE_PEPE;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_LA_PLAZUELA_5;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_PLAZUELA5_PEPE;
-import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;

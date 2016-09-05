@@ -1,7 +1,5 @@
 package com.didekindroid.usuario.webservices;
 
-import android.util.Log;
-
 import com.didekin.common.controller.RetrofitHandler;
 import com.didekin.usuario.controller.GcmTokenWrapper;
 import com.didekin.usuario.controller.UsuarioEndPoints;
@@ -17,6 +15,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Response;
+import timber.log.Timber;
 
 import static com.didekin.common.exception.ErrorBean.GENERIC_ERROR;
 import static com.didekindroid.DidekindroidApp.getBaseURL;
@@ -32,8 +31,6 @@ import static com.didekindroid.common.utils.UIutils.checkBearerToken;
  */
 @SuppressWarnings("unused")
 public final class UsuarioService implements UsuarioEndPoints {
-
-    private static final String TAG = UsuarioService.class.getCanonicalName();
 
     public static final RetrofitHandler retrofitHandler = new RetrofitHandler(getBaseURL(),new JksInAndroidApp(getJksPassword(), getJksResourceId()),getHttpTimeOut());
     public static final UsuarioService ServOne = new UsuarioService();
@@ -139,14 +136,14 @@ public final class UsuarioService implements UsuarioEndPoints {
     @Override
     public Call<Boolean> passwordSend(String userName)
     {
-        Log.d(TAG, "passwordSend()");
+        Timber.d("passwordSend()");
         return endPoint.passwordSend(userName);
     }
 
     @Override
     public Call<Boolean> regComuAndUserAndUserComu(UsuarioComunidad usuarioCom)
     {
-        Log.d(TAG, ("regComuAndUserAndUserComu()"));
+        Timber.d(("regComuAndUserAndUserComu()"));
         return endPoint.regComuAndUserAndUserComu(usuarioCom);
     }
 
@@ -159,7 +156,7 @@ public final class UsuarioService implements UsuarioEndPoints {
     @Override
     public Call<Boolean> regUserAndUserComu(UsuarioComunidad userCom)
     {
-        Log.d(TAG, "regUserAndUserComu()");
+        Timber.d("regUserAndUserComu()");
         return endPoint.regUserAndUserComu(userCom);
     }
 
@@ -180,7 +177,7 @@ public final class UsuarioService implements UsuarioEndPoints {
     @Override
     public Call<List<Comunidad>> searchComunidades(Comunidad comunidad)
     {
-        Log.d(TAG, "searchComunidades()");
+        Timber.d("searchComunidades()");
         return endPoint.searchComunidades(comunidad);
     }
 
@@ -202,7 +199,7 @@ public final class UsuarioService implements UsuarioEndPoints {
 
     public boolean deleteAccessToken(String oldAccessToken) throws UiException
     {
-        Log.d(TAG, "deleteAccessToken()");
+        Timber.d("deleteAccessToken()");
 
         try {
             Response<Boolean> response = deleteAccessToken(checkBearerToken(), oldAccessToken).execute();
@@ -214,7 +211,7 @@ public final class UsuarioService implements UsuarioEndPoints {
 
     public boolean deleteUser() throws UiException
     {
-        Log.d(TAG, "deleteUser()");
+        Timber.d("deleteUser()");
         try {
             Response<Boolean> response = deleteUser(checkBearerToken()).execute();
             return getResponseBody(response);
@@ -226,7 +223,7 @@ public final class UsuarioService implements UsuarioEndPoints {
 
     public int deleteUserComu(long comunidadId) throws UiException
     {
-        Log.d(TAG, "deleteUserComu()");
+        Timber.d("deleteUserComu()");
         try {
             Response<Integer> response = deleteUserComu(checkBearerToken(), comunidadId).execute();
             return getResponseBody(response);
@@ -237,7 +234,7 @@ public final class UsuarioService implements UsuarioEndPoints {
 
     public Comunidad getComuData(long idComunidad) throws UiException
     {
-        Log.d(TAG, "getComuData()");
+        Timber.d("getComuData()");
 
         try {
             Response<Comunidad> response = getComuData(checkBearerToken(), idComunidad).execute();
@@ -251,7 +248,7 @@ public final class UsuarioService implements UsuarioEndPoints {
 
     public List<Comunidad> getComusByUser() throws UiException
     {
-        Log.d(TAG, "getComusByUser()");
+        Timber.d("getComusByUser()");
         try {
             Response<List<Comunidad>> response = getComusByUser(checkBearerToken()).execute();
             return getResponseBody(response);
@@ -262,7 +259,7 @@ public final class UsuarioService implements UsuarioEndPoints {
 
     public String getGcmToken() throws UiException
     {
-        Log.d(TAG, "getGcmToken()");
+        Timber.d("getGcmToken()");
         try {
             Response<GcmTokenWrapper> response = getGcmToken(checkBearerToken()).execute();
             return getResponseBody(response).getToken();
@@ -273,7 +270,7 @@ public final class UsuarioService implements UsuarioEndPoints {
 
     public UsuarioComunidad getUserComuByUserAndComu(long comunidadId) throws UiException
     {
-        Log.d(TAG, "getUserComuByUserAndComu()");
+        Timber.d("getUserComuByUserAndComu()");
         try {
             Response<UsuarioComunidad> response = getUserComuByUserAndComu(checkBearerToken(), comunidadId).execute();
             return getResponseBody(response);
@@ -286,7 +283,7 @@ public final class UsuarioService implements UsuarioEndPoints {
 
     public Usuario getUserData() throws UiException
     {
-        Log.d(TAG, ("getUserData()"));
+        Timber.d(("getUserData()"));
         try {
             Response<Usuario> response = getUserData(checkBearerToken()).execute();
             return getResponseBody(response);
@@ -299,7 +296,7 @@ public final class UsuarioService implements UsuarioEndPoints {
 
     public boolean isOldestOrAdmonUserComu(long comunidadId) throws UiException
     {
-        Log.d(TAG, "isOldestOrAdmonUserComu()");
+        Timber.d("isOldestOrAdmonUserComu()");
         try {
             Response<Boolean> response = isOldestOrAdmonUserComu(checkBearerToken(), comunidadId).execute();
             return getResponseBody(response);
@@ -310,7 +307,7 @@ public final class UsuarioService implements UsuarioEndPoints {
 
     public boolean loginInternal(String userName, String password) throws UiException
     {
-        Log.d(TAG, "loginInternal()");
+        Timber.d("loginInternal()");
         try {
             Response<Boolean> response = login(userName, password).execute();
             return getResponseBody(response);
@@ -321,7 +318,7 @@ public final class UsuarioService implements UsuarioEndPoints {
 
     public int modifyComuData(Comunidad comunidad) throws UiException
     {
-        Log.d(TAG, "modifyComuData()");
+        Timber.d("modifyComuData()");
         try {
             Response<Integer> response = modifyComuData(checkBearerToken(), comunidad).execute();
             return getResponseBody(response);
@@ -332,7 +329,7 @@ public final class UsuarioService implements UsuarioEndPoints {
 
     public int modifyUserGcmToken(String gcmToken) throws UiException
     {
-        Log.d(TAG, "modifyUserGcmToken()");
+        Timber.d("modifyUserGcmToken()");
         try {
             Response<Integer> response = modifyUserGcmToken(checkBearerToken(), gcmToken).execute();
             return getResponseBody(response);
@@ -343,7 +340,7 @@ public final class UsuarioService implements UsuarioEndPoints {
 
     public int modifyUser(Usuario usuario) throws UiException
     {
-        Log.d(TAG, "modifyUser()");
+        Timber.d("modifyUser()");
         try {
             Response<Integer> response = modifyUser(checkBearerToken(), usuario).execute();
             return getResponseBody(response);
@@ -354,7 +351,7 @@ public final class UsuarioService implements UsuarioEndPoints {
 
     public int modifyUserComu(UsuarioComunidad userComu) throws UiException
     {
-        Log.d(TAG, "modifyUserComu()");
+        Timber.d("modifyUserComu()");
         try {
             Response<Integer> response = modifyUserComu(checkBearerToken(), userComu).execute();
             return getResponseBody(response);
@@ -365,7 +362,7 @@ public final class UsuarioService implements UsuarioEndPoints {
 
     public int passwordChange(String newPassword) throws UiException
     {
-        Log.d(TAG, "passwordChange()");
+        Timber.d("passwordChange()");
         try {
             Response<Integer> response = passwordChange(checkBearerToken(), newPassword).execute();
             return getResponseBody(response);
@@ -376,7 +373,7 @@ public final class UsuarioService implements UsuarioEndPoints {
 
     public boolean regComuAndUserComu(UsuarioComunidad usuarioComunidad) throws UiException
     {
-        Log.d(TAG, "regComuAndUserComu()");
+        Timber.d("regComuAndUserComu()");
         try {
             Response<Boolean> response = regComuAndUserComu(checkBearerToken(), usuarioComunidad).execute();
             return getResponseBody(response);
@@ -387,7 +384,7 @@ public final class UsuarioService implements UsuarioEndPoints {
 
     public int regUserComu(UsuarioComunidad usuarioComunidad) throws UiException
     {
-        Log.d(TAG, "regUserComu()");
+        Timber.d("regUserComu()");
         try {
             Response<Integer> response = regUserComu(checkBearerToken(), usuarioComunidad).execute();
             return getResponseBody(response);
@@ -398,7 +395,7 @@ public final class UsuarioService implements UsuarioEndPoints {
 
     public List<UsuarioComunidad> seeUserComusByComu(long idComunidad) throws UiException
     {
-        Log.d(TAG, "seeUserComusByComu()");
+        Timber.d("seeUserComusByComu()");
         try {
             Response<List<UsuarioComunidad>> response = seeUserComusByComu(checkBearerToken(), idComunidad).execute();
             return getResponseBody(response);
@@ -409,7 +406,7 @@ public final class UsuarioService implements UsuarioEndPoints {
 
     public List<UsuarioComunidad> seeUserComusByUser() throws UiException
     {
-        Log.d(TAG, "seeUserComusByUser()");
+        Timber.d("seeUserComusByUser()");
         try {
             Response<List<UsuarioComunidad>> response = seeUserComusByUser(checkBearerToken()).execute();
             return getResponseBody(response);

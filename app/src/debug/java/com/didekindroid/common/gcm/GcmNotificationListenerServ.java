@@ -6,19 +6,19 @@ import android.os.IBinder;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
+
+import timber.log.Timber;
 
 public class GcmNotificationListenerServ extends NotificationListenerService {
 
     public static final String GCM_NOTIFICATION_action = "com.didekindroid.common.gcm.NOTIFICATION_LISTENER";
-    private static final String TAG = GcmNotificationListenerServ.class.getCanonicalName();
     public static final String notification_id_extra = "com.didenkindroid.incidencia.gcm.NOTIFICATION_ID";
     public static final String notification_extra = "com.didenkindroid.incidencia.gcm.NOTIFICATION";
 
     @Override
     public void onNotificationPosted(StatusBarNotification sbn)
     {
-        Log.d(TAG, "onNotificationPosted()");
+        Timber.d("onNotificationPosted()");
 
         int notificationId = sbn.getId();
         Notification notification = sbn.getNotification();
@@ -28,38 +28,38 @@ public class GcmNotificationListenerServ extends NotificationListenerService {
         intent.putExtra(notification_extra,notification);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
 
-        Log.d(TAG,"onNotificationPosted(),sendBroadcastMsg with notificationID = " + notificationId);
+        Timber.d("onNotificationPosted(),sendBroadcastMsg with notificationID = " + notificationId);
     }
 
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn)
     {
-        Log.d(TAG,"onNotificationRemoved()");
+        Timber.d("onNotificationRemoved()");
     }
 
     @Override
     public void onCreate()
     {
-        Log.d(TAG,"onCreate()");
+        Timber.d("onCreate()");
     }
 
     @Override
     public IBinder onBind(Intent intent)
     {
-        Log.d(TAG,"onBind(): intent = " + intent.toString());
+        Timber.d("onBind(): intent = " + intent.toString());
         return super.onBind(intent);
     }
 
     @Override
     public void onListenerConnected()
     {
-        Log.d(TAG,"onListenerConnected(): I'm connected");
+        Timber.d("onListenerConnected(): I'm connected");
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId)
     {
-        Log.d(TAG, "onStartCommand()");
+        Timber.d("onStartCommand()");
         return super.onStartCommand(intent, flags, startId);
     }
 }

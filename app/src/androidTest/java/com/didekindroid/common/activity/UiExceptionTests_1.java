@@ -34,7 +34,7 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class UiExceptionTests_1 extends UiExceptionAbstractTest {
 
-    private MockActivity mActivity;
+    MockActivity mActivity;
 
     @Rule
     public IntentsTestRule<MockActivity> intentRule = new IntentsTestRule<MockActivity>(MockActivity.class) {
@@ -55,7 +55,7 @@ public class UiExceptionTests_1 extends UiExceptionAbstractTest {
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
     {
-//        Thread.sleep(1000);
+        Thread.sleep(4000);
     }
 
     @Before
@@ -67,7 +67,7 @@ public class UiExceptionTests_1 extends UiExceptionAbstractTest {
     @After
     public void tearDown() throws Exception
     {
-        Thread.sleep(3000);
+        Thread.sleep(4000);
     }
 
     //  ===========================================================================

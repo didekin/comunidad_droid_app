@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -16,17 +15,17 @@ import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.utils.UIutils;
 import com.didekindroid.usuario.activity.utils.UserMenu;
-import com.didekindroid.usuario.activity.utils.UsuarioFragmentTags;
 
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
+import timber.log.Timber;
+
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_LIST_INDEX;
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_SEARCH;
 import static com.didekindroid.common.activity.BundleKey.USERCOMU_LIST_OBJECT;
-import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_resolucion_ac_frgs_tag;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.UserMenu.REG_COMU_USER_USERCOMU_AC;
@@ -64,8 +63,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class ComuSearchResultsAc extends AppCompatActivity implements
         ComuSearchResultsListFr.ComuListListener {
 
-    private static final String TAG = ComuSearchResultsAc.class.getCanonicalName();
-
     // The fragment where the summary data are displayed.
     ComuSearchResultsListFr mComunidadesSummaryFrg;
     // The comunidad searched.
@@ -77,7 +74,7 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        Log.d(TAG, "onCreate().");
+        Timber.d("onCreate().");
         super.onCreate(savedInstanceState);
 
         Comunidad comunidad = (Comunidad) getIntent().getSerializableExtra(COMUNIDAD_SEARCH.key);
@@ -90,14 +87,14 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
     @Override
     protected void onStart()
     {
-        Log.d(TAG, "onStart()");
+        Timber.d("onStart()");
         super.onStart();
     }
 
     @Override
     protected void onSaveInstanceState(Bundle savedInstanceState)
     {
-        Log.d(TAG, "onSaveInstanceState()");
+        Timber.d("onSaveInstanceState()");
         savedInstanceState.putInt(COMUNIDAD_LIST_INDEX.name(), mIndex);
         savedInstanceState.putSerializable(COMUNIDAD_SEARCH.key, mComunidad);
         super.onSaveInstanceState(savedInstanceState);
@@ -106,7 +103,7 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState)
     {
-        Log.d(TAG, "onRestoreInstanceState()");
+        Timber.d("onRestoreInstanceState()");
         if (savedInstanceState != null) {
             mIndex = savedInstanceState.getInt(COMUNIDAD_LIST_INDEX.name(), 0);
             mComunidadesSummaryFrg.mListView.setSelection(mIndex);
@@ -123,7 +120,7 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        Log.d(TAG, "onCreateOptionsMenu()");
+        Timber.d("onCreateOptionsMenu()");
         getMenuInflater().inflate(R.menu.comu_search_results_ac_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
@@ -131,7 +128,7 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        Log.d(TAG, "onOptionsItemSelected()");
+        Timber.d("onOptionsItemSelected()");
 
         int resourceId = checkNotNull(item.getItemId());
 
@@ -154,11 +151,11 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
     @Override
     public void onComunidadSelected(Comunidad comunidad, int lineItemIndex)
     {
-        Log.d(TAG, "onComunidadSelected().");
+        Timber.d("onComunidadSelected().");
         mIndex = lineItemIndex;
 
         if (!isRegisteredUser(this)) {
-            Log.d(TAG, "onComunidadSelected(). User is not registered.");
+            Timber.d("onComunidadSelected(). User is not registered.");
             Intent intent = new Intent(this, RegUserAndUserComuAc.class);
             intent.putExtra(COMUNIDAD_LIST_OBJECT.key, comunidad);
             startActivity(intent);
@@ -170,7 +167,7 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
     @Override
     public List<Comunidad> getResultsList()
     {
-        Log.d(TAG, "getResultsList()");
+        Timber.d("getResultsList()");
         return Collections.unmodifiableList(mResultsList);
     }
 
@@ -180,13 +177,12 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
 
     class SearchComunidadesLoader extends AsyncTask<Comunidad, Void, List<Comunidad>> {
 
-        private final String TAG = SearchComunidadesLoader.class.getCanonicalName();
         private UiException uiException;
 
         @Override
         protected List<Comunidad> doInBackground(Comunidad... comunidades)
         {
-            Log.d(TAG, "doInBackground()");
+            Timber.d("doInBackground()");
             List<Comunidad> comunidadesList = null;
             try {
                 comunidadesList = ServOne.searchComunidades(comunidades[0]).execute().body();
@@ -199,11 +195,10 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
         @Override
         protected void onPostExecute(List<Comunidad> comunidadList)
         {
-            Log.d(TAG, "onPostExecute(); comunidadList.size = " +
-                    (comunidadList != null ? String.valueOf(comunidadList.size()) : "null"));
+            Timber.d("onPostExecute(); comunidadList.size = %s%n", comunidadList != null ? String.valueOf(comunidadList.size()) : "null");
 
             if (uiException != null) {
-                Log.d(TAG, "onPostExecute(), uiException = " + uiException.getErrorBean().getMessage());
+                Timber.d("onPostExecute(), uiException = %s%n", uiException.getErrorBean().getMessage());
                 uiException.processMe(ComuSearchResultsAc.this, new Intent());
                 return;
             }
@@ -230,7 +225,7 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
         @Override
         protected UsuarioComunidad doInBackground(Comunidad... comunidades)
         {
-            Log.d(ComuSearchResultsAc.TAG, ".UsuarioComunidadGetter.doInBackground()");
+            Timber.d("doInBackground()");
 
             comunidadSelected = comunidades[0];
             UsuarioComunidad userComuByUserAndComu = null;
@@ -247,8 +242,7 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
         {
             boolean isUserComuNull = (userComu == null);
 
-            Log.d(TAG, ".UsuarioComunidadGetter.onPostExecute(), isUserComu == null : " +
-                    isUserComuNull);
+            Timber.d(".UsuarioComunidadGetter.onPostExecute(), isUserComu == null : %b%n", isUserComuNull);
 
             if (uiException != null) {
                 uiException.processMe(ComuSearchResultsAc.this, new Intent());

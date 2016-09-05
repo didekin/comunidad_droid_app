@@ -1,7 +1,5 @@
 package com.didekindroid.incidencia.webservices;
 
-import android.util.Log;
-
 import com.didekin.common.controller.RetrofitHandler;
 import com.didekin.incidservice.controller.IncidenciaServEndPoints;
 import com.didekin.incidservice.dominio.ImportanciaUser;
@@ -20,6 +18,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Response;
+import timber.log.Timber;
 
 import static com.didekin.common.exception.ErrorBean.GENERIC_ERROR;
 import static com.didekindroid.DidekindroidApp.getBaseURL;
@@ -35,8 +34,6 @@ import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
  * Time: 13:11
  */
 public final class IncidService implements IncidenciaServEndPoints {
-
-    private static final String TAG = IncidService.class.getCanonicalName();
 
     private static final RetrofitHandler retrofitHandler =
             new RetrofitHandler(getBaseURL(),new JksInAndroidApp(getJksPassword(), getJksResourceId()),getHttpTimeOut());
@@ -134,7 +131,7 @@ public final class IncidService implements IncidenciaServEndPoints {
 
     public int closeIncidencia(Resolucion resolucion) throws UiException
     {
-        Log.d(TAG, "closeIncidencia()");
+        Timber.d("closeIncidencia()");
         try {
             Response<Integer> response = closeIncidencia(checkBearerToken(), resolucion).execute();
             return getResponseBody(response);
@@ -145,7 +142,7 @@ public final class IncidService implements IncidenciaServEndPoints {
 
     public int deleteIncidencia(long incidenciaId) throws UiException
     {
-        Log.d(TAG, "deleteIncidencia()");
+        Timber.d("deleteIncidencia()");
         try {
             Response<Integer> response = deleteIncidencia(checkBearerToken(), incidenciaId).execute();
             return getResponseBody(response);
@@ -159,13 +156,13 @@ public final class IncidService implements IncidenciaServEndPoints {
      */
     public List<Comunidad> getComusByUser() throws UiException
     {
-        Log.d(TAG, "getComusByUser()");
+        Timber.d("getComusByUser()");
         return ServOne.getComusByUser();
     }
 
     public int modifyIncidImportancia(IncidImportancia incidImportancia) throws UiException
     {
-        Log.d(TAG, "modifyUser()");
+        Timber.d("modifyUser()");
         try {
             Response<Integer> response = modifyIncidImportancia(checkBearerToken(), incidImportancia).execute();
             return getResponseBody(response);
@@ -176,7 +173,7 @@ public final class IncidService implements IncidenciaServEndPoints {
 
     public int modifyResolucion(Resolucion resolucion) throws UiException
     {
-        Log.d(TAG, "modifyResolucion()");
+        Timber.d("modifyResolucion()");
         try {
             Response<Integer> response = modifyResolucion(checkBearerToken(), resolucion).execute();
             return getResponseBody(response);
@@ -187,7 +184,7 @@ public final class IncidService implements IncidenciaServEndPoints {
 
     public int regIncidComment(IncidComment comment) throws UiException
     {
-        Log.d(TAG, "regIncidComment()");
+        Timber.d("regIncidComment()");
         try {
             Response<Integer> response = endPoint.regIncidComment(checkBearerToken(), comment).execute();
             return getResponseBody(response);
@@ -198,7 +195,7 @@ public final class IncidService implements IncidenciaServEndPoints {
 
     public int regIncidImportancia(IncidImportancia incidImportancia) throws UiException
     {
-        Log.d(TAG, "regIncidImportancia()");
+        Timber.d("regIncidImportancia()");
         try {
             Response<Integer> response = regIncidImportancia(checkBearerToken(), incidImportancia).execute();
             return getResponseBody(response);
@@ -209,7 +206,7 @@ public final class IncidService implements IncidenciaServEndPoints {
 
     public int regResolucion(Resolucion resolucion) throws UiException
     {
-        Log.d(TAG, "regResolucion()");
+        Timber.d("regResolucion()");
         try {
             Response<Integer> response = regResolucion(checkBearerToken(), resolucion).execute();
             return getResponseBody(response);
@@ -220,7 +217,7 @@ public final class IncidService implements IncidenciaServEndPoints {
 
     public List<IncidComment> seeCommentsByIncid(long incidenciaId) throws UiException
     {
-        Log.d(TAG, "seeCommentsByIncid()");
+        Timber.d("seeCommentsByIncid()");
         try {
             Response<List<IncidComment>> response = seeCommentsByIncid(checkBearerToken(), incidenciaId).execute();
             return getResponseBody(response);
@@ -231,7 +228,7 @@ public final class IncidService implements IncidenciaServEndPoints {
 
     public IncidAndResolBundle seeIncidImportancia(long incidenciaId) throws UiException
     {
-        Log.d(TAG, "seeIncidImportancia()");
+        Timber.d("seeIncidImportancia()");
         try {
             Response<IncidAndResolBundle> response = seeIncidImportancia(checkBearerToken(), incidenciaId).execute();
             return getResponseBody(response);
@@ -244,7 +241,7 @@ public final class IncidService implements IncidenciaServEndPoints {
 
     public List<IncidenciaUser> seeIncidsOpenByComu(long comunidadId) throws UiException
     {
-        Log.d(TAG, "seeIncidsOpenByComu()");
+        Timber.d("seeIncidsOpenByComu()");
         try {
             Response<List<IncidenciaUser>> response = seeIncidsOpenByComu(checkBearerToken(), comunidadId).execute();
             return getResponseBody(response);
@@ -255,7 +252,7 @@ public final class IncidService implements IncidenciaServEndPoints {
 
     public List<IncidenciaUser> seeIncidsClosedByComu(long comunidadId) throws UiException
     {
-        Log.d(TAG, "seeIncidsClosedByComu()");
+        Timber.d("seeIncidsClosedByComu()");
         try {
             Response<List<IncidenciaUser>> response = seeIncidsClosedByComu(checkBearerToken(), comunidadId).execute();
             return getResponseBody(response);
@@ -266,7 +263,7 @@ public final class IncidService implements IncidenciaServEndPoints {
 
     public Resolucion seeResolucion(long resolucionId) throws UiException
     {
-        Log.d(TAG, "seeResolucion()");
+        Timber.d("seeResolucion()");
         try {
             Response<Resolucion> response = seeResolucion(checkBearerToken(), resolucionId).execute();
             return getResponseBody(response);
@@ -279,7 +276,7 @@ public final class IncidService implements IncidenciaServEndPoints {
 
     public List<ImportanciaUser> seeUserComusImportancia(long incidenciaId) throws UiException
     {
-        Log.d(TAG, "seeUserComusImportancia()");
+        Timber.d("seeUserComusImportancia()");
         try {
             Response<List<ImportanciaUser>> response = seeUserComusImportancia(checkBearerToken(), incidenciaId).execute();
             return getResponseBody(response);

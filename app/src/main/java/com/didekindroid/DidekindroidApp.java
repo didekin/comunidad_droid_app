@@ -2,7 +2,10 @@ package com.didekindroid;
 
 import android.app.Application;
 import android.content.Context;
-import android.util.Log;
+
+import timber.log.Timber;
+
+import static java.lang.Integer.parseInt;
 
 /**
  * User: pedro@didekin
@@ -17,42 +20,45 @@ public final class DidekindroidApp extends Application {
     private static String jksPassword;
     private static int jksResourceId;
     private static int httpTimeOut;
-    private static final String TAG = DidekindroidApp.class.getCanonicalName();
 
     public void onCreate()
     {
         super.onCreate();
-        Log.d(TAG, "onCreate()");
-        // TODO: buscar un sustituto a esta inicialización de una variable estática con una instancia.
+
+        if (BuildConfig.DEBUG) {
+            Timber.plant(new Timber.DebugTree());
+        }
+        // TODO: ejemplo en Timber para librería de comunicación de errores en cliente.
+
         mContext = this;
         mBaseURL = mContext.getString(R.string.didekinspring_host)
-                + getContext().getString(R.string.didekinspring_port);
+                + mContext.getString(R.string.didekinspring_port);
+        httpTimeOut = parseInt(mContext.getString(R.string.timeOut));
         jksPassword = mContext.getString(R.string.didekinspring_pswd);
-        httpTimeOut = Integer.parseInt(mContext.getString(R.string.timeOut));
-        jksResourceId = mContext.getResources().getIdentifier(mContext.getString(R.string.bks_name),"raw",mContext.getPackageName());
+        jksResourceId = mContext.getResources().getIdentifier(mContext.getString(R.string.bks_name), "raw", mContext.getPackageName());
     }
 
     public static Context getContext()
     {
-        Log.d(TAG, "getContext()");
+        Timber.d("getContext()");
         return mContext;
     }
 
     public static String getBaseURL()
     {
-        Log.d(TAG, "getBaseURL()");
+        Timber.d("getBaseURL()");
         return mBaseURL;
     }
 
     public static String getJksPassword()
     {
-        Log.d(TAG, "getJksPassword()");
+        Timber.d("getJksPassword()");
         return jksPassword;
     }
 
     public static int getJksResourceId()
     {
-        Log.d(TAG, "getJksResourceId()");
+        Timber.d("getJksResourceId()");
         return jksResourceId;
     }
 

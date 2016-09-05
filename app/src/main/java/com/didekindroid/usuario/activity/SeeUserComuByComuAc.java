@@ -2,11 +2,12 @@ package com.didekindroid.usuario.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.didekindroid.R;
+
+import timber.log.Timber;
 
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
@@ -28,14 +29,13 @@ import static com.google.common.base.Preconditions.checkState;
  */
 public class SeeUserComuByComuAc extends AppCompatActivity {
 
-    public static final String TAG = SeeUserComuByComuAc.class.getCanonicalName();
     SeeUserComuByComuFr mFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        Log.i(TAG, "onCreate()");
+        Timber.i("onCreate()");
 
         // Preconditions: the user is registered.
         checkState(isRegisteredUser(this));
@@ -48,56 +48,56 @@ public class SeeUserComuByComuAc extends AppCompatActivity {
     @Override
     protected void onRestart()
     {
-        Log.d(TAG, "onRestart()");
+        Timber.d("onRestart()");
         super.onRestart();
     }
 
     @Override
     protected void onStart()
     {
-        Log.d(TAG, "onStart()");
+        Timber.d("onStart()");
         super.onStart();
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState)
     {
-        Log.d(TAG, "onRestoreInstanceState()");
+        Timber.d("onRestoreInstanceState()");
         super.onRestoreInstanceState(savedInstanceState);
     }
 
     @Override
     protected void onResume()
     {
-        Log.d(TAG, "onResume()");
+        Timber.d("onResume()");
         super.onResume();
     }
 
     @Override
     protected void onPause()
     {
-        Log.d(TAG, "onPause()");
+        Timber.d("onPause()");
         super.onPause();
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState)
     {
-        Log.d(TAG, "onSaveInstanceState()");
+        Timber.d("onSaveInstanceState()");
         super.onSaveInstanceState(outState);
     }
 
     @Override
     protected void onStop()
     {
-        Log.d(TAG, "onStop()");
+        Timber.d("onStop()");
         super.onStop();
     }
 
     @Override
     protected void onDestroy()
     {
-        Log.d(TAG, "onDestroy()");
+        Timber.d("onDestroy()");
         super.onDestroy();
     }
 
@@ -108,7 +108,7 @@ public class SeeUserComuByComuAc extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        Log.d(TAG, "onCreateOptionsMenu()");
+        Timber.d("onCreateOptionsMenu()");
         getMenuInflater().inflate(R.menu.see_usercomu_by_comu_ac_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
@@ -116,7 +116,7 @@ public class SeeUserComuByComuAc extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        Log.d(TAG, "onOptionsItemSelected()");
+        Timber.d("onOptionsItemSelected()");
 
         int resourceId = checkNotNull(item.getItemId());
 

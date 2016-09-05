@@ -3,7 +3,6 @@ package com.didekindroid.usuario.dominio;
 import android.content.res.Resources;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
-import android.util.Log;
 
 import com.didekin.usuario.dominio.Municipio;
 import com.didekin.usuario.dominio.Provincia;
@@ -28,8 +27,6 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class ComunidadBeanValidaTests {
 
-    private final String TAG = ComunidadBeanValidaTests.class.getCanonicalName();
-
     private static final String TIPO_VIA_ERROR = "errorTipoVia";
     private static final String ERROR_GENERIC = "genericError";
     private StringBuilder errors;
@@ -38,16 +35,14 @@ public class ComunidadBeanValidaTests {
     @Before
     public void doBefore()
     {
-        Log.d(TAG, "doBefore()");
+
         resources = InstrumentationRegistry.getTargetContext().getResources();
         errors = new StringBuilder(resources.getText(R.string.error_validation_msg));
-        Log.d(TAG, "doBefore()" + " capacity= " + errors.capacity());
     }
 
     @Test
     public void testPreconditions()
     {
-        Log.d(TAG, "testPreconditions()");
         assertThat(errors, notNullValue());
         assertThat(resources, notNullValue());
     }

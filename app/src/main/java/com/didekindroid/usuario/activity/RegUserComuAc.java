@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -17,6 +16,8 @@ import com.didekindroid.common.utils.ConnectionUtils;
 import com.didekindroid.common.utils.UIutils;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
+
+import timber.log.Timber;
 
 import static com.didekin.common.dominio.DataPatterns.LINE_BREAK;
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
@@ -51,8 +52,6 @@ import static com.google.common.base.Preconditions.checkState;
 @SuppressWarnings("ConstantConditions")
 public class RegUserComuAc extends AppCompatActivity {
 
-    public static final String TAG = RegUserComuAc.class.getCanonicalName();
-
     RegUserComuFr mRegUserComuFr;
     private Comunidad mComunidad;
 
@@ -60,7 +59,7 @@ public class RegUserComuAc extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        Log.i(TAG, "onCreate()");
+        Timber.i("onCreate()");
 
         checkState(isRegisteredUser(this));
         Comunidad coomunidadIntent =  (Comunidad) getIntent().getExtras()
@@ -76,7 +75,7 @@ public class RegUserComuAc extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                Log.d(TAG, "View.OnClickListener().onClick()");
+                Timber.d("View.OnClickListener().onClick()");
                 doOnclick();
             }
         });
@@ -84,7 +83,7 @@ public class RegUserComuAc extends AppCompatActivity {
 
     private void doOnclick()
     {
-        Log.d(TAG, "doOnclick()");
+        Timber.d("doOnclick()");
 
         // We don't need the user: it is already registered. As to comunidad, it is enough with its id in DB.
         UsuarioComunidadBean usuarioComunidadBean = makeUserComuBeanFromView(
@@ -112,56 +111,56 @@ public class RegUserComuAc extends AppCompatActivity {
     @Override
     protected void onRestart()
     {
-        Log.d(TAG, "onRestart()");
+        Timber.d("onRestart()");
         super.onRestart();
     }
 
     @Override
     protected void onStart()
     {
-        Log.d(TAG, "onStart()");
+        Timber.d("onStart()");
         super.onStart();
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState)
     {
-        Log.d(TAG, "onRestoreInstanceState()");
+        Timber.d("onRestoreInstanceState()");
         super.onRestoreInstanceState(savedInstanceState);
     }
 
     @Override
     protected void onResume()
     {
-        Log.d(TAG, "onResume()");
+        Timber.d("onResume()");
         super.onResume();
     }
 
     @Override
     protected void onPause()
     {
-        Log.d(TAG, "onPause()");
+        Timber.d("onPause()");
         super.onPause();
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState)
     {
-        Log.d(TAG, "onSaveInstanceState()");
+        Timber.d("onSaveInstanceState()");
         super.onSaveInstanceState(outState);
     }
 
     @Override
     protected void onStop()
     {
-        Log.d(TAG, "onStop()");
+        Timber.d("onStop()");
         super.onStop();
     }
 
     @Override
     protected void onDestroy()
     {
-        Log.d(TAG, "onDestroy()");
+        Timber.d("onDestroy()");
         super.onDestroy();
     }
 
@@ -171,13 +170,12 @@ public class RegUserComuAc extends AppCompatActivity {
 
     class UserComuRegister extends AsyncTask<UsuarioComunidad, Void, Integer> {
 
-        private final String TAG = UserComuRegister.class.getCanonicalName();
         UiException uiException;
 
         @Override
         protected Integer doInBackground(UsuarioComunidad... usuarioComunidad)
         {
-            Log.d(TAG, "doInBackground()");
+            Timber.d("doInBackground()");
 
             int i = 0;
             try {
@@ -191,7 +189,7 @@ public class RegUserComuAc extends AppCompatActivity {
         @Override
         protected void onPostExecute(Integer rowInserted)
         {
-            Log.d(TAG, "onPostExecute()");
+            Timber.d("onPostExecute()");
             if (uiException != null){
                 uiException.processMe(RegUserComuAc.this, new Intent());
             } else{

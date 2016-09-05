@@ -9,7 +9,6 @@ import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.NotificationCompat;
-import android.util.Log;
 
 import com.didekindroid.R;
 import com.didekindroid.incidencia.activity.IncidSeeClosedByComuAc;
@@ -20,6 +19,8 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import timber.log.Timber;
 
 import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
@@ -33,7 +34,6 @@ import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
 
 public class AppFirebaseMsgService extends FirebaseMessagingService {
 
-    private static final String TAG = AppFirebaseMsgService.class.getCanonicalName();
     Map<String, String> data;
 
     /**
@@ -42,13 +42,13 @@ public class AppFirebaseMsgService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage message)
     {
-        Log.d(TAG, "onMessageReceived()");
+        Timber.d("onMessageReceived()");
 
         // Sender ID.
         String from = message.getFrom();
         data = message.getData();
         String typeMessage = data.get(type_message_key);
-        Log.d(TAG, "onMessageReceived(), from: " + from + "  typeMessage: " + typeMessage);
+        Timber.d("onMessageReceived(), from: %s typeMessage: %s%n", from, typeMessage);
 
         TypeMsgHandler handler = TypeMsgHandler.getHandlerFromType(typeMessage);
         PendingIntent resultPendingIntent = handler.getPendingIntent(this);
@@ -56,7 +56,7 @@ public class AppFirebaseMsgService extends FirebaseMessagingService {
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mManager.notify(handler.getContentTextRsc(), getNotification(handler, resultPendingIntent));
 
-        Log.d(TAG, "onMessageReceived(), notification sent with ID: " + handler.getTitleRsc());
+        Timber.d("onMessageReceived(), notification sent with ID: %d%n", handler.getTitleRsc());
     }
 
 //    ================================== HELPER METHODS ====================================

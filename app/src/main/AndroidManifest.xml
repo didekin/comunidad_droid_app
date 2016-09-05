@@ -84,6 +84,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".incidencia.activity.IncidSeeOpenByComuAc"/>
         </activity>
+        <activity
+            android:name=".incidencia.activity.IncidSeeUserComuImportanciaAc"
+            android:label="@string/incid_incidencia_importancia_rot"
+            android:parentActivityName=".incidencia.activity.IncidEditAc">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".incidencia.activity.IncidEditAc"/>
+        </activity>
 
         <!-- .......... GCM services ......... -->
         <!--TODO: exported=false es una posibilidad.-->

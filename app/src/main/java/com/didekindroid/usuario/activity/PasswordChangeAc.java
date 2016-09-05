@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,6 +14,8 @@ import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.utils.ConnectionUtils;
 import com.didekindroid.usuario.dominio.UsuarioBean;
+
+import timber.log.Timber;
 
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
@@ -33,8 +34,6 @@ import static com.google.common.base.Preconditions.checkState;
 @SuppressWarnings("ConstantConditions")
 public class PasswordChangeAc extends AppCompatActivity {
 
-    private static final String TAG = PasswordChangeAc.class.getCanonicalName();
-
     private View mAcView;
 
     @SuppressLint("InflateParams")
@@ -42,7 +41,7 @@ public class PasswordChangeAc extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate()");
+        Timber.d("onCreate()");
 
         // Preconditions.
         checkState(isRegisteredUser(this));
@@ -56,7 +55,7 @@ public class PasswordChangeAc extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                Log.d(TAG, "mModifyButton.OnClickListener().onClick()");
+                Timber.d("mModifyButton.OnClickListener().onClick()");
                 modifyPassword();
             }
         });
@@ -64,7 +63,7 @@ public class PasswordChangeAc extends AppCompatActivity {
 
     private void modifyPassword()
     {
-        Log.d(TAG, "modifyPassword()");
+        Timber.d("modifyPassword()");
 
         UsuarioBean usuarioBean = new UsuarioBean(
                 null,
@@ -92,13 +91,12 @@ public class PasswordChangeAc extends AppCompatActivity {
 
     class PasswordModifyer extends AsyncTask<String, Void, Integer> {
 
-        private final String TAG = PasswordModifyer.class.getCanonicalName();
         UiException uiException;
 
         @Override
         protected Integer doInBackground(String... params)
         {
-            Log.d(TAG, "doInBackground()");
+            Timber.d("doInBackground()");
             int passwordChange = 0;
             try {
                 passwordChange = ServOne.passwordChange(params[0]);
@@ -111,7 +109,7 @@ public class PasswordChangeAc extends AppCompatActivity {
         @Override
         protected void onPostExecute(Integer passwordUpdate)
         {
-            Log.d(TAG, "onPostExecute(): DONE");
+            Timber.d("onPostExecute(): DONE");
             if (uiException != null) {
                 uiException.processMe(PasswordChangeAc.this, new Intent());
             } else {

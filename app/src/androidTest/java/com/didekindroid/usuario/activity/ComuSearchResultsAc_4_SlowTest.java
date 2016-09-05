@@ -3,7 +3,6 @@ package com.didekindroid.usuario.activity;
 import android.content.Intent;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.util.Log;
 
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
@@ -50,8 +49,6 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class ComuSearchResultsAc_4_SlowTest {
 
-    private static final String TAG = "ComunidadSeeActivTest";
-
     private ComuSearchResultsAc activity;
     ComuSearchResultsListFr mComunidadSummaryFrg;
     Intent intent;
@@ -72,7 +69,6 @@ public class ComuSearchResultsAc_4_SlowTest {
     {
         Thread.sleep(6000);
 
-        Log.d(TAG, "In getFixture()");
         whatClean = CleanUserEnum.CLEAN_NOTHING;
 
         intent = new Intent();

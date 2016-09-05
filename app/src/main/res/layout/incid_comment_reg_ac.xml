@@ -20,7 +20,7 @@
 
             <LinearLayout style="@style/baseLayout" android:orientation="horizontal">
                 <TextView
-                    android:id="@+id/incid_incidencias_rot"
+                    android:id="@+id/incid_comment_incidencias_rot"
                     style="@style/textBase.textPageLabel2"
                     android:layout_weight="0"
                     android:text="@string/incid_incidencia_rot"/>

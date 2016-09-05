@@ -2,7 +2,6 @@ package com.didekindroid.usuario.activity.utils;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.didekindroid.R;
@@ -15,6 +14,8 @@ import com.didekindroid.usuario.activity.RegComuAndUserComuAc;
 import com.didekindroid.usuario.activity.SeeUserComuByComuAc;
 import com.didekindroid.usuario.activity.SeeUserComuByUserAc;
 import com.didekindroid.usuario.activity.UserDataAc;
+
+import timber.log.Timber;
 
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.utils.UIutils.makeToast;
@@ -30,7 +31,7 @@ public enum UserMenu {
         @Override
         public void doMenuItem(Activity activity)
         {
-            Log.d(TAG,"comu_data_ac.doMenuItem()");
+            Timber.d("comu_data_ac.doMenuItem()");
             activity.startActivity(activity.getIntent());
         }
     },
@@ -39,7 +40,7 @@ public enum UserMenu {
         @Override
         public void doMenuItem(Activity activity)
         {
-            Log.d(TAG, "comu_search_ac.doMenuItem()");
+            Timber.d("comu_search_ac.doMenuItem()");
             Intent intent = new Intent(activity, ComuSearchAc.class);
             activity.startActivity(intent);
         }
@@ -49,7 +50,7 @@ public enum UserMenu {
         @Override
         public void doMenuItem(Activity activity)
         {
-            Log.d(TAG, "delete_me_ac.doMenuItem()");
+            Timber.d("delete_me_ac.doMenuItem()");
             Intent intent = new Intent(activity, DeleteMeAc.class);
             activity.startActivity(intent);
         }
@@ -60,7 +61,7 @@ public enum UserMenu {
         @Override
         public void doMenuItem(Activity activity)
         {
-            Log.d(TAG, "login_ac.doMenuItem()");
+            Timber.d("login_ac.doMenuItem()");
             Intent intent = new Intent(activity, LoginAc.class);
             activity.startActivity(intent);
         }
@@ -70,7 +71,7 @@ public enum UserMenu {
         @Override
         public void doMenuItem(Activity activity)
         {
-            Log.d(TAG, "password_change_ac.doMenuItem()");
+            Timber.d("password_change_ac.doMenuItem()");
             Intent intent = new Intent(activity, PasswordChangeAc.class);
             activity.startActivity(intent);
         }
@@ -81,15 +82,15 @@ public enum UserMenu {
         @Override
         public void doMenuItem(Activity activity)
         {
-            Log.d(TAG, "reg_comu_user_usercomu.doMenuItem()");
+            Timber.d("reg_comu_user_usercomu.doMenuItem()");
 
             if (!isRegisteredUser(activity)) {
-                Log.i(TAG, "reg_comu_user_usercomu.doMenuItem(), user not registered.");
+                Timber.i("reg_comu_user_usercomu.doMenuItem(), user not registered.");
                 // Activity with user and comunidad data.
                 Intent intent = new Intent(activity, RegComuAndUserAndUserComuAc.class);
                 activity.startActivity(intent);
             } else {
-                Log.i(TAG, "reg_comu_user_usercomu.doMenuItem(), user registered.");
+                Timber.i("reg_comu_user_usercomu.doMenuItem(), user registered.");
                 // Activity without user data: password, alias, email, telephone,..
                 Intent intent = new Intent(activity, RegComuAndUserComuAc.class);
                 activity.startActivity(intent);
@@ -103,7 +104,7 @@ public enum UserMenu {
         @Override
         public void doMenuItem(Activity activity)
         {
-            Log.d(TAG, "see_usercomu_by_comu_ac.doMenuItem()");
+            Timber.d("see_usercomu_by_comu_ac.doMenuItem()");
             Intent intent = activity.getIntent();
             intent.setClass(activity, SeeUserComuByComuAc.class);
             activity.startActivity(intent);
@@ -115,13 +116,13 @@ public enum UserMenu {
         @Override
         public void doMenuItem(Activity activity)
         {
-            Log.i(TAG, "comu_by_user.doMenuItem()");
+            Timber.i("comu_by_user.doMenuItem()");
 
             if (!isRegisteredUser(activity)) {
-                Log.i(TAG, "comu_by_user.doMenuItem(), user not registered.");
+                Timber.i("comu_by_user.doMenuItem(), user not registered.");
                 makeToast(activity, R.string.user_without_signedUp, Toast.LENGTH_SHORT);
             } else {
-                Log.i(TAG, "comu_by_user.doMenuItem(), user registered.");
+                Timber.i("comu_by_user.doMenuItem(), user registered.");
                 Intent intent = new Intent(activity, SeeUserComuByUserAc.class);
                 activity.startActivity(intent);
             }
@@ -133,20 +134,18 @@ public enum UserMenu {
         @Override
         public void doMenuItem(Activity activity)
         {
-            Log.d(TAG, "user_data_ac_mn.doMenuItem()");
+            Timber.d("user_data_ac_mn.doMenuItem()");
 
             if (!isRegisteredUser(activity)) {
-                Log.i(TAG, "user_data_ac_mn.doMenuItem(), user not registered.");
+                Timber.i("user_data_ac_mn.doMenuItem(), user not registered.");
                 makeToast(activity, R.string.user_without_signedUp, Toast.LENGTH_SHORT);
             } else {
-                Log.i(TAG, "user_data_ac_mn.doMenuItem(), user registered.");
+                Timber.i("user_data_ac_mn.doMenuItem(), user registered.");
                 Intent intent = new Intent(activity, UserDataAc.class);
                 activity.startActivity(intent);
             }
         }
     },;
-
-    private static final String TAG = UserMenu.class.getCanonicalName();
 
     public abstract void doMenuItem(Activity activity);
 }

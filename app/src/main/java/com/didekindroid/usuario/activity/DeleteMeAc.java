@@ -4,12 +4,13 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
+
+import timber.log.Timber;
 
 import static com.didekindroid.common.activity.TokenHandler.TKhandler;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
@@ -27,13 +28,11 @@ import static com.google.common.base.Preconditions.checkState;
 @SuppressWarnings("ConstantConditions")
 public class DeleteMeAc extends AppCompatActivity {
 
-    private static final String TAG = DeleteMeAc.class.getCanonicalName();
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate()");
+        Timber.d("onCreate()");
 
         // Preconditions.
         checkState(isRegisteredUser(this));
@@ -47,7 +46,7 @@ public class DeleteMeAc extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                Log.d(TAG, "mUnregisterButton.OnClickListener().onClick()");
+                Timber.d("mUnregisterButton.OnClickListener().onClick()");
                 unregisterUser();
             }
         });
@@ -55,7 +54,7 @@ public class DeleteMeAc extends AppCompatActivity {
 
     private void unregisterUser()
     {
-        Log.d(TAG, "unregisterUser()");
+        Timber.d("unregisterUser()");
         new UserDataEraser().execute();
         Intent intent = new Intent(this, ComuSearchAc.class);
         startActivity(intent);
@@ -67,13 +66,12 @@ public class DeleteMeAc extends AppCompatActivity {
 
     class UserDataEraser extends AsyncTask<Void, Void, Boolean> {
 
-        final String TAG = UserDataEraser.class.getCanonicalName();
         UiException uiException;
 
         @Override
         protected Boolean doInBackground(Void... params)
         {
-            Log.d(TAG, "doInBackground()");
+            Timber.d("doInBackground()");
 
             boolean isDeleted = false;
             try {
@@ -89,7 +87,7 @@ public class DeleteMeAc extends AppCompatActivity {
         @Override
         protected void onPostExecute(Boolean isDeleted)
         {
-            Log.d(TAG, "onPostExecute()");
+            Timber.d("onPostExecute()");
 
             if (uiException != null) {
                 uiException.processMe(DeleteMeAc.this, new Intent());

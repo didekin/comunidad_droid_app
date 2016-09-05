@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -26,6 +25,8 @@ import com.didekindroid.usuario.dominio.UsuarioBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
 
 import java.io.IOException;
+
+import timber.log.Timber;
 
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_LIST_OBJECT;
@@ -64,7 +65,6 @@ import static com.google.common.base.Preconditions.checkState;
  */
 @SuppressWarnings("ConstantConditions")
 public class RegUserAndUserComuAc extends AppCompatActivity {
-    private static final String TAG = RegComuAndUserAndUserComuAc.class.getCanonicalName();
 
     RegUserComuFr mRegUserComuFrg;
     RegUserFr mRegUserFr;
@@ -74,7 +74,7 @@ public class RegUserAndUserComuAc extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate()");
+        Timber.d("onCreate()");
 
         // Preconditions.
         checkState(!isRegisteredUser(this));
@@ -93,7 +93,7 @@ public class RegUserAndUserComuAc extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                Log.d(TAG, "View.OnClickListener().onClick()");
+                Timber.d("View.OnClickListener().onClick()");
                 registerUserAndUserComu();
             }
         });
@@ -101,7 +101,7 @@ public class RegUserAndUserComuAc extends AppCompatActivity {
 
     private void registerUserAndUserComu()
     {
-        Log.d(TAG, "registerComuAndUsuarioComu()");
+        Timber.d("registerComuAndUsuarioComu()");
 
         UsuarioBean usuarioBean = makeUserBeanFromRegUserFrView(mRegUserFr.getFragmentView());
         UsuarioComunidadBean usuarioComunidadBean = makeUserComuBeanFromView(
@@ -123,7 +123,7 @@ public class RegUserAndUserComuAc extends AppCompatActivity {
     @Override
     protected void onDestroy()
     {
-        Log.d(TAG, "onDestroy()");
+        Timber.d("onDestroy()");
         super.onDestroy();
     }
 
@@ -134,7 +134,7 @@ public class RegUserAndUserComuAc extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        Log.d(TAG, "onCreateOptionsMenu()");
+        Timber.d("onCreateOptionsMenu()");
 
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.reg_user_activities_mn, menu);
@@ -144,7 +144,7 @@ public class RegUserAndUserComuAc extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        Log.d(TAG, "onOptionsItemSelected()");
+        Timber.d("onOptionsItemSelected()");
 
         int resourceId = checkNotNull(item.getItemId());
 
@@ -168,7 +168,7 @@ public class RegUserAndUserComuAc extends AppCompatActivity {
         @Override
         protected Void doInBackground(UsuarioComunidad... usuarioComunidad)
         {
-            Log.d(TAG, "UserAndUserComuRegister.doInBackground()");
+            Timber.d("UserAndUserComuRegister.doInBackground()");
             Usuario newUser = usuarioComunidad[0].getUsuario();
             try {
                 ServOne.regUserAndUserComu(usuarioComunidad[0]).execute();
@@ -189,7 +189,7 @@ public class RegUserAndUserComuAc extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid)
         {
-            Log.d(TAG, "UserAndUserComuRegister.onPostExecute()");
+            Timber.d("UserAndUserComuRegister.onPostExecute()");
 
             if (uiException != null) {
                 uiException.processMe(RegUserAndUserComuAc.this, new Intent());

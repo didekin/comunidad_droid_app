@@ -1,7 +1,6 @@
 package com.didekindroid.common.webservices;
 
 import android.util.Base64;
-import android.util.Log;
 
 import com.didekin.common.controller.RetrofitHandler;
 import com.didekin.common.exception.ErrorBean;
@@ -14,6 +13,7 @@ import java.io.IOException;
 
 import retrofit2.Call;
 import retrofit2.Response;
+import timber.log.Timber;
 
 import static com.didekin.common.exception.ErrorBean.GENERIC_ERROR;
 import static com.didekin.oauth2.OauthClient.CL_USER;
@@ -31,8 +31,6 @@ import static com.didekindroid.DidekindroidApp.getJksResourceId;
  * Time: 10:52
  */
 public final class Oauth2Service implements Oauth2EndPoints {
-
-    private static final String TAG = Oauth2Service.class.getCanonicalName();
 
     private static final RetrofitHandler retrofitHandler = new RetrofitHandler(getBaseURL(), new JksInAndroidApp(getJksPassword(), getJksResourceId()), getHttpTimeOut());
     public static final Oauth2Service Oauth2 = new Oauth2Service();
@@ -73,7 +71,7 @@ public final class Oauth2Service implements Oauth2EndPoints {
 
     public AccessToken getPasswordUserToken(String userName, String password) throws UiException
     {
-        Log.d(TAG, "getPasswordUserToken()");
+        Timber.d("getPasswordUserToken()");
         try {
             Response<AccessToken> response = getPasswordUserToken(
                     doAuthBasicHeader(CL_USER),
@@ -88,7 +86,7 @@ public final class Oauth2Service implements Oauth2EndPoints {
 
     public AccessToken getRefreshUserToken(String refreshTokenKey) throws UiException
     {
-        Log.d(TAG, "getRefreshUserToken()");
+        Timber.d("getRefreshUserToken()");
         try {
             Response<AccessToken> response = getRefreshUserToken(
                     doAuthBasicHeader(CL_USER),

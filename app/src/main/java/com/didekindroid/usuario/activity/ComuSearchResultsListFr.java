@@ -3,7 +3,6 @@ package com.didekindroid.usuario.activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +13,8 @@ import com.didekin.usuario.dominio.Comunidad;
 import com.didekindroid.R;
 
 import java.util.List;
+
+import timber.log.Timber;
 
 /**
  * Preconditions:
@@ -41,8 +42,6 @@ import java.util.List;
  */
 public class ComuSearchResultsListFr extends Fragment {
 
-    public static final String TAG = ComuSearchResultsListFr.class.getCanonicalName();
-
     ComuSearchResultsListAdapter mAdapter;
     /**
      * The listener for dealing with the selection event of a line item (comunidad).
@@ -54,14 +53,14 @@ public class ComuSearchResultsListFr extends Fragment {
     @Override
     public void onAttach(Context context)
     {
-        Log.d(TAG, "onAttach()");
+        Timber.d("onAttach()");
         super.onAttach(context);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
-        Log.d(TAG, "onCreate()");
+        Timber.d("onCreate()");
         super.onCreate(savedInstanceState);
     }
 
@@ -69,7 +68,7 @@ public class ComuSearchResultsListFr extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        Log.d(TAG, "onCreateView()");
+        Timber.d("onCreateView()");
         mView = inflater.inflate(R.layout.comu_search_results_fr_layout, container, false);
         return mView;
     }
@@ -77,7 +76,7 @@ public class ComuSearchResultsListFr extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState)
     {
-        Log.d(TAG, "onActivityCreated()");
+        Timber.d("onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
 
         mComuListListener = (ComuListListener) getActivity();
@@ -92,7 +91,7 @@ public class ComuSearchResultsListFr extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                Log.d(TAG, "onListItemClick()");
+                Timber.d("onListItemClick()");
 
                 mListView.setItemChecked(position, true);
                 view.setSelected(true);
@@ -108,49 +107,49 @@ public class ComuSearchResultsListFr extends Fragment {
     @Override
     public void onStart()
     {
-        Log.d(TAG, "Enters onStart()");
+        Timber.d("Enters onStart()");
         super.onStart();
     }
 
     @Override
     public void onResume()
     {
-        Log.d(TAG, "Enters onResume()");
+        Timber.d("Enters onResume()");
         super.onResume();
     }
 
     @Override
     public void onPause()
     {
-        Log.d(TAG, "onPause()");
+        Timber.d("onPause()");
         super.onPause();
     }
 
     @Override
     public void onStop()
     {
-        Log.d(TAG, "onStop()");
+        Timber.d("onStop()");
         super.onStop();
     }
 
     @Override
     public void onDestroyView()
     {
-        Log.d(TAG, "onDestroyView()");
+        Timber.d("onDestroyView()");
         super.onDestroyView();
     }
 
     @Override
     public void onDestroy()
     {
-        Log.d(TAG, "onDestroy()");
+        Timber.d("onDestroy()");
         super.onDestroy();
     }
 
     @Override
     public void onDetach()
     {
-        Log.d(TAG, "onDetach()");
+        Timber.d("onDetach()");
         super.onDetach();
     }
 

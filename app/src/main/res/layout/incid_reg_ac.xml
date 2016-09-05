@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    style="@style/baseLayout"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:fitsSystemWindows="true"
-    tools:context="com.didekindroid.incidencia.activity.IncidRegAc">
+<ScrollView style="@style/baseLayout.scroll"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools">
 
-    <include layout="@layout/appbar_include_design"/>
+    <android.support.design.widget.CoordinatorLayout
+        style="@style/baseLayout"
+        android:fitsSystemWindows="true"
+        tools:context="com.didekindroid.incidencia.activity.IncidRegAc">
 
-    <ScrollView style="@style/baseLayout.scroll">
+        <include layout="@layout/appbar_include_design"/>
 
         <LinearLayout
             android:id="@+id/incid_reg_ac_layout"
@@ -30,5 +30,6 @@
                 android:layout_gravity="center_horizontal"
                 android:text="@string/incid_reg_ac_button_rot"/>
         </LinearLayout>
-    </ScrollView>
-</android.support.design.widget.CoordinatorLayout>
+
+    </android.support.design.widget.CoordinatorLayout>
+</ScrollView>

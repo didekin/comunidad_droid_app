@@ -3,11 +3,12 @@ package com.didekindroid.incidencia.activity.utils;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.widget.CursorAdapter;
 import android.widget.SimpleCursorAdapter;
 
 import com.didekindroid.R;
+
+import timber.log.Timber;
 
 import static com.didekindroid.incidencia.repository.IncidenciaDataDb.AmbitoIncidencia.ambito;
 
@@ -20,7 +21,6 @@ public class AmbitoIncidenciaSpinnerSetter<T extends Fragment & AmbitoSpinnerSet
 
     // TODO: to persist the task during restarts and properly cancel the task when the activity is destroyed. (Example in Shelves)
     private T mFragment;
-    private final String TAG = AmbitoIncidenciaSpinnerSetter.class.getCanonicalName();
 
     public AmbitoIncidenciaSpinnerSetter(T mFragment)
     {
@@ -30,14 +30,14 @@ public class AmbitoIncidenciaSpinnerSetter<T extends Fragment & AmbitoSpinnerSet
     @Override
     protected Cursor doInBackground(Void... params)
     {
-        Log.d(TAG, "doInBackground()");
+        Timber.d("doInBackground()");
         return mFragment.getDbHelper().doAmbitoIncidenciaCursor();
     }
 
     @Override
     protected void onPostExecute(Cursor cursor)
     {
-        Log.d(TAG, "onPostExecute()");
+        Timber.d("onPostExecute()");
 
         String[] fromColDB = new String[]{ambito};
         int[] toViews = new int[]{R.id.app_spinner_1_dropdown_item};

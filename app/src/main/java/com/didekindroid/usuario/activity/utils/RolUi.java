@@ -1,10 +1,8 @@
 package com.didekindroid.usuario.activity.utils;
 
 import android.content.res.Resources;
-import android.util.Log;
 
 import com.didekindroid.R;
-import com.didekindroid.usuario.activity.SeeUserComutByComuListAdapter;
 
 import java.util.HashMap;
 import java.util.Map;

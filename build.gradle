@@ -21,6 +21,17 @@ ext {
     targetCompatibilityVersion = JavaVersion.VERSION_1_7
 }
 
+ext.deps = [
+        retrofit                   : 'com.squareup.retrofit2:retrofit:2.0.2',
+        retrofit_converter_gson    : 'com.squareup.retrofit2:converter-gson:2.0.2',
+        okhttp3_logging_interceptor: 'com.squareup.okhttp3:logging-interceptor:3.2.0',
+        mockwebserver              : 'com.squareup.okhttp:mockwebserver:2.7.5',
+        timber                     : 'com.jakewharton.timber:timber:4.3.0',
+
+        junit                      : 'junit:junit:4.12',
+        guava                      : 'com.google.guava:guava:19.0'
+]
+
 task wrapper(type: Wrapper) {
     gradleVersion = '2.14.1'
 }

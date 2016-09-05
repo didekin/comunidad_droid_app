@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +18,8 @@ import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.utils.ConnectionUtils;
 import com.didekindroid.usuario.activity.utils.UserMenu;
 import com.didekindroid.usuario.dominio.UsuarioBean;
+
+import timber.log.Timber;
 
 import static com.didekin.common.exception.DidekinExceptionMsg.BAD_REQUEST;
 import static com.didekindroid.common.activity.TokenHandler.TKhandler;
@@ -44,8 +45,6 @@ import static com.google.common.base.Preconditions.checkState;
 @SuppressWarnings("ConstantConditions")
 public class UserDataAc extends AppCompatActivity {
 
-    private static final String TAG = UserDataAc.class.getCanonicalName();
-
     private View mAcView;
     private Usuario mOldUser;
 
@@ -53,7 +52,7 @@ public class UserDataAc extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate()");
+        Timber.d("onCreate()");
 
         // Preconditions.
         checkState(isRegisteredUser(this));
@@ -68,7 +67,7 @@ public class UserDataAc extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                Log.d(TAG, "mModifyButton.OnClickListener().onClick()");
+                Timber.d("mModifyButton.OnClickListener().onClick()");
                 modifyUserData();
             }
         });
@@ -80,7 +79,7 @@ public class UserDataAc extends AppCompatActivity {
         // and show in the activity an EditField to introduce it.
         // Only for changes of password.
 
-        Log.d(TAG, "modifyUserData()");
+        Timber.d("modifyUserData()");
 
         UsuarioBean usuarioBean = makeUserBeanFromUserDataAcView(mAcView);
 
@@ -103,7 +102,7 @@ public class UserDataAc extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        Log.d(TAG, "onCreateOptionsMenu()");
+        Timber.d("onCreateOptionsMenu()");
         getMenuInflater().inflate(R.menu.user_data_ac_menu, menu);
         return true;
     }
@@ -111,7 +110,7 @@ public class UserDataAc extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        Log.d(TAG, "onOptionsItemSelected()");
+        Timber.d("onOptionsItemSelected()");
 
         int resourceId = checkNotNull(item.getItemId());
 
@@ -142,12 +141,11 @@ public class UserDataAc extends AppCompatActivity {
 
     class UserDataGetter extends AsyncTask<Void, Void, Void> {
 
-        final String TAG = UserDataGetter.class.getCanonicalName();
         UiException uiException;
 
         protected Void doInBackground(Void... aVoid)
         {
-            Log.d(TAG, "UserDataGetter.doInBackground()");
+            Timber.d("UserDataGetter.doInBackground()");
 
             try {
                 mOldUser = ServOne.getUserData();
@@ -160,7 +158,7 @@ public class UserDataAc extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid)
         {
-            Log.d(TAG, "UserDataGetter.onPostExecute()");
+            Timber.d("UserDataGetter.onPostExecute()");
 
             if (uiException != null) {
                 uiException.processMe(UserDataAc.this, new Intent());
@@ -175,19 +173,18 @@ public class UserDataAc extends AppCompatActivity {
 
     class UserDataModifyer extends AsyncTask<Usuario, Void, Boolean> {
 
-        final String TAG = UserDataModifyer.class.getCanonicalName();
         UiException uiException;
 
         @Override
         protected Boolean doInBackground(Usuario... usuarios)
         {
-            Log.d(TAG, "doInBackground()");
+            Timber.d("doInBackground()");
 
             boolean isSameUserName = mOldUser.getUserName().equals(usuarios[0].getUserName());
             boolean isSameAlias = mOldUser.getAlias().equals(usuarios[0].getAlias());
 
             if (isSameAlias && isSameUserName) {
-                Log.d(TAG, "sameAlias && sameUserName");
+                Timber.d("sameAlias && sameUserName");
                 return false;
             }
 
@@ -198,11 +195,11 @@ public class UserDataAc extends AppCompatActivity {
                 TKhandler.initKeyCacheAndBackupFile(token_1);
             } catch (UiException e) {
                 if (e.getErrorBean().getMessage().equals(BAD_REQUEST.getHttpMessage())) {
-                    Log.d(TAG, " exception: " + BAD_REQUEST.getHttpMessage());
+                    Timber.d(" exception: %s%n", BAD_REQUEST.getHttpMessage());
                     return true;  // Password/user matching error.
                 } else {
                     uiException = e;
-                    Log.d(TAG, e.getErrorBean().getMessage());
+                    Timber.d(e.getErrorBean().getMessage());
                     return false; // Other authentication error.
                 }
             }
@@ -219,7 +216,7 @@ public class UserDataAc extends AppCompatActivity {
                     TKhandler.cleanCacheAndBckFile();
                 } catch (UiException e) {
                     uiException = e;
-                    Log.d(TAG, (e.getErrorBean() != null ?
+                    Timber.d((e.getErrorBean() != null ?
                             e.getErrorBean().getMessage() : "token null in cache"));
                     return false; // Authentication error with old credentials.
                 }
@@ -229,13 +226,13 @@ public class UserDataAc extends AppCompatActivity {
                     TKhandler.initKeyCacheAndBackupFile(token_2);
                 } catch (UiException e) {
                     // Authentication error with new credentials.
-                    Log.d(TAG, e.getErrorBean().getMessage());
+                    Timber.d(e.getErrorBean().getMessage());
                 }
                 try {
                     ServOne.deleteAccessToken(token_1.getValue());
                 } catch (UiException e) {
                     // No token in cache
-                    Log.d(TAG, e.getErrorBean().getMessage());
+                    Timber.d(e.getErrorBean().getMessage());
                     e.processMe(UserDataAc.this, new Intent());
                 }
                 return false;
@@ -249,7 +246,7 @@ public class UserDataAc extends AppCompatActivity {
                 ServOne.modifyUser(usuarioIn);
             } catch (UiException e) {
                 uiException = e;
-                Log.d(TAG, (e.getErrorBean() != null ?
+                Timber.d((e.getErrorBean() != null ?
                         e.getErrorBean().getMessage() : "token null in cache"));
                 return false;
             }
@@ -259,10 +256,10 @@ public class UserDataAc extends AppCompatActivity {
         @Override
         protected void onPostExecute(Boolean passwordWrong)
         {
-            Log.d(TAG, "onPostExecute()");
+            Timber.d("onPostExecute()");
 
             if (passwordWrong) {
-                Log.d(TAG, "onPostExecute(): password wrong");
+                Timber.d("onPostExecute(): password wrong");
                 checkState(uiException == null);
                 makeToast(UserDataAc.this, R.string.password_wrong, Toast.LENGTH_LONG);
             }

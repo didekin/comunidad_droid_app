@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -18,6 +17,8 @@ import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.utils.ConnectionUtils;
 import com.didekindroid.common.utils.UIutils;
 import com.didekindroid.usuario.dominio.ComunidadBean;
+
+import timber.log.Timber;
 
 import static android.widget.Toast.LENGTH_SHORT;
 import static com.didekin.common.dominio.DataPatterns.LINE_BREAK;
@@ -46,8 +47,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 @SuppressWarnings("ConstantConditions")
 public class ComuSearchAc extends AppCompatActivity {
 
-    private static final String TAG = ComuSearchAc.class.getCanonicalName();
-
     private Menu mMenu;
     RegComuFr mRegComuFrg;
     protected View mMainView;
@@ -57,24 +56,22 @@ public class ComuSearchAc extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-
-        Log.d(TAG, "In onCreate()");
+        Timber.d("In onCreate()");
 
         // To initilize the token cache. This is the launch activity.
         new CheckerTokenInCache().execute();
 
         mMainView = getLayoutInflater().inflate(R.layout.comu_search_ac, null);
         setContentView(mMainView);
-        mRegComuFrg = (RegComuFr) getFragmentManager().findFragmentById(R.id.reg_comunidad_frg);
-
         doToolBar(this, false);
+        mRegComuFrg = (RegComuFr) getFragmentManager().findFragmentById(R.id.reg_comunidad_frg);
 
         Button mSearchButton = (Button) findViewById(R.id.searchComunidad_Bton);
         mSearchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
             {
-                Log.d(TAG, "View.OnClickListener().onClick()");
+                Timber.d("View.OnClickListener().onClick()");
                 searchComunidad();
             }
         });
@@ -82,7 +79,7 @@ public class ComuSearchAc extends AppCompatActivity {
 
     void searchComunidad()
     {
-        Log.i(TAG, "In searchComunidad()");
+        Timber.i("In searchComunidad()");
 
         ComunidadBean comunidadBean = mRegComuFrg.getComunidadBean();
 
@@ -106,7 +103,7 @@ public class ComuSearchAc extends AppCompatActivity {
     @Override
     protected void onDestroy()
     {
-        Log.d(TAG, "onDestroy()");
+        Timber.d("onDestroy()");
         super.onDestroy();
     }
 
@@ -117,7 +114,7 @@ public class ComuSearchAc extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        Log.d(TAG, "onCreateOptionsMenu()");
+        Timber.d("onCreateOptionsMenu()");
         super.onCreateOptionsMenu(menu);
 
         MenuInflater inflater = getMenuInflater();
@@ -132,7 +129,7 @@ public class ComuSearchAc extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        Log.d(TAG, "onOptionsItemSelected()");
+        Timber.d("onOptionsItemSelected()");
 
         int resourceId = checkNotNull(item.getItemId());
 
@@ -168,7 +165,7 @@ public class ComuSearchAc extends AppCompatActivity {
         @Override
         protected AccessToken doInBackground(Void... params)
         {
-            Log.d(TAG, "CheckerTokenInCache.doInBackground");
+            Timber.d("CheckerTokenInCache.doInBackground");
 
             AccessToken accessTokenInCache = null;
             try {
@@ -182,8 +179,7 @@ public class ComuSearchAc extends AppCompatActivity {
         @Override
         protected void onPostExecute(AccessToken accessToken)
         {
-            Log.d(TAG, "CheckerTokenInCache.onPostExecute() accessToken null = "
-                    + (accessToken == null));
+            Timber.d("CheckerTokenInCache.onPostExecute() accessToken null = %b%n",accessToken == null);
 
             if (uiException == null && accessToken != null) {
                 updateIsRegistered(true, ComuSearchAc.this);

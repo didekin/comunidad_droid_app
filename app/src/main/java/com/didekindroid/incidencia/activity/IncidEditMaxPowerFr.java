@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +23,8 @@ import com.didekindroid.incidencia.activity.utils.ImportanciaSpinnerSettable;
 import com.didekindroid.incidencia.dominio.IncidImportanciaBean;
 import com.didekindroid.incidencia.dominio.IncidenciaBean;
 import com.didekindroid.incidencia.repository.IncidenciaDataDbHelper;
+
+import timber.log.Timber;
 
 import static android.view.View.GONE;
 import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
@@ -46,7 +47,6 @@ import static com.google.common.base.Preconditions.checkState;
 public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettable,
         ImportanciaSpinnerSettable {
 
-    private static final String TAG = IncidEditMaxPowerFr.class.getCanonicalName();
     View fFragmentView;
     IncidImportancia mIncidImportancia;
     Spinner mAmbitoIncidSpinner;
@@ -60,7 +60,7 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        Log.d(TAG, "onCreateView()");
+        Timber.d("onCreateView()");
         fFragmentView = inflater.inflate(R.layout.incid_edit_maxpower_fr, container, false);
         return fFragmentView;
     }
@@ -68,7 +68,7 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
     @Override
     public void onActivityCreated(Bundle savedInstanceState)
     {
-        Log.d(TAG, "onActivityCreated()");
+        Timber.d("onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
         mIncidImportancia = (IncidImportancia) getArguments().getSerializable(INCID_IMPORTANCIA_OBJECT.key);
         boolean flagResolucion = getArguments().getBoolean(INCID_RESOLUCION_FLAG.key);
@@ -93,7 +93,7 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
             @Override
             public void onClick(View v)
             {
-                Log.d(TAG, "mButtonModify.onClick()");
+                Timber.d("mButtonModify.onClick()");
                 modifyIncidenciaAndImportancia();
             }
         });
@@ -109,7 +109,7 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
             @Override
             public void onClick(View v)
             {
-                Log.d(TAG, "mButtonErase.onClick()");
+                Timber.d("mButtonErase.onClick()");
                 eraseIncidencia();
             }
         });
@@ -119,7 +119,7 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
     @Override
     public void onDestroy()
     {
-        Log.d(TAG, "onDestroy()");
+        Timber.d("onDestroy()");
         dbHelper.close();
         super.onDestroy();
     }
@@ -130,7 +130,7 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
 
     private void modifyIncidenciaAndImportancia()
     {
-        Log.d(TAG, "modifyIncidenciaAndImportancia()");
+        Timber.d("modifyIncidenciaAndImportancia()");
         StringBuilder errorMsg = getErrorMsgBuilder(getActivity());
 
         try {
@@ -140,14 +140,14 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
                 new IncidenciaModifyer().execute(incidImportancia);
             }
         } catch (IllegalStateException e) {
-            Log.e(TAG, e.getMessage());
+            Timber.e(e.getMessage());
             makeToast(getActivity(), errorMsg.toString(), Toast.LENGTH_SHORT);
         }
     }
 
     private void eraseIncidencia()
     {
-        Log.d(TAG, "eraseIncidencia()");
+        Timber.d("eraseIncidencia()");
 
         if (checkInternetConnected(getActivity())) {
             checkState(mIncidImportancia.getUserComu().hasAdministradorAuthority());
@@ -162,63 +162,63 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
     @Override
     public void onAmbitoIncidSpinnerLoaded()
     {
-        Log.d(TAG, "onAmbitoIncidSpinnerLoaded()");
+        Timber.d("onAmbitoIncidSpinnerLoaded()");
         mAmbitoIncidSpinner.setSelection(mIncidImportancia.getIncidencia().getAmbitoIncidencia().getAmbitoId());
     }
 
     @Override
     public void setAmbitoSpinnerAdapter(CursorAdapter cursorAdapter)
     {
-        Log.d(TAG, "setAmbitoSpinnerAdapter()");
+        Timber.d("setAmbitoSpinnerAdapter()");
         mAmbitoIncidSpinner.setAdapter(cursorAdapter);
     }
 
     @Override
     public IncidenciaDataDbHelper getDbHelper()
     {
-        Log.d(TAG, "getDbHelper()");
+        Timber.d("getDbHelper()");
         return dbHelper;
     }
 
     @Override
     public Spinner getAmbitoSpinner()
     {
-        Log.d(TAG, "getAmbitoSpinner()");
+        Timber.d("getAmbitoSpinner()");
         return mAmbitoIncidSpinner;
     }
 
     @Override
     public Incidencia getIncidencia()
     {
-        Log.d(TAG, "getIncidencia()");
+        Timber.d("getIncidencia()");
         return mIncidImportancia.getIncidencia();
     }
 
     @Override
     public IncidenciaBean getIncidenciaBean()
     {
-        Log.d(TAG, "getIncidenciaBean()");
+        Timber.d("getIncidenciaBean()");
         return mIncidenciaBean;
     }
 
     @Override
     public IncidImportanciaBean getIncidImportanciaBean()
     {
-        Log.d(TAG, "getIncidImportanciaBean()");
+        Timber.d("getIncidImportanciaBean()");
         return mIncidImportanciaBean;
     }
 
     @Override
     public Spinner getImportanciaSpinner()
     {
-        Log.d(TAG, "getImportanciaSpinner()");
+        Timber.d("getImportanciaSpinner()");
         return mImportanciaSpinner;
     }
 
     @Override
     public void onImportanciaSpinnerLoaded()
     {
-        Log.d(TAG, "onImportanciaSpinnerLoaded(), importancia= " + mIncidImportancia.getImportancia());
+        Timber.d("onImportanciaSpinnerLoaded(), importancia= %d%n", mIncidImportancia.getImportancia());
         mImportanciaSpinner.setSelection(mIncidImportancia.getImportancia());
     }
 
@@ -228,13 +228,12 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
 
     class IncidenciaModifyer extends AsyncTask<IncidImportancia, Void, Integer> {
 
-        private final String TAG = IncidenciaModifyer.class.getCanonicalName();
         UiException uiException;
 
         @Override
         protected Integer doInBackground(IncidImportancia... incidImportancias)
         {
-            Log.d(TAG, "doInBackground()");
+            Timber.d("doInBackground()");
             int rowInserted = 0;
 
             try {
@@ -248,7 +247,7 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
         @Override
         protected void onPostExecute(Integer rowInserted)
         {
-            Log.d(TAG, "onPostExecute()");
+            Timber.d("onPostExecute()");
 
             if (uiException != null) {
                 uiException.processMe(getActivity(), new Intent());
@@ -262,13 +261,12 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
 
     class IncidenciaEraser extends AsyncTask<Incidencia, Void, Integer> {
 
-        private final String TAG = IncidenciaEraser.class.getCanonicalName();
         UiException uiException;
 
         @Override
         protected Integer doInBackground(Incidencia... params)
         {
-            Log.d(TAG, "doInBackground()");
+            Timber.d("doInBackground()");
             int rowsDeleted = 0;
             try {
                 rowsDeleted = IncidenciaServ.deleteIncidencia(params[0].getIncidenciaId());
@@ -281,7 +279,7 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
         @Override
         protected void onPostExecute(Integer rowsDeleted)
         {
-            Log.d(TAG, "onPostExecute()");
+            Timber.d("onPostExecute()");
 
             if (uiException != null) {
                 uiException.processMe(getActivity(), new Intent());

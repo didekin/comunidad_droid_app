@@ -7,13 +7,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.didekin.usuario.dominio.ComunidadAutonoma;
 import com.didekin.usuario.dominio.Municipio;
 import com.didekin.usuario.dominio.Provincia;
 import com.didekindroid.R;
-import com.didekindroid.common.utils.UIutils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,6 +19,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+
+import timber.log.Timber;
 
 import static android.provider.BaseColumns._ID;
 import static com.didekindroid.common.utils.IoHelper.lineToLowerCase;
@@ -55,7 +55,6 @@ import static java.lang.String.valueOf;
  */
 public class UsuarioDataDbHelper extends SQLiteOpenHelper {
 
-    private static final String TAG = UsuarioDataDbHelper.class.getCanonicalName();
     public static final String DB_NAME = "userComu.db";
     /*This number has to be changed in future versions, to get executed onUpgrade() method.*/
     public static final int DB_VERSION = 1;
@@ -76,7 +75,7 @@ public class UsuarioDataDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db)
     {
-        Log.i(TAG, "In onCreate()");
+        Timber.i("In onCreate()");
 
         mDataBase = db;
 
@@ -94,32 +93,36 @@ public class UsuarioDataDbHelper extends SQLiteOpenHelper {
         try {
             loadTipoVia();
         } catch (IOException e) {
-            UIutils.doRuntimeException(e, TAG);
+            Timber.e(e.getMessage());
+            throw new RuntimeException(e);
         }
 
         try {
             loadComunidadesAutonomas();
         } catch (IOException e) {
-            UIutils.doRuntimeException(e, TAG);
+            Timber.e(e.getMessage());
+            throw new RuntimeException(e);
         }
 
         try {
             loadProvincias();
         } catch (IOException e) {
-            UIutils.doRuntimeException(e, TAG);
+            Timber.e(e.getMessage());
+            throw new RuntimeException(e);
         }
 
         try {
             loadMunicipios();
         } catch (IOException e) {
-            UIutils.doRuntimeException(e, TAG);
+            Timber.e(e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 
     @Override
     public void onOpen(SQLiteDatabase db)
     {
-        Log.d(TAG, "In onOpen()");
+        Timber.d("In onOpen()");
 
         if (mDataBase == null) {
             mDataBase = db;
@@ -129,8 +132,7 @@ public class UsuarioDataDbHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
-        Log.d(TAG, "In onUpgrade()");
-        Log.w(TAG, "Upgrading database from version " + oldVersion + " to " + newVersion);
+        Timber.w("Upgrading database from version %d to %d%n", oldVersion, newVersion);
 
         if (mDataBase == null) {
             mDataBase = db;
@@ -146,7 +148,7 @@ public class UsuarioDataDbHelper extends SQLiteOpenHelper {
 
     private int loadMunicipios() throws IOException
     {
-        Log.i(TAG, "In loadMunicipios()");
+        Timber.i("In loadMunicipios()");
 
         final Resources resources = mContext.getResources();
         InputStream inputStream = resources.openRawResource(R.raw.municipio);
@@ -170,14 +172,14 @@ public class UsuarioDataDbHelper extends SQLiteOpenHelper {
 
                 if (id < 0) {
                     --pkCounter;
-                    Log.e(TAG, "Unable to add municipio: " + strings[0].trim() + " " + strings[1].trim());
+                    Timber.e("Unable to add municipio: %s  %s%n", strings[0].trim(), strings[1].trim());
                 }
             }
         } finally {
             reader.close();
         }
 
-        Log.i(TAG, "Done loading municipio file in DB.");
+        Timber.i("Done loading municipio file in DB.");
         mMunicipiosCounter = pkCounter;
         return pkCounter;
     }
@@ -185,7 +187,7 @@ public class UsuarioDataDbHelper extends SQLiteOpenHelper {
     protected long addMunicipio(int pk, short provinciaPk, short codMunicipioInProv, String nombre)
     {
 
-//        Log.d(TAG, "In addMunicipio()");
+//        Timber.d("In addMunicipio()");
 
         ContentValues values = new ContentValues();
         values.put(_ID, pk);
@@ -199,7 +201,7 @@ public class UsuarioDataDbHelper extends SQLiteOpenHelper {
     @SuppressWarnings("unused")
     protected Municipio getMunicipioFromDb(short codMunicipio, short provinciaId)
     {
-        Log.d(TAG, "In getMunicipioFromDb()");
+        Timber.d("In getMunicipioFromDb()");
 
         String whereClause = _ID + " = ?";
         String[] whereArgs = new String[]{valueOf(codMunicipio), valueOf(provinciaId)};
@@ -227,7 +229,7 @@ public class UsuarioDataDbHelper extends SQLiteOpenHelper {
 
     public Cursor getMunicipiosByPrId(short prId)
     {
-        Log.i(TAG, "In getMunicipiosByPrId()");
+        Timber.i("In getMunicipiosByPrId()");
 
         if (mDataBase == null) {
             mDataBase = getReadableDatabase();
@@ -246,7 +248,7 @@ public class UsuarioDataDbHelper extends SQLiteOpenHelper {
 
     private int loadProvincias() throws IOException
     {
-        Log.i(TAG, "In loadProvincias()");
+        Timber.i("In loadProvincias()");
 
         final Resources resources = mContext.getResources();
         InputStream inputStream = resources.openRawResource(R.raw.provincia);
@@ -267,7 +269,7 @@ public class UsuarioDataDbHelper extends SQLiteOpenHelper {
                         strings[2].trim());
 
                 if (id < 0) {
-                    Log.e(TAG, "Unable to add provincia: " + strings[0].trim());
+                    Timber.e("Unable to add provincia: %s%n", strings[0].trim());
                 } else {
                     ++pkCounter;
                 }
@@ -276,14 +278,14 @@ public class UsuarioDataDbHelper extends SQLiteOpenHelper {
             reader.close();
         }
 
-        Log.i(TAG, "Done loading provincias file in DB.");
+        Timber.i("Done loading provincias file in DB.");
         mProvinciasCounter = pkCounter;
         return pkCounter;
     }
 
     private long addProvincia(short pk, short comunidadPk, String nombre)
     {
-        Log.d(TAG, "En addProvincia()");
+        Timber.d("En addProvincia()");
 
         ContentValues values = new ContentValues();
         values.put(_ID, pk);
@@ -295,7 +297,7 @@ public class UsuarioDataDbHelper extends SQLiteOpenHelper {
 
     public List<Provincia> getProvincias()
     {
-        Log.d(TAG, "In getProvincias()");
+        Timber.d("In getProvincias()");
 
         if (mDataBase == null || mProvinciasCounter == 0) {
             mDataBase = getReadableDatabase();
@@ -328,7 +330,7 @@ public class UsuarioDataDbHelper extends SQLiteOpenHelper {
 
     public Cursor getProvinciasByCA(short caId)
     {
-        Log.d(TAG, "In getProvinciasByCA(), caId = " + caId);
+        Timber.d("In getProvinciasByCA(), caId = %d%n", caId);
 
         if (mDataBase == null || mProvinciasCounter == 0) {
             mDataBase = getReadableDatabase();
@@ -348,7 +350,7 @@ public class UsuarioDataDbHelper extends SQLiteOpenHelper {
 
     private int loadComunidadesAutonomas() throws IOException
     {
-        Log.i(TAG, "In loadComunidadesAutonomas()");
+        Timber.i("In loadComunidadesAutonomas()");
 
         final Resources resources = mContext.getResources();
         InputStream inputStream = resources.openRawResource(R.raw.comunidad_autonoma);
@@ -367,7 +369,7 @@ public class UsuarioDataDbHelper extends SQLiteOpenHelper {
                 long id = addComunidad(Short.parseShort(strings[0].trim()), strings[1].trim());
 
                 if (id < 0) {
-                    Log.e(TAG, "Unable to add comunidad: " + strings[0].trim() + " " + strings[1].trim());
+                    Timber.e("Unable to add comunidad: %s  %s%n", strings[0].trim(), strings[1].trim());
                 } else {
                     ++pkCounter;
                 }
@@ -376,14 +378,14 @@ public class UsuarioDataDbHelper extends SQLiteOpenHelper {
             reader.close();
         }
 
-        Log.i(TAG, "Done loading comunidades file in DB.");
+        Timber.i("Done loading comunidades file in DB.");
         mComunidadesCounter = pkCounter;
         return pkCounter;
     }
 
     private long addComunidad(short pk, String nombre)
     {
-        Log.d(TAG, "En addComunidad()");
+        Timber.d("En addComunidad()");
 
         ContentValues values = new ContentValues();
         values.put(_ID, pk);
@@ -394,7 +396,7 @@ public class UsuarioDataDbHelper extends SQLiteOpenHelper {
 
     public List<ComunidadAutonoma> getComunidadesAu()
     {
-        Log.d(TAG, "In getComunidadesAu()");
+        Timber.d("In getComunidadesAu()");
 
         if (mDataBase == null) {
             mDataBase = getReadableDatabase();
@@ -418,7 +420,7 @@ public class UsuarioDataDbHelper extends SQLiteOpenHelper {
 
     public Cursor doComunidadesCursor()
     {
-        Log.d(TAG, "In doComunidadesCursor()");
+        Timber.d("In doComunidadesCursor()");
 
         if (mDataBase == null) {
             mDataBase = getReadableDatabase();
@@ -444,7 +446,7 @@ public class UsuarioDataDbHelper extends SQLiteOpenHelper {
 
     private int loadTipoVia() throws IOException
     {
-        Log.i(TAG, "In loadTipoVia()");
+        Timber.i("In loadTipoVia()");
 
         final Resources resources = mContext.getResources();
         int pkCounter = 0;
@@ -463,21 +465,21 @@ public class UsuarioDataDbHelper extends SQLiteOpenHelper {
                 long id = mDataBase.insert(TB_TIPO_VIA, null, values);
 
                 if (id < 0) {
-                    Log.e(TAG, "Unable to add tipo de vía: " + line.trim());
+                    Timber.e("Unable to add tipo de vía: %s%n", line.trim());
                 } else {
                     ++pkCounter;
                 }
             }
         }
 
-        Log.i(TAG, "Done loading tipos de vía file in DB.");
+        Timber.i("Done loading tipos de vía file in DB.");
         mTipoViaCounter = pkCounter;
         return pkCounter;
     }
 
     public Cursor doTipoViaCursor()
     {
-        Log.d(TAG, "In doTipoViaCursor()");
+        Timber.d("In doTipoViaCursor()");
 
         if (mDataBase == null) {
             mDataBase = getWritableDatabase();
@@ -500,7 +502,7 @@ public class UsuarioDataDbHelper extends SQLiteOpenHelper {
 
     public List<String> getTiposVia()
     {
-        Log.d(TAG, "In getTiposVia()");
+        Timber.d("In getTiposVia()");
 
         if (mDataBase == null) {
             mDataBase = getReadableDatabase();
@@ -524,7 +526,7 @@ public class UsuarioDataDbHelper extends SQLiteOpenHelper {
 
     void dropAllTables()
     {
-        Log.d(TAG, "In dropAllTables()");
+        Timber.d("In dropAllTables()");
 
         if (mDataBase != null) {
             mDataBase.execSQL(DROP_MUNICIPIO);

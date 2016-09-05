@@ -1,9 +1,11 @@
 package com.didekindroid.common.testutils;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.res.Resources;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.core.deps.guava.base.Preconditions;
+import android.widget.DatePicker;
 
 import com.didekin.oauth2.OauthToken;
 import com.didekin.usuario.dominio.Comunidad;
@@ -15,16 +17,23 @@ import com.didekindroid.common.activity.UiException;
 import com.didekindroid.usuario.testutils.CleanUserEnum;
 
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
+import static android.os.Build.VERSION.SDK_INT;
+import static android.os.Build.VERSION_CODES.KITKAT;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.contrib.PickerActions.setDate;
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.DidekindroidApp.getContext;
 import static com.didekindroid.common.activity.TokenHandler.TKhandler;
@@ -36,7 +45,10 @@ import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_JUAN2;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.makeUsuarioComunidad;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
+import static java.util.Calendar.DAY_OF_MONTH;
+import static java.util.Calendar.MONTH;
 import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
 
@@ -100,14 +112,39 @@ public final class ActivityTestUtils {
         }
     }
 
+    //    ============================= DATE PICKERS ===================================
+
+    public static Calendar reSetDatePicker(long fechaInicial, int monthsToAdd)
+    {
+        Calendar newCalendar = new GregorianCalendar();
+        if (fechaInicial > 0L) {
+            newCalendar.setTimeInMillis(fechaInicial);
+        }
+        // Aumentamos la fecha estimada en un número de meses.
+        newCalendar.add(MONTH, monthsToAdd);
+        // Android PickerActions substract 1 from the month passed to setDate(), so we increased the month parameter value in 1 before passing it.
+        onView(withClassName(is(DatePicker.class.getName())))
+                .perform(setDate(newCalendar.get(Calendar.YEAR), newCalendar.get(MONTH) + 1, newCalendar.get(DAY_OF_MONTH)));
+        return newCalendar;
+    }
+
+    public static void closeDatePicker(Context context)
+    {
+        if (SDK_INT == KITKAT) {
+            onView(withId(android.R.id.button1)).perform(click());
+        }
+        if (SDK_INT > KITKAT) {
+            onView(withText(context.getString(android.R.string.ok))).perform(click());
+        }
+    }
 
     //    ============================= NAVIGATION ===================================
 
     public static void checkNavigateUp()
     {
         onView(allOf(
-                        withContentDescription(R.string.navigate_up_txt),
-                        isClickable())
+                withContentDescription(R.string.navigate_up_txt),
+                isClickable())
         ).check(matches(isDisplayed())).perform(click());
     }
 

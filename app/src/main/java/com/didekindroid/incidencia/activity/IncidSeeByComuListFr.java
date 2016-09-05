@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +23,8 @@ import com.didekindroid.incidencia.activity.utils.ComunidadSpinnerSetter;
 
 import java.util.List;
 
+import timber.log.Timber;
+
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_LIST_INDEX;
 import static com.google.common.base.Preconditions.checkState;
 
@@ -34,8 +35,6 @@ import static com.google.common.base.Preconditions.checkState;
  * Postconditions:
  */
 public class IncidSeeByComuListFr extends Fragment implements ComuSpinnerSettable {
-
-    public static final String TAG = IncidSeeByComuListFr.class.getCanonicalName();
 
     ArrayAdapter<IncidenciaUser> mAdapter;
     IncidSeeListListener mListener;
@@ -54,21 +53,21 @@ public class IncidSeeByComuListFr extends Fragment implements ComuSpinnerSettabl
     @Override
     public void onAttach(Context context)
     {
-        Log.d(TAG, "onAttach()");
+        Timber.d("onAttach()");
         super.onAttach(context);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
-        Log.d(TAG, "onCreate()");
+        Timber.d("onCreate()");
         super.onCreate(savedInstanceState);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        Log.d(TAG, "onCreateView()");
+        Timber.d("onCreateView()");
 
         mView = inflater.inflate(R.layout.incid_see_generic_fr_layout, container, false);
         if (savedInstanceState != null) {
@@ -80,7 +79,7 @@ public class IncidSeeByComuListFr extends Fragment implements ComuSpinnerSettabl
     @Override
     public void onActivityCreated(Bundle savedInstanceState)
     {
-        Log.d(TAG, "onActivityCreated()");
+        Timber.d("onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
 
         mListener = (IncidSeeListListener) getActivity();
@@ -94,7 +93,7 @@ public class IncidSeeByComuListFr extends Fragment implements ComuSpinnerSettabl
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                Log.d(TAG, "onListItemClick()");
+                Timber.d("onListItemClick()");
                 mListView.setItemChecked(position, true);
                 view.setSelected(true);
                 if (mListener != null) {
@@ -111,7 +110,7 @@ public class IncidSeeByComuListFr extends Fragment implements ComuSpinnerSettabl
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
-                Log.d(TAG, "mComunidadSpinner.onItemSelected()");
+                Timber.d("mComunidadSpinner.onItemSelected()");
                 mComunidadSelectedIndex = position;
                 Comunidad comunidad = (Comunidad) parent.getItemAtPosition(position);
                 // Loading data for the comunidad selected.
@@ -123,7 +122,7 @@ public class IncidSeeByComuListFr extends Fragment implements ComuSpinnerSettabl
             @Override
             public void onNothingSelected(AdapterView<?> parent)
             {
-                Log.d(TAG, "mComunidadSpinner.onNothingSelected()");
+                Timber.d("mComunidadSpinner.onNothingSelected()");
             }
         });
     }
@@ -131,21 +130,21 @@ public class IncidSeeByComuListFr extends Fragment implements ComuSpinnerSettabl
     @Override
     public void onStart()
     {
-        Log.d(TAG, "Enters onStart()");
+        Timber.d("Enters onStart()");
         super.onStart();
     }
 
     @Override
     public void onResume()
     {
-        Log.d(TAG, "Enters onResume()");
+        Timber.d("Enters onResume()");
         super.onResume();
     }
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState)
     {
-        Log.d(TAG, "onSaveInstanceState()");
+        Timber.d("onSaveInstanceState()");
         savedInstanceState.putInt(COMUNIDAD_LIST_INDEX.key, mComunidadSelectedIndex);
         super.onSaveInstanceState(savedInstanceState);
     }
@@ -153,35 +152,35 @@ public class IncidSeeByComuListFr extends Fragment implements ComuSpinnerSettabl
     @Override
     public void onPause()
     {
-        Log.d(TAG, "onPause()");
+        Timber.d("onPause()");
         super.onPause();
     }
 
     @Override
     public void onStop()
     {
-        Log.d(TAG, "onStop()");
+        Timber.d("onStop()");
         super.onStop();
     }
 
     @Override
     public void onDestroyView()
     {
-        Log.d(TAG, "onDestroyView()");
+        Timber.d("onDestroyView()");
         super.onDestroyView();
     }
 
     @Override
     public void onDestroy()
     {
-        Log.d(TAG, "onDestroy()");
+        Timber.d("onDestroy()");
         super.onDestroy();
     }
 
     @Override
     public void onDetach()
     {
-        Log.d(TAG, "onDetach()");
+        Timber.d("onDetach()");
         super.onDetach();
     }
 
@@ -190,14 +189,14 @@ public class IncidSeeByComuListFr extends Fragment implements ComuSpinnerSettabl
     @Override
     public void setComunidadSpinnerAdapter(ArrayAdapter<Comunidad> comunidades)
     {
-        Log.d(TAG, "setComunidadSpinnerAdapter()");
+        Timber.d("setComunidadSpinnerAdapter()");
         mComunidadSpinner.setAdapter(comunidades);
     }
 
     @Override
     public void onComunidadSpinnerLoaded()
     {
-        Log.d(TAG, "onComunidadSpinnerLoaded()");
+        Timber.d("onComunidadSpinnerLoaded()");
 
         // We check if there is a comunidadId passed from the activity.
         long comunidadIntent = mListener.getComunidadSelected();
@@ -224,13 +223,12 @@ public class IncidSeeByComuListFr extends Fragment implements ComuSpinnerSettabl
 
     class IncidByComuLoader extends AsyncTask<Long, Void, List<IncidenciaUser>> {
 
-        private final String TAG = IncidByComuLoader.class.getCanonicalName();
         UiException uiException;
 
         @Override
         protected List<IncidenciaUser> doInBackground(Long... comunidadId)
         {
-            Log.d(TAG, "doInBackground()");
+            Timber.d("doInBackground()");
             List<IncidenciaUser> incidenciaList = null;
             try {
                 incidenciaList = mListener.getListFromService(comunidadId[0]);
@@ -243,15 +241,15 @@ public class IncidSeeByComuListFr extends Fragment implements ComuSpinnerSettabl
         @Override
         protected void onPostExecute(List<IncidenciaUser> incidencias)
         {
-            Log.d(TAG, "onPostExecute()");
+            Timber.d("onPostExecute()");
             if (incidencias != null && incidencias.size() > 0) {
-                Log.d(TAG, "onPostExecute(): incidUserComuList != null");
+                Timber.d("onPostExecute(): incidUserComuList != null");
                 mAdapter.clear();
                 mAdapter.addAll(incidencias);
                 mListView.setAdapter(mAdapter);
             }
             if (uiException != null) {
-                Log.d(TAG, "onPostExecute(): uiException != null");
+                Timber.d("onPostExecute(): uiException != null");
                 checkState(incidencias == null);
                 uiException.processMe(getActivity(), new Intent());
             }

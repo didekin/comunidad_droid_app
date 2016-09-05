@@ -2,7 +2,6 @@ package com.didekindroid.incidencia.activity;
 
 import android.content.Intent;
 import android.os.Build;
-import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.widget.DatePicker;
@@ -25,7 +24,6 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.contrib.PickerActions.setDate;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.matcher.RootMatchers.isDialog;
@@ -36,12 +34,12 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
+import static com.didekindroid.common.testutils.ActivityTestUtils.closeDatePicker;
+import static com.didekindroid.common.testutils.ActivityTestUtils.reSetDatePicker;
+import static com.didekindroid.common.utils.UIutils.formatTimeToString;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_PLAZUELA5_JUAN;
-import static java.util.Calendar.DAY_OF_MONTH;
-import static java.util.Calendar.MONTH;
-import static java.util.Calendar.YEAR;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -104,19 +102,20 @@ public class IncidResolucionRegFrTest extends IncidResolucionAbstractTest {
         // DatePicker tests.
         onView(withId(R.id.incid_resolucion_fecha_view)).check(matches(isDisplayed())).perform(click());
         onView(withClassName(is(DatePicker.class.getName()))).inRoot(isDialog()).check(matches(isDisplayed()));
-        // We pick a date.
-        onView(withClassName(is(DatePicker.class.getName()))).perform(setDate(2016, 3, 21));
-        onView(withText(mActivity.getString(android.R.string.ok))).perform(click());
+        // Seleccionamos fecha de resolución: fecha de hoy, sin añadir ningún mes adicional.
+        Calendar fechaPrev = reSetDatePicker(0,0);
+        closeDatePicker(mActivity);
+
         if (Locale.getDefault().equals(UIutils.SPAIN_LOCALE) && Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             onView(allOf(
                     withId(R.id.incid_resolucion_fecha_view),
-                    withText("21/3/2016")
+                    withText(formatTimeToString(fechaPrev.getTimeInMillis()))
             )).check(matches(isDisplayed()));
         }
         if (Locale.getDefault().equals(UIutils.SPAIN_LOCALE) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             onView(allOf(
                     withId(R.id.incid_resolucion_fecha_view),
-                    withText("21 mar. 2016")
+                    withText(formatTimeToString(fechaPrev.getTimeInMillis()))
             )).check(matches(isDisplayed()));
         }
     }
@@ -134,10 +133,10 @@ public class IncidResolucionRegFrTest extends IncidResolucionAbstractTest {
     @Test
     public void testOnEdit_2()
     {
+        setFechaEnPicker(0,1);
+
         // Descripción errónea.
-        setFecha(setDate(2016, 3, 22));
         onView(withId(R.id.incid_resolucion_desc_ed)).perform(replaceText("Desc * no válida"));
-        setFecha(setDate(2016, 3, 21));
 
         onView(withId(R.id.incid_resolucion_reg_ac_button)).perform(click());
         checkToastInTest(R.string.error_validation_msg, mActivity,
@@ -147,27 +146,28 @@ public class IncidResolucionRegFrTest extends IncidResolucionAbstractTest {
     @Test
     public void testOnEdit_3() throws InterruptedException
     {
-        // Coste erróneo.
-        setFecha(setDate(2016, 3, 22));
+        setFechaEnPicker(0,1);
         onView(withId(R.id.incid_resolucion_desc_ed)).perform(replaceText("Desc válida"));
+
+        // Coste erróneo.
         onView(withId(R.id.incid_resolucion_coste_prev_ed)).perform(replaceText("novalid"));
 
         onView(withId(R.id.incid_resolucion_reg_ac_button)).perform(click());
-        Thread.sleep(1500);
         checkToastInTest(R.string.error_validation_msg, mActivity,
                 R.string.incid_resolucion_coste_prev_msg);
     }
 
+
+
     @Test
     public void testOnEdit_4() throws InterruptedException
     {
+        setFechaEnPicker(0,1);
         // Coste y descripción erróneos.
-        setFecha(setDate(2016, 3, 22));
         onView(withId(R.id.incid_resolucion_desc_ed)).perform(replaceText("Desc * no válida"));
         onView(withId(R.id.incid_resolucion_coste_prev_ed)).perform(replaceText("novalid"));
 
         onView(withId(R.id.incid_resolucion_reg_ac_button)).perform(click());
-        Thread.sleep(1500);
         checkToastInTest(R.string.error_validation_msg, mActivity,
                 R.string.incid_resolucion_coste_prev_msg,
                 R.string.incid_resolucion_descrip_msg);
@@ -176,11 +176,9 @@ public class IncidResolucionRegFrTest extends IncidResolucionAbstractTest {
     @Test
     public void testOnEdit_5()
     {
-        // Fecha inferior a fecha_alta incidencia.
-        Calendar wrongDate = new GregorianCalendar();
-        wrongDate.add(YEAR, -1);
-        assertThat(wrongDate.getTimeInMillis() < incidImportancia.getFechaAlta().getTime(), is(true));
-        setFecha(setDate(wrongDate.get(YEAR), wrongDate.get(MONTH), wrongDate.get(DAY_OF_MONTH)));
+        // Fecha inferior a fecha_alta incidencia. Descripción ausente.
+        Calendar fechaPrev = setFechaEnPicker(0,-1);
+        assertThat(fechaPrev.getTimeInMillis() < incidImportancia.getFechaAlta().getTime(), is(true));
 
         onView(withId(R.id.incid_resolucion_reg_ac_button)).perform(click());
         checkToastInTest(R.string.error_validation_msg, mActivity,
@@ -196,21 +194,21 @@ public class IncidResolucionRegFrTest extends IncidResolucionAbstractTest {
         onView(withId(R.id.incid_resolucion_desc_ed)).perform(replaceText("desc_válida"));
         onView(withId(R.id.incid_resolucion_coste_prev_ed)).perform(replaceText("1234,5"));
         Calendar today = new GregorianCalendar();
-        today.add(YEAR, 1);
-        setFecha(setDate(today.get(YEAR), today.get(MONTH), today.get(DAY_OF_MONTH)));
+        setFechaEnPicker(0,2);
 
         onView(withId(R.id.incid_resolucion_reg_ac_button)).perform(click());
         onView(withId(R.id.incid_edit_fragment_container_ac)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_edit_maxpower_frg)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_edit_maxpower_fr_layout)).check(matches(isDisplayed()));
         intended(hasExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia));
     }
 
 //    ============================= HELPER METHODS ===========================
 
-    private void setFecha(ViewAction viewAction)
+    private Calendar setFechaEnPicker(long fechaInicial, int monthsToAdd)
     {
         onView(withId(R.id.incid_resolucion_fecha_view)).perform(click());
-        onView(withClassName(is(DatePicker.class.getName()))).perform(viewAction);
-        onView(withText(mActivity.getString(android.R.string.ok))).perform(click());
+        Calendar fechaPrev = reSetDatePicker(fechaInicial, monthsToAdd);
+        closeDatePicker(mActivity);
+        return fechaPrev;
     }
 }

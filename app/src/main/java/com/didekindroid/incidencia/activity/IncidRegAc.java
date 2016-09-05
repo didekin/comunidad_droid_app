@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -12,6 +11,8 @@ import android.widget.Toast;
 import com.didekin.incidservice.dominio.IncidImportancia;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
+
+import timber.log.Timber;
 
 import static com.didekindroid.common.utils.ConnectionUtils.checkInternetConnected;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
@@ -36,13 +37,12 @@ import static com.google.common.base.Preconditions.checkState;
 @SuppressWarnings("ConstantConditions")
 public class IncidRegAc extends AppCompatActivity {
 
-    private static final String TAG = IncidRegAc.class.getCanonicalName();
     IncidRegAcFragment mRegAcFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        Log.d(TAG, "onCreate()");
+        Timber.d("onCreate()");
         super.onCreate(savedInstanceState);
 
         getGcmToken(this);
@@ -57,7 +57,7 @@ public class IncidRegAc extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                Log.d(TAG, "View.OnClickListener().onClick()");
+                Timber.d("View.OnClickListener().onClick()");
                 registerIncidencia();
             }
         });
@@ -66,14 +66,14 @@ public class IncidRegAc extends AppCompatActivity {
     @Override
     protected void onResume()
     {
-        Log.d(TAG, "onResume()");
+        Timber.d("onResume()");
         getGcmToken(this);
         super.onResume();
     }
 
     private void registerIncidencia()
     {
-        Log.d(TAG, "registerIncidencia()");
+        Timber.d("registerIncidencia()");
 
         StringBuilder errorMsg = getErrorMsgBuilder(this);
         try {
@@ -83,7 +83,7 @@ public class IncidRegAc extends AppCompatActivity {
                 new IncidenciaRegister().execute(incidImportancia);
             }
         } catch (IllegalStateException e) {
-            Log.e(TAG, e.getMessage());
+            Timber.e(e.getMessage());
             makeToast(this, errorMsg.toString(), Toast.LENGTH_SHORT);
         }
     }
@@ -94,13 +94,12 @@ public class IncidRegAc extends AppCompatActivity {
 
     class IncidenciaRegister extends AsyncTask<IncidImportancia, Void, Integer> {
 
-        private final String TAG = IncidenciaRegister.class.getCanonicalName();
         UiException uiException;
 
         @Override
         protected Integer doInBackground(IncidImportancia... incidImportancias)
         {
-            Log.d(TAG, "doInBackground()");
+            Timber.d("doInBackground()");
             int rowInserted = 0;
 
             try {
@@ -114,7 +113,7 @@ public class IncidRegAc extends AppCompatActivity {
         @Override
         protected void onPostExecute(Integer rowInserted)
         {
-            Log.d(TAG, "onPostExecute()");
+            Timber.d("onPostExecute()");
 
             if (uiException != null) {
                 uiException.processMe(IncidRegAc.this, new Intent());

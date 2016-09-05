@@ -3,7 +3,6 @@ package com.didekindroid.incidencia.activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +20,8 @@ import com.didekindroid.incidencia.dominio.ResolucionBean;
 
 import java.sql.Timestamp;
 
+import timber.log.Timber;
+
 import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.activity.FechaPickerFr.FechaPickerHelper.initFechaSpinnerView;
 import static com.didekindroid.common.utils.ConnectionUtils.checkInternetConnected;
@@ -36,14 +37,13 @@ import static com.google.common.base.Preconditions.checkState;
  */
 public class IncidResolucionRegFr extends IncidResolucionFrAbstract {
 
-    private static final String TAG = IncidResolucionRegFr.class.getCanonicalName();
     IncidImportancia mIncidImportancia;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        Log.d(TAG, "onCreateView()");
+        Timber.d("onCreateView()");
         mFragmentView = inflater.inflate(R.layout.incid_resolucion_reg_frg, container, false);
         mResolucionBean = new ResolucionBean();
         mFechaView = initFechaSpinnerView(this);
@@ -53,7 +53,7 @@ public class IncidResolucionRegFr extends IncidResolucionFrAbstract {
             @Override
             public void onClick(View v)
             {
-                Log.d(TAG, "View.OnClickListener().onClick()");
+                Timber.d("View.OnClickListener().onClick()");
                 registerResolucion();
             }
         });
@@ -63,7 +63,7 @@ public class IncidResolucionRegFr extends IncidResolucionFrAbstract {
     @Override
     public void onActivityCreated(Bundle savedInstanceState)
     {
-        Log.d(TAG,"onActivityCreated()");
+        Timber.d("onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
         mIncidImportancia = (IncidImportancia) getArguments().getSerializable(INCID_IMPORTANCIA_OBJECT.key);
     }
@@ -72,7 +72,7 @@ public class IncidResolucionRegFr extends IncidResolucionFrAbstract {
 
     void registerResolucion()
     {
-        Log.d(TAG, "registerResolucion()");
+        Timber.d("registerResolucion()");
 
         StringBuilder errorMsg = getErrorMsgBuilder(getActivity());
         Resolucion resolucion = makeResolucionFromBean(errorMsg);
@@ -88,7 +88,7 @@ public class IncidResolucionRegFr extends IncidResolucionFrAbstract {
 
     Resolucion makeResolucionFromBean(StringBuilder errorMsg)
     {
-        Log.d(TAG, "makeResolucionFromBean()");
+        Timber.d("makeResolucionFromBean()");
 
         makeResolucionBeanFromView(errorMsg);
 
@@ -111,7 +111,7 @@ public class IncidResolucionRegFr extends IncidResolucionFrAbstract {
 
     void makeResolucionBeanFromView(StringBuilder errorMsg)
     {
-        Log.d(TAG, "makeResolucionBeanFromView()");
+        Timber.d("makeResolucionBeanFromView()");
 
         mResolucionBean.setPlan(((EditText) mFragmentView.findViewById(R.id.incid_resolucion_desc_ed)).getText().toString());
         mResolucionBean.setCostePrevText(((EditText) mFragmentView.findViewById(R.id.incid_resolucion_coste_prev_ed)).getText().toString());
@@ -129,14 +129,13 @@ public class IncidResolucionRegFr extends IncidResolucionFrAbstract {
 
     private class ResolucionRegister extends AsyncTask<Resolucion, Void, Integer> {
 
-        private final String TAG = ResolucionRegister.class.getCanonicalName();
         UiException uiException;
         Resolucion resolucion;
 
         @Override
         protected Integer doInBackground(Resolucion... params)
         {
-            Log.d(TAG, "doInBackground()");
+            Timber.d("doInBackground()");
             int rowInserted = 0;
             resolucion = params[0];
 
@@ -151,7 +150,7 @@ public class IncidResolucionRegFr extends IncidResolucionFrAbstract {
         @Override
         protected void onPostExecute(Integer rowInserted)
         {
-            Log.d(TAG, "onPostExecute()");
+            Timber.d("onPostExecute()");
 
             if (uiException != null) {
                 Intent intent = new Intent();

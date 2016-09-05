@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,13 +20,14 @@ import com.didekindroid.incidencia.activity.utils.ImportanciaSpinnerSettable;
 import com.didekindroid.incidencia.dominio.IncidImportanciaBean;
 import com.didekindroid.incidencia.repository.IncidenciaDataDbHelper;
 
+import timber.log.Timber;
+
 import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.utils.ConnectionUtils.checkInternetConnected;
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.common.utils.UIutils.makeToast;
 import static com.didekindroid.incidencia.activity.utils.IncidSpinnersHelper.HELPER;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
-import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
@@ -40,8 +40,6 @@ import static com.google.common.base.Preconditions.checkState;
 @SuppressWarnings("ConstantConditions")
 public class IncidEditNoPowerFr extends Fragment implements ImportanciaSpinnerSettable {
 
-    private static final String TAG = IncidEditNoPowerFr.class.getCanonicalName();
-
     View fFragmentView;
     IncidImportancia mIncidImportancia;
     Spinner mImportanciaSpinner;
@@ -51,7 +49,7 @@ public class IncidEditNoPowerFr extends Fragment implements ImportanciaSpinnerSe
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        Log.d(TAG, "onCreateView()");
+        Timber.d("onCreateView()");
         fFragmentView = inflater.inflate(R.layout.incid_edit_nopower_fr, container, false);
         return fFragmentView;
     }
@@ -59,7 +57,7 @@ public class IncidEditNoPowerFr extends Fragment implements ImportanciaSpinnerSe
     @Override
     public void onActivityCreated(Bundle savedInstanceState)
     {
-        Log.d(TAG, "onActivityCreated()");
+        Timber.d("onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
 
         mIncidImportanciaBean = new IncidImportanciaBean();
@@ -81,7 +79,7 @@ public class IncidEditNoPowerFr extends Fragment implements ImportanciaSpinnerSe
             @Override
             public void onClick(View v)
             {
-                Log.d(TAG, "mButtonModify.onClick()");
+                Timber.d("mButtonModify.onClick()");
                 modifyIncidImportancia();
             }
         });
@@ -90,7 +88,7 @@ public class IncidEditNoPowerFr extends Fragment implements ImportanciaSpinnerSe
     @Override
     public void onDestroy()
     {
-        Log.d(TAG, "onDestroy()");
+        Timber.d("onDestroy()");
         super.onDestroy();
     }
 
@@ -100,7 +98,7 @@ public class IncidEditNoPowerFr extends Fragment implements ImportanciaSpinnerSe
 
     private void modifyIncidImportancia()
     {
-        Log.d(TAG, "modifyIncidImportancia()");
+        Timber.d("modifyIncidImportancia()");
 
         StringBuilder errorMsg = getErrorMsgBuilder(getActivity());
         try {
@@ -110,7 +108,7 @@ public class IncidEditNoPowerFr extends Fragment implements ImportanciaSpinnerSe
                 new ImportanciaModifyer().execute(incidImportancia);
             }
         } catch (IllegalStateException e) {
-            Log.e(TAG, e.getMessage());
+            Timber.e(e.getMessage());
             makeToast(getActivity(), errorMsg.toString(), Toast.LENGTH_SHORT);
         }
     }
@@ -122,28 +120,28 @@ public class IncidEditNoPowerFr extends Fragment implements ImportanciaSpinnerSe
     @Override
     public Incidencia getIncidencia()
     {
-        Log.d(TAG, "getIncidencia()");
+        Timber.d("getIncidencia()");
         return mIncidImportancia.getIncidencia();
     }
 
     @Override
     public IncidImportanciaBean getIncidImportanciaBean()
     {
-        Log.d(TAG, "getIncidImportanciaBean()");
+        Timber.d("getIncidImportanciaBean()");
         return mIncidImportanciaBean;
     }
 
     @Override
     public Spinner getImportanciaSpinner()
     {
-        Log.d(TAG, "getImportanciaSpinner()");
+        Timber.d("getImportanciaSpinner()");
         return mImportanciaSpinner;
     }
 
     @Override
     public void onImportanciaSpinnerLoaded()
     {
-        Log.d(TAG, "onImportanciaSpinnerLoaded(), importancia= " + mIncidImportancia.getImportancia());
+        Timber.d("onImportanciaSpinnerLoaded(), importancia= %d%n", mIncidImportancia.getImportancia());
         mImportanciaSpinner.setSelection(mIncidImportancia.getImportancia());
     }
 
@@ -153,13 +151,12 @@ public class IncidEditNoPowerFr extends Fragment implements ImportanciaSpinnerSe
 
     class ImportanciaModifyer extends AsyncTask<IncidImportancia, Void, Integer> {
 
-        private final String TAG = ImportanciaModifyer.class.getCanonicalName();
         UiException uiException;
 
         @Override
         protected Integer doInBackground(IncidImportancia... incidImportancias)
         {
-            Log.d(TAG, "doInBackground()");
+            Timber.d("doInBackground()");
             int rowInserted = 0;
 
             try {
@@ -178,7 +175,7 @@ public class IncidEditNoPowerFr extends Fragment implements ImportanciaSpinnerSe
         @Override
         protected void onPostExecute(Integer rowInserted)
         {
-            Log.d(TAG, "onPostExecute()");
+            Timber.d("onPostExecute()");
 
             if (uiException != null) {
                 uiException.processMe(getActivity(), new Intent());

@@ -4,8 +4,7 @@
         android:id="@+id/comu_search_ac_coordinatorlayout"
         style="@style/baseLayout"
         xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        >
+        xmlns:tools="http://schemas.android.com/tools">
 
         <include layout="@layout/appbar_include_design"/>
 

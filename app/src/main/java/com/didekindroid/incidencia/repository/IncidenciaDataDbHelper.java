@@ -7,15 +7,15 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.didekindroid.R;
-import com.didekindroid.common.utils.UIutils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+
+import timber.log.Timber;
 
 import static android.provider.BaseColumns._ID;
 import static com.didekindroid.incidencia.repository.IncidenciaDataDb.AmbitoIncidencia.CREATE_AMBITO_INCIDENCIA;
@@ -30,10 +30,10 @@ import static com.didekindroid.incidencia.repository.IncidenciaDataDb.AmbitoInci
  */
 public class IncidenciaDataDbHelper extends SQLiteOpenHelper {
 
-    private static final String TAG = IncidenciaDataDbHelper.class.getCanonicalName();
     public static final String DB_NAME = "incidencia.db";
     public static final int DB_VERSION = 1;
-    public static final String PK_AMBITO_NULL_MSG = TAG + " getAmbitoDescByPk(), ambitoPk == null";
+    public static final String PK_AMBITO_NULL_MSG = IncidenciaDataDbHelper.class.getCanonicalName()
+            + " getAmbitoDescByPk(), ambitoPk == null";
 
     private final Context mContext;
     private SQLiteDatabase mDataBase;
@@ -48,14 +48,15 @@ public class IncidenciaDataDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db)
     {
-        Log.i(TAG, "onCreate()");
+        Timber.i("onCreate()");
         mDataBase = db;
         mDataBase.execSQL(CREATE_AMBITO_INCIDENCIA);
 
         try {
             loadAmbitoIncidencia();
         } catch (Exception e) {
-            UIutils.doRuntimeException(e, TAG);
+            Timber.e(e.getMessage());
+            throw new RuntimeException(e);
         }
 
     }
@@ -63,7 +64,7 @@ public class IncidenciaDataDbHelper extends SQLiteOpenHelper {
     @Override
     public void onOpen(SQLiteDatabase db)
     {
-        Log.d(TAG, "In onOpen()");
+        Timber.d("In onOpen()");
 
         if (mDataBase == null) {
             mDataBase = db;
@@ -73,8 +74,7 @@ public class IncidenciaDataDbHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
-        Log.d(TAG, "In onUpgrade()");
-        Log.w(TAG, "Upgrading database from version " + oldVersion + " to " + newVersion);
+        Timber.w("Upgrading database from version %d  to  %d%n", oldVersion, newVersion);
 
         if (mDataBase == null) {
             mDataBase = db;
@@ -85,7 +85,7 @@ public class IncidenciaDataDbHelper extends SQLiteOpenHelper {
 
     public void dropAllTables()
     {
-        Log.d(TAG, "dropAllTables()");
+        Timber.d("dropAllTables()");
         if (mDataBase != null) {
             dropAmbitoIncidencia();
         }
@@ -97,7 +97,7 @@ public class IncidenciaDataDbHelper extends SQLiteOpenHelper {
 
     int loadAmbitoIncidencia() throws IOException
     {
-        Log.i(TAG, "In loadAmbitoIncidencia()");
+        Timber.i("In loadAmbitoIncidencia()");
 
         final Resources resources = mContext.getResources();
         InputStream inputStream = resources.openRawResource(R.raw.ambito_incidencia);
@@ -113,7 +113,7 @@ public class IncidenciaDataDbHelper extends SQLiteOpenHelper {
                 }
                 long id = addAmbitoIncidencia(Short.parseShort(strings[0].trim()), strings[1].trim());
                 if (id < 0) {
-                    Log.e(TAG, "Unable to add ambito de incidencia: " + strings[0].trim() + " " + strings[1].trim());
+                    Timber.e("Unable to add ambito de incidencia: %s  %s%n", strings[0].trim(), strings[1].trim());
                 } else {
                     ++pkCounter;
                 }
@@ -122,7 +122,7 @@ public class IncidenciaDataDbHelper extends SQLiteOpenHelper {
             reader.close();
         }
 
-        Log.i(TAG, "Done loading tipos de incidencia file in DB.");
+        Timber.i("Done loading tipos de incidencia file in DB.");
         mAmbitoIncidenciaCounter = pkCounter;
         return pkCounter;
     }
@@ -137,7 +137,7 @@ public class IncidenciaDataDbHelper extends SQLiteOpenHelper {
 
     public Cursor doAmbitoIncidenciaCursor()
     {
-        Log.d(TAG, "En doAmbitoIncidenciaCursor()");
+        Timber.d("En doAmbitoIncidenciaCursor()");
 
         if (mDataBase == null) {
             mDataBase = getReadableDatabase();
@@ -159,7 +159,7 @@ public class IncidenciaDataDbHelper extends SQLiteOpenHelper {
 
     public String getAmbitoDescByPk(short pkAmbito)
     {
-        Log.d(TAG, "getAmbitoDescByPk()");
+        Timber.d("getAmbitoDescByPk()");
 
         if (mDataBase == null) {
             mDataBase = getReadableDatabase();
@@ -185,7 +185,7 @@ public class IncidenciaDataDbHelper extends SQLiteOpenHelper {
 
     void dropAmbitoIncidencia()
     {
-        Log.d(TAG, "dropAmbitoIncidencia()");
+        Timber.d("dropAmbitoIncidencia()");
         mDataBase.execSQL(DROP_AMBITO_INCIDENCIA);
         mAmbitoIncidenciaCounter = 0;
     }

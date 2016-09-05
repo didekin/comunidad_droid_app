@@ -25,12 +25,19 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import static android.os.Build.VERSION.SDK_INT;
+import static android.os.Build.VERSION_CODES.KITKAT;
+import static android.os.Build.VERSION_CODES.M;
 import static com.didekindroid.common.utils.UIutils.SPAIN_LOCALE;
 import static com.didekindroid.common.utils.UIutils.formatTimeStampToString;
 import static com.didekindroid.common.utils.UIutils.formatTimeToString;
 import static com.didekindroid.common.utils.UIutils.getIntFromStringDecimal;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.utils.UIutils.updateIsRegistered;
+import static java.text.DateFormat.*;
+import static java.text.DateFormat.MEDIUM;
+import static java.util.Locale.ENGLISH;
+import static java.util.Locale.getDefault;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -62,14 +69,19 @@ public class UIutilsTest extends TestCase {
     {
         Timestamp timestamp = new Timestamp(1455301148000L);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Locale.getDefault().equals(SPAIN_LOCALE)) {
-            assertThat(formatTimeStampToString(timestamp), is("12 feb. 2016"));
-        }
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M && Locale.getDefault().equals(SPAIN_LOCALE)) {
-            assertThat(formatTimeStampToString(timestamp), is("12/2/2016"));
+        if (getDefault().equals(SPAIN_LOCALE)) {
+            if (SDK_INT >= M) {
+                assertThat(formatTimeStampToString(timestamp), is("12 feb. 2016"));
+            }
+            if (SDK_INT < M && SDK_INT > KITKAT) {
+                assertThat(formatTimeStampToString(timestamp), is("12/2/2016"));
+            }
+            if (SDK_INT == KITKAT) {
+                assertThat(formatTimeStampToString(timestamp), is("12/02/2016"));
+            }
         }
 
-        if (Locale.getDefault().equals(Locale.ENGLISH)) {
+        if (getDefault().equals(ENGLISH)) {
             assertThat(formatTimeStampToString(timestamp), is("Feb 12, 2016"));
         }
     }
@@ -92,32 +104,36 @@ public class UIutilsTest extends TestCase {
 
         Timestamp timestamp = new Timestamp(1455301148000L);
 
-        String formatTime = DateFormat.getDateInstance(DateFormat.LONG, SPAIN_LOCALE).format(timestamp);
+        String formatTime = getDateInstance(LONG, SPAIN_LOCALE).format(timestamp);
         assertThat(formatTime, is("12 de febrero de 2016"));
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            formatTime = DateFormat.getDateInstance(DateFormat.MEDIUM, SPAIN_LOCALE).format(timestamp);
+        if (SDK_INT >= M) {
+            formatTime = getDateInstance(MEDIUM, SPAIN_LOCALE).format(timestamp);
             assertThat(formatTime, is("12 feb. 2016"));
         }
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            formatTime = DateFormat.getDateInstance(DateFormat.MEDIUM, SPAIN_LOCALE).format(timestamp);
+        if (SDK_INT < M && SDK_INT > KITKAT) {
+            formatTime = getDateInstance(MEDIUM, SPAIN_LOCALE).format(timestamp);
             assertThat(formatTime, is("12/2/2016"));
         }
+        if (SDK_INT == KITKAT) {
+            formatTime = getDateInstance(MEDIUM, SPAIN_LOCALE).format(timestamp);
+            assertThat(formatTime, is("12/02/2016"));
+        }
 
-        formatTime = DateFormat.getDateInstance(DateFormat.LONG, Locale.ENGLISH).format(timestamp);
+        formatTime = getDateInstance(LONG, ENGLISH).format(timestamp);
         assertThat(formatTime, is("February 12, 2016"));
 
-        formatTime = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.ENGLISH).format(timestamp);
+        formatTime = getDateInstance(MEDIUM, ENGLISH).format(timestamp);
         assertThat(formatTime, is("Feb 12, 2016"));
     }
 
     @Test
     public void testFormatDoubleToZeroDecimal()
     {
-        if (Locale.getDefault().equals(Locale.ENGLISH)) {
+        if (getDefault().equals(ENGLISH)) {
             assertThat(UIutils.formatDoubleZeroDecimal(12.34, context), is("12"));
         }
-        if (Locale.getDefault().equals(SPAIN_LOCALE)) {
+        if (getDefault().equals(SPAIN_LOCALE)) {
             assertThat(UIutils.formatDoubleZeroDecimal(12.34, context), is("12"));
         }
     }
@@ -134,10 +150,10 @@ public class UIutilsTest extends TestCase {
     @Test
     public void testGetIntFromStringDecimal() throws ParseException
     {
-        if (Locale.getDefault().equals(Locale.ENGLISH)) {
+        if (getDefault().equals(ENGLISH)) {
             assertThat(getIntFromStringDecimal("123.45"), is(123));
         }
-        if (Locale.getDefault().equals(SPAIN_LOCALE)) {
+        if (getDefault().equals(SPAIN_LOCALE)) {
             assertThat(getIntFromStringDecimal("123,45"), is(123));
         }
 
@@ -170,7 +186,7 @@ public class UIutilsTest extends TestCase {
     {
         TimeZone timeZone = new GregorianCalendar().getTimeZone();
         assertThat(timeZone.getID(), is("Europe/Brussels"));
-        assertThat(Locale.getDefault(), is(SPAIN_LOCALE));
+        assertThat(getDefault(), is(SPAIN_LOCALE));
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)

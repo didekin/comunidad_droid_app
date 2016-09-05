@@ -2,7 +2,6 @@ package com.didekindroid.common.utils;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.util.Log;
 
 import com.didekindroid.R;
 
@@ -16,6 +15,8 @@ import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
 
+import timber.log.Timber;
+
 /**
  * User: pedro@didekin
  * Date: 19/06/15
@@ -23,7 +24,6 @@ import java.util.List;
  */
 public final class IoHelper {
 
-    private static final String TAG = IoHelper.class.getCanonicalName();
     public static final int TIPO_VIA_FILE_SIZE = 323;
 
     private IoHelper()
@@ -33,7 +33,7 @@ public final class IoHelper {
     public static List<String> doArrayFromFile(Context context)
     {
 
-        Log.i(TAG, "In doArrayFromFile()");
+        Timber.i("In doArrayFromFile()");
 
         final Resources resources = context.getResources();
         InputStream inputStream = resources.openRawResource(R.raw.tipos_vias);
@@ -54,47 +54,50 @@ public final class IoHelper {
             }
 
         } catch (IOException e) {
-            UIutils.doRuntimeException(e, TAG);
+            Timber.e(e.getMessage());
+            throw new RuntimeException(e);
         } finally {
             try {
                 reader.close();
             } catch (IOException e) {
-                UIutils.doRuntimeException(e, TAG);
+                Timber.e(e.getMessage());
             }
         }
 
-        Log.i(TAG, "Done doArrayFromFile()");
+        Timber.i("Done doArrayFromFile()");
 
         return tipos;
     }
 
     public static String readStringFromFile(File file)
     {
-        Log.d(TAG, "readStringFromFile()");
+        Timber.d("readStringFromFile()");
 
         RandomAccessFile readableRefreshTkFile;
-        byte[] bytesRefreshToken = null;
+        byte[] bytesRefreshToken;
         try {
             readableRefreshTkFile = new RandomAccessFile(file, "r");
             bytesRefreshToken = new byte[(int) readableRefreshTkFile.length()];
             readableRefreshTkFile.readFully(bytesRefreshToken);
             readableRefreshTkFile.close();
         } catch (IOException e) {
-            UIutils.doRuntimeException(e, e.getLocalizedMessage());
+            Timber.e(e.getLocalizedMessage(), e.getMessage());
+            throw new RuntimeException(e);
         }
-        return new String(bytesRefreshToken != null ? bytesRefreshToken : new byte[0]);
+        return new String(bytesRefreshToken);
     }
 
     public static void writeFileFromString(String stringToWrite, File fileToWrite)
     {
-        Log.d(TAG, "writeFileFromString()");
+        Timber.d("writeFileFromString()");
         FileOutputStream stringFileStream;
         try {
             stringFileStream = new FileOutputStream(fileToWrite);
             stringFileStream.write(stringToWrite.getBytes());
             stringFileStream.close();
         } catch (IOException e) {
-            UIutils.doRuntimeException(e, e.getLocalizedMessage());
+            Timber.e(e.getLocalizedMessage(), e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 

@@ -4,7 +4,6 @@ package com.didekindroid.usuario.activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +13,14 @@ import android.widget.EditText;
 import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 
+import timber.log.Timber;
+
 import static com.didekindroid.usuario.activity.utils.RolUi.ADM;
 import static com.didekindroid.usuario.activity.utils.RolUi.INQ;
 import static com.didekindroid.usuario.activity.utils.RolUi.PRE;
 import static com.didekindroid.usuario.activity.utils.RolUi.PRO;
 
 public class RegUserComuFr extends Fragment {
-
-    private static final String TAG = RegUserComuFr.class.getCanonicalName();
 
     private View mRegUserComuFrView;
 
@@ -32,14 +31,14 @@ public class RegUserComuFr extends Fragment {
     @Override
     public void onAttach(Context context)
     {
-        Log.d(TAG, "onAttach()");
+        Timber.d("onAttach()");
         super.onAttach(context);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
-        Log.d(TAG, "onCreate()");
+        Timber.d("onCreate()");
         super.onCreate(savedInstanceState);
     }
 
@@ -47,7 +46,7 @@ public class RegUserComuFr extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        Log.d(TAG, "onCreateView()");
+        Timber.d("onCreateView()");
 
         mRegUserComuFrView = inflater.inflate(R.layout.reg_usercomu_fr, container, false);
         return mRegUserComuFrView;
@@ -56,7 +55,7 @@ public class RegUserComuFr extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState)
     {
-        Log.d(TAG, "onActivityCreated()");
+        Timber.d("onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
 
     }
@@ -64,49 +63,49 @@ public class RegUserComuFr extends Fragment {
     @Override
     public void onStart()
     {
-        Log.d(TAG, "onStart()");
+        Timber.d("onStart()");
         super.onStart();
     }
 
     @Override
     public void onResume()
     {
-        Log.d(TAG, "onResume()");
+        Timber.d("onResume()");
         super.onResume();
     }
 
     @Override
     public void onPause()
     {
-        Log.d(TAG, "onPause()");
+        Timber.d("onPause()");
         super.onPause();
     }
 
     @Override
     public void onStop()
     {
-        Log.d(TAG, "onStop()");
+        Timber.d("onStop()");
         super.onStop();
     }
 
     @Override
     public void onDestroyView()
     {
-        Log.d(TAG, "onDestroyView()");
+        Timber.d("onDestroyView()");
         super.onDestroyView();
     }
 
     @Override
     public void onDestroy()
     {
-        Log.d(TAG, "onDestroy()");
+        Timber.d("onDestroy()");
         super.onDestroy();
     }
 
     @Override
     public void onDetach()
     {
-        Log.d(TAG, "onDetach()");
+        Timber.d("onDetach()");
         super.onDetach();
     }
 
@@ -114,13 +113,13 @@ public class RegUserComuFr extends Fragment {
 
     public View getFragmentView()
     {
-        Log.d(TAG, "getFragmentView()");
+        Timber.d("getFragmentView()");
         return mRegUserComuFrView;
     }
 
     void paintUserComuView(UsuarioComunidad initUserComu)
     {
-        Log.d(TAG, "paintUserComuView()");
+        Timber.d("paintUserComuView()");
 
         ((EditText) mRegUserComuFrView.findViewById(R.id.reg_usercomu_portal_ed)).setText(initUserComu.getPortal());
         ((EditText) mRegUserComuFrView.findViewById(R.id.reg_usercomu_escalera_ed)).setText(initUserComu.getEscalera());

@@ -3,11 +3,11 @@ package com.didekindroid.incidencia.activity;
 import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.widget.DatePicker;
 
 import com.didekin.incidservice.dominio.Resolucion;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
+import com.didekindroid.common.testutils.ActivityTestUtils;
 import com.didekindroid.usuario.testutils.CleanUserEnum;
 
 import org.junit.BeforeClass;
@@ -16,7 +16,6 @@ import org.junit.runner.RunWith;
 
 import java.io.IOException;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -24,18 +23,17 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.pressBack;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.contrib.PickerActions.setDate;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtraWithKey;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkNavigateUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
+import static com.didekindroid.common.testutils.ActivityTestUtils.reSetDatePicker;
 import static com.didekindroid.common.utils.UIutils.SPAIN_LOCALE;
 import static com.didekindroid.common.utils.UIutils.formatTimeToString;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidImportancia;
@@ -43,8 +41,6 @@ import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGe
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_PLAZUELA5_JUAN;
-import static java.util.Calendar.DAY_OF_MONTH;
-import static java.util.Calendar.MONTH;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -130,18 +126,14 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
         // Caso: cambiamos la fecha prevista.
 
         onView(withId(R.id.incid_resolucion_fecha_view)).perform(click());
-        Calendar newCalendar = new GregorianCalendar();
-        newCalendar.setTimeInMillis(resolucion.getFechaPrev().getTime());
-        // Aumentamos un mes la fecha estimada.
-        newCalendar.add(MONTH, 1);
-        // Android PickerActions substract 1 from the month passed to setDate(), so we increased the month parameter value in 1 before passing it.
-        onView(withClassName(is(DatePicker.class.getName())))
-                .perform(setDate(newCalendar.get(Calendar.YEAR), newCalendar.get(MONTH) + 1, newCalendar.get(DAY_OF_MONTH)));
-        onView(withText(mActivity.getString(android.R.string.ok))).perform(click());
+        Calendar newFechaPrev = reSetDatePicker(resolucion.getFechaPrev().getTime(), 1);
+
+        ActivityTestUtils.closeDatePicker(mActivity);
+
         if (Locale.getDefault().equals(SPAIN_LOCALE)) {
             onView(allOf(
                     withId(R.id.incid_resolucion_fecha_view),
-                    withText(formatTimeToString(newCalendar.getTimeInMillis()))
+                    withText(formatTimeToString(newFechaPrev.getTimeInMillis()))
             )).check(matches(isDisplayed()));
         }
         onView(withId(R.id.incid_resolucion_fr_modif_button)).perform(click());
@@ -210,7 +202,7 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
     private void checKOk()
     {
         onView(withId(R.id.incid_edit_fragment_container_ac)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_edit_maxpower_frg)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_edit_maxpower_fr_layout)).check(matches(isDisplayed()));
         intended(hasExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia));
     }
 }

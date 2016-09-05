@@ -50,7 +50,7 @@ android {
 
 dependencies {
 
-    testCompile 'junit:junit:4.12'
+    testCompile deps.junit
     androidTestCompile 'com.android.support:support-annotations:24.2.0'
     androidTestCompile 'com.android.support.test:runner:0.5'
     androidTestCompile 'com.android.support.test:rules:0.5'
@@ -70,8 +70,9 @@ dependencies {
     /* Esta librería es para probar en terminales las funcionalidades servidor relacionadas con Firebase GCM y JavaMail*/
     androidTestCompile project(':client_gcm_lib')
 
-    compile project(':client_lib') //
-    compile 'com.google.guava:guava:19.0'
+    compile project(':client_lib')
+    compile deps.timber
+    compile deps.guava
     compile 'com.android.support:design:24.2.0'
     compile 'com.android.support:appcompat-v7:24.2.0'
     compile 'com.android.support:support-v4:24.2.0'

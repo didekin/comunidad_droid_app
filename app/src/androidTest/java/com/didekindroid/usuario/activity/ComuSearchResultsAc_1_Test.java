@@ -3,7 +3,6 @@ package com.didekindroid.usuario.activity;
 import android.content.Intent;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.util.Log;
 
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekin.usuario.dominio.Municipio;
@@ -55,7 +54,7 @@ import static com.didekindroid.usuario.testutils.UsuarioTestUtils.makeUsuario;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.makeUsuarioComunidad;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static com.google.common.base.Preconditions.checkState;
-import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
@@ -68,8 +67,6 @@ import static org.junit.Assert.assertThat;
  */
 @RunWith(AndroidJUnit4.class)
 public class ComuSearchResultsAc_1_Test {
-
-    private static final String TAG = "ComunidadSeeActivTest";
 
     private ComuSearchResultsAc activity;
     ComuSearchResultsListFr mComunidadSummaryFrg;
@@ -90,7 +87,6 @@ public class ComuSearchResultsAc_1_Test {
     @Before
     public void getFixture() throws Exception
     {
-        Log.d(TAG, "In getFixture()");
         intent = new Intent();
         intent.putExtra(COMUNIDAD_SEARCH.key, COMU_LA_PLAZUELA_5);
     }
@@ -255,7 +251,8 @@ public class ComuSearchResultsAc_1_Test {
 
         Comunidad comunidad = adapter.getItem(0);
         onView(withAdaptedData(Matchers.<Object>equalTo(comunidad))).check(matches(isDisplayed()));
-        onData(is(instanceOf(Comunidad.class))).onChildView(allOf(
+        onData(is(instanceOf(Comunidad.class))).onChildView(
+                allOf(
                 withId(R.id.nombreComunidad_view),
                 withText(COMU_LA_PLAZUELA_5.getNombreComunidad())
         )).perform(click());

@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,13 +14,15 @@ import com.didekin.incidservice.dominio.Resolucion;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 
+import timber.log.Timber;
+
 import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.INCID_ACTIVITY_VIEW_ID;
 import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_edit_ac_frgs_tag;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
+import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_edit_ac_frgs_tag;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_COMMENTS_SEE_AC;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_COMMENT_REG_AC;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_RESOLUCION_REG_EDIT_AC;
@@ -40,8 +41,6 @@ import static com.google.common.base.Preconditions.checkState;
  */
 public class IncidEditAc extends AppCompatActivity {
 
-    private static final String TAG = IncidEditAc.class.getCanonicalName();
-
     View mAcView;
     IncidImportancia mIncidImportancia;
     boolean flagResolucion;
@@ -49,11 +48,12 @@ public class IncidEditAc extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        Log.d(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
+        Timber.d("onCreate()");
+
         mIncidImportancia = (IncidImportancia) getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.key);
-        // Verificamos preconditions.
         checkState(mIncidImportancia != null && mIncidImportancia.getIncidencia() != null && mIncidImportancia.getIncidencia().getIncidenciaId() > 0);
+
         flagResolucion = getIntent().getBooleanExtra(INCID_RESOLUCION_FLAG.key, false);
 
         mAcView = getLayoutInflater().inflate(R.layout.incid_edit_ac, null);
@@ -83,31 +83,24 @@ public class IncidEditAc extends AppCompatActivity {
                 .commit();
     }
 
-//    ============================================================
+    //    ============================================================
 //    ......................... MENU .............................
 //    ============================================================
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        Log.d(TAG, "onCreateOptionsMenu()");
+        Timber.d("onCreateOptionsMenu()");
+        super.onCreateOptionsMenu(menu);
+
         getMenuInflater().inflate(R.menu.incid_edit_ac_mn, menu);
         return true;
     }
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu)
-    {
-        Log.d(TAG, "onPrepareOptionsMenu()");
-        /*MenuItem resolverItem = menu.findItem(R.id.incid_resolucion_reg_ac_mn);
-        resolverItem.setVisible(mIncidencia.getUserComu().hasAdministradorAuthority());*/
-        return super.onPrepareOptionsMenu(menu);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        Log.d(TAG, "onOptionsItemSelected()");
+        Timber.d("onOptionsItemSelected()");
 
         int resourceId = checkNotNull(item.getItemId());
         Intent intent;
@@ -140,13 +133,12 @@ public class IncidEditAc extends AppCompatActivity {
     // TODO: to persist the task during restarts and properly cancel the task when the activity is destroyed. (Example in Shelves)
     class ResolucionGetter extends AsyncTask<Void, Void, Resolucion> {
 
-        private final String TAG = ResolucionGetter.class.getCanonicalName();
         private UiException uiException;
 
         @Override
         protected Resolucion doInBackground(Void... aVoid)
         {
-            Log.d(TAG, "doInBackground()");
+            Timber.d("doInBackground()");
             Resolucion resolucion = null;
 
             try {
@@ -160,7 +152,7 @@ public class IncidEditAc extends AppCompatActivity {
         @Override
         protected void onPostExecute(Resolucion resolucion)
         {
-            Log.d(TAG, "onPostExecute()");
+            Timber.d("onPostExecute()");
 
             if (uiException != null) {
                 uiException.processMe(IncidEditAc.this, new Intent());

@@ -4,8 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
-import android.util.Log;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +17,8 @@ import com.didekindroid.common.activity.UiException;
 
 import java.util.List;
 
-import static android.widget.AbsListView.CHOICE_MODE_NONE;
+import timber.log.Timber;
+
 import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.google.common.base.Preconditions.checkState;
@@ -29,9 +29,7 @@ import static com.google.common.base.Preconditions.checkState;
  * <p/>
  * Postconditions:
  */
-public class IncidCommentSeeListFr extends ListFragment {
-
-    public static final String TAG = IncidCommentSeeListFr.class.getCanonicalName();
+public class IncidCommentSeeListFr extends Fragment {
 
     IncidCommentSeeAdapter mAdapter;
     View mView;
@@ -40,7 +38,7 @@ public class IncidCommentSeeListFr extends ListFragment {
 
     public static IncidCommentSeeListFr newInstance(Incidencia incidencia)
     {
-        Log.d(TAG, "newInstance()");
+        Timber.d("newInstance()");
         IncidCommentSeeListFr commentSeeListFr = new IncidCommentSeeListFr();
         Bundle args = new Bundle();
         args.putSerializable(INCIDENCIA_OBJECT.key, incidencia);
@@ -51,14 +49,14 @@ public class IncidCommentSeeListFr extends ListFragment {
     @Override
     public void onAttach(Context context)
     {
-        Log.d(TAG, "onAttach()");
+        Timber.d("onAttach()");
         super.onAttach(context);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
-        Log.d(TAG, "onCreate()");
+        Timber.d("onCreate()");
         super.onCreate(savedInstanceState);
     }
 
@@ -66,7 +64,7 @@ public class IncidCommentSeeListFr extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        Log.d(TAG, "onCreateView()");
+        Timber.d("onCreateView()");
         mView = inflater.inflate(R.layout.incid_comments_see_fr_layout, container, false);
         return mView;
     }
@@ -74,7 +72,7 @@ public class IncidCommentSeeListFr extends ListFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState)
     {
-        Log.d(TAG, "onActivityCreated()");
+        Timber.d("onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
 
         mAdapter = new IncidCommentSeeAdapter(getActivity());
@@ -89,65 +87,57 @@ public class IncidCommentSeeListFr extends ListFragment {
     @Override
     public void onStart()
     {
-        Log.d(TAG, "Enters onStart()");
+        Timber.d("Enters onStart()");
         super.onStart();
     }
 
     @Override
     public void onResume()
     {
-        Log.d(TAG, "Enters onResume()");
+        Timber.d("Enters onResume()");
         super.onResume();
     }
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState)
     {
-        Log.d(TAG, "onSaveInstanceState()");
+        Timber.d("onSaveInstanceState()");
         super.onSaveInstanceState(savedInstanceState);
     }
 
     @Override
     public void onPause()
     {
-        Log.d(TAG, "onPause()");
+        Timber.d("onPause()");
         super.onPause();
     }
 
     @Override
     public void onStop()
     {
-        Log.d(TAG, "onStop()");
+        Timber.d("onStop()");
         super.onStop();
     }
 
     @Override
     public void onDestroyView()
     {
-        Log.d(TAG, "onDestroyView()");
+        Timber.d("onDestroyView()");
         super.onDestroyView();
     }
 
     @Override
     public void onDestroy()
     {
-        Log.d(TAG, "onDestroy()");
+        Timber.d("onDestroy()");
         super.onDestroy();
     }
 
     @Override
     public void onDetach()
     {
-        Log.d(TAG, "onDetach()");
+        Timber.d("onDetach()");
         super.onDetach();
-    }
-
-//    ........................ INTERFACE METHODS ..........................
-
-    @Override
-    public void onListItemClick(ListView l, View v, int position, long id)
-    {
-        Log.d(TAG, "onListItemClick()");
     }
 
     //    ============================================================
@@ -157,13 +147,12 @@ public class IncidCommentSeeListFr extends ListFragment {
     // TODO: to persist the task during restarts and properly cancel the task when the activity is destroyed. (Example in Shelves)
     class IncidCommentLoader extends AsyncTask<Incidencia, Void, List<IncidComment>> {
 
-        private final String TAG = IncidCommentLoader.class.getCanonicalName();
         UiException uiException;
 
         @Override
         protected List<IncidComment> doInBackground(Incidencia... params)
         {
-            Log.d(TAG, "doInBackground()");
+            Timber.d("doInBackground()");
             List<IncidComment> comments = null;
             try {
                 comments = IncidenciaServ.seeCommentsByIncid(params[0].getIncidenciaId());
@@ -176,15 +165,15 @@ public class IncidCommentSeeListFr extends ListFragment {
         @Override
         protected void onPostExecute(List<IncidComment> incidComments)
         {
-            Log.d(TAG, "onPostExecute()");
+            Timber.d("onPostExecute()");
             if (incidComments != null && incidComments.size() > 0) {
-                Log.d(TAG, "onPostExecute(): incidComments != null");
+                Timber.d("onPostExecute(): incidComments != null");
                 mAdapter.clear();
                 mAdapter.addAll(incidComments);
-                setListAdapter(mAdapter);
+                mListView.setAdapter(mAdapter);
             }
             if (uiException != null) {
-                Log.d(TAG, "onPostExecute(): uiException != null");
+                Timber.d("onPostExecute(): uiException != null");
                 checkState(incidComments == null);
                 uiException.processMe(getActivity(), new Intent());
             }

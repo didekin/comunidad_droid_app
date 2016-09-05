@@ -6,7 +6,6 @@ import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.didekindroid.R;
 
@@ -14,6 +13,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+
+import timber.log.Timber;
 
 import static android.provider.BaseColumns._ID;
 import static com.didekindroid.usuario.repository.UsuarioDataDb.ComunidadAutonoma.TB_C_AUTONOMA;
@@ -25,11 +26,10 @@ import static com.didekindroid.usuario.repository.UsuarioDataDb.ComunidadAutonom
  * Time: 09:19
  */
 public class MockDbHelper extends SQLiteOpenHelper {
-
-    private static final String TAG = MockDbHelper.class.getCanonicalName();
     public static final String DB_NAME = "mock.db";
     /*This number has to be changed in future versions, to get executed onUpgrade() method.*/
     public static final int DB_VERSION = 1;
+
     private final Context mContext;
 
     public MockDbHelper(Context context)
@@ -41,12 +41,12 @@ public class MockDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db)
     {
-        Log.i(TAG, "In onCreate()");
+        Timber.i("In onCreate()");
         db.execSQL(UsuarioDataDb.ComunidadAutonoma.CREATE_C_AUTONOMA);
         try {
             loadComunidadesAutonomas(db);
         } catch (IOException e) {
-            Log.e(TAG, "IOException in loadComunidades");
+            Timber.e("IOException in loadComunidades");
             throw new RuntimeException(e);
         }
     }
@@ -54,19 +54,19 @@ public class MockDbHelper extends SQLiteOpenHelper {
     @Override
     public void onOpen(SQLiteDatabase db)
     {
-        Log.d(TAG, "In onOpen()");
+        Timber.d("In onOpen()");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
-        Log.d(TAG, "In onUpgrade()");
-        Log.w(TAG, "Upgrading database from version " + oldVersion + " to " + newVersion);
+        Timber.d("In onUpgrade()");
+        Timber.w("Upgrading database from version %d to %d%n", oldVersion, newVersion);
     }
 
     private int loadComunidadesAutonomas(SQLiteDatabase db) throws IOException
     {
-        Log.i(TAG, "In loadComunidadesAutonomas()");
+        Timber.i("In loadComunidadesAutonomas()");
 
         final Resources resources = mContext.getResources();
         InputStream inputStream = resources.openRawResource(R.raw.comunidad_autonoma);
@@ -86,7 +86,7 @@ public class MockDbHelper extends SQLiteOpenHelper {
 
                 if (id < 0) {
                     --pkCounter;
-                    Log.e(TAG, "Unable to add comunidad: " + strings[0].trim() + " " + strings[1].trim());
+                    Timber.e("Unable to add comunidad: %s  %s%n", strings[0].trim(), strings[1].trim());
                 } else {
                     ++pkCounter;
                 }
@@ -95,14 +95,14 @@ public class MockDbHelper extends SQLiteOpenHelper {
             reader.close();
         }
 
-        Log.i(TAG, "Done loading comunidades file in DB.");
+        Timber.i("Done loading comunidades file in DB.");
 
         return pkCounter;
     }
 
     private long addComunidad(SQLiteDatabase db, short pk, String nombre)
     {
-        Log.i(TAG, "En addComunidad()");
+        Timber.i("En addComunidad()");
 
         ContentValues values = new ContentValues();
         values.put(_ID, pk);

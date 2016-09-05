@@ -2,7 +2,6 @@ package com.didekindroid.usuario.activity;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +12,14 @@ import com.didekindroid.R;
 import com.didekindroid.usuario.activity.ComuSearchResultsListAdapter.ComuViewHolder;
 import com.didekindroid.usuario.activity.SeeUserComutByComuListAdapter.UserComuVwHolder;
 
+import timber.log.Timber;
+
 /**
  * User: pedro
  * Date: 10/07/15
  * Time: 18:01
  */
 public class SeeUserComuByUserAdapter extends ArrayAdapter<UsuarioComunidad> {
-
-    private static final String TAG = SeeUserComuByUserAdapter.class.getCanonicalName();
 
     public SeeUserComuByUserAdapter(Context context)
     {
@@ -30,13 +29,13 @@ public class SeeUserComuByUserAdapter extends ArrayAdapter<UsuarioComunidad> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent)
     {
-        Log.d(TAG, "getView(), position= " + position);
+        Timber.d("getView(), position= %d%n", position);
 
         ComuAndUserComuViewHolder comuAnduserComuViewHolder;
 
         if (convertView == null) {
 
-            Log.d(TAG, "getView(), convertView == null");
+            Timber.d("getView(), convertView == null");
 
             convertView = LayoutInflater.from(getContext())
                     .inflate(R.layout.comu_usercomu_list_item, parent, false);
@@ -68,7 +67,7 @@ public class SeeUserComuByUserAdapter extends ArrayAdapter<UsuarioComunidad> {
 
         void initializeTextInViews(UsuarioComunidad userComu)
         {
-            Log.d(TAG, "initializeTextInViews()");
+            Timber.d("initializeTextInViews()");
 
             comuViewHolder.initializeTextInViews(userComu.getComunidad());
             userComuVwHolder.initializeTextInViews(userComu);

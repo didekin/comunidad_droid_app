@@ -3,7 +3,6 @@ package com.didekindroid.incidencia.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,6 +14,8 @@ import android.widget.TextView;
 
 import com.didekin.incidservice.dominio.Resolucion;
 import com.didekindroid.R;
+
+import timber.log.Timber;
 
 import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
@@ -32,8 +33,6 @@ import static com.google.common.base.Preconditions.checkState;
  */
 public class IncidResolucionSeeFr extends Fragment {
 
-    private static final String TAG = IncidResolucionSeeFr.class.getCanonicalName();
-
     View mFragmentView;
     Resolucion mResolucion;
 
@@ -41,7 +40,7 @@ public class IncidResolucionSeeFr extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        Log.d(TAG, "onCreateView()");
+        Timber.d("onCreateView()");
         mFragmentView = inflater.inflate(R.layout.incid_resolucion_see_fr, container, false);
         return mFragmentView;
     }
@@ -49,7 +48,7 @@ public class IncidResolucionSeeFr extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState)
     {
-        Log.d(TAG, "onActivityCreated()");
+        Timber.d("onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
 
         mResolucion = (Resolucion) getArguments().getSerializable(INCID_RESOLUCION_OBJECT.key);
@@ -66,14 +65,14 @@ public class IncidResolucionSeeFr extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
     {
-        Log.d(TAG, "onCreateOptionsMenu()");
+        Timber.d("onCreateOptionsMenu()");
         inflater.inflate(R.menu.incid_see_closed_fragments_mn, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        Log.d(TAG, "onOptionsItemSelected()");
+        Timber.d("onOptionsItemSelected()");
 
         int resourceId = checkNotNull(item.getItemId());
 

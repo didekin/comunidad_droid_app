@@ -144,7 +144,7 @@ public class IncidResolucionEditFrTest_2 extends IncidResolucionAbstractTest {
         onView(withId(R.id.incid_resolucion_fr_modif_button)).perform(click());
 
         onView(withId(R.id.incid_edit_fragment_container_ac)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_edit_maxpower_frg)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_edit_maxpower_fr_layout)).check(matches(isDisplayed()));
         intended(hasExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia));
 
         Resolucion resolucionDb = IncidenciaServ.seeResolucion(resolucion.getIncidencia().getIncidenciaId());

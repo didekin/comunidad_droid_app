@@ -7,7 +7,6 @@ import android.app.DialogFragment;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TextView;
@@ -17,16 +16,17 @@ import com.didekindroid.R;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import timber.log.Timber;
+
 import static com.didekindroid.common.utils.UIutils.formatTimeToString;
 
 public class FechaPickerFr extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
-    private static final String TAG = FechaPickerFr.class.getCanonicalName();
     FechaPickerUser fechaFragment;
 
     public static FechaPickerFr newInstance(FechaPickerUser fragmentListener)
     {
-        Log.d(TAG, "newInstance()");
+        Timber.d("newInstance()");
         FechaPickerFr fechaPickerFr = new FechaPickerFr();
         fechaPickerFr.fechaFragment = fragmentListener;
         return fechaPickerFr;
@@ -35,7 +35,7 @@ public class FechaPickerFr extends DialogFragment implements DatePickerDialog.On
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState)
     {
-        Log.d(TAG, "onCreateDialog()");
+        Timber.d("onCreateDialog()");
 
         // Use the current date as the default date in the picker
         final Calendar c = Calendar.getInstance();
@@ -49,7 +49,7 @@ public class FechaPickerFr extends DialogFragment implements DatePickerDialog.On
     @Override
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth)
     {
-        Log.d(TAG, "onDateSet()");
+        Timber.d("onDateSet()");
 
         Calendar calendar = new GregorianCalendar(year, monthOfYear, dayOfMonth);
         long timeFecha = calendar.getTimeInMillis();
@@ -68,7 +68,7 @@ public class FechaPickerFr extends DialogFragment implements DatePickerDialog.On
 
         public static TextView initFechaSpinnerView(final FechaPickerUser fechaPickerUser)
         {
-            Log.d(TAG, "initFechaSpinnerView()");
+            Timber.d("initFechaSpinnerView()");
 
             TextView mFechaView = (TextView) fechaPickerUser.getFragmentView().findViewById(R.id.incid_resolucion_fecha_view);
 
@@ -76,7 +76,7 @@ public class FechaPickerFr extends DialogFragment implements DatePickerDialog.On
                 @Override
                 public void onClick(View v)
                 {
-                    Log.d(TAG, "onClick()");
+                    Timber.d("onClick()");
                     FechaPickerFr fechaPicker = FechaPickerFr.newInstance(fechaPickerUser);
                     fechaPicker.show(fechaPickerUser.getActivity().getFragmentManager(), "fechaPicker");
                 }

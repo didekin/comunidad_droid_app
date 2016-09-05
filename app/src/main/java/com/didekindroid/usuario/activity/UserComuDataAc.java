@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +20,8 @@ import com.didekindroid.common.utils.ConnectionUtils;
 import com.didekindroid.usuario.activity.utils.UserAndComuFiller;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
+
+import timber.log.Timber;
 
 import static com.didekin.usuario.controller.UsuarioServiceConstant.IS_USER_DELETED;
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
@@ -56,8 +57,6 @@ import static com.google.common.base.Preconditions.checkState;
 @SuppressWarnings("ConstantConditions")
 public class UserComuDataAc extends AppCompatActivity {
 
-    private static final String TAG = UserComuDataAc.class.getCanonicalName();
-
     private View mAcView;
     private UsuarioComunidad mOldUserComu;
     RegUserComuFr mRegUserComuFr;
@@ -67,7 +66,7 @@ public class UserComuDataAc extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        Log.d(TAG, "onCreate()");
+        Timber.d("onCreate()");
         super.onCreate(savedInstanceState);
 
         // Preconditions.
@@ -86,7 +85,7 @@ public class UserComuDataAc extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                Log.d(TAG, "mModifyButton.OnClickListener().onClick()");
+                Timber.d("mModifyButton.OnClickListener().onClick()");
                 modifyUserComuData();
             }
         });
@@ -96,7 +95,7 @@ public class UserComuDataAc extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                Log.d(TAG, "mDeleteButton.OnClickListener().onClick()");
+                Timber.d("mDeleteButton.OnClickListener().onClick()");
                 deleteUserComuData();
             }
         });
@@ -104,7 +103,7 @@ public class UserComuDataAc extends AppCompatActivity {
 
     private void modifyUserComuData()
     {
-        Log.d(TAG, "modifyUserComuData()");
+        Timber.d("modifyUserComuData()");
 
         // ComunidaBean initialized only with comunidadId. UsuarioBean is not initialized.
         UsuarioComunidadBean userComuBean = UserAndComuFiller.makeUserComuBeanFromView(mAcView,
@@ -124,7 +123,7 @@ public class UserComuDataAc extends AppCompatActivity {
 
     private void deleteUserComuData()
     {
-        Log.d(TAG, "deleteUserComuData()");
+        Timber.d("deleteUserComuData()");
         new UserComuEraser().execute(mOldUserComu.getComunidad());
     }
 
@@ -136,7 +135,7 @@ public class UserComuDataAc extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        Log.d(TAG, "onCreateOptionsMenu()");
+        Timber.d("onCreateOptionsMenu()");
         getMenuInflater().inflate(R.menu.usercomu_data_ac_mn, menu);
         mComuDataItem = menu.findItem(R.id.comu_data_ac_mn);
         // Is the oldest or admon userComu?
@@ -147,7 +146,7 @@ public class UserComuDataAc extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        Log.d(TAG, "onOptionsItemSelected()");
+        Timber.d("onOptionsItemSelected()");
 
         int resourceId = checkNotNull(item.getItemId());
 
@@ -182,13 +181,12 @@ public class UserComuDataAc extends AppCompatActivity {
     // TODO: to persist the task during restarts and properly cancel the task when the activity is destroyed. (Example in Shelves)
     class ComuDataMenuSetter extends AsyncTask<Void, Void, Boolean> {
 
-        final String TAG = ComuDataMenuSetter.class.getCanonicalName();
         UiException uiException;
 
         @Override
         protected Boolean doInBackground(Void... aVoid)
         {
-            Log.d(TAG, "doInBackground()");
+            Timber.d("doInBackground()");
 
             boolean isOldestUserComu = false;
             try {
@@ -202,7 +200,7 @@ public class UserComuDataAc extends AppCompatActivity {
         @Override
         protected void onPostExecute(Boolean isOldestUserComu)
         {
-            Log.d(TAG, "onPostExecute()");
+            Timber.d("onPostExecute()");
 
             if (uiException != null) {
                 uiException.processMe(UserComuDataAc.this, new Intent());
@@ -215,13 +213,12 @@ public class UserComuDataAc extends AppCompatActivity {
 
     class UserComuModifyer extends AsyncTask<UsuarioComunidad, Void, Integer> {
 
-        final String TAG = UserComuModifyer.class.getCanonicalName();
         UiException uiException;
 
         @Override
         protected Integer doInBackground(UsuarioComunidad... userComus)
         {
-            Log.d(TAG, "doInBackground()");
+            Timber.d("doInBackground()");
 
             int modifyUserComu = 0;
             try {
@@ -235,7 +232,7 @@ public class UserComuDataAc extends AppCompatActivity {
         @Override
         protected void onPostExecute(Integer rowsUpdated)
         {
-            Log.d(TAG, "onPostExecute()");
+            Timber.d("onPostExecute()");
             if (uiException != null) {
                 uiException.processMe(UserComuDataAc.this, new Intent());
             } else {
@@ -248,13 +245,12 @@ public class UserComuDataAc extends AppCompatActivity {
 
     class UserComuEraser extends AsyncTask<Comunidad, Void, Integer> {
 
-        final String TAG = UserComuEraser.class.getCanonicalName();
         UiException uiException;
 
         @Override
         protected Integer doInBackground(Comunidad... comunidades)
         {
-            Log.d(TAG, "doInBackground()");
+            Timber.d("doInBackground()");
 
             int deleteUserComu = 0;
             try {
@@ -268,7 +264,7 @@ public class UserComuDataAc extends AppCompatActivity {
         @Override
         protected void onPostExecute(Integer isDeleted)
         {
-            Log.d(TAG, "onPostExecute() entering.");
+            Timber.d("onPostExecute() entering.");
 
             if (uiException == null) {
 

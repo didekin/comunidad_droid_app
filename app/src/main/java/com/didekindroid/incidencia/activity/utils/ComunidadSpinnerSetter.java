@@ -3,7 +3,6 @@ package com.didekindroid.incidencia.activity.utils;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.widget.ArrayAdapter;
 
 import com.didekin.usuario.dominio.Comunidad;
@@ -11,6 +10,8 @@ import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 
 import java.util.List;
+
+import timber.log.Timber;
 
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.google.common.base.Preconditions.checkState;
@@ -22,8 +23,6 @@ import static com.google.common.base.Preconditions.checkState;
  */
 public class ComunidadSpinnerSetter<T extends Fragment & ComuSpinnerSettable> extends AsyncTask<Void, Void, List<Comunidad>> {
     // TODO: to persist the task during restarts and properly cancel the task when the activity is destroyed. (Example in Shelves)
-
-    private static final String TAG = ComunidadSpinnerSetter.class.getCanonicalName();
     UiException uiException;
     private T mFragment;
 
@@ -35,7 +34,7 @@ public class ComunidadSpinnerSetter<T extends Fragment & ComuSpinnerSettable> ex
     @Override
     protected List<Comunidad> doInBackground(Void... aVoid)
     {
-        Log.d(TAG, "doInBackground()");
+        Timber.d("doInBackground()");
         List<Comunidad> comunidadesByUser = null;
         try {
             comunidadesByUser = IncidenciaServ.getComusByUser();
@@ -49,7 +48,7 @@ public class ComunidadSpinnerSetter<T extends Fragment & ComuSpinnerSettable> ex
     protected void onPostExecute(List<Comunidad> comunidades)
     {
         if (comunidades != null) {
-            Log.d(TAG, "onPostExecute(): comunidades != null");
+            Timber.d("onPostExecute(): comunidades != null");
             ArrayAdapter<Comunidad> comunidadesAdapter = new ArrayAdapter<>(
                     mFragment.getActivity(),
                     R.layout.app_spinner_1_dropdown_item,
@@ -59,7 +58,7 @@ public class ComunidadSpinnerSetter<T extends Fragment & ComuSpinnerSettable> ex
             mFragment.onComunidadSpinnerLoaded();
         }
         if (uiException != null) {
-            Log.d(TAG, "onPostExecute(): uiException != null");
+            Timber.d("onPostExecute(): uiException != null");
             checkState(comunidades == null);
             uiException.processMe(mFragment.getActivity(), new Intent());
         }

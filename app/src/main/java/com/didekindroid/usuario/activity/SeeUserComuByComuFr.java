@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +18,8 @@ import com.didekindroid.common.activity.BundleKey;
 import com.didekindroid.common.activity.UiException;
 
 import java.util.List;
+
+import timber.log.Timber;
 
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 
@@ -35,8 +36,6 @@ import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
  */
 public class SeeUserComuByComuFr extends Fragment {
 
-    private static final String TAG = SeeUserComuByComuFr.class.getCanonicalName();
-
     SeeUserComutByComuListAdapter mAdapter;
     View mView;
     ListView fragmentListView;
@@ -50,14 +49,14 @@ public class SeeUserComuByComuFr extends Fragment {
     @Override
     public void onAttach(Context context)
     {
-        Log.d(TAG, "onAttach()");
+        Timber.d("onAttach()");
         super.onAttach(context);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
-        Log.d(TAG, "onCreate()");
+        Timber.d("onCreate()");
         super.onCreate(savedInstanceState);
 
         comunidadId = getActivity().getIntent().getExtras().getLong(BundleKey.COMUNIDAD_ID.key);
@@ -68,7 +67,7 @@ public class SeeUserComuByComuFr extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        Log.d(TAG, "onCreateView()");
+        Timber.d("onCreateView()");
         mView = inflater.inflate(R.layout.see_usercomu_by_comu_list_fr, container, false);
         return mView;
     }
@@ -76,7 +75,7 @@ public class SeeUserComuByComuFr extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState)
     {
-        Log.d(TAG, "onActivityCreated()");
+        Timber.d("onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
 
         fragmentListView = (ListView) mView.findViewById(android.R.id.list);
@@ -88,21 +87,21 @@ public class SeeUserComuByComuFr extends Fragment {
     @Override
     public void onStart()
     {
-        Log.d(TAG, "onStart()");
+        Timber.d("onStart()");
         super.onStart();
     }
 
     @Override
     public void onResume()
     {
-        Log.d(TAG, "onResume()");
+        Timber.d("onResume()");
         super.onResume();
     }
 
     @Override
     public void onPause()
     {
-        Log.d(TAG, "onPause()");
+        Timber.d("onPause()");
         super.onPause();
     }
 
@@ -115,28 +114,28 @@ public class SeeUserComuByComuFr extends Fragment {
     @Override
     public void onStop()
     {
-        Log.d(TAG, "onStop()");
+        Timber.d("onStop()");
         super.onStop();
     }
 
     @Override
     public void onDestroyView()
     {
-        Log.d(TAG, "onDestroyView()");
+        Timber.d("onDestroyView()");
         super.onDestroyView();
     }
 
     @Override
     public void onDestroy()
     {
-        Log.d(TAG, "onDestroy()");
+        Timber.d("onDestroy()");
         super.onDestroy();
     }
 
     @Override
     public void onDetach()
     {
-        Log.d(TAG, "onDetach()");
+        Timber.d("onDetach()");
         super.onDetach();
     }
 
@@ -147,13 +146,11 @@ public class SeeUserComuByComuFr extends Fragment {
 
     View getFragmentView()
     {
-        Log.d(TAG, "getFragmentView()");
+        Timber.d("getFragmentView()");
         return fragmentListView;
     }
 
     class UserComuByComuLoader extends AsyncTask<Long, Void, List<UsuarioComunidad>> {
-
-        private final String TAG = UserComuByComuLoader.class.getCanonicalName();
 
         private Comunidad comunidadIn;
         private UiException uiException;
@@ -161,7 +158,7 @@ public class SeeUserComuByComuFr extends Fragment {
         @Override
         protected List<UsuarioComunidad> doInBackground(Long... comunidadId)
         {
-            Log.d(TAG, "doInBackground()");
+            Timber.d("doInBackground()");
 
             List<UsuarioComunidad> usuarioComunidades = null;
             try {
@@ -176,7 +173,7 @@ public class SeeUserComuByComuFr extends Fragment {
         @Override
         protected void onPostExecute(List<UsuarioComunidad> userComuList)
         {
-            Log.d(TAG, "onPostExecute(); userComuList size = " + userComuList.size());
+            Timber.d("onPostExecute(); userComuList size = %d%n", userComuList.size());
 
             if (uiException != null) {
                 uiException.processMe(getActivity(), new Intent());

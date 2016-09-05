@@ -2,12 +2,13 @@ package com.didekindroid.incidencia.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.didekindroid.common.activity.FechaPickerUser;
 import com.didekindroid.incidencia.dominio.ResolucionBean;
+
+import timber.log.Timber;
 
 /**
  * User: pedro@didekin
@@ -17,8 +18,6 @@ import com.didekindroid.incidencia.dominio.ResolucionBean;
 @SuppressWarnings("AbstractClassExtendsConcreteClass")
 public abstract class IncidResolucionFrAbstract extends Fragment implements FechaPickerUser {
 
-    private static final String TAG = IncidResolucionRegFr.class.getCanonicalName();
-
     ResolucionBean mResolucionBean;
     View mFragmentView;
     TextView mFechaView;
@@ -26,7 +25,7 @@ public abstract class IncidResolucionFrAbstract extends Fragment implements Fech
     @Override
     public void onActivityCreated(Bundle savedInstanceState)
     {
-        Log.d(TAG, "onActivityCreated()");
+        Timber.d("onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
     }
 

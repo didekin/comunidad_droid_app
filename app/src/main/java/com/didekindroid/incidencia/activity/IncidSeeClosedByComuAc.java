@@ -6,7 +6,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -19,6 +18,8 @@ import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 
 import java.util.List;
+
+import timber.log.Timber;
 
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
 import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_LIST_INDEX;
@@ -53,7 +54,6 @@ import static com.google.common.base.Preconditions.checkState;
 public class IncidSeeClosedByComuAc extends AppCompatActivity implements
         IncidSeeListListener {
 
-    private static final String TAG = IncidSeeClosedByComuAc.class.getCanonicalName();
     IncidSeeByComuListFr mFragment;
     int mIncidenciaIndex;
     Comunidad mComunidadSelected;
@@ -61,7 +61,7 @@ public class IncidSeeClosedByComuAc extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        Log.d(TAG, "onCreate()");
+        Timber.d("onCreate()");
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.incid_see_closed_by_comu_ac);
@@ -79,7 +79,7 @@ public class IncidSeeClosedByComuAc extends AppCompatActivity implements
     @Override
     protected void onSaveInstanceState(Bundle savedInstanceState)
     {
-        Log.d(TAG, "onSaveInstanceState()");
+        Timber.d("onSaveInstanceState()");
         savedInstanceState.putInt(INCIDENCIA_LIST_INDEX.key, mIncidenciaIndex);
         super.onSaveInstanceState(savedInstanceState);
     }
@@ -87,7 +87,7 @@ public class IncidSeeClosedByComuAc extends AppCompatActivity implements
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState)
     {
-        Log.d(TAG, "onRestoreInstanceState()");
+        Timber.d("onRestoreInstanceState()");
         if (savedInstanceState != null) {
             mIncidenciaIndex = savedInstanceState.getInt(INCIDENCIA_LIST_INDEX.key, 0);
             mFragment.getListView().setSelection(mIncidenciaIndex);
@@ -101,7 +101,7 @@ public class IncidSeeClosedByComuAc extends AppCompatActivity implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        Log.d(TAG, "onCreateOptionsMenu()");
+        Timber.d("onCreateOptionsMenu()");
         getMenuInflater().inflate(R.menu.incid_see_closed_by_comu_ac_mn, menu);
         return super.onCreateOptionsMenu(menu);
     }
@@ -109,7 +109,7 @@ public class IncidSeeClosedByComuAc extends AppCompatActivity implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        Log.d(TAG, "onOptionsItemSelected()");
+        Timber.d("onOptionsItemSelected()");
 
         int resourceId = checkNotNull(item.getItemId());
 
@@ -130,7 +130,7 @@ public class IncidSeeClosedByComuAc extends AppCompatActivity implements
     @Override
     public void onIncidenciaSelected(final Incidencia incidencia, int position)
     {
-        Log.d(TAG, "onIncidenciaSelected()");
+        Timber.d("onIncidenciaSelected()");
         mIncidenciaIndex = position;
         new ResolucionGetter().execute(incidencia);
     }
@@ -138,7 +138,7 @@ public class IncidSeeClosedByComuAc extends AppCompatActivity implements
     @Override
     public void onComunidadSpinnerSelected(Comunidad comunidadSelected)
     {
-        Log.d(TAG, "onComunidadSpinnerSelected()");
+        Timber.d("onComunidadSpinnerSelected()");
         mComunidadSelected = comunidadSelected;
     }
 
@@ -160,7 +160,7 @@ public class IncidSeeClosedByComuAc extends AppCompatActivity implements
     @Override
     public long getComunidadSelected()
     {
-        Log.d(TAG,"getComunidadSelected()");
+        Timber.d("getComunidadSelected()");
         return getIntent().getLongExtra(COMUNIDAD_ID.key, 0);
     }
 
@@ -170,14 +170,13 @@ public class IncidSeeClosedByComuAc extends AppCompatActivity implements
 
     private class ResolucionGetter extends AsyncTask<Incidencia, Void, Resolucion> {
 
-        private final String TAG = ResolucionGetter.class.getCanonicalName();
         UiException uiException;
         Incidencia incidencia;
 
         @Override
         protected Resolucion doInBackground(final Incidencia... incidencias)
         {
-            Log.d(TAG, "doInBackground()");
+            Timber.d("doInBackground()");
             incidencia = incidencias[0];
             Resolucion resolucion = null;
             try {
@@ -191,7 +190,7 @@ public class IncidSeeClosedByComuAc extends AppCompatActivity implements
         @Override
         protected void onPostExecute(Resolucion resolucion)
         {
-            Log.d(TAG, "onPostExecute()");
+            Timber.d("onPostExecute()");
 
             if (uiException != null) {
                 uiException.processMe(IncidSeeClosedByComuAc.this, new Intent());

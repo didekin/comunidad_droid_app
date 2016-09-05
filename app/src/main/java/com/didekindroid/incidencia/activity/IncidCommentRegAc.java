@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -17,6 +16,8 @@ import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.utils.ConnectionUtils;
 import com.didekindroid.common.utils.UIutils;
 import com.didekindroid.incidencia.dominio.IncidCommentBean;
+
+import timber.log.Timber;
 
 import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
@@ -35,7 +36,6 @@ import static com.google.common.base.Preconditions.checkState;
  */
 public class IncidCommentRegAc extends AppCompatActivity {
 
-    private static final String TAG = IncidCommentRegAc.class.getCanonicalName();
     Incidencia mIncidencia;
     Button mComentarButton;
     View mAcView;
@@ -44,7 +44,7 @@ public class IncidCommentRegAc extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        Log.d(TAG, "onCreate()");
+        Timber.d("onCreate()");
         super.onCreate(savedInstanceState);
 
         mAcView = getLayoutInflater().inflate(R.layout.incid_comment_reg_ac, null);
@@ -58,7 +58,7 @@ public class IncidCommentRegAc extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                Log.d(TAG, "onClick()");
+                Timber.d("onClick()");
                 registerComment();
             }
         });
@@ -70,13 +70,13 @@ public class IncidCommentRegAc extends AppCompatActivity {
 
     private void registerComment()
     {
-        Log.d(TAG, "registerComment()");
+        Timber.d("registerComment()");
         StringBuilder errorMsg = getErrorMsgBuilder(this);
         IncidCommentBean commentBean = new IncidCommentBean(mIncidencia);
         IncidComment comment = commentBean.makeComment(mAcView ,errorMsg, getResources());
 
         if (comment == null) {
-            Log.d(TAG, "registerComment(); comment == null");
+            Timber.d("registerComment(); comment == null");
             makeToast(this, errorMsg.toString(), Toast.LENGTH_SHORT);
         } else if (!ConnectionUtils.isInternetConnected(this)) {
             UIutils.makeToast(this, R.string.no_internet_conn_toast, Toast.LENGTH_LONG);
@@ -92,13 +92,12 @@ public class IncidCommentRegAc extends AppCompatActivity {
 // TODO: to persist the task during restarts and properly cancel the task when the activity is destroyed. (Example in Shelves)
     class IncidCommentRegister extends AsyncTask<IncidComment, Void, Integer> {
 
-        private final String TAG = IncidCommentRegister.class.getCanonicalName();
         UiException uiException;
 
         @Override
         protected Integer doInBackground(IncidComment... comments)
         {
-            Log.d(TAG, "doInBackground()");
+            Timber.d("doInBackground()");
             int rowInserted = 0;
 
             try {
@@ -112,7 +111,7 @@ public class IncidCommentRegAc extends AppCompatActivity {
         @Override
         protected void onPostExecute(Integer rowInserted)
         {
-            Log.d(TAG, "onPostExecute()");
+            Timber.d("onPostExecute()");
 
             if (uiException != null) {
                 uiException.processMe(IncidCommentRegAc.this, new Intent());

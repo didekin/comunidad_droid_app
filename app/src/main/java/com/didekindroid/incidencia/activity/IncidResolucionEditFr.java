@@ -3,7 +3,6 @@ package com.didekindroid.incidencia.activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +26,8 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import timber.log.Timber;
+
 import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.common.activity.FechaPickerFr.FechaPickerHelper.initFechaSpinnerView;
@@ -44,7 +45,6 @@ import static com.google.common.base.Preconditions.checkState;
  */
 public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
 
-    private static final String TAG = IncidResolucionEditFr.class.getCanonicalName();
     Resolucion mResolucion;
     IncidImportancia mIncidImportancia;
 
@@ -52,7 +52,7 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        Log.d(TAG, "onCreateView()");
+        Timber.d("onCreateView()");
         mFragmentView = inflater.inflate(R.layout.incid_resolucion_edit_fr, container, false);
         mResolucionBean = new ResolucionBean();
         mFechaView = initFechaSpinnerView(this);
@@ -62,7 +62,7 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
             @Override
             public void onClick(View v)
             {
-                Log.d(TAG, "View.OnClickListener().onClick()");
+                Timber.d("View.OnClickListener().onClick()");
                 modifyResolucion(false);
             }
         });
@@ -71,7 +71,7 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
             @Override
             public void onClick(View v)
             {
-                Log.d(TAG, "View.OnClickListener().onClick()");
+                Timber.d("View.OnClickListener().onClick()");
                 modifyResolucion(true);
             }
         });
@@ -82,7 +82,7 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
     @Override
     public void onActivityCreated(Bundle savedInstanceState)
     {
-        Log.d(TAG, "onActivityCreated()");
+        Timber.d("onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
 
         mIncidImportancia = (IncidImportancia) getArguments().getSerializable(INCID_IMPORTANCIA_OBJECT.key);
@@ -110,9 +110,9 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
 
     //  ================================ HELPER METHODS =======================================
 
-    private void modifyResolucion(boolean isToBeClosed)
+    void modifyResolucion(boolean isToBeClosed)
     {
-        Log.d(TAG, "modifyResolucion()");
+        Timber.d("modifyResolucion()");
 
         StringBuilder errorMsg = getErrorMsgBuilder(getActivity());
         Resolucion resolucion = makeResolucionFromBean(errorMsg);
@@ -131,7 +131,7 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
     @SuppressWarnings("ConstantConditions")
     Resolucion makeResolucionFromBean(StringBuilder errorMsg)
     {
-        Log.d(TAG, "makeResolucionFromBean()");
+        Timber.d("makeResolucionFromBean()");
 
         makeResolucionBeanFromView(errorMsg);
 
@@ -165,7 +165,7 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
 
     void makeResolucionBeanFromView(StringBuilder errorMsg)
     {
-        Log.d(TAG, "makeResolucionBeanFromView()");
+        Timber.d("makeResolucionBeanFromView()");
 
         mResolucionBean.setAvanceDesc(((EditText) mFragmentView.findViewById(R.id.incid_resolucion_avance_ed)).getText().toString());
         mResolucionBean.setCostePrevText(((EditText) mFragmentView.findViewById(R.id.incid_resolucion_coste_prev_ed)).getText().toString());
@@ -182,13 +182,12 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
 
     class ResolucionModifyer extends AsyncTask<Resolucion, Void, Integer> {
 
-        private final String TAG = ResolucionModifyer.class.getCanonicalName();
         UiException uiException;
 
         @Override
         protected Integer doInBackground(Resolucion... params)
         {
-            Log.d(TAG, "doInBackground()");
+            Timber.d("doInBackground()");
             int rowModified = 0;
 
             try {
@@ -202,7 +201,7 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
         @Override
         protected void onPostExecute(Integer rowModified)
         {
-            Log.d(TAG, "onPostExecute()");
+            Timber.d("onPostExecute()");
 
             if (uiException != null) {
                 Intent intent = new Intent();
@@ -219,13 +218,12 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
 
     class IncidenciaCloser extends AsyncTask<Resolucion, Void, Integer> {
 
-        private final String TAG = IncidenciaCloser.class.getCanonicalName();
         UiException uiException;
 
         @Override
         protected Integer doInBackground(Resolucion... params)
         {
-            Log.d(TAG, "doInBackground()");
+            Timber.d("doInBackground()");
             int incidenciaCancelled = 0;
 
             try {
@@ -239,7 +237,7 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
         @Override
         protected void onPostExecute(Integer incidenciaCancelled)
         {
-            Log.d(TAG, "onPostExecute()");
+            Timber.d("onPostExecute()");
 
             if (uiException != null) {
                 Intent intent = new Intent();

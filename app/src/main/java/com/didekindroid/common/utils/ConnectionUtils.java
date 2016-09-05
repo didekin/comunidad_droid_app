@@ -3,10 +3,11 @@ package com.didekindroid.common.utils;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.didekindroid.R;
+
+import timber.log.Timber;
 
 import static com.didekindroid.common.utils.UIutils.makeToast;
 
@@ -16,8 +17,6 @@ import static com.didekindroid.common.utils.UIutils.makeToast;
  * Time: 12:37
  */
 public class ConnectionUtils {
-
-    private static final String TAG = ConnectionUtils.class.getCanonicalName();
 
     public static boolean checkInternetConnected(Context context)
     {
@@ -30,13 +29,13 @@ public class ConnectionUtils {
 
     public static boolean isInternetConnected(Context context)
     {
-        Log.d(TAG, "isInternetConnected()");
+        Timber.d("isInternetConnected()");
         return isMobileConnected(context) || isWifiConnected(context);
     }
 
     static boolean isMobileConnected(Context context)
     {
-        Log.d(TAG, "isMobileConnected()");
+        Timber.d("isMobileConnected()");
 
         ConnectivityManager connMgr =
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -48,13 +47,13 @@ public class ConnectionUtils {
             isMobileConnected = (networkInfo.getType() == ConnectivityManager.TYPE_MOBILE);
         }
 
-        Log.d(TAG, "isMobileConnected(): " + isMobileConnected);
+        Timber.d("isMobileConnected(): %b", isMobileConnected);
         return isMobileConnected;
     }
 
     static boolean isWifiConnected(Context context)
     {
-        Log.d(TAG, "isWifiConnected()");
+        Timber.d("isWifiConnected()");
 
         ConnectivityManager connMgr =
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -65,7 +64,7 @@ public class ConnectionUtils {
             isWifiConnected = (networkInfo.getType() == ConnectivityManager.TYPE_WIFI);
         }
 
-        Log.d(TAG, "isWifiConnected(): " + isWifiConnected);
+        Timber.d("isWifiConnected(): %b", isWifiConnected);
         return isWifiConnected;
     }
 }

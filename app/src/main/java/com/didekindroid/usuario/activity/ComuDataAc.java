@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +18,8 @@ import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.utils.ConnectionUtils;
 import com.didekindroid.usuario.dominio.ComunidadBean;
+
+import timber.log.Timber;
 
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
@@ -40,8 +41,6 @@ import static com.google.common.base.Preconditions.checkState;
  */
 public class ComuDataAc extends Activity implements RegComuFr.RegComuFrListener {
 
-    private static final String TAG = ComuDataAc.class.getCanonicalName();
-
     long mIdComunidad;
     View mAcView;
     Button mModifyButton;
@@ -56,7 +55,7 @@ public class ComuDataAc extends Activity implements RegComuFr.RegComuFrListener 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        Log.d(TAG, "onCreate()");
+        Timber.d("onCreate()");
         super.onCreate(savedInstanceState);
 
         // Preconditions.
@@ -78,7 +77,7 @@ public class ComuDataAc extends Activity implements RegComuFr.RegComuFrListener 
             @Override
             public void onClick(View v)
             {
-                Log.d(TAG, "mModifyButton.OnClickListener().onClick()");
+                Timber.d("mModifyButton.OnClickListener().onClick()");
                 modifyComuData();
             }
         });
@@ -86,7 +85,7 @@ public class ComuDataAc extends Activity implements RegComuFr.RegComuFrListener 
 
     private void modifyComuData()
     {
-        Log.d(TAG, "modifyComuData()");
+        Timber.d("modifyComuData()");
 
         ComunidadBean comuBean = mRegComuFrg.getComunidadBean();
         makeComunidadBeanFromView(mRegComuFrg.getFragmentView(), comuBean);
@@ -115,7 +114,7 @@ public class ComuDataAc extends Activity implements RegComuFr.RegComuFrListener 
 
     private void setEditTextComuData()
     {
-        Log.d(TAG, "setEditTextComuData()");
+        Timber.d("setEditTextComuData()");
 
         View comuFrView = mRegComuFrg.getFragmentView();
 
@@ -127,10 +126,10 @@ public class ComuDataAc extends Activity implements RegComuFr.RegComuFrListener 
     @Override
     public void onTipoViaSpinnerLoaded()
     {
-        Log.d(TAG, "onTipoViaSpinnerLoaded()");
+        Timber.d("onTipoViaSpinnerLoaded()");
 
         if (!isTipoViaSpinnerSet) {
-            Log.d(TAG, "onTipoViaSpinnerLoaded(): spinner not set");
+            Timber.d("onTipoViaSpinnerLoaded(): spinner not set");
             int position = 0;
             Cursor cursor;
             for (int i = 0; i < mRegComuFrg.mTipoViaSpinner.getCount(); i++) {
@@ -147,10 +146,10 @@ public class ComuDataAc extends Activity implements RegComuFr.RegComuFrListener 
     @Override
     public void onCAutonomaSpinnerLoaded()
     {
-        Log.d(TAG, "onCAutonomaSpinnerLoaded()");
+        Timber.d("onCAutonomaSpinnerLoaded()");
 
         if (!isCASpinnerSet) {
-            Log.d(TAG, "onCAutonomaSpinnerLoaded(): spinner not set");
+            Timber.d("onCAutonomaSpinnerLoaded(): spinner not set");
             short cAutonomaId = mComunidad.getMunicipio().getProvincia().getComunidadAutonoma().getCuId();
 
             int position = 0;
@@ -168,10 +167,10 @@ public class ComuDataAc extends Activity implements RegComuFr.RegComuFrListener 
     @Override
     public void onProvinciaSpinnerLoaded()
     {
-        Log.d(TAG, "onProvinciaSpinnerLoaded()");
+        Timber.d("onProvinciaSpinnerLoaded()");
 
         if (!isProvinciaSpinnerSet) {
-            Log.d(TAG, "onProvinciaSpinnerLoaded(): spinner not set");
+            Timber.d("onProvinciaSpinnerLoaded(): spinner not set");
             short provinciaId = mComunidad.getMunicipio().getProvincia().getProvinciaId();
             int position = 0;
             int itemsLength = mRegComuFrg.provinciaSpinner.getCount();
@@ -188,10 +187,10 @@ public class ComuDataAc extends Activity implements RegComuFr.RegComuFrListener 
     @Override
     public void onMunicipioSpinnerLoaded()
     {
-        Log.d(TAG, "onMunicipioSpinnerLoaded()");
+        Timber.d("onMunicipioSpinnerLoaded()");
 
         if (!isMunicipioSpinnerSet) {
-            Log.d(TAG, "onMunicipioSpinnerLoaded(): spinner not set");
+            Timber.d("onMunicipioSpinnerLoaded(): spinner not set");
             int municipioCP = mComunidad.getMunicipio().getCodInProvincia();
             short provinciaId = mComunidad.getMunicipio().getProvincia().getProvinciaId();
             int position = 0;
@@ -221,7 +220,7 @@ public class ComuDataAc extends Activity implements RegComuFr.RegComuFrListener 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        Log.d(TAG, "onCreateOptionsMenu()");
+        Timber.d("onCreateOptionsMenu()");
         getMenuInflater().inflate(R.menu.comu_data_ac_mn, menu);
         return true;
     }
@@ -229,7 +228,7 @@ public class ComuDataAc extends Activity implements RegComuFr.RegComuFrListener 
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        Log.d(TAG, "onOptionsItemSelected()");
+        Timber.d("onOptionsItemSelected()");
 
         int resourceId = checkNotNull(item.getItemId());
 
@@ -252,14 +251,12 @@ public class ComuDataAc extends Activity implements RegComuFr.RegComuFrListener 
     // TODO: to persist the task during restarts and properly cancel the task when the activity is destroyed. (Example in Shelves)
     class ComuDataSetter extends AsyncTask<Void, Void, Comunidad> {
 
-        final String TAG = ComuDataSetter.class.getCanonicalName();
-
         UiException uiException;
 
         @Override
         protected Comunidad doInBackground(Void... aVoid)
         {
-            Log.d(TAG, "doInBackground()");
+            Timber.d("doInBackground()");
 
             Comunidad comuData = null;
             try {
@@ -273,7 +270,7 @@ public class ComuDataAc extends Activity implements RegComuFr.RegComuFrListener 
         @Override
         protected void onPostExecute(Comunidad comunidad)
         {
-            Log.d(TAG, "onPostExecute()");
+            Timber.d("onPostExecute()");
 
             if (uiException != null) {
                 uiException.processMe(ComuDataAc.this, new Intent());
@@ -286,13 +283,12 @@ public class ComuDataAc extends Activity implements RegComuFr.RegComuFrListener 
 
     class ComuDataModifier extends AsyncTask<Comunidad, Void, Integer> {
 
-        final String TAG = ComuDataModifier.class.getCanonicalName();
         UiException uiException;
 
         @Override
         protected Integer doInBackground(Comunidad... comunidades)
         {
-            Log.d(TAG, "doInBackground()");
+            Timber.d("doInBackground()");
 
             int modifyComuData = 0;
             try {
@@ -306,7 +302,7 @@ public class ComuDataAc extends Activity implements RegComuFr.RegComuFrListener 
         @Override
         protected void onPostExecute(Integer rowsUpdated)
         {
-            Log.d(TAG, "onPostExecute()");
+            Timber.d("onPostExecute()");
             if (uiException != null) {
                 uiException.processMe(ComuDataAc.this, new Intent());
             } else {

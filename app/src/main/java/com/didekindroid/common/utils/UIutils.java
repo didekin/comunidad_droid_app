@@ -8,7 +8,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +27,8 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.Locale;
 
+import timber.log.Timber;
+
 import static android.widget.Toast.makeText;
 import static com.didekin.common.dominio.DataPatterns.LINE_BREAK;
 import static com.didekin.common.exception.DidekinExceptionMsg.TOKEN_NULL;
@@ -44,7 +45,6 @@ import static java.util.Locale.getDefault;
  */
 public final class UIutils {
 
-    private static final String TAG = UIutils.class.getCanonicalName();
     public static final int APPBAR_ID = R.id.appbar;
     public static final Locale SPAIN_LOCALE = new Locale("es", "ES");
 
@@ -107,15 +107,7 @@ public final class UIutils {
                 .append(LINE_BREAK.getRegexp());
     }
 
-//    ============================== EXCEPTIONS =======================================
-
-    public static void doRuntimeException(Exception e, String tagClass)
-    {
-        Log.e(tagClass, e.getMessage());
-        throw new RuntimeException(e);
-    }
-
-//    =============================== GOOGLE SERVICES =================================
+    //    =============================== GOOGLE SERVICES =================================
 
     public static void getGcmToken(Activity myActivity)
     {
@@ -128,7 +120,7 @@ public final class UIutils {
 
     public static boolean isRegisteredUser(Context context)
     {
-        Log.d(TAG, "isRegisteredUser()");
+        Timber.d("isRegisteredUser()");
 
         SharedPreferences sharedPref = context.getSharedPreferences
                 (app_preferences_file.toString(), Context.MODE_PRIVATE);
@@ -137,7 +129,7 @@ public final class UIutils {
 
     public static void updateIsRegistered(boolean isRegisteredUser, Context context)
     {
-        Log.d(TAG, "updateIsRegistered()");
+        Timber.d("updateIsRegistered()");
 
         SharedPreferences sharedPref = context.getSharedPreferences
                 (app_preferences_file.toString(), Context.MODE_PRIVATE);
@@ -162,7 +154,7 @@ public final class UIutils {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putBoolean(SharedPrefFiles.IS_GCM_TOKEN_SENT_TO_SERVER, isSentToServer);
         editor.apply();
-        Log.d(TAG, "updateIsGcmTokenSentServer(), exit. iSentToServer= " + isSentToServer);
+        Timber.d("updateIsGcmTokenSentServer(), iSentToServer= %b", isSentToServer);
     }
 
     //  ..............  INNER CLASSES ............
@@ -209,7 +201,7 @@ public final class UIutils {
     public static void doToolBar(AppCompatActivity activity, int resourceIdView, boolean hasParentAc)
     {
 
-        Log.d(TAG, "doToolBar()");
+        Timber.d("doToolBar()");
 
         Toolbar myToolbar = (Toolbar) activity.findViewById(resourceIdView);
         activity.setSupportActionBar(myToolbar);
@@ -232,7 +224,7 @@ public final class UIutils {
 
     public static void doToolBar(AppCompatActivity activity, boolean hasParentAc)
     {
-        Log.d(TAG, "doToolBar()");
+        Timber.d("doToolBar()");
         doToolBar(activity, APPBAR_ID, hasParentAc);
     }
 }

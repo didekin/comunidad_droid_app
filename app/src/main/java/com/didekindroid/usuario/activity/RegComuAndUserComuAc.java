@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -15,6 +14,8 @@ import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.utils.ConnectionUtils;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
+
+import timber.log.Timber;
 
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
@@ -31,15 +32,13 @@ import static com.google.common.base.Preconditions.checkState;
 @SuppressWarnings("ConstantConditions")
 public class RegComuAndUserComuAc extends AppCompatActivity {
 
-    private static final String TAG = RegComuAndUserComuAc.class.getCanonicalName();
-
     private RegComuFr mRegComuFrg;
     private RegUserComuFr mRegUserComuFrg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        Log.d(TAG, "onCreate()");
+        Timber.d("onCreate()");
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.reg_comu_and_usercomu_ac);
@@ -54,7 +53,7 @@ public class RegComuAndUserComuAc extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                Log.d(TAG, "View.OnClickListener().onClick()");
+                Timber.d("View.OnClickListener().onClick()");
                 registerComuAndUserComu();
             }
         });
@@ -62,7 +61,7 @@ public class RegComuAndUserComuAc extends AppCompatActivity {
 
     private void registerComuAndUserComu()
     {
-        Log.d(TAG, "registerComuAndUserComu()");
+        Timber.d("registerComuAndUserComu()");
 
         ComunidadBean comunidadBean = mRegComuFrg.getComunidadBean();
         makeComunidadBeanFromView(mRegComuFrg.getFragmentView(), comunidadBean);
@@ -86,7 +85,7 @@ public class RegComuAndUserComuAc extends AppCompatActivity {
     @Override
     protected void onDestroy()
     {
-        Log.d(TAG, "onDestroy()");
+        Timber.d("onDestroy()");
         super.onDestroy();
     }
 
@@ -96,13 +95,12 @@ public class RegComuAndUserComuAc extends AppCompatActivity {
 
     class ComuAndUserComuRegister extends AsyncTask<UsuarioComunidad, Void, Boolean> {
 
-        private final String TAG = ComuAndUserComuRegister.class.getCanonicalName();
         UiException uiException;
 
         @Override
         protected Boolean doInBackground(UsuarioComunidad... usuarioComunidad)
         {
-            Log.d(TAG, "doInBackground()");
+            Timber.d("doInBackground()");
             boolean isRegistered = false;
             try {
                 isRegistered = ServOne.regComuAndUserComu(usuarioComunidad[0]);
@@ -115,7 +113,7 @@ public class RegComuAndUserComuAc extends AppCompatActivity {
         @Override
         protected void onPostExecute(Boolean rowInserted)
         {
-            Log.d(TAG, "onPostExecute()");
+            Timber.d("onPostExecute()");
             if (uiException != null) {
                 uiException.processMe(RegComuAndUserComuAc.this, new Intent());
             } else {

@@ -2,7 +2,6 @@ package com.didekindroid.incidencia.activity.utils;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.util.Log;
 
 import com.didekindroid.incidencia.activity.IncidCommentRegAc;
 import com.didekindroid.incidencia.activity.IncidCommentSeeAc;
@@ -10,6 +9,8 @@ import com.didekindroid.incidencia.activity.IncidRegAc;
 import com.didekindroid.incidencia.activity.IncidResolucionRegEditSeeAc;
 import com.didekindroid.incidencia.activity.IncidSeeClosedByComuAc;
 import com.didekindroid.incidencia.activity.IncidSeeOpenByComuAc;
+
+import timber.log.Timber;
 
 /**
  * User: pedro@didekin
@@ -22,7 +23,7 @@ public enum IncidenciaMenu {
         @Override
         public void doMenuItem(Activity activity)
         {
-            Log.d(TAG, "incid_closed_by_comu.doMenuItem()");
+            Timber.d("incid_closed_by_comu.doMenuItem()");
             Intent intent = new Intent(activity, IncidSeeClosedByComuAc.class);
             activity.startActivity(intent);
         }
@@ -32,7 +33,7 @@ public enum IncidenciaMenu {
         @Override
         public void doMenuItem(Activity activity)
         {
-            Log.d(TAG, "incid_comment_reg.doMenuItem()");
+            Timber.d("incid_comment_reg.doMenuItem()");
             Intent intent = activity.getIntent();
             intent.setClass(activity, IncidCommentRegAc.class);
             activity.startActivity(intent);
@@ -43,7 +44,7 @@ public enum IncidenciaMenu {
         @Override
         public void doMenuItem(Activity activity)
         {
-            Log.d(TAG, "incid_comments_see.doMenuItem()");
+            Timber.d("incid_comments_see.doMenuItem()");
             Intent intent = activity.getIntent();
             intent.setClass(activity, IncidCommentSeeAc.class);
             activity.startActivity(intent);
@@ -54,7 +55,7 @@ public enum IncidenciaMenu {
         @Override
         public void doMenuItem(Activity activity)
         {
-            Log.d(TAG, "incid_reg_ac.doMenuItem()");
+            Timber.d("incid_reg_ac.doMenuItem()");
             Intent intent = new Intent(activity, IncidRegAc.class);
             activity.startActivity(intent);
         }
@@ -64,7 +65,7 @@ public enum IncidenciaMenu {
         @Override
         public void doMenuItem(Activity activity)
         {
-            Log.d(TAG, "incid_resolucion_ac.doMenuItem()");
+            Timber.d("incid_resolucion_ac.doMenuItem()");
             Intent intent = activity.getIntent();
             intent.setClass(activity, IncidResolucionRegEditSeeAc.class);
             activity.startActivity(intent);
@@ -75,15 +76,13 @@ public enum IncidenciaMenu {
         @Override
         public void doMenuItem(Activity activity)
         {
-            Log.d(TAG, "incid_see_by_comu.doMenuItem()");
+            Timber.d("incid_see_by_comu.doMenuItem()");
             Intent intent = new Intent(activity, IncidSeeOpenByComuAc.class);
             activity.startActivity(intent);
         }
     },
 
     ;
-
-    private static final String TAG =  IncidenciaMenu.class.getCanonicalName();
 
     public abstract void doMenuItem(Activity activity);
 }

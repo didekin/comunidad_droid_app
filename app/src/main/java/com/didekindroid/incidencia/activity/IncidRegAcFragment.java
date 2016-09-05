@@ -3,7 +3,6 @@ package com.didekindroid.incidencia.activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +22,8 @@ import com.didekindroid.incidencia.dominio.IncidImportanciaBean;
 import com.didekindroid.incidencia.dominio.IncidenciaBean;
 import com.didekindroid.incidencia.repository.IncidenciaDataDbHelper;
 
+import timber.log.Timber;
+
 import static com.didekindroid.incidencia.activity.utils.IncidSpinnersHelper.HELPER;
 
 /**
@@ -31,8 +32,6 @@ import static com.didekindroid.incidencia.activity.utils.IncidSpinnersHelper.HEL
 @SuppressWarnings("ConstantConditions")
 public class IncidRegAcFragment extends Fragment implements ComuSpinnerSettable,
         AmbitoSpinnerSettable, ImportanciaSpinnerSettable {
-
-    private static final String TAG = IncidRegAcFragment.class.getCanonicalName();
 
     IncidenciaBean mIncidenciaBean;
     Spinner mComunidadSpinner;
@@ -50,21 +49,21 @@ public class IncidRegAcFragment extends Fragment implements ComuSpinnerSettable,
     public void onAttach(Context context)
     {
         super.onAttach(context);
-        Log.d(TAG, "onAttach()");
+        Timber.d("onAttach()");
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate()");
+        Timber.d("onCreate()");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        Log.d(TAG, "onCreateView()");
+        Timber.d("onCreateView()");
         mFragmentView = inflater.inflate(R.layout.incid_reg_frg, container, false);
         return mFragmentView;
     }
@@ -74,7 +73,7 @@ public class IncidRegAcFragment extends Fragment implements ComuSpinnerSettable,
     public void onActivityCreated(Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
-        Log.d(TAG, "onActivityCreated()");
+        Timber.d("onActivityCreated()");
 
         mIncidenciaBean = new IncidenciaBean();
         mIncidImportanciaBean = new IncidImportanciaBean();
@@ -89,7 +88,7 @@ public class IncidRegAcFragment extends Fragment implements ComuSpinnerSettable,
     @Override
     public void onDestroy()
     {
-        Log.d(TAG, "onDestroy()");
+        Timber.d("onDestroy()");
         dbHelper.close();
         super.onDestroy();
     }
@@ -114,7 +113,7 @@ public class IncidRegAcFragment extends Fragment implements ComuSpinnerSettable,
             @Override
             public void onNothingSelected(AdapterView<?> parent)
             {
-                Log.d(TAG, "mComunidadSpinner.onNothingSelected()");
+                Timber.d("mComunidadSpinner.onNothingSelected()");
             }
         });
     }
@@ -131,77 +130,77 @@ public class IncidRegAcFragment extends Fragment implements ComuSpinnerSettable,
     @Override
     public void setComunidadSpinnerAdapter(ArrayAdapter<Comunidad> comunidades)
     {
-        Log.d(TAG, "setComunidadSpinnerAdapter()");
+        Timber.d("setComunidadSpinnerAdapter()");
         mComunidadSpinner.setAdapter(comunidades);
     }
 
     @Override
     public void onComunidadSpinnerLoaded()
     {
-        Log.d(TAG, "onComunidadSpinnerLoaded()");
+        Timber.d("onComunidadSpinnerLoaded()");
         mComunidadSpinner.setSelection(0);
     }
 
     @Override
     public void onAmbitoIncidSpinnerLoaded()
     {
-        Log.d(TAG, "onAmbitoIncidSpinnerLoaded()");
+        Timber.d("onAmbitoIncidSpinnerLoaded()");
         mAmbitoIncidenciaSpinner.setSelection(0);
     }
 
     @Override
     public void setAmbitoSpinnerAdapter(CursorAdapter cursorAdapter)
     {
-        Log.d(TAG, "setAmbitoSpinnerAdapter()");
+        Timber.d("setAmbitoSpinnerAdapter()");
         mAmbitoIncidenciaSpinner.setAdapter(cursorAdapter);
     }
 
     @Override
     public IncidenciaDataDbHelper getDbHelper()
     {
-        Log.d(TAG, "getDbHelper()");
+        Timber.d("getDbHelper()");
         return dbHelper;
     }
 
     @Override
     public Spinner getAmbitoSpinner()
     {
-        Log.d(TAG, "getAmbitoSpinner()");
+        Timber.d("getAmbitoSpinner()");
         return mAmbitoIncidenciaSpinner;
     }
 
     @Override
     public IncidenciaBean getIncidenciaBean()
     {
-        Log.d(TAG, "getIncidenciaBean()");
+        Timber.d("getIncidenciaBean()");
         return mIncidenciaBean;
     }
 
     @Override
     public IncidImportanciaBean getIncidImportanciaBean()
     {
-        Log.d(TAG, "getIncidImportanciaBean()");
+        Timber.d("getIncidImportanciaBean()");
         return mIncidImportanciaBean;
     }
 
     @Override
     public Spinner getImportanciaSpinner()
     {
-        Log.d(TAG, "getImportanciaSpinner()");
+        Timber.d("getImportanciaSpinner()");
         return mImportanciaSpinner;
     }
 
     @Override
     public void onImportanciaSpinnerLoaded()
     {
-        Log.d(TAG, "onImportanciaSpinnerLoaded()");
+        Timber.d("onImportanciaSpinnerLoaded()");
         mImportanciaSpinner.setSelection(0);
     }
 
     @Override
     public Incidencia getIncidencia()
     {
-        Log.d(TAG, "getIncidencia()");
+        Timber.d("getIncidencia()");
         throw new UnsupportedOperationException("getIncidencia() not supported");
     }
 }

@@ -8,7 +8,6 @@ package com.didekindroid.common.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.util.Log;
 
 import com.didekin.common.exception.ErrorBean;
 import com.didekin.incidservice.dominio.IncidImportancia;
@@ -22,6 +21,8 @@ import com.didekindroid.usuario.activity.UserDataAc;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import timber.log.Timber;
 
 import static android.widget.Toast.LENGTH_SHORT;
 import static com.didekin.common.exception.DidekinExceptionMsg.AVANCE_WRONG_INIT;
@@ -77,8 +78,6 @@ import static com.google.common.base.Preconditions.checkState;
  */
 public class UiException extends Exception {
 
-    private static final String TAG = UiException.class.getCanonicalName();
-
     private final ErrorBean errorBean;
 
     public UiException(ErrorBean errorBean)
@@ -88,7 +87,7 @@ public class UiException extends Exception {
 
     public void processMe(Activity activity, Intent intent)
     {
-        Log.d(TAG, "processMe(): " + activity.getComponentName().getClassName() + " " + errorBean.getMessage());
+        Timber.d("processMe(): %s %s%n", activity.getComponentName().getClassName(), errorBean.getMessage());
         checkArgument(intent != null);
         messageToAction.get(errorBean.getMessage()).doAction(activity, intent);
     }

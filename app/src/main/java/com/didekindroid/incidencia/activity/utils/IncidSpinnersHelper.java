@@ -1,8 +1,8 @@
 package com.didekindroid.incidencia.activity.utils;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -10,10 +10,11 @@ import android.widget.CursorAdapter;
 import android.widget.TextView;
 
 import com.didekindroid.R;
-import com.didekindroid.incidencia.activity.IncidSeeUserComuImportanciaFr;
+import com.didekindroid.incidencia.activity.IncidSeeUserComuImportanciaAc;
 
-import static com.didekindroid.common.activity.BundleKey.INCID_ACTIVITY_VIEW_ID;
-import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_see_usercomus_importancia_fr_tag;
+import timber.log.Timber;
+
+import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_OBJECT;
 
 /**
  * User: pedro@didekin
@@ -27,7 +28,7 @@ public enum IncidSpinnersHelper {
 
     public <T extends Fragment & AmbitoSpinnerSettable> void doAmbitoIncidenciaSpinner(final T fragment)
     {
-        Log.d(TAG, "doAmbitoIncidenciaSpinner()");
+        Timber.d("doAmbitoIncidenciaSpinner()");
 
         new AmbitoIncidenciaSpinnerSetter<>(fragment).execute();
 
@@ -35,7 +36,7 @@ public enum IncidSpinnersHelper {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
-                Log.d(TAG, "onItemSelected()");
+                Timber.d("onItemSelected()");
                 Cursor cursor = ((CursorAdapter) parent.getAdapter()).getCursor();
                 fragment.getIncidenciaBean().setCodAmbitoIncid(cursor.getShort(0)); // _ID.
             }
@@ -43,14 +44,14 @@ public enum IncidSpinnersHelper {
             @Override
             public void onNothingSelected(AdapterView<?> parent)
             {
-                Log.d(TAG, "onNothingSelected()");
+                Timber.d("onNothingSelected()");
             }
         });
     }
 
     public <T extends Fragment & ImportanciaSpinnerSettable> void doImportanciaSpinner(final T fragment)
     {
-        Log.d(TAG, "doImportanciaSpinner()");
+        Timber.d("doImportanciaSpinner()");
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 fragment.getActivity(),
@@ -64,14 +65,14 @@ public enum IncidSpinnersHelper {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
-                Log.d(TAG, "mImportanciaSpinner.onItemSelected()");
+                Timber.d("mImportanciaSpinner.onItemSelected()");
                 fragment.getIncidImportanciaBean().setImportancia((short) position);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent)
             {
-                Log.d(TAG, "mImportanciaSpinner.onNothingSelected()");
+                Timber.d("mImportanciaSpinner.onNothingSelected()");
             }
         });
     }
@@ -79,23 +80,18 @@ public enum IncidSpinnersHelper {
     @SuppressWarnings("ConstantConditions")
     public <T extends Fragment & ImportanciaSpinnerSettable> void initUserComusImportanciaView(final T fragment)
     {
-        Log.d(TAG, "initUserComusImportanciaView()");
+        Timber.d("initUserComusImportanciaView()");
 
         TextView mSeeImportanciaView = (TextView) fragment.getView().findViewById(R.id.incid_importancia_otros_view);
         mSeeImportanciaView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
             {
-                Log.d(TAG, "mSeeImportanciaView.onClick()");
-                IncidSeeUserComuImportanciaFr importanciaSeeByUsersFr = IncidSeeUserComuImportanciaFr.newInstance(fragment.getIncidencia());
-                fragment.getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(fragment.getArguments().getInt(INCID_ACTIVITY_VIEW_ID.key), importanciaSeeByUsersFr, incid_see_usercomus_importancia_fr_tag)
-                        .addToBackStack(importanciaSeeByUsersFr.getClass().getName())
-                        .commit();
+                Timber.d("mSeeImportanciaView.onClick()");
+                Intent intent = new Intent(fragment.getContext(), IncidSeeUserComuImportanciaAc.class);
+                intent.putExtra(INCIDENCIA_OBJECT.key, fragment.getIncidencia());
+                fragment.getActivity().startActivity(intent);
             }
         });
     }
-
-    private static final String TAG = IncidSpinnersHelper.class.getCanonicalName();
 }

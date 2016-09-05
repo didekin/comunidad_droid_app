@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -19,12 +18,13 @@ import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.utils.ConnectionUtils;
-import com.didekindroid.common.utils.UIutils;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
 
 import java.io.IOException;
+
+import timber.log.Timber;
 
 import static com.didekin.common.dominio.DataPatterns.LINE_BREAK;
 import static com.didekindroid.common.activity.TokenHandler.TKhandler;
@@ -48,8 +48,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 @SuppressWarnings("ConstantConditions")
 public class RegComuAndUserAndUserComuAc extends AppCompatActivity {
 
-    private static final String TAG = RegComuAndUserAndUserComuAc.class.getCanonicalName();
-
     private RegComuFr mRegComuFrg;
     private RegUserComuFr mRegUserComuFrg;
     private RegUserFr mRegUserFr;
@@ -61,7 +59,7 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate()");
+        Timber.d("onCreate()");
 
         setContentView(R.layout.reg_comu_and_user_and_usercomu_ac);
         doToolBar(this, true);
@@ -76,7 +74,7 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                Log.d(TAG, "View.OnClickListener().onClick()");
+                Timber.d("View.OnClickListener().onClick()");
                 registerComuAndUserComuAndUser();
             }
         });
@@ -84,7 +82,7 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity {
 
     private void registerComuAndUserComuAndUser()
     {
-        Log.d(TAG, "registerComuAndUsuarioComu()");
+        Timber.d("registerComuAndUsuarioComu()");
 
         ComunidadBean comunidadBean = mRegComuFrg.getComunidadBean();
         makeComunidadBeanFromView(mRegComuFrg.getFragmentView(), comunidadBean);
@@ -108,7 +106,7 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity {
     @Override
     protected void onDestroy()
     {
-        Log.d(TAG, "onDestroy()");
+        Timber.d("onDestroy()");
         super.onDestroy();
     }
 
@@ -119,17 +117,17 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        Log.d(TAG, "onCreateOptionsMenu()");
+        Timber.d("onCreateOptionsMenu()");
 
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.reg_user_activities_mn, menu);
+        getMenuInflater().inflate(R.menu.reg_user_activities_mn, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        Log.d(TAG, "onOptionsItemSelected()");
+        Timber.d("onOptionsItemSelected()");
 
         int resourceId = checkNotNull(item.getItemId());
 
@@ -153,7 +151,7 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity {
         @Override
         protected Void doInBackground(UsuarioComunidad... usuarioComunidad)
         {
-            Log.d(TAG, "ComuAndUserComuAndUserRegister.doInBackground()");
+            Timber.d("ComuAndUserComuAndUserRegister.doInBackground()");
             Usuario newUser = usuarioComunidad[0].getUsuario();
 
             try {
@@ -179,7 +177,7 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid)
         {
-            Log.d(TAG, "RegComuAndUserComuHttp.onPostExecute()");
+            Timber.d("RegComuAndUserComuHttp.onPostExecute()");
 
             if (uiException != null) {
                 uiException.processMe(RegComuAndUserAndUserComuAc.this, new Intent());

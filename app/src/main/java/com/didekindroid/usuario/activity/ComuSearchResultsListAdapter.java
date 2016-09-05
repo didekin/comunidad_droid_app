@@ -1,7 +1,6 @@
 package com.didekindroid.usuario.activity;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,14 +10,14 @@ import android.widget.TextView;
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekindroid.R;
 
+import timber.log.Timber;
+
 /**
  * User: pedro@didekin
  * Date: 12/05/15
  * Time: 17:22
  */
 public class ComuSearchResultsListAdapter extends ArrayAdapter<Comunidad> {
-
-    private static final String TAG = ComuSearchResultsListAdapter.class.getCanonicalName();
 
     public ComuSearchResultsListAdapter(Context context)
     {
@@ -28,12 +27,12 @@ public class ComuSearchResultsListAdapter extends ArrayAdapter<Comunidad> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent)
     {
-        Log.d(TAG, "getView(), position= " + position);
+        Timber.d("getView(), position= %d%n", position);
 
         ComuViewHolder viewHolder;
 
         if (convertView == null) {
-            Log.d(TAG, "getView(), convertView == null");
+            Timber.d("getView(), convertView == null");
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.comu_include, parent, false);
             viewHolder = new ComuViewHolder(convertView);
             convertView.setTag(viewHolder);
@@ -50,8 +49,6 @@ public class ComuSearchResultsListAdapter extends ArrayAdapter<Comunidad> {
 
     static class ComuViewHolder {
 
-        private static final String TAG = ComuViewHolder.class.getCanonicalName();
-
         TextView mNombreComunidadView;
         TextView mMunicipioView;
         TextView mProvinciaView;
@@ -65,7 +62,7 @@ public class ComuSearchResultsListAdapter extends ArrayAdapter<Comunidad> {
 
         void initializeTextInViews(Comunidad comunidad)
         {
-            Log.d(TAG, "initializeTextInViews()");
+            Timber.d("initializeTextInViews()");
 
             mNombreComunidadView.setText(comunidad.getNombreComunidad());
             mMunicipioView.setText(comunidad.getMunicipio().getNombre());

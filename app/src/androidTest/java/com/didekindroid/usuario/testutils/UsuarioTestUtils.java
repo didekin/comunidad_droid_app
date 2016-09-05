@@ -1,7 +1,5 @@
 package com.didekindroid.usuario.testutils;
 
-import android.os.Build;
-
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekin.usuario.dominio.Municipio;
 import com.didekin.usuario.dominio.Provincia;

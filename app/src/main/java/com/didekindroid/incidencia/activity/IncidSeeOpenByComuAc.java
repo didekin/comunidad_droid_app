@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -19,13 +18,15 @@ import com.didekindroid.common.activity.UiException;
 
 import java.util.List;
 
+import timber.log.Timber;
+
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
 import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_LIST_INDEX;
 import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_FLAG;
-import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.getGcmToken;
+import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_CLOSED_BY_COMU_AC;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_REG_AC;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
@@ -47,8 +48,6 @@ import static com.google.common.base.Preconditions.checkState;
 public class IncidSeeOpenByComuAc extends AppCompatActivity implements
         IncidSeeListListener {
 
-    private static final String TAG = IncidSeeOpenByComuAc.class.getCanonicalName();
-
     IncidSeeByComuListFr mFragment;
     int mIncidenciaIndex;
     Comunidad mComunidadSelected;
@@ -56,7 +55,7 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        Log.d(TAG, "onCreate().");
+        Timber.d("onCreate().");
         super.onCreate(savedInstanceState);
 
         getGcmToken(this);
@@ -77,7 +76,7 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements
     @Override
     protected void onResume()
     {
-        Log.d(TAG, "onResume()");
+        Timber.d("onResume()");
         getGcmToken(this);
         super.onResume();
     }
@@ -85,7 +84,7 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements
     @Override
     protected void onSaveInstanceState(Bundle savedInstanceState)
     {
-        Log.d(TAG, "onSaveInstanceState()");
+        Timber.d("onSaveInstanceState()");
         savedInstanceState.putInt(INCIDENCIA_LIST_INDEX.key, mIncidenciaIndex);
         super.onSaveInstanceState(savedInstanceState);
     }
@@ -93,7 +92,7 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState)
     {
-        Log.d(TAG, "onRestoreInstanceState()");
+        Timber.d("onRestoreInstanceState()");
         if (savedInstanceState != null) {
             mIncidenciaIndex = savedInstanceState.getInt(INCIDENCIA_LIST_INDEX.key, 0);
             mFragment.getListView().setSelection(mIncidenciaIndex); // Only for linearFragments.
@@ -107,7 +106,7 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        Log.d(TAG, "onCreateOptionsMenu()");
+        Timber.d("onCreateOptionsMenu()");
         getMenuInflater().inflate(R.menu.incid_see_open_by_comu_ac_mn, menu);
         return super.onCreateOptionsMenu(menu);
     }
@@ -115,7 +114,7 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        Log.d(TAG, "onOptionsItemSelected()");
+        Timber.d("onOptionsItemSelected()");
 
         int resourceId = checkNotNull(item.getItemId());
 
@@ -142,7 +141,7 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements
     @Override
     public void onIncidenciaSelected(final Incidencia incidencia, int position)
     {
-        Log.d(TAG, "onIncidenciaSelected()");
+        Timber.d("onIncidenciaSelected()");
         mIncidenciaIndex = position;
         new IncidImportanciaGetter().execute(incidencia.getIncidenciaId());
     }
@@ -150,21 +149,21 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements
     @Override
     public void onComunidadSpinnerSelected(Comunidad comunidadSelected)
     {
-        Log.d(TAG, "onComunidadSpinnerSelected()");
+        Timber.d("onComunidadSpinnerSelected()");
         mComunidadSelected = comunidadSelected;
     }
 
     @Override
     public ArrayAdapter<IncidenciaUser> getAdapter(Activity activity)
     {
-        Log.d(TAG, "getAdapter()");
+        Timber.d("getAdapter()");
         return new IncidSeeOpenByComuAdapter(this);
     }
 
     @Override
     public List<IncidenciaUser> getListFromService(long comunidadId) throws UiException
     {
-        Log.d(TAG, "getListFromService()");
+        Timber.d("getListFromService()");
         return IncidenciaServ.seeIncidsOpenByComu(comunidadId);
     }
 
@@ -174,7 +173,7 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements
     @Override
     public long getComunidadSelected()
     {
-        Log.d(TAG,"getComunidadSelected()");
+        Timber.d("getComunidadSelected()");
         return getIntent().getLongExtra(COMUNIDAD_ID.key, 0);
     }
 
@@ -182,15 +181,14 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements
 //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
 //    ============================================================
 
-    private class IncidImportanciaGetter extends AsyncTask<Long, Void, IncidAndResolBundle> {
+    class IncidImportanciaGetter extends AsyncTask<Long, Void, IncidAndResolBundle> {
 
-        private final String TAG = IncidImportanciaGetter.class.getCanonicalName();
         UiException uiException;
 
         @Override
         protected IncidAndResolBundle doInBackground(final Long... incidenciaId)
         {
-            Log.d(TAG, "doInBackground()");
+            Timber.d("doInBackground()");
             IncidAndResolBundle incidAndResolBundle = null;
             try {
                 incidAndResolBundle = IncidenciaServ.seeIncidImportancia(incidenciaId[0]);
@@ -203,7 +201,7 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements
         @Override
         protected void onPostExecute(IncidAndResolBundle incidAndResolBundle)
         {
-            Log.d(TAG, "onPostExecute()");
+            Timber.d("onPostExecute()");
 
             if (uiException != null) {
                 uiException.processMe(IncidSeeOpenByComuAc.this, new Intent());

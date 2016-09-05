@@ -2,9 +2,9 @@ apply plugin: 'java'
 apply plugin: 'idea'
 
 dependencies {
-    compile 'com.squareup.retrofit2:retrofit:2.0.2'
+    compile deps.retrofit
     compile project(':client_lib')
-    testCompile 'com.squareup.okhttp:mockwebserver:2.7.5'
+    testCompile deps.mockwebserver
 }
 
 targetCompatibility = rootProject.ext.targetCompatibilityVersion

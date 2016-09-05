@@ -3,7 +3,6 @@ package com.didekindroid.incidencia.activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 
 import com.didekin.incidservice.dominio.IncidImportancia;
@@ -11,13 +10,15 @@ import com.didekin.incidservice.dominio.Resolucion;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.BundleKey;
 
+import timber.log.Timber;
+
 import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_resolucion_ac_frgs_tag;
 import static com.didekindroid.common.activity.SavedInstanceKey.INCID_IMPORTANCIA;
 import static com.didekindroid.common.activity.SavedInstanceKey.INCID_RESOLUCION;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.getGcmToken;
+import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_resolucion_ac_frgs_tag;
 
 /**
  * This activity is a point of registration for receiving GCM notifications of new incidents.
@@ -41,15 +42,13 @@ import static com.didekindroid.common.utils.UIutils.getGcmToken;
  */
 public class IncidResolucionRegEditSeeAc extends AppCompatActivity {
 
-    private static final String TAG = IncidResolucionRegEditSeeAc.class.getCanonicalName();
-
     IncidImportancia mIncidImportancia;
     Resolucion mResolucion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        Log.d(TAG, "onCreate()");
+        Timber.d("onCreate()");
         super.onCreate(savedInstanceState);
 
         mIncidImportancia = (IncidImportancia) getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.key);
@@ -92,7 +91,7 @@ public class IncidResolucionRegEditSeeAc extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState)
     {
-        Log.d(TAG, "onSaveInstanceState()");
+        Timber.d("onSaveInstanceState()");
         if (mResolucion != null) {
             outState.putSerializable(INCID_RESOLUCION.key, mResolucion);
         }
@@ -103,7 +102,7 @@ public class IncidResolucionRegEditSeeAc extends AppCompatActivity {
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState)
     {
-        Log.d(TAG, "onRestoreInstanceState()");
+        Timber.d("onRestoreInstanceState()");
         mResolucion = (Resolucion) savedInstanceState.getSerializable(INCID_RESOLUCION.key);
         mIncidImportancia = (IncidImportancia) savedInstanceState.getSerializable(INCID_IMPORTANCIA.key);
         super.onRestoreInstanceState(savedInstanceState);
@@ -112,7 +111,7 @@ public class IncidResolucionRegEditSeeAc extends AppCompatActivity {
     @Override
     protected void onPostResume()
     {
-        Log.d(TAG, "onResume()");
+        Timber.d("onResume()");
         getGcmToken(this);
         super.onPostResume();
     }

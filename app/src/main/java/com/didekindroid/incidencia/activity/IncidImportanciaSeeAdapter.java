@@ -2,7 +2,6 @@ package com.didekindroid.incidencia.activity;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,14 +11,14 @@ import android.widget.TextView;
 import com.didekin.incidservice.dominio.ImportanciaUser;
 import com.didekindroid.R;
 
+import timber.log.Timber;
+
 /**
  * User: pedro@didekin
  * Date: 27/03/16
  * Time: 13:54
  */
 public class IncidImportanciaSeeAdapter extends ArrayAdapter<ImportanciaUser> {
-
-    private static final String TAG = IncidImportanciaSeeAdapter.class.getCanonicalName();
 
     public IncidImportanciaSeeAdapter(Context activity)
     {
@@ -29,11 +28,11 @@ public class IncidImportanciaSeeAdapter extends ArrayAdapter<ImportanciaUser> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent)
     {
-        Log.d(TAG, "getView()");
+        Timber.d("getView()");
         ImportanciaUserHolder viewHolder;
 
         if (convertView == null) {
-            Log.d(TAG, "getView(), convertView == null");
+            Timber.d("getView(), convertView == null");
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.incid_importancia_see_list_item, parent, false);
             viewHolder = new ImportanciaUserHolder(convertView);
             convertView.setTag(viewHolder);

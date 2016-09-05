@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +16,8 @@ import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 
 import java.util.List;
+
+import timber.log.Timber;
 
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static com.google.common.base.Preconditions.checkState;
@@ -33,8 +34,6 @@ import static com.google.common.base.Preconditions.checkState;
  */
 public class SeeUserComuByUserFr extends Fragment {
 
-    private static final String TAG = SeeUserComuByUserFr.class.getCanonicalName();
-
     private SeeUserComuByUserFrListener mListener;
     SeeUserComuByUserAdapter mAdapter;
     private ListView fragmentView;
@@ -46,14 +45,14 @@ public class SeeUserComuByUserFr extends Fragment {
     @Override
     public void onAttach(Context context)
     {
-        Log.d(TAG, "onAttach()");
+        Timber.d("onAttach()");
         super.onAttach(context);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
-        Log.d(TAG, "onCreate()");
+        Timber.d("onCreate()");
         super.onCreate(savedInstanceState);
         // Loading the data...
         new UserComuByUserLoader().execute();
@@ -62,7 +61,7 @@ public class SeeUserComuByUserFr extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        Log.d(TAG, "onCreateView()");
+        Timber.d("onCreateView()");
         fragmentView = (ListView) inflater.inflate(R.layout.see_user_by_user_list_fr, container, false);
         // To get visible a divider on top of the list.
         fragmentView.addHeaderView(new View(getContext()), null, true);
@@ -73,14 +72,14 @@ public class SeeUserComuByUserFr extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState)
     {
-        Log.d(TAG, "onActivityCreated()");
+        Timber.d("onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
         mListener = (SeeUserComuByUserFrListener) getActivity();
         fragmentView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                Log.d(TAG, "onItemClick()");
+                Timber.d("onItemClick()");
                 fragmentView.setItemChecked(position, true);
                 view.setSelected(true);
 
@@ -95,56 +94,56 @@ public class SeeUserComuByUserFr extends Fragment {
     @Override
     public void onStart()
     {
-        Log.d(TAG, "onStart()");
+        Timber.d("onStart()");
         super.onStart();
     }
 
     @Override
     public void onResume()
     {
-        Log.d(TAG, "onResume()");
+        Timber.d("onResume()");
         super.onResume();
     }
 
     @Override
     public void onPause()
     {
-        Log.d(TAG, "onPause()");
+        Timber.d("onPause()");
         super.onPause();
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState)
     {
-        Log.d(TAG, "onSaveInstanceState()");
+        Timber.d("onSaveInstanceState()");
         super.onSaveInstanceState(outState);
     }
 
     @Override
     public void onStop()
     {
-        Log.d(TAG, "onStop()");
+        Timber.d("onStop()");
         super.onStop();
     }
 
     @Override
     public void onDestroyView()
     {
-        Log.d(TAG, "onDestroyView()");
+        Timber.d("onDestroyView()");
         super.onDestroyView();
     }
 
     @Override
     public void onDestroy()
     {
-        Log.d(TAG, "onDestroy()");
+        Timber.d("onDestroy()");
         super.onDestroy();
     }
 
     @Override
     public void onDetach()
     {
-        Log.d(TAG, "onDetach()");
+        Timber.d("onDetach()");
         super.onDetach();
     }
 
@@ -160,19 +159,18 @@ public class SeeUserComuByUserFr extends Fragment {
 
     View getFragmentView()
     {
-        Log.d(TAG, "getFragmentView()");
+        Timber.d("getFragmentView()");
         return fragmentView;
     }
 
     class UserComuByUserLoader extends AsyncTask<Void, Void, List<UsuarioComunidad>> {
 
-        private final String TAG = UserComuByUserLoader.class.getCanonicalName();
         UiException uiException;
 
         @Override
         protected List<UsuarioComunidad> doInBackground(Void... aVoid)
         {
-            Log.d(TAG, "UserComuByUserLoader.doInBackground()");
+            Timber.d("UserComuByUserLoader.doInBackground()");
 
             List<UsuarioComunidad> usuarioComunidades = null;
             try {
@@ -187,12 +185,12 @@ public class SeeUserComuByUserFr extends Fragment {
         protected void onPostExecute(List<UsuarioComunidad> usuarioComunidades)
         {
             if (uiException != null) {  // action: LOGIN.
-                Log.d(TAG, "UserComuByUserLoader.onPostExecute(): uiException != null");
+                Timber.d("UserComuByUserLoader.onPostExecute(): uiException != null");
                 checkState(usuarioComunidades == null);
                 uiException.processMe(getActivity(), new Intent());
             }
             if (usuarioComunidades != null) {
-                Log.d(TAG, "UserComuByUserLoader.onPostExecute(): usuarioComunidades != null");
+                Timber.d("UserComuByUserLoader.onPostExecute(): usuarioComunidades != null");
                 mAdapter = new SeeUserComuByUserAdapter(getActivity());
                 mAdapter.addAll(usuarioComunidades);
                 fragmentView.setAdapter(mAdapter);

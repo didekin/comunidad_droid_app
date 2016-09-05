@@ -2,7 +2,6 @@ package com.didekindroid.usuario.repository;
 
 import android.content.Context;
 import android.support.test.runner.AndroidJUnit4;
-import android.util.Log;
 
 import com.didekindroid.DidekindroidApp;
 
@@ -12,6 +11,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
+
+import timber.log.Timber;
 
 import static android.database.sqlite.SQLiteDatabase.deleteDatabase;
 import static org.hamcrest.CoreMatchers.is;
@@ -26,15 +27,13 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class MockDbHelperTest {
 
-    private static final String TAG = MockDbHelperTest.class.getCanonicalName();
-
     private MockDbHelper dbHelper;
     Context context;
 
     @Before
     public void setUp() throws Exception
     {
-        Log.i(TAG,"In setUp()");
+        Timber.i("In setUp()");
         context = DidekindroidApp.getContext();
         dbHelper = new MockDbHelper(context);
     }
@@ -42,24 +41,24 @@ public class MockDbHelperTest {
     @Test
     public void testSetUp()
     {
-        Log.i(TAG,"In testSetUP()");
+        Timber.i("In testSetUP()");
         assertThat(context, notNullValue());
         assertThat(dbHelper, notNullValue());
     }
 
     @Test
-    public void testWritableDataBase(){
-        Log.i(TAG,"In testWritableDataBase()");
-
+    public void testWritableDataBase()
+    {
+        Timber.i("In testWritableDataBase()");
         dbHelper.getWritableDatabase();
         dbHelper.close();
-        boolean isClosedDb =  deleteDatabase(new File("data/data/com.didekindroid/databases/mock.db"));
-        assertThat(isClosedDb,is(true));
+        boolean isClosedDb = deleteDatabase(new File("data/data/com.didekindroid/databases/mock.db"));
+        assertThat(isClosedDb, is(true));
     }
 
     @After
     public void tearDown() throws Exception
     {
-        Log.i(TAG,"In tearDown()");
+        Timber.i("In tearDown()");
     }
 }

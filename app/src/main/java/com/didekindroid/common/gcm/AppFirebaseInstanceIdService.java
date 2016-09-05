@@ -1,11 +1,11 @@
 package com.didekindroid.common.gcm;
 
-import android.util.Log;
-
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.usuario.webservices.UsuarioService;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
+
+import timber.log.Timber;
 
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.utils.UIutils.updateIsGcmTokenSentServer;
@@ -16,8 +16,6 @@ import static com.didekindroid.common.utils.UIutils.updateIsGcmTokenSentServer;
  */
 public class AppFirebaseInstanceIdService extends FirebaseInstanceIdService {
 
-    private static final String TAG = AppFirebaseInstanceIdService.class.getCanonicalName();
-
     /**
      * Called if InstanceID token is created or updated. This may occur if the security of
      * the previous token had been compromised.
@@ -25,7 +23,7 @@ public class AppFirebaseInstanceIdService extends FirebaseInstanceIdService {
     @Override
     public void onTokenRefresh()
     {
-        Log.d(TAG, "onTokenRefresh()");
+        Timber.d("onTokenRefresh()");
 
         if (!isRegisteredUser(this)) {
             return;
@@ -35,10 +33,10 @@ public class AppFirebaseInstanceIdService extends FirebaseInstanceIdService {
         try {
             UsuarioService.ServOne.modifyUserGcmToken(refreshedToken);
             updateIsGcmTokenSentServer(true, this);
-            Log.i(TAG, "onTokenRefresh(), GCM token registered: " + refreshedToken);
+            Timber.i("onTokenRefresh(), GCM token registered: %s%n", refreshedToken);
         } catch (UiException e) {
             updateIsGcmTokenSentServer(false, this);
-            Log.e(TAG, "onTokenRefresh(), exception:", e);
+            Timber.e("onTokenRefresh(), exception: %s%n", e.getErrorBean().getMessage());
         }
     }
 }

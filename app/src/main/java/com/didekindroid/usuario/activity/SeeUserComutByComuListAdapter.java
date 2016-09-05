@@ -2,7 +2,6 @@ package com.didekindroid.usuario.activity;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +13,8 @@ import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.usuario.activity.utils.RolUi;
 
+import timber.log.Timber;
+
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
@@ -24,8 +25,6 @@ import static android.view.View.VISIBLE;
  */
 public class SeeUserComutByComuListAdapter extends ArrayAdapter<UsuarioComunidad> {
 
-    private static final String TAG = SeeUserComutByComuListAdapter.class.getCanonicalName();
-
     public SeeUserComutByComuListAdapter(Context context)
     {
         super(context, R.layout.user_usercomu_list_item, R.id.usercomu_item_alias_txt);
@@ -34,12 +33,12 @@ public class SeeUserComutByComuListAdapter extends ArrayAdapter<UsuarioComunidad
     @Override
     public View getView(int position, View convertView, ViewGroup parent)
     {
-        Log.d(TAG, "getView(), position= " + position);
+        Timber.d("getView(), position= %d%n", position);
 
         UserAndUserComuVwHolder viewHolder;
 
         if (convertView == null) {
-            Log.d(TAG, "getView(), convertView == null");
+            Timber.d("getView(), convertView == null");
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.user_usercomu_list_item, parent, false);
             viewHolder = new UserAndUserComuVwHolder(convertView, getContext().getResources());
             convertView.setTag(viewHolder);
@@ -56,8 +55,6 @@ public class SeeUserComutByComuListAdapter extends ArrayAdapter<UsuarioComunidad
 
     static class UserVwHolder {
 
-        static final String TAG = UserVwHolder.class.getCanonicalName();
-
         final TextView mUserName;
         final TextView mUserAlias;
 
@@ -69,7 +66,7 @@ public class SeeUserComutByComuListAdapter extends ArrayAdapter<UsuarioComunidad
 
         void initializeTextInViews(UsuarioComunidad userComu)
         {
-            Log.d(TAG, "initializeTextInViews()");
+            Timber.d("initializeTextInViews()");
 
             mUserName.setText(userComu.getUsuario().getUserName());
             mUserAlias.setText(userComu.getUsuario().getAlias());
@@ -77,8 +74,6 @@ public class SeeUserComutByComuListAdapter extends ArrayAdapter<UsuarioComunidad
     }
 
     static class UserComuVwHolder {
-
-        static final String TAG = UserComuVwHolder.class.getCanonicalName();
 
         final LinearLayout mPortalEscaleraBlock;
         final TextView mPortalRotView;
@@ -113,7 +108,7 @@ public class SeeUserComutByComuListAdapter extends ArrayAdapter<UsuarioComunidad
 
         void initializeTextInViews(UsuarioComunidad userComu)
         {
-            Log.d(TAG, "initializeTextInViews()");
+            Timber.d("initializeTextInViews()");
 
             boolean isBlockPortalEscalera = false;
             boolean isPlantaPuertaBlock = false;
@@ -159,8 +154,6 @@ public class SeeUserComutByComuListAdapter extends ArrayAdapter<UsuarioComunidad
 
     static class UserAndUserComuVwHolder {
 
-        static final String TAG = UserAndUserComuVwHolder.class.getCanonicalName();
-
         final UserVwHolder userVwHolder;
         final UserComuVwHolder userComuVwHolder;
 
@@ -172,7 +165,7 @@ public class SeeUserComutByComuListAdapter extends ArrayAdapter<UsuarioComunidad
 
         void initializeTextInViews(UsuarioComunidad userComu)
         {
-            Log.d(TAG, "initializeTextInViews()");
+            Timber.d("initializeTextInViews()");
 
             userVwHolder.initializeTextInViews(userComu);
             userComuVwHolder.initializeTextInViews(userComu);

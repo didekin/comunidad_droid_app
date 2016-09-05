@@ -6,7 +6,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,14 +21,14 @@ import com.didekindroid.R;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.repository.UsuarioDataDbHelper;
 
+import timber.log.Timber;
+
 import static com.didekindroid.usuario.repository.UsuarioDataDb.ComunidadAutonoma.cu_nombre;
 import static com.didekindroid.usuario.repository.UsuarioDataDb.Municipio.mu_nombre;
 import static com.didekindroid.usuario.repository.UsuarioDataDb.Provincia.pr_nombre;
 import static com.didekindroid.usuario.repository.UsuarioDataDb.TipoVia.tipovia;
 
 public class RegComuFr extends Fragment {
-
-    private static final String TAG = RegComuFr.class.getCanonicalName();
 
     private UsuarioDataDbHelper dbHelper;
 
@@ -56,21 +55,21 @@ public class RegComuFr extends Fragment {
     public void onAttach(Context context)
     {
         super.onAttach(context);
-        Log.d(TAG, "onAttach()");
+        Timber.d("onAttach()");
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate()");
+        Timber.d("onCreate()");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        Log.d(TAG, "onCreateView()");
+        Timber.d("onCreateView()");
         mRegComunidadFrView = inflater.inflate(R.layout.reg_comu_fr, container, false);
         return mRegComunidadFrView;
     }
@@ -80,7 +79,7 @@ public class RegComuFr extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
-        Log.d(TAG, "onActivityCreated()");
+        Timber.d("onActivityCreated()");
 
         dbHelper = new UsuarioDataDbHelper(getActivity());
         // Asynchronous call: initialize database if necessary.
@@ -101,7 +100,7 @@ public class RegComuFr extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
-                Log.d(TAG, "In mTipoViaSpinner.setOnItemSelectedListener, onItemSelected()");
+                Timber.d("In mTipoViaSpinner.setOnItemSelectedListener, onItemSelected()");
                 comunidadBean.setTipoVia(((Cursor) parent.getItemAtPosition(position)).getString(1));
                 mTipoViaPointer = position;
             }
@@ -109,7 +108,7 @@ public class RegComuFr extends Fragment {
             @Override
             public void onNothingSelected(AdapterView<?> parent)
             {
-                Log.d(TAG, "In mTipoViaSpinner.setOnItemSelectedListener, onNothingSelected()");
+                Timber.d("In mTipoViaSpinner.setOnItemSelectedListener, onNothingSelected()");
             }
         });
 
@@ -117,7 +116,7 @@ public class RegComuFr extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
-                Log.d(TAG, "In mAutonomaComuSpinner.setOnItemSelectedListener, onItemSelected()");
+                Timber.d("In mAutonomaComuSpinner.setOnItemSelectedListener, onItemSelected()");
 
                 short cu_id = (short) id;
                 new SpinnerProvinciasLoader().execute(cu_id);
@@ -127,7 +126,7 @@ public class RegComuFr extends Fragment {
             @Override
             public void onNothingSelected(AdapterView<?> parent)
             {
-                Log.d(TAG, "In mAutonomaComuSpinner.setOnItemSelectedListener, onNothingSelected()");
+                Timber.d("In mAutonomaComuSpinner.setOnItemSelectedListener, onNothingSelected()");
             }
         });
 
@@ -135,7 +134,7 @@ public class RegComuFr extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
-                Log.d(TAG, "In provinciasSpinner.setOnItemSelectedListener, onItemSelected()");
+                Timber.d("In provinciasSpinner.setOnItemSelectedListener, onItemSelected()");
 
                 comunidadBean.setMunicipio(null);
                 short prId = (short) id;
@@ -146,7 +145,7 @@ public class RegComuFr extends Fragment {
             @Override
             public void onNothingSelected(AdapterView<?> parent)
             {
-                Log.d(TAG, "In provinciasSpinner.setOnItemSelectedListener, onNothingSelected");
+                Timber.d("In provinciasSpinner.setOnItemSelectedListener, onNothingSelected");
             }
         });
 
@@ -154,7 +153,7 @@ public class RegComuFr extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
-                Log.d(TAG, "In municipiosSpinner.setOnItemSelectedListener, onItemSelected()");
+                Timber.d("In municipiosSpinner.setOnItemSelectedListener, onItemSelected()");
 
                 Cursor cursor = ((CursorAdapter) parent.getAdapter()).getCursor();
                 cursor.moveToPosition(position);
@@ -166,7 +165,7 @@ public class RegComuFr extends Fragment {
             @Override
             public void onNothingSelected(AdapterView<?> parent)
             {
-                Log.d(TAG, "In municipiosSpinner.setOnItemSelectedListener, onNothingSelected()");
+                Timber.d("In municipiosSpinner.setOnItemSelectedListener, onNothingSelected()");
             }
         });
     }
@@ -174,14 +173,14 @@ public class RegComuFr extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState)
     {
-        Log.d(TAG, "onSaveInstanceState()");
+        Timber.d("onSaveInstanceState()");
         super.onSaveInstanceState(outState);
     }
 
     @Override
     public void onStop()
     {
-        Log.d(TAG, "onStop()");
+        Timber.d("onStop()");
         dbHelper.close();
         super.onStop();
     }
@@ -189,7 +188,7 @@ public class RegComuFr extends Fragment {
     @Override
     public void onDestroy()
     {
-        Log.d(TAG, "onDestroy()");
+        Timber.d("onDestroy()");
 
         if (mActivityListener != null) {
             mActivityListener.onDestroyFragment();
@@ -238,7 +237,7 @@ public class RegComuFr extends Fragment {
 
     private SpinnerAdapter doAdapterSpinner(Cursor cursor, String[] fromColDB)
     {
-        Log.d(TAG, "In doAdapterSpinner()");
+        Timber.d("In doAdapterSpinner()");
 
         int[] toViews = new int[]{R.id.app_spinner_1_dropdown_item};
         return new SimpleCursorAdapter(
@@ -260,7 +259,7 @@ public class RegComuFr extends Fragment {
         @Override
         protected Void doInBackground(Void... params)
         {
-            Log.d(TAG, "In TipoViaComuAutoSpinnersSetter.doInBackground()");
+            Timber.d("In TipoViaComuAutoSpinnersSetter.doInBackground()");
             tipoViaCursor = dbHelper.doTipoViaCursor();
             comunidadAutonomaCursor = dbHelper.doComunidadesCursor();
             return null;
@@ -269,7 +268,7 @@ public class RegComuFr extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid)
         {
-            Log.d(TAG, "In TipoViaComuAutoSpinnersSetter.onPostExecute()");
+            Timber.d("In TipoViaComuAutoSpinnersSetter.onPostExecute()");
 
             String[] fromColumnDb = new String[]{tipovia};
             mTipoViaSpinner.setAdapter(doAdapterSpinner(tipoViaCursor, fromColumnDb));
@@ -291,17 +290,17 @@ public class RegComuFr extends Fragment {
         @Override
         protected Cursor doInBackground(Short... params)
         {
-            Log.d(TAG, "In SpinnerProvinciasLoader.doInBackground()");
+            Timber.d("In SpinnerProvinciasLoader.doInBackground()");
 
             Cursor provinciasCAcursor = dbHelper.getProvinciasByCA(params[0]);
-            Log.d(TAG, "In SpinnerProvinciasLoader.doInBackground() : cursor count = " + provinciasCAcursor.getCount());
+            Timber.d("In SpinnerProvinciasLoader.doInBackground() : cursor count = %d%n", provinciasCAcursor.getCount());
             return provinciasCAcursor;
         }
 
         @Override
         protected void onPostExecute(Cursor provinciasCursor)
         {
-            Log.d(TAG, "In SpinnerProvinciasLoader.onPostExecute()");
+            Timber.d("In SpinnerProvinciasLoader.onPostExecute()");
 
             String[] fromColDb = new String[]{pr_nombre};
             provinciaSpinner.setAdapter(doAdapterSpinner(provinciasCursor, fromColDb));
@@ -318,16 +317,16 @@ public class RegComuFr extends Fragment {
         @Override
         protected Cursor doInBackground(Short... params)
         {
-            Log.d(TAG, "In SpinnerMunicipioLoader.doInBackground()");
+            Timber.d("In SpinnerMunicipioLoader.doInBackground()");
             Cursor municipiosCursor = dbHelper.getMunicipiosByPrId(params[0]);
-            Log.d(TAG, "In SpinnerMunicipiosLoader.doInBackground() : cursor count = " + municipiosCursor.getCount());
+            Timber.d("In SpinnerMunicipiosLoader.doInBackground() : cursor count = %d%n", municipiosCursor.getCount());
             return municipiosCursor;
         }
 
         @Override
         protected void onPostExecute(Cursor municipiosCursor)
         {
-            Log.d(TAG, "In SpinnerMunicipioLoader.onPostExecute()");
+            Timber.d("In SpinnerMunicipioLoader.onPostExecute()");
 
             String[] fromColDb = new String[]{mu_nombre};
             municipioSpinner.setAdapter(doAdapterSpinner(municipiosCursor, fromColDb));

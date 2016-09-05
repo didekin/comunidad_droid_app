@@ -14,7 +14,7 @@
         style="@style/textBase.textFieldLabel1"
         android:layout_weight="0"
         android:gravity="start"
-    android:text="@string/dos_puntos"/>
+        android:text="@string/dos_puntos"/>
     <TextView
         android:id="@+id/incid_importancia_rating_view"
         style="@style/textBase.textFieldLabel2"
