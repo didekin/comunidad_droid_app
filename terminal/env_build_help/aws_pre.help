@@ -1,0 +1,10 @@
+CERTIFICADOS
+============
+(Desde /Users/pedro/keystores/android_aws_pre)
+
+$ keytool -importkeystore -srckeystore ../aws_pre/didekinspring_pre.pkcs12 -srcstoretype PKCS12 \
+          -deststoretype BKS  -destkeystore didekindroid_pre_bks -destProviderName BC \
+          -providerClass org.bouncycastle.jce.provider.BouncyCastleProvider \
+          -destkeypass droid_pre -deststorepass droid_pre -v
+
+$ cp didekindroid_pre_bks /Users/pedro/Documents/git_projects/didekindroid/app/src/debug/res/raw

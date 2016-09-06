@@ -14,7 +14,7 @@ fi
 if [ $ENV = "dbpre" ] || [ $ENV = "local" ] ; then
 
     kill $(ps -l | grep '[d]idekinspring.jar' | awk '{print $2}')
-    nginx -s quit  -c /usr/local/etc/nginx/nginx_didekindroid_dev.conf
+    nginx -s quit  -c /usr/local/etc/nginx/nginx_didekinspring_dev.conf
     rm  $APP_PARAM_HOME/local_app_parameters.xml
 
     if [ $EMULATOR = "geny" ] ; then

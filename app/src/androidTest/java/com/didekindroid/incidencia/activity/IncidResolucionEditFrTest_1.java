@@ -167,7 +167,7 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
     }
 
     @Test
-    public void testCloseIncidenciaAndBack()
+    public void testCloseIncidenciaAndBack() throws InterruptedException
     {
         // Caso OK: cerramos incidencia sin cambiar datos en pantalla.
         onView(withId(R.id.incid_resolucion_edit_fr_close_button)).perform(click());
@@ -176,6 +176,7 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
         intended(not(hasExtraWithKey(INCID_IMPORTANCIA_OBJECT.key)));
 
         // Damos back e intentamos modificar la incidencia. Nos da error.
+        Thread.sleep(2000);
         onView(withId(R.id.incid_see_closed_by_comu_ac)).check(matches(isDisplayed())).perform(pressBack());
         onView(withId(R.id.incid_resolucion_fr_modif_button)).perform(click());
         checkToastInTest(R.string.incidencia_wrong_init, mActivity);

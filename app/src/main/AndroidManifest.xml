@@ -55,6 +55,7 @@
         <activity
             android:name=".incidencia.activity.IncidRegAc"
             android:label="@string/incid_reg_ac_label"
+            android:windowSoftInputMode="stateHidden"
             android:parentActivityName=".incidencia.activity.IncidSeeOpenByComuAc">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

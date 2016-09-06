@@ -6,7 +6,6 @@
 
     <android.support.design.widget.CoordinatorLayout
         style="@style/baseLayout"
-        android:fitsSystemWindows="true"
         tools:context="com.didekindroid.incidencia.activity.IncidRegAc">
 
         <include layout="@layout/appbar_include_design"/>

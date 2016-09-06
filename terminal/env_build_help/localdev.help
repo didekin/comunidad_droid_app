@@ -1,0 +1,15 @@
+CERTIFICADOS
+============
+
+NOTA: en el entorno local no se utiliza el puerto 443, ni TLS. Esta información es meramente ilustrativa,
+      para el caso en que pudiera testarse directamente, sin pasar por el emulador GENYMOTION.
+
+(Desde /Users/pedro/keystores/android_dev)
+
+$ keytool -importkeystore -srckeystore ../localdev/didekinspring_dev.pkcs12 -srcstoretype PKCS12 \
+          -deststoretype BKS  -destkeystore didekindroid_dev_bks -destProviderName BC \
+          -providerClass org.bouncycastle.jce.provider.BouncyCastleProvider \
+          -destkeypass droid_dev -deststorepass droid_dev -v
+
+$ cp didekindroid_dev_bks /Users/pedro/Documents/git_projects/didekindroid/app/src/debug/res/raw
+

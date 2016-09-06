@@ -146,6 +146,7 @@ public class IncidResolucionRegFrTest extends IncidResolucionAbstractTest {
     @Test
     public void testOnEdit_3() throws InterruptedException
     {
+        Thread.sleep(2000);
         setFechaEnPicker(0,1);
         onView(withId(R.id.incid_resolucion_desc_ed)).perform(replaceText("Desc válida"));
 
@@ -162,6 +163,7 @@ public class IncidResolucionRegFrTest extends IncidResolucionAbstractTest {
     @Test
     public void testOnEdit_4() throws InterruptedException
     {
+        Thread.sleep(2000);
         setFechaEnPicker(0,1);
         // Coste y descripción erróneos.
         onView(withId(R.id.incid_resolucion_desc_ed)).perform(replaceText("Desc * no válida"));
@@ -174,8 +176,9 @@ public class IncidResolucionRegFrTest extends IncidResolucionAbstractTest {
     }
 
     @Test
-    public void testOnEdit_5()
+    public void testOnEdit_5() throws InterruptedException
     {
+        Thread.sleep(2000);
         // Fecha inferior a fecha_alta incidencia. Descripción ausente.
         Calendar fechaPrev = setFechaEnPicker(0,-1);
         assertThat(fechaPrev.getTimeInMillis() < incidImportancia.getFechaAlta().getTime(), is(true));

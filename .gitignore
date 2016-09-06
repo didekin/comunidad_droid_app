@@ -24,9 +24,8 @@ local.properties
 # Parámetros de entornos
 terminal/resources/aws*.xml
 terminal/env_init.sh
-terminal/aws*.help
-terminal/prod*.help
-terminal/local*.help
+terminal/*help
+terminal/app_production
 
 #  MISCELÁNEA
 terminal/server.log

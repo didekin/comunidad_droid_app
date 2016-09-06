@@ -164,7 +164,7 @@ public final class UIutils {
         app_preferences_file,;
 
         static final String IS_USER_REG = "isRegisteredUser";
-        private static final String IS_GCM_TOKEN_SENT_TO_SERVER = "isGcmTokenSentToServer";
+        static final String IS_GCM_TOKEN_SENT_TO_SERVER = "isGcmTokenSentToServer";
 
         @Override
         public String toString()

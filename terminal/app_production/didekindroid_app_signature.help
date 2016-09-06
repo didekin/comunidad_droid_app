@@ -1,0 +1,39 @@
+# Generación de self signed certificate OPENSSL:
+  =============================================
+
+   AWS_PRO  CN: didekindroid  pswd: didekin_droid_00
+
+   Ejecutado en: /Users/pedro/keystores/didekindroid_release
+
+   $ openssl genrsa -aes128 2048 > didekindroid.pem
+   $ openssl req -new -key didekindroid.pem -out didekindroid_csr.pem
+   $ openssl x509 -req -days 730 -in didekindroid_csr.pem -signkey didekindroid.pem -out didekindroid.crt
+   $ openssl rsa -in didekindroid.pem -out didekindroid.pem
+   $ openssl pkcs12 -inkey didekindroid.pem -in didekindroid.crt -export -out didekindroid.pkcs12 // export_password: didekin_droid_ex
+
+   $ keytool -importkeystore -srckeystore didekindroid.pkcs12 -srcstoretype PKCS12 \
+     -deststoretype JKS  -destkeystore didekindroid_jks -destkeypass didekin_droid_00 \
+     -deststorepass droid_jks_00
+
+  :::::::::::::::::::::::::::::: Descripción
+  Keystore type: JKS
+  Keystore provider: SUN
+
+  Your keystore contains 1 entry
+
+  Alias name: didekindroid
+  Creation date: Sep 6, 2016
+  Entry type: PrivateKeyEntry
+  Certificate chain length: 1
+  Certificate[1]:
+  Owner: EMAILADDRESS=contacto@didekin.es, CN=Didekin, O=Didekin, L=Las Rozas, ST=Madrid, C=ES
+  Issuer: EMAILADDRESS=contacto@didekin.es, CN=Didekin, O=Didekin, L=Las Rozas, ST=Madrid, C=ES
+  Serial number: b779cb2d1e2a4669
+  Valid from: Tue Sep 06 14:57:59 CEST 2016 until: Thu Sep 06 14:57:59 CEST 2018
+  Certificate fingerprints:
+  	 MD5:  F8:AA:81:56:82:E3:88:28:F6:41:29:B2:CE:9A:F2:D7
+  	 SHA1: D7:74:03:8C:CF:EC:1A:85:A9:9C:C0:67:78:31:CD:27:C8:21:5F:75
+  	 SHA256: 19:1B:9A:CC:53:57:BF:5D:39:B7:62:2B:A9:2E:FD:9A:A9:80:76:38:56:B5:F1:57:53:30:3F:58:BE:A8:76:C6
+  	 Signature algorithm name: SHA1withRSA
+  	 Version: 1
+  ::::::::::::::::::::::::::::::

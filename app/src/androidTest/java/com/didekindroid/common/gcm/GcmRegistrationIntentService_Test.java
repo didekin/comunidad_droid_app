@@ -3,7 +3,6 @@ package com.didekindroid.common.gcm;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.Espresso;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -17,9 +16,12 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static android.support.test.espresso.Espresso.registerIdlingResources;
+import static android.support.test.espresso.Espresso.unregisterIdlingResources;
 import static com.didekindroid.common.utils.UIutils.isGcmTokenSentServer;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.utils.UIutils.updateIsGcmTokenSentServer;
+import static com.didekindroid.common.utils.UIutils.updateIsRegistered;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -35,6 +37,7 @@ public class GcmRegistrationIntentService_Test {
     private MockActivity mActivity;
     IdlingResourceForIntentServ idlingResource;
     NotificationManager mNotifyManager;
+    Context context = InstrumentationRegistry.getTargetContext();
 
     @Rule
     public IntentsTestRule<MockActivity> intentRule = new IntentsTestRule<MockActivity>(MockActivity.class) {
@@ -42,8 +45,8 @@ public class GcmRegistrationIntentService_Test {
         @Override
         protected void beforeActivityLaunched()
         {
-            Context context = InstrumentationRegistry.getTargetContext();
             updateIsGcmTokenSentServer(false, context);
+            updateIsRegistered(false, context);
         }
     };
 
@@ -53,7 +56,7 @@ public class GcmRegistrationIntentService_Test {
         mActivity = intentRule.getActivity();
         mNotifyManager = (NotificationManager) mActivity.getSystemService(Context.NOTIFICATION_SERVICE);
         idlingResource = new IdlingResourceForIntentServ(mActivity, new GcmRegistrationIntentService());
-        Espresso.registerIdlingResources(idlingResource);
+        registerIdlingResources(idlingResource);
     }
 
     @After
@@ -61,7 +64,8 @@ public class GcmRegistrationIntentService_Test {
     {
         updateIsGcmTokenSentServer(false, mActivity);
         mNotifyManager.cancelAll();
-        Espresso.unregisterIdlingResources(idlingResource);
+        unregisterIdlingResources(idlingResource);
+        updateIsRegistered(false, context);
     }
 
     //  ===========================================================================
