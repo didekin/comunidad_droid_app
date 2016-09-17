@@ -15,8 +15,8 @@ import static com.didekin.common.exception.DidekinExceptionMsg.AVANCE_WRONG_INIT
  * Date: 11/03/16
  * Time: 12:03
  */
-@SuppressWarnings("unused")
-public class Avance implements Serializable {
+@SuppressWarnings({"PrivateMemberAccessBetweenOuterAndInnerClass"})
+public final class Avance implements Serializable {
 
     private final long avanceId;
     private final String avanceDesc;
@@ -79,7 +79,7 @@ public class Avance implements Serializable {
 
     public Timestamp getFechaAlta()
     {
-        return fechaAlta;
+        return fechaAlta != null? new Timestamp(fechaAlta.getTime()) : null;
     }
 
     //    ===============================  BUILDER  ============================

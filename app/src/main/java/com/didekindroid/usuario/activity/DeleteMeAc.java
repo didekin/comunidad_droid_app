@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
@@ -12,11 +13,15 @@ import com.didekindroid.common.activity.UiException;
 
 import timber.log.Timber;
 
+import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static com.didekindroid.common.activity.TokenHandler.TKhandler;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.utils.UIutils.updateIsRegistered;
+import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenu;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
 /**
@@ -52,12 +57,30 @@ public class DeleteMeAc extends AppCompatActivity {
         });
     }
 
-    private void unregisterUser()
+    void unregisterUser()
     {
         Timber.d("unregisterUser()");
         new UserDataEraser().execute();
-        Intent intent = new Intent(this, ComuSearchAc.class);
-        startActivity(intent);
+    }
+
+    // ============================================================
+    //    ..... ACTION BAR ....
+    // ============================================================
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        Timber.d("onOptionsItemSelected()");
+
+        int resourceId = checkNotNull(item.getItemId());
+
+        switch (resourceId) {
+            case android.R.id.home:
+                doUpMenu(this);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     //    ============================================================
@@ -93,6 +116,10 @@ public class DeleteMeAc extends AppCompatActivity {
                 uiException.processMe(DeleteMeAc.this, new Intent());
             } else {
                 checkState(isDeleted);
+                Intent intent = new Intent(DeleteMeAc.this, ComuSearchAc.class);
+                intent.setFlags(FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                DeleteMeAc.this.finish();
             }
         }
     }

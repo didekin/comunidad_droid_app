@@ -21,7 +21,8 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/themeOne"
-        android:usesCleartextTraffic="false" tools:ignore="UnusedAttribute"> <!-- To avoid http traffic in the clear.-->
+        android:usesCleartextTraffic="false"
+        tools:ignore="UnusedAttribute"> <!-- To avoid http traffic in the clear.-->
 
         <!-- **************************************************************** -->
         <!-- INCIDENCIA -->
@@ -29,8 +30,7 @@
         <activity
             android:name=".incidencia.activity.IncidCommentRegAc"
             android:label="@string/incid_comment_reg_ac_label"
-            android:parentActivityName=".incidencia.activity.IncidEditAc"
-            android:theme="@style/themeOne">
+            android:parentActivityName=".incidencia.activity.IncidEditAc">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".incidencia.activity.IncidEditAc"/>
@@ -38,8 +38,7 @@
         <activity
             android:name=".incidencia.activity.IncidCommentSeeAc"
             android:label="@string/incid_comment_see_ac_label"
-            android:parentActivityName=".incidencia.activity.IncidEditAc"
-            android:theme="@style/themeOne">
+            android:parentActivityName=".incidencia.activity.IncidEditAc">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".incidencia.activity.IncidEditAc"/>
@@ -55,8 +54,8 @@
         <activity
             android:name=".incidencia.activity.IncidRegAc"
             android:label="@string/incid_reg_ac_label"
-            android:windowSoftInputMode="stateHidden"
-            android:parentActivityName=".incidencia.activity.IncidSeeOpenByComuAc">
+            android:parentActivityName=".incidencia.activity.IncidSeeOpenByComuAc"
+            android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".incidencia.activity.IncidSeeOpenByComuAc"/>
@@ -64,18 +63,11 @@
         <activity
             android:name=".incidencia.activity.IncidResolucionRegEditSeeAc"
             android:label="@string/incid_resolution_ac_label"
-            android:parentActivityName=".incidencia.activity.IncidEditAc">
+            android:parentActivityName=".incidencia.activity.IncidEditAc"
+            android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".incidencia.activity.IncidEditAc"/>
-        </activity>
-        <activity
-            android:name=".incidencia.activity.IncidSeeOpenByComuAc"
-            android:label="@string/incid_see_by_user_ac_label"
-            android:parentActivityName=".usuario.activity.UserComuDataAc">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".usuario.activity.UserComuDataAc"/>
         </activity>
         <activity
             android:name=".incidencia.activity.IncidSeeClosedByComuAc"
@@ -86,6 +78,14 @@
                 android:value=".incidencia.activity.IncidSeeOpenByComuAc"/>
         </activity>
         <activity
+            android:name=".incidencia.activity.IncidSeeOpenByComuAc"
+            android:label="@string/incid_see_by_user_ac_label"
+            android:parentActivityName=".usuario.activity.UserComuDataAc">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".usuario.activity.UserComuDataAc"/>
+        </activity>
+        <activity
             android:name=".incidencia.activity.IncidSeeUserComuImportanciaAc"
             android:label="@string/incid_incidencia_importancia_rot"
             android:parentActivityName=".incidencia.activity.IncidEditAc">
@@ -93,7 +93,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".incidencia.activity.IncidEditAc"/>
         </activity>
-
         <!-- .......... GCM services ......... -->
         <!--TODO: exported=false es una posibilidad.-->
         <service
@@ -134,7 +133,6 @@
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
@@ -157,7 +155,12 @@
         <activity
             android:name=".usuario.activity.LoginAc"
             android:label="@string/login_label"
-            android:launchMode="singleInstance"/>
+            android:launchMode="singleInstance"
+            android:parentActivityName=".usuario.activity.ComuSearchAc">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".usuario.activity.ComuSearchAc"/>
+        </activity>
         <activity
             android:name=".usuario.activity.PasswordChangeAc"
             android:label="@string/password_change_ac_label"
@@ -174,7 +177,7 @@
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".usuario.activity.ComuSearchAc"/>
+                android:value=".usuario.activity.ComuSearchResultsAc"/>
         </activity>
         <activity
             android:name=".usuario.activity.RegComuAndUserComuAc"
@@ -199,11 +202,11 @@
             android:name=".usuario.activity.RegUserComuAc"
             android:label="@string/regusuario_comu_ac_label"
             android:launchMode="singleTask"
-            android:parentActivityName=".usuario.activity.ComuSearchAc"
+            android:parentActivityName=".usuario.activity.ComuSearchResultsAc"
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".usuario.activity.ComuSearchAc"/>
+                android:value=".usuario.activity.ComuSearchResultsAc"/>
         </activity>
         <activity
             android:name=".usuario.activity.SeeUserComuByComuAc"

@@ -34,6 +34,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.closeDatePicker;
 import static com.didekindroid.common.testutils.ActivityTestUtils.reSetDatePicker;
 import static com.didekindroid.common.utils.UIutils.formatTimeToString;
@@ -121,41 +122,46 @@ public class IncidResolucionRegFrTest extends IncidResolucionAbstractTest {
     }
 
     @Test
-    public void testOnEdit_1()
+    public void testOnEdit_1() throws InterruptedException
     {
-        // Descripción errónea y fecha sin fijar.
+        // NOT OK: Descripción errónea y fecha sin fijar.
         onView(withId(R.id.incid_resolucion_desc_ed)).perform(replaceText("Desc * no válida"));
         onView(withId(R.id.incid_resolucion_reg_ac_button)).perform(click());
         checkToastInTest(R.string.error_validation_msg, mActivity,
                 R.string.incid_resolucion_fecha_prev_msg, R.string.incid_resolucion_descrip_msg);
+
+        Thread.sleep(2000);
     }
 
     @Test
-    public void testOnEdit_2()
+    public void testOnEdit_2() throws InterruptedException
     {
         setFechaEnPicker(0,1);
 
-        // Descripción errónea.
+        // NOT OK: Descripción errónea.
         onView(withId(R.id.incid_resolucion_desc_ed)).perform(replaceText("Desc * no válida"));
 
         onView(withId(R.id.incid_resolucion_reg_ac_button)).perform(click());
         checkToastInTest(R.string.error_validation_msg, mActivity,
                 R.string.incid_resolucion_descrip_msg);
+
+        Thread.sleep(2000);
     }
 
     @Test
     public void testOnEdit_3() throws InterruptedException
     {
-        Thread.sleep(2000);
         setFechaEnPicker(0,1);
         onView(withId(R.id.incid_resolucion_desc_ed)).perform(replaceText("Desc válida"));
 
-        // Coste erróneo.
+        // NOT OK: Coste erróneo.
         onView(withId(R.id.incid_resolucion_coste_prev_ed)).perform(replaceText("novalid"));
 
         onView(withId(R.id.incid_resolucion_reg_ac_button)).perform(click());
         checkToastInTest(R.string.error_validation_msg, mActivity,
                 R.string.incid_resolucion_coste_prev_msg);
+
+        Thread.sleep(2000);
     }
 
 
@@ -163,9 +169,8 @@ public class IncidResolucionRegFrTest extends IncidResolucionAbstractTest {
     @Test
     public void testOnEdit_4() throws InterruptedException
     {
-        Thread.sleep(2000);
         setFechaEnPicker(0,1);
-        // Coste y descripción erróneos.
+        // NOT OK: Coste y descripción erróneos.
         onView(withId(R.id.incid_resolucion_desc_ed)).perform(replaceText("Desc * no válida"));
         onView(withId(R.id.incid_resolucion_coste_prev_ed)).perform(replaceText("novalid"));
 
@@ -173,13 +178,14 @@ public class IncidResolucionRegFrTest extends IncidResolucionAbstractTest {
         checkToastInTest(R.string.error_validation_msg, mActivity,
                 R.string.incid_resolucion_coste_prev_msg,
                 R.string.incid_resolucion_descrip_msg);
+
+        Thread.sleep(2000);
     }
 
     @Test
     public void testOnEdit_5() throws InterruptedException
     {
-        Thread.sleep(2000);
-        // Fecha inferior a fecha_alta incidencia. Descripción ausente.
+        // NOT OK: Fecha inferior a fecha_alta incidencia. Descripción ausente.
         Calendar fechaPrev = setFechaEnPicker(0,-1);
         assertThat(fechaPrev.getTimeInMillis() < incidImportancia.getFechaAlta().getTime(), is(true));
 
@@ -187,6 +193,8 @@ public class IncidResolucionRegFrTest extends IncidResolucionAbstractTest {
         checkToastInTest(R.string.error_validation_msg, mActivity,
                 R.string.incid_resolucion_fecha_prev_msg,
                 R.string.incid_resolucion_descrip_msg);
+
+        Thread.sleep(2000);
     }
 
     @Test
@@ -203,6 +211,9 @@ public class IncidResolucionRegFrTest extends IncidResolucionAbstractTest {
         onView(withId(R.id.incid_edit_fragment_container_ac)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_edit_maxpower_fr_layout)).check(matches(isDisplayed()));
         intended(hasExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia));
+
+        checkUp();
+        checkScreenResolucionRegFr();
     }
 
 //    ============================= HELPER METHODS ===========================

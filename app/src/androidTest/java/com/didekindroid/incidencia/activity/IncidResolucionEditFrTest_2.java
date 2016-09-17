@@ -34,6 +34,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkUp;
 import static com.didekindroid.common.utils.UIutils.formatTimeStampToString;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetResolucionNoAdvances;
@@ -139,21 +140,25 @@ public class IncidResolucionEditFrTest_2 extends IncidResolucionAbstractTest {
     @Test
     public void testOnEdit_1() throws UiException
     {
-        // Caso: añadimos un avance con descripción Ok .
+        // Caso OK: añadimos un avance con descripción Ok .
         onView(withId(R.id.incid_resolucion_avance_ed)).perform(replaceText("avance2_desc_válida"));
-        onView(withId(R.id.incid_resolucion_fr_modif_button)).perform(click());
 
+        onView(withId(R.id.incid_resolucion_fr_modif_button)).perform(click());
+        // Verificamos pantalla de llegada, intent y BD.
         onView(withId(R.id.incid_edit_fragment_container_ac)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_edit_maxpower_fr_layout)).check(matches(isDisplayed()));
         intended(hasExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia));
-
         Resolucion resolucionDb = IncidenciaServ.seeResolucion(resolucion.getIncidencia().getIncidenciaId());
         assertThat(resolucionDb.getAvances().size(), is(2));
         assertThat(resolucionDb.getAvances().get(1).getAvanceDesc(), is("avance2_desc_válida"));
+
+        checkUp();
+        checkScreenResolucionEditFr();
+        checkDataResolucionEditFr();
     }
 
     @Test
-    public void testCloseIncidenciaAndBack()
+    public void testCloseIncidenciaAndBack() throws InterruptedException
     {
         // Caso NOT OK: cerramos la incidencia, damos back y volvemos a intentar cerrarla.
         onView(withId(R.id.incid_resolucion_edit_fr_close_button)).perform(click());
@@ -164,6 +169,8 @@ public class IncidResolucionEditFrTest_2 extends IncidResolucionAbstractTest {
         onView(withId(R.id.incid_resolucion_edit_fr_close_button)).perform(click());
         checkToastInTest(R.string.incidencia_wrong_init, mActivity);
         onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed()));
+
+        Thread.sleep(2000);
     }
 
 /*    ============================= HELPER METHODS ===========================*/

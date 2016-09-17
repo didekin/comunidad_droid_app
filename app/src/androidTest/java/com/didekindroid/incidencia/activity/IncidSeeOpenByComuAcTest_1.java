@@ -35,7 +35,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
 import static com.didekindroid.common.gcm.AppFirebaseMsgService.TypeMsgHandler.INCIDENCIA_OPEN;
-import static com.didekindroid.common.testutils.ActivityTestUtils.checkNavigateUp;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkUp;
+import static com.didekindroid.common.testutils.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.regSeveralUserComuSameUser;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
@@ -69,6 +70,10 @@ public class IncidSeeOpenByComuAcTest_1 {
     Comunidad comunidadInIntent;
     NotificationManager mNotifyManager;
     private int messageId = INCIDENCIA_OPEN.getTitleRsc();
+
+    // Layouts to check in navigate-up.
+    int activityLayoutId = R.id.incid_see_open_by_comu_ac;
+    int secondLayoutId = R.id.incid_see_generic_layout;
 
     @Rule
     public IntentsTestRule<IncidSeeOpenByComuAc> activityRule = new IntentsTestRule<IncidSeeOpenByComuAc>(IncidSeeOpenByComuAc.class) {
@@ -138,8 +143,8 @@ public class IncidSeeOpenByComuAcTest_1 {
         assertThat(mActivity, notNullValue());
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
 
-        onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_see_generic_layout)).check(matches(isDisplayed()));
+        onView(withId(activityLayoutId)).check(matches(isDisplayed()));
+        onView(withId(secondLayoutId)).check(matches(isDisplayed()));
         // No hay incidencias registradas.
         onView(withId(android.R.id.list)).check(matches(not(isDisplayed())));
         onView(withId(android.R.id.empty)).check(matches(isDisplayed()));
@@ -151,7 +156,7 @@ public class IncidSeeOpenByComuAcTest_1 {
         )).check(matches(withText(is(comunidadInIntent.getNombreComunidad()))
         )).check(matches(isDisplayed()));
 
-        checkNavigateUp();
+        clickNavigateUp();
     }
 
 //  ================================ MENU ====================================
@@ -160,12 +165,14 @@ public class IncidSeeOpenByComuAcTest_1 {
     public void testIncidSeeClosedByComuMn() throws InterruptedException
     {
         INCID_SEE_CLOSED_BY_COMU_AC.checkMenuItem_WTk(mActivity);
+        checkUp(activityLayoutId, secondLayoutId);
     }
 
     @Test
     public void testIncidRegMn() throws InterruptedException
     {
         INCID_REG_AC.checkMenuItem_WTk(mActivity);
+        checkUp(activityLayoutId, secondLayoutId);
     }
 
     @Test
@@ -173,5 +180,6 @@ public class IncidSeeOpenByComuAcTest_1 {
     {
         SEE_USERCOMU_BY_COMU_AC.checkMenuItem_WTk(mActivity);
         intended(hasExtra(COMUNIDAD_ID.key, comunidadInIntent.getC_Id()));
+        checkUp(activityLayoutId, secondLayoutId);
     }
 }

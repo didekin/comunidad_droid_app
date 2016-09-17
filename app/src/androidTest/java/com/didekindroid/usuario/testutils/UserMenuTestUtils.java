@@ -87,7 +87,7 @@ public enum UserMenuTestUtils {
         @Override
         public void checkMenuItem_WTk(Activity activity)
         {
-            throw new UnsupportedOperationException(LOGIN_AC.name() + REQUIRES_USER_NO_TOKEN);
+            checkMenuItem_NTk(activity);
         }
     },
 
@@ -109,16 +109,11 @@ public enum UserMenuTestUtils {
         }
     },
 
-    REG_COMU_USER_USERCOMU_AC {
+    REG_COMU_USERCOMU_AC {
         @Override
-        public void checkMenuItem_NTk(Activity activity) throws InterruptedException
+        public void checkMenuItem_NTk(Activity activity)
         {
-            onView(withText(R.string.reg_comu_user_usercomu_ac_mn)).check(doesNotExist());
-            Thread.sleep(2000);
-
-            openActionBarOverflowOrOptionsMenu(activity);
-            onView(withText(R.string.reg_comu_user_usercomu_ac_mn)).check(matches(isDisplayed())).perform(click());
-            onView(withId(R.id.reg_comu_usuario_usuariocomu_layout)).check(matches(isDisplayed()));
+            throw new UnsupportedOperationException(REGISTERED_USER);
         }
 
         @Override
@@ -126,8 +121,27 @@ public enum UserMenuTestUtils {
         {
             openActionBarOverflowOrOptionsMenu(activity);
             Thread.sleep(2000);
-            onView(withText(R.string.reg_comu_user_usercomu_ac_mn)).check(matches(isDisplayed())).perform(click());
+            onView(withText(R.string.reg_nueva_comunidad_ac_mn)).check(matches(isDisplayed())).perform(click());
             onView(withId(R.id.reg_comu_and_usercomu_layout)).check(matches(isDisplayed()));
+        }
+    },
+
+    REG_COMU_USER_USERCOMU_AC {
+        @Override
+        public void checkMenuItem_NTk(Activity activity) throws InterruptedException
+        {
+            onView(withText(R.string.reg_nueva_comunidad_ac_mn)).check(doesNotExist());
+            Thread.sleep(2000);
+
+            openActionBarOverflowOrOptionsMenu(activity);
+            onView(withText(R.string.reg_nueva_comunidad_ac_mn)).check(matches(isDisplayed())).perform(click());
+            onView(withId(R.id.reg_comu_usuario_usuariocomu_layout)).check(matches(isDisplayed()));
+        }
+
+        @Override
+        public void checkMenuItem_WTk(Activity activity)
+        {
+            throw new UnsupportedOperationException(REQUIRES_USER_NO_TOKEN);
         }
     },
 
@@ -204,4 +218,7 @@ public enum UserMenuTestUtils {
 
     public static final String REGISTERED_USER = "requires registered user";
     public static final String REQUIRES_USER_NO_TOKEN = "requires user without token";
+
+//  =================================  HELPER METHODS ====================================
+
 }

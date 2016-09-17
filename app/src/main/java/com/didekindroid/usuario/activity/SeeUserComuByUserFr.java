@@ -1,6 +1,5 @@
 package com.didekindroid.usuario.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -34,19 +33,12 @@ import static com.google.common.base.Preconditions.checkState;
  */
 public class SeeUserComuByUserFr extends Fragment {
 
-    private SeeUserComuByUserFrListener mListener;
+    SeeUserComuByUserFrListener mListener;
     SeeUserComuByUserAdapter mAdapter;
-    private ListView fragmentView;
+    ListView fragmentView;
 
     public SeeUserComuByUserFr()
     {
-    }
-
-    @Override
-    public void onAttach(Context context)
-    {
-        Timber.d("onAttach()");
-        super.onAttach(context);
     }
 
     @Override
@@ -64,7 +56,7 @@ public class SeeUserComuByUserFr extends Fragment {
         Timber.d("onCreateView()");
         fragmentView = (ListView) inflater.inflate(R.layout.see_user_by_user_list_fr, container, false);
         // To get visible a divider on top of the list.
-        fragmentView.addHeaderView(new View(getContext()), null, true);
+//        fragmentView.addHeaderView(new View(getContext()), null, true);
         fragmentView.setItemsCanFocus(true);
         return fragmentView;
     }
@@ -89,62 +81,6 @@ public class SeeUserComuByUserFr extends Fragment {
                 }
             }
         });
-    }
-
-    @Override
-    public void onStart()
-    {
-        Timber.d("onStart()");
-        super.onStart();
-    }
-
-    @Override
-    public void onResume()
-    {
-        Timber.d("onResume()");
-        super.onResume();
-    }
-
-    @Override
-    public void onPause()
-    {
-        Timber.d("onPause()");
-        super.onPause();
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState)
-    {
-        Timber.d("onSaveInstanceState()");
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public void onStop()
-    {
-        Timber.d("onStop()");
-        super.onStop();
-    }
-
-    @Override
-    public void onDestroyView()
-    {
-        Timber.d("onDestroyView()");
-        super.onDestroyView();
-    }
-
-    @Override
-    public void onDestroy()
-    {
-        Timber.d("onDestroy()");
-        super.onDestroy();
-    }
-
-    @Override
-    public void onDetach()
-    {
-        Timber.d("onDetach()");
-        super.onDetach();
     }
 
 // .......... Interface to communicate with the Activity ...................

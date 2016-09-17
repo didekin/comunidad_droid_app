@@ -31,6 +31,7 @@ import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_CL
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_REG_AC;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_USERCOMU_BY_COMU_AC;
+import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenu;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
@@ -119,6 +120,9 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements
         int resourceId = checkNotNull(item.getItemId());
 
         switch (resourceId) {
+            case android.R.id.home:
+                doUpMenu(this);
+                return true;
             case R.id.incid_see_closed_by_comu_ac_mn:
                 INCID_CLOSED_BY_COMU_AC.doMenuItem(this);
                 return true;

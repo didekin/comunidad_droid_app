@@ -60,7 +60,7 @@
 
     <style name="textBase.editField.email">
         <item name="android:maxEms">60</item>
-        <item name="android:inputType">textEmailAddress</item>
+        <item name="android:inputType">textEmailAddress|textNoSuggestions</item>
         <item name="android:hint">@string/email_hint</item>
     </style>
 
@@ -72,7 +72,7 @@
 
     <style name="textBase.editField.alias">
         <item name="android:maxEms">30</item>
-        <item name="android:inputType">text</item>
+        <item name="android:inputType">text|textNoSuggestions</item>
         <item name="android:hint">@string/usuario_alias_hint</item>
     </style>
 

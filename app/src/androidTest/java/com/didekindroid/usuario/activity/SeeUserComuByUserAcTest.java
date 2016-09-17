@@ -5,7 +5,6 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
-import com.didekindroid.common.testutils.ActivityTestUtils;
 import com.didekindroid.usuario.activity.utils.RolUi;
 
 import org.hamcrest.Matchers;
@@ -20,16 +19,20 @@ import java.io.IOException;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.regSeveralUserComuSameUser;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.external.LongListMatchers.withAdaptedData;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.usuario.testutils.UserMenuTestUtils.COMU_SEARCH_AC;
+import static com.didekindroid.usuario.testutils.UserMenuTestUtils.USER_DATA_AC;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_EL_ESCORIAL;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_LA_FUENTE;
@@ -47,10 +50,11 @@ import static org.junit.Assert.assertThat;
  * Time: 16:15
  */
 @RunWith(AndroidJUnit4.class)
-public class SeeUserComuByUserAc_1_Test {
+public class SeeUserComuByUserAcTest {
 
     SeeUserComuByUserAc mActivity;
     SeeUserComuByUserFr mFragment;
+    private int fragmentLayoutId = R.id.see_usercomu_by_user_frg;
 
     @Rule
     public IntentsTestRule<SeeUserComuByUserAc> intentRule = new IntentsTestRule<SeeUserComuByUserAc>(SeeUserComuByUserAc.class) {
@@ -88,16 +92,20 @@ public class SeeUserComuByUserAc_1_Test {
 //  ================================================================================================================
 
     @Test
-    public void testOnCreate() throws Exception
+    public void testOnCreateAndNavigateUp() throws Exception
     {
         assertThat(mActivity, notNullValue());
         assertThat(mFragment, notNullValue());
         assertThat(isRegisteredUser(mActivity), is(true));
         assertThat(mFragment.getFragmentView(), notNullValue());
 
-        onView(withId(R.id.see_usercomu_by_user_frg)).check(matches(isDisplayed()));
+        onView(withId(fragmentLayoutId)).check(matches(isDisplayed()));
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
-        ActivityTestUtils.checkNavigateUp();
+
+        // Verificamos navegación en ambas direcciones.
+        onData(is(COMU_LA_FUENTE_PEPE)).check(matches(isDisplayed())).perform(click());
+        onView(withId(R.id.usercomu_data_ac_layout)).check(matches(isDisplayed()));
+        checkUp(fragmentLayoutId);
     }
 
     @Test
@@ -196,5 +204,19 @@ public class SeeUserComuByUserAc_1_Test {
                         withText("Almería")
                 ))
         )).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testUserDataMn_withToken() throws InterruptedException
+    {
+        USER_DATA_AC.checkMenuItem_WTk(mActivity);
+        checkUp(fragmentLayoutId);
+    }
+
+    @Test
+    public void testComuSearchMn_withToken() throws InterruptedException   // TODO: test failed
+    {
+        COMU_SEARCH_AC.checkMenuItem_WTk(mActivity);
+        // NO hay opción de navigate-up.
     }
 }

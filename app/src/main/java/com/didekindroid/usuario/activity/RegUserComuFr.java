@@ -47,7 +47,6 @@ public class RegUserComuFr extends Fragment {
                              Bundle savedInstanceState)
     {
         Timber.d("onCreateView()");
-
         mRegUserComuFrView = inflater.inflate(R.layout.reg_usercomu_fr, container, false);
         return mRegUserComuFrView;
     }
@@ -57,56 +56,6 @@ public class RegUserComuFr extends Fragment {
     {
         Timber.d("onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
-
-    }
-
-    @Override
-    public void onStart()
-    {
-        Timber.d("onStart()");
-        super.onStart();
-    }
-
-    @Override
-    public void onResume()
-    {
-        Timber.d("onResume()");
-        super.onResume();
-    }
-
-    @Override
-    public void onPause()
-    {
-        Timber.d("onPause()");
-        super.onPause();
-    }
-
-    @Override
-    public void onStop()
-    {
-        Timber.d("onStop()");
-        super.onStop();
-    }
-
-    @Override
-    public void onDestroyView()
-    {
-        Timber.d("onDestroyView()");
-        super.onDestroyView();
-    }
-
-    @Override
-    public void onDestroy()
-    {
-        Timber.d("onDestroy()");
-        super.onDestroy();
-    }
-
-    @Override
-    public void onDetach()
-    {
-        Timber.d("onDetach()");
-        super.onDetach();
     }
 
 //    ........... AUXILIARY METHODS ...........

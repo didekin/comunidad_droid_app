@@ -27,6 +27,7 @@ import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_COMMENTS_SEE_AC;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_COMMENT_REG_AC;
@@ -55,7 +56,7 @@ public class IncidEditAcTest_Mn1 extends IncidEditAbstractTest {
             protected Intent getActivityIntent()
             {
                 try {
-                    signUpAndUpdateTk(COMU_REAL_JUAN);
+                    signUpAndUpdateTk(COMU_REAL_JUAN); // Usuario PRO iniciador.
                     juanUserComu = ServOne.seeUserComusByUser().get(0);
                     incidenciaJuan = new IncidImportancia.IncidImportanciaBuilder(
                             doIncidencia(juanUserComu.getUsuario().getUserName(), "Incidencia Real One", juanUserComu.getComunidad().getC_Id(), (short) 43))
@@ -92,8 +93,11 @@ public class IncidEditAcTest_Mn1 extends IncidEditAbstractTest {
     @Test
     public void testIncidCommentReg_Mn() throws Exception
     {
+        checkScreenEditMaxPowerFr(); // Es usuario iniciador.
         INCID_COMMENT_REG_AC.checkMenuItem_WTk(mActivity);
         intended(hasExtra(INCIDENCIA_OBJECT.key, incidenciaJuan.getIncidencia()));
+        checkUp();
+        checkScreenEditMaxPowerFr();
     }
 
     @Test
@@ -101,16 +105,21 @@ public class IncidEditAcTest_Mn1 extends IncidEditAbstractTest {
     {
         INCID_COMMENTS_SEE_AC.checkMenuItem_WTk(mActivity);
         intended(hasExtra(INCIDENCIA_OBJECT.key, incidenciaJuan.getIncidencia()));
+        checkUp();
+        checkScreenEditMaxPowerFr();
     }
 
     @Test
     public void testIncidResolucionReg_Mn() throws Exception
     {
-        // El userComu no tiene función administrador. NO hay resolución en BD.
         INCID_RESOLUCION_REG_EDIT_AC.checkMenuItem_WTk(mActivity);
+
         onView(withId(R.id.incid_resolucion_see_default_fr)).check(matches(isDisplayed()));
         intended(hasExtra(INCID_IMPORTANCIA_OBJECT.key, incidenciaJuan));
-        // No key con resolución.
+        // NO hay resolución en BD --> No key con resolución.
         intended(not(hasExtraWithKey(INCID_RESOLUCION_OBJECT.key)));
+
+        checkUp();
+        checkScreenEditMaxPowerFr();
     }
 }

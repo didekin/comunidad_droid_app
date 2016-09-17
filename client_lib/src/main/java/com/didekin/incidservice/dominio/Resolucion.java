@@ -19,7 +19,7 @@ import static com.didekin.common.exception.DidekinExceptionMsg.RESOLUCION_WRONG_
  * Time: 18:30
  */
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"PrivateMemberAccessBetweenOuterAndInnerClass"})
 public final class Resolucion implements Serializable, GcmToComunidadHelper {
 
     private final String userName;
@@ -92,12 +92,14 @@ public final class Resolucion implements Serializable, GcmToComunidadHelper {
 
     public Timestamp getFechaPrev()
     {
-        return fechaPrev;
+        // Defensive copy.
+        return fechaPrev != null ? new Timestamp(fechaPrev.getTime()) : null;
     }
 
     public Timestamp getFechaAlta()
     {
-        return fechaAlta;
+        // Defensive copy.
+        return fechaAlta != null ? new Timestamp(fechaAlta.getTime()) : null;
     }
 
     public Incidencia getIncidencia()
@@ -107,7 +109,7 @@ public final class Resolucion implements Serializable, GcmToComunidadHelper {
 
     public List<Avance> getAvances()
     {
-        return avances;
+        return Collections.unmodifiableList(avances);
     }
 
     @Override

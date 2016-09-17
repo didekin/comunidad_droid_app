@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -24,6 +25,8 @@ import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.common.utils.UIutils.makeToast;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
+import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenu;
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
 /**
@@ -32,7 +35,7 @@ import static com.google.common.base.Preconditions.checkState;
  * Postconditions:
  * 1. An intent key is passed with an IncidenciaUser instance.
  * 2. A comment is persisted, associated the usuarioComunidad and incidencia implicits in the
- *    incidenciaUser in the received intent.
+ * incidenciaUser in the received intent.
  */
 public class IncidCommentRegAc extends AppCompatActivity {
 
@@ -64,16 +67,36 @@ public class IncidCommentRegAc extends AppCompatActivity {
         });
     }
 
+// ============================================================
+//    ..... ACTION BAR ....
+/* ============================================================*/
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        Timber.d("onOptionsItemSelected()");
+
+        int resourceId = checkNotNull(item.getItemId());
+
+        switch (resourceId) {
+            case android.R.id.home:
+                doUpMenu(this);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 //    ============================================================
 //              .......... HELPER METHDOS .......
 //    ============================================================
 
-    private void registerComment()
+    void registerComment()
     {
         Timber.d("registerComment()");
         StringBuilder errorMsg = getErrorMsgBuilder(this);
         IncidCommentBean commentBean = new IncidCommentBean(mIncidencia);
-        IncidComment comment = commentBean.makeComment(mAcView ,errorMsg, getResources());
+        IncidComment comment = commentBean.makeComment(mAcView, errorMsg, getResources());
 
         if (comment == null) {
             Timber.d("registerComment(); comment == null");
@@ -89,7 +112,7 @@ public class IncidCommentRegAc extends AppCompatActivity {
     //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
     //    ============================================================
 
-// TODO: to persist the task during restarts and properly cancel the task when the activity is destroyed. (Example in Shelves)
+    // TODO: to persist the task during restarts and properly cancel the task when the activity is destroyed. (Example in Shelves)
     class IncidCommentRegister extends AsyncTask<IncidComment, Void, Integer> {
 
         UiException uiException;

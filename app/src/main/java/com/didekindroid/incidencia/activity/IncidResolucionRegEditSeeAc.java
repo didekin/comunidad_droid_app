@@ -1,8 +1,10 @@
 package com.didekindroid.incidencia.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.didekin.incidservice.dominio.IncidImportancia;
@@ -19,6 +21,8 @@ import static com.didekindroid.common.activity.SavedInstanceKey.INCID_RESOLUCION
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.getGcmToken;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_resolucion_ac_frgs_tag;
+import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenu;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * This activity is a point of registration for receiving GCM notifications of new incidents.
@@ -117,7 +121,24 @@ public class IncidResolucionRegEditSeeAc extends AppCompatActivity {
     }
 
 //    ============================================================
-//    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
+//    ......................... MENU .............................
 //    ============================================================
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        Timber.d("onOptionsItemSelected()");
+
+        int resourceId = checkNotNull(item.getItemId());
+        Intent intent;
+
+        switch (resourceId) {
+            case android.R.id.home:
+                doUpMenu(this);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
 }

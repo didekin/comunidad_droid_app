@@ -27,7 +27,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withHint;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.activity.TokenHandler.TKhandler;
-import static com.didekindroid.common.testutils.ActivityTestUtils.checkNavigateUp;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkUp;
+import static com.didekindroid.common.testutils.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOneUser;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
@@ -54,6 +55,7 @@ public class PasswordChangeAcTest {
 
     PasswordChangeAc mActivity;
     CleanUserEnum whatToClean = CLEAN_PEPE;
+    int activityLayoutId = R.id.password_change_ac_layout;
 
     @Rule
     public ActivityTestRule<PasswordChangeAc> mActivityRule =
@@ -94,7 +96,7 @@ public class PasswordChangeAcTest {
         assertThat(mActivity, notNullValue());
         assertThat(isRegisteredUser(mActivity), is(true));
 
-        onView(withId(R.id.password_change_ac_layout)).check(matches(isDisplayed()));
+        onView(withId(activityLayoutId)).check(matches(isDisplayed()));
 
         onView(withId(R.id.reg_usuario_password_ediT)).check(matches(withText(containsString(""))))
                 .check(matches(withHint(R.string.usuario_password_hint)))
@@ -106,11 +108,11 @@ public class PasswordChangeAcTest {
                 .check(matches(isDisplayed()));
 
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
-        checkNavigateUp();
+        clickNavigateUp();
     }
 
     @Test
-    public void testPasswordChange_1() throws InterruptedException
+    public void testPasswordChange_NotOK() throws InterruptedException
     {
         onView(withId(R.id.reg_usuario_password_ediT)).perform(replaceText("new_pepe_password"));
         onView(withId(R.id.reg_usuario_password_confirm_ediT)).perform(replaceText("new_wrong_password"));
@@ -122,7 +124,7 @@ public class PasswordChangeAcTest {
     }
 
     @Test
-    public void testPasswordChange_2() throws UiException
+    public void testPasswordChange_OK() throws UiException
     {
         whatToClean = CLEAN_NOTHING;
 
@@ -136,6 +138,7 @@ public class PasswordChangeAcTest {
         onView(withId(R.id.password_change_ac_button)).check(matches(isDisplayed())).perform(click());
 
         onView(withId(R.id.user_data_ac_layout)).check(matches(isDisplayed()));
+        checkUp(activityLayoutId);
 
         // Check security data: new data.
         AccessToken tokenAfter = Oauth2.getRefreshUserToken(refreshTkValue);

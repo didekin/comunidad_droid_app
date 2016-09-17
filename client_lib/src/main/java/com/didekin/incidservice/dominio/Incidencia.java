@@ -17,7 +17,7 @@ import static com.didekin.common.exception.DidekinExceptionMsg.INCIDENCIA_WRONG_
  * Date: 12/11/15
  * Time: 17:07
  */
-@SuppressWarnings({"FieldCanBeLocal", "unused"})
+@SuppressWarnings({"PrivateMemberAccessBetweenOuterAndInnerClass"})
 public final class Incidencia implements Serializable, GcmToComunidadHelper {
 
     private final long incidenciaId;
@@ -29,7 +29,7 @@ public final class Incidencia implements Serializable, GcmToComunidadHelper {
     private final Timestamp fechaCierre;
     private final float importanciaAvg;
 
-    protected Incidencia(IncidenciaBuilder incidenciaBuilder)
+    private Incidencia(IncidenciaBuilder incidenciaBuilder)
     {
         incidenciaId = incidenciaBuilder.incidenciaId;
         comunidad = incidenciaBuilder.comunidad;
@@ -68,12 +68,12 @@ public final class Incidencia implements Serializable, GcmToComunidadHelper {
 
     public Timestamp getFechaAlta()
     {
-        return fechaAlta;
+        return fechaAlta != null ? new Timestamp(fechaAlta.getTime()) : null;
     }
 
     public Timestamp getFechaCierre()
     {
-        return fechaCierre;
+        return fechaCierre != null ? new Timestamp(fechaCierre.getTime()) : null;
     }
 
     public float getImportanciaAvg()
@@ -122,6 +122,7 @@ public final class Incidencia implements Serializable, GcmToComunidadHelper {
 
 //    ==================== BUILDER ====================
 
+    @SuppressWarnings("PrivateMemberAccessBetweenOuterAndInnerClass")
     public final static class IncidenciaBuilder implements BeanBuilder<Incidencia> {
 
         private long incidenciaId;
@@ -215,6 +216,7 @@ public final class Incidencia implements Serializable, GcmToComunidadHelper {
     /**
      * Example of serialization proxy.
      */
+    @SuppressWarnings("PrivateMemberAccessBetweenOuterAndInnerClass")
     private static class InnerSerial implements Serializable {
 
         private static final long serialVersionUID = SerialNumber.INCIDENCIA.number;

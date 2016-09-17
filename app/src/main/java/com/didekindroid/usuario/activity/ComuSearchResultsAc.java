@@ -14,7 +14,6 @@ import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.utils.UIutils;
-import com.didekindroid.usuario.activity.utils.UserMenu;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -28,8 +27,10 @@ import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_SEARCH;
 import static com.didekindroid.common.activity.BundleKey.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
+import static com.didekindroid.usuario.activity.utils.UserMenu.REG_COMU_USERCOMU_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.REG_COMU_USER_USERCOMU_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_USERCOMU_BY_USER_AC;
+import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenu;
 import static com.didekindroid.usuario.activity.utils.UsuarioFragmentTags.comu_search_results_list_fr_tag;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -85,13 +86,6 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
     }
 
     @Override
-    protected void onStart()
-    {
-        Timber.d("onStart()");
-        super.onStart();
-    }
-
-    @Override
     protected void onSaveInstanceState(Bundle savedInstanceState)
     {
         Timber.d("onSaveInstanceState()");
@@ -107,7 +101,7 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
         if (savedInstanceState != null) {
             mIndex = savedInstanceState.getInt(COMUNIDAD_LIST_INDEX.name(), 0);
             mComunidadesSummaryFrg.mListView.setSelection(mIndex);
-            if (mComunidad == null){
+            if (mComunidad == null) {
                 mComunidad = (Comunidad) savedInstanceState.getSerializable(COMUNIDAD_SEARCH.key);
             }
         }
@@ -133,11 +127,18 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
         int resourceId = checkNotNull(item.getItemId());
 
         switch (resourceId) {
+            case android.R.id.home:
+                doUpMenu(this);
+                return true;
             case R.id.see_usercomu_by_user_ac_mn:
                 SEE_USERCOMU_BY_USER_AC.doMenuItem(this);
                 return true;
-            case R.id.reg_comu_user_usercomu_ac_mn:
-                REG_COMU_USER_USERCOMU_AC.doMenuItem(this);
+            case R.id.reg_nueva_comunidad_ac_mn:
+                if (isRegisteredUser(this)) {
+                    REG_COMU_USERCOMU_AC.doMenuItem(this);
+                } else {
+                    REG_COMU_USER_USERCOMU_AC.doMenuItem(this);
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -210,7 +211,11 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
                         .commit();
             } else {
                 UIutils.makeToast(ComuSearchResultsAc.this, R.string.no_result_search_comunidad, Toast.LENGTH_LONG);
-                UserMenu.REG_COMU_USER_USERCOMU_AC.doMenuItem(ComuSearchResultsAc.this);
+                if (isRegisteredUser(ComuSearchResultsAc.this)) {
+                    REG_COMU_USERCOMU_AC.doMenuItem(ComuSearchResultsAc.this);
+                } else {
+                    REG_COMU_USER_USERCOMU_AC.doMenuItem(ComuSearchResultsAc.this);
+                }
             }
         }
     }

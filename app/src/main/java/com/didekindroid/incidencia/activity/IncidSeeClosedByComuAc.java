@@ -173,6 +173,10 @@ public class IncidSeeClosedByComuAc extends AppCompatActivity implements
         UiException uiException;
         Incidencia incidencia;
 
+        ResolucionGetter()
+        {
+        }
+
         @Override
         protected Resolucion doInBackground(final Incidencia... incidencias)
         {

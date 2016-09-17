@@ -19,3 +19,16 @@
 -keep class retrofit.** { *; }
 -keepattributes Signature
 -keepattributes Exceptions
+-dontwarn okio.**
+-dontwarn retrofit2.Platform$Java8
+
+-dontwarn javax.annotation.**
+# Guava
+-keep class sun.misc.Unsafe { *; }
+-dontwarn sun.misc.Unsafe
+-keep class com.google.j2objc.annotations.** { *; }
+-dontwarn   com.google.j2objc.annotations.**
+-keep class java.lang.ClassValue { *; }
+-dontwarn   java.lang.ClassValue
+-keep class org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement { *; }
+-dontwarn   org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement

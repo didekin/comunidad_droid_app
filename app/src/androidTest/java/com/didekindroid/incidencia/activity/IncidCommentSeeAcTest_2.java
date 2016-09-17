@@ -50,14 +50,14 @@ import static org.junit.Assert.assertThat;
  */
 
 /**
- * Tests sin comentarios registrados.
+ * Tests CON comentarios registrados.
  */
 @SuppressWarnings("ConstantConditions")
 @RunWith(AndroidJUnit4.class)
 public class IncidCommentSeeAcTest_2 {
 
     IncidCommentSeeAc mActivity;
-    private IncidImportancia incidJuanReal1;
+    IncidImportancia incidJuanReal1;
     private IncidCommentSeeAdapter mAdapter;
 
     @Rule

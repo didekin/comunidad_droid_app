@@ -3,6 +3,7 @@ package com.didekindroid;
 import android.app.Application;
 import android.content.Context;
 
+import butterknife.ButterKnife;
 import timber.log.Timber;
 
 import static java.lang.Integer.parseInt;
@@ -27,6 +28,7 @@ public final class DidekindroidApp extends Application {
 
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
+            ButterKnife.setDebug(true);
         }
         // TODO: ejemplo en Timber para librería de comunicación de errores en cliente.
 

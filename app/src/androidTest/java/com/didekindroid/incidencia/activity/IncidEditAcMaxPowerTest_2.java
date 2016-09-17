@@ -27,6 +27,7 @@ import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJEC
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkNoToastInTest;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.INCID_DEFAULT_DESC;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
@@ -96,25 +97,24 @@ public class IncidEditAcMaxPowerTest_2 extends IncidEditAbstractTest {
 //  ========================================  TESTS  =======================================
 
     @Test
-    public void testOnCreate() throws Exception
-    {
-        checkScreenEditMaxPowerFr();
-    }
-
-    @Test
     public void testDeleteIncidencia_1() throws InterruptedException
     {
-        Thread.sleep(4000);
+        checkScreenEditMaxPowerFr();
+
         /* CASO OK: borramos la incidencia.*/
         onView(withId(R.id.incid_edit_fr_borrar_button)).perform(scrollTo(), click());
         // Verificamos que no ha habido error.
         checkNoToastInTest(R.string.incidencia_wrong_init,mActivity);
         onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed()));
+        checkUp();
+        checkScreenEditMaxPowerFr();
     }
 
     @Test
-    public void testDeleteAndPressBack()
+    public void testDeleteAndPressBack() throws InterruptedException
     {
+        checkScreenEditMaxPowerFr();
+
         //CASO NOT OK: intentamos borrar una incidencia ya borrada, volviendo con back.
         onView(withId(R.id.incid_edit_fr_borrar_button)).perform(scrollTo(), click());
         onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed())).perform(pressBack());
@@ -122,5 +122,6 @@ public class IncidEditAcMaxPowerTest_2 extends IncidEditAbstractTest {
         onView(withId(R.id.incid_edit_fr_borrar_button)).check(matches(isDisplayed())).perform(click());
         checkToastInTest(R.string.incidencia_wrong_init, mActivity);
         onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed()));
+        Thread.sleep(3000);
     }
 }

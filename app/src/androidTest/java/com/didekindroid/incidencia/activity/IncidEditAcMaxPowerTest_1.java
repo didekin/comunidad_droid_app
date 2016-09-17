@@ -33,6 +33,7 @@ import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJEC
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkNoToastInTest;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
@@ -119,14 +120,9 @@ public class IncidEditAcMaxPowerTest_1 extends IncidEditAbstractTest {
 //    ============================  TESTS  ===================================
 
     @Test
-    public void testOnCreate_1() throws Exception
+    public void testOnCreate() throws Exception
     {
         checkScreenEditMaxPowerFr();
-    }
-
-    @Test
-    public void testOnData_1()
-    {
         checkDataEditMaxPowerFr(dBHelper);
     }
 
@@ -137,6 +133,7 @@ public class IncidEditAcMaxPowerTest_1 extends IncidEditAbstractTest {
         onView(withId(R.id.incid_reg_desc_ed)).perform(replaceText("descripcion = not valid"));
         onView(withId(R.id.incid_edit_fr_modif_button)).perform(scrollTo(), click());
         checkToastInTest(R.string.error_validation_msg, mActivity, R.string.incid_reg_descripcion);
+        Thread.sleep(2000);
     }
 
     @Test
@@ -160,5 +157,8 @@ public class IncidEditAcMaxPowerTest_1 extends IncidEditAbstractTest {
         // Verificamos que no ha habido error.
         checkNoToastInTest(R.string.incidencia_wrong_init,mActivity);
         onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed()));
+
+        checkUp();
+        checkScreenEditMaxPowerFr();
     }
 }

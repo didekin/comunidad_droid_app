@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDialog;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,7 +34,9 @@ import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.common.utils.UIutils.makeToast;
 import static com.didekindroid.common.utils.UIutils.updateIsRegistered;
 import static com.didekindroid.common.webservices.Oauth2Service.Oauth2;
+import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenu;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * User: pedro
@@ -54,7 +57,7 @@ import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 public class LoginAc extends AppCompatActivity {
 
     private View mAcView;
-    private short counterWrong;
+    short counterWrong;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -64,7 +67,7 @@ public class LoginAc extends AppCompatActivity {
 
         mAcView = getLayoutInflater().inflate(R.layout.login_ac, null);
         setContentView(mAcView);
-        doToolBar(this, false);
+        doToolBar(this, true);
 
         Button mLoginButton = (Button) findViewById(R.id.login_ac_button);
         mLoginButton.setOnClickListener(new View.OnClickListener() {
@@ -84,7 +87,7 @@ public class LoginAc extends AppCompatActivity {
         super.onPause();
     }
 
-    private void doLogin()
+    void doLogin()
     {
         Timber.i("doLogin()");
 
@@ -107,20 +110,20 @@ public class LoginAc extends AppCompatActivity {
 
 //    ........................ Helper methods in the activity for the dialog .............................
 
-    private void showDialog(String userName)
+    void showDialog(String userName)
     {
         Timber.d("showDialog()");
         DialogFragment newFragment = PasswordMailDialog.newInstance(userName);
         newFragment.show(getFragmentManager(), "passwordMailDialog");
     }
 
-    private void doPositiveClick(String email)
+    void doPositiveClick(String email)
     {
         Timber.d("doPositiveClick()");
         new LoginMailSender().execute(email);
     }
 
-    private void doNegativeClick()
+    void doNegativeClick()
     {
         Timber.d("doNegativeClick()");
 
@@ -129,6 +132,25 @@ public class LoginAc extends AppCompatActivity {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();
+    }
+
+    // ============================================================
+    //    ..... ACTION BAR ....
+    // ============================================================
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        Timber.d("onOptionsItemSelected()");
+        int resourceId = checkNotNull(item.getItemId());
+
+        switch (resourceId) {
+            case android.R.id.home:
+                doUpMenu(this);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
 //    =====================================================================================================
@@ -245,7 +267,7 @@ public class LoginAc extends AppCompatActivity {
             try {
                 isPasswordSend = ServOne.passwordSend(emails[0]).execute().body();
             } catch (IOException e) {
-                 uiException = new UiException(ErrorBean.GENERIC_ERROR);
+                uiException = new UiException(ErrorBean.GENERIC_ERROR);
             }
             return isPasswordSend;
         }

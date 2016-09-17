@@ -7,7 +7,6 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekin.oauth2.OauthToken.AccessToken;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
-import com.didekindroid.common.testutils.ActivityTestUtils;
 import com.didekindroid.usuario.testutils.CleanUserEnum;
 
 import org.junit.After;
@@ -32,9 +31,12 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.activity.TokenHandler.TKhandler;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
+import static com.didekindroid.common.testutils.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
+import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_OPEN_BY_COMU_AC;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_NOTHING;
 import static com.didekindroid.usuario.testutils.UserMenuTestUtils.COMU_SEARCH_AC;
@@ -57,11 +59,12 @@ import static org.junit.Assert.assertThat;
  * Time: 14:25
  */
 @RunWith(AndroidJUnit4.class)
-public class UserDataAc_1_Test {
+public class UserDataAcTest {
 
     UserDataAc mActivity;
     Resources resources;
     CleanUserEnum whatToClean = CLEAN_JUAN;
+    int activityLayoutId = R.id.user_data_ac_layout;
 
     @Rule
     public ActivityTestRule<UserDataAc> mActivityRule = new ActivityTestRule<UserDataAc>(UserDataAc.class) {
@@ -102,7 +105,7 @@ public class UserDataAc_1_Test {
         assertThat(mActivity, notNullValue());
         assertThat(isRegisteredUser(mActivity), is(true));
 
-        onView(withId(R.id.user_data_ac_layout)).check(matches(isDisplayed()));
+        onView(withId(activityLayoutId)).check(matches(isDisplayed()));
         onView(withId(R.id.reg_usuario_email_editT)).check(matches(isDisplayed()));
         onView(withId(R.id.reg_usuario_alias_ediT)).check(matches(isDisplayed()));
 
@@ -114,7 +117,7 @@ public class UserDataAc_1_Test {
         onView(withId(R.id.user_data_modif_button)).check(matches(isDisplayed()));
 
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
-        ActivityTestUtils.checkNavigateUp();
+        clickNavigateUp();
     }
 
     @Test
@@ -182,7 +185,10 @@ public class UserDataAc_1_Test {
 
         onView(withId(R.id.user_data_modif_button)).perform(scrollTo())
                 .check(matches(isDisplayed())).perform(click());
+
+        // Verificamos navegación.
         onView(withId(R.id.see_usercomu_by_user_frg)).check(matches(isDisplayed()));
+        checkUp(activityLayoutId);
 
         // New security data: same as the old one.
         AccessToken tokenAfter = TKhandler.getAccessTokenInCache();
@@ -206,7 +212,10 @@ public class UserDataAc_1_Test {
 
         onView(withId(R.id.user_data_modif_button)).perform(scrollTo())
                 .check(matches(isDisplayed())).perform(click());
+
+        // Verificamos navegación.
         onView(withId(R.id.see_usercomu_by_user_frg)).check(matches(isDisplayed()));
+        checkUp(activityLayoutId);
 
         // New security data.
         AccessToken tokenAfter = TKhandler.getAccessTokenInCache();
@@ -214,6 +223,7 @@ public class UserDataAc_1_Test {
         assertThat(tokenAfter.getValue(), not(is(accessTkValue)));  // differtent accessToken.
         assertThat(tokenAfter.getRefreshToken().getValue(), not(is(refreshTkValue)));  //different refreshToken.
 
+        // Borramos al usuario en BD.
         ServOne.deleteUser();
     }
 
@@ -223,23 +233,34 @@ public class UserDataAc_1_Test {
     public void testComuSearchMn() throws InterruptedException
     {
         COMU_SEARCH_AC.checkMenuItem_WTk(mActivity);
+        // NO navigate-up.
     }
 
     @Test
     public void testDeleteMeMn() throws InterruptedException
     {
         DELETE_ME_AC.checkMenuItem_WTk(mActivity);
+        checkUp(activityLayoutId);
     }
 
     @Test
     public void testPasswordChangeMn() throws InterruptedException
     {
         PASSWORD_CHANGE_AC.checkMenuItem_WTk(mActivity);
+        checkUp(activityLayoutId);
     }
 
     @Test
     public void testUserComuByUserMn() throws InterruptedException
     {
         SEE_USERCOMU_BY_USER_AC.checkMenuItem_WTk(mActivity);
+        checkUp(activityLayoutId);
+    }
+
+    @Test
+    public void testIncidSeeByComuMn() throws InterruptedException
+    {
+        INCID_SEE_OPEN_BY_COMU_AC.checkMenuItem_WTk(mActivity);
+        checkUp(activityLayoutId);
     }
 }

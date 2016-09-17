@@ -26,6 +26,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_RESOLUCION_REG_EDIT_AC;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
@@ -52,7 +53,7 @@ public class IncidEditAcTest_Mn2 extends IncidEditAbstractTest {
             protected Intent getActivityIntent()
             {
                 try {
-                    signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
+                    signUpAndUpdateTk(COMU_PLAZUELA5_JUAN); // Usuario ADM.
                     juanUserComu = ServOne.seeUserComusByUser().get(0);
                     incidenciaJuan = new IncidImportancia.IncidImportanciaBuilder(
                             doIncidencia(juanUserComu.getUsuario().getUserName(), "Incidencia Plazueles One", juanUserComu.getComunidad().getC_Id(), (short) 43))
@@ -92,7 +93,10 @@ public class IncidEditAcTest_Mn2 extends IncidEditAbstractTest {
         INCID_RESOLUCION_REG_EDIT_AC.checkMenuItem_WTk(mActivity);
         onView(withId(R.id.incid_resolucion_reg_frg_layout)).check(matches(isDisplayed()));
         intended(hasExtra(INCID_IMPORTANCIA_OBJECT.key, incidenciaJuan));
-        // No key con resolución.
+        // NO resolución en BD --> No key con resolución.
         intended(not(hasExtraWithKey(INCID_RESOLUCION_OBJECT.key)));
+
+        checkUp();
+        checkScreenEditMaxPowerFr();
     }
 }

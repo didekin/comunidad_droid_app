@@ -39,6 +39,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekin.usuario.dominio.Rol.PROPIETARIO;
 import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_FLAG;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.testutils.ActivityTestUtils.updateSecurityData;
@@ -71,7 +72,7 @@ public class IncidSeeOpenByComuAcTest_4 {
     UsuarioComunidad userComuJuan;
     private IncidSeeOpenByComuAdapter adapter;
 
-    private Resolucion resolucion;
+    Resolucion resolucion;
     @Rule
     public IntentsTestRule<IncidSeeOpenByComuAc> activityRule = new IntentsTestRule<IncidSeeOpenByComuAc>(IncidSeeOpenByComuAc.class) {
 
@@ -166,7 +167,9 @@ public class IncidSeeOpenByComuAcTest_4 {
         assertThat(incidAndResolBundle.hasResolucion(),is(true));
         intended(hasExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia));
         intended(hasExtra(INCID_RESOLUCION_FLAG.key, incidAndResolBundle.hasResolucion()));
+
         // Juan entra en la pantalla de edición de la incidencia, tras seleccionarla.
         onView(withId(R.id.incid_edit_fragment_container_ac)).check(matches(isDisplayed()));
+        checkUp(R.id.incid_see_open_by_comu_ac, R.id.incid_see_generic_layout);
     }
 }

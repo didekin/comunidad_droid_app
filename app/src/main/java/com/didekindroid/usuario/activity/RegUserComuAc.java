@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -26,7 +27,9 @@ import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.utils.UIutils.makeToast;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUserComuBeanFromView;
+import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenu;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
 /**
@@ -81,7 +84,7 @@ public class RegUserComuAc extends AppCompatActivity {
         });
     }
 
-    private void doOnclick()
+    void doOnclick()
     {
         Timber.d("doOnclick()");
 
@@ -108,60 +111,24 @@ public class RegUserComuAc extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onRestart()
-    {
-        Timber.d("onRestart()");
-        super.onRestart();
-    }
+
+    // ============================================================
+    //    ..... ACTION BAR ....
+    // ============================================================
 
     @Override
-    protected void onStart()
+    public boolean onOptionsItemSelected(MenuItem item)
     {
-        Timber.d("onStart()");
-        super.onStart();
-    }
+        Timber.d("onOptionsItemSelected()");
 
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState)
-    {
-        Timber.d("onRestoreInstanceState()");
-        super.onRestoreInstanceState(savedInstanceState);
-    }
-
-    @Override
-    protected void onResume()
-    {
-        Timber.d("onResume()");
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause()
-    {
-        Timber.d("onPause()");
-        super.onPause();
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState)
-    {
-        Timber.d("onSaveInstanceState()");
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    protected void onStop()
-    {
-        Timber.d("onStop()");
-        super.onStop();
-    }
-
-    @Override
-    protected void onDestroy()
-    {
-        Timber.d("onDestroy()");
-        super.onDestroy();
+        int resourceId = checkNotNull(item.getItemId());
+        switch (resourceId) {
+            case android.R.id.home:
+                doUpMenu(this);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     //    ============================================================

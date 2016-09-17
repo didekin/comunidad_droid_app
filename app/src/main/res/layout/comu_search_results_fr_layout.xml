@@ -8,6 +8,8 @@
               >
     <ListView
         android:id="@id/android:list"
-        style="@style/basicList">
+        style="@style/basicList"
+        android:choiceMode="singleChoice"
+        android:listSelector="@color/transparent">
     </ListView>
 </LinearLayout>

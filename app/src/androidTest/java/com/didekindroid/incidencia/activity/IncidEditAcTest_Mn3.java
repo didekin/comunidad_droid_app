@@ -30,6 +30,7 @@ import static com.didekin.usuario.dominio.Rol.PRESIDENTE;
 import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.testutils.ActivityTestUtils.updateSecurityData;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_RESOLUCION_REG_EDIT_AC;
@@ -122,10 +123,14 @@ public class IncidEditAcTest_Mn3 extends IncidEditAbstractTest {
     public void testIncidResolucionReg_Mn() throws Exception
     {
         INCID_RESOLUCION_REG_EDIT_AC.checkMenuItem_WTk(mActivity);
+
         onView(ViewMatchers.withId(R.id.incid_resolucion_see_fr_layout)).check(matches(isDisplayed()));
         // Extra con incidImportancia.
         intended(hasExtra(INCID_IMPORTANCIA_OBJECT.key, incidenciaJuan));
-        // Extra con resolución.
+        // Hay resolución en BD --> extra con resolución.
         intended(hasExtra(INCID_RESOLUCION_OBJECT.key, resolucion));
+
+        checkUp();
+        checkScreenEditMaxPowerFr();
     }
 }

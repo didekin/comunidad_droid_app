@@ -38,6 +38,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.regSeveralUserComuSameUser;
 import static com.didekindroid.common.utils.UIutils.formatTimeStampToString;
@@ -289,12 +290,15 @@ public class IncidSeeOpenByComuAcTest_2 {
         Thread.sleep(1000);
         IncidenciaUser incidUser_0 = adapter.getItem(0);
         Incidencia incidencia_0 = incidUser_0.getIncidencia();
+
         onData(is(incidUser_0)).inAdapterView(withId(android.R.id.list))
                 .check(matches(isDisplayed()))
                 .perform(click());
 
+        // Checks.
         IncidImportancia incidImportancia = IncidenciaServ.seeIncidImportancia(incidencia_0.getIncidenciaId()).getIncidImportancia();
         intended(hasExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia));
         onView(withId(R.id.incid_edit_fragment_container_ac)).check(matches(isDisplayed()));
+        checkUp(R.id.incid_see_open_by_comu_ac, R.id.incid_see_generic_layout);
     }
 }

@@ -7,7 +7,6 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
-import com.didekindroid.common.testutils.ActivityTestUtils;
 
 import org.hamcrest.Matchers;
 import org.junit.After;
@@ -25,11 +24,16 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
+import static com.didekindroid.common.testutils.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.external.LongListMatchers.withAdaptedData;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
+import static com.didekindroid.usuario.testutils.UserMenuTestUtils.COMU_SEARCH_AC;
+import static com.didekindroid.usuario.testutils.UserMenuTestUtils.SEE_USERCOMU_BY_USER_AC;
+import static com.didekindroid.usuario.testutils.UserMenuTestUtils.USER_DATA_AC;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_PLAZUELA5_JUAN;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_TRAV_PLAZUELA_PEPE;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.validaTypedUsuarioComunidad;
@@ -51,6 +55,8 @@ public class SeeUserComuByComuAc_1_Test {
     SeeUserComuByComuFr mFragment;
     long comunidadId;
     Intent intent;
+    int fragmentLayoutId = R.id.see_usercomu_by_comu_frg;
+
 
     @Rule
     public ActivityTestRule<SeeUserComuByComuAc> mActivityRule =
@@ -99,13 +105,13 @@ public class SeeUserComuByComuAc_1_Test {
         assertThat(mFragment.fragmentListView, notNullValue());
         assertThat(mFragment.nombreComuView, notNullValue());
 
-        onView(withId(R.id.see_usercomu_by_comu_frg)).check(matches(isDisplayed()));
+        onView(withId(fragmentLayoutId)).check(matches(isDisplayed()));
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
-        ActivityTestUtils.checkNavigateUp();
+        clickNavigateUp();
     }
 
     @Test
-    public void testViewData_1() throws InterruptedException
+    public void testViewData() throws InterruptedException
     {
         Thread.sleep(2000);
         SeeUserComutByComuListAdapter mAdapter = mFragment.mAdapter;
@@ -120,5 +126,26 @@ public class SeeUserComuByComuAc_1_Test {
         // Header.
         onView(withId(R.id.see_usercomu_by_comu_list_header))
                 .check(matches(withText(containsString(COMU_PLAZUELA5_JUAN.getComunidad().getNombreComunidad()))));
+    }
+
+    @Test
+    public void testUserComuByUserMn_withToken() throws InterruptedException
+    {
+        SEE_USERCOMU_BY_USER_AC.checkMenuItem_WTk(mActivity);
+        checkUp(fragmentLayoutId);
+    }
+
+    @Test
+    public void testUserDataMn_withToken() throws InterruptedException
+    {
+        USER_DATA_AC.checkMenuItem_WTk(mActivity);
+        checkUp(fragmentLayoutId);
+    }
+
+    @Test
+    public void testComuSearchMn_withToken() throws InterruptedException
+    {
+        COMU_SEARCH_AC.checkMenuItem_WTk(mActivity);
+        // En este caso no hay opción de 'navigate-up'.
     }
 }

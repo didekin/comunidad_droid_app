@@ -77,17 +77,16 @@ public class IncidResolucionSeeFr extends Fragment {
         int resourceId = checkNotNull(item.getItemId());
 
         switch (resourceId) {
-            // TODO: no parece funcionar el back cuando elige esta opción.
+            case android.R.id.home:
+                if (getFragmentManager().getBackStackEntryCount() > 0) {
+                    getFragmentManager().popBackStack();
+                }
+                return true;
             case R.id.incid_comments_see_ac_mn:
                 Intent intent = new Intent();
                 intent.putExtra(INCIDENCIA_OBJECT.key, getArguments().getSerializable(INCIDENCIA_OBJECT.key));
                 getActivity().setIntent(intent);
                 INCID_COMMENTS_SEE_AC.doMenuItem(getActivity());
-                return true;
-            case android.R.id.home:
-                if (getFragmentManager().getBackStackEntryCount() > 0) {
-                    getFragmentManager().popBackStack();
-                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

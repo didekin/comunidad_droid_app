@@ -22,7 +22,7 @@ public enum IncidenciaMenuTestUtils {
 
     INCID_COMMENT_REG_AC {
         @Override
-        public void checkMenuItem_WTk(Activity activity) throws InterruptedException
+        public void checkMenuItem_WTk(Activity activity)
         {
             check(activity, R.string.incid_comment_reg_ac_mn, R.id.incid_comment_reg_ac_layout);
         }
@@ -30,7 +30,7 @@ public enum IncidenciaMenuTestUtils {
 
     INCID_COMMENTS_SEE_AC {
         @Override
-        public void checkMenuItem_WTk(Activity activity) throws InterruptedException
+        public void checkMenuItem_WTk(Activity activity)
         {
             check(activity, R.string.incid_comments_see_ac_mn, R.id.incid_comments_see_fr_layout);
         }
@@ -38,7 +38,7 @@ public enum IncidenciaMenuTestUtils {
 
     INCID_REG_AC {
         @Override
-        public void checkMenuItem_WTk(Activity activity) throws InterruptedException
+        public void checkMenuItem_WTk(Activity activity)
         {
             check(activity, R.string.incid_reg_ac_mn, R.id.incid_reg_ac_layout);
         }
@@ -46,7 +46,7 @@ public enum IncidenciaMenuTestUtils {
 
     INCID_RESOLUCION_REG_EDIT_AC {
         @Override
-        public void checkMenuItem_WTk(Activity activity) throws InterruptedException
+        public void checkMenuItem_WTk(Activity activity)
         {
             onView(withText(R.string.incid_resolucion_ac_mn)).check(matches(isDisplayed())).perform(click());
             onView(withId(R.id.incid_resolucion_fragment_container_ac)).check(matches(isDisplayed()));
@@ -55,7 +55,7 @@ public enum IncidenciaMenuTestUtils {
 
     INCID_SEE_OPEN_BY_COMU_AC {
         @Override
-        public void checkMenuItem_WTk(Activity activity) throws InterruptedException
+        public void checkMenuItem_WTk(Activity activity)
         {
             check(activity, R.string.incid_see_by_comu_ac_mn, R.id.incid_see_open_by_comu_ac);
         }
@@ -63,7 +63,7 @@ public enum IncidenciaMenuTestUtils {
 
     INCID_SEE_CLOSED_BY_COMU_AC {
         @Override
-        public void checkMenuItem_WTk(Activity activity) throws InterruptedException
+        public void checkMenuItem_WTk(Activity activity)
         {
             check(activity, R.string.incid_closed_see_by_usercomu_ac_mn, R.id.incid_see_closed_by_comu_ac);
         }
@@ -73,12 +73,16 @@ public enum IncidenciaMenuTestUtils {
 
 //    ============================= HELPER METHODS ==========================
 
-    private static void check(Activity activity, int menuResourceId, int actionResourceId) throws InterruptedException
+    static void check(Activity activity, int menuResourceId, int actionResourceId)
     {
-        onView(withText(menuResourceId)).check(doesNotExist());
-        openActionBarOverflowOrOptionsMenu(activity);
-        Thread.sleep(1000);
-        onView(withText(menuResourceId)).check(matches(isDisplayed())).perform(click());
-        onView(withId(actionResourceId)).check(matches(isDisplayed()));
+        try {
+            onView(withText(menuResourceId)).check(doesNotExist());
+            openActionBarOverflowOrOptionsMenu(activity);
+            Thread.sleep(1000);
+        } catch (Throwable e) {}
+        finally {
+            onView(withText(menuResourceId)).check(matches(isDisplayed())).perform(click());
+            onView(withId(actionResourceId)).check(matches(isDisplayed()));
+        }
     }
 }

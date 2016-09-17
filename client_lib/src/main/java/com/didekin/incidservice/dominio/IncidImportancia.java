@@ -20,15 +20,15 @@ import java.sql.Timestamp;
  * Holder object for an incidencia and the importancia assigned by an user.
  * Integrity constraint: incidencia.comunidad == userComu.comunidad
  */
-@SuppressWarnings("unused")
-public class IncidImportancia implements Serializable {
+@SuppressWarnings({"PrivateMemberAccessBetweenOuterAndInnerClass"})
+public final class IncidImportancia implements Serializable {
 
     private final Incidencia incidencia;
     private final UsuarioComunidad userComu;
     private final short importancia;
     private final Timestamp fechaAlta;
 
-    public IncidImportancia(IncidImportanciaBuilder builder)
+    private IncidImportancia(IncidImportanciaBuilder builder)
     {
         incidencia = builder.incidencia;
         userComu = builder.userComu;
@@ -61,7 +61,7 @@ public class IncidImportancia implements Serializable {
 
     public Timestamp getFechaAlta()
     {
-        return fechaAlta;
+        return fechaAlta != null ? new Timestamp(fechaAlta.getTime()) : null;
     }
 
     @Override

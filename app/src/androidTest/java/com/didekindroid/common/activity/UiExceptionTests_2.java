@@ -51,7 +51,7 @@ import static org.junit.Assert.assertThat;
 public class UiExceptionTests_2 extends UiExceptionAbstractTest {
 
     IncidImportancia mIncidJuanPlazuelas;
-    private MockActivity mActivity;
+    MockActivity mActivity;
 
     @Rule
     public IntentsTestRule<MockActivity> intentRule = new IntentsTestRule<MockActivity>(MockActivity.class) {

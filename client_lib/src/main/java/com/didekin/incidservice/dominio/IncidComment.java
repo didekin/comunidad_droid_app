@@ -12,8 +12,8 @@ import static com.didekin.common.exception.DidekinExceptionMsg.INCIDENCIA_COMMEN
  * Date: 03/02/16
  * Time: 10:40
  */
-@SuppressWarnings("unused")
-public class IncidComment {
+@SuppressWarnings({"PrivateMemberAccessBetweenOuterAndInnerClass"})
+public final class IncidComment {
 
     private final long commentId;
     private final String descripcion;
@@ -21,7 +21,7 @@ public class IncidComment {
     private final Usuario redactor;
     private final Timestamp fechaAlta;
 
-    public IncidComment(IncidCommentBuilder builder)
+    private IncidComment(IncidCommentBuilder builder)
     {
         commentId = builder.commentId;
         descripcion = builder.descripcion;
@@ -52,7 +52,7 @@ public class IncidComment {
 
     public Timestamp getFechaAlta()
     {
-        return fechaAlta;
+        return fechaAlta != null ? new Timestamp(fechaAlta.getTime()) : null;
     }
 
     @Override
@@ -85,6 +85,7 @@ public class IncidComment {
 
     // ==================== BUILDER ====================
 
+    @SuppressWarnings("PrivateMemberAccessBetweenOuterAndInnerClass")
     public final static class IncidCommentBuilder implements BeanBuilder<IncidComment> {
 
         private long commentId;

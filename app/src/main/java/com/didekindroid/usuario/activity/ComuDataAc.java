@@ -1,10 +1,10 @@
 package com.didekindroid.usuario.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,11 +22,13 @@ import com.didekindroid.usuario.dominio.ComunidadBean;
 import timber.log.Timber;
 
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
+import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.utils.UIutils.makeToast;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeComunidadBeanFromView;
 import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_USERCOMU_BY_COMU_AC;
+import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenu;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
@@ -39,13 +41,13 @@ import static com.google.common.base.Preconditions.checkState;
  * Postconditions:
  * 1.
  */
-public class ComuDataAc extends Activity implements RegComuFr.RegComuFrListener {
+public class ComuDataAc extends AppCompatActivity implements RegComuFr.RegComuFrListener {
 
     long mIdComunidad;
     View mAcView;
     Button mModifyButton;
     RegComuFr mRegComuFrg;
-    private Comunidad mComunidad;
+    Comunidad mComunidad;
 
     private boolean isTipoViaSpinnerSet;
     private boolean isCASpinnerSet;
@@ -69,6 +71,7 @@ public class ComuDataAc extends Activity implements RegComuFr.RegComuFrListener 
 
         mAcView = getLayoutInflater().inflate(R.layout.comu_data_ac, null);
         setContentView(mAcView);
+        doToolBar(this, true);
         mRegComuFrg = (RegComuFr) getFragmentManager().findFragmentById(R.id.reg_comunidad_frg);
         mRegComuFrg.setmActivityListener(this);
 
@@ -83,7 +86,7 @@ public class ComuDataAc extends Activity implements RegComuFr.RegComuFrListener 
         });
     }
 
-    private void modifyComuData()
+    void modifyComuData()
     {
         Timber.d("modifyComuData()");
 
@@ -112,7 +115,7 @@ public class ComuDataAc extends Activity implements RegComuFr.RegComuFrListener 
 
 //  ================================= Painting the default comunidad data ================================
 
-    private void setEditTextComuData()
+    void setEditTextComuData()
     {
         Timber.d("setEditTextComuData()");
 
@@ -233,6 +236,9 @@ public class ComuDataAc extends Activity implements RegComuFr.RegComuFrListener 
         int resourceId = checkNotNull(item.getItemId());
 
         switch (resourceId) {
+            case android.R.id.home:
+                doUpMenu(this);
+                return true;
             case R.id.see_usercomu_by_comu_ac_mn:
                 Intent intent = new Intent();
                 intent.putExtra(COMUNIDAD_ID.key, mIdComunidad);

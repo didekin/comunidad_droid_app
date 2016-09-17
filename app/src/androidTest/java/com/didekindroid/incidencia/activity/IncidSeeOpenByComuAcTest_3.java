@@ -38,7 +38,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekin.usuario.dominio.Rol.PROPIETARIO;
 import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_FLAG;
-import static com.didekindroid.common.testutils.ActivityTestUtils.checkNavigateUp;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkUp;
+import static com.didekindroid.common.testutils.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.testutils.ActivityTestUtils.updateSecurityData;
@@ -146,8 +147,11 @@ public class IncidSeeOpenByComuAcTest_3 {
         assertThat(incidAndResolBundle.hasResolucion(), is(false));
         intended(hasExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia));
         intended(hasExtra(INCID_RESOLUCION_FLAG.key, incidAndResolBundle.hasResolucion()));
+
         // Juan entra en la pantalla de edición de la incidencia, tras seleccionarla.
         onView(withId(R.id.incid_edit_fragment_container_ac)).check(matches(isDisplayed()));
+        // Navigate-up.
+        checkUp(R.id.incid_see_open_by_comu_ac, R.id.incid_see_generic_layout);
     }
 
     @Test
@@ -162,7 +166,7 @@ public class IncidSeeOpenByComuAcTest_3 {
 
         // Juan entra en la pantalla de edición de la incidencia, y pulsa Up.
         onView(withId(R.id.incid_edit_fragment_container_ac)).check(matches(isDisplayed()));
-        checkNavigateUp();
+        clickNavigateUp();
         onView(withId(R.id.incid_see_generic_layout)).check(matches(isDisplayed()));
         onData(is(incidUser_0)).inAdapterView(withId(android.R.id.list))
                 .check(matches(isDisplayed()));

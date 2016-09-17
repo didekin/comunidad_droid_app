@@ -136,7 +136,7 @@
     <string name="delete_me_ac_mn">Borrar tus datos</string>
     <string name="login_ac_mn">Login</string>
     <string name="password_change_ac_mn">Renovar contraseña</string>
-    <string name="reg_comu_user_usercomu_ac_mn">Nueva comunidad</string>
+    <string name="reg_nueva_comunidad_ac_mn">Nueva comunidad</string>
     <!--Válido para reg_comu_usercomu-->
     <string name="see_usercomu_by_comu_ac_mn">Vecinos</string>
     <string name="see_usercomu_by_user_ac_mn">Tus comunidades</string>
@@ -216,7 +216,7 @@
     <string name="usercomu_puerta_rot">Puerta:</string>
     <string name="usercomu_role_rot">Vínculo: </string>
     <!-- ================= SeeUserComuByUserAc ============ -->
-    <string name="see_usercomu_by_user_ac_label">Mis comunidades</string>
+    <string name="see_usercomu_by_user_ac_label">Tus comunidades</string>
     <!-- ================= UserDataAc ===================== -->
     <string name="user_data_ac_label">Tus datos</string>
     <string name="user_data_ac_cambios_text">Sobrescribe el dato a modificar</string>

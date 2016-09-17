@@ -27,6 +27,7 @@ import static com.didekin.usuario.dominio.Rol.PROPIETARIO;
 import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkNoToastInTest;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.testutils.ActivityTestUtils.updateSecurityData;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidenciaUser;
@@ -124,9 +125,13 @@ public class IncidEditAcNoPowerTest_2 extends IncidEditAbstractTest {
                                 is(mActivity.getResources().getStringArray(R.array.IncidImportanciaArray)[4]))
                 )
                 .perform(click());
+
         onView(withId(R.id.incid_edit_fr_modif_button)).perform(scrollTo(), click());
         // Verificamos que no ha habido error.
         checkNoToastInTest(R.string.incidencia_wrong_init,mActivity);
         onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed()));
+
+        checkUp();
+        checkScreenEditNoPowerFr();
     }
 }

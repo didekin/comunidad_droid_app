@@ -14,6 +14,7 @@ import timber.log.Timber;
 
 import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
+import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenu;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -53,10 +54,7 @@ public class IncidSeeUserComuImportanciaAc extends AppCompatActivity {
 
         switch (resourceId) {
             case android.R.id.home:
-                Intent intent = NavUtils.getParentActivityIntent(this);
-                // We need both flags. The extra of the initial instance of the parent activity is kept.
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                NavUtils.navigateUpTo(this, intent);
+                doUpMenu(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

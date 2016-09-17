@@ -26,8 +26,10 @@ import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_OBJECT;
-import static com.didekindroid.common.testutils.ActivityTestUtils.checkNavigateUp;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkUp;
+import static com.didekindroid.common.testutils.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
@@ -39,6 +41,7 @@ import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -54,7 +57,9 @@ import static org.junit.Assert.assertThat;
 public class IncidCommentSeeAcTest_1 {
 
     IncidCommentSeeAc mActivity;
-    private IncidImportancia incidJuanReal1;
+    IncidImportancia incidJuanReal1;
+    int activityLayoutId = R.id.incid_comments_see_ac;
+    int fragmentLayoutId = R.id.incid_comments_see_fr_layout;
 
     @Rule
     public IntentsTestRule<IncidCommentSeeAc> activityRule = new IntentsTestRule<IncidCommentSeeAc>(IncidCommentSeeAc.class) {
@@ -110,20 +115,28 @@ public class IncidCommentSeeAcTest_1 {
         assertThat(isRegisteredUser(mActivity), is(true));
         assertThat(mActivity, notNullValue());
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_comments_see_ac)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_comments_see_fr_layout)).check(matches(isDisplayed()));
+        onView(withId(activityLayoutId)).check(matches(isDisplayed()));
+        onView(withId(fragmentLayoutId)).check(matches(isDisplayed()));
 
-        // No hay comentarios registrados. La vista forma parte de la jerarquía de vistas de la página.
+        // Verificamos visibilidad del menú cuando la incidencia está abierta.
+        assertThat(incidJuanReal1.getIncidencia().getFechaCierre(), nullValue());
+        onView(withId(R.id.incid_comment_reg_ac_mn)).check(matches(isDisplayed()));
+
+        // No hay comentarios registrados.
         onView(withId(android.R.id.list)).check(matches(not(isDisplayed())));
         onView(withId(android.R.id.empty)).check(matches(isDisplayed()));
 
-        checkNavigateUp();
+        clickNavigateUp();
     }
+
+//  ============================ MENU ======================================
 
     @Test
     public void testIncidCommentRegMn() throws InterruptedException
     {
+
         INCID_COMMENT_REG_AC.checkMenuItem_WTk(mActivity);
         intended(hasExtra(INCIDENCIA_OBJECT.key, incidJuanReal1.getIncidencia()));
+        checkUp(activityLayoutId, fragmentLayoutId);
     }
 }

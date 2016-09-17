@@ -35,7 +35,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.common.testutils.ActivityTestUtils.checkNavigateUp;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkUp;
+import static com.didekindroid.common.testutils.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.regSeveralUserComuSameUser;
@@ -70,6 +71,9 @@ public class IncidRegAcTest {
     private CleanUserEnum whatToClean = CleanUserEnum.CLEAN_PEPE;
     private Comunidad comunidadByDefault;
     ArrayAdapter<Comunidad> comunidadesAdapter;
+
+    int activityLayoutId = R.id.incid_reg_ac_layout;
+    int fragmentLayoutId = R.id.incid_reg_frg;
 
     @Rule
     public IntentsTestRule<IncidRegAc> intentRule = new IntentsTestRule<IncidRegAc>(IncidRegAc.class) {
@@ -117,46 +121,40 @@ public class IncidRegAcTest {
         assertThat(mActivity, notNullValue());
 
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_reg_ac_layout)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_reg_frg)).check(matches(isDisplayed()));
+        onView(withId(activityLayoutId)).check(matches(isDisplayed()));
+        onView(withId(fragmentLayoutId)).check(matches(isDisplayed()));
 
+        // Comunidad spinner.
         assertThat(comunidadesAdapter.getCount(), is(3));
-
         onView(allOf(
                 withId(R.id.app_spinner_1_dropdown_item),
                 withParent(withId(R.id.incid_reg_comunidad_spinner))))
                 .check(matches(withText(is(comunidadByDefault.getNombreComunidad()))))
                 .check(matches(isDisplayed()));
 
+        /* Ámbito incidencia spinner.*/
         onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.incid_reg_ambito_spinner))))
                 .check(matches(withText(is("ámbito de incidencia")))).check(matches(isDisplayed()));
-
-        String[] importancias = mActivity.getResources().getStringArray(R.array.IncidImportanciaArray);
-        assertThat(importancias.length, is(5));
-        onView(withId(R.id.incid_reg_importancia_spinner))
-                .check(matches(withSpinnerText(importancias[0])))
-                .check(matches(isDisplayed()));
-
-        checkNavigateUp();
-    }
-
-    @Test
-    public void testOnCreate_2() throws Exception
-    {
-        int count = mActivity.mRegAcFragment.mImportanciaSpinner.getCount();
-        assertThat(count, is(5));
-        String item = (String) mActivity.mRegAcFragment.mImportanciaSpinner.getItemAtPosition(1);
-        assertThat(item, is("baja"));
-        item = (String) mActivity.mRegAcFragment.mImportanciaSpinner.getItemAtPosition(4);
-        assertThat(item, is("urgente"));
-
-        count = mActivity.mRegAcFragment.mAmbitoIncidenciaSpinner.getCount();
+        int count = mActivity.mRegAcFragment.mAmbitoIncidenciaSpinner.getCount();
         assertThat(count, is(AMBITO_INCID_COUNT));
         Cursor cursor = ((CursorAdapter) mActivity.mRegAcFragment.mAmbitoIncidenciaSpinner.getAdapter()).getCursor();
         cursor.moveToPosition(1);
         assertThat(cursor.getString(1), is("Alarmas comunitarias"));
         cursor.moveToPosition(51);
         assertThat(cursor.getString(1), is("Zonas de juegos"));
+
+        // Importancia spinner.
+        String[] importancias = mActivity.getResources().getStringArray(R.array.IncidImportanciaArray);
+        assertThat(importancias.length, is(5));
+        onView(withId(R.id.incid_reg_importancia_spinner))
+                .check(matches(withSpinnerText(importancias[0])))
+                .check(matches(isDisplayed()));
+        String item = (String) mActivity.mRegAcFragment.mImportanciaSpinner.getItemAtPosition(1);
+        assertThat(item, is("baja"));
+        item = (String) mActivity.mRegAcFragment.mImportanciaSpinner.getItemAtPosition(4);
+        assertThat(item, is("urgente"));
+
+        clickNavigateUp();
     }
 
     @Test
@@ -183,10 +181,12 @@ public class IncidRegAcTest {
         // Caso OK: incidencia con datos de importancia.
         doImportanciaSpinner(4);
         doAmbitoAndDescripcion("Calefacción comunitaria", "descripcion is valid");
+
         onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
 
         onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed()));
         assertThat(IncidenciaServ.seeIncidsOpenByComu(comunidadByDefault.getC_Id()).size(), is(1));
+        checkUp(activityLayoutId,fragmentLayoutId);
     }
 
     @Test
@@ -197,10 +197,12 @@ public class IncidRegAcTest {
 
         // Caso OK: no cubro importancia.
         doAmbitoAndDescripcion("Calefacción comunitaria", "descripcion is valid");
+
         onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
 
         onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed()));
         assertThat(IncidenciaServ.seeIncidsOpenByComu(comunidadByDefault.getC_Id()).size(), is(1));
+        checkUp(activityLayoutId,fragmentLayoutId);
     }
 
     @Test
@@ -215,12 +217,14 @@ public class IncidRegAcTest {
         // Registro de incidencia con importancia.
         doImportanciaSpinner(4);
         doAmbitoAndDescripcion("Calefacción comunitaria", "Incidencia La Fuente");
+
         onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
 
         onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed()));
         List<IncidenciaUser> incidencias = IncidenciaServ.seeIncidsOpenByComu(comunidadFuente.getC_Id());
         assertThat(incidencias.size(), is(1));
         assertThat(incidencias.get(0).getIncidencia().getDescripcion(), is("Incidencia La Fuente"));
+        checkUp(activityLayoutId,fragmentLayoutId);
     }
 
 //    =======================   HELPER METHODS ========================

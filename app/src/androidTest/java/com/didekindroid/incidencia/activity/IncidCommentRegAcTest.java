@@ -32,7 +32,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withHint;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_OBJECT;
-import static com.didekindroid.common.testutils.ActivityTestUtils.checkNavigateUp;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkUp;
+import static com.didekindroid.common.testutils.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
@@ -54,6 +55,7 @@ public class IncidCommentRegAcTest {
 
     private IncidCommentRegAc mActivity;
     IncidImportancia incidJuanReal1;
+    int activityLayoutId = R.id.incid_comment_reg_ac_layout;
 
     @Rule
     public IntentsTestRule<IncidCommentRegAc> intentsRule = new IntentsTestRule<IncidCommentRegAc>(IncidCommentRegAc.class) {
@@ -111,7 +113,7 @@ public class IncidCommentRegAcTest {
     {
         assertThat(mActivity, notNullValue());
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
-        assertThat(mActivity.findViewById(R.id.incid_comment_reg_ac_layout), notNullValue());
+        assertThat(mActivity.findViewById(activityLayoutId), notNullValue());
 
         onView(withId(R.id.incid_comment_incidencias_rot)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_comment_reg_button)).check(matches(isDisplayed()));
@@ -125,7 +127,7 @@ public class IncidCommentRegAcTest {
                 withText(incidJuanReal1.getIncidencia().getDescripcion())
         )).check(matches(isDisplayed()));
 
-        checkNavigateUp();
+        clickNavigateUp();
     }
 
     @Test
@@ -140,8 +142,11 @@ public class IncidCommentRegAcTest {
     public void testRegComment_2(){
         // Caso OK.
         onView(withId(R.id.incid_comment_ed)).perform(typeText("Comment is now valid"));
+
         onView(withId(R.id.incid_comment_reg_button)).perform(scrollTo(), click());
+        // Verificación.
         onView(withId(R.id.incid_comments_see_ac)).check(matches(isDisplayed()));
         intended(hasExtra(INCIDENCIA_OBJECT.key, incidJuanReal1.getIncidencia()));
+        checkUp(activityLayoutId);
     }
 }

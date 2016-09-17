@@ -3,6 +3,7 @@ package com.didekindroid.common.utils;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.DidekindroidApp;
+import com.didekindroid.R;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,11 +22,13 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class IoHelperTest {
 
+    public static final int TIPO_VIA_FILE_SIZE = 323;
+
     @Test
     public void testDoArrayFromFile() throws Exception
     {
-        List<String> tipos = IoHelper.doArrayFromFile(DidekindroidApp.getContext());
-        assertThat(tipos.size(),is(IoHelper.TIPO_VIA_FILE_SIZE));
+        List<String> tipos = IoHelper.doArrayFromFile(DidekindroidApp.getContext(), R.raw.tipos_vias);
+        assertThat(tipos.size(),is(TIPO_VIA_FILE_SIZE));
         assertThat(tipos,hasItems("Acces","Galeria","Zumardi"));
     }
 }

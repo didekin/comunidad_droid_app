@@ -7,6 +7,7 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
+import com.didekindroid.common.utils.UIutils;
 import com.didekindroid.usuario.testutils.CleanUserEnum;
 
 import org.junit.After;
@@ -21,22 +22,28 @@ import java.util.List;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
+import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.activity.BundleKey.USERCOMU_LIST_OBJECT;
+import static com.didekindroid.common.activity.TokenHandler.TKhandler;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.testutils.ActivityTestUtils.updateSecurityData;
 import static com.didekindroid.usuario.activity.utils.RolUi.PRO;
+import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
+import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_JUAN;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.makeUsuarioComunidad;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 
 /**
  * User: pedro@didekin
@@ -48,7 +55,7 @@ import static org.hamcrest.CoreMatchers.is;
 public class UserComuDataAc_2_Test {
 
     private UserComuDataAc mActivity;
-    private UsuarioComunidad mUsuarioComunidad;
+    UsuarioComunidad mUsuarioComunidad;
     CleanUserEnum whatToClean = CLEAN_JUAN_AND_PEPE;
 
     @Rule
@@ -116,5 +123,19 @@ public class UserComuDataAc_2_Test {
         openActionBarOverflowOrOptionsMenu(mActivity);
         onView(withText(R.string.comu_data_ac_mn)).check(doesNotExist());
         onView(withText(R.string.see_usercomu_by_comu_ac_mn)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testDeleteUserComu_2() throws UiException
+    {
+        whatToClean = CLEAN_JUAN;
+
+        /* Borramos un usuario y verificamos datos de seguridad y navegación.*/
+        onView(withId(R.id.usercomu_data_ac_delete_button)).perform(click());
+        onView(withId(R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));
+
+        assertThat(TKhandler.getAccessTokenInCache(), nullValue());
+        assertThat(TKhandler.getRefreshTokenFile().exists(), is(false));
+        assertThat(UIutils.isRegisteredUser(mActivity), is(false));
     }
 }

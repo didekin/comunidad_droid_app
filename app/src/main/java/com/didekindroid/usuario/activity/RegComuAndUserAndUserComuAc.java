@@ -3,6 +3,7 @@ package com.didekindroid.usuario.activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -53,7 +54,6 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity {
     private RegUserFr mRegUserFr;
 
     // TODO: añadir un campo de número de vecinos en la comunidad (aprox.).
-    // TODO: recoger dato de localización en el alta. Control de altas masivas y remotas. Excluir Administrador.
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -80,7 +80,7 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity {
         });
     }
 
-    private void registerComuAndUserComuAndUser()
+    void registerComuAndUserComuAndUser()
     {
         Timber.d("registerComuAndUsuarioComu()");
 
@@ -132,6 +132,11 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity {
         int resourceId = checkNotNull(item.getItemId());
 
         switch (resourceId) {
+            case android.R.id.home:
+                Intent intent = new Intent(this, ComuSearchAc.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                NavUtils.navigateUpTo(this, intent);
+                return true;
             case R.id.login_ac_mn:
                 LOGIN_AC.doMenuItem(this);
                 return true;

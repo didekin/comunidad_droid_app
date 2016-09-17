@@ -29,6 +29,7 @@ public class LoginAcTest {
 
     LoginAc mActivity;
     CleanUserEnum whatToClean = CLEAN_NOTHING;
+    int activityLayoutId = R.id.login_ac_layout;
 
     @Rule
     public ActivityTestRule<LoginAc> mActivityRule = new ActivityTestRule<>(LoginAc.class, true, false);
@@ -56,7 +57,7 @@ public class LoginAcTest {
         onView(withId(R.id.login_ac_button)).check(matches(isDisplayed())).perform(click());
 
         checkToastInTest(R.string.password_wrong_in_login, mActivity);
-        onView(withId(R.id.login_ac_layout)).check(matches(isDisplayed()));
+        onView(withId(activityLayoutId)).check(matches(isDisplayed()));
     }
 
     void reTypeCheckClickPswdWrong(String userName)
@@ -66,7 +67,7 @@ public class LoginAcTest {
         onView(withId(R.id.login_ac_button)).check(matches(isDisplayed())).perform(click());
 
         checkToastInTest(R.string.password_wrong_in_login, mActivity);
-        onView(withId(R.id.login_ac_layout)).check(matches(isDisplayed()));
+        onView(withId(activityLayoutId)).check(matches(isDisplayed()));
     }
 
     void getDialogFragment(String userName) throws InterruptedException

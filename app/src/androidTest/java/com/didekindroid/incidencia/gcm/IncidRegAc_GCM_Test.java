@@ -60,7 +60,6 @@ public class IncidRegAc_GCM_Test extends Incidencia_GCM_Test {
     {
         // Preconditions for the test.
         assertThat(isRegisteredUser(mActivity), is(true));
-
         checkToken();
     }
 
@@ -71,7 +70,6 @@ public class IncidRegAc_GCM_Test extends Incidencia_GCM_Test {
         if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.M) {
             return;
         }
-
         // Preconditions for the test: TOKEN en BD.
         assertThat(ServOne.getGcmToken(), is(FirebaseInstanceId.getInstance().getToken()));
 
@@ -80,8 +78,8 @@ public class IncidRegAc_GCM_Test extends Incidencia_GCM_Test {
                         .usuarioComunidad(pepeUserComu)
                         .importancia((short) 3)
                         .build();
-        assertThat(IncidenciaServ.regIncidImportancia(incidPepe), is(2));
 
+        assertThat(IncidenciaServ.regIncidImportancia(incidPepe), is(2));
         checkNotification(INCIDENCIA_OPEN.getContentTextRsc());
     }
 

@@ -3,6 +3,7 @@ package com.didekindroid.usuario.activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,10 +26,12 @@ import static com.didekin.common.dominio.DataPatterns.LINE_BREAK;
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_SEARCH;
 import static com.didekindroid.common.activity.TokenHandler.TKhandler;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
+import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.utils.UIutils.makeToast;
 import static com.didekindroid.common.utils.UIutils.updateIsRegistered;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeComunidadBeanFromView;
 import static com.didekindroid.usuario.activity.utils.UserMenu.LOGIN_AC;
+import static com.didekindroid.usuario.activity.utils.UserMenu.REG_COMU_USERCOMU_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.REG_COMU_USER_USERCOMU_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_USERCOMU_BY_USER_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.USER_DATA_AC;
@@ -47,10 +50,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 @SuppressWarnings("ConstantConditions")
 public class ComuSearchAc extends AppCompatActivity {
 
-    private Menu mMenu;
+    Menu mMenu;
     RegComuFr mRegComuFrg;
     protected View mMainView;
-    private boolean hasLoginToRemove;
+    boolean hasLoginToRemove;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -140,8 +143,12 @@ public class ComuSearchAc extends AppCompatActivity {
             case R.id.see_usercomu_by_user_ac_mn:
                 SEE_USERCOMU_BY_USER_AC.doMenuItem(this);
                 return true;
-            case R.id.reg_comu_user_usercomu_ac_mn:
-                REG_COMU_USER_USERCOMU_AC.doMenuItem(this);
+            case R.id.reg_nueva_comunidad_ac_mn:
+                if (isRegisteredUser(this)){
+                    REG_COMU_USERCOMU_AC.doMenuItem(this);
+                } else{
+                    REG_COMU_USER_USERCOMU_AC.doMenuItem(this);
+                }
                 return true;
             case R.id.login_ac_mn:
                 LOGIN_AC.doMenuItem(this);

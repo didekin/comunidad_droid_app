@@ -22,13 +22,14 @@ import static com.didekin.common.exception.DidekinExceptionMsg.INCIDENCIA_USER_W
  * if there is one associated  to the incidencia.
  * Integrity constraint: incidencia.userName == userComu.userName, if both exists.
  */
-public class IncidenciaUser implements Serializable {
+@SuppressWarnings("PrivateMemberAccessBetweenOuterAndInnerClass")
+public final class IncidenciaUser implements Serializable {
 
     private final Incidencia incidencia;
     private final Usuario usuario;
     private final Timestamp fechaAltaResolucion;
 
-    public IncidenciaUser(IncidenciaUserBuilder builder) throws IllegalStateException
+    private IncidenciaUser(IncidenciaUserBuilder builder) throws IllegalStateException
     {
         incidencia = builder.incidencia;
         usuario = builder.usuario;
@@ -47,7 +48,7 @@ public class IncidenciaUser implements Serializable {
 
     public Timestamp getFechaAltaResolucion()
     {
-        return fechaAltaResolucion;
+        return fechaAltaResolucion != null ? new Timestamp(fechaAltaResolucion.getTime()) :  null;
     }
 
     // ............................ Serializable ...............................

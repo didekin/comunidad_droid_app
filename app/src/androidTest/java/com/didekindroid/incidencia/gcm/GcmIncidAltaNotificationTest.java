@@ -34,7 +34,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekin.incidservice.gcm.GcmKeyValueIncidData.incidencia_open_type;
 import static com.didekindroid.common.gcm.AppFirebaseMsgService.TypeMsgHandler.INCIDENCIA_OPEN;
-import static com.didekindroid.common.testutils.ActivityTestUtils.checkNavigateUp;
+import static com.didekindroid.common.testutils.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidenciaUser;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_PEPE;
@@ -161,7 +161,7 @@ public class GcmIncidAltaNotificationTest extends GcmIncidNotificationTest {
                             ))
                     ))
             )).check(matches(isDisplayed()));
-            checkNavigateUp();
+            clickNavigateUp();
             // Verificamos que se muestran los datos de búsqueda de comunidad.
             onView(withId(R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));
         }

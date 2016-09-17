@@ -32,6 +32,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.common.activity.TokenHandler.TKhandler;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOneUser;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
@@ -62,6 +63,7 @@ public class RegComuAndUserComuAcTest {
 
     @Rule
     public ActivityTestRule<RegComuAndUserComuAc> mActivityRule = new ActivityTestRule<>(RegComuAndUserComuAc.class, true, false);
+    private int activityLayoutId = R.id.reg_comu_and_usercomu_layout;
 
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
@@ -98,13 +100,13 @@ public class RegComuAndUserComuAcTest {
         assertThat(regComuFr, notNullValue());
         assertThat(regUserComuFr, notNullValue());
 
-        onView(withId(R.id.reg_comu_and_usercomu_layout));
+        onView(withId(activityLayoutId));
         onView(withId(R.id.reg_comunidad_frg)).check(matches(isDisplayed()));
         onView(withId(R.id.reg_usercomu_frg)).check(matches(isDisplayed()));
         onView(withId(R.id.reg_comu_usuariocomunidad_button)).perform(scrollTo()).check(matches(isDisplayed()));
 
         onView(withId(R.id.appbar)).perform(scrollTo()).check(matches(isDisplayed()));
-        ActivityTestUtils.checkNavigateUp();
+        ActivityTestUtils.clickNavigateUp();
     }
 
     @Test
@@ -146,7 +148,6 @@ public class RegComuAndUserComuAcTest {
                 R.string.nombre_via,
                 R.string.municipio,
                 R.string.reg_usercomu_role_rot);
-
     }
 
     @Test
@@ -181,5 +182,7 @@ public class RegComuAndUserComuAcTest {
 
         onView(withId(R.id.reg_comu_usuariocomunidad_button)).perform(scrollTo(), click());
         onView(withId(R.id.see_usercomu_by_user_frg)).check(matches(isDisplayed()));
+
+        checkUp(activityLayoutId);
     }
 }

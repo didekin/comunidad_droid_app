@@ -17,7 +17,7 @@ import static com.didekin.common.exception.DidekinExceptionMsg.USER_NOT_HASHABLE
  * Date: 29/03/15
  * Time: 12:02
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"PrivateMemberAccessBetweenOuterAndInnerClass"})
 public final class Usuario implements Comparable<Usuario>, Serializable {
 
     private final long uId;

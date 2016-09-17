@@ -61,7 +61,7 @@ public class PasswordChangeAc extends AppCompatActivity {
         });
     }
 
-    private void modifyPassword()
+    void modifyPassword()
     {
         Timber.d("modifyPassword()");
 

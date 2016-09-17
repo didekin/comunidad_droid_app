@@ -15,8 +15,11 @@ import com.didekindroid.DidekindroidApp;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.usuario.testutils.CleanUserEnum;
+import com.didekindroid.usuario.testutils.UsuarioTestUtils;
 
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -138,14 +141,37 @@ public final class ActivityTestUtils {
         }
     }
 
+    //    ============================= DATES ===================================
+
+    public static Timestamp doTimeStampFromCalendar(int daysToAdd)
+    {
+        Calendar fCierre = new GregorianCalendar();
+        fCierre.add(DAY_OF_MONTH, daysToAdd);
+        return new Timestamp(fCierre.getTimeInMillis());
+    }
+
     //    ============================= NAVIGATION ===================================
 
-    public static void checkNavigateUp()
+    public static void clickNavigateUp()
     {
         onView(allOf(
                 withContentDescription(R.string.navigate_up_txt),
                 isClickable())
         ).check(matches(isDisplayed())).perform(click());
+    }
+
+    public static void checkUp(int activityLayoutId)
+    {
+        clickNavigateUp();
+        onView(withId(activityLayoutId)).check(matches(isDisplayed()));
+    }
+
+    public static void checkUp(Integer... activityLayoutIds)
+    {
+        clickNavigateUp();
+        for (Integer layout : activityLayoutIds) {
+            onView(withId(layout)).check(matches(isDisplayed()));
+        }
     }
 
 //    =========================== REGISTERING USERS ==============================
@@ -178,6 +204,15 @@ public final class ActivityTestUtils {
         for (int i = 1; i < userComus.length; i++) {
             ServOne.regComuAndUserComu(userComus[i]);
         }
+    }
+
+    public static List<UsuarioComunidad> makeListTwoUserComu()
+    {
+        // Dos comunidades diferentes con un mismo userComu.
+        List<UsuarioComunidad> userComuList = new ArrayList<>(2);
+        userComuList.add(UsuarioTestUtils.COMU_REAL_JUAN);
+        userComuList.add(UsuarioTestUtils.COMU_PLAZUELA5_JUAN);
+        return userComuList;
     }
 
 //    ============================ SECURITY ============================

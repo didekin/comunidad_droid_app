@@ -32,6 +32,7 @@ import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_SE
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUserBeanFromUserDataAcView;
 import static com.didekindroid.usuario.activity.utils.UserMenu.COMU_SEARCH_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_USERCOMU_BY_USER_AC;
+import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenu;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
@@ -45,8 +46,8 @@ import static com.google.common.base.Preconditions.checkState;
 @SuppressWarnings("ConstantConditions")
 public class UserDataAc extends AppCompatActivity {
 
-    private View mAcView;
-    private Usuario mOldUser;
+    View mAcView;
+    Usuario mOldUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -73,7 +74,7 @@ public class UserDataAc extends AppCompatActivity {
         });
     }
 
-    private void modifyUserData()
+    void modifyUserData()
     {
         // TODO: send an email with a number, once the user hass pressed Modify,
         // and show in the activity an EditField to introduce it.
@@ -115,6 +116,9 @@ public class UserDataAc extends AppCompatActivity {
         int resourceId = checkNotNull(item.getItemId());
 
         switch (resourceId) {
+            case android.R.id.home:
+                doUpMenu(this);
+                return true;
             case R.id.password_change_ac_mn:
                 UserMenu.PASSWORD_CHANGE_AC.doMenuItem(this);
                 return true;

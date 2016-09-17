@@ -63,7 +63,7 @@ import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_DROID;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_JUAN;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_JUAN2;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_PEPE;
-import static com.didekindroid.usuario.testutils.UsuarioTestUtils.makeListTwoUserComu;
+import static com.didekindroid.common.testutils.ActivityTestUtils.makeListTwoUserComu;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.makeUsuarioComunidad;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static com.didekindroid.usuario.webservices.UsuarioService.retrofitHandler;

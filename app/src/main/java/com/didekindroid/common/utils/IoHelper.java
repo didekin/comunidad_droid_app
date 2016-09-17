@@ -3,8 +3,6 @@ package com.didekindroid.common.utils;
 import android.content.Context;
 import android.content.res.Resources;
 
-import com.didekindroid.R;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -24,22 +22,22 @@ import timber.log.Timber;
  */
 public final class IoHelper {
 
-    public static final int TIPO_VIA_FILE_SIZE = 323;
+
 
     private IoHelper()
     {
     }
 
-    public static List<String> doArrayFromFile(Context context)
+    public static List<String> doArrayFromFile(Context context, int rawResourceId)
     {
 
         Timber.i("In doArrayFromFile()");
 
         final Resources resources = context.getResources();
-        InputStream inputStream = resources.openRawResource(R.raw.tipos_vias);
+        InputStream inputStream = resources.openRawResource(rawResourceId);
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
-        List<String> tipos = new ArrayList<>(TIPO_VIA_FILE_SIZE);
+        List<String> tipos = new ArrayList<>();
 
         try {
 

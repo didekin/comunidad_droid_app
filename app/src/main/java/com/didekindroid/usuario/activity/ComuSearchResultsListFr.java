@@ -85,7 +85,6 @@ public class ComuSearchResultsListFr extends Fragment {
 
         mListView = (ListView) mView.findViewById(android.R.id.list);
         mListView.setItemsCanFocus(true);
-        mListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

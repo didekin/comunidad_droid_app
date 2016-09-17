@@ -18,7 +18,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.common.testutils.ActivityTestUtils.checkNavigateUp;
+import static com.didekindroid.common.testutils.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.not;
@@ -107,7 +107,7 @@ public class IncidSeeUserComuImportanciaTest_1 extends IncidEditAbstractTest {
 
         onView(withId(R.id.incid_importancia_otros_view)).check(matches(isDisplayed())).perform(click());
         // Up Navigate.
-        checkNavigateUp();
+        clickNavigateUp();
         // Datos a la vista.
         checkDataEditNoPowerFr();
     }

@@ -19,11 +19,14 @@ import java.io.IOException;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.common.activity.TokenHandler.TKhandler;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
+import static com.didekindroid.common.testutils.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_NOTHING;
@@ -86,7 +89,7 @@ public class DeleteMeAcTest {
         onView(withId(R.id.delete_me_ac_unreg_button)).check(matches(isDisplayed()));
 
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
-        ActivityTestUtils.checkNavigateUp();
+        clickNavigateUp();
     }
 
     @Test
@@ -95,10 +98,12 @@ public class DeleteMeAcTest {
         whatToClean = CLEAN_NOTHING;
 
         onView(withId(R.id.delete_me_ac_unreg_button)).check(matches(isDisplayed())).perform(click());
-        onView(withId(R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));
-
         assertThat(isRegisteredUser(mActivity), is(false));
         assertThat(TKhandler.getAccessTokenInCache(), nullValue());
         assertThat(TKhandler.getRefreshTokenFile().exists(), is(false));
+
+        onView(withId(R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));
+        // No hay Navigate-up.
+        onView(withContentDescription(R.string.navigate_up_txt)).check(doesNotExist());
     }
 }

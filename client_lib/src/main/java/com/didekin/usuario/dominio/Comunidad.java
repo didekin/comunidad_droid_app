@@ -19,7 +19,7 @@ import static com.didekin.common.exception.DidekinExceptionMsg.COMUNIDAD_WRONG_I
  * Date: 29/03/15
  * Time: 12:02
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"PrivateMemberAccessBetweenOuterAndInnerClass"})
 public final class Comunidad implements Comparable<Comunidad>, Serializable {
 
     private final long c_Id;
@@ -78,17 +78,14 @@ public final class Comunidad implements Comparable<Comunidad>, Serializable {
         return sufijoNumero;
     }
 
-
-    @SuppressWarnings("unused")
     public Timestamp getFechaAlta()
     {
-        return new Timestamp(fechaAlta.getTime());
+        return fechaAlta != null ? new Timestamp(fechaAlta.getTime()) : null;
     }
 
-    @SuppressWarnings("unused")
     public Timestamp getFechaMod()
     {
-        return new Timestamp(fechaMod.getTime());
+        return fechaMod != null ? new Timestamp(fechaMod.getTime()) : null;
     }
 
 

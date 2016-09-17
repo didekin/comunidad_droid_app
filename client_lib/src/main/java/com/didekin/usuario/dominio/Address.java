@@ -1,7 +1,5 @@
 package com.didekin.usuario.dominio;
 
-import com.didekin.usuario.dominio.Municipio;
-
 /**
  * User: pedro@didekin
  * Date: 13/11/15

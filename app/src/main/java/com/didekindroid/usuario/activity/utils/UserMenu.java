@@ -2,6 +2,7 @@ package com.didekindroid.usuario.activity.utils;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.v4.app.NavUtils;
 import android.widget.Toast;
 
 import com.didekindroid.R;
@@ -77,30 +78,27 @@ public enum UserMenu {
         }
     },
 
-    REG_COMU_USER_USERCOMU_AC { // Menu: Nueva comunidad.
+    REG_COMU_USERCOMU_AC { // Menu: Nueva comunidad.
+        @Override
+        public void doMenuItem(Activity activity)
+        {
+            Timber.i("reg_comu_usercomu.doMenuItem().");
+            Intent intent = new Intent(activity, RegComuAndUserComuAc.class);
+            activity.startActivity(intent);
+        }
+    },
 
+    REG_COMU_USER_USERCOMU_AC { /* Menu: Nueva comunidad.*/
         @Override
         public void doMenuItem(Activity activity)
         {
             Timber.d("reg_comu_user_usercomu.doMenuItem()");
-
-            if (!isRegisteredUser(activity)) {
-                Timber.i("reg_comu_user_usercomu.doMenuItem(), user not registered.");
-                // Activity with user and comunidad data.
-                Intent intent = new Intent(activity, RegComuAndUserAndUserComuAc.class);
-                activity.startActivity(intent);
-            } else {
-                Timber.i("reg_comu_user_usercomu.doMenuItem(), user registered.");
-                // Activity without user data: password, alias, email, telephone,..
-                Intent intent = new Intent(activity, RegComuAndUserComuAc.class);
-                activity.startActivity(intent);
-            }
-
+            Intent intent = new Intent(activity, RegComuAndUserAndUserComuAc.class);
+            activity.startActivity(intent);
         }
     },
 
     SEE_USERCOMU_BY_COMU_AC {
-
         @Override
         public void doMenuItem(Activity activity)
         {
@@ -111,7 +109,7 @@ public enum UserMenu {
         }
     },
 
-    SEE_USERCOMU_BY_USER_AC {  // Comunidades de un userComu: Mis comunidades.
+    SEE_USERCOMU_BY_USER_AC {  // Comunidades de un userComu: Tus comunidades.
 
         @Override
         public void doMenuItem(Activity activity)
@@ -148,4 +146,14 @@ public enum UserMenu {
     },;
 
     public abstract void doMenuItem(Activity activity);
+
+    //  =================================  HELPER METHODS ====================================
+
+    public static void doUpMenu(Activity parentActivity)
+    {
+        Intent intent = NavUtils.getParentActivityIntent(parentActivity);
+        // We need both flags to reuse the intent of the parent activity.
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        NavUtils.navigateUpTo(parentActivity, intent);
+    }
 }

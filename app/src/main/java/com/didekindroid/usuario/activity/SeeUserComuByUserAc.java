@@ -16,6 +16,7 @@ import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.UserMenu.COMU_SEARCH_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.USER_DATA_AC;
+import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenu;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
@@ -47,62 +48,6 @@ public class SeeUserComuByUserAc extends AppCompatActivity implements
         mFragment = (SeeUserComuByUserFr) getSupportFragmentManager().findFragmentById(R.id.see_usercomu_by_user_frg);
     }
 
-    @Override
-    protected void onRestart()
-    {
-        Timber.d("onRestart()");
-        super.onRestart();
-    }
-
-    @Override
-    protected void onStart()
-    {
-        Timber.d("onStart()");
-        super.onStart();
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState)
-    {
-        Timber.d("onRestoreInstanceState()");
-        super.onRestoreInstanceState(savedInstanceState);
-    }
-
-    @Override
-    protected void onResume()
-    {
-        Timber.d("onResume()");
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause()
-    {
-        Timber.d("onPause()");
-        super.onPause();
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState)
-    {
-        Timber.d("onSaveInstanceState()");
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    protected void onStop()
-    {
-        Timber.d("onStop()");
-        super.onStop();
-    }
-
-    @Override
-    protected void onDestroy()
-    {
-        Timber.d("onDestroy()");
-        super.onDestroy();
-    }
-
     // ============================================================
     //    ..... ACTION BAR ....
     // ============================================================
@@ -123,6 +68,9 @@ public class SeeUserComuByUserAc extends AppCompatActivity implements
         int resourceId = checkNotNull(item.getItemId());
 
         switch (resourceId) {
+            case android.R.id.home:
+                doUpMenu(this);
+                return true;
             case R.id.user_data_ac_mn:
                 USER_DATA_AC.doMenuItem(this);
                 return true;

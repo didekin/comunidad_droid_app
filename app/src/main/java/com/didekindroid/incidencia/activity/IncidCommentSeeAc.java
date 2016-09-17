@@ -15,6 +15,7 @@ import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_comments_see_list_fr_tag;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_COMMENT_REG_AC;
+import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenu;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
@@ -48,17 +49,19 @@ public class IncidCommentSeeAc extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().add(R.id.incid_comments_see_ac, mFragment, incid_comments_see_list_fr_tag).commit();
     }
 
-    // ============================================================
-    //    ..... ACTION BAR ....
-    // ============================================================
-
+// ============================================================
+//    ..... ACTION BAR ....
+/* ============================================================*/
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu)
     {
         Timber.d("onPrepareOptionsMenu()");
         // Mostramos el menú si la incidencia está abierta.
-        return mIncidencia.getFechaCierre() == null;
+        if (mIncidencia.getFechaCierre() == null) {
+            menu.findItem(R.id.incid_comment_reg_ac_mn).setVisible(true);
+        }
+        return true;
     }
 
     @Override
@@ -77,6 +80,9 @@ public class IncidCommentSeeAc extends AppCompatActivity {
         int resourceId = checkNotNull(item.getItemId());
 
         switch (resourceId) {
+            case android.R.id.home:
+                doUpMenu(this);
+                return true;
             case R.id.incid_comment_reg_ac_mn:
                 Intent intent = new Intent();
                 intent.putExtra(INCIDENCIA_OBJECT.key, mIncidencia);

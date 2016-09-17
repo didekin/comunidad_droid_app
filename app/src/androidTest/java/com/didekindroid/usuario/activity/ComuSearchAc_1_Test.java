@@ -12,6 +12,7 @@ import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.usuario.testutils.CleanUserEnum;
 
+import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -23,9 +24,14 @@ import java.io.File;
 import java.io.IOException;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withParent;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.activity.TokenHandler.TKhandler;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
@@ -36,6 +42,7 @@ import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeComu
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_JUAN;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.typeComunidadData;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.validaTypedComunidadBean;
+import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -89,8 +96,31 @@ public class ComuSearchAc_1_Test {
         assertThat(activity, notNullValue());
         assertThat(resources, notNullValue());
         assertThat(regComuFr, notNullValue());
+
+        onView(withId(R.id.appbar)).check(matches(isDisplayed()));
+        // Es la actividad inicial de la aplicación.
+        onView(allOf(
+                withContentDescription(R.string.navigate_up_txt),
+                isClickable())).check(doesNotExist());
+
         onView(withId(R.id.reg_comunidad_frg)).check(matches(isDisplayed()));
         onView(withId(R.id.tipo_via_spinner)).check(matches(isDisplayed()));
+        onView(withId(R.id.autonoma_comunidad_spinner)).check(matches(isDisplayed()));
+        onView(withId(R.id.provincia_spinner)).check(matches(isDisplayed()));
+        onView(withId(R.id.municipio_spinner)).check(matches(isDisplayed()));
+
+        assertThat(regComuFr.getComunidadBean().getTipoVia(), Matchers.is("tipo de vía"));
+        onView(allOf(
+                withId(R.id.app_spinner_1_dropdown_item),
+                withParent(withId(R.id.tipo_via_spinner))
+        )).check(matches(withText(Matchers.is("tipo de vía")))).check(matches(isDisplayed()));
+
+        onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.autonoma_comunidad_spinner))))
+                .check(matches(withText(Matchers.is("comunidad autónoma")))).check(matches(isDisplayed()));
+        onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.provincia_spinner))))
+                .check(matches(withText(Matchers.is("provincia")))).check(matches(isDisplayed()));
+        onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.municipio_spinner))))
+                .check(matches(withText(Matchers.is("municipio")))).check(matches(isDisplayed()));
     }
 
     @Test
@@ -131,7 +161,7 @@ public class ComuSearchAc_1_Test {
     }
 
     @Test
-    public void searchComunidadWrong() throws InterruptedException
+    public void testComunidadWrong() throws InterruptedException
     {
         activity = mActivityRule.launchActivity(new Intent());
 
@@ -142,7 +172,4 @@ public class ComuSearchAc_1_Test {
         onView(withId(R.id.searchComunidad_Bton)).perform(ViewActions.click());
         checkToastInTest(R.string.error_validation_msg, activity, R.string.tipo_via, R.string.nombre_via, R.string.municipio);
     }
-
-//    ................ UTILIDADES .....................
-
 }

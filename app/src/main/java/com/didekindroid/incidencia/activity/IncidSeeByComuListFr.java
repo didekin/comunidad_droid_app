@@ -128,60 +128,11 @@ public class IncidSeeByComuListFr extends Fragment implements ComuSpinnerSettabl
     }
 
     @Override
-    public void onStart()
-    {
-        Timber.d("Enters onStart()");
-        super.onStart();
-    }
-
-    @Override
-    public void onResume()
-    {
-        Timber.d("Enters onResume()");
-        super.onResume();
-    }
-
-    @Override
     public void onSaveInstanceState(Bundle savedInstanceState)
     {
         Timber.d("onSaveInstanceState()");
         savedInstanceState.putInt(COMUNIDAD_LIST_INDEX.key, mComunidadSelectedIndex);
         super.onSaveInstanceState(savedInstanceState);
-    }
-
-    @Override
-    public void onPause()
-    {
-        Timber.d("onPause()");
-        super.onPause();
-    }
-
-    @Override
-    public void onStop()
-    {
-        Timber.d("onStop()");
-        super.onStop();
-    }
-
-    @Override
-    public void onDestroyView()
-    {
-        Timber.d("onDestroyView()");
-        super.onDestroyView();
-    }
-
-    @Override
-    public void onDestroy()
-    {
-        Timber.d("onDestroy()");
-        super.onDestroy();
-    }
-
-    @Override
-    public void onDetach()
-    {
-        Timber.d("onDetach()");
-        super.onDetach();
     }
 
 //    ........................ INTERFACE METHODS ..........................

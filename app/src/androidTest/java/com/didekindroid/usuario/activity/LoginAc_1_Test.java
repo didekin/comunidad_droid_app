@@ -15,7 +15,6 @@ import java.io.IOException;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
-import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.isDialog;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -25,6 +24,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.activity.TokenHandler.TKhandler;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkNoToastInTest;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
+import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_TRAV_PLAZUELA_PEPE;
@@ -61,7 +61,7 @@ public class LoginAc_1_Test extends LoginAcTest{
         onView(withId(R.id.login_ac_button)).check(matches(isDisplayed()));
 
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
-        onView(withContentDescription(R.string.navigate_up_txt)).check(doesNotExist());
+        onView(withContentDescription(R.string.navigate_up_txt)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -78,9 +78,9 @@ public class LoginAc_1_Test extends LoginAcTest{
     }
 
     @Test
-    public void testValidate_1()
+    public void testValidate_1() throws InterruptedException
     {
-        // User not in DB.
+        // Caso NO OK: user not in DB.
         mActivity = mActivityRule.launchActivity(new Intent());
         assertThat(isRegisteredUser(mActivity), is(false));
 
@@ -91,12 +91,13 @@ public class LoginAc_1_Test extends LoginAcTest{
         //Invitación a hacer login.
         onView(withId(R.id.login_ac_layout)).check(matches(isDisplayed()));
         checkToastInTest(R.string.user_without_signedUp, mActivity);
+        Thread.sleep(2000);
     }
 
     @Test
     public void testValidate_2() throws UiException, IOException
     {
-        // User in DB.
+        // Caso OK: user in DB, but without token in cache.
         assertThat(ServOne.regComuAndUserAndUserComu(COMU_TRAV_PLAZUELA_PEPE).execute().body(), is(true));
 
         mActivity = mActivityRule.launchActivity(new Intent());
@@ -112,20 +113,30 @@ public class LoginAc_1_Test extends LoginAcTest{
         onView(withId(R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));
         assertThat(isRegisteredUser(mActivity), is(true));
         assertThat(TKhandler.getAccessTokenInCache(), notNullValue());
+        // NO navigate-up option in comunidad search.
 
         whatToClean = CLEAN_PEPE;
     }
 
     @Test
-    public void testValidate_3() throws IOException
+    public void testValidate_3() throws UiException, IOException
     {
-        whatToClean = CLEAN_PEPE;
-
-        // User in DB: wrong password.
-        assertThat(ServOne.regComuAndUserAndUserComu(COMU_TRAV_PLAZUELA_PEPE).execute().body(), is(true));
+        // Caso OK: user in DB, with token in cache.
+        signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
         mActivity = mActivityRule.launchActivity(new Intent());
+        // Previous state.
+        assertThat(isRegisteredUser(mActivity), is(true));
+        assertThat(TKhandler.getAccessTokenInCache(), notNullValue());
 
-        typeCheckClickPswdWrong(USER_PEPE.getUserName());
+        onView(withId(R.id.reg_usuario_email_editT)).perform(typeText(USER_PEPE.getUserName()));
+        onView(withId(R.id.reg_usuario_password_ediT)).perform(typeText(USER_PEPE.getPassword()));
+        onView(withId(R.id.login_ac_button)).check(matches(isDisplayed())).perform(click());
+
+        checkNoToastInTest(R.string.user_without_signedUp, mActivity);
+        onView(withId(R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));
+        // NO navigate-up option in comunidad search.
+
+        whatToClean = CLEAN_PEPE;
     }
 
     @Test
@@ -133,11 +144,25 @@ public class LoginAc_1_Test extends LoginAcTest{
     {
         whatToClean = CLEAN_PEPE;
 
-        // User in DB: wrong password three consecutive times.
+        // Caso NO OK: user in DB, wrong password.
+        assertThat(ServOne.regComuAndUserAndUserComu(COMU_TRAV_PLAZUELA_PEPE).execute().body(), is(true));
+        mActivity = mActivityRule.launchActivity(new Intent());
+
+        typeCheckClickPswdWrong(USER_PEPE.getUserName());
+        Thread.sleep(2000);
+    }
+
+    @Test
+    public void testValidate_5() throws IOException, InterruptedException
+    {
+        whatToClean = CLEAN_PEPE;
+
+        // Caso NO OK: user in DB, wrong password three consecutive times.
         assertThat(ServOne.regComuAndUserAndUserComu(COMU_TRAV_PLAZUELA_PEPE).execute().body(), is(true));
         mActivity = mActivityRule.launchActivity(new Intent());
 
         getDialogFragment(USER_PEPE.getUserName());
+        Thread.sleep(2000);
         onView(withText(R.string.send_password_by_mail_dialog)).inRoot(isDialog()).check(matches(isDisplayed()));
     }
 }

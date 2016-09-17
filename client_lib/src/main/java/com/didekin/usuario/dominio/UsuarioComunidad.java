@@ -17,7 +17,7 @@ import static com.didekin.common.exception.DidekinExceptionMsg.USERCOMU_WRONG_IN
  * Date: 29/03/15
  * Time: 12:02
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"PrivateMemberAccessBetweenOuterAndInnerClass"})
 public final class UsuarioComunidad implements Comparable<UsuarioComunidad>, Serializable {
 
     private final String portal;

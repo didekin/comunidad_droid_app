@@ -31,8 +31,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.common.testutils.ActivityTestUtils.checkNavigateUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.reSetDatePicker;
 import static com.didekindroid.common.utils.UIutils.SPAIN_LOCALE;
 import static com.didekindroid.common.utils.UIutils.formatTimeToString;
@@ -112,18 +112,22 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
     @Test
     public void testOnEdit_1() throws UiException
     {
-        // Caso: no cambiamos nada y pulsamos modificar. Mantiene los datos de la resolución.
+        // Caso OK: no cambiamos nada y pulsamos modificar. Mantiene los datos de la resolución.
         onView(withId(R.id.incid_resolucion_fr_modif_button)).perform(click());
         checKOk();
         Resolucion resolucionDb = IncidenciaServ.seeResolucion(resolucion.getIncidencia().getIncidenciaId());
         assertThat(resolucionDb.equals(resolucion), is(true));
         assertThat(Math.abs(resolucionDb.getFechaPrev().getTime() - resolucion.getFechaPrev().getTime()) < 1000, is(true));
+
+        checkUp();
+        checkScreenResolucionEditFr();
+        checkDataResolucionEditFr();
     }
 
     @Test
     public void testOnEdit_2() throws UiException
     {
-        // Caso: cambiamos la fecha prevista.
+        // Caso OK: cambiamos la fecha prevista.
 
         onView(withId(R.id.incid_resolucion_fecha_view)).perform(click());
         Calendar newFechaPrev = reSetDatePicker(resolucion.getFechaPrev().getTime(), 1);
@@ -138,12 +142,15 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
         }
         onView(withId(R.id.incid_resolucion_fr_modif_button)).perform(click());
         checKOk();
+
+        checkUp();
+        checkScreenResolucionEditFr();
     }
 
     @Test
     public void testOnEdit_3() throws UiException
     {
-        // Caso: añadimos un avance con descripción Ok y cambiamos coste (admite importes negativos).
+        // Caso OK: añadimos un avance con descripción Ok y cambiamos coste (admite importes negativos).
         onView(withId(R.id.incid_resolucion_avance_ed)).perform(replaceText("avance_desc_válida"));
         onView(withId(R.id.incid_resolucion_coste_prev_ed)).perform(replaceText("-1234,5"));
         onView(withId(R.id.incid_resolucion_fr_modif_button)).perform(click());
@@ -153,17 +160,21 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
         assertThat(resolucionDb.getAvances().size(), is(1));
         assertThat(resolucionDb.getAvances().get(0).getAvanceDesc(), is("avance_desc_válida"));
         assertThat(resolucionDb.getCosteEstimado(), is(-1234));
+
+        checkUp();
+        checkScreenResolucionEditFr();
     }
 
     @Test
-    public void testOnEdit_4() throws UiException
+    public void testOnEdit_4() throws UiException, InterruptedException
     {
-        // Caso: descripción de avance errónea.
+        // Caso NO OK: descripción de avance errónea.
         onView(withId(R.id.incid_resolucion_avance_ed)).perform(replaceText("avance * no válido"));
         onView(withId(R.id.incid_resolucion_coste_prev_ed)).perform(replaceText("-1234,5"));
         onView(withId(R.id.incid_resolucion_fr_modif_button)).perform(click());
 
         checkToastInTest(R.string.error_validation_msg, mActivity, R.string.incid_resolucion_avance_rot);
+        Thread.sleep(2000);
     }
 
     @Test
@@ -184,18 +195,23 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
     }
 
     @Test
-    public void testCloseIncidenciaAndUp()
+    public void testCloseIncidenciaAndUp() throws InterruptedException
     {
         // Caso OK: cerramos incidencia sin cambiar datos en pantalla.
         onView(withId(R.id.incid_resolucion_edit_fr_close_button)).perform(click());
 
         onView(withId(R.id.incid_see_closed_by_comu_ac)).check(matches(isDisplayed()));
         intended(not(hasExtraWithKey(INCID_IMPORTANCIA_OBJECT.key)));
+
         // Up Navigate.
-        checkNavigateUp();
+        checkUp();
+        checkScreenResolucionEditFr();
+        checkDataResolucionEditFr();
+        // Intentamos modificar la incidencia: error nos manda a la consulta.
         onView(withId(R.id.incid_resolucion_fr_modif_button)).perform(click());
         checkToastInTest(R.string.incidencia_wrong_init, mActivity);
         onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed()));
+        Thread.sleep(2000);
     }
 
 //    ============================= HELPER METHODS ===========================

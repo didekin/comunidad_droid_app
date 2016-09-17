@@ -27,7 +27,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
-import static com.didekindroid.common.testutils.ActivityTestUtils.checkNavigateUp;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkUp;
+import static com.didekindroid.common.testutils.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.regSeveralUserComuSameUser;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
@@ -63,6 +64,9 @@ public class IncidSeeClosedByComuAcTest_1 {
     Comunidad mComuReal;
     Comunidad comunidadInIntent;
     IncidSeeByComuListFr mFragment;
+
+    int activityLayoutId = R.id.incid_see_closed_by_comu_ac;
+    int fragmentLayoutId = R.id.incid_see_generic_layout;
 
     @Rule
     public IntentsTestRule<IncidSeeClosedByComuAc> activityRule = new IntentsTestRule<IncidSeeClosedByComuAc>(IncidSeeClosedByComuAc.class) {
@@ -100,8 +104,7 @@ public class IncidSeeClosedByComuAcTest_1 {
     {
         whatToClean = CLEAN_PEPE;
         mActivity = activityRule.getActivity();
-        mFragment = (IncidSeeByComuListFr) mActivity.getSupportFragmentManager()
-                .findFragmentByTag(incid_see_by_comu_list_fr_tag);
+        mFragment = (IncidSeeByComuListFr) mActivity.getSupportFragmentManager().findFragmentByTag(incid_see_by_comu_list_fr_tag);
     }
 
     @After
@@ -111,7 +114,7 @@ public class IncidSeeClosedByComuAcTest_1 {
     }
 
     @Test
-    public void testOnCreate_1() throws Exception
+    public void testOnCreate() throws Exception
     {
         // CASO OK: muestra estado inicial actividad.
 
@@ -120,20 +123,21 @@ public class IncidSeeClosedByComuAcTest_1 {
         assertThat(mFragment, notNullValue());
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
 
-        onView(withId(R.id.incid_see_closed_by_comu_ac)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_see_generic_layout)).check(matches(isDisplayed()));
+        onView(withId(activityLayoutId)).check(matches(isDisplayed()));
+        onView(withId(fragmentLayoutId)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_reg_comunidad_spinner)).check(matches(isDisplayed()));
         onView(withId(android.R.id.empty)).check(matches(isDisplayed()));
         // No hay incidencias cerradas.
         onView(withId(android.R.id.list)).check(matches(not(isDisplayed())));
 
-        checkNavigateUp();
+        clickNavigateUp();
     }
 
     @Test
-    public void testOnDataSpinner_1() throws InterruptedException
+    public void testOnDataSpinner() throws InterruptedException
     {
-        /* Caso OK: muestra datos de la comunidad en el intent (2ª en el spinner).*/
+        // Caso OK: muestra datos de la comunidad en el intent (2ª comunidad en el spinner)
+
         Thread.sleep(2000);
         assertThat(mActivity.mComunidadSelected, is(comunidadInIntent));
         onView(allOf(
@@ -142,12 +146,9 @@ public class IncidSeeClosedByComuAcTest_1 {
         )).check(matches(withText(is(mComuReal.getNombreComunidad()))
         )).check(matches(withText(is(comunidadInIntent.getNombreComunidad()))
         )).check(matches(isDisplayed()));
+        // Verificamos el índice de comunidad en el fragmento.
         assertThat(mFragment.mComunidadSelectedIndex, is(1));
-    }
 
-    @Test
-    public void testOnDataSpinner_2()
-    {
         // Caso OK: seleccionamos 1ª comunidad en spinner.
 
         onView(withId(R.id.incid_reg_comunidad_spinner)).perform(click());
@@ -166,11 +167,13 @@ public class IncidSeeClosedByComuAcTest_1 {
     public void testIncidSeeOpenByComuMn() throws InterruptedException
     {
         INCID_SEE_OPEN_BY_COMU_AC.checkMenuItem_WTk(mActivity);
+        checkUp(activityLayoutId, fragmentLayoutId);
     }
 
     @Test
     public void testIncidRegMn() throws InterruptedException
     {
         INCID_REG_AC.checkMenuItem_WTk(mActivity);
+        checkUp(activityLayoutId, fragmentLayoutId);
     }
 }

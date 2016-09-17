@@ -21,6 +21,8 @@ import com.didekindroid.usuario.activity.utils.UserAndComuFiller;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
 
+import java.util.Objects;
+
 import timber.log.Timber;
 
 import static com.didekin.usuario.controller.UsuarioServiceConstant.IS_USER_DELETED;
@@ -35,6 +37,7 @@ import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_RE
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_SEE_BY_COMU_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.COMU_DATA_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_USERCOMU_BY_COMU_AC;
+import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenu;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
@@ -58,9 +61,9 @@ import static com.google.common.base.Preconditions.checkState;
 public class UserComuDataAc extends AppCompatActivity {
 
     private View mAcView;
-    private UsuarioComunidad mOldUserComu;
+    UsuarioComunidad mOldUserComu;
     RegUserComuFr mRegUserComuFr;
-    private MenuItem mComuDataItem;
+    MenuItem mComuDataItem;
 
     @SuppressLint("InflateParams")
     @Override
@@ -101,7 +104,7 @@ public class UserComuDataAc extends AppCompatActivity {
         });
     }
 
-    private void modifyUserComuData()
+    void modifyUserComuData()
     {
         Timber.d("modifyUserComuData()");
 
@@ -121,11 +124,16 @@ public class UserComuDataAc extends AppCompatActivity {
         }
     }
 
-    private void deleteUserComuData()
+    void deleteUserComuData()
     {
         Timber.d("deleteUserComuData()");
         new UserComuEraser().execute(mOldUserComu.getComunidad());
     }
+
+
+    // ============================================================
+    //    ..... ACTION BAR ....
+    // ============================================================
 
     /**
      * Option 'comu_data_ac_mn' is only visible if the user is the oldest (oldest fecha_alta) UsuarioComunidad in
@@ -151,6 +159,9 @@ public class UserComuDataAc extends AppCompatActivity {
         int resourceId = checkNotNull(item.getItemId());
 
         switch (resourceId) {
+            case android.R.id.home:
+                doUpMenu(this);
+                return true;
             case R.id.see_usercomu_by_comu_ac_mn:
                 Intent intent = new Intent();
                 intent.putExtra(COMUNIDAD_ID.key, mOldUserComu.getComunidad().getC_Id());
@@ -267,15 +278,16 @@ public class UserComuDataAc extends AppCompatActivity {
             Timber.d("onPostExecute() entering.");
 
             if (uiException == null) {
-
                 checkState(isDeleted != 0);
-
+                Intent intent;
                 if (isDeleted == IS_USER_DELETED) {
                     TokenHandler.TKhandler.cleanCacheAndBckFile();
                     updateIsRegistered(false, UserComuDataAc.this);
+                    intent = new Intent(UserComuDataAc.this, ComuSearchAc.class);
+                } else {
+                    Objects.equals(isDeleted == 1, true);
+                    intent = new Intent(UserComuDataAc.this, SeeUserComuByUserAc.class);
                 }
-
-                Intent intent = new Intent(UserComuDataAc.this, ComuSearchAc.class);
                 startActivity(intent);
             } else {
                 uiException.processMe(UserComuDataAc.this, new Intent());

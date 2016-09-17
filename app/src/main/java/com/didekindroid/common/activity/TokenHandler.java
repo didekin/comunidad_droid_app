@@ -62,9 +62,9 @@ public enum TokenHandler {
 
         // Not stricty necessary; just convenient.
         cleanCacheAndBckFile();
+        refreshTokenKey = checkNotNull(accessToken).getRefreshToken().getValue();
 
         synchronized (this) {
-            refreshTokenKey = checkNotNull(accessToken).getRefreshToken().getValue();
             IoHelper.writeFileFromString(refreshTokenKey, refreshTokenFile);
             tokensCache.put(refreshTokenKey, accessToken);
         }

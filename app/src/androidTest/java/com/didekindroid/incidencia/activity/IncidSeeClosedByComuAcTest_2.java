@@ -16,6 +16,7 @@ import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.BundleKey;
 import com.didekindroid.common.activity.UiException;
+import com.didekindroid.common.testutils.ActivityTestUtils;
 import com.didekindroid.incidencia.repository.IncidenciaDataDbHelper;
 import com.didekindroid.usuario.testutils.CleanUserEnum;
 
@@ -28,15 +29,13 @@ import org.junit.runner.RunWith;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 import static android.database.sqlite.SQLiteDatabase.deleteDatabase;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.pressBack;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
@@ -47,7 +46,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.IS_MENU_IN_FRAGMENT_FLAG;
-import static com.didekindroid.common.testutils.ActivityTestUtils.checkNavigateUp;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkUp;
+import static com.didekindroid.common.testutils.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.regSeveralUserComuSameUser;
 import static com.didekindroid.common.utils.UIutils.formatTimeStampToString;
@@ -84,15 +84,15 @@ public class IncidSeeClosedByComuAcTest_2 {
 
     private IncidSeeClosedByComuAc mActivity;
     private CleanUserEnum whatToClean;
-    private UsuarioComunidad mPepePlazuelas5;
-    private UsuarioComunidad mPepeLaFuente;
-    private IncidImportancia incidPepePlazuelas5_1;
-    private IncidImportancia incidPepePlazuelas5_2;
-    private IncidImportancia incidPepeLaFuente;
+    UsuarioComunidad mPepePlazuelas5;
+    UsuarioComunidad mPepeLaFuente;
+    IncidImportancia incidPepePlazuelas5_1;
+    IncidImportancia incidPepePlazuelas5_2;
+    IncidImportancia incidPepeLaFuente;
     IncidSeeByComuListFr mFragment;
     IncidenciaDataDbHelper dbHelper;
     IncidSeeClosedByComuAdapter mAdapter;
-    private Resolucion mResolucionToCheck;
+    Resolucion mResolucionToCheck;
 
     @Rule
     public IntentsTestRule<IncidSeeClosedByComuAc> activityRule = new IntentsTestRule<IncidSeeClosedByComuAc>(IncidSeeClosedByComuAc.class) {
@@ -124,7 +124,7 @@ public class IncidSeeClosedByComuAcTest_2 {
                 Thread.sleep(1000);
                 Incidencia incidenciaDB = IncidenciaServ.seeIncidsOpenByComu(mPepePlazuelas5.getComunidad().getC_Id()).get(0).getIncidencia();
                 incidPepePlazuelas5_1 = IncidenciaServ.seeIncidImportancia(incidenciaDB.getIncidenciaId()).getIncidImportancia();
-                Resolucion resolucionToClose = doResolucionAvances(incidPepePlazuelas5_1.getIncidencia(), RESOLUCION_DEFAULT_DESC, 231, doTimeStamp(1));
+                Resolucion resolucionToClose = doResolucionAvances(incidPepePlazuelas5_1.getIncidencia(), RESOLUCION_DEFAULT_DESC, 231, ActivityTestUtils.doTimeStampFromCalendar(1));
                 assertThat(IncidenciaServ.regResolucion(resolucionToClose), is(1));
                 resolucionToClose = IncidenciaServ.seeResolucion(resolucionToClose.getIncidencia().getIncidenciaId());
                 // Cierre incidPepePlazuelas5_1.
@@ -136,7 +136,7 @@ public class IncidSeeClosedByComuAcTest_2 {
                 Thread.sleep(1000);
                 incidenciaDB = IncidenciaServ.seeIncidsOpenByComu(mPepeLaFuente.getComunidad().getC_Id()).get(0).getIncidencia();
                 incidPepeLaFuente = IncidenciaServ.seeIncidImportancia(incidenciaDB.getIncidenciaId()).getIncidImportancia();
-                resolucionToClose = doResolucionAvances(incidPepeLaFuente.getIncidencia(), RESOLUCION_DEFAULT_DESC, 321, doTimeStamp(1));
+                resolucionToClose = doResolucionAvances(incidPepeLaFuente.getIncidencia(), RESOLUCION_DEFAULT_DESC, 321, ActivityTestUtils.doTimeStampFromCalendar(1));
                 assertThat(IncidenciaServ.regResolucion(resolucionToClose), is(1));
                 resolucionToClose = IncidenciaServ.seeResolucion(resolucionToClose.getIncidencia().getIncidenciaId());
                 // Cierre incidPepeLaFuente.
@@ -148,7 +148,7 @@ public class IncidSeeClosedByComuAcTest_2 {
                 Thread.sleep(1000);
                 incidenciaDB = IncidenciaServ.seeIncidsOpenByComu(mPepePlazuelas5.getComunidad().getC_Id()).get(0).getIncidencia();
                 incidPepePlazuelas5_2 = IncidenciaServ.seeIncidImportancia(incidenciaDB.getIncidenciaId()).getIncidImportancia();
-                resolucionToClose = doResolucionAvances(incidPepePlazuelas5_2.getIncidencia(), RESOLUCION_DEFAULT_DESC, 334, doTimeStamp(1));
+                resolucionToClose = doResolucionAvances(incidPepePlazuelas5_2.getIncidencia(), RESOLUCION_DEFAULT_DESC, 334, ActivityTestUtils.doTimeStampFromCalendar(1));
                 mResolucionToCheck = resolucionToClose;
                 assertThat(IncidenciaServ.regResolucion(resolucionToClose), is(1));
                 resolucionToClose = IncidenciaServ.seeResolucion(resolucionToClose.getIncidencia().getIncidenciaId());
@@ -182,8 +182,7 @@ public class IncidSeeClosedByComuAcTest_2 {
     {
         whatToClean = CLEAN_PEPE;
         mActivity = activityRule.getActivity();
-        mFragment = (IncidSeeByComuListFr) mActivity.getSupportFragmentManager()
-                .findFragmentByTag(incid_see_by_comu_list_fr_tag);
+        mFragment = (IncidSeeByComuListFr) mActivity.getSupportFragmentManager().findFragmentByTag(incid_see_by_comu_list_fr_tag);
         Thread.sleep(2000);
         mAdapter = (IncidSeeClosedByComuAdapter) mFragment.mAdapter;
         dbHelper = new IncidenciaDataDbHelper(mActivity);
@@ -220,8 +219,8 @@ public class IncidSeeClosedByComuAcTest_2 {
         // CASO OK: cambiamos la comunidad en el spinner y revisamos los datos.
         onView(withId(R.id.incid_reg_comunidad_spinner)).perform(click());
         onData(allOf(
-                        is(instanceOf(Comunidad.class)),
-                        is(mPepePlazuelas5.getComunidad()))
+                is(instanceOf(Comunidad.class)),
+                is(mPepePlazuelas5.getComunidad()))
         ).check(matches(isDisplayed())).perform(click());
 
         assertThat(mAdapter.getCount(), is(2));
@@ -236,14 +235,14 @@ public class IncidSeeClosedByComuAcTest_2 {
     }
 
     @Test
-    public void testOnSelected_1()
+    public void testOnSelectedWithDoubleUp() throws UiException
     {
         // CASO OK: seleccionamos 2ª comunidad en spinner y la 2ª incidencia.
 
         onView(withId(R.id.incid_reg_comunidad_spinner)).perform(click());
         onData(allOf(
-                        is(instanceOf(Comunidad.class)),
-                        is(mPepePlazuelas5.getComunidad()))
+                is(instanceOf(Comunidad.class)),
+                is(mPepePlazuelas5.getComunidad()))
         ).perform(click());
 
         IncidenciaUser incidUser = mAdapter.getItem(1);
@@ -265,32 +264,42 @@ public class IncidSeeClosedByComuAcTest_2 {
 
         // Probamos el menú del nuevo fragmento.
         onView(withText(R.string.incid_comments_see_ac_mn)).check(matches(isDisplayed())).perform(click());
+        // Verificamos cambio a 'Comentarios'.
         onView(withId(R.id.incid_comments_see_fr_layout)).check(matches(isDisplayed()));
         intended(hasExtra(is(INCIDENCIA_OBJECT.key), is(incidPepePlazuelas5_2.getIncidencia())));
+        // Comentarios no muestra menú porque la incidencia está cerrada.
+        assertThat(IncidenciaServ.seeResolucion(incidPepePlazuelas5_2.getIncidencia().getIncidenciaId()).getIncidencia().getFechaCierre(),
+                notNullValue());
+        onView(withId(R.id.incid_comment_reg_ac_mn)).check(doesNotExist());
+
+        // Navigate-up
+        checkUp(R.id.incid_resolucion_see_fr_layout);  // Up to 'Resolución'
+        checkUp(R.id.incid_see_closed_by_comu_ac, R.id.incid_see_generic_layout);  // Up to consulta incidencias.
     }
 
     @Test
-    public void testOnSelected_2() throws InterruptedException
+    public void testOnSelectedWithBack() throws InterruptedException
     {
         // CASO: verificación de la navegación, Utilizamos PressBack.
 
         // Comunidad por defecto.
         Thread.sleep(1000);
         IncidenciaUser incidUser = mAdapter.getItem(0);
+
         // Seleccionamos una incidencia.
         onData(is(incidUser)).inAdapterView(withId(android.R.id.list))
                 .check(matches(isDisplayed()))
                 .perform(click());
+        onView(withId(R.id.incid_resolucion_see_fr_layout)).check(matches(isDisplayed()));
 
         // BACK.
         onView(withId(R.id.incid_resolucion_see_fr_layout)).check(matches(isDisplayed())).perform(pressBack());
-
         /* Datos a la vista de IncidSeeByComuListFr.*/
         showDataIncidList(incidUser);
     }
 
     @Test
-    public void testOnSelected_3() throws InterruptedException
+    public void testOnSelectedWithUp() throws InterruptedException
     {
         // CASO: verificación de la navegación,
 
@@ -302,10 +311,10 @@ public class IncidSeeClosedByComuAcTest_2 {
         onData(is(incidUser)).inAdapterView(withId(android.R.id.list))
                 .check(matches(isDisplayed()))
                 .perform(click());
+        onView(withId(R.id.incid_resolucion_see_fr_layout)).check(matches(isDisplayed()));
 
         // Up Navigation:
-        checkNavigateUp();
-
+        clickNavigateUp();
         /* Datos a la vista de IncidSeeByComuListFr.*/
         showDataIncidList(incidUser);
     }
@@ -334,9 +343,9 @@ public class IncidSeeClosedByComuAcTest_2 {
                 hasSibling(allOf(
                         withId(R.id.incid_see_importancia_block),
                         hasDescendant(allOf(
-                                        withId(R.id.incid_importancia_comunidad_view),
-                                        withText(mActivity.getResources()
-                                                .getStringArray(R.array.IncidImportanciaArray)[Math.round(incidPepeLaFuente.getImportancia())]))
+                                withId(R.id.incid_importancia_comunidad_view),
+                                withText(mActivity.getResources()
+                                        .getStringArray(R.array.IncidImportanciaArray)[Math.round(incidPepeLaFuente.getImportancia())]))
                         ))),
                 hasSibling(allOf(
                         withId(R.id.incid_ambito_view),
@@ -347,12 +356,5 @@ public class IncidSeeClosedByComuAcTest_2 {
                         withId(R.id.incid_descripcion_view)
                 ))
         )).check(matches(isDisplayed()));
-    }
-
-    private static Timestamp doTimeStamp(int daysToAdd)
-    {
-        Calendar fCierre = new GregorianCalendar();
-        fCierre.add(Calendar.DAY_OF_MONTH, daysToAdd);
-        return new Timestamp(fCierre.getTimeInMillis());
     }
 }

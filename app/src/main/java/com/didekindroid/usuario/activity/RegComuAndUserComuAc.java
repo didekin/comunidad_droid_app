@@ -3,7 +3,9 @@ package com.didekindroid.usuario.activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -23,6 +25,7 @@ import static com.didekindroid.common.utils.UIutils.makeToast;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeComunidadBeanFromView;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUserComuBeanFromView;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
 /**
@@ -59,7 +62,7 @@ public class RegComuAndUserComuAc extends AppCompatActivity {
         });
     }
 
-    private void registerComuAndUserComu()
+    void registerComuAndUserComu()
     {
         Timber.d("registerComuAndUserComu()");
 
@@ -82,11 +85,26 @@ public class RegComuAndUserComuAc extends AppCompatActivity {
         }
     }
 
+//    ============================================================
+//    ..... ACTION BAR ....
+//    ============================================================
+
     @Override
-    protected void onDestroy()
+    public boolean onOptionsItemSelected(MenuItem item)
     {
-        Timber.d("onDestroy()");
-        super.onDestroy();
+        Timber.d("onOptionsItemSelected()");
+
+        int resourceId = checkNotNull(item.getItemId());
+
+        switch (resourceId) {
+            case android.R.id.home:
+                Intent intent = new Intent(this, ComuSearchAc.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                NavUtils.navigateUpTo(this, intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     //    ============================================================

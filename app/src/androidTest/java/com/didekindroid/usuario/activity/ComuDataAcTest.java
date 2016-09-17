@@ -27,6 +27,8 @@ import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.matcher.CursorMatchers.withRowString;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -38,6 +40,8 @@ import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
+import static com.didekindroid.usuario.testutils.UserMenuTestUtils.SEE_USERCOMU_BY_COMU_AC;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkUp;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_LA_PLAZUELA_5;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_PLAZUELA5_JUAN;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
@@ -58,6 +62,7 @@ public class ComuDataAcTest {
     private ComuDataAc mActivity;
     CleanUserEnum whatToClean = CLEAN_JUAN;
     Comunidad mComunidad;
+    int activityLayoutId = R.id.comu_data_ac_layout;
 
     @Rule
     public IntentsTestRule<ComuDataAc> intentRule = new IntentsTestRule<ComuDataAc>(ComuDataAc.class) {
@@ -109,6 +114,8 @@ public class ComuDataAcTest {
         assertThat(mActivity.mAcView, notNullValue());
         assertThat(mActivity.mRegComuFrg, notNullValue());
 
+        onView(withId(activityLayoutId)).check(matches(isDisplayed()));
+
         onView(withId(R.id.comunidad_nombre_via_editT))
                 .check(matches(withText(is(mComunidad.getNombreVia()))))
                 .check(matches(isDisplayed()));
@@ -159,14 +166,17 @@ public class ComuDataAcTest {
         Thread.sleep(1000);
         onData(withRowString(3, "Ènova, l'")).perform(click());
 
+        // Modificamos.
         onView(withId(R.id.comu_data_ac_button)).check(matches(isDisplayed())).perform(click());
+        // Verificamos cambios.
         onView(withId(R.id.see_usercomu_by_user_frg)).check(matches(isDisplayed()));
-
         Comunidad comunidadDb = ServOne.getComuData(mComunidad.getC_Id());
         assertThat(comunidadDb != null ? comunidadDb.getMunicipio() : null, is(new Municipio((short) 119, new Provincia((short) 46))));
         assertThat(comunidadDb != null ? comunidadDb.getNombreVia() : null, is("nombre via One"));
         assertThat(comunidadDb != null ? comunidadDb.getNumero() : 0,is((short) 123));
         assertThat(comunidadDb != null ? comunidadDb.getSufijoNumero() : null,is("Tris"));
+
+        checkUp(activityLayoutId);
     }
 
     @Test
@@ -178,6 +188,8 @@ public class ComuDataAcTest {
         Comunidad comunidadDb = ServOne.getComuData(mComunidad.getC_Id());
         assertThat(comunidadDb != null ? comunidadDb.getMunicipio() : null, is(COMU_LA_PLAZUELA_5.getMunicipio()));
         assertThat(comunidadDb != null ? comunidadDb.getNombreVia() : null, is(COMU_LA_PLAZUELA_5.getNombreVia()));
+
+        checkUp(activityLayoutId);
     }
 
     @Test
@@ -195,5 +207,15 @@ public class ComuDataAcTest {
 
         onView(withId(R.id.comu_data_ac_button)).check(matches(isDisplayed())).perform(scrollTo(), click());
         checkToastInTest(R.string.error_validation_msg, mActivity, R.string.municipio);
+    }
+
+//     ==================== MENU ====================
+
+    @Test
+    public void testSeeUserComuByComuMn() throws InterruptedException
+    {
+        SEE_USERCOMU_BY_COMU_AC.checkMenuItem_WTk(mActivity);
+        intended(hasExtra(COMUNIDAD_ID.key,mComunidad.getC_Id()));
+        checkUp(activityLayoutId);
     }
 }

@@ -27,6 +27,7 @@ import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_CO
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_COMMENT_REG_AC;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_RESOLUCION_REG_EDIT_AC;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
+import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenu;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
@@ -35,6 +36,7 @@ import static com.google.common.base.Preconditions.checkState;
  * 1. An intent key is received with the IncidImportancia instance to be edited.
  * -- Users with maximum powers can modify description and ambito of the incidencia.
  * -- Users with minimum powers can only modify the importance assigned by them.
+ * 2. An intent key is received with a flag signalling if the incidencia has an open resolucion.
  * Postconditions:
  * 1. An incidencia is updated in BD, once edited.
  * 3. An updated incidencias list of the comunidad is showed.
@@ -83,7 +85,7 @@ public class IncidEditAc extends AppCompatActivity {
                 .commit();
     }
 
-    //    ============================================================
+//    ============================================================
 //    ......................... MENU .............................
 //    ============================================================
 
@@ -106,6 +108,9 @@ public class IncidEditAc extends AppCompatActivity {
         Intent intent;
 
         switch (resourceId) {
+            case android.R.id.home:
+                doUpMenu(this);
+                return true;
             case R.id.incid_comment_reg_ac_mn:
                 intent = new Intent();
                 intent.putExtra(INCIDENCIA_OBJECT.key, mIncidImportancia.getIncidencia());

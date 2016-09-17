@@ -185,16 +185,7 @@ public final class UsuarioTestUtils {
         return new UsuarioComunidad.UserComuBuilder(comunidad, usuarioComunidad.getUsuario()).userComuRest(usuarioComunidad).build();
     }
 
-    public static List<UsuarioComunidad> makeListTwoUserComu()
-    {
-        // Dos comunidades diferentes con un mismo userComu.
-        List<UsuarioComunidad> userComuList = new ArrayList<>(2);
-        userComuList.add(COMU_REAL_JUAN);
-        userComuList.add(COMU_PLAZUELA5_JUAN);
-        return userComuList;
-    }
-
-//  ======================================= UI TYPING DATA ==========================================
+    //  ======================================= UI TYPING DATA ==========================================
 
     public static void typeComunidadData() throws InterruptedException
     {

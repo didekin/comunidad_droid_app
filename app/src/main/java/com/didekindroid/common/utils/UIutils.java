@@ -1,9 +1,11 @@
 package com.didekindroid.common.utils;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -50,6 +52,15 @@ public final class UIutils {
 
     private UIutils()
     {
+    }
+
+//    ========================== ACTIVITIES ======================================
+
+    public ActivityManager getActivityManager(Context context){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return context.getSystemService(ActivityManager.class);
+        }
+        return (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
     }
 
 //    ===========================  AUTHENTICATION ==============================

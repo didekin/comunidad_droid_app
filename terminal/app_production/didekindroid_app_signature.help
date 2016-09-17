@@ -1,19 +1,21 @@
 # Generación de self signed certificate OPENSSL:
   =============================================
 
-   AWS_PRO  CN: didekindroid  pswd: didekin_droid_00
+   AWS_PRO  CN: didekindroid  pswd: didekin_00_droid_11
 
    Ejecutado en: /Users/pedro/keystores/didekindroid_release
 
    $ openssl genrsa -aes128 2048 > didekindroid.pem
    $ openssl req -new -key didekindroid.pem -out didekindroid_csr.pem
-   $ openssl x509 -req -days 730 -in didekindroid_csr.pem -signkey didekindroid.pem -out didekindroid.crt
+   $ openssl x509 -req -days 9125 -in didekindroid_csr.pem -signkey didekindroid.pem -out didekindroid.crt
    $ openssl rsa -in didekindroid.pem -out didekindroid.pem
    $ openssl pkcs12 -inkey didekindroid.pem -in didekindroid.crt -export -out didekindroid.pkcs12 // export_password: didekin_droid_ex
 
    $ keytool -importkeystore -srckeystore didekindroid.pkcs12 -srcstoretype PKCS12 \
-     -deststoretype JKS  -destkeystore didekindroid_jks -destkeypass didekin_droid_00 \
-     -deststorepass droid_jks_00
+     -deststoretype JKS  -destkeystore didekindroid_jks -destkeypass didekin_00_droid_11 \
+     -deststorepass droid_11_jks_00
+
+   $ keytool -changealias -alias 1 -destalias didekindroid -keystore didekindroid_jks -v
 
   :::::::::::::::::::::::::::::: Descripción
   Keystore type: JKS
@@ -22,18 +24,26 @@
   Your keystore contains 1 entry
 
   Alias name: didekindroid
-  Creation date: Sep 6, 2016
+  Creation date: Sep 7, 2016
   Entry type: PrivateKeyEntry
   Certificate chain length: 1
   Certificate[1]:
-  Owner: EMAILADDRESS=contacto@didekin.es, CN=Didekin, O=Didekin, L=Las Rozas, ST=Madrid, C=ES
-  Issuer: EMAILADDRESS=contacto@didekin.es, CN=Didekin, O=Didekin, L=Las Rozas, ST=Madrid, C=ES
-  Serial number: b779cb2d1e2a4669
-  Valid from: Tue Sep 06 14:57:59 CEST 2016 until: Thu Sep 06 14:57:59 CEST 2018
+  Owner: EMAILADDRESS=contacto@didekin.es, CN=Didekindroid, OU=didekindroid, O=Didekin, L=Las Rozas, ST=Madrid, C=ES
+  Issuer: EMAILADDRESS=contacto@didekin.es, CN=Didekindroid, OU=didekindroid, O=Didekin, L=Las Rozas, ST=Madrid, C=ES
+  Serial number: 8562f9f2f03c17cb
+  Valid from: Wed Sep 07 10:05:06 CEST 2016 until: Sun Sep 01 10:05:06 CEST 2041
   Certificate fingerprints:
-  	 MD5:  F8:AA:81:56:82:E3:88:28:F6:41:29:B2:CE:9A:F2:D7
-  	 SHA1: D7:74:03:8C:CF:EC:1A:85:A9:9C:C0:67:78:31:CD:27:C8:21:5F:75
-  	 SHA256: 19:1B:9A:CC:53:57:BF:5D:39:B7:62:2B:A9:2E:FD:9A:A9:80:76:38:56:B5:F1:57:53:30:3F:58:BE:A8:76:C6
+  	 MD5:  30:12:C3:E5:31:3D:AC:AA:43:93:2E:5F:72:8D:3A:E4
+  	 SHA1: C6:50:01:B1:8A:28:9B:99:8B:25:DC:3C:AB:85:41:4F:0C:03:F0:78
+  	 SHA256: 2F:1A:92:B2:2D:F8:3A:E2:7F:E2:16:60:61:1D:3B:40:08:3E:A2:36:DC:BE:25:B2:0D:F2:60:35:90:56:A1:18
   	 Signature algorithm name: SHA1withRSA
   	 Version: 1
-  ::::::::::::::::::::::::::::::
+  ..............................
+
+# Generation of signed APK
+  ========================
+
+  # It must be executed after 'cddroid' with:
+
+  ./gradlew app:assembleRelease -Pkeyalias=didekindroid -Pkeypassword=didekin_00_droid_11 \
+   -Pkeystore=/Users/pedro/keystores/didekindroid_release/didekindroid_jks -Pstorepassword=droid_11_jks_00

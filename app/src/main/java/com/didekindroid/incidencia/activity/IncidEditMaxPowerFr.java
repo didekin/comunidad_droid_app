@@ -113,7 +113,6 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
                 eraseIncidencia();
             }
         });
-
     }
 
     @Override
@@ -128,7 +127,7 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
 //    ...................... HELPER METHODS ......................
 //    ============================================================
 
-    private void modifyIncidenciaAndImportancia()
+    void modifyIncidenciaAndImportancia()
     {
         Timber.d("modifyIncidenciaAndImportancia()");
         StringBuilder errorMsg = getErrorMsgBuilder(getActivity());
@@ -145,7 +144,7 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
         }
     }
 
-    private void eraseIncidencia()
+    void eraseIncidencia()
     {
         Timber.d("eraseIncidencia()");
 

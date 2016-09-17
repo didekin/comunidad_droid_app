@@ -11,12 +11,12 @@ import com.didekindroid.usuario.testutils.CleanUserEnum;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 
 import java.util.Locale;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.matcher.BundleMatchers.hasEntry;
 import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
@@ -52,12 +52,6 @@ public abstract class IncidResolucionAbstractTest {
 
     @Rule
     public IntentsTestRule<IncidResolucionRegEditSeeAc> intentRule = doIntentRule();
-
-    @BeforeClass
-    public static void slowSeconds() throws InterruptedException
-    {
-        Thread.sleep(4000);
-    }
 
     @Before
     public void setUp() throws Exception
@@ -104,7 +98,7 @@ public abstract class IncidResolucionAbstractTest {
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
 
         onView(withId(R.id.incid_resolucion_fragment_container_ac)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_resolucion_edit_fr_layout)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_resolucion_edit_fr_layout)).check(matches(isDisplayed())).perform(closeSoftKeyboard());
         onView(withId(R.id.incid_resolucion_fecha_view)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_resolucion_coste_prev_ed)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_resolucion_avance_ed)).check(matches(isDisplayed()));

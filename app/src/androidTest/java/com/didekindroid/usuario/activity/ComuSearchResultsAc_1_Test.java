@@ -1,7 +1,7 @@
 package com.didekindroid.usuario.activity;
 
 import android.content.Intent;
-import android.support.test.rule.ActivityTestRule;
+import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.usuario.dominio.Comunidad;
@@ -28,16 +28,21 @@ import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_SEARCH;
+import static com.didekindroid.common.activity.BundleKey.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.common.activity.TokenHandler.TKhandler;
-import static com.didekindroid.common.testutils.ActivityTestUtils.checkNavigateUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanTwoUsers;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanWithTkhandler;
+import static com.didekindroid.common.testutils.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.regThreeUserComuSameUser;
 import static com.didekindroid.common.testutils.ActivityTestUtils.regTwoUserComuSameUser;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
@@ -46,10 +51,14 @@ import static com.didekindroid.external.LongListMatchers.withAdaptedData;
 import static com.didekindroid.usuario.activity.utils.RolUi.PRO;
 import static com.didekindroid.usuario.activity.utils.UsuarioFragmentTags.comu_search_results_list_fr_tag;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
+import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_LA_PLAZUELA_5;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_PLAZUELA5_PEPE;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL;
+import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_JUAN;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_JUAN;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.makeComunidad;
-import static com.didekindroid.usuario.testutils.UsuarioTestUtils.makeListTwoUserComu;
+import static com.didekindroid.common.testutils.ActivityTestUtils.makeListTwoUserComu;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.makeUsuario;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.makeUsuarioComunidad;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
@@ -74,9 +83,11 @@ public class ComuSearchResultsAc_1_Test {
     Intent intent;
     CleanUserEnum whatClean = CleanUserEnum.CLEAN_NOTHING;
 
+    int activityLayoutId = R.id.comu_list_frg;
+
     @Rule
-    public ActivityTestRule<ComuSearchResultsAc> mActivityRule =
-            new ActivityTestRule<>(ComuSearchResultsAc.class, true, false);
+    public IntentsTestRule<ComuSearchResultsAc> mIntentRule =
+            new IntentsTestRule<>(ComuSearchResultsAc.class, true, false);
 
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
@@ -91,6 +102,14 @@ public class ComuSearchResultsAc_1_Test {
         intent.putExtra(COMUNIDAD_SEARCH.key, COMU_LA_PLAZUELA_5);
     }
 
+    @After
+    public void cleanData() throws UiException, InterruptedException
+    {
+        cleanOptions(whatClean);
+        Thread.sleep(2000);
+        checkState(!isRegisteredUser(activity));
+    }
+
     @Test
     public void testOnCreate_0() throws UiException, IOException
     {
@@ -98,20 +117,10 @@ public class ComuSearchResultsAc_1_Test {
 
         // Inserto comunidades en DB.
         regTwoUserComuSameUser(makeListTwoUserComu());
-        activity = mActivityRule.launchActivity(intent);
-
-        checkNavigateUp();
-    }
-
-    @Test
-    public void testOnCreate_1() throws UiException, IOException
-    {
-        whatClean = CLEAN_JUAN;
-
-        // Inserto comunidades en DB.
-        regTwoUserComuSameUser(makeListTwoUserComu());
-        activity = mActivityRule.launchActivity(intent);
+        activity = mIntentRule.launchActivity(intent);
         onView(withId(R.id.comu_list_frg)).check(matches(isDisplayed()));
+
+        clickNavigateUp();
     }
 
     @Test
@@ -121,7 +130,7 @@ public class ComuSearchResultsAc_1_Test {
 
         // User with 2 comunidades. We search with one of them exactly.
         regTwoUserComuSameUser(makeListTwoUserComu());
-        activity = mActivityRule.launchActivity(intent);
+        activity = mIntentRule.launchActivity(intent);
         assertThat(isRegisteredUser(activity), is(true));
 
         Thread.sleep(2000);
@@ -149,8 +158,7 @@ public class ComuSearchResultsAc_1_Test {
                 new Municipio((short) 2, new Provincia((short) 27)));
         Intent intent = new Intent();
         intent.putExtra(COMUNIDAD_SEARCH.key, comunidad);
-        activity = mActivityRule.launchActivity(intent);
-        assertThat(isRegisteredUser(activity), is(true));
+        activity = mIntentRule.launchActivity(intent);
 
         Thread.sleep(2000);
         mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getSupportFragmentManager().findFragmentByTag(comu_search_results_list_fr_tag);
@@ -166,6 +174,7 @@ public class ComuSearchResultsAc_1_Test {
     public void testSearchComunidades_3() throws InterruptedException, UiException
     {
         // 1. No existe la comunidad en DB. 2. El usuario no está registrado.
+
         assertThat(TKhandler.getAccessTokenInCache(), nullValue());
 
         // Criterio de búsqueda.
@@ -174,7 +183,7 @@ public class ComuSearchResultsAc_1_Test {
         Intent intent = new Intent();
         intent.putExtra(COMUNIDAD_SEARCH.key, comunidad);
 
-        activity = mActivityRule.launchActivity(intent);
+        activity = mIntentRule.launchActivity(intent);
         assertThat(isRegisteredUser(activity), is(false));
         mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getSupportFragmentManager().findFragmentByTag(comu_search_results_list_fr_tag);
         assertThat(mComunidadSummaryFrg, nullValue());
@@ -198,7 +207,7 @@ public class ComuSearchResultsAc_1_Test {
         Intent intent = new Intent();
         intent.putExtra(COMUNIDAD_SEARCH.key, comunidad);
 
-        activity = mActivityRule.launchActivity(intent);
+        activity = mIntentRule.launchActivity(intent);
         assertThat(isRegisteredUser(activity), is(true));
         mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getSupportFragmentManager().findFragmentByTag(comu_search_results_list_fr_tag);
         assertThat(mComunidadSummaryFrg, nullValue());
@@ -220,7 +229,7 @@ public class ComuSearchResultsAc_1_Test {
         // Borro los datos del userComu.
         cleanWithTkhandler();
 
-        activity = mActivityRule.launchActivity(intent);
+        activity = mIntentRule.launchActivity(intent);
         assertThat(isRegisteredUser(activity), is(false));
 
         Thread.sleep(2000);
@@ -234,6 +243,8 @@ public class ComuSearchResultsAc_1_Test {
         )).perform(click());
 
         onView(withId(R.id.reg_user_and_usercomu_ac_layout)).check(matches(isDisplayed()));
+
+        checkUp(activityLayoutId);
     }
 
     @Test
@@ -244,7 +255,8 @@ public class ComuSearchResultsAc_1_Test {
         // Usuario registrado. La búsqueda devuelve una comunidad a la que él ya está asociado.
 
         regTwoUserComuSameUser(makeListTwoUserComu());
-        activity = mActivityRule.launchActivity(intent);
+        activity = mIntentRule.launchActivity(intent);
+        assertThat(isRegisteredUser(activity), is(true));
 
         Thread.sleep(2000);
         mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getSupportFragmentManager().findFragmentByTag(comu_search_results_list_fr_tag);
@@ -258,11 +270,46 @@ public class ComuSearchResultsAc_1_Test {
                 withId(R.id.nombreComunidad_view),
                 withText(COMU_LA_PLAZUELA_5.getNombreComunidad())
         )).perform(click());
+
         onView(withId(R.id.usercomu_data_ac_layout)).check(matches(isDisplayed()));
+
+        checkUp(activityLayoutId);
     }
 
     @Test
-    public void testOnListItemClick_3() throws UiException, IOException, InterruptedException
+    public void testOnListItemClick_3() throws Exception
+    {
+        whatClean = CLEAN_JUAN;
+
+        // Intent específico para este test.
+        intent = new Intent();
+        intent.putExtra(COMUNIDAD_SEARCH.key, COMU_REAL);
+
+        // Usuario registrado. La búsqueda devuelve una comunidad a la que él ya está asociado.
+        // Verificamos intent de salida.
+        Usuario userIntent = signUpAndUpdateTk(COMU_REAL_JUAN);
+        Comunidad comuIntent = ServOne.getComusByUser().get(0);
+
+        activity = mIntentRule.launchActivity(intent);
+        assertThat(isRegisteredUser(activity), is(true));
+
+        onData(is(COMU_REAL)).perform(click());
+
+        UsuarioComunidad usuarioComunidad = new UsuarioComunidad.UserComuBuilder(comuIntent, userIntent)
+                .portal(COMU_REAL_JUAN.getPortal())
+                .escalera(COMU_REAL_JUAN.getEscalera())
+                .planta(COMU_REAL_JUAN.getPlanta())
+                .puerta(COMU_REAL_JUAN.getPuerta())
+                .build();
+
+        intended(hasExtra(USERCOMU_LIST_OBJECT.key, usuarioComunidad));
+        onView(withId(R.id.usercomu_data_ac_layout)).check(matches(isDisplayed()));
+
+        checkUp(activityLayoutId);
+    }
+
+    @Test
+    public void testOnListItemClick_4() throws UiException, IOException, InterruptedException
     {
         // Usuario registrado. La búsqueda devuelve una comunidad a la que él NO está asociado.
 
@@ -278,7 +325,8 @@ public class ComuSearchResultsAc_1_Test {
         signUpAndUpdateTk(usuarioComunidad);
 
         // Búsqueda con comunidad/intent por defecto.
-        activity = mActivityRule.launchActivity(intent);
+        activity = mIntentRule.launchActivity(intent);
+        assertThat(isRegisteredUser(activity), is(true));
 
         Thread.sleep(2000);
         mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getSupportFragmentManager().findFragmentByTag(comu_search_results_list_fr_tag);
@@ -290,11 +338,34 @@ public class ComuSearchResultsAc_1_Test {
         onData(is(comunidad)).perform(click());
         onView(withId(R.id.reg_usercomu_ac_layout)).check(matches(isDisplayed()));
 
+        checkUp(activityLayoutId);
+
         cleanTwoUsers(USER_JUAN, usuarioIn);
     }
 
     @Test
-    public void testOnListItemClick_4() throws UiException, IOException, InterruptedException
+    public void testOnListItemClick_5() throws Exception
+    {
+        whatClean = CLEAN_JUAN_AND_PEPE;
+
+        // Usuario registrado. La búsqueda devuelve una comunidad a la que él NO está asociado.
+
+        signUpAndUpdateTk(COMU_PLAZUELA5_PEPE);
+        Comunidad comunidad = ServOne.getComusByUser().get(0);
+        signUpAndUpdateTk(COMU_REAL_JUAN);
+
+        activity = mIntentRule.launchActivity(intent);
+        assertThat(isRegisteredUser(activity), is(true));
+
+        onData(is(COMU_LA_PLAZUELA_5)).perform(click());
+        intended(hasExtra(COMUNIDAD_LIST_OBJECT.key,comunidad));
+        onView(withId(R.id.reg_usercomu_ac_layout)).check(matches(isDisplayed()));
+
+        checkUp(activityLayoutId);
+    }
+
+    @Test
+    public void testOnListItemClick_6() throws UiException, IOException, InterruptedException
     {
         whatClean = CLEAN_JUAN;
 
@@ -302,7 +373,8 @@ public class ComuSearchResultsAc_1_Test {
         regTwoUserComuSameUser(makeListTwoUserComu());
 
         // Búsqueda con comunidad/intent por defecto.
-        activity = mActivityRule.launchActivity(intent);
+        activity = mIntentRule.launchActivity(intent);
+        assertThat(isRegisteredUser(activity), is(true));
 
         Thread.sleep(2000);
         mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getSupportFragmentManager().findFragmentByTag(comu_search_results_list_fr_tag);
@@ -314,15 +386,8 @@ public class ComuSearchResultsAc_1_Test {
         // Borramos la comunidad en BD.
         assertThat(ServOne.deleteUserComu(comunidad.getC_Id()), is(1));
         onData(is(comunidad)).perform(click());
+        // On-click devuelve a la pantalla de búsqueda de comunidad.
         onView(withId(R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));
         checkToastInTest(R.string.comunidad_not_found_message, activity);
-    }
-
-    @After
-    public void cleanData() throws UiException, InterruptedException
-    {
-        cleanOptions(whatClean);
-        Thread.sleep(2000);
-        checkState(!isRegisteredUser(activity));
     }
 }

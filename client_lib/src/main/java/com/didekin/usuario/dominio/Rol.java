@@ -8,7 +8,6 @@ import java.util.Map;
  * Date: 29/05/15
  * Time: 13:28
  */
-@SuppressWarnings("unused")
 public enum Rol {
 
     ADMINISTRADOR("adm", "admon"),
