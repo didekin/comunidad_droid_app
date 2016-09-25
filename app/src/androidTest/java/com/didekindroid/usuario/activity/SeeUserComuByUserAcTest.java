@@ -139,7 +139,7 @@ public class SeeUserComuByUserAcTest {
                 .onChildView(
                         allOf(
                                 withId(R.id.usercomu_item_roles_txt),
-                                withText(RolUi.formatRol(COMU_LA_FUENTE_PEPE.getRoles(), mActivity.getResources()))
+                                withText(RolUi.formatRolToString(COMU_LA_FUENTE_PEPE.getRoles(), mActivity.getResources()))
                         )
                 )
                 .check(matches(isDisplayed()));
@@ -156,7 +156,7 @@ public class SeeUserComuByUserAcTest {
                 .onChildView(
                         allOf(
                                 withId(R.id.usercomu_item_roles_txt),
-                                withText(RolUi.formatRol(COMU_ESCORIAL_PEPE.getRoles(), mActivity.getResources()))
+                                withText(RolUi.formatRolToString(COMU_ESCORIAL_PEPE.getRoles(), mActivity.getResources()))
                         )
                 )
                 .check(matches(isDisplayed()));
@@ -173,7 +173,7 @@ public class SeeUserComuByUserAcTest {
                 .onChildView(
                         allOf(
                                 withId(R.id.usercomu_item_roles_txt),
-                                withText(RolUi.formatRol(COMU_PLAZUELA5_PEPE.getRoles(), mActivity.getResources()))
+                                withText(RolUi.formatRolToString(COMU_PLAZUELA5_PEPE.getRoles(), mActivity.getResources()))
                         )
                 )
                 .check(matches(isDisplayed()));

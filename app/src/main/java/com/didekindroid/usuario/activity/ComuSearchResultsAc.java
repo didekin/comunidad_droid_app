@@ -33,7 +33,6 @@ import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_USERCOMU_BY_U
 import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenu;
 import static com.didekindroid.usuario.activity.utils.UsuarioFragmentTags.comu_search_results_list_fr_tag;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Preconditions:
@@ -124,7 +123,7 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
     {
         Timber.d("onOptionsItemSelected()");
 
-        int resourceId = checkNotNull(item.getItemId());
+        int resourceId = item.getItemId();
 
         switch (resourceId) {
             case android.R.id.home:

@@ -10,9 +10,6 @@ import com.didekindroid.usuario.activity.utils.RolUi;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.M;
 import static android.support.test.espresso.Espresso.onData;

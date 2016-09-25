@@ -39,8 +39,6 @@ import static com.didekindroid.usuario.activity.utils.UserMenu.COMU_DATA_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_USERCOMU_BY_COMU_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenu;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkState;
 
 /**
  * Preconditions:
@@ -73,9 +71,9 @@ public class UserComuDataAc extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         // Preconditions.
-        checkState(isRegisteredUser(this));
+        Objects.equals(isRegisteredUser(this), true);
         mOldUserComu = (UsuarioComunidad) getIntent().getSerializableExtra(USERCOMU_LIST_OBJECT.key);
-        checkNotNull(mOldUserComu);
+        Objects.equals(mOldUserComu != null, true);
 
         mAcView = getLayoutInflater().inflate(R.layout.usercomu_data_ac_layout, null);
         setContentView(mAcView);
@@ -156,7 +154,7 @@ public class UserComuDataAc extends AppCompatActivity {
     {
         Timber.d("onOptionsItemSelected()");
 
-        int resourceId = checkNotNull(item.getItemId());
+        int resourceId = item.getItemId();
 
         switch (resourceId) {
             case android.R.id.home:
@@ -247,7 +245,7 @@ public class UserComuDataAc extends AppCompatActivity {
             if (uiException != null) {
                 uiException.processMe(UserComuDataAc.this, new Intent());
             } else {
-                checkState(rowsUpdated == 1);
+                Objects.equals(rowsUpdated == 1, true);
                 Intent intent = new Intent(UserComuDataAc.this, SeeUserComuByUserAc.class);
                 startActivity(intent);
             }
@@ -278,10 +276,10 @@ public class UserComuDataAc extends AppCompatActivity {
             Timber.d("onPostExecute() entering.");
 
             if (uiException == null) {
-                checkState(isDeleted != 0);
+                Objects.equals(isDeleted != 0, true);
                 Intent intent;
                 if (isDeleted == IS_USER_DELETED) {
-                    TokenHandler.TKhandler.cleanCacheAndBckFile();
+                    TokenHandler.TKhandler.cleanTokenAndBackFile();
                     updateIsRegistered(false, UserComuDataAc.this);
                     intent = new Intent(UserComuDataAc.this, ComuSearchAc.class);
                 } else {

@@ -5,6 +5,7 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
@@ -13,6 +14,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.CursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,11 +31,12 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 import timber.log.Timber;
 
 import static android.widget.Toast.makeText;
-import static com.didekin.common.dominio.DataPatterns.LINE_BREAK;
+import static com.didekin.common.dominio.UsuarioDataPatterns.LINE_BREAK;
 import static com.didekin.common.exception.DidekinExceptionMsg.TOKEN_NULL;
 import static com.didekindroid.R.color.deep_purple_100;
 import static com.didekindroid.common.activity.TokenHandler.TKhandler;
@@ -47,7 +51,7 @@ import static java.util.Locale.getDefault;
  */
 public final class UIutils {
 
-    public static final int APPBAR_ID = R.id.appbar;
+    private static final int APPBAR_ID = R.id.appbar;
     public static final Locale SPAIN_LOCALE = new Locale("es", "ES");
 
     private UIutils()
@@ -56,7 +60,26 @@ public final class UIutils {
 
 //    ========================== ACTIVITIES ======================================
 
-    public ActivityManager getActivityManager(Context context){
+    public static void closeCursor(Adapter adapter)
+    {
+        CursorAdapter cursorAdapter;
+        Cursor cursor;
+        if (adapter != null) {
+            try {
+                cursorAdapter = (CursorAdapter) adapter;
+                cursor = cursorAdapter.getCursor();
+                if (cursor != null) {
+                    cursor.close();
+                    Objects.equals(cursor.isClosed(),true);
+                }
+            } catch (ClassCastException e) {
+                throw new IllegalStateException("Illegal NON cursorAdapter", e);
+            }
+        }
+    }
+
+    public ActivityManager getActivityManager(Context context)
+    {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             return context.getSystemService(ActivityManager.class);
         }
@@ -88,13 +111,13 @@ public final class UIutils {
         return DateFormat.getDateInstance(MEDIUM, getDefault()).format(new Date(time));
     }
 
-    public static String formatDoubleZeroDecimal(Double myDouble, Context context)
+    static String formatDoubleZeroDecimal(Double myDouble, Context context)
     {
         DecimalFormat myFormatter = new DecimalFormat(context.getString(R.string.decimal_zero_regexp));
         return myFormatter.format(myDouble);
     }
 
-    public static String formatDoubleTwoDecimals(Double myDouble, Context context)
+    static String formatDoubleTwoDecimals(Double myDouble, Context context)
     {
         DecimalFormat myFormatter = new DecimalFormat(context.getString(R.string.decimal_two_regexp));
         return myFormatter.format(myDouble);
@@ -117,6 +140,10 @@ public final class UIutils {
         return new StringBuilder(context.getResources().getText(R.string.error_validation_msg))
                 .append(LINE_BREAK.getRegexp());
     }
+
+    //    ================================== EXCEPTIONS ======================================
+
+
 
     //    =============================== GOOGLE SERVICES =================================
 
@@ -170,7 +197,7 @@ public final class UIutils {
 
     //  ..............  INNER CLASSES ............
 
-    public enum SharedPrefFiles {
+    enum SharedPrefFiles {
 
         app_preferences_file,;
 

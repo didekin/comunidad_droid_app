@@ -4,10 +4,9 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.oauth2.OauthToken;
-import com.didekin.oauth2.OauthToken.AccessToken;
-import com.didekindroid.common.testutils.ActivityTestUtils;
-import com.google.common.cache.Cache;
+import com.didekin.oauth2.SpringOauthToken;
+import com.didekin.oauth2.SpringOauthToken.OauthToken;
+import com.didekindroid.usuario.testutils.CleanUserEnum;
 
 import org.junit.After;
 import org.junit.Before;
@@ -22,8 +21,14 @@ import java.util.Date;
 import static com.didekin.oauth2.OauthTokenHelper.HELPER;
 import static com.didekindroid.common.activity.TokenHandler.TKhandler;
 import static com.didekindroid.common.activity.TokenHandler.refresh_token_filename;
+import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
+import static com.didekindroid.common.testutils.ActivityTestUtils.cleanWithTkhandler;
+import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
+import static com.didekindroid.common.utils.IoHelper.writeFileFromString;
+import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
+import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_NOTHING;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_JUAN;
-import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
+import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -42,113 +47,125 @@ import static org.junit.Assert.assertThat;
 public class TokenHandlerTest {
 
     private Context context;
-    private AccessToken accessToken;
+    CleanUserEnum whatClean = CLEAN_NOTHING;
 
     @Before
     public void getFixture()
     {
-        TKhandler.cleanCacheAndBckFile();
+        cleanWithTkhandler();
         context = InstrumentationRegistry.getTargetContext();
-        accessToken = new AccessToken(
-                "50d3cdaa-0d2e-4cfd-b259-82b3a0b1edef",
-                new Timestamp(new Date().getTime() + 7200000),
-                "bearer",
-                new OauthToken("50d3cdaa-0d2e-4cfd-b259-82b3a0b1edef", new Timestamp(new Date().getTime() + 7200000)),
-                new String[]{"readwrite"}
-        );
     }
 
     @After
-    public void cleanFileToken()
+    public void cleanFileToken() throws UiException
     {
-        TKhandler.cleanCacheAndBckFile();
+        cleanOptions(whatClean);
     }
 
     @Test
-    public void testInstanceWithoutFile()
+    public void testInitTokenAndBackFile() throws Exception
     {
+        // Precondition: no file with refreshToken. We receive a fully initialized token instance.
         assertThat(TKhandler.getRefreshTokenFile(), notNullValue());
         assertThat(TKhandler.getRefreshTokenFile().exists(), is(false));
-        assertThat(TKhandler.getRefreshTokenKey(), nullValue());
-        Cache<String, AccessToken> tokenCache = TKhandler.getTokensCache();
-        assertThat(tokenCache, notNullValue());
-        // No accessToken entry in cache. The key is null.
-        assertThat(tokenCache.asMap().containsKey(TKhandler.getRefreshTokenKey()), is(false));
-    }
+        assertThat(TKhandler.getRefreshTokenValue(), nullValue());
+        assertThat(TKhandler.getAccessTokenInCache(), nullValue());
 
-    @Test
-    public void testInitCacheAndFile_1() throws Exception
-    {
-        // Precondition for initialization of the enum: no file with refreshToken.
-        assertThat(TKhandler.getRefreshTokenFile().exists(), is(false));
-        assertThat(TKhandler.getRefreshTokenKey(), nullValue());
-
-        TKhandler.initKeyCacheAndBackupFile(accessToken);
+        SpringOauthToken springOauthToken = doSpringOauthToken();
+        TKhandler.initTokenAndBackupFile(springOauthToken);
         assertThat(TKhandler.getRefreshTokenFile().exists(), is(true));
-        assertThat(TKhandler.getRefreshTokenKey(), is(accessToken.getRefreshToken().getValue()));
-        assertThat(TKhandler.getTokensCache().asMap().containsKey(TKhandler.getRefreshTokenKey()), is(true));
-        assertThat(TKhandler.getTokensCache().getIfPresent(TKhandler.getRefreshTokenKey()), notNullValue());
-        assertThat(TKhandler.getTokensCache().getIfPresent(TKhandler.getRefreshTokenKey()).getValue(),
-                is(accessToken.getValue()));
+        assertThat(TKhandler.getRefreshTokenValue(), is(springOauthToken.getRefreshToken().getValue()));
+        assertThat(TKhandler.getAccessTokenInCache(), is(springOauthToken));
     }
 
     @Test
-    public void testGetTkInCacheOnlyRefreshTk_1() throws UiException
+    public void testCleanCacheAndBckFile() throws UiException
     {
-        // No file with refreshToken.
-        assertThat(TKhandler.getRefreshTokenFile(), notNullValue());
-        assertThat(TKhandler.getRefreshTokenFile().exists(), is(false));
-        assertThat(TKhandler.getRefreshTokenKey(), nullValue());
+        // Preconditions: there exist token data and file.
+        SpringOauthToken springOauthToken = doSpringOauthToken();
+        TKhandler.initTokenAndBackupFile(springOauthToken);
 
-        AccessToken token = TKhandler.getAccessTokenInCache();
-        assertThat(token, nullValue());
+        TKhandler.cleanTokenAndBackFile();
+        // Assertions.
+        assertThat(TKhandler.getRefreshTokenValue(), nullValue());
+        assertThat(TKhandler.getRefreshTokenFile().exists(), is(false));
+        assertThat(TKhandler.getAccessTokenInCache(), nullValue());
     }
 
     @Test
-    public void testGetTkInCacheOnlyRefreshTk_2() throws IOException, UiException
+    public void testGetAccessTokenInCache_1() throws IOException, UiException
     {
-        // Precondition for initialization of the enum: no file with refreshToken.
-        assertThat(TKhandler.getRefreshTokenFile().exists(), is(false));
-        assertThat(TKhandler.getRefreshTokenKey(), nullValue());
+        whatClean = CLEAN_JUAN;
 
-        // Registers user and initializes cache.
-        // Case 1: there is a token in cache.
-        ActivityTestUtils.signUpAndUpdateTk(COMU_REAL_JUAN);
-        AccessToken token_1 = TKhandler.getAccessTokenInCache();
-        String accessToken_1 = token_1.getValue();
-        assertThat(accessToken_1, not(isEmptyOrNullString()));
-        String refreshToken_1 = token_1.getRefreshToken().getValue();
-        assertThat(refreshToken_1, not(isEmptyOrNullString()));
-
-        // Case 2: there is not token in cache, but there exists file with refreshToken.
-        Cache<String, AccessToken> tokenCache = TKhandler.getTokensCache();
-        tokenCache.invalidate(refreshToken_1);
-        assertThat(tokenCache.getIfPresent(refreshToken_1), nullValue());
+        // Precondition: a user in DB and there exists file with refreshToken.
+        signUpAndUpdateTk(COMU_REAL_JUAN);
+        SpringOauthToken springOauthTokenIn = TKhandler.getAccessTokenInCache();
+        String refreshTkOriginal = springOauthTokenIn.getRefreshToken().getValue();
+        // Borramos datos.
+        TKhandler.cleanTokenAndBackFile();
+        // We make out preconditions: file exists, tokenInCache initialized ONLY with refreshTokenValue.
         File refreshTkFile = new File(context.getFilesDir(), refresh_token_filename);
+        writeFileFromString(refreshTkOriginal, refreshTkFile);
+        TKhandler.tokenInCache.set(new SpringOauthToken(refreshTkOriginal));
         assertThat(refreshTkFile.exists(), is(true));
 
-        // The application must get another accessToken with a different refreshToken.
-        AccessToken token_2 = TKhandler.getAccessTokenInCache();
-        String accessToken_2 = token_2.getValue();
-        assertThat(accessToken_2, not(isEmptyOrNullString()));
-        assertThat(accessToken_2, not(equalTo(accessToken_1)));
-        String refreshToken_2 = token_2.getRefreshToken().getValue();
-        assertThat(refreshToken_2, not(isEmptyOrNullString()));
-        assertThat(refreshToken_2, not(is(refreshToken_1)));
+        // Call to the method.
+        SpringOauthToken fullTkNew =  TKhandler.getAccessTokenInCache();
+        assertThat(fullTkNew, notNullValue());
+        assertThat(fullTkNew.getValue(), not(isEmptyOrNullString()));
+        OauthToken refreshTkNew =  fullTkNew.getRefreshToken();
+        assertThat(refreshTkNew.getValue(), allOf(
+                not(refreshTkOriginal), // Return a different refresh token.
+                is(TKhandler.getRefreshTokenValue()),
+                not(isEmptyOrNullString())
+        ));
 
-        // User clean up.
-        assertThat(ServOne.deleteUser(), is(true));
+        // Volvemos a llamar y comprobamos que ahora devuelve los mismos valores.
+        SpringOauthToken oauthTokenInCache = TKhandler.getAccessTokenInCache();
+        assertThat(oauthTokenInCache, allOf(
+                notNullValue(),
+                is(fullTkNew)
+        ));
+        assertThat(oauthTokenInCache.getValue(), allOf(
+                not(isEmptyOrNullString()),
+                is(fullTkNew.getValue())
+        ));
+        OauthToken refreshTkInCache =  oauthTokenInCache.getRefreshToken();
+        assertThat(refreshTkInCache.getValue(), allOf(
+                is(refreshTkNew.getValue()),
+                is(TKhandler.getRefreshTokenValue()),
+                not(isEmptyOrNullString())
+        ));
+    }
+
+    @Test
+    public void testGetAccessTokenInCache_2() throws IOException, UiException
+    {
+        whatClean = CLEAN_JUAN;
+
+        // Precondition: file exists, tokenInCache initialized with a fully initialized token.
+        signUpAndUpdateTk(COMU_REAL_JUAN);
+        SpringOauthToken springOauthTokenIn = TKhandler.tokenInCache.get();
+        // Call to method.
+        SpringOauthToken springOauthTokenOut = TKhandler.getAccessTokenInCache();
+        // Assertions.
+        assertThat(TKhandler.getAccessTokenInCache(), allOf(
+                notNullValue(),
+                is(springOauthTokenIn)
+        ));
+        assertThat(TKhandler.getRefreshTokenValue(), not(isEmptyOrNullString()));
+        assertThat(TKhandler.getAccessTokenInCache().getValue(), not(isEmptyOrNullString()));
     }
 
     @Test
     public void testDoBearerAccessTkHeader()
     {
-        // Precondition for initialization of the enum: no file with refreshToken.
+        // Precondition: no file with refreshToken.
         assertThat(TKhandler.getRefreshTokenFile().exists(), is(false));
-        assertThat(TKhandler.getRefreshTokenKey(), nullValue());
 
-        String bearerTk = HELPER.doBearerAccessTkHeader(accessToken);
-        assertThat(bearerTk, equalTo("Bearer " + accessToken.getValue()));
+        SpringOauthToken springOauthToken = doSpringOauthToken();
+        String bearerTk = HELPER.doBearerAccessTkHeader(springOauthToken);
+        assertThat(bearerTk, equalTo("Bearer " + springOauthToken.getValue()));
     }
 
     @Test
@@ -156,29 +173,22 @@ public class TokenHandlerTest {
     {
         // Precondition for initialization of the enum: no file with refreshToken.
         assertThat(TKhandler.getRefreshTokenFile().exists(), is(false));
-        assertThat(TKhandler.getRefreshTokenKey(), nullValue());
+        assertThat(TKhandler.getRefreshTokenValue(), nullValue());
 
         String bearerHeader = TKhandler.doBearerAccessTkHeader();
         assertThat(bearerHeader, nullValue());
     }
 
-    @Test
-    public void testCleanCacheAndBckFile() throws UiException
-    {
-        // Precondition for initialization of TKhandler: no file with refreshToken.
-        assertThat(TKhandler.getRefreshTokenFile().exists(), is(false));
-        assertThat(TKhandler.getRefreshTokenKey(), nullValue());
-
-        // Preconditions: the user is registered.
-        TKhandler.initKeyCacheAndBackupFile(accessToken);
-        assertThat(TKhandler.getRefreshTokenKey(), notNullValue());
-
-        TKhandler.cleanCacheAndBckFile();
-        assertThat(TKhandler.getRefreshTokenKey(), nullValue());
-        assertThat(TKhandler.getRefreshTokenFile().exists(), is(false));
-        assertThat(TKhandler.getAccessTokenInCache(), nullValue());
-
-    }
-
 //    .................... UTILITIES .......................
+
+    private SpringOauthToken doSpringOauthToken()
+    {
+        return new SpringOauthToken(
+                "50d3cdaa-0d2e-4cfd-b259-82b3a0b1edef",
+                new Timestamp(new Date().getTime() + 7200000),
+                "bearer",
+                new OauthToken("50d3cdaa-0d2e-4cfd-b259-82b3a0b1edef", new Timestamp(new Date().getTime() + 7200000)),
+                new String[]{"readwrite"}
+        );
+    }
 }

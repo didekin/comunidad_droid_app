@@ -1,7 +1,7 @@
-package com.didekin.incidservice.dominio;
+package com.didekin.proveedor.dominio;
 
 import com.didekin.common.dominio.BeanBuilder;
-import com.didekin.usuario.dominio.Address;
+import com.didekin.incidservice.dominio.TipoServicio;
 import com.didekin.usuario.dominio.Usuario;
 
 import java.sql.Timestamp;
@@ -12,8 +12,8 @@ import java.sql.Timestamp;
  * Time: 17:16
  */
 
-@SuppressWarnings({"FieldCanBeLocal", "unused"})
-public class Proveedor {
+@SuppressWarnings({"FieldCanBeLocal", "unused", "PrivateMemberAccessBetweenOuterAndInnerClass", "WeakerAccess"})
+public final class Proveedor {
 
     private final long proveedorId;
     private final String nif;
@@ -32,6 +32,7 @@ public class Proveedor {
         fechaAlta = builder.fechaAlta;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public static class ProveedorBuilder implements BeanBuilder<Proveedor> {
 
         private long proveedorId;

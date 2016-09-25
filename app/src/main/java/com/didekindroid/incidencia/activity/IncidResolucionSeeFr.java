@@ -15,6 +15,8 @@ import android.widget.TextView;
 import com.didekin.incidservice.dominio.Resolucion;
 import com.didekindroid.R;
 
+import java.util.Objects;
+
 import timber.log.Timber;
 
 import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_OBJECT;
@@ -23,8 +25,6 @@ import static com.didekindroid.common.activity.BundleKey.IS_MENU_IN_FRAGMENT_FLA
 import static com.didekindroid.common.utils.UIutils.formatTimeStampToString;
 import static com.didekindroid.common.utils.UIutils.getStringFromInteger;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_COMMENTS_SEE_AC;
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkState;
 
 /**
  * User: pedro@didekin
@@ -52,7 +52,7 @@ public class IncidResolucionSeeFr extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         mResolucion = (Resolucion) getArguments().getSerializable(INCID_RESOLUCION_OBJECT.key);
-        checkState(mResolucion != null);
+        Objects.equals(mResolucion != null, true);
         // Activamos el menú.
         setHasOptionsMenu(getArguments().getBoolean(IS_MENU_IN_FRAGMENT_FLAG.key, false));
         paintViewData();
@@ -74,7 +74,7 @@ public class IncidResolucionSeeFr extends Fragment {
     {
         Timber.d("onOptionsItemSelected()");
 
-        int resourceId = checkNotNull(item.getItemId());
+        int resourceId = item.getItemId();
 
         switch (resourceId) {
             case android.R.id.home:

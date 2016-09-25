@@ -2,8 +2,8 @@ package com.didekindroid;
 
 import android.app.Application;
 import android.content.Context;
+import android.os.StrictMode;
 
-import butterknife.ButterKnife;
 import timber.log.Timber;
 
 import static java.lang.Integer.parseInt;
@@ -27,8 +27,22 @@ public final class DidekindroidApp extends Application {
         super.onCreate();
 
         if (BuildConfig.DEBUG) {
+
             Timber.plant(new Timber.DebugTree());
-            ButterKnife.setDebug(true);
+//            ButterKnife.setDebug(true);
+
+            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+                    .detectDiskReads()
+                    .detectDiskWrites()
+                    .detectNetwork()
+                    .penaltyLog()
+                    .build());
+            StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+                    .detectLeakedSqlLiteObjects()
+                    .detectLeakedClosableObjects()
+                    .penaltyLog()
+//                    .penaltyDeath()
+                    .build());
         }
         // TODO: ejemplo en Timber para librería de comunicación de errores en cliente.
 

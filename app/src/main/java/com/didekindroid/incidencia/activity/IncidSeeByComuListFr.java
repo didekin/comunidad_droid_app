@@ -22,11 +22,11 @@ import com.didekindroid.incidencia.activity.utils.ComuSpinnerSettable;
 import com.didekindroid.incidencia.activity.utils.ComunidadSpinnerSetter;
 
 import java.util.List;
+import java.util.Objects;
 
 import timber.log.Timber;
 
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_LIST_INDEX;
-import static com.google.common.base.Preconditions.checkState;
 
 /**
  * Preconditions:
@@ -201,7 +201,7 @@ public class IncidSeeByComuListFr extends Fragment implements ComuSpinnerSettabl
             }
             if (uiException != null) {
                 Timber.d("onPostExecute(): uiException != null");
-                checkState(incidencias == null);
+                Objects.equals(incidencias == null, true);
                 uiException.processMe(getActivity(), new Intent());
             }
         }

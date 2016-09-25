@@ -11,9 +11,8 @@ import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
 import java.util.Map;
+import java.util.Objects;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasEntry;
 
@@ -46,7 +45,7 @@ public final class LongListMatchers {
     public static Matcher<Object> withItemContent(String expectedText)
     {
         // use preconditions to fail fast when a test is creating an invalid matcher.
-        checkNotNull(expectedText);
+        Objects.equals(expectedText != null, true);
         return withItemContent(equalTo(expectedText));
     }
 
@@ -57,7 +56,7 @@ public final class LongListMatchers {
     public static Matcher<Object> withItemContent(final Matcher<String> itemTextMatcher)
     {
         // use preconditions to fail fast when a test is creating an invalid matcher.
-        checkNotNull(itemTextMatcher);
+        Objects.equals(itemTextMatcher != null, true);
         return new BoundedMatcher<Object, Map>(Map.class) {
             @Override
             public boolean matchesSafely(Map map)
@@ -81,7 +80,7 @@ public final class LongListMatchers {
     public static Matcher<Object> withItemSize(int itemSize)
     {
         // use preconditions to fail fast when a test is creating an invalid matcher.
-        checkArgument(itemSize > -1);
+        Objects.equals(itemSize > -1, true);
         return withItemSize(equalTo(itemSize));
     }
 
@@ -92,7 +91,7 @@ public final class LongListMatchers {
     public static Matcher<Object> withItemSize(final Matcher<Integer> itemSizeMatcher)
     {
         // use preconditions to fail fast when a test is creating an invalid matcher.
-        checkNotNull(itemSizeMatcher);
+        Objects.equals(itemSizeMatcher != null, true);
 
         return new BoundedMatcher<Object, Map>(Map.class) {
             @Override

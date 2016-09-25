@@ -43,6 +43,7 @@ import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanTwoUsers;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanWithTkhandler;
 import static com.didekindroid.common.testutils.ActivityTestUtils.clickNavigateUp;
+import static com.didekindroid.common.testutils.ActivityTestUtils.makeListTwoUserComu;
 import static com.didekindroid.common.testutils.ActivityTestUtils.regThreeUserComuSameUser;
 import static com.didekindroid.common.testutils.ActivityTestUtils.regTwoUserComuSameUser;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
@@ -58,11 +59,9 @@ import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_JUAN;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_JUAN;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.makeComunidad;
-import static com.didekindroid.common.testutils.ActivityTestUtils.makeListTwoUserComu;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.makeUsuario;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.makeUsuarioComunidad;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
-import static com.google.common.base.Preconditions.checkState;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
@@ -107,7 +106,7 @@ public class ComuSearchResultsAc_1_Test {
     {
         cleanOptions(whatClean);
         Thread.sleep(2000);
-        checkState(!isRegisteredUser(activity));
+        assertThat(isRegisteredUser(activity), is(false));
     }
 
     @Test

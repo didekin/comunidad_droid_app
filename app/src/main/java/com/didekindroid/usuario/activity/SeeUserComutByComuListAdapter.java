@@ -148,7 +148,7 @@ public class SeeUserComutByComuListAdapter extends ArrayAdapter<UsuarioComunidad
             mPortalEscaleraBlock.setVisibility(isBlockPortalEscalera ? VISIBLE : GONE);
             mPlantaPuertaBlock.setVisibility(isPlantaPuertaBlock ? VISIBLE : GONE);
 
-            mRolesView.setText(RolUi.formatRol(userComu.getRoles(), resources));
+            mRolesView.setText(RolUi.formatRolToString(userComu.getRoles(), resources));
         }
     }
 

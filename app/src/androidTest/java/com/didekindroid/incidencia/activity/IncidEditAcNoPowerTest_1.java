@@ -1,8 +1,6 @@
 package com.didekindroid.incidencia.activity;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.os.SystemClock;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 

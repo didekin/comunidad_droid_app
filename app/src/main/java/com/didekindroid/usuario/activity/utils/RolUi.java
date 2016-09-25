@@ -66,7 +66,7 @@ public enum RolUi {
     /**
      * This method formats and concatenates the strings used in the app to denominate the rol functions.
      */
-    public static String formatRol(String rolesString, Resources resources)
+    public static String formatRolToString(String rolesString, Resources resources)
     {
         String[] rolFunctions = rolesString.split(",");
         StringBuilder builder = new StringBuilder();

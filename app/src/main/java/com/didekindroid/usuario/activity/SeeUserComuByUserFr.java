@@ -15,11 +15,11 @@ import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 
 import java.util.List;
+import java.util.Objects;
 
 import timber.log.Timber;
 
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
-import static com.google.common.base.Preconditions.checkState;
 
 /**
  * Preconditions:
@@ -122,7 +122,7 @@ public class SeeUserComuByUserFr extends Fragment {
         {
             if (uiException != null) {  // action: LOGIN.
                 Timber.d("UserComuByUserLoader.onPostExecute(): uiException != null");
-                checkState(usuarioComunidades == null);
+                Objects.equals(usuarioComunidades == null, true);
                 uiException.processMe(getActivity(), new Intent());
             }
             if (usuarioComunidades != null) {

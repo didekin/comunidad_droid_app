@@ -1,4 +1,4 @@
-package com.didekin.incidservice.dominio;
+package com.didekin.proveedor.dominio;
 
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekin.usuario.dominio.Usuario;

@@ -1,108 +1,118 @@
 package com.didekindroid.common.activity;
 
-import com.didekin.oauth2.OauthToken.AccessToken;
-import com.didekindroid.common.utils.IoHelper;
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
+import com.didekin.oauth2.SpringOauthToken;
 
 import java.io.File;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.atomic.AtomicReference;
 
 import timber.log.Timber;
 
 import static com.didekin.oauth2.OauthTokenHelper.HELPER;
 import static com.didekindroid.DidekindroidApp.getContext;
+import static com.didekindroid.common.utils.IoHelper.readStringFromFile;
+import static com.didekindroid.common.utils.IoHelper.writeFileFromString;
 import static com.didekindroid.common.webservices.Oauth2Service.Oauth2;
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * User: pedro@didekin
  * Date: 25/06/15
  * Time: 17:28
  */
+
 /**
- *  Synchronization policy:
- *  - Synchronization of cache (put/get/invalidate) is delegated to the implementation.
- *  - To avoid a race condition 'locally' on the value of the refreshTokenKey, its value
- *    is thread confined at the beginning of the getter method in a local variable. It is also
- *    declared volatile.
- *  - The invariant 'a refreshTokenFile not empty implies a refreshTokenKey not null' is maintained
- *    synchronizing, on the intrinsic lock of the object, the method cleanCacheBckFile().
- *  - The invariants 'the same refreshToken is assigned to refreshTokenKey and written to a file' and
- *    'the refreshTokenKey and the accessToken in cache both corresponds to the same instance of
- *    an AccessToken' assignment, file writting and caching are synchronized on the intrinsic lock
- *    of the object.
- * */
-@SuppressWarnings("AnonymousInnerClassMayBeStatic")
+ *
+ */
 public enum TokenHandler {
 
     TKhandler,;
 
     public static final String refresh_token_filename = "tk_file";
-    private final Cache<String, AccessToken> tokensCache;
-    private volatile String refreshTokenKey;
+    private final ExecutorService tokenUpdater = Executors.newSingleThreadExecutor();
+    private final AtomicReference<Future<SpringOauthToken>> cacheForToken = new AtomicReference<>();
+    final AtomicReference<SpringOauthToken> tokenInCache;
     private final File refreshTokenFile;
 
     TokenHandler()
     {
-        tokensCache = CacheBuilder.newBuilder()
-                .maximumSize(1)
-                .expireAfterWrite(120, TimeUnit.MINUTES)
-                .build();
-
         refreshTokenFile = new File(getContext().getFilesDir(), refresh_token_filename);
-        refreshTokenKey = refreshTokenFile.exists() ? IoHelper.readStringFromFile(refreshTokenFile) : null;
+        String refreshTokenValue = refreshTokenFile.exists() ? readStringFromFile(refreshTokenFile) : null;
+        tokenInCache =  (refreshTokenValue != null && !refreshTokenValue.isEmpty()) ?
+                new AtomicReference<>(new SpringOauthToken(refreshTokenValue)) :  new AtomicReference<SpringOauthToken>();
     }
 
-    public final void initKeyCacheAndBackupFile(final AccessToken accessToken)
+    public final void initTokenAndBackupFile(final SpringOauthToken springOauthToken)
     {
-        Timber.d("initKeyCacheAndBackupFile()");
+        Timber.d("initTokenAndBackupFile()");
 
-        // Not stricty necessary; just convenient.
-        cleanCacheAndBckFile();
-        refreshTokenKey = checkNotNull(accessToken).getRefreshToken().getValue();
-
-        synchronized (this) {
-            IoHelper.writeFileFromString(refreshTokenKey, refreshTokenFile);
-            tokensCache.put(refreshTokenKey, accessToken);
+        cleanTokenAndBackFile();
+        synchronized (refreshTokenFile) {
+            tokenInCache.set(springOauthToken);
+            writeFileFromString(springOauthToken.getRefreshToken().getValue(), refreshTokenFile);
         }
     }
 
-    public final synchronized void cleanCacheAndBckFile()
+    public final void cleanTokenAndBackFile()
     {
-        Timber.d("cleanCacheAndBckFile()");
-
-        refreshTokenFile.delete();
-        tokensCache.invalidateAll();
-        refreshTokenKey = null;
+        Timber.d("cleanTokenAndBackFile()");
+        synchronized (refreshTokenFile) {
+            refreshTokenFile.delete();
+            tokenInCache.set(null);
+            cacheForToken.set(null);
+        }
     }
 
-    public final AccessToken getAccessTokenInCache() throws UiException
+    /**
+     * Preconditions:
+     * 1. This method would be called mainly in an asyncTask thread or in a background thread.
+     *    However, it uses an ExecutorService instance to update asynchronously the tokens in cache.
+     */
+    public final SpringOauthToken getAccessTokenInCache() throws UiException
     {
         Timber.d("getAccessTokenInCache()");
 
-        final String refreshTokenKeyLocal = refreshTokenKey;
-
-        if (refreshTokenKeyLocal == null) {
+        if (tokenInCache.get() == null) {
             return null;
         }
-        AccessToken accessToken;
-
-        try {
-            accessToken = tokensCache.get(refreshTokenKeyLocal, new Callable<AccessToken>() {
-
-                @Override
-                public AccessToken call() throws UiException
-                {
-                    return Oauth2.getRefreshUserToken(refreshTokenKeyLocal);
-                }
-            });
-        } catch (ExecutionException e) {
-            throw new UiException(null);
+        synchronized (this) {
+            if (tokenInCache.get().getValue() != null) {
+                return tokenInCache.get();
+            }
         }
-        return accessToken;
+
+        Future<SpringOauthToken> futureInCache = cacheForToken.get();
+
+        if (futureInCache == null) {
+
+            Callable<SpringOauthToken> cacheUpdater = new Callable<SpringOauthToken>() {
+                @Override
+                public SpringOauthToken call() throws UiException
+                {
+                    return Oauth2.getRefreshUserToken(tokenInCache.get().getRefreshToken().getValue());
+                }
+            };
+
+            Future<SpringOauthToken> futureToCache = new FutureTask<>(cacheUpdater);
+            futureInCache = cacheForToken.getAndSet(futureToCache);
+            if (futureInCache == null) {
+                futureInCache = tokenUpdater.submit(cacheUpdater);
+            }
+        }
+        try {
+            tokenInCache.set(futureInCache.get());
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            futureInCache.cancel(true);
+            cacheForToken.set(null);
+        } catch (ExecutionException e) {
+            return catchExecutionException(e);
+        }
+        return tokenInCache.get();
     }
 
     //    ...................  UTILITIES .....................
@@ -110,18 +120,33 @@ public enum TokenHandler {
     public String doBearerAccessTkHeader() throws UiException
     {
         Timber.d("doBearerAccessTkHeader()");
-        AccessToken accessToken = getAccessTokenInCache();
-        if (accessToken != null) {
-            return HELPER.doBearerAccessTkHeader(accessToken);
+        SpringOauthToken springOauthToken = getAccessTokenInCache();
+        if (springOauthToken != null) {
+            return HELPER.doBearerAccessTkHeader(springOauthToken);
         }
         return null;
     }
 
+    private SpringOauthToken catchExecutionException(ExecutionException e) throws UiException
+    {
+        cacheForToken.set(null);
+        Throwable cause = e.getCause();
+        if (cause instanceof UiException) {
+            throw (UiException) cause;
+        } else if (cause instanceof RuntimeException) {
+            throw (RuntimeException) cause;
+        } else if (cause instanceof Error) {
+            throw (Error) cause;
+        } else {
+            throw new IllegalStateException("What is this checkedException?", cause);
+        }
+    }
+
 //    .................... ACCESSOR METHODS .........................
 
-    public Cache<String, AccessToken> getTokensCache()
+    public SpringOauthToken getTokenInCache()
     {
-        return tokensCache;
+        return tokenInCache.get();
     }
 
     public File getRefreshTokenFile()
@@ -129,9 +154,14 @@ public enum TokenHandler {
         return refreshTokenFile;
     }
 
-    public String getRefreshTokenKey()
+    public String getRefreshTokenValue()
     {
-        return refreshTokenKey;
+        return tokenInCache.get() != null ? tokenInCache.get().getRefreshToken().getValue() : null;
+    }
+
+    AtomicReference<Future<SpringOauthToken>> getCacheForToken()
+    {
+        return cacheForToken;
     }
 }
 

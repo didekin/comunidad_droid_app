@@ -21,6 +21,7 @@ import com.didekindroid.usuario.activity.UserDataAc;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import timber.log.Timber;
 
@@ -70,8 +71,6 @@ import static com.didekindroid.common.activity.UiException.UiAction.TOKEN_TO_ERA
 import static com.didekindroid.common.activity.UiException.UiAction.USER_DATA_AC;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.utils.UIutils.makeToast;
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkState;
 
 /**
  * Exceptions to be dealt with in the user interface
@@ -88,7 +87,6 @@ public class UiException extends Exception {
     public void processMe(Activity activity, Intent intent)
     {
         Timber.d("processMe(): %s %s%n", activity.getComponentName().getClassName(), errorBean.getMessage());
-        checkArgument(intent != null);
         messageToAction.get(errorBean.getMessage()).doAction(activity, intent);
     }
 
@@ -99,7 +97,7 @@ public class UiException extends Exception {
 
     // =============================== INNER CLASSES =============================
 
-    public enum UiAction {
+    enum UiAction {
 
         GENERIC {
             @Override
@@ -163,7 +161,7 @@ public class UiException extends Exception {
             public void doAction(Activity activity, Intent intent)
             {
                 IncidImportancia incidImportancia = (IncidImportancia) intent.getSerializableExtra(INCID_IMPORTANCIA_OBJECT.key);
-                checkArgument(incidImportancia.getUserComu().hasAdministradorAuthority());
+                Objects.equals(incidImportancia.getUserComu().hasAdministradorAuthority(),true);
                 intent.setClass(activity, IncidEditAc.class);
                 activity.startActivity(intent);
                 makeToast(activity, R.string.resolucion_duplicada, LENGTH_SHORT);
@@ -193,7 +191,7 @@ public class UiException extends Exception {
             @Override
             public void doAction(Activity activity, Intent intent)
             {
-                checkState(isRegisteredUser(activity));
+                Objects.equals(isRegisteredUser(activity),true);
                 intent.setClass(activity, UserDataAc.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 activity.startActivity(intent);
@@ -206,7 +204,7 @@ public class UiException extends Exception {
 
         // ......................... HELPERS ...............................
 
-        private static void doCommonLogin(Activity activity, Intent intent)
+        static void doCommonLogin(Activity activity, Intent intent)
         {
             intent.setClass(activity, LoginAc.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -214,7 +212,7 @@ public class UiException extends Exception {
             finishActivity(activity, intent);
         }
 
-        private static void finishActivity(Activity activity, Intent intent)
+        static void finishActivity(Activity activity, Intent intent)
         {
             if (!activity.getClass().getCanonicalName().equals(intent.getComponent().getClassName())) {
                 activity.finish();
@@ -224,7 +222,7 @@ public class UiException extends Exception {
 
     // ...........................................................................................
 
-    static final Map<String, UiAction> messageToAction = new HashMap<>();
+    private static final Map<String, UiAction> messageToAction = new HashMap<>();
 
     static {
         messageToAction.put(AVANCE_WRONG_INIT.getHttpMessage(), INCID_SEE_BY_COMU);

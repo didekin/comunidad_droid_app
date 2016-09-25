@@ -13,14 +13,14 @@ import android.view.ViewGroup;
 
 import com.didekindroid.R;
 
+import java.util.Objects;
+
 import timber.log.Timber;
 
 import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.IS_MENU_IN_FRAGMENT_FLAG;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_COMMENTS_SEE_AC;
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkState;
 
 /**
  * User: pedro@didekin
@@ -52,7 +52,7 @@ public class IncidResolucionSeeDefaultFr extends Fragment {
     {
         Timber.d("onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
-        checkState(getArguments().getSerializable(INCID_RESOLUCION_OBJECT.key) == null);
+        Objects.equals(getArguments().getSerializable(INCID_RESOLUCION_OBJECT.key) == null, true);
         // Activamos el menú.
         setHasOptionsMenu(getArguments().getBoolean(IS_MENU_IN_FRAGMENT_FLAG.key, false));
     }
@@ -73,7 +73,7 @@ public class IncidResolucionSeeDefaultFr extends Fragment {
     {
         Timber.d("onOptionsItemSelected()");
 
-        int resourceId = checkNotNull(item.getItemId());
+        int resourceId = item.getItemId();
 
         switch (resourceId) {
             case R.id.incid_comments_see_ac_mn:

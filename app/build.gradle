@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'idea'
-apply plugin: 'com.neenbedankt.android-apt'
 
 android {
 
@@ -61,11 +60,11 @@ android {
         quiet true
         ignoreWarnings false
         htmlReport true
-    }
+    }/*
     packagingOptions {
         exclude 'META-INF/maven/com.google.guava/guava/pom.properties'
         exclude 'META-INF/maven/com.google.guava/guava/pom.xml'
-    }
+    }*/
     productFlavors {
     }
 }
@@ -85,23 +84,21 @@ dependencies {
         exclude module: 'design'
     }
     androidTestCompile 'com.android.support.test.espresso:espresso-idling-resource:2.2.2'
-    androidTestCompile('com.android.support.test.espresso:espresso-web:2.2.2') {
+    /*androidTestCompile('com.android.support.test.espresso:espresso-web:2.2.2') {
         exclude group: 'com.google.guava'
-    }
+    }*/
+
     /* Esta librería es para probar en terminales las funcionalidades servidor relacionadas con Firebase GCM y JavaMail*/
     androidTestCompile project(':client_gcm_lib')
 
     compile project(':client_lib')
     compile deps.timber
-    compile deps.guava
     compile 'com.android.support:design:24.2.1'
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.android.support:support-v4:24.2.1'
     compile 'com.android.support:recyclerview-v7:24.2.1'
     compile 'com.android.support:gridlayout-v7:24.2.1'
     compile 'com.google.firebase:firebase-messaging:9.4.0'
-    compile 'com.jakewharton:butterknife:8.4.0'
-    apt 'com.jakewharton:butterknife-compiler:8.4.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

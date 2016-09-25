@@ -20,6 +20,8 @@ import com.didekindroid.incidencia.activity.utils.ImportanciaSpinnerSettable;
 import com.didekindroid.incidencia.dominio.IncidImportanciaBean;
 import com.didekindroid.incidencia.repository.IncidenciaDataDbHelper;
 
+import java.util.Objects;
+
 import timber.log.Timber;
 
 import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
@@ -28,8 +30,6 @@ import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.common.utils.UIutils.makeToast;
 import static com.didekindroid.incidencia.activity.utils.IncidSpinnersHelper.HELPER;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkState;
 
 /**
  * User: pedro@didekin
@@ -44,6 +44,7 @@ public class IncidEditNoPowerFr extends Fragment implements ImportanciaSpinnerSe
     IncidImportancia mIncidImportancia;
     Spinner mImportanciaSpinner;
     IncidImportanciaBean mIncidImportanciaBean;
+    IncidenciaDataDbHelper dbHelper;
     Button mButtonModify;
 
     @Override
@@ -62,13 +63,14 @@ public class IncidEditNoPowerFr extends Fragment implements ImportanciaSpinnerSe
 
         mIncidImportanciaBean = new IncidImportanciaBean();
         mIncidImportancia = (IncidImportancia) getArguments().getSerializable(INCID_IMPORTANCIA_OBJECT.key);
+        dbHelper = new IncidenciaDataDbHelper(getActivity());
 
         ((TextView) fFragmentView.findViewById(R.id.incid_comunidad_txt))
                 .setText(mIncidImportancia.getIncidencia().getComunidad().getNombreComunidad());
         ((TextView) fFragmentView.findViewById(R.id.incid_reg_desc_txt))
                 .setText(mIncidImportancia.getIncidencia().getDescripcion());
         ((TextView) fFragmentView.findViewById(R.id.incid_ambito_view))
-                .setText(new IncidenciaDataDbHelper(getActivity()).getAmbitoDescByPk(mIncidImportancia.getIncidencia().getAmbitoIncidencia().getAmbitoId()));
+                .setText(dbHelper.getAmbitoDescByPk(mIncidImportancia.getIncidencia().getAmbitoIncidencia().getAmbitoId()));
 
         mImportanciaSpinner = (Spinner) getView().findViewById(R.id.incid_reg_importancia_spinner);
         HELPER.doImportanciaSpinner(this);
@@ -89,6 +91,7 @@ public class IncidEditNoPowerFr extends Fragment implements ImportanciaSpinnerSe
     public void onDestroy()
     {
         Timber.d("onDestroy()");
+        dbHelper.close();
         super.onDestroy();
     }
 
@@ -96,14 +99,15 @@ public class IncidEditNoPowerFr extends Fragment implements ImportanciaSpinnerSe
 //    ...................... HELPER METHODS ......................
 //    ============================================================
 
-    private void modifyIncidImportancia()
+    void modifyIncidImportancia()
     {
         Timber.d("modifyIncidImportancia()");
 
         StringBuilder errorMsg = getErrorMsgBuilder(getActivity());
+        Objects.equals(mIncidImportancia != null, true);
         try {
             IncidImportancia incidImportancia = mIncidImportanciaBean.makeIncidImportancia(
-                    errorMsg, getResources(), fFragmentView, checkNotNull(mIncidImportancia));
+                    errorMsg, getResources(), fFragmentView, mIncidImportancia);
             if (checkInternetConnected(getActivity())) {
                 new ImportanciaModifyer().execute(incidImportancia);
             }
@@ -180,7 +184,7 @@ public class IncidEditNoPowerFr extends Fragment implements ImportanciaSpinnerSe
             if (uiException != null) {
                 uiException.processMe(getActivity(), new Intent());
             } else {
-                checkState(rowInserted == 1);
+                Objects.equals(rowInserted == 1, true);
                 Intent intent = new Intent(getActivity(), IncidSeeOpenByComuAc.class);
                 startActivity(intent);
             }

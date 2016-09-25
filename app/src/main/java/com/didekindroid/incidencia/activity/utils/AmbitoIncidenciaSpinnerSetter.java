@@ -17,12 +17,12 @@ import static com.didekindroid.incidencia.repository.IncidenciaDataDb.AmbitoInci
  * Date: 27/01/16
  * Time: 10:00
  */
-public class AmbitoIncidenciaSpinnerSetter<T extends Fragment & AmbitoSpinnerSettable> extends AsyncTask<Void, Void, Cursor> {
+class AmbitoIncidenciaSpinnerSetter<T extends Fragment & AmbitoSpinnerSettable> extends AsyncTask<Void, Void, Cursor> {
 
     // TODO: to persist the task during restarts and properly cancel the task when the activity is destroyed. (Example in Shelves)
     private T mFragment;
 
-    public AmbitoIncidenciaSpinnerSetter(T mFragment)
+    AmbitoIncidenciaSpinnerSetter(T mFragment)
     {
         this.mFragment = mFragment;
     }

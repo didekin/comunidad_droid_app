@@ -3,7 +3,7 @@ package com.didekindroid.usuario.activity;
 import android.content.Intent;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.oauth2.OauthToken.AccessToken;
+import com.didekin.oauth2.SpringOauthToken;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 
@@ -50,7 +50,7 @@ public class LoginAc_3_SlowTest extends LoginAcTest {
     {
         // User in DB: wrong password three consecutive times. Choice "yes mail" in dialog.
         assertThat(ServOne.regComuAndUserAndUserComu(COMU_REAL_DROID).execute().body(), is(true));
-        AccessToken token = Oauth2.getPasswordUserToken(USER_DROID.getUserName(), USER_DROID.getPassword());
+        SpringOauthToken token = Oauth2.getPasswordUserToken(USER_DROID.getUserName(), USER_DROID.getPassword());
         mActivity = mActivityRule.launchActivity(new Intent());
 
         getDialogFragment(USER_DROID.getUserName());

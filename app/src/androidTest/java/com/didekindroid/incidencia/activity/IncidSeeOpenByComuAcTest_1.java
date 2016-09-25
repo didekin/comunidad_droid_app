@@ -23,10 +23,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.core.deps.guava.base.Preconditions.checkState;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -36,8 +36,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
 import static com.didekindroid.common.gcm.AppFirebaseMsgService.TypeMsgHandler.INCIDENCIA_OPEN;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkUp;
-import static com.didekindroid.common.testutils.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
+import static com.didekindroid.common.testutils.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.regSeveralUserComuSameUser;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.utils.UIutils.updateIsGcmTokenSentServer;
@@ -84,7 +84,7 @@ public class IncidSeeOpenByComuAcTest_1 {
             try {
                 Context context = InstrumentationRegistry.getTargetContext();
                 updateIsGcmTokenSentServer(false, context);
-                checkState(ServOne.getGcmToken() == null);
+                Objects.equals(ServOne.getGcmToken() == null, true);
 
             } catch (UiException e) {
                 e.printStackTrace();

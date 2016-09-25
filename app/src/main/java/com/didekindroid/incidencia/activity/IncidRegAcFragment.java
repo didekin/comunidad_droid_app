@@ -24,6 +24,7 @@ import com.didekindroid.incidencia.repository.IncidenciaDataDbHelper;
 
 import timber.log.Timber;
 
+import static com.didekindroid.common.utils.UIutils.closeCursor;
 import static com.didekindroid.incidencia.activity.utils.IncidSpinnersHelper.HELPER;
 
 /**
@@ -89,6 +90,7 @@ public class IncidRegAcFragment extends Fragment implements ComuSpinnerSettable,
     public void onDestroy()
     {
         Timber.d("onDestroy()");
+        closeCursor(mAmbitoIncidenciaSpinner.getAdapter());
         dbHelper.close();
         super.onDestroy();
     }

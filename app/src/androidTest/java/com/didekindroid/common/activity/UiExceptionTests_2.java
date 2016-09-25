@@ -109,7 +109,7 @@ public class UiExceptionTests_2 extends UiExceptionAbstractTest {
     {
         // Preconditions.
         assertThat(isRegisteredUser(mActivity), is(true));
-        assertThat(TKhandler.getTokensCache(), notNullValue());
+        assertThat(TKhandler.getTokenInCache(), notNullValue());
 
         final UiException ue = getUiException(INCIDENCIA_NOT_REGISTERED);
         mActivity.runOnUiThread(new Runnable() {
@@ -129,7 +129,7 @@ public class UiExceptionTests_2 extends UiExceptionAbstractTest {
     {
         // Preconditions.
         assertThat(isRegisteredUser(mActivity), is(true));
-        assertThat(TKhandler.getTokensCache(), notNullValue());
+        assertThat(TKhandler.getTokenInCache(), notNullValue());
 
         final UiException ue = getUiException(INCIDENCIA_COMMENT_WRONG_INIT);
         mActivity.runOnUiThread(new Runnable() {
@@ -169,7 +169,7 @@ public class UiExceptionTests_2 extends UiExceptionAbstractTest {
     {
         // Preconditions.
         assertThat(isRegisteredUser(mActivity), is(true));
-        assertThat(TKhandler.getTokensCache(), notNullValue());
+        assertThat(TKhandler.getTokenInCache(), notNullValue());
 
         final UiException ue = getUiException(USER_DATA_NOT_MODIFIED);
         mActivity.runOnUiThread(new Runnable() {

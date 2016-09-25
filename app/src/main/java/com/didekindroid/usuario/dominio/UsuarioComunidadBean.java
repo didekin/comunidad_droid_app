@@ -2,14 +2,13 @@ package com.didekindroid.usuario.dominio;
 
 import android.content.res.Resources;
 
-import com.didekin.common.dominio.DataPatterns;
+import com.didekin.common.dominio.UsuarioDataPatterns;
 import com.didekin.usuario.dominio.Usuario;
 import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.usuario.activity.utils.RolUi;
-import com.google.common.primitives.Booleans;
 
-import static com.didekin.common.dominio.DataPatterns.PORTAL;
+import static com.didekin.common.dominio.UsuarioDataPatterns.PORTAL;
 
 /**
  * User: pedro@didekin
@@ -49,6 +48,8 @@ public final class UsuarioComunidadBean {
         this.isInquilino = isInquilino;
     }
 
+    // .......................... Auxiliary role methods ...........................
+
     String rolesInBean()
     {
         StringBuilder rolesBuilder = new StringBuilder();
@@ -72,6 +73,19 @@ public final class UsuarioComunidadBean {
 
         return rolesBuilder.toString();
     }
+
+    private int countRoles(boolean... isRole)
+    {
+        int count = 0;
+        for (boolean value : isRole) {
+            if (value) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    // ................................................................................
 
     public boolean validate(Resources resources, StringBuilder errorMsg)
     {
@@ -101,67 +115,67 @@ public final class UsuarioComunidadBean {
     }
 
     /*  [\\w_ñÑáéíóúüÜ\\.\\-\\s]{1,10}  */
-    boolean validatePortal(Resources resources, StringBuilder errorMsg)
+    private boolean validatePortal(Resources resources, StringBuilder errorMsg)
     {
         if (portal.trim().isEmpty()) return true;
 
         boolean isValid = PORTAL.isPatternOk(portal);
         if (!isValid) {
-            errorMsg.append(resources.getText(R.string.reg_usercomu_portal_rot)).append(DataPatterns.LINE_BREAK.getRegexp());
+            errorMsg.append(resources.getText(R.string.reg_usercomu_portal_rot)).append(UsuarioDataPatterns.LINE_BREAK.getRegexp());
         }
         return isValid;
     }
 
     /*  [\\w_ñÑáéíóúüÜ\\.\\-\\s]{1,10}  */
-    boolean validateEscalera(Resources resources, StringBuilder errorMsg)
+    private boolean validateEscalera(Resources resources, StringBuilder errorMsg)
     {
         if (escalera.trim().isEmpty()) return true;
 
-        boolean isValid = DataPatterns.ESCALERA.isPatternOk(escalera);
+        boolean isValid = UsuarioDataPatterns.ESCALERA.isPatternOk(escalera);
         if (!isValid) {
-            errorMsg.append(resources.getText(R.string.reg_usercomu_escalera_rot)).append(DataPatterns.LINE_BREAK.getRegexp());
+            errorMsg.append(resources.getText(R.string.reg_usercomu_escalera_rot)).append(UsuarioDataPatterns.LINE_BREAK.getRegexp());
         }
         return isValid;
     }
 
     /*  [\\w_ñÑáéíóúüÜ\\.\\-\\s]{1,10}  */
-    boolean validatePlanta(Resources resources, StringBuilder errorMsg)
+    private boolean validatePlanta(Resources resources, StringBuilder errorMsg)
     {
         if (planta.trim().isEmpty()) return true;
 
-        boolean isValid = DataPatterns.PLANTA.isPatternOk(planta);
+        boolean isValid = UsuarioDataPatterns.PLANTA.isPatternOk(planta);
         if (!isValid)
-            errorMsg.append(resources.getText(R.string.reg_usercomu_planta_rot)).append(DataPatterns.LINE_BREAK.getRegexp());
+            errorMsg.append(resources.getText(R.string.reg_usercomu_planta_rot)).append(UsuarioDataPatterns.LINE_BREAK.getRegexp());
         return isValid;
     }
 
     /*  [\\w_ñÑáéíóúüÜ\\.\\-]{1,10}  */
-    boolean validatePuerta(Resources resources, StringBuilder errorMsg)
+    private boolean validatePuerta(Resources resources, StringBuilder errorMsg)
     {
         if (puerta.trim().isEmpty()) return true;
 
-        boolean isValid = DataPatterns.PUERTA.isPatternOk(puerta);
+        boolean isValid = UsuarioDataPatterns.PUERTA.isPatternOk(puerta);
         if (!isValid) {
-            errorMsg.append(resources.getText(R.string.reg_usercomu_puerta_rot)).append(DataPatterns.LINE_BREAK.getRegexp());
+            errorMsg.append(resources.getText(R.string.reg_usercomu_puerta_rot)).append(UsuarioDataPatterns.LINE_BREAK.getRegexp());
         }
         return isValid;
     }
 
-    boolean validateRoles(Resources resources, StringBuilder errorMsg)
+    private boolean validateRoles(Resources resources, StringBuilder errorMsg)
     {
-        int rolesSize = Booleans.countTrue(isAdministrador, isPropietario, isPresidente, isInquilino);
+        int rolesSize = countRoles(isAdministrador, isPropietario, isPresidente, isInquilino);
         boolean isValid = false;
 
         /*No son compatibles los rolesInBean de propietario e inquilino en una misma comunidad y vivienda.*/
         if (rolesSize > 0 && !(isPropietario && isInquilino)) {
             isValid = true;
         } else {
-            errorMsg.append(resources.getText(R.string.reg_usercomu_role_rot)).append(DataPatterns.LINE_BREAK.getRegexp());
+            errorMsg.append(resources.getText(R.string.reg_usercomu_role_rot)).append(UsuarioDataPatterns.LINE_BREAK.getRegexp());
         }
         return isValid;
     }
 
-    boolean validateUsuario(Resources resources, StringBuilder errorMsg)
+    private boolean validateUsuario(Resources resources, StringBuilder errorMsg)
     {
         // The user is authenticated by an accessToken. usuarioBean may be null.
         if (usuarioBean == null) {
@@ -171,10 +185,10 @@ public final class UsuarioComunidadBean {
         return usuarioBean.validate(resources, errorMsg);
     }
 
-    boolean validateComunidad(Resources resources, StringBuilder errorMsg)
+    private boolean validateComunidad(Resources resources, StringBuilder errorMsg)
     {
         if (comunidadBean == null) {
-            errorMsg.append(resources.getText(R.string.reg_usercomu_comunidad_null)).append(DataPatterns.LINE_BREAK.getRegexp());
+            errorMsg.append(resources.getText(R.string.reg_usercomu_comunidad_null)).append(UsuarioDataPatterns.LINE_BREAK.getRegexp());
             return false;
         }
         // In this point the instance of comunidad in usuarioBean is created.

@@ -149,7 +149,7 @@ public class RegUserAndUserComuAcTest {
 
         // Actualización correcta de datos de identidad.
         assertThat(TKhandler.getAccessTokenInCache(), notNullValue());
-        assertThat(TKhandler.getRefreshTokenKey(), is(TKhandler.getAccessTokenInCache().getRefreshToken().getValue()));
+        assertThat(TKhandler.getRefreshTokenValue(), is(TKhandler.getAccessTokenInCache().getRefreshToken().getValue()));
         assertThat(isRegisteredUser(activity), is(true));
 
         intended(hasExtra(COMUNIDAD_ID.key, comunidad.getC_Id()));

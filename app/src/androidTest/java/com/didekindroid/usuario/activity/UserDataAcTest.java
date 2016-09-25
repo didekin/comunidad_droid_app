@@ -4,7 +4,7 @@ import android.content.res.Resources;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.oauth2.OauthToken.AccessToken;
+import com.didekin.oauth2.SpringOauthToken;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.usuario.testutils.CleanUserEnum;
@@ -176,7 +176,7 @@ public class UserDataAcTest {
     public void testModifyUserData_4() throws UiException
     {
         // Check security data: old data.
-        AccessToken tokenBefore = TKhandler.getAccessTokenInCache();
+        SpringOauthToken tokenBefore = TKhandler.getAccessTokenInCache();
         String accessTkValue = tokenBefore != null ? tokenBefore.getValue() : null;
         String refreshTkValue = tokenBefore != null ? tokenBefore.getRefreshToken().getValue() : null;
 
@@ -191,7 +191,7 @@ public class UserDataAcTest {
         checkUp(activityLayoutId);
 
         // New security data: same as the old one.
-        AccessToken tokenAfter = TKhandler.getAccessTokenInCache();
+        SpringOauthToken tokenAfter = TKhandler.getAccessTokenInCache();
         assertThat(tokenAfter != null ? tokenAfter.getValue() : null, is(accessTkValue));  // same accessToken.
         assertThat(tokenAfter != null ? tokenAfter.getRefreshToken().getValue() : null, is(refreshTkValue));  //same refreshToken.
     }
@@ -202,7 +202,7 @@ public class UserDataAcTest {
         whatToClean = CLEAN_NOTHING;
 
         // Check security data: old data.
-        AccessToken tokenBefore = TKhandler.getAccessTokenInCache();
+        SpringOauthToken tokenBefore = TKhandler.getAccessTokenInCache();
         String accessTkValue = tokenBefore != null ? tokenBefore.getValue() : null;
         String refreshTkValue = tokenBefore != null ? tokenBefore.getRefreshToken().getValue() : null;
 
@@ -218,7 +218,7 @@ public class UserDataAcTest {
         checkUp(activityLayoutId);
 
         // New security data.
-        AccessToken tokenAfter = TKhandler.getAccessTokenInCache();
+        SpringOauthToken tokenAfter = TKhandler.getAccessTokenInCache();
         assertThat(tokenAfter, notNullValue());
         assertThat(tokenAfter.getValue(), not(is(accessTkValue)));  // differtent accessToken.
         assertThat(tokenAfter.getRefreshToken().getValue(), not(is(refreshTkValue)));  //different refreshToken.

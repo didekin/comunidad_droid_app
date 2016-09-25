@@ -1,7 +1,5 @@
 package com.didekin.oauth2;
 
-import com.didekin.oauth2.OauthToken.AccessToken;
-
 import static com.didekin.oauth2.OauthConstant.BEARER_TOKEN_TYPE;
 
 /**
@@ -16,9 +14,9 @@ public enum OauthTokenHelper {
 
     public static final String BASIC_AND_SPACE = "Basic ";
 
-    public String doBearerAccessTkHeader(AccessToken accessToken)
+    public String doBearerAccessTkHeader(SpringOauthToken springOauthToken)
     {
         return BEARER_TOKEN_TYPE.substring(0, 1).toUpperCase() + BEARER_TOKEN_TYPE.substring(1)
-                + " " + accessToken.getValue();
+                + " " + springOauthToken.getValue();
     }
 }

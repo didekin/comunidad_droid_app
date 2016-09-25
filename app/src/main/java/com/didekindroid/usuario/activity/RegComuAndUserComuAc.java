@@ -17,6 +17,8 @@ import com.didekindroid.common.utils.ConnectionUtils;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
 
+import java.util.Objects;
+
 import timber.log.Timber;
 
 import static com.didekindroid.common.utils.UIutils.doToolBar;
@@ -25,8 +27,6 @@ import static com.didekindroid.common.utils.UIutils.makeToast;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeComunidadBeanFromView;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUserComuBeanFromView;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkState;
 
 /**
  * Preconditions:
@@ -94,7 +94,7 @@ public class RegComuAndUserComuAc extends AppCompatActivity {
     {
         Timber.d("onOptionsItemSelected()");
 
-        int resourceId = checkNotNull(item.getItemId());
+        int resourceId = item.getItemId();
 
         switch (resourceId) {
             case android.R.id.home:
@@ -135,7 +135,7 @@ public class RegComuAndUserComuAc extends AppCompatActivity {
             if (uiException != null) {
                 uiException.processMe(RegComuAndUserComuAc.this, new Intent());
             } else {
-                checkState(rowInserted);
+                Objects.equals(rowInserted, true);
             }
         }
     }

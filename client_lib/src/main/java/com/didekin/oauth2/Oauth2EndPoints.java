@@ -1,7 +1,6 @@
 package com.didekin.oauth2;
 
 import com.didekin.common.exception.ErrorBean;
-import com.didekin.oauth2.OauthToken.AccessToken;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -25,14 +24,14 @@ public interface Oauth2EndPoints {
 
     @FormUrlEncoded
     @POST(OauthConstant.TOKEN_PATH)
-    Call<AccessToken> getPasswordUserToken(@Header("Authorization") String authClient
+    Call<SpringOauthToken> getPasswordUserToken(@Header("Authorization") String authClient
             , @Field(USER_PARAM) String username
             , @Field(PSWD_PARAM) String password
             , @Field(GRANT_TYPE_PARAM) String grantType);
 
     @FormUrlEncoded
     @POST(OauthConstant.TOKEN_PATH)
-    Call<AccessToken> getRefreshUserToken(@Header("Authorization") String authClient
+    Call<SpringOauthToken> getRefreshUserToken(@Header("Authorization") String authClient
             , @Field(REFRESH_TK_PARAM) String refreshToken
             , @Field(GRANT_TYPE_PARAM) String grantType);
 

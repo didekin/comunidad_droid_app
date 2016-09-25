@@ -122,7 +122,7 @@ public final class Incidencia implements Serializable, GcmToComunidadHelper {
 
 //    ==================== BUILDER ====================
 
-    @SuppressWarnings("PrivateMemberAccessBetweenOuterAndInnerClass")
+    @SuppressWarnings({"PrivateMemberAccessBetweenOuterAndInnerClass", "WeakerAccess"})
     public final static class IncidenciaBuilder implements BeanBuilder<Incidencia> {
 
         private long incidenciaId;
@@ -209,14 +209,13 @@ public final class Incidencia implements Serializable, GcmToComunidadHelper {
                 }
             }
             return incidencia;
-            // TODO: meter validaciones de los campos en este método.
         }
     }
 
     /**
      * Example of serialization proxy.
      */
-    @SuppressWarnings("PrivateMemberAccessBetweenOuterAndInnerClass")
+    @SuppressWarnings({"PrivateMemberAccessBetweenOuterAndInnerClass", "WeakerAccess"})
     private static class InnerSerial implements Serializable {
 
         private static final long serialVersionUID = SerialNumber.INCIDENCIA.number;

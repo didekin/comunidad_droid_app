@@ -37,7 +37,6 @@ import static com.didekindroid.common.testutils.ActivityTestUtils.updateSecurity
 import static com.didekindroid.usuario.activity.utils.RolUi.PRO;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
-import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_JUAN;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.makeUsuarioComunidad;

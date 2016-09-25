@@ -12,7 +12,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.didekin.common.exception.ErrorBean;
-import com.didekin.oauth2.OauthToken.AccessToken;
+import com.didekin.oauth2.SpringOauthToken;
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekin.usuario.dominio.Usuario;
 import com.didekin.usuario.dominio.UsuarioComunidad;
@@ -25,6 +25,7 @@ import com.didekindroid.usuario.dominio.UsuarioBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import timber.log.Timber;
 
@@ -41,8 +42,6 @@ import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUser
 import static com.didekindroid.usuario.activity.utils.UserMenu.LOGIN_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenu;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkState;
 
 /**
  * User: pedro@didekin
@@ -78,7 +77,7 @@ public class RegUserAndUserComuAc extends AppCompatActivity {
         Timber.d("onCreate()");
 
         // Preconditions.
-        checkState(!isRegisteredUser(this));
+        Objects.equals(isRegisteredUser(this), false);
         Comunidad comunidad = (Comunidad) getIntent().getExtras().getSerializable(COMUNIDAD_LIST_OBJECT.key);
         mComunidad = comunidad != null ? comunidad : null;
 
@@ -147,7 +146,7 @@ public class RegUserAndUserComuAc extends AppCompatActivity {
     {
         Timber.d("onOptionsItemSelected()");
 
-        int resourceId = checkNotNull(item.getItemId());
+        int resourceId = item.getItemId();
 
         switch (resourceId) {
             case android.R.id.home:
@@ -180,10 +179,10 @@ public class RegUserAndUserComuAc extends AppCompatActivity {
                 uiException = new UiException(ErrorBean.GENERIC_ERROR);
                 return null;
             }
-            AccessToken token;
+            SpringOauthToken token;
             try {
                 token = Oauth2.getPasswordUserToken(newUser.getUserName(), newUser.getPassword());
-                TKhandler.initKeyCacheAndBackupFile(token);
+                TKhandler.initTokenAndBackupFile(token);
             } catch (UiException e) {
                 uiException = e;
             }

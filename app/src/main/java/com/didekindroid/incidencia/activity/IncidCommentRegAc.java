@@ -18,6 +18,8 @@ import com.didekindroid.common.utils.ConnectionUtils;
 import com.didekindroid.common.utils.UIutils;
 import com.didekindroid.incidencia.dominio.IncidCommentBean;
 
+import java.util.Objects;
+
 import timber.log.Timber;
 
 import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_OBJECT;
@@ -26,8 +28,6 @@ import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.common.utils.UIutils.makeToast;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenu;
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkState;
 
 /**
  * Preconditions:
@@ -76,7 +76,7 @@ public class IncidCommentRegAc extends AppCompatActivity {
     {
         Timber.d("onOptionsItemSelected()");
 
-        int resourceId = checkNotNull(item.getItemId());
+        int resourceId = item.getItemId();
 
         switch (resourceId) {
             case android.R.id.home:
@@ -139,7 +139,7 @@ public class IncidCommentRegAc extends AppCompatActivity {
             if (uiException != null) {
                 uiException.processMe(IncidCommentRegAc.this, new Intent());
             } else {
-                checkState(rowInserted == 1);
+                Objects.equals(rowInserted == 1, true);
                 Intent intent = new Intent(IncidCommentRegAc.this, IncidCommentSeeAc.class);
                 intent.putExtra(INCIDENCIA_OBJECT.key, mIncidencia);
                 startActivity(intent);

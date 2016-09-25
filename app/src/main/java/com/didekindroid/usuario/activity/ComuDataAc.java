@@ -19,6 +19,8 @@ import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.utils.ConnectionUtils;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 
+import java.util.Objects;
+
 import timber.log.Timber;
 
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
@@ -30,8 +32,6 @@ import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeComu
 import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_USERCOMU_BY_COMU_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenu;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkState;
 
 /**
  * Preconditions:
@@ -61,9 +61,9 @@ public class ComuDataAc extends AppCompatActivity implements RegComuFr.RegComuFr
         super.onCreate(savedInstanceState);
 
         // Preconditions.
-        checkState(isRegisteredUser(this));
+        Objects.equals(isRegisteredUser(this), true);
         mIdComunidad = getIntent().getLongExtra(COMUNIDAD_ID.key, 0L);
-        checkState(mIdComunidad > 0L);
+        Objects.equals(mIdComunidad > 0L, true);
 
         // Asunción: esta tarea termina antes que la carga de los spinners en RegComuFr.
         // Si hay problemas: meter C_Autonoma en la query que obtiene los objetos Comunidad que se usan para el intent inicial de esta actividad.
@@ -233,7 +233,7 @@ public class ComuDataAc extends AppCompatActivity implements RegComuFr.RegComuFr
     {
         Timber.d("onOptionsItemSelected()");
 
-        int resourceId = checkNotNull(item.getItemId());
+        int resourceId = item.getItemId();
 
         switch (resourceId) {
             case android.R.id.home:
@@ -312,7 +312,7 @@ public class ComuDataAc extends AppCompatActivity implements RegComuFr.RegComuFr
             if (uiException != null) {
                 uiException.processMe(ComuDataAc.this, new Intent());
             } else {
-                checkState(rowsUpdated == 1);
+                Objects.equals(rowsUpdated == 1, true);
             }
         }
     }

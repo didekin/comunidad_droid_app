@@ -15,6 +15,8 @@ import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.utils.ConnectionUtils;
 import com.didekindroid.usuario.dominio.UsuarioBean;
 
+import java.util.Objects;
+
 import timber.log.Timber;
 
 import static com.didekindroid.common.utils.UIutils.doToolBar;
@@ -22,7 +24,6 @@ import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.utils.UIutils.makeToast;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
-import static com.google.common.base.Preconditions.checkState;
 
 /**
  * Preconditions:
@@ -44,7 +45,7 @@ public class PasswordChangeAc extends AppCompatActivity {
         Timber.d("onCreate()");
 
         // Preconditions.
-        checkState(isRegisteredUser(this));
+        Objects.equals(isRegisteredUser(this), true);
 
         mAcView = getLayoutInflater().inflate(R.layout.password_change_ac, null);
         setContentView(mAcView);
@@ -113,7 +114,7 @@ public class PasswordChangeAc extends AppCompatActivity {
             if (uiException != null) {
                 uiException.processMe(PasswordChangeAc.this, new Intent());
             } else {
-                checkState(passwordUpdate == 1);
+                Objects.equals(passwordUpdate == 1, true);
                 Intent intent = new Intent(PasswordChangeAc.this, UserDataAc.class);
                 startActivity(intent);
             }

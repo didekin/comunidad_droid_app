@@ -7,7 +7,7 @@ import com.didekin.incidservice.dominio.IncidImportancia;
 import com.didekin.incidservice.dominio.Incidencia;
 import com.didekindroid.R;
 
-import static com.didekin.common.dominio.DataPatterns.LINE_BREAK;
+import static com.didekin.common.dominio.UsuarioDataPatterns.LINE_BREAK;
 
 /**
  * User: pedro@didekin

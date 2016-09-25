@@ -25,6 +25,7 @@ import com.didekindroid.incidencia.dominio.ResolucionBean;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import timber.log.Timber;
 
@@ -36,7 +37,6 @@ import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.common.utils.UIutils.getStringFromInteger;
 import static com.didekindroid.common.utils.UIutils.makeToast;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
-import static com.google.common.base.Preconditions.checkState;
 
 /**
  * User: pedro@didekin
@@ -79,6 +79,7 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
         return mFragmentView;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public void onActivityCreated(Bundle savedInstanceState)
     {
@@ -87,8 +88,9 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
 
         mIncidImportancia = (IncidImportancia) getArguments().getSerializable(INCID_IMPORTANCIA_OBJECT.key);
         mResolucion = (Resolucion) getArguments().getSerializable(INCID_RESOLUCION_OBJECT.key);
-        checkState(mResolucion != null);
+        Objects.equals(mResolucion != null, true);
         // Inicialización de la fecha en BD en el bean, para manternela si no la modifica.
+        Objects.equals(mResolucion.getFechaPrev() != null, true);
         mResolucionBean.setFechaPrevista(mResolucion.getFechaPrev().getTime());
 
         IncidAvanceSeeAdapter mAdapter = new IncidAvanceSeeAdapter(getActivity());
@@ -148,7 +150,7 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
 
         List<Avance> avances = null;
 
-        if(mResolucionBean.getAvanceDesc() != null && !mResolucionBean.getAvanceDesc().trim().isEmpty()){
+        if (mResolucionBean.getAvanceDesc() != null && !mResolucionBean.getAvanceDesc().trim().isEmpty()) {
             avances = new ArrayList<>(1);
             final Avance avance = new Avance.AvanceBuilder()
                     .avanceDesc(mResolucionBean.getAvanceDesc())
@@ -208,7 +210,7 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
                 intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, mIncidImportancia);
                 uiException.processMe(getActivity(), intent);
             } else {
-                checkState(rowModified >= 1);
+                Objects.equals(rowModified >= 1, true);
                 Intent intent = new Intent(getActivity(), IncidEditAc.class);
                 intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, mIncidImportancia);
                 startActivity(intent);
@@ -243,7 +245,7 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
                 Intent intent = new Intent();
                 uiException.processMe(getActivity(), intent);
             } else {
-                checkState(incidenciaCancelled >= 2);
+                Objects.equals(incidenciaCancelled >= 2, true);
                 Intent intent = new Intent(getActivity(), IncidSeeClosedByComuAc.class);
                 startActivity(intent);
             }

@@ -17,6 +17,7 @@ import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 
 import java.util.List;
+import java.util.Objects;
 
 import timber.log.Timber;
 
@@ -32,8 +33,6 @@ import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_RE
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_USERCOMU_BY_COMU_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenu;
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkState;
 
 /**
  * This activity is a point of registration for receiving GCM notifications of new incidents.
@@ -65,7 +64,7 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements
         doToolBar(this, true);
 
         if (savedInstanceState != null) {
-            checkState(getSupportFragmentManager().findFragmentByTag(incid_see_by_comu_list_fr_tag) != null);
+            Objects.equals(getSupportFragmentManager().findFragmentByTag(incid_see_by_comu_list_fr_tag) != null, true);
             return;
         }
         mFragment = new IncidSeeByComuListFr();
@@ -117,7 +116,7 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements
     {
         Timber.d("onOptionsItemSelected()");
 
-        int resourceId = checkNotNull(item.getItemId());
+        int resourceId = item.getItemId();
 
         switch (resourceId) {
             case android.R.id.home:
@@ -202,6 +201,7 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements
             return incidAndResolBundle;
         }
 
+        @SuppressWarnings("ConstantConditions")
         @Override
         protected void onPostExecute(IncidAndResolBundle incidAndResolBundle)
         {
@@ -210,7 +210,7 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements
             if (uiException != null) {
                 uiException.processMe(IncidSeeOpenByComuAc.this, new Intent());
             } else {
-                checkState(incidAndResolBundle != null);
+                Objects.equals(incidAndResolBundle != null, true);
                 Intent intent = new Intent(IncidSeeOpenByComuAc.this, IncidEditAc.class);
                 intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, incidAndResolBundle.getIncidImportancia());
                 intent.putExtra(INCID_RESOLUCION_FLAG.key, incidAndResolBundle.hasResolucion());

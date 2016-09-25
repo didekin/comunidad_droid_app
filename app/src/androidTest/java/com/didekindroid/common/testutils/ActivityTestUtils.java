@@ -4,10 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.support.test.espresso.ViewInteraction;
-import android.support.test.espresso.core.deps.guava.base.Preconditions;
 import android.widget.DatePicker;
 
-import com.didekin.oauth2.OauthToken;
+import com.didekin.oauth2.SpringOauthToken;
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekin.usuario.dominio.Usuario;
 import com.didekin.usuario.dominio.UsuarioComunidad;
@@ -23,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Objects;
 
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.KITKAT;
@@ -83,8 +83,14 @@ public final class ActivityTestUtils {
 
     public static void cleanWithTkhandler()
     {
-        TKhandler.cleanCacheAndBckFile();
+        TKhandler.cleanTokenAndBackFile();
         updateIsRegistered(false, getContext());
+    }
+
+    public static void cleanWithTkhandler(Context context)
+    {
+        TKhandler.cleanTokenAndBackFile();
+        updateIsRegistered(false, context);
     }
 
     public static void cleanOptions(CleanUserEnum whatClean) throws UiException
@@ -199,7 +205,7 @@ public final class ActivityTestUtils {
 
     public static void regSeveralUserComuSameUser(UsuarioComunidad... userComus) throws UiException, IOException
     {
-        Preconditions.checkArgument(userComus.length > 0);
+        Objects.equals(userComus.length > 0, true);
         signUpAndUpdateTk(userComus[0]);
         for (int i = 1; i < userComus.length; i++) {
             ServOne.regComuAndUserComu(userComus[i]);
@@ -219,8 +225,8 @@ public final class ActivityTestUtils {
 
     public static void updateSecurityData(String userName, String password) throws UiException
     {
-        OauthToken.AccessToken token = Oauth2.getPasswordUserToken(userName, password);
-        TKhandler.initKeyCacheAndBackupFile(token);
+        SpringOauthToken token = Oauth2.getPasswordUserToken(userName, password);
+        TKhandler.initTokenAndBackupFile(token);
         updateIsRegistered(true, getContext());
     }
 

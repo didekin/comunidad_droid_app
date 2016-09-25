@@ -11,6 +11,8 @@ import android.widget.Button;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 
+import java.util.Objects;
+
 import timber.log.Timber;
 
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
@@ -21,8 +23,6 @@ import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.utils.UIutils.updateIsRegistered;
 import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenu;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkState;
 
 /**
  * Preconditions:
@@ -40,7 +40,7 @@ public class DeleteMeAc extends AppCompatActivity {
         Timber.d("onCreate()");
 
         // Preconditions.
-        checkState(isRegisteredUser(this));
+        Objects.equals(isRegisteredUser(this), true);
 
         View mAcView = getLayoutInflater().inflate(R.layout.delete_me_ac, null);
         setContentView(mAcView);
@@ -72,7 +72,7 @@ public class DeleteMeAc extends AppCompatActivity {
     {
         Timber.d("onOptionsItemSelected()");
 
-        int resourceId = checkNotNull(item.getItemId());
+        int resourceId = item.getItemId();
 
         switch (resourceId) {
             case android.R.id.home:
@@ -99,7 +99,7 @@ public class DeleteMeAc extends AppCompatActivity {
             boolean isDeleted = false;
             try {
                 isDeleted = ServOne.deleteUser();
-                TKhandler.cleanCacheAndBckFile();
+                TKhandler.cleanTokenAndBackFile();
                 updateIsRegistered(false, DeleteMeAc.this);
             } catch (UiException e) {
                 uiException = e;
@@ -115,7 +115,6 @@ public class DeleteMeAc extends AppCompatActivity {
             if (uiException != null) {
                 uiException.processMe(DeleteMeAc.this, new Intent());
             } else {
-                checkState(isDeleted);
                 Intent intent = new Intent(DeleteMeAc.this, ComuSearchAc.class);
                 intent.setFlags(FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);

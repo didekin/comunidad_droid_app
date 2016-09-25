@@ -9,6 +9,8 @@ import android.view.MenuItem;
 import com.didekin.incidservice.dominio.Incidencia;
 import com.didekindroid.R;
 
+import java.util.Objects;
+
 import timber.log.Timber;
 
 import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_OBJECT;
@@ -16,8 +18,6 @@ import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_comments_see_list_fr_tag;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_COMMENT_REG_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenu;
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkState;
 
 /**
  * Preconditions:
@@ -41,7 +41,7 @@ public class IncidCommentSeeAc extends AppCompatActivity {
         mIncidencia = (Incidencia) getIntent().getExtras().getSerializable(INCIDENCIA_OBJECT.key);
 
         if (savedInstanceState != null){
-            checkState((mFragment = (IncidCommentSeeListFr) getSupportFragmentManager().findFragmentByTag(incid_comments_see_list_fr_tag)) != null);
+            Objects.equals((mFragment = (IncidCommentSeeListFr) getSupportFragmentManager().findFragmentByTag(incid_comments_see_list_fr_tag)) != null, true);
             return;
         }
 
@@ -77,7 +77,7 @@ public class IncidCommentSeeAc extends AppCompatActivity {
     {
         Timber.d("onOptionsItemSelected()");
 
-        int resourceId = checkNotNull(item.getItemId());
+        int resourceId = item.getItemId();
 
         switch (resourceId) {
             case android.R.id.home:

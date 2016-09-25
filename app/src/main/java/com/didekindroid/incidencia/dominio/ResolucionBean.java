@@ -7,7 +7,7 @@ import com.didekindroid.R;
 
 import java.text.ParseException;
 
-import static com.didekin.common.dominio.DataPatterns.LINE_BREAK;
+import static com.didekin.common.dominio.UsuarioDataPatterns.LINE_BREAK;
 import static com.didekin.incidservice.dominio.IncidDataPatterns.INCID_RESOLUCION_DESC;
 import static com.didekin.incidservice.dominio.IncidDataPatterns.INCID_RES_AVANCE_DESC;
 import static com.didekindroid.common.utils.UIutils.formatTimeToString;

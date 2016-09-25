@@ -26,6 +26,7 @@ import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTe
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanWithTkhandler;
+import static com.didekindroid.common.testutils.ActivityTestUtils.makeListTwoUserComu;
 import static com.didekindroid.common.testutils.ActivityTestUtils.regTwoUserComuSameUser;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
@@ -33,8 +34,6 @@ import static com.didekindroid.usuario.testutils.UserMenuTestUtils.REG_COMU_USER
 import static com.didekindroid.usuario.testutils.UserMenuTestUtils.REG_COMU_USER_USERCOMU_AC;
 import static com.didekindroid.usuario.testutils.UserMenuTestUtils.SEE_USERCOMU_BY_USER_AC;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_LA_PLAZUELA_5;
-import static com.didekindroid.common.testutils.ActivityTestUtils.makeListTwoUserComu;
-import static com.google.common.base.Preconditions.checkState;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
@@ -85,7 +84,6 @@ public class ComuSearchResultsAc_2_SlowTest {
     public void cleanData() throws UiException
     {
         cleanOptions(whatClean);
-        checkState(!isRegisteredUser(activity));
     }
 
     @Test

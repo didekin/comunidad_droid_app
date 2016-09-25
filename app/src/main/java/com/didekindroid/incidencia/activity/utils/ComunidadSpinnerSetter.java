@@ -10,11 +10,11 @@ import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 
 import java.util.List;
+import java.util.Objects;
 
 import timber.log.Timber;
 
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
-import static com.google.common.base.Preconditions.checkState;
 
 /**
  * User: pedro@didekin
@@ -23,7 +23,7 @@ import static com.google.common.base.Preconditions.checkState;
  */
 public class ComunidadSpinnerSetter<T extends Fragment & ComuSpinnerSettable> extends AsyncTask<Void, Void, List<Comunidad>> {
     // TODO: to persist the task during restarts and properly cancel the task when the activity is destroyed. (Example in Shelves)
-    UiException uiException;
+    private UiException uiException;
     private T mFragment;
 
     public ComunidadSpinnerSetter(T mFragment)
@@ -59,7 +59,7 @@ public class ComunidadSpinnerSetter<T extends Fragment & ComuSpinnerSettable> ex
         }
         if (uiException != null) {
             Timber.d("onPostExecute(): uiException != null");
-            checkState(comunidades == null);
+            Objects.equals(comunidades == null, true);
             uiException.processMe(mFragment.getActivity(), new Intent());
         }
     }

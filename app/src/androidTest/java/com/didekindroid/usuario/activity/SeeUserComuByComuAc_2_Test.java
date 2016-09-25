@@ -30,7 +30,7 @@ import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.external.LongListMatchers.withAdaptedData;
 import static com.didekindroid.usuario.activity.utils.RolUi.INQ;
-import static com.didekindroid.usuario.activity.utils.RolUi.formatRol;
+import static com.didekindroid.usuario.activity.utils.RolUi.formatRolToString;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN2;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
@@ -146,7 +146,7 @@ public class SeeUserComuByComuAc_2_Test {
         checkNotRotulos(R.id.usercomu_item_portal_rot, R.id.usercomu_item_escalera_rot);
         checkRotulos(R.id.usercomu_item_planta_rot, R.id.usercomu_item_puerta_rot);
         checkUser(COMU_PLAZUELA5_JUAN.getUsuario().getAlias(), COMU_PLAZUELA5_JUAN.getUsuario().getUserName());
-        checkRole(formatRol(COMU_PLAZUELA5_JUAN.getRoles(), mActivity.getResources()));
+        checkRole(formatRolToString(COMU_PLAZUELA5_JUAN.getRoles(), mActivity.getResources()));
         checkPlantaView(COMU_PLAZUELA5_JUAN.getPlanta());
         checkPuertaView(COMU_PLAZUELA5_JUAN.getPuerta());
 
@@ -172,7 +172,7 @@ public class SeeUserComuByComuAc_2_Test {
         checkNotRotulos(R.id.usercomu_item_escalera_rot);
         checkRotulos(R.id.usercomu_item_portal_rot, R.id.usercomu_item_planta_rot, R.id.usercomu_item_puerta_rot);
         checkUser(usuarioComunidad.getUsuario().getAlias(), usuarioComunidad.getUsuario().getUserName());
-        checkRole(formatRol(usuarioComunidad.getRoles(), mActivity.getResources()));
+        checkRole(formatRolToString(usuarioComunidad.getRoles(), mActivity.getResources()));
         checkPortalView(usuarioComunidad.getPortal());
         checkPlantaView(usuarioComunidad.getPlanta());
         checkPuertaView(usuarioComunidad.getPuerta());
@@ -190,7 +190,7 @@ public class SeeUserComuByComuAc_2_Test {
         /* No muestra escalera; muestra alias, email, portal, escalera, planta, puerta y roles.*/
         checkRotulos(R.id.usercomu_item_portal_rot, R.id.usercomu_item_escalera_rot, R.id.usercomu_item_planta_rot, R.id.usercomu_item_puerta_rot);
         checkUser(COMU_PLAZUELA5_PEPE.getUsuario().getAlias(), COMU_PLAZUELA5_PEPE.getUsuario().getUserName());
-        checkRole(formatRol(COMU_PLAZUELA5_PEPE.getRoles(), mActivity.getResources()));
+        checkRole(formatRolToString(COMU_PLAZUELA5_PEPE.getRoles(), mActivity.getResources()));
         checkPortalView(COMU_PLAZUELA5_PEPE.getPortal());
         checkEscaleraView(COMU_PLAZUELA5_PEPE.getEscalera());
         checkPlantaView(COMU_PLAZUELA5_PEPE.getPlanta());

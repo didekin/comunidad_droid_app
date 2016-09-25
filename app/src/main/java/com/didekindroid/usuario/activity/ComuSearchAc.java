@@ -3,7 +3,6 @@ package com.didekindroid.usuario.activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,7 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.didekin.oauth2.OauthToken.AccessToken;
+import com.didekin.oauth2.SpringOauthToken;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.utils.ConnectionUtils;
@@ -22,7 +21,7 @@ import com.didekindroid.usuario.dominio.ComunidadBean;
 import timber.log.Timber;
 
 import static android.widget.Toast.LENGTH_SHORT;
-import static com.didekin.common.dominio.DataPatterns.LINE_BREAK;
+import static com.didekin.common.dominio.UsuarioDataPatterns.LINE_BREAK;
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_SEARCH;
 import static com.didekindroid.common.activity.TokenHandler.TKhandler;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
@@ -35,7 +34,6 @@ import static com.didekindroid.usuario.activity.utils.UserMenu.REG_COMU_USERCOMU
 import static com.didekindroid.usuario.activity.utils.UserMenu.REG_COMU_USER_USERCOMU_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_USERCOMU_BY_USER_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.USER_DATA_AC;
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Postconditions:
@@ -134,7 +132,7 @@ public class ComuSearchAc extends AppCompatActivity {
     {
         Timber.d("onOptionsItemSelected()");
 
-        int resourceId = checkNotNull(item.getItemId());
+        int resourceId = item.getItemId();
 
         switch (resourceId) {
             case R.id.user_data_ac_mn:
@@ -164,31 +162,31 @@ public class ComuSearchAc extends AppCompatActivity {
 
 
     /* This class should be in the launcher activity */
-    class CheckerTokenInCache extends AsyncTask<Void, Void, AccessToken> {
+    class CheckerTokenInCache extends AsyncTask<Void, Void, SpringOauthToken> {
     // TODO: to persist the task during restarts and properly cancel the task when the activity is destroyed. (Example in Shelves)
 
         UiException uiException;
 
         @Override
-        protected AccessToken doInBackground(Void... params)
+        protected SpringOauthToken doInBackground(Void... params)
         {
             Timber.d("CheckerTokenInCache.doInBackground");
 
-            AccessToken accessTokenInCache = null;
+            SpringOauthToken springOauthTokenInCache = null;
             try {
-                accessTokenInCache = TKhandler.getAccessTokenInCache();
+                springOauthTokenInCache = TKhandler.getAccessTokenInCache();
             } catch (UiException e) {
                 uiException = e;
             }
-            return accessTokenInCache;
+            return springOauthTokenInCache;
         }
 
         @Override
-        protected void onPostExecute(AccessToken accessToken)
+        protected void onPostExecute(SpringOauthToken springOauthToken)
         {
-            Timber.d("CheckerTokenInCache.onPostExecute() accessToken null = %b%n",accessToken == null);
+            Timber.d("CheckerTokenInCache.onPostExecute() springOauthToken null = %b%n", springOauthToken == null);
 
-            if (uiException == null && accessToken != null) {
+            if (uiException == null && springOauthToken != null) {
                 updateIsRegistered(true, ComuSearchAc.this);
                 if (mMenu != null) {
                     mMenu.removeItem(R.id.login_ac_mn);

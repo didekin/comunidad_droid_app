@@ -19,6 +19,7 @@ import com.didekindroid.common.activity.UiException;
 import com.didekindroid.incidencia.dominio.ResolucionBean;
 
 import java.sql.Timestamp;
+import java.util.Objects;
 
 import timber.log.Timber;
 
@@ -28,7 +29,6 @@ import static com.didekindroid.common.utils.ConnectionUtils.checkInternetConnect
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.common.utils.UIutils.makeToast;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
-import static com.google.common.base.Preconditions.checkState;
 
 /**
  * User: pedro@didekin
@@ -132,6 +132,10 @@ public class IncidResolucionRegFr extends IncidResolucionFrAbstract {
         UiException uiException;
         Resolucion resolucion;
 
+        ResolucionRegister()
+        {
+        }
+
         @Override
         protected Integer doInBackground(Resolucion... params)
         {
@@ -158,7 +162,7 @@ public class IncidResolucionRegFr extends IncidResolucionFrAbstract {
                 intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, mIncidImportancia);
                 uiException.processMe(getActivity(), intent);
             } else {
-                checkState(rowInserted == 1);
+                Objects.equals(rowInserted == 1,true);
                 Intent intent = new Intent(getActivity(), IncidEditAc.class);
                 intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, mIncidImportancia);
                 startActivity(intent);

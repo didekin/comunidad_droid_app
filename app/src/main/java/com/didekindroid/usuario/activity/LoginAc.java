@@ -15,7 +15,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.didekin.common.exception.ErrorBean;
-import com.didekin.oauth2.OauthToken.AccessToken;
+import com.didekin.oauth2.SpringOauthToken;
 import com.didekin.usuario.dominio.Usuario;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
@@ -36,7 +36,6 @@ import static com.didekindroid.common.utils.UIutils.updateIsRegistered;
 import static com.didekindroid.common.webservices.Oauth2Service.Oauth2;
 import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenu;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * User: pedro
@@ -142,7 +141,7 @@ public class LoginAc extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item)
     {
         Timber.d("onOptionsItemSelected()");
-        int resourceId = checkNotNull(item.getItemId());
+        int resourceId = item.getItemId();
 
         switch (resourceId) {
             case android.R.id.home:
@@ -177,8 +176,8 @@ public class LoginAc extends AppCompatActivity {
 
             try {
                 if (ServOne.loginInternal(userName, password)) {
-                    AccessToken token = Oauth2.getPasswordUserToken(userName, password);
-                    TKhandler.initKeyCacheAndBackupFile(token);
+                    SpringOauthToken token = Oauth2.getPasswordUserToken(userName, password);
+                    TKhandler.initTokenAndBackupFile(token);
                     updateIsRegistered(true, LoginAc.this);
                     isLoginOk = true;
                 }

@@ -16,8 +16,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
+import java.util.Objects;
 
-import static android.support.test.espresso.core.deps.guava.base.Preconditions.checkState;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.utils.UIutils.updateIsGcmTokenSentServer;
@@ -71,7 +71,7 @@ public class IncidSeeOpenAc_GCM_Test extends Incidencia_GCM_Test {
                     pepe = signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
                     pepeUserComu = ServOne.seeUserComusByUser().get(0);
                     // Pepe hasn't got a gcmToken.
-                    checkState(ServOne.getGcmToken() == null);
+                    Objects.equals(ServOne.getGcmToken() == null, true);
                 } catch (UiException | IOException e) {
                     e.printStackTrace();
                 }

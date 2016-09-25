@@ -3,7 +3,7 @@ package com.didekindroid.usuario.activity;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.oauth2.OauthToken.AccessToken;
+import com.didekin.oauth2.SpringOauthToken;
 import com.didekin.usuario.dominio.Usuario;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
@@ -27,11 +27,11 @@ import static android.support.test.espresso.matcher.ViewMatchers.withHint;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.activity.TokenHandler.TKhandler;
-import static com.didekindroid.common.testutils.ActivityTestUtils.checkUp;
-import static com.didekindroid.common.testutils.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOneUser;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
+import static com.didekindroid.common.testutils.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.webservices.Oauth2Service.Oauth2;
@@ -129,7 +129,7 @@ public class PasswordChangeAcTest {
         whatToClean = CLEAN_NOTHING;
 
         // Check security data: old data.
-        AccessToken tokenBefore = TKhandler.getAccessTokenInCache();
+        SpringOauthToken tokenBefore = TKhandler.getAccessTokenInCache();
         String accessTkValue = tokenBefore != null ? tokenBefore.getValue() : null;
         String refreshTkValue = tokenBefore != null ? tokenBefore.getRefreshToken().getValue() : null;
 
@@ -141,7 +141,7 @@ public class PasswordChangeAcTest {
         checkUp(activityLayoutId);
 
         // Check security data: new data.
-        AccessToken tokenAfter = Oauth2.getRefreshUserToken(refreshTkValue);
+        SpringOauthToken tokenAfter = Oauth2.getRefreshUserToken(refreshTkValue);
         assertThat(tokenAfter.getValue(), not(is(accessTkValue)));  // new accessToken.
         assertThat(tokenAfter.getRefreshToken().getValue(), not(is(refreshTkValue)));  // new refreshToken.
 

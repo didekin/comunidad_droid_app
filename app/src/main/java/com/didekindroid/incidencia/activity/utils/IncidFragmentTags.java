@@ -5,7 +5,6 @@ import com.didekindroid.incidencia.activity.IncidEditAc;
 import com.didekindroid.incidencia.activity.IncidResolucionRegEditSeeAc;
 import com.didekindroid.incidencia.activity.IncidResolucionSeeFr;
 import com.didekindroid.incidencia.activity.IncidSeeByComuListFr;
-import com.didekindroid.incidencia.activity.IncidSeeUserComuImportanciaFr;
 
 /**
  * User: pedro@didekin

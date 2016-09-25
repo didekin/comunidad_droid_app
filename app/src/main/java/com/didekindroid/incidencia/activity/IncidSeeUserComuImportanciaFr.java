@@ -15,12 +15,12 @@ import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 
 import java.util.List;
+import java.util.Objects;
 
 import timber.log.Timber;
 
 import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
-import static com.google.common.base.Preconditions.checkState;
 
 /**
  * Preconditions:
@@ -96,7 +96,7 @@ public class IncidSeeUserComuImportanciaFr extends Fragment {
             }
             if (uiException != null) {
                 Timber.d("onPostExecute(): uiException != null");
-                checkState(importanciaUsers == null);
+                Objects.equals(importanciaUsers == null, true);
                 uiException.processMe(getActivity(), new Intent());
             }
         }

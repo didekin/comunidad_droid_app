@@ -14,6 +14,8 @@ import com.didekin.incidservice.dominio.Resolucion;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 
+import java.util.Objects;
+
 import timber.log.Timber;
 
 import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_OBJECT;
@@ -28,8 +30,6 @@ import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_CO
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_RESOLUCION_REG_EDIT_AC;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenu;
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkState;
 
 /**
  * Preconditions:
@@ -54,7 +54,7 @@ public class IncidEditAc extends AppCompatActivity {
         Timber.d("onCreate()");
 
         mIncidImportancia = (IncidImportancia) getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.key);
-        checkState(mIncidImportancia != null && mIncidImportancia.getIncidencia() != null && mIncidImportancia.getIncidencia().getIncidenciaId() > 0);
+        Objects.equals(mIncidImportancia != null && mIncidImportancia.getIncidencia() != null && mIncidImportancia.getIncidencia().getIncidenciaId() > 0, true);
 
         flagResolucion = getIntent().getBooleanExtra(INCID_RESOLUCION_FLAG.key, false);
 
@@ -63,7 +63,7 @@ public class IncidEditAc extends AppCompatActivity {
         doToolBar(this, true);
 
         if (savedInstanceState != null) {
-            checkState(getSupportFragmentManager().findFragmentByTag(incid_edit_ac_frgs_tag) != null);
+            Objects.equals(getSupportFragmentManager().findFragmentByTag(incid_edit_ac_frgs_tag) != null,true);
             return;
         }
 
@@ -104,7 +104,7 @@ public class IncidEditAc extends AppCompatActivity {
     {
         Timber.d("onOptionsItemSelected()");
 
-        int resourceId = checkNotNull(item.getItemId());
+        int resourceId = item.getItemId();
         Intent intent;
 
         switch (resourceId) {

@@ -13,7 +13,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.didekin.common.exception.ErrorBean;
-import com.didekin.oauth2.OauthToken.AccessToken;
+import com.didekin.oauth2.SpringOauthToken;
 import com.didekin.usuario.dominio.Usuario;
 import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
@@ -27,7 +27,7 @@ import java.io.IOException;
 
 import timber.log.Timber;
 
-import static com.didekin.common.dominio.DataPatterns.LINE_BREAK;
+import static com.didekin.common.dominio.UsuarioDataPatterns.LINE_BREAK;
 import static com.didekindroid.common.activity.TokenHandler.TKhandler;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.makeToast;
@@ -38,7 +38,6 @@ import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUser
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUserComuBeanFromView;
 import static com.didekindroid.usuario.activity.utils.UserMenu.LOGIN_AC;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Preconditions:
@@ -129,7 +128,7 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity {
     {
         Timber.d("onOptionsItemSelected()");
 
-        int resourceId = checkNotNull(item.getItemId());
+        int resourceId = item.getItemId();
 
         switch (resourceId) {
             case android.R.id.home:
@@ -161,8 +160,8 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity {
 
             try {
                 ServOne.regComuAndUserAndUserComu(usuarioComunidad[0]).execute();
-                AccessToken token = Oauth2.getPasswordUserToken(newUser.getUserName(), newUser.getPassword());
-                TKhandler.initKeyCacheAndBackupFile(token);
+                SpringOauthToken token = Oauth2.getPasswordUserToken(newUser.getUserName(), newUser.getPassword());
+                TKhandler.initTokenAndBackupFile(token);
             }catch (IOException e) {
                 uiException = new UiException(ErrorBean.GENERIC_ERROR);
                 return null;

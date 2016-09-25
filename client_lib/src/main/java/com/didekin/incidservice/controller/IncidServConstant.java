@@ -8,6 +8,7 @@ import static com.didekin.oauth2.OauthConstant.INCID_WRITE;
  * Date: 12/11/15
  * Time: 17:06
  */
+@SuppressWarnings("WeakerAccess")
 public final class IncidServConstant {
 
     private IncidServConstant()

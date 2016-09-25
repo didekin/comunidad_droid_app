@@ -57,7 +57,7 @@ public class UsuarioDataDbHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "userComu.db";
     /*This number has to be changed in future versions, to get executed onUpgrade() method.*/
-    public static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 1;
 
     private final Context mContext;
     private SQLiteDatabase mDataBase;
@@ -184,11 +184,8 @@ public class UsuarioDataDbHelper extends SQLiteOpenHelper {
         return pkCounter;
     }
 
-    protected long addMunicipio(int pk, short provinciaPk, short codMunicipioInProv, String nombre)
+    private long addMunicipio(int pk, short provinciaPk, short codMunicipioInProv, String nombre)
     {
-
-//        Timber.d("In addMunicipio()");
-
         ContentValues values = new ContentValues();
         values.put(_ID, pk);
         values.put(pr_id, provinciaPk);
@@ -285,8 +282,6 @@ public class UsuarioDataDbHelper extends SQLiteOpenHelper {
 
     private long addProvincia(short pk, short comunidadPk, String nombre)
     {
-        Timber.d("En addProvincia()");
-
         ContentValues values = new ContentValues();
         values.put(_ID, pk);
         values.put(ca_id, comunidadPk);
@@ -295,7 +290,7 @@ public class UsuarioDataDbHelper extends SQLiteOpenHelper {
         return mDataBase.insert(TB_PROVINCIA, null, values);
     }
 
-    public List<Provincia> getProvincias()
+    List<Provincia> getProvincias()
     {
         Timber.d("In getProvincias()");
 
@@ -341,7 +336,6 @@ public class UsuarioDataDbHelper extends SQLiteOpenHelper {
         String[] wherClauseArgs = new String[]{String.valueOf(caId)};
 
         return mDataBase.query(TB_PROVINCIA, columns, whereClause, wherClauseArgs, null, null, null);
-
     }
 
 //    =====================================================
@@ -385,8 +379,6 @@ public class UsuarioDataDbHelper extends SQLiteOpenHelper {
 
     private long addComunidad(short pk, String nombre)
     {
-        Timber.d("En addComunidad()");
-
         ContentValues values = new ContentValues();
         values.put(_ID, pk);
         values.put(cu_nombre, nombre);
@@ -394,7 +386,7 @@ public class UsuarioDataDbHelper extends SQLiteOpenHelper {
         return mDataBase.insert(TB_C_AUTONOMA, null, values);
     }
 
-    public List<ComunidadAutonoma> getComunidadesAu()
+    List<ComunidadAutonoma> getComunidadesAu()
     {
         Timber.d("In getComunidadesAu()");
 
@@ -500,7 +492,7 @@ public class UsuarioDataDbHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
-    public List<String> getTiposVia()
+    List<String> getTiposVia()
     {
         Timber.d("In getTiposVia()");
 

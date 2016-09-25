@@ -5,7 +5,7 @@ package com.didekin.oauth2;
  * Date: 04/09/15
  * Time: 11:02
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "WeakerAccess"})
 public final class OauthConstant {
 
     // Oauth2: Grant types.

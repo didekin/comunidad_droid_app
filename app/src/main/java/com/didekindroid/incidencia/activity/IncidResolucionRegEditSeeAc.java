@@ -16,13 +16,10 @@ import timber.log.Timber;
 
 import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.common.activity.SavedInstanceKey.INCID_IMPORTANCIA;
-import static com.didekindroid.common.activity.SavedInstanceKey.INCID_RESOLUCION;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.getGcmToken;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_resolucion_ac_frgs_tag;
 import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenu;
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * This activity is a point of registration for receiving GCM notifications of new incidents.
@@ -97,9 +94,9 @@ public class IncidResolucionRegEditSeeAc extends AppCompatActivity {
     {
         Timber.d("onSaveInstanceState()");
         if (mResolucion != null) {
-            outState.putSerializable(INCID_RESOLUCION.key, mResolucion);
+            outState.putSerializable(INCID_RESOLUCION_OBJECT.key, mResolucion);
         }
-        outState.putSerializable(INCID_IMPORTANCIA.key, mIncidImportancia);
+        outState.putSerializable(INCID_IMPORTANCIA_OBJECT.key, mIncidImportancia);
         super.onSaveInstanceState(outState);
     }
 
@@ -107,8 +104,8 @@ public class IncidResolucionRegEditSeeAc extends AppCompatActivity {
     protected void onRestoreInstanceState(Bundle savedInstanceState)
     {
         Timber.d("onRestoreInstanceState()");
-        mResolucion = (Resolucion) savedInstanceState.getSerializable(INCID_RESOLUCION.key);
-        mIncidImportancia = (IncidImportancia) savedInstanceState.getSerializable(INCID_IMPORTANCIA.key);
+        mResolucion = (Resolucion) savedInstanceState.getSerializable(INCID_RESOLUCION_OBJECT.key);
+        mIncidImportancia = (IncidImportancia) savedInstanceState.getSerializable(INCID_IMPORTANCIA_OBJECT.key);
         super.onRestoreInstanceState(savedInstanceState);
     }
 
@@ -129,7 +126,7 @@ public class IncidResolucionRegEditSeeAc extends AppCompatActivity {
     {
         Timber.d("onOptionsItemSelected()");
 
-        int resourceId = checkNotNull(item.getItemId());
+        int resourceId = item.getItemId();
         Intent intent;
 
         switch (resourceId) {

@@ -3,7 +3,7 @@ package com.didekindroid.common.webservices;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.common.exception.ErrorBean;
-import com.didekin.oauth2.OauthToken.AccessToken;
+import com.didekin.oauth2.SpringOauthToken;
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.usuario.testutils.CleanUserEnum;
 
@@ -58,6 +58,12 @@ public class Oauth2ServiceIfTest {
         whatClean = CLEAN_NOTHING;
     }
 
+    @After
+    public void cleaningUp() throws UiException
+    {
+        cleanOptions(whatClean);
+    }
+
     @Test
     public void testGetNotFoundMsg() throws IOException
     {
@@ -75,7 +81,7 @@ public class Oauth2ServiceIfTest {
         boolean isRegistered = ServOne.regComuAndUserAndUserComu(COMU_REAL_JUAN).execute().body();
         assertThat(isRegistered, is(true));
         // Solicita token.
-        AccessToken token = Oauth2.getPasswordUserToken(USER_JUAN.getUserName(), USER_JUAN.getPassword());
+        SpringOauthToken token = Oauth2.getPasswordUserToken(USER_JUAN.getUserName(), USER_JUAN.getPassword());
         assertThat(token, notNullValue());
         assertThat(token.getValue(), notNullValue());
         assertThat(token.getRefreshToken().getValue(), notNullValue());
@@ -92,7 +98,7 @@ public class Oauth2ServiceIfTest {
         // Solicita token y actuliza tokenCache.
         updateSecurityData(COMU_REAL_JUAN.getUsuario().getUserName(), COMU_REAL_JUAN.getUsuario().getPassword());
         // Vuelve a solicitar token.
-        AccessToken token = Oauth2.getPasswordUserToken(USER_JUAN.getUserName(), USER_JUAN.getPassword());
+        SpringOauthToken token = Oauth2.getPasswordUserToken(USER_JUAN.getUserName(), USER_JUAN.getPassword());
         assertThat(token, notNullValue());
         assertThat(token.getValue(), notNullValue());
         assertThat(token.getRefreshToken().getValue(), notNullValue());
@@ -118,7 +124,7 @@ public class Oauth2ServiceIfTest {
         }
 
         // Es necesario conseguir un nuevo token.
-        AccessToken token = Oauth2.getRefreshUserToken(TKhandler.getRefreshTokenKey());
+        SpringOauthToken token = Oauth2.getRefreshUserToken(TKhandler.getRefreshTokenValue());
         assertThat(token, notNullValue());
         assertThat(token.getValue(), notNullValue());
         assertThat(token.getRefreshToken().getValue(), notNullValue());
@@ -134,12 +140,13 @@ public class Oauth2ServiceIfTest {
 
         //Inserta userComu, comunidad, usuariocomunidad y actuliza tokenCache.
         signUpAndUpdateTk(COMU_REAL_PEPE);
-        AccessToken tokenOld = TKhandler.getAccessTokenInCache();
+        SpringOauthToken tokenOld = TKhandler.getAccessTokenInCache();
         String accessTkOldValue = tokenOld != null ? tokenOld.getValue() : null;
         String refreshTkOldValue = tokenOld != null ? tokenOld.getRefreshToken().getValue() : null;
 
-        AccessToken tokenNew = Oauth2.getRefreshUserToken(TKhandler.getRefreshTokenKey());
+        SpringOauthToken tokenNew = Oauth2.getRefreshUserToken(TKhandler.getRefreshTokenValue());
         assertThat(tokenNew, notNullValue());
+        // Return mew access and refresh tokens.
         assertThat(tokenNew.getRefreshToken().getValue(), not(is(refreshTkOldValue)));
         assertThat(tokenNew.getValue(), not(is(accessTkOldValue)));
 
@@ -150,11 +157,5 @@ public class Oauth2ServiceIfTest {
     {
         String encodedHeader = Oauth2.doAuthBasicHeader(CL_USER);
         assertThat(encodedHeader, equalTo("Basic dXNlcjo="));
-    }
-
-    @After
-    public void cleaningUp() throws UiException
-    {
-        cleanOptions(whatClean);
     }
 }

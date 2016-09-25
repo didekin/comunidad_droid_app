@@ -24,18 +24,19 @@ import com.didekindroid.incidencia.dominio.IncidImportanciaBean;
 import com.didekindroid.incidencia.dominio.IncidenciaBean;
 import com.didekindroid.incidencia.repository.IncidenciaDataDbHelper;
 
+import java.util.Objects;
+
 import timber.log.Timber;
 
 import static android.view.View.GONE;
 import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.common.utils.ConnectionUtils.checkInternetConnected;
+import static com.didekindroid.common.utils.UIutils.closeCursor;
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.common.utils.UIutils.makeToast;
 import static com.didekindroid.incidencia.activity.utils.IncidSpinnersHelper.HELPER;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkState;
 
 /**
  * User: pedro@didekin
@@ -119,6 +120,7 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
     public void onDestroy()
     {
         Timber.d("onDestroy()");
+        closeCursor(mAmbitoIncidSpinner.getAdapter());
         dbHelper.close();
         super.onDestroy();
     }
@@ -131,10 +133,11 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
     {
         Timber.d("modifyIncidenciaAndImportancia()");
         StringBuilder errorMsg = getErrorMsgBuilder(getActivity());
+        Objects.equals(mIncidImportancia != null, true);
 
         try {
             IncidImportancia incidImportancia = mIncidImportanciaBean.makeIncidImportancia(
-                    errorMsg, getResources(), fFragmentView, mIncidenciaBean, checkNotNull(mIncidImportancia));
+                    errorMsg, getResources(), fFragmentView, mIncidenciaBean, mIncidImportancia);
             if (checkInternetConnected(getActivity())) {
                 new IncidenciaModifyer().execute(incidImportancia);
             }
@@ -149,7 +152,7 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
         Timber.d("eraseIncidencia()");
 
         if (checkInternetConnected(getActivity())) {
-            checkState(mIncidImportancia.getUserComu().hasAdministradorAuthority());
+            Objects.equals(mIncidImportancia.getUserComu().hasAdministradorAuthority(),true);
             new IncidenciaEraser().execute(mIncidImportancia.getIncidencia());
         }
     }
@@ -251,7 +254,7 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
             if (uiException != null) {
                 uiException.processMe(getActivity(), new Intent());
             } else {
-                checkState(rowInserted >= 1);
+                Objects.equals(rowInserted >= 1, true);
                 Intent intent = new Intent(getActivity(), IncidSeeOpenByComuAc.class);
                 startActivity(intent);
             }
@@ -283,7 +286,7 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
             if (uiException != null) {
                 uiException.processMe(getActivity(), new Intent());
             } else {
-                checkState(rowsDeleted == 1);
+                Objects.equals(rowsDeleted == 1,true);
                 Intent intent = new Intent(getActivity(), IncidSeeOpenByComuAc.class);
                 startActivity(intent);
             }

@@ -15,7 +15,6 @@ import com.didekindroid.incidencia.repository.IncidenciaDataDbHelper;
 import com.didekindroid.usuario.testutils.CleanUserEnum;
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -75,6 +74,8 @@ public abstract class IncidEditAbstractTest {
     Fragment incidEditFr;
     IncidImportancia incidImportanciaIntent;
     boolean flagResolucionIntent;
+    IncidenciaDataDbHelper dbHelper;
+
 
     @Rule
     public IntentsTestRule<IncidEditAc> intentRule = doIntentRule();
@@ -108,19 +109,18 @@ public abstract class IncidEditAbstractTest {
                 hasEntry(INCID_IMPORTANCIA_OBJECT.key, is(incidImportanciaIntent)),
                 hasEntry(INCID_ACTIVITY_VIEW_ID.key, is(R.id.incid_edit_fragment_container_ac))
         ));
+
+        dbHelper = new IncidenciaDataDbHelper(mActivity);
     }
 
     @After
     public void tearDown() throws Exception
     {
-        cleanOptions(whatToClean());
-    }
-
-    @AfterClass
-    public static void cleanDbSqlite()
-    {
+        dbHelper.dropAllTables();
+        dbHelper.close();
         String dBFileName = DB_PATH.concat(IncidenciaDataDbHelper.DB_NAME);
         deleteDatabase(new File(dBFileName));
+        cleanOptions(whatToClean());
     }
 
     abstract IntentsTestRule<IncidEditAc> doIntentRule();
@@ -188,7 +188,7 @@ public abstract class IncidEditAbstractTest {
 
         onView(allOf(
                 withId(R.id.incid_ambito_view),
-                withText(new IncidenciaDataDbHelper(mActivity).getAmbitoDescByPk(incidenciaJuan.getIncidencia().getAmbitoIncidencia().getAmbitoId()))
+                withText(dbHelper.getAmbitoDescByPk(incidenciaJuan.getIncidencia().getAmbitoIncidencia().getAmbitoId()))
         )).check(matches(isDisplayed()));
 
         onView(allOf(
@@ -221,7 +221,7 @@ public abstract class IncidEditAbstractTest {
         }
     }
 
-    void checkDataEditMaxPowerFr(IncidenciaDataDbHelper dBHelper)
+    void checkDataEditMaxPowerFr()
     {
         onView(allOf(
                 withId(R.id.incid_comunidad_txt),
@@ -236,7 +236,7 @@ public abstract class IncidEditAbstractTest {
         onView(allOf(
                 withId(R.id.app_spinner_1_dropdown_item),
                 withParent(withId(R.id.incid_reg_ambito_spinner)),
-                withText(dBHelper.getAmbitoDescByPk(incidenciaJuan.getIncidencia().getAmbitoIncidencia().getAmbitoId()))
+                withText(dbHelper.getAmbitoDescByPk(incidenciaJuan.getIncidencia().getAmbitoIncidencia().getAmbitoId()))
         )).check(matches(isDisplayed()));
 
         onView(allOf(

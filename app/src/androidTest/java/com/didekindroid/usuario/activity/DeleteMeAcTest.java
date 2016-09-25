@@ -5,7 +5,6 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
-import com.didekindroid.common.testutils.ActivityTestUtils;
 import com.didekindroid.usuario.testutils.CleanUserEnum;
 
 import org.junit.After;

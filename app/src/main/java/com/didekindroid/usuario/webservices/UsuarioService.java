@@ -32,7 +32,7 @@ import static com.didekindroid.common.utils.UIutils.checkBearerToken;
 @SuppressWarnings("unused")
 public final class UsuarioService implements UsuarioEndPoints {
 
-    public static final RetrofitHandler retrofitHandler = new RetrofitHandler(getBaseURL(),new JksInAndroidApp(getJksPassword(), getJksResourceId()),getHttpTimeOut());
+    static final RetrofitHandler retrofitHandler = new RetrofitHandler(getBaseURL(),new JksInAndroidApp(getJksPassword(), getJksResourceId()),getHttpTimeOut());
     public static final UsuarioService ServOne = new UsuarioService();
     private final UsuarioEndPoints endPoint;
 

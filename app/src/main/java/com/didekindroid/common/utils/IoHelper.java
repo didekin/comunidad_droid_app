@@ -82,7 +82,7 @@ public final class IoHelper {
             Timber.e(e.getLocalizedMessage(), e.getMessage());
             throw new RuntimeException(e);
         }
-        return new String(bytesRefreshToken);
+        return new String(bytesRefreshToken).trim();
     }
 
     public static void writeFileFromString(String stringToWrite, File fileToWrite)

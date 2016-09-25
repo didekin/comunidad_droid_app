@@ -47,8 +47,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.IS_MENU_IN_FRAGMENT_FLAG;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkUp;
-import static com.didekindroid.common.testutils.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
+import static com.didekindroid.common.testutils.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.regSeveralUserComuSameUser;
 import static com.didekindroid.common.utils.UIutils.formatTimeStampToString;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_resolucion_see_fr_tag;
@@ -203,6 +203,7 @@ public class IncidSeeClosedByComuAcTest_2 {
     public void testOnData_1() throws Exception
     {
         // CASO OK: muestra las incidencias de la comunidad por defecto (Calle La Fuente).
+        Thread.sleep(1000);
         assertThat(mAdapter.getCount(), is(1));
 
         IncidenciaUser incidUser_1 = mAdapter.getItem(0);

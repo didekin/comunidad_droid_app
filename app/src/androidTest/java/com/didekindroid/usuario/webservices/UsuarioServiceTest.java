@@ -5,7 +5,7 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.common.exception.ErrorBean;
-import com.didekin.oauth2.OauthToken.AccessToken;
+import com.didekin.oauth2.SpringOauthToken;
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekin.usuario.dominio.Municipio;
 import com.didekin.usuario.dominio.Provincia;
@@ -39,6 +39,7 @@ import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOneUser;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanTwoUsers;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanWithTkhandler;
+import static com.didekindroid.common.testutils.ActivityTestUtils.makeListTwoUserComu;
 import static com.didekindroid.common.testutils.ActivityTestUtils.regTwoUserComuSameUser;
 import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.common.testutils.ActivityTestUtils.updateSecurityData;
@@ -63,7 +64,6 @@ import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_DROID;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_JUAN;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_JUAN2;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_PEPE;
-import static com.didekindroid.common.testutils.ActivityTestUtils.makeListTwoUserComu;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.makeUsuarioComunidad;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static com.didekindroid.usuario.webservices.UsuarioService.retrofitHandler;
@@ -372,7 +372,7 @@ public class UsuarioServiceTest {
         signUpAndUpdateTk(COMU_REAL_DROID);
         assertThat(ServOne.passwordSend(USER_DROID.getUserName()).execute().body(), is(true));
         // Es necesario conseguir un nuevo token. La validación del antiguo falla por el cambio de password.
-        AccessToken token = Oauth2.getRefreshUserToken(TKhandler.getRefreshTokenKey());
+        SpringOauthToken token = Oauth2.getRefreshUserToken(TKhandler.getRefreshTokenValue());
         ServOne.deleteUser(HELPER.doBearerAccessTkHeader(token)).execute();
         cleanWithTkhandler();
     }
@@ -562,7 +562,7 @@ public class UsuarioServiceTest {
         signUpAndUpdateTk(COMU_REAL_JUAN);
 
         assertThat(refreshTkFile.exists(), is(true));
-        AccessToken tokenJuan = TKhandler.getAccessTokenInCache();
+        SpringOauthToken tokenJuan = TKhandler.getAccessTokenInCache();
         assertThat(tokenJuan, notNullValue());
         assertThat(tokenJuan.getValue(), not(isEmptyOrNullString()));
         assertThat(IoHelper.readStringFromFile(refreshTkFile), is(tokenJuan.getRefreshToken().getValue()));

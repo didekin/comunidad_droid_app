@@ -18,6 +18,7 @@ import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 
 import java.util.List;
+import java.util.Objects;
 
 import timber.log.Timber;
 
@@ -32,8 +33,6 @@ import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_REG_AC;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_SEE_BY_COMU_AC;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkState;
 
 /**
  * Preconditions:
@@ -67,7 +66,7 @@ public class IncidSeeClosedByComuAc extends AppCompatActivity implements
         setContentView(R.layout.incid_see_closed_by_comu_ac);
         doToolBar(this, true);
         if (savedInstanceState != null) {
-            checkState(getSupportFragmentManager().findFragmentByTag(incid_see_by_comu_list_fr_tag) != null);
+            Objects.equals(getSupportFragmentManager().findFragmentByTag(incid_see_by_comu_list_fr_tag) != null, true);
             return;
         }
         mFragment = new IncidSeeByComuListFr();
@@ -111,7 +110,7 @@ public class IncidSeeClosedByComuAc extends AppCompatActivity implements
     {
         Timber.d("onOptionsItemSelected()");
 
-        int resourceId = checkNotNull(item.getItemId());
+        int resourceId = item.getItemId();
 
         switch (resourceId) {
             case R.id.incid_see_open_by_comu_ac_mn:
@@ -200,7 +199,7 @@ public class IncidSeeClosedByComuAc extends AppCompatActivity implements
                 uiException.processMe(IncidSeeClosedByComuAc.this, new Intent());
             } else {
                 // Switch fragment here.
-                checkState(resolucion != null);
+                Objects.equals(resolucion != null, true);
                 Bundle bundle = new Bundle();
                 bundle.putBoolean(IS_MENU_IN_FRAGMENT_FLAG.key, true);
                 bundle.putSerializable(INCIDENCIA_OBJECT.key, incidencia);

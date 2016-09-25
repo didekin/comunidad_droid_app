@@ -6,7 +6,7 @@ import com.didekin.common.controller.RetrofitHandler;
 import com.didekin.common.exception.ErrorBean;
 import com.didekin.oauth2.Oauth2EndPoints;
 import com.didekin.oauth2.OauthClient;
-import com.didekin.oauth2.OauthToken.AccessToken;
+import com.didekin.oauth2.SpringOauthToken;
 import com.didekindroid.common.activity.UiException;
 
 import java.io.IOException;
@@ -41,20 +41,20 @@ public final class Oauth2Service implements Oauth2EndPoints {
         endPoint = retrofitHandler.getService(Oauth2EndPoints.class);
     }
 
-    public RetrofitHandler getRetrofitHandler()
+    RetrofitHandler getRetrofitHandler()
     {
         return retrofitHandler;
     }
     //  ================================== Oauth2EndPoints implementation ============================
 
     @Override
-    public Call<AccessToken> getPasswordUserToken(String authClient, String username, String password, String grantType)
+    public Call<SpringOauthToken> getPasswordUserToken(String authClient, String username, String password, String grantType)
     {
         return endPoint.getPasswordUserToken(authClient, username, password, grantType);
     }
 
     @Override
-    public Call<AccessToken> getRefreshUserToken(String authClient, String refreshToken, String grantType)
+    public Call<SpringOauthToken> getRefreshUserToken(String authClient, String refreshToken, String grantType)
     {
         return endPoint.getRefreshUserToken(authClient, refreshToken, grantType);
     }
@@ -69,11 +69,11 @@ public final class Oauth2Service implements Oauth2EndPoints {
 //                          CONVENIENCE METHODS
 //  =============================================================================
 
-    public AccessToken getPasswordUserToken(String userName, String password) throws UiException
+    public SpringOauthToken getPasswordUserToken(String userName, String password) throws UiException
     {
         Timber.d("getPasswordUserToken()");
         try {
-            Response<AccessToken> response = getPasswordUserToken(
+            Response<SpringOauthToken> response = getPasswordUserToken(
                     doAuthBasicHeader(CL_USER),
                     userName,
                     password,
@@ -84,11 +84,11 @@ public final class Oauth2Service implements Oauth2EndPoints {
         }
     }
 
-    public AccessToken getRefreshUserToken(String refreshTokenKey) throws UiException
+    public SpringOauthToken getRefreshUserToken(String refreshTokenKey) throws UiException
     {
         Timber.d("getRefreshUserToken()");
         try {
-            Response<AccessToken> response = getRefreshUserToken(
+            Response<SpringOauthToken> response = getRefreshUserToken(
                     doAuthBasicHeader(CL_USER),
                     refreshTokenKey,
                     REFRESH_TOKEN_GRANT).execute();

@@ -23,6 +23,7 @@ import com.didekindroid.usuario.repository.UsuarioDataDbHelper;
 
 import timber.log.Timber;
 
+import static com.didekindroid.common.utils.UIutils.closeCursor;
 import static com.didekindroid.usuario.repository.UsuarioDataDb.ComunidadAutonoma.cu_nombre;
 import static com.didekindroid.usuario.repository.UsuarioDataDb.Municipio.mu_nombre;
 import static com.didekindroid.usuario.repository.UsuarioDataDb.Provincia.pr_nombre;
@@ -30,7 +31,7 @@ import static com.didekindroid.usuario.repository.UsuarioDataDb.TipoVia.tipovia;
 
 public class RegComuFr extends Fragment {
 
-    private UsuarioDataDbHelper dbHelper;
+    UsuarioDataDbHelper dbHelper;
 
     private View mRegComunidadFrView;
     Spinner mTipoViaSpinner;
@@ -45,7 +46,7 @@ public class RegComuFr extends Fragment {
 
     RegComuFrListener mActivityListener;
 
-    private ComunidadBean comunidadBean;
+    ComunidadBean comunidadBean;
 
     public RegComuFr()
     {
@@ -181,7 +182,6 @@ public class RegComuFr extends Fragment {
     public void onStop()
     {
         Timber.d("onStop()");
-        dbHelper.close();
         super.onStop();
     }
 
@@ -194,6 +194,11 @@ public class RegComuFr extends Fragment {
             mActivityListener.onDestroyFragment();
         }
         mRegComunidadFrView = null;
+        closeCursor(mTipoViaSpinner.getAdapter());
+        closeCursor(mAutonomaComuSpinner.getAdapter());
+        closeCursor(provinciaSpinner.getAdapter());
+        closeCursor(municipioSpinner.getAdapter());
+        dbHelper.close();
         super.onDestroy();
     }
 
@@ -235,7 +240,7 @@ public class RegComuFr extends Fragment {
 //                               SPINNERS
 //  --------------------------------------------------------------------
 
-    private SpinnerAdapter doAdapterSpinner(Cursor cursor, String[] fromColDB)
+    SpinnerAdapter doAdapterSpinner(Cursor cursor, String[] fromColDB)
     {
         Timber.d("In doAdapterSpinner()");
 
@@ -292,13 +297,13 @@ public class RegComuFr extends Fragment {
         {
             Timber.d("In SpinnerProvinciasLoader.doInBackground()");
 
-            Cursor provinciasCAcursor = dbHelper.getProvinciasByCA(params[0]);
+            final Cursor provinciasCAcursor = dbHelper.getProvinciasByCA(params[0]);
             Timber.d("In SpinnerProvinciasLoader.doInBackground() : cursor count = %d%n", provinciasCAcursor.getCount());
             return provinciasCAcursor;
         }
 
         @Override
-        protected void onPostExecute(Cursor provinciasCursor)
+        protected void onPostExecute(final Cursor provinciasCursor)
         {
             Timber.d("In SpinnerProvinciasLoader.onPostExecute()");
 
@@ -318,13 +323,13 @@ public class RegComuFr extends Fragment {
         protected Cursor doInBackground(Short... params)
         {
             Timber.d("In SpinnerMunicipioLoader.doInBackground()");
-            Cursor municipiosCursor = dbHelper.getMunicipiosByPrId(params[0]);
+            final Cursor municipiosCursor = dbHelper.getMunicipiosByPrId(params[0]);
             Timber.d("In SpinnerMunicipiosLoader.doInBackground() : cursor count = %d%n", municipiosCursor.getCount());
             return municipiosCursor;
         }
 
         @Override
-        protected void onPostExecute(Cursor municipiosCursor)
+        protected void onPostExecute(final Cursor municipiosCursor)
         {
             Timber.d("In SpinnerMunicipioLoader.onPostExecute()");
 

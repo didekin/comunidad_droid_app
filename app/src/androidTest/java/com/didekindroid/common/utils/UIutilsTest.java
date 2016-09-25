@@ -17,12 +17,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.sql.Timestamp;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Locale;
 import java.util.TimeZone;
 
 import static android.os.Build.VERSION.SDK_INT;
@@ -34,8 +32,9 @@ import static com.didekindroid.common.utils.UIutils.formatTimeToString;
 import static com.didekindroid.common.utils.UIutils.getIntFromStringDecimal;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.utils.UIutils.updateIsRegistered;
-import static java.text.DateFormat.*;
+import static java.text.DateFormat.LONG;
 import static java.text.DateFormat.MEDIUM;
+import static java.text.DateFormat.getDateInstance;
 import static java.util.Locale.ENGLISH;
 import static java.util.Locale.getDefault;
 import static org.hamcrest.CoreMatchers.instanceOf;

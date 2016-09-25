@@ -18,9 +18,11 @@ import com.didekindroid.common.utils.UIutils;
 import com.didekindroid.usuario.dominio.ComunidadBean;
 import com.didekindroid.usuario.dominio.UsuarioComunidadBean;
 
+import java.util.Objects;
+
 import timber.log.Timber;
 
-import static com.didekin.common.dominio.DataPatterns.LINE_BREAK;
+import static com.didekin.common.dominio.UsuarioDataPatterns.LINE_BREAK;
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
@@ -29,8 +31,6 @@ import static com.didekindroid.common.utils.UIutils.makeToast;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUserComuBeanFromView;
 import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenu;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkState;
 
 /**
  * User: pedro@didekin
@@ -64,7 +64,7 @@ public class RegUserComuAc extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Timber.i("onCreate()");
 
-        checkState(isRegisteredUser(this));
+        Objects.equals(isRegisteredUser(this), true);
         Comunidad coomunidadIntent =  (Comunidad) getIntent().getExtras()
                 .getSerializable(COMUNIDAD_LIST_OBJECT.key);
         mComunidad = coomunidadIntent != null ? coomunidadIntent : null;
@@ -121,7 +121,7 @@ public class RegUserComuAc extends AppCompatActivity {
     {
         Timber.d("onOptionsItemSelected()");
 
-        int resourceId = checkNotNull(item.getItemId());
+        int resourceId = item.getItemId();
         switch (resourceId) {
             case android.R.id.home:
                 doUpMenu(this);
@@ -160,7 +160,7 @@ public class RegUserComuAc extends AppCompatActivity {
             if (uiException != null){
                 uiException.processMe(RegUserComuAc.this, new Intent());
             } else{
-                checkState(rowInserted == 1);
+                Objects.equals(rowInserted == 1, true);
             }
         }
     }

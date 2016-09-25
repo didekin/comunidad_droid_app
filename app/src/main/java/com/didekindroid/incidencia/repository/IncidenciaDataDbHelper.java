@@ -31,8 +31,8 @@ import static com.didekindroid.incidencia.repository.IncidenciaDataDb.AmbitoInci
 public class IncidenciaDataDbHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "incidencia.db";
-    public static final int DB_VERSION = 1;
-    public static final String PK_AMBITO_NULL_MSG = IncidenciaDataDbHelper.class.getCanonicalName()
+    private static final int DB_VERSION = 1;
+    static final String PK_AMBITO_NULL_MSG = IncidenciaDataDbHelper.class.getCanonicalName()
             + " getAmbitoDescByPk(), ambitoPk == null";
 
     private final Context mContext;

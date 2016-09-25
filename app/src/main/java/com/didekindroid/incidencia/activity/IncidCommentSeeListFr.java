@@ -21,7 +21,6 @@ import timber.log.Timber;
 
 import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
-import static com.google.common.base.Preconditions.checkState;
 
 /**
  * Preconditions:
@@ -174,7 +173,6 @@ public class IncidCommentSeeListFr extends Fragment {
             }
             if (uiException != null) {
                 Timber.d("onPostExecute(): uiException != null");
-                checkState(incidComments == null);
                 uiException.processMe(getActivity(), new Intent());
             }
         }

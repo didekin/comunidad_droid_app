@@ -9,6 +9,8 @@ import android.view.MenuItem;
 import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 
+import java.util.Objects;
+
 import timber.log.Timber;
 
 import static com.didekindroid.common.activity.BundleKey.USERCOMU_LIST_OBJECT;
@@ -17,8 +19,6 @@ import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.UserMenu.COMU_SEARCH_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.USER_DATA_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenu;
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkState;
 
 /**
  * Preconditions:
@@ -41,7 +41,7 @@ public class SeeUserComuByUserAc extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
 
         // Preconditions: the user is registered.
-        checkState(isRegisteredUser(this));
+        Objects.equals(isRegisteredUser(this), true);
 
         setContentView(R.layout.see_usercomu_by_user_ac);
         doToolBar(this, true);
@@ -65,7 +65,7 @@ public class SeeUserComuByUserAc extends AppCompatActivity implements
     {
         Timber.d("onOptionsItemSelected()");
 
-        int resourceId = checkNotNull(item.getItemId());
+        int resourceId = item.getItemId();
 
         switch (resourceId) {
             case android.R.id.home:

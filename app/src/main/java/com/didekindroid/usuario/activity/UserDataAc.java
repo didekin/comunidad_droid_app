@@ -11,13 +11,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.didekin.oauth2.OauthToken.AccessToken;
+import com.didekin.oauth2.SpringOauthToken;
 import com.didekin.usuario.dominio.Usuario;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.common.utils.ConnectionUtils;
 import com.didekindroid.usuario.activity.utils.UserMenu;
 import com.didekindroid.usuario.dominio.UsuarioBean;
+
+import java.util.Objects;
 
 import timber.log.Timber;
 
@@ -34,8 +36,6 @@ import static com.didekindroid.usuario.activity.utils.UserMenu.COMU_SEARCH_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_USERCOMU_BY_USER_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenu;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkState;
 
 /**
  * Preconditions:
@@ -56,7 +56,7 @@ public class UserDataAc extends AppCompatActivity {
         Timber.d("onCreate()");
 
         // Preconditions.
-        checkState(isRegisteredUser(this));
+        Objects.equals(isRegisteredUser(this), true);
         new UserDataGetter().execute();
 
         mAcView = getLayoutInflater().inflate(R.layout.user_data_ac, null);
@@ -113,7 +113,7 @@ public class UserDataAc extends AppCompatActivity {
     {
         Timber.d("onOptionsItemSelected()");
 
-        int resourceId = checkNotNull(item.getItemId());
+        int resourceId = item.getItemId();
 
         switch (resourceId) {
             case android.R.id.home:
@@ -193,10 +193,10 @@ public class UserDataAc extends AppCompatActivity {
             }
 
             // Token with the old credentials.
-            AccessToken token_1;
+            SpringOauthToken token_1;
             try {
                 token_1 = Oauth2.getPasswordUserToken(mOldUser.getUserName(), usuarios[0].getPassword());
-                TKhandler.initKeyCacheAndBackupFile(token_1);
+                TKhandler.initTokenAndBackupFile(token_1);
             } catch (UiException e) {
                 if (e.getErrorBean().getMessage().equals(BAD_REQUEST.getHttpMessage())) {
                     Timber.d(" exception: %s%n", BAD_REQUEST.getHttpMessage());
@@ -217,7 +217,7 @@ public class UserDataAc extends AppCompatActivity {
 
                 try {
                     ServOne.modifyUser(usuarioIn);
-                    TKhandler.cleanCacheAndBckFile();
+                    TKhandler.cleanTokenAndBackFile();
                 } catch (UiException e) {
                     uiException = e;
                     Timber.d((e.getErrorBean() != null ?
@@ -226,8 +226,8 @@ public class UserDataAc extends AppCompatActivity {
                 }
 
                 try {
-                    AccessToken token_2 = Oauth2.getPasswordUserToken(usuarioIn.getUserName(), usuarios[0].getPassword());
-                    TKhandler.initKeyCacheAndBackupFile(token_2);
+                    SpringOauthToken token_2 = Oauth2.getPasswordUserToken(usuarioIn.getUserName(), usuarios[0].getPassword());
+                    TKhandler.initTokenAndBackupFile(token_2);
                 } catch (UiException e) {
                     // Authentication error with new credentials.
                     Timber.d(e.getErrorBean().getMessage());
@@ -264,11 +264,11 @@ public class UserDataAc extends AppCompatActivity {
 
             if (passwordWrong) {
                 Timber.d("onPostExecute(): password wrong");
-                checkState(uiException == null);
+                Objects.equals(uiException == null, true);
                 makeToast(UserDataAc.this, R.string.password_wrong, Toast.LENGTH_LONG);
             }
             if (uiException != null) {
-                checkState(!passwordWrong);
+                Objects.equals(passwordWrong,false);
                 uiException.processMe(UserDataAc.this, new Intent());
             }
         }

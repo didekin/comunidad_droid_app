@@ -13,6 +13,8 @@ import com.didekin.incidservice.dominio.IncidImportancia;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 
+import java.util.Objects;
+
 import timber.log.Timber;
 
 import static com.didekindroid.common.utils.ConnectionUtils.checkInternetConnected;
@@ -22,8 +24,6 @@ import static com.didekindroid.common.utils.UIutils.getGcmToken;
 import static com.didekindroid.common.utils.UIutils.makeToast;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenu;
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkState;
 
 /**
  * Preconditions:
@@ -100,7 +100,7 @@ public class IncidRegAc extends AppCompatActivity {
     {
         Timber.d("onOptionsItemSelected()");
 
-        int resourceId = checkNotNull(item.getItemId());
+        int resourceId = item.getItemId();
 
         switch (resourceId) {
             case android.R.id.home:
@@ -141,7 +141,7 @@ public class IncidRegAc extends AppCompatActivity {
             if (uiException != null) {
                 uiException.processMe(IncidRegAc.this, new Intent());
             } else {
-                checkState(rowInserted == 2);
+                Objects.equals(rowInserted == 2, true);
                 Intent intent = new Intent(IncidRegAc.this, IncidSeeOpenByComuAc.class);
                 startActivity(intent);
             }

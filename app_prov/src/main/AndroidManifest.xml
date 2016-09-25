@@ -1,0 +1,13 @@
+<manifest package="com.didekindroid.proveedor"
+          xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application android:name=".DidekindroidProveedor"
+                 android:allowBackup="false"
+                 android:icon="@mipmap/ic_launcher"
+                 android:label="@string/app_name"
+                 android:supportsRtl="false"
+                 android:theme="@style/themeProv">
+
+    </application>
+
+</manifest>

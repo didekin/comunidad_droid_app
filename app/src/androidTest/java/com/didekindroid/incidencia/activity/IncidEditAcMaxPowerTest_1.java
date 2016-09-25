@@ -8,7 +8,6 @@ import com.didekin.incidservice.dominio.IncidImportancia;
 import com.didekin.incidservice.dominio.Incidencia;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
-import com.didekindroid.incidencia.repository.IncidenciaDataDbHelper;
 import com.didekindroid.usuario.testutils.CleanUserEnum;
 
 import org.hamcrest.core.AllOf;
@@ -56,20 +55,15 @@ import static org.hamcrest.CoreMatchers.is;
 @RunWith(AndroidJUnit4.class)
 public class IncidEditAcMaxPowerTest_1 extends IncidEditAbstractTest {
 
-    private IncidenciaDataDbHelper dBHelper;
-
     @Before
     public void setUp() throws Exception
     {
         super.setUp();
-        dBHelper = new IncidenciaDataDbHelper(mActivity);
     }
 
     @After
     public void tearDown() throws Exception
     {
-        dBHelper.dropAllTables();
-        dBHelper.close();
         super.tearDown();
     }
 
@@ -123,7 +117,7 @@ public class IncidEditAcMaxPowerTest_1 extends IncidEditAbstractTest {
     public void testOnCreate() throws Exception
     {
         checkScreenEditMaxPowerFr();
-        checkDataEditMaxPowerFr(dBHelper);
+        checkDataEditMaxPowerFr();
     }
 
     @Test
