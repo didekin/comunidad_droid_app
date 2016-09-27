@@ -34,6 +34,7 @@ import static com.didekin.common.exception.DidekinExceptionMsg.USER_NAME_DUPLICA
 import static com.didekin.common.exception.DidekinExceptionMsg.USER_NAME_NOT_FOUND;
 import static com.didekin.oauth2.OauthTokenHelper.HELPER;
 import static com.didekin.usuario.controller.UsuarioServiceConstant.IS_USER_DELETED;
+import static com.didekindroid.DidekindroidApp.getRetrofitHandler;
 import static com.didekindroid.common.activity.TokenHandler.TKhandler;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOneUser;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
@@ -66,7 +67,6 @@ import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_JUAN2;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.makeUsuarioComunidad;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
-import static com.didekindroid.usuario.webservices.UsuarioService.retrofitHandler;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
@@ -429,7 +429,7 @@ public class UsuarioServiceTest {
 
         Response<Boolean> response = ServOne.regUserAndUserComu(userComu).execute();
         assertThat(response.isSuccessful(), is(false));
-        ErrorBean errorBean = retrofitHandler.getErrorBean(response);
+        ErrorBean errorBean = getRetrofitHandler().getErrorBean(response);
         assertThat(errorBean, notNullValue());
         assertThat(errorBean.getMessage(), is(USER_NAME_DUPLICATE.getHttpMessage()));
         assertThat(errorBean.getHttpStatus(), is(USER_NAME_DUPLICATE.getHttpStatus()));

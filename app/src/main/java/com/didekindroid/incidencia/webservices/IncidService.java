@@ -1,6 +1,5 @@
 package com.didekindroid.incidencia.webservices;
 
-import com.didekin.common.controller.RetrofitHandler;
 import com.didekin.incidservice.controller.IncidenciaServEndPoints;
 import com.didekin.incidservice.dominio.ImportanciaUser;
 import com.didekin.incidservice.dominio.IncidAndResolBundle;
@@ -10,7 +9,6 @@ import com.didekin.incidservice.dominio.IncidenciaUser;
 import com.didekin.incidservice.dominio.Resolucion;
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekindroid.common.activity.UiException;
-import com.didekindroid.common.webservices.JksInAndroidApp;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -21,10 +19,8 @@ import retrofit2.Response;
 import timber.log.Timber;
 
 import static com.didekin.common.exception.ErrorBean.GENERIC_ERROR;
-import static com.didekindroid.DidekindroidApp.getBaseURL;
-import static com.didekindroid.DidekindroidApp.getHttpTimeOut;
-import static com.didekindroid.DidekindroidApp.getJksPassword;
-import static com.didekindroid.DidekindroidApp.getJksResourceId;
+import static com.didekindroid.DidekindroidApp.getRetrofitHandler;
+import static com.didekindroid.DidekindroidApp.initRetrofitHandler;
 import static com.didekindroid.common.utils.UIutils.checkBearerToken;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 
@@ -35,14 +31,13 @@ import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
  */
 public final class IncidService implements IncidenciaServEndPoints {
 
-    private static final RetrofitHandler retrofitHandler =
-            new RetrofitHandler(getBaseURL(),new JksInAndroidApp(getJksPassword(), getJksResourceId()),getHttpTimeOut());
     public static final IncidService IncidenciaServ = new IncidService();
     private final IncidenciaServEndPoints endPoint;
 
     private IncidService()
     {
-        endPoint = retrofitHandler.getService(IncidenciaServEndPoints.class);
+        initRetrofitHandler();
+        endPoint = getRetrofitHandler().getService(IncidenciaServEndPoints.class);
     }
 
     /*  ================================== IncidenciaServEndPoints implementation ============================*/
@@ -294,7 +289,7 @@ public final class IncidService implements IncidenciaServEndPoints {
         if (response.isSuccessful()){
             return response.body();
         } else {
-            throw new UiException(retrofitHandler.getErrorBean(response));
+            throw new UiException(getRetrofitHandler().getErrorBean(response));
         }
     }
 }

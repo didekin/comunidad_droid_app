@@ -32,8 +32,6 @@ public class IncidenciaDataDbHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "incidencia.db";
     private static final int DB_VERSION = 1;
-    static final String PK_AMBITO_NULL_MSG = IncidenciaDataDbHelper.class.getCanonicalName()
-            + " getAmbitoDescByPk(), ambitoPk == null";
 
     private final Context mContext;
     private SQLiteDatabase mDataBase;
@@ -171,11 +169,11 @@ public class IncidenciaDataDbHelper extends SQLiteOpenHelper {
         Cursor cursor = mDataBase.query(TB_AMBITO_INCIDENCIA,tableColumns,whereClause,whereClauseArgs,null,null,null);
 
         if (cursor == null){
-            throw new IllegalStateException(PK_AMBITO_NULL_MSG);
+            return null;
         }
         if (!cursor.moveToFirst()){
             cursor.close();
-            throw new IllegalStateException(PK_AMBITO_NULL_MSG);
+            return null;
         }
 
         String ambitoDesc = cursor.getString(0);

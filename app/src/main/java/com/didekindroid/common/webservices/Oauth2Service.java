@@ -2,7 +2,6 @@ package com.didekindroid.common.webservices;
 
 import android.util.Base64;
 
-import com.didekin.common.controller.RetrofitHandler;
 import com.didekin.common.exception.ErrorBean;
 import com.didekin.oauth2.Oauth2EndPoints;
 import com.didekin.oauth2.OauthClient;
@@ -20,10 +19,8 @@ import static com.didekin.oauth2.OauthClient.CL_USER;
 import static com.didekin.oauth2.OauthConstant.PASSWORD_GRANT;
 import static com.didekin.oauth2.OauthConstant.REFRESH_TOKEN_GRANT;
 import static com.didekin.oauth2.OauthTokenHelper.BASIC_AND_SPACE;
-import static com.didekindroid.DidekindroidApp.getBaseURL;
-import static com.didekindroid.DidekindroidApp.getHttpTimeOut;
-import static com.didekindroid.DidekindroidApp.getJksPassword;
-import static com.didekindroid.DidekindroidApp.getJksResourceId;
+import static com.didekindroid.DidekindroidApp.getRetrofitHandler;
+import static com.didekindroid.DidekindroidApp.initRetrofitHandler;
 
 /**
  * User: pedro@didekin
@@ -32,18 +29,13 @@ import static com.didekindroid.DidekindroidApp.getJksResourceId;
  */
 public final class Oauth2Service implements Oauth2EndPoints {
 
-    private static final RetrofitHandler retrofitHandler = new RetrofitHandler(getBaseURL(), new JksInAndroidApp(getJksPassword(), getJksResourceId()), getHttpTimeOut());
     public static final Oauth2Service Oauth2 = new Oauth2Service();
     private final Oauth2EndPoints endPoint;
 
     private Oauth2Service()
     {
-        endPoint = retrofitHandler.getService(Oauth2EndPoints.class);
-    }
-
-    RetrofitHandler getRetrofitHandler()
-    {
-        return retrofitHandler;
+        initRetrofitHandler();
+        endPoint = getRetrofitHandler().getService(Oauth2EndPoints.class);
     }
     //  ================================== Oauth2EndPoints implementation ============================
 
@@ -116,7 +108,7 @@ public final class Oauth2Service implements Oauth2EndPoints {
         if (response.isSuccessful()) {
             return response.body();
         } else {
-            throw new UiException(retrofitHandler.getErrorBean(response));
+            throw new UiException(getRetrofitHandler().getErrorBean(response));
         }
     }
 }

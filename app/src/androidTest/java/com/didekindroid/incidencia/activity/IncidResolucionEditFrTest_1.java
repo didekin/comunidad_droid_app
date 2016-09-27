@@ -187,7 +187,7 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
         intended(not(hasExtraWithKey(INCID_IMPORTANCIA_OBJECT.key)));
 
         // Damos back e intentamos modificar la incidencia. Nos da error.
-        Thread.sleep(2000);
+        Thread.sleep(3000);
         onView(withId(R.id.incid_see_closed_by_comu_ac)).check(matches(isDisplayed())).perform(pressBack());
         onView(withId(R.id.incid_resolucion_fr_modif_button)).perform(click());
         checkToastInTest(R.string.incidencia_wrong_init, mActivity);

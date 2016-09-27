@@ -4,6 +4,12 @@ import android.app.Application;
 import android.content.Context;
 import android.os.StrictMode;
 
+import com.didekin.common.controller.RetrofitHandler;
+import com.didekindroid.common.webservices.JksInAndroidApp;
+
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
+
 import timber.log.Timber;
 
 import static java.lang.Integer.parseInt;
@@ -13,14 +19,11 @@ import static java.lang.Integer.parseInt;
  * Date: 05/08/15
  * Time: 19:19
  */
-@SuppressWarnings({"StaticVariableMayNotBeInitialized", "StaticVariableUsedBeforeInitialization"})
 public final class DidekindroidApp extends Application {
 
-    private static Context mContext;
-    private static String mBaseURL;
-    private static String jksPassword;
-    private static int jksResourceId;
-    private static int httpTimeOut;
+    private static final AtomicReference<Context> mContext = new AtomicReference<>();
+    private static final AtomicInteger httpTimeOut = new AtomicInteger();
+    private static final AtomicReference<RetrofitHandler> retrofitHandler = new AtomicReference<>();
 
     public void onCreate()
     {
@@ -41,45 +44,44 @@ public final class DidekindroidApp extends Application {
                     .detectLeakedSqlLiteObjects()
                     .detectLeakedClosableObjects()
                     .penaltyLog()
-//                    .penaltyDeath()
                     .build());
         }
-        // TODO: ejemplo en Timber para librería de comunicación de errores en cliente.
+        // TODO: ejemplo en Timber para librería de comunicación de errores en cliente al servidor.
 
-        mContext = this;
-        mBaseURL = mContext.getString(R.string.didekinspring_host)
-                + mContext.getString(R.string.didekinspring_port);
-        httpTimeOut = parseInt(mContext.getString(R.string.timeOut));
-        jksPassword = mContext.getString(R.string.didekinspring_pswd);
-        jksResourceId = mContext.getResources().getIdentifier(mContext.getString(R.string.bks_name), "raw", mContext.getPackageName());
+        mContext.compareAndSet(null, this);
+        httpTimeOut.compareAndSet(0, parseInt(getString(R.string.timeOut)));
+    }
+
+    /**
+     *   This method is called asynchronously from the (http) services classes, to avoid running it in the main thread,
+     *   since it reads from disk (raw resources).
+     */
+    public static void initRetrofitHandler()
+    {
+        retrofitHandler.compareAndSet(
+                null,
+                new RetrofitHandler(
+                        mContext.get().getString(R.string.didekinspring_host) + mContext.get().getString(R.string.didekinspring_port),
+                        new JksInAndroidApp(
+                                mContext.get().getString(R.string.didekinspring_pswd),
+                                mContext.get().getResources().getIdentifier(mContext.get().getString(R.string.bks_name), "raw", mContext.get().getPackageName())
+                        ),
+                        parseInt(mContext.get().getString(R.string.timeOut)))
+        );
     }
 
     public static Context getContext()
     {
-        Timber.d("getContext()");
-        return mContext;
-    }
-
-    public static String getBaseURL()
-    {
-        Timber.d("getBaseURL()");
-        return mBaseURL;
-    }
-
-    public static String getJksPassword()
-    {
-        Timber.d("getJksPassword()");
-        return jksPassword;
-    }
-
-    public static int getJksResourceId()
-    {
-        Timber.d("getJksResourceId()");
-        return jksResourceId;
+        return mContext.get();
     }
 
     public static int getHttpTimeOut()
     {
-        return httpTimeOut;
+        return httpTimeOut.get();
+    }
+
+    public static RetrofitHandler getRetrofitHandler()
+    {
+        return retrofitHandler.get();
     }
 }

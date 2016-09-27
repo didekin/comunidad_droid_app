@@ -20,8 +20,8 @@ import static com.didekindroid.incidencia.repository.IncidenciaDataDb.AmbitoInci
 import static com.didekindroid.incidencia.repository.IncidenciaDataDb.AmbitoIncidencia.CREATE_AMBITO_INCIDENCIA;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -83,14 +83,11 @@ public class IncidenciaDataDbHelperTest {
     }
 
     @Test
-    public void testGetAmbitoDescByPk(){
+    public void testGetAmbitoDescByPk()
+    {
         assertThat(dbHelper.getAmbitoDescByPk((short) 9), is("Buzones"));
-        try{
-            dbHelper.getAmbitoDescByPk((short) 55);
-            fail();
-        } catch (IllegalStateException ie){
-            assertThat(ie.getMessage(), is(IncidenciaDataDbHelper.PK_AMBITO_NULL_MSG));
-        }
+        // No hay registro 55.
+        assertThat(dbHelper.getAmbitoDescByPk((short) 55), nullValue());
     }
 
     @Test

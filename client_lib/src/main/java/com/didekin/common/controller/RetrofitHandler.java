@@ -11,9 +11,13 @@ import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
+import java.util.Arrays;
 
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -87,24 +91,23 @@ public class RetrofitHandler {
         if (jksInAppClient == null) {
             return builder.build();
         } else {
-            return builder
-                    .sslSocketFactory(getSslContext(jksInAppClient).getSocketFactory())
+            X509TrustManager trustManager = getTrustManager(jksInAppClient);
+            return builder.sslSocketFactory(getSslSocketFactory(trustManager), trustManager)
                     .build();
         }
     }
 
-    protected Interceptor doLoggingInterceptor()
+    private Interceptor doLoggingInterceptor()
     {
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
         loggingInterceptor.setLevel(BODY);
         return loggingInterceptor;
     }
 
-    private SSLContext getSslContext(JksInClient jksInAppClient)
+    private X509TrustManager getTrustManager(JksInClient jksInAppClient)
     {
         KeyStore keyStore;
         TrustManagerFactory tmf;
-        SSLContext context = null;
 
         try {
             // Configuración cliente.
@@ -112,23 +115,37 @@ public class RetrofitHandler {
             keyStore = KeyStore.getInstance(keyStoreType);
             keyStore.load(jksInAppClient.getInputStream(), jksInAppClient.getJksPswd().toCharArray());
             // Create a TrustManager that trusts the CAs in our JksInAppClient
-            String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
-            tmf = TrustManagerFactory.getInstance(tmfAlgorithm);
+            tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
             tmf.init(keyStore);
-            context = SSLContext.getInstance("TLS");
-            context.init(null, tmf.getTrustManagers(), null);
-        } catch (KeyStoreException | CertificateException | IOException | NoSuchAlgorithmException | KeyManagementException e) {
-            e.printStackTrace();
+
+            TrustManager[] trustManagers = tmf.getTrustManagers();
+            if (trustManagers.length != 1 || !(trustManagers[0] instanceof X509TrustManager)) {
+                throw new IllegalStateException("Unexpected default trust managers:"
+                        + Arrays.toString(trustManagers));
+            }
+            return (X509TrustManager) trustManagers[0];
+        } catch (KeyStoreException | CertificateException | IOException | NoSuchAlgorithmException e) {
+            throw new RuntimeException("TrustManager not initialized");
         }
-        return context;
+    }
+
+    private SSLSocketFactory getSslSocketFactory(TrustManager trustManager)
+    {
+        try {
+            SSLContext sslContext = SSLContext.getInstance("TLS");
+            sslContext.init(null, new TrustManager[]{trustManager}, null);
+            return sslContext.getSocketFactory();
+        } catch (NoSuchAlgorithmException | KeyManagementException e) {
+            throw new RuntimeException("SSLSocketFactory not initialized");
+        }
     }
 
     public final static class JksInAppClient implements JksInClient {
         /**
          * File path.
          */
-        public String jksUri;
-        public String jksPswd;
+        String jksUri;
+        String jksPswd;
 
         public JksInAppClient(String jksUri, String jksPswd)
         {

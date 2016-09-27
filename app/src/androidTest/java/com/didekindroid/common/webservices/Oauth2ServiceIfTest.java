@@ -20,6 +20,7 @@ import static com.didekin.common.exception.DidekinExceptionMsg.BAD_REQUEST;
 import static com.didekin.common.exception.DidekinExceptionMsg.NOT_FOUND;
 import static com.didekin.oauth2.OauthClient.CL_USER;
 import static com.didekin.oauth2.OauthTokenHelper.HELPER;
+import static com.didekindroid.DidekindroidApp.getRetrofitHandler;
 import static com.didekindroid.common.activity.TokenHandler.TKhandler;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanWithTkhandler;
@@ -69,7 +70,7 @@ public class Oauth2ServiceIfTest {
     {
         Response<ErrorBean> response = Oauth2.getNotFoundMsg().execute();
         assertThat(response.isSuccessful(), is(false));
-        assertThat(Oauth2.getRetrofitHandler().getErrorBean(response).getMessage(), is(NOT_FOUND.getHttpMessage()));
+        assertThat(getRetrofitHandler().getErrorBean(response).getMessage(), is(NOT_FOUND.getHttpMessage()));
     }
 
     @Test

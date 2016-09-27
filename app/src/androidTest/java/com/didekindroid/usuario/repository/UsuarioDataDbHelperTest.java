@@ -37,12 +37,16 @@ public class UsuarioDataDbHelperTest {
     private UsuarioDataDbHelper dbHelper;
     Context context;
     SQLiteDatabase database;
+    File dbFile;
 
     @Before
     public void getFixture() throws Exception
     {
         String dBFileName = "data/data/com.didekindroid/databases/".concat(UsuarioDataDbHelper.DB_NAME);
-        deleteDatabase(new File(dBFileName));
+        dbFile = new File(dBFileName);
+        if (dbFile.exists()) {
+            deleteDatabase(dbFile);
+        }
 
         context = DidekindroidApp.getContext();
         dbHelper = new UsuarioDataDbHelper(context);
@@ -55,7 +59,9 @@ public class UsuarioDataDbHelperTest {
         dbHelper.close();
 
         String dBFileName = "data/data/com.didekindroid/databases/".concat(UsuarioDataDbHelper.DB_NAME);
-        deleteDatabase(new File(dBFileName));
+        if (dbFile.exists()) {
+            deleteDatabase(dbFile);
+        }
     }
 
     @Test
@@ -126,9 +132,10 @@ public class UsuarioDataDbHelperTest {
 
         SQLiteCursor cursor = (SQLiteCursor) dbHelper.getProvinciasByCA((short) 2);
         assertThat(cursor.getCount(), is(3));
-        cursor = (SQLiteCursor) dbHelper.getProvinciasByCA((short) 1);
-        assertThat(cursor.getCount(), is(8));
-        cursor.close();
+
+        SQLiteCursor cursorP = (SQLiteCursor) dbHelper.getProvinciasByCA((short) 1);
+        assertThat(cursorP.getCount(), is(8));
+        cursorP.close();
     }
 
     @Test
@@ -137,13 +144,14 @@ public class UsuarioDataDbHelperTest {
         database = dbHelper.getReadableDatabase();
         checkRecords();
 
-        Cursor cursor = dbHelper.getMunicipiosByPrId((short) 1);
-        assertThat(cursor.getCount(), is(51));
-        assertThat(cursor.getColumnCount(), is(4));
+        Cursor cursorM = dbHelper.getMunicipiosByPrId((short) 1);
+        assertThat(cursorM.getCount(), is(51));
+        assertThat(cursorM.getColumnCount(), is(4));
+        cursorM.close();
 
-        cursor = dbHelper.getMunicipiosByPrId((short) 33);
-        assertThat(cursor.getCount(), is(78));
-        cursor.close();
+        Cursor cursorP = dbHelper.getMunicipiosByPrId((short) 33);
+        assertThat(cursorP.getCount(), is(78));
+        cursorP.close();
     }
 
 //    ================================ Private methods ====================================
