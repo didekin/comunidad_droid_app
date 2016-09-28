@@ -5,10 +5,10 @@ import com.didekin.oauth2.SpringOauthToken;
 import java.io.File;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicReference;
 
 import timber.log.Timber;
@@ -18,6 +18,7 @@ import static com.didekindroid.DidekindroidApp.getContext;
 import static com.didekindroid.common.utils.IoHelper.readStringFromFile;
 import static com.didekindroid.common.utils.IoHelper.writeFileFromString;
 import static com.didekindroid.common.webservices.Oauth2Service.Oauth2;
+import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
  * User: pedro@didekin
@@ -33,13 +34,17 @@ public enum TokenHandler {
     TKhandler,;
 
     public static final String refresh_token_filename = "tk_file";
-    private final ExecutorService tokenUpdater = Executors.newSingleThreadExecutor();
+    private final ThreadPoolExecutor tokenUpdater;
     private final AtomicReference<Future<SpringOauthToken>> cacheForToken = new AtomicReference<>();
     final AtomicReference<SpringOauthToken> tokenInCache;
     private final File refreshTokenFile;
 
     TokenHandler()
     {
+        tokenUpdater = new ThreadPoolExecutor(1, 1, 7L, SECONDS, new LinkedBlockingQueue<Runnable>(5));
+        tokenUpdater.allowCoreThreadTimeOut(true);
+        tokenUpdater.setRejectedExecutionHandler(new ThreadPoolExecutor.AbortPolicy());
+
         refreshTokenFile = new File(getContext().getFilesDir(), refresh_token_filename);
         String refreshTokenValue = refreshTokenFile.exists() ? readStringFromFile(refreshTokenFile) : null;
         tokenInCache =  (refreshTokenValue != null && !refreshTokenValue.isEmpty()) ?
