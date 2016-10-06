@@ -108,7 +108,9 @@ public final class Oauth2Service implements Oauth2EndPoints {
         if (response.isSuccessful()) {
             return response.body();
         } else {
-            throw new UiException(getRetrofitHandler().getErrorBean(response));
+            ErrorBean errorBean = getRetrofitHandler().getErrorBean(response);
+            Timber.e("getResponseBody() exception: %s%n", errorBean.getMessage());
+            throw new UiException(errorBean);
         }
     }
 }

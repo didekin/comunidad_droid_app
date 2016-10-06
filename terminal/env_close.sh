@@ -12,9 +12,8 @@ if [ $ENV = "awspre" ] ; then
 fi
 
 if [ $ENV = "dbpre" ] || [ $ENV = "local" ] ; then
-
-    kill $(ps -l | grep '[d]idekinspring/services' | awk '{print $2}')
     rm  $APP_PARAM_HOME/local_app_parameters.xml
+    kill $(ps -l | grep '[d]idekinspring/services' | awk '{print $2}')
 
     if [ $EMULATOR = "geny" ] ; then
         rm  $APP_PARAM_HOME/geny_url.xml
