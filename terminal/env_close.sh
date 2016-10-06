@@ -8,13 +8,12 @@ EMULATOR="$2"
 APP_PARAM_HOME=app/src/debug/res/values
 
 if [ $ENV = "awspre" ] ; then
-    rm  $APP_PARAM_HOME/aws_app_parameters.xml
+    rm  $APP_PARAM_HOME/pre_app_parameters.xml
 fi
 
 if [ $ENV = "dbpre" ] || [ $ENV = "local" ] ; then
 
-    kill $(ps -l | grep '[d]idekinspring.jar' | awk '{print $2}')
-    #nginx -s quit  -c /usr/local/etc/nginx/nginx_didekinspring_dev.conf
+    kill $(ps -l | grep '[d]idekinspring/services' | awk '{print $2}')
     rm  $APP_PARAM_HOME/local_app_parameters.xml
 
     if [ $EMULATOR = "geny" ] ; then

@@ -1,0 +1,33 @@
+CERTIFICADOS
+============
+-- Generar keystore con certificado de didekinspring para producción y copiarlo en res/raw/.
+   Nota: cambiar el certificado en didekinspring implica una actualización de la aplicación con un nuevo keystore.
+TODO: constituir mi propia autoridad certificadora e importarla en didekindroid.
+
+CONFIGURACIÓN
+=============
+-- Ensure that you disable debugging for your app if using WebView. To disable debugging, use the WebView.setWebContentsDebuggingEnabled() method.
+
+DOCUMENTOS
+==========
+-- EULA: mirar bookmarks en didekin y en carpeta administración.  Hacer el cuadro de diálog para aceptarlo.
+
+MATERIALES
+==========
+-- Revisar esta página http://market.android.com/support/bin/answer.py?answer=1078870
+-- Icon 512 x 512 pixels para subir en la consola junto con la aplicación.
+
+SCRIPTS - OTRO CODIGO
+=====================
+-- Hay que definir el app_parameters.xml para producción.
+-- Hacer un script que incluya:
+   - Copia de app_parameters de producción a directorio app/src/main/res/values
+   - Copiar keystore en res/raw.
+   - Firma y generación del release apk.
+
+TESTS
+=====
+-- From each app screen, switch to another running app and then return to the app under test using the Recents app switcher.
+-- From each app screen (and dialogs), press the Back button.
+-- From each app screen, rotate the device between landscape and portrait orientation at least three times.
+-- Examine the permissions requested by the app by going to Settings > App Info.

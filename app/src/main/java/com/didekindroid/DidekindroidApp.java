@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.os.StrictMode;
 
+import com.didekin.common.controller.JksInClient;
 import com.didekin.common.controller.RetrofitHandler;
 import com.didekindroid.common.webservices.JksInAndroidApp;
 
@@ -53,8 +54,8 @@ public final class DidekindroidApp extends Application {
     }
 
     /**
-     *   This method is called asynchronously from the (http) services classes, to avoid running it in the main thread,
-     *   since it reads from disk (raw resources).
+     * This method is called asynchronously from the (http) services classes, to avoid running it in the main thread,
+     * since it reads from disk (raw resources).
      */
     public static void initRetrofitHandler()
     {
@@ -62,12 +63,21 @@ public final class DidekindroidApp extends Application {
                 null,
                 new RetrofitHandler(
                         mContext.get().getString(R.string.didekinspring_host) + mContext.get().getString(R.string.didekinspring_port),
-                        new JksInAndroidApp(
-                                mContext.get().getString(R.string.didekinspring_pswd),
-                                mContext.get().getResources().getIdentifier(mContext.get().getString(R.string.bks_name), "raw", mContext.get().getPackageName())
-                        ),
+                        doJksInAndroidApp(),
                         parseInt(mContext.get().getString(R.string.timeOut)))
         );
+    }
+
+    private static JksInClient doJksInAndroidApp()
+    {
+        String bksPassword = mContext.get().getString(R.string.didekindroid_bks_pswd);
+        int bksRawFileResourceId = mContext.get().getResources()
+                .getIdentifier(mContext.get().getString(R.string.didekindroid_bks_name), "raw", mContext.get().getPackageName());
+
+        if (bksPassword.isEmpty() || bksRawFileResourceId <= 0) {
+            return null;
+        }
+        return new JksInAndroidApp(bksPassword, bksRawFileResourceId);
     }
 
     public static Context getContext()

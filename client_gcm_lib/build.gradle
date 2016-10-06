@@ -10,10 +10,13 @@ dependencies {
 targetCompatibility = rootProject.ext.targetCompatibilityVersion
 sourceCompatibility = rootProject.ext.sourceCompatibilityVersion
 
+//noinspection GroovyAssignabilityCheck
 jar {
     baseName = 'client_gcm_lib'
+    version = 'alpha_1'
 }
 
+//noinspection GroovyAssignabilityCheck
 test {
     filter {
         includeTestsMatching "com.didekinservice.common.gcm.*Test"

@@ -10,7 +10,8 @@ dependencies {
 targetCompatibility = rootProject.ext.targetCompatibilityVersion
 sourceCompatibility = rootProject.ext.sourceCompatibilityVersion
 
+//noinspection GroovyAssignabilityCheck
 jar {
     baseName = 'client_lib'
-//    version = '0.2'
+    version = 'alpha_1'
 }

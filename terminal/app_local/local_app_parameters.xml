@@ -3,8 +3,6 @@
     <!-- ========= Desarrollo ======== -->
     <!-- Common -->
     <string name="didekinspring_port" translatable="false">:8080</string>
-    <string name="didekinspring_pswd" translatable="false">droid_dev</string>
-    <string name="bks_name" translatable="false">didekindroid_dev_bks</string>
     <!-- Http client timeOut-->
     <string name="timeOut" translatable="false">60</string>
 </resources>
