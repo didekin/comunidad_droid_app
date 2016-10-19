@@ -25,6 +25,7 @@ local.properties
 # Configuración de entornos
 terminal/app_pro
 terminal/app_pre
+!terminal/app_pre/*.xml
 terminal/env_init.sh
 terminal/env_close.sh
 
