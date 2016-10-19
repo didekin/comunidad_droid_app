@@ -13,5 +13,5 @@ sourceCompatibility = rootProject.ext.sourceCompatibilityVersion
 //noinspection GroovyAssignabilityCheck
 jar {
     baseName = 'client_lib'
-    version = 'alpha_1'
+    version = ''
 }

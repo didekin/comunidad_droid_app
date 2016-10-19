@@ -9,8 +9,8 @@ android {
         applicationId "com.didekindroid"
         minSdkVersion 19
         targetSdkVersion 24
-        versionCode 0
-        versionName "alpha-1"
+        versionCode 1
+        versionName ""
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         resConfigs "es" /* Añadir nuevos idiomas según hagan falta.*/
     }

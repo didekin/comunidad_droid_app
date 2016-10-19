@@ -3,6 +3,7 @@
 local.properties
 **/build
 **/libs
+**/gen
 
 # IDEA
 .idea
@@ -16,19 +17,19 @@ local.properties
 /**/google_services.txt
 
 # ENTORNOS y PRUEBAS
-# Certificate jks for tests
-**/res/raw/*
+# Certificate stores
+**/res/raw/*.bks
 # Parámetros redundantes
 /**/res/values/geny*.xml
 /**/res/values/local*.xml
-# Parámetros de entornos
-terminal/resources/aws*.xml
+# Configuración de entornos
+terminal/app_pro
+terminal/app_pre
 terminal/env_init.sh
-terminal/*help
-terminal/app_production
+terminal/env_close.sh
 
 #  MISCELÁNEA
-terminal/server.log
+logs/*.*
 administracion
 .navigation
 
