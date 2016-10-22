@@ -6,7 +6,7 @@ package com.didekin.common.controller;
  * Time: 16:59
  */
 @SuppressWarnings("unused")
-public class CommonServiceConstant {
+public final class CommonServiceConstant {
 
     // Mime types.
     public static final String MIME_JSON = "application/json";
@@ -14,4 +14,8 @@ public class CommonServiceConstant {
 
     /*Common paths out of the control of both authorization and resource servers.*/
     public static final String ERROR = "/error";
+
+    private CommonServiceConstant()
+    {
+    }
 }

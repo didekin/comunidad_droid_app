@@ -1,6 +1,4 @@
 rootProject.name = 'didekindroid'
 include ':app'
-include ':app_prov'
 include ':client_lib'
 include ':client_gcm_lib'
-include ':client_prov_lib'

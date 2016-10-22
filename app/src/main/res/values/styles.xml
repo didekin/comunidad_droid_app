@@ -55,7 +55,8 @@
         <item name="android:textSize">@dimen/text_hint_size</item>
         <item name="android:textStyle">normal</item>
         <item name="android:imeOptions">actionNext</item>
-        <item name="android:textColor">?attr/android:textColorPrimary</item>
+        <!--?attr/android:textColorPrimary-->
+        <item name="android:textColor">@color/purple_700</item>
     </style>
 
     <style name="textBase.editField.email">

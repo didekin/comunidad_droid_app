@@ -21,6 +21,7 @@ import java.io.IOException;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -131,9 +132,11 @@ public class IncidCommentRegAcTest {
     }
 
     @Test
-    public void testRegComment_1(){
+    public void testRegComment_1() throws InterruptedException
+    {
         // Descripción de comentario no válido.
-        onView(withId(R.id.incid_comment_ed)).perform(typeText("Comment = not valid"));
+        onView(withId(R.id.incid_comment_ed)).perform(typeText("Comment = not valid")).perform(closeSoftKeyboard());
+        Thread.sleep(1000);
         onView(withId(R.id.incid_comment_reg_button)).perform(click());
         checkToastInTest(R.string.error_validation_msg, mActivity, R.string.incid_comment_label);
     }
@@ -141,7 +144,7 @@ public class IncidCommentRegAcTest {
     @Test
     public void testRegComment_2(){
         // Caso OK.
-        onView(withId(R.id.incid_comment_ed)).perform(typeText("Comment is now valid"));
+        onView(withId(R.id.incid_comment_ed)).perform(typeText("Comment is now valid")).perform(closeSoftKeyboard());
 
         onView(withId(R.id.incid_comment_reg_button)).perform(scrollTo(), click());
         // Verificación.

@@ -10,9 +10,7 @@
     <string name="checkbox_si">Sí</string>
     <string name="checkbox_no">No</string>
     <string name="euros_rot">EUR</string>
-    <string name="decimal_separator">,</string>
-    <string name="decimal_zero_regexp">###,###</string>
-    <string name="decimal_two_regexp">###,###.##</string>
+    <string name="decimal_separator">.</string>
     <string name="navigate_up_txt">Desplazarse hacia arriba</string>
     <!--Menús-->
     <!--Messages-->

@@ -26,7 +26,6 @@ import com.didekindroid.common.gcm.GcmRegistrationIntentService;
 
 import java.sql.Timestamp;
 import java.text.DateFormat;
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Date;
@@ -113,13 +112,20 @@ public final class UIutils {
 
     static String formatDoubleZeroDecimal(Double myDouble, Context context)
     {
-        DecimalFormat myFormatter = new DecimalFormat(context.getString(R.string.decimal_zero_regexp));
+        NumberFormat myFormatter = NumberFormat.getInstance(SPAIN_LOCALE);
         return myFormatter.format(myDouble);
     }
 
+    @SuppressWarnings("deprecation")
     static String formatDoubleTwoDecimals(Double myDouble, Context context)
     {
-        DecimalFormat myFormatter = new DecimalFormat(context.getString(R.string.decimal_two_regexp));
+        Locale locale;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            locale = context.getResources().getConfiguration().getLocales().get(0);
+        } else {
+            locale = context.getResources().getConfiguration().locale;
+        }
+        NumberFormat myFormatter = NumberFormat.getInstance(locale);
         return myFormatter.format(myDouble);
     }
 

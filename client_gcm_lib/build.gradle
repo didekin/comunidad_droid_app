@@ -1,19 +1,18 @@
 apply plugin: 'java'
 apply plugin: 'idea'
 
-dependencies {
-    compile deps.retrofit
-    compile project(':client_lib')
-    testCompile deps.mockwebserver
-}
-
-targetCompatibility = rootProject.ext.targetCompatibilityVersion
-sourceCompatibility = rootProject.ext.sourceCompatibilityVersion
+targetCompatibility = '1.7'
+sourceCompatibility = '1.7'
 
 //noinspection GroovyAssignabilityCheck
 jar {
     baseName = 'client_gcm_lib'
     version = ''
+}
+
+dependencies {
+    compile project(':client_lib')
+    testCompile 'com.squareup.okhttp:mockwebserver:2.7.5'
 }
 
 //noinspection GroovyAssignabilityCheck

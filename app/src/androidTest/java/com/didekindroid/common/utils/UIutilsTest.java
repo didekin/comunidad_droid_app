@@ -21,6 +21,7 @@ import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import static android.os.Build.VERSION.SDK_INT;
@@ -129,10 +130,9 @@ public class UIutilsTest extends TestCase {
     @Test
     public void testFormatDoubleToZeroDecimal()
     {
-        if (getDefault().equals(ENGLISH)) {
-            assertThat(UIutils.formatDoubleZeroDecimal(12.34, context), is("12"));
-        }
-        if (getDefault().equals(SPAIN_LOCALE)) {
+        Locale locale = getLocale();
+
+        if (locale.equals(ENGLISH) || locale.equals(ENGLISH)) {
             assertThat(UIutils.formatDoubleZeroDecimal(12.34, context), is("12"));
         }
     }
@@ -140,10 +140,14 @@ public class UIutilsTest extends TestCase {
     @Test
     public void testFormatDoubleToTwoDecimal()
     {
-        assertThat(UIutils.formatDoubleTwoDecimals(12.34, context),
-                is("12".concat(context.getString(R.string.decimal_separator)).concat("34")));
-        assertThat(UIutils.formatDoubleTwoDecimals(12.3422, context),
-                is("12".concat(context.getString(R.string.decimal_separator)).concat("34")));
+        Locale locale = getLocale();
+
+        if (locale.equals(SPAIN_LOCALE) || locale.equals(ENGLISH)) {
+            assertThat(UIutils.formatDoubleTwoDecimals(12.34, context),
+                    is("12".concat(context.getString(R.string.decimal_separator)).concat("34")));
+            assertThat(UIutils.formatDoubleTwoDecimals(12.342, context),
+                    is("12".concat(context.getString(R.string.decimal_separator)).concat("342")));
+        }
     }
 
     @Test
@@ -196,5 +200,17 @@ public class UIutilsTest extends TestCase {
         Calendar calendar1 = new GregorianCalendar();
         calendar1.add(Calendar.MINUTE, 1);
         assertThat(Long.compare(date1.getTime(), calendar1.getTimeInMillis()) < 0, is(true));
+    }
+
+    @SuppressWarnings("deprecation")
+    private Locale getLocale()
+    {
+        Locale locale;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            locale = context.getResources().getConfiguration().getLocales().get(0);
+        } else {
+            locale = context.getResources().getConfiguration().locale;
+        }
+        return locale;
     }
 }

@@ -15,6 +15,7 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+-dontnote retrofit2.Platform
 -dontwarn retrofit.**
 -keep class retrofit.** { *; }
 -keepattributes Signature

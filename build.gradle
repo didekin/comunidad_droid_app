@@ -1,38 +1,9 @@
-buildscript {
-    repositories {
-        jcenter()
-        mavenCentral()
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.3'
-        classpath 'com.google.gms:google-services:3.0.0'
-    }
-}
-
 allprojects {
     repositories {
         jcenter()
         mavenCentral()
     }
 }
-
-ext {
-    sourceCompatibilityVersion = JavaVersion.VERSION_1_7
-    targetCompatibilityVersion = JavaVersion.VERSION_1_7
-}
-
-ext.deps = [
-        retrofit                   : 'com.squareup.retrofit2:retrofit:2.1.0',
-        retrofit_converter_gson    : 'com.squareup.retrofit2:converter-gson:2.1.0',
-        okhttp3_logging_interceptor: 'com.squareup.okhttp3:logging-interceptor:3.4.1',
-        mockwebserver              : 'com.squareup.okhttp:mockwebserver:2.7.5',
-        timber                     : 'com.jakewharton.timber:timber:4.3.0',
-
-        junit                      : 'junit:junit:4.12'
-]
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.14.1'

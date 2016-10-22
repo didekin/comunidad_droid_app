@@ -1,17 +1,19 @@
 apply plugin: 'java'
 apply plugin: 'idea'
 
-dependencies {
-    compile deps.retrofit
-    compile deps.retrofit_converter_gson
-    compile deps.okhttp3_logging_interceptor
-}
-
-targetCompatibility = rootProject.ext.targetCompatibilityVersion
-sourceCompatibility = rootProject.ext.sourceCompatibilityVersion
+targetCompatibility = '1.7'
+sourceCompatibility = '1.7'
 
 //noinspection GroovyAssignabilityCheck
 jar {
     baseName = 'client_lib'
     version = ''
 }
+
+dependencies {
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
+}
+
+
