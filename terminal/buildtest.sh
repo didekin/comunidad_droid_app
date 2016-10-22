@@ -17,14 +17,14 @@ source ./terminal/env_init.sh  $ENV $EMULATOR
 ./gradlew clean
 
 if [ $ENV == "local" ] || [ $ENV == "dbpre" ] ; then
-    # Git: add/commit/push local ...
+    echo "Git: add/commit/push local ..."
     git add .
     git commit -m "version $VERSION"
     git push $GITREMOTE localdev
 fi
 
 if [ $ENV = "awspre" ] ; then
-    # Git: merge local-awspre / push ...
+    echo "Git: merge local-awspre / push ..."
     git merge localdev  -m "version $VERSION"
     git push $GITREMOTE aws_pre
 fi
