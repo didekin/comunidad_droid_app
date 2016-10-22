@@ -1,13 +1,14 @@
-# It must be executed after 'cddroid' with ./terminal/buildtest.sh  environment emulator suite
+# It must be executed after 'cddroid' with ./terminal/buildtest.sh  environment emulator suite  version
 # environment('local','dbpre','awspre') emulator ('geny','google') suite('cm','in','us','all')
 
 #!/bin/bash
-[ $# -ne 3 ] && { echo "args count should be 3" 1>&2; exit 1;}
+[ $# -ne 4 ] && { echo "args count should be 4" 1>&2; exit 1;}
 
 ENV="$1"
 EMULATOR="$2"
 SUITE="$3"
-GITREMOTE=didekinspring
+VERSION="didekindroid-$4"
+GITREMOTE=didekindroid
 
 echo "Suite:" $SUITE
 
@@ -16,12 +17,14 @@ source ./terminal/env_init.sh  $ENV $EMULATOR
 ./gradlew clean
 
 if [ $ENV == "local" ] || [ $ENV == "dbpre" ] ; then
+    # Git: add/commit/push local ...
     git add .
     git commit -m "version $VERSION"
     git push $GITREMOTE localdev
 fi
 
 if [ $ENV = "awspre" ] ; then
+    # Git: merge local-awspre / push ...
     git merge localdev  -m "version $VERSION"
     git push $GITREMOTE aws_pre
 fi
