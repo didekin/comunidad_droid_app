@@ -305,7 +305,7 @@ public class IncidSeeClosedByComuAcTest_2 {
         // CASO: verificación de la navegación,
 
         // Comunidad por defecto.
-        Thread.sleep(1000);
+        Thread.sleep(3000);
         IncidenciaUser incidUser = mAdapter.getItem(0);
 
         // Seleccionamos una incidencia.

@@ -150,7 +150,6 @@ public class Oauth2ServiceIfTest {
         // Return mew access and refresh tokens.
         assertThat(tokenNew.getRefreshToken().getValue(), not(is(refreshTkOldValue)));
         assertThat(tokenNew.getValue(), not(is(accessTkOldValue)));
-
     }
 
     @Test
