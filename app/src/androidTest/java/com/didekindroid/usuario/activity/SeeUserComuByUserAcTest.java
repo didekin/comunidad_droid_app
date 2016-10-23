@@ -111,7 +111,7 @@ public class SeeUserComuByUserAcTest {
     @Test
     public void testViewData_1() throws InterruptedException
     {
-        Thread.sleep(2000);
+        Thread.sleep(3000);
         SeeUserComuByUserAdapter adapter = mFragment.mAdapter;
         assertThat(adapter.getCount(), is(3));
         // Orden es provinciaId, municipioCd.
