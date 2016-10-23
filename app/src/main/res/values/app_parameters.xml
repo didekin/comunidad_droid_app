@@ -4,7 +4,7 @@
     <!-- Producción -->
     <string name="didekinspring_host" translatable="false">https://didekinspring-web-pro.eu-central-1.elasticbeanstalk.com</string>
     <string name="didekinspring_port" translatable="false">:443</string>
-    <string name="didekindroid_bks_pswd" translatable="false">didekinspring_pro</string>
+    <string name="didekindroid_bks_pswd" translatable="false">pro_erots_d3r3o3i3d</string>
     <string name="didekindroid_bks_name" translatable="false">didekindroid_pro_bks</string>
     <!-- Http client timeOut-->
     <string name="timeOut" translatable="false">30</string>
