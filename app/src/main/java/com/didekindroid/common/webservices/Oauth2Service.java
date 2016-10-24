@@ -83,7 +83,8 @@ public final class Oauth2Service implements Oauth2EndPoints {
             Response<SpringOauthToken> response = getRefreshUserToken(
                     doAuthBasicHeader(CL_USER),
                     refreshTokenKey,
-                    REFRESH_TOKEN_GRANT).execute();
+                    REFRESH_TOKEN_GRANT
+            ).execute();
             return getResponseBody(response);
         } catch (IOException e) {
             throw new UiException(GENERIC_ERROR);

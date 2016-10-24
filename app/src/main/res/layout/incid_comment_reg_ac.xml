@@ -38,6 +38,7 @@
             <Button
                 android:id="@+id/incid_comment_reg_button"
                 style="@style/textBase.acButton1"
+                android:layout_marginBottom="18dp"
                 android:layout_gravity="center_horizontal"
                 android:text="@string/incid_comment_ed_button_rot"/>
 

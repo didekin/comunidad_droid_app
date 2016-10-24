@@ -141,8 +141,9 @@ public class UiExceptionTests_1 extends UiExceptionAbstractTest {
                 ue.processMe(mActivity, new Intent());
             }
         });
-        onView(withId(R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));
         checkToastInTest(R.string.comunidad_not_found_message, mActivity);
+        onView(withId(R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));
+
     }
 
     //  ============================== HELPERS  ===================================
