@@ -51,17 +51,18 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class Oauth2ServiceIfTest {
 
-    CleanUserEnum whatClean;
+    CleanUserEnum whatClean = CLEAN_NOTHING;
 
     @Before
     public void setUp() throws Exception
     {
-        whatClean = CLEAN_NOTHING;
+        Thread.sleep(1000);
     }
 
     @After
-    public void cleaningUp() throws UiException
+    public void cleaningUp() throws UiException, InterruptedException
     {
+        Thread.sleep(1000);
         cleanOptions(whatClean);
     }
 
@@ -150,7 +151,6 @@ public class Oauth2ServiceIfTest {
         // Return mew access and refresh tokens.
         assertThat(tokenNew.getRefreshToken().getValue(), not(is(refreshTkOldValue)));
         assertThat(tokenNew.getValue(), not(is(accessTkOldValue)));
-        Thread.sleep(1000);
     }
 
     @Test

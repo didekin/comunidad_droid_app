@@ -122,6 +122,6 @@ public class IncidEditAcMaxPowerTest_2 extends IncidEditAbstractTest {
         onView(withId(R.id.incid_edit_fr_borrar_button)).check(matches(isDisplayed())).perform(click());
         checkToastInTest(R.string.incidencia_wrong_init, mActivity);
         onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed()));
-        Thread.sleep(3000);
+        Thread.sleep(2000);
     }
 }
