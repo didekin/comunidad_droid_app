@@ -56,7 +56,7 @@
         <item name="android:textStyle">normal</item>
         <item name="android:imeOptions">actionNext</item>
         <!--?attr/android:textColorPrimary-->
-        <item name="android:textColor">@color/purple_700</item>
+        <item name="android:textColor">@color/purple_900</item>
     </style>
 
     <style name="textBase.editField.email">

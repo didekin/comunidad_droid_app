@@ -67,7 +67,7 @@ public class UiExceptionTests_1 extends UiExceptionAbstractTest {
     @After
     public void tearDown() throws Exception
     {
-        Thread.sleep(4000);
+        Thread.sleep(2000);
     }
 
     //  ===========================================================================

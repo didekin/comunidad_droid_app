@@ -3,7 +3,8 @@
     <!--Rótulo para plan resolución.-->
     <TextView
         android:id="@+id/incid_resolucion_desc_rot"
-        style="@style/textBase.textFieldLabel1"
+        style="@style/textBase.textPageLabel2"
+        android:layout_marginTop="2dp"
         android:text="@string/incid_resolucion_plan_rot"/>
     <!--Descripción resolución.-->
     <TextView
@@ -13,7 +14,7 @@
     <TextView
         android:id="@+id/incid_resolucion_hist_avances_rot"
         style="@style/textBase.textPageLabel2"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="4dp"
         android:text="@string/incid_resolucion_avances_rot"/>
     <!-- Lista de avances.-->
     <ListView
