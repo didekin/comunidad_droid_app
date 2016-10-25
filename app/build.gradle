@@ -20,7 +20,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 25
         versionCode 1
-        versionName ""
+        versionName "a-0.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         resConfigs "es" /* Añadir nuevos idiomas según hagan falta.*/
     }
@@ -49,6 +49,7 @@ android {
 
     buildTypes {
         release {
+            applicationIdSuffix ""
             shrinkResources true
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
