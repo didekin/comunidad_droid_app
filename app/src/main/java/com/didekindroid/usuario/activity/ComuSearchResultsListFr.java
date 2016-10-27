@@ -1,6 +1,9 @@
 package com.didekindroid.usuario.activity;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -8,13 +11,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.didekin.common.exception.ErrorBean;
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekindroid.R;
+import com.didekindroid.common.activity.UiException;
+import com.didekindroid.common.utils.UIutils;
 
+import java.io.IOException;
 import java.util.List;
 
 import timber.log.Timber;
+
+import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
+import static com.didekindroid.usuario.activity.utils.UserMenu.REG_COMU_USERCOMU_AC;
+import static com.didekindroid.usuario.activity.utils.UserMenu.REG_COMU_USER_USERCOMU_AC;
+import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 
 /**
  * Preconditions:
@@ -80,12 +93,14 @@ public class ComuSearchResultsListFr extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         mComuListListener = (ComuListListener) getActivity();
-        mAdapter = new ComuSearchResultsListAdapter(getActivity());
-        mAdapter.addAll(mComuListListener.getResultsList());
+        new SearchComunidadesLoader().execute(mComuListListener.getComunidadToSearch());
 
+        mAdapter = new ComuSearchResultsListAdapter(getActivity());
         mListView = (ListView) mView.findViewById(android.R.id.list);
+        //TextView for no result.
+        mListView.setEmptyView(mView.findViewById(android.R.id.empty));
         mListView.setItemsCanFocus(true);
-        mListView.setAdapter(mAdapter);
+
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
@@ -157,11 +172,54 @@ public class ComuSearchResultsListFr extends Fragment {
     public interface ComuListListener {
         void onComunidadSelected(Comunidad comunidad, int lineItemIndex);
         List<Comunidad> getResultsList();
+        Comunidad getComunidadToSearch();
+        Activity getActivity();
     }
 
     //    ============================================================
     //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
     //    ============================================================
 
+    class SearchComunidadesLoader extends AsyncTask<Comunidad, Void, List<Comunidad>> {
 
+        private UiException uiException;
+
+        @Override
+        protected List<Comunidad> doInBackground(Comunidad... comunidades)
+        {
+            Timber.d("doInBackground()");
+            List<Comunidad> comunidadesList = null;
+            try {
+                comunidadesList = ServOne.searchComunidades(comunidades[0]).execute().body();
+            } catch (IOException e) {
+                uiException = new UiException(ErrorBean.GENERIC_ERROR);
+            }
+            return comunidadesList;
+        }
+
+        @Override
+        protected void onPostExecute(List<Comunidad> comunidadList)
+        {
+            Timber.d("onPostExecute(); comunidadList.size = %s%n", comunidadList != null ? String.valueOf(comunidadList.size()) : "null");
+
+            if (uiException != null) {
+                Timber.d("onPostExecute(), uiException = %s%n", uiException.getErrorBean().getMessage());
+                uiException.processMe(mComuListListener.getActivity(), new Intent());
+                return;
+            }
+            if (comunidadList != null && comunidadList.size() > 0) {
+                mAdapter.clear();
+                mAdapter.addAll(comunidadList);
+                mListView.setAdapter(mAdapter);
+            } else {
+                UIutils.makeToast(mComuListListener.getActivity(), R.string.no_result_search_comunidad, Toast.LENGTH_LONG);
+                if (isRegisteredUser(mComuListListener.getActivity())) {
+                    REG_COMU_USERCOMU_AC.doMenuItem(mComuListListener.getActivity());
+                } else {
+                    REG_COMU_USER_USERCOMU_AC.doMenuItem(mComuListListener.getActivity());
+                }
+                mComuListListener.getActivity().finish();
+            }
+        }
+    }
 }

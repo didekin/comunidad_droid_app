@@ -9,4 +9,12 @@
 
     <include layout="@layout/appbar_include_design"/>
 
+    <fragment
+        android:id="@+id/comu_list_fragment"
+        android:name="com.didekindroid.usuario.activity.ComuSearchResultsListFr"
+        android:layout_marginTop="@dimen/app_bar_bottom_margin"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout="@layout/comu_search_results_fr_layout"/>
+
 </android.support.design.widget.CoordinatorLayout>

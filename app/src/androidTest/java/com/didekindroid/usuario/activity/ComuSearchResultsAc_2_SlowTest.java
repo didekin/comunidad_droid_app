@@ -55,7 +55,7 @@ public class ComuSearchResultsAc_2_SlowTest {
     CleanUserEnum whatClean;
 
     // Navigate-up layout cuando hay resultados.
-    int fragmentLayoutId = R.id.comu_list_frg;
+    int fragmentLayoutId = R.id.comu_list_fragment;
     // Navigate-up layout cuando NO hay resultados.
     int activityLayoutId = R.id.comu_search_results_frg_container_ac;
 
@@ -92,7 +92,7 @@ public class ComuSearchResultsAc_2_SlowTest {
         activity = mActivityRule.launchActivity(intent);
         assertThat(isRegisteredUser(activity), is(false));
 
-        mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getSupportFragmentManager().findFragmentById(R.id.comu_list_frg);
+        mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getSupportFragmentManager().findFragmentById(R.id.comu_list_frg_layout);
         assertThat(activity, notNullValue());
         assertThat(mComunidadSummaryFrg, nullValue());
 
@@ -100,6 +100,7 @@ public class ComuSearchResultsAc_2_SlowTest {
         checkToastInTest(R.string.no_result_search_comunidad, activity);
         onView(withId(R.id.reg_comu_usuario_usuariocomu_layout)).check(matches(isDisplayed()));
 
+        Thread.sleep(2000);
         checkUp(activityLayoutId);
     }
 

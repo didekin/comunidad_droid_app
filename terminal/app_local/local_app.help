@@ -1,5 +1,11 @@
-CERTIFICADOS
-============
-
 NOTA: en el entorno local no se utiliza el puerto 443, ni TLS.
+
+LOCALHOST
+=========
+
+Para acceder desde un móvil al servidor Jetty en local:
+- Incluir el móvil en la red WI-FI local.
+- Habilitar System Preferences/Sharing/Remote management para el servidor local.
+- Poner la URL del servidor local en el fichero terminal/emulators/physical_url.xml
+
 

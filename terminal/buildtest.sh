@@ -1,5 +1,5 @@
 # It must be executed after 'cddroid' with ./terminal/buildtest.sh  environment emulator suite  version
-# environment('local','dbpre','awspre') emulator ('geny','google') suite('cm','in','us','all')
+# environment('local','dbpre','awspre') emulator ('geny','google', 'physical') suite('cm','in','us','all')
 
 #!/bin/bash
 [ $# -ne 4 ] && { echo "args count should be 4" 1>&2; exit 1;}

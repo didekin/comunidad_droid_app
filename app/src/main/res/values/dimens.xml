@@ -13,11 +13,11 @@
     <!-- margin to include after appbar to account for its size in the activity layout-->
     <dimen name="app_bar_bottom_margin">55dp</dimen>
     <!-- Texts -->
-    <dimen name="text_hint_size">12sp</dimen>
-    <dimen name="text_rotulo_list">13sp</dimen>
-    <dimen name="text_rotulo_fragment">14sp</dimen>
-    <dimen name="text_decription_widget">13sp</dimen>
-    <dimen name="appBar_title">15sp</dimen>
+    <dimen name="text_hint_size">13sp</dimen>
+    <dimen name="text_rotulo_list">14sp</dimen>
+    <dimen name="text_rotulo_fragment">15sp</dimen>
+    <dimen name="text_decription_widget">14sp</dimen>
+    <dimen name="appBar_title">16sp</dimen>
     <!-- Toasts -->
     <dimen name="toast_text_size">10sp</dimen>
 </resources>

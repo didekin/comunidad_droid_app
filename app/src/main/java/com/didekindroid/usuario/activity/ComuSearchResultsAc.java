@@ -1,27 +1,23 @@
 package com.didekindroid.usuario.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
-import com.didekin.common.exception.ErrorBean;
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekin.usuario.dominio.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
-import com.didekindroid.common.utils.UIutils;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
 import timber.log.Timber;
 
-import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_LIST_INDEX;
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_SEARCH;
 import static com.didekindroid.common.activity.BundleKey.USERCOMU_LIST_OBJECT;
@@ -31,7 +27,6 @@ import static com.didekindroid.usuario.activity.utils.UserMenu.REG_COMU_USERCOMU
 import static com.didekindroid.usuario.activity.utils.UserMenu.REG_COMU_USER_USERCOMU_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_USERCOMU_BY_USER_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenu;
-import static com.didekindroid.usuario.activity.utils.UsuarioFragmentTags.comu_search_results_list_fr_tag;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 
 /**
@@ -67,8 +62,6 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
     ComuSearchResultsListFr mComunidadesSummaryFrg;
     // The comunidad searched.
     Comunidad mComunidad;
-    // The comunidad index selected.
-    int mIndex;
     List<Comunidad> mResultsList;
 
     @Override
@@ -77,18 +70,17 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
         Timber.d("onCreate().");
         super.onCreate(savedInstanceState);
 
-        Comunidad comunidad = (Comunidad) getIntent().getSerializableExtra(COMUNIDAD_SEARCH.key);
-        new SearchComunidadesLoader().execute(comunidad);
-
+        mComunidad = (Comunidad) getIntent().getSerializableExtra(COMUNIDAD_SEARCH.key);
         setContentView(R.layout.comu_search_results_layout);
         doToolBar(this, true);
+
+        mComunidadesSummaryFrg = (ComuSearchResultsListFr) getSupportFragmentManager().findFragmentById(R.id.comu_list_fragment);
     }
 
     @Override
     protected void onSaveInstanceState(Bundle savedInstanceState)
     {
         Timber.d("onSaveInstanceState()");
-        savedInstanceState.putInt(COMUNIDAD_LIST_INDEX.name(), mIndex);
         savedInstanceState.putSerializable(COMUNIDAD_SEARCH.key, mComunidad);
         super.onSaveInstanceState(savedInstanceState);
     }
@@ -97,12 +89,8 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
     protected void onRestoreInstanceState(Bundle savedInstanceState)
     {
         Timber.d("onRestoreInstanceState()");
-        if (savedInstanceState != null) {
-            mIndex = savedInstanceState.getInt(COMUNIDAD_LIST_INDEX.name(), 0);
-            mComunidadesSummaryFrg.mListView.setSelection(mIndex);
-            if (mComunidad == null) {
+        if (savedInstanceState != null && mComunidad == null) {
                 mComunidad = (Comunidad) savedInstanceState.getSerializable(COMUNIDAD_SEARCH.key);
-            }
         }
     }
 
@@ -152,7 +140,6 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
     public void onComunidadSelected(Comunidad comunidad, int lineItemIndex)
     {
         Timber.d("onComunidadSelected().");
-        mIndex = lineItemIndex;
 
         if (!isRegisteredUser(this)) {
             Timber.d("onComunidadSelected(). User is not registered.");
@@ -171,54 +158,20 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
         return Collections.unmodifiableList(mResultsList);
     }
 
-//    ============================================================
-//    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
-//    ============================================================
-
-    class SearchComunidadesLoader extends AsyncTask<Comunidad, Void, List<Comunidad>> {
-
-        private UiException uiException;
-
-        @Override
-        protected List<Comunidad> doInBackground(Comunidad... comunidades)
-        {
-            Timber.d("doInBackground()");
-            List<Comunidad> comunidadesList = null;
-            try {
-                comunidadesList = ServOne.searchComunidades(comunidades[0]).execute().body();
-            } catch (IOException e) {
-                uiException = new UiException(ErrorBean.GENERIC_ERROR);
-            }
-            return comunidadesList;
-        }
-
-        @Override
-        protected void onPostExecute(List<Comunidad> comunidadList)
-        {
-            Timber.d("onPostExecute(); comunidadList.size = %s%n", comunidadList != null ? String.valueOf(comunidadList.size()) : "null");
-
-            if (uiException != null) {
-                Timber.d("onPostExecute(), uiException = %s%n", uiException.getErrorBean().getMessage());
-                uiException.processMe(ComuSearchResultsAc.this, new Intent());
-                return;
-            }
-            if (comunidadList != null && comunidadList.size() > 0) {
-                mResultsList = comunidadList;
-                mComunidadesSummaryFrg = new ComuSearchResultsListFr();
-                getSupportFragmentManager().beginTransaction()
-                        .add(R.id.comu_search_results_frg_container_ac, mComunidadesSummaryFrg, comu_search_results_list_fr_tag)
-                        .commit();
-            } else {
-                UIutils.makeToast(ComuSearchResultsAc.this, R.string.no_result_search_comunidad, Toast.LENGTH_LONG);
-                if (isRegisteredUser(ComuSearchResultsAc.this)) {
-                    REG_COMU_USERCOMU_AC.doMenuItem(ComuSearchResultsAc.this);
-                } else {
-                    REG_COMU_USER_USERCOMU_AC.doMenuItem(ComuSearchResultsAc.this);
-                }
-            }
-        }
+    @Override
+    public Comunidad getComunidadToSearch(){
+        return mComunidad;
     }
 
+    @Override
+    public Activity getActivity()
+    {
+        return this;
+    }
+
+//    ============================================================
+//    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
+/*    ============================================================*/
 
     // TODO: to persist the task during restarts and properly cancel the task when the activity is destroyed. (Example in Shelves)
     class UsuarioComunidadGetter extends AsyncTask<Comunidad, Void, UsuarioComunidad> {

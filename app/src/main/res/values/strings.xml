@@ -225,5 +225,7 @@
     <string name="usercomu_data_ac_label">En la comunidad</string>
     <string name="usercomu_data_ac_delete_txt">Para borrar tus datos en esta comunidad:</string>
     <string name="usercomu_data_ac_delete_button_txt">Date de baja en la comunidad</string>
+    <string name="comu_list_no_result_txt">No hemos encontrado ningún resultado para tu búsqueda
+    </string>
 
 </resources>

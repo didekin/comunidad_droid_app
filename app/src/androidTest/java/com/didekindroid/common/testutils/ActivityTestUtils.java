@@ -28,6 +28,8 @@ import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.KITKAT;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.pressBack;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.PickerActions.setDate;
@@ -175,6 +177,13 @@ public final class ActivityTestUtils {
     public static void checkUp(Integer... activityLayoutIds)
     {
         clickNavigateUp();
+        for (Integer layout : activityLayoutIds) {
+            onView(withId(layout)).check(matches(isDisplayed()));
+        }
+    }
+
+    public static void checkBack(ViewInteraction viewInteraction, Integer... activityLayoutIds){
+        viewInteraction.perform(closeSoftKeyboard()).perform(pressBack());
         for (Integer layout : activityLayoutIds) {
             onView(withId(layout)).check(matches(isDisplayed()));
         }

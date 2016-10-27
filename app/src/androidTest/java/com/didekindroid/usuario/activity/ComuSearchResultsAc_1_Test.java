@@ -1,6 +1,7 @@
 package com.didekindroid.usuario.activity;
 
 import android.content.Intent;
+import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -37,12 +38,12 @@ import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_SEARCH;
 import static com.didekindroid.common.activity.BundleKey.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.common.activity.TokenHandler.TKhandler;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkBack;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanTwoUsers;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanWithTkhandler;
-import static com.didekindroid.common.testutils.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.makeListTwoUserComu;
 import static com.didekindroid.common.testutils.ActivityTestUtils.regThreeUserComuSameUser;
 import static com.didekindroid.common.testutils.ActivityTestUtils.regTwoUserComuSameUser;
@@ -50,7 +51,6 @@ import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdat
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.external.LongListMatchers.withAdaptedData;
 import static com.didekindroid.usuario.activity.utils.RolUi.PRO;
-import static com.didekindroid.usuario.activity.utils.UsuarioFragmentTags.comu_search_results_list_fr_tag;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_LA_PLAZUELA_5;
@@ -82,7 +82,7 @@ public class ComuSearchResultsAc_1_Test {
     Intent intent;
     CleanUserEnum whatClean = CleanUserEnum.CLEAN_NOTHING;
 
-    int activityLayoutId = R.id.comu_list_frg;
+    int activityLayoutId = R.id.comu_list_fragment;
 
     @Rule
     public IntentsTestRule<ComuSearchResultsAc> mIntentRule =
@@ -110,16 +110,14 @@ public class ComuSearchResultsAc_1_Test {
     }
 
     @Test
-    public void testOnCreate_0() throws UiException, IOException
+    public void testOnCreate() throws UiException, IOException
     {
         whatClean = CLEAN_JUAN;
 
         // Inserto comunidades en DB.
         regTwoUserComuSameUser(makeListTwoUserComu());
         activity = mIntentRule.launchActivity(intent);
-        onView(withId(R.id.comu_list_frg)).check(matches(isDisplayed()));
-
-        clickNavigateUp();
+        onView(withId(R.id.comu_list_fragment)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -133,7 +131,7 @@ public class ComuSearchResultsAc_1_Test {
         assertThat(isRegisteredUser(activity), is(true));
 
         Thread.sleep(2000);
-        mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getSupportFragmentManager().findFragmentByTag(comu_search_results_list_fr_tag);
+        mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getSupportFragmentManager().findFragmentById(R.id.comu_list_fragment);
         adapter = mComunidadSummaryFrg.mAdapter;
         assertThat(adapter.getCount(), is(1));
         Comunidad comunidad = (Comunidad) intent.getSerializableExtra(COMUNIDAD_SEARCH.key);
@@ -160,7 +158,7 @@ public class ComuSearchResultsAc_1_Test {
         activity = mIntentRule.launchActivity(intent);
 
         Thread.sleep(2000);
-        mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getSupportFragmentManager().findFragmentByTag(comu_search_results_list_fr_tag);
+        mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getSupportFragmentManager().findFragmentById(R.id.comu_list_fragment);
         adapter = mComunidadSummaryFrg.mAdapter;
         assertThat(adapter.getCount(), is(2));
         onView(withId(android.R.id.list)).check(
@@ -184,12 +182,12 @@ public class ComuSearchResultsAc_1_Test {
 
         activity = mIntentRule.launchActivity(intent);
         assertThat(isRegisteredUser(activity), is(false));
-        mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getSupportFragmentManager().findFragmentByTag(comu_search_results_list_fr_tag);
-        assertThat(mComunidadSummaryFrg, nullValue());
+        mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getSupportFragmentManager().findFragmentById(R.id.comu_list_fragment);
 
         checkToastInTest(R.string.no_result_search_comunidad, activity);
         // Presenta registro de usuario y comunidad.
         onView(withId(R.id.reg_comu_usuario_usuariocomu_layout)).check(matches(isDisplayed()));
+        Thread.sleep(2000);
     }
 
     @Test
@@ -208,12 +206,12 @@ public class ComuSearchResultsAc_1_Test {
 
         activity = mIntentRule.launchActivity(intent);
         assertThat(isRegisteredUser(activity), is(true));
-        mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getSupportFragmentManager().findFragmentByTag(comu_search_results_list_fr_tag);
-        assertThat(mComunidadSummaryFrg, nullValue());
+        mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getSupportFragmentManager().findFragmentById(R.id.comu_list_fragment);
 
         checkToastInTest(R.string.no_result_search_comunidad, activity);
         // Presenta registro de usuarioComunidad y comunidad.
         onView(withId(R.id.reg_comu_and_usercomu_layout)).check(matches(isDisplayed()));
+        Thread.sleep(2000);
     }
 
 
@@ -232,7 +230,7 @@ public class ComuSearchResultsAc_1_Test {
         assertThat(isRegisteredUser(activity), is(false));
 
         Thread.sleep(2000);
-        mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getSupportFragmentManager().findFragmentByTag(comu_search_results_list_fr_tag);
+        mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getSupportFragmentManager().findFragmentById(R.id.comu_list_fragment);
         adapter = mComunidadSummaryFrg.mAdapter;
         assertThat(adapter.getCount(), is(1));
         onView(withAdaptedData(Matchers.<Object>is(COMU_LA_PLAZUELA_5))).check(matches(isDisplayed()));
@@ -258,7 +256,7 @@ public class ComuSearchResultsAc_1_Test {
         assertThat(isRegisteredUser(activity), is(true));
 
         Thread.sleep(2000);
-        mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getSupportFragmentManager().findFragmentByTag(comu_search_results_list_fr_tag);
+        mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getSupportFragmentManager().findFragmentById(R.id.comu_list_fragment);
         adapter = mComunidadSummaryFrg.mAdapter;
         assertThat(adapter.getCount(), is(1));
 
@@ -266,13 +264,13 @@ public class ComuSearchResultsAc_1_Test {
         onView(withAdaptedData(Matchers.<Object>equalTo(comunidad))).check(matches(isDisplayed()));
         onData(is(instanceOf(Comunidad.class))).onChildView(
                 allOf(
-                withId(R.id.nombreComunidad_view),
-                withText(COMU_LA_PLAZUELA_5.getNombreComunidad())
-        )).perform(click());
+                        withId(R.id.nombreComunidad_view),
+                        withText(COMU_LA_PLAZUELA_5.getNombreComunidad())
+                )).perform(click());
 
-        onView(withId(R.id.usercomu_data_ac_layout)).check(matches(isDisplayed()));
+        ViewInteraction viewInteraction = onView(withId(R.id.usercomu_data_ac_layout)).check(matches(isDisplayed()));
 
-        checkUp(activityLayoutId);
+        checkBack(viewInteraction, activityLayoutId);
     }
 
     @Test
@@ -328,15 +326,14 @@ public class ComuSearchResultsAc_1_Test {
         assertThat(isRegisteredUser(activity), is(true));
 
         Thread.sleep(2000);
-        mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getSupportFragmentManager().findFragmentByTag(comu_search_results_list_fr_tag);
+        mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getSupportFragmentManager().findFragmentById(R.id.comu_list_fragment);
         adapter = mComunidadSummaryFrg.mAdapter;
         assertThat(adapter.getCount(), is(1));
         Comunidad comunidad = adapter.getItem(0);
-        assertThat(comunidad.getNombreVia(),is("de la Plazuela"));
+        assertThat(comunidad.getNombreVia(), is("de la Plazuela"));
 
         onData(is(comunidad)).perform(click());
         onView(withId(R.id.reg_usercomu_ac_layout)).check(matches(isDisplayed()));
-
         checkUp(activityLayoutId);
 
         cleanTwoUsers(USER_JUAN, usuarioIn);
@@ -357,10 +354,10 @@ public class ComuSearchResultsAc_1_Test {
         assertThat(isRegisteredUser(activity), is(true));
 
         onData(is(COMU_LA_PLAZUELA_5)).perform(click());
-        intended(hasExtra(COMUNIDAD_LIST_OBJECT.key,comunidad));
-        onView(withId(R.id.reg_usercomu_ac_layout)).check(matches(isDisplayed()));
+        intended(hasExtra(COMUNIDAD_LIST_OBJECT.key, comunidad));
+        ViewInteraction viewInteraction = onView(withId(R.id.reg_usercomu_ac_layout)).check(matches(isDisplayed()));
 
-        checkUp(activityLayoutId);
+        checkBack(viewInteraction, activityLayoutId);
     }
 
     @Test
@@ -376,7 +373,7 @@ public class ComuSearchResultsAc_1_Test {
         assertThat(isRegisteredUser(activity), is(true));
 
         Thread.sleep(2000);
-        mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getSupportFragmentManager().findFragmentByTag(comu_search_results_list_fr_tag);
+        mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getSupportFragmentManager().findFragmentById(R.id.comu_list_fragment);
         adapter = mComunidadSummaryFrg.mAdapter;
         assertThat(adapter.getCount(), is(1));
         Comunidad comunidad = adapter.getItem(0);
@@ -388,5 +385,7 @@ public class ComuSearchResultsAc_1_Test {
         // On-click devuelve a la pantalla de búsqueda de comunidad.
         onView(withId(R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));
         checkToastInTest(R.string.comunidad_not_found_message, activity);
+
+        Thread.sleep(2000);
     }
 }
