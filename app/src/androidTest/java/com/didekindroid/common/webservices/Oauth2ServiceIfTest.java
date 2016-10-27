@@ -9,6 +9,7 @@ import com.didekindroid.usuario.testutils.CleanUserEnum;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -52,6 +53,12 @@ import static org.junit.Assert.fail;
 public class Oauth2ServiceIfTest {
 
     CleanUserEnum whatClean = CLEAN_NOTHING;
+
+    @BeforeClass
+    public static void slowSeconds() throws InterruptedException
+    {
+        Thread.sleep(4000);
+    }
 
     @Before
     public void setUp() throws Exception

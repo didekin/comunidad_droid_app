@@ -99,7 +99,7 @@ public class UiExceptionTests_2 extends UiExceptionAbstractTest {
     public void tearDown() throws Exception
     {
         cleanOptions(CleanUserEnum.CLEAN_JUAN);
-        Thread.sleep(4000);
+        Thread.sleep(3000);
     }
 
     //  ===========================================================================
