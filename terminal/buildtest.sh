@@ -3,7 +3,6 @@
 
 #!/bin/bash
 [ $# -ne 4 ] && { echo "args count should be 4" 1>&2; exit 1;}
-Oauth2ServiceIfTest
 ENV="$1"
 EMULATOR="$2"
 SUITE="$3"
