@@ -184,14 +184,6 @@ public class UIutilsTest extends TestCase {
         assertThat(isRegisteredUser(context), is(true));
     }
 
-    @Test
-    public void testDefaultsEmulator()
-    {
-        TimeZone timeZone = new GregorianCalendar().getTimeZone();
-        assertThat(timeZone.getID(), is("Europe/Brussels"));
-        assertThat(getDefault(), is(SPAIN_LOCALE));
-    }
-
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @Test
     public void testCalendarTime()

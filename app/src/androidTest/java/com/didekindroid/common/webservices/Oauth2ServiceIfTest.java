@@ -69,7 +69,6 @@ public class Oauth2ServiceIfTest {
     @After
     public void cleaningUp() throws UiException, InterruptedException
     {
-        Thread.sleep(1000);
         cleanOptions(whatClean);
     }
 
@@ -142,6 +141,7 @@ public class Oauth2ServiceIfTest {
         cleanWithTkhandler();
     }
 
+    /*@SuppressWarnings("ConstantConditions")
     @Test
     public void testGetRefreshUserToken() throws Exception
     {
@@ -150,15 +150,15 @@ public class Oauth2ServiceIfTest {
         //Inserta userComu, comunidad, usuariocomunidad y actuliza tokenCache.
         signUpAndUpdateTk(COMU_REAL_PEPE);
         SpringOauthToken tokenOld = TKhandler.getAccessTokenInCache();
-        String accessTkOldValue = tokenOld != null ? tokenOld.getValue() : null;
-        String refreshTkOldValue = tokenOld != null ? tokenOld.getRefreshToken().getValue() : null;
+        String accessTkOldValue = tokenOld.getValue();
+        String refreshTkOldValue = tokenOld.getRefreshToken().getValue();
 
         SpringOauthToken tokenNew = Oauth2.getRefreshUserToken(TKhandler.getRefreshTokenValue());
         assertThat(tokenNew, notNullValue());
         // Return mew access and refresh tokens.
         assertThat(tokenNew.getRefreshToken().getValue(), not(is(refreshTkOldValue)));
         assertThat(tokenNew.getValue(), not(is(accessTkOldValue)));
-    }
+    }*/
 
     @Test
     public void testDoAuthBasicHeader()
