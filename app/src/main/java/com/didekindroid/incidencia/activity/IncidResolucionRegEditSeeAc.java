@@ -19,7 +19,7 @@ import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.getGcmToken;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_resolucion_ac_frgs_tag;
-import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenuClearSingleTop;
+import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenu;
 
 /**
  * This activity is a point of registration for receiving GCM notifications of new incidents.
@@ -131,7 +131,7 @@ public class IncidResolucionRegEditSeeAc extends AppCompatActivity {
 
         switch (resourceId) {
             case android.R.id.home:
-                doUpMenuClearSingleTop(this);
+                doUpMenu(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

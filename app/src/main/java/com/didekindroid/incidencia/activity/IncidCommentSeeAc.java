@@ -17,7 +17,7 @@ import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_comments_see_list_fr_tag;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_COMMENT_REG_AC;
-import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenuClearSingleTop;
+import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenu;
 
 /**
  * Preconditions:
@@ -81,7 +81,7 @@ public class IncidCommentSeeAc extends AppCompatActivity {
 
         switch (resourceId) {
             case android.R.id.home:
-                doUpMenuClearSingleTop(this);
+                doUpMenu(this);
                 return true;
             case R.id.incid_comment_reg_ac_mn:
                 Intent intent = new Intent();

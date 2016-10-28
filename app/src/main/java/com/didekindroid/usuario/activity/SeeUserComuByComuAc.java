@@ -16,7 +16,7 @@ import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.UserMenu.COMU_SEARCH_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_USERCOMU_BY_USER_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.USER_DATA_AC;
-import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenuClearSingleTop;
+import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenu;
 
 /**
  * User: pedro@didekin
@@ -67,7 +67,7 @@ public class SeeUserComuByComuAc extends AppCompatActivity {
 
         switch (resourceId) {
             case android.R.id.home:
-                doUpMenuClearSingleTop(this);
+                doUpMenu(this);
                 return true;
             case R.id.see_usercomu_by_user_ac_mn:
                 SEE_USERCOMU_BY_USER_AC.doMenuItem(this);

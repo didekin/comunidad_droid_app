@@ -18,7 +18,7 @@ import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuario.activity.utils.UserMenu.COMU_SEARCH_AC;
 import static com.didekindroid.usuario.activity.utils.UserMenu.USER_DATA_AC;
-import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenuClearSingleTop;
+import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenu;
 
 /**
  * Preconditions:
@@ -69,7 +69,7 @@ public class SeeUserComuByUserAc extends AppCompatActivity implements
 
         switch (resourceId) {
             case android.R.id.home:
-                doUpMenuClearSingleTop(this);
+                doUpMenu(this);
                 return true;
             case R.id.user_data_ac_mn:
                 USER_DATA_AC.doMenuItem(this);

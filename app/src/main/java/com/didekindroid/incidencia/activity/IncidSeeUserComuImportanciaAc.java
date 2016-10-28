@@ -13,7 +13,7 @@ import timber.log.Timber;
 
 import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
-import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenuClearSingleTop;
+import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenu;
 
 /**
  * Preconditions:
@@ -52,7 +52,7 @@ public class IncidSeeUserComuImportanciaAc extends AppCompatActivity {
 
         switch (resourceId) {
             case android.R.id.home:
-                doUpMenuClearSingleTop(this);
+                doUpMenu(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

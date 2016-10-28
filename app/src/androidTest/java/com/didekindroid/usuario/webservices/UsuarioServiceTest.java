@@ -222,7 +222,7 @@ public class UsuarioServiceTest {
     }
 
     @Test
-    public void testIsOldestUser_1() throws UiException, IOException
+    public void testIsOldestUser() throws UiException, IOException
     {
         whatClean = CLEAN_JUAN2_AND_PEPE;
 
@@ -237,18 +237,6 @@ public class UsuarioServiceTest {
         updateSecurityData(USER_JUAN2.getUserName(), USER_JUAN2.getPassword());
 
         assertThat(ServOne.isOldestOrAdmonUserComu(cDb.getC_Id()), is(false));
-    }
-
-    @Test
-    public void testIsOldestUser_2() throws UiException, IOException
-    {
-        signUpAndUpdateTk(COMU_REAL_JUAN);
-        try {
-            ServOne.isOldestOrAdmonUserComu(999L);
-            fail();
-        } catch (UiException e) {
-            assertThat(e.getErrorBean().getMessage(), is(COMUNIDAD_NOT_FOUND.getHttpMessage()));
-        }
     }
 
     @Test
