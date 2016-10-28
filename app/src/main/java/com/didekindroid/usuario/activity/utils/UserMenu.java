@@ -153,7 +153,7 @@ public enum UserMenu {
     {
         Intent intent = NavUtils.getParentActivityIntent(parentActivity);
         // We need both flags to reuse the intent of the parent activity.
-//        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         NavUtils.navigateUpTo(parentActivity, intent);
     }
 }
