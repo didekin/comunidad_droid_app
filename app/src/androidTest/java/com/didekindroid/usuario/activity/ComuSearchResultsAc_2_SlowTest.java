@@ -36,7 +36,6 @@ import static com.didekindroid.usuario.testutils.UserMenuTestUtils.SEE_USERCOMU_
 import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_LA_PLAZUELA_5;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -92,16 +91,13 @@ public class ComuSearchResultsAc_2_SlowTest {
         activity = mActivityRule.launchActivity(intent);
         assertThat(isRegisteredUser(activity), is(false));
 
-        mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getSupportFragmentManager().findFragmentById(R.id.comu_list_frg_layout);
+        mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getSupportFragmentManager().findFragmentById(R.id.comu_list_fragment);
         assertThat(activity, notNullValue());
-        assertThat(mComunidadSummaryFrg, nullValue());
+        assertThat(mComunidadSummaryFrg, notNullValue());
 
         // No results in DB. The user is invited to register.
         checkToastInTest(R.string.no_result_search_comunidad, activity);
         onView(withId(R.id.reg_comu_usuario_usuariocomu_layout)).check(matches(isDisplayed()));
-
-        Thread.sleep(2000);
-        checkUp(activityLayoutId);
     }
 
     @Test
