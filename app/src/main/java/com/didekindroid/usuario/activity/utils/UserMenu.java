@@ -149,7 +149,7 @@ public enum UserMenu {
 
     //  =================================  HELPER METHODS ====================================
 
-    public static void doUpMenu(Activity parentActivity)
+    public static void doUpMenuClearSingleTop(Activity parentActivity)
     {
         Intent intent = NavUtils.getParentActivityIntent(parentActivity);
         // We need both flags to reuse the intent of the parent activity.

@@ -34,7 +34,7 @@ import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.common.utils.UIutils.makeToast;
 import static com.didekindroid.common.utils.UIutils.updateIsRegistered;
 import static com.didekindroid.common.webservices.Oauth2Service.Oauth2;
-import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenu;
+import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenuClearSingleTop;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 
 /**
@@ -145,7 +145,7 @@ public class LoginAc extends AppCompatActivity {
 
         switch (resourceId) {
             case android.R.id.home:
-                doUpMenu(this);
+                doUpMenuClearSingleTop(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -25,6 +25,8 @@ import java.util.Objects;
 
 import timber.log.Timber;
 
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+import static android.content.Intent.FLAG_ACTIVITY_TASK_ON_HOME;
 import static android.widget.Toast.LENGTH_SHORT;
 import static com.didekin.common.exception.DidekinExceptionMsg.AVANCE_WRONG_INIT;
 import static com.didekin.common.exception.DidekinExceptionMsg.BAD_REQUEST;
@@ -104,7 +106,7 @@ public class UiException extends Exception {
             public void doAction(Activity activity, Intent intent)
             {
                 intent.setClass(activity, ComuSearchAc.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.setFlags(FLAG_ACTIVITY_NEW_TASK);
                 activity.startActivity(intent);
                 makeToast(activity, R.string.exception_generic_message, LENGTH_SHORT);
                 finishActivity(activity, intent);
@@ -173,7 +175,7 @@ public class UiException extends Exception {
             public void doAction(Activity activity, Intent intent)
             {
                 intent.setClass(activity, ComuSearchAc.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.setFlags(FLAG_ACTIVITY_NEW_TASK);
                 activity.startActivity(intent);
                 makeToast(activity, R.string.comunidad_not_found_message, LENGTH_SHORT);
                 finishActivity(activity, intent);
@@ -193,7 +195,7 @@ public class UiException extends Exception {
             {
                 Objects.equals(isRegisteredUser(activity),true);
                 intent.setClass(activity, UserDataAc.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.setFlags(FLAG_ACTIVITY_NEW_TASK);
                 activity.startActivity(intent);
                 makeToast(activity, R.string.user_data_not_modified_msg, LENGTH_SHORT);
                 finishActivity(activity, intent);
@@ -207,7 +209,7 @@ public class UiException extends Exception {
         static void doCommonLogin(Activity activity, Intent intent)
         {
             intent.setClass(activity, LoginAc.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setFlags(FLAG_ACTIVITY_TASK_ON_HOME | FLAG_ACTIVITY_NEW_TASK);
             activity.startActivity(intent);
             finishActivity(activity, intent);
         }

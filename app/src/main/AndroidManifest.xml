@@ -219,10 +219,10 @@
         <activity
             android:name=".usuario.activity.SeeUserComuByUserAc"
             android:label="@string/see_usercomu_by_user_ac_label"
-            android:parentActivityName=".usuario.activity.ComuSearchResultsAc">
+            android:parentActivityName=".usuario.activity.UserDataAc">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".usuario.activity.ComuSearchResultsAc"/>
+                android:value=".usuario.activity.UserDataAc"/>
         </activity>
         <activity
             android:name=".usuario.activity.UserComuDataAc"

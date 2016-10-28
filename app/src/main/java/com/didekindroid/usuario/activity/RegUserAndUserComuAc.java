@@ -40,7 +40,7 @@ import static com.didekindroid.common.webservices.Oauth2Service.Oauth2;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUserBeanFromRegUserFrView;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUserComuBeanFromView;
 import static com.didekindroid.usuario.activity.utils.UserMenu.LOGIN_AC;
-import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenu;
+import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenuClearSingleTop;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 
 /**
@@ -150,7 +150,7 @@ public class RegUserAndUserComuAc extends AppCompatActivity {
 
         switch (resourceId) {
             case android.R.id.home:
-                doUpMenu(this);
+                doUpMenuClearSingleTop(this);
                 return true;
             case R.id.login_ac_mn:
                 LOGIN_AC.doMenuItem(this);

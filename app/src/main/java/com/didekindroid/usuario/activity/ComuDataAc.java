@@ -30,7 +30,7 @@ import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.utils.UIutils.makeToast;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeComunidadBeanFromView;
 import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_USERCOMU_BY_COMU_AC;
-import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenu;
+import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenuClearSingleTop;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 
 /**
@@ -237,7 +237,7 @@ public class ComuDataAc extends AppCompatActivity implements RegComuFr.RegComuFr
 
         switch (resourceId) {
             case android.R.id.home:
-                doUpMenu(this);
+                doUpMenuClearSingleTop(this);
                 return true;
             case R.id.see_usercomu_by_comu_ac_mn:
                 Intent intent = new Intent();

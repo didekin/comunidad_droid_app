@@ -27,8 +27,10 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
+import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isNotChecked;
+import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekin.usuario.dominio.Rol.ADMINISTRADOR;
@@ -38,6 +40,7 @@ import static com.didekin.usuario.dominio.Rol.PROPIETARIO;
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
 import static com.didekindroid.common.activity.BundleKey.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.common.activity.TokenHandler.TKhandler;
+import static com.didekindroid.common.testutils.ActivityTestUtils.checkBack;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.common.testutils.ActivityTestUtils.checkUp;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
@@ -50,6 +53,7 @@ import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutils.UserMenuTestUtils.COMU_DATA_AC;
 import static com.didekindroid.usuario.testutils.UserMenuTestUtils.SEE_USERCOMU_BY_COMU_AC;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
+import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -197,7 +201,10 @@ public class UserComuDataAc_1_Test {
     {
         onView(withId(R.id.usercomu_data_ac_delete_button)).perform(click());
         onView(withId(R.id.see_usercomu_by_user_frg)).check(matches(isDisplayed()));
-        checkUp(activityLayoutId);
+//        checkUp(R.id.user_data_ac_layout);
+
+        ViewInteraction viewInteraction = onView(withId(R.id.see_usercomu_by_user_frg)).check(matches(isDisplayed()));
+        checkBack(viewInteraction, R.id.comu_search_ac_linearlayout);
 
         assertThat(TKhandler.getAccessTokenInCache(), notNullValue());
         assertThat(TKhandler.getRefreshTokenFile().exists(), is(true));

@@ -29,7 +29,7 @@ if [ $ENV = "awspre" ] ; then
 fi
 
 case "$SUITE" in
-    cm) ./gradlew --debug app:cAT -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.common.suite.CommonSuite ;;
+    cm) ./gradlew app:cAT -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.common.suite.CommonSuite ;;
     in) ./gradlew app:cAT -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.incidencia.suite.IncidSupportSuite,
                                                                              com.didekindroid.incidencia.suite.IncidFunctionalSuite;;
     us) ./gradlew app:cAT -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.usuario.suite.UserSupportSuite,com.didekindroid.usuario.suite.UserFunctionalSuite,com.didekindroid.usuario.suite.UserFunctionalSlowSuite;;

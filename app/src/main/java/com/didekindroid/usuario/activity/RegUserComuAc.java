@@ -29,7 +29,7 @@ import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.common.utils.UIutils.makeToast;
 import static com.didekindroid.usuario.activity.utils.UserAndComuFiller.makeUserComuBeanFromView;
-import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenu;
+import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenuClearSingleTop;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 
 /**
@@ -124,7 +124,7 @@ public class RegUserComuAc extends AppCompatActivity {
         int resourceId = item.getItemId();
         switch (resourceId) {
             case android.R.id.home:
-                doUpMenu(this);
+                doUpMenuClearSingleTop(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

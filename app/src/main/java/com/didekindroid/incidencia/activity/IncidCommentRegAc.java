@@ -27,7 +27,7 @@ import static com.didekindroid.common.utils.UIutils.doToolBar;
 import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.common.utils.UIutils.makeToast;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
-import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenu;
+import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenuClearSingleTop;
 
 /**
  * Preconditions:
@@ -80,7 +80,7 @@ public class IncidCommentRegAc extends AppCompatActivity {
 
         switch (resourceId) {
             case android.R.id.home:
-                doUpMenu(this);
+                doUpMenuClearSingleTop(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
