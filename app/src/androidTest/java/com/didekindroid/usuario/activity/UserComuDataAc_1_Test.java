@@ -197,7 +197,7 @@ public class UserComuDataAc_1_Test {
     {
         onView(withId(R.id.usercomu_data_ac_delete_button)).perform(click());
         onView(withId(R.id.see_usercomu_by_user_frg)).check(matches(isDisplayed()));
-        checkUp(activityLayoutId);
+        checkUp(R.id.comu_search_ac_coordinatorlayout);
 
         assertThat(TKhandler.getAccessTokenInCache(), notNullValue());
         assertThat(TKhandler.getRefreshTokenFile().exists(), is(true));
