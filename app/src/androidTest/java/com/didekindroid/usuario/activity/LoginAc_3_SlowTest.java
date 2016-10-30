@@ -49,7 +49,8 @@ public class LoginAc_3_SlowTest extends LoginAcTest {
     public void testValidate_6() throws InterruptedException, UiException, IOException
     {
         // User in DB: wrong password three consecutive times. Choice "yes mail" in dialog.
-        assertThat(ServOne.regComuAndUserAndUserComu(COMU_REAL_DROID).execute().body(), is(true));
+        boolean isRegistered = ServOne.regComuAndUserAndUserComu(COMU_REAL_DROID).execute().body();
+        assertThat(isRegistered, is(true));
         SpringOauthToken token = Oauth2.getPasswordUserToken(USER_DROID.getUserName(), USER_DROID.getPassword());
         mActivity = mActivityRule.launchActivity(new Intent());
 
@@ -63,17 +64,17 @@ public class LoginAc_3_SlowTest extends LoginAcTest {
         onView(withId(R.id.reg_usuario_email_editT)).check(matches(isDisplayed()));
         onView(withId(R.id.reg_usuario_password_ediT)).check(matches(isDisplayed()));
         onView(withId(R.id.login_ac_button)).check(matches(isDisplayed()));
-        Thread.sleep(3000);
         checkToastInTest(R.string.password_new_in_login, mActivity);
+        Thread.sleep(2000);
 
         token = Oauth2.getRefreshUserToken(token.getRefreshToken().getValue());
         // Verificamos cambio de password.
-        Thread.sleep(1500);
         String newPassword = ServOne.getUserData(HELPER.doBearerAccessTkHeader(token)).execute().body().getPassword();
+        ServOne.deleteUser(HELPER.doBearerAccessTkHeader(token)).execute();
+
         assertThat(newPassword, notNullValue());
         assertThat(newPassword.length() > 12, is(true));
 
-        ServOne.deleteUser(HELPER.doBearerAccessTkHeader(token)).execute();
         cleanWithTkhandler();
     }
 }
