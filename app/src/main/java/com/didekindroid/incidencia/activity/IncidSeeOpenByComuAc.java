@@ -22,7 +22,6 @@ import java.util.Objects;
 import timber.log.Timber;
 
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
-import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_LIST_INDEX;
 import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.common.utils.UIutils.doToolBar;
@@ -49,7 +48,6 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements
         IncidSeeListListener {
 
     IncidSeeByComuListFr mFragment;
-    int mIncidenciaIndex;
     Comunidad mComunidadSelected;
 
     @Override
@@ -64,7 +62,7 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements
         doToolBar(this, true);
 
         if (savedInstanceState != null) {
-            Objects.equals(getSupportFragmentManager().findFragmentByTag(incid_see_by_comu_list_fr_tag) != null, true);
+            mFragment = (IncidSeeByComuListFr) getSupportFragmentManager().findFragmentByTag(incid_see_by_comu_list_fr_tag);
             return;
         }
         mFragment = new IncidSeeByComuListFr();
@@ -79,24 +77,6 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements
         Timber.d("onResume()");
         getGcmToken(this);
         super.onResume();
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle savedInstanceState)
-    {
-        Timber.d("onSaveInstanceState()");
-        savedInstanceState.putInt(INCIDENCIA_LIST_INDEX.key, mIncidenciaIndex);
-        super.onSaveInstanceState(savedInstanceState);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState)
-    {
-        Timber.d("onRestoreInstanceState()");
-        if (savedInstanceState != null) {
-            mIncidenciaIndex = savedInstanceState.getInt(INCIDENCIA_LIST_INDEX.key, 0);
-            mFragment.getListView().setSelection(mIncidenciaIndex); // Only for linearFragments.
-        }
     }
 
     // ============================================================
@@ -145,7 +125,6 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements
     public void onIncidenciaSelected(final Incidencia incidencia, int position)
     {
         Timber.d("onIncidenciaSelected()");
-        mIncidenciaIndex = position;
         new IncidImportanciaGetter().execute(incidencia.getIncidenciaId());
     }
 

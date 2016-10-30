@@ -23,7 +23,6 @@ import java.util.Objects;
 import timber.log.Timber;
 
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
-import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_LIST_INDEX;
 import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.common.activity.BundleKey.IS_MENU_IN_FRAGMENT_FLAG;
@@ -39,10 +38,10 @@ import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaSer
  * 1. The user is NOW registered in the comunidad whose incidencias are shown.
  * 2. The incidencias shown have been registered in the last 24 months and are closed.
  * 3. All the incidencias closed in a comunidad where the user is NOW registered are shown,
- *    even is the user was not registered in the comunidad when incidencia was open or closed.
+ * even is the user was not registered in the comunidad when incidencia was open or closed.
  * 4. All incidencias closed MUST HAVE a resolucion.
  * 5. An intent may be passed with a comunidadId, when a notification is sent when the
- *    incidencia has been closed.
+ * incidencia has been closed.
  * Postconditions:
  * 1. A list of IncidenciaUSer instances are shown.
  * 2. The incidencias are shown in chronological order, from the most recent to the oldest one.
@@ -54,7 +53,6 @@ public class IncidSeeClosedByComuAc extends AppCompatActivity implements
         IncidSeeListListener {
 
     IncidSeeByComuListFr mFragment;
-    int mIncidenciaIndex;
     Comunidad mComunidadSelected;
 
     @Override
@@ -66,31 +64,13 @@ public class IncidSeeClosedByComuAc extends AppCompatActivity implements
         setContentView(R.layout.incid_see_closed_by_comu_ac);
         doToolBar(this, true);
         if (savedInstanceState != null) {
-            Objects.equals(getSupportFragmentManager().findFragmentByTag(incid_see_by_comu_list_fr_tag) != null, true);
+            mFragment = (IncidSeeByComuListFr) getSupportFragmentManager().findFragmentByTag(incid_see_by_comu_list_fr_tag);
             return;
         }
         mFragment = new IncidSeeByComuListFr();
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.incid_see_closed_by_comu_ac, mFragment, incid_see_by_comu_list_fr_tag)
                 .commit();
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle savedInstanceState)
-    {
-        Timber.d("onSaveInstanceState()");
-        savedInstanceState.putInt(INCIDENCIA_LIST_INDEX.key, mIncidenciaIndex);
-        super.onSaveInstanceState(savedInstanceState);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState)
-    {
-        Timber.d("onRestoreInstanceState()");
-        if (savedInstanceState != null) {
-            mIncidenciaIndex = savedInstanceState.getInt(INCIDENCIA_LIST_INDEX.key, 0);
-            mFragment.getListView().setSelection(mIncidenciaIndex);
-        }
     }
 
     // ============================================================
@@ -130,7 +110,6 @@ public class IncidSeeClosedByComuAc extends AppCompatActivity implements
     public void onIncidenciaSelected(final Incidencia incidencia, int position)
     {
         Timber.d("onIncidenciaSelected()");
-        mIncidenciaIndex = position;
         new ResolucionGetter().execute(incidencia);
     }
 

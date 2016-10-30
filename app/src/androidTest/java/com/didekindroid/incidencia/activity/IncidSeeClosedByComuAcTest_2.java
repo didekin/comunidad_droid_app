@@ -273,7 +273,7 @@ public class IncidSeeClosedByComuAcTest_2 {
                 notNullValue());
         onView(withId(R.id.incid_comment_reg_ac_mn)).check(doesNotExist());
 
-        // Navigate-up
+        // Navigate-up desde IncidCommentSeeAc
         checkUp(R.id.incid_resolucion_see_fr_layout);  // Up to 'Resolución'
         checkUp(R.id.incid_see_closed_by_comu_ac, R.id.incid_see_generic_layout);  // Up to consulta incidencias.
     }

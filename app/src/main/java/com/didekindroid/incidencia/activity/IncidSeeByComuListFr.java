@@ -27,6 +27,7 @@ import java.util.Objects;
 import timber.log.Timber;
 
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_LIST_INDEX;
+import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_LIST_INDEX;
 
 /**
  * Preconditions:
@@ -41,6 +42,7 @@ public class IncidSeeByComuListFr extends Fragment implements ComuSpinnerSettabl
     View mView;
     ListView mListView;
     Spinner mComunidadSpinner;
+    int mIncidenciaIndex;
 
     /**
      * This index can be set in three ways:
@@ -72,6 +74,7 @@ public class IncidSeeByComuListFr extends Fragment implements ComuSpinnerSettabl
         mView = inflater.inflate(R.layout.incid_see_generic_fr_layout, container, false);
         if (savedInstanceState != null) {
             mComunidadSelectedIndex = savedInstanceState.getInt(COMUNIDAD_LIST_INDEX.key, 0);
+            mIncidenciaIndex = savedInstanceState.getInt(INCIDENCIA_LIST_INDEX.key, 0);
         }
         return mView;
     }
@@ -89,6 +92,7 @@ public class IncidSeeByComuListFr extends Fragment implements ComuSpinnerSettabl
         // To get visible a divider on top of the list.
         mListView.addHeaderView(new View(getContext()), null, true);
         mListView.setEmptyView(mView.findViewById(android.R.id.empty));
+        mListView.setSelection(mIncidenciaIndex);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
@@ -100,6 +104,7 @@ public class IncidSeeByComuListFr extends Fragment implements ComuSpinnerSettabl
                     Incidencia incidencia = ((IncidenciaUser) mListView.getItemAtPosition(position)).getIncidencia();
                     mListener.onIncidenciaSelected(incidencia, position);
                 }
+                mIncidenciaIndex = position;
             }
         });
 
@@ -132,6 +137,7 @@ public class IncidSeeByComuListFr extends Fragment implements ComuSpinnerSettabl
     {
         Timber.d("onSaveInstanceState()");
         savedInstanceState.putInt(COMUNIDAD_LIST_INDEX.key, mComunidadSelectedIndex);
+        savedInstanceState.putInt(INCIDENCIA_LIST_INDEX.key, mIncidenciaIndex);
         super.onSaveInstanceState(savedInstanceState);
     }
 

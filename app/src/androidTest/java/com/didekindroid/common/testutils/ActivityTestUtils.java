@@ -168,12 +168,6 @@ public final class ActivityTestUtils {
         ).check(matches(isDisplayed())).perform(click());
     }
 
-    public static void checkUp(int activityLayoutId)
-    {
-        clickNavigateUp();
-        onView(withId(activityLayoutId)).check(matches(isDisplayed()));
-    }
-
     public static void checkUp(Integer... activityLayoutIds)
     {
         clickNavigateUp();

@@ -160,7 +160,7 @@ public abstract class IncidEditAbstractTest {
     void checkScreenEditNoPowerFr()
     {
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
-        assertThat(mActivity.findViewById(R.id.incid_edit_nopower_fr_layout), notNullValue());
+//        assertThat(mActivity.findViewById(R.id.incid_edit_nopower_fr_layout), notNullValue());
         onView(withId(R.id.incid_edit_fragment_container_ac)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_edit_nopower_fr_layout)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_comunidad_rot)).check(matches(isDisplayed()));
@@ -201,7 +201,6 @@ public abstract class IncidEditAbstractTest {
     void checkScreenEditMaxPowerFr()
     {
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
-        assertThat(mActivity.findViewById(R.id.incid_edit_maxpower_fr_layout), notNullValue());
         onView(withId(R.id.incid_edit_fragment_container_ac)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_edit_maxpower_fr_layout)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_comunidad_rot)).check(matches(isDisplayed()));
