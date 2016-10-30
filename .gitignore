@@ -22,6 +22,7 @@ local.properties
 # Parámetros redundantes
 /**/res/values/geny*.xml
 /**/res/values/local*.xml
+/**/res/values/physical*.xml
 # Configuración de entornos
 terminal/app_pro
 terminal/app_pre
