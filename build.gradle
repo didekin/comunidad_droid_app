@@ -2,6 +2,10 @@ allprojects {
     repositories {
         jcenter()
         mavenCentral()
+        flatDir{
+            dirs '/Users/pedro/Documents/git_projects/didekinlibs/client_lib/build/libs/',
+                    '/Users/pedro/Documents/git_projects//didekinlibs/client_gcm_lib/build/libs/'
+        }
     }
 }
 
