@@ -1,0 +1,41 @@
+function checkEnvEmulatorArgs() {
+
+    [ $# -ne 2 ] && { echo "args count should be 2" 1>&2; exit 1;}
+
+    export ENV="$1"
+
+    if ! [ $ENV = "local" ] && ! [ $ENV = "dbpre" ] && ! [ $ENV = "awspre" ] ; then
+            echo "Wrong type of environment: $ENV" 1>&2; exit 1;
+    fi
+
+    export EMULATOR="$2"
+
+    if ! [ $EMULATOR = "geny" ] && ! [ $EMULATOR = "google" ] && ! [ $EMULATOR = "physical" ] ; then
+                echo "Wrong type of emulator: $EMULATOR" 1>&2; exit 1;
+    fi
+}
+
+function setEnvEmulatorVariables() {
+     export LOCAL_ENV="local"
+     export DBPRE_ENV="dbpre"
+     export AWSPRE_ENV="awspre"
+     export GENY="geny"
+     export GOOGLE="google"
+     export PHYSICAL="physical"
+     export APP_PARAM_HOME=app/src/debug/res/values
+     export GITREMOTE=didekindroid
+     echo "Environment: $ENV, emulator: $EMULATOR"
+}
+
+function setArgsInitEnvironments() {
+    checkEnvEmulatorArgs "$1" "$2"
+    setEnvEmulatorVariables
+    export DIDEKINSPRING_HOME=/Users/pedro/Documents/git_projects/didekinspring/releases/$LOCAL_ENV
+}
+
+# export -f setArgsInitEnvironments
+
+function setArgsCloseEnv() {
+    checkEnvEmulatorArgs "$1" "$2"
+    setEnvEmulatorVariables
+}

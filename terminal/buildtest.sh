@@ -1,29 +1,26 @@
-# It must be executed after 'cddroid' with ./terminal/buildtest.sh  environment emulator suite  version
+# It must be executed after 'cddroid' with ./terminal/buildtest.sh  environment emulator suite version
 # environment('local','dbpre','awspre') emulator ('geny','google', 'physical') suite('cm','in','us','all')
 
 #!/bin/bash
 [ $# -ne 4 ] && { echo "args count should be 4" 1>&2; exit 1;}
-ENV="$1"
-EMULATOR="$2"
+
+source ./terminal/env_init.sh  $1 $2
+
 SUITE="$3"
-VERSION="didekindroid-$4"
-GITREMOTE=didekindroid
-
+VERSION="$GITREMOTE-$4"
 echo "Suite:" $SUITE
-
-source ./terminal/env_init.sh  $ENV $EMULATOR
 
 ./gradlew clean
 
-if [ $ENV == "local" ] || [ $ENV == "dbpre" ] ; then
-    echo "Git: add/commit/push local ..."
+if [ $ENV == "$LOCAL_ENV" ] || [ $ENV == "$DBPRE_ENV" ] ; then
+    echo "Git: add, commit, push local ..."
     git add .
     git commit -m "version $VERSION"
     git push $GITREMOTE localdev
 fi
 
-if [ $ENV = "awspre" ] ; then
-    echo "Git: merge local-awspre / push ..."
+if [ $ENV = "$AWSPRE_ENV" ] ; then
+    echo "Git: merge with local, push aws_pre ..."
     git merge localdev  -m "version $VERSION"
     git push $GITREMOTE aws_pre
 fi
@@ -38,4 +35,4 @@ esac
 
 echo " gradlew exit = $?"
 
-source ./terminal/env_close.sh
+source ./terminal/env_close.sh  $ENV $EMULATOR
