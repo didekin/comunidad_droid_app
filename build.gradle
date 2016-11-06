@@ -3,7 +3,8 @@ allprojects {
         jcenter()
         mavenCentral()
         flatDir{
-            dirs '/Users/pedro/Documents/git_projects/didekinlibs/releases/master/'
+            dirs '/Users/pedro/Documents/git_projects/didekinlibs/client_lib/releases/master/',
+                    '/Users/pedro/Documents/git_projects/didekinlibs/client_gcm_lib/releases/master/'
         }
     }
 }

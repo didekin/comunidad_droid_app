@@ -32,7 +32,7 @@ case "$SUITE" in
     all) ./gradlew app:cAT -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.AppFullSuite;;
     *) echo "Invalid suite";;
 esac
-
 echo " gradlew exit = $?"
+
 
 source ./terminal/env_close.sh  $ENV $EMULATOR
