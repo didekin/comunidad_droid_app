@@ -54,6 +54,32 @@ function setArgsInitEnvironments() {
 
 # export -f setArgsInitEnvironments
 
+function copyEmulatorParameters() {
+    echo "Copying emulator parameters ..."
+    if [ $EMULATOR = "$GENY" ] ; then
+        cp terminal/app_local/geny_url.xml $APP_PARAM_HOME
+    fi
+    if [ $EMULATOR = "$GOOGLE" ] ; then
+        cp terminal/app_local/google_url.xml $APP_PARAM_HOME
+    fi
+    if [ $EMULATOR = "$PHYSICAL" ] ; then
+        cp terminal/app_local/physical_url.xml $APP_PARAM_HOME
+    fi
+}
+
+function removeEmulatorParameters() {
+    echo "Removing emulator parameters ..."
+    if [ $EMULATOR = "$GENY" ] ; then
+        rm  $APP_PARAM_HOME/geny_url.xml
+    fi
+    if [ $EMULATOR = "$GOOGLE" ] ; then
+        rm  $APP_PARAM_HOME/google_url.xml
+    fi
+    if [ $EMULATOR = "$PHYSICAL" ] ; then
+        rm  $APP_PARAM_HOME/physical_url.xml
+    fi
+}
+
 function setArgsCloseEnv() {
     checkEnvEmulatorArgs "$1" "$2"
     setEnvEmulatorVariables

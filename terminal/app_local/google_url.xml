@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Http client timeOut-->
+    <string name="timeOut" translatable="false">60</string>
+    <string name="didekinspring_port" translatable="false">:8080</string>
     <!--Google emulator localhost address-->
     <string name="didekinspring_host" translatable="false">http://10.0.2.2</string>
 </resources>
