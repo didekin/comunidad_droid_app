@@ -4,7 +4,7 @@ function checkEnvEmulatorArgs() {
 
     export ENV="$1"
 
-    if ! [ $ENV = "local" ] && ! [ $ENV = "dbpre" ] && ! [ $ENV = "awspre" ] ; then
+    if ! [ $ENV = "local" ] && ! [ $ENV = "awspre" ] ; then
             echo "Wrong type of environment: $ENV" 1>&2; exit 1;
     fi
 
@@ -15,14 +15,33 @@ function checkEnvEmulatorArgs() {
     fi
 }
 
+function checkParamsPro() {
+    [ $# -ne 2 ] && { echo "args count should be 2" 1>&2; exit 1;}
+
+    export ENV="pro"
+    export BRANCH="master"
+    GITREMOTE=didekindroid
+    VERSION="$GITREMOTE-$2"
+
+    if ! [ $ACTION = "$RELEASE" ] && ! [ $ACTION = "$TEST" ] && ! [ $ACTION = "$INSTALL" ] ; then
+        echo "Wrong type of action: $ACTION" 1>&2; exit 1;
+    fi
+    echo "Action: $ACTION"
+    ACTION="$1"
+
+    RELEASE="release"
+    TEST="test"
+    INSTALL="install"
+}
+
 function setEnvEmulatorVariables() {
      export LOCAL_ENV="local"
-     export DBPRE_ENV="dbpre"
      export AWSPRE_ENV="awspre"
      export GENY="geny"
      export GOOGLE="google"
      export PHYSICAL="physical"
      export APP_PARAM_HOME=app/src/debug/res/values
+     export BKS_HOME=app/src/debug/res/raw
      export GITREMOTE=didekindroid
      echo "Environment: $ENV, emulator: $EMULATOR"
 }
@@ -38,4 +57,14 @@ function setArgsInitEnvironments() {
 function setArgsCloseEnv() {
     checkEnvEmulatorArgs "$1" "$2"
     setEnvEmulatorVariables
+}
+
+function assembleAndRelease() {
+
+    # Generation of signed APK
+    ./gradlew app:assembleRelease -Pkeyalias=didekindroid -Pkeypassword=didekin_00_droid_11 \
+       -Pkeystore=/Users/pedro/keystores/didekindroid_release/didekindroid_jks -Pstorepassword=droid_11_jks_00
+    echo "gradlew assembleRelease exit code = $?"
+
+    mv app/build/outputs/apk/app-release.apk app/releases/$ENV/
 }

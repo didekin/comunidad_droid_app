@@ -30,6 +30,8 @@ terminal/app_pre
 terminal/env_init.sh
 terminal/env_close.sh
 
+# Releases
+/**/releases
 #  MISCELÁNEA
 logs/*.*
 administracion
