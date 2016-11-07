@@ -35,6 +35,4 @@ echo "gradlew exit = $?"
 echo "pushing code to $BRANCH"
 git push $GITREMOTE $BRANCH
 
-assembleAndRelease
-
 source ./terminal/env_close.sh  $ENV $EMULATOR
