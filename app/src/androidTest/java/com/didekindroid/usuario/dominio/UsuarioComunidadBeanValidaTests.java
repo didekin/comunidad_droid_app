@@ -164,6 +164,8 @@ public class UsuarioComunidadBeanValidaTests {
     public void testValidateUsuario() throws Exception
     {
         assertThat(usuarioBean.validate(resources, errors), is(true));
+        UsuarioBean usuarioBean2 = new UsuarioBean("user@name.com", "Antonio Rodríguez", "password1", "password1");
+        assertThat(usuarioBean2.validate(resources, errors), is(true));
     }
 
     @Test

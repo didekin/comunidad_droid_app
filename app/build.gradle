@@ -92,9 +92,9 @@ dependencies {
     }
     androidTestCompile 'com.android.support.test.espresso:espresso-idling-resource:2.2.2'
     /* Esta librería es para probar en terminales las funcionalidades servidor relacionadas con Firebase GCM y JavaMail*/
-    androidTestCompile ':client_gcm_lib-a-0.1.2:@jar'
+    androidTestCompile ':client_gcm_lib-a-0.1.3:@jar'
 
-    compile ':client_lib-a-0.1.2:@jar'
+    compile ':client_lib-a-0.1.3:@jar'
     compile 'com.jakewharton.timber:timber:4.3.0'
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
