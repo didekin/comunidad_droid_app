@@ -11,20 +11,19 @@ function checkEnvEmulatorArgs() {
 }
 
 function checkParamsPro() {
+    ACTION="$1"
+    echo "Action: $ACTION"
+    RELEASE="release"
+    TEST="test"
+    INSTALL="install"
+    if ! [ $ACTION = "$RELEASE" ] && ! [ $ACTION = "$TEST" ] && ! [ $ACTION = "$INSTALL" ] ; then
+        echo "Wrong type of action: $ACTION" 1>&2; exit 1;
+    fi
+
     export ENV="pro"
     export BRANCH="master"
     GITREMOTE=didekindroid
     VERSION="$GITREMOTE-$2"
-
-    if ! [ $ACTION = "$RELEASE" ] && ! [ $ACTION = "$TEST" ] && ! [ $ACTION = "$INSTALL" ] ; then
-        echo "Wrong type of action: $ACTION" 1>&2; exit 1;
-    fi
-    echo "Action: $ACTION"
-    ACTION="$1"
-
-    RELEASE="release"
-    TEST="test"
-    INSTALL="install"
 }
 
 function setEnvEmulatorVariables() {
@@ -81,7 +80,6 @@ function setArgsCloseEnv() {
 export -f setArgsCloseEnv
 
 function assembleAndRelease() {
-
     # Generation of signed APK
     ./gradlew app:assembleRelease -Pkeyalias=didekindroid -Pkeypassword=didekin_00_droid_11 \
        -Pkeystore=/Users/pedro/keystores/didekindroid_release/didekindroid_jks -Pstorepassword=droid_11_jks_00
