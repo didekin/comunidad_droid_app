@@ -1,23 +1,16 @@
 function checkEnvEmulatorArgs() {
-
-    [ $# -ne 2 ] && { echo "args count should be 2" 1>&2; exit 1;}
-
     export ENV="$1"
-
     if ! [ $ENV = "local" ] && ! [ $ENV = "awspre" ] ; then
-            echo "Wrong type of environment: $ENV" 1>&2; exit 1;
+        echo "Wrong type of environment: $ENV" 1>&2; exit 1;
     fi
 
     export EMULATOR="$2"
-
     if ! [ $EMULATOR = "geny" ] && ! [ $EMULATOR = "google" ] && ! [ $EMULATOR = "physical" ] ; then
-                echo "Wrong type of emulator: $EMULATOR" 1>&2; exit 1;
+        echo "Wrong type of emulator: $EMULATOR" 1>&2; exit 1;
     fi
 }
 
 function checkParamsPro() {
-    [ $# -ne 2 ] && { echo "args count should be 2" 1>&2; exit 1;}
-
     export ENV="pro"
     export BRANCH="master"
     GITREMOTE=didekindroid
@@ -52,7 +45,7 @@ function setArgsInitEnvironments() {
     export DIDEKINSPRING_HOME=/Users/pedro/Documents/git_projects/didekinspring/releases/$LOCAL_ENV
 }
 
-# export -f setArgsInitEnvironments
+export -f setArgsInitEnvironments
 
 function copyEmulatorParameters() {
     echo "Copying emulator parameters ..."
@@ -81,9 +74,11 @@ function removeEmulatorParameters() {
 }
 
 function setArgsCloseEnv() {
-    checkEnvEmulatorArgs "$1" "$2"
+    checkEnvEmulatorArgs $1 $2
     setEnvEmulatorVariables
 }
+
+export -f setArgsCloseEnv
 
 function assembleAndRelease() {
 
