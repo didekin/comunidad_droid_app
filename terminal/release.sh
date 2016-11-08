@@ -14,11 +14,12 @@ fi
 
 [ $# -ne 1 ] && { echo "args count should be 1" 1>&2; exit 1;}
 
+export ENV="$1"
+
 if ! [ $ENV = "local" ] && ! [ $ENV = "awspre" ] ; then
     echo "Wrong type of environment: $ENV" 1>&2; exit 1;
 fi
 
-export ENV="$1"
 export APP_PROD_PARAM_HOME=app/src/main/res/values
 export BKS_PROD_HOME=app/src/main/res/raw
 
