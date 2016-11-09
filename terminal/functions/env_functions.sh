@@ -63,7 +63,7 @@ function setEnvEmulatorVariables() {
      export APP_PARAM_HOME=app/src/debug/res/values
      export BKS_HOME=app/src/debug/res/raw
      export GITREMOTE=didekindroid
-     echo "Environment: $ENV, emulator: $EMULATOR"
+     echo "Environment: $ENV"
 }
 
 

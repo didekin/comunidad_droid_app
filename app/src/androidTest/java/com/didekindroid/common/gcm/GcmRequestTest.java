@@ -154,6 +154,7 @@ public class GcmRequestTest {
                 new GcmRequest.Builder(new GcmIncidRequestData(incidencia_open_type, 999L)).build())
                 .build();
         GcmResponse gcmResponse = endPointImp.sendGcmMulticastRequest(ACCEPT_ENCODING_IDENTITY, request).execute().body();
+        Thread.sleep(500);
         assertThat(gcmResponse.getResults()[0].getMessage_id(), notNullValue());
         assertThat(gcmResponse.getFailure(), is(0));
         assertThat(gcmResponse.getSuccess(), is(1));
