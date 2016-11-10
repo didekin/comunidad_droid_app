@@ -9,7 +9,7 @@ if ! [ -d ${FUNC_DROID_DIR} ]
     then
         echo "No environment functions dirs" 1>&2; exit 1
     else
-        . ${FUNC_DROID_DIR}/env_functions
+        . ${FUNC_DROID_DIR}/env_functions.sh
 fi
 
 [ $# -ne 1 ] && { echo "args count should be 1" 1>&2; exit 1;}
@@ -36,7 +36,10 @@ fi
 
 assembleAndRelease
 
-echo "Installing app ..."
+echo "Uninstalling com.didekindroid ..."
+adb uninstall com.didekindroid
+
+echo "Installing apk ..."
 adb -d install app/releases/${ENV}/app-release.apk
 
 if [ ${ENV} = "local" ] ; then
