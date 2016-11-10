@@ -40,7 +40,7 @@ echo "Uninstalling com.didekindroid ..."
 adb uninstall com.didekindroid
 
 echo "Installing apk ..."
-adb -d install app/releases/${ENV}/app-release.apk
+adb  install app/releases/${ENV}/app-release.apk
 
 if [ ${ENV} = "local" ] ; then
    echo "borrando local_app_parameters ..."

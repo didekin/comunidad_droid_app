@@ -227,7 +227,8 @@
         <activity
             android:name=".usuario.activity.UserComuDataAc"
             android:label="@string/usercomu_data_ac_label"
-            android:parentActivityName=".usuario.activity.SeeUserComuByUserAc">
+            android:parentActivityName=".usuario.activity.SeeUserComuByUserAc"
+            android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".usuario.activity.SeeUserComuByUserAc"/>
@@ -235,7 +236,8 @@
         <activity
             android:name=".usuario.activity.UserDataAc"
             android:label="@string/user_data_ac_label"
-            android:parentActivityName=".usuario.activity.SeeUserComuByUserAc">
+            android:parentActivityName=".usuario.activity.SeeUserComuByUserAc"
+            android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".usuario.activity.SeeUserComuByUserAc"/>
