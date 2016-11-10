@@ -23,6 +23,9 @@ if [ ${ENV} = "$AWSPRE_ENV" ] ; then
     git merge localdev  -m "version $VERSION"
 fi
 
+echo "Uninstalling com.didekindroid ..."
+adb uninstall com.didekindroid
+
 case "$SUITE" in
     cm) ./gradlew app:cAT -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.common.suite.CommonSuite ;;
     in) ./gradlew --debug app:cAT -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.incidencia.suite.IncidSupportSuite,com.didekindroid.incidencia.suite.IncidFunctionalSuite;;
