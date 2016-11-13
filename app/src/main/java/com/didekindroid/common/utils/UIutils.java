@@ -100,7 +100,7 @@ public final class UIutils {
 
 //    ================================ DATA FORMATS ==========================================
 
-    public static String formatTimeStampToString(Timestamp timestamp)   // TEstar.
+    public static String formatTimeStampToString(Timestamp timestamp)
     {
         return DateFormat.getDateInstance(MEDIUM, getDefault()).format(timestamp);
     }

@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import timber.log.Timber;
 
 import static com.didekin.oauth2.OauthTokenHelper.HELPER;
-import static com.didekindroid.DidekindroidApp.getContext;
+import static com.didekindroid.DidekinApp.getContext;
 import static com.didekindroid.common.utils.IoHelper.readStringFromFile;
 import static com.didekindroid.common.utils.IoHelper.writeFileFromString;
 import static com.didekindroid.common.webservices.Oauth2Service.Oauth2;

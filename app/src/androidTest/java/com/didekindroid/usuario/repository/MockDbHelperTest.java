@@ -3,7 +3,7 @@ package com.didekindroid.usuario.repository;
 import android.content.Context;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekindroid.DidekindroidApp;
+import com.didekindroid.DidekinApp;
 
 import org.junit.After;
 import org.junit.Before;
@@ -34,7 +34,7 @@ public class MockDbHelperTest {
     public void setUp() throws Exception
     {
         Timber.i("In setUp()");
-        context = DidekindroidApp.getContext();
+        context = DidekinApp.getContext();
         dbHelper = new MockDbHelper(context);
     }
 

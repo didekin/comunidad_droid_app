@@ -175,7 +175,6 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity {
             // TODO: si existen ambos, pero el userComu no pertenece a la comunidad, hacer un RegUserComu.
             // TODO: algo similar hay que hacer en el resto de acciones de registro.
             // TODO: hay que validar que una comunidad no tiene más de un presidente o más de un administrador.
-            // TODO: relajar la restricción de solo un userComu por vivienda. Está en el modelo lógico.
         }
 
         @Override

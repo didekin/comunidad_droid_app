@@ -25,6 +25,8 @@ import java.util.Objects;
 
 import timber.log.Timber;
 
+import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static com.didekin.usuario.controller.UsuarioServiceConstant.IS_USER_DELETED;
 import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
 import static com.didekindroid.common.activity.BundleKey.USERCOMU_LIST_OBJECT;
@@ -282,6 +284,7 @@ public class UserComuDataAc extends AppCompatActivity {
                     TokenHandler.TKhandler.cleanTokenAndBackFile();
                     updateIsRegistered(false, UserComuDataAc.this);
                     intent = new Intent(UserComuDataAc.this, ComuSearchAc.class);
+                    intent.setFlags(FLAG_ACTIVITY_CLEAR_TOP | FLAG_ACTIVITY_NEW_TASK);
                 } else {
                     Objects.equals(isDeleted == 1, true);
                     intent = new Intent(UserComuDataAc.this, SeeUserComuByUserAc.class);

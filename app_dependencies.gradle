@@ -1,0 +1,39 @@
+
+def espressoVersion = '2.2.2'
+def testRunnerRulesVersion = '0.5'
+def androidSupportVersion = '25.0.0'
+
+dependencies {
+    compile project(":didekinaar")
+
+    testCompile 'junit:junit:4.12'
+    androidTestCompile "com.android.support:support-annotations:$androidSupportVersion"
+    androidTestCompile "com.android.support.test:runner:$testRunnerRulesVersion"
+    androidTestCompile "com.android.support.test:rules:$testRunnerRulesVersion"
+    androidTestCompile "com.android.support.test.espresso:espresso-core:$espressoVersion"
+    androidTestCompile "com.android.support.test.espresso:espresso-intents:$espressoVersion"
+    androidTestCompile("com.android.support.test.espresso:espresso-contrib:$espressoVersion") {
+        exclude group: 'com.android.support', module: 'appcompat'
+        exclude group: 'com.android.support', module: 'support-v4'
+        exclude module: 'recyclerview-v7'
+        exclude module: 'design'
+    }
+    androidTestCompile "com.android.support.test.espresso:espresso-idling-resource:$espressoVersion"
+
+    /* Esta librería es para probar en terminales las funcionalidades servidor relacionadas con Firebase GCM y JavaMail*/
+    androidTestCompile ':client_gcm_lib-a-0.1.3:@jar'
+    compile ':client_lib-a-0.1.3:@jar'
+
+    compile 'com.jakewharton.timber:timber:4.3.0'
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
+
+    //    compile 'com.android.support:support-annotations:24.2.1'
+    compile "com.android.support:design:$androidSupportVersion"
+    compile "com.android.support:appcompat-v7:$androidSupportVersion"
+    compile "com.android.support:support-v4:$androidSupportVersion"
+    compile "com.android.support:recyclerview-v7:$androidSupportVersion"
+    compile "com.android.support:gridlayout-v7:$androidSupportVersion"
+    compile 'com.google.firebase:firebase-messaging:9.4.0'
+}

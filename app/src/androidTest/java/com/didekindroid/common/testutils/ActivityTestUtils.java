@@ -10,7 +10,7 @@ import com.didekin.oauth2.SpringOauthToken;
 import com.didekin.usuario.dominio.Comunidad;
 import com.didekin.usuario.dominio.Usuario;
 import com.didekin.usuario.dominio.UsuarioComunidad;
-import com.didekindroid.DidekindroidApp;
+import com.didekindroid.DidekinApp;
 import com.didekindroid.R;
 import com.didekindroid.common.activity.UiException;
 import com.didekindroid.usuario.testutils.CleanUserEnum;
@@ -40,7 +40,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.DidekindroidApp.getContext;
+import static com.didekindroid.DidekinApp.getContext;
 import static com.didekindroid.common.activity.TokenHandler.TKhandler;
 import static com.didekindroid.common.utils.UIutils.updateIsRegistered;
 import static com.didekindroid.common.webservices.Oauth2Service.Oauth2;
@@ -237,7 +237,7 @@ public final class ActivityTestUtils {
 
     public static void checkToastInTest(int resourceId, Activity activity, int... resourceFieldsErrorId)
     {
-        Resources resources = DidekindroidApp.getContext().getResources();
+        Resources resources = DidekinApp.getContext().getResources();
 
         ViewInteraction toast = onView(
                 withText(containsString(resources.getText(resourceId).toString())))
@@ -253,7 +253,7 @@ public final class ActivityTestUtils {
 
     public static void checkNoToastInTest(int resourceStringId, Activity activity)
     {
-        Resources resources = DidekindroidApp.getContext().getResources();
+        Resources resources = DidekinApp.getContext().getResources();
 
         onView(
                 withText(containsString(resources.getText(resourceStringId).toString())))

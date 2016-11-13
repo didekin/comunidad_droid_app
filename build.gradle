@@ -1,3 +1,13 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.2.2'
+        classpath 'com.google.gms:google-services:3.0.0'
+    }
+}
+
 allprojects {
     repositories {
         jcenter()
@@ -7,6 +17,9 @@ allprojects {
                     '/Users/pedro/Documents/git_projects/didekinlibs/client_gcm_lib/releases/master/'
         }
     }
+}
+
+subprojects {
 }
 
 task wrapper(type: Wrapper) {

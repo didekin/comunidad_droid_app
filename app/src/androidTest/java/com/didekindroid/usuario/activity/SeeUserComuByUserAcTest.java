@@ -214,7 +214,7 @@ public class SeeUserComuByUserAcTest {
     }
 
     @Test
-    public void testComuSearchMn_withToken() throws InterruptedException   // TODO: test failed
+    public void testComuSearchMn_withToken() throws InterruptedException
     {
         COMU_SEARCH_AC.checkMenuItem_WTk(mActivity);
         // NO hay opción de navigate-up.

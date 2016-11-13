@@ -2,7 +2,7 @@ package com.didekindroid.common.utils;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekindroid.DidekindroidApp;
+import com.didekindroid.DidekinApp;
 import com.didekindroid.R;
 
 import org.junit.Test;
@@ -27,7 +27,7 @@ public class IoHelperTest {
     @Test
     public void testDoArrayFromFile() throws Exception
     {
-        List<String> tipos = IoHelper.doArrayFromFile(DidekindroidApp.getContext(), R.raw.tipos_vias);
+        List<String> tipos = IoHelper.doArrayFromFile(DidekinApp.getContext(), R.raw.tipos_vias);
         assertThat(tipos.size(),is(TIPO_VIA_FILE_SIZE));
         assertThat(tipos,hasItems("Acces","Galeria","Zumardi"));
     }

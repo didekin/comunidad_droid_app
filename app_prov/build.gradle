@@ -6,11 +6,11 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25"
     defaultConfig {
-        applicationId "com.didekindroid"
+        applicationId "com.didekinpro"
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 3
-        versionName "a-0.4.0"
+        versionCode 1
+        versionName "a-0.1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         resConfigs "es" /* Añadir nuevos idiomas según hagan falta.*/
     }
@@ -66,7 +66,5 @@ android {
     productFlavors {
     }
 }
-
-
 
 apply plugin: 'com.google.gms.google-services'

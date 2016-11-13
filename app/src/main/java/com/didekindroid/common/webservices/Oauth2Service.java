@@ -19,8 +19,8 @@ import static com.didekin.oauth2.OauthClient.CL_USER;
 import static com.didekin.oauth2.OauthConstant.PASSWORD_GRANT;
 import static com.didekin.oauth2.OauthConstant.REFRESH_TOKEN_GRANT;
 import static com.didekin.oauth2.OauthTokenHelper.BASIC_AND_SPACE;
-import static com.didekindroid.DidekindroidApp.getRetrofitHandler;
-import static com.didekindroid.DidekindroidApp.initRetrofitHandler;
+import static com.didekindroid.DidekinApp.getRetrofitHandler;
+import static com.didekindroid.DidekinApp.initRetrofitHandler;
 
 /**
  * User: pedro@didekin

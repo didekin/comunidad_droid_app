@@ -7,5 +7,5 @@ import android.app.Application;
  * Date: 25/09/16
  * Time: 12:08
  */
-public class DidekindroidProveedor extends Application {
+public class DidekinProApp extends Application {
 }

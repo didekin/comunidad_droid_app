@@ -22,7 +22,7 @@ import org.junit.runner.RunWith;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.didekindroid.DidekindroidApp.getHttpTimeOut;
+import static com.didekindroid.DidekinApp.getHttpTimeOut;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
 import static com.didekindroid.common.utils.UIutils.updateIsGcmTokenSentServer;
 import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_PEPE;

@@ -5,7 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekindroid.DidekindroidApp;
+import com.didekindroid.DidekinApp;
 
 import org.junit.After;
 import org.junit.Before;
@@ -39,7 +39,7 @@ public class IncidenciaDataDbHelperTest {
     @Before
     public void getFixture() throws Exception
     {
-        context = DidekindroidApp.getContext();
+        context = DidekinApp.getContext();
         dbHelper = new IncidenciaDataDbHelper(context);
         database = dbHelper.getWritableDatabase();
     }

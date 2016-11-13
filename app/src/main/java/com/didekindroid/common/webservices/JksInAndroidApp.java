@@ -1,7 +1,7 @@
 package com.didekindroid.common.webservices;
 
 import com.didekin.common.controller.JksInClient;
-import com.didekindroid.DidekindroidApp;
+import com.didekindroid.DidekinApp;
 
 import java.io.InputStream;
 
@@ -24,7 +24,7 @@ public final class JksInAndroidApp implements JksInClient {
     @Override
     public InputStream getInputStream()
     {
-        return DidekindroidApp.getContext().getResources().openRawResource(jksResourceId);
+        return DidekinApp.getContext().getResources().openRawResource(jksResourceId);
     }
 
     @Override

@@ -19,8 +19,8 @@ import retrofit2.Response;
 import timber.log.Timber;
 
 import static com.didekin.common.exception.ErrorBean.GENERIC_ERROR;
-import static com.didekindroid.DidekindroidApp.getRetrofitHandler;
-import static com.didekindroid.DidekindroidApp.initRetrofitHandler;
+import static com.didekindroid.DidekinApp.getRetrofitHandler;
+import static com.didekindroid.DidekinApp.initRetrofitHandler;
 import static com.didekindroid.common.utils.UIutils.checkBearerToken;
 import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 

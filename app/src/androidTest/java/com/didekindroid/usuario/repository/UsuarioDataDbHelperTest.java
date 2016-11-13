@@ -8,7 +8,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.usuario.dominio.ComunidadAutonoma;
 import com.didekin.usuario.dominio.Provincia;
-import com.didekindroid.DidekindroidApp;
+import com.didekindroid.DidekinApp;
 
 import org.junit.After;
 import org.junit.Before;
@@ -48,7 +48,7 @@ public class UsuarioDataDbHelperTest {
             deleteDatabase(dbFile);
         }
 
-        context = DidekindroidApp.getContext();
+        context = DidekinApp.getContext();
         dbHelper = new UsuarioDataDbHelper(context);
     }
 

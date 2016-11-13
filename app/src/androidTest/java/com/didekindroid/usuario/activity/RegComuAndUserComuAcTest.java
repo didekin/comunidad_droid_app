@@ -177,7 +177,7 @@ public class RegComuAndUserComuAcTest {
     {
         activity = mActivityRule.launchActivity(new Intent());
 
-        typeComunidadData(); // TODO. Algueña.
+        typeComunidadData();
         typeUserComuData("port2","escale_b","planta-N","puerta5", PRE, ADM, INQ);
 
         onView(withId(R.id.reg_comu_usuariocomunidad_button)).perform(scrollTo(), click());

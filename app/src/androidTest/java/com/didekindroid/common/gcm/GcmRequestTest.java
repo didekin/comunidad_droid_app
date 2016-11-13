@@ -23,7 +23,7 @@ import java.util.List;
 import retrofit2.Response;
 
 import static com.didekin.incidservice.gcm.GcmKeyValueIncidData.incidencia_open_type;
-import static com.didekindroid.DidekindroidApp.getHttpTimeOut;
+import static com.didekindroid.DidekinApp.getHttpTimeOut;
 import static com.didekinservice.common.gcm.GcmEndPoint.ACCEPT_ENCODING_IDENTITY;
 import static com.didekinservice.common.gcm.GcmEndPoint.FCM_HOST_PORT;
 import static com.didekinservice.common.gcm.GcmResponse.GcmErrorMessage.InvalidJson;

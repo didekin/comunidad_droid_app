@@ -33,7 +33,7 @@ public class ConnectionUtils {
         return isMobileConnected(context) || isWifiConnected(context);
     }
 
-    static boolean isMobileConnected(Context context)
+    private static boolean isMobileConnected(Context context)
     {
         Timber.d("isMobileConnected()");
 
@@ -51,7 +51,7 @@ public class ConnectionUtils {
         return isMobileConnected;
     }
 
-    static boolean isWifiConnected(Context context)
+    private static boolean isWifiConnected(Context context)
     {
         Timber.d("isWifiConnected()");
 

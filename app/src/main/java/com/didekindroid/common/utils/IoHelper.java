@@ -22,15 +22,12 @@ import timber.log.Timber;
  */
 public final class IoHelper {
 
-
-
     private IoHelper()
     {
     }
 
-    public static List<String> doArrayFromFile(Context context, int rawResourceId)
+    static List<String> doArrayFromFile(Context context, int rawResourceId)
     {
-
         Timber.i("In doArrayFromFile()");
 
         final Resources resources = context.getResources();

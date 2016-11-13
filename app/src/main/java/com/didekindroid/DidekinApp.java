@@ -20,7 +20,7 @@ import static java.lang.Integer.parseInt;
  * Date: 05/08/15
  * Time: 19:19
  */
-public final class DidekindroidApp extends Application {
+public final class DidekinApp extends Application {
 
     private static final AtomicReference<Context> mContext = new AtomicReference<>();
     private static final AtomicInteger httpTimeOut = new AtomicInteger();

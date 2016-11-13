@@ -34,7 +34,7 @@ import static com.didekin.common.exception.DidekinExceptionMsg.USER_NAME_DUPLICA
 import static com.didekin.common.exception.DidekinExceptionMsg.USER_NAME_NOT_FOUND;
 import static com.didekin.oauth2.OauthTokenHelper.HELPER;
 import static com.didekin.usuario.controller.UsuarioServiceConstant.IS_USER_DELETED;
-import static com.didekindroid.DidekindroidApp.getRetrofitHandler;
+import static com.didekindroid.DidekinApp.getRetrofitHandler;
 import static com.didekindroid.common.activity.TokenHandler.TKhandler;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOneUser;
 import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
@@ -573,7 +573,7 @@ public class UsuarioServiceTest {
     /*@Test
     public void testBaseURL() throws Exception
     {
-        String hostAndPort = DidekindroidApp.getBaseURL();
+        String hostAndPort = DidekinApp.getBaseURL();
         assertThat(hostAndPort, equalTo("http://192.168.57.1:8080"));
     }*/
 }
