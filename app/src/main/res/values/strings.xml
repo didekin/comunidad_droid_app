@@ -10,22 +10,11 @@
     <!--                                 GENERIC                                     -->
     <!--*****************************************************************************-->
     <!-- Formats-->
-    <string name="dos_puntos" translatable="false">:</string>
-    <string name="no_sabe" translatable="false">....</string>
     <!--Input controls-->
-    <string name="search_button">Buscar</string>
-    <string name="checkbox_si">Sí</string>
-    <string name="checkbox_no">No</string>
-    <string name="euros_rot">EUR</string>
-    <string name="decimal_separator">,</string>
-    <string name="navigate_up_txt">Desplazarse hacia arriba</string>
     <!--Menús-->
     <!--Messages-->
-    <string name="no_internet_conn_toast">No hay conexión de red disponible.</string>
-    <string name="exception_generic_message">No podemos continuar. Busca tu comunidad o haz login.</string>
     <!-- Google Cloud Messages -->
-    <string name="gcm_message_title">Dídekin</string>
-    <string name="gcm_message_generic_subtext">Pulsa aquí para ver los detalles.</string>
+    <string name="gcm_message_title" translatable="false">Dídekin</string>
     <!--******************************************************************************-->
     <!--                                 INCIDENCIAS                                  -->
     <!--******************************************************************************-->
@@ -167,13 +156,13 @@
     <string name="reg_comunidad_ac_label">Nueva comunidad</string>
     <!-- ........... RegUserFr ......... -->
     <string name="reg_usuario_rotulo">Tus datos</string>
-    <string name="usuario_password_hint">Contraseña: 6–60 letras, números, _ </string>
-    <string name="usuario_password_confirm_hint">Confirmación contraseña</string>
     <string name="alias">Nombre</string>
-    <string name="usuario_alias_hint">Nombre: 6–30 letras, números, _</string>
-    <string name="email_hint">Correo electrónico</string>
     <string name="password">Contraseña</string>
     <string name="password_different"> (no coinciden)</string>
+    <!--<string name="usuario_password_hint">Contraseña: 6–60 letras, números, _ </string>-->
+    <!--<string name="usuario_password_confirm_hint">Confirmación contraseña</string>-->
+    <!--<string name="usuario_alias_hint">Nombre: 6–30 letras, números, _</string>-->
+    <!--<string name="email_hint">Correo electrónico</string>-->
     <!-- .......... RegUserComuFr ....... -->
     <string name="reg_usercomu_vivienda_rot">Tu vivienda</string>
     <string name="reg_usercomu_portal_hint"> -- Portal --</string>

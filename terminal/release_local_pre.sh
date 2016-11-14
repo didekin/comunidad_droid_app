@@ -1,5 +1,5 @@
-# It must be executed after 'cddroid' with terminal/release.sh environment
-# environment('local','awspre')
+# It must be executed after 'cddroid' with terminal/release.sh buildType
+# buildTypes: Local, Pre
 
 #!/bin/bash
 
@@ -14,46 +14,19 @@ fi
 
 [ $# -ne 1 ] && { echo "args count should be 1" 1>&2; exit 1;}
 
-export ENV="$1"
+export BUILD_TYPE="$1"
 
-if ! [ ${ENV} = "local" ] && ! [ ${ENV} = "awspre" ] ; then
-    echo "Wrong type of environment: $ENV" 1>&2; exit 1;
+if ! [ ${BUILD_TYPE} = "Local" ] && ! [ ${BUILD_TYPE} = "Pre" ] ; then
+    echo "Wrong buildType: $BUILD_TYPE" 1>&2; exit 1;
 fi
 
-export APP_PROD_PARAM_HOME=app/src/main/res/values
-export BKS_PROD_HOME=app/src/main/res/raw
-
-rm ${APP_PROD_PARAM_HOME}/app_parameters.xml
-
-if [ ${ENV} = "local" ] ; then
-   cp terminal/app_local/local_app_parameters.xml ${APP_PROD_PARAM_HOME}/
-fi
-
-if [ ${ENV} = "awspre" ] ; then
-   cp terminal/app_pre/pre_app_parameters.xml ${APP_PROD_PARAM_HOME}/
-   cp terminal/app_pre/didekindroid_pre_bks ${BKS_PROD_HOME}
-fi
-
-assembleAndRelease
+assembleBuildType ${BUILD_TYPE}
 
 echo "Uninstalling com.didekindroid ..."
 adb uninstall com.didekindroid
 
 echo "Installing apk ..."
-adb  install app/releases/${ENV}/app-release.apk
-
-if [ ${ENV} = "local" ] ; then
-   echo "borrando local_app_parameters ..."
-   rm ${APP_PROD_PARAM_HOME}/local_app_parameters.xml
-fi
-
-if [ ${ENV} = "awspre" ] ; then
-   echo "borrando pre_app_parameters y didekindroid_pre_bks"
-   rm ${APP_PROD_PARAM_HOME}/pre_app_parameters.xml
-   rm ${BKS_PROD_HOME}/didekindroid_pre_bks
-fi
-
-cp terminal/app_pro/app_parameters.xml ${APP_PROD_PARAM_HOME}/
+adb  install app/releases/${BUILD_TYPE}/app-release.apk
 
 echo "SALIENDO..."
 exit 0

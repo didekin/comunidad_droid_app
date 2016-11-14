@@ -1,22 +1,22 @@
 apply plugin: 'com.android.application'
 apply plugin: 'idea'
-apply from: '../app_dependencies.gradle'
+apply from: '../test_dependencies.gradle'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25"
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
     defaultConfig {
         applicationId "com.didekindroid"
-        minSdkVersion 19
-        targetSdkVersion 25
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 3
         versionName "a-0.4.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner rootProject.ext.testInstrumentationRunner
         resConfigs "es" /* Añadir nuevos idiomas según hagan falta.*/
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility rootProject.ext.sourceCompatibilityVersion
+        targetCompatibility rootProject.ext.targetCompatibilityVersion
     }
 
     //noinspection GroovyAssignabilityCheck
@@ -45,6 +45,19 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
+        pre {
+            initWith release
+            signingConfig signingConfigs.release
+        }
+        local {
+            initWith debug
+            debuggable false
+            versionNameSuffix ''
+            shrinkResources true
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
         debug {
             debuggable true
             versionNameSuffix '-DEBUG'
@@ -67,6 +80,9 @@ android {
     }
 }
 
-
+dependencies {
+    compile project(':didekinaar')
+    compile 'com.google.firebase:firebase-messaging:9.4.0'
+}
 
 apply plugin: 'com.google.gms.google-services'

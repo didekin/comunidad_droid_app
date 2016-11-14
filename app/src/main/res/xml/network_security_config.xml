@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network_security_config>
     <domain-config cleartextTrafficPermitted="false">
-        <domain includeSubdomains="false">didekinspring-web-pre.eu-central-1.elasticbeanstalk.com</domain>
         <domain includeSubdomains="false">didekinspring-web-pro.eu-central-1.elasticbeanstalk.com</domain>
         <pin-set>
             <!-- pin: intermediate CA-->

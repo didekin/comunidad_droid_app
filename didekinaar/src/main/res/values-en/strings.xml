@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="app_name" translatable="false">didekinaar</string>
+<resources xmlns:tools="http://schemas.android.com/tools"
+           tools:locale="en">
     <!--*****************************************************************************-->
     <!--                                 GENERIC                                     -->
     <!--*****************************************************************************-->
     <!-- Formats-->
-    <string name="dos_puntos" translatable="false">:</string>
-    <string name="no_sabe" translatable="false">....</string>
     <!--Input controls-->
     <string name="search_button">Buscar</string>
     <string name="checkbox_si">Sí</string>
     <string name="checkbox_no">No</string>
     <string name="euros_rot">EUR</string>
-    <string name="decimal_separator">,</string>
+    <string name="decimal_separator">.</string>
     <string name="navigate_up_txt">Desplazarse hacia arriba</string>
     <!--Menús-->
     <!--Messages-->
@@ -20,11 +18,4 @@
     <string name="exception_generic_message">No podemos continuar. Busca tu comunidad o haz login.</string>
     <!-- Google Cloud Messages -->
     <string name="gcm_message_generic_subtext">Pulsa aquí para ver los detalles.</string>
-
-    <!-- ============================= ACTIVITIES ============================= -->
-    <!-- ........... RegUserFr ......... -->
-    <string name="email_hint">Correo electrónico</string>
-    <string name="usuario_password_hint">Contraseña: 6–60 letras, números, _ </string>
-    <string name="usuario_password_confirm_hint">Confirmación contraseña</string>
-    <string name="usuario_alias_hint">Nombre: 6–30 letras, números, _</string>
 </resources>

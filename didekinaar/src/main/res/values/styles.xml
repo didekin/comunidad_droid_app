@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <style name="themeOne.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
-
-    <style name="themeOne.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
-
     <!--................ Action bar .............-->
     <style name="appBarTitle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textSize">@dimen/appBar_title</item>
@@ -46,8 +41,8 @@
 
     <!-- ............... Dialogs ................-->
     <style name="alertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="colorAccent">@color/deep_orange_600</item>
-        <item name="android:textColorPrimary">@color/purple_900</item>
+        <item name="colorAccent">?attr/colorAccent</item>
+        <item name="android:textColorPrimary">?attr/colorPrimaryDark</item>
     </style>
 
     <!-- .............. EditTextFields ......... -->
@@ -56,7 +51,7 @@
         <item name="android:textStyle">normal</item>
         <item name="android:imeOptions">actionNext</item>
         <!--?attr/android:textColorPrimary-->
-        <item name="android:textColor">@color/purple_900</item>
+        <item name="android:textColor">?attr/colorPrimaryDark</item>
     </style>
 
     <style name="textBase.editField.email">

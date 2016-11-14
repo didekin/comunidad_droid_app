@@ -1,11 +1,9 @@
-<manifest package="material.example.didekin.com.didekinaar"
-          xmlns:android="http://schemas.android.com/apk/res/android">
-
+<manifest package="com.didekinaar"
+          xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools">
     <application android:allowBackup="false"
                  android:label="@string/app_name"
                  android:supportsRtl="false"
-    >
-
+                 tools:replace="android:label">
     </application>
-
 </manifest>

@@ -1,17 +1,17 @@
 #@IgnoreInspection BashAddShebang
 
-function assembleAndRelease() {
+function assembleBuildType() {
+    BUILD_TYPE="$1"
     # Generation of signed APK
-    ./gradlew app:assembleRelease -Pkeyalias=didekindroid -Pkeypassword=didekin_00_droid_11 \
-       -Pkeystore=/Users/pedro/keystores/didekindroid_release/didekindroid_jks -Pstorepassword=droid_11_jks_00
-    echo "gradlew assembleRelease exit code = $?"
-
-    mv app/build/outputs/apk/app-release.apk app/releases/${ENV}/
+    ./gradlew app:assemble${BUILD_TYPE} -Pkeyalias=didekindroid -Pkeypassword=didekin_00_droid_11 \
+               -Pkeystore=/Users/pedro/keystores/didekindroid_release/didekindroid_jks -Pstorepassword=droid_11_jks_00
+    echo "gradlew assemble${BUILD_TYPE} exit code = $?"
+    mv app/build/outputs/apk/app-release.apk app/releases/${BUILD_TYPE}/
 }
 
 # ..................................................................................................
 
-function checkEnvEmulatorArgs() {
+function checkEnvironmentArgs() {
     export ENV="$1"
     if ! [ ${ENV} = "local" ] && ! [ ${ENV} = "awspre" ] ; then
         echo "Wrong type of environment: $ENV" 1>&2; exit 1;
@@ -39,8 +39,8 @@ function checkParamsPro() {
 # ..................................................................................................
 
 function setArgsCloseEnv() {
-    checkEnvEmulatorArgs $1
-    setEnvEmulatorVariables
+    checkEnvironmentArgs $1
+    export GITREMOTE=didekindroid
 }
 
 export -f setArgsCloseEnv
@@ -48,23 +48,15 @@ export -f setArgsCloseEnv
 # ..................................................................................................
 
 function setArgsInitEnvironments() {
-    checkEnvEmulatorArgs "$1"
-    setEnvEmulatorVariables
-    export DIDEKINSPRING_HOME=/Users/pedro/Documents/git_projects/didekinspring/releases/${LOCAL_ENV}
+    checkEnvironmentArgs "$1"
+    export GITREMOTE=didekindroid
+    export DIDEKINSPRING_HOME=/Users/pedro/Documents/git_projects/didekinspring/releases/local
 }
 
 export -f setArgsInitEnvironments
 
 # ..................................................................................................
 
-function setEnvEmulatorVariables() {
-     export LOCAL_ENV="local"
-     export AWSPRE_ENV="awspre"
-     export APP_PARAM_HOME=app/src/debug/res/values
-     export BKS_HOME=app/src/debug/res/raw
-     export GITREMOTE=didekindroid
-     echo "Environment: $ENV"
-}
 
 
 

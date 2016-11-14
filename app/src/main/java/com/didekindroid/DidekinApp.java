@@ -26,6 +26,7 @@ public final class DidekinApp extends Application {
     private static final AtomicInteger httpTimeOut = new AtomicInteger();
     private static final AtomicReference<RetrofitHandler> retrofitHandler = new AtomicReference<>();
 
+    @Override
     public void onCreate()
     {
         super.onCreate();

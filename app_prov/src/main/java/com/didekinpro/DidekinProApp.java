@@ -1,4 +1,4 @@
-package com.didekindroid.proveedor;
+package com.didekinpro;
 
 import android.app.Application;
 
