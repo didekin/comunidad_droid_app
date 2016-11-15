@@ -1,5 +1,5 @@
 # It must be executed after 'cddroid' with terminal/release.sh buildType
-# buildTypes: Local, Pre
+# buildTypes: local, pre
 
 #!/bin/bash
 
@@ -16,7 +16,7 @@ fi
 
 export BUILD_TYPE="$1"
 
-if ! [ ${BUILD_TYPE} = "Local" ] && ! [ ${BUILD_TYPE} = "Pre" ] ; then
+if ! [ ${BUILD_TYPE} = "local" ] && ! [ ${BUILD_TYPE} = "pre" ] ; then
     echo "Wrong buildType: $BUILD_TYPE" 1>&2; exit 1;
 fi
 
@@ -26,7 +26,7 @@ echo "Uninstalling com.didekindroid ..."
 adb uninstall com.didekindroid
 
 echo "Installing apk ..."
-adb  install app/releases/${BUILD_TYPE}/app-release.apk
+adb  install app/releases/${BUILD_TYPE}/app-${BUILD_TYPE}.apk
 
 echo "SALIENDO..."
 exit 0

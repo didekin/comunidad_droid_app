@@ -2,6 +2,7 @@
 
 function assembleBuildType() {
     BUILD_TYPE="$1"
+    assemble_suffix=`echo ${foo:0:1} | tr  '[a-z]' '[A-Z]'`${foo:1}
     # Generation of signed APK
     ./gradlew app:assemble${BUILD_TYPE} -Pkeyalias=didekindroid -Pkeypassword=didekin_00_droid_11 \
                -Pkeystore=/Users/pedro/keystores/didekindroid_release/didekindroid_jks -Pstorepassword=droid_11_jks_00
