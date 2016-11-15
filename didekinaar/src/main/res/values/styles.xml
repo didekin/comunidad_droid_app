@@ -39,12 +39,6 @@
         <item name="android:gravity">center</item>
     </style>
 
-    <!-- ............... Dialogs ................-->
-    <style name="alertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="colorAccent">?attr/colorAccent</item>
-        <item name="android:textColorPrimary">?attr/colorPrimaryDark</item>
-    </style>
-
     <!-- .............. EditTextFields ......... -->
     <style name="textBase.editField">
         <item name="android:textSize">@dimen/text_hint_size</item>
