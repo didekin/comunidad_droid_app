@@ -229,7 +229,7 @@ public class GcmRequestTest {
     public void testErrorMulticast_2() throws Exception
     {
         gcmTokens.add("");
-        Thread.sleep(3000);
+        Thread.sleep(2000);
         gcmTokens.add(firebaseInstanceId.getToken());
         gcmTokens.add(null);
         gcmTokens.add("wrong_token");
