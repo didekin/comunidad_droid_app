@@ -1,5 +1,5 @@
 # It must be executed after 'cddroid' with terminal/release.sh buildType
-# buildTypes: local, pre
+# buildTypes: debug, pre
 
 #!/bin/bash
 
@@ -16,7 +16,7 @@ fi
 
 export BUILD_TYPE="$1"
 
-if ! [ ${BUILD_TYPE} = "local" ] && ! [ ${BUILD_TYPE} = "pre" ] ; then
+if ! [ ${BUILD_TYPE} = "debug" ] && ! [ ${BUILD_TYPE} = "pre" ] ; then
     echo "Wrong buildType: $BUILD_TYPE" 1>&2; exit 1;
 fi
 

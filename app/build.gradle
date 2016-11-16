@@ -49,19 +49,14 @@ android {
             initWith release
             signingConfig signingConfigs.release
         }
-        local {
-            initWith debug
-            debuggable false
-            versionNameSuffix ''
-            shrinkResources true
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
-        }
         debug {
             debuggable true
             versionNameSuffix '-DEBUG'
             applicationIdSuffix ""
+            shrinkResources true
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 

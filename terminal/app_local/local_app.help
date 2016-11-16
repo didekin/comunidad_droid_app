@@ -16,32 +16,26 @@ LOGCAT
 
 CERTIFICADOS
 ============
-(Desde /Users/pedro/keystores/android_dev)
+-- He optado por la misma BKS en todos los buildTypes. El texto que hay a continuación es sólo una referencia
+   al caso anterior: una BKS para el buildType local.
 
-$ keytool -importkeystore -srckeystore ../ca_didekin/intermediate_ca/certs/ca-chain.pkcs12 -srcstoretype PKCS12 \
-          -deststoretype BKS  -destkeystore didekindroid_dev_bks -destProviderName BC \
-          -providerClass org.bouncycastle.jce.provider.BouncyCastleProvider \
-          -destkeypass droid_dev_yek -deststorepass droid_dev_erots -v
+{
+    (Desde /Users/pedro/keystores/android_dev)
 
--- Copiar keyStore en debug resources.
-   $ cp didekindroid_dev_bks /Users/pedro/Documents/git_projects/didekindroid/app/src/debug/res/raw
+    $ keytool -importkeystore -srckeystore ../ca_didekin/intermediate_ca/certs/ca-chain.pkcs12 -srcstoretype PKCS12 \
+              -deststoretype BKS  -destkeystore didekindroid_dev_bks -destProviderName BC \
+              -providerClass org.bouncycastle.jce.provider.BouncyCastleProvider \
+              -destkeypass droid_dev_yek -deststorepass droid_dev_erots -v
 
--- Actualizar valores en /Users/pedro/Documents/git_projects/didekindroid/app/src/debug/res/values/local_app_parameters.xml:
+    -- Copiar keyStore en debug resources.
+       $ cp didekindroid_dev_bks /Users/pedro/Documents/git_projects/didekindroid/app/src/debug/res/raw
+
+    -- Actualizar valores en /Users/pedro/Documents/git_projects/didekindroid/app/src/debug/res/values/local_app_parameters.xml:
+}
 
 
 NETWORK_SECURITY_CONFIG
 =======================
 
-(Desde /Users/pedro/keystores/ca_didekin/intermediate_ca/private)
-
-Pongo las CAs, en lugar de la public keys de los certificados de servidor, para garantizar la permanencia de los datos.
-
--- To generate the SHA-256 digest of the public key of the Intermediate_CA:
-   $openssl dgst -sha256 -out intermediate.key.pub.sha256 intermediate.key.pub
-
--- For the CA (desde /Users/pedro/keystores/ca_didekin/private):
-   $ openssl dgst -sha256 -out ca.key.pub.sha256 ca.key.pub
-
--- Actualizo con los digests los valores en src/debug/res/xml/network_security_config.xml
-
+-- La misma que en Pro, cambiando el dominio.
 

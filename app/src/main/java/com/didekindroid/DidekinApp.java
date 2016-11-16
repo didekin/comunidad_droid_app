@@ -31,7 +31,7 @@ public final class DidekinApp extends Application {
     {
         super.onCreate();
 
-        if (BuildConfig.DEBUG || BuildConfig.BUILD_TYPE.equals("local")) {
+        if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
 //            ButterKnife.setDebug(true);
 
