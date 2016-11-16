@@ -30,7 +30,7 @@ android {
     }
 }
 
-def androidSupportVersion = '25.0.0'
+def androidSupportVersion = '25.0.1'
 
 dependencies {
     compile ':client_lib-a-0.1.3:@jar'

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools"
-           tools:keep="@raw/didekindroid_pre_bks"
+           tools:keep="@raw/didekindroid_dev_bks"
            tools:shrinkMode="safe"
 />

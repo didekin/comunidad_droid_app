@@ -31,8 +31,7 @@ public final class DidekinApp extends Application {
     {
         super.onCreate();
 
-        if (BuildConfig.DEBUG) {
-
+        if (BuildConfig.DEBUG || BuildConfig.BUILD_TYPE.equals("local")) {
             Timber.plant(new Timber.DebugTree());
 //            ButterKnife.setDebug(true);
 
@@ -47,6 +46,8 @@ public final class DidekinApp extends Application {
                     .detectLeakedClosableObjects()
                     .penaltyLog()
                     .build());
+
+            Timber.d("BUILD_TYPE: %s", BuildConfig.BUILD_TYPE);
         }
         // TODO: ejemplo en Timber para librería de comunicación de errores en cliente al servidor.
 

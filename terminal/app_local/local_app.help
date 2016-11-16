@@ -1,11 +1,47 @@
-NOTA: en el entorno local no se utiliza el puerto 443, ni TLS.
-
 LOCALHOST
 =========
 
 Para acceder desde un móvil al servidor Jetty en local:
 - Incluir el móvil en la red WI-FI local.
 - Habilitar System Preferences/Sharing/Remote management para el servidor local.
-- Poner la URL del servidor local en el fichero terminal/emulators/physical_url.xml
+
+LOGCAT
+======
+
+-- Filtrado:
+   $ adb logcat ActivityManager:I DidekinApp:D OkHttp:D \
+        ComuDataAc:D  \
+        ComuSearchAc:D \
+        *:S
+
+CERTIFICADOS
+============
+(Desde /Users/pedro/keystores/android_dev)
+
+$ keytool -importkeystore -srckeystore ../ca_didekin/intermediate_ca/certs/ca-chain.pkcs12 -srcstoretype PKCS12 \
+          -deststoretype BKS  -destkeystore didekindroid_dev_bks -destProviderName BC \
+          -providerClass org.bouncycastle.jce.provider.BouncyCastleProvider \
+          -destkeypass droid_dev_yek -deststorepass droid_dev_erots -v
+
+-- Copiar keyStore en debug resources.
+   $ cp didekindroid_dev_bks /Users/pedro/Documents/git_projects/didekindroid/app/src/debug/res/raw
+
+-- Actualizar valores en /Users/pedro/Documents/git_projects/didekindroid/app/src/debug/res/values/local_app_parameters.xml:
+
+
+NETWORK_SECURITY_CONFIG
+=======================
+
+(Desde /Users/pedro/keystores/ca_didekin/intermediate_ca/private)
+
+Pongo las CAs, en lugar de la public keys de los certificados de servidor, para garantizar la permanencia de los datos.
+
+-- To generate the SHA-256 digest of the public key of the Intermediate_CA:
+   $openssl dgst -sha256 -out intermediate.key.pub.sha256 intermediate.key.pub
+
+-- For the CA (desde /Users/pedro/keystores/ca_didekin/private):
+   $ openssl dgst -sha256 -out ca.key.pub.sha256 ca.key.pub
+
+-- Actualizo con los digests los valores en src/debug/res/xml/network_security_config.xml
 
 

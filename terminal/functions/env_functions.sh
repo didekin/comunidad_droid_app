@@ -2,12 +2,12 @@
 
 function assembleBuildType() {
     BUILD_TYPE="$1"
-    assemble_suffix=`echo ${foo:0:1} | tr  '[a-z]' '[A-Z]'`${foo:1}
+    suffix=`echo ${BUILD_TYPE:0:1} | tr '[:lower:]' '[:upper:]'`${BUILD_TYPE:1}
     # Generation of signed APK
-    ./gradlew app:assemble${BUILD_TYPE} -Pkeyalias=didekindroid -Pkeypassword=didekin_00_droid_11 \
+    ./gradlew app:assemble${suffix} -Pkeyalias=didekindroid -Pkeypassword=didekin_00_droid_11 \
                -Pkeystore=/Users/pedro/keystores/didekindroid_release/didekindroid_jks -Pstorepassword=droid_11_jks_00
-    echo "gradlew assemble${BUILD_TYPE} exit code = $?"
-    mv app/build/outputs/apk/app-release.apk app/releases/${BUILD_TYPE}/
+    echo "gradlew assemble${suffix} exit code = $?"
+    mv app/build/outputs/apk/app-${BUILD_TYPE}.apk app/releases/${BUILD_TYPE}/
 }
 
 # ..................................................................................................
