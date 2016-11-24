@@ -4,11 +4,12 @@ import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.incidservice.dominio.Avance;
-import com.didekin.incidservice.dominio.Resolucion;
+import com.didekin.incidencia.dominio.Avance;
+import com.didekin.incidencia.dominio.Resolucion;
+import com.didekinaar.exception.UiAarException;
+import com.didekindroid.incidencia.exception.UiAppException;
 import com.didekindroid.R;
-import com.didekindroid.common.activity.UiException;
-import com.didekindroid.usuario.testutils.CleanUserEnum;
+import com.didekinaar.testutil.CleanUserEnum;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -31,17 +32,17 @@ import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
-import static com.didekindroid.common.testutils.ActivityTestUtils.checkUp;
-import static com.didekindroid.common.utils.UIutils.formatTimeStampToString;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
+import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
+import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
+import static com.didekinaar.utils.UIutils.formatTimeStampToString;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetResolucionNoAdvances;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
-import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
-import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_PLAZUELA5_JUAN;
-import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_JUAN;
+import static com.didekinaar.testutil.CleanUserEnum.CLEAN_JUAN;
+import static com.didekinaar.testutil.UsuarioTestUtils.COMU_PLAZUELA5_JUAN;
+import static com.didekinaar.testutil.UsuarioTestUtils.USER_JUAN;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -85,7 +86,7 @@ public class IncidResolucionEditFrTest_2 extends IncidResolucionAbstractTest {
                             .build();
                     assertThat(IncidenciaServ.modifyResolucion(resolucion), is(2));
                     resolucion = IncidenciaServ.seeResolucion(resolucion.getIncidencia().getIncidenciaId());
-                } catch (UiException | InterruptedException | IOException e) {
+                } catch (UiAppException | InterruptedException | IOException | UiAarException e) {
                     e.printStackTrace();
                 }
                 Intent intent = new Intent();
@@ -138,7 +139,7 @@ public class IncidResolucionEditFrTest_2 extends IncidResolucionAbstractTest {
     }
 
     @Test
-    public void testOnEdit_1() throws UiException
+    public void testOnEdit_1() throws UiAppException, UiAarException
     {
         // Caso OK: añadimos un avance con descripción Ok .
         onView(withId(R.id.incid_resolucion_avance_ed)).perform(replaceText("avance2_desc_válida"));

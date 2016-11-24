@@ -2,30 +2,31 @@ package com.didekindroid.incidencia.dominio;
 
 import android.content.res.Resources;
 
-import com.didekin.incidservice.dominio.IncidImportancia;
+import com.didekin.incidencia.dominio.IncidImportancia;
+import com.didekinaar.utils.FechaPickerBean;
 import com.didekindroid.R;
 
 import java.text.ParseException;
 
-import static com.didekin.common.dominio.UsuarioDataPatterns.LINE_BREAK;
-import static com.didekin.incidservice.dominio.IncidDataPatterns.INCID_RESOLUCION_DESC;
-import static com.didekin.incidservice.dominio.IncidDataPatterns.INCID_RES_AVANCE_DESC;
-import static com.didekindroid.common.utils.UIutils.formatTimeToString;
-import static com.didekindroid.common.utils.UIutils.getIntFromStringDecimal;
+import static com.didekin.common.dominio.ValidDataPatterns.LINE_BREAK;
+import static com.didekin.incidencia.dominio.IncidDataPatterns.INCID_RESOLUCION_DESC;
+import static com.didekin.incidencia.dominio.IncidDataPatterns.INCID_RES_AVANCE_DESC;
+import static com.didekinaar.utils.UIutils.formatTimeToString;
+import static com.didekinaar.utils.UIutils.getIntFromStringDecimal;
 
 /**
  * User: pedro@didekin
  * Date: 10/03/16
  * Time: 11:46
  */
-public class ResolucionBean {
+public class ResolucionBean implements FechaPickerBean {
 
-    long fechaPrevista;
-    String fechaPrevistaText;
-    String plan;
-    String avanceDesc;
-    String costePrevText;
-    int costePrev;
+    private long fechaPrevista;
+    private String fechaPrevistaText;
+    private String plan;
+    private String avanceDesc;
+    private String costePrevText;
+    private int costePrev;
 
     public ResolucionBean()
     {
@@ -36,6 +37,7 @@ public class ResolucionBean {
         return fechaPrevista;
     }
 
+    @Override
     public void setFechaPrevista(long fechaPrevista)
     {
         this.fechaPrevista = fechaPrevista;
@@ -101,7 +103,7 @@ public class ResolucionBean {
         return true;
     }
 
-    boolean validateFechaPrev(StringBuilder errorMsg, Resources resources, IncidImportancia incidImportancia)
+    private boolean validateFechaPrev(StringBuilder errorMsg, Resources resources, IncidImportancia incidImportancia)
     {
         if (fechaPrevista < incidImportancia.getIncidencia().getFechaAlta().getTime()) {
             errorMsg.append(resources.getString(R.string.incid_resolucion_fecha_prev_msg)).append(LINE_BREAK.getRegexp());
@@ -111,7 +113,7 @@ public class ResolucionBean {
         return fechaPrevistaText.equals(formatTimeToString(fechaPrevista));
     }
 
-    boolean validatePlan(StringBuilder errorMsg, Resources resources)
+    private boolean validatePlan(StringBuilder errorMsg, Resources resources)
     {
         if (!INCID_RESOLUCION_DESC.isPatternOk(plan)) {
             errorMsg.append(resources.getString(R.string.incid_resolucion_descrip_msg)).append(LINE_BREAK.getRegexp());
@@ -120,7 +122,7 @@ public class ResolucionBean {
         return true;
     }
 
-    boolean validateCostePrev(StringBuilder errorMsg, Resources resources)
+    private boolean validateCostePrev(StringBuilder errorMsg, Resources resources)
     {
         if (costePrevText.isEmpty()) {
             return true;

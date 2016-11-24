@@ -4,28 +4,28 @@ import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
 
-import com.didekin.incidservice.dominio.IncidenciaUser;
+import com.didekin.incidencia.dominio.IncidenciaUser;
 import com.didekindroid.R;
 import com.didekindroid.incidencia.repository.IncidenciaDataDbHelper;
 
-import static com.didekindroid.common.utils.UIutils.formatTimeStampToString;
+import static com.didekinaar.utils.UIutils.formatTimeStampToString;
 
 /**
  * User: pedro@didekin
  * Date: 23/03/16
  * Time: 14:11
  */
-public class IncidSeeItemVwHolder {
+class IncidSeeItemVwHolder {
 
-    final TextView mDescripcionView;
-    final TextView mFechaAltaView;
-    final TextView mIniciador;
-    final TextView mAmbitoView;
-    final TextView mImportanciaComuView;
+    private final TextView mDescripcionView;
+    private final TextView mFechaAltaView;
+    private final TextView mIniciador;
+    private final TextView mAmbitoView;
+    private final TextView mImportanciaComuView;
 
     final Context context;
 
-    public IncidSeeItemVwHolder(View convertView)
+    IncidSeeItemVwHolder(View convertView)
     {
         mDescripcionView = (TextView) convertView.findViewById(R.id.incid_descripcion_view);
         mFechaAltaView = (TextView) convertView.findViewById(R.id.incid_fecha_alta_view);

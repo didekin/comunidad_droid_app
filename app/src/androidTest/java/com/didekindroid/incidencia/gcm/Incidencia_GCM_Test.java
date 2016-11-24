@@ -11,9 +11,10 @@ import android.support.test.espresso.Espresso;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekindroid.common.activity.IdlingResourceForIntentServ;
-import com.didekindroid.common.activity.UiException;
-import com.didekindroid.common.gcm.GcmRegistrationIntentService;
+import com.didekinaar.exception.UiAarException;
+import com.didekinaar.testutil.IdlingResourceForIntentServ;
+import com.didekindroid.incidencia.exception.UiAppException;
+import com.didekinaar.usuario.AarFBRegIntentService;
 import com.didekinservice.common.gcm.GcmRequest;
 import com.google.firebase.iid.FirebaseInstanceId;
 
@@ -22,11 +23,11 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.runner.RunWith;
 
-import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
-import static com.didekindroid.common.utils.UIutils.isGcmTokenSentServer;
-import static com.didekindroid.common.utils.UIutils.updateIsGcmTokenSentServer;
-import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
+import static com.didekinaar.testutil.AarActivityTestUtils.cleanOptions;
+import static com.didekinaar.utils.UIutils.isGcmTokenSentServer;
+import static com.didekinaar.utils.UIutils.updateIsGcmTokenSentServer;
+import static com.didekinaar.testutil.CleanUserEnum.CLEAN_PEPE;
+import static com.didekinaar.usuario.AarUsuarioService.AarUserServ;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -51,7 +52,7 @@ public abstract class Incidencia_GCM_Test {
     {
         mActivity = intentRule.getActivity();
         mNotifyManager = (NotificationManager) mActivity.getSystemService(Context.NOTIFICATION_SERVICE);
-        idlingResource = new IdlingResourceForIntentServ(mActivity, new GcmRegistrationIntentService());
+        idlingResource = new IdlingResourceForIntentServ(mActivity, new AarFBRegIntentService());
         Espresso.registerIdlingResources(idlingResource);
     }
 
@@ -68,13 +69,13 @@ public abstract class Incidencia_GCM_Test {
 
     protected abstract IntentsTestRule<? extends Activity> doIntentsTestRule();
 
-    void checkToken() throws UiException, InterruptedException
+    void checkToken() throws UiAppException, InterruptedException, UiAarException
     {
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         assertThat(refreshedToken, notNullValue());
         Thread.sleep(2000);
         assertThat(isGcmTokenSentServer(mActivity), is(true));
-        assertThat(ServOne.getGcmToken(), is(refreshedToken));
+        assertThat(AarUserServ.getGcmToken(), is(refreshedToken));
     }
 
     @TargetApi(Build.VERSION_CODES.M)

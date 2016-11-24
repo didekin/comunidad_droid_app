@@ -12,12 +12,11 @@ import android.widget.CursorAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.didekin.incidservice.dominio.IncidImportancia;
-import com.didekin.incidservice.dominio.Incidencia;
+import com.didekin.incidencia.dominio.IncidImportancia;
+import com.didekin.incidencia.dominio.Incidencia;
 import com.didekindroid.R;
-import com.didekindroid.common.activity.UiException;
+import com.didekindroid.incidencia.exception.UiAppException;
 import com.didekindroid.incidencia.activity.utils.AmbitoSpinnerSettable;
 import com.didekindroid.incidencia.activity.utils.ImportanciaSpinnerSettable;
 import com.didekindroid.incidencia.dominio.IncidImportanciaBean;
@@ -29,12 +28,12 @@ import java.util.Objects;
 import timber.log.Timber;
 
 import static android.view.View.GONE;
-import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_FLAG;
-import static com.didekindroid.common.utils.ConnectionUtils.checkInternetConnected;
-import static com.didekindroid.common.utils.UIutils.closeCursor;
-import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
-import static com.didekindroid.common.utils.UIutils.makeToast;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
+import static com.didekinaar.utils.ConnectionUtils.checkInternetConnected;
+import static com.didekinaar.utils.UIutils.closeCursor;
+import static com.didekinaar.utils.UIutils.getErrorMsgBuilder;
+import static com.didekinaar.utils.UIutils.makeToast;
 import static com.didekindroid.incidencia.activity.utils.IncidSpinnersHelper.HELPER;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 
@@ -143,7 +142,7 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
             }
         } catch (IllegalStateException e) {
             Timber.e(e.getMessage());
-            makeToast(getActivity(), errorMsg.toString(), Toast.LENGTH_SHORT);
+            makeToast(getActivity(), errorMsg.toString(), com.didekinaar.R.color.deep_purple_100);
         }
     }
 
@@ -230,7 +229,7 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
 
     class IncidenciaModifyer extends AsyncTask<IncidImportancia, Void, Integer> {
 
-        UiException uiException;
+        UiAppException uiException;
 
         @Override
         protected Integer doInBackground(IncidImportancia... incidImportancias)
@@ -240,7 +239,7 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
 
             try {
                 rowInserted = IncidenciaServ.modifyIncidImportancia(incidImportancias[0]);
-            } catch (UiException e) {
+            } catch (UiAppException e) {
                 uiException = e;
             }
             return rowInserted;
@@ -263,7 +262,7 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
 
     class IncidenciaEraser extends AsyncTask<Incidencia, Void, Integer> {
 
-        UiException uiException;
+        UiAppException uiException;
 
         @Override
         protected Integer doInBackground(Incidencia... params)
@@ -272,7 +271,7 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
             int rowsDeleted = 0;
             try {
                 rowsDeleted = IncidenciaServ.deleteIncidencia(params[0].getIncidenciaId());
-            } catch (UiException e) {
+            } catch (UiAppException e) {
                 uiException = e;
             }
             return rowsDeleted;

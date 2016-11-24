@@ -3,17 +3,18 @@ package com.didekindroid.incidencia.webservices;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.common.exception.DidekinExceptionMsg;
-import com.didekin.incidservice.dominio.AmbitoIncidencia;
-import com.didekin.incidservice.dominio.Avance;
-import com.didekin.incidservice.dominio.IncidComment;
-import com.didekin.incidservice.dominio.IncidImportancia;
-import com.didekin.incidservice.dominio.Incidencia;
-import com.didekin.incidservice.dominio.IncidenciaUser;
-import com.didekin.incidservice.dominio.Resolucion;
-import com.didekin.usuario.dominio.Usuario;
-import com.didekin.usuario.dominio.UsuarioComunidad;
-import com.didekindroid.common.activity.UiException;
-import com.didekindroid.usuario.testutils.CleanUserEnum;
+import com.didekin.incidencia.dominio.AmbitoIncidencia;
+import com.didekin.incidencia.dominio.Avance;
+import com.didekin.incidencia.dominio.IncidComment;
+import com.didekin.incidencia.dominio.IncidImportancia;
+import com.didekin.incidencia.dominio.Incidencia;
+import com.didekin.incidencia.dominio.IncidenciaUser;
+import com.didekin.incidencia.dominio.Resolucion;
+import com.didekin.usuario.Usuario;
+import com.didekin.usuariocomunidad.UsuarioComunidad;
+import com.didekinaar.exception.UiAarException;
+import com.didekinaar.testutil.CleanUserEnum;
+import com.didekindroid.incidencia.exception.UiAppException;
 
 import org.junit.After;
 import org.junit.Before;
@@ -30,10 +31,18 @@ import static com.didekin.common.exception.DidekinExceptionMsg.INCIDENCIA_NOT_FO
 import static com.didekin.common.exception.DidekinExceptionMsg.INCID_IMPORTANCIA_WRONG_INIT;
 import static com.didekin.common.exception.DidekinExceptionMsg.ROLES_NOT_FOUND;
 import static com.didekin.common.exception.DidekinExceptionMsg.USERCOMU_WRONG_INIT;
-import static com.didekin.usuario.dominio.Rol.PROPIETARIO;
-import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
-import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
-import static com.didekindroid.common.testutils.ActivityTestUtils.updateSecurityData;
+import static com.didekin.usuariocomunidad.Rol.PROPIETARIO;
+import static com.didekinaar.testutil.AarActivityTestUtils.cleanOptions;
+import static com.didekinaar.testutil.AarActivityTestUtils.signUpAndUpdateTk;
+import static com.didekinaar.testutil.AarActivityTestUtils.updateSecurityData;
+import static com.didekinaar.testutil.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
+import static com.didekinaar.testutil.CleanUserEnum.CLEAN_PEPE;
+import static com.didekinaar.testutil.UsuarioTestUtils.COMU_ESCORIAL_JUAN;
+import static com.didekinaar.testutil.UsuarioTestUtils.COMU_ESCORIAL_PEPE;
+import static com.didekinaar.testutil.UsuarioTestUtils.COMU_PLAZUELA5_JUAN;
+import static com.didekinaar.testutil.UsuarioTestUtils.USER_JUAN;
+import static com.didekinaar.testutil.UsuarioTestUtils.makeUserComuWithComunidadId;
+import static com.didekinaar.usuariocomunidad.AarUserComuService.AarUserComuServ;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.AVANCE_DEFAULT_DES;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.INCID_DEFAULT_DESC;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.RESOLUCION_DEFAULT_DESC;
@@ -43,14 +52,6 @@ import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncide
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doResolucion;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidenciaUser;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
-import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
-import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_ESCORIAL_JUAN;
-import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_ESCORIAL_PEPE;
-import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_PLAZUELA5_JUAN;
-import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_JUAN;
-import static com.didekindroid.usuario.testutils.UsuarioTestUtils.makeUserComuWithComunidadId;
-import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.core.IsNull.notNullValue;
@@ -62,6 +63,7 @@ import static org.junit.Assert.fail;
  * Date: 18/11/15
  * Time: 14:53
  */
+@SuppressWarnings("ConstantConditions")
 @RunWith(AndroidJUnit4.class)
 public class IncidServiceTest_1 {
 
@@ -74,7 +76,7 @@ public class IncidServiceTest_1 {
     {
         whatClean = CLEAN_PEPE;
         pepe = signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
-        pepeUserComu = ServOne.seeUserComusByUser().get(0);
+        pepeUserComu = AarUserComuServ.seeUserComusByUser().get(0);
     }
 
     @After
@@ -84,7 +86,7 @@ public class IncidServiceTest_1 {
     }
 
     @Test
-    public void testCloseIncidencia_1() throws InterruptedException, UiException
+    public void testCloseIncidencia_1() throws InterruptedException, UiAppException
     {
         // CASO OK: cerramos incidencia con resolución sin modificar y avance en blanco.
         Resolucion resolucion = insertGetDefaultResolucion();
@@ -103,7 +105,7 @@ public class IncidServiceTest_1 {
         try {
             IncidenciaServ.seeIncidImportancia(resolucion.getIncidencia().getIncidenciaId()).getIncidImportancia().getIncidencia();
             fail();
-        } catch (UiException ue) {
+        } catch (UiAppException ue) {
             // La incidencia no se encuentra por la consulta de incidencias abiertas.
             assertThat(ue.getErrorBean().getMessage(), is(DidekinExceptionMsg.INCIDENCIA_NOT_FOUND.getHttpMessage()));
             // Sí está en las incidencias cerradas.
@@ -112,7 +114,7 @@ public class IncidServiceTest_1 {
     }
 
     @Test
-    public void testDeleteIncidencia_1() throws UiException
+    public void testDeleteIncidencia_1() throws UiAppException
     {
         // Caso OK: existe la incidencia; la borrarmos.
         Incidencia incidencia = insertGetIncidenciaUser(pepeUserComu, 1).getIncidencia();
@@ -122,13 +124,13 @@ public class IncidServiceTest_1 {
         try {
             IncidenciaServ.deleteIncidencia(incidencia.getIncidenciaId());
             fail();
-        } catch (UiException ue) {
+        } catch (UiAppException ue) {
             assertThat(ue.getErrorBean().getMessage(), is(INCIDENCIA_NOT_FOUND.getHttpMessage()));
         }
     }
 
     @Test
-    public void testModifyIncidImportancia_1() throws UiException
+    public void testModifyIncidImportancia_1() throws UiAppException
     {
         Incidencia incidenciaDb = insertGetIncidenciaUser(pepeUserComu, 3).getIncidencia();
 
@@ -154,13 +156,13 @@ public class IncidServiceTest_1 {
         try {
             IncidenciaServ.modifyIncidImportancia(pepeIncidImportancia);
             fail();
-        } catch (UiException u) {
+        } catch (UiAppException u) {
             assertThat(u.getErrorBean().getMessage(), is(INCIDENCIA_NOT_FOUND.getHttpMessage()));
         }
     }
 
     @Test
-    public void testModifyResolucion_1() throws InterruptedException, UiException
+    public void testModifyResolucion_1() throws InterruptedException, UiAppException
     {
         // Caso OK: modificamos resolución sin avances previos.
 
@@ -182,7 +184,7 @@ public class IncidServiceTest_1 {
     }
 
     @Test
-    public void testRegIncidComment_1() throws UiException
+    public void testRegIncidComment_1() throws UiAppException
     {
         // Caso OK.
         Incidencia incidencia = insertGetIncidenciaUser(pepeUserComu, 1).getIncidencia();
@@ -190,7 +192,7 @@ public class IncidServiceTest_1 {
     }
 
     @Test
-    public void testRegIncidComment_2() throws UiException, IOException
+    public void testRegIncidComment_2() throws UiAppException, IOException, UiAarException
     {
         whatClean = CLEAN_JUAN_AND_PEPE;
 
@@ -201,13 +203,13 @@ public class IncidServiceTest_1 {
         try {
             IncidenciaServ.regIncidComment(doComment("Comment_DESC", incidencia));
             fail();
-        } catch (UiException ue) {
+        } catch (UiAppException ue) {
             assertThat(ue.getErrorBean().getMessage(), is(USERCOMU_WRONG_INIT.getHttpMessage()));
         }
     }
 
     @Test
-    public void testRegIncidComment_3() throws UiException
+    public void testRegIncidComment_3() throws UiAppException
     {
         // Caso: no existe incidencia.
         Incidencia incidencia = insertGetIncidenciaUser(pepeUserComu, 1).getIncidencia();
@@ -216,7 +218,7 @@ public class IncidServiceTest_1 {
         try {
             IncidenciaServ.regIncidComment(comment);
             fail();
-        } catch (UiException ue) {
+        } catch (UiAppException ue) {
             assertThat(ue.getErrorBean().getMessage(), is(INCIDENCIA_NOT_FOUND.getHttpMessage()));
         }
     }
@@ -252,7 +254,7 @@ public class IncidServiceTest_1 {
     }
 
     @Test
-    public void testRegResolucion_1() throws UiException, InterruptedException
+    public void testRegResolucion_1() throws UiAppException, InterruptedException
     {
         // Caso OK.
         Incidencia incidencia = insertGetIncidenciaUser(pepeUserComu, 2).getIncidencia();
@@ -262,7 +264,7 @@ public class IncidServiceTest_1 {
     }
 
     @Test
-    public void testRegResolucion_2() throws UiException, InterruptedException, IOException
+    public void testRegResolucion_2() throws UiAppException, InterruptedException, IOException, UiAarException
     {
         whatClean = CLEAN_JUAN_AND_PEPE;
 
@@ -275,7 +277,7 @@ public class IncidServiceTest_1 {
         try {
             IncidenciaServ.regResolucion(resolucion);
             fail();
-        } catch (UiException ue) {
+        } catch (UiAppException ue) {
             assertThat(ue.getErrorBean().getMessage(), is(ROLES_NOT_FOUND.getHttpMessage()));
         }
     }
@@ -289,13 +291,13 @@ public class IncidServiceTest_1 {
         try {
             IncidenciaServ.regResolucion(resolucion);
             fail();
-        } catch (UiException ie) {
+        } catch (UiAppException ie) {
             assertThat(ie.getErrorBean().getMessage(), is(INCIDENCIA_NOT_FOUND.getHttpMessage()));
         }
     }
 
     @Test
-    public void testRegResolucion_4() throws UiException, InterruptedException
+    public void testRegResolucion_4() throws UiAppException, InterruptedException
     {
         // Caso: resolución duplicada.
         Incidencia incidencia = insertGetIncidenciaUser(pepeUserComu, 2).getIncidencia();
@@ -307,13 +309,13 @@ public class IncidServiceTest_1 {
         try {
             IncidenciaServ.regResolucion(resolucion);
             fail();
-        } catch (UiException ue) {
+        } catch (UiAppException ue) {
             assertThat(ue.getErrorBean().getMessage(), is(DidekinExceptionMsg.RESOLUCION_DUPLICATE.getHttpMessage()));
         }
     }
 
     @Test
-    public void testSeeCommentsByIncid_1() throws UiException
+    public void testSeeCommentsByIncid_1() throws UiAppException
     {
         // Caso OK.
         Incidencia incid_pepeComu_1 = insertGetIncidenciaUser(pepeUserComu, 1).getIncidencia();
@@ -327,7 +329,7 @@ public class IncidServiceTest_1 {
     }
 
     @Test
-    public void testSeeCommentsByIncid_2() throws UiException
+    public void testSeeCommentsByIncid_2() throws UiAppException
     {
         // Incidencia no existe.
         Incidencia incidencia = doIncidenciaWithId(999L, "incid_no_existe", pepeUserComu.getComunidad().getC_Id(), (short) 2);
@@ -335,13 +337,13 @@ public class IncidServiceTest_1 {
         try {
             IncidenciaServ.seeCommentsByIncid(incidencia.getIncidenciaId());
             fail();
-        } catch (UiException ue) {
+        } catch (UiAppException ue) {
             assertThat(ue.getErrorBean().getMessage(), is(INCIDENCIA_NOT_FOUND.getHttpMessage()));
         }
     }
 
     @Test
-    public void testSeeCommentsByIncid_3() throws UiException
+    public void testSeeCommentsByIncid_3() throws UiAppException
     {
         // Incidencia existe; no tiene asociada comentarios.
         Incidencia incid_pepeComu_1 = insertGetIncidenciaUser(pepeUserComu, 1).getIncidencia();
@@ -351,7 +353,7 @@ public class IncidServiceTest_1 {
     }
 
     @Test
-    public void testSeeCommentsByIncid_4() throws UiException, IOException
+    public void testSeeCommentsByIncid_4() throws UiAppException, IOException, UiAarException
     {
         whatClean = CLEAN_JUAN_AND_PEPE;
 
@@ -363,13 +365,13 @@ public class IncidServiceTest_1 {
         try {
             IncidenciaServ.seeCommentsByIncid(incid_pepeComu_1.getIncidenciaId());
             fail();
-        } catch (UiException ue) {
+        } catch (UiAppException ue) {
             assertThat(ue.getErrorBean().getMessage(), is(USERCOMU_WRONG_INIT.getHttpMessage()));
         }
     }
 
     @Test
-    public void testSeeIncidImportancia_1() throws UiException
+    public void testSeeIncidImportancia_1() throws UiAppException
     {
         // Caso OK.
         Incidencia incidencia = insertGetIncidenciaUser(pepeUserComu, 1).getIncidencia();
@@ -378,20 +380,20 @@ public class IncidServiceTest_1 {
     }
 
     @Test
-    public void testSeeIncidImportancia_2() throws UiException
+    public void testSeeIncidImportancia_2() throws UiAppException
     {
         // Caso : incidencia no existe en BD.
         Incidencia incidencia = doIncidencia(pepe.getUserName(), "Incidencia One", pepeUserComu.getComunidad().getC_Id(), (short) 43);
         try {
             IncidenciaServ.seeIncidImportancia(incidencia.getIncidenciaId());
             fail();
-        } catch (UiException ue) {
+        } catch (UiAppException ue) {
             assertThat(ue.getErrorBean().getMessage(), is(INCIDENCIA_NOT_FOUND.getHttpMessage()));
         }
     }
 
     @Test
-    public void testSeeIncidImportancia_3() throws UiException, IOException
+    public void testSeeIncidImportancia_3() throws UiAppException, IOException, UiAarException
     {
         whatClean = CLEAN_JUAN_AND_PEPE;
 
@@ -402,20 +404,20 @@ public class IncidServiceTest_1 {
         try {
             IncidenciaServ.seeIncidImportancia(incidencia.getIncidenciaId());
             fail();
-        } catch (UiException ue) {
+        } catch (UiAppException ue) {
             assertThat(ue.getErrorBean().getMessage(), is(ROLES_NOT_FOUND.getHttpMessage()));
         }
     }
 
     @Test
-    public void testSeeIncidImportancia_4() throws UiException, IOException
+    public void testSeeIncidImportancia_4() throws UiAppException, IOException, UiAarException
     {
         whatClean = CLEAN_JUAN_AND_PEPE;
 
         /* Caso: no hay registro incidImportancia.userComu.usuario == usuario, SÍ usuario.comunidad == incidencia.comunidad.*/
 
         Incidencia incidencia = insertGetIncidenciaUser(pepeUserComu, 1).getIncidencia();
-        ServOne.regUserAndUserComu(makeUserComuWithComunidadId(COMU_ESCORIAL_JUAN, incidencia.getComunidad().getC_Id())).execute();
+        AarUserComuServ.regUserAndUserComu(makeUserComuWithComunidadId(COMU_ESCORIAL_JUAN, incidencia.getComunidad().getC_Id())).execute();
         updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
 
         IncidImportancia incidImportancia = IncidenciaServ.seeIncidImportancia(incidencia.getIncidenciaId()).getIncidImportancia();
@@ -430,7 +432,7 @@ public class IncidServiceTest_1 {
     }
 
     @Test
-    public void testSeeIncidsClosedByComu_1() throws InterruptedException, UiException
+    public void testSeeIncidsClosedByComu_1() throws InterruptedException, UiAppException
     {
         // CASO OK: usuario 'adm'.
         Resolucion resolucion = insertGetDefaultResolucion();
@@ -441,7 +443,7 @@ public class IncidServiceTest_1 {
     }
 
     @Test
-    public void testSeeIncidsClosedByComu_2() throws InterruptedException, UiException, IOException
+    public void testSeeIncidsClosedByComu_2() throws InterruptedException, UiAppException, IOException, UiAarException
     {
         // CASO NOT OK: usuario no pertenece a la comunidad.
 
@@ -453,13 +455,13 @@ public class IncidServiceTest_1 {
         try {
             IncidenciaServ.seeIncidsClosedByComu(pepeUserComu.getComunidad().getC_Id());
             fail();
-        } catch (UiException ue) {
+        } catch (UiAppException ue) {
             assertThat(ue.getErrorBean().getMessage(), is(USERCOMU_WRONG_INIT.getHttpMessage()));
         }
     }
 
     @Test
-    public void tesSeeIncidsOpenByComu_1() throws UiException
+    public void tesSeeIncidsOpenByComu_1() throws UiAppException
     {
         IncidImportancia incidPepe = new IncidImportancia.IncidImportanciaBuilder(doIncidencia(pepe.getUserName(), INCID_DEFAULT_DESC, pepeUserComu.getComunidad().getC_Id(), (short) 43))
                 .usuarioComunidad(pepeUserComu)
@@ -476,19 +478,19 @@ public class IncidServiceTest_1 {
     }
 
     @Test
-    public void testSeeIncidsOpenByComu_2() throws UiException
+    public void testSeeIncidsOpenByComu_2() throws UiAppException
     {
         // No existe la comunidad en BD: devuelve lista vacía.
         try {
             IncidenciaServ.seeIncidsOpenByComu(999L);
             fail();
-        } catch (UiException ue) {
+        } catch (UiAppException ue) {
             assertThat(ue.getErrorBean().getMessage(), is(USERCOMU_WRONG_INIT.getHttpMessage()));
         }
     }
 
     @Test
-    public void testSeeResolucion_1() throws UiException, InterruptedException
+    public void testSeeResolucion_1() throws UiAppException, InterruptedException
     {
         // Caso OK.
         Resolucion resolucion = insertGetDefaultResolucion();
@@ -497,7 +499,7 @@ public class IncidServiceTest_1 {
     }
 
     @Test
-    public void testSeeResolucion_2() throws UiException, InterruptedException
+    public void testSeeResolucion_2() throws UiAppException, InterruptedException
     {
         // Caso NOT OK: incidencia no existe.
         Incidencia incidencia = insertGetIncidenciaUser(pepeUserComu, 1).getIncidencia();
@@ -507,13 +509,13 @@ public class IncidServiceTest_1 {
         try {
             IncidenciaServ.seeResolucion(resolucion.getIncidencia().getIncidenciaId());
             fail();
-        } catch (UiException ue) {
+        } catch (UiAppException ue) {
             assertThat(ue.getErrorBean().getMessage(), is(INCIDENCIA_NOT_FOUND.getHttpMessage()));
         }
     }
 
     @Test
-    public void testSeeUserComusImportancia() throws UiException
+    public void testSeeUserComusImportancia() throws UiAppException
     {
         // Caso OK.
         Incidencia incidencia = insertGetIncidenciaUser(pepeUserComu, 1).getIncidencia();
@@ -522,7 +524,7 @@ public class IncidServiceTest_1 {
 
     //    ============================= HELPER METHODS ===============================
 
-    private Resolucion insertGetDefaultResolucion() throws UiException, InterruptedException
+    private Resolucion insertGetDefaultResolucion() throws UiAppException, InterruptedException
     {
         // Insertamos resolución.
         Incidencia incidencia = insertGetIncidenciaUser(pepeUserComu, 1).getIncidencia();

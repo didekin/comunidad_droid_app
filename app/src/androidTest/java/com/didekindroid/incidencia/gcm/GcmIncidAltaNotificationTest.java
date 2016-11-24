@@ -8,11 +8,12 @@ import android.service.notification.StatusBarNotification;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.incidservice.dominio.IncidenciaUser;
-import com.didekin.usuario.dominio.UsuarioComunidad;
+import com.didekin.incidencia.dominio.IncidenciaUser;
+import com.didekin.usuariocomunidad.UsuarioComunidad;
+import com.didekinaar.exception.UiAarException;
 import com.didekindroid.R;
-import com.didekindroid.common.activity.MockActivity;
-import com.didekindroid.common.activity.UiException;
+import com.didekinaar.mock.MockActivity;
+import com.didekindroid.incidencia.exception.UiAppException;
 import com.didekinservice.common.gcm.GcmException;
 import com.didekinservice.common.gcm.GcmRequest;
 import com.didekinservice.common.gcm.GcmResponse;
@@ -32,13 +33,13 @@ import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekin.incidservice.gcm.GcmKeyValueIncidData.incidencia_open_type;
-import static com.didekindroid.common.gcm.AppFirebaseMsgService.TypeMsgHandler.INCIDENCIA_OPEN;
-import static com.didekindroid.common.testutils.ActivityTestUtils.clickNavigateUp;
-import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
+import static com.didekin.incidencia.gcm.GcmKeyValueIncidData.incidencia_open_type;
+import static com.didekinaar.usuariocomunidad.AarUserComuService.AarUserComuServ;
+import static com.didekindroid.incidencia.gcm.AppFBService.IncidTypeMsgHandler.INCIDENCIA_OPEN;
+import static com.didekinaar.testutil.AarActivityTestUtils.clickNavigateUp;
+import static com.didekinaar.testutil.AarActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidenciaUser;
-import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_PEPE;
-import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
+import static com.didekinaar.testutil.UsuarioTestUtils.COMU_REAL_PEPE;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -51,7 +52,7 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class GcmIncidAltaNotificationTest extends GcmIncidNotificationTest {
 
-    private IncidenciaUser incidenciaUser;
+    IncidenciaUser incidenciaUser;
 
     @Override
     protected IntentsTestRule<MockActivity> doIntentsTestRule()
@@ -63,10 +64,10 @@ public class GcmIncidAltaNotificationTest extends GcmIncidNotificationTest {
             {
                 try {
                     signUpAndUpdateTk(COMU_REAL_PEPE);
-                    UsuarioComunidad pepeUserComu = ServOne.seeUserComusByUser().get(0);
+                    UsuarioComunidad pepeUserComu = AarUserComuServ.seeUserComusByUser().get(0);
                     comunidadIdIntent = pepeUserComu.getComunidad().getC_Id();
                     incidenciaUser = insertGetIncidenciaUser(pepeUserComu, 1);
-                } catch (UiException | IOException e) {
+                } catch (UiAppException | IOException | UiAarException e) {
                     e.printStackTrace();
                 }
             }

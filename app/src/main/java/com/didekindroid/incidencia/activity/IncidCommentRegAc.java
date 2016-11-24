@@ -8,26 +8,25 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.didekin.incidservice.dominio.IncidComment;
-import com.didekin.incidservice.dominio.Incidencia;
+import com.didekin.incidencia.dominio.IncidComment;
+import com.didekin.incidencia.dominio.Incidencia;
+import com.didekindroid.incidencia.exception.UiAppException;
 import com.didekindroid.R;
-import com.didekindroid.common.activity.UiException;
-import com.didekindroid.common.utils.ConnectionUtils;
-import com.didekindroid.common.utils.UIutils;
+import com.didekinaar.utils.ConnectionUtils;
+import com.didekinaar.utils.UIutils;
 import com.didekindroid.incidencia.dominio.IncidCommentBean;
 
 import java.util.Objects;
 
 import timber.log.Timber;
 
-import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_OBJECT;
-import static com.didekindroid.common.utils.UIutils.doToolBar;
-import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
-import static com.didekindroid.common.utils.UIutils.makeToast;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCIDENCIA_OBJECT;
+import static com.didekinaar.utils.UIutils.doToolBar;
+import static com.didekinaar.utils.UIutils.getErrorMsgBuilder;
+import static com.didekinaar.utils.UIutils.makeToast;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
-import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenu;
+import static com.didekinaar.usuario.UserMenu.doUpMenu;
 
 /**
  * Preconditions:
@@ -100,9 +99,9 @@ public class IncidCommentRegAc extends AppCompatActivity {
 
         if (comment == null) {
             Timber.d("registerComment(); comment == null");
-            makeToast(this, errorMsg.toString(), Toast.LENGTH_SHORT);
+            makeToast(this, errorMsg.toString(), com.didekinaar.R.color.deep_purple_100);
         } else if (!ConnectionUtils.isInternetConnected(this)) {
-            UIutils.makeToast(this, R.string.no_internet_conn_toast, Toast.LENGTH_LONG);
+            UIutils.makeToast(this, R.string.no_internet_conn_toast);
         } else {
             new IncidCommentRegister().execute(comment);
         }
@@ -115,7 +114,7 @@ public class IncidCommentRegAc extends AppCompatActivity {
     // TODO: to persist the task during restarts and properly cancel the task when the activity is destroyed. (Example in Shelves)
     class IncidCommentRegister extends AsyncTask<IncidComment, Void, Integer> {
 
-        UiException uiException;
+        UiAppException uiException;
 
         @Override
         protected Integer doInBackground(IncidComment... comments)
@@ -125,7 +124,7 @@ public class IncidCommentRegAc extends AppCompatActivity {
 
             try {
                 rowInserted = IncidenciaServ.regIncidComment(comments[0]);
-            } catch (UiException e) {
+            } catch (UiAppException e) {
                 uiException = e;
             }
             return rowInserted;

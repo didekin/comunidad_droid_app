@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <include layout="@layout/appbar_include_design" />
+
+    <fragment
+        android:id="@+id/see_usercomu_by_user_frg"
+        android:name="com.didekinaar.usuariocomunidad.SeeUserComuByUserFr"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/app_bar_bottom_margin" />
+
+</merge>

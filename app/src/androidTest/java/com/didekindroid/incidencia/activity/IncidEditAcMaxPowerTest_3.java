@@ -3,13 +3,14 @@ package com.didekindroid.incidencia.activity;
 import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 
-import com.didekin.incidservice.dominio.IncidAndResolBundle;
-import com.didekin.incidservice.dominio.IncidImportancia;
-import com.didekin.incidservice.dominio.Incidencia;
-import com.didekin.incidservice.dominio.Resolucion;
-import com.didekin.usuario.dominio.UsuarioComunidad;
-import com.didekindroid.common.activity.UiException;
-import com.didekindroid.usuario.testutils.CleanUserEnum;
+import com.didekin.incidencia.dominio.IncidAndResolBundle;
+import com.didekin.incidencia.dominio.IncidImportancia;
+import com.didekin.incidencia.dominio.Incidencia;
+import com.didekin.incidencia.dominio.Resolucion;
+import com.didekin.usuariocomunidad.UsuarioComunidad;
+import com.didekinaar.exception.UiAarException;
+import com.didekindroid.incidencia.exception.UiAppException;
+import com.didekinaar.testutil.CleanUserEnum;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -18,17 +19,17 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Date;
 
-import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_FLAG;
-import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
+import static com.didekinaar.usuariocomunidad.AarUserComuService.AarUserComuServ;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
+import static com.didekinaar.testutil.AarActivityTestUtils.signUpAndUpdateTk;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.INCID_DEFAULT_DESC;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.RESOLUCION_DEFAULT_DESC;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doResolucion;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
-import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_ESCORIAL_PEPE;
-import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
+import static com.didekinaar.testutil.CleanUserEnum.CLEAN_PEPE;
+import static com.didekinaar.testutil.UsuarioTestUtils.COMU_ESCORIAL_PEPE;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -37,6 +38,7 @@ import static org.junit.Assert.assertThat;
  * Date: 17/03/16
  * Time: 15:51
  */
+@SuppressWarnings("ConstantConditions")
 public class IncidEditAcMaxPowerTest_3 extends IncidEditAbstractTest {
 
     IncidAndResolBundle incidResolBundlePepe;
@@ -58,7 +60,7 @@ public class IncidEditAcMaxPowerTest_3 extends IncidEditAbstractTest {
             {
                 try {
                     signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
-                    UsuarioComunidad pepeEscorial = ServOne.seeUserComusByUser().get(0);
+                    UsuarioComunidad pepeEscorial = AarUserComuServ.seeUserComusByUser().get(0);
                     IncidImportancia incidPepeEscorial = new IncidImportancia.IncidImportanciaBuilder(
                             doIncidencia(pepeEscorial.getUsuario().getUserName(), INCID_DEFAULT_DESC, pepeEscorial.getComunidad().getC_Id(), (short) 43))
                             .usuarioComunidad(pepeEscorial)
@@ -72,7 +74,7 @@ public class IncidEditAcMaxPowerTest_3 extends IncidEditAbstractTest {
                     assertThat(IncidenciaServ.regResolucion(resolucion), is(1));
                     incidResolBundlePepe = IncidenciaServ.seeIncidImportancia(incidenciaDb.getIncidenciaId());
                     incidenciaPepe = incidResolBundlePepe.getIncidImportancia();
-                } catch (UiException | InterruptedException | IOException e) {
+                } catch (UiAppException | InterruptedException | IOException | UiAarException e) {
                     e.printStackTrace();
                 }
                 Intent intent = new Intent();

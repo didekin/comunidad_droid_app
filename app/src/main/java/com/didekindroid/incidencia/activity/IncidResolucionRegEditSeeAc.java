@@ -7,19 +7,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.didekin.incidservice.dominio.IncidImportancia;
-import com.didekin.incidservice.dominio.Resolucion;
+import com.didekin.incidencia.dominio.IncidImportancia;
+import com.didekin.incidencia.dominio.Resolucion;
 import com.didekindroid.R;
-import com.didekindroid.common.activity.BundleKey;
+import com.didekindroid.incidencia.activity.utils.IncidBundleKey;
 
 import timber.log.Timber;
 
-import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.common.utils.UIutils.doToolBar;
-import static com.didekindroid.common.utils.UIutils.getGcmToken;
+import static com.didekinaar.usuario.UserMenu.doUpMenu;
+import static com.didekinaar.gcm.GcmUtils.getGcmToken;
+import static com.didekinaar.utils.UIutils.doToolBar;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_resolucion_ac_frgs_tag;
-import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenu;
 
 /**
  * This activity is a point of registration for receiving GCM notifications of new incidents.
@@ -53,7 +53,7 @@ public class IncidResolucionRegEditSeeAc extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         mIncidImportancia = (IncidImportancia) getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.key);
-        mResolucion = (Resolucion) getIntent().getSerializableExtra(BundleKey.INCID_RESOLUCION_OBJECT.key);
+        mResolucion = (Resolucion) getIntent().getSerializableExtra(IncidBundleKey.INCID_RESOLUCION_OBJECT.key);
 
         View mAcView = getLayoutInflater().inflate(R.layout.incid_resolucion_reg_ac, null);
         setContentView(mAcView);

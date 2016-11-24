@@ -4,13 +4,13 @@ import android.content.res.Resources;
 import android.view.View;
 import android.widget.EditText;
 
-import com.didekin.incidservice.dominio.AmbitoIncidencia;
-import com.didekin.incidservice.dominio.Incidencia;
-import com.didekin.usuario.dominio.Comunidad;
+import com.didekin.incidencia.dominio.AmbitoIncidencia;
+import com.didekin.incidencia.dominio.Incidencia;
+import com.didekin.comunidad.Comunidad;
 import com.didekindroid.R;
 
-import static com.didekin.common.dominio.UsuarioDataPatterns.LINE_BREAK;
-import static com.didekin.incidservice.dominio.IncidDataPatterns.INCID_DESC;
+import static com.didekin.common.dominio.ValidDataPatterns.LINE_BREAK;
+import static com.didekin.incidencia.dominio.IncidDataPatterns.INCID_DESC;
 import static com.didekindroid.incidencia.repository.IncidenciaDataDb.AmbitoIncidencia.AMBITO_INCID_COUNT;
 
 /**
@@ -67,7 +67,7 @@ public class IncidenciaBean {
                 & validateComunidadId(errorMsg, resources);
     }
 
-    boolean validateDescripcion(StringBuilder errorMsg, Resources resources)
+    private boolean validateDescripcion(StringBuilder errorMsg, Resources resources)
     {
         if (!INCID_DESC.isPatternOk(descripcion)) {
             errorMsg.append(resources.getString(R.string.incid_reg_descripcion)).append(LINE_BREAK.getRegexp());
@@ -76,7 +76,7 @@ public class IncidenciaBean {
         return true;
     }
 
-    boolean validateCodAmbito(StringBuilder errorMsg, Resources resources)
+    private boolean validateCodAmbito(StringBuilder errorMsg, Resources resources)
     {
         if (codAmbitoIncid <= 0 || codAmbitoIncid > AMBITO_INCID_COUNT) {
             errorMsg.append(resources.getString(R.string.incid_reg_ambitoIncidencia)).append(LINE_BREAK.getRegexp());
@@ -85,7 +85,7 @@ public class IncidenciaBean {
         return true;
     }
 
-    boolean validateComunidadId(StringBuilder errorMsg, Resources resources)
+    private boolean validateComunidadId(StringBuilder errorMsg, Resources resources)
     {
         if (comunidadId <= 0) {
             errorMsg.append(resources.getString(R.string.reg_usercomu_comunidad_null)).append(LINE_BREAK.getRegexp());

@@ -8,12 +8,12 @@ import android.support.test.espresso.Espresso;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.usuario.dominio.Comunidad;
+import com.didekin.comunidad.Comunidad;
+import com.didekinaar.testutil.CleanUserEnum;
+import com.didekinaar.exception.UiAarException;
+import com.didekinaar.usuario.AarFBRegIntentService;
+import com.didekinaar.testutil.IdlingResourceForIntentServ;
 import com.didekindroid.R;
-import com.didekindroid.common.activity.IdlingResourceForIntentServ;
-import com.didekindroid.common.activity.UiException;
-import com.didekindroid.common.gcm.GcmRegistrationIntentService;
-import com.didekindroid.usuario.testutils.CleanUserEnum;
 
 import org.junit.After;
 import org.junit.Before;
@@ -33,21 +33,22 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
-import static com.didekindroid.common.gcm.AppFirebaseMsgService.TypeMsgHandler.INCIDENCIA_OPEN;
-import static com.didekindroid.common.testutils.ActivityTestUtils.checkUp;
-import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
-import static com.didekindroid.common.testutils.ActivityTestUtils.clickNavigateUp;
-import static com.didekindroid.common.testutils.ActivityTestUtils.regSeveralUserComuSameUser;
-import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
-import static com.didekindroid.common.utils.UIutils.updateIsGcmTokenSentServer;
+import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
+import static com.didekinaar.testutil.AarActivityTestUtils.cleanOptions;
+import static com.didekinaar.testutil.AarActivityTestUtils.clickNavigateUp;
+import static com.didekinaar.testutil.AarActivityTestUtils.regSeveralUserComuSameUser;
+import static com.didekinaar.usuariocomunidad.AarUserComuService.AarUserComuServ;
+import static com.didekinaar.comunidad.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekinaar.testutil.CleanUserEnum.CLEAN_JUAN;
+import static com.didekinaar.testutil.UserMenuTestUtils.SEE_USERCOMU_BY_COMU_AC;
+import static com.didekinaar.testutil.UsuarioTestUtils.COMU_PLAZUELA5_JUAN;
+import static com.didekinaar.testutil.UsuarioTestUtils.COMU_REAL_JUAN;
+import static com.didekinaar.utils.UIutils.isRegisteredUser;
+import static com.didekinaar.utils.UIutils.updateIsGcmTokenSentServer;
+import static com.didekinaar.usuario.AarUsuarioService.AarUserServ;
+import static com.didekindroid.incidencia.gcm.AppFBService.IncidTypeMsgHandler.INCIDENCIA_OPEN;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_REG_AC;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_CLOSED_BY_COMU_AC;
-import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
-import static com.didekindroid.usuario.testutils.UserMenuTestUtils.SEE_USERCOMU_BY_COMU_AC;
-import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_PLAZUELA5_JUAN;
-import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_JUAN;
-import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -81,14 +82,14 @@ public class IncidSeeOpenByComuAcTest_1 {
         @Override
         protected void beforeActivityLaunched()
         {
+            Context context = InstrumentationRegistry.getTargetContext();
+            updateIsGcmTokenSentServer(false, context);
             try {
-                Context context = InstrumentationRegistry.getTargetContext();
-                updateIsGcmTokenSentServer(false, context);
-                Objects.equals(ServOne.getGcmToken() == null, true);
-
-            } catch (UiException e) {
+                Objects.equals(AarUserServ.getGcmToken() == null, true);
+            } catch (UiAarException e) {
                 e.printStackTrace();
             }
+
         }
 
         /**
@@ -100,13 +101,15 @@ public class IncidSeeOpenByComuAcTest_1 {
         {
             try {
                 regSeveralUserComuSameUser(COMU_REAL_JUAN, COMU_PLAZUELA5_JUAN);
-                comunidadInIntent = ServOne.seeUserComusByUser().get(0).getComunidad();
+                comunidadInIntent = AarUserComuServ.seeUserComusByUser().get(0).getComunidad();
                 Intent intent = new Intent();
                 intent.putExtra(COMUNIDAD_ID.key, comunidadInIntent.getC_Id());
                 return intent;
-            } catch (UiException | IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
                 fail();
+            } catch (UiAarException e) {
+                e.printStackTrace();
             }
             return null;
         }
@@ -123,7 +126,7 @@ public class IncidSeeOpenByComuAcTest_1 {
     {
         mActivity = activityRule.getActivity();
         mNotifyManager = (NotificationManager) mActivity.getSystemService(Context.NOTIFICATION_SERVICE);
-        idlingResource = new IdlingResourceForIntentServ(mActivity, new GcmRegistrationIntentService());
+        idlingResource = new IdlingResourceForIntentServ(mActivity, new AarFBRegIntentService());
         Espresso.registerIdlingResources(idlingResource);
     }
 

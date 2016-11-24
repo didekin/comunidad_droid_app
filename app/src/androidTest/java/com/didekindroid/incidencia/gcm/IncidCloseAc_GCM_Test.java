@@ -9,9 +9,10 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.incidservice.dominio.IncidImportancia;
-import com.didekin.incidservice.dominio.Resolucion;
-import com.didekindroid.common.activity.UiException;
+import com.didekin.incidencia.dominio.IncidImportancia;
+import com.didekin.incidencia.dominio.Resolucion;
+import com.didekinaar.exception.UiAarException;
+import com.didekindroid.incidencia.exception.UiAppException;
 import com.didekindroid.incidencia.activity.IncidResolucionRegEditSeeAc;
 import com.google.firebase.iid.FirebaseInstanceId;
 
@@ -20,16 +21,16 @@ import org.junit.runner.RunWith;
 
 import java.io.IOException;
 
-import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.common.gcm.AppFirebaseMsgService.TypeMsgHandler.INCIDENCIA_CLOSE;
-import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
-import static com.didekindroid.common.utils.UIutils.updateIsGcmTokenSentServer;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
+import static com.didekindroid.incidencia.gcm.AppFBService.IncidTypeMsgHandler.INCIDENCIA_CLOSE;
+import static com.didekinaar.utils.UIutils.isRegisteredUser;
+import static com.didekinaar.utils.UIutils.updateIsGcmTokenSentServer;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetResolucionNoAdvances;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
-import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_PLAZUELA5_PEPE;
-import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
+import static com.didekinaar.testutil.UsuarioTestUtils.COMU_PLAZUELA5_PEPE;
+import static com.didekinaar.usuario.AarUsuarioService.AarUserServ;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -46,7 +47,7 @@ public class IncidCloseAc_GCM_Test extends Incidencia_GCM_Test {
     Resolucion resolucion;
 
     /**
-     * Test para GcmRegistrationIntentService methods.
+     * Test para AarFBRegIntentService methods.
      */
     @Test
     public void testRegistrationGcmToken() throws Exception
@@ -65,7 +66,7 @@ public class IncidCloseAc_GCM_Test extends Incidencia_GCM_Test {
             return;
         }
         // Preconditions for the test: TOKEN en BD.
-        assertThat(ServOne.getGcmToken(), is(FirebaseInstanceId.getInstance().getToken()));
+        assertThat(AarUserServ.getGcmToken(), is(FirebaseInstanceId.getInstance().getToken()));
 
         assertThat(IncidenciaServ.closeIncidencia(resolucion), is(2));
         checkNotification(INCIDENCIA_CLOSE.getContentTextRsc());
@@ -99,7 +100,7 @@ public class IncidCloseAc_GCM_Test extends Incidencia_GCM_Test {
                     incidImportancia = insertGetIncidImportancia(COMU_PLAZUELA5_PEPE);
                     Thread.sleep(1000);
                     resolucion = insertGetResolucionNoAdvances(incidImportancia);
-                } catch (UiException | InterruptedException | IOException e) {
+                } catch (UiAppException | InterruptedException | IOException | UiAarException e) {
                     e.printStackTrace();
                 }
                 Intent intent = new Intent();

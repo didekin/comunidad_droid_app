@@ -7,7 +7,7 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.common.controller.RetrofitHandler;
-import com.didekindroid.common.activity.MockActivity;
+import com.didekinaar.mock.MockActivity;
 import com.didekinservice.common.gcm.GcmEndPointImp;
 import com.didekinservice.common.gcm.GcmMulticastRequest;
 import com.didekinservice.common.gcm.GcmRequest;
@@ -22,10 +22,9 @@ import org.junit.runner.RunWith;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.didekindroid.DidekinApp.getHttpTimeOut;
-import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
-import static com.didekindroid.common.utils.UIutils.updateIsGcmTokenSentServer;
-import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekinaar.utils.UIutils.updateIsGcmTokenSentServer;
+import static com.didekinaar.testutil.AarActivityTestUtils.cleanOptions;
+import static com.didekinaar.testutil.CleanUserEnum.CLEAN_PEPE;
 import static com.didekinservice.common.gcm.GcmEndPoint.FCM_HOST_PORT;
 
 /**
@@ -57,7 +56,7 @@ public abstract class GcmIncidNotificationTest {
         Thread.sleep(2000);
 
         firebaseInstanceId = FirebaseInstanceId.getInstance();
-        retrofitHandler = new RetrofitHandler(FCM_HOST_PORT, getHttpTimeOut());
+        retrofitHandler = new RetrofitHandler(FCM_HOST_PORT, 60); // in seconds.
         mActivity = intentRule.getActivity();
         updateIsGcmTokenSentServer(false, mActivity);
 

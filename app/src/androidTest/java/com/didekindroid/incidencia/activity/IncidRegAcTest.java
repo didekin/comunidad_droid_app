@@ -6,12 +6,13 @@ import android.support.test.runner.AndroidJUnit4;
 import android.widget.ArrayAdapter;
 import android.widget.CursorAdapter;
 
-import com.didekin.incidservice.dominio.IncidenciaUser;
-import com.didekin.usuario.dominio.Comunidad;
+import com.didekin.incidencia.dominio.IncidenciaUser;
+import com.didekin.comunidad.Comunidad;
+import com.didekinaar.exception.UiAarException;
+import com.didekindroid.incidencia.exception.UiAppException;
 import com.didekindroid.R;
-import com.didekindroid.common.activity.UiException;
 import com.didekindroid.incidencia.dominio.IncidenciaBean;
-import com.didekindroid.usuario.testutils.CleanUserEnum;
+import com.didekinaar.testutil.CleanUserEnum;
 
 import org.junit.After;
 import org.junit.Before;
@@ -35,20 +36,20 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
-import static com.didekindroid.common.testutils.ActivityTestUtils.checkUp;
-import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
-import static com.didekindroid.common.testutils.ActivityTestUtils.clickNavigateUp;
-import static com.didekindroid.common.testutils.ActivityTestUtils.regSeveralUserComuSameUser;
-import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
-import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
-import static com.didekindroid.common.utils.UIutils.updateIsGcmTokenSentServer;
+import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
+import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
+import static com.didekinaar.testutil.AarActivityTestUtils.cleanOptions;
+import static com.didekinaar.testutil.AarActivityTestUtils.clickNavigateUp;
+import static com.didekinaar.testutil.AarActivityTestUtils.regSeveralUserComuSameUser;
+import static com.didekinaar.utils.UIutils.getErrorMsgBuilder;
+import static com.didekinaar.utils.UIutils.isRegisteredUser;
+import static com.didekinaar.utils.UIutils.updateIsGcmTokenSentServer;
 import static com.didekindroid.incidencia.repository.IncidenciaDataDb.AmbitoIncidencia.AMBITO_INCID_COUNT;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
-import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_ESCORIAL_PEPE;
-import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_LA_FUENTE;
-import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_LA_FUENTE_PEPE;
-import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_PEPE;
+import static com.didekinaar.testutil.UsuarioTestUtils.COMU_ESCORIAL_PEPE;
+import static com.didekinaar.testutil.UsuarioTestUtils.COMU_LA_FUENTE;
+import static com.didekinaar.testutil.UsuarioTestUtils.COMU_LA_FUENTE_PEPE;
+import static com.didekinaar.testutil.UsuarioTestUtils.COMU_REAL_PEPE;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -83,7 +84,7 @@ public class IncidRegAcTest {
         {
             try {
                 regSeveralUserComuSameUser(COMU_ESCORIAL_PEPE, COMU_REAL_PEPE, COMU_LA_FUENTE_PEPE);
-            } catch (UiException | IOException e) {
+            } catch (IOException | UiAarException e) {
                 e.printStackTrace();
             }
         }
@@ -173,7 +174,7 @@ public class IncidRegAcTest {
     }
 
     @Test
-    public void testRegisterIncidencia_2() throws UiException
+    public void testRegisterIncidencia_2() throws UiAppException
     {
         // Precondition.
         assertThat(IncidenciaServ.seeIncidsOpenByComu(comunidadByDefault.getC_Id()).size(), is(0));
@@ -190,7 +191,7 @@ public class IncidRegAcTest {
     }
 
     @Test
-    public void testRegisterIncidencia_3() throws UiException
+    public void testRegisterIncidencia_3() throws UiAppException
     {
         // Precondition.
         assertThat(IncidenciaServ.seeIncidsOpenByComu(comunidadByDefault.getC_Id()).size(), is(0));
@@ -206,7 +207,7 @@ public class IncidRegAcTest {
     }
 
     @Test
-    public void testRegisterIncidencia_4() throws UiException
+    public void testRegisterIncidencia_4() throws UiAppException
     {
         // Probamos cambio de comunidad en spinner: Calle La Fuente.
         Comunidad comunidadFuente = comunidadesAdapter.getItem(1);

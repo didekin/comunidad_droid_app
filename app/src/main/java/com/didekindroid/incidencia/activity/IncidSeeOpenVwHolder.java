@@ -3,21 +3,21 @@ package com.didekindroid.incidencia.activity;
 import android.view.View;
 import android.widget.TextView;
 
-import com.didekin.incidservice.dominio.IncidenciaUser;
+import com.didekin.incidencia.dominio.IncidenciaUser;
 import com.didekindroid.R;
 
-import static com.didekindroid.common.utils.UIutils.formatTimeStampToString;
+import static com.didekinaar.utils.UIutils.formatTimeStampToString;
 
 /**
  * User: pedro@didekin
  * Date: 09/06/16
  * Time: 19:58
  */
-public class IncidSeeOpenVwHolder extends IncidSeeItemVwHolder {
+class IncidSeeOpenVwHolder extends IncidSeeItemVwHolder {
 
-    final TextView mFechaAltaResolucion;
+    private final TextView mFechaAltaResolucion;
 
-    public IncidSeeOpenVwHolder(View convertView)
+    IncidSeeOpenVwHolder(View convertView)
     {
         super(convertView);
         mFechaAltaResolucion = (TextView) convertView.findViewById(R.id.incid_see_fecha_alta_resolucion_view);

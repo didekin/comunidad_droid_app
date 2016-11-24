@@ -4,13 +4,14 @@ import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.incidservice.dominio.IncidComment;
-import com.didekin.incidservice.dominio.IncidImportancia;
-import com.didekin.incidservice.dominio.IncidenciaUser;
-import com.didekin.usuario.dominio.UsuarioComunidad;
+import com.didekin.incidencia.dominio.IncidComment;
+import com.didekin.incidencia.dominio.IncidImportancia;
+import com.didekin.incidencia.dominio.IncidenciaUser;
+import com.didekin.usuariocomunidad.UsuarioComunidad;
+import com.didekinaar.exception.UiAarException;
+import com.didekinaar.testutil.CleanUserEnum;
 import com.didekindroid.R;
-import com.didekindroid.common.activity.UiException;
-import com.didekindroid.usuario.testutils.CleanUserEnum;
+import com.didekindroid.incidencia.exception.UiAppException;
 
 import org.junit.After;
 import org.junit.Before;
@@ -28,16 +29,16 @@ import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_OBJECT;
-import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
-import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
-import static com.didekindroid.common.utils.UIutils.formatTimeStampToString;
+import static com.didekinaar.testutil.AarActivityTestUtils.cleanOptions;
+import static com.didekinaar.testutil.AarActivityTestUtils.signUpAndUpdateTk;
+import static com.didekinaar.testutil.UsuarioTestUtils.COMU_REAL_JUAN;
+import static com.didekinaar.usuariocomunidad.AarUserComuService.AarUserComuServ;
+import static com.didekinaar.utils.UIutils.formatTimeStampToString;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_comments_see_list_fr_tag;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doComment;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
-import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_JUAN;
-import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -70,7 +71,7 @@ public class IncidCommentSeeAcTest_2 {
             try {
                 IncidenciaServ.regIncidComment(doComment("Comment_1_incidjuanReal1", incidJuanReal1.getIncidencia()));
                 IncidenciaServ.regIncidComment(doComment("Comment_2_incidjuanReal1", incidJuanReal1.getIncidencia()));
-            } catch (UiException e) {
+            } catch (UiAppException e) {
                 e.printStackTrace();
             }
         }
@@ -80,7 +81,7 @@ public class IncidCommentSeeAcTest_2 {
         {
             try {
                 signUpAndUpdateTk(COMU_REAL_JUAN);
-                UsuarioComunidad juanReal = ServOne.seeUserComusByUser().get(0);
+                UsuarioComunidad juanReal = AarUserComuServ.seeUserComusByUser().get(0);
                 incidJuanReal1 = new IncidImportancia.IncidImportanciaBuilder(
                         doIncidencia(juanReal.getUsuario().getUserName(), "Incidencia Real One", juanReal.getComunidad().getC_Id(), (short) 43))
                         .usuarioComunidad(juanReal)
@@ -88,7 +89,7 @@ public class IncidCommentSeeAcTest_2 {
                 IncidenciaServ.regIncidImportancia(incidJuanReal1);
                 IncidenciaUser incidenciaUser = IncidenciaServ.seeIncidsOpenByComu(juanReal.getComunidad().getC_Id()).get(0);
                 incidJuanReal1 = IncidenciaServ.seeIncidImportancia(incidenciaUser.getIncidencia().getIncidenciaId()).getIncidImportancia();
-            } catch (UiException | IOException e) {
+            } catch (UiAppException | IOException | UiAarException e) {
                 e.printStackTrace();
             }
             Intent intent = new Intent();

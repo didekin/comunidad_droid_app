@@ -3,28 +3,15 @@
           xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools">
 
-    <!--All of the permissions are non-dangerous permission. No check online.-->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <!-- Permissions for GCM services -->
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
-    <!-- .......... -->
-    <supports-screens
-        android:largeScreens="true"
-        android:normalScreens="true"
-        android:smallScreens="true"
-        android:xlargeScreens="true"/>
-
     <application
         android:name=".DidekinApp"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:networkSecurityConfig="@xml/network_security_config"
-        android:supportsRtl="false" android:theme="@style/themeOne"
+        android:supportsRtl="false"
+        android:theme="@style/themeOne"
         tools:ignore="UnusedAttribute"
-        tools:replace="android:label"
-        >
+        tools:node="replace">
 
         <!-- **************************************************************** -->
         <!-- INCIDENCIA -->
@@ -82,10 +69,10 @@
         <activity
             android:name=".incidencia.activity.IncidSeeOpenByComuAc"
             android:label="@string/incid_see_by_user_ac_label"
-            android:parentActivityName=".usuario.activity.UserComuDataAc">
+            android:parentActivityName="com.didekinaar.usuariocomunidad.UserComuDataAc">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".usuario.activity.UserComuDataAc"/>
+                android:value="com.didekinaar.usuariocomunidad.UserComuDataAc"/>
         </activity>
         <activity
             android:name=".incidencia.activity.IncidSeeUserComuImportanciaAc"
@@ -97,152 +84,13 @@
         </activity>
         <!-- .......... GCM services ......... -->
         <service
-            android:name=".common.gcm.AppFirebaseMsgService" android:exported="true"
+            android:name=".incidencia.gcm.AppFBService" android:exported="true"
             tools:ignore="ExportedService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
-        <service
-            android:name=".common.gcm.AppFirebaseInstanceIdService" android:exported="true"
-            tools:ignore="ExportedService">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
-            </intent-filter>
-        </service>
-        <service
-            android:name=".common.gcm.GcmRegistrationIntentService"
-            android:exported="false">
-        </service>
-        <!-- **************************************************************** -->
-        <!-- USUARIO -->
-        <!-- **************************************************************** -->
 
-        <activity
-            android:name=".usuario.activity.ComuDataAc"
-            android:label="@string/comu_data_ac_label"
-            android:parentActivityName=".usuario.activity.UserComuDataAc"
-            android:windowSoftInputMode="stateHidden">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".usuario.activity.UserComuDataAc"/>
-        </activity>
-        <activity
-            android:name=".usuario.activity.ComuSearchAc"
-            android:label="@string/comu_search_ac_label"
-            android:launchMode="singleTop"
-            android:windowSoftInputMode="stateHidden">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".usuario.activity.ComuSearchResultsAc"
-            android:label="@string/comu_search_results_ac_label"
-            android:parentActivityName=".usuario.activity.ComuSearchAc">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".usuario.activity.ComuSearchAc"/>
-        </activity>
-        <activity
-            android:name=".usuario.activity.DeleteMeAc"
-            android:label="@string/delete_me_ac_label"
-            android:parentActivityName=".usuario.activity.UserDataAc">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".usuario.activity.UserDataAc"/>
-        </activity>
-        <activity
-            android:name=".usuario.activity.LoginAc"
-            android:label="@string/login_label"
-            android:launchMode="singleInstance"
-            android:parentActivityName=".usuario.activity.ComuSearchAc">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".usuario.activity.ComuSearchAc"/>
-        </activity>
-        <activity
-            android:name=".usuario.activity.PasswordChangeAc"
-            android:label="@string/password_change_ac_label"
-            android:parentActivityName=".usuario.activity.UserDataAc">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".usuario.activity.UserDataAc"/>
-        </activity>
-        <activity
-            android:name=".usuario.activity.RegComuAndUserAndUserComuAc"
-            android:label="@string/reg_comunidad_ac_label"
-            android:launchMode="singleTask"
-            android:parentActivityName=".usuario.activity.ComuSearchAc"
-            android:windowSoftInputMode="stateHidden">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".usuario.activity.ComuSearchResultsAc"/>
-        </activity>
-        <activity
-            android:name=".usuario.activity.RegComuAndUserComuAc"
-            android:label="@string/reg_comunidad_ac_label"
-            android:launchMode="singleTask"
-            android:parentActivityName=".usuario.activity.ComuSearchAc"
-            android:windowSoftInputMode="stateHidden">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".usuario.activity.ComuSearchAc"/>
-        </activity>
-        <activity
-            android:name=".usuario.activity.RegUserAndUserComuAc"
-            android:label="@string/reg_user_and_usercomu_ac_label"
-            android:parentActivityName=".usuario.activity.ComuSearchResultsAc"
-            android:windowSoftInputMode="stateHidden">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".usuario.activity.ComuSearchResultsAc"/>
-        </activity>
-        <activity
-            android:name=".usuario.activity.RegUserComuAc"
-            android:label="@string/regusuario_comu_ac_label"
-            android:launchMode="singleTask"
-            android:parentActivityName=".usuario.activity.ComuSearchResultsAc"
-            android:windowSoftInputMode="stateHidden">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".usuario.activity.ComuSearchResultsAc"/>
-        </activity>
-        <activity
-            android:name=".usuario.activity.SeeUserComuByComuAc"
-            android:label="@string/see_usercomu_by_comu_ac_label"
-            android:parentActivityName=".usuario.activity.UserComuDataAc">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".usuario.activity.UserComuDataAc"/>
-        </activity>
-        <activity
-            android:name=".usuario.activity.SeeUserComuByUserAc"
-            android:label="@string/see_usercomu_by_user_ac_label"
-            android:parentActivityName=".usuario.activity.ComuSearchResultsAc">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".usuario.activity.ComuSearchResultsAc"/>
-        </activity>
-        <activity
-            android:name=".usuario.activity.UserComuDataAc"
-            android:label="@string/usercomu_data_ac_label"
-            android:parentActivityName=".usuario.activity.SeeUserComuByUserAc"
-            android:windowSoftInputMode="stateHidden">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".usuario.activity.SeeUserComuByUserAc"/>
-        </activity>
-        <activity
-            android:name=".usuario.activity.UserDataAc"
-            android:label="@string/user_data_ac_label"
-            android:parentActivityName=".usuario.activity.SeeUserComuByUserAc"
-            android:windowSoftInputMode="stateHidden">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".usuario.activity.SeeUserComuByUserAc"/>
-        </activity>
     </application>
 
 </manifest>

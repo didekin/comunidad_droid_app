@@ -5,14 +5,15 @@ import android.support.annotation.NonNull;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.v4.app.Fragment;
 
-import com.didekin.incidservice.dominio.IncidImportancia;
-import com.didekin.incidservice.dominio.Incidencia;
-import com.didekin.incidservice.dominio.IncidenciaUser;
-import com.didekin.usuario.dominio.UsuarioComunidad;
+import com.didekin.incidencia.dominio.IncidImportancia;
+import com.didekin.incidencia.dominio.Incidencia;
+import com.didekin.incidencia.dominio.IncidenciaUser;
+import com.didekin.usuariocomunidad.UsuarioComunidad;
+import com.didekinaar.exception.UiAarException;
+import com.didekinaar.testutil.CleanUserEnum;
 import com.didekindroid.R;
-import com.didekindroid.common.activity.UiException;
+import com.didekindroid.incidencia.exception.UiAppException;
 import com.didekindroid.incidencia.repository.IncidenciaDataDbHelper;
-import com.didekindroid.usuario.testutils.CleanUserEnum;
 
 import org.junit.After;
 import org.junit.Before;
@@ -32,21 +33,21 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekin.usuario.dominio.Rol.PROPIETARIO;
-import static com.didekindroid.common.activity.BundleKey.INCID_ACTIVITY_VIEW_ID;
-import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_FLAG;
-import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
-import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
-import static com.didekindroid.common.testutils.ActivityTestUtils.updateSecurityData;
+import static com.didekin.usuariocomunidad.Rol.PROPIETARIO;
+import static com.didekinaar.testutil.AarActivityTestUtils.cleanOptions;
+import static com.didekinaar.testutil.AarActivityTestUtils.signUpAndUpdateTk;
+import static com.didekinaar.testutil.AarActivityTestUtils.updateSecurityData;
+import static com.didekinaar.testutil.UsuarioTestUtils.COMU_REAL_PEPE;
+import static com.didekinaar.testutil.UsuarioTestUtils.USER_JUAN;
+import static com.didekinaar.testutil.UsuarioTestUtils.makeUsuarioComunidad;
+import static com.didekinaar.usuariocomunidad.AarUserComuService.AarUserComuServ;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_ACTIVITY_VIEW_ID;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_edit_ac_frgs_tag;
 import static com.didekindroid.incidencia.repository.IncidenciaDataDbHelperTest.DB_PATH;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidenciaUser;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
-import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_PEPE;
-import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_JUAN;
-import static com.didekindroid.usuario.testutils.UsuarioTestUtils.makeUsuarioComunidad;
-import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
@@ -63,7 +64,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
  * Clase con métodos comunes a los tests de edición de una incidencia sin resolución, con un
  * usuario en sesión sin autoriad 'adm'.
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "ConstantConditions"})
 public abstract class IncidEditAbstractTest {
 
     UsuarioComunidad pepeUserComu;
@@ -134,7 +135,7 @@ public abstract class IncidEditAbstractTest {
     {
         try {
             signUpAndUpdateTk(COMU_REAL_PEPE);
-            pepeUserComu = ServOne.seeUserComusByUser().get(0);
+            pepeUserComu = AarUserComuServ.seeUserComusByUser().get(0);
             // Insertamos incidencia.
             IncidenciaUser incidenciaUser_1 = insertGetIncidenciaUser(pepeUserComu, 0);
             incidenciaPepe = IncidenciaServ.seeIncidImportancia(incidenciaUser_1.getIncidencia().getIncidenciaId()).getIncidImportancia();
@@ -142,13 +143,13 @@ public abstract class IncidEditAbstractTest {
             // Registro userComu en misma comunidad.
             UsuarioComunidad userComuJuan = makeUsuarioComunidad(pepeUserComu.getComunidad(), USER_JUAN,
                     "portal", "esc", "plantaX", "door12", PROPIETARIO.function);
-            ServOne.regUserAndUserComu(userComuJuan).execute();
+            AarUserComuServ.regUserAndUserComu(userComuJuan).execute();
             updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
             Thread.sleep(1000);
             Incidencia incidencia_2 = insertGetIncidenciaUser(incidenciaPepe.getIncidencia().getIncidenciaId(), userComuJuan, 2).getIncidencia();
             incidenciaJuan = IncidenciaServ.seeIncidImportancia(incidencia_2.getIncidenciaId()).getIncidImportancia();
 
-        } catch (UiException | InterruptedException | IOException e) {
+        } catch (UiAppException | InterruptedException | IOException | UiAarException e) {
             e.printStackTrace();
         }
         Intent intent = new Intent();

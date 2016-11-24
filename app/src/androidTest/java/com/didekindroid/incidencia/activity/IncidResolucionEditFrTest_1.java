@@ -4,11 +4,12 @@ import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.incidservice.dominio.Resolucion;
+import com.didekin.incidencia.dominio.Resolucion;
+import com.didekinaar.exception.UiAarException;
+import com.didekinaar.testutil.AarActivityTestUtils;
+import com.didekindroid.incidencia.exception.UiAppException;
 import com.didekindroid.R;
-import com.didekindroid.common.activity.UiException;
-import com.didekindroid.common.testutils.ActivityTestUtils;
-import com.didekindroid.usuario.testutils.CleanUserEnum;
+import com.didekinaar.testutil.CleanUserEnum;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -29,18 +30,18 @@ import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExt
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
-import static com.didekindroid.common.testutils.ActivityTestUtils.checkUp;
-import static com.didekindroid.common.testutils.ActivityTestUtils.reSetDatePicker;
-import static com.didekindroid.common.utils.UIutils.SPAIN_LOCALE;
-import static com.didekindroid.common.utils.UIutils.formatTimeToString;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
+import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
+import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
+import static com.didekinaar.testutil.AarActivityTestUtils.reSetDatePicker;
+import static com.didekinaar.utils.UIutils.SPAIN_LOCALE;
+import static com.didekinaar.utils.UIutils.formatTimeToString;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetResolucionNoAdvances;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
-import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
-import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_PLAZUELA5_JUAN;
+import static com.didekinaar.testutil.CleanUserEnum.CLEAN_JUAN;
+import static com.didekinaar.testutil.UsuarioTestUtils.COMU_PLAZUELA5_JUAN;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -72,7 +73,7 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
                     Thread.sleep(1000);
                     resolucion = insertGetResolucionNoAdvances(incidImportancia);
 
-                } catch (UiException | InterruptedException | IOException e) {
+                } catch (UiAppException | InterruptedException | IOException | UiAarException e) {
                     e.printStackTrace();
                 }
                 Intent intent = new Intent();
@@ -110,7 +111,7 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
     }
 
     @Test
-    public void testOnEdit_1() throws UiException
+    public void testOnEdit_1() throws UiAppException
     {
         // Caso OK: no cambiamos nada y pulsamos modificar. Mantiene los datos de la resolución.
         onView(withId(R.id.incid_resolucion_fr_modif_button)).perform(click());
@@ -125,14 +126,14 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
     }
 
     @Test
-    public void testOnEdit_2() throws UiException
+    public void testOnEdit_2() throws UiAppException
     {
         // Caso OK: cambiamos la fecha prevista.
 
         onView(withId(R.id.incid_resolucion_fecha_view)).perform(click());
         Calendar newFechaPrev = reSetDatePicker(resolucion.getFechaPrev().getTime(), 1);
 
-        ActivityTestUtils.closeDatePicker(mActivity);
+        AarActivityTestUtils.closeDatePicker(mActivity);
 
         if (Locale.getDefault().equals(SPAIN_LOCALE)) {
             onView(allOf(
@@ -148,7 +149,7 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
     }
 
     @Test
-    public void testOnEdit_3() throws UiException
+    public void testOnEdit_3() throws UiAppException
     {
         // Caso OK: añadimos un avance con descripción Ok y cambiamos coste (admite importes negativos).
         onView(withId(R.id.incid_resolucion_avance_ed)).perform(replaceText("avance_desc_válida"));
@@ -166,7 +167,7 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
     }
 
     @Test
-    public void testOnEdit_4() throws UiException, InterruptedException
+    public void testOnEdit_4() throws UiAppException, InterruptedException
     {
         // Caso NO OK: descripción de avance errónea.
         onView(withId(R.id.incid_resolucion_avance_ed)).perform(replaceText("avance * no válido"));

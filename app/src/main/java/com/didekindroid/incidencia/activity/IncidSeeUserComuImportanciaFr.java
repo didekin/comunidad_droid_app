@@ -9,17 +9,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.didekin.incidservice.dominio.ImportanciaUser;
-import com.didekin.incidservice.dominio.Incidencia;
+import com.didekin.incidencia.dominio.ImportanciaUser;
+import com.didekin.incidencia.dominio.Incidencia;
 import com.didekindroid.R;
-import com.didekindroid.common.activity.UiException;
+import com.didekindroid.incidencia.exception.UiAppException;
 
 import java.util.List;
 import java.util.Objects;
 
 import timber.log.Timber;
 
-import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_OBJECT;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 
 /**
@@ -68,7 +68,7 @@ public class IncidSeeUserComuImportanciaFr extends Fragment {
 
     class IncidImportanciaLoader extends AsyncTask<Incidencia, Void, List<ImportanciaUser>> {
 
-        UiException uiException;
+        UiAppException uiException;
 
         @Override
         protected List<ImportanciaUser> doInBackground(Incidencia... params)
@@ -78,7 +78,7 @@ public class IncidSeeUserComuImportanciaFr extends Fragment {
             List<ImportanciaUser> importanciaUsers = null;
             try {
                 importanciaUsers = IncidenciaServ.seeUserComusImportancia(params[0].getIncidenciaId());
-            } catch (UiException ui) {
+            } catch (UiAppException ui) {
                 uiException = ui;
             }
             return importanciaUsers;

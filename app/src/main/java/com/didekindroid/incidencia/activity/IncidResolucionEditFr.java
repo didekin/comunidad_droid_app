@@ -10,16 +10,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.didekin.incidservice.dominio.Avance;
-import com.didekin.incidservice.dominio.IncidImportancia;
-import com.didekin.incidservice.dominio.Incidencia;
-import com.didekin.incidservice.dominio.Resolucion;
-import com.didekin.usuario.dominio.Comunidad;
+import com.didekin.incidencia.dominio.Avance;
+import com.didekin.incidencia.dominio.IncidImportancia;
+import com.didekin.incidencia.dominio.Incidencia;
+import com.didekin.incidencia.dominio.Resolucion;
+import com.didekin.comunidad.Comunidad;
 import com.didekindroid.R;
-import com.didekindroid.common.activity.UiException;
-import com.didekindroid.common.utils.ConnectionUtils;
+import com.didekindroid.incidencia.exception.UiAppException;
+import com.didekinaar.utils.ConnectionUtils;
 import com.didekindroid.incidencia.dominio.ResolucionBean;
 
 import java.sql.Timestamp;
@@ -29,13 +28,13 @@ import java.util.Objects;
 
 import timber.log.Timber;
 
-import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.common.activity.FechaPickerFr.FechaPickerHelper.initFechaSpinnerView;
-import static com.didekindroid.common.utils.UIutils.formatTimeStampToString;
-import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
-import static com.didekindroid.common.utils.UIutils.getStringFromInteger;
-import static com.didekindroid.common.utils.UIutils.makeToast;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
+import static com.didekinaar.utils.FechaPickerFr.FechaPickerHelper.initFechaSpinnerView;
+import static com.didekinaar.utils.UIutils.formatTimeStampToString;
+import static com.didekinaar.utils.UIutils.getErrorMsgBuilder;
+import static com.didekinaar.utils.UIutils.getStringFromInteger;
+import static com.didekinaar.utils.UIutils.makeToast;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 
 /**
@@ -55,7 +54,7 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
         Timber.d("onCreateView()");
         mFragmentView = inflater.inflate(R.layout.incid_resolucion_edit_fr, container, false);
         mResolucionBean = new ResolucionBean();
-        mFechaView = initFechaSpinnerView(this);
+        mFechaView = initFechaSpinnerView(this, (TextView) mFragmentView.findViewById(R.id.incid_resolucion_fecha_view));
 
         Button mModifyButton = (Button) mFragmentView.findViewById(R.id.incid_resolucion_fr_modif_button);
         mModifyButton.setOnClickListener(new View.OnClickListener() {
@@ -120,9 +119,9 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
         Resolucion resolucion = makeResolucionFromBean(errorMsg);
 
         if (resolucion == null) {
-            makeToast(getActivity(), errorMsg.toString(), Toast.LENGTH_SHORT);
+            makeToast(getActivity(), errorMsg.toString(), com.didekinaar.R.color.deep_purple_100);
         } else if (!ConnectionUtils.isInternetConnected(getActivity())) {
-            makeToast(getActivity(), R.string.no_internet_conn_toast, Toast.LENGTH_SHORT);
+            makeToast(getActivity(), R.string.no_internet_conn_toast);
         } else if (isToBeClosed) {
             new IncidenciaCloser().execute(resolucion);
         } else {
@@ -184,7 +183,7 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
 
     class ResolucionModifyer extends AsyncTask<Resolucion, Void, Integer> {
 
-        UiException uiException;
+        UiAppException uiException;
 
         @Override
         protected Integer doInBackground(Resolucion... params)
@@ -194,7 +193,7 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
 
             try {
                 rowModified = IncidenciaServ.modifyResolucion(params[0]);
-            } catch (UiException e) {
+            } catch (UiAppException e) {
                 uiException = e;
             }
             return rowModified;
@@ -220,7 +219,7 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
 
     class IncidenciaCloser extends AsyncTask<Resolucion, Void, Integer> {
 
-        UiException uiException;
+        UiAppException uiException;
 
         @Override
         protected Integer doInBackground(Resolucion... params)
@@ -230,7 +229,7 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
 
             try {
                 incidenciaCancelled = IncidenciaServ.closeIncidencia(params[0]);
-            } catch (UiException e) {
+            } catch (UiAppException e) {
                 uiException = e;
             }
             return incidenciaCancelled;

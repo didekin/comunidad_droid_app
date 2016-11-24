@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'idea'
-apply from: '../test_dependencies.gradle'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -45,6 +44,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
+        pre {
+            initWith release
+            signingConfig signingConfigs.release
+        }
+        local {
+            initWith release
+            signingConfig signingConfigs.release
+        }
         debug {
             debuggable true
             versionNameSuffix '-DEBUG'
@@ -69,6 +76,7 @@ android {
 
 dependencies {
     compile project(":didekinaar")
+    /* Warning if we do not repeat this dependency. */
     compile 'com.google.firebase:firebase-messaging:9.4.0'
 }
 

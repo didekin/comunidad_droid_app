@@ -9,27 +9,27 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.didekin.incidservice.dominio.IncidImportancia;
-import com.didekin.incidservice.dominio.Resolucion;
+import com.didekin.incidencia.dominio.IncidImportancia;
+import com.didekin.incidencia.dominio.Resolucion;
 import com.didekindroid.R;
-import com.didekindroid.common.activity.UiException;
+import com.didekindroid.incidencia.exception.UiAppException;
 
 import java.util.Objects;
 
 import timber.log.Timber;
 
-import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_OBJECT;
-import static com.didekindroid.common.activity.BundleKey.INCID_ACTIVITY_VIEW_ID;
-import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_FLAG;
-import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.common.utils.UIutils.doToolBar;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCIDENCIA_OBJECT;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_ACTIVITY_VIEW_ID;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
+import static com.didekinaar.utils.UIutils.doToolBar;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_edit_ac_frgs_tag;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_COMMENTS_SEE_AC;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_COMMENT_REG_AC;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_RESOLUCION_REG_EDIT_AC;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
-import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenu;
+import static com.didekinaar.usuario.UserMenu.doUpMenu;
 
 /**
  * Preconditions:
@@ -138,7 +138,7 @@ public class IncidEditAc extends AppCompatActivity {
     // TODO: to persist the task during restarts and properly cancel the task when the activity is destroyed. (Example in Shelves)
     class ResolucionGetter extends AsyncTask<Void, Void, Resolucion> {
 
-        private UiException uiException;
+        private UiAppException uiException;
 
         @Override
         protected Resolucion doInBackground(Void... aVoid)
@@ -148,7 +148,7 @@ public class IncidEditAc extends AppCompatActivity {
 
             try {
                 resolucion = IncidenciaServ.seeResolucion(mIncidImportancia.getIncidencia().getIncidenciaId());
-            } catch (UiException e) {
+            } catch (UiAppException e) {
                 uiException = e;
             }
             return resolucion;

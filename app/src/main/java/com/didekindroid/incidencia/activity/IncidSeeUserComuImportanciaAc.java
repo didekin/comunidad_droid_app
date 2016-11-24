@@ -4,16 +4,16 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-import com.didekin.incidservice.dominio.Incidencia;
+import com.didekin.incidencia.dominio.Incidencia;
 import com.didekindroid.R;
 
 import java.util.Objects;
 
 import timber.log.Timber;
 
-import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_OBJECT;
-import static com.didekindroid.common.utils.UIutils.doToolBar;
-import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenu;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCIDENCIA_OBJECT;
+import static com.didekinaar.utils.UIutils.doToolBar;
+import static com.didekinaar.usuario.UserMenu.doUpMenu;
 
 /**
  * Preconditions:

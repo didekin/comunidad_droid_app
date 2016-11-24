@@ -2,7 +2,7 @@ package com.didekindroid.incidencia.activity.utils;
 
 import android.widget.Spinner;
 
-import com.didekin.incidservice.dominio.Incidencia;
+import com.didekin.incidencia.dominio.Incidencia;
 import com.didekindroid.incidencia.dominio.IncidImportanciaBean;
 
 /**

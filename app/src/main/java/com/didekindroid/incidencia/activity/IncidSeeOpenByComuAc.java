@@ -9,29 +9,29 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 
-import com.didekin.incidservice.dominio.IncidAndResolBundle;
-import com.didekin.incidservice.dominio.Incidencia;
-import com.didekin.incidservice.dominio.IncidenciaUser;
-import com.didekin.usuario.dominio.Comunidad;
+import com.didekin.incidencia.dominio.IncidAndResolBundle;
+import com.didekin.incidencia.dominio.Incidencia;
+import com.didekin.incidencia.dominio.IncidenciaUser;
+import com.didekin.comunidad.Comunidad;
+import com.didekindroid.incidencia.exception.UiAppException;
 import com.didekindroid.R;
-import com.didekindroid.common.activity.UiException;
 
 import java.util.List;
 import java.util.Objects;
 
 import timber.log.Timber;
 
-import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
-import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_FLAG;
-import static com.didekindroid.common.utils.UIutils.doToolBar;
-import static com.didekindroid.common.utils.UIutils.getGcmToken;
+import static com.didekinaar.comunidad.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekinaar.gcm.GcmUtils.getGcmToken;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
+import static com.didekinaar.utils.UIutils.doToolBar;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_CLOSED_BY_COMU_AC;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_REG_AC;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
-import static com.didekindroid.usuario.activity.utils.UserMenu.SEE_USERCOMU_BY_COMU_AC;
-import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenu;
+import static com.didekinaar.usuario.UserMenu.SEE_USERCOMU_BY_COMU_AC;
+import static com.didekinaar.usuario.UserMenu.doUpMenu;
 
 /**
  * This activity is a point of registration for receiving GCM notifications of new incidents.
@@ -143,7 +143,7 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements
     }
 
     @Override
-    public List<IncidenciaUser> getListFromService(long comunidadId) throws UiException
+    public List<IncidenciaUser> getListFromService(long comunidadId) throws UiAppException
     {
         Timber.d("getListFromService()");
         return IncidenciaServ.seeIncidsOpenByComu(comunidadId);
@@ -165,7 +165,7 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements
 
     class IncidImportanciaGetter extends AsyncTask<Long, Void, IncidAndResolBundle> {
 
-        UiException uiException;
+        UiAppException uiException;
 
         @Override
         protected IncidAndResolBundle doInBackground(final Long... incidenciaId)
@@ -174,7 +174,7 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements
             IncidAndResolBundle incidAndResolBundle = null;
             try {
                 incidAndResolBundle = IncidenciaServ.seeIncidImportancia(incidenciaId[0]);
-            } catch (UiException e) {
+            } catch (UiAppException e) {
                 uiException = e;
             }
             return incidAndResolBundle;

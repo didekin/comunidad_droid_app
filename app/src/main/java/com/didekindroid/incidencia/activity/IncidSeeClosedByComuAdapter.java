@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
-import com.didekin.incidservice.dominio.IncidenciaUser;
+import com.didekin.incidencia.dominio.IncidenciaUser;
 import com.didekindroid.R;
 
 import timber.log.Timber;
@@ -16,9 +16,9 @@ import timber.log.Timber;
  * Date: 18/12/15
  * Time: 13:21
  */
-public class IncidSeeClosedByComuAdapter extends ArrayAdapter<IncidenciaUser> {
+class IncidSeeClosedByComuAdapter extends ArrayAdapter<IncidenciaUser> {
 
-    public IncidSeeClosedByComuAdapter(Context context)
+    IncidSeeClosedByComuAdapter(Context context)
     {
         super(context, R.layout.incid_see_by_comu_list_item, R.id.incid_see_apertura_block);
     }

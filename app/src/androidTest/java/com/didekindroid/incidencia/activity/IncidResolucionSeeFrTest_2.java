@@ -4,12 +4,13 @@ import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.incidservice.dominio.Avance;
-import com.didekin.incidservice.dominio.Resolucion;
-import com.didekin.usuario.dominio.UsuarioComunidad;
+import com.didekin.incidencia.dominio.Avance;
+import com.didekin.incidencia.dominio.Resolucion;
+import com.didekin.usuariocomunidad.UsuarioComunidad;
+import com.didekinaar.exception.UiAarException;
+import com.didekinaar.testutil.CleanUserEnum;
 import com.didekindroid.R;
-import com.didekindroid.common.activity.UiException;
-import com.didekindroid.usuario.testutils.CleanUserEnum;
+import com.didekindroid.incidencia.exception.UiAppException;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,19 +26,19 @@ import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekin.usuario.dominio.Rol.PRESIDENTE;
-import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.common.testutils.ActivityTestUtils.updateSecurityData;
-import static com.didekindroid.common.utils.UIutils.formatTimeStampToString;
+import static com.didekin.usuariocomunidad.Rol.PRESIDENTE;
+import static com.didekinaar.testutil.AarActivityTestUtils.updateSecurityData;
+import static com.didekinaar.testutil.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
+import static com.didekinaar.testutil.UsuarioTestUtils.COMU_ESCORIAL_JUAN;
+import static com.didekinaar.testutil.UsuarioTestUtils.USER_JUAN;
+import static com.didekinaar.testutil.UsuarioTestUtils.USER_PEPE;
+import static com.didekinaar.usuariocomunidad.AarUserComuService.AarUserComuServ;
+import static com.didekinaar.utils.UIutils.formatTimeStampToString;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetResolucionNoAdvances;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
-import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
-import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_ESCORIAL_JUAN;
-import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_JUAN;
-import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_PEPE;
-import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -67,7 +68,7 @@ public class IncidResolucionSeeFrTest_2 extends IncidResolucionAbstractTest {
                     incidImportancia = insertGetIncidImportancia(COMU_ESCORIAL_JUAN);
                     Thread.sleep(1000);
                     // Necesitamos usuario con 'adm' para registrar resolución.
-                    assertThat(ServOne.regUserAndUserComu(
+                    assertThat(AarUserComuServ.regUserAndUserComu(
                             new UsuarioComunidad.UserComuBuilder(
                                     incidImportancia.getUserComu().getComunidad(), USER_PEPE)
                                     .roles(PRESIDENTE.function)
@@ -88,7 +89,7 @@ public class IncidResolucionSeeFrTest_2 extends IncidResolucionAbstractTest {
                     resolucion = IncidenciaServ.seeResolucion(resolucion.getIncidencia().getIncidenciaId());
                     // Volvemos a usuario del test.
                     updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
-                } catch (UiException | InterruptedException | IOException e) {
+                } catch (UiAppException | InterruptedException | IOException | UiAarException e) {
                     e.printStackTrace();
                 }
                 Intent intent = new Intent();

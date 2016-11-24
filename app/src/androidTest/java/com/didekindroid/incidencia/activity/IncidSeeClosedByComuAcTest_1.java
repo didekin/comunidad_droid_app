@@ -4,10 +4,10 @@ import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.usuario.dominio.Comunidad;
+import com.didekin.comunidad.Comunidad;
+import com.didekinaar.exception.UiAarException;
+import com.didekinaar.testutil.CleanUserEnum;
 import com.didekindroid.R;
-import com.didekindroid.common.activity.UiException;
-import com.didekindroid.usuario.testutils.CleanUserEnum;
 
 import org.junit.After;
 import org.junit.Before;
@@ -26,19 +26,19 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
-import static com.didekindroid.common.testutils.ActivityTestUtils.checkUp;
-import static com.didekindroid.common.testutils.ActivityTestUtils.cleanOptions;
-import static com.didekindroid.common.testutils.ActivityTestUtils.clickNavigateUp;
-import static com.didekindroid.common.testutils.ActivityTestUtils.regSeveralUserComuSameUser;
-import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
+import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
+import static com.didekinaar.testutil.AarActivityTestUtils.cleanOptions;
+import static com.didekinaar.testutil.AarActivityTestUtils.clickNavigateUp;
+import static com.didekinaar.testutil.AarActivityTestUtils.regSeveralUserComuSameUser;
+import static com.didekinaar.testutil.CleanUserEnum.CLEAN_PEPE;
+import static com.didekinaar.testutil.UsuarioTestUtils.COMU_PLAZUELA5_PEPE;
+import static com.didekinaar.testutil.UsuarioTestUtils.COMU_REAL_PEPE;
+import static com.didekinaar.usuariocomunidad.AarUserComuService.AarUserComuServ;
+import static com.didekinaar.comunidad.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekinaar.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_REG_AC;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_OPEN_BY_COMU_AC;
-import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_PLAZUELA5_PEPE;
-import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_PEPE;
-import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
@@ -81,10 +81,10 @@ public class IncidSeeClosedByComuAcTest_1 {
         {
             try {
                 regSeveralUserComuSameUser(COMU_PLAZUELA5_PEPE, COMU_REAL_PEPE);
-                mComuPlazuelas5 = ServOne.getComusByUser().get(0);
-                mComuReal = ServOne.getComusByUser().get(1);
+                mComuPlazuelas5 = AarUserComuServ.getComusByUser().get(0);
+                mComuReal = AarUserComuServ.getComusByUser().get(1);
                 comunidadInIntent = mComuReal;
-            } catch (UiException | IOException e) {
+            } catch (IOException | UiAarException e) {
                 e.printStackTrace();
             }
             Intent intent = new Intent();

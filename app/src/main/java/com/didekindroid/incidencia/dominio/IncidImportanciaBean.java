@@ -3,11 +3,11 @@ package com.didekindroid.incidencia.dominio;
 import android.content.res.Resources;
 import android.view.View;
 
-import com.didekin.incidservice.dominio.IncidImportancia;
-import com.didekin.incidservice.dominio.Incidencia;
+import com.didekin.incidencia.dominio.IncidImportancia;
+import com.didekin.incidencia.dominio.Incidencia;
 import com.didekindroid.R;
 
-import static com.didekin.common.dominio.UsuarioDataPatterns.LINE_BREAK;
+import static com.didekin.common.dominio.ValidDataPatterns.LINE_BREAK;
 
 /**
  * User: pedro@didekin
@@ -32,7 +32,7 @@ public class IncidImportanciaBean {
         return importancia;
     }
 
-    boolean validateRange(StringBuilder errorMsg, Resources resources)
+    private boolean validateRange(StringBuilder errorMsg, Resources resources)
     {
         short upperBound = (short) resources.getStringArray(R.array.IncidImportanciaArray).length;
         if (!(importancia >= 0 && importancia < upperBound)) {

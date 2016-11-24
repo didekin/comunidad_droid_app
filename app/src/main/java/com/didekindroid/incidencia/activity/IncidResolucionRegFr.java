@@ -8,14 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.TextView;
 
-import com.didekin.incidservice.dominio.IncidImportancia;
-import com.didekin.incidservice.dominio.Incidencia;
-import com.didekin.incidservice.dominio.Resolucion;
-import com.didekin.usuario.dominio.Comunidad;
+import com.didekin.incidencia.dominio.IncidImportancia;
+import com.didekin.incidencia.dominio.Incidencia;
+import com.didekin.incidencia.dominio.Resolucion;
+import com.didekin.comunidad.Comunidad;
+import com.didekindroid.incidencia.exception.UiAppException;
 import com.didekindroid.R;
-import com.didekindroid.common.activity.UiException;
 import com.didekindroid.incidencia.dominio.ResolucionBean;
 
 import java.sql.Timestamp;
@@ -23,11 +23,11 @@ import java.util.Objects;
 
 import timber.log.Timber;
 
-import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.common.activity.FechaPickerFr.FechaPickerHelper.initFechaSpinnerView;
-import static com.didekindroid.common.utils.ConnectionUtils.checkInternetConnected;
-import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
-import static com.didekindroid.common.utils.UIutils.makeToast;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekinaar.utils.FechaPickerFr.FechaPickerHelper.initFechaSpinnerView;
+import static com.didekinaar.utils.ConnectionUtils.checkInternetConnected;
+import static com.didekinaar.utils.UIutils.getErrorMsgBuilder;
+import static com.didekinaar.utils.UIutils.makeToast;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
 
 /**
@@ -46,7 +46,7 @@ public class IncidResolucionRegFr extends IncidResolucionFrAbstract {
         Timber.d("onCreateView()");
         mFragmentView = inflater.inflate(R.layout.incid_resolucion_reg_frg, container, false);
         mResolucionBean = new ResolucionBean();
-        mFechaView = initFechaSpinnerView(this);
+        mFechaView = initFechaSpinnerView(this, (TextView) mFragmentView.findViewById(R.id.incid_resolucion_fecha_view));
 
         Button mConfirmButton = (Button) mFragmentView.findViewById(R.id.incid_resolucion_reg_ac_button);
         mConfirmButton.setOnClickListener(new View.OnClickListener() {
@@ -78,7 +78,7 @@ public class IncidResolucionRegFr extends IncidResolucionFrAbstract {
         Resolucion resolucion = makeResolucionFromBean(errorMsg);
 
         if (resolucion == null) {
-            makeToast(getActivity(), errorMsg.toString(), Toast.LENGTH_SHORT);
+            makeToast(getActivity(), errorMsg.toString(), com.didekinaar.R.color.deep_purple_100);
         } else {
             if (checkInternetConnected(getActivity())) {
                 new ResolucionRegister().execute(resolucion);
@@ -129,7 +129,7 @@ public class IncidResolucionRegFr extends IncidResolucionFrAbstract {
 
     private class ResolucionRegister extends AsyncTask<Resolucion, Void, Integer> {
 
-        UiException uiException;
+        UiAppException uiException;
         Resolucion resolucion;
 
         ResolucionRegister()
@@ -145,7 +145,7 @@ public class IncidResolucionRegFr extends IncidResolucionFrAbstract {
 
             try {
                 rowInserted = IncidenciaServ.regResolucion(resolucion);
-            } catch (UiException e) {
+            } catch (UiAppException e) {
                 uiException = e;
             }
             return rowInserted;

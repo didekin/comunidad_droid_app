@@ -11,8 +11,8 @@ import android.widget.ArrayAdapter;
 import android.widget.CursorAdapter;
 import android.widget.Spinner;
 
-import com.didekin.incidservice.dominio.Incidencia;
-import com.didekin.usuario.dominio.Comunidad;
+import com.didekin.incidencia.dominio.Incidencia;
+import com.didekin.comunidad.Comunidad;
 import com.didekindroid.R;
 import com.didekindroid.incidencia.activity.utils.AmbitoSpinnerSettable;
 import com.didekindroid.incidencia.activity.utils.ComuSpinnerSettable;
@@ -24,7 +24,7 @@ import com.didekindroid.incidencia.repository.IncidenciaDataDbHelper;
 
 import timber.log.Timber;
 
-import static com.didekindroid.common.utils.UIutils.closeCursor;
+import static com.didekinaar.utils.UIutils.closeCursor;
 import static com.didekindroid.incidencia.activity.utils.IncidSpinnersHelper.HELPER;
 
 /**

@@ -6,10 +6,11 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.widget.DatePicker;
 
+import com.didekinaar.exception.UiAarException;
 import com.didekindroid.R;
-import com.didekindroid.common.activity.UiException;
-import com.didekindroid.common.utils.UIutils;
-import com.didekindroid.usuario.testutils.CleanUserEnum;
+import com.didekindroid.incidencia.exception.UiAppException;
+import com.didekinaar.utils.UIutils;
+import com.didekinaar.testutil.CleanUserEnum;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -31,16 +32,16 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.common.testutils.ActivityTestUtils.checkToastInTest;
-import static com.didekindroid.common.testutils.ActivityTestUtils.checkUp;
-import static com.didekindroid.common.testutils.ActivityTestUtils.closeDatePicker;
-import static com.didekindroid.common.testutils.ActivityTestUtils.reSetDatePicker;
-import static com.didekindroid.common.utils.UIutils.formatTimeToString;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
+import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
+import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
+import static com.didekinaar.testutil.AarActivityTestUtils.closeDatePicker;
+import static com.didekinaar.testutil.AarActivityTestUtils.reSetDatePicker;
+import static com.didekinaar.utils.UIutils.formatTimeToString;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidImportancia;
-import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN;
-import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_PLAZUELA5_JUAN;
+import static com.didekinaar.testutil.CleanUserEnum.CLEAN_JUAN;
+import static com.didekinaar.testutil.UsuarioTestUtils.COMU_PLAZUELA5_JUAN;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -67,7 +68,7 @@ public class IncidResolucionRegFrTest extends IncidResolucionAbstractTest {
             {
                 try {
                     incidImportancia = insertGetIncidImportancia(COMU_PLAZUELA5_JUAN);
-                } catch (UiException | IOException e) {
+                } catch (UiAppException | IOException | UiAarException e) {
                     e.printStackTrace();
                 }
                 Intent intent = new Intent();

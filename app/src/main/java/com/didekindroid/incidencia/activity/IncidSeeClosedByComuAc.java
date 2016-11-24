@@ -10,23 +10,23 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 
-import com.didekin.incidservice.dominio.Incidencia;
-import com.didekin.incidservice.dominio.IncidenciaUser;
-import com.didekin.incidservice.dominio.Resolucion;
-import com.didekin.usuario.dominio.Comunidad;
+import com.didekin.comunidad.Comunidad;
+import com.didekin.incidencia.dominio.Incidencia;
+import com.didekin.incidencia.dominio.IncidenciaUser;
+import com.didekin.incidencia.dominio.Resolucion;
 import com.didekindroid.R;
-import com.didekindroid.common.activity.UiException;
+import com.didekindroid.incidencia.exception.UiAppException;
 
 import java.util.List;
 import java.util.Objects;
 
 import timber.log.Timber;
 
-import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_ID;
-import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_OBJECT;
-import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.common.activity.BundleKey.IS_MENU_IN_FRAGMENT_FLAG;
-import static com.didekindroid.common.utils.UIutils.doToolBar;
+import static com.didekinaar.comunidad.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekinaar.utils.AarBundleKey.IS_MENU_IN_FRAGMENT_FLAG;
+import static com.didekinaar.utils.UIutils.doToolBar;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCIDENCIA_OBJECT;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_resolucion_see_fr_tag;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_REG_AC;
@@ -127,7 +127,7 @@ public class IncidSeeClosedByComuAc extends AppCompatActivity implements
     }
 
     @Override
-    public List<IncidenciaUser> getListFromService(long comunidadId) throws UiException
+    public List<IncidenciaUser> getListFromService(long comunidadId) throws UiAppException
     {
         return IncidenciaServ.seeIncidsClosedByComu(comunidadId);
     }
@@ -148,7 +148,7 @@ public class IncidSeeClosedByComuAc extends AppCompatActivity implements
 
     private class ResolucionGetter extends AsyncTask<Incidencia, Void, Resolucion> {
 
-        UiException uiException;
+        UiAppException uiException;
         Incidencia incidencia;
 
         ResolucionGetter()
@@ -163,7 +163,7 @@ public class IncidSeeClosedByComuAc extends AppCompatActivity implements
             Resolucion resolucion = null;
             try {
                 resolucion = IncidenciaServ.seeResolucion(incidencia.getIncidenciaId());
-            } catch (UiException e) {
+            } catch (UiAppException e) {
                 uiException = e;
             }
             return resolucion;

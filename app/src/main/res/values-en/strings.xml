@@ -2,7 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools"
            tools:locale="en">
     <!--*****************************************************************************-->
-    <!--                                 GENERIC                                     -->
+    <!--                                 GENERIC_USER                                     -->
     <!--*****************************************************************************-->
 
     <!--******************************************************************************-->
@@ -90,119 +90,5 @@
     <string name="incid_closed_by_user_ac_label">Incidencias cerradas</string>
     <!-- ============ IncidSeeUserComuImportanciaFr ========== -->
     <string name="incid_incidencia_importancia_rot">Importancia en la comunidad:</string>
-    <!--******************************************************************************-->
-    <!--                                  USUARIO                                     -->
-    <!--******************************************************************************-->
-    <!-- ============================ MESSAGES ============================== -->
-    <string name="comunidad_not_found_message">No podemos mostrarte esta comunidad. Búscala nuevamente.</string>
-    <string name="error_validation_msg">Los siguientes datos no son válidos: </string>
-    <string name="login_wrong_no_mail">"Busca tu comunidad y regístrate.\nSi no existe, regístrala en 'Nueva comunidad'."</string>
-    <string name="no_result_search_comunidad">No hemos encontrado tu comunidad.\nPuedes registrarla aquí. </string>
-    <string name="password_new_in_login">Te hemos enviado tu nueva contraseña. Haz login, nuevamente, con ella.</string>
-    <string name="password_wrong">La contraseña no se corresponde con tu usuario.\nSi no la recuerdas,
-        selecciona en el menú la opción para renovarla.</string>
-    <string name="password_wrong_in_login">La contraseña no se corresponde con tu usuario.</string>
-    <string name="send_password_by_mail_dialog">¿Deseas que te enviemos una nueva contraseña por correo electrónico?</string>
-    <string name="send_password_by_mail_YES">Enviádmela</string>
-    <string name="send_password_by_mail_NO">No la enviéis</string>
-    <string name="user_data_not_modified_msg">No hemos podido modificar tus datos.</string>
-    <string name="user_without_signedUp">"Haz login. O busca tu comunidad y regístrate.\nSi no existe, regístrala en 'Nueva comunidad'."</string>
-    <!-- ============================= MENUS ================================= -->
-    <string name="comu_data_ac_mn">Datos comunidad</string>
-    <string name="comu_search_ac_mn">Buscar comunidad</string>
-    <string name="delete_me_ac_mn">Borrar tus datos</string>
-    <string name="login_ac_mn">Login</string>
-    <string name="password_change_ac_mn">Renovar contraseña</string>
-    <string name="reg_nueva_comunidad_ac_mn">Nueva comunidad</string>
-    <!--Válido para reg_comu_usercomu-->
-    <string name="see_usercomu_by_comu_ac_mn">Vecinos</string>
-    <string name="see_usercomu_by_user_ac_mn">Tus comunidades</string>
-    <string name="user_data_ac_mn">Tu usuario</string>
-    <!-- ============================= ACTIVITIES ============================= -->
-    <!-- =============== ComuDataActivity =============== -->
-    <string name="comu_data_ac_label">Datos comunidad</string>
-    <string name="comu_data_ac_button_txt">Modificar datos</string>
-    <!-- ================= ComuSearchAc ================= -->
-    <string name="comu_search_ac_label">Buscar comunidad</string>
-    <!-- =============== ComuSearchResultsAc ============ -->
-    <string name="comu_search_results_ac_label">Buscar comunidad: resultados</string>
-    <!-- ........ ComuSearchResultsListFr ......... -->
-    <string name="rotulo_comunidad">Tu comunidad</string>
-    <!-- ================= DeleteMeAc ===================== -->
-    <string name="delete_me_ac_label">Borrar tus datos</string>
-    <string name="delete_me_ac_unreg_rot_txt">¿Deseas eliminar tus datos en Didekin?</string>
-    <string name="delete_me_ac_unreg_button_txt">Sí, borrad todos mis datos</string>
-    <!--================= LoginAc =================== -->
-    <string name="login_label">Login</string>
-    <string name="login_ac_rotulo">Inicio de sesión</string>
-    <string name="login_ac_button_txt">Valida tus datos</string>
-    <!-- ================== PasswordChangeAc ============== -->
-    <string name="password_change_ac_label">Didekin</string>
-    <string name="password_change_ac_rotulo">Nueva contraseña</string>
-    <string name="password_change_ac_button_txt">Cambia tu contraseña</string>
-    <!-- ================ RegUserAndUserComuAc =========== -->
-    <string name="reg_user_and_usercomu_ac_label">Registro en comunidad</string>
-    <!-- =========== RegComuAndUserAndUserComuAc ========= -->
-    <string name="reg_comunidad_ac_label">Nueva comunidad</string>
-    <!-- ........... RegUserFr ......... -->
-    <string name="reg_usuario_rotulo">Tus datos</string>
-    <string name="usuario_password_hint">Contraseña: 6–60 letras, números, _ </string>
-    <string name="usuario_password_confirm_hint">Confirmación contraseña</string>
-    <string name="alias">Nombre</string>
-    <string name="usuario_alias_hint">Nombre: 6–30 letras, números, _</string>
-    <string name="email_hint">Correo electrónico</string>
-    <string name="password">Contraseña</string>
-    <string name="password_different"> (no coinciden)</string>
-    <!-- .......... RegUserComuFr ....... -->
-    <string name="reg_usercomu_vivienda_rot">Tu vivienda</string>
-    <string name="reg_usercomu_portal_hint"> -- Portal --</string>
-    <string name="reg_usercomu_escalera_hint"> -- Escalera --</string>
-    <string name="reg_usercomu_planta_hint"> -- Planta --</string>
-    <string name="reg_usercomu_puerta_hint"> -- Puerta --</string>
-    <string name="reg_usercomu_portal_rot">Portal</string>
-    <string name="reg_usercomu_escalera_rot">Escalera</string>
-    <string name="reg_usercomu_planta_rot">Planta</string>
-    <string name="reg_usercomu_puerta_rot">Puerta</string>
-    <string name="reg_usercomu_role_checkbox_rot">Vínculo</string>
-    <string name="reg_usercomu_ac_button_rot">Adhiérete a la comunidad</string>
-    <!--para mensaje de error validación y rótulos de campos  -->
-    <string name="reg_usercomu_checkbox_pre_rot">Presidente</string>
-    <string name="reg_usercomu_checbox_admin_rot">Administrador</string>
-    <string name="reg_usercomu_checbox_pro_rot">Propietario</string>
-    <string name="reg_usercomu_checbox_inq_rot">Arrendatario</string>
-    <string name="reg_usercomu_role_rot">Vínculo con la comunidad</string>
-    <string name="reg_usercomu_comunidad_null">Comunidad</string>
-    <!-- .......... RegComuFr ........... -->
-    <string name="municipio_spinner">municipio</string>
-    <string name="municipio">Municipio</string>
-    <string name="tipo_via">Tipo vía</string>
-    <string name="tipo_via_spinner">tipo de vía</string>   <!-- TODO: borrar cuando se internacionalicen las referencias a ella.-->
-    <string name="nombre_via_hint">Nombre de la vía, sin número</string>
-    <string name="nombre_via">Nombre de la vía</string>
-    <string name="numero_en_via">Número</string>
-    <string name="sufijo_numero_en_via_hint">Sufijo (op.)</string>
-    <string name="sufijo_numero">Sufijo</string>
-    <!-- ============= RegComuAndUserComuAc =============== -->
-    <!-- ================== RegUserComuAc ================= -->
-    <string name="regusuario_comu_ac_label">Comunidad seleccionada</string>
-    <!-- ================= SeeUserComuByComuAc ============ -->
-    <string name="see_usercomu_by_comu_ac_label">Vecinos</string>
-    <string name="usercomu_portal_rot">Portal:</string>
-    <string name="usercomu_escalera_rot">Escalera:</string>
-    <string name="usercomu_planta_rot">Planta:</string>
-    <string name="usercomu_puerta_rot">Puerta:</string>
-    <string name="usercomu_role_rot">Vínculo: </string>
-    <!-- ================= SeeUserComuByUserAc ============ -->
-    <string name="see_usercomu_by_user_ac_label">Mis comunidades</string>
-    <!-- ================= UserDataAc ===================== -->
-    <string name="user_data_ac_label">Tus datos</string>
-    <string name="user_data_ac_cambios_text">Sobrescribe el dato a modificar</string>
-    <string name="user_data_ac_password_txt">Valida los cambios introduciendo tu contraseña</string>
-    <string name="user_data_ac_password_hint">Contraseña actual</string>
-    <string name="user_data_modif_button_rot">Modifica tus datos</string>
-    <!-- ================= UserComuDataAc ===================== -->
-    <string name="usercomu_data_ac_label">En la comunidad</string>
-    <string name="usercomu_data_ac_delete_txt">Para borrar tus datos en esta comunidad:</string>
-    <string name="usercomu_data_ac_delete_button_txt">Date de baja en la comunidad</string>
 
 </resources>

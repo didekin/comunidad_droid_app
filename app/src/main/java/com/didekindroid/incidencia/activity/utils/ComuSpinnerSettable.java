@@ -2,7 +2,7 @@ package com.didekindroid.incidencia.activity.utils;
 
 import android.widget.ArrayAdapter;
 
-import com.didekin.usuario.dominio.Comunidad;
+import com.didekin.comunidad.Comunidad;
 
 /**
  * User: pedro@didekin

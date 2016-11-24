@@ -13,21 +13,21 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 
-import com.didekin.incidservice.dominio.Incidencia;
-import com.didekin.incidservice.dominio.IncidenciaUser;
-import com.didekin.usuario.dominio.Comunidad;
+import com.didekin.incidencia.dominio.Incidencia;
+import com.didekin.incidencia.dominio.IncidenciaUser;
+import com.didekin.comunidad.Comunidad;
 import com.didekindroid.R;
-import com.didekindroid.common.activity.UiException;
 import com.didekindroid.incidencia.activity.utils.ComuSpinnerSettable;
 import com.didekindroid.incidencia.activity.utils.ComunidadSpinnerSetter;
+import com.didekindroid.incidencia.exception.UiAppException;
 
 import java.util.List;
 import java.util.Objects;
 
 import timber.log.Timber;
 
-import static com.didekindroid.common.activity.BundleKey.COMUNIDAD_LIST_INDEX;
-import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_LIST_INDEX;
+import static com.didekinaar.comunidad.ComuBundleKey.COMUNIDAD_LIST_INDEX;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCIDENCIA_LIST_INDEX;
 
 /**
  * Preconditions:
@@ -180,7 +180,7 @@ public class IncidSeeByComuListFr extends Fragment implements ComuSpinnerSettabl
 
     class IncidByComuLoader extends AsyncTask<Long, Void, List<IncidenciaUser>> {
 
-        UiException uiException;
+        UiAppException uiException;
 
         @Override
         protected List<IncidenciaUser> doInBackground(Long... comunidadId)
@@ -189,7 +189,7 @@ public class IncidSeeByComuListFr extends Fragment implements ComuSpinnerSettabl
             List<IncidenciaUser> incidenciaList = null;
             try {
                 incidenciaList = mListener.getListFromService(comunidadId[0]);
-            } catch (UiException e) {
+            } catch (UiAppException e) {
                 uiException = e;
             }
             return incidenciaList;

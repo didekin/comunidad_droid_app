@@ -7,12 +7,13 @@ import android.os.Build;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.incidservice.dominio.IncidImportancia;
-import com.didekin.incidservice.dominio.Incidencia;
-import com.didekin.incidservice.dominio.Resolucion;
+import com.didekin.incidencia.dominio.IncidImportancia;
+import com.didekin.incidencia.dominio.Incidencia;
+import com.didekin.incidencia.dominio.Resolucion;
+import com.didekinaar.exception.UiAarException;
 import com.didekindroid.R;
-import com.didekindroid.common.activity.MockActivity;
-import com.didekindroid.common.activity.UiException;
+import com.didekinaar.mock.MockActivity;
+import com.didekindroid.incidencia.exception.UiAppException;
 import com.didekinservice.common.gcm.GcmException;
 
 import org.junit.Test;
@@ -29,13 +30,13 @@ import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekin.incidservice.gcm.GcmKeyValueIncidData.incidencia_closed_type;
-import static com.didekindroid.common.testutils.ActivityTestUtils.clickNavigateUp;
-import static com.didekindroid.common.utils.UIutils.formatTimeStampToString;
+import static com.didekin.incidencia.gcm.GcmKeyValueIncidData.incidencia_closed_type;
+import static com.didekinaar.testutil.AarActivityTestUtils.clickNavigateUp;
+import static com.didekinaar.utils.UIutils.formatTimeStampToString;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetResolucionNoAdvances;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
-import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_PLAZUELA5_PEPE;
+import static com.didekinaar.testutil.UsuarioTestUtils.COMU_PLAZUELA5_PEPE;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 
@@ -47,8 +48,8 @@ import static org.hamcrest.CoreMatchers.is;
 @RunWith(AndroidJUnit4.class)
 public class GcmIncidCloseNotificationTest extends GcmIncidNotificationTest {
 
-    private Incidencia incidencia;
-    private Resolucion resolucion;
+    Incidencia incidencia;
+    Resolucion resolucion;
     IncidImportancia incidImportancia;
 
     @Override
@@ -70,7 +71,7 @@ public class GcmIncidCloseNotificationTest extends GcmIncidNotificationTest {
                     resolucion = insertGetResolucionNoAdvances(incidImportancia);
                     assertThat(IncidenciaServ.closeIncidencia(resolucion), is(2));
                     incidencia = IncidenciaServ.seeIncidsClosedByComu(incidImportancia.getIncidencia().getComunidadId()).get(0).getIncidencia();
-                } catch (UiException | InterruptedException | IOException e) {
+                } catch (UiAppException | InterruptedException | IOException | UiAarException e) {
                     e.printStackTrace();
                 }
             }

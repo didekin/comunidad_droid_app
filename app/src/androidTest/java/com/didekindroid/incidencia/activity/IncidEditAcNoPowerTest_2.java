@@ -4,11 +4,12 @@ import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.incidservice.dominio.IncidenciaUser;
-import com.didekin.usuario.dominio.UsuarioComunidad;
+import com.didekin.incidencia.dominio.IncidenciaUser;
+import com.didekin.usuariocomunidad.UsuarioComunidad;
+import com.didekinaar.exception.UiAarException;
+import com.didekinaar.testutil.CleanUserEnum;
 import com.didekindroid.R;
-import com.didekindroid.common.activity.UiException;
-import com.didekindroid.usuario.testutils.CleanUserEnum;
+import com.didekindroid.incidencia.exception.UiAppException;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -23,20 +24,20 @@ import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekin.usuario.dominio.Rol.PROPIETARIO;
-import static com.didekindroid.common.activity.BundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_FLAG;
-import static com.didekindroid.common.testutils.ActivityTestUtils.checkNoToastInTest;
-import static com.didekindroid.common.testutils.ActivityTestUtils.checkUp;
-import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
-import static com.didekindroid.common.testutils.ActivityTestUtils.updateSecurityData;
+import static com.didekin.usuariocomunidad.Rol.PROPIETARIO;
+import static com.didekinaar.testutil.AarActivityTestUtils.checkNoToastInTest;
+import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
+import static com.didekinaar.testutil.AarActivityTestUtils.signUpAndUpdateTk;
+import static com.didekinaar.testutil.AarActivityTestUtils.updateSecurityData;
+import static com.didekinaar.testutil.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
+import static com.didekinaar.testutil.UsuarioTestUtils.COMU_REAL_PEPE;
+import static com.didekinaar.testutil.UsuarioTestUtils.USER_JUAN;
+import static com.didekinaar.testutil.UsuarioTestUtils.makeUsuarioComunidad;
+import static com.didekinaar.usuariocomunidad.AarUserComuService.AarUserComuServ;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidenciaUser;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
-import static com.didekindroid.usuario.testutils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
-import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_REAL_PEPE;
-import static com.didekindroid.usuario.testutils.UsuarioTestUtils.USER_JUAN;
-import static com.didekindroid.usuario.testutils.UsuarioTestUtils.makeUsuarioComunidad;
-import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
@@ -68,16 +69,16 @@ public class IncidEditAcNoPowerTest_2 extends IncidEditAbstractTest {
             {
                 try {
                     signUpAndUpdateTk(COMU_REAL_PEPE);
-                    pepeUserComu = ServOne.seeUserComusByUser().get(0);
+                    pepeUserComu = AarUserComuServ.seeUserComusByUser().get(0);
                     // Insertamos incidencia.
                     IncidenciaUser incidenciaUser_1 = insertGetIncidenciaUser(pepeUserComu, 1);
                     // Registro userComu en misma comunidad.
                     UsuarioComunidad userComuJuan = makeUsuarioComunidad(pepeUserComu.getComunidad(), USER_JUAN,
                             "portal", "esc", "plantaX", "door12", PROPIETARIO.function);
-                    ServOne.regUserAndUserComu(userComuJuan).execute();
+                    AarUserComuServ.regUserAndUserComu(userComuJuan).execute();
                     updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
                     incidenciaJuan = IncidenciaServ.seeIncidImportancia(incidenciaUser_1.getIncidencia().getIncidenciaId()).getIncidImportancia();
-                } catch (UiException | IOException e) {
+                } catch (UiAppException | IOException | UiAarException e) {
                     e.printStackTrace();
                 }
                 Intent intent = new Intent();

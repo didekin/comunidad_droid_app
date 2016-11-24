@@ -7,23 +7,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
-import com.didekin.incidservice.dominio.IncidImportancia;
+import com.didekin.incidencia.dominio.IncidImportancia;
 import com.didekindroid.R;
-import com.didekindroid.common.activity.UiException;
+import com.didekindroid.incidencia.exception.UiAppException;
 
 import java.util.Objects;
 
 import timber.log.Timber;
 
-import static com.didekindroid.common.utils.ConnectionUtils.checkInternetConnected;
-import static com.didekindroid.common.utils.UIutils.doToolBar;
-import static com.didekindroid.common.utils.UIutils.getErrorMsgBuilder;
-import static com.didekindroid.common.utils.UIutils.getGcmToken;
-import static com.didekindroid.common.utils.UIutils.makeToast;
+import static com.didekinaar.usuario.UserMenu.doUpMenu;
+import static com.didekinaar.gcm.GcmUtils.getGcmToken;
+import static com.didekinaar.utils.ConnectionUtils.checkInternetConnected;
+import static com.didekinaar.utils.UIutils.doToolBar;
+import static com.didekinaar.utils.UIutils.getErrorMsgBuilder;
+import static com.didekinaar.utils.UIutils.makeToast;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
-import static com.didekindroid.usuario.activity.utils.UserMenu.doUpMenu;
 
 /**
  * Preconditions:
@@ -87,7 +86,7 @@ public class IncidRegAc extends AppCompatActivity {
             }
         } catch (IllegalStateException e) {
             Timber.e(e.getMessage());
-            makeToast(this, errorMsg.toString(), Toast.LENGTH_SHORT);
+            makeToast(this, errorMsg.toString(), com.didekinaar.R.color.deep_purple_100);
         }
     }
 
@@ -117,7 +116,7 @@ public class IncidRegAc extends AppCompatActivity {
 
     class IncidenciaRegister extends AsyncTask<IncidImportancia, Void, Integer> {
 
-        UiException uiException;
+        UiAppException uiException;
 
         @Override
         protected Integer doInBackground(IncidImportancia... incidImportancias)
@@ -127,7 +126,7 @@ public class IncidRegAc extends AppCompatActivity {
 
             try {
                 rowInserted = IncidenciaServ.regIncidImportancia(incidImportancias[0]);
-            } catch (UiException e) {
+            } catch (UiAppException e) {
                 uiException = e;
             }
             return rowInserted;

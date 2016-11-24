@@ -12,18 +12,17 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.didekin.incidservice.dominio.Resolucion;
+import com.didekin.incidencia.dominio.Resolucion;
 import com.didekindroid.R;
 
 import java.util.Objects;
 
 import timber.log.Timber;
-
-import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_OBJECT;
-import static com.didekindroid.common.activity.BundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.common.activity.BundleKey.IS_MENU_IN_FRAGMENT_FLAG;
-import static com.didekindroid.common.utils.UIutils.formatTimeStampToString;
-import static com.didekindroid.common.utils.UIutils.getStringFromInteger;
+import static com.didekinaar.utils.AarBundleKey.IS_MENU_IN_FRAGMENT_FLAG;
+import static com.didekinaar.utils.UIutils.formatTimeStampToString;
+import static com.didekinaar.utils.UIutils.getStringFromInteger;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCIDENCIA_OBJECT;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_COMMENTS_SEE_AC;
 
 /**

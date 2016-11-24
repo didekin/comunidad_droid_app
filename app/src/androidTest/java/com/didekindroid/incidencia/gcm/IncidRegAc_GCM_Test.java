@@ -8,10 +8,10 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.incidservice.dominio.IncidImportancia;
-import com.didekin.usuario.dominio.Usuario;
-import com.didekin.usuario.dominio.UsuarioComunidad;
-import com.didekindroid.common.activity.UiException;
+import com.didekin.incidencia.dominio.IncidImportancia;
+import com.didekin.usuario.Usuario;
+import com.didekin.usuariocomunidad.UsuarioComunidad;
+import com.didekinaar.exception.UiAarException;
 import com.didekindroid.incidencia.activity.IncidRegAc;
 import com.google.firebase.iid.FirebaseInstanceId;
 
@@ -22,14 +22,15 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 import java.util.Objects;
 
-import static com.didekindroid.common.gcm.AppFirebaseMsgService.TypeMsgHandler.INCIDENCIA_OPEN;
-import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
-import static com.didekindroid.common.utils.UIutils.isRegisteredUser;
-import static com.didekindroid.common.utils.UIutils.updateIsGcmTokenSentServer;
+import static com.didekinaar.testutil.AarActivityTestUtils.signUpAndUpdateTk;
+import static com.didekinaar.testutil.UsuarioTestUtils.COMU_ESCORIAL_PEPE;
+import static com.didekinaar.usuariocomunidad.AarUserComuService.AarUserComuServ;
+import static com.didekinaar.utils.UIutils.isRegisteredUser;
+import static com.didekinaar.utils.UIutils.updateIsGcmTokenSentServer;
+import static com.didekinaar.usuario.AarUsuarioService.AarUserServ;
+import static com.didekindroid.incidencia.gcm.AppFBService.IncidTypeMsgHandler.INCIDENCIA_OPEN;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
-import static com.didekindroid.usuario.testutils.UsuarioTestUtils.COMU_ESCORIAL_PEPE;
-import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -53,7 +54,7 @@ public class IncidRegAc_GCM_Test extends Incidencia_GCM_Test {
     }
 
     /**
-     * Test para GcmRegistrationIntentService methods.
+     * Test para AarFBRegIntentService methods.
      */
     @Test
     public void testRegistrationGcmToken() throws Exception
@@ -71,7 +72,7 @@ public class IncidRegAc_GCM_Test extends Incidencia_GCM_Test {
             return;
         }
         // Preconditions for the test: TOKEN en BD.
-        assertThat(ServOne.getGcmToken(), is(FirebaseInstanceId.getInstance().getToken()));
+        assertThat(AarUserServ.getGcmToken(), is(FirebaseInstanceId.getInstance().getToken()));
 
         IncidImportancia incidPepe =
                 new IncidImportancia.IncidImportanciaBuilder(doIncidencia(pepe.getUserName(), "Incidencia One", pepeUserComu.getComunidad().getC_Id(), (short) 43))
@@ -97,10 +98,10 @@ public class IncidRegAc_GCM_Test extends Incidencia_GCM_Test {
                 updateIsGcmTokenSentServer(false, context);
                 try {
                     pepe = signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
-                    pepeUserComu = ServOne.seeUserComusByUser().get(0);
+                    pepeUserComu = AarUserComuServ.seeUserComusByUser().get(0);
                     // Pepe hasn't got a gcmToken.
-                    Objects.equals(ServOne.getGcmToken() == null, true);
-                } catch (UiException | IOException e) {
+                    Objects.equals(AarUserServ.getGcmToken() == null, true);
+                } catch (IOException | UiAarException e) {
                     e.printStackTrace();
                 }
             }

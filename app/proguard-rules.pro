@@ -16,8 +16,6 @@
 #   public *;
 #}
 
-#-dontwarn retrofit.**
-
 -keep class retrofit.** { *; }
 -dontwarn okio.**
 # Platform calls Class.forName on types which do not exist on Android to determine platform.

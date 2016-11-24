@@ -7,21 +7,21 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.didekin.incidservice.dominio.IncidComment;
+import com.didekin.incidencia.dominio.IncidComment;
 import com.didekindroid.R;
 
 import timber.log.Timber;
 
-import static com.didekindroid.common.utils.UIutils.formatTimeStampToString;
+import static com.didekinaar.utils.UIutils.formatTimeStampToString;
 
 /**
  * User: pedro@didekin
  * Date: 05/02/16
  * Time: 23:58
  */
-public class IncidCommentSeeAdapter extends ArrayAdapter<IncidComment> {
+class IncidCommentSeeAdapter extends ArrayAdapter<IncidComment> {
 
-    public IncidCommentSeeAdapter(Context activity)
+    IncidCommentSeeAdapter(Context activity)
     {
         super(activity, R.layout.incid_comments_see_list_item, R.id.incid_comment_fecha_view);
     }
@@ -51,7 +51,7 @@ public class IncidCommentSeeAdapter extends ArrayAdapter<IncidComment> {
         final TextView mRedactorView;
         final TextView mDescripcionView;
 
-        public IncidCommentViewHolder(View convertView)
+        IncidCommentViewHolder(View convertView)
         {
             mFechaAltaView = (TextView) convertView.findViewById(R.id.incid_comment_fecha_view);
             mRedactorView = (TextView) convertView.findViewById(R.id.incid_comment_redactor_view);

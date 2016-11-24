@@ -1,11 +1,9 @@
 package com.didekindroid;
 
-import com.didekindroid.common.suite.CommonSuite;
-import com.didekindroid.incidencia.suite.IncidFunctionalSuite;
-import com.didekindroid.incidencia.suite.IncidSupportSuite;
-import com.didekindroid.usuario.suite.UserFunctionalSlowSuite;
-import com.didekindroid.usuario.suite.UserFunctionalSuite;
-import com.didekindroid.usuario.suite.UserSupportSuite;
+import com.didekindroid.gcm.GcmBroadCastNotificationActivityTest;
+import com.didekindroid.gcm.GcmRequestTest;
+import com.didekindroid.incidencia.IncidFunctionalSuite;
+import com.didekindroid.incidencia.IncidSupportSuite;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -17,12 +15,8 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        CommonSuite.class,
         IncidFunctionalSuite.class,
         IncidSupportSuite.class,
-        UserFunctionalSuite.class,
-        UserFunctionalSlowSuite.class,
-        UserSupportSuite.class,
 })
 public class AppFullSuite {
 }

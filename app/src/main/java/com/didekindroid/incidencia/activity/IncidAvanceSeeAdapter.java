@@ -7,21 +7,21 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.didekin.incidservice.dominio.Avance;
+import com.didekin.incidencia.dominio.Avance;
 import com.didekindroid.R;
 
 import timber.log.Timber;
 
-import static com.didekindroid.common.utils.UIutils.formatTimeStampToString;
+import static com.didekinaar.utils.UIutils.formatTimeStampToString;
 
 /**
  * User: pedro@didekin
  * Date: 18/12/15
  * Time: 13:21
  */
-public class IncidAvanceSeeAdapter extends ArrayAdapter<Avance> {
+class IncidAvanceSeeAdapter extends ArrayAdapter<Avance> {
 
-    public IncidAvanceSeeAdapter(Context context)
+    IncidAvanceSeeAdapter(Context context)
     {
         super(context, R.layout.incid_see_avances_list_item, R.id.incid_avance_fecha_view);
     }
@@ -50,7 +50,7 @@ public class IncidAvanceSeeAdapter extends ArrayAdapter<Avance> {
         final TextView mAliasView;
         final TextView mDescripcionView;
 
-        public AvanceViewHolder(View convertView)
+        AvanceViewHolder(View convertView)
         {
             mFechaAltaView = (TextView) convertView.findViewById(R.id.incid_avance_fecha_view);
             mAliasView = (TextView) convertView.findViewById(R.id.incid_avance_aliasUser_view);

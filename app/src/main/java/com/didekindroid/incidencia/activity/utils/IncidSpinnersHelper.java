@@ -14,7 +14,7 @@ import com.didekindroid.incidencia.activity.IncidSeeUserComuImportanciaAc;
 
 import timber.log.Timber;
 
-import static com.didekindroid.common.activity.BundleKey.INCIDENCIA_OBJECT;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 
 /**
  * User: pedro@didekin

@@ -5,9 +5,9 @@ import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.widget.ArrayAdapter;
 
-import com.didekin.usuario.dominio.Comunidad;
+import com.didekin.comunidad.Comunidad;
+import com.didekinaar.exception.UiAarException;
 import com.didekindroid.R;
-import com.didekindroid.common.activity.UiException;
 
 import java.util.List;
 import java.util.Objects;
@@ -22,8 +22,8 @@ import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaSer
  * Time: 12:32
  */
 public class ComunidadSpinnerSetter<T extends Fragment & ComuSpinnerSettable> extends AsyncTask<Void, Void, List<Comunidad>> {
-    // TODO: to persist the task during restarts and properly cancel the task when the activity is destroyed. (Example in Shelves)
-    private UiException uiException;
+
+    private UiAarException uiException;
     private T mFragment;
 
     public ComunidadSpinnerSetter(T mFragment)
@@ -38,7 +38,7 @@ public class ComunidadSpinnerSetter<T extends Fragment & ComuSpinnerSettable> ex
         List<Comunidad> comunidadesByUser = null;
         try {
             comunidadesByUser = IncidenciaServ.getComusByUser();
-        } catch (UiException e) {
+        } catch (UiAarException e) {
             uiException = e;
         }
         return comunidadesByUser;

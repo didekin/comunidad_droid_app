@@ -1,15 +1,16 @@
 package com.didekindroid.incidencia.testutils;
 
-import com.didekin.incidservice.dominio.AmbitoIncidencia;
-import com.didekin.incidservice.dominio.Avance;
-import com.didekin.incidservice.dominio.IncidComment;
-import com.didekin.incidservice.dominio.IncidImportancia;
-import com.didekin.incidservice.dominio.Incidencia;
-import com.didekin.incidservice.dominio.IncidenciaUser;
-import com.didekin.incidservice.dominio.Resolucion;
-import com.didekin.usuario.dominio.Comunidad;
-import com.didekin.usuario.dominio.UsuarioComunidad;
-import com.didekindroid.common.activity.UiException;
+import com.didekin.comunidad.Comunidad;
+import com.didekin.incidencia.dominio.AmbitoIncidencia;
+import com.didekin.incidencia.dominio.Avance;
+import com.didekin.incidencia.dominio.IncidComment;
+import com.didekin.incidencia.dominio.IncidImportancia;
+import com.didekin.incidencia.dominio.Incidencia;
+import com.didekin.incidencia.dominio.IncidenciaUser;
+import com.didekin.incidencia.dominio.Resolucion;
+import com.didekin.usuariocomunidad.UsuarioComunidad;
+import com.didekinaar.exception.UiAarException;
+import com.didekindroid.incidencia.exception.UiAppException;
 
 import org.junit.Assert;
 
@@ -18,10 +19,10 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.didekindroid.common.testutils.ActivityTestUtils.signUpAndUpdateTk;
-import static com.didekindroid.common.utils.UIutils.getStringFromInteger;
+import static com.didekinaar.testutil.AarActivityTestUtils.signUpAndUpdateTk;
+import static com.didekinaar.usuariocomunidad.AarUserComuService.AarUserComuServ;
+import static com.didekinaar.utils.UIutils.getStringFromInteger;
 import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
-import static com.didekindroid.usuario.webservices.UsuarioService.ServOne;
 import static org.hamcrest.CoreMatchers.is;
 
 /**
@@ -97,7 +98,7 @@ public final class IncidenciaTestUtils {
                 .build();
     }
 
-    public static IncidenciaUser insertGetIncidenciaUser(UsuarioComunidad userComu, int importancia) throws UiException
+    public static IncidenciaUser insertGetIncidenciaUser(UsuarioComunidad userComu, int importancia) throws UiAppException
     {
         IncidImportancia incidImportancia = new IncidImportancia.IncidImportanciaBuilder(
                 doIncidencia(userComu.getUsuario().getUserName(), INCID_DEFAULT_DESC, userComu.getComunidad().getC_Id(), (short) 43))
@@ -109,7 +110,7 @@ public final class IncidenciaTestUtils {
         return IncidenciaServ.seeIncidsOpenByComu(userComu.getComunidad().getC_Id()).get(0);
     }
 
-    public static IncidenciaUser insertGetIncidenciaUser(long incidenciaId, UsuarioComunidad userComu, int importancia) throws UiException
+    public static IncidenciaUser insertGetIncidenciaUser(long incidenciaId, UsuarioComunidad userComu, int importancia) throws UiAppException
     {
         IncidImportancia incidImportancia =
                 new IncidImportancia.IncidImportanciaBuilder(doIncidenciaWithId(incidenciaId, INCID_DEFAULT_DESC, userComu.getComunidad().getC_Id(), (short) 43))
@@ -120,10 +121,10 @@ public final class IncidenciaTestUtils {
         return IncidenciaServ.seeIncidsOpenByComu(userComu.getComunidad().getC_Id()).get(0);
     }
 
-    public static IncidImportancia insertGetIncidImportancia(UsuarioComunidad userComu) throws UiException, IOException
+    public static IncidImportancia insertGetIncidImportancia(UsuarioComunidad userComu) throws UiAppException, IOException, UiAarException
     {
         signUpAndUpdateTk(userComu);
-        UsuarioComunidad userComuDb = ServOne.seeUserComusByUser().get(0);
+        UsuarioComunidad userComuDb = AarUserComuServ.seeUserComusByUser().get(0);
         IncidImportancia incidImportancia = new IncidImportancia.IncidImportanciaBuilder(
                 doIncidencia(userComuDb.getUsuario().getUserName(), INCID_DEFAULT_DESC, userComuDb.getComunidad().getC_Id(), (short) 43))
                 .usuarioComunidad(userComuDb)
@@ -135,7 +136,7 @@ public final class IncidenciaTestUtils {
         return incidImportancia;
     }
 
-    public static Resolucion insertGetResolucionNoAdvances(IncidImportancia incidImportancia) throws UiException
+    public static Resolucion insertGetResolucionNoAdvances(IncidImportancia incidImportancia) throws UiAppException
     {
         // Registramos resolución.
         Resolucion resolucion = doResolucion(incidImportancia.getIncidencia(),

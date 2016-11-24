@@ -5,8 +5,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekindroid.DidekinApp;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 
 import static android.database.sqlite.SQLiteDatabase.deleteDatabase;
+import static com.didekinaar.PrimalCreator.creator;
 import static com.didekindroid.incidencia.repository.IncidenciaDataDb.AmbitoIncidencia.AMBITO_INCID_COUNT;
 import static com.didekindroid.incidencia.repository.IncidenciaDataDb.AmbitoIncidencia.CREATE_AMBITO_INCIDENCIA;
 import static org.hamcrest.CoreMatchers.is;
@@ -39,7 +38,7 @@ public class IncidenciaDataDbHelperTest {
     @Before
     public void getFixture() throws Exception
     {
-        context = DidekinApp.getContext();
+        context = creator.get().getContext();
         dbHelper = new IncidenciaDataDbHelper(context);
         database = dbHelper.getWritableDatabase();
     }

@@ -12,7 +12,7 @@ allprojects {
     repositories {
         jcenter()
         mavenCentral()
-        flatDir{
+        flatDir {
             dirs '/Users/pedro/Documents/git_projects/didekinlibs/client_lib/releases/master/',
                     '/Users/pedro/Documents/git_projects/didekinlibs/client_gcm_lib/releases/master/'
         }
@@ -20,7 +20,12 @@ allprojects {
 }
 
 subprojects {
-
+    apply plugin: 'idea'
+    dependencies {
+        configurations.all {
+            resolutionStrategy.force rootProject.ext.test_resolution
+        }
+    }
 }
 
 ext {
@@ -31,6 +36,41 @@ ext {
     sourceCompatibilityVersion = JavaVersion.VERSION_1_7
     targetCompatibilityVersion = JavaVersion.VERSION_1_7
     testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
+    androidSupportVersion = '25.0.1'
+    espressoVersion = '2.2.2'
+    testRunnerRulesVersion = '0.5'
+
+    model_lib = ':client_lib-a-0.1.7:@jar'
+    firebase_message = 'com.google.firebase:firebase-messaging:9.4.0'
+    retrofit2 = ['com.squareup.retrofit2:retrofit:2.1.0',
+                 'com.squareup.retrofit2:converter-gson:2.1.0',
+                 'com.squareup.okhttp3:logging-interceptor:3.4.1']
+    timber = 'com.jakewharton.timber:timber:4.3.0'
+
+    android_support = ["com.android.support:support-annotations:$rootProject.ext.androidSupportVersion",
+                       "com.android.support:design:$rootProject.ext.androidSupportVersion",
+                       "com.android.support:appcompat-v7:$rootProject.ext.androidSupportVersion",
+                       "com.android.support:support-v4:$rootProject.ext.androidSupportVersion",
+                       "com.android.support:recyclerview-v7:$rootProject.ext.androidSupportVersion",
+                       "com.android.support:gridlayout-v7:$rootProject.ext.androidSupportVersion"]
+
+    junit = ["junit:junit:4.12"]
+
+    espresso = ["com.android.support.test:runner:$rootProject.ext.testRunnerRulesVersion",
+                "com.android.support.test:rules:$rootProject.ext.testRunnerRulesVersion",
+                "com.android.support.test.espresso:espresso-core:$rootProject.ext.espressoVersion",
+                "com.android.support.test.espresso:espresso-intents:$rootProject.ext.espressoVersion",
+                "com.android.support.test.espresso:espresso-contrib:$rootProject.ext.espressoVersion",
+                "com.android.support.test.espresso:espresso-idling-resource:$rootProject.ext.espressoVersion"]
+
+    apps_androidtest = [espresso,
+                        ':client_gcm_lib-a-0.1.7:@jar']
+
+    test_resolution = ["com.android.support:support-annotations:$rootProject.ext.androidSupportVersion",
+                       "com.android.support:support-v4:$rootProject.ext.androidSupportVersion",
+                       "com.android.support:appcompat-v7:$rootProject.ext.androidSupportVersion",
+                       "com.android.support:recyclerview-v7:$rootProject.ext.androidSupportVersion",
+                       "com.android.support:design:$rootProject.ext.androidSupportVersion"]
 }
 
 task wrapper(type: Wrapper) {

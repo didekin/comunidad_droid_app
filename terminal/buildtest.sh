@@ -31,10 +31,10 @@ case "$SUITE" in
         -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.common.suite.CommonSuite
         ;;
     in) ./gradlew --info app:cAT \
-        -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.incidencia.suite.IncidSupportSuite,com.didekindroid.incidencia.suite.IncidFunctionalSuite
+        -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.incidencia.IncidSupportSuite,com.didekindroid.incidencia.IncidFunctionalSuite
         ;;
     us) ./gradlew --info app:cAT \
-        -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.usuario.suite.UserSupportSuite,com.didekindroid.usuario.suite.UserFunctionalSuite,com.didekindroid.usuario.suite.UserFunctionalSlowSuite
+        -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.usuario.suite.UserSupportSuite,com.didekindroid.usuario.suite.UserFunctionalSuite
         ;;
     all) ./gradlew app:cAT -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.AppFullSuite
         ;;

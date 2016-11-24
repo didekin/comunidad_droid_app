@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.didekin.incidservice.dominio.ImportanciaUser;
+import com.didekin.incidencia.dominio.ImportanciaUser;
 import com.didekindroid.R;
 
 import timber.log.Timber;
@@ -18,9 +18,9 @@ import timber.log.Timber;
  * Date: 27/03/16
  * Time: 13:54
  */
-public class IncidImportanciaSeeAdapter extends ArrayAdapter<ImportanciaUser> {
+class IncidImportanciaSeeAdapter extends ArrayAdapter<ImportanciaUser> {
 
-    public IncidImportanciaSeeAdapter(Context activity)
+    IncidImportanciaSeeAdapter(Context activity)
     {
         super(activity, R.layout.incid_importancia_see_list_item, R.id.incid_importancia_alias_view);
     }
@@ -48,13 +48,13 @@ public class IncidImportanciaSeeAdapter extends ArrayAdapter<ImportanciaUser> {
         final TextView aliasView;
         final TextView ratingView;
 
-        public ImportanciaUserHolder(View convertView)
+        ImportanciaUserHolder(View convertView)
         {
             aliasView = (TextView) convertView.findViewById(R.id.incid_importancia_alias_view);
             ratingView = (TextView) convertView.findViewById(R.id.incid_importancia_rating_view);
         }
 
-        public void initializeTextInViews(ImportanciaUser importanciaUser)
+        void initializeTextInViews(ImportanciaUser importanciaUser)
         {
             aliasView.setText(importanciaUser.getUserAlias());
             Resources resources = getContext().getResources();

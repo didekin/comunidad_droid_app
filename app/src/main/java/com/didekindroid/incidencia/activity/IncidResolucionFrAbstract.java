@@ -5,7 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.TextView;
 
-import com.didekindroid.common.activity.FechaPickerUser;
+import com.didekinaar.utils.FechaPickerUser;
 import com.didekindroid.incidencia.dominio.ResolucionBean;
 
 import timber.log.Timber;
@@ -30,12 +30,6 @@ public abstract class IncidResolucionFrAbstract extends Fragment implements Fech
     }
 
     //  ======================== INTERFACE COMMUNICATIONS METHODS ==========================
-
-    @Override
-    public View getFragmentView()
-    {
-        return mFragmentView;
-    }
 
     @Override
     public TextView getFechaView()

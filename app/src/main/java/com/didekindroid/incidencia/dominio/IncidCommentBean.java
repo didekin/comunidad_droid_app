@@ -4,13 +4,14 @@ import android.content.res.Resources;
 import android.view.View;
 import android.widget.EditText;
 
-import com.didekin.incidservice.dominio.IncidComment;
-import com.didekin.incidservice.dominio.Incidencia;
-import com.didekin.usuario.dominio.Comunidad;
+import com.didekin.incidencia.dominio.IncidComment;
+import com.didekin.incidencia.dominio.Incidencia;
+import com.didekin.comunidad.Comunidad;
 import com.didekindroid.R;
 
-import static com.didekin.common.dominio.UsuarioDataPatterns.LINE_BREAK;
-import static com.didekin.incidservice.dominio.IncidDataPatterns.INCID_COMMENT_DESC;
+
+import static com.didekin.common.dominio.ValidDataPatterns.LINE_BREAK;
+import static com.didekin.incidencia.dominio.IncidDataPatterns.INCID_COMMENT_DESC;
 
 /**
  * User: pedro@didekin
@@ -27,12 +28,12 @@ public class IncidCommentBean {
         this.incidencia = incidencia;
     }
 
-    public void setCommentDesc(String commentDesc)
+    private void setCommentDesc(String commentDesc)
     {
         this.commentDesc = commentDesc;
     }
 
-    public boolean validateDescripcion(StringBuilder errorMsg, Resources resources)
+    private boolean validateDescripcion(StringBuilder errorMsg, Resources resources)
     {
         if (!INCID_COMMENT_DESC.isPatternOk(commentDesc)) {
             errorMsg.append(resources.getString(R.string.incid_comment_label)).append(LINE_BREAK.getRegexp());
