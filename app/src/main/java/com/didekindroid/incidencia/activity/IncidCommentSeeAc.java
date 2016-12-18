@@ -17,7 +17,7 @@ import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCIDENC
 import static com.didekinaar.utils.UIutils.doToolBar;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_comments_see_list_fr_tag;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_COMMENT_REG_AC;
-import static com.didekinaar.usuario.UserMenu.doUpMenu;
+import static com.didekinaar.utils.UIutils.doUpMenu;
 
 /**
  * Preconditions:

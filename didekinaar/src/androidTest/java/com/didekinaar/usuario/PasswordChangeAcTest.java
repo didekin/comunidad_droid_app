@@ -2,24 +2,17 @@ package com.didekinaar.usuario;
 
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
-import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.oauth2.SpringOauthToken;
 import com.didekin.usuario.Usuario;
 import com.didekinaar.R;
-import com.didekinaar.exception.UiAarException;
-import com.didekinaar.testutil.AarActivityTestUtils;
-import com.didekinaar.testutil.CleanUserEnum;
-import com.didekinaar.testutil.UsuarioTestUtils;
+import com.didekinaar.exception.UiException;
+import com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import java.io.IOException;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -30,13 +23,14 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekinaar.security.Oauth2Service.Oauth2;
 import static com.didekinaar.security.TokenHandler.TKhandler;
+import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_NOTHING;
+import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
 import static com.didekinaar.testutil.AarActivityTestUtils.cleanOneUser;
 import static com.didekinaar.testutil.AarActivityTestUtils.cleanOptions;
 import static com.didekinaar.testutil.AarActivityTestUtils.clickNavigateUp;
-import static com.didekinaar.testutil.CleanUserEnum.CLEAN_NOTHING;
-import static com.didekinaar.testutil.CleanUserEnum.CLEAN_PEPE;
+import static com.didekinaar.usuario.testutil.UsuarioTestUtils.USER_PEPE;
 import static com.didekinaar.utils.UIutils.isRegisteredUser;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
@@ -49,8 +43,7 @@ import static org.junit.Assert.assertThat;
  * Date: 25/09/15
  * Time: 17:45
  */
-@RunWith(AndroidJUnit4.class)
-public class PasswordChangeAcTest {
+public abstract class PasswordChangeAcTest {
 
     PasswordChangeAc mActivity;
     CleanUserEnum whatToClean = CLEAN_PEPE;
@@ -64,18 +57,12 @@ public class PasswordChangeAcTest {
                 {
                     // Precondition: the user is registered.
                     try {
-                        AarActivityTestUtils.signUpAndUpdateTk(UsuarioTestUtils.COMU_TRAV_PLAZUELA_PEPE);
-                    } catch (UiAarException | IOException e) {
+                        registerUser();
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
             };
-
-    @BeforeClass
-    public static void slowSeconds() throws InterruptedException
-    {
-        Thread.sleep(5000);
-    }
 
     @Before
     public void setUp() throws Exception
@@ -88,6 +75,12 @@ public class PasswordChangeAcTest {
     {
         cleanOptions(whatToClean);
     }
+
+    //  ............................. METHODS TO BE OVERWRITTEN ..................................
+
+    protected abstract void registerUser() throws Exception;
+
+    //    =====================================  TESTS  ==========================================
 
     @Test
     public void testOnCreate() throws Exception
@@ -123,7 +116,7 @@ public class PasswordChangeAcTest {
     }
 
     @Test
-    public void testPasswordChange_OK() throws UiAarException
+    public void testPasswordChange_OK() throws UiException
     {
         whatToClean = CLEAN_NOTHING;
 
@@ -145,7 +138,7 @@ public class PasswordChangeAcTest {
         assertThat(tokenAfter.getRefreshToken().getValue(), not(is(refreshTkValue)));  // new refreshToken.
 
         cleanOneUser(new Usuario.UsuarioBuilder()
-                .userName(UsuarioTestUtils.USER_PEPE.getUserName())
+                .userName(USER_PEPE.getUserName())
                 .password("new_pepe_password")
                 .build());
     }

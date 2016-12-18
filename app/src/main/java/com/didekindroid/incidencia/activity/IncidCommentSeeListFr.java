@@ -12,15 +12,16 @@ import android.widget.ListView;
 
 import com.didekin.incidencia.dominio.IncidComment;
 import com.didekin.incidencia.dominio.Incidencia;
-import com.didekindroid.incidencia.exception.UiAppException;
+import com.didekindroid.exception.UiAppException;
 import com.didekindroid.R;
 
 import java.util.List;
 
 import timber.log.Timber;
 
+import static com.didekinaar.utils.UIutils.checkPostExecute;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCIDENCIA_OBJECT;
-import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
+import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 
 /**
  * Preconditions:
@@ -164,6 +165,8 @@ public class IncidCommentSeeListFr extends Fragment {
         @Override
         protected void onPostExecute(List<IncidComment> incidComments)
         {
+            if (checkPostExecute(getActivity())) return;
+
             Timber.d("onPostExecute()");
             if (incidComments != null && incidComments.size() > 0) {
                 Timber.d("onPostExecute(): incidComments != null");

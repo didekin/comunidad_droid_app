@@ -7,7 +7,7 @@
     -->
     <string name="app_name" translatable="false">didekin</string>
     <!--*****************************************************************************-->
-    <!--                                 GENERIC_USER                                     -->
+    <!--                                 GENERIC                                     -->
     <!--*****************************************************************************-->
     <!-- Formats-->
     <!--Input controls-->
@@ -32,8 +32,8 @@
     <string name="incid_closed_see_by_usercomu_ac_mn">Incidencias cerradas</string>
     <string name="incid_comment_reg_ac_mn">Comentar</string>
     <string name="incid_comments_see_ac_mn">Ver comentarios</string>
-    <!--<string name="incid_reg_ac_mn">Nueva incidencia</string>-->
-    <!--<string name="incid_see_by_comu_ac_mn">Incidencias abiertas</string>-->
+    <string name="incid_reg_ac_mn">Nueva incidencia</string>
+    <string name="incid_see_by_comu_ac_mn">Incidencias abiertas</string>
     <string name="incid_resolucion_ac_mn">Resolución</string>
     <!-- ============================= ACTIVITIES ============================= -->
     <string name="incid_incidencia_rot">Incidencia:</string>
@@ -100,5 +100,83 @@
     <string name="incid_closed_by_user_ac_label">Incidencias cerradas</string>
     <!-- ============ IncidSeeUserComuImportanciaFr ========== -->
     <string name="incid_incidencia_importancia_rot">Importancia en la comunidad:</string>
+    <!--******************************************************************************-->
+    <!--                                  USUARIO                                     -->
+    <!--******************************************************************************-->
+    <!-- ============================ MESSAGES ============================== -->
+    <string name="exception_generic_app_message">No podemos continuar. Busca tu comunidad o haz login.</string>
+    <string name="comunidad_not_found_message">No podemos mostrarte esta comunidad. Búscala nuevamente.</string>
+    <string name="no_result_search_comunidad">No hemos encontrado tu comunidad.\nPuedes registrarla aquí. </string>
+    <!-- ============================= MENUS ================================= -->
+    <string name="comu_data_ac_mn">Datos comunidad</string>
+    <string name="comu_search_ac_mn">Buscar comunidad</string>
+    <string name="delete_me_ac_mn">Borrar tus datos</string>
+    <string name="login_ac_mn">Login</string>
+    <string name="password_change_ac_mn">Renovar contraseña</string>
+    <string name="reg_nueva_comunidad_ac_mn">Nueva comunidad</string>
+    <!--Válido para reg_comu_usercomu-->
+    <string name="see_usercomu_by_comu_ac_mn">Vecinos</string>
+    <string name="see_usercomu_by_user_ac_mn">Tus comunidades</string>
+    <string name="user_data_ac_mn">Tu usuario</string>
+    <!-- ============================= ACTIVITIES ============================= -->
+    <!-- =============== ComuDataActivity =============== -->
+    <string name="comu_data_ac_label">Datos comunidad</string>
+    <string name="comu_data_ac_button_txt">Modificar datos</string>
+    <!-- ================= ComuSearchAc ================= -->
+    <string name="comu_search_ac_label">Buscar comunidad</string>
+    <!-- =============== ComuSearchResultsAc ============ -->
+    <string name="comu_search_results_ac_label">Buscar comunidad: resultados</string>
+    <!-- ........ ComuSearchResultsListFr ......... -->
+    <string name="rotulo_comunidad">Tu comunidad</string>
+    <!-- ================ RegUserAndUserComuAc =========== -->
+    <string name="reg_user_and_usercomu_ac_label">Registro en comunidad</string>
+    <!-- =========== RegComuAndUserAndUserComuAc ========= -->
+    <string name="reg_comunidad_ac_label">Nueva comunidad</string>
+    <!-- .......... RegUserComuFr ....... -->
+    <string name="reg_usercomu_vivienda_rot">Tu vivienda</string>
+    <string name="reg_usercomu_portal_hint"> -- Portal --</string>
+    <string name="reg_usercomu_escalera_hint"> -- Escalera --</string>
+    <string name="reg_usercomu_planta_hint"> -- Planta --</string>
+    <string name="reg_usercomu_puerta_hint"> -- Puerta --</string>
+    <string name="reg_usercomu_portal_rot">Portal</string>
+    <string name="reg_usercomu_escalera_rot">Escalera</string>
+    <string name="reg_usercomu_planta_rot">Planta</string>
+    <string name="reg_usercomu_puerta_rot">Puerta</string>
+    <string name="reg_usercomu_role_checkbox_rot">Vínculo</string>
+    <string name="reg_usercomu_ac_button_rot">Adhiérete a la comunidad</string>
+    <!--para mensaje de error validación y rótulos de campos  -->
+    <string name="reg_usercomu_checkbox_pre_rot">Presidente</string>
+    <string name="reg_usercomu_checbox_admin_rot">Administrador</string>
+    <string name="reg_usercomu_checbox_pro_rot">Propietario</string>
+    <string name="reg_usercomu_checbox_inq_rot">Arrendatario</string>
+    <string name="reg_usercomu_role_rot">Vínculo con la comunidad</string>
+    <string name="reg_usercomu_comunidad_null">Comunidad</string>
+    <!-- .......... RegComuFr ........... -->
+    <string name="municipio_spinner">municipio</string>
+    <string name="municipio">Municipio</string>
+    <string name="tipo_via">Tipo vía</string>
+    <string name="tipo_via_spinner">tipo de vía</string>   <!-- TODO: borrar cuando se internacionalicen las referencias a ella.-->
+    <string name="nombre_via_hint">Nombre de la vía, sin número</string>
+    <string name="nombre_via">Nombre de la vía</string>
+    <string name="numero_en_via">Número</string>
+    <string name="sufijo_numero_en_via_hint">Sufijo (op.)</string>
+    <string name="sufijo_numero">Sufijo</string>
+    <!-- ============= RegComuAndUserComuAc =============== -->
+    <!-- ================== RegUserComuAc ================= -->
+    <string name="regusuario_comu_ac_label">Comunidad seleccionada</string>
+    <!-- ================= SeeUserComuByComuAc ============ -->
+    <string name="see_usercomu_by_comu_ac_label">Vecinos</string>
+    <string name="usercomu_portal_rot">Portal:</string>
+    <string name="usercomu_escalera_rot">Escalera:</string>
+    <string name="usercomu_planta_rot">Planta:</string>
+    <string name="usercomu_puerta_rot">Puerta:</string>
+    <string name="usercomu_role_rot">Vínculo: </string>
+    <!-- ================= SeeUserComuByUserAc ============ -->
+    <string name="see_usercomu_by_user_ac_label">Tus comunidades</string>
+    <!-- ================= UserComuDataAc ===================== -->
+    <string name="usercomu_data_ac_label">En la comunidad</string>
+    <string name="usercomu_data_ac_delete_txt">Para borrar tus datos en esta comunidad:</string>
+    <string name="usercomu_data_ac_delete_button_txt">Date de baja en la comunidad</string>
+    <string name="comu_list_no_result_txt">No hemos encontrado ningún resultado para tu búsqueda</string>
 
 </resources>

@@ -6,10 +6,10 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.incidencia.dominio.Avance;
 import com.didekin.incidencia.dominio.Resolucion;
-import com.didekinaar.exception.UiAarException;
-import com.didekindroid.incidencia.exception.UiAppException;
+import com.didekinaar.exception.UiException;
+import com.didekinaar.testutil.AarActivityTestUtils;
+import com.didekindroid.exception.UiAppException;
 import com.didekindroid.R;
-import com.didekinaar.testutil.CleanUserEnum;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -39,10 +39,10 @@ import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
 import static com.didekinaar.utils.UIutils.formatTimeStampToString;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetResolucionNoAdvances;
-import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
-import static com.didekinaar.testutil.CleanUserEnum.CLEAN_JUAN;
-import static com.didekinaar.testutil.UsuarioTestUtils.COMU_PLAZUELA5_JUAN;
-import static com.didekinaar.testutil.UsuarioTestUtils.USER_JUAN;
+import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
+import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_JUAN;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_PLAZUELA5_JUAN;
+import static com.didekinaar.usuario.testutil.UsuarioTestUtils.USER_JUAN;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -86,7 +86,7 @@ public class IncidResolucionEditFrTest_2 extends IncidResolucionAbstractTest {
                             .build();
                     assertThat(IncidenciaServ.modifyResolucion(resolucion), is(2));
                     resolucion = IncidenciaServ.seeResolucion(resolucion.getIncidencia().getIncidenciaId());
-                } catch (UiAppException | InterruptedException | IOException | UiAarException e) {
+                } catch (UiAppException | InterruptedException | IOException | UiException e) {
                     e.printStackTrace();
                 }
                 Intent intent = new Intent();
@@ -104,7 +104,7 @@ public class IncidResolucionEditFrTest_2 extends IncidResolucionAbstractTest {
     }
 
     @Override
-    CleanUserEnum whatToClean()
+    AarActivityTestUtils.CleanUserEnum whatToClean()
     {
         return CLEAN_JUAN;
     }
@@ -139,7 +139,7 @@ public class IncidResolucionEditFrTest_2 extends IncidResolucionAbstractTest {
     }
 
     @Test
-    public void testOnEdit_1() throws UiAppException, UiAarException
+    public void testOnEdit_1() throws UiAppException, UiException
     {
         // Caso OK: añadimos un avance con descripción Ok .
         onView(withId(R.id.incid_resolucion_avance_ed)).perform(replaceText("avance2_desc_válida"));

@@ -4,9 +4,9 @@ import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekinaar.exception.UiAarException;
-import com.didekindroid.incidencia.exception.UiAppException;
-import com.didekinaar.testutil.CleanUserEnum;
+import com.didekinaar.exception.UiException;
+import com.didekinaar.testutil.AarActivityTestUtils;
+import com.didekindroid.exception.UiAppException;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -17,8 +17,8 @@ import java.io.IOException;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidImportancia;
-import static com.didekinaar.testutil.CleanUserEnum.CLEAN_JUAN;
-import static com.didekinaar.testutil.UsuarioTestUtils.COMU_REAL_JUAN;
+import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_JUAN;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_REAL_JUAN;
 
 /**
  * User: pedro@didekin
@@ -43,7 +43,7 @@ public class IncidResolucionSeeDefaultFrTest extends IncidResolucionAbstractTest
             {
                 try {
                     incidImportancia = insertGetIncidImportancia(COMU_REAL_JUAN);
-                } catch (UiAppException | IOException | UiAarException e) {
+                } catch (UiAppException | IOException | UiException e) {
                     e.printStackTrace();
                 }
                 Intent intent = new Intent();
@@ -61,7 +61,7 @@ public class IncidResolucionSeeDefaultFrTest extends IncidResolucionAbstractTest
     }
 
     @Override
-    CleanUserEnum whatToClean()
+    AarActivityTestUtils.CleanUserEnum whatToClean()
     {
         return CLEAN_JUAN;
     }

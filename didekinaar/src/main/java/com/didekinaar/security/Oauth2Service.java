@@ -6,7 +6,7 @@ import com.didekin.common.exception.ErrorBean;
 import com.didekin.oauth2.Oauth2EndPoints;
 import com.didekin.oauth2.OauthClient;
 import com.didekin.oauth2.SpringOauthToken;
-import com.didekinaar.exception.UiAarException;
+import com.didekinaar.exception.UiException;
 
 import java.io.IOException;
 
@@ -59,7 +59,7 @@ public final class Oauth2Service implements Oauth2EndPoints {
 //                          CONVENIENCE METHODS
 //  =============================================================================
 
-    public SpringOauthToken getPasswordUserToken(String userName, String password) throws UiAarException
+    public SpringOauthToken getPasswordUserToken(String userName, String password) throws UiException
     {
         Timber.d("getPasswordUserToken()");
         try {
@@ -70,11 +70,11 @@ public final class Oauth2Service implements Oauth2EndPoints {
                     PASSWORD_GRANT).execute();
             return getResponseBody(response);
         } catch (IOException e) {
-            throw new UiAarException(GENERIC_ERROR);
+            throw new UiException(GENERIC_ERROR);
         }
     }
 
-    public SpringOauthToken getRefreshUserToken(String refreshTokenKey) throws UiAarException
+    public SpringOauthToken getRefreshUserToken(String refreshTokenKey) throws UiException
     {
         Timber.d("getRefreshUserToken()");
         try {
@@ -85,7 +85,7 @@ public final class Oauth2Service implements Oauth2EndPoints {
             ).execute();
             return getResponseBody(response);
         } catch (IOException e) {
-            throw new UiAarException(GENERIC_ERROR);
+            throw new UiException(GENERIC_ERROR);
         }
     }
 
@@ -102,14 +102,14 @@ public final class Oauth2Service implements Oauth2EndPoints {
         return BASIC_AND_SPACE + base64AuthData.substring(0, base64AuthData.length() - 1);
     }
 
-    private static <T> T getResponseBody(Response<T> response) throws UiAarException, IOException
+    private static <T> T getResponseBody(Response<T> response) throws UiException, IOException
     {
         if (response.isSuccessful()) {
             return response.body();
         } else {
             ErrorBean errorBean = creator.get().getRetrofitHandler().getErrorBean(response);
             Timber.e("getResponseBody() exception: %s%n", errorBean.getMessage());
-            throw new UiAarException(errorBean);
+            throw new UiException(errorBean);
         }
     }
 }

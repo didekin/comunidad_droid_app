@@ -6,10 +6,10 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.incidencia.dominio.IncidImportancia;
 import com.didekin.incidencia.dominio.IncidenciaUser;
-import com.didekinaar.exception.UiAarException;
-import com.didekinaar.testutil.CleanUserEnum;
+import com.didekinaar.exception.UiException;
+import com.didekinaar.testutil.AarActivityTestUtils;
 import com.didekindroid.R;
-import com.didekindroid.incidencia.exception.UiAppException;
+import com.didekindroid.exception.UiAppException;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -25,16 +25,16 @@ import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExt
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
-import static com.didekinaar.testutil.AarActivityTestUtils.signUpAndUpdateTk;
-import static com.didekinaar.testutil.CleanUserEnum.CLEAN_JUAN;
-import static com.didekinaar.testutil.UsuarioTestUtils.COMU_PLAZUELA5_JUAN;
-import static com.didekinaar.usuariocomunidad.AarUserComuService.AarUserComuServ;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.signUpAndUpdateTk;
+import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_JUAN;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_PLAZUELA5_JUAN;
+import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_RESOLUCION_REG_EDIT_AC;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
-import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
+import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 import static org.hamcrest.CoreMatchers.not;
 
 /**
@@ -55,7 +55,7 @@ public class IncidEditAcTest_Mn2 extends IncidEditAbstractTest {
             {
                 try {
                     signUpAndUpdateTk(COMU_PLAZUELA5_JUAN); // Usuario ADM.
-                    juanUserComu = AarUserComuServ.seeUserComusByUser().get(0);
+                    juanUserComu = AppUserComuServ.seeUserComusByUser().get(0);
                     incidenciaJuan = new IncidImportancia.IncidImportanciaBuilder(
                             doIncidencia(juanUserComu.getUsuario().getUserName(), "Incidencia Plazueles One", juanUserComu.getComunidad().getC_Id(), (short) 43))
                             .usuarioComunidad(juanUserComu)
@@ -63,7 +63,7 @@ public class IncidEditAcTest_Mn2 extends IncidEditAbstractTest {
                     IncidenciaServ.regIncidImportancia(incidenciaJuan);
                     IncidenciaUser incidenciaUserDb = IncidenciaServ.seeIncidsOpenByComu(juanUserComu.getComunidad().getC_Id()).get(0);
                     incidenciaJuan = IncidenciaServ.seeIncidImportancia(incidenciaUserDb.getIncidencia().getIncidenciaId()).getIncidImportancia();
-                } catch (UiAppException | IOException | UiAarException e) {
+                } catch (UiAppException | IOException | UiException e) {
                     e.printStackTrace();
                 }
                 Intent intent = new Intent();
@@ -81,7 +81,7 @@ public class IncidEditAcTest_Mn2 extends IncidEditAbstractTest {
     }
 
     @Override
-    CleanUserEnum whatToClean()
+    AarActivityTestUtils.CleanUserEnum whatToClean()
     {
         return CLEAN_JUAN;
     }

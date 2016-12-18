@@ -1,6 +1,6 @@
 package com.didekinaar.utils;
 
-import com.didekinaar.exception.UiAarException;
+import com.didekinaar.exception.UiException;
 
 import java.io.IOException;
 
@@ -20,12 +20,12 @@ public final class AarServiceUtil {
     {
     }
 
-    public static <T> T getResponseBody(Response<T> response) throws UiAarException, IOException
+    public static <T> T getResponseBody(Response<T> response) throws UiException, IOException
     {
         if (response.isSuccessful()) {
             return response.body();
         } else {
-            throw new UiAarException(creator.get().getRetrofitHandler().getErrorBean(response));
+            throw new UiException(creator.get().getRetrofitHandler().getErrorBean(response));
         }
     }
 }

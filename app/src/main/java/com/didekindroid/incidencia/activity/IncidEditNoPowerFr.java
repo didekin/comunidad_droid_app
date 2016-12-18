@@ -14,21 +14,22 @@ import android.widget.TextView;
 import com.didekin.incidencia.dominio.IncidImportancia;
 import com.didekin.incidencia.dominio.Incidencia;
 import com.didekindroid.R;
-import com.didekindroid.incidencia.exception.UiAppException;
+import com.didekindroid.exception.UiAppException;
 import com.didekindroid.incidencia.activity.utils.ImportanciaSpinnerSettable;
 import com.didekindroid.incidencia.dominio.IncidImportanciaBean;
-import com.didekindroid.incidencia.repository.IncidenciaDataDbHelper;
+import com.didekindroid.incidencia.IncidenciaDataDbHelper;
 
 import java.util.Objects;
 
 import timber.log.Timber;
 
+import static com.didekinaar.utils.UIutils.checkPostExecute;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekinaar.utils.ConnectionUtils.checkInternetConnected;
 import static com.didekinaar.utils.UIutils.getErrorMsgBuilder;
 import static com.didekinaar.utils.UIutils.makeToast;
 import static com.didekindroid.incidencia.activity.utils.IncidSpinnersHelper.HELPER;
-import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
+import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 
 /**
  * User: pedro@didekin
@@ -178,6 +179,8 @@ public class IncidEditNoPowerFr extends Fragment implements ImportanciaSpinnerSe
         @Override
         protected void onPostExecute(Integer rowInserted)
         {
+            if (checkPostExecute(getActivity())) return;
+
             Timber.d("onPostExecute()");
 
             if (uiException != null) {

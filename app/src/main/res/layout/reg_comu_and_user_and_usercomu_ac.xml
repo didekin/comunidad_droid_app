@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView style="@style/baseLayout.scroll">
+
+    <android.support.design.widget.CoordinatorLayout
+        style="@style/baseLayout"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools">
+
+        <include layout="@layout/appbar_include_design"/>
+
+        <LinearLayout
+            android:id="@+id/reg_comu_usuario_usuariocomu_layout"
+            style="@style/baseLayout"
+            android:layout_marginTop="@dimen/app_bar_bottom_margin"
+            tools:context="com.didekindroid.com.didekinaar.usuario.RegComuAndUserAndUserComuAc">
+
+            <fragment
+                android:id="@+id/reg_comunidad_frg"
+                android:name="com.didekindroid.comunidad.RegComuFr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:layout="@layout/reg_comu_fr"/>
+
+            <fragment
+                android:id="@+id/reg_usercomu_frg"
+                android:name="com.didekindroid.usuariocomunidad.RegUserComuFr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:layout="@layout/reg_usercomu_fr"/>
+
+            <fragment
+                android:id="@+id/reg_user_frg"
+                android:name="com.didekinaar.usuario.RegUserFr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:layout="@layout/reg_user_fr"/>
+
+            <Button
+                android:id="@+id/reg_com_usuario_usuariocomu_button"
+                style="@style/textBase.acButton1"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/reg_usercomu_ac_button_rot"/>
+
+        </LinearLayout>
+    </android.support.design.widget.CoordinatorLayout>
+</ScrollView>

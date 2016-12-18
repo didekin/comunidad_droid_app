@@ -7,10 +7,10 @@ import com.didekin.incidencia.dominio.IncidAndResolBundle;
 import com.didekin.incidencia.dominio.IncidImportancia;
 import com.didekin.incidencia.dominio.Incidencia;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
-import com.didekinaar.exception.UiAarException;
-import com.didekindroid.incidencia.exception.UiAppException;
+import com.didekinaar.exception.UiException;
+import com.didekinaar.testutil.AarActivityTestUtils;
+import com.didekindroid.exception.UiAppException;
 import com.didekindroid.R;
-import com.didekinaar.testutil.CleanUserEnum;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -24,18 +24,18 @@ import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekinaar.usuariocomunidad.AarUserComuService.AarUserComuServ;
+import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkNoToastInTest;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
-import static com.didekinaar.testutil.AarActivityTestUtils.signUpAndUpdateTk;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.signUpAndUpdateTk;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.INCID_DEFAULT_DESC;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
-import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
-import static com.didekinaar.testutil.CleanUserEnum.CLEAN_PEPE;
-import static com.didekinaar.testutil.UsuarioTestUtils.COMU_ESCORIAL_PEPE;
+import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
+import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_ESCORIAL_PEPE;
 
 /**
  * User: pedro@didekin
@@ -62,7 +62,7 @@ public class IncidEditAcMaxPowerTest_2 extends IncidEditAbstractTest {
             {
                 try {
                     signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
-                    UsuarioComunidad pepeEscorial = AarUserComuServ.seeUserComusByUser().get(0);
+                    UsuarioComunidad pepeEscorial = AppUserComuServ.seeUserComusByUser().get(0);
                     IncidImportancia incidPepeEscorial = new IncidImportancia.IncidImportanciaBuilder(
                             doIncidencia(pepeEscorial.getUsuario().getUserName(), INCID_DEFAULT_DESC, pepeEscorial.getComunidad().getC_Id(), (short) 43))
                             .usuarioComunidad(pepeEscorial)
@@ -72,7 +72,7 @@ public class IncidEditAcMaxPowerTest_2 extends IncidEditAbstractTest {
                     Incidencia incidenciaDb = IncidenciaServ.seeIncidsOpenByComu(pepeEscorial.getComunidad().getC_Id()).get(0).getIncidencia();
                     incidResolBundlePepe = IncidenciaServ.seeIncidImportancia(incidenciaDb.getIncidenciaId());
                     incidenciaPepe = incidResolBundlePepe.getIncidImportancia();
-                } catch (UiAppException | IOException | UiAarException e) {
+                } catch (UiAppException | IOException | UiException e) {
                     e.printStackTrace();
                 }
                 Intent intent = new Intent();
@@ -90,7 +90,7 @@ public class IncidEditAcMaxPowerTest_2 extends IncidEditAbstractTest {
     }
 
     @Override
-    CleanUserEnum whatToClean()
+    AarActivityTestUtils.CleanUserEnum whatToClean()
     {
         return CLEAN_PEPE;
     }

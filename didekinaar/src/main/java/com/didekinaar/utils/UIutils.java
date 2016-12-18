@@ -1,10 +1,13 @@
 package com.didekinaar.utils;
 
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Build;
+import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -19,7 +22,7 @@ import android.widget.Toast;
 
 import com.didekin.common.exception.ErrorBean;
 import com.didekinaar.R;
-import com.didekinaar.exception.UiAarException;
+import com.didekinaar.exception.UiException;
 import com.didekinaar.security.TokenHandler;
 
 import java.sql.Timestamp;
@@ -57,6 +60,15 @@ public final class UIutils {
 
 //    ========================== ACTIVITIES ======================================
 
+    public static boolean checkPostExecute(Activity activity)
+    {
+        if (activity.isDestroyed() || activity.isChangingConfigurations()) {
+            Timber.i("onPostExcecute(): activity is already destroyed");
+            return true;
+        }
+        return false;
+    }
+
     public static void closeCursor(Adapter adapter)
     {
         CursorAdapter cursorAdapter;
@@ -85,13 +97,13 @@ public final class UIutils {
 
 //    ===========================  AUTHENTICATION ==============================
 
-    public static String checkBearerToken() throws UiAarException
+    public static String checkBearerToken() throws UiException
     {
         String bearerAccessTkHeader = TokenHandler.TKhandler.doBearerAccessTkHeader();
 
         if (bearerAccessTkHeader == null) { // No token in cache.
             ErrorBean errorBean = new ErrorBean(TOKEN_NULL.getHttpMessage(), TOKEN_NULL.getHttpStatus());
-            throw new UiAarException(errorBean);
+            throw new UiException(errorBean);
         }
         return bearerAccessTkHeader;
     }
@@ -145,9 +157,15 @@ public final class UIutils {
                 .append(LINE_BREAK.getRegexp());
     }
 
-    /*    ================================== EXCEPTIONS ======================================*/
+    /*    ================================== MENUS ======================================*/
 
-
+    public static void doUpMenu(Activity parentActivity)
+    {
+        Intent intent = NavUtils.getParentActivityIntent(parentActivity);
+        // We need both flags to reuse the intent of the parent activity.
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        NavUtils.navigateUpTo(parentActivity, intent);
+    }
 
     //    ================================== SHARED PREFERENCES ======================================
 

@@ -12,7 +12,134 @@
         android:theme="@style/themeOne"
         tools:ignore="UnusedAttribute"
         tools:node="replace">
-
+        <!-- **************************************************************** -->
+        <!-- USUARIO -->
+        <!-- **************************************************************** -->
+        <activity
+            android:name="com.didekindroid.comunidad.ComuDataAc"
+            android:label="@string/comu_data_ac_label"
+            android:parentActivityName="com.didekindroid.usuariocomunidad.UserComuDataAc"
+            android:windowSoftInputMode="stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.didekindroid.usuariocomunidad.UserComuDataAc"/>
+        </activity>
+        <activity
+            android:name="com.didekindroid.comunidad.ComuSearchAc"
+            android:label="@string/comu_search_ac_label"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="stateHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.didekindroid.comunidad.ComuSearchResultsAc"
+            android:label="@string/comu_search_results_ac_label"
+            android:parentActivityName="com.didekindroid.comunidad.ComuSearchAc">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.didekindroid.comunidad.ComuSearchAc"/>
+        </activity>
+        <activity
+            android:name="com.didekindroid.usuario.DeleteMeAppAc"
+            android:label="@string/delete_me_ac_label"
+            android:parentActivityName=".usuario.UserDataAppAc">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".usuario.UserDataAppAc"/>
+        </activity>
+        <activity
+            android:name=".usuario.LoginAppAc"
+            android:label="@string/login_label"
+            android:launchMode="singleInstance"
+            android:parentActivityName="com.didekindroid.comunidad.ComuSearchAc">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.didekindroid.comunidad.ComuSearchAc"/>
+        </activity>
+        <activity
+            android:name=".usuario.PasswordChangeAppAc"
+            android:label="@string/password_change_ac_label"
+            android:parentActivityName=".usuario.UserDataAppAc">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".usuario.UserDataAppAc"/>
+        </activity>
+        <activity
+            android:name="com.didekindroid.usuariocomunidad.RegComuAndUserAndUserComuAc"
+            android:label="@string/reg_comunidad_ac_label"
+            android:launchMode="singleTask"
+            android:parentActivityName="com.didekindroid.comunidad.ComuSearchAc"
+            android:windowSoftInputMode="stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.didekindroid.comunidad.ComuSearchResultsAc"/>
+        </activity>
+        <activity
+            android:name="com.didekindroid.usuariocomunidad.RegComuAndUserComuAc"
+            android:label="@string/reg_comunidad_ac_label"
+            android:launchMode="singleTask"
+            android:parentActivityName="com.didekindroid.comunidad.ComuSearchAc"
+            android:windowSoftInputMode="stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.didekindroid.comunidad.ComuSearchAc"/>
+        </activity>
+        <activity
+            android:name="com.didekindroid.usuariocomunidad.RegUserAndUserComuAc"
+            android:label="@string/reg_user_and_usercomu_ac_label"
+            android:parentActivityName="com.didekindroid.comunidad.ComuSearchResultsAc"
+            android:windowSoftInputMode="stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.didekindroid.comunidad.ComuSearchResultsAc"/>
+        </activity>
+        <activity
+            android:name="com.didekindroid.usuariocomunidad.RegUserComuAc"
+            android:label="@string/regusuario_comu_ac_label"
+            android:launchMode="singleTask"
+            android:parentActivityName="com.didekindroid.comunidad.ComuSearchResultsAc"
+            android:windowSoftInputMode="stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.didekindroid.comunidad.ComuSearchResultsAc"/>
+        </activity>
+        <activity
+            android:name="com.didekindroid.usuariocomunidad.SeeUserComuByComuAc"
+            android:label="@string/see_usercomu_by_comu_ac_label"
+            android:parentActivityName="com.didekindroid.usuariocomunidad.UserComuDataAc">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.didekindroid.usuariocomunidad.UserComuDataAc"/>
+        </activity>
+        <activity
+            android:name="com.didekindroid.usuariocomunidad.SeeUserComuByUserAc"
+            android:label="@string/see_usercomu_by_user_ac_label"
+            android:parentActivityName="com.didekindroid.comunidad.ComuSearchResultsAc">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.didekindroid.comunidad.ComuSearchResultsAc"/>
+        </activity>
+        <activity
+            android:name="com.didekindroid.usuariocomunidad.UserComuDataAc"
+            android:label="@string/usercomu_data_ac_label"
+            android:parentActivityName="com.didekindroid.usuariocomunidad.SeeUserComuByUserAc"
+            android:windowSoftInputMode="stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.didekindroid.usuariocomunidad.SeeUserComuByUserAc"/>
+        </activity>
+        <activity
+            android:name=".usuario.UserDataAppAc"
+            android:label="@string/user_data_ac_label"
+            android:parentActivityName="com.didekindroid.usuariocomunidad.SeeUserComuByUserAc"
+            android:windowSoftInputMode="stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.didekindroid.usuariocomunidad.SeeUserComuByUserAc"/>
+        </activity>
         <!-- **************************************************************** -->
         <!-- INCIDENCIA -->
         <!-- **************************************************************** -->
@@ -69,10 +196,10 @@
         <activity
             android:name=".incidencia.activity.IncidSeeOpenByComuAc"
             android:label="@string/incid_see_by_user_ac_label"
-            android:parentActivityName="com.didekinaar.usuariocomunidad.UserComuDataAc">
+            android:parentActivityName=".usuariocomunidad.UserComuDataAc">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.didekinaar.usuariocomunidad.UserComuDataAc"/>
+                android:value=".usuariocomunidad.UserComuDataAc"/>
         </activity>
         <activity
             android:name=".incidencia.activity.IncidSeeUserComuImportanciaAc"
@@ -84,7 +211,7 @@
         </activity>
         <!-- .......... GCM services ......... -->
         <service
-            android:name=".incidencia.gcm.AppFBService" android:exported="true"
+            android:name=".incidencia.AppFBService" android:exported="true"
             tools:ignore="ExportedService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>

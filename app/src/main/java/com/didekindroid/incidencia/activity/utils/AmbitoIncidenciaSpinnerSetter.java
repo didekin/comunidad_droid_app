@@ -10,7 +10,8 @@ import com.didekindroid.R;
 
 import timber.log.Timber;
 
-import static com.didekindroid.incidencia.repository.IncidenciaDataDb.AmbitoIncidencia.ambito;
+import static com.didekinaar.utils.UIutils.checkPostExecute;
+import static com.didekindroid.incidencia.IncidenciaDataDb.AmbitoIncidencia.ambito;
 
 /**
  * User: pedro@didekin
@@ -19,7 +20,6 @@ import static com.didekindroid.incidencia.repository.IncidenciaDataDb.AmbitoInci
  */
 class AmbitoIncidenciaSpinnerSetter<T extends Fragment & AmbitoSpinnerSettable> extends AsyncTask<Void, Void, Cursor> {
 
-    // TODO: to persist the task during restarts and properly cancel the task when the activity is destroyed. (Example in Shelves)
     private T mFragment;
 
     AmbitoIncidenciaSpinnerSetter(T mFragment)
@@ -37,6 +37,8 @@ class AmbitoIncidenciaSpinnerSetter<T extends Fragment & AmbitoSpinnerSettable> 
     @Override
     protected void onPostExecute(Cursor cursor)
     {
+        if (checkPostExecute(mFragment.getActivity())) return;
+
         Timber.d("onPostExecute()");
 
         String[] fromColDB = new String[]{ambito};

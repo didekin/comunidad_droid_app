@@ -11,7 +11,7 @@ public enum AarBundleKey {
     IS_MENU_IN_FRAGMENT_FLAG,
     ;
 
-    private static final String intentPackage =  "com.didekinaar.comunidad.ComuBundleKey.";
+    private static final String intentPackage =  "ComuBundleKey.";
 
     public final String key;
 

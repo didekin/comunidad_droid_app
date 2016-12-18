@@ -12,12 +12,13 @@ import android.view.View;
 import com.didekin.incidencia.dominio.IncidImportancia;
 import com.didekin.incidencia.dominio.Resolucion;
 import com.didekindroid.R;
-import com.didekindroid.incidencia.exception.UiAppException;
+import com.didekindroid.exception.UiAppException;
 
 import java.util.Objects;
 
 import timber.log.Timber;
 
+import static com.didekinaar.utils.UIutils.checkPostExecute;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_ACTIVITY_VIEW_ID;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
@@ -28,8 +29,8 @@ import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_COMMENTS_SEE_AC;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_COMMENT_REG_AC;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_RESOLUCION_REG_EDIT_AC;
-import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
-import static com.didekinaar.usuario.UserMenu.doUpMenu;
+import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
+import static com.didekinaar.utils.UIutils.doUpMenu;
 
 /**
  * Preconditions:
@@ -157,6 +158,8 @@ public class IncidEditAc extends AppCompatActivity {
         @Override
         protected void onPostExecute(Resolucion resolucion)
         {
+            if (checkPostExecute(IncidEditAc.this)) return;
+
             Timber.d("onPostExecute()");
 
             if (uiException != null) {

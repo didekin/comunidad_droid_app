@@ -3,12 +3,12 @@ package com.didekinaar.usuario;
 import android.app.IntentService;
 import android.content.Intent;
 
-import com.didekinaar.exception.UiAarException;
+import com.didekinaar.exception.UiException;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import timber.log.Timber;
 
-import static com.didekinaar.usuario.AarUsuarioService.AarUserServ;
+import static com.didekinaar.usuario.UsuarioService.AarUserServ;
 import static com.didekinaar.utils.UIutils.isRegisteredUser;
 import static com.didekinaar.utils.UIutils.updateIsGcmTokenSentServer;
 
@@ -37,7 +37,7 @@ public class AarFBRegIntentService extends IntentService {
                 AarUserServ.modifyUserGcmToken(token);
                 updateIsGcmTokenSentServer(true, this);
                 Timber.i("onHandleIntent(), GCM token registered: %s%n", token);
-        } catch (UiAarException e) {
+        } catch (UiException e) {
             updateIsGcmTokenSentServer(false, this);
             Timber.e("onHandleIntent(), exception: %s%n", e.getErrorBean().getMessage());
         }

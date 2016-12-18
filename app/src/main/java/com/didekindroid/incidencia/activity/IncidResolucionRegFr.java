@@ -14,7 +14,7 @@ import com.didekin.incidencia.dominio.IncidImportancia;
 import com.didekin.incidencia.dominio.Incidencia;
 import com.didekin.incidencia.dominio.Resolucion;
 import com.didekin.comunidad.Comunidad;
-import com.didekindroid.incidencia.exception.UiAppException;
+import com.didekindroid.exception.UiAppException;
 import com.didekindroid.R;
 import com.didekindroid.incidencia.dominio.ResolucionBean;
 
@@ -23,12 +23,13 @@ import java.util.Objects;
 
 import timber.log.Timber;
 
+import static com.didekinaar.utils.UIutils.checkPostExecute;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekinaar.utils.FechaPickerFr.FechaPickerHelper.initFechaSpinnerView;
 import static com.didekinaar.utils.ConnectionUtils.checkInternetConnected;
 import static com.didekinaar.utils.UIutils.getErrorMsgBuilder;
 import static com.didekinaar.utils.UIutils.makeToast;
-import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
+import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 
 /**
  * User: pedro@didekin
@@ -154,6 +155,8 @@ public class IncidResolucionRegFr extends IncidResolucionFrAbstract {
         @Override
         protected void onPostExecute(Integer rowInserted)
         {
+            if (checkPostExecute(getActivity())) return;
+
             Timber.d("onPostExecute()");
 
             if (uiException != null) {

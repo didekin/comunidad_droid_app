@@ -5,10 +5,10 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.usuariocomunidad.UsuarioComunidad;
-import com.didekinaar.exception.UiAarException;
-import com.didekinaar.testutil.CleanUserEnum;
+import com.didekinaar.exception.UiException;
+import com.didekinaar.testutil.AarActivityTestUtils;
 import com.didekindroid.R;
-import com.didekindroid.incidencia.exception.UiAppException;
+import com.didekindroid.exception.UiAppException;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,11 +22,11 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekin.usuariocomunidad.Rol.PRESIDENTE;
 import static com.didekinaar.testutil.AarActivityTestUtils.updateSecurityData;
-import static com.didekinaar.testutil.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
-import static com.didekinaar.testutil.UsuarioTestUtils.COMU_ESCORIAL_JUAN;
-import static com.didekinaar.testutil.UsuarioTestUtils.USER_JUAN;
-import static com.didekinaar.testutil.UsuarioTestUtils.USER_PEPE;
-import static com.didekinaar.usuariocomunidad.AarUserComuService.AarUserComuServ;
+import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_ESCORIAL_JUAN;
+import static com.didekinaar.usuario.testutil.UsuarioTestUtils.USER_JUAN;
+import static com.didekinaar.usuario.testutil.UsuarioTestUtils.USER_PEPE;
+import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidImportancia;
@@ -61,7 +61,7 @@ public class IncidResolucionSeeFrTest_1 extends IncidResolucionAbstractTest {
                     incidImportancia = insertGetIncidImportancia(COMU_ESCORIAL_JUAN);
                     Thread.sleep(1000);
                     // Necesitamos usuario con 'adm' para registrar resolución.
-                    assertThat(AarUserComuServ.regUserAndUserComu(
+                    assertThat(AppUserComuServ.regUserAndUserComu(
                             new UsuarioComunidad.UserComuBuilder(
                                     incidImportancia.getUserComu().getComunidad(), USER_PEPE).roles(PRESIDENTE.function)
                                     .build())
@@ -72,7 +72,7 @@ public class IncidResolucionSeeFrTest_1 extends IncidResolucionAbstractTest {
                     resolucion = insertGetResolucionNoAdvances(incidImportancia);
                     // Volvemos a usuario del test.
                     updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
-                } catch (UiAppException | InterruptedException | IOException | UiAarException e) {
+                } catch (UiAppException | InterruptedException | IOException | UiException e) {
                     e.printStackTrace();
                 }
                 Intent intent = new Intent();
@@ -84,7 +84,7 @@ public class IncidResolucionSeeFrTest_1 extends IncidResolucionAbstractTest {
     }
 
     @Override
-    CleanUserEnum whatToClean()
+    AarActivityTestUtils.CleanUserEnum whatToClean()
     {
         return CLEAN_JUAN_AND_PEPE;
     }

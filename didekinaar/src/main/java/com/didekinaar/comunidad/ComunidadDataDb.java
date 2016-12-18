@@ -16,7 +16,7 @@ public final class ComunidadDataDb {
     {
     }
 
-    static final String SQL_ENABLE_FK = "PRAGMA foreign_keys=ON;";
+    public static final String SQL_ENABLE_FK = "PRAGMA foreign_keys=ON;";
 
     public interface TipoVia extends BaseColumns {
 

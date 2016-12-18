@@ -9,11 +9,11 @@ import com.didekin.incidencia.dominio.IncidImportancia;
 import com.didekin.incidencia.dominio.Incidencia;
 import com.didekin.incidencia.dominio.IncidenciaUser;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
-import com.didekinaar.exception.UiAarException;
-import com.didekinaar.testutil.CleanUserEnum;
+import com.didekinaar.exception.UiException;
+import com.didekinaar.testutil.AarActivityTestUtils;
 import com.didekindroid.R;
-import com.didekindroid.incidencia.exception.UiAppException;
-import com.didekindroid.incidencia.repository.IncidenciaDataDbHelper;
+import com.didekindroid.exception.UiAppException;
+import com.didekindroid.incidencia.IncidenciaDataDbHelper;
 
 import org.junit.After;
 import org.junit.Before;
@@ -35,19 +35,19 @@ import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekin.usuariocomunidad.Rol.PROPIETARIO;
 import static com.didekinaar.testutil.AarActivityTestUtils.cleanOptions;
-import static com.didekinaar.testutil.AarActivityTestUtils.signUpAndUpdateTk;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.signUpAndUpdateTk;
 import static com.didekinaar.testutil.AarActivityTestUtils.updateSecurityData;
-import static com.didekinaar.testutil.UsuarioTestUtils.COMU_REAL_PEPE;
-import static com.didekinaar.testutil.UsuarioTestUtils.USER_JUAN;
-import static com.didekinaar.testutil.UsuarioTestUtils.makeUsuarioComunidad;
-import static com.didekinaar.usuariocomunidad.AarUserComuService.AarUserComuServ;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_REAL_PEPE;
+import static com.didekinaar.usuario.testutil.UsuarioTestUtils.USER_JUAN;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.makeUsuarioComunidad;
+import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_ACTIVITY_VIEW_ID;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_edit_ac_frgs_tag;
-import static com.didekindroid.incidencia.repository.IncidenciaDataDbHelperTest.DB_PATH;
+import static com.didekindroid.incidencia.IncidenciaDataDbHelperTest.DB_PATH;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidenciaUser;
-import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
+import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
@@ -126,7 +126,7 @@ public abstract class IncidEditAbstractTest {
 
     abstract IntentsTestRule<IncidEditAc> doIntentRule();
 
-    abstract CleanUserEnum whatToClean();
+    abstract AarActivityTestUtils.CleanUserEnum whatToClean();
 
     //  ===============================  HELPER METHODS ================================
 
@@ -135,7 +135,7 @@ public abstract class IncidEditAbstractTest {
     {
         try {
             signUpAndUpdateTk(COMU_REAL_PEPE);
-            pepeUserComu = AarUserComuServ.seeUserComusByUser().get(0);
+            pepeUserComu = AppUserComuServ.seeUserComusByUser().get(0);
             // Insertamos incidencia.
             IncidenciaUser incidenciaUser_1 = insertGetIncidenciaUser(pepeUserComu, 0);
             incidenciaPepe = IncidenciaServ.seeIncidImportancia(incidenciaUser_1.getIncidencia().getIncidenciaId()).getIncidImportancia();
@@ -143,13 +143,13 @@ public abstract class IncidEditAbstractTest {
             // Registro userComu en misma comunidad.
             UsuarioComunidad userComuJuan = makeUsuarioComunidad(pepeUserComu.getComunidad(), USER_JUAN,
                     "portal", "esc", "plantaX", "door12", PROPIETARIO.function);
-            AarUserComuServ.regUserAndUserComu(userComuJuan).execute();
+            AppUserComuServ.regUserAndUserComu(userComuJuan).execute();
             updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
             Thread.sleep(1000);
             Incidencia incidencia_2 = insertGetIncidenciaUser(incidenciaPepe.getIncidencia().getIncidenciaId(), userComuJuan, 2).getIncidencia();
             incidenciaJuan = IncidenciaServ.seeIncidImportancia(incidencia_2.getIncidenciaId()).getIncidImportancia();
 
-        } catch (UiAppException | InterruptedException | IOException | UiAarException e) {
+        } catch (UiAppException | InterruptedException | IOException | UiException e) {
             e.printStackTrace();
         }
         Intent intent = new Intent();

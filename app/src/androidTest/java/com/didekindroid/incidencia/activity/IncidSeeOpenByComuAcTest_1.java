@@ -9,10 +9,10 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.comunidad.Comunidad;
-import com.didekinaar.testutil.CleanUserEnum;
-import com.didekinaar.exception.UiAarException;
-import com.didekinaar.usuario.AarFBRegIntentService;
+import com.didekinaar.exception.UiException;
+import com.didekinaar.testutil.AarActivityTestUtils;
 import com.didekinaar.testutil.IdlingResourceForIntentServ;
+import com.didekinaar.usuario.AarFBRegIntentService;
 import com.didekindroid.R;
 
 import org.junit.After;
@@ -33,22 +33,22 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
 import static com.didekinaar.testutil.AarActivityTestUtils.cleanOptions;
 import static com.didekinaar.testutil.AarActivityTestUtils.clickNavigateUp;
-import static com.didekinaar.testutil.AarActivityTestUtils.regSeveralUserComuSameUser;
-import static com.didekinaar.usuariocomunidad.AarUserComuService.AarUserComuServ;
-import static com.didekinaar.comunidad.ComuBundleKey.COMUNIDAD_ID;
-import static com.didekinaar.testutil.CleanUserEnum.CLEAN_JUAN;
-import static com.didekinaar.testutil.UserMenuTestUtils.SEE_USERCOMU_BY_COMU_AC;
-import static com.didekinaar.testutil.UsuarioTestUtils.COMU_PLAZUELA5_JUAN;
-import static com.didekinaar.testutil.UsuarioTestUtils.COMU_REAL_JUAN;
+import static com.didekinaar.usuario.UsuarioService.AarUserServ;
 import static com.didekinaar.utils.UIutils.isRegisteredUser;
 import static com.didekinaar.utils.UIutils.updateIsGcmTokenSentServer;
-import static com.didekinaar.usuario.AarUsuarioService.AarUserServ;
-import static com.didekindroid.incidencia.gcm.AppFBService.IncidTypeMsgHandler.INCIDENCIA_OPEN;
+import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.incidencia.AppFBService.IncidTypeMsgHandler.INCIDENCIA_OPEN;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_REG_AC;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_CLOSED_BY_COMU_AC;
+import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.SEE_USERCOMU_BY_COMU_AC;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_PLAZUELA5_JUAN;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_REAL_JUAN;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.regSeveralUserComuSameUser;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -66,7 +66,7 @@ import static org.junit.Assert.fail;
 public class IncidSeeOpenByComuAcTest_1 {
 
     private IncidSeeOpenByComuAc mActivity;
-    private CleanUserEnum whatToClean = CLEAN_JUAN;
+    private AarActivityTestUtils.CleanUserEnum whatToClean = CLEAN_JUAN;
     IdlingResourceForIntentServ idlingResource;
     Comunidad comunidadInIntent;
     NotificationManager mNotifyManager;
@@ -86,7 +86,7 @@ public class IncidSeeOpenByComuAcTest_1 {
             updateIsGcmTokenSentServer(false, context);
             try {
                 Objects.equals(AarUserServ.getGcmToken() == null, true);
-            } catch (UiAarException e) {
+            } catch (UiException e) {
                 e.printStackTrace();
             }
 
@@ -101,14 +101,14 @@ public class IncidSeeOpenByComuAcTest_1 {
         {
             try {
                 regSeveralUserComuSameUser(COMU_REAL_JUAN, COMU_PLAZUELA5_JUAN);
-                comunidadInIntent = AarUserComuServ.seeUserComusByUser().get(0).getComunidad();
+                comunidadInIntent = AppUserComuServ.seeUserComusByUser().get(0).getComunidad();
                 Intent intent = new Intent();
                 intent.putExtra(COMUNIDAD_ID.key, comunidadInIntent.getC_Id());
                 return intent;
             } catch (IOException e) {
                 e.printStackTrace();
                 fail();
-            } catch (UiAarException e) {
+            } catch (UiException e) {
                 e.printStackTrace();
             }
             return null;

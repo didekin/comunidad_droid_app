@@ -1,8 +1,6 @@
 package com.didekinaar;
 
-import com.didekinaar.comunidad.AarComunidadSuite;
 import com.didekinaar.usuario.AarUsuarioSuite;
-import com.didekinaar.usuariocomunidad.AarUserComuSuite;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -14,10 +12,8 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        AarComunidadSuite.class,
         AarCommonSuite.class,
         AarUsuarioSuite.class,
-        AarUserComuSuite.class,
 })
 public class AarSuite {
 }

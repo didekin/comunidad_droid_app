@@ -9,8 +9,8 @@ import com.didekin.incidencia.dominio.Incidencia;
 import com.didekin.incidencia.dominio.IncidenciaUser;
 import com.didekin.incidencia.dominio.Resolucion;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
-import com.didekinaar.exception.UiAarException;
-import com.didekindroid.incidencia.exception.UiAppException;
+import com.didekinaar.exception.UiException;
+import com.didekindroid.exception.UiAppException;
 
 import org.junit.Assert;
 
@@ -19,10 +19,10 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.didekinaar.testutil.AarActivityTestUtils.signUpAndUpdateTk;
-import static com.didekinaar.usuariocomunidad.AarUserComuService.AarUserComuServ;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static com.didekinaar.utils.UIutils.getStringFromInteger;
-import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
+import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 import static org.hamcrest.CoreMatchers.is;
 
 /**
@@ -121,10 +121,10 @@ public final class IncidenciaTestUtils {
         return IncidenciaServ.seeIncidsOpenByComu(userComu.getComunidad().getC_Id()).get(0);
     }
 
-    public static IncidImportancia insertGetIncidImportancia(UsuarioComunidad userComu) throws UiAppException, IOException, UiAarException
+    public static IncidImportancia insertGetIncidImportancia(UsuarioComunidad userComu) throws UiAppException, IOException, UiException
     {
         signUpAndUpdateTk(userComu);
-        UsuarioComunidad userComuDb = AarUserComuServ.seeUserComusByUser().get(0);
+        UsuarioComunidad userComuDb = AppUserComuServ.seeUserComusByUser().get(0);
         IncidImportancia incidImportancia = new IncidImportancia.IncidImportanciaBuilder(
                 doIncidencia(userComuDb.getUsuario().getUserName(), INCID_DEFAULT_DESC, userComuDb.getComunidad().getC_Id(), (short) 43))
                 .usuarioComunidad(userComuDb)

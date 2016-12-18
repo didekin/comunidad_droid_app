@@ -7,20 +7,15 @@ import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.widget.DatePicker;
 
-import com.didekin.comunidad.Comunidad;
 import com.didekin.oauth2.SpringOauthToken;
 import com.didekin.usuario.Usuario;
-import com.didekin.usuariocomunidad.UsuarioComunidad;
 import com.didekinaar.R;
-import com.didekinaar.exception.UiAarException;
+import com.didekinaar.exception.UiException;
+import com.didekinaar.usuario.testutil.UsuarioTestUtils;
 
-import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.Objects;
 
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.KITKAT;
@@ -40,10 +35,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekinaar.PrimalCreator.creator;
 import static com.didekinaar.security.Oauth2Service.Oauth2;
 import static com.didekinaar.security.TokenHandler.TKhandler;
-import static com.didekinaar.testutil.UsuarioTestUtils.makeUsuarioComunidad;
-import static com.didekinaar.usuario.AarUsuarioService.AarUserServ;
-import static com.didekinaar.usuariocomunidad.AarUserComuService.AarUserComuServ;
-import static com.didekinaar.usuariocomunidad.RolUi.ADM;
+import static com.didekinaar.usuario.UsuarioService.AarUserServ;
 import static com.didekinaar.utils.UIutils.updateIsRegistered;
 import static java.util.Calendar.DAY_OF_MONTH;
 import static java.util.Calendar.MONTH;
@@ -64,15 +56,14 @@ public final class AarActivityTestUtils {
     {
     }
 
-
-    public static void cleanOneUser(Usuario usuario) throws UiAarException
+    public static void cleanOneUser(Usuario usuario) throws UiException
     {
         updateSecurityData(usuario.getUserName(), usuario.getPassword());
         AarUserServ.deleteUser();
         cleanWithTkhandler();
     }
 
-    public static void cleanTwoUsers(Usuario usuarioOne, Usuario usuarioTwo) throws UiAarException
+    public static void cleanTwoUsers(Usuario usuarioOne, Usuario usuarioTwo) throws UiException
     {
         cleanOneUser(usuarioOne);
         cleanOneUser(usuarioTwo);
@@ -90,7 +81,7 @@ public final class AarActivityTestUtils {
         updateIsRegistered(false, context);
     }
 
-    public static void cleanOptions(CleanUserEnum whatClean) throws  UiAarException
+    public static void cleanOptions(CleanUserEnum whatClean) throws UiException
     {
         switch (whatClean) {
             case CLEAN_TK_HANDLER:
@@ -180,7 +171,7 @@ public final class AarActivityTestUtils {
 
     //    ============================ SECURITY ============================
 
-    public static void updateSecurityData(String userName, String password) throws UiAarException
+    public static void updateSecurityData(String userName, String password) throws UiException
     {
         SpringOauthToken token = Oauth2.getPasswordUserToken(userName, password);
         TKhandler.initTokenAndBackupFile(token);
@@ -215,42 +206,17 @@ public final class AarActivityTestUtils {
                 .check(doesNotExist());
     }
 
-    public static Usuario signUpAndUpdateTk(UsuarioComunidad usuarioComunidad) throws IOException, UiAarException
-    {
-        AarUserComuServ.regComuAndUserAndUserComu(usuarioComunidad).execute().body();
-        updateSecurityData(usuarioComunidad.getUsuario().getUserName(), usuarioComunidad.getUsuario().getPassword());
-        return AarUserServ.getUserData();
-    }
+//  ================================ HELPER CLASSES ============================
 
-    public static void regTwoUserComuSameUser(List<UsuarioComunidad> usuarioComunidadList) throws IOException, UiAarException
-    {
-        signUpAndUpdateTk(usuarioComunidadList.get(0));
-        AarUserComuServ.regComuAndUserComu(usuarioComunidadList.get(1));
-    }
+    public enum CleanUserEnum {
 
-    public static void regThreeUserComuSameUser(List<UsuarioComunidad> usuarioComunidadList, Comunidad comunidad) throws IOException, UiAarException
-    {
-        regTwoUserComuSameUser(usuarioComunidadList);
-        UsuarioComunidad usuarioComunidad = makeUsuarioComunidad(comunidad, usuarioComunidadList.get(0).getUsuario(),
-                null, null, "plan-5", null, ADM.function);
-        AarUserComuServ.regComuAndUserComu(usuarioComunidad);
-    }
-
-    public static void regSeveralUserComuSameUser(UsuarioComunidad... userComus) throws IOException, UiAarException
-    {
-        Objects.equals(userComus.length > 0, true);
-        signUpAndUpdateTk(userComus[0]);
-        for (int i = 1; i < userComus.length; i++) {
-            AarUserComuServ.regComuAndUserComu(userComus[i]);
-        }
-    }
-
-    public static List<UsuarioComunidad> makeListTwoUserComu()
-    {
-        // Dos comunidades diferentes con un mismo userComu.
-        List<UsuarioComunidad> userComuList = new ArrayList<>(2);
-        userComuList.add(UsuarioTestUtils.COMU_REAL_JUAN);
-        userComuList.add(UsuarioTestUtils.COMU_PLAZUELA5_JUAN);
-        return userComuList;
+        CLEAN_JUAN,
+        CLEAN_PEPE,
+        CLEAN_JUAN_AND_PEPE,
+        CLEAN_JUAN2_AND_PEPE,
+        CLEAN_TK_HANDLER,
+        CLEAN_NOTHING,
+        CLEAN_JUAN2,
+        ;
     }
 }

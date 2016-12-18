@@ -19,14 +19,15 @@ import com.didekin.comunidad.Comunidad;
 import com.didekindroid.R;
 import com.didekindroid.incidencia.activity.utils.ComuSpinnerSettable;
 import com.didekindroid.incidencia.activity.utils.ComunidadSpinnerSetter;
-import com.didekindroid.incidencia.exception.UiAppException;
+import com.didekindroid.exception.UiAppException;
 
 import java.util.List;
 import java.util.Objects;
 
 import timber.log.Timber;
 
-import static com.didekinaar.comunidad.ComuBundleKey.COMUNIDAD_LIST_INDEX;
+import static com.didekinaar.utils.UIutils.checkPostExecute;
+import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_LIST_INDEX;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCIDENCIA_LIST_INDEX;
 
 /**
@@ -198,6 +199,8 @@ public class IncidSeeByComuListFr extends Fragment implements ComuSpinnerSettabl
         @Override
         protected void onPostExecute(List<IncidenciaUser> incidencias)
         {
+            if (checkPostExecute(getActivity())) return;
+
             Timber.d("onPostExecute()");
             if (incidencias != null && incidencias.size() > 0) {
                 Timber.d("onPostExecute(): incidUserComuList != null");

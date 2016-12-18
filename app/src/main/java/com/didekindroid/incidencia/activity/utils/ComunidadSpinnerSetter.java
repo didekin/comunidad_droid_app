@@ -6,7 +6,7 @@ import android.support.v4.app.Fragment;
 import android.widget.ArrayAdapter;
 
 import com.didekin.comunidad.Comunidad;
-import com.didekinaar.exception.UiAarException;
+import com.didekinaar.exception.UiException;
 import com.didekindroid.R;
 
 import java.util.List;
@@ -14,7 +14,8 @@ import java.util.Objects;
 
 import timber.log.Timber;
 
-import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
+import static com.didekinaar.utils.UIutils.checkPostExecute;
+import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 
 /**
  * User: pedro@didekin
@@ -23,7 +24,7 @@ import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaSer
  */
 public class ComunidadSpinnerSetter<T extends Fragment & ComuSpinnerSettable> extends AsyncTask<Void, Void, List<Comunidad>> {
 
-    private UiAarException uiException;
+    private UiException uiException;
     private T mFragment;
 
     public ComunidadSpinnerSetter(T mFragment)
@@ -38,7 +39,7 @@ public class ComunidadSpinnerSetter<T extends Fragment & ComuSpinnerSettable> ex
         List<Comunidad> comunidadesByUser = null;
         try {
             comunidadesByUser = IncidenciaServ.getComusByUser();
-        } catch (UiAarException e) {
+        } catch (UiException e) {
             uiException = e;
         }
         return comunidadesByUser;
@@ -47,6 +48,8 @@ public class ComunidadSpinnerSetter<T extends Fragment & ComuSpinnerSettable> ex
     @Override
     protected void onPostExecute(List<Comunidad> comunidades)
     {
+        if (checkPostExecute(mFragment.getActivity())) return;
+
         if (comunidades != null) {
             Timber.d("onPostExecute(): comunidades != null");
             ArrayAdapter<Comunidad> comunidadesAdapter = new ArrayAdapter<>(

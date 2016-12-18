@@ -19,8 +19,6 @@ import org.junit.runner.RunWith;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static com.didekin.common.exception.DidekinExceptionMsg.COMUNIDAD_NOT_FOUND;
-import static com.didekin.common.exception.DidekinExceptionMsg.GENERIC_INTERNAL_ERROR;
 import static com.didekin.common.exception.DidekinExceptionMsg.ROLES_NOT_FOUND;
 import static com.didekin.common.exception.DidekinExceptionMsg.USER_DATA_NOT_MODIFIED;
 import static com.didekinaar.security.TokenHandler.TKhandler;
@@ -84,26 +82,9 @@ public class UiAarExceptionTests {
     }
 
     @Test
-    public void testGeneric() throws Exception
-    {
-        final UiAarException ue = new UiAarException(new ErrorBean(GENERIC_INTERNAL_ERROR));
-
-        mActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                ue.processMe(mActivity, new Intent());
-            }
-        });
-
-        checkToastInTest(R.string.exception_generic_message, mActivity);
-        onView(ViewMatchers.withId(R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));
-    }
-
-    @Test
     public void testLogin() throws Exception
     {
-        final UiAarException ue = new UiAarException(new ErrorBean(ROLES_NOT_FOUND));
+        final UiException ue = new UiException(new ErrorBean(ROLES_NOT_FOUND));
 
         mActivity.runOnUiThread(new Runnable() {
             @Override
@@ -118,29 +99,13 @@ public class UiAarExceptionTests {
     }
 
     @Test
-    public void testSearchComu() throws Exception
-    {
-        final UiAarException ue = new UiAarException(new ErrorBean(COMUNIDAD_NOT_FOUND));
-
-        mActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                ue.processMe(mActivity, new Intent());
-            }
-        });
-        checkToastInTest(R.string.comunidad_not_found_message, mActivity);
-        onView(ViewMatchers.withId(R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));
-    }
-
-    @Test
     public void testUserDataAc() throws Exception
     {
         // Preconditions.
         assertThat(isRegisteredUser(mActivity), is(true));
         assertThat(TKhandler.getTokenInCache(), notNullValue());
 
-        final UiAarException ue = new UiAarException(new ErrorBean(USER_DATA_NOT_MODIFIED));
+        final UiException ue = new UiException(new ErrorBean(USER_DATA_NOT_MODIFIED));
         mActivity.runOnUiThread(new Runnable() {
             @Override
             public void run()

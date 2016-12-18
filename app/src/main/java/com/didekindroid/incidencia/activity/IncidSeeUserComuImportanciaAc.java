@@ -13,7 +13,7 @@ import timber.log.Timber;
 
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekinaar.utils.UIutils.doToolBar;
-import static com.didekinaar.usuario.UserMenu.doUpMenu;
+import static com.didekinaar.utils.UIutils.doUpMenu;
 
 /**
  * Preconditions:

@@ -4,7 +4,7 @@ import android.widget.CursorAdapter;
 import android.widget.Spinner;
 
 import com.didekindroid.incidencia.dominio.IncidenciaBean;
-import com.didekindroid.incidencia.repository.IncidenciaDataDbHelper;
+import com.didekindroid.incidencia.IncidenciaDataDbHelper;
 
 /**
  * User: pedro@didekin

@@ -10,14 +10,16 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.didekinaar.R;
-import com.didekinaar.exception.UiAarException;
+import com.didekinaar.exception.UiException;
+import com.didekinaar.usuario.userdata.UserDataAc;
 import com.didekinaar.utils.ConnectionUtils;
 
 import java.util.Objects;
 
 import timber.log.Timber;
 
-import static com.didekinaar.usuario.AarUsuarioService.AarUserServ;
+import static com.didekinaar.usuario.UsuarioService.AarUserServ;
+import static com.didekinaar.utils.UIutils.checkPostExecute;
 import static com.didekinaar.utils.UIutils.doToolBar;
 import static com.didekinaar.utils.UIutils.getErrorMsgBuilder;
 import static com.didekinaar.utils.UIutils.isRegisteredUser;
@@ -32,6 +34,8 @@ import static com.didekinaar.utils.UIutils.makeToast;
  */
 @SuppressWarnings("ConstantConditions")
 public class PasswordChangeAc extends AppCompatActivity {
+
+    // TODO: implementación en app, extendiendo esta clase.
 
     private View mAcView;
 
@@ -90,7 +94,7 @@ public class PasswordChangeAc extends AppCompatActivity {
 
     class PasswordModifyer extends AsyncTask<String, Void, Integer> {
 
-        UiAarException uiException;
+        UiException uiException;
 
         @Override
         protected Integer doInBackground(String... params)
@@ -99,7 +103,7 @@ public class PasswordChangeAc extends AppCompatActivity {
             int passwordChange = 0;
             try {
                 passwordChange = AarUserServ.passwordChange(params[0]);
-            } catch (UiAarException e) {
+            } catch (UiException e) {
                 uiException = e;
             }
             return passwordChange;
@@ -108,8 +112,11 @@ public class PasswordChangeAc extends AppCompatActivity {
         @Override
         protected void onPostExecute(Integer passwordUpdate)
         {
+            if (checkPostExecute(PasswordChangeAc.this)) return;
+
             Timber.d("onPostExecute(): DONE");
             if (uiException != null) {
+                // TODO: en todos los 'processMe' de didekinaar hay que verificar que el mensaje en UiException es GENERIC_ERROR.
                 uiException.processMe(PasswordChangeAc.this, new Intent());
             } else {
                 Objects.equals(passwordUpdate == 1, true);

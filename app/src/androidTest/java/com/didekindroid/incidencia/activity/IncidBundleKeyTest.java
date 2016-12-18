@@ -4,11 +4,11 @@ import com.didekindroid.incidencia.activity.utils.IncidBundleKey;
 
 import org.junit.Test;
 
-import static com.didekinaar.comunidad.ComuBundleKey.COMUNIDAD_ID;
-import static com.didekinaar.comunidad.ComuBundleKey.COMUNIDAD_LIST_INDEX;
-import static com.didekinaar.comunidad.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
-import static com.didekinaar.comunidad.ComuBundleKey.COMUNIDAD_SEARCH;
-import static com.didekinaar.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;
+import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_LIST_INDEX;
+import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
+import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_SEARCH;
+import static com.didekindroid.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 

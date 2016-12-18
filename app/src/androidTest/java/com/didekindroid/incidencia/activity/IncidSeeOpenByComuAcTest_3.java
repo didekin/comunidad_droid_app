@@ -9,11 +9,11 @@ import com.didekin.incidencia.dominio.IncidImportancia;
 import com.didekin.incidencia.dominio.Incidencia;
 import com.didekin.incidencia.dominio.IncidenciaUser;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
-import com.didekinaar.exception.UiAarException;
-import com.didekinaar.testutil.CleanUserEnum;
+import com.didekinaar.exception.UiException;
+import com.didekinaar.testutil.AarActivityTestUtils;
 import com.didekindroid.R;
-import com.didekindroid.incidencia.exception.UiAppException;
-import com.didekindroid.incidencia.repository.IncidenciaDataDbHelper;
+import com.didekindroid.exception.UiAppException;
+import com.didekindroid.incidencia.IncidenciaDataDbHelper;
 
 import org.junit.After;
 import org.junit.Before;
@@ -40,19 +40,19 @@ import static com.didekin.usuariocomunidad.Rol.PROPIETARIO;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
 import static com.didekinaar.testutil.AarActivityTestUtils.cleanOptions;
 import static com.didekinaar.testutil.AarActivityTestUtils.clickNavigateUp;
-import static com.didekinaar.testutil.AarActivityTestUtils.signUpAndUpdateTk;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.signUpAndUpdateTk;
 import static com.didekinaar.testutil.AarActivityTestUtils.updateSecurityData;
-import static com.didekinaar.testutil.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
-import static com.didekinaar.testutil.UsuarioTestUtils.COMU_REAL_PEPE;
-import static com.didekinaar.testutil.UsuarioTestUtils.USER_JUAN;
-import static com.didekinaar.testutil.UsuarioTestUtils.makeUsuarioComunidad;
-import static com.didekinaar.usuariocomunidad.AarUserComuService.AarUserComuServ;
+import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_REAL_PEPE;
+import static com.didekinaar.usuario.testutil.UsuarioTestUtils.USER_JUAN;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.makeUsuarioComunidad;
+import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
-import static com.didekindroid.incidencia.repository.IncidenciaDataDbHelperTest.DB_PATH;
+import static com.didekindroid.incidencia.IncidenciaDataDbHelperTest.DB_PATH;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidenciaUser;
-import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
+import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 import static org.hamcrest.CoreMatchers.is;
 
 /**
@@ -64,7 +64,7 @@ import static org.hamcrest.CoreMatchers.is;
 @RunWith(AndroidJUnit4.class)
 public class IncidSeeOpenByComuAcTest_3 {
 
-    private CleanUserEnum whatToClean = CLEAN_JUAN_AND_PEPE;
+    private AarActivityTestUtils.CleanUserEnum whatToClean = CLEAN_JUAN_AND_PEPE;
     private IncidSeeOpenByComuAdapter adapter;
     UsuarioComunidad userComuJuan;
 
@@ -88,15 +88,15 @@ public class IncidSeeOpenByComuAcTest_3 {
         {
             try {
                 signUpAndUpdateTk(COMU_REAL_PEPE);
-                UsuarioComunidad pepeUserComu = AarUserComuServ.seeUserComusByUser().get(0);
+                UsuarioComunidad pepeUserComu = AppUserComuServ.seeUserComusByUser().get(0);
                 // Insertamos incidencia.
                 insertGetIncidenciaUser(pepeUserComu, 1);
                 // Registro userComu en misma comunidad.
                 userComuJuan = makeUsuarioComunidad(pepeUserComu.getComunidad(), USER_JUAN,
                         "portal", "esc", "plantaX", "door12", PROPIETARIO.function);
-                AarUserComuServ.regUserAndUserComu(userComuJuan).execute();
+                AppUserComuServ.regUserAndUserComu(userComuJuan).execute();
                 updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
-            } catch (UiAppException | IOException | UiAarException e) {
+            } catch (UiAppException | IOException | UiException e) {
                 e.printStackTrace();
             }
             FragmentManager.enableDebugLogging(true);

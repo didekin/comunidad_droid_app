@@ -5,9 +5,9 @@ import android.support.v4.app.Fragment;
 
 import com.didekin.incidencia.dominio.IncidImportancia;
 import com.didekin.incidencia.dominio.Resolucion;
+import com.didekinaar.testutil.AarActivityTestUtils;
 import com.didekindroid.R;
 import com.didekinaar.utils.UIutils;
-import com.didekinaar.testutil.CleanUserEnum;
 
 import org.junit.After;
 import org.junit.Before;
@@ -89,7 +89,7 @@ public abstract class IncidResolucionAbstractTest {
 
     abstract IntentsTestRule<IncidResolucionRegEditSeeAc> doIntentRule();
 
-    abstract CleanUserEnum whatToClean();
+    abstract AarActivityTestUtils.CleanUserEnum whatToClean();
 
     //  ===============================  HELPER METHODS ================================
 

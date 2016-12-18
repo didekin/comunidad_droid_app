@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.didekinaar.R;
 
@@ -105,6 +106,22 @@ public class RegUserFr extends Fragment {
     {
         Timber.d("getFragmentView()");
         return mRegUsuarioFrView;
+    }
+
+//  ===================== STATIC HELPER METHODS ==========================
+
+    public static UsuarioBean makeUserBeanFromRegUserFrView(View usuarioRegView)
+    {
+        return new UsuarioBean(
+                ((EditText) usuarioRegView.findViewById(R.id.reg_usuario_email_editT)).getText()
+                        .toString(),
+                ((EditText) usuarioRegView.findViewById(R.id.reg_usuario_alias_ediT)).getText()
+                        .toString(),
+                ((EditText) usuarioRegView.findViewById(R.id.reg_usuario_password_ediT)).getText()
+                        .toString(),
+                ((EditText) usuarioRegView.findViewById(R.id.reg_usuario_password_confirm_ediT)).getText()
+                        .toString()
+        );
     }
 
 }

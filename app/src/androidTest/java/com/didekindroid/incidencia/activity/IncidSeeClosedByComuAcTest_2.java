@@ -13,13 +13,12 @@ import com.didekin.incidencia.dominio.Incidencia;
 import com.didekin.incidencia.dominio.IncidenciaUser;
 import com.didekin.incidencia.dominio.Resolucion;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
-import com.didekinaar.exception.UiAarException;
+import com.didekinaar.exception.UiException;
 import com.didekinaar.testutil.AarActivityTestUtils;
-import com.didekinaar.testutil.CleanUserEnum;
 import com.didekindroid.R;
 import com.didekindroid.incidencia.activity.utils.IncidBundleKey;
-import com.didekindroid.incidencia.exception.UiAppException;
-import com.didekindroid.incidencia.repository.IncidenciaDataDbHelper;
+import com.didekindroid.exception.UiAppException;
+import com.didekindroid.incidencia.IncidenciaDataDbHelper;
 
 import org.junit.After;
 import org.junit.Before;
@@ -48,21 +47,21 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
 import static com.didekinaar.testutil.AarActivityTestUtils.cleanOptions;
 import static com.didekinaar.testutil.AarActivityTestUtils.clickNavigateUp;
-import static com.didekinaar.testutil.AarActivityTestUtils.regSeveralUserComuSameUser;
-import static com.didekinaar.testutil.CleanUserEnum.CLEAN_PEPE;
-import static com.didekinaar.testutil.UsuarioTestUtils.COMU_LA_FUENTE_PEPE;
-import static com.didekinaar.testutil.UsuarioTestUtils.COMU_PLAZUELA5_PEPE;
-import static com.didekinaar.testutil.UsuarioTestUtils.USER_PEPE;
-import static com.didekinaar.usuariocomunidad.AarUserComuService.AarUserComuServ;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.regSeveralUserComuSameUser;
+import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_LA_FUENTE_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_PLAZUELA5_PEPE;
+import static com.didekinaar.usuario.testutil.UsuarioTestUtils.USER_PEPE;
+import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static com.didekinaar.utils.UIutils.formatTimeStampToString;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_resolucion_see_fr_tag;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
-import static com.didekindroid.incidencia.repository.IncidenciaDataDbHelperTest.DB_PATH;
+import static com.didekindroid.incidencia.IncidenciaDataDbHelperTest.DB_PATH;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.RESOLUCION_DEFAULT_DESC;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doResolucionAvances;
-import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
+import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
@@ -83,7 +82,7 @@ import static org.junit.Assert.assertThat;
 public class IncidSeeClosedByComuAcTest_2 {
 
     private IncidSeeClosedByComuAc mActivity;
-    private CleanUserEnum whatToClean;
+    private AarActivityTestUtils.CleanUserEnum whatToClean;
     UsuarioComunidad mPepePlazuelas5;
     UsuarioComunidad mPepeLaFuente;
     IncidImportancia incidPepePlazuelas5_1;
@@ -102,8 +101,8 @@ public class IncidSeeClosedByComuAcTest_2 {
         {
             try {
                 regSeveralUserComuSameUser(COMU_PLAZUELA5_PEPE, COMU_LA_FUENTE_PEPE);
-                mPepeLaFuente = AarUserComuServ.seeUserComusByUser().get(0);
-                mPepePlazuelas5 = AarUserComuServ.seeUserComusByUser().get(1);
+                mPepeLaFuente = AppUserComuServ.seeUserComusByUser().get(0);
+                mPepePlazuelas5 = AppUserComuServ.seeUserComusByUser().get(1);
                 incidPepePlazuelas5_1 = new IncidImportancia.IncidImportanciaBuilder(
                         doIncidencia(USER_PEPE.getUserName(), "Incid_pepePlazuelas_1", mPepePlazuelas5.getComunidad().getC_Id(), (short) 12))
                         .usuarioComunidad(mPepePlazuelas5)
@@ -159,7 +158,7 @@ public class IncidSeeClosedByComuAcTest_2 {
                 Thread.sleep(1000);
                 FragmentManager.enableDebugLogging(true);
 
-            } catch (UiAppException | InterruptedException | IOException | UiAarException e) {
+            } catch (UiAppException | InterruptedException | IOException | UiException e) {
                 e.printStackTrace();
             }
         }

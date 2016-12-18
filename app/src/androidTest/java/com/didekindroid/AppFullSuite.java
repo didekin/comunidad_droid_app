@@ -1,9 +1,7 @@
 package com.didekindroid;
 
-import com.didekindroid.gcm.GcmBroadCastNotificationActivityTest;
-import com.didekindroid.gcm.GcmRequestTest;
-import com.didekindroid.incidencia.IncidFunctionalSuite;
-import com.didekindroid.incidencia.IncidSupportSuite;
+import com.didekindroid.incidencia.IncidSuiteFunctional;
+import com.didekindroid.incidencia.IncidSuiteSupport;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -15,8 +13,7 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        IncidFunctionalSuite.class,
-        IncidSupportSuite.class,
+        IncidSuiteFunctional.class,
 })
 public class AppFullSuite {
 }

@@ -9,29 +9,30 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 
+import com.didekin.comunidad.Comunidad;
 import com.didekin.incidencia.dominio.IncidAndResolBundle;
 import com.didekin.incidencia.dominio.Incidencia;
 import com.didekin.incidencia.dominio.IncidenciaUser;
-import com.didekin.comunidad.Comunidad;
-import com.didekindroid.incidencia.exception.UiAppException;
 import com.didekindroid.R;
+import com.didekindroid.exception.UiAppException;
 
 import java.util.List;
 import java.util.Objects;
 
 import timber.log.Timber;
 
-import static com.didekinaar.comunidad.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekinaar.gcm.GcmUtils.getGcmToken;
+import static com.didekinaar.utils.UIutils.checkPostExecute;
+import static com.didekinaar.utils.UIutils.doToolBar;
+import static com.didekinaar.utils.UIutils.doUpMenu;
+import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
-import static com.didekinaar.utils.UIutils.doToolBar;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_CLOSED_BY_COMU_AC;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_REG_AC;
-import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
-import static com.didekinaar.usuario.UserMenu.SEE_USERCOMU_BY_COMU_AC;
-import static com.didekinaar.usuario.UserMenu.doUpMenu;
+import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
+import static com.didekindroid.usuariocomunidad.UserComuMenu.SEE_USERCOMU_BY_COMU_AC;
 
 /**
  * This activity is a point of registration for receiving GCM notifications of new incidents.
@@ -184,6 +185,8 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements
         @Override
         protected void onPostExecute(IncidAndResolBundle incidAndResolBundle)
         {
+            if (checkPostExecute(IncidSeeOpenByComuAc.this)) return;
+
             Timber.d("onPostExecute()");
 
             if (uiException != null) {

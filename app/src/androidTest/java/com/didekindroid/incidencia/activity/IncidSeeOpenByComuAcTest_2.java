@@ -8,11 +8,11 @@ import com.didekin.incidencia.dominio.IncidImportancia;
 import com.didekin.incidencia.dominio.Incidencia;
 import com.didekin.incidencia.dominio.IncidenciaUser;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
-import com.didekinaar.exception.UiAarException;
-import com.didekinaar.testutil.CleanUserEnum;
+import com.didekinaar.exception.UiException;
+import com.didekinaar.testutil.AarActivityTestUtils;
 import com.didekindroid.R;
-import com.didekindroid.incidencia.exception.UiAppException;
-import com.didekindroid.incidencia.repository.IncidenciaDataDbHelper;
+import com.didekindroid.exception.UiAppException;
+import com.didekindroid.incidencia.IncidenciaDataDbHelper;
 
 import org.junit.After;
 import org.junit.Before;
@@ -40,19 +40,19 @@ import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
 import static com.didekinaar.testutil.AarActivityTestUtils.cleanOptions;
-import static com.didekinaar.testutil.AarActivityTestUtils.regSeveralUserComuSameUser;
-import static com.didekinaar.testutil.CleanUserEnum.CLEAN_JUAN;
-import static com.didekinaar.testutil.UsuarioTestUtils.COMU_LA_PLAZUELA_5;
-import static com.didekinaar.testutil.UsuarioTestUtils.COMU_PLAZUELA5_JUAN;
-import static com.didekinaar.testutil.UsuarioTestUtils.COMU_REAL_JUAN;
-import static com.didekinaar.usuariocomunidad.AarUserComuService.AarUserComuServ;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.regSeveralUserComuSameUser;
+import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_JUAN;
+import static com.didekindroid.comunidad.testutil.ComuTestUtil.COMU_LA_PLAZUELA_5;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_PLAZUELA5_JUAN;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_REAL_JUAN;
+import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static com.didekinaar.utils.UIutils.formatTimeStampToString;
 import static com.didekinaar.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
-import static com.didekindroid.incidencia.repository.IncidenciaDataDbHelperTest.DB_PATH;
+import static com.didekindroid.incidencia.IncidenciaDataDbHelperTest.DB_PATH;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
-import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
+import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -69,7 +69,7 @@ import static org.junit.Assert.assertThat;
 public class IncidSeeOpenByComuAcTest_2 {
 
     private IncidSeeOpenByComuAc mActivity;
-    private CleanUserEnum whatToClean = CLEAN_JUAN;
+    private AarActivityTestUtils.CleanUserEnum whatToClean = CLEAN_JUAN;
     UsuarioComunidad juanReal;
     UsuarioComunidad juanPlazuela;
     IncidImportancia incidJuanReal1;
@@ -99,8 +99,8 @@ public class IncidSeeOpenByComuAcTest_2 {
         {
             try {
                 regSeveralUserComuSameUser(COMU_REAL_JUAN, COMU_PLAZUELA5_JUAN);
-                juanReal = AarUserComuServ.seeUserComusByUser().get(0);
-                juanPlazuela = AarUserComuServ.seeUserComusByUser().get(1);
+                juanReal = AppUserComuServ.seeUserComusByUser().get(0);
+                juanPlazuela = AppUserComuServ.seeUserComusByUser().get(1);
                 incidJuanReal1 = new IncidImportancia.IncidImportanciaBuilder(
                         doIncidencia(juanReal.getUsuario().getUserName(), "Incidencia Real One", juanReal.getComunidad().getC_Id(), (short) 43))
                         .usuarioComunidad(juanReal)
@@ -116,7 +116,7 @@ public class IncidSeeOpenByComuAcTest_2 {
                 IncidenciaServ.regIncidImportancia(incidJuanReal1);
                 IncidenciaServ.regIncidImportancia(incidJuanReal2);
                 IncidenciaServ.regIncidImportancia(incidJuanPlazuela1);
-            } catch (UiAppException | IOException | UiAarException e) {
+            } catch (UiAppException | IOException | UiException e) {
                 e.printStackTrace();
             }
         }

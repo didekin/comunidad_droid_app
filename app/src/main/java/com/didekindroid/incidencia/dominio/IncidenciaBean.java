@@ -11,7 +11,7 @@ import com.didekindroid.R;
 
 import static com.didekin.common.dominio.ValidDataPatterns.LINE_BREAK;
 import static com.didekin.incidencia.dominio.IncidDataPatterns.INCID_DESC;
-import static com.didekindroid.incidencia.repository.IncidenciaDataDb.AmbitoIncidencia.AMBITO_INCID_COUNT;
+import static com.didekindroid.incidencia.IncidenciaDataDb.AmbitoIncidencia.AMBITO_INCID_COUNT;
 
 /**
  * User: pedro@didekin

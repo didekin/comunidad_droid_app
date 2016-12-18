@@ -1,12 +1,12 @@
 package com.didekinaar.usuario;
 
-import com.didekinaar.exception.UiAarException;
+import com.didekinaar.exception.UiException;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
 import timber.log.Timber;
 
-import static com.didekinaar.usuario.AarUsuarioService.AarUserServ;
+import static com.didekinaar.usuario.UsuarioService.AarUserServ;
 import static com.didekinaar.utils.UIutils.isRegisteredUser;
 import static com.didekinaar.utils.UIutils.updateIsGcmTokenSentServer;
 
@@ -34,7 +34,7 @@ public class AarFBInstanceIdService extends FirebaseInstanceIdService {
             AarUserServ.modifyUserGcmToken(refreshedToken);
             updateIsGcmTokenSentServer(true, this);
             Timber.i("onTokenRefresh(), GCM token registered: %s%n", refreshedToken);
-        } catch (UiAarException e) {
+        } catch (UiException e) {
             updateIsGcmTokenSentServer(false, this);
             Timber.e("onTokenRefresh(), exception: %s%n", e.getErrorBean().getMessage());
         }

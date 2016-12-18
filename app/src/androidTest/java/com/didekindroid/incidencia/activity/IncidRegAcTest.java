@@ -8,11 +8,11 @@ import android.widget.CursorAdapter;
 
 import com.didekin.incidencia.dominio.IncidenciaUser;
 import com.didekin.comunidad.Comunidad;
-import com.didekinaar.exception.UiAarException;
-import com.didekindroid.incidencia.exception.UiAppException;
+import com.didekinaar.exception.UiException;
+import com.didekinaar.testutil.AarActivityTestUtils;
+import com.didekindroid.exception.UiAppException;
 import com.didekindroid.R;
 import com.didekindroid.incidencia.dominio.IncidenciaBean;
-import com.didekinaar.testutil.CleanUserEnum;
 
 import org.junit.After;
 import org.junit.Before;
@@ -40,16 +40,16 @@ import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
 import static com.didekinaar.testutil.AarActivityTestUtils.cleanOptions;
 import static com.didekinaar.testutil.AarActivityTestUtils.clickNavigateUp;
-import static com.didekinaar.testutil.AarActivityTestUtils.regSeveralUserComuSameUser;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.regSeveralUserComuSameUser;
 import static com.didekinaar.utils.UIutils.getErrorMsgBuilder;
 import static com.didekinaar.utils.UIutils.isRegisteredUser;
 import static com.didekinaar.utils.UIutils.updateIsGcmTokenSentServer;
-import static com.didekindroid.incidencia.repository.IncidenciaDataDb.AmbitoIncidencia.AMBITO_INCID_COUNT;
-import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
-import static com.didekinaar.testutil.UsuarioTestUtils.COMU_ESCORIAL_PEPE;
-import static com.didekinaar.testutil.UsuarioTestUtils.COMU_LA_FUENTE;
-import static com.didekinaar.testutil.UsuarioTestUtils.COMU_LA_FUENTE_PEPE;
-import static com.didekinaar.testutil.UsuarioTestUtils.COMU_REAL_PEPE;
+import static com.didekindroid.incidencia.IncidenciaDataDb.AmbitoIncidencia.AMBITO_INCID_COUNT;
+import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_ESCORIAL_PEPE;
+import static com.didekindroid.comunidad.testutil.ComuTestUtil.COMU_LA_FUENTE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_LA_FUENTE_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_REAL_PEPE;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -69,7 +69,7 @@ public class IncidRegAcTest {
 //    TODO: internacionalizar textos.
 
     private IncidRegAc mActivity;
-    private CleanUserEnum whatToClean = CleanUserEnum.CLEAN_PEPE;
+    private AarActivityTestUtils.CleanUserEnum whatToClean = AarActivityTestUtils.CleanUserEnum.CLEAN_PEPE;
     private Comunidad comunidadByDefault;
     ArrayAdapter<Comunidad> comunidadesAdapter;
 
@@ -84,7 +84,7 @@ public class IncidRegAcTest {
         {
             try {
                 regSeveralUserComuSameUser(COMU_ESCORIAL_PEPE, COMU_REAL_PEPE, COMU_LA_FUENTE_PEPE);
-            } catch (IOException | UiAarException e) {
+            } catch (IOException | UiException e) {
                 e.printStackTrace();
             }
         }

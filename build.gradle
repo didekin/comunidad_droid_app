@@ -3,7 +3,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.2'
+        classpath 'com.android.tools.build:gradle:2.2.3'
         classpath 'com.google.gms:google-services:3.0.0'
     }
 }
@@ -36,7 +36,7 @@ ext {
     sourceCompatibilityVersion = JavaVersion.VERSION_1_7
     targetCompatibilityVersion = JavaVersion.VERSION_1_7
     testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
-    androidSupportVersion = '25.0.1'
+    androidSupportVersion = '25.1.0'
     espressoVersion = '2.2.2'
     testRunnerRulesVersion = '0.5'
 
@@ -46,6 +46,8 @@ ext {
                  'com.squareup.retrofit2:converter-gson:2.1.0',
                  'com.squareup.okhttp3:logging-interceptor:3.4.1']
     timber = 'com.jakewharton.timber:timber:4.3.0'
+    rxjava = ['io.reactivex:rxandroid:1.2.1',
+              'io.reactivex:rxjava:1.2.3']
 
     android_support = ["com.android.support:support-annotations:$rootProject.ext.androidSupportVersion",
                        "com.android.support:design:$rootProject.ext.androidSupportVersion",

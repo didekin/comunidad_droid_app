@@ -6,7 +6,7 @@ import android.widget.TextView;
 
 import com.didekin.incidencia.dominio.IncidenciaUser;
 import com.didekindroid.R;
-import com.didekindroid.incidencia.repository.IncidenciaDataDbHelper;
+import com.didekindroid.incidencia.IncidenciaDataDbHelper;
 
 import static com.didekinaar.utils.UIutils.formatTimeStampToString;
 

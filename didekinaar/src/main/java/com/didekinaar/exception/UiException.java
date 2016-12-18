@@ -1,0 +1,94 @@
+package com.didekinaar.exception;
+
+import android.app.Activity;
+import android.content.Intent;
+
+import com.didekin.common.exception.ErrorBean;
+import com.didekinaar.R;
+
+import timber.log.Timber;
+
+import static com.didekinaar.exception.UiActionExceptionUtil.finishActivity;
+import static com.didekinaar.utils.UIutils.makeToast;
+
+/**
+ * User: pedro@didekin
+ * Date: 17/11/16
+ * Time: 17:41
+ */
+
+@SuppressWarnings("AbstractClassExtendsConcreteClass")
+public class UiException extends Exception implements UiExceptionIf {
+
+    private final ErrorBean errorBean;
+
+    public UiException(ErrorBean errorBean)
+    {
+        this.errorBean = errorBean;
+    }
+
+    @Override
+    public void processMe(Activity activity, Intent intent)
+    {
+        Timber.d("processMe(): %s %s%n", activity.getComponentName().getClassName(), errorBean.getMessage());
+
+        // Default case GENERIC_INTERNAL_ERROR: back to the beginning of the app.
+        if (getUiActionException() == null){
+            makeToast(activity, R.string.exception_generic_message);
+            intent.addCategory(Intent.CATEGORY_LAUNCHER);
+            intent.setAction(Intent.ACTION_MAIN);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            activity.startActivity(intent);
+            finishActivity(activity, intent);
+        }
+
+        if (getUiActionException().getToastResourceId() > 0) {
+            makeToast(activity, getUiActionException().getToastResourceId());
+        }
+
+        if (getUiActionException().getActivityToGoClass() != null) {
+            intent.setClass(activity, getUiActionException().getActivityToGoClass());
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            activity.startActivity(intent);
+            finishActivity(activity, intent);
+        }
+    }
+
+    @Override
+    public ErrorBean getErrorBean()
+    {
+        return errorBean;
+    }
+
+    /**
+     *  Method to be overwritten by subclasses in the final apps.
+     *  Each app defines its own exception dealing.
+     * */
+    protected UiActionExceptionIf getUiActionException()
+    {
+        return null;
+    }
+
+    public static class UiActionException implements UiActionExceptionIf {
+
+        private final Class<? extends Activity> activityToGoClass;
+        private final int toastResourceId;
+
+        public UiActionException(Class<? extends Activity> activityToGoClass, int toastResourceId)
+        {
+            this.activityToGoClass = activityToGoClass;
+            this.toastResourceId = toastResourceId;
+        }
+
+        public Class<? extends Activity> getActivityToGoClass()
+        {
+            return activityToGoClass;
+        }
+
+        @Override
+        public int getToastResourceId()
+        {
+            return toastResourceId;
+        }
+    }
+}

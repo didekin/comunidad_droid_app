@@ -82,7 +82,7 @@ public final class PrimalCreator {
                 .getIdentifier(mContext.getString(R.string.didekindroid_bks_name), "raw", mContext.getPackageName());
 
         if (bksPassword.isEmpty() || bksRawFileResourceId <= 0) {
-            throw new IllegalStateException("BKS should be initialized in client applicaation.");
+            throw new IllegalStateException("BKS should be initialized in client application.");
         }
         return new JksInAndroidApp(bksPassword, bksRawFileResourceId);
     }

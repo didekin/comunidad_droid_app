@@ -5,8 +5,8 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.comunidad.Comunidad;
-import com.didekinaar.exception.UiAarException;
-import com.didekinaar.testutil.CleanUserEnum;
+import com.didekinaar.exception.UiException;
+import com.didekinaar.testutil.AarActivityTestUtils;
 import com.didekindroid.R;
 
 import org.junit.After;
@@ -29,12 +29,12 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
 import static com.didekinaar.testutil.AarActivityTestUtils.cleanOptions;
 import static com.didekinaar.testutil.AarActivityTestUtils.clickNavigateUp;
-import static com.didekinaar.testutil.AarActivityTestUtils.regSeveralUserComuSameUser;
-import static com.didekinaar.testutil.CleanUserEnum.CLEAN_PEPE;
-import static com.didekinaar.testutil.UsuarioTestUtils.COMU_PLAZUELA5_PEPE;
-import static com.didekinaar.testutil.UsuarioTestUtils.COMU_REAL_PEPE;
-import static com.didekinaar.usuariocomunidad.AarUserComuService.AarUserComuServ;
-import static com.didekinaar.comunidad.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.regSeveralUserComuSameUser;
+import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_PLAZUELA5_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_REAL_PEPE;
+import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekinaar.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_REG_AC;
@@ -59,7 +59,7 @@ import static org.junit.Assert.assertThat;
 public class IncidSeeClosedByComuAcTest_1 {
 
     private IncidSeeClosedByComuAc mActivity;
-    private CleanUserEnum whatToClean;
+    private AarActivityTestUtils.CleanUserEnum whatToClean;
     Comunidad mComuPlazuelas5;
     Comunidad mComuReal;
     Comunidad comunidadInIntent;
@@ -81,10 +81,10 @@ public class IncidSeeClosedByComuAcTest_1 {
         {
             try {
                 regSeveralUserComuSameUser(COMU_PLAZUELA5_PEPE, COMU_REAL_PEPE);
-                mComuPlazuelas5 = AarUserComuServ.getComusByUser().get(0);
-                mComuReal = AarUserComuServ.getComusByUser().get(1);
+                mComuPlazuelas5 = AppUserComuServ.getComusByUser().get(0);
+                mComuReal = AppUserComuServ.getComusByUser().get(1);
                 comunidadInIntent = mComuReal;
-            } catch (IOException | UiAarException e) {
+            } catch (IOException | UiException e) {
                 e.printStackTrace();
             }
             Intent intent = new Intent();

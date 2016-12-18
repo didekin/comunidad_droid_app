@@ -10,19 +10,20 @@ import android.widget.Button;
 
 import com.didekin.incidencia.dominio.IncidImportancia;
 import com.didekindroid.R;
-import com.didekindroid.incidencia.exception.UiAppException;
+import com.didekindroid.exception.UiAppException;
 
 import java.util.Objects;
 
 import timber.log.Timber;
 
-import static com.didekinaar.usuario.UserMenu.doUpMenu;
+import static com.didekinaar.utils.UIutils.checkPostExecute;
+import static com.didekinaar.utils.UIutils.doUpMenu;
 import static com.didekinaar.gcm.GcmUtils.getGcmToken;
 import static com.didekinaar.utils.ConnectionUtils.checkInternetConnected;
 import static com.didekinaar.utils.UIutils.doToolBar;
 import static com.didekinaar.utils.UIutils.getErrorMsgBuilder;
 import static com.didekinaar.utils.UIutils.makeToast;
-import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
+import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 
 /**
  * Preconditions:
@@ -135,6 +136,8 @@ public class IncidRegAc extends AppCompatActivity {
         @Override
         protected void onPostExecute(Integer rowInserted)
         {
+
+            if (checkPostExecute(IncidRegAc.this)) return;
             Timber.d("onPostExecute()");
 
             if (uiException != null) {

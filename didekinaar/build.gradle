@@ -32,15 +32,14 @@ android {
     }
 }
 
-sourceSets.all {
-    println name
-}
+// TODO: Añadir tests simples al build.
 
 dependencies {
     compile rootProject.ext.model_lib
     compile rootProject.ext.firebase_message
     compile rootProject.ext.timber
     compile rootProject.ext.retrofit2
+    compile rootProject.ext.rxjava
     compile rootProject.ext.android_support
 
     testCompile rootProject.ext.junit

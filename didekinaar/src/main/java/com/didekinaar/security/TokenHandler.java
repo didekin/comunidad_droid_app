@@ -1,7 +1,7 @@
 package com.didekinaar.security;
 
 import com.didekin.oauth2.SpringOauthToken;
-import com.didekinaar.exception.UiAarException;
+import com.didekinaar.exception.UiException;
 
 import java.io.File;
 import java.util.concurrent.Callable;
@@ -37,7 +37,7 @@ public enum TokenHandler {
     public static final String refresh_token_filename = "tk_file";
     private final ThreadPoolExecutor tokenUpdater;
     private final AtomicReference<Future<SpringOauthToken>> cacheForToken = new AtomicReference<>();
-    final AtomicReference<SpringOauthToken> tokenInCache;
+    public final AtomicReference<SpringOauthToken> tokenInCache;
     private final File refreshTokenFile;
 
     TokenHandler()
@@ -78,7 +78,7 @@ public enum TokenHandler {
      * 1. This method would be called mainly in an asyncTask thread or in a background thread.
      *    However, it uses an ExecutorService instance to update asynchronously the tokens in cache.
      */
-    public final SpringOauthToken getAccessTokenInCache() throws UiAarException
+    public final SpringOauthToken getAccessTokenInCache() throws UiException
     {
         Timber.d("getAccessTokenInCache()");
 
@@ -94,10 +94,10 @@ public enum TokenHandler {
         Future<SpringOauthToken> futureInCache = cacheForToken.get();
 
         if (futureInCache == null) {
-
+            // It may throw a UiException(GENERIC_ERROR). See Oauth2Service.
             Callable<SpringOauthToken> cacheUpdater = new Callable<SpringOauthToken>() {
                 @Override
-                public SpringOauthToken call() throws UiAarException
+                public SpringOauthToken call() throws UiException
                 {
                     return Oauth2.getRefreshUserToken(tokenInCache.get().getRefreshToken().getValue());
                 }
@@ -123,7 +123,7 @@ public enum TokenHandler {
 
     //    ...................  UTILITIES .....................
 
-    public String doBearerAccessTkHeader() throws UiAarException
+    public String doBearerAccessTkHeader() throws UiException
     {
         Timber.d("doBearerAccessTkHeader()");
         SpringOauthToken springOauthToken = getAccessTokenInCache();
@@ -133,12 +133,12 @@ public enum TokenHandler {
         return null;
     }
 
-    private SpringOauthToken catchExecutionException(ExecutionException e) throws UiAarException
+    private SpringOauthToken catchExecutionException(ExecutionException e) throws UiException
     {
         cacheForToken.set(null);
         Throwable cause = e.getCause();
-        if (cause instanceof UiAarException) {
-            throw (UiAarException) cause;
+        if (cause instanceof UiException) {
+            throw (UiException) cause;
         } else if (cause instanceof RuntimeException) {
             throw (RuntimeException) cause;
         } else if (cause instanceof Error) {

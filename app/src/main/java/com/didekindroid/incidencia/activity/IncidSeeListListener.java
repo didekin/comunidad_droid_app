@@ -6,7 +6,7 @@ import android.widget.ArrayAdapter;
 import com.didekin.incidencia.dominio.Incidencia;
 import com.didekin.incidencia.dominio.IncidenciaUser;
 import com.didekin.comunidad.Comunidad;
-import com.didekindroid.incidencia.exception.UiAppException;
+import com.didekindroid.exception.UiAppException;
 
 import java.util.List;
 

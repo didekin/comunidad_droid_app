@@ -20,7 +20,7 @@ import com.didekindroid.incidencia.activity.utils.ComunidadSpinnerSetter;
 import com.didekindroid.incidencia.activity.utils.ImportanciaSpinnerSettable;
 import com.didekindroid.incidencia.dominio.IncidImportanciaBean;
 import com.didekindroid.incidencia.dominio.IncidenciaBean;
-import com.didekindroid.incidencia.repository.IncidenciaDataDbHelper;
+import com.didekindroid.incidencia.IncidenciaDataDbHelper;
 
 import timber.log.Timber;
 

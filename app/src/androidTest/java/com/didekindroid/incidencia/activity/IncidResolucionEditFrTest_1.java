@@ -5,11 +5,10 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.incidencia.dominio.Resolucion;
-import com.didekinaar.exception.UiAarException;
+import com.didekinaar.exception.UiException;
 import com.didekinaar.testutil.AarActivityTestUtils;
-import com.didekindroid.incidencia.exception.UiAppException;
+import com.didekindroid.exception.UiAppException;
 import com.didekindroid.R;
-import com.didekinaar.testutil.CleanUserEnum;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -39,9 +38,9 @@ import static com.didekinaar.utils.UIutils.SPAIN_LOCALE;
 import static com.didekinaar.utils.UIutils.formatTimeToString;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetResolucionNoAdvances;
-import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
-import static com.didekinaar.testutil.CleanUserEnum.CLEAN_JUAN;
-import static com.didekinaar.testutil.UsuarioTestUtils.COMU_PLAZUELA5_JUAN;
+import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
+import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_JUAN;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_PLAZUELA5_JUAN;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -73,7 +72,7 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
                     Thread.sleep(1000);
                     resolucion = insertGetResolucionNoAdvances(incidImportancia);
 
-                } catch (UiAppException | InterruptedException | IOException | UiAarException e) {
+                } catch (UiAppException | InterruptedException | IOException | UiException e) {
                     e.printStackTrace();
                 }
                 Intent intent = new Intent();
@@ -91,7 +90,7 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
     }
 
     @Override
-    CleanUserEnum whatToClean()
+    AarActivityTestUtils.CleanUserEnum whatToClean()
     {
         return CLEAN_JUAN;
     }

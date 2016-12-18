@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView style="@style/baseLayout.scroll"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools">
+
+    <android.support.design.widget.CoordinatorLayout style="@style/baseLayout">
+
+        <include layout="@layout/appbar_include_design"/>
+
+        <LinearLayout
+            android:id="@+id/usercomu_data_ac_layout"
+            style="@style/baseLayout.withPadding"
+            android:layout_marginTop="@dimen/app_bar_bottom_margin"
+            tools:context="com.didekindroid.com.didekinaar.usuario.UserComuDataAc">
+
+            <TextView
+                android:id="@+id/usercomu_data_ac_modif_txt"
+                style="@style/textBase.textFieldLabel2"
+                android:text="@string/user_data_ac_cambios_text"/>
+
+            <fragment
+                android:id="@+id/reg_usercomu_frg"
+                android:name="com.didekindroid.usuariocomunidad.RegUserComuFr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:layout="@layout/reg_usercomu_fr"/>
+
+            <Button
+                android:id="@+id/usercomu_data_ac_modif_button"
+                style="@style/textBase.acButton1"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/user_data_modif_button_rot"/>
+
+            <TextView
+                android:id="@+id/usercomu_data_ac_delete_txt"
+                style="@style/textBase.textFieldLabel2"
+                android:text="@string/usercomu_data_ac_delete_txt"/>
+
+            <Button
+                android:id="@+id/usercomu_data_ac_delete_button"
+                style="@style/textBase.acButton1"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/usercomu_data_ac_delete_button_txt"/>
+        </LinearLayout>
+    </android.support.design.widget.CoordinatorLayout>
+</ScrollView>

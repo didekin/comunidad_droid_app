@@ -2,17 +2,18 @@ package com.didekindroid.incidencia.activity;
 
 import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.common.exception.ErrorBean;
 import com.didekin.incidencia.dominio.IncidImportancia;
 import com.didekin.incidencia.dominio.IncidenciaUser;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
-import com.didekinaar.exception.UiAarException;
+import com.didekinaar.exception.UiException;
 import com.didekinaar.mock.MockActivity;
-import com.didekinaar.testutil.CleanUserEnum;
+import com.didekinaar.testutil.AarActivityTestUtils;
 import com.didekindroid.R;
-import com.didekindroid.incidencia.exception.UiAppException;
+import com.didekindroid.exception.UiAppException;
 
 import org.junit.After;
 import org.junit.Before;
@@ -27,6 +28,8 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static com.didekin.common.exception.DidekinExceptionMsg.COMUNIDAD_NOT_FOUND;
+import static com.didekin.common.exception.DidekinExceptionMsg.GENERIC_INTERNAL_ERROR;
 import static com.didekin.common.exception.DidekinExceptionMsg.INCIDENCIA_COMMENT_WRONG_INIT;
 import static com.didekin.common.exception.DidekinExceptionMsg.INCIDENCIA_NOT_REGISTERED;
 import static com.didekin.common.exception.DidekinExceptionMsg.INCIDENCIA_USER_WRONG_INIT;
@@ -34,13 +37,13 @@ import static com.didekin.common.exception.DidekinExceptionMsg.RESOLUCION_DUPLIC
 import static com.didekinaar.security.TokenHandler.TKhandler;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
 import static com.didekinaar.testutil.AarActivityTestUtils.cleanOptions;
-import static com.didekinaar.testutil.AarActivityTestUtils.signUpAndUpdateTk;
-import static com.didekinaar.testutil.UsuarioTestUtils.COMU_PLAZUELA5_JUAN;
-import static com.didekinaar.usuariocomunidad.AarUserComuService.AarUserComuServ;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_PLAZUELA5_JUAN;
+import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static com.didekinaar.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
-import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
+import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -65,7 +68,7 @@ public class UiAppExceptionTests  {
         {
             try {
                 signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
-                UsuarioComunidad juanPlazuelas = AarUserComuServ.seeUserComusByUser().get(0);
+                UsuarioComunidad juanPlazuelas = AppUserComuServ.seeUserComusByUser().get(0);
                 mIncidJuanPlazuelas = new IncidImportancia.IncidImportanciaBuilder(
                         doIncidencia(juanPlazuelas.getUsuario().getUserName(), "Incidencia Plazueles", juanPlazuelas.getComunidad().getC_Id(), (short) 43))
                         .usuarioComunidad(juanPlazuelas)
@@ -73,7 +76,7 @@ public class UiAppExceptionTests  {
                 IncidenciaServ.regIncidImportancia(mIncidJuanPlazuelas);
                 IncidenciaUser incidenciaUserDb = IncidenciaServ.seeIncidsOpenByComu(juanPlazuelas.getComunidad().getC_Id()).get(0);
                 mIncidJuanPlazuelas = IncidenciaServ.seeIncidImportancia(incidenciaUserDb.getIncidencia().getIncidenciaId()).getIncidImportancia();
-            } catch (UiAppException | IOException | UiAarException e) {
+            } catch ( IOException | UiException e) {
                 e.printStackTrace();
             }
             Intent intent = new Intent();
@@ -102,11 +105,44 @@ public class UiAppExceptionTests  {
     @After
     public void tearDown() throws Exception
     {
-        cleanOptions(CleanUserEnum.CLEAN_JUAN);
+        cleanOptions(AarActivityTestUtils.CleanUserEnum.CLEAN_JUAN);
         Thread.sleep(3000);
     }
 
     //  ===========================================================================
+
+    @Test
+    public void testGeneric() throws Exception
+    {
+        final UiException ue = new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
+
+        mActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                ue.processMe(mActivity, new Intent());
+            }
+        });
+
+        checkToastInTest(com.didekinaar.R.string.exception_generic_app_message, mActivity);
+        onView(ViewMatchers.withId(com.didekinaar.R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testSearchComu() throws Exception
+    {
+        final UiException ue = new UiException(new ErrorBean(COMUNIDAD_NOT_FOUND));
+
+        mActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                ue.processMe(mActivity, new Intent());
+            }
+        });
+        checkToastInTest(com.didekinaar.R.string.comunidad_not_found_message, mActivity);
+        onView(ViewMatchers.withId(com.didekinaar.R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));
+    }
 
     @Test
     public void testIncidReg()

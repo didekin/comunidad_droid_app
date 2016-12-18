@@ -3,24 +3,17 @@ package com.didekinaar.usuario;
 import android.content.res.Resources;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
-import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.oauth2.SpringOauthToken;
 import com.didekinaar.R;
-import com.didekinaar.exception.UiAarException;
-import com.didekinaar.testutil.AarActivityTestUtils;
-import com.didekinaar.testutil.CleanUserEnum;
-import com.didekinaar.testutil.UserMenuTestUtils;
-import com.didekinaar.testutil.UsuarioTestUtils;
+import com.didekinaar.exception.UiException;
+import com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum;
+import com.didekinaar.usuario.userdata.UserDataAc;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import java.io.IOException;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -33,13 +26,13 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekinaar.security.TokenHandler.TKhandler;
+import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_JUAN;
+import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_NOTHING;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
-import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
 import static com.didekinaar.testutil.AarActivityTestUtils.cleanOptions;
 import static com.didekinaar.testutil.AarActivityTestUtils.clickNavigateUp;
-import static com.didekinaar.testutil.CleanUserEnum.CLEAN_JUAN;
-import static com.didekinaar.testutil.CleanUserEnum.CLEAN_NOTHING;
-import static com.didekinaar.usuario.AarUsuarioService.AarUserServ;
+import static com.didekinaar.usuario.UsuarioService.AarUserServ;
+import static com.didekinaar.usuario.testutil.UsuarioTestUtils.USER_JUAN;
 import static com.didekinaar.utils.UIutils.isRegisteredUser;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.Matchers.containsString;
@@ -53,13 +46,12 @@ import static org.junit.Assert.assertThat;
  * Date: 16/07/15
  * Time: 14:25
  */
-@RunWith(AndroidJUnit4.class)
-public class UserDataAcTest {
+public abstract class UserDataAcTest {
 
-    UserDataAc mActivity;
-    Resources resources;
-    CleanUserEnum whatToClean = CLEAN_JUAN;
-    int activityLayoutId = R.id.user_data_ac_layout;
+    protected UserDataAc mActivity;
+    protected Resources resources;
+    protected CleanUserEnum whatToClean = CLEAN_JUAN;
+    protected int activityLayoutId = R.id.user_data_ac_layout;
 
     @Rule
     public ActivityTestRule<UserDataAc> mActivityRule = new ActivityTestRule<UserDataAc>(UserDataAc.class) {
@@ -68,18 +60,13 @@ public class UserDataAcTest {
         {
             // Precondition: the user is registered.
             try {
-                AarActivityTestUtils.signUpAndUpdateTk(UsuarioTestUtils.COMU_REAL_JUAN);
-            } catch (UiAarException | IOException e) {
+                registerUser();
+//
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     };
-
-    @BeforeClass
-    public static void slowSeconds() throws InterruptedException
-    {
-        Thread.sleep(5000);
-    }
 
     @Before
     public void setUp() throws Exception
@@ -94,8 +81,15 @@ public class UserDataAcTest {
         cleanOptions(whatToClean);
     }
 
+    //  ............................. METHODS TO BE OVERWRITTEN ..................................
+
+    protected abstract void registerUser() throws Exception;
+    protected abstract void checkNavigateUp();
+
+    //    =====================================  TESTS  ==========================================
+
     @Test
-    public void testOncreate_1()
+    public void testOncreate_A()
     {
         assertThat(mActivity, notNullValue());
         assertThat(isRegisteredUser(mActivity), is(true));
@@ -116,20 +110,20 @@ public class UserDataAcTest {
     }
 
     @Test
-    public void testOncreate_2()
+    public void testOncreate_B()
     {
         // Aserciones sobre los datos mostrados en función del userComu en sesión.
         onView(ViewMatchers.withId(R.id.reg_usuario_email_editT))
-                .check(matches(withText(containsString(UsuarioTestUtils.USER_JUAN.getUserName()))));
+                .check(matches(withText(containsString(USER_JUAN.getUserName()))));
         onView(ViewMatchers.withId(R.id.reg_usuario_alias_ediT))
-                .check(matches(withText(containsString(UsuarioTestUtils.USER_JUAN.getAlias()))));
+                .check(matches(withText(containsString(USER_JUAN.getAlias()))));
         onView(ViewMatchers.withId(R.id.user_data_ac_password_ediT))
                 .check(matches(withText(containsString(""))));
     }
 
     /* Datos erróneos: formato de email y password vacío. */
     @Test
-    public void testModifyUserData_1() throws InterruptedException
+    public void testModifyUserData_A() throws InterruptedException
     {
         onView(ViewMatchers.withId(R.id.reg_usuario_alias_ediT)).perform(replaceText("new_alias"));
         onView(ViewMatchers.withId(R.id.reg_usuario_email_editT)).perform(replaceText("new_user_wrong"), closeSoftKeyboard());
@@ -140,22 +134,12 @@ public class UserDataAcTest {
                 R.string.password,
                 R.string.email_hint);
 
-        Thread.sleep(3000);
-    }
-
-    /* Alias y userName sin cambios. */
-    @Test
-    public void testModifyUserData_2() throws InterruptedException
-    {
-        onView(ViewMatchers.withId(R.id.user_data_ac_password_ediT)).perform(typeText(UsuarioTestUtils.USER_JUAN.getPassword()), closeSoftKeyboard());
-        onView(ViewMatchers.withId(R.id.user_data_modif_button)).perform(scrollTo())
-                .check(matches(isDisplayed())).perform(click());
-        onView(ViewMatchers.withId(R.id.see_usercomu_by_user_frg)).check(matches(isDisplayed()));
+        Thread.sleep(2000);
     }
 
     /* Password erróneo en servidor.*/
     @Test
-    public void testModifyUserData_3() throws InterruptedException
+    public void testModifyUserData_B() throws InterruptedException
     {
         onView(ViewMatchers.withId(R.id.reg_usuario_email_editT)).perform(replaceText("new_juan@juan.es"));
         onView(ViewMatchers.withId(R.id.user_data_ac_password_ediT)).perform(typeText("wrong_password"), closeSoftKeyboard());
@@ -163,12 +147,12 @@ public class UserDataAcTest {
                 .check(matches(isDisplayed())).perform(click());
 
         checkToastInTest(R.string.password_wrong, mActivity);
-        Thread.sleep(3000);
+        Thread.sleep(2000);
     }
 
     /* Change alias.*/
     @Test
-    public void testModifyUserData_4() throws UiAarException
+    public void testModifyUserData_4() throws UiException
     {
         // Check security data: old data.
         SpringOauthToken tokenBefore = TKhandler.getAccessTokenInCache();
@@ -176,14 +160,13 @@ public class UserDataAcTest {
         String refreshTkValue = tokenBefore != null ? tokenBefore.getRefreshToken().getValue() : null;
 
         onView(ViewMatchers.withId(R.id.reg_usuario_alias_ediT)).perform(replaceText("new_alias_juan"));
-        onView(ViewMatchers.withId(R.id.user_data_ac_password_ediT)).perform(typeText(UsuarioTestUtils.USER_JUAN.getPassword()), closeSoftKeyboard());
+        onView(ViewMatchers.withId(R.id.user_data_ac_password_ediT)).perform(typeText(USER_JUAN.getPassword()), closeSoftKeyboard());
 
         onView(ViewMatchers.withId(R.id.user_data_modif_button)).perform(scrollTo())
                 .check(matches(isDisplayed())).perform(click());
 
         // Verificamos navegación.
-        onView(ViewMatchers.withId(R.id.see_usercomu_by_user_frg)).check(matches(isDisplayed()));
-        checkUp(activityLayoutId);
+        checkNavigateUp();
 
         // New security data: same as the old one.
         SpringOauthToken tokenAfter = TKhandler.getAccessTokenInCache();
@@ -192,7 +175,7 @@ public class UserDataAcTest {
     }
 
     @Test
-    public void testModifyUserData_5() throws UiAarException
+    public void testModifyUserData_5() throws UiException
     {
         whatToClean = CLEAN_NOTHING;
 
@@ -203,14 +186,13 @@ public class UserDataAcTest {
 
         onView(ViewMatchers.withId(R.id.reg_usuario_alias_ediT)).perform(replaceText("new_alias_juan"));
         onView(ViewMatchers.withId(R.id.reg_usuario_email_editT)).perform(replaceText("new_juan@mail.org"));
-        onView(ViewMatchers.withId(R.id.user_data_ac_password_ediT)).perform(typeText(UsuarioTestUtils.USER_JUAN.getPassword()), closeSoftKeyboard());
+        onView(ViewMatchers.withId(R.id.user_data_ac_password_ediT)).perform(typeText(USER_JUAN.getPassword()), closeSoftKeyboard());
 
         onView(ViewMatchers.withId(R.id.user_data_modif_button)).perform(scrollTo())
                 .check(matches(isDisplayed())).perform(click());
 
         // Verificamos navegación.
-        onView(ViewMatchers.withId(R.id.see_usercomu_by_user_frg)).check(matches(isDisplayed()));
-        checkUp(activityLayoutId);
+        checkNavigateUp();
 
         // New security data.
         SpringOauthToken tokenAfter = TKhandler.getAccessTokenInCache();
@@ -220,42 +202,5 @@ public class UserDataAcTest {
 
         // Borramos al usuario en BD.
         AarUserServ.deleteUser();
-    }
-
-//    =================================  MENU ==================================
-
-    @Test
-    public void testComuSearchMn() throws InterruptedException
-    {
-        UserMenuTestUtils.COMU_SEARCH_AC.checkMenuItem_WTk(mActivity);
-        // NO navigate-up.
-    }
-
-    @Test
-    public void testDeleteMeMn() throws InterruptedException
-    {
-        UserMenuTestUtils.DELETE_ME_AC.checkMenuItem_WTk(mActivity);
-        checkUp(activityLayoutId);
-    }
-
-    @Test
-    public void testPasswordChangeMn() throws InterruptedException
-    {
-        UserMenuTestUtils.PASSWORD_CHANGE_AC.checkMenuItem_WTk(mActivity);
-        checkUp(activityLayoutId);
-    }
-
-    @Test
-    public void testUserComuByUserMn() throws InterruptedException
-    {
-        UserMenuTestUtils.SEE_USERCOMU_BY_USER_AC.checkMenuItem_WTk(mActivity);
-        checkUp(activityLayoutId);
-    }
-
-    @Test
-    public void testIncidSeeByComuMn() throws InterruptedException
-    {
-        /*IncidenciaMenuTestUtils.INCID_SEE_OPEN_BY_COMU_AC.checkMenuItem_WTk(mActivity);
-        checkUp(activityLayoutId);*/   // TODO: suprimir esta opción de menú aquí.
     }
 }

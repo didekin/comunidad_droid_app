@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.didekin.incidencia.dominio.IncidComment;
 import com.didekin.incidencia.dominio.Incidencia;
-import com.didekindroid.incidencia.exception.UiAppException;
+import com.didekindroid.exception.UiAppException;
 import com.didekindroid.R;
 import com.didekinaar.utils.ConnectionUtils;
 import com.didekinaar.utils.UIutils;
@@ -21,12 +21,13 @@ import java.util.Objects;
 
 import timber.log.Timber;
 
+import static com.didekinaar.utils.UIutils.checkPostExecute;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekinaar.utils.UIutils.doToolBar;
 import static com.didekinaar.utils.UIutils.getErrorMsgBuilder;
 import static com.didekinaar.utils.UIutils.makeToast;
-import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
-import static com.didekinaar.usuario.UserMenu.doUpMenu;
+import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
+import static com.didekinaar.utils.UIutils.doUpMenu;
 
 /**
  * Preconditions:
@@ -133,15 +134,19 @@ public class IncidCommentRegAc extends AppCompatActivity {
         @Override
         protected void onPostExecute(Integer rowInserted)
         {
+            if (checkPostExecute(IncidCommentRegAc.this)) return;
+
             Timber.d("onPostExecute()");
 
             if (uiException != null) {
                 uiException.processMe(IncidCommentRegAc.this, new Intent());
-            } else {
+            } else if (!(isDestroyed() || isChangingConfigurations())) {
                 Objects.equals(rowInserted == 1, true);
                 Intent intent = new Intent(IncidCommentRegAc.this, IncidCommentSeeAc.class);
                 intent.putExtra(INCIDENCIA_OBJECT.key, mIncidencia);
                 startActivity(intent);
+            } else {
+                Timber.i("onPostExcecute(): activity destroyed");
             }
         }
     }

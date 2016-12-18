@@ -15,14 +15,15 @@ import com.didekin.incidencia.dominio.Incidencia;
 import com.didekin.incidencia.dominio.IncidenciaUser;
 import com.didekin.incidencia.dominio.Resolucion;
 import com.didekindroid.R;
-import com.didekindroid.incidencia.exception.UiAppException;
+import com.didekindroid.exception.UiAppException;
 
 import java.util.List;
 import java.util.Objects;
 
 import timber.log.Timber;
 
-import static com.didekinaar.comunidad.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekinaar.utils.UIutils.checkPostExecute;
+import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekinaar.utils.AarBundleKey.IS_MENU_IN_FRAGMENT_FLAG;
 import static com.didekinaar.utils.UIutils.doToolBar;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCIDENCIA_OBJECT;
@@ -31,7 +32,7 @@ import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_REG_AC;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_SEE_BY_COMU_AC;
-import static com.didekindroid.incidencia.webservices.IncidService.IncidenciaServ;
+import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 
 /**
  * Preconditions:
@@ -172,6 +173,8 @@ public class IncidSeeClosedByComuAc extends AppCompatActivity implements
         @Override
         protected void onPostExecute(Resolucion resolucion)
         {
+            if (checkPostExecute(IncidSeeClosedByComuAc.this)) return;
+
             Timber.d("onPostExecute()");
 
             if (uiException != null) {
