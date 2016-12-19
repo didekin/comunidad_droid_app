@@ -1,4 +1,4 @@
-package com.didekindroid.incidencia.activity;
+package com.didekindroid.exception;
 
 import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
@@ -13,7 +13,6 @@ import com.didekinaar.exception.UiException;
 import com.didekinaar.mock.MockActivity;
 import com.didekinaar.testutil.AarActivityTestUtils;
 import com.didekindroid.R;
-import com.didekindroid.exception.UiAppException;
 
 import org.junit.After;
 import org.junit.Before;
@@ -34,16 +33,18 @@ import static com.didekin.common.exception.DidekinExceptionMsg.INCIDENCIA_COMMEN
 import static com.didekin.common.exception.DidekinExceptionMsg.INCIDENCIA_NOT_REGISTERED;
 import static com.didekin.common.exception.DidekinExceptionMsg.INCIDENCIA_USER_WRONG_INIT;
 import static com.didekin.common.exception.DidekinExceptionMsg.RESOLUCION_DUPLICATE;
+import static com.didekin.common.exception.DidekinExceptionMsg.ROLES_NOT_FOUND;
+import static com.didekin.common.exception.DidekinExceptionMsg.USER_DATA_NOT_MODIFIED;
 import static com.didekinaar.security.TokenHandler.TKhandler;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
 import static com.didekinaar.testutil.AarActivityTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.signUpAndUpdateTk;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_PLAZUELA5_JUAN;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static com.didekinaar.utils.UIutils.isRegisteredUser;
+import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
-import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
+import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_PLAZUELA5_JUAN;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.signUpAndUpdateTk;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -55,7 +56,7 @@ import static org.junit.Assert.assertThat;
  */
 @SuppressWarnings({"ThrowableInstanceNeverThrown", "ThrowableResultOfMethodCallIgnored"})
 @RunWith(AndroidJUnit4.class)
-public class UiAppExceptionTests  {
+public class UiAppExceptionTests {
 
     IncidImportancia mIncidJuanPlazuelas;
     MockActivity mActivity;
@@ -76,13 +77,14 @@ public class UiAppExceptionTests  {
                 IncidenciaServ.regIncidImportancia(mIncidJuanPlazuelas);
                 IncidenciaUser incidenciaUserDb = IncidenciaServ.seeIncidsOpenByComu(juanPlazuelas.getComunidad().getC_Id()).get(0);
                 mIncidJuanPlazuelas = IncidenciaServ.seeIncidImportancia(incidenciaUserDb.getIncidencia().getIncidenciaId()).getIncidImportancia();
-            } catch ( IOException | UiException e) {
+            } catch (IOException | UiException e) {
                 e.printStackTrace();
             }
             Intent intent = new Intent();
             intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, mIncidJuanPlazuelas);
             return intent;
         }
+
         @Override
         protected void beforeActivityLaunched()
         {
@@ -112,6 +114,12 @@ public class UiAppExceptionTests  {
     //  ===========================================================================
 
     @Test
+    public void testSetUp()
+    {
+        assertThat(mActivity, notNullValue());
+    }
+
+    @Test
     public void testGeneric() throws Exception
     {
         final UiException ue = new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
@@ -127,6 +135,44 @@ public class UiAppExceptionTests  {
         checkToastInTest(com.didekinaar.R.string.exception_generic_app_message, mActivity);
         onView(ViewMatchers.withId(com.didekinaar.R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));
     }
+
+    @Test
+    public void testLogin() throws Exception
+    {
+        final UiException ue = new UiException(new ErrorBean(ROLES_NOT_FOUND));
+
+        mActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                ue.processMe(mActivity, new Intent());
+            }
+        });
+
+        checkToastInTest(com.didekinaar.R.string.user_without_signedUp, mActivity);
+        onView(ViewMatchers.withId(com.didekinaar.R.id.login_ac_layout)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testUserDataAc() throws Exception
+    {
+        // Preconditions.
+        assertThat(isRegisteredUser(mActivity), is(true));
+        assertThat(TKhandler.getTokenInCache(), notNullValue());
+
+        final UiException ue = new UiException(new ErrorBean(USER_DATA_NOT_MODIFIED));
+        mActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                ue.processMe(mActivity, new Intent());
+            }
+        });
+
+        checkToastInTest(com.didekinaar.R.string.user_data_not_modified_msg, mActivity);
+        onView(ViewMatchers.withId(com.didekinaar.R.id.user_data_ac_layout)).check(matches(isDisplayed()));
+    }
+
 
     @Test
     public void testSearchComu() throws Exception

@@ -1,6 +1,8 @@
 package com.didekindroid.usuario;
 
+import android.app.Activity;
 import android.support.test.espresso.matcher.ViewMatchers;
+import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekinaar.usuario.UserDataAcTest;
@@ -41,13 +43,30 @@ public class UserDataAc_App_Test extends UserDataAcTest {
     }
 
     @Override
-    protected void registerUser() throws Exception
+    public boolean registerUser() throws Exception
     {
-        signUpAndUpdateTk(UserComuTestUtil.COMU_REAL_JUAN);
+        return signUpAndUpdateTk(UserComuTestUtil.COMU_REAL_JUAN) != null;
     }
 
     @Override
-    protected void checkNavigateUp()
+    public ActivityTestRule<? extends Activity> getActivityRule()
+    {
+        return new ActivityTestRule<UserDataAppAc>(UserDataAppAc.class) {
+            @Override
+            protected void beforeActivityLaunched()
+            {
+                // Precondition: the user is registered.
+                try {
+                    registerUser();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+    }
+
+    @Override
+    public void checkNavigateUp()
     {
         // Verificamos navegación.
         onView(ViewMatchers.withId(com.didekinaar.R.id.see_usercomu_by_user_frg)).check(matches(isDisplayed()));
@@ -67,7 +86,7 @@ public class UserDataAc_App_Test extends UserDataAcTest {
         onView(ViewMatchers.withId(com.didekinaar.R.id.see_usercomu_by_user_frg)).check(matches(isDisplayed()));
     }
 
-    //    =================================  MENU ==================================
+    //    =================================  MENU TESTS ==================================
 
     @Test
     public void testComuSearchMn() throws InterruptedException

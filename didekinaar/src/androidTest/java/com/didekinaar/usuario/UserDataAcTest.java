@@ -1,5 +1,6 @@
 package com.didekinaar.usuario;
 
+import android.app.Activity;
 import android.content.res.Resources;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
@@ -8,6 +9,7 @@ import com.didekin.oauth2.SpringOauthToken;
 import com.didekinaar.R;
 import com.didekinaar.exception.UiException;
 import com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum;
+import com.didekinaar.testutil.ExtendableTestAc;
 import com.didekinaar.usuario.userdata.UserDataAc;
 
 import org.junit.After;
@@ -46,7 +48,7 @@ import static org.junit.Assert.assertThat;
  * Date: 16/07/15
  * Time: 14:25
  */
-public abstract class UserDataAcTest {
+public abstract class UserDataAcTest implements ExtendableTestAc {
 
     protected UserDataAc mActivity;
     protected Resources resources;
@@ -54,24 +56,12 @@ public abstract class UserDataAcTest {
     protected int activityLayoutId = R.id.user_data_ac_layout;
 
     @Rule
-    public ActivityTestRule<UserDataAc> mActivityRule = new ActivityTestRule<UserDataAc>(UserDataAc.class) {
-        @Override
-        protected void beforeActivityLaunched()
-        {
-            // Precondition: the user is registered.
-            try {
-                registerUser();
-//
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    };
+    public ActivityTestRule<? extends Activity> mActivityRule = getActivityRule();
 
     @Before
     public void setUp() throws Exception
     {
-        mActivity = mActivityRule.getActivity();
+        mActivity = (UserDataAc) mActivityRule.getActivity();
         resources = mActivity.getResources();
     }
 
@@ -80,11 +70,6 @@ public abstract class UserDataAcTest {
     {
         cleanOptions(whatToClean);
     }
-
-    //  ............................. METHODS TO BE OVERWRITTEN ..................................
-
-    protected abstract void registerUser() throws Exception;
-    protected abstract void checkNavigateUp();
 
     //    =====================================  TESTS  ==========================================
 

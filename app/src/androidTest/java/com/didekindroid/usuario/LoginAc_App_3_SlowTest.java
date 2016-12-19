@@ -1,9 +1,12 @@
 package com.didekindroid.usuario;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekinaar.usuario.LoginAcTest;
+import com.didekinaar.usuario.login.LoginAc;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -27,15 +30,29 @@ public class LoginAc_App_3_SlowTest extends LoginAcTest {
     }
 
     @Override
-    protected boolean registerUser() throws Exception
+    public boolean registerUser() throws Exception
     {
         return AppUserComuServ.regComuAndUserAndUserComu(COMU_REAL_DROID).execute().body();
     }
 
+    @Override
+    public ActivityTestRule<? extends Activity> getActivityRule()
+    {
+        return new ActivityTestRule<>(LoginAppAc.class, true, false);
+    }
+
+    @Override
+    public void checkNavigateUp()
+    {
+        throw new UnsupportedOperationException("NO NAVIGATE-UP in LoginAppAc activity");
+    }
+
+    // ======================================  TESTS =====================================
+
     @Test
     public void testValidate_1() throws Exception
     {
-        mActivity = mActivityRule.launchActivity(new Intent());
+        mActivity = (LoginAc) mActivityRule.launchActivity(new Intent());
         checkLoginWithThreeErrors();
     }
 }

@@ -1,5 +1,7 @@
 package com.didekindroid.usuario;
 
+import android.app.Activity;
+import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekinaar.usuario.PasswordChangeAcTest;
@@ -25,8 +27,31 @@ public class PasswordChangeAc_App_Test extends PasswordChangeAcTest {
     }
 
     @Override
-    protected void registerUser() throws Exception
+    public boolean registerUser() throws Exception
     {
-        signUpAndUpdateTk(UserComuTestUtil.COMU_TRAV_PLAZUELA_PEPE);
+        return signUpAndUpdateTk(UserComuTestUtil.COMU_TRAV_PLAZUELA_PEPE) != null;
+    }
+
+    @Override
+    public ActivityTestRule<? extends Activity> getActivityRule()
+    {
+        return new ActivityTestRule<PasswordChangeAppAc>(PasswordChangeAppAc.class) {
+            @Override
+            protected void beforeActivityLaunched()
+            {
+                // Precondition: the user is registered.
+                try {
+                    registerUser();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+    }
+
+    @Override
+    public void checkNavigateUp()
+    {
+        throw new UnsupportedOperationException("NO NAVIGATE-UP in PasswordChange activity");
     }
 }

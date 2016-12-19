@@ -1,11 +1,14 @@
 package com.didekindroid.usuario;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.test.espresso.matcher.ViewMatchers;
+import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekinaar.R;
 import com.didekinaar.usuario.LoginAcTest;
+import com.didekinaar.usuario.login.LoginAc;
 import com.didekinaar.usuario.testutil.UsuarioTestUtils;
 
 import org.junit.BeforeClass;
@@ -40,6 +43,26 @@ public class LoginAc_App_2_SlowTest extends LoginAcTest {
         Thread.sleep(4000);
     }
 
+    @Override
+    public boolean registerUser() throws Exception
+    {
+        throw new UnsupportedOperationException("NO registerUser() in LoginAc_App_2_SlowTest");
+    }
+
+    @Override
+    public ActivityTestRule<? extends Activity> getActivityRule()
+    {
+        return new ActivityTestRule<>(LoginAppAc.class, true, false);
+    }
+
+    @Override
+    public void checkNavigateUp()
+    {
+        throw new UnsupportedOperationException("NO NAVIGATE-UP in LoginAppAc activity");
+    }
+
+    // ======================================  TESTS =====================================
+
     @Test
     public void testValidate_1() throws InterruptedException, IOException
     {
@@ -47,7 +70,7 @@ public class LoginAc_App_2_SlowTest extends LoginAcTest {
 
         // User in DB: wrong password three consecutive times. Choice "not mail" in dialog.
         assertThat(AppUserComuServ.regComuAndUserAndUserComu(COMU_TRAV_PLAZUELA_PEPE).execute().body(), is(true));
-        mActivity = mActivityRule.launchActivity(new Intent());
+        mActivity = (LoginAc) mActivityRule.launchActivity(new Intent());
 
         getDialogFragment(UsuarioTestUtils.USER_PEPE.getUserName());
         onView(ViewMatchers.withText(R.string.send_password_by_mail_dialog)).inRoot(isDialog())

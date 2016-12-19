@@ -1,11 +1,14 @@
 package com.didekindroid.usuario;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.test.espresso.matcher.ViewMatchers;
+import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekinaar.exception.UiException;
 import com.didekinaar.usuario.LoginAcTest;
+import com.didekinaar.usuario.login.LoginAc;
 import com.didekinaar.usuario.testutil.UsuarioTestUtils;
 
 import org.junit.BeforeClass;
@@ -46,13 +49,33 @@ public class LoginAc_App_1_Test extends LoginAcTest {
         Thread.sleep(4000);
     }
 
+    @Override
+    public boolean registerUser() throws Exception
+    {
+        throw new UnsupportedOperationException("NO registerUser() in LoginAc_App_1_Test");
+    }
+
+    @Override
+    public ActivityTestRule<? extends Activity> getActivityRule()
+    {
+        return new ActivityTestRule<>(LoginAppAc.class, true, false);
+    }
+
+    @Override
+    public void checkNavigateUp()
+    {
+        throw new UnsupportedOperationException("NO NAVIGATE-UP in LoginAppAc activity");
+    }
+
+    // ======================================  TESTS =====================================
+
     @Test
     public void testValidate_1() throws UiException, IOException
     {
         // Caso OK: user in DB, but without token in cache.
         assertThat(AppUserComuServ.regComuAndUserAndUserComu(COMU_TRAV_PLAZUELA_PEPE).execute().body(), is(true));
 
-        mActivity = mActivityRule.launchActivity(new Intent());
+        mActivity = (LoginAc) mActivityRule.launchActivity(new Intent());
         // Previous state.
         assertThat(isRegisteredUser(mActivity), is(false));
         assertThat(TKhandler.getAccessTokenInCache(), nullValue());
@@ -75,7 +98,7 @@ public class LoginAc_App_1_Test extends LoginAcTest {
     {
         // Caso OK: user in DB, with token in cache.
         signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
-        mActivity = mActivityRule.launchActivity(new Intent());
+        mActivity = (LoginAc) mActivityRule.launchActivity(new Intent());
         // Previous state.
         assertThat(isRegisteredUser(mActivity), is(true));
         assertThat(TKhandler.getAccessTokenInCache(), notNullValue());
@@ -98,7 +121,7 @@ public class LoginAc_App_1_Test extends LoginAcTest {
 
         // Caso NO OK: user in DB, wrong password.
         assertThat(AppUserComuServ.regComuAndUserAndUserComu(COMU_TRAV_PLAZUELA_PEPE).execute().body(), is(true));
-        mActivity = mActivityRule.launchActivity(new Intent());
+        mActivity = (LoginAc) mActivityRule.launchActivity(new Intent());
 
         typeCheckClickPswdWrong(UsuarioTestUtils.USER_PEPE.getUserName());
         Thread.sleep(2000);
@@ -111,7 +134,7 @@ public class LoginAc_App_1_Test extends LoginAcTest {
 
         // Caso NO OK: user in DB, wrong password three consecutive times.
         assertThat(AppUserComuServ.regComuAndUserAndUserComu(COMU_TRAV_PLAZUELA_PEPE).execute().body(), is(true));
-        mActivity = mActivityRule.launchActivity(new Intent());
+        mActivity = (LoginAc) mActivityRule.launchActivity(new Intent());
 
         getDialogFragment(UsuarioTestUtils.USER_PEPE.getUserName());
         Thread.sleep(2000);

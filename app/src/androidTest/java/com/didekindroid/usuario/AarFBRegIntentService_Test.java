@@ -1,4 +1,4 @@
-package com.didekinaar.usuario;
+package com.didekindroid.usuario;
 
 import android.app.NotificationManager;
 import android.content.Context;
@@ -8,6 +8,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekinaar.mock.MockActivity;
 import com.didekinaar.testutil.IdlingResourceForIntentServ;
+import com.didekinaar.usuario.AarFBRegIntentService;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.junit.After;

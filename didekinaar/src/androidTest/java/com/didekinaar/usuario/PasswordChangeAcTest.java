@@ -1,5 +1,6 @@
 package com.didekinaar.usuario;
 
+import android.app.Activity;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 
@@ -8,6 +9,7 @@ import com.didekin.usuario.Usuario;
 import com.didekinaar.R;
 import com.didekinaar.exception.UiException;
 import com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum;
+import com.didekinaar.testutil.ExtendableTestAc;
 
 import org.junit.After;
 import org.junit.Before;
@@ -43,31 +45,20 @@ import static org.junit.Assert.assertThat;
  * Date: 25/09/15
  * Time: 17:45
  */
-public abstract class PasswordChangeAcTest {
+public abstract class PasswordChangeAcTest implements ExtendableTestAc {
 
     PasswordChangeAc mActivity;
     CleanUserEnum whatToClean = CLEAN_PEPE;
     int activityLayoutId = R.id.password_change_ac_layout;
 
     @Rule
-    public ActivityTestRule<PasswordChangeAc> mActivityRule =
-            new ActivityTestRule<PasswordChangeAc>(PasswordChangeAc.class) {
-                @Override
-                protected void beforeActivityLaunched()
-                {
-                    // Precondition: the user is registered.
-                    try {
-                        registerUser();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            };
+    public ActivityTestRule<? extends Activity> mActivityRule =  getActivityRule();
+
 
     @Before
     public void setUp() throws Exception
     {
-        mActivity = mActivityRule.getActivity();
+        mActivity = (PasswordChangeAc) mActivityRule.getActivity();
     }
 
     @After
@@ -75,10 +66,6 @@ public abstract class PasswordChangeAcTest {
     {
         cleanOptions(whatToClean);
     }
-
-    //  ............................. METHODS TO BE OVERWRITTEN ..................................
-
-    protected abstract void registerUser() throws Exception;
 
     //    =====================================  TESTS  ==========================================
 

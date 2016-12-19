@@ -1,5 +1,6 @@
 package com.didekinaar.usuario;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
@@ -8,6 +9,7 @@ import com.didekin.oauth2.SpringOauthToken;
 import com.didekinaar.R;
 import com.didekinaar.testutil.AarActivityTestUtils;
 import com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum;
+import com.didekinaar.testutil.ExtendableTestAc;
 import com.didekinaar.usuario.login.LoginAc;
 
 import org.hamcrest.Matchers;
@@ -41,15 +43,14 @@ import static org.junit.Assert.assertThat;
  * Date: 26/10/15
  * Time: 13:55
  */
-@SuppressWarnings("AbstractClassWithoutAbstractMethods")
-public abstract class LoginAcTest {
+public abstract class LoginAcTest implements ExtendableTestAc {
 
     protected LoginAc mActivity;
     protected CleanUserEnum whatToClean = CLEAN_NOTHING;
     protected int activityLayoutId = R.id.login_ac_layout;
 
     @Rule
-    public ActivityTestRule<LoginAc> mActivityRule = new ActivityTestRule<>(LoginAc.class, true, false);
+    public ActivityTestRule<? extends Activity> mActivityRule = getActivityRule();
 
     @Before
     public void setUp() throws Exception
@@ -63,18 +64,12 @@ public abstract class LoginAcTest {
         cleanOptions(whatToClean);
     }
 
-    //  ............................. METHODS TO BE OVERWRITTEN ..................................
-
-    protected boolean registerUser() throws Exception {
-        throw new UnsupportedOperationException("This method should be overwritten");
-    }
-
     //    =====================================  TESTS  ==========================================
 
     @Test
     public final void testOnCreate() throws Exception
     {
-        mActivity = mActivityRule.launchActivity(new Intent());
+        mActivity = (LoginAc) mActivityRule.launchActivity(new Intent());
         assertThat(mActivity, Matchers.notNullValue());
         onView(ViewMatchers.withId(R.id.reg_usuario_email_editT)).check(matches(isDisplayed()));
         onView(ViewMatchers.withId(R.id.reg_usuario_password_ediT)).check(matches(isDisplayed()));
@@ -87,7 +82,7 @@ public abstract class LoginAcTest {
     @Test
     public final void testMakeBean_1()
     {
-        mActivity = mActivityRule.launchActivity(new Intent());
+        mActivity = (LoginAc) mActivityRule.launchActivity(new Intent());
 
         onView(ViewMatchers.withId(R.id.reg_usuario_email_editT)).perform(typeText("user_wrong"));
         onView(ViewMatchers.withId(R.id.reg_usuario_password_ediT)).perform(typeText("psw"));
@@ -101,7 +96,7 @@ public abstract class LoginAcTest {
     public final void testValidate_0() throws InterruptedException
     {
         // Caso NO OK: user not in DB.
-        mActivity = mActivityRule.launchActivity(new Intent());
+        mActivity = (LoginAc) mActivityRule.launchActivity(new Intent());
         assertThat(isRegisteredUser(mActivity), is(false));
 
         onView(ViewMatchers.withId(R.id.reg_usuario_email_editT)).perform(typeText("user@notfound.com"));

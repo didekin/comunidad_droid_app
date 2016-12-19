@@ -78,7 +78,7 @@ dependencies {
     compile rootProject.ext.firebase_message
     compile project(':didekinaar')
 
-    androidTestCompile project(path:':didekinaar', configuration:'androidTestCompile')
+//    androidTestCompile project(path:':didekinaar', configuration:'androidTestCompile')
     androidTestCompile rootProject.ext.apps_androidtest
     testCompile rootProject.ext.junit
 }
