@@ -31,7 +31,7 @@ import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doResolu
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_PLAZUELA5_PEPE;
-import static com.didekinaar.usuario.UsuarioService.AarUserServ;
+import static com.didekinaar.usuario.UsuarioDaoRemote.usuarioDaoRemote;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -67,7 +67,7 @@ public class IncidRegResolucion_GCM_Test extends Incidencia_GCM_Test {
             return;
         }
         // Preconditions for the test: TOKEN en BD.
-        assertThat(AarUserServ.getGcmToken(), is(FirebaseInstanceId.getInstance().getToken()));
+        assertThat(usuarioDaoRemote.getGcmToken(), is(FirebaseInstanceId.getInstance().getToken()));
 
         Resolucion resolucion = doResolucion(incidImportancia.getIncidencia(),
             RESOLUCION_DEFAULT_DESC,

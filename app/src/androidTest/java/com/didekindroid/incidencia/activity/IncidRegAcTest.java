@@ -9,7 +9,7 @@ import android.widget.CursorAdapter;
 import com.didekin.incidencia.dominio.IncidenciaUser;
 import com.didekin.comunidad.Comunidad;
 import com.didekinaar.exception.UiException;
-import com.didekinaar.testutil.AarActivityTestUtils;
+import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.exception.UiAppException;
 import com.didekindroid.R;
 import com.didekindroid.incidencia.dominio.IncidenciaBean;
@@ -38,7 +38,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
-import static com.didekinaar.testutil.AarActivityTestUtils.cleanOptions;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekinaar.testutil.AarActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.regSeveralUserComuSameUser;
 import static com.didekinaar.utils.UIutils.getErrorMsgBuilder;
@@ -69,7 +69,7 @@ public class IncidRegAcTest {
 //    TODO: internacionalizar textos.
 
     private IncidRegAc mActivity;
-    private AarActivityTestUtils.CleanUserEnum whatToClean = AarActivityTestUtils.CleanUserEnum.CLEAN_PEPE;
+    private UsuarioDataTestUtils.CleanUserEnum whatToClean = UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
     private Comunidad comunidadByDefault;
     ArrayAdapter<Comunidad> comunidadesAdapter;
 

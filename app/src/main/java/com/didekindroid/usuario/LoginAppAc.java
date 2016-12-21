@@ -29,7 +29,7 @@ public class LoginAppAc extends LoginAc {
     }
 
     @Override
-    protected int getDialogThemeId()
+    public int getDialogThemeId()
     {
         return R.style.alertDialogTheme;
     }

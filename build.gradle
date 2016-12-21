@@ -1,6 +1,7 @@
 buildscript {
     repositories {
         jcenter()
+        mavenCentral()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.2.3'
@@ -23,7 +24,7 @@ subprojects {
     apply plugin: 'idea'
     dependencies {
         configurations.all {
-            resolutionStrategy.force rootProject.ext.test_resolution
+            resolutionStrategy.force rootProject.ext.test_depend_resolution
         }
     }
 }
@@ -41,11 +42,14 @@ ext {
     testRunnerRulesVersion = '0.5'
 
     model_lib = ':client_lib-a-0.1.7:@jar'
+
     firebase_message = 'com.google.firebase:firebase-messaging:9.4.0'
+
     retrofit2 = ['com.squareup.retrofit2:retrofit:2.1.0',
                  'com.squareup.retrofit2:converter-gson:2.1.0',
-                 'com.squareup.okhttp3:logging-interceptor:3.4.1']
+                 'com.squareup.okhttp3:logging-interceptor:3.5.0']
     timber = 'com.jakewharton.timber:timber:4.3.0'
+
     rxjava = ['io.reactivex:rxandroid:1.2.1',
               'io.reactivex:rxjava:1.2.3']
 
@@ -68,11 +72,11 @@ ext {
     apps_androidtest = [espresso,
                         ':client_gcm_lib-a-0.1.7:@jar']
 
-    test_resolution = ["com.android.support:support-annotations:$rootProject.ext.androidSupportVersion",
-                       "com.android.support:support-v4:$rootProject.ext.androidSupportVersion",
-                       "com.android.support:appcompat-v7:$rootProject.ext.androidSupportVersion",
-                       "com.android.support:recyclerview-v7:$rootProject.ext.androidSupportVersion",
-                       "com.android.support:design:$rootProject.ext.androidSupportVersion"]
+    test_depend_resolution = ["com.android.support:support-annotations:$rootProject.ext.androidSupportVersion",
+                              "com.android.support:support-v4:$rootProject.ext.androidSupportVersion",
+                              "com.android.support:appcompat-v7:$rootProject.ext.androidSupportVersion",
+                              "com.android.support:recyclerview-v7:$rootProject.ext.androidSupportVersion",
+                              "com.android.support:design:$rootProject.ext.androidSupportVersion"]
 }
 
 task wrapper(type: Wrapper) {

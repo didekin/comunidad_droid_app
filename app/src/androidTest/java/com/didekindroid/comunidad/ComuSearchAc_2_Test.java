@@ -10,8 +10,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekinaar.R;
 import com.didekinaar.exception.UiException;
-import com.didekinaar.testutil.AarActivityTestUtils;
-import com.didekinaar.usuario.testutil.UsuarioTestUtils;
+import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.comunidad.testutil.ComuEspresoTestUtil;
 import com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil;
 
@@ -33,7 +32,7 @@ import static com.didekinaar.comunidad.ComuBundleKey.COMUNIDAD_SEARCH;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkBack;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
-import static com.didekinaar.testutil.AarActivityTestUtils.cleanOneUser;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
 import static com.didekinaar.utils.UIutils.isRegisteredUser;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -63,7 +62,7 @@ public class ComuSearchAc_2_Test {
     @Before @After
     public void cleanData()
     {
-        AarActivityTestUtils.cleanWithTkhandler();
+        UsuarioDataTestUtils.cleanWithTkhandler();
     }
 
     @Test
@@ -83,7 +82,7 @@ public class ComuSearchAc_2_Test {
 
         checkUp(activityLayoutId);
 
-        cleanOneUser(UsuarioTestUtils.USER_JUAN);
+        cleanOneUser(UsuarioDataTestUtils.USER_JUAN);
     }
 
     @Test
@@ -103,7 +102,7 @@ public class ComuSearchAc_2_Test {
         // Back.
         checkBack(onViewCheck, activityLayoutId);
 
-        cleanOneUser(UsuarioTestUtils.USER_JUAN);
+        cleanOneUser(UsuarioDataTestUtils.USER_JUAN);
     }
 
     @Test
@@ -164,7 +163,7 @@ public class ComuSearchAc_2_Test {
         // Back: volvemos al resultado de la búsqueda.
         checkUp(activityLayoutId);
 
-        cleanOneUser(UsuarioTestUtils.USER_JUAN);
+        cleanOneUser(UsuarioDataTestUtils.USER_JUAN);
     }
 
     @Test
@@ -185,6 +184,6 @@ public class ComuSearchAc_2_Test {
         // Back: volvemos al resultado de la búsqueda.
         checkBack(viewInteraction, activityLayoutId);
 
-        cleanOneUser(UsuarioTestUtils.USER_JUAN);
+        cleanOneUser(UsuarioDataTestUtils.USER_JUAN);
     }
 }

@@ -9,8 +9,8 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekinaar.R;
 import com.didekinaar.exception.UiException;
-import com.didekinaar.testutil.AarActivityTestUtils;
 import com.didekinaar.usuario.testutil.UserItemMenuTestUtils;
+import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil;
 
 import junit.framework.AssertionFailedError;
@@ -32,7 +32,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static com.didekinaar.security.TokenHandler.TKhandler;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
-import static com.didekinaar.testutil.AarActivityTestUtils.cleanOptions;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekinaar.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.REG_COMU_USERCOMU_AC;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.REG_COMU_USER_USERCOMU_AC;
@@ -51,7 +51,7 @@ public class ComuSearchAc_3_SlowTest {
     private ComuSearchAc activity;
     Context context;
     File refreshTkFile;
-    AarActivityTestUtils.CleanUserEnum whatClean;
+    UsuarioDataTestUtils.CleanUserEnum whatClean;
 
     // Navigate-up activity layout.
     int activityLayoutId = R.id.comu_search_ac_linearlayout;
@@ -71,7 +71,7 @@ public class ComuSearchAc_3_SlowTest {
         Thread.sleep(4000);
         context = InstrumentationRegistry.getTargetContext();
         refreshTkFile = TKhandler.getRefreshTokenFile();
-        whatClean = AarActivityTestUtils.CleanUserEnum.CLEAN_NOTHING;
+        whatClean = UsuarioDataTestUtils.CleanUserEnum.CLEAN_NOTHING;
     }
 
     @After
@@ -84,7 +84,7 @@ public class ComuSearchAc_3_SlowTest {
     @Test
     public void testComunidadesByUsuario_withToken() throws InterruptedException, UiException, IOException
     {
-        whatClean = AarActivityTestUtils.CleanUserEnum.CLEAN_JUAN;
+        whatClean = UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 
         UserComuTestUtil.signUpAndUpdateTk(UserComuTestUtil.COMU_REAL_JUAN);
         activity = mActivityRule.launchActivity(new Intent());
@@ -106,7 +106,7 @@ public class ComuSearchAc_3_SlowTest {
     @Test
     public void testLogin_withToken() throws InterruptedException, UiException, IOException
     {
-        whatClean = AarActivityTestUtils.CleanUserEnum.CLEAN_JUAN;
+        whatClean = UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
         UserComuTestUtil.signUpAndUpdateTk(UserComuTestUtil.COMU_REAL_JUAN);
         activity = mActivityRule.launchActivity(new Intent());
 
@@ -143,7 +143,7 @@ public class ComuSearchAc_3_SlowTest {
     @Test
     public void testGetDatosUsuarioWithToken() throws InterruptedException, UiException, IOException
     {
-        whatClean = AarActivityTestUtils.CleanUserEnum.CLEAN_JUAN;
+        whatClean = UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 
         //With token.
         UserComuTestUtil.signUpAndUpdateTk(UserComuTestUtil.COMU_REAL_JUAN);
@@ -168,7 +168,7 @@ public class ComuSearchAc_3_SlowTest {
     @Test
     public void testMenuNuevaComunidad_withToken() throws InterruptedException, UiException, IOException
     {
-        whatClean = AarActivityTestUtils.CleanUserEnum.CLEAN_JUAN;
+        whatClean = UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 
         UserComuTestUtil.signUpAndUpdateTk(UserComuTestUtil.COMU_REAL_JUAN);
         activity = mActivityRule.launchActivity(new Intent());

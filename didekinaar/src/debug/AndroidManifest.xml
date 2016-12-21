@@ -7,8 +7,13 @@
                  tools:node="replace">
         <!-- Activity for UIException tests. -->
         <activity
-            android:name="com.didekinaar.mock.MockActivity"
+            android:name="com.didekinaar.testutil.MockActivity"
             android:label="@string/mockActivity_label"
+            android:launchMode="singleTask">
+        </activity>
+        <activity
+            android:name="com.didekinaar.testutil.MockNextDefaultActivity"
+            android:label="@string/mockDefaultActivity_label"
             android:launchMode="singleTask">
         </activity>
     </application>

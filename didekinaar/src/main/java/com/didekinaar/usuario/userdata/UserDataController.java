@@ -15,8 +15,8 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
-import static com.didekinaar.usuario.UsuarioService.AarUserServ;
-import static com.didekinaar.usuario.UsuarioObservables.getUserDataSingle;
+import static com.didekinaar.usuario.UsuarioDaoRemote.usuarioDaoRemote;
+import static com.didekinaar.usuario.userdata.UserDataObservable.getUserDataSingle;
 import static com.didekinaar.utils.UIutils.getErrorMsgBuilder;
 import static com.didekinaar.utils.UIutils.makeToast;
 
@@ -109,7 +109,7 @@ class UserDataController implements UserDataControllerIf {
                 .build();
 
         try {
-            AarUserServ.modifyUser(usuarioIn);
+            usuarioDaoRemote.modifyUser(usuarioIn);
             TKhandler.cleanTokenAndBackFile();
         } catch (UiException e) {
             uiException = e;
@@ -126,7 +126,7 @@ class UserDataController implements UserDataControllerIf {
             Timber.d(e.getErrorBean().getMessage());
         }
         try {
-            AarUserServ.deleteAccessToken(token_1.getValue());
+            usuarioDaoRemote.deleteAccessToken(token_1.getValue());
         } catch (UiException e) {
             // No token in cache
             Timber.d(e.getErrorBean().getMessage());
@@ -143,7 +143,7 @@ class UserDataController implements UserDataControllerIf {
                 .uId(newUser.getuId())
                 .build();
         try {
-            AarUserServ.modifyUser(usuarioIn);
+            usuarioDaoRemote.modifyUser(usuarioIn);
         } catch (UiException e) {
 //            uiException = e;
             Timber.d((e.getErrorBean() != null ?

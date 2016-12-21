@@ -7,8 +7,8 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekin.oauth2.SpringOauthToken;
 import com.didekin.usuario.Usuario;
 import com.didekinaar.exception.UiException;
-import com.didekinaar.testutil.AarActivityTestUtils;
-import com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum;
+import com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum;
+import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 import com.didekinaar.utils.IoHelper;
 
 import org.junit.After;
@@ -21,17 +21,17 @@ import java.io.IOException;
 
 import static com.didekin.common.exception.DidekinExceptionMsg.USER_NAME_NOT_FOUND;
 import static com.didekin.oauth2.OauthTokenHelper.HELPER;
-import static com.didekinaar.security.Oauth2Service.Oauth2;
+import static com.didekinaar.security.Oauth2DaoRemote.Oauth2;
 import static com.didekinaar.security.TokenHandler.TKhandler;
-import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_JUAN;
-import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_NOTHING;
-import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekinaar.testutil.AarActivityTestUtils.cleanOneUser;
-import static com.didekinaar.testutil.AarActivityTestUtils.cleanOptions;
-import static com.didekinaar.usuario.UsuarioService.AarUserServ;
-import static com.didekinaar.usuario.testutil.UsuarioTestUtils.USER_DROID;
-import static com.didekinaar.usuario.testutil.UsuarioTestUtils.USER_JUAN;
-import static com.didekinaar.usuario.testutil.UsuarioTestUtils.USER_PEPE;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_NOTHING;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
+import static com.didekinaar.usuario.UsuarioDaoRemote.usuarioDaoRemote;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.USER_DROID;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_PLAZUELA5_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_REAL_DROID;
@@ -52,7 +52,7 @@ import static org.junit.Assert.fail;
  */
 @SuppressWarnings("ConstantConditions")
 @RunWith(AndroidJUnit4.class)
-public class UsuarioServiceTest {
+public class UsuarioDaoRemoteTest {
 
     Context context;
     File refreshTkFile;
@@ -80,7 +80,7 @@ public class UsuarioServiceTest {
         whatClean = CLEAN_PEPE;
 
         signUpAndUpdateTk(COMU_REAL_PEPE);
-        boolean isDeleted = AarUserServ.deleteAccessToken(TKhandler.getAccessTokenInCache().getValue());
+        boolean isDeleted = usuarioDaoRemote.deleteAccessToken(TKhandler.getAccessTokenInCache().getValue());
         assertThat(isDeleted, is(true));
     }
 
@@ -101,8 +101,8 @@ public class UsuarioServiceTest {
         whatClean = CLEAN_PEPE;
 
         signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
-        assertThat(AarUserServ.modifyUserGcmToken("pepe_test_gcm_token"), is(1));
-        assertThat(AarUserServ.getGcmToken(), is("pepe_test_gcm_token"));
+        assertThat(usuarioDaoRemote.modifyUserGcmToken("pepe_test_gcm_token"), is(1));
+        assertThat(usuarioDaoRemote.getGcmToken(), is("pepe_test_gcm_token"));
     }
 
     @Test
@@ -111,7 +111,7 @@ public class UsuarioServiceTest {
         //Inserta userComu, comunidad, usuariocomunidad y actuliza tokenCache.
         signUpAndUpdateTk(COMU_REAL_JUAN);
 
-        Usuario usuario = AarUserServ.getUserData();
+        Usuario usuario = usuarioDaoRemote.getUserData();
         assertThat(usuario.getUserName(), is(USER_JUAN.getUserName()));
 
         whatClean = CLEAN_JUAN;
@@ -122,7 +122,7 @@ public class UsuarioServiceTest {
     {
         // User not in DB.
         try {
-            AarUserServ.loginInternal("user@notfound.com", "password_wrong");
+            usuarioDaoRemote.loginInternal("user@notfound.com", "password_wrong");
             fail();
         } catch (UiException ue) {
             assertThat(ue.getErrorBean().getMessage(), is(USER_NAME_NOT_FOUND.getHttpMessage()));
@@ -135,7 +135,7 @@ public class UsuarioServiceTest {
         whatClean = CLEAN_JUAN;
         signUpAndUpdateTk(COMU_REAL_JUAN);
 
-        assertThat(AarUserServ.loginInternal(USER_JUAN.getUserName(), USER_JUAN.getPassword()), is(true));
+        assertThat(usuarioDaoRemote.loginInternal(USER_JUAN.getUserName(), USER_JUAN.getPassword()), is(true));
     }
 
     @Test
@@ -150,7 +150,7 @@ public class UsuarioServiceTest {
                 .uId(usuario_1.getuId())
                 .build();
 
-        int rowUpdated = AarUserServ.modifyUser(usuarioIn);
+        int rowUpdated = usuarioDaoRemote.modifyUser(usuarioIn);
         assertThat(rowUpdated, is(1));
     }
 
@@ -167,7 +167,7 @@ public class UsuarioServiceTest {
                 .uId(usuario_1.getuId())
                 .build();
 
-        int rowUpdated = AarUserServ.modifyUser(usuarioIn);
+        int rowUpdated = usuarioDaoRemote.modifyUser(usuarioIn);
         assertThat(rowUpdated, is(1));
 
         cleanOneUser(new Usuario.UsuarioBuilder()
@@ -182,8 +182,8 @@ public class UsuarioServiceTest {
     {
         whatClean = CLEAN_JUAN;
         signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
-        assertThat(AarUserServ.modifyUserGcmToken("GCMToken12345X"), is(1));
-        assertThat(AarUserServ.modifyUserGcmToken("GCMToken98765Z"), is(1));
+        assertThat(usuarioDaoRemote.modifyUserGcmToken("GCMToken12345X"), is(1));
+        assertThat(usuarioDaoRemote.modifyUserGcmToken("GCMToken98765Z"), is(1));
     }
 
     @Test
@@ -191,7 +191,7 @@ public class UsuarioServiceTest {
     {
         signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
         String passwordClear_2 = "new_juan_password";
-        assertThat(AarUserServ.passwordChange(passwordClear_2), is(1));
+        assertThat(usuarioDaoRemote.passwordChange(passwordClear_2), is(1));
 
         cleanOneUser(new Usuario.UsuarioBuilder()
                 .userName(USER_JUAN.getUserName())
@@ -203,11 +203,11 @@ public class UsuarioServiceTest {
     public void testPasswordSend() throws UiException, IOException
     {
         signUpAndUpdateTk(COMU_REAL_DROID);
-        assertThat(AarUserServ.passwordSend(USER_DROID.getUserName()).execute().body(), is(true));
+        assertThat(usuarioDaoRemote.passwordSend(USER_DROID.getUserName()).execute().body(), is(true));
         // Es necesario conseguir un nuevo token. La validación del antiguo falla por el cambio de password.
         SpringOauthToken token = Oauth2.getRefreshUserToken(TKhandler.getRefreshTokenValue());
-        AarUserServ.deleteUser(HELPER.doBearerAccessTkHeader(token)).execute();
-        AarActivityTestUtils.cleanWithTkhandler();
+        usuarioDaoRemote.deleteUser(HELPER.doBearerAccessTkHeader(token)).execute();
+        UsuarioDataTestUtils.cleanWithTkhandler();
     }
 
 //    ====================== NON INTERFACE TESTS =========================

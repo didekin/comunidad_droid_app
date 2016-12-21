@@ -5,7 +5,7 @@ import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekinaar.usuario.UserDataAcTest;
+import com.didekinaar.usuario.userdata.UserDataAcTest;
 import com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil;
 
 import org.junit.BeforeClass;
@@ -22,7 +22,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
 import static com.didekinaar.usuario.testutil.UserItemMenuTestUtils.DELETE_ME_AC;
 import static com.didekinaar.usuario.testutil.UserItemMenuTestUtils.PASSWORD_CHANGE_AC;
-import static com.didekinaar.usuario.testutil.UsuarioTestUtils.USER_JUAN;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
 import static com.didekindroid.comunidad.testutil.ComuMenuTestUtil.COMU_SEARCH_AC;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_OPEN_BY_COMU_AC;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.SEE_USERCOMU_BY_USER_AC;

@@ -1,4 +1,4 @@
-package com.didekinaar.mock;
+package com.didekinaar.repository;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -27,6 +27,7 @@ import static com.didekinaar.comunidad.ComunidadDataDb.ComunidadAutonoma.cu_nomb
  * Time: 09:19
  */
 public class MockDbHelper extends SQLiteOpenHelper {
+
     public static final String DB_NAME = "mock.db";
     /*This number has to be changed in future versions, to get executed onUpgrade() method.*/
     public static final int DB_VERSION = 1;

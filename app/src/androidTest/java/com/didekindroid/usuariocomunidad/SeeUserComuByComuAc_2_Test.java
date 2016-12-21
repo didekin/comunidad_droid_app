@@ -10,7 +10,7 @@ import com.didekin.usuariocomunidad.UsuarioComunidad;
 import com.didekinaar.R;
 import com.didekinaar.exception.UiException;
 import com.didekindroid.comunidad.ComuBundleKey;
-import com.didekinaar.usuario.testutil.UsuarioTestUtils;
+import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.comunidad.testutil.ComuTestUtil;
 import com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil;
 import com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil;
@@ -31,11 +31,11 @@ import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekinaar.testutil.AarActivityTestUtils.cleanOptions;
-import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_JUAN;
-import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_JUAN2;
-import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
-import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN2;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekinaar.usuariocomunidad.AarUserComuService.AarUserComuServ;
 import static com.didekinaar.usuariocomunidad.RolUi.INQ;
 import static com.didekinaar.usuariocomunidad.RolUi.formatRolToString;
@@ -106,7 +106,7 @@ public class SeeUserComuByComuAc_2_Test {
         UsuarioComunidad userComuNew = new UsuarioComunidad.UserComuBuilder(
                 new Comunidad.ComunidadBuilder().c_id(comunidadId)
                         .build(),
-                UsuarioTestUtils.USER_JUAN2)
+                UsuarioDataTestUtils.USER_JUAN2)
                 .portal("portal B")
                 .planta("B")
                 .puerta("123")
@@ -156,7 +156,7 @@ public class SeeUserComuByComuAc_2_Test {
     {
         UsuarioComunidad usuarioComunidad = new UsuarioComunidad.UserComuBuilder(
                 ComuTestUtil.COMU_LA_PLAZUELA_5,
-                UsuarioTestUtils.USER_JUAN2)
+                UsuarioDataTestUtils.USER_JUAN2)
                 .portal("portal B")
                 .planta("B")
                 .puerta("123")

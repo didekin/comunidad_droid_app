@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekinaar.usuario.PasswordChangeAcTest;
+import com.didekinaar.usuario.password.PasswordChangeAcTest;
 import com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil;
 
 import org.junit.BeforeClass;

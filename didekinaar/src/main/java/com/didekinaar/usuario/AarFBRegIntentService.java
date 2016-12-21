@@ -1,5 +1,6 @@
 package com.didekinaar.usuario;
 
+import android.app.Activity;
 import android.app.IntentService;
 import android.content.Intent;
 
@@ -8,7 +9,8 @@ import com.google.firebase.iid.FirebaseInstanceId;
 
 import timber.log.Timber;
 
-import static com.didekinaar.usuario.UsuarioService.AarUserServ;
+import static com.didekinaar.usuario.UsuarioDaoRemote.usuarioDaoRemote;
+import static com.didekinaar.utils.UIutils.isGcmTokenSentServer;
 import static com.didekinaar.utils.UIutils.isRegisteredUser;
 import static com.didekinaar.utils.UIutils.updateIsGcmTokenSentServer;
 
@@ -24,6 +26,13 @@ public class AarFBRegIntentService extends IntentService {
         super(AarFBRegIntentService.class.getCanonicalName());
     }
 
+    public static void getGcmToken(Activity myActivity)
+    {
+        if (!isGcmTokenSentServer(myActivity)) {
+            myActivity.startService(new Intent(myActivity, AarFBRegIntentService.class));
+        }
+    }
+
     @Override
     protected void onHandleIntent(Intent intent)
     {
@@ -34,7 +43,7 @@ public class AarFBRegIntentService extends IntentService {
         }
         try {
             String token = FirebaseInstanceId.getInstance().getToken();
-                AarUserServ.modifyUserGcmToken(token);
+                usuarioDaoRemote.modifyUserGcmToken(token);
                 updateIsGcmTokenSentServer(true, this);
                 Timber.i("onHandleIntent(), GCM token registered: %s%n", token);
         } catch (UiException e) {

@@ -10,9 +10,9 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.comunidad.Comunidad;
 import com.didekinaar.exception.UiException;
-import com.didekinaar.testutil.AarActivityTestUtils;
 import com.didekinaar.testutil.IdlingResourceForIntentServ;
 import com.didekinaar.usuario.AarFBRegIntentService;
+import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.R;
 
 import org.junit.After;
@@ -33,11 +33,11 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_JUAN;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
-import static com.didekinaar.testutil.AarActivityTestUtils.cleanOptions;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekinaar.testutil.AarActivityTestUtils.clickNavigateUp;
-import static com.didekinaar.usuario.UsuarioService.AarUserServ;
+import static com.didekinaar.usuario.UsuarioDaoRemote.usuarioDaoRemote;
 import static com.didekinaar.utils.UIutils.isRegisteredUser;
 import static com.didekinaar.utils.UIutils.updateIsGcmTokenSentServer;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
@@ -66,7 +66,7 @@ import static org.junit.Assert.fail;
 public class IncidSeeOpenByComuAcTest_1 {
 
     private IncidSeeOpenByComuAc mActivity;
-    private AarActivityTestUtils.CleanUserEnum whatToClean = CLEAN_JUAN;
+    private UsuarioDataTestUtils.CleanUserEnum whatToClean = CLEAN_JUAN;
     IdlingResourceForIntentServ idlingResource;
     Comunidad comunidadInIntent;
     NotificationManager mNotifyManager;
@@ -85,7 +85,7 @@ public class IncidSeeOpenByComuAcTest_1 {
             Context context = InstrumentationRegistry.getTargetContext();
             updateIsGcmTokenSentServer(false, context);
             try {
-                Objects.equals(AarUserServ.getGcmToken() == null, true);
+                Objects.equals(usuarioDaoRemote.getGcmToken() == null, true);
             } catch (UiException e) {
                 e.printStackTrace();
             }

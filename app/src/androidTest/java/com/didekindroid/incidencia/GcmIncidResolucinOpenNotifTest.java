@@ -10,7 +10,7 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekin.incidencia.dominio.IncidenciaUser;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
 import com.didekinaar.exception.UiException;
-import com.didekinaar.mock.MockActivity;
+import com.didekinaar.testutil.MockActivity;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiAppException;
 import com.didekinservice.common.gcm.GcmException;

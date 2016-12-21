@@ -1,6 +1,6 @@
 package com.didekindroid.usuario;
 
-import com.didekinaar.usuario.PasswordChangeAc;
+import com.didekinaar.usuario.password.PasswordChangeAc;
 
 /**
  * User: pedro@didekin

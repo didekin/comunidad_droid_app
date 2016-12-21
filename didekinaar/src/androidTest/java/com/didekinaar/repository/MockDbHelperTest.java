@@ -1,4 +1,4 @@
-package com.didekinaar.mock;
+package com.didekinaar.repository;
 
 import android.content.Context;
 import android.support.test.runner.AndroidJUnit4;

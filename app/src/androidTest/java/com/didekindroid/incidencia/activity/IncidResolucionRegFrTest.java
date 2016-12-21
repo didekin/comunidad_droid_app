@@ -7,7 +7,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.widget.DatePicker;
 
 import com.didekinaar.exception.UiException;
-import com.didekinaar.testutil.AarActivityTestUtils;
+import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiAppException;
 import com.didekinaar.utils.UIutils;
@@ -40,7 +40,7 @@ import static com.didekinaar.testutil.AarActivityTestUtils.closeDatePicker;
 import static com.didekinaar.testutil.AarActivityTestUtils.reSetDatePicker;
 import static com.didekinaar.utils.UIutils.formatTimeToString;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidImportancia;
-import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_JUAN;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_PLAZUELA5_JUAN;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
@@ -86,7 +86,7 @@ public class IncidResolucionRegFrTest extends IncidResolucionAbstractTest {
     }
 
     @Override
-    AarActivityTestUtils.CleanUserEnum whatToClean()
+    UsuarioDataTestUtils.CleanUserEnum whatToClean()
     {
         return CLEAN_JUAN;
     }

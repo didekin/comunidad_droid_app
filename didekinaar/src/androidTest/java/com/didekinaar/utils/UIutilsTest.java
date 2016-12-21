@@ -7,7 +7,7 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekinaar.R;
-import com.didekinaar.testutil.AarActivityTestUtils;
+import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 
 import org.junit.After;
 import org.junit.Before;
@@ -59,7 +59,7 @@ public class UIutilsTest {
     @After
     public void clean()
     {
-        AarActivityTestUtils.cleanWithTkhandler();
+        UsuarioDataTestUtils.cleanWithTkhandler();
     }
 
     @Test

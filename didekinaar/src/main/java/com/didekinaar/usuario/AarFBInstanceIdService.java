@@ -6,7 +6,7 @@ import com.google.firebase.iid.FirebaseInstanceIdService;
 
 import timber.log.Timber;
 
-import static com.didekinaar.usuario.UsuarioService.AarUserServ;
+import static com.didekinaar.usuario.UsuarioDaoRemote.usuarioDaoRemote;
 import static com.didekinaar.utils.UIutils.isRegisteredUser;
 import static com.didekinaar.utils.UIutils.updateIsGcmTokenSentServer;
 
@@ -31,7 +31,7 @@ public class AarFBInstanceIdService extends FirebaseInstanceIdService {
 
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         try {
-            AarUserServ.modifyUserGcmToken(refreshedToken);
+            usuarioDaoRemote.modifyUserGcmToken(refreshedToken);
             updateIsGcmTokenSentServer(true, this);
             Timber.i("onTokenRefresh(), GCM token registered: %s%n", refreshedToken);
         } catch (UiException e) {

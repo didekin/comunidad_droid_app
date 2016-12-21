@@ -14,7 +14,8 @@ import com.didekin.incidencia.dominio.IncidenciaUser;
 import com.didekin.incidencia.dominio.Resolucion;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
 import com.didekinaar.exception.UiException;
-import com.didekinaar.testutil.AarActivityTestUtils;
+import com.didekinaar.testutil.AarTestUtil;
+import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.R;
 import com.didekindroid.incidencia.activity.utils.IncidBundleKey;
 import com.didekindroid.exception.UiAppException;
@@ -45,13 +46,13 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
-import static com.didekinaar.testutil.AarActivityTestUtils.cleanOptions;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekinaar.testutil.AarActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.regSeveralUserComuSameUser;
-import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_LA_FUENTE_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_PLAZUELA5_PEPE;
-import static com.didekinaar.usuario.testutil.UsuarioTestUtils.USER_PEPE;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static com.didekinaar.utils.UIutils.formatTimeStampToString;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCIDENCIA_OBJECT;
@@ -82,7 +83,7 @@ import static org.junit.Assert.assertThat;
 public class IncidSeeClosedByComuAcTest_2 {
 
     private IncidSeeClosedByComuAc mActivity;
-    private AarActivityTestUtils.CleanUserEnum whatToClean;
+    private UsuarioDataTestUtils.CleanUserEnum whatToClean;
     UsuarioComunidad mPepePlazuelas5;
     UsuarioComunidad mPepeLaFuente;
     IncidImportancia incidPepePlazuelas5_1;
@@ -123,7 +124,7 @@ public class IncidSeeClosedByComuAcTest_2 {
                 Thread.sleep(1000);
                 Incidencia incidenciaDB = IncidenciaServ.seeIncidsOpenByComu(mPepePlazuelas5.getComunidad().getC_Id()).get(0).getIncidencia();
                 incidPepePlazuelas5_1 = IncidenciaServ.seeIncidImportancia(incidenciaDB.getIncidenciaId()).getIncidImportancia();
-                Resolucion resolucionToClose = doResolucionAvances(incidPepePlazuelas5_1.getIncidencia(), RESOLUCION_DEFAULT_DESC, 231, AarActivityTestUtils.doTimeStampFromCalendar(1));
+                Resolucion resolucionToClose = doResolucionAvances(incidPepePlazuelas5_1.getIncidencia(), RESOLUCION_DEFAULT_DESC, 231, AarTestUtil.doTimeStampFromCalendar(1));
                 assertThat(IncidenciaServ.regResolucion(resolucionToClose), is(1));
                 resolucionToClose = IncidenciaServ.seeResolucion(resolucionToClose.getIncidencia().getIncidenciaId());
                 // Cierre incidPepePlazuelas5_1.
@@ -135,7 +136,7 @@ public class IncidSeeClosedByComuAcTest_2 {
                 Thread.sleep(1000);
                 incidenciaDB = IncidenciaServ.seeIncidsOpenByComu(mPepeLaFuente.getComunidad().getC_Id()).get(0).getIncidencia();
                 incidPepeLaFuente = IncidenciaServ.seeIncidImportancia(incidenciaDB.getIncidenciaId()).getIncidImportancia();
-                resolucionToClose = doResolucionAvances(incidPepeLaFuente.getIncidencia(), RESOLUCION_DEFAULT_DESC, 321, AarActivityTestUtils.doTimeStampFromCalendar(1));
+                resolucionToClose = doResolucionAvances(incidPepeLaFuente.getIncidencia(), RESOLUCION_DEFAULT_DESC, 321, AarTestUtil.doTimeStampFromCalendar(1));
                 assertThat(IncidenciaServ.regResolucion(resolucionToClose), is(1));
                 resolucionToClose = IncidenciaServ.seeResolucion(resolucionToClose.getIncidencia().getIncidenciaId());
                 // Cierre incidPepeLaFuente.
@@ -147,7 +148,7 @@ public class IncidSeeClosedByComuAcTest_2 {
                 Thread.sleep(1000);
                 incidenciaDB = IncidenciaServ.seeIncidsOpenByComu(mPepePlazuelas5.getComunidad().getC_Id()).get(0).getIncidencia();
                 incidPepePlazuelas5_2 = IncidenciaServ.seeIncidImportancia(incidenciaDB.getIncidenciaId()).getIncidImportancia();
-                resolucionToClose = doResolucionAvances(incidPepePlazuelas5_2.getIncidencia(), RESOLUCION_DEFAULT_DESC, 334, AarActivityTestUtils.doTimeStampFromCalendar(1));
+                resolucionToClose = doResolucionAvances(incidPepePlazuelas5_2.getIncidencia(), RESOLUCION_DEFAULT_DESC, 334, AarTestUtil.doTimeStampFromCalendar(1));
                 mResolucionToCheck = resolucionToClose;
                 assertThat(IncidenciaServ.regResolucion(resolucionToClose), is(1));
                 resolucionToClose = IncidenciaServ.seeResolucion(resolucionToClose.getIncidencia().getIncidenciaId());

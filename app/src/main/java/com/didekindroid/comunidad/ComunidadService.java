@@ -15,7 +15,7 @@ import timber.log.Timber;
 
 import static com.didekin.common.exception.ErrorBean.GENERIC_ERROR;
 import static com.didekinaar.PrimalCreator.creator;
-import static com.didekinaar.utils.AarServiceUtil.getResponseBody;
+import static com.didekinaar.utils.AarDaoUtil.getResponseBody;
 import static com.didekinaar.utils.UIutils.checkBearerToken;
 
 /**

@@ -8,8 +8,8 @@ import com.didekin.comunidad.Comunidad;
 import com.didekin.usuario.Usuario;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
 import com.didekinaar.exception.UiException;
-import com.didekinaar.testutil.AarActivityTestUtils;
-import com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum;
+import com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum;
+import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil;
 
 import org.junit.Before;
@@ -27,14 +27,14 @@ import static com.didekin.common.exception.DidekinExceptionMsg.USER_NAME_DUPLICA
 import static com.didekin.usuario.UsuarioEndPoints.IS_USER_DELETED;
 import static com.didekinaar.PrimalCreator.creator;
 import static com.didekinaar.security.TokenHandler.TKhandler;
-import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_JUAN;
-import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_JUAN2_AND_PEPE;
-import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
-import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_NOTHING;
-import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekinaar.testutil.AarActivityTestUtils.updateSecurityData;
-import static com.didekinaar.usuario.UsuarioService.AarUserServ;
-import static com.didekinaar.usuario.testutil.UsuarioTestUtils.USER_JUAN2;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN2_AND_PEPE;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_NOTHING;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekinaar.testutil.AarTestUtil.updateSecurityData;
+import static com.didekinaar.usuario.UsuarioDaoRemote.usuarioDaoRemote;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.USER_JUAN2;
 import static com.didekinaar.utils.UIutils.updateIsRegistered;
 import static com.didekindroid.comunidad.testutil.ComuTestUtil.COMU_LA_PLAZUELA_5;
 import static com.didekindroid.comunidad.testutil.ComuTestUtil.COMU_REAL;
@@ -79,7 +79,7 @@ public class UserComuServiceTest {
         UsuarioComunidad uc_1 = userComus.get(0);
 
         assertThat(AppUserComuServ.deleteUserComu(uc_1.getComunidad().getC_Id()), is(IS_USER_DELETED));
-        AarActivityTestUtils.cleanWithTkhandler();
+        UsuarioDataTestUtils.cleanWithTkhandler();
     }
 
     @Test
@@ -141,7 +141,7 @@ public class UserComuServiceTest {
         Comunidad cDb = AppUserComuServ.getComusByUser().get(0);
         assertThat(AppUserComuServ.isOldestOrAdmonUserComu(cDb.getC_Id()), is(true));
 
-        AarActivityTestUtils.cleanWithTkhandler();
+        UsuarioDataTestUtils.cleanWithTkhandler();
         UsuarioComunidad userComu = makeUsuarioComunidad(cDb, USER_JUAN2,
                 "portalB", null, "planta1", null, PRO.function);
         AppUserComuServ.regUserAndUserComu(userComu).execute().body();
@@ -225,7 +225,7 @@ public class UserComuServiceTest {
         // Comunidad is associated to other user.
         UserComuTestUtil.signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
         Comunidad comunidad = AppUserComuServ.getComusByUser().get(0);
-        AarActivityTestUtils.cleanWithTkhandler();
+        UsuarioDataTestUtils.cleanWithTkhandler();
 
         UsuarioComunidad userComu = makeUsuarioComunidad(comunidad, USER_JUAN2,
                 "portalB", null, "planta1", null, PRO.function.concat(",").concat(PRE.function));
@@ -241,7 +241,7 @@ public class UserComuServiceTest {
         // Duplicated usuarioComunidad.
         Usuario pepe = UserComuTestUtil.signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
         Comunidad comunidad = AppUserComuServ.getComusByUser().get(0);
-        AarActivityTestUtils.cleanWithTkhandler();
+        UsuarioDataTestUtils.cleanWithTkhandler();
         UsuarioComunidad userComu = makeUsuarioComunidad(comunidad, pepe,
                 "portalB", null, "planta1", null, PRO.function.concat(",").concat(PRE.function));
 
@@ -312,7 +312,7 @@ public class UserComuServiceTest {
     public void testSeeUserComusByUser_2() throws Exception
     {
         UserComuTestUtil.signUpAndUpdateTk(COMU_REAL_JUAN);
-        assertThat(AarUserServ.deleteUser(), is(true)); // We do not update security data.
+        assertThat(usuarioDaoRemote.deleteUser(), is(true)); // We do not update security data.
         assertThat(TKhandler.doBearerAccessTkHeader(), notNullValue());
         // Wrong credentials: the user doesn't exist.
         AppUserComuServ.seeUserComusByUser();
@@ -322,7 +322,7 @@ public class UserComuServiceTest {
     public void testSeeUserComusByUser_3() throws Exception
     {
         UserComuTestUtil.signUpAndUpdateTk(COMU_REAL_JUAN);
-        assertThat(AarUserServ.deleteUser(), is(true));
+        assertThat(usuarioDaoRemote.deleteUser(), is(true));
         updateIsRegistered(false, context); // New variation: partially update of security data.
         assertThat(TKhandler.doBearerAccessTkHeader(), notNullValue());
         // Wrong credentials: the user doesn't exist.

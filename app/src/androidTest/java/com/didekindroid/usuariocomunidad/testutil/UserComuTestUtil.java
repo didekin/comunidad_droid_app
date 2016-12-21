@@ -12,11 +12,11 @@ import java.util.Objects;
 
 import static com.didekin.usuariocomunidad.Rol.PRESIDENTE;
 import static com.didekin.usuariocomunidad.Rol.PROPIETARIO;
-import static com.didekinaar.testutil.AarActivityTestUtils.updateSecurityData;
-import static com.didekinaar.usuario.UsuarioService.AarUserServ;
-import static com.didekinaar.usuario.testutil.UsuarioTestUtils.USER_DROID;
-import static com.didekinaar.usuario.testutil.UsuarioTestUtils.USER_JUAN;
-import static com.didekinaar.usuario.testutil.UsuarioTestUtils.USER_PEPE;
+import static com.didekinaar.testutil.AarTestUtil.updateSecurityData;
+import static com.didekinaar.usuario.UsuarioDaoRemote.usuarioDaoRemote;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.USER_DROID;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
 import static com.didekindroid.comunidad.testutil.ComuTestUtil.COMU_EL_ESCORIAL;
 import static com.didekindroid.comunidad.testutil.ComuTestUtil.COMU_LA_FUENTE;
 import static com.didekindroid.comunidad.testutil.ComuTestUtil.COMU_LA_PLAZUELA_5;
@@ -63,7 +63,7 @@ public final class UserComuTestUtil {
     {
         AppUserComuServ.regComuAndUserAndUserComu(usuarioComunidad).execute().body();
         updateSecurityData(usuarioComunidad.getUsuario().getUserName(), usuarioComunidad.getUsuario().getPassword());
-        return AarUserServ.getUserData();
+        return usuarioDaoRemote.getUserData();
     }
 
     public static void regTwoUserComuSameUser(List<UsuarioComunidad> usuarioComunidadList) throws IOException, UiException

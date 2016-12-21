@@ -30,7 +30,7 @@ import java.io.IOException;
 import timber.log.Timber;
 
 import static com.didekin.common.dominio.ValidDataPatterns.LINE_BREAK;
-import static com.didekinaar.security.Oauth2Service.Oauth2;
+import static com.didekinaar.security.Oauth2DaoRemote.Oauth2;
 import static com.didekinaar.security.TokenHandler.TKhandler;
 import static com.didekinaar.utils.UIutils.checkPostExecute;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;

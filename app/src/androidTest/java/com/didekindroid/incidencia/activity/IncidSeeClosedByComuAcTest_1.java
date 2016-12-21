@@ -6,7 +6,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.comunidad.Comunidad;
 import com.didekinaar.exception.UiException;
-import com.didekinaar.testutil.AarActivityTestUtils;
+import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.R;
 
 import org.junit.After;
@@ -27,10 +27,10 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
-import static com.didekinaar.testutil.AarActivityTestUtils.cleanOptions;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekinaar.testutil.AarActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.regSeveralUserComuSameUser;
-import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_PLAZUELA5_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_REAL_PEPE;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
@@ -59,7 +59,7 @@ import static org.junit.Assert.assertThat;
 public class IncidSeeClosedByComuAcTest_1 {
 
     private IncidSeeClosedByComuAc mActivity;
-    private AarActivityTestUtils.CleanUserEnum whatToClean;
+    private UsuarioDataTestUtils.CleanUserEnum whatToClean;
     Comunidad mComuPlazuelas5;
     Comunidad mComuReal;
     Comunidad comunidadInIntent;

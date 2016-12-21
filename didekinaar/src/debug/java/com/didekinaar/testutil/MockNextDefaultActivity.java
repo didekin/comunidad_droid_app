@@ -1,11 +1,11 @@
-package com.didekinaar.mock;
+package com.didekinaar.testutil;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import timber.log.Timber;
 
-public class MockActivity extends AppCompatActivity {
+public class MockNextDefaultActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState)

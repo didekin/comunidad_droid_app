@@ -10,8 +10,8 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
 import com.didekinaar.R;
 import com.didekinaar.exception.UiException;
-import com.didekinaar.testutil.AarActivityTestUtils;
 import com.didekinaar.usuario.testutil.UserItemMenuTestUtils;
+import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.comunidad.ComuBundleKey;
 import com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil;
 
@@ -40,10 +40,10 @@ import static com.didekin.usuariocomunidad.Rol.INQUILINO;
 import static com.didekin.usuariocomunidad.Rol.PRESIDENTE;
 import static com.didekin.usuariocomunidad.Rol.PROPIETARIO;
 import static com.didekinaar.security.TokenHandler.TKhandler;
-import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_JUAN;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
-import static com.didekinaar.testutil.AarActivityTestUtils.cleanOptions;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekinaar.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.comunidad.testutil.ComuMenuTestUtil.COMU_DATA_AC;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
@@ -63,7 +63,7 @@ public class UserComuDataAc_1_Test {
 
     private UserComuDataAc mActivity;
     UsuarioComunidad mUsuarioComunidad;
-    AarActivityTestUtils.CleanUserEnum whatToClean = CLEAN_JUAN;
+    UsuarioDataTestUtils.CleanUserEnum whatToClean = CLEAN_JUAN;
     int activityLayoutId = R.id.usercomu_data_ac_layout;
 
     @Rule

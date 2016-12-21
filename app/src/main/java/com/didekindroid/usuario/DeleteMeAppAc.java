@@ -10,7 +10,7 @@ import android.widget.Button;
 
 import com.didekinaar.R;
 import com.didekinaar.exception.UiException;
-import com.didekinaar.usuario.DeleteMeAc;
+import com.didekinaar.usuario.delete.DeleteMeAc;
 import com.didekinaar.utils.UIutils;
 import com.didekindroid.comunidad.ComuSearchAc;
 
@@ -24,7 +24,7 @@ import timber.log.Timber;
 
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
-import static com.didekinaar.usuario.UsuarioObservables.getDeleteMeSingle;
+import static com.didekinaar.usuario.delete.DeleteObservable.getDeleteMeSingle;
 import static com.didekinaar.utils.UIutils.doToolBar;
 import static com.didekinaar.utils.UIutils.isRegisteredUser;
 

@@ -4,24 +4,21 @@ import android.content.Context;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.oauth2.SpringOauthToken;
-import com.didekin.oauth2.SpringOauthToken.OauthToken;
 import com.didekinaar.exception.UiException;
-import com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum;
+import com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.sql.Timestamp;
-import java.util.Date;
-
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static com.didekin.oauth2.OauthTokenHelper.HELPER;
 import static com.didekinaar.security.TokenHandler.TKhandler;
-import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_NOTHING;
-import static com.didekinaar.testutil.AarActivityTestUtils.cleanOptions;
-import static com.didekinaar.testutil.AarActivityTestUtils.cleanWithTkhandler;
+import static com.didekinaar.testutil.AarTestUtil.doSpringOauthToken;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_TK_HANDLER;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanWithTkhandler;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -38,7 +35,7 @@ import static org.junit.Assert.assertThat;
 public class TokenHandlerTest {
 
     protected Context context;
-    protected CleanUserEnum whatClean = CLEAN_NOTHING;
+    protected CleanUserEnum whatClean = CLEAN_TK_HANDLER;
 
     @Before
     public void getFixture()
@@ -107,14 +104,4 @@ public class TokenHandlerTest {
 
 //    .................... UTILITIES .......................
 
-    private SpringOauthToken doSpringOauthToken()
-    {
-        return new SpringOauthToken(
-                "50d3cdaa-0d2e-4cfd-b259-82b3a0b1edef",
-                new Timestamp(new Date().getTime() + 7200000),
-                "bearer",
-                new OauthToken("50d3cdaa-0d2e-4cfd-b259-82b3a0b1edef", new Timestamp(new Date().getTime() + 7200000)),
-                new String[]{"readwrite"}
-        );
-    }
 }

@@ -7,8 +7,8 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekinaar.R;
 import com.didekinaar.exception.UiException;
-import com.didekinaar.testutil.AarActivityTestUtils;
 import com.didekinaar.usuario.testutil.UserItemMenuTestUtils;
+import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.comunidad.testutil.ComuTestUtil;
 import com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil;
 
@@ -25,10 +25,10 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_JUAN;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
-import static com.didekinaar.testutil.AarActivityTestUtils.cleanOptions;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekinaar.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_SEARCH;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.REG_COMU_USERCOMU_AC;
@@ -50,7 +50,7 @@ public class ComuSearchResultsAc_2_SlowTest {
     private ComuSearchResultsAc activity;
     ComuSearchResultsListFr mComunidadSummaryFrg;
     Intent intent;
-    AarActivityTestUtils.CleanUserEnum whatClean;
+    UsuarioDataTestUtils.CleanUserEnum whatClean;
 
     // Navigate-up layout cuando hay resultados.
     protected int fragmentLayoutId = R.id.comu_list_fragment;
@@ -72,7 +72,7 @@ public class ComuSearchResultsAc_2_SlowTest {
     {
         Thread.sleep(5000);
 
-        whatClean = AarActivityTestUtils.CleanUserEnum.CLEAN_NOTHING;
+        whatClean = UsuarioDataTestUtils.CleanUserEnum.CLEAN_NOTHING;
 
         intent = new Intent();
         intent.putExtra(COMUNIDAD_SEARCH.key, ComuTestUtil.COMU_LA_PLAZUELA_5);
@@ -106,7 +106,7 @@ public class ComuSearchResultsAc_2_SlowTest {
 
         UserComuTestUtil.regTwoUserComuSameUser(UserComuTestUtil.makeListTwoUserComu());
         // Borro los datos del userComu.
-        AarActivityTestUtils.cleanWithTkhandler();
+        UsuarioDataTestUtils.cleanWithTkhandler();
 
         //Usuario no registrado. La búsqueda devuelve una comunidad.
         activity = mActivityRule.launchActivity(intent);
@@ -140,7 +140,7 @@ public class ComuSearchResultsAc_2_SlowTest {
         //Usuario no registrado. La búsqueda devuelve una comunidad.
         UserComuTestUtil.regTwoUserComuSameUser(UserComuTestUtil.makeListTwoUserComu());
         // Borro los datos del userComu.
-        AarActivityTestUtils.cleanWithTkhandler();
+        UsuarioDataTestUtils.cleanWithTkhandler();
         activity = mActivityRule.launchActivity(intent);
         assertThat(isRegisteredUser(activity), is(false));
 

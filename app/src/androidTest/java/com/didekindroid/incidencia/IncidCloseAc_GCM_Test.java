@@ -30,7 +30,7 @@ import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGe
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetResolucionNoAdvances;
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_PLAZUELA5_PEPE;
-import static com.didekinaar.usuario.UsuarioService.AarUserServ;
+import static com.didekinaar.usuario.UsuarioDaoRemote.usuarioDaoRemote;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -66,7 +66,7 @@ public class IncidCloseAc_GCM_Test extends Incidencia_GCM_Test {
             return;
         }
         // Preconditions for the test: TOKEN en BD.
-        assertThat(AarUserServ.getGcmToken(), is(FirebaseInstanceId.getInstance().getToken()));
+        assertThat(usuarioDaoRemote.getGcmToken(), is(FirebaseInstanceId.getInstance().getToken()));
 
         assertThat(IncidenciaServ.closeIncidencia(resolucion), is(2));
         checkNotification(INCIDENCIA_CLOSE.getContentTextRsc());

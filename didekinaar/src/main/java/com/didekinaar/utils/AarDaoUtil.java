@@ -14,9 +14,9 @@ import static com.didekinaar.PrimalCreator.creator;
  * Time: 19:39
  */
 
-public final class AarServiceUtil {
+public final class AarDaoUtil {
 
-    private AarServiceUtil()
+    private AarDaoUtil()
     {
     }
 

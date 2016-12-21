@@ -7,7 +7,7 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.common.controller.RetrofitHandler;
-import com.didekinaar.mock.MockActivity;
+import com.didekinaar.testutil.MockActivity;
 import com.didekinservice.common.gcm.GcmEndPointImp;
 import com.didekinservice.common.gcm.GcmMulticastRequest;
 import com.didekinservice.common.gcm.GcmRequest;
@@ -23,8 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.didekinaar.utils.UIutils.updateIsGcmTokenSentServer;
-import static com.didekinaar.testutil.AarActivityTestUtils.cleanOptions;
-import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekinservice.common.gcm.GcmEndPoint.FCM_HOST_PORT;
 
 /**

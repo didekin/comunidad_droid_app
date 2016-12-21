@@ -6,7 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.didekinaar.R;
-import com.didekinaar.usuario.PasswordChangeAc;
+import com.didekinaar.usuario.password.PasswordChangeAc;
 import com.didekinaar.usuario.userdata.UserDataAc;
 import com.didekindroid.comunidad.ComuSearchAc;
 import com.didekindroid.usuariocomunidad.SeeUserComuByUserAc;

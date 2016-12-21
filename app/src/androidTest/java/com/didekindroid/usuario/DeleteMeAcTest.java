@@ -5,7 +5,7 @@ import android.support.test.rule.ActivityTestRule;
 
 import com.didekinaar.R;
 import com.didekinaar.exception.UiException;
-import com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum;
+import com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum;
 
 import org.junit.After;
 import org.junit.Before;
@@ -19,9 +19,9 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekinaar.security.TokenHandler.TKhandler;
-import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_NOTHING;
-import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekinaar.testutil.AarActivityTestUtils.cleanOptions;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_NOTHING;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekinaar.testutil.AarActivityTestUtils.clickNavigateUp;
 import static com.didekinaar.utils.UIutils.isRegisteredUser;
 import static org.hamcrest.Matchers.is;

@@ -11,7 +11,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekinaar.R;
 import com.didekinaar.exception.UiException;
-import com.didekinaar.testutil.AarActivityTestUtils;
+import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.comunidad.testutil.ComuEspresoTestUtil;
 import com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil;
 
@@ -35,7 +35,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekinaar.security.TokenHandler.TKhandler;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
-import static com.didekinaar.testutil.AarActivityTestUtils.cleanOptions;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekinaar.usuariocomunidad.UserAndComuFiller.makeComunidadBeanFromView;
 import static com.didekinaar.utils.UIutils.isRegisteredUser;
 import static org.hamcrest.CoreMatchers.is;
@@ -57,7 +57,7 @@ public class ComuSearchAc_1_Test {
     private Resources resources;
     private RegComuFr regComuFr;
     File refreshTkFile;
-    AarActivityTestUtils.CleanUserEnum whatClean = AarActivityTestUtils.CleanUserEnum.CLEAN_NOTHING;
+    UsuarioDataTestUtils.CleanUserEnum whatClean = UsuarioDataTestUtils.CleanUserEnum.CLEAN_NOTHING;
 
     @Rule
     public ActivityTestRule<ComuSearchAc> mActivityRule = new ActivityTestRule<>(ComuSearchAc.class, true, false);
@@ -74,7 +74,7 @@ public class ComuSearchAc_1_Test {
         context = InstrumentationRegistry.getTargetContext();
         refreshTkFile = TKhandler.getRefreshTokenFile();
         resources = context.getResources();
-        AarActivityTestUtils.cleanWithTkhandler();
+        UsuarioDataTestUtils.cleanWithTkhandler();
     }
 
     @After
@@ -141,7 +141,7 @@ public class ComuSearchAc_1_Test {
         assertThat(TKhandler.getAccessTokenInCache(), notNullValue());
         assertThat(isRegisteredUser(activity), is(true));
 
-        whatClean = AarActivityTestUtils.CleanUserEnum.CLEAN_JUAN;
+        whatClean = UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
     }
 
     @Test

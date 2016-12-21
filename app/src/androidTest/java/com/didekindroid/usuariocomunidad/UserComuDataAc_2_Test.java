@@ -8,8 +8,7 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
 import com.didekinaar.R;
 import com.didekinaar.exception.UiException;
-import com.didekinaar.testutil.AarActivityTestUtils;
-import com.didekinaar.usuario.testutil.UsuarioTestUtils;
+import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 import com.didekinaar.utils.UIutils;
 import com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil;
 
@@ -31,10 +30,10 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static com.didekinaar.security.TokenHandler.TKhandler;
-import static com.didekinaar.testutil.AarActivityTestUtils.cleanOptions;
-import static com.didekinaar.testutil.AarActivityTestUtils.updateSecurityData;
-import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_JUAN;
-import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
+import static com.didekinaar.testutil.AarTestUtil.updateSecurityData;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekinaar.usuariocomunidad.AarUserComuService.AarUserComuServ;
 import static com.didekinaar.usuariocomunidad.RolUi.PRO;
 import static com.didekinaar.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;
@@ -52,7 +51,7 @@ public class UserComuDataAc_2_Test {
 
     private UserComuDataAc mActivity;
     UsuarioComunidad mUsuarioComunidad;
-    AarActivityTestUtils.CleanUserEnum whatToClean = CLEAN_JUAN_AND_PEPE;
+    UsuarioDataTestUtils.CleanUserEnum whatToClean = CLEAN_JUAN_AND_PEPE;
 
     @Rule
     public IntentsTestRule<UserComuDataAc> intentRule = new IntentsTestRule<UserComuDataAc>(UserComuDataAc.class) {
@@ -61,11 +60,11 @@ public class UserComuDataAc_2_Test {
         protected void beforeActivityLaunched()
         {
             // Segundo usuario: newest, no ADMON.
-            UsuarioComunidad userComu = UserComuTestUtil.makeUsuarioComunidad(mUsuarioComunidad.getComunidad(), UsuarioTestUtils.USER_PEPE,
+            UsuarioComunidad userComu = UserComuTestUtil.makeUsuarioComunidad(mUsuarioComunidad.getComunidad(), UsuarioDataTestUtils.USER_PEPE,
                     "portalB", null, "planta1", null, PRO.function);
             try {
                 AarUserComuServ.regUserAndUserComu(userComu).execute();
-                updateSecurityData(UsuarioTestUtils.USER_PEPE.getUserName(), UsuarioTestUtils.USER_PEPE.getPassword());
+                updateSecurityData(UsuarioDataTestUtils.USER_PEPE.getUserName(), UsuarioDataTestUtils.USER_PEPE.getPassword());
             } catch (UiException | IOException e) {
                 e.printStackTrace();
             }

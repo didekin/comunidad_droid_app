@@ -1,4 +1,4 @@
-package com.didekinaar.usuario;
+package com.didekinaar.usuario.login;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -7,10 +7,9 @@ import android.support.test.rule.ActivityTestRule;
 
 import com.didekin.oauth2.SpringOauthToken;
 import com.didekinaar.R;
-import com.didekinaar.testutil.AarActivityTestUtils;
-import com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum;
+import com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum;
 import com.didekinaar.testutil.ExtendableTestAc;
-import com.didekinaar.usuario.login.LoginAc;
+import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 
 import org.hamcrest.Matchers;
 import org.junit.After;
@@ -27,12 +26,12 @@ import static android.support.test.espresso.matcher.RootMatchers.isDialog;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekin.oauth2.OauthTokenHelper.HELPER;
-import static com.didekinaar.security.Oauth2Service.Oauth2;
-import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_NOTHING;
+import static com.didekinaar.security.Oauth2DaoRemote.Oauth2;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_NOTHING;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
-import static com.didekinaar.testutil.AarActivityTestUtils.cleanOptions;
-import static com.didekinaar.usuario.UsuarioService.AarUserServ;
-import static com.didekinaar.usuario.testutil.UsuarioTestUtils.USER_DROID;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
+import static com.didekinaar.usuario.UsuarioDaoRemote.usuarioDaoRemote;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.USER_DROID;
 import static com.didekinaar.utils.UIutils.isRegisteredUser;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.is;
@@ -168,12 +167,12 @@ public abstract class LoginAcTest implements ExtendableTestAc {
 
         token = Oauth2.getRefreshUserToken(token.getRefreshToken().getValue());
         // Verificamos cambio de password.
-        String newPassword = AarUserServ.getUserData(HELPER.doBearerAccessTkHeader(token)).execute().body().getPassword();
-        AarUserServ.deleteUser(HELPER.doBearerAccessTkHeader(token)).execute();
+        String newPassword = usuarioDaoRemote.getUserData(HELPER.doBearerAccessTkHeader(token)).execute().body().getPassword();
+        usuarioDaoRemote.deleteUser(HELPER.doBearerAccessTkHeader(token)).execute();
 
         assertThat(newPassword, notNullValue());
         assertThat(newPassword.length() > 12, is(true));
 
-        AarActivityTestUtils.cleanWithTkhandler();
+        UsuarioDataTestUtils.cleanWithTkhandler();
     }
 }

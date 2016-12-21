@@ -10,8 +10,8 @@ import com.didekin.incidencia.dominio.IncidImportancia;
 import com.didekin.incidencia.dominio.IncidenciaUser;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
 import com.didekinaar.exception.UiException;
-import com.didekinaar.mock.MockActivity;
-import com.didekinaar.testutil.AarActivityTestUtils;
+import com.didekinaar.testutil.MockActivity;
+import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.R;
 
 import org.junit.After;
@@ -37,7 +37,7 @@ import static com.didekin.common.exception.DidekinExceptionMsg.ROLES_NOT_FOUND;
 import static com.didekin.common.exception.DidekinExceptionMsg.USER_DATA_NOT_MODIFIED;
 import static com.didekinaar.security.TokenHandler.TKhandler;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
-import static com.didekinaar.testutil.AarActivityTestUtils.cleanOptions;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekinaar.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
@@ -107,7 +107,7 @@ public class UiAppExceptionTests {
     @After
     public void tearDown() throws Exception
     {
-        cleanOptions(AarActivityTestUtils.CleanUserEnum.CLEAN_JUAN);
+        cleanOptions(UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN);
         Thread.sleep(3000);
     }
 

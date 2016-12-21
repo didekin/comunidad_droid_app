@@ -23,7 +23,7 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_E
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static com.didekinaar.utils.UIutils.isRegisteredUser;
 import static com.didekinaar.utils.UIutils.updateIsGcmTokenSentServer;
-import static com.didekinaar.usuario.UsuarioService.AarUserServ;
+import static com.didekinaar.usuario.UsuarioDaoRemote.usuarioDaoRemote;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -72,7 +72,7 @@ public class IncidSeeOpenAc_GCM_Test extends Incidencia_GCM_Test {
                     pepe = signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
                     pepeUserComu = AppUserComuServ.seeUserComusByUser().get(0);
                     // Pepe hasn't got a gcmToken.
-                    Objects.equals(AarUserServ.getGcmToken() == null, true);
+                    Objects.equals(usuarioDaoRemote.getGcmToken() == null, true);
                 } catch (IOException | UiException e) {
                     e.printStackTrace();
                 }

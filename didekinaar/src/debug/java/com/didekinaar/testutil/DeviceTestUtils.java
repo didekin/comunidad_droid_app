@@ -11,14 +11,14 @@ import android.util.DisplayMetrics;
 @SuppressWarnings("unused")
 public class DeviceTestUtils {
 
-    public static int getWidthDevice(Activity activity)
+    private static int getWidthDevice(Activity activity)
     {
         DisplayMetrics dm = new DisplayMetrics();
         activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
         return dm.widthPixels;
     }
 
-    public static int getHightDevice(Activity activity)
+    private static int getHightDevice(Activity activity)
     {
         DisplayMetrics dm = new DisplayMetrics();
         activity.getWindowManager().getDefaultDisplay().getMetrics(dm);

@@ -7,9 +7,9 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekinaar.exception.UiException;
-import com.didekinaar.usuario.LoginAcTest;
+import com.didekinaar.usuario.login.LoginAcTest;
 import com.didekinaar.usuario.login.LoginAc;
-import com.didekinaar.usuario.testutil.UsuarioTestUtils;
+import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -24,7 +24,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.isDialog;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static com.didekinaar.security.TokenHandler.TKhandler;
-import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkNoToastInTest;
 import static com.didekinaar.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
@@ -80,8 +80,8 @@ public class LoginAc_App_1_Test extends LoginAcTest {
         assertThat(isRegisteredUser(mActivity), is(false));
         assertThat(TKhandler.getAccessTokenInCache(), nullValue());
 
-        onView(ViewMatchers.withId(com.didekinaar.R.id.reg_usuario_email_editT)).perform(typeText(UsuarioTestUtils.USER_PEPE.getUserName()));
-        onView(ViewMatchers.withId(com.didekinaar.R.id.reg_usuario_password_ediT)).perform(typeText(UsuarioTestUtils.USER_PEPE.getPassword()));
+        onView(ViewMatchers.withId(com.didekinaar.R.id.reg_usuario_email_editT)).perform(typeText(UsuarioDataTestUtils.USER_PEPE.getUserName()));
+        onView(ViewMatchers.withId(com.didekinaar.R.id.reg_usuario_password_ediT)).perform(typeText(UsuarioDataTestUtils.USER_PEPE.getPassword()));
         onView(ViewMatchers.withId(com.didekinaar.R.id.login_ac_button)).check(matches(isDisplayed())).perform(click());
 
         checkNoToastInTest(com.didekinaar.R.string.user_without_signedUp, mActivity);
@@ -103,8 +103,8 @@ public class LoginAc_App_1_Test extends LoginAcTest {
         assertThat(isRegisteredUser(mActivity), is(true));
         assertThat(TKhandler.getAccessTokenInCache(), notNullValue());
 
-        onView(ViewMatchers.withId(com.didekinaar.R.id.reg_usuario_email_editT)).perform(typeText(UsuarioTestUtils.USER_PEPE.getUserName()));
-        onView(ViewMatchers.withId(com.didekinaar.R.id.reg_usuario_password_ediT)).perform(typeText(UsuarioTestUtils.USER_PEPE.getPassword()));
+        onView(ViewMatchers.withId(com.didekinaar.R.id.reg_usuario_email_editT)).perform(typeText(UsuarioDataTestUtils.USER_PEPE.getUserName()));
+        onView(ViewMatchers.withId(com.didekinaar.R.id.reg_usuario_password_ediT)).perform(typeText(UsuarioDataTestUtils.USER_PEPE.getPassword()));
         onView(ViewMatchers.withId(com.didekinaar.R.id.login_ac_button)).check(matches(isDisplayed())).perform(click());
 
         checkNoToastInTest(com.didekinaar.R.string.user_without_signedUp, mActivity);
@@ -123,7 +123,7 @@ public class LoginAc_App_1_Test extends LoginAcTest {
         assertThat(AppUserComuServ.regComuAndUserAndUserComu(COMU_TRAV_PLAZUELA_PEPE).execute().body(), is(true));
         mActivity = (LoginAc) mActivityRule.launchActivity(new Intent());
 
-        typeCheckClickPswdWrong(UsuarioTestUtils.USER_PEPE.getUserName());
+        typeCheckClickPswdWrong(UsuarioDataTestUtils.USER_PEPE.getUserName());
         Thread.sleep(2000);
     }
 
@@ -136,7 +136,7 @@ public class LoginAc_App_1_Test extends LoginAcTest {
         assertThat(AppUserComuServ.regComuAndUserAndUserComu(COMU_TRAV_PLAZUELA_PEPE).execute().body(), is(true));
         mActivity = (LoginAc) mActivityRule.launchActivity(new Intent());
 
-        getDialogFragment(UsuarioTestUtils.USER_PEPE.getUserName());
+        getDialogFragment(UsuarioDataTestUtils.USER_PEPE.getUserName());
         Thread.sleep(2000);
         onView(ViewMatchers.withText(com.didekinaar.R.string.send_password_by_mail_dialog)).inRoot(isDialog()).check(matches(isDisplayed()));
     }

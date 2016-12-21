@@ -6,7 +6,7 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekinaar.mock.MockActivity;
+import com.didekinaar.testutil.MockActivity;
 import com.didekinaar.testutil.IdlingResourceForIntentServ;
 import com.didekinaar.usuario.AarFBRegIntentService;
 import com.google.firebase.iid.FirebaseInstanceId;

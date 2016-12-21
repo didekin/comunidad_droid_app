@@ -11,7 +11,7 @@ import com.didekin.comunidad.Municipio;
 import com.didekin.comunidad.Provincia;
 import com.didekinaar.R;
 import com.didekinaar.exception.UiException;
-import com.didekinaar.testutil.AarActivityTestUtils;
+import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.comunidad.testutil.ComuTestUtil;
 import com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil;
 
@@ -38,10 +38,10 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_JUAN;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
-import static com.didekinaar.testutil.AarActivityTestUtils.cleanOptions;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekinaar.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.comunidad.ComunidadService.AppComuServ;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
@@ -61,7 +61,7 @@ import static org.junit.Assert.assertThat;
 public class ComuDataAcTest {
 
     private ComuDataAc mActivity;
-    AarActivityTestUtils.CleanUserEnum whatToClean = CLEAN_JUAN;
+    UsuarioDataTestUtils.CleanUserEnum whatToClean = CLEAN_JUAN;
     Comunidad mComunidad;
     int activityLayoutId = R.id.comu_data_ac_layout;
 

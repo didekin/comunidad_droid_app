@@ -4,8 +4,8 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.common.exception.ErrorBean;
 import com.didekinaar.exception.UiException;
-import com.didekinaar.testutil.AarActivityTestUtils;
-import com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum;
+import com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum;
+import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 
 import org.junit.After;
 import org.junit.Before;
@@ -20,8 +20,8 @@ import retrofit2.Response;
 import static com.didekin.common.exception.DidekinExceptionMsg.NOT_FOUND;
 import static com.didekin.oauth2.OauthClient.CL_USER;
 import static com.didekinaar.PrimalCreator.creator;
-import static com.didekinaar.security.Oauth2Service.Oauth2;
-import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_NOTHING;
+import static com.didekinaar.security.Oauth2DaoRemote.Oauth2;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_NOTHING;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -32,7 +32,7 @@ import static org.junit.Assert.assertThat;
  * Time: 11:07
  */
 @RunWith(AndroidJUnit4.class)
-public class Oauth2ServiceIfTest {
+public class Oauth2DaoRemoteIfTest {
 
     protected CleanUserEnum whatClean = CLEAN_NOTHING;
 
@@ -51,7 +51,7 @@ public class Oauth2ServiceIfTest {
     @After
     public void cleaningUp() throws UiException
     {
-        AarActivityTestUtils.cleanOptions(whatClean);
+        UsuarioDataTestUtils.cleanOptions(whatClean);
     }
 
     @Test

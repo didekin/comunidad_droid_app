@@ -12,7 +12,7 @@ import com.didekin.incidencia.dominio.Incidencia;
 import com.didekin.incidencia.dominio.Resolucion;
 import com.didekinaar.exception.UiException;
 import com.didekindroid.R;
-import com.didekinaar.mock.MockActivity;
+import com.didekinaar.testutil.MockActivity;
 import com.didekindroid.exception.UiAppException;
 import com.didekinservice.common.gcm.GcmException;
 

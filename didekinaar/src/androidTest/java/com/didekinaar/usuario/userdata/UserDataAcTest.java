@@ -1,4 +1,4 @@
-package com.didekinaar.usuario;
+package com.didekinaar.usuario.userdata;
 
 import android.app.Activity;
 import android.content.res.Resources;
@@ -8,9 +8,8 @@ import android.support.test.rule.ActivityTestRule;
 import com.didekin.oauth2.SpringOauthToken;
 import com.didekinaar.R;
 import com.didekinaar.exception.UiException;
-import com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum;
+import com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum;
 import com.didekinaar.testutil.ExtendableTestAc;
-import com.didekinaar.usuario.userdata.UserDataAc;
 
 import org.junit.After;
 import org.junit.Before;
@@ -28,13 +27,13 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekinaar.security.TokenHandler.TKhandler;
-import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_JUAN;
-import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_NOTHING;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_NOTHING;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
-import static com.didekinaar.testutil.AarActivityTestUtils.cleanOptions;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekinaar.testutil.AarActivityTestUtils.clickNavigateUp;
-import static com.didekinaar.usuario.UsuarioService.AarUserServ;
-import static com.didekinaar.usuario.testutil.UsuarioTestUtils.USER_JUAN;
+import static com.didekinaar.usuario.UsuarioDaoRemote.usuarioDaoRemote;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
 import static com.didekinaar.utils.UIutils.isRegisteredUser;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.Matchers.containsString;
@@ -186,6 +185,6 @@ public abstract class UserDataAcTest implements ExtendableTestAc {
         assertThat(tokenAfter.getRefreshToken().getValue(), not(is(refreshTkValue)));  //different refreshToken.
 
         // Borramos al usuario en BD.
-        AarUserServ.deleteUser();
+        usuarioDaoRemote.deleteUser();
     }
 }

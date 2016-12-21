@@ -12,12 +12,11 @@ import com.didekin.usuario.Usuario;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
 import com.didekinaar.R;
 import com.didekinaar.exception.UiException;
-import com.didekinaar.testutil.AarActivityTestUtils;
 import com.didekinaar.usuario.testutil.UserEspressoTestUtil;
 import com.didekindroid.comunidad.ComunidadBean;
 import com.didekindroid.comunidad.RegComuFr;
 import com.didekinaar.usuario.testutil.UserItemMenuTestUtils;
-import com.didekinaar.usuario.testutil.UsuarioTestUtils;
+import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 import com.didekinaar.usuario.RegUserFr;
 import com.didekinaar.usuario.UsuarioBean;
 import com.didekindroid.comunidad.testutil.ComuEspresoTestUtil;
@@ -41,10 +40,10 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static com.didekinaar.security.TokenHandler.TKhandler;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
-import static com.didekinaar.testutil.AarActivityTestUtils.cleanOptions;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekinaar.testutil.AarActivityTestUtils.clickNavigateUp;
-import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_NOTHING;
-import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_TK_HANDLER;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_NOTHING;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_TK_HANDLER;
 import static com.didekinaar.usuariocomunidad.UserAndComuFiller.makeComunidadBeanFromView;
 import static com.didekinaar.usuariocomunidad.UserAndComuFiller.makeUserBeanFromRegUserFrView;
 import static com.didekinaar.usuariocomunidad.UserAndComuFiller.makeUserComuBeanFromView;
@@ -69,7 +68,7 @@ public class RegComuAndUserAndUserComuAcTest {
 
     RegComuAndUserAndUserComuAc mActivity;
     Resources resources;
-    AarActivityTestUtils.CleanUserEnum whatToClean = CLEAN_NOTHING;
+    UsuarioDataTestUtils.CleanUserEnum whatToClean = CLEAN_NOTHING;
 
     RegComuFr mRegComuFrg;
     RegUserComuFr mRegUserComuFrg;
@@ -227,7 +226,7 @@ public class RegComuAndUserAndUserComuAcTest {
         Thread.sleep(1000);
         UserComuEspressoTestUtil.typeUserComuData("port2", "escale_b", "planta-N", "puerta5", RolUi.PRE, RolUi.INQ);
         // Usuario.
-        UserEspressoTestUtil.typeUserData(UsuarioTestUtils.USER_JUAN2.getUserName(), UsuarioTestUtils.USER_JUAN2.getAlias(), UsuarioTestUtils.USER_JUAN2.getPassword(), UsuarioTestUtils.USER_JUAN2.getPassword());
+        UserEspressoTestUtil.typeUserData(UsuarioDataTestUtils.USER_JUAN2.getUserName(), UsuarioDataTestUtils.USER_JUAN2.getAlias(), UsuarioDataTestUtils.USER_JUAN2.getPassword(), UsuarioDataTestUtils.USER_JUAN2.getPassword());
 
         onView(ViewMatchers.withId(R.id.reg_com_usuario_usuariocomu_button)).perform(scrollTo(), click());
 
@@ -238,7 +237,7 @@ public class RegComuAndUserAndUserComuAcTest {
         assertThat(TKhandler.getRefreshTokenValue(), is(TKhandler.getAccessTokenInCache().getRefreshToken().getValue()));
         assertThat(isRegisteredUser(mActivity), is(true));
 
-        whatToClean = AarActivityTestUtils.CleanUserEnum.CLEAN_JUAN2;
+        whatToClean = UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN2;
 
     }
 
@@ -258,7 +257,7 @@ public class RegComuAndUserAndUserComuAcTest {
     @Test
     public void testLoginMn_WithToken() throws InterruptedException, UiException, IOException
     {
-        whatToClean = AarActivityTestUtils.CleanUserEnum.CLEAN_JUAN;
+        whatToClean = UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
         //With token.
         UserComuTestUtil.signUpAndUpdateTk(UserComuTestUtil.COMU_REAL_JUAN);
 

@@ -15,7 +15,7 @@ import com.didekinaar.exception.UiException;
 import com.didekindroid.comunidad.ComunidadBean;
 import com.didekindroid.comunidad.RegComuFr;
 import com.didekinaar.testutil.AarActivityTestUtils;
-import com.didekinaar.usuario.testutil.UsuarioTestUtils;
+import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.comunidad.testutil.ComuEspresoTestUtil;
 import com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil;
 import com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil;
@@ -38,7 +38,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekinaar.security.TokenHandler.TKhandler;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
-import static com.didekinaar.testutil.AarActivityTestUtils.cleanOneUser;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
 import static com.didekinaar.usuariocomunidad.RolUi.ADM;
 import static com.didekinaar.usuariocomunidad.RolUi.INQ;
 import static com.didekinaar.usuariocomunidad.RolUi.PRE;
@@ -79,7 +79,7 @@ public class RegComuAndUserComuAcTest {
     @After
     public void tearDown() throws Exception
     {
-        cleanOneUser(UsuarioTestUtils.USER_PEPE);
+        cleanOneUser(UsuarioDataTestUtils.USER_PEPE);
     }
 
     @Test

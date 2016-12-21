@@ -8,7 +8,7 @@ import com.didekin.incidencia.dominio.IncidImportancia;
 import com.didekin.incidencia.dominio.Incidencia;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
 import com.didekinaar.exception.UiException;
-import com.didekinaar.testutil.AarActivityTestUtils;
+import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.exception.UiAppException;
 import com.didekindroid.R;
 
@@ -34,7 +34,7 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.signUp
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.INCID_DEFAULT_DESC;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
-import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_ESCORIAL_PEPE;
 
 /**
@@ -90,7 +90,7 @@ public class IncidEditAcMaxPowerTest_2 extends IncidEditAbstractTest {
     }
 
     @Override
-    AarActivityTestUtils.CleanUserEnum whatToClean()
+    UsuarioDataTestUtils.CleanUserEnum whatToClean()
     {
         return CLEAN_PEPE;
     }

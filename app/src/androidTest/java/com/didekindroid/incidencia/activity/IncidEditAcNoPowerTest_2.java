@@ -7,7 +7,7 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekin.incidencia.dominio.IncidenciaUser;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
 import com.didekinaar.exception.UiException;
-import com.didekinaar.testutil.AarActivityTestUtils;
+import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiAppException;
 
@@ -28,10 +28,10 @@ import static com.didekin.usuariocomunidad.Rol.PROPIETARIO;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkNoToastInTest;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.signUpAndUpdateTk;
-import static com.didekinaar.testutil.AarActivityTestUtils.updateSecurityData;
-import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
+import static com.didekinaar.testutil.AarTestUtil.updateSecurityData;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_REAL_PEPE;
-import static com.didekinaar.usuario.testutil.UsuarioTestUtils.USER_JUAN;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.makeUsuarioComunidad;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
@@ -96,7 +96,7 @@ public class IncidEditAcNoPowerTest_2 extends IncidEditAbstractTest {
     }
 
     @Override
-    AarActivityTestUtils.CleanUserEnum whatToClean()
+    UsuarioDataTestUtils.CleanUserEnum whatToClean()
     {
         return CLEAN_JUAN_AND_PEPE;
     }

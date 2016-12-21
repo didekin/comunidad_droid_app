@@ -1,4 +1,4 @@
-package com.didekinaar.usuario;
+package com.didekinaar.usuario.password;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -11,6 +11,7 @@ import android.widget.EditText;
 
 import com.didekinaar.R;
 import com.didekinaar.exception.UiException;
+import com.didekinaar.usuario.UsuarioBean;
 import com.didekinaar.usuario.userdata.UserDataAc;
 import com.didekinaar.utils.ConnectionUtils;
 
@@ -18,7 +19,7 @@ import java.util.Objects;
 
 import timber.log.Timber;
 
-import static com.didekinaar.usuario.UsuarioService.AarUserServ;
+import static com.didekinaar.usuario.UsuarioDaoRemote.usuarioDaoRemote;
 import static com.didekinaar.utils.UIutils.checkPostExecute;
 import static com.didekinaar.utils.UIutils.doToolBar;
 import static com.didekinaar.utils.UIutils.getErrorMsgBuilder;
@@ -102,7 +103,7 @@ public class PasswordChangeAc extends AppCompatActivity {
             Timber.d("doInBackground()");
             int passwordChange = 0;
             try {
-                passwordChange = AarUserServ.passwordChange(params[0]);
+                passwordChange = usuarioDaoRemote.passwordChange(params[0]);
             } catch (UiException e) {
                 uiException = e;
             }

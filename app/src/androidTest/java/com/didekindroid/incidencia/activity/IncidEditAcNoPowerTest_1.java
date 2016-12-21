@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekinaar.testutil.AarActivityTestUtils;
+import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.R;
 
 import org.junit.BeforeClass;
@@ -20,7 +20,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkNoToastInTest;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
-import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
@@ -58,7 +58,7 @@ public class IncidEditAcNoPowerTest_1 extends IncidEditAbstractTest {
     }
 
     @Override
-    AarActivityTestUtils.CleanUserEnum whatToClean()
+    UsuarioDataTestUtils.CleanUserEnum whatToClean()
     {
         return CLEAN_JUAN_AND_PEPE;
     }

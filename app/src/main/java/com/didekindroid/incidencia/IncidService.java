@@ -146,7 +146,7 @@ public final class IncidService implements IncidenciaServEndPoints {
     }
 
     /**
-     * This method encapsulates the call to the UsuarioService.AppUserComuServ method.
+     * This method encapsulates the call to the UsuarioDaoRemote.AppUserComuServ method.
      */
     public List<Comunidad> getComusByUser() throws UiException
     {

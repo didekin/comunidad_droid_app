@@ -5,7 +5,7 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekinaar.exception.UiException;
-import com.didekinaar.testutil.AarActivityTestUtils;
+import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.exception.UiAppException;
 
 import org.junit.BeforeClass;
@@ -17,7 +17,7 @@ import java.io.IOException;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidImportancia;
-import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_JUAN;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_REAL_JUAN;
 
 /**
@@ -61,7 +61,7 @@ public class IncidResolucionSeeDefaultFrTest extends IncidResolucionAbstractTest
     }
 
     @Override
-    AarActivityTestUtils.CleanUserEnum whatToClean()
+    UsuarioDataTestUtils.CleanUserEnum whatToClean()
     {
         return CLEAN_JUAN;
     }

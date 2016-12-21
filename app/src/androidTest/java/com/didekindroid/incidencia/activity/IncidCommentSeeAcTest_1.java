@@ -8,7 +8,7 @@ import com.didekin.incidencia.dominio.IncidImportancia;
 import com.didekin.incidencia.dominio.IncidenciaUser;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
 import com.didekinaar.exception.UiException;
-import com.didekinaar.testutil.AarActivityTestUtils;
+import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiAppException;
 
@@ -28,7 +28,7 @@ import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExt
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
-import static com.didekinaar.testutil.AarActivityTestUtils.cleanOptions;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekinaar.testutil.AarActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.signUpAndUpdateTk;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_REAL_JUAN;
@@ -106,7 +106,7 @@ public class IncidCommentSeeAcTest_1 {
     @After
     public void tearDown() throws Exception
     {
-        cleanOptions(AarActivityTestUtils.CleanUserEnum.CLEAN_JUAN);
+        cleanOptions(UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN);
     }
 
     @Test

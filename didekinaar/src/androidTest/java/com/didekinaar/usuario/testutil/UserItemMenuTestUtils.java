@@ -1,16 +1,14 @@
 package com.didekinaar.usuario.testutil;
 
 import android.app.Activity;
+import android.support.test.espresso.Espresso;
+import android.support.test.espresso.action.ViewActions;
+import android.support.test.espresso.assertion.ViewAssertions;
 import android.support.test.espresso.matcher.ViewMatchers;
 
 import com.didekinaar.R;
 import com.didekinaar.testutil.MenuTestUtilIf;
 
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
 
@@ -31,11 +29,11 @@ public enum UserItemMenuTestUtils implements MenuTestUtilIf {
         @Override
         public void checkMenuItem_WTk(Activity activity) throws InterruptedException
         {
-            onView(ViewMatchers.withText(R.string.delete_me_ac_mn)).check(doesNotExist());
-            openActionBarOverflowOrOptionsMenu(activity);
+            Espresso.onView(ViewMatchers.withText(R.string.delete_me_ac_mn)).check(ViewAssertions.doesNotExist());
+            Espresso.openActionBarOverflowOrOptionsMenu(activity);
             Thread.sleep(1000);
-            onView(ViewMatchers.withText(R.string.delete_me_ac_mn)).check(matches(isDisplayed())).perform(click());
-            onView(ViewMatchers.withId(R.id.delete_me_ac_layout)).check(matches(isDisplayed()));
+            Espresso.onView(ViewMatchers.withText(R.string.delete_me_ac_mn)).check(ViewAssertions.matches(isDisplayed())).perform(ViewActions.click());
+            Espresso.onView(ViewMatchers.withId(R.id.delete_me_ac_layout)).check(ViewAssertions.matches(isDisplayed()));
         }
     },
 
@@ -43,8 +41,8 @@ public enum UserItemMenuTestUtils implements MenuTestUtilIf {
         @Override
         public void checkMenuItem_NTk(Activity activity)
         {
-            onView(ViewMatchers.withText(R.string.login_ac_mn)).check(matches(isDisplayed())).perform(click());
-            onView(ViewMatchers.withId(R.id.login_ac_layout)).check(matches(isDisplayed()));
+            Espresso.onView(ViewMatchers.withText(R.string.login_ac_mn)).check(ViewAssertions.matches(isDisplayed())).perform(ViewActions.click());
+            Espresso.onView(ViewMatchers.withId(R.id.login_ac_layout)).check(ViewAssertions.matches(isDisplayed()));
         }
 
         @Override
@@ -64,11 +62,11 @@ public enum UserItemMenuTestUtils implements MenuTestUtilIf {
         @Override
         public void checkMenuItem_WTk(Activity activity) throws InterruptedException
         {
-            onView(ViewMatchers.withText(R.string.password_change_ac_mn)).check(doesNotExist());
-            openActionBarOverflowOrOptionsMenu(activity);
+            Espresso.onView(ViewMatchers.withText(R.string.password_change_ac_mn)).check(ViewAssertions.doesNotExist());
+            Espresso.openActionBarOverflowOrOptionsMenu(activity);
             Thread.sleep(1000);
-            onView(ViewMatchers.withText(R.string.password_change_ac_mn)).check(matches(isDisplayed())).perform(click());
-            onView(ViewMatchers.withId(R.id.password_change_ac_layout)).check(matches(isDisplayed()));
+            Espresso.onView(ViewMatchers.withText(R.string.password_change_ac_mn)).check(ViewAssertions.matches(isDisplayed())).perform(ViewActions.click());
+            Espresso.onView(ViewMatchers.withId(R.id.password_change_ac_layout)).check(ViewAssertions.matches(isDisplayed()));
         }
     },
 
@@ -76,21 +74,21 @@ public enum UserItemMenuTestUtils implements MenuTestUtilIf {
         @Override
         public void checkMenuItem_NTk(Activity activity) throws InterruptedException
         {
-            onView(ViewMatchers.withText(R.string.user_data_ac_mn)).check(doesNotExist());
-            openActionBarOverflowOrOptionsMenu(activity);
+            Espresso.onView(ViewMatchers.withText(R.string.user_data_ac_mn)).check(ViewAssertions.doesNotExist());
+            Espresso.openActionBarOverflowOrOptionsMenu(activity);
             Thread.sleep(1000);
-            onView(ViewMatchers.withText(R.string.user_data_ac_mn)).check(matches(isDisplayed())).perform(click());
+            Espresso.onView(ViewMatchers.withText(R.string.user_data_ac_mn)).check(ViewAssertions.matches(isDisplayed())).perform(ViewActions.click());
             checkToastInTest(R.string.user_without_signedUp, activity);
         }
 
         @Override
         public void checkMenuItem_WTk(Activity activity) throws InterruptedException
         {
-            openActionBarOverflowOrOptionsMenu(activity);
+            Espresso.openActionBarOverflowOrOptionsMenu(activity);
             Thread.sleep(2000);
-            onView(ViewMatchers.withText(R.string.user_data_ac_mn)).check(matches(isDisplayed())).perform(click());
+            Espresso.onView(ViewMatchers.withText(R.string.user_data_ac_mn)).check(ViewAssertions.matches(isDisplayed())).perform(ViewActions.click());
             // Show the data in modifiable state.
-            onView(ViewMatchers.withId(R.id.user_data_ac_layout)).check(matches(isDisplayed()));
+            Espresso.onView(ViewMatchers.withId(R.id.user_data_ac_layout)).check(ViewAssertions.matches(isDisplayed()));
         }
     },;
 

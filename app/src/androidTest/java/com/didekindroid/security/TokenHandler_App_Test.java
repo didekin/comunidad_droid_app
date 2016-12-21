@@ -6,7 +6,7 @@ import com.didekin.oauth2.SpringOauthToken;
 import com.didekin.oauth2.SpringOauthToken.OauthToken;
 import com.didekinaar.exception.UiException;
 import com.didekinaar.security.TokenHandlerTest;
-import com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum;
+import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,7 +38,7 @@ public class TokenHandler_App_Test extends TokenHandlerTest {
     @Test
     public void testGetAccessTokenInCache_1() throws IOException, UiException
     {
-        whatClean = CleanUserEnum.CLEAN_JUAN;
+        whatClean = UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 
         // Precondition: a user in DB and there exists file with refreshToken.
         signUpAndUpdateTk(COMU_REAL_JUAN);
@@ -84,7 +84,7 @@ public class TokenHandler_App_Test extends TokenHandlerTest {
     @Test
     public void testGetAccessTokenInCache_2() throws IOException, UiException
     {
-        whatClean = CleanUserEnum.CLEAN_JUAN;
+        whatClean = UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 
         // Precondition: file exists, tokenInCache initialized with a fully initialized token.
         signUpAndUpdateTk(COMU_REAL_JUAN);

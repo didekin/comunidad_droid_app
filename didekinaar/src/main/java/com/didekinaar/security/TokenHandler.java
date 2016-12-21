@@ -16,7 +16,7 @@ import timber.log.Timber;
 
 import static com.didekin.oauth2.OauthTokenHelper.HELPER;
 import static com.didekinaar.PrimalCreator.creator;
-import static com.didekinaar.security.Oauth2Service.Oauth2;
+import static com.didekinaar.security.Oauth2DaoRemote.Oauth2;
 import static com.didekinaar.utils.IoHelper.readStringFromFile;
 import static com.didekinaar.utils.IoHelper.writeFileFromString;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -94,7 +94,7 @@ public enum TokenHandler {
         Future<SpringOauthToken> futureInCache = cacheForToken.get();
 
         if (futureInCache == null) {
-            // It may throw a UiException(GENERIC_ERROR). See Oauth2Service.
+            // It may throw a UiException(GENERIC_ERROR). See Oauth2DaoRemote.
             Callable<SpringOauthToken> cacheUpdater = new Callable<SpringOauthToken>() {
                 @Override
                 public SpringOauthToken call() throws UiException

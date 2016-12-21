@@ -1,4 +1,4 @@
-package com.didekinaar.usuario;
+package com.didekinaar.usuario.password;
 
 import android.app.Activity;
 import android.support.test.espresso.matcher.ViewMatchers;
@@ -8,7 +8,7 @@ import com.didekin.oauth2.SpringOauthToken;
 import com.didekin.usuario.Usuario;
 import com.didekinaar.R;
 import com.didekinaar.exception.UiException;
-import com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum;
+import com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum;
 import com.didekinaar.testutil.ExtendableTestAc;
 
 import org.junit.After;
@@ -23,16 +23,16 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekinaar.security.Oauth2Service.Oauth2;
+import static com.didekinaar.security.Oauth2DaoRemote.Oauth2;
 import static com.didekinaar.security.TokenHandler.TKhandler;
-import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_NOTHING;
-import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_NOTHING;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
-import static com.didekinaar.testutil.AarActivityTestUtils.cleanOneUser;
-import static com.didekinaar.testutil.AarActivityTestUtils.cleanOptions;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekinaar.testutil.AarActivityTestUtils.clickNavigateUp;
-import static com.didekinaar.usuario.testutil.UsuarioTestUtils.USER_PEPE;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
 import static com.didekinaar.utils.UIutils.isRegisteredUser;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;

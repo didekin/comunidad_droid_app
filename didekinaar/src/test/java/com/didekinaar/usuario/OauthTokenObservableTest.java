@@ -14,7 +14,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
  * Date: 01/12/16
  * Time: 15:15
  */
-public class UsuarioObservablesTest {
+public class OauthTokenObservableTest {
 
     @Test
     public void testDeleteMeCallable() throws UiException

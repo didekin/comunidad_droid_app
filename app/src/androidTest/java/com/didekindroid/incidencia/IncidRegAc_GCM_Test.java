@@ -27,7 +27,7 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_E
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static com.didekinaar.utils.UIutils.isRegisteredUser;
 import static com.didekinaar.utils.UIutils.updateIsGcmTokenSentServer;
-import static com.didekinaar.usuario.UsuarioService.AarUserServ;
+import static com.didekinaar.usuario.UsuarioDaoRemote.usuarioDaoRemote;
 import static com.didekindroid.incidencia.AppFBService.IncidTypeMsgHandler.INCIDENCIA_OPEN;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
@@ -72,7 +72,7 @@ public class IncidRegAc_GCM_Test extends Incidencia_GCM_Test {
             return;
         }
         // Preconditions for the test: TOKEN en BD.
-        assertThat(AarUserServ.getGcmToken(), is(FirebaseInstanceId.getInstance().getToken()));
+        assertThat(usuarioDaoRemote.getGcmToken(), is(FirebaseInstanceId.getInstance().getToken()));
 
         IncidImportancia incidPepe =
                 new IncidImportancia.IncidImportanciaBuilder(doIncidencia(pepe.getUserName(), "Incidencia One", pepeUserComu.getComunidad().getC_Id(), (short) 43))
@@ -100,7 +100,7 @@ public class IncidRegAc_GCM_Test extends Incidencia_GCM_Test {
                     pepe = signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
                     pepeUserComu = AppUserComuServ.seeUserComusByUser().get(0);
                     // Pepe hasn't got a gcmToken.
-                    Objects.equals(AarUserServ.getGcmToken() == null, true);
+                    Objects.equals(usuarioDaoRemote.getGcmToken() == null, true);
                 } catch (IOException | UiException e) {
                     e.printStackTrace();
                 }

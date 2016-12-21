@@ -1,4 +1,4 @@
-package com.didekinaar.usuario;
+package com.didekinaar.usuario.delete;
 
 import android.app.Activity;
 import android.content.Context;
@@ -17,7 +17,7 @@ import timber.log.Timber;
 
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
-import static com.didekinaar.usuario.UsuarioObservables.getDeleteMeSingle;
+import static com.didekinaar.usuario.delete.DeleteObservable.getDeleteMeSingle;
 
 public class DeleteMeAc extends AppCompatActivity {
 

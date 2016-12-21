@@ -52,6 +52,10 @@ android {
             signingConfig signingConfigs.release
         }
         debug {
+            // Las tres siguientes opciones pueden dar problemas. TODO: quitarlas si los dan.
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            useProguard false
             debuggable true
             versionNameSuffix '-DEBUG'
             applicationIdSuffix ""
@@ -78,7 +82,7 @@ dependencies {
     compile rootProject.ext.firebase_message
     compile project(':didekinaar')
 
-//    androidTestCompile project(path:':didekinaar', configuration:'androidTestCompile')
+    androidTestCompile project(path:':didekinaar', configuration:'androidTestCompile')
     androidTestCompile rootProject.ext.apps_androidtest
     testCompile rootProject.ext.junit
 }

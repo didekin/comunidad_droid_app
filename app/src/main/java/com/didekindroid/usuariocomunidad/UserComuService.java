@@ -4,7 +4,7 @@ import com.didekin.comunidad.Comunidad;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
 import com.didekin.usuariocomunidad.UsuarioComunidadEndPoints;
 import com.didekinaar.exception.UiException;
-import com.didekinaar.utils.AarServiceUtil;
+import com.didekinaar.utils.AarDaoUtil;
 import com.didekindroid.exception.UiAppException;
 
 import java.io.EOFException;
@@ -17,7 +17,7 @@ import timber.log.Timber;
 
 import static com.didekin.common.exception.ErrorBean.GENERIC_ERROR;
 import static com.didekinaar.PrimalCreator.creator;
-import static com.didekinaar.utils.AarServiceUtil.getResponseBody;
+import static com.didekinaar.utils.AarDaoUtil.getResponseBody;
 import static com.didekinaar.utils.UIutils.checkBearerToken;
 
 /**
@@ -133,7 +133,7 @@ public final class UserComuService implements UsuarioComunidadEndPoints {
         Timber.d("getComusByUser()");
         try {
             Response<List<Comunidad>> response = getComusByUser(checkBearerToken()).execute();
-            return AarServiceUtil.getResponseBody(response);
+            return AarDaoUtil.getResponseBody(response);
         } catch (IOException | UiException e) {
             throw new UiAppException(GENERIC_ERROR);
         }
@@ -144,7 +144,7 @@ public final class UserComuService implements UsuarioComunidadEndPoints {
         Timber.d("getUserComuByUserAndComu()");
         try {
             Response<UsuarioComunidad> response = getUserComuByUserAndComu(checkBearerToken(), comunidadId).execute();
-            return AarServiceUtil.getResponseBody(response);
+            return AarDaoUtil.getResponseBody(response);
         } catch (EOFException eo) {
             return null;
         } catch (IOException | UiException e) {
@@ -157,7 +157,7 @@ public final class UserComuService implements UsuarioComunidadEndPoints {
         Timber.d("isOldestOrAdmonUserComu()");
         try {
             Response<Boolean> response = isOldestOrAdmonUserComu(checkBearerToken(), comunidadId).execute();
-            return AarServiceUtil.getResponseBody(response);
+            return AarDaoUtil.getResponseBody(response);
         } catch (IOException | UiException e) {
             throw new UiAppException(GENERIC_ERROR);
         }
@@ -168,7 +168,7 @@ public final class UserComuService implements UsuarioComunidadEndPoints {
         Timber.d("modifyComuData()");
         try {
             Response<Integer> response = modifyComuData(checkBearerToken(), comunidad).execute();
-            return AarServiceUtil.getResponseBody(response);
+            return AarDaoUtil.getResponseBody(response);
         } catch (IOException | UiException e) {
             throw new UiAppException(GENERIC_ERROR);
         }
@@ -179,7 +179,7 @@ public final class UserComuService implements UsuarioComunidadEndPoints {
         Timber.d("modifyUserComu()");
         try {
             Response<Integer> response = modifyUserComu(checkBearerToken(), userComu).execute();
-            return AarServiceUtil.getResponseBody(response);
+            return AarDaoUtil.getResponseBody(response);
         } catch (IOException | UiException e) {
             throw new UiAppException(GENERIC_ERROR);
         }
@@ -190,7 +190,7 @@ public final class UserComuService implements UsuarioComunidadEndPoints {
         Timber.d("regComuAndUserComu()");
         try {
             Response<Boolean> response = regComuAndUserComu(checkBearerToken(), usuarioComunidad).execute();
-            return AarServiceUtil.getResponseBody(response);
+            return AarDaoUtil.getResponseBody(response);
         } catch (IOException | UiException e) {
             throw new UiAppException(GENERIC_ERROR);
         }
@@ -201,7 +201,7 @@ public final class UserComuService implements UsuarioComunidadEndPoints {
         Timber.d("regUserComu()");
         try {
             Response<Integer> response = regUserComu(checkBearerToken(), usuarioComunidad).execute();
-            return AarServiceUtil.getResponseBody(response);
+            return AarDaoUtil.getResponseBody(response);
         } catch (IOException | UiException e) {
             throw new UiAppException(GENERIC_ERROR);
         }
@@ -212,7 +212,7 @@ public final class UserComuService implements UsuarioComunidadEndPoints {
         Timber.d("seeUserComusByComu()");
         try {
             Response<List<UsuarioComunidad>> response = seeUserComusByComu(checkBearerToken(), idComunidad).execute();
-            return AarServiceUtil.getResponseBody(response);
+            return AarDaoUtil.getResponseBody(response);
         } catch (IOException | UiException e) {
             throw new UiAppException(GENERIC_ERROR);
         }
@@ -223,7 +223,7 @@ public final class UserComuService implements UsuarioComunidadEndPoints {
         Timber.d("seeUserComusByUser()");
         try {
             Response<List<UsuarioComunidad>> response = seeUserComusByUser(checkBearerToken()).execute();
-            return AarServiceUtil.getResponseBody(response);
+            return AarDaoUtil.getResponseBody(response);
         } catch (IOException | UiException e) {
             throw new UiAppException(GENERIC_ERROR);
         }

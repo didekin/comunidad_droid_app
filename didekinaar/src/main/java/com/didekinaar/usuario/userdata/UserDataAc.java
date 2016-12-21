@@ -19,9 +19,9 @@ import java.util.Objects;
 import timber.log.Timber;
 
 import static com.didekin.common.exception.DidekinExceptionMsg.BAD_REQUEST;
-import static com.didekinaar.security.Oauth2Service.Oauth2;
+import static com.didekinaar.security.Oauth2DaoRemote.Oauth2;
 import static com.didekinaar.security.TokenHandler.TKhandler;
-import static com.didekinaar.usuario.UsuarioService.AarUserServ;
+import static com.didekinaar.usuario.UsuarioDaoRemote.usuarioDaoRemote;
 import static com.didekinaar.utils.UIutils.doToolBar;
 import static com.didekinaar.utils.UIutils.isRegisteredUser;
 import static com.didekinaar.utils.UIutils.makeToast;
@@ -113,7 +113,7 @@ public abstract class UserDataAc extends AppCompatActivity implements UserDataVi
                         .build();
 
                 try {
-                    AarUserServ.modifyUser(usuarioIn);
+                    usuarioDaoRemote.modifyUser(usuarioIn);
                     TKhandler.cleanTokenAndBackFile();
                 } catch (UiException e) {
                     uiException = e;
@@ -130,7 +130,7 @@ public abstract class UserDataAc extends AppCompatActivity implements UserDataVi
                     Timber.d(e.getErrorBean().getMessage());
                 }
                 try {
-                    AarUserServ.deleteAccessToken(token_1.getValue());
+                    usuarioDaoRemote.deleteAccessToken(token_1.getValue());
                 } catch (UiException e) {
                     // No token in cache
                     Timber.d(e.getErrorBean().getMessage());
@@ -144,7 +144,7 @@ public abstract class UserDataAc extends AppCompatActivity implements UserDataVi
                     .uId(usuarios[0].getuId())
                     .build();
             try {
-                AarUserServ.modifyUser(usuarioIn);
+                usuarioDaoRemote.modifyUser(usuarioIn);
             } catch (UiException e) {
                 uiException = e;
                 Timber.d((e.getErrorBean() != null ?

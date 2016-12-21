@@ -96,7 +96,7 @@ public final class UsuarioBean {
         return isValid;
     }
 
-    boolean validateDoublePassword(Resources resources, StringBuilder errorMsg)
+    public boolean validateDoublePassword(Resources resources, StringBuilder errorMsg)
     {
         if (!password.trim().equals(verificaPassword)) {
             errorMsg.append(resources.getText(R.string.password).toString())

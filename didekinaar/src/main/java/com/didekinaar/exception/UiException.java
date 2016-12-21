@@ -16,7 +16,6 @@ import static com.didekinaar.utils.UIutils.makeToast;
  * Date: 17/11/16
  * Time: 17:41
  */
-
 @SuppressWarnings("AbstractClassExtendsConcreteClass")
 public class UiException extends Exception implements UiExceptionIf {
 

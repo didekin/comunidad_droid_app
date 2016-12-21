@@ -1,6 +1,6 @@
 package com.didekinaar;
 
-import com.didekinaar.usuario.UsuarioObservablesTest;
+import com.didekinaar.usuario.OauthTokenObservableTest;
 import com.didekinaar.usuario.UsuarioTest;
 
 import org.junit.runner.RunWith;
@@ -14,7 +14,7 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         UsuarioTest.class,
-        UsuarioObservablesTest.class
+        OauthTokenObservableTest.class
 })
 public class SimpleUsarioSuite {
 }

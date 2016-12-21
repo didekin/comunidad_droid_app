@@ -7,9 +7,9 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekinaar.R;
-import com.didekinaar.usuario.LoginAcTest;
+import com.didekinaar.usuario.login.LoginAcTest;
 import com.didekinaar.usuario.login.LoginAc;
-import com.didekinaar.usuario.testutil.UsuarioTestUtils;
+import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -22,7 +22,7 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.isDialog;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_TRAV_PLAZUELA_PEPE;
@@ -72,7 +72,7 @@ public class LoginAc_App_2_SlowTest extends LoginAcTest {
         assertThat(AppUserComuServ.regComuAndUserAndUserComu(COMU_TRAV_PLAZUELA_PEPE).execute().body(), is(true));
         mActivity = (LoginAc) mActivityRule.launchActivity(new Intent());
 
-        getDialogFragment(UsuarioTestUtils.USER_PEPE.getUserName());
+        getDialogFragment(UsuarioDataTestUtils.USER_PEPE.getUserName());
         onView(ViewMatchers.withText(R.string.send_password_by_mail_dialog)).inRoot(isDialog())
                 .check(matches(isDisplayed()));
         Thread.sleep(7000);

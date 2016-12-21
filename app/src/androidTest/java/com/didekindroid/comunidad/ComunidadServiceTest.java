@@ -4,7 +4,7 @@ import com.didekin.comunidad.Comunidad;
 import com.didekin.comunidad.Municipio;
 import com.didekin.comunidad.Provincia;
 import com.didekinaar.exception.UiException;
-import com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum;
+import com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum;
 import com.didekindroid.comunidad.testutil.ComuTestUtil;
 import com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil;
 
@@ -15,11 +15,11 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.List;
 
-import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_NOTHING;
-import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekinaar.testutil.AarActivityTestUtils.cleanTwoUsers;
-import static com.didekinaar.usuario.testutil.UsuarioTestUtils.USER_JUAN;
-import static com.didekinaar.usuario.testutil.UsuarioTestUtils.USER_PEPE;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_NOTHING;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanTwoUsers;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
 import static com.didekindroid.comunidad.ComunidadService.AppComuServ;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_REAL_JUAN;

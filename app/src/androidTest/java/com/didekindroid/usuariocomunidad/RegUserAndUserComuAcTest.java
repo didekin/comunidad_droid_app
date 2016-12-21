@@ -11,9 +11,8 @@ import com.didekinaar.R;
 import com.didekinaar.exception.UiException;
 import com.didekinaar.usuario.testutil.UserEspressoTestUtil;
 import com.didekindroid.comunidad.ComuBundleKey;
-import com.didekinaar.testutil.AarActivityTestUtils;
 import com.didekinaar.usuario.testutil.UserItemMenuTestUtils;
-import com.didekinaar.usuario.testutil.UsuarioTestUtils;
+import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 import com.didekinaar.utils.UIutils;
 import com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil;
 import com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil;
@@ -37,11 +36,11 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekinaar.security.TokenHandler.TKhandler;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
-import static com.didekinaar.testutil.AarActivityTestUtils.cleanOptions;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekinaar.testutil.AarActivityTestUtils.clickNavigateUp;
-import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_JUAN2_AND_PEPE;
-import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
-import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN2_AND_PEPE;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekinaar.usuariocomunidad.AarUserComuService.AarUserComuServ;
 import static com.didekinaar.usuariocomunidad.RolUi.PRE;
 import static com.didekinaar.usuariocomunidad.RolUi.PRO;
@@ -65,7 +64,7 @@ public class RegUserAndUserComuAcTest {
     Intent intent;
     Comunidad comunidad;
 
-    AarActivityTestUtils.CleanUserEnum whatToClean;
+    UsuarioDataTestUtils.CleanUserEnum whatToClean;
     int activityLayoutId = R.id.reg_user_and_usercomu_ac_layout;
 
     @Rule
@@ -74,7 +73,7 @@ public class RegUserAndUserComuAcTest {
         @Override
         protected void beforeActivityLaunched()
         {
-            AarActivityTestUtils.cleanWithTkhandler();
+            UsuarioDataTestUtils.cleanWithTkhandler();
         }
 
         @Override
@@ -138,7 +137,7 @@ public class RegUserAndUserComuAcTest {
         activity = intentRule.getActivity();
 
         // Usuario data.
-        UserEspressoTestUtil.typeUserData(UsuarioTestUtils.USER_JUAN2.getUserName(), UsuarioTestUtils.USER_JUAN2.getAlias(), UsuarioTestUtils.USER_JUAN2.getPassword(), UsuarioTestUtils.USER_JUAN2.getPassword());
+        UserEspressoTestUtil.typeUserData(UsuarioDataTestUtils.USER_JUAN2.getUserName(), UsuarioDataTestUtils.USER_JUAN2.getAlias(), UsuarioDataTestUtils.USER_JUAN2.getPassword(), UsuarioDataTestUtils.USER_JUAN2.getPassword());
 
         // UsurioComunidad data.
         UserComuEspressoTestUtil.typeUserComuData("portalA", "escC", "plantaB", "puerta_1", PRO, PRE);

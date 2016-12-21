@@ -23,11 +23,11 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.runner.RunWith;
 
-import static com.didekinaar.testutil.AarActivityTestUtils.cleanOptions;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekinaar.utils.UIutils.isGcmTokenSentServer;
 import static com.didekinaar.utils.UIutils.updateIsGcmTokenSentServer;
-import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekinaar.usuario.UsuarioService.AarUserServ;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekinaar.usuario.UsuarioDaoRemote.usuarioDaoRemote;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -75,7 +75,7 @@ public abstract class Incidencia_GCM_Test {
         assertThat(refreshedToken, notNullValue());
         Thread.sleep(2000);
         assertThat(isGcmTokenSentServer(mActivity), is(true));
-        assertThat(AarUserServ.getGcmToken(), is(refreshedToken));
+        assertThat(usuarioDaoRemote.getGcmToken(), is(refreshedToken));
     }
 
     @TargetApi(Build.VERSION_CODES.M)

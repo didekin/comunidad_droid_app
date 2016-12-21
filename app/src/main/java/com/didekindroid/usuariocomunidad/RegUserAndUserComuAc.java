@@ -32,7 +32,7 @@ import timber.log.Timber;
 
 import static com.didekinaar.utils.UIutils.checkPostExecute;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
-import static com.didekinaar.security.Oauth2Service.Oauth2;
+import static com.didekinaar.security.Oauth2DaoRemote.Oauth2;
 import static com.didekinaar.security.TokenHandler.TKhandler;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static com.didekinaar.utils.UIutils.doToolBar;

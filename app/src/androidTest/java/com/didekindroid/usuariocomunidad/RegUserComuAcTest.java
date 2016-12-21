@@ -9,7 +9,7 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekin.comunidad.Comunidad;
 import com.didekinaar.R;
 import com.didekindroid.comunidad.ComuBundleKey;
-import com.didekinaar.usuario.testutil.UsuarioTestUtils;
+import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil;
 import com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil;
 
@@ -33,7 +33,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
-import static com.didekinaar.testutil.AarActivityTestUtils.cleanTwoUsers;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanTwoUsers;
 import static com.didekinaar.testutil.AarActivityTestUtils.clickNavigateUp;
 import static com.didekinaar.usuariocomunidad.AarUserComuService.AarUserComuServ;
 import static com.didekinaar.usuariocomunidad.RolUi.PRE;
@@ -82,7 +82,7 @@ public class RegUserComuAcTest {
     @After
     public void tearDown() throws Exception
     {
-        cleanTwoUsers(UsuarioTestUtils.USER_JUAN, UsuarioTestUtils.USER_PEPE);
+        cleanTwoUsers(UsuarioDataTestUtils.USER_JUAN, UsuarioDataTestUtils.USER_PEPE);
     }
 
     @Test

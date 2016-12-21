@@ -13,7 +13,7 @@ import com.didekin.incidencia.dominio.Resolucion;
 import com.didekin.usuario.Usuario;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
 import com.didekinaar.exception.UiException;
-import com.didekinaar.testutil.AarActivityTestUtils;
+import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.exception.UiAppException;
 
 import org.junit.After;
@@ -32,15 +32,15 @@ import static com.didekin.common.exception.DidekinExceptionMsg.INCID_IMPORTANCIA
 import static com.didekin.common.exception.DidekinExceptionMsg.ROLES_NOT_FOUND;
 import static com.didekin.common.exception.DidekinExceptionMsg.USERCOMU_WRONG_INIT;
 import static com.didekin.usuariocomunidad.Rol.PROPIETARIO;
-import static com.didekinaar.testutil.AarActivityTestUtils.cleanOptions;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.signUpAndUpdateTk;
-import static com.didekinaar.testutil.AarActivityTestUtils.updateSecurityData;
-import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
-import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekinaar.testutil.AarTestUtil.updateSecurityData;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_ESCORIAL_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_PLAZUELA5_JUAN;
-import static com.didekinaar.usuario.testutil.UsuarioTestUtils.USER_JUAN;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.makeUserComuWithComunidadId;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.AVANCE_DEFAULT_DES;
@@ -67,7 +67,7 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class IncidServiceTest_1 {
 
-    AarActivityTestUtils.CleanUserEnum whatClean;
+    UsuarioDataTestUtils.CleanUserEnum whatClean;
     Usuario pepe;
     UsuarioComunidad pepeUserComu;
 

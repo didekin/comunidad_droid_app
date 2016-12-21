@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekinaar.usuario.LoginAcTest;
+import com.didekinaar.usuario.login.LoginAcTest;
 import com.didekinaar.usuario.login.LoginAc;
 
 import org.junit.BeforeClass;

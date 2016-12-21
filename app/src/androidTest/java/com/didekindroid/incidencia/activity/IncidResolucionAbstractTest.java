@@ -5,7 +5,7 @@ import android.support.v4.app.Fragment;
 
 import com.didekin.incidencia.dominio.IncidImportancia;
 import com.didekin.incidencia.dominio.Resolucion;
-import com.didekinaar.testutil.AarActivityTestUtils;
+import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.R;
 import com.didekinaar.utils.UIutils;
 
@@ -25,7 +25,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekinaar.testutil.AarActivityTestUtils.cleanOptions;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekinaar.utils.UIutils.SPAIN_LOCALE;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_resolucion_ac_frgs_tag;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.COSTE_ESTIM_DEFAULT_String;
@@ -89,7 +89,7 @@ public abstract class IncidResolucionAbstractTest {
 
     abstract IntentsTestRule<IncidResolucionRegEditSeeAc> doIntentRule();
 
-    abstract AarActivityTestUtils.CleanUserEnum whatToClean();
+    abstract UsuarioDataTestUtils.CleanUserEnum whatToClean();
 
     //  ===============================  HELPER METHODS ================================
 

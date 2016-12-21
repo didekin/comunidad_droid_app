@@ -14,8 +14,7 @@ import com.didekin.usuario.Usuario;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
 import com.didekinaar.R;
 import com.didekinaar.exception.UiException;
-import com.didekinaar.testutil.AarActivityTestUtils;
-import com.didekinaar.usuario.testutil.UsuarioTestUtils;
+import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.comunidad.testutil.ComuTestUtil;
 import com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil;
 
@@ -42,10 +41,10 @@ import static com.didekinaar.security.TokenHandler.TKhandler;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkBack;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
-import static com.didekinaar.testutil.AarActivityTestUtils.cleanOptions;
-import static com.didekinaar.testutil.AarActivityTestUtils.cleanTwoUsers;
-import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_JUAN;
-import static com.didekinaar.testutil.AarActivityTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanTwoUsers;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekinaar.usuariocomunidad.AarUserComuService.AarUserComuServ;
 import static com.didekinaar.usuariocomunidad.RolUi.PRO;
 import static com.didekinaar.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;
@@ -69,7 +68,7 @@ public class ComuSearchResultsAc_1_Test {
     ComuSearchResultsListFr mComunidadSummaryFrg;
     ComuSearchResultsListAdapter adapter;
     Intent intent;
-    AarActivityTestUtils.CleanUserEnum whatClean = AarActivityTestUtils.CleanUserEnum.CLEAN_NOTHING;
+    UsuarioDataTestUtils.CleanUserEnum whatClean = UsuarioDataTestUtils.CleanUserEnum.CLEAN_NOTHING;
 
     int activityLayoutId = R.id.comu_list_fragment;
 
@@ -213,7 +212,7 @@ public class ComuSearchResultsAc_1_Test {
 
         UserComuTestUtil.regTwoUserComuSameUser(UserComuTestUtil.makeListTwoUserComu());
         // Borro los datos del userComu.
-        AarActivityTestUtils.cleanWithTkhandler();
+        UsuarioDataTestUtils.cleanWithTkhandler();
 
         activity = mIntentRule.launchActivity(intent);
         assertThat(isRegisteredUser(activity), is(false));
@@ -300,12 +299,12 @@ public class ComuSearchResultsAc_1_Test {
         // Usuario registrado. La búsqueda devuelve una comunidad a la que él NO está asociado.
 
         UserComuTestUtil.regTwoUserComuSameUser(UserComuTestUtil.makeListTwoUserComu());
-        AarActivityTestUtils.cleanWithTkhandler();
+        UsuarioDataTestUtils.cleanWithTkhandler();
 
         // Insertamos al userComu que hace la búsqueda.
         Comunidad comunidadIn = ComuTestUtil.makeComunidad("Calle", "de la Torre", (short) 115, "",
                 new Municipio((short) 22, new Provincia((short) 2)));
-        Usuario usuarioIn = UsuarioTestUtils.makeUsuario("newuser@jnew.us", "newuser", "psw_newuser");
+        Usuario usuarioIn = UsuarioDataTestUtils.makeUsuario("newuser@jnew.us", "newuser", "psw_newuser");
         UsuarioComunidad usuarioComunidad = UserComuTestUtil.makeUsuarioComunidad(comunidadIn, usuarioIn, null,
                 null, "3pl", "A_puerta", PRO.function);
         UserComuTestUtil.signUpAndUpdateTk(usuarioComunidad);
@@ -325,7 +324,7 @@ public class ComuSearchResultsAc_1_Test {
         onView(ViewMatchers.withId(R.id.reg_usercomu_ac_layout)).check(matches(isDisplayed()));
         checkUp(activityLayoutId);
 
-        cleanTwoUsers(UsuarioTestUtils.USER_JUAN, usuarioIn);
+        cleanTwoUsers(UsuarioDataTestUtils.USER_JUAN, usuarioIn);
     }
 
     @Test

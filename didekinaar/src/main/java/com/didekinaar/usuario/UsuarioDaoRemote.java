@@ -4,7 +4,7 @@ import com.didekin.usuario.GcmTokenWrapper;
 import com.didekin.usuario.Usuario;
 import com.didekin.usuario.UsuarioEndPoints;
 import com.didekinaar.exception.UiException;
-import com.didekinaar.utils.AarServiceUtil;
+import com.didekinaar.utils.AarDaoUtil;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -23,12 +23,12 @@ import static com.didekinaar.utils.UIutils.checkBearerToken;
  * Time: 15:06
  */
 @SuppressWarnings("WeakerAccess")
-public final class UsuarioService implements UsuarioEndPoints {
+public final class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDao {
 
-    public static final UsuarioService AarUserServ = new UsuarioService();
+    public static final UsuarioDaoRemote usuarioDaoRemote = new UsuarioDaoRemote();
     private final UsuarioEndPoints endPoint;
 
-    private UsuarioService()
+    private UsuarioDaoRemote()
     {
         endPoint = creator.get().getRetrofitHandler().getService(UsuarioEndPoints.class);
     }
@@ -94,46 +94,50 @@ public final class UsuarioService implements UsuarioEndPoints {
 //                          CONVENIENCE METHODS
 //  =============================================================================
 
+    @Override
     public boolean deleteAccessToken(String oldAccessToken) throws UiException
     {
         Timber.d("deleteAccessToken()");
 
         try {
             Response<Boolean> response = deleteAccessToken(checkBearerToken(), oldAccessToken).execute();
-            return AarServiceUtil.getResponseBody(response);
+            return AarDaoUtil.getResponseBody(response);
         } catch (IOException e) {
             throw new UiException(GENERIC_ERROR);
         }
     }
 
+    @Override
     public boolean deleteUser() throws UiException
     {
         Timber.d("deleteUser()");
         try {
             Response<Boolean> response = deleteUser(checkBearerToken()).execute();
-            return AarServiceUtil.getResponseBody(response);
+            return AarDaoUtil.getResponseBody(response);
         } catch (IOException e) {
             throw new UiException(GENERIC_ERROR);
         }
     }
 
+    @Override
     public String getGcmToken() throws UiException
     {
         Timber.d("getGcmToken()");
         try {
             Response<GcmTokenWrapper> response = getGcmToken(checkBearerToken()).execute();
-            return AarServiceUtil.getResponseBody(response).getToken();
+            return AarDaoUtil.getResponseBody(response).getToken();
         } catch (IOException e) {
             throw new UiException(GENERIC_ERROR);
         }
     }
 
+    @Override
     public Usuario getUserData() throws UiException
     {
         Timber.d(("getUserData()"));
         try {
             Response<Usuario> response = getUserData(checkBearerToken()).execute();
-            return AarServiceUtil.getResponseBody(response);
+            return AarDaoUtil.getResponseBody(response);
         } catch (EOFException eo) {
             return null;
         } catch (IOException e) {
@@ -141,45 +145,60 @@ public final class UsuarioService implements UsuarioEndPoints {
         }
     }
 
+    @Override
     public boolean loginInternal(String userName, String password) throws UiException
     {
         Timber.d("loginInternal()");
         try {
             Response<Boolean> response = login(userName, password).execute();
-            return AarServiceUtil.getResponseBody(response);
+            return AarDaoUtil.getResponseBody(response);
         } catch (IOException e) {
             throw new UiException(GENERIC_ERROR);
         }
     }
 
+    @Override
     public int modifyUserGcmToken(String gcmToken) throws UiException
     {
         Timber.d("modifyUserGcmToken()");
         try {
             Response<Integer> response = modifyUserGcmToken(checkBearerToken(), gcmToken).execute();
-            return AarServiceUtil.getResponseBody(response);
+            return AarDaoUtil.getResponseBody(response);
         } catch (IOException e) {
             throw new UiException(GENERIC_ERROR);
         }
     }
 
+    @Override
     public int modifyUser(Usuario usuario) throws UiException
     {
         Timber.d("modifyUser()");
         try {
             Response<Integer> response = modifyUser(checkBearerToken(), usuario).execute();
-            return AarServiceUtil.getResponseBody(response);
+            return AarDaoUtil.getResponseBody(response);
         } catch (IOException e) {
             throw new UiException(GENERIC_ERROR);
         }
     }
 
+    @Override
     public int passwordChange(String newPassword) throws UiException
     {
         Timber.d("passwordChange()");
         try {
             Response<Integer> response = passwordChange(checkBearerToken(), newPassword).execute();
-            return AarServiceUtil.getResponseBody(response);
+            return AarDaoUtil.getResponseBody(response);
+        } catch (IOException e) {
+            throw new UiException(GENERIC_ERROR);
+        }
+    }
+
+    @Override
+    public boolean sendPassword(String email) throws UiException
+    {
+        Timber.d("sendPassword()");
+        try {
+            return AarDaoUtil.getResponseBody(passwordSend(email).execute());
         } catch (IOException e) {
             throw new UiException(GENERIC_ERROR);
         }
