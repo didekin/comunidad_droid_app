@@ -21,8 +21,8 @@ import java.util.Objects;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.signUpAndUpdateTk;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
-import static com.didekinaar.utils.UIutils.isRegisteredUser;
-import static com.didekinaar.utils.UIutils.updateIsGcmTokenSentServer;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler.isRegisteredUser;
+import static com.didekinaar.security.TokenIdentityCacher.updateIsGcmTokenSentServer;
 import static com.didekinaar.usuario.UsuarioDaoRemote.usuarioDaoRemote;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -51,7 +51,7 @@ public class IncidSeeOpenAc_GCM_Test extends Incidencia_GCM_Test {
     public void testRegistrationGcmToken() throws Exception
     {
         // Preconditions for the test.
-        assertThat(isRegisteredUser(mActivity), is(true));
+        assertThat(TKhandler.isRegisteredUser(mActivity), is(true));
 
         checkToken();
     }

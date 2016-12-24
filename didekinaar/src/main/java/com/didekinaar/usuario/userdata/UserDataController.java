@@ -110,7 +110,7 @@ class UserDataController implements UserDataControllerIf {
 
         try {
             usuarioDaoRemote.modifyUser(usuarioIn);
-            TKhandler.cleanTokenAndBackFile();
+            TKhandler.cleanIdentityCache();
         } catch (UiException e) {
             uiException = e;
             Timber.d((e.getErrorBean() != null ?
@@ -120,7 +120,7 @@ class UserDataController implements UserDataControllerIf {
 
         try {
             SpringOauthToken token_2 = Oauth2.getPasswordUserToken(usuarioIn.getUserName(), newUser.getPassword());
-            TKhandler.initTokenAndBackupFile(token_2);
+            TKhandler.initIdentityCache(token_2);
         } catch (UiException e) {
             // Authentication error with new credentials.
             Timber.d(e.getErrorBean().getMessage());

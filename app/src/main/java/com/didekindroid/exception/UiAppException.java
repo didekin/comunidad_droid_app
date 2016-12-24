@@ -15,7 +15,7 @@ import com.didekindroid.comunidad.ComuSearchAc;
 import com.didekindroid.incidencia.activity.IncidEditAc;
 import com.didekindroid.incidencia.activity.IncidRegAc;
 import com.didekindroid.incidencia.activity.IncidSeeOpenByComuAc;
-import com.didekindroid.usuario.LoginAppAc;
+import com.didekindroid.usuario.login.LoginAppAc;
 
 import java.util.HashMap;
 import java.util.Map;

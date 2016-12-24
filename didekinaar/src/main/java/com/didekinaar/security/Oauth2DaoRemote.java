@@ -19,7 +19,7 @@ import static com.didekin.oauth2.OauthClient.CL_USER;
 import static com.didekin.oauth2.OauthConstant.PASSWORD_GRANT;
 import static com.didekin.oauth2.OauthConstant.REFRESH_TOKEN_GRANT;
 import static com.didekin.oauth2.OauthTokenHelper.BASIC_AND_SPACE;
-import static com.didekinaar.PrimalCreator.creator;
+import static com.didekinaar.AppInitializer.creator;
 import static com.didekinaar.utils.AarDaoUtil.getResponseBody;
 
 /**

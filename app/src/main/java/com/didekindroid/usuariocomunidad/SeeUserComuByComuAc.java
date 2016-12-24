@@ -14,7 +14,7 @@ import java.util.Objects;
 import timber.log.Timber;
 
 import static com.didekinaar.utils.UIutils.doToolBar;
-import static com.didekinaar.utils.UIutils.isRegisteredUser;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler.isRegisteredUser;
 import static com.didekindroid.comunidad.ComunidadMenu.COMU_SEARCH_AC;
 import static com.didekindroid.usuariocomunidad.UserComuMenu.SEE_USERCOMU_BY_USER_AC;
 
@@ -39,7 +39,7 @@ public class SeeUserComuByComuAc extends AppCompatActivity {
         Timber.i("onCreate()");
 
         // Preconditions: the user is registered.
-        Objects.equals(isRegisteredUser(this), true);
+        Objects.equals(TKhandler.isRegisteredUser(this), true);
 
         setContentView(R.layout.see_usercomu_by_comu_ac);
         doToolBar(this, true);

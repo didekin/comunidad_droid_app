@@ -26,7 +26,7 @@ import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static com.didekinaar.utils.UIutils.doToolBar;
-import static com.didekinaar.utils.UIutils.isRegisteredUser;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler.isRegisteredUser;
 import static com.didekinaar.utils.UIutils.makeToast;
 
 /**
@@ -61,7 +61,7 @@ public class RegUserComuAc extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Timber.i("onCreate()");
 
-        Objects.equals(isRegisteredUser(this), true);
+        Objects.equals(TKhandler.isRegisteredUser(this), true);
         Comunidad coomunidadIntent =  (Comunidad) getIntent().getExtras()
                 .getSerializable(COMUNIDAD_LIST_OBJECT.key);
         mComunidad = coomunidadIntent != null ? coomunidadIntent : null;

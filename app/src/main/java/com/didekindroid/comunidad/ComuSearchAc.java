@@ -20,12 +20,12 @@ import com.didekinaar.utils.UIutils;
 import timber.log.Timber;
 
 import static com.didekin.common.dominio.ValidDataPatterns.LINE_BREAK;
-import static com.didekinaar.security.TokenHandler.TKhandler;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
 import static com.didekinaar.utils.UIutils.checkPostExecute;
 import static com.didekinaar.utils.UIutils.doToolBar;
-import static com.didekinaar.utils.UIutils.isRegisteredUser;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler.isRegisteredUser;
 import static com.didekinaar.utils.UIutils.makeToast;
-import static com.didekinaar.utils.UIutils.updateIsRegistered;
+import static com.didekinaar.security.TokenIdentityCacher.updateIsRegistered;
 import static com.didekindroid.comunidad.RegComuFr.makeComunidadBeanFromView;
 import static com.didekindroid.usuariocomunidad.UserComuMenu.REG_COMU_USERCOMU_AC;
 import static com.didekindroid.usuariocomunidad.UserComuMenu.REG_COMU_USER_USERCOMU_AC;
@@ -139,7 +139,7 @@ public class ComuSearchAc extends AppCompatActivity {
             SEE_USERCOMU_BY_USER_AC.doMenuItem(this);
             return true;
         } else if (resourceId == R.id.reg_nueva_comunidad_ac_mn) {
-            if (isRegisteredUser(this)) {
+            if (TKhandler.isRegisteredUser()) {
                 REG_COMU_USERCOMU_AC.doMenuItem(this);
             } else {
                 REG_COMU_USER_USERCOMU_AC.doMenuItem(this);

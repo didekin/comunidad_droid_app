@@ -8,6 +8,8 @@ import com.didekinaar.R;
 
 import timber.log.Timber;
 
+import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static com.didekinaar.exception.UiActionExceptionUtil.finishActivity;
 import static com.didekinaar.utils.UIutils.makeToast;
 
@@ -16,7 +18,6 @@ import static com.didekinaar.utils.UIutils.makeToast;
  * Date: 17/11/16
  * Time: 17:41
  */
-@SuppressWarnings("AbstractClassExtendsConcreteClass")
 public class UiException extends Exception implements UiExceptionIf {
 
     private final ErrorBean errorBean;
@@ -36,7 +37,7 @@ public class UiException extends Exception implements UiExceptionIf {
             makeToast(activity, R.string.exception_generic_message);
             intent.addCategory(Intent.CATEGORY_LAUNCHER);
             intent.setAction(Intent.ACTION_MAIN);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setFlags(FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TOP);
             activity.startActivity(intent);
             finishActivity(activity, intent);
         }
@@ -47,7 +48,7 @@ public class UiException extends Exception implements UiExceptionIf {
 
         if (getUiActionException().getActivityToGoClass() != null) {
             intent.setClass(activity, getUiActionException().getActivityToGoClass());
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setFlags(FLAG_ACTIVITY_NEW_TASK);
             activity.startActivity(intent);
             finishActivity(activity, intent);
         }
@@ -65,7 +66,7 @@ public class UiException extends Exception implements UiExceptionIf {
      * */
     protected UiActionExceptionIf getUiActionException()
     {
-        return null;
+        throw new UnsupportedOperationException("This method should be overwritten by final apps.");
     }
 
     public static class UiActionException implements UiActionExceptionIf {

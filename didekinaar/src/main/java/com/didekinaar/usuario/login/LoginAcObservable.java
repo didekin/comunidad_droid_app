@@ -2,7 +2,6 @@ package com.didekinaar.usuario.login;
 
 import android.content.Intent;
 
-import com.didekin.oauth2.SpringOauthToken;
 import com.didekin.usuario.Usuario;
 import com.didekinaar.R;
 import com.didekinaar.exception.UiException;
@@ -11,16 +10,13 @@ import java.util.concurrent.Callable;
 
 import rx.Single;
 import rx.Subscriber;
-import rx.functions.Func2;
 import timber.log.Timber;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
-import static com.didekinaar.PrimalCreator.creator;
 import static com.didekinaar.security.OauthTokenObservable.getOauthTokenGetSingle;
-import static com.didekinaar.security.TokenHandler.TKhandler;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
 import static com.didekinaar.usuario.UsuarioDaoRemote.usuarioDaoRemote;
 import static com.didekinaar.utils.UIutils.makeToast;
-import static com.didekinaar.utils.UIutils.updateIsRegistered;
 import static rx.Single.fromCallable;
 
 /**
@@ -45,7 +41,7 @@ final class LoginAcObservable {
         return getLoginValidateSingle(usuario)
                 .zipWith(
                         getOauthTokenGetSingle(usuario),
-                        initTokenFunc
+                        TKhandler.initTokenFunc
                 );
     }
 
@@ -53,27 +49,6 @@ final class LoginAcObservable {
     {
         return fromCallable(new LoginMailCallable(email));
     }
-
-    //  ======================================================================================
-    //    .................................... FUNCTIONS .................................
-    //  ======================================================================================
-
-    private static final Func2<Boolean, SpringOauthToken, Boolean> initTokenFunc =
-
-            new Func2<Boolean, SpringOauthToken, Boolean>() {
-
-                @Override
-                public Boolean call(Boolean isLoginValid, SpringOauthToken token)
-                {
-                    boolean isUpdatedTokenData = isLoginValid && token != null;
-                    if (isUpdatedTokenData) {
-                        Timber.d("Updating token data ...");
-                        TKhandler.initTokenAndBackupFile(token);
-                        updateIsRegistered(true, creator.get().getContext());
-                    }
-                    return isUpdatedTokenData;
-                }
-            };
 
     //  =======================================================================================
     // ............................ SUBSCRIBERS ..................................
@@ -99,10 +74,11 @@ final class LoginAcObservable {
                 intent.setFlags(FLAG_ACTIVITY_NEW_TASK);
                 activity.startActivity(intent);
                 activity.finish();
-            } else if (++activity.counterWrong > 3) { // Password wrong
+            } else if (activity.getCounterWrong() > 2) { // Password wrong
+                activity.setCounterWrong(activity.getCounterWrong() + 1);
                 activity.showDialog(usuario.getUserName());
             } else {
-                Timber.d("Password wrong, counterWrong = %d%n", activity.counterWrong);
+                Timber.d("Password wrong, counterWrong = %d%n", activity.getCounterWrong());
                 makeToast(activity, R.string.password_wrong_in_login);
             }
         }

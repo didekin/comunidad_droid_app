@@ -29,7 +29,7 @@ import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum
 import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekinaar.utils.UIutils.isRegisteredUser;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler.isRegisteredUser;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_SEARCH;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.REG_COMU_USERCOMU_AC;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.REG_COMU_USER_USERCOMU_AC;
@@ -88,7 +88,7 @@ public class ComuSearchResultsAc_2_SlowTest {
     public void testNoUserNoResults() throws Exception
     {
         activity = mActivityRule.launchActivity(intent);
-        assertThat(isRegisteredUser(activity), is(false));
+        assertThat(TKhandler.isRegisteredUser(activity), is(false));
 
         mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getSupportFragmentManager().findFragmentById(R.id.comu_list_fragment);
         assertThat(activity, notNullValue());
@@ -110,7 +110,7 @@ public class ComuSearchResultsAc_2_SlowTest {
 
         //Usuario no registrado. La búsqueda devuelve una comunidad.
         activity = mActivityRule.launchActivity(intent);
-        assertThat(isRegisteredUser(activity), is(false));
+        assertThat(TKhandler.isRegisteredUser(activity), is(false));
         // La opción de nueva comunidad implica también registro de usuario.
         REG_COMU_USER_USERCOMU_AC.checkMenuItem_NTk(activity);
         checkUp(fragmentLayoutId);
@@ -124,7 +124,7 @@ public class ComuSearchResultsAc_2_SlowTest {
         UserComuTestUtil.regTwoUserComuSameUser(UserComuTestUtil.makeListTwoUserComu());
         //Usuario no registrado. La búsqueda devuelve una comunidad.
         activity = mActivityRule.launchActivity(intent);
-        assertThat(isRegisteredUser(activity), is(true));
+        assertThat(TKhandler.isRegisteredUser(activity), is(true));
 
         Thread.sleep(2000);
         // La opción de nueva comunidad NO implica registro de usuario.
@@ -142,7 +142,7 @@ public class ComuSearchResultsAc_2_SlowTest {
         // Borro los datos del userComu.
         UsuarioDataTestUtils.cleanWithTkhandler();
         activity = mActivityRule.launchActivity(intent);
-        assertThat(isRegisteredUser(activity), is(false));
+        assertThat(TKhandler.isRegisteredUser(activity), is(false));
 
         UserItemMenuTestUtils.SEE_USERCOMU_BY_USER_AC.checkMenuItem_NTk(activity);
         // No se mueve de la actividad. El home llevaría a la actividad de búsqueda de comunidad.
@@ -157,7 +157,7 @@ public class ComuSearchResultsAc_2_SlowTest {
         UserComuTestUtil.regTwoUserComuSameUser(UserComuTestUtil.makeListTwoUserComu());
         //Usuario registrado. La búsqueda devuelve una comunidad.
         activity = mActivityRule.launchActivity(intent);
-        assertThat(isRegisteredUser(activity), is(true));
+        assertThat(TKhandler.isRegisteredUser(activity), is(true));
         Thread.sleep(2000);
         // La consulta muestra las comunidades del usuario.
         UserItemMenuTestUtils.SEE_USERCOMU_BY_USER_AC.checkMenuItem_WTk(activity);

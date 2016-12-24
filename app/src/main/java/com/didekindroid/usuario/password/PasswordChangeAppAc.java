@@ -1,4 +1,4 @@
-package com.didekindroid.usuario;
+package com.didekindroid.usuario.password;
 
 import com.didekinaar.usuario.password.PasswordChangeAc;
 

@@ -24,8 +24,8 @@ import org.junit.Rule;
 import org.junit.runner.RunWith;
 
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekinaar.utils.UIutils.isGcmTokenSentServer;
-import static com.didekinaar.utils.UIutils.updateIsGcmTokenSentServer;
+import static com.didekinaar.security.TokenIdentityCacher.isGcmTokenSentServer;
+import static com.didekinaar.security.TokenIdentityCacher.updateIsGcmTokenSentServer;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekinaar.usuario.UsuarioDaoRemote.usuarioDaoRemote;
 import static org.hamcrest.CoreMatchers.is;

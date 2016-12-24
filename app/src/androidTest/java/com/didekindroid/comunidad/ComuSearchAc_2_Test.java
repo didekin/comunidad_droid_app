@@ -33,7 +33,7 @@ import static com.didekinaar.testutil.AarActivityTestUtils.checkBack;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
-import static com.didekinaar.utils.UIutils.isRegisteredUser;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler.isRegisteredUser;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -72,7 +72,7 @@ public class ComuSearchAc_2_Test {
         UserComuTestUtil.signUpAndUpdateTk(UserComuTestUtil.COMU_REAL_JUAN);
 
         ComuSearchAc activity = intentRule.launchActivity(new Intent());
-        assertThat(isRegisteredUser(activity), is(true));
+        assertThat(TKhandler.isRegisteredUser(activity), is(true));
 
         // Data corresponds to a comunidad in DB.
         ComuEspresoTestUtil.typeComunidadData();
@@ -92,7 +92,7 @@ public class ComuSearchAc_2_Test {
         UserComuTestUtil.signUpAndUpdateTk(UserComuTestUtil.COMU_REAL_JUAN);
 
         ComuSearchAc activity = intentRule.launchActivity(new Intent());
-        assertThat(isRegisteredUser(activity), is(true));
+        assertThat(TKhandler.isRegisteredUser(activity), is(true));
 
         // Data corresponds to a comunidad in DB.
         ComuEspresoTestUtil.typeComunidadData();

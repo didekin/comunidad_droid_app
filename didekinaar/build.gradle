@@ -32,8 +32,6 @@ android {
     }
 }
 
-// TODO: Añadir tests simples al build.
-
 dependencies {
     compile rootProject.ext.model_lib
     compile rootProject.ext.firebase_message
@@ -43,5 +41,6 @@ dependencies {
     compile rootProject.ext.android_support
 
     testCompile rootProject.ext.junit
+    testCompile rootProject.ext.mockito
     androidTestCompile rootProject.ext.espresso
 }

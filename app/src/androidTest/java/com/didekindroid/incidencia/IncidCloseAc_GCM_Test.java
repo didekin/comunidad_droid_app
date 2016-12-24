@@ -24,8 +24,8 @@ import java.io.IOException;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.incidencia.AppFBService.IncidTypeMsgHandler.INCIDENCIA_CLOSE;
-import static com.didekinaar.utils.UIutils.isRegisteredUser;
-import static com.didekinaar.utils.UIutils.updateIsGcmTokenSentServer;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler.isRegisteredUser;
+import static com.didekinaar.security.TokenIdentityCacher.updateIsGcmTokenSentServer;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetResolucionNoAdvances;
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
@@ -53,7 +53,7 @@ public class IncidCloseAc_GCM_Test extends Incidencia_GCM_Test {
     public void testRegistrationGcmToken() throws Exception
     {
         // Preconditions for the test.
-        assertThat(isRegisteredUser(mActivity), is(true));
+        assertThat(TKhandler.isRegisteredUser(mActivity), is(true));
 
         checkToken();
     }

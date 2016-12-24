@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Build;
 import android.support.v4.app.NavUtils;
@@ -23,7 +22,7 @@ import android.widget.Toast;
 import com.didekin.common.exception.ErrorBean;
 import com.didekinaar.R;
 import com.didekinaar.exception.UiException;
-import com.didekinaar.security.TokenHandler;
+import com.didekinaar.security.TokenIdentityCacher;
 
 import java.sql.Timestamp;
 import java.text.DateFormat;
@@ -39,7 +38,6 @@ import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;
 import static com.didekin.common.dominio.ValidDataPatterns.LINE_BREAK;
 import static com.didekin.common.exception.DidekinExceptionMsg.TOKEN_NULL;
-import static com.didekinaar.utils.UIutils.SharedPrefFiles.app_preferences_file;
 import static java.text.DateFormat.MEDIUM;
 import static java.util.Locale.getDefault;
 
@@ -99,7 +97,7 @@ public final class UIutils {
 
     public static String checkBearerToken() throws UiException
     {
-        String bearerAccessTkHeader = TokenHandler.TKhandler.doBearerAccessTkHeader();
+        String bearerAccessTkHeader = TokenIdentityCacher.TKhandler.doBearerAccessTkHeader();
 
         if (bearerAccessTkHeader == null) { // No token in cache.
             ErrorBean errorBean = new ErrorBean(TOKEN_NULL.getHttpMessage(), TOKEN_NULL.getHttpStatus());
@@ -167,64 +165,7 @@ public final class UIutils {
         NavUtils.navigateUpTo(parentActivity, intent);
     }
 
-    //    ================================== SHARED PREFERENCES ======================================
-
-    public static boolean isRegisteredUser(Context context)
-    {
-        Timber.d("isRegisteredUser()");
-
-        SharedPreferences sharedPref = context.getSharedPreferences
-                (app_preferences_file.toString(), Context.MODE_PRIVATE);
-        return sharedPref.getBoolean(SharedPrefFiles.IS_USER_REG, false);
-    }
-
-    public static void updateIsRegistered(boolean isRegisteredUser, Context context)
-    {
-        Timber.d("updateIsRegistered()");
-
-        SharedPreferences sharedPref = context.getSharedPreferences
-                (app_preferences_file.toString(), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putBoolean(SharedPrefFiles.IS_USER_REG, isRegisteredUser);
-        editor.apply();
-
-        if (!isRegisteredUser) {
-            updateIsGcmTokenSentServer(false, context);
-        }
-    }
-
-    public static boolean isGcmTokenSentServer(Context context)
-    {
-        SharedPreferences sharedPref = context.getSharedPreferences(app_preferences_file.toString(), Context.MODE_PRIVATE);
-        return sharedPref.getBoolean(SharedPrefFiles.IS_GCM_TOKEN_SENT_TO_SERVER, false);
-    }
-
-    public static void updateIsGcmTokenSentServer(boolean isSentToServer, Context context)
-    {
-        SharedPreferences sharedPref = context.getSharedPreferences(app_preferences_file.toString(), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putBoolean(SharedPrefFiles.IS_GCM_TOKEN_SENT_TO_SERVER, isSentToServer);
-        editor.apply();
-        Timber.d("updateIsGcmTokenSentServer(), iSentToServer= %b", isSentToServer);
-    }
-
-    //  ..............  INNER CLASSES ............
-
-    enum SharedPrefFiles {
-
-        app_preferences_file,;
-
-        static final String IS_USER_REG = "isRegisteredUser";
-        static final String IS_GCM_TOKEN_SENT_TO_SERVER = "isGcmTokenSentToServer";
-
-        @Override
-        public String toString()
-        {
-            return getClass().getCanonicalName().concat(".").concat(this.name());
-        }
-    }
-
-//    ================================== TOASTS ======================================
+    //    ================================== TOASTS ======================================
 
     public static void makeToast(Context context, int resourceStringId)
     {

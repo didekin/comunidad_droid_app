@@ -39,12 +39,12 @@ import static com.didekin.usuariocomunidad.Rol.ADMINISTRADOR;
 import static com.didekin.usuariocomunidad.Rol.INQUILINO;
 import static com.didekin.usuariocomunidad.Rol.PRESIDENTE;
 import static com.didekin.usuariocomunidad.Rol.PROPIETARIO;
-import static com.didekinaar.security.TokenHandler.TKhandler;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekinaar.utils.UIutils.isRegisteredUser;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler.isRegisteredUser;
 import static com.didekindroid.comunidad.testutil.ComuMenuTestUtil.COMU_DATA_AC;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static com.didekindroid.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;
@@ -199,7 +199,7 @@ public class UserComuDataAc_1_Test {
 
         assertThat(TKhandler.getAccessTokenInCache(), notNullValue());
         assertThat(TKhandler.getRefreshTokenFile().exists(), is(true));
-        assertThat(isRegisteredUser(mActivity), is(true));
+        assertThat(TKhandler.isRegisteredUser(), is(true));
     }
 
 //    ======================= MENU =========================

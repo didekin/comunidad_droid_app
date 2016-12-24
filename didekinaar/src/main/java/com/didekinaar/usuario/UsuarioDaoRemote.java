@@ -14,7 +14,7 @@ import retrofit2.Response;
 import timber.log.Timber;
 
 import static com.didekin.common.exception.ErrorBean.GENERIC_ERROR;
-import static com.didekinaar.PrimalCreator.creator;
+import static com.didekinaar.AppInitializer.creator;
 import static com.didekinaar.utils.UIutils.checkBearerToken;
 
 /**

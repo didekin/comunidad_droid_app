@@ -20,10 +20,9 @@ import timber.log.Timber;
 
 import static com.didekin.common.exception.DidekinExceptionMsg.BAD_REQUEST;
 import static com.didekinaar.security.Oauth2DaoRemote.Oauth2;
-import static com.didekinaar.security.TokenHandler.TKhandler;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
 import static com.didekinaar.usuario.UsuarioDaoRemote.usuarioDaoRemote;
 import static com.didekinaar.utils.UIutils.doToolBar;
-import static com.didekinaar.utils.UIutils.isRegisteredUser;
 import static com.didekinaar.utils.UIutils.makeToast;
 
 /**
@@ -49,7 +48,7 @@ public abstract class UserDataAc extends AppCompatActivity implements UserDataVi
         Timber.d("onCreate()");
 
         // Preconditions.
-        Objects.equals(isRegisteredUser(this), true);
+        Objects.equals(TKhandler.isRegisteredUser(), true);
         controller = new UserDataController(this);
         mAcView = getLayoutInflater().inflate(R.layout.user_data_ac, null);
         setContentView(mAcView);
@@ -93,7 +92,7 @@ public abstract class UserDataAc extends AppCompatActivity implements UserDataVi
             SpringOauthToken token_1;
             try {
                 token_1 = Oauth2.getPasswordUserToken(mOldUser.getUserName(), usuarios[0].getPassword());
-                TKhandler.initTokenAndBackupFile(token_1);
+                TKhandler.initIdentityCache(token_1);
             } catch (UiException e) {
                 if (e.getErrorBean().getMessage().equals(BAD_REQUEST.getHttpMessage())) {
                     Timber.d(" exception: %s%n", BAD_REQUEST.getHttpMessage());
@@ -114,7 +113,7 @@ public abstract class UserDataAc extends AppCompatActivity implements UserDataVi
 
                 try {
                     usuarioDaoRemote.modifyUser(usuarioIn);
-                    TKhandler.cleanTokenAndBackFile();
+                    TKhandler.cleanIdentityCache();
                 } catch (UiException e) {
                     uiException = e;
                     Timber.d((e.getErrorBean() != null ?
@@ -124,7 +123,7 @@ public abstract class UserDataAc extends AppCompatActivity implements UserDataVi
 
                 try {
                     SpringOauthToken token_2 = Oauth2.getPasswordUserToken(usuarioIn.getUserName(), usuarios[0].getPassword());
-                    TKhandler.initTokenAndBackupFile(token_2);
+                    TKhandler.initIdentityCache(token_2);
                 } catch (UiException e) {
                     // Authentication error with new credentials.
                     Timber.d(e.getErrorBean().getMessage());

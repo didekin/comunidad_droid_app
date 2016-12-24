@@ -1,5 +1,8 @@
 package com.didekinaar.security;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import com.didekin.oauth2.SpringOauthToken;
 import com.didekinaar.exception.UiException;
 
@@ -12,13 +15,19 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicReference;
 
+import rx.functions.Func1;
+import rx.functions.Func2;
 import timber.log.Timber;
 
+import static android.content.Context.MODE_PRIVATE;
 import static com.didekin.oauth2.OauthTokenHelper.HELPER;
-import static com.didekinaar.PrimalCreator.creator;
+import static com.didekinaar.AppInitializer.creator;
 import static com.didekinaar.security.Oauth2DaoRemote.Oauth2;
+import static com.didekinaar.security.TokenIdentityCacher.SharedPrefFiles.IS_GCM_TOKEN_SENT_TO_SERVER;
 import static com.didekinaar.utils.IoHelper.readStringFromFile;
 import static com.didekinaar.utils.IoHelper.writeFileFromString;
+import static com.didekinaar.security.TokenIdentityCacher.SharedPrefFiles.IS_USER_REG;
+import static com.didekinaar.security.TokenIdentityCacher.SharedPrefFiles.app_preferences_file;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
@@ -30,7 +39,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 /**
  *
  */
-public enum TokenHandler {
+public enum TokenIdentityCacher implements IdentityCacher {
 
     TKhandler,;
 
@@ -39,33 +48,36 @@ public enum TokenHandler {
     private final AtomicReference<Future<SpringOauthToken>> cacheForToken = new AtomicReference<>();
     public final AtomicReference<SpringOauthToken> tokenInCache;
     private final File refreshTokenFile;
+    private final Context context;
 
-    TokenHandler()
+    TokenIdentityCacher()
     {
         tokenUpdater = new ThreadPoolExecutor(1, 1, 7L, SECONDS, new LinkedBlockingQueue<Runnable>(5));
         tokenUpdater.allowCoreThreadTimeOut(true);
         tokenUpdater.setRejectedExecutionHandler(new ThreadPoolExecutor.AbortPolicy());
-
-        refreshTokenFile = new File(creator.get().getContext().getFilesDir(), refresh_token_filename);
+        context = creator.get().getContext();
+        refreshTokenFile = new File(context.getFilesDir(), refresh_token_filename);
         String refreshTokenValue = refreshTokenFile.exists() ? readStringFromFile(refreshTokenFile) : null;
-        tokenInCache =  (refreshTokenValue != null && !refreshTokenValue.isEmpty()) ?
-                new AtomicReference<>(new SpringOauthToken(refreshTokenValue)) :  new AtomicReference<SpringOauthToken>();
+        tokenInCache = (refreshTokenValue != null && !refreshTokenValue.isEmpty()) ?
+                new AtomicReference<>(new SpringOauthToken(refreshTokenValue)) : new AtomicReference<SpringOauthToken>();
     }
 
-    public final void initTokenAndBackupFile(final SpringOauthToken springOauthToken)
+    @Override
+    public final void initIdentityCache(final SpringOauthToken springOauthToken)
     {
-        Timber.d("initTokenAndBackupFile()");
+        Timber.d("initIdentityCache()");
 
         synchronized (refreshTokenFile) {
-            cleanTokenAndBackFile();
+            cleanIdentityCache();
             writeFileFromString(springOauthToken.getRefreshToken().getValue(), refreshTokenFile);
         }
         tokenInCache.set(springOauthToken);
     }
 
-    public final void cleanTokenAndBackFile()
+    @Override
+    public final void cleanIdentityCache()
     {
-        Timber.d("cleanTokenAndBackFile()");
+        Timber.d("cleanIdentityCache()");
         synchronized (refreshTokenFile) {
             refreshTokenFile.delete();
         }
@@ -76,7 +88,7 @@ public enum TokenHandler {
     /**
      * Preconditions:
      * 1. This method would be called mainly in an asyncTask thread or in a background thread.
-     *    However, it uses an ExecutorService instance to update asynchronously the tokens in cache.
+     * However, it uses an ExecutorService instance to update asynchronously the tokens in cache.
      */
     public final SpringOauthToken getAccessTokenInCache() throws UiException
     {
@@ -119,6 +131,64 @@ public enum TokenHandler {
             return catchExecutionException(e);
         }
         return tokenInCache.get();
+    }
+
+    //    ...................  SHARED PREFERENCES .....................
+
+    @Override
+    public boolean isRegisteredUser()
+    {
+        Timber.d("TKhandler.isRegisteredUser()");
+
+        SharedPreferences sharedPref = context.getSharedPreferences
+                (app_preferences_file.toString(), MODE_PRIVATE);
+        return sharedPref.getBoolean(IS_USER_REG, false);
+    }
+
+    @Override
+    public void updateIsRegistered(boolean isRegisteredUser)
+    {
+        Timber.d("updateIsRegistered()");
+
+        SharedPreferences sharedPref = context.getSharedPreferences(app_preferences_file.toString(), MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putBoolean(IS_USER_REG, isRegisteredUser);
+        editor.apply();
+
+        if (!isRegisteredUser) {
+            updateIsGcmTokenSentServer(false);
+        }
+    }
+
+    @Override
+    public boolean isGcmTokenSentServer()
+    {
+        SharedPreferences sharedPref = context.getSharedPreferences(app_preferences_file.toString(), MODE_PRIVATE);
+        return sharedPref.getBoolean(IS_GCM_TOKEN_SENT_TO_SERVER, false);
+    }
+
+    @Override
+    public void updateIsGcmTokenSentServer(boolean isSentToServer)
+    {
+        SharedPreferences sharedPref = context.getSharedPreferences(app_preferences_file.toString(), MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putBoolean(IS_GCM_TOKEN_SENT_TO_SERVER, isSentToServer);
+        editor.apply();
+        Timber.d("updateIsGcmTokenSentServer(), iSentToServer= %b", isSentToServer);
+    }
+
+    public enum SharedPrefFiles {
+
+        app_preferences_file,;
+
+        public static final String IS_USER_REG = "TKhandler.isRegisteredUser";
+        static final String IS_GCM_TOKEN_SENT_TO_SERVER = "isGcmTokenSentToServer";
+
+        @Override
+        public String toString()
+        {
+            return getClass().getCanonicalName().concat(".").concat(this.name());
+        }
     }
 
     //    ...................  UTILITIES .....................
@@ -168,6 +238,40 @@ public enum TokenHandler {
     AtomicReference<Future<SpringOauthToken>> getCacheForToken()
     {
         return cacheForToken;
+    }
+
+    //  ======================================================================================
+    //    .................................... FUNCTIONS .................................
+    //  ======================================================================================
+
+    public final Func2<Boolean, SpringOauthToken, Boolean> initTokenFunc = new InitializeIdentityFunc();
+
+    final static class InitializeIdentityFunc implements Func2<Boolean, SpringOauthToken, Boolean> {
+        @Override
+        public Boolean call(Boolean isLoginValid, SpringOauthToken token)
+        {
+            boolean isUpdatedTokenData = isLoginValid && token != null;
+            if (isUpdatedTokenData) {
+                Timber.d("Updating token data ...");
+                TKhandler.initIdentityCache(token);
+                TKhandler.updateIsRegistered(true);
+            }
+            return isUpdatedTokenData;
+        }
+    }
+
+    public final Func1<Boolean,Boolean> cleanTokenFunc = new CleanIdentityFunc();
+
+    final static class CleanIdentityFunc implements Func1<Boolean,Boolean> {
+        @Override
+        public Boolean call(Boolean isDeletedUser)
+        {
+            if (isDeletedUser) {
+                TKhandler.cleanIdentityCache();
+                TKhandler.updateIsRegistered(false);
+            }
+            return isDeletedUser;
+        }
     }
 }
 

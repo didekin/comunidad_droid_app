@@ -32,7 +32,7 @@ import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekinaar.testutil.AarActivityTestUtils.clickNavigateUp;
-import static com.didekinaar.utils.UIutils.isRegisteredUser;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler.isRegisteredUser;
 import static com.didekindroid.comunidad.testutil.ComuMenuTestUtil.COMU_SEARCH_AC;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.SEE_USERCOMU_BY_USER_AC;
@@ -98,7 +98,7 @@ public class SeeUserComuByComuAc_1_Test {
     public void testOnCreate() throws Exception
     {
         assertThat(mActivity, notNullValue());
-        assertThat(isRegisteredUser(mActivity), is(true));
+        assertThat(TKhandler.isRegisteredUser(mActivity), is(true));
         assertThat(mActivity.getIntent().getLongExtra(ComuBundleKey.COMUNIDAD_ID.key, 0L), is(comunidadId));
         assertThat(mFragment, notNullValue());
         assertThat(mFragment.fragmentListView, notNullValue());

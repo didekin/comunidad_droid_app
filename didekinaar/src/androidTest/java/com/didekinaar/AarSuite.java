@@ -3,7 +3,7 @@ package com.didekinaar;
 import com.didekinaar.repository.MockDbHelperTest;
 import com.didekinaar.security.JceTests;
 import com.didekinaar.security.Oauth2DaoRemoteIfTest;
-import com.didekinaar.security.TokenHandlerTest;
+import com.didekinaar.security.TokenIdentityCacherTest;
 import com.didekinaar.usuario.UsuarioBeanValidaTests;
 import com.didekinaar.utils.IoHelperTest;
 import com.didekinaar.utils.UIutilsTest;
@@ -22,7 +22,7 @@ import org.junit.runners.Suite;
         JceTests.class,
         MockDbHelperTest.class,
         Oauth2DaoRemoteIfTest.class,
-        TokenHandlerTest.class,
+        TokenIdentityCacherTest.class,
         UIutilsTest.class,
         UsuarioBeanValidaTests.class,
 })

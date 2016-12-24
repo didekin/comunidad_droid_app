@@ -6,6 +6,8 @@ package com.didekinaar.usuario.login;
  * Time: 10:30
  */
 interface LoginControllerIf {
+    int getCounterWrong();
+    void setCounterWrong(int counterWrong);
     void doLoginValidate();
     void doDialogPositiveClick(String email);
     void doDialogNegativeClick();

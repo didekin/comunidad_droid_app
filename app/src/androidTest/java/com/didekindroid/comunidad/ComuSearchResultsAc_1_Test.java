@@ -37,7 +37,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekinaar.comunidad.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekinaar.comunidad.ComuBundleKey.COMUNIDAD_SEARCH;
-import static com.didekinaar.security.TokenHandler.TKhandler;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkBack;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
@@ -48,7 +48,7 @@ import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum
 import static com.didekinaar.usuariocomunidad.AarUserComuService.AarUserComuServ;
 import static com.didekinaar.usuariocomunidad.RolUi.PRO;
 import static com.didekinaar.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;
-import static com.didekinaar.utils.UIutils.isRegisteredUser;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler.isRegisteredUser;
 import static com.external.LongListMatchers.withAdaptedData;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
@@ -94,7 +94,7 @@ public class ComuSearchResultsAc_1_Test {
     {
         cleanOptions(whatClean);
         Thread.sleep(2000);
-        assertThat(isRegisteredUser(activity), is(false));
+        assertThat(TKhandler.isRegisteredUser(), is(false));
     }
 
     @Test
@@ -116,7 +116,7 @@ public class ComuSearchResultsAc_1_Test {
         // User with 2 comunidades. We search with one of them exactly.
         UserComuTestUtil.regTwoUserComuSameUser(UserComuTestUtil.makeListTwoUserComu());
         activity = mIntentRule.launchActivity(intent);
-        assertThat(isRegisteredUser(activity), is(true));
+        assertThat(TKhandler.isRegisteredUser(), is(true));
 
         Thread.sleep(2000);
         mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getSupportFragmentManager().findFragmentById(R.id.comu_list_fragment);
@@ -169,7 +169,7 @@ public class ComuSearchResultsAc_1_Test {
         intent.putExtra(COMUNIDAD_SEARCH.key, comunidad);
 
         activity = mIntentRule.launchActivity(intent);
-        assertThat(isRegisteredUser(activity), is(false));
+        assertThat(TKhandler.isRegisteredUser(), is(false));
         mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getSupportFragmentManager().findFragmentById(R.id.comu_list_fragment);
 
         checkToastInTest(R.string.no_result_search_comunidad, activity);
@@ -193,7 +193,7 @@ public class ComuSearchResultsAc_1_Test {
         intent.putExtra(COMUNIDAD_SEARCH.key, comunidad);
 
         activity = mIntentRule.launchActivity(intent);
-        assertThat(isRegisteredUser(activity), is(true));
+        assertThat(TKhandler.isRegisteredUser(), is(true));
         mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getSupportFragmentManager().findFragmentById(R.id.comu_list_fragment);
 
         checkToastInTest(R.string.no_result_search_comunidad, activity);
@@ -215,7 +215,7 @@ public class ComuSearchResultsAc_1_Test {
         UsuarioDataTestUtils.cleanWithTkhandler();
 
         activity = mIntentRule.launchActivity(intent);
-        assertThat(isRegisteredUser(activity), is(false));
+        assertThat(TKhandler.isRegisteredUser(), is(false));
 
         Thread.sleep(2000);
         mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getSupportFragmentManager().findFragmentById(R.id.comu_list_fragment);
@@ -241,7 +241,7 @@ public class ComuSearchResultsAc_1_Test {
 
         UserComuTestUtil.regTwoUserComuSameUser(UserComuTestUtil.makeListTwoUserComu());
         activity = mIntentRule.launchActivity(intent);
-        assertThat(isRegisteredUser(activity), is(true));
+        assertThat(TKhandler.isRegisteredUser(), is(true));
 
         Thread.sleep(2000);
         mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getSupportFragmentManager().findFragmentById(R.id.comu_list_fragment);
@@ -276,7 +276,7 @@ public class ComuSearchResultsAc_1_Test {
         Comunidad comuIntent = AarUserComuServ.getComusByUser().get(0);
 
         activity = mIntentRule.launchActivity(intent);
-        assertThat(isRegisteredUser(activity), is(true));
+        assertThat(TKhandler.isRegisteredUser(), is(true));
 
         onData(Matchers.is(ComuTestUtil.COMU_REAL)).perform(click());
 
@@ -311,7 +311,7 @@ public class ComuSearchResultsAc_1_Test {
 
         // Búsqueda con comunidad/intent por defecto.
         activity = mIntentRule.launchActivity(intent);
-        assertThat(isRegisteredUser(activity), is(true));
+        assertThat(TKhandler.isRegisteredUser(), is(true));
 
         Thread.sleep(2000);
         mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getSupportFragmentManager().findFragmentById(R.id.comu_list_fragment);
@@ -339,7 +339,7 @@ public class ComuSearchResultsAc_1_Test {
         UserComuTestUtil.signUpAndUpdateTk(UserComuTestUtil.COMU_REAL_JUAN);
 
         activity = mIntentRule.launchActivity(intent);
-        assertThat(isRegisteredUser(activity), is(true));
+        assertThat(TKhandler.isRegisteredUser(), is(true));
 
         onData(Matchers.is(ComuTestUtil.COMU_LA_PLAZUELA_5)).perform(click());
         intended(IntentMatchers.hasExtra(COMUNIDAD_LIST_OBJECT.key, comunidad));
@@ -358,7 +358,7 @@ public class ComuSearchResultsAc_1_Test {
 
         // Búsqueda con comunidad/intent por defecto.
         activity = mIntentRule.launchActivity(intent);
-        assertThat(isRegisteredUser(activity), is(true));
+        assertThat(TKhandler.isRegisteredUser(), is(true));
 
         Thread.sleep(2000);
         mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getSupportFragmentManager().findFragmentById(R.id.comu_list_fragment);

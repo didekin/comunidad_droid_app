@@ -24,7 +24,7 @@ import java.util.List;
 import timber.log.Timber;
 
 import static com.didekinaar.utils.UIutils.checkPostExecute;
-import static com.didekinaar.utils.UIutils.isRegisteredUser;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler.isRegisteredUser;
 import static com.didekindroid.comunidad.ComunidadService.AppComuServ;
 import static com.didekindroid.usuariocomunidad.UserComuMenu.REG_COMU_USERCOMU_AC;
 import static com.didekindroid.usuariocomunidad.UserComuMenu.REG_COMU_USER_USERCOMU_AC;
@@ -215,7 +215,7 @@ public class ComuSearchResultsListFr extends Fragment {
                 mListView.setAdapter(mAdapter);
             } else {
                 UIutils.makeToast(mComuListListener.getActivity(), R.string.no_result_search_comunidad);
-                if (isRegisteredUser(mComuListListener.getActivity())) {
+                if (TKhandler.isRegisteredUser(mComuListListener.getActivity())) {
                     REG_COMU_USERCOMU_AC.doMenuItem(mComuListListener.getActivity());
                 } else {
                     REG_COMU_USER_USERCOMU_AC.doMenuItem(mComuListListener.getActivity());

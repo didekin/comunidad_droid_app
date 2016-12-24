@@ -7,6 +7,7 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekinaar.R;
+import com.didekinaar.security.TokenIdentityCacher;
 import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 
 import org.junit.After;
@@ -28,8 +29,6 @@ import static com.didekinaar.utils.UIutils.SPAIN_LOCALE;
 import static com.didekinaar.utils.UIutils.formatTimeStampToString;
 import static com.didekinaar.utils.UIutils.formatTimeToString;
 import static com.didekinaar.utils.UIutils.getIntFromStringDecimal;
-import static com.didekinaar.utils.UIutils.isRegisteredUser;
-import static com.didekinaar.utils.UIutils.updateIsRegistered;
 import static java.text.DateFormat.LONG;
 import static java.text.DateFormat.MEDIUM;
 import static java.text.DateFormat.getDateInstance;
@@ -169,17 +168,8 @@ public class UIutilsTest {
     @Test
     public void testNameFile() throws Exception
     {
-        assertThat(UIutils.SharedPrefFiles.app_preferences_file.toString(),
-                is("com.didekinaar.utils.UIutils.SharedPrefFiles.app_preferences_file"));
-    }
-
-    @Test
-    public void testUpdateIsRegistered() throws Exception
-    {
-        updateIsRegistered(false, context);
-        assertThat(isRegisteredUser(context), is(false));
-        updateIsRegistered(true, context);
-        assertThat(isRegisteredUser(context), is(true));
+        assertThat(TokenIdentityCacher.SharedPrefFiles.app_preferences_file.toString(),
+                is("com.didekinaar.security.TokenIdentityCacher.SharedPrefFiles.app_preferences_file"));
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)

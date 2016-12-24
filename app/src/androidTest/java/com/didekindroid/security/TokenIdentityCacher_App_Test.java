@@ -5,7 +5,7 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekin.oauth2.SpringOauthToken;
 import com.didekin.oauth2.SpringOauthToken.OauthToken;
 import com.didekinaar.exception.UiException;
-import com.didekinaar.security.TokenHandlerTest;
+import com.didekinaar.security.TokenIdentityCacherTest;
 import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 
 import org.junit.Test;
@@ -14,8 +14,8 @@ import org.junit.runner.RunWith;
 import java.io.File;
 import java.io.IOException;
 
-import static com.didekinaar.security.TokenHandler.TKhandler;
-import static com.didekinaar.security.TokenHandler.refresh_token_filename;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
+import static com.didekinaar.security.TokenIdentityCacher.refresh_token_filename;
 import static com.didekinaar.utils.IoHelper.writeFileFromString;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_REAL_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.signUpAndUpdateTk;
@@ -33,7 +33,7 @@ import static org.junit.Assert.assertThat;
  */
 @SuppressWarnings("ConstantConditions")
 @RunWith(AndroidJUnit4.class)
-public class TokenHandler_App_Test extends TokenHandlerTest {
+public class TokenIdentityCacher_App_Test extends TokenIdentityCacherTest {
 
     @Test
     public void testGetAccessTokenInCache_1() throws IOException, UiException
@@ -45,7 +45,7 @@ public class TokenHandler_App_Test extends TokenHandlerTest {
         SpringOauthToken springOauthTokenIn = TKhandler.getAccessTokenInCache();
         String refreshTkOriginal = springOauthTokenIn.getRefreshToken().getValue();
         // Borramos datos.
-        TKhandler.cleanTokenAndBackFile();
+        TKhandler.cleanIdentityCache();
         // We make out preconditions: file exists, tokenInCache initialized ONLY with refreshTokenValue.
         File refreshTkFile = new File(context.getFilesDir(), refresh_token_filename);
         writeFileFromString(refreshTkOriginal, refreshTkFile);

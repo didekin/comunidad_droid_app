@@ -26,7 +26,7 @@ import timber.log.Timber;
 import static com.didekinaar.utils.UIutils.checkPostExecute;
 import static com.didekinaar.utils.UIutils.doToolBar;
 import static com.didekinaar.utils.UIutils.getErrorMsgBuilder;
-import static com.didekinaar.utils.UIutils.isRegisteredUser;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler.isRegisteredUser;
 import static com.didekinaar.utils.UIutils.makeToast;
 import static com.didekindroid.comunidad.ComunidadService.AppComuServ;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
@@ -60,7 +60,7 @@ public class ComuDataAc extends AppCompatActivity implements RegComuFr.ComuDataC
         super.onCreate(savedInstanceState);
 
         // Preconditions.
-        Objects.equals(isRegisteredUser(this), true);
+        Objects.equals(TKhandler.isRegisteredUser(this), true);
         mIdComunidad = getIntent().getLongExtra(ComuBundleKey.COMUNIDAD_ID.key, 0L);
         Objects.equals(mIdComunidad > 0L, true);
 

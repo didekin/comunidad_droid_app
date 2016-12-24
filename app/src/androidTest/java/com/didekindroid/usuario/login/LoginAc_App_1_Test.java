@@ -1,38 +1,37 @@
-package com.didekindroid.usuario;
+package com.didekindroid.usuario.login;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.didekin.usuario.Usuario;
 import com.didekinaar.usuario.login.LoginAcTest;
-import com.didekinaar.usuario.login.LoginAc;
 
 import org.junit.BeforeClass;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekinaar.R.id.comu_search_ac_linearlayout;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_REAL_DROID;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.signUpAndUpdateTk;
 
 /**
  * User: pedro@didekin
- * Date: 26/10/15
- * Time: 13:51
+ * Date: 24/11/16
+ * Time: 14:39
  */
 @RunWith(AndroidJUnit4.class)
-public class LoginAc_App_3_SlowTest extends LoginAcTest {
+public class LoginAc_App_1_Test extends LoginAcTest {
 
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
     {
-        Thread.sleep(5000);
+        Thread.sleep(4000);
     }
 
     @Override
-    public boolean registerUser() throws Exception
+    public Usuario registerUser() throws Exception
     {
-        return AppUserComuServ.regComuAndUserAndUserComu(COMU_REAL_DROID).execute().body();
+        return signUpAndUpdateTk(COMU_REAL_DROID);
     }
 
     @Override
@@ -47,12 +46,9 @@ public class LoginAc_App_3_SlowTest extends LoginAcTest {
         throw new UnsupportedOperationException("NO NAVIGATE-UP in LoginAppAc activity");
     }
 
-    // ======================================  TESTS =====================================
-
-    @Test
-    public void testValidate_1() throws Exception
+    @Override
+    public int getNextViewResourceId()
     {
-        mActivity = (LoginAc) mActivityRule.launchActivity(new Intent());
-        checkLoginWithThreeErrors();
+        return comu_search_ac_linearlayout;
     }
 }

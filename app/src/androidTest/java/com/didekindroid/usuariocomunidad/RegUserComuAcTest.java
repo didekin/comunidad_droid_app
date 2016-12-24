@@ -38,7 +38,7 @@ import static com.didekinaar.testutil.AarActivityTestUtils.clickNavigateUp;
 import static com.didekinaar.usuariocomunidad.AarUserComuService.AarUserComuServ;
 import static com.didekinaar.usuariocomunidad.RolUi.PRE;
 import static com.didekinaar.usuariocomunidad.RolUi.PRO;
-import static com.didekinaar.utils.UIutils.isRegisteredUser;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler.isRegisteredUser;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -90,7 +90,7 @@ public class RegUserComuAcTest {
     {
         activity = mActivityRule.launchActivity(intent);
 
-        assertThat(isRegisteredUser(activity), is(true));
+        assertThat(TKhandler.isRegisteredUser(activity), is(true));
         List<Comunidad> comunidadesUserOne = AarUserComuServ.getComusByUser();
         assertThat(comunidadesUserOne.size(), is(1));
         Comunidad comunidad2 = comunidadesUserOne.get(0);

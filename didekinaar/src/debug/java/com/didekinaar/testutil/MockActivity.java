@@ -9,6 +9,7 @@ import timber.log.Timber;
 public class MockActivity extends AppCompatActivity {
 
     Class<? extends Activity> defaultActivityClassToGo;
+    volatile short counter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -36,5 +37,15 @@ public class MockActivity extends AppCompatActivity {
     protected void onDestroy(){
         Timber.d("onDestroy()");
         super.onDestroy();
+    }
+
+    public short getCounter()
+    {
+        return counter;
+    }
+
+    public void setCounter(short counter)
+    {
+        this.counter = counter;
     }
 }

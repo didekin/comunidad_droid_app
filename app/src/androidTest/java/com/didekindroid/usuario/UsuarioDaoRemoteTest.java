@@ -22,7 +22,7 @@ import java.io.IOException;
 import static com.didekin.common.exception.DidekinExceptionMsg.USER_NAME_NOT_FOUND;
 import static com.didekin.oauth2.OauthTokenHelper.HELPER;
 import static com.didekinaar.security.Oauth2DaoRemote.Oauth2;
-import static com.didekinaar.security.TokenHandler.TKhandler;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_NOTHING;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;

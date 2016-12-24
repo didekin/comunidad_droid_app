@@ -31,7 +31,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekinaar.utils.UIutils.isRegisteredUser;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler.isRegisteredUser;
 import static com.external.LongListMatchers.withAdaptedData;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -90,7 +90,7 @@ public class SeeUserComuByUserAcTest {
     {
         assertThat(mActivity, notNullValue());
         assertThat(mFragment, notNullValue());
-        assertThat(isRegisteredUser(mActivity), is(true));
+        assertThat(TKhandler.isRegisteredUser(mActivity), is(true));
         assertThat(mFragment.getFragmentView(), notNullValue());
 
         onView(withId(fragmentLayoutId)).check(matches(isDisplayed()));

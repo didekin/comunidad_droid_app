@@ -5,7 +5,6 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.oauth2.SpringOauthToken;
 import com.didekinaar.exception.UiException;
-import com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum;
 
 import org.junit.After;
 import org.junit.Before;
@@ -14,7 +13,7 @@ import org.junit.runner.RunWith;
 
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static com.didekin.oauth2.OauthTokenHelper.HELPER;
-import static com.didekinaar.security.TokenHandler.TKhandler;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
 import static com.didekinaar.testutil.AarTestUtil.doSpringOauthToken;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_TK_HANDLER;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
@@ -32,10 +31,9 @@ import static org.junit.Assert.assertThat;
  */
 @SuppressWarnings("ConstantConditions")
 @RunWith(AndroidJUnit4.class)
-public class TokenHandlerTest {
+public class TokenIdentityCacherTest {
 
     protected Context context;
-    protected CleanUserEnum whatClean = CLEAN_TK_HANDLER;
 
     @Before
     public void getFixture()
@@ -47,7 +45,7 @@ public class TokenHandlerTest {
     @After
     public void cleanFileToken() throws UiException
     {
-        cleanOptions(whatClean);
+        cleanOptions(CLEAN_TK_HANDLER);
     }
 
     @Test
@@ -60,7 +58,7 @@ public class TokenHandlerTest {
         assertThat(TKhandler.getAccessTokenInCache(), nullValue());
 
         SpringOauthToken springOauthToken = doSpringOauthToken();
-        TKhandler.initTokenAndBackupFile(springOauthToken);
+        TKhandler.initIdentityCache(springOauthToken);
         assertThat(TKhandler.getRefreshTokenFile().exists(), is(true));
         assertThat(TKhandler.getRefreshTokenValue(), is(springOauthToken.getRefreshToken().getValue()));
         assertThat(TKhandler.getAccessTokenInCache(), is(springOauthToken));
@@ -71,9 +69,9 @@ public class TokenHandlerTest {
     {
         // Preconditions: there exist token data and file.
         SpringOauthToken springOauthToken = doSpringOauthToken();
-        TKhandler.initTokenAndBackupFile(springOauthToken);
+        TKhandler.initIdentityCache(springOauthToken);
 
-        TKhandler.cleanTokenAndBackFile();
+        TKhandler.cleanIdentityCache();
         // Assertions.
         assertThat(TKhandler.getRefreshTokenValue(), nullValue());
         assertThat(TKhandler.getRefreshTokenFile().exists(), is(false));
@@ -102,6 +100,67 @@ public class TokenHandlerTest {
         assertThat(bearerHeader, nullValue());
     }
 
-//    .................... UTILITIES .......................
+    @Test
+    public void testUpdateIsRegistered() throws Exception
+    {
+        TKhandler.updateIsRegistered(false);
+        assertThat(TKhandler.isRegisteredUser(), is(false));
+        TKhandler.updateIsRegistered(true);
+        assertThat(TKhandler.isRegisteredUser(), is(true));
+    }
 
+    @Test
+    public void updateIsGcmTokenSentServer() throws Exception
+    {
+        assertThat(TKhandler.isGcmTokenSentServer(), is(false));
+        TKhandler.updateIsGcmTokenSentServer(true);
+        assertThat(TKhandler.isGcmTokenSentServer(), is(true));
+        TKhandler.updateIsGcmTokenSentServer(false);
+        assertThat(TKhandler.isGcmTokenSentServer(), is(false));
+    }
+
+//    .................... FUNCTIONS .......................
+
+    @Test
+    public void testInitTokenFunction_1() throws UiException
+    {
+        initTokenHelper();
+    }
+
+    @Test
+    public void testInitTokenFunction_2() throws UiException
+    {
+        SpringOauthToken token = doSpringOauthToken();
+        TKhandler.initTokenFunc.call(false, token);
+        assertThat(TKhandler.getAccessTokenInCache(), is(nullValue()));
+        assertThat(TKhandler.isRegisteredUser(), is(false));
+    }
+
+    @Test
+    public void testCleanTokenFunction_1() throws UiException
+    {
+        initTokenHelper();
+        TKhandler.cleanTokenFunc.call(true);
+        assertThat(TKhandler.getAccessTokenInCache(), is(nullValue()));
+        assertThat(TKhandler.isRegisteredUser(), is(false));
+    }
+
+    @Test
+    public void testCleanTokenFunction_2() throws UiException
+    {
+        initTokenHelper();
+        TKhandler.cleanTokenFunc.call(false);
+        assertThat(TKhandler.getAccessTokenInCache(), notNullValue());
+        assertThat(TKhandler.isRegisteredUser(), is(true));
+    }
+
+    // ............................... HELPER ..............................
+
+    private void initTokenHelper() throws UiException
+    {
+        SpringOauthToken token = doSpringOauthToken();
+        TKhandler.initTokenFunc.call(true, token);
+        assertThat(TKhandler.getAccessTokenInCache(), is(token));
+        assertThat(TKhandler.isRegisteredUser(), is(true));
+    }
 }

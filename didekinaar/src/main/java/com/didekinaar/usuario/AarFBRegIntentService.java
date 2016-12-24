@@ -9,10 +9,8 @@ import com.google.firebase.iid.FirebaseInstanceId;
 
 import timber.log.Timber;
 
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
 import static com.didekinaar.usuario.UsuarioDaoRemote.usuarioDaoRemote;
-import static com.didekinaar.utils.UIutils.isGcmTokenSentServer;
-import static com.didekinaar.utils.UIutils.isRegisteredUser;
-import static com.didekinaar.utils.UIutils.updateIsGcmTokenSentServer;
 
 /**
  * User: pedro@didekin
@@ -28,7 +26,7 @@ public class AarFBRegIntentService extends IntentService {
 
     public static void getGcmToken(Activity myActivity)
     {
-        if (!isGcmTokenSentServer(myActivity)) {
+        if (!TKhandler.isGcmTokenSentServer()) {
             myActivity.startService(new Intent(myActivity, AarFBRegIntentService.class));
         }
     }
@@ -38,16 +36,16 @@ public class AarFBRegIntentService extends IntentService {
     {
         Timber.d("onHandleIntent()");
 
-        if(!isRegisteredUser(this)){
+        if(!TKhandler.isRegisteredUser()){
             return;
         }
         try {
             String token = FirebaseInstanceId.getInstance().getToken();
                 usuarioDaoRemote.modifyUserGcmToken(token);
-                updateIsGcmTokenSentServer(true, this);
+            TKhandler.updateIsGcmTokenSentServer(true);
                 Timber.i("onHandleIntent(), GCM token registered: %s%n", token);
         } catch (UiException e) {
-            updateIsGcmTokenSentServer(false, this);
+            TKhandler.updateIsGcmTokenSentServer(false);
             Timber.e("onHandleIntent(), exception: %s%n", e.getErrorBean().getMessage());
         }
     }

@@ -19,10 +19,10 @@ import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.registerIdlingResources;
 import static android.support.test.espresso.Espresso.unregisterIdlingResources;
-import static com.didekinaar.utils.UIutils.isGcmTokenSentServer;
-import static com.didekinaar.utils.UIutils.isRegisteredUser;
-import static com.didekinaar.utils.UIutils.updateIsGcmTokenSentServer;
-import static com.didekinaar.utils.UIutils.updateIsRegistered;
+import static com.didekinaar.security.TokenIdentityCacher.isGcmTokenSentServer;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler.isRegisteredUser;
+import static com.didekinaar.security.TokenIdentityCacher.updateIsGcmTokenSentServer;
+import static com.didekinaar.security.TokenIdentityCacher.updateIsRegistered;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -78,7 +78,7 @@ public class AarFBRegIntentService_Test {
     public void testRegistrationGcmToken() throws Exception
     {
         // Preconditions for the test.
-        assertThat(isRegisteredUser(mActivity), is(false));
+        assertThat(TKhandler.isRegisteredUser(mActivity), is(false));
 
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         assertThat(refreshedToken, notNullValue());

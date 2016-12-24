@@ -2,6 +2,8 @@ package com.didekindroid;
 
 import com.didekindroid.incidencia.IncidSuiteFunctional;
 import com.didekindroid.incidencia.IncidSuiteSupport;
+import com.didekindroid.usuario.UsuarioSuite;
+import com.didekindroid.usuario.UsuarioSuiteSupport;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -14,6 +16,9 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         IncidSuiteFunctional.class,
+        IncidSuiteSupport.class,
+        UsuarioSuite.class,
+        UsuarioSuiteSupport.class,
 })
 public class AppFullSuite {
 }

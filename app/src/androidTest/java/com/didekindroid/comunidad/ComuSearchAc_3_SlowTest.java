@@ -30,10 +30,9 @@ import static android.support.test.espresso.Espresso.openActionBarOverflowOrOpti
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static com.didekinaar.security.TokenHandler.TKhandler;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekinaar.utils.UIutils.isRegisteredUser;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.REG_COMU_USERCOMU_AC;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.REG_COMU_USER_USERCOMU_AC;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.SEE_USERCOMU_BY_USER_AC;
@@ -88,7 +87,7 @@ public class ComuSearchAc_3_SlowTest {
 
         UserComuTestUtil.signUpAndUpdateTk(UserComuTestUtil.COMU_REAL_JUAN);
         activity = mActivityRule.launchActivity(new Intent());
-        assertThat(isRegisteredUser(activity), is(true));
+        assertThat(TKhandler.isRegisteredUser(), is(true));
         SEE_USERCOMU_BY_USER_AC.checkMenuItem_WTk(activity);
 
         checkUp(activityLayoutId);
@@ -99,7 +98,7 @@ public class ComuSearchAc_3_SlowTest {
     {
         assertThat(refreshTkFile.exists(), is(false));
         activity = mActivityRule.launchActivity(new Intent());
-        assertThat(isRegisteredUser(activity), is(false));
+        assertThat(TKhandler.isRegisteredUser(), is(false));
         SEE_USERCOMU_BY_USER_AC.checkMenuItem_NTk(activity);
     }
 
@@ -136,7 +135,7 @@ public class ComuSearchAc_3_SlowTest {
     {
         assertThat(refreshTkFile.exists(), is(false));
         activity = mActivityRule.launchActivity(new Intent());
-        assertThat(isRegisteredUser(activity), is(false));
+        assertThat(TKhandler.isRegisteredUser(), is(false));
         UserItemMenuTestUtils.USER_DATA_AC.checkMenuItem_NTk(activity);
     }
 
@@ -148,7 +147,7 @@ public class ComuSearchAc_3_SlowTest {
         //With token.
         UserComuTestUtil.signUpAndUpdateTk(UserComuTestUtil.COMU_REAL_JUAN);
         activity = mActivityRule.launchActivity(new Intent());
-        assertThat(isRegisteredUser(activity), is(true));
+        assertThat(TKhandler.isRegisteredUser(), is(true));
         UserItemMenuTestUtils.USER_DATA_AC.checkMenuItem_WTk(activity);
 
         checkUp(activityLayoutId);
@@ -159,7 +158,7 @@ public class ComuSearchAc_3_SlowTest {
     {
         assertThat(refreshTkFile.exists(), is(false));
         activity = mActivityRule.launchActivity(new Intent());
-        assertThat(isRegisteredUser(activity), is(false));
+        assertThat(TKhandler.isRegisteredUser(), is(false));
         REG_COMU_USER_USERCOMU_AC.checkMenuItem_NTk(activity);
 
         checkUp(activityLayoutId);
@@ -172,7 +171,7 @@ public class ComuSearchAc_3_SlowTest {
 
         UserComuTestUtil.signUpAndUpdateTk(UserComuTestUtil.COMU_REAL_JUAN);
         activity = mActivityRule.launchActivity(new Intent());
-        assertThat(isRegisteredUser(activity), is(true));
+        assertThat(TKhandler.isRegisteredUser(), is(true));
         REG_COMU_USERCOMU_AC.checkMenuItem_WTk(activity);
 
         checkUp(activityLayoutId);

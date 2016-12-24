@@ -6,9 +6,9 @@ import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 
 import com.didekin.oauth2.SpringOauthToken;
+import com.didekin.usuario.Usuario;
 import com.didekinaar.R;
 import com.didekinaar.exception.UiException;
-import com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum;
 import com.didekinaar.testutil.ExtendableTestAc;
 
 import org.junit.After;
@@ -26,15 +26,15 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekinaar.security.TokenHandler.TKhandler;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_NOTHING;
+import static com.didekinaar.R.id.reg_usuario_alias_ediT;
+import static com.didekinaar.R.id.reg_usuario_email_editT;
+import static com.didekinaar.R.id.user_data_ac_password_ediT;
+import static com.didekinaar.R.id.user_data_modif_button;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekinaar.testutil.AarActivityTestUtils.clickNavigateUp;
 import static com.didekinaar.usuario.UsuarioDaoRemote.usuarioDaoRemote;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
-import static com.didekinaar.utils.UIutils.isRegisteredUser;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
@@ -51,7 +51,8 @@ public abstract class UserDataAcTest implements ExtendableTestAc {
 
     protected UserDataAc mActivity;
     protected Resources resources;
-    protected CleanUserEnum whatToClean = CLEAN_JUAN;
+    boolean mustCleanUser;
+    protected Usuario registeredUser;
     protected int activityLayoutId = R.id.user_data_ac_layout;
 
     @Rule
@@ -62,56 +63,59 @@ public abstract class UserDataAcTest implements ExtendableTestAc {
     {
         mActivity = (UserDataAc) mActivityRule.getActivity();
         resources = mActivity.getResources();
+        mustCleanUser = true;
     }
 
     @After
     public void tearDown() throws Exception
     {
-        cleanOptions(whatToClean);
+        if (mustCleanUser){
+            cleanOneUser(registeredUser);
+        }
     }
 
     //    =====================================  TESTS  ==========================================
 
     @Test
-    public void testOncreate_A()
+    public void testOncreate_1()
     {
         assertThat(mActivity, notNullValue());
-        assertThat(isRegisteredUser(mActivity), is(true));
+        assertThat(TKhandler.isRegisteredUser(), is(true));
 
         onView(withId(activityLayoutId)).check(matches(isDisplayed()));
-        onView(ViewMatchers.withId(R.id.reg_usuario_email_editT)).check(matches(isDisplayed()));
-        onView(ViewMatchers.withId(R.id.reg_usuario_alias_ediT)).check(matches(isDisplayed()));
+        onView(withId(reg_usuario_email_editT)).check(matches(isDisplayed()));
+        onView(withId(reg_usuario_alias_ediT)).check(matches(isDisplayed()));
 
         onView(allOf(
-                ViewMatchers.withId(R.id.user_data_ac_password_ediT),
+                withId(user_data_ac_password_ediT),
                 ViewMatchers.withHint(R.string.user_data_ac_password_hint)))
                 .check(matches(isDisplayed()));
 
-        onView(ViewMatchers.withId(R.id.user_data_modif_button)).check(matches(isDisplayed()));
+        onView(withId(R.id.user_data_modif_button)).check(matches(isDisplayed()));
 
-        onView(ViewMatchers.withId(R.id.appbar)).check(matches(isDisplayed()));
+        onView(withId(R.id.appbar)).check(matches(isDisplayed()));
         clickNavigateUp();
     }
 
     @Test
-    public void testOncreate_B()
+    public void testOncreate_2()
     {
         // Aserciones sobre los datos mostrados en función del userComu en sesión.
-        onView(ViewMatchers.withId(R.id.reg_usuario_email_editT))
-                .check(matches(withText(containsString(USER_JUAN.getUserName()))));
-        onView(ViewMatchers.withId(R.id.reg_usuario_alias_ediT))
-                .check(matches(withText(containsString(USER_JUAN.getAlias()))));
-        onView(ViewMatchers.withId(R.id.user_data_ac_password_ediT))
+        onView(withId(reg_usuario_email_editT))
+                .check(matches(withText(containsString(registeredUser.getUserName()))));
+        onView(withId(reg_usuario_alias_ediT))
+                .check(matches(withText(containsString(registeredUser.getAlias()))));
+        onView(withId(user_data_ac_password_ediT))
                 .check(matches(withText(containsString(""))));
     }
 
     /* Datos erróneos: formato de email y password vacío. */
     @Test
-    public void testModifyUserData_A() throws InterruptedException
+    public void testModifyUserData_1() throws InterruptedException
     {
-        onView(ViewMatchers.withId(R.id.reg_usuario_alias_ediT)).perform(replaceText("new_alias"));
-        onView(ViewMatchers.withId(R.id.reg_usuario_email_editT)).perform(replaceText("new_user_wrong"), closeSoftKeyboard());
-        onView(ViewMatchers.withId(R.id.user_data_modif_button)).perform(scrollTo())
+        onView(withId(reg_usuario_alias_ediT)).perform(replaceText("new_alias"));
+        onView(withId(reg_usuario_email_editT)).perform(replaceText("new_user_wrong"), closeSoftKeyboard());
+        onView(withId(R.id.user_data_modif_button)).perform(scrollTo())
                 .check(matches(isDisplayed())).perform(click());
 
         checkToastInTest(R.string.error_validation_msg, mActivity,
@@ -123,15 +127,24 @@ public abstract class UserDataAcTest implements ExtendableTestAc {
 
     /* Password erróneo en servidor.*/
     @Test
-    public void testModifyUserData_B() throws InterruptedException
+    public void testModifyUserData_2() throws InterruptedException
     {
-        onView(ViewMatchers.withId(R.id.reg_usuario_email_editT)).perform(replaceText("new_juan@juan.es"));
-        onView(ViewMatchers.withId(R.id.user_data_ac_password_ediT)).perform(typeText("wrong_password"), closeSoftKeyboard());
-        onView(ViewMatchers.withId(R.id.user_data_modif_button)).perform(scrollTo())
+        onView(withId(reg_usuario_email_editT)).perform(replaceText("new_juan@juan.es"));
+        onView(withId(user_data_ac_password_ediT)).perform(typeText("wrong_password"), closeSoftKeyboard());
+        onView(withId(R.id.user_data_modif_button)).perform(scrollTo())
                 .check(matches(isDisplayed())).perform(click());
 
         checkToastInTest(R.string.password_wrong, mActivity);
         Thread.sleep(2000);
+    }
+
+    /* Alias y userName sin cambios. */
+    @Test
+    public void testModifyUserData_3() throws InterruptedException
+    {
+        onView(withId(user_data_ac_password_ediT)).perform(typeText(registeredUser.getPassword()), closeSoftKeyboard());
+        onView(withId(user_data_modif_button)).perform(scrollTo()).check(matches(isDisplayed())).perform(click());
+        onView(withId(getNextViewResourceId())).check(matches(isDisplayed()));
     }
 
     /* Change alias.*/
@@ -143,13 +156,14 @@ public abstract class UserDataAcTest implements ExtendableTestAc {
         String accessTkValue = tokenBefore != null ? tokenBefore.getValue() : null;
         String refreshTkValue = tokenBefore != null ? tokenBefore.getRefreshToken().getValue() : null;
 
-        onView(ViewMatchers.withId(R.id.reg_usuario_alias_ediT)).perform(replaceText("new_alias_juan"));
-        onView(ViewMatchers.withId(R.id.user_data_ac_password_ediT)).perform(typeText(USER_JUAN.getPassword()), closeSoftKeyboard());
+        onView(withId(reg_usuario_alias_ediT)).perform(replaceText("new_alias_juan"));
+        onView(withId(user_data_ac_password_ediT)).perform(typeText(registeredUser.getPassword()), closeSoftKeyboard());
 
-        onView(ViewMatchers.withId(R.id.user_data_modif_button)).perform(scrollTo())
+        onView(withId(R.id.user_data_modif_button)).perform(scrollTo())
                 .check(matches(isDisplayed())).perform(click());
 
         // Verificamos navegación.
+        onView(withId(getNextViewResourceId())).check(matches(isDisplayed()));
         checkNavigateUp();
 
         // New security data: same as the old one.
@@ -161,18 +175,18 @@ public abstract class UserDataAcTest implements ExtendableTestAc {
     @Test
     public void testModifyUserData_5() throws UiException
     {
-        whatToClean = CLEAN_NOTHING;
+        mustCleanUser = false;
 
         // Check security data: old data.
         SpringOauthToken tokenBefore = TKhandler.getAccessTokenInCache();
         String accessTkValue = tokenBefore != null ? tokenBefore.getValue() : null;
         String refreshTkValue = tokenBefore != null ? tokenBefore.getRefreshToken().getValue() : null;
 
-        onView(ViewMatchers.withId(R.id.reg_usuario_alias_ediT)).perform(replaceText("new_alias_juan"));
-        onView(ViewMatchers.withId(R.id.reg_usuario_email_editT)).perform(replaceText("new_juan@mail.org"));
-        onView(ViewMatchers.withId(R.id.user_data_ac_password_ediT)).perform(typeText(USER_JUAN.getPassword()), closeSoftKeyboard());
+        onView(withId(reg_usuario_alias_ediT)).perform(replaceText("new_alias_juan"));
+        onView(withId(reg_usuario_email_editT)).perform(replaceText("new_juan@mail.org"));
+        onView(withId(user_data_ac_password_ediT)).perform(typeText(registeredUser.getPassword()), closeSoftKeyboard());
 
-        onView(ViewMatchers.withId(R.id.user_data_modif_button)).perform(scrollTo())
+        onView(withId(R.id.user_data_modif_button)).perform(scrollTo())
                 .check(matches(isDisplayed())).perform(click());
 
         // Verificamos navegación.

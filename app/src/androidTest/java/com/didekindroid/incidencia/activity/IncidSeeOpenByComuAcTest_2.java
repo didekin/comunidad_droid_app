@@ -47,7 +47,7 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_P
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_REAL_JUAN;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static com.didekinaar.utils.UIutils.formatTimeStampToString;
-import static com.didekinaar.utils.UIutils.isRegisteredUser;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler.isRegisteredUser;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
 import static com.didekindroid.incidencia.IncidenciaDataDbHelperTest.DB_PATH;
@@ -152,7 +152,7 @@ public class IncidSeeOpenByComuAcTest_2 {
     @Test
     public void testOnCreate_1() throws Exception
     {
-        assertThat(isRegisteredUser(mActivity), is(true));
+        assertThat(TKhandler.isRegisteredUser(mActivity), is(true));
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
         // Default comunidad: Real, in position 0.
         onView(allOf(

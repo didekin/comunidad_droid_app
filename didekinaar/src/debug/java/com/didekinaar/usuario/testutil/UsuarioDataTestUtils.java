@@ -6,10 +6,9 @@ import com.didekin.usuario.Usuario;
 import com.didekinaar.exception.UiException;
 import com.didekinaar.testutil.AarTestUtil;
 
-import static com.didekinaar.PrimalCreator.creator;
-import static com.didekinaar.security.TokenHandler.TKhandler;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
+import static com.didekinaar.testutil.AarTestUtil.updateSecurityData;
 import static com.didekinaar.usuario.UsuarioDaoRemote.usuarioDaoRemote;
-import static com.didekinaar.utils.UIutils.updateIsRegistered;
 
 /**
  * User: pedro
@@ -62,7 +61,7 @@ public final class UsuarioDataTestUtils {
 
     public static void cleanOneUser(Usuario usuario) throws UiException
     {
-        AarTestUtil.updateSecurityData(usuario.getUserName(), usuario.getPassword());
+        updateSecurityData(usuario.getUserName(), usuario.getPassword());
         usuarioDaoRemote.deleteUser();
         cleanWithTkhandler();
     }
@@ -75,14 +74,14 @@ public final class UsuarioDataTestUtils {
 
     public static void cleanWithTkhandler()
     {
-        TKhandler.cleanTokenAndBackFile();
-        updateIsRegistered(false, creator.get().getContext());
+        TKhandler.cleanIdentityCache();
+        TKhandler.updateIsRegistered(false);
     }
 
     public static void cleanWithTkhandler(Context context)
     {
-        TKhandler.cleanTokenAndBackFile();
-        updateIsRegistered(false, context);
+        TKhandler.cleanIdentityCache();
+        TKhandler.updateIsRegistered(false);
     }
 
     public static void cleanOptions(CleanUserEnum whatClean) throws UiException

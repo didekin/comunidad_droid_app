@@ -43,15 +43,15 @@
                 android:value="com.didekindroid.comunidad.ComuSearchAc"/>
         </activity>
         <activity
-            android:name="com.didekindroid.usuario.DeleteMeAppAc"
+            android:name="com.didekindroid.usuario.delete.DeleteMeAppAc"
             android:label="@string/delete_me_ac_label"
-            android:parentActivityName=".usuario.UserDataAppAc">
+            android:parentActivityName=".usuario.userdata.UserDataAppAc">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".usuario.UserDataAppAc"/>
+                android:value=".usuario.userdata.UserDataAppAc"/>
         </activity>
         <activity
-            android:name=".usuario.LoginAppAc"
+            android:name=".usuario.login.LoginAppAc"
             android:label="@string/login_label"
             android:launchMode="singleInstance"
             android:parentActivityName="com.didekindroid.comunidad.ComuSearchAc">
@@ -60,12 +60,12 @@
                 android:value="com.didekindroid.comunidad.ComuSearchAc"/>
         </activity>
         <activity
-            android:name=".usuario.PasswordChangeAppAc"
+            android:name=".usuario.password.PasswordChangeAppAc"
             android:label="@string/password_change_ac_label"
-            android:parentActivityName=".usuario.UserDataAppAc">
+            android:parentActivityName=".usuario.userdata.UserDataAppAc">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".usuario.UserDataAppAc"/>
+                android:value=".usuario.userdata.UserDataAppAc"/>
         </activity>
         <activity
             android:name="com.didekindroid.usuariocomunidad.RegComuAndUserAndUserComuAc"
@@ -132,7 +132,7 @@
                 android:value="com.didekindroid.usuariocomunidad.SeeUserComuByUserAc"/>
         </activity>
         <activity
-            android:name=".usuario.UserDataAppAc"
+            android:name=".usuario.userdata.UserDataAppAc"
             android:label="@string/user_data_ac_label"
             android:parentActivityName="com.didekindroid.usuariocomunidad.SeeUserComuByUserAc"
             android:windowSoftInputMode="stateHidden">

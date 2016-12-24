@@ -19,11 +19,11 @@ import java.util.Objects;
 
 import timber.log.Timber;
 
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
 import static com.didekinaar.usuario.UsuarioDaoRemote.usuarioDaoRemote;
 import static com.didekinaar.utils.UIutils.checkPostExecute;
 import static com.didekinaar.utils.UIutils.doToolBar;
 import static com.didekinaar.utils.UIutils.getErrorMsgBuilder;
-import static com.didekinaar.utils.UIutils.isRegisteredUser;
 import static com.didekinaar.utils.UIutils.makeToast;
 
 /**
@@ -48,7 +48,7 @@ public class PasswordChangeAc extends AppCompatActivity {
         Timber.d("onCreate()");
 
         // Preconditions.
-        Objects.equals(isRegisteredUser(this), true);
+        Objects.equals(TKhandler.isRegisteredUser(), true);
 
         mAcView = getLayoutInflater().inflate(R.layout.password_change_ac, null);
         setContentView(mAcView);

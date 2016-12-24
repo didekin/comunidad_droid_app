@@ -4,7 +4,7 @@ import com.didekin.common.controller.JksInClient;
 
 import java.io.InputStream;
 
-import static com.didekinaar.PrimalCreator.creator;
+import static com.didekinaar.AppInitializer.creator;
 
 /**
  * User: pedro@didekin

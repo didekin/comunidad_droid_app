@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import retrofit2.Response;
 
-import static com.didekinaar.PrimalCreator.creator;
+import static com.didekinaar.AppInitializer.creator;
 
 /**
  * User: pedro@didekin

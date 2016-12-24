@@ -37,7 +37,7 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static com.didekinaar.security.TokenHandler.TKhandler;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
@@ -47,7 +47,7 @@ import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum
 import static com.didekinaar.usuariocomunidad.UserAndComuFiller.makeComunidadBeanFromView;
 import static com.didekinaar.usuariocomunidad.UserAndComuFiller.makeUserBeanFromRegUserFrView;
 import static com.didekinaar.usuariocomunidad.UserAndComuFiller.makeUserComuBeanFromView;
-import static com.didekinaar.utils.UIutils.isRegisteredUser;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler.isRegisteredUser;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -108,7 +108,7 @@ public class RegComuAndUserAndUserComuAcTest {
         assertThat(mRegUserComuFrg, notNullValue());
         assertThat(mRegUserFr, notNullValue());
 
-        assertThat(isRegisteredUser(mActivity), is(false));
+        assertThat(TKhandler.isRegisteredUser(), is(false));
 
         onView(ViewMatchers.withId(R.id.reg_comu_usuario_usuariocomu_layout)).check(matches(isDisplayed()));
         onView(ViewMatchers.withId(R.id.reg_comunidad_frg)).check(matches(isDisplayed()));
@@ -235,7 +235,7 @@ public class RegComuAndUserAndUserComuAcTest {
 
         assertThat(TKhandler.getAccessTokenInCache(), notNullValue());
         assertThat(TKhandler.getRefreshTokenValue(), is(TKhandler.getAccessTokenInCache().getRefreshToken().getValue()));
-        assertThat(isRegisteredUser(mActivity), is(true));
+        assertThat(TKhandler.isRegisteredUser(), is(true));
 
         whatToClean = UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN2;
 
@@ -247,7 +247,7 @@ public class RegComuAndUserAndUserComuAcTest {
     public void testLoginMn_NoToken() throws InterruptedException, UiException
     {
         mActivity = mActivityRule.launchActivity(new Intent());
-        assertThat(isRegisteredUser(mActivity), is(false));
+        assertThat(TKhandler.isRegisteredUser(), is(false));
         assertThat(TKhandler.getAccessTokenInCache(), nullValue());
 
         UserItemMenuTestUtils.LOGIN_AC.checkMenuItem_NTk(mActivity);
@@ -262,7 +262,7 @@ public class RegComuAndUserAndUserComuAcTest {
         UserComuTestUtil.signUpAndUpdateTk(UserComuTestUtil.COMU_REAL_JUAN);
 
         mActivity = mActivityRule.launchActivity(new Intent());
-        assertThat(isRegisteredUser(mActivity), is(true));
+        assertThat(TKhandler.isRegisteredUser(), is(true));
         assertThat(TKhandler.getAccessTokenInCache(), not(nullValue()));
 
         UserItemMenuTestUtils.LOGIN_AC.checkMenuItem_WTk(mActivity);

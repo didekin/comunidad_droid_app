@@ -35,10 +35,10 @@ import static com.didekin.common.exception.DidekinExceptionMsg.INCIDENCIA_USER_W
 import static com.didekin.common.exception.DidekinExceptionMsg.RESOLUCION_DUPLICATE;
 import static com.didekin.common.exception.DidekinExceptionMsg.ROLES_NOT_FOUND;
 import static com.didekin.common.exception.DidekinExceptionMsg.USER_DATA_NOT_MODIFIED;
-import static com.didekinaar.security.TokenHandler.TKhandler;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekinaar.utils.UIutils.isRegisteredUser;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler.isRegisteredUser;
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
@@ -157,7 +157,7 @@ public class UiAppExceptionTests {
     public void testUserDataAc() throws Exception
     {
         // Preconditions.
-        assertThat(isRegisteredUser(mActivity), is(true));
+        assertThat(TKhandler.isRegisteredUser(), is(true));
         assertThat(TKhandler.getTokenInCache(), notNullValue());
 
         final UiException ue = new UiException(new ErrorBean(USER_DATA_NOT_MODIFIED));
@@ -194,7 +194,7 @@ public class UiAppExceptionTests {
     public void testIncidReg()
     {
         // Preconditions.
-        assertThat(isRegisteredUser(mActivity), is(true));
+        assertThat(TKhandler.isRegisteredUser(), is(true));
         assertThat(TKhandler.getTokenInCache(), notNullValue());
 
         final UiAppException ue = new UiAppException(new ErrorBean(INCIDENCIA_NOT_REGISTERED));
@@ -231,7 +231,7 @@ public class UiAppExceptionTests {
     public void testIncidSeeByComu() throws Exception
     {
         // Preconditions.
-        assertThat(isRegisteredUser(mActivity), is(true));
+        assertThat(TKhandler.isRegisteredUser(), is(true));
         assertThat(TKhandler.getTokenInCache(), notNullValue());
 
         final UiAppException ue = new UiAppException(new ErrorBean(INCIDENCIA_COMMENT_WRONG_INIT));

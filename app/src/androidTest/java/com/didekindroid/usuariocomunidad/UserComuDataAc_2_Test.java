@@ -8,8 +8,8 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
 import com.didekinaar.R;
 import com.didekinaar.exception.UiException;
+import com.didekinaar.security.TokenIdentityCacher;
 import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
-import com.didekinaar.utils.UIutils;
 import com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil;
 
 import org.junit.After;
@@ -29,7 +29,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.doesNotExis
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static com.didekinaar.security.TokenHandler.TKhandler;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekinaar.testutil.AarTestUtil.updateSecurityData;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
@@ -131,6 +131,6 @@ public class UserComuDataAc_2_Test {
 
         assertThat(TKhandler.getAccessTokenInCache(), nullValue());
         assertThat(TKhandler.getRefreshTokenFile().exists(), is(false));
-        assertThat(UIutils.isRegisteredUser(mActivity), is(false));
+        assertThat(TokenIdentityCacher.TKhandler.isRegisteredUser(), is(false));
     }
 }

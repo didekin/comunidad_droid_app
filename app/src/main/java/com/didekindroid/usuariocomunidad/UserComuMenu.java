@@ -7,7 +7,7 @@ import com.didekinaar.utils.ItemMenuIf;
 
 import timber.log.Timber;
 
-import static com.didekinaar.utils.UIutils.isRegisteredUser;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler.isRegisteredUser;
 import static com.didekinaar.utils.UIutils.makeToast;
 
 /**
@@ -56,7 +56,7 @@ public enum UserComuMenu implements ItemMenuIf {
         {
             Timber.i("comu_by_user.doMenuItem()");
 
-            if (!isRegisteredUser(activity)) {
+            if (!TKhandler.isRegisteredUser(activity)) {
                 Timber.i("comu_by_user.doMenuItem(), user not registered.");
                 makeToast(activity, com.didekinaar.R.string.user_without_signedUp);
             } else {

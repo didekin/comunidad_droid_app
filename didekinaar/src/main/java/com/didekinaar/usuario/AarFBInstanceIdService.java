@@ -6,9 +6,8 @@ import com.google.firebase.iid.FirebaseInstanceIdService;
 
 import timber.log.Timber;
 
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
 import static com.didekinaar.usuario.UsuarioDaoRemote.usuarioDaoRemote;
-import static com.didekinaar.utils.UIutils.isRegisteredUser;
-import static com.didekinaar.utils.UIutils.updateIsGcmTokenSentServer;
 
 /**
  * On initial startup of your app, the FCM SDK generates a registration token for the client app instance.
@@ -25,17 +24,17 @@ public class AarFBInstanceIdService extends FirebaseInstanceIdService {
     {
         Timber.d("onTokenRefresh()");
 
-        if (!isRegisteredUser(this)) {
+        if (!TKhandler.isRegisteredUser()) {
             return;
         }
 
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         try {
             usuarioDaoRemote.modifyUserGcmToken(refreshedToken);
-            updateIsGcmTokenSentServer(true, this);
+            TKhandler.updateIsGcmTokenSentServer(true);
             Timber.i("onTokenRefresh(), GCM token registered: %s%n", refreshedToken);
         } catch (UiException e) {
-            updateIsGcmTokenSentServer(false, this);
+            TKhandler.updateIsGcmTokenSentServer(false);
             Timber.e("onTokenRefresh(), exception: %s%n", e.getErrorBean().getMessage());
         }
     }

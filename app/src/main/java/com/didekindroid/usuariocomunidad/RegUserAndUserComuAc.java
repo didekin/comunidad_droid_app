@@ -33,12 +33,12 @@ import timber.log.Timber;
 import static com.didekinaar.utils.UIutils.checkPostExecute;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekinaar.security.Oauth2DaoRemote.Oauth2;
-import static com.didekinaar.security.TokenHandler.TKhandler;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static com.didekinaar.utils.UIutils.doToolBar;
 import static com.didekinaar.utils.UIutils.getErrorMsgBuilder;
-import static com.didekinaar.utils.UIutils.isRegisteredUser;
-import static com.didekinaar.utils.UIutils.updateIsRegistered;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler.isRegisteredUser;
+import static com.didekinaar.security.TokenIdentityCacher.updateIsRegistered;
 
 /**
  * User: pedro@didekin
@@ -74,7 +74,7 @@ public class RegUserAndUserComuAc extends AppCompatActivity {
         Timber.d("onCreate()");
 
         // Preconditions.
-        Objects.equals(isRegisteredUser(this), false);
+        Objects.equals(TKhandler.isRegisteredUser(), false);
         Comunidad comunidad = (Comunidad) getIntent().getExtras().getSerializable(COMUNIDAD_LIST_OBJECT.key);
         mComunidad = comunidad != null ? comunidad : null;
 
@@ -178,7 +178,7 @@ public class RegUserAndUserComuAc extends AppCompatActivity {
             SpringOauthToken token;
             try {
                 token = Oauth2.getPasswordUserToken(newUser.getUserName(), newUser.getPassword());
-                TKhandler.initTokenAndBackupFile(token);
+                TKhandler.initIdentityCache(token);
             } catch (UiException e) {
                 uiException = e;
             }

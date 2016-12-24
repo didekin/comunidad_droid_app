@@ -24,7 +24,7 @@ import timber.log.Timber;
 
 import static com.didekinaar.utils.UIutils.checkPostExecute;
 import static com.didekinaar.utils.UIutils.doToolBar;
-import static com.didekinaar.utils.UIutils.isRegisteredUser;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler.isRegisteredUser;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_SEARCH;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
@@ -124,7 +124,7 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
             SEE_USERCOMU_BY_USER_AC.doMenuItem(this);
             return true;
         } else if (resourceId == R.id.reg_nueva_comunidad_ac_mn) {
-            if (isRegisteredUser(this)) {
+            if (TKhandler.isRegisteredUser(this)) {
                 REG_COMU_USERCOMU_AC.doMenuItem(this);
             } else {
                 REG_COMU_USER_USERCOMU_AC.doMenuItem(this);
@@ -144,7 +144,7 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
     {
         Timber.d("onComunidadSelected().");
 
-        if (!isRegisteredUser(this)) {
+        if (!TKhandler.isRegisteredUser(this)) {
             Timber.d("onComunidadSelected(). User is not registered.");
             Intent intent = new Intent(this, RegUserAndUserComuAc.class);
             intent.putExtra(COMUNIDAD_LIST_OBJECT.key, comunidad);

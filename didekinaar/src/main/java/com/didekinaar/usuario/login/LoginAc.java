@@ -15,6 +15,7 @@ import android.widget.EditText;
 
 import com.didekinaar.R;
 import com.didekinaar.usuario.UsuarioBean;
+import com.didekinaar.usuario.login.LoginAcObservable.LoginValidateSubscriber;
 import com.didekinaar.utils.ConnectionUtils;
 import com.didekinaar.utils.UIutils;
 
@@ -51,7 +52,7 @@ import static com.didekinaar.utils.UIutils.makeToast;
 public abstract class LoginAc extends AppCompatActivity implements LoginViewIf, LoginControllerIf {
 
     View mAcView;
-    volatile short counterWrong;
+    private volatile int counterWrong;
     CompositeSubscription subscriptions;
     protected Class<? extends Activity> defaultActivityClassToGo;
 
@@ -127,6 +128,21 @@ public abstract class LoginAc extends AppCompatActivity implements LoginViewIf, 
     //    ..... CONTROLLER IMPLEMENTATION ....
     // ============================================================
 
+
+    @Override
+    public int getCounterWrong()
+    {
+        Timber.d("getCounterWrong()");
+        return counterWrong;
+    }
+
+    @Override
+    public void setCounterWrong(int counterWrong)
+    {
+        Timber.d("setCounterWrong()");
+        this.counterWrong = counterWrong;
+    }
+
     @Override
     public void doLoginValidate()
     {
@@ -148,7 +164,7 @@ public abstract class LoginAc extends AppCompatActivity implements LoginViewIf, 
             subscriptions.add(getZipLoginSingle(usuarioBean.getUsuario())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new LoginAcObservable.LoginValidateSubscriber(this, usuarioBean.getUsuario())));
+                    .subscribe(new LoginValidateSubscriber(this, usuarioBean.getUsuario())));
         }
     }
 

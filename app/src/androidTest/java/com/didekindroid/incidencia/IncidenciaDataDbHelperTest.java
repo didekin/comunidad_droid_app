@@ -5,8 +5,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekindroid.incidencia.IncidenciaDataDbHelper;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,7 +14,7 @@ import java.io.File;
 import java.io.IOException;
 
 import static android.database.sqlite.SQLiteDatabase.deleteDatabase;
-import static com.didekinaar.PrimalCreator.creator;
+import static com.didekinaar.AppInitializer.creator;
 import static com.didekindroid.incidencia.IncidenciaDataDb.AmbitoIncidencia.AMBITO_INCID_COUNT;
 import static com.didekindroid.incidencia.IncidenciaDataDb.AmbitoIncidencia.CREATE_AMBITO_INCIDENCIA;
 import static org.hamcrest.CoreMatchers.is;

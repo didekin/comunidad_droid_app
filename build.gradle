@@ -62,6 +62,8 @@ ext {
 
     junit = ["junit:junit:4.12"]
 
+    mockito = 'org.mockito:mockito-core:2.4.0'
+
     espresso = ["com.android.support.test:runner:$rootProject.ext.testRunnerRulesVersion",
                 "com.android.support.test:rules:$rootProject.ext.testRunnerRulesVersion",
                 "com.android.support.test.espresso:espresso-core:$rootProject.ext.espressoVersion",

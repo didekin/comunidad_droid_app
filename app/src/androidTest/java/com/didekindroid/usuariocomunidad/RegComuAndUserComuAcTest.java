@@ -35,7 +35,7 @@ import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekinaar.security.TokenHandler.TKhandler;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
@@ -43,7 +43,7 @@ import static com.didekinaar.usuariocomunidad.RolUi.ADM;
 import static com.didekinaar.usuariocomunidad.RolUi.INQ;
 import static com.didekinaar.usuariocomunidad.RolUi.PRE;
 import static com.didekinaar.usuariocomunidad.UserAndComuFiller.makeUserComuBeanFromView;
-import static com.didekinaar.utils.UIutils.isRegisteredUser;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler.isRegisteredUser;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -92,7 +92,7 @@ public class RegComuAndUserComuAcTest {
 
         assertThat(activity, notNullValue());
 
-        assertThat(isRegisteredUser(activity), is(true));
+        assertThat(TKhandler.isRegisteredUser(), is(true));
         assertThat(TKhandler.getAccessTokenInCache(), notNullValue());
 
         assertThat(regComuFr, notNullValue());

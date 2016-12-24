@@ -1,4 +1,4 @@
-package com.didekindroid.usuario;
+package com.didekindroid.usuario.userdata;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -9,6 +9,7 @@ import com.didekinaar.R;
 import com.didekinaar.usuario.password.PasswordChangeAc;
 import com.didekinaar.usuario.userdata.UserDataAc;
 import com.didekindroid.comunidad.ComuSearchAc;
+import com.didekindroid.usuario.delete.DeleteMeAppAc;
 import com.didekindroid.usuariocomunidad.SeeUserComuByUserAc;
 
 import timber.log.Timber;

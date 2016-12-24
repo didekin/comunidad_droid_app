@@ -19,7 +19,7 @@ import retrofit2.Response;
 
 import static com.didekin.common.exception.DidekinExceptionMsg.NOT_FOUND;
 import static com.didekin.oauth2.OauthClient.CL_USER;
-import static com.didekinaar.PrimalCreator.creator;
+import static com.didekinaar.AppInitializer.creator;
 import static com.didekinaar.security.Oauth2DaoRemote.Oauth2;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_NOTHING;
 import static org.hamcrest.CoreMatchers.equalTo;

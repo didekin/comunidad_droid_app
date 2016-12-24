@@ -9,11 +9,11 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekin.comunidad.Comunidad;
 import com.didekinaar.R;
 import com.didekinaar.exception.UiException;
+import com.didekinaar.security.TokenIdentityCacher;
 import com.didekinaar.usuario.testutil.UserEspressoTestUtil;
 import com.didekindroid.comunidad.ComuBundleKey;
 import com.didekinaar.usuario.testutil.UserItemMenuTestUtils;
 import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
-import com.didekinaar.utils.UIutils;
 import com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil;
 import com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil;
 
@@ -34,7 +34,7 @@ import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
-import static com.didekinaar.security.TokenHandler.TKhandler;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekinaar.testutil.AarActivityTestUtils.clickNavigateUp;
@@ -44,7 +44,7 @@ import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum
 import static com.didekinaar.usuariocomunidad.AarUserComuService.AarUserComuServ;
 import static com.didekinaar.usuariocomunidad.RolUi.PRE;
 import static com.didekinaar.usuariocomunidad.RolUi.PRO;
-import static com.didekinaar.utils.UIutils.isRegisteredUser;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler.isRegisteredUser;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.is;
@@ -113,7 +113,7 @@ public class RegUserAndUserComuAcTest {
 
         activity = intentRule.getActivity();
 
-        assertThat(UIutils.isRegisteredUser(activity), is(false));
+        assertThat(TokenIdentityCacher.TKhandler.isRegisteredUser(), is(false));
         Comunidad comunidad = (Comunidad) intent.getSerializableExtra(COMUNIDAD_LIST_OBJECT.key);
         assertThat(comunidad, is(this.comunidad));
         assertThat(comunidad.getC_Id(), is(this.comunidad.getC_Id()));
@@ -147,7 +147,7 @@ public class RegUserAndUserComuAcTest {
         // Actualización correcta de datos de identidad.
         assertThat(TKhandler.getAccessTokenInCache(), notNullValue());
         assertThat(TKhandler.getRefreshTokenValue(), is(TKhandler.getAccessTokenInCache().getRefreshToken().getValue()));
-        assertThat(isRegisteredUser(activity), is(true));
+        assertThat(TKhandler.isRegisteredUser(), is(true));
 
         intended(IntentMatchers.hasExtra(ComuBundleKey.COMUNIDAD_ID.key, comunidad.getC_Id()));
         onView(ViewMatchers.withId(R.id.see_usercomu_by_comu_frg)).check(matches(isDisplayed()));
@@ -163,7 +163,7 @@ public class RegUserAndUserComuAcTest {
         whatToClean = CLEAN_PEPE;
 
         activity = intentRule.getActivity();
-        assertThat(isRegisteredUser(activity), is(false));
+        assertThat(TKhandler.isRegisteredUser(), is(false));
         assertThat(TKhandler.getAccessTokenInCache(), nullValue());
 
         UserItemMenuTestUtils.LOGIN_AC.checkMenuItem_NTk(activity);
@@ -178,7 +178,7 @@ public class RegUserAndUserComuAcTest {
         UserComuTestUtil.signUpAndUpdateTk(UserComuTestUtil.COMU_REAL_JUAN);
 
         activity = intentRule.getActivity();
-        assertThat(isRegisteredUser(activity), is(true));
+        assertThat(TKhandler.isRegisteredUser(), is(true));
         assertThat(TKhandler.getAccessTokenInCache(), not(nullValue()));
         UserItemMenuTestUtils.LOGIN_AC.checkMenuItem_WTk(activity);
         checkUp(activityLayoutId);

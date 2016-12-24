@@ -25,8 +25,8 @@ import static com.didekin.common.exception.DidekinExceptionMsg.COMUNIDAD_NOT_FOU
 import static com.didekin.common.exception.DidekinExceptionMsg.TOKEN_NULL;
 import static com.didekin.common.exception.DidekinExceptionMsg.USER_NAME_DUPLICATE;
 import static com.didekin.usuario.UsuarioEndPoints.IS_USER_DELETED;
-import static com.didekinaar.PrimalCreator.creator;
-import static com.didekinaar.security.TokenHandler.TKhandler;
+import static com.didekinaar.AppInitializer.creator;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN2_AND_PEPE;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
@@ -35,7 +35,7 @@ import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum
 import static com.didekinaar.testutil.AarTestUtil.updateSecurityData;
 import static com.didekinaar.usuario.UsuarioDaoRemote.usuarioDaoRemote;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.USER_JUAN2;
-import static com.didekinaar.utils.UIutils.updateIsRegistered;
+import static com.didekinaar.security.TokenIdentityCacher.updateIsRegistered;
 import static com.didekindroid.comunidad.testutil.ComuTestUtil.COMU_LA_PLAZUELA_5;
 import static com.didekindroid.comunidad.testutil.ComuTestUtil.COMU_REAL;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;

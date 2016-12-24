@@ -14,7 +14,7 @@ import com.didekin.comunidad.Comunidad;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
 import com.didekinaar.R;
 import com.didekinaar.exception.UiException;
-import com.didekinaar.security.TokenHandler;
+import com.didekinaar.security.TokenIdentityCacher;
 import com.didekinaar.utils.ConnectionUtils;
 import com.didekinaar.utils.UIutils;
 import com.didekindroid.comunidad.ComuBundleKey;
@@ -33,9 +33,9 @@ import static com.didekin.usuario.UsuarioEndPoints.IS_USER_DELETED;
 import static com.didekinaar.utils.UIutils.checkPostExecute;
 import static com.didekinaar.utils.UIutils.doToolBar;
 import static com.didekinaar.utils.UIutils.getErrorMsgBuilder;
-import static com.didekinaar.utils.UIutils.isRegisteredUser;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler.isRegisteredUser;
 import static com.didekinaar.utils.UIutils.makeToast;
-import static com.didekinaar.utils.UIutils.updateIsRegistered;
+import static com.didekinaar.security.TokenIdentityCacher.updateIsRegistered;
 import static com.didekindroid.comunidad.ComunidadMenu.COMU_DATA_AC;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static com.didekindroid.usuariocomunidad.UserComuMenu.SEE_USERCOMU_BY_COMU_AC;
@@ -71,7 +71,7 @@ public class UserComuDataAc extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         // Preconditions.
-        Objects.equals(isRegisteredUser(this), true);
+        Objects.equals(TKhandler.isRegisteredUser(this), true);
         mOldUserComu = (UsuarioComunidad) getIntent().getSerializableExtra(UserComuBundleKey.USERCOMU_LIST_OBJECT.key);
         Objects.equals(mOldUserComu != null, true);
 
@@ -285,7 +285,7 @@ public class UserComuDataAc extends AppCompatActivity {
                 Objects.equals(isDeleted != 0, true);
                 Intent intent;
                 if (isDeleted == IS_USER_DELETED) {
-                    TokenHandler.TKhandler.cleanTokenAndBackFile();
+                    TokenIdentityCacher.TKhandler.cleanIdentityCache();
                     updateIsRegistered(false, UserComuDataAc.this);
                     intent = new Intent(UserComuDataAc.this, ComuSearchAc.class);
                     intent.setFlags(FLAG_ACTIVITY_CLEAR_TOP | FLAG_ACTIVITY_NEW_TASK);

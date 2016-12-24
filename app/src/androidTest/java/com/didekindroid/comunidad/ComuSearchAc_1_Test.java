@@ -33,11 +33,11 @@ import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekinaar.security.TokenHandler.TKhandler;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekinaar.usuariocomunidad.UserAndComuFiller.makeComunidadBeanFromView;
-import static com.didekinaar.utils.UIutils.isRegisteredUser;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler.isRegisteredUser;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -127,7 +127,7 @@ public class ComuSearchAc_1_Test {
         //No token.
         assertThat(refreshTkFile.exists(), is(false));
         assertThat(TKhandler.getAccessTokenInCache(), nullValue());
-        assertThat(isRegisteredUser(activity), is(false));
+        assertThat(TKhandler.isRegisteredUser(), is(false));
     }
 
     @Test
@@ -139,7 +139,7 @@ public class ComuSearchAc_1_Test {
 
         activity = mActivityRule.launchActivity(new Intent());
         assertThat(TKhandler.getAccessTokenInCache(), notNullValue());
-        assertThat(isRegisteredUser(activity), is(true));
+        assertThat(TKhandler.isRegisteredUser(), is(true));
 
         whatClean = UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
     }

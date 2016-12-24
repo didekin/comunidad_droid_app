@@ -8,10 +8,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import static com.didekinaar.PrimalCreator.creator;
 import static com.didekinaar.security.Oauth2DaoRemote.Oauth2;
-import static com.didekinaar.security.TokenHandler.TKhandler;
-import static com.didekinaar.utils.UIutils.updateIsRegistered;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
 import static java.util.Calendar.DAY_OF_MONTH;
 
 /**
@@ -40,8 +38,8 @@ public final class AarTestUtil {
     public static void updateSecurityData(String userName, String password) throws UiException
     {
         SpringOauthToken token = Oauth2.getPasswordUserToken(userName, password);
-        TKhandler.initTokenAndBackupFile(token);
-        updateIsRegistered(true, creator.get().getContext());
+        TKhandler.initIdentityCache(token);
+        TKhandler.updateIsRegistered(true);
     }
 
     public static SpringOauthToken doSpringOauthToken()

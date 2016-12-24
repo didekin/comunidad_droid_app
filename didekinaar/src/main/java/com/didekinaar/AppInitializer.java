@@ -18,13 +18,13 @@ import static java.lang.Integer.parseInt;
  * Date: 17/11/16
  * Time: 14:21
  */
-public final class PrimalCreator {
+public final class AppInitializer {
 
-    public static final AtomicReference<PrimalCreator> creator = new AtomicReference<>();
+    public static final AtomicReference<AppInitializer> creator = new AtomicReference<>();
     private final Context mContext;
     private static final AtomicReference<RetrofitHandler> atomicRefRetrofit = new AtomicReference<>();
 
-    public PrimalCreator(Context appContext)
+    public AppInitializer(Context appContext)
     {
         mContext = appContext;
         initDebugBuildConfig();

@@ -31,12 +31,12 @@ import timber.log.Timber;
 
 import static com.didekin.common.dominio.ValidDataPatterns.LINE_BREAK;
 import static com.didekinaar.security.Oauth2DaoRemote.Oauth2;
-import static com.didekinaar.security.TokenHandler.TKhandler;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
 import static com.didekinaar.utils.UIutils.checkPostExecute;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static com.didekinaar.utils.UIutils.doToolBar;
 import static com.didekinaar.utils.UIutils.makeToast;
-import static com.didekinaar.utils.UIutils.updateIsRegistered;
+import static com.didekinaar.security.TokenIdentityCacher.updateIsRegistered;
 
 /**
  * Preconditions:
@@ -159,7 +159,7 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity {
             try {
                 AppUserComuServ.regComuAndUserAndUserComu(usuarioComunidad[0]).execute();
                 SpringOauthToken token = Oauth2.getPasswordUserToken(newUser.getUserName(), newUser.getPassword());
-                TKhandler.initTokenAndBackupFile(token);
+                TKhandler.initIdentityCache(token);
             }catch (IOException e) {
                 uiException = new UiException(ErrorBean.GENERIC_ERROR);
                 return null;
