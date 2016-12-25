@@ -8,7 +8,7 @@ import android.app.Activity;
  * Time: 14:25
  */
 
-public interface UiActionExceptionIf {
+public interface ActionForUiExceptionIf {
 
     Class<? extends Activity> getActivityToGoClass();
     int getToastResourceId();

@@ -1,8 +1,6 @@
 package com.didekinaar.usuario.delete;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -10,19 +8,16 @@ import android.view.View;
 import android.widget.Button;
 
 import com.didekinaar.R;
-import com.didekinaar.exception.UiException;
+import com.didekinaar.usuario.delete.DeleteObservable.DeleteMeSubscriber;
 import com.didekinaar.utils.UIutils;
 
 import java.util.Objects;
 
-import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
-import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
 import static com.didekinaar.usuario.delete.DeleteObservable.getDeleteMeSingle;
 import static com.didekinaar.utils.UIutils.doToolBar;
@@ -61,7 +56,7 @@ public abstract class DeleteMeAc extends AppCompatActivity implements DeleteMeCo
             public void onClick(View v)
             {
                 Timber.d("mUnregisterButton.OnClickListener().onClick()");
-                unregisterUser(DeleteMeAc.this, defaultActivityClassToGo);
+                unregisterUser();
             }
         });
     }
@@ -75,40 +70,19 @@ public abstract class DeleteMeAc extends AppCompatActivity implements DeleteMeCo
         }
     }
 
+    // ============================================================
+    //    ..... CONTROLLER IMPLEMENTATION ....
+    // ============================================================
+
     @Override
-    public void unregisterUser(final Context context, final Class<? extends Activity> nextActivityClass)
+    public void unregisterUser()
     {   // TODO: to test.
         Timber.d("unregisterUser()");
 
         subscription = getDeleteMeSingle()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Boolean>() {
-                    @Override
-                    public void onCompleted()
-                    {
-                        finish();
-                        unsubscribe();
-                    }
-
-                    @Override
-                    public void onError(Throwable e)
-                    {
-                        if (e instanceof UiException) {
-                            ((UiException) e).processMe(DeleteMeAc.this, new Intent());
-                            // TODO: en todos los 'processMe' de didekinaar hay que verificar que el mensaje en UiException es GENERIC_ERROR.
-                        }
-                    }
-
-                    @Override
-                    public void onNext(Boolean aBoolean)
-                    {
-                        Objects.equals(Boolean.TRUE, aBoolean);
-                        Intent intent = new Intent(context, nextActivityClass);
-                        intent.setFlags(FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intent);
-                    }
-                });
+                .subscribe(new DeleteMeSubscriber(this));
     }
 
     // ============================================================

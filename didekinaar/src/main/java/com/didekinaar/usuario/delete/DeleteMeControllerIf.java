@@ -9,5 +9,5 @@ import android.content.Context;
  * Time: 11:46
  */
 interface DeleteMeControllerIf {
-    void unregisterUser(Context context, Class<? extends Activity> nextActivityClass);
+    void unregisterUser();
 }

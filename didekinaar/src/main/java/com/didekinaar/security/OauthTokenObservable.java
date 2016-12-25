@@ -23,6 +23,7 @@ public final class OauthTokenObservable {
 
     public static Single<SpringOauthToken> getOauthTokenGetSingle(Usuario usuario)
     {
+        // TODO: test.
         return fromCallable(new OauthTokenGetCallable(usuario));
     }
 

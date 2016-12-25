@@ -9,5 +9,4 @@ import com.didekinaar.usuario.password.PasswordChangeAc;
  */
 
 public class PasswordChangeAppAc extends PasswordChangeAc {
-    // TODO: implementar.
 }

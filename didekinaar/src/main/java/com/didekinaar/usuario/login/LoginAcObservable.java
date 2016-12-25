@@ -3,13 +3,12 @@ package com.didekinaar.usuario.login;
 import android.content.Intent;
 
 import com.didekin.usuario.Usuario;
+import com.didekinaar.ActivitySubscriber;
 import com.didekinaar.R;
-import com.didekinaar.exception.UiException;
 
 import java.util.concurrent.Callable;
 
 import rx.Single;
-import rx.Subscriber;
 import timber.log.Timber;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
@@ -32,12 +31,12 @@ final class LoginAcObservable {
     //  =====================================================================================================
 
     private static Single<Boolean> getLoginValidateSingle(Usuario usuario)
-    {
+    {   // TODO: test.
         return fromCallable(new LoginValidateCallable(usuario));
     }
 
     static Single<Boolean> getZipLoginSingle(Usuario usuario)
-    {
+    {   // TODO: test.
         return getLoginValidateSingle(usuario)
                 .zipWith(
                         getOauthTokenGetSingle(usuario),
@@ -46,7 +45,7 @@ final class LoginAcObservable {
     }
 
     static Single<Boolean> getLoginMailSingle(String email)
-    {
+    {   // TODO: test.
         return fromCallable(new LoginMailCallable(email));
     }
 
@@ -54,7 +53,7 @@ final class LoginAcObservable {
     // ............................ SUBSCRIBERS ..................................
     //  =======================================================================================
 
-    static class LoginValidateSubscriber extends LoginSubscriber {
+    static class LoginValidateSubscriber extends ActivitySubscriber<Boolean, LoginAc> {
 
         private final Usuario usuario;
 
@@ -66,7 +65,7 @@ final class LoginAcObservable {
 
         @Override
         public void onNext(Boolean isLoginOk)
-        {
+        {   // TODO: test.
             Timber.d("onNext");
             if (isLoginOk) {
                 Timber.d("login OK");
@@ -84,46 +83,20 @@ final class LoginAcObservable {
         }
     }
 
-    static class LoginMailSubscriber extends LoginSubscriber {
+    static class LoginMailSubscriber extends ActivitySubscriber<Boolean, LoginAc> {
 
-        LoginMailSubscriber(LoginAc activity)
+        LoginMailSubscriber(final LoginAc activity)
         {
             super(activity);
         }
 
         @Override
         public void onNext(Boolean isMailOk)
-        {
+        { // TODO: test.
             Timber.d("onNext()");
             if (isMailOk) {
                 makeToast(activity, R.string.password_new_in_login);
                 activity.recreate();
-            }
-        }
-    }
-
-    abstract static class LoginSubscriber extends Subscriber<Boolean> {
-
-        final LoginAc activity;
-
-        LoginSubscriber(LoginAc activity)
-        {
-            this.activity = activity;
-        }
-
-        @Override
-        public void onCompleted()
-        {
-            Timber.d("onCompleted()");
-            unsubscribe();
-        }
-
-        @Override
-        public void onError(Throwable e)
-        {
-            Timber.d("onError");
-            if (e instanceof UiException) {
-                ((UiException) e).processMe(activity, new Intent());
             }
         }
     }

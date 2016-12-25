@@ -8,7 +8,7 @@ package com.didekindroid.exception;
 
 import com.didekin.common.exception.ErrorBean;
 import com.didekinaar.exception.UiException;
-import com.didekinaar.exception.UiActionExceptionIf;
+import com.didekinaar.exception.ActionForUiExceptionIf;
 import com.didekinaar.usuario.userdata.UserDataAc;
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComuSearchAc;
@@ -65,19 +65,19 @@ public class UiAppException extends UiException {
     }
 
     @Override
-    protected UiActionExceptionIf getUiActionException()
+    protected ActionForUiExceptionIf getUiActionException()
     {
         return messageToAction.get(getErrorBean().getMessage());
     }
 
     // ...........................................................................................
 
-    private static final UiActionExceptionIf GENERIC_APP_ACC = new UiActionException(ComuSearchAc.class, R.string.exception_generic_app_message);
-    private static final UiActionExceptionIf LOGIN_ACC = new UiActionException(LoginAppAc.class, R.string.user_without_signedUp);
-    private static final UiActionExceptionIf SEARCH_COMU_ACC = new UiActionException(ComuSearchAc.class, R.string.comunidad_not_found_message);
-    private static final UiActionExceptionIf INCID_SEE_BY_COMU_ACC = new UiActionException(IncidSeeOpenByComuAc.class, R.string.incidencia_wrong_init);
+    private static final ActionForUiExceptionIf GENERIC_APP_ACC = new ActionForUiException(ComuSearchAc.class, R.string.exception_generic_app_message);
+    private static final ActionForUiExceptionIf LOGIN_ACC = new ActionForUiException(LoginAppAc.class, R.string.user_without_signedUp);
+    private static final ActionForUiExceptionIf SEARCH_COMU_ACC = new ActionForUiException(ComuSearchAc.class, R.string.comunidad_not_found_message);
+    private static final ActionForUiExceptionIf INCID_SEE_BY_COMU_ACC = new ActionForUiException(IncidSeeOpenByComuAc.class, R.string.incidencia_wrong_init);
 
-    private static final Map<String, UiActionExceptionIf> messageToAction = new HashMap<>();
+    private static final Map<String, ActionForUiExceptionIf> messageToAction = new HashMap<>();
 
     static {
         messageToAction.put(AVANCE_WRONG_INIT.getHttpMessage(), INCID_SEE_BY_COMU_ACC);
@@ -90,13 +90,13 @@ public class UiAppException extends UiException {
         messageToAction.put(GENERIC_INTERNAL_ERROR.getHttpMessage(), GENERIC_APP_ACC);
         messageToAction.put(INCIDENCIA_COMMENT_WRONG_INIT.getHttpMessage(), INCID_SEE_BY_COMU_ACC);
         messageToAction.put(INCIDENCIA_NOT_FOUND.getHttpMessage(), INCID_SEE_BY_COMU_ACC);
-        messageToAction.put(INCIDENCIA_USER_WRONG_INIT.getHttpMessage(), new UiActionException(LoginAppAc.class, R.string.user_without_powers));
+        messageToAction.put(INCIDENCIA_USER_WRONG_INIT.getHttpMessage(), new ActionForUiException(LoginAppAc.class, R.string.user_without_powers));
         messageToAction.put(INCIDENCIA_WRONG_INIT.getHttpMessage(), INCID_SEE_BY_COMU_ACC);
         messageToAction.put(INCID_IMPORTANCIA_NOT_FOUND.getHttpMessage(), INCID_SEE_BY_COMU_ACC);
-        messageToAction.put(INCIDENCIA_NOT_REGISTERED.getHttpMessage(), new UiActionException(IncidRegAc.class, R.string.incidencia_not_registered));
+        messageToAction.put(INCIDENCIA_NOT_REGISTERED.getHttpMessage(), new ActionForUiException(IncidRegAc.class, R.string.incidencia_not_registered));
         messageToAction.put(INCID_IMPORTANCIA_WRONG_INIT.getHttpMessage(), INCID_SEE_BY_COMU_ACC);
         messageToAction.put(NOT_FOUND.getHttpMessage(), GENERIC_APP_ACC);
-        messageToAction.put(RESOLUCION_DUPLICATE.getHttpMessage(), new UiActionException(IncidEditAc.class, R.string.resolucion_duplicada));
+        messageToAction.put(RESOLUCION_DUPLICATE.getHttpMessage(), new ActionForUiException(IncidEditAc.class, R.string.resolucion_duplicada));
         messageToAction.put(RESOLUCION_WRONG_INIT.getHttpMessage(), INCID_SEE_BY_COMU_ACC);
         messageToAction.put(ROLES_NOT_FOUND.getHttpMessage(), LOGIN_ACC);
         messageToAction.put(SUFIJO_NUM_IN_COMUNIDAD_NULL.getHttpMessage(), GENERIC_APP_ACC);
@@ -106,7 +106,7 @@ public class UiAppException extends UiException {
         messageToAction.put(UNAUTHORIZED_TX_TO_USER.getHttpMessage(), LOGIN_ACC);
         messageToAction.put(USERCOMU_WRONG_INIT.getHttpMessage(), LOGIN_ACC);
         messageToAction.put(USER_COMU_NOT_FOUND.getHttpMessage(), LOGIN_ACC);
-        messageToAction.put(USER_DATA_NOT_MODIFIED.getHttpMessage(), new UiActionException(UserDataAc.class, string.user_data_not_modified_msg));
+        messageToAction.put(USER_DATA_NOT_MODIFIED.getHttpMessage(), new ActionForUiException(UserDataAc.class, string.user_data_not_modified_msg));
         messageToAction.put(USER_NOT_COMPARABLE.getHttpMessage(), LOGIN_ACC);
         messageToAction.put(USER_NOT_EQUAL_ABLE.getHttpMessage(), LOGIN_ACC);
         messageToAction.put(USER_NAME_NOT_FOUND.getHttpMessage(), LOGIN_ACC);

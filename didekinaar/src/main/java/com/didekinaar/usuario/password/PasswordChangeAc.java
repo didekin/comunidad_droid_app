@@ -1,8 +1,6 @@
 package com.didekinaar.usuario.password;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -10,18 +8,19 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.didekinaar.R;
-import com.didekinaar.exception.UiException;
 import com.didekinaar.usuario.UsuarioBean;
-import com.didekinaar.usuario.userdata.UserDataAc;
+import com.didekinaar.usuario.password.PswdChangeAcObservable.PasswordChangeSubscriber;
 import com.didekinaar.utils.ConnectionUtils;
 
 import java.util.Objects;
 
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
-import static com.didekinaar.usuario.UsuarioDaoRemote.usuarioDaoRemote;
-import static com.didekinaar.utils.UIutils.checkPostExecute;
+import static com.didekinaar.usuario.password.PswdChangeAcObservable.isPasswordChanged;
 import static com.didekinaar.utils.UIutils.doToolBar;
 import static com.didekinaar.utils.UIutils.getErrorMsgBuilder;
 import static com.didekinaar.utils.UIutils.makeToast;
@@ -34,11 +33,10 @@ import static com.didekinaar.utils.UIutils.makeToast;
  * 2. It goes to UserDataAc activity.
  */
 @SuppressWarnings("ConstantConditions")
-public class PasswordChangeAc extends AppCompatActivity {
-
-    // TODO: implementación en app, extendiendo esta clase.
+public class PasswordChangeAc extends AppCompatActivity implements PasswordChangeControllerIf {
 
     private View mAcView;
+    Subscription subscription;
 
     @SuppressLint("InflateParams")
     @Override
@@ -65,7 +63,21 @@ public class PasswordChangeAc extends AppCompatActivity {
         });
     }
 
-    void modifyPassword()
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        if (subscription != null) {
+            subscription.unsubscribe();
+        }
+    }
+
+    // ============================================================
+    //    ..... CONTROLLER IMPLEMENTATION ....
+    // ============================================================
+
+    @Override
+    public void modifyPassword()
     {
         Timber.d("modifyPassword()");
 
@@ -85,45 +97,10 @@ public class PasswordChangeAc extends AppCompatActivity {
         } else if (!ConnectionUtils.isInternetConnected(this)) {
             makeToast(this, R.string.no_internet_conn_toast);
         } else {
-            new PasswordModifyer().execute(usuarioBean.getPassword());
-        }
-    }
-
-    //    ============================================================
-    //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
-    //    ============================================================
-
-    class PasswordModifyer extends AsyncTask<String, Void, Integer> {
-
-        UiException uiException;
-
-        @Override
-        protected Integer doInBackground(String... params)
-        {
-            Timber.d("doInBackground()");
-            int passwordChange = 0;
-            try {
-                passwordChange = usuarioDaoRemote.passwordChange(params[0]);
-            } catch (UiException e) {
-                uiException = e;
-            }
-            return passwordChange;
-        }
-
-        @Override
-        protected void onPostExecute(Integer passwordUpdate)
-        {
-            if (checkPostExecute(PasswordChangeAc.this)) return;
-
-            Timber.d("onPostExecute(): DONE");
-            if (uiException != null) {
-                // TODO: en todos los 'processMe' de didekinaar hay que verificar que el mensaje en UiException es GENERIC_ERROR.
-                uiException.processMe(PasswordChangeAc.this, new Intent());
-            } else {
-                Objects.equals(passwordUpdate == 1, true);
-                Intent intent = new Intent(PasswordChangeAc.this, UserDataAc.class);
-                startActivity(intent);
-            }
+            subscription = isPasswordChanged(usuarioBean.getPassword())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new PasswordChangeSubscriber(this));
         }
     }
 }

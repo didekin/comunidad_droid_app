@@ -15,11 +15,11 @@ import android.widget.EditText;
 
 import com.didekinaar.R;
 import com.didekinaar.usuario.UsuarioBean;
+import com.didekinaar.usuario.login.LoginAcObservable.LoginMailSubscriber;
 import com.didekinaar.usuario.login.LoginAcObservable.LoginValidateSubscriber;
 import com.didekinaar.utils.ConnectionUtils;
 import com.didekinaar.utils.UIutils;
 
-import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
@@ -126,8 +126,7 @@ public abstract class LoginAc extends AppCompatActivity implements LoginViewIf, 
 
     // ============================================================
     //    ..... CONTROLLER IMPLEMENTATION ....
-    // ============================================================
-
+    /* ============================================================*/
 
     @Override
     public int getCounterWrong()
@@ -172,14 +171,10 @@ public abstract class LoginAc extends AppCompatActivity implements LoginViewIf, 
     public void doDialogPositiveClick(String email)
     {
         Timber.d("doDialogPositiveClick()");
-        Subscription subscriptionMail = getLoginMailSingle(email)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new LoginAcObservable.LoginMailSubscriber(this));
         subscriptions.add(getLoginMailSingle(email)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new LoginAcObservable.LoginMailSubscriber(this)));
+                .subscribe(new LoginMailSubscriber(this)));
     }
 
     @Override

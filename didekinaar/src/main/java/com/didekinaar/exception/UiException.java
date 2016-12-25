@@ -64,17 +64,17 @@ public class UiException extends Exception implements UiExceptionIf {
      *  Method to be overwritten by subclasses in the final apps.
      *  Each app defines its own exception dealing.
      * */
-    protected UiActionExceptionIf getUiActionException()
+    protected ActionForUiExceptionIf getUiActionException()
     {
         throw new UnsupportedOperationException("This method should be overwritten by final apps.");
     }
 
-    public static class UiActionException implements UiActionExceptionIf {
+    public static class ActionForUiException implements ActionForUiExceptionIf {
 
         private final Class<? extends Activity> activityToGoClass;
         private final int toastResourceId;
 
-        public UiActionException(Class<? extends Activity> activityToGoClass, int toastResourceId)
+        public ActionForUiException(Class<? extends Activity> activityToGoClass, int toastResourceId)
         {
             this.activityToGoClass = activityToGoClass;
             this.toastResourceId = toastResourceId;
