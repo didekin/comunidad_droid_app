@@ -15,6 +15,7 @@ import timber.log.Timber;
 
 import static com.didekin.common.exception.ErrorBean.GENERIC_ERROR;
 import static com.didekinaar.AppInitializer.creator;
+import static com.didekinaar.utils.AarDaoUtil.getResponseBody;
 import static com.didekinaar.utils.UIutils.checkBearerToken;
 
 /**
@@ -101,7 +102,7 @@ public final class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDao {
 
         try {
             Response<Boolean> response = deleteAccessToken(checkBearerToken(), oldAccessToken).execute();
-            return AarDaoUtil.getResponseBody(response);
+            return getResponseBody(response);
         } catch (IOException e) {
             throw new UiException(GENERIC_ERROR);
         }
@@ -113,7 +114,7 @@ public final class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDao {
         Timber.d("deleteUser()");
         try {
             Response<Boolean> response = deleteUser(checkBearerToken()).execute();
-            return AarDaoUtil.getResponseBody(response);
+            return getResponseBody(response);
         } catch (IOException e) {
             throw new UiException(GENERIC_ERROR);
         }
@@ -125,7 +126,7 @@ public final class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDao {
         Timber.d("getGcmToken()");
         try {
             Response<GcmTokenWrapper> response = getGcmToken(checkBearerToken()).execute();
-            return AarDaoUtil.getResponseBody(response).getToken();
+            return getResponseBody(response).getToken();
         } catch (IOException e) {
             throw new UiException(GENERIC_ERROR);
         }
@@ -137,7 +138,7 @@ public final class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDao {
         Timber.d(("getUserData()"));
         try {
             Response<Usuario> response = getUserData(checkBearerToken()).execute();
-            return AarDaoUtil.getResponseBody(response);
+            return getResponseBody(response);
         } catch (EOFException eo) {
             return null;
         } catch (IOException e) {
@@ -151,7 +152,7 @@ public final class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDao {
         Timber.d("loginInternal()");
         try {
             Response<Boolean> response = login(userName, password).execute();
-            return AarDaoUtil.getResponseBody(response);
+            return getResponseBody(response);
         } catch (IOException e) {
             throw new UiException(GENERIC_ERROR);
         }
@@ -163,7 +164,7 @@ public final class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDao {
         Timber.d("modifyUserGcmToken()");
         try {
             Response<Integer> response = modifyUserGcmToken(checkBearerToken(), gcmToken).execute();
-            return AarDaoUtil.getResponseBody(response);
+            return getResponseBody(response);
         } catch (IOException e) {
             throw new UiException(GENERIC_ERROR);
         }
@@ -175,7 +176,7 @@ public final class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDao {
         Timber.d("modifyUser()");
         try {
             Response<Integer> response = modifyUser(checkBearerToken(), usuario).execute();
-            return AarDaoUtil.getResponseBody(response);
+            return getResponseBody(response);
         } catch (IOException e) {
             throw new UiException(GENERIC_ERROR);
         }
@@ -187,7 +188,7 @@ public final class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDao {
         Timber.d("passwordChange()");
         try {
             Response<Integer> response = passwordChange(checkBearerToken(), newPassword).execute();
-            return AarDaoUtil.getResponseBody(response);
+            return getResponseBody(response);
         } catch (IOException e) {
             throw new UiException(GENERIC_ERROR);
         }
@@ -198,7 +199,7 @@ public final class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDao {
     {
         Timber.d("sendPassword()");
         try {
-            return AarDaoUtil.getResponseBody(passwordSend(email).execute());
+            return getResponseBody(passwordSend(email).execute());
         } catch (IOException e) {
             throw new UiException(GENERIC_ERROR);
         }

@@ -15,6 +15,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicReference;
 
+import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.functions.Func2;
 import timber.log.Timber;
@@ -24,10 +25,10 @@ import static com.didekin.oauth2.OauthTokenHelper.HELPER;
 import static com.didekinaar.AppInitializer.creator;
 import static com.didekinaar.security.Oauth2DaoRemote.Oauth2;
 import static com.didekinaar.security.TokenIdentityCacher.SharedPrefFiles.IS_GCM_TOKEN_SENT_TO_SERVER;
-import static com.didekinaar.utils.IoHelper.readStringFromFile;
-import static com.didekinaar.utils.IoHelper.writeFileFromString;
 import static com.didekinaar.security.TokenIdentityCacher.SharedPrefFiles.IS_USER_REG;
 import static com.didekinaar.security.TokenIdentityCacher.SharedPrefFiles.app_preferences_file;
+import static com.didekinaar.utils.IoHelper.readStringFromFile;
+import static com.didekinaar.utils.IoHelper.writeFileFromString;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
@@ -244,7 +245,7 @@ public enum TokenIdentityCacher implements IdentityCacher {
     //    .................................... FUNCTIONS .................................
     //  ======================================================================================
 
-    public final Func2<Boolean, SpringOauthToken, Boolean> initTokenFunc = new InitializeIdentityFunc();
+    public final Func2<Boolean, SpringOauthToken, Boolean> initTokenRegisterFunc = new InitializeIdentityFunc();
 
     final static class InitializeIdentityFunc implements Func2<Boolean, SpringOauthToken, Boolean> {
         @Override
@@ -271,6 +272,32 @@ public enum TokenIdentityCacher implements IdentityCacher {
                 TKhandler.updateIsRegistered(false);
             }
             return isDeletedUser;
+        }
+    }
+
+    //  ======================================================================================
+    //    .................................... ACTIONS .................................
+    //  ======================================================================================
+
+    public final Action1<SpringOauthToken> initTokenAction = new InitTokenAction();
+
+    static class InitTokenAction implements Action1<SpringOauthToken> {
+        @Override
+        public void call(SpringOauthToken token)
+        {
+            TKhandler.initIdentityCache(token);
+        }
+    }
+
+    public final Action1<Integer> cleanTokenCacheAction = new CleanTokenCacheAction();
+
+    static class CleanTokenCacheAction implements Action1<Integer> {
+        @Override
+        public void call(Integer modifiedUser)
+        {
+            if (modifiedUser > 0){
+                TKhandler.cleanIdentityCache();
+            }
         }
     }
 }

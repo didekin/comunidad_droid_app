@@ -2,13 +2,12 @@ package com.didekinaar.usuario.delete;
 
 import android.content.Intent;
 
-import com.didekinaar.exception.UiException;
+import com.didekinaar.ActivitySubscriber;
 
 import java.util.Objects;
 import java.util.concurrent.Callable;
 
 import rx.Single;
-import rx.Subscriber;
 
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
@@ -27,50 +26,23 @@ class DeleteObservable {
     //    .................................... OBSERVABLES .................................
 
     static Single<Boolean> getDeleteMeSingle()
-    {   // TODO: to test.
-        return fromCallable(new DeleteMeCallable()).map(TKhandler.cleanTokenFunc);
-    }
-
-    //    .................................... CALLABLES .................................
-
-    private static class DeleteMeCallable implements Callable<Boolean> {
-
-        DeleteMeCallable()
-        {
-        }
-
-        @Override
-        public Boolean call() throws Exception
-        {   // TODO: to test: devuelve true y devuelve false (no en BD).
-            return usuarioDaoRemote.deleteUser();
-        }
+    {   // TODO: to test: devuelve true y devuelve false (no en BD).
+        return fromCallable(new Callable<Boolean>() {
+            @Override
+            public Boolean call() throws Exception
+            {
+                return usuarioDaoRemote.deleteUser();
+            }
+        }).map(TKhandler.cleanTokenFunc);
     }
 
     // ............................ SUBSCRIBERS ..................................
 
-    static class DeleteMeSubscriber extends Subscriber<Boolean>{
-
-        final DeleteMeAc activity;
+    static class DeleteMeSubscriber extends ActivitySubscriber<Boolean, DeleteMeAc> {
 
         DeleteMeSubscriber(DeleteMeAc activity)
         {
-            this.activity = activity;
-        }
-
-        @Override
-        public void onCompleted()
-        {   // TODO: test.
-            activity.finish();
-            unsubscribe();
-        }
-
-        @Override
-        public void onError(Throwable e)
-        {
-            if (e instanceof UiException) {
-                ((UiException) e).processMe(activity, new Intent());
-                // TODO: en todos los 'processMe' de didekinaar hay que verificar que el mensaje en UiException es GENERIC_ERROR.
-            }
+            super(activity);
         }
 
         @Override

@@ -131,7 +131,7 @@ public class TokenIdentityCacherTest {
     public void testInitTokenFunction_2() throws UiException
     {
         SpringOauthToken token = doSpringOauthToken();
-        TKhandler.initTokenFunc.call(false, token);
+        TKhandler.initTokenRegisterFunc.call(false, token);
         assertThat(TKhandler.getAccessTokenInCache(), is(nullValue()));
         assertThat(TKhandler.isRegisteredUser(), is(false));
     }
@@ -159,7 +159,7 @@ public class TokenIdentityCacherTest {
     private void initTokenHelper() throws UiException
     {
         SpringOauthToken token = doSpringOauthToken();
-        TKhandler.initTokenFunc.call(true, token);
+        TKhandler.initTokenRegisterFunc.call(true, token);
         assertThat(TKhandler.getAccessTokenInCache(), is(token));
         assertThat(TKhandler.isRegisteredUser(), is(true));
     }

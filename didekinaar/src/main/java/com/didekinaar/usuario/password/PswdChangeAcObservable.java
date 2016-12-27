@@ -24,9 +24,15 @@ class PswdChangeAcObservable {
 
     // ............................ OBSERVABLES ..................................
 
-    static Single<Integer> isPasswordChanged(String newPassword)
+    static Single<Integer> isPasswordChanged(final String newPassword)
     {   // TODO: test.
-        return fromCallable(new PswdChangeCallable(newPassword));
+        return fromCallable(new Callable<Integer>() {
+            @Override
+            public Integer call() throws Exception
+            {
+                return usuarioDaoRemote.passwordChange(newPassword);
+            }
+        });
     }
 
     // ............................ SUBSCRIBERS ..................................
@@ -45,24 +51,6 @@ class PswdChangeAcObservable {
             Objects.equals(passwordUpdate == 1, true);
             Intent intent = new Intent(activity, UserDataAc.class);
             activity.startActivity(intent);
-        }
-    }
-
-    // ............................. CALLABLES ...................................
-
-    private static class PswdChangeCallable implements Callable<Integer> {
-
-        private final String newPassword;
-
-        PswdChangeCallable(String newPassword)
-        {
-            this.newPassword = newPassword;
-        }
-
-        @Override
-        public Integer call() throws Exception
-        {
-            return usuarioDaoRemote.passwordChange(newPassword);
         }
     }
 }

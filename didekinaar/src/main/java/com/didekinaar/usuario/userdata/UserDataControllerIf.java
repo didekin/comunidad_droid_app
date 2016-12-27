@@ -1,6 +1,9 @@
 package com.didekinaar.usuario.userdata;
 
-import com.didekinaar.usuario.UsuarioBean;
+import com.didekin.usuario.Usuario;
+import com.didekinaar.usuario.userdata.UserDataAcObservable.UserDataUpdateSubscriber;
+
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * User: pedro@didekin
@@ -8,7 +11,10 @@ import com.didekinaar.usuario.UsuarioBean;
  * Time: 17:37
  */
 interface UserDataControllerIf {
-    UsuarioBean makeUserBeanFromUserDataAcView();
+
     void loadUserData();
-    void modifyUserData();
+
+    void modifyUserName();
+
+    void modifyOnlyAlias();
 }

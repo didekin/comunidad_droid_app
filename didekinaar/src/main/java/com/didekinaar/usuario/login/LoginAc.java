@@ -71,6 +71,7 @@ public abstract class LoginAc extends AppCompatActivity implements LoginViewIf, 
         mAcView = getLayoutInflater().inflate(R.layout.login_ac, null);
         setContentView(mAcView);
         doToolBar(this, true);
+        subscriptions = new CompositeSubscription();
 
         Button mLoginButton = (Button) findViewById(R.id.login_ac_button);
         mLoginButton.setOnClickListener(new View.OnClickListener() {
@@ -160,10 +161,12 @@ public abstract class LoginAc extends AppCompatActivity implements LoginViewIf, 
         } else if (!ConnectionUtils.isInternetConnected(this)) {
             makeToast(this, R.string.no_internet_conn_toast);
         } else {
-            subscriptions.add(getZipLoginSingle(usuarioBean.getUsuario())
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new LoginValidateSubscriber(this, usuarioBean.getUsuario())));
+            subscriptions.add(
+                    getZipLoginSingle(usuarioBean.getUsuario())
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(new LoginValidateSubscriber(this, usuarioBean.getUsuario()))
+            );
         }
     }
 
@@ -171,10 +174,12 @@ public abstract class LoginAc extends AppCompatActivity implements LoginViewIf, 
     public void doDialogPositiveClick(String email)
     {
         Timber.d("doDialogPositiveClick()");
-        subscriptions.add(getLoginMailSingle(email)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new LoginMailSubscriber(this)));
+        subscriptions.add(
+                getLoginMailSingle(email)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new LoginMailSubscriber(this))
+        );
     }
 
     @Override

@@ -12,7 +12,7 @@ import rx.Single;
 import timber.log.Timber;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
-import static com.didekinaar.security.OauthTokenObservable.getOauthTokenGetSingle;
+import static com.didekinaar.security.OauthTokenObservable.getOauthToken;
 import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
 import static com.didekinaar.usuario.UsuarioDaoRemote.usuarioDaoRemote;
 import static com.didekinaar.utils.UIutils.makeToast;
@@ -30,23 +30,35 @@ final class LoginAcObservable {
     //    .................................... OBSERVABLES .................................
     //  =====================================================================================================
 
-    private static Single<Boolean> getLoginValidateSingle(Usuario usuario)
+    private static Single<Boolean> getLoginValidateSingle(final Usuario usuario)
     {   // TODO: test.
-        return fromCallable(new LoginValidateCallable(usuario));
+        return fromCallable(new Callable<Boolean>() {
+            @Override
+            public Boolean call() throws Exception
+            {
+                return usuarioDaoRemote.loginInternal(usuario.getUserName(), usuario.getPassword());
+            }
+        });
     }
 
     static Single<Boolean> getZipLoginSingle(Usuario usuario)
     {   // TODO: test.
         return getLoginValidateSingle(usuario)
                 .zipWith(
-                        getOauthTokenGetSingle(usuario),
-                        TKhandler.initTokenFunc
+                        getOauthToken(usuario),
+                        TKhandler.initTokenRegisterFunc
                 );
     }
 
-    static Single<Boolean> getLoginMailSingle(String email)
+    static Single<Boolean> getLoginMailSingle(final String email)
     {   // TODO: test.
-        return fromCallable(new LoginMailCallable(email));
+        return fromCallable(new Callable<Boolean>() {
+            @Override
+            public Boolean call() throws Exception
+            {
+                return usuarioDaoRemote.sendPassword(email);
+            }
+        });
     }
 
     //  =======================================================================================
@@ -98,42 +110,6 @@ final class LoginAcObservable {
                 makeToast(activity, R.string.password_new_in_login);
                 activity.recreate();
             }
-        }
-    }
-
-    //  =========================================================================================
-    //    .................................... CALLABLES .................................
-    //  =========================================================================================
-
-    private static class LoginValidateCallable implements Callable<Boolean> {
-
-        private final Usuario usuario;
-
-        LoginValidateCallable(Usuario usuario)
-        {
-            this.usuario = usuario;
-        }
-
-        @Override
-        public Boolean call() throws Exception
-        {
-            return usuarioDaoRemote.loginInternal(usuario.getUserName(), usuario.getPassword());
-        }
-    }
-
-    private static class LoginMailCallable implements Callable<Boolean> {
-
-        private final String email;
-
-        LoginMailCallable(String email)
-        {
-            this.email = email;
-        }
-
-        @Override
-        public Boolean call() throws Exception
-        {
-            return usuarioDaoRemote.sendPassword(email);
         }
     }
 }

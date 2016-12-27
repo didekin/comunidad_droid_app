@@ -13,8 +13,6 @@ import timber.log.Timber;
  * Date: 24/12/16
  * Time: 15:34
  */
-
-@SuppressWarnings("AbstractClassNeverImplemented")
 public abstract class ActivitySubscriber<T,R extends Activity> extends Subscriber<T> {
 
     protected final R activity;
@@ -25,19 +23,29 @@ public abstract class ActivitySubscriber<T,R extends Activity> extends Subscribe
     }
 
     @Override
+    public void onNext(T item)
+    {
+        Timber.d("onNext");
+    }
+
+    @Override
     public void onCompleted()
-    {   // TODO: test.
+    {
         Timber.d("onCompleted()");
         unsubscribe();
     }
 
     @Override
     public void onError(Throwable e)
-    {   // TODO: test.Todos los 'processMe' de didekinaar verificar que el mensaje en UiException es GENERIC_ERROR.
+    {
         Timber.d("onError");
         if (e instanceof UiException) {
             ((UiException) e).processMe(activity, new Intent());
         }
     }
 
+    public R getActivity()
+    {
+        return activity;
+    }
 }

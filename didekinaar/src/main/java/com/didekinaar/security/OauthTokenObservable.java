@@ -21,29 +21,15 @@ public final class OauthTokenObservable {
     //    .................................... OBSERVABLES .................................
     //  =====================================================================================================
 
-    public static Single<SpringOauthToken> getOauthTokenGetSingle(Usuario usuario)
-    {
-        // TODO: test.
-        return fromCallable(new OauthTokenGetCallable(usuario));
+    public static Single<SpringOauthToken> getOauthToken(final Usuario usuario)
+    { // TODO: test.
+        return fromCallable(new Callable<SpringOauthToken>() {
+            @Override
+            public SpringOauthToken call() throws Exception
+            {
+                return Oauth2.getPasswordUserToken(usuario.getUserName(), usuario.getPassword());
+            }
+        });
     }
 
-    //  =====================================================================================================
-    //    .................................... HELPER INNER CLASSES .................................
-    //  =====================================================================================================
-
-    private static class OauthTokenGetCallable implements Callable<SpringOauthToken> {
-
-        private final Usuario usuario;
-
-        OauthTokenGetCallable(Usuario usuario)
-        {
-            this.usuario = usuario;
-        }
-
-        @Override
-        public SpringOauthToken call() throws Exception
-        {
-            return Oauth2.getPasswordUserToken(usuario.getUserName(), usuario.getPassword());
-        }
-    }
 }

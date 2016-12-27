@@ -7,5 +7,14 @@ package com.didekinaar.usuario.userdata;
  */
 
 interface UserDataViewIf {
+
     void initUserDataInView();
+    UserChangeToMake getDataChangedFromAcView();
+
+    enum UserChangeToMake {
+        alias_only,
+        userName,
+        nothing,
+        ;
+    }
 }
