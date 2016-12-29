@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
+
 import com.didekinaar.R;
 
 import org.junit.Before;

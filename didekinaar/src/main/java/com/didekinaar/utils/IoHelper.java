@@ -12,6 +12,7 @@ import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import timber.log.Timber;
 
@@ -100,6 +101,6 @@ public final class IoHelper {
     public static String lineToLowerCase(String line)
     {
         String lineTrim = line.trim();
-        return lineTrim.substring(0,1) + lineTrim.substring(1).toLowerCase();
+        return lineTrim.substring(0,1) + lineTrim.substring(1).toLowerCase(Locale.getDefault());
     }
 }

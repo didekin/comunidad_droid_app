@@ -10,7 +10,6 @@ import com.didekin.incidencia.dominio.Resolucion;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
 import com.didekinaar.exception.UiException;
 import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
-import com.didekindroid.exception.UiAppException;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -19,17 +18,17 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Date;
 
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.signUpAndUpdateTk;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.INCID_DEFAULT_DESC;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.RESOLUCION_DEFAULT_DESC;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doResolucion;
-import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_ESCORIAL_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.signUpAndUpdateTk;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -74,7 +73,7 @@ public class IncidEditAcMaxPowerTest_3 extends IncidEditAbstractTest {
                     assertThat(IncidenciaServ.regResolucion(resolucion), is(1));
                     incidResolBundlePepe = IncidenciaServ.seeIncidImportancia(incidenciaDb.getIncidenciaId());
                     incidenciaPepe = incidResolBundlePepe.getIncidImportancia();
-                } catch (UiAppException | InterruptedException | IOException | UiException e) {
+                } catch ( InterruptedException | IOException | UiException e) {
                     e.printStackTrace();
                 }
                 Intent intent = new Intent();

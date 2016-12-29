@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.support.test.espresso.matcher.ViewMatchers;
 
 import com.didekinaar.testutil.MenuTestUtilIf;
+import com.didekindroid.R;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
@@ -36,8 +37,8 @@ public enum UserComuMenuTestUtil implements MenuTestUtilIf {
         {
             openActionBarOverflowOrOptionsMenu(activity);
             Thread.sleep(2000);
-            onView(ViewMatchers.withText(com.didekinaar.R.string.reg_nueva_comunidad_ac_mn)).check(matches(isDisplayed())).perform(click());
-            onView(ViewMatchers.withId(com.didekinaar.R.id.reg_comu_and_usercomu_layout)).check(matches(isDisplayed()));
+            onView(ViewMatchers.withText(R.string.reg_nueva_comunidad_ac_mn)).check(matches(isDisplayed())).perform(click());
+            onView(ViewMatchers.withId(R.id.reg_comu_and_usercomu_layout)).check(matches(isDisplayed()));
         }
     },
 
@@ -45,12 +46,12 @@ public enum UserComuMenuTestUtil implements MenuTestUtilIf {
         @Override
         public void checkMenuItem_NTk(Activity activity) throws InterruptedException
         {
-            onView(ViewMatchers.withText(com.didekinaar.R.string.reg_nueva_comunidad_ac_mn)).check(doesNotExist());
+            onView(ViewMatchers.withText(R.string.reg_nueva_comunidad_ac_mn)).check(doesNotExist());
             Thread.sleep(2000);
 
             openActionBarOverflowOrOptionsMenu(activity);
-            onView(ViewMatchers.withText(com.didekinaar.R.string.reg_nueva_comunidad_ac_mn)).check(matches(isDisplayed())).perform(click());
-            onView(ViewMatchers.withId(com.didekinaar.R.id.reg_comu_usuario_usuariocomu_layout)).check(matches(isDisplayed()));
+            onView(ViewMatchers.withText(R.string.reg_nueva_comunidad_ac_mn)).check(matches(isDisplayed())).perform(click());
+            onView(ViewMatchers.withId(R.id.reg_comu_usuario_usuariocomu_layout)).check(matches(isDisplayed()));
         }
 
         @Override
@@ -70,11 +71,11 @@ public enum UserComuMenuTestUtil implements MenuTestUtilIf {
         @Override
         public void checkMenuItem_WTk(Activity activity) throws InterruptedException
         {
-            onView(ViewMatchers.withText(com.didekinaar.R.string.see_usercomu_by_comu_ac_mn)).check(doesNotExist());
+            onView(ViewMatchers.withText(R.string.see_usercomu_by_comu_ac_mn)).check(doesNotExist());
             openActionBarOverflowOrOptionsMenu(activity);
             Thread.sleep(1000);
-            onView(ViewMatchers.withText(com.didekinaar.R.string.see_usercomu_by_comu_ac_mn)).check(matches(isDisplayed())).perform(click());
-            onView(ViewMatchers.withId(com.didekinaar.R.id.see_usercomu_by_comu_frg)).check(matches(isDisplayed()));
+            onView(ViewMatchers.withText(R.string.see_usercomu_by_comu_ac_mn)).check(matches(isDisplayed())).perform(click());
+            onView(ViewMatchers.withId(R.id.see_usercomu_by_comu_frg)).check(matches(isDisplayed()));
         }
     },
 
@@ -82,29 +83,27 @@ public enum UserComuMenuTestUtil implements MenuTestUtilIf {
         @Override
         public void checkMenuItem_NTk(Activity activity) throws InterruptedException
         {
-            onView(ViewMatchers.withText(com.didekinaar.R.string.see_usercomu_by_user_ac_mn)).check(doesNotExist());
+            onView(ViewMatchers.withText(R.string.see_usercomu_by_user_ac_mn)).check(doesNotExist());
             Thread.sleep(2000);
 
             openActionBarOverflowOrOptionsMenu(activity);
-            onView(ViewMatchers.withText(com.didekinaar.R.string.see_usercomu_by_user_ac_mn)).check(matches(isDisplayed())).perform(click());
-            checkToastInTest(com.didekinaar.R.string.user_without_signedUp, activity);
+            onView(ViewMatchers.withText(R.string.see_usercomu_by_user_ac_mn)).check(matches(isDisplayed())).perform(click());
+            checkToastInTest(R.string.user_without_signedUp, activity);
         }
 
         @Override
         public void checkMenuItem_WTk(Activity activity) throws InterruptedException
         {
-            onView(ViewMatchers.withText(com.didekinaar.R.string.see_usercomu_by_user_ac_mn)).check(doesNotExist());
+            onView(ViewMatchers.withText(R.string.see_usercomu_by_user_ac_mn)).check(doesNotExist());
             Thread.sleep(2000);
 
             openActionBarOverflowOrOptionsMenu(activity);
-            onView(ViewMatchers.withText(com.didekinaar.R.string.see_usercomu_by_user_ac_mn)).check(matches(isDisplayed())).perform(click());
+            onView(ViewMatchers.withText(R.string.see_usercomu_by_user_ac_mn)).check(matches(isDisplayed())).perform(click());
 
             // No muestra toast de error.
-            checkNoToastInTest(com.didekinaar.R.string.user_without_signedUp, activity);
-            onView(ViewMatchers.withId(com.didekinaar.R.id.see_usercomu_by_user_frg)).check(matches(isDisplayed()));
+            checkNoToastInTest(R.string.user_without_signedUp, activity);
+            onView(ViewMatchers.withId(R.id.see_usercomu_by_user_frg)).check(matches(isDisplayed()));
         }
     },
-
     ;
-
 }

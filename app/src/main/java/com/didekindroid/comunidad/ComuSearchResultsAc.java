@@ -10,11 +10,14 @@ import android.view.MenuItem;
 
 import com.didekin.comunidad.Comunidad;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
-import com.didekinaar.R;
 import com.didekinaar.exception.UiException;
 import com.didekinaar.utils.UIutils;
+import com.didekindroid.R;
+import com.didekindroid.usuariocomunidad.RegComuAndUserAndUserComuAc;
+import com.didekindroid.usuariocomunidad.RegComuAndUserComuAc;
 import com.didekindroid.usuariocomunidad.RegUserAndUserComuAc;
 import com.didekindroid.usuariocomunidad.RegUserComuAc;
+import com.didekindroid.usuariocomunidad.SeeUserComuByUserAc;
 import com.didekindroid.usuariocomunidad.UserComuDataAc;
 
 import java.util.Collections;
@@ -22,9 +25,9 @@ import java.util.List;
 
 import timber.log.Timber;
 
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
 import static com.didekinaar.utils.UIutils.checkPostExecute;
 import static com.didekinaar.utils.UIutils.doToolBar;
-import static com.didekinaar.security.TokenIdentityCacher.TKhandler.isRegisteredUser;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_SEARCH;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
@@ -121,13 +124,13 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
             UIutils.doUpMenu(this);
             return true;
         } else if (resourceId == R.id.see_usercomu_by_user_ac_mn) {
-            SEE_USERCOMU_BY_USER_AC.doMenuItem(this);
+            SEE_USERCOMU_BY_USER_AC.doMenuItem(this, SeeUserComuByUserAc.class);
             return true;
         } else if (resourceId == R.id.reg_nueva_comunidad_ac_mn) {
-            if (TKhandler.isRegisteredUser(this)) {
-                REG_COMU_USERCOMU_AC.doMenuItem(this);
+            if (TKhandler.isRegisteredUser()) {
+                REG_COMU_USERCOMU_AC.doMenuItem(this, RegComuAndUserComuAc.class);
             } else {
-                REG_COMU_USER_USERCOMU_AC.doMenuItem(this);
+                REG_COMU_USER_USERCOMU_AC.doMenuItem(this, RegComuAndUserAndUserComuAc.class);
             }
             return true;
         } else {
@@ -144,7 +147,7 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
     {
         Timber.d("onComunidadSelected().");
 
-        if (!TKhandler.isRegisteredUser(this)) {
+        if (!TKhandler.isRegisteredUser()) {
             Timber.d("onComunidadSelected(). User is not registered.");
             Intent intent = new Intent(this, RegUserAndUserComuAc.class);
             intent.putExtra(COMUNIDAD_LIST_OBJECT.key, comunidad);

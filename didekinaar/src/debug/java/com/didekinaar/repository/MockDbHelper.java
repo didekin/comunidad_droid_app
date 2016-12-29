@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.text.TextUtils;
 
+
 import com.didekinaar.R;
 
 import java.io.BufferedReader;
@@ -26,15 +27,15 @@ import static com.didekinaar.comunidad.ComunidadDataDb.ComunidadAutonoma.cu_nomb
  * Date: 16/06/15
  * Time: 09:19
  */
-public class MockDbHelper extends SQLiteOpenHelper {
+class MockDbHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "mock.db";
     /*This number has to be changed in future versions, to get executed onUpgrade() method.*/
-    public static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 1;
 
     private final Context mContext;
 
-    public MockDbHelper(Context context)
+    MockDbHelper(Context context)
     {
         super(context, DB_NAME, null, DB_VERSION);
         mContext = context;

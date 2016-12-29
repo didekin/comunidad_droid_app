@@ -11,21 +11,24 @@ import android.view.View;
 import android.widget.Button;
 
 import com.didekin.oauth2.SpringOauthToken;
-import com.didekinaar.R;
 import com.didekinaar.exception.UiException;
-import com.didekinaar.usuario.UserItemMenu;
 import com.didekinaar.utils.ConnectionUtils;
 import com.didekinaar.utils.UIutils;
+import com.didekindroid.R;
+import com.didekindroid.usuario.login.LoginAppAc;
+import com.didekindroid.usuariocomunidad.RegComuAndUserAndUserComuAc;
+import com.didekindroid.usuariocomunidad.RegComuAndUserComuAc;
+import com.didekindroid.usuariocomunidad.SeeUserComuByUserAc;
+import com.didekindroid.usuariocomunidad.UserComuDataAc;
 
 import timber.log.Timber;
 
 import static com.didekin.common.dominio.ValidDataPatterns.LINE_BREAK;
 import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
+import static com.didekinaar.usuario.ItemMenu.mn_handler;
 import static com.didekinaar.utils.UIutils.checkPostExecute;
 import static com.didekinaar.utils.UIutils.doToolBar;
-import static com.didekinaar.security.TokenIdentityCacher.TKhandler.isRegisteredUser;
 import static com.didekinaar.utils.UIutils.makeToast;
-import static com.didekinaar.security.TokenIdentityCacher.updateIsRegistered;
 import static com.didekindroid.comunidad.RegComuFr.makeComunidadBeanFromView;
 import static com.didekindroid.usuariocomunidad.UserComuMenu.REG_COMU_USERCOMU_AC;
 import static com.didekindroid.usuariocomunidad.UserComuMenu.REG_COMU_USER_USERCOMU_AC;
@@ -87,7 +90,7 @@ public class ComuSearchAc extends AppCompatActivity {
                 .append(LINE_BREAK.getRegexp());
 
         if (!comunidadBean.validate(getResources(), errorMsg)) {
-            UIutils.makeToast(this, errorMsg.toString(), com.didekinaar.R.color.deep_purple_100);
+            UIutils.makeToast(this, errorMsg.toString(), R.color.deep_purple_100);
         } else if (!ConnectionUtils.isInternetConnected(this)) {
             makeToast(this, R.string.no_internet_conn_toast);
         } else {
@@ -133,20 +136,20 @@ public class ComuSearchAc extends AppCompatActivity {
         int resourceId = item.getItemId();
 
         if (resourceId == R.id.user_data_ac_mn) {
-            UserItemMenu.USER_DATA_AC.doMenuItem(this);
+            mn_handler.doMenuItem(this, UserComuDataAc.class);
             return true;
         } else if (resourceId == R.id.see_usercomu_by_user_ac_mn) {
-            SEE_USERCOMU_BY_USER_AC.doMenuItem(this);
+            SEE_USERCOMU_BY_USER_AC.doMenuItem(this, SeeUserComuByUserAc.class);
             return true;
         } else if (resourceId == R.id.reg_nueva_comunidad_ac_mn) {
             if (TKhandler.isRegisteredUser()) {
-                REG_COMU_USERCOMU_AC.doMenuItem(this);
+                REG_COMU_USERCOMU_AC.doMenuItem(this, RegComuAndUserComuAc.class);
             } else {
-                REG_COMU_USER_USERCOMU_AC.doMenuItem(this);
+                REG_COMU_USER_USERCOMU_AC.doMenuItem(this, RegComuAndUserAndUserComuAc.class);
             }
             return true;
         } else if (resourceId == R.id.login_ac_mn) {
-            UserItemMenu.LOGIN_AC.doMenuItem(this);
+            mn_handler.doMenuItem(this, LoginAppAc.class);
             return true;
         } else {
             return super.onOptionsItemSelected(item);
@@ -185,7 +188,7 @@ public class ComuSearchAc extends AppCompatActivity {
             Timber.d("CheckerTokenInCache.onPostExecute() springOauthToken null = %b%n", springOauthToken == null);
 
             if (uiException == null && springOauthToken != null) {
-                updateIsRegistered(true, ComuSearchAc.this);
+                TKhandler.updateIsRegistered(true);
                 if (mMenu != null) {
                     mMenu.removeItem(R.id.login_ac_mn);
                     mMenu.add(R.id.user_data_ac_mn);

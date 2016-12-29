@@ -26,6 +26,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekinaar.testutil.AarActivityTestUtils.clickNavigateUp;
@@ -35,7 +36,6 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_P
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_REAL_PEPE;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
-import static com.didekinaar.security.TokenIdentityCacher.TKhandler.isRegisteredUser;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_REG_AC;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_OPEN_BY_COMU_AC;
@@ -118,7 +118,7 @@ public class IncidSeeClosedByComuAcTest_1 {
     {
         // CASO OK: muestra estado inicial actividad.
 
-        assertThat(TKhandler.isRegisteredUser(mActivity), is(true));
+        assertThat(TKhandler.isRegisteredUser(), is(true));
         assertThat(mActivity, notNullValue());
         assertThat(mFragment, notNullValue());
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));

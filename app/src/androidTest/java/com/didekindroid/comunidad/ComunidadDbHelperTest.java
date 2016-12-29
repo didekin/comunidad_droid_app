@@ -20,7 +20,7 @@ import java.util.List;
 
 import static android.support.test.InstrumentationRegistry.getContext;
 import static com.didekinaar.comunidad.ComunidadDataDb.ComunidadAutonoma.NUMBER_RECORDS;
-import static com.didekinaar.comunidad.ComunidadDbHelper.DB_NAME;
+import static com.didekindroid.comunidad.ComunidadDbHelper.DB_NAME;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;

@@ -15,30 +15,29 @@ import com.didekin.comunidad.Comunidad;
 import com.didekin.oauth2.SpringOauthToken;
 import com.didekin.usuario.Usuario;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
-import com.didekinaar.R;
-import com.didekindroid.comunidad.ComuBundleKey;
-import com.didekindroid.comunidad.ComunidadBean;
 import com.didekinaar.exception.UiException;
 import com.didekinaar.usuario.RegUserFr;
-import com.didekinaar.usuario.UserItemMenu;
 import com.didekinaar.usuario.UsuarioBean;
 import com.didekinaar.utils.ConnectionUtils;
 import com.didekinaar.utils.UIutils;
+import com.didekindroid.R;
+import com.didekindroid.comunidad.ComuBundleKey;
+import com.didekindroid.comunidad.ComunidadBean;
+import com.didekindroid.usuario.login.LoginAppAc;
 
 import java.io.IOException;
 import java.util.Objects;
 
 import timber.log.Timber;
 
-import static com.didekinaar.utils.UIutils.checkPostExecute;
-import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekinaar.security.Oauth2DaoRemote.Oauth2;
 import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekinaar.usuario.ItemMenu.mn_handler;
+import static com.didekinaar.utils.UIutils.checkPostExecute;
 import static com.didekinaar.utils.UIutils.doToolBar;
 import static com.didekinaar.utils.UIutils.getErrorMsgBuilder;
-import static com.didekinaar.security.TokenIdentityCacher.TKhandler.isRegisteredUser;
-import static com.didekinaar.security.TokenIdentityCacher.updateIsRegistered;
+import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
+import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 
 /**
  * User: pedro@didekin
@@ -109,7 +108,7 @@ public class RegUserAndUserComuAc extends AppCompatActivity {
         StringBuilder errorBuilder = getErrorMsgBuilder(this);
 
         if (!usuarioComunidadBean.validate(getResources(), errorBuilder)) {
-            UIutils.makeToast(this, errorBuilder.toString(), com.didekinaar.R.color.deep_purple_100);
+            UIutils.makeToast(this, errorBuilder.toString(), R.color.deep_purple_100);
         } else if (!ConnectionUtils.isInternetConnected(this)) {
             UIutils.makeToast(this, R.string.no_internet_conn_toast);
         } else {
@@ -149,7 +148,7 @@ public class RegUserAndUserComuAc extends AppCompatActivity {
             UIutils.doUpMenu(this);
             return true;
         } else if (resourceId == R.id.login_ac_mn) {
-            UserItemMenu.LOGIN_AC.doMenuItem(this);
+            mn_handler.doMenuItem(this, LoginAppAc.class);
             return true;
         } else {
             return super.onOptionsItemSelected(item);
@@ -198,7 +197,7 @@ public class RegUserAndUserComuAc extends AppCompatActivity {
                 Intent intent = new Intent(RegUserAndUserComuAc.this, SeeUserComuByComuAc.class);
                 intent.putExtra(ComuBundleKey.COMUNIDAD_ID.key, mComunidad.getC_Id());
                 startActivity(intent);
-                updateIsRegistered(true, RegUserAndUserComuAc.this);
+               TKhandler.updateIsRegistered(true);
             }
 
         }

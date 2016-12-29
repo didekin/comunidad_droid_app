@@ -13,24 +13,25 @@ import android.widget.CursorAdapter;
 import android.widget.EditText;
 
 import com.didekin.comunidad.Comunidad;
-import com.didekinaar.R;
 import com.didekinaar.exception.UiException;
 import com.didekinaar.utils.ConnectionUtils;
 import com.didekinaar.utils.UIutils;
+import com.didekindroid.R;
+import com.didekindroid.usuariocomunidad.SeeUserComuByComuAc;
 import com.didekindroid.usuariocomunidad.SeeUserComuByUserAc;
 
 import java.util.Objects;
 
 import timber.log.Timber;
 
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
 import static com.didekinaar.utils.UIutils.checkPostExecute;
 import static com.didekinaar.utils.UIutils.doToolBar;
 import static com.didekinaar.utils.UIutils.getErrorMsgBuilder;
-import static com.didekinaar.security.TokenIdentityCacher.TKhandler.isRegisteredUser;
 import static com.didekinaar.utils.UIutils.makeToast;
 import static com.didekindroid.comunidad.ComunidadService.AppComuServ;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static com.didekindroid.usuariocomunidad.UserComuMenu.SEE_USERCOMU_BY_COMU_AC;
+import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 
 /**
  * Preconditions:
@@ -60,7 +61,7 @@ public class ComuDataAc extends AppCompatActivity implements RegComuFr.ComuDataC
         super.onCreate(savedInstanceState);
 
         // Preconditions.
-        Objects.equals(TKhandler.isRegisteredUser(this), true);
+        Objects.equals(TKhandler.isRegisteredUser(), true);
         mIdComunidad = getIntent().getLongExtra(ComuBundleKey.COMUNIDAD_ID.key, 0L);
         Objects.equals(mIdComunidad > 0L, true);
 
@@ -94,7 +95,7 @@ public class ComuDataAc extends AppCompatActivity implements RegComuFr.ComuDataC
         StringBuilder errorBuilder = getErrorMsgBuilder(this);
 
         if (!comuBean.validate(getResources(), errorBuilder)) {
-            makeToast(this, errorBuilder.toString(), com.didekinaar.R.color.deep_purple_100);
+            makeToast(this, errorBuilder.toString(), R.color.deep_purple_100);
         } else if (!ConnectionUtils.isInternetConnected(this)) {
             makeToast(this, R.string.no_internet_conn_toast);
         } else {
@@ -241,7 +242,7 @@ public class ComuDataAc extends AppCompatActivity implements RegComuFr.ComuDataC
             Intent intent = new Intent();
             intent.putExtra(ComuBundleKey.COMUNIDAD_ID.key, mIdComunidad);
             this.setIntent(intent);
-            SEE_USERCOMU_BY_COMU_AC.doMenuItem(this);
+            SEE_USERCOMU_BY_COMU_AC.doMenuItem(this, SeeUserComuByComuAc.class);
             return true;
         } else {
             return super.onOptionsItemSelected(item);

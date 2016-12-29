@@ -18,16 +18,16 @@ import android.widget.SpinnerAdapter;
 
 import com.didekin.comunidad.Municipio;
 import com.didekin.comunidad.Provincia;
-import com.didekinaar.R;
+import com.didekindroid.R;
 
 import timber.log.Timber;
 
+import static com.didekinaar.comunidad.ComunidadDataDb.ComunidadAutonoma.cu_nombre;
+import static com.didekinaar.comunidad.ComunidadDataDb.Municipio.mu_nombre;
+import static com.didekinaar.comunidad.ComunidadDataDb.Provincia.pr_nombre;
+import static com.didekinaar.comunidad.ComunidadDataDb.TipoVia.tipovia;
 import static com.didekinaar.utils.UIutils.checkPostExecute;
 import static com.didekinaar.utils.UIutils.closeCursor;
-import static com.didekindroid.comunidad.ComunidadDataDb.ComunidadAutonoma.cu_nombre;
-import static com.didekindroid.comunidad.ComunidadDataDb.Municipio.mu_nombre;
-import static com.didekindroid.comunidad.ComunidadDataDb.Provincia.pr_nombre;
-import static com.didekindroid.comunidad.ComunidadDataDb.TipoVia.tipovia;
 
 public class RegComuFr extends Fragment {
 

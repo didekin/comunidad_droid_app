@@ -2,6 +2,7 @@ package com.didekindroid.comunidad.testutil;
 
 import com.didekin.comunidad.Comunidad;
 import com.didekin.comunidad.Municipio;
+import com.didekindroid.R;
 import com.didekindroid.comunidad.ComunidadBean;
 
 import static android.os.Build.VERSION.SDK_INT;
@@ -43,34 +44,34 @@ public final class ComuEspresoTestUtil {
     public static void typeComunidadData(String tipoVia, String comunidadAuto, String provincia, String municipio, String nombreVia,
                                          String numeroEnVia, String sufijoNumero) throws InterruptedException
     {
-        onView(withId(com.didekinaar.R.id.tipo_via_spinner)).perform(click());
+        onView(withId(R.id.tipo_via_spinner)).perform(click());
         Thread.sleep(1000);
         onData(withRowString(1, tipoVia)).perform(click());
-        onView(allOf(withId(com.didekinaar.R.id.app_spinner_1_dropdown_item), withParent(withId(com.didekinaar.R.id.tipo_via_spinner))))
+        onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.tipo_via_spinner))))
                 .check(matches(withText(containsString(tipoVia)))).check(matches(isDisplayed()));
 
-        onView(withId(com.didekinaar.R.id.comunidad_nombre_via_editT)).perform(typeText(nombreVia));
-        onView(withId(com.didekinaar.R.id.comunidad_numero_editT)).perform(typeText(numeroEnVia));
-        onView(withId(com.didekinaar.R.id.comunidad_sufijo_numero_editT)).perform(typeText(sufijoNumero), closeSoftKeyboard());
+        onView(withId(R.id.comunidad_nombre_via_editT)).perform(typeText(nombreVia));
+        onView(withId(R.id.comunidad_numero_editT)).perform(typeText(numeroEnVia));
+        onView(withId(R.id.comunidad_sufijo_numero_editT)).perform(typeText(sufijoNumero), closeSoftKeyboard());
 
-        onView(withId(com.didekinaar.R.id.autonoma_comunidad_spinner)).perform(click());
+        onView(withId(R.id.autonoma_comunidad_spinner)).perform(click());
         Thread.sleep(1000);
         onData(withRowString(1, comunidadAuto)).perform(click());
-        onView(allOf(withId(com.didekinaar.R.id.app_spinner_1_dropdown_item), withParent(withId(com.didekinaar.R.id.autonoma_comunidad_spinner))))
+        onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.autonoma_comunidad_spinner))))
                 .check(matches(withText(containsString(comunidadAuto))));
 
-        onView(withId(com.didekinaar.R.id.provincia_spinner)).perform(click());
+        onView(withId(R.id.provincia_spinner)).perform(click());
         Thread.sleep(1000);
         onData(withRowString(1, provincia)).perform(click());
-        onView(allOf(withId(com.didekinaar.R.id.app_spinner_1_dropdown_item), withParent(withId(com.didekinaar.R.id.provincia_spinner))))
+        onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.provincia_spinner))))
                 .check(matches(withText(containsString(provincia))));
 
-        onView(withId(com.didekinaar.R.id.municipio_spinner)).perform(click());
+        onView(withId(R.id.municipio_spinner)).perform(click());
         Thread.sleep(1000);
         onData(withRowString(3, municipio)).perform(click());
 
         if (SDK_INT >= M) {
-            onView(allOf(withId(com.didekinaar.R.id.app_spinner_1_dropdown_item), withParent(withId(com.didekinaar.R.id.municipio_spinner))))
+            onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.municipio_spinner))))
                     .check(matches(withText(containsString(municipio))));
         }
     }

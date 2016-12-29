@@ -6,6 +6,7 @@ import com.didekin.usuario.Usuario;
 import com.didekinaar.ActivitySubscriber;
 import com.didekinaar.R;
 
+
 import java.util.concurrent.Callable;
 
 import rx.Single;

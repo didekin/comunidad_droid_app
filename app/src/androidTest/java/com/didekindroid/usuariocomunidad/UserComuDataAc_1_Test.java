@@ -8,10 +8,10 @@ import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.usuariocomunidad.UsuarioComunidad;
-import com.didekinaar.R;
+
 import com.didekinaar.exception.UiException;
-import com.didekinaar.usuario.testutil.UserItemMenuTestUtils;
 import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
+import com.didekindroid.R;
 import com.didekindroid.comunidad.ComuBundleKey;
 import com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil;
 
@@ -40,14 +40,14 @@ import static com.didekin.usuariocomunidad.Rol.INQUILINO;
 import static com.didekin.usuariocomunidad.Rol.PRESIDENTE;
 import static com.didekin.usuariocomunidad.Rol.PROPIETARIO;
 import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekinaar.security.TokenIdentityCacher.TKhandler.isRegisteredUser;
 import static com.didekindroid.comunidad.testutil.ComuMenuTestUtil.COMU_DATA_AC;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static com.didekindroid.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;
+import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.SEE_USERCOMU_BY_COMU_AC;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -207,7 +207,7 @@ public class UserComuDataAc_1_Test {
     @Test
     public void testSeeUserComuByComuMn() throws InterruptedException
     {
-        UserItemMenuTestUtils.SEE_USERCOMU_BY_COMU_AC.checkMenuItem_WTk(mActivity);
+        SEE_USERCOMU_BY_COMU_AC.checkMenuItem_WTk(mActivity);
         intended(IntentMatchers.hasExtra(ComuBundleKey.COMUNIDAD_ID.key, mUsuarioComunidad.getComunidad().getC_Id()));
         checkUp(activityLayoutId);
     }

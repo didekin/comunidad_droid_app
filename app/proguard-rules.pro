@@ -34,6 +34,9 @@
 }
 -dontwarn javax.annotation.**
 
+# RxJava
+-dontwarn sun.misc.Unsafe
+
 # The classes needed by GSON.
 -keep class com.didekin.** { *; }
 

@@ -10,7 +10,6 @@ import com.didekin.usuariocomunidad.UsuarioComunidad;
 import com.didekinaar.exception.UiException;
 import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.R;
-import com.didekindroid.exception.UiAppException;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,16 +28,16 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekin.usuariocomunidad.Rol.PRESIDENTE;
 import static com.didekinaar.testutil.AarTestUtil.updateSecurityData;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_ESCORIAL_JUAN;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static com.didekinaar.utils.UIutils.formatTimeStampToString;
+import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetResolucionNoAdvances;
-import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
+import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_ESCORIAL_JUAN;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -89,7 +88,7 @@ public class IncidResolucionSeeFrTest_2 extends IncidResolucionAbstractTest {
                     resolucion = IncidenciaServ.seeResolucion(resolucion.getIncidencia().getIncidenciaId());
                     // Volvemos a usuario del test.
                     updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
-                } catch (UiAppException | InterruptedException | IOException | UiException e) {
+                } catch ( InterruptedException | IOException | UiException e) {
                     e.printStackTrace();
                 }
                 Intent intent = new Intent();

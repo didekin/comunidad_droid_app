@@ -18,11 +18,12 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 import java.util.Objects;
 
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.signUpAndUpdateTk;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
-import static com.didekinaar.security.TokenIdentityCacher.TKhandler.isRegisteredUser;
-import static com.didekinaar.security.TokenIdentityCacher.updateIsGcmTokenSentServer;
+
+
 import static com.didekinaar.usuario.UsuarioDaoRemote.usuarioDaoRemote;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -51,7 +52,7 @@ public class IncidSeeOpenAc_GCM_Test extends Incidencia_GCM_Test {
     public void testRegistrationGcmToken() throws Exception
     {
         // Preconditions for the test.
-        assertThat(TKhandler.isRegisteredUser(mActivity), is(true));
+        assertThat(TKhandler.isRegisteredUser(), is(true));
 
         checkToken();
     }
@@ -67,7 +68,7 @@ public class IncidSeeOpenAc_GCM_Test extends Incidencia_GCM_Test {
             protected void beforeActivityLaunched()
             {
                 Context context = InstrumentationRegistry.getTargetContext();
-                updateIsGcmTokenSentServer(false, context);
+                TKhandler.updateIsGcmTokenSentServer(false);
                 try {
                     pepe = signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
                     pepeUserComu = AppUserComuServ.seeUserComusByUser().get(0);

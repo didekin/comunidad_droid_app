@@ -33,13 +33,12 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekinaar.testutil.AarActivityTestUtils.clickNavigateUp;
 import static com.didekinaar.usuario.UsuarioDaoRemote.usuarioDaoRemote;
-import static com.didekinaar.security.TokenIdentityCacher.TKhandler.isRegisteredUser;
-import static com.didekinaar.security.TokenIdentityCacher.updateIsGcmTokenSentServer;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.AppFBService.IncidTypeMsgHandler.INCIDENCIA_OPEN;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_REG_AC;
@@ -83,7 +82,7 @@ public class IncidSeeOpenByComuAcTest_1 {
         protected void beforeActivityLaunched()
         {
             Context context = InstrumentationRegistry.getTargetContext();
-            updateIsGcmTokenSentServer(false, context);
+            TKhandler.updateIsGcmTokenSentServer(false);
             try {
                 Objects.equals(usuarioDaoRemote.getGcmToken() == null, true);
             } catch (UiException e) {
@@ -134,7 +133,7 @@ public class IncidSeeOpenByComuAcTest_1 {
     public void tearDown() throws Exception
     {
         Espresso.unregisterIdlingResources(idlingResource);
-        updateIsGcmTokenSentServer(false, mActivity);
+        TKhandler.updateIsGcmTokenSentServer(false);
         mNotifyManager.cancel(messageId);
         cleanOptions(whatToClean);
     }
@@ -142,7 +141,7 @@ public class IncidSeeOpenByComuAcTest_1 {
     @Test
     public void testOnCreate_1() throws Exception
     {
-        assertThat(TKhandler.isRegisteredUser(mActivity), is(true));
+        assertThat(TKhandler.isRegisteredUser(), is(true));
         assertThat(mActivity, notNullValue());
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
 

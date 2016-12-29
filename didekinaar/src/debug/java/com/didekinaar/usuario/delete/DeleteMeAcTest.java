@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.support.test.rule.ActivityTestRule;
 
 import com.didekin.usuario.Usuario;
+
 import com.didekinaar.R;
 import com.didekinaar.exception.UiException;
 import com.didekinaar.testutil.ExtendableTestAc;
@@ -30,6 +31,7 @@ import static org.junit.Assert.assertThat;
  * Date: 25/09/15
  * Time: 16:24
  */
+@SuppressWarnings("OverriddenMethodCallDuringObjectConstruction")
 public abstract class DeleteMeAcTest implements ExtendableTestAc{
 
     protected DeleteMeAc mActivity;

@@ -14,17 +14,19 @@ import android.widget.ListView;
 
 import com.didekin.common.exception.ErrorBean;
 import com.didekin.comunidad.Comunidad;
-import com.didekinaar.R;
 import com.didekinaar.exception.UiException;
 import com.didekinaar.utils.UIutils;
+import com.didekindroid.R;
+import com.didekindroid.usuariocomunidad.RegComuAndUserAndUserComuAc;
+import com.didekindroid.usuariocomunidad.RegComuAndUserComuAc;
 
 import java.io.IOException;
 import java.util.List;
 
 import timber.log.Timber;
 
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
 import static com.didekinaar.utils.UIutils.checkPostExecute;
-import static com.didekinaar.security.TokenIdentityCacher.TKhandler.isRegisteredUser;
 import static com.didekindroid.comunidad.ComunidadService.AppComuServ;
 import static com.didekindroid.usuariocomunidad.UserComuMenu.REG_COMU_USERCOMU_AC;
 import static com.didekindroid.usuariocomunidad.UserComuMenu.REG_COMU_USER_USERCOMU_AC;
@@ -215,10 +217,10 @@ public class ComuSearchResultsListFr extends Fragment {
                 mListView.setAdapter(mAdapter);
             } else {
                 UIutils.makeToast(mComuListListener.getActivity(), R.string.no_result_search_comunidad);
-                if (TKhandler.isRegisteredUser(mComuListListener.getActivity())) {
-                    REG_COMU_USERCOMU_AC.doMenuItem(mComuListListener.getActivity());
+                if (TKhandler.isRegisteredUser()) {
+                    REG_COMU_USERCOMU_AC.doMenuItem(mComuListListener.getActivity(), RegComuAndUserComuAc.class);
                 } else {
-                    REG_COMU_USER_USERCOMU_AC.doMenuItem(mComuListListener.getActivity());
+                    REG_COMU_USER_USERCOMU_AC.doMenuItem(mComuListListener.getActivity(), RegComuAndUserAndUserComuAc.class);
                 }
                 mComuListListener.getActivity().finish();
             }

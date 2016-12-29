@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
 import com.didekin.usuariocomunidad.UsuarioComunidad;
-import com.didekinaar.R;
+import com.didekindroid.R;
 import com.didekindroid.comunidad.ComuSearchResultsListAdapter;
 
 import timber.log.Timber;
@@ -18,7 +18,7 @@ import timber.log.Timber;
  * Date: 10/07/15
  * Time: 18:01
  */
-public class SeeUserComuByUserAdapter extends ArrayAdapter<UsuarioComunidad> {
+class SeeUserComuByUserAdapter extends ArrayAdapter<UsuarioComunidad> {
 
     SeeUserComuByUserAdapter(Context context)
     {

@@ -12,7 +12,6 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekin.incidencia.dominio.IncidImportancia;
 import com.didekin.incidencia.dominio.Resolucion;
 import com.didekinaar.exception.UiException;
-import com.didekindroid.exception.UiAppException;
 import com.didekindroid.incidencia.activity.IncidResolucionRegEditSeeAc;
 import com.google.firebase.iid.FirebaseInstanceId;
 
@@ -21,16 +20,15 @@ import org.junit.runner.RunWith;
 
 import java.io.IOException;
 
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
+import static com.didekinaar.usuario.UsuarioDaoRemote.usuarioDaoRemote;
+import static com.didekindroid.incidencia.AppFBService.IncidTypeMsgHandler.INCIDENCIA_CLOSE;
+import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.incidencia.AppFBService.IncidTypeMsgHandler.INCIDENCIA_CLOSE;
-import static com.didekinaar.security.TokenIdentityCacher.TKhandler.isRegisteredUser;
-import static com.didekinaar.security.TokenIdentityCacher.updateIsGcmTokenSentServer;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetResolucionNoAdvances;
-import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_PLAZUELA5_PEPE;
-import static com.didekinaar.usuario.UsuarioDaoRemote.usuarioDaoRemote;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -53,7 +51,7 @@ public class IncidCloseAc_GCM_Test extends Incidencia_GCM_Test {
     public void testRegistrationGcmToken() throws Exception
     {
         // Preconditions for the test.
-        assertThat(TKhandler.isRegisteredUser(mActivity), is(true));
+        assertThat(TKhandler.isRegisteredUser(), is(true));
 
         checkToken();
     }
@@ -83,7 +81,7 @@ public class IncidCloseAc_GCM_Test extends Incidencia_GCM_Test {
             protected void beforeActivityLaunched()
             {
                 Context context = InstrumentationRegistry.getTargetContext();
-                updateIsGcmTokenSentServer(false, context);
+                TKhandler.updateIsGcmTokenSentServer(false);
             }
 
             /**
@@ -100,7 +98,7 @@ public class IncidCloseAc_GCM_Test extends Incidencia_GCM_Test {
                     incidImportancia = insertGetIncidImportancia(COMU_PLAZUELA5_PEPE);
                     Thread.sleep(1000);
                     resolucion = insertGetResolucionNoAdvances(incidImportancia);
-                } catch (UiAppException | InterruptedException | IOException | UiException e) {
+                } catch ( InterruptedException | IOException | UiException e) {
                     e.printStackTrace();
                 }
                 Intent intent = new Intent();

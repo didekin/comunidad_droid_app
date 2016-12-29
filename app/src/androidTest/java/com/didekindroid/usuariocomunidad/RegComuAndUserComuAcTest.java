@@ -10,8 +10,9 @@ import android.view.View;
 import com.didekin.comunidad.Municipio;
 import com.didekin.comunidad.Provincia;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
-import com.didekinaar.R;
+
 import com.didekinaar.exception.UiException;
+import com.didekindroid.R;
 import com.didekindroid.comunidad.ComunidadBean;
 import com.didekindroid.comunidad.RegComuFr;
 import com.didekinaar.testutil.AarActivityTestUtils;
@@ -39,11 +40,11 @@ import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
-import static com.didekinaar.usuariocomunidad.RolUi.ADM;
-import static com.didekinaar.usuariocomunidad.RolUi.INQ;
-import static com.didekinaar.usuariocomunidad.RolUi.PRE;
-import static com.didekinaar.usuariocomunidad.UserAndComuFiller.makeUserComuBeanFromView;
-import static com.didekinaar.security.TokenIdentityCacher.TKhandler.isRegisteredUser;
+
+import static com.didekindroid.usuariocomunidad.RegUserComuFr.makeUserComuBeanFromView;
+import static com.didekindroid.usuariocomunidad.RolUi.ADM;
+import static com.didekindroid.usuariocomunidad.RolUi.INQ;
+import static com.didekindroid.usuariocomunidad.RolUi.PRE;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;

@@ -7,10 +7,11 @@ import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekinaar.R;
+
 import com.didekinaar.exception.UiException;
 import com.didekinaar.usuario.testutil.UserItemMenuTestUtils;
 import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
+import com.didekindroid.R;
 import com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil;
 
 import junit.framework.AssertionFailedError;

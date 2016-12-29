@@ -2,9 +2,7 @@
 <LinearLayout
     android:id="@+id/reg_comunidad_layout"
     style="@style/baseLayout.withPadding"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.didekindroid.com.didekinaar.comunidad.ComuSearchAc">
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <Spinner
         android:id="@+id/tipo_via_spinner"

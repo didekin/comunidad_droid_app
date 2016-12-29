@@ -3,6 +3,8 @@ apply plugin: 'com.android.library'
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
+    // Necessary for inheriting classes in debug build type.
+    publishNonDefault true
 
     defaultConfig {
         minSdkVersion rootProject.ext.minSdkVersion
@@ -29,6 +31,7 @@ android {
         quiet true
         ignoreWarnings false
         htmlReport true
+        disable  "InvalidPackage"
     }
 }
 
@@ -41,6 +44,7 @@ dependencies {
     compile rootProject.ext.android_support
 
     testCompile rootProject.ext.junit
-    testCompile rootProject.ext.mockito
     androidTestCompile rootProject.ext.espresso
+    // Necessary for inclusion of abstract tests and test utilities in debug build type.
+    debugCompile rootProject.ext.espresso
 }

@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.didekin.common.exception.ErrorBean;
+
 import com.didekinaar.R;
 import com.didekinaar.exception.UiException;
 import com.didekinaar.security.TokenIdentityCacher;

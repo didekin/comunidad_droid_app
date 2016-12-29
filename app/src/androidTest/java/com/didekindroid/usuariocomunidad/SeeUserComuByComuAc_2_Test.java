@@ -7,8 +7,9 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.comunidad.Comunidad;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
-import com.didekinaar.R;
+
 import com.didekinaar.exception.UiException;
+import com.didekindroid.R;
 import com.didekindroid.comunidad.ComuBundleKey;
 import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.comunidad.testutil.ComuTestUtil;
@@ -36,10 +37,10 @@ import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN2;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekinaar.usuariocomunidad.AarUserComuService.AarUserComuServ;
-import static com.didekinaar.usuariocomunidad.RolUi.INQ;
-import static com.didekinaar.usuariocomunidad.RolUi.formatRolToString;
-import static com.external.LongListMatchers.withAdaptedData;
+import static com.didekindroid.usuariocomunidad.RolUi.INQ;
+import static com.didekindroid.usuariocomunidad.RolUi.formatRolToString;
+import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static external.LongListMatchers.withAdaptedData;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
@@ -98,7 +99,7 @@ public class SeeUserComuByComuAc_2_Test {
         UserComuTestUtil.signUpAndUpdateTk(UserComuTestUtil.COMU_PLAZUELA5_JUAN);
         doSetUp();
         // Tiene portal, escalera, planta y puerta.
-        AarUserComuServ.regUserAndUserComu(new UsuarioComunidad.UserComuBuilder(
+        AppUserComuServ.regUserAndUserComu(new UsuarioComunidad.UserComuBuilder(
                 new Comunidad.ComunidadBuilder().c_id(comunidadId).build(),
                 UserComuTestUtil.COMU_PLAZUELA5_PEPE.getUsuario()).userComuRest(UserComuTestUtil.COMU_PLAZUELA5_PEPE)
                 .build()).execute();
@@ -112,7 +113,7 @@ public class SeeUserComuByComuAc_2_Test {
                 .puerta("123")
                 .roles(INQ.function)
                 .build();
-        AarUserComuServ.regUserAndUserComu(userComuNew).execute();
+        AppUserComuServ.regUserAndUserComu(userComuNew).execute();
         launch();
 
         // Check adapter data.
@@ -201,7 +202,7 @@ public class SeeUserComuByComuAc_2_Test {
 
     private void doSetUp() throws UiException
     {
-        List<UsuarioComunidad> usuariosComu = AarUserComuServ.seeUserComusByUser();
+        List<UsuarioComunidad> usuariosComu = AppUserComuServ.seeUserComusByUser();
         comunidadId = usuariosComu.get(0).getComunidad().getC_Id();
         intent = new Intent();
         intent.putExtra(ComuBundleKey.COMUNIDAD_ID.key, comunidadId);

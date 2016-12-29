@@ -22,9 +22,9 @@ import org.junit.runner.RunWith;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.didekinaar.security.TokenIdentityCacher.updateIsGcmTokenSentServer;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekinservice.common.gcm.GcmEndPoint.FCM_HOST_PORT;
 
 /**
@@ -58,7 +58,7 @@ public abstract class GcmIncidNotificationTest {
         firebaseInstanceId = FirebaseInstanceId.getInstance();
         retrofitHandler = new RetrofitHandler(FCM_HOST_PORT, 60); // in seconds.
         mActivity = intentRule.getActivity();
-        updateIsGcmTokenSentServer(false, mActivity);
+        TKhandler.updateIsGcmTokenSentServer(false);
 
         endPointImp = new GcmEndPointImp(retrofitHandler);
         context = InstrumentationRegistry.getTargetContext();
@@ -71,7 +71,7 @@ public abstract class GcmIncidNotificationTest {
     @After
     public void tearDown() throws Exception
     {
-        updateIsGcmTokenSentServer(false, mActivity);
+        TKhandler.updateIsGcmTokenSentServer(false);
         mManager.cancelAll();
         cleanOptions(CLEAN_PEPE);
     }

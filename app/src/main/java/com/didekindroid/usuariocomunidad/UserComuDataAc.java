@@ -12,11 +12,10 @@ import android.widget.Button;
 
 import com.didekin.comunidad.Comunidad;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
-import com.didekinaar.R;
 import com.didekinaar.exception.UiException;
-import com.didekinaar.security.TokenIdentityCacher;
 import com.didekinaar.utils.ConnectionUtils;
 import com.didekinaar.utils.UIutils;
+import com.didekindroid.R;
 import com.didekindroid.comunidad.ComuBundleKey;
 import com.didekindroid.comunidad.ComuDataAc;
 import com.didekindroid.comunidad.ComuSearchAc;
@@ -30,15 +29,13 @@ import timber.log.Timber;
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static com.didekin.usuario.UsuarioEndPoints.IS_USER_DELETED;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
+import static com.didekinaar.usuario.ItemMenu.mn_handler;
 import static com.didekinaar.utils.UIutils.checkPostExecute;
 import static com.didekinaar.utils.UIutils.doToolBar;
 import static com.didekinaar.utils.UIutils.getErrorMsgBuilder;
-import static com.didekinaar.security.TokenIdentityCacher.TKhandler.isRegisteredUser;
 import static com.didekinaar.utils.UIutils.makeToast;
-import static com.didekinaar.security.TokenIdentityCacher.updateIsRegistered;
-import static com.didekindroid.comunidad.ComunidadMenu.COMU_DATA_AC;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
-import static com.didekindroid.usuariocomunidad.UserComuMenu.SEE_USERCOMU_BY_COMU_AC;
 
 /**
  * Preconditions:
@@ -71,7 +68,7 @@ public class UserComuDataAc extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         // Preconditions.
-        Objects.equals(TKhandler.isRegisteredUser(this), true);
+        Objects.equals(TKhandler.isRegisteredUser(), true);
         mOldUserComu = (UsuarioComunidad) getIntent().getSerializableExtra(UserComuBundleKey.USERCOMU_LIST_OBJECT.key);
         Objects.equals(mOldUserComu != null, true);
 
@@ -113,7 +110,7 @@ public class UserComuDataAc extends AppCompatActivity {
         StringBuilder errorBuilder = getErrorMsgBuilder(this);
 
         if (!userComuBean.validate(getResources(), errorBuilder)) {
-            makeToast(this, errorBuilder.toString(), com.didekinaar.R.color.deep_purple_100);
+            makeToast(this, errorBuilder.toString(), R.color.deep_purple_100);
         } else if (!ConnectionUtils.isInternetConnected(this)) {
             makeToast(this, R.string.no_internet_conn_toast);
         } else {
@@ -163,14 +160,14 @@ public class UserComuDataAc extends AppCompatActivity {
             Intent intent = new Intent();
             intent.putExtra(ComuBundleKey.COMUNIDAD_ID.key, mOldUserComu.getComunidad().getC_Id());
             this.setIntent(intent);
-            SEE_USERCOMU_BY_COMU_AC.doMenuItem(this);
+            mn_handler.doMenuItem(this, SeeUserComuByComuAc.class);
             return true;
         } else if (resourceId == R.id.comu_data_ac_mn) {
             Intent intent;
             intent = new Intent(this, ComuDataAc.class);
             intent.putExtra(ComuBundleKey.COMUNIDAD_ID.key, mOldUserComu.getComunidad().getC_Id());
             this.setIntent(intent);
-            COMU_DATA_AC.doMenuItem(this);
+            mn_handler.doMenuItem(this, ComuDataAc.class);
             return true;
         } else if (resourceId == R.id.incid_see_open_by_comu_ac_mn) {
             IncidenciaMenu.INCID_SEE_BY_COMU_AC.doMenuItem(this);
@@ -285,8 +282,8 @@ public class UserComuDataAc extends AppCompatActivity {
                 Objects.equals(isDeleted != 0, true);
                 Intent intent;
                 if (isDeleted == IS_USER_DELETED) {
-                    TokenIdentityCacher.TKhandler.cleanIdentityCache();
-                    updateIsRegistered(false, UserComuDataAc.this);
+                    TKhandler.cleanIdentityCache();
+                    TKhandler.updateIsRegistered(false);
                     intent = new Intent(UserComuDataAc.this, ComuSearchAc.class);
                     intent.setFlags(FLAG_ACTIVITY_CLEAR_TOP | FLAG_ACTIVITY_NEW_TASK);
                 } else {

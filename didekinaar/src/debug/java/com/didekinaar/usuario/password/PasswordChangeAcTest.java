@@ -5,6 +5,7 @@ import android.support.test.rule.ActivityTestRule;
 
 import com.didekin.oauth2.SpringOauthToken;
 import com.didekin.usuario.Usuario;
+
 import com.didekinaar.R;
 import com.didekinaar.exception.UiException;
 import com.didekinaar.testutil.ExtendableTestAc;
@@ -39,10 +40,11 @@ import static org.junit.Assert.assertThat;
  * Date: 25/09/15
  * Time: 17:45
  */
+@SuppressWarnings("OverriddenMethodCallDuringObjectConstruction")
 public abstract class PasswordChangeAcTest implements ExtendableTestAc {
 
-    PasswordChangeAc mActivity;
-    int activityLayoutId = R.id.password_change_ac_layout;
+    private PasswordChangeAc mActivity;
+    private int activityLayoutId = R.id.password_change_ac_layout;
     protected Usuario registeredUser;
 
     @Rule

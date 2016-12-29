@@ -6,7 +6,6 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekinaar.exception.UiException;
 import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
-import com.didekindroid.exception.UiAppException;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -14,10 +13,10 @@ import org.junit.runner.RunWith;
 
 import java.io.IOException;
 
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidImportancia;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_REAL_JUAN;
 
 /**
@@ -43,7 +42,7 @@ public class IncidResolucionSeeDefaultFrTest extends IncidResolucionAbstractTest
             {
                 try {
                     incidImportancia = insertGetIncidImportancia(COMU_REAL_JUAN);
-                } catch (UiAppException | IOException | UiException e) {
+                } catch ( IOException | UiException e) {
                     e.printStackTrace();
                 }
                 Intent intent = new Intent();

@@ -4,8 +4,6 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.common.exception.ErrorBean;
 import com.didekinaar.exception.UiException;
-import com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum;
-import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 
 import org.junit.After;
 import org.junit.Before;
@@ -22,6 +20,7 @@ import static com.didekin.oauth2.OauthClient.CL_USER;
 import static com.didekinaar.AppInitializer.creator;
 import static com.didekinaar.security.Oauth2DaoRemote.Oauth2;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_NOTHING;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -33,8 +32,6 @@ import static org.junit.Assert.assertThat;
  */
 @RunWith(AndroidJUnit4.class)
 public class Oauth2DaoRemoteIfTest {
-
-    protected CleanUserEnum whatClean = CLEAN_NOTHING;
 
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
@@ -51,7 +48,7 @@ public class Oauth2DaoRemoteIfTest {
     @After
     public void cleaningUp() throws UiException
     {
-        UsuarioDataTestUtils.cleanOptions(whatClean);
+        cleanOptions(CLEAN_NOTHING);
     }
 
     @Test

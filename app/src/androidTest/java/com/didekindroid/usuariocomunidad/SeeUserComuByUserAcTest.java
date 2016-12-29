@@ -4,9 +4,10 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekinaar.R;
+
 import com.didekinaar.exception.UiException;
 import com.didekinaar.usuario.testutil.UserItemMenuTestUtils;
+import com.didekindroid.R;
 import com.didekindroid.comunidad.testutil.ComuTestUtil;
 import com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil;
 
@@ -28,11 +29,13 @@ import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekinaar.security.TokenIdentityCacher.TKhandler.isRegisteredUser;
-import static com.external.LongListMatchers.withAdaptedData;
+
+import static com.didekindroid.comunidad.testutil.ComuMenuTestUtil.COMU_SEARCH_AC;
+import static external.LongListMatchers.withAdaptedData;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.AllOf.allOf;
@@ -90,7 +93,7 @@ public class SeeUserComuByUserAcTest {
     {
         assertThat(mActivity, notNullValue());
         assertThat(mFragment, notNullValue());
-        assertThat(TKhandler.isRegisteredUser(mActivity), is(true));
+        assertThat(TKhandler.isRegisteredUser(), is(true));
         assertThat(mFragment.getFragmentView(), notNullValue());
 
         onView(withId(fragmentLayoutId)).check(matches(isDisplayed()));
@@ -210,7 +213,7 @@ public class SeeUserComuByUserAcTest {
     @Test
     public void testComuSearchMn_withToken() throws InterruptedException
     {
-        UserItemMenuTestUtils.COMU_SEARCH_AC.checkMenuItem_WTk(mActivity);
+        COMU_SEARCH_AC.checkMenuItem_WTk(mActivity);
         // NO hay opción de navigate-up.
     }
 }

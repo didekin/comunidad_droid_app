@@ -7,10 +7,11 @@ import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.comunidad.Comunidad;
-import com.didekinaar.R;
+
 import com.didekinaar.exception.UiException;
 import com.didekinaar.security.TokenIdentityCacher;
 import com.didekinaar.usuario.testutil.UserEspressoTestUtil;
+import com.didekindroid.R;
 import com.didekindroid.comunidad.ComuBundleKey;
 import com.didekinaar.usuario.testutil.UserItemMenuTestUtils;
 import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
@@ -41,10 +42,9 @@ import static com.didekinaar.testutil.AarActivityTestUtils.clickNavigateUp;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN2_AND_PEPE;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekinaar.usuariocomunidad.AarUserComuService.AarUserComuServ;
-import static com.didekinaar.usuariocomunidad.RolUi.PRE;
-import static com.didekinaar.usuariocomunidad.RolUi.PRO;
-import static com.didekinaar.security.TokenIdentityCacher.TKhandler.isRegisteredUser;
+import static com.didekindroid.usuariocomunidad.RolUi.PRE;
+import static com.didekindroid.usuariocomunidad.RolUi.PRO;
+import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.is;
@@ -83,7 +83,7 @@ public class RegUserAndUserComuAcTest {
             List<Comunidad> comunidadesUserOne = null;
             try {
                 UserComuTestUtil.signUpAndUpdateTk(UserComuTestUtil.COMU_TRAV_PLAZUELA_PEPE);
-                comunidadesUserOne = AarUserComuServ.getComusByUser();
+                comunidadesUserOne = AppUserComuServ.getComusByUser();
             } catch (UiException | IOException e) {
                 e.printStackTrace();
             }

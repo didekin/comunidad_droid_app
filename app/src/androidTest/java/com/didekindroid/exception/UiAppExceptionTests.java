@@ -38,7 +38,6 @@ import static com.didekin.common.exception.DidekinExceptionMsg.USER_DATA_NOT_MOD
 import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekinaar.security.TokenIdentityCacher.TKhandler.isRegisteredUser;
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
@@ -132,8 +131,8 @@ public class UiAppExceptionTests {
             }
         });
 
-        checkToastInTest(com.didekinaar.R.string.exception_generic_app_message, mActivity);
-        onView(ViewMatchers.withId(com.didekinaar.R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));
+        checkToastInTest(R.string.exception_generic_app_message, mActivity);
+        onView(ViewMatchers.withId(R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -149,8 +148,8 @@ public class UiAppExceptionTests {
             }
         });
 
-        checkToastInTest(com.didekinaar.R.string.user_without_signedUp, mActivity);
-        onView(ViewMatchers.withId(com.didekinaar.R.id.login_ac_layout)).check(matches(isDisplayed()));
+        checkToastInTest(R.string.user_without_signedUp, mActivity);
+        onView(ViewMatchers.withId(R.id.login_ac_layout)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -169,8 +168,8 @@ public class UiAppExceptionTests {
             }
         });
 
-        checkToastInTest(com.didekinaar.R.string.user_data_not_modified_msg, mActivity);
-        onView(ViewMatchers.withId(com.didekinaar.R.id.user_data_ac_layout)).check(matches(isDisplayed()));
+        checkToastInTest(R.string.user_data_not_modified_msg, mActivity);
+        onView(ViewMatchers.withId(R.id.user_data_ac_layout)).check(matches(isDisplayed()));
     }
 
 
@@ -186,8 +185,8 @@ public class UiAppExceptionTests {
                 ue.processMe(mActivity, new Intent());
             }
         });
-        checkToastInTest(com.didekinaar.R.string.comunidad_not_found_message, mActivity);
-        onView(ViewMatchers.withId(com.didekinaar.R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));
+        checkToastInTest(R.string.comunidad_not_found_message, mActivity);
+        onView(ViewMatchers.withId(R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));
     }
 
     @Test

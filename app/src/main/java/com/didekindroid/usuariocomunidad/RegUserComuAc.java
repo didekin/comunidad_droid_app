@@ -10,8 +10,8 @@ import android.widget.Button;
 
 import com.didekin.comunidad.Comunidad;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
-import com.didekinaar.R;
 import com.didekinaar.exception.UiException;
+import com.didekindroid.R;
 import com.didekindroid.comunidad.ComunidadBean;
 import com.didekinaar.utils.ConnectionUtils;
 import com.didekinaar.utils.UIutils;
@@ -21,12 +21,12 @@ import java.util.Objects;
 import timber.log.Timber;
 
 import static com.didekin.common.dominio.ValidDataPatterns.LINE_BREAK;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
 import static com.didekinaar.utils.UIutils.checkPostExecute;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static com.didekinaar.utils.UIutils.doToolBar;
-import static com.didekinaar.security.TokenIdentityCacher.TKhandler.isRegisteredUser;
 import static com.didekinaar.utils.UIutils.makeToast;
 
 /**
@@ -61,7 +61,7 @@ public class RegUserComuAc extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Timber.i("onCreate()");
 
-        Objects.equals(TKhandler.isRegisteredUser(this), true);
+        Objects.equals(TKhandler.isRegisteredUser(), true);
         Comunidad coomunidadIntent =  (Comunidad) getIntent().getExtras()
                 .getSerializable(COMUNIDAD_LIST_OBJECT.key);
         mComunidad = coomunidadIntent != null ? coomunidadIntent : null;
@@ -96,7 +96,7 @@ public class RegUserComuAc extends AppCompatActivity {
                 .append(LINE_BREAK.getRegexp());
 
         if (!usuarioComunidadBean.validate(getResources(), errorMsg)) {  // error validation.
-            makeToast(this, errorMsg.toString(), com.didekinaar.R.color.deep_purple_100);
+            makeToast(this, errorMsg.toString(), R.color.deep_purple_100);
         } else if (!ConnectionUtils.isInternetConnected(this)) {
             UIutils.makeToast(this, R.string.no_internet_conn_toast);
         } else {

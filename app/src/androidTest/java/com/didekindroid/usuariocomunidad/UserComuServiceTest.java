@@ -35,7 +35,7 @@ import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum
 import static com.didekinaar.testutil.AarTestUtil.updateSecurityData;
 import static com.didekinaar.usuario.UsuarioDaoRemote.usuarioDaoRemote;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.USER_JUAN2;
-import static com.didekinaar.security.TokenIdentityCacher.updateIsRegistered;
+
 import static com.didekindroid.comunidad.testutil.ComuTestUtil.COMU_LA_PLAZUELA_5;
 import static com.didekindroid.comunidad.testutil.ComuTestUtil.COMU_REAL;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
@@ -323,7 +323,7 @@ public class UserComuServiceTest {
     {
         UserComuTestUtil.signUpAndUpdateTk(COMU_REAL_JUAN);
         assertThat(usuarioDaoRemote.deleteUser(), is(true));
-        updateIsRegistered(false, context); // New variation: partially update of security data.
+        TKhandler.updateIsRegistered(false); // New variation: partially update of security data.
         assertThat(TKhandler.doBearerAccessTkHeader(), notNullValue());
         // Wrong credentials: the user doesn't exist.
         AppUserComuServ.seeUserComusByUser();

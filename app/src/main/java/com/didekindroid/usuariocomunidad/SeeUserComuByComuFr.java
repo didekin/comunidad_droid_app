@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.didekin.comunidad.Comunidad;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
-import com.didekinaar.R;
+import com.didekindroid.R;
 import com.didekindroid.comunidad.ComuBundleKey;
 import com.didekinaar.exception.UiException;
 

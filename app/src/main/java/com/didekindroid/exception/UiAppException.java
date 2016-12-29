@@ -52,7 +52,6 @@ import static com.didekin.common.exception.DidekinExceptionMsg.USER_NOT_COMPARAB
 import static com.didekin.common.exception.DidekinExceptionMsg.USER_NOT_EQUAL_ABLE;
 import static com.didekin.common.exception.DidekinExceptionMsg.USER_NOT_HASHABLE;
 import static com.didekin.common.exception.DidekinExceptionMsg.USER_WRONG_INIT;
-import static com.didekinaar.R.string;
 
 /**
  * Exceptions to be dealt with in the user interface
@@ -106,7 +105,7 @@ public class UiAppException extends UiException {
         messageToAction.put(UNAUTHORIZED_TX_TO_USER.getHttpMessage(), LOGIN_ACC);
         messageToAction.put(USERCOMU_WRONG_INIT.getHttpMessage(), LOGIN_ACC);
         messageToAction.put(USER_COMU_NOT_FOUND.getHttpMessage(), LOGIN_ACC);
-        messageToAction.put(USER_DATA_NOT_MODIFIED.getHttpMessage(), new ActionForUiException(UserDataAc.class, string.user_data_not_modified_msg));
+        messageToAction.put(USER_DATA_NOT_MODIFIED.getHttpMessage(), new ActionForUiException(UserDataAc.class, R.string.user_data_not_modified_msg));
         messageToAction.put(USER_NOT_COMPARABLE.getHttpMessage(), LOGIN_ACC);
         messageToAction.put(USER_NOT_EQUAL_ABLE.getHttpMessage(), LOGIN_ACC);
         messageToAction.put(USER_NAME_NOT_FOUND.getHttpMessage(), LOGIN_ACC);

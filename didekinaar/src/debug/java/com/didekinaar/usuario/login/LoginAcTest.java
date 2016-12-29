@@ -47,6 +47,7 @@ import static org.junit.Assert.assertThat;
  * Date: 26/10/15
  * Time: 13:55
  */
+@SuppressWarnings("OverriddenMethodCallDuringObjectConstruction")
 public abstract class LoginAcTest implements ExtendableTestAc {
 
     protected LoginAc mActivity;
@@ -122,7 +123,7 @@ public abstract class LoginAcTest implements ExtendableTestAc {
         onView(withId(reg_usuario_password_ediT)).perform(typeText(registeredUser.getPassword()));
         onView(withId(login_ac_button)).check(matches(isDisplayed())).perform(click());
 
-        checkNoToastInTest(com.didekinaar.R.string.user_without_signedUp, mActivity);
+        checkNoToastInTest(R.string.user_without_signedUp, mActivity);
         onView(withId(getNextViewResourceId())).check(matches(isDisplayed()));
         assertThat(TKhandler.isRegisteredUser(), is(true));
         assertThat(TKhandler.getAccessTokenInCache(), Matchers.notNullValue());
@@ -146,7 +147,7 @@ public abstract class LoginAcTest implements ExtendableTestAc {
         onView(withId(reg_usuario_password_ediT)).perform(typeText(registeredUser.getPassword()));
         onView(withId(login_ac_button)).check(matches(isDisplayed())).perform(click());
 
-        checkNoToastInTest(com.didekinaar.R.string.user_without_signedUp, mActivity);
+        checkNoToastInTest(R.string.user_without_signedUp, mActivity);
         onView(withId(getNextViewResourceId())).check(matches(isDisplayed()));
         // NO navigate-up option in comunidad search.
 
@@ -213,16 +214,16 @@ public abstract class LoginAcTest implements ExtendableTestAc {
         SpringOauthToken token = Oauth2.getPasswordUserToken(registeredUser.getUserName(), registeredUser.getPassword());
 
         getDialogFragment(registeredUser.getUserName());
-        onView(ViewMatchers.withText(com.didekinaar.R.string.send_password_by_mail_dialog)).inRoot(isDialog())
+        onView(ViewMatchers.withText(R.string.send_password_by_mail_dialog)).inRoot(isDialog())
                 .check(matches(isDisplayed()));
-        onView(ViewMatchers.withText(com.didekinaar.R.string.send_password_by_mail_YES)).inRoot(isDialog())
+        onView(ViewMatchers.withText(R.string.send_password_by_mail_YES)).inRoot(isDialog())
                 .check(matches(isDisplayed()))
                 .perform(click());
 
-        onView(withId(com.didekinaar.R.id.reg_usuario_email_editT)).check(matches(isDisplayed()));
-        onView(withId(com.didekinaar.R.id.reg_usuario_password_ediT)).check(matches(isDisplayed()));
-        onView(withId(com.didekinaar.R.id.login_ac_button)).check(matches(isDisplayed()));
-        checkToastInTest(com.didekinaar.R.string.password_new_in_login, mActivity);
+        onView(withId(reg_usuario_email_editT)).check(matches(isDisplayed()));
+        onView(withId(reg_usuario_password_ediT)).check(matches(isDisplayed()));
+        onView(withId(login_ac_button)).check(matches(isDisplayed()));
+        checkToastInTest(R.string.password_new_in_login, mActivity);
         Thread.sleep(2000);
 
         token = Oauth2.getRefreshUserToken(token.getRefreshToken().getValue());
@@ -238,7 +239,7 @@ public abstract class LoginAcTest implements ExtendableTestAc {
 
     //    ========================== Utility methods ============================
 
-    public final void typeCheckClickPswdWrong(String userName)
+    private void typeCheckClickPswdWrong(String userName)
     {
         if (userName != null) {
             onView(withId(reg_usuario_email_editT)).perform(typeText(userName));
@@ -250,7 +251,7 @@ public abstract class LoginAcTest implements ExtendableTestAc {
         onView(withId(activityLayoutId)).check(matches(isDisplayed()));
     }
 
-    public final void reTypeCheckClickPswdWrong(String userName)
+    private void reTypeCheckClickPswdWrong(String userName)
     {
         onView(withId(reg_usuario_email_editT)).perform(replaceText(userName));
         onView(withId(reg_usuario_password_ediT)).perform(replaceText("pasword_wrong"));
@@ -260,7 +261,7 @@ public abstract class LoginAcTest implements ExtendableTestAc {
         onView(withId(activityLayoutId)).check(matches(isDisplayed()));
     }
 
-    public final void getDialogFragment(String userName) throws InterruptedException
+    private void getDialogFragment(String userName) throws InterruptedException
     {
         typeCheckClickPswdWrong(userName);
         Thread.sleep(1000);

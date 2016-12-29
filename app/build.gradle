@@ -51,8 +51,8 @@ android {
             initWith release
             signingConfig signingConfigs.release
         }
-        debug {
-            // Las tres siguientes opciones pueden dar problemas. TODO: quitarlas si los dan.
+        debug {  // By default, all tests run against the debug build type
+            // Las tres siguientes opciones pueden dar problemas.
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             useProguard false
@@ -77,12 +77,18 @@ android {
     }
 }
 
+configurations {
+    debugCompile {}
+    releaseCompile {}
+}
+
 dependencies {
     /* Warning if we do not repeat this dependency. */
     compile rootProject.ext.firebase_message
-    compile project(':didekinaar')
+//    compile project(':didekinaar')
 
-    androidTestCompile project(path:':didekinaar', configuration:'androidTestCompile')
+    debugCompile project(path: ':didekinaar', configuration: 'debug')
+    releaseCompile project(path: ':didekinaar', configuration: 'release')
     androidTestCompile rootProject.ext.apps_androidtest
     testCompile rootProject.ext.junit
 }

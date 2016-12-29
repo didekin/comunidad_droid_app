@@ -6,6 +6,7 @@ import android.os.Build;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
+
 import com.didekinaar.R;
 import com.didekinaar.security.TokenIdentityCacher;
 import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;

@@ -15,15 +15,15 @@ import com.didekin.common.exception.ErrorBean;
 import com.didekin.oauth2.SpringOauthToken;
 import com.didekin.usuario.Usuario;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
-import com.didekinaar.R;
 import com.didekinaar.exception.UiException;
+import com.didekinaar.usuario.RegUserFr;
+import com.didekinaar.usuario.UsuarioBean;
+import com.didekinaar.utils.ConnectionUtils;
+import com.didekindroid.R;
 import com.didekindroid.comunidad.ComuSearchAc;
 import com.didekindroid.comunidad.ComunidadBean;
 import com.didekindroid.comunidad.RegComuFr;
-import com.didekinaar.usuario.RegUserFr;
-import com.didekinaar.usuario.UserItemMenu;
-import com.didekinaar.usuario.UsuarioBean;
-import com.didekinaar.utils.ConnectionUtils;
+import com.didekindroid.usuario.login.LoginAppAc;
 
 import java.io.IOException;
 
@@ -32,11 +32,11 @@ import timber.log.Timber;
 import static com.didekin.common.dominio.ValidDataPatterns.LINE_BREAK;
 import static com.didekinaar.security.Oauth2DaoRemote.Oauth2;
 import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
+import static com.didekinaar.usuario.ItemMenu.mn_handler;
 import static com.didekinaar.utils.UIutils.checkPostExecute;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static com.didekinaar.utils.UIutils.doToolBar;
 import static com.didekinaar.utils.UIutils.makeToast;
-import static com.didekinaar.security.TokenIdentityCacher.updateIsRegistered;
+import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 
 /**
  * Preconditions:
@@ -93,7 +93,7 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity {
                 .append(LINE_BREAK.getRegexp());
 
         if (!usuarioComunidadBean.validate(getResources(), errorMsg)) {
-            makeToast(this, errorMsg.toString(), com.didekinaar.R.color.deep_purple_100);
+            makeToast(this, errorMsg.toString(), R.color.deep_purple_100);
         } else if (!ConnectionUtils.isInternetConnected(this)) {
             makeToast(this, R.string.no_internet_conn_toast);
         } else {
@@ -135,7 +135,7 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity {
             NavUtils.navigateUpTo(this, intent);
             return true;
         } else if (resourceId == R.id.login_ac_mn) {
-            UserItemMenu.LOGIN_AC.doMenuItem(this);
+            mn_handler.doMenuItem(this, LoginAppAc.class);
             return true;
         } else {
             return super.onOptionsItemSelected(item);
@@ -187,7 +187,7 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity {
             } else {
                 Intent intent = new Intent(RegComuAndUserAndUserComuAc.this, SeeUserComuByUserAc.class);
                 startActivity(intent);
-                updateIsRegistered(true, RegComuAndUserAndUserComuAc.this);
+                TKhandler.updateIsRegistered(true);
             }
         }
     }

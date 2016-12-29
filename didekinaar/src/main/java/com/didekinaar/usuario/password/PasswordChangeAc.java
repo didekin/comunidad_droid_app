@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+
 import com.didekinaar.R;
 import com.didekinaar.usuario.UsuarioBean;
 import com.didekinaar.usuario.password.PswdChangeAcObservable.PasswordChangeSubscriber;
@@ -32,8 +33,8 @@ import static com.didekinaar.utils.UIutils.makeToast;
  * 1. Password changed and tokenCache updated.
  * 2. It goes to UserDataAc activity.
  */
-@SuppressWarnings("ConstantConditions")
-public class PasswordChangeAc extends AppCompatActivity implements PasswordChangeControllerIf {
+@SuppressWarnings({"ConstantConditions", "AbstractClassExtendsConcreteClass"})
+public abstract class PasswordChangeAc extends AppCompatActivity implements PasswordChangeControllerIf {
 
     private View mAcView;
     Subscription subscription;
@@ -93,7 +94,7 @@ public class PasswordChangeAc extends AppCompatActivity implements PasswordChang
         StringBuilder errorBuilder = getErrorMsgBuilder(this);
 
         if (!usuarioBean.validateDoublePassword(getResources(), errorBuilder)) {
-            makeToast(this, errorBuilder.toString(), com.didekinaar.R.color.deep_purple_100);
+            makeToast(this, errorBuilder.toString(), R.color.deep_purple_100);
         } else if (!ConnectionUtils.isInternetConnected(this)) {
             makeToast(this, R.string.no_internet_conn_toast);
         } else {

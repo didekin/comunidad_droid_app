@@ -1,21 +1,26 @@
 package com.didekindroid.security;
 
+import android.content.Context;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.oauth2.SpringOauthToken;
 import com.didekin.oauth2.SpringOauthToken.OauthToken;
 import com.didekinaar.exception.UiException;
-import com.didekinaar.security.TokenIdentityCacherTest;
-import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
 import java.io.IOException;
 
+import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
 import static com.didekinaar.security.TokenIdentityCacher.refresh_token_filename;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanWithTkhandler;
 import static com.didekinaar.utils.IoHelper.writeFileFromString;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_REAL_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.signUpAndUpdateTk;
@@ -31,15 +36,27 @@ import static org.junit.Assert.assertThat;
  * Date: 29/06/15
  * Time: 08:11
  */
-@SuppressWarnings("ConstantConditions")
 @RunWith(AndroidJUnit4.class)
-public class TokenIdentityCacher_App_Test extends TokenIdentityCacherTest {
+public class TokenIdentityCacher_App_Test {
+
+    private Context context;
+
+    @Before
+    public void getFixture()
+    {
+        cleanWithTkhandler();
+        context = getTargetContext();
+    }
+
+    @After
+    public void cleanFileToken() throws UiException
+    {
+        cleanOptions(CLEAN_JUAN);
+    }
 
     @Test
     public void testGetAccessTokenInCache_1() throws IOException, UiException
     {
-        whatClean = UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
-
         // Precondition: a user in DB and there exists file with refreshToken.
         signUpAndUpdateTk(COMU_REAL_JUAN);
         SpringOauthToken springOauthTokenIn = TKhandler.getAccessTokenInCache();
@@ -84,8 +101,6 @@ public class TokenIdentityCacher_App_Test extends TokenIdentityCacherTest {
     @Test
     public void testGetAccessTokenInCache_2() throws IOException, UiException
     {
-        whatClean = UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
-
         // Precondition: file exists, tokenInCache initialized with a fully initialized token.
         signUpAndUpdateTk(COMU_REAL_JUAN);
         SpringOauthToken springOauthTokenIn = TKhandler.tokenInCache.get();

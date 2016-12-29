@@ -89,7 +89,7 @@ public class IncidCommentSeeAcTest_2 {
                 IncidenciaServ.regIncidImportancia(incidJuanReal1);
                 IncidenciaUser incidenciaUser = IncidenciaServ.seeIncidsOpenByComu(juanReal.getComunidad().getC_Id()).get(0);
                 incidJuanReal1 = IncidenciaServ.seeIncidImportancia(incidenciaUser.getIncidencia().getIncidenciaId()).getIncidImportancia();
-            } catch (UiAppException | IOException | UiException e) {
+            } catch ( IOException | UiException e) {
                 e.printStackTrace();
             }
             Intent intent = new Intent();

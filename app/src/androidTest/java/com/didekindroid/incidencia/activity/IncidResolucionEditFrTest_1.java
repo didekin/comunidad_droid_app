@@ -73,7 +73,7 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
                     Thread.sleep(1000);
                     resolucion = insertGetResolucionNoAdvances(incidImportancia);
 
-                } catch (UiAppException | InterruptedException | IOException | UiException e) {
+                } catch ( InterruptedException | IOException | UiException e) {
                     e.printStackTrace();
                 }
                 Intent intent = new Intent();

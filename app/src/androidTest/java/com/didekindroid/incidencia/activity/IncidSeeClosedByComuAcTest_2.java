@@ -48,6 +48,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekinaar.testutil.AarActivityTestUtils.clickNavigateUp;
+import static com.didekinaar.utils.AarBundleKey.IS_MENU_IN_FRAGMENT_FLAG;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.regSeveralUserComuSameUser;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_LA_FUENTE_PEPE;
@@ -159,7 +160,7 @@ public class IncidSeeClosedByComuAcTest_2 {
                 Thread.sleep(1000);
                 FragmentManager.enableDebugLogging(true);
 
-            } catch (UiAppException | InterruptedException | IOException | UiException e) {
+            } catch ( InterruptedException | IOException | UiException e) {
                 e.printStackTrace();
             }
         }

@@ -1,4 +1,4 @@
-package com.external;
+package external;
 
 
 import android.support.test.espresso.matcher.BoundedMatcher;

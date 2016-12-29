@@ -7,18 +7,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.didekin.usuariocomunidad.UsuarioComunidad;
-import com.didekinaar.R;
-import com.didekinaar.usuario.UserItemMenu;
+import com.didekinaar.usuario.userdata.UserDataAc;
 import com.didekinaar.utils.UIutils;
+import com.didekindroid.R;
+import com.didekindroid.comunidad.ComuSearchAc;
 
 import java.util.Objects;
 
 import timber.log.Timber;
 
-import static com.didekindroid.comunidad.ComunidadMenu.COMU_SEARCH_AC;
-import static com.didekindroid.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
+import static com.didekinaar.usuario.ItemMenu.mn_handler;
 import static com.didekinaar.utils.UIutils.doToolBar;
-import static com.didekinaar.security.TokenIdentityCacher.TKhandler.isRegisteredUser;
+import static com.didekindroid.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;
 
 /**
  * Preconditions:
@@ -41,7 +42,7 @@ public class SeeUserComuByUserAc extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
 
         // Preconditions: the user is registered.
-        Objects.equals(TKhandler.isRegisteredUser(this), true);
+        Objects.equals(TKhandler.isRegisteredUser(), true);
 
         setContentView(R.layout.see_usercomu_by_user_ac);
         doToolBar(this, true);
@@ -71,10 +72,10 @@ public class SeeUserComuByUserAc extends AppCompatActivity implements
             UIutils.doUpMenu(this);
             return true;
         } else if (resourceId == R.id.user_data_ac_mn) {
-            UserItemMenu.USER_DATA_AC.doMenuItem(this);
+            mn_handler.doMenuItem(this, UserDataAc.class);
             return true;
         } else if (resourceId == R.id.comu_search_ac_mn) {
-            COMU_SEARCH_AC.doMenuItem(this);
+            mn_handler.doMenuItem(this, ComuSearchAc.class);
             return true;
         } else {
             return super.onOptionsItemSelected(item);

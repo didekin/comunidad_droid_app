@@ -5,19 +5,17 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.didekinaar.R;
 import com.didekinaar.usuario.password.PasswordChangeAc;
 import com.didekinaar.usuario.userdata.UserDataAc;
+import com.didekindroid.R;
 import com.didekindroid.comunidad.ComuSearchAc;
 import com.didekindroid.usuario.delete.DeleteMeAppAc;
 import com.didekindroid.usuariocomunidad.SeeUserComuByUserAc;
 
 import timber.log.Timber;
 
-import static com.didekinaar.usuario.UserItemMenu.DELETE_ME_AC;
-import static com.didekinaar.usuario.UserItemMenu.PASSWORD_CHANGE_AC;
+import static com.didekinaar.usuario.ItemMenu.mn_handler;
 import static com.didekinaar.utils.UIutils.doUpMenu;
-import static com.didekindroid.comunidad.ComunidadMenu.COMU_SEARCH_AC;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_SEE_BY_COMU_AC;
 import static com.didekindroid.usuariocomunidad.UserComuMenu.SEE_USERCOMU_BY_USER_AC;
 
@@ -56,16 +54,16 @@ public class UserDataAppAc extends UserDataAc {
             doUpMenu(this);
             return true;
         } else if (resourceId == R.id.password_change_ac_mn) {
-            PASSWORD_CHANGE_AC.doMenuItem(this, PasswordChangeAc.class);
+            mn_handler.doMenuItem(this, PasswordChangeAc.class);
             return true;
         } else if (resourceId == R.id.delete_me_ac_mn) {
-            DELETE_ME_AC.doMenuItem(this, DeleteMeAppAc.class);
+            mn_handler.doMenuItem(this, DeleteMeAppAc.class);
             return true;
         } else if (resourceId == R.id.see_usercomu_by_user_ac_mn) {
             SEE_USERCOMU_BY_USER_AC.doMenuItem(this, SeeUserComuByUserAc.class);
             return true;
         } else if (resourceId == R.id.comu_search_ac_mn) {
-            COMU_SEARCH_AC.doMenuItem(this, ComuSearchAc.class);
+            mn_handler.doMenuItem(this, ComuSearchAc.class);
             return true;
         } else if (resourceId == R.id.incid_see_open_by_comu_ac_mn) {
             INCID_SEE_BY_COMU_AC.doMenuItem(this);

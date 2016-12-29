@@ -1,6 +1,7 @@
 package com.didekindroid.usuariocomunidad.testutil;
 
 import com.didekin.usuariocomunidad.UsuarioComunidad;
+import com.didekindroid.R;
 import com.didekindroid.usuariocomunidad.RolUi;
 import com.didekindroid.usuariocomunidad.UsuarioComunidadBean;
 
@@ -29,10 +30,10 @@ public final class UserComuEspressoTestUtil {
     public static void typeUserComuData(String portal, String escalera, String planta, String puerta, RolUi...
             roles)
     {
-        onView(withId(com.didekinaar.R.id.reg_usercomu_portal_ed)).perform(typeText(portal));
-        onView(withId(com.didekinaar.R.id.reg_usercomu_escalera_ed)).perform(typeText(escalera));
-        onView(withId(com.didekinaar.R.id.reg_usercomu_planta_ed)).perform(scrollTo(), typeText(planta));
-        onView(withId(com.didekinaar.R.id.reg_usercomu_puerta_ed)).perform(typeText(puerta), closeSoftKeyboard());
+        onView(withId(R.id.reg_usercomu_portal_ed)).perform(typeText(portal));
+        onView(withId(R.id.reg_usercomu_escalera_ed)).perform(typeText(escalera));
+        onView(withId(R.id.reg_usercomu_planta_ed)).perform(scrollTo(), typeText(planta));
+        onView(withId(R.id.reg_usercomu_puerta_ed)).perform(typeText(puerta), closeSoftKeyboard());
 
         if (roles != null) {
             for (RolUi rolUi : roles) {

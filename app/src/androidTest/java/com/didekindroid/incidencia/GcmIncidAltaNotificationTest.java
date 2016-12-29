@@ -11,9 +11,8 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekin.incidencia.dominio.IncidenciaUser;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
 import com.didekinaar.exception.UiException;
-import com.didekindroid.R;
 import com.didekinaar.testutil.MockActivity;
-import com.didekindroid.exception.UiAppException;
+import com.didekindroid.R;
 import com.didekinservice.common.gcm.GcmException;
 import com.didekinservice.common.gcm.GcmRequest;
 import com.didekinservice.common.gcm.GcmResponse;
@@ -34,12 +33,12 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekin.incidencia.gcm.GcmKeyValueIncidData.incidencia_open_type;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
-import static com.didekindroid.incidencia.AppFBService.IncidTypeMsgHandler.INCIDENCIA_OPEN;
 import static com.didekinaar.testutil.AarActivityTestUtils.clickNavigateUp;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.incidencia.AppFBService.IncidTypeMsgHandler.INCIDENCIA_OPEN;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidenciaUser;
+import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_REAL_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.signUpAndUpdateTk;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -67,7 +66,7 @@ public class GcmIncidAltaNotificationTest extends GcmIncidNotificationTest {
                     UsuarioComunidad pepeUserComu = AppUserComuServ.seeUserComusByUser().get(0);
                     comunidadIdIntent = pepeUserComu.getComunidad().getC_Id();
                     incidenciaUser = insertGetIncidenciaUser(pepeUserComu, 1);
-                } catch (UiAppException | IOException | UiException e) {
+                } catch ( IOException | UiException e) {
                     e.printStackTrace();
                 }
             }

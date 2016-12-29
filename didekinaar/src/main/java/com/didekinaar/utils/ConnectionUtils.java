@@ -3,7 +3,6 @@ package com.didekinaar.utils;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-
 import com.didekinaar.R;
 
 import timber.log.Timber;

@@ -12,8 +12,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.didekin.usuariocomunidad.UsuarioComunidad;
-import com.didekinaar.R;
 import com.didekinaar.usuario.UsuarioBean;
+import com.didekindroid.R;
 import com.didekindroid.comunidad.ComunidadBean;
 
 import timber.log.Timber;

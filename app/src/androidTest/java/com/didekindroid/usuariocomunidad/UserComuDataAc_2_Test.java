@@ -6,10 +6,11 @@ import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.usuariocomunidad.UsuarioComunidad;
-import com.didekinaar.R;
+
 import com.didekinaar.exception.UiException;
 import com.didekinaar.security.TokenIdentityCacher;
 import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
+import com.didekindroid.R;
 import com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil;
 
 import org.junit.After;
@@ -34,9 +35,9 @@ import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekinaar.testutil.AarTestUtil.updateSecurityData;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
-import static com.didekinaar.usuariocomunidad.AarUserComuService.AarUserComuServ;
-import static com.didekinaar.usuariocomunidad.RolUi.PRO;
-import static com.didekinaar.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;
+import static com.didekindroid.usuariocomunidad.RolUi.PRO;
+import static com.didekindroid.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;
+import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 
@@ -63,7 +64,7 @@ public class UserComuDataAc_2_Test {
             UsuarioComunidad userComu = UserComuTestUtil.makeUsuarioComunidad(mUsuarioComunidad.getComunidad(), UsuarioDataTestUtils.USER_PEPE,
                     "portalB", null, "planta1", null, PRO.function);
             try {
-                AarUserComuServ.regUserAndUserComu(userComu).execute();
+                AppUserComuServ.regUserAndUserComu(userComu).execute();
                 updateSecurityData(UsuarioDataTestUtils.USER_PEPE.getUserName(), UsuarioDataTestUtils.USER_PEPE.getPassword());
             } catch (UiException | IOException e) {
                 e.printStackTrace();
@@ -77,7 +78,7 @@ public class UserComuDataAc_2_Test {
                 // Primer usuario: oldest, no ADMON.
                 assertThat(UserComuTestUtil.COMU_REAL_JUAN.hasAdministradorAuthority(), is(false));
                 UserComuTestUtil.signUpAndUpdateTk(UserComuTestUtil.COMU_REAL_JUAN);
-                List<UsuarioComunidad> comunidadesUserOne = AarUserComuServ.seeUserComusByUser();
+                List<UsuarioComunidad> comunidadesUserOne = AppUserComuServ.seeUserComusByUser();
                 mUsuarioComunidad = comunidadesUserOne != null ? comunidadesUserOne.get(0) : null;
                 Intent intent = new Intent();
                 intent.putExtra(USERCOMU_LIST_OBJECT.key, mUsuarioComunidad);

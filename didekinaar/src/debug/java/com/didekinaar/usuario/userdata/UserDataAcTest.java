@@ -7,6 +7,7 @@ import android.support.test.rule.ActivityTestRule;
 
 import com.didekin.oauth2.SpringOauthToken;
 import com.didekin.usuario.Usuario;
+
 import com.didekinaar.R;
 import com.didekinaar.exception.UiException;
 import com.didekinaar.testutil.ExtendableTestAc;
@@ -47,11 +48,12 @@ import static org.junit.Assert.assertThat;
  * Date: 16/07/15
  * Time: 14:25
  */
+@SuppressWarnings("OverriddenMethodCallDuringObjectConstruction")
 public abstract class UserDataAcTest implements ExtendableTestAc {
 
     protected UserDataAc mActivity;
     protected Resources resources;
-    boolean mustCleanUser;
+    private boolean mustCleanUser;
     protected Usuario registeredUser;
     protected int activityLayoutId = R.id.user_data_ac_layout;
 

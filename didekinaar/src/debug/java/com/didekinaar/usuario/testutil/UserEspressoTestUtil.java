@@ -6,6 +6,7 @@ import android.support.test.espresso.matcher.ViewMatchers;
 import com.didekin.usuario.Usuario;
 import com.didekinaar.R;
 
+
 import org.hamcrest.Matchers;
 
 import static android.support.test.espresso.Espresso.onView;

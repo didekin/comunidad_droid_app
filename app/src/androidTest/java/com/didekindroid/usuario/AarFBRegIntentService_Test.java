@@ -6,8 +6,8 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekinaar.testutil.MockActivity;
 import com.didekinaar.testutil.IdlingResourceForIntentServ;
+import com.didekinaar.testutil.MockActivity;
 import com.didekinaar.usuario.AarFBRegIntentService;
 import com.google.firebase.iid.FirebaseInstanceId;
 
@@ -19,10 +19,7 @@ import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.registerIdlingResources;
 import static android.support.test.espresso.Espresso.unregisterIdlingResources;
-import static com.didekinaar.security.TokenIdentityCacher.isGcmTokenSentServer;
-import static com.didekinaar.security.TokenIdentityCacher.TKhandler.isRegisteredUser;
-import static com.didekinaar.security.TokenIdentityCacher.updateIsGcmTokenSentServer;
-import static com.didekinaar.security.TokenIdentityCacher.updateIsRegistered;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -35,7 +32,6 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class AarFBRegIntentService_Test {
 
-    private MockActivity mActivity;
     IdlingResourceForIntentServ idlingResource;
     NotificationManager mNotifyManager;
     Context context = InstrumentationRegistry.getTargetContext();
@@ -46,15 +42,15 @@ public class AarFBRegIntentService_Test {
         @Override
         protected void beforeActivityLaunched()
         {
-            updateIsGcmTokenSentServer(false, context);
-            updateIsRegistered(false, context);
+            TKhandler.updateIsGcmTokenSentServer(false);
+            TKhandler.updateIsRegistered(false);
         }
     };
 
     @Before
     public void setUp() throws Exception
     {
-        mActivity = intentRule.getActivity();
+        MockActivity mActivity = intentRule.getActivity();
         mNotifyManager = (NotificationManager) mActivity.getSystemService(Context.NOTIFICATION_SERVICE);
         idlingResource = new IdlingResourceForIntentServ(mActivity, new AarFBRegIntentService());
         registerIdlingResources(idlingResource);
@@ -63,10 +59,10 @@ public class AarFBRegIntentService_Test {
     @After
     public void tearDown() throws Exception
     {
-        updateIsGcmTokenSentServer(false, mActivity);
+        TKhandler.updateIsGcmTokenSentServer(false);
         mNotifyManager.cancelAll();
         unregisterIdlingResources(idlingResource);
-        updateIsRegistered(false, context);
+        TKhandler.updateIsRegistered(false);
     }
 
     //  ===========================================================================
@@ -78,10 +74,10 @@ public class AarFBRegIntentService_Test {
     public void testRegistrationGcmToken() throws Exception
     {
         // Preconditions for the test.
-        assertThat(TKhandler.isRegisteredUser(mActivity), is(false));
+        assertThat(TKhandler.isRegisteredUser(), is(false));
 
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         assertThat(refreshedToken, notNullValue());
-        assertThat(isGcmTokenSentServer(mActivity), is(false));
+        assertThat(TKhandler.isGcmTokenSentServer(), is(false));
     }
 }

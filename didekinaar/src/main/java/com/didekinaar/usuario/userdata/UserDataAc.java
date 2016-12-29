@@ -10,6 +10,7 @@ import android.widget.EditText;
 
 import com.didekin.usuario.Usuario;
 import com.didekinaar.ActivitySubscriber;
+
 import com.didekinaar.R;
 import com.didekinaar.usuario.UsuarioBean;
 import com.didekinaar.usuario.userdata.UserDataAcObservable.UserDataUpdateSubscriber;

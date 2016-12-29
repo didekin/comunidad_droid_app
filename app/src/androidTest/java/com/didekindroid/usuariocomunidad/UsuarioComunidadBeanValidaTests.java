@@ -6,7 +6,8 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.comunidad.Municipio;
 import com.didekin.comunidad.Provincia;
-import com.didekinaar.R;
+
+import com.didekindroid.R;
 import com.didekindroid.comunidad.ComunidadBean;
 import com.didekinaar.usuario.UsuarioBean;
 

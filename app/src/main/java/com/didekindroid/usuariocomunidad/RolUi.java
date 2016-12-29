@@ -2,7 +2,7 @@ package com.didekindroid.usuariocomunidad;
 
 import android.content.res.Resources;
 
-import com.didekinaar.R;
+import com.didekindroid.R;
 
 import java.util.HashMap;
 import java.util.Map;

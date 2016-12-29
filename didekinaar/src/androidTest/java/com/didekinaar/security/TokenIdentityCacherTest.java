@@ -29,7 +29,6 @@ import static org.junit.Assert.assertThat;
  * Date: 29/06/15
  * Time: 08:11
  */
-@SuppressWarnings("ConstantConditions")
 @RunWith(AndroidJUnit4.class)
 public class TokenIdentityCacherTest {
 

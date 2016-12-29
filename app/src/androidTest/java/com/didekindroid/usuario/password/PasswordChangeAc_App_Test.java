@@ -11,7 +11,7 @@ import com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 
-import static com.didekinaar.R.id.user_data_ac_layout;
+import static com.didekindroid.R.id.user_data_ac_layout;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.signUpAndUpdateTk;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;

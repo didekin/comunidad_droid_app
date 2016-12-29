@@ -38,6 +38,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVi
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.regSeveralUserComuSameUser;
@@ -47,7 +48,7 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_P
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_REAL_JUAN;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static com.didekinaar.utils.UIutils.formatTimeStampToString;
-import static com.didekinaar.security.TokenIdentityCacher.TKhandler.isRegisteredUser;
+
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
 import static com.didekindroid.incidencia.IncidenciaDataDbHelperTest.DB_PATH;
@@ -116,7 +117,7 @@ public class IncidSeeOpenByComuAcTest_2 {
                 IncidenciaServ.regIncidImportancia(incidJuanReal1);
                 IncidenciaServ.regIncidImportancia(incidJuanReal2);
                 IncidenciaServ.regIncidImportancia(incidJuanPlazuela1);
-            } catch (UiAppException | IOException | UiException e) {
+            } catch ( IOException | UiException e) {
                 e.printStackTrace();
             }
         }
@@ -152,7 +153,7 @@ public class IncidSeeOpenByComuAcTest_2 {
     @Test
     public void testOnCreate_1() throws Exception
     {
-        assertThat(TKhandler.isRegisteredUser(mActivity), is(true));
+        assertThat(TKhandler.isRegisteredUser(), is(true));
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
         // Default comunidad: Real, in position 0.
         onView(allOf(

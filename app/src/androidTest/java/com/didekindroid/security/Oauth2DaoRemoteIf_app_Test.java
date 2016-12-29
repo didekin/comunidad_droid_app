@@ -4,10 +4,11 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.oauth2.SpringOauthToken;
 import com.didekinaar.exception.UiException;
-import com.didekinaar.security.Oauth2DaoRemoteIfTest;
 import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
+import com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum;
 import com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil;
 
+import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,9 +17,11 @@ import static com.didekin.common.exception.DidekinExceptionMsg.BAD_REQUEST;
 import static com.didekin.oauth2.OauthTokenHelper.HELPER;
 import static com.didekinaar.security.Oauth2DaoRemote.Oauth2;
 import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanWithTkhandler;
 import static com.didekinaar.testutil.AarTestUtil.updateSecurityData;
 import static com.didekinaar.usuario.UsuarioDaoRemote.usuarioDaoRemote;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_REAL_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.signUpAndUpdateTk;
@@ -34,7 +37,9 @@ import static org.junit.Assert.fail;
  * Time: 11:07
  */
 @RunWith(AndroidJUnit4.class)
-public class Oauth2DaoRemoteIf_app_Test extends Oauth2DaoRemoteIfTest {
+public class Oauth2DaoRemoteIf_app_Test {
+
+    private CleanUserEnum whatClean;
 
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
@@ -42,10 +47,16 @@ public class Oauth2DaoRemoteIf_app_Test extends Oauth2DaoRemoteIfTest {
         Thread.sleep(4000);
     }
 
+    @After
+    public void cleaningUp() throws UiException
+    {
+        cleanOptions(whatClean);
+    }
+
     @Test
     public void testGetPasswordUserToken_1() throws Exception
     {
-        whatClean = UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
+        whatClean = CLEAN_JUAN;
 
         //Inserta userComu, comunidad, usuariocomunidad y actuliza tokenCache.
         boolean isRegistered = AppUserComuServ.regComuAndUserAndUserComu(COMU_REAL_JUAN).execute().body();
@@ -60,7 +71,7 @@ public class Oauth2DaoRemoteIf_app_Test extends Oauth2DaoRemoteIfTest {
     @Test
     public void testGetPasswordUserToken_2() throws Exception
     {
-        whatClean = UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
+        whatClean = CLEAN_JUAN;
 
         //Inserta userComu, comunidad y usuariocomunidad.
         boolean isRegistered = AppUserComuServ.regComuAndUserAndUserComu(COMU_REAL_JUAN).execute().body();
@@ -107,7 +118,7 @@ public class Oauth2DaoRemoteIf_app_Test extends Oauth2DaoRemoteIfTest {
     @Test
     public void testGetRefreshUserToken() throws Exception
     {
-        whatClean = UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
+        whatClean = CLEAN_PEPE;
 
         //Inserta userComu, comunidad, usuariocomunidad y actuliza tokenCache.
         signUpAndUpdateTk(UserComuTestUtil.COMU_REAL_PEPE);

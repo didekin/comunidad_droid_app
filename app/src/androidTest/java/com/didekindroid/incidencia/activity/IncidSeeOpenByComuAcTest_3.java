@@ -96,7 +96,7 @@ public class IncidSeeOpenByComuAcTest_3 {
                         "portal", "esc", "plantaX", "door12", PROPIETARIO.function);
                 AppUserComuServ.regUserAndUserComu(userComuJuan).execute();
                 updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
-            } catch (UiAppException | IOException | UiException e) {
+            } catch (IOException | UiException e) {
                 e.printStackTrace();
             }
             FragmentManager.enableDebugLogging(true);

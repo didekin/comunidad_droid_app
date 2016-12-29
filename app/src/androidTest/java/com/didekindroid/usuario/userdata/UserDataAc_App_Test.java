@@ -11,10 +11,10 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static com.didekinaar.R.id.see_usercomu_by_user_frg;
+import static com.didekindroid.R.id.see_usercomu_by_user_frg;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
-import static com.didekinaar.usuario.testutil.UserItemMenuTestUtils.DELETE_ME_AC;
 import static com.didekinaar.usuario.testutil.UserItemMenuTestUtils.PASSWORD_CHANGE_AC;
+import static com.didekinaar.usuario.testutil.UserItemMenuTestUtils.USER_DATA_AC;
 import static com.didekindroid.comunidad.testutil.ComuMenuTestUtil.COMU_SEARCH_AC;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_OPEN_BY_COMU_AC;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.SEE_USERCOMU_BY_USER_AC;
@@ -85,7 +85,7 @@ public class UserDataAc_App_Test extends UserDataAcTest {
     @Test
     public void testDeleteMeMn() throws InterruptedException
     {
-        DELETE_ME_AC.checkMenuItem_WTk(mActivity);
+        USER_DATA_AC.checkMenuItem_WTk(mActivity);
         checkUp(activityLayoutId);
     }
 

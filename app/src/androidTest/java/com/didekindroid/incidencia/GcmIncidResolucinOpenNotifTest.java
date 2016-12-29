@@ -12,7 +12,6 @@ import com.didekin.usuariocomunidad.UsuarioComunidad;
 import com.didekinaar.exception.UiException;
 import com.didekinaar.testutil.MockActivity;
 import com.didekindroid.R;
-import com.didekindroid.exception.UiAppException;
 import com.didekinservice.common.gcm.GcmException;
 
 import org.junit.Test;
@@ -30,10 +29,10 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekin.incidencia.gcm.GcmKeyValueIncidData.resolucion_open_type;
 import static com.didekinaar.testutil.AarActivityTestUtils.clickNavigateUp;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.signUpAndUpdateTk;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_REAL_PEPE;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidenciaUser;
+import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_REAL_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.signUpAndUpdateTk;
 import static org.hamcrest.CoreMatchers.allOf;
 
 /**
@@ -59,7 +58,7 @@ public class GcmIncidResolucinOpenNotifTest extends GcmIncidNotificationTest {
                     UsuarioComunidad pepeUserComu = AppUserComuServ.seeUserComusByUser().get(0);
                     comunidadIdIntent = pepeUserComu.getComunidad().getC_Id();
                     incidenciaUser = insertGetIncidenciaUser(pepeUserComu, 1);
-                } catch (UiAppException | IOException | UiException e) {
+                } catch ( IOException | UiException e) {
                     e.printStackTrace();
                 }
             }

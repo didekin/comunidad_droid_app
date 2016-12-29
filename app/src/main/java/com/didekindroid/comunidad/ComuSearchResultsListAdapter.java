@@ -8,7 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.didekin.comunidad.Comunidad;
-import com.didekinaar.R;
+import com.didekindroid.R;
 
 import timber.log.Timber;
 

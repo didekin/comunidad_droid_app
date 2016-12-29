@@ -8,9 +8,8 @@ import android.widget.DatePicker;
 
 import com.didekinaar.exception.UiException;
 import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
-import com.didekindroid.R;
-import com.didekindroid.exception.UiAppException;
 import com.didekinaar.utils.UIutils;
+import com.didekindroid.R;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -32,15 +31,15 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
 import static com.didekinaar.testutil.AarActivityTestUtils.closeDatePicker;
 import static com.didekinaar.testutil.AarActivityTestUtils.reSetDatePicker;
-import static com.didekinaar.utils.UIutils.formatTimeToString;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidImportancia;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
+import static com.didekinaar.utils.UIutils.formatTimeToString;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
+import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_PLAZUELA5_JUAN;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
@@ -68,7 +67,7 @@ public class IncidResolucionRegFrTest extends IncidResolucionAbstractTest {
             {
                 try {
                     incidImportancia = insertGetIncidImportancia(COMU_PLAZUELA5_JUAN);
-                } catch (UiAppException | IOException | UiException e) {
+                } catch ( IOException | UiException e) {
                     e.printStackTrace();
                 }
                 Intent intent = new Intent();

@@ -11,9 +11,8 @@ import com.didekin.incidencia.dominio.IncidImportancia;
 import com.didekin.incidencia.dominio.Incidencia;
 import com.didekin.incidencia.dominio.Resolucion;
 import com.didekinaar.exception.UiException;
-import com.didekindroid.R;
 import com.didekinaar.testutil.MockActivity;
-import com.didekindroid.exception.UiAppException;
+import com.didekindroid.R;
 import com.didekinservice.common.gcm.GcmException;
 
 import org.junit.Test;
@@ -33,9 +32,9 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekin.incidencia.gcm.GcmKeyValueIncidData.incidencia_closed_type;
 import static com.didekinaar.testutil.AarActivityTestUtils.clickNavigateUp;
 import static com.didekinaar.utils.UIutils.formatTimeStampToString;
+import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetResolucionNoAdvances;
-import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_PLAZUELA5_PEPE;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
@@ -71,7 +70,7 @@ public class GcmIncidCloseNotificationTest extends GcmIncidNotificationTest {
                     resolucion = insertGetResolucionNoAdvances(incidImportancia);
                     assertThat(IncidenciaServ.closeIncidencia(resolucion), is(2));
                     incidencia = IncidenciaServ.seeIncidsClosedByComu(incidImportancia.getIncidencia().getComunidadId()).get(0).getIncidencia();
-                } catch (UiAppException | InterruptedException | IOException | UiException e) {
+                } catch ( InterruptedException | IOException | UiException e) {
                     e.printStackTrace();
                 }
             }

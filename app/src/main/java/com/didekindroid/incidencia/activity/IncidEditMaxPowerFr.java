@@ -143,7 +143,7 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
             }
         } catch (IllegalStateException e) {
             Timber.e(e.getMessage());
-            makeToast(getActivity(), errorMsg.toString(), com.didekinaar.R.color.deep_purple_100);
+            makeToast(getActivity(), errorMsg.toString(), R.color.deep_purple_100);
         }
     }
 

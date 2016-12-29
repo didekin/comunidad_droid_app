@@ -79,7 +79,7 @@ public class IncidResolucionRegFr extends IncidResolucionFrAbstract {
         Resolucion resolucion = makeResolucionFromBean(errorMsg);
 
         if (resolucion == null) {
-            makeToast(getActivity(), errorMsg.toString(), com.didekinaar.R.color.deep_purple_100);
+            makeToast(getActivity(), errorMsg.toString(), R.color.deep_purple_100);
         } else {
             if (checkInternetConnected(getActivity())) {
                 new ResolucionRegister().execute(resolucion);

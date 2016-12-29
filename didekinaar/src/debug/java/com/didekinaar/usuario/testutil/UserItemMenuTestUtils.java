@@ -6,6 +6,7 @@ import android.support.test.espresso.action.ViewActions;
 import android.support.test.espresso.assertion.ViewAssertions;
 import android.support.test.espresso.matcher.ViewMatchers;
 
+
 import com.didekinaar.R;
 import com.didekinaar.testutil.MenuTestUtilIf;
 
@@ -94,7 +95,4 @@ public enum UserItemMenuTestUtils implements MenuTestUtilIf {
 
     public static final String REGISTERED_USER = "requires registered user";
     public static final String REQUIRES_USER_NO_TOKEN = "requires user without token";
-
-//  =================================  HELPER METHODS ====================================
-
 }

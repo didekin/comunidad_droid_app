@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.didekin.usuariocomunidad.UsuarioComunidad;
-import com.didekinaar.R;
+import com.didekindroid.R;
 
 import timber.log.Timber;
 
@@ -22,7 +22,7 @@ import static android.view.View.VISIBLE;
  * Date: 25/08/15
  * Time: 17:50
  */
-public class SeeUserComuByComuListAdapter extends ArrayAdapter<UsuarioComunidad> {
+class SeeUserComuByComuListAdapter extends ArrayAdapter<UsuarioComunidad> {
 
     SeeUserComuByComuListAdapter(Context context)
     {

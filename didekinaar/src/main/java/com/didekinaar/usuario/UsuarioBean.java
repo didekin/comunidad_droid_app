@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import com.didekin.usuario.Usuario;
 import com.didekinaar.R;
 
+
 import static com.didekin.common.dominio.ValidDataPatterns.ALIAS;
 import static com.didekin.common.dominio.ValidDataPatterns.EMAIL;
 import static com.didekin.common.dominio.ValidDataPatterns.LINE_BREAK;

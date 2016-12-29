@@ -11,8 +11,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.didekin.usuariocomunidad.UsuarioComunidad;
-import com.didekinaar.R;
 import com.didekinaar.exception.UiException;
+import com.didekindroid.R;
 
 import java.util.List;
 import java.util.Objects;

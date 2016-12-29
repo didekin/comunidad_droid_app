@@ -5,9 +5,9 @@ import android.content.res.Resources;
 import com.didekin.common.dominio.ValidDataPatterns;
 import com.didekin.usuario.Usuario;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
-import com.didekinaar.R;
-import com.didekindroid.comunidad.ComunidadBean;
 import com.didekinaar.usuario.UsuarioBean;
+import com.didekindroid.R;
+import com.didekindroid.comunidad.ComunidadBean;
 
 import static com.didekin.common.dominio.ValidDataPatterns.PORTAL;
 
@@ -52,7 +52,7 @@ public final class UsuarioComunidadBean {
 
     // .......................... Auxiliary role methods ...........................
 
-    public String rolesInBean()
+    String rolesInBean()
     {
         StringBuilder rolesBuilder = new StringBuilder();
 

@@ -120,7 +120,7 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
         Resolucion resolucion = makeResolucionFromBean(errorMsg);
 
         if (resolucion == null) {
-            makeToast(getActivity(), errorMsg.toString(), com.didekinaar.R.color.deep_purple_100);
+            makeToast(getActivity(), errorMsg.toString(), R.color.deep_purple_100);
         } else if (!ConnectionUtils.isInternetConnected(getActivity())) {
             makeToast(getActivity(), R.string.no_internet_conn_toast);
         } else if (isToBeClosed) {

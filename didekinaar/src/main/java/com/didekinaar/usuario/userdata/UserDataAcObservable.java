@@ -6,6 +6,7 @@ import com.didekin.common.exception.ErrorBean;
 import com.didekin.oauth2.SpringOauthToken;
 import com.didekin.usuario.Usuario;
 import com.didekinaar.ActivitySubscriber;
+
 import com.didekinaar.R;
 import com.didekinaar.exception.UiException;
 

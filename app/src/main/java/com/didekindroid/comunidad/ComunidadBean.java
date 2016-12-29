@@ -5,7 +5,7 @@ import android.content.res.Resources;
 import com.didekin.comunidad.Comunidad;
 import com.didekin.comunidad.Municipio;
 import com.didekin.comunidad.Provincia;
-import com.didekinaar.R;
+import com.didekindroid.R;
 
 import static com.didekin.common.dominio.ValidDataPatterns.LINE_BREAK;
 import static com.didekin.common.dominio.ValidDataPatterns.NOMBRE_VIA;
@@ -198,7 +198,7 @@ public class ComunidadBean {
         this.nombreVia = nombreVia;
     }
 
-    public void setNumeroString(String numeroString)
+    void setNumeroString(String numeroString)
     {
         this.numeroString = numeroString;
     }

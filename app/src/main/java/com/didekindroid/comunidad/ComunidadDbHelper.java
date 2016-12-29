@@ -11,7 +11,7 @@ import android.text.TextUtils;
 import com.didekin.comunidad.ComunidadAutonoma;
 import com.didekin.comunidad.Municipio;
 import com.didekin.comunidad.Provincia;
-import com.didekinaar.R;
+import com.didekindroid.R;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -55,7 +55,7 @@ import static java.lang.String.valueOf;
  */
 class ComunidadDbHelper extends SQLiteOpenHelper {
 
-    private static final String DB_NAME = "comunidad.db";
+    static final String DB_NAME = "comunidad.db";
     /*This number has to be changed in future versions, to get executed onUpgrade() method.*/
     private static final int DB_VERSION = 1;
 

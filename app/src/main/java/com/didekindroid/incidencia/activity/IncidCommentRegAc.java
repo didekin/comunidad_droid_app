@@ -100,7 +100,7 @@ public class IncidCommentRegAc extends AppCompatActivity {
 
         if (comment == null) {
             Timber.d("registerComment(); comment == null");
-            makeToast(this, errorMsg.toString(), com.didekinaar.R.color.deep_purple_100);
+            makeToast(this, errorMsg.toString(), R.color.deep_purple_100);
         } else if (!ConnectionUtils.isInternetConnected(this)) {
             UIutils.makeToast(this, R.string.no_internet_conn_toast);
         } else {

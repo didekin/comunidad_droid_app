@@ -7,7 +7,8 @@ import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.comunidad.Comunidad;
-import com.didekinaar.R;
+
+import com.didekindroid.R;
 import com.didekindroid.comunidad.ComuBundleKey;
 import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil;
@@ -30,15 +31,15 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanTwoUsers;
 import static com.didekinaar.testutil.AarActivityTestUtils.clickNavigateUp;
-import static com.didekinaar.usuariocomunidad.AarUserComuService.AarUserComuServ;
-import static com.didekinaar.usuariocomunidad.RolUi.PRE;
-import static com.didekinaar.usuariocomunidad.RolUi.PRO;
-import static com.didekinaar.security.TokenIdentityCacher.TKhandler.isRegisteredUser;
+import static com.didekindroid.usuariocomunidad.RolUi.PRE;
+import static com.didekindroid.usuariocomunidad.RolUi.PRO;
+import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -69,7 +70,7 @@ public class RegUserComuAcTest {
     public void setUp() throws Exception
     {
         UserComuTestUtil.signUpAndUpdateTk(UserComuTestUtil.COMU_REAL_JUAN);
-        List<Comunidad> comunidadesUserOne = AarUserComuServ.getComusByUser();
+        List<Comunidad> comunidadesUserOne = AppUserComuServ.getComusByUser();
         comunidad = comunidadesUserOne.get(0);
 
         // We use that comunidad as the one to associate to the present user.
@@ -90,8 +91,8 @@ public class RegUserComuAcTest {
     {
         activity = mActivityRule.launchActivity(intent);
 
-        assertThat(TKhandler.isRegisteredUser(activity), is(true));
-        List<Comunidad> comunidadesUserOne = AarUserComuServ.getComusByUser();
+        assertThat(TKhandler.isRegisteredUser(), is(true));
+        List<Comunidad> comunidadesUserOne = AppUserComuServ.getComusByUser();
         assertThat(comunidadesUserOne.size(), is(1));
         Comunidad comunidad2 = comunidadesUserOne.get(0);
         assertThat(comunidad2, Matchers.is(UserComuTestUtil.COMU_TRAV_PLAZUELA_PEPE.getComunidad()));

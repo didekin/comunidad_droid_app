@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.support.test.espresso.matcher.ViewMatchers;
 
 import com.didekinaar.testutil.MenuTestUtilIf;
+import com.didekindroid.R;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
@@ -32,11 +33,11 @@ public enum  ComuMenuTestUtil implements MenuTestUtilIf {
         @Override
         public void checkMenuItem_WTk(Activity activity) throws InterruptedException
         {
-            onView(ViewMatchers.withText(com.didekinaar.R.string.comu_data_ac_mn)).check(doesNotExist());
+            onView(ViewMatchers.withText(R.string.comu_data_ac_mn)).check(doesNotExist());
             openActionBarOverflowOrOptionsMenu(activity);
             Thread.sleep(1000);
-            onView(ViewMatchers.withText(com.didekinaar.R.string.comu_data_ac_mn)).check(matches(isDisplayed())).perform(click());
-            onView(ViewMatchers.withId(com.didekinaar.R.id.comu_data_ac_layout)).check(matches(isDisplayed()));
+            onView(ViewMatchers.withText(R.string.comu_data_ac_mn)).check(matches(isDisplayed())).perform(click());
+            onView(ViewMatchers.withId(R.id.comu_data_ac_layout)).check(matches(isDisplayed()));
         }
     },
 
@@ -50,11 +51,11 @@ public enum  ComuMenuTestUtil implements MenuTestUtilIf {
         @Override
         public void checkMenuItem_WTk(Activity activity) throws InterruptedException
         {
-            onView(ViewMatchers.withText(com.didekinaar.R.string.comu_search_ac_mn)).check(doesNotExist());
+            onView(ViewMatchers.withText(R.string.comu_search_ac_mn)).check(doesNotExist());
             Thread.sleep(2000);
             openActionBarOverflowOrOptionsMenu(activity);
-            onView(ViewMatchers.withText(com.didekinaar.R.string.comu_search_ac_mn)).check(matches(isDisplayed())).perform(click());
-            onView(ViewMatchers.withId(com.didekinaar.R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));
+            onView(ViewMatchers.withText(R.string.comu_search_ac_mn)).check(matches(isDisplayed())).perform(click());
+            onView(ViewMatchers.withId(R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));
         }
     },
     ;

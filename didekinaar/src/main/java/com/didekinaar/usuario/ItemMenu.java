@@ -12,19 +12,20 @@ import timber.log.Timber;
  * Date: 10/08/15
  * Time: 10:37
  */
-public enum UserItemMenu implements ItemMenuIf {
+public enum ItemMenu implements ItemMenuIf {
 
-    DELETE_ME_AC,
-    LOGIN_AC,
-    PASSWORD_CHANGE_AC,
-    USER_DATA_AC,
+    mn_handler,
     ;
 
     @Override
     public void doMenuItem(Activity activity, Class<? extends Activity> activityToGoClass)
     {
         Timber.d("doMenuItem(): %s", activityToGoClass.getName());
-        Intent intent = new Intent(activity, activityToGoClass);
+        Intent intent = activity.getIntent();
+        if (intent == null){
+            intent = new Intent();
+        }
+        intent.setClass(activity, activityToGoClass);
         activity.startActivity(intent);
     }
 }

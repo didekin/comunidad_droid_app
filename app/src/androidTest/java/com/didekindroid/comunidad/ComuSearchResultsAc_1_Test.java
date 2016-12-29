@@ -12,9 +12,10 @@ import com.didekin.comunidad.Municipio;
 import com.didekin.comunidad.Provincia;
 import com.didekin.usuario.Usuario;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
-import com.didekinaar.R;
+
 import com.didekinaar.exception.UiException;
 import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
+import com.didekindroid.R;
 import com.didekindroid.comunidad.testutil.ComuTestUtil;
 import com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil;
 
@@ -35,21 +36,20 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekinaar.comunidad.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
-import static com.didekinaar.comunidad.ComuBundleKey.COMUNIDAD_SEARCH;
 import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkBack;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanTwoUsers;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
-import static com.didekinaar.usuariocomunidad.AarUserComuService.AarUserComuServ;
-import static com.didekinaar.usuariocomunidad.RolUi.PRO;
-import static com.didekinaar.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;
-import static com.didekinaar.security.TokenIdentityCacher.TKhandler.isRegisteredUser;
-import static com.external.LongListMatchers.withAdaptedData;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanTwoUsers;
+import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
+import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_SEARCH;
+import static com.didekindroid.usuariocomunidad.RolUi.PRO;
+import static com.didekindroid.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;
+import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static external.LongListMatchers.withAdaptedData;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
@@ -273,7 +273,7 @@ public class ComuSearchResultsAc_1_Test {
         // Usuario registrado. La búsqueda devuelve una comunidad a la que él ya está asociado.
         // Verificamos intent de salida.
         Usuario userIntent = UserComuTestUtil.signUpAndUpdateTk(UserComuTestUtil.COMU_REAL_JUAN);
-        Comunidad comuIntent = AarUserComuServ.getComusByUser().get(0);
+        Comunidad comuIntent = AppUserComuServ.getComusByUser().get(0);
 
         activity = mIntentRule.launchActivity(intent);
         assertThat(TKhandler.isRegisteredUser(), is(true));
@@ -335,7 +335,7 @@ public class ComuSearchResultsAc_1_Test {
         // Usuario registrado. La búsqueda devuelve una comunidad a la que él NO está asociado.
 
         UserComuTestUtil.signUpAndUpdateTk(UserComuTestUtil.COMU_PLAZUELA5_PEPE);
-        Comunidad comunidad = AarUserComuServ.getComusByUser().get(0);
+        Comunidad comunidad = AppUserComuServ.getComusByUser().get(0);
         UserComuTestUtil.signUpAndUpdateTk(UserComuTestUtil.COMU_REAL_JUAN);
 
         activity = mIntentRule.launchActivity(intent);
@@ -368,7 +368,7 @@ public class ComuSearchResultsAc_1_Test {
         assertThat(comunidad.getNombreVia(), is("de la Plazuela"));
 
         // Borramos la comunidad en BD.
-        assertThat(AarUserComuServ.deleteUserComu(comunidad.getC_Id()), is(1));
+        assertThat(AppUserComuServ.deleteUserComu(comunidad.getC_Id()), is(1));
         onData(is(comunidad)).perform(click());
         // On-click devuelve a la pantalla de búsqueda de comunidad.
         onView(ViewMatchers.withId(R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));

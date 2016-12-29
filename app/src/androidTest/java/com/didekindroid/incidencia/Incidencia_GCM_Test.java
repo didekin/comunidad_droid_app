@@ -13,7 +13,6 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekinaar.exception.UiException;
 import com.didekinaar.testutil.IdlingResourceForIntentServ;
-import com.didekindroid.exception.UiAppException;
 import com.didekinaar.usuario.AarFBRegIntentService;
 import com.didekinservice.common.gcm.GcmRequest;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -23,11 +22,10 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.runner.RunWith;
 
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekinaar.security.TokenIdentityCacher.isGcmTokenSentServer;
-import static com.didekinaar.security.TokenIdentityCacher.updateIsGcmTokenSentServer;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
 import static com.didekinaar.usuario.UsuarioDaoRemote.usuarioDaoRemote;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -59,7 +57,7 @@ public abstract class Incidencia_GCM_Test {
     @After
     public void tearDown() throws Exception
     {
-        updateIsGcmTokenSentServer(false, mActivity);
+        TKhandler.updateIsGcmTokenSentServer(false);
         mNotifyManager.cancelAll();
         Espresso.unregisterIdlingResources(idlingResource);
         cleanOptions(CLEAN_PEPE);
@@ -69,12 +67,12 @@ public abstract class Incidencia_GCM_Test {
 
     protected abstract IntentsTestRule<? extends Activity> doIntentsTestRule();
 
-    void checkToken() throws UiAppException, InterruptedException, UiException
+    void checkToken() throws InterruptedException, UiException
     {
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         assertThat(refreshedToken, notNullValue());
         Thread.sleep(2000);
-        assertThat(isGcmTokenSentServer(mActivity), is(true));
+        assertThat(TKhandler.isGcmTokenSentServer(), is(true));
         assertThat(usuarioDaoRemote.getGcmToken(), is(refreshedToken));
     }
 

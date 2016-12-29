@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.didekin.usuariocomunidad.UsuarioComunidad;
-import com.didekinaar.R;
+import com.didekindroid.R;
 import com.didekindroid.comunidad.ComuSearchAc;
 import com.didekindroid.comunidad.ComunidadBean;
 import com.didekindroid.comunidad.RegComuFr;
@@ -73,7 +73,7 @@ public class RegComuAndUserComuAc extends AppCompatActivity {
         StringBuilder errorMsg = getErrorMsgBuilder(this);
 
         if (!usuarioComunidadBean.validate(getResources(), errorMsg)) {
-            makeToast(this, errorMsg.toString(), com.didekinaar.R.color.deep_purple_100);
+            makeToast(this, errorMsg.toString(), R.color.deep_purple_100);
         } else if (!ConnectionUtils.isInternetConnected(this)) {
             makeToast(this, R.string.no_internet_conn_toast);
         } else {

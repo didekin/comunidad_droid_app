@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TextView;
 
+import com.didekinaar.R;
+
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -53,7 +55,7 @@ public class FechaPickerFr extends DialogFragment implements DatePickerDialog.On
         long timeFecha = calendar.getTimeInMillis();
 
         fechaFragment.getFechaView().setText(formatTimeToString(timeFecha));
-        fechaFragment.getFechaView().setTextColor(ContextCompat.getColor(getActivity(), com.didekinaar.R.color.black));
+        fechaFragment.getFechaView().setTextColor(ContextCompat.getColor(getActivity(), R.color.black));
         fechaFragment.getFechaView().setTypeface(Typeface.DEFAULT);
         fechaFragment.getBean().setFechaPrevista(timeFecha);
     }
