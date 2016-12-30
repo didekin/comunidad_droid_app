@@ -27,7 +27,7 @@ import static com.didekinaar.utils.UIutils.doToolBar;
 import static com.didekinaar.utils.UIutils.getErrorMsgBuilder;
 import static com.didekinaar.utils.UIutils.makeToast;
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
-import static com.didekinaar.utils.UIutils.doUpMenu;
+import static com.didekindroid.util.AppMenuRouter.doUpMenu;
 
 /**
  * Preconditions:

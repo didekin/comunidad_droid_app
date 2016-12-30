@@ -3,10 +3,8 @@ package com.didekinaar.utils;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.Build;
-import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -20,7 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.didekin.common.exception.ErrorBean;
-
 import com.didekinaar.R;
 import com.didekinaar.exception.UiException;
 import com.didekinaar.security.TokenIdentityCacher;
@@ -154,16 +151,6 @@ public final class UIutils {
     {
         return new StringBuilder(context.getResources().getText(R.string.error_validation_msg))
                 .append(LINE_BREAK.getRegexp());
-    }
-
-    /*    ================================== MENUS ======================================*/
-
-    public static void doUpMenu(Activity parentActivity)
-    {
-        Intent intent = NavUtils.getParentActivityIntent(parentActivity);
-        // We need both flags to reuse the intent of the parent activity.
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        NavUtils.navigateUpTo(parentActivity, intent);
     }
 
     //    ================================== TOASTS ======================================

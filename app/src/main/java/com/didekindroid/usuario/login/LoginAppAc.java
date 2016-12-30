@@ -2,10 +2,14 @@ package com.didekindroid.usuario.login;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import com.didekinaar.usuario.login.LoginAc;
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComuSearchAc;
+import com.didekindroid.util.AppMenuRouter;
+
+import timber.log.Timber;
 
 /**
  * User: pedro@didekin
@@ -32,5 +36,24 @@ public class LoginAppAc extends LoginAc {
     public int getDialogThemeId()
     {
         return R.style.alertDialogTheme;
+    }
+
+    // ============================================================
+    //    ..... ACTION BAR ....
+    // ============================================================
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        Timber.d("onOptionsItemSelected()");
+        int resourceId = item.getItemId();
+
+        switch (resourceId) {
+            case android.R.id.home:
+                AppMenuRouter.doUpMenu(this);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

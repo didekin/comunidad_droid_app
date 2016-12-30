@@ -18,12 +18,14 @@ import com.didekindroid.R;
 import java.util.Objects;
 
 import timber.log.Timber;
+
 import static com.didekinaar.utils.AarBundleKey.IS_MENU_IN_FRAGMENT_FLAG;
+import static com.didekinaar.utils.AarItemMenu.mn_handler;
 import static com.didekinaar.utils.UIutils.formatTimeStampToString;
 import static com.didekinaar.utils.UIutils.getStringFromInteger;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_COMMENTS_SEE_AC;
+import static com.didekindroid.util.AppMenuRouter.routerMap;
 
 /**
  * User: pedro@didekin
@@ -85,7 +87,7 @@ public class IncidResolucionSeeFr extends Fragment {
                 Intent intent = new Intent();
                 intent.putExtra(INCIDENCIA_OBJECT.key, getArguments().getSerializable(INCIDENCIA_OBJECT.key));
                 getActivity().setIntent(intent);
-                INCID_COMMENTS_SEE_AC.doMenuItem(getActivity());
+                mn_handler.doMenuItem(getActivity(), routerMap.get(resourceId));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

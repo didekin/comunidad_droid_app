@@ -15,23 +15,23 @@ import android.widget.EditText;
 import com.didekin.comunidad.Comunidad;
 import com.didekinaar.exception.UiException;
 import com.didekinaar.utils.ConnectionUtils;
-import com.didekinaar.utils.UIutils;
 import com.didekindroid.R;
-import com.didekindroid.usuariocomunidad.SeeUserComuByComuAc;
 import com.didekindroid.usuariocomunidad.SeeUserComuByUserAc;
+import com.didekindroid.util.AppMenuRouter;
 
 import java.util.Objects;
 
 import timber.log.Timber;
 
 import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
+import static com.didekinaar.utils.AarItemMenu.mn_handler;
 import static com.didekinaar.utils.UIutils.checkPostExecute;
 import static com.didekinaar.utils.UIutils.doToolBar;
 import static com.didekinaar.utils.UIutils.getErrorMsgBuilder;
 import static com.didekinaar.utils.UIutils.makeToast;
 import static com.didekindroid.comunidad.ComunidadService.AppComuServ;
-import static com.didekindroid.usuariocomunidad.UserComuMenu.SEE_USERCOMU_BY_COMU_AC;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.util.AppMenuRouter.routerMap;
 
 /**
  * Preconditions:
@@ -234,18 +234,18 @@ public class ComuDataAc extends AppCompatActivity implements RegComuFr.ComuDataC
         Timber.d("onOptionsItemSelected()");
 
         int resourceId = item.getItemId();
-
-        if (resourceId == android.R.id.home) {
-            UIutils.doUpMenu(this);
-            return true;
-        } else if (resourceId == R.id.see_usercomu_by_comu_ac_mn) {
-            Intent intent = new Intent();
-            intent.putExtra(ComuBundleKey.COMUNIDAD_ID.key, mIdComunidad);
-            this.setIntent(intent);
-            SEE_USERCOMU_BY_COMU_AC.doMenuItem(this, SeeUserComuByComuAc.class);
-            return true;
-        } else {
-            return super.onOptionsItemSelected(item);
+        switch (resourceId) {
+            case android.R.id.home:
+                AppMenuRouter.doUpMenu(this);
+                return true;
+            case R.id.see_usercomu_by_comu_ac_mn:
+                Intent intent = new Intent();
+                intent.putExtra(ComuBundleKey.COMUNIDAD_ID.key, mIdComunidad);
+                this.setIntent(intent);
+                mn_handler.doMenuItem(this, routerMap.get(resourceId));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 

@@ -3,7 +3,6 @@ package com.didekindroid.usuariocomunidad;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,10 +19,8 @@ import com.didekinaar.usuario.RegUserFr;
 import com.didekinaar.usuario.UsuarioBean;
 import com.didekinaar.utils.ConnectionUtils;
 import com.didekindroid.R;
-import com.didekindroid.comunidad.ComuSearchAc;
 import com.didekindroid.comunidad.ComunidadBean;
 import com.didekindroid.comunidad.RegComuFr;
-import com.didekindroid.usuario.login.LoginAppAc;
 
 import java.io.IOException;
 
@@ -32,11 +29,14 @@ import timber.log.Timber;
 import static com.didekin.common.dominio.ValidDataPatterns.LINE_BREAK;
 import static com.didekinaar.security.Oauth2DaoRemote.Oauth2;
 import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
-import static com.didekinaar.usuario.ItemMenu.mn_handler;
+import static com.didekinaar.utils.AarItemMenu.mn_handler;
 import static com.didekinaar.utils.UIutils.checkPostExecute;
 import static com.didekinaar.utils.UIutils.doToolBar;
 import static com.didekinaar.utils.UIutils.makeToast;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.util.AppMenuRouter.doUpMenuWithIntent;
+import static com.didekindroid.util.AppMenuRouter.getRegisterDependentClass;
+import static com.didekindroid.util.AppMenuRouter.routerMap;
 
 /**
  * Preconditions:
@@ -128,17 +128,16 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity {
         Timber.d("onOptionsItemSelected()");
 
         int resourceId = item.getItemId();
-
-        if (resourceId == android.R.id.home) {
-            Intent intent = new Intent(this, ComuSearchAc.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            NavUtils.navigateUpTo(this, intent);
-            return true;
-        } else if (resourceId == R.id.login_ac_mn) {
-            mn_handler.doMenuItem(this, LoginAppAc.class);
-            return true;
-        } else {
-            return super.onOptionsItemSelected(item);
+        switch (resourceId) {
+            case android.R.id.home:
+                Intent intent = new Intent(this, getRegisterDependentClass(resourceId));
+                doUpMenuWithIntent(this, intent);
+                return true;
+            case R.id.login_ac_mn:
+                mn_handler.doMenuItem(this, routerMap.get(resourceId));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
@@ -160,7 +159,7 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity {
                 AppUserComuServ.regComuAndUserAndUserComu(usuarioComunidad[0]).execute();
                 SpringOauthToken token = Oauth2.getPasswordUserToken(newUser.getUserName(), newUser.getPassword());
                 TKhandler.initIdentityCache(token);
-            }catch (IOException e) {
+            } catch (IOException e) {
                 uiException = new UiException(ErrorBean.GENERIC_ERROR);
                 return null;
             } catch (UiException e) {

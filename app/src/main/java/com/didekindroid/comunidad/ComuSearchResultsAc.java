@@ -11,13 +11,9 @@ import android.view.MenuItem;
 import com.didekin.comunidad.Comunidad;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
 import com.didekinaar.exception.UiException;
-import com.didekinaar.utils.UIutils;
 import com.didekindroid.R;
-import com.didekindroid.usuariocomunidad.RegComuAndUserAndUserComuAc;
-import com.didekindroid.usuariocomunidad.RegComuAndUserComuAc;
 import com.didekindroid.usuariocomunidad.RegUserAndUserComuAc;
 import com.didekindroid.usuariocomunidad.RegUserComuAc;
-import com.didekindroid.usuariocomunidad.SeeUserComuByUserAc;
 import com.didekindroid.usuariocomunidad.UserComuDataAc;
 
 import java.util.Collections;
@@ -26,15 +22,16 @@ import java.util.List;
 import timber.log.Timber;
 
 import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
+import static com.didekinaar.utils.AarItemMenu.mn_handler;
 import static com.didekinaar.utils.UIutils.checkPostExecute;
 import static com.didekinaar.utils.UIutils.doToolBar;
+import static com.didekindroid.util.AppMenuRouter.doUpMenu;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_SEARCH;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static com.didekindroid.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;
-import static com.didekindroid.usuariocomunidad.UserComuMenu.REG_COMU_USERCOMU_AC;
-import static com.didekindroid.usuariocomunidad.UserComuMenu.REG_COMU_USER_USERCOMU_AC;
-import static com.didekindroid.usuariocomunidad.UserComuMenu.SEE_USERCOMU_BY_USER_AC;
+import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.util.AppMenuRouter.getRegisterDependentClass;
+import static com.didekindroid.util.AppMenuRouter.routerMap;
 
 /**
  * Preconditions:
@@ -97,7 +94,7 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
     {
         Timber.d("onRestoreInstanceState()");
         if (savedInstanceState != null && mComunidad == null) {
-                mComunidad = (Comunidad) savedInstanceState.getSerializable(COMUNIDAD_SEARCH.key);
+            mComunidad = (Comunidad) savedInstanceState.getSerializable(COMUNIDAD_SEARCH.key);
         }
     }
 
@@ -114,27 +111,34 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu)
+    {
+        Timber.d("onPrepareOptionsMenu()");
+        // Mostramos el menú si el usuario está registrado. TODO: probar.
+        if (TKhandler.isRegisteredUser()) {
+            menu.findItem(R.id.see_usercomu_by_user_ac_mn).setVisible(true).setEnabled(true);
+        }
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
         Timber.d("onOptionsItemSelected()");
 
         int resourceId = item.getItemId();
-
-        if (resourceId == android.R.id.home) {
-            UIutils.doUpMenu(this);
-            return true;
-        } else if (resourceId == R.id.see_usercomu_by_user_ac_mn) {
-            SEE_USERCOMU_BY_USER_AC.doMenuItem(this, SeeUserComuByUserAc.class);
-            return true;
-        } else if (resourceId == R.id.reg_nueva_comunidad_ac_mn) {
-            if (TKhandler.isRegisteredUser()) {
-                REG_COMU_USERCOMU_AC.doMenuItem(this, RegComuAndUserComuAc.class);
-            } else {
-                REG_COMU_USER_USERCOMU_AC.doMenuItem(this, RegComuAndUserAndUserComuAc.class);
-            }
-            return true;
-        } else {
-            return super.onOptionsItemSelected(item);
+        switch (resourceId) {
+            case android.R.id.home:
+                doUpMenu(this);
+                return true;
+            case R.id.see_usercomu_by_user_ac_mn:
+                mn_handler.doMenuItem(this, routerMap.get(resourceId));
+                return true;
+            case R.id.reg_nueva_comunidad_ac_mn:
+                mn_handler.doMenuItem(this, getRegisterDependentClass(resourceId));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
@@ -165,7 +169,8 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
     }
 
     @Override
-    public Comunidad getComunidadToSearch(){
+    public Comunidad getComunidadToSearch()
+    {
         return mComunidad;
     }
 

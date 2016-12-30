@@ -14,13 +14,10 @@ import com.didekin.comunidad.Comunidad;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
 import com.didekinaar.exception.UiException;
 import com.didekinaar.utils.ConnectionUtils;
-import com.didekinaar.utils.UIutils;
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComuBundleKey;
-import com.didekindroid.comunidad.ComuDataAc;
 import com.didekindroid.comunidad.ComuSearchAc;
 import com.didekindroid.comunidad.ComunidadBean;
-import com.didekindroid.incidencia.activity.utils.IncidenciaMenu;
 
 import java.util.Objects;
 
@@ -30,12 +27,14 @@ import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static com.didekin.usuario.UsuarioEndPoints.IS_USER_DELETED;
 import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
-import static com.didekinaar.usuario.ItemMenu.mn_handler;
+import static com.didekinaar.utils.AarItemMenu.mn_handler;
 import static com.didekinaar.utils.UIutils.checkPostExecute;
 import static com.didekinaar.utils.UIutils.doToolBar;
 import static com.didekinaar.utils.UIutils.getErrorMsgBuilder;
 import static com.didekinaar.utils.UIutils.makeToast;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.util.AppMenuRouter.doUpMenu;
+import static com.didekindroid.util.AppMenuRouter.routerMap;
 
 /**
  * Preconditions:
@@ -152,31 +151,23 @@ public class UserComuDataAc extends AppCompatActivity {
         Timber.d("onOptionsItemSelected()");
 
         int resourceId = item.getItemId();
-
-        if (resourceId == android.R.id.home) {
-            UIutils.doUpMenu(this);
-            return true;
-        } else if (resourceId == R.id.see_usercomu_by_comu_ac_mn) {
-            Intent intent = new Intent();
-            intent.putExtra(ComuBundleKey.COMUNIDAD_ID.key, mOldUserComu.getComunidad().getC_Id());
-            this.setIntent(intent);
-            mn_handler.doMenuItem(this, SeeUserComuByComuAc.class);
-            return true;
-        } else if (resourceId == R.id.comu_data_ac_mn) {
-            Intent intent;
-            intent = new Intent(this, ComuDataAc.class);
-            intent.putExtra(ComuBundleKey.COMUNIDAD_ID.key, mOldUserComu.getComunidad().getC_Id());
-            this.setIntent(intent);
-            mn_handler.doMenuItem(this, ComuDataAc.class);
-            return true;
-        } else if (resourceId == R.id.incid_see_open_by_comu_ac_mn) {
-            IncidenciaMenu.INCID_SEE_BY_COMU_AC.doMenuItem(this);
-            return true;
-        } else if (resourceId == R.id.incid_reg_ac_mn) {
-            IncidenciaMenu.INCID_REG_AC.doMenuItem(this);
-            return true;   // TODO: conectar con DidekinApp para estas opciones de menú.
-        } else {
-            return super.onOptionsItemSelected(item);
+        switch (resourceId){
+            case android.R.id.home:
+                doUpMenu(this);
+                return true;
+            case R.id.see_usercomu_by_comu_ac_mn:
+            case R.id.comu_data_ac_mn:
+                Intent intent = new Intent();
+                intent.putExtra(ComuBundleKey.COMUNIDAD_ID.key, mOldUserComu.getComunidad().getC_Id());
+                this.setIntent(intent);
+                mn_handler.doMenuItem(this, routerMap.get(resourceId));
+                return true;
+            case R.id.incid_see_open_by_comu_ac_mn:
+            case R.id.incid_reg_ac_mn:
+                mn_handler.doMenuItem(this, routerMap.get(resourceId));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 

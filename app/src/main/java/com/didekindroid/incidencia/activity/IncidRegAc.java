@@ -17,7 +17,7 @@ import java.util.Objects;
 import timber.log.Timber;
 
 import static com.didekinaar.utils.UIutils.checkPostExecute;
-import static com.didekinaar.utils.UIutils.doUpMenu;
+import static com.didekindroid.util.AppMenuRouter.doUpMenu;
 import static com.didekinaar.usuario.AarFBRegIntentService.getGcmToken;
 import static com.didekinaar.utils.ConnectionUtils.checkInternetConnected;
 import static com.didekinaar.utils.UIutils.doToolBar;

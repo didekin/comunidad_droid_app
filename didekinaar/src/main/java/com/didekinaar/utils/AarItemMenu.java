@@ -1,9 +1,7 @@
-package com.didekinaar.usuario;
+package com.didekinaar.utils;
 
 import android.app.Activity;
 import android.content.Intent;
-
-import com.didekinaar.utils.ItemMenuIf;
 
 import timber.log.Timber;
 
@@ -12,7 +10,7 @@ import timber.log.Timber;
  * Date: 10/08/15
  * Time: 10:37
  */
-public enum ItemMenu implements ItemMenuIf {
+public enum AarItemMenu implements ItemMenuIf {
 
     mn_handler,
     ;

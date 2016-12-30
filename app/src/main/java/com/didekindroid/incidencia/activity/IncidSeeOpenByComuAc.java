@@ -14,8 +14,8 @@ import com.didekin.incidencia.dominio.IncidAndResolBundle;
 import com.didekin.incidencia.dominio.Incidencia;
 import com.didekin.incidencia.dominio.IncidenciaUser;
 import com.didekindroid.R;
+import com.didekindroid.comunidad.ComuBundleKey;
 import com.didekindroid.exception.UiAppException;
-import com.didekindroid.usuariocomunidad.SeeUserComuByComuAc;
 
 import java.util.List;
 import java.util.Objects;
@@ -23,17 +23,16 @@ import java.util.Objects;
 import timber.log.Timber;
 
 import static com.didekinaar.usuario.AarFBRegIntentService.getGcmToken;
-import static com.didekinaar.usuario.ItemMenu.mn_handler;
+import static com.didekinaar.utils.AarItemMenu.mn_handler;
 import static com.didekinaar.utils.UIutils.checkPostExecute;
 import static com.didekinaar.utils.UIutils.doToolBar;
-import static com.didekinaar.utils.UIutils.doUpMenu;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
-import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_CLOSED_BY_COMU_AC;
-import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_REG_AC;
+import static com.didekindroid.util.AppMenuRouter.doUpMenu;
+import static com.didekindroid.util.AppMenuRouter.routerMap;
 
 /**
  * This activity is a point of registration for receiving GCM notifications of new incidents.
@@ -105,16 +104,14 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements
                 doUpMenu(this);
                 return true;
             case R.id.incid_see_closed_by_comu_ac_mn:
-                INCID_CLOSED_BY_COMU_AC.doMenuItem(this);
-                return true;
             case R.id.incid_reg_ac_mn:
-                INCID_REG_AC.doMenuItem(this);
+                mn_handler.doMenuItem(this, routerMap.get(resourceId));
                 return true;
             case R.id.see_usercomu_by_comu_ac_mn:
                 Intent intent = new Intent();
-                intent.putExtra(COMUNIDAD_ID.key, mComunidadSelected.getC_Id());
+                intent.putExtra(ComuBundleKey.COMUNIDAD_ID.key, mComunidadSelected);
                 this.setIntent(intent);
-                mn_handler.doMenuItem(this, SeeUserComuByComuAc.class);
+                mn_handler.doMenuItem(this, routerMap.get(resourceId));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

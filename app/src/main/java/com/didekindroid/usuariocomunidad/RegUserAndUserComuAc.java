@@ -23,7 +23,6 @@ import com.didekinaar.utils.UIutils;
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComuBundleKey;
 import com.didekindroid.comunidad.ComunidadBean;
-import com.didekindroid.usuario.login.LoginAppAc;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -32,12 +31,14 @@ import timber.log.Timber;
 
 import static com.didekinaar.security.Oauth2DaoRemote.Oauth2;
 import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
-import static com.didekinaar.usuario.ItemMenu.mn_handler;
+import static com.didekinaar.utils.AarItemMenu.mn_handler;
 import static com.didekinaar.utils.UIutils.checkPostExecute;
 import static com.didekinaar.utils.UIutils.doToolBar;
 import static com.didekinaar.utils.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.util.AppMenuRouter.doUpMenu;
+import static com.didekindroid.util.AppMenuRouter.routerMap;
 
 /**
  * User: pedro@didekin
@@ -143,15 +144,15 @@ public class RegUserAndUserComuAc extends AppCompatActivity {
         Timber.d("onOptionsItemSelected()");
 
         int resourceId = item.getItemId();
-
-        if (resourceId == android.R.id.home) {
-            UIutils.doUpMenu(this);
-            return true;
-        } else if (resourceId == R.id.login_ac_mn) {
-            mn_handler.doMenuItem(this, LoginAppAc.class);
-            return true;
-        } else {
-            return super.onOptionsItemSelected(item);
+        switch (resourceId){
+            case android.R.id.home:
+                doUpMenu(this);
+                return true;
+            case R.id.login_ac_mn:
+                mn_handler.doMenuItem(this, routerMap.get(resourceId));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 

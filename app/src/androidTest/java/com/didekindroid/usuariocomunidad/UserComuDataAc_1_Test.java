@@ -8,7 +8,6 @@ import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.usuariocomunidad.UsuarioComunidad;
-
 import com.didekinaar.exception.UiException;
 import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.R;
@@ -45,6 +44,8 @@ import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.comunidad.testutil.ComuMenuTestUtil.COMU_DATA_AC;
+import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_REG_AC;
+import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_OPEN_BY_COMU_AC;
 import static com.didekindroid.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.SEE_USERCOMU_BY_COMU_AC;
@@ -224,14 +225,14 @@ public class UserComuDataAc_1_Test {
     @Test
     public void testIncidSeeByComuMn() throws InterruptedException
     {
-        /*IncidenciaMenuTestUtils.INCID_SEE_OPEN_BY_COMU_AC.checkMenuItem_WTk(mActivity);
-        checkUp(activityLayoutId);*/  // TODO: ¿movemos UserComuDataAc to app?
+        INCID_SEE_OPEN_BY_COMU_AC.checkMenuItem_WTk(mActivity);
+        checkUp(activityLayoutId);
     }
 
     @Test
     public void testIncidRegMn() throws InterruptedException
     {
-        /*IncidenciaMenuTestUtils.INCID_REG_AC.checkMenuItem_WTk(mActivity);
-        checkUp(activityLayoutId);*/  // TODO: ¿movemos UserComuDataAc to app?
+        INCID_REG_AC.checkMenuItem_WTk(mActivity);
+        checkUp(activityLayoutId);
     }
 }

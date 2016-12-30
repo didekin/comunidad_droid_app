@@ -5,19 +5,16 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.didekinaar.usuario.password.PasswordChangeAc;
 import com.didekinaar.usuario.userdata.UserDataAc;
 import com.didekindroid.R;
-import com.didekindroid.comunidad.ComuSearchAc;
-import com.didekindroid.usuario.delete.DeleteMeAppAc;
 import com.didekindroid.usuariocomunidad.SeeUserComuByUserAc;
 
 import timber.log.Timber;
 
-import static com.didekinaar.usuario.ItemMenu.mn_handler;
-import static com.didekinaar.utils.UIutils.doUpMenu;
-import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_SEE_BY_COMU_AC;
-import static com.didekindroid.usuariocomunidad.UserComuMenu.SEE_USERCOMU_BY_USER_AC;
+import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
+import static com.didekinaar.utils.AarItemMenu.mn_handler;
+import static com.didekindroid.util.AppMenuRouter.doUpMenu;
+import static com.didekindroid.util.AppMenuRouter.routerMap;
 
 public class UserDataAppAc extends UserDataAc {
 
@@ -35,6 +32,10 @@ public class UserDataAppAc extends UserDataAc {
         setDefaultActivityClassToGo(SeeUserComuByUserAc.class);
     }
 
+//    ============================================================
+//    ..... ACTION BAR ....
+/*    ============================================================*/
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
@@ -44,32 +45,35 @@ public class UserDataAppAc extends UserDataAc {
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu)
+    {
+        Timber.d("onPrepareOptionsMenu()");
+        // Mostramos el menú si el usuario está registrado. TODO: probar.
+        if (TKhandler.isRegisteredUser()) {
+            menu.findItem(R.id.see_usercomu_by_user_ac_mn).setVisible(true).setEnabled(true);
+        }
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
         Timber.d("onOptionsItemSelected()");
 
         int resourceId = item.getItemId();
-
-        if (resourceId == android.R.id.home) {
-            doUpMenu(this);
-            return true;
-        } else if (resourceId == R.id.password_change_ac_mn) {
-            mn_handler.doMenuItem(this, PasswordChangeAc.class);
-            return true;
-        } else if (resourceId == R.id.delete_me_ac_mn) {
-            mn_handler.doMenuItem(this, DeleteMeAppAc.class);
-            return true;
-        } else if (resourceId == R.id.see_usercomu_by_user_ac_mn) {
-            SEE_USERCOMU_BY_USER_AC.doMenuItem(this, SeeUserComuByUserAc.class);
-            return true;
-        } else if (resourceId == R.id.comu_search_ac_mn) {
-            mn_handler.doMenuItem(this, ComuSearchAc.class);
-            return true;
-        } else if (resourceId == R.id.incid_see_open_by_comu_ac_mn) {
-            INCID_SEE_BY_COMU_AC.doMenuItem(this);
-            return true;
-        } else {
-            return super.onOptionsItemSelected(item);
+        switch (resourceId){
+            case android.R.id.home:
+                doUpMenu(this);
+                return true;
+            case R.id.password_change_ac_mn:
+            case R.id.delete_me_ac_mn:
+            case R.id.see_usercomu_by_user_ac_mn:
+            case R.id.comu_search_ac_mn:
+            case R.id.incid_see_open_by_comu_ac_mn:
+                mn_handler.doMenuItem(this, routerMap.get(resourceId));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }

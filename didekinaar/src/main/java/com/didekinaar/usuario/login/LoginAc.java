@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog.Builder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDialog;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,7 +17,6 @@ import com.didekinaar.usuario.UsuarioBean;
 import com.didekinaar.usuario.login.LoginAcObservable.LoginMailSubscriber;
 import com.didekinaar.usuario.login.LoginAcObservable.LoginValidateSubscriber;
 import com.didekinaar.utils.ConnectionUtils;
-import com.didekinaar.utils.UIutils;
 
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -91,25 +89,6 @@ public abstract class LoginAc extends AppCompatActivity implements LoginViewIf, 
         super.onDestroy();
         if (subscriptions != null && subscriptions.hasSubscriptions()) {
             subscriptions.unsubscribe();
-        }
-    }
-
-    // ============================================================
-    //    ..... ACTION BAR ....
-    // ============================================================
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        Timber.d("onOptionsItemSelected()");
-        int resourceId = item.getItemId();
-
-        switch (resourceId) {
-            case android.R.id.home:
-                UIutils.doUpMenu(this);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
         }
     }
 

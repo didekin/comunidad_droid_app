@@ -15,7 +15,6 @@ import android.widget.ListView;
 import com.didekin.common.exception.ErrorBean;
 import com.didekin.comunidad.Comunidad;
 import com.didekinaar.exception.UiException;
-import com.didekinaar.utils.UIutils;
 import com.didekindroid.R;
 import com.didekindroid.usuariocomunidad.RegComuAndUserAndUserComuAc;
 import com.didekindroid.usuariocomunidad.RegComuAndUserComuAc;
@@ -27,9 +26,8 @@ import timber.log.Timber;
 
 import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
 import static com.didekinaar.utils.UIutils.checkPostExecute;
+import static com.didekinaar.utils.UIutils.makeToast;
 import static com.didekindroid.comunidad.ComunidadService.AppComuServ;
-import static com.didekindroid.usuariocomunidad.UserComuMenu.REG_COMU_USERCOMU_AC;
-import static com.didekindroid.usuariocomunidad.UserComuMenu.REG_COMU_USER_USERCOMU_AC;
 
 /**
  * Preconditions:
@@ -216,13 +214,16 @@ public class ComuSearchResultsListFr extends Fragment {
                 mAdapter.addAll(comunidadList);
                 mListView.setAdapter(mAdapter);
             } else {
-                UIutils.makeToast(mComuListListener.getActivity(), R.string.no_result_search_comunidad);
+                makeToast(mComuListListener.getActivity(), R.string.no_result_search_comunidad);
+                Intent intent;
+                Activity myActivity = mComuListListener.getActivity();
                 if (TKhandler.isRegisteredUser()) {
-                    REG_COMU_USERCOMU_AC.doMenuItem(mComuListListener.getActivity(), RegComuAndUserComuAc.class);
+                    intent = new Intent(myActivity, RegComuAndUserComuAc.class);
                 } else {
-                    REG_COMU_USER_USERCOMU_AC.doMenuItem(mComuListListener.getActivity(), RegComuAndUserAndUserComuAc.class);
+                    intent = new Intent(myActivity, RegComuAndUserAndUserComuAc.class);
                 }
-                mComuListListener.getActivity().finish();
+                myActivity.startActivity(intent);
+                myActivity.finish();
             }
         }
     }

@@ -7,6 +7,8 @@
             android:id="@+id/see_usercomu_by_user_ac_mn"
             android:title="@string/see_usercomu_by_user_ac_mn"
             android:orderInCategory="100"
+            android:visible="false"
+            android:enabled="false"
             app:showAsAction="never|withText"/>
     <item
             android:id="@+id/user_data_ac_mn"

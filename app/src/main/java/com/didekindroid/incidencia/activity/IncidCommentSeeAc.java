@@ -13,11 +13,12 @@ import java.util.Objects;
 
 import timber.log.Timber;
 
-import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCIDENCIA_OBJECT;
+import static com.didekinaar.utils.AarItemMenu.mn_handler;
 import static com.didekinaar.utils.UIutils.doToolBar;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_comments_see_list_fr_tag;
-import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_COMMENT_REG_AC;
-import static com.didekinaar.utils.UIutils.doUpMenu;
+import static com.didekindroid.util.AppMenuRouter.doUpMenu;
+import static com.didekindroid.util.AppMenuRouter.routerMap;
 
 /**
  * Preconditions:
@@ -86,7 +87,7 @@ public class IncidCommentSeeAc extends AppCompatActivity {
             case R.id.incid_comment_reg_ac_mn:
                 Intent intent = new Intent();
                 intent.putExtra(INCIDENCIA_OBJECT.key, mIncidencia);
-                INCID_COMMENT_REG_AC.doMenuItem(this);
+                mn_handler.doMenuItem(this, routerMap.get(resourceId));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -18,19 +18,18 @@ import java.util.Objects;
 
 import timber.log.Timber;
 
+import static com.didekinaar.utils.AarItemMenu.mn_handler;
 import static com.didekinaar.utils.UIutils.checkPostExecute;
+import static com.didekinaar.utils.UIutils.doToolBar;
+import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_ACTIVITY_VIEW_ID;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekinaar.utils.UIutils.doToolBar;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_edit_ac_frgs_tag;
-import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_COMMENTS_SEE_AC;
-import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_COMMENT_REG_AC;
-import static com.didekindroid.incidencia.activity.utils.IncidenciaMenu.INCID_RESOLUCION_REG_EDIT_AC;
-import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
-import static com.didekinaar.utils.UIutils.doUpMenu;
+import static com.didekindroid.util.AppMenuRouter.doUpMenu;
+import static com.didekindroid.util.AppMenuRouter.routerMap;
 
 /**
  * Preconditions:
@@ -106,26 +105,20 @@ public class IncidEditAc extends AppCompatActivity {
         Timber.d("onOptionsItemSelected()");
 
         int resourceId = item.getItemId();
-        Intent intent;
 
         switch (resourceId) {
             case android.R.id.home:
                 doUpMenu(this);
                 return true;
             case R.id.incid_comment_reg_ac_mn:
-                intent = new Intent();
-                intent.putExtra(INCIDENCIA_OBJECT.key, mIncidImportancia.getIncidencia());
-                setIntent(intent);
-                INCID_COMMENT_REG_AC.doMenuItem(this);
-                return true;
             case R.id.incid_comments_see_ac_mn:
-                intent = new Intent();
+                Intent intent = new Intent();
                 intent.putExtra(INCIDENCIA_OBJECT.key, mIncidImportancia.getIncidencia());
                 setIntent(intent);
-                INCID_COMMENTS_SEE_AC.doMenuItem(this);
+                mn_handler.doMenuItem(this, routerMap.get(resourceId));
                 return true;
             case R.id.incid_resolucion_reg_ac_mn:
-                new ResolucionGetter().execute();
+                new ResolucionGetter().execute(resourceId);
                 return false;
             default:
                 return super.onOptionsItemSelected(item);
@@ -137,14 +130,16 @@ public class IncidEditAc extends AppCompatActivity {
 //    ============================================================
 
     // TODO: to persist the task during restarts and properly cancel the task when the activity is destroyed. (Example in Shelves)
-    class ResolucionGetter extends AsyncTask<Void, Void, Resolucion> {
+    class ResolucionGetter extends AsyncTask<Integer, Void, Resolucion> {
 
         private UiAppException uiException;
+        private int itemMenuId;
 
         @Override
-        protected Resolucion doInBackground(Void... aVoid)
+        protected Resolucion doInBackground(Integer... resourceId)
         {
             Timber.d("doInBackground()");
+            itemMenuId = resourceId[0];
             Resolucion resolucion = null;
 
             try {
@@ -173,7 +168,7 @@ public class IncidEditAc extends AppCompatActivity {
                 intent0.putExtra(INCID_RESOLUCION_OBJECT.key, resolucion);
             }
             setIntent(intent0);
-            INCID_RESOLUCION_REG_EDIT_AC.doMenuItem(IncidEditAc.this);
+            mn_handler.doMenuItem(IncidEditAc.this, routerMap.get(itemMenuId));
         }
     }
 }

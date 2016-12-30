@@ -7,19 +7,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.didekin.usuariocomunidad.UsuarioComunidad;
-import com.didekinaar.usuario.userdata.UserDataAc;
-import com.didekinaar.utils.UIutils;
 import com.didekindroid.R;
-import com.didekindroid.comunidad.ComuSearchAc;
 
 import java.util.Objects;
 
 import timber.log.Timber;
 
 import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
-import static com.didekinaar.usuario.ItemMenu.mn_handler;
+import static com.didekinaar.utils.AarItemMenu.mn_handler;
 import static com.didekinaar.utils.UIutils.doToolBar;
 import static com.didekindroid.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;
+import static com.didekindroid.util.AppMenuRouter.doUpMenu;
+import static com.didekindroid.util.AppMenuRouter.routerMap;
 
 /**
  * Preconditions:
@@ -67,18 +66,16 @@ public class SeeUserComuByUserAc extends AppCompatActivity implements
         Timber.d("onOptionsItemSelected()");
 
         int resourceId = item.getItemId();
-
-        if (resourceId == android.R.id.home) {
-            UIutils.doUpMenu(this);
-            return true;
-        } else if (resourceId == R.id.user_data_ac_mn) {
-            mn_handler.doMenuItem(this, UserDataAc.class);
-            return true;
-        } else if (resourceId == R.id.comu_search_ac_mn) {
-            mn_handler.doMenuItem(this, ComuSearchAc.class);
-            return true;
-        } else {
-            return super.onOptionsItemSelected(item);
+        switch (resourceId) {
+            case android.R.id.home:
+                doUpMenu(this);
+                return true;
+            case R.id.user_data_ac_mn:
+            case R.id.comu_search_ac_mn:
+                mn_handler.doMenuItem(this, routerMap.get(resourceId));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 

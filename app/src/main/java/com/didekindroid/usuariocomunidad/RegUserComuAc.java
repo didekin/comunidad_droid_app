@@ -15,6 +15,7 @@ import com.didekindroid.R;
 import com.didekindroid.comunidad.ComunidadBean;
 import com.didekinaar.utils.ConnectionUtils;
 import com.didekinaar.utils.UIutils;
+import com.didekindroid.util.AppMenuRouter;
 
 import java.util.Objects;
 
@@ -121,7 +122,7 @@ public class RegUserComuAc extends AppCompatActivity {
         int resourceId = item.getItemId();
         switch (resourceId) {
             case android.R.id.home:
-                UIutils.doUpMenu(this);
+                AppMenuRouter.doUpMenu(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
