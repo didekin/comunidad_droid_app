@@ -33,11 +33,11 @@ import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IM
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_RESOLUCION_REG_EDIT_AC;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doResolucion;
+import static com.didekindroid.incidencia.IncidenciaTestUtils.doIncidencia;
+import static com.didekindroid.incidencia.IncidenciaTestUtils.doResolucion;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_PLAZUELA5_JUAN;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_PLAZUELA5_JUAN;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.signUpAndUpdateTk;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 

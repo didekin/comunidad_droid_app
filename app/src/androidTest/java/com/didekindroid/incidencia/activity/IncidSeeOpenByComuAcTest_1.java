@@ -11,7 +11,7 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekin.comunidad.Comunidad;
 import com.didekinaar.exception.UiException;
 import com.didekinaar.testutil.IdlingResourceForIntentServ;
-import com.didekinaar.usuario.AarFBRegIntentService;
+import com.didekindroid.usuario.AarFBRegIntentService;
 import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.R;
 
@@ -45,9 +45,9 @@ import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCI
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_CLOSED_BY_COMU_AC;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.SEE_USERCOMU_BY_COMU_AC;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_PLAZUELA5_JUAN;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_REAL_JUAN;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.regSeveralUserComuSameUser;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_PLAZUELA5_JUAN;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_REAL_JUAN;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.regSeveralUserComuSameUser;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;

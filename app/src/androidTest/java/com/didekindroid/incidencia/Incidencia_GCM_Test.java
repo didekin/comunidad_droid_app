@@ -13,7 +13,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekinaar.exception.UiException;
 import com.didekinaar.testutil.IdlingResourceForIntentServ;
-import com.didekinaar.usuario.AarFBRegIntentService;
+import com.didekindroid.usuario.AarFBRegIntentService;
 import com.didekinservice.common.gcm.GcmRequest;
 import com.google.firebase.iid.FirebaseInstanceId;
 

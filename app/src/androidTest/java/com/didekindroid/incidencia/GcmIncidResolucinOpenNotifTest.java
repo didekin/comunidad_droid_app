@@ -29,10 +29,10 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekin.incidencia.gcm.GcmKeyValueIncidData.resolucion_open_type;
 import static com.didekinaar.testutil.AarActivityTestUtils.clickNavigateUp;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidenciaUser;
+import static com.didekindroid.incidencia.IncidenciaTestUtils.insertGetIncidenciaUser;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_REAL_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_REAL_PEPE;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.signUpAndUpdateTk;
 import static org.hamcrest.CoreMatchers.allOf;
 
 /**

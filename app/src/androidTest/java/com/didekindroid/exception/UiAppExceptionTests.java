@@ -39,11 +39,11 @@ import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
+import static com.didekindroid.incidencia.IncidenciaTestUtils.doIncidencia;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_PLAZUELA5_JUAN;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_PLAZUELA5_JUAN;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.signUpAndUpdateTk;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -196,7 +196,7 @@ public class UiAppExceptionTests {
         assertThat(TKhandler.isRegisteredUser(), is(true));
         assertThat(TKhandler.getTokenInCache(), notNullValue());
 
-        final UiAppException ue = new UiAppException(new ErrorBean(INCIDENCIA_NOT_REGISTERED));
+        final UiException ue = new UiException(new ErrorBean(INCIDENCIA_NOT_REGISTERED));
         mActivity.runOnUiThread(new Runnable() {
             @Override
             public void run()
@@ -212,7 +212,7 @@ public class UiAppExceptionTests {
     @Test
     public void testLoginIncid() throws Exception
     {
-        final UiAppException ue = new UiAppException(new ErrorBean(INCIDENCIA_USER_WRONG_INIT));
+        final UiException ue = new UiException(new ErrorBean(INCIDENCIA_USER_WRONG_INIT));
 
         mActivity.runOnUiThread(new Runnable() {
             @Override
@@ -233,7 +233,7 @@ public class UiAppExceptionTests {
         assertThat(TKhandler.isRegisteredUser(), is(true));
         assertThat(TKhandler.getTokenInCache(), notNullValue());
 
-        final UiAppException ue = new UiAppException(new ErrorBean(INCIDENCIA_COMMENT_WRONG_INIT));
+        final UiException ue = new UiException(new ErrorBean(INCIDENCIA_COMMENT_WRONG_INIT));
         mActivity.runOnUiThread(new Runnable() {
             @Override
             public void run()
@@ -253,7 +253,7 @@ public class UiAppExceptionTests {
         final Intent intentIn = new Intent();
         intentIn.putExtra(INCID_IMPORTANCIA_OBJECT.key, mActivity.getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.key));
 
-        final UiAppException ue = new UiAppException(new ErrorBean(RESOLUCION_DUPLICATE));
+        final UiException ue = new UiException(new ErrorBean(RESOLUCION_DUPLICATE));
 
         mActivity.runOnUiThread(new Runnable() {
             @Override

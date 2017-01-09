@@ -4,7 +4,6 @@ import com.didekin.usuario.GcmTokenWrapper;
 import com.didekin.usuario.Usuario;
 import com.didekin.usuario.UsuarioEndPoints;
 import com.didekinaar.exception.UiException;
-import com.didekinaar.utils.AarDaoUtil;
 
 import java.io.EOFException;
 import java.io.IOException;

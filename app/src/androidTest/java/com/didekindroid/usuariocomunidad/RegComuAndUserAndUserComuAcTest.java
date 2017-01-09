@@ -22,7 +22,6 @@ import com.didekindroid.comunidad.ComunidadBean;
 import com.didekindroid.comunidad.RegComuFr;
 import com.didekindroid.comunidad.testutil.ComuEspresoTestUtil;
 import com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil;
-import com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil;
 
 import org.junit.After;
 import org.junit.Before;

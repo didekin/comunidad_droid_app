@@ -11,7 +11,7 @@ public enum UserComuBundleKey {
     USERCOMU_LIST_OBJECT,
     ;
 
-    private static final String intentPackage =  "UserComuBundleKey.";
+    public static final String intentPackage =  "UserComuBundleKey.";
 
     public final String key;
 

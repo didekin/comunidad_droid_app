@@ -1,5 +1,8 @@
 package com.didekindroid.comunidad;
 
+import com.didekindroid.comunidad.repository.ComunidadDbHelperTest;
+import com.didekindroid.comunidad.repository.MockDbHelperTest;
+
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -13,13 +16,13 @@ import org.junit.runners.Suite;
         ComuDataAcTest.class,
         ComunidadBeanValidaTests.class,
         ComunidadDbHelperTest.class,
-        ComunidadTest.class,
+        ComunidadServiceTest.class,
         ComuSearchAc_1_Test.class,
         ComuSearchAc_2_Test.class,
         ComuSearchAc_3_SlowTest.class,
         ComuSearchResultsAc_1_Test.class,
         ComuSearchResultsAc_2_SlowTest.class,
-        MunicipioTest.class,
+        MockDbHelperTest.class,
 })
 public class ComunidadSuite {
 

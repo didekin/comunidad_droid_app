@@ -7,8 +7,8 @@ android {
         applicationId "com.didekindroid"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 3
-        versionName "a-0.4.1"
+        versionCode 4
+        versionName "a-0.4.2"
         testInstrumentationRunner rootProject.ext.testInstrumentationRunner
         resConfigs "es" /* Añadir nuevos idiomas según hagan falta.*/
     }
@@ -51,11 +51,14 @@ android {
             initWith release
             signingConfig signingConfigs.release
         }
-        debug {  // By default, all tests run against the debug build type
-            // Las tres siguientes opciones pueden dar problemas.
+        debug {
+            /*
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
+                    'proguard-rules.pro',
+                    'proguard-debug-rules.pro'
             useProguard false
+            */
             debuggable true
             versionNameSuffix '-DEBUG'
             applicationIdSuffix ""
@@ -83,12 +86,13 @@ configurations {
 }
 
 dependencies {
-    /* Warning if we do not repeat this dependency. */
-    compile rootProject.ext.firebase_message
-//    compile project(':didekinaar')
-
     debugCompile project(path: ':didekinaar', configuration: 'debug')
     releaseCompile project(path: ':didekinaar', configuration: 'release')
+    localCompile project(path: ':didekinaar', configuration: 'release')
+    preCompile project(path: ':didekinaar', configuration: 'release')
+
+    /* Warning if we do not repeat this dependency. */
+    compile rootProject.ext.firebase_message
     androidTestCompile rootProject.ext.apps_androidtest
     testCompile rootProject.ext.junit
 }

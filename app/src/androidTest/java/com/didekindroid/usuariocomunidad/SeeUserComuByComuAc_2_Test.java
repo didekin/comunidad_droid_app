@@ -12,9 +12,8 @@ import com.didekinaar.exception.UiException;
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComuBundleKey;
 import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
-import com.didekindroid.comunidad.testutil.ComuTestUtil;
+import com.didekindroid.comunidad.ComuTestUtil;
 import com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil;
-import com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil;
 
 import org.hamcrest.Matchers;
 import org.junit.After;

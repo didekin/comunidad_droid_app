@@ -19,8 +19,8 @@ import java.io.IOException;
 import java.util.Objects;
 
 import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.signUpAndUpdateTk;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_ESCORIAL_PEPE;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 
 

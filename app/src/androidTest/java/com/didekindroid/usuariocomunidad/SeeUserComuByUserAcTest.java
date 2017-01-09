@@ -8,8 +8,7 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekinaar.exception.UiException;
 import com.didekinaar.usuario.testutil.UserItemMenuTestUtils;
 import com.didekindroid.R;
-import com.didekindroid.comunidad.testutil.ComuTestUtil;
-import com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil;
+import com.didekindroid.comunidad.ComuTestUtil;
 
 import org.hamcrest.Matchers;
 import org.junit.After;

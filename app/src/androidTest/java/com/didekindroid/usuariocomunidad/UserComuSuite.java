@@ -19,8 +19,8 @@ import org.junit.runners.Suite;
         SeeUserComuByUserAcTest.class,
         UserComuDataAc_1_Test.class,
         UserComuDataAc_2_Test.class,
+        UserComuServiceTest.class,
         UsuarioComunidadBeanValidaTests.class,
-        UsuarioComunidadTest.class,
 })
 public class UserComuSuite {
 }

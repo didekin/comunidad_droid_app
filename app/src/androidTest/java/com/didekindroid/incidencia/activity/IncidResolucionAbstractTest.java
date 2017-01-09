@@ -28,8 +28,8 @@ import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RE
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekinaar.utils.UIutils.SPAIN_LOCALE;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_resolucion_ac_frgs_tag;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.COSTE_ESTIM_DEFAULT_String;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.RESOLUCION_DEFAULT_DESC;
+import static com.didekindroid.incidencia.IncidenciaTestUtils.COSTE_ESTIM_DEFAULT_String;
+import static com.didekindroid.incidencia.IncidenciaTestUtils.RESOLUCION_DEFAULT_DESC;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;

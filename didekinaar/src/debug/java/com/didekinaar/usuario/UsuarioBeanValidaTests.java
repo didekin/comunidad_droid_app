@@ -1,15 +1,11 @@
 package com.didekinaar.usuario;
 
 import android.content.res.Resources;
-import android.support.test.InstrumentationRegistry;
-import android.support.test.runner.AndroidJUnit4;
-
 
 import com.didekinaar.R;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.containsString;
@@ -22,16 +18,17 @@ import static org.junit.Assert.assertThat;
  * Date: 01/06/15
  * Time: 18:47
  */
-@RunWith(AndroidJUnit4.class)
-public class UsuarioBeanValidaTests {
+public abstract class UsuarioBeanValidaTests {
 
     private StringBuilder errors;
     private Resources resources;
 
+    protected abstract Resources getResources();
+
     @Before
     public void doBefore()
     {
-        resources = InstrumentationRegistry.getTargetContext().getResources();
+        resources = getResources();
         errors = new StringBuilder(resources.getText(R.string.error_validation_msg));
     }
 

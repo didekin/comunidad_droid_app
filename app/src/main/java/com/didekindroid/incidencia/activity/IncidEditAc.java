@@ -11,8 +11,8 @@ import android.view.View;
 
 import com.didekin.incidencia.dominio.IncidImportancia;
 import com.didekin.incidencia.dominio.Resolucion;
+import com.didekinaar.exception.UiException;
 import com.didekindroid.R;
-import com.didekindroid.exception.UiAppException;
 
 import java.util.Objects;
 
@@ -132,7 +132,7 @@ public class IncidEditAc extends AppCompatActivity {
     // TODO: to persist the task during restarts and properly cancel the task when the activity is destroyed. (Example in Shelves)
     class ResolucionGetter extends AsyncTask<Integer, Void, Resolucion> {
 
-        private UiAppException uiException;
+        private UiException uiException;
         private int itemMenuId;
 
         @Override
@@ -144,7 +144,7 @@ public class IncidEditAc extends AppCompatActivity {
 
             try {
                 resolucion = IncidenciaServ.seeResolucion(mIncidImportancia.getIncidencia().getIncidenciaId());
-            } catch (UiAppException e) {
+            } catch (UiException e) {
                 uiException = e;
             }
             return resolucion;

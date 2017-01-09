@@ -35,10 +35,10 @@ import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
+import static com.didekindroid.incidencia.IncidenciaTestUtils.doIncidencia;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_REAL_JUAN;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_REAL_JUAN;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.signUpAndUpdateTk;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 

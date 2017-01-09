@@ -12,7 +12,7 @@ import android.widget.ListView;
 
 import com.didekin.incidencia.dominio.IncidComment;
 import com.didekin.incidencia.dominio.Incidencia;
-import com.didekindroid.exception.UiAppException;
+import com.didekinaar.exception.UiException;
 import com.didekindroid.R;
 
 import java.util.List;
@@ -20,8 +20,8 @@ import java.util.List;
 import timber.log.Timber;
 
 import static com.didekinaar.utils.UIutils.checkPostExecute;
-import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 
 /**
  * Preconditions:
@@ -147,7 +147,7 @@ public class IncidCommentSeeListFr extends Fragment {
     // TODO: to persist the task during restarts and properly cancel the task when the activity is destroyed. (Example in Shelves)
     class IncidCommentLoader extends AsyncTask<Incidencia, Void, List<IncidComment>> {
 
-        UiAppException uiException;
+        UiException uiException;
 
         @Override
         protected List<IncidComment> doInBackground(Incidencia... params)
@@ -156,7 +156,7 @@ public class IncidCommentSeeListFr extends Fragment {
             List<IncidComment> comments = null;
             try {
                 comments = IncidenciaServ.seeCommentsByIncid(params[0].getIncidenciaId());
-            } catch (UiAppException ue) {
+            } catch (UiException ue) {
                 uiException = ue;
             }
             return comments;

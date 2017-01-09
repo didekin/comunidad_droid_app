@@ -25,11 +25,11 @@ import static com.didekinaar.usuario.UsuarioDaoRemote.usuarioDaoRemote;
 import static com.didekindroid.incidencia.AppFBService.IncidTypeMsgHandler.RESOLUCION_OPEN;
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.COSTE_ESTIM_DEFAULT;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.RESOLUCION_DEFAULT_DESC;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doResolucion;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidImportancia;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_PLAZUELA5_PEPE;
+import static com.didekindroid.incidencia.IncidenciaTestUtils.COSTE_ESTIM_DEFAULT;
+import static com.didekindroid.incidencia.IncidenciaTestUtils.RESOLUCION_DEFAULT_DESC;
+import static com.didekindroid.incidencia.IncidenciaTestUtils.doResolucion;
+import static com.didekindroid.incidencia.IncidenciaTestUtils.insertGetIncidImportancia;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_PLAZUELA5_PEPE;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 

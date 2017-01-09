@@ -2,29 +2,39 @@ package com.didekindroid.security;
 
 import android.support.test.runner.AndroidJUnit4;
 
+import com.didekin.common.exception.ErrorBean;
 import com.didekin.oauth2.SpringOauthToken;
 import com.didekinaar.exception.UiException;
 import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 import com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum;
-import com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil;
+import com.didekindroid.usuariocomunidad.UserComuTestUtil;
 
 import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
+
+import retrofit2.Response;
+
 import static com.didekin.common.exception.DidekinExceptionMsg.BAD_REQUEST;
+import static com.didekin.common.exception.DidekinExceptionMsg.NOT_FOUND;
+import static com.didekin.oauth2.OauthClient.CL_USER;
 import static com.didekin.oauth2.OauthTokenHelper.HELPER;
+import static com.didekinaar.AppInitializer.creator;
 import static com.didekinaar.security.Oauth2DaoRemote.Oauth2;
 import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
 import static com.didekinaar.testutil.AarTestUtil.updateSecurityData;
 import static com.didekinaar.usuario.UsuarioDaoRemote.usuarioDaoRemote;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_NOTHING;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_REAL_JUAN;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_REAL_JUAN;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.signUpAndUpdateTk;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
@@ -39,7 +49,7 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class Oauth2DaoRemoteIf_app_Test {
 
-    private CleanUserEnum whatClean;
+    private CleanUserEnum whatClean = CLEAN_NOTHING;
 
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
@@ -51,6 +61,21 @@ public class Oauth2DaoRemoteIf_app_Test {
     public void cleaningUp() throws UiException
     {
         cleanOptions(whatClean);
+    }
+
+    @Test
+    public void testGetNotFoundMsg() throws IOException
+    {
+        Response<ErrorBean> response = Oauth2.getNotFoundMsg().execute();
+        assertThat(response.isSuccessful(), is(false));
+        assertThat(creator.get().getRetrofitHandler().getErrorBean(response).getMessage(), is(NOT_FOUND.getHttpMessage()));
+    }
+
+    @Test
+    public void testDoAuthBasicHeader()
+    {
+        String encodedHeader = Oauth2.doAuthBasicHeader(CL_USER);
+        assertThat(encodedHeader, equalTo("Basic dXNlcjo="));
     }
 
     @Test

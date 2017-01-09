@@ -14,8 +14,8 @@ import com.didekin.comunidad.Comunidad;
 import com.didekin.incidencia.dominio.Incidencia;
 import com.didekin.incidencia.dominio.IncidenciaUser;
 import com.didekin.incidencia.dominio.Resolucion;
+import com.didekinaar.exception.UiException;
 import com.didekindroid.R;
-import com.didekindroid.exception.UiAppException;
 
 import java.util.List;
 import java.util.Objects;
@@ -126,7 +126,7 @@ public class IncidSeeClosedByComuAc extends AppCompatActivity implements
     }
 
     @Override
-    public List<IncidenciaUser> getListFromService(long comunidadId) throws UiAppException
+    public List<IncidenciaUser> getListFromService(long comunidadId) throws UiException
     {
         return IncidenciaServ.seeIncidsClosedByComu(comunidadId);
     }
@@ -147,7 +147,7 @@ public class IncidSeeClosedByComuAc extends AppCompatActivity implements
 
     private class ResolucionGetter extends AsyncTask<Incidencia, Void, Resolucion> {
 
-        UiAppException uiException;
+        UiException uiException;
         Incidencia incidencia;
 
         ResolucionGetter()
@@ -162,7 +162,7 @@ public class IncidSeeClosedByComuAc extends AppCompatActivity implements
             Resolucion resolucion = null;
             try {
                 resolucion = IncidenciaServ.seeResolucion(incidencia.getIncidenciaId());
-            } catch (UiAppException e) {
+            } catch (UiException e) {
                 uiException = e;
             }
             return resolucion;

@@ -11,7 +11,6 @@ import com.didekin.usuariocomunidad.UsuarioComunidad;
 import com.didekinaar.exception.UiException;
 import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.R;
-import com.didekindroid.exception.UiAppException;
 import com.didekindroid.incidencia.IncidenciaDataDbHelper;
 
 import org.junit.After;
@@ -40,20 +39,19 @@ import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.regSeveralUserComuSameUser;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
-import static com.didekindroid.comunidad.testutil.ComuTestUtil.COMU_LA_PLAZUELA_5;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_PLAZUELA5_JUAN;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_REAL_JUAN;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekinaar.utils.UIutils.formatTimeStampToString;
-
+import static com.didekindroid.comunidad.ComuTestUtil.COMU_LA_PLAZUELA_5;
+import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
+import static com.didekindroid.incidencia.IncidenciaDataDbHelperTest.DB_PATH;
+import static com.didekindroid.incidencia.IncidenciaTestUtils.doIncidencia;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
-import static com.didekindroid.incidencia.IncidenciaDataDbHelperTest.DB_PATH;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
-import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
+import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_PLAZUELA5_JUAN;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_REAL_JUAN;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.regSeveralUserComuSameUser;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -286,7 +284,7 @@ public class IncidSeeOpenByComuAcTest_2 {
     }
 
     @Test
-    public void testOnSelected_1() throws UiAppException, InterruptedException
+    public void testOnSelected_1() throws UiException, InterruptedException
     {
 
         // Default comunidad (Real), in position 0, is selected.

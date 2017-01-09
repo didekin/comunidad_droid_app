@@ -16,8 +16,8 @@ import java.io.IOException;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidImportancia;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_REAL_JUAN;
+import static com.didekindroid.incidencia.IncidenciaTestUtils.insertGetIncidImportancia;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_REAL_JUAN;
 
 /**
  * User: pedro@didekin

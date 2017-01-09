@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- ============= web services ====================-->
+    <!-- Producción -->
+    <string name="didekinspring_host" translatable="false"/>
+    <string name="didekinspring_port" translatable="false"/>
+    <string name="didekindroid_bks_pswd" translatable="false">fake1</string>
+    <string name="didekindroid_bks_name" translatable="false">fake2</string>
+    <!-- Http client timeOut-->
+    <string name="timeOut" translatable="false">60</string>
+</resources>

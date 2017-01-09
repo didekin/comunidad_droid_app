@@ -12,7 +12,7 @@ import com.didekinaar.exception.UiException;
 import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.R;
 import com.didekindroid.comunidad.testutil.ComuEspresoTestUtil;
-import com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil;
+import com.didekindroid.usuariocomunidad.UserComuTestUtil;
 
 import org.hamcrest.Matchers;
 import org.junit.After;

@@ -13,23 +13,23 @@ import android.widget.TextView;
 
 import com.didekin.incidencia.dominio.IncidImportancia;
 import com.didekin.incidencia.dominio.Incidencia;
+import com.didekinaar.exception.UiException;
 import com.didekindroid.R;
-import com.didekindroid.exception.UiAppException;
+import com.didekindroid.incidencia.IncidenciaDataDbHelper;
 import com.didekindroid.incidencia.activity.utils.ImportanciaSpinnerSettable;
 import com.didekindroid.incidencia.dominio.IncidImportanciaBean;
-import com.didekindroid.incidencia.IncidenciaDataDbHelper;
 
 import java.util.Objects;
 
 import timber.log.Timber;
 
-import static com.didekinaar.utils.UIutils.checkPostExecute;
-import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekinaar.utils.ConnectionUtils.checkInternetConnected;
+import static com.didekinaar.utils.UIutils.checkPostExecute;
 import static com.didekinaar.utils.UIutils.getErrorMsgBuilder;
 import static com.didekinaar.utils.UIutils.makeToast;
-import static com.didekindroid.incidencia.activity.utils.IncidSpinnersHelper.HELPER;
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.activity.utils.IncidSpinnersHelper.HELPER;
 
 /**
  * User: pedro@didekin
@@ -155,7 +155,7 @@ public class IncidEditNoPowerFr extends Fragment implements ImportanciaSpinnerSe
 
     class ImportanciaModifyer extends AsyncTask<IncidImportancia, Void, Integer> {
 
-        UiAppException uiException;
+        UiException uiException;
 
         @Override
         protected Integer doInBackground(IncidImportancia... incidImportancias)
@@ -170,7 +170,7 @@ public class IncidEditNoPowerFr extends Fragment implements ImportanciaSpinnerSe
                 } else {
                     rowInserted = IncidenciaServ.modifyIncidImportancia(incidImportancias[0]);
                 }
-            } catch (UiAppException e) {
+            } catch (UiException e) {
                 uiException = e;
             }
             return rowInserted;

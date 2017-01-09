@@ -3,10 +3,10 @@ package com.didekindroid.incidencia.activity;
 import android.app.Activity;
 import android.widget.ArrayAdapter;
 
+import com.didekin.comunidad.Comunidad;
 import com.didekin.incidencia.dominio.Incidencia;
 import com.didekin.incidencia.dominio.IncidenciaUser;
-import com.didekin.comunidad.Comunidad;
-import com.didekindroid.exception.UiAppException;
+import com.didekinaar.exception.UiException;
 
 import java.util.List;
 
@@ -23,7 +23,7 @@ interface IncidSeeListListener {
 
     ArrayAdapter<IncidenciaUser> getAdapter(Activity activity);
 
-    List<IncidenciaUser> getListFromService(long comunidadId) throws UiAppException;
+    List<IncidenciaUser> getListFromService(long comunidadId) throws UiException;
 
     /**
      *   Implementations provide fragments witn a comunidadId passed in a Notification PendingIntent.

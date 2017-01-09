@@ -11,8 +11,8 @@ import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 
 import static com.didekindroid.R.id.comu_search_ac_linearlayout;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_REAL_DROID;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_REAL_DROID;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.signUpAndUpdateTk;
 
 /**
  * User: pedro@didekin

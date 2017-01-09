@@ -26,10 +26,10 @@ import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
 import static com.didekinaar.usuario.UsuarioDaoRemote.usuarioDaoRemote;
 import static com.didekindroid.incidencia.AppFBService.IncidTypeMsgHandler.INCIDENCIA_OPEN;
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
+import static com.didekindroid.incidencia.IncidenciaTestUtils.doIncidencia;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_ESCORIAL_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_ESCORIAL_PEPE;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.signUpAndUpdateTk;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 

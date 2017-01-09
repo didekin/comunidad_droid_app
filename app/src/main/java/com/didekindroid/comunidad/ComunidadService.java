@@ -1,9 +1,9 @@
 package com.didekindroid.comunidad;
 
+import com.didekin.common.exception.ErrorBean;
 import com.didekin.comunidad.Comunidad;
 import com.didekin.comunidad.ComunidadEndPoints;
 import com.didekinaar.exception.UiException;
-import com.didekindroid.exception.UiAppException;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -13,7 +13,6 @@ import retrofit2.Call;
 import retrofit2.Response;
 import timber.log.Timber;
 
-import static com.didekin.common.exception.ErrorBean.GENERIC_ERROR;
 import static com.didekinaar.AppInitializer.creator;
 import static com.didekinaar.utils.AarDaoUtil.getResponseBody;
 import static com.didekinaar.utils.UIutils.checkBearerToken;
@@ -61,7 +60,7 @@ public final class ComunidadService implements ComunidadEndPoints {
 //                          CONVENIENCE METHODS
 //  =============================================================================
 
-    public Comunidad getComuData(long idComunidad) throws UiAppException
+    public Comunidad getComuData(long idComunidad) throws UiException
     {
         Timber.d("getComuData()");
 
@@ -70,8 +69,8 @@ public final class ComunidadService implements ComunidadEndPoints {
             return getResponseBody(response);
         } catch (EOFException eo) {
             return null;
-        } catch (IOException | UiException e) {
-            throw new UiAppException(GENERIC_ERROR);
+        } catch (IOException e) {
+           throw new UiException(ErrorBean.GENERIC_ERROR);
         }
     }
 }

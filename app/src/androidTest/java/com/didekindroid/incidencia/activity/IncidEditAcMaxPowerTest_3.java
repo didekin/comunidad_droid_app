@@ -22,13 +22,13 @@ import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.INCID_DEFAULT_DESC;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.RESOLUCION_DEFAULT_DESC;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doResolucion;
+import static com.didekindroid.incidencia.IncidenciaTestUtils.INCID_DEFAULT_DESC;
+import static com.didekindroid.incidencia.IncidenciaTestUtils.RESOLUCION_DEFAULT_DESC;
+import static com.didekindroid.incidencia.IncidenciaTestUtils.doIncidencia;
+import static com.didekindroid.incidencia.IncidenciaTestUtils.doResolucion;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_ESCORIAL_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_ESCORIAL_PEPE;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.signUpAndUpdateTk;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 

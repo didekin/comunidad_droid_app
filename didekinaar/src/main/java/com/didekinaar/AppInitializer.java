@@ -5,6 +5,7 @@ import android.os.StrictMode;
 
 import com.didekin.common.controller.JksInClient;
 import com.didekin.common.controller.RetrofitHandler;
+import com.didekinaar.exception.UiExceptionDealerIf;
 import com.didekinaar.security.JksInAndroidApp;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -22,17 +23,24 @@ public final class AppInitializer {
 
     public static final AtomicReference<AppInitializer> creator = new AtomicReference<>();
     private final Context mContext;
+    private final UiExceptionDealerIf exceptionDealer;
     private static final AtomicReference<RetrofitHandler> atomicRefRetrofit = new AtomicReference<>();
 
-    public AppInitializer(Context appContext)
+    public AppInitializer(Context appContext, UiExceptionDealerIf dealer)
     {
         mContext = appContext;
+        exceptionDealer = dealer;
         initDebugBuildConfig();
     }
 
     public Context getContext()
     {
         return mContext;
+    }
+
+    public UiExceptionDealerIf getExceptionDealer()
+    {
+        return exceptionDealer;
     }
 
     /**

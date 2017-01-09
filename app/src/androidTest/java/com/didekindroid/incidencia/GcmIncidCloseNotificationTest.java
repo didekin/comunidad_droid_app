@@ -33,9 +33,9 @@ import static com.didekin.incidencia.gcm.GcmKeyValueIncidData.incidencia_closed_
 import static com.didekinaar.testutil.AarActivityTestUtils.clickNavigateUp;
 import static com.didekinaar.utils.UIutils.formatTimeStampToString;
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidImportancia;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetResolucionNoAdvances;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_PLAZUELA5_PEPE;
+import static com.didekindroid.incidencia.IncidenciaTestUtils.insertGetIncidImportancia;
+import static com.didekindroid.incidencia.IncidenciaTestUtils.insertGetResolucionNoAdvances;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_PLAZUELA5_PEPE;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 

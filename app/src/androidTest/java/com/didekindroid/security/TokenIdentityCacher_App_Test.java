@@ -22,8 +22,8 @@ import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanWithTkhandler;
 import static com.didekinaar.utils.IoHelper.writeFileFromString;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_REAL_JUAN;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_REAL_JUAN;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.signUpAndUpdateTk;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;

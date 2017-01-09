@@ -9,21 +9,21 @@ import android.view.View;
 import android.widget.Button;
 
 import com.didekin.incidencia.dominio.IncidImportancia;
+import com.didekinaar.exception.UiException;
 import com.didekindroid.R;
-import com.didekindroid.exception.UiAppException;
 
 import java.util.Objects;
 
 import timber.log.Timber;
 
-import static com.didekinaar.utils.UIutils.checkPostExecute;
-import static com.didekindroid.util.AppMenuRouter.doUpMenu;
-import static com.didekinaar.usuario.AarFBRegIntentService.getGcmToken;
+import static com.didekindroid.usuario.AarFBRegIntentService.getGcmToken;
 import static com.didekinaar.utils.ConnectionUtils.checkInternetConnected;
+import static com.didekinaar.utils.UIutils.checkPostExecute;
 import static com.didekinaar.utils.UIutils.doToolBar;
 import static com.didekinaar.utils.UIutils.getErrorMsgBuilder;
 import static com.didekinaar.utils.UIutils.makeToast;
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
+import static com.didekindroid.util.AppMenuRouter.doUpMenu;
 
 /**
  * Preconditions:
@@ -117,7 +117,7 @@ public class IncidRegAc extends AppCompatActivity {
 
     class IncidenciaRegister extends AsyncTask<IncidImportancia, Void, Integer> {
 
-        UiAppException uiException;
+        UiException uiException;
 
         @Override
         protected Integer doInBackground(IncidImportancia... incidImportancias)
@@ -127,7 +127,7 @@ public class IncidRegAc extends AppCompatActivity {
 
             try {
                 rowInserted = IncidenciaServ.regIncidImportancia(incidImportancias[0]);
-            } catch (UiAppException e) {
+            } catch (UiException e) {
                 uiException = e;
             }
             return rowInserted;

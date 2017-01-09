@@ -104,8 +104,8 @@ public class GcmRequestTest {
      * "failure":0,
      * "canonical_ids":0,
      * "results":
-     *   [ {"message_id":"0:1464877318831775%165f9abf76712599"},
-     *     {"message_id":"0:1464877318845757%165f9abf76712599"}]
+     * [ {"message_id":"0:1464877318831775%165f9abf76712599"},
+     * {"message_id":"0:1464877318845757%165f9abf76712599"}]
      * }
      */
     @Test
@@ -129,12 +129,12 @@ public class GcmRequestTest {
     /**
      * One token.
      * {
-     *  "multicast_id":4812133188796339897,
-     *  "success":1,
-     *  "failure":0,
-     *  "canonical_ids":0,
-     *  "results":[
-     *             {"message_id":"0:1464878753766395%165f9abf76712599"}]
+     * "multicast_id":4812133188796339897,
+     * "success":1,
+     * "failure":0,
+     * "canonical_ids":0,
+     * "results":[
+     * {"message_id":"0:1464878753766395%165f9abf76712599"}]
      * }
      */
     @Test
@@ -165,7 +165,7 @@ public class GcmRequestTest {
         GcmMulticastRequest request = new GcmMulticastRequest.Builder(gcmTokens,
                 new GcmRequest.Builder(new GcmIncidRequestData(incidencia_open_type, 999L)).build())
                 .build();
-        GcmResponse gcmResponse = endPointImp.sendGcmMulticastRequest(ACCEPT_ENCODING_IDENTITY,request).execute().body();
+        GcmResponse gcmResponse = endPointImp.sendGcmMulticastRequest(ACCEPT_ENCODING_IDENTITY, request).execute().body();
         assertThat(gcmResponse.getResults()[0].getMessage_id(), notNullValue());
         assertThat(gcmResponse.getFailure(), is(0));
         assertThat(gcmResponse.getSuccess(), is(1));
@@ -190,7 +190,7 @@ public class GcmRequestTest {
         GcmMulticastRequest request = new GcmMulticastRequest.Builder(gcmTokens,
                 new GcmRequest.Builder(new GcmIncidRequestData(incidencia_open_type, 999L)).build())
                 .build();
-        Response<GcmResponse> response = endPointImp.sendGcmMulticastRequest(ACCEPT_ENCODING_IDENTITY,request).execute();
+        Response<GcmResponse> response = endPointImp.sendGcmMulticastRequest(ACCEPT_ENCODING_IDENTITY, request).execute();
         assertThat(response.raw().code(), is(MissingRegistration.httpStatusCode));
 
         GcmResponse gcmResponse = response.body();
@@ -222,7 +222,7 @@ public class GcmRequestTest {
     {
         gcmTokens.add("");
         String token = firebaseInstanceId.getToken();
-        if (token == null){
+        if (token == null) {
             Thread.sleep(4000);
             token = firebaseInstanceId.getToken();
         }

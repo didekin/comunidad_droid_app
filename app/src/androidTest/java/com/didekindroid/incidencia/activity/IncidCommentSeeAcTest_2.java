@@ -11,7 +11,6 @@ import com.didekin.usuariocomunidad.UsuarioComunidad;
 import com.didekinaar.exception.UiException;
 import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.R;
-import com.didekindroid.exception.UiAppException;
 
 import org.junit.After;
 import org.junit.Before;
@@ -30,15 +29,15 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.signUpAndUpdateTk;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_REAL_JUAN;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static com.didekinaar.utils.UIutils.formatTimeStampToString;
+import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
+import static com.didekindroid.incidencia.IncidenciaTestUtils.doComment;
+import static com.didekindroid.incidencia.IncidenciaTestUtils.doIncidencia;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_comments_see_list_fr_tag;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doComment;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
-import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
+import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_REAL_JUAN;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.signUpAndUpdateTk;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -71,7 +70,7 @@ public class IncidCommentSeeAcTest_2 {
             try {
                 IncidenciaServ.regIncidComment(doComment("Comment_1_incidjuanReal1", incidJuanReal1.getIncidencia()));
                 IncidenciaServ.regIncidComment(doComment("Comment_2_incidjuanReal1", incidJuanReal1.getIncidencia()));
-            } catch (UiAppException e) {
+            } catch (UiException e) {
                 e.printStackTrace();
             }
         }

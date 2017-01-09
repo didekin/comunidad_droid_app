@@ -6,13 +6,13 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.usuario.Usuario;
 import com.didekinaar.usuario.password.PasswordChangeAcTest;
-import com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil;
+import com.didekindroid.usuariocomunidad.UserComuTestUtil;
 
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 
 import static com.didekindroid.R.id.user_data_ac_layout;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.signUpAndUpdateTk;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 

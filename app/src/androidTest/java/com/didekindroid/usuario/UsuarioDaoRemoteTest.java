@@ -1,14 +1,12 @@
 package com.didekindroid.usuario;
 
-import android.content.Context;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.oauth2.SpringOauthToken;
 import com.didekin.usuario.Usuario;
 import com.didekinaar.exception.UiException;
-import com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum;
 import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
+import com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum;
 import com.didekinaar.utils.IoHelper;
 
 import org.junit.After;
@@ -23,21 +21,21 @@ import static com.didekin.common.exception.DidekinExceptionMsg.USER_NAME_NOT_FOU
 import static com.didekin.oauth2.OauthTokenHelper.HELPER;
 import static com.didekinaar.security.Oauth2DaoRemote.Oauth2;
 import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
+import static com.didekinaar.usuario.UsuarioDaoRemote.usuarioDaoRemote;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_NOTHING;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekinaar.usuario.UsuarioDaoRemote.usuarioDaoRemote;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.USER_DROID;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_ESCORIAL_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_PLAZUELA5_JUAN;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_REAL_DROID;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_REAL_JUAN;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_REAL_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.signUpAndUpdateTk;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_ESCORIAL_PEPE;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_PLAZUELA5_JUAN;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_REAL_DROID;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_REAL_JUAN;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_REAL_PEPE;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.signUpAndUpdateTk;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
@@ -54,14 +52,12 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class UsuarioDaoRemoteTest {
 
-    Context context;
     File refreshTkFile;
     CleanUserEnum whatClean;
 
     @Before
     public void setUp() throws Exception
     {
-        context = InstrumentationRegistry.getTargetContext();
         refreshTkFile = TKhandler.getRefreshTokenFile();
         whatClean = CLEAN_NOTHING;
     }

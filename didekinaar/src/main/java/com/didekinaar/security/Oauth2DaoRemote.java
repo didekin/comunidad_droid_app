@@ -96,7 +96,7 @@ public final class Oauth2DaoRemote implements Oauth2EndPoints, Oauth2Dao {
 //                          HELPER METHODS
 //  =============================================================================
 
-    String doAuthBasicHeader(OauthClient cliente)
+    public String doAuthBasicHeader(OauthClient cliente)
     {
         String baseString = cliente.getId() + ":" + cliente.getSecret();
         String base64AuthData = Base64.encodeToString(baseString.getBytes(), Base64.DEFAULT);

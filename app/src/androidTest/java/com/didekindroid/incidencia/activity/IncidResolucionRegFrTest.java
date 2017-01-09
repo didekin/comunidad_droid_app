@@ -39,8 +39,8 @@ import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum
 import static com.didekinaar.utils.UIutils.formatTimeToString;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidImportancia;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_PLAZUELA5_JUAN;
+import static com.didekindroid.incidencia.IncidenciaTestUtils.insertGetIncidImportancia;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_PLAZUELA5_JUAN;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;

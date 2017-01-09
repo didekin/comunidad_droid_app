@@ -11,7 +11,6 @@ import com.didekinaar.exception.UiException;
 import com.didekinaar.security.TokenIdentityCacher;
 import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.R;
-import com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil;
 
 import org.junit.After;
 import org.junit.Before;

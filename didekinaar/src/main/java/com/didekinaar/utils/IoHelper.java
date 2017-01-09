@@ -27,7 +27,7 @@ public final class IoHelper {
     {
     }
 
-    static List<String> doArrayFromFile(Context context, int rawResourceId)
+    public static List<String> doArrayFromFile(Context context, int rawResourceId)
     {
         Timber.i("In doArrayFromFile()");
 

@@ -11,8 +11,8 @@ import com.didekin.usuario.Usuario;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
 import com.didekinaar.exception.UiException;
 import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
-import com.didekindroid.exception.UiAppException;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,25 +26,25 @@ import java.util.List;
 import static com.didekin.common.exception.DidekinExceptionMsg.INCID_IMPORTANCIA_WRONG_INIT;
 import static com.didekin.common.exception.DidekinExceptionMsg.UNAUTHORIZED_TX_TO_USER;
 import static com.didekin.common.exception.DidekinExceptionMsg.USERCOMU_WRONG_INIT;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.signUpAndUpdateTk;
 import static com.didekinaar.testutil.AarTestUtil.updateSecurityData;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_ESCORIAL_JUAN;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_ESCORIAL_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_PLAZUELA5_JUAN;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_REAL_JUAN;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_REAL_PEPE;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.makeUserComuWithComunidadId;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.INCID_DEFAULT_DESC;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.RESOLUCION_DEFAULT_DESC;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doResolucion;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidenciaUser;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
+import static com.didekindroid.incidencia.IncidenciaTestUtils.INCID_DEFAULT_DESC;
+import static com.didekindroid.incidencia.IncidenciaTestUtils.RESOLUCION_DEFAULT_DESC;
+import static com.didekindroid.incidencia.IncidenciaTestUtils.doResolucion;
+import static com.didekindroid.incidencia.IncidenciaTestUtils.insertGetIncidenciaUser;
+import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_ESCORIAL_JUAN;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_ESCORIAL_PEPE;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_PLAZUELA5_JUAN;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_REAL_JUAN;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_REAL_PEPE;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.makeUserComuWithComunidadId;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.signUpAndUpdateTk;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
@@ -53,9 +53,7 @@ import static org.junit.Assert.fail;
  * User: pedro@didekin
  * Date: 18/11/15
  * Time: 14:53
- */
-
-/**
+ * <p>
  * Tests con usario_comunidad sin autoridad 'adm'.
  */
 @SuppressWarnings("ConstantConditions")
@@ -82,37 +80,35 @@ public class IncidServiceTest_2 {
     }
 
     @Test
-    public void testCloseIncidencia_1() throws InterruptedException, UiAppException, IOException, UiException
+    public void testCloseIncidencia_1() throws InterruptedException, IOException
     {
         // Caso NOT OK: usuario no 'adm'.
 
         whatClean = CLEAN_JUAN_AND_PEPE;
-
-        Resolucion resolucion = signPepeWithResolucion();
         try {
+            Resolucion resolucion = signPepeWithResolucion();
             IncidenciaServ.closeIncidencia(resolucion);
             fail();
-        } catch (UiAppException ue) {
+        } catch (UiException ue) {
             assertThat(ue.getErrorBean().getMessage(), is(UNAUTHORIZED_TX_TO_USER.getHttpMessage()));
         }
     }
 
     @Test
-    public void testDeleteIncidencia_1() throws UiAppException, InterruptedException, IOException, UiException
+    public void testDeleteIncidencia_1() throws InterruptedException, IOException
     {
-        // Caso 1: usuario iniciador sin autoridad adm.
-        signPepeWithIncidImportancia();
-
         try {
+            // Caso 1: usuario iniciador sin autoridad adm.
+            signPepeWithIncidImportancia();
             IncidenciaServ.deleteIncidencia(incidImportancia_1.getIncidencia().getIncidenciaId());
             fail();
-        } catch (UiAppException ue) {
+        } catch (UiException ue) {
             assertThat(ue.getErrorBean().getMessage(), is(UNAUTHORIZED_TX_TO_USER.getHttpMessage()));
         }
     }
 
     @Test
-    public void testModifyIncidImportancia_1() throws UiAppException, InterruptedException, IOException, UiException
+    public void testModifyIncidImportancia_1() throws InterruptedException, IOException, UiException
     {
         whatClean = CLEAN_JUAN_AND_PEPE;
         // Caso OK: usuario sin registro de incidImportancia en BD, intenta modificar la incidencia, sin perfil administrador.
@@ -135,11 +131,11 @@ public class IncidServiceTest_2 {
 
         IncidImportancia incidImportancia = IncidService.IncidenciaServ.seeIncidImportancia(incidencia_1.getIncidenciaId()).getIncidImportancia();
         assertThat(incidImportancia.getImportancia(), is((short) 2));
-        assertThat(incidImportancia.getIncidencia().getDescripcion(), is(INCID_DEFAULT_DESC));
+        assertThat(incidImportancia.getIncidencia().getDescripcion(), CoreMatchers.is(INCID_DEFAULT_DESC));
     }
 
     @Test
-    public void testModifyIncidImportancia_2() throws UiAppException, InterruptedException, IOException, UiException
+    public void testModifyIncidImportancia_2() throws InterruptedException, IOException, UiException
     {
         // Caso OK: usuario CON registro de incidImportancia en BD, intenta modificar la incidencia, sin perfil administrador, CON perfil iniciador.
         signPepeWithIncidImportancia();
@@ -158,22 +154,22 @@ public class IncidServiceTest_2 {
     }
 
     @Test
-    public void testModifyResolucion_1() throws InterruptedException, UiAppException, IOException, UiException
+    public void testModifyResolucion_1() throws InterruptedException, IOException
     {
         whatClean = CLEAN_JUAN_AND_PEPE;
 
-        // Caso NOT OK: añadimos un avance a una resolución que no los tenía.
-        Resolucion resolucion = signPepeWithResolucion();
         try {
+            // Caso NOT OK: añadimos un avance a una resolución que no los tenía.
+            Resolucion resolucion = signPepeWithResolucion();
             IncidenciaServ.modifyResolucion(resolucion);
             fail();
-        } catch (UiAppException ue) {
+        } catch (UiException ue) {
             assertThat(ue.getErrorBean().getMessage(), is(UNAUTHORIZED_TX_TO_USER.getHttpMessage()));
         }
     }
 
     @Test
-    public void testRegIncidImportancia_1() throws UiAppException, InterruptedException, IOException, UiException
+    public void testRegIncidImportancia_1() throws InterruptedException, IOException, UiException
     {
         whatClean = CLEAN_JUAN_AND_PEPE;
 
@@ -192,7 +188,7 @@ public class IncidServiceTest_2 {
     }
 
     @Test
-    public void testRegIncidImportancia_2() throws UiAppException, IOException, UiException
+    public void testRegIncidImportancia_2() throws IOException, UiException
     {
         whatClean = CLEAN_JUAN_AND_PEPE;
 
@@ -213,32 +209,32 @@ public class IncidServiceTest_2 {
     }
 
     @Test
-    public void testRegResolucion_1() throws UiAppException, InterruptedException, IOException, UiException
+    public void testRegResolucion_1() throws InterruptedException, IOException
     {
-        // Caso: userComu sin funciones administrador.
-        signPepeWithIncidImportancia();
-        Thread.sleep(1000);
-        Resolucion resolucion = doResolucion(incidencia_1, "resol_desc", 1000, new Timestamp(new Date().getTime()));
         try {
+            // Caso: userComu sin funciones administrador.
+            signPepeWithIncidImportancia();
+            Thread.sleep(1000);
+            Resolucion resolucion = doResolucion(incidencia_1, "resol_desc", 1000, new Timestamp(new Date().getTime()));
             IncidenciaServ.regResolucion(resolucion);
             fail();
-        } catch (UiAppException ie) {
+        } catch (UiException ie) {
             assertThat(ie.getErrorBean().getMessage(), is(UNAUTHORIZED_TX_TO_USER.getHttpMessage()));
         }
     }
 
     @Test
-    public void testSeeResolucion_1() throws InterruptedException, UiAppException, IOException, UiException
+    public void testSeeResolucion_1() throws InterruptedException, IOException, UiException
     {
         whatClean = CLEAN_JUAN_AND_PEPE;
 
         Resolucion resolucion = signPepeWithResolucion();
-        assertThat(resolucion.getDescripcion(), is(RESOLUCION_DEFAULT_DESC));
+        assertThat(resolucion.getDescripcion(), CoreMatchers.is(RESOLUCION_DEFAULT_DESC));
         assertThat(resolucion.getCosteEstimado(), is(1122));
     }
 
     @Test
-    public void testSeeIncidClosedByComu() throws UiAppException, InterruptedException, IOException, UiException
+    public void testSeeIncidClosedByComu() throws InterruptedException, IOException, UiException
     {
         // CASO OK: consulta por usuario no 'adm'.
 
@@ -258,7 +254,7 @@ public class IncidServiceTest_2 {
     }
 
     @Test
-    public void testSeeUserComusImportancia_1() throws UiAppException, IOException, UiException
+    public void testSeeUserComusImportancia_1() throws IOException, UiException
     {
         whatClean = CLEAN_JUAN_AND_PEPE;
 
@@ -274,19 +270,18 @@ public class IncidServiceTest_2 {
     }
 
     @Test
-    public void testSeeUserComusImportancia_2() throws UiAppException, IOException, UiException
+    public void testSeeUserComusImportancia_2() throws IOException, UiException
     {
         whatClean = CLEAN_JUAN_AND_PEPE;
 
-        // Caso: incidencia.comunidad != usuario.comunidad.
-        signPepeWithIncidencia(COMU_ESCORIAL_PEPE);
-        // Registramos userComu en otra comunidad.
-        signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
-
         try {
+            // Caso: incidencia.comunidad != usuario.comunidad.
+            signPepeWithIncidencia(COMU_ESCORIAL_PEPE);
+            // Registramos userComu en otra comunidad.
+            signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
             IncidenciaServ.seeUserComusImportancia(incidencia_1.getIncidenciaId());
             fail();
-        } catch (UiAppException ue) {
+        } catch (UiException ue) {
             assertThat(ue.getErrorBean().getMessage(), is(USERCOMU_WRONG_INIT.getHttpMessage()));
         }
     }
@@ -294,7 +289,7 @@ public class IncidServiceTest_2 {
 
 //    ============================= HELPER METHODS ===============================
 
-    private void signPepeWithIncidImportancia() throws UiAppException, IOException, UiException
+    private void signPepeWithIncidImportancia() throws IOException, UiException
     {
         signPepeWithIncidencia();
         // Verificamos poderes: true; solo hay una incidenciaUser.
@@ -302,12 +297,12 @@ public class IncidServiceTest_2 {
         assertThat(incidImportancia_1.isIniciadorIncidencia(), is(true));
     }
 
-    private void signPepeWithIncidencia() throws UiAppException, IOException, UiException
+    private void signPepeWithIncidencia() throws IOException, UiException
     {
         signPepeWithIncidencia(COMU_REAL_PEPE);
     }
 
-    private void signPepeWithIncidencia(UsuarioComunidad userComu) throws UiAppException, IOException, UiException
+    private void signPepeWithIncidencia(UsuarioComunidad userComu) throws IOException, UiException
     {
         pepe = signUpAndUpdateTk(userComu);
         pepeUserComu = AppUserComuServ.seeUserComusByUser().get(0);
@@ -318,7 +313,7 @@ public class IncidServiceTest_2 {
     /**
      * Utiliad para tests donde el usario no tenga poderes adm y necesitemos un usuario que sí los tenga.
      */
-    private Resolucion signPepeWithResolucion() throws UiAppException, InterruptedException, IOException, UiException
+    private Resolucion signPepeWithResolucion() throws InterruptedException, IOException, UiException
     {
         signPepeWithIncidencia(COMU_ESCORIAL_PEPE);
         Thread.sleep(1000);

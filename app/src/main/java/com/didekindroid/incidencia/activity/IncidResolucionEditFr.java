@@ -11,14 +11,14 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.didekin.comunidad.Comunidad;
 import com.didekin.incidencia.dominio.Avance;
 import com.didekin.incidencia.dominio.IncidImportancia;
 import com.didekin.incidencia.dominio.Incidencia;
 import com.didekin.incidencia.dominio.Resolucion;
-import com.didekin.comunidad.Comunidad;
-import com.didekindroid.R;
-import com.didekindroid.exception.UiAppException;
+import com.didekinaar.exception.UiException;
 import com.didekinaar.utils.ConnectionUtils;
+import com.didekindroid.R;
 import com.didekindroid.incidencia.dominio.ResolucionBean;
 
 import java.sql.Timestamp;
@@ -28,15 +28,15 @@ import java.util.Objects;
 
 import timber.log.Timber;
 
-import static com.didekinaar.utils.UIutils.checkPostExecute;
-import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekinaar.utils.FechaPickerFr.FechaPickerHelper.initFechaSpinnerView;
+import static com.didekinaar.utils.UIutils.checkPostExecute;
 import static com.didekinaar.utils.UIutils.formatTimeStampToString;
 import static com.didekinaar.utils.UIutils.getErrorMsgBuilder;
 import static com.didekinaar.utils.UIutils.getStringFromInteger;
 import static com.didekinaar.utils.UIutils.makeToast;
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 
 /**
  * User: pedro@didekin
@@ -184,7 +184,7 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
 
     class ResolucionModifyer extends AsyncTask<Resolucion, Void, Integer> {
 
-        UiAppException uiException;
+        UiException uiException;
 
         @Override
         protected Integer doInBackground(Resolucion... params)
@@ -194,7 +194,7 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
 
             try {
                 rowModified = IncidenciaServ.modifyResolucion(params[0]);
-            } catch (UiAppException e) {
+            } catch (UiException e) {
                 uiException = e;
             }
             return rowModified;
@@ -222,7 +222,7 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
 
     class IncidenciaCloser extends AsyncTask<Resolucion, Void, Integer> {
 
-        UiAppException uiException;
+        UiException uiException;
 
         @Override
         protected Integer doInBackground(Resolucion... params)
@@ -232,7 +232,7 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
 
             try {
                 incidenciaCancelled = IncidenciaServ.closeIncidencia(params[0]);
-            } catch (UiAppException e) {
+            } catch (UiException e) {
                 uiException = e;
             }
             return incidenciaCancelled;

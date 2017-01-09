@@ -116,14 +116,14 @@ public final class UIutils {
         return DateFormat.getDateInstance(MEDIUM, getDefault()).format(new Date(time));
     }
 
-    static String formatDoubleZeroDecimal(Double myDouble, Context context)
+    public static String formatDoubleZeroDecimal(Double myDouble, Context context)
     {
         NumberFormat myFormatter = NumberFormat.getInstance(SPAIN_LOCALE);
         return myFormatter.format(myDouble);
     }
 
     @SuppressWarnings("deprecation")
-    static String formatDoubleTwoDecimals(Double myDouble, Context context)
+    public static String formatDoubleTwoDecimals(Double myDouble, Context context)
     {
         Locale locale;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {

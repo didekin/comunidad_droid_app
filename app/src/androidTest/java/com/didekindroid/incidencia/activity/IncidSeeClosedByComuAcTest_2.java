@@ -17,9 +17,8 @@ import com.didekinaar.exception.UiException;
 import com.didekinaar.testutil.AarTestUtil;
 import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.R;
-import com.didekindroid.incidencia.activity.utils.IncidBundleKey;
-import com.didekindroid.exception.UiAppException;
 import com.didekindroid.incidencia.IncidenciaDataDbHelper;
+import com.didekindroid.incidencia.activity.utils.IncidBundleKey;
 
 import org.junit.After;
 import org.junit.Before;
@@ -46,24 +45,24 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekinaar.testutil.AarActivityTestUtils.clickNavigateUp;
-import static com.didekinaar.utils.AarBundleKey.IS_MENU_IN_FRAGMENT_FLAG;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.regSeveralUserComuSameUser;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_LA_FUENTE_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_PLAZUELA5_PEPE;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
+import static com.didekinaar.utils.AarBundleKey.IS_MENU_IN_FRAGMENT_FLAG;
 import static com.didekinaar.utils.UIutils.formatTimeStampToString;
+import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
+import static com.didekindroid.incidencia.IncidenciaDataDbHelperTest.DB_PATH;
+import static com.didekindroid.incidencia.IncidenciaTestUtils.RESOLUCION_DEFAULT_DESC;
+import static com.didekindroid.incidencia.IncidenciaTestUtils.doIncidencia;
+import static com.didekindroid.incidencia.IncidenciaTestUtils.doResolucionAvances;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_resolucion_see_fr_tag;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
-import static com.didekindroid.incidencia.IncidenciaDataDbHelperTest.DB_PATH;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.RESOLUCION_DEFAULT_DESC;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doIncidencia;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.doResolucionAvances;
-import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
+import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_LA_FUENTE_PEPE;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_PLAZUELA5_PEPE;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.regSeveralUserComuSameUser;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
@@ -237,7 +236,7 @@ public class IncidSeeClosedByComuAcTest_2 {
     }
 
     @Test
-    public void testOnSelectedWithDoubleUp() throws UiAppException
+    public void testOnSelectedWithDoubleUp() throws UiException
     {
         // CASO OK: seleccionamos 2ª comunidad en spinner y la 2ª incidencia.
 

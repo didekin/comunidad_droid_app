@@ -11,10 +11,10 @@ import android.widget.TextView;
 
 import com.didekin.incidencia.dominio.IncidComment;
 import com.didekin.incidencia.dominio.Incidencia;
-import com.didekindroid.exception.UiAppException;
-import com.didekindroid.R;
+import com.didekinaar.exception.UiException;
 import com.didekinaar.utils.ConnectionUtils;
 import com.didekinaar.utils.UIutils;
+import com.didekindroid.R;
 import com.didekindroid.incidencia.dominio.IncidCommentBean;
 
 import java.util.Objects;
@@ -22,11 +22,11 @@ import java.util.Objects;
 import timber.log.Timber;
 
 import static com.didekinaar.utils.UIutils.checkPostExecute;
-import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekinaar.utils.UIutils.doToolBar;
 import static com.didekinaar.utils.UIutils.getErrorMsgBuilder;
 import static com.didekinaar.utils.UIutils.makeToast;
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.util.AppMenuRouter.doUpMenu;
 
 /**
@@ -115,7 +115,7 @@ public class IncidCommentRegAc extends AppCompatActivity {
     // TODO: to persist the task during restarts and properly cancel the task when the activity is destroyed. (Example in Shelves)
     class IncidCommentRegister extends AsyncTask<IncidComment, Void, Integer> {
 
-        UiAppException uiException;
+        UiException uiException;
 
         @Override
         protected Integer doInBackground(IncidComment... comments)
@@ -125,7 +125,7 @@ public class IncidCommentRegAc extends AppCompatActivity {
 
             try {
                 rowInserted = IncidenciaServ.regIncidComment(comments[0]);
-            } catch (UiAppException e) {
+            } catch (UiException e) {
                 uiException = e;
             }
             return rowInserted;

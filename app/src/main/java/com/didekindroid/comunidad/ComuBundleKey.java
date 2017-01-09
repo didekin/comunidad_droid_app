@@ -15,7 +15,7 @@ public enum ComuBundleKey {
     COMUNIDAD_SEARCH,
     ;
 
-    private static final String intentPackage =  "ComuBundleKey.";
+    public static final String intentPackage =  "ComuBundleKey.";
 
     public final String key;
 

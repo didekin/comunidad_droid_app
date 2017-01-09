@@ -8,7 +8,6 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekinaar.testutil.IdlingResourceForIntentServ;
 import com.didekinaar.testutil.MockActivity;
-import com.didekinaar.usuario.AarFBRegIntentService;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.junit.After;

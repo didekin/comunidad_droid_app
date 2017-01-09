@@ -15,7 +15,7 @@ import com.didekindroid.incidencia.activity.utils.IncidBundleKey;
 import timber.log.Timber;
 
 import static com.didekindroid.util.AppMenuRouter.doUpMenu;
-import static com.didekinaar.usuario.AarFBRegIntentService.getGcmToken;
+import static com.didekindroid.usuario.AarFBRegIntentService.getGcmToken;
 import static com.didekinaar.utils.UIutils.doToolBar;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;

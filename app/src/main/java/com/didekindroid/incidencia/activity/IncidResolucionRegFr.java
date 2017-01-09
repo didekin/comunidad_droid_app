@@ -10,11 +10,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.didekin.comunidad.Comunidad;
 import com.didekin.incidencia.dominio.IncidImportancia;
 import com.didekin.incidencia.dominio.Incidencia;
 import com.didekin.incidencia.dominio.Resolucion;
-import com.didekin.comunidad.Comunidad;
-import com.didekindroid.exception.UiAppException;
+import com.didekinaar.exception.UiException;
 import com.didekindroid.R;
 import com.didekindroid.incidencia.dominio.ResolucionBean;
 
@@ -23,13 +23,13 @@ import java.util.Objects;
 
 import timber.log.Timber;
 
-import static com.didekinaar.utils.UIutils.checkPostExecute;
-import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekinaar.utils.FechaPickerFr.FechaPickerHelper.initFechaSpinnerView;
 import static com.didekinaar.utils.ConnectionUtils.checkInternetConnected;
+import static com.didekinaar.utils.FechaPickerFr.FechaPickerHelper.initFechaSpinnerView;
+import static com.didekinaar.utils.UIutils.checkPostExecute;
 import static com.didekinaar.utils.UIutils.getErrorMsgBuilder;
 import static com.didekinaar.utils.UIutils.makeToast;
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 
 /**
  * User: pedro@didekin
@@ -130,7 +130,7 @@ public class IncidResolucionRegFr extends IncidResolucionFrAbstract {
 
     private class ResolucionRegister extends AsyncTask<Resolucion, Void, Integer> {
 
-        UiAppException uiException;
+        UiException uiException;
         Resolucion resolucion;
 
         ResolucionRegister()
@@ -146,7 +146,7 @@ public class IncidResolucionRegFr extends IncidResolucionFrAbstract {
 
             try {
                 rowInserted = IncidenciaServ.regResolucion(resolucion);
-            } catch (UiAppException e) {
+            } catch (UiException e) {
                 uiException = e;
             }
             return rowInserted;

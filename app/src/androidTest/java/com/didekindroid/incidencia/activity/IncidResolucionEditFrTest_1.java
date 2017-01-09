@@ -8,7 +8,6 @@ import com.didekin.incidencia.dominio.Resolucion;
 import com.didekinaar.exception.UiException;
 import com.didekinaar.testutil.AarActivityTestUtils;
 import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
-import com.didekindroid.exception.UiAppException;
 import com.didekindroid.R;
 
 import org.junit.BeforeClass;
@@ -30,18 +29,18 @@ import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExt
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
 import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
 import static com.didekinaar.testutil.AarActivityTestUtils.reSetDatePicker;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekinaar.utils.UIutils.SPAIN_LOCALE;
 import static com.didekinaar.utils.UIutils.formatTimeToString;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetIncidImportancia;
-import static com.didekindroid.incidencia.testutils.IncidenciaTestUtils.insertGetResolucionNoAdvances;
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_PLAZUELA5_JUAN;
+import static com.didekindroid.incidencia.IncidenciaTestUtils.insertGetIncidImportancia;
+import static com.didekindroid.incidencia.IncidenciaTestUtils.insertGetResolucionNoAdvances;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_PLAZUELA5_JUAN;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -111,7 +110,7 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
     }
 
     @Test
-    public void testOnEdit_1() throws UiAppException
+    public void testOnEdit_1() throws UiException
     {
         // Caso OK: no cambiamos nada y pulsamos modificar. Mantiene los datos de la resolución.
         onView(withId(R.id.incid_resolucion_fr_modif_button)).perform(click());
@@ -126,7 +125,7 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
     }
 
     @Test
-    public void testOnEdit_2() throws UiAppException
+    public void testOnEdit_2() throws UiException
     {
         // Caso OK: cambiamos la fecha prevista.
 
@@ -149,7 +148,7 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
     }
 
     @Test
-    public void testOnEdit_3() throws UiAppException
+    public void testOnEdit_3() throws UiException
     {
         // Caso OK: añadimos un avance con descripción Ok y cambiamos coste (admite importes negativos).
         onView(withId(R.id.incid_resolucion_avance_ed)).perform(replaceText("avance_desc_válida"));
@@ -167,7 +166,7 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
     }
 
     @Test
-    public void testOnEdit_4() throws UiAppException, InterruptedException
+    public void testOnEdit_4() throws UiException, InterruptedException
     {
         // Caso NO OK: descripción de avance errónea.
         onView(withId(R.id.incid_resolucion_avance_ed)).perform(replaceText("avance * no válido"));

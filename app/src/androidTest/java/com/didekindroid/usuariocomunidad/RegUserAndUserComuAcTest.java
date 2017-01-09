@@ -16,7 +16,6 @@ import com.didekindroid.comunidad.ComuBundleKey;
 import com.didekinaar.usuario.testutil.UserItemMenuTestUtils;
 import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil;
-import com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil;
 
 import org.junit.After;
 import org.junit.BeforeClass;

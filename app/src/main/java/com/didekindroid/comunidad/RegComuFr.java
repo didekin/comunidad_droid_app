@@ -19,6 +19,7 @@ import android.widget.SpinnerAdapter;
 import com.didekin.comunidad.Municipio;
 import com.didekin.comunidad.Provincia;
 import com.didekindroid.R;
+import com.didekindroid.comunidad.repository.ComunidadDbHelper;
 
 import timber.log.Timber;
 

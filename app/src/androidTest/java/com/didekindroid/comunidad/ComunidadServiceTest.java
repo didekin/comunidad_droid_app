@@ -1,29 +1,31 @@
 package com.didekindroid.comunidad;
 
+import android.support.test.runner.AndroidJUnit4;
+
 import com.didekin.comunidad.Comunidad;
 import com.didekin.comunidad.Municipio;
 import com.didekin.comunidad.Provincia;
 import com.didekinaar.exception.UiException;
 import com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum;
-import com.didekindroid.comunidad.testutil.ComuTestUtil;
-import com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil;
+import com.didekindroid.usuariocomunidad.UserComuTestUtil;
 
 import org.hamcrest.CoreMatchers;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.io.IOException;
 import java.util.List;
 
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_NOTHING;
 import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanTwoUsers;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
+import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.comunidad.ComunidadService.AppComuServ;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_REAL_JUAN;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil.COMU_TRAV_PLAZUELA_PEPE;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_REAL_JUAN;
+import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_TRAV_PLAZUELA_PEPE;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -32,6 +34,7 @@ import static org.junit.Assert.assertThat;
  * Date: 24/11/16
  * Time: 13:22
  */
+@RunWith(AndroidJUnit4.class)
 public class ComunidadServiceTest {
 
     CleanUserEnum whatClean;
@@ -39,6 +42,12 @@ public class ComunidadServiceTest {
     @Before
     public void setUp() throws Exception{
         whatClean = CLEAN_NOTHING;
+    }
+
+    @After
+    public void cleaningUp() throws UiException
+    {
+        cleanOptions(whatClean);
     }
 
     @Test
@@ -72,7 +81,7 @@ public class ComunidadServiceTest {
         assertThat(comunidades.get(0).getMunicipio().getCodInProvincia(), is((short) 13));
         assertThat(comunidades.get(0).getMunicipio().getNombre(), is("Algueña"));
 
-        cleanTwoUsers(USER_JUAN, USER_PEPE);
+        whatClean = CLEAN_JUAN_AND_PEPE;
     }
 
 }

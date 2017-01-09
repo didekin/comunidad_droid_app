@@ -19,7 +19,6 @@ import com.didekinaar.testutil.AarActivityTestUtils;
 import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.comunidad.testutil.ComuEspresoTestUtil;
 import com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil;
-import com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil;
 
 import org.junit.After;
 import org.junit.Before;

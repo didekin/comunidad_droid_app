@@ -16,11 +16,14 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
+        AarFBRegIntentService_Test.class,
         DeleteMeAppAc_App_Test.class,
         LoginAc_App_1_Test.class,
         LoginAppAcObservableTest.class,
         PasswordChangeAc_App_Test.class,
         UserDataAc_App_Test.class,
+        UsuarioBeanValida_App_test.class,
+        UsuarioDaoRemoteTest.class,
 })
 public class UsuarioSuite {
 }

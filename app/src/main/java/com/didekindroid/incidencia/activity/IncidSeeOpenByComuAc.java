@@ -13,16 +13,16 @@ import com.didekin.comunidad.Comunidad;
 import com.didekin.incidencia.dominio.IncidAndResolBundle;
 import com.didekin.incidencia.dominio.Incidencia;
 import com.didekin.incidencia.dominio.IncidenciaUser;
+import com.didekinaar.exception.UiException;
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComuBundleKey;
-import com.didekindroid.exception.UiAppException;
 
 import java.util.List;
 import java.util.Objects;
 
 import timber.log.Timber;
 
-import static com.didekinaar.usuario.AarFBRegIntentService.getGcmToken;
+import static com.didekindroid.usuario.AarFBRegIntentService.getGcmToken;
 import static com.didekinaar.utils.AarItemMenu.mn_handler;
 import static com.didekinaar.utils.UIutils.checkPostExecute;
 import static com.didekinaar.utils.UIutils.doToolBar;
@@ -142,7 +142,7 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements
     }
 
     @Override
-    public List<IncidenciaUser> getListFromService(long comunidadId) throws UiAppException
+    public List<IncidenciaUser> getListFromService(long comunidadId) throws UiException
     {
         Timber.d("getListFromService()");
         return IncidenciaServ.seeIncidsOpenByComu(comunidadId);
@@ -164,7 +164,7 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements
 
     class IncidImportanciaGetter extends AsyncTask<Long, Void, IncidAndResolBundle> {
 
-        UiAppException uiException;
+        UiException uiException;
 
         @Override
         protected IncidAndResolBundle doInBackground(final Long... incidenciaId)
@@ -173,7 +173,7 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements
             IncidAndResolBundle incidAndResolBundle = null;
             try {
                 incidAndResolBundle = IncidenciaServ.seeIncidImportancia(incidenciaId[0]);
-            } catch (UiAppException e) {
+            } catch (UiException e) {
                 uiException = e;
             }
             return incidAndResolBundle;

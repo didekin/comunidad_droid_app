@@ -12,7 +12,6 @@ import com.didekinaar.usuario.testutil.UserItemMenuTestUtils;
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComuBundleKey;
 import com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil;
-import com.didekindroid.usuariocomunidad.testutil.UserComuTestUtil;
 
 import org.hamcrest.Matchers;
 import org.junit.After;
