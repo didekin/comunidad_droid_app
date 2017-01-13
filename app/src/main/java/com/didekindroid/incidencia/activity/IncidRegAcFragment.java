@@ -24,7 +24,7 @@ import com.didekindroid.incidencia.IncidenciaDataDbHelper;
 
 import timber.log.Timber;
 
-import static com.didekinaar.utils.UIutils.closeCursor;
+import static com.didekindroid.util.UIutils.closeCursor;
 import static com.didekindroid.incidencia.activity.utils.IncidSpinnersHelper.HELPER;
 
 /**

@@ -5,7 +5,7 @@ import android.content.res.Resources;
 import com.didekin.common.dominio.ValidDataPatterns;
 import com.didekin.usuario.Usuario;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
-import com.didekinaar.usuario.UsuarioBean;
+import com.didekindroid.usuario.UsuarioBean;
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComunidadBean;
 

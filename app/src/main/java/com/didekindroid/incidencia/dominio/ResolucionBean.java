@@ -3,7 +3,7 @@ package com.didekindroid.incidencia.dominio;
 import android.content.res.Resources;
 
 import com.didekin.incidencia.dominio.IncidImportancia;
-import com.didekinaar.utils.FechaPickerBean;
+import com.didekindroid.util.FechaPickerBean;
 import com.didekindroid.R;
 
 import java.text.ParseException;
@@ -11,8 +11,8 @@ import java.text.ParseException;
 import static com.didekin.common.dominio.ValidDataPatterns.LINE_BREAK;
 import static com.didekin.incidencia.dominio.IncidDataPatterns.INCID_RESOLUCION_DESC;
 import static com.didekin.incidencia.dominio.IncidDataPatterns.INCID_RES_AVANCE_DESC;
-import static com.didekinaar.utils.UIutils.formatTimeToString;
-import static com.didekinaar.utils.UIutils.getIntFromStringDecimal;
+import static com.didekindroid.util.UIutils.formatTimeToString;
+import static com.didekindroid.util.UIutils.getIntFromStringDecimal;
 
 /**
  * User: pedro@didekin

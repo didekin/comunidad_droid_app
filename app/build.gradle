@@ -52,15 +52,8 @@ android {
             signingConfig signingConfigs.release
         }
         debug {
-            /*
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
-                    'proguard-rules.pro',
-                    'proguard-debug-rules.pro'
-            useProguard false
-            */
             debuggable true
-            versionNameSuffix '-DEBUG'
+            versionNameSuffix ''
             applicationIdSuffix ""
         }
     }
@@ -71,29 +64,28 @@ android {
     }
     lintOptions {
         checkReleaseBuilds true
-        abortOnError false
+        abortOnError true
         quiet true
         ignoreWarnings false
         htmlReport true
+//        disable  "InvalidPackage"
     }
     productFlavors {
     }
 }
 
-configurations {
-    debugCompile {}
-    releaseCompile {}
-}
-
 dependencies {
-    debugCompile project(path: ':didekinaar', configuration: 'debug')
-    releaseCompile project(path: ':didekinaar', configuration: 'release')
-    localCompile project(path: ':didekinaar', configuration: 'release')
-    preCompile project(path: ':didekinaar', configuration: 'release')
-
-    /* Warning if we do not repeat this dependency. */
     compile rootProject.ext.firebase_message
-    androidTestCompile rootProject.ext.apps_androidtest
+    compile rootProject.ext.model_lib
+    compile rootProject.ext.retrofit_model_lib
+    compile rootProject.ext.timber
+    compile rootProject.ext.retrofit2
+    compile rootProject.ext.rxjava
+    compile rootProject.ext.android_support
+
+    androidTestCompile rootProject.ext.espresso
+    androidTestCompile rootProject.ext.gcm_model_lib
+
     testCompile rootProject.ext.junit
 }
 

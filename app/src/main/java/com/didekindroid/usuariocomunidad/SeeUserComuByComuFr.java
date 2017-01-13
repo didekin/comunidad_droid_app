@@ -15,13 +15,13 @@ import com.didekin.comunidad.Comunidad;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComuBundleKey;
-import com.didekinaar.exception.UiException;
+import com.didekindroid.exception.UiException;
 
 import java.util.List;
 
 import timber.log.Timber;
 
-import static com.didekinaar.utils.UIutils.checkPostExecute;
+import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.comunidad.ComunidadService.AppComuServ;
 
 

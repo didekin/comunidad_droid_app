@@ -5,10 +5,11 @@ import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 
 
-import com.didekinaar.exception.UiException;
-import com.didekinaar.usuario.testutil.UserItemMenuTestUtils;
+import com.didekindroid.exception.UiException;
+import com.didekindroid.usuario.testutil.UserItemMenuTestUtils;
 import com.didekindroid.R;
-import com.didekindroid.comunidad.ComuTestUtil;
+import com.didekindroid.comunidad.testutil.ComuDataTestUtil;
+import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
 
 import org.hamcrest.Matchers;
 import org.junit.After;
@@ -28,10 +29,10 @@ import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
-import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 
 import static com.didekindroid.comunidad.testutil.ComuMenuTestUtil.COMU_SEARCH_AC;
 import static external.LongListMatchers.withAdaptedData;
@@ -59,7 +60,7 @@ public class SeeUserComuByUserAcTest {
         protected void beforeActivityLaunched()
         {
             try {
-                UserComuTestUtil.regSeveralUserComuSameUser(UserComuTestUtil.COMU_ESCORIAL_PEPE, UserComuTestUtil.COMU_PLAZUELA5_PEPE, UserComuTestUtil.COMU_LA_FUENTE_PEPE);
+                UserComuDataTestUtil.regSeveralUserComuSameUser(UserComuDataTestUtil.COMU_ESCORIAL_PEPE, UserComuDataTestUtil.COMU_PLAZUELA5_PEPE, UserComuDataTestUtil.COMU_LA_FUENTE_PEPE);
             } catch (UiException | IOException e) {
                 e.printStackTrace();
             }
@@ -99,7 +100,7 @@ public class SeeUserComuByUserAcTest {
         onView(ViewMatchers.withId(R.id.appbar)).check(matches(isDisplayed()));
 
         // Verificamos navegación en ambas direcciones.
-        onData(Matchers.is(UserComuTestUtil.COMU_LA_FUENTE_PEPE)).check(matches(isDisplayed())).perform(click());
+        onData(Matchers.is(UserComuDataTestUtil.COMU_LA_FUENTE_PEPE)).check(matches(isDisplayed())).perform(click());
         onView(ViewMatchers.withId(R.id.usercomu_data_ac_layout)).check(matches(isDisplayed()));
         checkUp(fragmentLayoutId);
     }
@@ -111,9 +112,9 @@ public class SeeUserComuByUserAcTest {
         SeeUserComuByUserAdapter adapter = mFragment.mAdapter;
         assertThat(adapter.getCount(), is(3));
         // Orden es provinciaId, municipioCd.
-        assertThat(adapter.getItem(0), Matchers.is(UserComuTestUtil.COMU_LA_FUENTE_PEPE));
-        assertThat(adapter.getItem(1), Matchers.is(UserComuTestUtil.COMU_ESCORIAL_PEPE));
-        assertThat(adapter.getItem(2), Matchers.is(UserComuTestUtil.COMU_PLAZUELA5_PEPE));
+        assertThat(adapter.getItem(0), Matchers.is(UserComuDataTestUtil.COMU_LA_FUENTE_PEPE));
+        assertThat(adapter.getItem(1), Matchers.is(UserComuDataTestUtil.COMU_ESCORIAL_PEPE));
+        assertThat(adapter.getItem(2), Matchers.is(UserComuDataTestUtil.COMU_PLAZUELA5_PEPE));
 
         for (int i = 0; i < adapter.getCount(); ++i) {
             onView(withAdaptedData(Matchers.<Object>is(adapter.getItem(i)))).check(matches(isDisplayed()));
@@ -123,53 +124,53 @@ public class SeeUserComuByUserAcTest {
     @Test
     public void testViewData_2()
     {
-        onData(Matchers.is(UserComuTestUtil.COMU_LA_FUENTE_PEPE))
+        onData(Matchers.is(UserComuDataTestUtil.COMU_LA_FUENTE_PEPE))
                 .onChildView(
                         allOf(
                                 ViewMatchers.withId(R.id.nombreComunidad_view),
-                                ViewMatchers.withText(ComuTestUtil.COMU_LA_FUENTE.getNombreComunidad())
+                                ViewMatchers.withText(ComuDataTestUtil.COMU_LA_FUENTE.getNombreComunidad())
                         )
                 )
                 .check(matches(isDisplayed()));
-        onData(Matchers.is(UserComuTestUtil.COMU_LA_FUENTE_PEPE))
+        onData(Matchers.is(UserComuDataTestUtil.COMU_LA_FUENTE_PEPE))
                 .onChildView(
                         allOf(
                                 ViewMatchers.withId(R.id.usercomu_item_roles_txt),
-                                withText(RolUi.formatRolToString(UserComuTestUtil.COMU_LA_FUENTE_PEPE.getRoles(), mActivity.getResources()))
+                                withText(RolUi.formatRolToString(UserComuDataTestUtil.COMU_LA_FUENTE_PEPE.getRoles(), mActivity.getResources()))
                         )
                 )
                 .check(matches(isDisplayed()));
 
-        onData(Matchers.is(UserComuTestUtil.COMU_ESCORIAL_PEPE))
+        onData(Matchers.is(UserComuDataTestUtil.COMU_ESCORIAL_PEPE))
                 .onChildView(
                         allOf(
                                 ViewMatchers.withId(R.id.nombreComunidad_view),
-                                ViewMatchers.withText(ComuTestUtil.COMU_EL_ESCORIAL.getNombreComunidad())
+                                ViewMatchers.withText(ComuDataTestUtil.COMU_EL_ESCORIAL.getNombreComunidad())
                         )
                 )
                 .check(matches(isDisplayed()));
-        onData(Matchers.is(UserComuTestUtil.COMU_ESCORIAL_PEPE))
+        onData(Matchers.is(UserComuDataTestUtil.COMU_ESCORIAL_PEPE))
                 .onChildView(
                         allOf(
                                 ViewMatchers.withId(R.id.usercomu_item_roles_txt),
-                                withText(RolUi.formatRolToString(UserComuTestUtil.COMU_ESCORIAL_PEPE.getRoles(), mActivity.getResources()))
+                                withText(RolUi.formatRolToString(UserComuDataTestUtil.COMU_ESCORIAL_PEPE.getRoles(), mActivity.getResources()))
                         )
                 )
                 .check(matches(isDisplayed()));
 
-        onData(Matchers.is(UserComuTestUtil.COMU_PLAZUELA5_PEPE))
+        onData(Matchers.is(UserComuDataTestUtil.COMU_PLAZUELA5_PEPE))
                 .onChildView(
                         allOf(
                                 ViewMatchers.withId(R.id.nombreComunidad_view),
-                                ViewMatchers.withText(ComuTestUtil.COMU_LA_PLAZUELA_5.getNombreComunidad())
+                                ViewMatchers.withText(ComuDataTestUtil.COMU_LA_PLAZUELA_5.getNombreComunidad())
                         )
                 )
                 .check(matches(isDisplayed()));
-        onData(Matchers.is(UserComuTestUtil.COMU_PLAZUELA5_PEPE))
+        onData(Matchers.is(UserComuDataTestUtil.COMU_PLAZUELA5_PEPE))
                 .onChildView(
                         allOf(
                                 ViewMatchers.withId(R.id.usercomu_item_roles_txt),
-                                withText(RolUi.formatRolToString(UserComuTestUtil.COMU_PLAZUELA5_PEPE.getRoles(), mActivity.getResources()))
+                                withText(RolUi.formatRolToString(UserComuDataTestUtil.COMU_PLAZUELA5_PEPE.getRoles(), mActivity.getResources()))
                         )
                 )
                 .check(matches(isDisplayed()));

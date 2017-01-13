@@ -5,14 +5,13 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.usuario.Usuario;
-import com.didekinaar.usuario.delete.DeleteMeAcTest;
 
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 
 import static com.didekindroid.R.id.comu_search_ac_linearlayout;
-import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_REAL_PEPE;
-import static com.didekindroid.usuariocomunidad.UserComuTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 

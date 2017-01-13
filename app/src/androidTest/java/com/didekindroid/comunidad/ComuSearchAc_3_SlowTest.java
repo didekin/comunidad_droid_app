@@ -8,11 +8,11 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 
-import com.didekinaar.exception.UiException;
-import com.didekinaar.usuario.testutil.UserItemMenuTestUtils;
-import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
+import com.didekindroid.exception.UiException;
+import com.didekindroid.usuario.testutil.UserItemMenuTestUtils;
+import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.R;
-import com.didekindroid.usuariocomunidad.UserComuTestUtil;
+import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
 
 import junit.framework.AssertionFailedError;
 
@@ -31,9 +31,9 @@ import static android.support.test.espresso.Espresso.openActionBarOverflowOrOpti
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
-import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.REG_COMU_USERCOMU_AC;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.REG_COMU_USER_USERCOMU_AC;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.SEE_USERCOMU_BY_USER_AC;
@@ -86,7 +86,7 @@ public class ComuSearchAc_3_SlowTest {
     {
         whatClean = UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 
-        UserComuTestUtil.signUpAndUpdateTk(UserComuTestUtil.COMU_REAL_JUAN);
+        UserComuDataTestUtil.signUpAndUpdateTk(UserComuDataTestUtil.COMU_REAL_JUAN);
         activity = mActivityRule.launchActivity(new Intent());
         assertThat(TKhandler.isRegisteredUser(), is(true));
         SEE_USERCOMU_BY_USER_AC.checkMenuItem_WTk(activity);
@@ -107,7 +107,7 @@ public class ComuSearchAc_3_SlowTest {
     public void testLogin_withToken() throws InterruptedException, UiException, IOException
     {
         whatClean = UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
-        UserComuTestUtil.signUpAndUpdateTk(UserComuTestUtil.COMU_REAL_JUAN);
+        UserComuDataTestUtil.signUpAndUpdateTk(UserComuDataTestUtil.COMU_REAL_JUAN);
         activity = mActivityRule.launchActivity(new Intent());
 
         onView(ViewMatchers.withId(R.id.login_ac_mn)).check(doesNotExist());
@@ -146,7 +146,7 @@ public class ComuSearchAc_3_SlowTest {
         whatClean = UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 
         //With token.
-        UserComuTestUtil.signUpAndUpdateTk(UserComuTestUtil.COMU_REAL_JUAN);
+        UserComuDataTestUtil.signUpAndUpdateTk(UserComuDataTestUtil.COMU_REAL_JUAN);
         activity = mActivityRule.launchActivity(new Intent());
         assertThat(TKhandler.isRegisteredUser(), is(true));
         UserItemMenuTestUtils.USER_DATA_AC.checkMenuItem_WTk(activity);
@@ -170,7 +170,7 @@ public class ComuSearchAc_3_SlowTest {
     {
         whatClean = UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 
-        UserComuTestUtil.signUpAndUpdateTk(UserComuTestUtil.COMU_REAL_JUAN);
+        UserComuDataTestUtil.signUpAndUpdateTk(UserComuDataTestUtil.COMU_REAL_JUAN);
         activity = mActivityRule.launchActivity(new Intent());
         assertThat(TKhandler.isRegisteredUser(), is(true));
         REG_COMU_USERCOMU_AC.checkMenuItem_WTk(activity);

@@ -3,7 +3,7 @@ package com.didekindroid.usuariocomunidad.testutil;
 import android.app.Activity;
 import android.support.test.espresso.matcher.ViewMatchers;
 
-import com.didekinaar.testutil.MenuTestUtilIf;
+import com.didekindroid.testutil.MenuTestUtilIf;
 import com.didekindroid.R;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -12,10 +12,10 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static com.didekinaar.testutil.AarActivityTestUtils.checkNoToastInTest;
-import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
-import static com.didekinaar.usuario.testutil.UserItemMenuTestUtils.REGISTERED_USER;
-import static com.didekinaar.usuario.testutil.UserItemMenuTestUtils.REQUIRES_USER_NO_TOKEN;
+import static com.didekindroid.testutil.ActivityTestUtils.checkNoToastInTest;
+import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
+import static com.didekindroid.usuario.testutil.UserItemMenuTestUtils.REGISTERED_USER;
+import static com.didekindroid.usuario.testutil.UserItemMenuTestUtils.REQUIRES_USER_NO_TOKEN;
 
 /**
  * User: pedro@didekin

@@ -12,7 +12,7 @@ import com.didekindroid.R;
 
 import timber.log.Timber;
 
-import static com.didekinaar.utils.UIutils.formatTimeStampToString;
+import static com.didekindroid.util.UIutils.formatTimeStampToString;
 
 /**
  * User: pedro@didekin

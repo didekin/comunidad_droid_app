@@ -11,16 +11,17 @@ import android.view.View;
 import com.didekin.usuario.Usuario;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
 
-import com.didekinaar.exception.UiException;
-import com.didekinaar.usuario.RegUserFr;
-import com.didekinaar.usuario.UsuarioBean;
-import com.didekinaar.usuario.testutil.UserEspressoTestUtil;
-import com.didekinaar.usuario.testutil.UserItemMenuTestUtils;
-import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
+import com.didekindroid.exception.UiException;
+import com.didekindroid.usuario.RegUserFr;
+import com.didekindroid.usuario.UsuarioBean;
+import com.didekindroid.usuario.testutil.UserEspressoTestUtil;
+import com.didekindroid.usuario.testutil.UserItemMenuTestUtils;
+import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComunidadBean;
 import com.didekindroid.comunidad.RegComuFr;
 import com.didekindroid.comunidad.testutil.ComuEspresoTestUtil;
+import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
 import com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil;
 
 import org.junit.After;
@@ -37,14 +38,14 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
-import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
-import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
-import static com.didekinaar.testutil.AarActivityTestUtils.clickNavigateUp;
-import static com.didekinaar.usuario.RegUserFr.makeUserBeanFromRegUserFrView;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_NOTHING;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_TK_HANDLER;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
+import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
+import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
+import static com.didekindroid.usuario.RegUserFr.makeUserBeanFromRegUserFrView;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_NOTHING;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_TK_HANDLER;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.comunidad.RegComuFr.makeComunidadBeanFromView;
 import static com.didekindroid.usuariocomunidad.RegUserComuFr.makeUserComuBeanFromView;
 import static org.hamcrest.CoreMatchers.is;
@@ -258,7 +259,7 @@ public class RegComuAndUserAndUserComuAcTest {
     {
         whatToClean = UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
         //With token.
-        UserComuTestUtil.signUpAndUpdateTk(UserComuTestUtil.COMU_REAL_JUAN);
+        UserComuDataTestUtil.signUpAndUpdateTk(UserComuDataTestUtil.COMU_REAL_JUAN);
 
         mActivity = mActivityRule.launchActivity(new Intent());
         assertThat(TKhandler.isRegisteredUser(), is(true));

@@ -14,7 +14,7 @@ import java.io.File;
 import java.io.IOException;
 
 import static android.database.sqlite.SQLiteDatabase.deleteDatabase;
-import static com.didekinaar.AppInitializer.creator;
+import static com.didekindroid.AppInitializer.creator;
 import static com.didekindroid.incidencia.IncidenciaDataDb.AmbitoIncidencia.AMBITO_INCID_COUNT;
 import static com.didekindroid.incidencia.IncidenciaDataDb.AmbitoIncidencia.CREATE_AMBITO_INCIDENCIA;
 import static org.hamcrest.CoreMatchers.is;

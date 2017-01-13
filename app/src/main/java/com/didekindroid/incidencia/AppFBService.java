@@ -11,9 +11,9 @@ import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.NotificationCompat;
 
 import com.didekindroid.R;
+import com.didekindroid.comunidad.ComuSearchAc;
 import com.didekindroid.incidencia.activity.IncidSeeClosedByComuAc;
 import com.didekindroid.incidencia.activity.IncidSeeOpenByComuAc;
-import com.didekindroid.comunidad.ComuSearchAc;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -25,14 +25,19 @@ import timber.log.Timber;
 import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
-import static com.didekin.common.gcm.GcmKeyValueData.type_message_key;
 import static com.didekin.incidencia.gcm.GcmKeyValueIncidData.comunidadId_key;
 import static com.didekin.incidencia.gcm.GcmKeyValueIncidData.incidencia_closed_type;
 import static com.didekin.incidencia.gcm.GcmKeyValueIncidData.incidencia_open_type;
 import static com.didekin.incidencia.gcm.GcmKeyValueIncidData.resolucion_open_type;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.incidencia.AppFBService.IncidTypeMsgHandler.getHandlerFromType;
 
 public class AppFBService extends FirebaseMessagingService {
+
+    /**
+     * The key to retrieve from the data payload the type of message.
+     */
+    public static final String type_message_key = "typeMsg";
 
     Map<String, String> data;
 
@@ -50,7 +55,7 @@ public class AppFBService extends FirebaseMessagingService {
         String typeMessage = data.get(type_message_key);
         Timber.d("onMessageReceived(), from: %s typeMessage: %s%n", from, typeMessage);
 
-        IncidTypeMsgHandler handler = IncidTypeMsgHandler.getHandlerFromType(typeMessage);
+        IncidTypeMsgHandler handler = getHandlerFromType(typeMessage);
         PendingIntent resultPendingIntent = handler.getPendingIntent(this);
         NotificationManager mManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

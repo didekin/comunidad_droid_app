@@ -5,9 +5,10 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekin.comunidad.Comunidad;
 import com.didekin.comunidad.Municipio;
 import com.didekin.comunidad.Provincia;
-import com.didekinaar.exception.UiException;
-import com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum;
-import com.didekindroid.usuariocomunidad.UserComuTestUtil;
+import com.didekindroid.exception.UiException;
+import com.didekindroid.comunidad.testutil.ComuDataTestUtil;
+import com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum;
+import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.After;
@@ -18,14 +19,14 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 import java.util.List;
 
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_NOTHING;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_NOTHING;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.comunidad.ComunidadService.AppComuServ;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
-import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_REAL_JUAN;
-import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_TRAV_PLAZUELA_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_TRAV_PLAZUELA_PEPE;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -55,7 +56,7 @@ public class ComunidadServiceTest {
     {
         whatClean = CLEAN_PEPE;
 
-        UserComuTestUtil.signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
+        UserComuDataTestUtil.signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
         Comunidad cDB = AppUserComuServ.getComusByUser().get(0);
         Comunidad c1 = AppComuServ.getComuData(cDB.getC_Id());
         assertThat(c1, is(cDB));
@@ -64,9 +65,9 @@ public class ComunidadServiceTest {
     @Test
     public void testSearchComunidades() throws Exception
     {
-        UserComuTestUtil.signUpAndUpdateTk(COMU_REAL_JUAN);
-        UserComuTestUtil.signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
-        Comunidad comunidadSearch = ComuTestUtil.makeComunidad("Calle", "de la Plazuela", (short) 11, "",
+        UserComuDataTestUtil.signUpAndUpdateTk(COMU_REAL_JUAN);
+        UserComuDataTestUtil.signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
+        Comunidad comunidadSearch = ComuDataTestUtil.makeComunidad("Calle", "de la Plazuela", (short) 11, "",
                 new Municipio((short) 13, new Provincia((short) 3)));
 
         List<Comunidad> comunidades = AppComuServ.searchComunidades(comunidadSearch).execute().body();

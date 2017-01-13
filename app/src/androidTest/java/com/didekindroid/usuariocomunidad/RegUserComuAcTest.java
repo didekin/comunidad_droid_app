@@ -10,7 +10,8 @@ import com.didekin.comunidad.Comunidad;
 
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComuBundleKey;
-import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
+import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
+import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
 import com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil;
 
 import org.hamcrest.Matchers;
@@ -30,12 +31,12 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
-import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
-import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanTwoUsers;
-import static com.didekinaar.testutil.AarActivityTestUtils.clickNavigateUp;
+import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
+import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanTwoUsers;
+import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.usuariocomunidad.RolUi.PRE;
 import static com.didekindroid.usuariocomunidad.RolUi.PRO;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
@@ -68,7 +69,7 @@ public class RegUserComuAcTest {
     @Before
     public void setUp() throws Exception
     {
-        UserComuTestUtil.signUpAndUpdateTk(UserComuTestUtil.COMU_REAL_JUAN);
+        UserComuDataTestUtil.signUpAndUpdateTk(UserComuDataTestUtil.COMU_REAL_JUAN);
         List<Comunidad> comunidadesUserOne = AppUserComuServ.getComusByUser();
         comunidad = comunidadesUserOne.get(0);
 
@@ -76,7 +77,7 @@ public class RegUserComuAcTest {
         intent = new Intent();
         intent.putExtra(COMUNIDAD_LIST_OBJECT.key, comunidad);
         // Segundo usuarioComunidad.
-        UserComuTestUtil.signUpAndUpdateTk(UserComuTestUtil.COMU_TRAV_PLAZUELA_PEPE);
+        UserComuDataTestUtil.signUpAndUpdateTk(UserComuDataTestUtil.COMU_TRAV_PLAZUELA_PEPE);
     }
 
     @After
@@ -94,7 +95,7 @@ public class RegUserComuAcTest {
         List<Comunidad> comunidadesUserOne = AppUserComuServ.getComusByUser();
         assertThat(comunidadesUserOne.size(), is(1));
         Comunidad comunidad2 = comunidadesUserOne.get(0);
-        assertThat(comunidad2, Matchers.is(UserComuTestUtil.COMU_TRAV_PLAZUELA_PEPE.getComunidad()));
+        assertThat(comunidad2, Matchers.is(UserComuDataTestUtil.COMU_TRAV_PLAZUELA_PEPE.getComunidad()));
 
         assertThat(activity, notNullValue());
         assertThat(activity.getFragmentManager().findFragmentById(R.id.reg_usercomu_frg), notNullValue());

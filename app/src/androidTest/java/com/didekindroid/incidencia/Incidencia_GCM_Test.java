@@ -11,10 +11,9 @@ import android.support.test.espresso.Espresso;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekinaar.exception.UiException;
-import com.didekinaar.testutil.IdlingResourceForIntentServ;
-import com.didekindroid.usuario.AarFBRegIntentService;
-import com.didekinservice.common.gcm.GcmRequest;
+import com.didekindroid.exception.UiException;
+import com.didekindroid.testutil.IdlingResourceForIntentServ;
+import com.didekindroid.usuario.RegGcmIntentService;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.junit.After;
@@ -22,10 +21,11 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.runner.RunWith;
 
-import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
-import static com.didekinaar.usuario.UsuarioDaoRemote.usuarioDaoRemote;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.usuario.UsuarioDaoRemote.usuarioDaoRemote;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
+import static com.didekindroid.incidencia.testutils.GcmConstantForTests.PACKAGE_TEST;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -42,6 +42,11 @@ public abstract class Incidencia_GCM_Test {
     IdlingResourceForIntentServ idlingResource;
     NotificationManager mNotifyManager;
 
+    /**
+     * To be implemented in subclasses.
+     */
+    protected abstract IntentsTestRule<? extends Activity> doIntentsTestRule();
+
     @Rule
     public IntentsTestRule<? extends Activity> intentRule = doIntentsTestRule();
 
@@ -50,7 +55,7 @@ public abstract class Incidencia_GCM_Test {
     {
         mActivity = intentRule.getActivity();
         mNotifyManager = (NotificationManager) mActivity.getSystemService(Context.NOTIFICATION_SERVICE);
-        idlingResource = new IdlingResourceForIntentServ(mActivity, new AarFBRegIntentService());
+        idlingResource = new IdlingResourceForIntentServ(mActivity, new RegGcmIntentService());
         Espresso.registerIdlingResources(idlingResource);
     }
 
@@ -64,8 +69,6 @@ public abstract class Incidencia_GCM_Test {
     }
 
     //  ===========================================================================
-
-    protected abstract IntentsTestRule<? extends Activity> doIntentsTestRule();
 
     void checkToken() throws InterruptedException, UiException
     {
@@ -82,13 +85,13 @@ public abstract class Incidencia_GCM_Test {
         NotificationManager mManager = (NotificationManager) mActivity.getSystemService(Context.NOTIFICATION_SERVICE);
 
         // Verifico recepción de notificación.
-        Thread.sleep(3000);
+        Thread.sleep(4000);
         assertThat(mManager.getActiveNotifications().length, is(1));
         StatusBarNotification barNotification = mManager.getActiveNotifications()[0];
         assertThat(barNotification.getId(), is(typeMsgInt));
 
         // We check the pending intent.
         PendingIntent pendingIntent = barNotification.getNotification().contentIntent;
-        assertThat(pendingIntent.getCreatorPackage(), is(GcmRequest.PACKAGE_DIDEKINDROID));
+        assertThat(pendingIntent.getCreatorPackage(), is(PACKAGE_TEST));
     }
 }

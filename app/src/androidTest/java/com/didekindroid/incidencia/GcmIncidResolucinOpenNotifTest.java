@@ -9,8 +9,8 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.incidencia.dominio.IncidenciaUser;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
-import com.didekinaar.exception.UiException;
-import com.didekinaar.testutil.MockActivity;
+import com.didekindroid.exception.UiException;
+import com.didekindroid.testutil.MockActivity;
 import com.didekindroid.R;
 import com.didekinservice.common.gcm.GcmException;
 
@@ -28,11 +28,12 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekin.incidencia.gcm.GcmKeyValueIncidData.resolucion_open_type;
-import static com.didekinaar.testutil.AarActivityTestUtils.clickNavigateUp;
-import static com.didekindroid.incidencia.IncidenciaTestUtils.insertGetIncidenciaUser;
+import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
+import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidenciaUser;
+import static com.didekindroid.incidencia.testutils.GcmConstantForTests.test_api_key_header;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
-import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_REAL_PEPE;
-import static com.didekindroid.usuariocomunidad.UserComuTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static org.hamcrest.CoreMatchers.allOf;
 
 /**
@@ -58,7 +59,7 @@ public class GcmIncidResolucinOpenNotifTest extends GcmIncidNotificationTest {
                     UsuarioComunidad pepeUserComu = AppUserComuServ.seeUserComusByUser().get(0);
                     comunidadIdIntent = pepeUserComu.getComunidad().getC_Id();
                     incidenciaUser = insertGetIncidenciaUser(pepeUserComu, 1);
-                } catch ( IOException | UiException e) {
+                } catch (IOException | UiException e) {
                     e.printStackTrace();
                 }
             }
@@ -68,7 +69,7 @@ public class GcmIncidResolucinOpenNotifTest extends GcmIncidNotificationTest {
     //    =========================== TESTS =============================
 
     /**
-     * Multicast request with two tokenIds.
+     * Multicast request with two tokenIds iguales.
      * We check the backStack with UP.
      */
     @TargetApi(Build.VERSION_CODES.M)
@@ -76,7 +77,7 @@ public class GcmIncidResolucinOpenNotifTest extends GcmIncidNotificationTest {
     public void testCheckNotification_1() throws IOException, InterruptedException, GcmException
     {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            endPointImp.sendGcmMulticastRequestImp(getGcmMultiRequest(resolucion_open_type));
+            endPointImp.sendMulticastGzip(test_api_key_header, getGcmMultiRequest(resolucion_open_type));
             Thread.sleep(2000);
             Notification notification = mManager.getActiveNotifications()[0].getNotification();
             final PendingIntent pendingIntent = notification.contentIntent;
@@ -118,7 +119,7 @@ public class GcmIncidResolucinOpenNotifTest extends GcmIncidNotificationTest {
     }
 
     /**
-     * Multicast request with two tokenIds.
+     * Multicast request with two tokenIds iguales.
      * We check the backStack with BACK.
      */
     @TargetApi(Build.VERSION_CODES.M)
@@ -126,7 +127,7 @@ public class GcmIncidResolucinOpenNotifTest extends GcmIncidNotificationTest {
     public void testCheckNotification_2() throws IOException, InterruptedException, GcmException
     {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            endPointImp.sendGcmMulticastRequestImp(getGcmMultiRequest(resolucion_open_type));
+            endPointImp.sendMulticastGzip(test_api_key_header, getGcmMultiRequest(resolucion_open_type));
             Thread.sleep(2000);
             final PendingIntent pendingIntent = mManager.getActiveNotifications()[0].getNotification().contentIntent;
 

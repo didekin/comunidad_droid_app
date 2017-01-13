@@ -5,9 +5,9 @@ import android.support.v4.app.Fragment;
 
 import com.didekin.incidencia.dominio.IncidImportancia;
 import com.didekin.incidencia.dominio.Resolucion;
-import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
+import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.R;
-import com.didekinaar.utils.UIutils;
+import com.didekindroid.util.UIutils;
 
 import org.junit.After;
 import org.junit.Before;
@@ -25,11 +25,11 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekinaar.utils.UIutils.SPAIN_LOCALE;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
+import static com.didekindroid.util.UIutils.SPAIN_LOCALE;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_resolucion_ac_frgs_tag;
-import static com.didekindroid.incidencia.IncidenciaTestUtils.COSTE_ESTIM_DEFAULT_String;
-import static com.didekindroid.incidencia.IncidenciaTestUtils.RESOLUCION_DEFAULT_DESC;
+import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.COSTE_ESTIM_DEFAULT_String;
+import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.RESOLUCION_DEFAULT_DESC;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;

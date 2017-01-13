@@ -13,25 +13,25 @@ import android.widget.CursorAdapter;
 import android.widget.EditText;
 
 import com.didekin.comunidad.Comunidad;
-import com.didekinaar.exception.UiException;
-import com.didekinaar.utils.ConnectionUtils;
+import com.didekindroid.exception.UiException;
+import com.didekindroid.util.ConnectionUtils;
 import com.didekindroid.R;
 import com.didekindroid.usuariocomunidad.SeeUserComuByUserAc;
-import com.didekindroid.util.AppMenuRouter;
+import com.didekindroid.util.MenuRouter;
 
 import java.util.Objects;
 
 import timber.log.Timber;
 
-import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
-import static com.didekinaar.utils.AarItemMenu.mn_handler;
-import static com.didekinaar.utils.UIutils.checkPostExecute;
-import static com.didekinaar.utils.UIutils.doToolBar;
-import static com.didekinaar.utils.UIutils.getErrorMsgBuilder;
-import static com.didekinaar.utils.UIutils.makeToast;
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.util.ItemMenu.mn_handler;
+import static com.didekindroid.util.UIutils.checkPostExecute;
+import static com.didekindroid.util.UIutils.doToolBar;
+import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
+import static com.didekindroid.util.UIutils.makeToast;
 import static com.didekindroid.comunidad.ComunidadService.AppComuServ;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
-import static com.didekindroid.util.AppMenuRouter.routerMap;
+import static com.didekindroid.util.MenuRouter.routerMap;
 
 /**
  * Preconditions:
@@ -236,7 +236,7 @@ public class ComuDataAc extends AppCompatActivity implements RegComuFr.ComuDataC
         int resourceId = item.getItemId();
         switch (resourceId) {
             case android.R.id.home:
-                AppMenuRouter.doUpMenu(this);
+                MenuRouter.doUpMenu(this);
                 return true;
             case R.id.see_usercomu_by_comu_ac_mn:
                 Intent intent = new Intent();

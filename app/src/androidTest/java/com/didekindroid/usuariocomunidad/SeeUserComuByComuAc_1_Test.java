@@ -8,9 +8,10 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekin.comunidad.Comunidad;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
 
-import com.didekinaar.usuario.testutil.UserItemMenuTestUtils;
+import com.didekindroid.usuario.testutil.UserItemMenuTestUtils;
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComuBundleKey;
+import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
 import com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil;
 
 import org.hamcrest.Matchers;
@@ -28,11 +29,11 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
-import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekinaar.testutil.AarActivityTestUtils.clickNavigateUp;
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
+import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
+import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
 
 import static com.didekindroid.comunidad.testutil.ComuMenuTestUtil.COMU_SEARCH_AC;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
@@ -72,9 +73,9 @@ public class SeeUserComuByComuAc_1_Test {
     public void setUp() throws Exception
     {
         // User is registered, with a comunidad in the intent.
-        UserComuTestUtil.signUpAndUpdateTk(UserComuTestUtil.COMU_TRAV_PLAZUELA_PEPE);
+        UserComuDataTestUtil.signUpAndUpdateTk(UserComuDataTestUtil.COMU_TRAV_PLAZUELA_PEPE);
         // We insert a second user in a different comunidad.
-        UserComuTestUtil.signUpAndUpdateTk(UserComuTestUtil.COMU_PLAZUELA5_JUAN);
+        UserComuDataTestUtil.signUpAndUpdateTk(UserComuDataTestUtil.COMU_PLAZUELA5_JUAN);
 
         // We get the id of the comunidad we will put in the intent.
         List<UsuarioComunidad> usuariosComu = AppUserComuServ.seeUserComusByUser();
@@ -118,14 +119,14 @@ public class SeeUserComuByComuAc_1_Test {
         assertThat(mAdapter.getCount(), is(1));
 
         UsuarioComunidad userComu = mAdapter.getItem(0);
-        UserComuEspressoTestUtil.validaTypedUsuarioComunidad(userComu, UserComuTestUtil.COMU_PLAZUELA5_JUAN.getPortal(), UserComuTestUtil.COMU_PLAZUELA5_JUAN.getEscalera(), UserComuTestUtil.COMU_PLAZUELA5_JUAN.getPlanta(),
-                UserComuTestUtil.COMU_PLAZUELA5_JUAN.getPuerta(), UserComuTestUtil.COMU_PLAZUELA5_JUAN.getRoles());
+        UserComuEspressoTestUtil.validaTypedUsuarioComunidad(userComu, UserComuDataTestUtil.COMU_PLAZUELA5_JUAN.getPortal(), UserComuDataTestUtil.COMU_PLAZUELA5_JUAN.getEscalera(), UserComuDataTestUtil.COMU_PLAZUELA5_JUAN.getPlanta(),
+                UserComuDataTestUtil.COMU_PLAZUELA5_JUAN.getPuerta(), UserComuDataTestUtil.COMU_PLAZUELA5_JUAN.getRoles());
         assertThat(userComu.getComunidad(),is(new Comunidad.ComunidadBuilder().c_id(comunidadId).build()));
 
         onView(withAdaptedData(Matchers.<Object>is(userComu))).check(matches(isDisplayed()));
         // Header.
         onView(ViewMatchers.withId(R.id.see_usercomu_by_comu_list_header))
-                .check(matches(withText(containsString(UserComuTestUtil.COMU_PLAZUELA5_JUAN.getComunidad().getNombreComunidad()))));
+                .check(matches(withText(containsString(UserComuDataTestUtil.COMU_PLAZUELA5_JUAN.getComunidad().getNombreComunidad()))));
     }
 
     @Test

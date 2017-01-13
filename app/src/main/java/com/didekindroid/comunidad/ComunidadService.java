@@ -1,9 +1,10 @@
 package com.didekindroid.comunidad;
 
-import com.didekin.common.exception.ErrorBean;
+
 import com.didekin.comunidad.Comunidad;
-import com.didekin.comunidad.ComunidadEndPoints;
-import com.didekinaar.exception.UiException;
+import com.didekin.http.ErrorBean;
+import com.didekin.retrofit.ComunidadEndPoints;
+import com.didekindroid.exception.UiException;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -13,9 +14,9 @@ import retrofit2.Call;
 import retrofit2.Response;
 import timber.log.Timber;
 
-import static com.didekinaar.AppInitializer.creator;
-import static com.didekinaar.utils.AarDaoUtil.getResponseBody;
-import static com.didekinaar.utils.UIutils.checkBearerToken;
+import static com.didekindroid.AppInitializer.creator;
+import static com.didekindroid.util.DaoUtil.getResponseBody;
+import static com.didekindroid.util.UIutils.checkBearerToken;
 
 /**
  * User: pedro@didekin

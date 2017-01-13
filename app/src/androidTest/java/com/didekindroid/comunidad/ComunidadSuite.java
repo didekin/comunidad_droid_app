@@ -1,8 +1,5 @@
 package com.didekindroid.comunidad;
 
-import com.didekindroid.comunidad.repository.ComunidadDbHelperTest;
-import com.didekindroid.comunidad.repository.MockDbHelperTest;
-
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -22,7 +19,6 @@ import org.junit.runners.Suite;
         ComuSearchAc_3_SlowTest.class,
         ComuSearchResultsAc_1_Test.class,
         ComuSearchResultsAc_2_SlowTest.class,
-        MockDbHelperTest.class,
 })
 public class ComunidadSuite {
 

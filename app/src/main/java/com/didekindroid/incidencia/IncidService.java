@@ -1,14 +1,14 @@
 package com.didekindroid.incidencia;
 
 import com.didekin.comunidad.Comunidad;
-import com.didekin.incidencia.controller.IncidenciaServEndPoints;
 import com.didekin.incidencia.dominio.ImportanciaUser;
 import com.didekin.incidencia.dominio.IncidAndResolBundle;
 import com.didekin.incidencia.dominio.IncidComment;
 import com.didekin.incidencia.dominio.IncidImportancia;
 import com.didekin.incidencia.dominio.IncidenciaUser;
 import com.didekin.incidencia.dominio.Resolucion;
-import com.didekinaar.exception.UiException;
+import com.didekin.retrofit.IncidenciaServEndPoints;
+import com.didekindroid.exception.UiException;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -18,10 +18,10 @@ import retrofit2.Call;
 import retrofit2.Response;
 import timber.log.Timber;
 
-import static com.didekin.common.exception.ErrorBean.GENERIC_ERROR;
-import static com.didekinaar.AppInitializer.creator;
-import static com.didekinaar.utils.AarDaoUtil.getResponseBody;
-import static com.didekinaar.utils.UIutils.checkBearerToken;
+import static com.didekin.http.ErrorBean.GENERIC_ERROR;
+import static com.didekindroid.AppInitializer.creator;
+import static com.didekindroid.util.DaoUtil.getResponseBody;
+import static com.didekindroid.util.UIutils.checkBearerToken;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 
 /**

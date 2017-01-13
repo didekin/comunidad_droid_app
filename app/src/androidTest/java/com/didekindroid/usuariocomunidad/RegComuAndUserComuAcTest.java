@@ -11,13 +11,14 @@ import com.didekin.comunidad.Municipio;
 import com.didekin.comunidad.Provincia;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
 
-import com.didekinaar.exception.UiException;
+import com.didekindroid.exception.UiException;
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComunidadBean;
 import com.didekindroid.comunidad.RegComuFr;
-import com.didekinaar.testutil.AarActivityTestUtils;
-import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
+import com.didekindroid.testutil.ActivityTestUtils;
+import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.comunidad.testutil.ComuEspresoTestUtil;
+import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
 import com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil;
 
 import org.junit.After;
@@ -35,10 +36,10 @@ import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
-import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
-import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
+import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
 
 import static com.didekindroid.usuariocomunidad.RegUserComuFr.makeUserComuBeanFromView;
 import static com.didekindroid.usuariocomunidad.RolUi.ADM;
@@ -73,7 +74,7 @@ public class RegComuAndUserComuAcTest {
     public void setUp() throws Exception
     {
         // Preconditions: the user is already registered.
-        UserComuTestUtil.signUpAndUpdateTk(UserComuTestUtil.COMU_TRAV_PLAZUELA_PEPE);
+        UserComuDataTestUtil.signUpAndUpdateTk(UserComuDataTestUtil.COMU_TRAV_PLAZUELA_PEPE);
     }
 
     @After
@@ -104,7 +105,7 @@ public class RegComuAndUserComuAcTest {
         onView(ViewMatchers.withId(R.id.reg_comu_usuariocomunidad_button)).perform(scrollTo()).check(matches(isDisplayed()));
 
         onView(ViewMatchers.withId(R.id.appbar)).perform(scrollTo()).check(matches(isDisplayed()));
-        AarActivityTestUtils.clickNavigateUp();
+        ActivityTestUtils.clickNavigateUp();
     }
 
     @Test
@@ -141,7 +142,7 @@ public class RegComuAndUserComuAcTest {
         // NO data.
         onView(ViewMatchers.withId(R.id.reg_comu_usuariocomunidad_button)).perform(scrollTo(), click());
 
-        AarActivityTestUtils.checkToastInTest(R.string.error_validation_msg, activity,
+        ActivityTestUtils.checkToastInTest(R.string.error_validation_msg, activity,
                 R.string.tipo_via,
                 R.string.nombre_via,
                 R.string.municipio,

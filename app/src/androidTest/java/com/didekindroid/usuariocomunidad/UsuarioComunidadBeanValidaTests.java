@@ -9,7 +9,7 @@ import com.didekin.comunidad.Provincia;
 
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComunidadBean;
-import com.didekinaar.usuario.UsuarioBean;
+import com.didekindroid.usuario.UsuarioBean;
 
 import org.junit.Before;
 import org.junit.Test;

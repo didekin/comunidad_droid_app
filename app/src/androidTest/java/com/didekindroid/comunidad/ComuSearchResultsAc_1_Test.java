@@ -13,10 +13,11 @@ import com.didekin.comunidad.Provincia;
 import com.didekin.usuario.Usuario;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
 
-import com.didekinaar.exception.UiException;
-import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
+import com.didekindroid.exception.UiException;
+import com.didekindroid.comunidad.testutil.ComuDataTestUtil;
+import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.R;
-import com.didekindroid.usuariocomunidad.UserComuTestUtil;
+import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
 
 import org.hamcrest.Matchers;
 import org.junit.After;
@@ -35,14 +36,14 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
-import static com.didekinaar.testutil.AarActivityTestUtils.checkBack;
-import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
-import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanTwoUsers;
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
+import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
+import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanTwoUsers;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_SEARCH;
 import static com.didekindroid.usuariocomunidad.RolUi.PRO;
@@ -85,7 +86,7 @@ public class ComuSearchResultsAc_1_Test {
     public void getFixture() throws Exception
     {
         intent = new Intent();
-        intent.putExtra(COMUNIDAD_SEARCH.key, ComuTestUtil.COMU_LA_PLAZUELA_5);
+        intent.putExtra(COMUNIDAD_SEARCH.key, ComuDataTestUtil.COMU_LA_PLAZUELA_5);
     }
 
     @After
@@ -102,7 +103,7 @@ public class ComuSearchResultsAc_1_Test {
         whatClean = CLEAN_JUAN;
 
         // Inserto comunidades en DB.
-        UserComuTestUtil.regTwoUserComuSameUser(UserComuTestUtil.makeListTwoUserComu());
+        UserComuDataTestUtil.regTwoUserComuSameUser(UserComuDataTestUtil.makeListTwoUserComu());
         activity = mIntentRule.launchActivity(intent);
         onView(ViewMatchers.withId(R.id.comu_list_fragment)).check(matches(isDisplayed()));
     }
@@ -113,7 +114,7 @@ public class ComuSearchResultsAc_1_Test {
         whatClean = CLEAN_JUAN;
 
         // User with 2 comunidades. We search with one of them exactly.
-        UserComuTestUtil.regTwoUserComuSameUser(UserComuTestUtil.makeListTwoUserComu());
+        UserComuDataTestUtil.regTwoUserComuSameUser(UserComuDataTestUtil.makeListTwoUserComu());
         activity = mIntentRule.launchActivity(intent);
         assertThat(TKhandler.isRegisteredUser(), is(true));
 
@@ -133,12 +134,12 @@ public class ComuSearchResultsAc_1_Test {
 
         // Caso: existen dos comunidades para el criterio de búsqueda.
 
-        Comunidad comunidadNew = ComuTestUtil.makeComunidad("Ronda", "del Norte", (short) 5, "",
+        Comunidad comunidadNew = ComuDataTestUtil.makeComunidad("Ronda", "del Norte", (short) 5, "",
                 new Municipio((short) 2, new Provincia((short) 27)));
-        UserComuTestUtil.regThreeUserComuSameUser(UserComuTestUtil.makeListTwoUserComu(), comunidadNew);
+        UserComuDataTestUtil.regThreeUserComuSameUser(UserComuDataTestUtil.makeListTwoUserComu(), comunidadNew);
 
         // Criterio de búsqueda.
-        Comunidad comunidad = ComuTestUtil.makeComunidad("Ronda", "de la Plazuela del Norte", (short) 5, "",
+        Comunidad comunidad = ComuDataTestUtil.makeComunidad("Ronda", "de la Plazuela del Norte", (short) 5, "",
                 new Municipio((short) 2, new Provincia((short) 27)));
         Intent intent = new Intent();
         intent.putExtra(COMUNIDAD_SEARCH.key, comunidad);
@@ -151,7 +152,7 @@ public class ComuSearchResultsAc_1_Test {
         onView(withId(android.R.id.list)).check(
                 matches(withAdaptedData(Matchers.<Object>is(comunidadNew))));
         onView(withId(android.R.id.list)).check(
-                matches(withAdaptedData(Matchers.<Object>is(ComuTestUtil.COMU_LA_PLAZUELA_5))));
+                matches(withAdaptedData(Matchers.<Object>is(ComuDataTestUtil.COMU_LA_PLAZUELA_5))));
     }
 
     @Test
@@ -162,7 +163,7 @@ public class ComuSearchResultsAc_1_Test {
         assertThat(TKhandler.getAccessTokenInCache(), nullValue());
 
         // Criterio de búsqueda.
-        Comunidad comunidad = ComuTestUtil.makeComunidad("Rincón", "del No Existente", (short) 123, "",
+        Comunidad comunidad = ComuDataTestUtil.makeComunidad("Rincón", "del No Existente", (short) 123, "",
                 new Municipio((short) 2, new Provincia((short) 27)));
         Intent intent = new Intent();
         intent.putExtra(COMUNIDAD_SEARCH.key, comunidad);
@@ -183,10 +184,10 @@ public class ComuSearchResultsAc_1_Test {
         whatClean = CLEAN_JUAN;
 
         /* 1. No existe la comunidad en DB. 2. El usuario está registrado.*/
-        UserComuTestUtil.signUpAndUpdateTk(UserComuTestUtil.COMU_REAL_JUAN);
+        UserComuDataTestUtil.signUpAndUpdateTk(UserComuDataTestUtil.COMU_REAL_JUAN);
 
         // Criterio de búsqueda.
-        Comunidad comunidad = ComuTestUtil.makeComunidad("Rincón", "del No Existente", (short) 123, "",
+        Comunidad comunidad = ComuDataTestUtil.makeComunidad("Rincón", "del No Existente", (short) 123, "",
                 new Municipio((short) 2, new Provincia((short) 27)));
         Intent intent = new Intent();
         intent.putExtra(COMUNIDAD_SEARCH.key, comunidad);
@@ -209,7 +210,7 @@ public class ComuSearchResultsAc_1_Test {
 
         //Usuario no registrado. La búsqueda devuelve una comunidad.
 
-        UserComuTestUtil.regTwoUserComuSameUser(UserComuTestUtil.makeListTwoUserComu());
+        UserComuDataTestUtil.regTwoUserComuSameUser(UserComuDataTestUtil.makeListTwoUserComu());
         // Borro los datos del userComu.
         UsuarioDataTestUtils.cleanWithTkhandler();
 
@@ -220,10 +221,10 @@ public class ComuSearchResultsAc_1_Test {
         mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getSupportFragmentManager().findFragmentById(R.id.comu_list_fragment);
         adapter = mComunidadSummaryFrg.mAdapter;
         assertThat(adapter.getCount(), is(1));
-        onView(withAdaptedData(Matchers.<Object>is(ComuTestUtil.COMU_LA_PLAZUELA_5))).check(matches(isDisplayed()));
+        onView(withAdaptedData(Matchers.<Object>is(ComuDataTestUtil.COMU_LA_PLAZUELA_5))).check(matches(isDisplayed()));
         onData(is(instanceOf(Comunidad.class))).onChildView(allOf(
                 ViewMatchers.withId(R.id.nombreComunidad_view),
-                ViewMatchers.withText(ComuTestUtil.COMU_LA_PLAZUELA_5.getNombreComunidad())
+                ViewMatchers.withText(ComuDataTestUtil.COMU_LA_PLAZUELA_5.getNombreComunidad())
         )).perform(click());
 
         onView(ViewMatchers.withId(R.id.reg_user_and_usercomu_ac_layout)).check(matches(isDisplayed()));
@@ -238,7 +239,7 @@ public class ComuSearchResultsAc_1_Test {
 
         // Usuario registrado. La búsqueda devuelve una comunidad a la que él ya está asociado.
 
-        UserComuTestUtil.regTwoUserComuSameUser(UserComuTestUtil.makeListTwoUserComu());
+        UserComuDataTestUtil.regTwoUserComuSameUser(UserComuDataTestUtil.makeListTwoUserComu());
         activity = mIntentRule.launchActivity(intent);
         assertThat(TKhandler.isRegisteredUser(), is(true));
 
@@ -252,7 +253,7 @@ public class ComuSearchResultsAc_1_Test {
         onData(is(instanceOf(Comunidad.class))).onChildView(
                 allOf(
                         ViewMatchers.withId(R.id.nombreComunidad_view),
-                        ViewMatchers.withText(ComuTestUtil.COMU_LA_PLAZUELA_5.getNombreComunidad())
+                        ViewMatchers.withText(ComuDataTestUtil.COMU_LA_PLAZUELA_5.getNombreComunidad())
                 )).perform(click());
 
         ViewInteraction viewInteraction = onView(ViewMatchers.withId(R.id.usercomu_data_ac_layout)).check(matches(isDisplayed()));
@@ -267,23 +268,23 @@ public class ComuSearchResultsAc_1_Test {
 
         // Intent específico para este test.
         intent = new Intent();
-        intent.putExtra(COMUNIDAD_SEARCH.key, ComuTestUtil.COMU_REAL);
+        intent.putExtra(COMUNIDAD_SEARCH.key, ComuDataTestUtil.COMU_REAL);
 
         // Usuario registrado. La búsqueda devuelve una comunidad a la que él ya está asociado.
         // Verificamos intent de salida.
-        Usuario userIntent = UserComuTestUtil.signUpAndUpdateTk(UserComuTestUtil.COMU_REAL_JUAN);
+        Usuario userIntent = UserComuDataTestUtil.signUpAndUpdateTk(UserComuDataTestUtil.COMU_REAL_JUAN);
         Comunidad comuIntent = AppUserComuServ.getComusByUser().get(0);
 
         activity = mIntentRule.launchActivity(intent);
         assertThat(TKhandler.isRegisteredUser(), is(true));
 
-        onData(Matchers.is(ComuTestUtil.COMU_REAL)).perform(click());
+        onData(Matchers.is(ComuDataTestUtil.COMU_REAL)).perform(click());
 
         UsuarioComunidad usuarioComunidad = new UsuarioComunidad.UserComuBuilder(comuIntent, userIntent)
-                .portal(UserComuTestUtil.COMU_REAL_JUAN.getPortal())
-                .escalera(UserComuTestUtil.COMU_REAL_JUAN.getEscalera())
-                .planta(UserComuTestUtil.COMU_REAL_JUAN.getPlanta())
-                .puerta(UserComuTestUtil.COMU_REAL_JUAN.getPuerta())
+                .portal(UserComuDataTestUtil.COMU_REAL_JUAN.getPortal())
+                .escalera(UserComuDataTestUtil.COMU_REAL_JUAN.getEscalera())
+                .planta(UserComuDataTestUtil.COMU_REAL_JUAN.getPlanta())
+                .puerta(UserComuDataTestUtil.COMU_REAL_JUAN.getPuerta())
                 .build();
 
         intended(IntentMatchers.hasExtra(USERCOMU_LIST_OBJECT.key, usuarioComunidad));
@@ -297,16 +298,16 @@ public class ComuSearchResultsAc_1_Test {
     {
         // Usuario registrado. La búsqueda devuelve una comunidad a la que él NO está asociado.
 
-        UserComuTestUtil.regTwoUserComuSameUser(UserComuTestUtil.makeListTwoUserComu());
+        UserComuDataTestUtil.regTwoUserComuSameUser(UserComuDataTestUtil.makeListTwoUserComu());
         UsuarioDataTestUtils.cleanWithTkhandler();
 
         // Insertamos al userComu que hace la búsqueda.
-        Comunidad comunidadIn = ComuTestUtil.makeComunidad("Calle", "de la Torre", (short) 115, "",
+        Comunidad comunidadIn = ComuDataTestUtil.makeComunidad("Calle", "de la Torre", (short) 115, "",
                 new Municipio((short) 22, new Provincia((short) 2)));
         Usuario usuarioIn = UsuarioDataTestUtils.makeUsuario("newuser@jnew.us", "newuser", "psw_newuser");
-        UsuarioComunidad usuarioComunidad = UserComuTestUtil.makeUsuarioComunidad(comunidadIn, usuarioIn, null,
+        UsuarioComunidad usuarioComunidad = UserComuDataTestUtil.makeUsuarioComunidad(comunidadIn, usuarioIn, null,
                 null, "3pl", "A_puerta", PRO.function);
-        UserComuTestUtil.signUpAndUpdateTk(usuarioComunidad);
+        UserComuDataTestUtil.signUpAndUpdateTk(usuarioComunidad);
 
         // Búsqueda con comunidad/intent por defecto.
         activity = mIntentRule.launchActivity(intent);
@@ -333,14 +334,14 @@ public class ComuSearchResultsAc_1_Test {
 
         // Usuario registrado. La búsqueda devuelve una comunidad a la que él NO está asociado.
 
-        UserComuTestUtil.signUpAndUpdateTk(UserComuTestUtil.COMU_PLAZUELA5_PEPE);
+        UserComuDataTestUtil.signUpAndUpdateTk(UserComuDataTestUtil.COMU_PLAZUELA5_PEPE);
         Comunidad comunidad = AppUserComuServ.getComusByUser().get(0);
-        UserComuTestUtil.signUpAndUpdateTk(UserComuTestUtil.COMU_REAL_JUAN);
+        UserComuDataTestUtil.signUpAndUpdateTk(UserComuDataTestUtil.COMU_REAL_JUAN);
 
         activity = mIntentRule.launchActivity(intent);
         assertThat(TKhandler.isRegisteredUser(), is(true));
 
-        onData(Matchers.is(ComuTestUtil.COMU_LA_PLAZUELA_5)).perform(click());
+        onData(Matchers.is(ComuDataTestUtil.COMU_LA_PLAZUELA_5)).perform(click());
         intended(IntentMatchers.hasExtra(COMUNIDAD_LIST_OBJECT.key, comunidad));
         ViewInteraction viewInteraction = onView(ViewMatchers.withId(R.id.reg_usercomu_ac_layout)).check(matches(isDisplayed()));
 
@@ -353,7 +354,7 @@ public class ComuSearchResultsAc_1_Test {
         whatClean = CLEAN_JUAN;
 
         // Usuario registrado. La búsqueda devuelve una comunidad que ya no existe.
-        UserComuTestUtil.regTwoUserComuSameUser(UserComuTestUtil.makeListTwoUserComu());
+        UserComuDataTestUtil.regTwoUserComuSameUser(UserComuDataTestUtil.makeListTwoUserComu());
 
         // Búsqueda con comunidad/intent por defecto.
         activity = mIntentRule.launchActivity(intent);

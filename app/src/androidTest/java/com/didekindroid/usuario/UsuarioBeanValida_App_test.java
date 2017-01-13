@@ -3,11 +3,9 @@ package com.didekindroid.usuario;
 import android.content.res.Resources;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekinaar.usuario.UsuarioBeanValidaTests;
-
 import org.junit.runner.RunWith;
 
-import static com.didekinaar.AppInitializer.creator;
+import static com.didekindroid.AppInitializer.creator;
 
 /**
  * User: pedro@didekin

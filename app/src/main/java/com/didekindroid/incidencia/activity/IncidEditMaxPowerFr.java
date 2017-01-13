@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import com.didekin.incidencia.dominio.IncidImportancia;
 import com.didekin.incidencia.dominio.Incidencia;
-import com.didekinaar.exception.UiException;
+import com.didekindroid.exception.UiException;
 import com.didekindroid.R;
 import com.didekindroid.incidencia.IncidenciaDataDbHelper;
 import com.didekindroid.incidencia.activity.utils.AmbitoSpinnerSettable;
@@ -28,11 +28,11 @@ import java.util.Objects;
 import timber.log.Timber;
 
 import static android.view.View.GONE;
-import static com.didekinaar.utils.ConnectionUtils.checkInternetConnected;
-import static com.didekinaar.utils.UIutils.checkPostExecute;
-import static com.didekinaar.utils.UIutils.closeCursor;
-import static com.didekinaar.utils.UIutils.getErrorMsgBuilder;
-import static com.didekinaar.utils.UIutils.makeToast;
+import static com.didekindroid.util.ConnectionUtils.checkInternetConnected;
+import static com.didekindroid.util.UIutils.checkPostExecute;
+import static com.didekindroid.util.UIutils.closeCursor;
+import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
+import static com.didekindroid.util.UIutils.makeToast;
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;

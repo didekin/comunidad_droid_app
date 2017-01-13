@@ -8,11 +8,12 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekin.comunidad.Comunidad;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
 
-import com.didekinaar.exception.UiException;
+import com.didekindroid.exception.UiException;
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComuBundleKey;
-import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
-import com.didekindroid.comunidad.ComuTestUtil;
+import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
+import com.didekindroid.comunidad.testutil.ComuDataTestUtil;
+import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
 import com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil;
 
 import org.hamcrest.Matchers;
@@ -31,11 +32,11 @@ import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN2;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN2;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuariocomunidad.RolUi.INQ;
 import static com.didekindroid.usuariocomunidad.RolUi.formatRolToString;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
@@ -80,13 +81,13 @@ public class SeeUserComuByComuAc_2_Test {
     @Test
     public void testOneUserComunidadOne() throws Exception
     {
-        UserComuTestUtil.signUpAndUpdateTk(UserComuTestUtil.COMU_TRAV_PLAZUELA_PEPE);
+        UserComuDataTestUtil.signUpAndUpdateTk(UserComuDataTestUtil.COMU_TRAV_PLAZUELA_PEPE);
         doSetUp();
         launch();
 
         assertThat(mAdapter.getCount(), is(1));
         UsuarioComunidad userComu = mAdapter.getItem(0);
-        checkUserComu(userComu, UserComuTestUtil.COMU_TRAV_PLAZUELA_PEPE);
+        checkUserComu(userComu, UserComuDataTestUtil.COMU_TRAV_PLAZUELA_PEPE);
 
         cleanOptions(CLEAN_PEPE);
     }
@@ -95,12 +96,12 @@ public class SeeUserComuByComuAc_2_Test {
     public void testThreeUsersInComunidad() throws IOException, UiException, InterruptedException
     {
         // No portal ni escalera.
-        UserComuTestUtil.signUpAndUpdateTk(UserComuTestUtil.COMU_PLAZUELA5_JUAN);
+        UserComuDataTestUtil.signUpAndUpdateTk(UserComuDataTestUtil.COMU_PLAZUELA5_JUAN);
         doSetUp();
         // Tiene portal, escalera, planta y puerta.
         AppUserComuServ.regUserAndUserComu(new UsuarioComunidad.UserComuBuilder(
                 new Comunidad.ComunidadBuilder().c_id(comunidadId).build(),
-                UserComuTestUtil.COMU_PLAZUELA5_PEPE.getUsuario()).userComuRest(UserComuTestUtil.COMU_PLAZUELA5_PEPE)
+                UserComuDataTestUtil.COMU_PLAZUELA5_PEPE.getUsuario()).userComuRest(UserComuDataTestUtil.COMU_PLAZUELA5_PEPE)
                 .build()).execute();
         // No escalera.
         UsuarioComunidad userComuNew = new UsuarioComunidad.UserComuBuilder(
@@ -118,15 +119,15 @@ public class SeeUserComuByComuAc_2_Test {
         // Check adapter data.
         assertThat(mAdapter.getCount(), is(3));
         UsuarioComunidad juan1 = mAdapter.getItem(0);
-        checkUserComu(juan1, UserComuTestUtil.COMU_PLAZUELA5_JUAN);
+        checkUserComu(juan1, UserComuDataTestUtil.COMU_PLAZUELA5_JUAN);
         UsuarioComunidad juan2 = mAdapter.getItem(1);
         checkUserComu(juan2, userComuNew);
         UsuarioComunidad pepe = mAdapter.getItem(2);
-        checkUserComu(pepe, UserComuTestUtil.COMU_PLAZUELA5_PEPE);
+        checkUserComu(pepe, UserComuDataTestUtil.COMU_PLAZUELA5_PEPE);
 
         // Header.
         onView(ViewMatchers.withId(R.id.see_usercomu_by_comu_list_header))
-                .check(matches(withText(containsString(UserComuTestUtil.COMU_PLAZUELA5_JUAN.getComunidad().getNombreComunidad()))));
+                .check(matches(withText(containsString(UserComuDataTestUtil.COMU_PLAZUELA5_JUAN.getComunidad().getNombreComunidad()))));
 
         // Delete data.
         cleanOptions(CLEAN_JUAN_AND_PEPE);
@@ -136,17 +137,17 @@ public class SeeUserComuByComuAc_2_Test {
     @Test
     public void testNoPortalEscalera() throws IOException, UiException, InterruptedException
     {
-        UserComuTestUtil.signUpAndUpdateTk(UserComuTestUtil.COMU_PLAZUELA5_JUAN);
+        UserComuDataTestUtil.signUpAndUpdateTk(UserComuDataTestUtil.COMU_PLAZUELA5_JUAN);
         doSetUp();
         launch();
 
         // COMU_PLAZUELA5_JUAN: no muestra portal y escalera; muestra aliad, email, planta, puerta y roles.
         checkNotRotulos(R.id.usercomu_item_portal_rot, R.id.usercomu_item_escalera_rot);
         checkRotulos(R.id.usercomu_item_planta_rot, R.id.usercomu_item_puerta_rot);
-        checkUser(UserComuTestUtil.COMU_PLAZUELA5_JUAN.getUsuario().getAlias(), UserComuTestUtil.COMU_PLAZUELA5_JUAN.getUsuario().getUserName());
-        checkRole(formatRolToString(UserComuTestUtil.COMU_PLAZUELA5_JUAN.getRoles(), mActivity.getResources()));
-        checkPlantaView(UserComuTestUtil.COMU_PLAZUELA5_JUAN.getPlanta());
-        checkPuertaView(UserComuTestUtil.COMU_PLAZUELA5_JUAN.getPuerta());
+        checkUser(UserComuDataTestUtil.COMU_PLAZUELA5_JUAN.getUsuario().getAlias(), UserComuDataTestUtil.COMU_PLAZUELA5_JUAN.getUsuario().getUserName());
+        checkRole(formatRolToString(UserComuDataTestUtil.COMU_PLAZUELA5_JUAN.getRoles(), mActivity.getResources()));
+        checkPlantaView(UserComuDataTestUtil.COMU_PLAZUELA5_JUAN.getPlanta());
+        checkPuertaView(UserComuDataTestUtil.COMU_PLAZUELA5_JUAN.getPuerta());
 
         cleanOptions(CLEAN_JUAN);
     }
@@ -155,14 +156,14 @@ public class SeeUserComuByComuAc_2_Test {
     public void testNoEscalera() throws UiException, IOException, InterruptedException
     {
         UsuarioComunidad usuarioComunidad = new UsuarioComunidad.UserComuBuilder(
-                ComuTestUtil.COMU_LA_PLAZUELA_5,
+                ComuDataTestUtil.COMU_LA_PLAZUELA_5,
                 UsuarioDataTestUtils.USER_JUAN2)
                 .portal("portal B")
                 .planta("B")
                 .puerta("123")
                 .roles(INQ.function)
                 .build();
-        UserComuTestUtil.signUpAndUpdateTk(usuarioComunidad);
+        UserComuDataTestUtil.signUpAndUpdateTk(usuarioComunidad);
         doSetUp();
         launch();
 
@@ -181,18 +182,18 @@ public class SeeUserComuByComuAc_2_Test {
     @Test
     public void testTodo() throws IOException, UiException, InterruptedException
     {
-        UserComuTestUtil.signUpAndUpdateTk(UserComuTestUtil.COMU_PLAZUELA5_PEPE);
+        UserComuDataTestUtil.signUpAndUpdateTk(UserComuDataTestUtil.COMU_PLAZUELA5_PEPE);
         doSetUp();
         launch();
 
         /* No muestra escalera; muestra alias, email, portal, escalera, planta, puerta y roles.*/
         checkRotulos(R.id.usercomu_item_portal_rot, R.id.usercomu_item_escalera_rot, R.id.usercomu_item_planta_rot, R.id.usercomu_item_puerta_rot);
-        checkUser(UserComuTestUtil.COMU_PLAZUELA5_PEPE.getUsuario().getAlias(), UserComuTestUtil.COMU_PLAZUELA5_PEPE.getUsuario().getUserName());
-        checkRole(formatRolToString(UserComuTestUtil.COMU_PLAZUELA5_PEPE.getRoles(), mActivity.getResources()));
-        checkPortalView(UserComuTestUtil.COMU_PLAZUELA5_PEPE.getPortal());
-        checkEscaleraView(UserComuTestUtil.COMU_PLAZUELA5_PEPE.getEscalera());
-        checkPlantaView(UserComuTestUtil.COMU_PLAZUELA5_PEPE.getPlanta());
-        checkPuertaView(UserComuTestUtil.COMU_PLAZUELA5_PEPE.getPuerta());
+        checkUser(UserComuDataTestUtil.COMU_PLAZUELA5_PEPE.getUsuario().getAlias(), UserComuDataTestUtil.COMU_PLAZUELA5_PEPE.getUsuario().getUserName());
+        checkRole(formatRolToString(UserComuDataTestUtil.COMU_PLAZUELA5_PEPE.getRoles(), mActivity.getResources()));
+        checkPortalView(UserComuDataTestUtil.COMU_PLAZUELA5_PEPE.getPortal());
+        checkEscaleraView(UserComuDataTestUtil.COMU_PLAZUELA5_PEPE.getEscalera());
+        checkPlantaView(UserComuDataTestUtil.COMU_PLAZUELA5_PEPE.getPlanta());
+        checkPuertaView(UserComuDataTestUtil.COMU_PLAZUELA5_PEPE.getPuerta());
 
         cleanOptions(CLEAN_PEPE);
     }

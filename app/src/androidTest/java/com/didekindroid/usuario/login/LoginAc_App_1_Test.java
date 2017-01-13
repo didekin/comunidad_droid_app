@@ -5,14 +5,13 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.usuario.Usuario;
-import com.didekinaar.usuario.login.LoginAcTest;
 
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 
 import static com.didekindroid.R.id.comu_search_ac_linearlayout;
-import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_REAL_DROID;
-import static com.didekindroid.usuariocomunidad.UserComuTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_DROID;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 
 /**
  * User: pedro@didekin

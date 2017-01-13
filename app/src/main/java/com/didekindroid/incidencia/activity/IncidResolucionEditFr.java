@@ -16,8 +16,8 @@ import com.didekin.incidencia.dominio.Avance;
 import com.didekin.incidencia.dominio.IncidImportancia;
 import com.didekin.incidencia.dominio.Incidencia;
 import com.didekin.incidencia.dominio.Resolucion;
-import com.didekinaar.exception.UiException;
-import com.didekinaar.utils.ConnectionUtils;
+import com.didekindroid.exception.UiException;
+import com.didekindroid.util.ConnectionUtils;
 import com.didekindroid.R;
 import com.didekindroid.incidencia.dominio.ResolucionBean;
 
@@ -28,12 +28,12 @@ import java.util.Objects;
 
 import timber.log.Timber;
 
-import static com.didekinaar.utils.FechaPickerFr.FechaPickerHelper.initFechaSpinnerView;
-import static com.didekinaar.utils.UIutils.checkPostExecute;
-import static com.didekinaar.utils.UIutils.formatTimeStampToString;
-import static com.didekinaar.utils.UIutils.getErrorMsgBuilder;
-import static com.didekinaar.utils.UIutils.getStringFromInteger;
-import static com.didekinaar.utils.UIutils.makeToast;
+import static com.didekindroid.util.FechaPickerFr.FechaPickerHelper.initFechaSpinnerView;
+import static com.didekindroid.util.UIutils.checkPostExecute;
+import static com.didekindroid.util.UIutils.formatTimeStampToString;
+import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
+import static com.didekindroid.util.UIutils.getStringFromInteger;
+import static com.didekindroid.util.UIutils.makeToast;
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;

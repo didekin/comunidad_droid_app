@@ -11,9 +11,9 @@ import android.widget.TextView;
 
 import com.didekin.incidencia.dominio.IncidComment;
 import com.didekin.incidencia.dominio.Incidencia;
-import com.didekinaar.exception.UiException;
-import com.didekinaar.utils.ConnectionUtils;
-import com.didekinaar.utils.UIutils;
+import com.didekindroid.exception.UiException;
+import com.didekindroid.util.ConnectionUtils;
+import com.didekindroid.util.UIutils;
 import com.didekindroid.R;
 import com.didekindroid.incidencia.dominio.IncidCommentBean;
 
@@ -21,13 +21,13 @@ import java.util.Objects;
 
 import timber.log.Timber;
 
-import static com.didekinaar.utils.UIutils.checkPostExecute;
-import static com.didekinaar.utils.UIutils.doToolBar;
-import static com.didekinaar.utils.UIutils.getErrorMsgBuilder;
-import static com.didekinaar.utils.UIutils.makeToast;
+import static com.didekindroid.util.UIutils.checkPostExecute;
+import static com.didekindroid.util.UIutils.doToolBar;
+import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
+import static com.didekindroid.util.UIutils.makeToast;
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCIDENCIA_OBJECT;
-import static com.didekindroid.util.AppMenuRouter.doUpMenu;
+import static com.didekindroid.util.MenuRouter.doUpMenu;
 
 /**
  * Preconditions:

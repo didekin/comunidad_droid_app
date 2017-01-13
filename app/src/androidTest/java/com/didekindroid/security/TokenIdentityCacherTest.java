@@ -3,8 +3,8 @@ package com.didekindroid.security;
 import android.content.Context;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.oauth2.SpringOauthToken;
-import com.didekinaar.exception.UiException;
+import com.didekin.http.oauth2.SpringOauthToken;
+import com.didekindroid.exception.UiException;
 
 import org.junit.After;
 import org.junit.Before;
@@ -12,12 +12,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.InstrumentationRegistry.getTargetContext;
-import static com.didekin.oauth2.OauthTokenHelper.HELPER;
-import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
-import static com.didekinaar.testutil.AarTestUtil.doSpringOauthToken;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_TK_HANDLER;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanWithTkhandler;
+import static com.didekin.http.oauth2.OauthTokenHelper.HELPER;
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.testutil.SecurityTestUtils.doSpringOauthToken;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_TK_HANDLER;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanWithTkhandler;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;

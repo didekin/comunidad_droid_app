@@ -9,10 +9,11 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekin.comunidad.Comunidad;
 import com.didekin.comunidad.Municipio;
 import com.didekin.comunidad.Provincia;
-import com.didekinaar.exception.UiException;
-import com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum;
+import com.didekindroid.exception.UiException;
+import com.didekindroid.comunidad.testutil.ComuDataTestUtil;
+import com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum;
 import com.didekindroid.R;
-import com.didekindroid.usuariocomunidad.UserComuTestUtil;
+import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
 
 import org.hamcrest.Matchers;
 import org.junit.After;
@@ -37,11 +38,11 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
-import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
-import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
+import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.comunidad.ComunidadService.AppComuServ;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.SEE_USERCOMU_BY_COMU_AC;
@@ -75,7 +76,7 @@ public class ComuDataAcTest {
         protected Intent getActivityIntent()
         {
             try {
-                UserComuTestUtil.signUpAndUpdateTk(UserComuTestUtil.COMU_PLAZUELA5_JUAN);
+                UserComuDataTestUtil.signUpAndUpdateTk(UserComuDataTestUtil.COMU_PLAZUELA5_JUAN);
                 mComunidad = AppUserComuServ.getComusByUser().get(0);
             } catch (UiException | IOException e) {
                 e.printStackTrace();
@@ -141,9 +142,9 @@ public class ComuDataAcTest {
         onView(ViewMatchers.withId(R.id.comu_data_ac_button)).check(matches(isDisplayed()));
 
         assertThat(mActivity.mRegComuFrg.getComunidadBean().getMunicipio().getProvincia().getProvinciaId(), Matchers.is
-                (ComuTestUtil.COMU_LA_PLAZUELA_5.getMunicipio().getProvincia().getProvinciaId()));
+                (ComuDataTestUtil.COMU_LA_PLAZUELA_5.getMunicipio().getProvincia().getProvinciaId()));
         assertThat(mActivity.mRegComuFrg.getComunidadBean().getMunicipio().getCodInProvincia(), Matchers.is
-                (ComuTestUtil.COMU_LA_PLAZUELA_5.getMunicipio().getCodInProvincia()));
+                (ComuDataTestUtil.COMU_LA_PLAZUELA_5.getMunicipio().getCodInProvincia()));
     }
 
     @Test
@@ -186,8 +187,8 @@ public class ComuDataAcTest {
         onView(ViewMatchers.withId(R.id.see_usercomu_by_user_frg)).check(matches(isDisplayed())).perform(closeSoftKeyboard());
 
         Comunidad comunidadDb = AppComuServ.getComuData(mComunidad.getC_Id());
-        assertThat(comunidadDb != null ? comunidadDb.getMunicipio() : null, Matchers.is(ComuTestUtil.COMU_LA_PLAZUELA_5.getMunicipio()));
-        assertThat(comunidadDb != null ? comunidadDb.getNombreVia() : null, Matchers.is(ComuTestUtil.COMU_LA_PLAZUELA_5.getNombreVia()));
+        assertThat(comunidadDb != null ? comunidadDb.getMunicipio() : null, Matchers.is(ComuDataTestUtil.COMU_LA_PLAZUELA_5.getMunicipio()));
+        assertThat(comunidadDb != null ? comunidadDb.getNombreVia() : null, Matchers.is(ComuDataTestUtil.COMU_LA_PLAZUELA_5.getNombreVia()));
 
         checkUp(activityLayoutId);
     }

@@ -5,16 +5,15 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.didekinaar.usuario.userdata.UserDataAc;
 import com.didekindroid.R;
 import com.didekindroid.usuariocomunidad.SeeUserComuByUserAc;
 
 import timber.log.Timber;
 
-import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
-import static com.didekinaar.utils.AarItemMenu.mn_handler;
-import static com.didekindroid.util.AppMenuRouter.doUpMenu;
-import static com.didekindroid.util.AppMenuRouter.routerMap;
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.util.ItemMenu.mn_handler;
+import static com.didekindroid.util.MenuRouter.doUpMenu;
+import static com.didekindroid.util.MenuRouter.routerMap;
 
 public class UserDataAppAc extends UserDataAc {
 

@@ -14,7 +14,7 @@ import com.didekin.comunidad.Comunidad;
 import com.didekin.incidencia.dominio.Incidencia;
 import com.didekin.incidencia.dominio.IncidenciaUser;
 import com.didekin.incidencia.dominio.Resolucion;
-import com.didekinaar.exception.UiException;
+import com.didekindroid.exception.UiException;
 import com.didekindroid.R;
 
 import java.util.List;
@@ -22,17 +22,17 @@ import java.util.Objects;
 
 import timber.log.Timber;
 
-import static com.didekinaar.utils.AarBundleKey.IS_MENU_IN_FRAGMENT_FLAG;
-import static com.didekinaar.utils.AarItemMenu.mn_handler;
-import static com.didekinaar.utils.UIutils.checkPostExecute;
-import static com.didekinaar.utils.UIutils.doToolBar;
+import static com.didekindroid.util.AppBundleKey.IS_MENU_IN_FRAGMENT_FLAG;
+import static com.didekindroid.util.ItemMenu.mn_handler;
+import static com.didekindroid.util.UIutils.checkPostExecute;
+import static com.didekindroid.util.UIutils.doToolBar;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_resolucion_see_fr_tag;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
-import static com.didekindroid.util.AppMenuRouter.routerMap;
+import static com.didekindroid.util.MenuRouter.routerMap;
 
 /**
  * Preconditions:

@@ -3,9 +3,8 @@ package com.didekindroid.security;
 import android.content.Context;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.oauth2.SpringOauthToken;
-import com.didekin.oauth2.SpringOauthToken.OauthToken;
-import com.didekinaar.exception.UiException;
+import com.didekin.http.oauth2.SpringOauthToken;
+import com.didekindroid.exception.UiException;
 
 import org.junit.After;
 import org.junit.Before;
@@ -16,14 +15,14 @@ import java.io.File;
 import java.io.IOException;
 
 import static android.support.test.InstrumentationRegistry.getTargetContext;
-import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
-import static com.didekinaar.security.TokenIdentityCacher.refresh_token_filename;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanWithTkhandler;
-import static com.didekinaar.utils.IoHelper.writeFileFromString;
-import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_REAL_JUAN;
-import static com.didekindroid.usuariocomunidad.UserComuTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.security.TokenIdentityCacher.refresh_token_filename;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanWithTkhandler;
+import static com.didekindroid.util.IoHelper.writeFileFromString;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -70,10 +69,10 @@ public class TokenIdentityCacher_App_Test {
         assertThat(refreshTkFile.exists(), is(true));
 
         // Call to the method.
-        SpringOauthToken fullTkNew =  TKhandler.getAccessTokenInCache();
+        SpringOauthToken fullTkNew = TKhandler.getAccessTokenInCache();
         assertThat(fullTkNew, notNullValue());
         assertThat(fullTkNew.getValue(), not(isEmptyOrNullString()));
-        OauthToken refreshTkNew =  fullTkNew.getRefreshToken();
+        SpringOauthToken.OauthToken refreshTkNew = fullTkNew.getRefreshToken();
         assertThat(refreshTkNew.getValue(), allOf(
                 not(refreshTkOriginal), // Return a different refresh token.
                 is(TKhandler.getRefreshTokenValue()),
@@ -90,7 +89,7 @@ public class TokenIdentityCacher_App_Test {
                 not(isEmptyOrNullString()),
                 is(fullTkNew.getValue())
         ));
-        OauthToken refreshTkInCache =  oauthTokenInCache.getRefreshToken();
+        SpringOauthToken.OauthToken refreshTkInCache = oauthTokenInCache.getRefreshToken();
         assertThat(refreshTkInCache.getValue(), allOf(
                 is(refreshTkNew.getValue()),
                 is(TKhandler.getRefreshTokenValue()),

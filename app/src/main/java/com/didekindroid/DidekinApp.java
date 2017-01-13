@@ -2,10 +2,9 @@ package com.didekindroid;
 
 import android.app.Application;
 
-import com.didekinaar.AppInitializer;
 import com.didekindroid.exception.UiExceptionDealer;
 
-import static com.didekinaar.AppInitializer.creator;
+import static com.didekindroid.AppInitializer.creator;
 
 /**
  * User: pedro@didekin

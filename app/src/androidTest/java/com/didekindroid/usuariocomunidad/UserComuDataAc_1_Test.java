@@ -8,10 +8,11 @@ import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.usuariocomunidad.UsuarioComunidad;
-import com.didekinaar.exception.UiException;
-import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
+import com.didekindroid.exception.UiException;
+import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComuBundleKey;
+import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
 
 import org.junit.After;
 import org.junit.Before;
@@ -37,11 +38,11 @@ import static com.didekin.usuariocomunidad.Rol.ADMINISTRADOR;
 import static com.didekin.usuariocomunidad.Rol.INQUILINO;
 import static com.didekin.usuariocomunidad.Rol.PRESIDENTE;
 import static com.didekin.usuariocomunidad.Rol.PROPIETARIO;
-import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
-import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
-import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
+import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.comunidad.testutil.ComuMenuTestUtil.COMU_DATA_AC;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_REG_AC;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_OPEN_BY_COMU_AC;
@@ -78,7 +79,7 @@ public class UserComuDataAc_1_Test {
         protected Intent getActivityIntent()
         {
             try {
-                UserComuTestUtil.regTwoUserComuSameUser(UserComuTestUtil.makeListTwoUserComu());
+                UserComuDataTestUtil.regTwoUserComuSameUser(UserComuDataTestUtil.makeListTwoUserComu());
             } catch (UiException | IOException e) {
                 e.printStackTrace();
             }

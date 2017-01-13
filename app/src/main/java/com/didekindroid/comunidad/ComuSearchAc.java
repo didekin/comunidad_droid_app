@@ -10,23 +10,23 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import com.didekin.oauth2.SpringOauthToken;
-import com.didekinaar.exception.UiException;
-import com.didekinaar.utils.ConnectionUtils;
-import com.didekinaar.utils.UIutils;
+import com.didekin.http.oauth2.SpringOauthToken;
+import com.didekindroid.exception.UiException;
+import com.didekindroid.util.ConnectionUtils;
+import com.didekindroid.util.UIutils;
 import com.didekindroid.R;
 
 import timber.log.Timber;
 
 import static com.didekin.common.dominio.ValidDataPatterns.LINE_BREAK;
-import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
-import static com.didekinaar.utils.AarItemMenu.mn_handler;
-import static com.didekinaar.utils.UIutils.checkPostExecute;
-import static com.didekinaar.utils.UIutils.doToolBar;
-import static com.didekinaar.utils.UIutils.makeToast;
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.util.ItemMenu.mn_handler;
+import static com.didekindroid.util.UIutils.checkPostExecute;
+import static com.didekindroid.util.UIutils.doToolBar;
+import static com.didekindroid.util.UIutils.makeToast;
 import static com.didekindroid.comunidad.RegComuFr.makeComunidadBeanFromView;
-import static com.didekindroid.util.AppMenuRouter.getRegisterDependentClass;
-import static com.didekindroid.util.AppMenuRouter.routerMap;
+import static com.didekindroid.util.MenuRouter.getRegisterDependentClass;
+import static com.didekindroid.util.MenuRouter.routerMap;
 
 /**
  * Postconditions:

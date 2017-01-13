@@ -10,14 +10,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import com.didekin.common.exception.ErrorBean;
-import com.didekin.oauth2.SpringOauthToken;
+import com.didekin.http.ErrorBean;
+import com.didekin.http.oauth2.SpringOauthToken;
 import com.didekin.usuario.Usuario;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
-import com.didekinaar.exception.UiException;
-import com.didekinaar.usuario.RegUserFr;
-import com.didekinaar.usuario.UsuarioBean;
-import com.didekinaar.utils.ConnectionUtils;
+import com.didekindroid.exception.UiException;
+import com.didekindroid.usuario.RegUserFr;
+import com.didekindroid.usuario.UsuarioBean;
+import com.didekindroid.util.ConnectionUtils;
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComunidadBean;
 import com.didekindroid.comunidad.RegComuFr;
@@ -27,16 +27,16 @@ import java.io.IOException;
 import timber.log.Timber;
 
 import static com.didekin.common.dominio.ValidDataPatterns.LINE_BREAK;
-import static com.didekinaar.security.Oauth2DaoRemote.Oauth2;
-import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
-import static com.didekinaar.utils.AarItemMenu.mn_handler;
-import static com.didekinaar.utils.UIutils.checkPostExecute;
-import static com.didekinaar.utils.UIutils.doToolBar;
-import static com.didekinaar.utils.UIutils.makeToast;
+import static com.didekindroid.security.Oauth2DaoRemote.Oauth2;
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.util.ItemMenu.mn_handler;
+import static com.didekindroid.util.UIutils.checkPostExecute;
+import static com.didekindroid.util.UIutils.doToolBar;
+import static com.didekindroid.util.UIutils.makeToast;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
-import static com.didekindroid.util.AppMenuRouter.doUpMenuWithIntent;
-import static com.didekindroid.util.AppMenuRouter.getRegisterDependentClass;
-import static com.didekindroid.util.AppMenuRouter.routerMap;
+import static com.didekindroid.util.MenuRouter.doUpMenuWithIntent;
+import static com.didekindroid.util.MenuRouter.getRegisterDependentClass;
+import static com.didekindroid.util.MenuRouter.routerMap;
 
 /**
  * Preconditions:

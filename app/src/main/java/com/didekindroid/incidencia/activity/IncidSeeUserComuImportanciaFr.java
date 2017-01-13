@@ -11,7 +11,7 @@ import android.widget.ListView;
 
 import com.didekin.incidencia.dominio.ImportanciaUser;
 import com.didekin.incidencia.dominio.Incidencia;
-import com.didekinaar.exception.UiException;
+import com.didekindroid.exception.UiException;
 import com.didekindroid.R;
 
 import java.util.List;
@@ -19,7 +19,7 @@ import java.util.Objects;
 
 import timber.log.Timber;
 
-import static com.didekinaar.utils.UIutils.checkPostExecute;
+import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 

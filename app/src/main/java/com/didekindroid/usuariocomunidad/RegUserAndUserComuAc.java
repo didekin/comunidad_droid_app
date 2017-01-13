@@ -10,35 +10,34 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import com.didekin.common.exception.ErrorBean;
 import com.didekin.comunidad.Comunidad;
-import com.didekin.oauth2.SpringOauthToken;
+import com.didekin.http.ErrorBean;
+import com.didekin.http.oauth2.SpringOauthToken;
 import com.didekin.usuario.Usuario;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
-import com.didekinaar.exception.UiException;
-import com.didekinaar.usuario.RegUserFr;
-import com.didekinaar.usuario.UsuarioBean;
-import com.didekinaar.utils.ConnectionUtils;
-import com.didekinaar.utils.UIutils;
+import com.didekindroid.exception.UiException;
+import com.didekindroid.usuario.RegUserFr;
+import com.didekindroid.usuario.UsuarioBean;
+import com.didekindroid.util.ConnectionUtils;
+import com.didekindroid.util.UIutils;
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComuBundleKey;
 import com.didekindroid.comunidad.ComunidadBean;
 
 import java.io.IOException;
 import java.util.Objects;
-
 import timber.log.Timber;
 
-import static com.didekinaar.security.Oauth2DaoRemote.Oauth2;
-import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
-import static com.didekinaar.utils.AarItemMenu.mn_handler;
-import static com.didekinaar.utils.UIutils.checkPostExecute;
-import static com.didekinaar.utils.UIutils.doToolBar;
-import static com.didekinaar.utils.UIutils.getErrorMsgBuilder;
+import static com.didekindroid.security.Oauth2DaoRemote.Oauth2;
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.util.ItemMenu.mn_handler;
+import static com.didekindroid.util.UIutils.checkPostExecute;
+import static com.didekindroid.util.UIutils.doToolBar;
+import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
-import static com.didekindroid.util.AppMenuRouter.doUpMenu;
-import static com.didekindroid.util.AppMenuRouter.routerMap;
+import static com.didekindroid.util.MenuRouter.doUpMenu;
+import static com.didekindroid.util.MenuRouter.routerMap;
 
 /**
  * User: pedro@didekin
@@ -144,7 +143,7 @@ public class RegUserAndUserComuAc extends AppCompatActivity {
         Timber.d("onOptionsItemSelected()");
 
         int resourceId = item.getItemId();
-        switch (resourceId){
+        switch (resourceId) {
             case android.R.id.home:
                 doUpMenu(this);
                 return true;
@@ -198,7 +197,7 @@ public class RegUserAndUserComuAc extends AppCompatActivity {
                 Intent intent = new Intent(RegUserAndUserComuAc.this, SeeUserComuByComuAc.class);
                 intent.putExtra(ComuBundleKey.COMUNIDAD_ID.key, mComunidad.getC_Id());
                 startActivity(intent);
-               TKhandler.updateIsRegistered(true);
+                TKhandler.updateIsRegistered(true);
             }
 
         }

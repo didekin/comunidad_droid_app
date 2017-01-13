@@ -2,7 +2,6 @@ package com.didekindroid.incidencia;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.common.exception.DidekinExceptionMsg;
 import com.didekin.incidencia.dominio.AmbitoIncidencia;
 import com.didekin.incidencia.dominio.Avance;
 import com.didekin.incidencia.dominio.IncidComment;
@@ -12,8 +11,8 @@ import com.didekin.incidencia.dominio.IncidenciaUser;
 import com.didekin.incidencia.dominio.Resolucion;
 import com.didekin.usuario.Usuario;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
-import com.didekinaar.exception.UiException;
-import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
+import com.didekindroid.exception.UiException;
+import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.After;
@@ -27,31 +26,32 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static com.didekin.common.exception.DidekinExceptionMsg.INCIDENCIA_NOT_FOUND;
-import static com.didekin.common.exception.DidekinExceptionMsg.INCID_IMPORTANCIA_WRONG_INIT;
-import static com.didekin.common.exception.DidekinExceptionMsg.ROLES_NOT_FOUND;
-import static com.didekin.common.exception.DidekinExceptionMsg.USERCOMU_WRONG_INIT;
+import static com.didekin.incidencia.dominio.IncidenciaExceptionMsg.INCIDENCIA_NOT_FOUND;
+import static com.didekin.incidencia.dominio.IncidenciaExceptionMsg.INCID_IMPORTANCIA_WRONG_INIT;
+import static com.didekin.incidencia.dominio.IncidenciaExceptionMsg.RESOLUCION_DUPLICATE;
 import static com.didekin.usuariocomunidad.Rol.PROPIETARIO;
-import static com.didekinaar.testutil.AarTestUtil.updateSecurityData;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
+import static com.didekin.usuariocomunidad.UsuarioComunidadExceptionMsg.ROLES_NOT_FOUND;
+import static com.didekin.usuariocomunidad.UsuarioComunidadExceptionMsg.USERCOMU_WRONG_INIT;
+import static com.didekindroid.testutil.SecurityTestUtils.updateSecurityData;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
-import static com.didekindroid.incidencia.IncidenciaTestUtils.AVANCE_DEFAULT_DES;
-import static com.didekindroid.incidencia.IncidenciaTestUtils.INCID_DEFAULT_DESC;
-import static com.didekindroid.incidencia.IncidenciaTestUtils.RESOLUCION_DEFAULT_DESC;
-import static com.didekindroid.incidencia.IncidenciaTestUtils.doComment;
-import static com.didekindroid.incidencia.IncidenciaTestUtils.doIncidencia;
-import static com.didekindroid.incidencia.IncidenciaTestUtils.doIncidenciaWithId;
-import static com.didekindroid.incidencia.IncidenciaTestUtils.doResolucion;
-import static com.didekindroid.incidencia.IncidenciaTestUtils.insertGetIncidenciaUser;
+import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.AVANCE_DEFAULT_DES;
+import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.INCID_DEFAULT_DESC;
+import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.RESOLUCION_DEFAULT_DESC;
+import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doComment;
+import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doIncidencia;
+import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doIncidenciaWithId;
+import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doResolucion;
+import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidenciaUser;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
-import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_ESCORIAL_JUAN;
-import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_ESCORIAL_PEPE;
-import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_PLAZUELA5_JUAN;
-import static com.didekindroid.usuariocomunidad.UserComuTestUtil.makeUserComuWithComunidadId;
-import static com.didekindroid.usuariocomunidad.UserComuTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_JUAN;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.makeUserComuWithComunidadId;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.core.IsNull.notNullValue;
@@ -107,7 +107,7 @@ public class IncidServiceTest_1 {
             fail();
         } catch (UiException ue) {
             // La incidencia no se encuentra por la consulta de incidencias abiertas.
-            assertThat(ue.getErrorBean().getMessage(), is(DidekinExceptionMsg.INCIDENCIA_NOT_FOUND.getHttpMessage()));
+            assertThat(ue.getErrorBean().getMessage(), is(INCIDENCIA_NOT_FOUND.getHttpMessage()));
             // Sí está en las incidencias cerradas.
             assertThat(IncidenciaServ.seeIncidsClosedByComu(incidencia.getComunidad().getC_Id()).size(), is(1));
         }
@@ -310,7 +310,7 @@ public class IncidServiceTest_1 {
             IncidenciaServ.regResolucion(resolucion);
             fail();
         } catch (UiException ue) {
-            assertThat(ue.getErrorBean().getMessage(), is(DidekinExceptionMsg.RESOLUCION_DUPLICATE.getHttpMessage()));
+            assertThat(ue.getErrorBean().getMessage(), is(RESOLUCION_DUPLICATE.getHttpMessage()));
         }
     }
 

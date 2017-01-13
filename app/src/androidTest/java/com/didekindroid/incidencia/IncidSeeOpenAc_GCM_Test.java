@@ -8,7 +8,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.usuario.Usuario;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
-import com.didekinaar.exception.UiException;
+import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.activity.IncidRegAc;
 
 import org.junit.BeforeClass;
@@ -18,13 +18,13 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 import java.util.Objects;
 
-import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.usuariocomunidad.UserComuTestUtil.signUpAndUpdateTk;
-import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_ESCORIAL_PEPE;
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 
 
-import static com.didekinaar.usuario.UsuarioDaoRemote.usuarioDaoRemote;
+import static com.didekindroid.usuario.UsuarioDaoRemote.usuarioDaoRemote;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -46,7 +46,7 @@ public class IncidSeeOpenAc_GCM_Test extends Incidencia_GCM_Test {
     }
 
     /**
-     * Test para AarFBRegIntentService methods.
+     * Test para RegGcmIntentService methods.
      */
     @Test
     public void testRegistrationGcmToken() throws Exception

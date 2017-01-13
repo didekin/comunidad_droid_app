@@ -23,12 +23,12 @@ import com.didekindroid.comunidad.repository.ComunidadDbHelper;
 
 import timber.log.Timber;
 
-import static com.didekinaar.comunidad.ComunidadDataDb.ComunidadAutonoma.cu_nombre;
-import static com.didekinaar.comunidad.ComunidadDataDb.Municipio.mu_nombre;
-import static com.didekinaar.comunidad.ComunidadDataDb.Provincia.pr_nombre;
-import static com.didekinaar.comunidad.ComunidadDataDb.TipoVia.tipovia;
-import static com.didekinaar.utils.UIutils.checkPostExecute;
-import static com.didekinaar.utils.UIutils.closeCursor;
+import static com.didekindroid.comunidad.repository.ComunidadDataDb.ComunidadAutonoma.cu_nombre;
+import static com.didekindroid.comunidad.repository.ComunidadDataDb.Municipio.mu_nombre;
+import static com.didekindroid.comunidad.repository.ComunidadDataDb.Provincia.pr_nombre;
+import static com.didekindroid.comunidad.repository.ComunidadDataDb.TipoVia.tipovia;
+import static com.didekindroid.util.UIutils.checkPostExecute;
+import static com.didekindroid.util.UIutils.closeCursor;
 
 public class RegComuFr extends Fragment {
 

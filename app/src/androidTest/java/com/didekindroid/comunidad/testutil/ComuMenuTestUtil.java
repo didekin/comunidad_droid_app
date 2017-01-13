@@ -3,8 +3,8 @@ package com.didekindroid.comunidad.testutil;
 import android.app.Activity;
 import android.support.test.espresso.matcher.ViewMatchers;
 
-import com.didekinaar.testutil.MenuTestUtilIf;
 import com.didekindroid.R;
+import com.didekindroid.testutil.MenuTestUtilIf;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
@@ -12,7 +12,7 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static com.didekinaar.usuario.testutil.UserItemMenuTestUtils.REGISTERED_USER;
+import static com.didekindroid.usuario.testutil.UserItemMenuTestUtils.REGISTERED_USER;
 
 /**
  * User: pedro@didekin

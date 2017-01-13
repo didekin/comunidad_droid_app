@@ -6,11 +6,10 @@ import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.usuariocomunidad.UsuarioComunidad;
-
-import com.didekinaar.exception.UiException;
-import com.didekinaar.security.TokenIdentityCacher;
-import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.R;
+import com.didekindroid.exception.UiException;
+import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
+import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
 
 import org.junit.After;
 import org.junit.Before;
@@ -29,11 +28,11 @@ import static android.support.test.espresso.assertion.ViewAssertions.doesNotExis
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekinaar.testutil.AarTestUtil.updateSecurityData;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.testutil.SecurityTestUtils.updateSecurityData;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.RolUi.PRO;
 import static com.didekindroid.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
@@ -60,7 +59,7 @@ public class UserComuDataAc_2_Test {
         protected void beforeActivityLaunched()
         {
             // Segundo usuario: newest, no ADMON.
-            UsuarioComunidad userComu = UserComuTestUtil.makeUsuarioComunidad(mUsuarioComunidad.getComunidad(), UsuarioDataTestUtils.USER_PEPE,
+            UsuarioComunidad userComu = UserComuDataTestUtil.makeUsuarioComunidad(mUsuarioComunidad.getComunidad(), UsuarioDataTestUtils.USER_PEPE,
                     "portalB", null, "planta1", null, PRO.function);
             try {
                 AppUserComuServ.regUserAndUserComu(userComu).execute();
@@ -75,8 +74,8 @@ public class UserComuDataAc_2_Test {
         {
             try {
                 // Primer usuario: oldest, no ADMON.
-                assertThat(UserComuTestUtil.COMU_REAL_JUAN.hasAdministradorAuthority(), is(false));
-                UserComuTestUtil.signUpAndUpdateTk(UserComuTestUtil.COMU_REAL_JUAN);
+                assertThat(UserComuDataTestUtil.COMU_REAL_JUAN.hasAdministradorAuthority(), is(false));
+                UserComuDataTestUtil.signUpAndUpdateTk(UserComuDataTestUtil.COMU_REAL_JUAN);
                 List<UsuarioComunidad> comunidadesUserOne = AppUserComuServ.seeUserComusByUser();
                 mUsuarioComunidad = comunidadesUserOne != null ? comunidadesUserOne.get(0) : null;
                 Intent intent = new Intent();
@@ -131,6 +130,6 @@ public class UserComuDataAc_2_Test {
 
         assertThat(TKhandler.getAccessTokenInCache(), nullValue());
         assertThat(TKhandler.getRefreshTokenFile().exists(), is(false));
-        assertThat(TokenIdentityCacher.TKhandler.isRegisteredUser(), is(false));
+        assertThat(TKhandler.isRegisteredUser(), is(false));
     }
 }

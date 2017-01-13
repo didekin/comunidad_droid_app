@@ -7,11 +7,11 @@ import android.support.test.espresso.intent.matcher.IntentMatchers;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
-import com.didekinaar.exception.UiException;
-import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
+import com.didekindroid.exception.UiException;
+import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.R;
 import com.didekindroid.comunidad.testutil.ComuEspresoTestUtil;
-import com.didekindroid.usuariocomunidad.UserComuTestUtil;
+import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
 
 import org.junit.After;
 import org.junit.Before;
@@ -27,11 +27,11 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
-import static com.didekinaar.testutil.AarActivityTestUtils.checkBack;
-import static com.didekinaar.testutil.AarActivityTestUtils.checkToastInTest;
-import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
+import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
+import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_SEARCH;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -68,7 +68,7 @@ public class ComuSearchAc_2_Test {
     public void testWithResultsAndUp() throws InterruptedException, UiException, IOException
     {
         //With token.
-        UserComuTestUtil.signUpAndUpdateTk(UserComuTestUtil.COMU_REAL_JUAN);
+        UserComuDataTestUtil.signUpAndUpdateTk(UserComuDataTestUtil.COMU_REAL_JUAN);
 
         ComuSearchAc activity = intentRule.launchActivity(new Intent());
         assertThat(TKhandler.isRegisteredUser(), is(true));
@@ -88,7 +88,7 @@ public class ComuSearchAc_2_Test {
     public void testWithResultsAndBack() throws InterruptedException, UiException, IOException
     {
         //With token.
-        UserComuTestUtil.signUpAndUpdateTk(UserComuTestUtil.COMU_REAL_JUAN);
+        UserComuDataTestUtil.signUpAndUpdateTk(UserComuDataTestUtil.COMU_REAL_JUAN);
 
         ComuSearchAc activity = intentRule.launchActivity(new Intent());
         assertThat(TKhandler.isRegisteredUser(), is(true));
@@ -148,7 +148,7 @@ public class ComuSearchAc_2_Test {
     public void testNoResults_2_Up() throws InterruptedException, UiException, IOException
     {
         // With token.
-        UserComuTestUtil.signUpAndUpdateTk(UserComuTestUtil.COMU_ESCORIAL_JUAN);
+        UserComuDataTestUtil.signUpAndUpdateTk(UserComuDataTestUtil.COMU_ESCORIAL_JUAN);
         intentRule.launchActivity(new Intent());
 
         ComuEspresoTestUtil.typeComunidadData();
@@ -169,7 +169,7 @@ public class ComuSearchAc_2_Test {
     public void testNoResults_2_Back() throws InterruptedException, UiException, IOException
     {
         // With token.
-        UserComuTestUtil.signUpAndUpdateTk(UserComuTestUtil.COMU_ESCORIAL_JUAN);
+        UserComuDataTestUtil.signUpAndUpdateTk(UserComuDataTestUtil.COMU_ESCORIAL_JUAN);
         intentRule.launchActivity(new Intent());
 
         ComuEspresoTestUtil.typeComunidadData();

@@ -11,7 +11,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.incidencia.dominio.IncidImportancia;
 import com.didekin.incidencia.dominio.Resolucion;
-import com.didekinaar.exception.UiException;
+import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.activity.IncidResolucionRegEditSeeAc;
 import com.google.firebase.iid.FirebaseInstanceId;
 
@@ -20,15 +20,15 @@ import org.junit.runner.RunWith;
 
 import java.io.IOException;
 
-import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
-import static com.didekinaar.usuario.UsuarioDaoRemote.usuarioDaoRemote;
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.usuario.UsuarioDaoRemote.usuarioDaoRemote;
 import static com.didekindroid.incidencia.AppFBService.IncidTypeMsgHandler.INCIDENCIA_CLOSE;
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.incidencia.IncidenciaTestUtils.insertGetIncidImportancia;
-import static com.didekindroid.incidencia.IncidenciaTestUtils.insertGetResolucionNoAdvances;
-import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_PLAZUELA5_PEPE;
+import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
+import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_PEPE;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -45,7 +45,7 @@ public class IncidCloseAc_GCM_Test extends Incidencia_GCM_Test {
     Resolucion resolucion;
 
     /**
-     * Test para AarFBRegIntentService methods.
+     * Test para RegGcmIntentService methods.
      */
     @Test
     public void testRegistrationGcmToken() throws Exception

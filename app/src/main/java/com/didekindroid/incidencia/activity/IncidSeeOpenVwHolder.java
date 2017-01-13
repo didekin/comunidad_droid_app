@@ -6,7 +6,7 @@ import android.widget.TextView;
 import com.didekin.incidencia.dominio.IncidenciaUser;
 import com.didekindroid.R;
 
-import static com.didekinaar.utils.UIutils.formatTimeStampToString;
+import static com.didekindroid.util.UIutils.formatTimeStampToString;
 
 /**
  * User: pedro@didekin

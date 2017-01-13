@@ -10,8 +10,8 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekin.incidencia.dominio.IncidImportancia;
 import com.didekin.incidencia.dominio.Incidencia;
 import com.didekin.incidencia.dominio.Resolucion;
-import com.didekinaar.exception.UiException;
-import com.didekinaar.testutil.MockActivity;
+import com.didekindroid.exception.UiException;
+import com.didekindroid.testutil.MockActivity;
 import com.didekindroid.R;
 import com.didekinservice.common.gcm.GcmException;
 
@@ -30,12 +30,13 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekin.incidencia.gcm.GcmKeyValueIncidData.incidencia_closed_type;
-import static com.didekinaar.testutil.AarActivityTestUtils.clickNavigateUp;
-import static com.didekinaar.utils.UIutils.formatTimeStampToString;
+import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
+import static com.didekindroid.util.UIutils.formatTimeStampToString;
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
-import static com.didekindroid.incidencia.IncidenciaTestUtils.insertGetIncidImportancia;
-import static com.didekindroid.incidencia.IncidenciaTestUtils.insertGetResolucionNoAdvances;
-import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_PLAZUELA5_PEPE;
+import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
+import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
+import static com.didekindroid.incidencia.testutils.GcmConstantForTests.test_api_key_header;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_PEPE;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 
@@ -70,7 +71,7 @@ public class GcmIncidCloseNotificationTest extends GcmIncidNotificationTest {
                     resolucion = insertGetResolucionNoAdvances(incidImportancia);
                     assertThat(IncidenciaServ.closeIncidencia(resolucion), is(2));
                     incidencia = IncidenciaServ.seeIncidsClosedByComu(incidImportancia.getIncidencia().getComunidadId()).get(0).getIncidencia();
-                } catch ( InterruptedException | IOException | UiException e) {
+                } catch (InterruptedException | IOException | UiException e) {
                     e.printStackTrace();
                 }
             }
@@ -88,7 +89,7 @@ public class GcmIncidCloseNotificationTest extends GcmIncidNotificationTest {
     public void testCheckNotification_1() throws IOException, InterruptedException, GcmException
     {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            endPointImp.sendGcmMulticastRequestImp(getGcmMultiRequest(incidencia_closed_type));
+            endPointImp.sendMulticastGzip(test_api_key_header, getGcmMultiRequest(incidencia_closed_type));
             Thread.sleep(2000);
             Notification notification = mManager.getActiveNotifications()[0].getNotification();
             final PendingIntent pendingIntent = notification.contentIntent;
@@ -149,7 +150,7 @@ public class GcmIncidCloseNotificationTest extends GcmIncidNotificationTest {
     public void testCheckNotification_2() throws IOException, InterruptedException, GcmException
     {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            endPointImp.sendGcmMulticastRequestImp(getGcmMultiRequest(incidencia_closed_type));
+            endPointImp.sendMulticastGzip(test_api_key_header, getGcmMultiRequest(incidencia_closed_type));
             Thread.sleep(2000);
             final PendingIntent pendingIntent = mManager.getActiveNotifications()[0].getNotification().contentIntent;
 

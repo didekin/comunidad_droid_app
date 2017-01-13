@@ -5,7 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.TextView;
 
-import com.didekinaar.utils.FechaPickerUser;
+import com.didekindroid.util.FechaPickerUser;
 import com.didekindroid.incidencia.dominio.ResolucionBean;
 
 import timber.log.Timber;

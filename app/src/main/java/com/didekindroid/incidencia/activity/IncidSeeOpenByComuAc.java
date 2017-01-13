@@ -13,7 +13,7 @@ import com.didekin.comunidad.Comunidad;
 import com.didekin.incidencia.dominio.IncidAndResolBundle;
 import com.didekin.incidencia.dominio.Incidencia;
 import com.didekin.incidencia.dominio.IncidenciaUser;
-import com.didekinaar.exception.UiException;
+import com.didekindroid.exception.UiException;
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComuBundleKey;
 
@@ -22,17 +22,17 @@ import java.util.Objects;
 
 import timber.log.Timber;
 
-import static com.didekindroid.usuario.AarFBRegIntentService.getGcmToken;
-import static com.didekinaar.utils.AarItemMenu.mn_handler;
-import static com.didekinaar.utils.UIutils.checkPostExecute;
-import static com.didekinaar.utils.UIutils.doToolBar;
+import static com.didekindroid.usuario.RegGcmIntentService.getGcmToken;
+import static com.didekindroid.util.ItemMenu.mn_handler;
+import static com.didekindroid.util.UIutils.checkPostExecute;
+import static com.didekindroid.util.UIutils.doToolBar;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
-import static com.didekindroid.util.AppMenuRouter.doUpMenu;
-import static com.didekindroid.util.AppMenuRouter.routerMap;
+import static com.didekindroid.util.MenuRouter.doUpMenu;
+import static com.didekindroid.util.MenuRouter.routerMap;
 
 /**
  * This activity is a point of registration for receiving GCM notifications of new incidents.

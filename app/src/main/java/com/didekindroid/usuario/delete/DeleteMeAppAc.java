@@ -4,9 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import com.didekinaar.usuario.delete.DeleteMeAc;
 import com.didekindroid.comunidad.ComuSearchAc;
-import com.didekindroid.util.AppMenuRouter;
+import com.didekindroid.util.MenuRouter;
 
 import timber.log.Timber;
 
@@ -38,7 +37,7 @@ public class DeleteMeAppAc extends DeleteMeAc {
 
         switch (resourceId) {
             case android.R.id.home:
-                AppMenuRouter.doUpMenu(this);
+                MenuRouter.doUpMenu(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

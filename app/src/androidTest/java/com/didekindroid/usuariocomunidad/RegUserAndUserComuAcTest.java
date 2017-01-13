@@ -8,13 +8,14 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.comunidad.Comunidad;
 
-import com.didekinaar.exception.UiException;
-import com.didekinaar.security.TokenIdentityCacher;
-import com.didekinaar.usuario.testutil.UserEspressoTestUtil;
+import com.didekindroid.exception.UiException;
+import com.didekindroid.security.TokenIdentityCacher;
+import com.didekindroid.usuario.testutil.UserEspressoTestUtil;
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComuBundleKey;
-import com.didekinaar.usuario.testutil.UserItemMenuTestUtils;
-import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
+import com.didekindroid.usuario.testutil.UserItemMenuTestUtils;
+import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
+import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
 import com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil;
 
 import org.junit.After;
@@ -34,13 +35,13 @@ import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
-import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
-import static com.didekinaar.testutil.AarActivityTestUtils.checkUp;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekinaar.testutil.AarActivityTestUtils.clickNavigateUp;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN2_AND_PEPE;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
+import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN2_AND_PEPE;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuariocomunidad.RolUi.PRE;
 import static com.didekindroid.usuariocomunidad.RolUi.PRO;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
@@ -81,7 +82,7 @@ public class RegUserAndUserComuAcTest {
             // Precondition 2: the comunidad already exists.
             List<Comunidad> comunidadesUserOne = null;
             try {
-                UserComuTestUtil.signUpAndUpdateTk(UserComuTestUtil.COMU_TRAV_PLAZUELA_PEPE);
+                UserComuDataTestUtil.signUpAndUpdateTk(UserComuDataTestUtil.COMU_TRAV_PLAZUELA_PEPE);
                 comunidadesUserOne = AppUserComuServ.getComusByUser();
             } catch (UiException | IOException e) {
                 e.printStackTrace();
@@ -174,7 +175,7 @@ public class RegUserAndUserComuAcTest {
     {
         whatToClean = CLEAN_JUAN_AND_PEPE;
         //With token.
-        UserComuTestUtil.signUpAndUpdateTk(UserComuTestUtil.COMU_REAL_JUAN);
+        UserComuDataTestUtil.signUpAndUpdateTk(UserComuDataTestUtil.COMU_REAL_JUAN);
 
         activity = intentRule.getActivity();
         assertThat(TKhandler.isRegisteredUser(), is(true));

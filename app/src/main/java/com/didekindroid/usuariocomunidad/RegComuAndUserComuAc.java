@@ -14,17 +14,17 @@ import com.didekindroid.R;
 import com.didekindroid.comunidad.ComuSearchAc;
 import com.didekindroid.comunidad.ComunidadBean;
 import com.didekindroid.comunidad.RegComuFr;
-import com.didekinaar.exception.UiException;
-import com.didekinaar.utils.ConnectionUtils;
+import com.didekindroid.exception.UiException;
+import com.didekindroid.util.ConnectionUtils;
 
 import java.util.Objects;
 
 import timber.log.Timber;
 
-import static com.didekinaar.utils.UIutils.checkPostExecute;
-import static com.didekinaar.utils.UIutils.doToolBar;
-import static com.didekinaar.utils.UIutils.getErrorMsgBuilder;
-import static com.didekinaar.utils.UIutils.makeToast;
+import static com.didekindroid.util.UIutils.checkPostExecute;
+import static com.didekindroid.util.UIutils.doToolBar;
+import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
+import static com.didekindroid.util.UIutils.makeToast;
 
 /**
  * Preconditions:

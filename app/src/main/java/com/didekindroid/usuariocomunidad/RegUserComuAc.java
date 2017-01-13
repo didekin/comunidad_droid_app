@@ -10,25 +10,25 @@ import android.widget.Button;
 
 import com.didekin.comunidad.Comunidad;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
-import com.didekinaar.exception.UiException;
+import com.didekindroid.exception.UiException;
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComunidadBean;
-import com.didekinaar.utils.ConnectionUtils;
-import com.didekinaar.utils.UIutils;
-import com.didekindroid.util.AppMenuRouter;
+import com.didekindroid.util.ConnectionUtils;
+import com.didekindroid.util.UIutils;
+import com.didekindroid.util.MenuRouter;
 
 import java.util.Objects;
 
 import timber.log.Timber;
 
 import static com.didekin.common.dominio.ValidDataPatterns.LINE_BREAK;
-import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
-import static com.didekinaar.utils.UIutils.checkPostExecute;
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
-import static com.didekinaar.utils.UIutils.doToolBar;
-import static com.didekinaar.utils.UIutils.makeToast;
+import static com.didekindroid.util.UIutils.doToolBar;
+import static com.didekindroid.util.UIutils.makeToast;
 
 /**
  * User: pedro@didekin
@@ -122,7 +122,7 @@ public class RegUserComuAc extends AppCompatActivity {
         int resourceId = item.getItemId();
         switch (resourceId) {
             case android.R.id.home:
-                AppMenuRouter.doUpMenu(this);
+                MenuRouter.doUpMenu(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -32,7 +32,7 @@
 
             <fragment
                 android:id="@+id/reg_user_frg"
-                android:name="com.didekinaar.usuario.RegUserFr"
+                android:name="com.didekindroid.usuario.RegUserFr"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:layout="@layout/reg_user_fr"/>

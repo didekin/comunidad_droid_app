@@ -2,12 +2,13 @@ package com.didekindroid.usuariocomunidad;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.common.exception.ErrorBean;
 import com.didekin.comunidad.Comunidad;
+import com.didekin.http.ErrorBean;
 import com.didekin.usuario.Usuario;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
-import com.didekinaar.exception.UiException;
-import com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum;
+import com.didekindroid.exception.UiException;
+import com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum;
+import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
 
 import org.junit.After;
 import org.junit.Before;
@@ -20,34 +21,34 @@ import java.util.List;
 
 import retrofit2.Response;
 
-import static com.didekin.common.exception.DidekinExceptionMsg.COMUNIDAD_NOT_FOUND;
-import static com.didekin.common.exception.DidekinExceptionMsg.TOKEN_NULL;
-import static com.didekin.common.exception.DidekinExceptionMsg.USER_NAME_DUPLICATE;
-import static com.didekin.usuario.UsuarioEndPoints.IS_USER_DELETED;
-import static com.didekinaar.AppInitializer.creator;
-import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
-import static com.didekinaar.testutil.AarTestUtil.updateSecurityData;
-import static com.didekinaar.usuario.UsuarioDaoRemote.usuarioDaoRemote;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN2_AND_PEPE;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_NOTHING;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.USER_JUAN2;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanWithTkhandler;
-import static com.didekindroid.comunidad.ComuTestUtil.COMU_LA_PLAZUELA_5;
-import static com.didekindroid.comunidad.ComuTestUtil.COMU_REAL;
+import static com.didekin.comunidad.ComunidadExceptionMsg.COMUNIDAD_NOT_FOUND;
+import static com.didekin.http.GenericExceptionMsg.TOKEN_NULL;
+import static com.didekin.http.UsuarioServConstant.IS_USER_DELETED;
+import static com.didekin.usuario.UsuarioExceptionMsg.USER_NAME_DUPLICATE;
+import static com.didekindroid.AppInitializer.creator;
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.testutil.SecurityTestUtils.updateSecurityData;
+import static com.didekindroid.usuario.UsuarioDaoRemote.usuarioDaoRemote;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN2_AND_PEPE;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_NOTHING;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN2;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanWithTkhandler;
+import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_LA_PLAZUELA_5;
+import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_REAL;
 import static com.didekindroid.usuariocomunidad.RolUi.PRE;
 import static com.didekindroid.usuariocomunidad.RolUi.PRO;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
-import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_PLAZUELA5_JUAN;
-import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_REAL_JUAN;
-import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_REAL_PEPE;
-import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_TRAV_PLAZUELA_PEPE;
-import static com.didekindroid.usuariocomunidad.UserComuTestUtil.makeUsuarioComunidad;
-import static com.didekindroid.usuariocomunidad.UserComuTestUtil.regTwoUserComuSameUser;
-import static com.didekindroid.usuariocomunidad.UserComuTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_TRAV_PLAZUELA_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.makeUsuarioComunidad;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.regTwoUserComuSameUser;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.Matchers.is;
@@ -106,7 +107,7 @@ public class UserComuServiceTest {
     @Test
     public void testGetComunidadesByUser_2() throws UiException, IOException
     {
-        regTwoUserComuSameUser(UserComuTestUtil.makeListTwoUserComu());
+        regTwoUserComuSameUser(UserComuDataTestUtil.makeListTwoUserComu());
         List<Comunidad> comunidades = AppUserComuServ.getComusByUser();
         assertThat(comunidades.size(), is(2));
         assertThat(comunidades, hasItems(COMU_REAL, COMU_LA_PLAZUELA_5));
@@ -287,7 +288,7 @@ public class UserComuServiceTest {
     @Test
     public void testSeeUserComuByComu() throws Exception
     {
-        regTwoUserComuSameUser(UserComuTestUtil.makeListTwoUserComu()); // User1, comunidades 1 y 2, userComu 1 y 2.
+        regTwoUserComuSameUser(UserComuDataTestUtil.makeListTwoUserComu()); // User1, comunidades 1 y 2, userComu 1 y 2.
         Comunidad comunidad1 = AppUserComuServ.getComusByUser().get(0); // User1 in session.
         assertThat(comunidad1.getNombreComunidad(), is(COMU_REAL.getNombreComunidad()));
 

@@ -8,7 +8,7 @@ import com.didekin.incidencia.dominio.IncidenciaUser;
 import com.didekindroid.R;
 import com.didekindroid.incidencia.IncidenciaDataDbHelper;
 
-import static com.didekinaar.utils.UIutils.formatTimeStampToString;
+import static com.didekindroid.util.UIutils.formatTimeStampToString;
 
 /**
  * User: pedro@didekin

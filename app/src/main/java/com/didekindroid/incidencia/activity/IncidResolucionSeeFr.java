@@ -19,13 +19,13 @@ import java.util.Objects;
 
 import timber.log.Timber;
 
-import static com.didekinaar.utils.AarBundleKey.IS_MENU_IN_FRAGMENT_FLAG;
-import static com.didekinaar.utils.AarItemMenu.mn_handler;
-import static com.didekinaar.utils.UIutils.formatTimeStampToString;
-import static com.didekinaar.utils.UIutils.getStringFromInteger;
+import static com.didekindroid.util.AppBundleKey.IS_MENU_IN_FRAGMENT_FLAG;
+import static com.didekindroid.util.ItemMenu.mn_handler;
+import static com.didekindroid.util.UIutils.formatTimeStampToString;
+import static com.didekindroid.util.UIutils.getStringFromInteger;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.util.AppMenuRouter.routerMap;
+import static com.didekindroid.util.MenuRouter.routerMap;
 
 /**
  * User: pedro@didekin

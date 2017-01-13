@@ -1,31 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.didekindroid"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools" package="com.didekindroid">
 
-    <application>
-        <!-- ......... -->
-        <!-- Notification Listener for tests. -->
-        <service
-            android:name=".gcm.GcmNotificationListenerServ"
-            android:label="@string/app_name"
-            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
-            <intent-filter>
-                <action android:name="android.service.notification.NotificationListenerService"/>
-            </intent-filter>
-        </service>
-        <activity
-            android:name=".gcm.GcmBroadCastNotificationActivity"
-            android:label="@string/title_activity_gcm_notification"
-            android:theme="@style/themeOne">
-        </activity>
+    <application tools:ignore="AllowBackup">
         <!-- Activity for UIException tests. -->
         <activity
-            android:name="com.didekinaar.testutil.MockActivity"
+            android:name=".testutil.MockActivity"
             android:label="@string/mockActivity_label"
             android:launchMode="singleTask">
         </activity>
         <activity
-            android:name="com.didekinaar.testutil.MockNextDefaultActivity"
+            android:name=".testutil.MockNextDefaultActivity"
             android:label="@string/mockDefaultActivity_label"
             android:launchMode="singleTask">
         </activity>

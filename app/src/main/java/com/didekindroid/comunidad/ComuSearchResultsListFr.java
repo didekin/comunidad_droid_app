@@ -12,9 +12,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.didekin.common.exception.ErrorBean;
 import com.didekin.comunidad.Comunidad;
-import com.didekinaar.exception.UiException;
+import com.didekin.http.ErrorBean;
+import com.didekindroid.exception.UiException;
 import com.didekindroid.R;
 import com.didekindroid.usuariocomunidad.RegComuAndUserAndUserComuAc;
 import com.didekindroid.usuariocomunidad.RegComuAndUserComuAc;
@@ -24,9 +24,9 @@ import java.util.List;
 
 import timber.log.Timber;
 
-import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
-import static com.didekinaar.utils.UIutils.checkPostExecute;
-import static com.didekinaar.utils.UIutils.makeToast;
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.util.UIutils.checkPostExecute;
+import static com.didekindroid.util.UIutils.makeToast;
 import static com.didekindroid.comunidad.ComunidadService.AppComuServ;
 
 /**

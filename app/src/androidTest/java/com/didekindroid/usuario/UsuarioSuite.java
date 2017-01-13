@@ -16,7 +16,7 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        AarFBRegIntentService_Test.class,
+        RegGcmIntentService_Test.class,
         DeleteMeAppAc_App_Test.class,
         LoginAc_App_1_Test.class,
         LoginAppAcObservableTest.class,

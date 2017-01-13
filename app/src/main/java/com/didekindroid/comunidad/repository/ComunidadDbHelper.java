@@ -23,29 +23,29 @@ import java.util.List;
 import timber.log.Timber;
 
 import static android.provider.BaseColumns._ID;
-import static com.didekinaar.comunidad.ComunidadDataDb.ComunidadAutonoma.CREATE_C_AUTONOMA;
-import static com.didekinaar.comunidad.ComunidadDataDb.ComunidadAutonoma.DROP_C_AUTONOMA;
-import static com.didekinaar.comunidad.ComunidadDataDb.ComunidadAutonoma.TB_C_AUTONOMA;
-import static com.didekinaar.comunidad.ComunidadDataDb.ComunidadAutonoma.cu_nombre;
-import static com.didekinaar.comunidad.ComunidadDataDb.Municipio.CREATE_INDEX_PROV_FK;
-import static com.didekinaar.comunidad.ComunidadDataDb.Municipio.CREATE_MUNICIPIO;
-import static com.didekinaar.comunidad.ComunidadDataDb.Municipio.DROP_MUNICIPIO;
-import static com.didekinaar.comunidad.ComunidadDataDb.Municipio.TB_MUNICIPIO;
-import static com.didekinaar.comunidad.ComunidadDataDb.Municipio.m_cd;
-import static com.didekinaar.comunidad.ComunidadDataDb.Municipio.mu_nombre;
-import static com.didekinaar.comunidad.ComunidadDataDb.Municipio.pr_id;
-import static com.didekinaar.comunidad.ComunidadDataDb.Provincia.CREATE_INDEX_CA_FK;
-import static com.didekinaar.comunidad.ComunidadDataDb.Provincia.CREATE_PROVINCIA;
-import static com.didekinaar.comunidad.ComunidadDataDb.Provincia.DROP_PROVINCIA;
-import static com.didekinaar.comunidad.ComunidadDataDb.Provincia.TB_PROVINCIA;
-import static com.didekinaar.comunidad.ComunidadDataDb.Provincia.ca_id;
-import static com.didekinaar.comunidad.ComunidadDataDb.Provincia.pr_nombre;
-import static com.didekinaar.comunidad.ComunidadDataDb.SQL_ENABLE_FK;
-import static com.didekinaar.comunidad.ComunidadDataDb.TipoVia.CREATE_TIPO_VIA;
-import static com.didekinaar.comunidad.ComunidadDataDb.TipoVia.DROP_TIPO_VIA;
-import static com.didekinaar.comunidad.ComunidadDataDb.TipoVia.TB_TIPO_VIA;
-import static com.didekinaar.comunidad.ComunidadDataDb.TipoVia.tipovia;
-import static com.didekinaar.utils.IoHelper.lineToLowerCase;
+import static com.didekindroid.comunidad.repository.ComunidadDataDb.ComunidadAutonoma.CREATE_C_AUTONOMA;
+import static com.didekindroid.comunidad.repository.ComunidadDataDb.ComunidadAutonoma.DROP_C_AUTONOMA;
+import static com.didekindroid.comunidad.repository.ComunidadDataDb.ComunidadAutonoma.TB_C_AUTONOMA;
+import static com.didekindroid.comunidad.repository.ComunidadDataDb.ComunidadAutonoma.cu_nombre;
+import static com.didekindroid.comunidad.repository.ComunidadDataDb.Municipio.CREATE_INDEX_PROV_FK;
+import static com.didekindroid.comunidad.repository.ComunidadDataDb.Municipio.CREATE_MUNICIPIO;
+import static com.didekindroid.comunidad.repository.ComunidadDataDb.Municipio.DROP_MUNICIPIO;
+import static com.didekindroid.comunidad.repository.ComunidadDataDb.Municipio.TB_MUNICIPIO;
+import static com.didekindroid.comunidad.repository.ComunidadDataDb.Municipio.m_cd;
+import static com.didekindroid.comunidad.repository.ComunidadDataDb.Municipio.mu_nombre;
+import static com.didekindroid.comunidad.repository.ComunidadDataDb.Municipio.pr_id;
+import static com.didekindroid.comunidad.repository.ComunidadDataDb.Provincia.CREATE_INDEX_CA_FK;
+import static com.didekindroid.comunidad.repository.ComunidadDataDb.Provincia.CREATE_PROVINCIA;
+import static com.didekindroid.comunidad.repository.ComunidadDataDb.Provincia.DROP_PROVINCIA;
+import static com.didekindroid.comunidad.repository.ComunidadDataDb.Provincia.TB_PROVINCIA;
+import static com.didekindroid.comunidad.repository.ComunidadDataDb.Provincia.ca_id;
+import static com.didekindroid.comunidad.repository.ComunidadDataDb.Provincia.pr_nombre;
+import static com.didekindroid.comunidad.repository.ComunidadDataDb.SQL_ENABLE_FK;
+import static com.didekindroid.comunidad.repository.ComunidadDataDb.TipoVia.CREATE_TIPO_VIA;
+import static com.didekindroid.comunidad.repository.ComunidadDataDb.TipoVia.DROP_TIPO_VIA;
+import static com.didekindroid.comunidad.repository.ComunidadDataDb.TipoVia.TB_TIPO_VIA;
+import static com.didekindroid.comunidad.repository.ComunidadDataDb.TipoVia.tipovia;
+import static com.didekindroid.util.IoHelper.lineToLowerCase;
 import static java.lang.String.valueOf;
 
 /**
@@ -55,16 +55,16 @@ import static java.lang.String.valueOf;
  */
 public class ComunidadDbHelper extends SQLiteOpenHelper {
 
-    static final String DB_NAME = "comunidad.db";
+    public static final String DB_NAME = "comunidad.db";
     /*This number has to be changed in future versions, to get executed onUpgrade() method.*/
     private static final int DB_VERSION = 1;
 
     private final Context mContext;
     private SQLiteDatabase mDataBase;
-    int mMunicipiosCounter;
-    int mComunidadesCounter;
-    int mProvinciasCounter;
-    int mTipoViaCounter;
+    public int mMunicipiosCounter;
+    public int mComunidadesCounter;
+    public int mProvinciasCounter;
+    public int mTipoViaCounter;
 
     public ComunidadDbHelper(Context context)
     {
@@ -290,7 +290,7 @@ public class ComunidadDbHelper extends SQLiteOpenHelper {
         return mDataBase.insert(TB_PROVINCIA, null, values);
     }
 
-    List<Provincia> getProvincias()
+    public List<Provincia> getProvincias()
     {
         Timber.d("In getProvincias()");
 
@@ -386,7 +386,7 @@ public class ComunidadDbHelper extends SQLiteOpenHelper {
         return mDataBase.insert(TB_C_AUTONOMA, null, values);
     }
 
-    List<ComunidadAutonoma> getComunidadesAu()
+    public List<ComunidadAutonoma> getComunidadesAu()
     {
         Timber.d("In getComunidadesAu()");
 
@@ -492,7 +492,7 @@ public class ComunidadDbHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
-    List<String> getTiposVia()
+    public List<String> getTiposVia()
     {
         Timber.d("In getTiposVia()");
 
@@ -516,7 +516,7 @@ public class ComunidadDbHelper extends SQLiteOpenHelper {
 
 //    ................ UTILITIES ...............
 
-    void dropAllTables()
+    public void dropAllTables()
     {
         Timber.d("In dropAllTables()");
 

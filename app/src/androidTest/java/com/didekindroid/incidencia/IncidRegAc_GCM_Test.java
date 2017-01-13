@@ -4,14 +4,13 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.incidencia.dominio.IncidImportancia;
 import com.didekin.usuario.Usuario;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
-import com.didekinaar.exception.UiException;
+import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.activity.IncidRegAc;
 import com.google.firebase.iid.FirebaseInstanceId;
 
@@ -22,14 +21,15 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 import java.util.Objects;
 
-import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
-import static com.didekinaar.usuario.UsuarioDaoRemote.usuarioDaoRemote;
+import static com.didekindroid.AppInitializer.creator;
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.usuario.UsuarioDaoRemote.usuarioDaoRemote;
 import static com.didekindroid.incidencia.AppFBService.IncidTypeMsgHandler.INCIDENCIA_OPEN;
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
-import static com.didekindroid.incidencia.IncidenciaTestUtils.doIncidencia;
+import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doIncidencia;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
-import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_ESCORIAL_PEPE;
-import static com.didekindroid.usuariocomunidad.UserComuTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -53,7 +53,7 @@ public class IncidRegAc_GCM_Test extends Incidencia_GCM_Test {
     }
 
     /**
-     * Test para AarFBRegIntentService methods.
+     * Test para RegGcmIntentService methods.
      */
     @Test
     public void testRegistrationGcmToken() throws Exception
@@ -93,7 +93,7 @@ public class IncidRegAc_GCM_Test extends Incidencia_GCM_Test {
             @Override
             protected void beforeActivityLaunched()
             {
-                Context context = InstrumentationRegistry.getTargetContext();
+                Context context = creator.get().getContext();
                 TKhandler.updateIsGcmTokenSentServer(false);
                 try {
                     pepe = signUpAndUpdateTk(COMU_ESCORIAL_PEPE);

@@ -2,12 +2,12 @@ package com.didekindroid.security;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.common.exception.ErrorBean;
-import com.didekin.oauth2.SpringOauthToken;
-import com.didekinaar.exception.UiException;
-import com.didekinaar.usuario.testutil.UsuarioDataTestUtils;
-import com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum;
-import com.didekindroid.usuariocomunidad.UserComuTestUtil;
+import com.didekin.http.ErrorBean;
+import com.didekin.http.oauth2.SpringOauthToken;
+import com.didekindroid.exception.UiException;
+import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
+import com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum;
+import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
 
 import org.junit.After;
 import org.junit.BeforeClass;
@@ -18,22 +18,22 @@ import java.io.IOException;
 
 import retrofit2.Response;
 
-import static com.didekin.common.exception.DidekinExceptionMsg.BAD_REQUEST;
-import static com.didekin.common.exception.DidekinExceptionMsg.NOT_FOUND;
-import static com.didekin.oauth2.OauthClient.CL_USER;
-import static com.didekin.oauth2.OauthTokenHelper.HELPER;
-import static com.didekinaar.AppInitializer.creator;
-import static com.didekinaar.security.Oauth2DaoRemote.Oauth2;
-import static com.didekinaar.security.TokenIdentityCacher.TKhandler;
-import static com.didekinaar.testutil.AarTestUtil.updateSecurityData;
-import static com.didekinaar.usuario.UsuarioDaoRemote.usuarioDaoRemote;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_NOTHING;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekinaar.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
+import static com.didekin.http.GenericExceptionMsg.BAD_REQUEST;
+import static com.didekin.http.GenericExceptionMsg.NOT_FOUND;
+import static com.didekin.http.oauth2.OauthClient.CL_USER;
+import static com.didekin.http.oauth2.OauthTokenHelper.HELPER;
+import static com.didekindroid.AppInitializer.creator;
+import static com.didekindroid.security.Oauth2DaoRemote.Oauth2;
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.testutil.SecurityTestUtils.updateSecurityData;
+import static com.didekindroid.usuario.UsuarioDaoRemote.usuarioDaoRemote;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_NOTHING;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
-import static com.didekindroid.usuariocomunidad.UserComuTestUtil.COMU_REAL_JUAN;
-import static com.didekindroid.usuariocomunidad.UserComuTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.not;
@@ -114,7 +114,7 @@ public class Oauth2DaoRemoteIf_app_Test {
     public void testGetPasswordUserToken_3() throws Exception
     {
         //Inserta userComu, comunidad, usuariocomunidad.
-        boolean isRegistered = AppUserComuServ.regComuAndUserAndUserComu(UserComuTestUtil.COMU_REAL_DROID).execute().body();
+        boolean isRegistered = AppUserComuServ.regComuAndUserAndUserComu(UserComuDataTestUtil.COMU_REAL_DROID).execute().body();
         assertThat(isRegistered, is(true));
         updateSecurityData(UsuarioDataTestUtils.USER_DROID.getUserName(), UsuarioDataTestUtils.USER_DROID.getPassword());
         // Envía correo.
@@ -146,7 +146,7 @@ public class Oauth2DaoRemoteIf_app_Test {
         whatClean = CLEAN_PEPE;
 
         //Inserta userComu, comunidad, usuariocomunidad y actuliza tokenCache.
-        signUpAndUpdateTk(UserComuTestUtil.COMU_REAL_PEPE);
+        signUpAndUpdateTk(UserComuDataTestUtil.COMU_REAL_PEPE);
         SpringOauthToken tokenOld = TKhandler.getAccessTokenInCache();
         String accessTkOldValue = tokenOld.getValue();
         String refreshTkOldValue = tokenOld.getRefreshToken().getValue();

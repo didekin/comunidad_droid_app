@@ -10,7 +10,7 @@ import com.didekindroid.R;
 
 import timber.log.Timber;
 
-import static com.didekinaar.utils.UIutils.checkPostExecute;
+import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.incidencia.IncidenciaDataDb.AmbitoIncidencia.ambito;
 
 /**
