@@ -7,6 +7,7 @@ import com.didekindroid.R;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.didekindroid.AppInitializer.creator;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
@@ -18,17 +19,15 @@ import static org.junit.Assert.assertThat;
  * Date: 01/06/15
  * Time: 18:47
  */
-public abstract class UsuarioBeanValidaTests {
+public class UsuarioBeanValidaTests {
 
     private StringBuilder errors;
     private Resources resources;
 
-    protected abstract Resources getResources();
-
     @Before
     public void doBefore()
     {
-        resources = getResources();
+        resources = creator.get().getContext().getResources();
         errors = new StringBuilder(resources.getText(R.string.error_validation_msg));
     }
 

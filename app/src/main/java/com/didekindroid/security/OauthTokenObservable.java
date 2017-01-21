@@ -5,10 +5,10 @@ import com.didekin.usuario.Usuario;
 
 import java.util.concurrent.Callable;
 
-import rx.Single;
+import io.reactivex.Single;
 
 import static com.didekindroid.security.Oauth2DaoRemote.Oauth2;
-import static rx.Single.fromCallable;
+import static io.reactivex.Single.fromCallable;
 
 /**
  * User: pedro@didekin

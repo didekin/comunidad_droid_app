@@ -53,31 +53,6 @@
                 android:value="com.didekindroid.comunidad.ComuSearchAc"/>
         </activity>
         <activity
-            android:name="com.didekindroid.usuario.delete.DeleteMeAppAc"
-            android:label="@string/delete_me_ac_label"
-            android:parentActivityName=".usuario.userdata.UserDataAppAc">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".usuario.userdata.UserDataAppAc"/>
-        </activity>
-        <activity
-            android:name=".usuario.login.LoginAppAc"
-            android:label="@string/login_label"
-            android:launchMode="singleInstance"
-            android:parentActivityName="com.didekindroid.comunidad.ComuSearchAc">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.didekindroid.comunidad.ComuSearchAc"/>
-        </activity>
-        <activity
-            android:name=".usuario.password.PasswordChangeAppAc"
-            android:label="@string/password_change_ac_label"
-            android:parentActivityName=".usuario.userdata.UserDataAppAc">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".usuario.userdata.UserDataAppAc"/>
-        </activity>
-        <activity
             android:name="com.didekindroid.usuariocomunidad.RegComuAndUserAndUserComuAc"
             android:label="@string/reg_comunidad_ac_label"
             android:launchMode="singleTask"
@@ -141,26 +116,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.didekindroid.usuariocomunidad.SeeUserComuByUserAc"/>
         </activity>
-        <activity
-            android:name=".usuario.userdata.UserDataAppAc"
-            android:label="@string/user_data_ac_label"
-            android:parentActivityName="com.didekindroid.usuariocomunidad.SeeUserComuByUserAc"
-            android:windowSoftInputMode="stateHidden">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.didekindroid.usuariocomunidad.SeeUserComuByUserAc"/>
-        </activity>
 
         <!-- .......... GCM services ......... -->
         <service
-            android:name=".usuario.InstanceIdService" android:exported="false">
+            android:name=".firebase.InstanceIdService" android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
-        </service>
-        <service
-            android:name=".usuario.RegGcmIntentService"
-            android:exported="false">
         </service>
         <!-- **************************************************************** -->
         <!-- INCIDENCIA -->
@@ -190,7 +152,7 @@
                 android:value=".incidencia.activity.IncidSeeOpenByComuAc"/>
         </activity>
         <activity
-            android:name=".incidencia.activity.IncidRegAc"
+            android:name=".incidencia.activity.incidreg.IncidRegAc"
             android:label="@string/incid_reg_ac_label"
             android:parentActivityName=".incidencia.activity.IncidSeeOpenByComuAc"
             android:windowSoftInputMode="stateHidden">
@@ -233,7 +195,7 @@
         </activity>
         <!-- .......... GCM services ......... -->
         <service
-            android:name=".incidencia.AppFBService" android:exported="false">
+            android:name=".incidencia.firebase.IncidFireBaseMsgService" android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>

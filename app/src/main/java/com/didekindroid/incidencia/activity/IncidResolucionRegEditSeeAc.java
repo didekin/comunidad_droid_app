@@ -14,12 +14,11 @@ import com.didekindroid.incidencia.activity.utils.IncidBundleKey;
 
 import timber.log.Timber;
 
-import static com.didekindroid.util.MenuRouter.doUpMenu;
-import static com.didekindroid.usuario.RegGcmIntentService.getGcmToken;
-import static com.didekindroid.util.UIutils.doToolBar;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_resolucion_ac_frgs_tag;
+import static com.didekindroid.util.MenuRouter.doUpMenu;
+import static com.didekindroid.util.UIutils.doToolBar;
 
 /**
  * This activity is a point of registration for receiving GCM notifications of new incidents.
@@ -59,7 +58,7 @@ public class IncidResolucionRegEditSeeAc extends AppCompatActivity {
         setContentView(mAcView);
         doToolBar(this, true);
 
-        getGcmToken(this);
+        // TODO: sustituir for llamada al observable getGcmToken(this);
 
         if (savedInstanceState != null) {
             return;
@@ -113,7 +112,7 @@ public class IncidResolucionRegEditSeeAc extends AppCompatActivity {
     protected void onPostResume()
     {
         Timber.d("onResume()");
-        getGcmToken(this);
+        // TODO: sustituir for llamada al observable getGcmToken(this);
         super.onPostResume();
     }
 

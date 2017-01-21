@@ -46,12 +46,20 @@ import static java.util.Locale.getDefault;
  */
 public final class UIutils {
 
-    @SuppressWarnings("NonFinalStaticVariableUsedInClassInitialization")
     private static final int APPBAR_ID = R.id.appbar;
     public static final Locale SPAIN_LOCALE = new Locale("es", "ES");
 
     private UIutils()
     {
+    }
+
+    public static boolean checkInternet(Activity activity)
+    {
+        if (!ConnectionUtils.isInternetConnected(activity)) {
+            makeToast(activity, R.string.no_internet_conn_toast);
+            return true;
+        }
+        return false;
     }
 
 //    ========================== ACTIVITIES ======================================

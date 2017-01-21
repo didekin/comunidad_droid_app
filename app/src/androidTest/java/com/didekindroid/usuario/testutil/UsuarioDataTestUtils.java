@@ -7,7 +7,7 @@ import com.didekindroid.exception.UiException;
 
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.SecurityTestUtils.updateSecurityData;
-import static com.didekindroid.usuario.UsuarioDaoRemote.usuarioDaoRemote;
+import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
 
 /**
  * User: pedro
@@ -61,7 +61,7 @@ public final class UsuarioDataTestUtils {
     public static void cleanOneUser(Usuario usuario) throws UiException
     {
         updateSecurityData(usuario.getUserName(), usuario.getPassword());
-        usuarioDaoRemote.deleteUser();
+        usuarioDao.deleteUser();
         cleanWithTkhandler();
     }
 

@@ -1,21 +1,26 @@
 package com.didekindroid.usuario.delete;
 
-import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
 import com.didekindroid.R;
+import com.didekindroid.exception.UiException;
+import com.didekindroid.util.MenuRouter;
 
 import java.util.Objects;
 
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 
+import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.usuario.delete.DeleteMeReactor.deleteReactor;
+import static com.didekindroid.util.DefaultNextAcRouter.routerMap;
 import static com.didekindroid.util.UIutils.doToolBar;
 
 /**
@@ -24,14 +29,10 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * Postconditions:
  * 1. Unregistered user, if she chooses so. ComuSearchAc is to be showed.
  */
-@SuppressWarnings("AbstractClassExtendsConcreteClass")
-public abstract class DeleteMeAc extends AppCompatActivity implements DeleteMeControllerIf {
+public class DeleteMeAc extends AppCompatActivity implements DeleteMeControllerIf {
 
-    protected Class<? extends Activity> defaultActivityClassToGo;
-    Subscription subscription;
-
-    // Template method to be overwritten in the apps.
-    protected abstract void setDefaultActivityClassToGo(Class<? extends Activity> activityClassToGo);
+    CompositeDisposable subscriptions;
+    DeleteMeReactorIf reactor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -41,6 +42,8 @@ public abstract class DeleteMeAc extends AppCompatActivity implements DeleteMeCo
 
         // Preconditions.
         Objects.equals(TKhandler.isRegisteredUser(), true);
+        // Manual injection of reactor.
+        reactor = deleteReactor;
 
         View mAcView = getLayoutInflater().inflate(R.layout.delete_me_ac, null);
         setContentView(mAcView);
@@ -61,8 +64,8 @@ public abstract class DeleteMeAc extends AppCompatActivity implements DeleteMeCo
     protected void onDestroy()
     {
         super.onDestroy();
-        if (subscription != null) {
-            subscription.unsubscribe();
+        if (subscriptions != null) {
+            subscriptions.clear();
         }
     }
 
@@ -71,13 +74,56 @@ public abstract class DeleteMeAc extends AppCompatActivity implements DeleteMeCo
     // ============================================================
 
     @Override
-    public void unregisterUser()
+    public boolean unregisterUser()
     {   // TODO: to test.
         Timber.d("unregisterUser()");
+        return reactor.deleteMeInRemote(this);
+    }
 
-        subscription = DeleteObservable.getDeleteMeSingle()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DeleteObservable.DeleteMeSubscriber(this));
+    @Override
+    public CompositeDisposable getSubscriptions()
+    {
+        Timber.d("getSubscriptions()");
+        if (subscriptions == null){
+            subscriptions = new CompositeDisposable();
+        }
+        return  subscriptions;
+    }
+
+    @Override
+    public void processBackDeleteMeRemote(Boolean isDeleted)
+    {
+        Intent intent = new Intent(this, routerMap.get(this.getClass()));
+        intent.setFlags(FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
+
+    @Override
+    public void processErrorInReactor(Throwable e)
+    {
+        Timber.d("processBackErrorInReactor()");
+        if (e instanceof UiException) {
+            ((UiException) e).processMe(this, new Intent());
+        }
+    }
+
+    // ============================================================
+    //    ..... ACTION BAR ....
+    // ============================================================
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        Timber.d("onOptionsItemSelected()");
+
+        int resourceId = item.getItemId();
+
+        switch (resourceId) {
+            case android.R.id.home:
+                MenuRouter.doUpMenu(this);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

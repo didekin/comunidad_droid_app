@@ -10,4 +10,6 @@ interface LoginViewIf {
     String EMAIL_DIALOG_ARG = "email";
 
     void showDialog(String userName);
+
+    String[] getLoginDataFromView();
 }

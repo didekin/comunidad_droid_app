@@ -11,7 +11,6 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekin.comunidad.Comunidad;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.testutil.IdlingResourceForIntentServ;
-import com.didekindroid.usuario.RegGcmIntentService;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.R;
 
@@ -36,11 +35,11 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
-import static com.didekindroid.usuario.UsuarioDaoRemote.usuarioDaoRemote;
+import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
-import static com.didekindroid.incidencia.AppFBService.IncidTypeMsgHandler.INCIDENCIA_OPEN;
+import static com.didekindroid.incidencia.firebase.IncidFirebaseDownMsgHandler.INCIDENCIA_OPEN;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_REG_AC;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_CLOSED_BY_COMU_AC;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
@@ -69,8 +68,7 @@ public class IncidSeeOpenByComuAcTest_1 {
     IdlingResourceForIntentServ idlingResource;
     Comunidad comunidadInIntent;
     NotificationManager mNotifyManager;
-    private int messageId = INCIDENCIA_OPEN.getTitleRsc();
-
+    private int messageId = INCIDENCIA_OPEN.getBarNotificationId();
     // Layouts to check in navigate-up.
     int activityLayoutId = R.id.incid_see_open_by_comu_ac;
     int secondLayoutId = R.id.incid_see_generic_layout;
@@ -84,7 +82,7 @@ public class IncidSeeOpenByComuAcTest_1 {
             Context context = InstrumentationRegistry.getTargetContext();
             TKhandler.updateIsGcmTokenSentServer(false);
             try {
-                Objects.equals(usuarioDaoRemote.getGcmToken() == null, true);
+                Objects.equals(usuarioDao.getGcmToken() == null, true);
             } catch (UiException e) {
                 e.printStackTrace();
             }
@@ -125,7 +123,7 @@ public class IncidSeeOpenByComuAcTest_1 {
     {
         mActivity = activityRule.getActivity();
         mNotifyManager = (NotificationManager) mActivity.getSystemService(Context.NOTIFICATION_SERVICE);
-        idlingResource = new IdlingResourceForIntentServ(mActivity, new RegGcmIntentService());
+//        idlingResource = new IdlingResourceForIntentServ(mActivity, new RegGcmIntentService());
         Espresso.registerIdlingResources(idlingResource);
     }
 

@@ -15,9 +15,9 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicReference;
 
-import rx.functions.Action1;
-import rx.functions.Func1;
-import rx.functions.Func2;
+import io.reactivex.functions.BiFunction;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 import timber.log.Timber;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -146,6 +146,12 @@ public enum TokenIdentityCacher implements IdentityCacher {
         return sharedPref.getBoolean(IS_USER_REG, false);
     }
 
+    /**
+     *  Invariants:
+     *  1. If a user is not registered (no record in database), she cannot be her gcm token recorded in database.
+     *  2. If a user is registered, his gcm token can or cannot been updated in database. Gcm token is not updated
+     *     when a user is registered. // TODO: cambiar esta posibilidad?
+     * */
     @Override
     public void updateIsRegistered(boolean isRegisteredUser)
     {
@@ -245,11 +251,11 @@ public enum TokenIdentityCacher implements IdentityCacher {
     //    .................................... FUNCTIONS .................................
     //  ======================================================================================
 
-    public final Func2<Boolean, SpringOauthToken, Boolean> initTokenRegisterFunc = new InitializeIdentityFunc();
+    public final BiFunction<Boolean, SpringOauthToken, Boolean> initTokenRegisterFunc = new InitializeIdentityFunc();
 
-    final static class InitializeIdentityFunc implements Func2<Boolean, SpringOauthToken, Boolean> {
+    final static class InitializeIdentityFunc implements BiFunction<Boolean, SpringOauthToken, Boolean> {
         @Override
-        public Boolean call(Boolean isLoginValid, SpringOauthToken token)
+        public Boolean apply(Boolean isLoginValid, SpringOauthToken token)
         {
             boolean isUpdatedTokenData = isLoginValid && token != null;
             if (isUpdatedTokenData) {
@@ -261,11 +267,11 @@ public enum TokenIdentityCacher implements IdentityCacher {
         }
     }
 
-    public final Func1<Boolean,Boolean> cleanTokenFunc = new CleanIdentityFunc();
+    public final Function<Boolean,Boolean> cleanTokenFunc = new CleanIdentityFunc();
 
-    final static class CleanIdentityFunc implements Func1<Boolean,Boolean> {
+    final static class CleanIdentityFunc implements Function<Boolean,Boolean> {
         @Override
-        public Boolean call(Boolean isDeletedUser)
+        public Boolean apply(Boolean isDeletedUser)
         {
             if (isDeletedUser) {
                 TKhandler.cleanIdentityCache();
@@ -279,21 +285,21 @@ public enum TokenIdentityCacher implements IdentityCacher {
     //    .................................... ACTIONS .................................
     //  ======================================================================================
 
-    public final Action1<SpringOauthToken> initTokenAction = new InitTokenAction();
+    public final Consumer<SpringOauthToken> initTokenAction = new InitTokenAction();
 
-    static class InitTokenAction implements Action1<SpringOauthToken> {
+    static class InitTokenAction implements Consumer<SpringOauthToken> {
         @Override
-        public void call(SpringOauthToken token)
+        public void accept(SpringOauthToken token)
         {
             TKhandler.initIdentityCache(token);
         }
     }
 
-    public final Action1<Integer> cleanTokenCacheAction = new CleanTokenCacheAction();
+    public final Consumer<Integer> cleanTokenCacheAction = new CleanTokenCacheAction();
 
-    static class CleanTokenCacheAction implements Action1<Integer> {
+    static class CleanTokenCacheAction implements Consumer<Integer> {
         @Override
-        public void call(Integer modifiedUser)
+        public void accept(Integer modifiedUser)
         {
             if (modifiedUser > 0){
                 TKhandler.cleanIdentityCache();

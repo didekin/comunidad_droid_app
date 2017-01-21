@@ -2,7 +2,7 @@ package com.didekindroid;
 
 import android.app.Application;
 
-import com.didekindroid.exception.UiExceptionDealer;
+import com.didekindroid.exception.UiExceptionRouter;
 
 import static com.didekindroid.AppInitializer.creator;
 
@@ -17,6 +17,6 @@ public final class DidekinApp extends Application {
     public void onCreate()
     {
         super.onCreate();
-        creator.compareAndSet(null, new AppInitializer(this, new UiExceptionDealer()));
+        creator.compareAndSet(null, new AppInitializer(this, new UiExceptionRouter()));
     }
 }

@@ -1,26 +1,26 @@
 package com.didekindroid.usuario.password;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-
-
-import com.didekindroid.usuario.UsuarioBean;
-import com.didekindroid.util.ConnectionUtils;
 import com.didekindroid.R;
+import com.didekindroid.exception.UiException;
+import com.didekindroid.usuario.UsuarioBean;
 
 import java.util.Objects;
 
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.usuario.password.PswdChangeReactor.pswdChangeReactor;
+import static com.didekindroid.util.ConnectionUtils.isInternetConnected;
+import static com.didekindroid.util.DefaultNextAcRouter.routerMap;
 import static com.didekindroid.util.UIutils.doToolBar;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.util.UIutils.makeToast;
@@ -32,11 +32,13 @@ import static com.didekindroid.util.UIutils.makeToast;
  * 1. Password changed and tokenCache updated.
  * 2. It goes to UserDataAc activity.
  */
-@SuppressWarnings({"ConstantConditions", "AbstractClassExtendsConcreteClass"})
-public abstract class PasswordChangeAc extends AppCompatActivity implements PasswordChangeControllerIf {
+public class PasswordChangeAc extends AppCompatActivity implements PasswordChangeControllerIf,
+        PasswordChangeViewIf {
 
+    CompositeDisposable subscriptions;
     private View mAcView;
-    Subscription subscription;
+    UsuarioBean usuarioBean;
+    PswdChangeReactorIf reactor;
 
     @SuppressLint("InflateParams")
     @Override
@@ -47,6 +49,7 @@ public abstract class PasswordChangeAc extends AppCompatActivity implements Pass
 
         // Preconditions.
         Objects.equals(TKhandler.isRegisteredUser(), true);
+        reactor = pswdChangeReactor;
 
         mAcView = getLayoutInflater().inflate(R.layout.password_change_ac, null);
         setContentView(mAcView);
@@ -58,7 +61,9 @@ public abstract class PasswordChangeAc extends AppCompatActivity implements Pass
             public void onClick(View v)
             {
                 Timber.d("mModifyButton.OnClickListener().onClick()");
-                modifyPassword();
+                if (checkLoginData()) {
+                    changePasswordInRemote() ;
+                }
             }
         });
     }
@@ -67,9 +72,24 @@ public abstract class PasswordChangeAc extends AppCompatActivity implements Pass
     protected void onDestroy()
     {
         super.onDestroy();
-        if (subscription != null) {
-            subscription.unsubscribe();
+        if (subscriptions != null) {
+            subscriptions.clear();
         }
+    }
+
+    // ============================================================
+    //    ..... VIEW IMPLEMENTATION ....
+    // ============================================================
+
+    @Override
+    public String[] getPswdDataFromView()
+    {
+        // TODO: test.
+        Timber.d("getPswdDataFromView()");
+        return new String[]{
+                ((EditText) mAcView.findViewById(R.id.reg_usuario_password_ediT)).getText().toString(),
+                ((EditText) mAcView.findViewById(R.id.reg_usuario_password_confirm_ediT)).getText().toString()
+        };
     }
 
     // ============================================================
@@ -77,30 +97,58 @@ public abstract class PasswordChangeAc extends AppCompatActivity implements Pass
     // ============================================================
 
     @Override
-    public void modifyPassword()
-    {
-        Timber.d("modifyPassword()");
+    public boolean checkLoginData()
+    {  // TODO: test.
+        Timber.i("doLoginValidate()");
 
-        UsuarioBean usuarioBean = new UsuarioBean(
-                null,
-                null,
-                ((EditText) mAcView.findViewById(R.id.reg_usuario_password_ediT)).getText()
-                        .toString(),
-                ((EditText) mAcView.findViewById(R.id.reg_usuario_password_confirm_ediT)).getText()
-                        .toString()
-        );
-
+        usuarioBean = new UsuarioBean(null, null, getPswdDataFromView()[0], getPswdDataFromView()[1]);
         StringBuilder errorBuilder = getErrorMsgBuilder(this);
 
-        if (!usuarioBean.validateDoublePassword(getResources(), errorBuilder)) {
+        if (!usuarioBean.validateLoginData(getResources(), errorBuilder)) {
             makeToast(this, errorBuilder.toString(), R.color.deep_purple_100);
-        } else if (!ConnectionUtils.isInternetConnected(this)) {
+            return false;
+        }
+        if (!isInternetConnected(this)) {
             makeToast(this, R.string.no_internet_conn_toast);
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void changePasswordInRemote()
+    {
+        Timber.d("changePasswordInRemote()");
+        reactor.passwordChangeRemote(this, usuarioBean.getUsuario());
+    }
+
+    @Override
+    public void processBackChangedPswdRemote(int changedPassword)
+    {
+        Timber.d("processBackChangedPswdRemote()");
+        if (changedPassword > 0) {
+            Intent intent = new Intent(this, routerMap.get(this.getClass()));
+            startActivity(intent);
         } else {
-            subscription = PswdChangeAcObservable.isPasswordChanged(usuarioBean.getPassword())
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new PswdChangeAcObservable.PasswordChangeSubscriber(this));
+            makeToast(this, R.string.password_remote_no_change);
+        }
+    }
+
+    @Override
+    public CompositeDisposable getSubscriptions()
+    {
+        if (subscriptions == null) {
+            subscriptions = new CompositeDisposable();
+        }
+        return subscriptions;
+    }
+
+    @Override
+    public void processErrorInReactor(Throwable e)
+    {
+        Timber.d("processBackErrorInReactor(), %s", e.getMessage());
+        if (e instanceof UiException) {
+            ((UiException) e).processMe(this, new Intent());
         }
     }
 }

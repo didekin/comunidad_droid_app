@@ -121,44 +121,44 @@ public class TokenIdentityCacherTest {
 //    .................... FUNCTIONS .......................
 
     @Test
-    public void testInitTokenFunction_1() throws UiException
+    public void testInitTokenFunction_1() throws Exception
     {
         initTokenHelper();
     }
 
     @Test
-    public void testInitTokenFunction_2() throws UiException
+    public void testInitTokenFunction_2() throws Exception
     {
         SpringOauthToken token = doSpringOauthToken();
-        TKhandler.initTokenRegisterFunc.call(false, token);
+        TKhandler.initTokenRegisterFunc.apply(false, token);
         assertThat(TKhandler.getAccessTokenInCache(), is(nullValue()));
         assertThat(TKhandler.isRegisteredUser(), is(false));
     }
 
     @Test
-    public void testCleanTokenFunction_1() throws UiException
+    public void testCleanTokenFunction_1() throws Exception
     {
         initTokenHelper();
-        TKhandler.cleanTokenFunc.call(true);
+        TKhandler.cleanTokenFunc.apply(true);
         assertThat(TKhandler.getAccessTokenInCache(), is(nullValue()));
         assertThat(TKhandler.isRegisteredUser(), is(false));
     }
 
     @Test
-    public void testCleanTokenFunction_2() throws UiException
+    public void testCleanTokenFunction_2() throws Exception
     {
         initTokenHelper();
-        TKhandler.cleanTokenFunc.call(false);
+        TKhandler.cleanTokenFunc.apply(false);
         assertThat(TKhandler.getAccessTokenInCache(), notNullValue());
         assertThat(TKhandler.isRegisteredUser(), is(true));
     }
 
     // ............................... HELPER ..............................
 
-    private void initTokenHelper() throws UiException
+    private void initTokenHelper() throws Exception
     {
         SpringOauthToken token = doSpringOauthToken();
-        TKhandler.initTokenRegisterFunc.call(true, token);
+        TKhandler.initTokenRegisterFunc.apply(true, token);
         assertThat(TKhandler.getAccessTokenInCache(), is(token));
         assertThat(TKhandler.isRegisteredUser(), is(true));
     }

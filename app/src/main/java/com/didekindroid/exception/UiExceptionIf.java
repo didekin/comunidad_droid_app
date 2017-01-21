@@ -16,7 +16,7 @@ public interface UiExceptionIf {
     void processMe(Activity activity, Intent intent) throws UiException;
     ErrorBean getErrorBean();
 
-    interface UiExceptionDealerIf {
+    interface UiExceptionRouterIf {
         ActionForUiExceptionIf getActionForException(UiException uiException);
     }
 

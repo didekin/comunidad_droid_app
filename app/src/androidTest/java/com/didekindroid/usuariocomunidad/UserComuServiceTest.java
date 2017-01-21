@@ -28,7 +28,7 @@ import static com.didekin.usuario.UsuarioExceptionMsg.USER_NAME_DUPLICATE;
 import static com.didekindroid.AppInitializer.creator;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.SecurityTestUtils.updateSecurityData;
-import static com.didekindroid.usuario.UsuarioDaoRemote.usuarioDaoRemote;
+import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN2_AND_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
@@ -321,7 +321,7 @@ public class UserComuServiceTest {
     public void testSeeUserComusByUser_2() throws Exception
     {
         signUpAndUpdateTk(COMU_REAL_JUAN);
-        assertThat(usuarioDaoRemote.deleteUser(), is(true)); // We do not update security data.
+        assertThat(usuarioDao.deleteUser(), is(true)); // We do not update security data.
         assertThat(TKhandler.doBearerAccessTkHeader(), notNullValue());
         // Wrong credentials: the user doesn't exist.
         AppUserComuServ.seeUserComusByUser();
@@ -331,7 +331,7 @@ public class UserComuServiceTest {
     public void testSeeUserComusByUser_3() throws Exception
     {
         signUpAndUpdateTk(COMU_REAL_JUAN);
-        assertThat(usuarioDaoRemote.deleteUser(), is(true));
+        assertThat(usuarioDao.deleteUser(), is(true));
         TKhandler.updateIsRegistered(false); // New variation: partially update of security data.
         assertThat(TKhandler.doBearerAccessTkHeader(), notNullValue());
         // Wrong credentials: the user doesn't exist.

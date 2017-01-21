@@ -1,15 +1,10 @@
 package com.didekindroid.testutil;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.didekindroid.usuario.RegGcmIntentService;
-
 import timber.log.Timber;
-
-import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 
 public class MockActivity extends AppCompatActivity {
 
@@ -22,12 +17,6 @@ public class MockActivity extends AppCompatActivity {
         Timber.d("onCreate()");
         super.onCreate(savedInstanceState);
         defaultActivityClassToGo = MockNextDefaultActivity.class;
-    }
-
-    public void launchRegService(){
-        if (!TKhandler.isGcmTokenSentServer()) {
-            startService(new Intent(this, RegGcmIntentService.class));
-        }
     }
 
     @Override

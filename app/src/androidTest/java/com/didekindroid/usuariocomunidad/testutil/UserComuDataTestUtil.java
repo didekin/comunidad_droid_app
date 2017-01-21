@@ -18,7 +18,7 @@ import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_LA_PLAZU
 import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_REAL;
 import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_TRAV_PLAZUELA_11;
 import static com.didekindroid.testutil.SecurityTestUtils.updateSecurityData;
-import static com.didekindroid.usuario.UsuarioDaoRemote.usuarioDaoRemote;
+import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_DROID;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
@@ -63,7 +63,7 @@ public final class UserComuDataTestUtil {
     {
         AppUserComuServ.regComuAndUserAndUserComu(usuarioComunidad).execute().body();
         updateSecurityData(usuarioComunidad.getUsuario().getUserName(), usuarioComunidad.getUsuario().getPassword());
-        return usuarioDaoRemote.getUserData();
+        return usuarioDao.getUserData();
     }
 
     public static void regTwoUserComuSameUser(List<UsuarioComunidad> usuarioComunidadList) throws IOException, UiException

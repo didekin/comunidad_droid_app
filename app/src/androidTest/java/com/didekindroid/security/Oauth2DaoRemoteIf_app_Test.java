@@ -21,12 +21,11 @@ import retrofit2.Response;
 import static com.didekin.http.GenericExceptionMsg.BAD_REQUEST;
 import static com.didekin.http.GenericExceptionMsg.NOT_FOUND;
 import static com.didekin.http.oauth2.OauthClient.CL_USER;
-import static com.didekin.http.oauth2.OauthTokenHelper.HELPER;
 import static com.didekindroid.AppInitializer.creator;
 import static com.didekindroid.security.Oauth2DaoRemote.Oauth2;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.SecurityTestUtils.updateSecurityData;
-import static com.didekindroid.usuario.UsuarioDaoRemote.usuarioDaoRemote;
+import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_NOTHING;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
@@ -118,7 +117,7 @@ public class Oauth2DaoRemoteIf_app_Test {
         assertThat(isRegistered, is(true));
         updateSecurityData(UsuarioDataTestUtils.USER_DROID.getUserName(), UsuarioDataTestUtils.USER_DROID.getPassword());
         // Envía correo.
-        boolean isPasswordSend = usuarioDaoRemote.passwordSend(UsuarioDataTestUtils.USER_DROID.getUserName()).execute().body();
+        boolean isPasswordSend = usuarioDao.sendPassword(UsuarioDataTestUtils.USER_DROID.getUserName());
         assertThat(isPasswordSend,is(true));
 
         // Old pair userName/password is invalid: passwordSend implies new password in BD.
@@ -135,7 +134,7 @@ public class Oauth2DaoRemoteIf_app_Test {
         assertThat(token.getValue(), notNullValue());
         assertThat(token.getRefreshToken().getValue(), notNullValue());
 
-        usuarioDaoRemote.deleteUser(HELPER.doBearerAccessTkHeader(token)).execute();
+        usuarioDao.deleteUser();
         UsuarioDataTestUtils.cleanWithTkhandler();
     }
 

@@ -7,14 +7,6 @@ package com.didekindroid.usuario.userdata;
  */
 
 interface UserDataViewIf {
-
     void initUserDataInView();
-    UserChangeToMake getDataChangedFromAcView();
-
-    enum UserChangeToMake {
-        alias_only,
-        userName,
-        nothing,
-        ;
-    }
+    String[] getDataChangedFromView();
 }

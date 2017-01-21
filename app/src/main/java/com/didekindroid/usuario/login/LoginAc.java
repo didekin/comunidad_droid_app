@@ -1,6 +1,5 @@
 package com.didekindroid.usuario.login;
 
-import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,21 +7,26 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog.Builder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDialog;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.didekindroid.R;
+import com.didekindroid.exception.UiException;
 import com.didekindroid.usuario.UsuarioBean;
 import com.didekindroid.util.ConnectionUtils;
-import com.didekindroid.R;
+import com.didekindroid.util.MenuRouter;
 
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import java.util.Objects;
+
+import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static com.didekindroid.usuario.login.LoginAc.PasswordMailDialog.newInstance;
+import static com.didekindroid.usuario.login.LoginAcReactor.loginReactor;
+import static com.didekindroid.util.DefaultNextAcRouter.routerMap;
 import static com.didekindroid.util.UIutils.doToolBar;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.util.UIutils.makeToast;
@@ -42,19 +46,13 @@ import static com.didekindroid.util.UIutils.makeToast;
  * 1c. If the userName exists, but the passowrd is not correct, after three failed intents,  a new passord is sent
  * by mail, after her confirmation.
  */
-@SuppressWarnings("AbstractClassExtendsConcreteClass")
-public abstract class LoginAc extends AppCompatActivity implements LoginViewIf, LoginControllerIf {
+public class LoginAc extends AppCompatActivity implements LoginViewIf, LoginControllerIf {
 
-    protected Class<? extends Activity> defaultActivityClassToGo;
     View mAcView;
-    CompositeSubscription subscriptions;
+    CompositeDisposable subscriptions;
     private volatile int counterWrong;
-
-    // Template method to be overwritten in the apps.
-    protected abstract void setDefaultActivityClassToGo(Class<? extends Activity> activityClassToGo);
-
-    // Template method to be overwritten in the apps.
-    protected abstract int getDialogThemeId();
+    private UsuarioBean usuarioBean;
+    LoginReactorIf reactor;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -65,7 +63,8 @@ public abstract class LoginAc extends AppCompatActivity implements LoginViewIf, 
         mAcView = getLayoutInflater().inflate(R.layout.login_ac, null);
         setContentView(mAcView);
         doToolBar(this, true);
-        subscriptions = new CompositeSubscription();
+        reactor = loginReactor;
+        subscriptions = new CompositeDisposable();
 
         Button mLoginButton = (Button) findViewById(R.id.login_ac_button);
         mLoginButton.setOnClickListener(new View.OnClickListener() {
@@ -73,7 +72,9 @@ public abstract class LoginAc extends AppCompatActivity implements LoginViewIf, 
             public void onClick(View v)
             {
                 Timber.d("View.OnClickListener().onClick()");
-                doLoginValidate();
+                if (checkLoginData()) {
+                   validateLoginRemote() ;
+                }
             }
         });
     }
@@ -83,8 +84,8 @@ public abstract class LoginAc extends AppCompatActivity implements LoginViewIf, 
     {
         Timber.d("onDestroy()");
         super.onDestroy();
-        if (subscriptions != null && subscriptions.hasSubscriptions()) {
-            subscriptions.unsubscribe();
+        if (subscriptions != null) {
+            subscriptions.clear();
         }
     }
 
@@ -100,48 +101,81 @@ public abstract class LoginAc extends AppCompatActivity implements LoginViewIf, 
         newFragment.show(getFragmentManager(), "passwordMailDialog");
     }
 
+    @Override
+    public String[] getLoginDataFromView(){
+        // TODO: test.
+        Timber.d("getLoginDataFromView()");
+        return new String[]{
+                ((EditText) mAcView.findViewById(R.id.reg_usuario_email_editT)).getText().toString(),
+                ((EditText) mAcView.findViewById(R.id.reg_usuario_password_ediT)).getText().toString()
+        };
+    }
+
     // ============================================================
     //    ..... CONTROLLER IMPLEMENTATION ....
     /* ============================================================*/
 
     @Override
-    public int getCounterWrong()
-    {
-        Timber.d("getCounterWrong()");
-        return counterWrong;
-    }
-
-    @Override
-    public void setCounterWrong(int counterWrong)
-    {
-        Timber.d("setCounterWrong()");
-        this.counterWrong = counterWrong;
-    }
-
-    @Override
-    public void doLoginValidate()
-    {
-        Timber.i("doLoginValidate()");
-
-        UsuarioBean usuarioBean = new UsuarioBean(
-                ((EditText) mAcView.findViewById(R.id.reg_usuario_email_editT)).getText().toString(),
-                null,
-                ((EditText) mAcView.findViewById(R.id.reg_usuario_password_ediT)).getText().toString(),
-                null
-        );
+    public boolean checkLoginData()
+    {  // TODO: test.
+        Timber.i("checkLoginData()");
+        usuarioBean = new UsuarioBean(getLoginDataFromView()[0], null, getLoginDataFromView()[1], null);
 
         StringBuilder errorBuilder = getErrorMsgBuilder(this);
         if (!usuarioBean.validateLoginData(getResources(), errorBuilder)) {
             makeToast(this, errorBuilder.toString(), R.color.deep_purple_100);
-        } else if (!ConnectionUtils.isInternetConnected(this)) {
+            return false;
+        }
+        if (!ConnectionUtils.isInternetConnected(this)) {
             makeToast(this, R.string.no_internet_conn_toast);
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void validateLoginRemote()
+    {
+        Timber.i("validateLoginRemote()");
+        Objects.equals(usuarioBean != null, true);
+        reactor.validateLogin(this, usuarioBean.getUsuario());
+    }
+
+    @Override
+    public void processBackLoginRemote(Boolean isLoginOk)
+    {
+        Timber.d("onNext");
+        if (isLoginOk) {
+            Timber.d("login OK");
+            Intent intent = new Intent(this, routerMap.get(this.getClass()));
+            intent.setFlags(FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
+        } else if (counterWrong > 2) { // Password wrong
+            ++counterWrong;
+            showDialog(usuarioBean.getUserName());
         } else {
-            subscriptions.add(
-                    LoginAcObservable.getZipLoginSingle(usuarioBean.getUsuario())
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(new LoginAcObservable.LoginValidateSubscriber(this, usuarioBean.getUsuario()))
-            );
+            Timber.d("Password wrong, counterWrong = %d%n",counterWrong);
+            makeToast(this, R.string.password_wrong_in_login);
+        }
+    }
+
+    @Override
+    public void processBackSendPassword(Boolean isSendPassword)
+    {
+        Timber.d("processBackSendPassword()");
+        if (isSendPassword) {
+            makeToast(this, R.string.password_new_in_login);
+            recreate();
+        }
+    }
+
+    @Override
+    public void processBackErrorInReactor(Throwable e)
+    {
+        Timber.d("processBackErrorInReactor()");
+        if (e instanceof UiException) {
+            ((UiException) e).processMe(this, new Intent());
         }
     }
 
@@ -149,12 +183,8 @@ public abstract class LoginAc extends AppCompatActivity implements LoginViewIf, 
     public void doDialogPositiveClick(String email)
     {
         Timber.d("doDialogPositiveClick()");
-        subscriptions.add(
-                LoginAcObservable.getLoginMailSingle(email)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new LoginAcObservable.LoginMailSubscriber(this))
-        );
+        Objects.equals(usuarioBean != null, true);
+        reactor.sendPasswordToUser(this, usuarioBean.getUsuario());
     }
 
     @Override
@@ -162,10 +192,38 @@ public abstract class LoginAc extends AppCompatActivity implements LoginViewIf, 
     {
         Timber.d("doDialogNegativeClick()");
 
-        Intent intent = new Intent(this, defaultActivityClassToGo);
+        Intent intent = new Intent(this, routerMap.get(this.getClass()));
         intent.setFlags(FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public CompositeDisposable getSubscriptions()
+    {
+        if (subscriptions == null){
+            subscriptions = new CompositeDisposable();
+        }
+        return subscriptions;
+    }
+
+    // ============================================================
+    //    ..... ACTION BAR ....
+    // ============================================================
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        Timber.d("onOptionsItemSelected()");
+        int resourceId = item.getItemId();
+
+        switch (resourceId) {
+            case android.R.id.home:
+                MenuRouter.doUpMenu(this);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     //  =====================================================================================================
@@ -193,7 +251,7 @@ public abstract class LoginAc extends AppCompatActivity implements LoginViewIf, 
             Timber.d("onCreateDialog()");
 
             int message = R.string.send_password_by_mail_dialog;
-            Builder builder = new Builder(getActivity(), ((LoginAc) getActivity()).getDialogThemeId());
+            Builder builder = new Builder(getActivity(), R.style.alertDialogTheme);
 
             builder.setMessage(message)
                     .setPositiveButton(R.string.send_password_by_mail_YES, new DialogInterface.OnClickListener() {
