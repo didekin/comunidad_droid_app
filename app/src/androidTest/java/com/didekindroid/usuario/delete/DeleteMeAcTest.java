@@ -1,4 +1,4 @@
-package com.didekindroid.usuario;
+package com.didekindroid.usuario.delete;
 
 import android.app.Activity;
 import android.support.test.rule.ActivityTestRule;

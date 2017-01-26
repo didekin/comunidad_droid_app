@@ -17,10 +17,11 @@ import com.didekindroid.comunidad.RegComuFr;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.util.ConnectionUtils;
 
-import java.util.Objects;
-
 import timber.log.Timber;
 
+import static com.didekindroid.usuariocomunidad.UserComuAssertionMsg.user_and_comunidad_should_be_registered;
+import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.util.UIutils.doToolBar;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
@@ -119,7 +120,7 @@ public class RegComuAndUserComuAc extends AppCompatActivity {
             Timber.d("doInBackground()");
             boolean isRegistered = false;
             try {
-                isRegistered = UserComuService.AppUserComuServ.regComuAndUserComu(usuarioComunidad[0]);
+                isRegistered = AppUserComuServ.regComuAndUserComu(usuarioComunidad[0]);
             } catch (UiException e) {
                 uiException = e;
             }
@@ -135,7 +136,7 @@ public class RegComuAndUserComuAc extends AppCompatActivity {
             if (uiException != null) {
                 uiException.processMe(RegComuAndUserComuAc.this, new Intent());
             } else {
-                Objects.equals(rowInserted, true);
+                assertTrue(rowInserted, user_and_comunidad_should_be_registered);
             }
         }
     }

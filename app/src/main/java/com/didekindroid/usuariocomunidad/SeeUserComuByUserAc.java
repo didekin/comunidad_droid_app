@@ -8,17 +8,18 @@ import android.view.MenuItem;
 
 import com.didekin.usuariocomunidad.UsuarioComunidad;
 import com.didekindroid.R;
-
-import java.util.Objects;
+import com.didekindroid.security.IdentityCacher;
 
 import timber.log.Timber;
 
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.util.ItemMenu.mn_handler;
-import static com.didekindroid.util.UIutils.doToolBar;
+import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
 import static com.didekindroid.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;
+import static com.didekindroid.util.ItemMenu.mn_handler;
 import static com.didekindroid.util.MenuRouter.doUpMenu;
 import static com.didekindroid.util.MenuRouter.routerMap;
+import static com.didekindroid.util.UIutils.assertTrue;
+import static com.didekindroid.util.UIutils.doToolBar;
 
 /**
  * Preconditions:
@@ -33,15 +34,17 @@ public class SeeUserComuByUserAc extends AppCompatActivity implements
         SeeUserComuByUserFr.SeeUserComuByUserFrListener {
 
     SeeUserComuByUserFr mFragment;
+    IdentityCacher identityCacher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         Timber.d("onCreate()");
         super.onCreate(savedInstanceState);
+        identityCacher = TKhandler;
 
         // Preconditions: the user is registered.
-        Objects.equals(TKhandler.isRegisteredUser(), true);
+        assertTrue(identityCacher.isRegisteredUser(), user_should_be_registered);
 
         setContentView(R.layout.see_usercomu_by_user_ac);
         doToolBar(this, true);

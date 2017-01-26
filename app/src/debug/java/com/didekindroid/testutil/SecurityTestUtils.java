@@ -31,25 +31,24 @@ public final class SecurityTestUtils {
         TKhandler.updateIsRegistered(true);
     }
 
-    public static SpringOauthToken doSpringOauthToken()
+    public static SpringOauthToken doSpringOauthToken(String accessToken, String refreshToken)
     {
         return new SpringOauthToken(
-                "50d3cdaa-0d2e-4cfd-b259-82b3a0b1edef",
+                accessToken,
                 new Timestamp(new Date().getTime() + 7200000),
                 "bearer",
-                new SpringOauthToken.OauthToken("50d3cdaa-0d2e-4cfd-b259-82b3a0b1edef", new Timestamp(new Date().getTime() + 7200000)),
+                new SpringOauthToken.OauthToken(refreshToken, new Timestamp(new Date().getTime() + 7200000)),
                 new String[]{"readwrite"}
         );
     }
 
+    public static SpringOauthToken doSpringOauthToken()
+    {
+        return doSpringOauthToken("50d3cdaa-0d2e-4cfd-b259-82b3a0b1edef", "50d3cdaa-0d2e-4cfd-b259-82b3a0b1edef");
+    }
+
     public static SpringOauthToken doSpringOauthToken(String refreshTokenKey)
     {
-        return new SpringOauthToken(
-                "50d3cdaa-0d2e-4cfd-b259-82b3a0b1edef",
-                new Timestamp(new Date().getTime() + 7200000),
-                "bearer",
-                new SpringOauthToken.OauthToken(refreshTokenKey, new Timestamp(new Date().getTime() + 7200000)),
-                new String[]{"readwrite"}
-        );
+        return doSpringOauthToken("50d3cdaa-0d2e-4cfd-b259-82b3a0b1edef", refreshTokenKey);
     }
 }

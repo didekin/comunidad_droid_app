@@ -18,7 +18,7 @@ import java.io.IOException;
 import io.reactivex.observers.TestObserver;
 
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.usuario.firebase.FirebaseTokenReactor.regGcmTokenSingle;
+import static com.didekindroid.usuario.firebase.FirebaseTokenReactor.updatedGcmTkSingle;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
@@ -70,7 +70,7 @@ public class RegGcmTokenObservableTest {
     public void testRegGcmTokenCompletable_1() throws Exception
     {
         testSubscriber = new TestObserver<>();
-        regGcmTokenSingle().subscribe(testSubscriber);
+        updatedGcmTkSingle().subscribe(testSubscriber);
         testSubscriber.assertComplete();
         testSubscriber.assertValueCount(1);
         testSubscriber.assertValue(1);

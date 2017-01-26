@@ -14,15 +14,15 @@ import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.activity.IncidSeeOpenByComuAc;
 import com.didekindroid.usuario.firebase.FirebaseTokenReactorIf;
 
-import java.util.Objects;
-
 import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
+import static com.didekindroid.incidencia.activity.utils.IncidenciaAssertionMsg.incid_importancia_should_be_registered;
 import static com.didekindroid.usuario.firebase.FirebaseTokenReactor.tokenReactor;
 import static com.didekindroid.util.ConnectionUtils.checkInternetConnected;
 import static com.didekindroid.util.MenuRouter.doUpMenu;
+import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.util.UIutils.doToolBar;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
@@ -172,7 +172,7 @@ public class IncidRegAc extends AppCompatActivity implements IncidRegControllerI
             if (uiException != null) {
                 uiException.processMe(IncidRegAc.this, new Intent());
             } else {
-                Objects.equals(rowInserted == 2, true);
+                assertTrue(rowInserted == 2, incid_importancia_should_be_registered);
                 Intent intent = new Intent(IncidRegAc.this, IncidSeeOpenByComuAc.class);
                 startActivity(intent);
             }

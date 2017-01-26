@@ -7,11 +7,9 @@ import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-
-import com.didekindroid.exception.UiException;
-import com.didekindroid.usuario.testutil.UserItemMenuTestUtils;
-import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.R;
+import com.didekindroid.exception.UiException;
+import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
 
 import junit.framework.AssertionFailedError;
@@ -33,6 +31,8 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
+import static com.didekindroid.usuario.testutil.UserItemMenuTestUtils.LOGIN_AC;
+import static com.didekindroid.usuario.testutil.UserItemMenuTestUtils.USER_DATA_AC;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.REG_COMU_USERCOMU_AC;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.REG_COMU_USER_USERCOMU_AC;
@@ -46,7 +46,7 @@ import static org.junit.Assert.assertThat;
  * Time: 09:53
  */
 @RunWith(AndroidJUnit4.class)
-public class ComuSearchAc_3_SlowTest {
+public class ComuSearchAc_3_Test {
 
     private ComuSearchAc activity;
     Context context;
@@ -68,7 +68,6 @@ public class ComuSearchAc_3_SlowTest {
     @Before
     public void getFixture() throws Exception
     {
-        Thread.sleep(4000);
         context = InstrumentationRegistry.getTargetContext();
         refreshTkFile = TKhandler.getRefreshTokenFile();
         whatClean = UsuarioDataTestUtils.CleanUserEnum.CLEAN_NOTHING;
@@ -127,17 +126,17 @@ public class ComuSearchAc_3_SlowTest {
             onView(ViewMatchers.withId(R.id.login_ac_mn)).check(matches(isDisplayed()));
         }
 
-        UserItemMenuTestUtils.LOGIN_AC.checkMenuItem_NTk(activity);
+        LOGIN_AC.checkMenuItem_NTk(activity);
         checkUp(activityLayoutId);
     }
 
     @Test
     public void testGetDatosUsuarioNoToken() throws InterruptedException
     {
-        assertThat(refreshTkFile.exists(), is(false));
         activity = mActivityRule.launchActivity(new Intent());
+        assertThat(refreshTkFile.exists(), is(false));
         assertThat(TKhandler.isRegisteredUser(), is(false));
-        UserItemMenuTestUtils.USER_DATA_AC.checkMenuItem_NTk(activity);
+        USER_DATA_AC.checkMenuItem_NTk(activity);
     }
 
     @Test
@@ -149,7 +148,7 @@ public class ComuSearchAc_3_SlowTest {
         UserComuDataTestUtil.signUpAndUpdateTk(UserComuDataTestUtil.COMU_REAL_JUAN);
         activity = mActivityRule.launchActivity(new Intent());
         assertThat(TKhandler.isRegisteredUser(), is(true));
-        UserItemMenuTestUtils.USER_DATA_AC.checkMenuItem_WTk(activity);
+        USER_DATA_AC.checkMenuItem_WTk(activity);
 
         checkUp(activityLayoutId);
     }

@@ -11,23 +11,23 @@ import android.widget.TextView;
 
 import com.didekin.incidencia.dominio.IncidComment;
 import com.didekin.incidencia.dominio.Incidencia;
+import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.incidencia.dominio.IncidCommentBean;
 import com.didekindroid.util.ConnectionUtils;
 import com.didekindroid.util.UIutils;
-import com.didekindroid.R;
-import com.didekindroid.incidencia.dominio.IncidCommentBean;
-
-import java.util.Objects;
 
 import timber.log.Timber;
 
-import static com.didekindroid.util.UIutils.checkPostExecute;
-import static com.didekindroid.util.UIutils.doToolBar;
-import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
-import static com.didekindroid.util.UIutils.makeToast;
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.util.MenuRouter.doUpMenu;
+import static com.didekindroid.util.UIutils.assertTrue;
+import static com.didekindroid.util.UIutils.checkPostExecute;
+import static com.didekindroid.util.UIutils.doToolBar;
+import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
+import static com.didekindroid.incidencia.activity.utils.IncidenciaAssertionMsg.comment_should_be_registered;
+import static com.didekindroid.util.UIutils.makeToast;
 
 /**
  * Preconditions:
@@ -141,7 +141,7 @@ public class IncidCommentRegAc extends AppCompatActivity {
             if (uiException != null) {
                 uiException.processMe(IncidCommentRegAc.this, new Intent());
             } else if (!(isDestroyed() || isChangingConfigurations())) {
-                Objects.equals(rowInserted == 1, true);
+                assertTrue(rowInserted == 1, comment_should_be_registered);
                 Intent intent = new Intent(IncidCommentRegAc.this, IncidCommentSeeAc.class);
                 intent.putExtra(INCIDENCIA_OBJECT.key, mIncidencia);
                 startActivity(intent);

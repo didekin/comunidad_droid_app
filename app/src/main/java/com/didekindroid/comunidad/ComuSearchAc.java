@@ -11,22 +11,22 @@ import android.view.View;
 import android.widget.Button;
 
 import com.didekin.http.oauth2.SpringOauthToken;
+import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.util.ConnectionUtils;
 import com.didekindroid.util.UIutils;
-import com.didekindroid.R;
 
 import timber.log.Timber;
 
 import static com.didekin.common.dominio.ValidDataPatterns.LINE_BREAK;
+import static com.didekindroid.comunidad.RegComuFr.makeComunidadBeanFromView;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.util.ItemMenu.mn_handler;
+import static com.didekindroid.util.MenuRouter.getRegisterDependentClass;
+import static com.didekindroid.util.MenuRouter.routerMap;
 import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.util.UIutils.doToolBar;
 import static com.didekindroid.util.UIutils.makeToast;
-import static com.didekindroid.comunidad.RegComuFr.makeComunidadBeanFromView;
-import static com.didekindroid.util.MenuRouter.getRegisterDependentClass;
-import static com.didekindroid.util.MenuRouter.routerMap;
 
 /**
  * Postconditions:
@@ -41,10 +41,8 @@ import static com.didekindroid.util.MenuRouter.routerMap;
 @SuppressWarnings("ConstantConditions")
 public class ComuSearchAc extends AppCompatActivity {
 
-    Menu mMenu;
     RegComuFr mRegComuFrg;
     protected View mMainView;
-    boolean hasLoginToRemove;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -114,11 +112,6 @@ public class ComuSearchAc extends AppCompatActivity {
 
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.comu_search_ac_menu, menu);
-        mMenu = menu;
-        if (hasLoginToRemove) {
-            mMenu.removeItem(R.id.login_ac_mn);
-            mMenu.add(R.id.user_data_ac_mn);
-        }
         return true;
     }
 
@@ -126,9 +119,11 @@ public class ComuSearchAc extends AppCompatActivity {
     public boolean onPrepareOptionsMenu(Menu menu)
     {
         Timber.d("onPrepareOptionsMenu()");
-        // Mostramos el menú si el usuario está registrado. TODO: probar.
         if (TKhandler.isRegisteredUser()) {
             menu.findItem(R.id.see_usercomu_by_user_ac_mn).setVisible(true).setEnabled(true);
+            menu.findItem(R.id.user_data_ac_mn).setVisible(true).setEnabled(true);
+        } else{
+            menu.findItem(R.id.login_ac_mn).setVisible(true).setEnabled(true);
         }
         return true;
     }
@@ -186,12 +181,7 @@ public class ComuSearchAc extends AppCompatActivity {
 
             if (uiException == null && springOauthToken != null) {
                 TKhandler.updateIsRegistered(true);
-                if (mMenu != null) {
-                    mMenu.removeItem(R.id.login_ac_mn);
-                    mMenu.add(R.id.user_data_ac_mn);
-                } else {
-                    hasLoginToRemove = true;
-                }
+                invalidateOptionsMenu();
             }
         }
     }

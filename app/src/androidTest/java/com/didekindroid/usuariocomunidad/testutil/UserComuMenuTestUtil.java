@@ -3,8 +3,8 @@ package com.didekindroid.usuariocomunidad.testutil;
 import android.app.Activity;
 import android.support.test.espresso.matcher.ViewMatchers;
 
-import com.didekindroid.testutil.MenuTestUtilIf;
 import com.didekindroid.R;
+import com.didekindroid.testutil.MenuTestUtilIf;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
@@ -13,7 +13,6 @@ import static android.support.test.espresso.assertion.ViewAssertions.doesNotExis
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.checkNoToastInTest;
-import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.usuario.testutil.UserItemMenuTestUtils.REGISTERED_USER;
 import static com.didekindroid.usuario.testutil.UserItemMenuTestUtils.REQUIRES_USER_NO_TOKEN;
 
@@ -36,7 +35,7 @@ public enum UserComuMenuTestUtil implements MenuTestUtilIf {
         public void checkMenuItem_WTk(Activity activity) throws InterruptedException
         {
             openActionBarOverflowOrOptionsMenu(activity);
-            Thread.sleep(2000);
+            Thread.sleep(1000);
             onView(ViewMatchers.withText(R.string.reg_nueva_comunidad_ac_mn)).check(matches(isDisplayed())).perform(click());
             onView(ViewMatchers.withId(R.id.reg_comu_and_usercomu_layout)).check(matches(isDisplayed()));
         }
@@ -47,9 +46,8 @@ public enum UserComuMenuTestUtil implements MenuTestUtilIf {
         public void checkMenuItem_NTk(Activity activity) throws InterruptedException
         {
             onView(ViewMatchers.withText(R.string.reg_nueva_comunidad_ac_mn)).check(doesNotExist());
-            Thread.sleep(2000);
-
             openActionBarOverflowOrOptionsMenu(activity);
+            Thread.sleep(1000);
             onView(ViewMatchers.withText(R.string.reg_nueva_comunidad_ac_mn)).check(matches(isDisplayed())).perform(click());
             onView(ViewMatchers.withId(R.id.reg_comu_usuario_usuariocomu_layout)).check(matches(isDisplayed()));
         }
@@ -84,20 +82,17 @@ public enum UserComuMenuTestUtil implements MenuTestUtilIf {
         public void checkMenuItem_NTk(Activity activity) throws InterruptedException
         {
             onView(ViewMatchers.withText(R.string.see_usercomu_by_user_ac_mn)).check(doesNotExist());
-            Thread.sleep(2000);
-
             openActionBarOverflowOrOptionsMenu(activity);
-            onView(ViewMatchers.withText(R.string.see_usercomu_by_user_ac_mn)).check(matches(isDisplayed())).perform(click());
-            checkToastInTest(R.string.user_without_signedUp, activity);
+            Thread.sleep(1000);
+            onView(ViewMatchers.withText(R.string.see_usercomu_by_user_ac_mn)).check(doesNotExist());
         }
 
         @Override
         public void checkMenuItem_WTk(Activity activity) throws InterruptedException
         {
             onView(ViewMatchers.withText(R.string.see_usercomu_by_user_ac_mn)).check(doesNotExist());
-            Thread.sleep(2000);
-
             openActionBarOverflowOrOptionsMenu(activity);
+            Thread.sleep(1000);
             onView(ViewMatchers.withText(R.string.see_usercomu_by_user_ac_mn)).check(matches(isDisplayed())).perform(click());
 
             // No muestra toast de error.

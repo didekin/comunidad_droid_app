@@ -11,16 +11,17 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.didekin.usuariocomunidad.UsuarioComunidad;
-import com.didekindroid.exception.UiException;
 import com.didekindroid.R;
+import com.didekindroid.exception.UiException;
 
 import java.util.List;
-import java.util.Objects;
 
 import timber.log.Timber;
 
-import static com.didekindroid.util.UIutils.checkPostExecute;
+import static com.didekindroid.usuariocomunidad.UserComuAssertionMsg.usercomu_list_should_be_initialized;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.util.UIutils.assertTrue;
+import static com.didekindroid.util.UIutils.checkPostExecute;
 
 /**
  * Preconditions:
@@ -125,7 +126,7 @@ public class SeeUserComuByUserFr extends Fragment {
 
             if (uiException != null) {  // action: LOGIN.
                 Timber.d("UserComuByUserLoader.onPostExecute(): uiException != null");
-                Objects.equals(usuarioComunidades == null, true);
+                assertTrue(usuarioComunidades == null, usercomu_list_should_be_initialized);
                 uiException.processMe(getActivity(), new Intent());
             }
             if (usuarioComunidades != null) {

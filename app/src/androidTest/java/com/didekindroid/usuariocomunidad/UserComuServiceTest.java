@@ -95,7 +95,7 @@ public class UserComuServiceTest {
     public void testGetComunidadesByUser_1() throws Exception
     {
         // No token in cache.
-        assertThat(TKhandler.doBearerAccessTkHeader(), nullValue());
+        assertThat(TKhandler.doHttpAuthHeaderFromTkInCache(), nullValue());
         try {
             assertThat(AppUserComuServ.getComusByUser(), nullValue());
             fail();
@@ -313,7 +313,7 @@ public class UserComuServiceTest {
     public void testSeeUserComusByUser_1() throws Exception
     {
         // No token in cache.
-        assertThat(TKhandler.doBearerAccessTkHeader(), nullValue());
+        assertThat(TKhandler.doHttpAuthHeaderFromTkInCache(), nullValue());
         AppUserComuServ.seeUserComusByUser();
     }
 
@@ -322,7 +322,7 @@ public class UserComuServiceTest {
     {
         signUpAndUpdateTk(COMU_REAL_JUAN);
         assertThat(usuarioDao.deleteUser(), is(true)); // We do not update security data.
-        assertThat(TKhandler.doBearerAccessTkHeader(), notNullValue());
+        assertThat(TKhandler.doHttpAuthHeaderFromTkInCache(), notNullValue());
         // Wrong credentials: the user doesn't exist.
         AppUserComuServ.seeUserComusByUser();
     }
@@ -333,7 +333,7 @@ public class UserComuServiceTest {
         signUpAndUpdateTk(COMU_REAL_JUAN);
         assertThat(usuarioDao.deleteUser(), is(true));
         TKhandler.updateIsRegistered(false); // New variation: partially update of security data.
-        assertThat(TKhandler.doBearerAccessTkHeader(), notNullValue());
+        assertThat(TKhandler.doHttpAuthHeaderFromTkInCache(), notNullValue());
         // Wrong credentials: the user doesn't exist.
         AppUserComuServ.seeUserComusByUser();
     }

@@ -14,25 +14,26 @@ import com.didekin.comunidad.Comunidad;
 import com.didekin.incidencia.dominio.Incidencia;
 import com.didekin.incidencia.dominio.IncidenciaUser;
 import com.didekin.incidencia.dominio.Resolucion;
-import com.didekindroid.exception.UiException;
 import com.didekindroid.R;
+import com.didekindroid.exception.UiException;
 
 import java.util.List;
-import java.util.Objects;
 
 import timber.log.Timber;
 
-import static com.didekindroid.util.AppBundleKey.IS_MENU_IN_FRAGMENT_FLAG;
-import static com.didekindroid.util.ItemMenu.mn_handler;
-import static com.didekindroid.util.UIutils.checkPostExecute;
-import static com.didekindroid.util.UIutils.doToolBar;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_resolucion_see_fr_tag;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
+import static com.didekindroid.incidencia.activity.utils.IncidenciaAssertionMsg.resolucion_should_be_initialized;
+import static com.didekindroid.util.AppBundleKey.IS_MENU_IN_FRAGMENT_FLAG;
+import static com.didekindroid.util.ItemMenu.mn_handler;
 import static com.didekindroid.util.MenuRouter.routerMap;
+import static com.didekindroid.util.UIutils.assertTrue;
+import static com.didekindroid.util.UIutils.checkPostExecute;
+import static com.didekindroid.util.UIutils.doToolBar;
 
 /**
  * Preconditions:
@@ -179,7 +180,7 @@ public class IncidSeeClosedByComuAc extends AppCompatActivity implements
                 uiException.processMe(IncidSeeClosedByComuAc.this, new Intent());
             } else {
                 // Switch fragment here.
-                Objects.equals(resolucion != null, true);
+                assertTrue(resolucion != null, resolucion_should_be_initialized);
                 Bundle bundle = new Bundle();
                 bundle.putBoolean(IS_MENU_IN_FRAGMENT_FLAG.key, true);
                 bundle.putSerializable(INCIDENCIA_OBJECT.key, incidencia);

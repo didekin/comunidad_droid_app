@@ -11,16 +11,16 @@ import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.util.MenuRouter;
 
-import java.util.Objects;
-
 import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
 import static com.didekindroid.usuario.delete.DeleteMeReactor.deleteReactor;
 import static com.didekindroid.util.DefaultNextAcRouter.routerMap;
+import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.doToolBar;
 
 /**
@@ -41,7 +41,7 @@ public class DeleteMeAc extends AppCompatActivity implements DeleteMeControllerI
         super.onCreate(savedInstanceState);
 
         // Preconditions.
-        Objects.equals(TKhandler.isRegisteredUser(), true);
+        assertTrue(TKhandler.isRegisteredUser(), user_should_be_registered);
         // Manual injection of reactor.
         reactor = deleteReactor;
 

@@ -18,7 +18,6 @@ import com.didekindroid.comunidad.ComuBundleKey;
 import com.didekindroid.exception.UiException;
 
 import java.util.List;
-import java.util.Objects;
 
 import timber.log.Timber;
 
@@ -27,9 +26,11 @@ import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
+import static com.didekindroid.incidencia.activity.utils.IncidenciaAssertionMsg.incidencia_resolucion_should_be_initialized;
 import static com.didekindroid.util.ItemMenu.mn_handler;
 import static com.didekindroid.util.MenuRouter.doUpMenu;
 import static com.didekindroid.util.MenuRouter.routerMap;
+import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.util.UIutils.doToolBar;
 
@@ -189,7 +190,7 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements
             if (uiException != null) {
                 uiException.processMe(IncidSeeOpenByComuAc.this, new Intent());
             } else {
-                Objects.equals(incidAndResolBundle != null, true);
+                assertTrue(incidAndResolBundle != null, incidencia_resolucion_should_be_initialized);
                 Intent intent = new Intent(IncidSeeOpenByComuAc.this, IncidEditAc.class);
                 intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, incidAndResolBundle.getIncidImportancia());
                 intent.putExtra(INCID_RESOLUCION_FLAG.key, incidAndResolBundle.hasResolucion());

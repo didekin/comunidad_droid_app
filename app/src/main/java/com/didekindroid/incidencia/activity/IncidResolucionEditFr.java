@@ -16,27 +16,31 @@ import com.didekin.incidencia.dominio.Avance;
 import com.didekin.incidencia.dominio.IncidImportancia;
 import com.didekin.incidencia.dominio.Incidencia;
 import com.didekin.incidencia.dominio.Resolucion;
-import com.didekindroid.exception.UiException;
-import com.didekindroid.util.ConnectionUtils;
 import com.didekindroid.R;
+import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.dominio.ResolucionBean;
+import com.didekindroid.util.ConnectionUtils;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import timber.log.Timber;
 
+import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
+import static com.didekindroid.incidencia.activity.utils.IncidenciaAssertionMsg.resolucion_fechaPrev_should_be_initialized;
+import static com.didekindroid.incidencia.activity.utils.IncidenciaAssertionMsg.resolucion_should_be_initialized;
+import static com.didekindroid.incidencia.activity.utils.IncidenciaAssertionMsg.resolucion_should_be_modified;
+import static com.didekindroid.incidencia.activity.utils.IncidenciaAssertionMsg.incidencia_should_be_cancelled;
 import static com.didekindroid.util.FechaPickerFr.FechaPickerHelper.initFechaSpinnerView;
+import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.util.UIutils.formatTimeStampToString;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.util.UIutils.getStringFromInteger;
 import static com.didekindroid.util.UIutils.makeToast;
-import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
-import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 
 /**
  * User: pedro@didekin
@@ -88,9 +92,9 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
 
         mIncidImportancia = (IncidImportancia) getArguments().getSerializable(INCID_IMPORTANCIA_OBJECT.key);
         mResolucion = (Resolucion) getArguments().getSerializable(INCID_RESOLUCION_OBJECT.key);
-        Objects.equals(mResolucion != null, true);
+        assertTrue (mResolucion != null, resolucion_should_be_initialized);
         // Inicialización de la fecha en BD en el bean, para manternela si no la modifica.
-        Objects.equals(mResolucion.getFechaPrev() != null, true);
+        assertTrue(mResolucion.getFechaPrev() != null, resolucion_fechaPrev_should_be_initialized);
         mResolucionBean.setFechaPrevista(mResolucion.getFechaPrev().getTime());
 
         IncidAvanceSeeAdapter mAdapter = new IncidAvanceSeeAdapter(getActivity());
@@ -212,7 +216,7 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
                 intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, mIncidImportancia);
                 uiException.processMe(getActivity(), intent);
             } else {
-                Objects.equals(rowModified >= 1, true);
+                assertTrue(rowModified >= 1, resolucion_should_be_modified);
                 Intent intent = new Intent(getActivity(), IncidEditAc.class);
                 intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, mIncidImportancia);
                 startActivity(intent);
@@ -249,7 +253,7 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
                 Intent intent = new Intent();
                 uiException.processMe(getActivity(), intent);
             } else {
-                Objects.equals(incidenciaCancelled >= 2, true);
+                assertTrue(incidenciaCancelled >= 2, incidencia_should_be_cancelled);
                 Intent intent = new Intent(getActivity(), IncidSeeClosedByComuAc.class);
                 startActivity(intent);
             }

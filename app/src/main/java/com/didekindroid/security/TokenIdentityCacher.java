@@ -3,16 +3,11 @@ package com.didekindroid.security;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.didekin.http.ErrorBean;
 import com.didekin.http.oauth2.SpringOauthToken;
 import com.didekindroid.exception.UiException;
 
 import java.io.File;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.concurrent.FutureTask;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicReference;
 
 import io.reactivex.functions.BiFunction;
@@ -21,14 +16,18 @@ import io.reactivex.functions.Function;
 import timber.log.Timber;
 
 import static android.content.Context.MODE_PRIVATE;
+import static com.didekin.http.GenericExceptionMsg.TOKEN_NULL;
 import static com.didekin.http.oauth2.OauthTokenHelper.HELPER;
 import static com.didekindroid.AppInitializer.creator;
-import static com.didekindroid.security.Oauth2DaoRemote.Oauth2;
+import static com.didekindroid.security.OauthTokenReactor.oauthTokenFromRefreshTk;
 import static com.didekindroid.security.TokenIdentityCacher.SharedPrefFiles.IS_GCM_TOKEN_SENT_TO_SERVER;
 import static com.didekindroid.security.TokenIdentityCacher.SharedPrefFiles.IS_USER_REG;
 import static com.didekindroid.security.TokenIdentityCacher.SharedPrefFiles.app_preferences_file;
+import static com.didekindroid.usuario.UsuarioAssertionMsg.identity_token_should_be_notnull;
+import static com.didekindroid.usuario.UsuarioAssertionMsg.updateIdentityToken_should_be_completed;
 import static com.didekindroid.util.IoHelper.readStringFromFile;
 import static com.didekindroid.util.IoHelper.writeFileFromString;
+import static com.didekindroid.util.UIutils.assertTrue;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
@@ -36,43 +35,46 @@ import static java.util.concurrent.TimeUnit.SECONDS;
  * Date: 25/06/15
  * Time: 17:28
  */
+public final class TokenIdentityCacher implements IdentityCacher {
 
-/**
- *
- */
-public enum TokenIdentityCacher implements IdentityCacher {
+    public static final IdentityCacher TKhandler =  new TokenIdentityCacher();
+    static final String refresh_token_filename = "tk_file";
 
-    TKhandler,;
-
-    public static final String refresh_token_filename = "tk_file";
-    private final ThreadPoolExecutor tokenUpdater;
-    private final AtomicReference<Future<SpringOauthToken>> cacheForToken = new AtomicReference<>();
-    public final AtomicReference<SpringOauthToken> tokenInCache;
+    private final AtomicReference<SpringOauthToken> tokenCache;
     private final File refreshTokenFile;
     private final Context context;
 
-    TokenIdentityCacher()
+    private TokenIdentityCacher()
     {
-        tokenUpdater = new ThreadPoolExecutor(1, 1, 7L, SECONDS, new LinkedBlockingQueue<Runnable>(5));
-        tokenUpdater.allowCoreThreadTimeOut(true);
-        tokenUpdater.setRejectedExecutionHandler(new ThreadPoolExecutor.AbortPolicy());
         context = creator.get().getContext();
         refreshTokenFile = new File(context.getFilesDir(), refresh_token_filename);
         String refreshTokenValue = refreshTokenFile.exists() ? readStringFromFile(refreshTokenFile) : null;
-        tokenInCache = (refreshTokenValue != null && !refreshTokenValue.isEmpty()) ?
+        tokenCache = (refreshTokenValue != null && !refreshTokenValue.isEmpty()) ?
                 new AtomicReference<>(new SpringOauthToken(refreshTokenValue)) : new AtomicReference<SpringOauthToken>();
     }
 
+    //  ======================================================================================
+    //    ............................... TOKEN CACHE .................................
+    //  ======================================================================================
+
+    /**
+     *  Preconditions:
+     *  1. Parameter is not null.
+     *  Postconditions:
+     *  1. A new file is written with the refresh token in the parameter.
+     *  2. Access token in cache is initialized.
+     */
     @Override
     public final void initIdentityCache(final SpringOauthToken springOauthToken)
     {
         Timber.d("initIdentityCache()");
+        assertTrue(springOauthToken != null, identity_token_should_be_notnull);
 
         synchronized (refreshTokenFile) {
             cleanIdentityCache();
             writeFileFromString(springOauthToken.getRefreshToken().getValue(), refreshTokenFile);
         }
-        tokenInCache.set(springOauthToken);
+        tokenCache.set(springOauthToken);
     }
 
     @Override
@@ -82,59 +84,50 @@ public enum TokenIdentityCacher implements IdentityCacher {
         synchronized (refreshTokenFile) {
             refreshTokenFile.delete();
         }
-        tokenInCache.set(null);
-        cacheForToken.set(null);
+        tokenCache.set(null);
     }
 
     /**
      * Preconditions:
-     * 1. This method would be called mainly in an asyncTask thread or in a background thread.
-     * However, it uses an ExecutorService instance to update asynchronously the tokens in cache.
+     * 1. This method will be called mainly in an asyncTask thread or in a background thread. It blocks until
+     *    a remote token is retrieved, if there exists a refresh token file in local.
+     * Postconditions:
+     * 1. If the cache has not been initialized (tokenCache == null), it returns null.
+     * 2. If there is an access token in cache, it is returned.
+     * 3. If tokenCache != null, but tokenCache.get().getValue() is null (no access token in cache,
+     *    but there exists a refresh token file), the access token is remotely retrieved and updated in
+     *    cache.
+     * @return null if:
+     * 1. The token in cache is null.
+     * 2. The synchronous call to update remotely the access token times out.
      */
+    @Override
     public final SpringOauthToken getAccessTokenInCache() throws UiException
     {
         Timber.d("getAccessTokenInCache()");
 
-        if (tokenInCache.get() == null) {
+        if (tokenCache.get() == null) {
             return null;
         }
         synchronized (this) {
-            if (tokenInCache.get().getValue() != null) {
-                return tokenInCache.get();
+            if (tokenCache.get().getValue() != null) {
+                return tokenCache.get();
             }
         }
 
-        Future<SpringOauthToken> futureInCache = cacheForToken.get();
-
-        if (futureInCache == null) {
-            // It may throw a UiException(GENERIC_ERROR). See Oauth2DaoRemote.
-            Callable<SpringOauthToken> cacheUpdater = new Callable<SpringOauthToken>() {
-                @Override
-                public SpringOauthToken call() throws UiException
-                {
-                    return Oauth2.getRefreshUserToken(tokenInCache.get().getRefreshToken().getValue());
-                }
-            };
-
-            Future<SpringOauthToken> futureToCache = new FutureTask<>(cacheUpdater);
-            futureInCache = cacheForToken.getAndSet(futureToCache);
-            if (futureInCache == null) {
-                futureInCache = tokenUpdater.submit(cacheUpdater);
-            }
-        }
         try {
-            tokenInCache.set(futureInCache.get());
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            futureInCache.cancel(true);
-            cacheForToken.set(null);
-        } catch (ExecutionException e) {
-            return catchExecutionException(e);
+            boolean isCompleted = oauthTokenFromRefreshTk(getRefreshTokenValue()).blockingAwait(5L, SECONDS);
+            assertTrue(isCompleted, updateIdentityToken_should_be_completed);
+        } catch (Exception e) {
+            TKhandler.cleanIdentityCache();
+            throw new UiException(new ErrorBean(TOKEN_NULL));
         }
-        return tokenInCache.get();
+        return tokenCache.get();
     }
 
-    //    ...................  SHARED PREFERENCES .....................
+    //  ======================================================================================
+    //    ............................... SHARED PREFERENCES .................................
+    //  ======================================================================================
 
     @Override
     public boolean isRegisteredUser()
@@ -198,11 +191,14 @@ public enum TokenIdentityCacher implements IdentityCacher {
         }
     }
 
-    //    ...................  UTILITIES .....................
+    //  ======================================================================================
+    //    .................................... UTILITIES .................................
+    //  ======================================================================================
 
-    public String doBearerAccessTkHeader() throws UiException
+    @Override
+    public String doHttpAuthHeaderFromTkInCache() throws UiException
     {
-        Timber.d("doBearerAccessTkHeader()");
+        Timber.d("doHttpAuthHeaderFromTkInCache()");
         SpringOauthToken springOauthToken = getAccessTokenInCache();
         if (springOauthToken != null) {
             return HELPER.doBearerAccessTkHeader(springOauthToken);
@@ -210,50 +206,33 @@ public enum TokenIdentityCacher implements IdentityCacher {
         return null;
     }
 
-    private SpringOauthToken catchExecutionException(ExecutionException e) throws UiException
+    //  ======================================================================================
+    //    .................................... ACCESSORS .................................
+    /*  ======================================================================================*/
+
+    @Override
+    public AtomicReference<SpringOauthToken> getTokenCache()
     {
-        cacheForToken.set(null);
-        Throwable cause = e.getCause();
-        if (cause instanceof UiException) {
-            throw (UiException) cause;
-        } else if (cause instanceof RuntimeException) {
-            throw (RuntimeException) cause;
-        } else if (cause instanceof Error) {
-            throw (Error) cause;
-        } else {
-            throw new IllegalStateException("What is this checkedException?", cause);
-        }
+        return tokenCache;
     }
 
-//    .................... ACCESSOR METHODS .........................
-
-    public SpringOauthToken getTokenInCache()
-    {
-        return tokenInCache.get();
-    }
-
+    @Override
     public File getRefreshTokenFile()
     {
         return refreshTokenFile;
     }
 
+    @Override
     public String getRefreshTokenValue()
     {
-        return tokenInCache.get() != null ? tokenInCache.get().getRefreshToken().getValue() : null;
-    }
-
-    AtomicReference<Future<SpringOauthToken>> getCacheForToken()
-    {
-        return cacheForToken;
+        return tokenCache.get() != null ? tokenCache.get().getRefreshToken().getValue() : null;
     }
 
     //  ======================================================================================
     //    .................................... FUNCTIONS .................................
     //  ======================================================================================
 
-    public final BiFunction<Boolean, SpringOauthToken, Boolean> initTokenRegisterFunc = new InitializeIdentityFunc();
-
-    final static class InitializeIdentityFunc implements BiFunction<Boolean, SpringOauthToken, Boolean> {
+    public static final BiFunction<Boolean, SpringOauthToken, Boolean> initTokenAndRegisterFunc = new BiFunction<Boolean, SpringOauthToken, Boolean>() {
         @Override
         public Boolean apply(Boolean isLoginValid, SpringOauthToken token)
         {
@@ -265,11 +244,9 @@ public enum TokenIdentityCacher implements IdentityCacher {
             }
             return isUpdatedTokenData;
         }
-    }
+    };
 
-    public final Function<Boolean,Boolean> cleanTokenFunc = new CleanIdentityFunc();
-
-    final static class CleanIdentityFunc implements Function<Boolean,Boolean> {
+    public static final Function<Boolean,Boolean> cleanTokenAndUnregisterFunc = new Function<Boolean, Boolean>() {
         @Override
         public Boolean apply(Boolean isDeletedUser)
         {
@@ -279,25 +256,21 @@ public enum TokenIdentityCacher implements IdentityCacher {
             }
             return isDeletedUser;
         }
-    }
+    };
 
     //  ======================================================================================
     //    .................................... ACTIONS .................................
     //  ======================================================================================
 
-    public final Consumer<SpringOauthToken> initTokenAction = new InitTokenAction();
-
-    static class InitTokenAction implements Consumer<SpringOauthToken> {
+    static final Consumer<SpringOauthToken> initTokenAction = new Consumer<SpringOauthToken>() {
         @Override
         public void accept(SpringOauthToken token)
         {
             TKhandler.initIdentityCache(token);
         }
-    }
+    };
 
-    public final Consumer<Integer> cleanTokenCacheAction = new CleanTokenCacheAction();
-
-    static class CleanTokenCacheAction implements Consumer<Integer> {
+    public static final Consumer<Integer> cleanTokenCacheAction = new Consumer<Integer>() {
         @Override
         public void accept(Integer modifiedUser)
         {
@@ -305,6 +278,6 @@ public enum TokenIdentityCacher implements IdentityCacher {
                 TKhandler.cleanIdentityCache();
             }
         }
-    }
+    };
 }
 

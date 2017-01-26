@@ -15,28 +15,31 @@ import android.widget.TextView;
 
 import com.didekin.incidencia.dominio.IncidImportancia;
 import com.didekin.incidencia.dominio.Incidencia;
-import com.didekindroid.exception.UiException;
 import com.didekindroid.R;
+import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.IncidenciaDataDbHelper;
 import com.didekindroid.incidencia.activity.utils.AmbitoSpinnerSettable;
 import com.didekindroid.incidencia.activity.utils.ImportanciaSpinnerSettable;
 import com.didekindroid.incidencia.dominio.IncidImportanciaBean;
 import com.didekindroid.incidencia.dominio.IncidenciaBean;
 
-import java.util.Objects;
-
 import timber.log.Timber;
 
 import static android.view.View.GONE;
-import static com.didekindroid.util.ConnectionUtils.checkInternetConnected;
-import static com.didekindroid.util.UIutils.checkPostExecute;
-import static com.didekindroid.util.UIutils.closeCursor;
-import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
-import static com.didekindroid.util.UIutils.makeToast;
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.incidencia.activity.utils.IncidSpinnersHelper.HELPER;
+import static com.didekindroid.incidencia.activity.utils.IncidenciaAssertionMsg.incid_importancia_should_be_initialized;
+import static com.didekindroid.incidencia.activity.utils.IncidenciaAssertionMsg.incid_importancia_should_be_modified;
+import static com.didekindroid.incidencia.activity.utils.IncidenciaAssertionMsg.incidencia_should_be_deleted;
+import static com.didekindroid.usuariocomunidad.UserComuAssertionMsg.usercomu_should_have_admAuthority;
+import static com.didekindroid.util.ConnectionUtils.checkInternetConnected;
+import static com.didekindroid.util.UIutils.assertTrue;
+import static com.didekindroid.util.UIutils.checkPostExecute;
+import static com.didekindroid.util.UIutils.closeCursor;
+import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
+import static com.didekindroid.util.UIutils.makeToast;
 
 /**
  * User: pedro@didekin
@@ -133,7 +136,7 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
     {
         Timber.d("modifyIncidenciaAndImportancia()");
         StringBuilder errorMsg = getErrorMsgBuilder(getActivity());
-        Objects.equals(mIncidImportancia != null, true);
+        assertTrue(mIncidImportancia != null, incid_importancia_should_be_initialized);
 
         try {
             IncidImportancia incidImportancia = mIncidImportanciaBean.makeIncidImportancia(
@@ -152,7 +155,7 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
         Timber.d("eraseIncidencia()");
 
         if (checkInternetConnected(getActivity())) {
-            Objects.equals(mIncidImportancia.getUserComu().hasAdministradorAuthority(),true);
+            assertTrue(mIncidImportancia.getUserComu().hasAdministradorAuthority(), usercomu_should_have_admAuthority);
             new IncidenciaEraser().execute(mIncidImportancia.getIncidencia());
         }
     }
@@ -256,7 +259,7 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
             if (uiException != null) {
                 uiException.processMe(getActivity(), new Intent());
             } else {
-                Objects.equals(rowInserted >= 1, true);
+                assertTrue(rowInserted >= 1, incid_importancia_should_be_modified);
                 Intent intent = new Intent(getActivity(), IncidSeeOpenByComuAc.class);
                 startActivity(intent);
             }
@@ -290,7 +293,7 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
             if (uiException != null) {
                 uiException.processMe(getActivity(), new Intent());
             } else {
-                Objects.equals(rowsDeleted == 1,true);
+                assertTrue(rowsDeleted == 1, incidencia_should_be_deleted);
                 Intent intent = new Intent(getActivity(), IncidSeeOpenByComuAc.class);
                 startActivity(intent);
             }

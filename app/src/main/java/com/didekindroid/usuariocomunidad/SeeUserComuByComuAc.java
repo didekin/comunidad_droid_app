@@ -6,16 +6,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.didekindroid.R;
-
-import java.util.Objects;
+import com.didekindroid.security.IdentityCacher;
 
 import timber.log.Timber;
 
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
 import static com.didekindroid.util.ItemMenu.mn_handler;
-import static com.didekindroid.util.UIutils.doToolBar;
 import static com.didekindroid.util.MenuRouter.doUpMenu;
 import static com.didekindroid.util.MenuRouter.routerMap;
+import static com.didekindroid.util.UIutils.assertTrue;
+import static com.didekindroid.util.UIutils.doToolBar;
 
 /**
  * User: pedro@didekin
@@ -30,15 +31,17 @@ import static com.didekindroid.util.MenuRouter.routerMap;
 public class SeeUserComuByComuAc extends AppCompatActivity {
 
     SeeUserComuByComuFr mFragment;
+    IdentityCacher identityCacher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         Timber.i("onCreate()");
+        identityCacher = TKhandler;
 
         // Preconditions: the user is registered.
-        Objects.equals(TKhandler.isRegisteredUser(), true);
+        assertTrue(identityCacher.isRegisteredUser(), user_should_be_registered);
 
         setContentView(R.layout.see_usercomu_by_comu_ac);
         doToolBar(this, true);

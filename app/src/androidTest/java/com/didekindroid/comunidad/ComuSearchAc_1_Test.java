@@ -36,6 +36,7 @@ import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.comunidad.RegComuFr.makeComunidadBeanFromView;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -132,7 +133,7 @@ public class ComuSearchAc_1_Test {
     public void testUpdateIsRegistered_2() throws UiException, IOException
     {
         //With token.
-        UserComuDataTestUtil.signUpAndUpdateTk(UserComuDataTestUtil.COMU_REAL_JUAN);
+        signUpAndUpdateTk(UserComuDataTestUtil.COMU_REAL_JUAN);
         assertThat(refreshTkFile.exists(), is(true));
 
         activity = mActivityRule.launchActivity(new Intent());

@@ -16,11 +16,11 @@ import com.didekindroid.incidencia.activity.incidreg.IncidRegAc;
 import com.didekindroid.usuario.delete.DeleteMeAc;
 import com.didekindroid.usuario.login.LoginAc;
 import com.didekindroid.usuario.password.PasswordChangeAc;
+import com.didekindroid.usuario.userdata.UserDataAc;
 import com.didekindroid.usuariocomunidad.RegComuAndUserAndUserComuAc;
 import com.didekindroid.usuariocomunidad.RegComuAndUserComuAc;
 import com.didekindroid.usuariocomunidad.SeeUserComuByComuAc;
 import com.didekindroid.usuariocomunidad.SeeUserComuByUserAc;
-import com.didekindroid.usuariocomunidad.UserComuDataAc;
 
 import java.util.Map;
 
@@ -56,7 +56,7 @@ public final class MenuRouter {
         routerMap.put(R.id.reg_nueva_comunidad_ac_mn, RegComuAndUserComuAc.class);
         routerMap.put(R.id.see_usercomu_by_comu_ac_mn, SeeUserComuByComuAc.class);
         routerMap.put(R.id.see_usercomu_by_user_ac_mn, SeeUserComuByUserAc.class);
-        routerMap.put(R.id.user_data_ac_mn, UserComuDataAc.class);
+        routerMap.put(R.id.user_data_ac_mn, UserDataAc.class);
 
         /* USUARIO NO REGISTRADO.*/
         noRegisteredRouterMap.put(R.id.reg_nueva_comunidad_ac_mn, RegComuAndUserAndUserComuAc.class);

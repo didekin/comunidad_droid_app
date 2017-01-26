@@ -19,12 +19,13 @@ import com.didekindroid.R;
 import com.didekindroid.incidencia.dominio.ResolucionBean;
 
 import java.sql.Timestamp;
-import java.util.Objects;
 
 import timber.log.Timber;
 
+import static com.didekindroid.incidencia.activity.utils.IncidenciaAssertionMsg.resolucion_should_be_registered;
 import static com.didekindroid.util.ConnectionUtils.checkInternetConnected;
 import static com.didekindroid.util.FechaPickerFr.FechaPickerHelper.initFechaSpinnerView;
+import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.util.UIutils.makeToast;
@@ -165,7 +166,7 @@ public class IncidResolucionRegFr extends IncidResolucionFrAbstract {
                 intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, mIncidImportancia);
                 uiException.processMe(getActivity(), intent);
             } else {
-                Objects.equals(rowInserted == 1,true);
+                assertTrue(rowInserted == 1, resolucion_should_be_registered);
                 Intent intent = new Intent(getActivity(), IncidEditAc.class);
                 intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, mIncidImportancia);
                 startActivity(intent);

@@ -1,4 +1,4 @@
-package com.didekinaar.usuario;
+package com.didekindroid.usuario;
 
 import com.didekin.usuario.Usuario;
 
@@ -11,6 +11,10 @@ import org.junit.Test;
  */
 public class UsuarioTest {
 
+    /**
+     *  if usuario.uId == 0 && usuario.userName == null
+     *  throws IllegalStateException.
+     */
     @Test(expected = IllegalStateException.class)
     public void testBuild_1()
     {

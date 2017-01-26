@@ -10,17 +10,18 @@ import android.widget.EditText;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.security.IdentityCacher;
 import com.didekindroid.usuario.UsuarioBean;
-
-import java.util.Objects;
 
 import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
 import static com.didekindroid.usuario.password.PswdChangeReactor.pswdChangeReactor;
 import static com.didekindroid.util.ConnectionUtils.isInternetConnected;
 import static com.didekindroid.util.DefaultNextAcRouter.routerMap;
+import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.doToolBar;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.util.UIutils.makeToast;
@@ -39,6 +40,7 @@ public class PasswordChangeAc extends AppCompatActivity implements PasswordChang
     private View mAcView;
     UsuarioBean usuarioBean;
     PswdChangeReactorIf reactor;
+    IdentityCacher identityCacher;
 
     @SuppressLint("InflateParams")
     @Override
@@ -46,9 +48,9 @@ public class PasswordChangeAc extends AppCompatActivity implements PasswordChang
     {
         super.onCreate(savedInstanceState);
         Timber.d("onCreate()");
-
+        identityCacher = TKhandler;
         // Preconditions.
-        Objects.equals(TKhandler.isRegisteredUser(), true);
+        assertTrue(identityCacher.isRegisteredUser(), user_should_be_registered);
         reactor = pswdChangeReactor;
 
         mAcView = getLayoutInflater().inflate(R.layout.password_change_ac, null);

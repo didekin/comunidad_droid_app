@@ -13,23 +13,24 @@ import android.widget.TextView;
 
 import com.didekin.incidencia.dominio.IncidImportancia;
 import com.didekin.incidencia.dominio.Incidencia;
-import com.didekindroid.exception.UiException;
 import com.didekindroid.R;
+import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.IncidenciaDataDbHelper;
 import com.didekindroid.incidencia.activity.utils.ImportanciaSpinnerSettable;
 import com.didekindroid.incidencia.dominio.IncidImportanciaBean;
 
-import java.util.Objects;
-
 import timber.log.Timber;
 
-import static com.didekindroid.util.ConnectionUtils.checkInternetConnected;
-import static com.didekindroid.util.UIutils.checkPostExecute;
-import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
-import static com.didekindroid.util.UIutils.makeToast;
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidSpinnersHelper.HELPER;
+import static com.didekindroid.incidencia.activity.utils.IncidenciaAssertionMsg.incid_importancia_should_be_initialized;
+import static com.didekindroid.incidencia.activity.utils.IncidenciaAssertionMsg.incid_importancia_should_be_modified;
+import static com.didekindroid.util.ConnectionUtils.checkInternetConnected;
+import static com.didekindroid.util.UIutils.assertTrue;
+import static com.didekindroid.util.UIutils.checkPostExecute;
+import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
+import static com.didekindroid.util.UIutils.makeToast;
 
 /**
  * User: pedro@didekin
@@ -104,7 +105,7 @@ public class IncidEditNoPowerFr extends Fragment implements ImportanciaSpinnerSe
         Timber.d("modifyIncidImportancia()");
 
         StringBuilder errorMsg = getErrorMsgBuilder(getActivity());
-        Objects.equals(mIncidImportancia != null, true);
+        assertTrue(mIncidImportancia != null, incid_importancia_should_be_initialized);
         try {
             IncidImportancia incidImportancia = mIncidImportanciaBean.makeIncidImportancia(
                     errorMsg, getResources(), fFragmentView, mIncidImportancia);
@@ -186,7 +187,7 @@ public class IncidEditNoPowerFr extends Fragment implements ImportanciaSpinnerSe
             if (uiException != null) {
                 uiException.processMe(getActivity(), new Intent());
             } else {
-                Objects.equals(rowInserted == 1, true);
+                assertTrue(rowInserted == 1, incid_importancia_should_be_modified);
                 Intent intent = new Intent(getActivity(), IncidSeeOpenByComuAc.class);
                 startActivity(intent);
             }

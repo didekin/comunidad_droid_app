@@ -7,13 +7,13 @@ import android.view.MenuItem;
 import com.didekin.incidencia.dominio.Incidencia;
 import com.didekindroid.R;
 
-import java.util.Objects;
-
 import timber.log.Timber;
 
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCIDENCIA_OBJECT;
-import static com.didekindroid.util.UIutils.doToolBar;
+import static com.didekindroid.incidencia.activity.utils.IncidenciaAssertionMsg.incidenciaId_should_be_initialized;
 import static com.didekindroid.util.MenuRouter.doUpMenu;
+import static com.didekindroid.util.UIutils.assertTrue;
+import static com.didekindroid.util.UIutils.doToolBar;
 
 /**
  * Preconditions:
@@ -34,7 +34,7 @@ public class IncidSeeUserComuImportanciaAc extends AppCompatActivity {
         doToolBar(this, true);
 
         mIncidencia = (Incidencia) getIntent().getExtras().getSerializable(INCIDENCIA_OBJECT.key);
-        Objects.equals(mIncidencia != null && mIncidencia.getIncidenciaId() > 0, true);
+        assertTrue(mIncidencia != null && mIncidencia.getIncidenciaId() > 0, incidenciaId_should_be_initialized);
 
         mFragment = (IncidSeeUserComuImportanciaFr) getSupportFragmentManager().findFragmentById(R.id.incid_see_usercomu_importancia_frg);
     }

@@ -18,8 +18,6 @@ import com.didekindroid.usuario.UsuarioBean;
 import com.didekindroid.util.ConnectionUtils;
 import com.didekindroid.util.MenuRouter;
 
-import java.util.Objects;
-
 import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 
@@ -27,6 +25,8 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static com.didekindroid.usuario.login.LoginAc.PasswordMailDialog.newInstance;
 import static com.didekindroid.usuario.login.LoginAcReactor.loginReactor;
 import static com.didekindroid.util.DefaultNextAcRouter.routerMap;
+import static com.didekindroid.util.UIutils.assertTrue;
+import static com.didekindroid.util.UIutils.bean_fromView_should_be_initialized;
 import static com.didekindroid.util.UIutils.doToolBar;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.util.UIutils.makeToast;
@@ -137,7 +137,7 @@ public class LoginAc extends AppCompatActivity implements LoginViewIf, LoginCont
     public void validateLoginRemote()
     {
         Timber.i("validateLoginRemote()");
-        Objects.equals(usuarioBean != null, true);
+        assertTrue(usuarioBean != null, bean_fromView_should_be_initialized);
         reactor.validateLogin(this, usuarioBean.getUsuario());
     }
 
@@ -183,7 +183,7 @@ public class LoginAc extends AppCompatActivity implements LoginViewIf, LoginCont
     public void doDialogPositiveClick(String email)
     {
         Timber.d("doDialogPositiveClick()");
-        Objects.equals(usuarioBean != null, true);
+        assertTrue(usuarioBean != null, bean_fromView_should_be_initialized);
         reactor.sendPasswordToUser(this, usuarioBean.getUsuario());
     }
 

@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import static com.didekin.usuariocomunidad.Rol.ADMINISTRADOR;
 import static com.didekin.usuariocomunidad.Rol.PROPIETARIO;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 /**

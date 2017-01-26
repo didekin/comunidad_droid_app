@@ -6,16 +6,17 @@ import android.support.v4.app.Fragment;
 import android.widget.ArrayAdapter;
 
 import com.didekin.comunidad.Comunidad;
-import com.didekindroid.exception.UiException;
 import com.didekindroid.R;
+import com.didekindroid.exception.UiException;
 
 import java.util.List;
-import java.util.Objects;
 
 import timber.log.Timber;
 
-import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
+import static com.didekindroid.usuariocomunidad.UserComuAssertionMsg.usercomu_list_should_be_initialized;
+import static com.didekindroid.util.UIutils.assertTrue;
+import static com.didekindroid.util.UIutils.checkPostExecute;
 
 /**
  * User: pedro@didekin
@@ -62,7 +63,7 @@ public class ComunidadSpinnerSetter<T extends Fragment & ComuSpinnerSettable> ex
         }
         if (uiException != null) {
             Timber.d("onPostExecute(): uiException != null");
-            Objects.equals(comunidades == null, true);
+            assertTrue(comunidades == null, usercomu_list_should_be_initialized);
             uiException.processMe(mFragment.getActivity(), new Intent());
         }
     }

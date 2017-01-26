@@ -10,23 +10,25 @@ import android.widget.Button;
 
 import com.didekin.comunidad.Comunidad;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
-import com.didekindroid.exception.UiException;
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComunidadBean;
+import com.didekindroid.exception.UiException;
+import com.didekindroid.security.IdentityCacher;
 import com.didekindroid.util.ConnectionUtils;
-import com.didekindroid.util.UIutils;
 import com.didekindroid.util.MenuRouter;
-
-import java.util.Objects;
+import com.didekindroid.util.UIutils;
 
 import timber.log.Timber;
 
 import static com.didekin.common.dominio.ValidDataPatterns.LINE_BREAK;
-import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
+import static com.didekindroid.usuariocomunidad.UserComuAssertionMsg.user_and_comunidad_should_be_registered;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.util.UIutils.assertTrue;
+import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.util.UIutils.doToolBar;
 import static com.didekindroid.util.UIutils.makeToast;
 
@@ -55,14 +57,16 @@ public class RegUserComuAc extends AppCompatActivity {
 
     RegUserComuFr mRegUserComuFr;
     private Comunidad mComunidad;
+    IdentityCacher identityCacher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         Timber.i("onCreate()");
+        identityCacher = TKhandler;
 
-        Objects.equals(TKhandler.isRegisteredUser(), true);
+        assertTrue(identityCacher.isRegisteredUser(), user_should_be_registered);
         Comunidad coomunidadIntent =  (Comunidad) getIntent().getExtras()
                 .getSerializable(COMUNIDAD_LIST_OBJECT.key);
         mComunidad = coomunidadIntent != null ? coomunidadIntent : null;
@@ -160,7 +164,7 @@ public class RegUserComuAc extends AppCompatActivity {
             if (uiException != null){
                 uiException.processMe(RegUserComuAc.this, new Intent());
             } else{
-                Objects.equals(rowInserted == 1, true);
+                assertTrue(rowInserted == 1, user_and_comunidad_should_be_registered);
             }
         }
     }

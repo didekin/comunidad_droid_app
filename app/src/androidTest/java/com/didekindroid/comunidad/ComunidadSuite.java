@@ -16,9 +16,9 @@ import org.junit.runners.Suite;
         ComunidadServiceTest.class,
         ComuSearchAc_1_Test.class,
         ComuSearchAc_2_Test.class,
-        ComuSearchAc_3_SlowTest.class,
+        ComuSearchAc_3_Test.class,
         ComuSearchResultsAc_1_Test.class,
-        ComuSearchResultsAc_2_SlowTest.class,
+        ComuSearchResultsAc_2_Test.class,
 })
 public class ComunidadSuite {
 

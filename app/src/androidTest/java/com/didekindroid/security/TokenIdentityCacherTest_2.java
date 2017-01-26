@@ -36,7 +36,7 @@ import static org.junit.Assert.assertThat;
  * Time: 08:11
  */
 @RunWith(AndroidJUnit4.class)
-public class TokenIdentityCacher_App_Test {
+public class TokenIdentityCacherTest_2 {
 
     private Context context;
 
@@ -65,7 +65,7 @@ public class TokenIdentityCacher_App_Test {
         // We make out preconditions: file exists, tokenInCache initialized ONLY with refreshTokenValue.
         File refreshTkFile = new File(context.getFilesDir(), refresh_token_filename);
         writeFileFromString(refreshTkOriginal, refreshTkFile);
-        TKhandler.tokenInCache.set(new SpringOauthToken(refreshTkOriginal));
+        TKhandler.getTokenCache().set(new SpringOauthToken(refreshTkOriginal));
         assertThat(refreshTkFile.exists(), is(true));
 
         // Call to the method.
@@ -100,9 +100,9 @@ public class TokenIdentityCacher_App_Test {
     @Test
     public void testGetAccessTokenInCache_2() throws IOException, UiException
     {
-        // Precondition: file exists, tokenInCache initialized with a fully initialized token.
+        // Precondition: file exists, getTokenCache() initialized with a fully initialized token.
         signUpAndUpdateTk(COMU_REAL_JUAN);
-        SpringOauthToken springOauthTokenIn = TKhandler.tokenInCache.get();
+        SpringOauthToken springOauthTokenIn = TKhandler.getTokenCache().get();
         // Call to method.
         SpringOauthToken springOauthTokenOut = TKhandler.getAccessTokenInCache();
         // Assertions.

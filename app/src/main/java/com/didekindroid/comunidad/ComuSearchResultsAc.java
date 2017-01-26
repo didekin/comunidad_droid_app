@@ -114,7 +114,6 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
     public boolean onPrepareOptionsMenu(Menu menu)
     {
         Timber.d("onPrepareOptionsMenu()");
-        // Mostramos el menú si el usuario está registrado. TODO: probar.
         if (TKhandler.isRegisteredUser()) {
             menu.findItem(R.id.see_usercomu_by_user_ac_mn).setVisible(true).setEnabled(true);
         }

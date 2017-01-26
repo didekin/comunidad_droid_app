@@ -13,15 +13,15 @@ import android.view.ViewGroup;
 
 import com.didekindroid.R;
 
-import java.util.Objects;
-
 import timber.log.Timber;
 
-import static com.didekindroid.util.AppBundleKey.IS_MENU_IN_FRAGMENT_FLAG;
-import static com.didekindroid.util.ItemMenu.mn_handler;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
+import static com.didekindroid.incidencia.activity.utils.IncidenciaAssertionMsg.resolucion_argFragment_should_be_initialized;
+import static com.didekindroid.util.AppBundleKey.IS_MENU_IN_FRAGMENT_FLAG;
+import static com.didekindroid.util.ItemMenu.mn_handler;
 import static com.didekindroid.util.MenuRouter.routerMap;
+import static com.didekindroid.util.UIutils.assertTrue;
 
 /**
  * User: pedro@didekin
@@ -53,7 +53,7 @@ public class IncidResolucionSeeDefaultFr extends Fragment {
     {
         Timber.d("onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
-        Objects.equals(getArguments().getSerializable(INCID_RESOLUCION_OBJECT.key) == null, true);
+        assertTrue(getArguments().getSerializable(INCID_RESOLUCION_OBJECT.key) == null, resolucion_argFragment_should_be_initialized);
         // Activamos el menú.
         setHasOptionsMenu(getArguments().getBoolean(IS_MENU_IN_FRAGMENT_FLAG.key, false));
     }

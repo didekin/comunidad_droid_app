@@ -11,21 +11,23 @@ import io.reactivex.disposables.CompositeDisposable;
  */
 interface UserDataControllerIf {
 
+    boolean checkLoginData();
+
     void loadUserData();
 
     void modifyUserData(UserChangeToMake userChangeToMake);
 
-    void modifyOnlyAlias();
-
     CompositeDisposable getSubscriptions();
 
-    void processBackGetUserData(Usuario usuario);
+    void processBackUserDataLoaded(Usuario usuario);
+
+    void processBackUserDataUpdated(boolean toInitTokenCache);
 
     void processBackErrorInReactor(Throwable e);
 
-    boolean checkLoginData();
-
     UserChangeToMake whatDataChangeToMake();
+
+    void processBackGenericUpdated();
 
     enum UserChangeToMake {
         alias_only,

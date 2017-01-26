@@ -15,17 +15,17 @@ import android.widget.TextView;
 import com.didekin.incidencia.dominio.Resolucion;
 import com.didekindroid.R;
 
-import java.util.Objects;
-
 import timber.log.Timber;
 
-import static com.didekindroid.util.AppBundleKey.IS_MENU_IN_FRAGMENT_FLAG;
-import static com.didekindroid.util.ItemMenu.mn_handler;
-import static com.didekindroid.util.UIutils.formatTimeStampToString;
-import static com.didekindroid.util.UIutils.getStringFromInteger;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
+import static com.didekindroid.incidencia.activity.utils.IncidenciaAssertionMsg.resolucion_should_be_initialized;
+import static com.didekindroid.util.AppBundleKey.IS_MENU_IN_FRAGMENT_FLAG;
+import static com.didekindroid.util.ItemMenu.mn_handler;
 import static com.didekindroid.util.MenuRouter.routerMap;
+import static com.didekindroid.util.UIutils.assertTrue;
+import static com.didekindroid.util.UIutils.formatTimeStampToString;
+import static com.didekindroid.util.UIutils.getStringFromInteger;
 
 /**
  * User: pedro@didekin
@@ -53,7 +53,7 @@ public class IncidResolucionSeeFr extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         mResolucion = (Resolucion) getArguments().getSerializable(INCID_RESOLUCION_OBJECT.key);
-        Objects.equals(mResolucion != null, true);
+        assertTrue(mResolucion != null, resolucion_should_be_initialized);
         // Activamos el menú.
         setHasOptionsMenu(getArguments().getBoolean(IS_MENU_IN_FRAGMENT_FLAG.key, false));
         paintViewData();

@@ -12,7 +12,7 @@
             android:id="@+id/reg_comu_usuario_usuariocomu_layout"
             style="@style/baseLayout"
             android:layout_marginTop="@dimen/app_bar_bottom_margin"
-            tools:context="com.didekindroid.com.didekinaar.usuario.RegComuAndUserAndUserComuAc">
+            tools:context="com.didekindroid.com.didekindroid.usuario.RegComuAndUserAndUserComuAc">
 
             <fragment
                 android:id="@+id/reg_comunidad_frg"

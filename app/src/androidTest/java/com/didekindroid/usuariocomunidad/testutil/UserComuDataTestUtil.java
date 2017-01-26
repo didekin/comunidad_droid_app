@@ -8,7 +8,6 @@ import com.didekindroid.exception.UiException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import static com.didekin.usuariocomunidad.Rol.PRESIDENTE;
 import static com.didekin.usuariocomunidad.Rol.PROPIETARIO;
@@ -27,6 +26,8 @@ import static com.didekindroid.usuariocomunidad.RolUi.INQ;
 import static com.didekindroid.usuariocomunidad.RolUi.PRE;
 import static com.didekindroid.usuariocomunidad.RolUi.PRO;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 /**
  * User: pedro@didekin
@@ -82,7 +83,7 @@ public final class UserComuDataTestUtil {
 
     public static void regSeveralUserComuSameUser(UsuarioComunidad... userComus) throws IOException, UiException
     {
-        Objects.equals(userComus.length > 0, true);
+        assertThat(userComus.length > 0, is(true));
         signUpAndUpdateTk(userComus[0]);
         for (int i = 1; i < userComus.length; i++) {
             AppUserComuServ.regComuAndUserComu(userComus[i]);

@@ -15,29 +15,32 @@ import com.didekin.http.ErrorBean;
 import com.didekin.http.oauth2.SpringOauthToken;
 import com.didekin.usuario.Usuario;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
+import com.didekindroid.R;
+import com.didekindroid.comunidad.ComuBundleKey;
+import com.didekindroid.comunidad.ComunidadBean;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.security.IdentityCacher;
 import com.didekindroid.usuario.RegUserFr;
 import com.didekindroid.usuario.UsuarioBean;
 import com.didekindroid.util.ConnectionUtils;
 import com.didekindroid.util.UIutils;
-import com.didekindroid.R;
-import com.didekindroid.comunidad.ComuBundleKey;
-import com.didekindroid.comunidad.ComunidadBean;
 
 import java.io.IOException;
-import java.util.Objects;
+
 import timber.log.Timber;
 
+import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.security.Oauth2DaoRemote.Oauth2;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_not_be_registered;
+import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static com.didekindroid.util.ItemMenu.mn_handler;
+import static com.didekindroid.util.MenuRouter.doUpMenu;
+import static com.didekindroid.util.MenuRouter.routerMap;
+import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.util.UIutils.doToolBar;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
-import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
-import static com.didekindroid.util.MenuRouter.doUpMenu;
-import static com.didekindroid.util.MenuRouter.routerMap;
 
 /**
  * User: pedro@didekin
@@ -65,15 +68,17 @@ public class RegUserAndUserComuAc extends AppCompatActivity {
     RegUserComuFr mRegUserComuFrg;
     RegUserFr mRegUserFr;
     Comunidad mComunidad;
+    IdentityCacher identityCacher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         Timber.d("onCreate()");
+        identityCacher = TKhandler;
 
         // Preconditions.
-        Objects.equals(TKhandler.isRegisteredUser(), false);
+        assertTrue(!identityCacher.isRegisteredUser(), user_should_not_be_registered);
         Comunidad comunidad = (Comunidad) getIntent().getExtras().getSerializable(COMUNIDAD_LIST_OBJECT.key);
         mComunidad = comunidad != null ? comunidad : null;
 
@@ -177,7 +182,7 @@ public class RegUserAndUserComuAc extends AppCompatActivity {
             SpringOauthToken token;
             try {
                 token = Oauth2.getPasswordUserToken(newUser.getUserName(), newUser.getPassword());
-                TKhandler.initIdentityCache(token);
+                identityCacher.initIdentityCache(token);
             } catch (UiException e) {
                 uiException = e;
             }
@@ -197,7 +202,7 @@ public class RegUserAndUserComuAc extends AppCompatActivity {
                 Intent intent = new Intent(RegUserAndUserComuAc.this, SeeUserComuByComuAc.class);
                 intent.putExtra(ComuBundleKey.COMUNIDAD_ID.key, mComunidad.getC_Id());
                 startActivity(intent);
-                TKhandler.updateIsRegistered(true);
+                identityCacher.updateIsRegistered(true);
             }
 
         }

@@ -13,25 +13,29 @@ import com.didekin.http.ErrorBean;
 import com.didekin.usuario.Usuario;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.security.IdentityCacher;
 import com.didekindroid.usuario.UsuarioBean;
 import com.didekindroid.util.MenuRouter;
 import com.didekindroid.util.UIutils;
 
-import java.util.Objects;
-
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 import static com.didekin.http.GenericExceptionMsg.BAD_REQUEST;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.usuario.UsuarioAssertionMsg.user_name_password_should_be_initialized;
+import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
+import static com.didekindroid.usuario.userdata.UserDataControllerIf.UserChangeToMake.alias_only;
+import static com.didekindroid.usuario.userdata.UserDataControllerIf.UserChangeToMake.nothing;
+import static com.didekindroid.usuario.userdata.UserDataControllerIf.UserChangeToMake.userName;
 import static com.didekindroid.usuario.userdata.UserDataReactor.userDataReactor;
+import static com.didekindroid.util.DefaultNextAcRouter.routerMap;
 import static com.didekindroid.util.ItemMenu.mn_handler;
 import static com.didekindroid.util.MenuRouter.doUpMenu;
+import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.doToolBar;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.util.UIutils.makeToast;
-import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 
 /**
  * Preconditions:
@@ -47,15 +51,17 @@ public class UserDataAc extends AppCompatActivity implements UserDataControllerI
     UsuarioBean usuarioBean;
     CompositeDisposable subscriptions;
     UserDataReactorIf reactor;
+    IdentityCacher identityCacher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         Timber.d("onCreate()");
+        identityCacher = TKhandler;
 
         // Preconditions.
-        Objects.equals(TKhandler.isRegisteredUser(), true);
+        assertTrue(identityCacher.isRegisteredUser(), user_should_be_registered);
 
         mAcView = getLayoutInflater().inflate(R.layout.user_data_ac, null);
         setContentView(mAcView);
@@ -73,17 +79,6 @@ public class UserDataAc extends AppCompatActivity implements UserDataControllerI
                 Timber.d("mModifyButton.OnClickListener().onClick()");
                 if (checkLoginData()) {
                     modifyUserData(whatDataChangeToMake());
-
-                    /*UserChangeToMake changeToMake = whatDataChangeToMake();
-                    if (changeToMake == UserChangeToMake.alias_only) {
-                        modifyOnlyAlias();
-                    }
-                    if (changeToMake == UserChangeToMake.userName) {
-                        modifyUserData();
-                    }
-                    // TODO: esto hay que moverlo al onSuccess.
-                    Intent intent = new Intent(UserDataAc.this, routerMap.get(UserDataAc.this.getClass()));
-                    startActivity(intent);*/
                 }
             }
         });
@@ -133,33 +128,7 @@ public class UserDataAc extends AppCompatActivity implements UserDataControllerI
     public void loadUserData()
     {
         Timber.d("loadUserData()");
-        reactor.getUserDataRemote(this);
-    }
-
-    @Override
-    public void processBackGetUserData(Usuario usuario)
-    {
-        Timber.d("processBackGetUserData()");
-        oldUser = usuario;
-        initUserDataInView();
-    }
-
-    @Override
-    public void processBackErrorInReactor(Throwable e)
-    {
-        if (e instanceof UiException) {
-            UiException ui = (UiException) e;
-            if (ui.getErrorBean().getMessage().equals(BAD_REQUEST.getHttpMessage())) {
-                makeToast(this, R.string.password_wrong);
-                if (isDestroyed() || isFinishing()) {
-                    recreate();
-                }
-            } else {
-                ui.processMe(this, new Intent());
-            }
-        } else {
-            new UiException(ErrorBean.GENERIC_ERROR).processMe(this, new Intent());
-        }
+        reactor.getUserInRemote(this);
     }
 
     @Override
@@ -187,10 +156,10 @@ public class UserDataAc extends AppCompatActivity implements UserDataControllerI
         Timber.d("whatDataChangeToMake()");
 
         if (oldUser.getAlias().equals(usuarioBean.getAlias()) && oldUser.getUserName().equals(usuarioBean.getUserName())) {
-            return UserChangeToMake.nothing;
+            return nothing;
         }
 
-        // Inicializao password en el antiguo usuario.
+        // Inicializo password en el antiguo usuario.
         oldUser = new Usuario.UsuarioBuilder()
                 .copyUsuario(oldUser)
                 .password(usuarioBean.getPassword())
@@ -201,40 +170,67 @@ public class UserDataAc extends AppCompatActivity implements UserDataControllerI
                 .build();
 
         if (!oldUser.getAlias().equals(newUser.getAlias()) && oldUser.getUserName().equals(newUser.getUserName())) {
-            return UserChangeToMake.alias_only;
+            return alias_only;
         }
-
         if (!oldUser.getUserName().equals(newUser.getUserName())) {
-            return UserChangeToMake.userName;
+            return userName;
         }
-
-        return UserChangeToMake.nothing;
+        return nothing;
     }
 
     @Override
     public void modifyUserData(UserChangeToMake userChangeToMake)
     {
         Timber.d("modifyUserData()");
-        reactor.modifyUserInRemote(userChangeToMake, oldUser, newUser);
-
-        subscriptions.add(
-                UserDataReactor.tokenAndUserModified(oldUser, newUser)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(mainThread())
-                        .subscribe(new UserDataReactor.UserDataUpdateSingleObserver(this))
-        );
+        reactor.modifyUserInRemote(this, userChangeToMake, oldUser, newUser);
     }
 
     @Override
-    public void modifyOnlyAlias()
+    public void processBackUserDataLoaded(Usuario usuario)
     {
-        Timber.d("modifyOnlyAlias()");
-        subscriptions.add(
-                UserDataReactor.aliasModified(newUser)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(mainThread())
-                        .subscribe(new UserDataReactor.UserDataUpdateSingleObserver(this))
-        );
+        Timber.d("processBackUserDataLoaded()");
+        oldUser = usuario;
+        initUserDataInView();
+    }
+
+    /**
+     *  Preconditions: newUser has been initialized with new user name and password entered.
+     */
+    @Override
+    public void processBackUserDataUpdated(boolean toInitTokenCache)
+    {
+        Timber.d("processBackUserDataUpdated()");
+        assertTrue(newUser.getUserName() != null && newUser.getPassword() != null, user_name_password_should_be_initialized);
+        if (toInitTokenCache) {
+            reactor.updateAndInitTokenCache(newUser);
+        }
+        processBackGenericUpdated();
+    }
+
+    @Override
+    public void processBackGenericUpdated()
+    {
+        Timber.d("processBackGenericUpdated()");
+        Intent intent = new Intent(UserDataAc.this, routerMap.get(UserDataAc.this.getClass()));
+        startActivity(intent);
+    }
+
+    @Override
+    public void processBackErrorInReactor(Throwable e)
+    {
+        if (e instanceof UiException) {
+            UiException ui = (UiException) e;
+            if (ui.getErrorBean().getMessage().equals(BAD_REQUEST.getHttpMessage())) {
+                makeToast(this, R.string.password_wrong);
+                if (isDestroyed() || isFinishing()) {
+                    recreate();
+                }
+            } else {
+                ui.processMe(this, new Intent());
+            }
+        } else {
+            new UiException(ErrorBean.GENERIC_ERROR).processMe(this, new Intent());
+        }
     }
 
     @Override
@@ -264,7 +260,7 @@ public class UserDataAc extends AppCompatActivity implements UserDataControllerI
     {
         Timber.d("onPrepareOptionsMenu()");
         // Mostramos el menú si el usuario está registrado. TODO: probar.
-        if (TKhandler.isRegisteredUser()) {
+        if (identityCacher.isRegisteredUser()) {
             menu.findItem(R.id.see_usercomu_by_user_ac_mn).setVisible(true).setEnabled(true);
         }
         return true;

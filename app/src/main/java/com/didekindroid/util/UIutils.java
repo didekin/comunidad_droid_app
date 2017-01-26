@@ -27,7 +27,6 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Objects;
 
 import timber.log.Timber;
 
@@ -44,14 +43,23 @@ import static java.util.Locale.getDefault;
  * Date: 04/07/15
  * Time: 17:36
  */
+@SuppressWarnings("WeakerAccess")
 public final class UIutils {
 
-    private static final int APPBAR_ID = R.id.appbar;
     public static final Locale SPAIN_LOCALE = new Locale("es", "ES");
+    private static final int APPBAR_ID = R.id.appbar;
+
+    /* ASSERTION MESSAGES*/
+    public static final String fragment_should_be_initialized = "Fragment should be initialized";
+    public static final String bean_fromView_should_be_initialized = "Bean with view data should be initialized";
+    public static final String intent_extra_should_be_initialized = "Intent extra should be initialized";
+    public static final String cursor_should_be_closed = "Database cursor should be closed";
 
     private UIutils()
     {
     }
+
+//    ========================== ACTIVITIES ======================================
 
     public static boolean checkInternet(Activity activity)
     {
@@ -61,8 +69,6 @@ public final class UIutils {
         }
         return false;
     }
-
-//    ========================== ACTIVITIES ======================================
 
     public static boolean checkPostExecute(Activity activity)
     {
@@ -83,7 +89,7 @@ public final class UIutils {
                 cursor = cursorAdapter.getCursor();
                 if (cursor != null) {
                     cursor.close();
-                    Objects.equals(cursor.isClosed(), true);
+                    assertTrue(cursor.isClosed(), cursor_should_be_closed );
                 }
             } catch (ClassCastException e) {
                 throw new IllegalStateException("Illegal NON cursorAdapter", e);
@@ -91,19 +97,11 @@ public final class UIutils {
         }
     }
 
-    public ActivityManager getActivityManager(Context context)
-    {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            return context.getSystemService(ActivityManager.class);
-        }
-        return (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-    }
-
 //    ===========================  AUTHENTICATION ==============================
 
     public static String checkBearerToken() throws UiException
     {
-        String bearerAccessTkHeader = TKhandler.doBearerAccessTkHeader();
+        String bearerAccessTkHeader = TKhandler.doHttpAuthHeaderFromTkInCache();
 
         if (bearerAccessTkHeader == null) { // No token in cache.
             ErrorBean errorBean = new ErrorBean(TOKEN_NULL.getHttpMessage(), TOKEN_NULL.getHttpStatus());
@@ -155,6 +153,13 @@ public final class UIutils {
 
     //    ================================== ERRORS ======================================
 
+    public static void assertTrue(boolean assertion, String message)
+    {
+        if (!assertion) {
+            throw new AssertionError(message);
+        }
+    }
+
     public static StringBuilder getErrorMsgBuilder(Context context)
     {
         return new StringBuilder(context.getResources().getText(R.string.error_validation_msg))
@@ -202,6 +207,12 @@ public final class UIutils {
         }
     }
 
+    public static void doToolBar(AppCompatActivity activity, boolean hasParentAc)
+    {
+        Timber.d("doToolBar()");
+        doToolBar(activity, APPBAR_ID, hasParentAc);
+    }
+
 /*
     When inflating anything to be displayed on the action bar (such as a SpinnerAdapter for
     list navigation in the toolbar), make sure you use the action bar’s themed context, retrieved
@@ -209,9 +220,11 @@ public final class UIutils {
     You must use the static methods in MenuItemCompat for any action-related calls on a MenuItem.
 */
 
-    public static void doToolBar(AppCompatActivity activity, boolean hasParentAc)
+    public ActivityManager getActivityManager(Context context)
     {
-        Timber.d("doToolBar()");
-        doToolBar(activity, APPBAR_ID, hasParentAc);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return context.getSystemService(ActivityManager.class);
+        }
+        return (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
     }
 }

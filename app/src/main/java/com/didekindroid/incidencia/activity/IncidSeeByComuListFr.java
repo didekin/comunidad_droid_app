@@ -16,19 +16,20 @@ import android.widget.Spinner;
 import com.didekin.comunidad.Comunidad;
 import com.didekin.incidencia.dominio.Incidencia;
 import com.didekin.incidencia.dominio.IncidenciaUser;
-import com.didekindroid.exception.UiException;
 import com.didekindroid.R;
+import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.activity.utils.ComuSpinnerSettable;
 import com.didekindroid.incidencia.activity.utils.ComunidadSpinnerSetter;
 
 import java.util.List;
-import java.util.Objects;
 
 import timber.log.Timber;
 
-import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_LIST_INDEX;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCIDENCIA_LIST_INDEX;
+import static com.didekindroid.incidencia.activity.utils.IncidenciaAssertionMsg.incidencias_list_should_be_initialized;
+import static com.didekindroid.util.UIutils.assertTrue;
+import static com.didekindroid.util.UIutils.checkPostExecute;
 
 /**
  * Preconditions:
@@ -210,7 +211,7 @@ public class IncidSeeByComuListFr extends Fragment implements ComuSpinnerSettabl
             }
             if (uiException != null) {
                 Timber.d("onPostExecute(): uiException != null");
-                Objects.equals(incidencias == null, true);
+                assertTrue(incidencias == null, incidencias_list_should_be_initialized);
                 uiException.processMe(getActivity(), new Intent());
             }
         }

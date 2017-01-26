@@ -30,6 +30,7 @@ import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEn
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_NOTHING;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanWithTkhandler;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
@@ -46,7 +47,7 @@ import static org.junit.Assert.fail;
  * Time: 11:07
  */
 @RunWith(AndroidJUnit4.class)
-public class Oauth2DaoRemoteIf_app_Test {
+public class Oauth2DaoRemoteTest {
 
     private CleanUserEnum whatClean = CLEAN_NOTHING;
 
@@ -134,8 +135,9 @@ public class Oauth2DaoRemoteIf_app_Test {
         assertThat(token.getValue(), notNullValue());
         assertThat(token.getRefreshToken().getValue(), notNullValue());
 
+        TKhandler.initIdentityCache(token);
         usuarioDao.deleteUser();
-        UsuarioDataTestUtils.cleanWithTkhandler();
+        cleanWithTkhandler();
     }
 
     @SuppressWarnings("ConstantConditions")

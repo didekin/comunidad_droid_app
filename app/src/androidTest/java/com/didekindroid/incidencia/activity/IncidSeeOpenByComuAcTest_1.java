@@ -9,10 +9,10 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekin.comunidad.Comunidad;
+import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.testutil.IdlingResourceForIntentServ;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
-import com.didekindroid.R;
 
 import org.junit.After;
 import org.junit.Before;
@@ -22,7 +22,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
-import java.util.Objects;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -32,25 +31,26 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.incidencia.firebase.IncidFirebaseDownMsgHandler.INCIDENCIA_OPEN;
+import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_REG_AC;
+import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_CLOSED_BY_COMU_AC;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
-import static com.didekindroid.incidencia.firebase.IncidFirebaseDownMsgHandler.INCIDENCIA_OPEN;
-import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_REG_AC;
-import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_CLOSED_BY_COMU_AC;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.SEE_USERCOMU_BY_COMU_AC;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.regSeveralUserComuSameUser;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.SEE_USERCOMU_BY_COMU_AC;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
@@ -82,7 +82,7 @@ public class IncidSeeOpenByComuAcTest_1 {
             Context context = InstrumentationRegistry.getTargetContext();
             TKhandler.updateIsGcmTokenSentServer(false);
             try {
-                Objects.equals(usuarioDao.getGcmToken() == null, true);
+                assertThat(usuarioDao.getGcmToken(), nullValue());
             } catch (UiException e) {
                 e.printStackTrace();
             }

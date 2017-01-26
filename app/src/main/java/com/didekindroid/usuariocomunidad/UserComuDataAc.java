@@ -12,14 +12,13 @@ import android.widget.Button;
 
 import com.didekin.comunidad.Comunidad;
 import com.didekin.usuariocomunidad.UsuarioComunidad;
-import com.didekindroid.exception.UiException;
-import com.didekindroid.util.ConnectionUtils;
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComuBundleKey;
 import com.didekindroid.comunidad.ComuSearchAc;
 import com.didekindroid.comunidad.ComunidadBean;
-
-import java.util.Objects;
+import com.didekindroid.exception.UiException;
+import com.didekindroid.security.IdentityCacher;
+import com.didekindroid.util.ConnectionUtils;
 
 import timber.log.Timber;
 
@@ -27,14 +26,19 @@ import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static com.didekin.http.UsuarioServConstant.IS_USER_DELETED;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
+import static com.didekindroid.usuariocomunidad.UserComuAssertionMsg.userComu_should_be_deleted;
+import static com.didekindroid.usuariocomunidad.UserComuAssertionMsg.userComu_should_be_modified;
+import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static com.didekindroid.util.ItemMenu.mn_handler;
+import static com.didekindroid.util.MenuRouter.doUpMenu;
+import static com.didekindroid.util.MenuRouter.routerMap;
+import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.util.UIutils.doToolBar;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
+import static com.didekindroid.util.UIutils.intent_extra_should_be_initialized;
 import static com.didekindroid.util.UIutils.makeToast;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
-import static com.didekindroid.util.MenuRouter.doUpMenu;
-import static com.didekindroid.util.MenuRouter.routerMap;
 
 /**
  * Preconditions:
@@ -58,6 +62,7 @@ public class UserComuDataAc extends AppCompatActivity {
     UsuarioComunidad mOldUserComu;
     public RegUserComuFr mRegUserComuFr;
     MenuItem mComuDataItem;
+    IdentityCacher identityCacher;
 
     @SuppressLint("InflateParams")
     @Override
@@ -65,11 +70,12 @@ public class UserComuDataAc extends AppCompatActivity {
     {
         Timber.d("onCreate()");
         super.onCreate(savedInstanceState);
+        identityCacher = TKhandler;
 
         // Preconditions.
-        Objects.equals(TKhandler.isRegisteredUser(), true);
+        assertTrue(identityCacher.isRegisteredUser(), user_should_be_registered);
         mOldUserComu = (UsuarioComunidad) getIntent().getSerializableExtra(UserComuBundleKey.USERCOMU_LIST_OBJECT.key);
-        Objects.equals(mOldUserComu != null, true);
+        assertTrue(mOldUserComu != null, intent_extra_should_be_initialized);
 
         mAcView = getLayoutInflater().inflate(R.layout.usercomu_data_ac_layout, null);
         setContentView(mAcView);
@@ -237,7 +243,7 @@ public class UserComuDataAc extends AppCompatActivity {
             if (uiException != null) {
                 uiException.processMe(UserComuDataAc.this, new Intent());
             } else {
-                Objects.equals(rowsUpdated == 1, true);
+                assertTrue(rowsUpdated == 1, userComu_should_be_modified);
                 Intent intent = new Intent(UserComuDataAc.this, SeeUserComuByUserAc.class);
                 startActivity(intent);
             }
@@ -270,15 +276,15 @@ public class UserComuDataAc extends AppCompatActivity {
             Timber.d("onPostExecute() entering.");
 
             if (uiException == null) {
-                Objects.equals(isDeleted != 0, true);
+                assertTrue(isDeleted != 0, userComu_should_be_deleted);
                 Intent intent;
                 if (isDeleted == IS_USER_DELETED) {
-                    TKhandler.cleanIdentityCache();
-                    TKhandler.updateIsRegistered(false);
+                    identityCacher.cleanIdentityCache();
+                    identityCacher.updateIsRegistered(false);
                     intent = new Intent(UserComuDataAc.this, ComuSearchAc.class);
                     intent.setFlags(FLAG_ACTIVITY_CLEAR_TOP | FLAG_ACTIVITY_NEW_TASK);
                 } else {
-                    Objects.equals(isDeleted == 1, true);
+                    assertTrue(isDeleted == 1, userComu_should_be_deleted);
                     intent = new Intent(UserComuDataAc.this, SeeUserComuByUserAc.class);
                 }
                 startActivity(intent);

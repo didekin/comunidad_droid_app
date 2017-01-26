@@ -8,8 +8,8 @@ import io.reactivex.Single;
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
-import static com.didekindroid.security.OauthTokenObservable.getOauthToken;
-import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.security.OauthTokenReactor.oauthTokenFromUserPswd;
+import static com.didekindroid.security.TokenIdentityCacher.initTokenAndRegisterFunc;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
 import static io.reactivex.Single.fromCallable;
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
@@ -49,8 +49,8 @@ final class LoginAcReactor implements LoginReactorIf {
     {   // TODO: test.
         return getLoginValidateSingle(usuario)
                 .zipWith(
-                        getOauthToken(usuario),
-                        TKhandler.initTokenRegisterFunc
+                        oauthTokenFromUserPswd(usuario),
+                        initTokenAndRegisterFunc
                 );
     }
 

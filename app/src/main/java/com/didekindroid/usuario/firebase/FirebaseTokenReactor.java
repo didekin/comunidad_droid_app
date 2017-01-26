@@ -14,7 +14,9 @@ import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
+import static com.didekindroid.util.UIutils.assertTrue;
 
 /**
  * User: pedro@didekin
@@ -37,19 +39,23 @@ public final class FirebaseTokenReactor implements FirebaseTokenReactorIf {
     /**
      * Preconditions: the user is registered.
      * Postconditions: the user's gcm token in database is updated.
+     *
+     * @return a Single with an item == 1 if the gcmToken is updated.
      */
-    static Single<Integer> regGcmTokenSingle()
+    static Single<Integer> updatedGcmTkSingle()
     {
+        assertTrue(TKhandler.isRegisteredUser(), user_should_be_registered);
         return Single.fromCallable(new Callable<Integer>() {
-            @Override
-            public Integer call() throws Exception
-            {
-                String token = FirebaseInstanceId.getInstance().getToken();
-                int updatedToken = usuarioDao.modifyUserGcmToken(token);
-                Timber.i("onHandleIntent(), GCM token registered: %s%n", token);
-                return updatedToken;
-            }
-        });
+                                       @Override
+                                       public Integer call() throws Exception
+                                       {
+                                           String token = FirebaseInstanceId.getInstance().getToken();
+                                           int updatedToken = usuarioDao.modifyUserGcmToken(token);
+                                           Timber.i("onHandleIntent(), GCM token registered: %s%n", token);
+                                           return updatedToken;
+                                       }
+                                   }
+        );
     }
 
     //  =======================================================================================
@@ -59,13 +65,11 @@ public final class FirebaseTokenReactor implements FirebaseTokenReactorIf {
     @Override
     public void checkGcmToken(CompositeDisposable subscriptions)
     {
-        // TODO: test.
-
         if (!TKhandler.isRegisteredUser()) {
             return;
         }
         subscriptions.add(
-                regGcmTokenSingle()
+                updatedGcmTkSingle()
                         .subscribeOn(Schedulers.io())
                         .subscribeWith(new RegGcmTokenObserver()));
     }
@@ -73,23 +77,18 @@ public final class FirebaseTokenReactor implements FirebaseTokenReactorIf {
     @Override
     public void checkGcmTokenSync()
     {
-        // TODO: test.
-
         if (!TKhandler.isRegisteredUser()) {
             return;
         }
-        regGcmTokenSingle().subscribe(new RegGcmTokenObserver());
+        updatedGcmTkSingle().subscribe(new RegGcmTokenObserver());
     }
 
     //  =======================================================================================
     // ............................ SUBSCRIBERS ..................................
     //  =======================================================================================
 
-    private static class RegGcmTokenObserver extends DisposableSingleObserver<Integer> {
-
-        RegGcmTokenObserver()
-        {
-        }
+    @SuppressWarnings("WeakerAccess")
+    static class RegGcmTokenObserver extends DisposableSingleObserver<Integer> {
 
         @Override
         public void onSuccess(Integer isUpdated)

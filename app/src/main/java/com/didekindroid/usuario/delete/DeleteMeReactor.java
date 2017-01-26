@@ -6,7 +6,7 @@ import io.reactivex.Single;
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
-import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.security.TokenIdentityCacher.cleanTokenAndUnregisterFunc;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
 import static io.reactivex.Single.fromCallable;
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
@@ -36,7 +36,7 @@ final class DeleteMeReactor implements  DeleteMeReactorIf{
             {
                 return usuarioDao.deleteUser();
             }
-        }).map(TKhandler.cleanTokenFunc);
+        }).map(cleanTokenAndUnregisterFunc);
     }
 
     //  =======================================================================================

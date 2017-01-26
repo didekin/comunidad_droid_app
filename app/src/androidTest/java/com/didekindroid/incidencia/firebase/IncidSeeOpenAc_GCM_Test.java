@@ -15,13 +15,14 @@ import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
-import java.util.Objects;
 
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
 import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertThat;
 
 /**
  * User: pedro@didekin
@@ -56,7 +57,7 @@ public class IncidSeeOpenAc_GCM_Test extends Incidencia_GCM_Test {
                     pepe = signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
                     pepeUserComu = AppUserComuServ.seeUserComusByUser().get(0);
                     // Pepe hasn't got a gcmToken.
-                    Objects.equals(usuarioDao.getGcmToken() == null, true);
+                    assertThat(usuarioDao.getGcmToken(), nullValue());
                 } catch (IOException | UiException e) {
                     e.printStackTrace();
                 }

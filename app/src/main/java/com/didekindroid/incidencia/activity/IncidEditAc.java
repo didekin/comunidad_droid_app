@@ -11,16 +11,11 @@ import android.view.View;
 
 import com.didekin.incidencia.dominio.IncidImportancia;
 import com.didekin.incidencia.dominio.Resolucion;
-import com.didekindroid.exception.UiException;
 import com.didekindroid.R;
-
-import java.util.Objects;
+import com.didekindroid.exception.UiException;
 
 import timber.log.Timber;
 
-import static com.didekindroid.util.ItemMenu.mn_handler;
-import static com.didekindroid.util.UIutils.checkPostExecute;
-import static com.didekindroid.util.UIutils.doToolBar;
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_ACTIVITY_VIEW_ID;
@@ -28,8 +23,14 @@ import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IM
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_edit_ac_frgs_tag;
+import static com.didekindroid.incidencia.activity.utils.IncidenciaAssertionMsg.incidenciaId_should_be_initialized;
+import static com.didekindroid.util.ItemMenu.mn_handler;
 import static com.didekindroid.util.MenuRouter.doUpMenu;
 import static com.didekindroid.util.MenuRouter.routerMap;
+import static com.didekindroid.util.UIutils.assertTrue;
+import static com.didekindroid.util.UIutils.checkPostExecute;
+import static com.didekindroid.util.UIutils.doToolBar;
+import static com.didekindroid.util.UIutils.fragment_should_be_initialized;
 
 /**
  * Preconditions:
@@ -54,7 +55,9 @@ public class IncidEditAc extends AppCompatActivity {
         Timber.d("onCreate()");
 
         mIncidImportancia = (IncidImportancia) getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.key);
-        Objects.equals(mIncidImportancia != null && mIncidImportancia.getIncidencia() != null && mIncidImportancia.getIncidencia().getIncidenciaId() > 0, true);
+        assertTrue(mIncidImportancia != null
+                && mIncidImportancia.getIncidencia() != null
+                && mIncidImportancia.getIncidencia().getIncidenciaId() > 0, incidenciaId_should_be_initialized);
 
         flagResolucion = getIntent().getBooleanExtra(INCID_RESOLUCION_FLAG.key, false);
 
@@ -63,7 +66,7 @@ public class IncidEditAc extends AppCompatActivity {
         doToolBar(this, true);
 
         if (savedInstanceState != null) {
-            Objects.equals(getSupportFragmentManager().findFragmentByTag(incid_edit_ac_frgs_tag) != null,true);
+            assertTrue(getSupportFragmentManager().findFragmentByTag(incid_edit_ac_frgs_tag) != null, fragment_should_be_initialized);
             return;
         }
 

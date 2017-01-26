@@ -13,25 +13,28 @@ import android.widget.CursorAdapter;
 import android.widget.EditText;
 
 import com.didekin.comunidad.Comunidad;
-import com.didekindroid.exception.UiException;
-import com.didekindroid.util.ConnectionUtils;
 import com.didekindroid.R;
+import com.didekindroid.exception.UiException;
+import com.didekindroid.security.IdentityCacher;
 import com.didekindroid.usuariocomunidad.SeeUserComuByUserAc;
+import com.didekindroid.util.ConnectionUtils;
 import com.didekindroid.util.MenuRouter;
-
-import java.util.Objects;
 
 import timber.log.Timber;
 
+import static com.didekindroid.comunidad.ComunidadService.AppComuServ;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static com.didekindroid.util.ItemMenu.mn_handler;
+import static com.didekindroid.util.MenuRouter.routerMap;
+import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.checkPostExecute;
+import static com.didekindroid.comunidad.ComunidadAssertionMsg.comuData_should_be_modified;
+import static com.didekindroid.comunidad.ComunidadAssertionMsg.comunidadId_should_be_initialized;
 import static com.didekindroid.util.UIutils.doToolBar;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.util.UIutils.makeToast;
-import static com.didekindroid.comunidad.ComunidadService.AppComuServ;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
-import static com.didekindroid.util.MenuRouter.routerMap;
+import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
 
 /**
  * Preconditions:
@@ -48,6 +51,7 @@ public class ComuDataAc extends AppCompatActivity implements RegComuFr.ComuDataC
     Button mModifyButton;
     RegComuFr mRegComuFrg;
     Comunidad mComunidad;
+    IdentityCacher identityCacher;
 
     private boolean isTipoViaSpinnerSet;
     private boolean isCASpinnerSet;
@@ -59,11 +63,12 @@ public class ComuDataAc extends AppCompatActivity implements RegComuFr.ComuDataC
     {
         Timber.d("onCreate()");
         super.onCreate(savedInstanceState);
+        identityCacher = TKhandler;
 
         // Preconditions.
-        Objects.equals(TKhandler.isRegisteredUser(), true);
+        assertTrue(identityCacher.isRegisteredUser(), user_should_be_registered);
         mIdComunidad = getIntent().getLongExtra(ComuBundleKey.COMUNIDAD_ID.key, 0L);
-        Objects.equals(mIdComunidad > 0L, true);
+        assertTrue(mIdComunidad > 0L, comunidadId_should_be_initialized);
 
         // Asunción: esta tarea termina antes que la carga de los spinners en RegComuFr.
         // Si hay problemas: meter C_Autonoma en la query que obtiene los objetos Comunidad que se usan para el intent inicial de esta actividad.
@@ -314,7 +319,7 @@ public class ComuDataAc extends AppCompatActivity implements RegComuFr.ComuDataC
             if (uiException != null) {
                 uiException.processMe(ComuDataAc.this, new Intent());
             } else {
-                Objects.equals(rowsUpdated == 1, true);
+                assertTrue(rowsUpdated == 1, comuData_should_be_modified);
             }
         }
     }

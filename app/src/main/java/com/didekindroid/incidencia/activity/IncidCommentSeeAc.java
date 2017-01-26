@@ -9,16 +9,16 @@ import android.view.MenuItem;
 import com.didekin.incidencia.dominio.Incidencia;
 import com.didekindroid.R;
 
-import java.util.Objects;
-
 import timber.log.Timber;
 
-import static com.didekindroid.util.ItemMenu.mn_handler;
-import static com.didekindroid.util.UIutils.doToolBar;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_comments_see_list_fr_tag;
+import static com.didekindroid.util.ItemMenu.mn_handler;
 import static com.didekindroid.util.MenuRouter.doUpMenu;
 import static com.didekindroid.util.MenuRouter.routerMap;
+import static com.didekindroid.util.UIutils.assertTrue;
+import static com.didekindroid.util.UIutils.doToolBar;
+import static com.didekindroid.util.UIutils.fragment_should_be_initialized;
 
 /**
  * Preconditions:
@@ -42,7 +42,8 @@ public class IncidCommentSeeAc extends AppCompatActivity {
         mIncidencia = (Incidencia) getIntent().getExtras().getSerializable(INCIDENCIA_OBJECT.key);
 
         if (savedInstanceState != null){
-            Objects.equals((mFragment = (IncidCommentSeeListFr) getSupportFragmentManager().findFragmentByTag(incid_comments_see_list_fr_tag)) != null, true);
+            assertTrue((mFragment = (IncidCommentSeeListFr) getSupportFragmentManager().
+                    findFragmentByTag(incid_comments_see_list_fr_tag)) != null, fragment_should_be_initialized);
             return;
         }
 

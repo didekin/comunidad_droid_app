@@ -7,14 +7,14 @@ import android.support.test.espresso.intent.matcher.IntentMatchers;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
-import com.didekindroid.exception.UiException;
-import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
+
 import com.didekindroid.R;
 import com.didekindroid.comunidad.testutil.ComuEspresoTestUtil;
+import com.didekindroid.exception.UiException;
+import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
 
 import org.junit.After;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -27,12 +27,13 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_SEARCH;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
-import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_SEARCH;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanWithTkhandler;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -55,13 +56,13 @@ public class ComuSearchAc_2_Test {
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
     {
-        Thread.sleep(5000);
+        Thread.sleep(4000);
     }
 
-    @Before @After
+    @After
     public void cleanData()
     {
-        UsuarioDataTestUtils.cleanWithTkhandler();
+        cleanWithTkhandler();
     }
 
     @Test
@@ -117,8 +118,6 @@ public class ComuSearchAc_2_Test {
         // No results in DB. The user is invited to register himself and the comunidad.
         checkToastInTest(R.string.no_result_search_comunidad, intentRule.getActivity());
         onView(ViewMatchers.withId(R.id.reg_comu_usuario_usuariocomu_layout)).check(matches(isDisplayed()));
-        Thread.sleep(2000);
-
         // Up: volvemos a búsqueda de comunidades.
         checkUp(activityLayoutId);
 
@@ -137,8 +136,6 @@ public class ComuSearchAc_2_Test {
         // No results in DB. The user is invited to register himself and the comunidad.
         checkToastInTest(R.string.no_result_search_comunidad, intentRule.getActivity());
         ViewInteraction viewInteraction = onView(ViewMatchers.withId(R.id.reg_comu_usuario_usuariocomu_layout)).check(matches(isDisplayed()));
-        Thread.sleep(2000);
-
         // Up: volvemos a búsqueda de comunidades.
         checkBack(viewInteraction, activityLayoutId);
 
@@ -158,7 +155,6 @@ public class ComuSearchAc_2_Test {
         // No results in DB. The user is invited to register the comunidad.
         checkToastInTest(R.string.no_result_search_comunidad, intentRule.getActivity());
         onView(ViewMatchers.withId(R.id.reg_comu_and_usercomu_layout)).check(matches(isDisplayed()));
-        Thread.sleep(2000);
         // Back: volvemos al resultado de la búsqueda.
         checkUp(activityLayoutId);
 
@@ -179,7 +175,6 @@ public class ComuSearchAc_2_Test {
         // No results in DB. The user is invited to register the comunidad.
         checkToastInTest(R.string.no_result_search_comunidad, intentRule.getActivity());
         ViewInteraction viewInteraction = onView(ViewMatchers.withId(R.id.reg_comu_and_usercomu_layout)).check(matches(isDisplayed()));
-        Thread.sleep(2000);
         // Back: volvemos al resultado de la búsqueda.
         checkBack(viewInteraction, activityLayoutId);
 

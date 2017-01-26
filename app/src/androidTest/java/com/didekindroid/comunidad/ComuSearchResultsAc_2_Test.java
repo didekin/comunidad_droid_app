@@ -5,12 +5,10 @@ import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-
-import com.didekindroid.exception.UiException;
-import com.didekindroid.comunidad.testutil.ComuDataTestUtil;
-import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.R;
-import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
+import com.didekindroid.comunidad.testutil.ComuDataTestUtil;
+import com.didekindroid.exception.UiException;
+import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 
 import org.junit.After;
 import org.junit.Before;
@@ -24,13 +22,15 @@ import java.io.IOException;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_SEARCH;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_SEARCH;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanWithTkhandler;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.makeListTwoUserComu;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.regTwoUserComuSameUser;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.REG_COMU_USERCOMU_AC;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.REG_COMU_USER_USERCOMU_AC;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.SEE_USERCOMU_BY_USER_AC;
@@ -46,7 +46,7 @@ import static org.junit.Assert.assertThat;
 
 
 @RunWith(AndroidJUnit4.class)
-public class ComuSearchResultsAc_2_SlowTest {
+public class ComuSearchResultsAc_2_Test {
 
     private ComuSearchResultsAc activity;
     ComuSearchResultsListFr mComunidadSummaryFrg;
@@ -65,16 +65,14 @@ public class ComuSearchResultsAc_2_SlowTest {
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
     {
-        Thread.sleep(5000);
+        Thread.sleep(4000);
     }
 
     @Before
     public void getFixture() throws Exception
     {
-        Thread.sleep(5000);
-
+        Thread.sleep(2000);
         whatClean = UsuarioDataTestUtils.CleanUserEnum.CLEAN_NOTHING;
-
         intent = new Intent();
         intent.putExtra(COMUNIDAD_SEARCH.key, ComuDataTestUtil.COMU_LA_PLAZUELA_5);
     }
@@ -105,9 +103,9 @@ public class ComuSearchResultsAc_2_SlowTest {
     {
         whatClean = CLEAN_JUAN;
 
-        UserComuDataTestUtil.regTwoUserComuSameUser(UserComuDataTestUtil.makeListTwoUserComu());
+        regTwoUserComuSameUser(makeListTwoUserComu());
         // Borro los datos del userComu.
-        UsuarioDataTestUtils.cleanWithTkhandler();
+        cleanWithTkhandler();
 
         //Usuario no registrado. La búsqueda devuelve una comunidad.
         activity = mActivityRule.launchActivity(intent);
@@ -122,7 +120,7 @@ public class ComuSearchResultsAc_2_SlowTest {
     {
         whatClean = CLEAN_JUAN;
 
-        UserComuDataTestUtil.regTwoUserComuSameUser(UserComuDataTestUtil.makeListTwoUserComu());
+        regTwoUserComuSameUser(makeListTwoUserComu());
         //Usuario no registrado. La búsqueda devuelve una comunidad.
         activity = mActivityRule.launchActivity(intent);
         assertThat(TKhandler.isRegisteredUser(), is(true));
@@ -139,15 +137,14 @@ public class ComuSearchResultsAc_2_SlowTest {
         whatClean = CLEAN_JUAN;
 
         //Usuario no registrado. La búsqueda devuelve una comunidad.
-        UserComuDataTestUtil.regTwoUserComuSameUser(UserComuDataTestUtil.makeListTwoUserComu());
+        regTwoUserComuSameUser(makeListTwoUserComu());
         // Borro los datos del userComu.
-        UsuarioDataTestUtils.cleanWithTkhandler();
+        cleanWithTkhandler();
         activity = mActivityRule.launchActivity(intent);
         assertThat(TKhandler.isRegisteredUser(), is(false));
 
+        /* Usuario no registrado: no aparece la opción de 'Tus comunidades'.*/
         SEE_USERCOMU_BY_USER_AC.checkMenuItem_NTk(activity);
-        // No se mueve de la actividad. El home llevaría a la actividad de búsqueda de comunidad.
-        onView(withId(fragmentLayoutId)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -155,11 +152,10 @@ public class ComuSearchResultsAc_2_SlowTest {
     {
         whatClean = CLEAN_JUAN;
 
-        UserComuDataTestUtil.regTwoUserComuSameUser(UserComuDataTestUtil.makeListTwoUserComu());
+        regTwoUserComuSameUser(makeListTwoUserComu());
         //Usuario registrado. La búsqueda devuelve una comunidad.
         activity = mActivityRule.launchActivity(intent);
         assertThat(TKhandler.isRegisteredUser(), is(true));
-        Thread.sleep(2000);
         // La consulta muestra las comunidades del usuario.
         SEE_USERCOMU_BY_USER_AC.checkMenuItem_WTk(activity);
         checkUp(fragmentLayoutId);
