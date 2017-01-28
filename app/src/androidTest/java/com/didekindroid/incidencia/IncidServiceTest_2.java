@@ -2,15 +2,15 @@ package com.didekindroid.incidencia;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.incidencia.dominio.AmbitoIncidencia;
-import com.didekin.incidencia.dominio.IncidImportancia;
-import com.didekin.incidencia.dominio.Incidencia;
-import com.didekin.incidencia.dominio.IncidenciaUser;
-import com.didekin.incidencia.dominio.Resolucion;
-import com.didekin.usuario.Usuario;
-import com.didekin.usuariocomunidad.UsuarioComunidad;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
+import com.didekinlib.model.incidencia.dominio.AmbitoIncidencia;
+import com.didekinlib.model.incidencia.dominio.IncidImportancia;
+import com.didekinlib.model.incidencia.dominio.Incidencia;
+import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
+import com.didekinlib.model.incidencia.dominio.Resolucion;
+import com.didekinlib.model.usuario.Usuario;
+import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.After;
@@ -23,21 +23,18 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
-import static com.didekin.http.GenericExceptionMsg.UNAUTHORIZED_TX_TO_USER;
-import static com.didekin.incidencia.dominio.IncidenciaExceptionMsg.INCID_IMPORTANCIA_WRONG_INIT;
-import static com.didekin.usuariocomunidad.UsuarioComunidadExceptionMsg.USERCOMU_WRONG_INIT;
+import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
+import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.INCID_DEFAULT_DESC;
+import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.RESOLUCION_DEFAULT_DESC;
+import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doResolucion;
+import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidenciaUser;
 import static com.didekindroid.testutil.SecurityTestUtils.updateSecurityData;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.INCID_DEFAULT_DESC;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.RESOLUCION_DEFAULT_DESC;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doResolucion;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidenciaUser;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
@@ -45,6 +42,9 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.CO
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.makeUserComuWithComunidadId;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static com.didekinlib.http.GenericExceptionMsg.UNAUTHORIZED_TX_TO_USER;
+import static com.didekinlib.model.incidencia.dominio.IncidenciaExceptionMsg.INCID_IMPORTANCIA_WRONG_INIT;
+import static com.didekinlib.model.usuariocomunidad.UsuarioComunidadExceptionMsg.USERCOMU_WRONG_INIT;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
@@ -118,7 +118,7 @@ public class IncidServiceTest_2 {
 
         // Registro userComu en misma comunidad.
         UsuarioComunidad userComuJuan = makeUserComuWithComunidadId(COMU_REAL_JUAN, pepeUserComu.getComunidad().getC_Id());
-        assertThat(AppUserComuServ.regUserAndUserComu(userComuJuan).execute().body(), is(true));
+        assertThat(userComuDaoRemote.regUserAndUserComu(userComuJuan).execute().body(), is(true));
         updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
         Thread.sleep(1000);
         // Return 1: only one record inserted or updated.
@@ -177,9 +177,9 @@ public class IncidServiceTest_2 {
         signPepeWithIncidencia();
         // Registro userComu en misma comunidad y lo asocio a la incidencia.
         UsuarioComunidad userComuJuan = makeUserComuWithComunidadId(COMU_REAL_JUAN, pepeUserComu.getComunidad().getC_Id());
-        assertThat(AppUserComuServ.regUserAndUserComu(userComuJuan).execute().body(), is(true));
+        assertThat(userComuDaoRemote.regUserAndUserComu(userComuJuan).execute().body(), is(true));
         updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
-        userComuJuan = AppUserComuServ.getUserComuByUserAndComu(pepeUserComu.getComunidad().getC_Id());
+        userComuJuan = userComuDaoRemote.getUserComuByUserAndComu(pepeUserComu.getComunidad().getC_Id());
         IncidImportancia newIncidImportancia = new IncidImportancia.IncidImportanciaBuilder(incidencia_1)
                 .usuarioComunidad(userComuJuan)
                 .importancia((short) 2)
@@ -196,7 +196,7 @@ public class IncidServiceTest_2 {
         signPepeWithIncidencia();
         // Registramos userComu en otra comunidad.
         signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
-        UsuarioComunidad juanUserComu = AppUserComuServ.seeUserComusByUser().get(0);
+        UsuarioComunidad juanUserComu = userComuDaoRemote.seeUserComusByUser().get(0);
         try {
             new IncidImportancia.IncidImportanciaBuilder(incidencia_1)
                     .usuarioComunidad(juanUserComu)
@@ -261,9 +261,9 @@ public class IncidServiceTest_2 {
         signPepeWithIncidencia(COMU_ESCORIAL_PEPE);
         // Registro userComu Juan en misma comunidad.
         juanUserComu = makeUserComuWithComunidadId(COMU_ESCORIAL_JUAN, pepeUserComu.getComunidad().getC_Id());
-        assertThat(AppUserComuServ.regUserAndUserComu(juanUserComu).execute().body(), is(true));
+        assertThat(userComuDaoRemote.regUserAndUserComu(juanUserComu).execute().body(), is(true));
         updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
-        juanUserComu = AppUserComuServ.getUserComuByUserAndComu(juanUserComu.getComunidad().getC_Id());
+        juanUserComu = userComuDaoRemote.getUserComuByUserAndComu(juanUserComu.getComunidad().getC_Id());
         // Añado registro incidImportancia de Juan.
         insertGetIncidenciaUser(incidencia_1.getIncidenciaId(), juanUserComu, 4);
         assertThat(IncidenciaServ.seeUserComusImportancia(incidencia_1.getIncidenciaId()).size(), is(2));
@@ -305,7 +305,7 @@ public class IncidServiceTest_2 {
     private void signPepeWithIncidencia(UsuarioComunidad userComu) throws IOException, UiException
     {
         pepe = signUpAndUpdateTk(userComu);
-        pepeUserComu = AppUserComuServ.seeUserComusByUser().get(0);
+        pepeUserComu = userComuDaoRemote.seeUserComusByUser().get(0);
         // Insertamos incidencia.
         incidencia_1 = insertGetIncidenciaUser(pepeUserComu, 1).getIncidencia();
     }
@@ -322,9 +322,9 @@ public class IncidServiceTest_2 {
 
         // Registro userComu en misma comunidad.
         juanUserComu = makeUserComuWithComunidadId(COMU_ESCORIAL_JUAN, pepeUserComu.getComunidad().getC_Id());
-        assertThat(AppUserComuServ.regUserAndUserComu(juanUserComu).execute().body(), is(true));
+        assertThat(userComuDaoRemote.regUserAndUserComu(juanUserComu).execute().body(), is(true));
         updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
-        juanUserComu = AppUserComuServ.getUserComuByUserAndComu(juanUserComu.getComunidad().getC_Id());
+        juanUserComu = userComuDaoRemote.getUserComuByUserAndComu(juanUserComu.getComunidad().getC_Id());
         assertThat(juanUserComu != null && juanUserComu.hasAdministradorAuthority(), is(false));
         return IncidenciaServ.seeResolucion(resolucion.getIncidencia().getIncidenciaId());
     }

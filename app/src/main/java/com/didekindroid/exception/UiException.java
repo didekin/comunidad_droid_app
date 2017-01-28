@@ -3,8 +3,8 @@ package com.didekindroid.exception;
 import android.app.Activity;
 import android.content.Intent;
 
-import com.didekin.http.ErrorBean;
 import com.didekindroid.R;
+import com.didekinlib.http.ErrorBean;
 
 import timber.log.Timber;
 

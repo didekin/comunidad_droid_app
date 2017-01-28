@@ -4,14 +4,13 @@ import android.content.res.Resources;
 import android.view.View;
 import android.widget.EditText;
 
-import com.didekin.incidencia.dominio.IncidComment;
-import com.didekin.incidencia.dominio.Incidencia;
-import com.didekin.comunidad.Comunidad;
 import com.didekindroid.R;
+import com.didekinlib.model.comunidad.Comunidad;
+import com.didekinlib.model.incidencia.dominio.IncidComment;
+import com.didekinlib.model.incidencia.dominio.Incidencia;
 
-
-import static com.didekin.common.dominio.ValidDataPatterns.LINE_BREAK;
-import static com.didekin.incidencia.dominio.IncidDataPatterns.INCID_COMMENT_DESC;
+import static com.didekinlib.model.common.dominio.ValidDataPatterns.LINE_BREAK;
+import static com.didekinlib.model.incidencia.dominio.IncidDataPatterns.INCID_COMMENT_DESC;
 
 /**
  * User: pedro@didekin
@@ -20,8 +19,8 @@ import static com.didekin.incidencia.dominio.IncidDataPatterns.INCID_COMMENT_DES
  */
 public class IncidCommentBean {
 
-    private String commentDesc;
     private final Incidencia incidencia;
+    private String commentDesc;
 
     public IncidCommentBean(Incidencia incidencia)
     {
@@ -46,7 +45,7 @@ public class IncidCommentBean {
     {
         setCommentDesc(((EditText) mAcView.findViewById(R.id.incid_comment_ed)).getText().toString());
 
-        if (validateDescripcion(errorMsg, resources)){
+        if (validateDescripcion(errorMsg, resources)) {
             return new IncidComment.IncidCommentBuilder()
                     .incidencia(new Incidencia.IncidenciaBuilder()
                             .incidenciaId(incidencia.getIncidenciaId())

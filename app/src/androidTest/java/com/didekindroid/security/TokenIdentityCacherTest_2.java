@@ -3,8 +3,8 @@ package com.didekindroid.security;
 import android.content.Context;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.http.oauth2.SpringOauthToken;
 import com.didekindroid.exception.UiException;
+import com.didekinlib.http.oauth2.SpringOauthToken;
 
 import org.junit.After;
 import org.junit.Before;
@@ -20,9 +20,9 @@ import static com.didekindroid.security.TokenIdentityCacher.refresh_token_filena
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanWithTkhandler;
-import static com.didekindroid.util.IoHelper.writeFileFromString;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.util.IoHelper.writeFileFromString;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;

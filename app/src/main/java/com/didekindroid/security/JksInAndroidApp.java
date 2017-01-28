@@ -1,7 +1,7 @@
 package com.didekindroid.security;
 
 
-import com.didekin.http.JksInClient;
+import com.didekinlib.http.JksInClient;
 
 import java.io.InputStream;
 

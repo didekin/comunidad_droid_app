@@ -1,9 +1,9 @@
 package com.didekindroid.comunidad.testutil;
 
-import com.didekin.comunidad.Comunidad;
-import com.didekin.comunidad.Municipio;
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComunidadBean;
+import com.didekinlib.model.comunidad.Comunidad;
+import com.didekinlib.model.comunidad.Municipio;
 
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.M;

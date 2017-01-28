@@ -11,15 +11,15 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.didekin.comunidad.Comunidad;
-import com.didekin.incidencia.dominio.Avance;
-import com.didekin.incidencia.dominio.IncidImportancia;
-import com.didekin.incidencia.dominio.Incidencia;
-import com.didekin.incidencia.dominio.Resolucion;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.dominio.ResolucionBean;
 import com.didekindroid.util.ConnectionUtils;
+import com.didekinlib.model.comunidad.Comunidad;
+import com.didekinlib.model.incidencia.dominio.Avance;
+import com.didekinlib.model.incidencia.dominio.IncidImportancia;
+import com.didekinlib.model.incidencia.dominio.Incidencia;
+import com.didekinlib.model.incidencia.dominio.Resolucion;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -30,10 +30,10 @@ import timber.log.Timber;
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
+import static com.didekindroid.incidencia.activity.utils.IncidenciaAssertionMsg.incidencia_should_be_cancelled;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaAssertionMsg.resolucion_fechaPrev_should_be_initialized;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaAssertionMsg.resolucion_should_be_initialized;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaAssertionMsg.resolucion_should_be_modified;
-import static com.didekindroid.incidencia.activity.utils.IncidenciaAssertionMsg.incidencia_should_be_cancelled;
 import static com.didekindroid.util.FechaPickerFr.FechaPickerHelper.initFechaSpinnerView;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.checkPostExecute;
@@ -92,7 +92,7 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
 
         mIncidImportancia = (IncidImportancia) getArguments().getSerializable(INCID_IMPORTANCIA_OBJECT.key);
         mResolucion = (Resolucion) getArguments().getSerializable(INCID_RESOLUCION_OBJECT.key);
-        assertTrue (mResolucion != null, resolucion_should_be_initialized);
+        assertTrue(mResolucion != null, resolucion_should_be_initialized);
         // Inicialización de la fecha en BD en el bean, para manternela si no la modifica.
         assertTrue(mResolucion.getFechaPrev() != null, resolucion_fechaPrev_should_be_initialized);
         mResolucionBean.setFechaPrevista(mResolucion.getFechaPrev().getTime());

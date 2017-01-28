@@ -1,6 +1,7 @@
 package com.didekindroid.usuario.userdata;
 
-import com.didekin.usuario.Usuario;
+
+import com.didekinlib.model.usuario.Usuario;
 
 import io.reactivex.disposables.CompositeDisposable;
 
@@ -32,7 +33,6 @@ interface UserDataControllerIf {
     enum UserChangeToMake {
         alias_only,
         userName,
-        nothing,
-        ;
+        nothing,;
     }
 }

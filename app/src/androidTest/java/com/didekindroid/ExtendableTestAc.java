@@ -3,7 +3,8 @@ package com.didekindroid;
 import android.app.Activity;
 import android.support.test.rule.ActivityTestRule;
 
-import com.didekin.usuario.Usuario;
+import com.didekinlib.model.usuario.Usuario;
+
 
 /**
  * User: pedro@didekin

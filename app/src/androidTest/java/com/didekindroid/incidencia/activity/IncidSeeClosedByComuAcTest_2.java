@@ -7,18 +7,18 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.comunidad.Comunidad;
-import com.didekin.incidencia.dominio.IncidImportancia;
-import com.didekin.incidencia.dominio.Incidencia;
-import com.didekin.incidencia.dominio.IncidenciaUser;
-import com.didekin.incidencia.dominio.Resolucion;
-import com.didekin.usuariocomunidad.UsuarioComunidad;
-import com.didekindroid.exception.UiException;
-import com.didekindroid.testutil.ActivityTestUtils;
-import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.R;
+import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.IncidenciaDataDbHelper;
 import com.didekindroid.incidencia.activity.utils.IncidBundleKey;
+import com.didekindroid.testutil.ActivityTestUtils;
+import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
+import com.didekinlib.model.comunidad.Comunidad;
+import com.didekinlib.model.incidencia.dominio.IncidImportancia;
+import com.didekinlib.model.incidencia.dominio.Incidencia;
+import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
+import com.didekinlib.model.incidencia.dominio.Resolucion;
+import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.junit.After;
 import org.junit.Before;
@@ -44,25 +44,25 @@ import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
+import static com.didekindroid.incidencia.IncidenciaDataDbHelperTest.DB_PATH;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCIDENCIA_OBJECT;
+import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_resolucion_see_fr_tag;
+import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
+import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.RESOLUCION_DEFAULT_DESC;
+import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doIncidencia;
+import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doResolucionAvances;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.util.AppBundleKey.IS_MENU_IN_FRAGMENT_FLAG;
-import static com.didekindroid.util.UIutils.formatTimeStampToString;
-import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
-import static com.didekindroid.incidencia.IncidenciaDataDbHelperTest.DB_PATH;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.RESOLUCION_DEFAULT_DESC;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doIncidencia;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doResolucionAvances;
-import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCIDENCIA_OBJECT;
-import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_resolucion_see_fr_tag;
-import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_LA_FUENTE_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.regSeveralUserComuSameUser;
+import static com.didekindroid.util.AppBundleKey.IS_MENU_IN_FRAGMENT_FLAG;
+import static com.didekindroid.util.UIutils.formatTimeStampToString;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
@@ -82,8 +82,6 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class IncidSeeClosedByComuAcTest_2 {
 
-    private IncidSeeClosedByComuAc mActivity;
-    private UsuarioDataTestUtils.CleanUserEnum whatToClean;
     UsuarioComunidad mPepePlazuelas5;
     UsuarioComunidad mPepeLaFuente;
     IncidImportancia incidPepePlazuelas5_1;
@@ -93,7 +91,6 @@ public class IncidSeeClosedByComuAcTest_2 {
     IncidenciaDataDbHelper dbHelper;
     IncidSeeClosedByComuAdapter mAdapter;
     Resolucion mResolucionToCheck;
-
     @Rule
     public IntentsTestRule<IncidSeeClosedByComuAc> activityRule = new IntentsTestRule<IncidSeeClosedByComuAc>(IncidSeeClosedByComuAc.class) {
 
@@ -102,8 +99,8 @@ public class IncidSeeClosedByComuAcTest_2 {
         {
             try {
                 regSeveralUserComuSameUser(COMU_PLAZUELA5_PEPE, COMU_LA_FUENTE_PEPE);
-                mPepeLaFuente = AppUserComuServ.seeUserComusByUser().get(0);
-                mPepePlazuelas5 = AppUserComuServ.seeUserComusByUser().get(1);
+                mPepeLaFuente = userComuDaoRemote.seeUserComusByUser().get(0);
+                mPepePlazuelas5 = userComuDaoRemote.seeUserComusByUser().get(1);
                 incidPepePlazuelas5_1 = new IncidImportancia.IncidImportanciaBuilder(
                         doIncidencia(USER_PEPE.getUserName(), "Incid_pepePlazuelas_1", mPepePlazuelas5.getComunidad().getC_Id(), (short) 12))
                         .usuarioComunidad(mPepePlazuelas5)
@@ -159,7 +156,7 @@ public class IncidSeeClosedByComuAcTest_2 {
                 Thread.sleep(1000);
                 FragmentManager.enableDebugLogging(true);
 
-            } catch ( InterruptedException | IOException | UiException e) {
+            } catch (InterruptedException | IOException | UiException e) {
                 e.printStackTrace();
             }
         }
@@ -170,6 +167,8 @@ public class IncidSeeClosedByComuAcTest_2 {
             return super.getActivityIntent();
         }
     };
+    private IncidSeeClosedByComuAc mActivity;
+    private UsuarioDataTestUtils.CleanUserEnum whatToClean;
 
     @BeforeClass
     public static void slowSeconds() throws InterruptedException

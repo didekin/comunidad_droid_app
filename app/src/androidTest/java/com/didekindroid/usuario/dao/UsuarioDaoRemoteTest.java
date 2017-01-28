@@ -2,12 +2,12 @@ package com.didekindroid.usuario.dao;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.http.oauth2.SpringOauthToken;
-import com.didekin.usuario.Usuario;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum;
 import com.didekindroid.util.IoHelper;
+import com.didekinlib.http.oauth2.SpringOauthToken;
+import com.didekinlib.model.usuario.Usuario;
 
 import org.junit.After;
 import org.junit.Before;
@@ -17,7 +17,6 @@ import org.junit.runner.RunWith;
 import java.io.File;
 import java.io.IOException;
 
-import static com.didekin.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOUND;
 import static com.didekindroid.security.Oauth2DaoRemote.Oauth2;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
@@ -35,6 +34,7 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.CO
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOUND;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;

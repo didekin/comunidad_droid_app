@@ -2,11 +2,11 @@ package com.didekindroid.security;
 
 import android.util.Base64;
 
-import com.didekin.http.ErrorBean;
-import com.didekin.http.oauth2.OauthClient;
-import com.didekin.http.oauth2.SpringOauthToken;
-import com.didekin.retrofit.Oauth2EndPoints;
 import com.didekindroid.exception.UiException;
+import com.didekinlib.http.ErrorBean;
+import com.didekinlib.http.oauth2.OauthClient;
+import com.didekinlib.http.oauth2.SpringOauthToken;
+import com.didekinlib.http.retrofit.Oauth2EndPoints;
 
 import java.io.IOException;
 
@@ -14,13 +14,13 @@ import retrofit2.Call;
 import retrofit2.Response;
 import timber.log.Timber;
 
-import static com.didekin.http.ErrorBean.GENERIC_ERROR;
-import static com.didekin.http.oauth2.OauthClient.CL_USER;
-import static com.didekin.http.oauth2.OauthConstant.PASSWORD_GRANT;
-import static com.didekin.http.oauth2.OauthConstant.REFRESH_TOKEN_GRANT;
-import static com.didekin.http.oauth2.OauthTokenHelper.BASIC_AND_SPACE;
 import static com.didekindroid.AppInitializer.creator;
 import static com.didekindroid.util.DaoUtil.getResponseBody;
+import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
+import static com.didekinlib.http.oauth2.OauthClient.CL_USER;
+import static com.didekinlib.http.oauth2.OauthConstant.PASSWORD_GRANT;
+import static com.didekinlib.http.oauth2.OauthConstant.REFRESH_TOKEN_GRANT;
+import static com.didekinlib.http.oauth2.OauthTokenHelper.BASIC_AND_SPACE;
 
 /**
  * User: pedro@didekin
@@ -72,7 +72,7 @@ public final class Oauth2DaoRemote implements Oauth2EndPoints, Oauth2Dao {
                     PASSWORD_GRANT).execute();
             return getResponseBody(response);
         } catch (IOException e) {
-            throw new UiException(GENERIC_ERROR);
+            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
         }
     }
 
@@ -88,7 +88,7 @@ public final class Oauth2DaoRemote implements Oauth2EndPoints, Oauth2Dao {
             ).execute();
             return getResponseBody(response);
         } catch (IOException e) {
-            throw new UiException(GENERIC_ERROR);
+            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
         }
     }
 

@@ -4,11 +4,11 @@ import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.incidencia.dominio.Avance;
-import com.didekin.incidencia.dominio.Resolucion;
+import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
-import com.didekindroid.R;
+import com.didekinlib.model.incidencia.dominio.Avance;
+import com.didekinlib.model.incidencia.dominio.Resolucion;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -31,17 +31,17 @@ import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
-import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
-import static com.didekindroid.util.UIutils.formatTimeStampToString;
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
+import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
+import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
+import static com.didekindroid.util.UIutils.formatTimeStampToString;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -54,6 +54,12 @@ import static org.junit.Assert.assertThat;
  */
 @RunWith(AndroidJUnit4.class)
 public class IncidResolucionEditFrTest_2 extends IncidResolucionAbstractTest {
+
+    @BeforeClass
+    public static void slowSeconds() throws InterruptedException
+    {
+        Thread.sleep(4000);
+    }
 
     @Override
     IntentsTestRule<IncidResolucionRegEditSeeAc> doIntentRule()
@@ -85,7 +91,7 @@ public class IncidResolucionEditFrTest_2 extends IncidResolucionAbstractTest {
                             .build();
                     assertThat(IncidenciaServ.modifyResolucion(resolucion), is(2));
                     resolucion = IncidenciaServ.seeResolucion(resolucion.getIncidencia().getIncidenciaId());
-                } catch ( InterruptedException | IOException | UiException e) {
+                } catch (InterruptedException | IOException | UiException e) {
                     e.printStackTrace();
                 }
                 Intent intent = new Intent();
@@ -94,12 +100,6 @@ public class IncidResolucionEditFrTest_2 extends IncidResolucionAbstractTest {
                 return intent;
             }
         };
-    }
-
-    @BeforeClass
-    public static void slowSeconds() throws InterruptedException
-    {
-        Thread.sleep(4000);
     }
 
     @Override

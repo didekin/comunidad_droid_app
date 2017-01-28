@@ -4,8 +4,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-import com.didekin.incidencia.dominio.Incidencia;
 import com.didekindroid.R;
+import com.didekinlib.model.incidencia.dominio.Incidencia;
 
 import timber.log.Timber;
 

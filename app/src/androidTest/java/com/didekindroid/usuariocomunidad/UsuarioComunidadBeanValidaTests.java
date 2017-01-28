@@ -4,12 +4,11 @@ import android.content.res.Resources;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.comunidad.Municipio;
-import com.didekin.comunidad.Provincia;
-
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComunidadBean;
 import com.didekindroid.usuario.UsuarioBean;
+import com.didekinlib.model.comunidad.Municipio;
+import com.didekinlib.model.comunidad.Provincia;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -40,8 +39,8 @@ public class UsuarioComunidadBeanValidaTests {
     {
         resources = InstrumentationRegistry.getTargetContext().getResources();
         errors = new StringBuilder(resources.getText(R.string.error_validation_msg));
-        comunidad = new ComunidadBean("ataxo", "24 de Otoño", "001", "bis",new Municipio
-                ((short)5, "Municipio2",new Provincia((short)35,"Las Palmas"))
+        comunidad = new ComunidadBean("ataxo", "24 de Otoño", "001", "bis", new Municipio
+                ((short) 5, "Municipio2", new Provincia((short) 35, "Las Palmas"))
         );
         usuarioBean = new UsuarioBean("user@name.com", "alias1", "password1", "password1");
     }
@@ -153,7 +152,7 @@ public class UsuarioComunidadBeanValidaTests {
         assertThat(usuarioComunidadBean.rolesInBean(), is("pre,pro"));
 
         usuarioComunidadBean = new UsuarioComunidadBean(comunidad, usuarioBean, "poÑr6ta_1",
-                "escalera-2", "plantaB_Ñ", "puerta12",true, true, true, false);
+                "escalera-2", "plantaB_Ñ", "puerta12", true, true, true, false);
         usuarioComunidadBean.rolesInBean();
         assertThat(usuarioComunidadBean.rolesInBean(), is("adm,pre,pro"));
 

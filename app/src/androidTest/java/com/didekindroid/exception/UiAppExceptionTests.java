@@ -5,13 +5,13 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.http.ErrorBean;
-import com.didekin.incidencia.dominio.IncidImportancia;
-import com.didekin.incidencia.dominio.IncidenciaUser;
-import com.didekin.usuariocomunidad.UsuarioComunidad;
+import com.didekindroid.R;
 import com.didekindroid.testutil.MockActivity;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
-import com.didekindroid.R;
+import com.didekinlib.http.ErrorBean;
+import com.didekinlib.model.incidencia.dominio.IncidImportancia;
+import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
+import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.junit.After;
 import org.junit.Before;
@@ -26,23 +26,23 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekin.comunidad.ComunidadExceptionMsg.COMUNIDAD_NOT_FOUND;
-import static com.didekin.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
-import static com.didekin.incidencia.dominio.IncidenciaExceptionMsg.INCIDENCIA_COMMENT_WRONG_INIT;
-import static com.didekin.incidencia.dominio.IncidenciaExceptionMsg.INCIDENCIA_NOT_REGISTERED;
-import static com.didekin.incidencia.dominio.IncidenciaExceptionMsg.INCIDENCIA_USER_WRONG_INIT;
-import static com.didekin.incidencia.dominio.IncidenciaExceptionMsg.RESOLUCION_DUPLICATE;
-import static com.didekin.usuario.UsuarioExceptionMsg.USER_DATA_NOT_MODIFIED;
-import static com.didekin.usuariocomunidad.UsuarioComunidadExceptionMsg.ROLES_NOT_FOUND;
+import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doIncidencia;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doIncidencia;
-import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
+import static com.didekinlib.model.comunidad.ComunidadExceptionMsg.COMUNIDAD_NOT_FOUND;
+import static com.didekinlib.model.incidencia.dominio.IncidenciaExceptionMsg.INCIDENCIA_COMMENT_WRONG_INIT;
+import static com.didekinlib.model.incidencia.dominio.IncidenciaExceptionMsg.INCIDENCIA_NOT_REGISTERED;
+import static com.didekinlib.model.incidencia.dominio.IncidenciaExceptionMsg.INCIDENCIA_USER_WRONG_INIT;
+import static com.didekinlib.model.incidencia.dominio.IncidenciaExceptionMsg.RESOLUCION_DUPLICATE;
+import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_DATA_NOT_MODIFIED;
+import static com.didekinlib.model.usuariocomunidad.UsuarioComunidadExceptionMsg.ROLES_NOT_FOUND;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -57,8 +57,6 @@ import static org.junit.Assert.assertThat;
 public class UiAppExceptionTests {
 
     IncidImportancia mIncidJuanPlazuelas;
-    MockActivity mActivity;
-
     @Rule
     public IntentsTestRule<MockActivity> intentRule = new IntentsTestRule<MockActivity>(MockActivity.class) {
 
@@ -67,7 +65,7 @@ public class UiAppExceptionTests {
         {
             try {
                 signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
-                UsuarioComunidad juanPlazuelas = AppUserComuServ.seeUserComusByUser().get(0);
+                UsuarioComunidad juanPlazuelas = userComuDaoRemote.seeUserComusByUser().get(0);
                 mIncidJuanPlazuelas = new IncidImportancia.IncidImportanciaBuilder(
                         doIncidencia(juanPlazuelas.getUsuario().getUserName(), "Incidencia Plazueles", juanPlazuelas.getComunidad().getC_Id(), (short) 43))
                         .usuarioComunidad(juanPlazuelas)
@@ -89,6 +87,7 @@ public class UiAppExceptionTests {
             super.beforeActivityLaunched();
         }
     };
+    MockActivity mActivity;
 
     @BeforeClass
     public static void slowSeconds() throws InterruptedException

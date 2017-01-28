@@ -3,10 +3,10 @@ package com.didekindroid;
 import android.content.Context;
 import android.os.StrictMode;
 
-import com.didekin.http.JksInClient;
-import com.didekin.retrofit.RetrofitHandler;
 import com.didekindroid.exception.UiExceptionIf.UiExceptionRouterIf;
 import com.didekindroid.security.JksInAndroidApp;
+import com.didekinlib.http.JksInClient;
+import com.didekinlib.http.retrofit.RetrofitHandler;
 
 import java.util.concurrent.atomic.AtomicReference;
 

@@ -4,10 +4,10 @@ import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.comunidad.Comunidad;
+import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
-import com.didekindroid.R;
+import com.didekinlib.model.comunidad.Comunidad;
 
 import org.junit.After;
 import org.junit.Before;
@@ -26,19 +26,19 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.regSeveralUserComuSameUser;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_PEPE;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_REG_AC;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_OPEN_BY_COMU_AC;
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
+import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
+import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.regSeveralUserComuSameUser;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
@@ -58,16 +58,9 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class IncidSeeClosedByComuAcTest_1 {
 
-    private IncidSeeClosedByComuAc mActivity;
-    private UsuarioDataTestUtils.CleanUserEnum whatToClean;
     Comunidad mComuPlazuelas5;
     Comunidad mComuReal;
     Comunidad comunidadInIntent;
-    IncidSeeByComuListFr mFragment;
-
-    int activityLayoutId = R.id.incid_see_closed_by_comu_ac;
-    int fragmentLayoutId = R.id.incid_see_generic_layout;
-
     @Rule
     public IntentsTestRule<IncidSeeClosedByComuAc> activityRule = new IntentsTestRule<IncidSeeClosedByComuAc>(IncidSeeClosedByComuAc.class) {
 
@@ -81,8 +74,8 @@ public class IncidSeeClosedByComuAcTest_1 {
         {
             try {
                 regSeveralUserComuSameUser(COMU_PLAZUELA5_PEPE, COMU_REAL_PEPE);
-                mComuPlazuelas5 = AppUserComuServ.getComusByUser().get(0);
-                mComuReal = AppUserComuServ.getComusByUser().get(1);
+                mComuPlazuelas5 = userComuDaoRemote.getComusByUser().get(0);
+                mComuReal = userComuDaoRemote.getComusByUser().get(1);
                 comunidadInIntent = mComuReal;
             } catch (IOException | UiException e) {
                 e.printStackTrace();
@@ -92,6 +85,11 @@ public class IncidSeeClosedByComuAcTest_1 {
             return intent;
         }
     };
+    IncidSeeByComuListFr mFragment;
+    int activityLayoutId = R.id.incid_see_closed_by_comu_ac;
+    int fragmentLayoutId = R.id.incid_see_generic_layout;
+    private IncidSeeClosedByComuAc mActivity;
+    private UsuarioDataTestUtils.CleanUserEnum whatToClean;
 
     @BeforeClass
     public static void slowSeconds() throws InterruptedException

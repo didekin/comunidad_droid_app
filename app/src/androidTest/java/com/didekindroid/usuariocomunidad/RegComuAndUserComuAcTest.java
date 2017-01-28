@@ -7,19 +7,18 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.view.View;
 
-import com.didekin.comunidad.Municipio;
-import com.didekin.comunidad.Provincia;
-import com.didekin.usuariocomunidad.UsuarioComunidad;
-
-import com.didekindroid.exception.UiException;
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComunidadBean;
 import com.didekindroid.comunidad.RegComuFr;
+import com.didekindroid.comunidad.testutil.ComuEspresoTestUtil;
+import com.didekindroid.exception.UiException;
 import com.didekindroid.testutil.ActivityTestUtils;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
-import com.didekindroid.comunidad.testutil.ComuEspresoTestUtil;
 import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
 import com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil;
+import com.didekinlib.model.comunidad.Municipio;
+import com.didekinlib.model.comunidad.Provincia;
+import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.junit.After;
 import org.junit.Before;
@@ -40,7 +39,6 @@ import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
-
 import static com.didekindroid.usuariocomunidad.RegUserComuFr.makeUserComuBeanFromView;
 import static com.didekindroid.usuariocomunidad.RolUi.ADM;
 import static com.didekindroid.usuariocomunidad.RolUi.INQ;
@@ -57,11 +55,10 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class RegComuAndUserComuAcTest {
 
-    private RegComuAndUserComuAc activity;
-    private RegUserComuFr regUserComuFr;
-
     @Rule
     public ActivityTestRule<RegComuAndUserComuAc> mActivityRule = new ActivityTestRule<>(RegComuAndUserComuAc.class, true, false);
+    private RegComuAndUserComuAc activity;
+    private RegUserComuFr regUserComuFr;
     private int activityLayoutId = R.id.reg_comu_and_usercomu_layout;
 
     @BeforeClass
@@ -119,19 +116,19 @@ public class RegComuAndUserComuAcTest {
         View usuarioComunidadRegView = activity.findViewById(R.id.reg_usercomu_frg);
 
         //UsuarioComunidadBean data.
-        UserComuEspressoTestUtil.typeUserComuData("port2","escale_b","planta-N","puerta5", PRE, ADM, INQ);
+        UserComuEspressoTestUtil.typeUserComuData("port2", "escale_b", "planta-N", "puerta5", PRE, ADM, INQ);
         // ComunidadBean data: we do not introduce the data in the screen.
         ComunidadBean comunidadBean = new ComunidadBean("ataxo", "24 de Otoño", "001", "bis",
                 new Municipio((short) 162, new Provincia((short) 10)));
         UsuarioComunidadBean usuarioComunidadBean =
                 makeUserComuBeanFromView(usuarioComunidadRegView, comunidadBean, null);
         // Verificamos usuarioComunidadBean.
-        UserComuEspressoTestUtil.validaTypedUserComuBean(usuarioComunidadBean,"port2","escale_b","planta-N","puerta5", true, true, false, true);
+        UserComuEspressoTestUtil.validaTypedUserComuBean(usuarioComunidadBean, "port2", "escale_b", "planta-N", "puerta5", true, true, false, true);
 
         // Verificamos usuarioComunidad.
         usuarioComunidadBean.validate(resources, new StringBuilder(resources.getText(R.string.error_validation_msg)));
         UsuarioComunidad usuarioComunidad = usuarioComunidadBean.getUsuarioComunidad();
-        UserComuEspressoTestUtil.validaTypedUsuarioComunidad(usuarioComunidad,"port2","escale_b","planta-N","puerta5","adm,pre,inq");
+        UserComuEspressoTestUtil.validaTypedUsuarioComunidad(usuarioComunidad, "port2", "escale_b", "planta-N", "puerta5", "adm,pre,inq");
     }
 
     @Test
@@ -177,7 +174,7 @@ public class RegComuAndUserComuAcTest {
         activity = mActivityRule.launchActivity(new Intent());
 
         ComuEspresoTestUtil.typeComunidadData();
-        UserComuEspressoTestUtil.typeUserComuData("port2","escale_b","planta-N","puerta5", PRE, ADM, INQ);
+        UserComuEspressoTestUtil.typeUserComuData("port2", "escale_b", "planta-N", "puerta5", PRE, ADM, INQ);
 
         onView(ViewMatchers.withId(R.id.reg_comu_usuariocomunidad_button)).perform(scrollTo(), click());
         onView(ViewMatchers.withId(R.id.see_usercomu_by_user_frg)).check(matches(isDisplayed()));

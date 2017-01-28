@@ -3,8 +3,8 @@ package com.didekindroid.incidencia.activity;
 import android.view.View;
 import android.widget.TextView;
 
-import com.didekin.incidencia.dominio.IncidenciaUser;
 import com.didekindroid.R;
+import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 
 import static com.didekindroid.util.UIutils.formatTimeStampToString;
 

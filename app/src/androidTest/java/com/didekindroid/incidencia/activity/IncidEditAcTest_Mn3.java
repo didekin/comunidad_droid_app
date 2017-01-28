@@ -5,13 +5,13 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.incidencia.dominio.IncidImportancia;
-import com.didekin.incidencia.dominio.IncidenciaUser;
-import com.didekin.incidencia.dominio.Resolucion;
-import com.didekin.usuariocomunidad.UsuarioComunidad;
+import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
-import com.didekindroid.R;
+import com.didekinlib.model.incidencia.dominio.IncidImportancia;
+import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
+import com.didekinlib.model.incidencia.dominio.Resolucion;
+import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -26,22 +26,22 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static com.didekin.usuariocomunidad.Rol.PRESIDENTE;
+import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
+import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doIncidencia;
+import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doResolucion;
+import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_RESOLUCION_REG_EDIT_AC;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.SecurityTestUtils.updateSecurityData;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
-import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
-import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
-import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_RESOLUCION_REG_EDIT_AC;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doIncidencia;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doResolucion;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static com.didekinlib.model.usuariocomunidad.Rol.PRESIDENTE;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -61,6 +61,12 @@ public class IncidEditAcTest_Mn3 extends IncidEditAbstractTest {
     Resolucion resolucion;
     boolean hasResolucion;
 
+    @BeforeClass
+    public static void slowSeconds() throws InterruptedException
+    {
+        Thread.sleep(4000);
+    }
+
     @Override
     IntentsTestRule<IncidEditAc> doIntentRule()
     {
@@ -73,7 +79,7 @@ public class IncidEditAcTest_Mn3 extends IncidEditAbstractTest {
             {
                 try {
                     signUpAndUpdateTk(COMU_ESCORIAL_JUAN);
-                    UsuarioComunidad juanEscorial = AppUserComuServ.seeUserComusByUser().get(0);
+                    UsuarioComunidad juanEscorial = userComuDaoRemote.seeUserComusByUser().get(0);
                     incidenciaJuan = new IncidImportancia.IncidImportanciaBuilder(
                             doIncidencia(juanEscorial.getUsuario().getUserName(), "Incidencia Escorial", juanEscorial.getComunidad().getC_Id(), (short) 43))
                             .usuarioComunidad(juanEscorial)
@@ -84,7 +90,7 @@ public class IncidEditAcTest_Mn3 extends IncidEditAbstractTest {
                     Thread.sleep(1000);
 
                     // Necesitamos usuario con 'adm' para registrar resolución.
-                    assertThat(AppUserComuServ.regUserAndUserComu(new UsuarioComunidad.UserComuBuilder(juanEscorial.getComunidad(), USER_PEPE)
+                    assertThat(userComuDaoRemote.regUserAndUserComu(new UsuarioComunidad.UserComuBuilder(juanEscorial.getComunidad(), USER_PEPE)
                             .roles(PRESIDENTE.function)
                             .build()).execute().body(), is(true));
                     updateSecurityData(USER_PEPE.getUserName(), USER_PEPE.getPassword());
@@ -94,7 +100,7 @@ public class IncidEditAcTest_Mn3 extends IncidEditAbstractTest {
 
                     // Volvemos a usuario del test.
                     updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
-                } catch ( InterruptedException | IOException | UiException e) {
+                } catch (InterruptedException | IOException | UiException e) {
                     e.printStackTrace();
                 }
                 Intent intent = new Intent();
@@ -103,12 +109,6 @@ public class IncidEditAcTest_Mn3 extends IncidEditAbstractTest {
                 return intent;
             }
         };
-    }
-
-    @BeforeClass
-    public static void slowSeconds() throws InterruptedException
-    {
-        Thread.sleep(4000);
     }
 
     @Override

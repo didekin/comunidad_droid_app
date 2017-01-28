@@ -14,9 +14,9 @@ allprojects {
         jcenter()
         mavenCentral()
         flatDir {
-            dirs '/Users/pedro/Documents/git_projects/didekinlibs/client_lib/releases/master/',
-                    '/Users/pedro/Documents/git_projects/didekinlibs/client_gcm_lib/releases/master/',
-                    '/Users/pedro/Documents/git_projects/didekinlibs/retrofit_client/releases/master/'
+            dirs '/Users/pedro/Documents/git_projects/didekinlibs/didekinlib_model/releases/master/',
+                    '/Users/pedro/Documents/git_projects/didekinlibs/didekinlib_gcm/releases/master/',
+                    '/Users/pedro/Documents/git_projects/didekinlibs/didekinlib_http/releases/master/'
         }
     }
 }
@@ -42,9 +42,9 @@ ext {
     espressoVersion = '2.2.2'
     testRunnerRulesVersion = '0.5'
 
-    model_lib = ':client_lib-a-0.1.10:@jar'
-    retrofit_model_lib = ':retrofit_client-a-0.1.10:@jar'
-    gcm_model_lib = ':client_gcm_lib-a-0.1.10:@jar'
+    didekinlib_model = ':didekinlib_model-a-0.1.12:@jar'
+    didekinlib_http = ':didekinlib_http-a-0.1.12:@jar'
+    didekinlib_gcm = ':didekinlib_gcm-a-0.1.12:@jar'
 
     firebase_message = ['com.google.firebase:firebase-messaging:10.0.1']
 

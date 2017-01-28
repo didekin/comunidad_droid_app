@@ -4,9 +4,9 @@ import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
 
-import com.didekin.incidencia.dominio.IncidenciaUser;
 import com.didekindroid.R;
 import com.didekindroid.incidencia.IncidenciaDataDbHelper;
+import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 
 import static com.didekindroid.util.UIutils.formatTimeStampToString;
 
@@ -17,13 +17,12 @@ import static com.didekindroid.util.UIutils.formatTimeStampToString;
  */
 class IncidSeeItemVwHolder {
 
+    final Context context;
     private final TextView mDescripcionView;
     private final TextView mFechaAltaView;
     private final TextView mIniciador;
     private final TextView mAmbitoView;
     private final TextView mImportanciaComuView;
-
-    final Context context;
 
     IncidSeeItemVwHolder(View convertView)
     {

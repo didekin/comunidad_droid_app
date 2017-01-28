@@ -1,6 +1,7 @@
 package com.didekindroid.security;
 
-import com.didekin.usuario.Usuario;
+
+import com.didekinlib.model.usuario.Usuario;
 
 /**
  * User: pedro@didekin

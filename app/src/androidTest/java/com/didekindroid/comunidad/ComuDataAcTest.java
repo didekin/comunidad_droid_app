@@ -6,14 +6,14 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.comunidad.Comunidad;
-import com.didekin.comunidad.Municipio;
-import com.didekin.comunidad.Provincia;
-import com.didekindroid.exception.UiException;
-import com.didekindroid.comunidad.testutil.ComuDataTestUtil;
-import com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum;
 import com.didekindroid.R;
+import com.didekindroid.comunidad.testutil.ComuDataTestUtil;
+import com.didekindroid.exception.UiException;
+import com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum;
 import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
+import com.didekinlib.model.comunidad.Comunidad;
+import com.didekinlib.model.comunidad.Municipio;
+import com.didekinlib.model.comunidad.Provincia;
 
 import org.hamcrest.Matchers;
 import org.junit.After;
@@ -38,13 +38,13 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.didekindroid.comunidad.ComunidadService.AppComuServ;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.comunidad.ComunidadService.AppComuServ;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.SEE_USERCOMU_BY_COMU_AC;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
@@ -60,11 +60,8 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class ComuDataAcTest {
 
-    private ComuDataAc mActivity;
     CleanUserEnum whatToClean = CLEAN_JUAN;
     Comunidad mComunidad;
-    int activityLayoutId = R.id.comu_data_ac_layout;
-
     @Rule
     public IntentsTestRule<ComuDataAc> intentRule = new IntentsTestRule<ComuDataAc>(ComuDataAc.class) {
         @Override
@@ -77,7 +74,7 @@ public class ComuDataAcTest {
         {
             try {
                 UserComuDataTestUtil.signUpAndUpdateTk(UserComuDataTestUtil.COMU_PLAZUELA5_JUAN);
-                mComunidad = AppUserComuServ.getComusByUser().get(0);
+                mComunidad = userComuDaoRemote.getComusByUser().get(0);
             } catch (UiException | IOException e) {
                 e.printStackTrace();
             }
@@ -86,6 +83,8 @@ public class ComuDataAcTest {
             return intent;
         }
     };
+    int activityLayoutId = R.id.comu_data_ac_layout;
+    private ComuDataAc mActivity;
 
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
@@ -174,8 +173,8 @@ public class ComuDataAcTest {
         Comunidad comunidadDb = AppComuServ.getComuData(mComunidad.getC_Id());
         assertThat(comunidadDb != null ? comunidadDb.getMunicipio() : null, is(new Municipio((short) 119, new Provincia((short) 46))));
         assertThat(comunidadDb != null ? comunidadDb.getNombreVia() : null, is("nombre via One"));
-        assertThat(comunidadDb != null ? comunidadDb.getNumero() : 0,is((short) 123));
-        assertThat(comunidadDb != null ? comunidadDb.getSufijoNumero() : null,is("Tris"));
+        assertThat(comunidadDb != null ? comunidadDb.getNumero() : 0, is((short) 123));
+        assertThat(comunidadDb != null ? comunidadDb.getSufijoNumero() : null, is("Tris"));
 
         checkUp(activityLayoutId);
     }
@@ -216,7 +215,7 @@ public class ComuDataAcTest {
     public void testSeeUserComuByComuMn() throws InterruptedException
     {
         SEE_USERCOMU_BY_COMU_AC.checkMenuItem_WTk(mActivity);
-        intended(IntentMatchers.hasExtra(ComuBundleKey.COMUNIDAD_ID.key,mComunidad.getC_Id()));
+        intended(IntentMatchers.hasExtra(ComuBundleKey.COMUNIDAD_ID.key, mComunidad.getC_Id()));
         checkUp(activityLayoutId);
     }
 }

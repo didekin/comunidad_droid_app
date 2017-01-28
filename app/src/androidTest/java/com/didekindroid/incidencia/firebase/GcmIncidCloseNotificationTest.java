@@ -7,13 +7,13 @@ import android.os.Build;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.incidencia.dominio.IncidImportancia;
-import com.didekin.incidencia.dominio.Incidencia;
-import com.didekin.incidencia.dominio.Resolucion;
+import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.testutil.MockActivity;
-import com.didekindroid.R;
-import com.didekinservice.common.gcm.GcmException;
+import com.didekinlib.gcm.model.common.GcmException;
+import com.didekinlib.model.incidencia.dominio.IncidImportancia;
+import com.didekinlib.model.incidencia.dominio.Incidencia;
+import com.didekinlib.model.incidencia.dominio.Resolucion;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,14 +29,14 @@ import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekin.incidencia.gcm.GcmKeyValueIncidData.incidencia_closed_type;
-import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
-import static com.didekindroid.util.UIutils.formatTimeStampToString;
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
+import static com.didekindroid.incidencia.testutils.GcmConstantForTests.test_api_key_header;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
-import static com.didekindroid.incidencia.testutils.GcmConstantForTests.test_api_key_header;
+import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_PEPE;
+import static com.didekindroid.util.UIutils.formatTimeStampToString;
+import static com.didekinlib.model.incidencia.gcm.GcmKeyValueIncidData.incidencia_closed_type;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 

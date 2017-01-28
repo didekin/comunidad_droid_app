@@ -5,11 +5,11 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.usuariocomunidad.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
+import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.junit.After;
 import org.junit.Before;
@@ -35,7 +35,7 @@ import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEn
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.RolUi.PRO;
 import static com.didekindroid.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 
@@ -48,10 +48,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 @RunWith(AndroidJUnit4.class)
 public class UserComuDataAc_2_Test {
 
-    private UserComuDataAc mActivity;
     UsuarioComunidad mUsuarioComunidad;
-    UsuarioDataTestUtils.CleanUserEnum whatToClean = CLEAN_JUAN_AND_PEPE;
-
     @Rule
     public IntentsTestRule<UserComuDataAc> intentRule = new IntentsTestRule<UserComuDataAc>(UserComuDataAc.class) {
 
@@ -62,7 +59,7 @@ public class UserComuDataAc_2_Test {
             UsuarioComunidad userComu = UserComuDataTestUtil.makeUsuarioComunidad(mUsuarioComunidad.getComunidad(), UsuarioDataTestUtils.USER_PEPE,
                     "portalB", null, "planta1", null, PRO.function);
             try {
-                AppUserComuServ.regUserAndUserComu(userComu).execute();
+                userComuDaoRemote.regUserAndUserComu(userComu).execute();
                 updateSecurityData(UsuarioDataTestUtils.USER_PEPE.getUserName(), UsuarioDataTestUtils.USER_PEPE.getPassword());
             } catch (UiException | IOException e) {
                 e.printStackTrace();
@@ -76,7 +73,7 @@ public class UserComuDataAc_2_Test {
                 // Primer usuario: oldest, no ADMON.
                 assertThat(UserComuDataTestUtil.COMU_REAL_JUAN.hasAdministradorAuthority(), is(false));
                 UserComuDataTestUtil.signUpAndUpdateTk(UserComuDataTestUtil.COMU_REAL_JUAN);
-                List<UsuarioComunidad> comunidadesUserOne = AppUserComuServ.seeUserComusByUser();
+                List<UsuarioComunidad> comunidadesUserOne = userComuDaoRemote.seeUserComusByUser();
                 mUsuarioComunidad = comunidadesUserOne != null ? comunidadesUserOne.get(0) : null;
                 Intent intent = new Intent();
                 intent.putExtra(USERCOMU_LIST_OBJECT.key, mUsuarioComunidad);
@@ -87,6 +84,8 @@ public class UserComuDataAc_2_Test {
             }
         }
     };
+    UsuarioDataTestUtils.CleanUserEnum whatToClean = CLEAN_JUAN_AND_PEPE;
+    private UserComuDataAc mActivity;
 
     @BeforeClass
     public static void slowSeconds() throws InterruptedException

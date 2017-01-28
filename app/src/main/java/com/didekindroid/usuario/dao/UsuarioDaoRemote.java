@@ -1,9 +1,10 @@
 package com.didekindroid.usuario.dao;
 
-import com.didekin.retrofit.UsuarioEndPoints;
-import com.didekin.usuario.GcmTokenWrapper;
-import com.didekin.usuario.Usuario;
 import com.didekindroid.exception.UiException;
+import com.didekinlib.http.ErrorBean;
+import com.didekinlib.http.retrofit.UsuarioEndPoints;
+import com.didekinlib.model.usuario.GcmTokenWrapper;
+import com.didekinlib.model.usuario.Usuario;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -12,10 +13,10 @@ import retrofit2.Call;
 import retrofit2.Response;
 import timber.log.Timber;
 
-import static com.didekin.http.ErrorBean.GENERIC_ERROR;
 import static com.didekindroid.AppInitializer.creator;
 import static com.didekindroid.util.DaoUtil.getResponseBody;
 import static com.didekindroid.util.UIutils.checkBearerToken;
+import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
 
 /**
  * User: pedro@didekin
@@ -109,7 +110,7 @@ public final class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDao {
             Response<Boolean> response = deleteAccessToken(checkBearerToken(), oldAccessToken).execute();
             return getResponseBody(response);
         } catch (IOException e) {
-            throw new UiException(GENERIC_ERROR);
+            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
         }
     }
 
@@ -121,7 +122,7 @@ public final class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDao {
             Response<Boolean> response = deleteUser(checkBearerToken()).execute();
             return getResponseBody(response);
         } catch (IOException e) {
-            throw new UiException(GENERIC_ERROR);
+            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
         }
     }
 
@@ -133,7 +134,7 @@ public final class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDao {
             Response<GcmTokenWrapper> response = getGcmToken(checkBearerToken()).execute();
             return getResponseBody(response).getToken();
         } catch (IOException e) {
-            throw new UiException(GENERIC_ERROR);
+            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
         }
     }
 
@@ -147,7 +148,7 @@ public final class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDao {
         } catch (EOFException eo) {
             return null;
         } catch (IOException e) {
-            throw new UiException(GENERIC_ERROR);
+            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
         }
     }
 
@@ -159,7 +160,7 @@ public final class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDao {
             Response<Boolean> response = login(userName, password).execute();
             return getResponseBody(response);
         } catch (IOException e) {
-            throw new UiException(GENERIC_ERROR);
+            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
         }
     }
 
@@ -171,7 +172,7 @@ public final class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDao {
             Response<Integer> response = modifyUserGcmToken(checkBearerToken(), gcmToken).execute();
             return getResponseBody(response);
         } catch (IOException e) {
-            throw new UiException(GENERIC_ERROR);
+            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
         }
     }
 
@@ -183,7 +184,7 @@ public final class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDao {
             Response<Integer> response = modifyUser(checkBearerToken(), usuario).execute();
             return getResponseBody(response);
         } catch (IOException e) {
-            throw new UiException(GENERIC_ERROR);
+            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
         }
     }
 
@@ -195,7 +196,7 @@ public final class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDao {
             Response<Integer> response = passwordChange(checkBearerToken(), newPassword).execute();
             return getResponseBody(response);
         } catch (IOException e) {
-            throw new UiException(GENERIC_ERROR);
+            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
         }
     }
 
@@ -206,7 +207,7 @@ public final class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDao {
         try {
             return getResponseBody(passwordSend(email).execute());
         } catch (IOException e) {
-            throw new UiException(GENERIC_ERROR);
+            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
         }
     }
 }

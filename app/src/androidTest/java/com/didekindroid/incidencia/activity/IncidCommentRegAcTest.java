@@ -4,11 +4,11 @@ import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.incidencia.dominio.IncidImportancia;
-import com.didekin.incidencia.dominio.IncidenciaUser;
-import com.didekin.usuariocomunidad.UsuarioComunidad;
-import com.didekindroid.exception.UiException;
 import com.didekindroid.R;
+import com.didekindroid.exception.UiException;
+import com.didekinlib.model.incidencia.dominio.IncidImportancia;
+import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
+import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.junit.After;
 import org.junit.Before;
@@ -32,15 +32,15 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withHint;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCIDENCIA_OBJECT;
+import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doIncidencia;
 import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
-import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCIDENCIA_OBJECT;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doIncidencia;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static org.hamcrest.CoreMatchers.allOf;
@@ -54,10 +54,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 @RunWith(AndroidJUnit4.class)
 public class IncidCommentRegAcTest {
 
-    private IncidCommentRegAc mActivity;
     IncidImportancia incidJuanReal1;
-    int activityLayoutId = R.id.incid_comment_reg_ac_layout;
-
     @Rule
     public IntentsTestRule<IncidCommentRegAc> intentsRule = new IntentsTestRule<IncidCommentRegAc>(IncidCommentRegAc.class) {
 
@@ -72,7 +69,7 @@ public class IncidCommentRegAcTest {
         {
             try {
                 signUpAndUpdateTk(COMU_REAL_JUAN);
-                UsuarioComunidad juanReal = AppUserComuServ.seeUserComusByUser().get(0);
+                UsuarioComunidad juanReal = userComuDaoRemote.seeUserComusByUser().get(0);
                 incidJuanReal1 = new IncidImportancia.IncidImportanciaBuilder(
                         doIncidencia(juanReal.getUsuario().getUserName(), "Incidencia Real One", juanReal.getComunidad().getC_Id(), (short) 43))
                         .usuarioComunidad(juanReal)
@@ -88,6 +85,8 @@ public class IncidCommentRegAcTest {
             return intent;
         }
     };
+    int activityLayoutId = R.id.incid_comment_reg_ac_layout;
+    private IncidCommentRegAc mActivity;
 
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
@@ -142,7 +141,8 @@ public class IncidCommentRegAcTest {
     }
 
     @Test
-    public void testRegComment_2(){
+    public void testRegComment_2()
+    {
         // Caso OK.
         onView(withId(R.id.incid_comment_ed)).perform(typeText("Comment is now valid")).perform(closeSoftKeyboard());
 

@@ -11,11 +11,6 @@ import com.google.firebase.messaging.RemoteMessage;
  */
 public interface FirebaseDownstreamMsgHandler {
 
-    /**
-     * The key to retrieve from the data payload the type of message.
-     */
-    String type_message_key = "typeMsg";
-
     void processMessage(RemoteMessage message, Context context);
 
     /**

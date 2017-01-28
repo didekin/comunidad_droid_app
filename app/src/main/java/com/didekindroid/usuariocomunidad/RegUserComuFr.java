@@ -11,10 +11,10 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.didekin.usuariocomunidad.UsuarioComunidad;
-import com.didekindroid.usuario.UsuarioBean;
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComunidadBean;
+import com.didekindroid.usuario.UsuarioBean;
+import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import timber.log.Timber;
 
@@ -24,6 +24,31 @@ public class RegUserComuFr extends Fragment {
 
     public RegUserComuFr()
     {
+    }
+
+    public static UsuarioComunidadBean makeUserComuBeanFromView(View usuarioComunidadRegView
+            , ComunidadBean comunidadBean, UsuarioBean usuarioBean)
+    {
+        return new UsuarioComunidadBean(
+                comunidadBean,
+                usuarioBean,
+                ((TextView) usuarioComunidadRegView.findViewById(R.id.reg_usercomu_portal_ed)).getText()
+                        .toString(),
+                ((TextView) usuarioComunidadRegView.findViewById(R.id.reg_usercomu_escalera_ed)).getText()
+                        .toString(),
+                ((TextView) usuarioComunidadRegView.findViewById(R.id.reg_usercomu_planta_ed)).getText()
+                        .toString(),
+                ((TextView) usuarioComunidadRegView.findViewById(R.id.reg_usercomu_puerta_ed)).getText()
+                        .toString(),
+                ((CheckBox) usuarioComunidadRegView.findViewById(R.id.reg_usercomu_checbox_pre))
+                        .isChecked(),
+                ((CheckBox) usuarioComunidadRegView.findViewById(R.id.reg_usercomu_checbox_admin))
+                        .isChecked(),
+                ((CheckBox) usuarioComunidadRegView.findViewById(R.id.reg_usercomu_checbox_pro))
+                        .isChecked(),
+                ((CheckBox) usuarioComunidadRegView.findViewById(R.id.reg_usercomu_checbox_inq))
+                        .isChecked()
+        );
     }
 
     @Override
@@ -49,38 +74,13 @@ public class RegUserComuFr extends Fragment {
         return mRegUserComuFrView;
     }
 
+//  ===================== STATIC HELPER METHODS ==========================
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState)
     {
         Timber.d("onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
-    }
-
-//  ===================== STATIC HELPER METHODS ==========================
-
-    public static UsuarioComunidadBean makeUserComuBeanFromView(View usuarioComunidadRegView
-            , ComunidadBean comunidadBean, UsuarioBean usuarioBean)
-    {
-        return new UsuarioComunidadBean(
-                comunidadBean,
-                usuarioBean,
-                ((TextView) usuarioComunidadRegView.findViewById(R.id.reg_usercomu_portal_ed)).getText()
-                        .toString(),
-                ((TextView) usuarioComunidadRegView.findViewById(R.id.reg_usercomu_escalera_ed)).getText()
-                        .toString(),
-                ((TextView) usuarioComunidadRegView.findViewById(R.id.reg_usercomu_planta_ed)).getText()
-                        .toString(),
-                ((TextView) usuarioComunidadRegView.findViewById(R.id.reg_usercomu_puerta_ed)).getText()
-                        .toString(),
-                ((CheckBox) usuarioComunidadRegView.findViewById(R.id.reg_usercomu_checbox_pre))
-                        .isChecked(),
-                ((CheckBox) usuarioComunidadRegView.findViewById(R.id.reg_usercomu_checbox_admin))
-                        .isChecked(),
-                ((CheckBox) usuarioComunidadRegView.findViewById(R.id.reg_usercomu_checbox_pro))
-                        .isChecked(),
-                ((CheckBox) usuarioComunidadRegView.findViewById(R.id.reg_usercomu_checbox_inq))
-                        .isChecked()
-        );
     }
 
 //    ........... AUXILIARY METHODS ...........

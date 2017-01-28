@@ -11,21 +11,21 @@ import android.widget.ArrayAdapter;
 import android.widget.CursorAdapter;
 import android.widget.Spinner;
 
-import com.didekin.incidencia.dominio.Incidencia;
-import com.didekin.comunidad.Comunidad;
 import com.didekindroid.R;
+import com.didekindroid.incidencia.IncidenciaDataDbHelper;
 import com.didekindroid.incidencia.activity.utils.AmbitoSpinnerSettable;
 import com.didekindroid.incidencia.activity.utils.ComuSpinnerSettable;
 import com.didekindroid.incidencia.activity.utils.ComunidadSpinnerSetter;
 import com.didekindroid.incidencia.activity.utils.ImportanciaSpinnerSettable;
 import com.didekindroid.incidencia.dominio.IncidImportanciaBean;
 import com.didekindroid.incidencia.dominio.IncidenciaBean;
-import com.didekindroid.incidencia.IncidenciaDataDbHelper;
+import com.didekinlib.model.comunidad.Comunidad;
+import com.didekinlib.model.incidencia.dominio.Incidencia;
 
 import timber.log.Timber;
 
-import static com.didekindroid.util.UIutils.closeCursor;
 import static com.didekindroid.incidencia.activity.utils.IncidSpinnersHelper.HELPER;
+import static com.didekindroid.util.UIutils.closeCursor;
 
 /**
  *

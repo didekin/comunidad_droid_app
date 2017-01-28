@@ -5,11 +5,10 @@ import android.content.Intent;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 
-import com.didekin.http.oauth2.SpringOauthToken;
-import com.didekin.usuario.Usuario;
 import com.didekindroid.ExtendableTestAc;
 import com.didekindroid.R;
-import com.didekindroid.usuario.login.LoginAc;
+import com.didekinlib.http.oauth2.SpringOauthToken;
+import com.didekinlib.model.usuario.Usuario;
 
 import org.hamcrest.Matchers;
 import org.junit.Before;
@@ -27,7 +26,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekin.http.oauth2.OauthTokenHelper.HELPER;
 import static com.didekindroid.R.id.comu_search_ac_linearlayout;
 import static com.didekindroid.R.id.login_ac_button;
 import static com.didekindroid.R.id.reg_usuario_email_editT;
@@ -42,6 +40,7 @@ import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOneUse
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanWithTkhandler;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_DROID;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static com.didekinlib.http.oauth2.OauthTokenHelper.HELPER;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
@@ -54,11 +53,10 @@ import static org.junit.Assert.assertThat;
  */
 public class LoginAcTest implements ExtendableTestAc {
 
-    protected LoginAc mActivity;
-    protected int activityLayoutId = R.id.login_ac_layout;
-
     @Rule
     public ActivityTestRule<? extends Activity> mActivityRule = getActivityRule();
+    protected LoginAc mActivity;
+    protected int activityLayoutId = R.id.login_ac_layout;
 
     @BeforeClass
     public static void slowSeconds() throws InterruptedException

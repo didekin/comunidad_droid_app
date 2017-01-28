@@ -1,8 +1,8 @@
 package com.didekindroid.usuario.dao;
 
-import com.didekin.retrofit.UsuarioEndPoints;
-import com.didekin.usuario.Usuario;
 import com.didekindroid.exception.UiException;
+import com.didekinlib.http.retrofit.UsuarioEndPoints;
+import com.didekinlib.model.usuario.Usuario;
 
 /**
  * User: pedro@didekin

@@ -2,17 +2,17 @@ package com.didekindroid.incidencia;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.incidencia.dominio.AmbitoIncidencia;
-import com.didekin.incidencia.dominio.Avance;
-import com.didekin.incidencia.dominio.IncidComment;
-import com.didekin.incidencia.dominio.IncidImportancia;
-import com.didekin.incidencia.dominio.Incidencia;
-import com.didekin.incidencia.dominio.IncidenciaUser;
-import com.didekin.incidencia.dominio.Resolucion;
-import com.didekin.usuario.Usuario;
-import com.didekin.usuariocomunidad.UsuarioComunidad;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
+import com.didekinlib.model.incidencia.dominio.AmbitoIncidencia;
+import com.didekinlib.model.incidencia.dominio.Avance;
+import com.didekinlib.model.incidencia.dominio.IncidComment;
+import com.didekinlib.model.incidencia.dominio.IncidImportancia;
+import com.didekinlib.model.incidencia.dominio.Incidencia;
+import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
+import com.didekinlib.model.incidencia.dominio.Resolucion;
+import com.didekinlib.model.usuario.Usuario;
+import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.After;
@@ -26,17 +26,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static com.didekin.incidencia.dominio.IncidenciaExceptionMsg.INCIDENCIA_NOT_FOUND;
-import static com.didekin.incidencia.dominio.IncidenciaExceptionMsg.INCID_IMPORTANCIA_WRONG_INIT;
-import static com.didekin.incidencia.dominio.IncidenciaExceptionMsg.RESOLUCION_DUPLICATE;
-import static com.didekin.usuariocomunidad.Rol.PROPIETARIO;
-import static com.didekin.usuariocomunidad.UsuarioComunidadExceptionMsg.ROLES_NOT_FOUND;
-import static com.didekin.usuariocomunidad.UsuarioComunidadExceptionMsg.USERCOMU_WRONG_INIT;
-import static com.didekindroid.testutil.SecurityTestUtils.updateSecurityData;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.AVANCE_DEFAULT_DES;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.INCID_DEFAULT_DESC;
@@ -46,12 +35,23 @@ import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doInciden
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doIncidenciaWithId;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doResolucion;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidenciaUser;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.testutil.SecurityTestUtils.updateSecurityData;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
+import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.makeUserComuWithComunidadId;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static com.didekinlib.model.incidencia.dominio.IncidenciaExceptionMsg.INCIDENCIA_NOT_FOUND;
+import static com.didekinlib.model.incidencia.dominio.IncidenciaExceptionMsg.INCID_IMPORTANCIA_WRONG_INIT;
+import static com.didekinlib.model.incidencia.dominio.IncidenciaExceptionMsg.RESOLUCION_DUPLICATE;
+import static com.didekinlib.model.usuariocomunidad.Rol.PROPIETARIO;
+import static com.didekinlib.model.usuariocomunidad.UsuarioComunidadExceptionMsg.ROLES_NOT_FOUND;
+import static com.didekinlib.model.usuariocomunidad.UsuarioComunidadExceptionMsg.USERCOMU_WRONG_INIT;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.core.IsNull.notNullValue;
@@ -76,7 +76,7 @@ public class IncidServiceTest_1 {
     {
         whatClean = CLEAN_PEPE;
         pepe = signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
-        pepeUserComu = AppUserComuServ.seeUserComusByUser().get(0);
+        pepeUserComu = userComuDaoRemote.seeUserComusByUser().get(0);
     }
 
     @After
@@ -417,7 +417,7 @@ public class IncidServiceTest_1 {
         /* Caso: no hay registro incidImportancia.userComu.usuario == usuario, SÍ usuario.comunidad == incidencia.comunidad.*/
 
         Incidencia incidencia = insertGetIncidenciaUser(pepeUserComu, 1).getIncidencia();
-        AppUserComuServ.regUserAndUserComu(makeUserComuWithComunidadId(COMU_ESCORIAL_JUAN, incidencia.getComunidad().getC_Id())).execute();
+        userComuDaoRemote.regUserAndUserComu(makeUserComuWithComunidadId(COMU_ESCORIAL_JUAN, incidencia.getComunidad().getC_Id())).execute();
         updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
 
         IncidImportancia incidImportancia = IncidenciaServ.seeIncidImportancia(incidencia.getIncidenciaId()).getIncidImportancia();
@@ -436,9 +436,9 @@ public class IncidServiceTest_1 {
     {
         // CASO OK: usuario 'adm'.
         Resolucion resolucion = insertGetDefaultResolucion();
-        assertThat(IncidenciaServ.closeIncidencia(resolucion),is(2));
+        assertThat(IncidenciaServ.closeIncidencia(resolucion), is(2));
         List<IncidenciaUser> incidenciaUsers = IncidenciaServ.seeIncidsClosedByComu(pepeUserComu.getComunidad().getC_Id());
-        assertThat(incidenciaUsers.size(),is(1));
+        assertThat(incidenciaUsers.size(), is(1));
         assertThat(incidenciaUsers.get(0).getIncidencia(), is(resolucion.getIncidencia()));
     }
 
@@ -450,7 +450,7 @@ public class IncidServiceTest_1 {
         whatClean = CLEAN_JUAN_AND_PEPE;
 
         Resolucion resolucion = insertGetDefaultResolucion();
-        assertThat(IncidenciaServ.closeIncidencia(resolucion),is(2));
+        assertThat(IncidenciaServ.closeIncidencia(resolucion), is(2));
         signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
         try {
             IncidenciaServ.seeIncidsClosedByComu(pepeUserComu.getComunidad().getC_Id());

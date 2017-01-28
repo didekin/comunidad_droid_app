@@ -9,13 +9,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 
-import com.didekin.comunidad.Comunidad;
-import com.didekin.incidencia.dominio.IncidAndResolBundle;
-import com.didekin.incidencia.dominio.Incidencia;
-import com.didekin.incidencia.dominio.IncidenciaUser;
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComuBundleKey;
 import com.didekindroid.exception.UiException;
+import com.didekinlib.model.comunidad.Comunidad;
+import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
+import com.didekinlib.model.incidencia.dominio.Incidencia;
+import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 
 import java.util.List;
 

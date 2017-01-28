@@ -13,8 +13,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.didekin.incidencia.dominio.IncidImportancia;
-import com.didekin.incidencia.dominio.Incidencia;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.IncidenciaDataDbHelper;
@@ -22,6 +20,8 @@ import com.didekindroid.incidencia.activity.utils.AmbitoSpinnerSettable;
 import com.didekindroid.incidencia.activity.utils.ImportanciaSpinnerSettable;
 import com.didekindroid.incidencia.dominio.IncidImportanciaBean;
 import com.didekindroid.incidencia.dominio.IncidenciaBean;
+import com.didekinlib.model.incidencia.dominio.IncidImportancia;
+import com.didekinlib.model.incidencia.dominio.Incidencia;
 
 import timber.log.Timber;
 

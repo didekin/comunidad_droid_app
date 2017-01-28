@@ -6,12 +6,12 @@ import android.support.test.runner.AndroidJUnit4;
 import android.widget.ArrayAdapter;
 import android.widget.CursorAdapter;
 
-import com.didekin.comunidad.Comunidad;
-import com.didekin.incidencia.dominio.IncidenciaUser;
-import com.didekindroid.exception.UiException;
-import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.R;
+import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.dominio.IncidenciaBean;
+import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
+import com.didekinlib.model.comunidad.Comunidad;
+import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 
 import org.junit.After;
 import org.junit.Before;
@@ -35,19 +35,19 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_LA_FUENTE;
+import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
+import static com.didekindroid.incidencia.IncidenciaDataDb.AmbitoIncidencia.AMBITO_INCID_COUNT;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
-import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_LA_FUENTE;
-import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
-import static com.didekindroid.incidencia.IncidenciaDataDb.AmbitoIncidencia.AMBITO_INCID_COUNT;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_LA_FUENTE_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.regSeveralUserComuSameUser;
+import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -66,14 +66,6 @@ public class IncidRegAcTest {
 
 //    TODO: internacionalizar textos.
 
-    private IncidRegAc mActivity;
-    private UsuarioDataTestUtils.CleanUserEnum whatToClean = UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
-    private Comunidad comunidadByDefault;
-    ArrayAdapter<Comunidad> comunidadesAdapter;
-
-    int activityLayoutId = R.id.incid_reg_ac_layout;
-    int fragmentLayoutId = R.id.incid_reg_frg;
-
     @Rule
     public IntentsTestRule<IncidRegAc> intentRule = new IntentsTestRule<IncidRegAc>(IncidRegAc.class) {
 
@@ -87,6 +79,12 @@ public class IncidRegAcTest {
             }
         }
     };
+    ArrayAdapter<Comunidad> comunidadesAdapter;
+    int activityLayoutId = R.id.incid_reg_ac_layout;
+    int fragmentLayoutId = R.id.incid_reg_frg;
+    private IncidRegAc mActivity;
+    private UsuarioDataTestUtils.CleanUserEnum whatToClean = UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
+    private Comunidad comunidadByDefault;
 
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
@@ -185,7 +183,7 @@ public class IncidRegAcTest {
 
         onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed()));
         assertThat(IncidenciaServ.seeIncidsOpenByComu(comunidadByDefault.getC_Id()).size(), is(1));
-        checkUp(activityLayoutId,fragmentLayoutId);
+        checkUp(activityLayoutId, fragmentLayoutId);
     }
 
     @Test
@@ -201,7 +199,7 @@ public class IncidRegAcTest {
 
         onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed()));
         assertThat(IncidenciaServ.seeIncidsOpenByComu(comunidadByDefault.getC_Id()).size(), is(1));
-        checkUp(activityLayoutId,fragmentLayoutId);
+        checkUp(activityLayoutId, fragmentLayoutId);
     }
 
     @Test
@@ -223,7 +221,7 @@ public class IncidRegAcTest {
         List<IncidenciaUser> incidencias = IncidenciaServ.seeIncidsOpenByComu(comunidadFuente.getC_Id());
         assertThat(incidencias.size(), is(1));
         assertThat(incidencias.get(0).getIncidencia().getDescripcion(), is("Incidencia La Fuente"));
-        checkUp(activityLayoutId,fragmentLayoutId);
+        checkUp(activityLayoutId, fragmentLayoutId);
     }
 
 //    =======================   HELPER METHODS ========================

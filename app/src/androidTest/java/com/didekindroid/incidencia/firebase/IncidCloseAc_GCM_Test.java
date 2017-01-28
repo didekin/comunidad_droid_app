@@ -9,10 +9,10 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.incidencia.dominio.IncidImportancia;
-import com.didekin.incidencia.dominio.Resolucion;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.activity.IncidResolucionRegEditSeeAc;
+import com.didekinlib.model.incidencia.dominio.IncidImportancia;
+import com.didekinlib.model.incidencia.dominio.Resolucion;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.junit.Test;
@@ -20,14 +20,14 @@ import org.junit.runner.RunWith;
 
 import java.io.IOException;
 
-import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
-import static com.didekindroid.incidencia.firebase.IncidFirebaseDownMsgHandler.INCIDENCIA_CLOSE;
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
+import static com.didekindroid.incidencia.firebase.IncidFirebaseDownMsgHandler.INCIDENCIA_CLOSE;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_PEPE;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -36,7 +36,7 @@ import static org.junit.Assert.assertThat;
  * User: pedro@didekin
  * Date: 27/11/15
  * Time: 16:38
- *
+ * <p>
  * Test GCM para cierre de una incidencia.
  */
 @RunWith(AndroidJUnit4.class)
@@ -86,7 +86,7 @@ public class IncidCloseAc_GCM_Test extends Incidencia_GCM_Test {
                     incidImportancia = insertGetIncidImportancia(COMU_PLAZUELA5_PEPE);
                     Thread.sleep(1000);
                     resolucion = insertGetResolucionNoAdvances(incidImportancia);
-                } catch ( InterruptedException | IOException | UiException e) {
+                } catch (InterruptedException | IOException | UiException e) {
                     e.printStackTrace();
                 }
                 Intent intent = new Intent();

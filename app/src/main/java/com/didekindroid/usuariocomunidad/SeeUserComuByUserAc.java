@@ -6,9 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.didekin.usuariocomunidad.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.security.IdentityCacher;
+import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import timber.log.Timber;
 

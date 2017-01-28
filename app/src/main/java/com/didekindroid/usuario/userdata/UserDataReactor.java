@@ -1,8 +1,9 @@
 package com.didekindroid.usuario.userdata;
 
-import com.didekin.usuario.Usuario;
+
 import com.didekindroid.security.OauthTokenReactorIf;
 import com.didekindroid.usuario.userdata.UserDataControllerIf.UserChangeToMake;
+import com.didekinlib.model.usuario.Usuario;
 
 import java.util.concurrent.Callable;
 

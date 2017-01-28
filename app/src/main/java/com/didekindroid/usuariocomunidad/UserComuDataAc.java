@@ -10,8 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import com.didekin.comunidad.Comunidad;
-import com.didekin.usuariocomunidad.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComuBundleKey;
 import com.didekindroid.comunidad.ComuSearchAc;
@@ -19,17 +17,18 @@ import com.didekindroid.comunidad.ComunidadBean;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.security.IdentityCacher;
 import com.didekindroid.util.ConnectionUtils;
+import com.didekinlib.model.comunidad.Comunidad;
+import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import timber.log.Timber;
 
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
-import static com.didekin.http.UsuarioServConstant.IS_USER_DELETED;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
 import static com.didekindroid.usuariocomunidad.UserComuAssertionMsg.userComu_should_be_deleted;
 import static com.didekindroid.usuariocomunidad.UserComuAssertionMsg.userComu_should_be_modified;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.util.ItemMenu.mn_handler;
 import static com.didekindroid.util.MenuRouter.doUpMenu;
 import static com.didekindroid.util.MenuRouter.routerMap;
@@ -39,6 +38,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.util.UIutils.intent_extra_should_be_initialized;
 import static com.didekindroid.util.UIutils.makeToast;
+import static com.didekinlib.http.UsuarioServConstant.IS_USER_DELETED;
 
 /**
  * Preconditions:
@@ -58,11 +58,11 @@ import static com.didekindroid.util.UIutils.makeToast;
 @SuppressWarnings("ConstantConditions")
 public class UserComuDataAc extends AppCompatActivity {
 
-    private View mAcView;
-    UsuarioComunidad mOldUserComu;
     public RegUserComuFr mRegUserComuFr;
+    UsuarioComunidad mOldUserComu;
     MenuItem mComuDataItem;
     IdentityCacher identityCacher;
+    private View mAcView;
 
     @SuppressLint("InflateParams")
     @Override
@@ -157,7 +157,7 @@ public class UserComuDataAc extends AppCompatActivity {
         Timber.d("onOptionsItemSelected()");
 
         int resourceId = item.getItemId();
-        switch (resourceId){
+        switch (resourceId) {
             case android.R.id.home:
                 doUpMenu(this);
                 return true;
@@ -193,7 +193,7 @@ public class UserComuDataAc extends AppCompatActivity {
 
             boolean isOldestUserComu = false;
             try {
-                isOldestUserComu = AppUserComuServ.isOldestOrAdmonUserComu(mOldUserComu.getComunidad().getC_Id());
+                isOldestUserComu = userComuDaoRemote.isOldestOrAdmonUserComu(mOldUserComu.getComunidad().getC_Id());
             } catch (UiException e) {
                 uiException = e;
             }
@@ -227,7 +227,7 @@ public class UserComuDataAc extends AppCompatActivity {
 
             int modifyUserComu = 0;
             try {
-                modifyUserComu = AppUserComuServ.modifyUserComu(userComus[0]);
+                modifyUserComu = userComuDaoRemote.modifyUserComu(userComus[0]);
             } catch (UiException e) {
                 uiException = e;
             }
@@ -261,7 +261,7 @@ public class UserComuDataAc extends AppCompatActivity {
 
             int deleteUserComu = 0;
             try {
-                deleteUserComu = AppUserComuServ.deleteUserComu(comunidades[0].getC_Id());
+                deleteUserComu = userComuDaoRemote.deleteUserComu(comunidades[0].getC_Id());
             } catch (UiException e) {
                 uiException = e;
             }

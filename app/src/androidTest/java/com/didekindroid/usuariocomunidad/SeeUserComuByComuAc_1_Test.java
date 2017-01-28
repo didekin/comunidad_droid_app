@@ -5,14 +5,13 @@ import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.comunidad.Comunidad;
-import com.didekin.usuariocomunidad.UsuarioComunidad;
-
-import com.didekindroid.usuario.testutil.UserItemMenuTestUtils;
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComuBundleKey;
+import com.didekindroid.usuario.testutil.UserItemMenuTestUtils;
 import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
 import com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil;
+import com.didekinlib.model.comunidad.Comunidad;
+import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.hamcrest.Matchers;
 import org.junit.After;
@@ -29,14 +28,13 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
-import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
-
 import static com.didekindroid.comunidad.testutil.ComuMenuTestUtil.COMU_SEARCH_AC;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
+import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
+import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.SEE_USERCOMU_BY_USER_AC;
 import static external.LongListMatchers.withAdaptedData;
 import static org.hamcrest.Matchers.containsString;
@@ -52,16 +50,14 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class SeeUserComuByComuAc_1_Test {
 
+    @Rule
+    public ActivityTestRule<SeeUserComuByComuAc> mActivityRule =
+            new ActivityTestRule<>(SeeUserComuByComuAc.class, true, false);
     SeeUserComuByComuAc mActivity;
     SeeUserComuByComuFr mFragment;
     long comunidadId;
     Intent intent;
     int fragmentLayoutId = R.id.see_usercomu_by_comu_frg;
-
-
-    @Rule
-    public ActivityTestRule<SeeUserComuByComuAc> mActivityRule =
-            new ActivityTestRule<>(SeeUserComuByComuAc.class, true, false);
 
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
@@ -78,7 +74,7 @@ public class SeeUserComuByComuAc_1_Test {
         UserComuDataTestUtil.signUpAndUpdateTk(UserComuDataTestUtil.COMU_PLAZUELA5_JUAN);
 
         // We get the id of the comunidad we will put in the intent.
-        List<UsuarioComunidad> usuariosComu = AppUserComuServ.seeUserComusByUser();
+        List<UsuarioComunidad> usuariosComu = userComuDaoRemote.seeUserComusByUser();
         comunidadId = usuariosComu.get(0).getComunidad().getC_Id(); // COMU_PLAZUELA5_JUAN.
         // We put the comunidad in the intent.
         intent = new Intent();
@@ -121,7 +117,7 @@ public class SeeUserComuByComuAc_1_Test {
         UsuarioComunidad userComu = mAdapter.getItem(0);
         UserComuEspressoTestUtil.validaTypedUsuarioComunidad(userComu, UserComuDataTestUtil.COMU_PLAZUELA5_JUAN.getPortal(), UserComuDataTestUtil.COMU_PLAZUELA5_JUAN.getEscalera(), UserComuDataTestUtil.COMU_PLAZUELA5_JUAN.getPlanta(),
                 UserComuDataTestUtil.COMU_PLAZUELA5_JUAN.getPuerta(), UserComuDataTestUtil.COMU_PLAZUELA5_JUAN.getRoles());
-        assertThat(userComu.getComunidad(),is(new Comunidad.ComunidadBuilder().c_id(comunidadId).build()));
+        assertThat(userComu.getComunidad(), is(new Comunidad.ComunidadBuilder().c_id(comunidadId).build()));
 
         onView(withAdaptedData(Matchers.<Object>is(userComu))).check(matches(isDisplayed()));
         // Header.

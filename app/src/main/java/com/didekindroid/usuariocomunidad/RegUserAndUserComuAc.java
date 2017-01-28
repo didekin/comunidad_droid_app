@@ -10,11 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import com.didekin.comunidad.Comunidad;
-import com.didekin.http.ErrorBean;
-import com.didekin.http.oauth2.SpringOauthToken;
-import com.didekin.usuario.Usuario;
-import com.didekin.usuariocomunidad.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComuBundleKey;
 import com.didekindroid.comunidad.ComunidadBean;
@@ -24,6 +19,11 @@ import com.didekindroid.usuario.RegUserFr;
 import com.didekindroid.usuario.UsuarioBean;
 import com.didekindroid.util.ConnectionUtils;
 import com.didekindroid.util.UIutils;
+import com.didekinlib.http.ErrorBean;
+import com.didekinlib.http.oauth2.SpringOauthToken;
+import com.didekinlib.model.comunidad.Comunidad;
+import com.didekinlib.model.usuario.Usuario;
+import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import java.io.IOException;
 
@@ -33,7 +33,7 @@ import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.security.Oauth2DaoRemote.Oauth2;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_not_be_registered;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.util.ItemMenu.mn_handler;
 import static com.didekindroid.util.MenuRouter.doUpMenu;
 import static com.didekindroid.util.MenuRouter.routerMap;
@@ -41,6 +41,7 @@ import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.util.UIutils.doToolBar;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
+import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
 
 /**
  * User: pedro@didekin
@@ -174,9 +175,9 @@ public class RegUserAndUserComuAc extends AppCompatActivity {
             Timber.d("UserAndUserComuRegister.doInBackground()");
             Usuario newUser = usuarioComunidad[0].getUsuario();
             try {
-                AppUserComuServ.regUserAndUserComu(usuarioComunidad[0]).execute();
+                userComuDaoRemote.regUserAndUserComu(usuarioComunidad[0]).execute();
             } catch (IOException e) {
-                uiException = new UiException(ErrorBean.GENERIC_ERROR);
+                uiException = new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
                 return null;
             }
             SpringOauthToken token;

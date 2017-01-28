@@ -76,15 +76,15 @@ android {
 
 dependencies {
     compile rootProject.ext.firebase_message
-    compile rootProject.ext.model_lib
-    compile rootProject.ext.retrofit_model_lib
+    compile rootProject.ext.didekinlib_model
+    compile rootProject.ext.didekinlib_http
     compile rootProject.ext.timber
     compile rootProject.ext.retrofit2
     compile rootProject.ext.rxjava
     compile rootProject.ext.android_support
 
     androidTestCompile rootProject.ext.espresso
-    androidTestCompile rootProject.ext.gcm_model_lib
+    androidTestCompile rootProject.ext.didekinlib_gcm
 
     testCompile rootProject.ext.junit
 }

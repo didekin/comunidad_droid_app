@@ -6,13 +6,12 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.comunidad.Comunidad;
-
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComuBundleKey;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
 import com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil;
+import com.didekinlib.model.comunidad.Comunidad;
 
 import org.hamcrest.Matchers;
 import org.junit.After;
@@ -31,15 +30,15 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanTwoUsers;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanTwoUsers;
 import static com.didekindroid.usuariocomunidad.RolUi.PRE;
 import static com.didekindroid.usuariocomunidad.RolUi.PRO;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -52,12 +51,11 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class RegUserComuAcTest {
 
-    private RegUserComuAc activity;
-    private Intent intent;
-    Comunidad comunidad;
-
     @Rule
     public IntentsTestRule<RegUserComuAc> mActivityRule = new IntentsTestRule<>(RegUserComuAc.class, true, false);
+    Comunidad comunidad;
+    private RegUserComuAc activity;
+    private Intent intent;
     private int activityLayoutId = R.id.reg_usercomu_ac_layout;
 
     @BeforeClass
@@ -70,7 +68,7 @@ public class RegUserComuAcTest {
     public void setUp() throws Exception
     {
         UserComuDataTestUtil.signUpAndUpdateTk(UserComuDataTestUtil.COMU_REAL_JUAN);
-        List<Comunidad> comunidadesUserOne = AppUserComuServ.getComusByUser();
+        List<Comunidad> comunidadesUserOne = userComuDaoRemote.getComusByUser();
         comunidad = comunidadesUserOne.get(0);
 
         // We use that comunidad as the one to associate to the present user.
@@ -92,7 +90,7 @@ public class RegUserComuAcTest {
         activity = mActivityRule.launchActivity(intent);
 
         assertThat(TKhandler.isRegisteredUser(), is(true));
-        List<Comunidad> comunidadesUserOne = AppUserComuServ.getComusByUser();
+        List<Comunidad> comunidadesUserOne = userComuDaoRemote.getComusByUser();
         assertThat(comunidadesUserOne.size(), is(1));
         Comunidad comunidad2 = comunidadesUserOne.get(0);
         assertThat(comunidad2, Matchers.is(UserComuDataTestUtil.COMU_TRAV_PLAZUELA_PEPE.getComunidad()));

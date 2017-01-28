@@ -3,11 +3,11 @@ package com.didekindroid.incidencia.activity;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.v4.app.Fragment;
 
-import com.didekin.incidencia.dominio.IncidImportancia;
-import com.didekin.incidencia.dominio.Resolucion;
-import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.R;
+import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.util.UIutils;
+import com.didekinlib.model.incidencia.dominio.IncidImportancia;
+import com.didekinlib.model.incidencia.dominio.Resolucion;
 
 import org.junit.After;
 import org.junit.Before;
@@ -25,11 +25,11 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.util.UIutils.SPAIN_LOCALE;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_resolucion_ac_frgs_tag;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.COSTE_ESTIM_DEFAULT_String;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.RESOLUCION_DEFAULT_DESC;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
+import static com.didekindroid.util.UIutils.SPAIN_LOCALE;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
@@ -43,15 +43,14 @@ import static org.hamcrest.CoreMatchers.notNullValue;
  */
 public abstract class IncidResolucionAbstractTest {
 
+    @Rule
+    public IntentsTestRule<IncidResolucionRegEditSeeAc> intentRule = doIntentRule();
     IncidResolucionRegEditSeeAc mActivity;
     Fragment incidEditFr;
     IncidImportancia incidImportancia;
     Resolucion resolucion;
     IncidImportancia mIncidImportanciaIntent;
     Resolucion mResolucionIntent;
-
-    @Rule
-    public IntentsTestRule<IncidResolucionRegEditSeeAc> intentRule = doIntentRule();
 
     @Before
     public void setUp() throws Exception

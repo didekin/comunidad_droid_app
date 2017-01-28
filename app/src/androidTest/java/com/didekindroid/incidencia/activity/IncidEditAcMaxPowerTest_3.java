@@ -3,13 +3,13 @@ package com.didekindroid.incidencia.activity;
 import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 
-import com.didekin.incidencia.dominio.IncidAndResolBundle;
-import com.didekin.incidencia.dominio.IncidImportancia;
-import com.didekin.incidencia.dominio.Incidencia;
-import com.didekin.incidencia.dominio.Resolucion;
-import com.didekin.usuariocomunidad.UsuarioComunidad;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
+import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
+import com.didekinlib.model.incidencia.dominio.IncidImportancia;
+import com.didekinlib.model.incidencia.dominio.Incidencia;
+import com.didekinlib.model.incidencia.dominio.Resolucion;
+import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Date;
 
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
@@ -26,7 +25,8 @@ import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.INCID_DEF
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.RESOLUCION_DEFAULT_DESC;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doIncidencia;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doResolucion;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static org.hamcrest.CoreMatchers.is;
@@ -41,6 +41,12 @@ import static org.junit.Assert.assertThat;
 public class IncidEditAcMaxPowerTest_3 extends IncidEditAbstractTest {
 
     IncidAndResolBundle incidResolBundlePepe;
+
+    @BeforeClass
+    public static void slowSeconds() throws InterruptedException
+    {
+        Thread.sleep(4000);
+    }
 
     @Override
     IntentsTestRule<IncidEditAc> doIntentRule()
@@ -59,7 +65,7 @@ public class IncidEditAcMaxPowerTest_3 extends IncidEditAbstractTest {
             {
                 try {
                     signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
-                    UsuarioComunidad pepeEscorial = AppUserComuServ.seeUserComusByUser().get(0);
+                    UsuarioComunidad pepeEscorial = userComuDaoRemote.seeUserComusByUser().get(0);
                     IncidImportancia incidPepeEscorial = new IncidImportancia.IncidImportanciaBuilder(
                             doIncidencia(pepeEscorial.getUsuario().getUserName(), INCID_DEFAULT_DESC, pepeEscorial.getComunidad().getC_Id(), (short) 43))
                             .usuarioComunidad(pepeEscorial)
@@ -73,7 +79,7 @@ public class IncidEditAcMaxPowerTest_3 extends IncidEditAbstractTest {
                     assertThat(IncidenciaServ.regResolucion(resolucion), is(1));
                     incidResolBundlePepe = IncidenciaServ.seeIncidImportancia(incidenciaDb.getIncidenciaId());
                     incidenciaPepe = incidResolBundlePepe.getIncidImportancia();
-                } catch ( InterruptedException | IOException | UiException e) {
+                } catch (InterruptedException | IOException | UiException e) {
                     e.printStackTrace();
                 }
                 Intent intent = new Intent();
@@ -82,12 +88,6 @@ public class IncidEditAcMaxPowerTest_3 extends IncidEditAbstractTest {
                 return intent;
             }
         };
-    }
-
-    @BeforeClass
-    public static void slowSeconds() throws InterruptedException
-    {
-        Thread.sleep(4000);
     }
 
     @Override

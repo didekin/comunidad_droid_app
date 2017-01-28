@@ -2,17 +2,17 @@ package com.didekindroid.incidencia.dominio;
 
 import android.content.res.Resources;
 
-import com.didekin.incidencia.dominio.IncidImportancia;
-import com.didekindroid.util.FechaPickerBean;
 import com.didekindroid.R;
+import com.didekindroid.util.FechaPickerBean;
+import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
 import java.text.ParseException;
 
-import static com.didekin.common.dominio.ValidDataPatterns.LINE_BREAK;
-import static com.didekin.incidencia.dominio.IncidDataPatterns.INCID_RESOLUCION_DESC;
-import static com.didekin.incidencia.dominio.IncidDataPatterns.INCID_RES_AVANCE_DESC;
 import static com.didekindroid.util.UIutils.formatTimeToString;
 import static com.didekindroid.util.UIutils.getIntFromStringDecimal;
+import static com.didekinlib.model.common.dominio.ValidDataPatterns.LINE_BREAK;
+import static com.didekinlib.model.incidencia.dominio.IncidDataPatterns.INCID_RESOLUCION_DESC;
+import static com.didekinlib.model.incidencia.dominio.IncidDataPatterns.INCID_RES_AVANCE_DESC;
 
 /**
  * User: pedro@didekin
@@ -48,9 +48,9 @@ public class ResolucionBean implements FechaPickerBean {
         return plan;
     }
 
-    public void setAvanceDesc(String avanceDesc)
+    public void setPlan(String plan)
     {
-        this.avanceDesc = avanceDesc;
+        this.plan = plan;
     }
 
     public String getAvanceDesc()
@@ -58,9 +58,9 @@ public class ResolucionBean implements FechaPickerBean {
         return avanceDesc;
     }
 
-    public void setPlan(String plan)
+    public void setAvanceDesc(String avanceDesc)
     {
-        this.plan = plan;
+        this.avanceDesc = avanceDesc;
     }
 
     public int getCostePrev()
@@ -96,7 +96,7 @@ public class ResolucionBean implements FechaPickerBean {
 
     private boolean validateAvaceDesc(StringBuilder errorMsg, Resources resources)
     {
-        if(!INCID_RES_AVANCE_DESC.isPatternOk(avanceDesc)){
+        if (!INCID_RES_AVANCE_DESC.isPatternOk(avanceDesc)) {
             errorMsg.append(resources.getString(R.string.incid_resolucion_avance_rot)).append(LINE_BREAK.getRegexp());
             return false;
         }

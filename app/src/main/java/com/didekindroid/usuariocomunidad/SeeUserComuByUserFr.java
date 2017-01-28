@@ -10,16 +10,16 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.didekin.usuariocomunidad.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
+import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import java.util.List;
 
 import timber.log.Timber;
 
 import static com.didekindroid.usuariocomunidad.UserComuAssertionMsg.usercomu_list_should_be_initialized;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.checkPostExecute;
 
@@ -35,8 +35,8 @@ import static com.didekindroid.util.UIutils.checkPostExecute;
  */
 public class SeeUserComuByUserFr extends Fragment {
 
-    SeeUserComuByUserFrListener mListener;
     public SeeUserComuByUserAdapter mAdapter;
+    SeeUserComuByUserFrListener mListener;
     ListView fragmentView;
 
     public SeeUserComuByUserFr()
@@ -87,18 +87,18 @@ public class SeeUserComuByUserFr extends Fragment {
 
 // .......... Interface to communicate with the Activity ...................
 
-    public interface SeeUserComuByUserFrListener {
-        void onUserComuSelected(UsuarioComunidad userComu, int position);
+    public View getFragmentView()
+    {
+        Timber.d("getFragmentView()");
+        return fragmentView;
     }
 
 //    ============================================================
 //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
 //    ============================================================
 
-    public View getFragmentView()
-    {
-        Timber.d("getFragmentView()");
-        return fragmentView;
+    public interface SeeUserComuByUserFrListener {
+        void onUserComuSelected(UsuarioComunidad userComu, int position);
     }
 
     class UserComuByUserLoader extends AsyncTask<Void, Void, List<UsuarioComunidad>> {
@@ -112,7 +112,7 @@ public class SeeUserComuByUserFr extends Fragment {
 
             List<UsuarioComunidad> usuarioComunidades = null;
             try {
-                usuarioComunidades = AppUserComuServ.seeUserComusByUser();
+                usuarioComunidades = userComuDaoRemote.seeUserComusByUser();
             } catch (UiException e) {
                 uiException = e;
             }

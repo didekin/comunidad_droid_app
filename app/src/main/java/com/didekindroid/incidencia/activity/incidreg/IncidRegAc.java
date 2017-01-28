@@ -8,11 +8,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import com.didekin.incidencia.dominio.IncidImportancia;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.activity.IncidSeeOpenByComuAc;
 import com.didekindroid.usuario.firebase.FirebaseTokenReactorIf;
+import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
 import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
@@ -41,7 +41,7 @@ import static com.didekindroid.util.UIutils.makeToast;
  * TODO: añadir varios tags a la incidencia para facilitar búsquedas.
  */
 @SuppressWarnings("ConstantConditions")
-public class IncidRegAc extends AppCompatActivity implements IncidRegControllerIf{
+public class IncidRegAc extends AppCompatActivity implements IncidRegControllerIf {
 
     IncidRegAcFragment mRegAcFragment;
     CompositeDisposable subscriptions;
@@ -114,7 +114,7 @@ public class IncidRegAc extends AppCompatActivity implements IncidRegControllerI
     @Override
     public void checkGcmToken()
     { // TODO: test methods of controller.
-        if (subscriptions == null){
+        if (subscriptions == null) {
             subscriptions = new CompositeDisposable();
         }
         reactor.checkGcmToken(subscriptions);

@@ -6,8 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.didekin.incidencia.dominio.Incidencia;
 import com.didekindroid.R;
+import com.didekinlib.model.incidencia.dominio.Incidencia;
 
 import timber.log.Timber;
 
@@ -41,7 +41,7 @@ public class IncidCommentSeeAc extends AppCompatActivity {
         doToolBar(this, true);
         mIncidencia = (Incidencia) getIntent().getExtras().getSerializable(INCIDENCIA_OBJECT.key);
 
-        if (savedInstanceState != null){
+        if (savedInstanceState != null) {
             assertTrue((mFragment = (IncidCommentSeeListFr) getSupportFragmentManager().
                     findFragmentByTag(incid_comments_see_list_fr_tag)) != null, fragment_should_be_initialized);
             return;

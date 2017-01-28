@@ -4,12 +4,12 @@ import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.incidencia.dominio.Avance;
-import com.didekin.incidencia.dominio.Resolucion;
-import com.didekin.usuariocomunidad.UsuarioComunidad;
+import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
-import com.didekindroid.R;
+import com.didekinlib.model.incidencia.dominio.Avance;
+import com.didekinlib.model.incidencia.dominio.Resolucion;
+import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,19 +25,19 @@ import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekin.usuariocomunidad.Rol.PRESIDENTE;
-import static com.didekindroid.testutil.SecurityTestUtils.updateSecurityData;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
-import static com.didekindroid.util.UIutils.formatTimeStampToString;
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.testutil.SecurityTestUtils.updateSecurityData;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
+import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_JUAN;
+import static com.didekindroid.util.UIutils.formatTimeStampToString;
+import static com.didekinlib.model.usuariocomunidad.Rol.PRESIDENTE;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -67,7 +67,7 @@ public class IncidResolucionSeeFrTest_2 extends IncidResolucionAbstractTest {
                     incidImportancia = insertGetIncidImportancia(COMU_ESCORIAL_JUAN);
                     Thread.sleep(1000);
                     // Necesitamos usuario con 'adm' para registrar resolución.
-                    assertThat(AppUserComuServ.regUserAndUserComu(
+                    assertThat(userComuDaoRemote.regUserAndUserComu(
                             new UsuarioComunidad.UserComuBuilder(
                                     incidImportancia.getUserComu().getComunidad(), USER_PEPE)
                                     .roles(PRESIDENTE.function)
@@ -88,7 +88,7 @@ public class IncidResolucionSeeFrTest_2 extends IncidResolucionAbstractTest {
                     resolucion = IncidenciaServ.seeResolucion(resolucion.getIncidencia().getIncidenciaId());
                     // Volvemos a usuario del test.
                     updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
-                } catch ( InterruptedException | IOException | UiException e) {
+                } catch (InterruptedException | IOException | UiException e) {
                     e.printStackTrace();
                 }
                 Intent intent = new Intent();

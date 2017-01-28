@@ -8,8 +8,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import com.didekin.comunidad.Comunidad;
-import com.didekin.usuariocomunidad.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComunidadBean;
 import com.didekindroid.exception.UiException;
@@ -17,20 +15,22 @@ import com.didekindroid.security.IdentityCacher;
 import com.didekindroid.util.ConnectionUtils;
 import com.didekindroid.util.MenuRouter;
 import com.didekindroid.util.UIutils;
+import com.didekinlib.model.comunidad.Comunidad;
+import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import timber.log.Timber;
 
-import static com.didekin.common.dominio.ValidDataPatterns.LINE_BREAK;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
 import static com.didekindroid.usuariocomunidad.UserComuAssertionMsg.user_and_comunidad_should_be_registered;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.util.UIutils.doToolBar;
 import static com.didekindroid.util.UIutils.makeToast;
+import static com.didekinlib.model.common.dominio.ValidDataPatterns.LINE_BREAK;
 
 /**
  * User: pedro@didekin
@@ -56,8 +56,8 @@ import static com.didekindroid.util.UIutils.makeToast;
 public class RegUserComuAc extends AppCompatActivity {
 
     RegUserComuFr mRegUserComuFr;
-    private Comunidad mComunidad;
     IdentityCacher identityCacher;
+    private Comunidad mComunidad;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -67,7 +67,7 @@ public class RegUserComuAc extends AppCompatActivity {
         identityCacher = TKhandler;
 
         assertTrue(identityCacher.isRegisteredUser(), user_should_be_registered);
-        Comunidad coomunidadIntent =  (Comunidad) getIntent().getExtras()
+        Comunidad coomunidadIntent = (Comunidad) getIntent().getExtras()
                 .getSerializable(COMUNIDAD_LIST_OBJECT.key);
         mComunidad = coomunidadIntent != null ? coomunidadIntent : null;
 
@@ -148,9 +148,9 @@ public class RegUserComuAc extends AppCompatActivity {
 
             int i = 0;
             try {
-                i = AppUserComuServ.regUserComu(usuarioComunidad[0]);
+                i = userComuDaoRemote.regUserComu(usuarioComunidad[0]);
             } catch (UiException e) {
-               uiException = e;
+                uiException = e;
             }
             return i;
         }
@@ -161,9 +161,9 @@ public class RegUserComuAc extends AppCompatActivity {
             if (checkPostExecute(RegUserComuAc.this)) return;
 
             Timber.d("onPostExecute()");
-            if (uiException != null){
+            if (uiException != null) {
                 uiException.processMe(RegUserComuAc.this, new Intent());
-            } else{
+            } else {
                 assertTrue(rowInserted == 1, user_and_comunidad_should_be_registered);
             }
         }

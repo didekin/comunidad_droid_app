@@ -4,13 +4,13 @@ import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.incidencia.dominio.IncidComment;
-import com.didekin.incidencia.dominio.IncidImportancia;
-import com.didekin.incidencia.dominio.IncidenciaUser;
-import com.didekin.usuariocomunidad.UsuarioComunidad;
+import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
-import com.didekindroid.R;
+import com.didekinlib.model.incidencia.dominio.IncidComment;
+import com.didekinlib.model.incidencia.dominio.IncidImportancia;
+import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
+import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.junit.After;
 import org.junit.Before;
@@ -28,16 +28,16 @@ import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.util.UIutils.formatTimeStampToString;
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doComment;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doIncidencia;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_comments_see_list_fr_tag;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doComment;
+import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doIncidencia;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
+import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.util.UIutils.formatTimeStampToString;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -58,8 +58,6 @@ public class IncidCommentSeeAcTest_2 {
 
     IncidCommentSeeAc mActivity;
     IncidImportancia incidJuanReal1;
-    private IncidCommentSeeAdapter mAdapter;
-
     @Rule
     public IntentsTestRule<IncidCommentSeeAc> activityRule = new IntentsTestRule<IncidCommentSeeAc>(IncidCommentSeeAc.class) {
 
@@ -80,7 +78,7 @@ public class IncidCommentSeeAcTest_2 {
         {
             try {
                 signUpAndUpdateTk(COMU_REAL_JUAN);
-                UsuarioComunidad juanReal = AppUserComuServ.seeUserComusByUser().get(0);
+                UsuarioComunidad juanReal = userComuDaoRemote.seeUserComusByUser().get(0);
                 incidJuanReal1 = new IncidImportancia.IncidImportanciaBuilder(
                         doIncidencia(juanReal.getUsuario().getUserName(), "Incidencia Real One", juanReal.getComunidad().getC_Id(), (short) 43))
                         .usuarioComunidad(juanReal)
@@ -88,7 +86,7 @@ public class IncidCommentSeeAcTest_2 {
                 IncidenciaServ.regIncidImportancia(incidJuanReal1);
                 IncidenciaUser incidenciaUser = IncidenciaServ.seeIncidsOpenByComu(juanReal.getComunidad().getC_Id()).get(0);
                 incidJuanReal1 = IncidenciaServ.seeIncidImportancia(incidenciaUser.getIncidencia().getIncidenciaId()).getIncidImportancia();
-            } catch ( IOException | UiException e) {
+            } catch (IOException | UiException e) {
                 e.printStackTrace();
             }
             Intent intent = new Intent();
@@ -96,6 +94,7 @@ public class IncidCommentSeeAcTest_2 {
             return intent;
         }
     };
+    private IncidCommentSeeAdapter mAdapter;
 
     @BeforeClass
     public static void slowSeconds() throws InterruptedException

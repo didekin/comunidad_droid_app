@@ -1,10 +1,9 @@
 package com.didekindroid.comunidad;
 
-
-import com.didekin.comunidad.Comunidad;
-import com.didekin.http.ErrorBean;
-import com.didekin.retrofit.ComunidadEndPoints;
 import com.didekindroid.exception.UiException;
+import com.didekinlib.http.ErrorBean;
+import com.didekinlib.http.retrofit.ComunidadEndPoints;
+import com.didekinlib.model.comunidad.Comunidad;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -17,6 +16,7 @@ import timber.log.Timber;
 import static com.didekindroid.AppInitializer.creator;
 import static com.didekindroid.util.DaoUtil.getResponseBody;
 import static com.didekindroid.util.UIutils.checkBearerToken;
+import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
 
 /**
  * User: pedro@didekin
@@ -71,7 +71,7 @@ public final class ComunidadService implements ComunidadEndPoints {
         } catch (EOFException eo) {
             return null;
         } catch (IOException e) {
-           throw new UiException(ErrorBean.GENERIC_ERROR);
+            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
         }
     }
 }

@@ -3,8 +3,8 @@ package com.didekindroid.usuario.testutil;
 import android.support.test.espresso.action.ViewActions;
 import android.support.test.espresso.matcher.ViewMatchers;
 
-import com.didekin.usuario.Usuario;
 import com.didekindroid.R;
+import com.didekinlib.model.usuario.Usuario;
 
 import org.hamcrest.Matchers;
 

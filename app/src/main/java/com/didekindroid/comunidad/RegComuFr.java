@@ -16,10 +16,10 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 
-import com.didekin.comunidad.Municipio;
-import com.didekin.comunidad.Provincia;
 import com.didekindroid.R;
 import com.didekindroid.comunidad.repository.ComunidadDbHelper;
+import com.didekinlib.model.comunidad.Municipio;
+import com.didekinlib.model.comunidad.Provincia;
 
 import timber.log.Timber;
 
@@ -33,24 +33,30 @@ import static com.didekindroid.util.UIutils.closeCursor;
 public class RegComuFr extends Fragment {
 
     ComunidadDbHelper dbHelper;
-
-    private View mRegComunidadFrView;
     Spinner mTipoViaSpinner;
     Spinner mAutonomaComuSpinner;
     Spinner provinciaSpinner;
     Spinner municipioSpinner;
-
     int mCApointer;
     int mProvinciaPointer;
     int mMunicipioPointer;
     int mTipoViaPointer;
-
     ComuDataControllerIf mComuDataController;
-
     ComunidadBean comunidadBean;
+    private View mRegComunidadFrView;
 
     public RegComuFr()
     {
+    }
+
+    public static void makeComunidadBeanFromView(View comunidadSearchView, ComunidadBean comunidadBean)
+    {
+        comunidadBean.setNombreVia(((EditText) comunidadSearchView
+                .findViewById(R.id.comunidad_nombre_via_editT)).getText().toString());
+        comunidadBean.setNumeroString(((EditText) comunidadSearchView
+                .findViewById(R.id.comunidad_numero_editT)).getText().toString());
+        comunidadBean.setSufijoNumero(((EditText) comunidadSearchView
+                .findViewById(R.id.comunidad_sufijo_numero_editT)).getText().toString());
     }
 
     @Override
@@ -186,6 +192,8 @@ public class RegComuFr extends Fragment {
         super.onStop();
     }
 
+// ================ Interface to communicate with the Activity ================
+
     @Override
     public void onDestroy()
     {
@@ -203,21 +211,6 @@ public class RegComuFr extends Fragment {
         super.onDestroy();
     }
 
-// ================ Interface to communicate with the Activity ================
-
-    public interface ComuDataControllerIf {
-
-        void onTipoViaSpinnerLoaded();
-
-        void onCAutonomaSpinnerLoaded();
-
-        void onProvinciaSpinnerLoaded();
-
-        void onMunicipioSpinnerLoaded();
-
-        void onDestroyFragment();
-    }
-
     void setmComuDataController(ComuDataControllerIf mComuDataController)
     {
         this.mComuDataController = mComuDataController;
@@ -225,33 +218,19 @@ public class RegComuFr extends Fragment {
 
 //  ===================== STATIC HELPER METHODS ==========================
 
-    public static void makeComunidadBeanFromView(View comunidadSearchView, ComunidadBean comunidadBean)
+    public View getFragmentView()
     {
-        comunidadBean.setNombreVia(((EditText) comunidadSearchView
-                .findViewById(R.id.comunidad_nombre_via_editT)).getText().toString());
-        comunidadBean.setNumeroString(((EditText) comunidadSearchView
-                .findViewById(R.id.comunidad_numero_editT)).getText().toString());
-        comunidadBean.setSufijoNumero(((EditText) comunidadSearchView
-                .findViewById(R.id.comunidad_sufijo_numero_editT)).getText().toString());
+        return mRegComunidadFrView;
     }
 
 //    ============================================================
 //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
 //    ============================================================
 
-    public View getFragmentView()
-    {
-        return mRegComunidadFrView;
-    }
-
     public ComunidadBean getComunidadBean()
     {
         return comunidadBean;
     }
-
-//  --------------------------------------------------------------------
-//                               SPINNERS
-//  --------------------------------------------------------------------
 
     SpinnerAdapter doAdapterSpinner(Cursor cursor, String[] fromColDB)
     {
@@ -265,6 +244,23 @@ public class RegComuFr extends Fragment {
                 fromColDB,
                 toViews,
                 0);
+    }
+
+//  --------------------------------------------------------------------
+//                               SPINNERS
+//  --------------------------------------------------------------------
+
+    public interface ComuDataControllerIf {
+
+        void onTipoViaSpinnerLoaded();
+
+        void onCAutonomaSpinnerLoaded();
+
+        void onProvinciaSpinnerLoaded();
+
+        void onMunicipioSpinnerLoaded();
+
+        void onDestroyFragment();
     }
 
 ///    ::::::::::::::: TIPO DE VÍA - COMUNIDAD AUTONOMA ::::::::::::::::

@@ -2,8 +2,8 @@ package com.didekindroid.incidencia.activity.utils;
 
 import android.widget.Spinner;
 
-import com.didekin.incidencia.dominio.Incidencia;
 import com.didekindroid.incidencia.dominio.IncidImportanciaBean;
+import com.didekinlib.model.incidencia.dominio.Incidencia;
 
 /**
  * User: pedro@didekin

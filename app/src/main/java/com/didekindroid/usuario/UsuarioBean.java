@@ -2,13 +2,13 @@ package com.didekindroid.usuario;
 
 import android.content.res.Resources;
 
-import com.didekin.usuario.Usuario;
 import com.didekindroid.R;
+import com.didekinlib.model.usuario.Usuario;
 
-import static com.didekin.common.dominio.ValidDataPatterns.ALIAS;
-import static com.didekin.common.dominio.ValidDataPatterns.EMAIL;
-import static com.didekin.common.dominio.ValidDataPatterns.LINE_BREAK;
-import static com.didekin.common.dominio.ValidDataPatterns.PASSWORD;
+import static com.didekinlib.model.common.dominio.ValidDataPatterns.ALIAS;
+import static com.didekinlib.model.common.dominio.ValidDataPatterns.EMAIL;
+import static com.didekinlib.model.common.dominio.ValidDataPatterns.LINE_BREAK;
+import static com.didekinlib.model.common.dominio.ValidDataPatterns.PASSWORD;
 
 /**
  * User: pedro@didekin
@@ -48,7 +48,7 @@ public final class UsuarioBean {
         return isValide;
     }
 
-    public boolean validateWithOnePassword(Resources resources, StringBuilder errorMsg)
+    boolean validateWithOnePassword(Resources resources, StringBuilder errorMsg)
     {
         boolean isValid = validateAlias(resources.getText(R.string.alias), errorMsg)
                 & validateUserName(resources.getText(R.string.email_hint), errorMsg)
@@ -96,7 +96,7 @@ public final class UsuarioBean {
         return isValid;
     }
 
-    public boolean validateDoublePassword(Resources resources, StringBuilder errorMsg)
+    private boolean validateDoublePassword(Resources resources, StringBuilder errorMsg)
     {
         if (!password.trim().equals(verificaPassword)) {
             errorMsg.append(resources.getText(R.string.password).toString())

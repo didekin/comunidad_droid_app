@@ -1,16 +1,14 @@
 package com.didekindroid.usuariocomunidad.testutil;
 
-import com.didekin.comunidad.Comunidad;
-import com.didekin.usuario.Usuario;
-import com.didekin.usuariocomunidad.UsuarioComunidad;
 import com.didekindroid.exception.UiException;
+import com.didekinlib.model.comunidad.Comunidad;
+import com.didekinlib.model.usuario.Usuario;
+import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.didekin.usuariocomunidad.Rol.PRESIDENTE;
-import static com.didekin.usuariocomunidad.Rol.PROPIETARIO;
 import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_EL_ESCORIAL;
 import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_LA_FUENTE;
 import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_LA_PLAZUELA_5;
@@ -25,7 +23,9 @@ import static com.didekindroid.usuariocomunidad.RolUi.ADM;
 import static com.didekindroid.usuariocomunidad.RolUi.INQ;
 import static com.didekindroid.usuariocomunidad.RolUi.PRE;
 import static com.didekindroid.usuariocomunidad.RolUi.PRO;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
+import static com.didekinlib.model.usuariocomunidad.Rol.PRESIDENTE;
+import static com.didekinlib.model.usuariocomunidad.Rol.PROPIETARIO;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -62,15 +62,22 @@ public final class UserComuDataTestUtil {
 
     public static Usuario signUpAndUpdateTk(UsuarioComunidad usuarioComunidad) throws IOException, UiException
     {
-        AppUserComuServ.regComuAndUserAndUserComu(usuarioComunidad).execute().body();
+        userComuDaoRemote.regComuAndUserAndUserComu(usuarioComunidad).execute().body();
         updateSecurityData(usuarioComunidad.getUsuario().getUserName(), usuarioComunidad.getUsuario().getPassword());
         return usuarioDao.getUserData();
+    }
+
+    public static Comunidad signUpWithTkGetComu(UsuarioComunidad usuarioComunidad) throws IOException, UiException
+    {
+        userComuDaoRemote.regComuAndUserAndUserComu(usuarioComunidad).execute().body();
+        updateSecurityData(usuarioComunidad.getUsuario().getUserName(), usuarioComunidad.getUsuario().getPassword());
+        return userComuDaoRemote.getComusByUser().get(0);
     }
 
     public static void regTwoUserComuSameUser(List<UsuarioComunidad> usuarioComunidadList) throws IOException, UiException
     {
         signUpAndUpdateTk(usuarioComunidadList.get(0));
-        AppUserComuServ.regComuAndUserComu(usuarioComunidadList.get(1));
+        userComuDaoRemote.regComuAndUserComu(usuarioComunidadList.get(1));
     }
 
     public static void regThreeUserComuSameUser(List<UsuarioComunidad> usuarioComunidadList, Comunidad comunidad) throws IOException, UiException
@@ -78,7 +85,7 @@ public final class UserComuDataTestUtil {
         regTwoUserComuSameUser(usuarioComunidadList);
         UsuarioComunidad usuarioComunidad = makeUsuarioComunidad(comunidad, usuarioComunidadList.get(0).getUsuario(),
                 null, null, "plan-5", null, ADM.function);
-        AppUserComuServ.regComuAndUserComu(usuarioComunidad);
+        userComuDaoRemote.regComuAndUserComu(usuarioComunidad);
     }
 
     public static void regSeveralUserComuSameUser(UsuarioComunidad... userComus) throws IOException, UiException
@@ -86,7 +93,7 @@ public final class UserComuDataTestUtil {
         assertThat(userComus.length > 0, is(true));
         signUpAndUpdateTk(userComus[0]);
         for (int i = 1; i < userComus.length; i++) {
-            AppUserComuServ.regComuAndUserComu(userComus[i]);
+            userComuDaoRemote.regComuAndUserComu(userComus[i]);
         }
     }
 

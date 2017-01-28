@@ -2,7 +2,8 @@ package com.didekindroid.incidencia.activity.utils;
 
 import android.widget.ArrayAdapter;
 
-import com.didekin.comunidad.Comunidad;
+import com.didekinlib.model.comunidad.Comunidad;
+
 
 /**
  * User: pedro@didekin

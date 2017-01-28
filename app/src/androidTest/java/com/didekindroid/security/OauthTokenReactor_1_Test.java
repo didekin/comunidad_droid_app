@@ -2,10 +2,10 @@ package com.didekindroid.security;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.http.ErrorBean;
-import com.didekin.http.oauth2.SpringOauthToken;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.security.OauthTokenReactor.OauthUpdateTokenCacheObserver;
+import com.didekinlib.http.ErrorBean;
+import com.didekinlib.http.oauth2.SpringOauthToken;
 
 import org.junit.After;
 import org.junit.Before;
@@ -18,7 +18,6 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Completable;
 
-import static com.didekin.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
 import static com.didekindroid.security.OauthTokenReactor.oauthTokenAndInitCache;
 import static com.didekindroid.security.OauthTokenReactor.oauthTokenFromRefreshTk;
 import static com.didekindroid.security.OauthTokenReactor.oauthTokenFromUserPswd;
@@ -28,10 +27,11 @@ import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceIoSch
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
 import static io.reactivex.plugins.RxJavaPlugins.reset;
 import static io.reactivex.schedulers.Schedulers.io;
 import static org.hamcrest.CoreMatchers.is;
@@ -197,7 +197,7 @@ public class OauthTokenReactor_1_Test {
         // We delete from everywhere the default user for the rest of the tests.
         cleanOptions(CLEAN_PEPE);
 
-        AppUserComuServ.regComuAndUserAndUserComu(COMU_REAL_PEPE).execute().body();
+        userComuDaoRemote.regComuAndUserAndUserComu(COMU_REAL_PEPE).execute().body();
         checkNoInitCache();
         try {
             trampolineReplaceIoScheduler();

@@ -2,15 +2,14 @@ package com.didekindroid.security;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.http.oauth2.SpringOauthToken;
 import com.didekindroid.exception.UiException;
+import com.didekinlib.http.oauth2.SpringOauthToken;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static com.didekin.http.oauth2.OauthTokenHelper.HELPER;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.security.TokenIdentityCacher.cleanTokenAndUnregisterFunc;
 import static com.didekindroid.security.TokenIdentityCacher.cleanTokenCacheAction;
@@ -20,6 +19,7 @@ import static com.didekindroid.testutil.SecurityTestUtils.doSpringOauthToken;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_TK_HANDLER;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.util.IoHelper.readStringFromFile;
+import static com.didekinlib.http.oauth2.OauthTokenHelper.HELPER;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;

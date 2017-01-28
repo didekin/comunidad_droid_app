@@ -1,5 +1,7 @@
 package com.didekindroid.usuariocomunidad;
 
+import com.didekindroid.usuariocomunidad.dao.UserComuDaoRemoteTest;
+
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -19,7 +21,7 @@ import org.junit.runners.Suite;
         SeeUserComuByUserAcTest.class,
         UserComuDataAc_1_Test.class,
         UserComuDataAc_2_Test.class,
-        UserComuServiceTest.class,
+        UserComuDaoRemoteTest.class,
         UsuarioComunidadBeanValidaTests.class,
 })
 public class UserComuSuite {

@@ -4,15 +4,15 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.app.FragmentManager;
 
-import com.didekin.incidencia.dominio.IncidAndResolBundle;
-import com.didekin.incidencia.dominio.IncidImportancia;
-import com.didekin.incidencia.dominio.Incidencia;
-import com.didekin.incidencia.dominio.IncidenciaUser;
-import com.didekin.usuariocomunidad.UsuarioComunidad;
-import com.didekindroid.exception.UiException;
-import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.R;
+import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.IncidenciaDataDbHelper;
+import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
+import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
+import com.didekinlib.model.incidencia.dominio.IncidImportancia;
+import com.didekinlib.model.incidencia.dominio.Incidencia;
+import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
+import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.junit.After;
 import org.junit.Before;
@@ -35,23 +35,23 @@ import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExt
 import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekin.usuariocomunidad.Rol.PROPIETARIO;
+import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
+import static com.didekindroid.incidencia.IncidenciaDataDbHelperTest.DB_PATH;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
+import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
+import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidenciaUser;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.testutil.SecurityTestUtils.updateSecurityData;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
-import static com.didekindroid.incidencia.IncidenciaDataDbHelperTest.DB_PATH;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidenciaUser;
-import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
-import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.makeUsuarioComunidad;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static com.didekinlib.model.usuariocomunidad.Rol.PROPIETARIO;
 import static org.hamcrest.CoreMatchers.is;
 
 /**
@@ -63,10 +63,7 @@ import static org.hamcrest.CoreMatchers.is;
 @RunWith(AndroidJUnit4.class)
 public class IncidSeeOpenByComuAcTest_3 {
 
-    private UsuarioDataTestUtils.CleanUserEnum whatToClean = CLEAN_JUAN_AND_PEPE;
-    private IncidSeeOpenByComuAdapter adapter;
     UsuarioComunidad userComuJuan;
-
     /**
      * Preconditions:
      * 1. Incidencia without resolucion in BD.
@@ -87,13 +84,13 @@ public class IncidSeeOpenByComuAcTest_3 {
         {
             try {
                 signUpAndUpdateTk(COMU_REAL_PEPE);
-                UsuarioComunidad pepeUserComu = AppUserComuServ.seeUserComusByUser().get(0);
+                UsuarioComunidad pepeUserComu = userComuDaoRemote.seeUserComusByUser().get(0);
                 // Insertamos incidencia.
                 insertGetIncidenciaUser(pepeUserComu, 1);
                 // Registro userComu en misma comunidad.
                 userComuJuan = makeUsuarioComunidad(pepeUserComu.getComunidad(), USER_JUAN,
                         "portal", "esc", "plantaX", "door12", PROPIETARIO.function);
-                AppUserComuServ.regUserAndUserComu(userComuJuan).execute();
+                userComuDaoRemote.regUserAndUserComu(userComuJuan).execute();
                 updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
             } catch (IOException | UiException e) {
                 e.printStackTrace();
@@ -101,6 +98,8 @@ public class IncidSeeOpenByComuAcTest_3 {
             FragmentManager.enableDebugLogging(true);
         }
     };
+    private UsuarioDataTestUtils.CleanUserEnum whatToClean = CLEAN_JUAN_AND_PEPE;
+    private IncidSeeOpenByComuAdapter adapter;
 
     @BeforeClass
     public static void slowSeconds() throws InterruptedException

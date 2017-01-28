@@ -7,10 +7,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.didekin.incidencia.dominio.IncidImportancia;
-import com.didekin.incidencia.dominio.Resolucion;
 import com.didekindroid.R;
 import com.didekindroid.incidencia.activity.utils.IncidBundleKey;
+import com.didekinlib.model.incidencia.dominio.IncidImportancia;
+import com.didekinlib.model.incidencia.dominio.Resolucion;
 
 import timber.log.Timber;
 
@@ -22,7 +22,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
 
 /**
  * This activity is a point of registration for receiving GCM notifications of new incidents.
- *
+ * <p>
  * Preconditions:
  * 1. An intent key is received with an IncidImportancia belonging to a user with function 'adm'.
  * 2. An intent key with a Resolucion instance MAY be received.
@@ -34,7 +34,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * 2. If a Resolucion intent is received and the user has authority 'adm':
  * 2.1. The resolucion is modified in BD, with a new avance record.
  * 2.2. If the user choose the 'close the incidencia' option, the incidencia is closed and a new
- *      avance record is inserted too.
+ * avance record is inserted too.
  * 3. If NOT Resolucion intent is received and the user hasn't got authority 'adm':
  * 3.1. A message informs that there is not resolución for the incidencia.
  * 4. If a Resolucion intent is received and the user hasn't got authority 'adm':

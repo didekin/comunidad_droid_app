@@ -2,13 +2,13 @@ package com.didekindroid.comunidad;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.comunidad.Comunidad;
-import com.didekin.comunidad.Municipio;
-import com.didekin.comunidad.Provincia;
-import com.didekindroid.exception.UiException;
 import com.didekindroid.comunidad.testutil.ComuDataTestUtil;
+import com.didekindroid.exception.UiException;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum;
 import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
+import com.didekinlib.model.comunidad.Comunidad;
+import com.didekinlib.model.comunidad.Municipio;
+import com.didekinlib.model.comunidad.Provincia;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.After;
@@ -19,12 +19,12 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 import java.util.List;
 
+import static com.didekindroid.comunidad.ComunidadService.AppComuServ;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_NOTHING;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.comunidad.ComunidadService.AppComuServ;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_TRAV_PLAZUELA_PEPE;
 import static org.hamcrest.Matchers.is;
@@ -41,7 +41,8 @@ public class ComunidadServiceTest {
     CleanUserEnum whatClean;
 
     @Before
-    public void setUp() throws Exception{
+    public void setUp() throws Exception
+    {
         whatClean = CLEAN_NOTHING;
     }
 
@@ -57,7 +58,7 @@ public class ComunidadServiceTest {
         whatClean = CLEAN_PEPE;
 
         UserComuDataTestUtil.signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
-        Comunidad cDB = AppUserComuServ.getComusByUser().get(0);
+        Comunidad cDB = userComuDaoRemote.getComusByUser().get(0);
         Comunidad c1 = AppComuServ.getComuData(cDB.getC_Id());
         assertThat(c1, is(cDB));
     }

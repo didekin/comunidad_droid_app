@@ -1,9 +1,10 @@
 package com.didekindroid.usuariocomunidad.testutil;
 
-import com.didekin.usuariocomunidad.UsuarioComunidad;
+
 import com.didekindroid.R;
 import com.didekindroid.usuariocomunidad.RolUi;
 import com.didekindroid.usuariocomunidad.UsuarioComunidadBean;
+import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;

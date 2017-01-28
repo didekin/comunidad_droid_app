@@ -3,13 +3,13 @@ package com.didekindroid.usuario;
 import android.app.Activity;
 import android.support.test.rule.ActivityTestRule;
 
-import com.didekin.http.oauth2.SpringOauthToken;
-import com.didekin.usuario.Usuario;
 import com.didekindroid.ExtendableTestAc;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.usuario.password.PasswordChangeAc;
 import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
+import com.didekinlib.http.oauth2.SpringOauthToken;
+import com.didekinlib.model.usuario.Usuario;
 
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
@@ -49,11 +49,10 @@ import static org.junit.Assert.assertThat;
 public class PasswordChangeAcTest implements ExtendableTestAc {
 
     protected Usuario registeredUser;
-    private PasswordChangeAc mActivity;
-    private int activityLayoutId = R.id.password_change_ac_layout;
-
     @Rule
     public ActivityTestRule<? extends Activity> mActivityRule = getActivityRule();
+    private PasswordChangeAc mActivity;
+    private int activityLayoutId = R.id.password_change_ac_layout;
 
     @BeforeClass
     public static void slowSeconds() throws InterruptedException

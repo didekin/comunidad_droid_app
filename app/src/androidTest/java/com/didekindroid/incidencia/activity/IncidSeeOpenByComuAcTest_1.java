@@ -8,11 +8,11 @@ import android.support.test.espresso.Espresso;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.comunidad.Comunidad;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.testutil.IdlingResourceForIntentServ;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
+import com.didekinlib.model.comunidad.Comunidad;
 
 import org.junit.After;
 import org.junit.Before;
@@ -41,7 +41,7 @@ import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.regSeveralUserComuSameUser;
@@ -63,16 +63,8 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class IncidSeeOpenByComuAcTest_1 {
 
-    private IncidSeeOpenByComuAc mActivity;
-    private UsuarioDataTestUtils.CleanUserEnum whatToClean = CLEAN_JUAN;
     IdlingResourceForIntentServ idlingResource;
     Comunidad comunidadInIntent;
-    NotificationManager mNotifyManager;
-    private int messageId = INCIDENCIA_OPEN.getBarNotificationId();
-    // Layouts to check in navigate-up.
-    int activityLayoutId = R.id.incid_see_open_by_comu_ac;
-    int secondLayoutId = R.id.incid_see_generic_layout;
-
     @Rule
     public IntentsTestRule<IncidSeeOpenByComuAc> activityRule = new IntentsTestRule<IncidSeeOpenByComuAc>(IncidSeeOpenByComuAc.class) {
 
@@ -98,7 +90,7 @@ public class IncidSeeOpenByComuAcTest_1 {
         {
             try {
                 regSeveralUserComuSameUser(COMU_REAL_JUAN, COMU_PLAZUELA5_JUAN);
-                comunidadInIntent = AppUserComuServ.seeUserComusByUser().get(0).getComunidad();
+                comunidadInIntent = userComuDaoRemote.seeUserComusByUser().get(0).getComunidad();
                 Intent intent = new Intent();
                 intent.putExtra(COMUNIDAD_ID.key, comunidadInIntent.getC_Id());
                 return intent;
@@ -111,6 +103,13 @@ public class IncidSeeOpenByComuAcTest_1 {
             return null;
         }
     };
+    NotificationManager mNotifyManager;
+    // Layouts to check in navigate-up.
+    int activityLayoutId = R.id.incid_see_open_by_comu_ac;
+    int secondLayoutId = R.id.incid_see_generic_layout;
+    private IncidSeeOpenByComuAc mActivity;
+    private UsuarioDataTestUtils.CleanUserEnum whatToClean = CLEAN_JUAN;
+    private int messageId = INCIDENCIA_OPEN.getBarNotificationId();
 
     @BeforeClass
     public static void slowSeconds() throws InterruptedException

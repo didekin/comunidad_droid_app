@@ -2,14 +2,14 @@ package com.didekindroid.usuariocomunidad;
 
 import android.content.res.Resources;
 
-import com.didekin.common.dominio.ValidDataPatterns;
-import com.didekin.usuario.Usuario;
-import com.didekin.usuariocomunidad.UsuarioComunidad;
-import com.didekindroid.usuario.UsuarioBean;
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComunidadBean;
+import com.didekindroid.usuario.UsuarioBean;
+import com.didekinlib.model.common.dominio.ValidDataPatterns;
+import com.didekinlib.model.usuario.Usuario;
+import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
-import static com.didekin.common.dominio.ValidDataPatterns.PORTAL;
+import static com.didekinlib.model.common.dominio.ValidDataPatterns.PORTAL;
 
 
 /**

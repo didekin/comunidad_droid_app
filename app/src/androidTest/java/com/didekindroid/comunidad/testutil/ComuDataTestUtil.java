@@ -1,8 +1,8 @@
 package com.didekindroid.comunidad.testutil;
 
-import com.didekin.comunidad.Comunidad;
-import com.didekin.comunidad.Municipio;
-import com.didekin.comunidad.Provincia;
+import com.didekinlib.model.comunidad.Comunidad;
+import com.didekinlib.model.comunidad.Municipio;
+import com.didekinlib.model.comunidad.Provincia;
 
 /**
  * User: pedro@didekin
@@ -11,10 +11,6 @@ import com.didekin.comunidad.Provincia;
  */
 
 public final class ComuDataTestUtil {
-
-    private ComuDataTestUtil()
-    {
-    }
 
     // Municipio: Benizalón  Provincia: Almería
     public static final Comunidad COMU_EL_ESCORIAL = new Comunidad.ComunidadBuilder()
@@ -52,6 +48,9 @@ public final class ComuDataTestUtil {
             .sufijoNumero("Bis")
             .municipio(new Municipio((short) 13, new Provincia((short) 3)))
             .build();
+    private ComuDataTestUtil()
+    {
+    }
 
     public static Comunidad makeComunidad(String tipoVia, String nombreVia, short numero, String sufijoNumero,
                                           Municipio municipio)

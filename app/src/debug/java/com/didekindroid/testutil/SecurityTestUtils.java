@@ -1,8 +1,8 @@
 package com.didekindroid.testutil;
 
 
-import com.didekin.http.oauth2.SpringOauthToken;
 import com.didekindroid.exception.UiException;
+import com.didekinlib.http.oauth2.SpringOauthToken;
 
 import java.sql.Timestamp;
 import java.util.Date;

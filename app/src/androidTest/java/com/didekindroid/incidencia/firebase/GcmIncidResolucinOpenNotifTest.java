@@ -7,12 +7,12 @@ import android.os.Build;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.incidencia.dominio.IncidenciaUser;
-import com.didekin.usuariocomunidad.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.testutil.MockActivity;
-import com.didekinservice.common.gcm.GcmException;
+import com.didekinlib.gcm.model.common.GcmException;
+import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
+import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,13 +27,13 @@ import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekin.incidencia.gcm.GcmKeyValueIncidData.resolucion_open_type;
 import static com.didekindroid.incidencia.testutils.GcmConstantForTests.test_api_key_header;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidenciaUser;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static com.didekinlib.model.incidencia.gcm.GcmKeyValueIncidData.resolucion_open_type;
 import static org.hamcrest.CoreMatchers.allOf;
 
 /**
@@ -56,7 +56,7 @@ public class GcmIncidResolucinOpenNotifTest extends GcmIncidNotificationTest {
             {
                 try {
                     signUpAndUpdateTk(COMU_REAL_PEPE);
-                    UsuarioComunidad pepeUserComu = AppUserComuServ.seeUserComusByUser().get(0);
+                    UsuarioComunidad pepeUserComu = userComuDaoRemote.seeUserComusByUser().get(0);
                     comunidadIdIntent = pepeUserComu.getComunidad().getC_Id();
                     incidenciaUser = insertGetIncidenciaUser(pepeUserComu, 1);
                 } catch (IOException | UiException e) {

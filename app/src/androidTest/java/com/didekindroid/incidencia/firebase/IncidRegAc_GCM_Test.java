@@ -6,12 +6,11 @@ import android.content.Context;
 import android.os.Build;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
-
-import com.didekin.incidencia.dominio.IncidImportancia;
-import com.didekin.usuario.Usuario;
-import com.didekin.usuariocomunidad.UsuarioComunidad;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.activity.incidreg.IncidRegAc;
+import com.didekinlib.model.incidencia.dominio.IncidImportancia;
+import com.didekinlib.model.usuario.Usuario;
+import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.junit.BeforeClass;
@@ -26,7 +25,7 @@ import static com.didekindroid.incidencia.firebase.IncidFirebaseDownMsgHandler.I
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doIncidencia;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static org.hamcrest.CoreMatchers.is;
@@ -86,7 +85,7 @@ public class IncidRegAc_GCM_Test extends Incidencia_GCM_Test {
                 TKhandler.updateIsGcmTokenSentServer(false);
                 try {
                     pepe = signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
-                    pepeUserComu = AppUserComuServ.seeUserComusByUser().get(0);
+                    pepeUserComu = userComuDaoRemote.seeUserComusByUser().get(0);
                     // Pepe hasn't got a gcmToken.
                     assertThat(usuarioDao.getGcmToken(), nullValue());
                 } catch (IOException | UiException e) {

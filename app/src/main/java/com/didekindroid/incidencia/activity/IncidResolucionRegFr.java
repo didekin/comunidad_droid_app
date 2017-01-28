@@ -10,18 +10,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.didekin.comunidad.Comunidad;
-import com.didekin.incidencia.dominio.IncidImportancia;
-import com.didekin.incidencia.dominio.Incidencia;
-import com.didekin.incidencia.dominio.Resolucion;
-import com.didekindroid.exception.UiException;
 import com.didekindroid.R;
+import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.dominio.ResolucionBean;
+import com.didekinlib.model.comunidad.Comunidad;
+import com.didekinlib.model.incidencia.dominio.IncidImportancia;
+import com.didekinlib.model.incidencia.dominio.Incidencia;
+import com.didekinlib.model.incidencia.dominio.Resolucion;
 
 import java.sql.Timestamp;
 
 import timber.log.Timber;
 
+import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
+import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaAssertionMsg.resolucion_should_be_registered;
 import static com.didekindroid.util.ConnectionUtils.checkInternetConnected;
 import static com.didekindroid.util.FechaPickerFr.FechaPickerHelper.initFechaSpinnerView;
@@ -29,8 +31,6 @@ import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.util.UIutils.makeToast;
-import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
-import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 
 /**
  * User: pedro@didekin
@@ -120,7 +120,7 @@ public class IncidResolucionRegFr extends IncidResolucionFrAbstract {
         mResolucionBean.setFechaPrevistaText(mFechaView.getText().toString());
         // La fecha se inicializa en FechaPickerFr.onDateSet().
 
-        if (!mResolucionBean.validateBeanPlan(errorMsg, getResources(),mIncidImportancia)) {
+        if (!mResolucionBean.validateBeanPlan(errorMsg, getResources(), mIncidImportancia)) {
             mResolucionBean = null;
         }
     }

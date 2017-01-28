@@ -12,22 +12,23 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.didekin.comunidad.Comunidad;
-import com.didekin.http.ErrorBean;
-import com.didekindroid.exception.UiException;
 import com.didekindroid.R;
+import com.didekindroid.exception.UiException;
 import com.didekindroid.usuariocomunidad.RegComuAndUserAndUserComuAc;
 import com.didekindroid.usuariocomunidad.RegComuAndUserComuAc;
+import com.didekinlib.http.ErrorBean;
+import com.didekinlib.model.comunidad.Comunidad;
 
 import java.io.IOException;
 import java.util.List;
 
 import timber.log.Timber;
 
+import static com.didekindroid.comunidad.ComunidadService.AppComuServ;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.util.UIutils.makeToast;
-import static com.didekindroid.comunidad.ComunidadService.AppComuServ;
+import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
 
 /**
  * Preconditions:
@@ -171,8 +172,11 @@ public class ComuSearchResultsListFr extends Fragment {
 
     public interface ComuListListener {
         void onComunidadSelected(Comunidad comunidad, int lineItemIndex);
+
         List<Comunidad> getResultsList();
+
         Comunidad getComunidadToSearch();
+
         Activity getActivity();
     }
 
@@ -192,7 +196,7 @@ public class ComuSearchResultsListFr extends Fragment {
             try {
                 comunidadesList = AppComuServ.searchComunidades(comunidades[0]).execute().body();
             } catch (IOException e) {
-                uiException = new UiException(ErrorBean.GENERIC_ERROR);
+                uiException = new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
             }
             return comunidadesList;
         }

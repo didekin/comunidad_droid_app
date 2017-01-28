@@ -5,16 +5,15 @@ import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.comunidad.Comunidad;
-import com.didekin.usuariocomunidad.UsuarioComunidad;
-
-import com.didekindroid.exception.UiException;
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComuBundleKey;
-import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.comunidad.testutil.ComuDataTestUtil;
+import com.didekindroid.exception.UiException;
+import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
 import com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil;
+import com.didekinlib.model.comunidad.Comunidad;
+import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.hamcrest.Matchers;
 import org.junit.After;
@@ -32,14 +31,14 @@ import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN2;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.RolUi.INQ;
 import static com.didekindroid.usuariocomunidad.RolUi.formatRolToString;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static external.LongListMatchers.withAdaptedData;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.containsString;
@@ -55,15 +54,14 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class SeeUserComuByComuAc_2_Test {
 
+    @Rule
+    public ActivityTestRule<SeeUserComuByComuAc> mActivityRule =
+            new ActivityTestRule<>(SeeUserComuByComuAc.class, true, false);
     SeeUserComuByComuAc mActivity;
     SeeUserComuByComuFr mFragment;
     SeeUserComuByComuListAdapter mAdapter;
     long comunidadId;
     Intent intent;
-
-    @Rule
-    public ActivityTestRule<SeeUserComuByComuAc> mActivityRule =
-            new ActivityTestRule<>(SeeUserComuByComuAc.class, true, false);
 
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
@@ -99,7 +97,7 @@ public class SeeUserComuByComuAc_2_Test {
         UserComuDataTestUtil.signUpAndUpdateTk(UserComuDataTestUtil.COMU_PLAZUELA5_JUAN);
         doSetUp();
         // Tiene portal, escalera, planta y puerta.
-        AppUserComuServ.regUserAndUserComu(new UsuarioComunidad.UserComuBuilder(
+        userComuDaoRemote.regUserAndUserComu(new UsuarioComunidad.UserComuBuilder(
                 new Comunidad.ComunidadBuilder().c_id(comunidadId).build(),
                 UserComuDataTestUtil.COMU_PLAZUELA5_PEPE.getUsuario()).userComuRest(UserComuDataTestUtil.COMU_PLAZUELA5_PEPE)
                 .build()).execute();
@@ -113,7 +111,7 @@ public class SeeUserComuByComuAc_2_Test {
                 .puerta("123")
                 .roles(INQ.function)
                 .build();
-        AppUserComuServ.regUserAndUserComu(userComuNew).execute();
+        userComuDaoRemote.regUserAndUserComu(userComuNew).execute();
         launch();
 
         // Check adapter data.
@@ -202,7 +200,7 @@ public class SeeUserComuByComuAc_2_Test {
 
     private void doSetUp() throws UiException
     {
-        List<UsuarioComunidad> usuariosComu = AppUserComuServ.seeUserComusByUser();
+        List<UsuarioComunidad> usuariosComu = userComuDaoRemote.seeUserComusByUser();
         comunidadId = usuariosComu.get(0).getComunidad().getC_Id();
         intent = new Intent();
         intent.putExtra(ComuBundleKey.COMUNIDAD_ID.key, comunidadId);

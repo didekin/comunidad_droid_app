@@ -7,10 +7,10 @@ import com.didekindroid.R;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.didekin.usuariocomunidad.Rol.ADMINISTRADOR;
-import static com.didekin.usuariocomunidad.Rol.INQUILINO;
-import static com.didekin.usuariocomunidad.Rol.PRESIDENTE;
-import static com.didekin.usuariocomunidad.Rol.PROPIETARIO;
+import static com.didekinlib.model.usuariocomunidad.Rol.ADMINISTRADOR;
+import static com.didekinlib.model.usuariocomunidad.Rol.INQUILINO;
+import static com.didekinlib.model.usuariocomunidad.Rol.PRESIDENTE;
+import static com.didekinlib.model.usuariocomunidad.Rol.PROPIETARIO;
 
 /**
  * User: pedro@didekin
@@ -56,7 +56,7 @@ public enum RolUi {
     }
 
     /**
-     *  It obtains the resource string associated wiht a rol function.
+     * It obtains the resource string associated wiht a rol function.
      */
     public static int getResourceStringId(String function)
     {

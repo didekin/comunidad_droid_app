@@ -9,19 +9,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.didekin.http.ErrorBean;
-import com.didekin.usuario.Usuario;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.security.IdentityCacher;
 import com.didekindroid.usuario.UsuarioBean;
 import com.didekindroid.util.MenuRouter;
 import com.didekindroid.util.UIutils;
+import com.didekinlib.http.ErrorBean;
+import com.didekinlib.model.usuario.Usuario;
 
 import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 
-import static com.didekin.http.GenericExceptionMsg.BAD_REQUEST;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_name_password_should_be_initialized;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
@@ -36,6 +35,8 @@ import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.doToolBar;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.util.UIutils.makeToast;
+import static com.didekinlib.http.GenericExceptionMsg.BAD_REQUEST;
+import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
 
 /**
  * Preconditions:
@@ -194,7 +195,7 @@ public class UserDataAc extends AppCompatActivity implements UserDataControllerI
     }
 
     /**
-     *  Preconditions: newUser has been initialized with new user name and password entered.
+     * Preconditions: newUser has been initialized with new user name and password entered.
      */
     @Override
     public void processBackUserDataUpdated(boolean toInitTokenCache)
@@ -229,7 +230,7 @@ public class UserDataAc extends AppCompatActivity implements UserDataControllerI
                 ui.processMe(this, new Intent());
             }
         } else {
-            new UiException(ErrorBean.GENERIC_ERROR).processMe(this, new Intent());
+            new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR)).processMe(this, new Intent());
         }
     }
 

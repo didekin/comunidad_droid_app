@@ -3,13 +3,13 @@ package com.didekindroid.incidencia.activity;
 import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 
-import com.didekin.incidencia.dominio.IncidAndResolBundle;
-import com.didekin.incidencia.dominio.IncidImportancia;
-import com.didekin.incidencia.dominio.Incidencia;
-import com.didekin.usuariocomunidad.UsuarioComunidad;
+import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
-import com.didekindroid.R;
+import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
+import com.didekinlib.model.incidencia.dominio.IncidImportancia;
+import com.didekinlib.model.incidencia.dominio.Incidencia;
+import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -23,16 +23,16 @@ import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekindroid.testutil.ActivityTestUtils.checkNoToastInTest;
-import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
-import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.INCID_DEFAULT_DESC;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doIncidencia;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.testutil.ActivityTestUtils.checkNoToastInTest;
+import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
+import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 
@@ -44,6 +44,12 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.si
 public class IncidEditAcMaxPowerTest_2 extends IncidEditAbstractTest {
 
     IncidAndResolBundle incidResolBundlePepe;
+
+    @BeforeClass
+    public static void slowSeconds() throws InterruptedException
+    {
+        Thread.sleep(4000);
+    }
 
     @Override
     IntentsTestRule<IncidEditAc> doIntentRule()
@@ -61,7 +67,7 @@ public class IncidEditAcMaxPowerTest_2 extends IncidEditAbstractTest {
             {
                 try {
                     signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
-                    UsuarioComunidad pepeEscorial = AppUserComuServ.seeUserComusByUser().get(0);
+                    UsuarioComunidad pepeEscorial = userComuDaoRemote.seeUserComusByUser().get(0);
                     IncidImportancia incidPepeEscorial = new IncidImportancia.IncidImportanciaBuilder(
                             doIncidencia(pepeEscorial.getUsuario().getUserName(), INCID_DEFAULT_DESC, pepeEscorial.getComunidad().getC_Id(), (short) 43))
                             .usuarioComunidad(pepeEscorial)
@@ -71,7 +77,7 @@ public class IncidEditAcMaxPowerTest_2 extends IncidEditAbstractTest {
                     Incidencia incidenciaDb = IncidenciaServ.seeIncidsOpenByComu(pepeEscorial.getComunidad().getC_Id()).get(0).getIncidencia();
                     incidResolBundlePepe = IncidenciaServ.seeIncidImportancia(incidenciaDb.getIncidenciaId());
                     incidenciaPepe = incidResolBundlePepe.getIncidImportancia();
-                } catch ( IOException | UiException e) {
+                } catch (IOException | UiException e) {
                     e.printStackTrace();
                 }
                 Intent intent = new Intent();
@@ -80,12 +86,6 @@ public class IncidEditAcMaxPowerTest_2 extends IncidEditAbstractTest {
                 return intent;
             }
         };
-    }
-
-    @BeforeClass
-    public static void slowSeconds() throws InterruptedException
-    {
-        Thread.sleep(4000);
     }
 
     @Override
@@ -104,7 +104,7 @@ public class IncidEditAcMaxPowerTest_2 extends IncidEditAbstractTest {
         /* CASO OK: borramos la incidencia.*/
         onView(withId(R.id.incid_edit_fr_borrar_button)).perform(scrollTo(), click());
         // Verificamos que no ha habido error.
-        checkNoToastInTest(R.string.incidencia_wrong_init,mActivity);
+        checkNoToastInTest(R.string.incidencia_wrong_init, mActivity);
         onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed()));
         checkUp();
         checkScreenEditMaxPowerFr();

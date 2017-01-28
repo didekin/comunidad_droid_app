@@ -17,9 +17,9 @@ import android.widget.CursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.didekin.http.ErrorBean;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
+import com.didekinlib.http.ErrorBean;
 
 import java.sql.Timestamp;
 import java.text.DateFormat;
@@ -32,9 +32,9 @@ import timber.log.Timber;
 
 import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;
-import static com.didekin.common.dominio.ValidDataPatterns.LINE_BREAK;
-import static com.didekin.http.GenericExceptionMsg.TOKEN_NULL;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekinlib.http.GenericExceptionMsg.TOKEN_NULL;
+import static com.didekinlib.model.common.dominio.ValidDataPatterns.LINE_BREAK;
 import static java.text.DateFormat.MEDIUM;
 import static java.util.Locale.getDefault;
 
@@ -47,13 +47,12 @@ import static java.util.Locale.getDefault;
 public final class UIutils {
 
     public static final Locale SPAIN_LOCALE = new Locale("es", "ES");
-    private static final int APPBAR_ID = R.id.appbar;
-
     /* ASSERTION MESSAGES*/
     public static final String fragment_should_be_initialized = "Fragment should be initialized";
     public static final String bean_fromView_should_be_initialized = "Bean with view data should be initialized";
     public static final String intent_extra_should_be_initialized = "Intent extra should be initialized";
     public static final String cursor_should_be_closed = "Database cursor should be closed";
+    private static final int APPBAR_ID = R.id.appbar;
 
     private UIutils()
     {
@@ -89,7 +88,7 @@ public final class UIutils {
                 cursor = cursorAdapter.getCursor();
                 if (cursor != null) {
                     cursor.close();
-                    assertTrue(cursor.isClosed(), cursor_should_be_closed );
+                    assertTrue(cursor.isClosed(), cursor_should_be_closed);
                 }
             } catch (ClassCastException e) {
                 throw new IllegalStateException("Illegal NON cursorAdapter", e);

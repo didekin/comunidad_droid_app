@@ -1,25 +1,25 @@
 package com.didekindroid.incidencia.testutils;
 
-import com.didekin.comunidad.Comunidad;
-import com.didekin.incidencia.dominio.AmbitoIncidencia;
-import com.didekin.incidencia.dominio.Avance;
-import com.didekin.incidencia.dominio.IncidComment;
-import com.didekin.incidencia.dominio.IncidImportancia;
-import com.didekin.incidencia.dominio.Incidencia;
-import com.didekin.incidencia.dominio.IncidenciaUser;
-import com.didekin.incidencia.dominio.Resolucion;
-import com.didekin.usuariocomunidad.UsuarioComunidad;
 import com.didekindroid.exception.UiException;
+import com.didekinlib.model.comunidad.Comunidad;
+import com.didekinlib.model.incidencia.dominio.AmbitoIncidencia;
+import com.didekinlib.model.incidencia.dominio.Avance;
+import com.didekinlib.model.incidencia.dominio.IncidComment;
+import com.didekinlib.model.incidencia.dominio.IncidImportancia;
+import com.didekinlib.model.incidencia.dominio.Incidencia;
+import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
+import com.didekinlib.model.incidencia.dominio.Resolucion;
+import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.didekindroid.util.UIutils.getStringFromInteger;
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.util.UIutils.getStringFromInteger;
 
 /**
  * User: pedro@didekin
@@ -110,9 +110,9 @@ public final class IncidDataTestUtils {
     {
         IncidImportancia incidImportancia =
                 new IncidImportancia.IncidImportanciaBuilder(doIncidenciaWithId(incidenciaId, INCID_DEFAULT_DESC, userComu.getComunidad().getC_Id(), (short) 43))
-                .usuarioComunidad(userComu)
-                .importancia((short) importancia)
-                .build();
+                        .usuarioComunidad(userComu)
+                        .importancia((short) importancia)
+                        .build();
         IncidenciaServ.regIncidImportancia(incidImportancia);
         return IncidenciaServ.seeIncidsOpenByComu(userComu.getComunidad().getC_Id()).get(0);
     }
@@ -120,7 +120,7 @@ public final class IncidDataTestUtils {
     public static IncidImportancia insertGetIncidImportancia(UsuarioComunidad userComu) throws IOException, UiException
     {
         signUpAndUpdateTk(userComu);
-        UsuarioComunidad userComuDb = AppUserComuServ.seeUserComusByUser().get(0);
+        UsuarioComunidad userComuDb = userComuDaoRemote.seeUserComusByUser().get(0);
         IncidImportancia incidImportancia = new IncidImportancia.IncidImportanciaBuilder(
                 doIncidencia(userComuDb.getUsuario().getUserName(), INCID_DEFAULT_DESC, userComuDb.getComunidad().getC_Id(), (short) 43))
                 .usuarioComunidad(userComuDb)

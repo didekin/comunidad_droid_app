@@ -1,7 +1,7 @@
 package com.didekindroid.security;
 
-import com.didekin.http.oauth2.SpringOauthToken;
-import com.didekin.usuario.Usuario;
+import com.didekinlib.http.oauth2.SpringOauthToken;
+import com.didekinlib.model.usuario.Usuario;
 
 import java.util.concurrent.Callable;
 
@@ -90,8 +90,8 @@ public final class OauthTokenReactor implements OauthTokenReactorIf {
     //  =======================================================================================
 
     /**
-     *  Convenience disposable which relates a Completable oauthTokenAndInitCache and a
-     *  oauthUpdateTokenCacheObserver.
+     * Convenience disposable which relates a Completable oauthTokenAndInitCache and a
+     * oauthUpdateTokenCacheObserver.
      */
     @Override
     public void updateTkAndCacheFromUser(Usuario newUser)

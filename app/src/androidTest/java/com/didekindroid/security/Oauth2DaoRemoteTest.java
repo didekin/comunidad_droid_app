@@ -2,12 +2,12 @@ package com.didekindroid.security;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.http.ErrorBean;
-import com.didekin.http.oauth2.SpringOauthToken;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum;
 import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
+import com.didekinlib.http.ErrorBean;
+import com.didekinlib.http.oauth2.SpringOauthToken;
 
 import org.junit.After;
 import org.junit.BeforeClass;
@@ -18,9 +18,6 @@ import java.io.IOException;
 
 import retrofit2.Response;
 
-import static com.didekin.http.GenericExceptionMsg.BAD_REQUEST;
-import static com.didekin.http.GenericExceptionMsg.NOT_FOUND;
-import static com.didekin.http.oauth2.OauthClient.CL_USER;
 import static com.didekindroid.AppInitializer.creator;
 import static com.didekindroid.security.Oauth2DaoRemote.Oauth2;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
@@ -31,9 +28,12 @@ import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEn
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanWithTkhandler;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static com.didekinlib.http.GenericExceptionMsg.BAD_REQUEST;
+import static com.didekinlib.http.GenericExceptionMsg.NOT_FOUND;
+import static com.didekinlib.http.oauth2.OauthClient.CL_USER;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.not;
@@ -84,7 +84,7 @@ public class Oauth2DaoRemoteTest {
         whatClean = CLEAN_JUAN;
 
         //Inserta userComu, comunidad, usuariocomunidad y actuliza tokenCache.
-        boolean isRegistered = AppUserComuServ.regComuAndUserAndUserComu(COMU_REAL_JUAN).execute().body();
+        boolean isRegistered = userComuDaoRemote.regComuAndUserAndUserComu(COMU_REAL_JUAN).execute().body();
         assertThat(isRegistered, is(true));
         // Solicita token.
         SpringOauthToken token = Oauth2.getPasswordUserToken(UsuarioDataTestUtils.USER_JUAN.getUserName(), UsuarioDataTestUtils.USER_JUAN.getPassword());
@@ -99,7 +99,7 @@ public class Oauth2DaoRemoteTest {
         whatClean = CLEAN_JUAN;
 
         //Inserta userComu, comunidad y usuariocomunidad.
-        boolean isRegistered = AppUserComuServ.regComuAndUserAndUserComu(COMU_REAL_JUAN).execute().body();
+        boolean isRegistered = userComuDaoRemote.regComuAndUserAndUserComu(COMU_REAL_JUAN).execute().body();
         assertThat(isRegistered, is(true));
         // Solicita token y actuliza tokenCache.
         updateSecurityData(COMU_REAL_JUAN.getUsuario().getUserName(), COMU_REAL_JUAN.getUsuario().getPassword());
@@ -114,12 +114,12 @@ public class Oauth2DaoRemoteTest {
     public void testGetPasswordUserToken_3() throws Exception
     {
         //Inserta userComu, comunidad, usuariocomunidad.
-        boolean isRegistered = AppUserComuServ.regComuAndUserAndUserComu(UserComuDataTestUtil.COMU_REAL_DROID).execute().body();
+        boolean isRegistered = userComuDaoRemote.regComuAndUserAndUserComu(UserComuDataTestUtil.COMU_REAL_DROID).execute().body();
         assertThat(isRegistered, is(true));
         updateSecurityData(UsuarioDataTestUtils.USER_DROID.getUserName(), UsuarioDataTestUtils.USER_DROID.getPassword());
         // Envía correo.
         boolean isPasswordSend = usuarioDao.sendPassword(UsuarioDataTestUtils.USER_DROID.getUserName());
-        assertThat(isPasswordSend,is(true));
+        assertThat(isPasswordSend, is(true));
 
         // Old pair userName/password is invalid: passwordSend implies new password in BD.
         try {

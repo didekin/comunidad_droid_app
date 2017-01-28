@@ -5,12 +5,12 @@ import android.content.res.Resources;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 
-import com.didekin.http.oauth2.SpringOauthToken;
-import com.didekin.usuario.Usuario;
 import com.didekindroid.ExtendableTestAc;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.usuario.userdata.UserDataAc;
+import com.didekinlib.http.oauth2.SpringOauthToken;
+import com.didekinlib.model.usuario.Usuario;
 
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
@@ -65,11 +65,10 @@ public class UserDataAcTest implements ExtendableTestAc {
     protected UserDataAc mActivity;
     protected Resources resources;
     protected Usuario registeredUser;
-    protected int activityLayoutId = R.id.user_data_ac_layout;
-    private boolean mustCleanUser;
-
     @Rule
     public ActivityTestRule<? extends Activity> mActivityRule = getActivityRule();
+    protected int activityLayoutId = R.id.user_data_ac_layout;
+    private boolean mustCleanUser;
 
     @BeforeClass
     public static void slowSeconds() throws InterruptedException

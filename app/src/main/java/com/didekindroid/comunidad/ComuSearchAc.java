@@ -10,15 +10,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import com.didekin.http.oauth2.SpringOauthToken;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.util.ConnectionUtils;
 import com.didekindroid.util.UIutils;
+import com.didekinlib.http.oauth2.SpringOauthToken;
 
 import timber.log.Timber;
 
-import static com.didekin.common.dominio.ValidDataPatterns.LINE_BREAK;
 import static com.didekindroid.comunidad.RegComuFr.makeComunidadBeanFromView;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.util.ItemMenu.mn_handler;
@@ -27,6 +26,7 @@ import static com.didekindroid.util.MenuRouter.routerMap;
 import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.util.UIutils.doToolBar;
 import static com.didekindroid.util.UIutils.makeToast;
+import static com.didekinlib.model.common.dominio.ValidDataPatterns.LINE_BREAK;
 
 /**
  * Postconditions:
@@ -41,8 +41,8 @@ import static com.didekindroid.util.UIutils.makeToast;
 @SuppressWarnings("ConstantConditions")
 public class ComuSearchAc extends AppCompatActivity {
 
-    RegComuFr mRegComuFrg;
     protected View mMainView;
+    RegComuFr mRegComuFrg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -122,7 +122,7 @@ public class ComuSearchAc extends AppCompatActivity {
         if (TKhandler.isRegisteredUser()) {
             menu.findItem(R.id.see_usercomu_by_user_ac_mn).setVisible(true).setEnabled(true);
             menu.findItem(R.id.user_data_ac_mn).setVisible(true).setEnabled(true);
-        } else{
+        } else {
             menu.findItem(R.id.login_ac_mn).setVisible(true).setEnabled(true);
         }
         return true;

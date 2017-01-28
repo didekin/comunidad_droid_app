@@ -6,10 +6,10 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.usuario.Usuario;
-import com.didekin.usuariocomunidad.UsuarioComunidad;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.activity.incidreg.IncidRegAc;
+import com.didekinlib.model.usuario.Usuario;
+import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
@@ -18,7 +18,7 @@ import java.io.IOException;
 
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -55,7 +55,7 @@ public class IncidSeeOpenAc_GCM_Test extends Incidencia_GCM_Test {
                 TKhandler.updateIsGcmTokenSentServer(false);
                 try {
                     pepe = signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
-                    pepeUserComu = AppUserComuServ.seeUserComusByUser().get(0);
+                    pepeUserComu = userComuDaoRemote.seeUserComusByUser().get(0);
                     // Pepe hasn't got a gcmToken.
                     assertThat(usuarioDao.getGcmToken(), nullValue());
                 } catch (IOException | UiException e) {

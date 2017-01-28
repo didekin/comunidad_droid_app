@@ -8,10 +8,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.text.TextUtils;
 
-import com.didekin.comunidad.ComunidadAutonoma;
-import com.didekin.comunidad.Municipio;
-import com.didekin.comunidad.Provincia;
 import com.didekindroid.R;
+import com.didekinlib.model.comunidad.ComunidadAutonoma;
+import com.didekinlib.model.comunidad.Municipio;
+import com.didekinlib.model.comunidad.Provincia;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -60,11 +60,11 @@ public class ComunidadDbHelper extends SQLiteOpenHelper {
     private static final int DB_VERSION = 1;
 
     private final Context mContext;
-    private SQLiteDatabase mDataBase;
     public int mMunicipiosCounter;
     public int mComunidadesCounter;
     public int mProvinciasCounter;
     public int mTipoViaCounter;
+    private SQLiteDatabase mDataBase;
 
     public ComunidadDbHelper(Context context)
     {

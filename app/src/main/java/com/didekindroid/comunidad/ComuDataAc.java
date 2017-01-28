@@ -12,29 +12,29 @@ import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.EditText;
 
-import com.didekin.comunidad.Comunidad;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.security.IdentityCacher;
 import com.didekindroid.usuariocomunidad.SeeUserComuByUserAc;
 import com.didekindroid.util.ConnectionUtils;
 import com.didekindroid.util.MenuRouter;
+import com.didekinlib.model.comunidad.Comunidad;
 
 import timber.log.Timber;
 
+import static com.didekindroid.comunidad.ComunidadAssertionMsg.comuData_should_be_modified;
+import static com.didekindroid.comunidad.ComunidadAssertionMsg.comunidadId_should_be_initialized;
 import static com.didekindroid.comunidad.ComunidadService.AppComuServ;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
+import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.util.ItemMenu.mn_handler;
 import static com.didekindroid.util.MenuRouter.routerMap;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.checkPostExecute;
-import static com.didekindroid.comunidad.ComunidadAssertionMsg.comuData_should_be_modified;
-import static com.didekindroid.comunidad.ComunidadAssertionMsg.comunidadId_should_be_initialized;
 import static com.didekindroid.util.UIutils.doToolBar;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.util.UIutils.makeToast;
-import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
 
 /**
  * Preconditions:
@@ -303,7 +303,7 @@ public class ComuDataAc extends AppCompatActivity implements RegComuFr.ComuDataC
 
             int modifyComuData = 0;
             try {
-                modifyComuData = AppUserComuServ.modifyComuData(comunidades[0]);
+                modifyComuData = userComuDaoRemote.modifyComuData(comunidades[0]);
             } catch (UiException e) {
                 uiException = e;
             }

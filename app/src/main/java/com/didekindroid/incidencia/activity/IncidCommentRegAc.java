@@ -9,24 +9,24 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.didekin.incidencia.dominio.IncidComment;
-import com.didekin.incidencia.dominio.Incidencia;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.dominio.IncidCommentBean;
 import com.didekindroid.util.ConnectionUtils;
 import com.didekindroid.util.UIutils;
+import com.didekinlib.model.incidencia.dominio.IncidComment;
+import com.didekinlib.model.incidencia.dominio.Incidencia;
 
 import timber.log.Timber;
 
 import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCIDENCIA_OBJECT;
+import static com.didekindroid.incidencia.activity.utils.IncidenciaAssertionMsg.comment_should_be_registered;
 import static com.didekindroid.util.MenuRouter.doUpMenu;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.util.UIutils.doToolBar;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
-import static com.didekindroid.incidencia.activity.utils.IncidenciaAssertionMsg.comment_should_be_registered;
 import static com.didekindroid.util.UIutils.makeToast;
 
 /**

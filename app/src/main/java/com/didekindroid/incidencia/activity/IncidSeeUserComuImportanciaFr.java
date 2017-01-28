@@ -9,10 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.didekin.incidencia.dominio.ImportanciaUser;
-import com.didekin.incidencia.dominio.Incidencia;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
+import com.didekinlib.model.incidencia.dominio.ImportanciaUser;
+import com.didekinlib.model.incidencia.dominio.Incidencia;
 
 import java.util.List;
 

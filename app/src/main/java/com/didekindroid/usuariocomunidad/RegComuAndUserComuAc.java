@@ -9,18 +9,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import com.didekin.usuariocomunidad.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComuSearchAc;
 import com.didekindroid.comunidad.ComunidadBean;
 import com.didekindroid.comunidad.RegComuFr;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.util.ConnectionUtils;
+import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import timber.log.Timber;
 
 import static com.didekindroid.usuariocomunidad.UserComuAssertionMsg.user_and_comunidad_should_be_registered;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.util.UIutils.doToolBar;
@@ -78,7 +78,7 @@ public class RegComuAndUserComuAc extends AppCompatActivity {
         } else if (!ConnectionUtils.isInternetConnected(this)) {
             makeToast(this, R.string.no_internet_conn_toast);
         } else {
-            new ComuAndUserComuRegister().execute(usuarioComunidadBean. getUsuarioComunidad());
+            new ComuAndUserComuRegister().execute(usuarioComunidadBean.getUsuarioComunidad());
             Intent intent = new Intent(this, SeeUserComuByUserAc.class);
             startActivity(intent);
         }
@@ -120,7 +120,7 @@ public class RegComuAndUserComuAc extends AppCompatActivity {
             Timber.d("doInBackground()");
             boolean isRegistered = false;
             try {
-                isRegistered = AppUserComuServ.regComuAndUserComu(usuarioComunidad[0]);
+                isRegistered = userComuDaoRemote.regComuAndUserComu(usuarioComunidad[0]);
             } catch (UiException e) {
                 uiException = e;
             }

@@ -2,14 +2,14 @@ package com.didekindroid.comunidad;
 
 import android.content.res.Resources;
 
-import com.didekin.comunidad.Comunidad;
-import com.didekin.comunidad.Municipio;
-import com.didekin.comunidad.Provincia;
 import com.didekindroid.R;
+import com.didekinlib.model.comunidad.Comunidad;
+import com.didekinlib.model.comunidad.Municipio;
+import com.didekinlib.model.comunidad.Provincia;
 
-import static com.didekin.common.dominio.ValidDataPatterns.LINE_BREAK;
-import static com.didekin.common.dominio.ValidDataPatterns.NOMBRE_VIA;
-import static com.didekin.common.dominio.ValidDataPatterns.SUFIJO_NUMERO;
+import static com.didekinlib.model.common.dominio.ValidDataPatterns.LINE_BREAK;
+import static com.didekinlib.model.common.dominio.ValidDataPatterns.NOMBRE_VIA;
+import static com.didekinlib.model.common.dominio.ValidDataPatterns.SUFIJO_NUMERO;
 
 
 /**
@@ -155,9 +155,19 @@ public class ComunidadBean {
         return municipio;
     }
 
+    public void setMunicipio(Municipio municipio)
+    {
+        this.municipio = municipio;
+    }
+
     public String getNombreVia()
     {
         return nombreVia;
+    }
+
+    public void setNombreVia(String nombreVia)
+    {
+        this.nombreVia = nombreVia;
     }
 
     public short getNumero()
@@ -170,14 +180,29 @@ public class ComunidadBean {
         return numeroString;
     }
 
+    void setNumeroString(String numeroString)
+    {
+        this.numeroString = numeroString;
+    }
+
     public String getSufijoNumero()
     {
         return sufijoNumero;
     }
 
+    public void setSufijoNumero(String sufijoNumero)
+    {
+        this.sufijoNumero = sufijoNumero;
+    }
+
     public String getTipoVia()
     {
         return tipoVia;
+    }
+
+    public void setTipoVia(String tipoVia)
+    {
+        this.tipoVia = tipoVia;
     }
 
     public Provincia getProvincia()
@@ -186,30 +211,5 @@ public class ComunidadBean {
             return null;
         }
         return municipio.getProvincia();
-    }
-
-    public void setMunicipio(Municipio municipio)
-    {
-        this.municipio = municipio;
-    }
-
-    public void setNombreVia(String nombreVia)
-    {
-        this.nombreVia = nombreVia;
-    }
-
-    void setNumeroString(String numeroString)
-    {
-        this.numeroString = numeroString;
-    }
-
-    public void setSufijoNumero(String sufijoNumero)
-    {
-        this.sufijoNumero = sufijoNumero;
-    }
-
-    public void setTipoVia(String tipoVia)
-    {
-        this.tipoVia = tipoVia;
     }
 }

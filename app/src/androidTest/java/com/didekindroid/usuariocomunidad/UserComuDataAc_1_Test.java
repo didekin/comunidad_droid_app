@@ -7,12 +7,12 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.usuariocomunidad.UsuarioComunidad;
-import com.didekindroid.exception.UiException;
-import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComuBundleKey;
+import com.didekindroid.exception.UiException;
+import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
+import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.junit.After;
 import org.junit.Before;
@@ -34,21 +34,21 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekin.usuariocomunidad.Rol.ADMINISTRADOR;
-import static com.didekin.usuariocomunidad.Rol.INQUILINO;
-import static com.didekin.usuariocomunidad.Rol.PRESIDENTE;
-import static com.didekin.usuariocomunidad.Rol.PROPIETARIO;
+import static com.didekindroid.comunidad.testutil.ComuMenuTestUtil.COMU_DATA_AC;
+import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_REG_AC;
+import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_OPEN_BY_COMU_AC;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.comunidad.testutil.ComuMenuTestUtil.COMU_DATA_AC;
-import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_REG_AC;
-import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_OPEN_BY_COMU_AC;
 import static com.didekindroid.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.SEE_USERCOMU_BY_COMU_AC;
+import static com.didekinlib.model.usuariocomunidad.Rol.ADMINISTRADOR;
+import static com.didekinlib.model.usuariocomunidad.Rol.INQUILINO;
+import static com.didekinlib.model.usuariocomunidad.Rol.PRESIDENTE;
+import static com.didekinlib.model.usuariocomunidad.Rol.PROPIETARIO;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -62,11 +62,7 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class UserComuDataAc_1_Test {
 
-    private UserComuDataAc mActivity;
     UsuarioComunidad mUsuarioComunidad;
-    UsuarioDataTestUtils.CleanUserEnum whatToClean = CLEAN_JUAN;
-    int activityLayoutId = R.id.usercomu_data_ac_layout;
-
     @Rule
     public IntentsTestRule<UserComuDataAc> intentRule = new IntentsTestRule<UserComuDataAc>(UserComuDataAc.class) {
 
@@ -85,7 +81,7 @@ public class UserComuDataAc_1_Test {
             }
             List<UsuarioComunidad> comunidadesUserOne = null;
             try {
-                comunidadesUserOne = AppUserComuServ.seeUserComusByUser();
+                comunidadesUserOne = userComuDaoRemote.seeUserComusByUser();
             } catch (UiException e) {
             }
             mUsuarioComunidad = comunidadesUserOne != null ? comunidadesUserOne.get(0) : null;
@@ -96,6 +92,9 @@ public class UserComuDataAc_1_Test {
             return intent;
         }
     };
+    UsuarioDataTestUtils.CleanUserEnum whatToClean = CLEAN_JUAN;
+    int activityLayoutId = R.id.usercomu_data_ac_layout;
+    private UserComuDataAc mActivity;
 
     @BeforeClass
     public static void slowSeconds() throws InterruptedException

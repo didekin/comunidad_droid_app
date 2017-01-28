@@ -74,6 +74,9 @@ public final class FirebaseTokenReactor implements FirebaseTokenReactorIf {
                         .subscribeWith(new RegGcmTokenObserver()));
     }
 
+    /**
+     * Synchronous variant for the service InstanceIdService.
+     */
     @Override
     public void checkGcmTokenSync()
     {
@@ -93,6 +96,7 @@ public final class FirebaseTokenReactor implements FirebaseTokenReactorIf {
         @Override
         public void onSuccess(Integer isUpdated)
         {
+            Timber.d("onSuccess(%d)", isUpdated);
             if (isUpdated > 0) {
                 TKhandler.updateIsGcmTokenSentServer(true);
             }

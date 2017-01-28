@@ -7,8 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.didekin.incidencia.dominio.IncidComment;
 import com.didekindroid.R;
+import com.didekinlib.model.incidencia.dominio.IncidComment;
 
 import timber.log.Timber;
 
@@ -33,9 +33,9 @@ class IncidCommentSeeAdapter extends ArrayAdapter<IncidComment> {
 
         IncidCommentViewHolder viewHolder;
 
-        if (convertView == null){
+        if (convertView == null) {
             Timber.d("getView(), convertView == null");
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.incid_comments_see_list_item, parent,false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.incid_comments_see_list_item, parent, false);
             viewHolder = new IncidCommentViewHolder(convertView);
             convertView.setTag(viewHolder);
         }

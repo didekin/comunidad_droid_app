@@ -3,11 +3,10 @@ package com.didekindroid.usuario.delete;
 import android.app.Activity;
 import android.support.test.rule.ActivityTestRule;
 
-import com.didekin.usuario.Usuario;
 import com.didekindroid.ExtendableTestAc;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.usuario.delete.DeleteMeAc;
+import com.didekinlib.model.usuario.Usuario;
 
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;

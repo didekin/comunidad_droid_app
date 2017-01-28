@@ -3,11 +3,12 @@ package com.didekindroid.incidencia.dominio;
 import android.content.res.Resources;
 import android.view.View;
 
-import com.didekin.incidencia.dominio.IncidImportancia;
-import com.didekin.incidencia.dominio.Incidencia;
 import com.didekindroid.R;
+import com.didekinlib.model.incidencia.dominio.IncidImportancia;
+import com.didekinlib.model.incidencia.dominio.Incidencia;
 
-import static com.didekin.common.dominio.ValidDataPatterns.LINE_BREAK;
+import static com.didekinlib.model.common.dominio.ValidDataPatterns.LINE_BREAK;
+
 
 /**
  * User: pedro@didekin
@@ -22,14 +23,14 @@ public class IncidImportanciaBean {
     {
     }
 
-    public void setImportancia(short importancia)
-    {
-        this.importancia = importancia;
-    }
-
     public short getImportancia()
     {
         return importancia;
+    }
+
+    public void setImportancia(short importancia)
+    {
+        this.importancia = importancia;
     }
 
     private boolean validateRange(StringBuilder errorMsg, Resources resources)

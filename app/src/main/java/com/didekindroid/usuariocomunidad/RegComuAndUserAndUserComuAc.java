@@ -10,33 +10,34 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import com.didekin.http.ErrorBean;
-import com.didekin.http.oauth2.SpringOauthToken;
-import com.didekin.usuario.Usuario;
-import com.didekin.usuariocomunidad.UsuarioComunidad;
+import com.didekindroid.R;
+import com.didekindroid.comunidad.ComunidadBean;
+import com.didekindroid.comunidad.RegComuFr;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.usuario.RegUserFr;
 import com.didekindroid.usuario.UsuarioBean;
 import com.didekindroid.util.ConnectionUtils;
-import com.didekindroid.R;
-import com.didekindroid.comunidad.ComunidadBean;
-import com.didekindroid.comunidad.RegComuFr;
+import com.didekinlib.http.ErrorBean;
+import com.didekinlib.http.oauth2.SpringOauthToken;
+import com.didekinlib.model.usuario.Usuario;
+import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import java.io.IOException;
 
 import timber.log.Timber;
 
-import static com.didekin.common.dominio.ValidDataPatterns.LINE_BREAK;
 import static com.didekindroid.security.Oauth2DaoRemote.Oauth2;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.util.ItemMenu.mn_handler;
-import static com.didekindroid.util.UIutils.checkPostExecute;
-import static com.didekindroid.util.UIutils.doToolBar;
-import static com.didekindroid.util.UIutils.makeToast;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
 import static com.didekindroid.util.MenuRouter.doUpMenuWithIntent;
 import static com.didekindroid.util.MenuRouter.getRegisterDependentClass;
 import static com.didekindroid.util.MenuRouter.routerMap;
+import static com.didekindroid.util.UIutils.checkPostExecute;
+import static com.didekindroid.util.UIutils.doToolBar;
+import static com.didekindroid.util.UIutils.makeToast;
+import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
+import static com.didekinlib.model.common.dominio.ValidDataPatterns.LINE_BREAK;
 
 /**
  * Preconditions:
@@ -156,11 +157,11 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity {
             Usuario newUser = usuarioComunidad[0].getUsuario();
 
             try {
-                AppUserComuServ.regComuAndUserAndUserComu(usuarioComunidad[0]).execute();
+                userComuDaoRemote.regComuAndUserAndUserComu(usuarioComunidad[0]).execute();
                 SpringOauthToken token = Oauth2.getPasswordUserToken(newUser.getUserName(), newUser.getPassword());
                 TKhandler.initIdentityCache(token);
             } catch (IOException e) {
-                uiException = new UiException(ErrorBean.GENERIC_ERROR);
+                uiException = new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
                 return null;
             } catch (UiException e) {
                 uiException = e;

@@ -4,9 +4,9 @@ import android.content.res.Resources;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.comunidad.Municipio;
-import com.didekin.comunidad.Provincia;
 import com.didekindroid.R;
+import com.didekinlib.model.comunidad.Municipio;
+import com.didekinlib.model.comunidad.Provincia;
 
 import org.junit.After;
 import org.junit.Before;
@@ -51,7 +51,7 @@ public class ComunidadBeanValidaTests {
     public void testValidate() throws Exception
     {
         ComunidadBean comunidadBean = new ComunidadBean("select *", "24 de Otoño", "00A1", "",
-                new Municipio((short) 53,new Provincia((short) 12)));
+                new Municipio((short) 53, new Provincia((short) 12)));
 
         boolean isValid = comunidadBean.validate(resources, errors);
         assertThat(isValid, is(false));
@@ -64,7 +64,7 @@ public class ComunidadBeanValidaTests {
         /*"[0-9a-zA-ZñÑáéíóúüÜ[\s]]{2,150}*/
 
         ComunidadBean comunidadBean = new ComunidadBean("tipoVia1", "avenida de las 25 ñs", "", "",
-                new Municipio((short)112));
+                new Municipio((short) 112));
         assertThat(comunidadBean.validateNombreVia(ERROR_GENERIC, errors), equalTo(true));
         comunidadBean.setNombreVia("avenid@ de lo$");
         assertThat(comunidadBean.validateNombreVia(ERROR_GENERIC, errors), equalTo(false));
@@ -74,17 +74,17 @@ public class ComunidadBeanValidaTests {
     public void testGetNumeroEnVia() throws Exception
     {
         ComunidadBean comunidadBean = new ComunidadBean("tipoVia1", "avenida de las 25 ñs", "001", "",
-                new Municipio((short)118));
+                new Municipio((short) 118));
         assertThat(comunidadBean.validateNumeroEnVia(ERROR_GENERIC, errors), equalTo(true));
 
-        comunidadBean = new ComunidadBean("tipoVia1", "avenida de las 25 ñs", "23412", "", new Municipio((short)114));
+        comunidadBean = new ComunidadBean("tipoVia1", "avenida de las 25 ñs", "23412", "", new Municipio((short) 114));
         assertThat(comunidadBean.validateNumeroEnVia(ERROR_GENERIC, errors), equalTo(true));
 
         comunidadBean = new ComunidadBean("tipoVia1", "avenida de las 25 ñs", "select *", "",
-                new Municipio((short)113));
+                new Municipio((short) 113));
         assertThat(comunidadBean.validateNumeroEnVia(ERROR_GENERIC, errors), equalTo(false));
 
-        comunidadBean = new ComunidadBean("", "", "AB", "", new Municipio((short)115));
+        comunidadBean = new ComunidadBean("", "", "AB", "", new Municipio((short) 115));
         assertThat(comunidadBean.validateNumeroEnVia(resources.getText(R.string.numero_en_via), errors),
                 equalTo(false));
         assertThat(errors.toString(), containsString(resources.getText(R.string.numero_en_via).toString()));
@@ -93,9 +93,9 @@ public class ComunidadBeanValidaTests {
     @Test
     public void testValidateSufijo() throws Exception
     {
-        ComunidadBean comunidadBean = new ComunidadBean("", "", "", "ñÍs", new Municipio((short)116));
+        ComunidadBean comunidadBean = new ComunidadBean("", "", "", "ñÍs", new Municipio((short) 116));
         assertThat(comunidadBean.validateSufijo(TIPO_VIA_ERROR, errors), equalTo(true));
-        comunidadBean = new ComunidadBean("", "", "", "w 2", new Municipio((short)117));
+        comunidadBean = new ComunidadBean("", "", "", "w 2", new Municipio((short) 117));
         assertThat(comunidadBean.validateSufijo(TIPO_VIA_ERROR, errors), equalTo(false));
     }
 

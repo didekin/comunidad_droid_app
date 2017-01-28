@@ -4,14 +4,14 @@ import android.content.res.Resources;
 import android.view.View;
 import android.widget.EditText;
 
-import com.didekin.incidencia.dominio.AmbitoIncidencia;
-import com.didekin.incidencia.dominio.Incidencia;
-import com.didekin.comunidad.Comunidad;
 import com.didekindroid.R;
+import com.didekinlib.model.comunidad.Comunidad;
+import com.didekinlib.model.incidencia.dominio.AmbitoIncidencia;
+import com.didekinlib.model.incidencia.dominio.Incidencia;
 
-import static com.didekin.common.dominio.ValidDataPatterns.LINE_BREAK;
-import static com.didekin.incidencia.dominio.IncidDataPatterns.INCID_DESC;
 import static com.didekindroid.incidencia.IncidenciaDataDb.AmbitoIncidencia.AMBITO_INCID_COUNT;
+import static com.didekinlib.model.common.dominio.ValidDataPatterns.LINE_BREAK;
+import static com.didekinlib.model.incidencia.dominio.IncidDataPatterns.INCID_DESC;
 
 /**
  * User: pedro@didekin

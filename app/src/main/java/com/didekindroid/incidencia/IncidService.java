@@ -1,14 +1,15 @@
 package com.didekindroid.incidencia;
 
-import com.didekin.comunidad.Comunidad;
-import com.didekin.incidencia.dominio.ImportanciaUser;
-import com.didekin.incidencia.dominio.IncidAndResolBundle;
-import com.didekin.incidencia.dominio.IncidComment;
-import com.didekin.incidencia.dominio.IncidImportancia;
-import com.didekin.incidencia.dominio.IncidenciaUser;
-import com.didekin.incidencia.dominio.Resolucion;
-import com.didekin.retrofit.IncidenciaServEndPoints;
 import com.didekindroid.exception.UiException;
+import com.didekinlib.http.ErrorBean;
+import com.didekinlib.http.retrofit.IncidenciaServEndPoints;
+import com.didekinlib.model.comunidad.Comunidad;
+import com.didekinlib.model.incidencia.dominio.ImportanciaUser;
+import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
+import com.didekinlib.model.incidencia.dominio.IncidComment;
+import com.didekinlib.model.incidencia.dominio.IncidImportancia;
+import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
+import com.didekinlib.model.incidencia.dominio.Resolucion;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -18,11 +19,11 @@ import retrofit2.Call;
 import retrofit2.Response;
 import timber.log.Timber;
 
-import static com.didekin.http.ErrorBean.GENERIC_ERROR;
 import static com.didekindroid.AppInitializer.creator;
+import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.util.DaoUtil.getResponseBody;
 import static com.didekindroid.util.UIutils.checkBearerToken;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
 
 /**
  * User: pedro@didekin
@@ -130,7 +131,7 @@ public final class IncidService implements IncidenciaServEndPoints {
             Response<Integer> response = closeIncidencia(checkBearerToken(), resolucion).execute();
             return getResponseBody(response);
         } catch (IOException e) {
-            throw new UiException(GENERIC_ERROR);
+            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
         }
     }
 
@@ -141,17 +142,17 @@ public final class IncidService implements IncidenciaServEndPoints {
             Response<Integer> response = deleteIncidencia(checkBearerToken(), incidenciaId).execute();
             return getResponseBody(response);
         } catch (IOException e) {
-            throw new UiException(GENERIC_ERROR);
+            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
         }
     }
 
     /**
-     * This method encapsulates the call to the UsuarioDaoRemote.AppUserComuServ method.
+     * This method encapsulates the call to the UsuarioDaoRemote.userComuDaoRemote method.
      */
     public List<Comunidad> getComusByUser() throws UiException
     {
         Timber.d("getComusByUser()");
-        return AppUserComuServ.getComusByUser();
+        return userComuDaoRemote.getComusByUser();
     }
 
     public int modifyIncidImportancia(IncidImportancia incidImportancia) throws UiException
@@ -161,7 +162,7 @@ public final class IncidService implements IncidenciaServEndPoints {
             Response<Integer> response = modifyIncidImportancia(checkBearerToken(), incidImportancia).execute();
             return getResponseBody(response);
         } catch (IOException e) {
-            throw new UiException(GENERIC_ERROR);
+            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
         }
     }
 
@@ -172,7 +173,7 @@ public final class IncidService implements IncidenciaServEndPoints {
             Response<Integer> response = modifyResolucion(checkBearerToken(), resolucion).execute();
             return getResponseBody(response);
         } catch (IOException e) {
-            throw new UiException(GENERIC_ERROR);
+            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
         }
     }
 
@@ -183,7 +184,7 @@ public final class IncidService implements IncidenciaServEndPoints {
             Response<Integer> response = endPoint.regIncidComment(checkBearerToken(), comment).execute();
             return getResponseBody(response);
         } catch (IOException e) {
-            throw new UiException(GENERIC_ERROR);
+            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
         }
     }
 
@@ -194,7 +195,7 @@ public final class IncidService implements IncidenciaServEndPoints {
             Response<Integer> response = regIncidImportancia(checkBearerToken(), incidImportancia).execute();
             return getResponseBody(response);
         } catch (IOException e) {
-            throw new UiException(GENERIC_ERROR);
+            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
         }
     }
 
@@ -205,7 +206,7 @@ public final class IncidService implements IncidenciaServEndPoints {
             Response<Integer> response = regResolucion(checkBearerToken(), resolucion).execute();
             return getResponseBody(response);
         } catch (IOException e) {
-            throw new UiException(GENERIC_ERROR);
+            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
         }
     }
 
@@ -216,7 +217,7 @@ public final class IncidService implements IncidenciaServEndPoints {
             Response<List<IncidComment>> response = seeCommentsByIncid(checkBearerToken(), incidenciaId).execute();
             return getResponseBody(response);
         } catch (IOException e) {
-            throw new UiException(GENERIC_ERROR);
+            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
         }
     }
 
@@ -229,7 +230,7 @@ public final class IncidService implements IncidenciaServEndPoints {
         } catch (EOFException eo) {
             return null;
         } catch (IOException e) {
-            throw new UiException(GENERIC_ERROR);
+            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
         }
     }
 
@@ -240,7 +241,7 @@ public final class IncidService implements IncidenciaServEndPoints {
             Response<List<IncidenciaUser>> response = seeIncidsOpenByComu(checkBearerToken(), comunidadId).execute();
             return getResponseBody(response);
         } catch (IOException e) {
-            throw new UiException(GENERIC_ERROR);
+            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
         }
     }
 
@@ -251,7 +252,7 @@ public final class IncidService implements IncidenciaServEndPoints {
             Response<List<IncidenciaUser>> response = seeIncidsClosedByComu(checkBearerToken(), comunidadId).execute();
             return getResponseBody(response);
         } catch (IOException e) {
-            throw new UiException(GENERIC_ERROR);
+            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
         }
     }
 
@@ -264,7 +265,7 @@ public final class IncidService implements IncidenciaServEndPoints {
         } catch (EOFException eo) {
             return null;
         } catch (IOException e) {
-            throw new UiException(GENERIC_ERROR);
+            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
         }
     }
 
@@ -275,7 +276,7 @@ public final class IncidService implements IncidenciaServEndPoints {
             Response<List<ImportanciaUser>> response = seeUserComusImportancia(checkBearerToken(), incidenciaId).execute();
             return getResponseBody(response);
         } catch (IOException e) {
-            throw new UiException(GENERIC_ERROR);
+            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
         }
     }
 }

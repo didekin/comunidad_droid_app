@@ -3,7 +3,7 @@ package com.didekindroid.exception;
 import android.app.Activity;
 import android.content.Intent;
 
-import com.didekin.http.ErrorBean;
+import com.didekinlib.http.ErrorBean;
 
 /**
  * User: pedro@didekin
@@ -14,6 +14,7 @@ import com.didekin.http.ErrorBean;
 public interface UiExceptionIf {
 
     void processMe(Activity activity, Intent intent) throws UiException;
+
     ErrorBean getErrorBean();
 
     interface UiExceptionRouterIf {
@@ -22,6 +23,7 @@ public interface UiExceptionIf {
 
     interface ActionForUiExceptionIf {
         Class<? extends Activity> getActivityToGoClass();
+
         int getToastResourceId();
     }
 }

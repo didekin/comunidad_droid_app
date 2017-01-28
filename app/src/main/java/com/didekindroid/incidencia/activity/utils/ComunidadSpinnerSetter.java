@@ -5,9 +5,9 @@ import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.widget.ArrayAdapter;
 
-import com.didekin.comunidad.Comunidad;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
+import com.didekinlib.model.comunidad.Comunidad;
 
 import java.util.List;
 
@@ -23,7 +23,8 @@ import static com.didekindroid.util.UIutils.checkPostExecute;
  * Date: 12/01/16
  * Time: 12:32
  */
-public class ComunidadSpinnerSetter<T extends Fragment & ComuSpinnerSettable> extends AsyncTask<Void, Void, List<Comunidad>> {
+public class ComunidadSpinnerSetter<T extends Fragment & ComuSpinnerSettable> extends
+        AsyncTask<Void, Void, List<Comunidad>> {
 
     private UiException uiException;
     private T mFragment;

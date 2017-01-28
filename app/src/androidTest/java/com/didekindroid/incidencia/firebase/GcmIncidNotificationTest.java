@@ -6,12 +6,12 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.retrofit.RetrofitHandler;
 import com.didekindroid.testutil.MockActivity;
-import com.didekinservice.common.gcm.GcmMulticastRequest;
-import com.didekinservice.common.gcm.GcmRequest;
-import com.didekinservice.incidservice.gcm.GcmIncidRequestData;
-import com.didekinservice.retrofit.GcmEndPointImp;
+import com.didekinlib.gcm.model.common.GcmMulticastRequest;
+import com.didekinlib.gcm.model.common.GcmRequest;
+import com.didekinlib.gcm.model.incidservice.GcmIncidRequestData;
+import com.didekinlib.gcm.retrofit.GcmEndPointImp;
+import com.didekinlib.http.retrofit.RetrofitHandler;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.junit.After;
@@ -22,11 +22,12 @@ import org.junit.runner.RunWith;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.didekindroid.incidencia.testutils.GcmConstantForTests.PACKAGE_TEST;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.incidencia.testutils.GcmConstantForTests.PACKAGE_TEST;
-import static com.didekinservice.common.GcmServConstant.FCM_HOST_PORT;
+import static com.didekinlib.gcm.model.common.GcmServConstant.FCM_HOST_PORT;
+
 
 /**
  * User: pedro@didekin
@@ -36,11 +37,8 @@ import static com.didekinservice.common.GcmServConstant.FCM_HOST_PORT;
 @RunWith(AndroidJUnit4.class)
 public abstract class GcmIncidNotificationTest {
 
-    protected abstract IntentsTestRule<MockActivity> doIntentsTestRule();
-
     @Rule
     public IntentsTestRule<MockActivity> intentRule = doIntentsTestRule();
-
     RetrofitHandler retrofitHandler;
     FirebaseInstanceId firebaseInstanceId;
     GcmEndPointImp endPointImp;
@@ -49,6 +47,8 @@ public abstract class GcmIncidNotificationTest {
     Context context;
     MockActivity mActivity;
     long comunidadIdIntent;
+
+    protected abstract IntentsTestRule<MockActivity> doIntentsTestRule();
 
     @Before
     public void setUp() throws Exception

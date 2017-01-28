@@ -8,30 +8,30 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.didekin.comunidad.Comunidad;
-import com.didekin.usuariocomunidad.UsuarioComunidad;
-import com.didekindroid.exception.UiException;
 import com.didekindroid.R;
+import com.didekindroid.exception.UiException;
 import com.didekindroid.usuariocomunidad.RegUserAndUserComuAc;
 import com.didekindroid.usuariocomunidad.RegUserComuAc;
 import com.didekindroid.usuariocomunidad.UserComuDataAc;
+import com.didekinlib.model.comunidad.Comunidad;
+import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import java.util.Collections;
 import java.util.List;
 
 import timber.log.Timber;
 
-import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.util.ItemMenu.mn_handler;
-import static com.didekindroid.util.UIutils.checkPostExecute;
-import static com.didekindroid.util.UIutils.doToolBar;
-import static com.didekindroid.util.MenuRouter.doUpMenu;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_SEARCH;
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
+import static com.didekindroid.util.ItemMenu.mn_handler;
+import static com.didekindroid.util.MenuRouter.doUpMenu;
 import static com.didekindroid.util.MenuRouter.getRegisterDependentClass;
 import static com.didekindroid.util.MenuRouter.routerMap;
+import static com.didekindroid.util.UIutils.checkPostExecute;
+import static com.didekindroid.util.UIutils.doToolBar;
 
 /**
  * Preconditions:
@@ -185,8 +185,8 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
 
     class UsuarioComunidadGetter extends AsyncTask<Comunidad, Void, UsuarioComunidad> {
 
-        private Comunidad comunidadSelected;
         UiException uiException;
+        private Comunidad comunidadSelected;
 
         @Override
         protected UsuarioComunidad doInBackground(Comunidad... comunidades)
@@ -196,7 +196,7 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
             comunidadSelected = comunidades[0];
             UsuarioComunidad userComuByUserAndComu = null;
             try {
-                userComuByUserAndComu = AppUserComuServ.getUserComuByUserAndComu(comunidadSelected.getC_Id());
+                userComuByUserAndComu = userComuDaoRemote.getUserComuByUserAndComu(comunidadSelected.getC_Id());
             } catch (UiException e) {
                 uiException = e;
             }

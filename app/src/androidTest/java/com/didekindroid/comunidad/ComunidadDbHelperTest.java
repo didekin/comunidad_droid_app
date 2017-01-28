@@ -6,10 +6,10 @@ import android.database.sqlite.SQLiteCursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.comunidad.ComunidadAutonoma;
-import com.didekin.comunidad.Provincia;
 import com.didekindroid.comunidad.repository.ComunidadDataDb;
 import com.didekindroid.comunidad.repository.ComunidadDbHelper;
+import com.didekinlib.model.comunidad.ComunidadAutonoma;
+import com.didekinlib.model.comunidad.Provincia;
 
 import org.junit.After;
 import org.junit.Before;
@@ -36,10 +36,10 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class ComunidadDbHelperTest {
 
-    private ComunidadDbHelper dbHelper;
     Context context;
     SQLiteDatabase database;
     File dbFile;
+    private ComunidadDbHelper dbHelper;
 
     @Before
     public void getFixture() throws Exception

@@ -7,8 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.didekin.incidencia.dominio.Avance;
 import com.didekindroid.R;
+import com.didekinlib.model.incidencia.dominio.Avance;
 
 import timber.log.Timber;
 

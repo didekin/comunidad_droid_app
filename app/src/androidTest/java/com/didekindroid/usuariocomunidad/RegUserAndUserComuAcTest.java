@@ -6,17 +6,16 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekin.comunidad.Comunidad;
-
+import com.didekindroid.R;
+import com.didekindroid.comunidad.ComuBundleKey;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.security.TokenIdentityCacher;
 import com.didekindroid.usuario.testutil.UserEspressoTestUtil;
-import com.didekindroid.R;
-import com.didekindroid.comunidad.ComuBundleKey;
 import com.didekindroid.usuario.testutil.UserItemMenuTestUtils;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
 import com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil;
+import com.didekinlib.model.comunidad.Comunidad;
 
 import org.junit.After;
 import org.junit.BeforeClass;
@@ -37,14 +36,14 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN2_AND_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.RolUi.PRE;
 import static com.didekindroid.usuariocomunidad.RolUi.PRO;
-import static com.didekindroid.usuariocomunidad.UserComuService.AppUserComuServ;
+import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.is;
@@ -60,13 +59,8 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class RegUserAndUserComuAcTest {
 
-    private RegUserAndUserComuAc activity;
     Intent intent;
     Comunidad comunidad;
-
-    UsuarioDataTestUtils.CleanUserEnum whatToClean;
-    int activityLayoutId = R.id.reg_user_and_usercomu_ac_layout;
-
     @Rule
     public IntentsTestRule<RegUserAndUserComuAc> intentRule = new IntentsTestRule<RegUserAndUserComuAc>(RegUserAndUserComuAc.class) {
 
@@ -83,7 +77,7 @@ public class RegUserAndUserComuAcTest {
             List<Comunidad> comunidadesUserOne = null;
             try {
                 UserComuDataTestUtil.signUpAndUpdateTk(UserComuDataTestUtil.COMU_TRAV_PLAZUELA_PEPE);
-                comunidadesUserOne = AppUserComuServ.getComusByUser();
+                comunidadesUserOne = userComuDaoRemote.getComusByUser();
             } catch (UiException | IOException e) {
                 e.printStackTrace();
             }
@@ -93,6 +87,9 @@ public class RegUserAndUserComuAcTest {
             return intent;
         }
     };
+    UsuarioDataTestUtils.CleanUserEnum whatToClean;
+    int activityLayoutId = R.id.reg_user_and_usercomu_ac_layout;
+    private RegUserAndUserComuAc activity;
 
     @BeforeClass
     public static void slowSeconds() throws InterruptedException

@@ -29,11 +29,12 @@ import static android.graphics.BitmapFactory.decodeResource;
 import static android.media.RingtoneManager.TYPE_NOTIFICATION;
 import static android.media.RingtoneManager.getDefaultUri;
 import static android.support.v4.app.NotificationCompat.PRIORITY_DEFAULT;
-import static com.didekin.incidencia.gcm.GcmKeyValueIncidData.comunidadId_key;
-import static com.didekin.incidencia.gcm.GcmKeyValueIncidData.incidencia_closed_type;
-import static com.didekin.incidencia.gcm.GcmKeyValueIncidData.incidencia_open_type;
-import static com.didekin.incidencia.gcm.GcmKeyValueIncidData.resolucion_open_type;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekinlib.model.common.gcm.GcmKeyValueData.type_message_key;
+import static com.didekinlib.model.incidencia.gcm.GcmKeyValueIncidData.comunidadId_key;
+import static com.didekinlib.model.incidencia.gcm.GcmKeyValueIncidData.incidencia_closed_type;
+import static com.didekinlib.model.incidencia.gcm.GcmKeyValueIncidData.incidencia_open_type;
+import static com.didekinlib.model.incidencia.gcm.GcmKeyValueIncidData.resolucion_open_type;
 import static java.lang.Long.parseLong;
 
 /**
@@ -51,12 +52,12 @@ public enum IncidFirebaseDownMsgHandler implements FirebaseDownstreamMsgHandler 
         }
 
         @Override
-        PendingIntent doPendingIntent(Context context, Map<String, String> data)
+        TaskStackBuilder doStackBuilder(Context context, Map<String, String> data)
         {
             Intent comuSearch = new Intent(new Intent(context, ComuSearchAc.class));
             Intent incidSeeComu = new Intent(context, IncidSeeOpenByComuAc.class);
             incidSeeComu.putExtra(COMUNIDAD_ID.key, parseLong(data.get(comunidadId_key)));
-            return doBasicPendingIntent(context, incidSeeComu, comuSearch);
+            return doCommonStackBuilder(context, incidSeeComu, comuSearch);
         }
 
         @Override
@@ -74,12 +75,12 @@ public enum IncidFirebaseDownMsgHandler implements FirebaseDownstreamMsgHandler 
         }
 
         @Override
-        PendingIntent doPendingIntent(Context context, Map<String, String> data)
+        TaskStackBuilder doStackBuilder(Context context, Map<String, String> data)
         {
             Intent comuSearch = new Intent(context, ComuSearchAc.class);
             Intent incidSeeClosedComu = new Intent(context, IncidSeeClosedByComuAc.class);
             incidSeeClosedComu.putExtra(COMUNIDAD_ID.key, parseLong(data.get(comunidadId_key)));
-            return doBasicPendingIntent(context, incidSeeClosedComu, comuSearch);
+            return doCommonStackBuilder(context, incidSeeClosedComu, comuSearch);
         }
 
         @Override
@@ -97,9 +98,9 @@ public enum IncidFirebaseDownMsgHandler implements FirebaseDownstreamMsgHandler 
         }
 
         @Override
-        PendingIntent doPendingIntent(Context context, Map<String, String> data)
+        TaskStackBuilder doStackBuilder(Context context, Map<String, String> data)
         {
-            return INCIDENCIA_OPEN.doPendingIntent(context, data);
+            return INCIDENCIA_OPEN.doStackBuilder(context, data);
         }
 
         @Override
@@ -131,32 +132,31 @@ public enum IncidFirebaseDownMsgHandler implements FirebaseDownstreamMsgHandler 
 
     /* ===================== PUBLIC INSTANCE METHODS ==================*/
 
+    static TaskStackBuilder doCommonStackBuilder(Context context, Intent firsOutIntent, Intent... lastOutIntents)
+    {
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+        for (Intent intent : lastOutIntents) {
+            // Remark: add intent without parentStack.
+            stackBuilder.addNextIntent(intent);
+        }
+        firsOutIntent.addFlags(FLAG_ACTIVITY_CLEAR_TOP | FLAG_ACTIVITY_NEW_TASK);
+        stackBuilder.addNextIntent(firsOutIntent);
+        return stackBuilder;
+    }
+
     @Override
     public void processMessage(RemoteMessage message, Context context)
     {
-        Resources resources = context.getResources();
+        Timber.d("processMessage()");
         Map<String, String> data = message.getData();
-
-        PendingIntent resultPendingIntent = doPendingIntent(context, data);
-
-        Notification notification = new NotificationCompat.Builder(context)
-                .setSmallIcon(R.drawable.ic_info_outline_white_36dp)
-                .setLargeIcon(decodeResource(resources, R.drawable.ic_launcher))
-                .setSound(getDefaultUri(TYPE_NOTIFICATION))
-                .setPriority(PRIORITY_DEFAULT)
-                .setContentTitle(resources.getString(getBarNotificationId()))
-                .setContentText(resources.getString(getContentTextRsc()))
-                .setSubText(resources.getString(getSubTextRsc()))
-                .setContentIntent(resultPendingIntent)
-                .setAutoCancel(true)
-                .build();
-
+        PendingIntent resultPendingIntent = doStackBuilder(context, data).getPendingIntent(0, FLAG_UPDATE_CURRENT);
         NotificationManager mManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
-        mManager.notify(getContentTextRsc(), notification);
+        mManager.notify(getContentTextRsc(), doNotification(context, resultPendingIntent));
 
         Timber.d("onMessageReceived(), notification sent with ID: %d%n", getBarNotificationId());
     }
 
+    /* ===================== PACKAGE PRIVATE INSTANCE METHODS ==================*/
 
     @Override
     public int getBarNotificationId()
@@ -164,9 +164,7 @@ public enum IncidFirebaseDownMsgHandler implements FirebaseDownstreamMsgHandler 
         return getContentTextRsc();
     }
 
-    /* ===================== PACKAGE PRIVATE INSTANCE METHODS ==================*/
-
-    abstract PendingIntent doPendingIntent(Context context, Map<String, String> data);
+    abstract TaskStackBuilder doStackBuilder(Context context, Map<String, String> data);
 
     abstract String getType();
 
@@ -177,16 +175,22 @@ public enum IncidFirebaseDownMsgHandler implements FirebaseDownstreamMsgHandler 
         return R.string.gcm_message_generic_subtext;
     }
 
-    // ======================= HELPER METHODS ========================
+    /* ===================== STATIC HELPER METHODS ==================*/
 
-    PendingIntent doBasicPendingIntent(Context context, Intent firsOutIntent, Intent... lastOutIntents)
+    Notification doNotification(Context context, PendingIntent resultPendingIntent)
     {
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-        for (Intent intent : lastOutIntents) {
-            stackBuilder.addNextIntentWithParentStack(intent);
-        }
-        firsOutIntent.addFlags(FLAG_ACTIVITY_CLEAR_TOP | FLAG_ACTIVITY_NEW_TASK);
-        stackBuilder.addNextIntent(firsOutIntent);
-        return stackBuilder.getPendingIntent(0, FLAG_UPDATE_CURRENT);
+        Resources resources = context.getResources();
+        return new NotificationCompat.Builder(context)
+                .setSmallIcon(R.drawable.ic_info_outline_white_36dp)
+                .setLargeIcon(decodeResource(resources, R.drawable.ic_launcher))
+                .setSound(getDefaultUri(TYPE_NOTIFICATION))
+                .setPriority(PRIORITY_DEFAULT)
+                .setContentTitle(resources.getString(getBarNotificationId()))
+                .setContentText(resources.getString(getContentTextRsc()))
+                .setSubText(resources.getString(getSubTextRsc()))
+                .setContentIntent(resultPendingIntent)
+                .setAutoCancel(true)
+                .build();
     }
+
 }

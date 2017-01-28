@@ -12,8 +12,8 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.didekin.incidencia.dominio.Resolucion;
 import com.didekindroid.R;
+import com.didekinlib.model.incidencia.dominio.Resolucion;
 
 import timber.log.Timber;
 

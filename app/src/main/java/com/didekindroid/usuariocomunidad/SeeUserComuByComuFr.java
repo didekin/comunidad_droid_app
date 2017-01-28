@@ -11,18 +11,19 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.didekin.comunidad.Comunidad;
-import com.didekin.usuariocomunidad.UsuarioComunidad;
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComuBundleKey;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote;
+import com.didekinlib.model.comunidad.Comunidad;
+import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import java.util.List;
 
 import timber.log.Timber;
 
-import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.comunidad.ComunidadService.AppComuServ;
+import static com.didekindroid.util.UIutils.checkPostExecute;
 
 
 /**
@@ -38,9 +39,9 @@ import static com.didekindroid.comunidad.ComunidadService.AppComuServ;
 public class SeeUserComuByComuFr extends Fragment {
 
     public SeeUserComuByComuListAdapter mAdapter;
-    View mView;
     public ListView fragmentListView;
     public TextView nombreComuView;
+    View mView;
     long comunidadId;
 
     public SeeUserComuByComuFr()
@@ -164,7 +165,7 @@ public class SeeUserComuByComuFr extends Fragment {
             List<UsuarioComunidad> usuarioComunidades = null;
             try {
                 comunidadIn = AppComuServ.getComuData(comunidadId[0]);
-                usuarioComunidades = UserComuService.AppUserComuServ.seeUserComusByComu(comunidadId[0]);
+                usuarioComunidades = UserComuDaoRemote.userComuDaoRemote.seeUserComusByComu(comunidadId[0]);
             } catch (UiException e) {
                 uiException = e;
             }

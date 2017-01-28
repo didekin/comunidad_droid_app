@@ -2,8 +2,8 @@ package com.didekindroid.usuario.testutil;
 
 import android.content.Context;
 
-import com.didekin.usuario.Usuario;
 import com.didekindroid.exception.UiException;
+import com.didekinlib.model.usuario.Usuario;
 
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.SecurityTestUtils.updateSecurityData;
@@ -17,35 +17,32 @@ import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
 
 public final class UsuarioDataTestUtils {
 
-    private UsuarioDataTestUtils()
-    {
-    }
-
-    //  ======================================= CREATING METHODS  ==========================================
-
     public static final Usuario USER_DROID = new Usuario.UsuarioBuilder()
             .userName("didekindroid@didekin.es")
             .alias("didekindroid")
             .password("psw_droid")
             .build();
 
+    //  ======================================= CREATING METHODS  ==========================================
     public static final Usuario USER_JUAN = new Usuario.UsuarioBuilder()
             .userName("juan@juan.us")
             .alias("alias_juan")
             .password("psw_juan")
             .build();
-
     public static final Usuario USER_JUAN2 = new Usuario.UsuarioBuilder()
             .userName("juan@juan.com")
             .alias("alias_juan")
             .password("pswd01")
             .build();
-
     public static final Usuario USER_PEPE = new Usuario.UsuarioBuilder()
             .userName("pepe@pepe.org")
             .alias("pepe")
             .password("psw_pepe")
             .build();
+
+    private UsuarioDataTestUtils()
+    {
+    }
 
     public static Usuario makeUsuario(String userName, String alias, String password)
     {
@@ -119,8 +116,7 @@ public final class UsuarioDataTestUtils {
         CLEAN_JUAN2_AND_PEPE,
         CLEAN_TK_HANDLER,
         CLEAN_NOTHING,
-        CLEAN_JUAN2,
-        ;
+        CLEAN_JUAN2,;
     }
 }
 
