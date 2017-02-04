@@ -67,11 +67,10 @@ public enum UserComuMenuTestUtil implements MenuTestUtilIf {
         }
 
         @Override
-        public void checkMenuItem_WTk(Activity activity) throws InterruptedException
+        public void checkMenuItem_WTk(Activity activity)
         {
             onView(ViewMatchers.withText(R.string.see_usercomu_by_comu_ac_mn)).check(doesNotExist());
             openActionBarOverflowOrOptionsMenu(activity);
-            Thread.sleep(1000);
             onView(ViewMatchers.withText(R.string.see_usercomu_by_comu_ac_mn)).check(matches(isDisplayed())).perform(click());
             onView(ViewMatchers.withId(R.id.see_usercomu_by_comu_frg)).check(matches(isDisplayed()));
         }

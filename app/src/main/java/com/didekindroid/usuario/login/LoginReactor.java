@@ -1,18 +1,20 @@
 package com.didekindroid.usuario.login;
 
 
+import com.didekindroid.exception.UiException;
 import com.didekinlib.model.usuario.Usuario;
 
 import java.util.concurrent.Callable;
 
 import io.reactivex.Single;
+import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
-import static com.didekindroid.security.OauthTokenReactor.oauthTokenFromUserPswd;
-import static com.didekindroid.security.TokenIdentityCacher.initTokenAndRegisterFunc;
+import static com.didekindroid.security.OauthTokenReactor.oauthTokenAndInitCache;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
 import static io.reactivex.Single.fromCallable;
+import static io.reactivex.Single.just;
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 import static io.reactivex.schedulers.Schedulers.io;
 
@@ -21,13 +23,11 @@ import static io.reactivex.schedulers.Schedulers.io;
  * Date: 19/12/16
  * Time: 16:32
  */
+final class LoginReactor implements LoginReactorIf {
 
-@SuppressWarnings("AnonymousInnerClassMayBeStatic")
-final class LoginAcReactor implements LoginReactorIf {
+    static final LoginReactorIf loginReactor = new LoginReactor();
 
-    static final LoginReactorIf loginReactor = new LoginAcReactor();
-
-    private LoginAcReactor()
+    private LoginReactor()
     {
     }
 
@@ -35,8 +35,8 @@ final class LoginAcReactor implements LoginReactorIf {
     //    .................................... OBSERVABLES .................................
     //  =====================================================================================================
 
-    private static Single<Boolean> getLoginValidateSingle(final Usuario usuario)
-    {   // TODO: test.
+    static Single<Boolean> loginSingle(final Usuario usuario)
+    {
         return fromCallable(new Callable<Boolean>() {
             @Override
             public Boolean call() throws Exception
@@ -46,17 +46,22 @@ final class LoginAcReactor implements LoginReactorIf {
         });
     }
 
-    private static Single<Boolean> getZipLoginSingle(Usuario usuario)
-    {   // TODO: test.
-        return getLoginValidateSingle(usuario)
-                .zipWith(
-                        oauthTokenFromUserPswd(usuario),
-                        initTokenAndRegisterFunc
-                );
+    static Single<Boolean> loginUpdateTkCache(final Usuario usuario)
+    {
+        return loginSingle(usuario).flatMap(new Function<Boolean, Single<Boolean>>() {
+            @Override
+            public Single<Boolean> apply(Boolean isLoginValid) throws Exception
+            {
+                if (isLoginValid){
+                    return oauthTokenAndInitCache(usuario).toSingleDefault(true);
+                }
+                return just(false);
+            }
+        });
     }
 
-    private static Single<Boolean> getLoginMailSingle(final String email)
-    {   // TODO: test.
+    static Single<Boolean> loginPswdSendSingle(final String email)
+    {
         return fromCallable(new Callable<Boolean>() {
             @Override
             public Boolean call() throws Exception
@@ -72,37 +77,23 @@ final class LoginAcReactor implements LoginReactorIf {
 
     @Override
     public boolean validateLogin(LoginControllerIf controller, Usuario usuario)
-    {  // TODO: test.
+    {
         return controller.getSubscriptions().add(
-                getZipLoginSingle(usuario)
+                loginUpdateTkCache(usuario)
                         .subscribeOn(io())
                         .observeOn(mainThread())
-                        .subscribeWith(new LoginSingleObserver(controller) {
-                            @Override
-                            public void onSuccess(Boolean isLoginOk)
-                            {
-                                Timber.d("onSuccess");
-                                controller.processBackLoginRemote(isLoginOk);
-                            }
-                        })
+                        .subscribeWith(new LoginValidateObserver(controller))
         );
     }
 
     @Override
     public boolean sendPasswordToUser(LoginControllerIf controller, Usuario usuario)
-    {  // TODO: test.
+    {
         return controller.getSubscriptions().add(
-                LoginAcReactor.getLoginMailSingle(usuario.getUserName())
+                LoginReactor.loginPswdSendSingle(usuario.getUserName())
                         .subscribeOn(io())
                         .observeOn(mainThread())
-                        .subscribeWith(new LoginSingleObserver(controller) {
-                            @Override
-                            public void onSuccess(Boolean isSendPassword)
-                            {
-                                Timber.d("onSuccess");
-                                controller.processBackSendPassword(isSendPassword);
-                            }
-                        })
+                        .subscribeWith(new LoginPswdSendObserver(controller))
         );
     }
 
@@ -121,9 +112,42 @@ final class LoginAcReactor implements LoginReactorIf {
 
         @Override
         public void onError(Throwable e)
-        {   // TODO: test.
-            Timber.d("onError");
+        {
+            Timber.d("onError, message: %s", e.getMessage());
+            if (e instanceof UiException){
+                Timber.d("UiException message: %s", ((UiException) e).getErrorBean().getMessage());
+            }
             controller.processBackErrorInReactor(e);
+        }
+    }
+
+    private static class LoginPswdSendObserver extends LoginSingleObserver {
+
+        LoginPswdSendObserver(LoginControllerIf controller)
+        {
+            super(controller);
+        }
+
+        @Override
+        public void onSuccess(Boolean isSendPassword)
+        {
+            Timber.d("onSuccess");
+            controller.processBackSendPassword(isSendPassword);
+        }
+    }
+
+    private static class LoginValidateObserver extends LoginSingleObserver {
+
+        LoginValidateObserver(LoginControllerIf controller)
+        {
+            super(controller);
+        }
+
+        @Override
+        public void onSuccess(Boolean isLoginOk)
+        {
+            Timber.d("onSuccess");
+            controller.processBackLoginRemote(isLoginOk);
         }
     }
 }

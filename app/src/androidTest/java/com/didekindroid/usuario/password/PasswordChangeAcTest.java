@@ -1,4 +1,4 @@
-package com.didekindroid.usuario;
+package com.didekindroid.usuario.password;
 
 import android.app.Activity;
 import android.support.test.rule.ActivityTestRule;
@@ -6,7 +6,6 @@ import android.support.test.rule.ActivityTestRule;
 import com.didekindroid.ExtendableTestAc;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.usuario.password.PasswordChangeAc;
 import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
 import com.didekinlib.http.oauth2.SpringOauthToken;
 import com.didekinlib.model.usuario.Usuario;
@@ -49,15 +48,28 @@ import static org.junit.Assert.assertThat;
 public class PasswordChangeAcTest implements ExtendableTestAc {
 
     protected Usuario registeredUser;
-    @Rule
-    public ActivityTestRule<? extends Activity> mActivityRule = getActivityRule();
     private PasswordChangeAc mActivity;
     private int activityLayoutId = R.id.password_change_ac_layout;
+
+    @Rule
+    public ActivityTestRule<? extends Activity> mActivityRule = new ActivityTestRule<PasswordChangeAc>(PasswordChangeAc.class) {
+        @Override
+        protected void beforeActivityLaunched()
+        {
+            // Precondition: the user is registered.
+            try {
+                registeredUser = signUpAndUpdateTk(UserComuDataTestUtil.COMU_TRAV_PLAZUELA_PEPE);
+                MatcherAssert.assertThat(registeredUser, CoreMatchers.notNullValue());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    };
 
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
     {
-        Thread.sleep(5000);
+        Thread.sleep(2000);
     }
 
     @Before
@@ -70,30 +82,6 @@ public class PasswordChangeAcTest implements ExtendableTestAc {
     public void tearDown() throws Exception
     {
         cleanOneUser(registeredUser);
-    }
-
-    @Override
-    public Usuario registerUser() throws Exception
-    {
-        return signUpAndUpdateTk(UserComuDataTestUtil.COMU_TRAV_PLAZUELA_PEPE);
-    }
-
-    @Override
-    public ActivityTestRule<? extends Activity> getActivityRule()
-    {
-        return new ActivityTestRule<PasswordChangeAc>(PasswordChangeAc.class) {
-            @Override
-            protected void beforeActivityLaunched()
-            {
-                // Precondition: the user is registered.
-                try {
-                    registeredUser = registerUser();
-                    MatcherAssert.assertThat(registeredUser, CoreMatchers.notNullValue());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        };
     }
 
     @Override

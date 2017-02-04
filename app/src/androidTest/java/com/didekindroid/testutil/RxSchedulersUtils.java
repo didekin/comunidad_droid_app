@@ -1,9 +1,13 @@
 package com.didekindroid.testutil;
 
+import java.util.concurrent.Callable;
+
 import io.reactivex.Scheduler;
+import io.reactivex.android.plugins.RxAndroidPlugins;
 import io.reactivex.functions.Function;
 import io.reactivex.plugins.RxJavaPlugins;
-import io.reactivex.schedulers.Schedulers;
+
+import static io.reactivex.schedulers.Schedulers.trampoline;
 
 /**
  * User: pedro@didekin
@@ -19,7 +23,18 @@ public class RxSchedulersUtils {
             @Override
             public Scheduler apply(Scheduler scheduler) throws Exception
             {
-                return Schedulers.trampoline();
+                return trampoline();
+            }
+        });
+    }
+
+    public static void trampolineReplaceAndroidMain()
+    {
+        RxAndroidPlugins.setInitMainThreadSchedulerHandler(new Function<Callable<Scheduler>, Scheduler>() {
+            @Override
+            public Scheduler apply(Callable<Scheduler> schedulerCallable) throws Exception
+            {
+                return trampoline();
             }
         });
     }

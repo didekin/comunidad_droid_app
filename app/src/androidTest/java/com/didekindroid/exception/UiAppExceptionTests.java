@@ -2,7 +2,6 @@ package com.didekindroid.exception;
 
 import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
-import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
@@ -130,7 +129,7 @@ public class UiAppExceptionTests {
         });
 
         checkToastInTest(R.string.exception_generic_app_message, mActivity);
-        onView(ViewMatchers.withId(R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));
+        onView(withId(R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -147,7 +146,7 @@ public class UiAppExceptionTests {
         });
 
         checkToastInTest(R.string.user_without_signedUp, mActivity);
-        onView(ViewMatchers.withId(R.id.login_ac_layout)).check(matches(isDisplayed()));
+        onView(withId(R.id.login_ac_layout)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -167,7 +166,7 @@ public class UiAppExceptionTests {
         });
 
         checkToastInTest(R.string.user_data_not_modified_msg, mActivity);
-        onView(ViewMatchers.withId(R.id.user_data_ac_layout)).check(matches(isDisplayed()));
+        onView(withId(R.id.user_data_ac_layout)).check(matches(isDisplayed()));
     }
 
 
@@ -184,7 +183,7 @@ public class UiAppExceptionTests {
             }
         });
         checkToastInTest(R.string.comunidad_not_found_message, mActivity);
-        onView(ViewMatchers.withId(R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));
+        onView(withId(R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));
     }
 
     @Test

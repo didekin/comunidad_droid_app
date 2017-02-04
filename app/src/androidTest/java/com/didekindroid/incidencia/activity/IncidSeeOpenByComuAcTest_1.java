@@ -1,22 +1,16 @@
 package com.didekindroid.incidencia.activity;
 
-import android.app.NotificationManager;
-import android.content.Context;
 import android.content.Intent;
-import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.Espresso;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.testutil.IdlingResourceForIntentServ;
-import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
+import com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,13 +26,11 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
-import static com.didekindroid.incidencia.firebase.IncidFirebaseDownMsgHandler.INCIDENCIA_OPEN;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_REG_AC;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_CLOSED_BY_COMU_AC;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
-import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
@@ -49,8 +41,6 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.SE
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
@@ -59,87 +49,56 @@ import static org.junit.Assert.fail;
  * Date: 23/11/15
  * Time: 18:45
  */
-/* Tests de presentación, navegación y notificaciones GCM. */
 @RunWith(AndroidJUnit4.class)
 public class IncidSeeOpenByComuAcTest_1 {
 
-    IdlingResourceForIntentServ idlingResource;
     Comunidad comunidadInIntent;
+    int activityLayoutId = R.id.incid_see_open_by_comu_ac;
+    int secondLayoutId = R.id.incid_see_generic_layout;
+    private IncidSeeOpenByComuAc mActivity;
+    private CleanUserEnum whatToClean = CLEAN_JUAN;
+
     @Rule
     public IntentsTestRule<IncidSeeOpenByComuAc> activityRule = new IntentsTestRule<IncidSeeOpenByComuAc>(IncidSeeOpenByComuAc.class) {
-
-        @Override
-        protected void beforeActivityLaunched()
-        {
-            Context context = InstrumentationRegistry.getTargetContext();
-            TKhandler.updateIsGcmTokenSentServer(false);
-            try {
-                assertThat(usuarioDao.getGcmToken(), nullValue());
-            } catch (UiException e) {
-                e.printStackTrace();
-            }
-
-        }
 
         /**
          * Preconditions:
          * 1. A comunidadId is passed as an intent extra.
+         * 2. The user is registered.
          */
         @Override
         protected Intent getActivityIntent()
         {
             try {
                 regSeveralUserComuSameUser(COMU_REAL_JUAN, COMU_PLAZUELA5_JUAN);
+                assertThat(TKhandler.isRegisteredUser(), is(true));
                 comunidadInIntent = userComuDaoRemote.seeUserComusByUser().get(0).getComunidad();
                 Intent intent = new Intent();
                 intent.putExtra(COMUNIDAD_ID.key, comunidadInIntent.getC_Id());
                 return intent;
-            } catch (IOException e) {
+            } catch (IOException | UiException e) {
                 e.printStackTrace();
                 fail();
-            } catch (UiException e) {
-                e.printStackTrace();
             }
             return null;
         }
     };
-    NotificationManager mNotifyManager;
-    // Layouts to check in navigate-up.
-    int activityLayoutId = R.id.incid_see_open_by_comu_ac;
-    int secondLayoutId = R.id.incid_see_generic_layout;
-    private IncidSeeOpenByComuAc mActivity;
-    private UsuarioDataTestUtils.CleanUserEnum whatToClean = CLEAN_JUAN;
-    private int messageId = INCIDENCIA_OPEN.getBarNotificationId();
-
-    @BeforeClass
-    public static void slowSeconds() throws InterruptedException
-    {
-        Thread.sleep(4000);
-    }
 
     @Before
     public void setUp() throws Exception
     {
         mActivity = activityRule.getActivity();
-        mNotifyManager = (NotificationManager) mActivity.getSystemService(Context.NOTIFICATION_SERVICE);
-//        idlingResource = new IdlingResourceForIntentServ(mActivity, new RegGcmIntentService());
-        Espresso.registerIdlingResources(idlingResource);
     }
 
     @After
     public void tearDown() throws Exception
     {
-        Espresso.unregisterIdlingResources(idlingResource);
-        TKhandler.updateIsGcmTokenSentServer(false);
-        mNotifyManager.cancel(messageId);
         cleanOptions(whatToClean);
     }
 
     @Test
     public void testOnCreate_1() throws Exception
     {
-        assertThat(TKhandler.isRegisteredUser(), is(true));
-        assertThat(mActivity, notNullValue());
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
 
         onView(withId(activityLayoutId)).check(matches(isDisplayed()));

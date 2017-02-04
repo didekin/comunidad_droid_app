@@ -28,11 +28,13 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.Locale;
 
+import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 
 import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.util.CommonAssertionMsg.subscriptions_should_be_zero;
 import static com.didekinlib.http.GenericExceptionMsg.TOKEN_NULL;
 import static com.didekinlib.model.common.dominio.ValidDataPatterns.LINE_BREAK;
 import static java.text.DateFormat.MEDIUM;
@@ -47,11 +49,7 @@ import static java.util.Locale.getDefault;
 public final class UIutils {
 
     public static final Locale SPAIN_LOCALE = new Locale("es", "ES");
-    /* ASSERTION MESSAGES*/
-    public static final String fragment_should_be_initialized = "Fragment should be initialized";
-    public static final String bean_fromView_should_be_initialized = "Bean with view data should be initialized";
-    public static final String intent_extra_should_be_initialized = "Intent extra should be initialized";
-    public static final String cursor_should_be_closed = "Database cursor should be closed";
+
     private static final int APPBAR_ID = R.id.appbar;
 
     private UIutils()
@@ -88,12 +86,20 @@ public final class UIutils {
                 cursor = cursorAdapter.getCursor();
                 if (cursor != null) {
                     cursor.close();
-                    assertTrue(cursor.isClosed(), cursor_should_be_closed);
+                    assertTrue(cursor.isClosed(), CommonAssertionMsg.cursor_should_be_closed);
                 }
             } catch (ClassCastException e) {
                 throw new IllegalStateException("Illegal NON cursorAdapter", e);
             }
         }
+    }
+
+    public static void destroySubscriptions(CompositeDisposable subscriptions)
+    {
+        if (subscriptions != null) {
+            subscriptions.clear();
+        }
+        assertTrue((subscriptions != null ? subscriptions.size() : 0) == 0, subscriptions_should_be_zero);
     }
 
 //    ===========================  AUTHENTICATION ==============================

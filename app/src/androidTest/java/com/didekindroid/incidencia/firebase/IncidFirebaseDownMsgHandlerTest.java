@@ -1,8 +1,13 @@
 package com.didekindroid.incidencia.firebase;
 
 import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.os.Build;
+import android.service.notification.StatusBarNotification;
+import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v4.app.TaskStackBuilder;
@@ -11,7 +16,6 @@ import android.util.ArrayMap;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.testutil.MockActivity;
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.RemoteMessage;
 
 import org.junit.After;
@@ -22,11 +26,13 @@ import org.junit.runner.RunWith;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 import static android.app.Notification.EXTRA_SUB_TEXT;
 import static android.app.Notification.EXTRA_TEXT;
 import static android.app.Notification.EXTRA_TITLE;
 import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
+import static android.content.Context.NOTIFICATION_SERVICE;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -39,6 +45,8 @@ import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.firebase.IncidFirebaseDownMsgHandler.INCIDENCIA_CLOSE;
 import static com.didekindroid.incidencia.firebase.IncidFirebaseDownMsgHandler.INCIDENCIA_OPEN;
 import static com.didekindroid.incidencia.firebase.IncidFirebaseDownMsgHandler.RESOLUCION_OPEN;
+import static com.didekindroid.incidencia.firebase.IncidFirebaseDownMsgHandler.processMsgWithHandler;
+import static com.didekindroid.incidencia.testutils.GcmConstantForTests.PACKAGE_TEST;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
@@ -46,6 +54,12 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.CO
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpWithTkGetComu;
 import static com.didekinlib.model.common.gcm.GcmKeyValueData.type_message_key;
 import static com.didekinlib.model.incidencia.gcm.GcmKeyValueIncidData.comunidadId_key;
+import static com.didekinlib.model.incidencia.gcm.GcmKeyValueIncidData.incidencia_closed_type;
+import static com.didekinlib.model.incidencia.gcm.GcmKeyValueIncidData.incidencia_open_type;
+import static com.didekinlib.model.incidencia.gcm.GcmKeyValueIncidData.resolucion_open_type;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static junit.framework.Assert.fail;
+import static org.awaitility.Awaitility.await;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -61,6 +75,7 @@ public class IncidFirebaseDownMsgHandlerTest {
     MockActivity mActivity;
     long comunidadId;
     Map<String, String> data;
+    NotificationManager notificationManager;
     @Rule
     public IntentsTestRule<MockActivity> intentRule = new IntentsTestRule<MockActivity>(MockActivity.class) {
 
@@ -87,9 +102,12 @@ public class IncidFirebaseDownMsgHandlerTest {
     public void tearDown() throws Exception
     {
         cleanOptions(CLEAN_JUAN);
+        if (notificationManager != null){
+            notificationManager.cancelAll();
+        }
     }
 
-    //    =========================== TESTS =============================
+    //  ============================= UNIT TESTS ==============================
 
     @Test
     public void testDoStackBuilder_INCIDENCIA_OPEN() throws Exception
@@ -150,12 +168,64 @@ public class IncidFirebaseDownMsgHandlerTest {
 
     }
 
+    //    ====================== INTEGRATION TESTS =========================
+
+    /**
+     *  1. We build a RemoteMessage instancea and we pass it to the handler.
+     *  2. We check that a notification is received.
+     */
     @Test
-    public void testProcessMsgWithHandler()   // TODO: terminar test.
+    public void testProcessMsgWithHandler_INCIDENCIA_OPEN()
     {
-        /*RemoteMessage remoteMsg = new RemoteMessage.Builder(FirebaseInstanceId.getInstance().getToken())
-                .addData(type_message_key, )
-                .addData(comunidadId_key, comunidadId)*/
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            return;
+        }
+
+        RemoteMessage remoteMsg = new RemoteMessage.Builder("to ME")
+                .addData(type_message_key, incidencia_open_type)
+                .addData(comunidadId_key, String.valueOf(comunidadId))
+                .setCollapseKey(incidencia_open_type)
+                .build();
+
+        processMsgWithHandler(remoteMsg, mActivity);
+        StatusBarNotification barNotification = checkBarNotification(INCIDENCIA_OPEN);
+        checkNotification(barNotification.getNotification(), incid_gcm_nueva_incidencia_body);
+    }
+
+    @Test
+    public void testProcessMsgWithHandler_INCIDENCIA_CLOSE()
+    {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            return;
+        }
+
+        RemoteMessage remoteMsg = new RemoteMessage.Builder("to ME")
+                .addData(type_message_key, incidencia_closed_type)
+                .addData(comunidadId_key, String.valueOf(comunidadId))
+                .setCollapseKey(incidencia_closed_type)
+                .build();
+
+        processMsgWithHandler(remoteMsg, mActivity);
+        StatusBarNotification barNotification = checkBarNotification(INCIDENCIA_CLOSE);
+        checkNotification(barNotification.getNotification(), incid_gcm_incidencia_closed_body);
+    }
+
+    @Test
+    public void testProcessMsgWithHandler_RESOLUCION_OPEN()
+    {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            return;
+        }
+
+        RemoteMessage remoteMsg = new RemoteMessage.Builder("to ME")
+                .addData(type_message_key, resolucion_open_type)
+                .addData(comunidadId_key, String.valueOf(comunidadId))
+                .setCollapseKey(resolucion_open_type)
+                .build();
+
+        processMsgWithHandler(remoteMsg, mActivity);
+        StatusBarNotification barNotification = checkBarNotification(RESOLUCION_OPEN);
+        checkNotification(barNotification.getNotification(), incid_gcm_resolucion_open_body);
     }
 
     //    =========================== HELPERS =============================
@@ -182,9 +252,40 @@ public class IncidFirebaseDownMsgHandlerTest {
 
     private void checkNotification(Notification notification, int... extrasRscId)
     {
-        assertThat(notification.extras.getCharSequence(EXTRA_TITLE).toString(), is(mActivity.getString(extrasRscId[0])));
-        assertThat(notification.extras.getCharSequence(EXTRA_TEXT).toString(), is(mActivity.getString(extrasRscId[1])));
-        assertThat(notification.extras.getCharSequence(EXTRA_SUB_TEXT).toString(), is(mActivity.getString(extrasRscId[2])));
+        int switchInt = extrasRscId.length;
+        switch (switchInt){
+            case 3:
+                assertThat(notification.extras.getCharSequence(EXTRA_SUB_TEXT).toString(), is(mActivity.getString(extrasRscId[2])));
+            case 2:
+                assertThat(notification.extras.getCharSequence(EXTRA_TEXT).toString(), is(mActivity.getString(extrasRscId[1])));
+            case 1:
+                assertThat(notification.extras.getCharSequence(EXTRA_TITLE).toString(), is(mActivity.getString(extrasRscId[0])));
+                break;
+            default:
+                fail();
+        }
     }
 
+
+    @NonNull  @RequiresApi(api = Build.VERSION_CODES.M)
+    private StatusBarNotification checkBarNotification(IncidFirebaseDownMsgHandler handler)
+    {
+        await().atMost(5, SECONDS).until(notificationsSize(), is(1));
+        StatusBarNotification barNotification = notificationManager.getActiveNotifications()[0];
+        assertThat(barNotification.getId(), is(handler.getBarNotificationId()));
+        assertThat(barNotification.getPackageName(), is(PACKAGE_TEST));
+        return barNotification;
+    }
+
+    /* ........................Awaitility helpers ................ */
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private Callable<Integer> notificationsSize() {
+        return new Callable<Integer>() {
+            public Integer call() throws Exception {
+                notificationManager = (NotificationManager) mActivity.getSystemService(NOTIFICATION_SERVICE);
+                return notificationManager.getActiveNotifications().length;
+            }
+        };
+    }
 }

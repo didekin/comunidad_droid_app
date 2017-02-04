@@ -64,7 +64,7 @@ public final class MenuRouter {
     }
 
     public static Class<? extends Activity> getRegisterDependentClass(int resourceId)
-    {   // TODO: test both cases.
+    {
         if (TKhandler.isRegisteredUser()) {
             return routerMap.get(resourceId);
         } else {

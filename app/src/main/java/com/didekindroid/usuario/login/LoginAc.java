@@ -14,22 +14,29 @@ import android.widget.EditText;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.security.OauthTokenReactorIf;
 import com.didekindroid.usuario.UsuarioBean;
 import com.didekindroid.util.ConnectionUtils;
 import com.didekindroid.util.MenuRouter;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+import static com.didekindroid.security.OauthTokenReactor.tokenReactor;
+import static com.didekindroid.usuario.UsuarioBundleKey.login_counter_atomic_int;
 import static com.didekindroid.usuario.login.LoginAc.PasswordMailDialog.newInstance;
-import static com.didekindroid.usuario.login.LoginAcReactor.loginReactor;
+import static com.didekindroid.usuario.login.LoginReactor.loginReactor;
+import static com.didekindroid.util.CommonAssertionMsg.bean_fromView_should_be_initialized;
 import static com.didekindroid.util.DefaultNextAcRouter.routerMap;
 import static com.didekindroid.util.UIutils.assertTrue;
-import static com.didekindroid.util.UIutils.bean_fromView_should_be_initialized;
+import static com.didekindroid.util.UIutils.destroySubscriptions;
 import static com.didekindroid.util.UIutils.doToolBar;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.util.UIutils.makeToast;
+import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOUND;
 
 /**
  * User: pedro
@@ -50,9 +57,10 @@ public class LoginAc extends AppCompatActivity implements LoginViewIf, LoginCont
 
     View mAcView;
     CompositeDisposable subscriptions;
-    private volatile int counterWrong;
-    private UsuarioBean usuarioBean;
     LoginReactorIf reactor;
+    OauthTokenReactorIf oauthTokenReactor;
+    AtomicInteger counterWrong;
+    UsuarioBean usuarioBean;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -64,7 +72,8 @@ public class LoginAc extends AppCompatActivity implements LoginViewIf, LoginCont
         setContentView(mAcView);
         doToolBar(this, true);
         reactor = loginReactor;
-        subscriptions = new CompositeDisposable();
+        oauthTokenReactor = tokenReactor;
+        counterWrong = new AtomicInteger(0);
 
         Button mLoginButton = (Button) findViewById(R.id.login_ac_button);
         mLoginButton.setOnClickListener(new View.OnClickListener() {
@@ -73,10 +82,28 @@ public class LoginAc extends AppCompatActivity implements LoginViewIf, LoginCont
             {
                 Timber.d("View.OnClickListener().onClick()");
                 if (checkLoginData()) {
-                   validateLoginRemote() ;
+                    validateLoginRemote();
                 }
             }
         });
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState)
+    {
+        Timber.d("onSaveInstanceState()");
+        super.onSaveInstanceState(outState);
+        outState.putInt(login_counter_atomic_int.key, counterWrong.get());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState)
+    {
+        Timber.d("onRestoreInstanceState()");
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState != null){
+            counterWrong.set(savedInstanceState.getInt(login_counter_atomic_int.key));
+        }
     }
 
     @Override
@@ -84,9 +111,7 @@ public class LoginAc extends AppCompatActivity implements LoginViewIf, LoginCont
     {
         Timber.d("onDestroy()");
         super.onDestroy();
-        if (subscriptions != null) {
-            subscriptions.clear();
-        }
+        destroySubscriptions(subscriptions);
     }
 
     // ============================================================
@@ -97,13 +122,13 @@ public class LoginAc extends AppCompatActivity implements LoginViewIf, LoginCont
     public void showDialog(String userName)
     {
         Timber.d("showDialog()");
-        DialogFragment newFragment = newInstance(userName);
+        DialogFragment newFragment = newInstance();
         newFragment.show(getFragmentManager(), "passwordMailDialog");
     }
 
     @Override
-    public String[] getLoginDataFromView(){
-        // TODO: test.
+    public String[] getLoginDataFromView()
+    {
         Timber.d("getLoginDataFromView()");
         return new String[]{
                 ((EditText) mAcView.findViewById(R.id.reg_usuario_email_editT)).getText().toString(),
@@ -117,7 +142,7 @@ public class LoginAc extends AppCompatActivity implements LoginViewIf, LoginCont
 
     @Override
     public boolean checkLoginData()
-    {  // TODO: test.
+    {
         Timber.i("checkLoginData()");
         usuarioBean = new UsuarioBean(getLoginDataFromView()[0], null, getLoginDataFromView()[1], null);
 
@@ -144,19 +169,21 @@ public class LoginAc extends AppCompatActivity implements LoginViewIf, LoginCont
     @Override
     public void processBackLoginRemote(Boolean isLoginOk)
     {
-        Timber.d("onNext");
+        Timber.d("processBackLoginRemote()");
         if (isLoginOk) {
             Timber.d("login OK");
             Intent intent = new Intent(this, routerMap.get(this.getClass()));
             intent.setFlags(FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
             finish();
-        } else if (counterWrong > 2) { // Password wrong
-            ++counterWrong;
-            showDialog(usuarioBean.getUserName());
         } else {
-            Timber.d("Password wrong, counterWrong = %d%n",counterWrong);
-            makeToast(this, R.string.password_wrong_in_login);
+            int counter = counterWrong.addAndGet(1);
+            Timber.d("Password wrong, counterWrong = %d%n", counter - 1);
+            if (counter > 3) { /* Password wrong*/
+                showDialog(usuarioBean.getUserName());
+            } else {
+                makeToast(this, R.string.password_wrong_in_login);
+            }
         }
     }
 
@@ -173,14 +200,18 @@ public class LoginAc extends AppCompatActivity implements LoginViewIf, LoginCont
     @Override
     public void processBackErrorInReactor(Throwable e)
     {
-        Timber.d("processBackErrorInReactor()");
+        Timber.d("processBackErrorInReactor(), message: %s", e.getMessage());
         if (e instanceof UiException) {
-            ((UiException) e).processMe(this, new Intent());
+            if (((UiException) e).getErrorBean().getMessage().equalsIgnoreCase(USER_NAME_NOT_FOUND.getHttpMessage())) {
+                makeToast(this, R.string.username_wrong_in_login);
+            } else {
+                ((UiException) e).processMe(this, new Intent());
+            }
         }
     }
 
     @Override
-    public void doDialogPositiveClick(String email)
+    public void doDialogPositiveClick()
     {
         Timber.d("doDialogPositiveClick()");
         assertTrue(usuarioBean != null, bean_fromView_should_be_initialized);
@@ -201,7 +232,7 @@ public class LoginAc extends AppCompatActivity implements LoginViewIf, LoginCont
     @Override
     public CompositeDisposable getSubscriptions()
     {
-        if (subscriptions == null){
+        if (subscriptions == null) {
             subscriptions = new CompositeDisposable();
         }
         return subscriptions;
@@ -234,15 +265,10 @@ public class LoginAc extends AppCompatActivity implements LoginViewIf, LoginCont
 
     public static class PasswordMailDialog extends DialogFragment {
 
-        public static PasswordMailDialog newInstance(String emailUser)
+        public static PasswordMailDialog newInstance()
         {
             Timber.d("newInstance()");
-
-            PasswordMailDialog mailDialog = new PasswordMailDialog();
-            Bundle args = new Bundle();
-            args.putString(EMAIL_DIALOG_ARG, emailUser);
-            mailDialog.setArguments(args);
-            return mailDialog;
+            return new PasswordMailDialog();
         }
 
         @Override
@@ -258,7 +284,7 @@ public class LoginAc extends AppCompatActivity implements LoginViewIf, LoginCont
                         public void onClick(DialogInterface dialog, int id)
                         {
                             dismiss();
-                            ((LoginAc) getActivity()).doDialogPositiveClick(getArguments().getString("email"));
+                            ((LoginAc) getActivity()).doDialogPositiveClick();
                         }
                     })
                     .setNegativeButton(R.string.send_password_by_mail_NO, new DialogInterface.OnClickListener() {

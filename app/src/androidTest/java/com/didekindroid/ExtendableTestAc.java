@@ -13,10 +13,6 @@ import com.didekinlib.model.usuario.Usuario;
  */
 public interface ExtendableTestAc {
 
-    Usuario registerUser() throws Exception;
-
-    ActivityTestRule<? extends Activity> getActivityRule();
-
     void checkNavigateUp();
 
     int getNextViewResourceId();

@@ -24,6 +24,7 @@ import static com.didekindroid.util.ConnectionUtils.checkInternetConnected;
 import static com.didekindroid.util.MenuRouter.doUpMenu;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.checkPostExecute;
+import static com.didekindroid.util.UIutils.destroySubscriptions;
 import static com.didekindroid.util.UIutils.doToolBar;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.util.UIutils.makeToast;
@@ -34,13 +35,10 @@ import static com.didekindroid.util.UIutils.makeToast;
  * 2. No intent received.
  * Postconditions:
  * 1. No intent passed.
- */
-
-/**
+ *
  * This activity is a point of registration for receiving notifications of new incidencias.
  * TODO: añadir varios tags a la incidencia para facilitar búsquedas.
  */
-@SuppressWarnings("ConstantConditions")
 public class IncidRegAc extends AppCompatActivity implements IncidRegControllerIf {
 
     IncidRegAcFragment mRegAcFragment;
@@ -76,7 +74,7 @@ public class IncidRegAc extends AppCompatActivity implements IncidRegControllerI
     protected void onResume()
     {
         Timber.d("onResume()");
-        // TODO: sustituir for llamada al observable getGcmToken(this);
+        checkGcmToken();
         super.onResume();
     }
 
@@ -85,9 +83,7 @@ public class IncidRegAc extends AppCompatActivity implements IncidRegControllerI
     {
         Timber.d("onDestroy()");
         super.onDestroy();
-        if (subscriptions != null) {
-            subscriptions.clear();
-        }
+        destroySubscriptions(subscriptions);
     }
 
     void registerIncidencia()
@@ -113,11 +109,9 @@ public class IncidRegAc extends AppCompatActivity implements IncidRegControllerI
 
     @Override
     public void checkGcmToken()
-    { // TODO: test methods of controller.
-        if (subscriptions == null) {
-            subscriptions = new CompositeDisposable();
-        }
-        reactor.checkGcmToken(subscriptions);
+    {
+        Timber.d("checkGcmToken()");
+        subscriptions = reactor.checkGcmToken(subscriptions);
     }
 
     // ============================================================

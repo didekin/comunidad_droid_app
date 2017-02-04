@@ -30,7 +30,7 @@ import static com.didekindroid.util.MenuRouter.routerMap;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.util.UIutils.doToolBar;
-import static com.didekindroid.util.UIutils.fragment_should_be_initialized;
+import static com.didekindroid.util.CommonAssertionMsg.fragment_should_be_initialized;
 
 /**
  * Preconditions:

@@ -18,9 +18,11 @@ import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
+import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_have_been_deleted;
 import static com.didekindroid.usuario.delete.DeleteMeReactor.deleteReactor;
 import static com.didekindroid.util.DefaultNextAcRouter.routerMap;
 import static com.didekindroid.util.UIutils.assertTrue;
+import static com.didekindroid.util.UIutils.destroySubscriptions;
 import static com.didekindroid.util.UIutils.doToolBar;
 
 /**
@@ -63,10 +65,9 @@ public class DeleteMeAc extends AppCompatActivity implements DeleteMeControllerI
     @Override
     protected void onDestroy()
     {
+        Timber.d("onDestroy()");
         super.onDestroy();
-        if (subscriptions != null) {
-            subscriptions.clear();
-        }
+        destroySubscriptions(subscriptions);
     }
 
     // ============================================================
@@ -75,7 +76,7 @@ public class DeleteMeAc extends AppCompatActivity implements DeleteMeControllerI
 
     @Override
     public boolean unregisterUser()
-    {   // TODO: to test.
+    {
         Timber.d("unregisterUser()");
         return reactor.deleteMeInRemote(this);
     }
@@ -93,6 +94,8 @@ public class DeleteMeAc extends AppCompatActivity implements DeleteMeControllerI
     @Override
     public void processBackDeleteMeRemote(Boolean isDeleted)
     {
+        Timber.d("processBackDeleteMeRemote()");
+        assertTrue(isDeleted, user_should_have_been_deleted);
         Intent intent = new Intent(this, routerMap.get(this.getClass()));
         intent.setFlags(FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);

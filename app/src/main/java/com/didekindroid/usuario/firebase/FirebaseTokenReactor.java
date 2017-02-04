@@ -63,19 +63,30 @@ public final class FirebaseTokenReactor implements FirebaseTokenReactorIf {
     //  =======================================================================================
 
     @Override
-    public void checkGcmToken(CompositeDisposable subscriptions)
+    public CompositeDisposable checkGcmToken(final CompositeDisposable inSubscriptions)
     {
-        if (!TKhandler.isRegisteredUser()) {
-            return;
+        // We do nothing if the user is not registered or his gcmToken has been sent to the database.
+        if (!TKhandler.isRegisteredUser() || TKhandler.isGcmTokenSentServer()) {
+            return inSubscriptions;
         }
-        subscriptions.add(
+
+        CompositeDisposable outSubscriptions = inSubscriptions;
+
+        if (outSubscriptions == null) {
+            outSubscriptions = new CompositeDisposable();
+        }
+
+        outSubscriptions.add(
                 updatedGcmTkSingle()
                         .subscribeOn(Schedulers.io())
                         .subscribeWith(new RegGcmTokenObserver()));
+
+        return outSubscriptions;
     }
 
     /**
      * Synchronous variant for the service InstanceIdService.
+     * The method does not check if the gcmToken has been sent previously to database.
      */
     @Override
     public void checkGcmTokenSync()

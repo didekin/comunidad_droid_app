@@ -1,6 +1,8 @@
 package com.didekindroid.security;
 
 
+import android.content.Context;
+
 import com.didekindroid.exception.UiException;
 import com.didekinlib.http.oauth2.SpringOauthToken;
 
@@ -19,11 +21,13 @@ public interface IdentityCacher {
 
     void cleanIdentityCache();
 
+    String doHttpAuthHeaderFromTkInCache() throws UiException;
+
     SpringOauthToken getAccessTokenInCache() throws UiException;
 
-    AtomicReference<SpringOauthToken> getTokenCache();
+    Context getContext();
 
-    String doHttpAuthHeaderFromTkInCache() throws UiException;
+    AtomicReference<SpringOauthToken> getTokenCache();
 
     File getRefreshTokenFile();
 

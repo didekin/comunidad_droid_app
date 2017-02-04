@@ -1,4 +1,4 @@
-package com.didekindroid.usuario;
+package com.didekindroid.usuario.userdata;
 
 import android.app.Activity;
 import android.content.res.Resources;
@@ -8,7 +8,6 @@ import android.support.test.rule.ActivityTestRule;
 import com.didekindroid.ExtendableTestAc;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.usuario.userdata.UserDataAc;
 import com.didekinlib.http.oauth2.SpringOauthToken;
 import com.didekinlib.model.usuario.Usuario;
 
@@ -65,15 +64,28 @@ public class UserDataAcTest implements ExtendableTestAc {
     protected UserDataAc mActivity;
     protected Resources resources;
     protected Usuario registeredUser;
-    @Rule
-    public ActivityTestRule<? extends Activity> mActivityRule = getActivityRule();
     protected int activityLayoutId = R.id.user_data_ac_layout;
     private boolean mustCleanUser;
+
+    @Rule
+    public ActivityTestRule<? extends Activity> mActivityRule = new ActivityTestRule<UserDataAc>(UserDataAc.class) {
+        @Override
+        protected void beforeActivityLaunched()
+        {
+            // Precondition: the user is registered.
+            try {
+                registeredUser = signUpAndUpdateTk(COMU_REAL_JUAN);
+                MatcherAssert.assertThat(registeredUser, CoreMatchers.notNullValue());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    };
 
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
     {
-        Thread.sleep(4000);
+        Thread.sleep(2000);
     }
 
     @Before
@@ -92,29 +104,6 @@ public class UserDataAcTest implements ExtendableTestAc {
         }
     }
 
-    @Override
-    public Usuario registerUser() throws Exception
-    {
-        return signUpAndUpdateTk(COMU_REAL_JUAN);
-    }
-
-    @Override
-    public ActivityTestRule<? extends Activity> getActivityRule()
-    {
-        return new ActivityTestRule<UserDataAc>(UserDataAc.class) {
-            @Override
-            protected void beforeActivityLaunched()
-            {
-                // Precondition: the user is registered.
-                try {
-                    registeredUser = registerUser();
-                    MatcherAssert.assertThat(registeredUser, CoreMatchers.notNullValue());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-    }
 
     @Override
     public void checkNavigateUp()

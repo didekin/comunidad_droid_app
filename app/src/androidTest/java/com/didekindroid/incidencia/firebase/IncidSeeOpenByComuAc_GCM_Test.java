@@ -1,44 +1,44 @@
 package com.didekindroid.incidencia.firebase;
 
 import android.app.Activity;
-import android.content.Context;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.exception.UiException;
-import com.didekindroid.incidencia.activity.incidreg.IncidRegAc;
+import com.didekindroid.incidencia.activity.IncidSeeOpenByComuAc;
 import com.didekinlib.model.usuario.Usuario;
-import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
-import org.junit.BeforeClass;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
 
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
-import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
  * Date: 27/11/15
  * Time: 16:38
+ *
+ * Test de integración GCM para la consulta de incidencias abiertas.
  */
 @RunWith(AndroidJUnit4.class)
-public class IncidSeeOpenAc_GCM_Test extends Incidencia_GCM_Test {
+public class IncidSeeOpenByComuAc_GCM_Test extends Incidencia_GCM_Test {
 
     Usuario pepe;
-    UsuarioComunidad pepeUserComu;
 
-    @BeforeClass
-    public static void slowSeconds() throws InterruptedException
+    @Test
+    public void testUpdateGcmToken() throws Exception
     {
-        Thread.sleep(3000);
+        // We check that the activity has sent the Firebase token to BD.
+        checkToken();
     }
 
 //  ================================= Helper methods  ==========================================
@@ -46,20 +46,18 @@ public class IncidSeeOpenAc_GCM_Test extends Incidencia_GCM_Test {
     @Override
     protected IntentsTestRule<? extends Activity> doIntentsTestRule()
     {
-        return new IntentsTestRule<IncidRegAc>(IncidRegAc.class) {
+        return new IntentsTestRule<IncidSeeOpenByComuAc>(IncidSeeOpenByComuAc.class) {
 
             @Override
             protected void beforeActivityLaunched()
             {
-                Context context = InstrumentationRegistry.getTargetContext();
-                TKhandler.updateIsGcmTokenSentServer(false);
                 try {
                     pepe = signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
-                    pepeUserComu = userComuDaoRemote.seeUserComusByUser().get(0);
-                    // Pepe hasn't got a gcmToken.
+                    // We'll test that the gcmToken is not updated in server.
+                    assertThat(TKhandler.isGcmTokenSentServer(), is(false));
                     assertThat(usuarioDao.getGcmToken(), nullValue());
                 } catch (IOException | UiException e) {
-                    e.printStackTrace();
+                    fail();
                 }
             }
         };

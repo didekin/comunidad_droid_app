@@ -20,7 +20,7 @@ import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
 import static com.didekindroid.usuario.userdata.UserDataControllerIf.UserChangeToMake.alias_only;
 import static com.didekindroid.usuario.userdata.UserDataControllerIf.UserChangeToMake.userName;
 import static com.didekindroid.util.UIutils.assertTrue;
-import static com.didekindroid.util.UIutils.bean_fromView_should_be_initialized;
+import static com.didekindroid.util.CommonAssertionMsg.bean_fromView_should_be_initialized;
 import static io.reactivex.Single.fromCallable;
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 import static io.reactivex.schedulers.Schedulers.io;

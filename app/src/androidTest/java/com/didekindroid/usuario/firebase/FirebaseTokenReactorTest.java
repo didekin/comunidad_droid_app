@@ -27,6 +27,7 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.si
 import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
 import static io.reactivex.plugins.RxJavaPlugins.reset;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -98,17 +99,41 @@ public class FirebaseTokenReactorTest {
      * We call the subscription and check that the gcm token status has been updated.
      */
     @Test
-    public void testCheckGcmToken()
+    public void testCheckGcmToken_1()
     {
-        CompositeDisposable subscriptions = new CompositeDisposable();
+        // Preconditions: the user is registered and her gcmToken has not been sent to database.
+        assertThat(TKhandler.isRegisteredUser() && !TKhandler.isGcmTokenSentServer(), is(true));
+
+        CompositeDisposable subscriptions;
         try {
             trampolineReplaceIoScheduler();
-            tokenReactor.checkGcmToken(subscriptions);
+            subscriptions = tokenReactor.checkGcmToken(null);
         } finally {
             reset();
         }
         assertThat(subscriptions.size(), is(1));
         assertThat(TKhandler.isGcmTokenSentServer(), is(true));
+    }
+
+    /**
+     * Synchronous execution: we use RxJavaPlugins to replace io scheduler; everything runs in the test runner thread.
+     * The gcmToken has been updated in database: we check that the subscriptions continue to be null.
+     */
+    @Test
+    public void testCheckGcmToken_2()
+    {
+        // Preconditions: the user is registered and her gcmToken has been sent to database.
+        TKhandler.updateIsGcmTokenSentServer(true);
+        assertThat(TKhandler.isRegisteredUser(), is(true));
+
+        CompositeDisposable subscriptions;
+        try {
+            trampolineReplaceIoScheduler();
+            subscriptions = tokenReactor.checkGcmToken(null);
+        } finally {
+            reset();
+        }
+        assertThat(subscriptions, nullValue());
     }
 
     /**

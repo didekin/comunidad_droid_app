@@ -28,12 +28,13 @@ final class DeleteMeReactor implements  DeleteMeReactorIf{
 
     //    .................................... OBSERVABLES .................................
 
-    private static Single<Boolean> getDeleteMeSingle()
-    {   // TODO: to test: devuelve true y devuelve false (no en BD).
+    static Single<Boolean> getDeleteMeSingle()
+    {
         return fromCallable(new Callable<Boolean>() {
             @Override
             public Boolean call() throws Exception
             {
+                Timber.d("fromCallable(), thread: %s", Thread.currentThread().getName());
                 return usuarioDao.deleteUser();
             }
         }).map(cleanTokenAndUnregisterFunc);
@@ -53,7 +54,7 @@ final class DeleteMeReactor implements  DeleteMeReactorIf{
 
     // ............................ SUBSCRIBERS ..................................
 
-    private static class DeleteMeSingleObserver extends DisposableSingleObserver<Boolean> {
+    static class DeleteMeSingleObserver extends DisposableSingleObserver<Boolean> {
 
         private final DeleteMeControllerIf controller;
 
@@ -64,15 +65,15 @@ final class DeleteMeReactor implements  DeleteMeReactorIf{
 
         @Override
         public void onSuccess(Boolean isDeleted)
-        { // TODO: test.
+        {
+            Timber.d("onSuccess(), Thread: %s", Thread.currentThread().getName());
             controller.processBackDeleteMeRemote(isDeleted);
-
         }
 
         @Override
         public void onError(Throwable e)
-        { // TODO: test.
-            Timber.d("onError");
+        {
+            Timber.d("onError, Thread: %s", Thread.currentThread().getName());
             controller.processErrorInReactor(e);
         }
     }

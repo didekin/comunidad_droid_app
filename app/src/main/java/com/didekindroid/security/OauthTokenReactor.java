@@ -13,7 +13,11 @@ import timber.log.Timber;
 import static com.didekindroid.security.Oauth2DaoRemote.Oauth2;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.security.TokenIdentityCacher.initTokenAction;
+import static com.didekindroid.usuario.UsuarioAssertionMsg.identity_token_should_be_notnull;
+import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
+import static com.didekindroid.util.UIutils.assertTrue;
 import static io.reactivex.Single.fromCallable;
+import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 import static io.reactivex.schedulers.Schedulers.io;
 
 /**
@@ -38,8 +42,10 @@ public final class OauthTokenReactor implements OauthTokenReactorIf {
      *
      * @return a Single to obtain a new access token with userName and password credentials.
      */
-    public static Single<SpringOauthToken> oauthTokenFromUserPswd(final Usuario usuario)
+    static Single<SpringOauthToken> oauthTokenFromUserPswd(final Usuario usuario)
     {
+        assertTrue(TKhandler.isRegisteredUser(), user_should_be_registered);
+
         return fromCallable(new Callable<SpringOauthToken>() {
             @Override
             public SpringOauthToken call() throws Exception
@@ -59,6 +65,8 @@ public final class OauthTokenReactor implements OauthTokenReactorIf {
      */
     static Completable oauthTokenFromRefreshTk(final String refreshToken)
     {
+        assertTrue(TKhandler.getTokenCache().get() != null, identity_token_should_be_notnull);
+
         return fromCallable(new Callable<SpringOauthToken>() {
             @Override
             public SpringOauthToken call() throws Exception
@@ -96,7 +104,7 @@ public final class OauthTokenReactor implements OauthTokenReactorIf {
     @Override
     public void updateTkAndCacheFromUser(Usuario newUser)
     {
-        oauthTokenAndInitCache(newUser).subscribeWith(new OauthUpdateTokenCacheObserver());
+        oauthTokenAndInitCache(newUser).observeOn(mainThread()).subscribeWith(new OauthUpdateTokenCacheObserver());
     }
 
     //  =======================================================================================

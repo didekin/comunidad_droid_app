@@ -8,16 +8,21 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
+import com.didekindroid.incidencia.activity.incidreg.IncidRegControllerIf;
 import com.didekindroid.incidencia.activity.utils.IncidBundleKey;
+import com.didekindroid.usuario.firebase.FirebaseTokenReactorIf;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 
+import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_resolucion_ac_frgs_tag;
+import static com.didekindroid.usuario.firebase.FirebaseTokenReactor.tokenReactor;
 import static com.didekindroid.util.MenuRouter.doUpMenu;
+import static com.didekindroid.util.UIutils.destroySubscriptions;
 import static com.didekindroid.util.UIutils.doToolBar;
 
 /**
@@ -40,10 +45,12 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * 4. If a Resolucion intent is received and the user hasn't got authority 'adm':
  * 4.1 The data are shown.
  */
-public class IncidResolucionRegEditSeeAc extends AppCompatActivity {
+public class IncidResolucionRegEditSeeAc extends AppCompatActivity implements IncidRegControllerIf {
 
     IncidImportancia mIncidImportancia;
     Resolucion mResolucion;
+    CompositeDisposable subscriptions;
+    FirebaseTokenReactorIf reactor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -53,12 +60,12 @@ public class IncidResolucionRegEditSeeAc extends AppCompatActivity {
 
         mIncidImportancia = (IncidImportancia) getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.key);
         mResolucion = (Resolucion) getIntent().getSerializableExtra(IncidBundleKey.INCID_RESOLUCION_OBJECT.key);
+        reactor = tokenReactor;
+        checkGcmToken();
 
         View mAcView = getLayoutInflater().inflate(R.layout.incid_resolucion_reg_ac, null);
         setContentView(mAcView);
         doToolBar(this, true);
-
-        // TODO: sustituir for llamada al observable getGcmToken(this);
 
         if (savedInstanceState != null) {
             return;
@@ -109,11 +116,30 @@ public class IncidResolucionRegEditSeeAc extends AppCompatActivity {
     }
 
     @Override
-    protected void onPostResume()
+    protected void onResume()
     {
         Timber.d("onResume()");
-        // TODO: sustituir for llamada al observable getGcmToken(this);
-        super.onPostResume();
+        checkGcmToken();
+        super.onResume();
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        Timber.d("onDestroy()");
+        super.onDestroy();
+        destroySubscriptions(subscriptions);
+    }
+
+    // ============================================================
+    //    ..... CONTROLLER IMPLEMENTATION ....
+    /* ============================================================*/
+
+    @Override
+    public void checkGcmToken()
+    {
+        Timber.d("checkGcmToken()");
+        subscriptions = reactor.checkGcmToken(subscriptions);
     }
 
 //    ============================================================
@@ -136,5 +162,4 @@ public class IncidResolucionRegEditSeeAc extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
 }

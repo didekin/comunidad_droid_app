@@ -36,7 +36,7 @@ import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.util.UIutils.doToolBar;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
-import static com.didekindroid.util.UIutils.intent_extra_should_be_initialized;
+import static com.didekindroid.util.CommonAssertionMsg.intent_extra_should_be_initialized;
 import static com.didekindroid.util.UIutils.makeToast;
 import static com.didekinlib.http.UsuarioServConstant.IS_USER_DELETED;
 

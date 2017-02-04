@@ -6,6 +6,6 @@ package com.didekindroid.incidencia.activity.incidreg;
  * Time: 14:01
  */
 
-interface IncidRegControllerIf {
+public interface IncidRegControllerIf {
     void checkGcmToken();
 }

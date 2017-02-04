@@ -12,6 +12,8 @@ import android.widget.ArrayAdapter;
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComuBundleKey;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.incidencia.activity.incidreg.IncidRegControllerIf;
+import com.didekindroid.usuario.firebase.FirebaseTokenReactorIf;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
@@ -19,6 +21,7 @@ import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 
 import java.util.List;
 
+import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
@@ -27,11 +30,13 @@ import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IM
 import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.incidencia.activity.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
 import static com.didekindroid.incidencia.activity.utils.IncidenciaAssertionMsg.incidencia_resolucion_should_be_initialized;
+import static com.didekindroid.usuario.firebase.FirebaseTokenReactor.tokenReactor;
 import static com.didekindroid.util.ItemMenu.mn_handler;
 import static com.didekindroid.util.MenuRouter.doUpMenu;
 import static com.didekindroid.util.MenuRouter.routerMap;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.checkPostExecute;
+import static com.didekindroid.util.UIutils.destroySubscriptions;
 import static com.didekindroid.util.UIutils.doToolBar;
 
 /**
@@ -45,11 +50,12 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * Postconditions:
  * 1. An intent is passed with an IncidImportancia instance, where the selected incidencia is embedded.
  */
-public class IncidSeeOpenByComuAc extends AppCompatActivity implements
-        IncidSeeListListener {
+public class IncidSeeOpenByComuAc extends AppCompatActivity implements IncidSeeListListener, IncidRegControllerIf {
 
     IncidSeeByComuListFr mFragment;
     Comunidad mComunidadSelected;
+    CompositeDisposable subscriptions;
+    FirebaseTokenReactorIf reactor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -57,7 +63,8 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements
         Timber.d("onCreate().");
         super.onCreate(savedInstanceState);
 
-        // TODO: sustituir for llamada al observable getGcmToken(this);
+        reactor = tokenReactor;
+        checkGcmToken();
 
         setContentView(R.layout.incid_see_open_by_comu_ac);
         doToolBar(this, true);
@@ -76,8 +83,16 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements
     protected void onResume()
     {
         Timber.d("onResume()");
-        // TODO: sustituir for llamada al observable getGcmToken(this);
+        checkGcmToken();
         super.onResume();
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        Timber.d("onDestroy()");
+        super.onDestroy();
+        destroySubscriptions(subscriptions);
     }
 
     // ============================================================
@@ -109,13 +124,24 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements
                 return true;
             case R.id.see_usercomu_by_comu_ac_mn:
                 Intent intent = new Intent();
-                intent.putExtra(ComuBundleKey.COMUNIDAD_ID.key, mComunidadSelected);
+                intent.putExtra(ComuBundleKey.COMUNIDAD_ID.key, mComunidadSelected.getC_Id());
                 this.setIntent(intent);
                 mn_handler.doMenuItem(this, routerMap.get(resourceId));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    // ============================================================
+    //    ..... CONTROLLER IMPLEMENTATION ....
+    /* ============================================================*/
+
+    @Override
+    public void checkGcmToken()
+    {
+        Timber.d("checkGcmToken()");
+        subscriptions = reactor.checkGcmToken(subscriptions);
     }
 
     //  ........... HELPER INTERFACES AND CLASSES ..................

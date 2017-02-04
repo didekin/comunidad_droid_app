@@ -12,7 +12,7 @@ interface LoginControllerIf {
     void validateLoginRemote();
     void processBackLoginRemote(Boolean isLoginOk);
     void processBackSendPassword(Boolean isSendPassword);
-    void doDialogPositiveClick(String email);
+    void doDialogPositiveClick();
     void doDialogNegativeClick();
     CompositeDisposable getSubscriptions();
     void processBackErrorInReactor(Throwable e);

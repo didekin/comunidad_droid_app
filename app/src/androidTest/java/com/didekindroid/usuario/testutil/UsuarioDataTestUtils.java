@@ -95,6 +95,9 @@ public final class UsuarioDataTestUtils {
             case CLEAN_JUAN2:
                 cleanOneUser(USER_JUAN2);
                 break;
+            case CLEAN_DROID:
+                cleanOneUser(USER_DROID);
+                break;
             case CLEAN_JUAN_AND_PEPE:
                 cleanTwoUsers(USER_JUAN, USER_PEPE);
                 break;
@@ -116,7 +119,9 @@ public final class UsuarioDataTestUtils {
         CLEAN_JUAN2_AND_PEPE,
         CLEAN_TK_HANDLER,
         CLEAN_NOTHING,
-        CLEAN_JUAN2,;
+        CLEAN_JUAN2,
+        CLEAN_DROID,
+        ;
     }
 }
 

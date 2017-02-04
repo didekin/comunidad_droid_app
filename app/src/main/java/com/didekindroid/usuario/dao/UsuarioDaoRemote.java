@@ -152,6 +152,10 @@ public final class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDao {
         }
     }
 
+    /**
+     * @return  false if the userName exists but the password doesn't match that in the data base.
+     * @throws  UiException if USER_NAME_NOT_FOUND or GENERIC_INTERNAL_ERROR.
+     */
     @Override
     public boolean loginInternal(String userName, String password) throws UiException
     {

@@ -28,6 +28,7 @@ import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanWithTkhandler;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_DROID;
@@ -82,12 +83,10 @@ public class UsuarioDaoRemoteTest {
     @Test
     public void testDeleteUser() throws Exception
     {
-        // No file with refreshToken.
-        assertThat(refreshTkFile.exists(), is(false));
         //Inserta userComu, comunidad, usuariocomunidad y actuliza tokenCache.
         signUpAndUpdateTk(COMU_REAL_JUAN);
-
-        whatClean = CLEAN_JUAN;
+        // Borramos.
+        assertThat(usuarioDao.deleteUser(), is(true));
     }
 
     @Test
@@ -200,9 +199,9 @@ public class UsuarioDaoRemoteTest {
         signUpAndUpdateTk(COMU_REAL_DROID);
         assertThat(usuarioDao.sendPassword(USER_DROID.getUserName()), is(true));
         // Es necesario conseguir un nuevo token. La validación del antiguo falla por el cambio de password.
-        SpringOauthToken token = Oauth2.getRefreshUserToken(TKhandler.getRefreshTokenValue());
+        TKhandler.initIdentityCache(Oauth2.getRefreshUserToken(TKhandler.getRefreshTokenValue()));
         usuarioDao.deleteUser();
-        UsuarioDataTestUtils.cleanWithTkhandler();
+        cleanWithTkhandler();
     }
 
 //    ====================== NON INTERFACE TESTS =========================

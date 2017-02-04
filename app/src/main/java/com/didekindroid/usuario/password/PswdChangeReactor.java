@@ -30,8 +30,8 @@ final class PswdChangeReactor implements PswdChangeReactorIf {
 
     // ............................ OBSERVABLES ..................................
 
-    private static Single<Integer> isPasswordChanged(final String newPassword)
-    {   // TODO: test.
+    static Single<Integer> isPasswordChanged(final String newPassword)
+    {
         Timber.d("isPasswordChanged()");
         return fromCallable(new Callable<Integer>() {
             @Override
@@ -69,14 +69,14 @@ final class PswdChangeReactor implements PswdChangeReactorIf {
 
         @Override
         public void onSuccess(Integer changedPassword)
-        { // TODO: test.
+        {
             Timber.d("onNext: passwordUpdate = %d", changedPassword);
             controller.processBackChangedPswdRemote(changedPassword);
         }
 
         @Override
         public void onError(Throwable e)
-        {  // TODO: test.
+        {
             Timber.d("onError");
             controller.processErrorInReactor(e);
         }

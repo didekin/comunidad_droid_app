@@ -8,6 +8,6 @@ import io.reactivex.disposables.CompositeDisposable;
  * Time: 09:58
  */
 public interface FirebaseTokenReactorIf {
-    void checkGcmToken(CompositeDisposable subscriptions);
+    CompositeDisposable checkGcmToken(CompositeDisposable subscriptions);
     void checkGcmTokenSync();
 }

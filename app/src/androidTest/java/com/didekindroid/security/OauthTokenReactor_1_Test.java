@@ -23,6 +23,7 @@ import static com.didekindroid.security.OauthTokenReactor.oauthTokenFromRefreshT
 import static com.didekindroid.security.OauthTokenReactor.oauthTokenFromUserPswd;
 import static com.didekindroid.security.OauthTokenReactor.tokenReactor;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceAndroidMain;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceIoScheduler;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
@@ -194,13 +195,14 @@ public class OauthTokenReactor_1_Test {
     @Test
     public void testUpdateTkAndCacheFromUser() throws IOException, UiException
     {
-        // We delete from everywhere the default user for the rest of the tests.
+        // Borramos el usario dado de alta por defecto.
         cleanOptions(CLEAN_PEPE);
 
         userComuDaoRemote.regComuAndUserAndUserComu(COMU_REAL_PEPE).execute().body();
         checkNoInitCache();
         try {
             trampolineReplaceIoScheduler();
+            trampolineReplaceAndroidMain();
             tokenReactor.updateTkAndCacheFromUser(USER_PEPE);
         } finally {
             reset();
@@ -212,13 +214,13 @@ public class OauthTokenReactor_1_Test {
     //    .................................... HELPERS .................................
     //  ============================================================================================
 
-    private void checkUpdateTokenCache(SpringOauthToken oldToken) throws UiException
+    public static void checkUpdateTokenCache(SpringOauthToken oldToken) throws UiException
     {
         assertThat(TKhandler.getAccessTokenInCache(), not(is(oldToken)));
         checkInitTokenCache();
     }
 
-    private void checkInitTokenCache() throws UiException
+    public static void checkInitTokenCache() throws UiException
     {
         assertThat(TKhandler.getAccessTokenInCache(), notNullValue());
         assertThat(TKhandler.getAccessTokenInCache().getValue().isEmpty(), is(false));
@@ -226,7 +228,7 @@ public class OauthTokenReactor_1_Test {
         assertThat(TKhandler.getRefreshTokenFile().exists(), is(true));
     }
 
-    private void checkNoInitCache() throws UiException
+    public static void checkNoInitCache() throws UiException
     {
         assertThat(TKhandler.getAccessTokenInCache(), nullValue());
         assertThat(TKhandler.getRefreshTokenFile().exists(), is(false));

@@ -121,6 +121,7 @@
     <string name="login_wrong_no_mail">"Busca tu comunidad y regístrate.\nSi no existe, regístrala en 'Nueva comunidad'."</string>
     <string name="password_wrong">La contraseña no se corresponde con tu usuario.\nSi no la recuerdas,
         selecciona en el menú la opción para renovarla.</string>
+    <string name="username_wrong_in_login">La dirección de correo electrónico no está registrada.</string>
     <string name="password_wrong_in_login">La contraseña no se corresponde con tu usuario.</string>
     <string name="password_new_in_login">Te hemos enviado tu nueva contraseña. Haz login, nuevamente, con ella.</string>
     <string name="send_password_by_mail_dialog">¿Deseas que te enviemos una nueva contraseña por correo electrónico?</string>

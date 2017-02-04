@@ -1,6 +1,7 @@
 package com.didekindroid.incidencia.activity.incidreg;
 
 import android.database.Cursor;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.widget.ArrayAdapter;
@@ -62,9 +63,7 @@ import static org.junit.Assert.assertThat;
  */
 @SuppressWarnings({"ConstantConditions", "unchecked"})
 @RunWith(AndroidJUnit4.class)
-public class IncidRegAcTest {
-
-//    TODO: internacionalizar textos.
+public class IncidRegAcTest_1 {
 
     @Rule
     public IntentsTestRule<IncidRegAc> intentRule = new IntentsTestRule<IncidRegAc>(IncidRegAc.class) {

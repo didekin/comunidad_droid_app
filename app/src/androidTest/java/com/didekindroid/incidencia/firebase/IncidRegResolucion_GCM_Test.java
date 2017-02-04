@@ -2,10 +2,8 @@ package com.didekindroid.incidencia.firebase;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -13,7 +11,6 @@ import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.activity.IncidResolucionRegEditSeeAc;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
-import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,6 +28,7 @@ import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_PEPE;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -52,14 +50,16 @@ public class IncidRegResolucion_GCM_Test extends Incidencia_GCM_Test {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return;
         }
-        // Preconditions for the test: TOKEN en BD.
-        assertThat(usuarioDao.getGcmToken(), is(FirebaseInstanceId.getInstance().getToken()));
+        // We check that the activity has sent the Firebase token to BD.
+        checkToken();
 
         Resolucion resolucion = doResolucion(incidImportancia.getIncidencia(),
                 RESOLUCION_DEFAULT_DESC,
                 COSTE_ESTIM_DEFAULT,
                 incidImportancia.getFechaAlta());
         assertThat(IncidenciaServ.regResolucion(resolucion), is(1));
+
+        // We check that the notification is received.
         checkNotification(RESOLUCION_OPEN.getBarNotificationId());
     }
 
@@ -69,14 +69,6 @@ public class IncidRegResolucion_GCM_Test extends Incidencia_GCM_Test {
     protected IntentsTestRule<? extends Activity> doIntentsTestRule()
     {
         return new IntentsTestRule<IncidResolucionRegEditSeeAc>(IncidResolucionRegEditSeeAc.class) {
-
-            @Override
-            protected void beforeActivityLaunched()
-            {
-                Context context = InstrumentationRegistry.getTargetContext();
-                TKhandler.updateIsGcmTokenSentServer(false);
-            }
-
             /**
              * Preconditions:
              * 1. A user WITH powers 'adm' in sesssion.
@@ -88,6 +80,9 @@ public class IncidRegResolucion_GCM_Test extends Incidencia_GCM_Test {
             {
                 try {
                     incidImportancia = insertGetIncidImportancia(COMU_PLAZUELA5_PEPE);
+                    // We'll test that the gcmToken is not updated in server.
+                    assertThat(TKhandler.isGcmTokenSentServer(), is(false));
+                    assertThat(usuarioDao.getGcmToken(), nullValue());
                 } catch (IOException | UiException e) {
                     e.printStackTrace();
                 }

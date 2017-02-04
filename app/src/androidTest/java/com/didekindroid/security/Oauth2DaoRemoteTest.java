@@ -23,12 +23,15 @@ import static com.didekindroid.security.Oauth2DaoRemote.Oauth2;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.SecurityTestUtils.updateSecurityData;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_DROID;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_NOTHING;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_DROID;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanWithTkhandler;
 import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_DROID;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static com.didekinlib.http.GenericExceptionMsg.BAD_REQUEST;
@@ -142,7 +145,7 @@ public class Oauth2DaoRemoteTest {
 
     @SuppressWarnings("ConstantConditions")
     @Test
-    public void testGetRefreshUserToken() throws Exception
+    public void testGetRefreshUserToken_1() throws Exception
     {
         whatClean = CLEAN_PEPE;
 
@@ -157,5 +160,26 @@ public class Oauth2DaoRemoteTest {
         // Return mew access and refresh tokens.
         assertThat(tokenNew.getRefreshToken().getValue(), not(is(refreshTkOldValue)));
         assertThat(tokenNew.getValue(), not(is(accessTkOldValue)));
+    }
+
+    @Test
+    public void testGetRefreshUserToken_2() throws Exception
+    {
+        whatClean = CLEAN_DROID;
+
+        userComuDaoRemote.regComuAndUserAndUserComu(COMU_REAL_DROID).execute().body();
+
+        SpringOauthToken token0 = Oauth2.getPasswordUserToken(USER_DROID.getUserName(), USER_DROID.getPassword());
+        assertThat(token0.getRefreshToken(), notNullValue());
+
+        SpringOauthToken token1 = Oauth2.getPasswordUserToken(USER_DROID.getUserName(), USER_DROID.getPassword());
+        assertThat(token1.getRefreshToken(), notNullValue());
+
+        try {
+            Oauth2.getRefreshUserToken(token1.getRefreshToken().getValue());
+            fail();
+        } catch (UiException e) {
+            assertThat(e.getErrorBean().getMessage(), is(BAD_REQUEST.getHttpMessage()));
+        }
     }
 }

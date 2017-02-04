@@ -37,7 +37,12 @@ import static java.util.concurrent.TimeUnit.SECONDS;
  */
 public final class TokenIdentityCacher implements IdentityCacher {
 
-    public static final IdentityCacher TKhandler = new TokenIdentityCacher();
+    public static final IdentityCacher TKhandler = new TokenIdentityCacher(creator.get().getContext());
+
+    //  ======================================================================================
+    //    .................................... FUNCTIONS .................................
+    //  ======================================================================================
+
     public static final BiFunction<Boolean, SpringOauthToken, Boolean> initTokenAndRegisterFunc = new BiFunction<Boolean, SpringOauthToken, Boolean>() {
         @Override
         public Boolean apply(Boolean isLoginValid, SpringOauthToken token)
@@ -51,6 +56,7 @@ public final class TokenIdentityCacher implements IdentityCacher {
             return isUpdatedTokenData;
         }
     };
+
     public static final Function<Boolean, Boolean> cleanTokenAndUnregisterFunc = new Function<Boolean, Boolean>() {
         @Override
         public Boolean apply(Boolean isDeletedUser)
@@ -62,6 +68,11 @@ public final class TokenIdentityCacher implements IdentityCacher {
             return isDeletedUser;
         }
     };
+
+    //  ======================================================================================
+    //    .................................... ACTIONS .................................
+    //  ======================================================================================
+
     public static final Consumer<Integer> cleanTokenCacheAction = new Consumer<Integer>() {
         @Override
         public void accept(Integer modifiedUser)
@@ -71,7 +82,9 @@ public final class TokenIdentityCacher implements IdentityCacher {
             }
         }
     };
+
     static final String refresh_token_filename = "tk_file";
+
     static final Consumer<SpringOauthToken> initTokenAction = new Consumer<SpringOauthToken>() {
         @Override
         public void accept(SpringOauthToken token)
@@ -83,18 +96,15 @@ public final class TokenIdentityCacher implements IdentityCacher {
     //  ======================================================================================
     //    ............................... TOKEN CACHE .................................
     //  ======================================================================================
+
     private final AtomicReference<SpringOauthToken> tokenCache;
     private final File refreshTokenFile;
     private final Context context;
 
-    //  ======================================================================================
-    //    ............................... SHARED PREFERENCES .................................
-    //  ======================================================================================
-
-    private TokenIdentityCacher()
+    private TokenIdentityCacher(Context context)
     {
-        context = creator.get().getContext();
-        refreshTokenFile = new File(context.getFilesDir(), refresh_token_filename);
+        this.context = context;
+        refreshTokenFile = new File(this.context.getFilesDir(), refresh_token_filename);
         String refreshTokenValue = refreshTokenFile.exists() ? readStringFromFile(refreshTokenFile) : null;
         tokenCache = (refreshTokenValue != null && !refreshTokenValue.isEmpty()) ?
                 new AtomicReference<>(new SpringOauthToken(refreshTokenValue)) : new AtomicReference<SpringOauthToken>();
@@ -169,6 +179,10 @@ public final class TokenIdentityCacher implements IdentityCacher {
         return tokenCache.get();
     }
 
+    //  ======================================================================================
+    //    ............................... SHARED PREFERENCES .................................
+    //  ======================================================================================
+
     @Override
     public boolean isRegisteredUser()
     {
@@ -178,10 +192,6 @@ public final class TokenIdentityCacher implements IdentityCacher {
                 (app_preferences_file.toString(), MODE_PRIVATE);
         return sharedPref.getBoolean(IS_USER_REG, false);
     }
-
-    //  ======================================================================================
-    //    .................................... UTILITIES .................................
-    //  ======================================================================================
 
     /**
      * Invariants:
@@ -204,10 +214,6 @@ public final class TokenIdentityCacher implements IdentityCacher {
         }
     }
 
-    //  ======================================================================================
-    //    .................................... ACCESSORS .................................
-    /*  ======================================================================================*/
-
     @Override
     public boolean isGcmTokenSentServer()
     {
@@ -225,6 +231,10 @@ public final class TokenIdentityCacher implements IdentityCacher {
         Timber.d("updateIsGcmTokenSentServer(), iSentToServer= %b", isSentToServer);
     }
 
+    //  ======================================================================================
+    //    .................................... UTILITIES .................................
+    //  ======================================================================================
+
     @Override
     public String doHttpAuthHeaderFromTkInCache() throws UiException
     {
@@ -237,8 +247,8 @@ public final class TokenIdentityCacher implements IdentityCacher {
     }
 
     //  ======================================================================================
-    //    .................................... FUNCTIONS .................................
-    //  ======================================================================================
+    //    .................................... ACCESSORS .................................
+    /*  ======================================================================================*/
 
     @Override
     public AtomicReference<SpringOauthToken> getTokenCache()
@@ -252,9 +262,11 @@ public final class TokenIdentityCacher implements IdentityCacher {
         return refreshTokenFile;
     }
 
-    //  ======================================================================================
-    //    .................................... ACTIONS .................................
-    //  ======================================================================================
+    @Override
+    public Context getContext()
+    {
+        return context;
+    }
 
     @Override
     public String getRefreshTokenValue()

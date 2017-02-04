@@ -85,6 +85,7 @@ dependencies {
 
     androidTestCompile rootProject.ext.espresso
     androidTestCompile rootProject.ext.didekinlib_gcm
+    androidTestCompile rootProject.ext.awaitility
 
     testCompile rootProject.ext.junit
 }
