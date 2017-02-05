@@ -215,7 +215,8 @@ public class LoginAc extends AppCompatActivity implements LoginViewIf, LoginCont
     {
         Timber.d("doDialogPositiveClick()");
         assertTrue(usuarioBean != null, bean_fromView_should_be_initialized);
-        reactor.sendPasswordToUser(this, usuarioBean.getUsuario());
+        // We use mock reactor to avoid deleting the password and access token remotely.
+        reactor.sendPasswordToUser(this, usuarioBean.getUsuario());      // TODO: cambiar.
     }
 
     @Override

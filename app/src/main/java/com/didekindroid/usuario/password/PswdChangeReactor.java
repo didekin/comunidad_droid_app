@@ -40,6 +40,8 @@ final class PswdChangeReactor implements PswdChangeReactorIf {
                 return usuarioDao.passwordChange(newPassword);
             }
         });
+
+        // TODO: hay que inicializar cache con nueveo token, tras cambiar password.
     }
 
     //  =======================================================================================

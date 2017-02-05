@@ -102,6 +102,15 @@ public final class UIutils {
         assertTrue((subscriptions != null ? subscriptions.size() : 0) == 0, subscriptions_should_be_zero);
     }
 
+//    ================================== ASSERTIONS ======================================
+
+    public static void assertTrue(boolean assertion, String message)
+    {
+        if (!assertion) {
+            throw new AssertionError(message);
+        }
+    }
+
 //    ===========================  AUTHENTICATION ==============================
 
     public static String checkBearerToken() throws UiException
@@ -157,13 +166,6 @@ public final class UIutils {
     }
 
     //    ================================== ERRORS ======================================
-
-    public static void assertTrue(boolean assertion, String message)
-    {
-        if (!assertion) {
-            throw new AssertionError(message);
-        }
-    }
 
     public static StringBuilder getErrorMsgBuilder(Context context)
     {

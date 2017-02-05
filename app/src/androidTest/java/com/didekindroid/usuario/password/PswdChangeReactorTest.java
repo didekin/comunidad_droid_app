@@ -8,11 +8,17 @@ import org.junit.Test;
 
 import java.io.IOException;
 
+import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
 import static com.didekindroid.usuario.password.PswdChangeReactor.isPasswordChanged;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_TRAV_PLAZUELA_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.junit.Assert.assertThat;
 
 /**
  * User: pedro@didekin
@@ -40,6 +46,12 @@ public class PswdChangeReactorTest {
     public void testPasswordChangeRemote() throws Exception
     {
         isPasswordChanged("new_password").test().assertResult(1);
+
+        String newPswd = usuarioDao.getUserData().getPassword();
+        assertThat(newPswd, allOf(
+                is("new_password"),
+                not(is(USER_PEPE.getPassword()))
+        ));
     }
 
     //  =======================================================================================

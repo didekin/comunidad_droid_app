@@ -12,6 +12,7 @@ import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
 import static com.didekindroid.security.OauthTokenReactor.oauthTokenAndInitCache;
+import static com.didekindroid.security.TokenIdentityCacher.cleanTkCacheActionBoolean;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
 import static io.reactivex.Single.fromCallable;
 import static io.reactivex.Single.just;
@@ -23,6 +24,7 @@ import static io.reactivex.schedulers.Schedulers.io;
  * Date: 19/12/16
  * Time: 16:32
  */
+@SuppressWarnings("AnonymousInnerClassMayBeStatic")
 final class LoginReactor implements LoginReactorIf {
 
     static final LoginReactorIf loginReactor = new LoginReactor();
@@ -60,7 +62,11 @@ final class LoginReactor implements LoginReactorIf {
         });
     }
 
-    static Single<Boolean> loginPswdSendSingle(final String email)
+    /**
+     *  Non static. It has a mock test implementation.
+     */
+    @Override
+    public Single<Boolean> loginPswdSendSingle(final String email)
     {
         return fromCallable(new Callable<Boolean>() {
             @Override
@@ -68,7 +74,7 @@ final class LoginReactor implements LoginReactorIf {
             {
                 return usuarioDao.sendPassword(email);
             }
-        });
+        }).doOnSuccess(cleanTkCacheActionBoolean);
     }
 
     //  =======================================================================================
@@ -90,7 +96,7 @@ final class LoginReactor implements LoginReactorIf {
     public boolean sendPasswordToUser(LoginControllerIf controller, Usuario usuario)
     {
         return controller.getSubscriptions().add(
-                LoginReactor.loginPswdSendSingle(usuario.getUserName())
+                loginPswdSendSingle(usuario.getUserName())
                         .subscribeOn(io())
                         .observeOn(mainThread())
                         .subscribeWith(new LoginPswdSendObserver(controller))
@@ -121,7 +127,7 @@ final class LoginReactor implements LoginReactorIf {
         }
     }
 
-    private static class LoginPswdSendObserver extends LoginSingleObserver {
+    static class LoginPswdSendObserver extends LoginSingleObserver {
 
         LoginPswdSendObserver(LoginControllerIf controller)
         {

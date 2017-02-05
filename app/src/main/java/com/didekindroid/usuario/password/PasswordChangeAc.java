@@ -129,6 +129,7 @@ public class PasswordChangeAc extends AppCompatActivity implements PasswordChang
     {
         Timber.d("processBackChangedPswdRemote()");
         if (changedPassword > 0) {
+            // Inicializar token cache. Está vacía.
             Intent intent = new Intent(this, routerMap.get(this.getClass()));
             startActivity(intent);
         } else {

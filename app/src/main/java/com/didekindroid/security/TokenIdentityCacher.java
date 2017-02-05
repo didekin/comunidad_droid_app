@@ -43,7 +43,7 @@ public final class TokenIdentityCacher implements IdentityCacher {
     //    .................................... FUNCTIONS .................................
     //  ======================================================================================
 
-    public static final BiFunction<Boolean, SpringOauthToken, Boolean> initTokenAndRegisterFunc = new BiFunction<Boolean, SpringOauthToken, Boolean>() {
+    static final BiFunction<Boolean, SpringOauthToken, Boolean> initTokenAndRegisterFunc = new BiFunction<Boolean, SpringOauthToken, Boolean>() {
         @Override
         public Boolean apply(Boolean isLoginValid, SpringOauthToken token)
         {
@@ -83,7 +83,13 @@ public final class TokenIdentityCacher implements IdentityCacher {
         }
     };
 
-    static final String refresh_token_filename = "tk_file";
+    public static final Consumer<Boolean> cleanTkCacheActionBoolean = new Consumer<Boolean>() {
+        @Override
+        public void accept(Boolean isToClean) throws Exception
+        {
+            cleanTokenCacheAction.accept(isToClean ? 1 : 0);
+        }
+    };
 
     static final Consumer<SpringOauthToken> initTokenAction = new Consumer<SpringOauthToken>() {
         @Override
@@ -97,6 +103,7 @@ public final class TokenIdentityCacher implements IdentityCacher {
     //    ............................... TOKEN CACHE .................................
     //  ======================================================================================
 
+    static final String refresh_token_filename = "tk_file";
     private final AtomicReference<SpringOauthToken> tokenCache;
     private final File refreshTokenFile;
     private final Context context;

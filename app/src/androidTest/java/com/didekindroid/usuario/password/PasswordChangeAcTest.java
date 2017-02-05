@@ -6,12 +6,9 @@ import android.support.test.rule.ActivityTestRule;
 import com.didekindroid.ExtendableTestAc;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
 import com.didekinlib.http.oauth2.SpringOauthToken;
 import com.didekinlib.model.usuario.Usuario;
 
-import org.hamcrest.CoreMatchers;
-import org.hamcrest.MatcherAssert;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -33,6 +30,7 @@ import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_TRAV_PLAZUELA_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
@@ -58,8 +56,8 @@ public class PasswordChangeAcTest implements ExtendableTestAc {
         {
             // Precondition: the user is registered.
             try {
-                registeredUser = signUpAndUpdateTk(UserComuDataTestUtil.COMU_TRAV_PLAZUELA_PEPE);
-                MatcherAssert.assertThat(registeredUser, CoreMatchers.notNullValue());
+                registeredUser = signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
+                assertThat(registeredUser, notNullValue());
             } catch (Exception e) {
                 e.printStackTrace();
             }
