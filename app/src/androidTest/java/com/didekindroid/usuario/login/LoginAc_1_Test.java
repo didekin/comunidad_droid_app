@@ -2,6 +2,7 @@ package com.didekindroid.usuario.login;
 
 import android.app.Activity;
 import android.support.test.rule.ActivityTestRule;
+import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.ExtendableTestAc;
 import com.didekindroid.R;
@@ -14,6 +15,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -42,6 +44,7 @@ import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkNoToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
+import static com.didekindroid.usuario.login.LoginReactorTest.doLoginReactorNoDeletePswd;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_DROID;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_DROID;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
@@ -62,6 +65,7 @@ import static org.junit.Assert.assertThat;
  * Date: 26/10/15
  * Time: 13:55
  */
+@RunWith(AndroidJUnit4.class)
 public class LoginAc_1_Test implements ExtendableTestAc {
 
     protected LoginAc activity;
@@ -96,8 +100,8 @@ public class LoginAc_1_Test implements ExtendableTestAc {
     public void cleanUp() throws UiException
     {
         if (!isToCleanNormal.get()) {
-            // Es necesario conseguir un nuevo token. La validación del antiguo falla por el cambio de password.
-            TKhandler.initIdentityCache(Oauth2.getRefreshUserToken(TKhandler.getRefreshTokenValue()));
+            // Es necesario conseguir un nuevo token: la cache está en blanco.
+            TKhandler.initIdentityCache(Oauth2.getPasswordUserToken(USER_DROID.getUserName(), USER_DROID.getPassword()));
             usuarioDao.deleteUser();
             return;
         }
@@ -289,7 +293,7 @@ public class LoginAc_1_Test implements ExtendableTestAc {
             @Override
             public void run()
             {
-                activity.doDialogPositiveClick();
+                activity.doDialogPositiveClick(doLoginReactorNoDeletePswd(true));
             }
         });
 

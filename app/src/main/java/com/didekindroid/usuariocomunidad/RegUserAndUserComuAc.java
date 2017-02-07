@@ -114,7 +114,7 @@ public class RegUserAndUserComuAc extends AppCompatActivity {
         StringBuilder errorBuilder = getErrorMsgBuilder(this);
 
         if (!usuarioComunidadBean.validate(getResources(), errorBuilder)) {
-            UIutils.makeToast(this, errorBuilder.toString(), R.color.deep_purple_100);
+            UIutils.makeToast(this, errorBuilder.toString());
         } else if (!ConnectionUtils.isInternetConnected(this)) {
             UIutils.makeToast(this, R.string.no_internet_conn_toast);
         } else {

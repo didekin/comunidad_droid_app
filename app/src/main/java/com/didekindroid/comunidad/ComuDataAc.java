@@ -100,7 +100,7 @@ public class ComuDataAc extends AppCompatActivity implements RegComuFr.ComuDataC
         StringBuilder errorBuilder = getErrorMsgBuilder(this);
 
         if (!comuBean.validate(getResources(), errorBuilder)) {
-            makeToast(this, errorBuilder.toString(), R.color.deep_purple_100);
+            makeToast(this, errorBuilder.toString());
         } else if (!ConnectionUtils.isInternetConnected(this)) {
             makeToast(this, R.string.no_internet_conn_toast);
         } else {

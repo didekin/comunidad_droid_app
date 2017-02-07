@@ -8,7 +8,7 @@ import io.reactivex.disposables.CompositeDisposable;
  * Time: 14:45
  */
 interface PasswordChangeControllerIf {
-    void processBackChangedPswdRemote(int changedPassword);
+    void processBackChangedPswdRemote();
     CompositeDisposable getSubscriptions();
     void processErrorInReactor(Throwable e);
 }

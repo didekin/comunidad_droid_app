@@ -44,6 +44,7 @@ public final class OauthTokenReactor implements OauthTokenReactorIf {
      */
     static Single<SpringOauthToken> oauthTokenFromUserPswd(final Usuario usuario)
     {
+        Timber.d("oauthTokenFromUserPswd()");
         assertTrue(TKhandler.isRegisteredUser(), user_should_be_registered);
 
         return fromCallable(new Callable<SpringOauthToken>() {
@@ -65,6 +66,7 @@ public final class OauthTokenReactor implements OauthTokenReactorIf {
      */
     static Completable oauthTokenFromRefreshTk(final String refreshToken)
     {
+        Timber.d("oauthTokenFromRefreshTk()");
         assertTrue(TKhandler.getTokenCache().get() != null, identity_token_should_be_notnull);
 
         return fromCallable(new Callable<SpringOauthToken>() {
@@ -87,6 +89,7 @@ public final class OauthTokenReactor implements OauthTokenReactorIf {
      */
     public static Completable oauthTokenAndInitCache(final Usuario usuario)
     {
+        Timber.d("oauthTokenAndInitCache()");
         return oauthTokenFromUserPswd(usuario)
                 .doOnSuccess(initTokenAction)
                 .toCompletable()
@@ -104,6 +107,7 @@ public final class OauthTokenReactor implements OauthTokenReactorIf {
     @Override
     public void updateTkAndCacheFromUser(Usuario newUser)
     {
+        Timber.d("updateTkAndCacheFromUser()");
         oauthTokenAndInitCache(newUser).observeOn(mainThread()).subscribeWith(new OauthUpdateTokenCacheObserver());
     }
 

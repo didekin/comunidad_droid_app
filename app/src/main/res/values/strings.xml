@@ -162,7 +162,7 @@
     <string name="password_change_ac_label">Didekin</string>
     <string name="password_change_ac_rotulo">Nueva contraseña</string>
     <string name="password_change_ac_button_txt">Cambia tu contraseña</string>
-    <string name="password_remote_no_change">No se ha realizado el cambio. Inténtelo nuevamente.</string>
+    <string name="password_remote_change">Ya está modificada tu contraseña.</string>
     <!-- ================ RegUserAndUserComuAc =========== -->
     <string name="reg_user_and_usercomu_ac_label">Registro en comunidad</string>
     <!-- =========== RegComuAndUserAndUserComuAc ========= -->

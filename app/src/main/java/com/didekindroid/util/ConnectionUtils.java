@@ -1,6 +1,5 @@
 package com.didekindroid.util;
 
-import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -36,8 +35,6 @@ public class ConnectionUtils {
 
     private static boolean isMobileConnected(Context context)
     {
-        Timber.d("isMobileConnected()");
-
         ConnectivityManager connMgr =
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
@@ -54,8 +51,6 @@ public class ConnectionUtils {
 
     private static boolean isWifiConnected(Context context)
     {
-        Timber.d("isWifiConnected()");
-
         ConnectivityManager connMgr =
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();

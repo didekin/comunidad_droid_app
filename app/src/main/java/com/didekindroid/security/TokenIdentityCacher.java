@@ -44,9 +44,12 @@ public final class TokenIdentityCacher implements IdentityCacher {
     //  ======================================================================================
 
     static final BiFunction<Boolean, SpringOauthToken, Boolean> initTokenAndRegisterFunc = new BiFunction<Boolean, SpringOauthToken, Boolean>() {
+
         @Override
         public Boolean apply(Boolean isLoginValid, SpringOauthToken token)
         {
+            Timber.d("initTokenAndRegisterFunc.apply()");
+
             boolean isUpdatedTokenData = isLoginValid && token != null;
             if (isUpdatedTokenData) {
                 Timber.d("Updating token data ...");
@@ -58,9 +61,12 @@ public final class TokenIdentityCacher implements IdentityCacher {
     };
 
     public static final Function<Boolean, Boolean> cleanTokenAndUnregisterFunc = new Function<Boolean, Boolean>() {
+
         @Override
         public Boolean apply(Boolean isDeletedUser)
         {
+            Timber.d("cleanTokenAndUnregisterFunc.apply()");
+
             if (isDeletedUser) {
                 TKhandler.cleanIdentityCache();
                 TKhandler.updateIsRegistered(false);
@@ -193,7 +199,7 @@ public final class TokenIdentityCacher implements IdentityCacher {
     @Override
     public boolean isRegisteredUser()
     {
-        Timber.d("TKhandler.isRegisteredUser()");
+        Timber.d("isRegisteredUser()");
 
         SharedPreferences sharedPref = context.getSharedPreferences
                 (app_preferences_file.toString(), MODE_PRIVATE);
@@ -231,6 +237,7 @@ public final class TokenIdentityCacher implements IdentityCacher {
     @Override
     public void updateIsGcmTokenSentServer(boolean isSentToServer)
     {
+        Timber.d("updateIsGcmTokenSentServer()");
         SharedPreferences sharedPref = context.getSharedPreferences(app_preferences_file.toString(), MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putBoolean(IS_GCM_TOKEN_SENT_TO_SERVER, isSentToServer);

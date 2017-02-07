@@ -101,7 +101,7 @@ public class RegUserComuAc extends AppCompatActivity {
                 .append(LINE_BREAK.getRegexp());
 
         if (!usuarioComunidadBean.validate(getResources(), errorMsg)) {  // error validation.
-            makeToast(this, errorMsg.toString(), R.color.deep_purple_100);
+            makeToast(this, errorMsg.toString());
         } else if (!ConnectionUtils.isInternetConnected(this)) {
             UIutils.makeToast(this, R.string.no_internet_conn_toast);
         } else {

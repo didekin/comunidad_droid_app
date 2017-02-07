@@ -33,8 +33,7 @@ public final class UsuarioBean {
 
     public boolean validate(Resources resources, StringBuilder errorMsg)
     {
-        boolean isValide = validateAlias(resources.getText(
-                R.string.alias), errorMsg)
+        boolean isValide = validateAlias(resources.getText(R.string.alias), errorMsg)
                 & validateDoublePassword(resources, errorMsg)
                 & validateUserName(resources.getText(R.string.email_hint), errorMsg);
 
@@ -42,6 +41,20 @@ public final class UsuarioBean {
             usuario = new Usuario.UsuarioBuilder()
                     .userName(userName)
                     .alias(alias)
+                    .password(password)
+                    .build();
+        }
+        return isValide;
+    }
+
+    public boolean validateWithoutAlias(Resources resources, StringBuilder errorMsg)
+    {
+        boolean isValide = validateDoublePassword(resources, errorMsg)
+                & validateUserName(resources.getText(R.string.email_hint), errorMsg);
+
+        if (isValide) {
+            usuario = new Usuario.UsuarioBuilder()
+                    .userName(userName)
                     .password(password)
                     .build();
         }

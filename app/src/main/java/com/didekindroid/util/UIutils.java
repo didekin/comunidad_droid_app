@@ -177,10 +177,15 @@ public final class UIutils {
 
     public static void makeToast(Context context, int resourceStringId)
     {
-        makeToast(context, context.getResources().getText(resourceStringId), R.color.deep_purple_100);
+        makeToastIntern(context, context.getString(resourceStringId), R.color.deep_purple_100);
     }
 
-    public static void makeToast(Context context, CharSequence toastMessage, int toastBackColor)
+    public static void makeToast(Context context, CharSequence toastMessage)
+    {
+        makeToastIntern(context, toastMessage, R.color.deep_purple_100);
+    }
+
+    private static void makeToastIntern(Context context, CharSequence toastMessage, int toastBackColor)
     {
         Toast clickToast = makeText(context, null, LENGTH_SHORT);
         View toastView = clickToast.getView();

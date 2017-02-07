@@ -8,7 +8,8 @@ package com.didekindroid.usuario;
 
 public enum UsuarioBundleKey {
 
-    login_counter_atomic_int,;
+    login_counter_atomic_int,
+    user_name;
 
     public final String key;
 

@@ -45,6 +45,7 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.CO
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -78,7 +79,7 @@ public class IncidCommentRegAcTest {
                 IncidenciaUser incidenciaUser = IncidenciaServ.seeIncidsOpenByComu(juanReal.getComunidad().getC_Id()).get(0);
                 incidJuanReal1 = IncidenciaServ.seeIncidImportancia(incidenciaUser.getIncidencia().getIncidenciaId()).getIncidImportancia();
             } catch (UiException | IOException e) {
-                e.printStackTrace();
+                fail();
             }
             Intent intent = new Intent();
             intent.putExtra(INCIDENCIA_OBJECT.key, incidJuanReal1.getIncidencia());

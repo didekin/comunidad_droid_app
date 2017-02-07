@@ -10,6 +10,7 @@ import android.widget.EditText;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.exception.UiExceptionIf;
 import com.didekindroid.security.IdentityCacher;
 import com.didekindroid.usuario.UsuarioBean;
 
@@ -17,18 +18,24 @@ import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.usuario.UsuarioAssertionMsg.user_name_should_be_initialized;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
+import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
 import static com.didekindroid.usuario.password.PswdChangeReactor.pswdChangeReactor;
 import static com.didekindroid.util.ConnectionUtils.isInternetConnected;
 import static com.didekindroid.util.DefaultNextAcRouter.routerMap;
 import static com.didekindroid.util.UIutils.assertTrue;
+import static com.didekindroid.util.UIutils.destroySubscriptions;
 import static com.didekindroid.util.UIutils.doToolBar;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.util.UIutils.makeToast;
+import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_DATA_NOT_MODIFIED;
+import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOUND;
 
 /**
  * Preconditions:
  * 1. Registered user.
+ * 2. An intent is received with the userName.
  * Postconditions:
  * 1. Password changed and tokenCache updated.
  * 2. It goes to UserDataAc activity.
@@ -37,20 +44,25 @@ public class PasswordChangeAc extends AppCompatActivity implements PasswordChang
         PasswordChangeViewIf {
 
     CompositeDisposable subscriptions;
-    private View mAcView;
     UsuarioBean usuarioBean;
+    String userName;
     PswdChangeReactorIf reactor;
     IdentityCacher identityCacher;
+    private View mAcView;
 
     @SuppressLint("InflateParams")
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        super.onCreate(savedInstanceState);
         Timber.d("onCreate()");
+        super.onCreate(savedInstanceState);
+
+        // Preconditions and tokenCacher initialization.
+        userName = getIntent().getStringExtra(user_name.key);
+        assertTrue(userName != null, user_name_should_be_initialized);
         identityCacher = TKhandler;
-        // Preconditions.
         assertTrue(identityCacher.isRegisteredUser(), user_should_be_registered);
+        // Initialize reactor.
         reactor = pswdChangeReactor;
 
         mAcView = getLayoutInflater().inflate(R.layout.password_change_ac, null);
@@ -64,7 +76,7 @@ public class PasswordChangeAc extends AppCompatActivity implements PasswordChang
             {
                 Timber.d("mModifyButton.OnClickListener().onClick()");
                 if (checkLoginData()) {
-                    changePasswordInRemote() ;
+                    changePasswordInRemote();
                 }
             }
         });
@@ -73,10 +85,9 @@ public class PasswordChangeAc extends AppCompatActivity implements PasswordChang
     @Override
     protected void onDestroy()
     {
+        Timber.d("onDestroy()");
         super.onDestroy();
-        if (subscriptions != null) {
-            subscriptions.clear();
-        }
+        destroySubscriptions(subscriptions);
     }
 
     // ============================================================
@@ -86,7 +97,6 @@ public class PasswordChangeAc extends AppCompatActivity implements PasswordChang
     @Override
     public String[] getPswdDataFromView()
     {
-        // TODO: test.
         Timber.d("getPswdDataFromView()");
         return new String[]{
                 ((EditText) mAcView.findViewById(R.id.reg_usuario_password_ediT)).getText().toString(),
@@ -100,14 +110,14 @@ public class PasswordChangeAc extends AppCompatActivity implements PasswordChang
 
     @Override
     public boolean checkLoginData()
-    {  // TODO: test.
-        Timber.i("doLoginValidate()");
+    {
+        Timber.i("checkLoginData()");
 
-        usuarioBean = new UsuarioBean(null, null, getPswdDataFromView()[0], getPswdDataFromView()[1]);
+        usuarioBean = new UsuarioBean(userName, null, getPswdDataFromView()[0], getPswdDataFromView()[1]);
         StringBuilder errorBuilder = getErrorMsgBuilder(this);
 
-        if (!usuarioBean.validateLoginData(getResources(), errorBuilder)) {
-            makeToast(this, errorBuilder.toString(), R.color.deep_purple_100);
+        if (!usuarioBean.validateWithoutAlias(getResources(), errorBuilder)) {
+            makeToast(this, errorBuilder.toString());
             return false;
         }
         if (!isInternetConnected(this)) {
@@ -121,19 +131,29 @@ public class PasswordChangeAc extends AppCompatActivity implements PasswordChang
     public void changePasswordInRemote()
     {
         Timber.d("changePasswordInRemote()");
-        reactor.passwordChangeRemote(this, usuarioBean.getUsuario());
+        reactor.passwordChange(this, usuarioBean.getUsuario());
     }
 
     @Override
-    public void processBackChangedPswdRemote(int changedPassword)
+    public void processBackChangedPswdRemote()
     {
         Timber.d("processBackChangedPswdRemote()");
-        if (changedPassword > 0) {
-            // Inicializar token cache. Está vacía.
-            Intent intent = new Intent(this, routerMap.get(this.getClass()));
-            startActivity(intent);
-        } else {
-            makeToast(this, R.string.password_remote_no_change);
+        makeToast(this, R.string.password_remote_change);
+        Intent intent = new Intent(this, routerMap.get(this.getClass()));
+        startActivity(intent);
+    }
+
+    @Override
+    public void processErrorInReactor(Throwable e)
+    {
+        Timber.d("processBackErrorInReactor(), %s", e.getMessage());
+        if (e instanceof UiExceptionIf) {
+            String ueMessage = ((UiExceptionIf) e).getErrorBean().getMessage();
+            if (ueMessage.equals(USER_NAME_NOT_FOUND.getHttpMessage()) || ueMessage.equals(USER_DATA_NOT_MODIFIED.getHttpMessage())) {
+                makeToast(this, R.string.username_wrong_in_login);
+            } else {
+                ((UiException) e).processMe(this, new Intent());
+            }
         }
     }
 
@@ -144,14 +164,5 @@ public class PasswordChangeAc extends AppCompatActivity implements PasswordChang
             subscriptions = new CompositeDisposable();
         }
         return subscriptions;
-    }
-
-    @Override
-    public void processErrorInReactor(Throwable e)
-    {
-        Timber.d("processBackErrorInReactor(), %s", e.getMessage());
-        if (e instanceof UiException) {
-            ((UiException) e).processMe(this, new Intent());
-        }
     }
 }

@@ -24,6 +24,7 @@ import timber.log.Timber;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_name_password_should_be_initialized;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
+import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
 import static com.didekindroid.usuario.userdata.UserDataControllerIf.UserChangeToMake.alias_only;
 import static com.didekindroid.usuario.userdata.UserDataControllerIf.UserChangeToMake.nothing;
 import static com.didekindroid.usuario.userdata.UserDataControllerIf.UserChangeToMake.userName;
@@ -32,6 +33,7 @@ import static com.didekindroid.util.DefaultNextAcRouter.routerMap;
 import static com.didekindroid.util.ItemMenu.mn_handler;
 import static com.didekindroid.util.MenuRouter.doUpMenu;
 import static com.didekindroid.util.UIutils.assertTrue;
+import static com.didekindroid.util.UIutils.destroySubscriptions;
 import static com.didekindroid.util.UIutils.doToolBar;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.util.UIutils.makeToast;
@@ -42,7 +44,8 @@ import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
  * Preconditions:
  * 1. Registered user.
  * Postconditions:
- * 1. Regitered user with modified data. Once done, it goes to SeeUserComuByUserAc.
+ * 1. Registered user with modified data. Once done, it goes to SeeUserComuByUserAc.
+ * 2. An intent is created for menu options with the old user data, once they have been loaded.
  */
 public class UserDataAc extends AppCompatActivity implements UserDataControllerIf, UserDataViewIf {
 
@@ -53,24 +56,25 @@ public class UserDataAc extends AppCompatActivity implements UserDataControllerI
     CompositeDisposable subscriptions;
     UserDataReactorIf reactor;
     IdentityCacher identityCacher;
+    Intent intentForMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         Timber.d("onCreate()");
-        identityCacher = TKhandler;
 
+        // Initialize tokenCacher.
+        identityCacher = TKhandler;
         // Preconditions.
         assertTrue(identityCacher.isRegisteredUser(), user_should_be_registered);
+        // Initialize user data.
+        reactor = userDataReactor;
+        loadUserData();
 
         mAcView = getLayoutInflater().inflate(R.layout.user_data_ac, null);
         setContentView(mAcView);
         doToolBar(this, true);
-
-        // Initialize user data.
-        reactor = userDataReactor;
-        loadUserData();
 
         Button mModifyButton = (Button) findViewById(R.id.user_data_modif_button);
         mModifyButton.setOnClickListener(new View.OnClickListener() {
@@ -90,9 +94,7 @@ public class UserDataAc extends AppCompatActivity implements UserDataControllerI
     {
         Timber.d("onCreate()");
         super.onDestroy();
-        if (subscriptions != null) {
-            subscriptions.clear();
-        }
+        destroySubscriptions(subscriptions);
     }
 
     // ============================================================
@@ -112,7 +114,6 @@ public class UserDataAc extends AppCompatActivity implements UserDataControllerI
     @Override
     public String[] getDataChangedFromView()
     {
-
         Timber.d("getDataChangedFromView()");
         return new String[]{
                 ((EditText) mAcView.findViewById(R.id.reg_usuario_email_editT)).getText().toString(),
@@ -134,7 +135,7 @@ public class UserDataAc extends AppCompatActivity implements UserDataControllerI
 
     @Override
     public boolean checkLoginData()
-    {  // TODO: test.
+    {
         Timber.d("checkLoginData()");
         usuarioBean = new UsuarioBean(
                 getDataChangedFromView()[0],
@@ -146,7 +147,7 @@ public class UserDataAc extends AppCompatActivity implements UserDataControllerI
         StringBuilder errorBuilder = getErrorMsgBuilder(this);
 
         if (!usuarioBean.validateLoginData(getResources(), errorBuilder)) {
-            makeToast(this, errorBuilder.toString(), R.color.deep_purple_100);
+            makeToast(this, errorBuilder.toString());
             return false;
         }
         return !UIutils.checkInternet(this);
@@ -192,10 +193,13 @@ public class UserDataAc extends AppCompatActivity implements UserDataControllerI
         Timber.d("processBackUserDataLoaded()");
         oldUser = usuario;
         initUserDataInView();
+        intentForMenu = new Intent().putExtra(user_name.key, oldUser.getUserName());
+        // Force update of intent in menu.
+        invalidateOptionsMenu();
     }
 
     /**
-     * Preconditions: newUser has been initialized with new user name and password entered.
+     * Preconditions: newUser has been initialized with new user name and password.
      */
     @Override
     public void processBackUserDataUpdated(boolean toInitTokenCache)
@@ -260,9 +264,13 @@ public class UserDataAc extends AppCompatActivity implements UserDataControllerI
     public boolean onPrepareOptionsMenu(Menu menu)
     {
         Timber.d("onPrepareOptionsMenu()");
-        // Mostramos el menú si el usuario está registrado. TODO: probar.
+        // Mostramos el menú si el usuario está registrado. TODO: probar esto y actualización intent.
         if (identityCacher.isRegisteredUser()) {
             menu.findItem(R.id.see_usercomu_by_user_ac_mn).setVisible(true).setEnabled(true);
+        }
+        // Update intent in activity with user data.
+        if (intentForMenu != null){
+            setIntent(intentForMenu);
         }
         return true;
     }

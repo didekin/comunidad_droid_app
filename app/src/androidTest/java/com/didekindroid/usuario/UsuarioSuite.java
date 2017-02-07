@@ -7,6 +7,7 @@ import com.didekindroid.usuario.firebase.FirebaseTokenReactorTest;
 import com.didekindroid.usuario.login.LoginAc_1_Test;
 import com.didekindroid.usuario.login.LoginReactorTest;
 import com.didekindroid.usuario.password.PasswordChangeAcTest;
+import com.didekindroid.usuario.password.PswdChangeReactorTest;
 import com.didekindroid.usuario.userdata.UserDataAcTest;
 
 import org.junit.runner.RunWith;
@@ -26,6 +27,7 @@ import org.junit.runners.Suite;
         LoginAc_1_Test.class,
         LoginReactorTest.class,
         PasswordChangeAcTest.class,
+        PswdChangeReactorTest.class,
         UserDataAcTest.class,
         UsuarioBeanValidaTests.class,
         UsuarioDaoRemoteTest.class,

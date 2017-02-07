@@ -148,7 +148,7 @@ public class LoginAc extends AppCompatActivity implements LoginViewIf, LoginCont
 
         StringBuilder errorBuilder = getErrorMsgBuilder(this);
         if (!usuarioBean.validateLoginData(getResources(), errorBuilder)) {
-            makeToast(this, errorBuilder.toString(), R.color.deep_purple_100);
+            makeToast(this, errorBuilder.toString());
             return false;
         }
         if (!ConnectionUtils.isInternetConnected(this)) {
@@ -211,12 +211,15 @@ public class LoginAc extends AppCompatActivity implements LoginViewIf, LoginCont
     }
 
     @Override
-    public void doDialogPositiveClick()
+    public void doDialogPositiveClick(LoginReactorIf loginReactor)
     {
         Timber.d("doDialogPositiveClick()");
         assertTrue(usuarioBean != null, bean_fromView_should_be_initialized);
-        // We use mock reactor to avoid deleting the password and access token remotely.
-        reactor.sendPasswordToUser(this, usuarioBean.getUsuario());      // TODO: cambiar.
+        if (loginReactor == null){
+            reactor.sendPasswordToUser(this, usuarioBean.getUsuario());
+        } else{ // Variant to inject a mock reactor.
+            loginReactor.sendPasswordToUser(this, usuarioBean.getUsuario());
+        }
     }
 
     @Override
@@ -285,7 +288,7 @@ public class LoginAc extends AppCompatActivity implements LoginViewIf, LoginCont
                         public void onClick(DialogInterface dialog, int id)
                         {
                             dismiss();
-                            ((LoginAc) getActivity()).doDialogPositiveClick();
+                            ((LoginAc) getActivity()).doDialogPositiveClick(null);
                         }
                     })
                     .setNegativeButton(R.string.send_password_by_mail_NO, new DialogInterface.OnClickListener() {

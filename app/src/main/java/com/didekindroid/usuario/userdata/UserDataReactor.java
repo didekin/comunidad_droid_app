@@ -43,7 +43,7 @@ final class UserDataReactor implements UserDataReactorIf {
 
     // .................................... OBSERVABLES .................................
 
-    private static Single<Usuario> getUserDataSingle()
+    static Single<Usuario> userDataLoaded()
     {
         return fromCallable(new Callable<Usuario>() {
             @Override
@@ -54,7 +54,7 @@ final class UserDataReactor implements UserDataReactorIf {
         });
     }
 
-    static Single<Integer> userModified(final Usuario newUser)
+    static Single<Integer> userDataModified(final Usuario newUser)
     {
         return fromCallable(new Callable<Integer>() {
             @Override
@@ -87,8 +87,9 @@ final class UserDataReactor implements UserDataReactorIf {
         assertTrue(oldUser.getUserName() != null
                 && oldUser.getPassword() != null
                 && newUser.getUserName() != null, user_name_password_should_be_initialized);
+
         return oauthTokenAndInitCache(oldUser)
-                .andThen(userModified(newUser))
+                .andThen(userDataModified(newUser))
                 .doOnSuccess(cleanTokenCacheAction);
 
         // TODO: en el servicio remoto hay que borrar el token en su tabla. Ver UsuarioSErvicio.
@@ -121,7 +122,7 @@ final class UserDataReactor implements UserDataReactorIf {
     public boolean getUserInRemote(UserDataControllerIf controller)
     {
         return controller.getSubscriptions().add(
-                getUserDataSingle()
+                userDataLoaded()
                         .subscribeOn(io())
                         .observeOn(mainThread())
                         .subscribeWith(new UserDataObserver<Usuario>(controller) {

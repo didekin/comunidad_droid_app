@@ -1,19 +1,24 @@
 package com.didekindroid.usuario.password;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.test.rule.ActivityTestRule;
+import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.ExtendableTestAc;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
-import com.didekinlib.http.oauth2.SpringOauthToken;
+import com.didekinlib.http.ErrorBean;
 import com.didekinlib.model.usuario.Usuario;
 
-import org.junit.After;
+import org.awaitility.Duration;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -24,68 +29,68 @@ import static android.support.test.espresso.matcher.ViewMatchers.withHint;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.R.id.user_data_ac_layout;
-import static com.didekindroid.security.Oauth2DaoRemote.Oauth2;
-import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
+import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
+import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_TRAV_PLAZUELA_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOUND;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.awaitility.Awaitility.await;
+import static org.awaitility.Awaitility.fieldIn;
+import static org.awaitility.Awaitility.waitAtMost;
+import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
  * Date: 25/09/15
  * Time: 17:45
  */
+@RunWith(AndroidJUnit4.class)
 public class PasswordChangeAcTest implements ExtendableTestAc {
-
-    protected Usuario registeredUser;
-    private PasswordChangeAc mActivity;
-    private int activityLayoutId = R.id.password_change_ac_layout;
 
     @Rule
     public ActivityTestRule<? extends Activity> mActivityRule = new ActivityTestRule<PasswordChangeAc>(PasswordChangeAc.class) {
+
         @Override
-        protected void beforeActivityLaunched()
+        protected Intent getActivityIntent()
         {
-            // Precondition: the user is registered.
+            Usuario usuario = null;
             try {
-                registeredUser = signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
-                assertThat(registeredUser, notNullValue());
+                usuario = signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
             } catch (Exception e) {
-                e.printStackTrace();
+                fail();
             }
+            return new Intent().putExtra(user_name.key, usuario.getUserName());
         }
     };
 
-    @BeforeClass
-    public static void slowSeconds() throws InterruptedException
-    {
-        Thread.sleep(2000);
-    }
+    String[] textFromView;
+    AtomicBoolean isPswdDataOk;
+    AtomicBoolean isExceptionThrown;
+    PasswordChangeAc activity;
+    private int activityLayoutId = R.id.password_change_ac_layout;
 
     @Before
     public void setUp() throws Exception
     {
-        mActivity = (PasswordChangeAc) mActivityRule.getActivity();
-    }
-
-    @After
-    public void tearDown() throws Exception
-    {
-        cleanOneUser(registeredUser);
+        activity = (PasswordChangeAc) mActivityRule.getActivity();
     }
 
     @Override
     public void checkNavigateUp()
     {
-        throw new UnsupportedOperationException("NO NAVIGATE-UP in PasswordChange activity");
+        fail("NO NAVIGATE-UP in PasswordChange activity");
     }
 
     @Override
@@ -94,14 +99,11 @@ public class PasswordChangeAcTest implements ExtendableTestAc {
         return user_data_ac_layout;
     }
 
-    //    =====================================  TESTS  ==========================================
+    //    ================================= INTEGRATION TESTS  =====================================
 
     @Test
     public void testOnCreate() throws Exception
     {
-        assertThat(mActivity, notNullValue());
-        assertThat(TKhandler.isRegisteredUser(), is(true));
-
         onView(withId(activityLayoutId)).check(matches(isDisplayed()));
 
         onView(withId(R.id.reg_usuario_password_ediT)).check(matches(withText(containsString(""))))
@@ -115,43 +117,149 @@ public class PasswordChangeAcTest implements ExtendableTestAc {
 
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
         clickNavigateUp();
+
+        cleanOneUser(USER_PEPE);
     }
 
     @Test
-    public void testPasswordChange_NotOK() throws InterruptedException
+    public void testPasswordChange_NotOK() throws InterruptedException, UiException
     {
-        onView(withId(R.id.reg_usuario_password_ediT)).perform(replaceText("new_pepe_password"));
-        onView(withId(R.id.reg_usuario_password_confirm_ediT)).perform(replaceText("new_wrong_password"));
+        typePswdData("new_pepe_password", "new_wrong_password");
         onView(withId(R.id.password_change_ac_button)).check(matches(isDisplayed())).perform(click());
 
-        checkToastInTest(R.string.error_validation_msg, mActivity, R.string.password_different);
+        checkToastInTest(R.string.error_validation_msg, activity, R.string.password_different);
         // Se queda en la misma actividad.
         onView(withId(R.id.password_change_ac_layout)).check(matches(isDisplayed()));
+
+        cleanOneUser(USER_PEPE);
     }
 
     @Test
-    public void testPasswordChange_OK() throws UiException
+    public void testPasswordChange_OK() throws UiException, InterruptedException
     {
-        // Check security data: old data.
-        SpringOauthToken tokenBefore = TKhandler.getAccessTokenInCache();
-        String accessTkValue = tokenBefore != null ? tokenBefore.getValue() : null;
-        String refreshTkValue = tokenBefore != null ? tokenBefore.getRefreshToken().getValue() : null;
-
-        onView(withId(R.id.reg_usuario_password_ediT)).perform(replaceText("new_pepe_password"));
-        onView(withId(R.id.reg_usuario_password_confirm_ediT)).perform(replaceText("new_pepe_password"));
+        typePswdData("new_pepe_password", "new_pepe_password");
         onView(withId(R.id.password_change_ac_button)).check(matches(isDisplayed())).perform(click());
 
+        TimeUnit.MILLISECONDS.sleep(2500);
         onView(withId(getNextViewResourceId())).check(matches(isDisplayed()));
         checkUp(activityLayoutId);
 
-        // Check security data: new data.
-        SpringOauthToken tokenAfter = Oauth2.getRefreshUserToken(refreshTkValue);
-        assertThat(tokenAfter.getValue(), not(is(accessTkValue)));  // new accessToken.
-        assertThat(tokenAfter.getRefreshToken().getValue(), not(is(refreshTkValue)));  // new refreshToken.
+        usuarioDao.deleteUser();
+    }
 
-        cleanOneUser(new Usuario.UsuarioBuilder()
-                .userName(registeredUser.getUserName())
-                .password("new_pepe_password")
-                .build());
+    //  ================================== CONTROLLER TESTS  =====================================
+
+    @Test
+    public void testGetPswdDataFromView() throws Exception
+    {
+        typePswdData("new_password", "confirmation");
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                textFromView = activity.getPswdDataFromView();
+            }
+        });
+        await().atMost(1, SECONDS).until(fieldIn(this).ofType(String[].class).andWithName("textFromView"),
+                equalTo(new String[]{"new_password", "confirmation"}));
+
+        cleanOneUser(USER_PEPE);
+    }
+
+    @Test
+    public void testCheckLoginData_1() throws Exception
+    {
+        // Caso WRONG: We test the change to false.
+        isPswdDataOk = new AtomicBoolean(true);
+        typePswdData("password1", "password2");
+
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                assertThat(isPswdDataOk.getAndSet(activity.checkLoginData()), is(true));
+            }
+        });
+        await().atMost(1, SECONDS).untilFalse(isPswdDataOk);
+        assertThat(activity.usuarioBean.getUserName(), allOf(
+                is(activity.userName),
+                is(activity.getIntent().getStringExtra(user_name.key))
+        ));
+        checkToastInTest(R.string.error_validation_msg, activity, R.string.password_different);
+
+        cleanOneUser(USER_PEPE);
+    }
+
+    @Test
+    public void testCheckLoginData_2() throws UiException
+    {
+        // Caso OK: We test the change to true.
+        isPswdDataOk = new AtomicBoolean(false);
+        typePswdData("password1", "password1");
+
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                assertThat(isPswdDataOk.getAndSet(activity.checkLoginData()), is(false));
+            }
+        });
+        await().atMost(1, SECONDS).untilTrue(isPswdDataOk);
+        assertThat(activity.usuarioBean.getUsuario(), notNullValue());
+
+        cleanOneUser(USER_PEPE);
+    }
+
+    @Test
+    public void testChangePasswordInRemote() throws Exception
+    {
+        // Caso OK.
+        typePswdData("password1", "password1");
+
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                assertThat(activity.checkLoginData(), is(true));
+                activity.changePasswordInRemote();
+            }
+        });
+
+        TimeUnit.MILLISECONDS.sleep(2500);
+        checkToastInTest(R.string.password_remote_change, activity);
+        onView(withId(getNextViewResourceId())).check(matches(isDisplayed()));
+
+        usuarioDao.deleteUser();
+    }
+
+    @Test
+    public void testProcessBackChangedPswdRemote() throws Exception
+    {
+        testChangePasswordInRemote();
+    }
+
+    @Test
+    public void testProcessErrorInReactor_1() throws Exception
+    {
+        isExceptionThrown = new AtomicBoolean(false);
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                activity.processErrorInReactor(new UiException(new ErrorBean(USER_NAME_NOT_FOUND)));
+                assertThat(isExceptionThrown.getAndSet(true), is(false));
+            }
+        });
+        waitAtMost(Duration.ONE_SECOND).untilTrue(isExceptionThrown);
+        checkToastInTest(R.string.username_wrong_in_login, activity);
+        onView(withId(activityLayoutId)).check(matches(isDisplayed()));
+    }
+
+    //  ================================== HELPERS  =====================================
+
+    private void typePswdData(String password, String confirmation)
+    {
+        onView(withId(R.id.reg_usuario_password_ediT)).perform(replaceText(password));
+        onView(withId(R.id.reg_usuario_password_confirm_ediT)).perform(replaceText(confirmation));
     }
 }
