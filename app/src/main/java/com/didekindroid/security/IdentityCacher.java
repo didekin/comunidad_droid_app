@@ -23,6 +23,8 @@ public interface IdentityCacher {
 
     String doHttpAuthHeaderFromTkInCache() throws UiException;
 
+    String doHttpAuthHeader(SpringOauthToken oauthToken) throws UiException;
+
     SpringOauthToken getAccessTokenInCache() throws UiException;
 
     Context getContext();

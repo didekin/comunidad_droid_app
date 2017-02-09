@@ -1,6 +1,5 @@
 package com.didekindroid.usuario.userdata;
 
-import com.didekindroid.usuario.userdata.UserDataControllerIf.UserChangeToMake;
 import com.didekinlib.model.usuario.Usuario;
 
 /**
@@ -9,9 +8,8 @@ import com.didekinlib.model.usuario.Usuario;
  * Time: 17:14
  */
 interface UserDataReactorIf {
-    boolean getUserInRemote(UserDataControllerIf controller);
 
-    boolean modifyUserInRemote(UserDataControllerIf controllerIf, UserChangeToMake changeToMake, Usuario oldUser, Usuario newUser);
+    boolean loadUserData(UserDataControllerIf controller);
 
-    void updateAndInitTokenCache(Usuario newUser);
+    boolean modifyUser(UserDataControllerIf controller, Usuario oldUser, Usuario newUser);
 }

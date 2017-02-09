@@ -118,7 +118,7 @@ public class LoginAcTest implements ExtendableTestAc {
         onView(withId(login_ac_button)).check(matches(isDisplayed())).perform(click());
 
         MILLISECONDS.sleep(1000);
-        checkToastInTest(R.string.password_wrong_in_login, mActivity);
+        checkToastInTest(R.string.password_wrong, mActivity);
         onView(withId(activityLayoutId)).check(matches(isDisplayed()));
     }
 
@@ -128,7 +128,7 @@ public class LoginAcTest implements ExtendableTestAc {
         onView(withId(reg_usuario_password_ediT)).perform(replaceText("pasword_wrong"));
         onView(withId(login_ac_button)).check(matches(isDisplayed())).perform(click());
 
-        checkToastInTest(R.string.password_wrong_in_login, mActivity);
+        checkToastInTest(R.string.password_wrong, mActivity);
         onView(withId(activityLayoutId)).check(matches(isDisplayed()));
     }
 

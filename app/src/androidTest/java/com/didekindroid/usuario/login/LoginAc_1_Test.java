@@ -44,7 +44,7 @@ import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkNoToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
-import static com.didekindroid.usuario.login.LoginReactorTest.doLoginReactorNoDeletePswd;
+import static com.didekindroid.usuario.login.LoginReactorTest.doLoginMockReactor;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_DROID;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_DROID;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
@@ -293,7 +293,7 @@ public class LoginAc_1_Test implements ExtendableTestAc {
             @Override
             public void run()
             {
-                activity.doDialogPositiveClick(doLoginReactorNoDeletePswd(true));
+                activity.doDialogPositiveClick(doLoginMockReactor(true));
             }
         });
 
@@ -399,7 +399,7 @@ public class LoginAc_1_Test implements ExtendableTestAc {
     private void checkLoginValidateBackWrong()
     {
         await().atMost(3, SECONDS).untilAtomic(activity.counterWrong, equalTo(3));
-        checkToastInTest(R.string.password_wrong_in_login, activity);
+        checkToastInTest(R.string.password_wrong, activity);
         onView(withId(activityLayoutId)).check(matches(isDisplayed()));
     }
 

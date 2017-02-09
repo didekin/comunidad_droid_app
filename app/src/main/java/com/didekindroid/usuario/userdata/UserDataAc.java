@@ -22,7 +22,6 @@ import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.usuario.UsuarioAssertionMsg.user_name_password_should_be_initialized;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
 import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
 import static com.didekindroid.usuario.userdata.UserDataControllerIf.UserChangeToMake.alias_only;
@@ -130,7 +129,7 @@ public class UserDataAc extends AppCompatActivity implements UserDataControllerI
     public void loadUserData()
     {
         Timber.d("loadUserData()");
-        reactor.getUserInRemote(this);
+        reactor.loadUserData(this);
     }
 
     @Override
@@ -161,12 +160,13 @@ public class UserDataAc extends AppCompatActivity implements UserDataControllerI
             return nothing;
         }
 
-        // Inicializo password en el antiguo usuario.
+        // Password in screen and old userName will be used for authentication.
         oldUser = new Usuario.UsuarioBuilder()
                 .copyUsuario(oldUser)
                 .password(usuarioBean.getPassword())
                 .build();
-        // Inicializo datos en nuevo usuario, salvo PK.
+
+        // Inicializo datos en nuevo usuario y añado PK.
         newUser = new Usuario.UsuarioBuilder().copyUsuario(usuarioBean.getUsuario())
                 .uId(oldUser.getuId())
                 .build();
@@ -181,10 +181,18 @@ public class UserDataAc extends AppCompatActivity implements UserDataControllerI
     }
 
     @Override
-    public void modifyUserData(UserChangeToMake userChangeToMake)
+    public boolean modifyUserData(UserChangeToMake userChangeToMake)
     {
         Timber.d("modifyUserData()");
-        reactor.modifyUserInRemote(this, userChangeToMake, oldUser, newUser);
+        switch (userChangeToMake) {
+            case nothing:
+                makeToast(this, R.string.no_user_data_to_be_modified);
+                return false;
+            case userName: case alias_only:
+                return reactor.modifyUser(this, oldUser, newUser);
+            default:
+                return false;
+        }
     }
 
     @Override
@@ -194,28 +202,13 @@ public class UserDataAc extends AppCompatActivity implements UserDataControllerI
         oldUser = usuario;
         initUserDataInView();
         intentForMenu = new Intent().putExtra(user_name.key, oldUser.getUserName());
-        // Force update of intent in menu.
         invalidateOptionsMenu();
     }
 
-    /**
-     * Preconditions: newUser has been initialized with new user name and password.
-     */
     @Override
-    public void processBackUserDataUpdated(boolean toInitTokenCache)
+    public void processBackUserModified()
     {
-        Timber.d("processBackUserDataUpdated()");
-        assertTrue(newUser.getUserName() != null && newUser.getPassword() != null, user_name_password_should_be_initialized);
-        if (toInitTokenCache) {
-            reactor.updateAndInitTokenCache(newUser);
-        }
-        processBackGenericUpdated();
-    }
-
-    @Override
-    public void processBackGenericUpdated()
-    {
-        Timber.d("processBackGenericUpdated()");
+        Timber.d("processBackUserModified()");
         Intent intent = new Intent(UserDataAc.this, routerMap.get(UserDataAc.this.getClass()));
         startActivity(intent);
     }
@@ -269,7 +262,7 @@ public class UserDataAc extends AppCompatActivity implements UserDataControllerI
             menu.findItem(R.id.see_usercomu_by_user_ac_mn).setVisible(true).setEnabled(true);
         }
         // Update intent in activity with user data.
-        if (intentForMenu != null){
+        if (intentForMenu != null) {
             setIntent(intentForMenu);
         }
         return true;

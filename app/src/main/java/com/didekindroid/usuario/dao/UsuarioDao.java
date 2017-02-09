@@ -1,6 +1,7 @@
 package com.didekindroid.usuario.dao;
 
 import com.didekindroid.exception.UiException;
+import com.didekinlib.http.oauth2.SpringOauthToken;
 import com.didekinlib.http.retrofit.UsuarioEndPoints;
 import com.didekinlib.model.usuario.Usuario;
 
@@ -27,6 +28,8 @@ public interface UsuarioDao {
     int modifyUserGcmToken(String gcmToken) throws UiException;
 
     int modifyUser(Usuario usuario) throws UiException;
+
+    int modifyUserWithToken(SpringOauthToken oauthToken, Usuario usuario) throws UiException;
 
     int passwordChange(String newPassword) throws UiException;
 

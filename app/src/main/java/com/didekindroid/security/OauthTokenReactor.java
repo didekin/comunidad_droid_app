@@ -42,7 +42,7 @@ public final class OauthTokenReactor implements OauthTokenReactorIf {
      *
      * @return a Single to obtain a new access token with userName and password credentials.
      */
-    static Single<SpringOauthToken> oauthTokenFromUserPswd(final Usuario usuario)
+    public static Single<SpringOauthToken> oauthTokenFromUserPswd(final Usuario usuario)
     {
         Timber.d("oauthTokenFromUserPswd()");
         assertTrue(TKhandler.isRegisteredUser(), user_should_be_registered);
@@ -83,7 +83,7 @@ public final class OauthTokenReactor implements OauthTokenReactorIf {
 
     /**
      * Preconditions:
-     * 1. The user should be registered and the token cache previously initialized.
+     * 1. The user should be registered.
      *
      * @return a Completable which calls oauthTokenFromUserPswd and initializes the token cache.
      */

@@ -182,7 +182,7 @@ public class LoginAc extends AppCompatActivity implements LoginViewIf, LoginCont
             if (counter > 3) { /* Password wrong*/
                 showDialog(usuarioBean.getUserName());
             } else {
-                makeToast(this, R.string.password_wrong_in_login);
+                makeToast(this, R.string.password_wrong);
             }
         }
     }

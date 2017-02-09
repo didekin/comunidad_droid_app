@@ -79,7 +79,7 @@ public final class TokenIdentityCacher implements IdentityCacher {
     //    .................................... ACTIONS .................................
     //  ======================================================================================
 
-    public static final Consumer<Integer> cleanTokenCacheAction = new Consumer<Integer>() {
+    static final Consumer<Integer> cleanTokenCacheAction = new Consumer<Integer>() {
         @Override
         public void accept(Integer modifiedUser)
         {
@@ -97,7 +97,7 @@ public final class TokenIdentityCacher implements IdentityCacher {
         }
     };
 
-    static final Consumer<SpringOauthToken> initTokenAction = new Consumer<SpringOauthToken>() {
+    public static final Consumer<SpringOauthToken> initTokenAction = new Consumer<SpringOauthToken>() {
         @Override
         public void accept(SpringOauthToken token)
         {
@@ -252,10 +252,16 @@ public final class TokenIdentityCacher implements IdentityCacher {
     @Override
     public String doHttpAuthHeaderFromTkInCache() throws UiException
     {
-        Timber.d("doHttpAuthHeaderFromTkInCache()");
-        SpringOauthToken springOauthToken = getAccessTokenInCache();
-        if (springOauthToken != null) {
-            return HELPER.doBearerAccessTkHeader(springOauthToken);
+        Timber.d("doHttpAuthHeader()");
+        return doHttpAuthHeader(getAccessTokenInCache());
+    }
+
+    @Override
+    public String doHttpAuthHeader(SpringOauthToken oauthToken)
+    {
+        Timber.d("doHttpAuthHeader(token)");
+        if (oauthToken != null) {
+            return HELPER.doBearerAccessTkHeader(oauthToken);
         }
         return null;
     }

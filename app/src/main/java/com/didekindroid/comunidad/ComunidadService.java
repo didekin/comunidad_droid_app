@@ -15,7 +15,7 @@ import timber.log.Timber;
 
 import static com.didekindroid.AppInitializer.creator;
 import static com.didekindroid.util.DaoUtil.getResponseBody;
-import static com.didekindroid.util.UIutils.checkBearerToken;
+import static com.didekindroid.util.UIutils.checkBearerTokenInCache;
 import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
 
 /**
@@ -66,7 +66,7 @@ public final class ComunidadService implements ComunidadEndPoints {
         Timber.d("getComuData()");
 
         try {
-            Response<Comunidad> response = getComuData(checkBearerToken(), idComunidad).execute();
+            Response<Comunidad> response = getComuData(checkBearerTokenInCache(), idComunidad).execute();
             return getResponseBody(response);
         } catch (EOFException eo) {
             return null;

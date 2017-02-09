@@ -107,11 +107,11 @@ final class LoginReactor implements LoginReactorIf {
     // ............................ SUBSCRIBERS ..................................
     //  =======================================================================================
 
-    abstract static class LoginSingleObserver extends DisposableSingleObserver<Boolean> {
+    abstract static class LoginObserver extends DisposableSingleObserver<Boolean> {
 
         final LoginControllerIf controller;
 
-        LoginSingleObserver(final LoginControllerIf controller)
+        LoginObserver(final LoginControllerIf controller)
         {
             this.controller = controller;
         }
@@ -127,7 +127,7 @@ final class LoginReactor implements LoginReactorIf {
         }
     }
 
-    static class LoginPswdSendObserver extends LoginSingleObserver {
+    static class LoginPswdSendObserver extends LoginObserver {
 
         LoginPswdSendObserver(LoginControllerIf controller)
         {
@@ -142,7 +142,7 @@ final class LoginReactor implements LoginReactorIf {
         }
     }
 
-    private static class LoginValidateObserver extends LoginSingleObserver {
+    private static class LoginValidateObserver extends LoginObserver {
 
         LoginValidateObserver(LoginControllerIf controller)
         {

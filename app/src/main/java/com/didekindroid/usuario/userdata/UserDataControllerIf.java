@@ -16,19 +16,17 @@ interface UserDataControllerIf {
 
     void loadUserData();
 
-    void modifyUserData(UserChangeToMake userChangeToMake);
+    boolean modifyUserData(UserChangeToMake userChangeToMake);
 
     CompositeDisposable getSubscriptions();
 
     void processBackUserDataLoaded(Usuario usuario);
 
-    void processBackUserDataUpdated(boolean toInitTokenCache);
-
     void processBackErrorInReactor(Throwable e);
 
     UserChangeToMake whatDataChangeToMake();
 
-    void processBackGenericUpdated();
+    void processBackUserModified();
 
     enum UserChangeToMake {
         alias_only,

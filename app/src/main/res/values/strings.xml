@@ -119,10 +119,8 @@
     <string name="comunidad_not_found_message">No podemos mostrarte esta comunidad. Búscala nuevamente.</string>
     <string name="no_result_search_comunidad">No hemos encontrado tu comunidad.\nPuedes registrarla aquí. </string>
     <string name="login_wrong_no_mail">"Busca tu comunidad y regístrate.\nSi no existe, regístrala en 'Nueva comunidad'."</string>
-    <string name="password_wrong">La contraseña no se corresponde con tu usuario.\nSi no la recuerdas,
-        selecciona en el menú la opción para renovarla.</string>
     <string name="username_wrong_in_login">La dirección de correo electrónico no está registrada.</string>
-    <string name="password_wrong_in_login">La contraseña no se corresponde con tu usuario.</string>
+    <string name="password_wrong">La contraseña no se corresponde con tu usuario.</string>
     <string name="password_new_in_login">Te hemos enviado tu nueva contraseña. Haz login, nuevamente, con ella.</string>
     <string name="send_password_by_mail_dialog">¿Deseas que te enviemos una nueva contraseña por correo electrónico?</string>
     <string name="send_password_by_mail_YES">Enviádmela</string>
@@ -228,6 +226,6 @@
     <string name="user_data_ac_password_txt">Valida los cambios introduciendo tu contraseña</string>
     <string name="user_data_ac_password_hint">Contraseña actual</string>
     <string name="user_data_modif_button_rot">Modifica tus datos</string>
-    <string name="gcm_message_title" translatable="false">Dídekin</string>
+    <string name="no_user_data_to_be_modified">No hay datos a modificar</string>
 
 </resources>

@@ -105,7 +105,7 @@ public class LoginReactorTest {
     {
         signUpAndUpdateTk(COMU_REAL_DROID);
 
-        doLoginReactorNoDeletePswd(true).loginPswdSendSingle(USER_DROID.getUserName()).test().assertResult(true);
+        doLoginMockReactor(true).loginPswdSendSingle(USER_DROID.getUserName()).test().assertResult(true);
         // Check cache cleaning.
         checkNoInitCache();
 
@@ -123,7 +123,7 @@ public class LoginReactorTest {
     {
         signUpAndUpdateTk(COMU_REAL_DROID);
 
-        doLoginReactorNoDeletePswd(false).loginPswdSendSingle(USER_DROID.getUserName()).test().assertResult(false);
+        doLoginMockReactor(false).loginPswdSendSingle(USER_DROID.getUserName()).test().assertResult(false);
         // Check cache is not cleaned.
         checkInitTokenCache();
 
@@ -279,7 +279,7 @@ public class LoginReactorTest {
         };
     }
 
-    static LoginReactorIf doLoginReactorNoDeletePswd(final boolean isSendPassword)
+    static LoginReactorIf doLoginMockReactor(final boolean isSendPassword)
     {
         return new LoginReactorIf() {
 

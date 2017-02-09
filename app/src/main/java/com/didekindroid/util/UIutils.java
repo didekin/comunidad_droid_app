@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekinlib.http.ErrorBean;
+import com.didekinlib.http.oauth2.SpringOauthToken;
 
 import java.sql.Timestamp;
 import java.text.DateFormat;
@@ -113,16 +114,23 @@ public final class UIutils {
 
 //    ===========================  AUTHENTICATION ==============================
 
-    public static String checkBearerToken() throws UiException
+    public static String checkBearerTokenInCache() throws UiException
     {
-        String bearerAccessTkHeader = TKhandler.doHttpAuthHeaderFromTkInCache();
+        return checkBearerToken(TKhandler.getAccessTokenInCache());
+    }
 
-        if (bearerAccessTkHeader == null) { // No token in cache.
+    public static String checkBearerToken(SpringOauthToken oauthToken) throws UiException
+    {
+        String bearerAccessTkHeader = TKhandler.doHttpAuthHeader(oauthToken);
+
+        if (bearerAccessTkHeader == null) {
             ErrorBean errorBean = new ErrorBean(TOKEN_NULL.getHttpMessage(), TOKEN_NULL.getHttpStatus());
             throw new UiException(errorBean);
         }
         return bearerAccessTkHeader;
     }
+
+
 
 //    ================================ DATA FORMATS ==========================================
 

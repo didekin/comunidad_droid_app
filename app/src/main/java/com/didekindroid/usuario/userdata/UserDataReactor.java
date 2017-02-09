@@ -1,26 +1,28 @@
 package com.didekindroid.usuario.userdata;
 
 
-import com.didekindroid.security.OauthTokenReactorIf;
-import com.didekindroid.usuario.userdata.UserDataControllerIf.UserChangeToMake;
+import com.didekindroid.security.IdentityCacher;
+import com.didekinlib.http.oauth2.SpringOauthToken;
 import com.didekinlib.model.usuario.Usuario;
 
 import java.util.concurrent.Callable;
+import java.util.concurrent.atomic.AtomicReference;
 
+import io.reactivex.Completable;
 import io.reactivex.Single;
 import io.reactivex.SingleSource;
+import io.reactivex.functions.Function;
+import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
-import static com.didekindroid.security.OauthTokenReactor.oauthTokenAndInitCache;
-import static com.didekindroid.security.OauthTokenReactor.tokenReactor;
-import static com.didekindroid.security.TokenIdentityCacher.cleanTokenCacheAction;
-import static com.didekindroid.usuario.UsuarioAssertionMsg.user_name_password_should_be_initialized;
+import static com.didekindroid.security.OauthTokenReactor.oauthTokenFromUserPswd;
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.security.TokenIdentityCacher.initTokenAction;
+import static com.didekindroid.usuario.UsuarioAssertionMsg.user_name_uID_should_be_initialized;
+import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_have_been_modified;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
-import static com.didekindroid.usuario.userdata.UserDataControllerIf.UserChangeToMake.alias_only;
-import static com.didekindroid.usuario.userdata.UserDataControllerIf.UserChangeToMake.userName;
 import static com.didekindroid.util.UIutils.assertTrue;
-import static com.didekindroid.util.CommonAssertionMsg.bean_fromView_should_be_initialized;
 import static io.reactivex.Single.fromCallable;
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 import static io.reactivex.schedulers.Schedulers.io;
@@ -30,15 +32,14 @@ import static io.reactivex.schedulers.Schedulers.io;
  * Date: 20/12/16
  * Time: 18:57
  */
-@SuppressWarnings({"AnonymousInnerClassMayBeStatic", "WeakerAccess"})
+@SuppressWarnings("WeakerAccess")
 final class UserDataReactor implements UserDataReactorIf {
 
-    static final UserDataReactorIf userDataReactor = new UserDataReactor(tokenReactor);
-    private OauthTokenReactorIf oauth2reactor;
+    static final UserDataReactorIf userDataReactor = new UserDataReactor();
+    static final IdentityCacher tokenCacher = TKhandler;
 
-    private UserDataReactor(OauthTokenReactorIf oauth2reactor)
+    private UserDataReactor()
     {
-        this.oauth2reactor = oauth2reactor;
     }
 
     // .................................... OBSERVABLES .................................
@@ -54,138 +55,107 @@ final class UserDataReactor implements UserDataReactorIf {
         });
     }
 
-    static Single<Integer> userDataModified(final Usuario newUser)
+    static Single<Integer> userDataModified(final SpringOauthToken oauthToken, final Usuario newUser)
     {
         return fromCallable(new Callable<Integer>() {
             @Override
             public Integer call() throws Exception
             {
-                return usuarioDao.modifyUser(newUser);
+                return usuarioDao.modifyUserWithToken(oauthToken, newUser);
             }
         });
     }
 
-    static SingleSource<Integer> deletedTokenInBd(final String accessToken)
-    {
-        return fromCallable(new Callable<Integer>() {
-            @Override
-            public Integer call() throws Exception
-            {
-                return (usuarioDao.deleteAccessToken(accessToken) ? 1 : 0);
-            }
-        });
+    static Single<SpringOauthToken> userModifiedUpdatedToken(final SpringOauthToken oauthToken, final Usuario newUser){
+        return userDataModified(oauthToken, newUser)
+                .flatMap(new Function<Integer, SingleSource<SpringOauthToken>>() {
+                    @Override
+                    public SingleSource<SpringOauthToken> apply(Integer modifiedUser) throws Exception
+                    {
+                        assertTrue(modifiedUser == 1, user_should_have_been_modified);
+                        return oauthTokenFromUserPswd(newUser);
+                    }
+                });
     }
 
-    /**
-     * It obtains the current oauthTokenFromUserPswd in remote and, once updated token in cache just for double check, it modifies user data.
-     * If successful, it clears token in local cache.
-     * Preconditions: olsUser name and password, and newUser name should be not null.
-     * Postconditions: user name is updated, oauth token is deleted in database and token in cache is erased.
-     */
-    static Single<Integer> userNameModified(Usuario oldUser, final Usuario newUser)
+    static Completable userModifiedCacheUpdated(Usuario oldUser, final Usuario newUser)
     {
-        assertTrue(oldUser.getUserName() != null
-                && oldUser.getPassword() != null
-                && newUser.getUserName() != null, user_name_password_should_be_initialized);
+        final AtomicReference<SpringOauthToken> atomicToken = new AtomicReference<>();
 
-        return oauthTokenAndInitCache(oldUser)
-                .andThen(userDataModified(newUser))
-                .doOnSuccess(cleanTokenCacheAction);
-
-        // TODO: en el servicio remoto hay que borrar el token en su tabla. Ver UsuarioSErvicio.
-    }
-
-    /**
-     * Preconditions: user name must be null.
-     * Postconditions: if alias is updated, an integer > 0 is returned (1).
-     */
-    static Single<Integer> aliasModified(final Usuario newUser)
-    {
-        assertTrue(newUser.getUserName() == null, bean_fromView_should_be_initialized);
-        return fromCallable(new Callable<Integer>() {
-            @Override
-            public Integer call() throws Exception
-            {
-                return usuarioDao.modifyUser(
-                        new Usuario.UsuarioBuilder()
-                                .alias(newUser.getAlias())
-                                .uId(newUser.getuId())
-                                .build()
-                );
-            }
-        });
+        return oauthTokenFromUserPswd(oldUser)
+                .flatMap(new Function<SpringOauthToken, SingleSource<SpringOauthToken>>() {
+                    @Override
+                    public SingleSource<SpringOauthToken> apply(SpringOauthToken oauthToken) throws Exception
+                    {
+                        return userModifiedUpdatedToken(oauthToken, newUser);
+                    }
+                }).doOnSuccess(initTokenAction).toCompletable();
     }
 
     // ............................ SUBSCRIPTIONS ..................................
 
     @Override
-    public boolean getUserInRemote(UserDataControllerIf controller)
+    public boolean loadUserData(UserDataControllerIf controller)
     {
         return controller.getSubscriptions().add(
                 userDataLoaded()
                         .subscribeOn(io())
                         .observeOn(mainThread())
-                        .subscribeWith(new UserDataObserver<Usuario>(controller) {
-                            @Override
-                            public void onSuccess(Usuario usuario)
-                            {
-                                Timber.d("onSuccess(), Thread for subscriber: %s", Thread.currentThread().getName());
-                                controller.processBackUserDataLoaded(usuario);
-                            }
-                        })
+                        .subscribeWith(new LoadedUserObserver(controller))
         );
     }
 
     @Override
-    public boolean modifyUserInRemote(UserDataControllerIf controller, UserChangeToMake changeToMake, Usuario oldUser, Usuario newUser)
+    public boolean modifyUser(UserDataControllerIf controller, Usuario oldUser, Usuario newUser)
     {
-        if (changeToMake == alias_only) {
-            return controller.getSubscriptions().add(
-                    aliasModified(newUser)
-                            .subscribeOn(io())
-                            .observeOn(mainThread())
-                            .subscribeWith(new UserDataObserver<Integer>(controller) {
-                                @Override
-                                public void onSuccess(Integer aliasUpdated)
-                                {
-                                    Timber.d("onSuccess(), Thread for subscriber: %s", Thread.currentThread().getName());
-                                    controller.processBackGenericUpdated();
-                                }
-                            })
-            );
-        }
-        return changeToMake == userName
-                && controller.getSubscriptions().add(
-                userNameModified(oldUser, newUser)
+        return controller.getSubscriptions().add(
+                userModifiedCacheUpdated(oldUser, newUser)
                         .subscribeOn(io())
                         .observeOn(mainThread())
-                        .subscribeWith(new UserDataObserver<Integer>(controller) {
-                            @Override
-                            public void onSuccess(Integer updatedUsuario)
-                            {
-                                Timber.d("onSuccess(), Thread for subscriber: %s", Thread.currentThread().getName());
-                                if (updatedUsuario > 0) {
-                                    controller.processBackUserDataUpdated(true);
-                                }
-                            }
-                        }));
-    }
-
-    @Override
-    public void updateAndInitTokenCache(Usuario newUser)
-    {
-        oauth2reactor.updateTkAndCacheFromUser(newUser);
+                        .subscribeWith(new ModifyUserObserver(controller)));
     }
 
     // .............................. SUBSCRIBERS ..................................
 
-    static abstract class UserDataObserver<T> extends DisposableSingleObserver<T> {
+    private static class ModifyUserObserver extends DisposableCompletableObserver {
 
         final UserDataControllerIf controller;
 
-        UserDataObserver(UserDataControllerIf controller)
+        ModifyUserObserver(UserDataControllerIf controller)
         {
             this.controller = controller;
+        }
+
+        @Override
+        public void onError(Throwable e)
+        {
+            Timber.d("onError(), Thread for subscriber: %s", Thread.currentThread().getName());
+            controller.processBackErrorInReactor(e);
+        }
+
+        @Override
+        public void onComplete()
+        {
+            Timber.d("onSuccess(), Thread for subscriber: %s", Thread.currentThread().getName());
+            controller.processBackUserModified();
+        }
+    }
+
+    private static class LoadedUserObserver extends DisposableSingleObserver<Usuario> {
+
+        final UserDataControllerIf controller;
+
+        LoadedUserObserver(UserDataControllerIf controller)
+        {
+            this.controller = controller;
+        }
+
+        @Override
+        public void onSuccess(Usuario usuario)
+        {
+            Timber.d("onSuccess(), Thread for subscriber: %s", Thread.currentThread().getName());
+            assertTrue(usuario.getuId() > 0L && usuario.getUserName() != null, user_name_uID_should_be_initialized);
+            controller.processBackUserDataLoaded(usuario);
         }
 
         @Override
