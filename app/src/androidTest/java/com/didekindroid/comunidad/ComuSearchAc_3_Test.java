@@ -81,7 +81,7 @@ public class ComuSearchAc_3_Test {
     }
 
     @Test
-    public void testComunidadesByUsuario_withToken() throws InterruptedException, UiException, IOException
+    public void testComunidadesByUsuario() throws InterruptedException, UiException, IOException
     {
         whatClean = UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 
@@ -91,15 +91,6 @@ public class ComuSearchAc_3_Test {
         SEE_USERCOMU_BY_USER_AC.checkMenuItem_WTk(activity);
 
         checkUp(activityLayoutId);
-    }
-
-    @Test
-    public void tesComunidadesByUsuario_noToken() throws InterruptedException
-    {
-        assertThat(refreshTkFile.exists(), is(false));
-        activity = mActivityRule.launchActivity(new Intent());
-        assertThat(TKhandler.isRegisteredUser(), is(false));
-        SEE_USERCOMU_BY_USER_AC.checkMenuItem_NTk(activity);
     }
 
     @Test

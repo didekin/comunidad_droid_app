@@ -13,6 +13,7 @@ import com.didekinlib.model.usuario.Usuario;
 
 import org.awaitility.Duration;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,6 +23,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -42,10 +44,12 @@ import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOU
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
 import static org.awaitility.Awaitility.fieldIn;
+import static org.awaitility.Awaitility.to;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.assertThat;
@@ -80,6 +84,12 @@ public class PasswordChangeAcTest implements ExtendableTestAc {
     AtomicBoolean isExceptionThrown;
     PasswordChangeAc activity;
     private int activityLayoutId = R.id.password_change_ac_layout;
+
+    @BeforeClass
+    public  static void relax() throws InterruptedException
+    {
+        TimeUnit.MILLISECONDS.sleep(2500);
+    }
 
     @Before
     public void setUp() throws Exception
@@ -122,26 +132,16 @@ public class PasswordChangeAcTest implements ExtendableTestAc {
     }
 
     @Test
-    public void testPasswordChange_NotOK() throws InterruptedException, UiException
-    {
-        typePswdData("new_pepe_password", "new_wrong_password");
-        onView(withId(R.id.password_change_ac_button)).check(matches(isDisplayed())).perform(click());
-
-        checkToastInTest(R.string.error_validation_msg, activity, R.string.password_different);
-        // Se queda en la misma actividad.
-        onView(withId(R.id.password_change_ac_layout)).check(matches(isDisplayed()));
-
-        cleanOneUser(USER_PEPE);
-    }
-
-    @Test
     public void testPasswordChange_OK() throws UiException, InterruptedException
     {
+        String refreshToken1 = activity.identityCacher.getRefreshTokenValue();
+
         typePswdData("new_pepe_password", "new_pepe_password");
         onView(withId(R.id.password_change_ac_button)).check(matches(isDisplayed())).perform(click());
 
-        TimeUnit.MILLISECONDS.sleep(2500);
+        waitAtMost(4, SECONDS).untilCall(to(activity.identityCacher).getRefreshTokenValue(), not(equalTo(refreshToken1)));
         onView(withId(getNextViewResourceId())).check(matches(isDisplayed()));
+
         checkUp(activityLayoutId);
 
         usuarioDao.deleteUser();
@@ -210,9 +210,10 @@ public class PasswordChangeAcTest implements ExtendableTestAc {
         cleanOneUser(USER_PEPE);
     }
 
-    @Test
+    @Test  // Includes a test for processBackChangedPswdRemote()
     public void testChangePasswordInRemote() throws Exception
     {
+        String refreshToken1 = activity.identityCacher.getRefreshTokenValue();
         // Caso OK.
         typePswdData("password1", "password1");
 
@@ -225,17 +226,12 @@ public class PasswordChangeAcTest implements ExtendableTestAc {
             }
         });
 
-        TimeUnit.MILLISECONDS.sleep(2500);
+        waitAtMost(2, SECONDS).untilCall(to(activity.identityCacher).getRefreshTokenValue(), not(equalTo(refreshToken1)));
+        TimeUnit.MILLISECONDS.sleep(1000);
         checkToastInTest(R.string.password_remote_change, activity);
         onView(withId(getNextViewResourceId())).check(matches(isDisplayed()));
 
         usuarioDao.deleteUser();
-    }
-
-    @Test
-    public void testProcessBackChangedPswdRemote() throws Exception
-    {
-        testChangePasswordInRemote();
     }
 
     @Test
@@ -260,6 +256,6 @@ public class PasswordChangeAcTest implements ExtendableTestAc {
     private void typePswdData(String password, String confirmation)
     {
         onView(withId(R.id.reg_usuario_password_ediT)).perform(replaceText(password));
-        onView(withId(R.id.reg_usuario_password_confirm_ediT)).perform(replaceText(confirmation));
+        onView(withId(R.id.reg_usuario_password_confirm_ediT)).perform(replaceText(confirmation), closeSoftKeyboard());
     }
 }

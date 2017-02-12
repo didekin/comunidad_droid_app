@@ -10,10 +10,12 @@ import com.didekinlib.http.ErrorBean;
 import com.didekinlib.model.usuario.Usuario;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 
 import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -58,6 +60,12 @@ public class DeleteMeAcTest implements ExtendableTestAc {
             }
         }
     };
+
+    @BeforeClass
+    public  static void relax() throws InterruptedException
+    {
+        TimeUnit.MILLISECONDS.sleep(2000);
+    }
 
     @Before
     public void setUp() throws Exception

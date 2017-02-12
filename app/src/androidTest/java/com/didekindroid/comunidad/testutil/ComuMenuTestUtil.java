@@ -52,7 +52,7 @@ public enum  ComuMenuTestUtil implements MenuTestUtilIf {
         public void checkMenuItem_WTk(Activity activity) throws InterruptedException
         {
             onView(ViewMatchers.withText(R.string.comu_search_ac_mn)).check(doesNotExist());
-            Thread.sleep(2000);
+            Thread.sleep(1000);
             openActionBarOverflowOrOptionsMenu(activity);
             onView(ViewMatchers.withText(R.string.comu_search_ac_mn)).check(matches(isDisplayed())).perform(click());
             onView(ViewMatchers.withId(R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));

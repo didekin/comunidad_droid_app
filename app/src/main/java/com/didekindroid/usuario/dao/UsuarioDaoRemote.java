@@ -120,7 +120,7 @@ public final class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDao {
     @Override
     public boolean deleteUser() throws UiException
     {
-        Timber.d("deleteUser()");
+        Timber.d("deleteUser(), Thread: %s", Thread.currentThread().getName());
         try {
             Response<Boolean> response = deleteUser(checkBearerTokenInCache()).execute();
             return getResponseBody(response);
@@ -144,7 +144,7 @@ public final class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDao {
     @Override
     public Usuario getUserData() throws UiException
     {
-        Timber.d(("getUserData()"));
+        Timber.d("getUserData(), Thread: %s", Thread.currentThread().getName());
         try {
             Response<Usuario> response = getUserData(checkBearerTokenInCache()).execute();
             return getResponseBody(response);

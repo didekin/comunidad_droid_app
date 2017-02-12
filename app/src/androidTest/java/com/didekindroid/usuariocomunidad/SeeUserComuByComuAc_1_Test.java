@@ -51,8 +51,7 @@ import static org.junit.Assert.assertThat;
 public class SeeUserComuByComuAc_1_Test {
 
     @Rule
-    public ActivityTestRule<SeeUserComuByComuAc> mActivityRule =
-            new ActivityTestRule<>(SeeUserComuByComuAc.class, true, false);
+    public ActivityTestRule<SeeUserComuByComuAc> mActivityRule = new ActivityTestRule<>(SeeUserComuByComuAc.class, true, false);
     SeeUserComuByComuAc mActivity;
     SeeUserComuByComuFr mFragment;
     long comunidadId;
@@ -115,10 +114,15 @@ public class SeeUserComuByComuAc_1_Test {
         assertThat(mAdapter.getCount(), is(1));
 
         UsuarioComunidad userComu = mAdapter.getItem(0);
-        UserComuEspressoTestUtil.validaTypedUsuarioComunidad(userComu, UserComuDataTestUtil.COMU_PLAZUELA5_JUAN.getPortal(), UserComuDataTestUtil.COMU_PLAZUELA5_JUAN.getEscalera(), UserComuDataTestUtil.COMU_PLAZUELA5_JUAN.getPlanta(),
-                UserComuDataTestUtil.COMU_PLAZUELA5_JUAN.getPuerta(), UserComuDataTestUtil.COMU_PLAZUELA5_JUAN.getRoles());
-        assertThat(userComu.getComunidad(), is(new Comunidad.ComunidadBuilder().c_id(comunidadId).build()));
+        UserComuEspressoTestUtil.validaTypedUsuarioComunidad(
+                userComu,
+                UserComuDataTestUtil.COMU_PLAZUELA5_JUAN.getPortal(),
+                UserComuDataTestUtil.COMU_PLAZUELA5_JUAN.getEscalera(),
+                UserComuDataTestUtil.COMU_PLAZUELA5_JUAN.getPlanta(),
+                UserComuDataTestUtil.COMU_PLAZUELA5_JUAN.getPuerta(),
+                UserComuDataTestUtil.COMU_PLAZUELA5_JUAN.getRoles());
 
+        assertThat(userComu.getComunidad(), is(new Comunidad.ComunidadBuilder().c_id(comunidadId).build()));
         onView(withAdaptedData(Matchers.<Object>is(userComu))).check(matches(isDisplayed()));
         // Header.
         onView(ViewMatchers.withId(R.id.see_usercomu_by_comu_list_header))
@@ -126,7 +130,7 @@ public class SeeUserComuByComuAc_1_Test {
     }
 
     @Test
-    public void testUserComuByUserMn_withToken() throws InterruptedException
+    public void testUserComuByUserMn_withToken() throws InterruptedException    // TODO.
     {
         SEE_USERCOMU_BY_USER_AC.checkMenuItem_WTk(mActivity);
         checkUp(fragmentLayoutId);

@@ -3,6 +3,7 @@ package com.didekindroid.usuario.login;
 import com.didekindroid.exception.UiException;
 import com.didekinlib.model.usuario.Usuario;
 
+import org.junit.AfterClass;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -27,6 +28,7 @@ import static com.didekindroid.usuario.login.LoginReactor.loginUpdateTkCache;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_DROID;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_DROID;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanWithTkhandler;
 import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_DROID;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
@@ -44,9 +46,59 @@ import static org.junit.Assert.fail;
  */
 public class LoginReactorTest {
 
+    @AfterClass
+    public static void resetScheduler()
+    {
+        reset();
+    }
+
     //  ====================================================================================
     //    .......................... OBSERVABLES .................................
     //  ====================================================================================
+
+    static LoginReactorIf doLoginMockReactor(final boolean isSendPassword)
+    {
+        return new LoginReactorIf() {
+
+            /**
+             *  Mock variant without changing password and deleting access token remotely.
+             */
+            @Override
+            public Single<Boolean> loginPswdSendSingle(final String email)
+            {
+                Timber.d("MockVariant.loginPswdSendSingle(), Thread: %s", Thread.currentThread().getName());
+                return fromCallable(new Callable<Boolean>() {
+                    @Override
+                    public Boolean call() throws Exception
+                    {
+                        return isSendPassword;
+                    }
+                }).doOnSuccess(cleanTkCacheActionBoolean);
+            }
+
+            @Override
+            public boolean validateLogin(LoginControllerIf controller, Usuario usuario)
+            {
+                Timber.d("MockVariant.validateLogin(), Thread: %s", Thread.currentThread().getName());
+                return loginReactor.validateLogin(controller, usuario);
+            }
+
+            /**
+             *  Mock variant to call mock loginPswdSendSingle.
+             */
+            @Override
+            public boolean sendPasswordToUser(LoginControllerIf controller, Usuario usuario)
+            {
+                Timber.d("MockVariant.sendPasswordToUser(), Thread: %s", Thread.currentThread().getName());
+                return controller.getSubscriptions().add(
+                        loginPswdSendSingle(usuario.getUserName())
+                                .subscribeOn(io())
+                                .observeOn(mainThread())
+                                .subscribeWith(new LoginReactor.LoginPswdSendObserver(controller))
+                );
+            }
+        };
+    }
 
     /**
      * Synchronous execution: no scheduler specified, everything runs in the test runner thread.
@@ -110,8 +162,9 @@ public class LoginReactorTest {
         checkNoInitCache();
 
         // Es necesario conseguir un nuevo token.
-        TKhandler.initIdentityCache(Oauth2.getPasswordUserToken(USER_DROID.getUserName(),USER_DROID.getPassword()));
+        TKhandler.initIdentityCache(Oauth2.getPasswordUserToken(USER_DROID.getUserName(), USER_DROID.getPassword()));
         usuarioDao.deleteUser();
+        cleanWithTkhandler();
     }
 
     /**
@@ -129,6 +182,7 @@ public class LoginReactorTest {
 
         // NO es necesario conseguir un nuevo token.
         usuarioDao.deleteUser();
+        cleanWithTkhandler();
     }
 
     /**
@@ -137,7 +191,7 @@ public class LoginReactorTest {
     @Test
     public void testLoginUpdateTkCache_1() throws UiException, IOException
     {
-        userComuDaoRemote.regComuAndUserAndUserComu(COMU_REAL_DROID).execute().body();
+        TKhandler.updateIsRegistered(userComuDaoRemote.regComuAndUserAndUserComu(COMU_REAL_DROID).execute().body());
 
         try {
             trampolineReplaceIoScheduler();
@@ -148,6 +202,10 @@ public class LoginReactorTest {
         checkInitTokenCache();
         cleanOptions(CLEAN_DROID);
     }
+
+    //  =======================================================================================
+    // ............................ SUBSCRIPTIONS ..................................
+    //  =======================================================================================
 
     /**
      * Synchronous execution: we use RxJavaPlugins to replace io scheduler; everything runs in the test runner thread.
@@ -168,10 +226,6 @@ public class LoginReactorTest {
         cleanOptions(CLEAN_DROID);
     }
 
-    //  =======================================================================================
-    // ............................ SUBSCRIPTIONS ..................................
-    //  =======================================================================================
-
     /**
      * Synchronous execution: we use RxJavaPlugins to replace io scheduler; everything runs in the test runner thread.
      */
@@ -190,6 +244,10 @@ public class LoginReactorTest {
         cleanOptions(CLEAN_DROID);
     }
 
+    //  ============================================================================================
+    //    .................................... HELPERS .................................
+    //  ============================================================================================
+
     /**
      * Synchronous execution: we use RxJavaPlugins to replace io scheduler; everything runs in the test runner thread.
      */
@@ -207,10 +265,6 @@ public class LoginReactorTest {
         }
         cleanOptions(CLEAN_DROID);
     }
-
-    //  ============================================================================================
-    //    .................................... HELPERS .................................
-    //  ============================================================================================
 
     LoginControllerIf doLoginController()
     {
@@ -275,47 +329,6 @@ public class LoginReactorTest {
             public void processBackErrorInReactor(Throwable e)
             {
 
-            }
-        };
-    }
-
-    static LoginReactorIf doLoginMockReactor(final boolean isSendPassword)
-    {
-        return new LoginReactorIf() {
-
-            /**
-             *  Mock variant without changing password and deleting access token remotely.
-             */
-            @Override
-            public Single<Boolean> loginPswdSendSingle(final String email)
-            {
-                return fromCallable(new Callable<Boolean>() {
-                    @Override
-                    public Boolean call() throws Exception
-                    {
-                        return isSendPassword;
-                    }
-                }).doOnSuccess(cleanTkCacheActionBoolean);
-            }
-
-            @Override
-            public boolean validateLogin(LoginControllerIf controller, Usuario usuario)
-            {
-                return loginReactor.validateLogin(controller, usuario);
-            }
-
-            /**
-             *  Mock variant to call mock loginPswdSendSingle.
-             */
-            @Override
-            public boolean sendPasswordToUser(LoginControllerIf controller, Usuario usuario)
-            {
-                return controller.getSubscriptions().add(
-                        loginPswdSendSingle(usuario.getUserName())
-                                .subscribeOn(io())
-                                .observeOn(mainThread())
-                                .subscribeWith(new LoginReactor.LoginPswdSendObserver(controller))
-                );
             }
         };
     }

@@ -132,23 +132,7 @@ public class ComuSearchResultsAc_2_Test {
     }
 
     @Test
-    public void tesComunidadesByUsuario_noToken() throws InterruptedException, UiException, IOException
-    {
-        whatClean = CLEAN_JUAN;
-
-        //Usuario no registrado. La búsqueda devuelve una comunidad.
-        regTwoUserComuSameUser(makeListTwoUserComu());
-        // Borro los datos del userComu.
-        cleanWithTkhandler();
-        activity = mActivityRule.launchActivity(intent);
-        assertThat(TKhandler.isRegisteredUser(), is(false));
-
-        /* Usuario no registrado: no aparece la opción de 'Tus comunidades'.*/
-        SEE_USERCOMU_BY_USER_AC.checkMenuItem_NTk(activity);
-    }
-
-    @Test
-    public void testComunidadesByUsuario_withToken() throws InterruptedException, UiException, IOException
+    public void testComunidadesByUsuario() throws InterruptedException, UiException, IOException
     {
         whatClean = CLEAN_JUAN;
 

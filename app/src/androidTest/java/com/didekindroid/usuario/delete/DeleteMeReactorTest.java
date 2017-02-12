@@ -4,6 +4,7 @@ import com.didekindroid.exception.UiException;
 import com.didekindroid.usuario.delete.DeleteMeReactor.DeleteMeSingleObserver;
 import com.didekinlib.http.ErrorBean;
 
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -21,7 +22,6 @@ import static com.didekindroid.usuario.delete.DeleteMeReactor.getDeleteMeSingle;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_DROID;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
-import static com.didekinlib.http.GenericExceptionMsg.TOKEN_NULL;
 import static io.reactivex.plugins.RxJavaPlugins.reset;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -45,6 +45,12 @@ public class DeleteMeReactorTest {
         // PRECONDITIONS.
         assertThat(TKhandler.isRegisteredUser(), is(true));
         assertThat(TKhandler.getTokenCache().get().getValue(), notNullValue());
+    }
+
+    @AfterClass
+    public static void resetScheduler()
+    {
+        reset();
     }
 
     //  ====================================================================================
@@ -147,7 +153,6 @@ public class DeleteMeReactorTest {
             @Override
             public void processErrorInReactor(Throwable e)
             {
-                assertThat(((UiException)e).getErrorBean().getMessage(), is(TOKEN_NULL.getHttpMessage()));
                 assertThat(DeleteMeReactorTest.this.testCounter.getAndSet(11), is(0));
             }
         };

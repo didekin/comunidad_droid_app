@@ -87,14 +87,14 @@ final class PswdChangeReactor implements PswdChangeReactorIf {
         @Override
         public void onComplete()
         {
-            Timber.d("onComplete()");
+            Timber.d("onComplete(), Thread: %s", Thread.currentThread().getName());
             controller.processBackChangedPswdRemote();
         }
 
         @Override
         public void onError(Throwable e)
         {
-            Timber.d("onError");
+            Timber.d("onError, Thread: %s", Thread.currentThread().getName());
             controller.processErrorInReactor(e);
         }
     }

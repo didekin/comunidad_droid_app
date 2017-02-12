@@ -111,7 +111,7 @@ public class PasswordChangeAc extends AppCompatActivity implements PasswordChang
     @Override
     public boolean checkLoginData()
     {
-        Timber.i("checkLoginData()");
+        Timber.i("checkUserData()");
 
         usuarioBean = new UsuarioBean(userName, null, getPswdDataFromView()[0], getPswdDataFromView()[1]);
         StringBuilder errorBuilder = getErrorMsgBuilder(this);
@@ -137,7 +137,7 @@ public class PasswordChangeAc extends AppCompatActivity implements PasswordChang
     @Override
     public void processBackChangedPswdRemote()
     {
-        Timber.d("processBackChangedPswdRemote()");
+        Timber.d("processBackChangedPswdRemote(), Thread: %s", Thread.currentThread().getName());
         makeToast(this, R.string.password_remote_change);
         Intent intent = new Intent(this, routerMap.get(this.getClass()));
         startActivity(intent);
@@ -146,7 +146,7 @@ public class PasswordChangeAc extends AppCompatActivity implements PasswordChang
     @Override
     public void processErrorInReactor(Throwable e)
     {
-        Timber.d("processBackErrorInReactor(), %s", e.getMessage());
+        Timber.d("processErrorInReactor(), Thread: %s, message: %s", Thread.currentThread().getName(), e.getMessage());
         if (e instanceof UiExceptionIf) {
             String ueMessage = ((UiExceptionIf) e).getErrorBean().getMessage();
             if (ueMessage.equals(USER_NAME_NOT_FOUND.getHttpMessage()) || ueMessage.equals(USER_DATA_NOT_MODIFIED.getHttpMessage())) {

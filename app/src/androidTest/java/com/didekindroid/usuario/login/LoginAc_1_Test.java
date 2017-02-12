@@ -7,23 +7,24 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekindroid.ExtendableTestAc;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.security.IdentityCacher;
 import com.didekindroid.usuario.UsuarioBean;
 import com.didekinlib.http.ErrorBean;
 import com.didekinlib.model.usuario.Usuario;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import timber.log.Timber;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.isDialog;
@@ -41,8 +42,9 @@ import static com.didekindroid.R.string.send_password_by_mail_dialog;
 import static com.didekindroid.R.string.username_wrong_in_login;
 import static com.didekindroid.security.Oauth2DaoRemote.Oauth2;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.testutil.ActivityTestUtils.checkNoToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
+import static com.didekindroid.testutil.ActivityTestUtils.isActivityDying;
+import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
 import static com.didekindroid.usuario.login.LoginReactorTest.doLoginMockReactor;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_DROID;
@@ -52,12 +54,14 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.CO
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
 import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOUND;
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
 import static org.awaitility.Awaitility.fieldIn;
+import static org.awaitility.Awaitility.to;
+import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -68,9 +72,14 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class LoginAc_1_Test implements ExtendableTestAc {
 
-    protected LoginAc activity;
-    protected int activityLayoutId = R.id.login_ac_layout;
-    protected Usuario registeredUser;
+    LoginAc activity;
+    int activityLayoutId = R.id.login_ac_layout;
+    Usuario registeredUser;
+    String[] textFromView;
+    AtomicBoolean isLoginDataOk;
+    AtomicBoolean isToCleanNormal;
+    IdentityCacher identityCacher;
+
     @Rule
     public ActivityTestRule<? extends Activity> mActivityRule = new ActivityTestRule<LoginAc>(LoginAc.class) {
         @Override
@@ -84,14 +93,17 @@ public class LoginAc_1_Test implements ExtendableTestAc {
             }
         }
     };
-    String[] textFromView;
-    AtomicBoolean isLoginDataOk;
-    AtomicBoolean isToCleanNormal;
+
+    @BeforeClass
+    public static void relax() throws InterruptedException
+    {
+        TimeUnit.MILLISECONDS.sleep(2000);
+    }
 
     @Before
     public void setUp() throws Exception
     {
-        MILLISECONDS.sleep(1000);
+        identityCacher = TKhandler;
         isToCleanNormal = new AtomicBoolean(true);
         activity = (LoginAc) mActivityRule.getActivity();
     }
@@ -213,25 +225,34 @@ public class LoginAc_1_Test implements ExtendableTestAc {
     @Test   // Login OK.
     public void testValidateLoginRemote_1()
     {
-        processInUiValidateLogin(USER_DROID.getPassword());
-        checkLoginValidateBackOk();
+        typeLoginData(USER_DROID.getUserName(), USER_DROID.getPassword());
+        onView(withId(login_ac_button)).check(matches(isDisplayed())).perform(click());
+
+        await().atMost(3, SECONDS).until(isActivityDying(activity), is(true));
+        onView(withId(getNextViewResourceId())).check(matches(isDisplayed()));
     }
 
     @Test   // Login NOT OK, counterWrong > 3.
     public void testValidateLoginRemote_2()
     {
         activity.counterWrong.set(3);
-        processInUiValidateLogin("password_wrong");
-        await().atMost(1, SECONDS).untilAtomic(activity.counterWrong, equalTo(4));
+        typeLoginData(USER_DROID.getUserName(), "password_wrong");
+        onView(withId(login_ac_button)).check(matches(isDisplayed())).perform(click());
+
+        await().atMost(2, SECONDS).untilAtomic(activity.counterWrong, equalTo(4));
         checkShowDialog();
     }
 
     @Test   // Login NOT OK, counterWrong <= 3.
-    public void testValidateLoginRemote_3()
+    public void testValidateLoginRemote_3() throws InterruptedException
     {
         activity.counterWrong.set(2);
-        processInUiValidateLogin("password_wrong");
-        checkLoginValidateBackWrong();
+        typeLoginData(USER_DROID.getUserName(), "password_wrong");
+        onView(withId(login_ac_button)).check(matches(isDisplayed())).perform(click(), closeSoftKeyboard());
+
+        await().atMost(2, SECONDS).untilAtomic(activity.counterWrong, equalTo(3));
+        onView(withId(activityLayoutId)).check(matches(isDisplayed()));
+        checkToastInTest(R.string.password_wrong, activity);
     }
 
     @Test   // Login OK.
@@ -244,7 +265,8 @@ public class LoginAc_1_Test implements ExtendableTestAc {
                 activity.processBackLoginRemote(true);
             }
         });
-        checkLoginValidateBackOk();
+        await().atMost(3, SECONDS).until(isActivityDying(activity), is(true));
+        onView(withId(getNextViewResourceId())).check(matches(isDisplayed()));
     }
 
     @Test   // Login NO ok, counterWrong > 3.
@@ -266,9 +288,8 @@ public class LoginAc_1_Test implements ExtendableTestAc {
     }
 
     @Test   // Login NO ok, counterWrong <= 3.
-    public void testProcessBackLoginRemote_3()
+    public void testProcessBackLoginRemote_3() throws InterruptedException
     {
-        activity.counterWrong = new AtomicInteger(0);
         activity.counterWrong.set(2);
 
         activity.runOnUiThread(new Runnable() {
@@ -278,13 +299,17 @@ public class LoginAc_1_Test implements ExtendableTestAc {
                 activity.processBackLoginRemote(false);
             }
         });
-        checkLoginValidateBackWrong();
+
+        await().atMost(3, SECONDS).untilAtomic(activity.counterWrong, equalTo(3));
+        checkToastInTest(R.string.password_wrong, activity);
+        onView(withId(activityLayoutId)).check(matches(isDisplayed()));
     }
 
-    @Test
-    public void testDoDialogPositiveClick() throws UiException
+    @Test // We user a mockReactor.
+    public void testDoDialogPositiveClick() throws UiException, InterruptedException
     {
         isToCleanNormal.set(false);
+
         activity.usuarioBean = new UsuarioBean(USER_DROID.getUserName(), "userdroid", USER_DROID.getPassword(), USER_DROID.getPassword());
         // Necesitamos el usuarion dentro de usuarioBean inicializado.
         activity.usuarioBean.validate(activity.getResources(), null);
@@ -297,7 +322,8 @@ public class LoginAc_1_Test implements ExtendableTestAc {
             }
         });
 
-        await().atMost(5, SECONDS).until(isActivityDying(), is(true));
+        waitAtMost(2, SECONDS).untilCall(to(identityCacher).getRefreshTokenValue(),nullValue());
+        onView(withId(activityLayoutId)).check(matches(isDisplayed())).perform(closeSoftKeyboard());
         checkToastInTest(R.string.password_new_in_login, activity);
     }
 
@@ -312,12 +338,12 @@ public class LoginAc_1_Test implements ExtendableTestAc {
             }
         });
 
-        await().atMost(1, SECONDS).until(isActivityDying(), is(true));
+        await().atMost(1, SECONDS).until(isActivityDying(activity), is(true));
         onView(withId(getNextViewResourceId())).check(matches(isDisplayed()));
     }
 
     @Test
-    public void testProcessBackSendPassword()
+    public void testProcessBackSendPassword() throws InterruptedException
     {
         activity.runOnUiThread(new Runnable() {
             @Override
@@ -326,8 +352,7 @@ public class LoginAc_1_Test implements ExtendableTestAc {
                 activity.processBackSendPassword(true);
             }
         });
-        await().atMost(1, SECONDS).until(isActivityDying(), is(true));
-        checkToastInTest(R.string.password_new_in_login, activity);
+        await().atMost(2, SECONDS).until(isToastInView(R.string.password_new_in_login, activity));
     }
 
     @Test
@@ -340,12 +365,12 @@ public class LoginAc_1_Test implements ExtendableTestAc {
                 activity.processBackErrorInReactor(new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR)));
             }
         });
-        await().atMost(1, SECONDS).until(isActivityDying(), is(true));
+        await().atMost(1, SECONDS).until(isActivityDying(activity), is(true));
         onView(withId(getNextViewResourceId())).check(matches(isDisplayed()));
     }
 
     @Test
-    public void testProcessBackErrorInReactor_2()
+    public void testProcessBackErrorInReactor_2() throws InterruptedException
     {
         activity.runOnUiThread(new Runnable() {
             @Override
@@ -354,7 +379,7 @@ public class LoginAc_1_Test implements ExtendableTestAc {
                 activity.processBackErrorInReactor(new UiException(new ErrorBean(USER_NAME_NOT_FOUND)));
             }
         });
-        checkToastInTest(username_wrong_in_login, activity);
+        await().atMost(2, SECONDS).until(isToastInView(username_wrong_in_login, activity));
     }
 
     //    ========================== Utility methods ============================
@@ -365,56 +390,13 @@ public class LoginAc_1_Test implements ExtendableTestAc {
         onView(withId(reg_usuario_password_ediT)).perform(typeText(password));
     }
 
-    private Callable<Boolean> isActivityDying()
-    {
-        return new Callable<Boolean>() {
-            public Boolean call() throws Exception
-            {
-                return activity.isFinishing() || activity.isDestroyed();
-            }
-        };
-    }
-
     private void checkShowDialog()
     {
-        Timber.d("checkShowDialogThread: %s", Thread.currentThread().getName());
-
         onView(withText(send_password_by_mail_dialog)).inRoot(isDialog())
                 .check(matches(isDisplayed()));
         onView(withText(send_password_by_mail_YES)).inRoot(isDialog())
                 .check(matches(isDisplayed()));
         onView(withText(send_password_by_mail_NO)).inRoot(isDialog())
                 .check(matches(isDisplayed()));
-    }
-
-    private void checkLoginValidateBackOk()
-    {
-        Timber.d("checkLoginValidateBackOkThread: %s", Thread.currentThread().getName());
-
-        await().atMost(3, SECONDS).until(isActivityDying(), is(true));
-        checkNoToastInTest(R.string.user_without_signedUp, activity);
-        onView(withId(getNextViewResourceId())).check(matches(isDisplayed()));
-    }
-
-    private void checkLoginValidateBackWrong()
-    {
-        await().atMost(3, SECONDS).untilAtomic(activity.counterWrong, equalTo(3));
-        checkToastInTest(R.string.password_wrong, activity);
-        onView(withId(activityLayoutId)).check(matches(isDisplayed()));
-    }
-
-    private void processInUiValidateLogin(final String password)
-    {
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                Timber.d("runOnUiThread: %s", Thread.currentThread().getName());
-                activity.usuarioBean = new UsuarioBean(USER_DROID.getUserName(), "userdroid", password, password);
-                // Necesitamos el usuarion dentro de usuarioBean inicializado.
-                activity.usuarioBean.validate(activity.getResources(), null);
-                activity.validateLoginRemote();
-            }
-        });
     }
 }

@@ -169,7 +169,7 @@ public class RegComuAndUserComuAcTest {
     }
 
     @Test
-    public void testRegisterComuAndUserComu_3() throws InterruptedException
+    public void testRegisterComuAndUserComu_3() throws InterruptedException   // TODO.
     {
         activity = mActivityRule.launchActivity(new Intent());
 

@@ -1,7 +1,5 @@
 package com.didekindroid.testutil;
 
-import java.util.concurrent.Callable;
-
 import io.reactivex.Scheduler;
 import io.reactivex.android.plugins.RxAndroidPlugins;
 import io.reactivex.functions.Function;
@@ -30,9 +28,9 @@ public class RxSchedulersUtils {
 
     public static void trampolineReplaceAndroidMain()
     {
-        RxAndroidPlugins.setInitMainThreadSchedulerHandler(new Function<Callable<Scheduler>, Scheduler>() {
+        RxAndroidPlugins.setMainThreadSchedulerHandler(new Function<Scheduler, Scheduler>() {
             @Override
-            public Scheduler apply(Callable<Scheduler> schedulerCallable) throws Exception
+            public Scheduler apply(Scheduler scheduler) throws Exception
             {
                 return trampoline();
             }

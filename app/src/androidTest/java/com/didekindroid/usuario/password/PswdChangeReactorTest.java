@@ -8,6 +8,7 @@ import com.didekinlib.http.oauth2.SpringOauthToken;
 import com.didekinlib.model.usuario.Usuario;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -63,6 +64,12 @@ public class PswdChangeReactorTest {
     @After
     public void unDoFixture() throws UiException
     {
+    }
+
+    @AfterClass
+    public static void resetScheduler()
+    {
+        reset();
     }
 
     //  =======================================================================================

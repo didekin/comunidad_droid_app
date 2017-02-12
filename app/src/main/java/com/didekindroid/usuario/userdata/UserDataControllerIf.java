@@ -12,7 +12,7 @@ import io.reactivex.disposables.CompositeDisposable;
  */
 interface UserDataControllerIf {
 
-    boolean checkLoginData();
+    boolean checkUserData();
 
     void loadUserData();
 

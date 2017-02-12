@@ -1,7 +1,5 @@
 package com.didekindroid.usuario.testutil;
 
-import android.content.Context;
-
 import com.didekindroid.exception.UiException;
 import com.didekinlib.model.usuario.Usuario;
 
@@ -69,12 +67,6 @@ public final class UsuarioDataTestUtils {
     }
 
     public static void cleanWithTkhandler()
-    {
-        TKhandler.cleanIdentityCache();
-        TKhandler.updateIsRegistered(false);
-    }
-
-    public static void cleanWithTkhandler(Context context)
     {
         TKhandler.cleanIdentityCache();
         TKhandler.updateIsRegistered(false);

@@ -3,6 +3,7 @@ package com.didekindroid.testutil;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.support.test.espresso.NoMatchingViewException;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.contrib.PickerActions;
 import android.support.test.espresso.matcher.ViewMatchers;
@@ -15,6 +16,7 @@ import org.hamcrest.CoreMatchers;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.concurrent.Callable;
 
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.KITKAT;
@@ -45,6 +47,33 @@ public final class ActivityTestUtils {
 
     private ActivityTestUtils()
     {
+    }
+
+    //    ============================= AWAITILITY ===================================
+
+    public static Callable<Boolean> isActivityDying(final Activity activity)
+    {
+        return new Callable<Boolean>() {
+            public Boolean call() throws Exception
+            {
+                return activity.isFinishing() || activity.isDestroyed();
+            }
+        };
+    }
+
+    public static Callable<Boolean> isToastInView(final int resourceStringId,final Activity activity)
+    {
+        return new Callable<Boolean>() {
+            public Boolean call() throws Exception
+            {
+                try {
+                    checkToastInTest(resourceStringId, activity);
+                    return true;
+                } catch (NoMatchingViewException ne){
+                    return false;
+                }
+            }
+        };
     }
 
     //    ============================= DATES ===================================

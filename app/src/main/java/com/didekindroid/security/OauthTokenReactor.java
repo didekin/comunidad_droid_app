@@ -44,14 +44,13 @@ public final class OauthTokenReactor implements OauthTokenReactorIf {
      */
     public static Single<SpringOauthToken> oauthTokenFromUserPswd(final Usuario usuario)
     {
-        Timber.d("oauthTokenFromUserPswd()");
+        Timber.d("oauthTokenFromUserPswd(), Thread: %s", Thread.currentThread().getName());
         assertTrue(TKhandler.isRegisteredUser(), user_should_be_registered);
 
         return fromCallable(new Callable<SpringOauthToken>() {
             @Override
             public SpringOauthToken call() throws Exception
             {
-                Timber.d("Thread for oauthTokenFromUserPswd: %s", Thread.currentThread().getName());
                 return Oauth2.getPasswordUserToken(usuario.getUserName(), usuario.getPassword());
             }
         });

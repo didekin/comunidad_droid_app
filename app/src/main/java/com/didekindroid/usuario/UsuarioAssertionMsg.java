@@ -13,6 +13,7 @@ public final class UsuarioAssertionMsg {
     public static final String user_name_uID_should_be_initialized = "UserName and uId should be initialized";
     public static final String user_name_should_be_initialized = "UserName should be initialized";
     public static final String user_name_password_should_be_initialized = "UserName and password should be initialized";
+    public static final String user_name_alias_should_be_initialized = "UserName and alias should be initialized";
     public static final String user_password_should_be_updated = "Password should have been updated";
     public static final String user_should_have_been_deleted = "User should have been deleted";
     public static final String user_should_have_been_modified = "User should have been modified";

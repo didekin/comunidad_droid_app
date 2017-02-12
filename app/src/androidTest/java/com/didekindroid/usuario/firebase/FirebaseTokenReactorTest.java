@@ -7,6 +7,7 @@ import com.didekindroid.usuario.firebase.FirebaseTokenReactor.RegGcmTokenObserve
 import com.didekinlib.http.ErrorBean;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -48,6 +49,12 @@ public class FirebaseTokenReactorTest {
     public void cleanFileToken() throws UiException
     {
         cleanOptions(CLEAN_JUAN);
+    }
+
+    @AfterClass
+    public static void resetScheduler()
+    {
+        reset();
     }
 
     //  ====================================================================================

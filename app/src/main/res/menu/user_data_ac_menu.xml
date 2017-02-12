@@ -18,8 +18,6 @@
         android:id="@+id/see_usercomu_by_user_ac_mn"
         android:orderInCategory="100"
         android:title="@string/see_usercomu_by_user_ac_mn"
-        android:visible="false"
-        android:enabled="false"
         app:showAsAction="never|withText"/>
     <item
         android:id="@+id/comu_search_ac_mn"

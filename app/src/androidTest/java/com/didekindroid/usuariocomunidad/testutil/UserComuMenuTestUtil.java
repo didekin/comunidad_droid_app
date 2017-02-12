@@ -12,7 +12,6 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static com.didekindroid.testutil.ActivityTestUtils.checkNoToastInTest;
 import static com.didekindroid.usuario.testutil.UserItemMenuTestUtils.REGISTERED_USER;
 import static com.didekindroid.usuario.testutil.UserItemMenuTestUtils.REQUIRES_USER_NO_TOKEN;
 
@@ -78,12 +77,9 @@ public enum UserComuMenuTestUtil implements MenuTestUtilIf {
 
     SEE_USERCOMU_BY_USER_AC {
         @Override
-        public void checkMenuItem_NTk(Activity activity) throws InterruptedException
+        public void checkMenuItem_NTk(Activity activity)
         {
-            onView(ViewMatchers.withText(R.string.see_usercomu_by_user_ac_mn)).check(doesNotExist());
-            openActionBarOverflowOrOptionsMenu(activity);
-            Thread.sleep(1000);
-            onView(ViewMatchers.withText(R.string.see_usercomu_by_user_ac_mn)).check(doesNotExist());
+            throw new UnsupportedOperationException(SEE_USERCOMU_BY_USER_AC + " without token");
         }
 
         @Override
@@ -94,8 +90,6 @@ public enum UserComuMenuTestUtil implements MenuTestUtilIf {
             Thread.sleep(1000);
             onView(ViewMatchers.withText(R.string.see_usercomu_by_user_ac_mn)).check(matches(isDisplayed())).perform(click());
 
-            // No muestra toast de error.
-            checkNoToastInTest(R.string.user_without_signedUp, activity);
             onView(ViewMatchers.withId(R.id.see_usercomu_by_user_frg)).check(matches(isDisplayed()));
         }
     },

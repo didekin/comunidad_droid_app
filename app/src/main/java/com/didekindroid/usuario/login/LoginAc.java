@@ -14,7 +14,6 @@ import android.widget.EditText;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.security.OauthTokenReactorIf;
 import com.didekindroid.usuario.UsuarioBean;
 import com.didekindroid.util.ConnectionUtils;
 import com.didekindroid.util.MenuRouter;
@@ -25,7 +24,6 @@ import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
-import static com.didekindroid.security.OauthTokenReactor.tokenReactor;
 import static com.didekindroid.usuario.UsuarioBundleKey.login_counter_atomic_int;
 import static com.didekindroid.usuario.login.LoginAc.PasswordMailDialog.newInstance;
 import static com.didekindroid.usuario.login.LoginReactor.loginReactor;
@@ -58,7 +56,6 @@ public class LoginAc extends AppCompatActivity implements LoginViewIf, LoginCont
     View mAcView;
     CompositeDisposable subscriptions;
     LoginReactorIf reactor;
-    OauthTokenReactorIf oauthTokenReactor;
     AtomicInteger counterWrong;
     UsuarioBean usuarioBean;
 
@@ -72,7 +69,6 @@ public class LoginAc extends AppCompatActivity implements LoginViewIf, LoginCont
         setContentView(mAcView);
         doToolBar(this, true);
         reactor = loginReactor;
-        oauthTokenReactor = tokenReactor;
         counterWrong = new AtomicInteger(0);
 
         Button mLoginButton = (Button) findViewById(R.id.login_ac_button);
@@ -143,7 +139,7 @@ public class LoginAc extends AppCompatActivity implements LoginViewIf, LoginCont
     @Override
     public boolean checkLoginData()
     {
-        Timber.i("checkLoginData()");
+        Timber.i("checkUserData()");
         usuarioBean = new UsuarioBean(getLoginDataFromView()[0], null, getLoginDataFromView()[1], null);
 
         StringBuilder errorBuilder = getErrorMsgBuilder(this);

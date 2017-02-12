@@ -9,6 +9,7 @@ import com.didekinlib.http.oauth2.SpringOauthToken;
 import com.didekinlib.model.usuario.Usuario;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -70,6 +71,12 @@ public class UserDataReactorTest {
     {
         usuarioDao.deleteUser();
         cleanWithTkhandler();
+    }
+
+    @AfterClass
+    public static void resetScheduler()
+    {
+        reset();
     }
 
     //  =======================================================================================
@@ -277,7 +284,7 @@ public class UserDataReactorTest {
 
         return new UserDataControllerIf() {
             @Override
-            public boolean checkLoginData()
+            public boolean checkUserData()
             {
                 return false;
             }

@@ -9,6 +9,7 @@ import com.didekindroid.usuario.login.LoginReactorTest;
 import com.didekindroid.usuario.password.PasswordChangeAcTest;
 import com.didekindroid.usuario.password.PswdChangeReactorTest;
 import com.didekindroid.usuario.userdata.UserDataAcTest;
+import com.didekindroid.usuario.userdata.UserDataReactorTest;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -20,17 +21,20 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
+
         DeleteMeAcTest.class,
-        DeleteMeReactorTest.class,
-        FirebaseTokenReactorTest.class,
 //        LoginAcTest.class,
         LoginAc_1_Test.class,
-        LoginReactorTest.class,
         PasswordChangeAcTest.class,
-        PswdChangeReactorTest.class,
         UserDataAcTest.class,
         UsuarioBeanValidaTests.class,
         UsuarioDaoRemoteTest.class,
+        // Reactors.
+        DeleteMeReactorTest.class,
+        FirebaseTokenReactorTest.class,
+        LoginReactorTest.class,
+        PswdChangeReactorTest.class,
+        UserDataReactorTest.class,
 })
 public class UsuarioSuite {
 }

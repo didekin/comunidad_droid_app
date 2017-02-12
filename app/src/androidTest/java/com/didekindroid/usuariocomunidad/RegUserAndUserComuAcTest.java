@@ -127,7 +127,7 @@ public class RegUserAndUserComuAcTest {
     }
 
     @Test
-    public void testRegisterUserAndUserComu_1() throws UiException
+    public void testRegisterUserAndUserComu_1() throws UiException      // TODO.
     {
         whatToClean = CLEAN_JUAN2_AND_PEPE;
 
@@ -168,7 +168,7 @@ public class RegUserAndUserComuAcTest {
     }
 
     @Test
-    public void testLoginMn_WithToken() throws InterruptedException, UiException, IOException
+    public void testLoginMn_WithToken() throws InterruptedException, UiException, IOException     // TODO:
     {
         whatToClean = CLEAN_JUAN_AND_PEPE;
         //With token.

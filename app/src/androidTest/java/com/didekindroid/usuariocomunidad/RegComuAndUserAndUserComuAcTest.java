@@ -225,7 +225,11 @@ public class RegComuAndUserAndUserComuAcTest {
         Thread.sleep(1000);
         UserComuEspressoTestUtil.typeUserComuData("port2", "escale_b", "planta-N", "puerta5", RolUi.PRE, RolUi.INQ);
         // Usuario.
-        UserEspressoTestUtil.typeUserData(UsuarioDataTestUtils.USER_JUAN2.getUserName(), UsuarioDataTestUtils.USER_JUAN2.getAlias(), UsuarioDataTestUtils.USER_JUAN2.getPassword(), UsuarioDataTestUtils.USER_JUAN2.getPassword());
+        UserEspressoTestUtil.typeUserData(
+                UsuarioDataTestUtils.USER_JUAN2.getUserName(),
+                UsuarioDataTestUtils.USER_JUAN2.getAlias(),
+                UsuarioDataTestUtils.USER_JUAN2.getPassword(),
+                UsuarioDataTestUtils.USER_JUAN2.getPassword());
 
         onView(ViewMatchers.withId(R.id.reg_com_usuario_usuariocomu_button)).perform(scrollTo(), click());
 

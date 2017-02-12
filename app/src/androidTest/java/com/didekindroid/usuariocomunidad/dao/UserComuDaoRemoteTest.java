@@ -244,7 +244,7 @@ public class UserComuDaoRemoteTest {
     }
 
     @Test
-    public void testRegUserAndUserComu_2() throws UiException, IOException
+    public void testRegUserAndUserComu_2() throws UiException, IOException    // TODO.
     {
         whatClean = CLEAN_PEPE;
 
