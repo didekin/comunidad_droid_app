@@ -28,13 +28,13 @@ class SeeUserComuByUserAdapter extends ArrayAdapter<UsuarioComunidad> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent)
     {
-        Timber.d("getView(), position= %d%n", position);
+        Timber.d("getViewInViewer(), position= %d%n", position);
 
         ComuAndUserComuViewHolder comuAnduserComuViewHolder;
 
         if (convertView == null) {
 
-            Timber.d("getView(), convertView == null");
+            Timber.d("getViewInViewer(), convertView == null");
 
             convertView = LayoutInflater.from(getContext())
                     .inflate(R.layout.comu_usercomu_list_item, parent, false);

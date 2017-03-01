@@ -161,57 +161,57 @@
         <!-- INCIDENCIA -->
         <!-- **************************************************************** -->
         <activity
-            android:name=".incidencia.activity.IncidCommentRegAc"
+            android:name=".incidencia.comment.IncidCommentRegAc"
             android:label="@string/incid_comment_reg_ac_label"
-            android:parentActivityName=".incidencia.activity.IncidEditAc">
+            android:parentActivityName=".incidencia.core.IncidEditAc">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".incidencia.activity.IncidEditAc"/>
+                android:value=".incidencia.core.IncidEditAc"/>
         </activity>
         <activity
-            android:name=".incidencia.activity.IncidCommentSeeAc"
+            android:name=".incidencia.comment.IncidCommentSeeAc"
             android:label="@string/incid_comment_see_ac_label"
-            android:parentActivityName=".incidencia.activity.IncidEditAc">
+            android:parentActivityName=".incidencia.core.IncidEditAc">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".incidencia.activity.IncidEditAc"/>
+                android:value=".incidencia.core.IncidEditAc"/>
         </activity>
         <activity
-            android:name=".incidencia.activity.IncidEditAc"
+            android:name=".incidencia.core.IncidEditAc"
             android:label="@string/incid_edit_ac_label"
-            android:parentActivityName=".incidencia.activity.IncidSeeOpenByComuAc">
+            android:parentActivityName=".incidencia.list.IncidSeeOpenByComuAc">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".incidencia.activity.IncidSeeOpenByComuAc"/>
+                android:value=".incidencia.list.IncidSeeOpenByComuAc"/>
         </activity>
         <activity
-            android:name=".incidencia.activity.incidreg.IncidRegAc"
+            android:name=".incidencia.core.IncidRegAc"
             android:label="@string/incid_reg_ac_label"
-            android:parentActivityName=".incidencia.activity.IncidSeeOpenByComuAc"
+            android:parentActivityName=".incidencia.list.IncidSeeOpenByComuAc"
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".incidencia.activity.IncidSeeOpenByComuAc"/>
+                android:value=".incidencia.list.IncidSeeOpenByComuAc"/>
         </activity>
         <activity
-            android:name=".incidencia.activity.IncidResolucionRegEditSeeAc"
+            android:name=".incidencia.resolucion.IncidResolucionRegEditSeeAc"
             android:label="@string/incid_resolution_ac_label"
-            android:parentActivityName=".incidencia.activity.IncidEditAc"
+            android:parentActivityName=".incidencia.core.IncidEditAc"
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".incidencia.activity.IncidEditAc"/>
+                android:value=".incidencia.core.IncidEditAc"/>
         </activity>
         <activity
-            android:name=".incidencia.activity.IncidSeeClosedByComuAc"
+            android:name=".incidencia.list.IncidSeeClosedByComuAc"
             android:label="@string/incid_closed_by_user_ac_label"
-            android:parentActivityName=".incidencia.activity.IncidSeeOpenByComuAc">
+            android:parentActivityName=".incidencia.list.IncidSeeOpenByComuAc">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".incidencia.activity.IncidSeeOpenByComuAc"/>
+                android:value=".incidencia.list.IncidSeeOpenByComuAc"/>
         </activity>
         <activity
-            android:name=".incidencia.activity.IncidSeeOpenByComuAc"
+            android:name=".incidencia.list.IncidSeeOpenByComuAc"
             android:label="@string/incid_see_by_user_ac_label"
             android:parentActivityName=".usuariocomunidad.UserComuDataAc">
             <meta-data
@@ -219,12 +219,12 @@
                 android:value=".usuariocomunidad.UserComuDataAc"/>
         </activity>
         <activity
-            android:name=".incidencia.activity.IncidSeeUserComuImportanciaAc"
+            android:name=".incidencia.list.IncidSeeUserComuImportanciaAc"
             android:label="@string/incid_incidencia_importancia_rot"
-            android:parentActivityName=".incidencia.activity.IncidEditAc">
+            android:parentActivityName=".incidencia.core.IncidEditAc">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".incidencia.activity.IncidEditAc"/>
+                android:value=".incidencia.core.IncidEditAc"/>
         </activity>
         <!-- .......... GCM services ......... -->
         <service

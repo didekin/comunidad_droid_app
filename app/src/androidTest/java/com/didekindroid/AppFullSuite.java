@@ -2,8 +2,7 @@ package com.didekindroid;
 
 import com.didekindroid.comunidad.ComunidadSuite;
 import com.didekindroid.exception.UiAppExceptionTests;
-import com.didekindroid.incidencia.IncidSuiteFunctional;
-import com.didekindroid.incidencia.IncidSuiteSupport;
+import com.didekindroid.incidencia.IncidSuite;
 import com.didekindroid.security.JceTests;
 import com.didekindroid.security.Oauth2DaoRemoteTest;
 import com.didekindroid.security.OauthTokenReactor_1_Test;
@@ -25,8 +24,7 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         ComunidadSuite.class,
-        IncidSuiteFunctional.class,
-        IncidSuiteSupport.class,
+        IncidSuite.class,
         IoHelperTest.class,
         JceTests.class,
         Oauth2DaoRemoteTest.class,

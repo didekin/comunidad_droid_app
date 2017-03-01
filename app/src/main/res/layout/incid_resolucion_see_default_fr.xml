@@ -4,7 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginTop="@dimen/app_bar_bottom_margin"
-    tools:context="com.didekindroid.incidencia.activity.IncidResolucionSeeDefaultFr">
+    tools:context=".incidencia.resolucion.IncidResolucionSeeDefaultFr">
 
     <TextView
         android:id="@+id/incid_resolucion_see_default_txt"

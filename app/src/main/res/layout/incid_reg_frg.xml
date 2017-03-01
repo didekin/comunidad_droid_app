@@ -3,7 +3,7 @@
     style="@style/baseLayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.didekindroid.incidencia.activity.incidreg.IncidRegAcFragment">
+    tools:context=".incidencia.core.IncidRegAcFragment">
 
     <EditText
         android:id="@+id/incid_reg_desc_ed"

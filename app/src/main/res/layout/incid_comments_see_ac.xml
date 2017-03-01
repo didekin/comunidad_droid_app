@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/baseLayout"
     android:fitsSystemWindows="true"
-    tools:context=".incidencia.activity.IncidCommentSeeAc"
+    tools:context=".incidencia.comment.IncidCommentSeeAc"
     android:id="@+id/incid_comments_see_ac">
 
     <include layout="@layout/appbar_include_design"/>

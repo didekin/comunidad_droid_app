@@ -27,12 +27,12 @@ public class ComuSearchResultsListAdapter extends ArrayAdapter<Comunidad> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent)
     {
-        Timber.d("getView(), position= %d%n", position);
+        Timber.d("getViewInViewer(), position= %d%n", position);
 
         ComuViewHolder viewHolder;
 
         if (convertView == null) {
-            Timber.d("getView(), convertView == null");
+            Timber.d("getViewInViewer(), convertView == null");
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.comu_include, parent, false);
             viewHolder = new ComuViewHolder(convertView);
             convertView.setTag(viewHolder);

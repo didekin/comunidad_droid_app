@@ -9,6 +9,9 @@ import com.didekinlib.model.usuario.Usuario;
 import org.hamcrest.Matchers;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.replaceText;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -38,5 +41,11 @@ public final class UserEspressoTestUtil {
         assertThat(usuario.getUserName(), Matchers.is(email));
         assertThat(usuario.getAlias(), Matchers.is(alias1));
         assertThat(usuario.getPassword(), Matchers.is(password));
+    }
+
+    public static void typePswdData(String password, String confirmation)
+    {
+        onView(withId(R.id.reg_usuario_password_ediT)).perform(replaceText(password));
+        onView(withId(R.id.reg_usuario_password_confirm_ediT)).perform(replaceText(confirmation), closeSoftKeyboard());
     }
 }

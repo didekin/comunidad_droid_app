@@ -25,8 +25,8 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
-import static com.didekindroid.incidencia.activity.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doIncidencia;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
@@ -69,9 +69,9 @@ public class UiAppExceptionTests {
                         doIncidencia(juanPlazuelas.getUsuario().getUserName(), "Incidencia Plazueles", juanPlazuelas.getComunidad().getC_Id(), (short) 43))
                         .usuarioComunidad(juanPlazuelas)
                         .importancia((short) 3).build();
-                IncidenciaServ.regIncidImportancia(mIncidJuanPlazuelas);
-                IncidenciaUser incidenciaUserDb = IncidenciaServ.seeIncidsOpenByComu(juanPlazuelas.getComunidad().getC_Id()).get(0);
-                mIncidJuanPlazuelas = IncidenciaServ.seeIncidImportancia(incidenciaUserDb.getIncidencia().getIncidenciaId()).getIncidImportancia();
+                incidenciaDao.regIncidImportancia(mIncidJuanPlazuelas);
+                IncidenciaUser incidenciaUserDb = incidenciaDao.seeIncidsOpenByComu(juanPlazuelas.getComunidad().getC_Id()).get(0);
+                mIncidJuanPlazuelas = incidenciaDao.seeIncidImportancia(incidenciaUserDb.getIncidencia().getIncidenciaId()).getIncidImportancia();
             } catch (IOException | UiException e) {
                 e.printStackTrace();
             }

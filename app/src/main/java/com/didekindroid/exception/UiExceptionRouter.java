@@ -4,9 +4,9 @@ import com.didekindroid.R;
 import com.didekindroid.comunidad.ComuSearchAc;
 import com.didekindroid.exception.UiExceptionIf.ActionForUiExceptionIf;
 import com.didekindroid.exception.UiExceptionIf.UiExceptionRouterIf;
-import com.didekindroid.incidencia.activity.IncidEditAc;
-import com.didekindroid.incidencia.activity.IncidSeeOpenByComuAc;
-import com.didekindroid.incidencia.activity.incidreg.IncidRegAc;
+import com.didekindroid.incidencia.core.IncidEditAc;
+import com.didekindroid.incidencia.list.IncidSeeOpenByComuAc;
+import com.didekindroid.incidencia.core.IncidRegAc;
 import com.didekindroid.usuario.login.LoginAc;
 import com.didekindroid.usuario.userdata.UserDataAc;
 
@@ -54,8 +54,8 @@ import static com.didekinlib.model.usuariocomunidad.UsuarioComunidadExceptionMsg
 
 public final class UiExceptionRouter implements UiExceptionRouterIf {
 
-    private static final ActionForUiExceptionIf GENERIC_APP_ACC = new ActionForUiException(ComuSearchAc.class, R.string.exception_generic_app_message);
-    private static final ActionForUiExceptionIf LOGIN_ACC = new ActionForUiException(LoginAc.class, R.string.user_without_signedUp);
+    public static final ActionForUiExceptionIf GENERIC_APP_ACC = new ActionForUiException(ComuSearchAc.class, R.string.exception_generic_app_message);
+    public static final ActionForUiExceptionIf LOGIN_ACC = new ActionForUiException(LoginAc.class, R.string.user_without_signedUp);
     private static final ActionForUiExceptionIf SEARCH_COMU_ACC = new ActionForUiException(ComuSearchAc.class, R.string.comunidad_not_found_message);
     private static final ActionForUiExceptionIf INCID_SEE_BY_COMU_ACC = new ActionForUiException(IncidSeeOpenByComuAc.class, R.string.incidencia_wrong_init);
 

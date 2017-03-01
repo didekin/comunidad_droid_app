@@ -7,7 +7,7 @@ import android.widget.EditText;
 import com.didekindroid.ExtendableTestAc;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
-import com.didekinlib.http.ErrorBean;
+import com.didekindroid.usuario.UsuarioBean;
 import com.didekinlib.model.usuario.Usuario;
 
 import org.junit.After;
@@ -37,28 +37,36 @@ import static com.didekindroid.R.id.reg_usuario_email_editT;
 import static com.didekindroid.R.id.user_data_ac_password_ediT;
 import static com.didekindroid.R.id.user_data_modif_button;
 import static com.didekindroid.comunidad.testutil.ComuMenuTestUtil.COMU_SEARCH_AC;
+import static com.didekindroid.exception.UiExceptionRouter.GENERIC_APP_ACC;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_OPEN_BY_COMU_AC;
 import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
+import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
+import static com.didekindroid.testutil.ActivityTestUtils.isViewOnView;
+import static com.didekindroid.testutil.ActivityTestUtils.testClearCtrlSubscriptions;
+import static com.didekindroid.testutil.ActivityTestUtils.testProcessCtrlError;
+import static com.didekindroid.testutil.ActivityTestUtils.testProcessCtrlErrorOnlyToast;
+import static com.didekindroid.testutil.ActivityTestUtils.testReplaceViewStd;
 import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
 import static com.didekindroid.usuario.testutil.UserItemMenuTestUtils.DELETE_ME_AC;
 import static com.didekindroid.usuario.testutil.UserItemMenuTestUtils.PASSWORD_CHANGE_AC;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_DROID;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanWithTkhandler;
-import static com.didekindroid.usuario.userdata.UserDataControllerIf.UserChangeToMake.alias_only;
-import static com.didekindroid.usuario.userdata.UserDataControllerIf.UserChangeToMake.nothing;
-import static com.didekindroid.usuario.userdata.UserDataControllerIf.UserChangeToMake.userName;
+import static com.didekindroid.usuario.userdata.ViewerUserDataIf.UserChangeToMake.alias_only;
+import static com.didekindroid.usuario.userdata.ViewerUserDataIf.UserChangeToMake.nothing;
+import static com.didekindroid.usuario.userdata.ViewerUserDataIf.UserChangeToMake.userName;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.SEE_USERCOMU_BY_USER_AC;
 import static com.didekinlib.http.GenericExceptionMsg.BAD_REQUEST;
+import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
 import static org.awaitility.Awaitility.fieldIn;
-import static org.awaitility.Awaitility.to;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.containsString;
@@ -91,10 +99,11 @@ public class UserDataAcTest implements ExtendableTestAc {
             }
         }
     };
+    ControllerUserDataIf controller;
     int activityLayoutId = R.id.user_data_ac_layout;
 
     @BeforeClass
-    public  static void relax() throws InterruptedException
+    public static void relax() throws InterruptedException
     {
         TimeUnit.MILLISECONDS.sleep(2000);
     }
@@ -103,6 +112,7 @@ public class UserDataAcTest implements ExtendableTestAc {
     public void setUp() throws Exception
     {
         activity = (UserDataAc) mActivityRule.getActivity();
+        controller = new ControllerUserData(activity);
     }
 
     @After
@@ -125,7 +135,7 @@ public class UserDataAcTest implements ExtendableTestAc {
     }
 
     // ============================================================
-    //    ..... PRESENTER IMPLEMENTATION TESTS ....
+    //    ................ INTEGRATION TESTS ..............
     // ============================================================
 
     @Test
@@ -148,6 +158,63 @@ public class UserDataAcTest implements ExtendableTestAc {
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
         clickNavigateUp();
     }
+
+    @Test  // Integration test: wrong password.
+    public void testModifyUserData_A() throws InterruptedException
+    {
+        // Preconditions.
+        waitAtMost(1500, MILLISECONDS).until(fieldIn(activity).ofType(Usuario.class).andWithName("oldUser"), equalTo(registeredUser));
+        typeUserData("new_juan@juan.es", USER_JUAN.getAlias(), "wrong_password");
+        onView(withId(user_data_modif_button)).perform(scrollTo()).check(matches(isDisplayed())).perform(click());
+        waitAtMost(1, SECONDS).until(isToastInView(R.string.password_wrong, activity));
+    }
+
+    @Test  // Integration test: modify user OK.
+    public void testModifyUserData_B() throws UiException
+    {
+        // Preconditions.
+        waitAtMost(1500, MILLISECONDS).until(fieldIn(activity).ofType(Usuario.class).andWithName("oldUser"), equalTo(registeredUser));
+
+        typeUserData("new@username.com", "new_alias", USER_JUAN.getPassword());
+        onView(withId(user_data_modif_button)).perform(scrollTo())
+                .check(matches(isDisplayed())).perform(click());
+
+        waitAtMost(2, SECONDS).until(isViewOnView(getNextViewResourceId()));
+        // Verificamos navegación.
+        checkNavigateUp();
+    }
+
+    // ============================================================
+    //    ................. VIEWER TESTS ..................
+    // ============================================================
+
+    @Test
+    public void testProcessControllerError_1() throws InterruptedException
+    {
+        testProcessCtrlErrorOnlyToast(activity, BAD_REQUEST, R.string.password_wrong, activityLayoutId);
+    }
+
+    @Test
+    public void testProcessControllerError_2()
+    {
+        testProcessCtrlError(activity, GENERIC_INTERNAL_ERROR, GENERIC_APP_ACC);
+    }
+
+    @Test
+    public void testClearControllerSubscriptions()
+    {
+        testClearCtrlSubscriptions(controller, activity);
+    }
+
+    @Test
+    public void testReplaceView()
+    {
+        testReplaceViewStd(activity, getNextViewResourceId());
+    }
+
+    // ============================================================
+    //    ............. VIEWER USER DATA TESTS ...............
+    // ============================================================
 
     @Test
     public void testInitUserDataInView()
@@ -191,74 +258,40 @@ public class UserDataAcTest implements ExtendableTestAc {
         assertThat(activity.getDataChangedFromView()[2], is(USER_JUAN.getPassword()));
     }
 
-    // ============================================================
-    //    ..... CONTROLLER IMPLEMENTATION TESTS ....
-    // ============================================================
-
     @Test
-    public void testLoadUserData()
-    {
-        testProcessBackUserDataLoaded();
-    }
-
-    @Test
-    public void testProcessBackUserDataLoaded()
-    {
-        final AtomicBoolean isRun = new AtomicBoolean(false);
-
-        activity.oldUser = null;
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                activity.processBackUserDataLoaded(registeredUser);
-                assertThat(isRun.getAndSet(true), is(false));
-            }
-        });
-
-        waitAtMost(1500, MILLISECONDS).untilTrue(isRun);
-        assertThat(activity.oldUser, is(registeredUser));
-        checkInitialData(USER_JUAN.getUserName(), USER_JUAN.getAlias());
-        assertThat(activity.intentForMenu.getStringExtra(user_name.key), is(registeredUser.getUserName()));
-    }
-
-    @Test
-    public void testCheckLoginData_1()
+    public void testCheckUserData_1()
     {
         typeUserData("newuser@user.com", USER_JUAN.getAlias(), USER_JUAN.getPassword());
 
-        final AtomicBoolean isRun = new AtomicBoolean(false);
         activity.usuarioBean = null;
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run()
             {
                 assertThat(activity.checkUserData(), is(true));
-                assertThat(isRun.getAndSet(true), is(false));
             }
         });
-        waitAtMost(1, SECONDS).untilTrue(isRun);
+        waitAtMost(1, SECONDS).until(fieldIn(activity.usuarioBean).ofType(String.class).andWithName("userName"), is("newuser@user.com"));
         assertThat(activity.usuarioBean.getUserName(), is("newuser@user.com"));
         assertThat(activity.usuarioBean.getAlias(), is(USER_JUAN.getAlias()));
         assertThat(activity.usuarioBean.getPassword(), is(USER_JUAN.getPassword()));
     }
 
     @Test
-    public void testCheckLoginData_2()
+    public void testCheckUserData_2()
     {
         typeUserData("wrong_newuser.com", USER_JUAN.getAlias(), USER_JUAN.getPassword());
-        final AtomicBoolean isRun = new AtomicBoolean(false);
+
         activity.usuarioBean = null;
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run()
             {
                 assertThat(activity.checkUserData(), is(false));
-                assertThat(isRun.getAndSet(true), is(false));
             }
         });
-        waitAtMost(1, SECONDS).untilTrue(isRun);
-        assertThat(activity.usuarioBean, notNullValue());
+
+        waitAtMost(1, SECONDS).until(fieldIn(activity).ofType(UsuarioBean.class), notNullValue());
         checkToastInTest(R.string.email_hint, activity);
     }
 
@@ -309,87 +342,35 @@ public class UserDataAcTest implements ExtendableTestAc {
     }
 
     @Test
-    public void testModifyUserData_1() throws InterruptedException
+    public void testModifyUserData() throws InterruptedException
     {
         // Preconditions.
         waitAtMost(1500, MILLISECONDS).until(fieldIn(activity).ofType(Usuario.class).andWithName("oldUser"), equalTo(registeredUser));
         // No modificamos ningún dato.
         onView(withId(user_data_ac_password_ediT)).perform(typeText(USER_JUAN.getPassword()), closeSoftKeyboard());
 
-        final AtomicBoolean isRun = new AtomicBoolean(false);
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run()
             {
                 assertThat(activity.checkUserData(), is(true));
                 activity.modifyUserData(activity.whatDataChangeToMake());
-                assertThat(isRun.getAndSet(true), is(false));
             }
         });
-        waitAtMost(1, SECONDS).untilTrue(isRun);
-        checkToastInTest(R.string.no_user_data_to_be_modified, activity);
-    }
-
-    @Test  // Integration test: modify user OK.
-    public void testModifyUserData_2() throws UiException
-    {
-        // Preconditions.
-        waitAtMost(1500, MILLISECONDS).until(fieldIn(activity).ofType(Usuario.class).andWithName("oldUser"), equalTo(registeredUser));
-        String refreshToken1 = activity.identityCacher.getRefreshTokenValue();
-
-        typeUserData("new@username.com", "new_alias", USER_JUAN.getPassword());
-
-        onView(withId(user_data_modif_button)).perform(scrollTo())
-                .check(matches(isDisplayed())).perform(click());
-
-        waitAtMost(2, SECONDS).untilCall(to(activity.identityCacher).getRefreshTokenValue(), not(equalTo(refreshToken1)));
-        onView(withId(getNextViewResourceId())).check(matches(isDisplayed()));
-        // Verificamos navegación.
-        checkNavigateUp();
+        await().atMost(2, SECONDS).until(isToastInView(R.string.no_user_data_to_be_modified, activity));
     }
 
     @Test
-    public void testProcessBackUserModified()
-    {
-        final AtomicBoolean isRun = new AtomicBoolean(false);
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                activity.processBackUserModified();
-                assertThat(isRun.getAndSet(true), is(false));
-            }
-        });
-        waitAtMost(1, SECONDS).untilTrue(isRun);
-        onView(withId(getNextViewResourceId())).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void testProcessBackErrorInReactor()
-    {
-        final AtomicBoolean isRun = new AtomicBoolean(false);
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                activity.processBackErrorInReactor(new UiException(new ErrorBean(BAD_REQUEST)));
-                assertThat(isRun.getAndSet(true), is(false));
-            }
-        });
-        await().atMost(1, SECONDS).untilTrue(isRun);
-        checkToastInTest(R.string.password_wrong, activity);
-    }
-
-    @Test  // Integration test: wrong password.
-    public void testModifyUserData_A() throws InterruptedException
+    public void processBackUsuarioInView()
     {
         // Preconditions.
-        waitAtMost(1500, MILLISECONDS).until(fieldIn(activity).ofType(Usuario.class).andWithName("oldUser"), equalTo(registeredUser));
-        typeUserData("new_juan@juan.es", USER_JUAN.getAlias(), "wrong_password");
-        onView(withId(user_data_modif_button)).perform(scrollTo()).check(matches(isDisplayed())).perform(click());
-        TimeUnit.MILLISECONDS.sleep(1000);
-        checkToastInTest(R.string.password_wrong, activity);
-        TimeUnit.MILLISECONDS.sleep(1000);
+        assertThat(activity.oldUser, not(is(USER_DROID)));
+        // Execute.
+        activity.processBackUsuarioInView(USER_DROID);
+        // Check.
+        assertThat(activity.oldUser, is(USER_DROID));
+        checkInitialData(USER_DROID.getUserName(), USER_DROID.getAlias());
+        assertThat(activity.intentForMenu.getStringExtra(user_name.key), is(activity.oldUser.getUserName()));
     }
 
     //    =================================  MENU TESTS ==================================

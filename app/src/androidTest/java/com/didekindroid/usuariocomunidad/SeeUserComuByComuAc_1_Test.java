@@ -61,7 +61,7 @@ public class SeeUserComuByComuAc_1_Test {
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
     {
-        Thread.sleep(4000);
+        Thread.sleep(3000);
     }
 
     @Before
@@ -130,21 +130,21 @@ public class SeeUserComuByComuAc_1_Test {
     }
 
     @Test
-    public void testUserComuByUserMn_withToken() throws InterruptedException    // TODO.
+    public void testUserComuByUserMn() throws InterruptedException
     {
         SEE_USERCOMU_BY_USER_AC.checkMenuItem_WTk(mActivity);
         checkUp(fragmentLayoutId);
     }
 
     @Test
-    public void testUserDataMn_withToken() throws InterruptedException
+    public void testUserDataMn() throws InterruptedException
     {
         UserItemMenuTestUtils.USER_DATA_AC.checkMenuItem_WTk(mActivity);
         checkUp(fragmentLayoutId);
     }
 
     @Test
-    public void testComuSearchMn_withToken() throws InterruptedException
+    public void testComuSearchMn() throws InterruptedException
     {
         COMU_SEARCH_AC.checkMenuItem_WTk(mActivity);
         // En este caso no hay opción de 'navigate-up'.

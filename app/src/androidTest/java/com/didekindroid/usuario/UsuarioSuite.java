@@ -1,15 +1,20 @@
 package com.didekindroid.usuario;
 
 import com.didekindroid.usuario.dao.UsuarioDaoRemoteTest;
+import com.didekindroid.usuario.delete.ControllerDeleteMeTest;
 import com.didekindroid.usuario.delete.DeleteMeAcTest;
-import com.didekindroid.usuario.delete.DeleteMeReactorTest;
+import com.didekindroid.usuario.delete.ReactorDeleteMeTest;
 import com.didekindroid.usuario.firebase.FirebaseTokenReactorTest;
+import com.didekindroid.usuario.login.ControllerLoginTest;
 import com.didekindroid.usuario.login.LoginAc_1_Test;
-import com.didekindroid.usuario.login.LoginReactorTest;
-import com.didekindroid.usuario.password.PasswordChangeAcTest;
-import com.didekindroid.usuario.password.PswdChangeReactorTest;
+import com.didekindroid.usuario.login.ReactorLoginTest;
+import com.didekindroid.usuario.password.ControllerPasswordChangeTest;
+import com.didekindroid.usuario.password.PasswordChangeAc_Integration_Test;
+import com.didekindroid.usuario.password.PasswordChangeAc_Unit_Test;
+import com.didekindroid.usuario.password.ReactorPswdChangeTest;
+import com.didekindroid.usuario.userdata.ControllerUserDataTest;
 import com.didekindroid.usuario.userdata.UserDataAcTest;
-import com.didekindroid.usuario.userdata.UserDataReactorTest;
+import com.didekindroid.usuario.userdata.ReactorUserDataTest;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -22,19 +27,24 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
 
+        ControllerDeleteMeTest.class,
+        ControllerLoginTest.class,
+        ControllerPasswordChangeTest.class,
+        ControllerUserDataTest.class,
         DeleteMeAcTest.class,
 //        LoginAcTest.class,
         LoginAc_1_Test.class,
-        PasswordChangeAcTest.class,
+        PasswordChangeAc_Integration_Test.class,
+        PasswordChangeAc_Unit_Test.class,
         UserDataAcTest.class,
         UsuarioBeanValidaTests.class,
         UsuarioDaoRemoteTest.class,
         // Reactors.
-        DeleteMeReactorTest.class,
         FirebaseTokenReactorTest.class,
-        LoginReactorTest.class,
-        PswdChangeReactorTest.class,
-        UserDataReactorTest.class,
+        ReactorDeleteMeTest.class,
+        ReactorLoginTest.class,
+        ReactorPswdChangeTest.class,
+        ReactorUserDataTest.class,
 })
 public class UsuarioSuite {
 }

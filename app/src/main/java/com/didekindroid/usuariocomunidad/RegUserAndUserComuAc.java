@@ -79,7 +79,9 @@ public class RegUserAndUserComuAc extends AppCompatActivity {
         identityCacher = TKhandler;
 
         // Preconditions.
-        assertTrue(!identityCacher.isRegisteredUser(), user_should_not_be_registered);
+        if (savedInstanceState == null) { // To allow for navigate-up.
+            assertTrue(!identityCacher.isRegisteredUser(), user_should_not_be_registered);
+        }
         Comunidad comunidad = (Comunidad) getIntent().getExtras().getSerializable(COMUNIDAD_LIST_OBJECT.key);
         mComunidad = comunidad != null ? comunidad : null;
 

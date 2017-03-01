@@ -3,8 +3,10 @@ package com.didekindroid.util;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -36,6 +38,7 @@ import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.util.CommonAssertionMsg.subscriptions_should_be_zero;
+import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
 import static com.didekinlib.http.GenericExceptionMsg.TOKEN_NULL;
 import static com.didekinlib.model.common.dominio.ValidDataPatterns.LINE_BREAK;
 import static java.text.DateFormat.MEDIUM;
@@ -77,30 +80,19 @@ public final class UIutils {
         return false;
     }
 
-    public static void closeCursor(Adapter adapter)
+    public ActivityManager getActivityManager(Context context)
     {
-        CursorAdapter cursorAdapter;
-        Cursor cursor;
-        if (adapter != null) {
-            try {
-                cursorAdapter = (CursorAdapter) adapter;
-                cursor = cursorAdapter.getCursor();
-                if (cursor != null) {
-                    cursor.close();
-                    assertTrue(cursor.isClosed(), CommonAssertionMsg.cursor_should_be_closed);
-                }
-            } catch (ClassCastException e) {
-                throw new IllegalStateException("Illegal NON cursorAdapter", e);
-            }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return context.getSystemService(ActivityManager.class);
         }
+        return (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
     }
 
-    public static void destroySubscriptions(CompositeDisposable subscriptions)
+    public static void finishActivity(Activity activity, Intent intent)
     {
-        if (subscriptions != null) {
-            subscriptions.clear();
+        if (!activity.getClass().getCanonicalName().equals(intent.getComponent().getClassName())) {
+            activity.finish();
         }
-        assertTrue((subscriptions != null ? subscriptions.size() : 0) == 0, subscriptions_should_be_zero);
     }
 
 //    ================================== ASSERTIONS ======================================
@@ -130,7 +122,40 @@ public final class UIutils {
         return bearerAccessTkHeader;
     }
 
+//    ================================== CONTROLLERS ======================================
 
+    public static int destroySubscriptions(CompositeDisposable... subscriptions)
+    {
+        int counter = subscriptions.length;
+        for (CompositeDisposable composite : subscriptions){
+            if (composite != null) {
+                composite.clear();
+                --counter;
+            }
+        }
+        assertTrue(counter == 0, subscriptions_should_be_zero);
+        return counter;
+    }
+
+//    ================================== CURSORS ======================================
+
+    public static void closeCursor(Adapter adapter)
+    {
+        CursorAdapter cursorAdapter;
+        Cursor cursor;
+        if (adapter != null) {
+            try {
+                cursorAdapter = (CursorAdapter) adapter;
+                cursor = cursorAdapter.getCursor();
+                if (cursor != null) {
+                    cursor.close();
+                    assertTrue(cursor.isClosed(), CommonAssertionMsg.cursor_should_be_closed);
+                }
+            } catch (ClassCastException e) {
+                throw new IllegalStateException("Illegal NON cursorAdapter", e);
+            }
+        }
+    }
 
 //    ================================ DATA FORMATS ==========================================
 
@@ -179,6 +204,20 @@ public final class UIutils {
     {
         return new StringBuilder(context.getResources().getText(R.string.error_validation_msg))
                 .append(LINE_BREAK.getRegexp());
+    }
+
+    //    ================================== EXCEPTIONS ===================================
+
+    @NonNull
+    public static UiException getUiExceptionFromThrowable(Throwable e)
+    {
+        UiException ui;
+        if (e instanceof UiException) {
+            ui = (UiException) e;
+        } else {
+            ui = new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
+        }
+        return ui;
     }
 
     //    ================================== TOASTS ======================================
@@ -233,18 +272,11 @@ public final class UIutils {
         doToolBar(activity, APPBAR_ID, hasParentAc);
     }
 
+
 /*
     When inflating anything to be displayed on the action bar (such as a SpinnerAdapter for
     list navigation in the toolbar), make sure you use the action bar’s themed context, retrieved
     via getSupportActionBar().getThemedContext().
     You must use the static methods in MenuItemCompat for any action-related calls on a MenuItem.
 */
-
-    public ActivityManager getActivityManager(Context context)
-    {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            return context.getSystemService(ActivityManager.class);
-        }
-        return (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-    }
 }

@@ -7,9 +7,16 @@ import android.support.test.espresso.NoMatchingViewException;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.contrib.PickerActions;
 import android.support.test.espresso.matcher.ViewMatchers;
+import android.view.View;
 import android.widget.DatePicker;
 
+import com.didekindroid.ManagerIf.ControllerIf;
+import com.didekindroid.ManagerIf.ViewerIf;
 import com.didekindroid.R;
+import com.didekindroid.exception.UiException;
+import com.didekindroid.exception.UiExceptionIf.ActionForUiExceptionIf;
+import com.didekinlib.http.ErrorBean;
+import com.didekinlib.model.exception.ExceptionMsgIf;
 
 import org.hamcrest.CoreMatchers;
 
@@ -17,6 +24,9 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.concurrent.Callable;
+import java.util.concurrent.atomic.AtomicReference;
+
+import io.reactivex.disposables.Disposable;
 
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.KITKAT;
@@ -32,10 +42,16 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOUND;
 import static java.util.Calendar.DAY_OF_MONTH;
 import static java.util.Calendar.MONTH;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.awaitility.Awaitility.await;
+import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertThat;
 
 /**
  * User: pedro@didekin
@@ -49,7 +65,7 @@ public final class ActivityTestUtils {
     {
     }
 
-    //    ============================= AWAITILITY ===================================
+    //    ============================= ACTIVITY ===================================
 
     public static Callable<Boolean> isActivityDying(final Activity activity)
     {
@@ -61,17 +77,49 @@ public final class ActivityTestUtils {
         };
     }
 
-    public static Callable<Boolean> isToastInView(final int resourceStringId,final Activity activity)
+    public static Callable<Boolean> isViewOnView(final int resourceStringId)
     {
         return new Callable<Boolean>() {
             public Boolean call() throws Exception
             {
                 try {
-                    checkToastInTest(resourceStringId, activity);
+                    onView(withId(resourceStringId)).check(matches(isDisplayed()));
                     return true;
-                } catch (NoMatchingViewException ne){
+                } catch (NoMatchingViewException ne) {
                     return false;
                 }
+            }
+        };
+    }
+
+    //    ============================= CONTROLLER ===================================
+
+    public static void testClearCtrlSubscriptions(ControllerIf controller, ViewerIf viewer)
+    {
+        addSubscription(controller);
+        viewer.clearControllerSubscriptions();
+        await().atMost(1, SECONDS).until(subscriptionsSize(controller), is(0));
+    }
+
+    public static void addSubscription(ControllerIf controller)
+    {
+        controller.getSubscriptions().add(new Disposable() {
+            @Override
+            public void dispose()
+            {}
+            @Override
+            public boolean isDisposed()
+            { return false; }
+        });
+        assertThat(controller.getSubscriptions().size(), is(1));
+    }
+
+    static Callable<Integer> subscriptionsSize(final ControllerIf controller){
+        return  new Callable<Integer>() {
+            @Override
+            public Integer call() throws Exception
+            {
+                return controller.getSubscriptions().size();
             }
         };
     }
@@ -112,6 +160,45 @@ public final class ActivityTestUtils {
         }
     }
 
+    //    ============================= EXCEPTIONS ===================================
+
+    public static ActionForUiExceptionIf testProcessCtrlError(final ViewerIf viewer, final ExceptionMsgIf exceptionMsg, ActionForUiExceptionIf actionToExpect)
+    {
+        final Activity activityError = viewer.getActivity();
+        final AtomicReference<ActionForUiExceptionIf> actionException = new AtomicReference<>(null);
+
+        activityError.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                assertThat(actionException.compareAndSet(
+                        null,
+                        viewer.processControllerError(new UiException(new ErrorBean(exceptionMsg)))
+                        ),
+                        is(true)
+                );
+            }
+        });
+        waitAtMost(2, SECONDS).untilAtomic(actionException, is(actionToExpect));
+        return actionException.get();
+    }
+
+    public static void testProcessCtrlErrorOnlyToast(final ViewerIf viewer,
+                                                     ExceptionMsgIf exceptionMsg, int resourceIdToast,
+                                                     int activityLayoutId)
+    {
+        final Activity activityError = (Activity) viewer;
+        activityError.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                viewer.processControllerError(new UiException(new ErrorBean(USER_NAME_NOT_FOUND)));
+            }
+        });
+        waitAtMost(2, SECONDS).until(isToastInView(R.string.username_wrong_in_login, activityError));
+        onView(withId(activityLayoutId)).check(matches(isDisplayed()));
+    }
+
     //    ============================= NAVIGATION ===================================
 
     public static void clickNavigateUp()
@@ -136,6 +223,19 @@ public final class ActivityTestUtils {
         for (Integer layout : activityLayoutIds) {
             onView(withId(layout)).check(matches(isDisplayed()));
         }
+    }
+
+    public static void testReplaceViewStd(final ViewerIf<View,Object> viewer, int resorceIdNextView)
+    {
+        Activity activityOld = (Activity) viewer;
+        activityOld.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                viewer.replaceView(null);
+            }
+        });
+        waitAtMost(1, SECONDS).until(isViewOnView(resorceIdNextView));
     }
 
     //    ============================ TOASTS ============================
@@ -164,5 +264,36 @@ public final class ActivityTestUtils {
                 withText(containsString(resources.getText(resourceStringId).toString())))
                 .inRoot(withDecorView(not(activity.getWindow().getDecorView())))
                 .check(doesNotExist());
+    }
+
+    public static Callable<Boolean> isToastInView(final int resourceStringId, final Activity activity, final int... resorceErrorId)
+    {
+        return new Callable<Boolean>() {
+            public Boolean call() throws Exception
+            {
+                try {
+                    checkToastInTest(resourceStringId, activity, resorceErrorId);
+                    return true;
+                } catch (NoMatchingViewException ne) {
+                    return false;
+                }
+            }
+        };
+    }
+
+    public static Callable<Boolean> isNotToastInView(final int resourceStringId, final Activity activity)
+    {
+        return new Callable<Boolean>() {
+            @Override
+            public Boolean call() throws Exception
+            {
+                try {
+                    checkNoToastInTest(resourceStringId, activity);
+                    return true;
+                } catch (NoMatchingViewException ne) {
+                    return false;
+                }
+            }
+        };
     }
 }

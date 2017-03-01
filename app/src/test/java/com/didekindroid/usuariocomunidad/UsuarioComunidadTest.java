@@ -1,16 +1,17 @@
 package com.didekindroid.usuariocomunidad;
 
-import com.didekin.comunidad.Comunidad;
-import com.didekin.comunidad.Municipio;
-import com.didekin.comunidad.Provincia;
-import com.didekin.usuario.Usuario;
-import com.didekin.usuariocomunidad.Rol;
-import com.didekin.usuariocomunidad.UsuarioComunidad;
+import com.didekinlib.model.comunidad.Comunidad;
+import com.didekinlib.model.comunidad.Municipio;
+import com.didekinlib.model.comunidad.Provincia;
+import com.didekinlib.model.usuario.Usuario;
+import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.junit.Test;
 
-import static com.didekin.usuariocomunidad.Rol.ADMINISTRADOR;
-import static com.didekin.usuariocomunidad.Rol.PROPIETARIO;
+import static com.didekinlib.model.usuariocomunidad.Rol.ADMINISTRADOR;
+import static com.didekinlib.model.usuariocomunidad.Rol.INQUILINO;
+import static com.didekinlib.model.usuariocomunidad.Rol.PRESIDENTE;
+import static com.didekinlib.model.usuariocomunidad.Rol.PROPIETARIO;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -79,33 +80,33 @@ public class UsuarioComunidadTest {
 
         UsuarioComunidad usuarioComunidad_1 = new UsuarioComunidad.UserComuBuilder(comunidad, usuario)
                 .portal("portalA")
-                .roles(Rol.INQUILINO.function)
+                .roles(INQUILINO.function)
                 .build();
         assertThat(usuarioComunidad_1.hasAdministradorAuthority(), is(false));
 
         usuarioComunidad_1 = new UsuarioComunidad.UserComuBuilder(comunidad, usuario)
                 .portal("portal B")
-                .roles(Rol.INQUILINO.function.concat(",").concat(Rol.ADMINISTRADOR.function))
+                .roles(INQUILINO.function.concat(",").concat(ADMINISTRADOR.function))
                 .build();
         assertThat(usuarioComunidad_1.hasAdministradorAuthority(), is(true));
 
         usuarioComunidad_1 = new UsuarioComunidad.UserComuBuilder(comunidad, usuario)
                 .portal("portal B")
-                .roles(Rol.PROPIETARIO.function)
+                .roles(PROPIETARIO.function)
                 .build();
         assertThat(usuarioComunidad_1.hasAdministradorAuthority(), is(false));
 
         usuarioComunidad_1 = new UsuarioComunidad.UserComuBuilder(comunidad, usuario)
                 .portal("portal B")
-                .roles(Rol.INQUILINO.function.concat(",").concat(Rol.PROPIETARIO.function))
+                .roles(INQUILINO.function.concat(",").concat(PROPIETARIO.function))
                 .build();
         assertThat(usuarioComunidad_1.hasAdministradorAuthority(), is(false));
 
         usuarioComunidad_1 = new UsuarioComunidad.UserComuBuilder(comunidad, usuario)
                 .portal("portal B")
-                .roles(Rol.INQUILINO.function.concat(",")
-                        .concat(Rol.PRESIDENTE.function).concat(",")
-                        .concat(Rol.ADMINISTRADOR.function))
+                .roles(INQUILINO.function.concat(",")
+                        .concat(PRESIDENTE.function).concat(",")
+                        .concat(ADMINISTRADOR.function))
                 .build();
         assertThat(usuarioComunidad_1.hasAdministradorAuthority(), is(true));
     }

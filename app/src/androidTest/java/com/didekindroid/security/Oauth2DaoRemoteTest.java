@@ -21,15 +21,13 @@ import retrofit2.Response;
 import static com.didekindroid.AppInitializer.creator;
 import static com.didekindroid.security.Oauth2DaoRemote.Oauth2;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.testutil.SecurityTestUtils.updateSecurityData;
-import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
+import static com.didekindroid.security.SecurityTestUtils.updateSecurityData;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_DROID;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_NOTHING;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_DROID;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanWithTkhandler;
 import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_DROID;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
@@ -111,36 +109,6 @@ public class Oauth2DaoRemoteTest {
         assertThat(token, notNullValue());
         assertThat(token.getValue(), notNullValue());
         assertThat(token.getRefreshToken().getValue(), notNullValue());
-    }
-
-    @Test
-    public void testGetPasswordUserToken_3() throws Exception
-    {
-        //Inserta userComu, comunidad, usuariocomunidad.
-        boolean isRegistered = userComuDaoRemote.regComuAndUserAndUserComu(UserComuDataTestUtil.COMU_REAL_DROID).execute().body();
-        assertThat(isRegistered, is(true));
-        updateSecurityData(UsuarioDataTestUtils.USER_DROID.getUserName(), UsuarioDataTestUtils.USER_DROID.getPassword());
-        // Envía correo.
-        boolean isPasswordSend = usuarioDao.sendPassword(UsuarioDataTestUtils.USER_DROID.getUserName());
-        assertThat(isPasswordSend, is(true));
-
-        // Old pair userName/password is invalid: passwordSend implies new password in BD.
-        try {
-            Oauth2.getPasswordUserToken(UsuarioDataTestUtils.USER_DROID.getUserName(), UsuarioDataTestUtils.USER_DROID.getPassword());
-            fail();
-        } catch (UiException e) {
-            assertThat(e.getErrorBean().getMessage(), is(BAD_REQUEST.getHttpMessage()));
-        }
-
-        // Es necesario conseguir un nuevo token.
-        SpringOauthToken token = Oauth2.getRefreshUserToken(TKhandler.getRefreshTokenValue());
-        assertThat(token, notNullValue());
-        assertThat(token.getValue(), notNullValue());
-        assertThat(token.getRefreshToken().getValue(), notNullValue());
-
-        TKhandler.initIdentityCache(token);
-        usuarioDao.deleteUser();
-        cleanWithTkhandler();
     }
 
     @SuppressWarnings("ConstantConditions")

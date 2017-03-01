@@ -11,7 +11,7 @@ import timber.log.Timber;
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static com.didekindroid.AppInitializer.creator;
-import static com.didekindroid.exception.UiActionExceptionUtil.finishActivity;
+import static com.didekindroid.util.UIutils.finishActivity;
 import static com.didekindroid.util.UIutils.makeToast;
 
 /**
@@ -29,7 +29,7 @@ public class UiException extends Exception implements UiExceptionIf {
     }
 
     @Override
-    public void processMe(Activity activity, Intent intent)
+    public ActionForUiExceptionIf processMe(Activity activity, Intent intent)
     {
         Timber.d("processMe(): %s%n", errorBean.getMessage());
 
@@ -53,6 +53,7 @@ public class UiException extends Exception implements UiExceptionIf {
                 finishActivity(activity, intent);
             }
         }
+        return action;
     }
 
     @Override

@@ -75,6 +75,7 @@ public final class AppInitializer {
             StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
                     .detectLeakedSqlLiteObjects()
                     .detectLeakedClosableObjects()
+                    .detectLeakedRegistrationObjects()
                     .penaltyLog()
                     .build());
 

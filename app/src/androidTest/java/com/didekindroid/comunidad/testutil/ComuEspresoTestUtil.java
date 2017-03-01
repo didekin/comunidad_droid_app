@@ -69,11 +69,6 @@ public final class ComuEspresoTestUtil {
         onView(withId(R.id.municipio_spinner)).perform(click());
         Thread.sleep(1000);
         onData(withRowString(3, municipio)).perform(click());
-
-        if (SDK_INT >= M) {
-            onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.municipio_spinner))))
-                    .check(matches(withText(containsString(municipio))));
-        }
     }
 
     public static void validaTypedComunidadBean(final ComunidadBean comunidadBean, String tipoVia, short municipioProvId,

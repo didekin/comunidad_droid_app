@@ -64,7 +64,7 @@ public class ComuSearchAc_1_Test {
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
     {
-        Thread.sleep(4000);
+        Thread.sleep(3000);
     }
 
     @Before

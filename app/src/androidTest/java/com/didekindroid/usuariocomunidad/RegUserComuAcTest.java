@@ -61,7 +61,7 @@ public class RegUserComuAcTest {
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
     {
-        Thread.sleep(5000);
+        Thread.sleep(3000);
     }
 
     @Before

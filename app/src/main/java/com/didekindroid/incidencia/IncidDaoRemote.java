@@ -1,0 +1,282 @@
+package com.didekindroid.incidencia;
+
+import com.didekindroid.exception.UiException;
+import com.didekinlib.http.ErrorBean;
+import com.didekinlib.http.retrofit.IncidenciaServEndPoints;
+import com.didekinlib.model.comunidad.Comunidad;
+import com.didekinlib.model.incidencia.dominio.ImportanciaUser;
+import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
+import com.didekinlib.model.incidencia.dominio.IncidComment;
+import com.didekinlib.model.incidencia.dominio.IncidImportancia;
+import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
+import com.didekinlib.model.incidencia.dominio.Resolucion;
+
+import java.io.EOFException;
+import java.io.IOException;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Response;
+import timber.log.Timber;
+
+import static com.didekindroid.AppInitializer.creator;
+import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
+import static com.didekindroid.util.DaoUtil.getResponseBody;
+import static com.didekindroid.util.UIutils.checkBearerTokenInCache;
+import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
+
+/**
+ * User: pedro@didekin
+ * Date: 18/11/15
+ * Time: 13:11
+ */
+public final class IncidDaoRemote implements IncidenciaServEndPoints {
+
+    public static final IncidDaoRemote incidenciaDao = new IncidDaoRemote();
+    private final IncidenciaServEndPoints endPoint;
+
+    private IncidDaoRemote()
+    {
+        endPoint = creator.get().getRetrofitHandler().getService(IncidenciaServEndPoints.class);
+    }
+
+    /*  ================================== IncidenciaServEndPoints implementation ============================*/
+
+    @Override
+    public Call<Integer> closeIncidencia(String accessToken, Resolucion resolucion)
+    {
+        return endPoint.closeIncidencia(accessToken, resolucion);
+    }
+
+    @Override
+    public Call<Integer> deleteIncidencia(String accessToken, long incidenciaId)
+    {
+        return endPoint.deleteIncidencia(accessToken, incidenciaId);
+    }
+
+    @Override
+    public Call<Integer> modifyIncidImportancia(String accessToken, IncidImportancia incidImportancia)
+    {
+        return endPoint.modifyIncidImportancia(accessToken, incidImportancia);
+    }
+
+    @Override
+    public Call<Integer> modifyResolucion(String accessToken, Resolucion resolucion)
+    {
+        return endPoint.modifyResolucion(accessToken, resolucion);
+    }
+
+    @Override
+    public Call<Integer> regIncidComment(String accessToken, IncidComment comment)
+    {
+        return endPoint.regIncidComment(accessToken, comment);
+    }
+
+    @Override
+    public Call<Integer> regIncidImportancia(String accessToken, IncidImportancia incidImportancia)
+    {
+        return endPoint.regIncidImportancia(accessToken, incidImportancia);
+    }
+
+    @Override
+    public Call<Integer> regResolucion(String accessToken, Resolucion resolucion)
+    {
+        return endPoint.regResolucion(accessToken, resolucion);
+    }
+
+    @Override
+    public Call<List<IncidComment>> seeCommentsByIncid(String accessToken, long incidenciaId)
+    {
+        return endPoint.seeCommentsByIncid(accessToken, incidenciaId);
+    }
+
+    @Override
+    public Call<IncidAndResolBundle> seeIncidImportancia(String accessToken, long incidenciaId)
+    {
+        return endPoint.seeIncidImportancia(accessToken, incidenciaId);
+    }
+
+    @Override
+    public Call<List<IncidenciaUser>> seeIncidsOpenByComu(String accessToken, long comunidadId)
+    {
+        return endPoint.seeIncidsOpenByComu(accessToken, comunidadId);
+    }
+
+    @Override
+    public Call<List<IncidenciaUser>> seeIncidsClosedByComu(String accessToken, long comunidadId)
+    {
+        return endPoint.seeIncidsClosedByComu(accessToken, comunidadId);
+    }
+
+    @Override
+    public Call<Resolucion> seeResolucion(String accessToken, long resolucionId)
+    {
+        return endPoint.seeResolucion(accessToken, resolucionId);
+    }
+
+    @Override
+    public Call<List<ImportanciaUser>> seeUserComusImportancia(String accessToken, long incidenciaId)
+    {
+        return endPoint.seeUserComusImportancia(accessToken, incidenciaId);
+    }
+
+//  =============================================================================
+//                          CONVENIENCE METHODS
+//  =============================================================================
+
+    public int closeIncidencia(Resolucion resolucion) throws UiException
+    {
+        Timber.d("closeIncidencia()");
+        try {
+            Response<Integer> response = closeIncidencia(checkBearerTokenInCache(), resolucion).execute();
+            return getResponseBody(response);
+        } catch (IOException e) {
+            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
+        }
+    }
+
+    public int deleteIncidencia(long incidenciaId) throws UiException
+    {
+        Timber.d("deleteIncidencia()");
+        try {
+            Response<Integer> response = deleteIncidencia(checkBearerTokenInCache(), incidenciaId).execute();
+            return getResponseBody(response);
+        } catch (IOException e) {
+            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
+        }
+    }
+
+    /**
+     * This method encapsulates the call to the UsuarioDaoRemote.userComuDaoRemote method.
+     */
+    public List<Comunidad> getComusByUser() throws UiException
+    {
+        Timber.d("getComusByUser()");
+        return userComuDaoRemote.getComusByUser();
+    }
+
+    public int modifyIncidImportancia(IncidImportancia incidImportancia) throws UiException
+    {
+        Timber.d("modifyUser()");
+        try {
+            Response<Integer> response = modifyIncidImportancia(checkBearerTokenInCache(), incidImportancia).execute();
+            return getResponseBody(response);
+        } catch (IOException e) {
+            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
+        }
+    }
+
+    public int modifyResolucion(Resolucion resolucion) throws UiException
+    {
+        Timber.d("modifyResolucion()");
+        try {
+            Response<Integer> response = modifyResolucion(checkBearerTokenInCache(), resolucion).execute();
+            return getResponseBody(response);
+        } catch (IOException e) {
+            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
+        }
+    }
+
+    public int regIncidComment(IncidComment comment) throws UiException
+    {
+        Timber.d("regIncidComment()");
+        try {
+            Response<Integer> response = endPoint.regIncidComment(checkBearerTokenInCache(), comment).execute();
+            return getResponseBody(response);
+        } catch (IOException e) {
+            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
+        }
+    }
+
+    public int regIncidImportancia(IncidImportancia incidImportancia) throws UiException
+    {
+        Timber.d("regIncidImportancia()");
+        try {
+            Response<Integer> response = regIncidImportancia(checkBearerTokenInCache(), incidImportancia).execute();
+            return getResponseBody(response);
+        } catch (IOException e) {
+            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
+        }
+    }
+
+    public int regResolucion(Resolucion resolucion) throws UiException
+    {
+        Timber.d("regResolucion()");
+        try {
+            Response<Integer> response = regResolucion(checkBearerTokenInCache(), resolucion).execute();
+            return getResponseBody(response);
+        } catch (IOException e) {
+            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
+        }
+    }
+
+    public List<IncidComment> seeCommentsByIncid(long incidenciaId) throws UiException
+    {
+        Timber.d("seeCommentsByIncid()");
+        try {
+            Response<List<IncidComment>> response = seeCommentsByIncid(checkBearerTokenInCache(), incidenciaId).execute();
+            return getResponseBody(response);
+        } catch (IOException e) {
+            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
+        }
+    }
+
+    public IncidAndResolBundle seeIncidImportancia(long incidenciaId) throws UiException
+    {
+        Timber.d("seeIncidImportancia()");
+        try {
+            Response<IncidAndResolBundle> response = seeIncidImportancia(checkBearerTokenInCache(), incidenciaId).execute();
+            return getResponseBody(response);
+        } catch (EOFException eo) {
+            return null;
+        } catch (IOException e) {
+            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
+        }
+    }
+
+    public List<IncidenciaUser> seeIncidsOpenByComu(long comunidadId) throws UiException
+    {
+        Timber.d("seeIncidsOpenByComu()");
+        try {
+            Response<List<IncidenciaUser>> response = seeIncidsOpenByComu(checkBearerTokenInCache(), comunidadId).execute();
+            return getResponseBody(response);
+        } catch (IOException e) {
+            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
+        }
+    }
+
+    public List<IncidenciaUser> seeIncidsClosedByComu(long comunidadId) throws UiException
+    {
+        Timber.d("seeIncidsClosedByComu()");
+        try {
+            Response<List<IncidenciaUser>> response = seeIncidsClosedByComu(checkBearerTokenInCache(), comunidadId).execute();
+            return getResponseBody(response);
+        } catch (IOException e) {
+            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
+        }
+    }
+
+    public Resolucion seeResolucion(long resolucionId) throws UiException
+    {
+        Timber.d("seeResolucion()");
+        try {
+            Response<Resolucion> response = seeResolucion(checkBearerTokenInCache(), resolucionId).execute();
+            return getResponseBody(response);
+        } catch (EOFException eo) {
+            return null;
+        } catch (IOException e) {
+            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
+        }
+    }
+
+    public List<ImportanciaUser> seeUserComusImportancia(long incidenciaId) throws UiException
+    {
+        Timber.d("seeUserComusImportancia()");
+        try {
+            Response<List<ImportanciaUser>> response = seeUserComusImportancia(checkBearerTokenInCache(), incidenciaId).execute();
+            return getResponseBody(response);
+        } catch (IOException e) {
+            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
+        }
+    }
+}

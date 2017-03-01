@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/baseLayout"
     android:fitsSystemWindows="true"
-    tools:context=".incidencia.activity.IncidSeeClosedByComuAc"
+    tools:context=".incidencia.list.IncidSeeClosedByComuAc"
     android:id="@+id/incid_see_closed_by_comu_ac">
 
     <include layout="@layout/appbar_include_design"/>

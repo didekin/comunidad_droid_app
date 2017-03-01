@@ -1,7 +1,6 @@
 package com.didekindroid.usuariocomunidad;
 
 import android.content.res.Resources;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
@@ -14,6 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -37,7 +37,7 @@ public class UsuarioComunidadBeanValidaTests {
     @Before
     public void doBefore()
     {
-        resources = InstrumentationRegistry.getTargetContext().getResources();
+        resources = getTargetContext().getResources();
         errors = new StringBuilder(resources.getText(R.string.error_validation_msg));
         comunidad = new ComunidadBean("ataxo", "24 de Otoño", "001", "bis", new Municipio
                 ((short) 5, "Municipio2", new Provincia((short) 35, "Las Palmas"))

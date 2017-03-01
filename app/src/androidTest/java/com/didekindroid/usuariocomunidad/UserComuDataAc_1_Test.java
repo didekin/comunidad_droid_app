@@ -11,7 +11,6 @@ import com.didekindroid.R;
 import com.didekindroid.comunidad.ComuBundleKey;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
-import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.junit.After;
@@ -44,6 +43,8 @@ import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEn
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.makeListTwoUserComu;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.regTwoUserComuSameUser;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.SEE_USERCOMU_BY_COMU_AC;
 import static com.didekinlib.model.usuariocomunidad.Rol.ADMINISTRADOR;
 import static com.didekinlib.model.usuariocomunidad.Rol.INQUILINO;
@@ -75,7 +76,7 @@ public class UserComuDataAc_1_Test {
         protected Intent getActivityIntent()
         {
             try {
-                UserComuDataTestUtil.regTwoUserComuSameUser(UserComuDataTestUtil.makeListTwoUserComu());
+                regTwoUserComuSameUser(makeListTwoUserComu());
             } catch (UiException | IOException e) {
                 e.printStackTrace();
             }
@@ -99,7 +100,7 @@ public class UserComuDataAc_1_Test {
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
     {
-        Thread.sleep(5000);
+        Thread.sleep(3000);
     }
 
     @Before

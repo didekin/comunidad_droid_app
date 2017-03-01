@@ -1,5 +1,5 @@
 # It must be executed after 'cddroid' with ./terminal/buildtest.sh  environment  suite  version
-# environment('local','awspre') suite('cm','in','us','all')
+# environment('local','awspre') suite('co','in','us', 'usco', 'all')
 
 #!/bin/bash
 [ $# -ne 3 ] && { echo "args count should be 3" 1>&2; exit 1;}

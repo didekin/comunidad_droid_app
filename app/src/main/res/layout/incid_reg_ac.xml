@@ -6,7 +6,7 @@
 
     <android.support.design.widget.CoordinatorLayout
         style="@style/baseLayout"
-        tools:context="com.didekindroid.incidencia.activity.incidreg.IncidRegAc">
+        tools:context=".incidencia.core.IncidRegAc">
 
         <include layout="@layout/appbar_include_design"/>
 
@@ -17,7 +17,7 @@
 
             <fragment
                 android:id="@+id/incid_reg_frg"
-                android:name="com.didekindroid.incidencia.activity.incidreg.IncidRegAcFragment"
+                android:name="com.didekindroid.incidencia.core.IncidRegAcFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"

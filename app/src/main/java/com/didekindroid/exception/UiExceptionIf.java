@@ -13,7 +13,7 @@ import com.didekinlib.http.ErrorBean;
 
 public interface UiExceptionIf {
 
-    void processMe(Activity activity, Intent intent) throws UiException;
+    ActionForUiExceptionIf processMe(Activity activity, Intent intent) throws UiException;
 
     ErrorBean getErrorBean();
 

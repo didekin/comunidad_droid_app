@@ -28,16 +28,11 @@ import static com.didekindroid.R.id.reg_usuario_password_ediT;
 import static com.didekindroid.R.string.send_password_by_mail_dialog;
 import static com.didekindroid.security.Oauth2DaoRemote.Oauth2;
 import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
-import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_DROID;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanWithTkhandler;
 import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_DROID;
-import static com.didekinlib.http.oauth2.OauthTokenHelper.HELPER;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
 
 /**
  * User: pedro@didekin
@@ -96,14 +91,16 @@ public class LoginAcTest implements ExtendableTestAc {
         MILLISECONDS.sleep(5000);
         checkToastInTest(R.string.password_new_in_login, mActivity);
 
+        // ¡¡¡¡¡¡¡¡¡¡¡¡¡ No podemos borrar al usurio desde aquí. ¡¡¡¡¡¡¡¡¡¡¡¡¡
 
-        token = Oauth2.getRefreshUserToken(token.getRefreshToken().getValue());
+        /*token = Oauth2.getRefreshUserToken(token.getRefreshToken().getValue());
         // Verificamos cambio de password.
         String newPassword = usuarioDao.getEndPoint().getUserData(HELPER.doBearerAccessTkHeader(token)).execute().body().getPassword();
         assertThat(newPassword, notNullValue());
         assertThat(newPassword.length() > 12, is(true));
 
-        usuarioDao.getEndPoint().deleteUser(HELPER.doBearerAccessTkHeader(token)).execute();
+        usuarioDao.getEndPoint().deleteUser(HELPER.doBearerAccessTkHeader(token)).execute();*/
+
         cleanWithTkhandler();
     }
 

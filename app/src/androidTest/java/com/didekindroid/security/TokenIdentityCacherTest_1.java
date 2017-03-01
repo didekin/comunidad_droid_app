@@ -15,7 +15,7 @@ import static com.didekindroid.security.TokenIdentityCacher.cleanTokenAndUnregis
 import static com.didekindroid.security.TokenIdentityCacher.cleanTokenCacheAction;
 import static com.didekindroid.security.TokenIdentityCacher.initTokenAction;
 import static com.didekindroid.security.TokenIdentityCacher.initTokenAndRegisterFunc;
-import static com.didekindroid.testutil.SecurityTestUtils.doSpringOauthToken;
+import static com.didekindroid.security.SecurityTestUtils.doSpringOauthToken;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_TK_HANDLER;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.util.IoHelper.readStringFromFile;

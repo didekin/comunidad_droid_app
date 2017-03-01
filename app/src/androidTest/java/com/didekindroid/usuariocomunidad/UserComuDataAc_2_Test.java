@@ -7,8 +7,6 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
-import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.junit.After;
@@ -29,13 +27,18 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.testutil.SecurityTestUtils.updateSecurityData;
+import static com.didekindroid.security.SecurityTestUtils.updateSecurityData;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.RolUi.PRO;
 import static com.didekindroid.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.makeUsuarioComunidad;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 
@@ -56,11 +59,11 @@ public class UserComuDataAc_2_Test {
         protected void beforeActivityLaunched()
         {
             // Segundo usuario: newest, no ADMON.
-            UsuarioComunidad userComu = UserComuDataTestUtil.makeUsuarioComunidad(mUsuarioComunidad.getComunidad(), UsuarioDataTestUtils.USER_PEPE,
+            UsuarioComunidad userComu = makeUsuarioComunidad(mUsuarioComunidad.getComunidad(), USER_PEPE,
                     "portalB", null, "planta1", null, PRO.function);
             try {
                 userComuDaoRemote.regUserAndUserComu(userComu).execute();
-                updateSecurityData(UsuarioDataTestUtils.USER_PEPE.getUserName(), UsuarioDataTestUtils.USER_PEPE.getPassword());
+                updateSecurityData(USER_PEPE.getUserName(), USER_PEPE.getPassword());
             } catch (UiException | IOException e) {
                 e.printStackTrace();
             }
@@ -71,8 +74,8 @@ public class UserComuDataAc_2_Test {
         {
             try {
                 // Primer usuario: oldest, no ADMON.
-                assertThat(UserComuDataTestUtil.COMU_REAL_JUAN.hasAdministradorAuthority(), is(false));
-                UserComuDataTestUtil.signUpAndUpdateTk(UserComuDataTestUtil.COMU_REAL_JUAN);
+                assertThat(COMU_REAL_JUAN.hasAdministradorAuthority(), is(false));
+                signUpAndUpdateTk(COMU_REAL_JUAN);
                 List<UsuarioComunidad> comunidadesUserOne = userComuDaoRemote.seeUserComusByUser();
                 mUsuarioComunidad = comunidadesUserOne != null ? comunidadesUserOne.get(0) : null;
                 Intent intent = new Intent();
@@ -84,13 +87,13 @@ public class UserComuDataAc_2_Test {
             }
         }
     };
-    UsuarioDataTestUtils.CleanUserEnum whatToClean = CLEAN_JUAN_AND_PEPE;
+    CleanUserEnum whatToClean = CLEAN_JUAN_AND_PEPE;
     private UserComuDataAc mActivity;
 
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
     {
-        Thread.sleep(5000);
+        Thread.sleep(3000);
     }
 
     @Before

@@ -1,8 +1,8 @@
 package com.didekindroid.comunidad;
 
-import com.didekin.comunidad.Comunidad;
-import com.didekin.comunidad.Municipio;
-import com.didekin.comunidad.Provincia;
+import com.didekinlib.model.comunidad.Comunidad;
+import com.didekinlib.model.comunidad.Municipio;
+import com.didekinlib.model.comunidad.Provincia;
 
 import org.junit.Test;
 

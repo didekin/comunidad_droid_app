@@ -25,7 +25,7 @@ import static com.didekindroid.AppInitializer.creator;
 import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_LA_PLAZUELA_5;
 import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_REAL;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.testutil.SecurityTestUtils.updateSecurityData;
+import static com.didekindroid.security.SecurityTestUtils.updateSecurityData;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN2_AND_PEPE;
@@ -33,6 +33,7 @@ import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEn
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_NOTHING;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN2;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanWithTkhandler;
 import static com.didekindroid.usuariocomunidad.RolUi.PRE;
@@ -244,7 +245,7 @@ public class UserComuDaoRemoteTest {
     }
 
     @Test
-    public void testRegUserAndUserComu_2() throws UiException, IOException    // TODO.
+    public void testRegUserAndUserComu_2() throws UiException, IOException
     {
         whatClean = CLEAN_PEPE;
 
@@ -252,7 +253,8 @@ public class UserComuDaoRemoteTest {
         Usuario pepe = signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
         Comunidad comunidad = userComuDaoRemote.getComusByUser().get(0);
         cleanWithTkhandler();
-        UsuarioComunidad userComu = makeUsuarioComunidad(comunidad, pepe,
+        Usuario pepeAgain = new Usuario.UsuarioBuilder().copyUsuario(pepe).password(USER_PEPE.getPassword()).build();
+        UsuarioComunidad userComu = makeUsuarioComunidad(comunidad, pepeAgain,
                 "portalB", null, "planta1", null, PRO.function.concat(",").concat(PRE.function));
 
         Response<Boolean> response = userComuDaoRemote.regUserAndUserComu(userComu).execute();

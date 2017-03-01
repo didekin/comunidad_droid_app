@@ -1,20 +1,16 @@
 package com.didekindroid.usuariocomunidad;
 
 import android.content.Intent;
-import android.support.test.espresso.intent.matcher.IntentMatchers;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
-import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.comunidad.ComuBundleKey;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.security.TokenIdentityCacher;
 import com.didekindroid.usuario.testutil.UserEspressoTestUtil;
 import com.didekindroid.usuario.testutil.UserItemMenuTestUtils;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
-import com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import org.junit.After;
@@ -31,8 +27,10 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
@@ -40,10 +38,12 @@ import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN2_AND_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN2;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.RolUi.PRE;
 import static com.didekindroid.usuariocomunidad.RolUi.PRO;
 import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.typeUserComuData;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.is;
@@ -94,7 +94,7 @@ public class RegUserAndUserComuAcTest {
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
     {
-        Thread.sleep(5000);
+        Thread.sleep(3000);
     }
 
     @After
@@ -119,26 +119,30 @@ public class RegUserAndUserComuAcTest {
         assertThat(activity.getFragmentManager().findFragmentById(R.id.reg_usercomu_frg), notNullValue());
 
         onView(withId(activityLayoutId)).check(matches(isDisplayed()));
-        onView(ViewMatchers.withId(R.id.reg_user_frg)).check(matches(isDisplayed()));
-        onView(ViewMatchers.withId(R.id.reg_usercomu_frg)).check(matches(isDisplayed()));
+        onView(withId(R.id.reg_user_frg)).check(matches(isDisplayed()));
+        onView(withId(R.id.reg_usercomu_frg)).check(matches(isDisplayed()));
 
-        onView(ViewMatchers.withId(R.id.appbar)).perform(scrollTo()).check(matches(isDisplayed()));
+        onView(withId(R.id.appbar)).perform(scrollTo()).check(matches(isDisplayed()));
         clickNavigateUp();
     }
 
     @Test
-    public void testRegisterUserAndUserComu_1() throws UiException      // TODO.
+    public void testRegisterUserAndUserComu_1() throws UiException
     {
         whatToClean = CLEAN_JUAN2_AND_PEPE;
 
         activity = intentRule.getActivity();
 
         // Usuario data.
-        UserEspressoTestUtil.typeUserData(UsuarioDataTestUtils.USER_JUAN2.getUserName(), UsuarioDataTestUtils.USER_JUAN2.getAlias(), UsuarioDataTestUtils.USER_JUAN2.getPassword(), UsuarioDataTestUtils.USER_JUAN2.getPassword());
+        UserEspressoTestUtil.typeUserData(
+                USER_JUAN2.getUserName(),
+                USER_JUAN2.getAlias(),
+                USER_JUAN2.getPassword(),
+                USER_JUAN2.getPassword());
 
         // UsurioComunidad data.
-        UserComuEspressoTestUtil.typeUserComuData("portalA", "escC", "plantaB", "puerta_1", PRO, PRE);
-        onView(ViewMatchers.withId(R.id.reg_user_usercomu_button)).perform(scrollTo())
+        typeUserComuData("portalA", "escC", "plantaB", "puerta_1", PRO, PRE);
+        onView(withId(R.id.reg_user_usercomu_button)).perform(scrollTo())
                 .check(matches(isDisplayed())).perform(click());
 
         // Actualización correcta de datos de identidad.
@@ -146,8 +150,8 @@ public class RegUserAndUserComuAcTest {
         assertThat(TKhandler.getRefreshTokenValue(), is(TKhandler.getAccessTokenInCache().getRefreshToken().getValue()));
         assertThat(TKhandler.isRegisteredUser(), is(true));
 
-        intended(IntentMatchers.hasExtra(ComuBundleKey.COMUNIDAD_ID.key, comunidad.getC_Id()));
-        onView(ViewMatchers.withId(R.id.see_usercomu_by_comu_frg)).check(matches(isDisplayed()));
+        intended(hasExtra(COMUNIDAD_ID.key, comunidad.getC_Id()));
+        onView(withId(R.id.see_usercomu_by_comu_frg)).check(matches(isDisplayed()));
         checkUp(activityLayoutId);
 
     }
@@ -168,7 +172,7 @@ public class RegUserAndUserComuAcTest {
     }
 
     @Test
-    public void testLoginMn_WithToken() throws InterruptedException, UiException, IOException     // TODO:
+    public void testLoginMn_WithToken() throws InterruptedException, UiException, IOException
     {
         whatToClean = CLEAN_JUAN_AND_PEPE;
         //With token.

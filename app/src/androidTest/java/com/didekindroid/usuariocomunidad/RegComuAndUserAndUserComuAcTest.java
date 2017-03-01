@@ -15,11 +15,8 @@ import com.didekindroid.comunidad.testutil.ComuEspresoTestUtil;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.usuario.RegUserFr;
 import com.didekindroid.usuario.UsuarioBean;
-import com.didekindroid.usuario.testutil.UserEspressoTestUtil;
-import com.didekindroid.usuario.testutil.UserItemMenuTestUtils;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
-import com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil;
 import com.didekinlib.model.usuario.Usuario;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
@@ -38,15 +35,25 @@ import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static com.didekindroid.comunidad.RegComuFr.makeComunidadBeanFromView;
+import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.typeComunidadData;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.usuario.RegUserFr.makeUserBeanFromRegUserFrView;
+import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typeUserData;
+import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.validaTypedUsuario;
+import static com.didekindroid.usuario.testutil.UserItemMenuTestUtils.LOGIN_AC;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_NOTHING;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_TK_HANDLER;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.RegUserComuFr.makeUserComuBeanFromView;
+import static com.didekindroid.usuariocomunidad.RolUi.INQ;
+import static com.didekindroid.usuariocomunidad.RolUi.PRE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.typeUserComuData;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.validaTypedUsuarioComunidad;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -78,7 +85,7 @@ public class RegComuAndUserAndUserComuAcTest {
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
     {
-        Thread.sleep(5000);
+        Thread.sleep(3000);
     }
 
     @Before
@@ -92,7 +99,6 @@ public class RegComuAndUserAndUserComuAcTest {
     public void tearDown() throws Exception
     {
         cleanOptions(whatToClean);
-        Thread.sleep(2000);
     }
 
     //    ================================================================================
@@ -124,7 +130,7 @@ public class RegComuAndUserAndUserComuAcTest {
     {
         mActivity = mActivityRule.launchActivity(new Intent());
         // Data for Usuario.
-        UserEspressoTestUtil.typeUserData("yo@email.com", "alias1", "password1", "password1");
+        typeUserData("yo@email.com", "alias1", "password1", "password1");
 
         View usuarioRegView = mActivity.findViewById(R.id.reg_user_frg);
 
@@ -138,7 +144,7 @@ public class RegComuAndUserAndUserComuAcTest {
         // Test assertions about Usuario.
         usuarioBean.validate(resources, new StringBuilder(resources.getText(R.string.error_validation_msg)));
         Usuario usuario = usuarioBean.getUsuario();
-        UserEspressoTestUtil.validaTypedUsuario(usuario, "yo@email.com", "alias1", "password1");
+        validaTypedUsuario(usuario, "yo@email.com", "alias1", "password1");
     }
 
     @Test
@@ -147,13 +153,13 @@ public class RegComuAndUserAndUserComuAcTest {
         initActivityAndFragments();
 
         // Data for ComunidadBean.
-        ComuEspresoTestUtil.typeComunidadData("Callejon", "Valencia", "Castellón/Castelló", "Chilches/Xilxes", "nombre via One", "123", "Tris");
+        typeComunidadData("Callejon", "Valencia", "Castellón/Castelló", "Chilches/Xilxes", "nombre via One", "123", "Tris");
         // Data for UsuarioComunidadBean.
         Thread.sleep(1000);
-        UserComuEspressoTestUtil.typeUserComuData("port2", "escale_b", "planta-N", "puerta5", RolUi.PRE, RolUi.INQ);
+        typeUserComuData("port2", "escale_b", "planta-N", "puerta5", PRE, INQ);
         // Data for UsuarioBean.
         Thread.sleep(1000);
-        UserEspressoTestUtil.typeUserData("yo@email.com", "alias1", "password1", "password1");
+        typeUserData("yo@email.com", "alias1", "password1", "password1");
 
         // Make ComunidadBean.
         ComunidadBean comunidadBean = mRegComuFrg.getComunidadBean();
@@ -172,8 +178,8 @@ public class RegComuAndUserAndUserComuAcTest {
         // Test assertions.
         UsuarioComunidad usuarioComunidad = usuarioComunidadBean.getUsuarioComunidad();
         ComuEspresoTestUtil.validaTypedComunidad(usuarioComunidad.getComunidad(), "Callejon", (short) 12, (short) 53, "nombre via One", (short) 123, "Tris");
-        UserEspressoTestUtil.validaTypedUsuario(usuarioComunidad.getUsuario(), "yo@email.com", "alias1", "password1");
-        UserComuEspressoTestUtil.validaTypedUsuarioComunidad(usuarioComunidad, "port2", "escale_b", "planta-N", "puerta5", "pre,inq");
+        validaTypedUsuario(usuarioComunidad.getUsuario(), "yo@email.com", "alias1", "password1");
+        validaTypedUsuarioComunidad(usuarioComunidad, "port2", "escale_b", "planta-N", "puerta5", "pre,inq");
     }
 
     @Test
@@ -220,12 +226,12 @@ public class RegComuAndUserAndUserComuAcTest {
         mActivity = mActivityRule.launchActivity(new Intent());
 
         // Comunidad data.
-        ComuEspresoTestUtil.typeComunidadData("Callejon", "Valencia", "Castellón/Castelló", "Chilches/Xilxes", "nombre via One", "123", "Tris");
+        typeComunidadData("Callejon", "Valencia", "Castellón/Castelló", "Chilches/Xilxes", "nombre via One", "123", "Tris");
         // Data for UsuarioComunidadBean.
         Thread.sleep(1000);
-        UserComuEspressoTestUtil.typeUserComuData("port2", "escale_b", "planta-N", "puerta5", RolUi.PRE, RolUi.INQ);
+        typeUserComuData("port2", "escale_b", "planta-N", "puerta5", PRE, INQ);
         // Usuario.
-        UserEspressoTestUtil.typeUserData(
+        typeUserData(
                 UsuarioDataTestUtils.USER_JUAN2.getUserName(),
                 UsuarioDataTestUtils.USER_JUAN2.getAlias(),
                 UsuarioDataTestUtils.USER_JUAN2.getPassword(),
@@ -253,22 +259,22 @@ public class RegComuAndUserAndUserComuAcTest {
         assertThat(TKhandler.isRegisteredUser(), is(false));
         assertThat(TKhandler.getAccessTokenInCache(), nullValue());
 
-        UserItemMenuTestUtils.LOGIN_AC.checkMenuItem_NTk(mActivity);
+        LOGIN_AC.checkMenuItem_NTk(mActivity);
         checkUp(activiyLayoutId);
     }
 
     @Test
     public void testLoginMn_WithToken() throws InterruptedException, UiException, IOException
     {
-        whatToClean = UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
+        whatToClean = CLEAN_JUAN;
         //With token.
-        UserComuDataTestUtil.signUpAndUpdateTk(UserComuDataTestUtil.COMU_REAL_JUAN);
+        signUpAndUpdateTk(UserComuDataTestUtil.COMU_REAL_JUAN);
 
         mActivity = mActivityRule.launchActivity(new Intent());
         assertThat(TKhandler.isRegisteredUser(), is(true));
         assertThat(TKhandler.getAccessTokenInCache(), not(nullValue()));
 
-        UserItemMenuTestUtils.LOGIN_AC.checkMenuItem_WTk(mActivity);
+        LOGIN_AC.checkMenuItem_WTk(mActivity);
         checkUp(activiyLayoutId);
     }
 

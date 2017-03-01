@@ -1,7 +1,9 @@
 package com.didekindroid.usuario.userdata;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,35 +13,28 @@ import android.widget.EditText;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.security.IdentityCacher;
+import com.didekindroid.exception.UiExceptionIf.ActionForUiExceptionIf;
 import com.didekindroid.usuario.UsuarioBean;
 import com.didekindroid.util.MenuRouter;
 import com.didekindroid.util.UIutils;
-import com.didekinlib.http.ErrorBean;
 import com.didekinlib.model.usuario.Usuario;
 
-import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 
-import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_name_alias_should_be_initialized;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
 import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
-import static com.didekindroid.usuario.userdata.UserDataControllerIf.UserChangeToMake.alias_only;
-import static com.didekindroid.usuario.userdata.UserDataControllerIf.UserChangeToMake.nothing;
-import static com.didekindroid.usuario.userdata.UserDataControllerIf.UserChangeToMake.userName;
-import static com.didekindroid.usuario.userdata.UserDataReactor.userDataReactor;
-import static com.didekindroid.util.CommonAssertionMsg.activity_reactor_not_null;
+import static com.didekindroid.usuario.userdata.ViewerUserDataIf.UserChangeToMake.alias_only;
+import static com.didekindroid.usuario.userdata.ViewerUserDataIf.UserChangeToMake.nothing;
+import static com.didekindroid.usuario.userdata.ViewerUserDataIf.UserChangeToMake.userName;
 import static com.didekindroid.util.DefaultNextAcRouter.routerMap;
 import static com.didekindroid.util.ItemMenu.mn_handler;
 import static com.didekindroid.util.MenuRouter.doUpMenu;
 import static com.didekindroid.util.UIutils.assertTrue;
-import static com.didekindroid.util.UIutils.destroySubscriptions;
 import static com.didekindroid.util.UIutils.doToolBar;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.util.UIutils.makeToast;
 import static com.didekinlib.http.GenericExceptionMsg.BAD_REQUEST;
-import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
 
 /**
  * Preconditions:
@@ -48,34 +43,29 @@ import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
  * 1. Registered user with modified data.
  * 2. An intent is created for menu options with the old user data, once they have been loaded.
  */
-public class UserDataAc extends AppCompatActivity implements UserDataControllerIf, UserDataViewIf {
+public class UserDataAc extends AppCompatActivity implements ViewerUserDataIf<View,Object> {
 
     View acView;
+    ControllerUserDataIf controller;
     Usuario oldUser;
     Usuario newUser;
     UsuarioBean usuarioBean;
-    CompositeDisposable subscriptions;
-    UserDataReactorIf reactor;
-    IdentityCacher identityCacher;
     Intent intentForMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        super.onCreate(savedInstanceState);
         Timber.d("onCreate()");
-
-        // Initialize tokenCacher.
-        identityCacher = TKhandler;
-        // Preconditions.
-        assertTrue(identityCacher.isRegisteredUser(), user_should_be_registered);
-        // Initialize user data.
-        reactor = userDataReactor;
-        loadUserData();
+        super.onCreate(savedInstanceState);
 
         acView = getLayoutInflater().inflate(R.layout.user_data_ac, null);
         setContentView(acView);
         doToolBar(this, true);
+        controller = new ControllerUserData(this);
+
+        // Preconditions.
+        assertTrue(controller.isRegisteredUser(), user_should_be_registered);
+        controller.loadUserData();
 
         Button modifyButton = (Button) findViewById(R.id.user_data_modif_button);
         modifyButton.setOnClickListener(new View.OnClickListener() {
@@ -91,15 +81,59 @@ public class UserDataAc extends AppCompatActivity implements UserDataControllerI
     }
 
     @Override
-    protected void onDestroy()
+    protected void onStop()
     {
-        Timber.d("onCreate()");
-        super.onDestroy();
-        destroySubscriptions(subscriptions);
+        Timber.d("onStop()");
+        super.onStop();
+        controller.clearSubscriptions();
     }
 
     // ============================================================
-    //    ..... PRESENTER IMPLEMENTATION ....
+    //    ..... VIEWER IMPLEMENTATION ....
+    // ============================================================
+
+    @Override
+    public Activity getActivity()
+    {
+        Timber.d("getContext()");
+        return this;
+    }
+
+    @Override
+    public ActionForUiExceptionIf processControllerError(UiException e)
+    {
+        Timber.d("processControllerError()");
+        if (e.getErrorBean().getMessage().equals(BAD_REQUEST.getHttpMessage())) {
+            makeToast(this, R.string.password_wrong);
+            return null;
+        }
+        return e.processMe(this, new Intent());
+    }
+
+    @Override
+    public int clearControllerSubscriptions()
+    {
+        Timber.d("clearControllerSubscriptions()");
+        return controller.clearSubscriptions();
+    }
+
+    @Override
+    public View getViewInViewer()
+    {
+        Timber.d("getViewInViewer()");
+        return acView;
+    }
+
+    @Override
+    public void replaceView(@Nullable Object initParams)
+    {
+        Timber.d("replaceView()");
+        Intent intent = new Intent(UserDataAc.this, routerMap.get(UserDataAc.this.getClass()));
+        startActivity(intent);
+    }
+
+    // ============================================================
+    //    ..... VIEWER USER DATA IMPLEMENTATION ....
     // ============================================================
 
     /**
@@ -129,18 +163,6 @@ public class UserDataAc extends AppCompatActivity implements UserDataControllerI
                 ((EditText) acView.findViewById(R.id.reg_usuario_alias_ediT)).getText().toString(),
                 ((EditText) acView.findViewById(R.id.user_data_ac_password_ediT)).getText().toString()
         };
-    }
-
-    // ============================================================
-    //    ..... CONTROLLER IMPLEMENTATION ....
-    // ============================================================
-
-    @Override
-    public void loadUserData()
-    {
-        Timber.d("loadUserData()");
-        assertTrue(reactor != null && identityCacher != null, activity_reactor_not_null);
-        reactor.loadUserData(this);
     }
 
     /**
@@ -202,7 +224,7 @@ public class UserDataAc extends AppCompatActivity implements UserDataControllerI
     }
 
     /**
-     * @return true if the new subscription has been successfully added to the reactor's set.
+     * @return true if the new subscription has been successfully added to the controller's set.
      */
     @Override
     public boolean modifyUserData(UserChangeToMake userChangeToMake)
@@ -213,60 +235,20 @@ public class UserDataAc extends AppCompatActivity implements UserDataControllerI
                 makeToast(this, R.string.no_user_data_to_be_modified);
                 return false;
             case userName: case alias_only:
-                return reactor.modifyUser(this, oldUser, newUser);
+                return controller.modifyUser(oldUser, newUser);
             default:
                 return false;
         }
     }
 
-    /**
-     *  Preconditions:
-     *  1. loadUserData() has been called.
-     */
     @Override
-    public void processBackUserDataLoaded(Usuario usuario)
+    public void processBackUsuarioInView(Usuario usuario)
     {
-        Timber.d("processBackUserDataLoaded()");
+        Timber.d("processBackUsuarioInView()");
         oldUser = usuario;
         initUserDataInView();
         intentForMenu = new Intent().putExtra(user_name.key, oldUser.getUserName());
         invalidateOptionsMenu();
-    }
-
-    @Override
-    public void processBackUserModified()
-    {
-        Timber.d("processBackUserModified()");
-        Intent intent = new Intent(UserDataAc.this, routerMap.get(UserDataAc.this.getClass()));
-        startActivity(intent);
-    }
-
-    @Override
-    public void processBackErrorInReactor(Throwable e)
-    {
-        if (e instanceof UiException) {
-            UiException ui = (UiException) e;
-            if (ui.getErrorBean().getMessage().equals(BAD_REQUEST.getHttpMessage())) {
-                makeToast(this, R.string.password_wrong);
-                if (isDestroyed() || isFinishing()) {
-                    recreate();
-                }
-            } else {
-                ui.processMe(this, new Intent());
-            }
-        } else {
-            new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR)).processMe(this, new Intent());
-        }
-    }
-
-    @Override
-    public CompositeDisposable getSubscriptions()
-    {
-        Timber.d("getSubscriptions()");
-        if (subscriptions == null) {
-            subscriptions = new CompositeDisposable();
-        }
-        return subscriptions;
     }
 
 //    ============================================================

@@ -9,7 +9,6 @@ import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.security.IdentityCacher;
 import com.didekindroid.usuario.UsuarioBean;
-import com.didekinlib.http.ErrorBean;
 import com.didekinlib.model.usuario.Usuario;
 
 import org.junit.After;
@@ -39,14 +38,17 @@ import static com.didekindroid.R.id.reg_usuario_password_ediT;
 import static com.didekindroid.R.string.send_password_by_mail_NO;
 import static com.didekindroid.R.string.send_password_by_mail_YES;
 import static com.didekindroid.R.string.send_password_by_mail_dialog;
-import static com.didekindroid.R.string.username_wrong_in_login;
+import static com.didekindroid.exception.UiExceptionRouter.GENERIC_APP_ACC;
 import static com.didekindroid.security.Oauth2DaoRemote.Oauth2;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtils.isActivityDying;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
+import static com.didekindroid.testutil.ActivityTestUtils.testClearCtrlSubscriptions;
+import static com.didekindroid.testutil.ActivityTestUtils.testProcessCtrlError;
+import static com.didekindroid.testutil.ActivityTestUtils.testProcessCtrlErrorOnlyToast;
+import static com.didekindroid.testutil.ActivityTestUtils.testReplaceViewStd;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
-import static com.didekindroid.usuario.login.LoginReactorTest.doLoginMockReactor;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_DROID;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_DROID;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
@@ -57,11 +59,8 @@ import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOU
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
 import static org.awaitility.Awaitility.fieldIn;
-import static org.awaitility.Awaitility.to;
-import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -75,10 +74,6 @@ public class LoginAc_1_Test implements ExtendableTestAc {
     LoginAc activity;
     int activityLayoutId = R.id.login_ac_layout;
     Usuario registeredUser;
-    String[] textFromView;
-    AtomicBoolean isLoginDataOk;
-    AtomicBoolean isToCleanNormal;
-    IdentityCacher identityCacher;
 
     @Rule
     public ActivityTestRule<? extends Activity> mActivityRule = new ActivityTestRule<LoginAc>(LoginAc.class) {
@@ -94,6 +89,13 @@ public class LoginAc_1_Test implements ExtendableTestAc {
         }
     };
 
+
+    String[] textFromView;
+    AtomicBoolean isLoginDataOk;
+    AtomicBoolean isToCleanNormal;
+    IdentityCacher identityCacher;
+    ControllerLoginIf controller;
+
     @BeforeClass
     public static void relax() throws InterruptedException
     {
@@ -106,6 +108,7 @@ public class LoginAc_1_Test implements ExtendableTestAc {
         identityCacher = TKhandler;
         isToCleanNormal = new AtomicBoolean(true);
         activity = (LoginAc) mActivityRule.getActivity();
+        controller = new ControllerLogin(activity);
     }
 
     @After
@@ -146,42 +149,73 @@ public class LoginAc_1_Test implements ExtendableTestAc {
     }
 
     // ============================================================
-    //    ..... VIEW IMPLEMENTATION ....
+    //    ..... VIEWER IMPLEMENTATION ....
     // ============================================================
 
     @Test
-    public void testShowDialog()
+    public void testProcessControllerError_1()
     {
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                activity.showDialog(USER_DROID.getUserName());
-            }
-        });
+        testProcessCtrlError(activity, GENERIC_INTERNAL_ERROR, GENERIC_APP_ACC);
+    }
+
+    @Test
+    public void testProcessControllerError_2() throws InterruptedException
+    {
+        testProcessCtrlErrorOnlyToast(activity, USER_NAME_NOT_FOUND, R.string.username_wrong_in_login, activityLayoutId);
+    }
+
+    @Test
+    public void testClearControllerSubscriptions()
+    {
+        testClearCtrlSubscriptions(controller, activity);
+    }
+
+    @Test
+    public void testReplaceView()
+    {
+        testReplaceViewStd(activity, getNextViewResourceId());
+    }
+
+    // ============================================================
+    //    .............. CONTROLLER (Integration)  ...............
+    /* ============================================================*/
+
+    @Test   // Login OK.
+    public void testValidateLoginRemote_1()
+    {
+        typeLoginData(USER_DROID.getUserName(), USER_DROID.getPassword());
+        onView(withId(login_ac_button)).check(matches(isDisplayed())).perform(click());
+
+        await().atMost(3, SECONDS).until(isActivityDying(activity), is(true));
+        onView(withId(getNextViewResourceId())).check(matches(isDisplayed()));
+    }
+
+    @Test   // Login NOT OK, counterWrong > 3.
+    public void testValidateLoginRemote_2()
+    {
+        activity.counterWrong.set(3);
+        typeLoginData(USER_DROID.getUserName(), "password_wrong");
+        onView(withId(login_ac_button)).check(matches(isDisplayed())).perform(click());
+
+        await().atMost(2, SECONDS).untilAtomic(activity.counterWrong, equalTo(4));
         checkShowDialog();
     }
 
-    @Test
-    public void testGetLoginDataFromView()
+    @Test   // Login NOT OK, counterWrong <= 3.
+    public void testValidateLoginRemote_3() throws InterruptedException
     {
-        typeLoginData(USER_DROID.getUserName(), USER_DROID.getPassword());
+        activity.counterWrong.set(2);
+        typeLoginData(USER_DROID.getUserName(), "password_wrong");
+        onView(withId(login_ac_button)).check(matches(isDisplayed())).perform(click(), closeSoftKeyboard());
 
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                textFromView = activity.getLoginDataFromView();
-            }
-        });
-
-        await().atMost(1, SECONDS).until(fieldIn(this).ofType(String[].class).andWithName("textFromView"),
-                equalTo(new String[]{USER_DROID.getUserName(), USER_DROID.getPassword()}));
+        await().atMost(2, SECONDS).untilAtomic(activity.counterWrong, equalTo(3));
+        onView(withId(activityLayoutId)).check(matches(isDisplayed()));
+        checkToastInTest(R.string.password_wrong, activity);
     }
 
     // ============================================================
-    //    ..... CONTROLLER IMPLEMENTATION ....
-    /* ============================================================*/
+    //    ........... VIEWER LOGIN IMPLEMENTATION .........
+    // ============================================================
 
     @Test   // Validation: error message.
     public void testCheckLoginData_1() throws InterruptedException
@@ -222,55 +256,38 @@ public class LoginAc_1_Test implements ExtendableTestAc {
         await().atMost(1, SECONDS).untilTrue(isLoginDataOk);
     }
 
-    @Test   // Login OK.
-    public void testValidateLoginRemote_1()
-    {
-        typeLoginData(USER_DROID.getUserName(), USER_DROID.getPassword());
-        onView(withId(login_ac_button)).check(matches(isDisplayed())).perform(click());
-
-        await().atMost(3, SECONDS).until(isActivityDying(activity), is(true));
-        onView(withId(getNextViewResourceId())).check(matches(isDisplayed()));
-    }
-
-    @Test   // Login NOT OK, counterWrong > 3.
-    public void testValidateLoginRemote_2()
-    {
-        activity.counterWrong.set(3);
-        typeLoginData(USER_DROID.getUserName(), "password_wrong");
-        onView(withId(login_ac_button)).check(matches(isDisplayed())).perform(click());
-
-        await().atMost(2, SECONDS).untilAtomic(activity.counterWrong, equalTo(4));
-        checkShowDialog();
-    }
-
-    @Test   // Login NOT OK, counterWrong <= 3.
-    public void testValidateLoginRemote_3() throws InterruptedException
-    {
-        activity.counterWrong.set(2);
-        typeLoginData(USER_DROID.getUserName(), "password_wrong");
-        onView(withId(login_ac_button)).check(matches(isDisplayed())).perform(click(), closeSoftKeyboard());
-
-        await().atMost(2, SECONDS).untilAtomic(activity.counterWrong, equalTo(3));
-        onView(withId(activityLayoutId)).check(matches(isDisplayed()));
-        checkToastInTest(R.string.password_wrong, activity);
-    }
-
-    @Test   // Login OK.
-    public void testProcessBackLoginRemote_1()
+    @Test
+    public void testShowDialog()
     {
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run()
             {
-                activity.processBackLoginRemote(true);
+                activity.showDialog(USER_DROID.getUserName());
             }
         });
-        await().atMost(3, SECONDS).until(isActivityDying(activity), is(true));
-        onView(withId(getNextViewResourceId())).check(matches(isDisplayed()));
+        checkShowDialog();
+    }
+
+    @Test
+    public void testGetLoginDataFromView()
+    {
+        typeLoginData(USER_DROID.getUserName(), USER_DROID.getPassword());
+
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                textFromView = activity.getLoginDataFromView();
+            }
+        });
+
+        await().atMost(1, SECONDS).until(fieldIn(this).ofType(String[].class).andWithName("textFromView"),
+                equalTo(new String[]{USER_DROID.getUserName(), USER_DROID.getPassword()}));
     }
 
     @Test   // Login NO ok, counterWrong > 3.
-    public void testProcessBackLoginRemote_2()
+    public void testProcessLoginBackInView_1()
     {
         activity.counterWrong.set(3);
         activity.usuarioBean = new UsuarioBean("mail_wrong", null, "password_wrong", null);
@@ -279,7 +296,7 @@ public class LoginAc_1_Test implements ExtendableTestAc {
             @Override
             public void run()
             {
-                activity.processBackLoginRemote(false);
+                activity.processLoginBackInView(false);
             }
         });
 
@@ -288,7 +305,7 @@ public class LoginAc_1_Test implements ExtendableTestAc {
     }
 
     @Test   // Login NO ok, counterWrong <= 3.
-    public void testProcessBackLoginRemote_3() throws InterruptedException
+    public void testProcessLoginBackInView_2() throws InterruptedException
     {
         activity.counterWrong.set(2);
 
@@ -296,7 +313,7 @@ public class LoginAc_1_Test implements ExtendableTestAc {
             @Override
             public void run()
             {
-                activity.processBackLoginRemote(false);
+                activity.processLoginBackInView(false);
             }
         });
 
@@ -305,26 +322,17 @@ public class LoginAc_1_Test implements ExtendableTestAc {
         onView(withId(activityLayoutId)).check(matches(isDisplayed()));
     }
 
-    @Test // We user a mockReactor.
-    public void testDoDialogPositiveClick() throws UiException, InterruptedException
+    @Test
+    public void testProcessBackSendPswdInView() throws InterruptedException
     {
-        isToCleanNormal.set(false);
-
-        activity.usuarioBean = new UsuarioBean(USER_DROID.getUserName(), "userdroid", USER_DROID.getPassword(), USER_DROID.getPassword());
-        // Necesitamos el usuarion dentro de usuarioBean inicializado.
-        activity.usuarioBean.validate(activity.getResources(), null);
-
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run()
             {
-                activity.doDialogPositiveClick(doLoginMockReactor(true));
+                activity.processBackSendPswdInView(true);
             }
         });
-
-        waitAtMost(2, SECONDS).untilCall(to(identityCacher).getRefreshTokenValue(),nullValue());
-        onView(withId(activityLayoutId)).check(matches(isDisplayed())).perform(closeSoftKeyboard());
-        checkToastInTest(R.string.password_new_in_login, activity);
+        await().atMost(2, SECONDS).until(isToastInView(R.string.password_new_in_login, activity));
     }
 
     @Test
@@ -342,47 +350,7 @@ public class LoginAc_1_Test implements ExtendableTestAc {
         onView(withId(getNextViewResourceId())).check(matches(isDisplayed()));
     }
 
-    @Test
-    public void testProcessBackSendPassword() throws InterruptedException
-    {
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                activity.processBackSendPassword(true);
-            }
-        });
-        await().atMost(2, SECONDS).until(isToastInView(R.string.password_new_in_login, activity));
-    }
-
-    @Test
-    public void testProcessBackErrorInReactor_1()
-    {
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                activity.processBackErrorInReactor(new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR)));
-            }
-        });
-        await().atMost(1, SECONDS).until(isActivityDying(activity), is(true));
-        onView(withId(getNextViewResourceId())).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void testProcessBackErrorInReactor_2() throws InterruptedException
-    {
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                activity.processBackErrorInReactor(new UiException(new ErrorBean(USER_NAME_NOT_FOUND)));
-            }
-        });
-        await().atMost(2, SECONDS).until(isToastInView(username_wrong_in_login, activity));
-    }
-
-    //    ========================== Utility methods ============================
+    // ========================== Utility methods ============================
 
     private void typeLoginData(String userName, String password)
     {

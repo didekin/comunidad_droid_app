@@ -2,7 +2,7 @@
 <ScrollView style="@style/baseLayout.scroll"
             xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
-            tools:context="com.didekindroid.com.didekindroid.usuario.RegComuAndUserComuAc">
+            tools:context="com.didekindroid.usuariocomunidad.RegComuAndUserComuAc">
 
     <android.support.design.widget.CoordinatorLayout style="@style/baseLayout">
 

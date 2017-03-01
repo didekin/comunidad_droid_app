@@ -148,10 +148,10 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
     @Override
     public void onComunidadSelected(Comunidad comunidad, int lineItemIndex)
     {
-        Timber.d("onComunidadSelected().");
+        Timber.d("loadIncidsByComu().");
 
         if (!TKhandler.isRegisteredUser()) {
-            Timber.d("onComunidadSelected(). User is not registered.");
+            Timber.d("loadIncidsByComu(). User is not registered.");
             Intent intent = new Intent(this, RegUserAndUserComuAc.class);
             intent.putExtra(COMUNIDAD_LIST_OBJECT.key, comunidad);
             startActivity(intent);

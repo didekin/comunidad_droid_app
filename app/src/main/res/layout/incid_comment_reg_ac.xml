@@ -5,7 +5,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:fitsSystemWindows="true"
-        tools:context="com.didekindroid.incidencia.activity.IncidCommentRegAc">
+        tools:context=".incidencia.comment.IncidCommentRegAc">
 
         <include layout="@layout/appbar_include_design"/>
 

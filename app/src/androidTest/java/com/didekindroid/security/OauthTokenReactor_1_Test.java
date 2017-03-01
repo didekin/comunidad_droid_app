@@ -199,11 +199,12 @@ public class OauthTokenReactor_1_Test {
         cleanOptions(CLEAN_PEPE);
 
         userComuDaoRemote.regComuAndUserAndUserComu(COMU_REAL_PEPE).execute().body();
+        TKhandler.updateIsRegistered(true);
         checkNoInitCache();
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
-            tokenReactor.updateTkAndCacheFromUser(USER_PEPE);
+            tokenReactor.updateTkAndCacheFromUser(USER_PEPE);       // TODO:
         } finally {
             reset();
         }

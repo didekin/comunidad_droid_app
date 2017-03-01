@@ -58,7 +58,7 @@ public class SeeUserComuByUserFr extends Fragment {
         Timber.d("onCreateView()");
         fragmentView = (ListView) inflater.inflate(R.layout.see_user_by_user_list_fr, container, false);
         // To get visible a divider on top of the list.
-//        fragmentView.addHeaderView(new View(getContext()), null, true);
+//        fragmentView.addHeaderView(new View(getActivity()), null, true);
         fragmentView.setItemsCanFocus(true);
         return fragmentView;
     }

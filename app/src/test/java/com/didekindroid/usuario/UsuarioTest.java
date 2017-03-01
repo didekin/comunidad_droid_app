@@ -1,6 +1,7 @@
 package com.didekindroid.usuario;
 
-import com.didekin.usuario.Usuario;
+
+import com.didekinlib.model.usuario.Usuario;
 
 import org.junit.Test;
 

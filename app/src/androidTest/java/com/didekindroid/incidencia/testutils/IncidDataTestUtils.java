@@ -14,12 +14,15 @@ import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-import static com.didekindroid.incidencia.IncidService.IncidenciaServ;
+import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
 import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static com.didekindroid.util.UIutils.getStringFromInteger;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 /**
  * User: pedro@didekin
@@ -36,19 +39,6 @@ public final class IncidDataTestUtils {
 
     private IncidDataTestUtils()
     {
-    }
-
-    public static IncidComment doComment(String descComment, Incidencia incidencia)
-    {
-        Incidencia incidenciaIn = new Incidencia.IncidenciaBuilder()
-                .incidenciaId(incidencia.getIncidenciaId())
-                .comunidad(new Comunidad.ComunidadBuilder().c_id(incidencia.getComunidad().getC_Id()).build())
-                .build();
-
-        return new IncidComment.IncidCommentBuilder().descripcion(descComment)
-                .incidencia(incidenciaIn)
-                .redactor(null)
-                .build();
     }
 
     public static Incidencia doIncidencia(String userName, String descripcion, long comunidadId, short ambitoId)
@@ -68,6 +58,61 @@ public final class IncidDataTestUtils {
                 .comunidad(new Comunidad.ComunidadBuilder().c_id(comunidadId).build())
                 .descripcion(descripcion)
                 .ambitoIncid(new AmbitoIncidencia(ambitoId))
+                .build();
+    }
+
+    public static int makeAndRegIncidImportancia(UsuarioComunidad userComu, short importancia) throws UiException
+    {
+        IncidImportancia incidImportancia = new IncidImportancia.IncidImportanciaBuilder(
+                doIncidencia(userComu.getUsuario().getUserName(), INCID_DEFAULT_DESC, userComu.getComunidad().getC_Id(), (short) 43))
+                .usuarioComunidad(userComu)
+                .importancia(importancia)
+                .build();
+
+        return incidenciaDao.regIncidImportancia(incidImportancia);
+    }
+
+    public static IncidenciaUser insertGetIncidenciaUser(UsuarioComunidad userComu, int importancia) throws UiException
+    {
+        makeAndRegIncidImportancia(userComu, (short) importancia);
+        return incidenciaDao.seeIncidsOpenByComu(userComu.getComunidad().getC_Id()).get(0);
+    }
+
+    public static IncidenciaUser insertGetIncidenciaUser(long incidenciaId, UsuarioComunidad userComu, int importancia) throws UiException
+    {
+        IncidImportancia incidImportancia =
+                new IncidImportancia.IncidImportanciaBuilder(doIncidenciaWithId(incidenciaId, INCID_DEFAULT_DESC, userComu.getComunidad().getC_Id(), (short) 43))
+                        .usuarioComunidad(userComu)
+                        .importancia((short) importancia)
+                        .build();
+        incidenciaDao.regIncidImportancia(incidImportancia);
+        return incidenciaDao.seeIncidsOpenByComu(userComu.getComunidad().getC_Id()).get(0);
+    }
+
+    public static IncidImportancia insertGetIncidImportancia(UsuarioComunidad userComu) throws IOException, UiException
+    {
+        signUpAndUpdateTk(userComu);
+        UsuarioComunidad userComuDb = userComuDaoRemote.seeUserComusByUser().get(0);
+        IncidImportancia incidImportancia = new IncidImportancia.IncidImportanciaBuilder(
+                doIncidencia(userComuDb.getUsuario().getUserName(), INCID_DEFAULT_DESC, userComuDb.getComunidad().getC_Id(), (short) 43))
+                .usuarioComunidad(userComuDb)
+                .importancia((short) 3).build();
+        incidenciaDao.regIncidImportancia(incidImportancia);
+        Incidencia incidenciaDb = incidenciaDao.seeIncidsOpenByComu(userComuDb.getComunidad().getC_Id()).get(0).getIncidencia();
+        incidImportancia = incidenciaDao.seeIncidImportancia(incidenciaDb.getIncidenciaId()).getIncidImportancia();
+        return incidImportancia;
+    }
+
+    public static IncidComment doComment(String descComment, Incidencia incidencia)
+    {
+        Incidencia incidenciaIn = new Incidencia.IncidenciaBuilder()
+                .incidenciaId(incidencia.getIncidenciaId())
+                .comunidad(new Comunidad.ComunidadBuilder().c_id(incidencia.getComunidad().getC_Id()).build())
+                .build();
+
+        return new IncidComment.IncidCommentBuilder().descripcion(descComment)
+                .incidencia(incidenciaIn)
+                .redactor(null)
                 .build();
     }
 
@@ -94,43 +139,6 @@ public final class IncidDataTestUtils {
                 .build();
     }
 
-    public static IncidenciaUser insertGetIncidenciaUser(UsuarioComunidad userComu, int importancia) throws UiException
-    {
-        IncidImportancia incidImportancia = new IncidImportancia.IncidImportanciaBuilder(
-                doIncidencia(userComu.getUsuario().getUserName(), INCID_DEFAULT_DESC, userComu.getComunidad().getC_Id(), (short) 43))
-                .usuarioComunidad(userComu)
-                .importancia((short) importancia)
-                .build();
-
-        IncidenciaServ.regIncidImportancia(incidImportancia);
-        return IncidenciaServ.seeIncidsOpenByComu(userComu.getComunidad().getC_Id()).get(0);
-    }
-
-    public static IncidenciaUser insertGetIncidenciaUser(long incidenciaId, UsuarioComunidad userComu, int importancia) throws UiException
-    {
-        IncidImportancia incidImportancia =
-                new IncidImportancia.IncidImportanciaBuilder(doIncidenciaWithId(incidenciaId, INCID_DEFAULT_DESC, userComu.getComunidad().getC_Id(), (short) 43))
-                        .usuarioComunidad(userComu)
-                        .importancia((short) importancia)
-                        .build();
-        IncidenciaServ.regIncidImportancia(incidImportancia);
-        return IncidenciaServ.seeIncidsOpenByComu(userComu.getComunidad().getC_Id()).get(0);
-    }
-
-    public static IncidImportancia insertGetIncidImportancia(UsuarioComunidad userComu) throws IOException, UiException
-    {
-        signUpAndUpdateTk(userComu);
-        UsuarioComunidad userComuDb = userComuDaoRemote.seeUserComusByUser().get(0);
-        IncidImportancia incidImportancia = new IncidImportancia.IncidImportanciaBuilder(
-                doIncidencia(userComuDb.getUsuario().getUserName(), INCID_DEFAULT_DESC, userComuDb.getComunidad().getC_Id(), (short) 43))
-                .usuarioComunidad(userComuDb)
-                .importancia((short) 3).build();
-        IncidenciaServ.regIncidImportancia(incidImportancia);
-        Incidencia incidenciaDb = IncidenciaServ.seeIncidsOpenByComu(userComuDb.getComunidad().getC_Id()).get(0).getIncidencia();
-        incidImportancia = IncidenciaServ.seeIncidImportancia(incidenciaDb.getIncidenciaId()).getIncidImportancia();
-        return incidImportancia;
-    }
-
     public static Resolucion insertGetResolucionNoAdvances(IncidImportancia incidImportancia) throws UiException
     {
         // Registramos resolución.
@@ -138,8 +146,19 @@ public final class IncidDataTestUtils {
                 RESOLUCION_DEFAULT_DESC,
                 COSTE_ESTIM_DEFAULT,
                 incidImportancia.getFechaAlta());
-        IncidenciaServ.regResolucion(resolucion);
-        resolucion = IncidenciaServ.seeResolucion(resolucion.getIncidencia().getIncidenciaId());
+        incidenciaDao.regResolucion(resolucion);
+        resolucion = incidenciaDao.seeResolucion(resolucion.getIncidencia().getIncidenciaId());
         return resolucion;
+    }
+
+    public static Resolucion insertGetDefaultResolucion(UsuarioComunidad userComu) throws UiException, InterruptedException
+    {
+        // Insertamos resolución.
+        Incidencia incidencia = insertGetIncidenciaUser(userComu, 1).getIncidencia();
+        Thread.sleep(1000);
+        Resolucion resolucion = doResolucion(incidencia, RESOLUCION_DEFAULT_DESC, 1122, new Timestamp(new Date().getTime()));
+        assertThat(incidenciaDao.regResolucion(resolucion), is(1));
+
+        return incidenciaDao.seeResolucion(resolucion.getIncidencia().getIncidenciaId());
     }
 }

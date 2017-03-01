@@ -10,9 +10,9 @@
         style="@style/textBase.textFieldLabel1"
         android:text="@string/incid_comunidad_rot"/>
 
-    <Spinner
-        android:id="@+id/incid_reg_comunidad_spinner"
-        style="@style/spinnerBase"/>
+     <Spinner
+         android:id="@+id/incid_reg_comunidad_spinner"
+         style="@style/spinnerBase"/>
 
     <TextView
         android:id="@+id/incid_see_incidencias_rot"

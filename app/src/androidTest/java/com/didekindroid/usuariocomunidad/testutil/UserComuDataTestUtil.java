@@ -14,7 +14,7 @@ import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_LA_FUENT
 import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_LA_PLAZUELA_5;
 import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_REAL;
 import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_TRAV_PLAZUELA_11;
-import static com.didekindroid.testutil.SecurityTestUtils.updateSecurityData;
+import static com.didekindroid.security.SecurityTestUtils.updateSecurityData;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_DROID;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
