@@ -1,7 +1,6 @@
 package com.didekindroid.incidencia.list;
 
 import android.app.FragmentManager;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.ViewMatchers;
@@ -13,7 +12,6 @@ import com.didekindroid.incidencia.core.IncidenciaDataDbHelper;
 import com.didekindroid.incidencia.resolucion.IncidResolucionSeeFr;
 import com.didekindroid.incidencia.utils.IncidBundleKey;
 import com.didekindroid.testutil.ActivityTestUtils;
-import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
@@ -23,13 +21,13 @@ import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import static android.database.sqlite.SQLiteDatabase.deleteDatabase;
 import static android.support.test.espresso.Espresso.onData;
@@ -47,14 +45,15 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
 import static com.didekindroid.incidencia.core.IncidenciaDataDbHelperTest.DB_PATH;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_resolucion_see_fr_tag;
-import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.RESOLUCION_DEFAULT_DESC;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doIncidencia;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doResolucionAvances;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
+import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_resolucion_see_fr_tag;
+import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
+import static com.didekindroid.testutil.ActivityTestUtils.isAdapterInitialized;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
@@ -64,6 +63,8 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.CO
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.regSeveralUserComuSameUser;
 import static com.didekindroid.util.AppBundleKey.IS_MENU_IN_FRAGMENT_FLAG;
 import static com.didekindroid.util.UIutils.formatTimeStampToString;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
@@ -81,17 +82,19 @@ import static org.junit.Assert.assertThat;
  */
 @SuppressWarnings({"unchecked", "ConstantConditions"})
 @RunWith(AndroidJUnit4.class)
-public class IncidSeeClosedByComuAcTest_2 {
+public class IncidSeeClosedByComuAcTest {
 
-    UsuarioComunidad mPepePlazuelas5;
-    UsuarioComunidad mPepeLaFuente;
+    UsuarioComunidad pepePlazuelas5;
+    UsuarioComunidad pepeLaFuente;
     IncidImportancia incidPepePlazuelas5_1;
     IncidImportancia incidPepePlazuelas5_2;
     IncidImportancia incidPepeLaFuente;
-    IncidSeeByComuListFr mFragment;
+    IncidSeeByComuListFr fragment;
     IncidenciaDataDbHelper dbHelper;
-    AdapterIncidSeeClosedByComu mAdapter;
-    Resolucion mResolucionToCheck;
+    ControllerIncidCloseSee controllerList;
+    AdapterIncidSeeClosedByComu listAdapter;
+    Resolucion resolucionToCheck;
+
     @Rule
     public IntentsTestRule<IncidSeeClosedByComuAc> activityRule = new IntentsTestRule<IncidSeeClosedByComuAc>(IncidSeeClosedByComuAc.class) {
 
@@ -100,27 +103,27 @@ public class IncidSeeClosedByComuAcTest_2 {
         {
             try {
                 regSeveralUserComuSameUser(COMU_PLAZUELA5_PEPE, COMU_LA_FUENTE_PEPE);
-                mPepeLaFuente = userComuDaoRemote.seeUserComusByUser().get(0);
-                mPepePlazuelas5 = userComuDaoRemote.seeUserComusByUser().get(1);
+                pepeLaFuente = userComuDaoRemote.seeUserComusByUser().get(0);
+                pepePlazuelas5 = userComuDaoRemote.seeUserComusByUser().get(1);
                 incidPepePlazuelas5_1 = new IncidImportancia.IncidImportanciaBuilder(
-                        doIncidencia(USER_PEPE.getUserName(), "Incid_pepePlazuelas_1", mPepePlazuelas5.getComunidad().getC_Id(), (short) 12))
-                        .usuarioComunidad(mPepePlazuelas5)
+                        doIncidencia(USER_PEPE.getUserName(), "Incid_pepePlazuelas_1", pepePlazuelas5.getComunidad().getC_Id(), (short) 12))
+                        .usuarioComunidad(pepePlazuelas5)
                         .importancia((short) 2)
                         .build();
                 incidPepePlazuelas5_2 = new IncidImportancia.IncidImportanciaBuilder(
-                        doIncidencia(USER_PEPE.getUserName(), "Incid_pepePlazuelas_2", mPepePlazuelas5.getComunidad().getC_Id(), (short) 23))
-                        .usuarioComunidad(mPepePlazuelas5)
+                        doIncidencia(USER_PEPE.getUserName(), "Incid_pepePlazuelas_2", pepePlazuelas5.getComunidad().getC_Id(), (short) 23))
+                        .usuarioComunidad(pepePlazuelas5)
                         .build();
                 incidPepeLaFuente = new IncidImportancia.IncidImportanciaBuilder(
-                        doIncidencia(USER_PEPE.getUserName(), "Incid_pepeLaFuente_1", mPepeLaFuente.getComunidad().getC_Id(), (short) 33))
-                        .usuarioComunidad(mPepeLaFuente)
+                        doIncidencia(USER_PEPE.getUserName(), "Incid_pepeLaFuente_1", pepeLaFuente.getComunidad().getC_Id(), (short) 33))
+                        .usuarioComunidad(pepeLaFuente)
                         .importancia((short) 3)
                         .build();
 
                 // Registro incidPepePlazuelas5_1.
                 assertThat(incidenciaDao.regIncidImportancia(incidPepePlazuelas5_1), is(2));
                 Thread.sleep(1000);
-                Incidencia incidenciaDB = incidenciaDao.seeIncidsOpenByComu(mPepePlazuelas5.getComunidad().getC_Id()).get(0).getIncidencia();
+                Incidencia incidenciaDB = incidenciaDao.seeIncidsOpenByComu(pepePlazuelas5.getComunidad().getC_Id()).get(0).getIncidencia();
                 incidPepePlazuelas5_1 = incidenciaDao.seeIncidImportancia(incidenciaDB.getIncidenciaId()).getIncidImportancia();
                 Resolucion resolucionToClose = doResolucionAvances(incidPepePlazuelas5_1.getIncidencia(), RESOLUCION_DEFAULT_DESC, 231, ActivityTestUtils.doTimeStampFromCalendar(1));
                 assertThat(incidenciaDao.regResolucion(resolucionToClose), is(1));
@@ -132,7 +135,7 @@ public class IncidSeeClosedByComuAcTest_2 {
                 // Registro incidPepeLaFuente.
                 assertThat(incidenciaDao.regIncidImportancia(incidPepeLaFuente), is(2));
                 Thread.sleep(1000);
-                incidenciaDB = incidenciaDao.seeIncidsOpenByComu(mPepeLaFuente.getComunidad().getC_Id()).get(0).getIncidencia();
+                incidenciaDB = incidenciaDao.seeIncidsOpenByComu(pepeLaFuente.getComunidad().getC_Id()).get(0).getIncidencia();
                 incidPepeLaFuente = incidenciaDao.seeIncidImportancia(incidenciaDB.getIncidenciaId()).getIncidImportancia();
                 resolucionToClose = doResolucionAvances(incidPepeLaFuente.getIncidencia(), RESOLUCION_DEFAULT_DESC, 321, ActivityTestUtils.doTimeStampFromCalendar(1));
                 assertThat(incidenciaDao.regResolucion(resolucionToClose), is(1));
@@ -144,10 +147,10 @@ public class IncidSeeClosedByComuAcTest_2 {
                 // Registro incidPepePlazuelas5_2.
                 assertThat(incidenciaDao.regIncidImportancia(incidPepePlazuelas5_2), is(2));
                 Thread.sleep(1000);
-                incidenciaDB = incidenciaDao.seeIncidsOpenByComu(mPepePlazuelas5.getComunidad().getC_Id()).get(0).getIncidencia();
+                incidenciaDB = incidenciaDao.seeIncidsOpenByComu(pepePlazuelas5.getComunidad().getC_Id()).get(0).getIncidencia();
                 incidPepePlazuelas5_2 = incidenciaDao.seeIncidImportancia(incidenciaDB.getIncidenciaId()).getIncidImportancia();
                 resolucionToClose = doResolucionAvances(incidPepePlazuelas5_2.getIncidencia(), RESOLUCION_DEFAULT_DESC, 334, ActivityTestUtils.doTimeStampFromCalendar(1));
-                mResolucionToCheck = resolucionToClose;
+                resolucionToCheck = resolucionToClose;
                 assertThat(incidenciaDao.regResolucion(resolucionToClose), is(1));
                 resolucionToClose = incidenciaDao.seeResolucion(resolucionToClose.getIncidencia().getIncidenciaId());
                 // Cierre incidPepePlazuelas5_2.
@@ -161,31 +164,19 @@ public class IncidSeeClosedByComuAcTest_2 {
                 e.printStackTrace();
             }
         }
-
-        @Override
-        protected Intent getActivityIntent()
-        {
-            return super.getActivityIntent();
-        }
     };
-    private IncidSeeClosedByComuAc mActivity;
-    private UsuarioDataTestUtils.CleanUserEnum whatToClean;
 
-    @BeforeClass
-    public static void slowSeconds() throws InterruptedException
-    {
-        Thread.sleep(3000);
-    }
+    IncidSeeClosedByComuAc activity;
 
     @Before
     public void setUp() throws Exception
     {
-        whatToClean = CLEAN_PEPE;
-        mActivity = activityRule.getActivity();
-        mFragment = (IncidSeeByComuListFr) mActivity.getSupportFragmentManager().findFragmentByTag(incid_see_by_comu_list_fr_tag);
-//        mAdapter = (AdapterIncidSeeClosedByComu) fragmentList.mAdapter;   // TODO: ¡¡¡¡¡¡ Arreglar ¡¡¡¡¡¡¡¡¡¡
-        dbHelper = new IncidenciaDataDbHelper(mActivity);
-//        assertThat(mActivity.mComunidadSelected, is(mPepeLaFuente.getComunidad()));   // TODO: ¡¡¡¡¡¡ Arreglar ¡¡¡¡¡¡¡¡¡¡
+        activity = activityRule.getActivity();
+        dbHelper = new IncidenciaDataDbHelper(activity);
+        fragment = (IncidSeeByComuListFr) activity.getSupportFragmentManager().findFragmentByTag(incid_see_by_comu_list_fr_tag);
+        controllerList = (ControllerIncidCloseSee) fragment.controllerSeeIncids;
+        listAdapter = (AdapterIncidSeeClosedByComu) controllerList.adapter;
+        waitAtMost(2, SECONDS).until(isAdapterInitialized(listAdapter));
     }
 
     @After
@@ -195,17 +186,18 @@ public class IncidSeeClosedByComuAcTest_2 {
         dbHelper.close();
         String dBFileName = DB_PATH.concat(IncidenciaDataDbHelper.DB_NAME);
         deleteDatabase(new File(dBFileName));
-        cleanOptions(whatToClean);
+        cleanOptions(CLEAN_PEPE);
     }
+
+    // ======================================  ManagerIncidSeeIf  ==================================
 
     @Test
     public void testOnData_1() throws Exception
     {
         // CASO OK: muestra las incidencias de la comunidad por defecto (Calle La Fuente).
-        Thread.sleep(2000);
-        assertThat(mAdapter.getCount(), is(1));
+        assertThat(listAdapter.getCount(), is(1));
 
-        IncidenciaUser incidUser_1 = mAdapter.getItem(0);
+        IncidenciaUser incidUser_1 = listAdapter.getItem(0);
         ViewMatchers.assertThat(incidUser_1.getIncidencia(), is(incidPepeLaFuente.getIncidencia()));
         onData(is(incidUser_1)).inAdapterView(withId(android.R.id.list)).check(matches(isDisplayed()));
 
@@ -220,12 +212,12 @@ public class IncidSeeClosedByComuAcTest_2 {
         onView(withId(R.id.incid_reg_comunidad_spinner)).perform(click());
         onData(allOf(
                 is(instanceOf(Comunidad.class)),
-                is(mPepePlazuelas5.getComunidad()))
+                is(pepePlazuelas5.getComunidad()))
         ).check(matches(isDisplayed())).perform(click());
 
-        assertThat(mAdapter.getCount(), is(2));
-        IncidenciaUser incidUser_1 = mAdapter.getItem(0);
-        IncidenciaUser incidUser_2 = mAdapter.getItem(1);
+        assertThat(listAdapter.getCount(), is(2));
+        IncidenciaUser incidUser_1 = listAdapter.getItem(0);
+        IncidenciaUser incidUser_2 = listAdapter.getItem(1);
 
         ViewMatchers.assertThat(incidUser_1.getIncidencia(), is(incidPepePlazuelas5_1.getIncidencia()));
         onData(is(incidUser_1)).inAdapterView(withId(android.R.id.list)).check(matches(isDisplayed()));
@@ -242,10 +234,10 @@ public class IncidSeeClosedByComuAcTest_2 {
         onView(withId(R.id.incid_reg_comunidad_spinner)).perform(click());
         onData(allOf(
                 is(instanceOf(Comunidad.class)),
-                is(mPepePlazuelas5.getComunidad()))
+                is(pepePlazuelas5.getComunidad()))
         ).perform(click());
 
-        IncidenciaUser incidUser = mAdapter.getItem(1);
+        IncidenciaUser incidUser = listAdapter.getItem(1);
         onData(is(incidUser)).inAdapterView(withId(android.R.id.list))
                 .check(matches(isDisplayed()))
                 .perform(click());
@@ -253,13 +245,13 @@ public class IncidSeeClosedByComuAcTest_2 {
         onView(withId(R.id.incid_resolucion_see_fr_layout)).check(matches(isDisplayed()));
 
         // Verificamos argumentos del nuevo fragmento.
-        IncidResolucionSeeFr resolucionSeeFr = (IncidResolucionSeeFr) mActivity.getSupportFragmentManager()
+        IncidResolucionSeeFr resolucionSeeFr = (IncidResolucionSeeFr) activity.getSupportFragmentManager()
                 .findFragmentByTag(incid_resolucion_see_fr_tag);
         assertThat(resolucionSeeFr, notNullValue());
         Bundle args = resolucionSeeFr.getArguments();
         assertThat(args.size(), is(3));
         assertThat((Incidencia) args.getSerializable(IncidBundleKey.INCIDENCIA_OBJECT.key), is(incidPepePlazuelas5_2.getIncidencia()));
-        assertThat((Resolucion) args.getSerializable(IncidBundleKey.INCID_RESOLUCION_OBJECT.key), is(mResolucionToCheck));
+        assertThat((Resolucion) args.getSerializable(IncidBundleKey.INCID_RESOLUCION_OBJECT.key), is(resolucionToCheck));
         assertThat(args.getBoolean(IS_MENU_IN_FRAGMENT_FLAG.key), is(true));
 
         // Probamos el menú del nuevo fragmento.
@@ -283,17 +275,15 @@ public class IncidSeeClosedByComuAcTest_2 {
         // CASO: verificación de la navegación, Utilizamos PressBack.
 
         // Comunidad por defecto.
-        Thread.sleep(2000);
-        IncidenciaUser incidUser = mAdapter.getItem(0);
+        IncidenciaUser incidUser = listAdapter.getItem(0);
 
         // Seleccionamos una incidencia.
         onData(is(incidUser)).inAdapterView(withId(android.R.id.list))
                 .check(matches(isDisplayed()))
                 .perform(click());
-        onView(withId(R.id.incid_resolucion_see_fr_layout)).check(matches(isDisplayed()));
-
         // BACK.
         onView(withId(R.id.incid_resolucion_see_fr_layout)).check(matches(isDisplayed())).perform(pressBack());
+        TimeUnit.MILLISECONDS.sleep(2000);
         /* Datos a la vista de IncidSeeByComuListFr.*/
         showDataIncidList(incidUser);
     }
@@ -304,18 +294,19 @@ public class IncidSeeClosedByComuAcTest_2 {
         // CASO: verificación de la navegación,
 
         // Comunidad por defecto.
-        Thread.sleep(3000);
-        IncidenciaUser incidUser = mAdapter.getItem(0);
+        IncidenciaUser incidUser = listAdapter.getItem(0);
 
         // Seleccionamos una incidencia.
         onData(is(incidUser)).inAdapterView(withId(android.R.id.list))
                 .check(matches(isDisplayed()))
                 .perform(click());
+        TimeUnit.MILLISECONDS.sleep(1000);
         onView(withId(R.id.incid_resolucion_see_fr_layout)).check(matches(isDisplayed()));
 
         // Up Navigation:
         clickNavigateUp();
         /* Datos a la vista de IncidSeeByComuListFr.*/
+        TimeUnit.MILLISECONDS.sleep(2000);
         showDataIncidList(incidUser);
     }
 
@@ -344,7 +335,7 @@ public class IncidSeeClosedByComuAcTest_2 {
                         withId(R.id.incid_see_importancia_block),
                         hasDescendant(allOf(
                                 withId(R.id.incid_importancia_comunidad_view),
-                                withText(mActivity.getResources()
+                                withText(activity.getResources()
                                         .getStringArray(R.array.IncidImportanciaArray)[Math.round(incidPepeLaFuente.getImportancia())]))
                         ))),
                 hasSibling(allOf(

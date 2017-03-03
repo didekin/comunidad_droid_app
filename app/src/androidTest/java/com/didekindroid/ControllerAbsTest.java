@@ -6,7 +6,6 @@ import com.didekindroid.security.IdentityCacher;
 import org.junit.Test;
 
 import static com.didekindroid.testutil.ActivityTestUtils.addSubscription;
-import static com.didekindroid.testutil.ActivityTestUtils.testClearCtrlSubscriptions;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -19,7 +18,7 @@ public abstract class ControllerAbsTest<T extends ControllerIf> {
 
     protected T controller;
 
-    protected abstract void testProcessReactorError();
+    public abstract void testProcessReactorError();
 
     @Test
     public void testGetSubscriptions() throws Exception

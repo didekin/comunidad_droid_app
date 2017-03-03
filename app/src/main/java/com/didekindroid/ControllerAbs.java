@@ -23,8 +23,13 @@ public abstract class ControllerAbs implements ControllerIf {
 
     protected ControllerAbs()
     {
+        this(TKhandler);
+    }
+
+    protected ControllerAbs(IdentityCacher identityCacher)
+    {
         subscriptions = new CompositeDisposable();
-        identityCacher = TKhandler;
+        this.identityCacher = identityCacher;
     }
 
     public abstract ManagerIf.ViewerIf getViewer();

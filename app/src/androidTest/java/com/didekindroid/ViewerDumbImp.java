@@ -25,11 +25,7 @@ public abstract class ViewerDumbImp<T extends View, B> implements ViewerIf<T, B>
         viewInViewer = doViewInViewer(activity);
     }
 
-    @SuppressWarnings("unchecked")
-    public T doViewInViewer(Activity activity)
-    {
-        return (T) new View(activity);
-    }
+    public abstract T doViewInViewer(Activity activity);
 
     @Override
     public Activity getActivity()
@@ -40,7 +36,6 @@ public abstract class ViewerDumbImp<T extends View, B> implements ViewerIf<T, B>
     @Override
     public ActionForUiExceptionIf processControllerError(UiException e)
     {
-        Timber.d("====================== processControllerError() ====================");
         return null;
     }
 

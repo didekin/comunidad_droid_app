@@ -14,8 +14,8 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
         ControllerIncidCloseSeeTest.class,
         ControllerIncidOpenSeeTest.class,
-        IncidSeeClosedByComuAcTest_1.class,
-        IncidSeeClosedByComuAcTest_2.class,
+        IncidSeeClosedByComuAc_Mn_Test.class,
+        IncidSeeClosedByComuAcTest.class,
         IncidSeeOpenByComuAc_GCM_Test.class,
         IncidSeeOpenByComuAcTest_1.class,
         IncidSeeOpenByComuAcTest_2.class,

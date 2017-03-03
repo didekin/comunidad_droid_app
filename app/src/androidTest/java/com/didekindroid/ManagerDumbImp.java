@@ -5,7 +5,6 @@ import android.content.Intent;
 
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf;
-import com.didekindroid.testutil.MockActivity;
 
 /**
  * User: pedro@didekin
@@ -14,7 +13,12 @@ import com.didekindroid.testutil.MockActivity;
  */
 public class ManagerDumbImp<B> implements ManagerIf<B> {
 
-    Activity activity = new MockActivity();
+    final Activity activity;
+
+    public ManagerDumbImp(Activity activity)
+    {
+        this.activity = activity;
+    }
 
     @Override
     public Activity getActivity()

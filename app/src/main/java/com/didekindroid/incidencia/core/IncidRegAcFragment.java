@@ -86,7 +86,7 @@ public class IncidRegAcFragment extends Fragment implements AmbitoSpinnerSettabl
         HELPER.doImportanciaSpinner(this);
 
         comuSpinnerManager = this;
-        comuSpinnerViewer =  newComuSpinnerViewer(comuSpinnerManager).initSelectedIndex(savedState).setDataInView();
+        comuSpinnerViewer = newComuSpinnerViewer(comuSpinnerManager).setDataInView(savedState);
     }
 
     @Override

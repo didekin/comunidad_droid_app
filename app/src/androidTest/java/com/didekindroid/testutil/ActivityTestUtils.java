@@ -8,6 +8,7 @@ import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.contrib.PickerActions;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.view.View;
+import android.widget.BaseAdapter;
 import android.widget.DatePicker;
 
 import com.didekindroid.ManagerIf.ControllerIf;
@@ -46,7 +47,6 @@ import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOU
 import static java.util.Calendar.DAY_OF_MONTH;
 import static java.util.Calendar.MONTH;
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.awaitility.Awaitility.await;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
@@ -92,14 +92,7 @@ public final class ActivityTestUtils {
         };
     }
 
-    //    ============================= CONTROLLER ===================================
-
-    public static void testClearCtrlSubscriptions(ControllerIf controller, ViewerIf viewer)
-    {
-        addSubscription(controller);
-        viewer.clearControllerSubscriptions();
-        await().atMost(1, SECONDS).until(subscriptionsSize(controller), is(0));
-    }
+    //    ============================= CONTROLLER/adapters ===================================
 
     public static void addSubscription(ControllerIf controller)
     {
@@ -114,12 +107,22 @@ public final class ActivityTestUtils {
         assertThat(controller.getSubscriptions().size(), is(1));
     }
 
-    static Callable<Integer> subscriptionsSize(final ControllerIf controller){
-        return  new Callable<Integer>() {
-            @Override
-            public Integer call() throws Exception
+    public static Callable<Boolean> hasRegisteredFlag(final ControllerIf controller)
+    {
+        return new Callable<Boolean>() {
+            public Boolean call() throws Exception
             {
-                return controller.getSubscriptions().size();
+                return controller.isRegisteredUser();
+            }
+        };
+    }
+
+    public static Callable<Boolean> isAdapterInitialized(final BaseAdapter adapter)
+    {
+        return new Callable<Boolean>() {
+            public Boolean call() throws Exception
+            {
+                return !adapter.isEmpty();
             }
         };
     }

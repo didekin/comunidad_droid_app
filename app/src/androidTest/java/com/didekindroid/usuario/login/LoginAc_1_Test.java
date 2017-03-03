@@ -3,6 +3,7 @@ package com.didekindroid.usuario.login;
 import android.app.Activity;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.view.View;
 
 import com.didekindroid.ExtendableTestAc;
 import com.didekindroid.R;
@@ -18,8 +19,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -44,7 +45,6 @@ import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtils.isActivityDying;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
-import static com.didekindroid.testutil.ActivityTestUtils.testClearCtrlSubscriptions;
 import static com.didekindroid.testutil.ActivityTestUtils.testProcessCtrlError;
 import static com.didekindroid.testutil.ActivityTestUtils.testProcessCtrlErrorOnlyToast;
 import static com.didekindroid.testutil.ActivityTestUtils.testReplaceViewStd;
@@ -56,6 +56,7 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.CO
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
 import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOUND;
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
 import static org.awaitility.Awaitility.fieldIn;
@@ -70,6 +71,8 @@ import static org.junit.Assert.assertThat;
  */
 @RunWith(AndroidJUnit4.class)
 public class LoginAc_1_Test implements ExtendableTestAc {
+
+    static AtomicInteger flagForExecution = new AtomicInteger(0);
 
     LoginAc activity;
     int activityLayoutId = R.id.login_ac_layout;
@@ -99,7 +102,7 @@ public class LoginAc_1_Test implements ExtendableTestAc {
     @BeforeClass
     public static void relax() throws InterruptedException
     {
-        TimeUnit.MILLISECONDS.sleep(2000);
+        MILLISECONDS.sleep(2000);
     }
 
     @Before
@@ -108,6 +111,7 @@ public class LoginAc_1_Test implements ExtendableTestAc {
         identityCacher = TKhandler;
         isToCleanNormal = new AtomicBoolean(true);
         activity = (LoginAc) mActivityRule.getActivity();
+        // Default initialization.
         controller = new ControllerLogin(activity);
     }
 
@@ -167,7 +171,9 @@ public class LoginAc_1_Test implements ExtendableTestAc {
     @Test
     public void testClearControllerSubscriptions()
     {
-        testClearCtrlSubscriptions(controller, activity);
+        controller = new ControllerLoginForTest(activity);
+        activity.clearControllerSubscriptions();
+        assertThat(flagForExecution.getAndSet(0), is(29));
     }
 
     @Test
@@ -366,5 +372,22 @@ public class LoginAc_1_Test implements ExtendableTestAc {
                 .check(matches(isDisplayed()));
         onView(withText(send_password_by_mail_NO)).inRoot(isDialog())
                 .check(matches(isDisplayed()));
+    }
+
+    // ========================== HELPERS ============================
+
+    class ControllerLoginForTest extends ControllerLogin {
+
+        ControllerLoginForTest(ViewerLoginIf<View, Object> viewer)
+        {
+            super(viewer);
+        }
+
+        @Override
+        public int clearSubscriptions()
+        {
+            assertThat(flagForExecution.getAndSet(29), is(0));
+            return 99;
+        }
     }
 }

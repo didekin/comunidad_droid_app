@@ -114,7 +114,7 @@ public class IncidSeeOpenByComuAcTest_3 {
         IncidSeeByComuListFr mFragment = (IncidSeeByComuListFr) mActivity.getSupportFragmentManager()
                 .findFragmentByTag(incid_see_by_comu_list_fr_tag);
         Thread.sleep(2000);
-//        adapter = (AdapterIncidSeeOpenByComu) fragmentList.mAdapter;           // TODO: ¡¡¡¡¡¡ Arreglar ¡¡¡¡¡¡¡¡¡¡
+//        adapter = (AdapterIncidSeeOpenByComu) fragmentList.listAdapter;           // TODO: ¡¡¡¡¡¡ Arreglar ¡¡¡¡¡¡¡¡¡¡
     }
 
     @After

@@ -1,14 +1,15 @@
 package com.didekindroid.incidencia.spinner;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.didekindroid.ControllerAbsTest;
+import com.didekindroid.ManagerIf.ControllerIf;
 import com.didekindroid.ViewerDumbImp;
 import com.didekindroid.ViewerWithSelectIf;
 import com.didekindroid.exception.UiException;
@@ -18,6 +19,8 @@ import com.didekindroid.incidencia.spinner.ManagerComuSpinnerIf.ReactorComuSpinn
 import com.didekindroid.incidencia.spinner.ManagerComuSpinnerIf.ViewerComuSpinnerIf;
 import com.didekindroid.testutil.MockActivity;
 import com.didekinlib.model.comunidad.Comunidad;
+import com.didekinlib.model.comunidad.Municipio;
+import com.didekinlib.model.comunidad.Provincia;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.junit.Before;
@@ -33,8 +36,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import timber.log.Timber;
 
-import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_EL_ESCORIAL;
-import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_LA_FUENTE;
 import static com.didekindroid.incidencia.spinner.ControllerComuSpinner.newControllerComuSpinner;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceAndroidMain;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceIoScheduler;
@@ -44,7 +45,11 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.ma
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.regTwoUserComuSameUser;
 import static com.didekinlib.http.GenericExceptionMsg.TOKEN_NULL;
 import static io.reactivex.plugins.RxJavaPlugins.reset;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.awaitility.Awaitility.fieldIn;
+import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -60,17 +65,25 @@ public class ControllerComuSpinnerTest extends ControllerAbsTest<ControllerComuS
     @Rule
     public ActivityTestRule<MockActivity> activityRule = new ActivityTestRule<>(MockActivity.class, true, true);
 
-    ControllerComuSpinner controller;
     UsuarioComunidad pepeUserComu;
     ReactorComuSpinnerIf reactor;
     ViewerComuSpinnerIf controllerViewer;
+    Activity activity;
 
     @Before
     public void setUp()
     {
-        controllerViewer = new ViewerComuSpinnerForTest(activityRule.getActivity());
-        // Default initialization.
-        controller = (ControllerComuSpinner) newControllerComuSpinner(controllerViewer);
+        activity = activityRule.getActivity();
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                controllerViewer = new ViewerComuSpinnerForTest(activity);
+                // Default initialization of field in ControllerAbsTest.
+                controller = (ControllerComuSpinner) newControllerComuSpinner(controllerViewer);
+            }
+        });
+        waitAtMost(1L, SECONDS).until(fieldIn(this).ofType(ControllerIf.class), notNullValue());
     }
 
     // ............................ CONTROLLER ...............................
@@ -91,28 +104,51 @@ public class ControllerComuSpinnerTest extends ControllerAbsTest<ControllerComuS
         assertThat(flagForExecution.getAndSet(0), is(19));
     }
 
+    @Test
+    public void getSelectedFromComunidadId() throws Exception
+    {
+        List<Comunidad> comunidades = makeComunidadesList();
+        controller.spinnerAdapter.addAll(comunidades);
+        controller.comuSpinner.setAdapter(controller.spinnerAdapter);
+        assertThat(controller.getSelectedFromComunidadId(321L), is(0));
+        assertThat(controller.getSelectedFromComunidadId(123L), is(1));
+    }
+
     @SuppressWarnings("unchecked")
     @Test
     public void testProcessBackLoadComusInSpinner() throws IOException, UiException
     {
-        List<Comunidad> comunidades = new ArrayList<>(2);
-        comunidades.add(COMU_EL_ESCORIAL);
-        comunidades.add(COMU_LA_FUENTE);
+        List<Comunidad> comunidades = makeComunidadesList();
         controller.processBackLoadComusInSpinner(comunidades);
+
+        assertThat(flagForExecution.getAndSet(0), is(13));
 
         ArrayAdapter<Comunidad> postAdapter = (ArrayAdapter<Comunidad>) controller.comuSpinner.getAdapter();
         assertThat(postAdapter, is(controller.spinnerAdapter));
         assertThat(postAdapter.getCount(), is(2));
-        // Assertions based on viewer.getComunidadSelectedIndex().
-        assertThat(controller.comuSpinner.getSelectedItemId(), is(1L));
+        // Assertions based on viewer.getComunidadSelectedId(): 123L.
+        assertThat(controller.comuSpinner.getSelectedItemPosition(), is(1));
     }
 
     @Override
     @Test
-    protected void testProcessReactorError()
+    public void testProcessReactorError()
     {
         controller.processReactorError(new Throwable());
         assertThat(flagForExecution.getAndSet(0), is(23));
+    }
+
+    @NonNull
+    private List<Comunidad> makeComunidadesList()
+    {
+        List<Comunidad> comunidades = new ArrayList<>(2);
+        comunidades.add(new Comunidad.ComunidadBuilder().c_id(321L).nombreVia("AAAAAA")
+                .municipio(new Municipio((short) 1, new Provincia((short) 11)))
+                .build());
+        comunidades.add(new Comunidad.ComunidadBuilder().c_id(123L).nombreVia("ZZZZZ")
+                .municipio(new Municipio((short) 2, new Provincia((short) 22)))
+                .build());
+        return comunidades;
     }
 
     // ............................ REACTOR ..................................
@@ -121,6 +157,7 @@ public class ControllerComuSpinnerTest extends ControllerAbsTest<ControllerComuS
     @Test
     public void testLoadComunidades() throws IOException, UiException
     {
+        // Mock injection.
         controller = new ControllerComuSpinner(controllerViewer) {
             @Override
             public void processBackLoadComusInSpinner(Collection<Comunidad> comunidades)
@@ -183,15 +220,16 @@ public class ControllerComuSpinnerTest extends ControllerAbsTest<ControllerComuS
         }
 
         @Override
-        public ViewerComuSpinnerIf setDataInView()
+        public ViewerComuSpinnerIf setDataInView(Bundle savedState)
         {
             return this;
         }
 
-        @Override // Used in testProcessBackLoadComusInSpinner().
-        public int getComunidadSelectedIndex()
+        // Used in testProcessBackLoadComusInSpinner().
+        public long getComunidadSelectedId()
         {
-            return 1;
+            assertThat(flagForExecution.getAndSet(13), is(0));
+            return 123L;
         }
 
         @Override
@@ -221,8 +259,7 @@ public class ControllerComuSpinnerTest extends ControllerAbsTest<ControllerComuS
         {
             Timber.d("====================== processControllerError() ====================");
             assertThat(flagForExecution.getAndSet(23), is(0));
-            assertThat(ui.getErrorBean().getMessage(), is(TOKEN_NULL.getHttpMessage()));
-            return ui.processMe(activity, new Intent());
+            return null;
         }
     }
 }

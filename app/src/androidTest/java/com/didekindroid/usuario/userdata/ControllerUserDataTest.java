@@ -19,6 +19,8 @@ import org.junit.Test;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import timber.log.Timber;
+
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_DROID;
 import static com.didekinlib.http.GenericExceptionMsg.TOKEN_NULL;
 import static org.hamcrest.CoreMatchers.is;
@@ -76,7 +78,7 @@ public class ControllerUserDataTest extends ControllerAbsTest {
 
     @Override
     @Test
-    protected void testProcessReactorError()
+    public void testProcessReactorError()
     {
         controller.processReactorError(new UiException(new ErrorBean(TOKEN_NULL)));
         assertThat(flagForExecution.getAndSet(0), is(37));
@@ -113,6 +115,12 @@ public class ControllerUserDataTest extends ControllerAbsTest {
         {
             super(activity);
             viewInViewer = new View(activity);
+        }
+
+        @Override
+        public View doViewInViewer(Activity activity)
+        {
+            return new View(activity);
         }
 
         @Override
@@ -160,10 +168,10 @@ public class ControllerUserDataTest extends ControllerAbsTest {
         @Override  // Used in testProcessReactorError()
         public UiExceptionIf.ActionForUiExceptionIf processControllerError(UiException ui)
         {
-            super.processControllerError(ui);
+            Timber.d("====================== processControllerError() ====================");
             assertThat(flagForExecution.getAndSet(37), is(0));
             assertThat(ui.getErrorBean().getMessage(), is(TOKEN_NULL.getHttpMessage()));
-            return ui.processMe(activity, new Intent());
+            return null;
         }
     }
 

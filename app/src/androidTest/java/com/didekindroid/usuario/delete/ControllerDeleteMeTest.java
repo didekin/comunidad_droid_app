@@ -81,6 +81,12 @@ public class ControllerDeleteMeTest {
         }
 
         @Override
+        public View doViewInViewer(Activity activity)
+        {
+            return new View(activity);
+        }
+
+        @Override
         public void replaceView(Object initParams)
         {
             assertThat(flagForExecution.getAndSet(12), is(0));

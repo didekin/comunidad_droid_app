@@ -1,5 +1,6 @@
 package com.didekindroid.incidencia.list;
 
+import android.os.Bundle;
 import android.widget.ListView;
 
 import com.didekindroid.ManagerIf;
@@ -31,7 +32,7 @@ interface ManagerIncidSeeIf<B> extends ManagerIf<B> {
 
     interface ViewerIncidSeeIf<B> extends ViewerWithSelectIf<ListView, B> {
 
-        void doIncidListView();
+        void doIncidListView(Bundle savedState);
     }
 
     // ................. CONTROLLER ....................

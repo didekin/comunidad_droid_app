@@ -2,6 +2,7 @@ package com.didekindroid.usuario.userdata;
 
 import android.app.Activity;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
+import android.view.View;
 import android.widget.EditText;
 
 import com.didekindroid.ExtendableTestAc;
@@ -18,6 +19,7 @@ import org.junit.Test;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -44,7 +46,6 @@ import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewOnView;
-import static com.didekindroid.testutil.ActivityTestUtils.testClearCtrlSubscriptions;
 import static com.didekindroid.testutil.ActivityTestUtils.testProcessCtrlError;
 import static com.didekindroid.testutil.ActivityTestUtils.testProcessCtrlErrorOnlyToast;
 import static com.didekindroid.testutil.ActivityTestUtils.testReplaceViewStd;
@@ -84,8 +85,10 @@ import static org.junit.Assert.fail;
  */
 public class UserDataAcTest implements ExtendableTestAc {
 
+    static AtomicInteger flagForExecution = new AtomicInteger(0);
     UserDataAc activity;
     Usuario registeredUser;
+
     @Rule
     public IntentsTestRule<? extends Activity> mActivityRule = new IntentsTestRule<UserDataAc>(UserDataAc.class) {
         @Override
@@ -99,6 +102,7 @@ public class UserDataAcTest implements ExtendableTestAc {
             }
         }
     };
+
     ControllerUserDataIf controller;
     int activityLayoutId = R.id.user_data_ac_layout;
 
@@ -112,6 +116,7 @@ public class UserDataAcTest implements ExtendableTestAc {
     public void setUp() throws Exception
     {
         activity = (UserDataAc) mActivityRule.getActivity();
+        // Default initialization.
         controller = new ControllerUserData(activity);
     }
 
@@ -203,7 +208,9 @@ public class UserDataAcTest implements ExtendableTestAc {
     @Test
     public void testClearControllerSubscriptions()
     {
-        testClearCtrlSubscriptions(controller, activity);
+        controller = new ControllerUserDataForTest(activity);
+        activity.clearControllerSubscriptions();
+        assertThat(flagForExecution.getAndSet(0), is(29));
     }
 
     @Test
@@ -438,5 +445,20 @@ public class UserDataAcTest implements ExtendableTestAc {
     {
         assertThat(((EditText) activity.acView.findViewById(R.id.reg_usuario_email_editT)).getText().toString(), is(userName));
         assertThat(((EditText) activity.acView.findViewById(R.id.reg_usuario_alias_ediT)).getText().toString(), is(alias));
+    }
+
+    class ControllerUserDataForTest extends ControllerUserData{
+
+        ControllerUserDataForTest(ViewerUserDataIf<View, Object> viewer)
+        {
+            super(viewer);
+        }
+
+        @Override
+        public int clearSubscriptions()
+        {
+            assertThat(flagForExecution.getAndSet(29), is(0));
+            return 99;
+        }
     }
 }

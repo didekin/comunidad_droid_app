@@ -1,5 +1,6 @@
 package com.didekindroid.incidencia.spinner;
 
+import android.os.Bundle;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
@@ -39,8 +40,8 @@ public interface ManagerComuSpinnerIf<B> extends ManagerIf<B>{
     // ........................ VIEWER ...........................
 
     interface ViewerComuSpinnerIf extends ViewerWithSelectIf<Spinner,Object> {
-        ViewerComuSpinnerIf setDataInView();
-        int getComunidadSelectedIndex();
+        ViewerComuSpinnerIf setDataInView(Bundle savedState);
+        long getComunidadSelectedId();
     }
 
     // ....................... REACTOR ...........................

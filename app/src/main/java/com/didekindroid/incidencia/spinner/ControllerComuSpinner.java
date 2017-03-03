@@ -30,8 +30,8 @@ import static io.reactivex.schedulers.Schedulers.io;
 class ControllerComuSpinner extends ControllerAbs implements ControllerComuSpinnerIf {
 
     final ArrayAdapter<Comunidad> spinnerAdapter;
-    private final AtomicReference<ReactorComuSpinnerIf> reactor;
     final Spinner comuSpinner;
+    private final AtomicReference<ReactorComuSpinnerIf> reactor;
     private final ViewerComuSpinnerIf viewer;
 
     // Package local to allow for extending it in anonymous mock subclasses.
@@ -85,7 +85,25 @@ class ControllerComuSpinner extends ControllerAbs implements ControllerComuSpinn
         spinnerAdapter.clear();
         spinnerAdapter.addAll(comunidades);
         comuSpinner.setAdapter(spinnerAdapter);
-        comuSpinner.setSelection(viewer.getComunidadSelectedIndex());
+        comuSpinner.setSelection(getSelectedFromComunidadId(viewer.getComunidadSelectedId()));
+    }
+
+    int getSelectedFromComunidadId(final long comunidadId)
+    {
+        int position = 0;
+        boolean isFound = false;
+        if (comunidadId > 0L) {
+            long comunidadIdIn;
+            do {
+                comunidadIdIn = ((Comunidad) comuSpinner.getItemAtPosition(position)).getC_Id();
+                if (comunidadIdIn == comunidadId) {
+                    isFound = true;
+                    break;
+                }
+            } while (++position < comuSpinner.getCount());
+        }
+        // Si no encontramos la comuidad, index = 0.
+        return isFound ? position : 0;
     }
 
     // ............................ REACTOR ..................................

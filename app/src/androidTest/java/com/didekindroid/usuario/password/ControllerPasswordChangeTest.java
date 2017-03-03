@@ -72,6 +72,12 @@ public class ControllerPasswordChangeTest {
         }
 
         @Override
+        public View doViewInViewer(Activity activity)
+        {
+            return new View(activity);
+        }
+
+        @Override
         public String[] getPswdDataFromView()
         {
             return new String[0];

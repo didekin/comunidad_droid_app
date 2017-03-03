@@ -8,11 +8,10 @@ import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf.ActionForUiExceptionIf;
 import com.didekindroid.incidencia.spinner.ManagerComuSpinnerIf.ControllerComuSpinnerIf;
 import com.didekindroid.incidencia.spinner.ManagerComuSpinnerIf.ViewerComuSpinnerIf;
-import com.didekinlib.model.comunidad.Comunidad;
 
 import timber.log.Timber;
 
-import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_LIST_INDEX;
+import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.spinner.ControllerComuSpinner.newControllerComuSpinner;
 
 /**
@@ -25,7 +24,7 @@ public final class ViewerComuSpinner implements ViewerComuSpinnerIf {
 
     final ManagerComuSpinnerIf manager;
     final private Spinner spinnerView;
-    int comunidadSelectedIndex;
+    long comunidadSelectedId;
     private ControllerComuSpinnerIf controller;
 
     private ViewerComuSpinner(ManagerComuSpinnerIf spinnerManager)
@@ -42,6 +41,49 @@ public final class ViewerComuSpinner implements ViewerComuSpinnerIf {
         return instance;
     }
 
+    // ==================================== ViewerComuSpinnerI ====================================
+
+    @Override
+    public ViewerComuSpinnerIf setDataInView(Bundle savedState)
+    {
+        Timber.d("setDataInView()");
+        initSelectedIndex(savedState);
+        controller.loadDataInSpinner();
+        return this;
+    }
+
+    public long getComunidadSelectedId()
+    {
+        Timber.d("getComunidadSelectedId()");
+        return comunidadSelectedId;
+    }
+
+    // ==================================== ViewerWithSelectIf ====================================
+
+    @Override
+    public ViewerComuSpinnerIf initSelectedIndex(Bundle savedState)
+    {
+        Timber.d("initSelectedIndex()");
+
+        if (savedState != null) {
+            // From savedInstanceState.
+            comunidadSelectedId = savedState.getLong(COMUNIDAD_ID.key, 0);
+        } else {
+            // From intent.
+            comunidadSelectedId = manager.getComunidadIdInIntent();
+        }
+        return this;
+    }
+
+    @Override
+    public void saveSelectedIndex(Bundle savedState)
+    {
+        Timber.d("saveSelectedIndex()");
+        savedState.putLong(COMUNIDAD_ID.key, comunidadSelectedId);
+    }
+
+    // ==================================== ViewerIf ====================================
+
     @Override
     public Spinner getViewInViewer()
     {
@@ -57,45 +99,10 @@ public final class ViewerComuSpinner implements ViewerComuSpinnerIf {
     }
 
     @Override
-    public ViewerComuSpinnerIf setDataInView()
-    {
-        Timber.d("setDataInView()");
-        controller.loadDataInSpinner();
-        return this;
-    }
-
-    @Override
     public Activity getActivity()
     {
         Timber.d("getContext()");
         return manager.getActivity();
-    }
-
-    @Override
-    public ViewerComuSpinnerIf initSelectedIndex(Bundle savedState)
-    {
-        Timber.d("initSelectedIndex()");
-
-        // From savedInstanceState.
-        if (savedState != null) {
-            comunidadSelectedIndex = savedState.getInt(COMUNIDAD_LIST_INDEX.key, 0);
-            return this;
-        }
-
-        // From intent.
-        long idToSearchFor = manager.getComunidadIdInIntent();
-
-        if (idToSearchFor > 0L) {
-            int position = 0;
-            comunidadSelectedIndex = 0;
-            do {
-                if (((Comunidad) spinnerView.getItemAtPosition(position)).getC_Id() == idToSearchFor) {
-                    comunidadSelectedIndex = position;
-                    break;
-                }
-            } while (++position < spinnerView.getCount());
-        }
-        return this;
     }
 
     @Override
@@ -106,27 +113,13 @@ public final class ViewerComuSpinner implements ViewerComuSpinnerIf {
     }
 
     @Override
-    public void saveSelectedIndex(Bundle savedState)
-    {
-        Timber.d("saveSelectedIndex()");
-        savedState.putInt(COMUNIDAD_LIST_INDEX.key, comunidadSelectedIndex);
-    }
-
-    @Override
-    public int getComunidadSelectedIndex()
-    {
-        Timber.d("getComunidadSelectedIndex()");
-        return comunidadSelectedIndex;
-    }
-
-    @Override
     public int clearControllerSubscriptions()
     {
         Timber.d("clearControllerSubscriptions()");
         return controller.clearSubscriptions();
     }
 
-//  ===================================== HELPERS ============================================
+    //  ===================================== HELPERS ============================================
 
     ControllerComuSpinnerIf getController()
     {
@@ -135,7 +128,8 @@ public final class ViewerComuSpinner implements ViewerComuSpinnerIf {
 
     void setController(ViewerComuSpinnerIf viewer)
     {
-        this.controller = newControllerComuSpinner(viewer);
+        controller = newControllerComuSpinner(viewer);
+
     }
 
     // Mainly to allow injection of mock controllers.

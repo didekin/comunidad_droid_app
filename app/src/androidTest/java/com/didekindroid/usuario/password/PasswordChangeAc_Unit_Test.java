@@ -3,6 +3,7 @@ package com.didekindroid.usuario.password;
 import android.app.Activity;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.view.View;
 
 import com.didekindroid.ExtendableTestAc;
 import com.didekindroid.R;
@@ -17,12 +18,12 @@ import org.junit.runner.RunWith;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.didekindroid.R.id.user_data_ac_layout;
 import static com.didekindroid.exception.UiExceptionRouter.GENERIC_APP_ACC;
 import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
-import static com.didekindroid.testutil.ActivityTestUtils.testClearCtrlSubscriptions;
 import static com.didekindroid.testutil.ActivityTestUtils.testProcessCtrlError;
 import static com.didekindroid.testutil.ActivityTestUtils.testProcessCtrlErrorOnlyToast;
 import static com.didekindroid.testutil.ActivityTestUtils.testReplaceViewStd;
@@ -47,12 +48,14 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class PasswordChangeAc_Unit_Test implements ExtendableTestAc {
 
+    static AtomicInteger flagForExecution = new AtomicInteger(0);
+
+    @Rule
+    public ActivityTestRule<? extends Activity> mActivityRule = new ActivityTestRule<>(PasswordChangeAc.class, true);
+
     String[] textFromView;
     PasswordChangeAc activity;
     ControllerPasswordChangeIf controller;
-
-    @Rule
-    public ActivityTestRule<? extends Activity> mActivityRule = new ActivityTestRule<>(PasswordChangeAc.class,true);
 
     @BeforeClass
     public static void relax() throws InterruptedException
@@ -64,6 +67,7 @@ public class PasswordChangeAc_Unit_Test implements ExtendableTestAc {
     public void setUp() throws Exception
     {
         activity = (PasswordChangeAc) mActivityRule.getActivity();
+        // Default initialization.
         controller = new ControllerPasswordChange(activity);
     }
 
@@ -91,13 +95,15 @@ public class PasswordChangeAc_Unit_Test implements ExtendableTestAc {
     public void testProcessControllerError_2() throws Exception
     {
         int activityLayoutId = R.id.password_change_ac_layout;
-        testProcessCtrlErrorOnlyToast(activity,USER_NAME_NOT_FOUND, R.string.username_wrong_in_login, activityLayoutId);
+        testProcessCtrlErrorOnlyToast(activity, USER_NAME_NOT_FOUND, R.string.username_wrong_in_login, activityLayoutId);
     }
 
     @Test
     public void testClearControllerSubscriptions()
     {
-        testClearCtrlSubscriptions(controller, activity);
+        controller = new ControllerPasswordChangeForTest(activity);
+        activity.clearControllerSubscriptions();
+        assertThat(flagForExecution.getAndSet(0), is(29));
     }
 
     @Test
@@ -160,5 +166,22 @@ public class PasswordChangeAc_Unit_Test implements ExtendableTestAc {
         });
         await().atMost(1, SECONDS).untilTrue(isPswdDataOk);
         assertThat(activity.usuarioBean.getUsuario(), notNullValue());
+    }
+
+    //  ================================== HELPERS  ==================================
+
+    class ControllerPasswordChangeForTest extends ControllerPasswordChange {
+
+        ControllerPasswordChangeForTest(ViewerPasswordChangeIf<View, Object> viewer)
+        {
+            super(viewer);
+        }
+
+        @Override
+        public int clearSubscriptions()
+        {
+            assertThat(flagForExecution.getAndSet(29), is(0));
+            return 99;
+        }
     }
 }

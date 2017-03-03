@@ -159,7 +159,7 @@ public class ControllerIncidCloseSeeTest extends ControllerAbsTest<ControllerInc
         }
 
         @Override
-        public void doIncidListView()
+        public void doIncidListView(Bundle savedState)
         {
         }
 
@@ -192,7 +192,7 @@ public class ControllerIncidCloseSeeTest extends ControllerAbsTest<ControllerInc
         }
     }
 
-    static class ReactorIncidSeeForTest implements ManagerIncidSeeIf.ReactorIncidSeeIf {
+    class ReactorIncidSeeForTest implements ManagerIncidSeeIf.ReactorIncidSeeIf {
 
         @Override  // User in testDealWithIncidSelected().
         public boolean seeResolucion(ControllerIncidSeeIf<Resolucion> controller, Incidencia incidencia)
@@ -211,15 +211,13 @@ public class ControllerIncidCloseSeeTest extends ControllerAbsTest<ControllerInc
         @Override // Used in ControllerIncidOpenSeeTest.loadIncidsByComu().
         public boolean seeIncidOpenList(ControllerIncidSeeIf controller, long comunidadId)
         {
-            assertThat(flagForExecution.getAndSet(110), is(0));
-            return flagForExecution.get() == 110;
+            return false;
         }
 
         @Override  // Used in dealWithIncidSelected().
         public boolean seeIncidImportancia(ControllerIncidSeeIf<IncidAndResolBundle> controller, Incidencia incidencia)
         {
-            assertThat(flagForExecution.getAndSet(112), is(0));
-            return flagForExecution.get() == 112;
+            return false;
         }
     }
 }

@@ -123,7 +123,7 @@ public class IncidSeeOpenByComuAcTest_4 {
         IncidSeeByComuListFr mFragment = (IncidSeeByComuListFr) mActivity.getSupportFragmentManager()
                 .findFragmentByTag(incid_see_by_comu_list_fr_tag);
         Thread.sleep(2000);
-//        adapter = (AdapterIncidSeeOpenByComu) fragmentList.mAdapter;         // TODO: ¡¡¡¡¡¡ Arreglar ¡¡¡¡¡¡¡¡¡¡
+//        adapter = (AdapterIncidSeeOpenByComu) fragmentList.listAdapter;         // TODO: ¡¡¡¡¡¡ Arreglar ¡¡¡¡¡¡¡¡¡¡
         // Premisas.
         assertThat(userComuJuan.hasAdministradorAuthority(), is(false));
         assertThat(incidenciaDao.seeResolucion(resolucion.getIncidencia().getIncidenciaId()), notNullValue());

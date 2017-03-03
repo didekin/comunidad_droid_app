@@ -1,7 +1,6 @@
 package com.didekindroid.incidencia.list;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.test.rule.ActivityTestRule;
 import android.widget.ListAdapter;
@@ -12,7 +11,6 @@ import com.didekindroid.ViewerDumbImp;
 import com.didekindroid.ViewerWithSelectIf;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf;
-import com.didekindroid.incidencia.list.ControllerIncidCloseSeeTest.ReactorIncidSeeForTest;
 import com.didekindroid.incidencia.list.ManagerIncidSeeIf.ViewerIncidSeeIf;
 import com.didekindroid.testutil.MockActivity;
 import com.didekinlib.model.comunidad.Comunidad;
@@ -20,8 +18,10 @@ import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
+import com.didekinlib.model.incidencia.dominio.Resolucion;
 
 import org.hamcrest.CoreMatchers;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -55,13 +55,20 @@ public class ControllerIncidOpenSeeTest extends ControllerAbsTest<ControllerInci
     public void setUp()
     {
         activity = activityRule.getActivity();
-        controller = new ControllerIncidOpenSee(new ViewerIncidOpenSeeForTest(activity), new ReactorIncidSeeForTest());
+        controller = new ControllerIncidOpenSee(new ViewerIncidSeeForTest(activity), new ReactorIncidSeeForTest());
         incidencia = new Incidencia.IncidenciaBuilder().incidenciaId(1L)
                 .comunidad(
                         new Comunidad.ComunidadBuilder().c_id(99L).build()
-                ).build();
+                )
+                .userName(USER_JUAN.getUserName())
+                .build();
     }
 
+    @After
+    public void closeDown()
+    {
+        flagForExecution.set(0);
+    }
 
     //  ============================================================================================
     //    .................................... TESTS .................................
@@ -71,7 +78,7 @@ public class ControllerIncidOpenSeeTest extends ControllerAbsTest<ControllerInci
 
     @Override
     @Test
-    protected void testProcessReactorError()
+    public void testProcessReactorError()
     {
         controller.processReactorError(new Throwable());
         assertThat(flagForExecution.getAndSet(0), is(111));
@@ -123,17 +130,22 @@ public class ControllerIncidOpenSeeTest extends ControllerAbsTest<ControllerInci
     //    .................................... HELPERS .................................
     //  ============================================================================================
 
-    class ViewerIncidOpenSeeForTest extends ViewerDumbImp<ListView, IncidAndResolBundle> implements
+    class ViewerIncidSeeForTest extends ViewerDumbImp<ListView, IncidAndResolBundle> implements
             ViewerIncidSeeIf<IncidAndResolBundle> {
 
-        protected ViewerIncidOpenSeeForTest(Activity activity)
+        protected ViewerIncidSeeForTest(Activity activity)
         {
             super(activity);
         }
 
+        @Override
+        public ListView doViewInViewer(Activity activity)
+        {
+            return new ListView(activity);
+        }
 
         @Override
-        public void doIncidListView()
+        public void doIncidListView(Bundle savedState)
         {
         }
 
@@ -154,14 +166,43 @@ public class ControllerIncidOpenSeeTest extends ControllerAbsTest<ControllerInci
             assertThat(flagForExecution.getAndSet(113), is(0));
             assertThat(initParams.hasResolucion(), is(true));
             assertThat(initParams.getIncidImportancia().getIncidencia(), is(incidencia));
-            assertThat(initParams.getIncidImportancia().getImportancia(), is((short)3));
+            assertThat(initParams.getIncidImportancia().getImportancia(), is((short) 3));
         }
 
         @Override // Used in testProcessReactorError().
         public UiExceptionIf.ActionForUiExceptionIf processControllerError(UiException e)
         {
             assertThat(flagForExecution.getAndSet(111), is(0));
-            return e.processMe(activity, new Intent());
+            return null;
+        }
+    }
+
+    class ReactorIncidSeeForTest implements ManagerIncidSeeIf.ReactorIncidSeeIf {
+
+        @Override
+        public boolean seeResolucion(ManagerIncidSeeIf.ControllerIncidSeeIf<Resolucion> controller, Incidencia incidencia)
+        {
+            return false;
+        }
+
+        @Override
+        public boolean seeIncidClosedList(ManagerIncidSeeIf.ControllerIncidSeeIf controller, long comunidadId)
+        {
+            return false;
+        }
+
+        @Override // Used in loadIncidsByComu().
+        public boolean seeIncidOpenList(ManagerIncidSeeIf.ControllerIncidSeeIf controller, long comunidadId)
+        {
+            assertThat(flagForExecution.getAndSet(110), is(0));
+            return flagForExecution.get() == 110;
+        }
+
+        @Override  // Used in dealWithIncidSelected().
+        public boolean seeIncidImportancia(ManagerIncidSeeIf.ControllerIncidSeeIf<IncidAndResolBundle> controller, Incidencia incidencia)
+        {
+            assertThat(flagForExecution.getAndSet(112), is(0));
+            return flagForExecution.get() == 112;
         }
     }
 }
