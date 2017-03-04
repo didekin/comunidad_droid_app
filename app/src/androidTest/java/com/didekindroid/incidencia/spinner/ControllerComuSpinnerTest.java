@@ -246,7 +246,7 @@ public class ControllerComuSpinnerTest extends ControllerAbsTest<ControllerComuS
         @Override
         public Spinner doViewInViewer(Activity activity)
         {
-            return new Spinner(getActivity());
+            return new Spinner(getManager());
         }
 
         @Override

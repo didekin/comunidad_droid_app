@@ -24,7 +24,6 @@ import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_REG_AC;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_OPEN_BY_COMU_AC;
 import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
-import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_DROID;
@@ -45,6 +44,7 @@ import static org.junit.Assert.assertThat;
 public class IncidSeeClosedByComuAc_Mn_Test {
 
     Comunidad comunidadInIntent;
+    ControllerIncidCloseSee controllerList;
 
     @Rule
     public ActivityTestRule<IncidSeeClosedByComuAc> activityRule = new ActivityTestRule<IncidSeeClosedByComuAc>(IncidSeeClosedByComuAc.class,true, true) {
@@ -63,16 +63,17 @@ public class IncidSeeClosedByComuAc_Mn_Test {
         }
     };
 
-    IncidSeeByComuListFr mFragment;
+    IncidSeeByComuListFr fragment;
     int activityLayoutId = R.id.incid_see_closed_by_comu_ac;
     int fragmentLayoutId = R.id.incid_see_generic_layout;
-    private IncidSeeClosedByComuAc mActivity;
+    private IncidSeeClosedByComuAc activity;
 
     @Before
     public void setUp() throws Exception
     {
-        mActivity = activityRule.getActivity();
-        mFragment = (IncidSeeByComuListFr) mActivity.getSupportFragmentManager().findFragmentByTag(incid_see_by_comu_list_fr_tag);
+        activity = activityRule.getActivity();
+        fragment = (IncidSeeByComuListFr) activity.getSupportFragmentManager().findFragmentByTag(incid_see_by_comu_list_fr_tag);
+        controllerList = (ControllerIncidCloseSee) fragment.controllerSeeIncids;
     }
 
     @After
@@ -86,9 +87,9 @@ public class IncidSeeClosedByComuAc_Mn_Test {
     {
         // CASO OK: muestra estado inicial actividad.
 
-        assertThat(TKhandler.isRegisteredUser(), is(true));
-        assertThat(mActivity, notNullValue());
-        assertThat(mFragment, notNullValue());
+        assertThat(controllerList.isRegisteredUser(), is(true));
+        assertThat(activity, notNullValue());
+        assertThat(fragment, notNullValue());
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
 
         onView(withId(activityLayoutId)).check(matches(isDisplayed()));
@@ -108,14 +109,14 @@ public class IncidSeeClosedByComuAc_Mn_Test {
     @Test
     public void testIncidSeeOpenByComuMn() throws InterruptedException
     {
-        INCID_SEE_OPEN_BY_COMU_AC.checkMenuItem_WTk(mActivity);
+        INCID_SEE_OPEN_BY_COMU_AC.checkMenuItem_WTk(activity);
         checkUp(activityLayoutId, fragmentLayoutId);
     }
 
     @Test
     public void testIncidRegMn() throws InterruptedException
     {
-        INCID_REG_AC.checkMenuItem_WTk(mActivity);
+        INCID_REG_AC.checkMenuItem_WTk(activity);
         checkUp(activityLayoutId, fragmentLayoutId);
     }
 }

@@ -1,5 +1,6 @@
 package com.didekindroid.incidencia.core;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -8,23 +9,23 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.didekindroid.ManagerIf;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.incidencia.list.IncidSeeOpenByComuAc;
-import com.didekindroid.usuario.firebase.FirebaseTokenReactorIf;
+import com.didekindroid.exception.UiExceptionIf;
+import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
-import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.incid_importancia_should_be_registered;
-import static com.didekindroid.usuario.firebase.FirebaseTokenReactor.tokenReactor;
+import static com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf.ViewerFirebaseToken.newViewerFirebaseToken;
 import static com.didekindroid.util.ConnectionUtils.checkInternetConnected;
+import static com.didekindroid.util.DefaultNextAcRouter.routerMap;
 import static com.didekindroid.util.MenuRouter.doUpMenu;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.checkPostExecute;
-import static com.didekindroid.util.UIutils.destroySubscriptions;
 import static com.didekindroid.util.UIutils.doToolBar;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.util.UIutils.makeToast;
@@ -39,11 +40,10 @@ import static com.didekindroid.util.UIutils.makeToast;
  * This activity is a point of registration for receiving notifications of new incidencias.
  * TODO: añadir varios tags a la incidencia para facilitar búsquedas.
  */
-public class IncidRegAc extends AppCompatActivity implements ControllerIncidRegIf {
+public class IncidRegAc extends AppCompatActivity implements ManagerIf {
 
     IncidRegAcFragment mRegAcFragment;
-    CompositeDisposable subscriptions;
-    FirebaseTokenReactorIf reactor;
+    ViewerFirebaseTokenIf viewerFirebaseToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -54,9 +54,6 @@ public class IncidRegAc extends AppCompatActivity implements ControllerIncidRegI
         View mAcView = getLayoutInflater().inflate(R.layout.incid_reg_ac, null);
         setContentView(mAcView);
         doToolBar(this, true);
-
-        reactor = tokenReactor;
-        checkGcmToken();
 
         mRegAcFragment = (IncidRegAcFragment) getSupportFragmentManager().findFragmentById(R.id.incid_reg_frg);
         Button mRegisterButton = (Button) findViewById(R.id.incid_reg_ac_button);
@@ -71,11 +68,12 @@ public class IncidRegAc extends AppCompatActivity implements ControllerIncidRegI
     }
 
     @Override
-    protected void onResume()
+    protected void onStart()
     {
-        Timber.d("onResume()");
-        checkGcmToken();
-        super.onResume();
+        Timber.d("onStart()");
+        super.onStart();
+        viewerFirebaseToken = newViewerFirebaseToken(this);
+        viewerFirebaseToken.checkGcmTokenAsync();
     }
 
     @Override
@@ -83,7 +81,7 @@ public class IncidRegAc extends AppCompatActivity implements ControllerIncidRegI
     {
         Timber.d("onStop()");
         super.onStop();
-        destroySubscriptions(subscriptions);
+        viewerFirebaseToken.clearControllerSubscriptions();
     }
 
     void registerIncidencia()
@@ -104,15 +102,30 @@ public class IncidRegAc extends AppCompatActivity implements ControllerIncidRegI
     }
 
     // ============================================================
-    //    ..... CONTROLLER IMPLEMENTATION ....
-    /* ============================================================*/
+    //   .............. ManagerIf ...............
+    // ============================================================
 
     @Override
-    public void checkGcmToken()
+    public Activity getActivity()
     {
-        Timber.d("checkGcmToken()");
-        subscriptions = reactor.checkGcmToken(subscriptions);
+        return this;
     }
+
+    @Override
+    public UiExceptionIf.ActionForUiExceptionIf processViewerError(UiException ui)
+    {
+        Timber.d("processViewerError()");
+        return ui.processMe(this, new Intent());
+    }
+
+    @Override
+    public void replaceRootView(Object initParamsForView)
+    {
+        Timber.d("replaceRootView()");
+        Intent intent = new Intent(this, routerMap.get(this.getClass()));
+        startActivity(intent);
+    }
+
 
     // ============================================================
     //    ..... ACTION BAR ....
@@ -138,6 +151,7 @@ public class IncidRegAc extends AppCompatActivity implements ControllerIncidRegI
     //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
     //    ============================================================
 
+    @SuppressWarnings("WeakerAccess")
     class IncidenciaRegister extends AsyncTask<IncidImportancia, Void, Integer> {
 
         UiException uiException;
@@ -167,8 +181,7 @@ public class IncidRegAc extends AppCompatActivity implements ControllerIncidRegI
                 uiException.processMe(IncidRegAc.this, new Intent());
             } else {
                 assertTrue(rowInserted == 2, incid_importancia_should_be_registered);
-                Intent intent = new Intent(IncidRegAc.this, IncidSeeOpenByComuAc.class);
-                startActivity(intent);
+                replaceRootView(null);
             }
         }
     }

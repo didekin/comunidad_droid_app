@@ -1,13 +1,10 @@
 package com.didekindroid;
 
-import android.app.Activity;
 import android.view.View;
 
 import com.didekindroid.ManagerIf.ViewerIf;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf.ActionForUiExceptionIf;
-
-import timber.log.Timber;
 
 /**
  * User: pedro@didekin
@@ -16,21 +13,21 @@ import timber.log.Timber;
  */
 public abstract class ViewerDumbImp<T extends View, B> implements ViewerIf<T, B> {
 
-    protected final Activity activity;
+    protected final ManagerIf<B> manager;
     protected T viewInViewer;
 
-    protected ViewerDumbImp(Activity activity)
+    protected ViewerDumbImp(ManagerIf<B> manager)
     {
-        this.activity = activity;
-        viewInViewer = doViewInViewer(activity);
+        this.manager = manager;
+        viewInViewer = doViewInViewer(manager);
     }
 
-    public abstract T doViewInViewer(Activity activity);
+    public abstract T doViewInViewer(ManagerIf<B> manager);
 
     @Override
-    public Activity getActivity()
+    public ManagerIf<B> getManager()
     {
-        return activity;
+        return manager;
     }
 
     @Override

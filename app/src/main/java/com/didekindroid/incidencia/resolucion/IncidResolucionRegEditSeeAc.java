@@ -1,5 +1,6 @@
 package com.didekindroid.incidencia.resolucion;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -7,22 +8,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.didekindroid.ManagerIf;
 import com.didekindroid.R;
-import com.didekindroid.incidencia.core.ControllerIncidRegIf;
+import com.didekindroid.exception.UiException;
+import com.didekindroid.exception.UiExceptionIf;
 import com.didekindroid.incidencia.utils.IncidBundleKey;
-import com.didekindroid.usuario.firebase.FirebaseTokenReactorIf;
+import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 
-import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_resolucion_ac_frgs_tag;
-import static com.didekindroid.usuario.firebase.FirebaseTokenReactor.tokenReactor;
+import static com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf.ViewerFirebaseToken.newViewerFirebaseToken;
 import static com.didekindroid.util.MenuRouter.doUpMenu;
-import static com.didekindroid.util.UIutils.destroySubscriptions;
 import static com.didekindroid.util.UIutils.doToolBar;
 
 /**
@@ -45,12 +46,11 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * 4. If a Resolucion intent is received and the user hasn't got authority 'adm':
  * 4.1 The data are shown.
  */
-public class IncidResolucionRegEditSeeAc extends AppCompatActivity implements ControllerIncidRegIf {
+public class IncidResolucionRegEditSeeAc extends AppCompatActivity implements ManagerIf {
 
     IncidImportancia mIncidImportancia;
     Resolucion mResolucion;
-    CompositeDisposable subscriptions;
-    FirebaseTokenReactorIf reactor;
+    ViewerFirebaseTokenIf viewerFirebaseToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -60,8 +60,6 @@ public class IncidResolucionRegEditSeeAc extends AppCompatActivity implements Co
 
         mIncidImportancia = (IncidImportancia) getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.key);
         mResolucion = (Resolucion) getIntent().getSerializableExtra(IncidBundleKey.INCID_RESOLUCION_OBJECT.key);
-        reactor = tokenReactor;
-        checkGcmToken();
 
         View mAcView = getLayoutInflater().inflate(R.layout.incid_resolucion_reg_ac, null);
         setContentView(mAcView);
@@ -116,11 +114,12 @@ public class IncidResolucionRegEditSeeAc extends AppCompatActivity implements Co
     }
 
     @Override
-    protected void onResume()
+    protected void onStart()
     {
-        Timber.d("onResume()");
-        checkGcmToken();
-        super.onResume();
+        Timber.d("onStart()");
+        super.onStart();
+        viewerFirebaseToken = newViewerFirebaseToken(this);
+        viewerFirebaseToken.checkGcmTokenAsync();
     }
 
     @Override
@@ -128,18 +127,30 @@ public class IncidResolucionRegEditSeeAc extends AppCompatActivity implements Co
     {
         Timber.d("onStop()");
         super.onStop();
-        destroySubscriptions(subscriptions);
+        viewerFirebaseToken.clearControllerSubscriptions();
     }
 
     // ============================================================
-    //    ..... CONTROLLER IMPLEMENTATION ....
-    /* ============================================================*/
+    //   .............. ManagerIf ...............
+    // ============================================================
 
     @Override
-    public void checkGcmToken()
+    public Activity getActivity()
     {
-        Timber.d("checkGcmToken()");
-        subscriptions = reactor.checkGcmToken(subscriptions);
+        return this;
+    }
+
+    @Override
+    public UiExceptionIf.ActionForUiExceptionIf processViewerError(UiException ui)
+    {
+        Timber.d("processViewerError()");
+        return ui.processMe(this, new Intent());
+    }
+
+    @Override
+    public void replaceRootView(Object initParamsForView)
+    {
+       throw new UnsupportedOperationException();
     }
 
 //    ============================================================

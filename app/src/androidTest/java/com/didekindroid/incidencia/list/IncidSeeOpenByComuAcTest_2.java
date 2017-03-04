@@ -117,7 +117,7 @@ public class IncidSeeOpenByComuAcTest_2 {
     IncidenciaDataDbHelper dBHelper;
     AdapterIncidSeeOpenByComu adapter;
     IncidSeeByComuListFr mFragment;
-    private IncidSeeOpenByComuAc mActivity;
+    private IncidSeeOpenByComuAc activity;
     private UsuarioDataTestUtils.CleanUserEnum whatToClean = CLEAN_JUAN;
 
     @BeforeClass
@@ -129,12 +129,12 @@ public class IncidSeeOpenByComuAcTest_2 {
     @Before
     public void setUp() throws Exception
     {
-        mActivity = activityRule.getActivity();
-        mFragment = (IncidSeeByComuListFr) mActivity.getSupportFragmentManager()
+        activity = activityRule.getActivity();
+        mFragment = (IncidSeeByComuListFr) activity.getSupportFragmentManager()
                 .findFragmentByTag(incid_see_by_comu_list_fr_tag);
         Thread.sleep(2000);
 //        adapter = (AdapterIncidSeeOpenByComu) fragmentList.listAdapter;   // TODO: ¡¡¡¡¡¡ Arreglar ¡¡¡¡¡¡¡¡¡¡
-        dBHelper = new IncidenciaDataDbHelper(mActivity);
+        dBHelper = new IncidenciaDataDbHelper(activity);
     }
 
     @After
@@ -190,7 +190,6 @@ public class IncidSeeOpenByComuAcTest_2 {
         onView(withText(COMU_LA_PLAZUELA_5.getNombreComunidad())).perform(click()).check(matches(isDisplayed()));
 
         // Verificamos que la actividad recibe la comunidad seleccionada.
-        assertThat(mActivity.mComunidadSelected, is(COMU_LA_PLAZUELA_5));
         assertThat(mFragment.comunidadSelectedIndex, is(1));
         assertThat(adapter.getCount(), is(1));
 
@@ -220,7 +219,7 @@ public class IncidSeeOpenByComuAcTest_2 {
                 withId(R.id.incid_see_importancia_block),
                 hasDescendant(allOf(
                         withId(R.id.incid_importancia_comunidad_view),
-                        withText(mActivity.getResources()
+                        withText(activity.getResources()
                                 .getStringArray(R.array.IncidImportanciaArray)[Math.round(incidJuanReal1.getImportancia())]))
                 ),
                 hasSibling(allOf(

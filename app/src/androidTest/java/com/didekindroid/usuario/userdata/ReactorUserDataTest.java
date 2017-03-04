@@ -7,6 +7,7 @@ import com.didekindroid.ManagerIf;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.security.Oauth2DaoRemote;
 import com.didekindroid.security.OauthTokenReactorIf;
+import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
 import com.didekinlib.http.oauth2.SpringOauthToken;
 import com.didekinlib.model.usuario.Usuario;
 
@@ -288,7 +289,7 @@ public class ReactorUserDataTest {
 
             ManagerIf.ControllerIf controllerAb = new ControllerAbs() {
                 @Override
-                public ManagerIf.ViewerIf getViewer()
+                public ViewerFirebaseTokenIf getViewer()
                 {
                     return null;
                 }
@@ -311,7 +312,7 @@ public class ReactorUserDataTest {
             { return controllerAb.clearSubscriptions(); }
 
             @Override
-            public ManagerIf.ViewerIf getViewer()
+            public ViewerFirebaseTokenIf getViewer()
             { return controllerAb.getViewer(); }
 
             @Override

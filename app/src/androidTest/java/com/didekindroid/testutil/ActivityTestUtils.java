@@ -20,6 +20,7 @@ import com.didekinlib.http.ErrorBean;
 import com.didekinlib.model.exception.ExceptionMsgIf;
 
 import org.hamcrest.CoreMatchers;
+import org.hamcrest.Matcher;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
@@ -42,12 +43,14 @@ import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOUND;
 import static java.util.Calendar.DAY_OF_MONTH;
 import static java.util.Calendar.MONTH;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
+import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
@@ -77,13 +80,47 @@ public final class ActivityTestUtils {
         };
     }
 
-    public static Callable<Boolean> isViewOnView(final int resourceStringId)
+    public static Callable<Boolean> isResourceIdDisplayed(final int resourceStringId)
     {
         return new Callable<Boolean>() {
             public Boolean call() throws Exception
             {
                 try {
                     onView(withId(resourceStringId)).check(matches(isDisplayed()));
+                    return true;
+                } catch (NoMatchingViewException ne) {
+                    return false;
+                }
+            }
+        };
+    }
+
+    public static Callable<Boolean> isViewDisplayed(final Matcher<View> viewMatcher)
+    {
+        return new Callable<Boolean>() {
+            public Boolean call() throws Exception
+            {
+                try {
+                    onView(viewMatcher).check(matches(isDisplayed()));
+                    return true;
+                } catch (NoMatchingViewException ne) {
+                    return false;
+                }
+            }
+        };
+    }
+
+    public static Callable<Boolean> isViewInteractionOk(final String textToCheck){
+
+        return new Callable<Boolean>() {
+            public Boolean call() throws Exception
+            {
+                try {
+                    onView(allOf(
+                            withId(R.id.app_spinner_1_dropdown_item),
+                            withParent(withId(R.id.incid_reg_comunidad_spinner))
+                    )).check(matches(withText(is(textToCheck))
+                    )).check(matches(isDisplayed()));
                     return true;
                 } catch (NoMatchingViewException ne) {
                     return false;
@@ -117,12 +154,12 @@ public final class ActivityTestUtils {
         };
     }
 
-    public static Callable<Boolean> isAdapterInitialized(final BaseAdapter adapter)
+    public static Callable<Integer> getAdapterCount(final BaseAdapter adapter)
     {
-        return new Callable<Boolean>() {
-            public Boolean call() throws Exception
+        return new Callable<Integer>() {
+            public Integer call() throws Exception
             {
-                return !adapter.isEmpty();
+                return adapter.getCount();
             }
         };
     }
@@ -167,7 +204,7 @@ public final class ActivityTestUtils {
 
     public static ActionForUiExceptionIf testProcessCtrlError(final ViewerIf viewer, final ExceptionMsgIf exceptionMsg, ActionForUiExceptionIf actionToExpect)
     {
-        final Activity activityError = viewer.getActivity();
+        final Activity activityError = viewer.getManager();
         final AtomicReference<ActionForUiExceptionIf> actionException = new AtomicReference<>(null);
 
         activityError.runOnUiThread(new Runnable() {
@@ -206,7 +243,7 @@ public final class ActivityTestUtils {
 
     public static void clickNavigateUp()
     {
-        onView(CoreMatchers.allOf(
+        onView(allOf(
                 ViewMatchers.withContentDescription(R.string.navigate_up_txt),
                 isClickable())
         ).check(matches(isDisplayed())).perform(click());
@@ -238,7 +275,7 @@ public final class ActivityTestUtils {
                 viewer.replaceView(null);
             }
         });
-        waitAtMost(1, SECONDS).until(isViewOnView(resorceIdNextView));
+        waitAtMost(1, SECONDS).until(isResourceIdDisplayed(resorceIdNextView));
     }
 
     //    ============================ TOASTS ============================

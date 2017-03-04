@@ -3,7 +3,7 @@ package com.didekindroid.usuario.password;
 import android.view.View;
 
 import com.didekindroid.ControllerAbs;
-import com.didekindroid.ManagerIf.ViewerIf;
+import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
 import com.didekinlib.model.usuario.Usuario;
 
 import java.util.concurrent.Callable;
@@ -59,7 +59,7 @@ class ControllerPasswordChange extends ControllerAbs implements ControllerPasswo
     }
 
     @Override
-    public ViewerIf getViewer()
+    public ViewerFirebaseTokenIf getViewer()
     {
         Timber.d("getViewer()");
         return viewer;

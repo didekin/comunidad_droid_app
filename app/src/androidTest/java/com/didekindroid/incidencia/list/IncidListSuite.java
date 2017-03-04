@@ -17,7 +17,7 @@ import org.junit.runners.Suite;
         IncidSeeClosedByComuAc_Mn_Test.class,
         IncidSeeClosedByComuAcTest.class,
         IncidSeeOpenByComuAc_GCM_Test.class,
-        IncidSeeOpenByComuAcTest_1.class,
+        IncidSeeOpenByComuAc_Mn_Test.class,
         IncidSeeOpenByComuAcTest_2.class,
         IncidSeeOpenByComuAcTest_3.class,
         IncidSeeOpenByComuAcTest_4.class,

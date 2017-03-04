@@ -12,22 +12,18 @@ import com.didekindroid.comunidad.ComuBundleKey;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf;
 import com.didekindroid.incidencia.core.IncidEditAc;
-import com.didekindroid.incidencia.core.ControllerIncidRegIf;
-import com.didekindroid.usuario.firebase.FirebaseTokenReactorIf;
-import com.didekinlib.model.comunidad.Comunidad;
+import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 
-import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
-import static com.didekindroid.usuario.firebase.FirebaseTokenReactor.tokenReactor;
+import static com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf.ViewerFirebaseToken.newViewerFirebaseToken;
 import static com.didekindroid.util.ItemMenu.mn_handler;
 import static com.didekindroid.util.MenuRouter.doUpMenu;
 import static com.didekindroid.util.MenuRouter.routerMap;
-import static com.didekindroid.util.UIutils.destroySubscriptions;
 import static com.didekindroid.util.UIutils.doToolBar;
 
 /**
@@ -42,12 +38,11 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * 1. A list of IncidenciaUSer instances are shown.
  * 2. An intent is passed with an IncidImportancia instance, where the selected incidencia is embedded.
  */
-public class IncidSeeOpenByComuAc extends AppCompatActivity implements ManagerIncidSeeIf<IncidAndResolBundle>, ControllerIncidRegIf {
+public class IncidSeeOpenByComuAc extends AppCompatActivity implements
+        ManagerIncidSeeIf<IncidAndResolBundle> {
 
-    IncidSeeByComuListFr<IncidAndResolBundle> mFragment;
-    Comunidad mComunidadSelected;
-    CompositeDisposable subscriptions;
-    FirebaseTokenReactorIf reactor;
+    IncidSeeByComuListFr<IncidAndResolBundle> fragment;
+    ViewerFirebaseTokenIf viewerFirebaseToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -55,29 +50,27 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements ManagerIn
         Timber.d("onCreate().");
         super.onCreate(savedInstanceState);
 
-        reactor = tokenReactor;
-        checkGcmToken();
-
         setContentView(R.layout.incid_see_open_by_comu_ac);
         doToolBar(this, true);
 
         if (savedInstanceState != null) {
             //noinspection unchecked
-            mFragment = (IncidSeeByComuListFr<IncidAndResolBundle>) getSupportFragmentManager().findFragmentByTag(incid_see_by_comu_list_fr_tag);
+            fragment = (IncidSeeByComuListFr<IncidAndResolBundle>) getSupportFragmentManager().findFragmentByTag(incid_see_by_comu_list_fr_tag);
             return;
         }
-        mFragment = new IncidSeeByComuListFr<>();
+        fragment = new IncidSeeByComuListFr<>();
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.incid_see_open_by_comu_ac, mFragment, incid_see_by_comu_list_fr_tag)
+                .add(R.id.incid_see_open_by_comu_ac, fragment, incid_see_by_comu_list_fr_tag)
                 .commit();
     }
 
     @Override
-    protected void onResume()
+    protected void onStart()
     {
-        Timber.d("onResume()");
-        checkGcmToken();
-        super.onResume();
+        Timber.d("onStart()");
+        super.onStart();
+        viewerFirebaseToken = newViewerFirebaseToken(this);
+        viewerFirebaseToken.checkGcmTokenAsync();
     }
 
     @Override
@@ -85,7 +78,7 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements ManagerIn
     {
         Timber.d("onStop()");
         super.onStop();
-        destroySubscriptions(subscriptions);
+        viewerFirebaseToken.clearControllerSubscriptions();
     }
 
     // ============================================================
@@ -117,7 +110,8 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements ManagerIn
                 return true;
             case R.id.see_usercomu_by_comu_ac_mn:
                 Intent intent = new Intent();
-                intent.putExtra(ComuBundleKey.COMUNIDAD_ID.key, mComunidadSelected.getC_Id());
+                long comunidadSelectedId = fragment.comuSpinnerViewer.getComunidadSelectedId();
+                intent.putExtra(ComuBundleKey.COMUNIDAD_ID.key, comunidadSelectedId);
                 this.setIntent(intent);
                 mn_handler.doMenuItem(this, routerMap.get(resourceId));
                 return true;
@@ -127,34 +121,24 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements ManagerIn
     }
 
     // ============================================================
-    //    ..... IncidRegController IMPLEMENTATION ....
-    /* ============================================================*/
-
-    @Override
-    public void checkGcmToken()
-    {
-        Timber.d("checkGcmToken()");
-        subscriptions = reactor.checkGcmToken(subscriptions);
-    }
-
-    // ============================================================
-    //   .............. INCIDENCIA LIST MANAGER ...............
+    //   .............. ManagerIncidSeeIf ...............
     // ============================================================
 
     @Override
-    public void replaceRootView(IncidAndResolBundle incidAndResolBundle)
+    public ControllerIncidSeeIf getController()
     {
-        Timber.d("replaceActionInView()");
-        Intent intent = new Intent(IncidSeeOpenByComuAc.this, IncidEditAc.class);
-        intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, incidAndResolBundle.getIncidImportancia());
-        intent.putExtra(INCID_RESOLUCION_FLAG.key, incidAndResolBundle.hasResolucion());
-        startActivity(intent);
+        Timber.d("getController()");
+        return new ControllerIncidOpenSee(fragment);
     }
+
+    // ============================================================
+    //   .............. ManagerIf ...............
+    // ============================================================
 
     @Override
     public Activity getActivity()
     {
-        Timber.d("getContext()");
+        Timber.d("getActivity()");
         return this;
     }
 
@@ -166,9 +150,12 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements ManagerIn
     }
 
     @Override
-    public ControllerIncidSeeIf getController()
+    public void replaceRootView(IncidAndResolBundle incidAndResolBundle)
     {
-        Timber.d("getController()");
-        return new ControllerIncidOpenSee(mFragment);
+        Timber.d("replaceActionInView()");
+        Intent intent = new Intent(IncidSeeOpenByComuAc.this, IncidEditAc.class);
+        intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, incidAndResolBundle.getIncidImportancia());
+        intent.putExtra(INCID_RESOLUCION_FLAG.key, incidAndResolBundle.hasResolucion());
+        startActivity(intent);
     }
 }

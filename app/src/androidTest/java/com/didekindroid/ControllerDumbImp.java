@@ -1,7 +1,6 @@
 package com.didekindroid;
 
-import com.didekindroid.ControllerAbs;
-import com.didekindroid.ManagerIf;
+import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
 
 /**
  * User: pedro@didekin
@@ -20,7 +19,7 @@ public class ControllerDumbImp<P extends ManagerIf.ViewerIf> extends ControllerA
 
 
     @Override
-    public P getViewer()
+    public ViewerFirebaseTokenIf getViewer()
     {
         return viewer;
     }

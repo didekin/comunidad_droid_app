@@ -1,9 +1,9 @@
 package com.didekindroid.incidencia.spinner;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.widget.Spinner;
 
+import com.didekindroid.ManagerIf;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf.ActionForUiExceptionIf;
 import com.didekindroid.incidencia.spinner.ManagerComuSpinnerIf.ControllerComuSpinnerIf;
@@ -22,18 +22,18 @@ import static com.didekindroid.incidencia.spinner.ControllerComuSpinner.newContr
 @SuppressWarnings("WeakerAccess")
 public final class ViewerComuSpinner implements ViewerComuSpinnerIf {
 
-    final ManagerComuSpinnerIf manager;
+    final ManagerComuSpinnerIf<Object> manager;
     final private Spinner spinnerView;
     long comunidadSelectedId;
     private ControllerComuSpinnerIf controller;
 
-    private ViewerComuSpinner(ManagerComuSpinnerIf spinnerManager)
+    private ViewerComuSpinner(ManagerComuSpinnerIf<Object> spinnerManager)
     {
         manager = spinnerManager;
         spinnerView = spinnerManager.initSpinnerView();
     }
 
-    public static ViewerComuSpinner newComuSpinnerViewer(ManagerComuSpinnerIf comuSpinnerManager)
+    public static ViewerComuSpinner newComuSpinnerViewer(ManagerComuSpinnerIf<Object> comuSpinnerManager)
     {
         Timber.d("newComuSpinnerViewer(comuSpinnerManager)");
         ViewerComuSpinner instance = new ViewerComuSpinner(comuSpinnerManager);
@@ -92,17 +92,10 @@ public final class ViewerComuSpinner implements ViewerComuSpinnerIf {
     }
 
     @Override
-    public void replaceView(Object initParams)
-    {
-        Timber.d("replaceView()");
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public Activity getActivity()
+    public ManagerIf<Object> getManager()
     {
         Timber.d("getContext()");
-        return manager.getActivity();
+        return manager;
     }
 
     @Override

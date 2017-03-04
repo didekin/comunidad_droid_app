@@ -45,7 +45,7 @@ import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
-import static com.didekindroid.testutil.ActivityTestUtils.isViewOnView;
+import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.testProcessCtrlError;
 import static com.didekindroid.testutil.ActivityTestUtils.testProcessCtrlErrorOnlyToast;
 import static com.didekindroid.testutil.ActivityTestUtils.testReplaceViewStd;
@@ -184,7 +184,7 @@ public class UserDataAcTest implements ExtendableTestAc {
         onView(withId(user_data_modif_button)).perform(scrollTo())
                 .check(matches(isDisplayed())).perform(click());
 
-        waitAtMost(2, SECONDS).until(isViewOnView(getNextViewResourceId()));
+        waitAtMost(2, SECONDS).until(isResourceIdDisplayed(getNextViewResourceId()));
         // Verificamos navegación.
         checkNavigateUp();
     }

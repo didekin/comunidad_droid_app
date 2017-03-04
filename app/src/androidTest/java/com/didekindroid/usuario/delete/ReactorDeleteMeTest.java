@@ -6,6 +6,7 @@ import com.didekindroid.ControllerAbs;
 import com.didekindroid.ManagerIf;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.usuario.delete.ControllerDeleteMe.ReactorDeleteMe.DeleteMeSingleObserver;
+import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
 import com.didekinlib.http.ErrorBean;
 
 import org.junit.AfterClass;
@@ -141,7 +142,7 @@ public class ReactorDeleteMeTest {
 
             ManagerIf.ControllerIf controllerAbs = new ControllerAbs() {
                 @Override
-                public ManagerIf.ViewerIf getViewer()
+                public ViewerFirebaseTokenIf getViewer()
                 {
                     return null;
                 }
@@ -173,7 +174,7 @@ public class ReactorDeleteMeTest {
             }
 
             @Override
-            public ManagerIf.ViewerIf getViewer()
+            public ViewerFirebaseTokenIf getViewer()
             {
                 return controllerAbs.getViewer();
             }

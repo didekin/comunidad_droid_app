@@ -4,6 +4,7 @@ import android.view.View;
 
 import com.didekindroid.ControllerAbs;
 import com.didekindroid.ManagerIf.ViewerIf;
+import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
 
 import java.util.concurrent.Callable;
 
@@ -59,7 +60,7 @@ class ControllerDeleteMe extends ControllerAbs implements ControllerDeleteMeIf {
     }
 
     @Override
-    public ViewerIf getViewer()
+    public ViewerFirebaseTokenIf getViewer()
     {
         Timber.d("getViewer()");
         return viewer;

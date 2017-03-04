@@ -3,7 +3,7 @@ package com.didekindroid.usuario.userdata;
 import android.view.View;
 
 import com.didekindroid.ControllerAbs;
-import com.didekindroid.ManagerIf.ViewerIf;
+import com.didekindroid.ManagerIf;
 import com.didekindroid.security.IdentityCacher;
 import com.didekinlib.http.oauth2.SpringOauthToken;
 import com.didekinlib.model.usuario.Usuario;
@@ -77,11 +77,11 @@ class ControllerUserData extends ControllerAbs implements ControllerUserDataIf {
     public void processBackUserModified()
     {
         Timber.d("processBackUserModified()");
-        viewer.replaceView(null);
+        viewer.getManager().replaceRootView(null);
     }
 
     @Override
-    public ViewerIf getViewer()
+    public ManagerIf.ViewerIf getViewer()
     {
         Timber.d("getViewer()");
         return viewer;

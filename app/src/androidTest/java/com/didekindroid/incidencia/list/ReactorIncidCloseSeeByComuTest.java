@@ -3,10 +3,10 @@ package com.didekindroid.incidencia.list;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.ControllerAbs;
-import com.didekindroid.ManagerIf;
 import com.didekindroid.ManagerIf.ControllerIf;
 import com.didekindroid.incidencia.list.ManagerIncidSeeIf.ControllerIncidSeeIf;
 import com.didekindroid.incidencia.list.ManagerIncidSeeIf.IncidListObserver;
+import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
@@ -158,7 +158,7 @@ public class ReactorIncidCloseSeeByComuTest {
 
             ControllerIf controllerAbs = new ControllerAbs() {
                 @Override
-                public ManagerIf.ViewerIf getViewer()
+                public ViewerFirebaseTokenIf getViewer()
                 {
                     return null;
                 }
@@ -209,7 +209,7 @@ public class ReactorIncidCloseSeeByComuTest {
             }
 
             @Override
-            public ManagerIf.ViewerIf getViewer()
+            public ViewerFirebaseTokenIf getViewer()
             {
                 return controllerAbs.getViewer();
             }

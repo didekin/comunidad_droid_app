@@ -123,7 +123,7 @@ public class RegUserComuAcTest {
     @Test
     public void testOnclick_2()
     {
-        // Data input OK; the next activity is initiated.
+        // Data input OK; the next manager is initiated.
         activity = mActivityRule.launchActivity(intent);
 
         UserComuEspressoTestUtil.typeUserComuData("portalA", "escC", "plantaB", "puerta_1", PRO, PRE);

@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Spinner;
 
+import com.didekindroid.ManagerIf;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf;
@@ -115,6 +116,12 @@ public class IncidSeeByComuListFr<B> extends Fragment implements ViewerIncidSeeI
     }
 
     @Override
+    public ManagerIf<B> getManager()
+    {
+        return this;
+    }
+
+    @Override
     public void replaceRootView(Object initParamsForView)
     {
         Timber.d("replaceRootView()");
@@ -164,12 +171,6 @@ public class IncidSeeByComuListFr<B> extends Fragment implements ViewerIncidSeeI
     }
 
     // =============================== ViewerIf =================================
-
-    @Override
-    public void replaceView(B initParams)
-    {
-        incidListManager.replaceRootView(initParams);
-    }
 
     public ListView getViewInViewer()
     {

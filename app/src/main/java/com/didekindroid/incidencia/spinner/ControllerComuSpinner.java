@@ -41,7 +41,7 @@ class ControllerComuSpinner extends ControllerAbs implements ControllerComuSpinn
         reactor = new AtomicReference<>(null);
         viewer = viewerIn;
         spinnerAdapter = new ArrayAdapter<>(
-                viewer.getActivity(),
+                viewer.getManager(),
                 R.layout.app_spinner_1_dropdown_item,
                 R.id.app_spinner_1_dropdown_item);
         comuSpinner = viewer.getViewInViewer();

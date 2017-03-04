@@ -38,6 +38,7 @@ import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.util.CommonAssertionMsg.subscriptions_should_be_zero;
+import static com.didekindroid.util.CommonAssertionMsg.subscriptions_should_not_be_null;
 import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
 import static com.didekinlib.http.GenericExceptionMsg.TOKEN_NULL;
 import static com.didekinlib.model.common.dominio.ValidDataPatterns.LINE_BREAK;
@@ -124,17 +125,14 @@ public final class UIutils {
 
 //    ================================== CONTROLLERS ======================================
 
-    public static int destroySubscriptions(CompositeDisposable... subscriptions)
+    public static int destroySubscriptions(CompositeDisposable subscriptions)
     {
-        int counter = subscriptions.length;
-        for (CompositeDisposable composite : subscriptions){
-            if (composite != null) {
-                composite.clear();
-                --counter;
-            }
-        }
-        assertTrue(counter == 0, subscriptions_should_be_zero);
-        return counter;
+        Timber.d("destroySubscriptions()");
+
+        assertTrue(subscriptions != null, subscriptions_should_not_be_null);
+        subscriptions.clear();
+        assertTrue(subscriptions.size() == 0, subscriptions_should_be_zero);
+        return subscriptions.size();
     }
 
 //    ================================== CURSORS ======================================

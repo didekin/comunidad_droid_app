@@ -1,10 +1,9 @@
 package com.didekindroid.firebase;
 
+import com.didekindroid.usuario.firebase.ControllerFirebaseToken;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
 import timber.log.Timber;
-
-import static com.didekindroid.usuario.firebase.FirebaseTokenReactor.tokenReactor;
 
 /**
  * On initial startup of your app, the FCM SDK generates a registration token for the client app instance.
@@ -20,6 +19,6 @@ public class InstanceIdService extends FirebaseInstanceIdService {
     public void onTokenRefresh()
     {
         Timber.d("onTokenRefresh()");
-        tokenReactor.checkGcmTokenSync();
+        new ControllerFirebaseToken(null).checkGcmTokenSync();
     }
 }

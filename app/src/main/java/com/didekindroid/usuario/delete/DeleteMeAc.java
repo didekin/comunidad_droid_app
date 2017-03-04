@@ -3,12 +3,12 @@ package com.didekindroid.usuario.delete;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.didekindroid.ManagerIf;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf;
@@ -30,7 +30,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * Postconditions:
  * 1. Unregistered user, if she chooses so. ComuSearchAc is to be showed.
  */
-public class DeleteMeAc extends AppCompatActivity implements ViewerIf<View,Object> {
+public class DeleteMeAc extends AppCompatActivity implements ViewerIf<View,Object>, ManagerIf<Object> {
 
     View acView;
     ControllerDeleteMeIf controller;
@@ -95,7 +95,7 @@ public class DeleteMeAc extends AppCompatActivity implements ViewerIf<View,Objec
     // ============================================================
 
     @Override
-    public Activity getActivity()
+    public ManagerIf<Object> getManager()
     {
         Timber.d("getContext()");
         return this;
@@ -121,10 +121,27 @@ public class DeleteMeAc extends AppCompatActivity implements ViewerIf<View,Objec
         return acView;
     }
 
+    // ============================================================
+    //   .............. ManagerIf ...............
+    // ============================================================
+
     @Override
-    public void replaceView(@Nullable Object initParams)
+    public Activity getActivity()
     {
-        Timber.d("replaceView()");
+        return this;
+    }
+
+    @Override
+    public UiExceptionIf.ActionForUiExceptionIf processViewerError(UiException ui)
+    {
+        Timber.d("processViewerError()");
+        return ui.processMe(this, new Intent());
+    }
+
+    @Override
+    public void replaceRootView(Object initParamsForView)
+    {
+        Timber.d("replaceRootView()");
         Intent intent = new Intent(this, routerMap.get(this.getClass()));
         intent.setFlags(FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);

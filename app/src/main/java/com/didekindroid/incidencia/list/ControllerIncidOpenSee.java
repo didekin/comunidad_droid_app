@@ -4,10 +4,10 @@ import android.support.annotation.NonNull;
 import android.widget.ArrayAdapter;
 
 import com.didekindroid.ControllerAbs;
-import com.didekindroid.ViewerWithSelectIf;
 import com.didekindroid.incidencia.list.ManagerIncidSeeIf.ControllerIncidSeeIf;
 import com.didekindroid.incidencia.list.ManagerIncidSeeIf.ReactorIncidSeeIf;
 import com.didekindroid.incidencia.list.ManagerIncidSeeIf.ViewerIncidSeeIf;
+import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
@@ -41,11 +41,11 @@ class ControllerIncidOpenSee extends ControllerAbs implements ControllerIncidSee
         super();
         this.viewer = viewer;
         this.reactor = reactor;
-        adapter = new AdapterIncidSeeOpenByComu(viewer.getActivity());
+        adapter = new AdapterIncidSeeOpenByComu(viewer.getManager());
     }
 
     @Override
-    public ViewerWithSelectIf getViewer()
+    public ViewerFirebaseTokenIf getViewer()
     {
         Timber.d("getViewer()");
         return viewer;

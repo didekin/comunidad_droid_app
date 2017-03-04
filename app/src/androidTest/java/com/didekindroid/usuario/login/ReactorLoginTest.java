@@ -1,8 +1,8 @@
 package com.didekindroid.usuario.login;
 
 import com.didekindroid.ControllerAbs;
-import com.didekindroid.ManagerIf;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
 import com.didekindroid.usuario.login.ControllerLogin.ReactorLogin.LoginPswdSendObserver;
 import com.didekindroid.usuario.login.ControllerLoginIf.ReactorLoginIf;
 import com.didekinlib.model.usuario.Usuario;
@@ -311,7 +311,7 @@ public class ReactorLoginTest {
 
             ControllerAbs controllerAbs = new ControllerAbs() {
                 @Override
-                public ManagerIf.ViewerIf getViewer()
+                public ViewerFirebaseTokenIf getViewer()
                 {
                     return null;
                 }
@@ -370,7 +370,7 @@ public class ReactorLoginTest {
             }
 
             @Override
-            public ManagerIf.ViewerIf getViewer()
+            public ViewerFirebaseTokenIf getViewer()
             {
                 return controllerAbs.getViewer();
             }

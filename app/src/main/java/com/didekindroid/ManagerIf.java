@@ -24,17 +24,15 @@ public interface ManagerIf<B> {
 
     // .................... VIEWER .....................
 
-    interface ViewerIf<T extends View, B> {
+    interface ViewerIf<T extends View,B> {
 
-        Activity getActivity();
+        ManagerIf<B> getManager();
 
         ActionForUiExceptionIf processControllerError(UiException ui);
 
         int clearControllerSubscriptions();
 
         T getViewInViewer();
-
-        void replaceView(B initParams);
     }
 
     // ................. CONTROLLER ....................

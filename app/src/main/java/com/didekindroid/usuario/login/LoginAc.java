@@ -5,7 +5,6 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog.Builder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDialog;
@@ -14,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.didekindroid.ManagerIf;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf.ActionForUiExceptionIf;
@@ -40,9 +40,7 @@ import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOU
  * User: pedro
  * Date: 15/12/14
  * Time: 10:04
- */
-
-/**
+ * <p>
  * Preconditions:
  * 1. The user is not necessarily registered: she might have erased the security app data.
  * Results:
@@ -51,7 +49,7 @@ import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOU
  * 1c. If the userName exists, but the passowrd is not correct, after three failed intents,  a new passord is sent
  * by mail, after her confirmation.
  */
-public class LoginAc extends AppCompatActivity implements ViewerLoginIf<View, Object> {
+public class LoginAc extends AppCompatActivity implements ViewerLoginIf<View, Object>, ManagerIf<Object> {
 
     View acView;
     AtomicInteger counterWrong;
@@ -84,11 +82,11 @@ public class LoginAc extends AppCompatActivity implements ViewerLoginIf<View, Ob
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState)
+    protected void onSaveInstanceState(Bundle saveState)
     {
         Timber.d("onSaveInstanceState()");
-        super.onSaveInstanceState(outState);
-        outState.putInt(login_counter_atomic_int.key, counterWrong.get());
+        super.onSaveInstanceState(saveState);
+        saveState.putInt(login_counter_atomic_int.key, counterWrong.get());
     }
 
     @Override
@@ -110,11 +108,38 @@ public class LoginAc extends AppCompatActivity implements ViewerLoginIf<View, Ob
     }
 
     // ============================================================
-    //    ........... VIEWER IMPLEMENTATION .........
+    //    ........... ManagerIf .........
     // ============================================================
 
     @Override
     public Activity getActivity()
+    {
+        return this;
+    }
+
+    @Override
+    public ActionForUiExceptionIf processViewerError(UiException ui)
+    {
+        Timber.d("processViewerError()");
+        return ui.processMe(this, new Intent());
+    }
+
+    @Override
+    public void replaceRootView(Object initParamsForView)
+    {
+        Timber.d("replaceRootView()");
+        Intent intent = new Intent(this, routerMap.get(this.getClass()));
+        intent.setFlags(FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
+    }
+
+    // ============================================================
+    //    ........... VIEWER IMPLEMENTATION .........
+    // ============================================================
+
+    @Override
+    public ManagerIf<Object> getManager()
     {
         Timber.d("getContext()");
         return this;
@@ -128,7 +153,7 @@ public class LoginAc extends AppCompatActivity implements ViewerLoginIf<View, Ob
         if (e.getErrorBean().getMessage().equals(USER_NAME_NOT_FOUND.getHttpMessage())) {
             makeToast(this, R.string.username_wrong_in_login);
         } else {
-            action = e.processMe(this, new Intent());
+            action = processViewerError(e);
         }
         return action;
     }
@@ -145,16 +170,6 @@ public class LoginAc extends AppCompatActivity implements ViewerLoginIf<View, Ob
     {
         Timber.d("getViewInViewer()");
         return acView;
-    }
-
-    @Override
-    public void replaceView(@Nullable Object initParams)
-    {
-        Timber.d("replaceView()");
-        Intent intent = new Intent(this, routerMap.get(this.getClass()));
-        intent.setFlags(FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-        finish();
     }
 
     // ============================================================
@@ -204,7 +219,7 @@ public class LoginAc extends AppCompatActivity implements ViewerLoginIf<View, Ob
 
         if (isLoginOk) {
             Timber.d("login OK");
-            replaceView(null);
+            replaceRootView(null);
         } else {
             int counter = counterWrong.addAndGet(1);
             Timber.d("Password wrong, counterWrong = %d%n", counter - 1);

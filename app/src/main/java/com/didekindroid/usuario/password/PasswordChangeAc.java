@@ -3,12 +3,12 @@ package com.didekindroid.usuario.password;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.didekindroid.ManagerIf;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf.ActionForUiExceptionIf;
@@ -36,8 +36,7 @@ import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOU
  * 1. Password changed and tokenCache updated.
  * 2. It goes to UserDataAc activity.
  */
-public class PasswordChangeAc extends AppCompatActivity implements
-        ViewerPasswordChangeIf<View, Object> {
+public class PasswordChangeAc extends AppCompatActivity implements ManagerIf<Object>, ViewerPasswordChangeIf<View, Object> {
 
     UsuarioBean usuarioBean;
     String userName;
@@ -87,7 +86,7 @@ public class PasswordChangeAc extends AppCompatActivity implements
     // ============================================================
 
     @Override
-    public Activity getActivity()
+    public ManagerIf<Object> getManager()
     {
         Timber.d("getContext()");
         return this;
@@ -102,7 +101,7 @@ public class PasswordChangeAc extends AppCompatActivity implements
         if (e.getErrorBean().getMessage().equals(USER_NAME_NOT_FOUND.getHttpMessage())) {
             makeToast(this, R.string.username_wrong_in_login);
         } else {
-            action = e.processMe(this, new Intent());
+            action = processViewerError(e);
         }
         return action;
     }
@@ -119,15 +118,6 @@ public class PasswordChangeAc extends AppCompatActivity implements
     {
         Timber.d("getViewInViewer()");
         return acView;
-    }
-
-    @Override
-    public void replaceView(@Nullable Object initParams)
-    {
-        Timber.d("replaceView()");
-        makeToast(this, R.string.password_remote_change);
-        Intent intent = new Intent(this, routerMap.get(this.getClass()));
-        startActivity(intent);
     }
 
     // ============================================================
@@ -161,5 +151,31 @@ public class PasswordChangeAc extends AppCompatActivity implements
             return false;
         }
         return true;
+    }
+
+    // ============================================================
+    //    ........... ManagerIf .........
+    // ============================================================
+
+    @Override
+    public Activity getActivity()
+    {
+        return this;
+    }
+
+    @Override
+    public ActionForUiExceptionIf processViewerError(UiException ui)
+    {
+        Timber.d("processViewerError()");
+        return ui.processMe(this, new Intent());
+    }
+
+    @Override
+    public void replaceRootView(Object initParamsForView)
+    {
+        Timber.d("replaceRootView()");
+        makeToast(this, R.string.password_remote_change);
+        Intent intent = new Intent(this, routerMap.get(this.getClass()));
+        startActivity(intent);
     }
 }

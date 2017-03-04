@@ -55,7 +55,7 @@ public class LoginAcTest implements ExtendableTestAc {
     @Override
     public void checkNavigateUp()
     {
-        throw new UnsupportedOperationException("NO NAVIGATE-UP in LoginAc activity");
+        throw new UnsupportedOperationException("NO NAVIGATE-UP in LoginAc manager");
     }
 
     @Override

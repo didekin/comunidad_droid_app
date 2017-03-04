@@ -74,7 +74,7 @@ public class PasswordChangeAc_Unit_Test implements ExtendableTestAc {
     @Override
     public void checkNavigateUp()
     {
-        fail("NO NAVIGATE-UP in PasswordChange activity");
+        fail("NO NAVIGATE-UP in PasswordChange manager");
     }
 
     @Override

@@ -5,6 +5,7 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekindroid.ControllerAbs;
 import com.didekindroid.ManagerIf;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
 import com.didekinlib.http.ErrorBean;
 import com.didekinlib.http.oauth2.SpringOauthToken;
 import com.didekinlib.model.usuario.Usuario;
@@ -218,7 +219,7 @@ public class ReactorPswdChangeTest {
 
             ManagerIf.ControllerIf controllerAb = new ControllerAbs() {
                 @Override
-                public ManagerIf.ViewerIf getViewer()
+                public ViewerFirebaseTokenIf getViewer()
                 {
                     return null;
                 }
@@ -241,7 +242,7 @@ public class ReactorPswdChangeTest {
             { return controllerAb.clearSubscriptions(); }
 
             @Override
-            public ManagerIf.ViewerIf getViewer()
+            public ViewerFirebaseTokenIf getViewer()
             { return controllerAb.getViewer(); }
 
             @Override

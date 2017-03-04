@@ -3,7 +3,6 @@ package com.didekindroid.usuario.userdata;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.didekindroid.ManagerIf;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf.ActionForUiExceptionIf;
@@ -43,7 +43,7 @@ import static com.didekinlib.http.GenericExceptionMsg.BAD_REQUEST;
  * 1. Registered user with modified data.
  * 2. An intent is created for menu options with the old user data, once they have been loaded.
  */
-public class UserDataAc extends AppCompatActivity implements ViewerUserDataIf<View,Object> {
+public class UserDataAc extends AppCompatActivity implements ManagerIf<Object>, ViewerUserDataIf<View,Object> {
 
     View acView;
     ControllerUserDataIf controller;
@@ -89,11 +89,35 @@ public class UserDataAc extends AppCompatActivity implements ViewerUserDataIf<Vi
     }
 
     // ============================================================
-    //    ..... VIEWER IMPLEMENTATION ....
+    //    ............... ManagerIf ..............
     // ============================================================
 
     @Override
     public Activity getActivity()
+    {
+        return this;
+    }
+
+    @Override
+    public ActionForUiExceptionIf processViewerError(UiException ui)
+    {
+        return ui.processMe(this, new Intent());
+    }
+
+    @Override
+    public void replaceRootView(Object initParamsForView)
+    {
+        Timber.d("replaceRootView()");
+        Intent intent = new Intent(UserDataAc.this, routerMap.get(UserDataAc.this.getClass()));
+        startActivity(intent);
+    }
+
+    // ============================================================
+    //    ..... VIEWER IMPLEMENTATION ....
+    // ============================================================
+
+    @Override
+    public ManagerIf<Object> getManager()
     {
         Timber.d("getContext()");
         return this;
@@ -107,7 +131,7 @@ public class UserDataAc extends AppCompatActivity implements ViewerUserDataIf<Vi
             makeToast(this, R.string.password_wrong);
             return null;
         }
-        return e.processMe(this, new Intent());
+        return processViewerError(e);
     }
 
     @Override
@@ -122,14 +146,6 @@ public class UserDataAc extends AppCompatActivity implements ViewerUserDataIf<Vi
     {
         Timber.d("getViewInViewer()");
         return acView;
-    }
-
-    @Override
-    public void replaceView(@Nullable Object initParams)
-    {
-        Timber.d("replaceView()");
-        Intent intent = new Intent(UserDataAc.this, routerMap.get(UserDataAc.this.getClass()));
-        startActivity(intent);
     }
 
     // ============================================================

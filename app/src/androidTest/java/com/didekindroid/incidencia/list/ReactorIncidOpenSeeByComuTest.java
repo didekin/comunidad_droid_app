@@ -4,6 +4,7 @@ import com.didekindroid.ControllerAbs;
 import com.didekindroid.ManagerIf;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.list.ManagerIncidSeeIf.ControllerIncidSeeIf;
+import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
@@ -153,7 +154,7 @@ public class ReactorIncidOpenSeeByComuTest {
 
             ManagerIf.ControllerIf controllerAbs = new ControllerAbs() {
                 @Override
-                public ManagerIf.ViewerIf getViewer()
+                public ViewerFirebaseTokenIf getViewer()
                 {
                     return null;
                 }
@@ -204,7 +205,7 @@ public class ReactorIncidOpenSeeByComuTest {
             }
 
             @Override
-            public ManagerIf.ViewerIf getViewer()
+            public ViewerFirebaseTokenIf getViewer()
             {
                 return controllerAbs.getViewer();
             }

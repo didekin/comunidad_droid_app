@@ -3,7 +3,6 @@ package com.didekindroid.usuario.firebase;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.exception.UiException;
-import com.didekindroid.usuario.firebase.FirebaseTokenReactor.RegGcmTokenObserver;
 import com.didekinlib.http.ErrorBean;
 
 import org.junit.After;
@@ -19,8 +18,8 @@ import io.reactivex.disposables.CompositeDisposable;
 
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceIoScheduler;
-import static com.didekindroid.usuario.firebase.FirebaseTokenReactor.tokenReactor;
-import static com.didekindroid.usuario.firebase.FirebaseTokenReactor.updatedGcmTkSingle;
+import static com.didekindroid.usuario.firebase.ControllerFirebaseToken.FirebaseTokenReactor.tokenReactor;
+import static com.didekindroid.usuario.firebase.ControllerFirebaseToken.FirebaseTokenReactor.updatedGcmTkSingle;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
@@ -82,7 +81,7 @@ public class FirebaseTokenReactorTest {
     public void testOnError() throws Exception
     {
         Single.<Integer>error(new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR)))
-                .subscribeWith(new RegGcmTokenObserver());
+                .subscribeWith(new RegGcmTokenObserver(controller));
         assertThat(TKhandler.isGcmTokenSentServer(), is(false));
     }
 
@@ -93,7 +92,7 @@ public class FirebaseTokenReactorTest {
     @Test
     public void testOnSuccess() throws Exception
     {
-        Single.just(1).subscribeWith(new RegGcmTokenObserver());
+        Single.just(1).subscribeWith(new RegGcmTokenObserver(controller));
         assertThat(TKhandler.isGcmTokenSentServer(), is(true));
     }
 

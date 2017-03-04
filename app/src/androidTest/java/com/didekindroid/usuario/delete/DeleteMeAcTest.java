@@ -84,7 +84,7 @@ public class DeleteMeAcTest implements ExtendableTestAc {
     @Override
     public void checkNavigateUp()
     {
-        throw new UnsupportedOperationException("NO NAVIGATE-UP in DeleteMeAc activity");
+        throw new UnsupportedOperationException("NO NAVIGATE-UP in DeleteMeAc manager");
     }
 
     @Override

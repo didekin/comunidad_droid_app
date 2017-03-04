@@ -2,9 +2,11 @@ package com.didekindroid.incidencia.list;
 
 import android.app.FragmentManager;
 import android.os.Bundle;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
+import android.view.View;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
@@ -19,6 +21,7 @@ import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
+import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -27,7 +30,6 @@ import org.junit.runner.RunWith;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 import static android.database.sqlite.SQLiteDatabase.deleteDatabase;
 import static android.support.test.espresso.Espresso.onData;
@@ -53,7 +55,8 @@ import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_resoluci
 import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
-import static com.didekindroid.testutil.ActivityTestUtils.isAdapterInitialized;
+import static com.didekindroid.testutil.ActivityTestUtils.getAdapterCount;
+import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
@@ -75,9 +78,6 @@ import static org.junit.Assert.assertThat;
  * User: pedro@didekin
  * Date: 02/02/16
  * Time: 18:00
- */
-
-/**
  * Tests sobre la lista de incidencias cerradas.
  */
 @SuppressWarnings({"unchecked", "ConstantConditions"})
@@ -176,7 +176,6 @@ public class IncidSeeClosedByComuAcTest {
         fragment = (IncidSeeByComuListFr) activity.getSupportFragmentManager().findFragmentByTag(incid_see_by_comu_list_fr_tag);
         controllerList = (ControllerIncidCloseSee) fragment.controllerSeeIncids;
         listAdapter = (AdapterIncidSeeClosedByComu) controllerList.adapter;
-        waitAtMost(2, SECONDS).until(isAdapterInitialized(listAdapter));
     }
 
     @After
@@ -195,14 +194,25 @@ public class IncidSeeClosedByComuAcTest {
     public void testOnData_1() throws Exception
     {
         // CASO OK: muestra las incidencias de la comunidad por defecto (Calle La Fuente).
-        assertThat(listAdapter.getCount(), is(1));
+        waitAtMost(3, SECONDS).until(getAdapterCount(listAdapter), is(1));
 
         IncidenciaUser incidUser_1 = listAdapter.getItem(0);
         ViewMatchers.assertThat(incidUser_1.getIncidencia(), is(incidPepeLaFuente.getIncidencia()));
         onData(is(incidUser_1)).inAdapterView(withId(android.R.id.list)).check(matches(isDisplayed()));
 
          /* Datos a la vista de IncidSeeByComuListFr.*/
-        showDataIncidList(incidUser_1);
+        waitAtMost(2, SECONDS).until(isViewDisplayed(getIncidListViewMatcher(incidUser_1)));
+    }
+
+    @Test
+    public void testOnCloseSubscriptions(){
+        // Preconditions.
+        waitAtMost(3, SECONDS).until(getAdapterCount(listAdapter), is(1));
+
+        assertThat(controllerList.getSubscriptions().size(), is(1));
+        InstrumentationRegistry.getInstrumentation().callActivityOnStop(activity);
+        // Check.
+        assertThat(controllerList.getSubscriptions().size(), is(0));
     }
 
     @Test
@@ -215,7 +225,8 @@ public class IncidSeeClosedByComuAcTest {
                 is(pepePlazuelas5.getComunidad()))
         ).check(matches(isDisplayed())).perform(click());
 
-        assertThat(listAdapter.getCount(), is(2));
+        waitAtMost(2, SECONDS).until(getAdapterCount(listAdapter), is(2));
+
         IncidenciaUser incidUser_1 = listAdapter.getItem(0);
         IncidenciaUser incidUser_2 = listAdapter.getItem(1);
 
@@ -237,12 +248,13 @@ public class IncidSeeClosedByComuAcTest {
                 is(pepePlazuelas5.getComunidad()))
         ).perform(click());
 
+        waitAtMost(2, SECONDS).until(getAdapterCount(listAdapter), is(2));
         IncidenciaUser incidUser = listAdapter.getItem(1);
         onData(is(incidUser)).inAdapterView(withId(android.R.id.list))
                 .check(matches(isDisplayed()))
                 .perform(click());
 
-        onView(withId(R.id.incid_resolucion_see_fr_layout)).check(matches(isDisplayed()));
+        waitAtMost(2, SECONDS).until(isViewDisplayed(withId(R.id.incid_resolucion_see_fr_layout)));
 
         // Verificamos argumentos del nuevo fragmento.
         IncidResolucionSeeFr resolucionSeeFr = (IncidResolucionSeeFr) activity.getSupportFragmentManager()
@@ -275,17 +287,18 @@ public class IncidSeeClosedByComuAcTest {
         // CASO: verificación de la navegación, Utilizamos PressBack.
 
         // Comunidad por defecto.
+        waitAtMost(2, SECONDS).until(getAdapterCount(listAdapter), is(1));
         IncidenciaUser incidUser = listAdapter.getItem(0);
-
         // Seleccionamos una incidencia.
         onData(is(incidUser)).inAdapterView(withId(android.R.id.list))
                 .check(matches(isDisplayed()))
                 .perform(click());
+
         // BACK.
-        onView(withId(R.id.incid_resolucion_see_fr_layout)).check(matches(isDisplayed())).perform(pressBack());
-        TimeUnit.MILLISECONDS.sleep(2000);
+        waitAtMost(2, SECONDS).until(isViewDisplayed(withId(R.id.incid_resolucion_see_fr_layout)));
+        onView(withId(R.id.incid_resolucion_see_fr_layout)).perform(pressBack());
         /* Datos a la vista de IncidSeeByComuListFr.*/
-        showDataIncidList(incidUser);
+        waitAtMost(2, SECONDS).until(isViewDisplayed(getIncidListViewMatcher(incidUser)));
     }
 
     @Test
@@ -294,27 +307,26 @@ public class IncidSeeClosedByComuAcTest {
         // CASO: verificación de la navegación,
 
         // Comunidad por defecto.
+        waitAtMost(2, SECONDS).until(getAdapterCount(listAdapter), is(1));
         IncidenciaUser incidUser = listAdapter.getItem(0);
-
         // Seleccionamos una incidencia.
         onData(is(incidUser)).inAdapterView(withId(android.R.id.list))
                 .check(matches(isDisplayed()))
                 .perform(click());
-        TimeUnit.MILLISECONDS.sleep(1000);
-        onView(withId(R.id.incid_resolucion_see_fr_layout)).check(matches(isDisplayed()));
+
+        waitAtMost(2, SECONDS).until(isViewDisplayed(withId(R.id.incid_resolucion_see_fr_layout)));
 
         // Up Navigation:
         clickNavigateUp();
         /* Datos a la vista de IncidSeeByComuListFr.*/
-        TimeUnit.MILLISECONDS.sleep(2000);
-        showDataIncidList(incidUser);
+        waitAtMost(2, SECONDS).until(isViewDisplayed(getIncidListViewMatcher(incidUser)));
     }
 
 //    ===================================== HELPERS =====================================
 
-    private void showDataIncidList(IncidenciaUser incidUser)
+    private Matcher<View> getIncidListViewMatcher(IncidenciaUser incidUser)
     {
-        onView(allOf(
+        return allOf(
                 withId(R.id.incid_see_apertura_block),
                 hasDescendant(allOf(
                         withId(R.id.incid_fecha_alta_view),
@@ -346,6 +358,6 @@ public class IncidSeeClosedByComuAcTest {
                         withText(incidUser.getIncidencia().getDescripcion()),
                         withId(R.id.incid_descripcion_view)
                 ))
-        )).check(matches(isDisplayed()));
+        );
     }
 }

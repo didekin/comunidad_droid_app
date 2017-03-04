@@ -53,7 +53,7 @@ public class ComuSearchAc_3_Test {
     File refreshTkFile;
     UsuarioDataTestUtils.CleanUserEnum whatClean;
 
-    // Navigate-up activity layout.
+    // Navigate-up manager layout.
     int activityLayoutId = R.id.comu_search_ac_linearlayout;
 
     @Rule
