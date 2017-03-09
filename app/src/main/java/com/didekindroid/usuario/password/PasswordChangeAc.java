@@ -12,7 +12,6 @@ import com.didekindroid.ManagerIf;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf.ActionForUiExceptionIf;
-import com.didekindroid.security.IdentityCacher;
 import com.didekindroid.usuario.UsuarioBean;
 
 import timber.log.Timber;
@@ -40,7 +39,6 @@ public class PasswordChangeAc extends AppCompatActivity implements ManagerIf<Obj
 
     UsuarioBean usuarioBean;
     String userName;
-    IdentityCacher identityCacher;
     private View acView;
     ControllerPasswordChangeIf controller;
 

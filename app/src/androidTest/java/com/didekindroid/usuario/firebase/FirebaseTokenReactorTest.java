@@ -1,25 +1,37 @@
 package com.didekindroid.usuario.firebase;
 
+import android.app.Activity;
+import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.didekindroid.ManagerIf;
+import com.didekindroid.ManagerMock;
+import com.didekindroid.MockActivity;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.exception.UiExceptionIf;
+import com.didekindroid.incidencia.core.ControllerFirebaseTokenIf;
+import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf.ViewerFirebaseToken;
 import com.didekinlib.http.ErrorBean;
 
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicReference;
 
 import io.reactivex.Single;
-import io.reactivex.disposables.CompositeDisposable;
 
-import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC;
+import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
+import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceAndroidMain;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceIoScheduler;
-import static com.didekindroid.usuario.firebase.ControllerFirebaseToken.FirebaseTokenReactor.tokenReactor;
-import static com.didekindroid.usuario.firebase.ControllerFirebaseToken.FirebaseTokenReactor.updatedGcmTkSingle;
+import static com.didekindroid.usuario.firebase.FirebaseTokenReactor.tokenReactor;
+import static com.didekindroid.usuario.firebase.FirebaseTokenReactor.updatedGcmTkSingle;
+import static com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf.ViewerFirebaseToken.newViewerFirebaseToken;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
@@ -27,7 +39,6 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.si
 import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
 import static io.reactivex.plugins.RxJavaPlugins.reset;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -38,10 +49,19 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class FirebaseTokenReactorTest {
 
+    final static AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
+
+    ControllerFirebaseTokenIf controller;
+    ManagerIf manager;
+
+    @Rule
+    public ActivityTestRule<? extends Activity> activityRule = new ActivityTestRule<>(MockActivity.class, true, true);
+
     @Before
     public void getFixture() throws IOException, UiException
     {
         signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
+        manager = new ManagerMock(activityRule.getActivity());
     }
 
     @After
@@ -80,9 +100,25 @@ public class FirebaseTokenReactorTest {
     @Test
     public void testOnError() throws Exception
     {
+        ViewerFirebaseTokenIf viewer = new ViewerFirebaseToken(manager){
+            @Override
+            public UiExceptionIf.ActionForUiExceptionIf processControllerError(UiException ui)
+            {
+                assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC), is(BEFORE_METHOD_EXEC));
+                return null;
+            }
+        };
+        controller = new ControllerFirebaseToken(viewer);
+        viewer.setController(controller);
+
+        // Preconditions.
+        assertThat(controller.isGcmTokenSentServer(), is(false));
+        // Call.
         Single.<Integer>error(new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR)))
-                .subscribeWith(new RegGcmTokenObserver(controller));
-        assertThat(TKhandler.isGcmTokenSentServer(), is(false));
+                .subscribeWith(new FirebaseTokenReactor.RegGcmTokenObserver(controller));
+        // Check.
+        assertThat(controller.isGcmTokenSentServer(), is(false));
+        assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC));
     }
 
     /**
@@ -92,8 +128,11 @@ public class FirebaseTokenReactorTest {
     @Test
     public void testOnSuccess() throws Exception
     {
-        Single.just(1).subscribeWith(new RegGcmTokenObserver(controller));
-        assertThat(TKhandler.isGcmTokenSentServer(), is(true));
+        controller = new ControllerFirebaseToken(newViewerFirebaseToken(manager));
+        assertThat(controller.isGcmTokenSentServer(), is(false));
+
+        Single.just(1).subscribeWith(new FirebaseTokenReactor.RegGcmTokenObserver(controller));
+        assertThat(controller.isGcmTokenSentServer(), is(true));
     }
 
     //  =======================================================================================
@@ -107,39 +146,19 @@ public class FirebaseTokenReactorTest {
     @Test
     public void testCheckGcmToken_1()
     {
+        controller = new ControllerFirebaseToken(newViewerFirebaseToken(manager));
         // Preconditions: the user is registered and her gcmToken has not been sent to database.
-        assertThat(TKhandler.isRegisteredUser() && !TKhandler.isGcmTokenSentServer(), is(true));
+        assertThat(controller.isRegisteredUser() && controller.isGcmTokenSentServer(), is(false));
 
-        CompositeDisposable subscriptions;
         try {
             trampolineReplaceIoScheduler();
-            subscriptions = tokenReactor.checkGcmToken(null);
+            trampolineReplaceAndroidMain();
+            assertThat(tokenReactor.checkGcmToken(controller),is(true));
         } finally {
             reset();
         }
-        assertThat(subscriptions.size(), is(1));
-        assertThat(TKhandler.isGcmTokenSentServer(), is(true));
-    }
-
-    /**
-     * Synchronous execution: we use RxJavaPlugins to replace io scheduler; everything runs in the test runner thread.
-     * The gcmToken has been updated in database: we check that the subscriptions continue to be null.
-     */
-    @Test
-    public void testCheckGcmToken_2()
-    {
-        // Preconditions: the user is registered and her gcmToken has been sent to database.
-        TKhandler.updateIsGcmTokenSentServer(true);
-        assertThat(TKhandler.isRegisteredUser(), is(true));
-
-        CompositeDisposable subscriptions;
-        try {
-            trampolineReplaceIoScheduler();
-            subscriptions = tokenReactor.checkGcmToken(null);
-        } finally {
-            reset();
-        }
-        assertThat(subscriptions, nullValue());
+        assertThat(controller.getSubscriptions().size(), is(1));
+        assertThat(controller.isGcmTokenSentServer(), is(true));           // TODO
     }
 
     /**
@@ -149,8 +168,8 @@ public class FirebaseTokenReactorTest {
     @Test
     public void testCheckGcmTokenSync() throws Exception
     {
-        tokenReactor.checkGcmTokenSync();
-        assertThat(TKhandler.isGcmTokenSentServer(), is(true));
+        controller = new ControllerFirebaseToken(newViewerFirebaseToken(manager));
+        tokenReactor.checkGcmTokenSync(controller);
+        assertThat(controller.getSubscriptions().size(), is(1));
     }
-
 }

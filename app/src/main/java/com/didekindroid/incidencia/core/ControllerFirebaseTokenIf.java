@@ -8,14 +8,17 @@ import com.didekindroid.ManagerIf;
  * Time: 14:01
  */
 
-public interface ControllerFirebaseTokenIf extends ManagerIf.ControllerIf {
+public interface ControllerFirebaseTokenIf extends ManagerIf.ControllerIdentityIf {
+
+    String IS_GCM_TOKEN_SENT_TO_SERVER = "isGcmTokenSentToServer";
 
     void checkGcmToken();
 
     void checkGcmTokenSync();
 
-    void updateIsGcmTokenSentServer(boolean b);
+    boolean isGcmTokenSentServer();
 
+    void updateIsGcmTokenSentServer(boolean isSentToServer);
 
     interface FirebaseTokenReactorIf {
 

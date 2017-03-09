@@ -42,7 +42,7 @@ public class IncidSeeByComuListFr<B> extends Fragment implements ViewerIncidSeeI
 
     // The fragment itself.
     ManagerComuSpinnerIf<B> comuSpinnerManager;
-    ViewerComuSpinnerIf comuSpinnerViewer;
+    ViewerComuSpinnerIf<B> comuSpinnerViewer;
 
     View rootFrgView;
     ListView listView;
@@ -116,19 +116,6 @@ public class IncidSeeByComuListFr<B> extends Fragment implements ViewerIncidSeeI
     }
 
     @Override
-    public ManagerIf<B> getManager()
-    {
-        return this;
-    }
-
-    @Override
-    public void replaceRootView(Object initParamsForView)
-    {
-        Timber.d("replaceRootView()");
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public Spinner initSpinnerView()
     {
         Timber.d("initSpinnerView()");
@@ -148,6 +135,21 @@ public class IncidSeeByComuListFr<B> extends Fragment implements ViewerIncidSeeI
     public AdapterView.OnItemSelectedListener getSpinnerListener()
     {
         return new ComuSelectedListener();
+    }
+
+    @Override
+    public void replaceRootView(B initParamsForView)
+    {
+        Timber.d("replaceRootView()");
+        incidListManager.replaceRootView(initParamsForView);
+    }
+
+    // =============================== ViewerIncidSeeIf =================================
+
+    @Override
+    public ManagerIf<B> getManager()
+    {
+        return incidListManager;
     }
 
     // ...................... Helpers ....................

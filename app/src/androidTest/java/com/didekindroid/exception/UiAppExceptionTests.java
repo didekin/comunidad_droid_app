@@ -5,7 +5,7 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.testutil.MockActivity;
+import com.didekindroid.MockActivity;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekinlib.http.ErrorBean;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;

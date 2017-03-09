@@ -4,6 +4,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.exception.UiException;
 import com.didekindroid.security.OauthTokenReactor.OauthUpdateTokenCacheObserver;
+import com.didekindroid.testutil.ActivityTestUtils;
 import com.didekinlib.http.ErrorBean;
 import com.didekinlib.http.oauth2.SpringOauthToken;
 
@@ -35,11 +36,6 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.si
 import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
 import static io.reactivex.plugins.RxJavaPlugins.reset;
 import static io.reactivex.schedulers.Schedulers.io;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertThat;
 
 /**
  * User: pedro@didekin
@@ -103,7 +99,7 @@ public class OauthTokenReactor_1_Test {
                 .assertComplete()
                 .assertTerminated();
 
-        checkUpdateTokenCache(oldToken);
+        ActivityTestUtils.checkUpdateTokenCache(oldToken);
     }
 
     /**
@@ -115,7 +111,7 @@ public class OauthTokenReactor_1_Test {
         SpringOauthToken oldToken = TKhandler.getAccessTokenInCache();
         oauthTokenFromRefreshTk(TKhandler.getRefreshTokenValue())
                 .blockingAwait();
-        checkUpdateTokenCache(oldToken);
+        ActivityTestUtils.checkUpdateTokenCache(oldToken);
     }
 
     /**
@@ -131,7 +127,7 @@ public class OauthTokenReactor_1_Test {
                 .assertComplete()
                 .assertTerminated();
 
-        checkUpdateTokenCache(oldToken);
+        ActivityTestUtils.checkUpdateTokenCache(oldToken);
     }
 
     /**
@@ -143,7 +139,7 @@ public class OauthTokenReactor_1_Test {
         SpringOauthToken oldToken = TKhandler.getAccessTokenInCache();
         oauthTokenAndInitCache(USER_PEPE)
                 .blockingAwait();
-        checkUpdateTokenCache(oldToken);
+        ActivityTestUtils.checkUpdateTokenCache(oldToken);
     }
 
     //  =======================================================================================
@@ -157,10 +153,10 @@ public class OauthTokenReactor_1_Test {
     @Test
     public void testOauthUpdateTokenCacheObserver_1() throws UiException
     {
-        checkInitTokenCache();
+        ActivityTestUtils.checkInitTokenCache();
         Completable.error(new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR)))
                 .subscribeWith(new OauthUpdateTokenCacheObserver());
-        checkNoInitCache();
+        ActivityTestUtils.checkNoInitCache();
 
     }
 
@@ -171,7 +167,7 @@ public class OauthTokenReactor_1_Test {
     @Test
     public void testOauthUpdateTokenCacheObserver_2() throws UiException
     {
-        checkInitTokenCache();
+        ActivityTestUtils.checkInitTokenCache();
 
         Completable.fromCallable(new Callable<Object>() {
             @Override
@@ -181,7 +177,7 @@ public class OauthTokenReactor_1_Test {
             }
         }).subscribeWith(new OauthUpdateTokenCacheObserver());
 
-        checkInitTokenCache();
+        ActivityTestUtils.checkInitTokenCache();
     }
 
     //  =======================================================================================
@@ -200,7 +196,7 @@ public class OauthTokenReactor_1_Test {
 
         userComuDaoRemote.regComuAndUserAndUserComu(COMU_REAL_PEPE).execute().body();
         TKhandler.updateIsRegistered(true);
-        checkNoInitCache();
+        ActivityTestUtils.checkNoInitCache();
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
@@ -208,30 +204,11 @@ public class OauthTokenReactor_1_Test {
         } finally {
             reset();
         }
-        checkInitTokenCache();
+        ActivityTestUtils.checkInitTokenCache();
     }
 
     //  ============================================================================================
     //    .................................... HELPERS .................................
     //  ============================================================================================
 
-    public static void checkUpdateTokenCache(SpringOauthToken oldToken) throws UiException
-    {
-        assertThat(TKhandler.getAccessTokenInCache(), not(is(oldToken)));
-        checkInitTokenCache();
-    }
-
-    public static void checkInitTokenCache() throws UiException
-    {
-        assertThat(TKhandler.getAccessTokenInCache(), notNullValue());
-        assertThat(TKhandler.getAccessTokenInCache().getValue().isEmpty(), is(false));
-        assertThat(TKhandler.getRefreshTokenValue().isEmpty(), is(false));
-        assertThat(TKhandler.getRefreshTokenFile().exists(), is(true));
-    }
-
-    public static void checkNoInitCache() throws UiException
-    {
-        assertThat(TKhandler.getAccessTokenInCache(), nullValue());
-        assertThat(TKhandler.getRefreshTokenFile().exists(), is(false));
-    }
 }

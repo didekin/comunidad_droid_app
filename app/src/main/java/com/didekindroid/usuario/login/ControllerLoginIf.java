@@ -1,6 +1,6 @@
 package com.didekindroid.usuario.login;
 
-import com.didekindroid.ManagerIf.ControllerIf;
+import com.didekindroid.ManagerIf;
 import com.didekinlib.model.usuario.Usuario;
 
 import io.reactivex.Single;
@@ -10,7 +10,7 @@ import io.reactivex.Single;
  * Date: 29/11/16
  * Time: 10:30
  */
-interface ControllerLoginIf extends ControllerIf {
+interface ControllerLoginIf extends ManagerIf.ControllerIdentityIf {
 
     void validateLoginRemote(Usuario usuario);
 

@@ -5,10 +5,13 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.widget.ArrayAdapter;
 import android.widget.CursorAdapter;
+import android.widget.Spinner;
 
+import com.didekindroid.ManagerMock;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum;
+import com.didekindroid.incidencia.spinner.ManagerComuSpinnerIf.ViewerComuSpinnerIf;
+import com.didekindroid.usuario.firebase.ControllerFirebaseToken;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 
@@ -41,6 +44,8 @@ import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
+import static com.didekindroid.testutil.ActivityTestUtils.getAdapterCount;
+import static com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf.ViewerFirebaseToken.newViewerFirebaseToken;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
@@ -48,7 +53,9 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.CO
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.regSeveralUserComuSameUser;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.awaitility.Awaitility.fieldIn;
+import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -83,8 +90,8 @@ public class IncidRegAcTest_1 {
     int activityLayoutId = R.id.incid_reg_ac_layout;
     int fragmentLayoutId = R.id.incid_reg_frg;
     private IncidRegAc mActivity;
-    private CleanUserEnum whatToClean = CLEAN_PEPE;
     private Comunidad comunidadByDefault;
+    private ControllerFirebaseTokenIf controller;
 
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
@@ -96,17 +103,20 @@ public class IncidRegAcTest_1 {
     public void setUp() throws Exception
     {
         mActivity = intentRule.getActivity();
-        MILLISECONDS.sleep(2000);
-        comunidadesAdapter = (ArrayAdapter<Comunidad>) mActivity.mRegAcFragment.comunidadSpinner.getAdapter();
+        waitAtMost(2, SECONDS).until(fieldIn(mActivity.mRegAcFragment).ofType(ViewerComuSpinnerIf.class), notNullValue());
+        Spinner spinner = (Spinner) mActivity.mRegAcFragment.comuSpinnerViewer.getViewInViewer();
+        comunidadesAdapter = (ArrayAdapter<Comunidad>) spinner.getAdapter();
+        waitAtMost(2, SECONDS).until(getAdapterCount(comunidadesAdapter), is(3));
         comunidadByDefault = comunidadesAdapter.getItem(0);
-        TKhandler.updateIsGcmTokenSentServer(false);
+        controller = new ControllerFirebaseToken(newViewerFirebaseToken(new ManagerMock<>(mActivity)));
+        controller.updateIsGcmTokenSentServer(false);
     }
 
     @After
     public void tearDown() throws Exception
     {
-        cleanOptions(whatToClean);
-        TKhandler.updateIsGcmTokenSentServer(false);
+        cleanOptions(CLEAN_PEPE);
+        controller.updateIsGcmTokenSentServer(false);
     }
 
     //  ===========================================================================

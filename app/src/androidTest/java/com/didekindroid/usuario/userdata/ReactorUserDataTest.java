@@ -1,32 +1,38 @@
 package com.didekindroid.usuario.userdata;
 
+import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.view.View;
 
-import com.didekindroid.ControllerAbs;
-import com.didekindroid.ManagerIf;
+import com.didekindroid.ControllerIdentityAbs;
+import com.didekindroid.ManagerMock;
+import com.didekindroid.MockActivity;
+import com.didekindroid.ViewerMock;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.incidencia.list.ManagerIncidSeeIf;
 import com.didekindroid.security.Oauth2DaoRemote;
 import com.didekindroid.security.OauthTokenReactorIf;
-import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
 import com.didekinlib.http.oauth2.SpringOauthToken;
 import com.didekinlib.model.usuario.Usuario;
 
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
-import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Predicate;
 import io.reactivex.observers.TestObserver;
-import timber.log.Timber;
 
+import static com.didekindroid.ViewerMock.flagViewerMockMethodExec;
 import static com.didekindroid.security.OauthTokenReactor.tokenReactor;
+import static com.didekindroid.testutil.ConstantExecution.VIEWER_AFTER_ERROR_CONTROL;
+import static com.didekindroid.testutil.ConstantExecution.VIEWER_FLAG_INITIAL;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceAndroidMain;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceIoScheduler;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
@@ -57,6 +63,9 @@ import static org.junit.Assert.assertThat;
  */
 @RunWith(AndroidJUnit4.class)
 public class ReactorUserDataTest {
+
+    @Rule
+    public ActivityTestRule<MockActivity> activityRule = new ActivityTestRule<>(MockActivity.class, true, true);
 
     Usuario usuarioOrig;
     OauthTokenReactorIf oauthTokenReactor = tokenReactor;
@@ -235,7 +244,7 @@ public class ReactorUserDataTest {
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
-            assertThat(userDataReactor.loadUserData(doUserDataController()), is(true));
+            assertThat(userDataReactor.loadUserData(new ControllerUserDataForTest()), is(true));
         } finally {
             reset();
         }
@@ -252,7 +261,7 @@ public class ReactorUserDataTest {
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
-            assertThat(userDataReactor.modifyUser(doUserDataController(), USER_PEPE, newUser), is(true));
+            assertThat(userDataReactor.modifyUser(new ControllerUserDataForTest(), USER_PEPE, newUser), is(true));
         } finally {
             reset();
         }
@@ -272,7 +281,8 @@ public class ReactorUserDataTest {
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
-            assertThat(userDataReactor.modifyUser(doUserDataController(), oldUser, newUser), is(true));
+            assertThat(userDataReactor.modifyUser(new ControllerUserDataForTest(), oldUser, newUser), is(true));
+            assertThat(flagViewerMockMethodExec.getAndSet(VIEWER_FLAG_INITIAL), is(VIEWER_AFTER_ERROR_CONTROL));
         } finally {
             reset();
         }
@@ -282,71 +292,42 @@ public class ReactorUserDataTest {
     //    .................................... HELPERS .................................
     //  ============================================================================================
 
-    ControllerUserDataIf doUserDataController()
-    {
+    class ControllerUserDataForTest extends ControllerIdentityAbs implements ControllerUserDataIf{
 
-        return new ControllerUserDataIf() {
+        @Override
+        public void loadUserData()
+        {
+        }
 
-            ManagerIf.ControllerIf controllerAb = new ControllerAbs() {
-                @Override
-                public ViewerFirebaseTokenIf getViewer()
-                {
-                    return null;
-                }
-            };
+        @Override
+        public boolean modifyUser(Usuario oldUser, Usuario newUser)
+        {
+            return false;
+        }
 
-            @Override
-            public void loadUserData()
-            { }
+        @Override   // LoadedUserObserver
+        public void processBackUserDataLoaded(Usuario usuario)
+        {
+            assertThat(usuario.getuId(), is(usuarioOrig.getuId()));
+            assertThat(usuario.getUserName(), is(USER_PEPE.getUserName()));
+            assertThat(usuario.getAlias(), is(USER_PEPE.getAlias()));
+        }
 
-            @Override
-            public boolean modifyUser(Usuario oldUser, Usuario newUser)
-            { return false; }
+        @Override
+        public ManagerIncidSeeIf.ViewerIf<View,Object> getViewer()
+        {
+            return new ViewerMock<>(new ManagerMock<>(activityRule.getActivity()));
+        }
 
-            @Override
-            public CompositeDisposable getSubscriptions()
-            { return controllerAb.getSubscriptions(); }
-
-            @Override
-            public int clearSubscriptions()
-            { return controllerAb.clearSubscriptions(); }
-
-            @Override
-            public ViewerFirebaseTokenIf getViewer()
-            { return controllerAb.getViewer(); }
-
-            @Override
-            public boolean isRegisteredUser()
-            { return controllerAb.isRegisteredUser(); }
-
-            @Override   // LoadedUserObserver
-            public void processBackUserDataLoaded(Usuario usuario)
-            {
-                assertThat(usuario.getuId(), is(usuarioOrig.getuId()));
-                assertThat(usuario.getUserName(), is(USER_PEPE.getUserName()));
-                assertThat(usuario.getAlias(), is(USER_PEPE.getAlias()));
-            }
-
-            @Override
-            public void processReactorError(Throwable e)
-            {
-                // Check modifyUser subscription with wrong password.
-                Timber.d("!!!!!!!!!!!!!!!! ERROR !!!!!!!!!!!!!!!!!!");
-                UiException ue = (UiException) e;
-                assertThat(ue.getErrorBean().getMessage(), is(BAD_REQUEST.getHttpMessage()));
-            }
-
-            @Override   // ModifyUserObserver
-            public void processBackUserModified()
-            {
-                SpringOauthToken oauthToken2 = tokenCacher.getTokenCache().get();
-                assertThat(oauthToken2, notNullValue());
-                assertThat(oauthToken2.getValue(), allOf(
-                        notNullValue(),
-                        not(is(oauthToken1.getValue()))
-                ));
-            }
-        };
+        @Override   // ModifyUserObserver
+        public void processBackUserModified()
+        {
+            SpringOauthToken oauthToken2 = tokenCacher.getTokenCache().get();
+            assertThat(oauthToken2, notNullValue());
+            assertThat(oauthToken2.getValue(), allOf(
+                    notNullValue(),
+                    not(is(oauthToken1.getValue()))
+            ));
+        }
     }
-
 }

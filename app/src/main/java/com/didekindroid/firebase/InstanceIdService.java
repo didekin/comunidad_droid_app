@@ -1,5 +1,6 @@
 package com.didekindroid.firebase;
 
+import com.didekindroid.incidencia.core.ControllerFirebaseTokenIf;
 import com.didekindroid.usuario.firebase.ControllerFirebaseToken;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
@@ -19,6 +20,8 @@ public class InstanceIdService extends FirebaseInstanceIdService {
     public void onTokenRefresh()
     {
         Timber.d("onTokenRefresh()");
-        new ControllerFirebaseToken(null).checkGcmTokenSync();
+        ControllerFirebaseTokenIf controller = new ControllerFirebaseToken(null);
+        controller.checkGcmTokenSync();
+        controller.clearSubscriptions();
     }
 }

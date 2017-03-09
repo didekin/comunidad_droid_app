@@ -17,10 +17,10 @@ import timber.log.Timber;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.didekindroid.AppInitializer.creator;
+import static com.didekindroid.incidencia.core.ControllerFirebaseTokenIf.IS_GCM_TOKEN_SENT_TO_SERVER;
+import static com.didekindroid.security.IdentityCacher.SharedPrefFiles.IS_USER_REG;
+import static com.didekindroid.security.IdentityCacher.SharedPrefFiles.app_preferences_file;
 import static com.didekindroid.security.OauthTokenReactor.oauthTokenFromRefreshTk;
-import static com.didekindroid.security.TokenIdentityCacher.SharedPrefFiles.IS_GCM_TOKEN_SENT_TO_SERVER;
-import static com.didekindroid.security.TokenIdentityCacher.SharedPrefFiles.IS_USER_REG;
-import static com.didekindroid.security.TokenIdentityCacher.SharedPrefFiles.app_preferences_file;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.identity_token_should_be_notnull;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.updateIdentityToken_should_be_completed;
 import static com.didekindroid.util.IoHelper.readStringFromFile;
@@ -220,29 +220,10 @@ public final class TokenIdentityCacher implements IdentityCacher {
         SharedPreferences sharedPref = context.getSharedPreferences(app_preferences_file.toString(), MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putBoolean(IS_USER_REG, isRegisteredUser);
-        editor.apply();
-
         if (!isRegisteredUser) {
-            updateIsGcmTokenSentServer(false);
+            editor.putBoolean(IS_GCM_TOKEN_SENT_TO_SERVER, false);
         }
-    }
-
-    @Override
-    public boolean isGcmTokenSentServer()
-    {
-        SharedPreferences sharedPref = context.getSharedPreferences(app_preferences_file.toString(), MODE_PRIVATE);
-        return sharedPref.getBoolean(IS_GCM_TOKEN_SENT_TO_SERVER, false);
-    }
-
-    @Override
-    public void updateIsGcmTokenSentServer(boolean isSentToServer)
-    {
-        Timber.d("updateIsGcmTokenSentServer()");
-        SharedPreferences sharedPref = context.getSharedPreferences(app_preferences_file.toString(), MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putBoolean(IS_GCM_TOKEN_SENT_TO_SERVER, isSentToServer);
         editor.apply();
-        Timber.d("updateIsGcmTokenSentServer(), iSentToServer= %b", isSentToServer);
     }
 
     //  ======================================================================================
@@ -292,20 +273,6 @@ public final class TokenIdentityCacher implements IdentityCacher {
     public String getRefreshTokenValue()
     {
         return tokenCache.get() != null ? tokenCache.get().getRefreshToken().getValue() : null;
-    }
-
-    public enum SharedPrefFiles {
-
-        app_preferences_file,;
-
-        public static final String IS_USER_REG = "TKhandler.isRegisteredUser";
-        static final String IS_GCM_TOKEN_SENT_TO_SERVER = "isGcmTokenSentToServer";
-
-        @Override
-        public String toString()
-        {
-            return getClass().getCanonicalName().concat(".").concat(this.name());
-        }
     }
 }
 

@@ -22,18 +22,18 @@ import static com.didekindroid.incidencia.spinner.ControllerComuSpinner.newContr
 @SuppressWarnings("WeakerAccess")
 public final class ViewerComuSpinner implements ViewerComuSpinnerIf {
 
-    final ManagerComuSpinnerIf<Object> manager;
+    final ManagerComuSpinnerIf<?> manager;
     final private Spinner spinnerView;
     long comunidadSelectedId;
     private ControllerComuSpinnerIf controller;
 
-    private ViewerComuSpinner(ManagerComuSpinnerIf<Object> spinnerManager)
+    private ViewerComuSpinner(ManagerComuSpinnerIf<?> spinnerManager)
     {
         manager = spinnerManager;
         spinnerView = spinnerManager.initSpinnerView();
     }
 
-    public static ViewerComuSpinner newComuSpinnerViewer(ManagerComuSpinnerIf<Object> comuSpinnerManager)
+    public static ViewerComuSpinner newComuSpinnerViewer(ManagerComuSpinnerIf<?> comuSpinnerManager)
     {
         Timber.d("newComuSpinnerViewer(comuSpinnerManager)");
         ViewerComuSpinner instance = new ViewerComuSpinner(comuSpinnerManager);
@@ -92,7 +92,7 @@ public final class ViewerComuSpinner implements ViewerComuSpinnerIf {
     }
 
     @Override
-    public ManagerIf<Object> getManager()
+    public ManagerIf getManager()
     {
         Timber.d("getContext()");
         return manager;

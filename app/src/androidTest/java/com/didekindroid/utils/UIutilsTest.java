@@ -21,7 +21,7 @@ import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.KITKAT;
 import static android.os.Build.VERSION_CODES.M;
 import static com.didekindroid.AppInitializer.creator;
-import static com.didekindroid.security.TokenIdentityCacher.SharedPrefFiles.app_preferences_file;
+import static com.didekindroid.security.IdentityCacher.SharedPrefFiles.app_preferences_file;
 import static com.didekindroid.util.UIutils.SPAIN_LOCALE;
 import static com.didekindroid.util.UIutils.formatDoubleZeroDecimal;
 import static com.didekindroid.util.UIutils.formatTimeStampToString;

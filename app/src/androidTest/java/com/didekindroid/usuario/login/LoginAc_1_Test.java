@@ -1,9 +1,9 @@
 package com.didekindroid.usuario.login;
 
 import android.app.Activity;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.view.View;
 
 import com.didekindroid.ExtendableTestAc;
 import com.didekindroid.R;
@@ -20,7 +20,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -42,12 +41,12 @@ import static com.didekindroid.R.string.send_password_by_mail_dialog;
 import static com.didekindroid.exception.UiExceptionRouter.GENERIC_APP_ACC;
 import static com.didekindroid.security.Oauth2DaoRemote.Oauth2;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.testutil.ActivityTestUtils.checkProcessCtrlError;
+import static com.didekindroid.testutil.ActivityTestUtils.checkProcessCtrlErrorOnlyToast;
+import static com.didekindroid.testutil.ActivityTestUtils.checkReplaceViewStd;
 import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtils.isActivityDying;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
-import static com.didekindroid.testutil.ActivityTestUtils.testProcessCtrlError;
-import static com.didekindroid.testutil.ActivityTestUtils.testProcessCtrlErrorOnlyToast;
-import static com.didekindroid.testutil.ActivityTestUtils.testReplaceViewStd;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_DROID;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_DROID;
@@ -71,8 +70,6 @@ import static org.junit.Assert.assertThat;
  */
 @RunWith(AndroidJUnit4.class)
 public class LoginAc_1_Test implements ExtendableTestAc {
-
-    static AtomicInteger flagForExecution = new AtomicInteger(0);
 
     LoginAc activity;
     int activityLayoutId = R.id.login_ac_layout;
@@ -152,6 +149,14 @@ public class LoginAc_1_Test implements ExtendableTestAc {
         onView(withContentDescription(R.string.navigate_up_txt)).check(matches(isDisplayed()));
     }
 
+    @Test
+    public final void testOnStop() throws Exception
+    {
+        InstrumentationRegistry.getInstrumentation().callActivityOnStop(activity);
+        // Check.
+        assertThat(controller.getSubscriptions().size(), is(0));
+    }
+
     // ============================================================
     //    ..... VIEWER IMPLEMENTATION ....
     // ============================================================
@@ -159,27 +164,19 @@ public class LoginAc_1_Test implements ExtendableTestAc {
     @Test
     public void testProcessControllerError_1()
     {
-        testProcessCtrlError(activity, GENERIC_INTERNAL_ERROR, GENERIC_APP_ACC);
+        checkProcessCtrlError(activity, GENERIC_INTERNAL_ERROR, GENERIC_APP_ACC);
     }
 
     @Test
     public void testProcessControllerError_2() throws InterruptedException
     {
-        testProcessCtrlErrorOnlyToast(activity, USER_NAME_NOT_FOUND, R.string.username_wrong_in_login, activityLayoutId);
-    }
-
-    @Test
-    public void testClearControllerSubscriptions()
-    {
-        controller = new ControllerLoginForTest(activity);
-        activity.clearControllerSubscriptions();
-        assertThat(flagForExecution.getAndSet(0), is(29));
+        checkProcessCtrlErrorOnlyToast(activity, USER_NAME_NOT_FOUND, R.string.username_wrong_in_login, activityLayoutId);
     }
 
     @Test
     public void testReplaceView()
     {
-        testReplaceViewStd(activity, getNextViewResourceId());
+        checkReplaceViewStd(activity, getNextViewResourceId());
     }
 
     // ============================================================
@@ -265,6 +262,10 @@ public class LoginAc_1_Test implements ExtendableTestAc {
     @Test
     public void testShowDialog()
     {
+        // Preconditions.
+        typeLoginData(USER_DROID.getUserName(), USER_DROID.getPassword());
+        activity.checkLoginData();
+
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run()
@@ -374,20 +375,5 @@ public class LoginAc_1_Test implements ExtendableTestAc {
                 .check(matches(isDisplayed()));
     }
 
-    // ========================== HELPERS ============================
-
-    class ControllerLoginForTest extends ControllerLogin {
-
-        ControllerLoginForTest(ViewerLoginIf<View, Object> viewer)
-        {
-            super(viewer);
-        }
-
-        @Override
-        public int clearSubscriptions()
-        {
-            assertThat(flagForExecution.getAndSet(29), is(0));
-            return 99;
-        }
-    }
+    /* ========================== HELPERS ============================*/
 }

@@ -146,6 +146,7 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity {
     //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
     //    ============================================================
 
+    @SuppressWarnings("WeakerAccess")
     class ComuAndUserComuAndUserRegister extends AsyncTask<UsuarioComunidad, Void, Void> {
 
         UiException uiException;

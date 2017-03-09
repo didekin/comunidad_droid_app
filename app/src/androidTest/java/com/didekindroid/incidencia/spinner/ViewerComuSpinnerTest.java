@@ -7,10 +7,10 @@ import android.support.test.runner.AndroidJUnit4;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
-import com.didekindroid.ManagerDumbImp;
+import com.didekindroid.ManagerMock;
+import com.didekindroid.MockActivity;
 import com.didekindroid.incidencia.spinner.ManagerComuSpinnerIf.ControllerComuSpinnerIf;
 import com.didekindroid.incidencia.spinner.ManagerComuSpinnerIf.ViewerComuSpinnerIf;
-import com.didekindroid.testutil.MockActivity;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
@@ -18,13 +18,15 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.exception.UiExceptionRouter.LOGIN_ACC;
 import static com.didekindroid.incidencia.spinner.ViewerComuSpinner.newComuSpinnerViewer;
-import static com.didekindroid.testutil.ActivityTestUtils.testProcessCtrlError;
+import static com.didekindroid.testutil.ActivityTestUtils.checkProcessCtrlError;
+import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC;
+import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekinlib.http.GenericExceptionMsg.TOKEN_NULL;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.fieldIn;
@@ -41,13 +43,15 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class ViewerComuSpinnerTest {
 
+    final static AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
+
     @Rule
     public ActivityTestRule<MockActivity> activityRule = new ActivityTestRule<>(MockActivity.class, true, true);
 
     ViewerComuSpinner viewer;
     boolean flagIntent;
     AtomicLong comunidadId = new AtomicLong(0);
-    static AtomicInteger flagForExecution = new AtomicInteger(0);
+    //    static AtomicInteger flagForExecution = new AtomicInteger(0);
     Activity activity;
 
     @Before
@@ -73,7 +77,7 @@ public class ViewerComuSpinnerTest {
         // Inject mock controller.
         viewer.injectController(controller);
         assertThat(viewer.setDataInView(new Bundle()), CoreMatchers.<ViewerComuSpinnerIf>is(viewer));
-        assertThat(flagForExecution.getAndSet(0), is(19));
+        assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC));
     }
 
     @Test
@@ -97,7 +101,7 @@ public class ViewerComuSpinnerTest {
     @Test
     public void testProcessControllerError()
     {
-        testProcessCtrlError(viewer, TOKEN_NULL, LOGIN_ACC);
+        checkProcessCtrlError(viewer, TOKEN_NULL, LOGIN_ACC);
     }
 
     @Test
@@ -115,13 +119,12 @@ public class ViewerComuSpinnerTest {
         ControllerComuSpinnerIf controller = new ControllerComuSpinnerForTest(viewer);
         // Inject mock controller.
         viewer.injectController(controller);
-        viewer.clearControllerSubscriptions();
-        assertThat(flagForExecution.getAndSet(0), is(29));
+        assertThat(viewer.clearControllerSubscriptions(), is(999));
     }
 
     // ............................ HELPERS ..................................
 
-    class ManagerComuSpinnerForTest extends ManagerDumbImp implements ManagerComuSpinnerIf {
+    class ManagerComuSpinnerForTest extends ManagerMock implements ManagerComuSpinnerIf {
 
         ManagerComuSpinnerForTest(Activity activity)
         {
@@ -137,15 +140,13 @@ public class ViewerComuSpinnerTest {
         @Override
         public Spinner initSpinnerView()
         {
-            Spinner spinner = getSpinnerViewInManager();
-            getSpinnerViewInManager().setOnItemSelectedListener(getSpinnerListener());
-            return spinner;
+            return null;
         }
 
         @Override
         public Spinner getSpinnerViewInManager()
         {
-            return new Spinner(activity);
+            return null;
         }
 
         @Override
@@ -166,14 +167,13 @@ public class ViewerComuSpinnerTest {
         @Override // Used in testSetDataInView().
         public void loadDataInSpinner()
         {
-            assertThat(flagForExecution.getAndSet(19), is(0));
+            assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC), is(BEFORE_METHOD_EXEC));
         }
 
         @Override  // Used in testClearControllerSubscriptions().
         public int clearSubscriptions()
         {
-            assertThat(flagForExecution.getAndSet(29), is(0));
-            return 99;
+            return 999;
         }
     }
 }

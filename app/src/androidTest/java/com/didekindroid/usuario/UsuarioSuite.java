@@ -9,8 +9,7 @@ import com.didekindroid.usuario.login.ControllerLoginTest;
 import com.didekindroid.usuario.login.LoginAc_1_Test;
 import com.didekindroid.usuario.login.ReactorLoginTest;
 import com.didekindroid.usuario.password.ControllerPasswordChangeTest;
-import com.didekindroid.usuario.password.PasswordChangeAc_Integration_Test;
-import com.didekindroid.usuario.password.PasswordChangeAc_Unit_Test;
+import com.didekindroid.usuario.password.PasswordChangeAc_Test;
 import com.didekindroid.usuario.password.ReactorPswdChangeTest;
 import com.didekindroid.usuario.userdata.ControllerUserDataTest;
 import com.didekindroid.usuario.userdata.UserDataAcTest;
@@ -34,8 +33,7 @@ import org.junit.runners.Suite;
         DeleteMeAcTest.class,
 //        LoginAcTest.class,
         LoginAc_1_Test.class,
-        PasswordChangeAc_Integration_Test.class,
-        PasswordChangeAc_Unit_Test.class,
+        PasswordChangeAc_Test.class,
         UserDataAcTest.class,
         UsuarioBeanValidaTests.class,
         UsuarioDaoRemoteTest.class,

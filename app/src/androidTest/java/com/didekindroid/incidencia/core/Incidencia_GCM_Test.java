@@ -10,7 +10,9 @@ import android.support.annotation.RequiresApi;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.didekindroid.ManagerMock;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.usuario.firebase.ControllerFirebaseToken;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.junit.After;
@@ -22,8 +24,8 @@ import java.util.concurrent.Callable;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
 import static com.didekindroid.incidencia.testutils.GcmConstantForTests.PACKAGE_TEST;
-import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
+import static com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf.ViewerFirebaseToken.newViewerFirebaseToken;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -75,12 +77,13 @@ public abstract class Incidencia_GCM_Test {
 
     protected void checkToken() throws InterruptedException, UiException
     {
+        ControllerFirebaseTokenIf controller = new ControllerFirebaseToken(newViewerFirebaseToken(new ManagerMock(mActivity)));
         firebaseToken = FirebaseInstanceId.getInstance().getToken();
         await().atMost(6, SECONDS).until(getGcmToken(), allOf(
                 notNullValue(),
                 is(firebaseToken)
         ));
-        assertThat(TKhandler.isGcmTokenSentServer(), is(true));
+        assertThat(controller.isGcmTokenSentServer(), is(true));
     }
 
     @TargetApi(Build.VERSION_CODES.M)

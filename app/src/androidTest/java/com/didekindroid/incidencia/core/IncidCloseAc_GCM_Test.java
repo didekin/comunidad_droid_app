@@ -18,12 +18,11 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.incidencia.firebase.IncidFirebaseDownMsgHandler.INCIDENCIA_CLOSE;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
-import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_PEPE;
 import static org.hamcrest.CoreMatchers.is;
@@ -77,7 +76,6 @@ public class IncidCloseAc_GCM_Test extends Incidencia_GCM_Test {
                     incidImportancia = insertGetIncidImportancia(COMU_PLAZUELA5_PEPE);
                     resolucion = insertGetResolucionNoAdvances(incidImportancia);
                     // We'll test that the gcmToken has not been updated in server.
-                    assertThat(TKhandler.isGcmTokenSentServer(), is(false));
                     assertThat(usuarioDao.getGcmToken(), nullValue());
                 } catch ( IOException | UiException e) {
                     e.printStackTrace();

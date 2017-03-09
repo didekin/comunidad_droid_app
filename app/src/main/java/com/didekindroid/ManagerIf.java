@@ -5,6 +5,7 @@ import android.view.View;
 
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf.ActionForUiExceptionIf;
+import com.didekindroid.security.IdentityCacher;
 
 import io.reactivex.disposables.CompositeDisposable;
 
@@ -24,7 +25,7 @@ public interface ManagerIf<B> {
 
     // .................... VIEWER .....................
 
-    interface ViewerIf<T extends View,B> {
+    interface ViewerIf<T extends View, B> {
 
         ManagerIf<B> getManager();
 
@@ -46,10 +47,17 @@ public interface ManagerIf<B> {
         int clearSubscriptions();
 
         /**
-         * It allows to inject different implementations of viewer in ControllerAbs.processReactorError().
+         * It allows to inject different implementations of viewer in ControllerIdentityAbs.processReactorError().
          */
         ViewerIf getViewer();
+    }
+
+    interface ControllerIdentityIf extends ControllerIf {
 
         boolean isRegisteredUser();
+
+        void updateIsRegistered(boolean isRegisteredUser);
+
+        IdentityCacher getIdentityCacher();
     }
 }

@@ -8,15 +8,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-import com.didekindroid.ControllerAbsTest;
-import com.didekindroid.ViewerDumbImp;
+import com.didekindroid.ManagerIf;
+import com.didekindroid.ManagerMock;
+import com.didekindroid.MockActivity;
+import com.didekindroid.ViewerMock;
 import com.didekindroid.ViewerWithSelectIf;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.exception.UiExceptionIf.ActionForUiExceptionIf;
-import com.didekindroid.incidencia.list.ManagerIncidSeeIf.ControllerIncidSeeIf;
 import com.didekindroid.incidencia.list.ManagerIncidSeeIf.ViewerIncidSeeIf;
-import com.didekindroid.testutil.MockActivity;
-import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
@@ -33,14 +31,19 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
-import timber.log.Timber;
-
+import static com.didekindroid.ManagerMock.flagManageMockExecMethod;
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
+import static com.didekindroid.incidencia.list.ReactorIncidSeeForTest.AFTER_seeIncidClosedList_EXEC;
+import static com.didekindroid.incidencia.list.ReactorIncidSeeForTest.AFTER_seeResolucioin_EXEC;
+import static com.didekindroid.incidencia.list.ReactorIncidSeeForTest.flagReactorMethodExec;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetDefaultResolucion;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
+import static com.didekindroid.testutil.ConstantExecution.MANAGER_AFTER_REPLACED_VIEW;
+import static com.didekindroid.testutil.ConstantExecution.MANAGER_FLAG_INITIAL;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
@@ -56,9 +59,7 @@ import static org.junit.Assert.assertThat;
  * Time: 13:25
  */
 @RunWith(AndroidJUnit4.class)
-public class ControllerIncidCloseSeeTest extends ControllerAbsTest<ControllerIncidCloseSee> {
-
-    final static AtomicInteger flagForExecution = new AtomicInteger(0);
+public class ControllerIncidCloseSeeTest {
 
     @Rule
     public ActivityTestRule<MockActivity> activityRule = new ActivityTestRule<>(MockActivity.class, true, true);
@@ -68,13 +69,24 @@ public class ControllerIncidCloseSeeTest extends ControllerAbsTest<ControllerInc
     List<IncidenciaUser> incidList;
     Incidencia incidencia;
     Activity activity;
+    ManagerIf<Bundle> manager;
+    ControllerIncidCloseSee controller;
 
+    @SuppressWarnings("unchecked")
     @Before
     public void setUp() throws IOException, UiException, InterruptedException
     {
-        // Controller in superclass.
         activity = activityRule.getActivity();
-        controller = new ControllerIncidCloseSee(new ViewerIncidSeeForTest(activity), new ReactorIncidSeeForTest());
+        manager = new ManagerMock<Bundle>(activity){
+            @Override
+            public void replaceRootView(Bundle bundle)
+            {
+                super.replaceRootView(bundle);
+                assertThat(bundle.getSerializable(INCIDENCIA_OBJECT.key), CoreMatchers.<Serializable>is(controller.atomicIncidencia.get()));
+                assertThat(bundle.getSerializable(INCID_RESOLUCION_OBJECT.key), CoreMatchers.<Serializable>is(resolucion));
+            }
+        };
+        controller = new ControllerIncidCloseSee(new ViewerIncidSeeForTest(manager), new ReactorIncidSeeForTest(), TKhandler);
 
         signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
         pepeUserComu = userComuDaoRemote.seeUserComusByUser().get(0);
@@ -98,7 +110,7 @@ public class ControllerIncidCloseSeeTest extends ControllerAbsTest<ControllerInc
     public void testLoadIncidsByComu()
     {
         controller.loadIncidsByComu(9L);
-        assertThat(flagForExecution.getAndSet(0), is(907));
+        assertThat(flagReactorMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_seeIncidClosedList_EXEC));
     }
 
     @Test
@@ -106,7 +118,7 @@ public class ControllerIncidCloseSeeTest extends ControllerAbsTest<ControllerInc
     {
         controller.dealWithIncidSelected(incidencia);
         assertThat(controller.atomicIncidencia.get(), notNullValue());
-        assertThat(flagForExecution.getAndSet(0), is(53));
+        assertThat(flagReactorMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_seeResolucioin_EXEC));
     }
 
     @Test
@@ -128,34 +140,20 @@ public class ControllerIncidCloseSeeTest extends ControllerAbsTest<ControllerInc
         // Incializamos atomicIncidencia, que se haría previamente en controller.dealWithIncidSelected(incidencia).
         controller.atomicIncidencia.compareAndSet(null, incidencia);
         controller.processBackDealWithIncidencia(resolucion);
-        assertThat(flagForExecution.getAndSet(0), is(37));
+        assertThat(flagManageMockExecMethod.getAndSet(MANAGER_FLAG_INITIAL), is(MANAGER_AFTER_REPLACED_VIEW));
     }
-
-    @Test
-    @Override
-    public void testProcessReactorError()
-    {
-        controller.processReactorError(new Throwable());
-        assertThat(flagForExecution.getAndSet(0), is(773));
-    }
-
 
     //  ============================================================================================
     //    .................................... HELPERS .................................
     //  ============================================================================================
 
-    class ViewerIncidSeeForTest extends ViewerDumbImp<ListView, Bundle> implements
+    class ViewerIncidSeeForTest extends ViewerMock<ListView, Bundle> implements
             ViewerIncidSeeIf<Bundle> {
 
-        protected ViewerIncidSeeForTest(Activity activity)
+        protected ViewerIncidSeeForTest(ManagerIf<Bundle> manager)
         {
-            super(activity);
-        }
-
-        @Override
-        public ListView doViewInViewer(Activity activity)
-        {
-            return new ListView(activity);
+            super(manager);
+            viewInViewer = new ListView(manager.getActivity());
         }
 
         @Override
@@ -164,7 +162,7 @@ public class ControllerIncidCloseSeeTest extends ControllerAbsTest<ControllerInc
         }
 
         @Override
-        public ViewerWithSelectIf initSelectedIndex(Bundle savedState)
+        public ViewerWithSelectIf<ListView,Bundle> initSelectedIndex(Bundle savedState)
         {
             return null;
         }
@@ -172,52 +170,6 @@ public class ControllerIncidCloseSeeTest extends ControllerAbsTest<ControllerInc
         @Override
         public void saveSelectedIndex(Bundle savedState)
         {
-        }
-
-        @Override // Used in testProcessReactorError().
-        public ActionForUiExceptionIf processControllerError(UiException ui)
-        {
-            Timber.d(" ===================== processControllerError() ==========================");
-            assertThat(flagForExecution.getAndSet(773), is(0));
-            return null;
-        }
-
-        @Override  // Used in testProcessBackDealWithIncidencia()
-        public void replaceView(Bundle bundle)
-        {
-            Timber.d(" ===================== replaceRootView() ==========================");
-            assertThat(flagForExecution.getAndSet(37), is(0));
-            assertThat(bundle.getSerializable(INCIDENCIA_OBJECT.key), CoreMatchers.<Serializable>is(controller.atomicIncidencia.get()));
-            assertThat(bundle.getSerializable(INCID_RESOLUCION_OBJECT.key), CoreMatchers.<Serializable>is(resolucion));
-        }
-    }
-
-    class ReactorIncidSeeForTest implements ManagerIncidSeeIf.ReactorIncidSeeIf {
-
-        @Override  // User in testDealWithIncidSelected().
-        public boolean seeResolucion(ControllerIncidSeeIf<Resolucion> controller, Incidencia incidencia)
-        {
-            assertThat(flagForExecution.getAndSet(53), is(0));
-            return flagForExecution.get() == 53;
-        }
-
-        @Override  // Used in testLoadIncidsByComu().
-        public boolean seeIncidClosedList(ControllerIncidSeeIf controller, long comunidadId)
-        {
-            assertThat(flagForExecution.getAndSet(907), is(0));
-            return flagForExecution.get() == 907;
-        }
-
-        @Override // Used in ControllerIncidOpenSeeTest.loadIncidsByComu().
-        public boolean seeIncidOpenList(ControllerIncidSeeIf controller, long comunidadId)
-        {
-            return false;
-        }
-
-        @Override  // Used in dealWithIncidSelected().
-        public boolean seeIncidImportancia(ControllerIncidSeeIf<IncidAndResolBundle> controller, Incidencia incidencia)
-        {
-            return false;
         }
     }
 }

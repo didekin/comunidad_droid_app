@@ -5,12 +5,12 @@
     <application tools:ignore="AllowBackup">
         <!-- Activity for UIException tests. -->
         <activity
-            android:name=".testutil.MockActivity"
+            android:name=".MockActivity"
             android:label="@string/mockActivity_label"
             android:launchMode="singleTask">
         </activity>
         <activity
-            android:name=".testutil.MockNextDefaultActivity"
+            android:name=".MockNextDefaultActivity"
             android:label="@string/mockDefaultActivity_label"
             android:launchMode="singleTask">
         </activity>

@@ -15,9 +15,10 @@ import java.util.concurrent.atomic.AtomicReference;
  * Time: 15:06
  */
 
-public interface ViewerFirebaseTokenIf extends ManagerIf.ViewerIf {
+public interface ViewerFirebaseTokenIf<B> extends ManagerIf.ViewerIf {
 
     void setController(ControllerFirebaseTokenIf controllerIn);
+
     void checkGcmTokenAsync();
 
     class ViewerFirebaseToken implements ViewerFirebaseTokenIf {
@@ -30,9 +31,9 @@ public interface ViewerFirebaseTokenIf extends ManagerIf.ViewerIf {
             this.manager = manager;
         }
 
-        public static ViewerFirebaseTokenIf newViewerFirebaseToken(ManagerIf activityManager)
+        public static ViewerFirebaseTokenIf newViewerFirebaseToken(ManagerIf manager)
         {
-            ViewerFirebaseTokenIf viewer = new ViewerFirebaseToken(activityManager);
+            ViewerFirebaseTokenIf viewer = new ViewerFirebaseToken(manager);
             viewer.setController(new ControllerFirebaseToken(viewer));
             return viewer;
         }

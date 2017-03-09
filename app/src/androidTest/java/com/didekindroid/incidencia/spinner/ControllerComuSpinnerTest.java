@@ -8,16 +8,16 @@ import android.support.test.runner.AndroidJUnit4;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-import com.didekindroid.ControllerAbsTest;
+import com.didekindroid.ManagerIf;
 import com.didekindroid.ManagerIf.ControllerIf;
-import com.didekindroid.ViewerDumbImp;
+import com.didekindroid.ManagerMock;
+import com.didekindroid.MockActivity;
+import com.didekindroid.ViewerMock;
 import com.didekindroid.ViewerWithSelectIf;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.exception.UiExceptionIf;
 import com.didekindroid.incidencia.spinner.ControllerComuSpinner.ReactorComuSpinner;
 import com.didekindroid.incidencia.spinner.ManagerComuSpinnerIf.ReactorComuSpinnerIf;
 import com.didekindroid.incidencia.spinner.ManagerComuSpinnerIf.ViewerComuSpinnerIf;
-import com.didekindroid.testutil.MockActivity;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.comunidad.Municipio;
 import com.didekinlib.model.comunidad.Provincia;
@@ -32,11 +32,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import timber.log.Timber;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static com.didekindroid.incidencia.spinner.ControllerComuSpinner.newControllerComuSpinner;
+import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC;
+import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceAndroidMain;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceIoScheduler;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
@@ -58,9 +58,13 @@ import static org.junit.Assert.assertThat;
  * Time: 14:13
  */
 @RunWith(AndroidJUnit4.class)
-public class ControllerComuSpinnerTest extends ControllerAbsTest<ControllerComuSpinner> {
+public class ControllerComuSpinnerTest {
 
-    final static AtomicInteger flagForExecution = new AtomicInteger(0);
+    final static AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
+    static final String AFTER_loadComunidades_EXEC = "after loadComunidades";
+    static final String AFTER_getComunidadSelectedId_EXEC = "after getComunidadSelectedId";
+    static final String AFTER_processBackLoadComusInSpinner_EXEC = "after processBackLoadComusInSpinner";
+    static final String AFTER_processReactorError_EXEC = "after processReactorError";
 
     @Rule
     public ActivityTestRule<MockActivity> activityRule = new ActivityTestRule<>(MockActivity.class, true, true);
@@ -69,17 +73,21 @@ public class ControllerComuSpinnerTest extends ControllerAbsTest<ControllerComuS
     ReactorComuSpinnerIf reactor;
     ViewerComuSpinnerIf controllerViewer;
     Activity activity;
+    ManagerIf<?> manager;
+    ControllerComuSpinner controller;
 
     @Before
     public void setUp()
     {
         activity = activityRule.getActivity();
+        manager = new ManagerMock<>(activity);
         activity.runOnUiThread(new Runnable() {
+            @SuppressWarnings("unchecked")
             @Override
             public void run()
             {
-                controllerViewer = new ViewerComuSpinnerForTest(activity);
-                // Default initialization of field in ControllerAbsTest.
+                controllerViewer = new ViewerComuSpinnerForTest((ManagerIf<Object>) manager);
+                // Default initialization of field in ControllerBasicTest.
                 controller = (ControllerComuSpinner) newControllerComuSpinner(controllerViewer);
             }
         });
@@ -95,13 +103,13 @@ public class ControllerComuSpinnerTest extends ControllerAbsTest<ControllerComuS
             @Override
             public boolean loadComunidades()
             {
-                assertThat(flagForExecution.getAndSet(19), is(0));
-                return flagForExecution.get() == 19;
+                assertThat(flagMethodExec.getAndSet(AFTER_loadComunidades_EXEC), is(BEFORE_METHOD_EXEC));
+                return flagMethodExec.get().equals(AFTER_METHOD_EXEC);
             }
         };
         controller = (ControllerComuSpinner) newControllerComuSpinner(controllerViewer, reactor);
         controller.loadDataInSpinner();
-        assertThat(flagForExecution.getAndSet(0), is(19));
+        assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_loadComunidades_EXEC));
     }
 
     @Test
@@ -121,21 +129,13 @@ public class ControllerComuSpinnerTest extends ControllerAbsTest<ControllerComuS
         List<Comunidad> comunidades = makeComunidadesList();
         controller.processBackLoadComusInSpinner(comunidades);
 
-        assertThat(flagForExecution.getAndSet(0), is(13));
+        assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_getComunidadSelectedId_EXEC));
 
         ArrayAdapter<Comunidad> postAdapter = (ArrayAdapter<Comunidad>) controller.comuSpinner.getAdapter();
         assertThat(postAdapter, is(controller.spinnerAdapter));
         assertThat(postAdapter.getCount(), is(2));
         // Assertions based on viewer.getComunidadSelectedId(): 123L.
         assertThat(controller.comuSpinner.getSelectedItemPosition(), is(1));
-    }
-
-    @Override
-    @Test
-    public void testProcessReactorError()
-    {
-        controller.processReactorError(new Throwable());
-        assertThat(flagForExecution.getAndSet(0), is(23));
     }
 
     @NonNull
@@ -163,7 +163,7 @@ public class ControllerComuSpinnerTest extends ControllerAbsTest<ControllerComuS
             public void processBackLoadComusInSpinner(Collection<Comunidad> comunidades)
             {
                 assertThat(comunidades.size(), is(2));
-                assertThat(flagForExecution.getAndSet(119), is(0));
+                assertThat(flagMethodExec.getAndSet(AFTER_processBackLoadComusInSpinner_EXEC), is(BEFORE_METHOD_EXEC));
             }
         };
 
@@ -178,7 +178,7 @@ public class ControllerComuSpinnerTest extends ControllerAbsTest<ControllerComuS
         } finally {
             reset();
         }
-        assertThat(flagForExecution.getAndSet(0), is(119));
+        assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_processBackLoadComusInSpinner_EXEC));
         cleanOptions(CLEAN_JUAN);
     }
 
@@ -193,7 +193,7 @@ public class ControllerComuSpinnerTest extends ControllerAbsTest<ControllerComuS
             {
                 UiException ue = (UiException) e;
                 assertThat(ue.getErrorBean().getMessage(), is(TOKEN_NULL.getHttpMessage()));
-                assertThat(flagForExecution.getAndSet(113), is(0));
+                assertThat(flagMethodExec.getAndSet(AFTER_processReactorError_EXEC), is(BEFORE_METHOD_EXEC));
             }
         };
 
@@ -206,21 +206,22 @@ public class ControllerComuSpinnerTest extends ControllerAbsTest<ControllerComuS
         } finally {
             reset();
         }
-        assertThat(flagForExecution.getAndSet(0), is(113));
+        assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_processReactorError_EXEC));
     }
 
     // ............................ HELPERS ..................................
 
-    class ViewerComuSpinnerForTest extends ViewerDumbImp<Spinner, Object> implements
-            ViewerComuSpinnerIf {
+    class ViewerComuSpinnerForTest extends ViewerMock<Spinner, Object> implements
+            ViewerComuSpinnerIf<Object> {
 
-        protected ViewerComuSpinnerForTest(Activity activity)
+        protected ViewerComuSpinnerForTest(ManagerIf<Object> manager)
         {
-            super(activity);
+            super(manager);
+            viewInViewer = new Spinner(manager.getActivity());
         }
 
         @Override
-        public ViewerComuSpinnerIf setDataInView(Bundle savedState)
+        public ViewerComuSpinnerIf<Object> setDataInView(Bundle savedState)
         {
             return this;
         }
@@ -228,12 +229,12 @@ public class ControllerComuSpinnerTest extends ControllerAbsTest<ControllerComuS
         // Used in testProcessBackLoadComusInSpinner().
         public long getComunidadSelectedId()
         {
-            assertThat(flagForExecution.getAndSet(13), is(0));
+            assertThat(flagMethodExec.getAndSet(AFTER_getComunidadSelectedId_EXEC), is(BEFORE_METHOD_EXEC));
             return 123L;
         }
 
         @Override
-        public ViewerWithSelectIf initSelectedIndex(Bundle savedState)
+        public ViewerWithSelectIf<Spinner, Object> initSelectedIndex(Bundle savedState)
         {
             return null;
         }
@@ -241,25 +242,6 @@ public class ControllerComuSpinnerTest extends ControllerAbsTest<ControllerComuS
         @Override
         public void saveSelectedIndex(Bundle savedState)
         {
-        }
-
-        @Override
-        public Spinner doViewInViewer(Activity activity)
-        {
-            return new Spinner(getManager());
-        }
-
-        @Override
-        public void replaceView(Object initParams)
-        {
-        }
-
-        @Override  // Used in testProcessReactorError()
-        public UiExceptionIf.ActionForUiExceptionIf processControllerError(UiException ui)
-        {
-            Timber.d("====================== processControllerError() ====================");
-            assertThat(flagForExecution.getAndSet(23), is(0));
-            return null;
         }
     }
 }

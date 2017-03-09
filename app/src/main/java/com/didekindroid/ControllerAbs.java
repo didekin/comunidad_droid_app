@@ -1,13 +1,11 @@
 package com.didekindroid;
 
-import com.didekindroid.ManagerIf.ControllerIf;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.security.IdentityCacher;
+import com.didekindroid.incidencia.list.ManagerIncidSeeIf;
 
 import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 
-import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.util.UIutils.destroySubscriptions;
 import static com.didekindroid.util.UIutils.getUiExceptionFromThrowable;
 
@@ -16,23 +14,17 @@ import static com.didekindroid.util.UIutils.getUiExceptionFromThrowable;
  * Date: 21/02/17
  * Time: 10:43
  */
-public abstract class ControllerAbs implements ControllerIf {
+@SuppressWarnings("WeakerAccess")
+public abstract class ControllerAbs implements ManagerIf.ControllerIf {
 
     private final CompositeDisposable subscriptions;
-    private final IdentityCacher identityCacher;
 
     protected ControllerAbs()
     {
-        this(TKhandler);
-    }
-
-    protected ControllerAbs(IdentityCacher identityCacher)
-    {
         subscriptions = new CompositeDisposable();
-        this.identityCacher = identityCacher;
     }
 
-    public abstract ManagerIf.ViewerIf getViewer();
+    public abstract ManagerIncidSeeIf.ViewerIf getViewer();
 
     @Override
     public CompositeDisposable getSubscriptions()
@@ -54,17 +46,5 @@ public abstract class ControllerAbs implements ControllerIf {
         Timber.d("processViewerError()");
         UiException ui = getUiExceptionFromThrowable(e);
         getViewer().processControllerError(ui);
-    }
-
-    @Override
-    public boolean isRegisteredUser()
-    {
-        Timber.d("isRegisteredUser()");
-        return identityCacher.isRegisteredUser();
-    }
-
-    IdentityCacher getIdentityCacher()
-    {
-        return identityCacher;
     }
 }

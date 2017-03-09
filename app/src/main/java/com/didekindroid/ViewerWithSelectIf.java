@@ -13,6 +13,6 @@ import com.didekindroid.ManagerIf.ViewerIf;
 
 public interface ViewerWithSelectIf<T extends AdapterView,B> extends ViewerIf<T,B> {
 
-    ViewerWithSelectIf initSelectedIndex(Bundle savedState);
+    ViewerWithSelectIf<T,B> initSelectedIndex(Bundle savedState);
     void saveSelectedIndex(Bundle savedState);
 }

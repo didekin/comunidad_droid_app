@@ -1,11 +1,12 @@
 package com.didekindroid.usuario.login;
 
-import android.app.Activity;
 import android.support.test.rule.ActivityTestRule;
 import android.view.View;
 
-import com.didekindroid.ViewerDumbImp;
-import com.didekindroid.testutil.MockActivity;
+import com.didekindroid.ManagerIf;
+import com.didekindroid.ManagerMock;
+import com.didekindroid.MockActivity;
+import com.didekindroid.ViewerMock;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekinlib.model.usuario.Usuario;
 
@@ -13,10 +14,13 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 import io.reactivex.Single;
 
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC;
+import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -27,45 +31,47 @@ import static org.junit.Assert.assertThat;
  */
 public class ControllerLoginTest {
 
-    final static AtomicInteger flagForExecution = new AtomicInteger(0);
+    final static AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
 
     @Rule
     public ActivityTestRule<MockActivity> activityRule = new ActivityTestRule<>(MockActivity.class, true, true);
 
     ControllerLoginIf controller;
+    ManagerIf<Object> manager;
 
     @Before
     public void setUp() throws Exception
     {
-        controller = new ControllerLogin(new ViewerLoginForTest(activityRule.getActivity()), doReactor());
+        manager = new ManagerMock<>(activityRule.getActivity());
+        controller = new ControllerLogin(new ViewerLoginForTest(manager), doReactor(), TKhandler);
     }
 
     @Test
     public void testValidateLoginRemote() throws Exception
     {
         controller.validateLoginRemote(UsuarioDataTestUtils.USER_PEPE);
-        assertThat(flagForExecution.getAndSet(0), is(13));
+        assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC));
     }
 
     @Test
     public void testProcessBackLoginRemote() throws Exception
     {
         controller.processBackLoginRemote(false);
-        assertThat(flagForExecution.getAndSet(0), is(77));
+        assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC));
     }
 
     @Test
     public void testDoDialogPositiveClick() throws Exception
     {
         controller.doDialogPositiveClick(UsuarioDataTestUtils.USER_JUAN);
-        assertThat(flagForExecution.getAndSet(0), is(17));
+        assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC));
     }
 
     @Test
     public void testProcessBackDialogPositiveClick() throws Exception
     {
         controller.processBackDialogPositiveClick(false);
-        assertThat(flagForExecution.getAndSet(0), is(22));
+        assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC));
     }
 
     //  ============================================================================================
@@ -86,31 +92,26 @@ public class ControllerLoginTest {
             @Override
             public boolean validateLogin(ControllerLoginIf controller, Usuario usuario)
             {
-                assertThat(flagForExecution.getAndSet(13), is(0));
-                return flagForExecution.get() == 13;
+                assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC), is(BEFORE_METHOD_EXEC));
+                return flagMethodExec.get().equals(AFTER_METHOD_EXEC);
             }
 
             @Override
             public boolean sendPasswordToUser(ControllerLoginIf controller, Usuario usuario)
             {
-                assertThat(flagForExecution.getAndSet(17), is(0));
-                return flagForExecution.get() == 17;
+                assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC), is(BEFORE_METHOD_EXEC));
+                return flagMethodExec.get().equals(AFTER_METHOD_EXEC);
             }
         };
     }
 
-    static class ViewerLoginForTest extends ViewerDumbImp<View, Object> implements
+    static class ViewerLoginForTest extends ViewerMock<View, Object> implements
             ViewerLoginIf<View, Object> {
 
-        protected ViewerLoginForTest(Activity activity)
+        protected ViewerLoginForTest(ManagerIf<Object> manager)
         {
-            super(activity);
-        }
-
-        @Override
-        public View doViewInViewer(Activity activity)
-        {
-            return new View(activity);
+            super(manager);
+            viewInViewer = new View(manager.getActivity());
         }
 
         @Override
@@ -133,22 +134,17 @@ public class ControllerLoginTest {
         @Override
         public void processLoginBackInView(boolean isLoginOk)
         {
-            assertThat(flagForExecution.getAndSet(77), is(0));
+            assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC), is(BEFORE_METHOD_EXEC));
         }
 
         @Override
         public void processBackSendPswdInView(boolean isSendPassword)
         {
-            assertThat(flagForExecution.getAndSet(22), is(0));
+            assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC), is(BEFORE_METHOD_EXEC));
         }
 
         @Override
         public void doDialogNegativeClick()
-        {
-        }
-
-        @Override
-        public void replaceView(Object initParams)
         {
         }
     }

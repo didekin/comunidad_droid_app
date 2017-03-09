@@ -1,13 +1,12 @@
 package com.didekindroid.usuario.delete;
 
-import android.app.Activity;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.view.View;
 
-import com.didekindroid.ManagerIf.ViewerIf;
-import com.didekindroid.ViewerDumbImp;
-import com.didekindroid.testutil.MockActivity;
+import com.didekindroid.ManagerIf;
+import com.didekindroid.ManagerMock;
+import com.didekindroid.MockActivity;
+import com.didekindroid.ViewerMock;
 import com.didekindroid.usuario.delete.ControllerDeleteMeIf.ReactorDeleteMeIf;
 
 import org.junit.Before;
@@ -15,8 +14,14 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
+import static com.didekindroid.ManagerMock.flagManageMockExecMethod;
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC;
+import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
+import static com.didekindroid.testutil.ConstantExecution.MANAGER_AFTER_REPLACED_VIEW;
+import static com.didekindroid.testutil.ConstantExecution.MANAGER_FLAG_INITIAL;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -28,32 +33,33 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class ControllerDeleteMeTest {
 
-    final static AtomicInteger flagForExecution = new AtomicInteger(0);
+    final static AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
 
     @Rule
     public ActivityTestRule<MockActivity> activityRule = new ActivityTestRule<>(MockActivity.class, true, true);
 
     ControllerDeleteMeIf controller;
+    ManagerIf<Object> manager;
 
     @Before
     public void setUp()
     {
-        controller = new ControllerDeleteMe(new ViewerForTest(activityRule.getActivity()), doReactor());
+        manager = new ManagerMock<>(activityRule.getActivity());
+        controller = new ControllerDeleteMe(new ViewerMock<>(manager), doReactor(), TKhandler);
     }
 
     @Test
     public void testUnregisterUser() throws Exception
     {
-        assertThat(controller.unregisterUser(), is(false));
-        assertThat(flagForExecution.getAndSet(0), is(77));
-
+        assertThat(controller.unregisterUser(), is(false)); // False is returned in mock implementation.
+        assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC));
     }
 
     @Test
     public void testProcessBackDeleteMeRemote() throws Exception
     {
         controller.processBackDeleteMeRemote(true);
-        assertThat(flagForExecution.getAndSet(0), is(12));
+        assertThat(flagManageMockExecMethod.getAndSet(MANAGER_FLAG_INITIAL), is(MANAGER_AFTER_REPLACED_VIEW));
     }
 
     //  ============================================================================================
@@ -63,33 +69,12 @@ public class ControllerDeleteMeTest {
     ReactorDeleteMeIf doReactor()
     {
         return new ReactorDeleteMeIf() {
-            @Override
+            @Override // Used in testUnregisterUser.
             public boolean deleteMeInRemote(ControllerDeleteMeIf controller)
             {
-                assertThat(flagForExecution.getAndSet(77), is(0));
+                assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC), is(BEFORE_METHOD_EXEC));
                 return false;
             }
         };
-    }
-
-    class ViewerForTest extends ViewerDumbImp<View, Object> implements ViewerIf<View, Object> {
-
-        public ViewerForTest(Activity activity)
-        {
-            super(activity);
-            viewInViewer = new View(activity);
-        }
-
-        @Override
-        public View doViewInViewer(Activity activity)
-        {
-            return new View(activity);
-        }
-
-        @Override
-        public void replaceView(Object initParams)
-        {
-            assertThat(flagForExecution.getAndSet(12), is(0));
-        }
     }
 }

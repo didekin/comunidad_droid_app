@@ -2,8 +2,8 @@ package com.didekindroid.usuario.userdata;
 
 import android.view.View;
 
-import com.didekindroid.ControllerAbs;
-import com.didekindroid.ManagerIf;
+import com.didekindroid.ControllerIdentityAbs;
+import com.didekindroid.incidencia.list.ManagerIncidSeeIf;
 import com.didekindroid.security.IdentityCacher;
 import com.didekinlib.http.oauth2.SpringOauthToken;
 import com.didekinlib.model.usuario.Usuario;
@@ -36,18 +36,20 @@ import static io.reactivex.schedulers.Schedulers.io;
  * Date: 23/02/17
  * Time: 10:58
  */
-class ControllerUserData extends ControllerAbs implements ControllerUserDataIf {
+@SuppressWarnings("WeakerAccess")
+class ControllerUserData extends ControllerIdentityAbs implements ControllerUserDataIf {
 
     private final ViewerUserDataIf<View,Object> viewer;
     private final ReactorUserDataIf reactor;
 
     ControllerUserData(ViewerUserDataIf<View, Object> viewer)
     {
-        this(viewer, userDataReactor);
+        this(viewer, userDataReactor, TKhandler);
     }
 
-    ControllerUserData(ViewerUserDataIf<View, Object> viewer, ReactorUserDataIf reactor)
+    ControllerUserData(ViewerUserDataIf<View, Object> viewer, ReactorUserDataIf reactor, IdentityCacher identityCacher)
     {
+        super(identityCacher);
         this.viewer = viewer;
         this.reactor = reactor;
     }
@@ -81,11 +83,12 @@ class ControllerUserData extends ControllerAbs implements ControllerUserDataIf {
     }
 
     @Override
-    public ManagerIf.ViewerIf getViewer()
+    public ManagerIncidSeeIf.ViewerIf getViewer()
     {
         Timber.d("getViewer()");
         return viewer;
     }
+
 
     // ============================================================================================
     // ......................................... REACTOR ..........................................

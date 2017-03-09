@@ -2,11 +2,8 @@ package com.didekindroid.incidencia.list;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekindroid.ControllerAbs;
-import com.didekindroid.ManagerIf.ControllerIf;
+import com.didekindroid.ControllerIdentityAbs;
 import com.didekindroid.incidencia.list.ManagerIncidSeeIf.ControllerIncidSeeIf;
-import com.didekindroid.incidencia.list.ManagerIncidSeeIf.IncidListObserver;
-import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
@@ -20,18 +17,15 @@ import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import io.reactivex.Maybe;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.functions.Action;
-import timber.log.Timber;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
 import static com.didekindroid.incidencia.list.ReactorIncidSee.incidCloseList;
 import static com.didekindroid.incidencia.list.ReactorIncidSee.incidSeeReactor;
 import static com.didekindroid.incidencia.list.ReactorIncidSee.resolucion;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetDefaultResolucion;
+import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC;
+import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceAndroidMain;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceIoScheduler;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
@@ -51,10 +45,11 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class ReactorIncidCloseSeeByComuTest {
 
+    final static AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
+
     UsuarioComunidad pepeUserComu;
     Resolucion resolucion;
     List<IncidenciaUser> incidList;
-    AtomicInteger counter = new AtomicInteger(0);
 
     @AfterClass
     public static void resetScheduler()
@@ -108,7 +103,8 @@ public class ReactorIncidCloseSeeByComuTest {
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
-            assertThat(incidSeeReactor.seeResolucion(doController(), resolucion.getIncidencia()), is(true));
+            assertThat(incidSeeReactor.seeResolucion(new ControllerIncidSeeForTest(), resolucion.getIncidencia()), is(true));
+            assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC));
         } finally {
             reset();
         }
@@ -120,105 +116,44 @@ public class ReactorIncidCloseSeeByComuTest {
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
-            assertThat(incidSeeReactor.seeIncidClosedList(doController(), resolucion.getComunidadId()), is(true));
+            assertThat(incidSeeReactor.seeIncidClosedList(new ControllerIncidSeeForTest(), resolucion.getComunidadId()), is(true));
         } finally {
             reset();
         }
-    }
-
-    // .................................... SUBSCRIBERS ............................................
-
-    // Maybe without item.
-    @Test
-    public void testIncidCloseListObserver()
-    {
-        Maybe.<List<IncidenciaUser>>fromAction(new Action() {
-            @Override
-            public void run() throws Exception
-            {
-                assertThat(counter.getAndAdd(11), is(0));
-            }
-        }).subscribeWith(new IncidListObserver(doController()){
-            @Override
-            public void onComplete()
-            {
-                super.onComplete();
-                assertThat(counter.get(), is(11));
-            }
-        });
     }
 
     //  ============================================================================================
     //    .................................... HELPERS .................................
     //  ============================================================================================
 
-    ControllerIncidSeeIf<Resolucion> doController()
-    {
-        return new ControllerIncidSeeIf<Resolucion>() {
+    class ControllerIncidSeeForTest extends ControllerIdentityAbs implements ControllerIncidSeeIf<Resolucion>{
 
-            ControllerIf controllerAbs = new ControllerAbs() {
-                @Override
-                public ViewerFirebaseTokenIf getViewer()
-                {
-                    return null;
-                }
-            };
+        @Override
+        public ManagerIncidSeeIf.ViewerIf getViewer()
+        {
+            return null;
+        }
 
-            @Override
-            public void loadIncidsByComu(long comunidadId)
-            {
-            }
+        @Override
+        public void loadIncidsByComu(long comunidadId)
+        {
+        }
 
-            @Override
-            public void processBackLoadIncidsByComu(List<IncidenciaUser> incidList)
-            {
-                Timber.d("processBackLoadIncidsByComu()");
-                ArrayList<IncidenciaUser> list = (ArrayList<IncidenciaUser>) incidList;
-                assertThat(list.size(), is(1));
-                assertThat(list.get(0).getIncidencia(), is(resolucion.getIncidencia()));
-            }
+        @Override
+        public void processBackLoadIncidsByComu(List<IncidenciaUser> incidList)
+        {
+        }
 
-            @Override
-            public void dealWithIncidSelected(Incidencia incidencia)
-            {
-            }
+        @Override
+        public void dealWithIncidSelected(Incidencia incidencia)
+        {
+        }
 
-            @Override
-            public void processBackDealWithIncidencia(Resolucion resolucion)
-            {
-                Timber.d("processBackDealWithIncidencia()");
-                assertThat(resolucion, is(ReactorIncidCloseSeeByComuTest.this.resolucion));
-            }
-
-            @Override
-            public CompositeDisposable getSubscriptions()
-            {
-                return controllerAbs.getSubscriptions();
-            }
-
-            @Override
-            public void processReactorError(Throwable e)
-            {
-                controllerAbs.processReactorError(e);
-            }
-
-            @Override
-            public int clearSubscriptions()
-            {
-                return controllerAbs.clearSubscriptions();
-            }
-
-            @Override
-            public ViewerFirebaseTokenIf getViewer()
-            {
-                return controllerAbs.getViewer();
-            }
-
-            @Override
-            public boolean isRegisteredUser()
-            {
-                return controllerAbs.isRegisteredUser();
-            }
-        };
+        @Override  // Used in testSeeResolucion().
+        public void processBackDealWithIncidencia(Resolucion itemBack)
+        {
+            assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC), is(BEFORE_METHOD_EXEC));
+            assertThat(resolucion, is(ReactorIncidCloseSeeByComuTest.this.resolucion));
+        }
     }
 }

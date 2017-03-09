@@ -1,28 +1,26 @@
 package com.didekindroid.usuario.userdata;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.support.test.rule.ActivityTestRule;
 import android.view.View;
 
-import com.didekindroid.ControllerAbsTest;
-import com.didekindroid.ViewerDumbImp;
-import com.didekindroid.exception.UiException;
-import com.didekindroid.exception.UiExceptionIf;
-import com.didekindroid.testutil.MockActivity;
-import com.didekinlib.http.ErrorBean;
+import com.didekindroid.ManagerIf;
+import com.didekindroid.ManagerMock;
+import com.didekindroid.MockActivity;
+import com.didekindroid.ViewerMock;
 import com.didekinlib.model.usuario.Usuario;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
-import timber.log.Timber;
-
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC;
+import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
+import static com.didekindroid.testutil.ConstantExecution.MANAGER_AFTER_REPLACED_VIEW;
+import static com.didekindroid.testutil.ConstantExecution.MANAGER_FLAG_INITIAL;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_DROID;
-import static com.didekinlib.http.GenericExceptionMsg.TOKEN_NULL;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -31,26 +29,28 @@ import static org.junit.Assert.assertThat;
  * Date: 24/02/17
  * Time: 14:29
  */
-public class ControllerUserDataTest extends ControllerAbsTest {
+public class ControllerUserDataTest {
 
-    final static AtomicInteger flagForExecution = new AtomicInteger(0);
+    final static AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
 
     @Rule
     public ActivityTestRule<MockActivity> activityRule = new ActivityTestRule<>(MockActivity.class, true, true);
 
-    ControllerUserDataIf controller;
+    ManagerIf<Object> manager;
+    ControllerUserData controller;
 
     @Before
     public void setUp() throws Exception
     {
-        controller = new ControllerUserData(new ViewerForUserDataTest(activityRule.getActivity()), doReactor());
+        manager = new ManagerMock<>(activityRule.getActivity());
+        controller = new ControllerUserData(new ViewerForUserDataTest(manager), doReactor(), TKhandler);
     }
 
     @Test
     public void testLoadUserData() throws Exception
     {
         controller.loadUserData();
-        assertThat(flagForExecution.getAndSet(0), is(3));
+        assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC));
     }
 
     @Test
@@ -59,29 +59,22 @@ public class ControllerUserDataTest extends ControllerAbsTest {
         controller.modifyUser(USER_DROID, new Usuario.UsuarioBuilder().copyUsuario(USER_DROID)
                 .userName("new_user_droid")
                 .build());
-        assertThat(flagForExecution.getAndSet(0), is(7));
+        assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC));
     }
 
     @Test
     public void testProcessBackUserDataLoaded() throws Exception
     {
         controller.processBackUserDataLoaded(USER_DROID);
-        assertThat(flagForExecution.getAndSet(0), is(11));
+        assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC));
     }
 
     @Test
     public void testProcessBackUserModified() throws Exception
     {
         controller.processBackUserModified();
-        assertThat(flagForExecution.getAndSet(0), is(23));
-    }
-
-    @Override
-    @Test
-    public void testProcessReactorError()
-    {
-        controller.processReactorError(new UiException(new ErrorBean(TOKEN_NULL)));
-        assertThat(flagForExecution.getAndSet(0), is(37));
+        assertThat(ManagerMock.flagManageMockExecMethod.getAndSet(MANAGER_FLAG_INITIAL),
+                is(MANAGER_AFTER_REPLACED_VIEW));
     }
 
     //  ============================================================================================
@@ -95,32 +88,26 @@ public class ControllerUserDataTest extends ControllerAbsTest {
             @Override
             public boolean loadUserData(ControllerUserDataIf controller)
             {
-                assertThat(flagForExecution.getAndSet(3), is(0));
-                return flagForExecution.get() == 3;
+                assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC), is(BEFORE_METHOD_EXEC));
+                return flagMethodExec.get().equals(AFTER_METHOD_EXEC);
             }
 
             @Override
             public boolean modifyUser(ControllerUserDataIf controller, Usuario oldUser, Usuario newUser)
             {
-                assertThat(flagForExecution.getAndSet(7), is(0));
-                return flagForExecution.get() == 7;
+                assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC), is(BEFORE_METHOD_EXEC));
+                return flagMethodExec.get().equals(AFTER_METHOD_EXEC);
             }
         };
     }
 
-    static class ViewerForUserDataTest extends ViewerDumbImp<View, Object> implements
+    static class ViewerForUserDataTest extends ViewerMock<View, Object> implements
             ViewerUserDataIf<View, Object> {
 
-        public ViewerForUserDataTest(Activity activity)
+        public ViewerForUserDataTest(ManagerIf<Object> manager)
         {
-            super(activity);
-            viewInViewer = new View(activity);
-        }
-
-        @Override
-        public View doViewInViewer(Activity activity)
-        {
-            return new View(activity);
+            super(manager);
+            new View(manager.getActivity());
         }
 
         @Override
@@ -155,23 +142,7 @@ public class ControllerUserDataTest extends ControllerAbsTest {
         @Override
         public void processBackUsuarioInView(Usuario usuario)
         {
-            assertThat(flagForExecution.getAndSet(11), is(0));
-        }
-
-        @Override
-        public void replaceView(Object initParams)
-        {
-            assertThat(flagForExecution.getAndSet(23), is(0));
-        }
-
-
-        @Override  // Used in testProcessReactorError()
-        public UiExceptionIf.ActionForUiExceptionIf processControllerError(UiException ui)
-        {
-            Timber.d("====================== processControllerError() ====================");
-            assertThat(flagForExecution.getAndSet(37), is(0));
-            assertThat(ui.getErrorBean().getMessage(), is(TOKEN_NULL.getHttpMessage()));
-            return null;
+            assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC), is(BEFORE_METHOD_EXEC));
         }
     }
 

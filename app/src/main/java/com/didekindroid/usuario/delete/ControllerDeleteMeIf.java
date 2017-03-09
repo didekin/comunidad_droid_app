@@ -1,13 +1,13 @@
 package com.didekindroid.usuario.delete;
 
-import com.didekindroid.ManagerIf.ControllerIf;
+import com.didekindroid.ManagerIf;
 
 /**
  * User: pedro@didekin
  * Date: 23/12/16
  * Time: 11:46
  */
-interface ControllerDeleteMeIf extends ControllerIf {
+interface ControllerDeleteMeIf extends ManagerIf.ControllerIdentityIf {
 
     boolean unregisterUser();
 

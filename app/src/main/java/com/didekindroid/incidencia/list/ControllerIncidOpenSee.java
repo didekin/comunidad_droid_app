@@ -3,11 +3,11 @@ package com.didekindroid.incidencia.list;
 import android.support.annotation.NonNull;
 import android.widget.ArrayAdapter;
 
-import com.didekindroid.ControllerAbs;
+import com.didekindroid.ControllerIdentityAbs;
 import com.didekindroid.incidencia.list.ManagerIncidSeeIf.ControllerIncidSeeIf;
 import com.didekindroid.incidencia.list.ManagerIncidSeeIf.ReactorIncidSeeIf;
 import com.didekindroid.incidencia.list.ManagerIncidSeeIf.ViewerIncidSeeIf;
-import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
+import com.didekindroid.security.IdentityCacher;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
@@ -18,6 +18,7 @@ import timber.log.Timber;
 
 import static com.didekindroid.incidencia.list.ReactorIncidSee.incidSeeReactor;
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.incidenciaId_should_be_initialized;
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.util.UIutils.assertTrue;
 
 /**
@@ -25,7 +26,8 @@ import static com.didekindroid.util.UIutils.assertTrue;
  * Date: 16/02/17
  * Time: 17:56
  */
-class ControllerIncidOpenSee extends ControllerAbs implements ControllerIncidSeeIf<IncidAndResolBundle> {
+@SuppressWarnings("WeakerAccess")
+class ControllerIncidOpenSee extends ControllerIdentityAbs implements ControllerIncidSeeIf<IncidAndResolBundle> {
 
     final ViewerIncidSeeIf<IncidAndResolBundle> viewer;
     private final ReactorIncidSeeIf reactor;
@@ -33,19 +35,19 @@ class ControllerIncidOpenSee extends ControllerAbs implements ControllerIncidSee
 
     ControllerIncidOpenSee(ViewerIncidSeeIf<IncidAndResolBundle> viewer)
     {
-        this(viewer, incidSeeReactor);
+        this(viewer, incidSeeReactor, TKhandler);
     }
 
-    ControllerIncidOpenSee(ViewerIncidSeeIf<IncidAndResolBundle> viewer, ReactorIncidSeeIf reactor)
+    ControllerIncidOpenSee(ViewerIncidSeeIf<IncidAndResolBundle> viewer, ReactorIncidSeeIf reactor, IdentityCacher identityCacher)
     {
-        super();
+        super(identityCacher);
         this.viewer = viewer;
         this.reactor = reactor;
-        adapter = new AdapterIncidSeeOpenByComu(viewer.getManager());
+        adapter = new AdapterIncidSeeOpenByComu(viewer.getManager().getActivity());
     }
 
     @Override
-    public ViewerFirebaseTokenIf getViewer()
+    public ViewerIncidSeeIf<IncidAndResolBundle> getViewer()
     {
         Timber.d("getViewer()");
         return viewer;
@@ -80,6 +82,6 @@ class ControllerIncidOpenSee extends ControllerAbs implements ControllerIncidSee
     public void processBackDealWithIncidencia(@NonNull IncidAndResolBundle incidAndResolBundle)
     {
         Timber.d("processBackDealWithIncidencia()");
-        viewer.replaceView(incidAndResolBundle);
+        viewer.getManager().replaceRootView(incidAndResolBundle);
     }
 }

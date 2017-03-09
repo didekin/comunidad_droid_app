@@ -43,7 +43,6 @@ public class IncidRegAcFragment extends Fragment implements AmbitoSpinnerSettabl
 
     ManagerComuSpinnerIf comuSpinnerManager;
     ViewerComuSpinnerIf comuSpinnerViewer;
-    Spinner comunidadSpinner;
     int comunidadSelectedIndex;
 
     @Override
@@ -235,6 +234,7 @@ public class IncidRegAcFragment extends Fragment implements AmbitoSpinnerSettabl
 
     // ...................... HELPERS ....................
 
+    @SuppressWarnings("WeakerAccess")
     class ComuSelectedListener implements AdapterView.OnItemSelectedListener {
 
         @Override

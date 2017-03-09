@@ -6,23 +6,29 @@ import com.didekindroid.ManagerIf.ViewerIf;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf.ActionForUiExceptionIf;
 
+import java.util.concurrent.atomic.AtomicReference;
+
+import static com.didekindroid.testutil.ConstantExecution.VIEWER_AFTER_ERROR_CONTROL;
+import static com.didekindroid.testutil.ConstantExecution.VIEWER_FLAG_INITIAL;
+import static com.didekindroid.testutil.ConstantExecution.WRONG_FLAG_VALUE;
+import static com.didekindroid.util.UIutils.assertTrue;
+
 /**
  * User: pedro@didekin
  * Date: 24/02/17
  * Time: 17:23
  */
-public abstract class ViewerDumbImp<T extends View, B> implements ViewerIf<T, B> {
+public class ViewerMock<T extends View, B> implements ViewerIf<T, B> {
+
+    public static final AtomicReference<String> flagViewerMockMethodExec = new AtomicReference<>(VIEWER_FLAG_INITIAL);
 
     protected final ManagerIf<B> manager;
     protected T viewInViewer;
 
-    protected ViewerDumbImp(ManagerIf<B> manager)
+    public ViewerMock(ManagerIf<B> manager)
     {
         this.manager = manager;
-        viewInViewer = doViewInViewer(manager);
     }
-
-    public abstract T doViewInViewer(ManagerIf<B> manager);
 
     @Override
     public ManagerIf<B> getManager()
@@ -33,6 +39,7 @@ public abstract class ViewerDumbImp<T extends View, B> implements ViewerIf<T, B>
     @Override
     public ActionForUiExceptionIf processControllerError(UiException e)
     {
+        assertTrue(flagViewerMockMethodExec.getAndSet(VIEWER_AFTER_ERROR_CONTROL).equals(VIEWER_FLAG_INITIAL), WRONG_FLAG_VALUE);
         return null;
     }
 

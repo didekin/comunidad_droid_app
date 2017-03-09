@@ -37,9 +37,18 @@ public interface IdentityCacher {
 
     boolean isRegisteredUser();
 
-    boolean isGcmTokenSentServer();
-
     void updateIsRegistered(boolean isRegisteredUser);
 
-    void updateIsGcmTokenSentServer(boolean isSentToServer);
+    enum SharedPrefFiles {
+
+        app_preferences_file,;
+
+        public static final String IS_USER_REG = "TKhandler.isRegisteredUser";
+
+        @Override
+        public String toString()
+        {
+            return getClass().getCanonicalName().concat(".").concat(this.name());
+        }
+    }
 }

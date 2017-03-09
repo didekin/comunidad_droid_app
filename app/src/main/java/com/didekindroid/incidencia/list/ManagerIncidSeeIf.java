@@ -21,7 +21,7 @@ import timber.log.Timber;
  * Date: 12/01/16
  * Time: 12:16
  */
-interface ManagerIncidSeeIf<B> extends ManagerIf<B> {
+public interface ManagerIncidSeeIf<B> extends ManagerIf<B> {
 
     /**
      * To allow for controller injection in the viewer from the manager.
@@ -59,38 +59,5 @@ interface ManagerIncidSeeIf<B> extends ManagerIf<B> {
         boolean seeIncidOpenList(ControllerIncidSeeIf controller, long comunidadId);
 
         boolean seeIncidImportancia(ControllerIncidSeeIf<IncidAndResolBundle> controller, Incidencia incidencia);
-    }
-
-    // .............................. SUBSCRIBERS ..................................
-
-    class IncidListObserver extends DisposableMaybeObserver<List<IncidenciaUser>> {
-
-        final ControllerIncidSeeIf controller;
-
-        IncidListObserver(ControllerIncidSeeIf controller)
-        {
-            this.controller = controller;
-        }
-
-        @Override
-        public void onSuccess(List<IncidenciaUser> incidenciaUserList)
-        {
-            Timber.d("onSuccess(), Thread for subscriber: %s", Thread.currentThread().getName());
-            controller.processBackLoadIncidsByComu(incidenciaUserList);
-        }
-
-        @Override
-        public void onError(Throwable e)
-        {
-            Timber.d("onError(), Thread for subscriber: %s", Thread.currentThread().getName());
-            controller.processReactorError(e);
-        }
-
-        @Override
-        public void onComplete()
-        {
-            Timber.d("onComplete()");
-            // Do nothing in the controller.
-        }
     }
 }

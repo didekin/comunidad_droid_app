@@ -1,21 +1,21 @@
 package com.didekindroid.usuario.firebase;
 
-import com.didekindroid.ControllerAbs;
+import android.content.Context;
+import android.content.SharedPreferences;
+
+import com.didekindroid.ControllerIdentityAbs;
 import com.didekindroid.incidencia.core.ControllerFirebaseTokenIf;
+import com.didekindroid.incidencia.list.ManagerIncidSeeIf;
 import com.didekindroid.security.IdentityCacher;
-import com.google.firebase.iid.FirebaseInstanceId;
 
-import java.util.concurrent.Callable;
-
-import io.reactivex.Single;
-import io.reactivex.observers.DisposableSingleObserver;
-import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
+import static android.content.Context.MODE_PRIVATE;
+import static com.didekindroid.security.IdentityCacher.SharedPrefFiles.app_preferences_file;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
-import static com.didekindroid.usuario.firebase.ControllerFirebaseToken.FirebaseTokenReactor.tokenReactor;
-import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
+import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
+import static com.didekindroid.usuario.firebase.FirebaseTokenReactor.tokenReactor;
+import static com.didekindroid.util.UIutils.assertTrue;
 
 /**
  * User: pedro@didekin
@@ -23,11 +23,10 @@ import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
  * Time: 14:23
  */
 @SuppressWarnings("WeakerAccess")
-public class ControllerFirebaseToken extends ControllerAbs implements ControllerFirebaseTokenIf {
+public class ControllerFirebaseToken extends ControllerIdentityAbs implements ControllerFirebaseTokenIf {
 
     private final ViewerFirebaseTokenIf viewer;
     private final FirebaseTokenReactorIf reactor;
-    private final IdentityCacher identityCacher;
 
 
     public ControllerFirebaseToken(ViewerFirebaseTokenIf viewer)
@@ -37,16 +36,16 @@ public class ControllerFirebaseToken extends ControllerAbs implements Controller
 
     ControllerFirebaseToken(ViewerFirebaseTokenIf viewer, FirebaseTokenReactorIf reactor, IdentityCacher identityCacher)
     {
+        super(identityCacher);
         this.viewer = viewer;
         this.reactor = reactor;
-        this.identityCacher = identityCacher;
     }
 
     @Override
     public void checkGcmToken()
     {
         Timber.d("checkGcmToken()");
-        if (!identityCacher.isRegisteredUser() || identityCacher.isGcmTokenSentServer()) {
+        if (!identityCacher.isRegisteredUser() || isGcmTokenSentServer()) {
             return;
         }
         reactor.checkGcmToken(this);
@@ -56,115 +55,35 @@ public class ControllerFirebaseToken extends ControllerAbs implements Controller
     public void checkGcmTokenSync()
     {
         Timber.d("checkGcmTokenSync()");
-        if (identityCacher.isRegisteredUser()){
+        if (identityCacher.isRegisteredUser()) {
             reactor.checkGcmTokenSync(this);
         }
     }
 
     @Override
-    public void updateIsGcmTokenSentServer(boolean toUpdadteToken)
+    public boolean isGcmTokenSentServer()
     {
-        Timber.d("updateIsGcmTokenSentServer()");
-        identityCacher.updateIsGcmTokenSentServer(toUpdadteToken);
+        Timber.d("isGcmTokenSentServer()");
+        Context context = viewer.getManager().getActivity();
+        SharedPreferences sharedPref = context.getSharedPreferences(app_preferences_file.toString(), MODE_PRIVATE);
+        return sharedPref.getBoolean(IS_GCM_TOKEN_SENT_TO_SERVER, false);
     }
 
     @Override
-    public ViewerFirebaseTokenIf getViewer()
+    public void updateIsGcmTokenSentServer(boolean isSentToServer)
     {
-        return viewer;
+        Timber.d("updateIsGcmTokenSentServer(), isSentToServer = %b", isSentToServer);
+        assertTrue(isRegisteredUser(), user_should_be_registered);
+        Context context = viewer.getManager().getActivity();
+        SharedPreferences sharedPref = context.getSharedPreferences(app_preferences_file.toString(), MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putBoolean(IS_GCM_TOKEN_SENT_TO_SERVER, isSentToServer);
+        editor.apply();
     }
 
-    //  =====================================================================================================
-    //    .................................... REACTOR .................................
-    //  =====================================================================================================
-
-    @SuppressWarnings("AnonymousInnerClassMayBeStatic")
-    final static class FirebaseTokenReactor implements FirebaseTokenReactorIf {
-
-        static final FirebaseTokenReactorIf tokenReactor = new FirebaseTokenReactor();
-
-        //    .................................... OBSERVABLES .................................
-
-        /**
-         * Preconditions: the user is registered.
-         * Postconditions: the user's gcm token in database is updated.
-         *
-         * @return a Single with an item == 1 if the gcmToken is updated.
-         */
-        Single<Integer> updatedGcmTkSingle()
-        {
-            return Single.fromCallable(new Callable<Integer>() {
-                                           @Override
-                                           public Integer call() throws Exception
-                                           {
-                                               String token = FirebaseInstanceId.getInstance().getToken();
-                                               return usuarioDao.modifyUserGcmToken(token);
-                                           }
-                                       }
-            );
-        }
-
-        // .................................... SUBSCRIPTIONS ..................................
-
-        @Override
-        public boolean checkGcmToken(ControllerFirebaseTokenIf controller)
-        {
-            Timber.d("checkGcmToken()");
-
-            return controller.getSubscriptions().add(
-                    updatedGcmTkSingle()
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(mainThread())
-                            .subscribeWith(new RegGcmTokenObserver(controller)));
-        }
-
-        /**
-         * Synchronous variant for the service InstanceIdService.
-         * The method does not check if the gcmToken has been sent previously to database.
-         */
-        @Override
-        public void checkGcmTokenSync(ControllerFirebaseTokenIf controller)
-        {
-            Timber.d("checkGcmTokenSync()");
-
-            updatedGcmTkSingle().subscribe(new RegGcmTokenObserver(controller){
-                @Override
-                public void onError(Throwable error)
-                {
-                    Timber.d("onError(): %s", error.getMessage());
-                }
-            });
-        }
-
-        // ............................ SUBSCRIBERS ..................................
-
-        class RegGcmTokenObserver extends DisposableSingleObserver<Integer> {
-
-            private final ControllerFirebaseTokenIf controller;
-
-            public RegGcmTokenObserver(ControllerFirebaseTokenIf controller)
-            {
-                this.controller = controller;
-            }
-
-            @Override
-            public void onSuccess(Integer isUpdated)
-            {
-                Timber.d("onSuccess(%d)", isUpdated);
-                if (isUpdated > 0) {
-                    controller.updateIsGcmTokenSentServer(true);
-                }
-                controller.clearSubscriptions();
-            }
-
-            @Override
-            public void onError(Throwable error)
-            {
-                Timber.d("onError(): %s", error.getMessage());
-                controller.updateIsGcmTokenSentServer(false);
-                controller.processReactorError(error);
-                controller.clearSubscriptions();
-            }
-        }
+    @Override
+    public ManagerIncidSeeIf.ViewerIf getViewer()
+    {
+        return viewer;
     }
 }

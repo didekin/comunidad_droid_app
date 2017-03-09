@@ -4,11 +4,11 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.widget.ArrayAdapter;
 
-import com.didekindroid.ControllerAbs;
+import com.didekindroid.ControllerIdentityAbs;
 import com.didekindroid.incidencia.list.ManagerIncidSeeIf.ControllerIncidSeeIf;
 import com.didekindroid.incidencia.list.ManagerIncidSeeIf.ReactorIncidSeeIf;
 import com.didekindroid.incidencia.list.ManagerIncidSeeIf.ViewerIncidSeeIf;
-import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
+import com.didekindroid.security.IdentityCacher;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
@@ -21,6 +21,7 @@ import timber.log.Timber;
 import static com.didekindroid.incidencia.list.ReactorIncidSee.incidSeeReactor;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.util.AppBundleKey.IS_MENU_IN_FRAGMENT_FLAG;
 import static com.didekindroid.util.UIutils.assertTrue;
 
@@ -30,7 +31,7 @@ import static com.didekindroid.util.UIutils.assertTrue;
  * Time: 17:15
  */
 
-class ControllerIncidCloseSee extends ControllerAbs implements ControllerIncidSeeIf<Resolucion> {
+class ControllerIncidCloseSee extends ControllerIdentityAbs implements ControllerIncidSeeIf<Resolucion> {
 
     private final ReactorIncidSeeIf reactor;
     final AtomicReference<Incidencia> atomicIncidencia;
@@ -39,20 +40,21 @@ class ControllerIncidCloseSee extends ControllerAbs implements ControllerIncidSe
 
     ControllerIncidCloseSee(ViewerIncidSeeIf<Bundle> incidViewer)
     {
-        this(incidViewer, incidSeeReactor);
+        this(incidViewer, incidSeeReactor, TKhandler);
     }
 
-    ControllerIncidCloseSee(ViewerIncidSeeIf<Bundle> viewer, ReactorIncidSeeIf reactor)
+    @SuppressWarnings("WeakerAccess")
+    ControllerIncidCloseSee(ViewerIncidSeeIf<Bundle> viewer, ReactorIncidSeeIf reactor, IdentityCacher identityCacher)
     {
-        super();
+        super(identityCacher);
         this.viewer = viewer;
         this.reactor = reactor;
         atomicIncidencia = new AtomicReference<>();
-        adapter = new AdapterIncidSeeClosedByComu(viewer.getManager());
+        adapter = new AdapterIncidSeeClosedByComu(viewer.getManager().getActivity());
     }
 
     @Override
-    public ViewerFirebaseTokenIf getViewer()
+    public ViewerIncidSeeIf getViewer()
     {
         Timber.d("getViewer()");
         return viewer;
@@ -92,6 +94,6 @@ class ControllerIncidCloseSee extends ControllerAbs implements ControllerIncidSe
         bundle.putSerializable(INCIDENCIA_OBJECT.key, atomicIncidencia.get());
         bundle.putSerializable(INCID_RESOLUCION_OBJECT.key, resolucion);
         // Switch fragment here.
-        viewer.replaceView(bundle);
+        viewer.getManager().replaceRootView(bundle);
     }
 }

@@ -187,6 +187,7 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
 //    ..................... INNER CLASSES  .......................
 /*    ============================================================*/
 
+    @SuppressWarnings("WeakerAccess")
     class ResolucionModifyer extends AsyncTask<Resolucion, Void, Integer> {
 
         UiException uiException;
@@ -225,6 +226,7 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
         }
     }
 
+    @SuppressWarnings("WeakerAccess")
     class IncidenciaCloser extends AsyncTask<Resolucion, Void, Integer> {
 
         UiException uiException;

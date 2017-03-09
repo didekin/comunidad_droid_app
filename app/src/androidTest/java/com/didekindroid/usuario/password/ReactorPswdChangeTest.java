@@ -2,10 +2,9 @@ package com.didekindroid.usuario.password;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekindroid.ControllerAbs;
-import com.didekindroid.ManagerIf;
+import com.didekindroid.ControllerIdentityAbs;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
+import com.didekindroid.incidencia.list.ManagerIncidSeeIf;
 import com.didekinlib.http.ErrorBean;
 import com.didekinlib.http.oauth2.SpringOauthToken;
 import com.didekinlib.model.usuario.Usuario;
@@ -22,13 +21,12 @@ import java.util.concurrent.Callable;
 import io.reactivex.Completable;
 import io.reactivex.CompletableSource;
 import io.reactivex.Single;
-import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import timber.log.Timber;
 
 import static com.didekindroid.security.OauthTokenReactor.oauthTokenAndInitCache;
-import static com.didekindroid.security.OauthTokenReactor_1_Test.checkInitTokenCache;
+import static com.didekindroid.testutil.ActivityTestUtils.checkInitTokenCache;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceAndroidMain;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceIoScheduler;
@@ -57,6 +55,12 @@ public class ReactorPswdChangeTest {
     private final Usuario usuario = new Usuario.UsuarioBuilder().userName(USER_PEPE.getUserName()).password(new_password).build();
     private SpringOauthToken oldToken;
 
+    @AfterClass
+    public static void resetScheduler()
+    {
+        reset();
+    }
+
     @Before
     public void doFixture() throws IOException, UiException
     {
@@ -67,12 +71,6 @@ public class ReactorPswdChangeTest {
     @After
     public void unDoFixture() throws UiException
     {
-    }
-
-    @AfterClass
-    public static void resetScheduler()
-    {
-        reset();
     }
 
     //  =======================================================================================
@@ -160,7 +158,7 @@ public class ReactorPswdChangeTest {
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
-            assertThat(pswdChangeReactor.passwordChange(doPswdAssertionErrorController(), usuario), is(true));
+            assertThat(pswdChangeReactor.passwordChange(new ControllerPassworForTest(), usuario), is(true));
         } finally {
             reset();
         }
@@ -213,48 +211,22 @@ public class ReactorPswdChangeTest {
 
 //    .................................... MOCK CONTROLLERS .................................
 
-    ControllerPasswordChangeIf doPswdAssertionErrorController()
-    {
-        return new ControllerPasswordChangeIf() {
+    class ControllerPassworForTest extends ControllerIdentityAbs implements ControllerPasswordChangeIf{
 
-            ManagerIf.ControllerIf controllerAb = new ControllerAbs() {
-                @Override
-                public ViewerFirebaseTokenIf getViewer()
-                {
-                    return null;
-                }
-            };
+        @Override
+        public void changePasswordInRemote(Usuario usuario)
+        {
+        }
 
-            @Override
-            public void changePasswordInRemote(Usuario usuario)
-            { }
+        @Override
+        public void processBackChangedPswdRemote()
+        {
+        }
 
-            @Override
-            public void processBackChangedPswdRemote()
-            { Timber.d("!!!!!!!!!!!!!!!! SUCCESS !!!!!!!!!!!!!!!!!!"); }
-
-            @Override
-            public CompositeDisposable getSubscriptions()
-            { return controllerAb.getSubscriptions(); }
-
-            @Override
-            public int clearSubscriptions()
-            { return controllerAb.clearSubscriptions(); }
-
-            @Override
-            public ViewerFirebaseTokenIf getViewer()
-            { return controllerAb.getViewer(); }
-
-            @Override
-            public boolean isRegisteredUser()
-            { return controllerAb.isRegisteredUser(); }
-
-            @Override
-            public void processReactorError(Throwable e)
-            {
-                Timber.d("!!!!!!!!!!!!!!!! ERROR !!!!!!!!!!!!!!!!!!");
-                controllerAb.processReactorError(e);
-            }
-        };
+        @Override
+        public ManagerIncidSeeIf.ViewerIf getViewer()
+        {
+            return null;
+        }
     }
 }

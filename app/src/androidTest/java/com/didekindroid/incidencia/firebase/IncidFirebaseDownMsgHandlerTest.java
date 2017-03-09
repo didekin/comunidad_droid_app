@@ -15,7 +15,7 @@ import android.util.ArrayMap;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.testutil.MockActivity;
+import com.didekindroid.MockActivity;
 import com.google.firebase.messaging.RemoteMessage;
 
 import org.junit.After;

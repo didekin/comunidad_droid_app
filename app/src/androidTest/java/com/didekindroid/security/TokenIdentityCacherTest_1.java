@@ -1,8 +1,15 @@
 package com.didekindroid.security;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.didekindroid.ManagerMock;
+import com.didekindroid.MockActivity;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.incidencia.core.ControllerFirebaseTokenIf;
+import com.didekindroid.usuario.firebase.ControllerFirebaseToken;
 import com.didekinlib.http.oauth2.SpringOauthToken;
 
 import org.junit.After;
@@ -10,12 +17,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static com.didekindroid.security.SecurityTestUtils.doSpringOauthToken;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.security.TokenIdentityCacher.cleanTokenAndUnregisterFunc;
 import static com.didekindroid.security.TokenIdentityCacher.cleanTokenCacheAction;
 import static com.didekindroid.security.TokenIdentityCacher.initTokenAction;
 import static com.didekindroid.security.TokenIdentityCacher.initTokenAndRegisterFunc;
-import static com.didekindroid.security.SecurityTestUtils.doSpringOauthToken;
+import static com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf.ViewerFirebaseToken.newViewerFirebaseToken;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_TK_HANDLER;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.util.IoHelper.readStringFromFile;
@@ -87,7 +95,7 @@ public class TokenIdentityCacherTest_1 {
     }
 
     @Test
-    public void testUpdateIsRegistered() throws Exception
+    public void testUpdateIsRegistered_1() throws Exception
     {
         TKhandler.updateIsRegistered(false);
         assertThat(TKhandler.isRegisteredUser(), is(false));
@@ -96,13 +104,17 @@ public class TokenIdentityCacherTest_1 {
     }
 
     @Test
-    public void updateIsGcmTokenSentServer() throws Exception
+    public void testUpdateIsRegistered_2() throws Exception
     {
-        assertThat(TKhandler.isGcmTokenSentServer(), is(false));
-        TKhandler.updateIsGcmTokenSentServer(true);
-        assertThat(TKhandler.isGcmTokenSentServer(), is(true));
-        TKhandler.updateIsGcmTokenSentServer(false);
-        assertThat(TKhandler.isGcmTokenSentServer(), is(false));
+        Intent intent = new Intent();
+        intent.setClass(InstrumentationRegistry.getContext(),MockActivity.class);
+        Activity activity = InstrumentationRegistry.getInstrumentation().startActivitySync(intent);
+        ControllerFirebaseTokenIf controller = new ControllerFirebaseToken(newViewerFirebaseToken(new ManagerMock(activity)));
+        TKhandler.updateIsRegistered(false);
+        assertThat(controller.isGcmTokenSentServer(), is(false));
+        TKhandler.updateIsRegistered(true);
+        // No actualizamos.
+        assertThat(controller.isGcmTokenSentServer(), is(false));
     }
 
 //    .................... ACTIONS .......................

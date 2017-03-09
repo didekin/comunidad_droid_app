@@ -19,7 +19,6 @@ import java.io.IOException;
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
 import static com.didekindroid.incidencia.firebase.IncidFirebaseDownMsgHandler.INCIDENCIA_OPEN;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doIncidencia;
-import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
 import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
@@ -75,7 +74,6 @@ public class IncidRegAc_GCM_Test extends Incidencia_GCM_Test {
                     pepe = signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
                     pepeUserComu = userComuDaoRemote.seeUserComusByUser().get(0);
                     // We'll test that the gcmToken is not updated in server.
-                    assertThat(TKhandler.isGcmTokenSentServer(), is(false));
                     assertThat(usuarioDao.getGcmToken(), nullValue());
                 } catch (IOException | UiException e) {
                     e.printStackTrace();

@@ -11,12 +11,15 @@ import android.view.View;
 import android.widget.BaseAdapter;
 import android.widget.DatePicker;
 
+import com.didekindroid.ManagerIf;
 import com.didekindroid.ManagerIf.ControllerIf;
 import com.didekindroid.ManagerIf.ViewerIf;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf.ActionForUiExceptionIf;
+import com.didekindroid.security.IdentityCacher;
 import com.didekinlib.http.ErrorBean;
+import com.didekinlib.http.oauth2.SpringOauthToken;
 import com.didekinlib.model.exception.ExceptionMsgIf;
 
 import org.hamcrest.CoreMatchers;
@@ -45,12 +48,14 @@ import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOUND;
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static java.util.Calendar.DAY_OF_MONTH;
 import static java.util.Calendar.MONTH;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
@@ -110,7 +115,7 @@ public final class ActivityTestUtils {
         };
     }
 
-    public static Callable<Boolean> isViewInteractionOk(final String textToCheck){
+    public static Callable<Boolean> isViewWithTextOk(final String textToCheck){
 
         return new Callable<Boolean>() {
             public Boolean call() throws Exception
@@ -144,7 +149,7 @@ public final class ActivityTestUtils {
         assertThat(controller.getSubscriptions().size(), is(1));
     }
 
-    public static Callable<Boolean> hasRegisteredFlag(final ControllerIf controller)
+    public static Callable<Boolean> hasRegisteredFlag(final ManagerIf.ControllerIdentityIf controller)
     {
         return new Callable<Boolean>() {
             public Boolean call() throws Exception
@@ -200,11 +205,11 @@ public final class ActivityTestUtils {
         }
     }
 
-    //    ============================= EXCEPTIONS ===================================
+    //    ============================= EXCEPTIONS/ERRORS ===================================
 
-    public static ActionForUiExceptionIf testProcessCtrlError(final ViewerIf viewer, final ExceptionMsgIf exceptionMsg, ActionForUiExceptionIf actionToExpect)
+    public static ActionForUiExceptionIf checkProcessCtrlError(final ViewerIf viewer, final ExceptionMsgIf exceptionMsg, ActionForUiExceptionIf actionToExpect)
     {
-        final Activity activityError = viewer.getManager();
+        final Activity activityError = viewer.getManager().getActivity();
         final AtomicReference<ActionForUiExceptionIf> actionException = new AtomicReference<>(null);
 
         activityError.runOnUiThread(new Runnable() {
@@ -219,24 +224,54 @@ public final class ActivityTestUtils {
                 );
             }
         });
-        waitAtMost(2, SECONDS).untilAtomic(actionException, is(actionToExpect));
         return actionException.get();
     }
 
-    public static void testProcessCtrlErrorOnlyToast(final ViewerIf viewer,
-                                                     ExceptionMsgIf exceptionMsg, int resourceIdToast,
-                                                     int activityLayoutId)
+    public static void checkProcessCtrlErrorOnlyToast(final ViewerIf viewer,
+                                                      final ExceptionMsgIf exceptionMsg, int resourceIdToast,
+                                                      int activityLayoutId)
     {
         final Activity activityError = (Activity) viewer;
         activityError.runOnUiThread(new Runnable() {
             @Override
             public void run()
             {
-                viewer.processControllerError(new UiException(new ErrorBean(USER_NAME_NOT_FOUND)));
+                viewer.processControllerError(new UiException(new ErrorBean(exceptionMsg)));
             }
         });
-        waitAtMost(2, SECONDS).until(isToastInView(R.string.username_wrong_in_login, activityError));
         onView(withId(activityLayoutId)).check(matches(isDisplayed()));
+    }
+
+    //    ============================= IDENTITY CACHE ===================================
+
+    public static void checkUpdateTokenCache(SpringOauthToken oldToken) throws UiException
+    {
+        assertThat(TKhandler.getAccessTokenInCache(), CoreMatchers.not(CoreMatchers.is(oldToken)));
+        checkInitTokenCache();
+    }
+
+    public static void checkInitTokenCache() throws UiException
+    {
+        assertThat(TKhandler.getAccessTokenInCache(), notNullValue());
+        assertThat(TKhandler.getAccessTokenInCache().getValue().isEmpty(), CoreMatchers.is(false));
+        assertThat(TKhandler.getRefreshTokenValue().isEmpty(), CoreMatchers.is(false));
+        assertThat(TKhandler.getRefreshTokenFile().exists(), CoreMatchers.is(true));
+    }
+
+    public static void checkNoInitCache() throws UiException
+    {
+        assertThat(TKhandler.getAccessTokenInCache(), nullValue());
+        assertThat(TKhandler.getRefreshTokenFile().exists(), CoreMatchers.is(false));
+    }
+
+    public static Callable<String> getRefreshTokenValue(final IdentityCacher identityCacher){
+        return new Callable<String>() {
+            @Override
+            public String call() throws Exception
+            {
+                return identityCacher.getRefreshTokenValue();
+            }
+        };
     }
 
     //    ============================= NAVIGATION ===================================
@@ -265,14 +300,14 @@ public final class ActivityTestUtils {
         }
     }
 
-    public static void testReplaceViewStd(final ViewerIf<View,Object> viewer, int resorceIdNextView)
+    public static void checkReplaceViewStd(final ViewerIf<View,Object> viewer, int resorceIdNextView)
     {
         Activity activityOld = (Activity) viewer;
         activityOld.runOnUiThread(new Runnable() {
             @Override
             public void run()
             {
-                viewer.replaceView(null);
+                viewer.getManager().replaceRootView(null);
             }
         });
         waitAtMost(1, SECONDS).until(isResourceIdDisplayed(resorceIdNextView));

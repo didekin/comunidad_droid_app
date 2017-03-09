@@ -2,8 +2,9 @@ package com.didekindroid.usuario.password;
 
 import android.view.View;
 
-import com.didekindroid.ControllerAbs;
-import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
+import com.didekindroid.ControllerIdentityAbs;
+import com.didekindroid.incidencia.list.ManagerIncidSeeIf;
+import com.didekindroid.security.IdentityCacher;
 import com.didekinlib.model.usuario.Usuario;
 
 import java.util.concurrent.Callable;
@@ -15,6 +16,7 @@ import io.reactivex.observers.DisposableCompletableObserver;
 import timber.log.Timber;
 
 import static com.didekindroid.security.OauthTokenReactor.oauthTokenAndInitCache;
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_password_should_be_updated;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
 import static com.didekindroid.usuario.password.ControllerPasswordChange.ReactorPswdChange.pswdChangeReactor;
@@ -28,18 +30,20 @@ import static io.reactivex.schedulers.Schedulers.io;
  * Date: 22/02/17
  * Time: 20:37
  */
-class ControllerPasswordChange extends ControllerAbs implements ControllerPasswordChangeIf {
+@SuppressWarnings("WeakerAccess")
+class ControllerPasswordChange extends ControllerIdentityAbs implements ControllerPasswordChangeIf {
 
     private final ViewerPasswordChangeIf<View, Object> viewer;
     private final ReactorPswdChangeIf reactor;
 
     ControllerPasswordChange(ViewerPasswordChangeIf<View, Object> viewer)
     {
-        this(viewer, pswdChangeReactor);
+        this(viewer, pswdChangeReactor, TKhandler);
     }
 
-    ControllerPasswordChange(ViewerPasswordChangeIf<View, Object> viewer, ReactorPswdChangeIf reactor)
+    ControllerPasswordChange(ViewerPasswordChangeIf<View, Object> viewer, ReactorPswdChangeIf reactor, IdentityCacher identityCacher)
     {
+        super(identityCacher);
         this.viewer = viewer;
         this.reactor = reactor;
     }
@@ -55,11 +59,11 @@ class ControllerPasswordChange extends ControllerAbs implements ControllerPasswo
     public void processBackChangedPswdRemote()
     {
         Timber.d("processBackChangedPswdRemote()");
-        viewer.replaceView(null);
+        viewer.getManager().replaceRootView(null);
     }
 
     @Override
-    public ViewerFirebaseTokenIf getViewer()
+    public ManagerIncidSeeIf.ViewerIf getViewer()
     {
         Timber.d("getViewer()");
         return viewer;

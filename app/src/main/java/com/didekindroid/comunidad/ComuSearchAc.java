@@ -153,6 +153,7 @@ public class ComuSearchAc extends AppCompatActivity {
     /*    ============================================================*/
 
     /* This class should be in the launcher activity */
+    @SuppressWarnings("WeakerAccess")
     class CheckerTokenInCache extends AsyncTask<Void, Void, SpringOauthToken> {
 
         UiException uiException;
@@ -171,7 +172,6 @@ public class ComuSearchAc extends AppCompatActivity {
             return springOauthTokenInCache;
         }
 
-        @SuppressWarnings("ResourceType")
         @Override
         protected void onPostExecute(SpringOauthToken springOauthToken)
         {

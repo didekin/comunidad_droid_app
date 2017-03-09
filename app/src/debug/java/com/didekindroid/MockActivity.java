@@ -1,17 +1,22 @@
-package com.didekindroid.testutil;
+package com.didekindroid;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import timber.log.Timber;
 
-public class MockNextDefaultActivity extends AppCompatActivity {
+public class MockActivity<B> extends AppCompatActivity {
+
+    Class<? extends Activity> defaultActivityClassToGo;
+    volatile short counter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         Timber.d("onCreate()");
         super.onCreate(savedInstanceState);
+        defaultActivityClassToGo = MockNextDefaultActivity.class;
     }
 
     @Override
@@ -32,5 +37,15 @@ public class MockNextDefaultActivity extends AppCompatActivity {
     protected void onDestroy(){
         Timber.d("onDestroy()");
         super.onDestroy();
+    }
+
+    public short getCounter()
+    {
+        return counter;
+    }
+
+    public void setCounter(short counter)
+    {
+        this.counter = counter;
     }
 }

@@ -1,6 +1,7 @@
 package com.didekindroid.usuario.userdata;
 
 import android.app.Activity;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.view.View;
 import android.widget.EditText;
@@ -19,7 +20,7 @@ import org.junit.Test;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -41,14 +42,16 @@ import static com.didekindroid.R.id.user_data_modif_button;
 import static com.didekindroid.comunidad.testutil.ComuMenuTestUtil.COMU_SEARCH_AC;
 import static com.didekindroid.exception.UiExceptionRouter.GENERIC_APP_ACC;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_OPEN_BY_COMU_AC;
+import static com.didekindroid.testutil.ActivityTestUtils.checkProcessCtrlError;
+import static com.didekindroid.testutil.ActivityTestUtils.checkProcessCtrlErrorOnlyToast;
+import static com.didekindroid.testutil.ActivityTestUtils.checkReplaceViewStd;
 import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
-import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
-import static com.didekindroid.testutil.ActivityTestUtils.testProcessCtrlError;
-import static com.didekindroid.testutil.ActivityTestUtils.testProcessCtrlErrorOnlyToast;
-import static com.didekindroid.testutil.ActivityTestUtils.testReplaceViewStd;
+import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
+import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC;
+import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
 import static com.didekindroid.usuario.testutil.UserItemMenuTestUtils.DELETE_ME_AC;
@@ -85,9 +88,10 @@ import static org.junit.Assert.fail;
  */
 public class UserDataAcTest implements ExtendableTestAc {
 
-    static AtomicInteger flagForExecution = new AtomicInteger(0);
     UserDataAc activity;
     Usuario registeredUser;
+
+    final static AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
 
     @Rule
     public IntentsTestRule<? extends Activity> mActivityRule = new IntentsTestRule<UserDataAc>(UserDataAc.class) {
@@ -189,6 +193,14 @@ public class UserDataAcTest implements ExtendableTestAc {
         checkNavigateUp();
     }
 
+    @Test
+    public final void testOnStop() throws Exception
+    {
+        InstrumentationRegistry.getInstrumentation().callActivityOnStop(activity);
+        // Check.
+        assertThat(controller.getSubscriptions().size(), is(0));
+    }
+
     // ============================================================
     //    ................. VIEWER TESTS ..................
     // ============================================================
@@ -196,27 +208,19 @@ public class UserDataAcTest implements ExtendableTestAc {
     @Test
     public void testProcessControllerError_1() throws InterruptedException
     {
-        testProcessCtrlErrorOnlyToast(activity, BAD_REQUEST, R.string.password_wrong, activityLayoutId);
+        checkProcessCtrlErrorOnlyToast(activity, BAD_REQUEST, R.string.password_wrong, activityLayoutId);
     }
 
     @Test
     public void testProcessControllerError_2()
     {
-        testProcessCtrlError(activity, GENERIC_INTERNAL_ERROR, GENERIC_APP_ACC);
-    }
-
-    @Test
-    public void testClearControllerSubscriptions()
-    {
-        controller = new ControllerUserDataForTest(activity);
-        activity.clearControllerSubscriptions();
-        assertThat(flagForExecution.getAndSet(0), is(29));
+        checkProcessCtrlError(activity, GENERIC_INTERNAL_ERROR, GENERIC_APP_ACC);
     }
 
     @Test
     public void testReplaceView()
     {
-        testReplaceViewStd(activity, getNextViewResourceId());
+        checkReplaceViewStd(activity, getNextViewResourceId());
     }
 
     // ============================================================
@@ -270,7 +274,6 @@ public class UserDataAcTest implements ExtendableTestAc {
     {
         typeUserData("newuser@user.com", USER_JUAN.getAlias(), USER_JUAN.getPassword());
 
-        activity.usuarioBean = null;
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run()
@@ -278,7 +281,7 @@ public class UserDataAcTest implements ExtendableTestAc {
                 assertThat(activity.checkUserData(), is(true));
             }
         });
-        waitAtMost(1, SECONDS).until(fieldIn(activity.usuarioBean).ofType(String.class).andWithName("userName"), is("newuser@user.com"));
+        waitAtMost(1, SECONDS).until(fieldIn(activity).ofType(UsuarioBean.class), notNullValue());
         assertThat(activity.usuarioBean.getUserName(), is("newuser@user.com"));
         assertThat(activity.usuarioBean.getAlias(), is(USER_JUAN.getAlias()));
         assertThat(activity.usuarioBean.getPassword(), is(USER_JUAN.getPassword()));
@@ -373,9 +376,16 @@ public class UserDataAcTest implements ExtendableTestAc {
         // Preconditions.
         assertThat(activity.oldUser, not(is(USER_DROID)));
         // Execute.
-        activity.processBackUsuarioInView(USER_DROID);
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                activity.processBackUsuarioInView(USER_DROID);
+            }
+        });
         // Check.
-        assertThat(activity.oldUser, is(USER_DROID));
+        waitAtMost(1, SECONDS).until(fieldIn(activity).ofType(Usuario.class).andWithName("oldUser"), is(USER_DROID));
+        assertThat(activity.oldUser.getUserName(), is(USER_DROID.getUserName()));
         checkInitialData(USER_DROID.getUserName(), USER_DROID.getAlias());
         assertThat(activity.intentForMenu.getStringExtra(user_name.key), is(activity.oldUser.getUserName()));
     }
@@ -457,7 +467,7 @@ public class UserDataAcTest implements ExtendableTestAc {
         @Override
         public int clearSubscriptions()
         {
-            assertThat(flagForExecution.getAndSet(29), is(0));
+            assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC), is(BEFORE_METHOD_EXEC));
             return 99;
         }
     }

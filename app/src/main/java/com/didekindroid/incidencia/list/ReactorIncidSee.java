@@ -1,7 +1,6 @@
 package com.didekindroid.incidencia.list;
 
 import com.didekindroid.incidencia.list.ManagerIncidSeeIf.ControllerIncidSeeIf;
-import com.didekindroid.incidencia.list.ManagerIncidSeeIf.IncidListObserver;
 import com.didekindroid.incidencia.list.ManagerIncidSeeIf.ReactorIncidSeeIf;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.Incidencia;

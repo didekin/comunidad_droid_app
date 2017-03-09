@@ -2,16 +2,14 @@ package com.didekindroid.incidencia.list;
 
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.support.v4.app.FragmentManager;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.core.IncidenciaDataDbHelper;
-import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
-import com.didekinlib.model.incidencia.dominio.Incidencia;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
+import com.didekinlib.model.incidencia.dominio.Resolucion;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.junit.After;
@@ -23,70 +21,85 @@ import org.junit.runner.RunWith;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.Date;
 
 import static android.database.sqlite.SQLiteDatabase.deleteDatabase;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.pressBack;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
-import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
+import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
 import static com.didekindroid.incidencia.core.IncidenciaDataDbHelperTest.DB_PATH;
+import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.RESOLUCION_DEFAULT_DESC;
+import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doResolucion;
+import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidenciaUser;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidenciaUser;
-import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
-import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.security.SecurityTestUtils.updateSecurityData;
+import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
+import static com.didekindroid.testutil.ActivityTestUtils.getAdapterCount;
+import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.makeUsuarioComunidad;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static com.didekinlib.model.usuariocomunidad.Rol.PROPIETARIO;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.awaitility.Awaitility.waitAtMost;
+import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
 /**
  * User: pedro@didekin
- * Date: 23/11/15
- * Time: 18:45
+ * Date: 17/03/16
+ * Time: 15:41
  */
-/* Tests con usuario sin incidImportancia asociado a la incidencia. */
+@SuppressWarnings("ConstantConditions")
 @RunWith(AndroidJUnit4.class)
 public class IncidSeeOpenByComuAcTest_3 {
 
+    UsuarioComunidad pepeUserComu;
     UsuarioComunidad userComuJuan;
-    /**
-     * Preconditions:
-     * 1. Incidencia without resolucion in BD.
-     * 2. User without authority 'adm' and without incidImportancia record in DB.
-     * Condition:
-     * 1. User select an incidencia.
-     * Postconditions:
-     * 1. The incidencia is shown in edit mode (importancia field).
-     * 2. An intent is passed whith:
-     * - the incidImportancia instance of the user in session.
-     * - a false value in the resolucion flag.
-     */
+    Resolucion resolucion;
     @Rule
     public IntentsTestRule<IncidSeeOpenByComuAc> activityRule = new IntentsTestRule<IncidSeeOpenByComuAc>(IncidSeeOpenByComuAc.class) {
 
+        /**
+         * Preconditions:
+         * 1. Incidencia with resolucion in BD.
+         * 2. User without authority 'adm'.
+         * Condition:
+         * 1. User select an incidencia.
+         * Postconditions:
+         * 1. The incidencia is shown in edit mode.
+         * 2. An intent is passed whith:
+         *    - the incidImportancia instance of the user in session.
+         *    - a true value in the resolucion flag.
+         */
         @Override
         protected void beforeActivityLaunched()
         {
             try {
-                signUpAndUpdateTk(COMU_REAL_PEPE);
-                UsuarioComunidad pepeUserComu = userComuDaoRemote.seeUserComusByUser().get(0);
+                signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
+                pepeUserComu = userComuDaoRemote.seeUserComusByUser().get(0);
                 // Insertamos incidencia.
-                insertGetIncidenciaUser(pepeUserComu, 1);
+                IncidenciaUser incidenciaUser = insertGetIncidenciaUser(pepeUserComu, 1);
+                // Insertamos resolución.
+                resolucion = doResolucion(incidenciaUser.getIncidencia(), RESOLUCION_DEFAULT_DESC, 1000, new Timestamp(new Date().getTime()));
+                assertThat(incidenciaDao.regResolucion(resolucion), is(1));
                 // Registro userComu en misma comunidad.
                 userComuJuan = makeUsuarioComunidad(pepeUserComu.getComunidad(), USER_JUAN,
                         "portal", "esc", "plantaX", "door12", PROPIETARIO.function);
@@ -95,16 +108,16 @@ public class IncidSeeOpenByComuAcTest_3 {
             } catch (IOException | UiException e) {
                 e.printStackTrace();
             }
-            FragmentManager.enableDebugLogging(true);
         }
     };
-    private UsuarioDataTestUtils.CleanUserEnum whatToClean = CLEAN_JUAN_AND_PEPE;
+
+    ControllerIncidOpenSee controller;
     private AdapterIncidSeeOpenByComu adapter;
 
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
     {
-        Thread.sleep(3000);
+        Thread.sleep(2000);
     }
 
     @Before
@@ -113,8 +126,11 @@ public class IncidSeeOpenByComuAcTest_3 {
         IncidSeeOpenByComuAc mActivity = activityRule.getActivity();
         IncidSeeByComuListFr mFragment = (IncidSeeByComuListFr) mActivity.getSupportFragmentManager()
                 .findFragmentByTag(incid_see_by_comu_list_fr_tag);
-        Thread.sleep(2000);
-//        adapter = (AdapterIncidSeeOpenByComu) fragmentList.listAdapter;           // TODO: ¡¡¡¡¡¡ Arreglar ¡¡¡¡¡¡¡¡¡¡
+        controller = (ControllerIncidOpenSee) mFragment.controllerSeeIncids;
+        adapter = (AdapterIncidSeeOpenByComu) controller.adapter;
+        // Premisas.
+        assertThat(userComuJuan.hasAdministradorAuthority(), is(false));
+        assertThat(incidenciaDao.seeResolucion(resolucion.getIncidencia().getIncidenciaId()), notNullValue());
     }
 
     @After
@@ -122,70 +138,45 @@ public class IncidSeeOpenByComuAcTest_3 {
     {
         String dBFileName = DB_PATH.concat(IncidenciaDataDbHelper.DB_NAME);
         deleteDatabase(new File(dBFileName));
-        cleanOptions(whatToClean);
+        cleanOptions(CLEAN_JUAN_AND_PEPE);
     }
 
     @Test
-    public void testOnSelected_1() throws UiException, InterruptedException
+    public void testOnCreate_1()
     {
 
-        // CASO OK
-        // Default comunidad (Real), in position 0, is selected.
-        Thread.sleep(1000);
-        IncidenciaUser incidUser_0 = adapter.getItem(0);
-        Incidencia incidencia_0 = incidUser_0.getIncidencia();
-        // Usuario Juan ve la incidencia por usuario Pepe.
-        onData(is(incidUser_0)).inAdapterView(withId(android.R.id.list))
+        // CASO OK para la visibilidad del bloque de datos de resolución.
+        waitAtMost(3, SECONDS).until(getAdapterCount(adapter), is(1));
+        IncidenciaUser incidenciaUser = adapter.getItem(0);
+        // Bloque datos de fecha alta resolución visible.
+        onView(allOf(
+                withId(R.id.incid_see_resolucion_block),
+                hasSibling(allOf(
+                        withText(incidenciaUser.getIncidencia().getDescripcion()),
+                        withId(R.id.incid_descripcion_view)
+                ))
+        )).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testOnSelected_1() throws Exception
+    {
+        // Caso OK: comunidad Escorial es mostrada. El usuario la selecciona.
+        waitAtMost(3, SECONDS).until(getAdapterCount(adapter), is(1));
+        IncidenciaUser incidenciaUser = adapter.getItem(0);
+        onData(is(incidenciaUser)).inAdapterView(withId(android.R.id.list))
                 .check(matches(isDisplayed()))
                 .perform(click());
 
-        // Verificamos intents.
-        IncidAndResolBundle incidAndResolBundle = incidenciaDao.seeIncidImportancia(incidencia_0.getIncidenciaId());
+        IncidAndResolBundle incidAndResolBundle = incidenciaDao.seeIncidImportancia(incidenciaUser.getIncidencia().getIncidenciaId());
         IncidImportancia incidImportancia = incidAndResolBundle.getIncidImportancia();
         assertThat(incidImportancia.getUserComu(), is(userComuJuan));
-        assertThat(incidAndResolBundle.hasResolucion(), is(false));
+        assertThat(incidAndResolBundle.hasResolucion(), is(true));
         intended(hasExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia));
         intended(hasExtra(INCID_RESOLUCION_FLAG.key, incidAndResolBundle.hasResolucion()));
 
         // Juan entra en la pantalla de edición de la incidencia, tras seleccionarla.
-        onView(withId(R.id.incid_edit_fragment_container_ac)).check(matches(isDisplayed()));
-        // Navigate-up.
+        waitAtMost(2, SECONDS).until(isViewDisplayed(withId(R.id.incid_edit_fragment_container_ac)));
         checkUp(R.id.incid_see_open_by_comu_ac, R.id.incid_see_generic_layout);
-    }
-
-    @Test
-    public void testUpNavigate()
-    {
-        // CASO OK: probamos UP navigation.
-        IncidenciaUser incidUser_0 = adapter.getItem(0);
-        // Usuario Juan ve la incidencia por usuario Pepe.
-        onData(is(incidUser_0)).inAdapterView(withId(android.R.id.list))
-                .check(matches(isDisplayed()))
-                .perform(click());
-
-        // Juan entra en la pantalla de edición de la incidencia, y pulsa Up.
-        onView(withId(R.id.incid_edit_fragment_container_ac)).check(matches(isDisplayed()));
-        clickNavigateUp();
-        onView(withId(R.id.incid_see_generic_layout)).check(matches(isDisplayed()));
-        onData(is(incidUser_0)).inAdapterView(withId(android.R.id.list))
-                .check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void testPressBack() throws InterruptedException
-    {
-        // CASO OK: probamos BACK navigation.
-        Thread.sleep(1000);
-        IncidenciaUser incidUser_0 = adapter.getItem(0);
-        // Usuario Juan ve la incidencia puesta por usuario Pepe.
-        onData(is(incidUser_0)).inAdapterView(withId(android.R.id.list))
-                .check(matches(isDisplayed()))
-                .perform(click());
-
-        // Juan entra en la pantalla de edición de la incidencia, y pulsa BACK.
-        onView(withId(R.id.incid_edit_nopower_fr_layout)).check(matches(isDisplayed())).perform(pressBack());
-        onView(withId(R.id.incid_see_generic_layout)).check(matches(isDisplayed()));
-        onData(is(incidUser_0)).inAdapterView(withId(android.R.id.list))
-                .check(matches(isDisplayed()));
     }
 }

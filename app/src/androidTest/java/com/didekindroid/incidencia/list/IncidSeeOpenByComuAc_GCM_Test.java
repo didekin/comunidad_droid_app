@@ -13,11 +13,9 @@ import org.junit.runner.RunWith;
 
 import java.io.IOException;
 
-import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
@@ -54,7 +52,6 @@ public class IncidSeeOpenByComuAc_GCM_Test extends Incidencia_GCM_Test {
                 try {
                     pepe = signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
                     // We'll test that the gcmToken is not updated in server.
-                    assertThat(TKhandler.isGcmTokenSentServer(), is(false));
                     assertThat(usuarioDao.getGcmToken(), nullValue());
                 } catch (IOException | UiException e) {
                     fail();

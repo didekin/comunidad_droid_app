@@ -39,8 +39,8 @@ public interface ManagerComuSpinnerIf<B> extends ManagerIf<B>{
 
     // ........................ VIEWER ...........................
 
-    interface ViewerComuSpinnerIf extends ViewerWithSelectIf<Spinner,Object> {
-        ViewerComuSpinnerIf setDataInView(Bundle savedState);
+    interface ViewerComuSpinnerIf<B> extends ViewerWithSelectIf<Spinner,B> {
+        ViewerComuSpinnerIf<B> setDataInView(Bundle savedState);
         long getComunidadSelectedId();
     }
 

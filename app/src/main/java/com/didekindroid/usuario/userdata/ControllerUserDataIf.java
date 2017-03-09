@@ -1,7 +1,7 @@
 package com.didekindroid.usuario.userdata;
 
 
-import com.didekindroid.ManagerIf.ControllerIf;
+import com.didekindroid.ManagerIf;
 import com.didekinlib.model.usuario.Usuario;
 
 /**
@@ -9,7 +9,7 @@ import com.didekinlib.model.usuario.Usuario;
  * Date: 29/11/16
  * Time: 17:37
  */
-interface ControllerUserDataIf extends ControllerIf {
+interface ControllerUserDataIf extends ManagerIf.ControllerIdentityIf {
 
     void loadUserData();
 

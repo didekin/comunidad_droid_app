@@ -1,35 +1,40 @@
 package com.didekindroid.usuario.login;
 
-import com.didekindroid.ControllerAbs;
+import android.support.test.rule.ActivityTestRule;
+import android.view.View;
+
+import com.didekindroid.ControllerIdentityAbs;
+import com.didekindroid.ManagerMock;
+import com.didekindroid.MockActivity;
+import com.didekindroid.ViewerMock;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
-import com.didekindroid.usuario.login.ControllerLogin.ReactorLogin.LoginPswdSendObserver;
-import com.didekindroid.usuario.login.ControllerLoginIf.ReactorLoginIf;
+import com.didekindroid.incidencia.list.ManagerIncidSeeIf;
 import com.didekinlib.model.usuario.Usuario;
 
 import org.junit.AfterClass;
+import org.junit.Rule;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.util.concurrent.Callable;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 import io.reactivex.Single;
-import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Predicate;
-import timber.log.Timber;
 
 import static com.didekindroid.security.Oauth2DaoRemote.Oauth2;
-import static com.didekindroid.security.OauthTokenReactor_1_Test.checkInitTokenCache;
-import static com.didekindroid.security.OauthTokenReactor_1_Test.checkNoInitCache;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.security.TokenIdentityCacher.cleanTkCacheActionBoolean;
+import static com.didekindroid.testutil.ActivityTestUtils.checkInitTokenCache;
+import static com.didekindroid.testutil.ActivityTestUtils.checkNoInitCache;
+import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC;
+import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceAndroidMain;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceIoScheduler;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
-import static com.didekindroid.usuario.login.ControllerLogin.ReactorLogin.loginReactor;
-import static com.didekindroid.usuario.login.ControllerLogin.ReactorLogin.loginSingle;
-import static com.didekindroid.usuario.login.ControllerLogin.ReactorLogin.loginUpdateTkCache;
+import static com.didekindroid.usuario.login.ReactorLogin.loginReactor;
+import static com.didekindroid.usuario.login.ReactorLogin.loginSingle;
+import static com.didekindroid.usuario.login.ReactorLogin.loginUpdateTkCache;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_DROID;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_DROID;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
@@ -45,7 +50,6 @@ import static io.reactivex.plugins.RxJavaPlugins.reset;
 import static io.reactivex.schedulers.Schedulers.io;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -54,7 +58,12 @@ import static org.junit.Assert.fail;
  */
 public class ReactorLoginTest {
 
-    final static AtomicInteger flagForExecution = new AtomicInteger(0);
+    public static final String IS_SENT_PSWSD_AFTER = "sent password";
+    public static final String IS_NOT_SENT_PSWSD_AFTER = "not sent password";
+    final static AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
+
+    @Rule
+    public ActivityTestRule<MockActivity> activityRule = new ActivityTestRule<>(MockActivity.class, true, true);
 
     @AfterClass
     public static void resetScheduler()
@@ -66,9 +75,6 @@ public class ReactorLoginTest {
     //    .......................... OBSERVABLES .................................
     //  ====================================================================================
 
-    /**
-     * Synchronous execution: no scheduler specified, everything runs in the test runner thread.
-     */
     @Test
     public void testLoginSingle_1() throws UiException, IOException
     {
@@ -79,9 +85,6 @@ public class ReactorLoginTest {
         cleanOptions(CLEAN_DROID);
     }
 
-    /**
-     * Synchronous execution: no scheduler specified, everything runs in the test runner thread.
-     */
     @Test
     public void testLoginSingle_2() throws UiException, IOException
     {
@@ -100,9 +103,6 @@ public class ReactorLoginTest {
         cleanOptions(CLEAN_DROID);
     }
 
-    /**
-     * Synchronous execution: no scheduler specified, everything runs in the test runner thread.
-     */
     @Test
     public void testLoginSingle_3() throws UiException, IOException
     {
@@ -114,46 +114,6 @@ public class ReactorLoginTest {
         cleanOptions(CLEAN_DROID);
     }
 
-    /**
-     * Synchronous execution: no scheduler specified, everything runs in the test runner thread.
-     * We use a mock ReactorLogin to avoid changing user password in database: it would make impossible to delete user afterwards.
-     */
-    @Test
-    public void testPasswordSendSingle_1() throws UiException, IOException
-    {
-        signUpAndUpdateTk(COMU_REAL_DROID);
-
-        doLoginMockReactor(true).loginPswdSendSingle(USER_DROID.getUserName()).test().assertResult(true);
-        // Check cache cleaning.
-        checkNoInitCache();
-
-        // Es necesario conseguir un nuevo token.
-        TKhandler.initIdentityCache(Oauth2.getPasswordUserToken(USER_DROID.getUserName(), USER_DROID.getPassword()));
-        usuarioDao.deleteUser();
-        cleanWithTkhandler();
-    }
-
-    /**
-     * Synchronous execution: no scheduler specified, everything runs in the test runner thread.
-     * We use a mock ReactorLogin to avoid changing user password in database: it would make impossible to delete user afterwards.
-     */
-    @Test
-    public void testPasswordSendSingle_2() throws UiException, IOException
-    {
-        signUpAndUpdateTk(COMU_REAL_DROID);
-
-        doLoginMockReactor(false).loginPswdSendSingle(USER_DROID.getUserName()).test().assertResult(false);
-        // Check cache is not cleaned.
-        checkInitTokenCache();
-
-        // NO es necesario conseguir un nuevo token.
-        usuarioDao.deleteUser();
-        cleanWithTkhandler();
-    }
-
-    /**
-     * Synchronous execution: we use RxJavaPlugins to replace io scheduler; everything runs in the test runner thread.
-     */
     @Test
     public void testLoginUpdateTkCache_1() throws UiException, IOException
     {
@@ -169,9 +129,6 @@ public class ReactorLoginTest {
         cleanOptions(CLEAN_DROID);
     }
 
-    /**
-     * Synchronous execution: we use RxJavaPlugins to replace io scheduler; everything runs in the test runner thread.
-     */
     @Test
     public void testLoginUpdateTkCache_2() throws UiException, IOException
     {
@@ -188,6 +145,41 @@ public class ReactorLoginTest {
         cleanOptions(CLEAN_DROID);
     }
 
+    /**
+     * We use a mock ReactorLogin to avoid changing user password in database: it would make impossible to delete user afterwards.
+     */
+    @Test
+    public void testPasswordSendSingle_1() throws UiException, IOException
+    {
+        signUpAndUpdateTk(COMU_REAL_DROID);
+
+        new ReactorLoginForTest(true).loginPswdSendSingle(USER_DROID.getUserName()).test().assertResult(true);
+        // Check cache cleaning.
+        checkNoInitCache();
+
+        // Es necesario conseguir un nuevo token.
+        TKhandler.initIdentityCache(Oauth2.getPasswordUserToken(USER_DROID.getUserName(), USER_DROID.getPassword()));
+        usuarioDao.deleteUser();
+        cleanWithTkhandler();
+    }
+
+    /**
+     * We use a mock ReactorLogin to avoid changing user password in database: it would make impossible to delete user afterwards.
+     */
+    @Test
+    public void testPasswordSendSingle_2() throws UiException, IOException
+    {
+        signUpAndUpdateTk(COMU_REAL_DROID);
+
+        new ReactorLoginForTest(false).loginPswdSendSingle(USER_DROID.getUserName()).test().assertResult(false);
+        // Check cache is not cleaned.
+        checkInitTokenCache();
+
+        // NO es necesario conseguir un nuevo token.
+        usuarioDao.deleteUser();
+        cleanWithTkhandler();
+    }
+
     //  =======================================================================================
     // ............................ SUBSCRIPTIONS ..................................
     //  =======================================================================================
@@ -199,29 +191,13 @@ public class ReactorLoginTest {
     public void testValidateLogin_1() throws UiException, IOException
     {
         userComuDaoRemote.regComuAndUserAndUserComu(COMU_REAL_DROID).execute().body();
+        TKhandler.updateIsRegistered(true);
 
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
-            loginReactor.validateLogin(doLoginController(), USER_DROID);
-        } finally {
-            reset();
-        }
-        cleanOptions(CLEAN_DROID);
-    }
-
-    /**
-     * Synchronous execution: we use RxJavaPlugins to replace io scheduler; everything runs in the test runner thread.
-     */
-    @Test
-    public void testValidateLogin_2() throws UiException, IOException
-    {
-        userComuDaoRemote.regComuAndUserAndUserComu(COMU_REAL_DROID).execute().body();
-
-        try {
-            trampolineReplaceIoScheduler();
-            trampolineReplaceAndroidMain();
-            loginReactor.validateLogin(doLoginController(), new Usuario.UsuarioBuilder().userName(USER_DROID.getUserName()).password("password_wrong").build());
+            loginReactor.validateLogin(new ControllerLoginForTest(), USER_DROID);
+            assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC));
         } finally {
             reset();
         }
@@ -234,11 +210,11 @@ public class ReactorLoginTest {
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
-            doLoginMockReactor(true).sendPasswordToUser(doLoginController(), USER_JUAN);
+            new ReactorLoginForTest(true).sendPasswordToUser(new ControllerLoginForTest(), USER_JUAN);
         } finally {
             reset();
         }
-        assertThat(flagForExecution.getAndSet(0), is(23));
+        assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(IS_SENT_PSWSD_AFTER));
     }
 
     @Test
@@ -247,145 +223,88 @@ public class ReactorLoginTest {
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
-            doLoginMockReactor(false).sendPasswordToUser(doLoginController(), USER_JUAN);
+            new ReactorLoginForTest(false).sendPasswordToUser(new ControllerLoginForTest(), USER_JUAN);
         } finally {
             reset();
         }
-        assertThat(flagForExecution.getAndSet(0), is(44));
+        assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(IS_NOT_SENT_PSWSD_AFTER));
     }
 
     //  ============================================================================================
     //    .................................... HELPERS .................................
     /*  ============================================================================================*/
 
-    ReactorLoginIf doLoginMockReactor(final boolean isSendPassword)
-    {
-        return new ReactorLoginIf() {
+    class ReactorLoginForTest extends ReactorLogin {
 
-            //    ................... OBSERVABLES ...........................
+        final boolean isSentPassword;
 
-            /**
-             *  Mock variant without changing password and deleting access token remotely.
-             */
-            @Override
-            public Single<Boolean> loginPswdSendSingle(final String email)
-            {
-                Timber.d("MockVariant.loginPswdSendSingle(), Thread: %s", Thread.currentThread().getName());
-                return fromCallable(new Callable<Boolean>() {
-                    @Override
-                    public Boolean call() throws Exception
-                    {
-                        return isSendPassword;
-                    }
-                }).doOnSuccess(cleanTkCacheActionBoolean);
-            }
+        public ReactorLoginForTest(Boolean isSentPswd)
+        {
+            this.isSentPassword = isSentPswd;
+        }
 
-            // ....................... SUBSCRIPTIONS .........................
+        /**
+         * Mock variant without changing password and deleting access token remotely.
+         */
+        @Override
+        public Single<Boolean> loginPswdSendSingle(final String email)
+        {
+            return fromCallable(new Callable<Boolean>() {
+                @Override
+                public Boolean call() throws Exception
+                {
+                    return isSentPassword;
+                }
+            }).doOnSuccess(cleanTkCacheActionBoolean);
+        }
 
-            @Override
-            public boolean validateLogin(ControllerLoginIf controller, Usuario usuario)
-            {
-                return false;
-            }
-
-            /**
-             *  Mock variant to call mock loginPswdSendSingle.
-             */
-            @Override
-            public boolean sendPasswordToUser(ControllerLoginIf controller, Usuario usuario)
-            {
-                Timber.d("MockVariant.sendPasswordToUser(), Thread: %s", Thread.currentThread().getName());
-                return controller.getSubscriptions().add(
-                        loginPswdSendSingle(usuario.getUserName())
-                                .subscribeOn(io())
-                                .observeOn(mainThread())
-                                .subscribeWith(new LoginPswdSendObserver(controller))
-                );
-            }
-        };
+        /**
+         * Mock variant to call mock loginPswdSendSingle.
+         */
+        @Override
+        public boolean sendPasswordToUser(ControllerLoginIf controller, Usuario usuario)
+        {
+            return controller.getSubscriptions().add(
+                    loginPswdSendSingle(usuario.getUserName())
+                            .subscribeOn(io())
+                            .observeOn(mainThread())
+                            .subscribeWith(new LoginPswdSendObserver(controller))
+            );
+        }
     }
 
-    ControllerLoginIf doLoginController()
-    {
-        return new ControllerLoginIf() {
+    class ControllerLoginForTest extends ControllerIdentityAbs implements ControllerLoginIf {
 
-            ControllerAbs controllerAbs = new ControllerAbs() {
-                @Override
-                public ViewerFirebaseTokenIf getViewer()
-                {
-                    return null;
-                }
-            };
+        @Override
+        public void validateLoginRemote(Usuario usuario)
+        {
+        }
 
-            @Override
-            public void validateLoginRemote(Usuario usuario)
-            {
+        @Override  // Used in testValidateLogin_1
+        public void processBackLoginRemote(Boolean isLoginOk)
+        {
+            assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC), is(BEFORE_METHOD_EXEC));
+        }
+
+        @Override
+        public void doDialogPositiveClick(Usuario usuario)
+        {
+        }
+
+        @Override
+        public ManagerIncidSeeIf.ViewerIf<View,Object> getViewer()
+        {
+            return new ViewerMock<>(new ManagerMock<>(activityRule.getActivity()));
+        }
+
+        @Override  // Used in testSendPasswordToUser_*
+        public void processBackDialogPositiveClick(Boolean isSendPassword)
+        {
+            if (isSendPassword) {
+                assertThat(flagMethodExec.getAndSet(IS_SENT_PSWSD_AFTER), is(BEFORE_METHOD_EXEC));
+            } else {
+                assertThat(flagMethodExec.getAndSet(IS_NOT_SENT_PSWSD_AFTER), is(BEFORE_METHOD_EXEC));
             }
-
-            @Override
-            public void processBackLoginRemote(Boolean isLoginOk)
-            {
-                if (isLoginOk) {
-                    try {
-                        Timber.d("¡¡¡¡¡¡¡¡¡¡¡¡ Login OK  ¡¡¡¡¡¡¡¡¡¡¡¡¡");
-                        checkInitTokenCache();
-                    } catch (UiException e) {
-                        fail();
-                    }
-                } else {
-                    try {
-                        Timber.d("¡¡¡¡¡¡¡¡¡¡¡ Login NOT OK ¡¡¡¡¡¡¡¡¡¡¡¡");
-                        checkNoInitCache();
-                    } catch (UiException e) {
-                        fail();
-                    }
-                }
-            }
-
-            @Override  // Used in testSendPasswordToUser_*
-            public void processBackDialogPositiveClick(Boolean isSendPassword)
-            {
-                if (isSendPassword){
-                    assertThat(flagForExecution.getAndSet(23), is(0));
-                }else{
-                    assertThat(flagForExecution.getAndSet(44), is(0));
-                }
-            }
-
-            @Override
-            public void doDialogPositiveClick(Usuario usuario)
-            {
-            }
-
-            @Override
-            public CompositeDisposable getSubscriptions()
-            {
-                return controllerAbs.getSubscriptions();
-            }
-
-            @Override
-            public int clearSubscriptions()
-            {
-                return controllerAbs.clearSubscriptions();
-            }
-
-            @Override
-            public ViewerFirebaseTokenIf getViewer()
-            {
-                return controllerAbs.getViewer();
-            }
-
-            @Override
-            public boolean isRegisteredUser()
-            {
-                return controllerAbs.isRegisteredUser();
-            }
-
-            @Override
-            public void processReactorError(Throwable e)
-            {
-                controllerAbs.processReactorError(e);
-            }
-        };
+        }
     }
 }

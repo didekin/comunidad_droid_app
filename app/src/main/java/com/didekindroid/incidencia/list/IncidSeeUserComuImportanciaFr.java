@@ -68,6 +68,7 @@ public class IncidSeeUserComuImportanciaFr extends Fragment {
     //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
     //    ============================================================
 
+    @SuppressWarnings("WeakerAccess")
     class IncidImportanciaLoader extends AsyncTask<Incidencia, Void, List<ImportanciaUser>> {
 
         UiException uiException;
