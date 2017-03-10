@@ -1,4 +1,4 @@
-package com.didekindroid;
+package com.didekindroid.api;
 
 import android.app.Activity;
 import android.view.View;

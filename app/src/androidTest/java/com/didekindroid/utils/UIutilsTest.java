@@ -159,7 +159,7 @@ public class UIutilsTest {
     public void testNameFile() throws Exception
     {
         assertThat(app_preferences_file.toString(),
-                is("TokenIdentityCacher.SharedPrefFiles.app_preferences_file"));
+                is("com.didekindroid.security.IdentityCacher.SharedPrefFiles.app_preferences_file"));
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)

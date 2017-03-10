@@ -1,8 +1,8 @@
-package com.didekindroid;
+package com.didekindroid.api;
 
 import android.view.View;
 
-import com.didekindroid.ManagerIf.ViewerIf;
+import com.didekindroid.api.ManagerIf.ViewerIf;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf.ActionForUiExceptionIf;
 

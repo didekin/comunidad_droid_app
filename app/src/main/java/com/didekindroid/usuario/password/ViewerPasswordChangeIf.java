@@ -2,7 +2,7 @@ package com.didekindroid.usuario.password;
 
 import android.view.View;
 
-import com.didekindroid.ManagerIf.ViewerIf;
+import com.didekindroid.api.ManagerIf.ViewerIf;
 
 /**
  * User: pedro@didekin

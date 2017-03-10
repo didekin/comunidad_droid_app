@@ -3,10 +3,10 @@ package com.didekindroid.usuario.login;
 import android.support.test.rule.ActivityTestRule;
 import android.view.View;
 
-import com.didekindroid.ControllerIdentityAbs;
-import com.didekindroid.ManagerMock;
-import com.didekindroid.MockActivity;
-import com.didekindroid.ViewerMock;
+import com.didekindroid.api.ControllerIdentityAbs;
+import com.didekindroid.api.ManagerMock;
+import com.didekindroid.api.ActivityMock;
+import com.didekindroid.api.ViewerMock;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.list.ManagerIncidSeeIf;
 import com.didekinlib.model.usuario.Usuario;
@@ -63,7 +63,7 @@ public class ReactorLoginTest {
     final static AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
 
     @Rule
-    public ActivityTestRule<MockActivity> activityRule = new ActivityTestRule<>(MockActivity.class, true, true);
+    public ActivityTestRule<ActivityMock> activityRule = new ActivityTestRule<>(ActivityMock.class, true, true);
 
     @AfterClass
     public static void resetScheduler()

@@ -3,7 +3,7 @@ package com.didekindroid.incidencia.spinner;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-import com.didekindroid.ControllerAbs;
+import com.didekindroid.api.ControllerAbs;
 import com.didekindroid.R;
 import com.didekindroid.incidencia.list.ManagerIncidSeeIf;
 import com.didekindroid.incidencia.spinner.ManagerComuSpinnerIf.ControllerComuSpinnerIf;

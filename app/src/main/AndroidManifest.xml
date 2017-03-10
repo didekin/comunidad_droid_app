@@ -185,7 +185,7 @@
                 android:value=".incidencia.list.IncidSeeOpenByComuAc"/>
         </activity>
         <activity
-            android:name=".incidencia.core.IncidRegAc"
+            android:name=".incidencia.core.reg.IncidRegAc"
             android:label="@string/incid_reg_ac_label"
             android:parentActivityName=".incidencia.list.IncidSeeOpenByComuAc"
             android:windowSoftInputMode="stateHidden">

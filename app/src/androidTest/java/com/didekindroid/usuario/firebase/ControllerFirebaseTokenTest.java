@@ -4,9 +4,9 @@ import android.app.Activity;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekindroid.ManagerIf;
-import com.didekindroid.ManagerMock;
-import com.didekindroid.MockActivity;
+import com.didekindroid.api.ManagerIf;
+import com.didekindroid.api.ManagerMock;
+import com.didekindroid.api.ActivityMock;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.core.ControllerFirebaseTokenIf;
 
@@ -21,7 +21,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
-import static com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf.ViewerFirebaseToken.newViewerFirebaseToken;
+import static com.didekindroid.usuario.firebase.ViewerFirebaseToken.newViewerFirebaseToken;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_TK_HANDLER;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static org.hamcrest.CoreMatchers.is;
@@ -38,7 +38,7 @@ public class ControllerFirebaseTokenTest {
     static final AtomicReference<String> flagControl = new AtomicReference<>(BEFORE_METHOD_EXEC);
 
     @Rule
-    public ActivityTestRule<? extends Activity> activityRule = new ActivityTestRule<>(MockActivity.class, true, true);
+    public ActivityTestRule<? extends Activity> activityRule = new ActivityTestRule<>(ActivityMock.class, true, true);
 
     ManagerIf manager;
     ControllerFirebaseToken controller;

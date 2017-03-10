@@ -10,7 +10,7 @@ import android.support.annotation.RequiresApi;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekindroid.ManagerMock;
+import com.didekindroid.api.ManagerMock;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.usuario.firebase.ControllerFirebaseToken;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -25,7 +25,7 @@ import java.util.concurrent.Callable;
 import static android.content.Context.NOTIFICATION_SERVICE;
 import static com.didekindroid.incidencia.testutils.GcmConstantForTests.PACKAGE_TEST;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
-import static com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf.ViewerFirebaseToken.newViewerFirebaseToken;
+import static com.didekindroid.usuario.firebase.ViewerFirebaseToken.newViewerFirebaseToken;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static java.util.concurrent.TimeUnit.SECONDS;

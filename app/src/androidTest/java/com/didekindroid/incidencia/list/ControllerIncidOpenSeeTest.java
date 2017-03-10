@@ -6,11 +6,11 @@ import android.support.test.rule.ActivityTestRule;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-import com.didekindroid.ManagerIf;
-import com.didekindroid.ManagerMock;
-import com.didekindroid.MockActivity;
-import com.didekindroid.ViewerMock;
-import com.didekindroid.ViewerWithSelectIf;
+import com.didekindroid.api.ManagerIf;
+import com.didekindroid.api.ManagerMock;
+import com.didekindroid.api.ActivityMock;
+import com.didekindroid.api.ViewerMock;
+import com.didekindroid.api.ViewerWithSelectIf;
 import com.didekindroid.incidencia.list.ManagerIncidSeeIf.ViewerIncidSeeIf;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
@@ -26,7 +26,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.didekindroid.ManagerMock.flagManageMockExecMethod;
+import static com.didekindroid.api.ManagerMock.flagManageMockExecMethod;
 import static com.didekindroid.incidencia.list.ReactorIncidSeeForTest.AFTER_seeIncidImportancia_EXEC;
 import static com.didekindroid.incidencia.list.ReactorIncidSeeForTest.AFTER_seeIncidOpenList_EXEC;
 import static com.didekindroid.incidencia.list.ReactorIncidSeeForTest.flagReactorMethodExec;
@@ -48,7 +48,7 @@ import static org.junit.Assert.assertThat;
 public class ControllerIncidOpenSeeTest{
 
     @Rule
-    public ActivityTestRule<MockActivity> activityRule = new ActivityTestRule<>(MockActivity.class, true, true);
+    public ActivityTestRule<ActivityMock> activityRule = new ActivityTestRule<>(ActivityMock.class, true, true);
 
     Activity activity;
     Incidencia incidencia;

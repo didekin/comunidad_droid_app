@@ -2,7 +2,7 @@ package com.didekindroid.incidencia.list;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekindroid.ControllerIdentityAbs;
+import com.didekindroid.api.ControllerIdentityAbs;
 import com.didekindroid.incidencia.list.ManagerIncidSeeIf.ControllerIncidSeeIf;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;

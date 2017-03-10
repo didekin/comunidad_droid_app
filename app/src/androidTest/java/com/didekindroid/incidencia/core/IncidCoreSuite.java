@@ -1,5 +1,8 @@
 package com.didekindroid.incidencia.core;
 
+import com.didekindroid.incidencia.core.reg.IncidRegAcTest_1;
+import com.didekindroid.incidencia.core.reg.IncidRegAc_GCM_Test;
+
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 

@@ -3,7 +3,7 @@ package com.didekindroid.incidencia.list;
 import android.support.annotation.NonNull;
 import android.widget.ArrayAdapter;
 
-import com.didekindroid.ControllerIdentityAbs;
+import com.didekindroid.api.ControllerIdentityAbs;
 import com.didekindroid.incidencia.list.ManagerIncidSeeIf.ControllerIncidSeeIf;
 import com.didekindroid.incidencia.list.ManagerIncidSeeIf.ReactorIncidSeeIf;
 import com.didekindroid.incidencia.list.ManagerIncidSeeIf.ViewerIncidSeeIf;

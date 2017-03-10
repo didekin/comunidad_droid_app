@@ -3,8 +3,8 @@ package com.didekindroid.incidencia.list;
 import android.os.Bundle;
 import android.widget.ListView;
 
-import com.didekindroid.ManagerIf;
-import com.didekindroid.ViewerWithSelectIf;
+import com.didekindroid.api.ManagerIf;
+import com.didekindroid.api.ViewerWithSelectIf;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
@@ -12,9 +12,6 @@ import com.didekinlib.model.incidencia.dominio.Resolucion;
 
 import java.io.Serializable;
 import java.util.List;
-
-import io.reactivex.observers.DisposableMaybeObserver;
-import timber.log.Timber;
 
 /**
  * User: pedro@didekin

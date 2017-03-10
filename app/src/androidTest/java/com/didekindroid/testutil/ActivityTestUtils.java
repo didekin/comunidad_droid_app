@@ -11,10 +11,10 @@ import android.view.View;
 import android.widget.BaseAdapter;
 import android.widget.DatePicker;
 
-import com.didekindroid.ManagerIf;
-import com.didekindroid.ManagerIf.ControllerIf;
-import com.didekindroid.ManagerIf.ViewerIf;
 import com.didekindroid.R;
+import com.didekindroid.api.ManagerIf;
+import com.didekindroid.api.ManagerIf.ControllerIf;
+import com.didekindroid.api.ManagerIf.ViewerIf;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf.ActionForUiExceptionIf;
 import com.didekindroid.security.IdentityCacher;
@@ -115,7 +115,8 @@ public final class ActivityTestUtils {
         };
     }
 
-    public static Callable<Boolean> isViewWithTextOk(final String textToCheck){
+    public static Callable<Boolean> isViewWithTextOk(final String textToCheck)
+    {
 
         return new Callable<Boolean>() {
             public Boolean call() throws Exception
@@ -141,10 +142,14 @@ public final class ActivityTestUtils {
         controller.getSubscriptions().add(new Disposable() {
             @Override
             public void dispose()
-            {}
+            {
+            }
+
             @Override
             public boolean isDisposed()
-            { return false; }
+            {
+                return false;
+            }
         });
         assertThat(controller.getSubscriptions().size(), is(1));
     }
@@ -207,7 +212,7 @@ public final class ActivityTestUtils {
 
     //    ============================= EXCEPTIONS/ERRORS ===================================
 
-    public static ActionForUiExceptionIf checkProcessCtrlError(final ViewerIf viewer, final ExceptionMsgIf exceptionMsg, ActionForUiExceptionIf actionToExpect)
+    public static boolean checkProcessCtrlError(final ViewerIf viewer, final ExceptionMsgIf exceptionMsg, ActionForUiExceptionIf actionToExpect)
     {
         final Activity activityError = viewer.getManager().getActivity();
         final AtomicReference<ActionForUiExceptionIf> actionException = new AtomicReference<>(null);
@@ -224,7 +229,8 @@ public final class ActivityTestUtils {
                 );
             }
         });
-        return actionException.get();
+        waitAtMost(1, SECONDS).untilAtomic(actionException, notNullValue());
+        return actionException.get().getActivityToGoClass().equals(actionToExpect.getActivityToGoClass());
     }
 
     public static void checkProcessCtrlErrorOnlyToast(final ViewerIf viewer,
@@ -240,6 +246,27 @@ public final class ActivityTestUtils {
             }
         });
         onView(withId(activityLayoutId)).check(matches(isDisplayed()));
+    }
+
+    public static boolean checkProcessViewerCtrError(final ManagerIf manager, final ExceptionMsgIf exceptionMsg, ActionForUiExceptionIf actionToExpect)
+    {
+        final Activity activity = manager.getActivity();
+        final AtomicReference<ActionForUiExceptionIf> actionException = new AtomicReference<>(null);
+
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                assertThat(actionException.compareAndSet(
+                        null,
+                        manager.processViewerError(new UiException(new ErrorBean(exceptionMsg)))
+                        ),
+                        is(true)
+                );
+            }
+        });
+        waitAtMost(1, SECONDS).untilAtomic(actionException, notNullValue());
+        return actionException.get().getActivityToGoClass().equals(actionToExpect.getActivityToGoClass());
     }
 
     //    ============================= IDENTITY CACHE ===================================
@@ -264,7 +291,8 @@ public final class ActivityTestUtils {
         assertThat(TKhandler.getRefreshTokenFile().exists(), CoreMatchers.is(false));
     }
 
-    public static Callable<String> getRefreshTokenValue(final IdentityCacher identityCacher){
+    public static Callable<String> getRefreshTokenValue(final IdentityCacher identityCacher)
+    {
         return new Callable<String>() {
             @Override
             public String call() throws Exception
@@ -300,14 +328,19 @@ public final class ActivityTestUtils {
         }
     }
 
-    public static void checkReplaceViewStd(final ViewerIf<View,Object> viewer, int resorceIdNextView)
+    public static void checkViewerReplaceView(final ViewerIf<View, Object> viewer, int resorceIdNextView)
     {
-        Activity activityOld = (Activity) viewer;
-        activityOld.runOnUiThread(new Runnable() {
+        final ManagerIf<Object> manager = viewer.getManager();
+        checkManagerReplaceView(manager, resorceIdNextView);
+    }
+
+    public static void checkManagerReplaceView(final ManagerIf<Object> manager, int resorceIdNextView)
+    {
+        manager.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run()
             {
-                viewer.getManager().replaceRootView(null);
+                manager.replaceRootView(null);
             }
         });
         waitAtMost(1, SECONDS).until(isResourceIdDisplayed(resorceIdNextView));

@@ -1,6 +1,6 @@
 package com.didekindroid.incidencia.core;
 
-import com.didekindroid.ManagerIf;
+import com.didekindroid.api.ManagerIf;
 
 /**
  * User: pedro@didekin

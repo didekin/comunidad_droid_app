@@ -4,10 +4,10 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.view.View;
 
-import com.didekindroid.ControllerIdentityAbs;
-import com.didekindroid.ManagerMock;
-import com.didekindroid.MockActivity;
-import com.didekindroid.ViewerMock;
+import com.didekindroid.api.ControllerIdentityAbs;
+import com.didekindroid.api.ManagerMock;
+import com.didekindroid.api.ActivityMock;
+import com.didekindroid.api.ViewerMock;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.list.ManagerIncidSeeIf;
 import com.didekindroid.usuario.delete.ReactorDeleteMe.DeleteMeSingleObserver;
@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import io.reactivex.Single;
 
-import static com.didekindroid.ViewerMock.flagViewerMockMethodExec;
+import static com.didekindroid.api.ViewerMock.flagViewerMockMethodExec;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
@@ -54,7 +54,7 @@ public class ReactorDeleteMeTest {
     final static AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
 
     @Rule
-    public ActivityTestRule<MockActivity> activityRule = new ActivityTestRule<>(MockActivity.class, true, true);
+    public ActivityTestRule<ActivityMock> activityRule = new ActivityTestRule<>(ActivityMock.class, true, true);
 
     @AfterClass
     public static void resetScheduler()

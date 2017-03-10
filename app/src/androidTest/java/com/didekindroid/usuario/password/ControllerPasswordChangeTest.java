@@ -3,10 +3,10 @@ package com.didekindroid.usuario.password;
 import android.support.test.rule.ActivityTestRule;
 import android.view.View;
 
-import com.didekindroid.ManagerIf;
-import com.didekindroid.ManagerMock;
-import com.didekindroid.MockActivity;
-import com.didekindroid.ViewerMock;
+import com.didekindroid.api.ManagerIf;
+import com.didekindroid.api.ManagerMock;
+import com.didekindroid.api.ActivityMock;
+import com.didekindroid.api.ViewerMock;
 import com.didekindroid.usuario.password.ControllerPasswordChangeIf.ReactorPswdChangeIf;
 import com.didekinlib.model.usuario.Usuario;
 
@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import io.reactivex.Completable;
 
-import static com.didekindroid.ManagerMock.flagManageMockExecMethod;
+import static com.didekindroid.api.ManagerMock.flagManageMockExecMethod;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
@@ -38,7 +38,7 @@ public class ControllerPasswordChangeTest {
     final static AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
 
     @Rule
-    public ActivityTestRule<MockActivity> activityRule = new ActivityTestRule<>(MockActivity.class, true, true);
+    public ActivityTestRule<ActivityMock> activityRule = new ActivityTestRule<>(ActivityMock.class, true, true);
 
     ControllerPasswordChangeIf controller;
     ViewerPasswordChangeIf<View, Object> viewer;

@@ -2,7 +2,7 @@ package com.didekindroid.incidencia.list;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekindroid.ControllerIdentityAbs;
+import com.didekindroid.api.ControllerIdentityAbs;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.list.ManagerIncidSeeIf.ControllerIncidSeeIf;
 import com.didekinlib.http.ErrorBean;
@@ -22,7 +22,6 @@ import io.reactivex.Maybe;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_WITH_EXCEPTION_EXEC;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
 import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;

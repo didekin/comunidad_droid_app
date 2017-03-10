@@ -3,8 +3,10 @@ package com.didekindroid.util;
 import android.app.Activity;
 import android.util.ArrayMap;
 
+import com.didekindroid.api.ActivityMock;
+import com.didekindroid.api.ActivityNextMock;
 import com.didekindroid.comunidad.ComuSearchAc;
-import com.didekindroid.incidencia.core.IncidRegAc;
+import com.didekindroid.incidencia.core.reg.IncidRegAc;
 import com.didekindroid.incidencia.list.IncidSeeOpenByComuAc;
 import com.didekindroid.usuario.delete.DeleteMeAc;
 import com.didekindroid.usuario.login.LoginAc;
@@ -30,5 +32,8 @@ public class DefaultNextAcRouter {
         routerMap.put(LoginAc.class, ComuSearchAc.class);
         routerMap.put(PasswordChangeAc.class, UserDataAc.class);
         routerMap.put(UserDataAc.class, SeeUserComuByUserAc.class);
+
+        // Tests.
+        routerMap.put(ActivityMock.class, ActivityNextMock.class);
     }
 }

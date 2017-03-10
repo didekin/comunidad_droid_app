@@ -1,7 +1,6 @@
-package com.didekindroid;
+package com.didekindroid.api;
 
 import com.didekindroid.exception.UiException;
-import com.didekindroid.incidencia.list.ManagerIncidSeeIf;
 
 import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
@@ -24,7 +23,7 @@ public abstract class ControllerAbs implements ManagerIf.ControllerIf {
         subscriptions = new CompositeDisposable();
     }
 
-    public abstract ManagerIncidSeeIf.ViewerIf getViewer();
+    public abstract ManagerIf.ViewerIf getViewer();
 
     @Override
     public CompositeDisposable getSubscriptions()

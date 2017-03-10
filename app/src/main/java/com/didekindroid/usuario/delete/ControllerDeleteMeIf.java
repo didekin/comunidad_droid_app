@@ -1,6 +1,6 @@
 package com.didekindroid.usuario.delete;
 
-import com.didekindroid.ManagerIf;
+import com.didekindroid.api.ManagerIf;
 
 /**
  * User: pedro@didekin

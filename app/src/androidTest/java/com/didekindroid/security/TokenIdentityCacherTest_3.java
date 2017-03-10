@@ -4,8 +4,8 @@ import android.app.Activity;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekindroid.ManagerMock;
-import com.didekindroid.MockActivity;
+import com.didekindroid.api.ManagerMock;
+import com.didekindroid.api.ActivityMock;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.core.ControllerFirebaseTokenIf;
 import com.didekindroid.usuario.firebase.ControllerFirebaseToken;
@@ -16,7 +16,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf.ViewerFirebaseToken.newViewerFirebaseToken;
+import static com.didekindroid.usuario.firebase.ViewerFirebaseToken.newViewerFirebaseToken;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_TK_HANDLER;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static org.hamcrest.CoreMatchers.is;
@@ -31,7 +31,7 @@ import static org.junit.Assert.assertThat;
 public class TokenIdentityCacherTest_3 {
 
     @Rule
-    public ActivityTestRule<? extends Activity> activityRule = new ActivityTestRule<>(MockActivity.class, true, true);
+    public ActivityTestRule<? extends Activity> activityRule = new ActivityTestRule<>(ActivityMock.class, true, true);
 
     @After
     public void cleanFileToken() throws UiException

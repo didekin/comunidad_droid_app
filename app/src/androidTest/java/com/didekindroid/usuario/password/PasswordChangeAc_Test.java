@@ -32,7 +32,7 @@ import static com.didekindroid.R.id.user_data_ac_layout;
 import static com.didekindroid.exception.UiExceptionRouter.GENERIC_APP_ACC;
 import static com.didekindroid.testutil.ActivityTestUtils.checkProcessCtrlError;
 import static com.didekindroid.testutil.ActivityTestUtils.checkProcessCtrlErrorOnlyToast;
-import static com.didekindroid.testutil.ActivityTestUtils.checkReplaceViewStd;
+import static com.didekindroid.testutil.ActivityTestUtils.checkViewerReplaceView;
 import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
@@ -167,7 +167,7 @@ public class PasswordChangeAc_Test implements ExtendableTestAc {
     @Test
     public void testProcessControllerError_1()
     {
-        checkProcessCtrlError(activity, GENERIC_INTERNAL_ERROR, GENERIC_APP_ACC);
+        assertThat(checkProcessCtrlError(activity, GENERIC_INTERNAL_ERROR, GENERIC_APP_ACC), is(true));
     }
 
     @Test
@@ -180,7 +180,7 @@ public class PasswordChangeAc_Test implements ExtendableTestAc {
     @Test
     public void testReplaceView()
     {
-        checkReplaceViewStd(activity, getNextViewResourceId());
+        checkViewerReplaceView(activity, getNextViewResourceId());
         checkToastInTest(R.string.password_remote_change, activity);
     }
 

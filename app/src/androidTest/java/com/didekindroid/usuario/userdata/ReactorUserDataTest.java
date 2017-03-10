@@ -4,10 +4,10 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.view.View;
 
-import com.didekindroid.ControllerIdentityAbs;
-import com.didekindroid.ManagerMock;
-import com.didekindroid.MockActivity;
-import com.didekindroid.ViewerMock;
+import com.didekindroid.api.ControllerIdentityAbs;
+import com.didekindroid.api.ManagerMock;
+import com.didekindroid.api.ActivityMock;
+import com.didekindroid.api.ViewerMock;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.list.ManagerIncidSeeIf;
 import com.didekindroid.security.Oauth2DaoRemote;
@@ -29,7 +29,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Predicate;
 import io.reactivex.observers.TestObserver;
 
-import static com.didekindroid.ViewerMock.flagViewerMockMethodExec;
+import static com.didekindroid.api.ViewerMock.flagViewerMockMethodExec;
 import static com.didekindroid.security.OauthTokenReactor.tokenReactor;
 import static com.didekindroid.testutil.ConstantExecution.VIEWER_AFTER_ERROR_CONTROL;
 import static com.didekindroid.testutil.ConstantExecution.VIEWER_FLAG_INITIAL;
@@ -65,7 +65,7 @@ import static org.junit.Assert.assertThat;
 public class ReactorUserDataTest {
 
     @Rule
-    public ActivityTestRule<MockActivity> activityRule = new ActivityTestRule<>(MockActivity.class, true, true);
+    public ActivityTestRule<ActivityMock> activityRule = new ActivityTestRule<>(ActivityMock.class, true, true);
 
     Usuario usuarioOrig;
     OauthTokenReactorIf oauthTokenReactor = tokenReactor;

@@ -2,7 +2,7 @@ package com.didekindroid.usuario.password;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekindroid.ControllerIdentityAbs;
+import com.didekindroid.api.ControllerIdentityAbs;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.list.ManagerIncidSeeIf;
 import com.didekinlib.http.ErrorBean;

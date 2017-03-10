@@ -3,7 +3,7 @@ package com.didekindroid.incidencia.spinner;
 import android.os.Bundle;
 import android.widget.Spinner;
 
-import com.didekindroid.ManagerIf;
+import com.didekindroid.api.ManagerIf;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf.ActionForUiExceptionIf;
 import com.didekindroid.incidencia.spinner.ManagerComuSpinnerIf.ControllerComuSpinnerIf;

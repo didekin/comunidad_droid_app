@@ -12,7 +12,7 @@ import com.didekindroid.incidencia.comment.IncidCommentSeeAc;
 import com.didekindroid.incidencia.resolucion.IncidResolucionRegEditSeeAc;
 import com.didekindroid.incidencia.list.IncidSeeClosedByComuAc;
 import com.didekindroid.incidencia.list.IncidSeeOpenByComuAc;
-import com.didekindroid.incidencia.core.IncidRegAc;
+import com.didekindroid.incidencia.core.reg.IncidRegAc;
 import com.didekindroid.usuario.delete.DeleteMeAc;
 import com.didekindroid.usuario.login.LoginAc;
 import com.didekindroid.usuario.password.PasswordChangeAc;

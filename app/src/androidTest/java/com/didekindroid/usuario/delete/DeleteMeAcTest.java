@@ -10,6 +10,7 @@ import com.didekindroid.exception.UiException;
 import com.didekinlib.model.usuario.Usuario;
 
 import org.hamcrest.CoreMatchers;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -24,7 +25,7 @@ import static com.didekindroid.R.id.comu_search_ac_linearlayout;
 import static com.didekindroid.exception.UiExceptionRouter.GENERIC_APP_ACC;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkProcessCtrlError;
-import static com.didekindroid.testutil.ActivityTestUtils.checkReplaceViewStd;
+import static com.didekindroid.testutil.ActivityTestUtils.checkViewerReplaceView;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.testutil.ActivityTestUtils.hasRegisteredFlag;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
@@ -112,6 +113,7 @@ public class DeleteMeAcTest implements ExtendableTestAc {
         InstrumentationRegistry.getInstrumentation().callActivityOnStop(activity);
         // Check.
         assertThat(controller.getSubscriptions().size(), CoreMatchers.is(0));
+        cleanOptions(CLEAN_PEPE);
     }
 
     @Test
@@ -126,13 +128,14 @@ public class DeleteMeAcTest implements ExtendableTestAc {
     @Test
     public void testReplaceView() throws Exception
     {
-        checkReplaceViewStd(activity, getNextViewResourceId());
+        checkViewerReplaceView(activity, getNextViewResourceId());
+        cleanOptions(CLEAN_PEPE);
     }
 
     @Test
     public void testProcessControllerError() throws UiException
     {
-        checkProcessCtrlError(activity, GENERIC_INTERNAL_ERROR, GENERIC_APP_ACC);
+        assertThat(checkProcessCtrlError(activity, GENERIC_INTERNAL_ERROR, GENERIC_APP_ACC), is(true));
         cleanOptions(CLEAN_PEPE);
     }
 

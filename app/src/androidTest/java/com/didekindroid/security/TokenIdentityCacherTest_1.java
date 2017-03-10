@@ -1,12 +1,11 @@
 package com.didekindroid.security;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.support.test.InstrumentationRegistry;
+import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekindroid.ManagerMock;
-import com.didekindroid.MockActivity;
+import com.didekindroid.api.ActivityMock;
+import com.didekindroid.api.ManagerMock;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.core.ControllerFirebaseTokenIf;
 import com.didekindroid.usuario.firebase.ControllerFirebaseToken;
@@ -14,6 +13,7 @@ import com.didekinlib.http.oauth2.SpringOauthToken;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -23,7 +23,7 @@ import static com.didekindroid.security.TokenIdentityCacher.cleanTokenAndUnregis
 import static com.didekindroid.security.TokenIdentityCacher.cleanTokenCacheAction;
 import static com.didekindroid.security.TokenIdentityCacher.initTokenAction;
 import static com.didekindroid.security.TokenIdentityCacher.initTokenAndRegisterFunc;
-import static com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf.ViewerFirebaseToken.newViewerFirebaseToken;
+import static com.didekindroid.usuario.firebase.ViewerFirebaseToken.newViewerFirebaseToken;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_TK_HANDLER;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.util.IoHelper.readStringFromFile;
@@ -42,9 +42,15 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class TokenIdentityCacherTest_1 {
 
+    @Rule
+    public ActivityTestRule<? extends Activity> activityRule = new ActivityTestRule<>(ActivityMock.class, true, true);
+
+    Activity activity;
+
     @Before
     public void getFixture()
     {
+        activity = activityRule.getActivity();
     }
 
     @After
@@ -106,14 +112,12 @@ public class TokenIdentityCacherTest_1 {
     @Test
     public void testUpdateIsRegistered_2() throws Exception
     {
-        Intent intent = new Intent();
-        intent.setClass(InstrumentationRegistry.getContext(),MockActivity.class);
-        Activity activity = InstrumentationRegistry.getInstrumentation().startActivitySync(intent);
         ControllerFirebaseTokenIf controller = new ControllerFirebaseToken(newViewerFirebaseToken(new ManagerMock(activity)));
         TKhandler.updateIsRegistered(false);
+        // Actualiza a falso.
         assertThat(controller.isGcmTokenSentServer(), is(false));
         TKhandler.updateIsRegistered(true);
-        // No actualizamos.
+        // No actualizamos a verdadero.
         assertThat(controller.isGcmTokenSentServer(), is(false));
     }
 

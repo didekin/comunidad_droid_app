@@ -1,7 +1,7 @@
 package com.didekindroid.usuario.userdata;
 
 
-import com.didekindroid.ManagerIf;
+import com.didekindroid.api.ManagerIf;
 import com.didekinlib.model.usuario.Usuario;
 
 /**

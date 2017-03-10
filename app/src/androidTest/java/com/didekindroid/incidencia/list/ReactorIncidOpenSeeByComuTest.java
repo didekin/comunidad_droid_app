@@ -1,6 +1,6 @@
 package com.didekindroid.incidencia.list;
 
-import com.didekindroid.ControllerIdentityAbs;
+import com.didekindroid.api.ControllerIdentityAbs;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.list.ManagerIncidSeeIf.ControllerIncidSeeIf;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;

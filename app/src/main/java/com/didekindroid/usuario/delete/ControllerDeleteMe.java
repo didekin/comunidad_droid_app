@@ -2,8 +2,8 @@ package com.didekindroid.usuario.delete;
 
 import android.view.View;
 
-import com.didekindroid.ControllerIdentityAbs;
-import com.didekindroid.ManagerIf.ViewerIf;
+import com.didekindroid.api.ControllerIdentityAbs;
+import com.didekindroid.api.ManagerIf.ViewerIf;
 import com.didekindroid.security.IdentityCacher;
 
 import timber.log.Timber;

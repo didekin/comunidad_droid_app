@@ -24,7 +24,7 @@ public class IncidenciaBean {
     private String descripcion;
     private long comunidadId;
 
-    IncidenciaBean()
+    public IncidenciaBean()
     {
     }
 
@@ -46,7 +46,7 @@ public class IncidenciaBean {
         return this;
     }
 
-    Incidencia makeIncidenciaFromView(final View mFragmentView, StringBuilder errorMsg, Resources resources)
+    public Incidencia makeIncidenciaFromView(final View mFragmentView, StringBuilder errorMsg, Resources resources)
     {
         setDescripcion(((EditText) mFragmentView.findViewById(R.id.incid_reg_desc_ed)).getText().toString());
         if (validateBean(errorMsg, resources)) {

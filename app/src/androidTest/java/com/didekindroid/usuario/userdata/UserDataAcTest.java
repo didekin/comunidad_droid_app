@@ -44,9 +44,8 @@ import static com.didekindroid.exception.UiExceptionRouter.GENERIC_APP_ACC;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_OPEN_BY_COMU_AC;
 import static com.didekindroid.testutil.ActivityTestUtils.checkProcessCtrlError;
 import static com.didekindroid.testutil.ActivityTestUtils.checkProcessCtrlErrorOnlyToast;
-import static com.didekindroid.testutil.ActivityTestUtils.checkReplaceViewStd;
-import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
+import static com.didekindroid.testutil.ActivityTestUtils.checkViewerReplaceView;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
@@ -88,11 +87,9 @@ import static org.junit.Assert.fail;
  */
 public class UserDataAcTest implements ExtendableTestAc {
 
+    final static AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
     UserDataAc activity;
     Usuario registeredUser;
-
-    final static AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
-
     @Rule
     public IntentsTestRule<? extends Activity> mActivityRule = new IntentsTestRule<UserDataAc>(UserDataAc.class) {
         @Override
@@ -214,13 +211,13 @@ public class UserDataAcTest implements ExtendableTestAc {
     @Test
     public void testProcessControllerError_2()
     {
-        checkProcessCtrlError(activity, GENERIC_INTERNAL_ERROR, GENERIC_APP_ACC);
+        assertThat(checkProcessCtrlError(activity, GENERIC_INTERNAL_ERROR, GENERIC_APP_ACC), is(true));
     }
 
     @Test
     public void testReplaceView()
     {
-        checkReplaceViewStd(activity, getNextViewResourceId());
+        checkViewerReplaceView(activity, getNextViewResourceId());
     }
 
     // ============================================================
@@ -300,9 +297,7 @@ public class UserDataAcTest implements ExtendableTestAc {
                 assertThat(activity.checkUserData(), is(false));
             }
         });
-
-        waitAtMost(1, SECONDS).until(fieldIn(activity).ofType(UsuarioBean.class), notNullValue());
-        checkToastInTest(R.string.email_hint, activity);
+        waitAtMost(1, SECONDS).until(isToastInView(R.string.email_hint, activity));
     }
 
     @Test
@@ -457,7 +452,7 @@ public class UserDataAcTest implements ExtendableTestAc {
         assertThat(((EditText) activity.acView.findViewById(R.id.reg_usuario_alias_ediT)).getText().toString(), is(alias));
     }
 
-    class ControllerUserDataForTest extends ControllerUserData{
+    class ControllerUserDataForTest extends ControllerUserData {
 
         ControllerUserDataForTest(ViewerUserDataIf<View, Object> viewer)
         {

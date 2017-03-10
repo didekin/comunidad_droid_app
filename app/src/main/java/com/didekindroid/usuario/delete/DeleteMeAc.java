@@ -8,7 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import com.didekindroid.ManagerIf;
+import com.didekindroid.api.ManagerIf;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf;
@@ -18,7 +18,7 @@ import timber.log.Timber;
 
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
-import static com.didekindroid.ManagerIf.ViewerIf;
+import static com.didekindroid.api.ManagerIf.ViewerIf;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
 import static com.didekindroid.util.DefaultNextAcRouter.routerMap;
 import static com.didekindroid.util.UIutils.assertTrue;

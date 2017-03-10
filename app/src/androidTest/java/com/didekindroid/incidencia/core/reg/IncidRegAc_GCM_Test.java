@@ -1,4 +1,4 @@
-package com.didekindroid.incidencia.core;
+package com.didekindroid.incidencia.core.reg;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -7,6 +7,7 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.exception.UiException;
+import com.didekindroid.incidencia.core.Incidencia_GCM_Test;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.usuario.Usuario;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;

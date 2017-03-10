@@ -4,8 +4,8 @@ import android.os.Bundle;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
-import com.didekindroid.ManagerIf;
-import com.didekindroid.ViewerWithSelectIf;
+import com.didekindroid.api.ManagerIf;
+import com.didekindroid.api.ViewerWithSelectIf;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import java.util.Collection;

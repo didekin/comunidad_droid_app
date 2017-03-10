@@ -1,4 +1,4 @@
-package com.didekindroid;
+package com.didekindroid.api;
 
 import com.didekindroid.security.IdentityCacher;
 

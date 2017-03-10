@@ -15,7 +15,7 @@ import android.util.ArrayMap;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.MockActivity;
+import com.didekindroid.api.ActivityMock;
 import com.google.firebase.messaging.RemoteMessage;
 
 import org.junit.After;
@@ -72,12 +72,12 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class IncidFirebaseDownMsgHandlerTest {
 
-    MockActivity mActivity;
+    ActivityMock mActivity;
     long comunidadId;
     Map<String, String> data;
     NotificationManager notificationManager;
     @Rule
-    public IntentsTestRule<MockActivity> intentRule = new IntentsTestRule<MockActivity>(MockActivity.class) {
+    public IntentsTestRule<ActivityMock> intentRule = new IntentsTestRule<ActivityMock>(ActivityMock.class) {
 
         @Override
         protected void beforeActivityLaunched()
@@ -116,7 +116,7 @@ public class IncidFirebaseDownMsgHandlerTest {
         assertThat(stackBuilder.getIntentCount(), is(2));
         Intent[] intents = stackBuilder.getIntents();
         assertThat(intents[0].getComponent().getShortClassName(), is(".comunidad.ComuSearchAc"));
-        assertThat(intents[1].getComponent().getShortClassName(), is(".incidencia.manager.IncidSeeOpenByComuAc"));
+        assertThat(intents[1].getComponent().getShortClassName(), is(".incidencia.list.IncidSeeOpenByComuAc"));
         assertThat(intents[1].getLongExtra(COMUNIDAD_ID.key, 0L), is(comunidadId));
     }
 

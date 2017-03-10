@@ -19,7 +19,7 @@ public class IncidImportanciaBean {
 
     private short importancia;
 
-    IncidImportanciaBean()
+    public IncidImportanciaBean()
     {
     }
 
@@ -57,7 +57,7 @@ public class IncidImportanciaBean {
         }
     }
 
-    IncidImportancia makeIncidImportancia(StringBuilder errorMsg, Resources resources, View fragmentView, IncidenciaBean incidenciaBean)
+    public IncidImportancia makeIncidImportancia(StringBuilder errorMsg, Resources resources, View fragmentView, IncidenciaBean incidenciaBean)
     {
         final Incidencia incidencia = incidenciaBean.makeIncidenciaFromView(fragmentView, errorMsg, resources);
 

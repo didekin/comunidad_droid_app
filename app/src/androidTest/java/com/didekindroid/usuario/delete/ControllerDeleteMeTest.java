@@ -3,10 +3,10 @@ package com.didekindroid.usuario.delete;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekindroid.ManagerIf;
-import com.didekindroid.ManagerMock;
-import com.didekindroid.MockActivity;
-import com.didekindroid.ViewerMock;
+import com.didekindroid.api.ManagerIf;
+import com.didekindroid.api.ManagerMock;
+import com.didekindroid.api.ActivityMock;
+import com.didekindroid.api.ViewerMock;
 import com.didekindroid.usuario.delete.ControllerDeleteMeIf.ReactorDeleteMeIf;
 
 import org.junit.Before;
@@ -16,7 +16,7 @@ import org.junit.runner.RunWith;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-import static com.didekindroid.ManagerMock.flagManageMockExecMethod;
+import static com.didekindroid.api.ManagerMock.flagManageMockExecMethod;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
@@ -36,7 +36,7 @@ public class ControllerDeleteMeTest {
     final static AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
 
     @Rule
-    public ActivityTestRule<MockActivity> activityRule = new ActivityTestRule<>(MockActivity.class, true, true);
+    public ActivityTestRule<ActivityMock> activityRule = new ActivityTestRule<>(ActivityMock.class, true, true);
 
     ControllerDeleteMeIf controller;
     ManagerIf<Object> manager;

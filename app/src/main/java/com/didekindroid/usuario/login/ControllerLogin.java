@@ -2,7 +2,7 @@ package com.didekindroid.usuario.login;
 
 import android.view.View;
 
-import com.didekindroid.ControllerIdentityAbs;
+import com.didekindroid.api.ControllerIdentityAbs;
 import com.didekindroid.incidencia.list.ManagerIncidSeeIf;
 import com.didekindroid.security.IdentityCacher;
 import com.didekinlib.model.usuario.Usuario;

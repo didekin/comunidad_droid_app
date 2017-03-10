@@ -1,22 +1,25 @@
-package com.didekindroid;
+package com.didekindroid.api;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+
+import com.didekindroid.R;
 
 import timber.log.Timber;
 
-public class MockActivity<B> extends AppCompatActivity {
+import static com.didekindroid.util.UIutils.doToolBar;
 
-    Class<? extends Activity> defaultActivityClassToGo;
-    volatile short counter;
+public class ActivityNextMock extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         Timber.d("onCreate()");
         super.onCreate(savedInstanceState);
-        defaultActivityClassToGo = MockNextDefaultActivity.class;
+        View mAcView = getLayoutInflater().inflate(R.layout.next_mock_ac, null);
+        setContentView(mAcView);
+        doToolBar(this, true);
     }
 
     @Override
@@ -37,15 +40,5 @@ public class MockActivity<B> extends AppCompatActivity {
     protected void onDestroy(){
         Timber.d("onDestroy()");
         super.onDestroy();
-    }
-
-    public short getCounter()
-    {
-        return counter;
-    }
-
-    public void setCounter(short counter)
-    {
-        this.counter = counter;
     }
 }

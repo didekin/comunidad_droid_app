@@ -43,7 +43,7 @@ import static com.didekindroid.security.Oauth2DaoRemote.Oauth2;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkProcessCtrlError;
 import static com.didekindroid.testutil.ActivityTestUtils.checkProcessCtrlErrorOnlyToast;
-import static com.didekindroid.testutil.ActivityTestUtils.checkReplaceViewStd;
+import static com.didekindroid.testutil.ActivityTestUtils.checkViewerReplaceView;
 import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtils.isActivityDying;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
@@ -59,6 +59,7 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
 import static org.awaitility.Awaitility.fieldIn;
+import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -164,7 +165,7 @@ public class LoginAc_1_Test implements ExtendableTestAc {
     @Test
     public void testProcessControllerError_1()
     {
-        checkProcessCtrlError(activity, GENERIC_INTERNAL_ERROR, GENERIC_APP_ACC);
+        assertThat(checkProcessCtrlError(activity, GENERIC_INTERNAL_ERROR, GENERIC_APP_ACC), is(true));
     }
 
     @Test
@@ -176,7 +177,7 @@ public class LoginAc_1_Test implements ExtendableTestAc {
     @Test
     public void testReplaceView()
     {
-        checkReplaceViewStd(activity, getNextViewResourceId());
+        checkViewerReplaceView(activity, getNextViewResourceId());
     }
 
     // ============================================================
@@ -213,7 +214,7 @@ public class LoginAc_1_Test implements ExtendableTestAc {
 
         await().atMost(2, SECONDS).untilAtomic(activity.counterWrong, equalTo(3));
         onView(withId(activityLayoutId)).check(matches(isDisplayed()));
-        checkToastInTest(R.string.password_wrong, activity);
+        waitAtMost(1, SECONDS).until(isToastInView(R.string.password_wrong, activity));
     }
 
     // ============================================================
@@ -223,22 +224,17 @@ public class LoginAc_1_Test implements ExtendableTestAc {
     @Test   // Validation: error message.
     public void testCheckLoginData_1() throws InterruptedException
     {
-        // We test the change to false.
-        isLoginDataOk = new AtomicBoolean(true);
-
         typeLoginData("user_wrong", "psw");
 
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run()
             {
-                assertThat(isLoginDataOk.getAndSet(activity.checkLoginData()), is(true));
+                activity.checkLoginData();
             }
         });
-
-        await().atMost(1, SECONDS).untilFalse(isLoginDataOk);
-        checkToastInTest(R.string.error_validation_msg, activity,
-                R.string.email_hint, R.string.password);
+        waitAtMost(1, SECONDS).until(isToastInView(R.string.error_validation_msg, activity,
+                R.string.email_hint, R.string.password));
     }
 
     @Test   // Validation OK

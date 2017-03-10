@@ -8,12 +8,12 @@ import android.support.test.runner.AndroidJUnit4;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-import com.didekindroid.ManagerIf;
-import com.didekindroid.ManagerIf.ControllerIf;
-import com.didekindroid.ManagerMock;
-import com.didekindroid.MockActivity;
-import com.didekindroid.ViewerMock;
-import com.didekindroid.ViewerWithSelectIf;
+import com.didekindroid.api.ManagerIf;
+import com.didekindroid.api.ManagerIf.ControllerIf;
+import com.didekindroid.api.ManagerMock;
+import com.didekindroid.api.ActivityMock;
+import com.didekindroid.api.ViewerMock;
+import com.didekindroid.api.ViewerWithSelectIf;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.spinner.ControllerComuSpinner.ReactorComuSpinner;
 import com.didekindroid.incidencia.spinner.ManagerComuSpinnerIf.ReactorComuSpinnerIf;
@@ -67,7 +67,7 @@ public class ControllerComuSpinnerTest {
     static final String AFTER_processReactorError_EXEC = "after processReactorError";
 
     @Rule
-    public ActivityTestRule<MockActivity> activityRule = new ActivityTestRule<>(MockActivity.class, true, true);
+    public ActivityTestRule<ActivityMock> activityRule = new ActivityTestRule<>(ActivityMock.class, true, true);
 
     UsuarioComunidad pepeUserComu;
     ReactorComuSpinnerIf reactor;
@@ -87,7 +87,7 @@ public class ControllerComuSpinnerTest {
             public void run()
             {
                 controllerViewer = new ViewerComuSpinnerForTest((ManagerIf<Object>) manager);
-                // Default initialization of field in ControllerBasicTest.
+                // Default initialization of field in ControllerIdentityAbsTest.
                 controller = (ControllerComuSpinner) newControllerComuSpinner(controllerViewer);
             }
         });

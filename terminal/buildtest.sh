@@ -1,5 +1,5 @@
 # It must be executed after 'cddroid' with ./terminal/buildtest.sh  environment  suite  version
-# environment('local','awspre') suite('co','in','us', 'usco', 'all')
+# environment('local','awspre') suite('se', 'co','in','us', 'usco', 'all')
 
 #!/bin/bash
 [ $# -ne 3 ] && { echo "args count should be 3" 1>&2; exit 1;}
@@ -27,14 +27,20 @@ echo "Uninstalling com.didekindroid ..."
 adb uninstall com.didekindroid
 
 case "$SUITE" in
-    cm) ./gradlew --info app:cAT \
-        -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.common.suite.CommonSuite
+    se) ./gradlew --info app:cAT \
+        -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.security.SecuritySuite
+        ;;
+    co) ./gradlew --info app:cAT \
+        -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.comunidad.ComunidadSuite
         ;;
     in) ./gradlew --info app:cAT \
-        -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.incidencia.IncidSupportSuite,com.didekindroid.incidencia.IncidFunctionalSuite
+        -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.incidencia.IncidSuite
         ;;
     us) ./gradlew --info app:cAT \
-        -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.usuario.suite.UserSupportSuite,com.didekindroid.usuario.suite.UserFunctionalSuite
+        -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.usuario.UsuarioSuite
+        ;;
+    usco) ./gradlew --info app:cAT \
+        -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.usuariocomunidad.UserComuSuite
         ;;
     all) ./gradlew app:cAT -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.AppFullSuite
         ;;

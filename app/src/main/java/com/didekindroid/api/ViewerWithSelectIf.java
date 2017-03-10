@@ -1,9 +1,7 @@
-package com.didekindroid;
+package com.didekindroid.api;
 
 import android.os.Bundle;
 import android.widget.AdapterView;
-
-import com.didekindroid.ManagerIf.ViewerIf;
 
 /**
  * User: pedro@didekin
@@ -11,7 +9,7 @@ import com.didekindroid.ManagerIf.ViewerIf;
  * Time: 10:11
  */
 
-public interface ViewerWithSelectIf<T extends AdapterView,B> extends ViewerIf<T,B> {
+public interface ViewerWithSelectIf<T extends AdapterView,B> extends ManagerIf.ViewerIf<T,B> {
 
     ViewerWithSelectIf<T,B> initSelectedIndex(Bundle savedState);
     void saveSelectedIndex(Bundle savedState);

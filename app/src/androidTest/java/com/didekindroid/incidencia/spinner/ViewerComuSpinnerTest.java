@@ -7,10 +7,12 @@ import android.support.test.runner.AndroidJUnit4;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
-import com.didekindroid.ManagerMock;
-import com.didekindroid.MockActivity;
+import com.didekindroid.api.ActivityMock;
+import com.didekindroid.api.ManagerMock;
+import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.spinner.ManagerComuSpinnerIf.ControllerComuSpinnerIf;
 import com.didekindroid.incidencia.spinner.ManagerComuSpinnerIf.ViewerComuSpinnerIf;
+import com.didekinlib.http.ErrorBean;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
@@ -21,13 +23,14 @@ import org.junit.runner.RunWith;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static com.didekindroid.api.ManagerMock.flagManageMockExecMethod;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
-import static com.didekindroid.exception.UiExceptionRouter.LOGIN_ACC;
 import static com.didekindroid.incidencia.spinner.ViewerComuSpinner.newComuSpinnerViewer;
-import static com.didekindroid.testutil.ActivityTestUtils.checkProcessCtrlError;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
-import static com.didekinlib.http.GenericExceptionMsg.TOKEN_NULL;
+import static com.didekindroid.testutil.ConstantExecution.MANAGER_AFTER_ERROR_CONTROL;
+import static com.didekindroid.testutil.ConstantExecution.MANAGER_FLAG_INITIAL;
+import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.fieldIn;
 import static org.awaitility.Awaitility.waitAtMost;
@@ -46,7 +49,7 @@ public class ViewerComuSpinnerTest {
     final static AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
 
     @Rule
-    public ActivityTestRule<MockActivity> activityRule = new ActivityTestRule<>(MockActivity.class, true, true);
+    public ActivityTestRule<ActivityMock> activityRule = new ActivityTestRule<>(ActivityMock.class, true, true);
 
     ViewerComuSpinner viewer;
     boolean flagIntent;
@@ -101,7 +104,8 @@ public class ViewerComuSpinnerTest {
     @Test
     public void testProcessControllerError()
     {
-        checkProcessCtrlError(viewer, TOKEN_NULL, LOGIN_ACC);
+        viewer.processControllerError(new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR)));
+        assertThat(flagManageMockExecMethod.getAndSet(MANAGER_FLAG_INITIAL), is(MANAGER_AFTER_ERROR_CONTROL));
     }
 
     @Test

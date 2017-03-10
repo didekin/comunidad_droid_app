@@ -2,7 +2,7 @@ package com.didekindroid.usuario.userdata;
 
 import android.view.View;
 
-import com.didekindroid.ManagerIf.ViewerIf;
+import com.didekindroid.api.ManagerIf.ViewerIf;
 import com.didekinlib.model.usuario.Usuario;
 
 /**

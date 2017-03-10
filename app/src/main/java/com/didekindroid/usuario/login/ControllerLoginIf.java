@@ -1,6 +1,6 @@
 package com.didekindroid.usuario.login;
 
-import com.didekindroid.ManagerIf;
+import com.didekindroid.api.ManagerIf;
 import com.didekinlib.model.usuario.Usuario;
 
 import io.reactivex.Single;

@@ -1,4 +1,4 @@
-package com.didekindroid.incidencia.core;
+package com.didekindroid.incidencia.core.reg;
 
 import android.database.Cursor;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
@@ -7,17 +7,14 @@ import android.widget.ArrayAdapter;
 import android.widget.CursorAdapter;
 import android.widget.Spinner;
 
-import com.didekindroid.ManagerMock;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.incidencia.spinner.ManagerComuSpinnerIf.ViewerComuSpinnerIf;
-import com.didekindroid.usuario.firebase.ControllerFirebaseToken;
+import com.didekindroid.incidencia.core.IncidenciaBean;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -44,8 +41,7 @@ import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
-import static com.didekindroid.testutil.ActivityTestUtils.getAdapterCount;
-import static com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf.ViewerFirebaseToken.newViewerFirebaseToken;
+import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
@@ -54,7 +50,6 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.CO
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.regSeveralUserComuSameUser;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.awaitility.Awaitility.fieldIn;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
@@ -91,32 +86,23 @@ public class IncidRegAcTest_1 {
     int fragmentLayoutId = R.id.incid_reg_frg;
     private IncidRegAc mActivity;
     private Comunidad comunidadByDefault;
-    private ControllerFirebaseTokenIf controller;
-
-    @BeforeClass
-    public static void slowSeconds() throws InterruptedException
-    {
-        Thread.sleep(3000);
-    }
 
     @Before
     public void setUp() throws Exception
     {
+        Thread.sleep(2500);
+
         mActivity = intentRule.getActivity();
-        waitAtMost(2, SECONDS).until(fieldIn(mActivity.mRegAcFragment).ofType(ViewerComuSpinnerIf.class), notNullValue());
         Spinner spinner = (Spinner) mActivity.mRegAcFragment.comuSpinnerViewer.getViewInViewer();
         comunidadesAdapter = (ArrayAdapter<Comunidad>) spinner.getAdapter();
-        waitAtMost(2, SECONDS).until(getAdapterCount(comunidadesAdapter), is(3));
+        assertThat(comunidadesAdapter, notNullValue());
         comunidadByDefault = comunidadesAdapter.getItem(0);
-        controller = new ControllerFirebaseToken(newViewerFirebaseToken(new ManagerMock<>(mActivity)));
-        controller.updateIsGcmTokenSentServer(false);
     }
 
     @After
     public void tearDown() throws Exception
     {
         cleanOptions(CLEAN_PEPE);
-        controller.updateIsGcmTokenSentServer(false);
     }
 
     //  ===========================================================================
@@ -139,7 +125,7 @@ public class IncidRegAcTest_1 {
                 .check(matches(withText(is(comunidadByDefault.getNombreComunidad()))))
                 .check(matches(isDisplayed()));
 
-        /* Ámbito incidencia spinner.*/
+        // Ámbito incidencia spinner.
         onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.incid_reg_ambito_spinner))))
                 .check(matches(withText(is("ámbito de incidencia")))).check(matches(isDisplayed()));
         int count = mActivity.mRegAcFragment.mAmbitoIncidenciaSpinner.getCount();
@@ -191,7 +177,7 @@ public class IncidRegAcTest_1 {
 
         onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
 
-        onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed()));
+        waitAtMost(3, SECONDS).until(isViewDisplayed(withId(R.id.incid_see_open_by_comu_ac)));
         assertThat(incidenciaDao.seeIncidsOpenByComu(comunidadByDefault.getC_Id()).size(), is(1));
         checkUp(activityLayoutId, fragmentLayoutId);
     }
@@ -207,7 +193,7 @@ public class IncidRegAcTest_1 {
 
         onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
 
-        onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed()));
+        waitAtMost(3, SECONDS).until(isViewDisplayed(withId(R.id.incid_see_open_by_comu_ac)));
         assertThat(incidenciaDao.seeIncidsOpenByComu(comunidadByDefault.getC_Id()).size(), is(1));
         checkUp(activityLayoutId, fragmentLayoutId);
     }
@@ -227,7 +213,7 @@ public class IncidRegAcTest_1 {
 
         onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
 
-        onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed()));
+        waitAtMost(3, SECONDS).until(isViewDisplayed(withId(R.id.incid_see_open_by_comu_ac)));
         List<IncidenciaUser> incidencias = incidenciaDao.seeIncidsOpenByComu(comunidadFuente.getC_Id());
         assertThat(incidencias.size(), is(1));
         assertThat(incidencias.get(0).getIncidencia().getDescripcion(), is("Incidencia La Fuente"));

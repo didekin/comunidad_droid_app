@@ -1,9 +1,14 @@
-package com.didekindroid;
+package com.didekindroid.api;
 
 import android.app.Activity;
 import android.support.test.rule.ActivityTestRule;
 import android.view.View;
 
+import com.didekindroid.api.ActivityMock;
+import com.didekindroid.api.ControllerIdentityAbs;
+import com.didekindroid.api.ManagerIf;
+import com.didekindroid.api.ManagerMock;
+import com.didekindroid.api.ViewerMock;
 import com.didekindroid.incidencia.list.ManagerIncidSeeIf;
 import com.didekindroid.security.IdentityCacher;
 import com.didekindroid.security.IdentityCacherMock;
@@ -13,7 +18,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static com.didekindroid.ViewerMock.flagViewerMockMethodExec;
+import static com.didekindroid.api.ViewerMock.flagViewerMockMethodExec;
 import static com.didekindroid.security.IdentityCacherMock.flagIdentityMockMethodExec;
 import static com.didekindroid.testutil.ActivityTestUtils.addSubscription;
 import static com.didekindroid.testutil.ConstantExecution.IDENTITY_AFTER_IS_REGISTERED;
@@ -33,10 +38,10 @@ import static org.junit.Assert.assertThat;
  * <p>
  * Tests for the methods implemented in ControllerAbs and ControllerIdentityAbs.
  */
-public class ControllerBasicTest {
+public class ControllerIdentityAbsTest {
 
     @Rule
-    public ActivityTestRule<? extends Activity> activityRule = new ActivityTestRule<>(MockActivity.class, true, true);
+    public ActivityTestRule<? extends Activity> activityRule = new ActivityTestRule<>(ActivityMock.class, true, true);
 
     protected ManagerIf.ControllerIdentityIf controller;
     ViewerMock<View, Object> myViewer;

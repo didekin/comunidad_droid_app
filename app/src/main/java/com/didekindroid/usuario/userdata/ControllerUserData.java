@@ -2,7 +2,7 @@ package com.didekindroid.usuario.userdata;
 
 import android.view.View;
 
-import com.didekindroid.ControllerIdentityAbs;
+import com.didekindroid.api.ControllerIdentityAbs;
 import com.didekindroid.incidencia.list.ManagerIncidSeeIf;
 import com.didekindroid.security.IdentityCacher;
 import com.didekinlib.http.oauth2.SpringOauthToken;

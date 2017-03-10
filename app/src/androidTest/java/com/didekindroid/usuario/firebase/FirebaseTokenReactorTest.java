@@ -4,13 +4,12 @@ import android.app.Activity;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekindroid.ManagerIf;
-import com.didekindroid.ManagerMock;
-import com.didekindroid.MockActivity;
+import com.didekindroid.api.ManagerIf;
+import com.didekindroid.api.ManagerMock;
+import com.didekindroid.api.ActivityMock;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf;
 import com.didekindroid.incidencia.core.ControllerFirebaseTokenIf;
-import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf.ViewerFirebaseToken;
 import com.didekinlib.http.ErrorBean;
 
 import org.junit.After;
@@ -31,7 +30,7 @@ import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceAndro
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceIoScheduler;
 import static com.didekindroid.usuario.firebase.FirebaseTokenReactor.tokenReactor;
 import static com.didekindroid.usuario.firebase.FirebaseTokenReactor.updatedGcmTkSingle;
-import static com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf.ViewerFirebaseToken.newViewerFirebaseToken;
+import static com.didekindroid.usuario.firebase.ViewerFirebaseToken.newViewerFirebaseToken;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
@@ -55,7 +54,7 @@ public class FirebaseTokenReactorTest {
     ManagerIf manager;
 
     @Rule
-    public ActivityTestRule<? extends Activity> activityRule = new ActivityTestRule<>(MockActivity.class, true, true);
+    public ActivityTestRule<? extends Activity> activityRule = new ActivityTestRule<>(ActivityMock.class, true, true);
 
     @Before
     public void getFixture() throws IOException, UiException

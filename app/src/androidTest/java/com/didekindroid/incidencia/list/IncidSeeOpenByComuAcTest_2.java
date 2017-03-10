@@ -180,7 +180,7 @@ public class IncidSeeOpenByComuAcTest_2 {
     }
 
     @Test
-    public void testPressBack() throws InterruptedException
+    public void testPressBack() throws InterruptedException     // TODO.
     {
         // CASO OK: probamos BACK navigation.
         waitAtMost(3, SECONDS).until(getAdapterCount(adapter), is(1));
@@ -196,7 +196,7 @@ public class IncidSeeOpenByComuAcTest_2 {
 
         waitAtMost(2, SECONDS).until(isViewDisplayed(withId(R.id.incid_see_generic_layout)));
         waitAtMost(3, SECONDS).until(getAdapterCount(adapter), is(1));
-        onData(is(incidUser_0)).inAdapterView(withId(android.R.id.list))
+        onData(is(incidUser_0)).inAdapterView(withId(android.R.id.list))  // TODO error here.   Suprimir última línea.
                 .check(matches(isDisplayed()));
     }
 }

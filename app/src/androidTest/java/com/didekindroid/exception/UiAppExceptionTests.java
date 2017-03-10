@@ -5,7 +5,7 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.MockActivity;
+import com.didekindroid.api.ActivityMock;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekinlib.http.ErrorBean;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
@@ -57,7 +57,7 @@ public class UiAppExceptionTests {
 
     IncidImportancia mIncidJuanPlazuelas;
     @Rule
-    public IntentsTestRule<MockActivity> intentRule = new IntentsTestRule<MockActivity>(MockActivity.class) {
+    public IntentsTestRule<ActivityMock> intentRule = new IntentsTestRule<ActivityMock>(ActivityMock.class) {
 
         @Override
         protected Intent getActivityIntent()
@@ -86,7 +86,7 @@ public class UiAppExceptionTests {
             super.beforeActivityLaunched();
         }
     };
-    MockActivity mActivity;
+    ActivityMock mActivity;
 
     @BeforeClass
     public static void slowSeconds() throws InterruptedException

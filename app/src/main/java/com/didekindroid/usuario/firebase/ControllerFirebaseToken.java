@@ -3,7 +3,7 @@ package com.didekindroid.usuario.firebase;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.didekindroid.ControllerIdentityAbs;
+import com.didekindroid.api.ControllerIdentityAbs;
 import com.didekindroid.incidencia.core.ControllerFirebaseTokenIf;
 import com.didekindroid.incidencia.list.ManagerIncidSeeIf;
 import com.didekindroid.security.IdentityCacher;
