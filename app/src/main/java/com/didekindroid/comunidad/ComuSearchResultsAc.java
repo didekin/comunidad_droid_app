@@ -183,6 +183,7 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
 //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
 /*    ============================================================*/
 
+    @SuppressWarnings("WeakerAccess")
     class UsuarioComunidadGetter extends AsyncTask<Comunidad, Void, UsuarioComunidad> {
 
         UiException uiException;
