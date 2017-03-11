@@ -97,6 +97,8 @@ public class ComuSearchResultsListFr extends Fragment {
         new SearchComunidadesLoader().execute(mComuListListener.getComunidadToSearch());
 
         mAdapter = new ComuSearchResultsListAdapter(getActivity());
+        mListView = (ListView) mView.findViewById(android.R.id.list);
+        mListView.setItemsCanFocus(true);
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -205,9 +207,6 @@ public class ComuSearchResultsListFr extends Fragment {
             if (checkPostExecute(getActivity())) return;
 
             Timber.d("onPostExecute(); comunidadList.size = %s%n", comunidadList != null ? String.valueOf(comunidadList.size()) : "null");
-
-            mListView = (ListView) mView.findViewById(android.R.id.list);
-            mListView.setItemsCanFocus(true);
 
             if (uiException != null) {
                 Timber.d("onPostExecute(), uiException = %s%n", uiException.getErrorBean().getMessage());

@@ -8,10 +8,11 @@ import android.support.test.espresso.action.ViewActions;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+
+import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
-import com.didekindroid.R;
-import com.didekindroid.comunidad.testutil.ComuEspresoTestUtil;
+import com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum;
 import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
 
 import org.hamcrest.Matchers;
@@ -32,10 +33,14 @@ import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.didekindroid.comunidad.RegComuFr.makeComunidadBeanFromView;
+import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.typeComunidadData;
+import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.validaTypedComunidadBean;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_NOTHING;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.comunidad.RegComuFr.makeComunidadBeanFromView;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -56,7 +61,7 @@ public class ComuSearchAc_1_Test {
     private Resources resources;
     private RegComuFr regComuFr;
     File refreshTkFile;
-    UsuarioDataTestUtils.CleanUserEnum whatClean = UsuarioDataTestUtils.CleanUserEnum.CLEAN_NOTHING;
+    CleanUserEnum whatClean = CLEAN_NOTHING;
 
     @Rule
     public ActivityTestRule<ComuSearchAc> mActivityRule = new ActivityTestRule<>(ComuSearchAc.class, true, false);
@@ -140,7 +145,7 @@ public class ComuSearchAc_1_Test {
         assertThat(TKhandler.getAccessTokenInCache(), notNullValue());
         assertThat(TKhandler.isRegisteredUser(), is(true));
 
-        whatClean = UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
+        whatClean = CLEAN_JUAN;
     }
 
     @Test
@@ -149,10 +154,10 @@ public class ComuSearchAc_1_Test {
         activity = mActivityRule.launchActivity(new Intent());
         regComuFr = (RegComuFr) activity.getFragmentManager().findFragmentById(R.id.reg_comunidad_frg);
 
-        ComuEspresoTestUtil.typeComunidadData();
+        typeComunidadData();
 
         makeComunidadBeanFromView(regComuFr.getFragmentView(), regComuFr.getComunidadBean());
-        ComuEspresoTestUtil.validaTypedComunidadBean(regComuFr.getComunidadBean(), "Calle", (short) 3, (short) 13, "Real", "5", "Bis");
+        validaTypedComunidadBean(regComuFr.getComunidadBean(), "Calle", (short) 3, (short) 13, "Real", "5", "Bis");
     }
 
     @Test
