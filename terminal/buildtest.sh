@@ -27,7 +27,7 @@ echo "Uninstalling com.didekindroid ..."
 adb uninstall com.didekindroid
 
 case "$SUITE" in
-    se) ./gradlew app:cAT \
+    se) ./gradlew --info app:cAT \
         -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.security.SecuritySuite
         ;;
     co) ./gradlew --info app:cAT \

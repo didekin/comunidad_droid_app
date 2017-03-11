@@ -10,7 +10,6 @@ import com.didekindroid.exception.UiException;
 import com.didekinlib.model.usuario.Usuario;
 
 import org.hamcrest.CoreMatchers;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
