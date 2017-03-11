@@ -6,6 +6,7 @@ import android.util.ArrayMap;
 import com.didekindroid.api.ActivityMock;
 import com.didekindroid.api.ActivityNextMock;
 import com.didekindroid.comunidad.ComuSearchAc;
+import com.didekindroid.comunidad.ComuSearchResultsAc;
 import com.didekindroid.incidencia.core.reg.IncidRegAc;
 import com.didekindroid.incidencia.list.IncidSeeOpenByComuAc;
 import com.didekindroid.usuario.delete.DeleteMeAc;
@@ -27,13 +28,11 @@ public class DefaultNextAcRouter {
     public static final Map<Class<? extends Activity>, Class<? extends Activity>> routerMap = new ArrayMap<>();
 
     static {
+        routerMap.put(ComuSearchAc.class, ComuSearchResultsAc.class);
         routerMap.put(DeleteMeAc.class, ComuSearchAc.class);
         routerMap.put(IncidRegAc.class, IncidSeeOpenByComuAc.class);
         routerMap.put(LoginAc.class, ComuSearchAc.class);
         routerMap.put(PasswordChangeAc.class, UserDataAc.class);
         routerMap.put(UserDataAc.class, SeeUserComuByUserAc.class);
-
-        // Tests.
-        routerMap.put(ActivityMock.class, ActivityNextMock.class);
     }
 }

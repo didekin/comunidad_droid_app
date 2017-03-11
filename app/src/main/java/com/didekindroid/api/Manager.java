@@ -8,19 +8,17 @@ import com.didekindroid.exception.UiExceptionIf;
 
 import timber.log.Timber;
 
-import static com.didekindroid.util.DefaultNextAcRouter.routerMap;
-
 /**
  * User: pedro@didekin
  * Date: 09/03/17
  * Time: 16:11
  */
 
-public class Manager implements ManagerIf<Object> {
+class Manager implements ManagerIf<Object> {
 
     private final Activity activity;
 
-    public Manager(Activity activity)
+    Manager(Activity activity)
     {
         this.activity = activity;
     }
@@ -42,7 +40,7 @@ public class Manager implements ManagerIf<Object> {
     public void replaceRootView(Object initParamsForView)
     {
         Timber.d("replaceRootView()");
-        Intent intent = new Intent(activity, routerMap.get(activity.getClass()));
+        Intent intent = new Intent(activity, ActivityNextMock.class);
         activity.startActivity(intent);
     }
 }

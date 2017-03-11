@@ -3,7 +3,7 @@
               xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools"
               android:id="@+id/comu_list_frg_layout"
-              tools:context="com.didekindroid.com.didekinaar.comunidad.ComuSearchResultsListFr"
+              tools:context="com.didekindroid.comunidad.ComuSearchResultsListFr"
               >
     <ListView
         android:id="@id/android:list"

@@ -250,7 +250,7 @@ public class RegComuFr extends Fragment {
 //                               SPINNERS
 //  --------------------------------------------------------------------
 
-    public interface ComuDataControllerIf {
+    interface ComuDataControllerIf {
 
         void onTipoViaSpinnerLoaded();
 
@@ -265,6 +265,7 @@ public class RegComuFr extends Fragment {
 
 ///    ::::::::::::::: TIPO DE VÍA - COMUNIDAD AUTONOMA ::::::::::::::::
 
+    @SuppressWarnings("WeakerAccess")
     class TipoViaComuAutoSpinnersSetter extends AsyncTask<Void, Void, Void> {
 
         Cursor tipoViaCursor;
@@ -301,6 +302,7 @@ public class RegComuFr extends Fragment {
 
 ///    :::::::::::::::::: PROVINCIA ::::::::::::::::::::::
 
+    @SuppressWarnings("WeakerAccess")
     class SpinnerProvinciasLoader extends AsyncTask<Short, Void, Cursor> {
 
         @Override
@@ -330,6 +332,7 @@ public class RegComuFr extends Fragment {
 
 ///   :::::::::::::::::  MUNICIPIO ::::::::::::::::::::
 
+    @SuppressWarnings("WeakerAccess")
     class SpinnerMunicipioLoader extends AsyncTask<Short, Void, Cursor> {
 
         @Override

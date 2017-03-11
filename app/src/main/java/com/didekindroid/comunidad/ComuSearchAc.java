@@ -13,6 +13,7 @@ import android.widget.Button;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.util.ConnectionUtils;
+import com.didekindroid.util.DefaultNextAcRouter;
 import com.didekindroid.util.UIutils;
 import com.didekinlib.http.oauth2.SpringOauthToken;
 
@@ -86,7 +87,7 @@ public class ComuSearchAc extends AppCompatActivity {
         } else if (!ConnectionUtils.isInternetConnected(this)) {
             makeToast(this, R.string.no_internet_conn_toast);
         } else {
-            Intent intent = new Intent(this, ComuSearchResultsAc.class);
+            Intent intent = new Intent(this, DefaultNextAcRouter.routerMap.get(this.getClass()));
             intent.putExtra(ComuBundleKey.COMUNIDAD_SEARCH.key, comunidadBean.getComunidad());
             startActivity(intent);
         }
