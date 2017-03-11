@@ -13,7 +13,7 @@ echo "Suite:" ${SUITE}
 ./gradlew clean
 
 if [ ${ENV} == "local" ] ; then
-    echo "Git: add, commit, push local ..."
+    echo "Git: add"
     git add .
     git commit -m "version $VERSION"
 fi
