@@ -212,9 +212,9 @@ public class LoginAc_1_Test implements ExtendableTestAc {
         typeLoginData(USER_DROID.getUserName(), "password_wrong");
         onView(withId(login_ac_button)).check(matches(isDisplayed())).perform(click(), closeSoftKeyboard());
 
-//        await().atMost(2, SECONDS).untilAtomic(activity.counterWrong, equalTo(3));
         onView(withId(activityLayoutId)).check(matches(isDisplayed()));
-        waitAtMost(2, SECONDS).until(isToastInView(R.string.password_wrong, activity));
+        checkToastInTest(R.string.password_wrong, activity);
+//        waitAtMost(2, SECONDS).until(isToastInView(R.string.password_wrong, activity));
     }
 
     // ============================================================

@@ -283,9 +283,9 @@ public class RegComuFr extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid)
         {
-            if (checkPostExecute(getActivity())) return;
-
             Timber.d("In TipoViaComuAutoSpinnersSetter.onPostExecute()");
+
+            if (checkPostExecute(getActivity())) return;
 
             String[] fromColumnDb = new String[]{tipovia};
             mTipoViaSpinner.setAdapter(doAdapterSpinner(tipoViaCursor, fromColumnDb));
