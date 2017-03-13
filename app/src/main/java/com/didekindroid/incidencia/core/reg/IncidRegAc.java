@@ -17,7 +17,7 @@ import timber.log.Timber;
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.incid_importancia_should_be_registered;
 import static com.didekindroid.util.ConnectionUtils.checkInternetConnected;
-import static com.didekindroid.util.DefaultNextAcRouter.routerMap;
+import static com.didekindroid.util.DefaultNextAcRouter.acRouter;
 import static com.didekindroid.util.MenuRouter.doUpMenu;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.checkPostExecute;
@@ -132,7 +132,7 @@ public class IncidRegAc extends AppCompatActivity{
                 uiException.processMe(IncidRegAc.this, new Intent());
             } else {
                 assertTrue(rowInserted == 2, incid_importancia_should_be_registered);
-                Intent intent = new Intent(IncidRegAc.this, routerMap.get(IncidRegAc.this.getClass()));
+                Intent intent = new Intent(IncidRegAc.this, acRouter.getNextActivity(IncidRegAc.this.getClass()));
                 startActivity(intent);
             }
         }

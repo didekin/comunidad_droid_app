@@ -5,6 +5,7 @@ import android.content.Intent;
 
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf;
+import com.didekindroid.util.ActivityRouter;
 
 import timber.log.Timber;
 
@@ -17,10 +18,12 @@ import timber.log.Timber;
 class Manager implements ManagerIf<Object> {
 
     private final Activity activity;
+    private final ActivityRouter activityRouter;
 
-    Manager(Activity activity)
+    Manager(Activity activity, ActivityRouter activityRouter)
     {
         this.activity = activity;
+        this.activityRouter = activityRouter;
     }
 
     @Override
@@ -40,7 +43,7 @@ class Manager implements ManagerIf<Object> {
     public void replaceRootView(Object initParamsForView)
     {
         Timber.d("replaceRootView()");
-        Intent intent = new Intent(activity, ActivityNextMock.class);
+        Intent intent = new Intent(activity, activityRouter.getNextActivity(activity.getClass()));
         activity.startActivity(intent);
     }
 }

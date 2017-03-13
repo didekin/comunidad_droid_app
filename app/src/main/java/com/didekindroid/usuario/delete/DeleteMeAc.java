@@ -8,8 +8,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import com.didekindroid.api.ManagerIf;
 import com.didekindroid.R;
+import com.didekindroid.api.ManagerIf;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf;
 import com.didekindroid.util.MenuRouter;
@@ -20,7 +20,7 @@ import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static com.didekindroid.api.ManagerIf.ViewerIf;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
-import static com.didekindroid.util.DefaultNextAcRouter.routerMap;
+import static com.didekindroid.util.DefaultNextAcRouter.acRouter;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.doToolBar;
 
@@ -142,7 +142,7 @@ public class DeleteMeAc extends AppCompatActivity implements ViewerIf<View,Objec
     public void replaceRootView(Object initParamsForView)
     {
         Timber.d("replaceRootView()");
-        Intent intent = new Intent(this, routerMap.get(this.getClass()));
+        Intent intent = new Intent(this, acRouter.getNextActivity(this.getClass()));
         intent.setFlags(FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }

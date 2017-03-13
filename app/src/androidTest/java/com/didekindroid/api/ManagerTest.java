@@ -5,6 +5,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
+import com.didekindroid.util.ActivityRouter;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -37,7 +38,13 @@ public class ManagerTest {
     public void setUp()
     {
         activity = activityRule.getActivity();
-        manager = new Manager(activity);
+        manager = new Manager(activity, new ActivityRouter() {
+            @Override
+            public Class<? extends Activity> getNextActivity(Class<? extends Activity> previousActivity)
+            {
+                return ActivityNextMock.class;
+            }
+        });
         nextViewResourceId = R.id.next_mock_ac_layout;
     }
 

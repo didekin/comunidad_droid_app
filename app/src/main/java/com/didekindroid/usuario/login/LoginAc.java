@@ -13,8 +13,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.didekindroid.api.ManagerIf;
 import com.didekindroid.R;
+import com.didekindroid.api.ManagerIf;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf.ActionForUiExceptionIf;
 import com.didekindroid.usuario.UsuarioBean;
@@ -30,7 +30,7 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static com.didekindroid.usuario.UsuarioBundleKey.login_counter_atomic_int;
 import static com.didekindroid.usuario.UsuarioBundleKey.usuario_object;
 import static com.didekindroid.usuario.login.LoginAc.PasswordMailDialog.newInstance;
-import static com.didekindroid.util.DefaultNextAcRouter.routerMap;
+import static com.didekindroid.util.DefaultNextAcRouter.acRouter;
 import static com.didekindroid.util.UIutils.doToolBar;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.util.UIutils.makeToast;
@@ -128,7 +128,7 @@ public class LoginAc extends AppCompatActivity implements ViewerLoginIf<View, Ob
     public void replaceRootView(Object initParamsForView)
     {
         Timber.d("replaceRootView()");
-        Intent intent = new Intent(this, routerMap.get(this.getClass()));
+        Intent intent = new Intent(this, acRouter.getNextActivity(this.getClass()));
         intent.setFlags(FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();
@@ -245,7 +245,7 @@ public class LoginAc extends AppCompatActivity implements ViewerLoginIf<View, Ob
     public void doDialogNegativeClick()
     {
         Timber.d("doDialogNegativeClick()");
-        Intent intent = new Intent(this, routerMap.get(this.getClass()));
+        Intent intent = new Intent(this, acRouter.getNextActivity(this.getClass()));
         intent.setFlags(FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();

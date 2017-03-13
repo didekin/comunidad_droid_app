@@ -62,7 +62,7 @@ public final class AppInitializer {
 
     private void initDebugBuildConfig()
     {
-        if (BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG || BuildConfig.BUILD_TYPE.equals("local")) {
             Timber.plant(new Timber.DebugTree());
 //            ButterKnife.setDebug(true);
 

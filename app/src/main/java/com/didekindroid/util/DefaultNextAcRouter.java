@@ -3,8 +3,6 @@ package com.didekindroid.util;
 import android.app.Activity;
 import android.util.ArrayMap;
 
-import com.didekindroid.api.ActivityMock;
-import com.didekindroid.api.ActivityNextMock;
 import com.didekindroid.comunidad.ComuSearchAc;
 import com.didekindroid.comunidad.ComuSearchResultsAc;
 import com.didekindroid.incidencia.core.reg.IncidRegAc;
@@ -23,9 +21,10 @@ import java.util.Map;
  * Time: 16:28
  */
 
-public class DefaultNextAcRouter {
+public class DefaultNextAcRouter implements ActivityRouter {
 
-    public static final Map<Class<? extends Activity>, Class<? extends Activity>> routerMap = new ArrayMap<>();
+    private static final Map<Class<? extends Activity>, Class<? extends Activity>> routerMap = new ArrayMap<>();
+    public static final DefaultNextAcRouter acRouter = new DefaultNextAcRouter();
 
     static {
         routerMap.put(ComuSearchAc.class, ComuSearchResultsAc.class);
@@ -34,5 +33,11 @@ public class DefaultNextAcRouter {
         routerMap.put(LoginAc.class, ComuSearchAc.class);
         routerMap.put(PasswordChangeAc.class, UserDataAc.class);
         routerMap.put(UserDataAc.class, SeeUserComuByUserAc.class);
+    }
+
+    @Override
+    public Class<? extends Activity> getNextActivity(Class<? extends Activity> previousActivity)
+    {
+        return routerMap.get(previousActivity);
     }
 }

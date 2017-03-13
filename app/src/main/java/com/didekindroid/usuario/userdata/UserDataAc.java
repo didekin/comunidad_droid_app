@@ -10,8 +10,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.didekindroid.api.ManagerIf;
 import com.didekindroid.R;
+import com.didekindroid.api.ManagerIf;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf.ActionForUiExceptionIf;
 import com.didekindroid.usuario.UsuarioBean;
@@ -27,7 +27,7 @@ import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
 import static com.didekindroid.usuario.userdata.ViewerUserDataIf.UserChangeToMake.alias_only;
 import static com.didekindroid.usuario.userdata.ViewerUserDataIf.UserChangeToMake.nothing;
 import static com.didekindroid.usuario.userdata.ViewerUserDataIf.UserChangeToMake.userName;
-import static com.didekindroid.util.DefaultNextAcRouter.routerMap;
+import static com.didekindroid.util.DefaultNextAcRouter.acRouter;
 import static com.didekindroid.util.ItemMenu.mn_handler;
 import static com.didekindroid.util.MenuRouter.doUpMenu;
 import static com.didekindroid.util.UIutils.assertTrue;
@@ -108,7 +108,7 @@ public class UserDataAc extends AppCompatActivity implements ManagerIf<Object>, 
     public void replaceRootView(Object initParamsForView)
     {
         Timber.d("replaceRootView()");
-        Intent intent = new Intent(UserDataAc.this, routerMap.get(UserDataAc.this.getClass()));
+        Intent intent = new Intent(UserDataAc.this, acRouter.getNextActivity(UserDataAc.this.getClass()));
         startActivity(intent);
     }
 

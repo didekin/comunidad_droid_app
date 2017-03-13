@@ -20,7 +20,7 @@ import static com.didekindroid.usuario.UsuarioAssertionMsg.user_name_should_be_i
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
 import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
 import static com.didekindroid.util.ConnectionUtils.isInternetConnected;
-import static com.didekindroid.util.DefaultNextAcRouter.routerMap;
+import static com.didekindroid.util.DefaultNextAcRouter.acRouter;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.doToolBar;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
@@ -173,7 +173,7 @@ public class PasswordChangeAc extends AppCompatActivity implements ManagerIf<Obj
     {
         Timber.d("replaceRootView()");
         makeToast(this, R.string.password_remote_change);
-        Intent intent = new Intent(this, routerMap.get(this.getClass()));
+        Intent intent = new Intent(this, acRouter.getNextActivity(this.getClass()));
         startActivity(intent);
     }
 }
