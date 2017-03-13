@@ -3,6 +3,7 @@ package com.didekindroid.testutil;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.support.test.espresso.NoMatchingRootException;
 import android.support.test.espresso.NoMatchingViewException;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.contrib.PickerActions;
@@ -382,7 +383,7 @@ public final class ActivityTestUtils {
                 try {
                     checkToastInTest(resourceStringId, activity, resorceErrorId);
                     return true;
-                } catch (NoMatchingViewException ne) {
+                } catch (NoMatchingViewException | NoMatchingRootException ne) {
                     return false;
                 }
             }
@@ -398,7 +399,7 @@ public final class ActivityTestUtils {
                 try {
                     checkNoToastInTest(resourceStringId, activity);
                     return true;
-                } catch (NoMatchingViewException ne) {
+                } catch (NoMatchingViewException | NoMatchingRootException ne) {
                     return false;
                 }
             }

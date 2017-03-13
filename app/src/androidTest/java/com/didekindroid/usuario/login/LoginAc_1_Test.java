@@ -214,7 +214,7 @@ public class LoginAc_1_Test implements ExtendableTestAc {
 
         await().atMost(2, SECONDS).untilAtomic(activity.counterWrong, equalTo(3));
         onView(withId(activityLayoutId)).check(matches(isDisplayed()));
-        waitAtMost(1, SECONDS).until(isToastInView(R.string.password_wrong, activity));
+        waitAtMost(2, SECONDS).until(isToastInView(R.string.password_wrong, activity));
     }
 
     // ============================================================
