@@ -31,7 +31,7 @@ public final class SecurityTestUtils {
         TKhandler.updateIsRegistered(true);
     }
 
-    public static SpringOauthToken doSpringOauthToken(String accessToken, String refreshToken)
+    static SpringOauthToken doSpringOauthToken(String accessToken, String refreshToken)
     {
         return new SpringOauthToken(
                 accessToken,
@@ -42,12 +42,12 @@ public final class SecurityTestUtils {
         );
     }
 
-    public static SpringOauthToken doSpringOauthToken()
+    static SpringOauthToken doSpringOauthToken()
     {
         return doSpringOauthToken("50d3cdaa-0d2e-4cfd-b259-82b3a0b1edef", "50d3cdaa-0d2e-4cfd-b259-82b3a0b1edef");
     }
 
-    public static SpringOauthToken doSpringOauthToken(String refreshTokenKey)
+    static SpringOauthToken doSpringOauthToken(String refreshTokenKey)
     {
         return doSpringOauthToken("50d3cdaa-0d2e-4cfd-b259-82b3a0b1edef", refreshTokenKey);
     }
