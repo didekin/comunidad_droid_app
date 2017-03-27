@@ -8,12 +8,6 @@ import com.didekinlib.http.oauth2.SpringOauthToken;
 import java.io.File;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static com.didekindroid.testutil.ConstantExecution.IDENTITY_AFTER_IS_REGISTERED;
-import static com.didekindroid.testutil.ConstantExecution.IDENTITY_AFTER_UPDATE_REGISTERED;
-import static com.didekindroid.testutil.ConstantExecution.IDENTITY_FLAG_INITIAL;
-import static com.didekindroid.testutil.ConstantExecution.WRONG_FLAG_VALUE;
-import static com.didekindroid.util.UIutils.assertTrue;
-
 /**
  * User: pedro@didekin
  * Date: 07/03/17
@@ -21,8 +15,6 @@ import static com.didekindroid.util.UIutils.assertTrue;
  */
 
 public class IdentityCacherMock implements IdentityCacher {
-
-    public static final AtomicReference<String> flagIdentityMockMethodExec = new AtomicReference<>(IDENTITY_FLAG_INITIAL);
 
     private volatile boolean isRegistered;
 
@@ -80,14 +72,12 @@ public class IdentityCacherMock implements IdentityCacher {
     @Override
     public boolean isRegisteredUser()
     {
-        assertTrue(flagIdentityMockMethodExec.getAndSet(IDENTITY_AFTER_IS_REGISTERED).equals(IDENTITY_FLAG_INITIAL), WRONG_FLAG_VALUE);
         return isRegistered;
     }
 
     @Override
     public void updateIsRegistered(boolean isRegisteredUser)
     {
-        assertTrue(flagIdentityMockMethodExec.getAndSet(IDENTITY_AFTER_UPDATE_REGISTERED).equals(IDENTITY_FLAG_INITIAL), WRONG_FLAG_VALUE);
         isRegistered = isRegisteredUser;
     }
 }

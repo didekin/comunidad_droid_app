@@ -75,7 +75,7 @@ public class ObserverMaybeListTest {
         @Override
         public boolean loadItemsByEntitiyId(long entityId)
         {
-            return false; // NOT in test.
+            return false; // NOT necessary for test.
         }
 
         @Override

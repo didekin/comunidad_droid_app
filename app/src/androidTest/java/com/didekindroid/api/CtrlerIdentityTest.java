@@ -6,17 +6,13 @@ import android.support.test.runner.AndroidJUnit4;
 import android.view.View;
 
 import com.didekindroid.security.IdentityCacher;
-import com.didekindroid.security.IdentityCacherMock;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static com.didekindroid.security.IdentityCacherMock.flagIdentityMockMethodExec;
-import static com.didekindroid.testutil.ConstantExecution.IDENTITY_AFTER_IS_REGISTERED;
-import static com.didekindroid.testutil.ConstantExecution.IDENTITY_AFTER_UPDATE_REGISTERED;
-import static com.didekindroid.testutil.ConstantExecution.IDENTITY_FLAG_INITIAL;
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -43,7 +39,7 @@ public class CtrlerIdentityTest {
     public void setUp()
     {
         myViewer = new ViewerMock<>(null, activityRule.getActivity(), null);
-        identityCacher = new IdentityCacherMock();
+        identityCacher = TKhandler;
         controller = new CtrlerIdentity<>(myViewer);
     }
 
@@ -52,7 +48,6 @@ public class CtrlerIdentityTest {
     {
         controller.updateIsRegistered(true);
         assertThat(controller.isRegisteredUser(), is(true));
-        assertThat(flagIdentityMockMethodExec.getAndSet(IDENTITY_FLAG_INITIAL), is(IDENTITY_AFTER_IS_REGISTERED));
     }
 
     @Test
@@ -60,7 +55,6 @@ public class CtrlerIdentityTest {
     {
         controller.updateIsRegistered(false);
         assertThat(controller.isRegisteredUser(), is(false));
-        assertThat(flagIdentityMockMethodExec.getAndSet(IDENTITY_FLAG_INITIAL), is(IDENTITY_AFTER_UPDATE_REGISTERED));
     }
 
     @Test
@@ -70,6 +64,5 @@ public class CtrlerIdentityTest {
                 notNullValue(),
                 is(identityCacher)
         ));
-        assertThat(flagIdentityMockMethodExec.getAndSet(IDENTITY_FLAG_INITIAL), is(IDENTITY_AFTER_IS_REGISTERED));
     }
 }

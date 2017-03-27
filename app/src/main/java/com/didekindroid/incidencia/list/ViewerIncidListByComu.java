@@ -42,9 +42,9 @@ public class ViewerIncidListByComu extends Viewer<ListView, CtrlerSelectableList
     }
 
     @Override
-    public ViewerSelectableIf<ListView, CtrlerSelectableListIf<IncidenciaUser,Bundle>> initSelectedItem(Bundle savedState)
+    public ViewerSelectableIf<ListView, CtrlerSelectableListIf<IncidenciaUser,Bundle>> initSelectedItemId(Bundle savedState)
     {
-        Timber.d("initSelectedItem()");
+        Timber.d("initSelectedItemId()");
         if (savedState != null) {
             incidenciaSelectedIndex = savedState.getInt(INCIDENCIA_LIST_INDEX.key, 0);
         }
@@ -62,7 +62,7 @@ public class ViewerIncidListByComu extends Viewer<ListView, CtrlerSelectableList
      *  @return the list index of the incidencia selected.
      */
     @Override
-    public long getSelectedItem()
+    public long getSelectedItemId()
     {
         return incidenciaSelectedIndex;
     }
@@ -79,13 +79,13 @@ public class ViewerIncidListByComu extends Viewer<ListView, CtrlerSelectableList
     {
         Timber.d("doViewInViewer()");
 
-        initSelectedItem(savedState);
+        initSelectedItemId(savedState);
 
         // view is intialized in parent viewer.
         // To get visible a divider on top of the list.
         view.addHeaderView(new View(activity), null, true);
         view.setEmptyView(emptyListView);
-        initSelectedItem(savedState);
+        initSelectedItemId(savedState);
         view.setSelection((int) incidenciaSelectedIndex);
 
         view.setOnItemClickListener(new AdapterView.OnItemClickListener() {

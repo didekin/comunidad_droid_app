@@ -88,9 +88,9 @@ public class ViewerComuSpinnerTest {
     @Test
     public void testInitSelectedItem_intent() throws Exception
     {
-        viewer.initSelectedItem(null);
+        viewer.initSelectedItemId(null);
         // Value in mock manager.
-        assertThat(viewer.getSelectedItem(), is(comuId_intent));
+        assertThat(viewer.getSelectedItemId(), is(comuId_intent));
     }
 
     @Test
@@ -98,8 +98,8 @@ public class ViewerComuSpinnerTest {
     {
         Bundle savedState = new Bundle();
         savedState.putLong(COMUNIDAD_ID.key, 8L);
-        viewer.initSelectedItem(savedState);
-        assertThat(viewer.getSelectedItem(), is(8L));
+        viewer.initSelectedItemId(savedState);
+        assertThat(viewer.getSelectedItemId(), is(8L));
     }
 
     @Test
@@ -115,7 +115,7 @@ public class ViewerComuSpinnerTest {
     public void testGetSelectedItem() throws Exception
     {
         viewer.itemSelectedId = 111L;
-        assertThat(viewer.getSelectedItem(), is(111L));
+        assertThat(viewer.getSelectedItemId(), is(111L));
     }
 
     @Test
@@ -129,7 +129,7 @@ public class ViewerComuSpinnerTest {
     {
         // TODO. terminar.
         /*view.setOnItemSelectedListener(new ComuSelectedListener());
-        initSelectedItem(savedState);
+        initSelectedItemId(savedState);
         controller.loadDataInSpinner();*/
 
         // Tested in the fragments.

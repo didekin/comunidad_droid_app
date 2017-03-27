@@ -50,9 +50,9 @@ public class ViewerComuSpinner extends Viewer<Spinner, CtrlerSpinnerIf>
     // ==================================== ViewerSelectableIf ====================================
 
     @Override
-    public ViewerSelectableIf<Spinner, CtrlerSpinnerIf> initSelectedItem(Bundle savedState)
+    public ViewerSelectableIf<Spinner, CtrlerSpinnerIf> initSelectedItemId(Bundle savedState)
     {
-        Timber.d("initSelectedItem()");
+        Timber.d("initSelectedItemId()");
 
         if (savedState != null) {
             itemSelectedId = savedState.getLong(COMUNIDAD_ID.key, 0);
@@ -73,9 +73,9 @@ public class ViewerComuSpinner extends Viewer<Spinner, CtrlerSpinnerIf>
      *  @return the comunidadId selected in the spinner.
      */
     @Override
-    public long getSelectedItem()
+    public long getSelectedItemId()
     {
-        Timber.d("getSelectedItem()");
+        Timber.d("getSelectedItemId()");
         return itemSelectedId;
     }
 
@@ -92,7 +92,7 @@ public class ViewerComuSpinner extends Viewer<Spinner, CtrlerSpinnerIf>
     {
         Timber.d("doViewInViewer()");
         view.setOnItemSelectedListener(new ComuSelectedListener());
-        initSelectedItem(savedState);
+        initSelectedItemId(savedState);
         controller.loadDataInSpinner();
     }
 

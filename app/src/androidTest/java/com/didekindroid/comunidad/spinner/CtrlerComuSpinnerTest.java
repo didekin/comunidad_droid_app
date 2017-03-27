@@ -49,7 +49,7 @@ public class CtrlerComuSpinnerTest {
             {
                 controller = (CtrlerComuSpinner) CtrlerComuSpinner.newControllerComuSpinner(new ViewerComuSpinner(new Spinner(activity), activity, null){
                     @Override
-                    public long getSelectedItem()
+                    public long getSelectedItemId()
                     {
                         return 123L;
                     }
@@ -64,10 +64,10 @@ public class CtrlerComuSpinnerTest {
         List<Comunidad> comunidades = makeListComu();
         controller.onSuccessLoadDataInSpinner(comunidades);
 
-        assertThat(controller.spinnerAdapter.getCount(), is(2));
-        assertThat(controller.spinnerView.getAdapter(), CoreMatchers.<SpinnerAdapter>is(controller.spinnerAdapter));
-        // Assertions based on viewer.getSelectedItem(): 123L, second in the list.
-        assertThat(controller.spinnerView.getSelectedItemPosition(), is(1));
+        assertThat(controller.getSpinnerAdapter().getCount(), is(2));
+        assertThat(controller.getSpinnerView().getAdapter(), CoreMatchers.<SpinnerAdapter>is(controller.getSpinnerAdapter()));
+        // Assertions based on viewer.getSelectedItemId(): 123L, second in the list.
+        assertThat(controller.getSpinnerView().getSelectedItemPosition(), is(1));
     }
 
     @Test
@@ -86,8 +86,8 @@ public class CtrlerComuSpinnerTest {
     public void getSelectedFromItemId() throws Exception
     {
         List<Comunidad> comunidades = makeListComu();
-        controller.spinnerAdapter.addAll(comunidades);
-        controller.spinnerView.setAdapter(controller.spinnerAdapter);
+        controller.getSpinnerAdapter().addAll(comunidades);
+        controller.getSpinnerView().setAdapter(controller.getSpinnerAdapter());
         assertThat(controller.getSelectedFromItemId(321L), is(0));
         assertThat(controller.getSelectedFromItemId(123L), is(1));
     }

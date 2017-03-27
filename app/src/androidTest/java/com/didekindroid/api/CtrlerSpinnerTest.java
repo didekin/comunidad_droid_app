@@ -1,6 +1,25 @@
 package com.didekindroid.api;
 
+import android.app.Activity;
+import android.os.Bundle;
+import android.support.test.rule.ActivityTestRule;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
+
+import org.hamcrest.CoreMatchers;
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
+
+import static org.awaitility.Awaitility.waitAtMost;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
 /**
  * User: pedro@didekin
@@ -8,22 +27,82 @@ import org.junit.Test;
  * Time: 18:23
  */
 public class CtrlerSpinnerTest {
-    @Test
-    public void processBackLoadDataInSpinner() throws Exception
-    {
 
+    @Rule
+    public ActivityTestRule<ActivityMock> activityRule = new ActivityTestRule<>(ActivityMock.class, true, true);
+
+    AtomicReference<CtrlerSpinner<Long>> controller = new AtomicReference<>(null);
+    Activity activity;
+
+    @Before
+    public void setUp()
+    {
+        activity = activityRule.getActivity();
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                controller.compareAndSet(null, new CtrlerSpinner<Long>(new ViewerSelectableForTest(new Spinner(activity), activity)) {
+                    @Override
+                    public boolean loadDataInSpinner()
+                    {
+                        return false;
+                    }
+
+                    @Override
+                    public int getSelectedFromItemId(long itemId)
+                    {
+                        return 2;   // Value used in test.
+                    }
+                });
+            }
+        });
     }
 
     @Test
-    public void loadDataInSpinner() throws Exception
+    public void testOnSuccessLoadDataInSpinner() throws Exception
     {
-
+        List<Long> idsList = Arrays.asList(12L, 13L, 21L, 31L);
+        waitAtMost(2, TimeUnit.SECONDS).untilAtomic(controller, notNullValue());
+        assertThat(controller.get().spinnerAdapter.getCount(), is(0));
+        controller.get().onSuccessLoadDataInSpinner(idsList);
+        assertThat(controller.get().spinnerView.getAdapter(), CoreMatchers.<SpinnerAdapter>is(controller.get().spinnerAdapter));
+        assertThat(controller.get().spinnerAdapter.getCount(), is(4));
+        assertThat(controller.get().spinnerView.getSelectedItemPosition(), is(2));
     }
 
-    @Test
-    public void getSelectedFromItemId() throws Exception
-    {
+    //    .................................... HELPERS .................................
 
+
+    static class ViewerSelectableForTest extends Viewer<Spinner, CtrlerSpinnerIf> implements
+            ViewerSelectableIf<Spinner, CtrlerSpinnerIf> {
+
+        protected ViewerSelectableForTest(Spinner view, Activity activity)
+        {
+            super(view, activity, null);
+        }
+
+        @Override
+        public ViewerSelectableIf<Spinner, CtrlerSpinnerIf> initSelectedItemId(Bundle savedState)
+        {
+            return null;
+        }
+
+        @Override
+        public long getSelectedItemId()
+        {
+            return 0;
+        }
+
+        @Override
+        public long getItemIdInIntent()
+        {
+            return 0;
+        }
+
+        @Override
+        public void doViewInViewer(Bundle savedState)
+        {
+        }
     }
-
 }

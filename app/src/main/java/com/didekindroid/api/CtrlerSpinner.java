@@ -18,8 +18,8 @@ import timber.log.Timber;
 @SuppressWarnings("AbstractClassExtendsConcreteClass")
 public abstract class CtrlerSpinner<E> extends Controller<Spinner> implements CtrlerSpinnerIf<E> {
 
-    public final ArrayAdapter<E> spinnerAdapter;
-    public final Spinner spinnerView;
+    final ArrayAdapter<E> spinnerAdapter;
+    protected final Spinner spinnerView;
     protected final AtomicReference<ObserverSpinner<E>> atomicObserver;
     private ViewerSelectableIf<Spinner, CtrlerSpinnerIf> viewerSelect;
 
@@ -39,7 +39,19 @@ public abstract class CtrlerSpinner<E> extends Controller<Spinner> implements Ct
         spinnerAdapter.clear();
         spinnerAdapter.addAll(comunidades);
         spinnerView.setAdapter(spinnerAdapter);
-        spinnerView.setSelection(getSelectedFromItemId(viewerSelect.getSelectedItem()));
+        spinnerView.setSelection(getSelectedFromItemId(viewerSelect.getSelectedItemId()));
+    }
+
+    public ArrayAdapter<E> getSpinnerAdapter()
+    {
+        Timber.d("getSpinnerAdapter()");
+        return spinnerAdapter;
+    }
+
+    public Spinner getSpinnerView()
+    {
+        Timber.d("getSpinnerView()");
+        return spinnerView;
     }
 
     @Override

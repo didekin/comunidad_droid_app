@@ -11,7 +11,7 @@ import android.widget.AdapterView;
 
 public interface ViewerSelectableIf<T extends AdapterView,C extends ControllerIf> extends ViewerIf<T,C> {
 
-    ViewerSelectableIf<T,C> initSelectedItem(Bundle savedState);
-    long getSelectedItem();
+    ViewerSelectableIf<T,C> initSelectedItemId(Bundle savedState);
+    long getSelectedItemId();
     long getItemIdInIntent();
 }
