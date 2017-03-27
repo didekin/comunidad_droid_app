@@ -5,8 +5,9 @@ import android.util.ArrayMap;
 
 import com.didekindroid.comunidad.ComuSearchAc;
 import com.didekindroid.comunidad.ComuSearchResultsAc;
+import com.didekindroid.incidencia.core.IncidEditAc;
 import com.didekindroid.incidencia.core.reg.IncidRegAc;
-import com.didekindroid.incidencia.list.IncidSeeOpenByComuAc;
+import com.didekindroid.incidencia.list.open.IncidSeeOpenByComuAc;
 import com.didekindroid.usuario.delete.DeleteMeAc;
 import com.didekindroid.usuario.login.LoginAc;
 import com.didekindroid.usuario.password.PasswordChangeAc;
@@ -30,6 +31,7 @@ public class DefaultNextAcRouter implements ActivityRouter {
         routerMap.put(ComuSearchAc.class, ComuSearchResultsAc.class);
         routerMap.put(DeleteMeAc.class, ComuSearchAc.class);
         routerMap.put(IncidRegAc.class, IncidSeeOpenByComuAc.class);
+        routerMap.put(IncidSeeOpenByComuAc.class, IncidEditAc.class);
         routerMap.put(LoginAc.class, ComuSearchAc.class);
         routerMap.put(PasswordChangeAc.class, UserDataAc.class);
         routerMap.put(UserDataAc.class, SeeUserComuByUserAc.class);

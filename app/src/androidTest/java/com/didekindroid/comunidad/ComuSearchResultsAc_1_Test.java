@@ -158,7 +158,7 @@ public class ComuSearchResultsAc_1_Test {
     {
         // 1. No existe la comunidad en DB. 2. El usuario no está registrado.
 
-        assertThat(TKhandler.getAccessTokenInCache(), nullValue());
+        assertThat(TKhandler.getTokenCache().get(), nullValue());
 
         // Criterio de búsqueda.
         Comunidad comunidad = ComuDataTestUtil.makeComunidad("Rincón", "del No Existente", (short) 123, "",

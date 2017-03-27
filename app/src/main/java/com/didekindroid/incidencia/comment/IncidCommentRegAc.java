@@ -111,7 +111,7 @@ public class IncidCommentRegAc extends AppCompatActivity {
     //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
     //    ============================================================
 
-    // TODO: to persist the task during restarts and properly cancel the task when the activity is destroyed. (Example in Shelves)
+    @SuppressWarnings("WeakerAccess")
     class IncidCommentRegister extends AsyncTask<IncidComment, Void, Integer> {
 
         UiException uiException;

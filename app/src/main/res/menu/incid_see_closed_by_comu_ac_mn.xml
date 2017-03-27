@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
-      tools:context=".incidencia.list.IncidSeeClosedByComuAc">
+      tools:context=".incidencia.list.close.IncidSeeClosedByComuAc">
       <item
           android:id="@+id/incid_see_open_by_comu_ac_mn"
           android:title="@string/incid_see_by_comu_ac_mn"

@@ -44,7 +44,6 @@ import static com.didekindroid.usuariocomunidad.RolUi.PRE;
 import static com.didekindroid.usuariocomunidad.RolUi.PRO;
 import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.typeUserComuData;
-import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -134,7 +133,7 @@ public class RegUserAndUserComuAcTest {
         activity = intentRule.getActivity();
 
         // Usuario data.
-        UserEspressoTestUtil.typeUserData(
+        UserEspressoTestUtil.typeUserDataFull(
                 USER_JUAN2.getUserName(),
                 USER_JUAN2.getAlias(),
                 USER_JUAN2.getPassword(),
@@ -146,8 +145,8 @@ public class RegUserAndUserComuAcTest {
                 .check(matches(isDisplayed())).perform(click());
 
         // Actualización correcta de datos de identidad.
-        assertThat(TKhandler.getAccessTokenInCache(), notNullValue());
-        assertThat(TKhandler.getRefreshTokenValue(), is(TKhandler.getAccessTokenInCache().getRefreshToken().getValue()));
+        assertThat(TKhandler.getTokenCache().get(), notNullValue());
+        assertThat(TKhandler.getRefreshTokenValue(), is(TKhandler.getTokenCache().get().getRefreshToken().getValue()));
         assertThat(TKhandler.isRegisteredUser(), is(true));
 
         intended(hasExtra(COMUNIDAD_ID.key, comunidad.getC_Id()));
@@ -165,7 +164,7 @@ public class RegUserAndUserComuAcTest {
 
         activity = intentRule.getActivity();
         assertThat(TKhandler.isRegisteredUser(), is(false));
-        assertThat(TKhandler.getAccessTokenInCache(), nullValue());
+        assertThat(TKhandler.getTokenCache().get(), nullValue());
 
         UserItemMenuTestUtils.LOGIN_AC.checkMenuItem_NTk(activity);
         checkUp(activityLayoutId);
@@ -180,7 +179,7 @@ public class RegUserAndUserComuAcTest {
 
         activity = intentRule.getActivity();
         assertThat(TKhandler.isRegisteredUser(), is(true));
-        assertThat(TKhandler.getAccessTokenInCache(), not(nullValue()));
+        assertThat(TKhandler.getTokenCache().get(), notNullValue());
         UserItemMenuTestUtils.LOGIN_AC.checkMenuItem_WTk(activity);
         checkUp(activityLayoutId);
     }

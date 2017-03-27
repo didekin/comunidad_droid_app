@@ -181,7 +181,7 @@ public class UserComuDataAc extends AppCompatActivity {
     //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
     //    ============================================================
 
-    // TODO: to persist the task during restarts and properly cancel the task when the activity is destroyed. (Example in Shelves)
+    @SuppressWarnings("WeakerAccess")
     class ComuDataMenuSetter extends AsyncTask<Void, Void, Boolean> {
 
         UiException uiException;
@@ -216,6 +216,7 @@ public class UserComuDataAc extends AppCompatActivity {
         }
     }
 
+    @SuppressWarnings("WeakerAccess")
     class UserComuModifyer extends AsyncTask<UsuarioComunidad, Void, Integer> {
 
         UiException uiException;
@@ -250,6 +251,7 @@ public class UserComuDataAc extends AppCompatActivity {
         }
     }
 
+    @SuppressWarnings("WeakerAccess")
     class UserComuEraser extends AsyncTask<Comunidad, Void, Integer> {
 
         UiException uiException;

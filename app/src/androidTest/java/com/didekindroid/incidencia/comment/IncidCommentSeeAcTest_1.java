@@ -47,9 +47,7 @@ import static org.junit.Assert.assertThat;
  * User: pedro@didekin
  * Date: 08/02/16
  * Time: 10:28
- */
-
-/**
+ *
  * Tests sin comentarios registrados.
  */
 @RunWith(AndroidJUnit4.class)

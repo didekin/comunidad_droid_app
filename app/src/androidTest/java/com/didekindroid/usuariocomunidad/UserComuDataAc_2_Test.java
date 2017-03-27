@@ -130,7 +130,7 @@ public class UserComuDataAc_2_Test {
         onView(ViewMatchers.withId(R.id.usercomu_data_ac_delete_button)).perform(click());
         onView(ViewMatchers.withId(R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));
 
-        assertThat(TKhandler.getAccessTokenInCache(), nullValue());
+        assertThat(TKhandler.getTokenCache().get(), nullValue());
         assertThat(TKhandler.getRefreshTokenFile().exists(), is(false));
         assertThat(TKhandler.isRegisteredUser(), is(false));
     }

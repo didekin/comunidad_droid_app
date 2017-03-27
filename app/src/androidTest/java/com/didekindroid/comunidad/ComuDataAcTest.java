@@ -38,7 +38,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.comunidad.ComunidadService.AppComuServ;
+import static com.didekindroid.comunidad.ComunidadDao.comunidadDao;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
@@ -89,7 +89,7 @@ public class ComuDataAcTest {
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
     {
-        Thread.sleep(4000);
+        Thread.sleep(2000);
     }
 
     @Before
@@ -170,7 +170,7 @@ public class ComuDataAcTest {
         onView(ViewMatchers.withId(R.id.comu_data_ac_button)).check(matches(isDisplayed())).perform(click());
         // Verificamos cambios.
         onView(ViewMatchers.withId(R.id.see_usercomu_by_user_frg)).check(matches(isDisplayed()));
-        Comunidad comunidadDb = AppComuServ.getComuData(mComunidad.getC_Id());
+        Comunidad comunidadDb = comunidadDao.getComuData(mComunidad.getC_Id());
         assertThat(comunidadDb != null ? comunidadDb.getMunicipio() : null, is(new Municipio((short) 119, new Provincia((short) 46))));
         assertThat(comunidadDb != null ? comunidadDb.getNombreVia() : null, is("nombre via One"));
         assertThat(comunidadDb != null ? comunidadDb.getNumero() : 0, is((short) 123));
@@ -185,7 +185,7 @@ public class ComuDataAcTest {
         onView(ViewMatchers.withId(R.id.comu_data_ac_button)).check(matches(isDisplayed())).perform(scrollTo(), click());
         onView(ViewMatchers.withId(R.id.see_usercomu_by_user_frg)).check(matches(isDisplayed())).perform(closeSoftKeyboard());
 
-        Comunidad comunidadDb = AppComuServ.getComuData(mComunidad.getC_Id());
+        Comunidad comunidadDb = comunidadDao.getComuData(mComunidad.getC_Id());
         assertThat(comunidadDb != null ? comunidadDb.getMunicipio() : null, Matchers.is(ComuDataTestUtil.COMU_LA_PLAZUELA_5.getMunicipio()));
         assertThat(comunidadDb != null ? comunidadDb.getNombreVia() : null, Matchers.is(ComuDataTestUtil.COMU_LA_PLAZUELA_5.getNombreVia()));
 

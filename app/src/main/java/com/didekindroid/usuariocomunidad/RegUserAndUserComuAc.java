@@ -17,6 +17,7 @@ import com.didekindroid.exception.UiException;
 import com.didekindroid.security.IdentityCacher;
 import com.didekindroid.usuario.RegUserFr;
 import com.didekindroid.usuario.UsuarioBean;
+import com.didekindroid.usuariocomunidad.listbycomu.SeeUserComuByComuAc;
 import com.didekindroid.util.ConnectionUtils;
 import com.didekindroid.util.UIutils;
 import com.didekinlib.http.ErrorBean;
@@ -47,9 +48,7 @@ import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
  * User: pedro@didekin
  * Date: 11/05/15
  * Time: 19:13
- */
-
-/**
+ *
  * Preconditions:
  * 1. The user is not registered.
  * 2. The activity receives a comunidad object, as an intent key, with the following fields:
@@ -167,6 +166,7 @@ public class RegUserAndUserComuAc extends AppCompatActivity {
     //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
     //    ============================================================
 
+    @SuppressWarnings("WeakerAccess")
     class UserAndUserComuRegister extends AsyncTask<UsuarioComunidad, Void, Void> {
 
         UiException uiException;

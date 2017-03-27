@@ -132,7 +132,7 @@ public class IncidEditAc extends AppCompatActivity {
 //    ..................... INNER CLASSES  .......................
 //    ============================================================
 
-    // TODO: to persist the task during restarts and properly cancel the task when the activity is destroyed. (Example in Shelves)
+    @SuppressWarnings("WeakerAccess")
     class ResolucionGetter extends AsyncTask<Integer, Void, Resolucion> {
 
         private UiException uiException;

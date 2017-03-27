@@ -12,6 +12,7 @@ import com.didekindroid.R;
 import com.didekindroid.comunidad.ComunidadBean;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.security.IdentityCacher;
+import com.didekindroid.usuariocomunidad.listbycomu.SeeUserComuByComuAc;
 import com.didekindroid.util.ConnectionUtils;
 import com.didekindroid.util.MenuRouter;
 import com.didekindroid.util.UIutils;
@@ -36,9 +37,7 @@ import static com.didekinlib.model.common.dominio.ValidDataPatterns.LINE_BREAK;
  * User: pedro@didekin
  * Date: 11/05/15
  * Time: 19:13
- */
-
-/**
+ *
  * Preconditions:
  * 1. The user is already registered.
  * 2. The activity receives a comunidad object, as an intent key, with the following fields:
@@ -137,6 +136,7 @@ public class RegUserComuAc extends AppCompatActivity {
     //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
     //    ============================================================
 
+    @SuppressWarnings("WeakerAccess")
     class UserComuRegister extends AsyncTask<UsuarioComunidad, Void, Integer> {
 
         UiException uiException;

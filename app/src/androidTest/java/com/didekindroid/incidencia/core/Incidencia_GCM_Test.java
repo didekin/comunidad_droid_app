@@ -10,9 +10,9 @@ import android.support.annotation.RequiresApi;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekindroid.api.ManagerMock;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.usuario.firebase.ControllerFirebaseToken;
+import com.didekindroid.usuario.firebase.CtrlerFirebaseToken;
+import com.didekindroid.usuario.firebase.CtrlerFirebaseTokenIf;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.junit.After;
@@ -77,7 +77,7 @@ public abstract class Incidencia_GCM_Test {
 
     protected void checkToken() throws InterruptedException, UiException
     {
-        ControllerFirebaseTokenIf controller = new ControllerFirebaseToken(newViewerFirebaseToken(new ManagerMock(mActivity)));
+        CtrlerFirebaseTokenIf controller = new CtrlerFirebaseToken(newViewerFirebaseToken(mActivity));
         firebaseToken = FirebaseInstanceId.getInstance().getToken();
         await().atMost(6, SECONDS).until(getGcmToken(), allOf(
                 notNullValue(),

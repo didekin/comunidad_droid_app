@@ -25,7 +25,7 @@ public interface IdentityCacher {
 
     String doHttpAuthHeader(SpringOauthToken oauthToken) throws UiException;
 
-    SpringOauthToken getAccessTokenInCache() throws UiException;
+    void refreshAccessToken(OauthTokenReactorIf reactor);
 
     Context getContext();
 

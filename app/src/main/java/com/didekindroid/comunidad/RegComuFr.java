@@ -2,7 +2,6 @@ package com.didekindroid.comunidad;
 
 
 import android.app.Fragment;
-import android.content.Context;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -57,20 +56,6 @@ public class RegComuFr extends Fragment {
                 .findViewById(R.id.comunidad_numero_editT)).getText().toString());
         comunidadBean.setSufijoNumero(((EditText) comunidadSearchView
                 .findViewById(R.id.comunidad_sufijo_numero_editT)).getText().toString());
-    }
-
-    @Override
-    public void onAttach(Context context)
-    {
-        super.onAttach(context);
-        Timber.d("onAttach()");
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        Timber.d("onCreate()");
     }
 
     @Override

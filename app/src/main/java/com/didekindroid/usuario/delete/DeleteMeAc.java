@@ -1,7 +1,5 @@
 package com.didekindroid.usuario.delete;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -9,18 +7,15 @@ import android.view.View;
 import android.widget.Button;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ManagerIf;
-import com.didekindroid.exception.UiException;
-import com.didekindroid.exception.UiExceptionIf;
+import com.didekindroid.api.RootViewReplacer;
+import com.didekindroid.api.RootViewReplacerIf;
 import com.didekindroid.util.MenuRouter;
 
 import timber.log.Timber;
 
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
-import static com.didekindroid.api.ManagerIf.ViewerIf;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
-import static com.didekindroid.util.DefaultNextAcRouter.acRouter;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.doToolBar;
 
@@ -30,10 +25,10 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * Postconditions:
  * 1. Unregistered user, if she chooses so. ComuSearchAc is to be showed.
  */
-public class DeleteMeAc extends AppCompatActivity implements ViewerIf<View,Object>, ManagerIf<Object> {
+public class DeleteMeAc extends AppCompatActivity implements RootViewReplacerIf {
 
     View acView;
-    ControllerDeleteMeIf controller;
+    CtrlerDeleteMeIf controller;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -44,11 +39,6 @@ public class DeleteMeAc extends AppCompatActivity implements ViewerIf<View,Objec
         acView = getLayoutInflater().inflate(R.layout.delete_me_ac, null);
         setContentView(acView);
         doToolBar(this, true);
-        // Controller initialization.
-        controller = new ControllerDeleteMe(this);
-
-        // Preconditions.
-        assertTrue(controller.isRegisteredUser(), user_should_be_registered);
 
         Button mUnregisterButton = (Button) findViewById(R.id.delete_me_ac_unreg_button);
         mUnregisterButton.setOnClickListener(new View.OnClickListener() {
@@ -56,9 +46,20 @@ public class DeleteMeAc extends AppCompatActivity implements ViewerIf<View,Objec
             public void onClick(View v)
             {
                 Timber.d("mUnregisterButton.OnClickListener().onClick()");
-                controller.unregisterUser();
+                controller.deleteMeRemote();
             }
         });
+    }
+
+    @Override
+    protected void onStart()
+    {
+        Timber.d("onStart()");
+        super.onStart();
+        // Controller initialization.
+        controller = new CtrlerDeleteMe(this);
+        // Preconditions.
+        assertTrue(controller.isRegisteredUser(), user_should_be_registered);
     }
 
     @Override
@@ -66,8 +67,14 @@ public class DeleteMeAc extends AppCompatActivity implements ViewerIf<View,Objec
     {
         Timber.d("onStop()");
         super.onStop();
-        // Viewer lifecycle call.
-        clearControllerSubscriptions();
+        controller.clearSubscriptions();
+    }
+
+    @Override
+    public void replaceRootView(Bundle bundle)
+    {
+        Timber.d("replaceView()");
+        new RootViewReplacer(this).replacerRootView(bundle, FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TOP);
     }
 
     // ============================================================
@@ -88,62 +95,5 @@ public class DeleteMeAc extends AppCompatActivity implements ViewerIf<View,Objec
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    // ============================================================
-    //  ................. VIEWER IMPLEMENTATION ...............
-    // ============================================================
-
-    @Override
-    public ManagerIf<Object> getManager()
-    {
-        Timber.d("getContext()");
-        return this;
-    }
-
-    @Override
-    public UiExceptionIf.ActionForUiExceptionIf processControllerError(UiException ui)
-    {
-        Timber.d("processControllerError()");
-        return ui.processMe(this, new Intent());
-    }
-
-    @Override
-    public int clearControllerSubscriptions()
-    {
-        return controller.clearSubscriptions();
-    }
-
-    @Override
-    public View getViewInViewer()
-    {
-        Timber.d("getViewInViewer()");
-        return acView;
-    }
-
-    // ============================================================
-    //   .............. ManagerIf ...............
-    // ============================================================
-
-    @Override
-    public Activity getActivity()
-    {
-        return this;
-    }
-
-    @Override
-    public UiExceptionIf.ActionForUiExceptionIf processViewerError(UiException ui)
-    {
-        Timber.d("processViewerError()");
-        return ui.processMe(this, new Intent());
-    }
-
-    @Override
-    public void replaceRootView(Object initParamsForView)
-    {
-        Timber.d("replaceRootView()");
-        Intent intent = new Intent(this, acRouter.getNextActivity(this.getClass()));
-        intent.setFlags(FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
     }
 }

@@ -1,7 +1,5 @@
 package com.didekindroid.incidencia.core.reg;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,23 +11,21 @@ import android.widget.CursorAdapter;
 import android.widget.Spinner;
 
 import com.didekindroid.R;
-import com.didekindroid.exception.UiException;
-import com.didekindroid.exception.UiExceptionIf;
+import com.didekindroid.api.CtrlerSpinnerIf;
+import com.didekindroid.api.ViewerSelectableIf;
 import com.didekindroid.incidencia.core.IncidImportanciaBean;
 import com.didekindroid.incidencia.core.IncidenciaBean;
 import com.didekindroid.incidencia.core.IncidenciaDataDbHelper;
 import com.didekindroid.incidencia.spinner.AmbitoSpinnerSettable;
 import com.didekindroid.incidencia.spinner.ImportanciaSpinnerSettable;
-import com.didekindroid.incidencia.spinner.ManagerComuSpinnerIf;
 import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 
 import timber.log.Timber;
 
-import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.comunidad.spinner.ViewerComuSpinner.newViewerComuSpinner;
 import static com.didekindroid.incidencia.spinner.IncidSpinnersHelper.HELPER;
-import static com.didekindroid.incidencia.spinner.ViewerComuSpinner.newComuSpinnerViewer;
 import static com.didekindroid.usuario.firebase.ViewerFirebaseToken.newViewerFirebaseToken;
 import static com.didekindroid.util.UIutils.closeCursor;
 
@@ -37,8 +33,7 @@ import static com.didekindroid.util.UIutils.closeCursor;
  *
  */
 @SuppressWarnings("ConstantConditions")
-public class IncidRegAcFragment extends Fragment implements AmbitoSpinnerSettable,
-        ImportanciaSpinnerSettable, ManagerComuSpinnerIf {
+public class IncidRegAcFragment extends Fragment implements AmbitoSpinnerSettable, ImportanciaSpinnerSettable {
 
     IncidenciaBean mIncidenciaBean;
     Spinner mImportanciaSpinner;
@@ -47,25 +42,9 @@ public class IncidRegAcFragment extends Fragment implements AmbitoSpinnerSettabl
     View rootFrgView;
     IncidImportanciaBean mIncidImportanciaBean;
 
-    ManagerComuSpinnerIf comuSpinnerManager;
-    ViewerComuSpinnerIf comuSpinnerViewer;
-    int comunidadSelectedIndex;
-
+    ViewerSelectableIf<Spinner, CtrlerSpinnerIf> viewerComuSpinner;
     ViewerFirebaseTokenIf viewerFirebaseToken;
 
-    @Override
-    public void onAttach(Context context)
-    {
-        super.onAttach(context);
-        Timber.d("onAttach()");
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        Timber.d("onCreate()");
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -91,8 +70,8 @@ public class IncidRegAcFragment extends Fragment implements AmbitoSpinnerSettabl
         mImportanciaSpinner = (Spinner) getView().findViewById(R.id.incid_reg_importancia_spinner);
         HELPER.doImportanciaSpinner(this);
 
-        comuSpinnerManager = this;
-        comuSpinnerViewer = newComuSpinnerViewer(comuSpinnerManager).setDataInView(savedState);
+        viewerComuSpinner = newViewerComuSpinner((Spinner) rootFrgView.findViewById(R.id.incid_reg_comunidad_spinner), getActivity(), null);
+        viewerComuSpinner.doViewInViewer(savedState);
     }
 
     @Override
@@ -100,7 +79,7 @@ public class IncidRegAcFragment extends Fragment implements AmbitoSpinnerSettabl
     {
         Timber.d("onStart()");
         super.onStart();
-        viewerFirebaseToken = newViewerFirebaseToken(this);
+        viewerFirebaseToken = newViewerFirebaseToken(getActivity());
         viewerFirebaseToken.checkGcmTokenAsync();
     }
 
@@ -108,7 +87,7 @@ public class IncidRegAcFragment extends Fragment implements AmbitoSpinnerSettabl
     public void onSaveInstanceState(Bundle savedState)
     {
         Timber.d("onSaveInstanceState()");
-        comuSpinnerViewer.saveSelectedIndex(savedState);
+        viewerComuSpinner.saveState(savedState);
         super.onSaveInstanceState(savedState);
     }
 
@@ -119,8 +98,8 @@ public class IncidRegAcFragment extends Fragment implements AmbitoSpinnerSettabl
         super.onDestroy();
         closeCursor(mAmbitoIncidenciaSpinner.getAdapter());
         dbHelper.close();
-        comuSpinnerViewer.clearControllerSubscriptions();
-        viewerFirebaseToken.clearControllerSubscriptions();
+        viewerComuSpinner.clearSubscriptions();
+        viewerFirebaseToken.clearSubscriptions();
     }
 
 //    ============================================================
@@ -203,53 +182,6 @@ public class IncidRegAcFragment extends Fragment implements AmbitoSpinnerSettabl
         throw new UnsupportedOperationException("getIncidencia() not supported");
     }
 
-//    ============================================================================
-//    ....................... MANAGER COMUNIDAD SPINNER  .........................
-//    ============================================================================
-
-    @Override
-    public long getComunidadIdInIntent()
-    {
-        Timber.d("getComunidadIdInIntent()");
-        return getActivity().getIntent().getLongExtra(COMUNIDAD_ID.key, 0);
-    }
-
-    @Override
-    public UiExceptionIf.ActionForUiExceptionIf processViewerError(UiException ui)
-    {
-        Timber.d("processViewerError()");
-        return ui.processMe(getActivity(), new Intent());
-    }
-
-    @Override
-    public void replaceRootView(Object initParamsForView)
-    {
-        throw new UnsupportedOperationException();
-    }
-
-    public Spinner initSpinnerView()
-    {
-        Timber.d("initSpinnerView()");
-        Spinner spinnerToInit = getSpinnerViewInManager();
-        spinnerToInit.setOnItemSelectedListener(getSpinnerListener());
-        return spinnerToInit;
-    }
-
-    @Override
-    public Spinner getSpinnerViewInManager()
-    {
-        Timber.d("getSpinnerViewInManager()");
-        return (Spinner) rootFrgView.findViewById(R.id.incid_reg_comunidad_spinner);
-    }
-
-    @Override
-    public AdapterView.OnItemSelectedListener getSpinnerListener()
-    {
-        Timber.d("getSpinnerListener()");
-        return new ComuSelectedListener();
-    }
-
-
     // ...................... HELPERS ....................
 
     @SuppressWarnings("WeakerAccess")
@@ -259,7 +191,6 @@ public class IncidRegAcFragment extends Fragment implements AmbitoSpinnerSettabl
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
         {
             Timber.d("comunidadSpinner.onItemSelected()");
-            comunidadSelectedIndex = position;
             Comunidad comunidad = (Comunidad) parent.getItemAtPosition(position);
             mIncidenciaBean.setComunidadId(comunidad.getC_Id());
         }

@@ -1,9 +1,12 @@
 package com.didekindroid.usuario.userdata;
 
+import android.content.Intent;
 import android.view.View;
 
-import com.didekindroid.api.ManagerIf.ViewerIf;
+import com.didekindroid.api.ViewerIf;
 import com.didekinlib.model.usuario.Usuario;
+
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * User: pedro@didekin
@@ -11,11 +14,9 @@ import com.didekinlib.model.usuario.Usuario;
  * Time: 17:25
  */
 
-interface ViewerUserDataIf<T extends View, B> extends ViewerIf<T,B> {
+interface ViewerUserDataIf extends ViewerIf<View,CtrlerUserDataIf> {
 
-    void initUserDataInView();
-
-    String[] getDataChangedFromView();
+    AtomicReference<Intent> getIntentForMenu();
 
     boolean checkUserData();
 
@@ -23,7 +24,7 @@ interface ViewerUserDataIf<T extends View, B> extends ViewerIf<T,B> {
 
     boolean modifyUserData(UserChangeToMake userChangeToMake);
 
-    void processBackUsuarioInView(Usuario usuario);
+    void processBackUserDataLoaded(Usuario usuario);
 
     enum UserChangeToMake {
         alias_only,

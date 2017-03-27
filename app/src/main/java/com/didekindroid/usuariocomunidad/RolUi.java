@@ -26,9 +26,7 @@ public enum RolUi {
 
     private static final Map<String, RolUi> functionToResorceString = new HashMap<>();
 
-    /**
-     *  Map relating a function with its RolUi instance.
-     */
+    /* Map relating a function with its RolUi instance. */
     static {
         for (RolUi rolUi : values()) {
             functionToResorceString.put(rolUi.function, rolUi);

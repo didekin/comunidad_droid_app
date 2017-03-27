@@ -92,7 +92,7 @@ public class RegComuAndUserComuAcTest {
         assertThat(activity, notNullValue());
 
         assertThat(TKhandler.isRegisteredUser(), is(true));
-        assertThat(TKhandler.getAccessTokenInCache(), notNullValue());
+        assertThat(TKhandler.getTokenCache().get(), notNullValue());
 
         assertThat(regComuFr, notNullValue());
         assertThat(regUserComuFr, notNullValue());

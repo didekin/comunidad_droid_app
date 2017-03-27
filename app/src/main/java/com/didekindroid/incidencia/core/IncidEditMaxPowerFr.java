@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.incidencia.list.IncidSeeOpenByComuAc;
+import com.didekindroid.incidencia.list.open.IncidSeeOpenByComuAc;
 import com.didekindroid.incidencia.spinner.AmbitoSpinnerSettable;
 import com.didekindroid.incidencia.spinner.ImportanciaSpinnerSettable;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
@@ -229,6 +229,7 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
 //    ..................... INNER CLASSES  .......................
 //    ============================================================
 
+    @SuppressWarnings("WeakerAccess")
     class IncidenciaModifyer extends AsyncTask<IncidImportancia, Void, Integer> {
 
         UiException uiException;
@@ -264,6 +265,7 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
         }
     }
 
+    @SuppressWarnings("WeakerAccess")
     class IncidenciaEraser extends AsyncTask<Incidencia, Void, Integer> {
 
         UiException uiException;

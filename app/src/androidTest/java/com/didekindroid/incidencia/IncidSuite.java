@@ -5,7 +5,6 @@ import com.didekindroid.incidencia.core.IncidCoreSuite;
 import com.didekindroid.incidencia.firebase.IncidFirebaseDownMsgHandlerTest;
 import com.didekindroid.incidencia.list.IncidListSuite;
 import com.didekindroid.incidencia.resolucion.IncidResolucionSuite;
-import com.didekindroid.incidencia.spinner.IncidSpinnerSuite;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -24,7 +23,6 @@ import org.junit.runners.Suite;
         IncidFirebaseDownMsgHandlerTest.class,
         IncidListSuite.class,
         IncidResolucionSuite.class,
-        IncidSpinnerSuite.class,
 })
 public class IncidSuite {
 }

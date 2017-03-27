@@ -3,13 +3,11 @@ package com.didekindroid.usuario.userdata;
 import android.app.Activity;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
-import android.view.View;
 import android.widget.EditText;
 
 import com.didekindroid.ExtendableTestAc;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.usuario.UsuarioBean;
 import com.didekinlib.model.usuario.Usuario;
 
 import org.junit.After;
@@ -19,15 +17,11 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
-import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
@@ -40,42 +34,32 @@ import static com.didekindroid.R.id.reg_usuario_email_editT;
 import static com.didekindroid.R.id.user_data_ac_password_ediT;
 import static com.didekindroid.R.id.user_data_modif_button;
 import static com.didekindroid.comunidad.testutil.ComuMenuTestUtil.COMU_SEARCH_AC;
-import static com.didekindroid.exception.UiExceptionRouter.GENERIC_APP_ACC;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_OPEN_BY_COMU_AC;
-import static com.didekindroid.testutil.ActivityTestUtils.checkProcessCtrlError;
-import static com.didekindroid.testutil.ActivityTestUtils.checkProcessCtrlErrorOnlyToast;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.checkViewerReplaceView;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
-import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
+import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typeUserData;
 import static com.didekindroid.usuario.testutil.UserItemMenuTestUtils.DELETE_ME_AC;
 import static com.didekindroid.usuario.testutil.UserItemMenuTestUtils.PASSWORD_CHANGE_AC;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_DROID;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanWithTkhandler;
-import static com.didekindroid.usuario.userdata.ViewerUserDataIf.UserChangeToMake.alias_only;
-import static com.didekindroid.usuario.userdata.ViewerUserDataIf.UserChangeToMake.nothing;
-import static com.didekindroid.usuario.userdata.ViewerUserDataIf.UserChangeToMake.userName;
+import static com.didekindroid.usuario.userdata.ViewerUserData.newViewerUserData;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.SEE_USERCOMU_BY_USER_AC;
-import static com.didekinlib.http.GenericExceptionMsg.BAD_REQUEST;
-import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.awaitility.Awaitility.await;
 import static org.awaitility.Awaitility.fieldIn;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
@@ -88,8 +72,11 @@ import static org.junit.Assert.fail;
 public class UserDataAcTest implements ExtendableTestAc {
 
     final static AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
+
     UserDataAc activity;
+    ViewerUserData viewer;
     Usuario registeredUser;
+
     @Rule
     public IntentsTestRule<? extends Activity> mActivityRule = new IntentsTestRule<UserDataAc>(UserDataAc.class) {
         @Override
@@ -104,7 +91,6 @@ public class UserDataAcTest implements ExtendableTestAc {
         }
     };
 
-    ControllerUserDataIf controller;
     int activityLayoutId = R.id.user_data_ac_layout;
 
     @BeforeClass
@@ -117,8 +103,7 @@ public class UserDataAcTest implements ExtendableTestAc {
     public void setUp() throws Exception
     {
         activity = (UserDataAc) mActivityRule.getActivity();
-        // Default initialization.
-        controller = new ControllerUserData(activity);
+        viewer = (ViewerUserData) newViewerUserData(activity);
     }
 
     @After
@@ -148,14 +133,11 @@ public class UserDataAcTest implements ExtendableTestAc {
     public void testOncreate()
     {
         onView(withId(activityLayoutId)).check(matches(isDisplayed()));
-        // Preconditions.
-        waitAtMost(1500, MILLISECONDS).until(fieldIn(activity).ofType(Usuario.class).andWithName("oldUser"), equalTo(registeredUser));
 
         onView(withId(reg_usuario_email_editT))
                 .check(matches(withText(containsString(registeredUser.getUserName()))));
         onView(withId(reg_usuario_alias_ediT))
                 .check(matches(withText(containsString(registeredUser.getAlias()))));
-
         onView(allOf(withId(user_data_ac_password_ediT),
                 withHint(R.string.user_data_ac_password_hint)))
                 .check(matches(withText(containsString(""))));
@@ -168,8 +150,6 @@ public class UserDataAcTest implements ExtendableTestAc {
     @Test  // Integration test: wrong password.
     public void testModifyUserData_A() throws InterruptedException
     {
-        // Preconditions.
-        waitAtMost(1500, MILLISECONDS).until(fieldIn(activity).ofType(Usuario.class).andWithName("oldUser"), equalTo(registeredUser));
         typeUserData("new_juan@juan.es", USER_JUAN.getAlias(), "wrong_password");
         onView(withId(user_data_modif_button)).perform(scrollTo()).check(matches(isDisplayed())).perform(click());
         waitAtMost(1, SECONDS).until(isToastInView(R.string.password_wrong, activity));
@@ -178,9 +158,6 @@ public class UserDataAcTest implements ExtendableTestAc {
     @Test  // Integration test: modify user OK.
     public void testModifyUserData_B() throws UiException
     {
-        // Preconditions.
-        waitAtMost(1500, MILLISECONDS).until(fieldIn(activity).ofType(Usuario.class).andWithName("oldUser"), equalTo(registeredUser));
-
         typeUserData("new@username.com", "new_alias", USER_JUAN.getPassword());
         onView(withId(user_data_modif_button)).perform(scrollTo())
                 .check(matches(isDisplayed())).perform(click());
@@ -195,194 +172,13 @@ public class UserDataAcTest implements ExtendableTestAc {
     {
         InstrumentationRegistry.getInstrumentation().callActivityOnStop(activity);
         // Check.
-        assertThat(controller.getSubscriptions().size(), is(0));
-    }
-
-    // ============================================================
-    //    ................. VIEWER TESTS ..................
-    // ============================================================
-
-    @Test
-    public void testProcessControllerError_1() throws InterruptedException
-    {
-        checkProcessCtrlErrorOnlyToast(activity, BAD_REQUEST, R.string.password_wrong, activityLayoutId);
+        assertThat(viewer.getController().getSubscriptions().size(), is(0));
     }
 
     @Test
-    public void testProcessControllerError_2()
+    public void testReplaceRootView()
     {
-        assertThat(checkProcessCtrlError(activity, GENERIC_INTERNAL_ERROR, GENERIC_APP_ACC), is(true));
-    }
-
-    @Test
-    public void testReplaceView()
-    {
-        checkViewerReplaceView(activity, getNextViewResourceId());
-    }
-
-    // ============================================================
-    //    ............. VIEWER USER DATA TESTS ...............
-    // ============================================================
-
-    @Test
-    public void testInitUserDataInView()
-    {
-        // Preconditions.
-        waitAtMost(1500, MILLISECONDS).until(fieldIn(activity).ofType(Usuario.class).andWithName("oldUser"), equalTo(registeredUser));
-        final AtomicBoolean isRun = new AtomicBoolean(false);
-
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                activity.initUserDataInView();
-                assertThat(isRun.getAndSet(true), is(false));
-            }
-        });
-
-        waitAtMost(1, SECONDS).untilTrue(isRun);
-        checkInitialData(USER_JUAN.getUserName(), USER_JUAN.getAlias());
-    }
-
-    @Test
-    public void testGetDataChangedFromView()
-    {
-        // Preconditions.
-        waitAtMost(1500, MILLISECONDS).until(fieldIn(activity).ofType(Usuario.class).andWithName("oldUser"), equalTo(registeredUser));
-        typeUserData("newuser@user.com", USER_JUAN.getAlias(), USER_JUAN.getPassword());
-
-        final AtomicBoolean isRun = new AtomicBoolean(false);
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                activity.getDataChangedFromView();
-                assertThat(isRun.getAndSet(true), is(false));
-            }
-        });
-        waitAtMost(1, SECONDS).untilTrue(isRun);
-        assertThat(activity.getDataChangedFromView()[0], is("newuser@user.com"));
-        assertThat(activity.getDataChangedFromView()[1], is(USER_JUAN.getAlias()));
-        assertThat(activity.getDataChangedFromView()[2], is(USER_JUAN.getPassword()));
-    }
-
-    @Test
-    public void testCheckUserData_1()
-    {
-        typeUserData("newuser@user.com", USER_JUAN.getAlias(), USER_JUAN.getPassword());
-
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                assertThat(activity.checkUserData(), is(true));
-            }
-        });
-        waitAtMost(1, SECONDS).until(fieldIn(activity).ofType(UsuarioBean.class), notNullValue());
-        assertThat(activity.usuarioBean.getUserName(), is("newuser@user.com"));
-        assertThat(activity.usuarioBean.getAlias(), is(USER_JUAN.getAlias()));
-        assertThat(activity.usuarioBean.getPassword(), is(USER_JUAN.getPassword()));
-    }
-
-    @Test
-    public void testCheckUserData_2()
-    {
-        typeUserData("wrong_newuser.com", USER_JUAN.getAlias(), USER_JUAN.getPassword());
-
-        activity.usuarioBean = null;
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                assertThat(activity.checkUserData(), is(false));
-            }
-        });
-        waitAtMost(1, SECONDS).until(isToastInView(R.string.email_hint, activity));
-    }
-
-    @Test
-    public void testWhatDataChangeToMake()
-    {
-        // Preconditions.
-        waitAtMost(1500, MILLISECONDS).until(fieldIn(activity).ofType(Usuario.class).andWithName("oldUser"), equalTo(registeredUser));
-        onView(withId(user_data_ac_password_ediT)).perform(typeText(USER_JUAN.getPassword()), closeSoftKeyboard());
-
-        final AtomicBoolean isRun = new AtomicBoolean(false);
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                assertThat(activity.checkUserData(), is(true));
-                assertThat(activity.whatDataChangeToMake(), is(nothing));
-                assertThat(isRun.getAndSet(true), is(false));
-            }
-        });
-        waitAtMost(1, SECONDS).untilTrue(isRun);
-
-        typeUserData(USER_JUAN.getUserName(), "new_alias", USER_JUAN.getPassword());
-        isRun.set(false);
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                assertThat(activity.checkUserData(), is(true));
-                assertThat(activity.whatDataChangeToMake(), is(alias_only));
-                assertThat(isRun.getAndSet(true), is(false));
-            }
-        });
-        waitAtMost(1, SECONDS).untilTrue(isRun);
-
-        typeUserData("new@username.com", "new_alias", USER_JUAN.getPassword());
-        isRun.set(false);
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                assertThat(activity.checkUserData(), is(true));
-                assertThat(activity.whatDataChangeToMake(), is(userName));
-                assertThat(isRun.getAndSet(true), is(false));
-            }
-        });
-        waitAtMost(1, SECONDS).untilTrue(isRun);
-    }
-
-    @Test
-    public void testModifyUserData() throws InterruptedException
-    {
-        // Preconditions.
-        waitAtMost(1500, MILLISECONDS).until(fieldIn(activity).ofType(Usuario.class).andWithName("oldUser"), equalTo(registeredUser));
-        // No modificamos ningún dato.
-        onView(withId(user_data_ac_password_ediT)).perform(typeText(USER_JUAN.getPassword()), closeSoftKeyboard());
-
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                assertThat(activity.checkUserData(), is(true));
-                activity.modifyUserData(activity.whatDataChangeToMake());
-            }
-        });
-        await().atMost(2, SECONDS).until(isToastInView(R.string.no_user_data_to_be_modified, activity));
-    }
-
-    @Test
-    public void processBackUsuarioInView()
-    {
-        // Preconditions.
-        assertThat(activity.oldUser, not(is(USER_DROID)));
-        // Execute.
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                activity.processBackUsuarioInView(USER_DROID);
-            }
-        });
-        // Check.
-        waitAtMost(1, SECONDS).until(fieldIn(activity).ofType(Usuario.class).andWithName("oldUser"), is(USER_DROID));
-        assertThat(activity.oldUser.getUserName(), is(USER_DROID.getUserName()));
-        checkInitialData(USER_DROID.getUserName(), USER_DROID.getAlias());
-        assertThat(activity.intentForMenu.getStringExtra(user_name.key), is(activity.oldUser.getUserName()));
+        checkViewerReplaceView(viewer, getNextViewResourceId());
     }
 
     //    =================================  MENU TESTS ==================================
@@ -393,7 +189,7 @@ public class UserDataAcTest implements ExtendableTestAc {
         // Preconditions.
         waitAtMost(1500, MILLISECONDS).until(fieldIn(activity).ofType(Usuario.class).andWithName("oldUser"), equalTo(registeredUser));
         COMU_SEARCH_AC.checkMenuItem_WTk(activity);
-        intended(hasExtra(user_name.key, activity.oldUser.getUserName()));
+        intended(hasExtra(user_name.key, viewer.oldUser.get().getUserName()));
         // NO navigate-up.
     }
 
@@ -403,7 +199,7 @@ public class UserDataAcTest implements ExtendableTestAc {
         // Preconditions.
         waitAtMost(1500, MILLISECONDS).until(fieldIn(activity).ofType(Usuario.class).andWithName("oldUser"), equalTo(registeredUser));
         DELETE_ME_AC.checkMenuItem_WTk(activity);
-        intended(hasExtra(user_name.key, activity.oldUser.getUserName()));
+        intended(hasExtra(user_name.key, viewer.oldUser.get().getUserName()));
         checkUp(activityLayoutId);
     }
 
@@ -413,7 +209,7 @@ public class UserDataAcTest implements ExtendableTestAc {
         // Preconditions.
         waitAtMost(1500, MILLISECONDS).until(fieldIn(activity).ofType(Usuario.class).andWithName("oldUser"), equalTo(registeredUser));
         PASSWORD_CHANGE_AC.checkMenuItem_WTk(activity);
-        intended(hasExtra(user_name.key, activity.oldUser.getUserName()));
+        intended(hasExtra(user_name.key, viewer.oldUser.get().getUserName()));
         checkUp(activityLayoutId);
     }
 
@@ -423,7 +219,7 @@ public class UserDataAcTest implements ExtendableTestAc {
         // Preconditions.
         waitAtMost(1500, MILLISECONDS).until(fieldIn(activity).ofType(Usuario.class).andWithName("oldUser"), equalTo(registeredUser));
         SEE_USERCOMU_BY_USER_AC.checkMenuItem_WTk(activity);
-        intended(hasExtra(user_name.key, activity.oldUser.getUserName()));
+        intended(hasExtra(user_name.key, viewer.oldUser.get().getUserName()));
         checkUp(activityLayoutId);
     }
 
@@ -433,37 +229,15 @@ public class UserDataAcTest implements ExtendableTestAc {
         // Preconditions.
         waitAtMost(1500, MILLISECONDS).until(fieldIn(activity).ofType(Usuario.class).andWithName("oldUser"), equalTo(registeredUser));
         INCID_SEE_OPEN_BY_COMU_AC.checkMenuItem_WTk(activity);
-        intended(hasExtra(user_name.key, activity.oldUser.getUserName()));
+        intended(hasExtra(user_name.key,viewer.oldUser.get().getUserName()));
         checkUp(activityLayoutId);
     }
 
     /*    =================================  HELPERS ==================================*/
 
-    private void typeUserData(String userName, String alias, String password)
-    {
-        onView(withId(reg_usuario_email_editT)).perform(replaceText(userName), closeSoftKeyboard());
-        onView(withId(reg_usuario_alias_ediT)).perform(replaceText(alias));
-        onView(withId(user_data_ac_password_ediT)).perform(replaceText(password), closeSoftKeyboard());
-    }
-
     private void checkInitialData(String userName, String alias)
     {
         assertThat(((EditText) activity.acView.findViewById(R.id.reg_usuario_email_editT)).getText().toString(), is(userName));
         assertThat(((EditText) activity.acView.findViewById(R.id.reg_usuario_alias_ediT)).getText().toString(), is(alias));
-    }
-
-    class ControllerUserDataForTest extends ControllerUserData {
-
-        ControllerUserDataForTest(ViewerUserDataIf<View, Object> viewer)
-        {
-            super(viewer);
-        }
-
-        @Override
-        public int clearSubscriptions()
-        {
-            assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC), is(BEFORE_METHOD_EXEC));
-            return 99;
-        }
     }
 }

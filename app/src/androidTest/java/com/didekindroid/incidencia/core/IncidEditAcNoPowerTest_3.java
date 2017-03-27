@@ -27,9 +27,7 @@ import static org.hamcrest.CoreMatchers.not;
  * User: pedro@didekin
  * Date: 19/01/16
  * Time: 16:57
- */
-
-/**
+ *
  * Tests con inicio de IncidSeeUserComuImportancia desde IncidEditAc.IncidEditNoPowerFr.
  * Dos incidImportancias registradas en BD, para la misma incidencia.
  * Usuario inicial en sesión SIN permisos para modificar o borrar una incidencia.

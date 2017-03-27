@@ -46,9 +46,7 @@ import static org.hamcrest.CoreMatchers.is;
  * User: pedro@didekin
  * Date: 19/01/16
  * Time: 16:57
- */
-
-/**
+ *
  * Tests genéricos sobre aspecto y tests funcionales para un userComu CON permisos para modificar, pero NO borrar una incidencia.
  */
 @SuppressWarnings("UnnecessaryLocalVariable")

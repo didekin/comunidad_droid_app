@@ -3,6 +3,7 @@ package com.didekindroid.testutil;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.Bundle;
 import android.support.test.espresso.NoMatchingRootException;
 import android.support.test.espresso.NoMatchingViewException;
 import android.support.test.espresso.ViewInteraction;
@@ -13,9 +14,9 @@ import android.widget.BaseAdapter;
 import android.widget.DatePicker;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ManagerIf;
-import com.didekindroid.api.ManagerIf.ControllerIf;
-import com.didekindroid.api.ManagerIf.ViewerIf;
+import com.didekindroid.api.ControllerIf;
+import com.didekindroid.api.CtrlerIdentityIf;
+import com.didekindroid.api.ViewerIf;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf.ActionForUiExceptionIf;
 import com.didekindroid.security.IdentityCacher;
@@ -74,7 +75,7 @@ public final class ActivityTestUtils {
     {
     }
 
-    //    ============================= ACTIVITY ===================================
+    //    ============================= ACTIVITY / GENERIC ===================================
 
     public static Callable<Boolean> isActivityDying(final Activity activity)
     {
@@ -155,7 +156,7 @@ public final class ActivityTestUtils {
         assertThat(controller.getSubscriptions().size(), is(1));
     }
 
-    public static Callable<Boolean> hasRegisteredFlag(final ManagerIf.ControllerIdentityIf controller)
+    public static Callable<Boolean> hasRegisteredFlag(final CtrlerIdentityIf controller)
     {
         return new Callable<Boolean>() {
             public Boolean call() throws Exception
@@ -215,7 +216,7 @@ public final class ActivityTestUtils {
 
     public static boolean checkProcessCtrlError(final ViewerIf viewer, final ExceptionMsgIf exceptionMsg, ActionForUiExceptionIf actionToExpect)
     {
-        final Activity activityError = viewer.getManager().getActivity();
+        final Activity activityError = viewer.getActivity();
         final AtomicReference<ActionForUiExceptionIf> actionException = new AtomicReference<>(null);
 
         activityError.runOnUiThread(new Runnable() {
@@ -249,47 +250,26 @@ public final class ActivityTestUtils {
         onView(withId(activityLayoutId)).check(matches(isDisplayed()));
     }
 
-    public static boolean checkProcessViewerCtrError(final ManagerIf manager, final ExceptionMsgIf exceptionMsg, ActionForUiExceptionIf actionToExpect)
-    {
-        final Activity activity = manager.getActivity();
-        final AtomicReference<ActionForUiExceptionIf> actionException = new AtomicReference<>(null);
-
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                assertThat(actionException.compareAndSet(
-                        null,
-                        manager.processViewerError(new UiException(new ErrorBean(exceptionMsg)))
-                        ),
-                        is(true)
-                );
-            }
-        });
-        waitAtMost(1, SECONDS).untilAtomic(actionException, notNullValue());
-        return actionException.get().getActivityToGoClass().equals(actionToExpect.getActivityToGoClass());
-    }
-
     //    ============================= IDENTITY CACHE ===================================
 
-    public static void checkUpdateTokenCache(SpringOauthToken oldToken) throws UiException
+    public static void checkUpdateTokenCache(SpringOauthToken oldToken)
     {
-        assertThat(TKhandler.getAccessTokenInCache(), CoreMatchers.not(CoreMatchers.is(oldToken)));
+        assertThat(TKhandler.getTokenCache().get(), not(is(oldToken)));
         checkInitTokenCache();
     }
 
-    public static void checkInitTokenCache() throws UiException
+    public static void checkInitTokenCache()
     {
-        assertThat(TKhandler.getAccessTokenInCache(), notNullValue());
-        assertThat(TKhandler.getAccessTokenInCache().getValue().isEmpty(), CoreMatchers.is(false));
-        assertThat(TKhandler.getRefreshTokenValue().isEmpty(), CoreMatchers.is(false));
-        assertThat(TKhandler.getRefreshTokenFile().exists(), CoreMatchers.is(true));
+        assertThat(TKhandler.getTokenCache().get(), notNullValue());
+        assertThat(TKhandler.getTokenCache().get().getValue().isEmpty(), is(false));
+        assertThat(TKhandler.getRefreshTokenValue().isEmpty(), is(false));
+        assertThat(TKhandler.getRefreshTokenFile().exists(), is(true));
     }
 
-    public static void checkNoInitCache() throws UiException
+    public static void checkNoInitCache()
     {
-        assertThat(TKhandler.getAccessTokenInCache(), nullValue());
-        assertThat(TKhandler.getRefreshTokenFile().exists(), CoreMatchers.is(false));
+        assertThat(TKhandler.getTokenCache().get(), nullValue());
+        assertThat(TKhandler.getRefreshTokenFile().exists(), is(false));
     }
 
     public static Callable<String> getRefreshTokenValue(final IdentityCacher identityCacher)
@@ -329,22 +309,16 @@ public final class ActivityTestUtils {
         }
     }
 
-    public static void checkViewerReplaceView(final ViewerIf<View, Object> viewer, int resorceIdNextView)
+    public static void checkViewerReplaceView(final ViewerIf<View, ?> viewer, int resorceIdNextView)
     {
-        final ManagerIf<Object> manager = viewer.getManager();
-        checkManagerReplaceView(manager, resorceIdNextView);
-    }
-
-    public static void checkManagerReplaceView(final ManagerIf<Object> manager, int resorceIdNextView)
-    {
-        manager.getActivity().runOnUiThread(new Runnable() {
+        viewer.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run()
             {
-                manager.replaceRootView(null);
+                viewer.replaceRootView(new Bundle());
             }
         });
-        waitAtMost(1, SECONDS).until(isResourceIdDisplayed(resorceIdNextView));
+        waitAtMost(2, SECONDS).until(isResourceIdDisplayed(resorceIdNextView));
     }
 
     //    ============================ TOASTS ============================

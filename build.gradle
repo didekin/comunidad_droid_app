@@ -34,11 +34,11 @@ ext {
     minSdkVersion = 19
     targetSdkVersion = 25
     compileSdkVersion = 25
-    buildToolsVersion = '25'
+    buildToolsVersion = '25.0.2'
     sourceCompatibilityVersion = JavaVersion.VERSION_1_7
     targetCompatibilityVersion = JavaVersion.VERSION_1_7
     testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
-    androidSupportVersion = '25.2.0'
+    androidSupportVersion = '25.3.0'
     espressoVersion = '2.2.2'
     testRunnerRulesVersion = '0.5'
 

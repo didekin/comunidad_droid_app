@@ -209,7 +209,7 @@ public final class UserComuDaoRemote implements UsuarioComunidadEndPoints {
 
     public List<UsuarioComunidad> seeUserComusByComu(long idComunidad) throws UiException
     {
-        Timber.d("seeUserComusByComu()");
+        Timber.d("loadItemsByEntitiyId()");
         try {
             Response<List<UsuarioComunidad>> response = seeUserComusByComu(checkBearerTokenInCache(), idComunidad).execute();
             return getResponseBody(response);

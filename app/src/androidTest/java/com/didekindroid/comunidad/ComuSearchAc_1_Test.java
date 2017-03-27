@@ -2,18 +2,13 @@ package com.didekindroid.comunidad;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.action.ViewActions;
-import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum;
-import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
 
 import org.hamcrest.Matchers;
 import org.junit.After;
@@ -27,10 +22,15 @@ import java.io.File;
 import java.io.IOException;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.comunidad.RegComuFr.makeComunidadBeanFromView;
@@ -41,6 +41,8 @@ import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_NOTHING;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanWithTkhandler;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -58,7 +60,6 @@ public class ComuSearchAc_1_Test {
 
     private ComuSearchAc activity;
     Context context;
-    private Resources resources;
     private RegComuFr regComuFr;
     File refreshTkFile;
     CleanUserEnum whatClean = CLEAN_NOTHING;
@@ -69,7 +70,7 @@ public class ComuSearchAc_1_Test {
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
     {
-        Thread.sleep(3000);
+        Thread.sleep(2000);
     }
 
     @Before
@@ -77,8 +78,7 @@ public class ComuSearchAc_1_Test {
     {
         context = InstrumentationRegistry.getTargetContext();
         refreshTkFile = TKhandler.getRefreshTokenFile();
-        resources = context.getResources();
-        UsuarioDataTestUtils.cleanWithTkhandler();
+        cleanWithTkhandler();
     }
 
     @After
@@ -93,33 +93,29 @@ public class ComuSearchAc_1_Test {
         activity = mActivityRule.launchActivity(new Intent());
         regComuFr = (RegComuFr) activity.getFragmentManager().findFragmentById(R.id.reg_comunidad_frg);
 
-        assertThat(activity, notNullValue());
-        assertThat(resources, notNullValue());
-        assertThat(regComuFr, notNullValue());
-
-        onView(ViewMatchers.withId(R.id.appbar)).check(matches(isDisplayed()));
+        onView(withId(R.id.appbar)).check(matches(isDisplayed()));
         // Es la actividad inicial de la aplicación.
         onView(allOf(
-                ViewMatchers.withContentDescription(R.string.navigate_up_txt),
+                withContentDescription(R.string.navigate_up_txt),
                 isClickable())).check(doesNotExist());
 
-        onView(ViewMatchers.withId(R.id.reg_comunidad_frg)).check(matches(isDisplayed()));
-        onView(ViewMatchers.withId(R.id.tipo_via_spinner)).check(matches(isDisplayed()));
-        onView(ViewMatchers.withId(R.id.autonoma_comunidad_spinner)).check(matches(isDisplayed()));
-        onView(ViewMatchers.withId(R.id.provincia_spinner)).check(matches(isDisplayed()));
-        onView(ViewMatchers.withId(R.id.municipio_spinner)).check(matches(isDisplayed()));
+        onView(withId(R.id.reg_comunidad_frg)).check(matches(isDisplayed()));
+        onView(withId(R.id.tipo_via_spinner)).check(matches(isDisplayed()));
+        onView(withId(R.id.autonoma_comunidad_spinner)).check(matches(isDisplayed()));
+        onView(withId(R.id.provincia_spinner)).check(matches(isDisplayed()));
+        onView(withId(R.id.municipio_spinner)).check(matches(isDisplayed()));
 
         assertThat(regComuFr.getComunidadBean().getTipoVia(), Matchers.is("tipo de vía"));
         onView(allOf(
-                ViewMatchers.withId(R.id.app_spinner_1_dropdown_item),
-                withParent(ViewMatchers.withId(R.id.tipo_via_spinner))
+                withId(R.id.app_spinner_1_dropdown_item),
+                withParent(withId(R.id.tipo_via_spinner))
         )).check(matches(withText(Matchers.is("tipo de vía")))).check(matches(isDisplayed()));
 
-        onView(allOf(ViewMatchers.withId(R.id.app_spinner_1_dropdown_item), withParent(ViewMatchers.withId(R.id.autonoma_comunidad_spinner))))
+        onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.autonoma_comunidad_spinner))))
                 .check(matches(withText(Matchers.is("comunidad autónoma")))).check(matches(isDisplayed()));
-        onView(allOf(ViewMatchers.withId(R.id.app_spinner_1_dropdown_item), withParent(ViewMatchers.withId(R.id.provincia_spinner))))
+        onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.provincia_spinner))))
                 .check(matches(withText(Matchers.is("provincia")))).check(matches(isDisplayed()));
-        onView(allOf(ViewMatchers.withId(R.id.app_spinner_1_dropdown_item), withParent(ViewMatchers.withId(R.id.municipio_spinner))))
+        onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.municipio_spinner))))
                 .check(matches(withText(Matchers.is("municipio")))).check(matches(isDisplayed()));
     }
 
@@ -130,7 +126,7 @@ public class ComuSearchAc_1_Test {
 
         //No token.
         assertThat(refreshTkFile.exists(), is(false));
-        assertThat(TKhandler.getAccessTokenInCache(), nullValue());
+        assertThat(TKhandler.getTokenCache().get(), nullValue());
         assertThat(TKhandler.isRegisteredUser(), is(false));
     }
 
@@ -138,11 +134,11 @@ public class ComuSearchAc_1_Test {
     public void testUpdateIsRegistered_2() throws UiException, IOException
     {
         //With token.
-        signUpAndUpdateTk(UserComuDataTestUtil.COMU_REAL_JUAN);
+        signUpAndUpdateTk(COMU_REAL_JUAN);
         assertThat(refreshTkFile.exists(), is(true));
 
         activity = mActivityRule.launchActivity(new Intent());
-        assertThat(TKhandler.getAccessTokenInCache(), notNullValue());
+        assertThat(TKhandler.getTokenCache().get(), notNullValue());
         assertThat(TKhandler.isRegisteredUser(), is(true));
 
         whatClean = CLEAN_JUAN;
@@ -165,11 +161,11 @@ public class ComuSearchAc_1_Test {
     {
         activity = mActivityRule.launchActivity(new Intent());
 
-        onView(ViewMatchers.withId(R.id.comunidad_nombre_via_editT)).perform(ViewActions.typeText("select * via"));
-        onView(ViewMatchers.withId(R.id.comunidad_numero_editT)).perform(ViewActions.typeText("123"));
-        onView(ViewMatchers.withId(R.id.comunidad_sufijo_numero_editT)).perform(ViewActions.typeText("Tris"), ViewActions.closeSoftKeyboard());
+        onView(withId(R.id.comunidad_nombre_via_editT)).perform(typeText("select * via"));
+        onView(withId(R.id.comunidad_numero_editT)).perform(typeText("123"));
+        onView(withId(R.id.comunidad_sufijo_numero_editT)).perform(typeText("Tris"), closeSoftKeyboard());
 
-        onView(ViewMatchers.withId(R.id.searchComunidad_Bton)).perform(ViewActions.click());
+        onView(withId(R.id.searchComunidad_Bton)).perform(click());
         checkToastInTest(R.string.error_validation_msg, activity, R.string.tipo_via, R.string.nombre_via, R.string.municipio);
     }
 }

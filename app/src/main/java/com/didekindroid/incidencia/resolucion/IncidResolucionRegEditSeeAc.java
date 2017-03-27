@@ -1,6 +1,5 @@
 package com.didekindroid.incidencia.resolucion;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,10 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.didekindroid.api.ManagerIf;
 import com.didekindroid.R;
-import com.didekindroid.exception.UiException;
-import com.didekindroid.exception.UiExceptionIf;
 import com.didekindroid.incidencia.utils.IncidBundleKey;
 import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
@@ -46,7 +42,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * 4. If a Resolucion intent is received and the user hasn't got authority 'adm':
  * 4.1 The data are shown.
  */
-public class IncidResolucionRegEditSeeAc extends AppCompatActivity implements ManagerIf {
+public class IncidResolucionRegEditSeeAc extends AppCompatActivity{
 
     IncidImportancia mIncidImportancia;
     Resolucion mResolucion;
@@ -127,30 +123,7 @@ public class IncidResolucionRegEditSeeAc extends AppCompatActivity implements Ma
     {
         Timber.d("onStop()");
         super.onStop();
-        viewerFirebaseToken.clearControllerSubscriptions();
-    }
-
-    // ============================================================
-    //   .............. ManagerIf ...............
-    // ============================================================
-
-    @Override
-    public Activity getActivity()
-    {
-        return this;
-    }
-
-    @Override
-    public UiExceptionIf.ActionForUiExceptionIf processViewerError(UiException ui)
-    {
-        Timber.d("processViewerError()");
-        return ui.processMe(this, new Intent());
-    }
-
-    @Override
-    public void replaceRootView(Object initParamsForView)
-    {
-       throw new UnsupportedOperationException();
+        viewerFirebaseToken.clearSubscriptions();
     }
 
 //    ============================================================

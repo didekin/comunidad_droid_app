@@ -78,10 +78,7 @@ public class IncidCommentSeeListFr extends Fragment {
         mAdapter = new IncidCommentSeeAdapter(getActivity());
         mIncidencia = (Incidencia) getArguments().getSerializable(INCIDENCIA_OBJECT.key);
         new IncidCommentLoader().execute(mIncidencia);
-
         mListView = (ListView) mView.findViewById(android.R.id.list);
-        //TextView for no result.
-        mListView.setEmptyView(mView.findViewById(android.R.id.empty));
     }
 
     @Override
@@ -144,7 +141,7 @@ public class IncidCommentSeeListFr extends Fragment {
     //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
     //    ============================================================
 
-    // TODO: to persist the task during restarts and properly cancel the task when the activity is destroyed. (Example in Shelves)
+    @SuppressWarnings("WeakerAccess")
     class IncidCommentLoader extends AsyncTask<Incidencia, Void, List<IncidComment>> {
 
         UiException uiException;
@@ -165,18 +162,22 @@ public class IncidCommentSeeListFr extends Fragment {
         @Override
         protected void onPostExecute(List<IncidComment> incidComments)
         {
+            Timber.d("onPostExecute()");
+
             if (checkPostExecute(getActivity())) return;
 
-            Timber.d("onPostExecute()");
+            if (uiException != null) {
+                Timber.d("onPostExecute(): uiException != null");
+                uiException.processMe(getActivity(), new Intent());
+            }
             if (incidComments != null && incidComments.size() > 0) {
                 Timber.d("onPostExecute(): incidComments != null");
                 mAdapter.clear();
                 mAdapter.addAll(incidComments);
                 mListView.setAdapter(mAdapter);
-            }
-            if (uiException != null) {
-                Timber.d("onPostExecute(): uiException != null");
-                uiException.processMe(getActivity(), new Intent());
+            } else {
+                //TextView for no result.
+                mListView.setEmptyView(mView.findViewById(android.R.id.empty));
             }
         }
     }

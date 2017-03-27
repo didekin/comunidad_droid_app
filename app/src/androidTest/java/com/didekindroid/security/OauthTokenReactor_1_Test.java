@@ -4,7 +4,6 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.exception.UiException;
 import com.didekindroid.security.OauthTokenReactor.OauthUpdateTokenCacheObserver;
-import com.didekindroid.testutil.ActivityTestUtils;
 import com.didekinlib.http.ErrorBean;
 import com.didekinlib.http.oauth2.SpringOauthToken;
 
@@ -17,13 +16,16 @@ import java.io.IOException;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
-import io.reactivex.Completable;
+import io.reactivex.observers.DisposableCompletableObserver;
 
 import static com.didekindroid.security.OauthTokenReactor.oauthTokenAndInitCache;
 import static com.didekindroid.security.OauthTokenReactor.oauthTokenFromRefreshTk;
 import static com.didekindroid.security.OauthTokenReactor.oauthTokenFromUserPswd;
 import static com.didekindroid.security.OauthTokenReactor.tokenReactor;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.testutil.ActivityTestUtils.checkInitTokenCache;
+import static com.didekindroid.testutil.ActivityTestUtils.checkNoInitCache;
+import static com.didekindroid.testutil.ActivityTestUtils.checkUpdateTokenCache;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceAndroidMain;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceIoScheduler;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
@@ -34,8 +36,12 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.CO
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
+import static io.reactivex.Completable.error;
+import static io.reactivex.Completable.fromCallable;
 import static io.reactivex.plugins.RxJavaPlugins.reset;
 import static io.reactivex.schedulers.Schedulers.io;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 /**
  * User: pedro@didekin
@@ -91,7 +97,7 @@ public class OauthTokenReactor_1_Test {
     @Test
     public void testOauthTokenFromRefreshTk_1() throws Exception
     {
-        SpringOauthToken oldToken = TKhandler.getAccessTokenInCache();
+        SpringOauthToken oldToken = TKhandler.getTokenCache().get();
         oauthTokenFromRefreshTk(TKhandler.getRefreshTokenValue()).test()
                 .await()
                 .assertValueCount(0)
@@ -99,7 +105,7 @@ public class OauthTokenReactor_1_Test {
                 .assertComplete()
                 .assertTerminated();
 
-        ActivityTestUtils.checkUpdateTokenCache(oldToken);
+        checkUpdateTokenCache(oldToken);
     }
 
     /**
@@ -108,10 +114,10 @@ public class OauthTokenReactor_1_Test {
     @Test
     public void testOauthTokenFromRefreshTk_2() throws Exception
     {
-        SpringOauthToken oldToken = TKhandler.getAccessTokenInCache();
+        SpringOauthToken oldToken = TKhandler.getTokenCache().get();
         oauthTokenFromRefreshTk(TKhandler.getRefreshTokenValue())
                 .blockingAwait();
-        ActivityTestUtils.checkUpdateTokenCache(oldToken);
+        checkUpdateTokenCache(oldToken);
     }
 
     /**
@@ -120,14 +126,14 @@ public class OauthTokenReactor_1_Test {
     @Test
     public void testOauthTokenAndInitCache_1() throws Exception
     {
-        SpringOauthToken oldToken = TKhandler.getAccessTokenInCache();
+        SpringOauthToken oldToken = TKhandler.getTokenCache().get();
         oauthTokenAndInitCache(USER_PEPE).test()
                 .awaitDone(4L, TimeUnit.SECONDS)
                 .assertValueCount(0)
                 .assertComplete()
                 .assertTerminated();
 
-        ActivityTestUtils.checkUpdateTokenCache(oldToken);
+        checkUpdateTokenCache(oldToken);
     }
 
     /**
@@ -136,10 +142,10 @@ public class OauthTokenReactor_1_Test {
     @Test
     public void testOauthTokenAndInitCache_2() throws Exception
     {
-        SpringOauthToken oldToken = TKhandler.getAccessTokenInCache();
+        SpringOauthToken oldToken = TKhandler.getTokenCache().get();
         oauthTokenAndInitCache(USER_PEPE)
                 .blockingAwait();
-        ActivityTestUtils.checkUpdateTokenCache(oldToken);
+        checkUpdateTokenCache(oldToken);
     }
 
     //  =======================================================================================
@@ -148,16 +154,16 @@ public class OauthTokenReactor_1_Test {
 
     /**
      * Synchronous execution: no scheduler specified, everything runs in the test runner thread.
-     * onError method: we test that the token cache is cleaned.
+     * onErrorCtrl method: we test that the token cache is cleaned.
      */
     @Test
     public void testOauthUpdateTokenCacheObserver_1() throws UiException
     {
-        ActivityTestUtils.checkInitTokenCache();
-        Completable.error(new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR)))
+        checkInitTokenCache();
+        DisposableCompletableObserver disposable = error(new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR)))
                 .subscribeWith(new OauthUpdateTokenCacheObserver());
-        ActivityTestUtils.checkNoInitCache();
-
+        checkNoInitCache();
+        assertThat(disposable.isDisposed(), is(true));
     }
 
     /**
@@ -167,9 +173,9 @@ public class OauthTokenReactor_1_Test {
     @Test
     public void testOauthUpdateTokenCacheObserver_2() throws UiException
     {
-        ActivityTestUtils.checkInitTokenCache();
+        checkInitTokenCache();
 
-        Completable.fromCallable(new Callable<Object>() {
+        DisposableCompletableObserver disposable = fromCallable(new Callable<Object>() {
             @Override
             public Object call() throws Exception
             {
@@ -177,7 +183,8 @@ public class OauthTokenReactor_1_Test {
             }
         }).subscribeWith(new OauthUpdateTokenCacheObserver());
 
-        ActivityTestUtils.checkInitTokenCache();
+        checkInitTokenCache();
+        assertThat(disposable.isDisposed(), is(true));
     }
 
     //  =======================================================================================
@@ -196,19 +203,29 @@ public class OauthTokenReactor_1_Test {
 
         userComuDaoRemote.regComuAndUserAndUserComu(COMU_REAL_PEPE).execute().body();
         TKhandler.updateIsRegistered(true);
-        ActivityTestUtils.checkNoInitCache();
+        checkNoInitCache();
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
-            tokenReactor.updateTkAndCacheFromUser(USER_PEPE);       // TODO:
+            tokenReactor.updateTkAndCacheFromUser(USER_PEPE);
         } finally {
             reset();
         }
-        ActivityTestUtils.checkInitTokenCache();
+        checkInitTokenCache();
     }
 
-    //  ============================================================================================
-    //    .................................... HELPERS .................................
-    //  ============================================================================================
+    @Test
+    public void testOauthTokenFromRefreshTk(){
 
+        DisposableCompletableObserver disposable = null;
+
+        try {
+            trampolineReplaceIoScheduler();
+            trampolineReplaceAndroidMain();
+            disposable = tokenReactor.updateTkCacheFromRefreshTk(TKhandler.getRefreshTokenValue());
+        } finally {
+            reset();
+        }
+        assertThat(disposable != null && disposable.isDisposed(), is(true));
+    }
 }

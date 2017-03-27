@@ -93,7 +93,7 @@ public class IncidRegAcTest_1 {
         Thread.sleep(2500);
 
         mActivity = intentRule.getActivity();
-        Spinner spinner = (Spinner) mActivity.mRegAcFragment.comuSpinnerViewer.getViewInViewer();
+        Spinner spinner = mActivity.mRegAcFragment.viewerComuSpinner.getViewInViewer();
         comunidadesAdapter = (ArrayAdapter<Comunidad>) spinner.getAdapter();
         assertThat(comunidadesAdapter, notNullValue());
         comunidadByDefault = comunidadesAdapter.getItem(0);

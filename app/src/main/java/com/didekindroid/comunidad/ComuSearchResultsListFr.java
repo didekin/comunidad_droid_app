@@ -24,7 +24,7 @@ import java.util.List;
 
 import timber.log.Timber;
 
-import static com.didekindroid.comunidad.ComunidadService.AppComuServ;
+import static com.didekindroid.comunidad.ComunidadDao.comunidadDao;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.util.UIutils.makeToast;
@@ -194,7 +194,7 @@ public class ComuSearchResultsListFr extends Fragment {
             Timber.d("doInBackground()");
             List<Comunidad> comunidadesList = null;
             try {
-                comunidadesList = AppComuServ.searchComunidades(comunidades[0]).execute().body();
+                comunidadesList = comunidadDao.searchComunidades(comunidades[0]).execute().body();
             } catch (IOException e) {
                 uiException = new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
             }

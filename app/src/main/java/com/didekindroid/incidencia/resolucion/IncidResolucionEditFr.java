@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.core.IncidEditAc;
-import com.didekindroid.incidencia.list.IncidSeeClosedByComuAc;
+import com.didekindroid.incidencia.list.close.IncidSeeClosedByComuAc;
 import com.didekindroid.util.ConnectionUtils;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.Avance;

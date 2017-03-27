@@ -109,7 +109,7 @@ public final class UIutils {
 
     public static String checkBearerTokenInCache() throws UiException
     {
-        return checkBearerToken(TKhandler.getAccessTokenInCache());
+        return checkBearerToken(TKhandler.getTokenCache().get());
     }
 
     public static String checkBearerToken(SpringOauthToken oauthToken) throws UiException

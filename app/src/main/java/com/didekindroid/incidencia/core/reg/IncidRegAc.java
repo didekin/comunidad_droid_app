@@ -67,8 +67,8 @@ public class IncidRegAc extends AppCompatActivity{
 
         StringBuilder errorMsg = getErrorMsgBuilder(this);
         try {
-            IncidImportancia incidImportancia = mRegAcFragment.getIncidImportanciaBean().makeIncidImportancia(
-                    errorMsg, getResources(), mRegAcFragment.getRootFrgView(), mRegAcFragment.getIncidenciaBean());
+            IncidImportancia incidImportancia = mRegAcFragment.getIncidImportanciaBean()
+                    .makeIncidImportancia(errorMsg, getResources(), mRegAcFragment.getRootFrgView(), mRegAcFragment.getIncidenciaBean());
             if (checkInternetConnected(this)) {
                 new IncidenciaRegister().execute(incidImportancia);
             }

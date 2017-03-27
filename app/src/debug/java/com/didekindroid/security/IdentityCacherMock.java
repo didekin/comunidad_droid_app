@@ -23,6 +23,7 @@ import static com.didekindroid.util.UIutils.assertTrue;
 public class IdentityCacherMock implements IdentityCacher {
 
     public static final AtomicReference<String> flagIdentityMockMethodExec = new AtomicReference<>(IDENTITY_FLAG_INITIAL);
+
     private volatile boolean isRegistered;
 
     @Override
@@ -48,9 +49,8 @@ public class IdentityCacherMock implements IdentityCacher {
     }
 
     @Override
-    public SpringOauthToken getAccessTokenInCache() throws UiException
+    public void refreshAccessToken(OauthTokenReactorIf reactor)
     {
-        return null;
     }
 
     @Override

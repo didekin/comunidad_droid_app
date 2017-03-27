@@ -10,7 +10,6 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
-import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
 
 import junit.framework.AssertionFailedError;
 
@@ -33,7 +32,10 @@ import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.usuario.testutil.UserItemMenuTestUtils.LOGIN_AC;
 import static com.didekindroid.usuario.testutil.UserItemMenuTestUtils.USER_DATA_AC;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.REG_COMU_USERCOMU_AC;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.REG_COMU_USER_USERCOMU_AC;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.SEE_USERCOMU_BY_USER_AC;
@@ -62,7 +64,7 @@ public class ComuSearchAc_3_Test {
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
     {
-        Thread.sleep(3000);
+        Thread.sleep(2000);
     }
 
     @Before
@@ -77,15 +79,14 @@ public class ComuSearchAc_3_Test {
     public void cleanData() throws UiException
     {
         cleanOptions(whatClean);
-
     }
 
     @Test
     public void testComunidadesByUsuario() throws InterruptedException, UiException, IOException
     {
-        whatClean = UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
+        whatClean = CLEAN_JUAN;
 
-        UserComuDataTestUtil.signUpAndUpdateTk(UserComuDataTestUtil.COMU_REAL_JUAN);
+        signUpAndUpdateTk(COMU_REAL_JUAN);
         activity = mActivityRule.launchActivity(new Intent());
         assertThat(TKhandler.isRegisteredUser(), is(true));
         SEE_USERCOMU_BY_USER_AC.checkMenuItem_WTk(activity);
@@ -96,10 +97,11 @@ public class ComuSearchAc_3_Test {
     @Test
     public void testLogin_withToken() throws InterruptedException, UiException, IOException
     {
-        whatClean = UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
-        UserComuDataTestUtil.signUpAndUpdateTk(UserComuDataTestUtil.COMU_REAL_JUAN);
+        whatClean = CLEAN_JUAN;
+        signUpAndUpdateTk(COMU_REAL_JUAN);
         activity = mActivityRule.launchActivity(new Intent());
 
+        // No hay opción de LOGIN en pantalla.
         onView(ViewMatchers.withId(R.id.login_ac_mn)).check(doesNotExist());
         openActionBarOverflowOrOptionsMenu(activity);
         onView(ViewMatchers.withId(R.id.login_ac_mn)).check(doesNotExist());
@@ -133,10 +135,10 @@ public class ComuSearchAc_3_Test {
     @Test
     public void testGetDatosUsuarioWithToken() throws InterruptedException, UiException, IOException
     {
-        whatClean = UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
+        whatClean = CLEAN_JUAN;
 
         //With token.
-        UserComuDataTestUtil.signUpAndUpdateTk(UserComuDataTestUtil.COMU_REAL_JUAN);
+        signUpAndUpdateTk(COMU_REAL_JUAN);
         activity = mActivityRule.launchActivity(new Intent());
         assertThat(TKhandler.isRegisteredUser(), is(true));
         USER_DATA_AC.checkMenuItem_WTk(activity);
@@ -158,9 +160,9 @@ public class ComuSearchAc_3_Test {
     @Test
     public void testMenuNuevaComunidad_withToken() throws InterruptedException, UiException, IOException
     {
-        whatClean = UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
+        whatClean = CLEAN_JUAN;
 
-        UserComuDataTestUtil.signUpAndUpdateTk(UserComuDataTestUtil.COMU_REAL_JUAN);
+        signUpAndUpdateTk(COMU_REAL_JUAN);
         activity = mActivityRule.launchActivity(new Intent());
         assertThat(TKhandler.isRegisteredUser(), is(true));
         REG_COMU_USERCOMU_AC.checkMenuItem_WTk(activity);

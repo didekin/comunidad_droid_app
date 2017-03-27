@@ -8,8 +8,7 @@ package com.didekindroid.util;
 
 public final class CommonAssertionMsg {
 
-    public static final String activity_reactor_not_null = "activity reactor must have been initialized";
-    public static final String activity_tokencacher_not_null = "activity token cache must have been initialized";
+    public static final String activity_should_be_instance_RootViewReplacer = "activity should be instance of RootViewReplacerIf";
     static final String subscriptions_should_be_zero = "subscriptions_should_be_zero";
     static final String subscriptions_should_not_be_null = "subscriptions_should_not_be_null";
     public static final String bean_fromView_should_be_initialized = "Bean with view data should be initialized";

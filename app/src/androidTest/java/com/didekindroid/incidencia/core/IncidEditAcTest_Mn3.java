@@ -49,9 +49,7 @@ import static org.junit.Assert.assertThat;
  * User: pedro@didekin
  * Date: 19/01/16
  * Time: 16:57
- */
-
-/**
+ *
  * Tests sobre una incidencia CON resolución en BD.
  * El usuario NO tiene autoridad 'adm'; es iniciador de la incidencia.
  */

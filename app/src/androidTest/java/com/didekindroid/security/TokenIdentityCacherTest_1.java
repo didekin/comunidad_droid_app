@@ -5,10 +5,9 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.api.ActivityMock;
-import com.didekindroid.api.ManagerMock;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.incidencia.core.ControllerFirebaseTokenIf;
-import com.didekindroid.usuario.firebase.ControllerFirebaseToken;
+import com.didekindroid.usuario.firebase.CtrlerFirebaseTokenIf;
+import com.didekindroid.usuario.firebase.CtrlerFirebaseToken;
 import com.didekinlib.http.oauth2.SpringOauthToken;
 
 import org.junit.After;
@@ -66,13 +65,13 @@ public class TokenIdentityCacherTest_1 {
         assertThat(TKhandler.getRefreshTokenFile(), notNullValue());
         assertThat(TKhandler.getRefreshTokenFile().exists(), is(false));
         assertThat(TKhandler.getRefreshTokenValue(), nullValue());
-        assertThat(TKhandler.getAccessTokenInCache(), nullValue());
+        assertThat(TKhandler.getTokenCache().get(), nullValue());
 
         SpringOauthToken springOauthToken = doSpringOauthToken();
         TKhandler.initIdentityCache(springOauthToken);
         assertThat(TKhandler.getRefreshTokenFile().exists(), is(true));
         assertThat(TKhandler.getRefreshTokenValue(), is(springOauthToken.getRefreshToken().getValue()));
-        assertThat(TKhandler.getAccessTokenInCache(), is(springOauthToken));
+        assertThat(TKhandler.getTokenCache().get(), is(springOauthToken));
     }
 
     @Test
@@ -86,7 +85,7 @@ public class TokenIdentityCacherTest_1 {
         // Assertions.
         assertThat(TKhandler.getRefreshTokenValue(), nullValue());
         assertThat(TKhandler.getRefreshTokenFile().exists(), is(false));
-        assertThat(TKhandler.getAccessTokenInCache(), nullValue());
+        assertThat(TKhandler.getTokenCache().get(), nullValue());
     }
 
     @Test
@@ -112,12 +111,28 @@ public class TokenIdentityCacherTest_1 {
     @Test
     public void testUpdateIsRegistered_2() throws Exception
     {
-        ControllerFirebaseTokenIf controller = new ControllerFirebaseToken(newViewerFirebaseToken(new ManagerMock(activity)));
+        CtrlerFirebaseTokenIf controller = new CtrlerFirebaseToken(newViewerFirebaseToken(activity));
         TKhandler.updateIsRegistered(false);
         // Actualiza a falso.
         assertThat(controller.isGcmTokenSentServer(), is(false));
         TKhandler.updateIsRegistered(true);
         // No actualizamos a verdadero.
+        assertThat(controller.isGcmTokenSentServer(), is(false));
+    }
+
+    @Test
+    public void testUpdateIsRegistered() throws Exception
+    {
+        CtrlerFirebaseTokenIf controller = new CtrlerFirebaseToken(newViewerFirebaseToken(activity));
+        TKhandler.updateIsRegistered(true);
+        controller.updateIsGcmTokenSentServer(true);
+
+        TKhandler.updateIsRegistered(false);
+        // Check the change in the flag.
+        assertThat(controller.isGcmTokenSentServer(), is(false));
+
+        TKhandler.updateIsRegistered(true);
+        // No change in flag.
         assertThat(controller.isGcmTokenSentServer(), is(false));
     }
 
@@ -183,15 +198,15 @@ public class TokenIdentityCacherTest_1 {
     {
         SpringOauthToken token = doSpringOauthToken();
         initTokenAndRegisterFunc.apply(true, token);
-        assertThat(TKhandler.getAccessTokenInCache(), is(token));
+        assertThat(TKhandler.getTokenCache().get(), is(token));
         assertThat(TKhandler.isRegisteredUser(), is(true));
         return token;
     }
 
-    private void checkNoCacheAndFile() throws UiException
+    private void checkNoCacheAndFile()
     {
         assertThat(TKhandler.getRefreshTokenFile().exists(), is(false));
-        assertThat(TKhandler.getAccessTokenInCache(), is(nullValue()));
+        assertThat(TKhandler.getTokenCache().get(), is(nullValue()));
     }
 
     private void checkSiCacheAndFile(SpringOauthToken token)

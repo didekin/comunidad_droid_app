@@ -15,7 +15,6 @@ import org.junit.runners.Suite;
         OauthTokenReactor_1_Test.class,
         TokenIdentityCacherTest_1.class,
         TokenIdentityCacherTest_2.class,
-        TokenIdentityCacherTest_3.class,
 })
 public class SecuritySuite {
 }

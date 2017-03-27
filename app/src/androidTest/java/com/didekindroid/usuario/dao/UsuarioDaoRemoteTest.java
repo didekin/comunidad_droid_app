@@ -71,7 +71,7 @@ public class UsuarioDaoRemoteTest {
         whatClean = CLEAN_PEPE;
 
         signUpAndUpdateTk(COMU_REAL_PEPE);
-        boolean isDeleted = usuarioDao.deleteAccessToken(TKhandler.getAccessTokenInCache().getValue());
+        boolean isDeleted = usuarioDao.deleteAccessToken(TKhandler.getTokenCache().get().getValue());
         assertThat(isDeleted, is(true));
     }
 
@@ -210,7 +210,7 @@ public class UsuarioDaoRemoteTest {
         signUpAndUpdateTk(COMU_REAL_JUAN);
 
         assertThat(refreshTkFile.exists(), is(true));
-        SpringOauthToken tokenJuan = TKhandler.getAccessTokenInCache();
+        SpringOauthToken tokenJuan = TKhandler.getTokenCache().get();
         assertThat(tokenJuan, notNullValue());
         assertThat(tokenJuan.getValue(), not(isEmptyOrNullString()));
         assertThat(IoHelper.readStringFromFile(refreshTkFile), is(tokenJuan.getRefreshToken().getValue()));

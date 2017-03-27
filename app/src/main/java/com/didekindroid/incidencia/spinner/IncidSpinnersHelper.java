@@ -10,7 +10,7 @@ import android.widget.CursorAdapter;
 import android.widget.TextView;
 
 import com.didekindroid.R;
-import com.didekindroid.incidencia.list.IncidSeeUserComuImportanciaAc;
+import com.didekindroid.incidencia.list.importancia.IncidSeeUserComuImportanciaAc;
 
 import timber.log.Timber;
 

@@ -119,7 +119,7 @@ public class Oauth2DaoRemoteTest {
 
         //Inserta userComu, comunidad, usuariocomunidad y actuliza tokenCache.
         signUpAndUpdateTk(UserComuDataTestUtil.COMU_REAL_PEPE);
-        SpringOauthToken tokenOld = TKhandler.getAccessTokenInCache();
+        SpringOauthToken tokenOld = TKhandler.getTokenCache().get();
         String accessTkOldValue = tokenOld.getValue();
         String refreshTkOldValue = tokenOld.getRefreshToken().getValue();
 

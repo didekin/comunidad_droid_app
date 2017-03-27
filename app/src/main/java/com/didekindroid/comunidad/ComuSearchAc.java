@@ -1,7 +1,6 @@
 package com.didekindroid.comunidad;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -11,20 +10,20 @@ import android.view.View;
 import android.widget.Button;
 
 import com.didekindroid.R;
-import com.didekindroid.exception.UiException;
+import com.didekindroid.security.IdentityCacher;
+import com.didekindroid.security.OauthTokenReactorIf;
 import com.didekindroid.util.ConnectionUtils;
 import com.didekindroid.util.UIutils;
-import com.didekinlib.http.oauth2.SpringOauthToken;
 
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.RegComuFr.makeComunidadBeanFromView;
+import static com.didekindroid.security.OauthTokenReactor.tokenReactor;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.util.DefaultNextAcRouter.acRouter;
 import static com.didekindroid.util.ItemMenu.mn_handler;
 import static com.didekindroid.util.MenuRouter.getRegisterDependentClass;
 import static com.didekindroid.util.MenuRouter.routerMap;
-import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.util.UIutils.doToolBar;
 import static com.didekindroid.util.UIutils.makeToast;
 import static com.didekinlib.model.common.dominio.ValidDataPatterns.LINE_BREAK;
@@ -42,8 +41,10 @@ import static com.didekinlib.model.common.dominio.ValidDataPatterns.LINE_BREAK;
 @SuppressWarnings("ConstantConditions")
 public class ComuSearchAc extends AppCompatActivity {
 
-    protected View mMainView;
-    RegComuFr mRegComuFrg;
+    protected View mainView;
+    RegComuFr regComuFrg;
+    IdentityCacher identityCacher;
+    OauthTokenReactorIf reactor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -51,13 +52,10 @@ public class ComuSearchAc extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Timber.d("In onCreate()");
 
-        // To initilize the token cache. This is the launch activity.
-        new CheckerTokenInCache().execute();
-
-        mMainView = getLayoutInflater().inflate(R.layout.comu_search_ac, null);
-        setContentView(mMainView);
+        mainView = getLayoutInflater().inflate(R.layout.comu_search_ac, null);
+        setContentView(mainView);
         doToolBar(this, false);
-        mRegComuFrg = (RegComuFr) getFragmentManager().findFragmentById(R.id.reg_comunidad_frg);
+        regComuFrg = (RegComuFr) getFragmentManager().findFragmentById(R.id.reg_comunidad_frg);
 
         Button mSearchButton = (Button) findViewById(R.id.searchComunidad_Bton);
         mSearchButton.setOnClickListener(new View.OnClickListener() {
@@ -70,13 +68,23 @@ public class ComuSearchAc extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+        identityCacher = TKhandler;
+        reactor = tokenReactor;
+        // To initilize the token cache. This is the launch activity.
+        TKhandler.refreshAccessToken(reactor);
+    }
+
     void searchComunidad()
     {
         Timber.i("In searchComunidad()");
 
-        ComunidadBean comunidadBean = mRegComuFrg.getComunidadBean();
+        ComunidadBean comunidadBean = regComuFrg.getComunidadBean();
 
-        makeComunidadBeanFromView(mRegComuFrg.getFragmentView(), comunidadBean);
+        makeComunidadBeanFromView(regComuFrg.getFragmentView(), comunidadBean);
 
         // Validation of data.
         StringBuilder errorMsg = new StringBuilder(getResources().getText(R.string.error_validation_msg))
@@ -91,13 +99,6 @@ public class ComuSearchAc extends AppCompatActivity {
             intent.putExtra(ComuBundleKey.COMUNIDAD_SEARCH.key, comunidadBean.getComunidad());
             startActivity(intent);
         }
-    }
-
-    @Override
-    protected void onDestroy()
-    {
-        Timber.d("onDestroy()");
-        super.onDestroy();
     }
 
 //    ============================================================
@@ -146,44 +147,6 @@ public class ComuSearchAc extends AppCompatActivity {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
-        }
-    }
-
-    //    ============================================================
-    //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
-    /*    ============================================================*/
-
-    /* This class should be in the launcher activity */
-    @SuppressWarnings("WeakerAccess")
-    class CheckerTokenInCache extends AsyncTask<Void, Void, SpringOauthToken> {
-
-        UiException uiException;
-
-        @Override
-        protected SpringOauthToken doInBackground(Void... params)
-        {
-            Timber.d("CheckerTokenInCache.doInBackground");
-
-            SpringOauthToken springOauthTokenInCache = null;
-            try {
-                springOauthTokenInCache = TKhandler.getAccessTokenInCache();
-            } catch (UiException e) {
-                uiException = e;
-            }
-            return springOauthTokenInCache;
-        }
-
-        @Override
-        protected void onPostExecute(SpringOauthToken springOauthToken)
-        {
-            if (checkPostExecute(ComuSearchAc.this)) return;
-
-            Timber.d("CheckerTokenInCache.onPostExecute() springOauthToken null = %b%n", springOauthToken == null);
-
-            if (uiException == null && springOauthToken != null) {
-                TKhandler.updateIsRegistered(true);
-                invalidateOptionsMenu();
-            }
         }
     }
 }

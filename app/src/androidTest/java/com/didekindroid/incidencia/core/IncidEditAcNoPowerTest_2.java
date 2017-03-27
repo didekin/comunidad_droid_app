@@ -45,9 +45,7 @@ import static org.hamcrest.CoreMatchers.is;
  * User: pedro@didekin
  * Date: 19/01/16
  * Time: 16:57
- */
-
-/**
+ *
  * Tests para un userComu sin registro IncidImportancia en la incidencia.
  */
 @RunWith(AndroidJUnit4.class)

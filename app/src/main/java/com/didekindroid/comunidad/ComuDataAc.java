@@ -24,7 +24,7 @@ import timber.log.Timber;
 
 import static com.didekindroid.comunidad.ComunidadAssertionMsg.comuData_should_be_modified;
 import static com.didekindroid.comunidad.ComunidadAssertionMsg.comunidadId_should_be_initialized;
-import static com.didekindroid.comunidad.ComunidadService.AppComuServ;
+import static com.didekindroid.comunidad.ComunidadDao.comunidadDao;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
 import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
@@ -258,6 +258,7 @@ public class ComuDataAc extends AppCompatActivity implements RegComuFr.ComuDataC
     //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
     //    ============================================================
 
+    @SuppressWarnings("WeakerAccess")
     class ComuDataSetter extends AsyncTask<Void, Void, Comunidad> {
 
         UiException uiException;
@@ -269,7 +270,7 @@ public class ComuDataAc extends AppCompatActivity implements RegComuFr.ComuDataC
 
             Comunidad comuData = null;
             try {
-                comuData = AppComuServ.getComuData(mIdComunidad);
+                comuData = comunidadDao.getComuData(mIdComunidad);
             } catch (UiException e) {
                 uiException = e;
             }
@@ -292,6 +293,7 @@ public class ComuDataAc extends AppCompatActivity implements RegComuFr.ComuDataC
         }
     }
 
+    @SuppressWarnings("WeakerAccess")
     class ComuDataModifier extends AsyncTask<Comunidad, Void, Integer> {
 
         UiException uiException;

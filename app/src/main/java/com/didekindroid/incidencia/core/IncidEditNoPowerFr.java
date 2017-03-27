@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.incidencia.list.IncidSeeOpenByComuAc;
+import com.didekindroid.incidencia.list.open.IncidSeeOpenByComuAc;
 import com.didekindroid.incidencia.spinner.ImportanciaSpinnerSettable;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
@@ -153,6 +153,7 @@ public class IncidEditNoPowerFr extends Fragment implements ImportanciaSpinnerSe
 //    ..................... INNER CLASSES  .......................
 //    ============================================================
 
+    @SuppressWarnings("WeakerAccess")
     class ImportanciaModifyer extends AsyncTask<IncidImportancia, Void, Integer> {
 
         UiException uiException;

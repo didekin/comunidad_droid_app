@@ -15,7 +15,7 @@ import static com.didekindroid.util.UIutils.formatTimeStampToString;
  * Date: 23/03/16
  * Time: 14:11
  */
-class VwHolderIncidSeeItem {
+public class VwHolderIncidSeeItem {
 
     private final Context context;
     private final TextView mDescripcionView;
@@ -24,7 +24,7 @@ class VwHolderIncidSeeItem {
     private final TextView mAmbitoView;
     private final TextView mImportanciaComuView;
 
-    VwHolderIncidSeeItem(View convertView)
+    public VwHolderIncidSeeItem(View convertView)
     {
         mDescripcionView = (TextView) convertView.findViewById(R.id.incid_descripcion_view);
         mFechaAltaView = (TextView) convertView.findViewById(R.id.incid_fecha_alta_view);

@@ -3,17 +3,12 @@ package com.didekindroid.usuario;
 import com.didekindroid.usuario.dao.UsuarioDaoRemoteTest;
 import com.didekindroid.usuario.delete.ControllerDeleteMeTest;
 import com.didekindroid.usuario.delete.DeleteMeAcTest;
-import com.didekindroid.usuario.delete.ReactorDeleteMeTest;
-import com.didekindroid.usuario.firebase.FirebaseTokenReactorTest;
-import com.didekindroid.usuario.login.ControllerLoginTest;
-import com.didekindroid.usuario.login.LoginAc_1_Test;
-import com.didekindroid.usuario.login.ReactorLoginTest;
-import com.didekindroid.usuario.password.ControllerPasswordChangeTest;
+import com.didekindroid.usuario.login.CtrlerLoginTest;
+import com.didekindroid.usuario.login.LoginAcTest;
+import com.didekindroid.usuario.password.CtrlerPasswordChangeTest;
 import com.didekindroid.usuario.password.PasswordChangeAc_Test;
-import com.didekindroid.usuario.password.ReactorPswdChangeTest;
-import com.didekindroid.usuario.userdata.ControllerUserDataTest;
+import com.didekindroid.usuario.userdata.CtrlerUserDataTest;
 import com.didekindroid.usuario.userdata.UserDataAcTest;
-import com.didekindroid.usuario.userdata.ReactorUserDataTest;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -27,22 +22,15 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
 
         ControllerDeleteMeTest.class,
-        ControllerLoginTest.class,
-        ControllerPasswordChangeTest.class,
-        ControllerUserDataTest.class,
+        CtrlerLoginTest.class,
+        CtrlerPasswordChangeTest.class,
+        CtrlerUserDataTest.class,
         DeleteMeAcTest.class,
-//        LoginAcTest.class,
-        LoginAc_1_Test.class,
+        LoginAcTest.class,
         PasswordChangeAc_Test.class,
         UserDataAcTest.class,
         UsuarioBeanValidaTests.class,
         UsuarioDaoRemoteTest.class,
-        // Reactors.
-        FirebaseTokenReactorTest.class,
-        ReactorDeleteMeTest.class,
-        ReactorLoginTest.class,
-        ReactorPswdChangeTest.class,
-        ReactorUserDataTest.class,
 })
 public class UsuarioSuite {
 }

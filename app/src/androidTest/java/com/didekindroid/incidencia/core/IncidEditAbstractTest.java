@@ -56,9 +56,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
  * User: pedro@didekin
  * Date: 01/04/16
  * Time: 11:32
- */
-
-/**
+ *
  * Clase con métodos comunes a los tests de edición de una incidencia sin resolución, con un
  * usuario en sesión sin autoriad 'adm'.
  */

@@ -478,8 +478,7 @@ public class ComunidadDbHelper extends SQLiteOpenHelper {
         }
 
         String[] tableColumns = new String[]{_ID, tipovia};
-        String sortOrder = _ID;
-        Cursor cursor = mDataBase.query(TB_TIPO_VIA, tableColumns, null, null, null, null, sortOrder);
+        Cursor cursor = mDataBase.query(TB_TIPO_VIA, tableColumns, null, null, null, null, _ID);
 
         if (cursor == null) {
             return null;

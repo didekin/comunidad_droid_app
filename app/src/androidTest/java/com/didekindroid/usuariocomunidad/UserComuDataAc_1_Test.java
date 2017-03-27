@@ -198,7 +198,7 @@ public class UserComuDataAc_1_Test {
         onView(ViewMatchers.withId(R.id.see_usercomu_by_user_frg)).check(matches(isDisplayed()));
         checkUp(R.id.comu_search_ac_coordinatorlayout); // Falla en emulador 4.4.2
 
-        assertThat(TKhandler.getAccessTokenInCache(), notNullValue());
+        assertThat(TKhandler.getTokenCache().get(), notNullValue());
         assertThat(TKhandler.getRefreshTokenFile().exists(), is(true));
         assertThat(TKhandler.isRegisteredUser(), is(true));
     }

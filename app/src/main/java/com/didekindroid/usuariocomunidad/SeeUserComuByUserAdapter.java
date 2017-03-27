@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
 import com.didekindroid.R;
-import com.didekindroid.comunidad.ComuSearchResultsListAdapter;
+import com.didekindroid.comunidad.ComuSearchResultsListAdapter.ComuViewHolder;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import timber.log.Timber;
@@ -55,13 +55,13 @@ class SeeUserComuByUserAdapter extends ArrayAdapter<UsuarioComunidad> {
 
     private static class ComuAndUserComuViewHolder {
 
-        private final ComuSearchResultsListAdapter.ComuViewHolder comuViewHolder;
-        private final SeeUserComuByComuListAdapter.UserComuVwHolder userComuVwHolder;
+        private final ComuViewHolder comuViewHolder;
+        private final UserComuVwHolder userComuVwHolder;
 
         ComuAndUserComuViewHolder(View convertView, Resources resources)
         {
-            comuViewHolder = new ComuSearchResultsListAdapter.ComuViewHolder(convertView);
-            userComuVwHolder = new SeeUserComuByComuListAdapter.UserComuVwHolder(convertView, resources);
+            comuViewHolder = new ComuViewHolder(convertView);
+            userComuVwHolder = new UserComuVwHolder(convertView, resources);
         }
 
         void initializeTextInViews(UsuarioComunidad userComu)

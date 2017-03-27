@@ -12,8 +12,8 @@ import android.support.v7.app.NotificationCompat;
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComuSearchAc;
 import com.didekindroid.firebase.FirebaseDownstreamMsgHandler;
-import com.didekindroid.incidencia.list.IncidSeeClosedByComuAc;
-import com.didekindroid.incidencia.list.IncidSeeOpenByComuAc;
+import com.didekindroid.incidencia.list.close.IncidSeeClosedByComuAc;
+import com.didekindroid.incidencia.list.open.IncidSeeOpenByComuAc;
 import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.HashMap;

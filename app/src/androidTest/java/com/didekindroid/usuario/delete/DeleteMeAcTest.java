@@ -6,6 +6,7 @@ import android.support.test.rule.ActivityTestRule;
 
 import com.didekindroid.ExtendableTestAc;
 import com.didekindroid.R;
+import com.didekindroid.api.ViewerMock;
 import com.didekindroid.exception.UiException;
 import com.didekinlib.model.usuario.Usuario;
 
@@ -21,9 +22,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.R.id.comu_search_ac_linearlayout;
-import static com.didekindroid.exception.UiExceptionRouter.GENERIC_APP_ACC;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.testutil.ActivityTestUtils.checkProcessCtrlError;
 import static com.didekindroid.testutil.ActivityTestUtils.checkViewerReplaceView;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.testutil.ActivityTestUtils.hasRegisteredFlag;
@@ -31,7 +30,6 @@ import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEn
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
-import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
@@ -48,6 +46,7 @@ public class DeleteMeAcTest implements ExtendableTestAc {
 
     protected DeleteMeAc activity;
     protected Usuario registeredUser;
+
     @Rule
     public ActivityTestRule<? extends Activity> mActivityRule = new ActivityTestRule<DeleteMeAc>(DeleteMeAc.class) {
         @Override
@@ -61,7 +60,7 @@ public class DeleteMeAcTest implements ExtendableTestAc {
             }
         }
     };
-    ControllerDeleteMeIf controller;
+    CtrlerDeleteMeIf controller;
 
     @BeforeClass
     public static void relax() throws InterruptedException
@@ -74,7 +73,7 @@ public class DeleteMeAcTest implements ExtendableTestAc {
     {
         activity = (DeleteMeAc) mActivityRule.getActivity();
         // Default initialization.
-        controller = new ControllerDeleteMe(activity);
+        controller = new CtrlerDeleteMe(activity);
     }
 
     @Override
@@ -116,10 +115,19 @@ public class DeleteMeAcTest implements ExtendableTestAc {
     }
 
     @Test
+    public final void testOnStart() throws Exception
+    {
+        InstrumentationRegistry.getInstrumentation().callActivityOnStart(activity);
+        // Check.
+        assertThat(controller, notNullValue());
+        cleanOptions(CLEAN_PEPE);
+    }
+
+    @Test
     public void testUnregisterUser() throws UiException
     {
         onView(withId(R.id.delete_me_ac_unreg_button)).check(matches(isDisplayed())).perform(click());
-        await().atMost(5, SECONDS).until(hasRegisteredFlag(controller), is(false));
+        await().atMost(4, SECONDS).until(hasRegisteredFlag(controller), is(false));
 
         onView(withId(getNextViewResourceId())).check(matches(isDisplayed()));
     }
@@ -127,18 +135,7 @@ public class DeleteMeAcTest implements ExtendableTestAc {
     @Test
     public void testReplaceView() throws Exception
     {
-        checkViewerReplaceView(activity, getNextViewResourceId());
+        checkViewerReplaceView(new ViewerMock<>(null, activity, null), getNextViewResourceId());
         cleanOptions(CLEAN_PEPE);
     }
-
-    @Test
-    public void testProcessControllerError() throws UiException
-    {
-        assertThat(checkProcessCtrlError(activity, GENERIC_INTERNAL_ERROR, GENERIC_APP_ACC), is(true));
-        cleanOptions(CLEAN_PEPE);
-    }
-
-    // ............................ HELPERS ..................................
-
-
 }

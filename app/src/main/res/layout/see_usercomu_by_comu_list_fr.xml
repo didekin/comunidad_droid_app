@@ -4,7 +4,7 @@
     style="@style/baseLayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.didekindroid.usuariocomunidad.SeeUserComuByComuFr">
+    tools:context="com.didekindroid.usuariocomunidad.listbycomu.SeeUserComuByComuFr">
 
     <TextView
         android:id="@+id/see_usercomu_by_comu_list_header"

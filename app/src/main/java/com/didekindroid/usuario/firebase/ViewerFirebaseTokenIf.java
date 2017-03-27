@@ -2,12 +2,7 @@ package com.didekindroid.usuario.firebase;
 
 import android.view.View;
 
-import com.didekindroid.api.ManagerIf;
-import com.didekindroid.exception.UiException;
-import com.didekindroid.exception.UiExceptionIf;
-import com.didekindroid.incidencia.core.ControllerFirebaseTokenIf;
-
-import java.util.concurrent.atomic.AtomicReference;
+import com.didekindroid.api.ViewerIf;
 
 /**
  * User: pedro@didekin
@@ -15,10 +10,8 @@ import java.util.concurrent.atomic.AtomicReference;
  * Time: 15:06
  */
 
-public interface ViewerFirebaseTokenIf<B> extends ManagerIf.ViewerIf {
-
-    void setController(ControllerFirebaseTokenIf controllerIn);
+public interface ViewerFirebaseTokenIf<T extends View> extends
+        ViewerIf<T, CtrlerFirebaseTokenIf> {
 
     void checkGcmTokenAsync();
-
 }

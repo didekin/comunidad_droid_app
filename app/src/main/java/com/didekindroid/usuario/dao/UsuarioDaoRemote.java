@@ -187,7 +187,7 @@ public final class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDao {
     public int modifyUser(Usuario usuario) throws UiException
     {
         Timber.d("modifyUser()");
-        return modifyUserWithToken(TKhandler.getAccessTokenInCache(), usuario);
+        return modifyUserWithToken(TKhandler.getTokenCache().get(), usuario);
     }
 
     @Override

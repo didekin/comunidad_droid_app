@@ -29,9 +29,7 @@ import static org.hamcrest.CoreMatchers.is;
  * User: pedro@didekin
  * Date: 19/01/16
  * Time: 16:57
- */
-
-/**
+ *
  * Tests genéricos sobre aspecto y tests funcionales para un userComu SIN permisos para modificar o borrar una incidencia.
  * El userComu ya tiene registrada incidImportancia en BD.
  */

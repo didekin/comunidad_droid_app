@@ -97,10 +97,11 @@ public class SeeUserComuByUserFr extends Fragment {
 //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
 //    ============================================================
 
-    public interface SeeUserComuByUserFrListener {
+    interface SeeUserComuByUserFrListener {
         void onUserComuSelected(UsuarioComunidad userComu, int position);
     }
 
+    @SuppressWarnings("WeakerAccess")
     class UserComuByUserLoader extends AsyncTask<Void, Void, List<UsuarioComunidad>> {
 
         UiException uiException;

@@ -1,5 +1,7 @@
 package com.didekindroid.security;
 
+import android.support.annotation.NonNull;
+
 import com.didekinlib.http.oauth2.SpringOauthToken;
 import com.didekinlib.model.usuario.Usuario;
 
@@ -13,7 +15,6 @@ import timber.log.Timber;
 import static com.didekindroid.security.Oauth2DaoRemote.Oauth2;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.security.TokenIdentityCacher.initTokenAction;
-import static com.didekindroid.usuario.UsuarioAssertionMsg.identity_token_should_be_notnull;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static io.reactivex.Single.fromCallable;
@@ -25,13 +26,15 @@ import static io.reactivex.schedulers.Schedulers.io;
  * Date: 27/11/16
  * Time: 14:35
  */
-public final class OauthTokenReactor implements OauthTokenReactorIf {
+@SuppressWarnings("AnonymousInnerClassMayBeStatic")
+public class OauthTokenReactor implements OauthTokenReactorIf {
 
     public static final OauthTokenReactorIf tokenReactor = new OauthTokenReactor();
 
-    private OauthTokenReactor()
+    OauthTokenReactor()
     {
     }
+
     //  =====================================================================================================
     //    .................................... OBSERVABLES .................................
     //  =====================================================================================================
@@ -58,15 +61,15 @@ public final class OauthTokenReactor implements OauthTokenReactorIf {
 
     /**
      * Preconditions:
-     * 1. The user should be registered and the token cache previously initialized.
+     * 1. The user should be registered and a refreshToken is passed from the token cache.
      *
      * @return a Completable which obtains a new access token based on the old refresh token credential,
      * and initializes the token cache with the new one.
      */
-    static Completable oauthTokenFromRefreshTk(final String refreshToken)
+    static Completable oauthTokenFromRefreshTk(@NonNull final String refreshToken)
     {
         Timber.d("oauthTokenFromRefreshTk()");
-        assertTrue(TKhandler.getTokenCache().get() != null, identity_token_should_be_notnull);
+        assertTrue(TKhandler.isRegisteredUser(), user_should_be_registered);
 
         return fromCallable(new Callable<SpringOauthToken>() {
             @Override
@@ -110,6 +113,12 @@ public final class OauthTokenReactor implements OauthTokenReactorIf {
         oauthTokenAndInitCache(newUser).observeOn(mainThread()).subscribeWith(new OauthUpdateTokenCacheObserver());
     }
 
+    @Override
+    public DisposableCompletableObserver updateTkCacheFromRefreshTk(final String refreshToken){
+        Timber.d("updateTkCacheFromRefreshTk()");
+        return oauthTokenFromRefreshTk(refreshToken).observeOn(mainThread()).subscribeWith(new OauthUpdateTokenCacheObserver());
+    }
+
     //  =======================================================================================
     // ............................ SUBSCRIBERS ..................................
     //  =======================================================================================
@@ -120,6 +129,7 @@ public final class OauthTokenReactor implements OauthTokenReactorIf {
         public void onComplete()
         {
             Timber.d("onComplete(), Thread for subscriber: %s", Thread.currentThread().getName());
+            dispose();
         }
 
         /**
@@ -129,8 +139,9 @@ public final class OauthTokenReactor implements OauthTokenReactorIf {
         @Override
         public void onError(Throwable e)
         {
-            Timber.d("onError(), Thread for subscriber: %s", Thread.currentThread().getName());
+            Timber.d("onErrorCtrl(), Thread for subscriber: %s", Thread.currentThread().getName());
             TKhandler.cleanIdentityCache();
+            dispose();
         }
     }
 }
