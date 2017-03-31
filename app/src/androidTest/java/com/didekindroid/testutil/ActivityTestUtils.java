@@ -10,16 +10,22 @@ import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.contrib.PickerActions;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.DatePicker;
+import android.widget.Spinner;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ControllerIf;
 import com.didekindroid.api.CtrlerIdentityIf;
+import com.didekindroid.api.CtrlerSpinner;
+import com.didekindroid.api.CtrlerSpinnerIf;
 import com.didekindroid.api.ViewerIf;
+import com.didekindroid.api.ViewerSelectableIf;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf.ActionForUiExceptionIf;
 import com.didekindroid.security.IdentityCacher;
+import com.didekindroid.util.BundleKey;
 import com.didekinlib.http.ErrorBean;
 import com.didekinlib.http.oauth2.SpringOauthToken;
 import com.didekinlib.model.exception.ExceptionMsgIf;
@@ -51,6 +57,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
+import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static java.util.Calendar.DAY_OF_MONTH;
 import static java.util.Calendar.MONTH;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -70,6 +78,8 @@ import static org.junit.Assert.assertThat;
  */
 
 public final class ActivityTestUtils {
+
+    public static final long LONG_DEFAULT_EXTRA_VALUE = 0L;
 
     private ActivityTestUtils()
     {
@@ -379,4 +389,80 @@ public final class ActivityTestUtils {
             }
         };
     }
+
+    //    ============================ VIEWERS ============================
+
+    //    ................. Spinners ...............
+
+    public static void checkDoSpinnerViewer(Bundle savedState, BundleKey key,
+                                            Class<? extends AdapterView.OnItemSelectedListener> listener,
+                                            ViewerSelectableIf<Spinner, CtrlerSpinnerIf> viewer)
+    {
+
+        final AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
+
+        CtrlerSpinnerIf controllerLocal = new CtrlerSpinner(viewer) {
+            @Override
+            public boolean loadDataInSpinner()
+            {
+                assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), CoreMatchers.is(BEFORE_METHOD_EXEC));
+                return true;
+            }
+
+            @Override
+            public int getSelectedFromItemId(long itemId)
+            {
+                return 0;
+            }
+        };
+
+        viewer.setController(controllerLocal);
+        viewer.doViewInViewer(savedState, null);
+        assertThat(viewer.getSelectedItemId(), is(savedState.getLong(key.getKey())));
+        assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_A));
+        assertThat(listener.isInstance(viewer.getViewInViewer().getOnItemSelectedListener()), is(true));
+    }
+
+    public static long checkInitSelectedItemId(Bundle savedState, BundleKey key, ViewerSelectableIf<Spinner, CtrlerSpinnerIf> viewer)
+    {
+        viewer.initSelectedItemId(savedState);
+
+        if (!savedState.containsKey(key.getKey())) {
+            assertThat(viewer.getSelectedItemId(), is(LONG_DEFAULT_EXTRA_VALUE));
+        } else {
+            assertThat(viewer.getSelectedItemId(), is(savedState.getLong(key.getKey())));
+        }
+        return viewer.getSelectedItemId();
+    }
+
+    public static long checkSavedStateInSpinner(Bundle stateToSave, long keyValue, BundleKey key, ViewerSelectableIf<Spinner, CtrlerSpinnerIf> viewer)
+    {
+        assertThat(viewer.getSelectedItemId(), is(LONG_DEFAULT_EXTRA_VALUE));
+        viewer.saveState(stateToSave);
+
+        if (stateToSave == null) {
+            return LONG_DEFAULT_EXTRA_VALUE;
+        }
+
+        // Since itemSelectedId == 0, it returns default value.
+        assertThat(stateToSave.getLong(key.getKey(), LONG_DEFAULT_EXTRA_VALUE), is(LONG_DEFAULT_EXTRA_VALUE));
+
+        stateToSave.putLong(key.getKey(), keyValue);
+        viewer.initSelectedItemId(stateToSave);
+        viewer.saveState(stateToSave);
+        // It returns initialized value.
+        assertThat(stateToSave.getLong(key.getKey(), LONG_DEFAULT_EXTRA_VALUE), is(keyValue));
+
+        return viewer.getSelectedItemId();
+    }
+
+    public static long checkGetSelectedItemId(long keyValue, BundleKey key, ViewerSelectableIf<Spinner, CtrlerSpinnerIf> viewer)
+    {
+        Bundle bundle = new Bundle();
+        bundle.putLong(key.getKey(), (short) keyValue);
+        viewer.initSelectedItemId(bundle);
+        assertThat(viewer.getSelectedItemId(), is(keyValue));
+        return viewer.getSelectedItemId();
+    }
 }
+

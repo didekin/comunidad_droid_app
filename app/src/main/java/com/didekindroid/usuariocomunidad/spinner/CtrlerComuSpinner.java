@@ -1,4 +1,4 @@
-package com.didekindroid.comunidad.spinner;
+package com.didekindroid.usuariocomunidad.spinner;
 
 import android.widget.Spinner;
 
@@ -7,6 +7,8 @@ import com.didekindroid.api.CtrlerSpinnerIf;
 import com.didekindroid.api.ObserverSpinner;
 import com.didekindroid.api.ViewerSelectableIf;
 import com.didekinlib.model.comunidad.Comunidad;
+
+import java.util.concurrent.atomic.AtomicReference;
 
 import timber.log.Timber;
 
@@ -20,17 +22,20 @@ import static io.reactivex.schedulers.Schedulers.io;
  * Time: 15:11
  */
 
-final class CtrlerComuSpinner extends CtrlerSpinner<Comunidad> {
+public final class CtrlerComuSpinner extends CtrlerSpinner<Comunidad> {
+
+    private final AtomicReference<ObserverSpinner<Comunidad>> observerSpinner;
 
     private CtrlerComuSpinner(ViewerSelectableIf<Spinner, CtrlerSpinnerIf> viewerIn)
     {
         super(viewerIn);
+        observerSpinner = new AtomicReference<>(null);
     }
 
     static CtrlerSpinnerIf newControllerComuSpinner(ViewerSelectableIf<Spinner, CtrlerSpinnerIf> viewerIn)
     {
         CtrlerComuSpinner controller = new CtrlerComuSpinner(viewerIn);
-        controller.atomicObserver.compareAndSet(null, new ObserverSpinner<>(controller));
+        controller.observerSpinner.compareAndSet(null, new ObserverSpinner<>(controller));
         return controller;
     }
 
@@ -41,7 +46,7 @@ final class CtrlerComuSpinner extends CtrlerSpinner<Comunidad> {
         return subscriptions.add(comunidadesByUser()
                 .subscribeOn(io())
                 .observeOn(mainThread())
-                .subscribeWith(atomicObserver.get()));
+                .subscribeWith(observerSpinner.get()));
     }
 
     @Override
@@ -52,12 +57,12 @@ final class CtrlerComuSpinner extends CtrlerSpinner<Comunidad> {
         if (itemId > 0L) {
             long comunidadIdIn;
             do {
-                comunidadIdIn = ((Comunidad) spinnerView.getItemAtPosition(position)).getC_Id();
+                comunidadIdIn = ((Comunidad) getSpinnerView().getItemAtPosition(position)).getC_Id();
                 if (comunidadIdIn == itemId) {
                     isFound = true;
                     break;
                 }
-            } while (++position < spinnerView.getCount());
+            } while (++position < getSpinnerView().getCount());
         }
         // Si no encontramos la comuidad, index = 0.
         return isFound ? position : 0;

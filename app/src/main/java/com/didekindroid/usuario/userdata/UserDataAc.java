@@ -9,12 +9,13 @@ import android.view.View;
 import com.didekindroid.R;
 import com.didekindroid.api.RootViewReplacer;
 import com.didekindroid.api.RootViewReplacerIf;
-import com.didekindroid.util.MenuRouter;
+import com.didekindroid.MenuRouter;
 
 import timber.log.Timber;
 
-import static com.didekindroid.util.ItemMenu.mn_handler;
-import static com.didekindroid.util.MenuRouter.doUpMenu;
+import static com.didekindroid.usuario.userdata.ViewerUserData.newViewerUserData;
+import static com.didekindroid.api.ItemMenu.mn_handler;
+import static com.didekindroid.MenuRouter.doUpMenu;
 import static com.didekindroid.util.UIutils.doToolBar;
 
 /**
@@ -38,7 +39,7 @@ public class UserDataAc extends AppCompatActivity implements RootViewReplacerIf 
         acView = getLayoutInflater().inflate(R.layout.user_data_ac, null);
         setContentView(acView);
         doToolBar(this, true);
-        viewer = new ViewerUserData(acView, this);
+        viewer = newViewerUserData(this);
     }
 
     @Override

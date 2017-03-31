@@ -1,7 +1,7 @@
 package com.didekindroid;
 
 import com.didekindroid.comunidad.ComunidadSuite;
-import com.didekindroid.exception.UiAppExceptionTests;
+import com.didekindroid.exception.UiExceptionTest;
 import com.didekindroid.incidencia.IncidSuite;
 import com.didekindroid.security.JceTests;
 import com.didekindroid.security.Oauth2DaoRemoteTest;
@@ -31,7 +31,7 @@ import org.junit.runners.Suite;
         OauthTokenReactor_1_Test.class,
         TokenIdentityCacherTest_1.class,
         TokenIdentityCacherTest_2.class,
-        UiAppExceptionTests.class,
+        UiExceptionTest.class,
         UIutilsTest.class,
         UserComuSuite.class,
         UsuarioSuite.class,

@@ -21,7 +21,7 @@ import timber.log.Timber;
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.comment_should_be_registered;
-import static com.didekindroid.util.MenuRouter.doUpMenu;
+import static com.didekindroid.MenuRouter.doUpMenu;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.util.UIutils.doToolBar;

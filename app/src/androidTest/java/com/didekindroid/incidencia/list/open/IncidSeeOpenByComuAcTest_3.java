@@ -5,7 +5,6 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.incidencia.core.IncidenciaDataDbHelper;
 import com.didekindroid.incidencia.list.close.IncidSeeCloseByComuFr;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
@@ -20,12 +19,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Date;
 
-import static android.database.sqlite.SQLiteDatabase.deleteDatabase;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -37,7 +34,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
-import static com.didekindroid.incidencia.core.IncidenciaDataDbHelperTest.DB_PATH;
+import static com.didekindroid.incidencia.core.IncidenciaDataDbHelper.DB_NAME;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.RESOLUCION_DEFAULT_DESC;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doResolucion;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidenciaUser;
@@ -75,6 +72,8 @@ public class IncidSeeOpenByComuAcTest_3 {
     UsuarioComunidad pepeUserComu;
     UsuarioComunidad userComuJuan;
     Resolucion resolucion;
+    IncidSeeOpenByComuAc activity;
+
     @Rule
     public IntentsTestRule<IncidSeeOpenByComuAc> activityRule = new IntentsTestRule<IncidSeeOpenByComuAc>(IncidSeeOpenByComuAc.class) {
 
@@ -124,8 +123,8 @@ public class IncidSeeOpenByComuAcTest_3 {
     @Before
     public void setUp() throws Exception
     {
-        IncidSeeOpenByComuAc mActivity = activityRule.getActivity();
-        IncidSeeCloseByComuFr mFragment = (IncidSeeCloseByComuFr) mActivity.getSupportFragmentManager()
+        activity = activityRule.getActivity();
+        IncidSeeCloseByComuFr mFragment = (IncidSeeCloseByComuFr) activity.getSupportFragmentManager()
                 .findFragmentByTag(incid_see_by_comu_list_fr_tag);
 //        controller = (CtrlerIncidSeeOpenByComu) mFragment.controllerSeeIncids;       TODO: quitar Controller.
         adapter = (AdapterIncidSeeOpenByComu) controller.adapter;
@@ -137,8 +136,7 @@ public class IncidSeeOpenByComuAcTest_3 {
     @After
     public void tearDown() throws Exception
     {
-        String dBFileName = DB_PATH.concat(IncidenciaDataDbHelper.DB_NAME);
-        deleteDatabase(new File(dBFileName));
+        activity.deleteDatabase(DB_NAME);
         cleanOptions(CLEAN_JUAN_AND_PEPE);
     }
 

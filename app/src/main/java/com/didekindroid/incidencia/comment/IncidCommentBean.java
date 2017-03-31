@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.didekindroid.R;
+import com.didekindroid.api.ViewBean;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.IncidComment;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
@@ -17,7 +18,7 @@ import static com.didekinlib.model.incidencia.dominio.IncidDataPatterns.INCID_CO
  * Date: 03/02/16
  * Time: 18:47
  */
-class IncidCommentBean {
+class IncidCommentBean implements ViewBean{
 
     private final Incidencia incidencia;
     private String commentDesc;

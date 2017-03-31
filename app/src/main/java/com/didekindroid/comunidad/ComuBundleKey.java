@@ -1,12 +1,14 @@
 package com.didekindroid.comunidad;
 
+import com.didekindroid.util.BundleKey;
+
 /**
  * User: pedro@didekin
  * Date: 18/11/16
  * Time: 09:54
  */
 
-public enum ComuBundleKey {
+public enum ComuBundleKey implements BundleKey {
 
     COMUNIDAD_LIST,
     COMUNIDAD_LIST_INDEX,
@@ -22,5 +24,11 @@ public enum ComuBundleKey {
     ComuBundleKey()
     {
         key = intentPackage.concat(this.name());
+    }
+
+    @Override
+    public String getKey()
+    {
+        return key;
     }
 }

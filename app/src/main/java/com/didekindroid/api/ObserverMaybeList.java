@@ -1,7 +1,5 @@
 package com.didekindroid.api;
 
-import com.didekindroid.exception.UiException;
-
 import java.io.Serializable;
 import java.util.List;
 
@@ -33,9 +31,6 @@ public class ObserverMaybeList<E extends Serializable> extends DisposableMaybeOb
     public void onError(Throwable e)
     {
         Timber.d("onErrorCtrl(), Thread for subscriber: %s", Thread.currentThread().getName());
-        if (e instanceof UiException) {
-            Timber.d("UiException message: %s", ((UiException) e).getErrorBean().getMessage());
-        }
         controller.onErrorCtrl(e);
     }
 

@@ -4,12 +4,9 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-
 import com.didekindroid.R;
 
 import timber.log.Timber;
-
-import static com.didekindroid.util.UIutils.makeToast;
 
 /**
  * User: pedro

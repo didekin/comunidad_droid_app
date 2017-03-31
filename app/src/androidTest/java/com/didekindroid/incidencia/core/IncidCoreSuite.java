@@ -26,6 +26,7 @@ import org.junit.runners.Suite;
         IncidEditAcTest_Mn4.class,
         IncidenciaBeanTest.class,
         IncidenciaDataDbHelperTest.class,
+        // package reg.
         IncidRegAc_GCM_Test.class,
         IncidRegAcTest_1.class,
 })

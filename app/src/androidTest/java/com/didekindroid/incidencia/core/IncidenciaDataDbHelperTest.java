@@ -10,13 +10,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
-import static android.database.sqlite.SQLiteDatabase.deleteDatabase;
 import static com.didekindroid.AppInitializer.creator;
 import static com.didekindroid.incidencia.core.IncidenciaDataDb.AmbitoIncidencia.AMBITO_INCID_COUNT;
 import static com.didekindroid.incidencia.core.IncidenciaDataDb.AmbitoIncidencia.CREATE_AMBITO_INCIDENCIA;
+import static com.didekindroid.incidencia.core.IncidenciaDataDbHelper.DB_NAME;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -30,7 +30,6 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class IncidenciaDataDbHelperTest {
 
-    public static final String DB_PATH = "data/data/com.didekindroid/databases/";
     private IncidenciaDataDbHelper dbHelper;
     Context context;
     SQLiteDatabase database;
@@ -82,6 +81,19 @@ public class IncidenciaDataDbHelperTest {
     }
 
     @Test
+    public void testGetAmbitoIncidList() throws Exception
+    {
+        final Cursor cursor = dbHelper.doAmbitoIncidenciaCursor();
+        List<AmbitoIncidValueObj> list = dbHelper.getAmbitoIncidList(cursor);
+        assertThat(list.size(), is(AMBITO_INCID_COUNT));
+        assertThat(list.get(0)._ID, is((short)0));
+        assertThat(list.get(0).ambitoStr, is("ámbito de incidencia"));
+        assertThat(list.get(AMBITO_INCID_COUNT - 1)._ID, is((short)(AMBITO_INCID_COUNT - 1)));
+        assertThat(list.get(AMBITO_INCID_COUNT - 1).ambitoStr, is("Otros"));
+        assertThat(cursor.isClosed(), is(true));
+    }
+
+    @Test
     public void testGetAmbitoDescByPk()
     {
         assertThat(dbHelper.getAmbitoDescByPk((short) 9), is("Buzones"));
@@ -104,7 +116,6 @@ public class IncidenciaDataDbHelperTest {
     {
         dbHelper.dropAllTables();
         dbHelper.close();
-        String dBFileName = DB_PATH.concat(IncidenciaDataDbHelper.DB_NAME);
-        deleteDatabase(new File(dBFileName));
+        context.deleteDatabase(DB_NAME);
     }
 }

@@ -15,9 +15,9 @@ import timber.log.Timber;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
 import static com.didekindroid.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;
-import static com.didekindroid.util.ItemMenu.mn_handler;
-import static com.didekindroid.util.MenuRouter.doUpMenu;
-import static com.didekindroid.util.MenuRouter.routerMap;
+import static com.didekindroid.api.ItemMenu.mn_handler;
+import static com.didekindroid.MenuRouter.doUpMenu;
+import static com.didekindroid.MenuRouter.routerMap;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.doToolBar;
 

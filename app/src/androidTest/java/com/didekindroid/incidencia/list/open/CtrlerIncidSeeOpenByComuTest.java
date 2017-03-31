@@ -154,13 +154,13 @@ public class CtrlerIncidSeeOpenByComuTest {
     @Test
     public void testDealWithSelectedItem() throws Exception
     {
-        assertThat(controller.dealWithSelectedItem(new IncidenciaUser.IncidenciaUserBuilder(incidencia).usuario(USER_PEPE).build()), is(true));
+        assertThat(controller.selectItem(new IncidenciaUser.IncidenciaUserBuilder(incidencia).usuario(USER_PEPE).build()), is(true));
     }
 
     @Test
     public void testOnSuccessDealSelectedItem() throws Exception
     {
-        controller.onSuccessDealSelectedItem(new Bundle());
+        controller.onSuccessSelectedItem(new Bundle());
         assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_A));
     }
 

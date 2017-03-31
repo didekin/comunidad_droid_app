@@ -1,4 +1,4 @@
-package com.didekindroid.comunidad.spinner;
+package com.didekindroid.usuariocomunidad.spinner;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -12,17 +12,23 @@ import com.didekindroid.api.ActivityMock;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
-import static com.didekindroid.comunidad.spinner.ViewerComuSpinner.newViewerComuSpinner;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.*;
+import static com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner.newViewerComuSpinner;
+import static com.didekindroid.testutil.ActivityTestUtils.checkDoSpinnerViewer;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.regTwoUserComuSameUser;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -68,13 +74,23 @@ public class ViewerComuSpinnerTest {
     {
         activity = activityRule.getActivity();
         spinner = (Spinner) activity.findViewById(R.id.comunidad_spinner);
+
+        final AtomicReference<ViewerComuSpinner> atomicViewer = new AtomicReference<>(null);
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run()
             {
-                viewer = newViewerComuSpinner(spinner, activity, null);
+                atomicViewer.compareAndSet(null, newViewerComuSpinner(spinner, activity, null));
             }
         });
+        waitAtMost(2, SECONDS).untilAtomic(atomicViewer, notNullValue());
+        viewer = atomicViewer.get();
+    }
+
+    @After
+    public void cleanUp() throws UiException
+    {
+        cleanOneUser(USER_JUAN);
     }
 
     @Test
@@ -121,18 +137,14 @@ public class ViewerComuSpinnerTest {
     @Test
     public void testGetItemIdInIntent() throws Exception
     {
-       assertThat(viewer.getItemIdInIntent(), is(comuId_intent));
+        assertThat(viewer.getItemIdInIntent(), is(comuId_intent));
     }
 
     @Test
-    public void doViewInViewer() throws Exception
+    public void testDoViewInViewer() throws Exception
     {
-        // TODO. terminar.
-        /*view.setOnItemSelectedListener(new ComuSelectedListener());
-        initSelectedItemId(savedState);
-        controller.loadDataInSpinner();*/
-
-        // Tested in the fragments.
-        cleanOneUser(USER_JUAN);
+        Bundle bundleTest = new Bundle(1);
+        bundleTest.putLong(COMUNIDAD_ID.key, 323L);
+        checkDoSpinnerViewer(bundleTest, COMUNIDAD_ID, ViewerComuSpinner.ComuSelectedListener.class, viewer);
     }
 }

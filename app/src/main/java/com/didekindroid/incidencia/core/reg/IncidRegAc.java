@@ -1,29 +1,20 @@
 package com.didekindroid.incidencia.core.reg;
 
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 
 import com.didekindroid.R;
-import com.didekindroid.exception.UiException;
-import com.didekinlib.model.incidencia.dominio.IncidImportancia;
+import com.didekindroid.api.RootViewReplacer;
+import com.didekindroid.api.RootViewReplacerIf;
 
 import timber.log.Timber;
 
-import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
-import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.incid_importancia_should_be_registered;
-import static com.didekindroid.util.ConnectionUtils.checkInternetConnected;
-import static com.didekindroid.util.DefaultNextAcRouter.acRouter;
-import static com.didekindroid.util.MenuRouter.doUpMenu;
-import static com.didekindroid.util.UIutils.assertTrue;
-import static com.didekindroid.util.UIutils.checkPostExecute;
+import static com.didekindroid.MenuRouter.doUpMenu;
+import static com.didekindroid.incidencia.core.reg.ViewerIncidRegAc.newViewerIncidRegAc;
 import static com.didekindroid.util.UIutils.doToolBar;
-import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
-import static com.didekindroid.util.UIutils.makeToast;
 
 /**
  * Preconditions:
@@ -31,13 +22,14 @@ import static com.didekindroid.util.UIutils.makeToast;
  * 2. No intent received.
  * Postconditions:
  * 1. No intent passed.
- *
+ * <p>
  * This activity is a point of registration for receiving notifications of new incidencias.
  * TODO: añadir varios tags a la incidencia para facilitar búsquedas.
  */
-public class IncidRegAc extends AppCompatActivity{
+public class IncidRegAc extends AppCompatActivity implements RootViewReplacerIf {
 
     IncidRegAcFragment mRegAcFragment;
+    ViewerIncidRegAc viewer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -50,32 +42,15 @@ public class IncidRegAc extends AppCompatActivity{
         doToolBar(this, true);
 
         mRegAcFragment = (IncidRegAcFragment) getSupportFragmentManager().findFragmentById(R.id.incid_reg_frg);
-        Button mRegisterButton = (Button) findViewById(R.id.incid_reg_ac_button);
-        mRegisterButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                Timber.d("View.OnClickListener().onClick()");
-                registerIncidencia();
-            }
-        });
+        viewer = newViewerIncidRegAc(mAcView, this);
+        viewer.doViewInViewer(savedInstanceState, null);
     }
 
-    void registerIncidencia()
+    @Override
+    public void replaceRootView(@NonNull Bundle bundle)
     {
-        Timber.d("registerIncidencia()");
-
-        StringBuilder errorMsg = getErrorMsgBuilder(this);
-        try {
-            IncidImportancia incidImportancia = mRegAcFragment.getIncidImportanciaBean()
-                    .makeIncidImportancia(errorMsg, getResources(), mRegAcFragment.getRootFrgView(), mRegAcFragment.getIncidenciaBean());
-            if (checkInternetConnected(this)) {
-                new IncidenciaRegister().execute(incidImportancia);
-            }
-        } catch (IllegalStateException e) {
-            Timber.e(e.getMessage());
-            makeToast(this, errorMsg.toString());
-        }
+        Timber.d("replaceRootView()");
+        new RootViewReplacer(this).replaceRootView(bundle);
     }
 
     // ============================================================
@@ -95,46 +70,6 @@ public class IncidRegAc extends AppCompatActivity{
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
-        }
-    }
-
-    //    ============================================================
-    //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
-    //    ============================================================
-
-    @SuppressWarnings("WeakerAccess")
-    class IncidenciaRegister extends AsyncTask<IncidImportancia, Void, Integer> {
-
-        UiException uiException;
-
-        @Override
-        protected Integer doInBackground(IncidImportancia... incidImportancias)
-        {
-            Timber.d("doInBackground()");
-            int rowInserted = 0;
-
-            try {
-                rowInserted = incidenciaDao.regIncidImportancia(incidImportancias[0]);
-            } catch (UiException e) {
-                uiException = e;
-            }
-            return rowInserted;
-        }
-
-        @Override
-        protected void onPostExecute(Integer rowInserted)
-        {
-
-            if (checkPostExecute(IncidRegAc.this)) return;
-            Timber.d("onPostExecute()");
-
-            if (uiException != null) {
-                uiException.processMe(IncidRegAc.this, new Intent());
-            } else {
-                assertTrue(rowInserted == 2, incid_importancia_should_be_registered);
-                Intent intent = new Intent(IncidRegAc.this, acRouter.getNextActivity(IncidRegAc.this.getClass()));
-                startActivity(intent);
-            }
         }
     }
 }

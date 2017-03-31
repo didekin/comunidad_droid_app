@@ -9,6 +9,7 @@ import com.didekindroid.R;
 import com.didekindroid.comunidad.testutil.ComuDataTestUtil;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
+import com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum;
 
 import org.junit.After;
 import org.junit.Before;
@@ -23,6 +24,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_SEARCH;
+import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_LA_PLAZUELA_5;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
@@ -51,7 +53,7 @@ public class ComuSearchResultsAc_2_Test {
     private ComuSearchResultsAc activity;
     ComuSearchResultsListFr mComunidadSummaryFrg;
     Intent intent;
-    UsuarioDataTestUtils.CleanUserEnum whatClean;
+    CleanUserEnum whatClean;
 
     // Navigate-up layout cuando hay resultados.
     protected int fragmentLayoutId = R.id.comu_list_fragment;
@@ -65,16 +67,16 @@ public class ComuSearchResultsAc_2_Test {
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
     {
-        Thread.sleep(4000);
+        Thread.sleep(2000);
     }
 
     @Before
     public void getFixture() throws Exception
     {
         Thread.sleep(2000);
-        whatClean = UsuarioDataTestUtils.CleanUserEnum.CLEAN_NOTHING;
+        whatClean = CleanUserEnum.CLEAN_NOTHING;
         intent = new Intent();
-        intent.putExtra(COMUNIDAD_SEARCH.key, ComuDataTestUtil.COMU_LA_PLAZUELA_5);
+        intent.putExtra(COMUNIDAD_SEARCH.key, COMU_LA_PLAZUELA_5);
     }
 
     @After

@@ -10,7 +10,7 @@ import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
 
 import timber.log.Timber;
 
-import static com.didekindroid.comunidad.spinner.ViewerComuSpinner.newViewerComuSpinner;
+import static com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner.newViewerComuSpinner;
 import static com.didekindroid.incidencia.list.ViewerIncidListByComu.newListViewer;
 import static com.didekindroid.usuario.firebase.ViewerFirebaseToken.newViewerFirebaseToken;
 

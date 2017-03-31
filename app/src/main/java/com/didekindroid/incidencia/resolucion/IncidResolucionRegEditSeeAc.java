@@ -19,7 +19,7 @@ import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_resolucion_ac_frgs_tag;
 import static com.didekindroid.usuario.firebase.ViewerFirebaseToken.newViewerFirebaseToken;
-import static com.didekindroid.util.MenuRouter.doUpMenu;
+import static com.didekindroid.MenuRouter.doUpMenu;
 import static com.didekindroid.util.UIutils.doToolBar;
 
 /**

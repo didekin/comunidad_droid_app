@@ -1,4 +1,4 @@
-package com.didekindroid.comunidad.spinner;
+package com.didekindroid.usuariocomunidad.spinner;
 
 import android.app.Activity;
 import android.support.annotation.NonNull;
@@ -8,6 +8,7 @@ import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 
 import com.didekindroid.api.ActivityMock;
+import com.didekindroid.exception.UiException;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.comunidad.Municipio;
 import com.didekinlib.model.comunidad.Provincia;
@@ -18,13 +19,23 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
+import static com.didekindroid.usuariocomunidad.spinner.CtrlerComuSpinner.newControllerComuSpinner;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceAndroidMain;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceIoScheduler;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static io.reactivex.plugins.RxJavaPlugins.reset;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -41,25 +52,33 @@ public class CtrlerComuSpinnerTest {
     CtrlerComuSpinner controller;
 
     @Before
-    public void setUp(){
+    public void setUp() throws IOException, UiException
+    {
         final Activity activity = activityRule.getActivity();
+        final AtomicReference<CtrlerComuSpinner> atomicController = new AtomicReference<>(null);
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run()
             {
-                controller = (CtrlerComuSpinner) CtrlerComuSpinner.newControllerComuSpinner(new ViewerComuSpinner(new Spinner(activity), activity, null){
-                    @Override
-                    public long getSelectedItemId()
-                    {
-                        return 123L;
-                    }
-                });
+                atomicController.compareAndSet(
+                        null,
+                        (CtrlerComuSpinner) newControllerComuSpinner(
+                                new ViewerComuSpinner(new Spinner(activity), activity, null) {
+                                    @Override
+                                    public long getSelectedItemId()
+                                    {
+                                        return 123L;
+                                    }
+                                })
+                );
             }
         });
+        waitAtMost(2, SECONDS).untilAtomic(atomicController, notNullValue());
+        controller = atomicController.get();
     }
 
     @Test
-    public void testProcessBackLoadDataInSpinner()
+    public void testOnSuccessLoadDataInSpinner()
     {
         List<Comunidad> comunidades = makeListComu();
         controller.onSuccessLoadDataInSpinner(comunidades);
@@ -71,8 +90,10 @@ public class CtrlerComuSpinnerTest {
     }
 
     @Test
-    public void loadDataInSpinner()
+    public void testLoadDataInSpinner() throws IOException, UiException
     {
+        signUpAndUpdateTk(COMU_REAL_JUAN);
+
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
@@ -80,6 +101,8 @@ public class CtrlerComuSpinnerTest {
         } finally {
             reset();
         }
+
+        cleanOneUser(USER_JUAN);
     }
 
     @Test

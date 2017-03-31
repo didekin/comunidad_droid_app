@@ -20,10 +20,10 @@ import timber.log.Timber;
 import static com.didekindroid.comunidad.RegComuFr.makeComunidadBeanFromView;
 import static com.didekindroid.security.OauthTokenReactor.tokenReactor;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.util.DefaultNextAcRouter.acRouter;
-import static com.didekindroid.util.ItemMenu.mn_handler;
-import static com.didekindroid.util.MenuRouter.getRegisterDependentClass;
-import static com.didekindroid.util.MenuRouter.routerMap;
+import static com.didekindroid.DefaultNextAcRouter.acRouter;
+import static com.didekindroid.api.ItemMenu.mn_handler;
+import static com.didekindroid.MenuRouter.getRegisterDependentClass;
+import static com.didekindroid.MenuRouter.routerMap;
 import static com.didekindroid.util.UIutils.doToolBar;
 import static com.didekindroid.util.UIutils.makeToast;
 import static com.didekinlib.model.common.dominio.ValidDataPatterns.LINE_BREAK;
@@ -74,7 +74,7 @@ public class ComuSearchAc extends AppCompatActivity {
         super.onStart();
         identityCacher = TKhandler;
         reactor = tokenReactor;
-        // To initilize the token cache. This is the launch activity.
+        // To initialize the token cache. This is the launch activity.
         TKhandler.refreshAccessToken(reactor);
     }
 

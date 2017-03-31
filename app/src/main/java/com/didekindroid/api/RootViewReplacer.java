@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
-import static com.didekindroid.util.DefaultNextAcRouter.acRouter;
+import com.didekindroid.ActivityRouter;
+
+import static com.didekindroid.DefaultNextAcRouter.acRouter;
 
 /**
  * User: pedro@didekin
@@ -16,23 +18,30 @@ import static com.didekindroid.util.DefaultNextAcRouter.acRouter;
 public class RootViewReplacer implements RootViewReplacerIf {
 
     private final Activity activity;
+    private final ActivityRouter router;
 
     public RootViewReplacer(Activity activity)
     {
+        this(activity, acRouter);
+    }
+
+    RootViewReplacer(Activity activity, ActivityRouter router)
+    {
         this.activity = activity;
+        this.router = router;
     }
 
     @Override
     public void replaceRootView(@NonNull Bundle bundle)
     {
-        Intent intent = new Intent(activity, acRouter.getNextActivity(activity.getClass()));
+        Intent intent = new Intent(activity, router.getNextActivity(activity.getClass()));
         intent.putExtras(bundle);
         activity.startActivity(intent);
     }
 
-    public void replacerRootView(@NonNull Bundle bundle, @NonNull int flags)
+    public void replaceRootView(@NonNull Bundle bundle, @NonNull int flags)
     {
-        Intent intent = new Intent(activity, acRouter.getNextActivity(activity.getClass()));
+        Intent intent = new Intent(activity, router.getNextActivity(activity.getClass()));
         intent.putExtras(bundle);
         intent.setFlags(flags);
         activity.startActivity(intent);

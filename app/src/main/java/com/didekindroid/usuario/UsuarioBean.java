@@ -3,6 +3,7 @@ package com.didekindroid.usuario;
 import android.content.res.Resources;
 
 import com.didekindroid.R;
+import com.didekindroid.api.ViewBean;
 import com.didekinlib.model.usuario.Usuario;
 
 import static com.didekinlib.model.common.dominio.ValidDataPatterns.ALIAS;
@@ -15,7 +16,7 @@ import static com.didekinlib.model.common.dominio.ValidDataPatterns.PASSWORD;
  * Date: 01/06/15
  * Time: 17:09
  */
-public final class UsuarioBean {
+public final class UsuarioBean implements ViewBean {
 
     private final String userName;
     private final String password;

@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.didekindroid.R;
+import com.didekindroid.api.ViewBean;
 import com.didekindroid.api.Viewer;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf;
@@ -66,7 +67,7 @@ class ViewerUserData extends Viewer<View, CtrlerUserDataIf> implements ViewerUse
     }
 
     @Override
-    public void doViewInViewer(Bundle savedState)
+    public void doViewInViewer(Bundle savedState, ViewBean viewBean)
     {
         Timber.d("doViewInViewer()");
         assertTrue(controller.isRegisteredUser(), user_should_be_registered);

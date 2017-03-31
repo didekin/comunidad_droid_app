@@ -1,5 +1,7 @@
 package com.didekindroid.util;
 
+import com.didekindroid.api.ViewBean;
+
 /**
  * User: pedro@didekin
  * Date: 16/11/16
@@ -8,6 +10,6 @@ package com.didekindroid.util;
  *
  */
 
-public interface FechaPickerBean {
+public interface FechaPickerBean extends ViewBean {
     void setFechaPrevista(long fechaPrevista);
 }

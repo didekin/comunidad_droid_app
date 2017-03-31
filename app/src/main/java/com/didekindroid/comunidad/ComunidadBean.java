@@ -3,6 +3,7 @@ package com.didekindroid.comunidad;
 import android.content.res.Resources;
 
 import com.didekindroid.R;
+import com.didekindroid.api.ViewBean;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.comunidad.Municipio;
 import com.didekinlib.model.comunidad.Provincia;
@@ -17,7 +18,7 @@ import static com.didekinlib.model.common.dominio.ValidDataPatterns.SUFIJO_NUMER
  * Date: 12/05/15
  * Time: 16:55
  */
-public class ComunidadBean {
+public class ComunidadBean implements ViewBean {
 
     private long comunidadId;
     private String tipoVia;

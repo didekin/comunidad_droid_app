@@ -3,6 +3,7 @@ package com.didekindroid.usuariocomunidad;
 import android.content.res.Resources;
 
 import com.didekindroid.R;
+import com.didekindroid.api.ViewBean;
 import com.didekindroid.comunidad.ComunidadBean;
 import com.didekindroid.usuario.UsuarioBean;
 import com.didekinlib.model.common.dominio.ValidDataPatterns;
@@ -17,7 +18,7 @@ import static com.didekinlib.model.common.dominio.ValidDataPatterns.PORTAL;
  * Date: 01/06/15
  * Time: 16:59
  */
-public final class UsuarioComunidadBean {
+public final class UsuarioComunidadBean implements ViewBean {
 
 
     private final boolean isPresidente;

@@ -29,9 +29,9 @@ import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_regist
 import static com.didekindroid.usuariocomunidad.UserComuAssertionMsg.userComu_should_be_deleted;
 import static com.didekindroid.usuariocomunidad.UserComuAssertionMsg.userComu_should_be_modified;
 import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
-import static com.didekindroid.util.ItemMenu.mn_handler;
-import static com.didekindroid.util.MenuRouter.doUpMenu;
-import static com.didekindroid.util.MenuRouter.routerMap;
+import static com.didekindroid.api.ItemMenu.mn_handler;
+import static com.didekindroid.MenuRouter.doUpMenu;
+import static com.didekindroid.MenuRouter.routerMap;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.util.UIutils.doToolBar;

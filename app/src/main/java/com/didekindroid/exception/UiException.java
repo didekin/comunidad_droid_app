@@ -22,10 +22,16 @@ import static com.didekindroid.util.UIutils.makeToast;
 public class UiException extends Exception implements UiExceptionIf {
 
     private final ErrorBean errorBean;
+    private final UiExceptionRouterIf exceptionRouter;
 
     public UiException(ErrorBean errorBean)
     {
+        this(errorBean, creator.get().getUiExceptionRouter());
+    }
+
+    public UiException(ErrorBean errorBean, UiExceptionRouterIf exceptionRouter){
         this.errorBean = errorBean;
+        this.exceptionRouter = exceptionRouter;
     }
 
     @Override
@@ -33,7 +39,7 @@ public class UiException extends Exception implements UiExceptionIf {
     {
         Timber.d("processMe(): %s%n", errorBean.getMessage());
 
-        ActionForUiExceptionIf action = creator.get().getExceptionDealer().getActionForException(this);
+        ActionForUiExceptionIf action = exceptionRouter.getActionForException(this);
 
         if (action == null) { // NO entry in exceptions dealer's table for error bean message.
             makeToast(activity, R.string.exception_generic_message);

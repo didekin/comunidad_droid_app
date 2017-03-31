@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.didekindroid.R;
+import com.didekindroid.api.ViewBean;
 import com.didekindroid.api.Viewer;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf;
@@ -56,7 +57,7 @@ class ViewerLogin extends Viewer<View, CtrlerLoginIf> implements ViewerLoginIf {
     }
 
     @Override
-    public void doViewInViewer(Bundle savedState)
+    public void doViewInViewer(Bundle savedState, ViewBean viewBean)
     {
         Timber.d("doViewInViewer()");
 
@@ -201,6 +202,9 @@ class ViewerLogin extends Viewer<View, CtrlerLoginIf> implements ViewerLoginIf {
     public void saveState(Bundle savedState)
     {
         Timber.d("saveState()");
+        if (savedState == null){
+            savedState = new Bundle(1);
+        }
         savedState.putInt(login_counter_atomic_int.key, counterWrong.get());
     }
 

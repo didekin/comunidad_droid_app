@@ -21,8 +21,8 @@ import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.resolucion_should_be_initialized;
 import static com.didekindroid.util.AppBundleKey.IS_MENU_IN_FRAGMENT_FLAG;
-import static com.didekindroid.util.ItemMenu.mn_handler;
-import static com.didekindroid.util.MenuRouter.routerMap;
+import static com.didekindroid.api.ItemMenu.mn_handler;
+import static com.didekindroid.MenuRouter.routerMap;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.formatTimeStampToString;
 import static com.didekindroid.util.UIutils.getStringFromInteger;

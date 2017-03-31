@@ -6,9 +6,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.didekindroid.api.CtrlerIdentity;
-import com.didekindroid.api.CtrlerSelectableListIf;
+import com.didekindroid.api.CtrlerSelectableItemIf;
 import com.didekindroid.api.ObserverMaybeList;
-import com.didekindroid.api.ObserverSingleListSelected;
+import com.didekindroid.api.ObserverSingleSelectedItem;
 import com.didekindroid.incidencia.list.ViewerIncidListByComu;
 import com.didekindroid.security.IdentityCacher;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
@@ -39,7 +39,7 @@ import static io.reactivex.schedulers.Schedulers.io;
  */
 @SuppressWarnings({"TypeMayBeWeakened", "AnonymousInnerClassMayBeStatic", "WeakerAccess"})
 public class CtrlerIncidSeeCloseByComu extends CtrlerIdentity<ListView> implements
-        CtrlerSelectableListIf<IncidenciaUser,Bundle> {
+        CtrlerSelectableItemIf<IncidenciaUser,Bundle> {
 
     final ArrayAdapter<IncidenciaUser> adapter;
 
@@ -113,22 +113,22 @@ public class CtrlerIncidSeeCloseByComu extends CtrlerIdentity<ListView> implemen
     }
 
     @Override
-    public boolean dealWithSelectedItem(@NonNull IncidenciaUser incidenciaUser)
+    public boolean selectItem(@NonNull IncidenciaUser incidenciaUser)
     {
-        Timber.d("dealWithSelectedItem()");
+        Timber.d("selectItem()");
         final Incidencia incidencia = incidenciaUser.getIncidencia();
         return subscriptions.add(
                 bundleWithResolucion(incidencia)
                         .subscribeOn(io())
                         .observeOn(mainThread())
-                        .subscribeWith(new ObserverSingleListSelected<>(this))
+                        .subscribeWith(new ObserverSingleSelectedItem<>(this))
         );
     }
 
     @Override
-    public void onSuccessDealSelectedItem(@NonNull Bundle bundle)
+    public void onSuccessSelectedItem(@NonNull Bundle bundle)
     {
-        Timber.d("onSuccessDealSelectedItem()");
+        Timber.d("onSuccessSelectedItem()");
         viewer.replaceRootView(bundle);
     }
 }

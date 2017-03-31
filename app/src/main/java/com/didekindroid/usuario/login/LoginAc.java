@@ -10,7 +10,7 @@ import android.view.View;
 import com.didekindroid.R;
 import com.didekindroid.api.RootViewReplacer;
 import com.didekindroid.api.RootViewReplacerIf;
-import com.didekindroid.util.MenuRouter;
+import com.didekindroid.MenuRouter;
 import com.didekinlib.model.usuario.Usuario;
 
 import timber.log.Timber;
@@ -48,7 +48,7 @@ public class LoginAc extends AppCompatActivity implements RootViewReplacerIf {
         doToolBar(this, true);
 
         viewerLogin = ViewerLogin.newViewerLogin(this);
-        viewerLogin.doViewInViewer(savedInstanceState);
+        viewerLogin.doViewInViewer(savedInstanceState, null);
     }
 
     @Override
@@ -71,7 +71,7 @@ public class LoginAc extends AppCompatActivity implements RootViewReplacerIf {
     public void replaceRootView(Bundle bundle)
     {
         Timber.d("replaceView()");
-        new RootViewReplacer(this).replacerRootView(bundle, FLAG_ACTIVITY_NEW_TASK);
+        new RootViewReplacer(this).replaceRootView(bundle, FLAG_ACTIVITY_NEW_TASK);
         finish();
     }
 

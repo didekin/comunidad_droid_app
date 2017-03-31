@@ -1,4 +1,4 @@
-package com.didekindroid.util;
+package com.didekindroid.api;
 
 import android.app.Activity;
 

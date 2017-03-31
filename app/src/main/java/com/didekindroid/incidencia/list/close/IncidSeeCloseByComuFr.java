@@ -38,7 +38,7 @@ public class IncidSeeCloseByComuFr extends Fragment  {
         super.onViewCreated(view, savedState);
         /* Initialization of viewers.*/
         viewerIncidClose = newViewerIncidSeeClose(rootFrgView, getActivity());
-        viewerIncidClose.doViewInViewer(savedState);
+        viewerIncidClose.doViewInViewer(savedState, null);
     }
 
     @Override

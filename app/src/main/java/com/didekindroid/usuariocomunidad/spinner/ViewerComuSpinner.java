@@ -1,4 +1,4 @@
-package com.didekindroid.comunidad.spinner;
+package com.didekindroid.usuariocomunidad.spinner;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -7,15 +7,19 @@ import android.widget.AdapterView;
 import android.widget.Spinner;
 
 import com.didekindroid.api.CtrlerSpinnerIf;
+import com.didekindroid.api.ViewBean;
 import com.didekindroid.api.Viewer;
 import com.didekindroid.api.ViewerIf;
 import com.didekindroid.api.ViewerSelectableIf;
+import com.didekindroid.incidencia.core.IncidenciaBean;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
-import static com.didekindroid.comunidad.spinner.CtrlerComuSpinner.newControllerComuSpinner;
+import static com.didekindroid.usuariocomunidad.spinner.CtrlerComuSpinner.newControllerComuSpinner;
+import static com.didekindroid.util.CommonAssertionMsg.class_cast_unallowed;
+import static com.didekindroid.util.UIutils.assertTrue;
 
 /**
  * User: pedro@didekin
@@ -23,6 +27,7 @@ import static com.didekindroid.comunidad.spinner.CtrlerComuSpinner.newController
  * Time: 10:49
  */
 
+@SuppressWarnings("ClassWithOnlyPrivateConstructors")
 public class ViewerComuSpinner extends Viewer<Spinner, CtrlerSpinnerIf>
         implements ViewerSelectableIf<Spinner, CtrlerSpinnerIf> {
 
@@ -32,6 +37,7 @@ public class ViewerComuSpinner extends Viewer<Spinner, CtrlerSpinnerIf>
      * 2. The id is retrieved from savedInstanceState.
      * 3. The id is passed from the activity (in FCM notifications).
      */
+    @SuppressWarnings("WeakerAccess")
     long itemSelectedId;
 
     ViewerComuSpinner(Spinner view, Activity activity, ViewerIf parentViewer)
@@ -50,7 +56,7 @@ public class ViewerComuSpinner extends Viewer<Spinner, CtrlerSpinnerIf>
     // ==================================== ViewerSelectableIf ====================================
 
     @Override
-    public ViewerSelectableIf<Spinner, CtrlerSpinnerIf> initSelectedItemId(Bundle savedState)
+    public void initSelectedItemId(Bundle savedState)
     {
         Timber.d("initSelectedItemId()");
 
@@ -59,13 +65,15 @@ public class ViewerComuSpinner extends Viewer<Spinner, CtrlerSpinnerIf>
         } else {
             itemSelectedId = getItemIdInIntent();
         }
-        return this;
     }
 
     @Override
     public void saveState(Bundle savedState)
     {
         Timber.d("saveState()");
+        if (savedState == null){
+            savedState = new Bundle(1);
+        }
         savedState.putLong(COMUNIDAD_ID.key, itemSelectedId);
     }
 
@@ -82,16 +90,18 @@ public class ViewerComuSpinner extends Viewer<Spinner, CtrlerSpinnerIf>
     @Override
     public long getItemIdInIntent()
     {
+        Timber.d("getItemIdInIntent()");
         return activity.getIntent().getLongExtra(COMUNIDAD_ID.key, 0);
     }
 
     // ==================================== ViewerIf ====================================
 
     @Override
-    public void doViewInViewer(Bundle savedState)
+    public void doViewInViewer(Bundle savedState, ViewBean viewBean)
     {
         Timber.d("doViewInViewer()");
-        view.setOnItemSelectedListener(new ComuSelectedListener());
+        assertTrue(viewBean instanceof IncidenciaBean, class_cast_unallowed);
+        view.setOnItemSelectedListener(new ComuSelectedListener((IncidenciaBean) viewBean));
         initSelectedItemId(savedState);
         controller.loadDataInSpinner();
     }
@@ -101,12 +111,20 @@ public class ViewerComuSpinner extends Viewer<Spinner, CtrlerSpinnerIf>
     @SuppressWarnings("WeakerAccess")
     class ComuSelectedListener implements AdapterView.OnItemSelectedListener {
 
+        private final IncidenciaBean bean;
+
+        public ComuSelectedListener(IncidenciaBean viewBean)
+        {
+            bean = viewBean;
+        }
+
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
         {
             Timber.d("comunidadSpinner.onItemSelected()");
             Comunidad comunidad = (Comunidad) parent.getItemAtPosition(position);
             itemSelectedId = comunidad.getC_Id();
+            bean.setComunidadId(itemSelectedId);
         }
 
         @Override

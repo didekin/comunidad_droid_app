@@ -9,7 +9,7 @@ import android.widget.Button;
 import com.didekindroid.R;
 import com.didekindroid.api.RootViewReplacer;
 import com.didekindroid.api.RootViewReplacerIf;
-import com.didekindroid.util.MenuRouter;
+import com.didekindroid.MenuRouter;
 
 import timber.log.Timber;
 
@@ -74,7 +74,7 @@ public class DeleteMeAc extends AppCompatActivity implements RootViewReplacerIf 
     public void replaceRootView(Bundle bundle)
     {
         Timber.d("replaceView()");
-        new RootViewReplacer(this).replacerRootView(bundle, FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TOP);
+        new RootViewReplacer(this).replaceRootView(bundle, FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TOP);
     }
 
     // ============================================================

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 
+import com.didekindroid.api.ViewBean;
 import com.didekindroid.api.Viewer;
 
 /**
@@ -34,7 +35,7 @@ public final class ViewerFirebaseToken extends Viewer<View, CtrlerFirebaseTokenI
     }
 
     @Override
-    public void doViewInViewer(Bundle savedState)
+    public void doViewInViewer(Bundle savedState, ViewBean viewBean)
     {
         throw new UnsupportedOperationException();
     }

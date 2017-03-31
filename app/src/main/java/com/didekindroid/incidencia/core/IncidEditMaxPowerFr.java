@@ -68,7 +68,7 @@ public class IncidEditMaxPowerFr extends Fragment implements AmbitoSpinnerSettab
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState)
+    public void onActivityCreated(Bundle savedInstanceState)        // TODO: ya no funcionan los helpers.
     {
         Timber.d("onActivityCreated()");
         super.onActivityCreated(savedInstanceState);

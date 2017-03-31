@@ -26,10 +26,10 @@ import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_SEARCH;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
-import static com.didekindroid.util.ItemMenu.mn_handler;
-import static com.didekindroid.util.MenuRouter.doUpMenu;
-import static com.didekindroid.util.MenuRouter.getRegisterDependentClass;
-import static com.didekindroid.util.MenuRouter.routerMap;
+import static com.didekindroid.api.ItemMenu.mn_handler;
+import static com.didekindroid.MenuRouter.doUpMenu;
+import static com.didekindroid.MenuRouter.getRegisterDependentClass;
+import static com.didekindroid.MenuRouter.routerMap;
 import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.util.UIutils.doToolBar;
 

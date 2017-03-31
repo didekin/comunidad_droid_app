@@ -1,4 +1,4 @@
-package com.didekindroid.util;
+package com.didekindroid;
 
 import android.app.Activity;
 import android.util.ArrayMap;

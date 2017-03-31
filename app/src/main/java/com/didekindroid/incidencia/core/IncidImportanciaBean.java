@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.view.View;
 
 import com.didekindroid.R;
+import com.didekindroid.api.ViewBean;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 
@@ -15,7 +16,7 @@ import static com.didekinlib.model.common.dominio.ValidDataPatterns.LINE_BREAK;
  * Date: 24/02/16
  * Time: 10:01
  */
-public class IncidImportanciaBean {
+public class IncidImportanciaBean implements ViewBean {
 
     private short importancia;
 
@@ -66,7 +67,7 @@ public class IncidImportanciaBean {
                     .importancia(importancia)
                     .build();
         } else {
-            throw new IllegalStateException(errorMsg.toString());
+            return null;
         }
     }
 

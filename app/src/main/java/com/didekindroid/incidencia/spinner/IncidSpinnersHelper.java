@@ -30,7 +30,7 @@ public enum IncidSpinnersHelper {
     {
         Timber.d("doAmbitoIncidenciaSpinner()");
 
-        new AmbitoIncidenciaSpinnerSetter<>(fragment).execute();
+//        new AmbitoIncidenciaSpinnerSetter<>(fragment).execute();
 
         fragment.getAmbitoSpinner().setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

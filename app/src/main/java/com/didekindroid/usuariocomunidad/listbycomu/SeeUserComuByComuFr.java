@@ -38,7 +38,7 @@ public class SeeUserComuByComuFr extends Fragment {
         Timber.d("onCreateView()");
         View mainView = inflater.inflate(R.layout.see_usercomu_by_comu_list_fr, container, false);
         viewer = ViewerSeeUserComuByComu.newViewerUserComuByComu(mainView, getActivity());
-        viewer.doViewInViewer(savedInstanceState);
+        viewer.doViewInViewer(savedInstanceState, null);
         return mainView;
     }
 

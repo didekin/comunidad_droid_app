@@ -1,26 +1,25 @@
-package com.didekindroid.util;
+package com.didekindroid;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.util.ArrayMap;
 
-import com.didekindroid.R;
 import com.didekindroid.comunidad.ComuDataAc;
 import com.didekindroid.comunidad.ComuSearchAc;
 import com.didekindroid.incidencia.comment.IncidCommentRegAc;
 import com.didekindroid.incidencia.comment.IncidCommentSeeAc;
-import com.didekindroid.incidencia.resolucion.IncidResolucionRegEditSeeAc;
+import com.didekindroid.incidencia.core.reg.IncidRegAc;
 import com.didekindroid.incidencia.list.close.IncidSeeClosedByComuAc;
 import com.didekindroid.incidencia.list.open.IncidSeeOpenByComuAc;
-import com.didekindroid.incidencia.core.reg.IncidRegAc;
+import com.didekindroid.incidencia.resolucion.IncidResolucionRegEditSeeAc;
 import com.didekindroid.usuario.delete.DeleteMeAc;
 import com.didekindroid.usuario.login.LoginAc;
 import com.didekindroid.usuario.password.PasswordChangeAc;
 import com.didekindroid.usuario.userdata.UserDataAc;
 import com.didekindroid.usuariocomunidad.RegComuAndUserAndUserComuAc;
 import com.didekindroid.usuariocomunidad.RegComuAndUserComuAc;
-import com.didekindroid.usuariocomunidad.listbycomu.SeeUserComuByComuAc;
 import com.didekindroid.usuariocomunidad.SeeUserComuByUserAc;
+import com.didekindroid.usuariocomunidad.listbycomu.SeeUserComuByComuAc;
 
 import java.util.Map;
 

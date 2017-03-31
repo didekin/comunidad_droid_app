@@ -6,7 +6,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.didekindroid.api.CtrlerSelectableListIf;
+import com.didekindroid.api.CtrlerSelectableItemIf;
+import com.didekindroid.api.ViewBean;
 import com.didekindroid.api.Viewer;
 import com.didekindroid.api.ViewerIf;
 import com.didekindroid.api.ViewerSelectableIf;
@@ -22,8 +23,9 @@ import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_LIST_I
  * Time: 18:05
  */
 @SuppressWarnings("WeakerAccess")
-public class ViewerIncidListByComu extends Viewer<ListView, CtrlerSelectableListIf<IncidenciaUser,Bundle>>
-        implements ViewerSelectableIf<ListView, CtrlerSelectableListIf<IncidenciaUser,Bundle>> {
+public class ViewerIncidListByComu extends
+        Viewer<ListView, CtrlerSelectableItemIf<IncidenciaUser, Bundle>>
+        implements ViewerSelectableIf<ListView, CtrlerSelectableItemIf<IncidenciaUser, Bundle>> {
 
     private final View emptyListView;
     long incidenciaSelectedIndex;
@@ -42,24 +44,26 @@ public class ViewerIncidListByComu extends Viewer<ListView, CtrlerSelectableList
     }
 
     @Override
-    public ViewerSelectableIf<ListView, CtrlerSelectableListIf<IncidenciaUser,Bundle>> initSelectedItemId(Bundle savedState)
+    public void initSelectedItemId(Bundle savedState)
     {
         Timber.d("initSelectedItemId()");
         if (savedState != null) {
             incidenciaSelectedIndex = savedState.getInt(INCIDENCIA_LIST_INDEX.key, 0);
         }
-        return this;
     }
 
     @Override
     public void saveState(Bundle savedState)
     {
         Timber.d("saveIncidSelectedIndex()");
+        if (savedState == null){
+            savedState = new Bundle(1);
+        }
         savedState.putLong(INCIDENCIA_LIST_INDEX.key, incidenciaSelectedIndex);
     }
 
     /**
-     *  @return the list index of the incidencia selected.
+     * @return the list index of the incidencia selected.
      */
     @Override
     public long getSelectedItemId()
@@ -75,7 +79,7 @@ public class ViewerIncidListByComu extends Viewer<ListView, CtrlerSelectableList
     }
 
     @Override
-    public void doViewInViewer(Bundle savedState)
+    public void doViewInViewer(Bundle savedState, ViewBean viewBean)
     {
         Timber.d("doViewInViewer()");
 
@@ -97,7 +101,7 @@ public class ViewerIncidListByComu extends Viewer<ListView, CtrlerSelectableList
                 viewClick.setSelected(true);
                 IncidenciaUser incidenciaUser = (IncidenciaUser) view.getItemAtPosition(position);
                 incidenciaSelectedIndex = position;
-                controller.dealWithSelectedItem(incidenciaUser);
+                controller.selectItem(incidenciaUser);
             }
         });
     }

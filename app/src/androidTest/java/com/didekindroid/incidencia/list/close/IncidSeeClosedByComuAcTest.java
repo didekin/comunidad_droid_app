@@ -28,10 +28,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.File;
 import java.io.IOException;
 
-import static android.database.sqlite.SQLiteDatabase.deleteDatabase;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -46,7 +44,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
-import static com.didekindroid.incidencia.core.IncidenciaDataDbHelperTest.DB_PATH;
+import static com.didekindroid.incidencia.core.IncidenciaDataDbHelper.DB_NAME;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.RESOLUCION_DEFAULT_DESC;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doIncidencia;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doResolucionAvances;
@@ -183,8 +181,7 @@ public class IncidSeeClosedByComuAcTest {
     {
         dbHelper.dropAllTables();
         dbHelper.close();
-        String dBFileName = DB_PATH.concat(IncidenciaDataDbHelper.DB_NAME);
-        deleteDatabase(new File(dBFileName));
+        activity.deleteDatabase(DB_NAME);
         cleanOptions(CLEAN_PEPE);
     }
 

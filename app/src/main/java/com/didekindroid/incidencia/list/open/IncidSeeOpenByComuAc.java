@@ -12,9 +12,9 @@ import com.didekindroid.api.RootViewReplacerIf;
 import timber.log.Timber;
 
 import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
-import static com.didekindroid.util.ItemMenu.mn_handler;
-import static com.didekindroid.util.MenuRouter.doUpMenu;
-import static com.didekindroid.util.MenuRouter.routerMap;
+import static com.didekindroid.api.ItemMenu.mn_handler;
+import static com.didekindroid.MenuRouter.doUpMenu;
+import static com.didekindroid.MenuRouter.routerMap;
 import static com.didekindroid.util.UIutils.doToolBar;
 
 /**

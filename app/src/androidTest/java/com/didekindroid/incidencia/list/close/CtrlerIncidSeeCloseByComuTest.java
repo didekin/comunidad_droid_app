@@ -130,7 +130,7 @@ public class CtrlerIncidSeeCloseByComuTest {
     @Test
     public void testDealWithIncidSelected()
     {
-        assertThat(controller.dealWithSelectedItem(incidenciaUser), is(true));
+        assertThat(controller.selectItem(incidenciaUser), is(true));
     }
 
     @Test
@@ -149,7 +149,7 @@ public class CtrlerIncidSeeCloseByComuTest {
     @Test
     public void testOnSuccessDealSelectedItem() throws Exception
     {
-        controller.onSuccessDealSelectedItem(new Bundle());
+        controller.onSuccessSelectedItem(new Bundle());
         assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_A));
     }
 

@@ -14,7 +14,7 @@ import com.didekindroid.exception.UiException;
 import com.didekindroid.security.IdentityCacher;
 import com.didekindroid.usuariocomunidad.listbycomu.SeeUserComuByComuAc;
 import com.didekindroid.util.ConnectionUtils;
-import com.didekindroid.util.MenuRouter;
+import com.didekindroid.MenuRouter;
 import com.didekindroid.util.UIutils;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;

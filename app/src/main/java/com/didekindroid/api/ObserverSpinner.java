@@ -1,7 +1,5 @@
 package com.didekindroid.api;
 
-import com.didekindroid.exception.UiException;
-
 import java.util.List;
 
 import io.reactivex.observers.DisposableSingleObserver;
@@ -32,9 +30,6 @@ public class ObserverSpinner<E> extends DisposableSingleObserver<List<E>> {
     public void onError(Throwable e)
     {
         Timber.d("onErrorCtrl()");
-        if (e instanceof UiException) {
-            Timber.d("UiException message: %s", ((UiException) e).getErrorBean().getMessage());
-        }
         controller.onErrorCtrl(e);
     }
 }

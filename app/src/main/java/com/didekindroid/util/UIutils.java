@@ -211,6 +211,7 @@ public final class UIutils {
     {
         UiException ui;
         if (e instanceof UiException) {
+            Timber.d("UiException message: %s", ((UiException) e).getErrorBean().getMessage());
             ui = (UiException) e;
         } else {
             ui = new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));

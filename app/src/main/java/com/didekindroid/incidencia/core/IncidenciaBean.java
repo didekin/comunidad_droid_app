@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.didekindroid.R;
+import com.didekindroid.api.ViewBean;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.AmbitoIncidencia;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
@@ -18,7 +19,7 @@ import static com.didekinlib.model.incidencia.dominio.IncidDataPatterns.INCID_DE
  * Date: 16/11/15
  * Time: 11:19
  */
-public class IncidenciaBean {
+public class IncidenciaBean implements ViewBean {
 
     private short codAmbitoIncid;
     private String descripcion;

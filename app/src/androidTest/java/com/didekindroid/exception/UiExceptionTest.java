@@ -53,7 +53,7 @@ import static org.junit.Assert.assertThat;
  */
 @SuppressWarnings({"ThrowableInstanceNeverThrown", "ThrowableResultOfMethodCallIgnored"})
 @RunWith(AndroidJUnit4.class)
-public class UiAppExceptionTests {
+public class UiExceptionTest {
 
     IncidImportancia mIncidJuanPlazuelas;
     @Rule
@@ -91,7 +91,7 @@ public class UiAppExceptionTests {
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
     {
-        Thread.sleep(4000);
+        Thread.sleep(2000);
     }
 
     @Before
@@ -104,7 +104,6 @@ public class UiAppExceptionTests {
     public void tearDown() throws Exception
     {
         cleanOptions(UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN);
-        Thread.sleep(3000);
     }
 
     //  ===========================================================================

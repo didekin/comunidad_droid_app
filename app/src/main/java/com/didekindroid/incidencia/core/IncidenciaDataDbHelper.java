@@ -14,6 +14,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import timber.log.Timber;
 
@@ -22,6 +24,8 @@ import static com.didekindroid.incidencia.core.IncidenciaDataDb.AmbitoIncidencia
 import static com.didekindroid.incidencia.core.IncidenciaDataDb.AmbitoIncidencia.DROP_AMBITO_INCIDENCIA;
 import static com.didekindroid.incidencia.core.IncidenciaDataDb.AmbitoIncidencia.TB_AMBITO_INCIDENCIA;
 import static com.didekindroid.incidencia.core.IncidenciaDataDb.AmbitoIncidencia.ambito;
+import static com.didekindroid.util.CommonAssertionMsg.cursor_should_be_in_first_position;
+import static com.didekindroid.util.UIutils.assertTrue;
 
 /**
  * User: pedro@didekin
@@ -34,8 +38,8 @@ public class IncidenciaDataDbHelper extends SQLiteOpenHelper {
     private static final int DB_VERSION = 1;
 
     private final Context mContext;
-    private SQLiteDatabase mDataBase;
     int mAmbitoIncidenciaCounter;
+    private SQLiteDatabase mDataBase;
 
     public IncidenciaDataDbHelper(Context context)
     {
@@ -155,6 +159,28 @@ public class IncidenciaDataDbHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
+    public List<AmbitoIncidValueObj> getAmbitoIncidList(Cursor cursor)
+    {
+        Timber.d("getAmbitoIncidList(Cursor cursor)");
+        assertTrue(cursor.moveToFirst(), cursor_should_be_in_first_position);
+
+        List<AmbitoIncidValueObj> list = new ArrayList<>(cursor.getCount());
+        AmbitoIncidValueObj ambitoObj;
+        while (!cursor.isAfterLast()) {
+            ambitoObj = new AmbitoIncidValueObj((short) cursor.getInt(0), cursor.getString(1));
+            list.add(ambitoObj);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return list;
+    }
+
+    public List<AmbitoIncidValueObj> getAmbitoIncidList()
+    {
+        Timber.d("getAmbitoIncidList()");
+        return getAmbitoIncidList(doAmbitoIncidenciaCursor());
+    }
+
     public String getAmbitoDescByPk(short pkAmbito)
     {
         Timber.d("getAmbitoDescByPk()");
@@ -166,12 +192,12 @@ public class IncidenciaDataDbHelper extends SQLiteOpenHelper {
         String[] tableColumns = new String[]{ambito};
         String whereClause = _ID + " = ?";
         String[] whereClauseArgs = new String[]{String.valueOf(pkAmbito)};
-        Cursor cursor = mDataBase.query(TB_AMBITO_INCIDENCIA,tableColumns,whereClause,whereClauseArgs,null,null,null);
+        Cursor cursor = mDataBase.query(TB_AMBITO_INCIDENCIA, tableColumns, whereClause, whereClauseArgs, null, null, null);
 
-        if (cursor == null){
+        if (cursor == null) {
             return null;
         }
-        if (!cursor.moveToFirst()){
+        if (!cursor.moveToFirst()) {
             cursor.close();
             return null;
         }

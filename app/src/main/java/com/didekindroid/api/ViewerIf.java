@@ -8,9 +8,6 @@ import android.view.View;
 
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf;
-import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
-
-import java.util.List;
 
 /**
  * User: pedro@didekin
@@ -27,7 +24,7 @@ public interface ViewerIf<T extends View, C extends ControllerIf> {
 
     T getViewInViewer();
 
-    void doViewInViewer(Bundle savedState);
+    void doViewInViewer(Bundle savedState, ViewBean viewBean);
 
     C getController();
 

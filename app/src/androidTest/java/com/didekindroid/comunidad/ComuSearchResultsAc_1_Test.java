@@ -66,6 +66,7 @@ public class ComuSearchResultsAc_1_Test {
     @Rule
     public IntentsTestRule<ComuSearchResultsAc> mIntentRule =
             new IntentsTestRule<>(ComuSearchResultsAc.class, true, false);
+
     ComuSearchResultsListFr mComunidadSummaryFrg;
     ComuSearchResultsListAdapter adapter;
     Intent intent;
@@ -77,7 +78,7 @@ public class ComuSearchResultsAc_1_Test {
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
     {
-        Thread.sleep(4000);
+        Thread.sleep(2000);
     }
 
     @Before

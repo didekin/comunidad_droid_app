@@ -6,17 +6,23 @@ package com.didekindroid.util;
  * Time: 09:54
  */
 
-public enum AppBundleKey {
+public enum AppBundleKey implements BundleKey {
 
     IS_MENU_IN_FRAGMENT_FLAG,
     ;
 
-    private static final String intentPackage =  "ComuBundleKey.";
+    private static final String intentPackage =  "AppBundleKey.";
 
     public final String key;
 
     AppBundleKey()
     {
         key = intentPackage.concat(this.name());
+    }
+
+    @Override
+    public String getKey()
+    {
+        return key;
     }
 }

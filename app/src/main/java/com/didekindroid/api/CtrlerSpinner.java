@@ -6,7 +6,6 @@ import android.widget.Spinner;
 import com.didekindroid.R;
 
 import java.util.Collection;
-import java.util.concurrent.atomic.AtomicReference;
 
 import timber.log.Timber;
 
@@ -18,26 +17,24 @@ import timber.log.Timber;
 @SuppressWarnings("AbstractClassExtendsConcreteClass")
 public abstract class CtrlerSpinner<E> extends Controller<Spinner> implements CtrlerSpinnerIf<E> {
 
-    final ArrayAdapter<E> spinnerAdapter;
-    protected final Spinner spinnerView;
-    protected final AtomicReference<ObserverSpinner<E>> atomicObserver;
-    private ViewerSelectableIf<Spinner, CtrlerSpinnerIf> viewerSelect;
+    private final Spinner spinnerView;
+    private final ArrayAdapter<E> spinnerAdapter;
+    private final ViewerSelectableIf<Spinner, CtrlerSpinnerIf> viewerSelect;
 
     protected CtrlerSpinner(ViewerSelectableIf<Spinner, CtrlerSpinnerIf> viewerIn)
     {
         super(viewerIn);
         viewerSelect = viewerIn;
-        atomicObserver = new AtomicReference<>(null);
-        spinnerAdapter = new ArrayAdapter<>(viewer.getActivity(), R.layout.app_spinner_1_dropdown_item, R.id.app_spinner_1_dropdown_item);
         spinnerView = viewer.getViewInViewer();
+        spinnerAdapter = new ArrayAdapter<>(viewer.getActivity(), R.layout.app_spinner_1_dropdown_item, R.id.app_spinner_1_dropdown_item);
     }
 
     @Override
-    public void onSuccessLoadDataInSpinner(Collection<E> comunidades)
+    public void onSuccessLoadDataInSpinner(Collection<E> items)
     {
         Timber.d("onSuccessLoadDataInSpinner()");
         spinnerAdapter.clear();
-        spinnerAdapter.addAll(comunidades);
+        spinnerAdapter.addAll(items);
         spinnerView.setAdapter(spinnerAdapter);
         spinnerView.setSelection(getSelectedFromItemId(viewerSelect.getSelectedItemId()));
     }

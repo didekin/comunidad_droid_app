@@ -17,7 +17,7 @@ public class ViewerMock<T extends View, C extends ControllerIf> extends Viewer<T
     }
 
     @Override
-    public void doViewInViewer(Bundle savedState)
+    public void doViewInViewer(Bundle savedState, ViewBean viewBean)
     {
     }
 }

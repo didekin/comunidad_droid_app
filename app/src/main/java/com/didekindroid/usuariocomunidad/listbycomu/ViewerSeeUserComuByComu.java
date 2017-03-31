@@ -8,6 +8,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.didekindroid.R;
+import com.didekindroid.api.ViewBean;
 import com.didekindroid.api.Viewer;
 import com.didekindroid.comunidad.ComuBundleKey;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
@@ -50,7 +51,7 @@ class ViewerSeeUserComuByComu extends Viewer<ListView, CtrlerUserComuByComuList>
     }
 
     @Override
-    public void doViewInViewer(Bundle savedState)
+    public void doViewInViewer(Bundle savedState, ViewBean viewBean)
     {
         Timber.d("doViewInViewer()");
         // To get visible a divider on top of the list.

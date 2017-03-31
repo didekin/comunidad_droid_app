@@ -1,6 +1,7 @@
 package com.didekindroid.comunidad;
 
-import com.didekindroid.comunidad.spinner.ViewerComuSpinnerTest;
+import com.didekindroid.usuariocomunidad.spinner.CtrlerComuSpinnerTest;
+import com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinnerTest;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -14,13 +15,14 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
         ComuDataAcTest.class,
         ComunidadBeanValidaTests.class,
-        ComunidadDbHelperTest.class,
         ComunidadDaoTest.class,
+        ComunidadDbHelperTest.class,
         ComuSearchAc_1_Test.class,
         ComuSearchAc_2_Test.class,
         ComuSearchAc_3_Test.class,
         ComuSearchResultsAc_1_Test.class,
         ComuSearchResultsAc_2_Test.class,
+        CtrlerComuSpinnerTest.class,
         ViewerComuSpinnerTest.class,
 })
 public class ComunidadSuite {

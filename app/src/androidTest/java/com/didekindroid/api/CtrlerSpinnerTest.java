@@ -64,11 +64,11 @@ public class CtrlerSpinnerTest {
     {
         List<Long> idsList = Arrays.asList(12L, 13L, 21L, 31L);
         waitAtMost(2, TimeUnit.SECONDS).untilAtomic(controller, notNullValue());
-        assertThat(controller.get().spinnerAdapter.getCount(), is(0));
+        assertThat(controller.get().getSpinnerAdapter().getCount(), is(0));
         controller.get().onSuccessLoadDataInSpinner(idsList);
-        assertThat(controller.get().spinnerView.getAdapter(), CoreMatchers.<SpinnerAdapter>is(controller.get().spinnerAdapter));
-        assertThat(controller.get().spinnerAdapter.getCount(), is(4));
-        assertThat(controller.get().spinnerView.getSelectedItemPosition(), is(2));
+        assertThat(controller.get().getSpinnerView().getAdapter(), CoreMatchers.<SpinnerAdapter>is(controller.get().getSpinnerAdapter()));
+        assertThat(controller.get().getSpinnerAdapter().getCount(), is(4));
+        assertThat(controller.get().getSpinnerView().getSelectedItemPosition(), is(2));
     }
 
     //    .................................... HELPERS .................................
@@ -83,9 +83,8 @@ public class CtrlerSpinnerTest {
         }
 
         @Override
-        public ViewerSelectableIf<Spinner, CtrlerSpinnerIf> initSelectedItemId(Bundle savedState)
+        public void initSelectedItemId(Bundle savedState)
         {
-            return null;
         }
 
         @Override
@@ -101,7 +100,7 @@ public class CtrlerSpinnerTest {
         }
 
         @Override
-        public void doViewInViewer(Bundle savedState)
+        public void doViewInViewer(Bundle savedState, ViewBean viewBean)
         {
         }
     }

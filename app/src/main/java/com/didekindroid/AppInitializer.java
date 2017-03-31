@@ -38,7 +38,7 @@ public final class AppInitializer {
         return mContext;
     }
 
-    public UiExceptionRouterIf getExceptionDealer()
+    public UiExceptionRouterIf getUiExceptionRouter()
     {
         return exceptionDealer;
     }

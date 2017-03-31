@@ -40,7 +40,7 @@ public class IncidSeeOpenByComuFr extends Fragment  {
         super.onViewCreated(view, savedState);
         /* Initialization of viewers.*/
         viewerIncidSeeOpen = newViewerIncidSeeOpen(rootFrgView, getActivity());
-        viewerIncidSeeOpen.doViewInViewer(savedState);
+        viewerIncidSeeOpen.doViewInViewer(savedState, null);
 
     }
 

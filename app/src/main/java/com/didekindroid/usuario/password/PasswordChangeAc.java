@@ -38,7 +38,7 @@ public class PasswordChangeAc extends AppCompatActivity implements RootViewRepla
         doToolBar(this, true);
 
         viewer = newViewerPswdChange(this);
-        viewer.doViewInViewer(savedInstanceState);
+        viewer.doViewInViewer(savedInstanceState, null);
     }
 
     @Override
