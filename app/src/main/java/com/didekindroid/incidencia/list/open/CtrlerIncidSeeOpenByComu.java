@@ -103,11 +103,11 @@ class CtrlerIncidSeeOpenByComu extends CtrlerIdentity<ListView> implements
     }
 
     @Override
-    public void onSuccessLoadItemsById(List<IncidenciaUser> incidCloseList)
+    public void onSuccessLoadItemsById(List<IncidenciaUser> incidOpenList)
     {
         Timber.d("onSuccessLoadItemsById()");
         adapter.clear();
-        adapter.addAll(incidCloseList);
+        adapter.addAll(incidOpenList);
         viewer.getViewInViewer().setAdapter(adapter);
     }
 
@@ -128,6 +128,6 @@ class CtrlerIncidSeeOpenByComu extends CtrlerIdentity<ListView> implements
     public void onSuccessSelectedItem(@NonNull Bundle bundle)
     {
         Timber.d("onSuccessSelectedItem()");
-        viewer.replaceRootView(bundle);
+        ViewerIncidListByComu.class.cast(viewer).replaceRootView(bundle);
     }
 }

@@ -10,6 +10,8 @@ import android.view.View;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf;
 
+import java.io.Serializable;
+
 import timber.log.Timber;
 
 /**
@@ -18,12 +20,12 @@ import timber.log.Timber;
  * Time: 13:37
  */
 @SuppressWarnings("WeakerAccess")
-public abstract class Viewer<T extends View, C extends ControllerIf> implements ViewerIf<T,C> {
+public class Viewer<T extends View, C extends ControllerIf> implements ViewerIf<T, C> {
 
     protected final T view;
-    protected C controller;
     protected final Activity activity;
     protected final ViewerIf parentViewer;
+    protected C controller;
 
     protected Viewer(T view, Activity activity, ViewerIf parentViewer)
     {
@@ -35,6 +37,7 @@ public abstract class Viewer<T extends View, C extends ControllerIf> implements 
     @Override
     public Activity getActivity()
     {
+        Timber.d("getActivity()");
         return activity;
     }
 
@@ -48,54 +51,48 @@ public abstract class Viewer<T extends View, C extends ControllerIf> implements 
     @Override
     public int clearSubscriptions()
     {
+        Timber.d("clearSubscriptions()");
         return controller.clearSubscriptions();
     }
 
     @Override
     public T getViewInViewer()
     {
+        Timber.d("getViewInViewer()");
         return view;
+    }
+
+    @Override
+    public void doViewInViewer(Bundle savedState, @NonNull Serializable viewBean)
+    {
+        Timber.d("doViewInViewer()");
     }
 
     @Override
     public C getController()
     {
+        Timber.d("getController()");
         return controller;
     }
 
     @Override
     public void setController(C controller)
     {
+        Timber.d("setController()");
         this.controller = controller;
-    }
-
-    /**
-     *  It calls the parentViewer to replace the rootView.
-     *  This method should be overwritten in viewers wich actually needs to replace the rootView for one
-     *  of its child viewers.
-     */
-    @Override
-    public void replaceRootView(@NonNull Bundle bundle)
-    {
-        if (parentViewer != null){
-            parentViewer.replaceRootView(bundle);
-        } else if (activity instanceof RootViewReplacerIf){
-            ((RootViewReplacerIf) activity).replaceRootView(bundle);
-        }
-        else {
-            throw new UnsupportedOperationException();
-        }
     }
 
     @Nullable
     @Override
     public ViewerIf getParentViewer()
     {
+        Timber.d("getParentViewer()");
         return parentViewer;
     }
 
     @Override
     public void saveState(Bundle savedState)
     {
+        Timber.d("saveState()");
     }
 }

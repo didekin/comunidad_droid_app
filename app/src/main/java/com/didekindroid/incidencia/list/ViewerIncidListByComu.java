@@ -2,16 +2,19 @@ package com.didekindroid.incidencia.list;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.didekindroid.api.CtrlerSelectableItemIf;
-import com.didekindroid.api.ViewBean;
+import com.didekindroid.api.RootViewReplacerIf;
 import com.didekindroid.api.Viewer;
 import com.didekindroid.api.ViewerIf;
 import com.didekindroid.api.ViewerSelectableIf;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
+
+import java.io.Serializable;
 
 import timber.log.Timber;
 
@@ -23,9 +26,12 @@ import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_LIST_I
  * Time: 18:05
  */
 @SuppressWarnings("WeakerAccess")
-public class ViewerIncidListByComu extends
+public class ViewerIncidListByComu
+        extends
         Viewer<ListView, CtrlerSelectableItemIf<IncidenciaUser, Bundle>>
-        implements ViewerSelectableIf<ListView, CtrlerSelectableItemIf<IncidenciaUser, Bundle>> {
+        implements
+        ViewerSelectableIf<ListView, CtrlerSelectableItemIf<IncidenciaUser, Bundle>>,
+        RootViewReplacerIf {
 
     private final View emptyListView;
     long incidenciaSelectedIndex;
@@ -36,8 +42,9 @@ public class ViewerIncidListByComu extends
         this.emptyListView = emptyListView;
     }
 
-    public static ViewerIncidListByComu newListViewer(View view, Activity activity, ViewerIf parentViewer)
+    public static ViewerIncidListByComu newListViewer(View view, Activity activity, @NonNull ViewerIf parentViewer)
     {
+        Timber.d("newListViewer()");
         ListView listView = (ListView) view.findViewById(android.R.id.list);
         View emptyListView = view.findViewById(android.R.id.empty);
         return new ViewerIncidListByComu(listView, emptyListView, activity, parentViewer);
@@ -56,7 +63,7 @@ public class ViewerIncidListByComu extends
     public void saveState(Bundle savedState)
     {
         Timber.d("saveIncidSelectedIndex()");
-        if (savedState == null){
+        if (savedState == null) {
             savedState = new Bundle(1);
         }
         savedState.putLong(INCIDENCIA_LIST_INDEX.key, incidenciaSelectedIndex);
@@ -72,14 +79,7 @@ public class ViewerIncidListByComu extends
     }
 
     @Override
-    public long getItemIdInIntent()
-    {
-        // No itemId in intent.
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void doViewInViewer(Bundle savedState, ViewBean viewBean)
+    public void doViewInViewer(Bundle savedState, Serializable viewBean)
     {
         Timber.d("doViewInViewer()");
 
@@ -104,5 +104,12 @@ public class ViewerIncidListByComu extends
                 controller.selectItem(incidenciaUser);
             }
         });
+    }
+
+    @Override
+    public void replaceRootView(Bundle bundle)
+    {
+        Timber.d("replaceRootView()");
+        RootViewReplacerIf.class.cast(parentViewer).replaceRootView(bundle);
     }
 }

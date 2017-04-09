@@ -9,22 +9,24 @@ import android.support.test.espresso.NoMatchingViewException;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.contrib.PickerActions;
 import android.support.test.espresso.matcher.ViewMatchers;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ControllerIf;
-import com.didekindroid.api.CtrlerIdentityIf;
 import com.didekindroid.api.CtrlerSpinner;
 import com.didekindroid.api.CtrlerSpinnerIf;
+import com.didekindroid.api.RootViewReplacerIf;
 import com.didekindroid.api.ViewerIf;
 import com.didekindroid.api.ViewerSelectableIf;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf.ActionForUiExceptionIf;
 import com.didekindroid.security.IdentityCacher;
+import com.didekindroid.usuario.firebase.CtrlerFirebaseTokenIf;
 import com.didekindroid.util.BundleKey;
 import com.didekinlib.http.ErrorBean;
 import com.didekinlib.http.oauth2.SpringOauthToken;
@@ -43,6 +45,7 @@ import io.reactivex.disposables.Disposable;
 
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.KITKAT;
+import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -85,7 +88,7 @@ public final class ActivityTestUtils {
     {
     }
 
-    //    ============================= ACTIVITY / GENERIC ===================================
+    //    ======================== ACTIVITY / FRAGMENT ================================
 
     public static Callable<Boolean> isActivityDying(final Activity activity)
     {
@@ -127,7 +130,7 @@ public final class ActivityTestUtils {
         };
     }
 
-    public static Callable<Boolean> isViewWithTextOk(final String textToCheck)
+    public static Callable<Boolean> isComuSpinnerWithText(final String textToCheck)
     {
 
         return new Callable<Boolean>() {
@@ -147,7 +150,16 @@ public final class ActivityTestUtils {
         };
     }
 
-    //    ============================= CONTROLLER/adapters ===================================
+    public static View doFragmentView(int resourdeIdLayout, String description)
+    {
+        LayoutInflater inflater = (LayoutInflater) getTargetContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View frView = inflater.inflate(resourdeIdLayout, null);
+        EditText editText = (EditText) frView.findViewById(R.id.incid_reg_desc_ed);
+        editText.setText(description);
+        return frView;
+    }
+
+    //    ============================= CONTROLLER/Adapters ===================================
 
     public static void addSubscription(ControllerIf controller)
     {
@@ -166,12 +178,12 @@ public final class ActivityTestUtils {
         assertThat(controller.getSubscriptions().size(), is(1));
     }
 
-    public static Callable<Boolean> hasRegisteredFlag(final CtrlerIdentityIf controller)
+    public static Callable<Boolean> gcmTokenSentFlag(final CtrlerFirebaseTokenIf controller)
     {
         return new Callable<Boolean>() {
             public Boolean call() throws Exception
             {
-                return controller.isRegisteredUser();
+                return controller.isGcmTokenSentServer();
             }
         };
     }
@@ -325,7 +337,7 @@ public final class ActivityTestUtils {
             @Override
             public void run()
             {
-                viewer.replaceRootView(new Bundle());
+                RootViewReplacerIf.class.cast(viewer).replaceRootView(new Bundle());
             }
         });
         waitAtMost(2, SECONDS).until(isResourceIdDisplayed(resorceIdNextView));
@@ -394,9 +406,7 @@ public final class ActivityTestUtils {
 
     //    ................. Spinners ...............
 
-    public static void checkDoSpinnerViewer(Bundle savedState, BundleKey key,
-                                            Class<? extends AdapterView.OnItemSelectedListener> listener,
-                                            ViewerSelectableIf<Spinner, CtrlerSpinnerIf> viewer)
+    public static AtomicReference<String> doCtrlerInSpinnerViewer(ViewerSelectableIf<Spinner, CtrlerSpinnerIf> viewer)
     {
 
         final AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
@@ -417,22 +427,7 @@ public final class ActivityTestUtils {
         };
 
         viewer.setController(controllerLocal);
-        viewer.doViewInViewer(savedState, null);
-        assertThat(viewer.getSelectedItemId(), is(savedState.getLong(key.getKey())));
-        assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_A));
-        assertThat(listener.isInstance(viewer.getViewInViewer().getOnItemSelectedListener()), is(true));
-    }
-
-    public static long checkInitSelectedItemId(Bundle savedState, BundleKey key, ViewerSelectableIf<Spinner, CtrlerSpinnerIf> viewer)
-    {
-        viewer.initSelectedItemId(savedState);
-
-        if (!savedState.containsKey(key.getKey())) {
-            assertThat(viewer.getSelectedItemId(), is(LONG_DEFAULT_EXTRA_VALUE));
-        } else {
-            assertThat(viewer.getSelectedItemId(), is(savedState.getLong(key.getKey())));
-        }
-        return viewer.getSelectedItemId();
+        return flagMethodExec;
     }
 
     public static long checkSavedStateInSpinner(Bundle stateToSave, long keyValue, BundleKey key, ViewerSelectableIf<Spinner, CtrlerSpinnerIf> viewer)
@@ -453,15 +448,6 @@ public final class ActivityTestUtils {
         // It returns initialized value.
         assertThat(stateToSave.getLong(key.getKey(), LONG_DEFAULT_EXTRA_VALUE), is(keyValue));
 
-        return viewer.getSelectedItemId();
-    }
-
-    public static long checkGetSelectedItemId(long keyValue, BundleKey key, ViewerSelectableIf<Spinner, CtrlerSpinnerIf> viewer)
-    {
-        Bundle bundle = new Bundle();
-        bundle.putLong(key.getKey(), (short) keyValue);
-        viewer.initSelectedItemId(bundle);
-        assertThat(viewer.getSelectedItemId(), is(keyValue));
         return viewer.getSelectedItemId();
     }
 }

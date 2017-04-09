@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.incidencia.core.IncidEditAc;
+import com.didekindroid.incidencia.core.edit.IncidEditAc;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Incidencia;

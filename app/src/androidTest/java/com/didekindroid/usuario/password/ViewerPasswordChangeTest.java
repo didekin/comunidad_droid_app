@@ -66,7 +66,7 @@ public class ViewerPasswordChangeTest {
     }
 
     @Test
-    public void doViewInViewer() throws Exception
+    public void testDoViewInViewer() throws Exception
     {
 
     }
@@ -113,9 +113,14 @@ public class ViewerPasswordChangeTest {
     }
 
     @Test
-    public void processControllerError() throws Exception
+    public void testProcessControllerError() throws Exception
     {
+    }
 
+    @Test
+    public void testReplaceRootView() throws Exception
+    {
+        // TODO.
     }
 
 }

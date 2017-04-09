@@ -5,7 +5,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ViewBean;
+import com.didekindroid.usuariocomunidad.spinner.ComuSpinnerBean;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.AmbitoIncidencia;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
@@ -19,7 +19,7 @@ import static com.didekinlib.model.incidencia.dominio.IncidDataPatterns.INCID_DE
  * Date: 16/11/15
  * Time: 11:19
  */
-public class IncidenciaBean implements ViewBean {
+public class IncidenciaBean implements ComuSpinnerBean {
 
     private short codAmbitoIncid;
     private String descripcion;
@@ -29,10 +29,20 @@ public class IncidenciaBean implements ViewBean {
     {
     }
 
+    public short getCodAmbitoIncid()
+    {
+        return codAmbitoIncid;
+    }
+
     public IncidenciaBean setCodAmbitoIncid(short codAmbitoIncid)
     {
         this.codAmbitoIncid = codAmbitoIncid;
         return this;
+    }
+
+    public String getDescripcion()
+    {
+        return descripcion;
     }
 
     public IncidenciaBean setDescripcion(String descripcion)
@@ -41,15 +51,22 @@ public class IncidenciaBean implements ViewBean {
         return this;
     }
 
+    @Override
+    public long getComunidadId()
+    {
+        return comunidadId;
+    }
+
+    @Override
     public IncidenciaBean setComunidadId(long comunidadId)
     {
         this.comunidadId = comunidadId;
         return this;
     }
 
-    public Incidencia makeIncidenciaFromView(final View mFragmentView, StringBuilder errorMsg, Resources resources)
+    Incidencia makeIncidenciaFromView(final View fragmentView, StringBuilder errorMsg, Resources resources)
     {
-        setDescripcion(((EditText) mFragmentView.findViewById(R.id.incid_reg_desc_ed)).getText().toString());
+        setDescripcion(((EditText) fragmentView.findViewById(R.id.incid_reg_desc_ed)).getText().toString());
         if (validateBean(errorMsg, resources)) {
             return new Incidencia.IncidenciaBuilder()
                     .comunidad(new Comunidad.ComunidadBuilder().c_id(comunidadId).build())

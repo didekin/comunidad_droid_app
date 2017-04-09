@@ -1,7 +1,7 @@
 package com.didekindroid.incidencia.utils;
 
 import com.didekindroid.incidencia.comment.IncidCommentSeeListFr;
-import com.didekindroid.incidencia.core.IncidEditAc;
+import com.didekindroid.incidencia.core.edit.IncidEditAc;
 import com.didekindroid.incidencia.list.close.IncidSeeCloseByComuFr;
 import com.didekindroid.incidencia.resolucion.IncidResolucionRegEditSeeAc;
 import com.didekindroid.incidencia.resolucion.IncidResolucionSeeFr;

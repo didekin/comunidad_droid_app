@@ -4,7 +4,7 @@ import com.didekindroid.R;
 import com.didekindroid.comunidad.ComuSearchAc;
 import com.didekindroid.exception.UiExceptionIf.ActionForUiExceptionIf;
 import com.didekindroid.exception.UiExceptionIf.UiExceptionRouterIf;
-import com.didekindroid.incidencia.core.IncidEditAc;
+import com.didekindroid.incidencia.core.edit.IncidEditAc;
 import com.didekindroid.incidencia.list.open.IncidSeeOpenByComuAc;
 import com.didekindroid.incidencia.core.reg.IncidRegAc;
 import com.didekindroid.usuario.login.LoginAc;

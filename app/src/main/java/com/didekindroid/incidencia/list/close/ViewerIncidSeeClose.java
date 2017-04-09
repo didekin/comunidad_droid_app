@@ -2,21 +2,23 @@ package com.didekindroid.incidencia.list.close;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.Spinner;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ControllerIf;
 import com.didekindroid.api.RootViewReplacerIf;
-import com.didekindroid.api.ViewBean;
 import com.didekindroid.api.Viewer;
-import com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner;
 import com.didekindroid.incidencia.list.ViewerIncidListByComu;
+import com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner;
+
+import java.io.Serializable;
 
 import timber.log.Timber;
 
-import static com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner.newViewerComuSpinner;
 import static com.didekindroid.incidencia.list.ViewerIncidListByComu.newListViewer;
+import static com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner.newViewerComuSpinner;
 import static com.didekindroid.util.CommonAssertionMsg.activity_should_be_instance_RootViewReplacer;
 import static com.didekindroid.util.UIutils.assertTrue;
 
@@ -25,7 +27,7 @@ import static com.didekindroid.util.UIutils.assertTrue;
  * Date: 18/03/17
  * Time: 11:01
  */
-public class ViewerIncidSeeClose extends Viewer<View, ControllerIf> {
+public class ViewerIncidSeeClose extends Viewer<View, ControllerIf> implements RootViewReplacerIf {
 
     protected ViewerComuSpinner spinnerViewer;
     protected ViewerIncidListByComu listViewer;
@@ -47,11 +49,11 @@ public class ViewerIncidSeeClose extends Viewer<View, ControllerIf> {
     }
 
     @Override
-    public void doViewInViewer(Bundle savedState, ViewBean viewBean)
+    public void doViewInViewer(Bundle savedState, Serializable viewBean)
     {
         Timber.d("doViewInViewer()");
-        spinnerViewer.doViewInViewer(savedState, null);
-        listViewer.doViewInViewer(savedState, null);
+        spinnerViewer.doViewInViewer(savedState, viewBean);
+        listViewer.doViewInViewer(savedState, viewBean);
     }
 
     @Override
@@ -70,5 +72,12 @@ public class ViewerIncidSeeClose extends Viewer<View, ControllerIf> {
         }
         spinnerViewer.saveState(savedState);
         listViewer.saveState(savedState);
+    }
+
+    @Override
+    public void replaceRootView(@NonNull Bundle bundle)
+    {
+        Timber.d("replaceRootView()");
+        RootViewReplacerIf.class.cast(activity).replaceRootView(bundle);
     }
 }

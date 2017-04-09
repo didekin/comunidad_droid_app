@@ -1,10 +1,8 @@
 package com.didekindroid.usuario.firebase;
 
 import android.app.Activity;
-import android.os.Bundle;
 import android.view.View;
 
-import com.didekindroid.api.ViewBean;
 import com.didekindroid.api.Viewer;
 
 /**
@@ -32,11 +30,5 @@ public final class ViewerFirebaseToken extends Viewer<View, CtrlerFirebaseTokenI
     public void checkGcmTokenAsync()
     {
         controller.checkGcmToken();
-    }
-
-    @Override
-    public void doViewInViewer(Bundle savedState, ViewBean viewBean)
-    {
-        throw new UnsupportedOperationException();
     }
 }

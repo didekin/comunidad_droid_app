@@ -1,0 +1,33 @@
+Applications Memory Usage (kB):
+Uptime: 8063857 Realtime: 8063857
+
+** MEMINFO in pid 12772 [com.didekindroid] **
+                   Pss  Private  Private  Swapped     Heap     Heap     Heap
+                 Total    Dirty    Clean    Dirty     Size    Alloc     Free
+                ------   ------   ------   ------   ------   ------   ------
+  Native Heap     2196     2164        0        0     7580     7320      259
+  Dalvik Heap     2949     2756        0        0     4736     4148      588
+ Dalvik Other     2643     2508        0        0                           
+        Stack      136      136        0        0                           
+    Other dev        4        0        4        0                           
+     .so mmap     2079      600      128        0                           
+    .jar mmap        4        0        4        0                           
+    .apk mmap      265        0       84        0                           
+    .ttf mmap        8        0        0        0                           
+    .dex mmap     6161      112     5396        0                           
+   Other mmap       29        4        0        0                           
+      Unknown       96       96        0        0                           
+        TOTAL    16570     8376     5616        0    12316    11468      847
+ 
+ Objects
+               Views:       31         ViewRootImpl:        1
+         AppContexts:        5           Activities:        1
+              Assets:        3        AssetManagers:        3
+       Local Binders:        9        Proxy Binders:       21
+    Death Recipients:        1
+     OpenSSL Sockets:        3
+ 
+ SQL
+         MEMORY_USED:        0
+  PAGECACHE_OVERFLOW:        0          MALLOC_SIZE:       62
+ 

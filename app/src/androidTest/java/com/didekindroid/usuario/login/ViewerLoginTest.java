@@ -60,13 +60,11 @@ public class ViewerLoginTest {
     @Test
     public void testNewViewerLogin() throws Exception
     {
-
     }
 
     @Test
     public void testDoViewInViewer() throws Exception
     {
-
     }
 
     @Test  // Validation: error message.
@@ -196,6 +194,11 @@ public class ViewerLoginTest {
     @Test
     public void testSaveState() throws Exception
     {
+    }
 
+    @Test
+    public void testReplaceRootView() throws Exception
+    {
+        // TODO: falta.
     }
 }

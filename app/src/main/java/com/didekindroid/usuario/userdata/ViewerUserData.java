@@ -9,7 +9,8 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ViewBean;
+import com.didekindroid.api.RootViewReplacer;
+import com.didekindroid.api.RootViewReplacerIf;
 import com.didekindroid.api.Viewer;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf;
@@ -17,6 +18,7 @@ import com.didekindroid.usuario.UsuarioBean;
 import com.didekindroid.util.UIutils;
 import com.didekinlib.model.usuario.Usuario;
 
+import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicReference;
 
 import timber.log.Timber;
@@ -36,7 +38,8 @@ import static com.didekinlib.http.GenericExceptionMsg.BAD_REQUEST;
  * Date: 22/03/17
  * Time: 10:27
  */
-class ViewerUserData extends Viewer<View, CtrlerUserDataIf> implements ViewerUserDataIf {
+class ViewerUserData extends Viewer<View, CtrlerUserDataIf> implements ViewerUserDataIf,
+        RootViewReplacerIf {
 
     private final EditText emailView;
     private final EditText aliasView;
@@ -67,7 +70,7 @@ class ViewerUserData extends Viewer<View, CtrlerUserDataIf> implements ViewerUse
     }
 
     @Override
-    public void doViewInViewer(Bundle savedState, ViewBean viewBean)
+    public void doViewInViewer(Bundle savedState, Serializable viewBean)
     {
         Timber.d("doViewInViewer()");
         assertTrue(controller.isRegisteredUser(), user_should_be_registered);
@@ -197,5 +200,12 @@ class ViewerUserData extends Viewer<View, CtrlerUserDataIf> implements ViewerUse
             return null;
         }
         return super.processControllerError(ui);
+    }
+
+    @Override
+    public void replaceRootView(Bundle bundle)
+    {
+       Timber.d("replaceRootView()");
+        RootViewReplacer.class.cast(activity).replaceRootView(bundle);
     }
 }

@@ -1,19 +1,21 @@
 package com.didekindroid.incidencia.core.reg;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.api.RootViewReplacer;
-import com.didekindroid.api.RootViewReplacerIf;
+import com.didekindroid.api.ViewerIf;
+import com.didekindroid.api.ViewerParentInjectorIf;
 
 import timber.log.Timber;
 
 import static com.didekindroid.MenuRouter.doUpMenu;
 import static com.didekindroid.incidencia.core.reg.ViewerIncidRegAc.newViewerIncidRegAc;
+import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
+import static com.didekindroid.util.CommonAssertionMsg.controller_should_be_initialized;
+import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.doToolBar;
 
 /**
@@ -26,10 +28,11 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * This activity is a point of registration for receiving notifications of new incidencias.
  * TODO: añadir varios tags a la incidencia para facilitar búsquedas.
  */
-public class IncidRegAc extends AppCompatActivity implements RootViewReplacerIf {
+public class IncidRegAc extends AppCompatActivity implements ViewerParentInjectorIf {
 
-    IncidRegAcFragment mRegAcFragment;
+    IncidRegFr mRegAcFragment;
     ViewerIncidRegAc viewer;
+    View acView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -37,20 +40,40 @@ public class IncidRegAc extends AppCompatActivity implements RootViewReplacerIf 
         Timber.d("onCreate()");
         super.onCreate(savedInstanceState);
 
-        View mAcView = getLayoutInflater().inflate(R.layout.incid_reg_ac, null);
-        setContentView(mAcView);
+        acView = getLayoutInflater().inflate(R.layout.incid_reg_ac, null);
+        setContentView(acView);
         doToolBar(this, true);
 
-        mRegAcFragment = (IncidRegAcFragment) getSupportFragmentManager().findFragmentById(R.id.incid_reg_frg);
-        viewer = newViewerIncidRegAc(mAcView, this);
+        viewer = newViewerIncidRegAc(this);
+        //noinspection ConstantConditions
         viewer.doViewInViewer(savedInstanceState, null);
+        mRegAcFragment = (IncidRegFr) getSupportFragmentManager().findFragmentById(R.id.incid_reg_frg);
+
+        // Precondition.
+        assertTrue(viewer.getController() != null, controller_should_be_initialized);
+        assertTrue(viewer.getController().isRegisteredUser(), user_should_be_registered);
     }
 
     @Override
-    public void replaceRootView(@NonNull Bundle bundle)
+    public void onStop()
     {
-        Timber.d("replaceRootView()");
-        new RootViewReplacer(this).replaceRootView(bundle);
+        Timber.d("onStop()");
+        viewer.clearSubscriptions();
+        super.onStop();
+    }
+
+    @Override
+    public ViewerIncidRegAc getViewerAsParent()
+    {
+        Timber.d("getViewerAsParent()");
+        return viewer;
+    }
+
+    @Override
+    public void setChildInViewer(ViewerIf childInViewer)
+    {
+        Timber.d("setChildInViewer()");
+        viewer.setChildViewer(childInViewer);
     }
 
     // ============================================================

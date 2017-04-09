@@ -22,8 +22,6 @@ import org.junit.runners.Suite;
         ComuSearchAc_3_Test.class,
         ComuSearchResultsAc_1_Test.class,
         ComuSearchResultsAc_2_Test.class,
-        CtrlerComuSpinnerTest.class,
-        ViewerComuSpinnerTest.class,
 })
 public class ComunidadSuite {
 

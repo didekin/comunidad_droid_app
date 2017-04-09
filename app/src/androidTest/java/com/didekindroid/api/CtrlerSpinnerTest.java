@@ -92,16 +92,5 @@ public class CtrlerSpinnerTest {
         {
             return 0;
         }
-
-        @Override
-        public long getItemIdInIntent()
-        {
-            return 0;
-        }
-
-        @Override
-        public void doViewInViewer(Bundle savedState, ViewBean viewBean)
-        {
-        }
     }
 }

@@ -11,6 +11,7 @@ import com.didekindroid.api.RootViewReplacerIf;
 
 import timber.log.Timber;
 
+import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
 import static com.didekindroid.api.ItemMenu.mn_handler;
 import static com.didekindroid.MenuRouter.doUpMenu;
@@ -42,11 +43,14 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements RootViewR
         doToolBar(this, true);
 
         if (savedInstanceState != null) {
-            //noinspection unchecked
             fragment = (IncidSeeOpenByComuFr) getSupportFragmentManager().findFragmentByTag(incid_see_by_comu_list_fr_tag);
             return;
         }
         fragment = new IncidSeeOpenByComuFr();
+        Bundle argsFragment = new Bundle();
+        // We create an argument for the fragment even if the intent extra doesn't exist in the activity.
+        argsFragment.putLong(COMUNIDAD_ID.key, getIntent().getLongExtra(COMUNIDAD_ID.key, 0));
+        fragment.setArguments(argsFragment);
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.incid_see_open_by_comu_ac, fragment, incid_see_by_comu_list_fr_tag)
                 .commit();

@@ -4,9 +4,10 @@ import android.content.res.Resources;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ViewBean;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
+
+import java.io.Serializable;
 
 import static com.didekinlib.model.common.dominio.ValidDataPatterns.LINE_BREAK;
 
@@ -16,7 +17,7 @@ import static com.didekinlib.model.common.dominio.ValidDataPatterns.LINE_BREAK;
  * Date: 24/02/16
  * Time: 10:01
  */
-public class IncidImportanciaBean implements ViewBean {
+public class IncidImportanciaBean implements Serializable {
 
     private short importancia;
 
@@ -34,7 +35,7 @@ public class IncidImportanciaBean implements ViewBean {
         this.importancia = importancia;
     }
 
-    private boolean validateRange(StringBuilder errorMsg, Resources resources)
+    boolean validateRange(StringBuilder errorMsg, Resources resources)
     {
         short upperBound = (short) resources.getStringArray(R.array.IncidImportanciaArray).length;
         if (!(importancia >= 0 && importancia < upperBound)) {
@@ -44,7 +45,7 @@ public class IncidImportanciaBean implements ViewBean {
         return true;
     }
 
-    IncidImportancia makeIncidImportancia(StringBuilder errorMsg, Resources resources, View fragmentView, IncidImportancia incidImportancia)
+    public IncidImportancia makeIncidImportancia(StringBuilder errorMsg, Resources resources, IncidImportancia incidImportancia)
     {
         if (validateRange(errorMsg, resources)) {
             return new IncidImportancia.IncidImportanciaBuilder(
@@ -71,16 +72,16 @@ public class IncidImportanciaBean implements ViewBean {
         }
     }
 
-    IncidImportancia makeIncidImportancia(StringBuilder errorMsg, Resources resources, View fragmentView, IncidenciaBean incidenciaBean, IncidImportancia incidImportancia)
+    public IncidImportancia makeIncidImportancia(StringBuilder errorMsg, Resources resources, View fragmentView, IncidenciaBean incidenciaBean, Incidencia oldIncidencia)
     {
-        final Incidencia incidencia = incidenciaBean.makeIncidenciaFromView(fragmentView, errorMsg, resources);
+        final Incidencia newIncidencia = incidenciaBean.makeIncidenciaFromView(fragmentView, errorMsg, resources);
 
-        if (incidencia != null & validateRange(errorMsg, resources)) {
+        if (newIncidencia != null & validateRange(errorMsg, resources)) {
             return new IncidImportancia.IncidImportanciaBuilder(
                     new Incidencia.IncidenciaBuilder()
-                            .copyIncidencia(incidImportancia.getIncidencia())
-                            .ambitoIncid(incidencia.getAmbitoIncidencia())
-                            .descripcion(incidencia.getDescripcion())
+                            .copyIncidencia(oldIncidencia)
+                            .ambitoIncid(newIncidencia.getAmbitoIncidencia())
+                            .descripcion(newIncidencia.getDescripcion())
                             .build())
                     .importancia(importancia)
                     .build();

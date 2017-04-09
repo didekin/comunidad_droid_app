@@ -8,9 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.didekindroid.R;
+import com.didekindroid.incidencia.core.IncidenciaBean;
+import com.didekindroid.usuariocomunidad.spinner.ComuSpinnerBean;
 
 import timber.log.Timber;
 
+import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.list.close.ViewerIncidSeeClose.newViewerIncidSeeClose;
 
 /**
@@ -37,8 +40,10 @@ public class IncidSeeCloseByComuFr extends Fragment  {
         Timber.d("onViewCreated()");
         super.onViewCreated(view, savedState);
         /* Initialization of viewers.*/
+        ComuSpinnerBean spinnerBean = new IncidenciaBean();
+        spinnerBean.setComunidadId(getArguments().getLong(COMUNIDAD_ID.key));
         viewerIncidClose = newViewerIncidSeeClose(rootFrgView, getActivity());
-        viewerIncidClose.doViewInViewer(savedState, null);
+        viewerIncidClose.doViewInViewer(savedState, spinnerBean);
     }
 
     @Override

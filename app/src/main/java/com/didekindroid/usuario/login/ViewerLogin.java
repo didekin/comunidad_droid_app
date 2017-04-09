@@ -3,6 +3,7 @@ package com.didekindroid.usuario.login;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialog;
 import android.view.View;
@@ -10,13 +11,14 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ViewBean;
+import com.didekindroid.api.RootViewReplacerIf;
 import com.didekindroid.api.Viewer;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf;
 import com.didekindroid.usuario.UsuarioBean;
 import com.didekinlib.model.usuario.Usuario;
 
+import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -36,7 +38,7 @@ import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOU
  * Time: 12:05
  */
 
-class ViewerLogin extends Viewer<View, CtrlerLoginIf> implements ViewerLoginIf {
+class ViewerLogin extends Viewer<View, CtrlerLoginIf> implements ViewerLoginIf, RootViewReplacerIf {
 
     @SuppressWarnings("WeakerAccess")
     final AtomicReference<UsuarioBean> usuarioBean;
@@ -57,7 +59,7 @@ class ViewerLogin extends Viewer<View, CtrlerLoginIf> implements ViewerLoginIf {
     }
 
     @Override
-    public void doViewInViewer(Bundle savedState, ViewBean viewBean)
+    public void doViewInViewer(Bundle savedState, Serializable viewBean)
     {
         Timber.d("doViewInViewer()");
 
@@ -212,5 +214,12 @@ class ViewerLogin extends Viewer<View, CtrlerLoginIf> implements ViewerLoginIf {
     public AtomicInteger getCounterWrong()
     {
         return counterWrong;
+    }
+
+    @Override
+    public void replaceRootView(@NonNull Bundle bundle)
+    {
+        Timber.d("replaceRootView()");
+        RootViewReplacerIf.class.cast(activity).replaceRootView(bundle);
     }
 }

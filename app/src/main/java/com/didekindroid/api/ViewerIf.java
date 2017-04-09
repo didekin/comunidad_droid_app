@@ -9,6 +9,8 @@ import android.view.View;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf;
 
+import java.io.Serializable;
+
 /**
  * User: pedro@didekin
  * Date: 16/03/17
@@ -24,13 +26,12 @@ public interface ViewerIf<T extends View, C extends ControllerIf> {
 
     T getViewInViewer();
 
-    void doViewInViewer(Bundle savedState, ViewBean viewBean);
+    void doViewInViewer(Bundle savedState, @NonNull Serializable viewBean);
 
+    @Nullable
     C getController();
 
-    void setController(C controller);
-
-    void replaceRootView(@NonNull Bundle bundle);
+    void setController(@NonNull C controller);
 
     void saveState(Bundle savedState);
 

@@ -138,7 +138,7 @@ class CtrlerUserData extends CtrlerIdentity<View> implements CtrlerUserDataIf {
     public void onCompleteUserModified()
     {
         Timber.d("onCompleteUserModified()");
-        viewer.replaceRootView(new Bundle());
+        ViewerUserData.class.cast(viewer).replaceRootView(new Bundle());
     }
 
     // .............................. SUBSCRIBERS ..................................

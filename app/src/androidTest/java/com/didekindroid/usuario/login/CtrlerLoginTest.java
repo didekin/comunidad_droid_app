@@ -1,6 +1,7 @@
 package com.didekindroid.usuario.login;
 
 import android.support.test.rule.ActivityTestRule;
+import android.support.test.runner.AndroidJUnit4;
 import android.view.View;
 
 import com.didekindroid.exception.UiException;
@@ -11,6 +12,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.io.IOException;
 import java.util.concurrent.Callable;
@@ -49,6 +51,7 @@ import static org.junit.Assert.assertThat;
  * Date: 23/02/17
  * Time: 14:17
  */
+@RunWith(AndroidJUnit4.class)
 public class CtrlerLoginTest {
 
     final static AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);

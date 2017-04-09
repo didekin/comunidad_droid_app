@@ -258,7 +258,7 @@ public final class IncidDaoRemote implements IncidenciaServEndPoints {
 
     public Resolucion seeResolucion(long resolucionId) throws UiException
     {
-        Timber.d("seeResolucion()");
+        Timber.d("checkResolucion()");
         try {
             Response<Resolucion> response = seeResolucion(checkBearerTokenInCache(), resolucionId).execute();
             return getResponseBody(response);

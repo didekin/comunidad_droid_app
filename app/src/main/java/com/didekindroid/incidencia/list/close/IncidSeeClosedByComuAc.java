@@ -13,6 +13,7 @@ import com.didekindroid.incidencia.resolucion.IncidResolucionSeeFr;
 
 import timber.log.Timber;
 
+import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_resolucion_see_fr_tag;
 import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
 import static com.didekindroid.api.ItemMenu.mn_handler;
@@ -53,6 +54,10 @@ public class IncidSeeClosedByComuAc extends AppCompatActivity implements RootVie
         }
 
         fragmentList = new IncidSeeCloseByComuFr();
+        Bundle argsFragment = new Bundle();
+        // We create an argument for the fragment even if the intent extra doesn't exist in the activity.
+        argsFragment.putLong(COMUNIDAD_ID.key, getIntent().getLongExtra(COMUNIDAD_ID.key, 0));
+        fragmentList.setArguments(argsFragment);
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.incid_see_closed_by_comu_ac, fragmentList, incid_see_by_comu_list_fr_tag)
                 .commit();

@@ -3,8 +3,9 @@ package com.didekindroid.usuario;
 import android.content.res.Resources;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ViewBean;
 import com.didekinlib.model.usuario.Usuario;
+
+import java.io.Serializable;
 
 import static com.didekinlib.model.common.dominio.ValidDataPatterns.ALIAS;
 import static com.didekinlib.model.common.dominio.ValidDataPatterns.EMAIL;
@@ -16,7 +17,7 @@ import static com.didekinlib.model.common.dominio.ValidDataPatterns.PASSWORD;
  * Date: 01/06/15
  * Time: 17:09
  */
-public final class UsuarioBean implements ViewBean {
+public final class UsuarioBean implements Serializable {
 
     private final String userName;
     private final String password;
@@ -105,7 +106,7 @@ public final class UsuarioBean implements ViewBean {
     {
         boolean isValid = PASSWORD.isPatternOk(password);
         if (!isValid) {
-            errorMsg.append(resources.getText(R.string.password).toString()).append(LINE_BREAK.getRegexp());
+            errorMsg.append(resources.getText(R.string.password)).append(LINE_BREAK.getRegexp());
         }
         return isValid;
     }
@@ -113,9 +114,8 @@ public final class UsuarioBean implements ViewBean {
     private boolean validateDoublePassword(Resources resources, StringBuilder errorMsg)
     {
         if (!password.trim().equals(verificaPassword)) {
-            errorMsg.append(resources.getText(R.string.password).toString())
-                    .append(resources.getText(R.string
-                            .password_different).toString())
+            errorMsg.append(resources.getText(R.string.password))
+                    .append(resources.getText(R.string.password_different))
                     .append(LINE_BREAK.getRegexp());
             return false;
         }

@@ -26,8 +26,10 @@ import static android.support.test.espresso.intent.matcher.IntentMatchers.hasFla
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
+import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_B;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekinlib.http.GenericExceptionMsg.BAD_REQUEST;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -52,23 +54,9 @@ public class ViewerTest {
     public void setUp()
     {
         activity = activityRule.getActivity();
-
-        parentViewer = new ViewerMock<View, ControllerIf>(new View(activity), activity, null) {
-            @Override // USED in testReplaceView().
-            public void replaceRootView(@NonNull Bundle bundle)
-            {
-                Intent intent = new Intent(activity, ActivityNextMock.class);
-                activity.startActivity(intent);
-            }
-        };
-
+        parentViewer = new ViewerMock<>(new View(activity), activity, null);
         viewInViewer = new View(activity);
-        viewer = new Viewer<View, ControllerIf>(viewInViewer, activity, parentViewer) {
-            @Override  // NOT USED.
-            public void doViewInViewer(Bundle savedState, ViewBean viewBean)
-            {
-            }
-        };
+        viewer = new ViewerForTest(viewInViewer, activity, parentViewer);
     }
 
     @Test
@@ -80,8 +68,11 @@ public class ViewerTest {
     @Test
     public void testReplaceView() throws Exception
     {
-        viewer.replaceRootView(new Bundle(0));
+        assertThat(viewer, instanceOf(RootViewReplacerIf.class));
+        RootViewReplacerIf rootViewReplacer = (RootViewReplacerIf) viewer;
+        rootViewReplacer.replaceRootView(new Bundle(0));
         onView(withId(R.id.next_mock_ac_layout)).check(matches(isDisplayed()));
+        assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_B));
     }
 
     @Test
@@ -149,5 +140,22 @@ public class ViewerTest {
     public void setController() throws Exception
     {
         testGetController();
+    }
+
+    //    ============================  HELPERS  ===================================
+
+    static class ViewerForTest extends Viewer<View, ControllerIf> implements RootViewReplacerIf {
+
+        protected ViewerForTest(View view, Activity activity, ViewerIf parentViewer)
+        {
+            super(view, activity, parentViewer);
+        }
+
+        @Override
+        public void replaceRootView(@NonNull Bundle bundle)
+        {
+            activity.startActivity(new Intent(activity, ActivityNextMock.class));
+            assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_B), is(BEFORE_METHOD_EXEC));
+        }
     }
 }

@@ -129,6 +129,6 @@ public class CtrlerIncidSeeCloseByComu extends CtrlerIdentity<ListView> implemen
     public void onSuccessSelectedItem(@NonNull Bundle bundle)
     {
         Timber.d("onSuccessSelectedItem()");
-        viewer.replaceRootView(bundle);
+        ViewerIncidListByComu.class.cast(viewer).replaceRootView(bundle);
     }
 }

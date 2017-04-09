@@ -2,18 +2,21 @@ package com.didekindroid.incidencia.core;
 
 import android.content.res.Resources;
 import android.support.test.runner.AndroidJUnit4;
+import android.view.View;
 
 import com.didekindroid.R;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.InstrumentationRegistry.getTargetContext;
+import static com.didekindroid.testutil.ActivityTestUtils.doFragmentView;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
 
@@ -25,12 +28,14 @@ import static org.hamcrest.Matchers.allOf;
 @RunWith(AndroidJUnit4.class)
 public class IncidenciaBeanTest {
 
-    private Resources resources;
+    Resources resources;
+    StringBuilder errors;
 
     @Before
     public void doBefore()
     {
         resources = getTargetContext().getResources();
+        errors = getErrorMsgBuilder(getTargetContext());
     }
 
     @Test
@@ -39,12 +44,12 @@ public class IncidenciaBeanTest {
         IncidenciaBean incidenciaBean = new IncidenciaBean()
                 .setCodAmbitoIncid((short) 99)
                 .setDescripcion("Descripcion incidencia = test");
-        StringBuilder errors = getErrorMsgBuilder(getTargetContext());
+
         assertThat(incidenciaBean.validateBean(errors, resources), is(false));
-        Assert.assertThat(errors.toString(), allOf(
-                        containsString(resources.getText(R.string.incid_reg_descripcion).toString()),
-                        containsString(resources.getText(R.string.incid_reg_ambitoIncidencia).toString()),
-                        containsString(resources.getText(R.string.reg_usercomu_comunidad_null).toString())
+        assertThat(errors.toString(), allOf(
+                containsString(resources.getText(R.string.incid_reg_descripcion).toString()),
+                containsString(resources.getText(R.string.incid_reg_ambitoIncidencia).toString()),
+                containsString(resources.getText(R.string.reg_usercomu_comunidad_null).toString())
                 )
         );
     }
@@ -55,11 +60,11 @@ public class IncidenciaBeanTest {
         IncidenciaBean incidenciaBean = new IncidenciaBean()
                 .setCodAmbitoIncid((short) 49)
                 .setDescripcion("Descripcion incidencia ? test");
-        StringBuilder errors = getErrorMsgBuilder(getTargetContext());
+
         // No tiene asociada comunidad.
         assertThat(incidenciaBean.validateBean(errors, resources), is(false));
-        Assert.assertThat(errors.toString(),
-                        containsString(resources.getText(R.string.reg_usercomu_comunidad_null).toString())
+        assertThat(errors.toString(),
+                containsString(resources.getText(R.string.reg_usercomu_comunidad_null).toString())
         );
     }
 
@@ -69,9 +74,34 @@ public class IncidenciaBeanTest {
         IncidenciaBean incidenciaBean = new IncidenciaBean()
                 .setCodAmbitoIncid((short) 49)
                 .setComunidadId(2L)
-                .setDescripcion("Descripcion incidencia ? test");
-        StringBuilder errors = getErrorMsgBuilder(getTargetContext());
-        // No tiene asociada comunidad.
+                .setDescripcion("Descripcion incidencia ok");
+
         assertThat(incidenciaBean.validateBean(errors, resources), is(true));
+    }
+
+    @Test
+    public void testMakeIncidenciaFromView_1() throws Exception
+    {
+        final IncidenciaBean incidenciaBean = doIncidenciaBean();
+        final View fragmentView = doFragmentView(R.layout.mock_incid_desc_edit_fr, "Description valid");
+        assertThat(incidenciaBean.makeIncidenciaFromView(fragmentView, errors, resources), notNullValue());
+    }
+
+    @Test
+    public void testMakeIncidenciaFromView_2() throws Exception
+    {
+        final IncidenciaBean incidenciaBean = doIncidenciaBean();
+        final View fragmentView = doFragmentView(R.layout.mock_incid_desc_edit_fr, "No valid = ** description");
+        // Check.
+        assertThat(incidenciaBean.makeIncidenciaFromView(fragmentView, errors, resources), nullValue());
+        assertThat(errors.toString(), containsString(resources.getText(R.string.incid_reg_descripcion).toString()));
+    }
+
+
+    private IncidenciaBean doIncidenciaBean()
+    {
+        return new IncidenciaBean()
+                .setCodAmbitoIncid((short) 49)
+                .setComunidadId(2L);
     }
 }

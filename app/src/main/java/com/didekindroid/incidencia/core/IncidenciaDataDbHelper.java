@@ -137,7 +137,7 @@ public class IncidenciaDataDbHelper extends SQLiteOpenHelper {
         return mDataBase.insert(TB_AMBITO_INCIDENCIA, null, values);
     }
 
-    public Cursor doAmbitoIncidenciaCursor()
+    Cursor doAmbitoIncidenciaCursor()
     {
         Timber.d("En doAmbitoIncidenciaCursor()");
 
@@ -159,7 +159,7 @@ public class IncidenciaDataDbHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
-    public List<AmbitoIncidValueObj> getAmbitoIncidList(Cursor cursor)
+    List<AmbitoIncidValueObj> getAmbitoIncidList(Cursor cursor)
     {
         Timber.d("getAmbitoIncidList(Cursor cursor)");
         assertTrue(cursor.moveToFirst(), cursor_should_be_in_first_position);
@@ -175,7 +175,7 @@ public class IncidenciaDataDbHelper extends SQLiteOpenHelper {
         return list;
     }
 
-    public List<AmbitoIncidValueObj> getAmbitoIncidList()
+    List<AmbitoIncidValueObj> getAmbitoIncidList()
     {
         Timber.d("getAmbitoIncidList()");
         return getAmbitoIncidList(doAmbitoIncidenciaCursor());

@@ -1,7 +1,6 @@
 package com.didekindroid.usuario.delete;
 
 import android.app.Activity;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 
 import com.didekindroid.ExtendableTestAc;
@@ -16,6 +15,9 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.util.concurrent.Callable;
+
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -25,7 +27,6 @@ import static com.didekindroid.R.id.comu_search_ac_linearlayout;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkViewerReplaceView;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
-import static com.didekindroid.testutil.ActivityTestUtils.hasRegisteredFlag;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_PEPE;
@@ -108,7 +109,7 @@ public class DeleteMeAcTest implements ExtendableTestAc {
     @Test
     public final void testOnStop() throws Exception
     {
-        InstrumentationRegistry.getInstrumentation().callActivityOnStop(activity);
+        getInstrumentation().callActivityOnStop(activity);
         // Check.
         assertThat(controller.getSubscriptions().size(), CoreMatchers.is(0));
         cleanOptions(CLEAN_PEPE);
@@ -117,7 +118,7 @@ public class DeleteMeAcTest implements ExtendableTestAc {
     @Test
     public final void testOnStart() throws Exception
     {
-        InstrumentationRegistry.getInstrumentation().callActivityOnStart(activity);
+        getInstrumentation().callActivityOnStart(activity);
         // Check.
         assertThat(controller, notNullValue());
         cleanOptions(CLEAN_PEPE);
@@ -127,7 +128,12 @@ public class DeleteMeAcTest implements ExtendableTestAc {
     public void testUnregisterUser() throws UiException
     {
         onView(withId(R.id.delete_me_ac_unreg_button)).check(matches(isDisplayed())).perform(click());
-        await().atMost(4, SECONDS).until(hasRegisteredFlag(controller), is(false));
+        await().atMost(4, SECONDS).until(new Callable<Boolean>() {
+            public Boolean call() throws Exception
+            {
+                return controller.isRegisteredUser();
+            }
+        }, is(false));
 
         onView(withId(getNextViewResourceId())).check(matches(isDisplayed()));
     }

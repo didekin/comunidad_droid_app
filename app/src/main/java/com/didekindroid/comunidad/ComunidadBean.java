@@ -3,10 +3,11 @@ package com.didekindroid.comunidad;
 import android.content.res.Resources;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ViewBean;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.comunidad.Municipio;
 import com.didekinlib.model.comunidad.Provincia;
+
+import java.io.Serializable;
 
 import static com.didekinlib.model.common.dominio.ValidDataPatterns.LINE_BREAK;
 import static com.didekinlib.model.common.dominio.ValidDataPatterns.NOMBRE_VIA;
@@ -18,7 +19,7 @@ import static com.didekinlib.model.common.dominio.ValidDataPatterns.SUFIJO_NUMER
  * Date: 12/05/15
  * Time: 16:55
  */
-public class ComunidadBean implements ViewBean {
+public class ComunidadBean implements Serializable {
 
     private long comunidadId;
     private String tipoVia;
@@ -38,7 +39,7 @@ public class ComunidadBean implements ViewBean {
     {
         this.tipoVia = tipoVia;
         this.nombreVia = nombreVia;
-        this.numeroString = numeroEnVia;
+        numeroString = numeroEnVia;
         this.sufijoNumero = sufijoNumero;
         this.municipio = municipio;
         comunidadId = 0L;

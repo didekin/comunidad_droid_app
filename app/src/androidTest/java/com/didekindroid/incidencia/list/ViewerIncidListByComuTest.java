@@ -10,6 +10,8 @@ import static org.junit.Assert.*;
  * Time: 18:11
  */
 public class ViewerIncidListByComuTest {
+
+
     @Test
     public void newListViewer() throws Exception
     {
@@ -42,6 +44,12 @@ public class ViewerIncidListByComuTest {
 
     @Test
     public void doViewInViewer() throws Exception
+    {
+
+    }
+
+    @Test
+    public void replaceRootView() throws Exception
     {
 
     }

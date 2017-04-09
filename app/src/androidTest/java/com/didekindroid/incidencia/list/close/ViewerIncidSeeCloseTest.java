@@ -9,6 +9,7 @@ import org.junit.Test;
  */
 public class ViewerIncidSeeCloseTest {
 
+
     @Test
     public void newViewerIncidSeeClose() throws Exception
     {
@@ -35,6 +36,12 @@ public class ViewerIncidSeeCloseTest {
 
     @Test
     public void replaceRootView() throws Exception
+    {
+
+    }
+
+    @Test
+    public void replaceRootView1() throws Exception
     {
 
     }

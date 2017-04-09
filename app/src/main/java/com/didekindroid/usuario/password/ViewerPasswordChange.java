@@ -7,12 +7,13 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ViewBean;
+import com.didekindroid.api.RootViewReplacerIf;
 import com.didekindroid.api.Viewer;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf;
 import com.didekindroid.usuario.UsuarioBean;
 
+import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicReference;
 
 import timber.log.Timber;
@@ -32,8 +33,8 @@ import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOU
  * Time: 20:08
  */
 
-class ViewerPasswordChange extends Viewer<View, CtrlerPasswordChangeIf> implements
-        ViewerPasswordChangeIf {
+class ViewerPasswordChange extends Viewer<View, CtrlerPasswordChangeIf>
+        implements ViewerPasswordChangeIf, RootViewReplacerIf {
 
     @SuppressWarnings("WeakerAccess")
     final AtomicReference<UsuarioBean> usuarioBean;
@@ -52,7 +53,7 @@ class ViewerPasswordChange extends Viewer<View, CtrlerPasswordChangeIf> implemen
     }
 
     @Override
-    public void doViewInViewer(Bundle savedState, ViewBean viewBean)
+    public void doViewInViewer(Bundle savedState, Serializable viewBean)
     {
         // Precondition.
         assertTrue(controller.isRegisteredUser(), user_should_be_registered);
@@ -72,7 +73,7 @@ class ViewerPasswordChange extends Viewer<View, CtrlerPasswordChangeIf> implemen
     }
 
     @NonNull
-    String initUserName()
+    private String initUserName()
     {
         return activity.getIntent().getStringExtra(user_name.key);
     }
@@ -118,5 +119,12 @@ class ViewerPasswordChange extends Viewer<View, CtrlerPasswordChangeIf> implemen
             action = super.processControllerError(ui);
         }
         return action;
+    }
+
+    @Override
+    public void replaceRootView(@NonNull Bundle bundle)
+    {
+        Timber.d("replaceRootView()");
+        RootViewReplacerIf.class.cast(activity).replaceRootView(bundle);
     }
 }

@@ -13,5 +13,4 @@ public interface ViewerSelectableIf<T extends AdapterView,C extends ControllerIf
 
     void initSelectedItemId(Bundle savedState);
     long getSelectedItemId();
-    long getItemIdInIntent();
 }

@@ -6,6 +6,8 @@ import com.didekindroid.usuariocomunidad.listbycomu.CtrlerUserComuByComuTest;
 import com.didekindroid.usuariocomunidad.listbycomu.SeeUserComuByComuAc_1_Test;
 import com.didekindroid.usuariocomunidad.listbycomu.SeeUserComuByComuAc_2_Test;
 import com.didekindroid.usuariocomunidad.listbycomu.ViewerSeeUserComuByComuTest;
+import com.didekindroid.usuariocomunidad.spinner.CtrlerComuSpinnerTest;
+import com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinnerTest;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -17,6 +19,7 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
+        CtrlerComuSpinnerTest.class,
         CtrlerUserComuByComuTest.class,
         RegComuAndUserAndUserComuAcTest.class,
         RegComuAndUserComuAcTest.class,
@@ -30,6 +33,7 @@ import org.junit.runners.Suite;
         UserComuDaoRemoteTest.class,
         UserComuObservableTest.class,
         UsuarioComunidadBeanValidaTests.class,
+        ViewerComuSpinnerTest.class,
         ViewerSeeUserComuByComuTest.class,
 })
 public class UserComuSuite {

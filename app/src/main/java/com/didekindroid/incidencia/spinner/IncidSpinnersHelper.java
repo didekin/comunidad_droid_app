@@ -77,21 +77,4 @@ public enum IncidSpinnersHelper {
         });
     }
 
-    @SuppressWarnings("ConstantConditions")
-    public <T extends Fragment & ImportanciaSpinnerSettable> void initUserComusImportanciaView(final T fragment)
-    {
-        Timber.d("initUserComusImportanciaView()");
-
-        TextView mSeeImportanciaView = (TextView) fragment.getView().findViewById(R.id.incid_importancia_otros_view);
-        mSeeImportanciaView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                Timber.d("mSeeImportanciaView.onClick()");
-                Intent intent = new Intent(fragment.getContext(), IncidSeeUserComuImportanciaAc.class);
-                intent.putExtra(INCIDENCIA_OBJECT.key, fragment.getIncidencia());
-                fragment.getActivity().startActivity(intent);
-            }
-        });
-    }
 }

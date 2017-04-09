@@ -30,8 +30,8 @@ import static io.reactivex.schedulers.Schedulers.io;
  * Time: 20:37
  */
 @SuppressWarnings("WeakerAccess")
-class CtrlerPasswordChange extends CtrlerIdentity<View> implements
-        CtrlerPasswordChangeIf {
+class CtrlerPasswordChange extends CtrlerIdentity<View>
+        implements CtrlerPasswordChangeIf {
 
     CtrlerPasswordChange(ViewerPasswordChangeIf viewer)
     {
@@ -42,27 +42,6 @@ class CtrlerPasswordChange extends CtrlerIdentity<View> implements
     {
         super(viewer, identityCacher);
     }
-
-    @Override
-    public boolean changePasswordInRemote(Usuario usuario)
-    {
-        Timber.d("changePasswordInRemote()");
-        return subscriptions.add(
-                isPasswordChanged(usuario)
-                        .subscribeOn(io())
-                        .observeOn(mainThread())
-                        .subscribeWith(new PswdChangeSingleObserver(this))
-        );
-    }
-
-    @Override
-    public void onSuccessChangedPswd()
-    {
-        Timber.d("onSuccessChangedPswd()");
-        viewer.replaceRootView(new Bundle());
-    }
-
-    // ............................ OBSERVABLES ..................................
 
     public static Completable isPasswordChanged(final Usuario usuario)
     {
@@ -82,6 +61,27 @@ class CtrlerPasswordChange extends CtrlerIdentity<View> implements
                 return oauthTokenAndInitCache(usuario);
             }
         });
+    }
+
+    @Override
+    public boolean changePasswordInRemote(Usuario usuario)
+    {
+        Timber.d("changePasswordInRemote()");
+        return subscriptions.add(
+                isPasswordChanged(usuario)
+                        .subscribeOn(io())
+                        .observeOn(mainThread())
+                        .subscribeWith(new PswdChangeSingleObserver(this))
+        );
+    }
+
+    // ............................ OBSERVABLES ..................................
+
+    @Override
+    public void onSuccessChangedPswd()
+    {
+        Timber.d("onSuccessChangedPswd()");
+        ViewerPasswordChange.class.cast(viewer).replaceRootView(new Bundle());
     }
 
     // ............................ SUBSCRIBERS ..................................
