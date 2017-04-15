@@ -8,7 +8,7 @@ import android.widget.Spinner;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ControllerIf;
-import com.didekindroid.api.RootViewReplacerIf;
+import com.didekindroid.router.ActivityInitiatorIf;
 import com.didekindroid.api.Viewer;
 import com.didekindroid.incidencia.list.ViewerIncidListByComu;
 import com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner;
@@ -27,7 +27,7 @@ import static com.didekindroid.util.UIutils.assertTrue;
  * Date: 18/03/17
  * Time: 11:01
  */
-public class ViewerIncidSeeClose extends Viewer<View, ControllerIf> implements RootViewReplacerIf {
+public class ViewerIncidSeeClose extends Viewer<View, ControllerIf>  {
 
     protected ViewerComuSpinner spinnerViewer;
     protected ViewerIncidListByComu listViewer;
@@ -35,7 +35,7 @@ public class ViewerIncidSeeClose extends Viewer<View, ControllerIf> implements R
     protected ViewerIncidSeeClose(View view, Activity activity)
     {
         super(view, activity, null);
-        assertTrue(activity instanceof RootViewReplacerIf, activity_should_be_instance_RootViewReplacer);
+        assertTrue(activity instanceof ActivityInitiatorIf, activity_should_be_instance_RootViewReplacer);
         controller = null; // Just for documentation.
     }
 
@@ -72,12 +72,5 @@ public class ViewerIncidSeeClose extends Viewer<View, ControllerIf> implements R
         }
         spinnerViewer.saveState(savedState);
         listViewer.saveState(savedState);
-    }
-
-    @Override
-    public void replaceRootView(@NonNull Bundle bundle)
-    {
-        Timber.d("replaceRootView()");
-        RootViewReplacerIf.class.cast(activity).replaceRootView(bundle);
     }
 }

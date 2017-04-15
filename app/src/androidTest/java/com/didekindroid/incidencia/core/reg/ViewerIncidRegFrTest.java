@@ -97,8 +97,6 @@ public class ViewerIncidRegFrTest {
     @Test
     public void testNewViewerIncidReg() throws Exception
     {
-        assertThat(viewer.incidenciaBean, notNullValue());
-        assertThat(viewer.incidImportanciaBean, notNullValue());
         assertThat(viewer.getController(), nullValue());
         assertThat(viewer.getParentViewer(), notNullValue());
         assertThat(viewer.viewerAmbitoIncidSpinner, notNullValue());
@@ -107,7 +105,7 @@ public class ViewerIncidRegFrTest {
     }
 
     @Test
-    public void doViewInViewer() throws Exception
+    public void testDoViewInViewer() throws Exception
     {
         onView(withId(fragmentLayoutId)).check(matches(isDisplayed()));
 
@@ -123,7 +121,7 @@ public class ViewerIncidRegFrTest {
     }
 
     @Test
-    public void clearSubscriptions() throws Exception
+    public void testClearSubscriptions() throws Exception
     {
         addSubscription(viewer.viewerComuSpinner.getController());
         addSubscription(viewer.viewerAmbitoIncidSpinner.getController());
@@ -141,6 +139,7 @@ public class ViewerIncidRegFrTest {
         Bundle bundleTest = new Bundle();
         viewer.viewerAmbitoIncidSpinner.setItemSelectedId(11);
         viewer.viewerImportanciaSpinner.setItemSelectedId((short) 31);
+        // Solo hay una comunidad en el spinner.
         viewer.saveState(bundleTest);
 
         assertThat(bundleTest.getLong(AMBITO_INCIDENCIA_POSITION.key), is(11L));
@@ -151,11 +150,24 @@ public class ViewerIncidRegFrTest {
     @Test
     public void testDoIncidImportanciaFromView() throws Exception
     {
-        StringBuilder errors = getErrorMsgBuilder(getTargetContext());
-        viewer.incidenciaBean.setComunidadId(2L);
-        viewer.incidenciaBean.setCodAmbitoIncid((short) 49);
-
         final AtomicBoolean isRun = new AtomicBoolean(false);
+
+        // Preconditions:
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                viewer.doViewInViewer(new Bundle(), null);
+                isRun.compareAndSet(false,true);
+            }
+        });
+        waitAtMost(1,SECONDS).untilTrue(isRun);
+
+        StringBuilder errors = getErrorMsgBuilder(getTargetContext());
+        viewer.atomIncidBean.get().setComunidadId(2L);
+        viewer.atomIncidBean.get().setCodAmbitoIncid((short) 29);
+
+        isRun.set(false);
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run()
@@ -167,11 +179,11 @@ public class ViewerIncidRegFrTest {
         });
         waitAtMost(1,SECONDS).untilTrue(isRun);
 
-        viewer.incidImportanciaBean.setImportancia((short) 1);
+        viewer.atomIncidImportBean.get().setImportancia((short) 1);
         assertThat(viewer.doIncidImportanciaFromView(errors), notNullValue());
         assertThat(viewer.doIncidImportanciaFromView(errors).getImportancia(), is((short) 1));
 
-        viewer.incidImportanciaBean.setImportancia((short) 111);
+        viewer.atomIncidImportBean.get().setImportancia((short) 111);
         assertThat(viewer.doIncidImportanciaFromView(errors), nullValue());
         assertThat(errors.toString(), containsString(activity.getResources().getText(R.string.incid_reg_importancia).toString()));
     }

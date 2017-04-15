@@ -1,5 +1,7 @@
 package com.didekindroid.api;
 
+import com.didekindroid.router.ActivityInitiatorTest;
+
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -17,7 +19,7 @@ import org.junit.runners.Suite;
         ObserverSingleListTest.class,
         ObserverSingleSelectedItemTest.class,
         ObserverSpinnerTest.class,
-        RootViewReplacerTest.class,
+        ActivityInitiatorTest.class,
         ViewerTest.class,
 })
 public class ApiSuite {

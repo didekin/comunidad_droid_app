@@ -1,13 +1,18 @@
 package com.didekindroid.incidencia.core.reg;
 
+import android.app.Instrumentation;
+import android.os.Bundle;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
+import com.didekindroid.api.ViewerIf;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.core.AmbitoIncidValueObj;
 import com.didekinlib.model.comunidad.Comunidad;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -15,19 +20,25 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
-import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_LA_FUENTE;
-import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
+import static com.didekindroid.incidencia.testutils.IncidUiUtils.doAmbitoAndDescripcion;
+import static com.didekindroid.incidencia.testutils.IncidUiUtils.doImportanciaSpinner;
+import static com.didekindroid.testutil.ActivityTestUtils.addSubscription;
+import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
+import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
+import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
+import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
@@ -38,7 +49,9 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.core.AllOf.allOf;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 /**
@@ -47,7 +60,9 @@ import static org.junit.Assert.fail;
  * Time: 10:07
  */
 @RunWith(AndroidJUnit4.class)
-public class IncidRegAcTest_1 {
+public class IncidRegAcTest {
+
+    final static AtomicReference<String> flagMethodExec_1 = new AtomicReference<>(BEFORE_METHOD_EXEC);
 
     @Rule
     public IntentsTestRule<IncidRegAc> intentRule = new IntentsTestRule<IncidRegAc>(IncidRegAc.class) {
@@ -63,11 +78,10 @@ public class IncidRegAcTest_1 {
         }
     };
 
-
     int activityLayoutId = R.id.incid_reg_ac_layout;
     int fragmentLayoutId = R.id.incid_reg_frg;
     AmbitoIncidValueObj ambitoObj = new AmbitoIncidValueObj((short) 10, "Calefacción comunitaria");
-    private IncidRegAc activity;
+    IncidRegAc activity;
 
     @Before
     public void setUp() throws Exception
@@ -81,25 +95,25 @@ public class IncidRegAcTest_1 {
         cleanOptions(CLEAN_PEPE);
     }
 
-    //  ================================ INTEGRATION ===================================
+    /*  ================================ INTEGRATION ===================================*/
 
     @Test
     public void testRegisterIncidencia_1()
     {
         /* Caso NOT OK: descripción de incidencia no válida.*/
-        doImportanciaSpinner(4);
+        doImportanciaSpinner(activity, 4);
         doAmbitoAndDescripcion(ambitoObj, "descripcion = not valid");
         onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
 
-        checkToastInTest(R.string.error_validation_msg, activity, R.string.incid_reg_descripcion);
+        waitAtMost(2, SECONDS).until(isToastInView(R.string.error_validation_msg, activity, R.string.incid_reg_descripcion));
     }
 
     @Test
     public void testRegisterIncidencia_2() throws UiException
     {
         // Caso OK: incidencia con datos de importancia.
-        doImportanciaSpinner(4);
-        doAmbitoAndDescripcion(ambitoObj, "descripcion is valid");
+        doImportanciaSpinner(activity, 4);
+        doAmbitoAndDescripcion(ambitoObj, "descripcion es valida");
 
         onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
         waitAtMost(3, SECONDS).until(isViewDisplayed(withId(R.id.incid_see_open_by_comu_ac)));
@@ -116,7 +130,7 @@ public class IncidRegAcTest_1 {
 
         waitAtMost(3, SECONDS).until(isViewDisplayed(withId(R.id.incid_see_open_by_comu_ac)));
 
-        checkUp(activityLayoutId, fragmentLayoutId);
+        checkBack(onView(withId(R.id.incid_see_open_by_comu_ac)), activityLayoutId, fragmentLayoutId);
     }
 
     @Test
@@ -127,7 +141,7 @@ public class IncidRegAcTest_1 {
         onData(allOf(is(instanceOf(Comunidad.class)), is(COMU_LA_FUENTE))).perform(click()).check(matches(isDisplayed()));
 
         // Registro de incidencia con importancia.
-        doImportanciaSpinner(4);
+        doImportanciaSpinner(activity, 4);
         doAmbitoAndDescripcion(ambitoObj, "Incidencia La Fuente");
         onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
 
@@ -136,26 +150,49 @@ public class IncidRegAcTest_1 {
         checkUp(activityLayoutId, fragmentLayoutId);
     }
 
-//    =======================   HELPER METHODS ========================
+    //    =======================   UNIT TESTS ========================
 
-    private void doImportanciaSpinner(int i)
+    @Test
+    public void testOnCreate()
     {
-        onView(withId(R.id.incid_reg_importancia_spinner)).perform(click());
-        onData
-                (allOf(
-                        is(instanceOf(String.class)),
-                        is(activity.getResources().getStringArray(R.array.IncidImportanciaArray)[i]))
-                )
-                .perform(click());
+        assertThat(activity.getViewerAsParent(), notNullValue());
+        IncidRegFr fragment =  (IncidRegFr) activity.getSupportFragmentManager().findFragmentById(R.id.incid_reg_frg);
+        assertThat(fragment.viewerInjector, instanceOf(IncidRegAc.class));
+        assertThat(fragment.viewer.getParentViewer(), CoreMatchers.<ViewerIf>is(activity.viewer));
     }
 
-    private void doAmbitoAndDescripcion(AmbitoIncidValueObj ambito, String descripcion)
+    @Test
+    public void testOnStop()
     {
-        onView(withId(R.id.incid_reg_ambito_spinner)).perform(click());
-        onData(allOf(
-                is(instanceOf(AmbitoIncidValueObj.class)),
-                is(ambito)
-        )).perform(click());
-        onView(withId(R.id.incid_reg_desc_ed)).perform(typeText(descripcion));
+        Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
+        addSubscription(activity.viewer.getController());
+        instrumentation.callActivityOnStop(activity);
+        assertThat(activity.viewer.getController().getSubscriptions().size(), is(0));
+    }
+
+    @Test
+    public void testOnSaveInstanceState()
+    {
+        activity.viewer = new ViewerIncidRegAc(activity) {
+            @Override
+            public void saveState(Bundle savedState)
+            {
+                assertThat(flagMethodExec_1.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
+            }
+
+            @Override
+            public int clearSubscriptions()  // It is called from onStop() and gives problems.
+            {
+                return 0;
+            }
+        };
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                InstrumentationRegistry.getInstrumentation().callActivityOnSaveInstanceState(activity, new Bundle(0));
+            }
+        });
+        waitAtMost(1, SECONDS).untilAtomic(flagMethodExec_1, is(AFTER_METHOD_EXEC_A));
     }
 }

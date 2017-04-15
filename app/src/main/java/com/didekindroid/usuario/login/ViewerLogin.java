@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.didekindroid.R;
-import com.didekindroid.api.RootViewReplacerIf;
+import com.didekindroid.router.ActivityInitiatorIf;
 import com.didekindroid.api.Viewer;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf;
@@ -38,7 +38,7 @@ import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOU
  * Time: 12:05
  */
 
-class ViewerLogin extends Viewer<View, CtrlerLoginIf> implements ViewerLoginIf, RootViewReplacerIf {
+class ViewerLogin extends Viewer<View, CtrlerLoginIf> implements ViewerLoginIf {
 
     @SuppressWarnings("WeakerAccess")
     final AtomicReference<UsuarioBean> usuarioBean;
@@ -68,7 +68,7 @@ class ViewerLogin extends Viewer<View, CtrlerLoginIf> implements ViewerLoginIf, 
             @Override
             public void onClick(View v)
             {
-                Timber.d("View.OnClickListener().onClick()");
+                Timber.d("View.OnClickListener().onClickLinkToImportanciaUsers()");
                 if (checkLoginData()) {
                     controller.validateLogin(usuarioBean.get().getUsuario());
                 }
@@ -113,7 +113,7 @@ class ViewerLogin extends Viewer<View, CtrlerLoginIf> implements ViewerLoginIf, 
 
         if (isLoginOk) {
             Timber.d("login OK");
-            replaceRootView(new Bundle());
+            initActivity(new Bundle());
         } else {
             int counter = counterWrong.addAndGet(1);
             Timber.d("Password wrong, counterWrong = %d%n", counter - 1);
@@ -167,7 +167,7 @@ class ViewerLogin extends Viewer<View, CtrlerLoginIf> implements ViewerLoginIf, 
     public void doDialogNegativeClick()
     {
         Timber.d("doDialogNegativeClick()");
-        replaceRootView(new Bundle());
+        initActivity(new Bundle());
     }
 
     @Override
@@ -216,10 +216,9 @@ class ViewerLogin extends Viewer<View, CtrlerLoginIf> implements ViewerLoginIf, 
         return counterWrong;
     }
 
-    @Override
-    public void replaceRootView(@NonNull Bundle bundle)
+    public void initActivity(@NonNull Bundle bundle)
     {
-        Timber.d("replaceRootView()");
-        RootViewReplacerIf.class.cast(activity).replaceRootView(bundle);
+        Timber.d("initActivityWithBundle()");
+        ActivityInitiatorIf.class.cast(activity).initActivity(bundle);
     }
 }

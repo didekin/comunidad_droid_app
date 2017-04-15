@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.didekindroid.R;
+import com.didekindroid.router.ActivityInitiator;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 
 import timber.log.Timber;
@@ -21,8 +22,6 @@ import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.resolucion_should_be_initialized;
 import static com.didekindroid.util.AppBundleKey.IS_MENU_IN_FRAGMENT_FLAG;
-import static com.didekindroid.api.ItemMenu.mn_handler;
-import static com.didekindroid.MenuRouter.routerMap;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.formatTimeStampToString;
 import static com.didekindroid.util.UIutils.getStringFromInteger;
@@ -87,7 +86,7 @@ public class IncidResolucionSeeFr extends Fragment {
                 Intent intent = new Intent();
                 intent.putExtra(INCIDENCIA_OBJECT.key, getArguments().getSerializable(INCIDENCIA_OBJECT.key));
                 getActivity().setIntent(intent);
-                mn_handler.doMenuItem(getActivity(), routerMap.get(resourceId));
+                new ActivityInitiator(getActivity()).initActivityFromMn(resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

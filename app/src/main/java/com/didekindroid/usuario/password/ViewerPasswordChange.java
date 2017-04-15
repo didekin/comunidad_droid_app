@@ -7,7 +7,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.didekindroid.R;
-import com.didekindroid.api.RootViewReplacerIf;
+import com.didekindroid.router.ActivityInitiatorIf;
 import com.didekindroid.api.Viewer;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf;
@@ -34,7 +34,7 @@ import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOU
  */
 
 class ViewerPasswordChange extends Viewer<View, CtrlerPasswordChangeIf>
-        implements ViewerPasswordChangeIf, RootViewReplacerIf {
+        implements ViewerPasswordChangeIf, ActivityInitiatorIf {
 
     @SuppressWarnings("WeakerAccess")
     final AtomicReference<UsuarioBean> usuarioBean;
@@ -63,7 +63,7 @@ class ViewerPasswordChange extends Viewer<View, CtrlerPasswordChangeIf>
             @Override
             public void onClick(View v)
             {
-                Timber.d("mModifyButton.OnClickListener().onClick()");
+                Timber.d("mModifyButton.OnClickListener().onClickLinkToImportanciaUsers()");
                 if (checkLoginData()) {
                     assertTrue(usuarioBean.get() != null, bean_fromView_should_be_initialized);
                     controller.changePasswordInRemote(usuarioBean.get().getUsuario());
@@ -122,9 +122,9 @@ class ViewerPasswordChange extends Viewer<View, CtrlerPasswordChangeIf>
     }
 
     @Override
-    public void replaceRootView(@NonNull Bundle bundle)
+    public void initActivity(@NonNull Bundle bundle)
     {
-        Timber.d("replaceRootView()");
-        RootViewReplacerIf.class.cast(activity).replaceRootView(bundle);
+        Timber.d("initActivityWithBundle()");
+        ActivityInitiatorIf.class.cast(activity).initActivity(bundle);
     }
 }

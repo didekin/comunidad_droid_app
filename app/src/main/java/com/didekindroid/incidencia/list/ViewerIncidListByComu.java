@@ -8,7 +8,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.didekindroid.api.CtrlerSelectableItemIf;
-import com.didekindroid.api.RootViewReplacerIf;
+import com.didekindroid.router.ActivityInitiatorIf;
 import com.didekindroid.api.Viewer;
 import com.didekindroid.api.ViewerIf;
 import com.didekindroid.api.ViewerSelectableIf;
@@ -31,7 +31,7 @@ public class ViewerIncidListByComu
         Viewer<ListView, CtrlerSelectableItemIf<IncidenciaUser, Bundle>>
         implements
         ViewerSelectableIf<ListView, CtrlerSelectableItemIf<IncidenciaUser, Bundle>>,
-        RootViewReplacerIf {
+        ActivityInitiatorIf {
 
     private final View emptyListView;
     long incidenciaSelectedIndex;
@@ -107,9 +107,9 @@ public class ViewerIncidListByComu
     }
 
     @Override
-    public void replaceRootView(Bundle bundle)
+    public void initActivity(Bundle bundle)
     {
-        Timber.d("replaceRootView()");
-        RootViewReplacerIf.class.cast(parentViewer).replaceRootView(bundle);
+        Timber.d("initActivityWithBundle()");
+        ActivityInitiatorIf.class.cast(parentViewer).initActivity(bundle);
     }
 }

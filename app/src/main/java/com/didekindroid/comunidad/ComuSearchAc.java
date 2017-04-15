@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.didekindroid.R;
+import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.security.IdentityCacher;
 import com.didekindroid.security.OauthTokenReactorIf;
 import com.didekindroid.util.ConnectionUtils;
@@ -17,13 +18,11 @@ import com.didekindroid.util.UIutils;
 
 import timber.log.Timber;
 
+import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_SEARCH;
 import static com.didekindroid.comunidad.RegComuFr.makeComunidadBeanFromView;
+import static com.didekindroid.router.ActivityRouter.acRouter;
 import static com.didekindroid.security.OauthTokenReactor.tokenReactor;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.DefaultNextAcRouter.acRouter;
-import static com.didekindroid.api.ItemMenu.mn_handler;
-import static com.didekindroid.MenuRouter.getRegisterDependentClass;
-import static com.didekindroid.MenuRouter.routerMap;
 import static com.didekindroid.util.UIutils.doToolBar;
 import static com.didekindroid.util.UIutils.makeToast;
 import static com.didekinlib.model.common.dominio.ValidDataPatterns.LINE_BREAK;
@@ -62,7 +61,7 @@ public class ComuSearchAc extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                Timber.d("View.OnClickListener().onClick()");
+                Timber.d("View.OnClickListener().onClickLinkToImportanciaUsers()");
                 searchComunidad();
             }
         });
@@ -75,7 +74,7 @@ public class ComuSearchAc extends AppCompatActivity {
         identityCacher = TKhandler;
         reactor = tokenReactor;
         // To initialize the token cache. This is the launch activity.
-        TKhandler.refreshAccessToken(reactor);
+        identityCacher.refreshAccessToken(reactor);
     }
 
     void searchComunidad()
@@ -95,8 +94,8 @@ public class ComuSearchAc extends AppCompatActivity {
         } else if (!ConnectionUtils.isInternetConnected(this)) {
             makeToast(this, R.string.no_internet_conn_toast);
         } else {
-            Intent intent = new Intent(this, acRouter.getNextActivity(this.getClass()));
-            intent.putExtra(ComuBundleKey.COMUNIDAD_SEARCH.key, comunidadBean.getComunidad());
+            Intent intent = new Intent(this, acRouter.nextActivity(getClass()));
+            intent.putExtra(COMUNIDAD_SEARCH.key, comunidadBean.getComunidad());
             startActivity(intent);
         }
     }
@@ -121,7 +120,7 @@ public class ComuSearchAc extends AppCompatActivity {
     public boolean onPrepareOptionsMenu(Menu menu)
     {
         Timber.d("onPrepareOptionsMenu()");
-        if (TKhandler.isRegisteredUser()) {
+        if (identityCacher.isRegisteredUser()) {
             menu.findItem(R.id.see_usercomu_by_user_ac_mn).setVisible(true).setEnabled(true);
             menu.findItem(R.id.user_data_ac_mn).setVisible(true).setEnabled(true);
         } else {
@@ -134,16 +133,15 @@ public class ComuSearchAc extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item)
     {
         Timber.d("onOptionsItemSelected()");
-
+        ActivityInitiator activityInitiator = new ActivityInitiator(this);
         int resourceId = item.getItemId();
+
         switch (resourceId) {
             case R.id.user_data_ac_mn:
             case R.id.see_usercomu_by_user_ac_mn:
             case R.id.login_ac_mn:
-                mn_handler.doMenuItem(this, routerMap.get(resourceId));
-                return true;
             case R.id.reg_nueva_comunidad_ac_mn:
-                mn_handler.doMenuItem(this, getRegisterDependentClass(resourceId));
+                activityInitiator.initActivityFromMn(resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

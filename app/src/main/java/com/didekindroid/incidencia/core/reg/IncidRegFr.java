@@ -55,15 +55,15 @@ public class IncidRegFr extends Fragment {
     public void onSaveInstanceState(Bundle savedState)
     {
         Timber.d("onSaveInstanceState()");
-        viewer.saveState(savedState);
         super.onSaveInstanceState(savedState);
+        viewer.saveState(savedState);
     }
 
     @Override
     public void onStop()
     {
         Timber.d("onStop()");
-        viewer.clearSubscriptions();
         super.onStop();
+        viewer.clearSubscriptions();
     }
 }

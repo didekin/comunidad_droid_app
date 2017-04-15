@@ -6,6 +6,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.incidencia.testutils.IncidUiUtils;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
@@ -64,7 +65,7 @@ public class IncidEditAcNoPowerTest_2 extends IncidEditAbstractTest {
 
             /**
              * Preconditions:
-             * 1. An incidImportancia.userComu WITHOUT powers to erase OR modify is passed.
+             * 1. An oldIncidImportancia.userComu WITHOUT powers to erase OR modify is passed.
              * 2. UserComu sin registro IncidImportancia en la incidencia.
              * */
             @Override
@@ -103,13 +104,13 @@ public class IncidEditAcNoPowerTest_2 extends IncidEditAbstractTest {
     @Test
     public void testOnCreate_1() throws Exception
     {
-        checkScreenEditNoPowerFr();
+        IncidUiUtils.checkScreenEditMinFr();
     }
 
     @Test
     public void testOnData_1()
     {
-        checkDataEditNoPowerFr();
+        IncidUiUtils.checkDataEditMinFr(dbHelper, mActivity, incidenciaJuan);
     }
 
     @Test
@@ -130,6 +131,6 @@ public class IncidEditAcNoPowerTest_2 extends IncidEditAbstractTest {
         onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed()));
 
         checkUp();
-        checkScreenEditNoPowerFr();
+        IncidUiUtils.checkScreenEditMinFr();
     }
 }

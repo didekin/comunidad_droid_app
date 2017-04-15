@@ -4,7 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginTop="@dimen/app_bar_bottom_margin"
-    tools:context=".incidencia.core.edit.IncidEditMaxPowerFr">
+    tools:context=".incidencia.core.edit.IncidEditMaxFr">
 
     <include layout="@layout/incid_edit_comunidad_head_include"/>
 

@@ -1,14 +1,15 @@
 package com.didekindroid.incidencia.core.reg;
 
-import android.app.Instrumentation;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.usuario.firebase.CtrlerFirebaseToken;
 import com.didekindroid.usuario.firebase.CtrlerFirebaseTokenIf;
+import com.didekindroid.usuario.firebase.ViewerFirebaseToken;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.AmbitoIncidencia;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
@@ -22,6 +23,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -30,6 +32,9 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.testutil.ActivityTestUtils.addSubscription;
 import static com.didekindroid.testutil.ActivityTestUtils.gcmTokenSentFlag;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
+import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
+import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_B;
+import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
@@ -39,6 +44,7 @@ import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
 import static com.didekinlib.model.common.dominio.ValidDataPatterns.LINE_BREAK;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -51,6 +57,9 @@ import static org.junit.Assert.fail;
  */
 @RunWith(AndroidJUnit4.class)
 public class ViewerIncidRegAcTest {
+
+    final static AtomicReference<String> flagMethodExec_1 = new AtomicReference<>(BEFORE_METHOD_EXEC);
+    final static AtomicReference<String> flagMethodExec_2 = new AtomicReference<>(BEFORE_METHOD_EXEC);
 
     UsuarioComunidad pepeUserComu;
 
@@ -84,6 +93,7 @@ public class ViewerIncidRegAcTest {
     public void clearUp() throws UiException
     {
         viewer.clearSubscriptions();
+        activity.viewer.clearSubscriptions();
         cleanOptions(CLEAN_PEPE);
     }
 
@@ -153,18 +163,56 @@ public class ViewerIncidRegAcTest {
     @Test
     public void testOnSuccessRegisterIncidencia() throws Exception
     {
-        viewer.onSuccessRegisterIncidencia(2);
+        viewer.onSuccessRegisterIncidImportancia(2);
         // Check change of activity.
         waitAtMost(3, SECONDS).until(isViewDisplayed(withId(R.id.incid_see_open_by_comu_ac)));
     }
 
     @Test
-    public void testOnStop()
+    public void testOnSuccessModifyIncidImportancia() throws Exception
     {
-        Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
-        addSubscription(activity.viewer.getController());
-        instrumentation.callActivityOnStop(activity);
-        assertThat(activity.viewer.getController().getSubscriptions().size(), is(0));
+        try {
+            viewer.onSuccessModifyIncidImportancia(2);
+            fail();
+        } catch (Exception ue) {
+            assertThat(ue, instanceOf(UnsupportedOperationException.class));
+        }
+    }
+
+    @Test
+    public void testOnSuccessEraseIncidencia() throws Exception
+    {
+        try {
+            viewer.onSuccessEraseIncidencia(1);
+            fail();
+        } catch (Exception ue) {
+            assertThat(ue, instanceOf(UnsupportedOperationException.class));
+        }
+    }
+
+    @Test
+    public void testSaveState()
+    {
+        ViewerIncidRegFr viewerIncidRegFr = new ViewerIncidRegFr(null, activity, viewer) {
+            @Override
+            public void saveState(Bundle savedState)
+            {
+                assertThat(flagMethodExec_1.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
+            }
+        };
+        ViewerFirebaseToken viewerFirebaseToken = new ViewerFirebaseToken(activity) {
+            @Override
+            public void saveState(Bundle savedState)
+            {
+                assertThat(flagMethodExec_2.getAndSet(AFTER_METHOD_EXEC_B), is(BEFORE_METHOD_EXEC));
+            }
+        };
+        viewerFirebaseToken.setController(new CtrlerFirebaseToken(viewerFirebaseToken));
+        viewer.viewerIncidRegFr = viewerIncidRegFr;
+        viewer.viewerFirebaseToken = viewerFirebaseToken;
+        viewer.saveState(new Bundle());
+        assertThat(flagMethodExec_1.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_A));
+        assertThat(flagMethodExec_2.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_B));
     }
 
     // ...................................... HELPERS ..........................................

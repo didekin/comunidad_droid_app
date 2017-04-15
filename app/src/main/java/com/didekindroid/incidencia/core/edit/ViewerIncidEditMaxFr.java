@@ -1,7 +1,6 @@
 package com.didekindroid.incidencia.core.edit;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
@@ -11,15 +10,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.didekindroid.R;
-import com.didekindroid.api.RootViewReplacer;
-import com.didekindroid.api.RootViewReplacerIf;
-import com.didekindroid.api.Viewer;
 import com.didekindroid.api.ViewerIf;
+import com.didekindroid.incidencia.core.CtrlerIncidRegEditFr;
 import com.didekindroid.incidencia.core.IncidImportanciaBean;
 import com.didekindroid.incidencia.core.IncidenciaBean;
 import com.didekindroid.incidencia.core.ViewerAmbitoIncidSpinner;
 import com.didekindroid.incidencia.core.ViewerImportanciaSpinner;
-import com.didekindroid.incidencia.list.importancia.IncidSeeUserComuImportanciaAc;
+import com.didekindroid.incidencia.core.ViewerIncidRegEdit;
+import com.didekindroid.router.ActivityInitiator;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
 import java.io.Serializable;
@@ -43,18 +41,18 @@ import static com.didekindroid.util.UIutils.makeToast;
  * Date: 04/04/17
  * Time: 15:06
  */
-class ViewerIncidEditMaxFr extends Viewer<View, CtrlerIncidEditMaxFr> implements
-        RootViewReplacerIf {
+class ViewerIncidEditMaxFr extends ViewerIncidRegEdit implements
+        LinkToImportanciaUsersClickable {
 
+    final boolean hasResolucion;
     IncidImportancia incidImportancia;
-    private boolean hasAdmAuthority;
-    private IncidenciaBean incidenciaBean;
-    private IncidImportanciaBean incidImportanciaBean;
-    private final boolean hasResolucion;
-    private ViewerAmbitoIncidSpinner viewerAmbitoIncidSpinner;
-    private ViewerImportanciaSpinner viewerImportanciaSpinner;
+    IncidenciaBean incidenciaBean;
+    IncidImportanciaBean incidImportanciaBean;
+    ViewerAmbitoIncidSpinner viewerAmbitoIncidSpinner;
+    ViewerImportanciaSpinner viewerImportanciaSpinner;
 
-    ViewerIncidEditMaxFr(View view, Activity activity, ViewerIf parentViewer, boolean flagResolucion)
+    @SuppressWarnings("WeakerAccess")
+    public ViewerIncidEditMaxFr(View view, Activity activity, ViewerIf parentViewer, boolean flagResolucion)
     {
         super(view, activity, parentViewer);
         hasResolucion = flagResolucion;
@@ -71,10 +69,15 @@ class ViewerIncidEditMaxFr extends Viewer<View, CtrlerIncidEditMaxFr> implements
                 newViewerAmbitoIncidSpinner((Spinner) frView.findViewById(R.id.incid_reg_ambito_spinner), activity, instance);
         instance.viewerImportanciaSpinner =
                 newViewerImportanciaSpinner((Spinner) frView.findViewById(R.id.incid_reg_importancia_spinner), activity, instance);
-        instance.setController(new CtrlerIncidEditMaxFr(instance));
+        instance.setController(new CtrlerIncidRegEditFr(instance));
         return instance;
     }
 
+    /**
+     * Preconditions:
+     * 1. An incidencia with resolucion is not allowed to be erased.
+     * 2. An incidencia can be erased by a user with adm function.
+     */
     @Override
     public void doViewInViewer(Bundle savedState, Serializable viewBean)
     {
@@ -82,26 +85,39 @@ class ViewerIncidEditMaxFr extends Viewer<View, CtrlerIncidEditMaxFr> implements
 
         incidImportancia = IncidImportancia.class.cast(viewBean);
         doViewBeans();
-        hasAdmAuthority = incidImportancia.getUserComu().hasAdministradorAuthority();
 
         viewerAmbitoIncidSpinner.doViewInViewer(savedState, incidenciaBean);
         viewerImportanciaSpinner.doViewInViewer(savedState, incidImportanciaBean);
 
-        ((TextView) view.findViewById(R.id.incid_comunidad_txt)).setText(incidImportancia.getUserComu().getComunidad().getNombreComunidad());
-        ((EditText) view.findViewById(R.id.incid_reg_desc_ed)).setText(incidenciaBean.getDescripcion());
+        ((TextView) view.findViewById(R.id.incid_comunidad_txt)).setText(incidImportancia.getIncidencia().getComunidad().getNombreComunidad());
+        ((EditText) view.findViewById(R.id.incid_reg_desc_ed)).setText(incidImportancia.getIncidencia().getDescripcion());
 
         TextView linkToImportanciaUsersView = (TextView) view.findViewById(R.id.incid_importancia_otros_view);
-        linkToImportanciaUsersView.setOnClickListener(new LinkImportanciaUsersListener());
+        linkToImportanciaUsersView.setOnClickListener(new LinkToImportanciaUsersListener(this));
 
         Button buttonModify = (Button) view.findViewById(R.id.incid_edit_fr_modif_button);
-        buttonModify.setOnClickListener(new ButtonModifyListener());
+        buttonModify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                Timber.d("onClickLinkToImportanciaUsers()");
+                onClickButtonModify();
+            }
+        });
 
         Button buttonErase = (Button) view.findViewById(R.id.incid_edit_fr_borrar_button);
-        if (!hasAdmAuthority || hasResolucion) {
+        if (hasResolucion || !incidImportancia.getUserComu().hasAdministradorAuthority()) {
             buttonErase.setVisibility(GONE);
             view.findViewById(R.id.incid_edit_fr_borrar_txt).setVisibility(GONE);
         } else {
-            buttonErase.setOnClickListener(new ButtonEraseListener());
+            buttonErase.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v)
+                {
+                    Timber.d("mButtonErase.onClickLinkToImportanciaUsers()");
+                    onClickButtonErase();
+                }
+            });
         }
     }
 
@@ -115,16 +131,16 @@ class ViewerIncidEditMaxFr extends Viewer<View, CtrlerIncidEditMaxFr> implements
         incidenciaBean = new IncidenciaBean();
         incidImportanciaBean = new IncidImportanciaBean();
         incidenciaBean.setCodAmbitoIncid(incidImportancia.getIncidencia().getAmbitoIncidencia().getAmbitoId());
+        incidenciaBean.setComunidadId(incidImportancia.getIncidencia().getComunidadId());
         incidImportanciaBean.setImportancia(incidImportancia.getImportancia());
     }
 
-    @SuppressWarnings("WeakerAccess")
-    void onClickLinkImportanciaUsers()
+    public void onClickLinkToImportanciaUsers(LinkToImportanciaUsersListener listener)
     {
-        Timber.d("onClickLinkImportanciaUsers()");
-        Intent intent = new Intent(getActivity(), IncidSeeUserComuImportanciaAc.class);
-        intent.putExtra(INCIDENCIA_OBJECT.key, incidImportancia.getIncidencia());
-        activity.startActivity(intent);
+        Timber.d("LinkToImportanciaUsersListener.onClickLinkToImportanciaUsers()");
+        Bundle bundle = new Bundle(1);
+        bundle.putSerializable(INCIDENCIA_OBJECT.key, incidImportancia.getIncidencia());
+        new ActivityInitiator(activity).initActivityFromListener(bundle, listener);
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -155,63 +171,45 @@ class ViewerIncidEditMaxFr extends Viewer<View, CtrlerIncidEditMaxFr> implements
     void onClickButtonErase()
     {
         Timber.d("onClickButtonErase()");
-        assertTrue(hasAdmAuthority, usercomu_should_have_admAuthority);
+        assertTrue(incidImportancia.getUserComu().hasAdministradorAuthority(), usercomu_should_have_admAuthority);
 
         if (checkInternetConnected(getActivity())) {
             controller.eraseIncidencia(incidImportancia.getIncidencia());
         }
     }
 
-    void onSuccessModifyIncidImportancia(int rowInserted)
+    public void onSuccessModifyIncidImportancia(int rowInserted)
     {
         Timber.d("onSuccessModifyIncidImportancia()");
         assertTrue(rowInserted >= 1, incid_importancia_should_be_modified);
-        replaceRootView(new Bundle(0));
+        new ActivityInitiator(activity).initActivityWithBundle(new Bundle(0));
     }
 
-    void onSuccessEraseIncidencia(int rowsDeleted)
+    public void onSuccessEraseIncidencia(int rowsDeleted)
     {
         Timber.d("onSuccessEraseIncidencia()");
         assertTrue(rowsDeleted == 1, incidencia_should_be_deleted);
-        replaceRootView(new Bundle(0));
+        new ActivityInitiator(activity).initActivityWithBundle(new Bundle(0));
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    @Override
+    public int clearSubscriptions()
+    {
+        Timber.d("clearSubscriptions()");
+        return getController().clearSubscriptions()
+                + viewerImportanciaSpinner.clearSubscriptions()
+                + viewerAmbitoIncidSpinner.clearSubscriptions();
     }
 
     @Override
-    public void replaceRootView(@NonNull Bundle bundle)
+    public void saveState(Bundle savedState)
     {
-        Timber.d("replaceRootView()");
-        new RootViewReplacer(activity).replaceRootView(bundle);
+        Timber.d("saveState()");
+        viewerAmbitoIncidSpinner.saveState(savedState);
+        viewerImportanciaSpinner.saveState(savedState);
     }
 
-    //    ............................... HELPERS .................................
+    // ==================================== HELPERS ======================================
 
-    @SuppressWarnings("WeakerAccess")
-    class LinkImportanciaUsersListener implements View.OnClickListener {
-        @Override
-        public void onClick(View v)
-        {
-            Timber.d("onClick()");
-            onClickLinkImportanciaUsers();
-        }
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    class ButtonModifyListener implements View.OnClickListener {
-        @Override
-        public void onClick(View v)
-        {
-            Timber.d("onClick()");
-            onClickButtonModify();
-        }
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    class ButtonEraseListener implements View.OnClickListener {
-        @Override
-        public void onClick(View v)
-        {
-            Timber.d("mButtonErase.onClick()");
-            onClickButtonErase();
-        }
-    }
 }

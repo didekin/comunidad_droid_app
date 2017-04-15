@@ -9,8 +9,8 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.didekindroid.R;
-import com.didekindroid.api.RootViewReplacer;
-import com.didekindroid.api.RootViewReplacerIf;
+import com.didekindroid.router.ActivityInitiatorIf;
+import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.api.Viewer;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf;
@@ -39,7 +39,7 @@ import static com.didekinlib.http.GenericExceptionMsg.BAD_REQUEST;
  * Time: 10:27
  */
 class ViewerUserData extends Viewer<View, CtrlerUserDataIf> implements ViewerUserDataIf,
-        RootViewReplacerIf {
+        ActivityInitiatorIf {
 
     private final EditText emailView;
     private final EditText aliasView;
@@ -89,7 +89,7 @@ class ViewerUserData extends Viewer<View, CtrlerUserDataIf> implements ViewerUse
             @Override
             public void onClick(View v)
             {
-                Timber.d("mModifyButton.OnClickListener().onClick()");
+                Timber.d("mModifyButton.OnClickListener().onClickLinkToImportanciaUsers()");
                 if (checkUserData()) {
                     modifyUserData(whatDataChangeToMake());
                 }
@@ -203,9 +203,9 @@ class ViewerUserData extends Viewer<View, CtrlerUserDataIf> implements ViewerUse
     }
 
     @Override
-    public void replaceRootView(Bundle bundle)
+    public void initActivity(Bundle bundle)
     {
-       Timber.d("replaceRootView()");
-        RootViewReplacer.class.cast(activity).replaceRootView(bundle);
+       Timber.d("initActivityWithBundle()");
+        ActivityInitiator.class.cast(activity).initActivityWithBundle(bundle);
     }
 }

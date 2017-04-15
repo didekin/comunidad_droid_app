@@ -6,6 +6,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.incidencia.testutils.IncidUiUtils;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
@@ -97,6 +98,6 @@ public class IncidEditAcTest_Mn2 extends IncidEditAbstractTest {
         intended(not(hasExtraWithKey(INCID_RESOLUCION_OBJECT.key)));
 
         checkUp();
-        checkScreenEditMaxPowerFr();
+        IncidUiUtils.checkScreenEditMaxPowerFr(incidImportanciaIntent, flagResolucionIntent);
     }
 }

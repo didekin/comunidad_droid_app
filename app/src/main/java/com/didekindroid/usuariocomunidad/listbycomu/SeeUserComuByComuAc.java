@@ -6,12 +6,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.didekindroid.R;
+import com.didekindroid.router.ActivityInitiator;
 
 import timber.log.Timber;
 
-import static com.didekindroid.api.ItemMenu.mn_handler;
-import static com.didekindroid.MenuRouter.doUpMenu;
-import static com.didekindroid.MenuRouter.routerMap;
+import static com.didekindroid.router.ActivityRouter.doUpMenu;
 import static com.didekindroid.util.UIutils.doToolBar;
 
 /**
@@ -62,7 +61,7 @@ public class SeeUserComuByComuAc extends AppCompatActivity {
             case R.id.see_usercomu_by_user_ac_mn:
             case R.id.user_data_ac_mn:
             case R.id.comu_search_ac_mn:
-                mn_handler.doMenuItem(this, routerMap.get(resourceId));
+                new ActivityInitiator(this).initActivityFromMn(resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

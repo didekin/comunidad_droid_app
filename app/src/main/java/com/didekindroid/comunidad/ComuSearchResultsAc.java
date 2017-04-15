@@ -10,6 +10,7 @@ import android.view.MenuItem;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.usuariocomunidad.RegUserAndUserComuAc;
 import com.didekindroid.usuariocomunidad.RegUserComuAc;
 import com.didekindroid.usuariocomunidad.UserComuDataAc;
@@ -23,13 +24,10 @@ import timber.log.Timber;
 
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_SEARCH;
+import static com.didekindroid.router.ActivityRouter.doUpMenu;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
-import static com.didekindroid.api.ItemMenu.mn_handler;
-import static com.didekindroid.MenuRouter.doUpMenu;
-import static com.didekindroid.MenuRouter.getRegisterDependentClass;
-import static com.didekindroid.MenuRouter.routerMap;
 import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.util.UIutils.doToolBar;
 
@@ -124,17 +122,15 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
     public boolean onOptionsItemSelected(MenuItem item)
     {
         Timber.d("onOptionsItemSelected()");
-
+        ActivityInitiator activityInitiator = new ActivityInitiator(this);
         int resourceId = item.getItemId();
         switch (resourceId) {
             case android.R.id.home:
                 doUpMenu(this);
                 return true;
             case R.id.see_usercomu_by_user_ac_mn:
-                mn_handler.doMenuItem(this, routerMap.get(resourceId));
-                return true;
             case R.id.reg_nueva_comunidad_ac_mn:
-                mn_handler.doMenuItem(this, getRegisterDependentClass(resourceId));
+                activityInitiator.initActivityFromMn(resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

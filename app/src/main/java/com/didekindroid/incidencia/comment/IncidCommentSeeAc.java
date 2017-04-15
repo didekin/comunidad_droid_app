@@ -7,15 +7,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.didekindroid.R;
+import com.didekindroid.router.ActivityInitiator;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 
 import timber.log.Timber;
 
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_comments_see_list_fr_tag;
-import static com.didekindroid.api.ItemMenu.mn_handler;
-import static com.didekindroid.MenuRouter.doUpMenu;
-import static com.didekindroid.MenuRouter.routerMap;
+import static com.didekindroid.router.ActivityRouter.doUpMenu;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.doToolBar;
 import static com.didekindroid.util.CommonAssertionMsg.fragment_should_be_initialized;
@@ -79,6 +78,7 @@ public class IncidCommentSeeAc extends AppCompatActivity {
     {
         Timber.d("onOptionsItemSelected()");
 
+        ActivityInitiator activityInitiator = new ActivityInitiator(this);
         int resourceId = item.getItemId();
 
         switch (resourceId) {
@@ -88,7 +88,7 @@ public class IncidCommentSeeAc extends AppCompatActivity {
             case R.id.incid_comment_reg_ac_mn:
                 Intent intent = new Intent();
                 intent.putExtra(INCIDENCIA_OBJECT.key, mIncidencia);
-                mn_handler.doMenuItem(this, routerMap.get(resourceId));
+                activityInitiator.initActivityFromMn(resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

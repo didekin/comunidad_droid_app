@@ -8,9 +8,9 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.api.RootViewReplacer;
-import com.didekindroid.api.RootViewReplacerIf;
-import com.didekindroid.MenuRouter;
+import com.didekindroid.router.ActivityInitiatorIf;
+import com.didekindroid.router.ActivityInitiator;
+import com.didekindroid.router.ActivityRouter;
 import com.didekinlib.model.usuario.Usuario;
 
 import timber.log.Timber;
@@ -32,7 +32,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * 1c. If the userName exists, but the passowrd is not correct, after three failed intents,  a new passord is sent
  * by mail, after her confirmation.
  */
-public class LoginAc extends AppCompatActivity implements RootViewReplacerIf {
+public class LoginAc extends AppCompatActivity implements ActivityInitiatorIf {
 
     View acView;
     ViewerLoginIf viewerLogin;
@@ -68,10 +68,10 @@ public class LoginAc extends AppCompatActivity implements RootViewReplacerIf {
     }
 
     @Override
-    public void replaceRootView(Bundle bundle)
+    public void initActivity(Bundle bundle)
     {
-        Timber.d("replaceView()");
-        new RootViewReplacer(this).replaceRootView(bundle, FLAG_ACTIVITY_NEW_TASK);
+        Timber.d("initActivityWithBundle()");
+        new ActivityInitiator(this).initActivityWithFlag(bundle, FLAG_ACTIVITY_NEW_TASK);
         finish();
     }
 
@@ -87,7 +87,7 @@ public class LoginAc extends AppCompatActivity implements RootViewReplacerIf {
 
         switch (resourceId) {
             case android.R.id.home:
-                MenuRouter.doUpMenu(this);
+                ActivityRouter.doUpMenu(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

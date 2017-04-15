@@ -6,6 +6,7 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.exception.UiException;
+import com.didekindroid.incidencia.core.CtrlerIncidRegEditFr;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
@@ -40,11 +41,11 @@ import static org.junit.Assert.fail;
  * Time: 10:36
  */
 @RunWith(AndroidJUnit4.class)
-public class CtrlerIncidEditMaxFrTest {
+public class CtrlerIncidRegEditFr_Edit_Test {
 
     final static AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
 
-    CtrlerIncidEditMaxFr controller;
+    CtrlerIncidRegEditFr controller;
     UsuarioComunidad pepeUserComu;
     IncidImportancia incidImportancia;
 
@@ -65,25 +66,12 @@ public class CtrlerIncidEditMaxFrTest {
         }
     };
 
+    Activity activity;
+
     @Before
     public void setUp()
     {
-        Activity activity = activityRule.getActivity();
-        controller = new CtrlerIncidEditMaxFr(new ViewerIncidEditMaxFr(null, activity, null, false) {
-            @Override
-            void onSuccessModifyIncidImportancia(int rowInserted)
-            {
-                assertThat(rowInserted >= 1, is(true));
-                assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
-            }
-
-            @Override
-            void onSuccessEraseIncidencia(int rowsDeleted)
-            {
-                assertThat(rowsDeleted, is(1));
-                assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_B), is(BEFORE_METHOD_EXEC));
-            }
-        });
+        activity = activityRule.getActivity();
     }
 
     @After
@@ -98,6 +86,8 @@ public class CtrlerIncidEditMaxFrTest {
     @Test
     public void testModifyIncidImportancia() throws Exception
     {
+        doCtrlerForViewerMax();
+
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
@@ -119,6 +109,8 @@ public class CtrlerIncidEditMaxFrTest {
     @Test
     public void testEraseIncidencia() throws Exception
     {
+        doCtrlerForViewerMax();
+
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
@@ -128,5 +120,33 @@ public class CtrlerIncidEditMaxFrTest {
         }
         assertThat(controller.getSubscriptions().size(), is(1));
         assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_B));
+    }
+
+    @Test
+    public void testGetAmbitoIncidDesc() throws Exception
+    {
+        controller = new CtrlerIncidRegEditFr(new ViewerIncidEditMaxFr(null, activity, null, false));
+        assertThat(controller.getAmbitoIncidDesc((short) 9), is("Buzones"));
+    }
+
+    //    ============================= Helpers ===============================
+
+    private void doCtrlerForViewerMax()
+    {
+        controller = new CtrlerIncidRegEditFr(new ViewerIncidEditMaxFr(null, activity, null, false) {
+            @Override
+            public void onSuccessModifyIncidImportancia(int rowInserted)
+            {
+                assertThat(rowInserted >= 1, is(true));
+                assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
+            }
+
+            @Override
+            public void onSuccessEraseIncidencia(int rowsDeleted)
+            {
+                assertThat(rowsDeleted, is(1));
+                assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_B), is(BEFORE_METHOD_EXEC));
+            }
+        });
     }
 }

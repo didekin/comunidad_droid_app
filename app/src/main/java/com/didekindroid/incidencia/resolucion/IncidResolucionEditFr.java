@@ -67,7 +67,7 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
             @Override
             public void onClick(View v)
             {
-                Timber.d("View.OnClickListener().onClick()");
+                Timber.d("View.OnClickListener().onClickLinkToImportanciaUsers()");
                 modifyResolucion(false);
             }
         });
@@ -76,7 +76,7 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
             @Override
             public void onClick(View v)
             {
-                Timber.d("View.OnClickListener().onClick()");
+                Timber.d("View.OnClickListener().onClickLinkToImportanciaUsers()");
                 modifyResolucion(true);
             }
         });

@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ViewerIf;
@@ -15,9 +14,11 @@ import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
 import timber.log.Timber;
 
+import static com.didekindroid.incidencia.core.edit.ViewerIncidEditMaxFr.newViewerIncidEditMaxFr;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.incid_importancia_should_be_initialized;
+import static com.didekindroid.util.CommonAssertionMsg.intent_extra_should_be_initialized;
 import static com.didekindroid.util.UIutils.assertTrue;
 
 /**
@@ -25,15 +26,13 @@ import static com.didekindroid.util.UIutils.assertTrue;
  * Date: 22/01/16
  * Time: 16:16
  */
-public class IncidEditMaxPowerFr extends Fragment {
-
-    Button mButtonModify;
-    Button mButtonErase;
+@SuppressWarnings("ConstantConditions")
+public class IncidEditMaxFr extends Fragment {
 
     View frView;
     ViewerParentInjectorIf viewerInjector;
     /**
-     * Instantiated by the activity (ViewerIncidRegAc).
+     * Instantiated by the activity (ViewerIncidEditAc).
      */
     ViewerIncidEditMaxFr viewer;
 
@@ -53,17 +52,31 @@ public class IncidEditMaxPowerFr extends Fragment {
 
         IncidImportancia incidImportancia = (IncidImportancia) getArguments().getSerializable(INCID_IMPORTANCIA_OBJECT.key);
         // Preconditions.
-        assertTrue(incidImportancia != null
-                && incidImportancia.getUserComu() != null
-                && incidImportancia.getIncidencia() != null
+        assertTrue(incidImportancia.getUserComu() != null
                 && incidImportancia.getIncidencia().getIncidenciaId() > 0, incid_importancia_should_be_initialized);
+        assertTrue(getArguments().containsKey(INCID_RESOLUCION_FLAG.key), intent_extra_should_be_initialized);
 
         boolean flagResolucion = getArguments().getBoolean(INCID_RESOLUCION_FLAG.key);
-        boolean flagHasAdmAuthority = incidImportancia.getUserComu().hasAdministradorAuthority();
 
         viewerInjector = (ViewerParentInjectorIf) getActivity();
         ViewerIf parentViewer = viewerInjector.getViewerAsParent();
-        viewer = ViewerIncidEditMaxFr.newViewerIncidEditMaxFr(frView, parentViewer, flagResolucion);
+        viewer = newViewerIncidEditMaxFr(frView, parentViewer, flagResolucion);
         viewer.doViewInViewer(savedInstanceState, incidImportancia);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState)
+    {
+        Timber.d("onSaveInstanceState()");
+        super.onSaveInstanceState(outState);
+        viewer.saveState(outState);
+    }
+
+    @Override
+    public void onStop()
+    {
+        Timber.d("onStop()");
+        viewer.clearSubscriptions();
+        super.onStop();
     }
 }

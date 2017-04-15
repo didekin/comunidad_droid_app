@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.didekindroid.R;
+import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.security.IdentityCacher;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
@@ -15,9 +16,7 @@ import timber.log.Timber;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
 import static com.didekindroid.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;
-import static com.didekindroid.api.ItemMenu.mn_handler;
-import static com.didekindroid.MenuRouter.doUpMenu;
-import static com.didekindroid.MenuRouter.routerMap;
+import static com.didekindroid.router.ActivityRouter.doUpMenu;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.doToolBar;
 
@@ -75,7 +74,7 @@ public class SeeUserComuByUserAc extends AppCompatActivity implements
                 return true;
             case R.id.user_data_ac_mn:
             case R.id.comu_search_ac_mn:
-                mn_handler.doMenuItem(this, routerMap.get(resourceId));
+                new ActivityInitiator(this).initActivityFromMn(resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

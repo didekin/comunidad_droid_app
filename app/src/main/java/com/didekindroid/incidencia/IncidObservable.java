@@ -20,9 +20,9 @@ import static io.reactivex.Single.fromCallable;
 
 public class IncidObservable {
 
-    public static Single<Integer> incidenciaRegistered(final IncidImportancia incidImportancia)
+    public static Single<Integer> incidImportanciaRegistered(final IncidImportancia incidImportancia)
     {
-        Timber.d("incidenciaRegistered()");
+        Timber.d("incidImportanciaRegistered()");
         return fromCallable(new Callable<Integer>() {
             @Override
             public Integer call() throws Exception

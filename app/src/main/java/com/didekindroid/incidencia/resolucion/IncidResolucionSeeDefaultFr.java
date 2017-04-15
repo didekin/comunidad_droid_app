@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.didekindroid.R;
+import com.didekindroid.router.ActivityInitiator;
 
 import timber.log.Timber;
 
@@ -19,8 +20,6 @@ import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.resolucion_argFragment_should_be_initialized;
 import static com.didekindroid.util.AppBundleKey.IS_MENU_IN_FRAGMENT_FLAG;
-import static com.didekindroid.api.ItemMenu.mn_handler;
-import static com.didekindroid.MenuRouter.routerMap;
 import static com.didekindroid.util.UIutils.assertTrue;
 
 /**
@@ -81,7 +80,7 @@ public class IncidResolucionSeeDefaultFr extends Fragment {
                 Intent intent = new Intent();
                 intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, getArguments().getSerializable(INCID_IMPORTANCIA_OBJECT.key));
                 getActivity().setIntent(intent);
-                mn_handler.doMenuItem(getActivity(), routerMap.get(resourceId));
+                new ActivityInitiator(getActivity()).initActivityFromMn(resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

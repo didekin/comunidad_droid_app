@@ -10,11 +10,11 @@ import com.didekindroid.api.Viewer;
  * Date: 09/03/17
  * Time: 21:11
  */
-public final class ViewerFirebaseToken extends Viewer<View, CtrlerFirebaseTokenIf> implements
+public class ViewerFirebaseToken extends Viewer<View, CtrlerFirebaseTokenIf> implements
         ViewerFirebaseTokenIf<View> {
 
 
-    private ViewerFirebaseToken(Activity activity)
+    public ViewerFirebaseToken(Activity activity)
     {
         super(null, activity, null);
     }

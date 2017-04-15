@@ -15,6 +15,7 @@ import com.didekindroid.comunidad.ComuBundleKey;
 import com.didekindroid.comunidad.ComuSearchAc;
 import com.didekindroid.comunidad.ComunidadBean;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.security.IdentityCacher;
 import com.didekindroid.util.ConnectionUtils;
 import com.didekinlib.model.comunidad.Comunidad;
@@ -29,9 +30,7 @@ import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_regist
 import static com.didekindroid.usuariocomunidad.UserComuAssertionMsg.userComu_should_be_deleted;
 import static com.didekindroid.usuariocomunidad.UserComuAssertionMsg.userComu_should_be_modified;
 import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
-import static com.didekindroid.api.ItemMenu.mn_handler;
-import static com.didekindroid.MenuRouter.doUpMenu;
-import static com.didekindroid.MenuRouter.routerMap;
+import static com.didekindroid.router.ActivityRouter.doUpMenu;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.util.UIutils.doToolBar;
@@ -88,7 +87,7 @@ public class UserComuDataAc extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                Timber.d("mModifyButton.OnClickListener().onClick()");
+                Timber.d("mModifyButton.OnClickListener().onClickLinkToImportanciaUsers()");
                 modifyUserComuData();
             }
         });
@@ -98,7 +97,7 @@ public class UserComuDataAc extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                Timber.d("mDeleteButton.OnClickListener().onClick()");
+                Timber.d("mDeleteButton.OnClickListener().onClickLinkToImportanciaUsers()");
                 deleteUserComuData();
             }
         });
@@ -165,12 +164,12 @@ public class UserComuDataAc extends AppCompatActivity {
             case R.id.comu_data_ac_mn:
                 Intent intent = new Intent();
                 intent.putExtra(ComuBundleKey.COMUNIDAD_ID.key, mOldUserComu.getComunidad().getC_Id());
-                this.setIntent(intent);
-                mn_handler.doMenuItem(this, routerMap.get(resourceId));
+                setIntent(intent);
+                new ActivityInitiator(this).initActivityFromMn(resourceId);
                 return true;
             case R.id.incid_see_open_by_comu_ac_mn:
             case R.id.incid_reg_ac_mn:
-                mn_handler.doMenuItem(this, routerMap.get(resourceId));
+                new ActivityInitiator(this).initActivityFromMn(resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

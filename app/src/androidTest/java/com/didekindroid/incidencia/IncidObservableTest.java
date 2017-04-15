@@ -17,7 +17,7 @@ import java.io.IOException;
 
 import static com.didekindroid.incidencia.IncidObservable.incidImportanciaModified;
 import static com.didekindroid.incidencia.IncidObservable.incidenciaDeleted;
-import static com.didekindroid.incidencia.IncidObservable.incidenciaRegistered;
+import static com.didekindroid.incidencia.IncidObservable.incidImportanciaRegistered;
 import static com.didekindroid.incidencia.IncidObservable.resolucion;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doIncidencia;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetDefaultResolucion;
@@ -59,7 +59,7 @@ public class IncidObservableTest {
     @Test
     public void tesIncidenciaRegistered() throws Exception
     {
-        incidenciaRegistered(
+        incidImportanciaRegistered(
                 doIncidImportancia()
         ).test().assertResult(2);
     }

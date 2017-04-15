@@ -14,6 +14,7 @@ import com.didekindroid.R;
 import com.didekindroid.comunidad.ComuBundleKey;
 import com.didekindroid.comunidad.ComunidadBean;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.security.IdentityCacher;
 import com.didekindroid.usuario.RegUserFr;
 import com.didekindroid.usuario.UsuarioBean;
@@ -35,9 +36,7 @@ import static com.didekindroid.security.Oauth2DaoRemote.Oauth2;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_not_be_registered;
 import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
-import static com.didekindroid.api.ItemMenu.mn_handler;
-import static com.didekindroid.MenuRouter.doUpMenu;
-import static com.didekindroid.MenuRouter.routerMap;
+import static com.didekindroid.router.ActivityRouter.doUpMenu;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.util.UIutils.doToolBar;
@@ -96,7 +95,7 @@ public class RegUserAndUserComuAc extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                Timber.d("View.OnClickListener().onClick()");
+                Timber.d("View.OnClickListener().onClickLinkToImportanciaUsers()");
                 registerUserAndUserComu();
             }
         });
@@ -155,7 +154,7 @@ public class RegUserAndUserComuAc extends AppCompatActivity {
                 doUpMenu(this);
                 return true;
             case R.id.login_ac_mn:
-                mn_handler.doMenuItem(this, routerMap.get(resourceId));
+                new ActivityInitiator(this).initActivityFromMn(resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

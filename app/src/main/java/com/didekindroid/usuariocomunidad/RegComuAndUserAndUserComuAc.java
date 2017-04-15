@@ -14,6 +14,7 @@ import com.didekindroid.R;
 import com.didekindroid.comunidad.ComunidadBean;
 import com.didekindroid.comunidad.RegComuFr;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.usuario.RegUserFr;
 import com.didekindroid.usuario.UsuarioBean;
 import com.didekindroid.util.ConnectionUtils;
@@ -26,13 +27,11 @@ import java.io.IOException;
 
 import timber.log.Timber;
 
+import static com.didekindroid.router.ActivityRouter.acRouter;
+import static com.didekindroid.router.ActivityRouter.doUpMenuWithIntent;
 import static com.didekindroid.security.Oauth2DaoRemote.Oauth2;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
-import static com.didekindroid.api.ItemMenu.mn_handler;
-import static com.didekindroid.MenuRouter.doUpMenuWithIntent;
-import static com.didekindroid.MenuRouter.getRegisterDependentClass;
-import static com.didekindroid.MenuRouter.routerMap;
 import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.util.UIutils.doToolBar;
 import static com.didekindroid.util.UIutils.makeToast;
@@ -73,7 +72,7 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                Timber.d("View.OnClickListener().onClick()");
+                Timber.d("View.OnClickListener().onClickLinkToImportanciaUsers()");
                 registerComuAndUserComuAndUser();
             }
         });
@@ -131,11 +130,11 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity {
         int resourceId = item.getItemId();
         switch (resourceId) {
             case android.R.id.home:
-                Intent intent = new Intent(this, getRegisterDependentClass(resourceId));
+                Intent intent = new Intent(this, acRouter.nextActivityFromMn(resourceId));
                 doUpMenuWithIntent(this, intent);
                 return true;
             case R.id.login_ac_mn:
-                mn_handler.doMenuItem(this, routerMap.get(resourceId));
+                new ActivityInitiator(this).initActivityFromMn(resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

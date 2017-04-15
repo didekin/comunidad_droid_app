@@ -81,7 +81,7 @@ class CtrlerPasswordChange extends CtrlerIdentity<View>
     public void onSuccessChangedPswd()
     {
         Timber.d("onSuccessChangedPswd()");
-        ViewerPasswordChange.class.cast(viewer).replaceRootView(new Bundle());
+        ViewerPasswordChange.class.cast(viewer).initActivity(new Bundle());
     }
 
     // ............................ SUBSCRIBERS ..................................

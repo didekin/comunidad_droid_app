@@ -7,9 +7,9 @@ import android.view.View;
 import android.widget.Button;
 
 import com.didekindroid.R;
-import com.didekindroid.api.RootViewReplacer;
-import com.didekindroid.api.RootViewReplacerIf;
-import com.didekindroid.MenuRouter;
+import com.didekindroid.router.ActivityInitiatorIf;
+import com.didekindroid.router.ActivityInitiator;
+import com.didekindroid.router.ActivityRouter;
 
 import timber.log.Timber;
 
@@ -25,7 +25,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * Postconditions:
  * 1. Unregistered user, if she chooses so. ComuSearchAc is to be showed.
  */
-public class DeleteMeAc extends AppCompatActivity implements RootViewReplacerIf {
+public class DeleteMeAc extends AppCompatActivity implements ActivityInitiatorIf {
 
     View acView;
     CtrlerDeleteMeIf controller;
@@ -45,7 +45,7 @@ public class DeleteMeAc extends AppCompatActivity implements RootViewReplacerIf 
             @Override
             public void onClick(View v)
             {
-                Timber.d("mUnregisterButton.OnClickListener().onClick()");
+                Timber.d("mUnregisterButton.OnClickListener().onClickLinkToImportanciaUsers()");
                 controller.deleteMeRemote();
             }
         });
@@ -71,10 +71,10 @@ public class DeleteMeAc extends AppCompatActivity implements RootViewReplacerIf 
     }
 
     @Override
-    public void replaceRootView(Bundle bundle)
+    public void initActivity(Bundle bundle)
     {
-        Timber.d("replaceView()");
-        new RootViewReplacer(this).replaceRootView(bundle, FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TOP);
+        Timber.d("initActivityWithBundle()");
+        new ActivityInitiator(this).initActivityWithFlag(bundle, FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TOP);
     }
 
     // ============================================================
@@ -90,7 +90,7 @@ public class DeleteMeAc extends AppCompatActivity implements RootViewReplacerIf 
 
         switch (resourceId) {
             case android.R.id.home:
-                MenuRouter.doUpMenu(this);
+                ActivityRouter.doUpMenu(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

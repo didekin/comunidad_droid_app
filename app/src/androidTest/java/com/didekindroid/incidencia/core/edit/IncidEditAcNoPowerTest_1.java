@@ -5,6 +5,7 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
+import com.didekindroid.incidencia.testutils.IncidUiUtils;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum;
 
 import org.junit.BeforeClass;
@@ -31,7 +32,7 @@ import static org.hamcrest.CoreMatchers.is;
  * Time: 16:57
  *
  * Tests genéricos sobre aspecto y tests funcionales para un userComu SIN permisos para modificar o borrar una incidencia.
- * El userComu ya tiene registrada incidImportancia en BD.
+ * El userComu ya tiene registrada oldIncidImportancia en BD.
  */
 @RunWith(AndroidJUnit4.class)
 public class IncidEditAcNoPowerTest_1 extends IncidEditAbstractTest {
@@ -66,13 +67,13 @@ public class IncidEditAcNoPowerTest_1 extends IncidEditAbstractTest {
     @Test
     public void testOnCreate_1() throws Exception
     {
-        checkScreenEditNoPowerFr();
+        IncidUiUtils.checkScreenEditMinFr();
     }
 
     @Test
     public void testOnData_1()
     {
-        checkDataEditNoPowerFr();
+    IncidUiUtils.checkDataEditMinFr(dbHelper, mActivity, incidenciaJuan);
     }
 
     @Test
@@ -92,6 +93,6 @@ public class IncidEditAcNoPowerTest_1 extends IncidEditAbstractTest {
         onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed()));
 
         checkUp();
-        checkScreenEditNoPowerFr();
+        IncidUiUtils.checkScreenEditMinFr();
     }
 }

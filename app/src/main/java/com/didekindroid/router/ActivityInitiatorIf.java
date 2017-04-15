@@ -1,4 +1,4 @@
-package com.didekindroid.api;
+package com.didekindroid.router;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,6 +9,6 @@ import android.support.annotation.NonNull;
  * Time: 10:05
  */
 
-public interface RootViewReplacerIf {
-    void replaceRootView(@NonNull Bundle bundle);
+public interface ActivityInitiatorIf {
+    void initActivity(@NonNull Bundle bundle);
 }

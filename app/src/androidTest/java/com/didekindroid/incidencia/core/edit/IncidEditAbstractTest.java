@@ -94,10 +94,10 @@ public abstract class IncidEditAbstractTest {
 
         //Premisas.
         if (incidImportanciaIntent.getUserComu().hasAdministradorAuthority() || incidImportanciaIntent.isIniciadorIncidencia()) {
-            assertThat(incidEditFr, instanceOf(IncidEditMaxPowerFr.class));
+            assertThat(incidEditFr, instanceOf(IncidEditMaxFr.class));
             assertThat(incidEditFr.getArguments(), hasEntry(INCID_RESOLUCION_FLAG.key, is(flagResolucionIntent)));
         } else {
-            assertThat(incidEditFr, instanceOf(IncidEditNoPowerFr.class));
+            assertThat(incidEditFr, instanceOf(IncidEditMinFr.class));
             assertThat(incidEditFr.getArguments(), not(hasKey(INCID_RESOLUCION_FLAG.key)));
         }
         assertThat(incidEditFr.getArguments(), allOf(
@@ -111,7 +111,6 @@ public abstract class IncidEditAbstractTest {
     @After
     public void tearDown() throws Exception
     {
-        dbHelper.dropAllTables();
         dbHelper.close();
         mActivity.deleteDatabase(DB_NAME);
         cleanOptions(whatToClean());
@@ -149,93 +148,5 @@ public abstract class IncidEditAbstractTest {
         intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, incidenciaJuan);
         intent.putExtra(INCID_RESOLUCION_FLAG.key, false);
         return intent;
-    }
-
-    void checkScreenEditNoPowerFr()
-    {
-        onView(withId(R.id.appbar)).check(matches(isDisplayed()));
-//        assertThat(activity.findViewById(R.id.incid_edit_nopower_fr_layout), notNullValue());
-        onView(withId(R.id.incid_edit_fragment_container_ac)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_edit_nopower_fr_layout)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_comunidad_rot)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_comunidad_txt)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_reg_desc_txt)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_ambito_view)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_reg_importancia_spinner)).check(matches(isDisplayed()));
-        onView(allOf(
-                withId(R.id.incid_edit_fr_modif_button),
-                withText(R.string.incid_importancia_reg_edit_button_rot)
-        )).check(matches(isDisplayed()));
-    }
-
-    protected void checkDataEditNoPowerFr()
-    {
-        onView(allOf(
-                withId(R.id.incid_comunidad_txt),
-                withText(incidenciaJuan.getIncidencia().getComunidad().getNombreComunidad())
-        )).check(matches(isDisplayed()));
-
-        onView(allOf(
-                withId(R.id.incid_reg_desc_txt),
-                withText(incidenciaJuan.getIncidencia().getDescripcion())
-        )).check(matches(isDisplayed()));
-
-        onView(allOf(
-                withId(R.id.incid_ambito_view),
-                withText(dbHelper.getAmbitoDescByPk(incidenciaJuan.getIncidencia().getAmbitoIncidencia().getAmbitoId()))
-        )).check(matches(isDisplayed()));
-
-        onView(allOf(
-                withId(R.id.app_spinner_1_dropdown_item),
-                withParent(withId(R.id.incid_reg_importancia_spinner)),
-                withText(mActivity.getResources().getStringArray(R.array.IncidImportanciaArray)[incidenciaJuan.getImportancia()])
-        )).check(matches(isDisplayed()));
-    }
-
-    void checkScreenEditMaxPowerFr()
-    {
-        onView(withId(R.id.appbar)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_edit_fragment_container_ac)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_edit_maxpower_fr_layout)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_comunidad_rot)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_comunidad_txt)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_reg_desc_ed)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_reg_ambito_spinner)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_reg_importancia_spinner)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_edit_fr_modif_button)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_comunidad_txt)).check(matches(isDisplayed()));
-
-        if (incidImportanciaIntent.getUserComu().hasAdministradorAuthority() && !flagResolucionIntent) {
-            onView(withId(R.id.incid_edit_fr_borrar_txt)).check(matches(isDisplayed()));
-            onView(withId(R.id.incid_edit_fr_borrar_button)).check(matches(isDisplayed()));
-        } else {
-            onView(withId(R.id.incid_edit_fr_borrar_txt)).check(matches(not(isDisplayed())));
-            onView(withId(R.id.incid_edit_fr_borrar_button)).check(matches(not(isDisplayed())));
-        }
-    }
-
-    void checkDataEditMaxPowerFr()
-    {
-        onView(allOf(
-                withId(R.id.incid_comunidad_txt),
-                withText(incidenciaJuan.getIncidencia().getComunidad().getNombreComunidad())
-        )).check(matches(isDisplayed()));
-
-        onView(allOf(
-                withId(R.id.incid_reg_desc_ed),
-                withText(incidenciaJuan.getIncidencia().getDescripcion())
-        )).check(matches(isDisplayed()));
-
-        onView(allOf(
-                withId(R.id.app_spinner_1_dropdown_item),
-                withParent(withId(R.id.incid_reg_ambito_spinner)),
-                withText(dbHelper.getAmbitoDescByPk(incidenciaJuan.getIncidencia().getAmbitoIncidencia().getAmbitoId()))
-        )).check(matches(isDisplayed()));
-
-        onView(allOf(
-                withId(R.id.app_spinner_1_dropdown_item),
-                withParent(withId(R.id.incid_reg_importancia_spinner)),
-                withText(mActivity.getResources().getStringArray(R.array.IncidImportanciaArray)[incidenciaJuan.getImportancia()])
-        )).check(matches(isDisplayed()));
     }
 }

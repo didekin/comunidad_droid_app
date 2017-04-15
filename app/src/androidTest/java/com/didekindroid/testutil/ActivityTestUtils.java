@@ -20,11 +20,11 @@ import com.didekindroid.R;
 import com.didekindroid.api.ControllerIf;
 import com.didekindroid.api.CtrlerSpinner;
 import com.didekindroid.api.CtrlerSpinnerIf;
-import com.didekindroid.api.RootViewReplacerIf;
 import com.didekindroid.api.ViewerIf;
 import com.didekindroid.api.ViewerSelectableIf;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf.ActionForUiExceptionIf;
+import com.didekindroid.router.ActivityInitiatorIf;
 import com.didekindroid.security.IdentityCacher;
 import com.didekindroid.usuario.firebase.CtrlerFirebaseTokenIf;
 import com.didekindroid.util.BundleKey;
@@ -41,6 +41,7 @@ import java.util.GregorianCalendar;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicReference;
 
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
 import static android.os.Build.VERSION.SDK_INT;
@@ -161,7 +162,7 @@ public final class ActivityTestUtils {
 
     //    ============================= CONTROLLER/Adapters ===================================
 
-    public static void addSubscription(ControllerIf controller)
+    public static CompositeDisposable addSubscription(ControllerIf controller)
     {
         controller.getSubscriptions().add(new Disposable() {
             @Override
@@ -176,6 +177,7 @@ public final class ActivityTestUtils {
             }
         });
         assertThat(controller.getSubscriptions().size(), is(1));
+        return controller.getSubscriptions();
     }
 
     public static Callable<Boolean> gcmTokenSentFlag(final CtrlerFirebaseTokenIf controller)
@@ -337,7 +339,7 @@ public final class ActivityTestUtils {
             @Override
             public void run()
             {
-                RootViewReplacerIf.class.cast(viewer).replaceRootView(new Bundle());
+                ActivityInitiatorIf.class.cast(viewer).initActivity(new Bundle());
             }
         });
         waitAtMost(2, SECONDS).until(isResourceIdDisplayed(resorceIdNextView));

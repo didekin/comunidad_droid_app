@@ -6,16 +6,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.didekindroid.R;
-import com.didekindroid.api.RootViewReplacer;
-import com.didekindroid.api.RootViewReplacerIf;
+import com.didekindroid.router.ActivityInitiator;
+import com.didekindroid.router.ActivityInitiatorIf;
 
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
-import static com.didekindroid.api.ItemMenu.mn_handler;
-import static com.didekindroid.MenuRouter.doUpMenu;
-import static com.didekindroid.MenuRouter.routerMap;
+import static com.didekindroid.router.ActivityRouter.doUpMenu;
 import static com.didekindroid.util.UIutils.doToolBar;
 
 /**
@@ -30,7 +28,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * 1. A list of IncidenciaUSer instances are shown.
  * 2. An intent is passed with an IncidImportancia instance, where the selected incidencia is embedded.
  */
-public class IncidSeeOpenByComuAc extends AppCompatActivity implements RootViewReplacerIf {
+public class IncidSeeOpenByComuAc extends AppCompatActivity implements ActivityInitiatorIf {
 
     IncidSeeOpenByComuFr fragment;
 
@@ -57,10 +55,10 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements RootViewR
     }
 
     @Override
-    public void replaceRootView(Bundle bundle)
+    public void initActivity(Bundle bundle)
     {
         Timber.d("replaceActionInView()");
-        new RootViewReplacer(this).replaceRootView(bundle);
+        new ActivityInitiator(this).initActivityWithBundle(bundle);
     }
 
     // ============================================================
@@ -88,7 +86,7 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements RootViewR
                 return true;
             case R.id.incid_see_closed_by_comu_ac_mn:
             case R.id.incid_reg_ac_mn:
-                mn_handler.doMenuItem(this, routerMap.get(resourceId));
+                new ActivityInitiator(this).initActivityFromMn(resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

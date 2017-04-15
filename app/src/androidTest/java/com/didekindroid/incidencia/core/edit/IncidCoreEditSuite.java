@@ -1,5 +1,7 @@
 package com.didekindroid.incidencia.core.edit;
 
+import com.didekindroid.incidencia.core.reg.CtrlerIncidRegEditFr_Reg_Test;
+
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -10,10 +12,7 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        IncidCloseAc_GCM_Test.class,
-        IncidEditAcMaxPowerTest_1.class,
-        IncidEditAcMaxPowerTest_2.class,
-        IncidEditAcMaxPowerTest_3.class,
+        // Activities
         IncidEditAcNoPowerTest_1.class,
         IncidEditAcNoPowerTest_2.class,
         IncidEditAcNoPowerTest_3.class,
@@ -21,7 +20,6 @@ import org.junit.runners.Suite;
         IncidEditAcTest_Mn2.class,
         IncidEditAcTest_Mn3.class,
         IncidEditAcTest_Mn4.class,
-        // TODO: completar clases.
 })
 public class IncidCoreEditSuite {
 }

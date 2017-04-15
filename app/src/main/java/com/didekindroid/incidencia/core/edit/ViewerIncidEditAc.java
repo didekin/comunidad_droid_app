@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.didekindroid.api.Viewer;
+import com.didekindroid.router.ActivityInitiator;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 
@@ -12,10 +13,10 @@ import java.io.Serializable;
 
 import timber.log.Timber;
 
-import static com.didekindroid.MenuRouter.routerMap;
-import static com.didekindroid.api.ItemMenu.mn_handler;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
+import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
+import static com.didekindroid.util.UIutils.assertTrue;
 
 /**
  * User: pedro@didekin
@@ -43,13 +44,15 @@ class ViewerIncidEditAc extends Viewer<View, CtrlerIncidEditAc> {
     public void doViewInViewer(Bundle savedState, Serializable viewBean)
     {
         Timber.d("doViewInViewer()");
+        // Preconditions.
+        assertTrue(controller.isRegisteredUser(), user_should_be_registered);
         incidImportancia = IncidImportancia.class.cast(viewBean);
     }
 
-    void checkResolucion(int resourceIdItemMn)
+    boolean checkResolucion(int resourceIdItemMn)
     {
         Timber.d("checkResolucion()");
-        controller.seeResolucion(incidImportancia.getIncidencia().getIncidenciaId(), resourceIdItemMn);
+        return controller.seeResolucion(incidImportancia.getIncidencia().getIncidenciaId(), resourceIdItemMn);
     }
 
     void onSuccessSeeResolucion(Resolucion resolucion, int resourceIdItemMn)
@@ -61,6 +64,6 @@ class ViewerIncidEditAc extends Viewer<View, CtrlerIncidEditAc> {
             intent0.putExtra(INCID_RESOLUCION_OBJECT.key, resolucion);
         }
         activity.setIntent(intent0);
-        mn_handler.doMenuItem(activity, routerMap.get(resourceIdItemMn));
+        new ActivityInitiator(activity).initActivityFromMn(resourceIdItemMn);
     }
 }

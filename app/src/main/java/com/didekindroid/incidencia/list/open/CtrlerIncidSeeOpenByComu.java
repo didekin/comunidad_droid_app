@@ -128,6 +128,6 @@ class CtrlerIncidSeeOpenByComu extends CtrlerIdentity<ListView> implements
     public void onSuccessSelectedItem(@NonNull Bundle bundle)
     {
         Timber.d("onSuccessSelectedItem()");
-        ViewerIncidListByComu.class.cast(viewer).replaceRootView(bundle);
+        ViewerIncidListByComu.class.cast(viewer).initActivity(bundle);
     }
 }

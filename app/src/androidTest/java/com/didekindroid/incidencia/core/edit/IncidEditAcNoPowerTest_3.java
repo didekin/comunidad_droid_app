@@ -5,6 +5,7 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
+import com.didekindroid.incidencia.testutils.IncidUiUtils;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum;
 
 import org.junit.Test;
@@ -28,7 +29,7 @@ import static org.hamcrest.CoreMatchers.not;
  * Date: 19/01/16
  * Time: 16:57
  *
- * Tests con inicio de IncidSeeUserComuImportancia desde IncidEditAc.IncidEditNoPowerFr.
+ * Tests con inicio de IncidSeeUserComuImportancia desde IncidEditAc.IncidEditMinFr.
  * Dos incidImportancias registradas en BD, para la misma incidencia.
  * Usuario inicial en sesión SIN permisos para modificar o borrar una incidencia.
  */
@@ -65,7 +66,7 @@ public class IncidEditAcNoPowerTest_3 extends IncidEditAbstractTest {
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_see_usercomu_importancia_frg)).check(matches(isDisplayed()));
 
-        /* Datos a la vista: lista con 2 incidImportancia.*/
+        /* Datos a la vista: lista con 2 oldIncidImportancia.*/
         onView(withId(android.R.id.list)).check(matches(isDisplayed()));
         onView(withId(android.R.id.empty)).check(matches(not(isDisplayed())));
 
@@ -95,7 +96,7 @@ public class IncidEditAcNoPowerTest_3 extends IncidEditAbstractTest {
         // BACK.
         onView(withId(R.id.incid_see_usercomu_importancia_frg)).check(matches(isDisplayed())).perform(pressBack());
         // Datos a la vista.
-        checkDataEditNoPowerFr();
+        IncidUiUtils.checkDataEditMinFr(dbHelper, mActivity, incidenciaJuan);
     }
 
     @Test
@@ -107,6 +108,6 @@ public class IncidEditAcNoPowerTest_3 extends IncidEditAbstractTest {
         // Up Navigate.
         clickNavigateUp();
         // Datos a la vista.
-        checkDataEditNoPowerFr();
+        IncidUiUtils.checkDataEditMinFr(dbHelper, mActivity, incidenciaJuan);
     }
 }

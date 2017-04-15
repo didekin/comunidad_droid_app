@@ -6,7 +6,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.api.ActivityMock;
-import com.didekindroid.api.RootViewReplacerIf;
+import com.didekindroid.router.ActivityInitiatorIf;
 import com.didekindroid.exception.UiException;
 import com.didekinlib.http.ErrorBean;
 
@@ -105,10 +105,10 @@ public class ControllerDeleteMeTest {
     //    .................................... HELPERS .................................
     //  ============================================================================================
 
-    class RootViewReplacerForTest implements RootViewReplacerIf{
+    class ActivityInitiatorForTest implements ActivityInitiatorIf {
 
         @Override
-        public void replaceRootView(@NonNull Bundle bundle)
+        public void initActivity(@NonNull Bundle bundle)
         {
             assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
         }

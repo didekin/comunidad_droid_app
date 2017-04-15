@@ -6,6 +6,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.incidencia.testutils.IncidUiUtils;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
@@ -93,11 +94,11 @@ public class IncidEditAcTest_Mn1 extends IncidEditAbstractTest {
     @Test
     public void testIncidCommentReg_Mn() throws Exception
     {
-        checkScreenEditMaxPowerFr(); // Es usuario iniciador.
+        IncidUiUtils.checkScreenEditMaxPowerFr(incidImportanciaIntent, flagResolucionIntent); // Es usuario iniciador.
         INCID_COMMENT_REG_AC.checkMenuItem_WTk(mActivity);
         intended(hasExtra(INCIDENCIA_OBJECT.key, incidenciaJuan.getIncidencia()));
         checkUp();
-        checkScreenEditMaxPowerFr();
+        IncidUiUtils.checkScreenEditMaxPowerFr(incidImportanciaIntent, flagResolucionIntent);
     }
 
     @Test
@@ -106,7 +107,7 @@ public class IncidEditAcTest_Mn1 extends IncidEditAbstractTest {
         INCID_COMMENTS_SEE_AC.checkMenuItem_WTk(mActivity);
         intended(hasExtra(INCIDENCIA_OBJECT.key, incidenciaJuan.getIncidencia()));
         checkUp();
-        checkScreenEditMaxPowerFr();
+        IncidUiUtils.checkScreenEditMaxPowerFr(incidImportanciaIntent, flagResolucionIntent);
     }
 
     @Test
@@ -120,6 +121,6 @@ public class IncidEditAcTest_Mn1 extends IncidEditAbstractTest {
         intended(not(hasExtraWithKey(INCID_RESOLUCION_OBJECT.key)));
 
         checkUp();
-        checkScreenEditMaxPowerFr();
+        IncidUiUtils.checkScreenEditMaxPowerFr(incidImportanciaIntent, flagResolucionIntent);
     }
 }

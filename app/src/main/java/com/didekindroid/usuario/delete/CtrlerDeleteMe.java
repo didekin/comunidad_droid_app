@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.didekindroid.api.CtrlerIdentity;
-import com.didekindroid.api.RootViewReplacerIf;
+import com.didekindroid.router.ActivityInitiatorIf;
 import com.didekindroid.security.IdentityCacher;
 
 import java.util.concurrent.Callable;
@@ -31,7 +31,7 @@ import static io.reactivex.schedulers.Schedulers.io;
 @SuppressWarnings("WeakerAccess")
 class CtrlerDeleteMe extends CtrlerIdentity<View> implements CtrlerDeleteMeIf {
 
-    private final RootViewReplacerIf rootViewReplacer;
+    private final ActivityInitiatorIf rootViewReplacer;
 
     CtrlerDeleteMe(Activity activity)
     {
@@ -41,7 +41,7 @@ class CtrlerDeleteMe extends CtrlerIdentity<View> implements CtrlerDeleteMeIf {
     private CtrlerDeleteMe(IdentityCacher identityCacher, Activity activity)
     {
         super(null, identityCacher);
-        rootViewReplacer = (RootViewReplacerIf) activity;
+        rootViewReplacer = (ActivityInitiatorIf) activity;
     }
 
     @Override
@@ -59,7 +59,7 @@ class CtrlerDeleteMe extends CtrlerIdentity<View> implements CtrlerDeleteMeIf {
     {
         Timber.d("onSuccessDeleteMeRemote()");
         assertTrue(isDeleted, user_should_have_been_deleted);
-        rootViewReplacer.replaceRootView(new Bundle());
+        rootViewReplacer.initActivity(new Bundle());
     }
 
     // ................................. OBSERVABLES ...............................

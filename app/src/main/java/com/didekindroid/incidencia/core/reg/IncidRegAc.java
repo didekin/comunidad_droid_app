@@ -11,7 +11,7 @@ import com.didekindroid.api.ViewerParentInjectorIf;
 
 import timber.log.Timber;
 
-import static com.didekindroid.MenuRouter.doUpMenu;
+import static com.didekindroid.router.ActivityRouter.doUpMenu;
 import static com.didekindroid.incidencia.core.reg.ViewerIncidRegAc.newViewerIncidRegAc;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
 import static com.didekindroid.util.CommonAssertionMsg.controller_should_be_initialized;
@@ -58,8 +58,16 @@ public class IncidRegAc extends AppCompatActivity implements ViewerParentInjecto
     public void onStop()
     {
         Timber.d("onStop()");
-        viewer.clearSubscriptions();
         super.onStop();
+        viewer.clearSubscriptions();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState)
+    {
+        Timber.d("onSaveInstanceState()");
+        super.onSaveInstanceState(outState);
+        viewer.saveState(outState);
     }
 
     @Override

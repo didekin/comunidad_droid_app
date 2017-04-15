@@ -10,6 +10,7 @@ import android.view.View;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf;
+import com.didekindroid.router.ActivityInitiatorIf;
 import com.didekinlib.http.ErrorBean;
 
 import org.junit.Before;
@@ -68,9 +69,9 @@ public class ViewerTest {
     @Test
     public void testReplaceView() throws Exception
     {
-        assertThat(viewer, instanceOf(RootViewReplacerIf.class));
-        RootViewReplacerIf rootViewReplacer = (RootViewReplacerIf) viewer;
-        rootViewReplacer.replaceRootView(new Bundle(0));
+        assertThat(viewer, instanceOf(ActivityInitiatorIf.class));
+        ActivityInitiatorIf rootViewReplacer = (ActivityInitiatorIf) viewer;
+        rootViewReplacer.initActivity(new Bundle(0));
         onView(withId(R.id.next_mock_ac_layout)).check(matches(isDisplayed()));
         assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_B));
     }
@@ -144,7 +145,7 @@ public class ViewerTest {
 
     //    ============================  HELPERS  ===================================
 
-    static class ViewerForTest extends Viewer<View, ControllerIf> implements RootViewReplacerIf {
+    static class ViewerForTest extends Viewer<View, ControllerIf> implements ActivityInitiatorIf {
 
         protected ViewerForTest(View view, Activity activity, ViewerIf parentViewer)
         {
@@ -152,7 +153,7 @@ public class ViewerTest {
         }
 
         @Override
-        public void replaceRootView(@NonNull Bundle bundle)
+        public void initActivity(@NonNull Bundle bundle)
         {
             activity.startActivity(new Intent(activity, ActivityNextMock.class));
             assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_B), is(BEFORE_METHOD_EXEC));

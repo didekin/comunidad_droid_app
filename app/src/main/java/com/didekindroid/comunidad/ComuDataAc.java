@@ -14,22 +14,22 @@ import android.widget.EditText;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.router.ActivityInitiator;
+import com.didekindroid.router.ActivityRouter;
 import com.didekindroid.security.IdentityCacher;
 import com.didekindroid.usuariocomunidad.SeeUserComuByUserAc;
 import com.didekindroid.util.ConnectionUtils;
-import com.didekindroid.MenuRouter;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import timber.log.Timber;
 
+import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.comunidad.ComunidadAssertionMsg.comuData_should_be_modified;
 import static com.didekindroid.comunidad.ComunidadAssertionMsg.comunidadId_should_be_initialized;
 import static com.didekindroid.comunidad.ComunidadDao.comunidadDao;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
 import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
-import static com.didekindroid.api.ItemMenu.mn_handler;
-import static com.didekindroid.MenuRouter.routerMap;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.util.UIutils.doToolBar;
@@ -67,7 +67,7 @@ public class ComuDataAc extends AppCompatActivity implements RegComuFr.ComuDataC
 
         // Preconditions.
         assertTrue(identityCacher.isRegisteredUser(), user_should_be_registered);
-        mIdComunidad = getIntent().getLongExtra(ComuBundleKey.COMUNIDAD_ID.key, 0L);
+        mIdComunidad = getIntent().getLongExtra(COMUNIDAD_ID.key, 0L);
         assertTrue(mIdComunidad > 0L, comunidadId_should_be_initialized);
 
         // Asunción: esta tarea termina antes que la carga de los spinners en RegComuFr.
@@ -85,7 +85,7 @@ public class ComuDataAc extends AppCompatActivity implements RegComuFr.ComuDataC
             @Override
             public void onClick(View v)
             {
-                Timber.d("mModifyButton.OnClickListener().onClick()");
+                Timber.d("mModifyButton.OnClickListener().onClickLinkToImportanciaUsers()");
                 modifyComuData();
             }
         });
@@ -238,16 +238,17 @@ public class ComuDataAc extends AppCompatActivity implements RegComuFr.ComuDataC
     {
         Timber.d("onOptionsItemSelected()");
 
+        ActivityInitiator activityInitiator = new ActivityInitiator(this);
         int resourceId = item.getItemId();
         switch (resourceId) {
             case android.R.id.home:
-                MenuRouter.doUpMenu(this);
+                ActivityRouter.doUpMenu(this);
                 return true;
             case R.id.see_usercomu_by_comu_ac_mn:
                 Intent intent = new Intent();
-                intent.putExtra(ComuBundleKey.COMUNIDAD_ID.key, mIdComunidad);
-                this.setIntent(intent);
-                mn_handler.doMenuItem(this, routerMap.get(resourceId));
+                intent.putExtra(COMUNIDAD_ID.key, mIdComunidad);
+                setIntent(intent);
+                activityInitiator.initActivityFromMn(resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

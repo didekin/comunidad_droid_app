@@ -7,15 +7,13 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.api.RootViewReplacer;
-import com.didekindroid.api.RootViewReplacerIf;
-import com.didekindroid.MenuRouter;
+import com.didekindroid.router.ActivityInitiatorIf;
+import com.didekindroid.router.ActivityInitiator;
 
 import timber.log.Timber;
 
 import static com.didekindroid.usuario.userdata.ViewerUserData.newViewerUserData;
-import static com.didekindroid.api.ItemMenu.mn_handler;
-import static com.didekindroid.MenuRouter.doUpMenu;
+import static com.didekindroid.router.ActivityRouter.doUpMenu;
 import static com.didekindroid.util.UIutils.doToolBar;
 
 /**
@@ -25,7 +23,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * 1. Registered user with modified data.
  * 2. An intent is created for menu options with the old user data, once they have been loaded.
  */
-public class UserDataAc extends AppCompatActivity implements RootViewReplacerIf {
+public class UserDataAc extends AppCompatActivity implements ActivityInitiatorIf {
 
     ViewerUserDataIf viewer;
     View acView;
@@ -51,10 +49,10 @@ public class UserDataAc extends AppCompatActivity implements RootViewReplacerIf 
     }
 
     @Override
-    public void replaceRootView(Bundle bundle)
+    public void initActivity(Bundle bundle)
     {
-        Timber.d("replaceView()");
-        new RootViewReplacer(this).replaceRootView(bundle);
+        Timber.d("initActivityWithBundle()");
+        new ActivityInitiator(this).initActivityWithBundle(bundle);
     }
 
 //    ============================================================
@@ -95,7 +93,7 @@ public class UserDataAc extends AppCompatActivity implements RootViewReplacerIf 
             case R.id.see_usercomu_by_user_ac_mn:
             case R.id.comu_search_ac_mn:
             case R.id.incid_see_open_by_comu_ac_mn:
-                mn_handler.doMenuItem(this, MenuRouter.routerMap.get(resourceId));
+                new ActivityInitiator(this).initActivityFromMn(resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

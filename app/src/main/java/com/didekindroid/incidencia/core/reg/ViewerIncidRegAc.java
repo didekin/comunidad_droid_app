@@ -7,10 +7,10 @@ import android.view.View;
 import android.widget.Button;
 
 import com.didekindroid.R;
-import com.didekindroid.api.RootViewReplacer;
-import com.didekindroid.api.RootViewReplacerIf;
-import com.didekindroid.api.Viewer;
 import com.didekindroid.api.ViewerIf;
+import com.didekindroid.incidencia.core.CtrlerIncidRegEditFr;
+import com.didekindroid.incidencia.core.ViewerIncidRegEdit;
+import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
@@ -28,13 +28,13 @@ import static com.didekindroid.util.UIutils.makeToast;
  * Date: 31/03/17
  * Time: 11:59
  */
-class ViewerIncidRegAc extends Viewer<View, CtrlerIncidRegAc> implements RootViewReplacerIf {
+@SuppressWarnings("WeakerAccess")
+public class ViewerIncidRegAc extends ViewerIncidRegEdit {
 
     ViewerFirebaseTokenIf viewerFirebaseToken;
-    @SuppressWarnings("WeakerAccess")
     ViewerIncidRegFr viewerIncidRegFr;
 
-    ViewerIncidRegAc(IncidRegAc activity)
+    public ViewerIncidRegAc(IncidRegAc activity)
     {
         super(activity.acView, activity, null);
     }
@@ -44,7 +44,7 @@ class ViewerIncidRegAc extends Viewer<View, CtrlerIncidRegAc> implements RootVie
         Timber.d("newViewerIncidRegAc()");
         ViewerIncidRegAc instance = new ViewerIncidRegAc(activity);
         instance.viewerFirebaseToken = newViewerFirebaseToken(activity);
-        instance.setController(new CtrlerIncidRegAc(instance));
+        instance.setController(new CtrlerIncidRegEditFr(instance));
         return instance;
     }
 
@@ -69,13 +69,8 @@ class ViewerIncidRegAc extends Viewer<View, CtrlerIncidRegAc> implements RootVie
     public void saveState(Bundle savedState)
     {
         Timber.d("saveState()");
-    }
-
-    @Override
-    public void replaceRootView(@NonNull Bundle bundle)
-    {
-        Timber.d("replaceRootView()");
-        new RootViewReplacer(activity).replaceRootView(bundle);
+        viewerIncidRegFr.saveState(savedState);
+        viewerFirebaseToken.saveState(savedState);
     }
 
     void setChildViewer(@NonNull ViewerIf childViewer)
@@ -86,19 +81,20 @@ class ViewerIncidRegAc extends Viewer<View, CtrlerIncidRegAc> implements RootVie
 
     boolean registerIncidencia(@Nullable IncidImportancia incidImportancia, @NonNull StringBuilder errorMsg)
     {
-        Timber.d("registerIncidencia()");
+        Timber.d("registerIncidImportancia()");
         if (incidImportancia == null) {
             makeToast(activity, errorMsg);
             return false;
         } else {
-            return checkInternetConnected(activity) && controller.registerIncidencia(incidImportancia);
+            return checkInternetConnected(activity) && controller.registerIncidImportancia(incidImportancia);
         }
     }
 
-    void onSuccessRegisterIncidencia(int rowInserted)
+    @Override
+    public void onSuccessRegisterIncidImportancia(int rowInserted)
     {
-        Timber.d("onSuccessRegisterIncidencia()");
-        replaceRootView(new Bundle());
+        Timber.d("onSuccessRegisterIncidImportancia()");
+        new ActivityInitiator(activity).initActivityWithBundle(new Bundle());
     }
 
 //  ................................... HELPERS ......................................
@@ -109,7 +105,7 @@ class ViewerIncidRegAc extends Viewer<View, CtrlerIncidRegAc> implements RootVie
         @Override
         public void onClick(View v)
         {
-            Timber.d("View.OnClickListener().onClick()");
+            Timber.d("View.OnClickListener().onClickLinkToImportanciaUsers()");
             StringBuilder errorMsg = getErrorMsgBuilder(activity);
             IncidImportancia incidImportancia = viewerIncidRegFr.doIncidImportanciaFromView(errorMsg);
             registerIncidencia(incidImportancia, errorMsg);

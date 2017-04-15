@@ -35,8 +35,10 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_SEARCH;
+import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_LA_PLAZUELA_5;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
@@ -85,7 +87,7 @@ public class ComuSearchResultsAc_1_Test {
     public void getFixture() throws Exception
     {
         intent = new Intent();
-        intent.putExtra(COMUNIDAD_SEARCH.key, ComuDataTestUtil.COMU_LA_PLAZUELA_5);
+        intent.putExtra(COMUNIDAD_SEARCH.key, COMU_LA_PLAZUELA_5);
     }
 
     @After
@@ -104,7 +106,7 @@ public class ComuSearchResultsAc_1_Test {
         // Inserto comunidades en DB.
         UserComuDataTestUtil.regTwoUserComuSameUser(UserComuDataTestUtil.makeListTwoUserComu());
         activity = mIntentRule.launchActivity(intent);
-        onView(ViewMatchers.withId(R.id.comu_list_fragment)).check(matches(isDisplayed()));
+        onView(withId(R.id.comu_list_fragment)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -151,7 +153,7 @@ public class ComuSearchResultsAc_1_Test {
         onView(withId(android.R.id.list)).check(
                 matches(withAdaptedData(Matchers.<Object>is(comunidadNew))));
         onView(withId(android.R.id.list)).check(
-                matches(withAdaptedData(Matchers.<Object>is(ComuDataTestUtil.COMU_LA_PLAZUELA_5))));
+                matches(withAdaptedData(Matchers.<Object>is(COMU_LA_PLAZUELA_5))));
     }
 
     @Test
@@ -173,7 +175,7 @@ public class ComuSearchResultsAc_1_Test {
 
         checkToastInTest(R.string.no_result_search_comunidad, activity);
         // Presenta registro de usuario y comunidad.
-        onView(ViewMatchers.withId(R.id.reg_comu_usuario_usuariocomu_layout)).check(matches(isDisplayed()));
+        onView(withId(R.id.reg_comu_usuario_usuariocomu_layout)).check(matches(isDisplayed()));
         Thread.sleep(2000);
     }
 
@@ -197,7 +199,7 @@ public class ComuSearchResultsAc_1_Test {
 
         checkToastInTest(R.string.no_result_search_comunidad, activity);
         // Presenta registro de usuarioComunidad y comunidad.
-        onView(ViewMatchers.withId(R.id.reg_comu_and_usercomu_layout)).check(matches(isDisplayed()));
+        onView(withId(R.id.reg_comu_and_usercomu_layout)).check(matches(isDisplayed()));
         Thread.sleep(2000);
     }
 
@@ -220,13 +222,13 @@ public class ComuSearchResultsAc_1_Test {
         mComunidadSummaryFrg = (ComuSearchResultsListFr) activity.getSupportFragmentManager().findFragmentById(R.id.comu_list_fragment);
         adapter = mComunidadSummaryFrg.mAdapter;
         assertThat(adapter.getCount(), is(1));
-        onView(withAdaptedData(Matchers.<Object>is(ComuDataTestUtil.COMU_LA_PLAZUELA_5))).check(matches(isDisplayed()));
+        onView(withAdaptedData(Matchers.<Object>is(COMU_LA_PLAZUELA_5))).check(matches(isDisplayed()));
         onData(is(instanceOf(Comunidad.class))).onChildView(allOf(
-                ViewMatchers.withId(R.id.nombreComunidad_view),
-                ViewMatchers.withText(ComuDataTestUtil.COMU_LA_PLAZUELA_5.getNombreComunidad())
+                withId(R.id.nombreComunidad_view),
+                withText(COMU_LA_PLAZUELA_5.getNombreComunidad())
         )).perform(click());
 
-        onView(ViewMatchers.withId(R.id.reg_user_and_usercomu_ac_layout)).check(matches(isDisplayed()));
+        onView(withId(R.id.reg_user_and_usercomu_ac_layout)).check(matches(isDisplayed()));
 
         checkUp(activityLayoutId);
     }
@@ -251,11 +253,11 @@ public class ComuSearchResultsAc_1_Test {
         onView(withAdaptedData(Matchers.<Object>equalTo(comunidad))).check(matches(isDisplayed()));
         onData(is(instanceOf(Comunidad.class))).onChildView(
                 allOf(
-                        ViewMatchers.withId(R.id.nombreComunidad_view),
-                        ViewMatchers.withText(ComuDataTestUtil.COMU_LA_PLAZUELA_5.getNombreComunidad())
+                        withId(R.id.nombreComunidad_view),
+                        withText(COMU_LA_PLAZUELA_5.getNombreComunidad())
                 )).perform(click());
 
-        ViewInteraction viewInteraction = onView(ViewMatchers.withId(R.id.usercomu_data_ac_layout)).check(matches(isDisplayed()));
+        ViewInteraction viewInteraction = onView(withId(R.id.usercomu_data_ac_layout)).check(matches(isDisplayed()));
 
         checkBack(viewInteraction, activityLayoutId);
     }
@@ -287,7 +289,7 @@ public class ComuSearchResultsAc_1_Test {
                 .build();
 
         intended(IntentMatchers.hasExtra(USERCOMU_LIST_OBJECT.key, usuarioComunidad));
-        onView(ViewMatchers.withId(R.id.usercomu_data_ac_layout)).check(matches(isDisplayed()));
+        onView(withId(R.id.usercomu_data_ac_layout)).check(matches(isDisplayed()));
 
         checkUp(activityLayoutId);
     }
@@ -320,7 +322,7 @@ public class ComuSearchResultsAc_1_Test {
         assertThat(comunidad.getNombreVia(), is("de la Plazuela"));
 
         onData(is(comunidad)).perform(click());
-        onView(ViewMatchers.withId(R.id.reg_usercomu_ac_layout)).check(matches(isDisplayed()));
+        onView(withId(R.id.reg_usercomu_ac_layout)).check(matches(isDisplayed()));
         checkUp(activityLayoutId);
 
         cleanTwoUsers(UsuarioDataTestUtils.USER_JUAN, usuarioIn);
@@ -340,9 +342,9 @@ public class ComuSearchResultsAc_1_Test {
         activity = mIntentRule.launchActivity(intent);
         assertThat(TKhandler.isRegisteredUser(), is(true));
 
-        onData(Matchers.is(ComuDataTestUtil.COMU_LA_PLAZUELA_5)).perform(click());
+        onData(Matchers.is(COMU_LA_PLAZUELA_5)).perform(click());
         intended(IntentMatchers.hasExtra(COMUNIDAD_LIST_OBJECT.key, comunidad));
-        ViewInteraction viewInteraction = onView(ViewMatchers.withId(R.id.reg_usercomu_ac_layout)).check(matches(isDisplayed()));
+        ViewInteraction viewInteraction = onView(withId(R.id.reg_usercomu_ac_layout)).check(matches(isDisplayed()));
 
         checkBack(viewInteraction, activityLayoutId);
     }
@@ -370,7 +372,7 @@ public class ComuSearchResultsAc_1_Test {
         assertThat(userComuDaoRemote.deleteUserComu(comunidad.getC_Id()), is(1));
         onData(is(comunidad)).perform(click());
         // On-click devuelve a la pantalla de búsqueda de comunidad.
-        onView(ViewMatchers.withId(R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));
+        onView(withId(R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));
         checkToastInTest(R.string.comunidad_not_found_message, activity);
 
         Thread.sleep(2000);

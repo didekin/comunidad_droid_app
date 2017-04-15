@@ -6,17 +6,17 @@ import android.view.View;
 import android.widget.Spinner;
 
 import com.didekindroid.R;
-import com.didekindroid.api.CtrlerIdentityIf;
-import com.didekindroid.api.Viewer;
 import com.didekindroid.api.ViewerIf;
 import com.didekindroid.incidencia.core.IncidImportanciaBean;
 import com.didekindroid.incidencia.core.IncidenciaBean;
 import com.didekindroid.incidencia.core.ViewerAmbitoIncidSpinner;
 import com.didekindroid.incidencia.core.ViewerImportanciaSpinner;
+import com.didekindroid.incidencia.core.ViewerIncidRegEdit;
 import com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
 import java.io.Serializable;
+import java.util.concurrent.atomic.AtomicReference;
 
 import timber.log.Timber;
 
@@ -29,19 +29,22 @@ import static com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner.newVie
  * Date: 30/03/17
  * Time: 19:14
  */
-final class ViewerIncidRegFr extends Viewer<View, CtrlerIdentityIf> {
+class ViewerIncidRegFr extends ViewerIncidRegEdit {
 
-    IncidenciaBean incidenciaBean;
-    IncidImportanciaBean incidImportanciaBean;
+    AtomicReference<IncidenciaBean> atomIncidBean;
+    AtomicReference<IncidImportanciaBean> atomIncidImportBean;
     ViewerAmbitoIncidSpinner viewerAmbitoIncidSpinner;
     ViewerImportanciaSpinner viewerImportanciaSpinner;
     ViewerComuSpinner viewerComuSpinner;
 
 
-    private ViewerIncidRegFr(View view, Activity activity, ViewerIf parentViewer)
+    @SuppressWarnings("WeakerAccess")
+    ViewerIncidRegFr(View view, Activity activity, ViewerIf parentViewer)
     {
         super(view, activity, parentViewer);
         controller = null;  // Just for documentation.
+        atomIncidBean = new AtomicReference<>(null);
+        atomIncidImportBean = new AtomicReference<>(null);
     }
 
     static ViewerIncidRegFr newViewerIncidRegFr(View view, ViewerIf parentViewer)
@@ -63,11 +66,11 @@ final class ViewerIncidRegFr extends Viewer<View, CtrlerIdentityIf> {
     public void doViewInViewer(Bundle savedState, Serializable viewBean)
     {
         Timber.d("doViewInViewer()");
-        incidenciaBean = new IncidenciaBean();
-        viewerAmbitoIncidSpinner.doViewInViewer(savedState, incidenciaBean);
-        viewerComuSpinner.doViewInViewer(savedState, incidenciaBean);
-        incidImportanciaBean = new IncidImportanciaBean();
-        viewerImportanciaSpinner.doViewInViewer(savedState, incidImportanciaBean);
+        atomIncidBean.compareAndSet(null, new IncidenciaBean());
+        viewerAmbitoIncidSpinner.doViewInViewer(savedState, atomIncidBean.get());
+        viewerComuSpinner.doViewInViewer(savedState, atomIncidBean.get());
+        atomIncidImportBean.compareAndSet(null, new IncidImportanciaBean());
+        viewerImportanciaSpinner.doViewInViewer(savedState, atomIncidImportBean.get());
     }
 
     @Override
@@ -95,6 +98,6 @@ final class ViewerIncidRegFr extends Viewer<View, CtrlerIdentityIf> {
     IncidImportancia doIncidImportanciaFromView(StringBuilder errorMsg)
     {
         Timber.d("doIncidImportanciaFromView()");
-        return incidImportanciaBean.makeIncidImportancia(errorMsg, activity.getResources(), view, incidenciaBean);
+        return atomIncidImportBean.get().makeIncidImportancia(errorMsg, activity.getResources(), view, atomIncidBean.get());
     }
 }

@@ -55,7 +55,7 @@ public class RegComuAndUserComuAc extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                Timber.d("View.OnClickListener().onClick()");
+                Timber.d("View.OnClickListener().onClickLinkToImportanciaUsers()");
                 registerComuAndUserComu();
             }
         });

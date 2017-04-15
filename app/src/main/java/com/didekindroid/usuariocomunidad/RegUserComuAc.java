@@ -11,10 +11,10 @@ import android.widget.Button;
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComunidadBean;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.router.ActivityRouter;
 import com.didekindroid.security.IdentityCacher;
 import com.didekindroid.usuariocomunidad.listbycomu.SeeUserComuByComuAc;
 import com.didekindroid.util.ConnectionUtils;
-import com.didekindroid.MenuRouter;
 import com.didekindroid.util.UIutils;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
@@ -79,7 +79,7 @@ public class RegUserComuAc extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                Timber.d("View.OnClickListener().onClick()");
+                Timber.d("View.OnClickListener().onClickLinkToImportanciaUsers()");
                 doOnclick();
             }
         });
@@ -125,7 +125,7 @@ public class RegUserComuAc extends AppCompatActivity {
         int resourceId = item.getItemId();
         switch (resourceId) {
             case android.R.id.home:
-                MenuRouter.doUpMenu(this);
+                ActivityRouter.doUpMenu(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

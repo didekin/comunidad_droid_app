@@ -206,7 +206,7 @@ public class CtrlerIncidSeeCloseByComuTest {
         }
 
         @Override
-        public void replaceRootView(@NonNull Bundle bundle)
+        public void initActivity(@NonNull Bundle bundle)
         {
             assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_C), is(BEFORE_METHOD_EXEC));
         }

@@ -5,6 +5,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.exception.UiException;
+import com.didekindroid.incidencia.core.CtrlerIncidRegEditFr;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.usuario.Usuario;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
@@ -35,15 +36,15 @@ import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
- * Date: 31/03/17
- * Time: 15:24
+ * Date: 09/04/17
+ * Time: 14:40
  */
 @RunWith(AndroidJUnit4.class)
-public class CtrlerIncidRegAcTest {
+public class CtrlerIncidRegEditFr_Reg_Test {
 
     final static AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
 
-    CtrlerIncidRegAc controller;
+    CtrlerIncidRegEditFr controller;
     IncidRegAc activity;
     Usuario pepe;
     UsuarioComunidad pepeUserComu;
@@ -66,15 +67,6 @@ public class CtrlerIncidRegAcTest {
     public void setUp()
     {
         activity = activityRule.getActivity();
-        controller = new CtrlerIncidRegAc(new ViewerIncidRegAc(activity) {
-            @Override
-            void onSuccessRegisterIncidencia(int rowInserted)
-            {
-                assertThat(rowInserted, is(2));
-                assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
-            }
-        });
-        assertThat(controller.getSubscriptions().size(), is(0));
     }
 
     @After
@@ -90,10 +82,20 @@ public class CtrlerIncidRegAcTest {
     @Test
     public void testRegisterIncidencia() throws Exception
     {
+        controller = new CtrlerIncidRegEditFr(new ViewerIncidRegAc(activity) {
+            @Override
+            public void onSuccessRegisterIncidImportancia(int rowInserted)
+            {
+                assertThat(rowInserted, is(2));
+                assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
+            }
+        });
+        assertThat(controller.getSubscriptions().size(), is(0));
+
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
-            assertThat(controller.registerIncidencia(doIncidImportancia()), is(true));
+            assertThat(controller.registerIncidImportancia(doIncidImportancia()), is(true));
         } finally {
             reset();
         }

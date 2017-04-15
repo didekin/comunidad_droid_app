@@ -73,7 +73,7 @@ public class FechaPickerFr extends DialogFragment implements DatePickerDialog.On
                 @Override
                 public void onClick(View v)
                 {
-                    Timber.d("onClick()");
+                    Timber.d("onClickLinkToImportanciaUsers()");
                     FechaPickerFr fechaPicker = FechaPickerFr.newInstance(fechaPickerUser);
                     fechaPicker.show(fechaPickerUser.getActivity().getFragmentManager(), "fechaPicker");
                 }
