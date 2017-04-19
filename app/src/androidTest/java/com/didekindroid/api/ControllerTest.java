@@ -16,6 +16,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import io.reactivex.disposables.Disposable;
 
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static org.hamcrest.CoreMatchers.allOf;
@@ -37,11 +38,12 @@ public class ControllerTest {
     public ActivityTestRule<ActivityMock> activityRule = new ActivityTestRule<>(ActivityMock.class, true, true);
 
     Controller controller;
-    ViewerMock<View,ControllerIf> viewer;
+    ViewerMock<View, ControllerIf> viewer;
 
     @Before
-    public void setUp(){
-        viewer = new ViewerMock<View, ControllerIf>(null, activityRule.getActivity(), null){
+    public void setUp()
+    {
+        viewer = new ViewerMock<View, ControllerIf>(null, activityRule.getActivity(), null) {
             @Override
             public UiExceptionIf.ActionForUiExceptionIf processControllerError(UiException ui)
             {
@@ -49,11 +51,11 @@ public class ControllerTest {
                 return null;
             }
         };
-        controller = new Controller<>(viewer);
+        controller = new Controller(viewer);
     }
 
     @Test
-    public void getSubscriptions() throws Exception
+    public void testGetSubscriptions() throws Exception
     {
         assertThat(controller.getSubscriptions(), allOf(
                 is(controller.subscriptions),
@@ -63,7 +65,7 @@ public class ControllerTest {
     }
 
     @Test
-    public void clearSubscriptions() throws Exception
+    public void testClearSubscriptions() throws Exception
     {
         assertThat(controller.getSubscriptions().size(), is(0));
         controller.subscriptions.add(new Disposable() {
@@ -71,6 +73,7 @@ public class ControllerTest {
             public void dispose()
             {
             }
+
             @Override
             public boolean isDisposed()
             {
@@ -83,16 +86,39 @@ public class ControllerTest {
     }
 
     @Test
-    public void getViewer() throws Exception
+    public void testGetViewer() throws Exception
     {
         ViewerIf viewerOut = controller.getViewer();
         assertThat(controller.getViewer(), is(viewerOut));
     }
 
     @Test
-    public void onErrorCtrl() throws Exception
+    public void testOnErrorCtrl() throws Exception
     {
         controller.onErrorCtrl(new Throwable());
         assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_A));
+    }
+
+    @Test
+    public void testIsRegisteredUser() throws Exception
+    {
+        controller.updateIsRegistered(true);
+        assertThat(controller.isRegisteredUser(), is(true));
+    }
+
+    @Test
+    public void testUpdateIsRegistered()
+    {
+        controller.updateIsRegistered(false);
+        assertThat(controller.isRegisteredUser(), is(false));
+    }
+
+    @Test
+    public void testGetIdentityCacher()
+    {
+        assertThat(controller.getIdentityCacher(), allOf(
+                notNullValue(),
+                is(TKhandler)
+        ));
     }
 }

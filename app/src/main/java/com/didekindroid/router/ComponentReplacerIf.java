@@ -9,6 +9,6 @@ import android.support.annotation.NonNull;
  * Time: 10:05
  */
 
-public interface ActivityInitiatorIf {
-    void initActivity(@NonNull Bundle bundle);
+public interface ComponentReplacerIf {
+    void replaceComponent(@NonNull Bundle bundle);
 }

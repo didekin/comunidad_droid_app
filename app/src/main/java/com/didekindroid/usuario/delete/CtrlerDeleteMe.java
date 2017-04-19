@@ -2,10 +2,9 @@ package com.didekindroid.usuario.delete;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.View;
 
-import com.didekindroid.api.CtrlerIdentity;
-import com.didekindroid.router.ActivityInitiatorIf;
+import com.didekindroid.api.Controller;
+import com.didekindroid.router.ComponentReplacerIf;
 import com.didekindroid.security.IdentityCacher;
 
 import java.util.concurrent.Callable;
@@ -29,9 +28,9 @@ import static io.reactivex.schedulers.Schedulers.io;
  * Time: 12:53
  */
 @SuppressWarnings("WeakerAccess")
-class CtrlerDeleteMe extends CtrlerIdentity<View> implements CtrlerDeleteMeIf {
+class CtrlerDeleteMe extends Controller implements CtrlerDeleteMeIf {
 
-    private final ActivityInitiatorIf rootViewReplacer;
+    private final ComponentReplacerIf rootViewReplacer;
 
     CtrlerDeleteMe(Activity activity)
     {
@@ -41,7 +40,19 @@ class CtrlerDeleteMe extends CtrlerIdentity<View> implements CtrlerDeleteMeIf {
     private CtrlerDeleteMe(IdentityCacher identityCacher, Activity activity)
     {
         super(null, identityCacher);
-        rootViewReplacer = (ActivityInitiatorIf) activity;
+        rootViewReplacer = (ComponentReplacerIf) activity;
+    }
+
+    static Single<Boolean> getDeleteMeSingle()
+    {
+        return fromCallable(new Callable<Boolean>() {
+            @Override
+            public Boolean call() throws Exception
+            {
+                Timber.d("fromCallable(), thread: %s", Thread.currentThread().getName());
+                return usuarioDao.deleteUser();
+            }
+        }).map(cleanTokenAndUnregisterFunc);
     }
 
     @Override
@@ -54,26 +65,14 @@ class CtrlerDeleteMe extends CtrlerIdentity<View> implements CtrlerDeleteMeIf {
                 .subscribeWith(new DeleteMeSingleObserver(this)));
     }
 
+    // ................................. OBSERVABLES ...............................
+
     @Override
     public void onSuccessDeleteMeRemote(boolean isDeleted)
     {
         Timber.d("onSuccessDeleteMeRemote()");
         assertTrue(isDeleted, user_should_have_been_deleted);
-        rootViewReplacer.initActivity(new Bundle());
-    }
-
-    // ................................. OBSERVABLES ...............................
-
-    static Single<Boolean> getDeleteMeSingle()
-    {
-        return fromCallable(new Callable<Boolean>() {
-            @Override
-            public Boolean call() throws Exception
-            {
-                Timber.d("fromCallable(), thread: %s", Thread.currentThread().getName());
-                return usuarioDao.deleteUser();
-            }
-        }).map(cleanTokenAndUnregisterFunc);
+        rootViewReplacer.replaceComponent(new Bundle());
     }
 
     // .............................. SUBSCRIBERS ..................................

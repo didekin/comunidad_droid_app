@@ -11,7 +11,9 @@ import com.didekindroid.api.ViewerIf;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.core.AmbitoIncidValueObj;
 import com.didekindroid.incidencia.core.IncidenciaDataDbHelper;
+import com.didekinlib.model.incidencia.dominio.AmbitoIncidencia;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
+import com.didekinlib.model.incidencia.dominio.Incidencia;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.After;
@@ -26,17 +28,16 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.pressBack;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
-import static com.didekindroid.incidencia.testutils.IncidUiUtils.checkDataEditMaxPowerFr;
-import static com.didekindroid.incidencia.testutils.IncidUiUtils.checkScreenEditMaxPowerFr;
-import static com.didekindroid.incidencia.testutils.IncidUiUtils.doAmbitoAndDescripcion;
-import static com.didekindroid.incidencia.testutils.IncidUiUtils.doImportanciaSpinner;
+import static com.didekindroid.incidencia.testutils.IncidUiTestUtils.checkDataEditMaxPowerFr;
+import static com.didekindroid.incidencia.testutils.IncidUiTestUtils.checkScreenEditMaxPowerFr;
+import static com.didekindroid.incidencia.testutils.IncidUiTestUtils.doAmbitoAndDescripcion;
+import static com.didekindroid.incidencia.testutils.IncidUiTestUtils.doImportanciaSpinner;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_edit_ac_frgs_tag;
@@ -117,7 +118,7 @@ public class IncidEditAcMaxTest {
     }
 
     @Test
-    public void testModifyIncidencia_1() throws InterruptedException
+    public void testModifyIncidencia() throws InterruptedException
     {
         // Cason NOT OK: descripción de incidencia no válida.
         onView(withId(R.id.incid_reg_desc_ed)).perform(replaceText("descripcion = not valid"));
@@ -126,23 +127,36 @@ public class IncidEditAcMaxTest {
     }
 
     @Test
-    public void testModifyIncidencia_2() throws InterruptedException
+    public void testModifyIncidenciaPressUp() throws InterruptedException
     {
-        // Caso OK. Hacemos UP.
-        doImportanciaSpinner(activity, 4);
-
+        // Caso OK. Modificamos: importancia, ámbito y descripción. Hacemos UP.
+        short newImportancia = (short) 2;
+        String newDesc = "descripcion es valida";
+        doImportanciaSpinner(activity, newImportancia);
         AmbitoIncidValueObj ambitoObj = new AmbitoIncidValueObj((short) 10, "Calefacción comunitaria");
-        doAmbitoAndDescripcion(ambitoObj, "descripcion es valida");
+        doAmbitoAndDescripcion(ambitoObj, newDesc);
 
         onView(withId(R.id.incid_edit_fr_modif_button)).perform(scrollTo(), click());
 
         waitAtMost(2, SECONDS).until(isResourceIdDisplayed(R.id.incid_see_open_by_comu_ac));
         checkUp();
-        checkScreenEditMaxPowerFr(incidImportancia, flagResolucion);
+        IncidImportancia newIncidImportancia = new IncidImportancia.IncidImportanciaBuilder
+                (
+                        new Incidencia.IncidenciaBuilder()
+                                .copyIncidencia(incidImportancia.getIncidencia())
+                                .descripcion(newDesc)
+                                .ambitoIncid(new AmbitoIncidencia(ambitoObj.get_ID()))
+                                .build()
+                )
+                .copyIncidImportancia(incidImportancia)
+                .importancia(newImportancia)
+                .build();
+        checkScreenEditMaxPowerFr(newIncidImportancia, flagResolucion);
+        checkDataEditMaxPowerFr(dbHelper, activity, newIncidImportancia);
     }
 
     @Test
-    public void testModifyIncidencia_3() throws InterruptedException
+    public void testModifyIncidenciaPressBack() throws InterruptedException
     {
         // Caso OK. No cambiamos nada. Hacemos BACK.
         onView(withId(R.id.incid_edit_fr_modif_button)).perform(scrollTo(), click());
@@ -153,7 +167,7 @@ public class IncidEditAcMaxTest {
     }
 
     @Test
-    public void testDeleteIncidencia_1() throws InterruptedException
+    public void testDeleteIncidenciaPressUp() throws InterruptedException
     {
         // CASO OK: borramos la incidencia.
         onView(withId(R.id.incid_edit_fr_borrar_button)).perform(scrollTo(), click());
@@ -161,6 +175,7 @@ public class IncidEditAcMaxTest {
         waitAtMost(2, SECONDS).until(isResourceIdDisplayed(R.id.incid_see_open_by_comu_ac));
         checkUp();
         checkScreenEditMaxPowerFr(incidImportancia, flagResolucion);
+        checkDataEditMaxPowerFr(dbHelper, activity, incidImportancia);
     }
 
     @Test
@@ -170,9 +185,11 @@ public class IncidEditAcMaxTest {
         onView(withId(R.id.incid_edit_fr_borrar_button)).perform(scrollTo(), click());
 
         // BACK y verificamos que hemos vuelto.
-        waitAtMost(1,SECONDS).until(isResourceIdDisplayed(R.id.incid_see_open_by_comu_ac));
-        onView(withId(R.id.incid_see_open_by_comu_ac)).perform(pressBack());
+        waitAtMost(1, SECONDS).until(isResourceIdDisplayed(R.id.incid_see_open_by_comu_ac));
+        checkBack(onView(withId(R.id.incid_see_open_by_comu_ac)));
+
         checkScreenEditMaxPowerFr(incidImportancia, flagResolucion);
+        checkDataEditMaxPowerFr(dbHelper, activity, incidImportancia);
 
         // Intentamos borrar y verificamos error.
         onView(withId(R.id.incid_edit_fr_borrar_button)).check(matches(isDisplayed())).perform(click());

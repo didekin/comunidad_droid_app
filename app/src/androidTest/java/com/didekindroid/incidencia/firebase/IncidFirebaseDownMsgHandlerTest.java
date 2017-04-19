@@ -116,7 +116,7 @@ public class IncidFirebaseDownMsgHandlerTest {
         assertThat(stackBuilder.getIntentCount(), is(2));
         Intent[] intents = stackBuilder.getIntents();
         assertThat(intents[0].getComponent().getShortClassName(), is(".comunidad.ComuSearchAc"));
-        assertThat(intents[1].getComponent().getShortClassName(), is(".incidencia.list.IncidSeeOpenByComuAc"));
+        assertThat(intents[1].getComponent().getShortClassName(), is(".incidencia.list.open.IncidSeeOpenByComuAc"));
         assertThat(intents[1].getLongExtra(COMUNIDAD_ID.key, 0L), is(comunidadId));
     }
 

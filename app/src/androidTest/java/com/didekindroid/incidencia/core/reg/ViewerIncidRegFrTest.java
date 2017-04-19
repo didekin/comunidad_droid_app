@@ -187,4 +187,10 @@ public class ViewerIncidRegFrTest {
         assertThat(viewer.doIncidImportanciaFromView(errors), nullValue());
         assertThat(errors.toString(), containsString(activity.getResources().getText(R.string.incid_reg_importancia).toString()));
     }
+
+    @Test
+    public void testDoOnClickItemId() throws Exception
+    {
+        // TODO: test.
+    }
 }

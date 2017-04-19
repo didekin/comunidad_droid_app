@@ -1,14 +1,8 @@
 package com.didekindroid.usuariocomunidad.spinner;
 
-import android.widget.Spinner;
-
-import com.didekindroid.api.CtrlerSpinner;
-import com.didekindroid.api.CtrlerSpinnerIf;
-import com.didekindroid.api.ObserverSpinner;
-import com.didekindroid.api.ViewerSelectableIf;
+import com.didekindroid.api.CtrlerSelectionList;
+import com.didekindroid.api.ObserverSelectionList;
 import com.didekinlib.model.comunidad.Comunidad;
-
-import java.util.concurrent.atomic.AtomicReference;
 
 import timber.log.Timber;
 
@@ -22,49 +16,29 @@ import static io.reactivex.schedulers.Schedulers.io;
  * Time: 15:11
  */
 
-public final class CtrlerComuSpinner extends CtrlerSpinner<Comunidad> {
+final class CtrlerComuSpinner extends CtrlerSelectionList<Comunidad> {
 
-    private final AtomicReference<ObserverSpinner<Comunidad>> observerSpinner;
+    private ObserverSelectionList<Comunidad> observerSpinner;
 
-    private CtrlerComuSpinner(ViewerSelectableIf<Spinner, CtrlerSpinnerIf> viewerIn)
+    private CtrlerComuSpinner(ViewerComuSpinner viewer)
     {
-        super(viewerIn);
-        observerSpinner = new AtomicReference<>(null);
+        super(viewer);
     }
 
-    static CtrlerSpinnerIf newControllerComuSpinner(ViewerSelectableIf<Spinner, CtrlerSpinnerIf> viewerIn)
+    static CtrlerComuSpinner newControllerComuSpinner(ViewerComuSpinner viewerIn)
     {
         CtrlerComuSpinner controller = new CtrlerComuSpinner(viewerIn);
-        controller.observerSpinner.compareAndSet(null, new ObserverSpinner<>(controller));
+        controller.observerSpinner = new ObserverSelectionList<>(controller);
         return controller;
     }
 
     @Override
-    public boolean loadDataInSpinner()
+    public boolean loadItemsByEntitiyId(Long... entityId)
     {
-        Timber.d("loadDataInSpinner()");
+        Timber.d("loadItemsByEntitiyId()");
         return subscriptions.add(comunidadesByUser()
                 .subscribeOn(io())
                 .observeOn(mainThread())
-                .subscribeWith(observerSpinner.get()));
-    }
-
-    @Override
-    public int getSelectedFromItemId(final long itemId)
-    {
-        int position = 0;
-        boolean isFound = false;
-        if (itemId > 0L) {
-            long comunidadIdIn;
-            do {
-                comunidadIdIn = ((Comunidad) getSpinnerView().getItemAtPosition(position)).getC_Id();
-                if (comunidadIdIn == itemId) {
-                    isFound = true;
-                    break;
-                }
-            } while (++position < getSpinnerView().getCount());
-        }
-        // Si no encontramos la comuidad, index = 0.
-        return isFound ? position : 0;
+                .subscribeWith(observerSpinner));
     }
 }

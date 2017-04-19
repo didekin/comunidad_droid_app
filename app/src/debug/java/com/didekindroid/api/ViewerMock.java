@@ -10,8 +10,19 @@ import android.view.View;
  */
 public class ViewerMock<T extends View, C extends ControllerIf> extends Viewer<T, C> {
 
+    public ViewerMock(Activity activity)
+    {
+        this(null, activity,null);
+    }
+
     public ViewerMock(T view, Activity activity, ViewerIf<T, C> parentViewer)
     {
         super(view, activity, null);
+    }
+
+    @Override
+    public int clearSubscriptions()
+    {
+        return 0;
     }
 }

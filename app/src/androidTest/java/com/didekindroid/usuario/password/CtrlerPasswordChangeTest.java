@@ -125,7 +125,7 @@ public class CtrlerPasswordChangeTest {
         }
 
         @Override
-        public void initActivity(@NonNull Bundle bundle)
+        public void replaceComponent(@NonNull Bundle bundle)
         {
             assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
         }

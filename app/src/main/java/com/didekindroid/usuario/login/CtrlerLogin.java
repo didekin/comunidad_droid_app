@@ -1,9 +1,8 @@
 package com.didekindroid.usuario.login;
 
 import android.support.annotation.NonNull;
-import android.view.View;
 
-import com.didekindroid.api.CtrlerIdentity;
+import com.didekindroid.api.Controller;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.security.IdentityCacher;
 import com.didekinlib.model.usuario.Usuario;
@@ -30,7 +29,7 @@ import static io.reactivex.schedulers.Schedulers.io;
  * Time: 12:53
  */
 @SuppressWarnings({"AnonymousInnerClassMayBeStatic", "WeakerAccess"})
-class CtrlerLogin extends CtrlerIdentity<View> implements CtrlerLoginIf {
+class CtrlerLogin extends Controller implements CtrlerLoginIf {
 
     private final ViewerLoginIf viewerLogin;
 

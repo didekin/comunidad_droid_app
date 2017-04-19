@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Spinner;
 
 import com.didekindroid.R;
+import com.didekindroid.api.OnSpinnerClick;
 import com.didekindroid.api.ViewerIf;
 import com.didekindroid.incidencia.core.IncidImportanciaBean;
 import com.didekindroid.incidencia.core.IncidenciaBean;
@@ -29,7 +30,7 @@ import static com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner.newVie
  * Date: 30/03/17
  * Time: 19:14
  */
-class ViewerIncidRegFr extends ViewerIncidRegEdit {
+class ViewerIncidRegFr extends ViewerIncidRegEdit implements OnSpinnerClick {
 
     AtomicReference<IncidenciaBean> atomIncidBean;
     AtomicReference<IncidImportanciaBean> atomIncidImportBean;
@@ -99,5 +100,13 @@ class ViewerIncidRegFr extends ViewerIncidRegEdit {
     {
         Timber.d("doIncidImportanciaFromView()");
         return atomIncidImportBean.get().makeIncidImportancia(errorMsg, activity.getResources(), view, atomIncidBean.get());
+    }
+
+    @Override
+    public long doOnClickItemId(long itemId)
+    {
+        Timber.d("doOnClickItemId()");
+        // do nothing.
+        return itemId;
     }
 }

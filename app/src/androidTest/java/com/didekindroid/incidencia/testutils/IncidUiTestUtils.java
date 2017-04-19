@@ -1,28 +1,23 @@
 package com.didekindroid.incidencia.testutils;
 
 import android.app.Activity;
-import android.view.View;
 
 import com.didekindroid.R;
 import com.didekindroid.incidencia.core.AmbitoIncidValueObj;
 import com.didekindroid.incidencia.core.IncidenciaDataDbHelper;
 import com.didekindroid.incidencia.core.edit.IncidEditAc;
+import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
-import org.hamcrest.CoreMatchers;
-import org.hamcrest.Matcher;
-
-import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.typeText;
+import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
-import static external.LongListMatchers.withAdaptedData;
+import static com.didekindroid.testutil.ActivityTestUtils.isDataDisplayedAndClick;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
@@ -37,9 +32,9 @@ import static org.junit.Assert.assertThat;
  * Time: 18:29
  */
 
-public final class IncidUiUtils {
+public final class IncidUiTestUtils {
 
-    private IncidUiUtils()
+    private IncidUiTestUtils()
     {
     }
 
@@ -117,6 +112,8 @@ public final class IncidUiUtils {
         // Precondiditions:
         assertThat(!incidImportancia.isIniciadorIncidencia() && !incidImportancia.getUserComu().hasAdministradorAuthority(), is(true));
 
+        checkScreenEditMinFr();
+
         onView(allOf(
                 withId(R.id.incid_comunidad_txt),
                 withText(incidImportancia.getIncidencia().getComunidad().getNombreComunidad())
@@ -135,36 +132,49 @@ public final class IncidUiUtils {
         onView(allOf(
                 withId(R.id.app_spinner_1_dropdown_item),
                 withParent(withId(R.id.incid_reg_importancia_spinner)),
+                // We adjust the array counter: android seems to add 1 to the counter passed to the method getStringArray().
                 withText(activity.getResources().getStringArray(R.array.IncidImportanciaArray)[incidImportancia.getImportancia()])
         )).check(matches(isDisplayed()));
     }
 
+    public static void doComunidadSpinner(Comunidad comunidad)
+    {
+        doComunidadSpinner(comunidad, R.id.incid_reg_comunidad_spinner);
+    }
+
+    public static void doComunidadSpinner(Comunidad comunidad, int resourceId)
+    {
+
+        onView(withId(resourceId)).perform(click());
+        waitAtMost(2, SECONDS).until(isDataDisplayedAndClick(
+                allOf(
+                        is(instanceOf(Comunidad.class)),
+                        is(comunidad)
+                )
+        ));
+    }
+
     public static void doImportanciaSpinner(Activity activity, int i)
     {
-        Matcher<View> importanciaValue = withAdaptedData(
+        onView(withId(R.id.incid_reg_importancia_spinner)).perform(click());
+        waitAtMost(2, SECONDS).until(isDataDisplayedAndClick(
                 allOf(
                         is(instanceOf(String.class)),
-                        CoreMatchers.<Object>is(activity.getResources().getStringArray(R.array.IncidImportanciaArray)[i]))
-        );
-
-        onView(withId(R.id.incid_reg_importancia_spinner)).perform(click());
-        waitAtMost(1, SECONDS).until(isViewDisplayed(importanciaValue));
-        onView(importanciaValue).perform(click());
+                        is(activity.getResources().getStringArray(R.array.IncidImportanciaArray)[i])
+                )
+        ));
     }
 
     public static void doAmbitoAndDescripcion(AmbitoIncidValueObj ambito, String descripcion)
     {
-        Matcher<View> ambitoValue = withAdaptedData(
+        onView(withId(R.id.incid_reg_ambito_spinner)).perform(click());
+        waitAtMost(2, SECONDS).until(isDataDisplayedAndClick(
                 allOf(
                         is(instanceOf(AmbitoIncidValueObj.class)),
-                        CoreMatchers.<Object>is(ambito)
+                        is(ambito)
                 )
-        );
+        ));
 
-        onView(withId(R.id.incid_reg_ambito_spinner)).perform(click());
-        waitAtMost(1, SECONDS).until(isViewDisplayed(ambitoValue));
-        onView(ambitoValue).perform(click());
-
-        onView(withId(R.id.incid_reg_desc_ed)).perform(typeText(descripcion));
+        onView(withId(R.id.incid_reg_desc_ed)).perform(replaceText(descripcion));
     }
 }

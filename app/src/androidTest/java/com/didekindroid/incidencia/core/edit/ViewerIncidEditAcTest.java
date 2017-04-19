@@ -1,7 +1,6 @@
 package com.didekindroid.incidencia.core.edit;
 
 import android.content.Intent;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -17,7 +16,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -33,14 +31,11 @@ import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_edit_ac_frgs_tag;
-import static com.didekindroid.testutil.ActivityTestUtils.addSubscription;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;

@@ -32,8 +32,8 @@ import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExt
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
-import static com.didekindroid.incidencia.testutils.IncidUiUtils.checkDataEditMinFr;
-import static com.didekindroid.incidencia.testutils.IncidUiUtils.checkScreenEditMinFr;
+import static com.didekindroid.incidencia.testutils.IncidUiTestUtils.checkDataEditMinFr;
+import static com.didekindroid.incidencia.testutils.IncidUiTestUtils.checkScreenEditMinFr;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_NUMBER;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;

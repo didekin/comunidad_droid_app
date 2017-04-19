@@ -1,6 +1,6 @@
 package com.didekindroid.usuario.password;
 
-import com.didekindroid.api.CtrlerIdentityIf;
+import com.didekindroid.api.ControllerIf;
 import com.didekinlib.model.usuario.Usuario;
 
 /**
@@ -8,7 +8,7 @@ import com.didekinlib.model.usuario.Usuario;
  * Date: 24/12/16
  * Time: 14:45
  */
-interface CtrlerPasswordChangeIf extends CtrlerIdentityIf {
+interface CtrlerPasswordChangeIf extends ControllerIf {
 
     boolean changePasswordInRemote(Usuario usuario);
 

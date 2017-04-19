@@ -1,9 +1,8 @@
 package com.didekindroid.usuario.password;
 
 import android.os.Bundle;
-import android.view.View;
 
-import com.didekindroid.api.CtrlerIdentity;
+import com.didekindroid.api.Controller;
 import com.didekindroid.security.IdentityCacher;
 import com.didekinlib.model.usuario.Usuario;
 
@@ -30,8 +29,7 @@ import static io.reactivex.schedulers.Schedulers.io;
  * Time: 20:37
  */
 @SuppressWarnings("WeakerAccess")
-class CtrlerPasswordChange extends CtrlerIdentity<View>
-        implements CtrlerPasswordChangeIf {
+class CtrlerPasswordChange extends Controller implements CtrlerPasswordChangeIf {
 
     CtrlerPasswordChange(ViewerPasswordChangeIf viewer)
     {
@@ -81,7 +79,7 @@ class CtrlerPasswordChange extends CtrlerIdentity<View>
     public void onSuccessChangedPswd()
     {
         Timber.d("onSuccessChangedPswd()");
-        ViewerPasswordChange.class.cast(viewer).initActivity(new Bundle());
+        ViewerPasswordChange.class.cast(viewer).replaceComponent(new Bundle());
     }
 
     // ............................ SUBSCRIBERS ..................................

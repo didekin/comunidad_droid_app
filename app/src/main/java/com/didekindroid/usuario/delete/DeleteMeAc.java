@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.didekindroid.R;
-import com.didekindroid.router.ActivityInitiatorIf;
+import com.didekindroid.router.ComponentReplacerIf;
 import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.router.ActivityRouter;
 
@@ -25,7 +25,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * Postconditions:
  * 1. Unregistered user, if she chooses so. ComuSearchAc is to be showed.
  */
-public class DeleteMeAc extends AppCompatActivity implements ActivityInitiatorIf {
+public class DeleteMeAc extends AppCompatActivity implements ComponentReplacerIf {
 
     View acView;
     CtrlerDeleteMeIf controller;
@@ -71,7 +71,7 @@ public class DeleteMeAc extends AppCompatActivity implements ActivityInitiatorIf
     }
 
     @Override
-    public void initActivity(Bundle bundle)
+    public void replaceComponent(Bundle bundle)
     {
         Timber.d("initActivityWithBundle()");
         new ActivityInitiator(this).initActivityWithFlag(bundle, FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TOP);

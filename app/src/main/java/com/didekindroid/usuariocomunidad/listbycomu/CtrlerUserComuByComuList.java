@@ -1,10 +1,8 @@
 package com.didekindroid.usuariocomunidad.listbycomu;
 
-import android.widget.ListView;
-
-import com.didekindroid.api.CtrlerIdentity;
-import com.didekindroid.api.CtrlerListIf;
-import com.didekindroid.api.ObserverSingleList;
+import com.didekindroid.api.Controller;
+import com.didekindroid.api.CtrlerSelectionListIf;
+import com.didekindroid.api.ObserverSelectionList;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
@@ -26,8 +24,8 @@ import static io.reactivex.schedulers.Schedulers.io;
  * Time: 10:59
  */
 @SuppressWarnings({"AnonymousInnerClassMayBeStatic"})
-class CtrlerUserComuByComuList extends CtrlerIdentity<ListView> implements
-        CtrlerListIf<UsuarioComunidad> {
+class CtrlerUserComuByComuList extends Controller implements
+        CtrlerSelectionListIf<UsuarioComunidad> {
 
     private final ViewerSeeUserComuByComu viewerList;
 
@@ -66,21 +64,21 @@ class CtrlerUserComuByComuList extends CtrlerIdentity<ListView> implements
     // .................................... INSTANCE METHODS .................................
 
     @Override
-    public boolean loadItemsByEntitiyId(final long entityId)
+    public boolean loadItemsByEntitiyId(final Long... entityId)
     {
         Timber.d("loadItemsByEntitiyId()");
         return subscriptions.add(
-                listByEntityId(entityId)
+                listByEntityId(entityId[0])
                         .subscribeOn(io())
                         .observeOn(mainThread())
-                        .subscribeWith(new ObserverSingleList<>(this))
+                        .subscribeWith(new ObserverSelectionList<>(this))
         );
     }
 
     @Override
-    public void onSuccessLoadItemsById(List<UsuarioComunidad> itemList)
+    public void onSuccessLoadItemsInList(List<UsuarioComunidad> itemList)
     {
-        Timber.d("onSuccessLoadItemsById()");
+        Timber.d("onSuccessLoadItemsInList()");
         viewerList.processLoadedItemsinView(itemList);
     }
 
@@ -96,7 +94,8 @@ class CtrlerUserComuByComuList extends CtrlerIdentity<ListView> implements
                             public void onSuccess(Comunidad comunidad)
                             {
                                 Timber.d("onSuccess()");
-                                onSuccessComunidadData(comunidad); }
+                                onSuccessComunidadData(comunidad);
+                            }
 
                             @Override
                             public void onError(Throwable e)

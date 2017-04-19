@@ -81,14 +81,6 @@ public final class UIutils {
         return false;
     }
 
-    public ActivityManager getActivityManager(Context context)
-    {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            return context.getSystemService(ActivityManager.class);
-        }
-        return (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-    }
-
     public static void finishActivity(Activity activity, Intent intent)
     {
         if (!activity.getClass().getCanonicalName().equals(intent.getComponent().getClassName())) {
@@ -134,8 +126,6 @@ public final class UIutils {
         assertTrue(subscriptions.size() == 0, subscriptions_should_be_zero);
         return subscriptions.size();
     }
-
-//    ================================== CURSORS ======================================
 
     public static void closeCursor(Adapter adapter)
     {
@@ -196,15 +186,13 @@ public final class UIutils {
         return NumberFormat.getIntegerInstance().format(number);
     }
 
-    //    ================================== ERRORS ======================================
+    //    ================================== EXCEPTIONS ===================================
 
     public static StringBuilder getErrorMsgBuilder(Context context)
     {
         return new StringBuilder(context.getResources().getText(R.string.error_validation_msg))
                 .append(LINE_BREAK.getRegexp());
     }
-
-    //    ================================== EXCEPTIONS ===================================
 
     @NonNull
     public static UiException getUiExceptionFromThrowable(Throwable e)
@@ -271,6 +259,13 @@ public final class UIutils {
         doToolBar(activity, APPBAR_ID, hasParentAc);
     }
 
+    public ActivityManager getActivityManager(Context context)
+    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return context.getSystemService(ActivityManager.class);
+        }
+        return (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+    }
 
 /*
     When inflating anything to be displayed on the action bar (such as a SpinnerAdapter for

@@ -6,14 +6,9 @@ import android.support.annotation.NonNull;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 
 import com.didekindroid.api.ActivityMock;
-import com.didekindroid.api.ViewerIf;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.incidencia.list.ViewerIncidListByComu;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
@@ -44,6 +39,7 @@ import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_B;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_C;
+import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_D;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceAndroidMain;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceIoScheduler;
@@ -84,7 +80,7 @@ public class CtrlerIncidSeeCloseByComuTest {
     public void setUp() throws IOException, UiException, InterruptedException
     {
         activity = activityRule.getActivity();
-        controller = new CtrlerIncidSeeCloseByComu(new ViewerIncidSeeForTest(new ListView(activity), null, activity, null));
+        controller = new CtrlerIncidSeeCloseByComu(new ViewerIncidSeeForTest(new View(activity), activity));
 
         signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
         pepeUserComu = userComuDaoRemote.seeUserComusByUser().get(0);
@@ -131,9 +127,9 @@ public class CtrlerIncidSeeCloseByComuTest {
     @Test
     public void testLoadItemsByEntitiyId()
     {
-        CtrlerIncidSeeCloseByComu controllerLocal = new CtrlerIncidSeeCloseByComu(new ViewerIncidSeeForTest(null, null, activity, null)){
+        CtrlerIncidSeeCloseByComu controllerLocal = new CtrlerIncidSeeCloseByComu(new ViewerIncidSeeForTest(new View(activity), activity)) {
             @Override
-            public void onSuccessLoadItemsById(@NonNull List<IncidenciaUser> incidCloseList)
+            public void onSuccessLoadItemsInList(@NonNull List<IncidenciaUser> incidCloseList)
             {
                 assertThat(incidCloseList, notNullValue());
                 assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
@@ -154,7 +150,7 @@ public class CtrlerIncidSeeCloseByComuTest {
     @Test
     public void testSelectItem()
     {
-        CtrlerIncidSeeCloseByComu controllerLocal = new CtrlerIncidSeeCloseByComu(new ViewerIncidSeeForTest(null, null, activity, null)){
+        CtrlerIncidSeeCloseByComu controllerLocal = new CtrlerIncidSeeCloseByComu(new ViewerIncidSeeForTest(new View(activity), activity)) {
             @Override
             public void onSuccessSelectedItem(@NonNull Bundle bundle)
             {
@@ -177,14 +173,8 @@ public class CtrlerIncidSeeCloseByComuTest {
     @Test
     public void testOnSuccessLoadItemsById() throws Exception
     {
-        // Precondition:
-        assertThat(controller.adapter.getCount(), is(0));
-        // Execute
-        controller.onSuccessLoadItemsById(incidList);
-        ArrayAdapter<IncidenciaUser> adapterTest = controller.adapter;
-        // Check
-        assertThat(adapterTest.getCount(), is(1));
-        assertThat(controller.getViewer().getViewInViewer().getAdapter(), CoreMatchers.<ListAdapter>is(adapterTest));
+        controller.onSuccessLoadItemsInList(new ArrayList<IncidenciaUser>());
+        assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_D));
     }
 
     @Test
@@ -198,24 +188,30 @@ public class CtrlerIncidSeeCloseByComuTest {
     //    .................................... HELPERS .................................
     //  ============================================================================================
 
-    class ViewerIncidSeeForTest extends ViewerIncidListByComu {
-
-        public ViewerIncidSeeForTest(ListView view, View emptyListView, Activity activity, ViewerIf parentViewer)
-        {
-            super(view, emptyListView, activity, parentViewer);
-        }
-
-        @Override
-        public void initActivity(@NonNull Bundle bundle)
-        {
-            assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_C), is(BEFORE_METHOD_EXEC));
-        }
-    }
-
     void checkBundle(Bundle bundleIn)
     {
         assertThat(bundleIn.getBoolean(IS_MENU_IN_FRAGMENT_FLAG.key), is(true));
         assertThat(bundleIn.getSerializable(INCIDENCIA_OBJECT.key), CoreMatchers.<Serializable>is(incidencia));
         assertThat(bundleIn.getSerializable(INCID_RESOLUCION_OBJECT.key), CoreMatchers.<Serializable>is(resolucion));
+    }
+
+    class ViewerIncidSeeForTest extends ViewerIncidSeeClose {
+
+        protected ViewerIncidSeeForTest(View frView, Activity activity)
+        {
+            super(frView, activity);
+        }
+
+        @Override
+        public void replaceComponent(@NonNull Bundle bundle)
+        {
+            assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_C), is(BEFORE_METHOD_EXEC));
+        }
+
+        @Override
+        public void onSuccessLoadItems(List<IncidenciaUser> incidCloseList)
+        {
+            assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_D), is(BEFORE_METHOD_EXEC));
+        }
     }
 }

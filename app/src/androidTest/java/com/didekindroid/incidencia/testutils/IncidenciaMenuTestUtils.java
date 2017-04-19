@@ -12,6 +12,9 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.awaitility.Awaitility.waitAtMost;
 
 /**
  * User: pedro@didekin
@@ -49,7 +52,7 @@ public enum IncidenciaMenuTestUtils {
         public void checkMenuItem_WTk(Activity activity)
         {
             onView(withText(R.string.incid_resolucion_ac_mn)).check(matches(isDisplayed())).perform(click());
-            onView(withId(R.id.incid_resolucion_fragment_container_ac)).check(matches(isDisplayed()));
+            waitAtMost(2, SECONDS).until(isResourceIdDisplayed(R.id.incid_resolucion_fragment_container_ac));
         }
     },
 

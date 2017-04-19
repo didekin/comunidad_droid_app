@@ -101,7 +101,7 @@ public class CtrlerUserComuByComuTest {
     public void testOnSuccessLoadItemsById()
     {
         List<UsuarioComunidad> userComus = new ArrayList<>();
-        controller.onSuccessLoadItemsById(userComus);
+        controller.onSuccessLoadItemsInList(userComus);
         assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_A));
     }
 

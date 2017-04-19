@@ -7,7 +7,7 @@ import android.provider.BaseColumns;
  * Date: 16/11/15
  * Time: 16:43
  */
-public final class IncidenciaDataDb {
+final class IncidenciaDataDb {
 
     private IncidenciaDataDb(){}
 

@@ -2,14 +2,11 @@ package com.didekindroid.incidencia.list.close;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
-import com.didekindroid.api.CtrlerIdentity;
+import com.didekindroid.api.Controller;
 import com.didekindroid.api.CtrlerSelectableItemIf;
 import com.didekindroid.api.ObserverMaybeList;
 import com.didekindroid.api.ObserverSingleSelectedItem;
-import com.didekindroid.incidencia.list.ViewerIncidListByComu;
 import com.didekindroid.security.IdentityCacher;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
@@ -38,20 +35,17 @@ import static io.reactivex.schedulers.Schedulers.io;
  * Time: 17:15
  */
 @SuppressWarnings({"TypeMayBeWeakened", "AnonymousInnerClassMayBeStatic", "WeakerAccess"})
-public class CtrlerIncidSeeCloseByComu extends CtrlerIdentity<ListView> implements
-        CtrlerSelectableItemIf<IncidenciaUser,Bundle> {
+public class CtrlerIncidSeeCloseByComu extends Controller implements
+        CtrlerSelectableItemIf<IncidenciaUser, Bundle> {
 
-    final ArrayAdapter<IncidenciaUser> adapter;
-
-    CtrlerIncidSeeCloseByComu(ViewerIncidListByComu incidViewer)
+    CtrlerIncidSeeCloseByComu(ViewerIncidSeeClose incidViewer)
     {
         this(incidViewer, TKhandler);
     }
 
-    private CtrlerIncidSeeCloseByComu(ViewerIncidListByComu viewer, IdentityCacher identityCacher)
+    private CtrlerIncidSeeCloseByComu(ViewerIncidSeeClose viewer, IdentityCacher identityCacher)
     {
         super(viewer, identityCacher);
-        adapter = new AdapterIncidSeeClosedByComu(viewer.getActivity());
     }
 
     // .................................... OBSERVABLES .................................
@@ -91,12 +85,12 @@ public class CtrlerIncidSeeCloseByComu extends CtrlerIdentity<ListView> implemen
     // .................................... INSTANCE METHODS .................................
 
     @Override
-    public boolean loadItemsByEntitiyId(long comunidadId)
+    public boolean loadItemsByEntitiyId(Long... comunidadId)
     {
         Timber.d("loadItemsByEntitiyId()");
-        assertTrue(comunidadId > 0L, "Comunidad ID should be greater than 0");
+        assertTrue(comunidadId[0] > 0L, "Comunidad ID should be greater than 0");
         return subscriptions.add(
-                incidCloseList(comunidadId)
+                incidCloseList(comunidadId[0])
                         .subscribeOn(io())
                         .observeOn(mainThread())
                         .subscribeWith(new ObserverMaybeList<>(this))
@@ -104,12 +98,10 @@ public class CtrlerIncidSeeCloseByComu extends CtrlerIdentity<ListView> implemen
     }
 
     @Override
-    public void onSuccessLoadItemsById(@NonNull List<IncidenciaUser> incidCloseList)
+    public void onSuccessLoadItemsInList(@NonNull List<IncidenciaUser> incidCloseList)
     {
-        Timber.d("onPostExecute()");
-        adapter.clear();
-        adapter.addAll(incidCloseList);
-        viewer.getViewInViewer().setAdapter(adapter);
+        Timber.d("onSuccessLoadItemsInList();");
+        ViewerIncidSeeClose.class.cast(viewer).onSuccessLoadItems(incidCloseList);
     }
 
     @Override
@@ -129,6 +121,6 @@ public class CtrlerIncidSeeCloseByComu extends CtrlerIdentity<ListView> implemen
     public void onSuccessSelectedItem(@NonNull Bundle bundle)
     {
         Timber.d("onSuccessSelectedItem()");
-        ViewerIncidListByComu.class.cast(viewer).initActivity(bundle);
+        ViewerIncidSeeClose.class.cast(viewer).replaceComponent(bundle);
     }
 }

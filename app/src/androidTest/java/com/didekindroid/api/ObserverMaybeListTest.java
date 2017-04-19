@@ -33,7 +33,7 @@ public class ObserverMaybeListTest {
     final static AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
 
     @Test
-    public void onSuccess() throws Exception
+    public void testOnSuccess() throws Exception
     {
         List<Integer> list = new ArrayList<>(1);
         list.add(11);
@@ -41,7 +41,7 @@ public class ObserverMaybeListTest {
         Maybe.just(list).subscribeWith(
                 new ObserverMaybeList<>(
                         new CtrlerIncidSeeForTest(
-                                new ViewerMock<View, CtrlerListIf<Integer>>(null, null, null)
+                                new ViewerMock<View, CtrlerSelectionListIf>(null, null, null)
                         )
                 )
         );
@@ -49,12 +49,12 @@ public class ObserverMaybeListTest {
     }
 
     @Test
-    public void onError() throws Exception
+    public void testOnError() throws Exception
     {
         Maybe.<List<Integer>>error(new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR)))
                 .subscribeWith(new ObserverMaybeList<>(
                         new CtrlerIncidSeeForTest(
-                                new ViewerMock<View, CtrlerListIf<Integer>>(null, null, null)
+                                new ViewerMock<View, CtrlerSelectionListIf>(null, null, null)
                         )
                 ));
         assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_WITH_EXCEPTION_EXEC));
@@ -64,22 +64,21 @@ public class ObserverMaybeListTest {
     //    .................................... HELPERS .................................
     //  ============================================================================================
 
-    class CtrlerIncidSeeForTest extends CtrlerIdentity<View> implements
-            CtrlerListIf<Integer> {
+    class CtrlerIncidSeeForTest extends Controller implements CtrlerSelectionListIf<Integer> {
 
-        protected CtrlerIncidSeeForTest(ViewerIf<View, CtrlerListIf<Integer>> viewer)
+        public CtrlerIncidSeeForTest(ViewerIf<View, CtrlerSelectionListIf> viewer)
         {
             super(viewer);
         }
 
         @Override
-        public boolean loadItemsByEntitiyId(long entityId)
+        public boolean loadItemsByEntitiyId(Long... entityId)
         {
             return false; // NOT necessary for test.
         }
 
         @Override
-        public void onSuccessLoadItemsById(List<Integer> itemList)
+        public void onSuccessLoadItemsInList(List<Integer> itemList)
         {
             assertThat(itemList.size(), is(2));
             assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));

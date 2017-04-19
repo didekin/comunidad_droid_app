@@ -1,5 +1,6 @@
 package com.didekindroid.api;
 
+import java.io.Serializable;
 import java.util.List;
 
 import io.reactivex.observers.DisposableSingleObserver;
@@ -10,11 +11,11 @@ import timber.log.Timber;
  * Date: 16/03/17
  * Time: 15:56
  */
-public class ObserverSpinner<E> extends DisposableSingleObserver<List<E>> {
+public class ObserverSelectionList<E extends Serializable> extends DisposableSingleObserver<List<E>> {
 
-    private final CtrlerSpinnerIf<E> controller;
+    private final CtrlerSelectionListIf<E> controller;
 
-    public ObserverSpinner(CtrlerSpinnerIf<E> controller)
+    public ObserverSelectionList(CtrlerSelectionListIf<E> controller)
     {
         this.controller = controller;
     }
@@ -23,7 +24,7 @@ public class ObserverSpinner<E> extends DisposableSingleObserver<List<E>> {
     public void onSuccess(List<E> items)
     {
         Timber.d("onSuccess()");
-        controller.onSuccessLoadDataInSpinner(items);
+        controller.onSuccessLoadItemsInList(items);
     }
 
     @Override

@@ -7,7 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.router.ActivityInitiatorIf;
+import com.didekindroid.router.ComponentReplacerIf;
 import com.didekindroid.router.ActivityInitiator;
 
 import timber.log.Timber;
@@ -23,7 +23,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * 1. Registered user with modified data.
  * 2. An intent is created for menu options with the old user data, once they have been loaded.
  */
-public class UserDataAc extends AppCompatActivity implements ActivityInitiatorIf {
+public class UserDataAc extends AppCompatActivity implements ComponentReplacerIf {
 
     ViewerUserDataIf viewer;
     View acView;
@@ -49,7 +49,7 @@ public class UserDataAc extends AppCompatActivity implements ActivityInitiatorIf
     }
 
     @Override
-    public void initActivity(Bundle bundle)
+    public void replaceComponent(Bundle bundle)
     {
         Timber.d("initActivityWithBundle()");
         new ActivityInitiator(this).initActivityWithBundle(bundle);

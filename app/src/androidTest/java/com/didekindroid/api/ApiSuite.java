@@ -1,7 +1,5 @@
 package com.didekindroid.api;
 
-import com.didekindroid.router.ActivityInitiatorTest;
-
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -13,13 +11,11 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         ControllerTest.class,
-        CtrlerIdentityTest.class,
-        CtrlerSpinnerTest.class,
+        CtrlerSelectionListTest.class,
         ObserverMaybeListTest.class,
-        ObserverSingleListTest.class,
         ObserverSingleSelectedItemTest.class,
-        ObserverSpinnerTest.class,
-        ActivityInitiatorTest.class,
+        ObserverSelectionListTest.class,
+        ViewerSelectionListTest.class,
         ViewerTest.class,
 })
 public class ApiSuite {

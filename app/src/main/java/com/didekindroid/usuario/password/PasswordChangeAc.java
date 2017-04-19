@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.router.ActivityInitiatorIf;
+import com.didekindroid.router.ComponentReplacerIf;
 import com.didekindroid.router.ActivityInitiator;
 
 import timber.log.Timber;
@@ -22,7 +22,7 @@ import static com.didekindroid.util.UIutils.makeToast;
  * 1. Password changed and tokenCache updated.
  * 2. It goes to UserDataAc activity.
  */
-public class PasswordChangeAc extends AppCompatActivity implements ActivityInitiatorIf {
+public class PasswordChangeAc extends AppCompatActivity implements ComponentReplacerIf {
 
     ViewerPasswordChangeIf viewer;
     View acView;
@@ -50,7 +50,7 @@ public class PasswordChangeAc extends AppCompatActivity implements ActivityIniti
     }
 
     @Override
-    public void initActivity(Bundle bundle)
+    public void replaceComponent(Bundle bundle)
     {
         Timber.d("initActivityWithBundle()");
         makeToast(this, R.string.password_remote_change);

@@ -1,6 +1,6 @@
 package com.didekindroid.usuario.login;
 
-import com.didekindroid.api.CtrlerIdentityIf;
+import com.didekindroid.api.ControllerIf;
 import com.didekinlib.model.usuario.Usuario;
 
 /**
@@ -8,7 +8,7 @@ import com.didekinlib.model.usuario.Usuario;
  * Date: 29/11/16
  * Time: 10:30
  */
-interface CtrlerLoginIf extends CtrlerIdentityIf {
+interface CtrlerLoginIf extends ControllerIf {
 
     void onSuccessValidateLogin(Boolean isLoginOk);
 

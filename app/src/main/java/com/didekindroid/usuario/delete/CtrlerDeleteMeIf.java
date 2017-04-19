@@ -1,13 +1,13 @@
 package com.didekindroid.usuario.delete;
 
-import com.didekindroid.api.CtrlerIdentityIf;
+import com.didekindroid.api.ControllerIf;
 
 /**
  * User: pedro@didekin
  * Date: 23/12/16
  * Time: 11:46
  */
-interface CtrlerDeleteMeIf extends CtrlerIdentityIf {
+interface CtrlerDeleteMeIf extends ControllerIf {
 
     boolean deleteMeRemote();
 

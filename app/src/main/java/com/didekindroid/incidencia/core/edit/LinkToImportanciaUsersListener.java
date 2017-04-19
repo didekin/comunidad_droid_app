@@ -11,7 +11,7 @@ public class LinkToImportanciaUsersListener implements View.OnClickListener {
 
     private final LinkToImportanciaUsersClickable clickable;
 
-    public LinkToImportanciaUsersListener(LinkToImportanciaUsersClickable clickable)
+    LinkToImportanciaUsersListener(LinkToImportanciaUsersClickable clickable)
     {
         this.clickable = clickable;
     }

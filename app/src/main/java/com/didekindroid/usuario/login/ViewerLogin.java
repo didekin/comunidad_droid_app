@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.didekindroid.R;
-import com.didekindroid.router.ActivityInitiatorIf;
+import com.didekindroid.router.ComponentReplacerIf;
 import com.didekindroid.api.Viewer;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf;
@@ -219,6 +219,6 @@ class ViewerLogin extends Viewer<View, CtrlerLoginIf> implements ViewerLoginIf {
     public void initActivity(@NonNull Bundle bundle)
     {
         Timber.d("initActivityWithBundle()");
-        ActivityInitiatorIf.class.cast(activity).initActivity(bundle);
+        ComponentReplacerIf.class.cast(activity).replaceComponent(bundle);
     }
 }

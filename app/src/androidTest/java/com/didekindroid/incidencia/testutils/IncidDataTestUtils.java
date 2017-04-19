@@ -72,6 +72,20 @@ public final class IncidDataTestUtils {
         return incidenciaDao.regIncidImportancia(incidImportancia);
     }
 
+    public static IncidImportancia makeRegGetIncidImportancia(UsuarioComunidad userComu, short importancia) throws UiException
+    {
+        IncidImportancia incidImportancia = new IncidImportancia.IncidImportanciaBuilder(
+                doIncidencia(userComu.getUsuario().getUserName(), INCID_DEFAULT_DESC, userComu.getComunidad().getC_Id(), (short) 43))
+                .usuarioComunidad(userComu)
+                .importancia(importancia)
+                .build();
+
+        incidenciaDao.regIncidImportancia(incidImportancia);
+        Incidencia incidenciaDb = incidenciaDao.seeIncidsOpenByComu(userComu.getComunidad().getC_Id()).get(0).getIncidencia();
+        incidImportancia = incidenciaDao.seeIncidImportancia(incidenciaDb.getIncidenciaId()).getIncidImportancia();
+        return incidImportancia;
+    }
+
     public static IncidenciaUser insertGetIncidenciaUser(UsuarioComunidad userComu, int importancia) throws UiException
     {
         makeAndRegIncidImportancia(userComu, (short) importancia);

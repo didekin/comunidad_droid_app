@@ -5,14 +5,15 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-import com.didekindroid.api.CtrlerSpinnerIf;
-import com.didekindroid.api.Viewer;
+import com.didekindroid.api.CtrlerSelectionList;
 import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ViewerSelectableIf;
+import com.didekindroid.api.ViewerSelectionList;
 
 import java.io.Serializable;
+import java.util.List;
 
 import timber.log.Timber;
 
@@ -24,16 +25,8 @@ import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA
  * Time: 11:57
  */
 
-public final class ViewerImportanciaSpinner extends Viewer<Spinner, CtrlerSpinnerIf>
-        implements ViewerSelectableIf<Spinner, CtrlerSpinnerIf> {
+public final class ViewerImportanciaSpinner extends ViewerSelectionList<Spinner, CtrlerSelectionList<String>, String> {
 
-    /**
-     * This id can be set in two ways:
-     * 1. The user selects one item in the spinner.
-     * 2. The id is retrieved from savedInstanceState.
-     */
-    @SuppressWarnings("WeakerAccess")
-    short itemSelectedId;
     @SuppressWarnings("WeakerAccess")
     IncidImportanciaBean bean;
 
@@ -50,6 +43,18 @@ public final class ViewerImportanciaSpinner extends Viewer<Spinner, CtrlerSpinne
         return instance;
     }
 
+    // ==================================== ViewerSelectionListIf ====================================
+
+    @Override
+    public void onSuccessLoadItems(List<String> incidCloseList)
+    {
+        Timber.d("onSuccessLoadItems()");
+
+        ArrayAdapter<String> adapter = ViewerSelectionList.getArrayAdapterForSpinner(String.class, activity);
+        adapter.addAll(incidCloseList);
+        view.setSelection(getSelectedViewFromItemId(itemSelectedId));
+    }
+
     @Override
     public void initSelectedItemId(Bundle savedState)
     {
@@ -62,6 +67,18 @@ public final class ViewerImportanciaSpinner extends Viewer<Spinner, CtrlerSpinne
         } else {
             itemSelectedId = (short) 0;
         }
+    }
+
+    // ==================================== ViewerIf ====================================
+
+    @Override
+    public void doViewInViewer(Bundle savedState, Serializable viewBean)
+    {
+        Timber.d("doViewInViewer()");
+        bean = IncidImportanciaBean.class.cast(viewBean);
+        view.setOnItemSelectedListener(new ImportanciaSelectedListener());
+        initSelectedItemId(savedState);
+        CtrlerSelectionList.class.cast(controller).loadItemsByEntitiyId();
     }
 
     @Override
@@ -77,31 +94,6 @@ public final class ViewerImportanciaSpinner extends Viewer<Spinner, CtrlerSpinne
         }
     }
 
-    @Override
-    public long getSelectedItemId()
-    {
-        Timber.d("getSelectedItemId()");
-        return itemSelectedId;
-    }
-
-    /* Mainly for tests */
-    public void setItemSelectedId(short itemSelectedId)
-    {
-        this.itemSelectedId = itemSelectedId;
-    }
-
-    // ==================================== ViewerIf ====================================
-
-    @Override
-    public void doViewInViewer(Bundle savedState, Serializable viewBean)
-    {
-        Timber.d("doViewInViewer()");
-        bean = IncidImportanciaBean.class.cast(viewBean);
-        view.setOnItemSelectedListener(new ImportanciaSelectedListener());
-        initSelectedItemId(savedState);
-        controller.loadDataInSpinner();
-    }
-
     //  ===================================== HELPERS ============================================
 
     @SuppressWarnings("WeakerAccess")
@@ -111,7 +103,7 @@ public final class ViewerImportanciaSpinner extends Viewer<Spinner, CtrlerSpinne
         {
             Timber.d("importanciaSpinner.onItemSelected()");
             itemSelectedId = (short) position;
-            bean.setImportancia(itemSelectedId);
+            bean.setImportancia((short) itemSelectedId);
         }
 
         @Override

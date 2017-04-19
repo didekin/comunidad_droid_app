@@ -1,5 +1,6 @@
 package com.didekindroid;
 
+import android.app.FragmentManager;
 import android.content.Context;
 import android.os.StrictMode;
 
@@ -62,9 +63,13 @@ public final class AppInitializer {
 
     private void initDebugBuildConfig()
     {
+        Timber.d("initDebugBuildConfig(), BUILD_TYPE: %s", BuildConfig.BUILD_TYPE);
+
         if (BuildConfig.DEBUG || BuildConfig.BUILD_TYPE.equals("local")) {
+
             Timber.plant(new Timber.DebugTree());
-//            ButterKnife.setDebug(true);
+
+            FragmentManager.enableDebugLogging(true);
 
             StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
                     .detectDiskReads()
@@ -79,8 +84,9 @@ public final class AppInitializer {
                     .penaltyLog()
                     .build());
 
-            Timber.d("BUILD_TYPE: %s", BuildConfig.BUILD_TYPE);
+
             /* TODO: ejemplo en Timber para librería de comunicación de errores en cliente al servidor.*/
+            //            ButterKnife.setDebug(true);
         }
     }
 

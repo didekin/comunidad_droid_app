@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.didekindroid.R;
-import com.didekindroid.router.ActivityInitiatorIf;
+import com.didekindroid.router.ComponentReplacerIf;
 import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.api.Viewer;
 import com.didekindroid.exception.UiException;
@@ -39,7 +39,7 @@ import static com.didekinlib.http.GenericExceptionMsg.BAD_REQUEST;
  * Time: 10:27
  */
 class ViewerUserData extends Viewer<View, CtrlerUserDataIf> implements ViewerUserDataIf,
-        ActivityInitiatorIf {
+        ComponentReplacerIf {
 
     private final EditText emailView;
     private final EditText aliasView;
@@ -203,7 +203,7 @@ class ViewerUserData extends Viewer<View, CtrlerUserDataIf> implements ViewerUse
     }
 
     @Override
-    public void initActivity(Bundle bundle)
+    public void replaceComponent(Bundle bundle)
     {
        Timber.d("initActivityWithBundle()");
         ActivityInitiator.class.cast(activity).initActivityWithBundle(bundle);

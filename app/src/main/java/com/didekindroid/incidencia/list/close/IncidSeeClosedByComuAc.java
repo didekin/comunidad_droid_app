@@ -2,15 +2,15 @@ package com.didekindroid.incidencia.list.close;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.didekindroid.R;
-import com.didekindroid.router.ActivityInitiator;
-import com.didekindroid.router.ActivityInitiatorIf;
 import com.didekindroid.incidencia.resolucion.IncidResolucionSeeFr;
+import com.didekindroid.router.ActivityInitiator;
+import com.didekindroid.router.ComponentReplacerIf;
+import com.didekindroid.router.FragmentInitiator;
 
 import timber.log.Timber;
 
@@ -24,18 +24,18 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * 1. The user is NOW registered in the comunidad whose incidencias are shown.
  * 2. The incidencias shown have been registered in the last 24 months and are closed.
  * 3. All the incidencias closed in a comunidad where the user is NOW registered are shown,
- *    even is the user was not registered in the comunidad when incidencia was open or closed.
+ * even is the user was not registered in the comunidad when incidencia was open or closed.
  * 4. All incidencias closed MUST HAVE a bundleWithResolucion.
  * 5. An intent may be passed with a comunidadId, when a notification is sent when the
- *    incidencia has been closed.
+ * incidencia has been closed.
  * Postconditions:
  * 1. A list of IncidenciaUSer instances are shown.
  * 2. The incidencias are shown in chronological order, from the most recent to the oldest one.
  * 3. If an incidencia is selected, the bundleWithResolucion data are shown.
  * -- Arguments with incidImportancia, bundleWithResolucion and a toShowMenu flag are passed to the bundleWithResolucion
- *    fragment.
+ * fragment.
  */
-public class IncidSeeClosedByComuAc extends AppCompatActivity implements ActivityInitiatorIf {
+public class IncidSeeClosedByComuAc extends AppCompatActivity implements ComponentReplacerIf {
 
     IncidSeeCloseByComuFr fragmentList;
 
@@ -62,15 +62,11 @@ public class IncidSeeClosedByComuAc extends AppCompatActivity implements Activit
                 .commit();
     }
 
-    public void initActivity(@NonNull Bundle bundle)
+    public void replaceComponent(@NonNull Bundle bundle)
     {
-        Timber.d("initActivityWithBundle()");
-        Fragment switchFragment = new IncidResolucionSeeFr();
-        switchFragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.incid_see_closed_by_comu_ac, switchFragment, incid_resolucion_see_fr_tag)
-                .addToBackStack(switchFragment.getClass().getName())
-                .commit();
+        Timber.d("changeFragment()");
+        new FragmentInitiator(this, R.id.incid_see_closed_by_comu_ac)
+                .initFragment(bundle, new IncidResolucionSeeFr(), incid_resolucion_see_fr_tag);
     }
 
     // ============================================================

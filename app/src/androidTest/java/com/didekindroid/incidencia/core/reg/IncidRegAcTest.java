@@ -10,7 +10,6 @@ import com.didekindroid.R;
 import com.didekindroid.api.ViewerIf;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.core.AmbitoIncidValueObj;
-import com.didekinlib.model.comunidad.Comunidad;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.After;
@@ -22,16 +21,14 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_LA_FUENTE;
-import static com.didekindroid.incidencia.testutils.IncidUiUtils.doAmbitoAndDescripcion;
-import static com.didekindroid.incidencia.testutils.IncidUiUtils.doImportanciaSpinner;
+import static com.didekindroid.incidencia.testutils.IncidUiTestUtils.doAmbitoAndDescripcion;
+import static com.didekindroid.incidencia.testutils.IncidUiTestUtils.doComunidadSpinner;
+import static com.didekindroid.incidencia.testutils.IncidUiTestUtils.doImportanciaSpinner;
 import static com.didekindroid.testutil.ActivityTestUtils.addSubscription;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
@@ -50,7 +47,6 @@ import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.core.AllOf.allOf;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
@@ -137,9 +133,7 @@ public class IncidRegAcTest {
     public void testRegisterIncidencia_4() throws UiException
     {
         // Probamos cambio de comunidad en spinner: Calle La Fuente.
-        onView(withId(R.id.incid_reg_comunidad_spinner)).perform(click());
-        onData(allOf(is(instanceOf(Comunidad.class)), is(COMU_LA_FUENTE))).perform(click()).check(matches(isDisplayed()));
-
+        doComunidadSpinner(COMU_LA_FUENTE);
         // Registro de incidencia con importancia.
         doImportanciaSpinner(activity, 4);
         doAmbitoAndDescripcion(ambitoObj, "Incidencia La Fuente");
@@ -156,7 +150,7 @@ public class IncidRegAcTest {
     public void testOnCreate()
     {
         assertThat(activity.getViewerAsParent(), notNullValue());
-        IncidRegFr fragment =  (IncidRegFr) activity.getSupportFragmentManager().findFragmentById(R.id.incid_reg_frg);
+        IncidRegFr fragment = (IncidRegFr) activity.getSupportFragmentManager().findFragmentById(R.id.incid_reg_frg);
         assertThat(fragment.viewerInjector, instanceOf(IncidRegAc.class));
         assertThat(fragment.viewer.getParentViewer(), CoreMatchers.<ViewerIf>is(activity.viewer));
     }

@@ -1,12 +1,7 @@
 package com.didekindroid.incidencia.core;
 
-import android.support.annotation.NonNull;
-import android.widget.Spinner;
-
 import com.didekindroid.R;
-import com.didekindroid.api.CtrlerSpinner;
-import com.didekindroid.api.CtrlerSpinnerIf;
-import com.didekindroid.api.ViewerSelectableIf;
+import com.didekindroid.api.CtrlerSelectionList;
 
 import java.util.Arrays;
 
@@ -17,26 +12,20 @@ import timber.log.Timber;
  * Date: 29/03/17
  * Time: 12:01
  */
-public class CtrlerImportanciaSpinner extends CtrlerSpinner<String> {
+class CtrlerImportanciaSpinner extends CtrlerSelectionList<String> {
 
-    public CtrlerImportanciaSpinner(@NonNull ViewerSelectableIf<Spinner, CtrlerSpinnerIf> viewerIn)
+
+    CtrlerImportanciaSpinner(ViewerImportanciaSpinner viewer)
     {
-        super(viewerIn);
+        super(viewer);
     }
 
     @Override
-    public boolean loadDataInSpinner()
+    public boolean loadItemsByEntitiyId(Long... entityId)
     {
+        Timber.d("loadItemsByEntitiyId()");
         String[] strings = viewer.getActivity().getResources().getStringArray(R.array.IncidImportanciaArray);
-        onSuccessLoadDataInSpinner(Arrays.asList(strings));
-        return getSpinnerAdapter().getCount() > 0;
-    }
-
-    @Override
-    public int getSelectedFromItemId(long positionInArray)
-    {
-        Timber.d("getSelectedFromItemId(itemId)");
-        // The id of the string shown is its position.
-        return (short) positionInArray;
+        onSuccessLoadItemsInList((Arrays.asList(strings)));
+        return strings.length > 0;
     }
 }

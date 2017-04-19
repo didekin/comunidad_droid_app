@@ -17,7 +17,6 @@ import timber.log.Timber;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.incid_importancia_should_be_initialized;
-import static com.didekindroid.util.CommonAssertionMsg.intent_extra_should_be_initialized;
 import static com.didekindroid.util.CommonAssertionMsg.intent_extra_should_not_be_initialized;
 import static com.didekindroid.util.UIutils.assertTrue;
 
@@ -61,6 +60,14 @@ public class IncidEditMinFr extends Fragment {
         ViewerIf parentViewer = viewerInjector.getViewerAsParent();
         viewer = ViewerIncidEditMinFr.newViewerIncidEditMinFr(frView, parentViewer);
         viewer.doViewInViewer(savedInstanceState, incidImportancia);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState)
+    {
+        Timber.d("onSaveInstanceState()");
+        super.onSaveInstanceState(outState);
+        viewer.saveState(outState);
     }
 
     @Override

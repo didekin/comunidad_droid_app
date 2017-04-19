@@ -3,8 +3,9 @@ package com.didekindroid.incidencia.core;
 import com.didekindroid.incidencia.core.edit.CtrlerIncidEditAcTest;
 import com.didekindroid.incidencia.core.edit.CtrlerIncidRegEditFr_Edit_Test;
 import com.didekindroid.incidencia.core.edit.IncidCloseAc_GCM_Test;
-import com.didekindroid.incidencia.core.edit.IncidCoreEditSuite;
 import com.didekindroid.incidencia.core.edit.IncidEditAcMaxTest;
+import com.didekindroid.incidencia.core.edit.IncidEditAcMinTest;
+import com.didekindroid.incidencia.core.edit.IncidEditAc_Mn_Test;
 import com.didekindroid.incidencia.core.edit.ViewerIncidEditAcTest;
 import com.didekindroid.incidencia.core.edit.ViewerIncidEditMaxFrTest;
 import com.didekindroid.incidencia.core.edit.ViewerIncidEditMinFrTest;
@@ -28,7 +29,9 @@ import org.junit.runners.Suite;
         IncidCloseAc_GCM_Test.class,
         IncidRegAc_GCM_Test.class,
         // Activities.
+        IncidEditAc_Mn_Test.class,
         IncidEditAcMaxTest.class,
+        IncidEditAcMinTest.class,
         IncidRegAcTest.class,
         // Viewers
         ViewerAmbitoIncidSpinnerTest.class,

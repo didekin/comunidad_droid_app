@@ -3,10 +3,12 @@ package com.didekindroid.api;
 import android.view.View;
 
 import com.didekindroid.exception.UiException;
+import com.didekindroid.security.IdentityCacher;
 
 import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.util.UIutils.destroySubscriptions;
 import static com.didekindroid.util.UIutils.getUiExceptionFromThrowable;
 
@@ -15,15 +17,22 @@ import static com.didekindroid.util.UIutils.getUiExceptionFromThrowable;
  * Date: 21/02/17
  * Time: 10:43
  */
-class Controller<T extends View> implements ControllerIf {
+public class Controller implements ControllerIf {
 
     protected final CompositeDisposable subscriptions;
-    protected final ViewerIf<T, ? extends ControllerIf> viewer;
+    protected final ViewerIf<? extends View, ? extends ControllerIf> viewer;
+    protected final IdentityCacher identityCacher;
 
-    Controller(ViewerIf<T, ? extends ControllerIf> viewer)
+    public Controller(ViewerIf<? extends View, ? extends ControllerIf> viewer)
+    {
+        this(viewer, TKhandler);
+    }
+
+    public Controller(ViewerIf<? extends View, ? extends ControllerIf> viewer, IdentityCacher identityCacher)
     {
         this.viewer = viewer;
         subscriptions = new CompositeDisposable();
+        this.identityCacher = identityCacher;
     }
 
     @Override
@@ -41,7 +50,7 @@ class Controller<T extends View> implements ControllerIf {
     }
 
     @Override
-    public ViewerIf<T, ? extends ControllerIf> getViewer()
+    public ViewerIf<? extends View, ? extends ControllerIf> getViewer()
     {
         return viewer;
     }
@@ -52,5 +61,25 @@ class Controller<T extends View> implements ControllerIf {
         Timber.d("onErrorCtrl()");
         UiException ui = getUiExceptionFromThrowable(e);
         viewer.processControllerError(ui);
+    }
+
+    @Override
+    public boolean isRegisteredUser()
+    {
+        Timber.d("isRegisteredUser()");
+        return identityCacher.isRegisteredUser();
+    }
+
+    @Override
+    public void updateIsRegistered(boolean isRegisteredUser)
+    {
+        Timber.d("updateIsRegistered()");
+        identityCacher.updateIsRegistered(isRegisteredUser);
+    }
+
+    @Override
+    public IdentityCacher getIdentityCacher()
+    {
+        return identityCacher;
     }
 }

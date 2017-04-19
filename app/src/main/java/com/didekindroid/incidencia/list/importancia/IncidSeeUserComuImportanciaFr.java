@@ -57,9 +57,6 @@ public class IncidSeeUserComuImportanciaFr extends Fragment {
         new IncidImportanciaLoader().execute(mIncidencia);
 
         mListView = (ListView) mFrView.findViewById(android.R.id.list);
-        /*listView.addHeaderView(new View(getActivity()), null, true);*/
-        /* Cuando necesitemos activar opciones de menú.
-        setHasOptionsMenu(true);*/
     }
 
     //    ============================================================
@@ -97,12 +94,12 @@ public class IncidSeeUserComuImportanciaFr extends Fragment {
                 assertTrue(importanciaUsers == null, incidImportanciaUsers_list_should_be_initialized);
                 uiException.processMe(getActivity(), new Intent());
             }
-            if (importanciaUsers != null && importanciaUsers.size() > 0) {
+            if (importanciaUsers != null && !importanciaUsers.isEmpty()) {
                 Timber.d("onPostExecute(): importanciaUsers != null");
                 mAdapter.clear();
                 mAdapter.addAll(importanciaUsers);
                 mListView.setAdapter(mAdapter);
-            } else{
+            } else {
                 mListView.setEmptyView(mFrView.findViewById(android.R.id.empty));
             }
         }

@@ -1,8 +1,6 @@
 package com.didekindroid.incidencia.core.edit;
 
-import android.view.View;
-
-import com.didekindroid.api.CtrlerIdentity;
+import com.didekindroid.api.Controller;
 import com.didekindroid.incidencia.IncidObservable;
 import com.didekindroid.security.IdentityCacher;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
@@ -21,7 +19,7 @@ import static io.reactivex.schedulers.Schedulers.io;
  */
 
 @SuppressWarnings("WeakerAccess")
-class CtrlerIncidEditAc extends CtrlerIdentity<View> {
+class CtrlerIncidEditAc extends Controller {
 
     ViewerIncidEditAc viewerIncidEditAc;
 

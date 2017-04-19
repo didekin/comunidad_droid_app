@@ -13,18 +13,19 @@ import timber.log.Timber;
  */
 public class ObserverMaybeList<E extends Serializable> extends DisposableMaybeObserver<List<E>> {
 
-    private final CtrlerListIf<E> controller;
+    private final CtrlerSelectionListIf<E> controller;
 
-    public ObserverMaybeList(CtrlerListIf<E> controller)
+    public ObserverMaybeList(CtrlerSelectionListIf<E> controller)
     {
         this.controller = controller;
     }
+
 
     @Override
     public void onSuccess(List<E> list)
     {
         Timber.d("onSuccess(), Thread for subscriber: %s", Thread.currentThread().getName());
-        controller.onSuccessLoadItemsById(list);
+        controller.onSuccessLoadItemsInList(list);
     }
 
     @Override

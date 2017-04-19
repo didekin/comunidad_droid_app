@@ -1,9 +1,8 @@
 package com.didekindroid.usuario.userdata;
 
 import android.os.Bundle;
-import android.view.View;
 
-import com.didekindroid.api.CtrlerIdentity;
+import com.didekindroid.api.Controller;
 import com.didekindroid.security.IdentityCacher;
 import com.didekinlib.http.oauth2.SpringOauthToken;
 import com.didekinlib.model.usuario.Usuario;
@@ -36,7 +35,7 @@ import static io.reactivex.schedulers.Schedulers.io;
  * Time: 10:58
  */
 @SuppressWarnings("WeakerAccess")
-class CtrlerUserData extends CtrlerIdentity<View> implements CtrlerUserDataIf {
+class CtrlerUserData extends Controller implements CtrlerUserDataIf {
 
     private final ViewerUserDataIf viewerUserData;
 
@@ -138,7 +137,7 @@ class CtrlerUserData extends CtrlerIdentity<View> implements CtrlerUserDataIf {
     public void onCompleteUserModified()
     {
         Timber.d("onCompleteUserModified()");
-        ViewerUserData.class.cast(viewer).initActivity(new Bundle());
+        ViewerUserData.class.cast(viewer).replaceComponent(new Bundle());
     }
 
     // .............................. SUBSCRIBERS ..................................

@@ -1,7 +1,8 @@
 package com.didekindroid.api;
 
+import android.os.Bundle;
 import android.support.test.runner.AndroidJUnit4;
-import android.view.View;
+import android.widget.AdapterView;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -30,12 +31,24 @@ public class ObserverSingleSelectedItemTest {
     ObserverSingleSelectedItem<Integer> observerSingleSelectedItem;
 
     @Before
-    public void setUp(){
-        observerSingleSelectedItem = new ObserverSingleSelectedItem<>(new CtrlerSelectItemForTest(new ViewerMock<View,CtrlerSelectableItemIf>(null,null,null)));
+    public void setUp()
+    {
+        observerSingleSelectedItem = new ObserverSingleSelectedItem<>(
+                new CtrlerSelectItemForTest(new ViewerSelectionList<AdapterView, CtrlerSelectionList<String>, String>(null, null, null) {
+                    @Override
+                    public void onSuccessLoadItems(List<String> incidCloseList)
+                    {
+                    }
+
+                    @Override
+                    public void initSelectedItemId(Bundle savedState)
+                    {
+                    }
+                }));
     }
 
     @Test
-    public void onSuccess() throws Exception
+    public void testOnSuccess() throws Exception
     {
         Single.just(111).subscribeWith(observerSingleSelectedItem);
         assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_A));
@@ -43,36 +56,32 @@ public class ObserverSingleSelectedItemTest {
 
     //    =========================== HELPERS =============================
 
-   static class CtrlerSelectItemForTest extends CtrlerIdentity<View> implements
-           CtrlerSelectableItemIf<String,Integer> {
+    static class CtrlerSelectItemForTest extends CtrlerSelectionList<String> implements
+            CtrlerSelectableItemIf<String, Integer> {
 
-       protected CtrlerSelectItemForTest(ViewerIf<View, ? extends ControllerIf> viewer)
-       {
-           super(viewer);
-       }
 
-       @Override
-       public boolean selectItem(String item)
-       {
-           return false;
-       }
+        protected CtrlerSelectItemForTest(ViewerSelectionList<? extends AdapterView, CtrlerSelectionList<String>, String> viewer)
+        {
+            super(viewer);
+        }
 
-       @Override   // IN TEST.
-       public void onSuccessSelectedItem(Integer itemBack)
-       {
-           assertThat(itemBack, is(111));
-           assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
-       }
+        @Override
+        public boolean selectItem(String item)
+        {
+            return false;
+        }
 
-       @Override
-       public boolean loadItemsByEntitiyId(long entityId)
-       {
-           return false;
-       }
+        @Override   // IN TEST.
+        public void onSuccessSelectedItem(Integer itemBack)
+        {
+            assertThat(itemBack, is(111));
+            assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
+        }
 
-       @Override
-       public void onSuccessLoadItemsById(List<String> itemList)
-       {
-       }
-   }
+        @Override
+        public boolean loadItemsByEntitiyId(Long... entityId)
+        {
+            return false;
+        }
+    }
 }

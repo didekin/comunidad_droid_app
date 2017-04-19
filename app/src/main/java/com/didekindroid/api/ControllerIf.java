@@ -1,5 +1,7 @@
 package com.didekindroid.api;
 
+import com.didekindroid.security.IdentityCacher;
+
 import io.reactivex.disposables.CompositeDisposable;
 
 /**
@@ -16,4 +18,10 @@ public interface ControllerIf {
     int clearSubscriptions();
 
     ViewerIf getViewer();
+
+    boolean isRegisteredUser();
+
+    void updateIsRegistered(boolean isRegisteredUser);
+
+    IdentityCacher getIdentityCacher();
 }

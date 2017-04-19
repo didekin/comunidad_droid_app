@@ -14,7 +14,7 @@ public class ViewerFirebaseToken extends Viewer<View, CtrlerFirebaseTokenIf> imp
         ViewerFirebaseTokenIf<View> {
 
 
-    public ViewerFirebaseToken(Activity activity)
+    protected ViewerFirebaseToken(Activity activity)
     {
         super(null, activity, null);
     }

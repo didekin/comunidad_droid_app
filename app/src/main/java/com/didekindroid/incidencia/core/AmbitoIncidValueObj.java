@@ -1,12 +1,14 @@
 package com.didekindroid.incidencia.core;
 
+import java.io.Serializable;
+
 /**
  * User: pedro@didekin
  * Date: 30/03/17
  * Time: 13:38
  */
 
-public class AmbitoIncidValueObj {
+public class AmbitoIncidValueObj implements Serializable {
 
     final short _ID;
     final String ambitoStr;
@@ -15,6 +17,11 @@ public class AmbitoIncidValueObj {
     {
         _ID = ambitoId;
         this.ambitoStr = ambitoStr;
+    }
+
+    public short get_ID()
+    {
+        return _ID;
     }
 
     @Override

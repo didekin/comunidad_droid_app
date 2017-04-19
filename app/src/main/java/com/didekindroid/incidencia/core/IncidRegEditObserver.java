@@ -8,15 +8,13 @@ import timber.log.Timber;
  * Date: 13/04/17
  * Time: 11:42
  */
-public abstract class IncidRegEditObserver extends DisposableSingleObserver<Integer> {
+abstract class IncidRegEditObserver extends DisposableSingleObserver<Integer> {
 
     private final CtrlerIncidRegEditFr controller;
-    private final ViewerIncidRegEdit viewer;
 
-    protected IncidRegEditObserver(CtrlerIncidRegEditFr controller, ViewerIncidRegEdit viewer)
+    IncidRegEditObserver(CtrlerIncidRegEditFr controller)
     {
         this.controller = controller;
-        this.viewer = viewer;
     }
 
     @Override

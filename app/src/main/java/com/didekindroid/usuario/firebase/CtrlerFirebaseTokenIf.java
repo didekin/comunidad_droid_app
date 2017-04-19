@@ -1,7 +1,7 @@
 package com.didekindroid.usuario.firebase;
 
 
-import com.didekindroid.api.CtrlerIdentityIf;
+import com.didekindroid.api.ControllerIf;
 
 /**
  * User: pedro@didekin
@@ -9,7 +9,7 @@ import com.didekindroid.api.CtrlerIdentityIf;
  * Time: 14:01
  */
 
-public interface CtrlerFirebaseTokenIf extends CtrlerIdentityIf {
+public interface CtrlerFirebaseTokenIf extends ControllerIf {
 
     String IS_GCM_TOKEN_SENT_TO_SERVER = "isGcmTokenSentToServer";
 

@@ -8,7 +8,7 @@ package com.didekindroid.util;
 
 public final class CommonAssertionMsg {
 
-    public static final String activity_should_be_instance_RootViewReplacer = "activity should be instance of ActivityInitiatorIf";
+    public static final String activity_should_be_instance_activityInitiator = "activity should be instance of ComponentReplacerIf";
     public static final String bean_fromView_should_be_initialized = "Bean with view data should be initialized";
     public static final String bean_instances_should_be_equal = "Bean instances should be equal";
     public static final String class_cast_unallowed = "Class cast not allowed";

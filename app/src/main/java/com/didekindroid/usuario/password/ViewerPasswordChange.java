@@ -7,7 +7,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.didekindroid.R;
-import com.didekindroid.router.ActivityInitiatorIf;
+import com.didekindroid.router.ComponentReplacerIf;
 import com.didekindroid.api.Viewer;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf;
@@ -34,7 +34,7 @@ import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOU
  */
 
 class ViewerPasswordChange extends Viewer<View, CtrlerPasswordChangeIf>
-        implements ViewerPasswordChangeIf, ActivityInitiatorIf {
+        implements ViewerPasswordChangeIf, ComponentReplacerIf {
 
     @SuppressWarnings("WeakerAccess")
     final AtomicReference<UsuarioBean> usuarioBean;
@@ -122,9 +122,9 @@ class ViewerPasswordChange extends Viewer<View, CtrlerPasswordChangeIf>
     }
 
     @Override
-    public void initActivity(@NonNull Bundle bundle)
+    public void replaceComponent(@NonNull Bundle bundle)
     {
         Timber.d("initActivityWithBundle()");
-        ActivityInitiatorIf.class.cast(activity).initActivity(bundle);
+        ComponentReplacerIf.class.cast(activity).replaceComponent(bundle);
     }
 }

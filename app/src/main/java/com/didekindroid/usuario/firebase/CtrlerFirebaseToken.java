@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.view.View;
 
-import com.didekindroid.api.CtrlerIdentity;
+import com.didekindroid.api.Controller;
 import com.didekindroid.security.IdentityCacher;
 import com.google.firebase.iid.FirebaseInstanceId;
 
@@ -29,7 +29,7 @@ import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
  * Time: 14:23
  */
 @SuppressWarnings({"WeakerAccess", "AnonymousInnerClassMayBeStatic"})
-public class CtrlerFirebaseToken extends CtrlerIdentity<View> implements CtrlerFirebaseTokenIf {
+public class CtrlerFirebaseToken extends Controller implements CtrlerFirebaseTokenIf {
 
     private final ViewerFirebaseTokenIf<View> viewer;
 
@@ -45,31 +45,9 @@ public class CtrlerFirebaseToken extends CtrlerIdentity<View> implements CtrlerF
         this.viewer = viewer;
     }
 
-    @Override
-    public boolean isGcmTokenSentServer()
-    {
-        Timber.d("isGcmTokenSentServer()");
-        Context context = viewer.getActivity();
-        SharedPreferences sharedPref = context.getSharedPreferences(app_preferences_file.toString(), MODE_PRIVATE);
-        return sharedPref.getBoolean(IS_GCM_TOKEN_SENT_TO_SERVER, false);
-    }
-
-    @Override
-    public void updateIsGcmTokenSentServer(boolean isSentToServer)
-    {
-        Timber.d("updateIsGcmTokenSentServer(), isSentToServer = %b", isSentToServer);
-        assertTrue(isRegisteredUser(), user_should_be_registered);
-        Context context = viewer.getActivity();
-        SharedPreferences sharedPref = context.getSharedPreferences(app_preferences_file.toString(), MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putBoolean(IS_GCM_TOKEN_SENT_TO_SERVER, isSentToServer);
-        editor.apply();
-    }
-
-    //    .................................... OBSERVABLES .................................
-
     /**
      * Postconditions: the user's gcm token in database is updated.
+     *
      * @return a Single with an item == 1 if the gcmToken is updated.
      */
     static Single<Integer> updatedGcmTkSingle()
@@ -83,6 +61,29 @@ public class CtrlerFirebaseToken extends CtrlerIdentity<View> implements CtrlerF
                                        }
                                    }
         );
+    }
+
+    @Override
+    public boolean isGcmTokenSentServer()
+    {
+        Timber.d("isGcmTokenSentServer()");
+        Context context = viewer.getActivity();
+        SharedPreferences sharedPref = context.getSharedPreferences(app_preferences_file.toString(), MODE_PRIVATE);
+        return sharedPref.getBoolean(IS_GCM_TOKEN_SENT_TO_SERVER, false);
+    }
+
+    //    .................................... OBSERVABLES .................................
+
+    @Override
+    public void updateIsGcmTokenSentServer(boolean isSentToServer)
+    {
+        Timber.d("updateIsGcmTokenSentServer(), isSentToServer = %b", isSentToServer);
+        assertTrue(isRegisteredUser(), user_should_be_registered);
+        Context context = viewer.getActivity();
+        SharedPreferences sharedPref = context.getSharedPreferences(app_preferences_file.toString(), MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putBoolean(IS_GCM_TOKEN_SENT_TO_SERVER, isSentToServer);
+        editor.apply();
     }
 
     // .................................... SUBSCRIPTIONS ..................................

@@ -1,8 +1,6 @@
 package com.didekindroid.incidencia.core;
 
-import android.view.View;
-
-import com.didekindroid.api.CtrlerIdentity;
+import com.didekindroid.api.Controller;
 import com.didekindroid.incidencia.IncidObservable;
 import com.didekindroid.security.IdentityCacher;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
@@ -21,7 +19,7 @@ import static io.reactivex.schedulers.Schedulers.io;
  * Date: 04/04/17
  * Time: 15:08
  */
-public class CtrlerIncidRegEditFr extends CtrlerIdentity<View> {
+public class CtrlerIncidRegEditFr extends Controller {
 
     @SuppressWarnings("WeakerAccess")
     ViewerIncidRegEdit viewerIncidRegEdit;
@@ -46,7 +44,7 @@ public class CtrlerIncidRegEditFr extends CtrlerIdentity<View> {
                 IncidObservable.incidImportanciaRegistered(incidImportancia)
                         .subscribeOn(io())
                         .observeOn(mainThread())
-                        .subscribeWith(new IncidRegEditObserver(this, viewerIncidRegEdit) {
+                        .subscribeWith(new IncidRegEditObserver(this) {
                             @Override
                             public void onSuccess(Integer rowInserted)
                             {
@@ -64,7 +62,7 @@ public class CtrlerIncidRegEditFr extends CtrlerIdentity<View> {
                 incidImportanciaModified(newIncidImportancia)
                         .subscribeOn(io())
                         .observeOn(mainThread())
-                        .subscribeWith(new IncidRegEditObserver(this, viewerIncidRegEdit) {
+                        .subscribeWith(new IncidRegEditObserver(this) {
                             @Override
                             public void onSuccess(Integer rowsModified)
                             {
@@ -82,7 +80,7 @@ public class CtrlerIncidRegEditFr extends CtrlerIdentity<View> {
                 incidenciaDeleted(incidencia)
                         .subscribeOn(io())
                         .observeOn(mainThread())
-                        .subscribeWith(new IncidRegEditObserver(this, viewerIncidRegEdit) {
+                        .subscribeWith(new IncidRegEditObserver(this) {
                             @Override
                             public void onSuccess(Integer rowsDeleted)
                             {

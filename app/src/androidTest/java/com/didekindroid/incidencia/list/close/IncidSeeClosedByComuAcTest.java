@@ -101,8 +101,10 @@ public class IncidSeeClosedByComuAcTest {
         {
             try {
                 regSeveralUserComuSameUser(COMU_PLAZUELA5_PEPE, COMU_LA_FUENTE_PEPE);
+
                 pepeLaFuente = userComuDaoRemote.seeUserComusByUser().get(0);
                 pepePlazuelas5 = userComuDaoRemote.seeUserComusByUser().get(1);
+
                 incidPepePlazuelas5_1 = new IncidImportancia.IncidImportanciaBuilder(
                         doIncidencia(USER_PEPE.getUserName(), "Incid_pepePlazuelas_1", pepePlazuelas5.getComunidad().getC_Id(), (short) 12))
                         .usuarioComunidad(pepePlazuelas5)
@@ -173,7 +175,7 @@ public class IncidSeeClosedByComuAcTest {
         dbHelper = new IncidenciaDataDbHelper(activity);
         fragment = (IncidSeeCloseByComuFr) activity.getSupportFragmentManager().findFragmentByTag(incid_see_by_comu_list_fr_tag);
         // controllerList = (CtrlerIncidSeeCloseByComu) fragment.controllerSeeIncids;  TODO: no necesario el controller.
-        listAdapter = (AdapterIncidSeeClosedByComu) controllerList.adapter;
+//        listAdapter = (AdapterIncidSeeClosedByComu) controllerList.adapter;  // TODO
     }
 
     @After
@@ -198,7 +200,7 @@ public class IncidSeeClosedByComuAcTest {
         onData(is(incidUser_1)).inAdapterView(withId(android.R.id.list)).check(matches(isDisplayed()));
 
          /* Datos a la vista de IncidSeeCloseByComuFr.*/
-        waitAtMost(2, SECONDS).until(isViewDisplayed(getIncidListViewMatcher(incidUser_1)));
+        waitAtMost(2, SECONDS).until(isViewDisplayed(checkIncidListView(incidUser_1)));
     }
 
     @Test
@@ -295,7 +297,7 @@ public class IncidSeeClosedByComuAcTest {
         waitAtMost(2, SECONDS).until(isViewDisplayed(withId(R.id.incid_resolucion_see_fr_layout)));
         onView(withId(R.id.incid_resolucion_see_fr_layout)).perform(pressBack());
         /* Datos a la vista de IncidSeeCloseByComuFr.*/
-        waitAtMost(2, SECONDS).until(isViewDisplayed(getIncidListViewMatcher(incidUser)));
+        waitAtMost(2, SECONDS).until(isViewDisplayed(checkIncidListView(incidUser)));
     }
 
     @Test
@@ -316,12 +318,12 @@ public class IncidSeeClosedByComuAcTest {
         // Up Navigation:
         clickNavigateUp();
         /* Datos a la vista de IncidSeeCloseByComuFr.*/
-        waitAtMost(2, SECONDS).until(isViewDisplayed(getIncidListViewMatcher(incidUser)));
+        waitAtMost(2, SECONDS).until(isViewDisplayed(checkIncidListView(incidUser)));
     }
 
 //    ===================================== HELPERS =====================================
 
-    private Matcher<View> getIncidListViewMatcher(IncidenciaUser incidUser)
+    private Matcher<View> checkIncidListView(IncidenciaUser incidUser)
     {
         return allOf(
                 withId(R.id.incid_see_apertura_block),

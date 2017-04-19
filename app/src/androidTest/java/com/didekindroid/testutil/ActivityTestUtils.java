@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.test.espresso.NoMatchingRootException;
 import android.support.test.espresso.NoMatchingViewException;
+import android.support.test.espresso.PerformException;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.contrib.PickerActions;
 import android.support.test.espresso.matcher.ViewMatchers;
@@ -18,13 +19,11 @@ import android.widget.Spinner;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ControllerIf;
-import com.didekindroid.api.CtrlerSpinner;
-import com.didekindroid.api.CtrlerSpinnerIf;
 import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ViewerSelectableIf;
+import com.didekindroid.api.ViewerSelectionListIf;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf.ActionForUiExceptionIf;
-import com.didekindroid.router.ActivityInitiatorIf;
+import com.didekindroid.router.ComponentReplacerIf;
 import com.didekindroid.security.IdentityCacher;
 import com.didekindroid.usuario.firebase.CtrlerFirebaseTokenIf;
 import com.didekindroid.util.BundleKey;
@@ -47,6 +46,7 @@ import io.reactivex.disposables.Disposable;
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.KITKAT;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
+import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -125,6 +125,24 @@ public final class ActivityTestUtils {
                     onView(viewMatcher).check(matches(isDisplayed()));
                     return true;
                 } catch (NoMatchingViewException ne) {
+                    return false;
+                }
+            }
+        };
+    }
+
+    public static Callable<Boolean> isDataDisplayedAndClick(final Matcher<?> objectMatcher)
+    {
+        return new Callable<Boolean>() {
+            @Override
+            public Boolean call() throws Exception
+            {
+                try {
+                    onData(objectMatcher)
+                            .check(matches(isDisplayed()))
+                            .perform(click());
+                    return true;
+                } catch (NoMatchingViewException | PerformException e) {
                     return false;
                 }
             }
@@ -339,7 +357,7 @@ public final class ActivityTestUtils {
             @Override
             public void run()
             {
-                ActivityInitiatorIf.class.cast(viewer).initActivity(new Bundle());
+                ComponentReplacerIf.class.cast(viewer).replaceComponent(new Bundle());
             }
         });
         waitAtMost(2, SECONDS).until(isResourceIdDisplayed(resorceIdNextView));
@@ -408,7 +426,7 @@ public final class ActivityTestUtils {
 
     //    ................. Spinners ...............
 
-    public static AtomicReference<String> doCtrlerInSpinnerViewer(ViewerSelectableIf<Spinner, CtrlerSpinnerIf> viewer)
+    /*public static AtomicReference<String> doCtrlerInSpinnerViewer(ViewerSelectionListIf<Spinner, CtrlerSpinnerIf> viewer)
     {
 
         final AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
@@ -430,9 +448,9 @@ public final class ActivityTestUtils {
 
         viewer.setController(controllerLocal);
         return flagMethodExec;
-    }
+    }*/
 
-    public static long checkSavedStateInSpinner(Bundle stateToSave, long keyValue, BundleKey key, ViewerSelectableIf<Spinner, CtrlerSpinnerIf> viewer)
+    /*public static long checkSavedStateInSpinner(Bundle stateToSave, long keyValue, BundleKey key, ViewerSelectionListIf<Spinner, CtrlerSpinnerIf> viewer)
     {
         assertThat(viewer.getSelectedItemId(), is(LONG_DEFAULT_EXTRA_VALUE));
         viewer.saveState(stateToSave);
@@ -451,6 +469,6 @@ public final class ActivityTestUtils {
         assertThat(stateToSave.getLong(key.getKey(), LONG_DEFAULT_EXTRA_VALUE), is(keyValue));
 
         return viewer.getSelectedItemId();
-    }
+    }*/
 }
 

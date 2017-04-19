@@ -10,9 +10,8 @@ import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
 
 import timber.log.Timber;
 
-import static com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner.newViewerComuSpinner;
-import static com.didekindroid.incidencia.list.ViewerIncidListByComu.newListViewer;
 import static com.didekindroid.usuario.firebase.ViewerFirebaseToken.newViewerFirebaseToken;
+import static com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner.newViewerComuSpinner;
 
 /**
  * User: pedro@didekin
@@ -20,33 +19,31 @@ import static com.didekindroid.usuario.firebase.ViewerFirebaseToken.newViewerFir
  * Time: 12:33
  */
 
-final class ViewerIncidSeeOpen extends ViewerIncidSeeClose {
+class ViewerIncidSeeOpen extends ViewerIncidSeeClose {
 
     private ViewerFirebaseTokenIf viewerFirebaseToken;
 
-    private ViewerIncidSeeOpen(View view, Activity activity)
+    ViewerIncidSeeOpen(View frView, Activity activity)
     {
-        super(view, activity);
+        super(frView, activity);
     }
 
     static ViewerIncidSeeOpen newViewerIncidSeeOpen(View view, Activity activity)
     {
         Timber.d("newViewerIncidSeeOpen()");
         ViewerIncidSeeOpen parentInstance = new ViewerIncidSeeOpen(view, activity);
+        parentInstance.setController(new CtrlerIncidSeeOpenByComu(parentInstance));
         parentInstance.viewerFirebaseToken = newViewerFirebaseToken(activity);
         parentInstance.spinnerViewer = newViewerComuSpinner((Spinner) view.findViewById(R.id.incid_reg_comunidad_spinner), activity, parentInstance);
-        parentInstance.listViewer = newListViewer(view, activity, parentInstance);
-        parentInstance.listViewer.setController(new CtrlerIncidSeeOpenByComu(parentInstance.listViewer));
         parentInstance.viewerFirebaseToken.checkGcmTokenAsync();
-        return  parentInstance;
+        return parentInstance;
     }
 
     @Override
     public int clearSubscriptions()
     {
         Timber.d("clearSubscriptions()");
-        return listViewer.clearSubscriptions()
-                + spinnerViewer.clearSubscriptions()
-                + viewerFirebaseToken.clearSubscriptions();
+        viewerFirebaseToken.clearSubscriptions();
+        return super.clearSubscriptions();
     }
 }
