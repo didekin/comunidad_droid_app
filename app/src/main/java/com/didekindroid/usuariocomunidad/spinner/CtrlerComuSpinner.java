@@ -16,11 +16,11 @@ import static io.reactivex.schedulers.Schedulers.io;
  * Time: 15:11
  */
 
-final class CtrlerComuSpinner extends CtrlerSelectionList<Comunidad> {
+class CtrlerComuSpinner extends CtrlerSelectionList<Comunidad> {
 
     private ObserverSelectionList<Comunidad> observerSpinner;
 
-    private CtrlerComuSpinner(ViewerComuSpinner viewer)
+    CtrlerComuSpinner(ViewerComuSpinner viewer)
     {
         super(viewer);
     }

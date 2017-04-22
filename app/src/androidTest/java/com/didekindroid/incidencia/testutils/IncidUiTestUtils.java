@@ -1,6 +1,7 @@
 package com.didekindroid.incidencia.testutils;
 
 import android.app.Activity;
+import android.view.View;
 
 import com.didekindroid.R;
 import com.didekindroid.incidencia.core.AmbitoIncidValueObj;
@@ -9,15 +10,21 @@ import com.didekindroid.incidencia.core.edit.IncidEditAc;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
+import org.hamcrest.Matcher;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.didekindroid.incidencia.core.IncidenciaDataDbHelper.DB_NAME;
 import static com.didekindroid.testutil.ActivityTestUtils.isDataDisplayedAndClick;
+import static com.didekindroid.util.UIutils.formatTimeStampToString;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
@@ -176,5 +183,49 @@ public final class IncidUiTestUtils {
         ));
 
         onView(withId(R.id.incid_reg_desc_ed)).perform(replaceText(descripcion));
+    }
+
+    @SuppressWarnings("unchecked")
+    public static Matcher<View> checkIncidListView(IncidImportancia incidImportancia, Activity activity)
+    {
+        IncidenciaDataDbHelper dbHelper = new IncidenciaDataDbHelper(activity);
+
+        Matcher<View> matcher = allOf(
+                withId(R.id.incid_see_apertura_block),
+                hasDescendant(allOf(
+                        withId(R.id.incid_fecha_alta_view),
+                        withText(formatTimeStampToString(incidImportancia.getIncidencia().getFechaAlta()))
+                )),
+                hasDescendant(allOf(
+                        withId(R.id.incid_see_iniciador_view),
+                        withText(incidImportancia.getUserComu().getUsuario().getAlias())
+                )),
+                hasSibling(allOf(
+                        withId(R.id.incid_see_cierre_block),
+                        hasDescendant(allOf(
+                                withId(R.id.incid_fecha_cierre_view),
+                                withText(formatTimeStampToString(incidImportancia.getIncidencia().getFechaCierre()))
+                        ))
+                )),
+                hasSibling(allOf(
+                        withId(R.id.incid_see_importancia_block),
+                        hasDescendant(allOf(
+                                withId(R.id.incid_importancia_comunidad_view),
+                                withText(activity.getResources()
+                                        .getStringArray(R.array.IncidImportanciaArray)[Math.round(incidImportancia.getImportancia())]))
+                        ))),
+                hasSibling(allOf(
+                        withId(R.id.incid_ambito_view),
+                        withText(dbHelper.getAmbitoDescByPk(incidImportancia.getIncidencia().getAmbitoIncidencia().getAmbitoId()))
+                )),
+                hasSibling(allOf(
+                        withText(incidImportancia.getIncidencia().getDescripcion()),
+                        withId(R.id.incid_descripcion_view)
+                ))
+        );
+
+        dbHelper.close();
+        activity.deleteDatabase(DB_NAME);
+        return matcher;
     }
 }

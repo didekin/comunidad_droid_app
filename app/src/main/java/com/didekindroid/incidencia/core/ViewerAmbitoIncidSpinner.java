@@ -52,7 +52,8 @@ public final class ViewerAmbitoIncidSpinner extends
 
         ArrayAdapter<AmbitoIncidValueObj> adapter = ViewerSelectionList.getArrayAdapterForSpinner(AmbitoIncidValueObj.class, activity);
         adapter.addAll(incidCloseList);
-        view.setSelection(getSelectedViewFromItemId(itemSelectedId));
+        view.setAdapter(adapter);
+        view.setSelection(getSelectedPositionFromItemId(itemSelectedId));
     }
 
     @Override

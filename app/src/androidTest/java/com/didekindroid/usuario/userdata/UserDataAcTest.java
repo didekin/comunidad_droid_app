@@ -36,7 +36,7 @@ import static com.didekindroid.R.id.user_data_modif_button;
 import static com.didekindroid.comunidad.testutil.ComuMenuTestUtil.COMU_SEARCH_AC;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_OPEN_BY_COMU_AC;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
-import static com.didekindroid.testutil.ActivityTestUtils.checkViewerReplaceView;
+import static com.didekindroid.testutil.ActivityTestUtils.checkViewerReplaceComponent;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
@@ -178,7 +178,7 @@ public class UserDataAcTest implements ExtendableTestAc {
     @Test
     public void testReplaceRootView()
     {
-        checkViewerReplaceView(viewer, getNextViewResourceId());
+        checkViewerReplaceComponent(viewer, getNextViewResourceId(), null);
     }
 
     //    =================================  MENU TESTS ==================================

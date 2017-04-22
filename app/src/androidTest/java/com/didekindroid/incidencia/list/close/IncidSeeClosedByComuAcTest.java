@@ -203,16 +203,7 @@ public class IncidSeeClosedByComuAcTest {
         waitAtMost(2, SECONDS).until(isViewDisplayed(checkIncidListView(incidUser_1)));
     }
 
-    @Test
-    public void testOnCloseSubscriptions(){
-        // Preconditions.
-        waitAtMost(3, SECONDS).until(getAdapterCount(listAdapter), is(1));
 
-        assertThat(controllerList.getSubscriptions().size(), is(1));
-        InstrumentationRegistry.getInstrumentation().callActivityOnStop(activity);
-        // Check.
-        assertThat(controllerList.getSubscriptions().size(), is(0));
-    }
 
     @Test
     public void testOnData_2() throws Exception

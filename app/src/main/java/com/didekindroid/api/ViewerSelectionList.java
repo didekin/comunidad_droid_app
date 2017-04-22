@@ -59,7 +59,7 @@ public abstract class ViewerSelectionList<T extends AdapterView, C extends Ctrle
     }
 
     @Override
-    public int getSelectedViewFromItemId(long itemId)
+    public int getSelectedPositionFromItemId(long itemId)
     {
         Timber.d("getSelectedItemId()");
         return (int) itemId;

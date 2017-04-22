@@ -2,11 +2,15 @@ package com.didekindroid.incidencia.list.open;
 
 import android.app.Activity;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.didekindroid.R;
 import com.didekindroid.incidencia.list.close.ViewerIncidSeeClose;
 import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
+import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
+
+import java.util.List;
 
 import timber.log.Timber;
 
@@ -34,9 +38,18 @@ class ViewerIncidSeeOpen extends ViewerIncidSeeClose {
         ViewerIncidSeeOpen parentInstance = new ViewerIncidSeeOpen(view, activity);
         parentInstance.setController(new CtrlerIncidSeeOpenByComu(parentInstance));
         parentInstance.viewerFirebaseToken = newViewerFirebaseToken(activity);
-        parentInstance.spinnerViewer = newViewerComuSpinner((Spinner) view.findViewById(R.id.incid_reg_comunidad_spinner), activity, parentInstance);
+        parentInstance.comuSpinnerViewer = newViewerComuSpinner((Spinner) view.findViewById(R.id.incid_reg_comunidad_spinner), activity, parentInstance);
         parentInstance.viewerFirebaseToken.checkGcmTokenAsync();
         return parentInstance;
+    }
+
+    @Override
+    public void onSuccessLoadItems(List<IncidenciaUser> incidCloseList)
+    {
+        Timber.d("onSuccessLoadItems()");
+        ArrayAdapter<IncidenciaUser> adapter = new AdapterIncidSeeOpenByComu(activity);
+        adapter.addAll(incidCloseList);
+        view.setAdapter(adapter);
     }
 
     @Override

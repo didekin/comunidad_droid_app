@@ -9,6 +9,7 @@ import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
+import com.didekinlib.model.usuario.Usuario;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import java.io.IOException;
@@ -61,6 +62,19 @@ public final class IncidDataTestUtils {
                 .build();
     }
 
+    public static Incidencia doSimpleIncidenciaWithId(long incidenciaId, Timestamp altaDate, Timestamp resolucionDate)
+    {
+        return new Incidencia.IncidenciaBuilder()
+                .incidenciaId(incidenciaId)
+                .comunidad(new Comunidad.ComunidadBuilder().c_id(987L).build())
+                .descripcion("Simple description")
+                .userName("simpleUser")
+                .ambitoIncid(new AmbitoIncidencia((short) 33))
+                .fechaAlta(altaDate)
+                .fechaCierre(resolucionDate)
+                .build();
+    }
+
     public static int makeAndRegIncidImportancia(UsuarioComunidad userComu, short importancia) throws UiException
     {
         IncidImportancia incidImportancia = new IncidImportancia.IncidImportanciaBuilder(
@@ -84,6 +98,16 @@ public final class IncidDataTestUtils {
         Incidencia incidenciaDb = incidenciaDao.seeIncidsOpenByComu(userComu.getComunidad().getC_Id()).get(0).getIncidencia();
         incidImportancia = incidenciaDao.seeIncidImportancia(incidenciaDb.getIncidenciaId()).getIncidImportancia();
         return incidImportancia;
+    }
+
+    public static IncidenciaUser doSimpleIncidenciaUser(long incidenciaId, Timestamp incidAltaDate, long usuarioId, Timestamp resolucionDate)
+    {
+        return new IncidenciaUser.IncidenciaUserBuilder(doSimpleIncidenciaWithId(incidenciaId, incidAltaDate, resolucionDate))
+                .usuario(new Usuario.UsuarioBuilder()
+                        .uId(usuarioId)
+                        .build())
+                .fechaAltaResolucion(resolucionDate)
+                .build();
     }
 
     public static IncidenciaUser insertGetIncidenciaUser(UsuarioComunidad userComu, int importancia) throws UiException

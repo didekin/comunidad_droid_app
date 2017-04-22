@@ -12,21 +12,19 @@ import android.support.test.espresso.contrib.PickerActions;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.BaseAdapter;
+import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ControllerIf;
 import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ViewerSelectionListIf;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf.ActionForUiExceptionIf;
 import com.didekindroid.router.ComponentReplacerIf;
 import com.didekindroid.security.IdentityCacher;
 import com.didekindroid.usuario.firebase.CtrlerFirebaseTokenIf;
-import com.didekindroid.util.BundleKey;
 import com.didekinlib.http.ErrorBean;
 import com.didekinlib.http.oauth2.SpringOauthToken;
 import com.didekinlib.model.exception.ExceptionMsgIf;
@@ -61,8 +59,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
-import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static java.util.Calendar.DAY_OF_MONTH;
 import static java.util.Calendar.MONTH;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -208,12 +204,32 @@ public final class ActivityTestUtils {
         };
     }
 
-    public static Callable<Integer> getAdapterCount(final BaseAdapter adapter)
+    public static Callable<Integer> getAdapterCount(final SpinnerAdapter adapter)
     {
         return new Callable<Integer>() {
             public Integer call() throws Exception
             {
                 return adapter.getCount();
+            }
+        };
+    }
+
+    public static Callable<SpinnerAdapter> getAdapter(final AdapterView<SpinnerAdapter> adapterView)
+    {
+        return new Callable<SpinnerAdapter>() {
+            public SpinnerAdapter call() throws Exception
+            {
+                return adapterView.getAdapter();
+            }
+        };
+    }
+
+    public static Callable<Long> checkInteger(final long intTocheck){
+        return new Callable<Long>() {
+            @Override
+            public Long call() throws Exception
+            {
+                return intTocheck;
             }
         };
     }
@@ -351,16 +367,21 @@ public final class ActivityTestUtils {
         }
     }
 
-    public static void checkViewerReplaceView(final ViewerIf<View, ?> viewer, int resorceIdNextView)
+    public static void checkViewerReplaceComponent(final ViewerIf<? extends View, ? extends ControllerIf> viewer, int resorceIdNextView, Bundle bundle)
     {
+        if (bundle == null){
+            bundle = new Bundle(0);
+        }
+        final Bundle finalBundle = bundle;
+
         viewer.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run()
             {
-                ComponentReplacerIf.class.cast(viewer).replaceComponent(new Bundle());
+                ComponentReplacerIf.class.cast(viewer).replaceComponent(finalBundle);
             }
         });
-        waitAtMost(2, SECONDS).until(isResourceIdDisplayed(resorceIdNextView));
+        waitAtMost(2, SECONDS).until(isViewDisplayed(withId(resorceIdNextView)));
     }
 
     //    ============================ TOASTS ============================
@@ -423,52 +444,5 @@ public final class ActivityTestUtils {
     }
 
     //    ============================ VIEWERS ============================
-
-    //    ................. Spinners ...............
-
-    /*public static AtomicReference<String> doCtrlerInSpinnerViewer(ViewerSelectionListIf<Spinner, CtrlerSpinnerIf> viewer)
-    {
-
-        final AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
-
-        CtrlerSpinnerIf controllerLocal = new CtrlerSpinner(viewer) {
-            @Override
-            public boolean loadDataInSpinner()
-            {
-                assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), CoreMatchers.is(BEFORE_METHOD_EXEC));
-                return true;
-            }
-
-            @Override
-            public int getSelectedFromItemId(long itemId)
-            {
-                return 0;
-            }
-        };
-
-        viewer.setController(controllerLocal);
-        return flagMethodExec;
-    }*/
-
-    /*public static long checkSavedStateInSpinner(Bundle stateToSave, long keyValue, BundleKey key, ViewerSelectionListIf<Spinner, CtrlerSpinnerIf> viewer)
-    {
-        assertThat(viewer.getSelectedItemId(), is(LONG_DEFAULT_EXTRA_VALUE));
-        viewer.saveState(stateToSave);
-
-        if (stateToSave == null) {
-            return LONG_DEFAULT_EXTRA_VALUE;
-        }
-
-        // Since itemSelectedId == 0, it returns default value.
-        assertThat(stateToSave.getLong(key.getKey(), LONG_DEFAULT_EXTRA_VALUE), is(LONG_DEFAULT_EXTRA_VALUE));
-
-        stateToSave.putLong(key.getKey(), keyValue);
-        viewer.initSelectedItemId(stateToSave);
-        viewer.saveState(stateToSave);
-        // It returns initialized value.
-        assertThat(stateToSave.getLong(key.getKey(), LONG_DEFAULT_EXTRA_VALUE), is(keyValue));
-
-        return viewer.getSelectedItemId();
-    }*/
 }
 

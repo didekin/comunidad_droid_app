@@ -52,7 +52,8 @@ public final class ViewerImportanciaSpinner extends ViewerSelectionList<Spinner,
 
         ArrayAdapter<String> adapter = ViewerSelectionList.getArrayAdapterForSpinner(String.class, activity);
         adapter.addAll(incidCloseList);
-        view.setSelection(getSelectedViewFromItemId(itemSelectedId));
+        view.setAdapter(adapter);
+        view.setSelection(getSelectedPositionFromItemId(itemSelectedId));
     }
 
     @Override

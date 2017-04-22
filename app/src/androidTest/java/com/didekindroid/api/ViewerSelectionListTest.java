@@ -66,6 +66,6 @@ public class ViewerSelectionListTest {
     public void getSelectedViewFromItemId() throws Exception
     {
         viewer.setItemSelectedId(111L);
-        assertThat(viewer.getSelectedViewFromItemId(111L), is(111));
+        assertThat(viewer.getSelectedPositionFromItemId(111L), is(111));
     }
 }

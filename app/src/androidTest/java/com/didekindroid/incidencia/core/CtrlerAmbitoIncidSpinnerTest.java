@@ -95,17 +95,10 @@ public class CtrlerAmbitoIncidSpinnerTest {
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
-//            assertThat(controller.loadDataInSpinner(), is(true));     TODO: revisar.
+            assertThat(controller.loadItemsByEntitiyId(), is(true));
         } finally {
             reset();
         }
         assertThat(controller.getSubscriptions().size(), is(1));
     }
-
-    @Test
-    public void getSelectedFromItemId() throws Exception
-    {
-//        assertThat(controller.getSelectedFromItemId(12L), is(12));    TODO: revisar.
-    }
-
 }

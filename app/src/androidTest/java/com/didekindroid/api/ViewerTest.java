@@ -67,7 +67,7 @@ public class ViewerTest {
     }
 
     @Test
-    public void testReplaceView() throws Exception
+    public void testReplaceComponent() throws Exception
     {
         assertThat(viewer, instanceOf(ComponentReplacerIf.class));
         ComponentReplacerIf rootViewReplacer = (ComponentReplacerIf) viewer;

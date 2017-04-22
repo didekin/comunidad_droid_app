@@ -62,6 +62,8 @@ public class IncidSeeClosedByComuAc extends AppCompatActivity implements Compone
                 .commit();
     }
 
+    // ==================================  ComponentReplaceIF  =================================
+
     public void replaceComponent(@NonNull Bundle bundle)
     {
         Timber.d("changeFragment()");

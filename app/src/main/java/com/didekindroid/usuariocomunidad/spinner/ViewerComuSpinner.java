@@ -55,7 +55,7 @@ public class ViewerComuSpinner extends ViewerSelectionList<Spinner, CtrlerSelect
         ArrayAdapter<Comunidad> adapter = ViewerSelectionList.getArrayAdapterForSpinner(Comunidad.class, activity);
         adapter.addAll(incidCloseList);
         view.setAdapter(adapter);
-        view.setSelection(getSelectedViewFromItemId(itemSelectedId));
+        view.setSelection(getSelectedPositionFromItemId(itemSelectedId));
     }
 
     @Override
@@ -73,7 +73,7 @@ public class ViewerComuSpinner extends ViewerSelectionList<Spinner, CtrlerSelect
     }
 
     @Override
-    public int getSelectedViewFromItemId(long itemId)
+    public int getSelectedPositionFromItemId(long itemId)
     {
         int position = 0;
         boolean isFound = false;
@@ -125,6 +125,7 @@ public class ViewerComuSpinner extends ViewerSelectionList<Spinner, CtrlerSelect
             Comunidad comunidad = (Comunidad) parent.getItemAtPosition(position);
             itemSelectedId = comunidad.getC_Id();
             spinnerBean.setComunidadId(itemSelectedId);
+            // Event passed to parent viewer for futher action.
             OnSpinnerClick.class.cast(parentViewer).doOnClickItemId(itemSelectedId);
         }
 

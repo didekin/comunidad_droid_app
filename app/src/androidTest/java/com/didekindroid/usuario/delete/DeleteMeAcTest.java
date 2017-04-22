@@ -25,7 +25,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.R.id.comu_search_ac_linearlayout;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.testutil.ActivityTestUtils.checkViewerReplaceView;
+import static com.didekindroid.testutil.ActivityTestUtils.checkViewerReplaceComponent;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
@@ -141,7 +141,7 @@ public class DeleteMeAcTest implements ExtendableTestAc {
     @Test
     public void testReplaceView() throws Exception
     {
-        checkViewerReplaceView(new ViewerMock<>(null, activity, null), getNextViewResourceId());
+        checkViewerReplaceComponent(new ViewerMock<>(null, activity, null), getNextViewResourceId(), null);
         cleanOptions(CLEAN_PEPE);
     }
 }

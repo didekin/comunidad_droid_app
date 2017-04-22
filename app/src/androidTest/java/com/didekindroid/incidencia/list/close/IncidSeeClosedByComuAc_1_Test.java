@@ -1,15 +1,13 @@
 package com.didekindroid.incidencia.list.close;
 
+import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
-import android.view.View;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.incidencia.core.IncidenciaDataDbHelper;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 
-import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -19,16 +17,14 @@ import java.io.IOException;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
-import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
-import static com.didekindroid.incidencia.core.IncidenciaDataDbHelper.DB_NAME;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.makeRegGetIncidImportancia;
+import static com.didekindroid.incidencia.testutils.IncidUiTestUtils.checkIncidListView;
 import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
+import static com.didekindroid.testutil.ActivityTestUtils.getAdapterCount;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
@@ -36,10 +32,9 @@ import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDa
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_LA_FUENTE_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.regSeveralUserComuSameUser;
-import static com.didekindroid.util.UIutils.formatTimeStampToString;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
-import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
@@ -129,55 +124,21 @@ public class IncidSeeClosedByComuAc_1_Test {
         onView(withId(activityLayoutId)).check(matches(isDisplayed()));
         onView(withId(fragmentLayoutId)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_reg_comunidad_spinner)).check(matches(isDisplayed()));
-
-        waitAtMost(2, SECONDS).until(isViewDisplayed(checkIncidListView(incidImportancia1)));
     }
 
     //  ======================================== UNIT TESTS  =======================================
 
+    @Test
+    public void testOnStop(){
+        // Preconditions.
+        /*waitAtMost(3, SECONDS).until(getAdapterCount(listAdapter), is(1));
+
+        assertThat(controllerList.getSubscriptions().size(), is(1));
+        InstrumentationRegistry.getInstrumentation().callActivityOnStop(activity);
+        // Check.
+        assertThat(controllerList.getSubscriptions().size(), is(0));*/
+    }
+
     //    ===================================== HELPERS =====================================
 
-    @SuppressWarnings("unchecked")
-    private Matcher<View> checkIncidListView(IncidImportancia incidImportancia)
-    {
-        IncidenciaDataDbHelper dbHelper = new IncidenciaDataDbHelper(activity);
-
-        Matcher<View> matcher = allOf(
-                withId(R.id.incid_see_apertura_block),
-                hasDescendant(allOf(
-                        withId(R.id.incid_fecha_alta_view),
-                        withText(formatTimeStampToString(incidImportancia.getIncidencia().getFechaAlta()))
-                )),
-                hasDescendant(allOf(
-                        withId(R.id.incid_see_iniciador_view),
-                        withText(incidImportancia.getUserComu().getUsuario().getAlias())
-                )),
-                hasSibling(allOf(
-                        withId(R.id.incid_see_cierre_block),
-                        hasDescendant(allOf(
-                                withId(R.id.incid_fecha_cierre_view),
-                                withText(formatTimeStampToString(incidImportancia.getIncidencia().getFechaCierre()))
-                        ))
-                )),
-                hasSibling(allOf(
-                        withId(R.id.incid_see_importancia_block),
-                        hasDescendant(allOf(
-                                withId(R.id.incid_importancia_comunidad_view),
-                                withText(activity.getResources()
-                                        .getStringArray(R.array.IncidImportanciaArray)[Math.round(incidImportancia.getImportancia())]))
-                        ))),
-                hasSibling(allOf(
-                        withId(R.id.incid_ambito_view),
-                        withText(dbHelper.getAmbitoDescByPk(incidImportancia.getIncidencia().getAmbitoIncidencia().getAmbitoId()))
-                )),
-                hasSibling(allOf(
-                        withText(incidImportancia.getIncidencia().getDescripcion()),
-                        withId(R.id.incid_descripcion_view)
-                ))
-        );
-
-        dbHelper.close();
-        activity.deleteDatabase(DB_NAME);
-        return matcher;
-    }
 }

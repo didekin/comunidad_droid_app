@@ -1,5 +1,6 @@
 package com.didekindroid.usuariocomunidad.spinner;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.test.rule.ActivityTestRule;
@@ -10,13 +11,12 @@ import android.widget.Spinner;
 import com.didekindroid.R;
 import com.didekindroid.api.ActivityMock;
 import com.didekindroid.api.CtrlerSelectionListIf;
+import com.didekindroid.api.OnSpinnerClick;
 import com.didekindroid.api.SpinnerMockFr;
 import com.didekindroid.api.ViewerMock;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.core.IncidenciaBean;
 import com.didekinlib.model.comunidad.Comunidad;
-import com.didekinlib.model.comunidad.Municipio;
-import com.didekinlib.model.comunidad.Provincia;
 
 import org.junit.After;
 import org.junit.Before;
@@ -27,9 +27,15 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
+import timber.log.Timber;
+
 import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.testutil.ActivityTestUtils.getAdapter;
+import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
+import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_B;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
@@ -38,8 +44,11 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.ma
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.regTwoUserComuSameUser;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
+import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
@@ -59,7 +68,7 @@ public class ViewerComuSpinnerTest {
         protected void beforeActivityLaunched()
         {
             try {
-                regTwoUserComuSameUser(makeListTwoUserComu()); // TODO: para qué dos comunidades.
+                regTwoUserComuSameUser(makeListTwoUserComu());
             } catch (IOException | UiException e) {
                 fail();
             }
@@ -67,6 +76,7 @@ public class ViewerComuSpinnerTest {
     };
 
     ViewerComuSpinner viewer;
+    AtomicReference<ViewerComuSpinner> atomicViewer;
     ActivityMock activity;
     Spinner spinner;
 
@@ -75,7 +85,7 @@ public class ViewerComuSpinnerTest {
     {
         activity = activityRule.getActivity();
 
-        final AtomicReference<ViewerComuSpinner> atomicViewer = new AtomicReference<>(null);
+        atomicViewer = new AtomicReference<>(null);
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run()
@@ -84,7 +94,7 @@ public class ViewerComuSpinnerTest {
                         .add(R.id.mock_ac_layout, new SpinnerMockFr(), null)
                         .commitNow();
                 spinner = (Spinner) activity.findViewById(R.id.comunidad_spinner);
-                atomicViewer.compareAndSet(null, newViewerComuSpinner(spinner, activity, new ViewerMock<View, CtrlerSelectionListIf>(activity)));
+                atomicViewer.compareAndSet(null, newViewerComuSpinner(spinner, activity, new ViewerForTest(activity)));
             }
         });
         waitAtMost(2, SECONDS).untilAtomic(atomicViewer, notNullValue());
@@ -110,7 +120,17 @@ public class ViewerComuSpinnerTest {
     @Test
     public void testOnSuccessLoadItems()
     {
-        // TODO
+        viewer.setItemSelectedId(33L);
+        execLoadItems();
+
+        assertThat(viewer.getViewInViewer().getAdapter().getCount(), is(3));
+        assertThat(ViewerComuSpinner.class.cast(viewer).getViewInViewer().getSelectedItemId(), is((long) viewer.getSelectedPositionFromItemId(33L)));
+        // ListView.getSelectedItemId() returns the same as ListView.getSelectedItemPosition(), not the c_Id.
+        assertThat(ViewerComuSpinner.class.cast(viewer).getViewInViewer().getSelectedItemId(), is(1L));
+        assertThat(ViewerComuSpinner.class.cast(viewer).getViewInViewer().getSelectedItemPosition(), is(1));
+        // To get the itemId:
+        assertThat(((Comunidad) viewer.getViewInViewer().getItemAtPosition(0)).getC_Id(), is(11L));
+        assertThat(((Comunidad) viewer.getViewInViewer().getItemAtPosition(1)).getC_Id(), is(33L));
     }
 
     @Test
@@ -134,44 +154,6 @@ public class ViewerComuSpinnerTest {
         assertThat(viewer.getSelectedItemId(), is(8L));
     }
 
-    @SuppressWarnings("unchecked")
-    @Test
-    public void testGetSelectedViewFromItemId() throws Exception
-    {
-        /*List<Comunidad> comunidades = makeListComu();
-        ArrayAdapter<Comunidad> adapterIn = (ArrayAdapter<Comunidad>) ViewerComuSpinner.class.cast(viewer).getViewInViewer().getAdapter();
-        adapterIn.addAll(comunidades);
-        controller.getSpinnerView().setAdapter(controller.getSpinnerAdapter());
-        assertThat(controller.getSelectedFromItemId(321L), is(0));
-        assertThat(controller.getSelectedFromItemId(123L), is(1));*/
-        // TODO: revisar entero.
-    }
-
-    @Test
-    public void testDoViewInViewer() throws Exception
-    {
-        /*final String keyBundle = COMUNIDAD_ID.key;
-        IncidenciaBean incidenciaBean = new IncidenciaBean();
-        Bundle bundleTest = new Bundle(1);
-        bundleTest.putLong(keyBundle, 122L);
-
-        // Inject mockController.
-        AtomicReference<String> flagExec = doCtrlerInSpinnerViewer(viewer);
-        viewer.doViewInViewer(bundleTest, incidenciaBean);
-
-        // Check call to initSelectedItemId().
-        assertThat(viewer.getSelectedItemId(), allOf(
-                is(bundleTest.getLong(keyBundle)),
-                is(122L)
-        ));
-        // Check call to controller.loadDataInSpinner();
-        assertThat(flagExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_A));
-        // Check call to view.setOnItemSelectedListener().
-        ViewerComuSpinner.ComuSelectedListener listener =
-                (ViewerComuSpinner.ComuSelectedListener) viewer.getViewInViewer().getOnItemSelectedListener();
-        assertThat(listener, notNullValue());*/  // TODO: revisar
-    }
-
     @Test
     public void testSavedState() throws Exception
     {
@@ -181,19 +163,114 @@ public class ViewerComuSpinnerTest {
         assertThat(newBundle.getLong(COMUNIDAD_ID.key), is(111L));
     }
 
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testGetSelectedPositionFromItemId() throws Exception
+    {
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                waitAtMost(2, SECONDS).untilAtomic(atomicViewer, notNullValue());
+                viewer = atomicViewer.get();
+                viewer.onSuccessLoadItems(makeListComu());
+                assertThat(viewer.getSelectedPositionFromItemId(33L), is(1));
+                assertThat(viewer.getSelectedPositionFromItemId(22L), is(2));
+                assertThat(viewer.getSelectedPositionFromItemId(122L), is(0));
+            }
+        });
+    }
+
+    @Test
+    public void testDoViewInViewer() throws Exception
+    {
+        final String keyBundle = COMUNIDAD_ID.key;
+        IncidenciaBean incidenciaBean = new IncidenciaBean();
+        Bundle bundleTest = new Bundle(1);
+        bundleTest.putLong(keyBundle, 122L);
+
+        viewer.setController(new CtrlerComuSpinner(viewer) {
+            @Override
+            public boolean loadItemsByEntitiyId(Long... entityId)
+            {
+                assertThat(flagLocalExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
+                return false;
+            }
+        });
+        viewer.doViewInViewer(bundleTest, incidenciaBean);
+
+        // Check call to initSelectedItemId().
+        assertThat(viewer.getSelectedItemId(), allOf(
+                is(bundleTest.getLong(keyBundle)),
+                is(122L)
+        ));
+        // Check call to controller.loadDataInSpinner();
+        assertThat(flagLocalExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_A));
+        // Check call to view.setOnItemSelectedListener().
+        assertThat(viewer.getViewInViewer().getOnItemSelectedListener(), instanceOf(ViewerComuSpinner.ComuSelectedListener.class));
+    }
+
+    @Test
+    public void testComuSelectedListener()
+    {
+        // Initial state:
+        assertThat(viewer.spinnerBean, nullValue());
+        assertThat(viewer.getSelectedItemId(), is(0L));
+
+        // Action.
+        viewer.doViewInViewer(new Bundle(0), new IncidenciaBean());
+        /* doViewInViewer() --> loadItemsByEntitiyId() --> onSuccessLoadItems() --> view.setSelection() --> ComuSelectedListener.onItemSelected() */
+        // Check
+        waitAtMost(2, SECONDS).until(getAdapter(viewer.getViewInViewer()), notNullValue());
+        assertThat(viewer.getViewInViewer().getCount(), is(2));
+        // Initialize itemId.
+        assertThat(viewer.getSelectedItemId() > 1, is(true));
+        assertThat(viewer.getSelectedPositionFromItemId(viewer.getSelectedItemId()), is(0));
+        // Initialize comunidadId in spinnerBean.
+        assertThat(viewer.spinnerBean.getComunidadId(), is(viewer.getSelectedItemId()));
+        // Call to OnSpinnerClick.doOnClickItemId()
+        assertThat(flagLocalExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_B));
+    }
+
     // ======================================= HELPERS ===============================================
 
     @NonNull
-    private List<Comunidad> makeListComu()
+    List<Comunidad> makeListComu()
     {
-        List<Comunidad> comunidades = new ArrayList<>(2);
-        comunidades.add(new Comunidad.ComunidadBuilder().c_id(321L).nombreVia("AAAAAA")
-                .municipio(new Municipio((short) 1, new Provincia((short) 11)))
-                .build());
-        comunidades.add(new Comunidad.ComunidadBuilder().c_id(123L).nombreVia("ZZZZZ")
-                .municipio(new Municipio((short) 2, new Provincia((short) 22)))
-                .build());
+        final List<Comunidad> comunidades = new ArrayList<>(3);
+        comunidades.add(new Comunidad.ComunidadBuilder().c_id(11L).build());
+        comunidades.add(new Comunidad.ComunidadBuilder().c_id(33L).build());
+        comunidades.add(new Comunidad.ComunidadBuilder().c_id(22L).build());
         return comunidades;
     }
 
+    private void execLoadItems()
+    {
+        final AtomicBoolean isExec = new AtomicBoolean(false);
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                viewer.onSuccessLoadItems(makeListComu());
+                isExec.compareAndSet(false, true);
+            }
+        });
+        waitAtMost(2, SECONDS).untilTrue(isExec);
+    }
+
+    class ViewerForTest extends ViewerMock<View, CtrlerSelectionListIf> implements OnSpinnerClick {
+
+        public ViewerForTest(Activity activity)
+        {
+            super(activity);
+        }
+
+        @Override
+        public long doOnClickItemId(long itemId)
+        {
+            Timber.d("==================== doOnClickItemId =====================");
+            assertThat(flagLocalExec.getAndSet(AFTER_METHOD_EXEC_B), is(BEFORE_METHOD_EXEC));
+            return 0;
+        }
+    }
 }

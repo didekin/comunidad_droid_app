@@ -9,17 +9,24 @@ import com.didekindroid.R;
 import com.didekindroid.api.ActivityMock;
 import com.didekindroid.api.SpinnerMockFr;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static com.didekindroid.incidencia.core.ViewerImportanciaSpinner.newViewerImportanciaSpinner;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_NUMBER;
+import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
+import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
+import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -31,6 +38,8 @@ import static org.junit.Assert.assertThat;
  */
 @RunWith(AndroidJUnit4.class)
 public class ViewerImportanciaSpinnerTest {
+
+    final AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
 
     @Rule
     public ActivityTestRule<ActivityMock> activityRule = new ActivityTestRule<>(ActivityMock.class, true, true);
@@ -67,6 +76,27 @@ public class ViewerImportanciaSpinnerTest {
     }
 
     @Test
+    public void testOnSuccessLoadItems()
+    {
+        final List<String> importancias = Arrays.asList("baja", "alta", "muy alta", "urgente");
+        viewer.setItemSelectedId(2);
+
+        final AtomicBoolean isExec = new AtomicBoolean(false);
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                viewer.onSuccessLoadItems(importancias);
+                isExec.compareAndSet(false, true);
+            }
+        });
+        waitAtMost(2, SECONDS).untilTrue(isExec);
+        assertThat(viewer.getViewInViewer().getAdapter().getCount(), is(4));
+        assertThat(ViewerImportanciaSpinner.class.cast(viewer).getViewInViewer().getSelectedItemId(), is(2L));
+        assertThat(ViewerImportanciaSpinner.class.cast(viewer).getViewInViewer().getSelectedItemPosition(), is(2));
+    }
+
+    @Test
     public void testInitSelectedItemId() throws Exception
     {
         viewer.bean = new IncidImportanciaBean();
@@ -89,26 +119,32 @@ public class ViewerImportanciaSpinnerTest {
     @Test
     public void testSaveState() throws Exception
     {
-        /*assertThat(checkSavedStateInSpinner(null, (short) 121, INCID_IMPORTANCIA_NUMBER, viewer), is(LONG_DEFAULT_EXTRA_VALUE));
-        assertThat(checkSavedStateInSpinner(new Bundle(1), (short) 101, INCID_IMPORTANCIA_NUMBER, viewer), is(101L));*/     // TODO
-    }
+        assertThat(viewer.getSelectedItemId(), is(0L));
+        Bundle bundle = new Bundle(0);
+        viewer.saveState(bundle);
+        assertThat(bundle.containsKey(INCID_IMPORTANCIA_NUMBER.key), is(false));
 
-    @Test
-    public void testGetSelectedItemId() throws Exception
-    {
-        /*viewer.itemSelectedId = (short) 27;
-        assertThat(viewer.getSelectedItemId(), is(27L));*/     // TODO
+        viewer.setItemSelectedId(1L);
+        viewer.saveState(bundle);
+        assertThat(bundle.getLong(INCID_IMPORTANCIA_NUMBER.key), is(1L));
     }
 
     @Test
     public void testDoViewInViewer() throws Exception
     {
-        /*final String keyBundle = INCID_IMPORTANCIA_NUMBER.key;
+        final String keyBundle = INCID_IMPORTANCIA_NUMBER.key;
         IncidImportanciaBean incidImportanciaBean = new IncidImportanciaBean();
         Bundle bundle = new Bundle();
         bundle.putLong(keyBundle, (short) 93);
 
-        AtomicReference<String> flagExec = doCtrlerInSpinnerViewer(viewer);
+        viewer.setController(new CtrlerImportanciaSpinner(viewer) {
+            @Override
+            public boolean loadItemsByEntitiyId(Long... entityId)
+            {
+                assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), CoreMatchers.is(BEFORE_METHOD_EXEC));
+                return false;
+            }
+        });
         viewer.doViewInViewer(bundle, incidImportanciaBean);
 
         // Check call to initSelectedItemId().
@@ -117,9 +153,9 @@ public class ViewerImportanciaSpinnerTest {
                 is(93L)
         ));
         // Check call to controller.loadDataInSpinner();
-        assertThat(flagExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_A));
+        assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_A));
         // Check call to view.setOnItemSelectedListener().
         ViewerImportanciaSpinner.ImportanciaSelectedListener listener =
-                (ViewerImportanciaSpinner.ImportanciaSelectedListener) viewer.getViewInViewer().getOnItemSelectedListener();*/    // TODO
+                (ViewerImportanciaSpinner.ImportanciaSelectedListener) viewer.getViewInViewer().getOnItemSelectedListener();
     }
 }

@@ -191,6 +191,6 @@ public class ViewerIncidRegFrTest {
     @Test
     public void testDoOnClickItemId() throws Exception
     {
-        // TODO: test.
+        assertThat(viewer.doOnClickItemId(123L), is(123L));
     }
 }

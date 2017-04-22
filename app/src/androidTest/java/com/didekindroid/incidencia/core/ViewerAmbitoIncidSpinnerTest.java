@@ -9,17 +9,24 @@ import com.didekindroid.R;
 import com.didekindroid.api.ActivityMock;
 import com.didekindroid.api.SpinnerMockFr;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static com.didekindroid.incidencia.core.ViewerAmbitoIncidSpinner.newViewerAmbitoIncidSpinner;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.AMBITO_INCIDENCIA_POSITION;
+import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
+import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
+import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -31,6 +38,8 @@ import static org.junit.Assert.assertThat;
  */
 @RunWith(AndroidJUnit4.class)
 public class ViewerAmbitoIncidSpinnerTest {
+
+    final AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
 
     @Rule
     public ActivityTestRule<ActivityMock> activityRule = new ActivityTestRule<>(ActivityMock.class, true, true);
@@ -69,6 +78,30 @@ public class ViewerAmbitoIncidSpinnerTest {
     }
 
     @Test
+    public void testOnSuccessLoadItems()
+    {
+        final List<AmbitoIncidValueObj> ambitos = new ArrayList<>(3);
+        ambitos.add(new AmbitoIncidValueObj((short) 0, "ambito0"));
+        ambitos.add(new AmbitoIncidValueObj((short) 1, "ambito1"));
+        ambitos.add(new AmbitoIncidValueObj((short) 2, "ambito2"));
+        viewer.setItemSelectedId(1);
+
+        final AtomicBoolean isExec = new AtomicBoolean(false);
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                viewer.onSuccessLoadItems(ambitos);
+                isExec.compareAndSet(false, true);
+            }
+        });
+        waitAtMost(2, SECONDS).untilTrue(isExec);
+        assertThat(viewer.getViewInViewer().getAdapter().getCount(), is(3));
+        assertThat(ViewerAmbitoIncidSpinner.class.cast(viewer).getViewInViewer().getSelectedItemId(), is(1L));
+        assertThat(ViewerAmbitoIncidSpinner.class.cast(viewer).getViewInViewer().getSelectedItemPosition(), is(1));
+    }
+
+    @Test
     public void testInitSelectedItemId() throws Exception
     {
 
@@ -93,26 +126,33 @@ public class ViewerAmbitoIncidSpinnerTest {
     @Test
     public void testSaveState() throws Exception
     {
-        /*assertThat(checkSavedStateInSpinner(null, 121, AMBITO_INCIDENCIA_POSITION, viewer), is(LONG_DEFAULT_EXTRA_VALUE));
-        assertThat(checkSavedStateInSpinner(new Bundle(1), 101, AMBITO_INCIDENCIA_POSITION, viewer), is(101L));*/   // TODO
-    }
+        assertThat(viewer.getSelectedItemId(), is(0L));
+        Bundle bundle = new Bundle(0);
+        viewer.saveState(bundle);
+        assertThat(bundle.containsKey(AMBITO_INCIDENCIA_POSITION.key), is(false));
 
-    @Test
-    public void testGetSelectedItemId() throws Exception
-    {
-        /*viewer.itemSelectedId = 93;
-        assertThat(viewer.getSelectedItemId(), is(93L));*/          // TODO
+        viewer.setItemSelectedId(1L);
+        viewer.saveState(bundle);
+        assertThat(bundle.getLong(AMBITO_INCIDENCIA_POSITION.key), is(1L));
     }
 
     @Test
     public void testDoViewInViewer_1() throws Exception
     {
-        /*final String keyBundle = AMBITO_INCIDENCIA_POSITION.key;
+        final String keyBundle = AMBITO_INCIDENCIA_POSITION.key;
         IncidenciaBean incidenciaBean = new IncidenciaBean();
         Bundle bundle = new Bundle();
         bundle.putLong(keyBundle, 111);
 
-        AtomicReference<String> flagExec = doCtrlerInSpinnerViewer(viewer);
+        viewer.setController(new CtrlerAmbitoIncidSpinner(viewer) {
+            @Override
+            public boolean loadItemsByEntitiyId(Long... entityId)
+            {
+                assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), CoreMatchers.is(BEFORE_METHOD_EXEC));
+                return false;
+            }
+        });
+
         viewer.doViewInViewer(bundle, incidenciaBean);
 
         // Check call to initSelectedItemId().
@@ -121,10 +161,10 @@ public class ViewerAmbitoIncidSpinnerTest {
                 is(bundle.getLong(keyBundle))
         ));
         // Check call to controller.loadDataInSpinner();
-        assertThat(flagExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_A));
+        assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_A));
         // Check call to view.setOnItemSelectedListener().
         ViewerAmbitoIncidSpinner.AmbitoIncidSelectedListener listener =
-                (ViewerAmbitoIncidSpinner.AmbitoIncidSelectedListener) viewer.getViewInViewer().getOnItemSelectedListener();*/    // TODO
+                (ViewerAmbitoIncidSpinner.AmbitoIncidSelectedListener) viewer.getViewInViewer().getOnItemSelectedListener();
     }
 
     @Test
