@@ -1,6 +1,7 @@
 package com.didekindroid.incidencia.testutils;
 
 import android.app.Activity;
+import android.support.annotation.NonNull;
 import android.view.View;
 
 import com.didekindroid.R;
@@ -12,13 +13,17 @@ import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
 import org.hamcrest.Matcher;
 
+import java.sql.Timestamp;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.Visibility.GONE;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -186,25 +191,75 @@ public final class IncidUiTestUtils {
     }
 
     @SuppressWarnings("unchecked")
-    public static Matcher<View> checkIncidListView(IncidImportancia incidImportancia, Activity activity)
+    public static Matcher<View> checkIncidClosedListView(IncidImportancia incidImportancia, Activity activity)
+    {
+        return allOf(
+                withId(R.id.incid_see_cierre_block),
+                hasDescendant(allOf(
+                        withId(R.id.incid_fecha_cierre_view),
+                        withText(formatTimeStampToString(incidImportancia.getIncidencia().getFechaCierre()))
+                )),
+                hasSibling(allOf(
+                        withId(R.id.incid_see_resolucion_block),
+                        withEffectiveVisibility(GONE)
+                )),
+                addIncidCommonMatcher(incidImportancia, activity)
+        );
+    }
+
+    public static Matcher<View> checkIncidOpenListView(IncidImportancia incidImportancia, Activity activity, Timestamp fechaAltaResolucion)
+    {
+        return allOf(
+                withId(R.id.incid_see_resolucion_block),
+                hasDescendant(allOf(
+                        withId(R.id.incid_see_fecha_alta_resolucion_view),
+                        withText(formatTimeStampToString(fechaAltaResolucion))
+                )),
+                hasSibling(allOf(
+                        withId(R.id.incid_see_cierre_block),
+                        withEffectiveVisibility(GONE)
+                )),
+                addIncidCommonMatcher(incidImportancia, activity)
+        );
+    }
+
+    @SuppressWarnings("unchecked")
+    public static Matcher<View> checkIncidOpenListViewNoResol(IncidImportancia incidImportancia, Activity activity)
+    {
+        return allOf(
+                withId(R.id.incid_see_apertura_block),
+                hasDescendant(withId(R.id.incid_see_iniciador_view)),
+                hasSibling(allOf(
+                        withId(R.id.incid_see_importancia_block),
+                        hasDescendant(withId(R.id.incid_importancia_comunidad_view)))),
+                hasSibling(withId(R.id.incid_ambito_view)),
+                hasSibling(withId(R.id.incid_descripcion_view)),
+                hasSibling(allOf(
+                        withId(R.id.incid_see_resolucion_block),
+                        withEffectiveVisibility(GONE)
+                )),
+                hasSibling(allOf(
+                        withId(R.id.incid_see_cierre_block),
+                        withEffectiveVisibility(GONE)
+                ))
+        );
+    }
+
+    @NonNull
+    private static Matcher<View> addIncidCommonMatcher(IncidImportancia incidImportancia, Activity activity)
     {
         IncidenciaDataDbHelper dbHelper = new IncidenciaDataDbHelper(activity);
 
         Matcher<View> matcher = allOf(
-                withId(R.id.incid_see_apertura_block),
-                hasDescendant(allOf(
-                        withId(R.id.incid_fecha_alta_view),
-                        withText(formatTimeStampToString(incidImportancia.getIncidencia().getFechaAlta()))
-                )),
-                hasDescendant(allOf(
-                        withId(R.id.incid_see_iniciador_view),
-                        withText(incidImportancia.getUserComu().getUsuario().getAlias())
-                )),
                 hasSibling(allOf(
-                        withId(R.id.incid_see_cierre_block),
+                        withId(R.id.incid_see_apertura_block),
                         hasDescendant(allOf(
-                                withId(R.id.incid_fecha_cierre_view),
-                                withText(formatTimeStampToString(incidImportancia.getIncidencia().getFechaCierre()))
+                                withId(R.id.incid_fecha_alta_view),
+                                withText(formatTimeStampToString(incidImportancia.getIncidencia().getFechaAlta()))
+                        )),
+                        hasDescendant(allOf(
+                                withId(R.id.incid_see_iniciador_view),
+                                withText(incidImportancia.getUserComu().getUsuario().getAlias())
                         ))
                 )),
                 hasSibling(allOf(

@@ -25,12 +25,12 @@ import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_B;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
+import static com.didekindroid.testutil.RxSchedulersUtils.resetAllSchedulers;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceAndroidMain;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceIoScheduler;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
-import static io.reactivex.plugins.RxJavaPlugins.reset;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
@@ -78,6 +78,7 @@ public class CtrlerIncidRegEditFr_Edit_Test {
     public void clean() throws UiException
     {
         controller.clearSubscriptions();
+        resetAllSchedulers();
         cleanOptions(CLEAN_PEPE);
     }
 
@@ -99,7 +100,7 @@ public class CtrlerIncidRegEditFr_Edit_Test {
                     is(true)
             );
         } finally {
-            reset();
+            resetAllSchedulers();
         }
         assertThat(controller.getSubscriptions().size(), is(1));
         assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_A));
@@ -116,7 +117,7 @@ public class CtrlerIncidRegEditFr_Edit_Test {
             trampolineReplaceAndroidMain();
             assertThat(controller.eraseIncidencia(incidImportancia.getIncidencia()), is(true));
         } finally {
-            reset();
+            resetAllSchedulers();
         }
         assertThat(controller.getSubscriptions().size(), is(1));
         assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_B));

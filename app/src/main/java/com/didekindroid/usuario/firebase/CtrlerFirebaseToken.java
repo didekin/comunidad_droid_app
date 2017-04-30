@@ -45,6 +45,8 @@ public class CtrlerFirebaseToken extends Controller implements CtrlerFirebaseTok
         this.viewer = viewer;
     }
 
+    //    .................................... OBSERVABLES .................................
+
     /**
      * Postconditions: the user's gcm token in database is updated.
      *
@@ -63,6 +65,8 @@ public class CtrlerFirebaseToken extends Controller implements CtrlerFirebaseTok
         );
     }
 
+    //    .................................... INSTANCE METHODS .................................
+
     @Override
     public boolean isGcmTokenSentServer()
     {
@@ -72,7 +76,6 @@ public class CtrlerFirebaseToken extends Controller implements CtrlerFirebaseTok
         return sharedPref.getBoolean(IS_GCM_TOKEN_SENT_TO_SERVER, false);
     }
 
-    //    .................................... OBSERVABLES .................................
 
     @Override
     public void updateIsGcmTokenSentServer(boolean isSentToServer)
@@ -85,8 +88,6 @@ public class CtrlerFirebaseToken extends Controller implements CtrlerFirebaseTok
         editor.putBoolean(IS_GCM_TOKEN_SENT_TO_SERVER, isSentToServer);
         editor.apply();
     }
-
-    // .................................... SUBSCRIPTIONS ..................................
 
     @Override
     public boolean checkGcmToken()
@@ -106,22 +107,17 @@ public class CtrlerFirebaseToken extends Controller implements CtrlerFirebaseTok
      * The method does not check if the gcmToken has been sent previously to database.
      */
     @Override
-    public void checkGcmTokenSync()
+    public boolean checkGcmTokenSync()
     {
         Timber.d("checkGcmTokenSync()");
-        if (identityCacher.isRegisteredUser()) {
-            subscriptions.add(
-                    updatedGcmTkSingle()
-                            .subscribeWith(
-                                    new RegGcmTokenObserver(this) {
-                                        @Override
-                                        public void onError(Throwable error)
-                                        {
-                                            Timber.d("onErrorCtrl(): %s", error.getMessage());
-                                        }
-                                    }
-                            ));
-        }
+
+        return identityCacher.isRegisteredUser() && subscriptions.add(updatedGcmTkSingle().subscribeWith(new RegGcmTokenObserver(this) {
+            @Override
+            public void onError(Throwable error)
+            {
+                Timber.d("onErrorCtrl(): %s", error.getMessage());
+            }
+        }));
     }
 
     // ............................ SUBSCRIBERS ..................................

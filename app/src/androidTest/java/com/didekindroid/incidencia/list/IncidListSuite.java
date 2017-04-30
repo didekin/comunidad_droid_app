@@ -6,9 +6,7 @@ import com.didekindroid.incidencia.list.close.IncidSeeClosedByComuAc_Mn_Test;
 import com.didekindroid.incidencia.list.close.ViewerIncidSeeCloseTest;
 import com.didekindroid.incidencia.list.importancia.IncidSeeUserComuImportanciaAcTest;
 import com.didekindroid.incidencia.list.open.CtrlerIncidSeeOpenByComuTest;
-import com.didekindroid.incidencia.list.open.IncidSeeOpenByComuAcTest_1;
-import com.didekindroid.incidencia.list.open.IncidSeeOpenByComuAcTest_2;
-import com.didekindroid.incidencia.list.open.IncidSeeOpenByComuAcTest_3;
+import com.didekindroid.incidencia.list.open.IncidSeeOpenByComuAcTest;
 import com.didekindroid.incidencia.list.open.IncidSeeOpenByComuAc_GCM_Test;
 import com.didekindroid.incidencia.list.open.IncidSeeOpenByComuAc_Mn_Test;
 import com.didekindroid.incidencia.list.open.ViewerIncidSeeOpenTest;
@@ -29,9 +27,7 @@ import org.junit.runners.Suite;
         IncidSeeClosedByComuAcTest.class,
         IncidSeeOpenByComuAc_GCM_Test.class,
         IncidSeeOpenByComuAc_Mn_Test.class,
-        IncidSeeOpenByComuAcTest_1.class,
-        IncidSeeOpenByComuAcTest_2.class,
-        IncidSeeOpenByComuAcTest_3.class,
+        IncidSeeOpenByComuAcTest.class,
         IncidSeeUserComuImportanciaAcTest.class,
         ViewerIncidSeeCloseTest.class,
         ViewerIncidSeeOpenTest.class,

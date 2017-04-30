@@ -38,7 +38,7 @@ import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOU
  * Time: 12:05
  */
 
-class ViewerLogin extends Viewer<View, CtrlerLoginIf> implements ViewerLoginIf {
+class ViewerLogin extends Viewer<View, CtrlerLoginIf> implements ViewerLoginIf, ComponentReplacerIf {
 
     @SuppressWarnings("WeakerAccess")
     final AtomicReference<UsuarioBean> usuarioBean;
@@ -53,6 +53,7 @@ class ViewerLogin extends Viewer<View, CtrlerLoginIf> implements ViewerLoginIf {
 
     static ViewerLoginIf newViewerLogin(LoginAc activity)
     {
+        Timber.d("newViewerLogin()");
         ViewerLoginIf instance = new ViewerLogin(activity);
         instance.setController(new CtrlerLogin(instance));
         return instance;
@@ -64,16 +65,7 @@ class ViewerLogin extends Viewer<View, CtrlerLoginIf> implements ViewerLoginIf {
         Timber.d("doViewInViewer()");
 
         Button mLoginButton = (Button) view.findViewById(R.id.login_ac_button);
-        mLoginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                Timber.d("View.OnClickListener().onClickLinkToImportanciaUsers()");
-                if (checkLoginData()) {
-                    controller.validateLogin(usuarioBean.get().getUsuario());
-                }
-            }
-        });
+        mLoginButton.setOnClickListener(new LoginButtonListener());
         if (savedState != null) {
             counterWrong.set(savedState.getInt(login_counter_atomic_int.key));
         }
@@ -113,7 +105,7 @@ class ViewerLogin extends Viewer<View, CtrlerLoginIf> implements ViewerLoginIf {
 
         if (isLoginOk) {
             Timber.d("login OK");
-            initActivity(new Bundle());
+            replaceComponent(new Bundle());
         } else {
             int counter = counterWrong.addAndGet(1);
             Timber.d("Password wrong, counterWrong = %d%n", counter - 1);
@@ -167,7 +159,7 @@ class ViewerLogin extends Viewer<View, CtrlerLoginIf> implements ViewerLoginIf {
     public void doDialogNegativeClick()
     {
         Timber.d("doDialogNegativeClick()");
-        initActivity(new Bundle());
+        replaceComponent(new Bundle());
     }
 
     @Override
@@ -213,12 +205,29 @@ class ViewerLogin extends Viewer<View, CtrlerLoginIf> implements ViewerLoginIf {
     @Override
     public AtomicInteger getCounterWrong()
     {
+        Timber.d("getCounterWrong()");
         return counterWrong;
     }
 
-    public void initActivity(@NonNull Bundle bundle)
+    @Override
+    public void replaceComponent(@NonNull Bundle bundle)
     {
-        Timber.d("initActivityWithBundle()");
+        Timber.d("replaceComponent()");
         ComponentReplacerIf.class.cast(activity).replaceComponent(bundle);
+    }
+
+    // ==================================  HELPERS  =================================
+
+    @SuppressWarnings("WeakerAccess")
+    class LoginButtonListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v)
+        {
+            Timber.d("View.OnClickListener().onClickLinkToImportanciaUsers()");
+            if (checkLoginData()) {
+                controller.validateLogin(usuarioBean.get().getUsuario());
+            }
+        }
     }
 }

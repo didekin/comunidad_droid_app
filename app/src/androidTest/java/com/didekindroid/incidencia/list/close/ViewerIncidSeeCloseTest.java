@@ -1,12 +1,15 @@
 package com.didekindroid.incidencia.list.close;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.widget.ListView;
+import android.widget.TextView;
 
-import com.didekindroid.R;
+import com.didekindroid.api.CtrlerSelectableItemIf;
+import com.didekindroid.api.ViewerSelectionListIf;
 import com.didekindroid.exception.UiException;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
@@ -23,9 +26,6 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
-
-import timber.log.Timber;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -38,7 +38,8 @@ import static com.didekindroid.incidencia.list.close.ViewerIncidSeeClose.newView
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doSimpleIncidenciaUser;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.makeRegGetIncidImportancia;
-import static com.didekindroid.incidencia.testutils.IncidUiTestUtils.checkIncidListView;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.nextResolucionFrResourceId;
+import static com.didekindroid.incidencia.testutils.IncidUiTestUtils.checkIncidClosedListView;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_ID_LIST_SELECTED;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
@@ -47,8 +48,6 @@ import static com.didekindroid.testutil.ActivityTestUtils.addSubscription;
 import static com.didekindroid.testutil.ActivityTestUtils.checkViewerReplaceComponent;
 import static com.didekindroid.testutil.ActivityTestUtils.isComuSpinnerWithText;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
-import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_B;
-import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
@@ -72,9 +71,6 @@ import static org.junit.Assert.fail;
  */
 @RunWith(AndroidJUnit4.class)
 public class ViewerIncidSeeCloseTest {
-
-    public static final int next_resourceId_to_check = R.id.incid_resolucion_see_fr_layout;
-    static final AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
 
     IncidImportancia incidImportancia1;
     Resolucion resolucion;
@@ -111,88 +107,27 @@ public class ViewerIncidSeeCloseTest {
     IncidSeeCloseByComuFr fragment;
     IncidSeeClosedByComuAc activity;
 
-    @Before
-    public void setUp() throws Exception
+    @NonNull
+    public static List<IncidenciaUser> doIncidenciaUsers(IncidImportancia incidImportancia)
     {
-        activity = activityRule.getActivity();
-        fragment = (IncidSeeCloseByComuFr) activity.getSupportFragmentManager().findFragmentByTag(incid_see_by_comu_list_fr_tag);
+        final List<IncidenciaUser> list = new ArrayList<>(3);
+        Timestamp resolucionDate = incidImportancia.getIncidencia().getFechaCierre();
+        Timestamp altaIncidDate = incidImportancia.getIncidencia().getFechaAlta();
+        IncidenciaUser iu_1 = doSimpleIncidenciaUser(33L, altaIncidDate, 34L, resolucionDate);
+        IncidenciaUser iu_2 = doSimpleIncidenciaUser(11L, altaIncidDate, 14L, resolucionDate);
+        IncidenciaUser iu_3 = doSimpleIncidenciaUser(22L, altaIncidDate, 24L, resolucionDate);
+        list.add(iu_1);
+        list.add(iu_2);
+        list.add(iu_3);
+        return list;
     }
 
-    @After
-    public void tearDown() throws Exception
+    //    ============================  STATIC UTILITIES  ===================================
+
+    public static void checkOnSuccessLoadItems(IncidImportancia incidImportancia, Activity activity,
+                                               final ViewerSelectionListIf<ListView, CtrlerSelectableItemIf<IncidenciaUser, Bundle>, IncidenciaUser> viewer)
     {
-        cleanOptions(CLEAN_PEPE);
-    }
-
-    //    ============================  TESTS INTEGRATION  ===================================
-
-    @Test
-    public void testNewViewerIncidSeeClose() throws Exception
-    {
-        assertThat(fragment.viewerIncidClose.getController(), allOf(notNullValue(), instanceOf(CtrlerIncidSeeCloseByComu.class)));
-        assertThat(fragment.viewerIncidClose.comuSpinnerViewer, notNullValue());
-    }
-
-    @Test
-    public void testDoViewInViewer() throws Exception
-    {
-        // Check list.
-        waitAtMost(2, SECONDS).until(isViewDisplayed(checkIncidListView(incidImportancia1, activity)));
-        // itemSelectedId with default value.
-        assertThat(fragment.viewerIncidClose.getSelectedItemId(), is(0L));
-        // When itemSelectedId == 0, no checkedItem.
-        assertThat(fragment.viewerIncidClose.getViewInViewer().getCheckedItemPosition() < 0, is(true));
-        assertThat(fragment.viewerIncidClose.getViewInViewer().getOnItemClickListener(), instanceOf(ViewerIncidSeeClose.ListItemOnClickListener.class));
-        // Comunidad spinner.
-        waitAtMost(2, SECONDS).until(isComuSpinnerWithText(incidImportancia1.getIncidencia().getComunidad().getNombreComunidad()));
-    }
-
-    @Test
-    public void testListItemOnClickListener_1() throws InterruptedException
-    {
-        waitAtMost(2, SECONDS).until(isViewDisplayed(checkIncidListView(incidImportancia1, activity)));
-        onData(isA(IncidenciaUser.class)).inAdapterView(withId(android.R.id.list))
-                .check(matches(isDisplayed()))
-                .perform(click());
-        waitAtMost(2, SECONDS).until(isViewDisplayed(withId(next_resourceId_to_check)));
-    }
-
-    @Test
-    public void testReplaceComponent() throws Exception
-    {
-        waitAtMost(2, SECONDS).until(isViewDisplayed(checkIncidListView(incidImportancia1, activity)));
-        // Preconditions.
-        Bundle bundle = new Bundle(3);
-        bundle.putBoolean(IS_MENU_IN_FRAGMENT_FLAG.key, true);
-        bundle.putSerializable(INCIDENCIA_OBJECT.key, resolucion.getIncidencia());
-        bundle.putSerializable(INCID_RESOLUCION_OBJECT.key, resolucion);
-
-        checkViewerReplaceComponent(fragment.viewerIncidClose, next_resourceId_to_check, bundle);
-    }
-
-    //    ============================  TESTS  ===================================
-
-    @Test
-    public void test_InitSelectedItemId() throws Exception
-    {
-        Bundle savedState = new Bundle();
-        savedState.putLong(INCIDENCIA_ID_LIST_SELECTED.key, 11L);
-        viewer = newViewerIncidSeeClose(fragment.getView(), activity);
-        viewer.initSelectedItemId(savedState);
-
-        assertThat(viewer.getSelectedItemId(), is(11L));
-
-        savedState = new Bundle(0);
-        viewer.initSelectedItemId(savedState);
-        assertThat(viewer.getSelectedItemId(), is(0L));
-    }
-
-    @Test
-    public void test_OnSuccessLoadItems() throws Exception
-    {
-        final List<IncidenciaUser> list = doIncidenciaUsers();
-
-        viewer = newViewerIncidSeeClose(fragment.getView(), activity);
+        final List<IncidenciaUser> list = doIncidenciaUsers(incidImportancia);
 
         activity.runOnUiThread(new Runnable() {
             @Override
@@ -230,18 +165,105 @@ public class ViewerIncidSeeCloseTest {
             {
                 viewer.setItemSelectedId(22L);
                 viewer.onSuccessLoadItems(listEmpty);
-                // ListView.getCount() and Adapter.getCount() take into account header views.
-                assertThat(viewer.getViewInViewer().getCount(), is(1));
+                // No se cumple la condición view.getCount() > view.getHeaderViewsCount(): no se llama  view.setItemChecked().
+                assertThat(viewer.getViewInViewer().getCount() <= viewer.getViewInViewer().getHeaderViewsCount(), is(true));
                 // When list is empty, no checkedItem.
                 assertThat(viewer.getViewInViewer().getCheckedItemPosition() < 0, is(true));
             }
         });
     }
 
+    //    ============================  SETUP - CLEAN  ===================================
+
+    @Before
+    public void setUp() throws Exception
+    {
+        activity = activityRule.getActivity();
+        fragment = (IncidSeeCloseByComuFr) activity.getSupportFragmentManager().findFragmentByTag(incid_see_by_comu_list_fr_tag);
+    }
+
+    @After
+    public void tearDown() throws Exception
+    {
+        cleanOptions(CLEAN_PEPE);
+    }
+
+    //    ============================  TESTS INTEGRATION  ===================================
+
+    @Test
+    public void testDoViewInViewer() throws Exception
+    {
+        // Check list.
+        waitAtMost(3, SECONDS).until(isViewDisplayed(checkIncidClosedListView(incidImportancia1, activity)));
+        // itemSelectedId with default value.
+        assertThat(fragment.viewer.getSelectedItemId(), is(0L));
+        // When itemSelectedId == 0, no checkedItem.
+        assertThat(fragment.viewer.getViewInViewer().getCheckedItemPosition() < 0, is(true));
+        assertThat(fragment.viewer.getViewInViewer().getOnItemClickListener(), instanceOf(ViewerIncidSeeClose.ListItemOnClickListener.class));
+        // Comunidad spinner.
+        waitAtMost(2, SECONDS).until(isComuSpinnerWithText(incidImportancia1.getIncidencia().getComunidad().getNombreComunidad()));
+    }
+
+    @Test
+    public void testListItemOnClickListener() throws InterruptedException
+    {
+        waitAtMost(2, SECONDS).until(isViewDisplayed(checkIncidClosedListView(incidImportancia1, activity)));
+        onData(isA(IncidenciaUser.class)).inAdapterView(withId(android.R.id.list))
+                .check(matches(isDisplayed()))
+                .perform(click());
+        assertThat(fragment.viewer.getSelectedItemId(), is(incidImportancia1.getIncidencia().getIncidenciaId()));
+        waitAtMost(2, SECONDS).until(isViewDisplayed(withId(nextResolucionFrResourceId)));
+    }
+
+    @Test
+    public void testReplaceComponent() throws Exception
+    {
+        waitAtMost(2, SECONDS).until(isViewDisplayed(checkIncidClosedListView(incidImportancia1, activity)));
+        // Preconditions.
+        Bundle bundle = new Bundle(3);
+        bundle.putBoolean(IS_MENU_IN_FRAGMENT_FLAG.key, true);
+        bundle.putSerializable(INCIDENCIA_OBJECT.key, resolucion.getIncidencia());
+        bundle.putSerializable(INCID_RESOLUCION_OBJECT.key, resolucion);
+
+        checkViewerReplaceComponent(fragment.viewer, nextResolucionFrResourceId, bundle);
+    }
+
+    //    ============================  TESTS  ===================================
+
+    @Test
+    public void testNewViewerIncidSeeClose() throws Exception
+    {
+        assertThat(fragment.viewer.getController(), allOf(notNullValue(), instanceOf(CtrlerIncidSeeCloseByComu.class)));
+        assertThat(fragment.viewer.comuSpinnerViewer, notNullValue());
+        assertThat(fragment.viewer.getViewInViewer(), instanceOf(ListView.class));
+        assertThat(fragment.viewer.getViewInViewer().getEmptyView(), instanceOf(TextView.class));
+    }
+
+    @Test
+    public void test_InitSelectedItemId() throws Exception
+    {
+        Bundle savedState = new Bundle();
+        savedState.putLong(INCIDENCIA_ID_LIST_SELECTED.key, 11L);
+        viewer = newViewerIncidSeeClose(fragment.getView(), activity);
+        viewer.initSelectedItemId(savedState);
+
+        assertThat(viewer.getSelectedItemId(), is(11L));
+
+        savedState = new Bundle(0);
+        viewer.initSelectedItemId(savedState);
+        assertThat(viewer.getSelectedItemId(), is(0L));
+    }
+
+    @Test
+    public void test_OnSuccessLoadItems() throws Exception    // getHeaderViewsCount()
+    {
+        checkOnSuccessLoadItems(incidImportancia1, activity, fragment.viewer);
+    }
+
     @Test
     public void test_GetSelectedPositionFromItemId() throws Exception
     {
-        final List<IncidenciaUser> list = doIncidenciaUsers();
+        final List<IncidenciaUser> list = doIncidenciaUsers(incidImportancia1);
         viewer = newViewerIncidSeeClose(fragment.getView(), activity);
 
         activity.runOnUiThread(new Runnable() {
@@ -254,39 +276,6 @@ public class ViewerIncidSeeCloseTest {
                 assertThat(viewer.getSelectedPositionFromItemId(22L), is(3));
                 // No se encuentra la incidencia en la lista.
                 assertThat(viewer.getSelectedPositionFromItemId(93L), is(0));
-            }
-        });
-    }
-
-    @Test
-    public void testListItemOnClickListener_2() throws InterruptedException
-    {
-        // Wait for fragment be fully created.
-        waitAtMost(2, SECONDS).until(isViewDisplayed(checkIncidListView(incidImportancia1, activity)));
-
-        final List<IncidenciaUser> list = doIncidenciaUsers();
-
-        fragment.viewerIncidClose.setController(new CtrlerIncidSeeCloseByComu(viewer) {
-            @Override
-            public boolean selectItem(@NonNull IncidenciaUser incidenciaUser)
-            {
-                Timber.d("==================== selectItem() =====================");
-                assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_B), is(BEFORE_METHOD_EXEC));
-                return false;
-            }
-        });
-
-        ViewerIncidSeeClose.ListItemOnClickListener listener = fragment.viewerIncidClose.new ListItemOnClickListener();
-
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                fragment.viewerIncidClose.onSuccessLoadItems(list);
-                ListView listView = fragment.viewerIncidClose.getViewInViewer();
-                listView.performItemClick(listView.getAdapter().getView(1, null, listView), 2, 2);
-                assertThat(fragment.viewerIncidClose.getSelectedItemId(), is(11L));
-                assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_B));
             }
         });
     }
@@ -316,22 +305,5 @@ public class ViewerIncidSeeCloseTest {
         viewer.saveState(bundle);
         assertThat(bundle.getLong(INCIDENCIA_ID_LIST_SELECTED.key), is(5L));
         assertThat(bundle.getLong(COMUNIDAD_ID.key), is(7L));
-    }
-
-    //    ============================  HELPERS  ===================================
-
-    @NonNull
-    private List<IncidenciaUser> doIncidenciaUsers()
-    {
-        final List<IncidenciaUser> list = new ArrayList<>(3);
-        Timestamp resolucionDate = incidImportancia1.getIncidencia().getFechaCierre();
-        Timestamp altaIncidDate = incidImportancia1.getIncidencia().getFechaAlta();
-        IncidenciaUser iu_1 = doSimpleIncidenciaUser(33L, altaIncidDate, 34L, resolucionDate);
-        IncidenciaUser iu_2 = doSimpleIncidenciaUser(11L, altaIncidDate, 14L, resolucionDate);
-        IncidenciaUser iu_3 = doSimpleIncidenciaUser(22L, altaIncidDate, 24L, resolucionDate);
-        list.add(iu_1);
-        list.add(iu_2);
-        list.add(iu_3);
-        return list;
     }
 }

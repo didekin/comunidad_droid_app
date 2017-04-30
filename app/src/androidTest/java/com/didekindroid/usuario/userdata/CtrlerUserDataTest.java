@@ -1,10 +1,13 @@
 package com.didekindroid.usuario.userdata;
 
+import android.app.Activity;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.test.rule.ActivityTestRule;
+import android.view.View;
 
 import com.didekindroid.api.ActivityMock;
 import com.didekindroid.exception.UiException;
-import com.didekinlib.http.oauth2.SpringOauthToken;
 import com.didekinlib.model.usuario.Usuario;
 
 import org.junit.Before;
@@ -14,32 +17,24 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
-import io.reactivex.functions.Consumer;
-import io.reactivex.observers.TestObserver;
-
-import static com.didekindroid.security.OauthTokenReactor.tokenReactor;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
+import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_B;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
+import static com.didekindroid.testutil.RxSchedulersUtils.resetAllSchedulers;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceAndroidMain;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceIoScheduler;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_DROID;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanWithTkhandler;
 import static com.didekindroid.usuario.userdata.CtrlerUserData.userDataLoaded;
-import static com.didekindroid.usuario.userdata.CtrlerUserData.userDataModified;
-import static com.didekindroid.usuario.userdata.CtrlerUserData.userModifiedCacheUpdated;
-import static com.didekindroid.usuario.userdata.CtrlerUserData.userModifiedTokenUpdated;
+import static com.didekindroid.usuario.userdata.CtrlerUserData.userModifiedTkUpdated;
+import static com.didekindroid.usuario.userdata.CtrlerUserData.userModifiedWithPswdValidation;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
-import static io.reactivex.plugins.RxJavaPlugins.reset;
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -59,53 +54,8 @@ public class CtrlerUserDataTest {
     @Before
     public void setUp() throws Exception
     {
-        controller = new CtrlerUserData(new ViewerUserData(null, activityRule.getActivity()));
-    }
-
-    @Test
-    public void testLoadUserData() throws Exception
-    {
-        try {
-            trampolineReplaceIoScheduler();
-            trampolineReplaceAndroidMain();
-            assertThat(controller.loadUserData(), is(true));
-        } finally {
-            reset();
-        }
-        assertThat(controller.getSubscriptions().size(), is(1));
-    }
-
-    @Test
-    public void testModifyUser() throws Exception
-    {
-        try {
-            trampolineReplaceIoScheduler();
-            trampolineReplaceAndroidMain();
-            assertThat(controller.modifyUser(
-                    USER_DROID,
-                    new Usuario.UsuarioBuilder().copyUsuario(USER_DROID)
-                            .userName("new_user_droid")
-                            .build()
-                    ),
-                    is(true));
-        } finally {
-            reset();
-        }
-        assertThat(controller.getSubscriptions().size(), is(1));
-    }
-
-    @Test
-    public void testProcessBackUserDataLoaded() throws Exception
-    {
-        controller.onSuccessUserDataLoaded(USER_DROID);
-        assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_A));
-    }
-
-    @Test
-    public void testProcessBackUserModified() throws Exception
-    {
-        controller.onCompleteUserModified();
-        // TODO.....
+        Activity activity = activityRule.getActivity();
+        controller = new CtrlerUserData(new ViewerUserDataForTest(new View(activity), activity));
     }
 
     // ..................................... OBSERVABLES ..........................................
@@ -121,79 +71,93 @@ public class CtrlerUserDataTest {
     }
 
     @Test
-    public void testUserDataModified() throws IOException, UiException
+    public void test_UserModifiedTokenUpdated() throws Exception
     {
-        // Caso OK.
-        Usuario usuario = new Usuario.UsuarioBuilder().userName("new_pepe_name")
-                .uId(signUpAndUpdateTk(COMU_ESCORIAL_PEPE).getuId())
-                .build();
-        userDataModified(TKhandler.getTokenCache().get(), usuario).test().assertResult(1);
-
-        try { // Para poder borrar al usuario.
-            trampolineReplaceIoScheduler();
-            trampolineReplaceAndroidMain();
-            tokenReactor.updateTkAndCacheFromUser(new Usuario.UsuarioBuilder().userName("new_pepe_name").password(USER_PEPE.getPassword()).build());
-        } finally {
-            reset();
-        }
-        usuarioDao.deleteUser();
-        cleanWithTkhandler();
-    }
-
-    @Test
-    public void testUserModifiedTokenUpdated() throws IOException, UiException
-    {
-        /* Caso OK.*/
-        final AtomicReference<SpringOauthToken> atomicToken = new AtomicReference<>();
-
-        Usuario newUser = new Usuario.UsuarioBuilder().alias("new_pepe_alias")
-                .userName(USER_PEPE.getUserName())
-                .uId(signUpAndUpdateTk(COMU_ESCORIAL_PEPE).getuId())
-                .password(USER_PEPE.getPassword())
-                .build();
-
-        final SpringOauthToken oauthToken1 = TKhandler.getTokenCache().get();
-        userModifiedTokenUpdated(oauthToken1, newUser).test().assertValueCount(1).assertOf(new Consumer<TestObserver<SpringOauthToken>>() {
-            @Override
-            public void accept(TestObserver<SpringOauthToken> testObserver) throws Exception
-            {
-                final SpringOauthToken oauthToken2 = testObserver.values().get(0);
-                atomicToken.compareAndSet(null, oauthToken2);
-
-                assertThat(oauthToken2, notNullValue());
-                assertThat(oauthToken2.getValue(), allOf(
-                        notNullValue(),
-                        not(is(oauthToken1.getValue()))
-                ));
-                assertThat(oauthToken2.getRefreshToken().getValue(), allOf(
-                        notNullValue(),
-                        not(is(oauthToken1.getRefreshToken().getValue()))
-                ));
-            }
-        });
-
-        // Para poder borrar el usuario, actualizamos cache.
-        TKhandler.initIdentityCache(atomicToken.getAndSet(null));
-        usuarioDao.deleteUser();
-        cleanWithTkhandler();
-    }
-
-    @Test
-    public void testUserModifiedCacheUpdated() throws IOException, UiException
-    {
-        /* Caso OK.*/
-        userModifiedCacheUpdated(
-                USER_PEPE,
-                new Usuario.UsuarioBuilder()
-                        .userName("new_pepe_name")
-                        .uId(signUpAndUpdateTk(COMU_ESCORIAL_PEPE).getuId())
-                        .password(USER_PEPE.getPassword())
-                        .build()
-        ).test().awaitDone(4, SECONDS).assertComplete();
-        assertThat(TKhandler.getTokenCache().get().getValue(), notNullValue());
+        Usuario oldUsuario = signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
+        userModifiedTkUpdated(TKhandler.getTokenCache().get(), doNewUser(oldUsuario)).test().awaitDone(4, SECONDS).assertComplete();
 
         // El hecho de poder borrar implica que la cache se ha actualizado correctamente.
         usuarioDao.deleteUser();
         cleanWithTkhandler();
     }
+
+    @Test
+    public void test_UserModifiedWithPswdValidation() throws Exception
+    {
+        Usuario oldUsuario = new Usuario.UsuarioBuilder().copyUsuario(signUpAndUpdateTk(COMU_ESCORIAL_PEPE)).password(USER_PEPE.getPassword()).build();
+        userModifiedWithPswdValidation(oldUsuario, doNewUser(oldUsuario)).test().assertResult(true);
+
+        usuarioDao.deleteUser();
+        cleanWithTkhandler();
+    }
+
+    // ..................................... INSTANCE METHODS ..........................................
+
+    @Test
+    public void testLoadUserData() throws Exception
+    {
+        signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
+        try {
+            trampolineReplaceIoScheduler();
+            trampolineReplaceAndroidMain();
+            assertThat(controller.loadUserData(), is(true));
+        } finally {
+            resetAllSchedulers();
+        }
+        assertThat(controller.getSubscriptions().size(), is(1));
+        assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_A));
+
+        cleanOneUser(USER_PEPE);
+    }
+
+    @Test
+    public void testModifyUser() throws Exception
+    {
+        Usuario oldUser = new Usuario.UsuarioBuilder().copyUsuario(signUpAndUpdateTk(COMU_ESCORIAL_PEPE)).password(USER_PEPE.getPassword()).build();
+
+        try {
+            trampolineReplaceIoScheduler();
+            trampolineReplaceAndroidMain();
+            assertThat(controller.modifyUser(oldUser, doNewUser(oldUser)), is(true));
+        } finally {
+            resetAllSchedulers();
+        }
+        assertThat(controller.getSubscriptions().size(), is(1));
+        assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_B));
+
+        usuarioDao.deleteUser();
+        cleanWithTkhandler();
+    }
+
+    // ..................................... HELPERS ..........................................
+
+    static class ViewerUserDataForTest extends ViewerUserData {
+
+        ViewerUserDataForTest(View view, Activity activity)
+        {
+            super(view, activity);
+        }
+
+        @Override
+        public void processBackUserDataLoaded(@NonNull Usuario usuario)
+        {
+            assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
+        }
+
+        @Override
+        public void replaceComponent(Bundle bundle)
+        {
+            assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_B), is(BEFORE_METHOD_EXEC));
+        }
+    }
+
+    public Usuario doNewUser(Usuario oldUsuario)
+    {
+        return new Usuario.UsuarioBuilder()
+                .userName("new_pepe_name")
+                .uId(oldUsuario.getuId())
+                .password(USER_PEPE.getPassword())
+                .build();
+    }
+
 }

@@ -93,7 +93,7 @@ public class RegUserAndUserComuAcTest {
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
     {
-        Thread.sleep(3000);
+        Thread.sleep(2000);
     }
 
     @After

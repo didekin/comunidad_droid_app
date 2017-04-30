@@ -23,12 +23,12 @@ import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
+import static com.didekindroid.testutil.RxSchedulersUtils.resetAllSchedulers;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceAndroidMain;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceIoScheduler;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
-import static io.reactivex.plugins.RxJavaPlugins.reset;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
@@ -42,9 +42,11 @@ import static org.junit.Assert.fail;
 public class CtrlerIncidEditAcTest {
 
     final static AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
+
     CtrlerIncidEditAc controller;
     int resorceMnId = 77;
     IncidImportancia incidImportancia;
+
     @Rule
     public IntentsTestRule<IncidEditAc> activityRule = new IntentsTestRule<IncidEditAc>(IncidEditAc.class) {
         @Override
@@ -62,6 +64,7 @@ public class CtrlerIncidEditAcTest {
             return intent;
         }
     };
+
     Resolucion resolucionBd;
 
     @Before
@@ -83,7 +86,7 @@ public class CtrlerIncidEditAcTest {
     public void tearDown() throws Exception
     {
         controller.clearSubscriptions();
-        reset();
+        resetAllSchedulers();
         cleanOptions(CLEAN_PEPE);
     }
 
@@ -98,7 +101,7 @@ public class CtrlerIncidEditAcTest {
             trampolineReplaceAndroidMain();
             assertThat(controller.seeResolucion(resolucionBd.getIncidencia().getIncidenciaId(), resorceMnId), is(true));
         } finally {
-            reset();
+            resetAllSchedulers();
         }
         assertThat(controller.getSubscriptions().size(), is(1));
         assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_A));

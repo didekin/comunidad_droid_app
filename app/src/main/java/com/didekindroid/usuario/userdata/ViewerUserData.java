@@ -9,11 +9,10 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.didekindroid.R;
-import com.didekindroid.router.ComponentReplacerIf;
-import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.api.Viewer;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf;
+import com.didekindroid.router.ComponentReplacerIf;
 import com.didekindroid.usuario.UsuarioBean;
 import com.didekindroid.util.UIutils;
 import com.didekinlib.model.usuario.Usuario;
@@ -41,11 +40,11 @@ import static com.didekinlib.http.GenericExceptionMsg.BAD_REQUEST;
 class ViewerUserData extends Viewer<View, CtrlerUserDataIf> implements ViewerUserDataIf,
         ComponentReplacerIf {
 
-    private final EditText emailView;
-    private final EditText aliasView;
-    private final EditText passwordView;
+    final EditText emailView;
+    final EditText aliasView;
+    final EditText passwordView;
     final AtomicReference<UsuarioBean> usuarioBean;
-    private final AtomicReference<Intent> intentForMenu;
+    final AtomicReference<Intent> intentForMenu;
     final AtomicReference<Usuario> oldUser;
     final AtomicReference<Usuario> newUser;
 
@@ -62,7 +61,8 @@ class ViewerUserData extends Viewer<View, CtrlerUserDataIf> implements ViewerUse
         intentForMenu = new AtomicReference<>(null);
     }
 
-    static ViewerUserDataIf newViewerUserData(UserDataAc activity){
+    static ViewerUserDataIf newViewerUserData(UserDataAc activity)
+    {
         Timber.d("newViewerUserData()");
         ViewerUserDataIf instance = new ViewerUserData(activity.acView, activity);
         instance.setController(new CtrlerUserData(instance));
@@ -80,7 +80,7 @@ class ViewerUserData extends Viewer<View, CtrlerUserDataIf> implements ViewerUse
     @Override
     public void processBackUserDataLoaded(@NonNull Usuario usuario)
     {
-        Timber.d("onSuccessUserDataLoaded()");
+        Timber.d("processBackUserDataLoaded()");
 
         oldUser.set(usuario);
 
@@ -131,6 +131,7 @@ class ViewerUserData extends Viewer<View, CtrlerUserDataIf> implements ViewerUse
 
         StringBuilder errorBuilder = getErrorMsgBuilder(activity);
         if (!usuarioBean.get().validateLoginData(activity.getResources(), errorBuilder)) {
+            Timber.d("checkUserData(): %s", errorBuilder.toString());
             makeToast(activity, errorBuilder.toString());
             return false;
         }
@@ -205,7 +206,7 @@ class ViewerUserData extends Viewer<View, CtrlerUserDataIf> implements ViewerUse
     @Override
     public void replaceComponent(Bundle bundle)
     {
-       Timber.d("initActivityWithBundle()");
-        ActivityInitiator.class.cast(activity).initActivityWithBundle(bundle);
+        Timber.d("initActivityWithBundle()");
+        ComponentReplacerIf.class.cast(activity).replaceComponent(bundle);
     }
 }

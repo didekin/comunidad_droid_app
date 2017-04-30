@@ -23,7 +23,7 @@ import static com.didekindroid.util.UIutils.assertTrue;
  * Date: 04/04/17
  * Time: 15:06
  */
-class ViewerIncidEditAc extends Viewer<View, CtrlerIncidEditAc> {
+public class ViewerIncidEditAc extends Viewer<View, CtrlerIncidEditAc> {
 
     private IncidImportancia incidImportancia;
 

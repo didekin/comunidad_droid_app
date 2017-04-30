@@ -46,7 +46,7 @@ ext {
     didekinlib_http = ':didekinlib_http-a-0.1.14:@jar'
     didekinlib_gcm = ':didekinlib_gcm-a-0.1.14:@jar'
 
-    firebase_message = ['com.google.firebase:firebase-messaging:10.2.0']
+    firebase_message = ['com.google.firebase:firebase-messaging:10.2.4']
 
     retrofit2 = ['com.squareup.retrofit2:retrofit:2.1.0',
                  'com.squareup.retrofit2:converter-gson:2.1.0',
@@ -82,7 +82,7 @@ ext {
 
     awaitility = 'org.awaitility:awaitility:2.0.0'
 
-    mockito = 'org.mockito:mockito-core:2.7.11'
+   /* mockito = 'org.mockito:mockito-core:2.7.11'*/
 }
 
 task wrapper(type: Wrapper) {

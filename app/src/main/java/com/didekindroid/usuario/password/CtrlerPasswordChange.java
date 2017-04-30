@@ -41,6 +41,8 @@ class CtrlerPasswordChange extends Controller implements CtrlerPasswordChangeIf 
         super(viewer, identityCacher);
     }
 
+    // ............................ OBSERVABLES ..................................
+
     public static Completable isPasswordChanged(final Usuario usuario)
     {
         Timber.d("isPasswordChanged()");
@@ -61,6 +63,8 @@ class CtrlerPasswordChange extends Controller implements CtrlerPasswordChangeIf 
         });
     }
 
+    // ............................ Instance methods ................................
+
     @Override
     public boolean changePasswordInRemote(Usuario usuario)
     {
@@ -72,8 +76,6 @@ class CtrlerPasswordChange extends Controller implements CtrlerPasswordChangeIf 
                         .subscribeWith(new PswdChangeSingleObserver(this))
         );
     }
-
-    // ............................ OBSERVABLES ..................................
 
     @Override
     public void onSuccessChangedPswd()

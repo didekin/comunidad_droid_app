@@ -15,7 +15,7 @@ public interface CtrlerFirebaseTokenIf extends ControllerIf {
 
     boolean checkGcmToken();
 
-    void checkGcmTokenSync();
+    boolean checkGcmTokenSync();
 
     boolean isGcmTokenSentServer();
 

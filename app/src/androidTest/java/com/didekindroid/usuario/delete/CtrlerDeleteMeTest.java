@@ -1,15 +1,12 @@
 package com.didekindroid.usuario.delete;
 
-import android.os.Bundle;
-import android.support.annotation.NonNull;
+import android.app.Activity;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekindroid.api.ActivityMock;
-import com.didekindroid.router.ComponentReplacerIf;
 import com.didekindroid.exception.UiException;
-import com.didekinlib.http.ErrorBean;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -18,20 +15,22 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
-import io.reactivex.Single;
-
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
-import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_WITH_EXCEPTION_EXEC;
+import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekindroid.usuario.delete.CtrlerDeleteMe.getDeleteMeSingle;
+import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.nextDeleteMeAcRsId;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_DROID;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_DROID;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
-import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.awaitility.Awaitility.waitAtMost;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -39,50 +38,48 @@ import static org.junit.Assert.assertThat;
  * Time: 12:47
  */
 @RunWith(AndroidJUnit4.class)
-public class ControllerDeleteMeTest {
+public class CtrlerDeleteMeTest {
 
     final static AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
 
     @Rule
-    public ActivityTestRule<ActivityMock> activityRule = new ActivityTestRule<>(ActivityMock.class, true, true);
+    public ActivityTestRule<DeleteMeAc> activityRule = new ActivityTestRule<DeleteMeAc>(DeleteMeAc.class) {
+        @Override
+        protected void beforeActivityLaunched()
+        {
+            try {
+                signUpAndUpdateTk(COMU_REAL_DROID);
+            } catch (IOException | UiException e) {
+                fail();
+            }
+        }
+    };
 
-    CtrlerDeleteMeIf controller;
+    CtrlerDeleteMe controller;
 
     @Before
     public void setUp() throws IOException, UiException
     {
-        controller = new CtrlerDeleteMe(activityRule.getActivity());
-        signUpAndUpdateTk(COMU_REAL_DROID);
-        // PRECONDITIONS.
+        Activity activity = activityRule.getActivity();
+        controller = new CtrlerDeleteMe(activity);
+        assertThat(controller.rootViewReplacer, instanceOf(DeleteMeAc.class));
         assertThat(TKhandler.isRegisteredUser(), is(true));
-        assertThat(TKhandler.getTokenCache().get().getValue(), notNullValue());
+    }
+
+    @After
+    public void cleanUp()
+    {
+        assertThat(controller.clearSubscriptions(), is(0));
     }
 
     // ................................. OBSERVABLES ...............................
 
     @Test
-    public void testGetDeleteMeSingle_1() throws Exception
+    public void testGetDeleteMeSingle() throws Exception
     {
         getDeleteMeSingle().test().assertResult(true);
         assertThat(TKhandler.getTokenCache().get(), nullValue());
         assertThat(TKhandler.isRegisteredUser(), is(false));
-    }
-
-    // ............................ SUBSCRIBERS ..................................
-
-    @Test
-    public void testSubscriberOnError() throws UiException
-    {
-        Single.<Boolean>error(new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR)))
-                .subscribeWith(new CtrlerDeleteMe.DeleteMeSingleObserver(controller){
-                    @Override
-                    public void onError(Throwable e)
-                    {
-                        assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_WITH_EXCEPTION_EXEC));
-                    }
-                });
-
-        assertThat(flagMethodExec.getAndSet(AFTER_METHOD_WITH_EXCEPTION_EXEC), is(BEFORE_METHOD_EXEC));
     }
 
     // .............................. INSTANCE METHODS .............................
@@ -94,23 +91,19 @@ public class ControllerDeleteMeTest {
         assertThat(controller.getSubscriptions().size(), is(1));
     }
 
+    /*
+    *  Test for the activity replaceComponent(Bundle bundle) method.
+    */
     @Test
     public void testOnSuccessDeleteMeRemote() throws Exception
     {
         controller.onSuccessDeleteMeRemote(true);
-        assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_A));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(nextDeleteMeAcRsId));
+        cleanOneUser(USER_DROID);
     }
 
     //  ============================================================================================
     //    .................................... HELPERS .................................
     //  ============================================================================================
 
-    class ActivityInitiatorForTest implements ComponentReplacerIf {
-
-        @Override
-        public void replaceComponent(@NonNull Bundle bundle)
-        {
-            assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
-        }
-    }
 }

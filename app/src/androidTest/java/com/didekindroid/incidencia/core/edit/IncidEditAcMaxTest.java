@@ -11,6 +11,7 @@ import com.didekindroid.api.ViewerIf;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.core.AmbitoIncidValueObj;
 import com.didekindroid.incidencia.core.IncidenciaDataDbHelper;
+import com.didekindroid.testutil.ActivityTestUtils;
 import com.didekinlib.model.incidencia.dominio.AmbitoIncidencia;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
@@ -23,7 +24,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -41,8 +41,8 @@ import static com.didekindroid.incidencia.testutils.IncidUiTestUtils.doImportanc
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_edit_ac_frgs_tag;
-import static com.didekindroid.testutil.ActivityTestUtils.addSubscription;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
+import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptions;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
@@ -235,9 +235,6 @@ public class IncidEditAcMaxTest {
     @Test
     public void testOnStop()
     {
-        AtomicInteger atomicInteger = new AtomicInteger(addSubscription(activity.viewer.getController()).size());
-        InstrumentationRegistry.getInstrumentation().callActivityOnStop(activity);
-        atomicInteger.compareAndSet(1, activity.viewer.getController().getSubscriptions().size());
-        waitAtMost(2, SECONDS).untilAtomic(atomicInteger, is(0));
+        checkSubscriptions(activity.viewer.getController(), activity);
     }
 }

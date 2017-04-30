@@ -100,7 +100,7 @@ public class UserComuDataAc_1_Test {
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
     {
-        Thread.sleep(3000);
+        Thread.sleep(2000);
     }
 
     @Before
@@ -192,7 +192,7 @@ public class UserComuDataAc_1_Test {
     }
 
     @Test
-    public void testDeleteUserComu_1() throws UiException
+    public void testDeleteUserComu_1() throws UiException   // TODO. failed
     {
         onView(ViewMatchers.withId(R.id.usercomu_data_ac_delete_button)).perform(click());
         onView(ViewMatchers.withId(R.id.see_usercomu_by_user_frg)).check(matches(isDisplayed()));

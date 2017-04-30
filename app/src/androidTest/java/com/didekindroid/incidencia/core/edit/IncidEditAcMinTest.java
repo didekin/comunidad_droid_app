@@ -21,9 +21,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
@@ -38,8 +38,8 @@ import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_edit_ac_frgs_tag;
 import static com.didekindroid.security.SecurityTestUtils.updateSecurityData;
-import static com.didekindroid.testutil.ActivityTestUtils.addSubscription;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
+import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptions;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
@@ -209,7 +209,7 @@ public class IncidEditAcMinTest {
             @Override
             public void run()
             {
-                InstrumentationRegistry.getInstrumentation().callActivityOnSaveInstanceState(activity, new Bundle(0));
+                getInstrumentation().callActivityOnSaveInstanceState(activity, new Bundle(0));
             }
         });
         waitAtMost(1, SECONDS).untilAtomic(flagMethodExec, is(AFTER_METHOD_EXEC_A));
@@ -218,9 +218,6 @@ public class IncidEditAcMinTest {
     @Test
     public void testOnStop()
     {
-        AtomicInteger atomicInteger = new AtomicInteger(addSubscription(activity.viewer.getController()).size());
-        InstrumentationRegistry.getInstrumentation().callActivityOnStop(activity);
-        atomicInteger.compareAndSet(1, activity.viewer.getController().getSubscriptions().size());
-        waitAtMost(2, SECONDS).untilAtomic(atomicInteger, is(0));
+        checkSubscriptions(activity.viewer.getController(), activity);
     }
 }

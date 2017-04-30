@@ -2,28 +2,45 @@ package com.didekindroid.usuario.password;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.test.rule.ActivityTestRule;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
+import com.didekinlib.http.ErrorBean;
 import com.didekinlib.model.usuario.Usuario;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static com.didekindroid.exception.UiExceptionRouter.GENERIC_APP_ACC;
+import static com.didekindroid.testutil.ActivityTestUtils.checkProcessCtrlError;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
 import static com.didekindroid.usuario.password.ViewerPasswordChange.newViewerPswdChange;
 import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typePswdData;
+import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.nextPswdChangeAcRsId;
+import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.pswdChangeAcRsId;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_TRAV_PLAZUELA_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
+import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOUND;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
 import static org.awaitility.Awaitility.waitAtMost;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
@@ -54,21 +71,26 @@ public class ViewerPasswordChangeTest {
     ViewerPasswordChange viewer;
 
     @Before
-    public void setUp(){
-         activity = (PasswordChangeAc) mActivityRule.getActivity();
-         viewer = (ViewerPasswordChange) newViewerPswdChange(activity);
+    public void setUp()
+    {
+        activity = (PasswordChangeAc) mActivityRule.getActivity();
+        viewer = (ViewerPasswordChange) newViewerPswdChange(activity);
     }
+
+    @After
+    public void clearUp() throws UiException
+    {
+        cleanOneUser(USER_PEPE);
+    }
+
+    //    ============================  TESTS  ===================================
 
     @Test
     public void testNewViewerPswdChange() throws Exception
     {
-
-    }
-
-    @Test
-    public void testDoViewInViewer() throws Exception
-    {
-
+        assertThat(viewer.getController(), instanceOf(CtrlerPasswordChange.class));
+        assertThat(viewer.userName, is(activity.getIntent().getStringExtra(user_name.key)));
+        assertThat(viewer.usuarioBean, notNullValue());
     }
 
     @Test
@@ -113,14 +135,36 @@ public class ViewerPasswordChangeTest {
     }
 
     @Test
-    public void testProcessControllerError() throws Exception
+    public void testProcessControllerError_1() throws Exception
     {
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                viewer.processControllerError(new UiException(new ErrorBean(USER_NAME_NOT_FOUND)));
+            }
+        });
+        waitAtMost(3, SECONDS).until(isToastInView(R.string.username_wrong_in_login, activity));
+        onView(withId(pswdChangeAcRsId)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testProcessControllerError_2()
+    {
+        assertThat(checkProcessCtrlError(viewer, GENERIC_INTERNAL_ERROR, GENERIC_APP_ACC), is(true));
     }
 
     @Test
     public void testReplaceRootView() throws Exception
     {
-        // TODO.
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                viewer.replaceComponent(new Bundle(0));
+            }
+        });
+        waitAtMost(3, SECONDS).until(isToastInView(R.string.password_remote_change, activity));
+        onView(withId(nextPswdChangeAcRsId)).check(matches(isDisplayed()));
     }
-
 }

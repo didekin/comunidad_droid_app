@@ -38,6 +38,7 @@ public class UserDataAc extends AppCompatActivity implements ComponentReplacerIf
         setContentView(acView);
         doToolBar(this, true);
         viewer = newViewerUserData(this);
+        viewer.doViewInViewer(savedInstanceState, null);
     }
 
     @Override
@@ -75,7 +76,7 @@ public class UserDataAc extends AppCompatActivity implements ComponentReplacerIf
         if (viewer.getIntentForMenu().get() != null){
             setIntent(viewer.getIntentForMenu().getAndSet(null));
         }
-        return true;
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override

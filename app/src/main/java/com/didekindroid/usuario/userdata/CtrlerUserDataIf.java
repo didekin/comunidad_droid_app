@@ -14,8 +14,4 @@ interface CtrlerUserDataIf extends ControllerIf {
     boolean loadUserData();
 
     boolean modifyUser(Usuario oldUser, Usuario newUser);
-
-    void onSuccessUserDataLoaded(Usuario usuario);
-
-    void onCompleteUserModified();
 }

@@ -36,4 +36,10 @@ public class RxSchedulersUtils {
             }
         });
     }
+
+    public static void resetAllSchedulers()
+    {
+        RxJavaPlugins.reset();
+        RxAndroidPlugins.reset();
+    }
 }

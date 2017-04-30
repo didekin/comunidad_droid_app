@@ -25,9 +25,9 @@ import static com.didekindroid.incidencia.core.CtrlerAmbitoIncidSpinner.ambitoIn
 import static com.didekindroid.incidencia.core.CtrlerAmbitoIncidSpinner.newCtrlerAmbitoIncidSpinner;
 import static com.didekindroid.incidencia.core.IncidenciaDataDb.AmbitoIncidencia.AMBITO_INCID_COUNT;
 import static com.didekindroid.incidencia.core.ViewerAmbitoIncidSpinner.newViewerAmbitoIncidSpinner;
+import static com.didekindroid.testutil.RxSchedulersUtils.resetAllSchedulers;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceAndroidMain;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceIoScheduler;
-import static io.reactivex.plugins.RxJavaPlugins.reset;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.is;
@@ -74,6 +74,7 @@ public class CtrlerAmbitoIncidSpinnerTest {
     public void clear()
     {
         controller.clearSubscriptions();
+        resetAllSchedulers();
     }
 
     @Test
@@ -97,7 +98,7 @@ public class CtrlerAmbitoIncidSpinnerTest {
             trampolineReplaceAndroidMain();
             assertThat(controller.loadItemsByEntitiyId(), is(true));
         } finally {
-            reset();
+            resetAllSchedulers();
         }
         assertThat(controller.getSubscriptions().size(), is(1));
     }

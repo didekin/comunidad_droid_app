@@ -152,6 +152,16 @@ public class ComunidadBean implements Serializable {
         return comunidad;
     }
 
+    public void setComunidadId(long comunidadId)
+    {
+        this.comunidadId = comunidadId;
+    }
+
+    public long getComunidadId()
+    {
+        return comunidadId;
+    }
+
     public Municipio getMunicipio()
     {
         return municipio;

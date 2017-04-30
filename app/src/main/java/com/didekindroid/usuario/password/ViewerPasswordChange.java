@@ -7,10 +7,10 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.didekindroid.R;
-import com.didekindroid.router.ComponentReplacerIf;
 import com.didekindroid.api.Viewer;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf;
+import com.didekindroid.router.ComponentReplacerIf;
 import com.didekindroid.usuario.UsuarioBean;
 
 import java.io.Serializable;
@@ -33,16 +33,19 @@ import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOU
  * Time: 20:08
  */
 
+@SuppressWarnings("ClassWithOnlyPrivateConstructors")
 class ViewerPasswordChange extends Viewer<View, CtrlerPasswordChangeIf>
         implements ViewerPasswordChangeIf, ComponentReplacerIf {
 
     @SuppressWarnings("WeakerAccess")
     final AtomicReference<UsuarioBean> usuarioBean;
+    final String userName;
 
     ViewerPasswordChange(PasswordChangeAc activity)
     {
         super(activity.acView, activity, null);
         usuarioBean = new AtomicReference<>(null);
+        userName = activity.getIntent().getStringExtra(user_name.key);
     }
 
     static ViewerPasswordChangeIf newViewerPswdChange(PasswordChangeAc activity)
@@ -63,7 +66,7 @@ class ViewerPasswordChange extends Viewer<View, CtrlerPasswordChangeIf>
             @Override
             public void onClick(View v)
             {
-                Timber.d("mModifyButton.OnClickListener().onClickLinkToImportanciaUsers()");
+                Timber.d("onClick()");
                 if (checkLoginData()) {
                     assertTrue(usuarioBean.get() != null, bean_fromView_should_be_initialized);
                     controller.changePasswordInRemote(usuarioBean.get().getUsuario());
@@ -72,18 +75,12 @@ class ViewerPasswordChange extends Viewer<View, CtrlerPasswordChangeIf>
         });
     }
 
-    @NonNull
-    private String initUserName()
-    {
-        return activity.getIntent().getStringExtra(user_name.key);
-    }
-
     @Override
     public boolean checkLoginData()
     {
         Timber.i("checkLoginData()");
 
-        usuarioBean.set(new UsuarioBean(initUserName(), null, getPswdDataFromView()[0], getPswdDataFromView()[1]));
+        usuarioBean.set(new UsuarioBean(userName, null, getPswdDataFromView()[0], getPswdDataFromView()[1]));
         StringBuilder errorBuilder = getErrorMsgBuilder(activity);
 
         if (!usuarioBean.get().validateWithoutAlias(activity.getResources(), errorBuilder)) {

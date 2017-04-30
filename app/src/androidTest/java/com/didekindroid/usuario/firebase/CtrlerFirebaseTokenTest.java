@@ -21,6 +21,9 @@ import java.util.concurrent.atomic.AtomicReference;
 import io.reactivex.Single;
 
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
+import static com.didekindroid.testutil.RxSchedulersUtils.resetAllSchedulers;
+import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceAndroidMain;
+import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceIoScheduler;
 import static com.didekindroid.usuario.firebase.CtrlerFirebaseToken.updatedGcmTkSingle;
 import static com.didekindroid.usuario.firebase.ViewerFirebaseToken.newViewerFirebaseToken;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
@@ -37,7 +40,7 @@ import static org.junit.Assert.assertThat;
  * Time: 17:26
  */
 @RunWith(AndroidJUnit4.class)
-public class ControllerFirebaseTokenTest {
+public class CtrlerFirebaseTokenTest {
 
     static final AtomicReference<String> flagControl = new AtomicReference<>(BEFORE_METHOD_EXEC);
 
@@ -45,12 +48,14 @@ public class ControllerFirebaseTokenTest {
     public ActivityTestRule<? extends Activity> activityRule = new ActivityTestRule<>(ActivityMock.class, true, true);
 
     CtrlerFirebaseToken controller;
+    ActivityMock activity;
 
     @Before
     public void setUp() throws IOException, UiException
     {
         signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
-        controller = new CtrlerFirebaseToken(newViewerFirebaseToken(activityRule.getActivity()));
+        activity = (ActivityMock) activityRule.getActivity();
+        controller = new CtrlerFirebaseToken(newViewerFirebaseToken(activity));
     }
 
     @After
@@ -77,10 +82,16 @@ public class ControllerFirebaseTokenTest {
         controller.updateIsGcmTokenSentServer(true);
         assertThat(controller.isGcmTokenSentServer(), is(true));
         // Call.
-        Single.<Integer>error(new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR)))
-                .subscribeWith(new RegGcmTokenObserver(controller));
-        // Check call-back to onErrorCtrl change the status to false.
-        assertThat(controller.isGcmTokenSentServer(), is(false));
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                Single.<Integer>error(new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR)))
+                        .subscribeWith(new RegGcmTokenObserver(controller));
+                // Check call-back to onErrorCtrl change the status to false.
+                assertThat(controller.isGcmTokenSentServer(), is(false));
+            }
+        });
     }
 
     @Test
@@ -122,23 +133,31 @@ public class ControllerFirebaseTokenTest {
     @Test
     public void checkGcmToken() throws Exception
     {
-        // Preconditions.
-        controller.getIdentityCacher().updateIsRegistered(true);
-        controller.updateIsGcmTokenSentServer(true);
-        /* Execute.*/
-        assertThat(controller.checkGcmToken(), is(false));
-        assertThat(controller.getSubscriptions().size(), is(0));
-        // Mantains status.
-        assertThat(controller.isGcmTokenSentServer(), is(true));
+        try {
+            trampolineReplaceIoScheduler();
+            trampolineReplaceAndroidMain();
 
-        // Preconditions.
-        controller.getIdentityCacher().updateIsRegistered(true);
-        controller.updateIsGcmTokenSentServer(false);
-        /* Execute.*/
-        assertThat(controller.checkGcmToken(), is(true));
-        assertThat(controller.getSubscriptions().size(), is(1));
-        // Change status.
-        assertThat(controller.isGcmTokenSentServer(), is(true));
+            // Preconditions.
+            controller.getIdentityCacher().updateIsRegistered(true);
+            controller.updateIsGcmTokenSentServer(true);
+            /* Execute. FALSE: no update because is already updated.*/
+            assertThat(controller.checkGcmToken(), is(false));
+            assertThat(controller.getSubscriptions().size(), is(0));
+            // Mantains status.
+            assertThat(controller.isGcmTokenSentServer(), is(true));
+
+            // Preconditions.
+            controller.getIdentityCacher().updateIsRegistered(true);
+            controller.updateIsGcmTokenSentServer(false);
+            /* Execute.*/
+            assertThat(controller.checkGcmToken(), is(true));
+            assertThat(controller.getSubscriptions().size(), is(1));
+            // Change status.
+            assertThat(controller.isGcmTokenSentServer(), is(true));
+
+        } finally {
+            resetAllSchedulers();
+        }
     }
 
     @Test
@@ -146,15 +165,26 @@ public class ControllerFirebaseTokenTest {
     {
         // Preconditions.
         controller.getIdentityCacher().updateIsRegistered(true);
+        controller.updateIsGcmTokenSentServer(true);
         /* Execute.*/
-        controller.checkGcmTokenSync();
-        assertThat(controller.checkGcmToken(), is(true));
+        assertThat(controller.checkGcmTokenSync(), is(true));
+        // The token is updated: controller open subscription.
         assertThat(controller.getSubscriptions().size(), is(1));
 
         // Preconditions.
         controller.getIdentityCacher().updateIsRegistered(false);
         /* Execute.*/
-        assertThat(controller.checkGcmToken(), is(false));
-        assertThat(controller.getSubscriptions().size(), is(0));
+        assertThat(controller.checkGcmTokenSync(), is(false));
+        // NO increase in subscriptions.
+        assertThat(controller.getSubscriptions().size(), is(1));
+        assertThat(controller.isGcmTokenSentServer(), is(false));
+
+        // Preconditions.
+        controller.getIdentityCacher().updateIsRegistered(true);
+        controller.updateIsGcmTokenSentServer(false);
+        /* Execute.*/
+        assertThat(controller.checkGcmTokenSync(), is(true));
+        assertThat(controller.getSubscriptions().size(), is(2));
+        assertThat(controller.isGcmTokenSentServer(), is(true));
     }
 }

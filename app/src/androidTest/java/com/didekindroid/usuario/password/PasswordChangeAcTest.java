@@ -6,7 +6,6 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekindroid.ExtendableTestAc;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekinlib.model.usuario.Usuario;
@@ -26,18 +25,22 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withHint;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.R.id.user_data_ac_layout;
-import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
+import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
+import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
 import static com.didekindroid.usuario.password.ViewerPasswordChange.newViewerPswdChange;
 import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typePswdData;
+import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.nextPswdChangeAcRsId;
+import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.pswdChangeAcRsId;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_TRAV_PLAZUELA_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.assertThat;
@@ -49,7 +52,7 @@ import static org.junit.Assert.fail;
  * Time: 17:45
  */
 @RunWith(AndroidJUnit4.class)
-public class PasswordChangeAc_Test implements ExtendableTestAc {
+public class PasswordChangeAcTest {
 
     @Rule
     public ActivityTestRule<? extends Activity> mActivityRule = new ActivityTestRule<PasswordChangeAc>(PasswordChangeAc.class) {
@@ -68,7 +71,6 @@ public class PasswordChangeAc_Test implements ExtendableTestAc {
     };
 
     PasswordChangeAc activity;
-    private int activityLayoutId = R.id.password_change_ac_layout;
     ViewerPasswordChange viewer;
 
     @BeforeClass
@@ -84,22 +86,12 @@ public class PasswordChangeAc_Test implements ExtendableTestAc {
         viewer = (ViewerPasswordChange) newViewerPswdChange(activity);
     }
 
-    @Override
-    public void checkNavigateUp()
-    {
-        fail("NO NAVIGATE-UP in PasswordChange manager");
-    }
-
-    @Override
-    public int getNextViewResourceId()
-    {
-        return user_data_ac_layout;
-    }
+    //    ============================  TESTS  ===================================
 
     @Test
     public void testOnCreate() throws Exception
     {
-        onView(withId(activityLayoutId)).check(matches(isDisplayed()));
+        onView(withId(pswdChangeAcRsId)).check(matches(isDisplayed()));
 
         onView(withId(R.id.reg_usuario_password_ediT)).check(matches(withText(containsString(""))))
                 .check(matches(withHint(R.string.usuario_password_hint)))
@@ -117,24 +109,29 @@ public class PasswordChangeAc_Test implements ExtendableTestAc {
     }
 
     @Test
-    public void testPasswordChange_OK() throws UiException, InterruptedException
+    public void testPasswordChangeAndUp() throws UiException, InterruptedException
     {
         typePswdData("new_pepe_password", "new_pepe_password");
         onView(withId(R.id.password_change_ac_button)).check(matches(isDisplayed())).perform(click());
 
-        checkToastInTest(R.string.password_remote_change, activity);
-        onView(withId(getNextViewResourceId())).check(matches(isDisplayed()));
-        checkUp(activityLayoutId);
+        waitAtMost(4, SECONDS).until(isToastInView(R.string.password_remote_change, activity));
+        onView(withId(nextPswdChangeAcRsId)).check(matches(isDisplayed()));
+        checkUp(pswdChangeAcRsId);
 
         usuarioDao.deleteUser();
     }
 
     @Test
-    public final void testReplaceView()
+    public void testPasswordChangeAndBack() throws UiException, InterruptedException
     {
-        // TODO.
-        /*checkViewerReplaceView(activity, getNextViewResourceId());
-        checkToastInTest(R.string.password_remote_change, activity);*/
+        typePswdData("new_pepe_password", "new_pepe_password");
+        onView(withId(R.id.password_change_ac_button)).check(matches(isDisplayed())).perform(click());
+
+        waitAtMost(4, SECONDS).until(isToastInView(R.string.password_remote_change, activity));
+        onView(withId(nextPswdChangeAcRsId)).check(matches(isDisplayed()));
+        checkBack(onView(withId(nextPswdChangeAcRsId)).check(matches(isDisplayed())), pswdChangeAcRsId);
+
+        usuarioDao.deleteUser();
     }
 
     @Test
@@ -143,5 +140,7 @@ public class PasswordChangeAc_Test implements ExtendableTestAc {
         InstrumentationRegistry.getInstrumentation().callActivityOnStop(activity);
         // Check.
         assertThat(viewer.getController().getSubscriptions().size(), is(0));
+
+        cleanOneUser(USER_PEPE);
     }
 }

@@ -30,7 +30,7 @@ import static io.reactivex.schedulers.Schedulers.io;
 @SuppressWarnings("WeakerAccess")
 class CtrlerDeleteMe extends Controller implements CtrlerDeleteMeIf {
 
-    private final ComponentReplacerIf rootViewReplacer;
+    final ComponentReplacerIf rootViewReplacer;
 
     CtrlerDeleteMe(Activity activity)
     {
@@ -43,17 +43,22 @@ class CtrlerDeleteMe extends Controller implements CtrlerDeleteMeIf {
         rootViewReplacer = (ComponentReplacerIf) activity;
     }
 
+    // ................................. OBSERVABLES ...............................
+
     static Single<Boolean> getDeleteMeSingle()
     {
+        Timber.d("getDeleteMeSingle()");
+
         return fromCallable(new Callable<Boolean>() {
             @Override
             public Boolean call() throws Exception
             {
-                Timber.d("fromCallable(), thread: %s", Thread.currentThread().getName());
                 return usuarioDao.deleteUser();
             }
         }).map(cleanTokenAndUnregisterFunc);
     }
+
+    // ................................. INSTANCE METHODS ...............................
 
     @Override
     public boolean deleteMeRemote()
@@ -64,8 +69,6 @@ class CtrlerDeleteMe extends Controller implements CtrlerDeleteMeIf {
                 .observeOn(mainThread())
                 .subscribeWith(new DeleteMeSingleObserver(this)));
     }
-
-    // ................................. OBSERVABLES ...............................
 
     @Override
     public void onSuccessDeleteMeRemote(boolean isDeleted)

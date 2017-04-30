@@ -33,6 +33,7 @@ public class SeeUserComuByComuAc extends AppCompatActivity {
 
         setContentView(R.layout.see_usercomu_by_comu_ac);
         doToolBar(this, true);
+
         fragment = (SeeUserComuByComuFr) getSupportFragmentManager().findFragmentById(R.id.see_usercomu_by_comu_frg);
     }
 

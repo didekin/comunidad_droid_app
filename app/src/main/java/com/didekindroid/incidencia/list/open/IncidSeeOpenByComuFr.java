@@ -24,15 +24,15 @@ import static com.didekindroid.incidencia.list.open.ViewerIncidSeeOpen.newViewer
  */
 public class IncidSeeOpenByComuFr extends Fragment  {
 
-    View rootFrgView;
-    ViewerIncidSeeOpen viewerIncidSeeOpen;
+    View frView;
+    ViewerIncidSeeOpen viewer;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedState)
     {
         Timber.d("onCreateView()");
-        rootFrgView = inflater.inflate(R.layout.incid_see_generic_fr_layout, container, false);
-        return rootFrgView;
+        frView = inflater.inflate(R.layout.incid_see_generic_fr_layout, container, false);
+        return frView;
     }
 
     @SuppressWarnings("unchecked")
@@ -44,8 +44,8 @@ public class IncidSeeOpenByComuFr extends Fragment  {
         /* Initialization of viewers.*/
         ComuSpinnerBean spinnerBean = new IncidenciaBean();
         spinnerBean.setComunidadId(getArguments().getLong(COMUNIDAD_ID.key));
-        viewerIncidSeeOpen = newViewerIncidSeeOpen(rootFrgView, getActivity());
-        viewerIncidSeeOpen.doViewInViewer(savedState, spinnerBean);
+        viewer = newViewerIncidSeeOpen(frView, getActivity());
+        viewer.doViewInViewer(savedState, spinnerBean);
 
     }
 
@@ -53,7 +53,7 @@ public class IncidSeeOpenByComuFr extends Fragment  {
     public void onSaveInstanceState(Bundle savedState)
     {
         Timber.d("onSaveInstanceState()");
-        viewerIncidSeeOpen.saveState(savedState);
+        viewer.saveState(savedState);
         super.onSaveInstanceState(savedState);
     }
 
@@ -61,7 +61,7 @@ public class IncidSeeOpenByComuFr extends Fragment  {
     public void onStop()
     {
         Timber.d("onStop()");
+        viewer.clearSubscriptions();
         super.onStop();
-        viewerIncidSeeOpen.clearSubscriptions();
     }
 }

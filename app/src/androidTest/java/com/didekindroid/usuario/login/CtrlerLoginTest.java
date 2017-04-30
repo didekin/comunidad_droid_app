@@ -5,10 +5,8 @@ import android.support.test.runner.AndroidJUnit4;
 import android.view.View;
 
 import com.didekindroid.exception.UiException;
-import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekinlib.model.usuario.Usuario;
 
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -27,6 +25,7 @@ import static com.didekindroid.testutil.ActivityTestUtils.checkNoInitCache;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_B;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
+import static com.didekindroid.testutil.RxSchedulersUtils.resetAllSchedulers;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceIoScheduler;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
 import static com.didekindroid.usuario.login.CtrlerLogin.loginPswdSendSingle;
@@ -35,6 +34,7 @@ import static com.didekindroid.usuario.login.CtrlerLogin.loginUpdateTkCache;
 import static com.didekindroid.usuario.login.ViewerLogin.newViewerLogin;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_DROID;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_DROID;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanWithTkhandler;
@@ -42,7 +42,6 @@ import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDa
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_DROID;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOUND;
-import static io.reactivex.plugins.RxJavaPlugins.reset;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -60,18 +59,14 @@ public class CtrlerLoginTest {
     public ActivityTestRule<LoginAc> activityRule = new ActivityTestRule<>(LoginAc.class, true, true);
 
     CtrlerLoginIf controller;
+    LoginAc activity;
 
     @Before
     public void setUp() throws Exception
     {
-        controller = new CtrlerLogin(newViewerLogin(activityRule.getActivity()));
+        activity = activityRule.getActivity();
+        controller = new CtrlerLogin(newViewerLogin(activity));
         assertThat(controller.getSubscriptions().size(), is(0));
-    }
-
-    @AfterClass
-    public static void resetScheduler()
-    {
-        reset();
     }
 
     //    .................................... OBSERVABLES .................................
@@ -123,7 +118,7 @@ public class CtrlerLoginTest {
             trampolineReplaceIoScheduler();
             loginUpdateTkCache(USER_DROID).test().assertResult(true);
         } finally {
-            reset();
+            resetAllSchedulers();
         }
         checkInitTokenCache();
         cleanOptions(CLEAN_DROID);
@@ -139,7 +134,7 @@ public class CtrlerLoginTest {
             loginUpdateTkCache(new Usuario.UsuarioBuilder().userName(USER_DROID.getUserName()).password("password_wrong").build())
                     .test().assertResult(false);
         } finally {
-            reset();
+            resetAllSchedulers();
         }
         checkNoInitCache();
         cleanOptions(CLEAN_DROID);
@@ -176,44 +171,58 @@ public class CtrlerLoginTest {
     @Test
     public void testValidateLogin() throws Exception
     {
-        assertThat(controller.validateLogin(USER_PEPE),is(true));
+        assertThat(controller.validateLogin(USER_PEPE), is(true));
         assertThat(controller.getSubscriptions().size(), is(1));
     }
 
     @Test
     public void testOnSuccessValidateLogin() throws Exception
     {
-        controller.onSuccessValidateLogin(false);
-        assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_A));
+        controller = new CtrlerLogin(new ViewerLoginForTest(null, activity));
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                controller.onSuccessValidateLogin(false);
+                assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_A));
+            }
+        });
     }
 
     @Test
     public void testDoDialogPositiveClick() throws Exception
     {
-        assertThat(controller.doDialogPositiveClick(UsuarioDataTestUtils.USER_JUAN), is(true));
+        assertThat(controller.doDialogPositiveClick(USER_JUAN), is(true));
         assertThat(controller.getSubscriptions().size(), is(1));
     }
 
     @Test
     public void testOnSuccessDialogPositiveClick() throws Exception
     {
-        controller.onSuccessDialogPositiveClick(false);
-        assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_B));
+        controller = new CtrlerLogin(new ViewerLoginForTest(null, activity));
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                controller.onSuccessDialogPositiveClick(false);
+                assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_B));
+            }
+        });
     }
 
     //  ============================================================================================
     //    .................................... HELPERS .................................
     //  ============================================================================================
 
-    static final class ViewerLoginForTest extends ViewerLogin{
+    static final class ViewerLoginForTest extends ViewerLogin {
 
-        private ViewerLoginForTest(View view, LoginAc activity)
+        ViewerLoginForTest(View view, LoginAc activity)
         {
             super(activity);
         }
 
         @Override
-        public void doDialogPositiveClick(Usuario usuario)
+        public void processLoginBackInView(boolean isLoginOk)
         {
             assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
         }

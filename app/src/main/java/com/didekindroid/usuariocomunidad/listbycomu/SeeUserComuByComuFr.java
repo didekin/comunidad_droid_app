@@ -1,14 +1,20 @@
 package com.didekindroid.usuariocomunidad.listbycomu;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.didekindroid.R;
+import com.didekindroid.comunidad.ComunidadBean;
 
 import timber.log.Timber;
+
+import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.util.CommonAssertionMsg.intent_extra_should_be_initialized;
+import static com.didekindroid.util.UIutils.assertTrue;
 
 
 /**
@@ -24,22 +30,28 @@ import timber.log.Timber;
 public class SeeUserComuByComuFr extends Fragment {
 
     ViewerSeeUserComuByComu viewer;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        Timber.d("onCreate()");
-        super.onCreate(savedInstanceState);
-    }
+    View frView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         Timber.d("onCreateView()");
-        View mainView = inflater.inflate(R.layout.see_usercomu_by_comu_list_fr, container, false);
-        viewer = ViewerSeeUserComuByComu.newViewerUserComuByComu(mainView, getActivity());
-        viewer.doViewInViewer(savedInstanceState, null);
-        return mainView;
+        frView = inflater.inflate(R.layout.see_usercomu_by_comu_list_fr, container, false);
+        return frView;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
+    {
+        Timber.d("onViewCreated()");
+        super.onViewCreated(view, savedInstanceState);
+        /* Initialization of viewers.*/
+        // Precondition:
+        assertTrue(getActivity().getIntent().hasExtra(COMUNIDAD_ID.key), intent_extra_should_be_initialized);
+        ComunidadBean comunidadBean = new ComunidadBean();
+        comunidadBean.setComunidadId(getActivity().getIntent().getLongExtra(COMUNIDAD_ID.key, 0L));
+        viewer = ViewerSeeUserComuByComu.newViewerUserComuByComu(frView, getActivity());
+        viewer.doViewInViewer(savedInstanceState, comunidadBean);
     }
 
     @Override

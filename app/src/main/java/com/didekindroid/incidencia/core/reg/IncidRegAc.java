@@ -48,10 +48,6 @@ public class IncidRegAc extends AppCompatActivity implements ViewerParentInjecto
         //noinspection ConstantConditions
         viewer.doViewInViewer(savedInstanceState, null);
         mRegAcFragment = (IncidRegFr) getSupportFragmentManager().findFragmentById(R.id.incid_reg_frg);
-
-        // Precondition.
-        assertTrue(viewer.getController() != null, controller_should_be_initialized);
-        assertTrue(viewer.getController().isRegisteredUser(), user_should_be_registered);
     }
 
     @Override

@@ -22,6 +22,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doIncidencia;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
+import static com.didekindroid.testutil.RxSchedulersUtils.resetAllSchedulers;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceAndroidMain;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceIoScheduler;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
@@ -29,7 +30,6 @@ import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOption
 import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
-import static io.reactivex.android.plugins.RxAndroidPlugins.reset;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
@@ -73,7 +73,7 @@ public class CtrlerIncidRegEditFr_Reg_Test {
     public void clearUp() throws UiException
     {
         controller.clearSubscriptions();
-        reset();
+        resetAllSchedulers();
         cleanOptions(CLEAN_PEPE);
     }
 
@@ -97,7 +97,7 @@ public class CtrlerIncidRegEditFr_Reg_Test {
             trampolineReplaceAndroidMain();
             assertThat(controller.registerIncidImportancia(doIncidImportancia()), is(true));
         } finally {
-            reset();
+            resetAllSchedulers();
         }
         assertThat(controller.getSubscriptions().size(), is(1));
         assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_A));

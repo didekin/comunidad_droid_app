@@ -8,13 +8,11 @@ import com.didekinlib.http.oauth2.SpringOauthToken;
 import com.didekinlib.model.usuario.Usuario;
 
 import java.util.concurrent.Callable;
-import java.util.concurrent.atomic.AtomicReference;
 
 import io.reactivex.Completable;
 import io.reactivex.Single;
 import io.reactivex.SingleSource;
 import io.reactivex.functions.Function;
-import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
@@ -37,8 +35,6 @@ import static io.reactivex.schedulers.Schedulers.io;
 @SuppressWarnings("WeakerAccess")
 class CtrlerUserData extends Controller implements CtrlerUserDataIf {
 
-    private final ViewerUserDataIf viewerUserData;
-
     CtrlerUserData(ViewerUserDataIf viewer)
     {
         this(viewer, TKhandler);
@@ -47,7 +43,6 @@ class CtrlerUserData extends Controller implements CtrlerUserDataIf {
     CtrlerUserData(ViewerUserDataIf viewer, IdentityCacher identityCacher)
     {
         super(viewer, identityCacher);
-        viewerUserData = viewer;
     }
 
     // .................................... OBSERVABLES .................................
@@ -63,42 +58,34 @@ class CtrlerUserData extends Controller implements CtrlerUserDataIf {
         });
     }
 
-    static Single<Integer> userDataModified(final SpringOauthToken oauthToken, final Usuario newUser)
+    static Completable userModifiedTkUpdated(final SpringOauthToken oldUserToken, final Usuario newUser)
     {
         return fromCallable(new Callable<Integer>() {
             @Override
             public Integer call() throws Exception
             {
-                return usuarioDao.modifyUserWithToken(oauthToken, newUser);
+                return usuarioDao.modifyUserWithToken(oldUserToken, newUser);
             }
-        });
+        }).flatMap(new Function<Integer, SingleSource<SpringOauthToken>>() {
+            @Override
+            public SingleSource<SpringOauthToken> apply(Integer modifiedUser) throws Exception
+            {
+                assertTrue(modifiedUser == 1, user_should_have_been_modified);
+                return oauthTokenFromUserPswd(newUser);
+            }
+        }).doOnSuccess(initTokenAction).toCompletable();
     }
 
-    static Single<SpringOauthToken> userModifiedTokenUpdated(final SpringOauthToken oauthToken, final Usuario newUser)
+    static Single<Boolean> userModifiedWithPswdValidation(Usuario oldUser, final Usuario newUser)
     {
-        return userDataModified(oauthToken, newUser)
-                .flatMap(new Function<Integer, SingleSource<SpringOauthToken>>() {
+        return oauthTokenFromUserPswd(oldUser)
+                .flatMap(new Function<SpringOauthToken, Single<Boolean>>() {
                     @Override
-                    public SingleSource<SpringOauthToken> apply(Integer modifiedUser) throws Exception
+                    public Single<Boolean> apply(SpringOauthToken oldUserToken) throws Exception
                     {
-                        assertTrue(modifiedUser == 1, user_should_have_been_modified);
-                        return oauthTokenFromUserPswd(newUser);
+                        return userModifiedTkUpdated(oldUserToken, newUser).toSingleDefault(Boolean.TRUE);
                     }
                 });
-    }
-
-    static Completable userModifiedCacheUpdated(Usuario oldUser, final Usuario newUser)
-    {
-        final AtomicReference<SpringOauthToken> atomicToken = new AtomicReference<>();
-
-        return oauthTokenFromUserPswd(oldUser)
-                .flatMap(new Function<SpringOauthToken, SingleSource<SpringOauthToken>>() {
-                    @Override
-                    public SingleSource<SpringOauthToken> apply(SpringOauthToken oauthToken) throws Exception
-                    {
-                        return userModifiedTokenUpdated(oauthToken, newUser);
-                    }
-                }).doOnSuccess(initTokenAction).toCompletable();
     }
 
     // .................................... INSTANCE METHODS .................................
@@ -120,42 +107,29 @@ class CtrlerUserData extends Controller implements CtrlerUserDataIf {
     {
         Timber.d("modifyUser()");
         return subscriptions.add(
-                userModifiedCacheUpdated(oldUser, newUser)
+                userModifiedWithPswdValidation(oldUser, newUser)
                         .subscribeOn(io())
                         .observeOn(mainThread())
                         .subscribeWith(new ModifyUserObserver()));
     }
 
-    @Override
-    public void onSuccessUserDataLoaded(Usuario usuario)
-    {
-        Timber.d("onSuccessUserDataLoaded()");
-        viewerUserData.processBackUserDataLoaded(usuario);
-    }
-
-    @Override
-    public void onCompleteUserModified()
-    {
-        Timber.d("onCompleteUserModified()");
-        ViewerUserData.class.cast(viewer).replaceComponent(new Bundle());
-    }
-
     // .............................. SUBSCRIBERS ..................................
 
-    class ModifyUserObserver extends DisposableCompletableObserver {
+    class ModifyUserObserver extends DisposableSingleObserver<Boolean> {
+
+        @Override
+        public void onSuccess(Boolean isCompleted)
+        {
+            Timber.d("onSuccess(), isCompleted == %s", isCompleted.toString());
+            assertTrue(isCompleted, "ModifyUserObserver.onSuccess() should be TRUE");
+            ViewerUserData.class.cast(viewer).replaceComponent(new Bundle());
+        }
 
         @Override
         public void onError(Throwable e)
         {
             Timber.d("onErrorCtrl(), Thread for subscriber: %s", Thread.currentThread().getName());
             onErrorCtrl(e);
-        }
-
-        @Override
-        public void onComplete()
-        {
-            Timber.d("onSuccess(), Thread for subscriber: %s", Thread.currentThread().getName());
-            onCompleteUserModified();
         }
     }
 
@@ -166,7 +140,7 @@ class CtrlerUserData extends Controller implements CtrlerUserDataIf {
         {
             Timber.d("onSuccess(), Thread for subscriber: %s", Thread.currentThread().getName());
             assertTrue(usuario.getuId() > 0L && usuario.getUserName() != null, user_name_uID_should_be_initialized);
-            onSuccessUserDataLoaded(usuario);
+            ViewerUserData.class.cast(viewer).processBackUserDataLoaded(usuario);
         }
 
         @Override

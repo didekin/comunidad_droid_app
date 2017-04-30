@@ -27,7 +27,8 @@ import static io.reactivex.schedulers.Schedulers.io;
 class CtrlerUserComuByComuList extends Controller implements
         CtrlerSelectionListIf<UsuarioComunidad> {
 
-    private final ViewerSeeUserComuByComu viewerList;
+    @SuppressWarnings("WeakerAccess")
+    final ViewerSeeUserComuByComu viewerList;
 
     CtrlerUserComuByComuList(ViewerSeeUserComuByComu viewer)
     {
@@ -79,7 +80,7 @@ class CtrlerUserComuByComuList extends Controller implements
     public void onSuccessLoadItemsInList(List<UsuarioComunidad> itemList)
     {
         Timber.d("onSuccessLoadItemsInList()");
-        viewerList.processLoadedItemsinView(itemList);
+        viewerList.onSuccessLoadItems(itemList);
     }
 
     boolean comunidadData(long comunidadId)
@@ -94,7 +95,7 @@ class CtrlerUserComuByComuList extends Controller implements
                             public void onSuccess(Comunidad comunidad)
                             {
                                 Timber.d("onSuccess()");
-                                onSuccessComunidadData(comunidad);
+                                viewerList.onSuccessComunidadData(comunidad.getNombreComunidad());
                             }
 
                             @Override
@@ -105,12 +106,5 @@ class CtrlerUserComuByComuList extends Controller implements
                             }
                         })
         );
-    }
-
-    @SuppressWarnings("WeakerAccess")
-    void onSuccessComunidadData(Comunidad comunidad)
-    {
-        Timber.d("onSuccessComunidadData()");
-        viewerList.setNombreComuViewText(comunidad.getNombreComunidad());
     }
 }

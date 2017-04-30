@@ -11,7 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.InstrumentationRegistry.getTargetContext;
-import static com.didekindroid.testutil.ActivityTestUtils.doFragmentView;
+import static com.didekindroid.testutil.ActivityTestUtils.doFragmentTextView;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
@@ -83,7 +83,7 @@ public class IncidenciaBeanTest {
     public void testMakeIncidenciaFromView_1() throws Exception
     {
         final IncidenciaBean incidenciaBean = doIncidenciaBean();
-        final View fragmentView = doFragmentView(R.layout.mock_incid_desc_edit_fr, "Description valid");
+        final View fragmentView = doFragmentTextView(R.layout.mock_incid_desc_edit_fr, "Description valid");
         assertThat(incidenciaBean.makeIncidenciaFromView(fragmentView, errors, resources), notNullValue());
     }
 
@@ -91,7 +91,7 @@ public class IncidenciaBeanTest {
     public void testMakeIncidenciaFromView_2() throws Exception
     {
         final IncidenciaBean incidenciaBean = doIncidenciaBean();
-        final View fragmentView = doFragmentView(R.layout.mock_incid_desc_edit_fr, "No valid = ** description");
+        final View fragmentView = doFragmentTextView(R.layout.mock_incid_desc_edit_fr, "No valid = ** description");
         // Check.
         assertThat(incidenciaBean.makeIncidenciaFromView(fragmentView, errors, resources), nullValue());
         assertThat(errors.toString(), containsString(resources.getText(R.string.incid_reg_descripcion).toString()));

@@ -52,7 +52,7 @@ public class PasswordChangeAc extends AppCompatActivity implements ComponentRepl
     @Override
     public void replaceComponent(Bundle bundle)
     {
-        Timber.d("initActivityWithBundle()");
+        Timber.d("replaceComponent()");
         makeToast(this, R.string.password_remote_change);
         new ActivityInitiator(this).initActivityWithBundle(bundle);
     }

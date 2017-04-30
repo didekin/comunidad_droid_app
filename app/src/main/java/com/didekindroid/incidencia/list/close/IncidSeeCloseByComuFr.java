@@ -22,15 +22,15 @@ import static com.didekindroid.incidencia.list.close.ViewerIncidSeeClose.newView
  */
 public class IncidSeeCloseByComuFr extends Fragment  {
 
-    View rootFrgView;
-    ViewerIncidSeeClose viewerIncidClose;
+    View frView;
+    ViewerIncidSeeClose viewer;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedState)
     {
         Timber.d("onCreateView()");
-        rootFrgView = inflater.inflate(R.layout.incid_see_generic_fr_layout, container, false);
-        return rootFrgView;
+        frView = inflater.inflate(R.layout.incid_see_generic_fr_layout, container, false);
+        return frView;
     }
 
     @SuppressWarnings("unchecked")
@@ -42,15 +42,15 @@ public class IncidSeeCloseByComuFr extends Fragment  {
         /* Initialization of viewers.*/
         ComuSpinnerBean spinnerBean = new IncidenciaBean();
         spinnerBean.setComunidadId(getArguments().getLong(COMUNIDAD_ID.key));
-        viewerIncidClose = newViewerIncidSeeClose(rootFrgView, getActivity());
-        viewerIncidClose.doViewInViewer(savedState, spinnerBean);
+        viewer = newViewerIncidSeeClose(frView, getActivity());
+        viewer.doViewInViewer(savedState, spinnerBean);
     }
 
     @Override
     public void onSaveInstanceState(Bundle savedState)
     {
         Timber.d("onSaveInstanceState()");
-        viewerIncidClose.saveState(savedState);
+        viewer.saveState(savedState);
         super.onSaveInstanceState(savedState);
     }
 
@@ -59,6 +59,6 @@ public class IncidSeeCloseByComuFr extends Fragment  {
     {
         Timber.d("onStop()");
         super.onStop();
-        viewerIncidClose.clearSubscriptions();
+        viewer.clearSubscriptions();
     }
 }

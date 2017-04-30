@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.view.View;
+import android.widget.ListView;
 
 import com.didekindroid.api.ActivityMock;
 import com.didekindroid.exception.UiException;
@@ -41,6 +41,7 @@ import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_B;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_C;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_D;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
+import static com.didekindroid.testutil.RxSchedulersUtils.resetAllSchedulers;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceAndroidMain;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceIoScheduler;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
@@ -49,7 +50,6 @@ import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDa
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static com.didekindroid.util.AppBundleKey.IS_MENU_IN_FRAGMENT_FLAG;
-import static io.reactivex.plugins.RxJavaPlugins.reset;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -80,7 +80,7 @@ public class CtrlerIncidSeeCloseByComuTest {
     public void setUp() throws IOException, UiException, InterruptedException
     {
         activity = activityRule.getActivity();
-        controller = new CtrlerIncidSeeCloseByComu(new ViewerIncidSeeForTest(new View(activity), activity));
+        controller = new CtrlerIncidSeeCloseByComu(new ViewerIncidSeeForTest(activity));
 
         signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
         pepeUserComu = userComuDaoRemote.seeUserComusByUser().get(0);
@@ -97,6 +97,7 @@ public class CtrlerIncidSeeCloseByComuTest {
     public void tearDown() throws Exception
     {
         controller.clearSubscriptions();
+        resetAllSchedulers();
         cleanOptions(CLEAN_PEPE);
     }
 
@@ -127,7 +128,7 @@ public class CtrlerIncidSeeCloseByComuTest {
     @Test
     public void testLoadItemsByEntitiyId()
     {
-        CtrlerIncidSeeCloseByComu controllerLocal = new CtrlerIncidSeeCloseByComu(new ViewerIncidSeeForTest(new View(activity), activity)) {
+        CtrlerIncidSeeCloseByComu controllerLocal = new CtrlerIncidSeeCloseByComu(new ViewerIncidSeeForTest(activity)) {
             @Override
             public void onSuccessLoadItemsInList(@NonNull List<IncidenciaUser> incidCloseList)
             {
@@ -141,7 +142,7 @@ public class CtrlerIncidSeeCloseByComuTest {
             trampolineReplaceAndroidMain();
             assertThat(controllerLocal.loadItemsByEntitiyId(pepeUserComu.getComunidad().getC_Id()), is(true));
         } finally {
-            reset();
+            resetAllSchedulers();
         }
         assertThat(controllerLocal.getSubscriptions().size(), is(1));
         assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_A));
@@ -150,7 +151,7 @@ public class CtrlerIncidSeeCloseByComuTest {
     @Test
     public void testSelectItem()
     {
-        CtrlerIncidSeeCloseByComu controllerLocal = new CtrlerIncidSeeCloseByComu(new ViewerIncidSeeForTest(new View(activity), activity)) {
+        CtrlerIncidSeeCloseByComu controllerLocal = new CtrlerIncidSeeCloseByComu(new ViewerIncidSeeForTest(activity)) {
             @Override
             public void onSuccessSelectedItem(@NonNull Bundle bundle)
             {
@@ -164,7 +165,7 @@ public class CtrlerIncidSeeCloseByComuTest {
             trampolineReplaceAndroidMain();
             assertThat(controllerLocal.selectItem(incidenciaUser), is(true));
         } finally {
-            reset();
+            resetAllSchedulers();
         }
         assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_B));
         assertThat(controllerLocal.getSubscriptions().size(), is(1));
@@ -197,9 +198,9 @@ public class CtrlerIncidSeeCloseByComuTest {
 
     class ViewerIncidSeeForTest extends ViewerIncidSeeClose {
 
-        protected ViewerIncidSeeForTest(View frView, Activity activity)
+        protected ViewerIncidSeeForTest(Activity activity)
         {
-            super(frView, activity);
+            super(new ListView(activity), activity);
         }
 
         @Override
@@ -214,4 +215,6 @@ public class CtrlerIncidSeeCloseByComuTest {
             assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_D), is(BEFORE_METHOD_EXEC));
         }
     }
+
+
 }

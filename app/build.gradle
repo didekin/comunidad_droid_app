@@ -91,7 +91,6 @@ dependencies {
     androidTestCompile rootProject.ext.awaitility
 
     testCompile rootProject.ext.junit
-    testCompile rootProject.ext.mockito
 }
 
 apply plugin: 'com.google.gms.google-services'

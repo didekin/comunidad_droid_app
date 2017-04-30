@@ -2,7 +2,6 @@ package com.didekindroid.incidencia.list.open;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.widget.ArrayAdapter;
 
 import com.didekindroid.api.Controller;
 import com.didekindroid.api.CtrlerSelectableItemIf;
@@ -39,8 +38,6 @@ import static io.reactivex.schedulers.Schedulers.io;
 class CtrlerIncidSeeOpenByComu extends Controller implements
         CtrlerSelectableItemIf<IncidenciaUser, Bundle> {
 
-    final ArrayAdapter<IncidenciaUser> adapter;
-
     CtrlerIncidSeeOpenByComu(ViewerIncidSeeOpen incidViewer)
     {
         this(incidViewer, TKhandler);
@@ -49,7 +46,6 @@ class CtrlerIncidSeeOpenByComu extends Controller implements
     CtrlerIncidSeeOpenByComu(ViewerIncidSeeOpen viewer, IdentityCacher identityCacher)
     {
         super(viewer, identityCacher);
-        adapter = new AdapterIncidSeeOpenByComu(viewer.getActivity());
     }
 
     /* .................................... OBSERVABLES .................................*/

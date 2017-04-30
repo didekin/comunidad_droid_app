@@ -2,7 +2,6 @@ package com.didekindroid.usuariocomunidad;
 
 import android.content.Intent;
 import android.content.res.Resources;
-import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.view.View;
@@ -14,7 +13,6 @@ import com.didekindroid.exception.UiException;
 import com.didekindroid.testutil.ActivityTestUtils;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
-import com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil;
 import com.didekinlib.model.comunidad.Municipio;
 import com.didekinlib.model.comunidad.Provincia;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
@@ -43,7 +41,10 @@ import static com.didekindroid.usuariocomunidad.RegUserComuFr.makeUserComuBeanFr
 import static com.didekindroid.usuariocomunidad.RolUi.ADM;
 import static com.didekindroid.usuariocomunidad.RolUi.INQ;
 import static com.didekindroid.usuariocomunidad.RolUi.PRE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.typeUserComuData;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.validaTypedUserComuBean;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.validaTypedUsuarioComunidad;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -65,14 +66,14 @@ public class RegComuAndUserComuAcTest {
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
     {
-        Thread.sleep(3000);
+        Thread.sleep(2000);
     }
 
     @Before
     public void setUp() throws Exception
     {
         // Preconditions: the user is already registered.
-        UserComuDataTestUtil.signUpAndUpdateTk(UserComuDataTestUtil.COMU_TRAV_PLAZUELA_PEPE);
+        signUpAndUpdateTk(UserComuDataTestUtil.COMU_TRAV_PLAZUELA_PEPE);
     }
 
     @After
@@ -98,11 +99,11 @@ public class RegComuAndUserComuAcTest {
         assertThat(regUserComuFr, notNullValue());
 
         onView(withId(activityLayoutId));
-        onView(ViewMatchers.withId(R.id.reg_comunidad_frg)).check(matches(isDisplayed()));
-        onView(ViewMatchers.withId(R.id.reg_usercomu_frg)).check(matches(isDisplayed()));
-        onView(ViewMatchers.withId(R.id.reg_comu_usuariocomunidad_button)).perform(scrollTo()).check(matches(isDisplayed()));
+        onView(withId(R.id.reg_comunidad_frg)).check(matches(isDisplayed()));
+        onView(withId(R.id.reg_usercomu_frg)).check(matches(isDisplayed()));
+        onView(withId(R.id.reg_comu_usuariocomunidad_button)).perform(scrollTo()).check(matches(isDisplayed()));
 
-        onView(ViewMatchers.withId(R.id.appbar)).perform(scrollTo()).check(matches(isDisplayed()));
+        onView(withId(R.id.appbar)).perform(scrollTo()).check(matches(isDisplayed()));
         ActivityTestUtils.clickNavigateUp();
     }
 
@@ -124,12 +125,12 @@ public class RegComuAndUserComuAcTest {
         UsuarioComunidadBean usuarioComunidadBean =
                 makeUserComuBeanFromView(usuarioComunidadRegView, comunidadBean, null);
         // Verificamos usuarioComunidadBean.
-        UserComuEspressoTestUtil.validaTypedUserComuBean(usuarioComunidadBean, "port2", "escale_b", "planta-N", "puerta5", true, true, false, true);
+        validaTypedUserComuBean(usuarioComunidadBean, "port2", "escale_b", "planta-N", "puerta5", true, true, false, true);
 
         // Verificamos usuarioComunidad.
         usuarioComunidadBean.validate(resources, new StringBuilder(resources.getText(R.string.error_validation_msg)));
         UsuarioComunidad usuarioComunidad = usuarioComunidadBean.getUsuarioComunidad();
-        UserComuEspressoTestUtil.validaTypedUsuarioComunidad(usuarioComunidad, "port2", "escale_b", "planta-N", "puerta5", "adm,pre,inq");
+        validaTypedUsuarioComunidad(usuarioComunidad, "port2", "escale_b", "planta-N", "puerta5", "adm,pre,inq");
     }
 
     @Test
@@ -138,9 +139,9 @@ public class RegComuAndUserComuAcTest {
         activity = mActivityRule.launchActivity(new Intent());
 
         // NO data.
-        onView(ViewMatchers.withId(R.id.reg_comu_usuariocomunidad_button)).perform(scrollTo(), click());
+        onView(withId(R.id.reg_comu_usuariocomunidad_button)).perform(scrollTo(), click());
 
-        ActivityTestUtils.checkToastInTest(R.string.error_validation_msg, activity,
+        checkToastInTest(R.string.error_validation_msg, activity,
                 R.string.tipo_via,
                 R.string.nombre_via,
                 R.string.municipio,
@@ -153,14 +154,14 @@ public class RegComuAndUserComuAcTest {
         activity = mActivityRule.launchActivity(new Intent());
 
         // Wrong data.
-        onView(ViewMatchers.withId(R.id.reg_usercomu_checbox_pre)).perform(click());
-        onView(ViewMatchers.withId(R.id.reg_usercomu_checbox_admin)).perform(click());
-        onView(ViewMatchers.withId(R.id.reg_usercomu_checbox_inq)).perform(click());
-        onView(ViewMatchers.withId(R.id.reg_usercomu_checbox_pro)).perform(click());
+        onView(withId(R.id.reg_usercomu_checbox_pre)).perform(click());
+        onView(withId(R.id.reg_usercomu_checbox_admin)).perform(click());
+        onView(withId(R.id.reg_usercomu_checbox_inq)).perform(click());
+        onView(withId(R.id.reg_usercomu_checbox_pro)).perform(click());
 
-        onView(ViewMatchers.withId(R.id.reg_usercomu_escalera_ed)).perform(typeText("escal ?? b"), closeSoftKeyboard());
+        onView(withId(R.id.reg_usercomu_escalera_ed)).perform(typeText("escal ?? b"), closeSoftKeyboard());
 
-        onView(ViewMatchers.withId(R.id.reg_comu_usuariocomunidad_button)).perform(scrollTo(), click());
+        onView(withId(R.id.reg_comu_usuariocomunidad_button)).perform(scrollTo(), click());
         checkToastInTest(R.string.error_validation_msg, activity,
                 R.string.tipo_via,
                 R.string.nombre_via,
@@ -170,7 +171,7 @@ public class RegComuAndUserComuAcTest {
     }
 
     @Test
-    public void testRegisterComuAndUserComu_3() throws InterruptedException
+    public void testRegisterComuAndUserComu_3() throws InterruptedException    // TODO: failed.
     {
         activity = mActivityRule.launchActivity(new Intent());
 
@@ -178,8 +179,8 @@ public class RegComuAndUserComuAcTest {
         Thread.sleep(1000);
         typeComunidadData();
 
-        onView(ViewMatchers.withId(R.id.reg_comu_usuariocomunidad_button)).perform(scrollTo(), click());
-        onView(ViewMatchers.withId(R.id.see_usercomu_by_user_frg)).check(matches(isDisplayed()));
+        onView(withId(R.id.reg_comu_usuariocomunidad_button)).perform(scrollTo(), click());   // Failed here.
+        onView(withId(R.id.see_usercomu_by_user_frg)).check(matches(isDisplayed()));
 
         checkUp(activityLayoutId);
     }

@@ -14,23 +14,25 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkInitTokenCache;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
+import static com.didekindroid.testutil.RxSchedulersUtils.resetAllSchedulers;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceAndroidMain;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceIoScheduler;
 import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
 import static com.didekindroid.usuario.password.CtrlerPasswordChange.isPasswordChanged;
-import static com.didekindroid.usuario.password.ViewerPasswordChange.newViewerPswdChange;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_DROID;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_TRAV_PLAZUELA_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
-import static io.reactivex.plugins.RxJavaPlugins.reset;
+import static junit.framework.Assert.fail;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
@@ -49,6 +51,11 @@ public class CtrlerPasswordChangeTest {
         @Override
         protected Intent getActivityIntent()
         {
+            try {
+                signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
+            } catch (IOException | UiException e) {
+                fail();
+            }
             return new Intent().putExtra(user_name.key, USER_DROID.getUserName());
         }
     };
@@ -60,10 +67,14 @@ public class CtrlerPasswordChangeTest {
     @Before
     public void setUp()
     {
-        viewer = newViewerPswdChange((PasswordChangeAc) activityRule.getActivity());
+        viewer = new ViewerPswdChangeForTest((PasswordChangeAc) activityRule.getActivity());
         controller = new CtrlerPasswordChange(viewer);
         oldToken = TKhandler.getTokenCache().get();
     }
+
+    //  ============================================================================================
+    // ............................ Instance methods ..................................
+    //  ============================================================================================
 
     @Test
     public void testChangePasswordInRemote() throws Exception
@@ -73,31 +84,36 @@ public class CtrlerPasswordChangeTest {
             trampolineReplaceAndroidMain();
             assertThat(controller.changePasswordInRemote(USER_PEPE), is(true));
         } finally {
-            reset();
+            resetAllSchedulers();
         }
         assertThat(controller.getSubscriptions().size(), is(1));
+        // Final call to viewer.replaceComponent().
+        assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_A));
+        cleanOneUser(USER_PEPE);
     }
 
     @Test
     public void testOnSuccessChangePswd() throws Exception
     {
         controller.onSuccessChangedPswd();
+        // Call to viewer.replaceComponent().
         assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_A));
     }
 
+    //  ============================================================================================
     // ............................ OBSERVABLES ..................................
+    //  ============================================================================================
 
     @Test
     public void testIsPasswordChanged() throws Exception
     {
         Usuario usuario = new Usuario.UsuarioBuilder().userName(USER_PEPE.getUserName()).password("new_password").build();
-        signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
 
         try {
             trampolineReplaceIoScheduler();
             isPasswordChanged(usuario).test().assertComplete();
         } finally {
-            reset();
+            resetAllSchedulers();
         }
         checkCacheAndDeleteUser(true);
     }
@@ -117,9 +133,10 @@ public class CtrlerPasswordChangeTest {
         usuarioDao.deleteUser();
     }
 
-    static final class ViewerPasswordChangeForTest extends ViewerPasswordChange {
+    @SuppressWarnings("ClassWithOnlyPrivateConstructors")
+    static class ViewerPswdChangeForTest extends ViewerPasswordChange {
 
-        private ViewerPasswordChangeForTest(PasswordChangeAc activity)
+        ViewerPswdChangeForTest(PasswordChangeAc activity)
         {
             super(activity);
         }
@@ -127,6 +144,7 @@ public class CtrlerPasswordChangeTest {
         @Override
         public void replaceComponent(@NonNull Bundle bundle)
         {
+            // Calling directly activity.replaceComponent() gives problem with the toast.
             assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
         }
     }

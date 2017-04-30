@@ -84,8 +84,10 @@ public class IncidSeeOpenByComuAc_Mn_Test {
         cleanOptions(CLEAN_DROID);
     }
 
+    //  ============================= TESTS Empty list ==============================
+
     @Test
-    public void testOnCreate_1() throws Exception
+    public void testOnCreate() throws Exception
     {
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
 
@@ -102,7 +104,7 @@ public class IncidSeeOpenByComuAc_Mn_Test {
         clickNavigateUp();
     }
 
-//  ================================ MENU ====================================
+//  ================================== MENU TESTS ====================================
 
     @Test
     public void testIncidSeeClosedByComuMn() throws InterruptedException
@@ -115,14 +117,6 @@ public class IncidSeeOpenByComuAc_Mn_Test {
     public void testIncidRegMn() throws InterruptedException
     {
         INCID_REG_AC.checkMenuItem_WTk(activity);
-        checkUp(activityLayoutId, secondLayoutId);
-    }
-
-    @Test
-    public void testSeeUserComuByComuMn() throws InterruptedException
-    {
-        SEE_USERCOMU_BY_COMU_AC.checkMenuItem_WTk(activity);
-        intended(hasExtra(COMUNIDAD_ID.key, comunidadInIntent.getC_Id()));
         checkUp(activityLayoutId, secondLayoutId);
     }
 }

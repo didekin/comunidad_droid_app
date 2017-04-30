@@ -41,6 +41,9 @@ public class ViewerIncidSeeClose extends
     protected ViewerIncidSeeClose(View frView, Activity activity)
     {
         super((ListView) frView.findViewById(android.R.id.list), activity, null);
+        view.setEmptyView(frView.findViewById(android.R.id.empty));
+        // To get visible a divider on top of the list.
+        view.addHeaderView(new View(activity), null, false);
     }
 
     static ViewerIncidSeeClose newViewerIncidSeeClose(View view, Activity activity)
@@ -60,7 +63,7 @@ public class ViewerIncidSeeClose extends
         Timber.d("doViewInViewer()");
         initSelectedItemId(savedState);
         comuSpinnerViewer.doViewInViewer(savedState, viewBean);
-        doListViewer(savedState);
+        view.setOnItemClickListener(new ListItemOnClickListener());
     }
 
     @Override
@@ -82,7 +85,7 @@ public class ViewerIncidSeeClose extends
         comuSpinnerViewer.saveState(savedState);
     }
 
-    /* ==================================  ViewerSelection  =================================*/
+    /* ==================================  ViewerSelectionIf  =================================*/
 
     /**
      * comunidadesSpinner.doViewInViewer() --> comunidadesSpinner.loadItemsByEntitiyId() --> onSuccessLoadItems()
@@ -93,12 +96,7 @@ public class ViewerIncidSeeClose extends
     public void onSuccessLoadItems(List<IncidenciaUser> incidCloseList)
     {
         Timber.d("onSuccessLoadItems()");
-        ArrayAdapter<IncidenciaUser> adapter = new AdapterIncidSeeClosedByComu(activity);
-        adapter.addAll(incidCloseList);
-        view.setAdapter(adapter);
-        if (view.getCount() > 1 && itemSelectedId > 0L) {
-            view.setItemChecked(getSelectedPositionFromItemId(itemSelectedId), true);
-        }
+        onSuccessLoadItems(incidCloseList, getNewViewAdapter());
     }
 
     @Override
@@ -116,8 +114,8 @@ public class ViewerIncidSeeClose extends
         Timber.d("getSelectedItemId()");
         assertTrue(itemSelectedId > 0, item_selected_in_list_should_not_be_zero);
 
-        // Position in 1 to take account header view in position 0.
-        int position = 1;
+        // Position set to take account header view in position 0, ...
+        int position = view.getHeaderViewsCount();
         boolean isFound = false;
         if (itemSelectedId > 0L) {
             long incidenciaIdIn;
@@ -149,7 +147,7 @@ public class ViewerIncidSeeClose extends
     // ==================================  OnSpinnerClick  =================================
 
     /**
-     * This method is called when the comunidades spinner is loadeda and one of them selected.
+     * This method is called when the comunidades spinner is loaded and one of them selected.
      * It loads the list data.
      */
     @Override
@@ -162,16 +160,23 @@ public class ViewerIncidSeeClose extends
 
     // ==================================  HELPERS  =================================
 
-    private void doListViewer(Bundle savedState)
+    @NonNull
+    private ArrayAdapter<IncidenciaUser> getNewViewAdapter()
     {
-        // To get visible a divider on top of the list.
-        view.addHeaderView(new View(activity), null, false);
-        view.setEmptyView(view.findViewById(android.R.id.empty));
-        view.setOnItemClickListener(new ListItemOnClickListener());
+        return new AdapterIncidSeeClosedByComu(activity);
+    }
+
+    protected void onSuccessLoadItems(List<IncidenciaUser> incidCloseList, ArrayAdapter<IncidenciaUser> adapter)
+    {
+        adapter.addAll(incidCloseList);
+        view.setAdapter(adapter);
+        if (view.getCount() > view.getHeaderViewsCount() && itemSelectedId > 0L) {
+            view.setItemChecked(getSelectedPositionFromItemId(itemSelectedId), true);
+        }
     }
 
     @SuppressWarnings("WeakerAccess")
-    class ListItemOnClickListener implements AdapterView.OnItemClickListener {
+    public class ListItemOnClickListener implements AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View viewClick, int position, long id)
         {

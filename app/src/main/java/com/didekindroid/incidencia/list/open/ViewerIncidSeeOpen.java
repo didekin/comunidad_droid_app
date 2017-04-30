@@ -1,15 +1,21 @@
 package com.didekindroid.incidencia.list.open;
 
 import android.app.Activity;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Spinner;
 
 import com.didekindroid.R;
+import com.didekindroid.api.ViewerIf;
 import com.didekindroid.incidencia.list.close.ViewerIncidSeeClose;
 import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
+import com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 
+import java.io.Serializable;
 import java.util.List;
 
 import timber.log.Timber;
@@ -25,7 +31,12 @@ import static com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner.newVie
 
 class ViewerIncidSeeOpen extends ViewerIncidSeeClose {
 
-    private ViewerFirebaseTokenIf viewerFirebaseToken;
+    ViewerFirebaseTokenIf viewerFirebaseToken;
+
+    ViewerIncidSeeOpen(Activity activity)
+    {
+        super(new ListView(activity), activity);
+    }
 
     ViewerIncidSeeOpen(View frView, Activity activity)
     {
@@ -39,17 +50,26 @@ class ViewerIncidSeeOpen extends ViewerIncidSeeClose {
         parentInstance.setController(new CtrlerIncidSeeOpenByComu(parentInstance));
         parentInstance.viewerFirebaseToken = newViewerFirebaseToken(activity);
         parentInstance.comuSpinnerViewer = newViewerComuSpinner((Spinner) view.findViewById(R.id.incid_reg_comunidad_spinner), activity, parentInstance);
-        parentInstance.viewerFirebaseToken.checkGcmTokenAsync();
         return parentInstance;
     }
+
+    /* ==================================  ViewerSelectionIf  =================================*/
 
     @Override
     public void onSuccessLoadItems(List<IncidenciaUser> incidCloseList)
     {
         Timber.d("onSuccessLoadItems()");
-        ArrayAdapter<IncidenciaUser> adapter = new AdapterIncidSeeOpenByComu(activity);
-        adapter.addAll(incidCloseList);
-        view.setAdapter(adapter);
+        onSuccessLoadItems(incidCloseList, getNewViewAdapter());
+    }
+
+    /* ==================================  VIEWER  =================================*/
+
+    @Override
+    public void doViewInViewer(Bundle savedState, Serializable viewBean)
+    {
+        Timber.d("doViewInViewer()");
+        super.doViewInViewer(savedState, viewBean);
+        viewerFirebaseToken.checkGcmTokenAsync();
     }
 
     @Override
@@ -58,5 +78,20 @@ class ViewerIncidSeeOpen extends ViewerIncidSeeClose {
         Timber.d("clearSubscriptions()");
         viewerFirebaseToken.clearSubscriptions();
         return super.clearSubscriptions();
+    }
+
+    // ==================================  HELPERS  =================================
+
+    ViewerComuSpinner getComuSpinner()
+    {
+        Timber.d("getComuSpinner()");
+        return comuSpinnerViewer;
+    }
+
+    @NonNull
+    private ArrayAdapter<IncidenciaUser> getNewViewAdapter()
+    {
+        Timber.d("getNewViewAdapter()");
+        return new AdapterIncidSeeOpenByComu(activity);
     }
 }

@@ -44,8 +44,8 @@ public class ActivityRouter implements ActivityRouterIf {
 
     public static final ActivityRouter acRouter = new ActivityRouter();
 
-    private static final Map<Integer, Class<? extends Activity>> menuIdItemMap = new ArrayMap<>();
-    private static final Map<Integer, Class<? extends Activity>> noUserRegMenuIdItemMap = new ArrayMap<>();
+    private static final Map<Integer, Class<? extends Activity>> menuIdMap = new ArrayMap<>();
+    private static final Map<Integer, Class<? extends Activity>> noUserRegMenuIdMap = new ArrayMap<>();
     private static final Map<Class<? extends Activity>, Class<? extends Activity>> acRouterMap = new ArrayMap<>();
     private static final Map<Class<? extends View.OnClickListener>, Class<? extends Activity>> onClickRouterMap = new ArrayMap<>();
 
@@ -62,26 +62,27 @@ public class ActivityRouter implements ActivityRouterIf {
 
     static {
         // INCIDENCIAS.
-        menuIdItemMap.put(R.id.incid_comment_reg_ac_mn, IncidCommentRegAc.class);
-        menuIdItemMap.put(R.id.incid_comments_see_ac_mn, IncidCommentSeeAc.class);
-        menuIdItemMap.put(R.id.incid_reg_ac_mn, IncidRegAc.class);
-        menuIdItemMap.put(R.id.incid_resolucion_reg_ac_mn, IncidResolucionRegEditSeeAc.class);
-        menuIdItemMap.put(R.id.incid_see_closed_by_comu_ac_mn, IncidSeeClosedByComuAc.class);
-        menuIdItemMap.put(R.id.incid_see_open_by_comu_ac_mn, IncidSeeOpenByComuAc.class);
+        menuIdMap.put(R.id.incid_comment_reg_ac_mn, IncidCommentRegAc.class);
+        menuIdMap.put(R.id.incid_comments_see_ac_mn, IncidCommentSeeAc.class);
+        menuIdMap.put(R.id.incid_reg_ac_mn, IncidRegAc.class);
+        menuIdMap.put(R.id.incid_resolucion_reg_ac_mn, IncidResolucionRegEditSeeAc.class);
+        menuIdMap.put(R.id.incid_see_closed_by_comu_ac_mn, IncidSeeClosedByComuAc.class);
+        menuIdMap.put(R.id.incid_see_open_by_comu_ac_mn, IncidSeeOpenByComuAc.class);
         // USUARIO REGISTRADO.
-        menuIdItemMap.put(R.id.comu_data_ac_mn, ComuDataAc.class);
-        menuIdItemMap.put(R.id.comu_search_ac_mn, ComuSearchAc.class);
-        menuIdItemMap.put(R.id.delete_me_ac_mn, DeleteMeAc.class);
-        menuIdItemMap.put(R.id.login_ac_mn, LoginAc.class);
-        menuIdItemMap.put(R.id.password_change_ac_mn, PasswordChangeAc.class);
-        menuIdItemMap.put(R.id.reg_nueva_comunidad_ac_mn, RegComuAndUserComuAc.class);
-        menuIdItemMap.put(R.id.see_usercomu_by_comu_ac_mn, SeeUserComuByComuAc.class);
-        menuIdItemMap.put(R.id.see_usercomu_by_user_ac_mn, SeeUserComuByUserAc.class);
-        menuIdItemMap.put(R.id.user_data_ac_mn, UserDataAc.class);
+        menuIdMap.put(R.id.comu_data_ac_mn, ComuDataAc.class);
+        menuIdMap.put(R.id.comu_search_ac_mn, ComuSearchAc.class);
+        menuIdMap.put(R.id.delete_me_ac_mn, DeleteMeAc.class);
+        menuIdMap.put(R.id.login_ac_mn, LoginAc.class);
+        menuIdMap.put(R.id.password_change_ac_mn, PasswordChangeAc.class);
+        menuIdMap.put(R.id.reg_nueva_comunidad_ac_mn, RegComuAndUserComuAc.class);
+        menuIdMap.put(R.id.see_usercomu_by_comu_ac_mn, SeeUserComuByComuAc.class);
+        menuIdMap.put(R.id.see_usercomu_by_user_ac_mn, SeeUserComuByUserAc.class);
+        menuIdMap.put(R.id.user_data_ac_mn, UserDataAc.class);
 
         /* USUARIO NO REGISTRADO.*/
-        noUserRegMenuIdItemMap.put(R.id.reg_nueva_comunidad_ac_mn, RegComuAndUserAndUserComuAc.class);
-        noUserRegMenuIdItemMap.put(android.R.id.home, ComuSearchAc.class);
+        noUserRegMenuIdMap.put(R.id.reg_nueva_comunidad_ac_mn, RegComuAndUserAndUserComuAc.class);
+        noUserRegMenuIdMap.put(android.R.id.home, ComuSearchAc.class);
+        noUserRegMenuIdMap.put(R.id.login_ac_mn, LoginAc.class);
     }
 
     static {
@@ -122,9 +123,9 @@ public class ActivityRouter implements ActivityRouterIf {
     public Class<? extends Activity> nextActivityFromMn(int resourceId)
     {
         if (identityCacher.isRegisteredUser()) {
-            return menuIdItemMap.get(resourceId);
+            return menuIdMap.get(resourceId);
         } else {
-            return noUserRegMenuIdItemMap.get(resourceId);
+            return noUserRegMenuIdMap.get(resourceId);
         }
     }
 

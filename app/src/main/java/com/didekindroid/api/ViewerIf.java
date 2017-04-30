@@ -26,7 +26,7 @@ public interface ViewerIf<T extends View, C extends ControllerIf> {
 
     T getViewInViewer();
 
-    void doViewInViewer(Bundle savedState, @NonNull Serializable viewBean);
+    void doViewInViewer(Bundle savedState, Serializable viewBean);
 
     @Nullable
     C getController();

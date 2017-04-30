@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.NoMatchingRootException;
 import android.support.test.espresso.NoMatchingViewException;
 import android.support.test.espresso.PerformException;
@@ -12,10 +13,11 @@ import android.support.test.espresso.contrib.PickerActions;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.SpinnerAdapter;
+import android.widget.ListView;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ControllerIf;
@@ -25,6 +27,7 @@ import com.didekindroid.exception.UiExceptionIf.ActionForUiExceptionIf;
 import com.didekindroid.router.ComponentReplacerIf;
 import com.didekindroid.security.IdentityCacher;
 import com.didekindroid.usuario.firebase.CtrlerFirebaseTokenIf;
+import com.didekindroid.util.BundleKey;
 import com.didekinlib.http.ErrorBean;
 import com.didekinlib.http.oauth2.SpringOauthToken;
 import com.didekinlib.model.exception.ExceptionMsgIf;
@@ -36,6 +39,7 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.concurrent.Callable;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import io.reactivex.disposables.CompositeDisposable;
@@ -165,7 +169,7 @@ public final class ActivityTestUtils {
         };
     }
 
-    public static View doFragmentView(int resourdeIdLayout, String description)
+    public static View doFragmentTextView(int resourdeIdLayout, String description)
     {
         LayoutInflater inflater = (LayoutInflater) getTargetContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View frView = inflater.inflate(resourdeIdLayout, null);
@@ -174,10 +178,28 @@ public final class ActivityTestUtils {
         return frView;
     }
 
+    public static ListView doListView(int resourdeIdLayout)
+    {
+        LayoutInflater inflater = (LayoutInflater) getTargetContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View frView = inflater.inflate(resourdeIdLayout, null);
+        return (ListView) frView.findViewById(android.R.id.list);
+    }
+
+    public static Callable<Long> getLongInBundle(final Bundle bundleIn, final BundleKey bundleKey)
+    {
+        return new Callable<Long>() {
+            public Long call() throws Exception
+            {
+                return bundleIn.getLong(bundleKey.getKey());
+            }
+        };
+    }
+
     //    ============================= CONTROLLER/Adapters ===================================
 
     public static CompositeDisposable addSubscription(ControllerIf controller)
     {
+        int oldNumberSubscriptions = controller.getSubscriptions().size();
         controller.getSubscriptions().add(new Disposable() {
             @Override
             public void dispose()
@@ -190,8 +212,17 @@ public final class ActivityTestUtils {
                 return false;
             }
         });
-        assertThat(controller.getSubscriptions().size(), is(1));
+        assertThat(controller.getSubscriptions().size(), is(++oldNumberSubscriptions));
+        assertThat(controller.getSubscriptions().size() > 0, is(true));
         return controller.getSubscriptions();
+    }
+
+    public static void checkSubscriptions(ControllerIf controller, Activity activity)
+    {
+        AtomicInteger atomicInteger = new AtomicInteger(addSubscription(controller).size());
+        InstrumentationRegistry.getInstrumentation().callActivityOnStop(activity);
+        atomicInteger.set(controller.getSubscriptions().size());
+        waitAtMost(2, SECONDS).untilAtomic(atomicInteger, is(0));
     }
 
     public static Callable<Boolean> gcmTokenSentFlag(final CtrlerFirebaseTokenIf controller)
@@ -204,7 +235,7 @@ public final class ActivityTestUtils {
         };
     }
 
-    public static Callable<Integer> getAdapterCount(final SpinnerAdapter adapter)
+    public static Callable<Integer> getAdapterCount(final Adapter adapter)
     {
         return new Callable<Integer>() {
             public Integer call() throws Exception
@@ -214,22 +245,12 @@ public final class ActivityTestUtils {
         };
     }
 
-    public static Callable<SpinnerAdapter> getAdapter(final AdapterView<SpinnerAdapter> adapterView)
+    public static Callable<Adapter> getAdapter(final AdapterView<? extends Adapter> adapterView)
     {
-        return new Callable<SpinnerAdapter>() {
-            public SpinnerAdapter call() throws Exception
+        return new Callable<Adapter>() {
+            public Adapter call() throws Exception
             {
                 return adapterView.getAdapter();
-            }
-        };
-    }
-
-    public static Callable<Long> checkInteger(final long intTocheck){
-        return new Callable<Long>() {
-            @Override
-            public Long call() throws Exception
-            {
-                return intTocheck;
             }
         };
     }
@@ -293,21 +314,6 @@ public final class ActivityTestUtils {
         return actionException.get().getActivityToGoClass().equals(actionToExpect.getActivityToGoClass());
     }
 
-    public static void checkProcessCtrlErrorOnlyToast(final ViewerIf viewer,
-                                                      final ExceptionMsgIf exceptionMsg, int resourceIdToast,
-                                                      int activityLayoutId)
-    {
-        final Activity activityError = (Activity) viewer;
-        activityError.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                viewer.processControllerError(new UiException(new ErrorBean(exceptionMsg)));
-            }
-        });
-        onView(withId(activityLayoutId)).check(matches(isDisplayed()));
-    }
-
     //    ============================= IDENTITY CACHE ===================================
 
     public static void checkUpdateTokenCache(SpringOauthToken oldToken)
@@ -369,7 +375,7 @@ public final class ActivityTestUtils {
 
     public static void checkViewerReplaceComponent(final ViewerIf<? extends View, ? extends ControllerIf> viewer, int resorceIdNextView, Bundle bundle)
     {
-        if (bundle == null){
+        if (bundle == null) {
             bundle = new Bundle(0);
         }
         final Bundle finalBundle = bundle;

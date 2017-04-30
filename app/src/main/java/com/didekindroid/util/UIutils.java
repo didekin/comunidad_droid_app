@@ -101,11 +101,13 @@ public final class UIutils {
 
     public static String checkBearerTokenInCache() throws UiException
     {
+        Timber.d("checkBearerTokenInCache()");
         return checkBearerToken(TKhandler.getTokenCache().get());
     }
 
     public static String checkBearerToken(SpringOauthToken oauthToken) throws UiException
     {
+        Timber.d("checkBearerTokenInCache()");
         String bearerAccessTkHeader = TKhandler.doHttpAuthHeader(oauthToken);
 
         if (bearerAccessTkHeader == null) {
@@ -129,6 +131,8 @@ public final class UIutils {
 
     public static void closeCursor(Adapter adapter)
     {
+        Timber.d("closeCursor()");
+
         CursorAdapter cursorAdapter;
         Cursor cursor;
         if (adapter != null) {

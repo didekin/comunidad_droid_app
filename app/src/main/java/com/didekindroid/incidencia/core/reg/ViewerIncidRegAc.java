@@ -18,8 +18,10 @@ import java.io.Serializable;
 
 import timber.log.Timber;
 
+import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
 import static com.didekindroid.usuario.firebase.ViewerFirebaseToken.newViewerFirebaseToken;
 import static com.didekindroid.util.ConnectionUtils.checkInternetConnected;
+import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.util.UIutils.makeToast;
 
@@ -52,6 +54,9 @@ public class ViewerIncidRegAc extends ViewerIncidRegEdit {
     public void doViewInViewer(Bundle savedState, Serializable viewBean)
     {
         Timber.d("doViewInViewer()");
+        // Preconditions.
+        assertTrue(controller.isRegisteredUser(), user_should_be_registered);
+
         viewerFirebaseToken.checkGcmTokenAsync();
         Button registerButton = (Button) activity.findViewById(R.id.incid_reg_ac_button);
         registerButton.setOnClickListener(new RegButtonOnClickListener());

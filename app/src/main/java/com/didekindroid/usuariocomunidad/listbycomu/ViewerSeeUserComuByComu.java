@@ -1,7 +1,6 @@
 package com.didekindroid.usuariocomunidad.listbycomu;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
@@ -9,7 +8,7 @@ import android.widget.TextView;
 
 import com.didekindroid.R;
 import com.didekindroid.api.Viewer;
-import com.didekindroid.comunidad.ComuBundleKey;
+import com.didekindroid.comunidad.ComunidadBean;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import java.io.Serializable;
@@ -17,7 +16,6 @@ import java.util.List;
 
 import timber.log.Timber;
 
-import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
 import static com.didekindroid.util.CommonAssertionMsg.intent_extra_should_be_initialized;
 import static com.didekindroid.util.UIutils.assertTrue;
@@ -27,55 +25,55 @@ import static com.didekindroid.util.UIutils.assertTrue;
  * Date: 22/03/17
  * Time: 14:40
  */
+@SuppressWarnings("ClassWithOnlyPrivateConstructors")
 class ViewerSeeUserComuByComu extends Viewer<ListView, CtrlerUserComuByComuList> {
 
-    private final TextView nombreComuView;
+    final TextView nombreComuView;
 
-    ViewerSeeUserComuByComu(ListView view, TextView nombreComuView, Activity activity)
+    ViewerSeeUserComuByComu(View frView, Activity activity)
     {
-        super(view, activity, null);
-        this.nombreComuView = nombreComuView;
+        super((ListView) frView.findViewById(android.R.id.list), activity, null);
+        nombreComuView = (TextView) frView.findViewById(R.id.see_usercomu_by_comu_list_header);
+        // To get visible a divider on top of the list.
+        view.addHeaderView(new View(activity), null, true);
     }
 
-    static ViewerSeeUserComuByComu newViewerUserComuByComu(View mainView, Activity activity)
+    static ViewerSeeUserComuByComu newViewerUserComuByComu(View frView, Activity activity)
     {
         Timber.d("newViewerUserComuByComu()");
-        ViewerSeeUserComuByComu instance = new ViewerSeeUserComuByComu(
-                (ListView) mainView.findViewById(android.R.id.list),
-                (TextView) mainView.findViewById(R.id.see_usercomu_by_comu_list_header),
-                activity);
+        ViewerSeeUserComuByComu instance = new ViewerSeeUserComuByComu(frView, activity);
         instance.setController(new CtrlerUserComuByComuList(instance));
-        // Precondition.
-        assertTrue(instance.controller.isRegisteredUser(), user_should_be_registered);
         return instance;
     }
 
+    // ==================================  VIEWER  =================================
+
     @Override
-    public void doViewInViewer(Bundle savedState, Serializable viewBean)
+    public void doViewInViewer(Bundle savedState, Serializable comunidadBean)
     {
         Timber.d("doViewInViewer()");
-        // To get visible a divider on top of the list.
-        view.addHeaderView(new View(activity), null, true);
-
-        Intent intentInActivity = activity.getIntent();
-        assertTrue(intentInActivity.hasExtra(COMUNIDAD_ID.key), intent_extra_should_be_initialized);
-        long comunidadId = intentInActivity.getExtras().getLong(ComuBundleKey.COMUNIDAD_ID.key);
+        // Precondition.
+        assertTrue(controller.isRegisteredUser(), user_should_be_registered);
+        long comunidadId = ComunidadBean.class.cast(comunidadBean).getComunidadId();
+        assertTrue(comunidadId > 0L, intent_extra_should_be_initialized);
 
         controller.loadItemsByEntitiyId(comunidadId);
         controller.comunidadData(comunidadId);
     }
 
-    void processLoadedItemsinView(List<UsuarioComunidad> itemList)
+    // =============================================================================
+
+    void onSuccessLoadItems(List<UsuarioComunidad> itemList)
     {
-        Timber.d("processLoadedItemsinView()");
+        Timber.d("onSuccessLoadItems()");
         SeeUserComuByComuListAdapter adapter = new SeeUserComuByComuListAdapter(activity);
         adapter.addAll(itemList);
         view.setAdapter(adapter);
     }
 
-    void setNombreComuViewText(String text)
+    void onSuccessComunidadData(String text)
     {
-        Timber.d("setNombreComuViewText()");
+        Timber.d("onSuccessComunidadData()");
         nombreComuView.setText(text);
     }
 }

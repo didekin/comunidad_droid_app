@@ -1,353 +1,191 @@
 package com.didekindroid.incidencia.list.close;
 
-import android.app.FragmentManager;
-import android.os.Bundle;
-import android.support.test.InstrumentationRegistry;
+import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
-import android.support.test.espresso.matcher.ViewMatchers;
-import android.support.test.runner.AndroidJUnit4;
-import android.view.View;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.incidencia.core.IncidenciaDataDbHelper;
-import com.didekindroid.incidencia.resolucion.IncidResolucionSeeFr;
-import com.didekindroid.incidencia.utils.IncidBundleKey;
-import com.didekindroid.testutil.ActivityTestUtils;
-import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
-import com.didekinlib.model.incidencia.dominio.Resolucion;
-import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
-import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import java.io.IOException;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.pressBack;
-import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.intent.Intents.intended;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
-import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
-import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
-import static com.didekindroid.incidencia.core.IncidenciaDataDbHelper.DB_NAME;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.RESOLUCION_DEFAULT_DESC;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doIncidencia;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doResolucionAvances;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_resolucion_see_fr_tag;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeCloseAcResourceId;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeGenericFrResourceId;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.nextResolucionFrResourceId;
+import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
+import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.makeRegGetIncidImportancia;
+import static com.didekindroid.incidencia.testutils.IncidUiTestUtils.checkIncidClosedListView;
+import static com.didekindroid.incidencia.testutils.IncidUiTestUtils.doComunidadSpinner;
 import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
+import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
+import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptions;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
-import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
-import static com.didekindroid.testutil.ActivityTestUtils.getAdapterCount;
+import static com.didekindroid.testutil.ActivityTestUtils.isComuSpinnerWithText;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_LA_FUENTE_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.regSeveralUserComuSameUser;
-import static com.didekindroid.util.AppBundleKey.IS_MENU_IN_FRAGMENT_FLAG;
-import static com.didekindroid.util.UIutils.formatTimeStampToString;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
-import static org.hamcrest.CoreMatchers.allOf;
-import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
- * Date: 02/02/16
- * Time: 18:00
- * Tests sobre la lista de incidencias cerradas.
+ * Date: 17/04/17
+ * Time: 11:35
  */
-@SuppressWarnings({"unchecked", "ConstantConditions"})
-@RunWith(AndroidJUnit4.class)
+
 public class IncidSeeClosedByComuAcTest {
 
-    UsuarioComunidad pepePlazuelas5;
-    UsuarioComunidad pepeLaFuente;
-    IncidImportancia incidPepePlazuelas5_1;
-    IncidImportancia incidPepePlazuelas5_2;
-    IncidImportancia incidPepeLaFuente;
-    IncidSeeCloseByComuFr fragment;
-    IncidenciaDataDbHelper dbHelper;
-    CtrlerIncidSeeCloseByComu controllerList;
-    AdapterIncidSeeClosedByComu listAdapter;
-    Resolucion resolucionToCheck;
+    IncidImportancia incidImportancia2;
+    IncidImportancia incidImportancia1;
 
     @Rule
     public IntentsTestRule<IncidSeeClosedByComuAc> activityRule = new IntentsTestRule<IncidSeeClosedByComuAc>(IncidSeeClosedByComuAc.class) {
-
         @Override
-        protected void beforeActivityLaunched()
+        protected Intent getActivityIntent()
         {
             try {
                 regSeveralUserComuSameUser(COMU_PLAZUELA5_PEPE, COMU_LA_FUENTE_PEPE);
+                incidImportancia1 = makeRegGetIncidImportancia(userComuDaoRemote.seeUserComusByUser().get(0), (short) 1);
+                incidImportancia2 = makeRegGetIncidImportancia(userComuDaoRemote.seeUserComusByUser().get(1), (short) 4);
 
-                pepeLaFuente = userComuDaoRemote.seeUserComusByUser().get(0);
-                pepePlazuelas5 = userComuDaoRemote.seeUserComusByUser().get(1);
+                // Cierre incidencias..
+                incidenciaDao.closeIncidencia(insertGetResolucionNoAdvances(incidImportancia1));
+                incidenciaDao.closeIncidencia(insertGetResolucionNoAdvances(incidImportancia2));
 
-                incidPepePlazuelas5_1 = new IncidImportancia.IncidImportanciaBuilder(
-                        doIncidencia(USER_PEPE.getUserName(), "Incid_pepePlazuelas_1", pepePlazuelas5.getComunidad().getC_Id(), (short) 12))
-                        .usuarioComunidad(pepePlazuelas5)
-                        .importancia((short) 2)
+                // Incidencias con fecha de cierre.
+                incidImportancia1 = new IncidImportancia.IncidImportanciaBuilder(
+                        new Incidencia.IncidenciaBuilder()
+                                .copyIncidencia(incidImportancia1.getIncidencia())
+                                .fechaCierre(
+                                        incidenciaDao.seeIncidsClosedByComu(incidImportancia1.getIncidencia().getComunidadId()).get(0).getIncidencia().getFechaCierre()
+                                )
+                                .build())
+                        .copyIncidImportancia(incidImportancia1)
                         .build();
-                incidPepePlazuelas5_2 = new IncidImportancia.IncidImportanciaBuilder(
-                        doIncidencia(USER_PEPE.getUserName(), "Incid_pepePlazuelas_2", pepePlazuelas5.getComunidad().getC_Id(), (short) 23))
-                        .usuarioComunidad(pepePlazuelas5)
+
+                incidImportancia2 = new IncidImportancia.IncidImportanciaBuilder(
+                        new Incidencia.IncidenciaBuilder()
+                                .copyIncidencia(incidImportancia2.getIncidencia())
+                                .fechaCierre(
+                                        incidenciaDao.seeIncidsClosedByComu(incidImportancia2.getIncidencia().getComunidadId()).get(0).getIncidencia().getFechaCierre()
+                                )
+                                .build())
+                        .copyIncidImportancia(incidImportancia2)
                         .build();
-                incidPepeLaFuente = new IncidImportancia.IncidImportanciaBuilder(
-                        doIncidencia(USER_PEPE.getUserName(), "Incid_pepeLaFuente_1", pepeLaFuente.getComunidad().getC_Id(), (short) 33))
-                        .usuarioComunidad(pepeLaFuente)
-                        .importancia((short) 3)
-                        .build();
 
-                // Registro incidPepePlazuelas5_1.
-                assertThat(incidenciaDao.regIncidImportancia(incidPepePlazuelas5_1), is(2));
-                Thread.sleep(1000);
-                Incidencia incidenciaDB = incidenciaDao.seeIncidsOpenByComu(pepePlazuelas5.getComunidad().getC_Id()).get(0).getIncidencia();
-                incidPepePlazuelas5_1 = incidenciaDao.seeIncidImportancia(incidenciaDB.getIncidenciaId()).getIncidImportancia();
-                Resolucion resolucionToClose = doResolucionAvances(incidPepePlazuelas5_1.getIncidencia(), RESOLUCION_DEFAULT_DESC, 231, ActivityTestUtils.doTimeStampFromCalendar(1));
-                assertThat(incidenciaDao.regResolucion(resolucionToClose), is(1));
-                resolucionToClose = incidenciaDao.seeResolucion(resolucionToClose.getIncidencia().getIncidenciaId());
-                // Cierre incidPepePlazuelas5_1.
-                Thread.sleep(1000);
-                incidenciaDao.closeIncidencia(resolucionToClose);
-
-                // Registro incidPepeLaFuente.
-                assertThat(incidenciaDao.regIncidImportancia(incidPepeLaFuente), is(2));
-                Thread.sleep(1000);
-                incidenciaDB = incidenciaDao.seeIncidsOpenByComu(pepeLaFuente.getComunidad().getC_Id()).get(0).getIncidencia();
-                incidPepeLaFuente = incidenciaDao.seeIncidImportancia(incidenciaDB.getIncidenciaId()).getIncidImportancia();
-                resolucionToClose = doResolucionAvances(incidPepeLaFuente.getIncidencia(), RESOLUCION_DEFAULT_DESC, 321, ActivityTestUtils.doTimeStampFromCalendar(1));
-                assertThat(incidenciaDao.regResolucion(resolucionToClose), is(1));
-                resolucionToClose = incidenciaDao.seeResolucion(resolucionToClose.getIncidencia().getIncidenciaId());
-                // Cierre incidPepeLaFuente.
-                Thread.sleep(1000);
-                incidenciaDao.closeIncidencia(resolucionToClose);
-
-                // Registro incidPepePlazuelas5_2.
-                assertThat(incidenciaDao.regIncidImportancia(incidPepePlazuelas5_2), is(2));
-                Thread.sleep(1000);
-                incidenciaDB = incidenciaDao.seeIncidsOpenByComu(pepePlazuelas5.getComunidad().getC_Id()).get(0).getIncidencia();
-                incidPepePlazuelas5_2 = incidenciaDao.seeIncidImportancia(incidenciaDB.getIncidenciaId()).getIncidImportancia();
-                resolucionToClose = doResolucionAvances(incidPepePlazuelas5_2.getIncidencia(), RESOLUCION_DEFAULT_DESC, 334, ActivityTestUtils.doTimeStampFromCalendar(1));
-                resolucionToCheck = resolucionToClose;
-                assertThat(incidenciaDao.regResolucion(resolucionToClose), is(1));
-                resolucionToClose = incidenciaDao.seeResolucion(resolucionToClose.getIncidencia().getIncidenciaId());
-                // Cierre incidPepePlazuelas5_2.
-                Thread.sleep(1000);
-                incidenciaDao.closeIncidencia(resolucionToClose);
-
-                Thread.sleep(1000);
-                FragmentManager.enableDebugLogging(true);
-
-            } catch (InterruptedException | IOException | UiException e) {
-                e.printStackTrace();
+            } catch (UiException | IOException e) {
+                fail();
             }
+            Intent intent = new Intent();
+            intent.putExtra(COMUNIDAD_ID.key, incidImportancia1.getIncidencia().getComunidadId());
+            return intent;
         }
     };
 
     IncidSeeClosedByComuAc activity;
+    private IncidSeeCloseByComuFr fragment;
 
     @Before
     public void setUp() throws Exception
     {
         activity = activityRule.getActivity();
-        dbHelper = new IncidenciaDataDbHelper(activity);
         fragment = (IncidSeeCloseByComuFr) activity.getSupportFragmentManager().findFragmentByTag(incid_see_by_comu_list_fr_tag);
-        // controllerList = (CtrlerIncidSeeCloseByComu) fragment.controllerSeeIncids;  TODO: no necesario el controller.
-//        listAdapter = (AdapterIncidSeeClosedByComu) controllerList.adapter;  // TODO
     }
 
     @After
     public void tearDown() throws Exception
     {
-        dbHelper.dropAllTables();
-        dbHelper.close();
-        activity.deleteDatabase(DB_NAME);
         cleanOptions(CLEAN_PEPE);
     }
 
-    // ======================================  ViewerSelectableListIf  ==================================
+
+    //  ==================================== INTEGRATION TESTS  ====================================
 
     @Test
-    public void testOnData_1() throws Exception
+    public void testOnCreate() throws Exception
     {
-        // CASO OK: muestra las incidencias de la comunidad por defecto (Calle La Fuente).
-        waitAtMost(3, SECONDS).until(getAdapterCount(listAdapter), is(1));
+        /* CASO OK: muestra las incidencias de la comunidad por defecto (Calle La Fuente).*/
+        assertThat(activity, notNullValue());
+        assertThat(fragment, notNullValue());
+        // Inicializa correctamente fragment.
+        assertThat(fragment.getArguments().getLong(COMUNIDAD_ID.key), is(incidImportancia1.getIncidencia().getComunidadId()));
 
-        IncidenciaUser incidUser_1 = listAdapter.getItem(0);
-        ViewMatchers.assertThat(incidUser_1.getIncidencia(), is(incidPepeLaFuente.getIncidencia()));
-        onData(is(incidUser_1)).inAdapterView(withId(android.R.id.list)).check(matches(isDisplayed()));
+        onView(withId(R.id.appbar)).check(matches(isDisplayed()));
+        onView(withId(incidSeeCloseAcResourceId)).check(matches(isDisplayed()));
+        onView(withId(incidSeeGenericFrResourceId)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_reg_comunidad_spinner)).check(matches(isDisplayed()));
 
-         /* Datos a la vista de IncidSeeCloseByComuFr.*/
-        waitAtMost(2, SECONDS).until(isViewDisplayed(checkIncidListView(incidUser_1)));
-    }
+        // Data
+        waitAtMost(2, SECONDS).until(isViewDisplayed(checkIncidClosedListView(incidImportancia1, activity)));
+        waitAtMost(2, SECONDS).until(isComuSpinnerWithText(incidImportancia1.getIncidencia().getComunidad().getNombreComunidad()));
 
-
-
-    @Test
-    public void testOnData_2() throws Exception
-    {
-        // CASO OK: cambiamos la comunidad en el spinner y revisamos los datos.
-        onView(withId(R.id.incid_reg_comunidad_spinner)).perform(click());
-        onData(allOf(
-                is(instanceOf(Comunidad.class)),
-                is(pepePlazuelas5.getComunidad()))
-        ).check(matches(isDisplayed())).perform(click());
-
-        waitAtMost(2, SECONDS).until(getAdapterCount(listAdapter), is(2));
-
-        IncidenciaUser incidUser_1 = listAdapter.getItem(0);
-        IncidenciaUser incidUser_2 = listAdapter.getItem(1);
-
-        ViewMatchers.assertThat(incidUser_1.getIncidencia(), is(incidPepePlazuelas5_1.getIncidencia()));
-        onData(is(incidUser_1)).inAdapterView(withId(android.R.id.list)).check(matches(isDisplayed()));
-
-        ViewMatchers.assertThat(incidUser_2.getIncidencia(), is(incidPepePlazuelas5_2.getIncidencia()));
-        onData(is(incidUser_2)).inAdapterView(withId(android.R.id.list)).check(matches(isDisplayed()));
+        // Cambiamos la comunidad en el spinner y revisamos los datos.
+        doComunidadSpinner(incidImportancia2.getIncidencia().getComunidad());
+        waitAtMost(2, SECONDS).until(isViewDisplayed(checkIncidClosedListView(incidImportancia2, activity)));
     }
 
     @Test
-    public void testOnSelectedWithDoubleUp() throws UiException
+    public void testOnSelectedWithUp() throws UiException
     {
-        // CASO OK: seleccionamos 2ª comunidad en spinner y la 2ª incidencia.
-
-        onView(withId(R.id.incid_reg_comunidad_spinner)).perform(click());
-        onData(allOf(
-                is(instanceOf(Comunidad.class)),
-                is(pepePlazuelas5.getComunidad()))
-        ).perform(click());
-
-        waitAtMost(2, SECONDS).until(getAdapterCount(listAdapter), is(2));
-        IncidenciaUser incidUser = listAdapter.getItem(1);
-        onData(is(incidUser)).inAdapterView(withId(android.R.id.list))
+        waitAtMost(2, SECONDS).until(isViewDisplayed(checkIncidClosedListView(incidImportancia1, activity)));
+        // Seleccionamos incidencia.
+        onData(isA(IncidenciaUser.class)).inAdapterView(withId(android.R.id.list))
                 .check(matches(isDisplayed()))
                 .perform(click());
-
-        waitAtMost(2, SECONDS).until(isViewDisplayed(withId(R.id.incid_resolucion_see_fr_layout)));
-
-        // Verificamos argumentos del nuevo fragmento.
-        IncidResolucionSeeFr resolucionSeeFr = (IncidResolucionSeeFr) activity.getSupportFragmentManager()
-                .findFragmentByTag(incid_resolucion_see_fr_tag);
-        assertThat(resolucionSeeFr, notNullValue());
-        Bundle args = resolucionSeeFr.getArguments();
-        assertThat(args.size(), is(3));
-        assertThat((Incidencia) args.getSerializable(IncidBundleKey.INCIDENCIA_OBJECT.key), is(incidPepePlazuelas5_2.getIncidencia()));
-        assertThat((Resolucion) args.getSerializable(IncidBundleKey.INCID_RESOLUCION_OBJECT.key), is(resolucionToCheck));
-        assertThat(args.getBoolean(IS_MENU_IN_FRAGMENT_FLAG.key), is(true));
-
-        // Probamos el menú del nuevo fragmento.
-        onView(withText(R.string.incid_comments_see_ac_mn)).check(matches(isDisplayed())).perform(click());
-        // Verificamos cambio a 'Comentarios'.
-        onView(withId(R.id.incid_comments_see_fr_layout)).check(matches(isDisplayed()));
-        intended(hasExtra(is(INCIDENCIA_OBJECT.key), is(incidPepePlazuelas5_2.getIncidencia())));
-        // Comentarios no muestra menú porque la incidencia está cerrada.
-        assertThat(incidenciaDao.seeResolucion(incidPepePlazuelas5_2.getIncidencia().getIncidenciaId()).getIncidencia().getFechaCierre(),
-                notNullValue());
-        onView(withId(R.id.incid_comment_reg_ac_mn)).check(doesNotExist());
-
-        // Navigate-up desde IncidCommentSeeAc
-        checkUp(R.id.incid_resolucion_see_fr_layout);  // Up to 'Resolución'
-        checkUp(R.id.incid_see_closed_by_comu_ac, R.id.incid_see_generic_layout);  // Up to consulta incidencias.
+        // Check next fragment.
+        waitAtMost(2, SECONDS).until(isViewDisplayed(withId(nextResolucionFrResourceId)));
+        // Up and check.
+        checkUp();
+        waitAtMost(2, SECONDS).until(isViewDisplayed(checkIncidClosedListView(incidImportancia1, activity)));
     }
 
     @Test
-    public void testOnSelectedWithBack() throws InterruptedException
+    public void testOnSelectedWithBack() throws UiException
     {
-        // CASO: verificación de la navegación, Utilizamos PressBack.
-
-        // Comunidad por defecto.
-        waitAtMost(2, SECONDS).until(getAdapterCount(listAdapter), is(1));
-        IncidenciaUser incidUser = listAdapter.getItem(0);
-        // Seleccionamos una incidencia.
-        onData(is(incidUser)).inAdapterView(withId(android.R.id.list))
+        waitAtMost(2, SECONDS).until(isViewDisplayed(checkIncidClosedListView(incidImportancia1, activity)));
+        // Seleccionamos incidencia.
+        onData(isA(IncidenciaUser.class)).inAdapterView(withId(android.R.id.list))
                 .check(matches(isDisplayed()))
                 .perform(click());
-
-        // BACK.
-        waitAtMost(2, SECONDS).until(isViewDisplayed(withId(R.id.incid_resolucion_see_fr_layout)));
-        onView(withId(R.id.incid_resolucion_see_fr_layout)).perform(pressBack());
-        /* Datos a la vista de IncidSeeCloseByComuFr.*/
-        waitAtMost(2, SECONDS).until(isViewDisplayed(checkIncidListView(incidUser)));
+        // Check next fragment.
+        waitAtMost(2, SECONDS).until(isViewDisplayed(withId(nextResolucionFrResourceId)));
+        // Back and check.
+        checkBack(onView(withId(nextResolucionFrResourceId)));
+        waitAtMost(2, SECONDS).until(isViewDisplayed(checkIncidClosedListView(incidImportancia1, activity)));
     }
+
+    //  ======================================== UNIT TESTS  =======================================
 
     @Test
-    public void testOnSelectedWithUp() throws InterruptedException
+    public void testOnStop()
     {
-        // CASO: verificación de la navegación,
-
-        // Comunidad por defecto.
-        waitAtMost(2, SECONDS).until(getAdapterCount(listAdapter), is(1));
-        IncidenciaUser incidUser = listAdapter.getItem(0);
-        // Seleccionamos una incidencia.
-        onData(is(incidUser)).inAdapterView(withId(android.R.id.list))
-                .check(matches(isDisplayed()))
-                .perform(click());
-
-        waitAtMost(2, SECONDS).until(isViewDisplayed(withId(R.id.incid_resolucion_see_fr_layout)));
-
-        // Up Navigation:
-        clickNavigateUp();
-        /* Datos a la vista de IncidSeeCloseByComuFr.*/
-        waitAtMost(2, SECONDS).until(isViewDisplayed(checkIncidListView(incidUser)));
+        checkSubscriptions(fragment.viewer.getController(), activity);
     }
 
-//    ===================================== HELPERS =====================================
+    //    ===================================== HELPERS =====================================
 
-    private Matcher<View> checkIncidListView(IncidenciaUser incidUser)
-    {
-        return allOf(
-                withId(R.id.incid_see_apertura_block),
-                hasDescendant(allOf(
-                        withId(R.id.incid_fecha_alta_view),
-                        withText(formatTimeStampToString(incidUser.getIncidencia().getFechaAlta()))
-                )),
-                hasDescendant(allOf(
-                        withId(R.id.incid_see_iniciador_view),
-                        withText(incidUser.getUsuario().getAlias())
-                )),
-                hasSibling(allOf(
-                        withId(R.id.incid_see_cierre_block),
-                        hasDescendant(allOf(
-                                withId(R.id.incid_fecha_cierre_view),
-                                withText(formatTimeStampToString(incidUser.getIncidencia().getFechaCierre()))
-                        ))
-                )),
-                hasSibling(allOf(
-                        withId(R.id.incid_see_importancia_block),
-                        hasDescendant(allOf(
-                                withId(R.id.incid_importancia_comunidad_view),
-                                withText(activity.getResources()
-                                        .getStringArray(R.array.IncidImportanciaArray)[Math.round(incidPepeLaFuente.getImportancia())]))
-                        ))),
-                hasSibling(allOf(
-                        withId(R.id.incid_ambito_view),
-                        withText(dbHelper.getAmbitoDescByPk(incidUser.getIncidencia().getAmbitoIncidencia().getAmbitoId()))
-                )),
-                hasSibling(allOf(
-                        withText(incidUser.getIncidencia().getDescripcion()),
-                        withId(R.id.incid_descripcion_view)
-                ))
-        );
-    }
 }
