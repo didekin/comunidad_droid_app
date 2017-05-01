@@ -10,9 +10,6 @@ import com.didekindroid.R;
 import com.didekindroid.comunidad.ComunidadBean;
 import com.didekindroid.comunidad.RegComuFr;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.testutil.ActivityTestUtils;
-import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
-import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
 import com.didekinlib.model.comunidad.Municipio;
 import com.didekinlib.model.comunidad.Provincia;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
@@ -36,15 +33,21 @@ import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.typeComuni
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
+import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
+import static com.didekindroid.testutil.ActivityTestUtils.isRsIdDisplayedAndPerform;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
 import static com.didekindroid.usuariocomunidad.RegUserComuFr.makeUserComuBeanFromView;
 import static com.didekindroid.usuariocomunidad.RolUi.ADM;
 import static com.didekindroid.usuariocomunidad.RolUi.INQ;
 import static com.didekindroid.usuariocomunidad.RolUi.PRE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_TRAV_PLAZUELA_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.typeUserComuData;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.validaTypedUserComuBean;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.validaTypedUsuarioComunidad;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -59,7 +62,7 @@ public class RegComuAndUserComuAcTest {
 
     @Rule
     public ActivityTestRule<RegComuAndUserComuAc> mActivityRule = new ActivityTestRule<>(RegComuAndUserComuAc.class, true, false);
-    private RegComuAndUserComuAc activity;
+    RegComuAndUserComuAc activity;
     private RegUserComuFr regUserComuFr;
     private int activityLayoutId = R.id.reg_comu_and_usercomu_layout;
 
@@ -73,13 +76,13 @@ public class RegComuAndUserComuAcTest {
     public void setUp() throws Exception
     {
         // Preconditions: the user is already registered.
-        signUpAndUpdateTk(UserComuDataTestUtil.COMU_TRAV_PLAZUELA_PEPE);
+        signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
     }
 
     @After
     public void tearDown() throws Exception
     {
-        cleanOneUser(UsuarioDataTestUtils.USER_PEPE);
+        cleanOneUser(USER_PEPE);
     }
 
     @Test
@@ -104,7 +107,7 @@ public class RegComuAndUserComuAcTest {
         onView(withId(R.id.reg_comu_usuariocomunidad_button)).perform(scrollTo()).check(matches(isDisplayed()));
 
         onView(withId(R.id.appbar)).perform(scrollTo()).check(matches(isDisplayed()));
-        ActivityTestUtils.clickNavigateUp();
+        clickNavigateUp();
     }
 
     @Test
@@ -171,15 +174,24 @@ public class RegComuAndUserComuAcTest {
     }
 
     @Test
-    public void testRegisterComuAndUserComu_3() throws InterruptedException    // TODO: failed.
+    public void testRegisterComuAndUserComu_3() throws InterruptedException
     {
         activity = mActivityRule.launchActivity(new Intent());
 
         typeUserComuData("port2", "escale_b", "planta-N", "puerta5", PRE, ADM, INQ);
-        Thread.sleep(1000);
         typeComunidadData();
 
-        onView(withId(R.id.reg_comu_usuariocomunidad_button)).perform(scrollTo(), click());   // Failed here.
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                activity.mRegistroButton.setFocusable(true);
+                activity.mRegistroButton.setFocusableInTouchMode(true);
+                activity.mRegistroButton.requestFocus();
+            }
+        });
+
+        waitAtMost(4, SECONDS).until(isRsIdDisplayedAndPerform(R.id.reg_comu_usuariocomunidad_button, scrollTo(), click()));
         onView(withId(R.id.see_usercomu_by_user_frg)).check(matches(isDisplayed()));
 
         checkUp(activityLayoutId);

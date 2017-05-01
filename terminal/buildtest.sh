@@ -27,14 +27,18 @@ echo "Uninstalling com.didekindroid ..."
 adb uninstall com.didekindroid
 
 case "$SUITE" in
-    se) ./gradlew --info app:cAT \
-        -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.security.SecuritySuite
+
+    api) ./gradlew --info app:cAT \
+        -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.api.ApiSuite
         ;;
     co) ./gradlew --info app:cAT \
         -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.comunidad.ComunidadSuite
         ;;
     in) ./gradlew --info app:cAT \
         -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.incidencia.IncidSuite
+        ;;
+    se) ./gradlew --info app:cAT \
+        -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.security.SecuritySuite
         ;;
     us) ./gradlew --info app:cAT \
         -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.usuario.UsuarioSuite

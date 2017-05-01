@@ -270,7 +270,7 @@ public class IncidFirebaseDownMsgHandlerTest {
     @NonNull  @RequiresApi(api = Build.VERSION_CODES.M)
     private StatusBarNotification checkBarNotification(IncidFirebaseDownMsgHandler handler)
     {
-        await().atMost(5, SECONDS).until(notificationsSize(), is(1));
+        await().atMost(6, SECONDS).until(notificationsSize(), is(1));
         StatusBarNotification barNotification = notificationManager.getActiveNotifications()[0];
         assertThat(barNotification.getId(), is(handler.getBarNotificationId()));
         assertThat(barNotification.getPackageName(), is(PACKAGE_TEST));

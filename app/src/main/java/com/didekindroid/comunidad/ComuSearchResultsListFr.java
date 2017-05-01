@@ -65,20 +65,6 @@ public class ComuSearchResultsListFr extends Fragment {
     View mView;
 
     @Override
-    public void onAttach(Context context)
-    {
-        Timber.d("onAttach()");
-        super.onAttach(context);
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        Timber.d("onCreate()");
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
@@ -115,55 +101,6 @@ public class ComuSearchResultsListFr extends Fragment {
                 }
             }
         });
-    }
-
-    @Override
-    public void onStart()
-    {
-        Timber.d("Enters onStart()");
-        super.onStart();
-    }
-
-    @Override
-    public void onResume()
-    {
-        Timber.d("Enters onResume()");
-        super.onResume();
-    }
-
-    @Override
-    public void onPause()
-    {
-        Timber.d("onPause()");
-        super.onPause();
-    }
-
-    @Override
-    public void onStop()
-    {
-        Timber.d("onStop()");
-        super.onStop();
-    }
-
-    @Override
-    public void onDestroyView()
-    {
-        Timber.d("onDestroyView()");
-        super.onDestroyView();
-    }
-
-    @Override
-    public void onDestroy()
-    {
-        Timber.d("onDestroy()");
-        super.onDestroy();
-    }
-
-    @Override
-    public void onDetach()
-    {
-        Timber.d("onDetach()");
-        super.onDetach();
     }
 
     // .......... Interface to communicate with the Activity ...................
@@ -213,13 +150,11 @@ public class ComuSearchResultsListFr extends Fragment {
                 uiException.processMe(mComuListListener.getActivity(), new Intent());
                 return;
             }
-            if (comunidadList != null && comunidadList.size() > 0) {
+            if (comunidadList != null && !comunidadList.isEmpty()) {
                 mAdapter.clear();
                 mAdapter.addAll(comunidadList);
                 mListView.setAdapter(mAdapter);
             } else {
-                //TextView for no result.
-                mListView.setEmptyView(mView.findViewById(android.R.id.empty));
                 makeToast(mComuListListener.getActivity(), R.string.no_result_search_comunidad);
                 Intent intent;
                 Activity myActivity = mComuListListener.getActivity();

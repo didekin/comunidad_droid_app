@@ -12,7 +12,7 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
         JceTests.class,
         Oauth2DaoRemoteTest.class,
-        OauthTokenReactor_1_Test.class,
+        OauthTokenReactorTest.class,
         TokenIdentityCacherTest_1.class,
         TokenIdentityCacherTest_2.class,
 })

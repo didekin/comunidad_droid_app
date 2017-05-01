@@ -16,8 +16,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.concurrent.TimeUnit;
-
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -28,9 +26,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.R.id.login_ac_button;
 import static com.didekindroid.R.id.reg_usuario_email_editT;
 import static com.didekindroid.R.id.reg_usuario_password_ediT;
-import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtils.isActivityDying;
-import static com.didekindroid.usuario.login.ViewerLogin.newViewerLogin;
+import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.checkPswdSendByMailDialog;
 import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typeLoginData;
 import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.loginAcResourceId;
@@ -42,7 +39,7 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.CO
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.awaitility.Awaitility.await;
+import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -72,8 +69,6 @@ public class LoginAcTest {
         }
     };
 
-    ViewerLoginIf viewerLogin;
-
     @BeforeClass
     public static void relax() throws InterruptedException
     {
@@ -84,7 +79,6 @@ public class LoginAcTest {
     public void setUp() throws Exception
     {
         activity = (LoginAc) mActivityRule.getActivity();
-        viewerLogin = newViewerLogin(activity);
     }
 
     @After
@@ -111,7 +105,7 @@ public class LoginAcTest {
     {
         InstrumentationRegistry.getInstrumentation().callActivityOnStop(activity);
         // Check.
-        assertThat(viewerLogin.getController().getSubscriptions().size(), is(0));
+        assertThat(activity.viewerLogin.getController().getSubscriptions().size(), is(0));
     }
 
     @Test   // Login OK.
@@ -120,7 +114,7 @@ public class LoginAcTest {
         typeLoginData(USER_DROID.getUserName(), USER_DROID.getPassword());
         onView(withId(login_ac_button)).check(matches(isDisplayed())).perform(click());
 
-        await().atMost(3, SECONDS).until(isActivityDying(activity), is(true));
+        waitAtMost(3, SECONDS).until(isActivityDying(activity), is(true));
         onView(withId(nextLoginAcRsId)).check(matches(isDisplayed()));
     }
 
@@ -131,7 +125,7 @@ public class LoginAcTest {
         typeLoginData(USER_DROID.getUserName(), "password_wrong");
         onView(withId(login_ac_button)).check(matches(isDisplayed())).perform(click());
 
-        await().atMost(2, SECONDS).untilAtomic(activity.viewerLogin.getCounterWrong(), equalTo(4));
+        waitAtMost(2, SECONDS).untilAtomic(activity.viewerLogin.getCounterWrong(), equalTo(4));
         checkPswdSendByMailDialog();
     }
 
@@ -145,6 +139,6 @@ public class LoginAcTest {
         onView(withId(login_ac_button)).check(matches(isDisplayed())).perform(click(), closeSoftKeyboard());
 
         onView(withId(loginAcResourceId)).check(matches(isDisplayed()));
-        checkToastInTest(R.string.password_wrong, activity);
+        waitAtMost(3, SECONDS).until(isToastInView(R.string.password_wrong, activity));
     }
 }

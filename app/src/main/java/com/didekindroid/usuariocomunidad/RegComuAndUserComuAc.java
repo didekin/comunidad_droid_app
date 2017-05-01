@@ -36,6 +36,7 @@ public class RegComuAndUserComuAc extends AppCompatActivity {
 
     private RegComuFr mRegComuFrg;
     private RegUserComuFr mRegUserComuFrg;
+    Button mRegistroButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -50,7 +51,7 @@ public class RegComuAndUserComuAc extends AppCompatActivity {
         mRegUserComuFrg = (RegUserComuFr) getFragmentManager().findFragmentById(R.id
                 .reg_usercomu_frg);
 
-        Button mRegistroButton = (Button) findViewById(R.id.reg_comu_usuariocomunidad_button);
+        mRegistroButton = (Button) findViewById(R.id.reg_comu_usuariocomunidad_button);
         mRegistroButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)

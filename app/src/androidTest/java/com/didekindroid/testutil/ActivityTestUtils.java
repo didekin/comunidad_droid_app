@@ -8,6 +8,7 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.NoMatchingRootException;
 import android.support.test.espresso.NoMatchingViewException;
 import android.support.test.espresso.PerformException;
+import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.contrib.PickerActions;
 import android.support.test.espresso.matcher.ViewMatchers;
@@ -60,7 +61,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static java.util.Calendar.DAY_OF_MONTH;
@@ -116,6 +116,21 @@ public final class ActivityTestUtils {
         };
     }
 
+    public static Callable<Boolean> isRsIdDisplayedAndPerform(final int resourceStringId, final ViewAction... viewActions)
+    {
+        return new Callable<Boolean>() {
+            public Boolean call() throws Exception
+            {
+                try {
+                    onView(withId(resourceStringId)).check(matches(isDisplayed())).perform(viewActions);
+                    return true;
+                } catch (NoMatchingViewException ne) {
+                    return false;
+                }
+            }
+        };
+    }
+
     public static Callable<Boolean> isViewDisplayed(final Matcher<View> viewMatcher)
     {
         return new Callable<Boolean>() {
@@ -143,26 +158,6 @@ public final class ActivityTestUtils {
                             .perform(click());
                     return true;
                 } catch (NoMatchingViewException | PerformException e) {
-                    return false;
-                }
-            }
-        };
-    }
-
-    public static Callable<Boolean> isComuSpinnerWithText(final String textToCheck)
-    {
-
-        return new Callable<Boolean>() {
-            public Boolean call() throws Exception
-            {
-                try {
-                    onView(allOf(
-                            withId(R.id.app_spinner_1_dropdown_item),
-                            withParent(withId(R.id.incid_reg_comunidad_spinner))
-                    )).check(matches(withText(is(textToCheck))
-                    )).check(matches(isDisplayed()));
-                    return true;
-                } catch (NoMatchingViewException ne) {
                     return false;
                 }
             }

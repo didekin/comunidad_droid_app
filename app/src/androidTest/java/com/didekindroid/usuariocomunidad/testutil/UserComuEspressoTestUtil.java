@@ -40,7 +40,7 @@ public final class UserComuEspressoTestUtil {
     {
     }
 
-    public static void ./typeUserComuData(String portal, String escalera, String planta, String puerta, RolUi...
+    public static void typeUserComuData(String portal, String escalera, String planta, String puerta, RolUi...
             roles)
     {
         onView(withId(R.id.reg_usercomu_portal_ed)).perform(typeText(portal));

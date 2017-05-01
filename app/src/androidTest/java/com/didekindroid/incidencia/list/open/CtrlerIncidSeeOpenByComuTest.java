@@ -4,8 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.test.rule.ActivityTestRule;
-import android.widget.ListView;
 
+import com.didekindroid.R;
 import com.didekindroid.api.ActivityMock;
 import com.didekindroid.exception.UiException;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
@@ -32,6 +32,7 @@ import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.INCID_DEF
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
+import static com.didekindroid.testutil.ActivityTestUtils.doListView;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_B;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_C;
@@ -196,7 +197,7 @@ public class CtrlerIncidSeeOpenByComuTest {
 
         ViewerIncidSeeForTest(Activity activity)
         {
-            super(new ListView(activity), activity);
+            super(doListView(R.layout.mock_list_fr), activity);
         }
 
         @Override

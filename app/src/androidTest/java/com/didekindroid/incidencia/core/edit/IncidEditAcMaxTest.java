@@ -11,7 +11,6 @@ import com.didekindroid.api.ViewerIf;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.core.AmbitoIncidValueObj;
 import com.didekindroid.incidencia.core.IncidenciaDataDbHelper;
-import com.didekindroid.testutil.ActivityTestUtils;
 import com.didekinlib.model.incidencia.dominio.AmbitoIncidencia;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
@@ -127,7 +126,7 @@ public class IncidEditAcMaxTest {
     }
 
     @Test
-    public void testModifyIncidenciaPressUp() throws InterruptedException
+    public void testModifyIncidenciaPressUp() throws InterruptedException   // TODO: failed.
     {
         // Caso OK. Modificamos: importancia, ámbito y descripción. Hacemos UP.
         short newImportancia = (short) 2;
@@ -138,7 +137,7 @@ public class IncidEditAcMaxTest {
 
         onView(withId(R.id.incid_edit_fr_modif_button)).perform(scrollTo(), click());
 
-        waitAtMost(2, SECONDS).until(isResourceIdDisplayed(R.id.incid_see_open_by_comu_ac));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(R.id.incid_see_open_by_comu_ac));
         checkUp();
         IncidImportancia newIncidImportancia = new IncidImportancia.IncidImportanciaBuilder
                 (
@@ -167,12 +166,12 @@ public class IncidEditAcMaxTest {
     }
 
     @Test
-    public void testDeleteIncidenciaPressUp() throws InterruptedException
+    public void testDeleteIncidenciaPressUp() throws InterruptedException     // TODO: failed
     {
         // CASO OK: borramos la incidencia.
         onView(withId(R.id.incid_edit_fr_borrar_button)).perform(scrollTo(), click());
 
-        waitAtMost(2, SECONDS).until(isResourceIdDisplayed(R.id.incid_see_open_by_comu_ac));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(R.id.incid_see_open_by_comu_ac));
         checkUp();
         checkScreenEditMaxPowerFr(incidImportancia, flagResolucion);
         checkDataEditMaxPowerFr(dbHelper, activity, incidImportancia);

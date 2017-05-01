@@ -33,8 +33,10 @@ terminal/env_close.sh
 
 # Releases
 /**/releases
+
 #  MISCELÁNEA
 logs/*.*
 administracion
 .navigation
+**/captures
 

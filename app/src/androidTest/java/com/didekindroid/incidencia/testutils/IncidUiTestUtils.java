@@ -2,6 +2,7 @@ package com.didekindroid.incidencia.testutils;
 
 import android.app.Activity;
 import android.support.annotation.NonNull;
+import android.support.test.espresso.NoMatchingViewException;
 import android.view.View;
 
 import com.didekindroid.R;
@@ -12,8 +13,10 @@ import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
 import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 
 import java.sql.Timestamp;
+import java.util.concurrent.Callable;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -149,47 +152,6 @@ public final class IncidUiTestUtils {
         )).check(matches(isDisplayed()));
     }
 
-    public static void doComunidadSpinner(Comunidad comunidad)
-    {
-        doComunidadSpinner(comunidad, R.id.incid_reg_comunidad_spinner);
-    }
-
-    public static void doComunidadSpinner(Comunidad comunidad, int resourceId)
-    {
-
-        onView(withId(resourceId)).perform(click());
-        waitAtMost(2, SECONDS).until(isDataDisplayedAndClick(
-                allOf(
-                        is(instanceOf(Comunidad.class)),
-                        is(comunidad)
-                )
-        ));
-    }
-
-    public static void doImportanciaSpinner(Activity activity, int i)
-    {
-        onView(withId(R.id.incid_reg_importancia_spinner)).perform(click());
-        waitAtMost(2, SECONDS).until(isDataDisplayedAndClick(
-                allOf(
-                        is(instanceOf(String.class)),
-                        is(activity.getResources().getStringArray(R.array.IncidImportanciaArray)[i])
-                )
-        ));
-    }
-
-    public static void doAmbitoAndDescripcion(AmbitoIncidValueObj ambito, String descripcion)
-    {
-        onView(withId(R.id.incid_reg_ambito_spinner)).perform(click());
-        waitAtMost(2, SECONDS).until(isDataDisplayedAndClick(
-                allOf(
-                        is(instanceOf(AmbitoIncidValueObj.class)),
-                        is(ambito)
-                )
-        ));
-
-        onView(withId(R.id.incid_reg_desc_ed)).perform(replaceText(descripcion));
-    }
-
     @SuppressWarnings("unchecked")
     public static Matcher<View> checkIncidClosedListView(IncidImportancia incidImportancia, Activity activity)
     {
@@ -282,5 +244,67 @@ public final class IncidUiTestUtils {
         dbHelper.close();
         activity.deleteDatabase(DB_NAME);
         return matcher;
+    }
+
+    // ====================================== SPINNERS =========================================
+
+    public static void doComunidadSpinner(Comunidad comunidad)
+    {
+        doComunidadSpinner(comunidad, R.id.incid_reg_comunidad_spinner);
+    }
+
+    public static void doComunidadSpinner(Comunidad comunidad, int resourceId)
+    {
+        onView(withId(resourceId)).perform(click());
+        waitAtMost(2, SECONDS).until(isDataDisplayedAndClick(
+                allOf(
+                        is(instanceOf(Comunidad.class)),
+                        is(comunidad)
+                )
+        ));
+    }
+
+    public static Callable<Boolean> isComuSpinnerWithText(final String textToCheck)
+    {
+        return new Callable<Boolean>() {
+            public Boolean call() throws Exception
+            {
+                try {
+                    onView(allOf(
+                            withId(R.id.app_spinner_1_dropdown_item),
+                            withParent(withId(R.id.incid_reg_comunidad_spinner))
+                    )).check(matches(withText(is(textToCheck))
+                    )).check(matches(isDisplayed()));
+                    return true;
+                } catch (NoMatchingViewException ne) {
+                    return false;
+                }
+            }
+        };
+    }
+
+    public static void doImportanciaSpinner(Activity activity, int i)
+    {
+        onView(withId(R.id.incid_reg_importancia_spinner)).perform(click());
+        waitAtMost(2, SECONDS).until(isDataDisplayedAndClick(
+                allOf(
+                        is(instanceOf(String.class)),
+                        is(activity.getResources().getStringArray(R.array.IncidImportanciaArray)[i])
+                )
+        ));
+    }
+
+    public static void doAmbitoAndDescripcion(AmbitoIncidValueObj ambito, String descripcion)
+    {
+        onView(withId(R.id.incid_reg_ambito_spinner)).perform(click());
+        waitAtMost(2, SECONDS).until(isDataDisplayedAndClick(
+                allOf(
+                        is(instanceOf(AmbitoIncidValueObj.class)),
+                        is(ambito)
+                )
+        ));
+
+        // Replace text in description.
+        onView(withId(R.id.incid_reg_desc_ed)).perform(replaceText(descripcion));
     }
 }

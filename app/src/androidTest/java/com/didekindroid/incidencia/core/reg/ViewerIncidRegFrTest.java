@@ -32,7 +32,7 @@ import static com.didekindroid.incidencia.core.reg.ViewerIncidRegFr.newViewerInc
 import static com.didekindroid.incidencia.utils.IncidBundleKey.AMBITO_INCIDENCIA_POSITION;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_NUMBER;
 import static com.didekindroid.testutil.ActivityTestUtils.addSubscription;
-import static com.didekindroid.testutil.ActivityTestUtils.isComuSpinnerWithText;
+import static com.didekindroid.incidencia.testutils.IncidUiTestUtils.isComuSpinnerWithText;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;

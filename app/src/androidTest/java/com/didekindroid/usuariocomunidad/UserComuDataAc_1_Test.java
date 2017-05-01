@@ -192,11 +192,11 @@ public class UserComuDataAc_1_Test {
     }
 
     @Test
-    public void testDeleteUserComu_1() throws UiException   // TODO. failed
+    public void testDeleteUserComu_1() throws UiException
     {
         onView(ViewMatchers.withId(R.id.usercomu_data_ac_delete_button)).perform(click());
         onView(ViewMatchers.withId(R.id.see_usercomu_by_user_frg)).check(matches(isDisplayed()));
-        checkUp(R.id.comu_search_ac_coordinatorlayout); // Falla en emulador 4.4.2
+        checkUp(activityLayoutId);
 
         assertThat(TKhandler.getTokenCache().get(), notNullValue());
         assertThat(TKhandler.getRefreshTokenFile().exists(), is(true));

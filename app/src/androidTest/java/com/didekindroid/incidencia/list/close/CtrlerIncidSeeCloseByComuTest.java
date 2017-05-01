@@ -5,8 +5,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.widget.ListView;
 
+import com.didekindroid.R;
 import com.didekindroid.api.ActivityMock;
 import com.didekindroid.exception.UiException;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
@@ -36,6 +36,7 @@ import static com.didekindroid.incidencia.list.close.CtrlerIncidSeeCloseByComu.i
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetDefaultResolucion;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
+import static com.didekindroid.testutil.ActivityTestUtils.doListView;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_B;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_C;
@@ -53,6 +54,7 @@ import static com.didekindroid.util.AppBundleKey.IS_MENU_IN_FRAGMENT_FLAG;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -63,10 +65,6 @@ import static org.junit.Assert.assertThat;
 public class CtrlerIncidSeeCloseByComuTest {
 
     final static AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
-
-    @Rule
-    public ActivityTestRule<ActivityMock> activityRule = new ActivityTestRule<>(ActivityMock.class, true, true);
-
     Resolucion resolucion;
     List<IncidenciaUser> incidList;
     Incidencia incidencia;
@@ -75,22 +73,34 @@ public class CtrlerIncidSeeCloseByComuTest {
     Activity activity;
     UsuarioComunidad pepeUserComu;
 
+    @Rule
+    public ActivityTestRule<ActivityMock> activityRule = new ActivityTestRule<ActivityMock>(ActivityMock.class, true, true) {
+        @Override
+        protected void beforeActivityLaunched()
+        {
+            try {
+                signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
+                pepeUserComu = userComuDaoRemote.seeUserComusByUser().get(0);
+                resolucion = insertGetDefaultResolucion(pepeUserComu);
+                assertThat(incidenciaDao.closeIncidencia(resolucion), is(2));
+            } catch (UiException | InterruptedException | IOException e) {
+                fail();
+            }
+
+            incidList = new ArrayList<>();
+            incidencia = resolucion.getIncidencia();
+            incidenciaUser = new IncidenciaUser.IncidenciaUserBuilder(incidencia).usuario(pepeUserComu.getUsuario()).build();
+            incidList.add(incidenciaUser);
+        }
+    };
+
     @SuppressWarnings("unchecked")
     @Before
     public void setUp() throws IOException, UiException, InterruptedException
     {
         activity = activityRule.getActivity();
         controller = new CtrlerIncidSeeCloseByComu(new ViewerIncidSeeForTest(activity));
-
-        signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
-        pepeUserComu = userComuDaoRemote.seeUserComusByUser().get(0);
-        resolucion = insertGetDefaultResolucion(pepeUserComu);
-        assertThat(incidenciaDao.closeIncidencia(resolucion), is(2));
-
-        incidList = new ArrayList<>();
-        incidencia = resolucion.getIncidencia();
-        incidenciaUser = new IncidenciaUser.IncidenciaUserBuilder(incidencia).usuario(pepeUserComu.getUsuario()).build();
-        incidList.add(incidenciaUser);
+        assertThat(controller, notNullValue());
     }
 
     @After
@@ -200,7 +210,7 @@ public class CtrlerIncidSeeCloseByComuTest {
 
         protected ViewerIncidSeeForTest(Activity activity)
         {
-            super(new ListView(activity), activity);
+            super(doListView(R.layout.mock_list_fr), activity);
         }
 
         @Override
@@ -215,6 +225,4 @@ public class CtrlerIncidSeeCloseByComuTest {
             assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_D), is(BEFORE_METHOD_EXEC));
         }
     }
-
-
 }

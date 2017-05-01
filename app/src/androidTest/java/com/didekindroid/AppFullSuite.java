@@ -1,12 +1,13 @@
 package com.didekindroid;
 
+import com.didekindroid.api.ApiSuite;
 import com.didekindroid.comunidad.ComunidadSuite;
 import com.didekindroid.exception.UiExceptionTest;
 import com.didekindroid.incidencia.IncidSuite;
 import com.didekindroid.router.ActivityInitiatorTest;
 import com.didekindroid.security.JceTests;
 import com.didekindroid.security.Oauth2DaoRemoteTest;
-import com.didekindroid.security.OauthTokenReactor_1_Test;
+import com.didekindroid.security.OauthTokenReactorTest;
 import com.didekindroid.security.TokenIdentityCacherTest_1;
 import com.didekindroid.security.TokenIdentityCacherTest_2;
 import com.didekindroid.usuario.UsuarioSuite;
@@ -25,12 +26,13 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         ActivityInitiatorTest.class,
+        ApiSuite.class,
         ComunidadSuite.class,
         IncidSuite.class,
         IoHelperTest.class,
         JceTests.class,
         Oauth2DaoRemoteTest.class,
-        OauthTokenReactor_1_Test.class,
+        OauthTokenReactorTest.class,
         TokenIdentityCacherTest_1.class,
         TokenIdentityCacherTest_2.class,
         UiExceptionTest.class,
