@@ -14,8 +14,8 @@ import android.support.v4.app.TaskStackBuilder;
 import android.util.ArrayMap;
 
 import com.didekindroid.R;
-import com.didekindroid.exception.UiException;
 import com.didekindroid.api.ActivityMock;
+import com.didekindroid.exception.UiException;
 import com.google.firebase.messaging.RemoteMessage;
 
 import org.junit.After;
@@ -59,7 +59,7 @@ import static com.didekinlib.model.incidencia.gcm.GcmKeyValueIncidData.incidenci
 import static com.didekinlib.model.incidencia.gcm.GcmKeyValueIncidData.resolucion_open_type;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static junit.framework.Assert.fail;
-import static org.awaitility.Awaitility.await;
+import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -75,7 +75,6 @@ public class IncidFirebaseDownMsgHandlerTest {
     ActivityMock mActivity;
     long comunidadId;
     Map<String, String> data;
-    NotificationManager notificationManager;
     @Rule
     public IntentsTestRule<ActivityMock> intentRule = new IntentsTestRule<ActivityMock>(ActivityMock.class) {
 
@@ -91,18 +90,20 @@ public class IncidFirebaseDownMsgHandlerTest {
             }
         }
     };
+    NotificationManager notificationManager;
 
     @Before
     public void setUp() throws Exception
     {
         mActivity = intentRule.getActivity();
+        SECONDS.sleep(2);
     }
 
     @After
     public void tearDown() throws Exception
     {
         cleanOptions(CLEAN_JUAN);
-        if (notificationManager != null){
+        if (notificationManager != null) {
             notificationManager.cancelAll();
         }
     }
@@ -171,8 +172,8 @@ public class IncidFirebaseDownMsgHandlerTest {
     //    ====================== INTEGRATION TESTS =========================
 
     /**
-     *  1. We build a RemoteMessage instancea and we pass it to the handler.
-     *  2. We check that a notification is received.
+     * 1. We build a RemoteMessage instancea and we pass it to the handler.
+     * 2. We check that a notification is received.
      */
     @Test
     public void testProcessMsgWithHandler_INCIDENCIA_OPEN()
@@ -253,7 +254,7 @@ public class IncidFirebaseDownMsgHandlerTest {
     private void checkNotification(Notification notification, int... extrasRscId)
     {
         int switchInt = extrasRscId.length;
-        switch (switchInt){
+        switch (switchInt) {
             case 3:
                 assertThat(notification.extras.getCharSequence(EXTRA_SUB_TEXT).toString(), is(mActivity.getString(extrasRscId[2])));
             case 2:
@@ -267,10 +268,11 @@ public class IncidFirebaseDownMsgHandlerTest {
     }
 
 
-    @NonNull  @RequiresApi(api = Build.VERSION_CODES.M)
+    @NonNull
+    @RequiresApi(api = Build.VERSION_CODES.M)
     private StatusBarNotification checkBarNotification(IncidFirebaseDownMsgHandler handler)
     {
-        await().atMost(6, SECONDS).until(notificationsSize(), is(1));
+        waitAtMost(6, SECONDS).until(notificationsSize(), is(1));
         StatusBarNotification barNotification = notificationManager.getActiveNotifications()[0];
         assertThat(barNotification.getId(), is(handler.getBarNotificationId()));
         assertThat(barNotification.getPackageName(), is(PACKAGE_TEST));
@@ -280,9 +282,11 @@ public class IncidFirebaseDownMsgHandlerTest {
     /* ........................Awaitility helpers ................ */
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    private Callable<Integer> notificationsSize() {
+    private Callable<Integer> notificationsSize()
+    {
         return new Callable<Integer>() {
-            public Integer call() throws Exception {
+            public Integer call() throws Exception
+            {
                 notificationManager = (NotificationManager) mActivity.getSystemService(NOTIFICATION_SERVICE);
                 return notificationManager.getActiveNotifications().length;
             }

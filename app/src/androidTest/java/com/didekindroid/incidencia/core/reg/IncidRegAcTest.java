@@ -19,6 +19,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -105,15 +106,16 @@ public class IncidRegAcTest {
     }
 
     @Test
-    public void testRegisterIncidencia_2() throws UiException
+    public void testRegisterIncidencia_2() throws UiException, InterruptedException
     {
         // Caso OK: incidencia con datos de importancia.
         doImportanciaSpinner(activity, 4);
+        TimeUnit.SECONDS.sleep(1);
         doAmbitoAndDescripcion(ambitoObj, "descripcion es valida");
+        TimeUnit.SECONDS.sleep(1);
 
         onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
         waitAtMost(3, SECONDS).until(isViewDisplayed(withId(R.id.incid_see_open_by_comu_ac)));
-
         checkUp(activityLayoutId, fragmentLayoutId);
     }
 
@@ -125,22 +127,22 @@ public class IncidRegAcTest {
         onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
 
         waitAtMost(3, SECONDS).until(isViewDisplayed(withId(R.id.incid_see_open_by_comu_ac)));
-
         checkBack(onView(withId(R.id.incid_see_open_by_comu_ac)), activityLayoutId, fragmentLayoutId);
     }
 
     @Test
-    public void testRegisterIncidencia_4() throws UiException
+    public void testRegisterIncidencia_4() throws UiException, InterruptedException
     {
         // Probamos cambio de comunidad en spinner: Calle La Fuente.
         doComunidadSpinner(COMU_LA_FUENTE);
+        TimeUnit.SECONDS.sleep(1);
         // Registro de incidencia con importancia.
         doImportanciaSpinner(activity, 4);
+        TimeUnit.SECONDS.sleep(1);
         doAmbitoAndDescripcion(ambitoObj, "Incidencia La Fuente");
         onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
 
         waitAtMost(3, SECONDS).until(isViewDisplayed(withId(R.id.incid_see_open_by_comu_ac)));
-
         checkUp(activityLayoutId, fragmentLayoutId);
     }
 

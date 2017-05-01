@@ -5,11 +5,7 @@ import com.didekindroid.comunidad.ComunidadSuite;
 import com.didekindroid.exception.UiExceptionTest;
 import com.didekindroid.incidencia.IncidSuite;
 import com.didekindroid.router.ActivityInitiatorTest;
-import com.didekindroid.security.JceTests;
-import com.didekindroid.security.Oauth2DaoRemoteTest;
-import com.didekindroid.security.OauthTokenReactorTest;
-import com.didekindroid.security.TokenIdentityCacherTest_1;
-import com.didekindroid.security.TokenIdentityCacherTest_2;
+import com.didekindroid.security.SecuritySuite;
 import com.didekindroid.usuario.UsuarioSuite;
 import com.didekindroid.usuariocomunidad.UserComuSuite;
 import com.didekindroid.utils.IoHelperTest;
@@ -30,11 +26,7 @@ import org.junit.runners.Suite;
         ComunidadSuite.class,
         IncidSuite.class,
         IoHelperTest.class,
-        JceTests.class,
-        Oauth2DaoRemoteTest.class,
-        OauthTokenReactorTest.class,
-        TokenIdentityCacherTest_1.class,
-        TokenIdentityCacherTest_2.class,
+        SecuritySuite.class,
         UiExceptionTest.class,
         UIutilsTest.class,
         UserComuSuite.class,
