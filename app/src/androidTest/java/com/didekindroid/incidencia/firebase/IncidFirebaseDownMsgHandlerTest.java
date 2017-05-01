@@ -75,6 +75,7 @@ public class IncidFirebaseDownMsgHandlerTest {
     ActivityMock mActivity;
     long comunidadId;
     Map<String, String> data;
+
     @Rule
     public IntentsTestRule<ActivityMock> intentRule = new IntentsTestRule<ActivityMock>(ActivityMock.class) {
 
@@ -90,22 +91,26 @@ public class IncidFirebaseDownMsgHandlerTest {
             }
         }
     };
+
     NotificationManager notificationManager;
 
     @Before
     public void setUp() throws Exception
     {
         mActivity = intentRule.getActivity();
-        SECONDS.sleep(2);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (notificationsSize().call() > 0) {
+                notificationManager.cancelAll();
+            }
+            waitAtMost(4, SECONDS).until(notificationsSize(), is(0));
+        }
     }
 
     @After
     public void tearDown() throws Exception
     {
         cleanOptions(CLEAN_JUAN);
-        if (notificationManager != null) {
-            notificationManager.cancelAll();
-        }
     }
 
     //  ============================= UNIT TESTS ==============================
@@ -217,8 +222,6 @@ public class IncidFirebaseDownMsgHandlerTest {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return;
         }
-
-        waitAtMost(4, SECONDS).until(notificationsSize(), is(0));
 
         RemoteMessage remoteMsg = new RemoteMessage.Builder("to ME")
                 .addData(type_message_key, resolucion_open_type)
