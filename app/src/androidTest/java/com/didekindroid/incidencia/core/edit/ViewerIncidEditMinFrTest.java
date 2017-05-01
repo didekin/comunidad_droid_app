@@ -21,7 +21,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -99,10 +99,33 @@ public class ViewerIncidEditMinFrTest {
     IncidEditAc activity;
     IncidEditMinFr fragment;
     View frView;
-    ViewerIncidEditMinFr viewer;
     IncidenciaDataDbHelper dbHelper;
     int nextActivityId = R.id.incid_see_open_by_comu_ac;
     int onClickLinkImportanciaId = R.id.incid_see_usercomu_importancia_ac;
+
+    //    ============================  STATIC HELPERS  ===================================
+
+    public static Callable<Boolean> isDataFrDisplayed(final IncidenciaDataDbHelper dbHelper, final IncidEditAc activity, final IncidImportancia incidImportancia)
+    {
+        return new Callable<Boolean>() {
+            public Boolean call() throws Exception
+            {
+                return checkDataEditMinFr(dbHelper, activity, incidImportancia);
+            }
+        };
+    }
+
+    public static Callable<Boolean> isFrDisplayed()
+    {
+        return new Callable<Boolean>() {
+            public Boolean call() throws Exception
+            {
+                return checkScreenEditMinFr();
+            }
+        };
+    }
+
+    //    ============================  TESTS  ===================================
 
     @Before
     public void setUp() throws Exception
@@ -112,7 +135,8 @@ public class ViewerIncidEditMinFrTest {
         fragment = (IncidEditMinFr) activity.getSupportFragmentManager().findFragmentByTag(incid_edit_ac_frgs_tag);
         frView = fragment.getView();
 
-        viewer = ViewerIncidEditMinFr.newViewerIncidEditMinFr(frView, activity.viewer);
+        waitAtMost(4, SECONDS).until(isFrDisplayed());
+        waitAtMost(4, SECONDS).until(isDataFrDisplayed(dbHelper, activity, newIncidImportancia));
     }
 
     @After
@@ -122,33 +146,26 @@ public class ViewerIncidEditMinFrTest {
         cleanOptions(CLEAN_JUAN_AND_PEPE);
     }
 
-    //    ============================  TESTS  ===================================
-
     @Test
     public void testNewViewerIncidEditMinFr() throws Exception
     {
-        assertThat(viewer.getViewInViewer(), is(frView));
-        assertThat(viewer.getController(), instanceOf(CtrlerIncidRegEditFr.class));
-        assertThat(viewer.getParentViewer(), is(activity.getViewerAsParent()));
-        assertThat(viewer.viewerImportanciaSpinner, notNullValue());
+        assertThat(fragment.viewer.getViewInViewer(), is(frView));
+        assertThat(fragment.viewer.getController(), instanceOf(CtrlerIncidRegEditFr.class));
+        assertThat(fragment.viewer.getParentViewer(), is(activity.getViewerAsParent()));
+        assertThat(fragment.viewer.viewerImportanciaSpinner, notNullValue());
     }
 
     @Test
     public void testDoViewInViewer() throws Exception
     {
-        execDoInViewer();
-
-        assertThat(viewer.incidImportancia, is(newIncidImportancia));
-        assertThat(viewer.incidImportanciaBean.getImportancia(), is(newIncidImportancia.getImportancia()));
-        checkScreenEditMinFr();
-        checkDataEditMinFr(dbHelper, activity, newIncidImportancia);
+        assertThat(fragment.viewer.incidImportancia, is(newIncidImportancia));
+        assertThat(fragment.viewer.incidImportanciaBean.getImportancia(), is(newIncidImportancia.getImportancia()));
     }
 
     @Test
     public void testOnClickLinkImportanciaUsers() throws Exception
     {
-        execDoInViewer();
-        viewer.onClickLinkToImportanciaUsers(new LinkToImportanciaUsersListener(viewer));
+        fragment.viewer.onClickLinkToImportanciaUsers(new LinkToImportanciaUsersListener(fragment.viewer));
         onView(withId(onClickLinkImportanciaId)).check(matches(isDisplayed()));
         intended(hasExtra(INCIDENCIA_OBJECT.key, newIncidImportancia.getIncidencia()));
     }
@@ -159,13 +176,12 @@ public class ViewerIncidEditMinFrTest {
     @Test
     public void testOnClickButtonModify_1() throws Exception
     {
-        execDoInViewer();
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run()
             {
-                viewer.incidImportanciaBean.setImportancia((short) 1);
-                viewer.onClickButtonModify();
+                fragment.viewer.incidImportanciaBean.setImportancia((short) 1);
+                fragment.viewer.onClickButtonModify();
             }
         });
         waitAtMost(2, SECONDS).until(isResourceIdDisplayed(nextActivityId));
@@ -182,13 +198,12 @@ public class ViewerIncidEditMinFrTest {
                 .copyIncidImportancia(newIncidImportancia)
                 .importancia((short) 2)
                 .build();
-        execDoInViewer();
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run()
             {
-                viewer.incidImportanciaBean.setImportancia((short) 3);
-                viewer.onClickButtonModify();
+                fragment.viewer.incidImportanciaBean.setImportancia((short) 3);
+                fragment.viewer.onClickButtonModify();
             }
         });
         waitAtMost(2, SECONDS).until(isResourceIdDisplayed(nextActivityId));
@@ -197,14 +212,14 @@ public class ViewerIncidEditMinFrTest {
     @Test
     public void testOnSuccessRegisterIncidImportancia() throws Exception
     {
-        viewer.onSuccessRegisterIncidImportancia(2);
+        fragment.viewer.onSuccessRegisterIncidImportancia(2);
         waitAtMost(3, SECONDS).until(isViewDisplayed(withId(nextActivityId)));
     }
 
     @Test
     public void testOnSuccessModifyIncidImportancia() throws Exception
     {
-        viewer.onSuccessModifyIncidImportancia(1);
+        fragment.viewer.onSuccessModifyIncidImportancia(1);
         waitAtMost(3, SECONDS).until(isViewDisplayed(withId(nextActivityId)));
     }
 
@@ -212,7 +227,7 @@ public class ViewerIncidEditMinFrTest {
     public void testOnSuccessEraseIncidencia() throws Exception
     {
         try {
-            viewer.onSuccessEraseIncidencia(1);
+            fragment.viewer.onSuccessEraseIncidencia(1);
             fail();
         } catch (Exception ue) {
             assertThat(ue, instanceOf(UnsupportedOperationException.class));
@@ -222,22 +237,22 @@ public class ViewerIncidEditMinFrTest {
     @Test
     public void testClearSubscriptions() throws Exception
     {
-        addSubscription(viewer.viewerImportanciaSpinner.getController());
-        addSubscription(viewer.getController());
+        addSubscription(fragment.viewer.viewerImportanciaSpinner.getController());
+        addSubscription(fragment.viewer.getController());
 
-        assertThat(viewer.clearSubscriptions(), is(0));
+        assertThat(fragment.viewer.clearSubscriptions(), is(0));
 
-        assertThat(viewer.viewerImportanciaSpinner.getController().getSubscriptions().size(), is(0));
-        assertThat(viewer.getController().getSubscriptions().size(), is(0));
+        assertThat(fragment.viewer.viewerImportanciaSpinner.getController().getSubscriptions().size(), is(0));
+        assertThat(fragment.viewer.getController().getSubscriptions().size(), is(0));
     }
 
     @Test
     public void testSaveState() throws Exception
     {
         Bundle bundleTest = new Bundle();
-        viewer.viewerImportanciaSpinner.setItemSelectedId((short) 31);
+        fragment.viewer.viewerImportanciaSpinner.setItemSelectedId((short) 31);
 
-        viewer.saveState(bundleTest);
+        fragment.viewer.saveState(bundleTest);
 
         assertThat(bundleTest.getLong(INCID_IMPORTANCIA_NUMBER.key), is(31L));
     }
@@ -249,21 +264,5 @@ public class ViewerIncidEditMinFrTest {
         InstrumentationRegistry.getInstrumentation().callActivityOnStop(activity);
         atomicInteger.compareAndSet(1, fragment.viewer.getController().getSubscriptions().size());
         waitAtMost(2, SECONDS).untilAtomic(atomicInteger, is(0));
-    }
-
-    //    ............................... HELPERS .................................
-
-    private void execDoInViewer()
-    {
-        final AtomicBoolean isRun = new AtomicBoolean(false);
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                viewer.doViewInViewer(null, newIncidImportancia);
-                isRun.compareAndSet(false, true);
-            }
-        });
-        waitAtMost(2, SECONDS).untilTrue(isRun);
     }
 }

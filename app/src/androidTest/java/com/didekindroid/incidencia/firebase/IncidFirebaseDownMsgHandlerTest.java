@@ -218,6 +218,8 @@ public class IncidFirebaseDownMsgHandlerTest {
             return;
         }
 
+        waitAtMost(4, SECONDS).until(notificationsSize(), is(0));
+
         RemoteMessage remoteMsg = new RemoteMessage.Builder("to ME")
                 .addData(type_message_key, resolucion_open_type)
                 .addData(comunidadId_key, String.valueOf(comunidadId))
@@ -266,7 +268,6 @@ public class IncidFirebaseDownMsgHandlerTest {
                 fail();
         }
     }
-
 
     @NonNull
     @RequiresApi(api = Build.VERSION_CODES.M)

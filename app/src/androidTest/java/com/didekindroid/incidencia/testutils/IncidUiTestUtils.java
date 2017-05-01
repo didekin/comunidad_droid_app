@@ -13,7 +13,6 @@ import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
 import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
 
 import java.sql.Timestamp;
 import java.util.concurrent.Callable;
@@ -106,8 +105,10 @@ public final class IncidUiTestUtils {
         )).check(matches(isDisplayed()));
     }
 
-    public static void checkScreenEditMinFr()
+    public static boolean checkScreenEditMinFr()
     {
+        boolean isDone;
+
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_edit_nopower_fr_layout)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_comunidad_rot)).check(matches(isDisplayed()));
@@ -120,10 +121,15 @@ public final class IncidUiTestUtils {
                 withId(R.id.incid_edit_fr_modif_button),
                 withText(R.string.incid_importancia_reg_edit_button_rot)
         )).check(matches(isDisplayed()));
+
+        isDone = true;
+        return isDone;
     }
 
-    public static void checkDataEditMinFr(IncidenciaDataDbHelper dbHelper, IncidEditAc activity, IncidImportancia incidImportancia)
+    public static boolean checkDataEditMinFr(IncidenciaDataDbHelper dbHelper, IncidEditAc activity, IncidImportancia incidImportancia)
     {
+        boolean isDone;
+
         // Precondiditions:
         assertThat(!incidImportancia.isIniciadorIncidencia() && !incidImportancia.getUserComu().hasAdministradorAuthority(), is(true));
 
@@ -150,6 +156,9 @@ public final class IncidUiTestUtils {
                 // We adjust the array counter: android seems to add 1 to the counter passed to the method getStringArray().
                 withText(activity.getResources().getStringArray(R.array.IncidImportanciaArray)[incidImportancia.getImportancia()])
         )).check(matches(isDisplayed()));
+
+        isDone = true;
+        return isDone;
     }
 
     @SuppressWarnings("unchecked")
@@ -259,7 +268,9 @@ public final class IncidUiTestUtils {
         waitAtMost(2, SECONDS).until(isDataDisplayedAndClick(
                 allOf(
                         is(instanceOf(Comunidad.class)),
-                        is(comunidad)
+                        is(comunidad),
+                        not(instanceOf(String.class)),
+                        not(instanceOf(AmbitoIncidValueObj.class))
                 )
         ));
     }
@@ -289,7 +300,9 @@ public final class IncidUiTestUtils {
         waitAtMost(2, SECONDS).until(isDataDisplayedAndClick(
                 allOf(
                         is(instanceOf(String.class)),
-                        is(activity.getResources().getStringArray(R.array.IncidImportanciaArray)[i])
+                        is(activity.getResources().getStringArray(R.array.IncidImportanciaArray)[i]),
+                        not(instanceOf(Comunidad.class)),
+                        not(instanceOf(AmbitoIncidValueObj.class))
                 )
         ));
     }
@@ -300,7 +313,9 @@ public final class IncidUiTestUtils {
         waitAtMost(2, SECONDS).until(isDataDisplayedAndClick(
                 allOf(
                         is(instanceOf(AmbitoIncidValueObj.class)),
-                        is(ambito)
+                        is(ambito),
+                        not(instanceOf(String.class)),
+                        not(instanceOf(Comunidad.class))
                 )
         ));
 

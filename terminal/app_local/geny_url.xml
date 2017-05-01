@@ -6,3 +6,4 @@
     <!--Genymotion emulator localhost address-->
     <string name="didekinspring_host" translatable="false">http://192.168.57.1</string>
 </resources>
+<!--NOT USED-->
