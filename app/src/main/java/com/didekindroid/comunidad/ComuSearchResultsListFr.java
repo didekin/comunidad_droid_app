@@ -1,7 +1,6 @@
 package com.didekindroid.comunidad;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -46,7 +45,7 @@ import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
  * -- sufijoNumero (it can be an empty string).
  * -- municipio with codInProvincia and provinciaId.
  * <p/>
- * Postconditions:
+ * Postconditions for comunidad selection:
  * <p/>
  * 1. An object comunidad is passed to the listener activity with the fields:
  * -- comunidadId.
@@ -156,6 +155,7 @@ public class ComuSearchResultsListFr extends Fragment {
                 mListView.setAdapter(mAdapter);
             } else {
                 makeToast(mComuListListener.getActivity(), R.string.no_result_search_comunidad);
+                // TODO: pasar un intent con los datos de la comunidad buscada, y cubrirlos en el formulario de registro.
                 Intent intent;
                 Activity myActivity = mComuListListener.getActivity();
                 if (TKhandler.isRegisteredUser()) {

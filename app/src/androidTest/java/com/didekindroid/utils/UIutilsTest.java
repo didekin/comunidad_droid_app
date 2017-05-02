@@ -45,6 +45,7 @@ import static org.junit.Assert.fail;
 public class UIutilsTest {
 
     private Context context;
+
     @Before
     public void setUp()
     {

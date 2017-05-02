@@ -1,6 +1,7 @@
 package com.didekindroid.comunidad;
 
 import com.didekindroid.exception.UiException;
+import com.didekindroid.security.IdentityCacher;
 import com.didekinlib.http.ErrorBean;
 import com.didekinlib.http.retrofit.ComunidadEndPoints;
 import com.didekinlib.model.comunidad.Comunidad;
@@ -14,8 +15,8 @@ import retrofit2.Response;
 import timber.log.Timber;
 
 import static com.didekindroid.AppInitializer.creator;
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.util.DaoUtil.getResponseBody;
-import static com.didekindroid.util.UIutils.checkBearerTokenInCache;
 import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
 
 /**
@@ -28,10 +29,17 @@ public final class ComunidadDao implements ComunidadEndPoints {
 
     public static final ComunidadDao comunidadDao = new ComunidadDao();
     private final ComunidadEndPoints endPoint;
+    private final IdentityCacher identityCacher;
 
     private ComunidadDao()
     {
-        endPoint = creator.get().getRetrofitHandler().getService(ComunidadEndPoints.class);
+        this(creator.get().getRetrofitHandler().getService(ComunidadEndPoints.class), TKhandler);
+    }
+
+    public ComunidadDao(ComunidadEndPoints endPoint, IdentityCacher identityCacher)
+    {
+        this.endPoint = endPoint;
+        this.identityCacher = identityCacher;
     }
 
     //  ================================== ComunidadEndPoints implementation ============================
@@ -66,7 +74,7 @@ public final class ComunidadDao implements ComunidadEndPoints {
         Timber.d("getComuData()");
 
         try {
-            Response<Comunidad> response = getComuData(checkBearerTokenInCache(), idComunidad).execute();
+            Response<Comunidad> response = getComuData(identityCacher.checkBearerTokenInCache(), idComunidad).execute();
             return getResponseBody(response);
         } catch (EOFException eo) {
             return null;

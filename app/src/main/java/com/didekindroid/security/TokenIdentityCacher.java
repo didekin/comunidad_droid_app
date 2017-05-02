@@ -2,7 +2,10 @@ package com.didekindroid.security;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.annotation.Nullable;
 
+import com.didekindroid.exception.UiException;
+import com.didekinlib.http.ErrorBean;
 import com.didekinlib.http.oauth2.SpringOauthToken;
 
 import java.io.File;
@@ -15,13 +18,14 @@ import timber.log.Timber;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.didekindroid.AppInitializer.creator;
-import static com.didekindroid.usuario.firebase.CtrlerFirebaseTokenIf.IS_GCM_TOKEN_SENT_TO_SERVER;
 import static com.didekindroid.security.IdentityCacher.SharedPrefFiles.IS_USER_REG;
 import static com.didekindroid.security.IdentityCacher.SharedPrefFiles.app_preferences_file;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.identity_token_should_be_notnull;
+import static com.didekindroid.usuario.firebase.CtrlerFirebaseTokenIf.IS_GCM_TOKEN_SENT_TO_SERVER;
 import static com.didekindroid.util.IoHelper.readStringFromFile;
 import static com.didekindroid.util.IoHelper.writeFileFromString;
 import static com.didekindroid.util.UIutils.assertTrue;
+import static com.didekinlib.http.GenericExceptionMsg.TOKEN_NULL;
 import static com.didekinlib.http.oauth2.OauthTokenHelper.HELPER;
 
 /**
@@ -51,7 +55,18 @@ public final class TokenIdentityCacher implements IdentityCacher {
             return isDeletedUser;
         }
     };
+    public static final Consumer<SpringOauthToken> initTokenAction = new Consumer<SpringOauthToken>() {
+        @Override
+        public void accept(SpringOauthToken token)
+        {
+            Timber.d("accept(), Thread: %s", Thread.currentThread().getName());
+            TKhandler.initIdentityCache(token);
+        }
+    };
 
+    //  ======================================================================================
+    //    .................................... ACTIONS .................................
+    //  ======================================================================================
     static final BiFunction<Boolean, SpringOauthToken, Boolean> initTokenAndRegisterFunc
             = new BiFunction<Boolean, SpringOauthToken, Boolean>() {
 
@@ -69,11 +84,6 @@ public final class TokenIdentityCacher implements IdentityCacher {
             return isUpdatedTokenData;
         }
     };
-
-    //  ======================================================================================
-    //    .................................... ACTIONS .................................
-    //  ======================================================================================
-
     static final Consumer<Integer> cleanTokenCacheAction = new Consumer<Integer>() {
         @Override
         public void accept(Integer modifiedUser)
@@ -83,16 +93,6 @@ public final class TokenIdentityCacher implements IdentityCacher {
             }
         }
     };
-
-    public static final Consumer<SpringOauthToken> initTokenAction = new Consumer<SpringOauthToken>() {
-        @Override
-        public void accept(SpringOauthToken token)
-        {
-            Timber.d("accept(), Thread: %s", Thread.currentThread().getName());
-            TKhandler.initIdentityCache(token);
-        }
-    };
-
     public static final Consumer<Boolean> cleanTkCacheActionBoolean = new Consumer<Boolean>() {
         @Override
         public void accept(Boolean isToClean) throws Exception
@@ -116,7 +116,7 @@ public final class TokenIdentityCacher implements IdentityCacher {
     }
 
     /**
-     *  It allows for a more friendly injection constructor.
+     * It allows for a more friendly injection constructor.
      */
     private TokenIdentityCacher(File refreshTkFile, Context inContext)
     {
@@ -170,7 +170,9 @@ public final class TokenIdentityCacher implements IdentityCacher {
     {
         Timber.d("refreshAccessToken()");
 
-        if (isRegisteredUser() && tokenCache.get() == null && getRefreshTokenFile().exists()) {
+        if (isRegisteredUser()
+                && (tokenCache.get() == null || tokenCache.get().getValue() == null || tokenCache.get().getValue().isEmpty())
+                && refreshTokenFile.exists()) {
             reactor.updateTkCacheFromRefreshTk(getRefreshTokenValue());
         }
     }
@@ -213,21 +215,42 @@ public final class TokenIdentityCacher implements IdentityCacher {
     //    .................................... UTILITIES .................................
     //  ======================================================================================
 
-    @Override
     public String doHttpAuthHeaderFromTkInCache()
     {
         Timber.d("doHttpAuthHeader()");
         return doHttpAuthHeader(getTokenCache().get());
     }
 
-    @Override
-    public String doHttpAuthHeader(SpringOauthToken oauthToken)
+    @Nullable
+    private String doHttpAuthHeader(SpringOauthToken oauthToken)
     {
         Timber.d("doHttpAuthHeader(token)");
-        if (oauthToken != null) {
+        if (oauthToken != null && !oauthToken.getValue().isEmpty()) {
             return HELPER.doBearerAccessTkHeader(oauthToken);
         }
         return null;
+    }
+
+    @Override
+    public String checkBearerTokenInCache() throws UiException
+    {
+        Timber.d("checkBearerTokenInCache()");
+        return checkBearerToken(tokenCache.get());
+    }
+
+    @Override
+    public String checkBearerToken(SpringOauthToken oauthToken) throws UiException
+    {
+        Timber.d("checkBearerTokenInCache()");
+        String bearerAccessTkHeader = doHttpAuthHeader(oauthToken);
+
+        if (bearerAccessTkHeader == null) {
+            Timber.d("checkBearerTokenInCache(), bearerAccessTkHeader == null");
+            ErrorBean errorBean = new ErrorBean(TOKEN_NULL.getHttpMessage(), TOKEN_NULL.getHttpStatus());
+            throw new UiException(errorBean);
+        }
+        Timber.d("checkBearerTokenInCache(), bearerAccessTkHeader == %s", bearerAccessTkHeader);
+        return bearerAccessTkHeader;
     }
 
     //  ======================================================================================

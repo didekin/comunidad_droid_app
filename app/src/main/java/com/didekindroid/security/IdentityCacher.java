@@ -17,25 +17,25 @@ import java.util.concurrent.atomic.AtomicReference;
 @SuppressWarnings("WeakerAccess")
 public interface IdentityCacher {
 
-    void initIdentityCache(SpringOauthToken springOauthToken);
+    String checkBearerTokenInCache() throws UiException;
+
+    String checkBearerToken(SpringOauthToken oauthToken) throws UiException;
 
     void cleanIdentityCache();
 
-    String doHttpAuthHeaderFromTkInCache() throws UiException;
-
-    String doHttpAuthHeader(SpringOauthToken oauthToken) throws UiException;
-
-    void refreshAccessToken(OauthTokenReactorIf reactor);
-
     Context getContext();
-
-    AtomicReference<SpringOauthToken> getTokenCache();
 
     File getRefreshTokenFile();
 
     String getRefreshTokenValue();
 
+    AtomicReference<SpringOauthToken> getTokenCache();
+
+    void initIdentityCache(SpringOauthToken springOauthToken);
+
     boolean isRegisteredUser();
+
+    void refreshAccessToken(OauthTokenReactorIf reactor);
 
     void updateIsRegistered(boolean isRegisteredUser);
 
@@ -48,7 +48,7 @@ public interface IdentityCacher {
         @Override
         public String toString()
         {
-            return getClass().getCanonicalName().concat(".").concat(this.name());
+            return getClass().getCanonicalName().concat(".").concat(name());
         }
     }
 }

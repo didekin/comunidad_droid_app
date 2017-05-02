@@ -1,6 +1,7 @@
 package com.didekindroid.usuariocomunidad.dao;
 
 import com.didekindroid.exception.UiException;
+import com.didekindroid.security.IdentityCacher;
 import com.didekinlib.http.ErrorBean;
 import com.didekinlib.http.retrofit.UsuarioComunidadEndPoints;
 import com.didekinlib.model.comunidad.Comunidad;
@@ -15,8 +16,8 @@ import retrofit2.Response;
 import timber.log.Timber;
 
 import static com.didekindroid.AppInitializer.creator;
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.util.DaoUtil.getResponseBody;
-import static com.didekindroid.util.UIutils.checkBearerTokenInCache;
 import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
 
 /**
@@ -30,10 +31,17 @@ public final class UserComuDaoRemote implements UsuarioComunidadEndPoints {
 
     public static final UserComuDaoRemote userComuDaoRemote = new UserComuDaoRemote();
     private final UsuarioComunidadEndPoints endPoint;
+    private final IdentityCacher identityCacher;
 
     private UserComuDaoRemote()
     {
-        endPoint = creator.get().getRetrofitHandler().getService(UsuarioComunidadEndPoints.class);
+        this(creator.get().getRetrofitHandler().getService(UsuarioComunidadEndPoints.class), TKhandler);
+    }
+
+    public UserComuDaoRemote(UsuarioComunidadEndPoints endPoint, IdentityCacher identityCacher)
+    {
+        this.endPoint = endPoint;
+        this.identityCacher = identityCacher;
     }
 
     //  ================================== UserComuEndPoints implementation ============================
@@ -120,7 +128,7 @@ public final class UserComuDaoRemote implements UsuarioComunidadEndPoints {
     {
         Timber.d("deleteUserComu()");
         try {
-            Response<Integer> response = deleteUserComu(checkBearerTokenInCache(), comunidadId).execute();
+            Response<Integer> response = deleteUserComu(identityCacher.checkBearerTokenInCache(), comunidadId).execute();
             return getResponseBody(response);
         } catch (IOException e) {
             throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
@@ -131,7 +139,7 @@ public final class UserComuDaoRemote implements UsuarioComunidadEndPoints {
     {
         Timber.d("getComusByUser()");
         try {
-            Response<List<Comunidad>> response = getComusByUser(checkBearerTokenInCache()).execute();
+            Response<List<Comunidad>> response = getComusByUser(identityCacher.checkBearerTokenInCache()).execute();
             return getResponseBody(response);
         } catch (IOException e) {
             throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
@@ -142,7 +150,7 @@ public final class UserComuDaoRemote implements UsuarioComunidadEndPoints {
     {
         Timber.d("getUserComuByUserAndComu()");
         try {
-            Response<UsuarioComunidad> response = getUserComuByUserAndComu(checkBearerTokenInCache(), comunidadId).execute();
+            Response<UsuarioComunidad> response = getUserComuByUserAndComu(identityCacher.checkBearerTokenInCache(), comunidadId).execute();
             return getResponseBody(response);
         } catch (EOFException eo) {
             return null;
@@ -155,7 +163,7 @@ public final class UserComuDaoRemote implements UsuarioComunidadEndPoints {
     {
         Timber.d("isOldestOrAdmonUserComu()");
         try {
-            Response<Boolean> response = isOldestOrAdmonUserComu(checkBearerTokenInCache(), comunidadId).execute();
+            Response<Boolean> response = isOldestOrAdmonUserComu(identityCacher.checkBearerTokenInCache(), comunidadId).execute();
             return getResponseBody(response);
         } catch (IOException e) {
             throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
@@ -166,7 +174,7 @@ public final class UserComuDaoRemote implements UsuarioComunidadEndPoints {
     {
         Timber.d("modifyComuData()");
         try {
-            Response<Integer> response = modifyComuData(checkBearerTokenInCache(), comunidad).execute();
+            Response<Integer> response = modifyComuData(identityCacher.checkBearerTokenInCache(), comunidad).execute();
             return getResponseBody(response);
         } catch (IOException e) {
             throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
@@ -177,7 +185,7 @@ public final class UserComuDaoRemote implements UsuarioComunidadEndPoints {
     {
         Timber.d("modifyUserComu()");
         try {
-            Response<Integer> response = modifyUserComu(checkBearerTokenInCache(), userComu).execute();
+            Response<Integer> response = modifyUserComu(identityCacher.checkBearerTokenInCache(), userComu).execute();
             return getResponseBody(response);
         } catch (IOException e) {
             throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
@@ -188,7 +196,7 @@ public final class UserComuDaoRemote implements UsuarioComunidadEndPoints {
     {
         Timber.d("regComuAndUserComu()");
         try {
-            Response<Boolean> response = regComuAndUserComu(checkBearerTokenInCache(), usuarioComunidad).execute();
+            Response<Boolean> response = regComuAndUserComu(identityCacher.checkBearerTokenInCache(), usuarioComunidad).execute();
             return getResponseBody(response);
         } catch (IOException e) {
             throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
@@ -200,7 +208,7 @@ public final class UserComuDaoRemote implements UsuarioComunidadEndPoints {
     {
         Timber.d("regUserComu()");
         try {
-            Response<Integer> response = regUserComu(checkBearerTokenInCache(), usuarioComunidad).execute();
+            Response<Integer> response = regUserComu(identityCacher.checkBearerTokenInCache(), usuarioComunidad).execute();
             return getResponseBody(response);
         } catch (IOException e) {
             throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
@@ -211,7 +219,7 @@ public final class UserComuDaoRemote implements UsuarioComunidadEndPoints {
     {
         Timber.d("seeUserComusByComu()");
         try {
-            Response<List<UsuarioComunidad>> response = seeUserComusByComu(checkBearerTokenInCache(), idComunidad).execute();
+            Response<List<UsuarioComunidad>> response = seeUserComusByComu(identityCacher.checkBearerTokenInCache(), idComunidad).execute();
             return getResponseBody(response);
         } catch (IOException e) {
             throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
@@ -222,7 +230,7 @@ public final class UserComuDaoRemote implements UsuarioComunidadEndPoints {
     {
         Timber.d("seeUserComusByUser()");
         try {
-            Response<List<UsuarioComunidad>> response = seeUserComusByUser(checkBearerTokenInCache()).execute();
+            Response<List<UsuarioComunidad>> response = seeUserComusByUser(identityCacher.checkBearerTokenInCache()).execute();
             return getResponseBody(response);
         } catch (IOException e) {
             throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));

@@ -1,6 +1,7 @@
 package com.didekindroid.usuario.dao;
 
 import com.didekindroid.exception.UiException;
+import com.didekindroid.security.IdentityCacher;
 import com.didekinlib.http.ErrorBean;
 import com.didekinlib.http.oauth2.SpringOauthToken;
 import com.didekinlib.http.retrofit.UsuarioEndPoints;
@@ -17,8 +18,6 @@ import timber.log.Timber;
 import static com.didekindroid.AppInitializer.creator;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.util.DaoUtil.getResponseBody;
-import static com.didekindroid.util.UIutils.checkBearerToken;
-import static com.didekindroid.util.UIutils.checkBearerTokenInCache;
 import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
 
 /**
@@ -31,10 +30,17 @@ public final class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDao {
 
     public static final UsuarioDao usuarioDao = new UsuarioDaoRemote(creator.get().getRetrofitHandler().getService(UsuarioEndPoints.class));
     private final UsuarioEndPoints endPoint;
+    private final IdentityCacher identityCacher;
 
     private UsuarioDaoRemote(UsuarioEndPoints endPoints)
     {
-        endPoint = endPoints;
+        this(endPoints, TKhandler);
+    }
+
+    public UsuarioDaoRemote(UsuarioEndPoints endPoint, IdentityCacher identityCacher)
+    {
+        this.endPoint = endPoint;
+        this.identityCacher = identityCacher;
     }
 
     @Override
@@ -107,10 +113,10 @@ public final class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDao {
     @Override
     public boolean deleteAccessToken(String oldAccessToken) throws UiException
     {
-        Timber.d("deleteAccessToken()");
+        Timber.d("deleteAccessToken(), Thread: %s", Thread.currentThread().getName());
 
         try {
-            Response<Boolean> response = deleteAccessToken(checkBearerTokenInCache(), oldAccessToken).execute();
+            Response<Boolean> response = deleteAccessToken(identityCacher.checkBearerTokenInCache(), oldAccessToken).execute();
             return getResponseBody(response);
         } catch (IOException e) {
             throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
@@ -122,7 +128,7 @@ public final class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDao {
     {
         Timber.d("deleteUser(), Thread: %s", Thread.currentThread().getName());
         try {
-            Response<Boolean> response = deleteUser(checkBearerTokenInCache()).execute();
+            Response<Boolean> response = deleteUser(identityCacher.checkBearerTokenInCache()).execute();
             return getResponseBody(response);
         } catch (IOException e) {
             throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
@@ -132,9 +138,9 @@ public final class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDao {
     @Override
     public String getGcmToken() throws UiException
     {
-        Timber.d("getGcmToken()");
+        Timber.d("getGcmToken(), Thread: %s", Thread.currentThread().getName());
         try {
-            Response<GcmTokenWrapper> response = getGcmToken(checkBearerTokenInCache()).execute();
+            Response<GcmTokenWrapper> response = getGcmToken(identityCacher.checkBearerTokenInCache()).execute();
             return getResponseBody(response).getToken();
         } catch (IOException e) {
             throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
@@ -146,7 +152,7 @@ public final class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDao {
     {
         Timber.d("getUserData(), Thread: %s", Thread.currentThread().getName());
         try {
-            Response<Usuario> response = getUserData(checkBearerTokenInCache()).execute();
+            Response<Usuario> response = getUserData(identityCacher.checkBearerTokenInCache()).execute();
             return getResponseBody(response);
         } catch (EOFException eo) {
             return null;
@@ -156,13 +162,13 @@ public final class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDao {
     }
 
     /**
-     * @return  false if the userName exists but the password doesn't match that in the data base.
-     * @throws  UiException if USER_NAME_NOT_FOUND or GENERIC_INTERNAL_ERROR.
+     * @return false if the userName exists but the password doesn't match that in the data base.
+     * @throws UiException if USER_NAME_NOT_FOUND or GENERIC_INTERNAL_ERROR.
      */
     @Override
     public boolean loginInternal(String userName, String password) throws UiException
     {
-        Timber.d("loginInternal()");
+        Timber.d("loginInternal(), Thread: %s", Thread.currentThread().getName());
         try {
             Response<Boolean> response = login(userName, password).execute();
             return getResponseBody(response);
@@ -174,9 +180,9 @@ public final class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDao {
     @Override
     public int modifyUserGcmToken(String gcmToken) throws UiException
     {
-        Timber.d("modifyUserGcmToken()");
+        Timber.d("modifyUserGcmToken(), Thread: %s", Thread.currentThread().getName());
         try {
-            Response<Integer> response = modifyUserGcmToken(checkBearerTokenInCache(), gcmToken).execute();
+            Response<Integer> response = modifyUserGcmToken(identityCacher.checkBearerTokenInCache(), gcmToken).execute();
             return getResponseBody(response);
         } catch (IOException e) {
             throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
@@ -186,16 +192,16 @@ public final class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDao {
     @Override
     public int modifyUser(Usuario usuario) throws UiException
     {
-        Timber.d("modifyUser()");
+        Timber.d("modifyUser(), Thread: %s", Thread.currentThread().getName());
         return modifyUserWithToken(TKhandler.getTokenCache().get(), usuario);
     }
 
     @Override
     public int modifyUserWithToken(SpringOauthToken oauthToken, Usuario usuario) throws UiException
     {
-        Timber.d("modifyUserWithToken()");
+        Timber.d("modifyUserWithToken(), Thread: %s", Thread.currentThread().getName());
         try {
-            return getResponseBody(modifyUser(checkBearerToken(oauthToken), usuario).execute());
+            return getResponseBody(modifyUser(identityCacher.checkBearerToken(oauthToken), usuario).execute());
         } catch (IOException e) {
             throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
         }
@@ -204,9 +210,9 @@ public final class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDao {
     @Override
     public int passwordChange(String newPassword) throws UiException
     {
-        Timber.d("passwordChange()");
+        Timber.d("passwordChange(), Thread: %s", Thread.currentThread().getName());
         try {
-            Response<Integer> response = passwordChange(checkBearerTokenInCache(), newPassword).execute();
+            Response<Integer> response = passwordChange(identityCacher.checkBearerTokenInCache(), newPassword).execute();
             return getResponseBody(response);
         } catch (IOException e) {
             throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
@@ -216,7 +222,7 @@ public final class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDao {
     @Override
     public boolean sendPassword(String email) throws UiException
     {
-        Timber.d("sendPassword()");
+        Timber.d("sendPassword(), Thread: %s", Thread.currentThread().getName());
         try {
             return getResponseBody(passwordSend(email).execute());
         } catch (IOException e) {

@@ -90,7 +90,7 @@ public class ComuSearchAc extends AppCompatActivity {
                 .append(LINE_BREAK.getRegexp());
 
         if (!comunidadBean.validate(getResources(), errorMsg)) {
-            UIutils.makeToast(this, errorMsg.toString());
+            makeToast(this, errorMsg.toString());
         } else if (!ConnectionUtils.isInternetConnected(this)) {
             makeToast(this, R.string.no_internet_conn_toast);
         } else {

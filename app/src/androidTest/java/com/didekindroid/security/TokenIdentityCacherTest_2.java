@@ -3,6 +3,7 @@ package com.didekindroid.security;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.exception.UiException;
+import com.didekinlib.http.oauth2.SpringOauthToken;
 
 import org.junit.After;
 import org.junit.Before;
@@ -27,6 +28,7 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.CO
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static com.didekindroid.util.IoHelper.writeFileFromString;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
@@ -52,13 +54,15 @@ public class TokenIdentityCacherTest_2 {
         cleanOptions(CLEAN_JUAN);
     }
 
+    //    ===================================== TESTS ===========================================
+
     @Test
-    public void testGetAccessTokenInCache_1() throws IOException, UiException
+    public void testRefreshAccessToken_1() throws IOException, UiException
     {
         // Precondition: a fully initialized cache.
 
         signUpAndUpdateTk(COMU_REAL_JUAN);
-        assertThat(TKhandler.getTokenCache().get() != null, is(true));
+        assertThat(TKhandler.getTokenCache().get().getValue().isEmpty(), is(false));
 
         TKhandler.refreshAccessToken(new OauthReactorForTest());
         // No hay llamada al método del reactor.
@@ -66,9 +70,9 @@ public class TokenIdentityCacherTest_2 {
     }
 
     @Test
-    public void testGetAccessTokenInCache_2() throws IOException, UiException
+    public void testRefreshAccessToken_2() throws IOException, UiException
     {
-        // Precondition: a user in DB and there exists file with refreshToken, but cache is not initialized.
+        // Precondition: a user in DB, file with refreshToken, cache is null.
         signUpAndUpdateTk(COMU_REAL_JUAN);
         String refreshTkOriginal = TKhandler.getRefreshTokenValue();
         // Borramos cache.
@@ -86,6 +90,32 @@ public class TokenIdentityCacherTest_2 {
         // Hay llamada al método del reactor.
         assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_A));
     }
+
+    @Test
+    public void testRefreshAccessToken_3() throws IOException, UiException
+    {
+        // Precondition: a user in DB, file with refreshToken, cache initialized, accessToken is null.
+        signUpAndUpdateTk(COMU_REAL_JUAN);
+        String refreshTkOriginal = TKhandler.getRefreshTokenValue();
+        // Clean cache and initialize with a refreshToken.
+        TKhandler.cleanIdentityCache();
+        TKhandler.getTokenCache().compareAndSet(null, new SpringOauthToken(refreshTkOriginal));
+        // Escribimos fichero.
+        File refreshTkFile = new File(getTargetContext().getFilesDir(), refresh_token_filename);
+        writeFileFromString(refreshTkOriginal, refreshTkFile);
+
+        // Initial state.
+        assertThat(TKhandler.isRegisteredUser(), is(true));
+        assertThat(TKhandler.getTokenCache().get(), notNullValue());
+        assertThat(TKhandler.getTokenCache().get().getValue(), nullValue());
+        assertThat(TKhandler.getRefreshTokenFile().exists(), is(true));
+
+        TKhandler.refreshAccessToken(new OauthReactorForTest());
+        // Hay llamada al método del reactor.
+        assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_A));
+    }
+
+    // ............................... HELPERS ..............................
 
     static class OauthReactorForTest extends OauthTokenReactor {
         @Override

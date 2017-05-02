@@ -58,6 +58,8 @@ public class TokenIdentityCacherTest_1 {
         cleanOptions(CLEAN_TK_HANDLER);
     }
 
+    // ===================================== TESTS ==========================================
+
     @Test
     public void testInitTokenAndBackFile() throws Exception
     {
@@ -136,7 +138,7 @@ public class TokenIdentityCacherTest_1 {
         assertThat(controller.isGcmTokenSentServer(), is(false));
     }
 
-//    .................... ACTIONS .......................
+    // ===================================== ACTIONS TESTS =========================================
 
     @Test
     public void testInitTokenAction() throws Exception
@@ -154,7 +156,7 @@ public class TokenIdentityCacherTest_1 {
         checkNoCacheAndFile();
     }
 
-//    .................... FUNCTIONS .......................
+// ===================================== FUNCTIONS TESTS =========================================
 
     @Test
     public void testInitTokenAndRegisterFunc_1() throws Exception
@@ -192,7 +194,7 @@ public class TokenIdentityCacherTest_1 {
         assertThat(TKhandler.isRegisteredUser(), is(true));
     }
 
-    // ............................... HELPER ..............................
+    // ............................... HELPERS ..............................
 
     private SpringOauthToken initTokenHelper() throws Exception
     {

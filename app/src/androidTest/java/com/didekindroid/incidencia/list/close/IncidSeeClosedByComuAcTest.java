@@ -166,16 +166,16 @@ public class IncidSeeClosedByComuAcTest {
     @Test
     public void testOnSelectedWithBack() throws UiException
     {
-        waitAtMost(2, SECONDS).until(isViewDisplayed(checkIncidClosedListView(incidImportancia1, activity)));
+        waitAtMost(4, SECONDS).until(isViewDisplayed(checkIncidClosedListView(incidImportancia1, activity)));
         // Seleccionamos incidencia.
         onData(isA(IncidenciaUser.class)).inAdapterView(withId(android.R.id.list))
                 .check(matches(isDisplayed()))
                 .perform(click());
         // Check next fragment.
-        waitAtMost(2, SECONDS).until(isViewDisplayed(withId(nextResolucionFrResourceId)));
+        waitAtMost(4, SECONDS).until(isViewDisplayed(withId(nextResolucionFrResourceId)));
         // Back and check.
         checkBack(onView(withId(nextResolucionFrResourceId)));
-        waitAtMost(2, SECONDS).until(isViewDisplayed(checkIncidClosedListView(incidImportancia1, activity)));
+        waitAtMost(4, SECONDS).until(isViewDisplayed(checkIncidClosedListView(incidImportancia1, activity)));
     }
 
     //  ======================================== UNIT TESTS  =======================================

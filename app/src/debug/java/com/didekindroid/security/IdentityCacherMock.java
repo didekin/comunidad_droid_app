@@ -24,20 +24,20 @@ public class IdentityCacherMock implements IdentityCacher {
     }
 
     @Override
+    public String checkBearerTokenInCache() throws UiException
+    {
+        return null;
+    }
+
+    @Override
+    public String checkBearerToken(SpringOauthToken oauthToken) throws UiException
+    {
+        return null;
+    }
+
+    @Override
     public void cleanIdentityCache()
     {
-    }
-
-    @Override
-    public String doHttpAuthHeaderFromTkInCache() throws UiException
-    {
-        return null;
-    }
-
-    @Override
-    public String doHttpAuthHeader(SpringOauthToken oauthToken) throws UiException
-    {
-        return null;
     }
 
     @Override

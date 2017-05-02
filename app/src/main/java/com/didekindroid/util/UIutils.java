@@ -22,7 +22,6 @@ import android.widget.Toast;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekinlib.http.ErrorBean;
-import com.didekinlib.http.oauth2.SpringOauthToken;
 
 import java.sql.Timestamp;
 import java.text.DateFormat;
@@ -36,11 +35,9 @@ import timber.log.Timber;
 
 import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;
-import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.util.CommonAssertionMsg.subscriptions_should_be_zero;
 import static com.didekindroid.util.CommonAssertionMsg.subscriptions_should_not_be_null;
 import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
-import static com.didekinlib.http.GenericExceptionMsg.TOKEN_NULL;
 import static com.didekinlib.model.common.dominio.ValidDataPatterns.LINE_BREAK;
 import static java.text.DateFormat.MEDIUM;
 import static java.util.Locale.getDefault;
@@ -97,27 +94,7 @@ public final class UIutils {
         }
     }
 
-//    ===========================  AUTHENTICATION ==============================
-
-    public static String checkBearerTokenInCache() throws UiException
-    {
-        Timber.d("checkBearerTokenInCache()");
-        return checkBearerToken(TKhandler.getTokenCache().get());
-    }
-
-    public static String checkBearerToken(SpringOauthToken oauthToken) throws UiException
-    {
-        Timber.d("checkBearerTokenInCache()");
-        String bearerAccessTkHeader = TKhandler.doHttpAuthHeader(oauthToken);
-
-        if (bearerAccessTkHeader == null) {
-            ErrorBean errorBean = new ErrorBean(TOKEN_NULL.getHttpMessage(), TOKEN_NULL.getHttpStatus());
-            throw new UiException(errorBean);
-        }
-        return bearerAccessTkHeader;
-    }
-
-//    ================================== CONTROLLERS ======================================
+    //    ================================== CONTROLLERS ======================================
 
     public static int destroySubscriptions(CompositeDisposable subscriptions)
     {
