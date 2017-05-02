@@ -14,7 +14,6 @@ import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.security.IdentityCacher;
 import com.didekindroid.security.OauthTokenReactorIf;
 import com.didekindroid.util.ConnectionUtils;
-import com.didekindroid.util.UIutils;
 
 import timber.log.Timber;
 
