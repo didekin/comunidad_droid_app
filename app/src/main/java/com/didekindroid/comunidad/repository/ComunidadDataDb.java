@@ -20,6 +20,8 @@ public final class ComunidadDataDb {
 
     public interface TipoVia extends BaseColumns {
 
+        int NUMBER_RECORDS = 323;
+
         String TB_TIPO_VIA = "tipo_via";
 
         String tipovia = "tipovia";

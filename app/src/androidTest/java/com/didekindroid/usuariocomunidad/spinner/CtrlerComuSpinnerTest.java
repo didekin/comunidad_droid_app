@@ -16,19 +16,15 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceAndroidMain;
-import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceIoScheduler;
+import static com.didekindroid.testutil.ActivityTestUtils.checkSpinnerCtrlerLoadItems;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
 import static com.didekindroid.usuariocomunidad.spinner.CtrlerComuSpinner.newControllerComuSpinner;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
-import static io.reactivex.plugins.RxJavaPlugins.reset;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
 
 /**
  * User: pedro@didekin
@@ -68,13 +64,7 @@ public class CtrlerComuSpinnerTest {
     {
         signUpAndUpdateTk(COMU_REAL_JUAN);
 
-        try {
-            trampolineReplaceIoScheduler();
-            trampolineReplaceAndroidMain();
-            assertThat(controller.loadItemsByEntitiyId(), is(true));
-        } finally {
-            reset();
-        }
+        checkSpinnerCtrlerLoadItems(controller);
 
         cleanOneUser(USER_JUAN);
     }

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.didekindroid.api.CtrlerSelectionList;
@@ -13,7 +12,6 @@ import com.didekindroid.api.ViewerIf;
 import com.didekindroid.api.ViewerSelectionList;
 
 import java.io.Serializable;
-import java.util.List;
 
 import timber.log.Timber;
 
@@ -25,7 +23,8 @@ import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA
  * Time: 11:57
  */
 
-public final class ViewerImportanciaSpinner extends ViewerSelectionList<Spinner, CtrlerSelectionList<String>, String> {
+public final class ViewerImportanciaSpinner extends
+        ViewerSelectionList<Spinner, CtrlerSelectionList<String>, String> {
 
     @SuppressWarnings("WeakerAccess")
     IncidImportanciaBean bean;
@@ -44,17 +43,6 @@ public final class ViewerImportanciaSpinner extends ViewerSelectionList<Spinner,
     }
 
     // ==================================== ViewerSelectionListIf ====================================
-
-    @Override
-    public void onSuccessLoadItems(List<String> incidCloseList)
-    {
-        Timber.d("onSuccessLoadItems()");
-
-        ArrayAdapter<String> adapter = ViewerSelectionList.getArrayAdapterForSpinner(String.class, activity);
-        adapter.addAll(incidCloseList);
-        view.setAdapter(adapter);
-        view.setSelection(getSelectedPositionFromItemId(itemSelectedId));
-    }
 
     @Override
     public void initSelectedItemId(Bundle savedState)

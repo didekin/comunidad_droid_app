@@ -22,17 +22,13 @@ import com.didekinlib.model.comunidad.Provincia;
 
 import timber.log.Timber;
 
-import static com.didekindroid.comunidad.repository.ComunidadDataDb.ComunidadAutonoma.cu_nombre;
 import static com.didekindroid.comunidad.repository.ComunidadDataDb.Municipio.mu_nombre;
-import static com.didekindroid.comunidad.repository.ComunidadDataDb.Provincia.pr_nombre;
-import static com.didekindroid.comunidad.repository.ComunidadDataDb.TipoVia.tipovia;
 import static com.didekindroid.util.UIutils.checkPostExecute;
-import static com.didekindroid.util.UIutils.closeCursor;
 
 public class RegComuFr extends Fragment {
 
     ComunidadDbHelper dbHelper;
-    Spinner mTipoViaSpinner;
+    Spinner tipoViaSpinner;
     Spinner mAutonomaComuSpinner;
     Spinner provinciaSpinner;
     Spinner municipioSpinner;
@@ -76,52 +72,17 @@ public class RegComuFr extends Fragment {
 
         dbHelper = new ComunidadDbHelper(getActivity());
         // Asynchronous call: initialize database if necessary.
-        new TipoViaComuAutoSpinnersSetter().execute();
 
-        mTipoViaSpinner = (Spinner) getView().findViewById(R.id.tipo_via_spinner);
-//        mTipoViaSpinner.setFocusable(true);
-//        mTipoViaSpinner.setFocusableInTouchMode(true);
-//        mTipoViaSpinner.requestFocus();
+        tipoViaSpinner = (Spinner) getView().findViewById(R.id.tipo_via_spinner);
+//        tipoViaSpinner.setFocusable(true);
+//        tipoViaSpinner.setFocusableInTouchMode(true);
+//        tipoViaSpinner.requestFocus();
         mAutonomaComuSpinner = (Spinner) getView().findViewById(R.id.autonoma_comunidad_spinner);
         provinciaSpinner = (Spinner) getView().findViewById(R.id.provincia_spinner);
         municipioSpinner = (Spinner) getView().findViewById(R.id.municipio_spinner);
         comunidadBean = new ComunidadBean();
 
         // ................................ LISTENERS ............................................
-
-        mTipoViaSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-            {
-                Timber.d("In mTipoViaSpinner.setOnItemSelectedListener, onItemSelected()");
-                comunidadBean.setTipoVia(((Cursor) parent.getItemAtPosition(position)).getString(1));
-                mTipoViaPointer = position;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent)
-            {
-                Timber.d("In mTipoViaSpinner.setOnItemSelectedListener, onNothingSelected()");
-            }
-        });
-
-        mAutonomaComuSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-            {
-                Timber.d("In mAutonomaComuSpinner.setOnItemSelectedListener, onItemSelected()");
-
-                short cu_id = (short) id;
-                new SpinnerProvinciasLoader().execute(cu_id);
-                mCApointer = position;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent)
-            {
-                Timber.d("In mAutonomaComuSpinner.setOnItemSelectedListener, onNothingSelected()");
-            }
-        });
 
         provinciaSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -163,38 +124,8 @@ public class RegComuFr extends Fragment {
         });
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState)
-    {
-        Timber.d("onSaveInstanceState()");
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public void onStop()
-    {
-        Timber.d("onStop()");
-        super.onStop();
-    }
-
 // ================ Interface to communicate with the Activity ================
 
-    @Override
-    public void onDestroy()
-    {
-        Timber.d("onDestroy()");
-
-        if (mComuDataController != null) {
-            mComuDataController.onDestroyFragment();
-        }
-        mRegComunidadFrView = null;
-        closeCursor(mTipoViaSpinner.getAdapter());
-        closeCursor(mAutonomaComuSpinner.getAdapter());
-        closeCursor(provinciaSpinner.getAdapter());
-        closeCursor(municipioSpinner.getAdapter());
-        dbHelper.close();
-        super.onDestroy();
-    }
 
     void setmComuDataController(ComuDataControllerIf mComuDataController)
     {
@@ -219,7 +150,7 @@ public class RegComuFr extends Fragment {
 
     SpinnerAdapter doAdapterSpinner(Cursor cursor, String[] fromColDB)
     {
-        Timber.d("In doAdapterSpinner()");
+        Timber.d("In doAdapterSpinnerFromCursor()");
 
         int[] toViews = new int[]{R.id.app_spinner_1_dropdown_item};
         return new SimpleCursorAdapter(
@@ -231,13 +162,11 @@ public class RegComuFr extends Fragment {
                 0);
     }
 
-//  --------------------------------------------------------------------
+    //  --------------------------------------------------------------------
 //                               SPINNERS
 //  --------------------------------------------------------------------
 
     interface ComuDataControllerIf {
-
-        void onTipoViaSpinnerLoaded();
 
         void onCAutonomaSpinnerLoaded();
 
@@ -248,72 +177,6 @@ public class RegComuFr extends Fragment {
         void onDestroyFragment();
     }
 
-///    ::::::::::::::: TIPO DE VÍA - COMUNIDAD AUTONOMA ::::::::::::::::
-
-    @SuppressWarnings("WeakerAccess")
-    class TipoViaComuAutoSpinnersSetter extends AsyncTask<Void, Void, Void> {
-
-        Cursor tipoViaCursor;
-        Cursor comunidadAutonomaCursor;
-
-        @Override
-        protected Void doInBackground(Void... params)
-        {
-            Timber.d("In TipoViaComuAutoSpinnersSetter.doInBackground()");
-            tipoViaCursor = dbHelper.doTipoViaCursor();
-            comunidadAutonomaCursor = dbHelper.doComunidadesCursor();
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid)
-        {
-            Timber.d("In TipoViaComuAutoSpinnersSetter.onPostExecute()");
-
-            if (checkPostExecute(getActivity())) return;
-
-            String[] fromColumnDb = new String[]{tipovia};
-            mTipoViaSpinner.setAdapter(doAdapterSpinner(tipoViaCursor, fromColumnDb));
-
-            fromColumnDb = new String[]{cu_nombre};
-            mAutonomaComuSpinner.setAdapter(doAdapterSpinner(comunidadAutonomaCursor, fromColumnDb));
-
-            if (mComuDataController != null) {
-                mComuDataController.onTipoViaSpinnerLoaded();
-                mComuDataController.onCAutonomaSpinnerLoaded();
-            }
-        }
-    }
-
-///    :::::::::::::::::: PROVINCIA ::::::::::::::::::::::
-
-    @SuppressWarnings("WeakerAccess")
-    class SpinnerProvinciasLoader extends AsyncTask<Short, Void, Cursor> {
-
-        @Override
-        protected Cursor doInBackground(Short... params)
-        {
-            Timber.d("In SpinnerProvinciasLoader.doInBackground()");
-
-            final Cursor provinciasCAcursor = dbHelper.getProvinciasByCA(params[0]);
-            Timber.d("In SpinnerProvinciasLoader.doInBackground() : cursor count = %d%n", provinciasCAcursor.getCount());
-            return provinciasCAcursor;
-        }
-
-        @Override
-        protected void onPostExecute(final Cursor provinciasCursor)
-        {
-            if (checkPostExecute(getActivity())) return;
-
-            Timber.d("In SpinnerProvinciasLoader.onPostExecute()");
-
-            String[] fromColDb = new String[]{pr_nombre};
-            provinciaSpinner.setAdapter(doAdapterSpinner(provinciasCursor, fromColDb));
-            if (mComuDataController != null) {
-                mComuDataController.onProvinciaSpinnerLoaded();
-            }
-        }
-    }
 
 ///   :::::::::::::::::  MUNICIPIO ::::::::::::::::::::
 
@@ -324,7 +187,7 @@ public class RegComuFr extends Fragment {
         protected Cursor doInBackground(Short... params)
         {
             Timber.d("In SpinnerMunicipioLoader.doInBackground()");
-            final Cursor municipiosCursor = dbHelper.getMunicipiosByPrId(params[0]);
+            final Cursor municipiosCursor = dbHelper.doMunicipiosByProvinciaCursor(params[0]);
             Timber.d("In SpinnerMunicipiosLoader.doInBackground() : cursor count = %d%n", municipiosCursor.getCount());
             return municipiosCursor;
         }

@@ -1,4 +1,4 @@
-package com.didekindroid.comunidad;
+package com.didekindroid.comunidad.repository;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -6,9 +6,9 @@ import android.database.sqlite.SQLiteCursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekindroid.comunidad.repository.ComunidadDataDb;
-import com.didekindroid.comunidad.repository.ComunidadDbHelper;
+import com.didekindroid.comunidad.spinner.TipoViaValueObj;
 import com.didekinlib.model.comunidad.ComunidadAutonoma;
+import com.didekinlib.model.comunidad.Municipio;
 import com.didekinlib.model.comunidad.Provincia;
 
 import org.junit.After;
@@ -21,6 +21,7 @@ import java.util.List;
 
 import static com.didekindroid.AppInitializer.creator;
 import static com.didekindroid.comunidad.repository.ComunidadDataDb.ComunidadAutonoma.NUMBER_RECORDS;
+import static com.didekindroid.comunidad.repository.ComunidadDataDb.TipoVia;
 import static com.didekindroid.comunidad.repository.ComunidadDbHelper.DB_NAME;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
@@ -45,7 +46,6 @@ public class ComunidadDbHelperTest {
     public void getFixture() throws Exception
     {
         context = creator.get().getContext();
-        // Borro la base de datos para evitar interferencias con tests encadenados que fallen y no borren la base de datos.
         context.deleteDatabase(DB_NAME);
         dbHelper = new ComunidadDbHelper(context);
     }
@@ -83,9 +83,13 @@ public class ComunidadDbHelperTest {
         database = dbHelper.getReadableDatabase();
         checkRecords();
 
-        List<String> tiposVia = dbHelper.getTiposVia();
-        assertThat(tiposVia.size() > 1, is(true));
-        assertThat(tiposVia, hasItems("tipo de vía", "Avenida", "Calle", "Ronda", "Carretera"));
+        List<TipoViaValueObj> tiposVia = dbHelper.getTiposVia();
+        assertThat(tiposVia.size(), is(TipoVia.NUMBER_RECORDS));
+        assertThat(tiposVia, hasItems(
+                new TipoViaValueObj(0, "tipo de vía"),
+                new TipoViaValueObj(2, "Acceso"),
+                new TipoViaValueObj(4, "Acera")
+        ));
     }
 
     @Test
@@ -104,46 +108,56 @@ public class ComunidadDbHelperTest {
     }
 
     @Test
-    public void testGetProvincias()
+    public void test_DoProvinciasByCACursor() throws Exception
     {
         database = dbHelper.getReadableDatabase();
         checkRecords();
 
-        List<Provincia> provincias = dbHelper.getProvincias();
-        assertThat(provincias.size(), is(ComunidadDataDb.Provincia.NUMBER_RECORDS));
-        Provincia provincia1 = new Provincia((short) 12, "Castellón/Castelló");
-        Provincia provincia2 = new Provincia((short) 46, "Valencia/València");
-        Provincia provincia3 = new Provincia((short) 38, "Santa Cruz de Tenerife");
-        Provincia provincia4 = new Provincia((short) 35, "Palmas, Las");
-        assertThat(provincias, hasItems(provincia1, provincia2, provincia3, provincia4));
-    }
-
-    @Test
-    public void testGetProvinciasByCA()
-    {
-        database = dbHelper.getReadableDatabase();
-        checkRecords();
-
-        SQLiteCursor cursor = (SQLiteCursor) dbHelper.getProvinciasByCA((short) 2);
+        SQLiteCursor cursor = (SQLiteCursor) dbHelper.doProvinciasByCACursor((short) 2);
         assertThat(cursor.getCount(), is(3));
 
-        SQLiteCursor cursorP = (SQLiteCursor) dbHelper.getProvinciasByCA((short) 1);
+        SQLiteCursor cursorP = (SQLiteCursor) dbHelper.doProvinciasByCACursor((short) 1);
         assertThat(cursorP.getCount(), is(8));
         cursorP.close();
     }
 
     @Test
-    public void testGetMunicipiosByPrId()
+    public void test_GetProvinciasByCA()
     {
         database = dbHelper.getReadableDatabase();
         checkRecords();
 
-        Cursor cursorM = dbHelper.getMunicipiosByPrId((short) 1);
+        List<Provincia> provincias = dbHelper.getProvinciasByCA((short) 11);
+        assertThat(provincias.size(), is(2));
+        Provincia provincia1 = new Provincia((short) 6, "Badajoz");
+        Provincia provincia2 = new Provincia((short) 10, "Cáceres");
+        assertThat(provincias, hasItems(provincia1, provincia2));
+    }
+
+    @Test
+    public void test_GetMunicipioByProvincia() throws Exception
+    {
+        database = dbHelper.getReadableDatabase();
+        checkRecords();
+
+        List<Municipio> municipios = dbHelper.getMunicipioByProvincia((short) 11);
+        assertThat(municipios.size(), is(44));
+        assertThat(municipios.get(0).getNombre(), is("Alcalá de los Gazules"));
+        assertThat(municipios.get(2).getNombre(), is("Algar"));
+    }
+
+    @Test
+    public void test_DoMunicipiosByProvinciaCursor() throws Exception
+    {
+        database = dbHelper.getReadableDatabase();
+        checkRecords();
+
+        Cursor cursorM = dbHelper.doMunicipiosByProvinciaCursor((short) 1);
         assertThat(cursorM.getCount(), is(51));
         assertThat(cursorM.getColumnCount(), is(4));
         cursorM.close();
 
-        Cursor cursorP = dbHelper.getMunicipiosByPrId((short) 33);
+        Cursor cursorP = dbHelper.doMunicipiosByProvinciaCursor((short) 33);
         assertThat(cursorP.getCount(), is(78));
         cursorP.close();
     }
@@ -152,7 +166,7 @@ public class ComunidadDbHelperTest {
 
     private void checkRecords()
     {
-        assertThat(dbHelper.mTipoViaCounter > 1, is(true));
+        assertThat(dbHelper.mTipoViaCounter, is(TipoVia.NUMBER_RECORDS));
         assertThat(dbHelper.mMunicipiosCounter > 1, is(true));
         assertThat(dbHelper.mComunidadesCounter, is(NUMBER_RECORDS));
         assertThat(dbHelper.mProvinciasCounter, is(ComunidadDataDb.Provincia.NUMBER_RECORDS));

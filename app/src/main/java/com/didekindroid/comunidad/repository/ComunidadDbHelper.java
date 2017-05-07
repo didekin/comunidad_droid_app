@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.text.TextUtils;
 
 import com.didekindroid.R;
+import com.didekindroid.comunidad.spinner.TipoViaValueObj;
 import com.didekinlib.model.comunidad.ComunidadAutonoma;
 import com.didekinlib.model.comunidad.Municipio;
 import com.didekinlib.model.comunidad.Provincia;
@@ -46,7 +47,6 @@ import static com.didekindroid.comunidad.repository.ComunidadDataDb.TipoVia.DROP
 import static com.didekindroid.comunidad.repository.ComunidadDataDb.TipoVia.TB_TIPO_VIA;
 import static com.didekindroid.comunidad.repository.ComunidadDataDb.TipoVia.tipovia;
 import static com.didekindroid.util.IoHelper.lineToLowerCase;
-import static java.lang.String.valueOf;
 
 /**
  * User: pedro
@@ -55,15 +55,15 @@ import static java.lang.String.valueOf;
  */
 public class ComunidadDbHelper extends SQLiteOpenHelper {
 
-    public static final String DB_NAME = "comunidad.db";
+    static final String DB_NAME = "comunidad.db";
     /*This number has to be changed in future versions, to get executed onUpgrade() method.*/
     private static final int DB_VERSION = 1;
 
     private final Context mContext;
-    public int mMunicipiosCounter;
-    public int mComunidadesCounter;
-    public int mProvinciasCounter;
-    public int mTipoViaCounter;
+    int mMunicipiosCounter;
+    int mComunidadesCounter;
+    int mProvinciasCounter;
+    int mTipoViaCounter;
     private SQLiteDatabase mDataBase;
 
     public ComunidadDbHelper(Context context)
@@ -142,9 +142,9 @@ public class ComunidadDbHelper extends SQLiteOpenHelper {
         onCreate(mDataBase);
     }
 
-//    ======================================
-//    ........... MUNICIPIOS ...............
-//    ======================================
+//    ==============================================================================================
+//    ................................. MUNICIPIOS .....................................
+//    ==============================================================================================
 
     private int loadMunicipios() throws IOException
     {
@@ -196,37 +196,38 @@ public class ComunidadDbHelper extends SQLiteOpenHelper {
     }
 
     @SuppressWarnings("unused")
-    protected Municipio getMunicipioFromDb(short codMunicipio, short provinciaId)
+    public List<Municipio> getMunicipioByProvincia(short provinciaId)
     {
-        Timber.d("In getMunicipioFromDb()");
+        Timber.d("In getMunicipioByProvincia()");
 
-        String whereClause = _ID + " = ?";
-        String[] whereArgs = new String[]{valueOf(codMunicipio), valueOf(provinciaId)};
-        String[] tableColumns = new String[]{
-                _ID
-                , mu_nombre};
-
-        Cursor cursor = mDataBase.query(TB_MUNICIPIO, tableColumns, whereClause, whereArgs,
-                null, null, null);
-
+        Cursor cursor = doMunicipiosByProvinciaCursor(provinciaId);
         if (cursor == null) {
-            return null;
-        }
-        if (!cursor.moveToFirst()) {
-            cursor.close();
-            return null;
+            return new ArrayList<>(0);
         }
 
+        int pkMunicipioIndex = cursor.getColumnIndex(_ID);
+        int pkProvinciaIndex = cursor.getColumnIndex(pr_id);
+        int pkMunicipioInProvinciaIndex = cursor.getColumnIndex(m_cd);
         int nombreIndex = cursor.getColumnIndex(mu_nombre);
-        Municipio municipio = new Municipio((int) cursor.getLong(0), codMunicipio, cursor.getString(nombreIndex), new
-                Provincia(provinciaId));
+        List<Municipio> municipios = new ArrayList<>(cursor.getCount());
+        Municipio municipio;
+
+        do {
+            municipio = new Municipio(
+                    (int) cursor.getLong(pkMunicipioIndex),
+                    cursor.getShort(pkMunicipioInProvinciaIndex),
+                    cursor.getString(nombreIndex),
+                    new Provincia(cursor.getShort(pkProvinciaIndex)));
+            municipios.add(municipio);
+        } while (cursor.moveToNext());
+
         cursor.close();
-        return municipio;
+        return municipios;
     }
 
-    public Cursor getMunicipiosByPrId(short prId)
+    public Cursor doMunicipiosByProvinciaCursor(short prId)
     {
-        Timber.i("In getMunicipiosByPrId()");
+        Timber.i("In doMunicipiosByProvinciaCursor()");
 
         if (mDataBase == null) {
             mDataBase = getReadableDatabase();
@@ -236,12 +237,15 @@ public class ComunidadDbHelper extends SQLiteOpenHelper {
         String whereClause = pr_id + " = ?";
         String[] wherClauseArgs = new String[]{String.valueOf(prId)};
 
-        return mDataBase.query(TB_MUNICIPIO, columns, whereClause, wherClauseArgs, null, null, null);
+        Cursor cursor = mDataBase.query(TB_MUNICIPIO, columns, whereClause, wherClauseArgs, null, null, null);
+
+        if (checkNullCursor(cursor)) return null;
+        return cursor;
     }
 
-//    ======================================
-//    ............. PROVINCIAS .............
-//    ======================================
+//    ==============================================================================================
+//    ....................................... PROVINCIAS .......................................
+//    ==============================================================================================
 
     private int loadProvincias() throws IOException
     {
@@ -290,23 +294,31 @@ public class ComunidadDbHelper extends SQLiteOpenHelper {
         return mDataBase.insert(TB_PROVINCIA, null, values);
     }
 
-    public List<Provincia> getProvincias()
+    Cursor doProvinciasByCACursor(short caId)
     {
-        Timber.d("In getProvincias()");
+        Timber.d("doProvinciasByCACursor()");
 
         if (mDataBase == null || mProvinciasCounter == 0) {
             mDataBase = getReadableDatabase();
         }
 
-        String[] tableColumns = new String[]{_ID, pr_nombre};
-        Cursor cursor = mDataBase.query(TB_PROVINCIA, tableColumns, null, null, null, null, null);
+        String[] columns = new String[]{_ID, pr_nombre};
+        String whereClause = ca_id + " = ?";
+        String[] wherClauseArgs = new String[]{String.valueOf(caId)};
 
+        Cursor cursor = mDataBase.query(TB_PROVINCIA, columns, whereClause, wherClauseArgs, null, null, null);
+
+        if (checkNullCursor(cursor)) return null;
+        return cursor;
+    }
+
+    public List<Provincia> getProvinciasByCA(short caId)
+    {
+        Timber.d("In getProvinciasByCA(), caId = %d%n", caId);
+
+        Cursor cursor = doProvinciasByCACursor(caId);
         if (cursor == null) {
-            return null;
-        }
-        if (!cursor.moveToFirst()) {
-            cursor.close();
-            return null;
+            return new ArrayList<>(0);
         }
 
         int pkIndex = cursor.getColumnIndex(_ID);
@@ -323,24 +335,9 @@ public class ComunidadDbHelper extends SQLiteOpenHelper {
         return provincias;
     }
 
-    public Cursor getProvinciasByCA(short caId)
-    {
-        Timber.d("In getProvinciasByCA(), caId = %d%n", caId);
-
-        if (mDataBase == null || mProvinciasCounter == 0) {
-            mDataBase = getReadableDatabase();
-        }
-
-        String[] columns = new String[]{_ID, pr_nombre};
-        String whereClause = ca_id + " = ?";
-        String[] wherClauseArgs = new String[]{String.valueOf(caId)};
-
-        return mDataBase.query(TB_PROVINCIA, columns, whereClause, wherClauseArgs, null, null, null);
-    }
-
-//    =====================================================
-//    ............. COMUNIDADES AUTÓNOMAS .................
-//    =====================================================
+//    ==============================================================================================
+//    ................................ COMUNIDADES AUTÓNOMAS ..............................
+//    ==============================================================================================
 
     private int loadComunidadesAutonomas() throws IOException
     {
@@ -390,13 +387,10 @@ public class ComunidadDbHelper extends SQLiteOpenHelper {
     {
         Timber.d("In getComunidadesAu()");
 
-        if (mDataBase == null) {
-            mDataBase = getReadableDatabase();
-        }
-
         Cursor cursor = doComunidadesCursor();
 
-        int pkIndex = cursor.getColumnIndex(_ID);
+        int pkIndex = cursor != null ? cursor.getColumnIndex(_ID) : 0;
+        assert cursor != null;
         int nombreIndex = cursor.getColumnIndex(cu_nombre);
         ComunidadAutonoma comunidad;
         List<ComunidadAutonoma> comunidades = new ArrayList<>();
@@ -410,7 +404,7 @@ public class ComunidadDbHelper extends SQLiteOpenHelper {
         return comunidades;
     }
 
-    public Cursor doComunidadesCursor()
+    private Cursor doComunidadesCursor()
     {
         Timber.d("In doComunidadesCursor()");
 
@@ -421,20 +415,13 @@ public class ComunidadDbHelper extends SQLiteOpenHelper {
         String[] tableColumns = new String[]{_ID, cu_nombre};
         Cursor cursor = mDataBase.query(TB_C_AUTONOMA, tableColumns, null, null, null, null, null);
 
-        if (cursor == null) {
-            return null;
-        }
-        if (!cursor.moveToFirst()) {
-            cursor.close();
-            return null;
-        }
-
+        if (checkNullCursor(cursor)) return null;
         return cursor;
     }
 
-//    =====================================================
-//    .................... TIPOS DE VÍA ...................
-//    =====================================================
+//    ==============================================================================================
+//    ................................... TIPOS DE VÍA ..................................
+//    ==============================================================================================
 
     private int loadTipoVia() throws IOException
     {
@@ -469,7 +456,7 @@ public class ComunidadDbHelper extends SQLiteOpenHelper {
         return pkCounter;
     }
 
-    public Cursor doTipoViaCursor()
+    private Cursor doTipoViaCursor()
     {
         Timber.d("In doTipoViaCursor()");
 
@@ -480,18 +467,12 @@ public class ComunidadDbHelper extends SQLiteOpenHelper {
         String[] tableColumns = new String[]{_ID, tipovia};
         Cursor cursor = mDataBase.query(TB_TIPO_VIA, tableColumns, null, null, null, null, _ID);
 
-        if (cursor == null) {
-            return null;
-        }
-        if (!cursor.moveToFirst()) {
-            cursor.close();
-            return null;
-        }
+        if (checkNullCursor(cursor)) return null;
 
         return cursor;
     }
 
-    public List<String> getTiposVia()
+    public List<TipoViaValueObj> getTiposVia()
     {
         Timber.d("In getTiposVia()");
 
@@ -500,22 +481,27 @@ public class ComunidadDbHelper extends SQLiteOpenHelper {
         }
 
         Cursor cursor = doTipoViaCursor();
+        if (cursor == null){
+            return new ArrayList<>(0);
+        }
 
         int pkIndex = cursor.getColumnIndex(_ID);
-        int tipoViaIndex = cursor.getColumnIndex(tipovia);
-        List<String> tiposViaList = new ArrayList<>();
+        int tipoViaIndexDesc = cursor.getColumnIndex(tipovia);
+        List<TipoViaValueObj> tiposViaList = new ArrayList<>(cursor.getCount());
+        TipoViaValueObj tipoViaObj;
 
-        do {
-            tiposViaList.add(cursor.getString(tipoViaIndex));
-        } while (cursor.moveToNext());
-
+        while (!cursor.isAfterLast()) {
+            tipoViaObj = new TipoViaValueObj(cursor.getInt(pkIndex), cursor.getString(tipoViaIndexDesc));
+            tiposViaList.add(tipoViaObj);
+            cursor.moveToNext();
+        }
         cursor.close();
         return tiposViaList;
     }
 
-//    ................ UTILITIES ...............
+//    ...................................... UTILITIES .............................................
 
-    public void dropAllTables()
+    void dropAllTables()
     {
         Timber.d("In dropAllTables()");
 
@@ -529,5 +515,17 @@ public class ComunidadDbHelper extends SQLiteOpenHelper {
             mDataBase.execSQL(DROP_TIPO_VIA);
             mTipoViaCounter = 0;
         }
+    }
+
+    private boolean checkNullCursor(Cursor cursor)
+    {
+        if (cursor == null) {
+            return true;
+        }
+        if (!cursor.moveToFirst()) {
+            cursor.close();
+            return true;
+        }
+        return false;
     }
 }

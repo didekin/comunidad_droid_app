@@ -6,8 +6,9 @@ import android.view.View;
 import android.widget.Spinner;
 
 import com.didekindroid.R;
-import com.didekindroid.api.OnSpinnerClick;
+import com.didekindroid.api.SpinnerClickHandler;
 import com.didekindroid.api.ViewerIf;
+import com.didekindroid.api.ViewerSelectionList;
 import com.didekindroid.incidencia.core.IncidImportanciaBean;
 import com.didekindroid.incidencia.core.IncidenciaBean;
 import com.didekindroid.incidencia.core.ViewerAmbitoIncidSpinner;
@@ -30,7 +31,7 @@ import static com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner.newVie
  * Date: 30/03/17
  * Time: 19:14
  */
-class ViewerIncidRegFr extends ViewerIncidRegEdit implements OnSpinnerClick {
+class ViewerIncidRegFr extends ViewerIncidRegEdit implements SpinnerClickHandler {
 
     AtomicReference<IncidenciaBean> atomIncidBean;
     AtomicReference<IncidImportanciaBean> atomIncidImportBean;
@@ -103,7 +104,7 @@ class ViewerIncidRegFr extends ViewerIncidRegEdit implements OnSpinnerClick {
     }
 
     @Override
-    public long doOnClickItemId(long itemId)
+    public long doOnClickItemId(long itemId, Class<? extends ViewerSelectionList> viewerSourceEvent)
     {
         Timber.d("doOnClickItemId()");
         // do nothing.

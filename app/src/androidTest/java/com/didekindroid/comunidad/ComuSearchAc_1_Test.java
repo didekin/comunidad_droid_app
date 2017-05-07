@@ -105,7 +105,7 @@ public class ComuSearchAc_1_Test {
         onView(withId(R.id.provincia_spinner)).check(matches(isDisplayed()));
         onView(withId(R.id.municipio_spinner)).check(matches(isDisplayed()));
 
-        assertThat(regComuFr.getComunidadBean().getTipoVia(), Matchers.is("tipo de vía"));
+        assertThat(regComuFr.getComunidadBean().getTipoVia().getTipoViaDesc(), is("tipo de vía"));
         onView(allOf(
                 withId(R.id.app_spinner_1_dropdown_item),
                 withParent(withId(R.id.tipo_via_spinner))

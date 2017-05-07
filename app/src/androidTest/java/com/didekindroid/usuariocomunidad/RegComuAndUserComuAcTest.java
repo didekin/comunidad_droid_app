@@ -9,6 +9,7 @@ import android.view.View;
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComunidadBean;
 import com.didekindroid.comunidad.RegComuFr;
+import com.didekindroid.comunidad.spinner.TipoViaValueObj;
 import com.didekindroid.exception.UiException;
 import com.didekinlib.model.comunidad.Municipio;
 import com.didekinlib.model.comunidad.Provincia;
@@ -123,7 +124,7 @@ public class RegComuAndUserComuAcTest {
         //UsuarioComunidadBean data.
         typeUserComuData("port2", "escale_b", "planta-N", "puerta5", PRE, ADM, INQ);
         // ComunidadBean data: we do not introduce the data in the screen.
-        ComunidadBean comunidadBean = new ComunidadBean("ataxo", "24 de Otoño", "001", "bis",
+        ComunidadBean comunidadBean = new ComunidadBean(new TipoViaValueObj(11, "ataxo"), "24 de Otoño", "001", "bis",
                 new Municipio((short) 162, new Provincia((short) 10)));
         UsuarioComunidadBean usuarioComunidadBean =
                 makeUserComuBeanFromView(usuarioComunidadRegView, comunidadBean, null);

@@ -22,7 +22,9 @@ import android.widget.ListView;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ControllerIf;
+import com.didekindroid.api.CtrlerSelectionListIf;
 import com.didekindroid.api.ViewerIf;
+import com.didekindroid.api.ViewerSelectionListIf;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf.ActionForUiExceptionIf;
 import com.didekindroid.router.ComponentReplacerIf;
@@ -63,6 +65,9 @@ import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.testutil.RxSchedulersUtils.resetAllSchedulers;
+import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceAndroidMain;
+import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceIoScheduler;
 import static java.util.Calendar.DAY_OF_MONTH;
 import static java.util.Calendar.MONTH;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -385,6 +390,20 @@ public final class ActivityTestUtils {
         waitAtMost(2, SECONDS).until(isViewDisplayed(withId(resorceIdNextView)));
     }
 
+    //    ============================ SPINNERS ============================
+
+    public static void checkSpinnerCtrlerLoadItems(CtrlerSelectionListIf controller, Long... entityId)
+    {
+        try {
+            trampolineReplaceIoScheduler();
+            trampolineReplaceAndroidMain();
+            assertThat(controller.loadItemsByEntitiyId(entityId), is(true));
+        } finally {
+            resetAllSchedulers();
+        }
+        assertThat(controller.getSubscriptions().size(), is(1));
+    }
+
     //    ============================ TOASTS ============================
 
     public static void checkToastInTest(int resourceId, Activity activity, int... resourceFieldsErrorId)
@@ -445,5 +464,13 @@ public final class ActivityTestUtils {
     }
 
     //    ============================ VIEWERS ============================
+
+    public static void checkSavedStateWithItemSelected(ViewerSelectionListIf viewer, BundleKey bundleKey)
+    {
+        viewer.setItemSelectedId(18L);
+        Bundle bundle = new Bundle(1);
+        viewer.saveState(bundle);
+        assertThat(bundle.getLong(bundleKey.getKey()), CoreMatchers.is(18L));
+    }
 }
 

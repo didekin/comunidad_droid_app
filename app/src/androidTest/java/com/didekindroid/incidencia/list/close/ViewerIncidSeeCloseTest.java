@@ -251,7 +251,7 @@ public class ViewerIncidSeeCloseTest {
     }
 
     @Test
-    public void test_OnSuccessLoadItems() throws Exception    // getHeaderViewsCount()
+    public void test_OnSuccessLoadItems() throws Exception
     {
         checkOnSuccessLoadItems(incidImportancia1, activity, fragment.viewer);
     }

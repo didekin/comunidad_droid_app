@@ -16,6 +16,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.CursorAdapter;
+import android.widget.SimpleCursorAdapter;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -83,6 +85,22 @@ public final class UIutils {
         if (!activity.getClass().getCanonicalName().equals(intent.getComponent().getClassName())) {
             activity.finish();
         }
+    }
+
+//    ================================== ADAPTERS ======================================
+
+    public static SpinnerAdapter doAdapterSpinnerFromCursor(Cursor cursor, String[] fromColDB, Activity activity)
+    {
+        Timber.d("In doAdapterSpinnerFromCursor()");
+
+        int[] toViews = new int[]{R.id.app_spinner_1_dropdown_item};
+        return new SimpleCursorAdapter(
+                activity,
+                R.layout.app_spinner_1_dropdown_item,
+                cursor,
+                fromColDB,
+                toViews,
+                0);
     }
 
 //    ================================== ASSERTIONS ======================================

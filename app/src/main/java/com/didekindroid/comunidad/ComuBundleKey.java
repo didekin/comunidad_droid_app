@@ -15,15 +15,18 @@ public enum ComuBundleKey implements BundleKey {
     COMUNIDAD_LIST_OBJECT,
     COMUNIDAD_ID,
     COMUNIDAD_SEARCH,
-    ;
+    COMUNIDAD_AUTONOMA_ID,
+    MUNICIPIO_ID,
+    PROVINCIA_ID,
+    TIPO_VIA_ID,;
 
-    public static final String intentPackage =  "ComuBundleKey.";
+    public static final String intentPackage = "ComuBundleKey.";
 
     public final String key;
 
     ComuBundleKey()
     {
-        key = intentPackage.concat(this.name());
+        key = intentPackage.concat(name());
     }
 
     @Override

@@ -44,6 +44,9 @@ public class ActivityRouter implements ActivityRouterIf {
 
     public static final ActivityRouter acRouter = new ActivityRouter();
 
+    static final Class<? extends Activity> acByDefaultRegUser = LoginAc.class;
+    static final Class<? extends Activity> acByDefaultNoRegUser = ComuSearchAc.class;
+
     private static final Map<Integer, Class<? extends Activity>> menuIdMap = new ArrayMap<>();
     private static final Map<Integer, Class<? extends Activity>> noUserRegMenuIdMap = new ArrayMap<>();
     private static final Map<Class<? extends Activity>, Class<? extends Activity>> acRouterMap = new ArrayMap<>();
@@ -123,9 +126,9 @@ public class ActivityRouter implements ActivityRouterIf {
     public Class<? extends Activity> nextActivityFromMn(int resourceId)
     {
         if (identityCacher.isRegisteredUser()) {
-            return menuIdMap.get(resourceId);
+            return menuIdMap.get(resourceId) != null ? menuIdMap.get(resourceId) : acByDefaultRegUser;
         } else {
-            return noUserRegMenuIdMap.get(resourceId);
+            return noUserRegMenuIdMap.get(resourceId) != null ? noUserRegMenuIdMap.get(resourceId) : acByDefaultNoRegUser;
         }
     }
 

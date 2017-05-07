@@ -44,7 +44,7 @@ import static com.didekindroid.util.UIutils.makeToast;
  * Postconditions:
  * 1.
  */
-public class ComuDataAc extends AppCompatActivity implements RegComuFr.ComuDataControllerIf {
+public class ComuDataAc extends AppCompatActivity /*implements RegComuFr.ComuDataControllerIf*/ {
 
     long mIdComunidad;
     View mAcView;
@@ -53,8 +53,7 @@ public class ComuDataAc extends AppCompatActivity implements RegComuFr.ComuDataC
     Comunidad mComunidad;
     IdentityCacher identityCacher;
 
-    private boolean isTipoViaSpinnerSet;
-    private boolean isCASpinnerSet;
+
     private boolean isProvinciaSpinnerSet;
     private boolean isMunicipioSpinnerSet;
 
@@ -70,15 +69,13 @@ public class ComuDataAc extends AppCompatActivity implements RegComuFr.ComuDataC
         mIdComunidad = getIntent().getLongExtra(COMUNIDAD_ID.key, 0L);
         assertTrue(mIdComunidad > 0L, comunidadId_should_be_initialized);
 
-        // Asunción: esta tarea termina antes que la carga de los spinners en RegComuFr.
-        // Si hay problemas: meter C_Autonoma en la query que obtiene los objetos Comunidad que se usan para el intent inicial de esta actividad.
         new ComuDataSetter().execute();
 
         mAcView = getLayoutInflater().inflate(R.layout.comu_data_ac, null);
         setContentView(mAcView);
         doToolBar(this, true);
         mRegComuFrg = (RegComuFr) getFragmentManager().findFragmentById(R.id.reg_comunidad_frg);
-        mRegComuFrg.setmComuDataController(this);
+//        mRegComuFrg.setmComuDataController(this);  // TODO: cambiar.
 
         mModifyButton = (Button) findViewById(R.id.comu_data_ac_button);
         mModifyButton.setOnClickListener(new View.OnClickListener() {
@@ -131,48 +128,6 @@ public class ComuDataAc extends AppCompatActivity implements RegComuFr.ComuDataC
         ((EditText) comuFrView.findViewById(R.id.comunidad_sufijo_numero_editT)).setText(mComunidad.getSufijoNumero());
     }
 
-    @Override
-    public void onTipoViaSpinnerLoaded()
-    {
-        Timber.d("onTipoViaSpinnerLoaded()");
-
-        if (!isTipoViaSpinnerSet) {
-            Timber.d("onTipoViaSpinnerLoaded(): spinner not set");
-            int position = 0;
-            Cursor cursor;
-            for (int i = 0; i < mRegComuFrg.mTipoViaSpinner.getCount(); i++) {
-                cursor = (Cursor) mRegComuFrg.mTipoViaSpinner.getItemAtPosition(i);
-                if (cursor.getString(1).equals(mComunidad.getTipoVia())) {
-                    position = i;
-                }
-            }
-            mRegComuFrg.mTipoViaSpinner.setSelection(position);
-            isTipoViaSpinnerSet = true;
-        }
-    }
-
-    @Override
-    public void onCAutonomaSpinnerLoaded()
-    {
-        Timber.d("onCAutonomaSpinnerLoaded()");
-
-        if (!isCASpinnerSet) {
-            Timber.d("onCAutonomaSpinnerLoaded(): spinner not set");
-            short cAutonomaId = mComunidad.getMunicipio().getProvincia().getComunidadAutonoma().getCuId();
-
-            int position = 0;
-            int itemsLength = mRegComuFrg.mAutonomaComuSpinner.getCount();
-            for (int i = 0; i < itemsLength; i++) {
-                if ((short) mRegComuFrg.mAutonomaComuSpinner.getItemIdAtPosition(i) == cAutonomaId) {
-                    position = i;
-                }
-            }
-            mRegComuFrg.mAutonomaComuSpinner.setSelection(position);
-            isCASpinnerSet = true;
-        }
-    }
-
-    @Override
     public void onProvinciaSpinnerLoaded()
     {
         Timber.d("onProvinciaSpinnerLoaded()");
@@ -192,7 +147,6 @@ public class ComuDataAc extends AppCompatActivity implements RegComuFr.ComuDataC
         }
     }
 
-    @Override
     public void onMunicipioSpinnerLoaded()
     {
         Timber.d("onMunicipioSpinnerLoaded()");
@@ -212,15 +166,6 @@ public class ComuDataAc extends AppCompatActivity implements RegComuFr.ComuDataC
             mRegComuFrg.municipioSpinner.setSelection(position);
             isMunicipioSpinnerSet = true;
         }
-    }
-
-    @Override
-    public void onDestroyFragment()
-    {
-        isCASpinnerSet = false;
-        isMunicipioSpinnerSet = false;
-        isProvinciaSpinnerSet = false;
-        isTipoViaSpinnerSet = false;
     }
 
 //    ============================================================================================

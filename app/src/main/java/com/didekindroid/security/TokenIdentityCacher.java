@@ -55,18 +55,7 @@ public final class TokenIdentityCacher implements IdentityCacher {
             return isDeletedUser;
         }
     };
-    public static final Consumer<SpringOauthToken> initTokenAction = new Consumer<SpringOauthToken>() {
-        @Override
-        public void accept(SpringOauthToken token)
-        {
-            Timber.d("accept(), Thread: %s", Thread.currentThread().getName());
-            TKhandler.initIdentityCache(token);
-        }
-    };
 
-    //  ======================================================================================
-    //    .................................... ACTIONS .................................
-    //  ======================================================================================
     static final BiFunction<Boolean, SpringOauthToken, Boolean> initTokenAndRegisterFunc
             = new BiFunction<Boolean, SpringOauthToken, Boolean>() {
 
@@ -84,6 +73,20 @@ public final class TokenIdentityCacher implements IdentityCacher {
             return isUpdatedTokenData;
         }
     };
+
+    //  ======================================================================================
+    //    .................................... ACTIONS .................................
+    //  ======================================================================================
+
+    public static final Consumer<SpringOauthToken> initTokenAction = new Consumer<SpringOauthToken>() {
+        @Override
+        public void accept(SpringOauthToken token)
+        {
+            Timber.d("accept(), Thread: %s", Thread.currentThread().getName());
+            TKhandler.initIdentityCache(token);
+        }
+    };
+
     static final Consumer<Integer> cleanTokenCacheAction = new Consumer<Integer>() {
         @Override
         public void accept(Integer modifiedUser)
@@ -93,6 +96,7 @@ public final class TokenIdentityCacher implements IdentityCacher {
             }
         }
     };
+
     public static final Consumer<Boolean> cleanTkCacheActionBoolean = new Consumer<Boolean>() {
         @Override
         public void accept(Boolean isToClean) throws Exception

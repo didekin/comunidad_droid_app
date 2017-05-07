@@ -1,7 +1,6 @@
 package com.didekindroid.comunidad;
 
-import com.didekindroid.usuariocomunidad.spinner.CtrlerComuSpinnerTest;
-import com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinnerTest;
+import com.didekindroid.comunidad.repository.ComunidadDbHelperTest;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;

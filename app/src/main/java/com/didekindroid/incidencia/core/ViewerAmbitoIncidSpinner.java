@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.didekindroid.api.CtrlerSelectionList;
@@ -12,7 +11,6 @@ import com.didekindroid.api.ViewerIf;
 import com.didekindroid.api.ViewerSelectionList;
 
 import java.io.Serializable;
-import java.util.List;
 
 import timber.log.Timber;
 
@@ -46,17 +44,6 @@ public final class ViewerAmbitoIncidSpinner extends
     // ==================================== ViewerSelectionListIf ====================================
 
     @Override
-    public void onSuccessLoadItems(List<AmbitoIncidValueObj> incidCloseList)
-    {
-        Timber.d("onSuccessLoadItems()");
-
-        ArrayAdapter<AmbitoIncidValueObj> adapter = ViewerSelectionList.getArrayAdapterForSpinner(AmbitoIncidValueObj.class, activity);
-        adapter.addAll(incidCloseList);
-        view.setAdapter(adapter);
-        view.setSelection(getSelectedPositionFromItemId(itemSelectedId));
-    }
-
-    @Override
     public void initSelectedItemId(Bundle savedState)
     {
         Timber.d("initSelectedItemId()");
@@ -76,8 +63,8 @@ public final class ViewerAmbitoIncidSpinner extends
     {
         Timber.d("doViewInViewer()");
         incidenciaBean = IncidenciaBean.class.cast(viewBean);
-        view.setOnItemSelectedListener(new ViewerAmbitoIncidSpinner.AmbitoIncidSelectedListener());
         initSelectedItemId(savedState);
+        view.setOnItemSelectedListener(new ViewerAmbitoIncidSpinner.AmbitoIncidSelectedListener());
         CtrlerSelectionList.class.cast(controller).loadItemsByEntitiyId();
     }
 

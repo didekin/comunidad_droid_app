@@ -3,6 +3,7 @@ package com.didekindroid.comunidad;
 import android.content.res.Resources;
 
 import com.didekindroid.R;
+import com.didekindroid.comunidad.spinner.TipoViaValueObj;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.comunidad.Municipio;
 import com.didekinlib.model.comunidad.Provincia;
@@ -22,7 +23,7 @@ import static com.didekinlib.model.common.dominio.ValidDataPatterns.SUFIJO_NUMER
 public class ComunidadBean implements Serializable {
 
     private long comunidadId;
-    private String tipoVia;
+    private TipoViaValueObj tipoVia;
     private String nombreVia;
     private String numeroString;
     private short numero;
@@ -34,7 +35,7 @@ public class ComunidadBean implements Serializable {
     {
     }
 
-    public ComunidadBean(String tipoVia, String nombreVia, String numeroEnVia,
+    public ComunidadBean(TipoViaValueObj tipoVia, String nombreVia, String numeroEnVia,
                          String sufijoNumero, Municipio municipio)
     {
         this.tipoVia = tipoVia;
@@ -45,7 +46,7 @@ public class ComunidadBean implements Serializable {
         comunidadId = 0L;
     }
 
-    public ComunidadBean(long comunidadId, String tipoVia, String nombreVia, String numeroEnVia,
+    public ComunidadBean(long comunidadId, TipoViaValueObj tipoVia, String nombreVia, String numeroEnVia,
                          String sufijoNumero, Municipio municipio)
     {
         this(tipoVia, nombreVia, numeroEnVia, sufijoNumero, municipio);
@@ -56,7 +57,7 @@ public class ComunidadBean implements Serializable {
     {
         boolean isValid;
 
-        if ((tipoVia == null || tipoVia.isEmpty())
+        if ((tipoVia == null || tipoVia.getTipoViaDesc().isEmpty())
                 && (nombreVia == null || nombreVia.isEmpty())
                 && (numeroString == null || numeroString.isEmpty())
                 && (sufijoNumero == null || sufijoNumero.isEmpty())
@@ -74,7 +75,7 @@ public class ComunidadBean implements Serializable {
 
         if (isValid) {
             comunidad = new Comunidad.ComunidadBuilder()
-                    .tipoVia(tipoVia)
+                    .tipoVia(tipoVia.getTipoViaDesc())
                     .nombreVia(nombreVia)
                     .numero(numero)
                     .sufijoNumero(sufijoNumero)
@@ -87,8 +88,7 @@ public class ComunidadBean implements Serializable {
 
     private boolean validateTipoVia(Resources resources, StringBuilder errorMsg)
     {
-        // TODO: internacionalizar. Ha de compararse con el primer registro de la tabla de tipo_via.
-        if (tipoVia == null || tipoVia.trim().equals(resources.getString(R.string.tipo_via_spinner))) {
+        if (tipoVia == null || tipoVia.getTipoViaDesc().trim().equals(resources.getString(R.string.tipo_via_spinner))) {
             errorMsg.append(resources.getString(R.string.tipo_via)).append(LINE_BREAK.getRegexp());
             return false;
         }
@@ -207,12 +207,12 @@ public class ComunidadBean implements Serializable {
         this.sufijoNumero = sufijoNumero;
     }
 
-    public String getTipoVia()
+    public TipoViaValueObj getTipoVia()
     {
         return tipoVia;
     }
 
-    public void setTipoVia(String tipoVia)
+    public void setTipoVia(TipoViaValueObj tipoVia)
     {
         this.tipoVia = tipoVia;
     }

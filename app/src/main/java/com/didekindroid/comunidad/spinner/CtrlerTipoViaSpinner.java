@@ -1,9 +1,10 @@
-package com.didekindroid.incidencia.core;
+package com.didekindroid.comunidad.spinner;
 
 import android.app.Activity;
 
 import com.didekindroid.api.CtrlerSelectionList;
 import com.didekindroid.api.ObserverSelectionList;
+import com.didekindroid.comunidad.repository.ComunidadDbHelper;
 
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -16,41 +17,41 @@ import static io.reactivex.schedulers.Schedulers.io;
 
 /**
  * User: pedro@didekin
- * Date: 30/03/17
- * Time: 13:20
+ * Date: 03/05/17
+ * Time: 10:08
  */
 
-class CtrlerAmbitoIncidSpinner extends CtrlerSelectionList<AmbitoIncidValueObj> {
+class CtrlerTipoViaSpinner extends CtrlerSelectionList<TipoViaValueObj> {
 
-    private ObserverSelectionList<AmbitoIncidValueObj> observerSpinner;
+    ObserverSelectionList<TipoViaValueObj> observerSpinner;
 
-    CtrlerAmbitoIncidSpinner(ViewerAmbitoIncidSpinner viewerIn)
+    CtrlerTipoViaSpinner(ViewerTipoViaSpinner viewer)
     {
-        super(viewerIn);
+        super(viewer);
     }
 
-    static CtrlerAmbitoIncidSpinner newCtrlerAmbitoIncidSpinner(ViewerAmbitoIncidSpinner viewerIn)
+    static CtrlerTipoViaSpinner newCtrlerTipoViaSpinner(ViewerTipoViaSpinner viewer)
     {
-        Timber.d("newCtrlerAmbitoIncidSpinner()");
-        CtrlerAmbitoIncidSpinner controller = new CtrlerAmbitoIncidSpinner(viewerIn);
+        Timber.d("newCtrlerTipoViaSpinner()");
+        CtrlerTipoViaSpinner controller = new CtrlerTipoViaSpinner(viewer);
         controller.observerSpinner = new ObserverSelectionList<>(controller);
         return controller;
     }
 
     // .................................... OBSERVABLE .......................................
 
-    static Single<List<AmbitoIncidValueObj>> ambitoIncidList(final Activity activity)
+    static Single<List<TipoViaValueObj>> tipoViaList(final Activity activity)
     {
+        Timber.d("tipoViaList()");
 
-        Timber.d("ambitoIncidList()");
-        return Single.fromCallable(new Callable<List<AmbitoIncidValueObj>>() {
+        return Single.fromCallable(new Callable<List<TipoViaValueObj>>() {
             @Override
-            public List<AmbitoIncidValueObj> call() throws Exception
+            public List<TipoViaValueObj> call() throws Exception
             {
-                IncidenciaDataDbHelper dbHelper = new IncidenciaDataDbHelper(activity);
-                List<AmbitoIncidValueObj> list = dbHelper.getAmbitoIncidList();
+                ComunidadDbHelper dbHelper = new ComunidadDbHelper(activity);
+                List<TipoViaValueObj> tiposVia = dbHelper.getTiposVia();
                 dbHelper.close();
-                return list;
+                return tiposVia;
             }
         });
     }
@@ -61,7 +62,7 @@ class CtrlerAmbitoIncidSpinner extends CtrlerSelectionList<AmbitoIncidValueObj> 
     public boolean loadItemsByEntitiyId(Long... entityId)
     {
         Timber.d("loadItemsByEntitiyId()");
-        return subscriptions.add(ambitoIncidList(viewer.getActivity())
+        return subscriptions.add(tipoViaList(viewer.getActivity())
                 .subscribeOn(io())
                 .observeOn(mainThread())
                 .subscribeWith(observerSpinner)

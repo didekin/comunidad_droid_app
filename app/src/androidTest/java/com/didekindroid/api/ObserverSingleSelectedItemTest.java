@@ -3,12 +3,12 @@ package com.didekindroid.api;
 import android.os.Bundle;
 import android.support.test.runner.AndroidJUnit4;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import io.reactivex.Single;
@@ -34,17 +34,13 @@ public class ObserverSingleSelectedItemTest {
     public void setUp()
     {
         observerSingleSelectedItem = new ObserverSingleSelectedItem<>(
-                new CtrlerSelectItemForTest(new ViewerSelectionList<AdapterView, CtrlerSelectionList<String>, String>(null, null, null) {
-                    @Override
-                    public void onSuccessLoadItems(List<String> incidCloseList)
-                    {
-                    }
-
+                new CtrlerSelectItemForTest(new ViewerSelectionList<AdapterView<ArrayAdapter<String>>, CtrlerSelectionList<String>, String>(null, null, null) {
                     @Override
                     public void initSelectedItemId(Bundle savedState)
                     {
                     }
-                }));
+                })
+        );
     }
 
     @Test
@@ -59,8 +55,7 @@ public class ObserverSingleSelectedItemTest {
     static class CtrlerSelectItemForTest extends CtrlerSelectionList<String> implements
             CtrlerSelectableItemIf<String, Integer> {
 
-
-        protected CtrlerSelectItemForTest(ViewerSelectionList<? extends AdapterView, CtrlerSelectionList<String>, String> viewer)
+        CtrlerSelectItemForTest(ViewerSelectionList<? extends AdapterView, CtrlerSelectionList<String>, String> viewer)
         {
             super(viewer);
         }

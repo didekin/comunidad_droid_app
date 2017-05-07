@@ -22,6 +22,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import static com.didekindroid.incidencia.core.ViewerAmbitoIncidSpinner.newViewerAmbitoIncidSpinner;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.AMBITO_INCIDENCIA_POSITION;
+import static com.didekindroid.testutil.ActivityTestUtils.checkSavedStateWithItemSelected;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -96,7 +97,7 @@ public class ViewerAmbitoIncidSpinnerTest {
             }
         });
         waitAtMost(2, SECONDS).untilTrue(isExec);
-        assertThat(viewer.getViewInViewer().getAdapter().getCount(), is(3));
+        assertThat(viewer.getViewInViewer().getAdapter().getCount(), is(ambitos.size()));
         assertThat(ViewerAmbitoIncidSpinner.class.cast(viewer).getViewInViewer().getSelectedItemId(), is(1L));
         assertThat(ViewerAmbitoIncidSpinner.class.cast(viewer).getViewInViewer().getSelectedItemPosition(), is(1));
     }
@@ -126,14 +127,7 @@ public class ViewerAmbitoIncidSpinnerTest {
     @Test
     public void testSaveState() throws Exception
     {
-        assertThat(viewer.getSelectedItemId(), is(0L));
-        Bundle bundle = new Bundle(0);
-        viewer.saveState(bundle);
-        assertThat(bundle.containsKey(AMBITO_INCIDENCIA_POSITION.key), is(false));
-
-        viewer.setItemSelectedId(1L);
-        viewer.saveState(bundle);
-        assertThat(bundle.getLong(AMBITO_INCIDENCIA_POSITION.key), is(1L));
+        checkSavedStateWithItemSelected(viewer, AMBITO_INCIDENCIA_POSITION);
     }
 
     @Test

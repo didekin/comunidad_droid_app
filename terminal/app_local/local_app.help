@@ -1,9 +1,10 @@
 LOCALHOST
 =========
+
+{Nota: estoy accediendo a través de pakagekite. No creo que necesite esa configuración}
 Para acceder desde un móvil al servidor Jetty en local:
 - Incluir el móvil en la red WI-FI local.
 - Habilitar System Preferences/Sharing/Remote management para el servidor local.
-{Nota: estoy accediendo a través de pakagekite. No creo que necesite esa configuración}
 
 LOGCAT
 ======

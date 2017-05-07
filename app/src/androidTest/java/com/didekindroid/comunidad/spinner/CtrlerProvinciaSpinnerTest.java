@@ -1,19 +1,18 @@
-package com.didekindroid.incidencia.core;
+package com.didekindroid.comunidad.spinner;
 
 import android.app.Activity;
 import android.support.test.rule.ActivityTestRule;
-import android.support.test.runner.AndroidJUnit4;
 import android.view.View;
 import android.widget.Spinner;
 
 import com.didekindroid.api.ActivityMock;
 import com.didekindroid.api.ViewerMock;
+import com.didekinlib.model.comunidad.Provincia;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
@@ -21,10 +20,9 @@ import java.util.concurrent.atomic.AtomicReference;
 import io.reactivex.functions.Consumer;
 import io.reactivex.observers.TestObserver;
 
-import static com.didekindroid.incidencia.core.CtrlerAmbitoIncidSpinner.ambitoIncidList;
-import static com.didekindroid.incidencia.core.CtrlerAmbitoIncidSpinner.newCtrlerAmbitoIncidSpinner;
-import static com.didekindroid.incidencia.core.IncidenciaDataDb.AmbitoIncidencia.AMBITO_INCID_COUNT;
-import static com.didekindroid.incidencia.core.ViewerAmbitoIncidSpinner.newViewerAmbitoIncidSpinner;
+import static com.didekindroid.comunidad.spinner.CtrlerProvinciaSpinner.newCtrlerProvinciaSpinner;
+import static com.didekindroid.comunidad.spinner.CtrlerProvinciaSpinner.provinciasByComAutonoma;
+import static com.didekindroid.comunidad.spinner.ViewerProvinciaSpinner.newViewerProvinciaSpinner;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSpinnerCtrlerLoadItems;
 import static com.didekindroid.testutil.RxSchedulersUtils.resetAllSchedulers;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -35,30 +33,29 @@ import static org.junit.Assert.assertThat;
 
 /**
  * User: pedro@didekin
- * Date: 30/03/17
- * Time: 16:31
+ * Date: 05/05/17
+ * Time: 19:13
  */
-@RunWith(AndroidJUnit4.class)
-public class CtrlerAmbitoIncidSpinnerTest {
+public class CtrlerProvinciaSpinnerTest {
 
     @Rule
     public ActivityTestRule<ActivityMock> activityRule = new ActivityTestRule<>(ActivityMock.class, true, true);
 
-    CtrlerAmbitoIncidSpinner controller;
+    CtrlerProvinciaSpinner controller;
 
     @Before
-    public void setUp()
+    public void setUp() throws Exception
     {
         final Activity activity = activityRule.getActivity();
-        final AtomicReference<CtrlerAmbitoIncidSpinner> atomicController = new AtomicReference<>(null);
+        final AtomicReference<CtrlerProvinciaSpinner> atomicController = new AtomicReference<>(null);
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run()
             {
                 atomicController.compareAndSet(
                         null,
-                        newCtrlerAmbitoIncidSpinner(
-                                newViewerAmbitoIncidSpinner(
+                        newCtrlerProvinciaSpinner(
+                                newViewerProvinciaSpinner(
                                         new Spinner(activity), activity, new ViewerMock<>(new View(activity), activity, null)
                                 )
                         )
@@ -70,21 +67,28 @@ public class CtrlerAmbitoIncidSpinnerTest {
     }
 
     @After
-    public void clear()
+    public void tearDown() throws Exception
     {
         controller.clearSubscriptions();
         resetAllSchedulers();
     }
 
     @Test
-    public void testAmbitoIncidList()
+    public void test_NewCtrlerProvinciaSpinner() throws Exception
     {
-        ambitoIncidList(controller.getViewer().getActivity()).test().assertOf(new Consumer<TestObserver<List<AmbitoIncidValueObj>>>() {
+        assertThat(controller.observerSpinner, notNullValue());
+    }
+
+    @Test
+    public void test_ProvinciasByComAutonoma() throws Exception
+    {
+        provinciasByComAutonoma(controller.getViewer().getActivity(), (short) 11).test().assertOf(new Consumer<TestObserver<List<Provincia>>>() {
             @Override
-            public void accept(TestObserver<List<AmbitoIncidValueObj>> listTestObserver) throws Exception
+            public void accept(TestObserver<List<Provincia>> listTestObserver) throws Exception
             {
-                assertThat(listTestObserver.values().get(0).size(), is(AMBITO_INCID_COUNT));
-                assertThat(listTestObserver.values().size(), is(1));
+                assertThat(listTestObserver.values().size(), is(1)); // Single.
+                assertThat(listTestObserver.values().get(0).size(), is(2));
+                assertThat(listTestObserver.values().get(0).get(0).getNombre(), is("Badajoz"));
             }
         });
     }
@@ -92,6 +96,6 @@ public class CtrlerAmbitoIncidSpinnerTest {
     @Test
     public void test_LoadItemsByEntitiyId() throws Exception
     {
-        checkSpinnerCtrlerLoadItems(controller);
+        checkSpinnerCtrlerLoadItems(controller, 11L);
     }
 }

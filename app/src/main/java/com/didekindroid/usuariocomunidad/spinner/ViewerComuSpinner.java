@@ -4,17 +4,15 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.didekindroid.api.CtrlerSelectionList;
-import com.didekindroid.api.OnSpinnerClick;
+import com.didekindroid.api.SpinnerClickHandler;
 import com.didekindroid.api.ViewerIf;
 import com.didekindroid.api.ViewerSelectionList;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import java.io.Serializable;
-import java.util.List;
 
 import timber.log.Timber;
 
@@ -26,7 +24,8 @@ import static com.didekindroid.usuariocomunidad.spinner.CtrlerComuSpinner.newCon
  * Date: 16/02/17
  * Time: 10:49
  */
-public class ViewerComuSpinner extends ViewerSelectionList<Spinner, CtrlerSelectionList<Comunidad>, Comunidad> {
+public class ViewerComuSpinner extends
+        ViewerSelectionList<Spinner, CtrlerSelectionList<Comunidad>, Comunidad> {
 
     @SuppressWarnings("WeakerAccess")
     ComuSpinnerBean spinnerBean;
@@ -45,18 +44,6 @@ public class ViewerComuSpinner extends ViewerSelectionList<Spinner, CtrlerSelect
     }
 
     // ==================================== ViewerSelectionListIf ====================================
-
-
-    @Override
-    public void onSuccessLoadItems(List<Comunidad> incidCloseList)
-    {
-        Timber.d("onSuccessLoadItems()");
-
-        ArrayAdapter<Comunidad> adapter = ViewerSelectionList.getArrayAdapterForSpinner(Comunidad.class, activity);
-        adapter.addAll(incidCloseList);
-        view.setAdapter(adapter);
-        view.setSelection(getSelectedPositionFromItemId(itemSelectedId));
-    }
 
     @Override
     public void initSelectedItemId(Bundle savedState)
@@ -126,7 +113,7 @@ public class ViewerComuSpinner extends ViewerSelectionList<Spinner, CtrlerSelect
             itemSelectedId = comunidad.getC_Id();
             spinnerBean.setComunidadId(itemSelectedId);
             // Event passed to parent viewer for futher action.
-            OnSpinnerClick.class.cast(parentViewer).doOnClickItemId(itemSelectedId);
+            SpinnerClickHandler.class.cast(parentViewer).doOnClickItemId(itemSelectedId, ViewerComuSpinner.this.getClass());
         }
 
         @Override

@@ -126,7 +126,7 @@ public class ComuDataAcTest {
                 .check(matches(withText(is(mComunidad.getSufijoNumero()))))
                 .check(matches(isDisplayed()));
 
-        assertThat(mActivity.mRegComuFrg.getComunidadBean().getTipoVia(), is(mComunidad.getTipoVia()));
+        assertThat(mActivity.mRegComuFrg.getComunidadBean().getTipoVia().getTipoViaDesc(), is(mComunidad.getTipoVia()));
 
         onView(allOf(ViewMatchers.withId(R.id.app_spinner_1_dropdown_item), withParent(ViewMatchers.withId(R.id.tipo_via_spinner))))
                 .check(matches(withText(is(mComunidad.getTipoVia())))).check(matches(isDisplayed()));

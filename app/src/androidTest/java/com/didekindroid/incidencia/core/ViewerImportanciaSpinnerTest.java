@@ -22,6 +22,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import static com.didekindroid.incidencia.core.ViewerImportanciaSpinner.newViewerImportanciaSpinner;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_NUMBER;
+import static com.didekindroid.testutil.ActivityTestUtils.checkSavedStateWithItemSelected;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -119,14 +120,7 @@ public class ViewerImportanciaSpinnerTest {
     @Test
     public void testSaveState() throws Exception
     {
-        assertThat(viewer.getSelectedItemId(), is(0L));
-        Bundle bundle = new Bundle(0);
-        viewer.saveState(bundle);
-        assertThat(bundle.containsKey(INCID_IMPORTANCIA_NUMBER.key), is(false));
-
-        viewer.setItemSelectedId(1L);
-        viewer.saveState(bundle);
-        assertThat(bundle.getLong(INCID_IMPORTANCIA_NUMBER.key), is(1L));
+        checkSavedStateWithItemSelected(viewer, INCID_IMPORTANCIA_NUMBER);
     }
 
     @Test

@@ -59,12 +59,7 @@ public class ObserverSelectionListTest {
                 atomicObserver.compareAndSet(null,
                         new ObserverSelectionList<>(
                                 new CtrlerSpinnerForTest(
-                                        new ViewerSelectionList<AdapterView, CtrlerSelectionList<String>, String>(new Spinner(activity), activity, null) {
-                                            @Override
-                                            public void onSuccessLoadItems(List<String> incidCloseList)
-                                            {
-                                            }
-
+                                        new ViewerSelectionList<Spinner, CtrlerSelectionList<String>, String>(new Spinner(activity), activity, null) {
                                             @Override
                                             public void initSelectedItemId(Bundle savedState)
                                             {
@@ -98,8 +93,7 @@ public class ObserverSelectionListTest {
 
     static class CtrlerSpinnerForTest extends CtrlerSelectionList<String> {
 
-
-        protected CtrlerSpinnerForTest(ViewerSelectionList<AdapterView, CtrlerSelectionList<String>, String> viewer)
+        CtrlerSpinnerForTest(ViewerSelectionList<? extends AdapterView, CtrlerSelectionList<String>, String> viewer)
         {
             super(viewer);
         }

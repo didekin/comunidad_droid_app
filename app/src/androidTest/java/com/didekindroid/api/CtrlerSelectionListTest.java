@@ -10,7 +10,6 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
@@ -39,12 +38,6 @@ public class CtrlerSelectionListTest {
 
         ViewerSelectionList<Spinner, CtrlerSelectionList<String>, String> viewer =
                 new ViewerSelectionList<Spinner, CtrlerSelectionList<String>, String>(new Spinner(activity), activity, null) {
-                    @Override
-                    public void onSuccessLoadItems(List incidCloseList)
-                    {
-                        assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
-                    }
-
                     @Override
                     public void initSelectedItemId(Bundle savedState)
                     {

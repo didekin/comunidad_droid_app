@@ -5,6 +5,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComunidadBean;
+import com.didekindroid.comunidad.spinner.TipoViaValueObj;
 import com.didekindroid.usuario.UsuarioBean;
 import com.didekinlib.model.comunidad.Municipio;
 import com.didekinlib.model.comunidad.Provincia;
@@ -39,7 +40,7 @@ public class UsuarioComunidadBeanValidaTests {
     {
         resources = getTargetContext().getResources();
         errors = new StringBuilder(resources.getText(R.string.error_validation_msg));
-        comunidad = new ComunidadBean("ataxo", "24 de Otoño", "001", "bis", new Municipio
+        comunidad = new ComunidadBean(new TipoViaValueObj(11, "ataxo"), "24 de Otoño", "001", "bis", new Municipio
                 ((short) 5, "Municipio2", new Provincia((short) 35, "Las Palmas"))
         );
         usuarioBean = new UsuarioBean("user@name.com", "alias1", "password1", "password1");

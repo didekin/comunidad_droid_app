@@ -18,4 +18,16 @@
         android:id="@+id/importancia_spinner"
         style="@style/spinnerBase"/>
 
+    <Spinner
+        android:id="@+id/tipovia_spinner"
+        style="@style/spinnerBase"/>
+
+    <Spinner
+        android:id="@+id/comunidadAutonoma_spinner"
+        style="@style/spinnerBase"/>
+
+    <Spinner
+        android:id="@+id/provincia_spinner"
+        style="@style/spinnerBase"/>
+
 </LinearLayout>

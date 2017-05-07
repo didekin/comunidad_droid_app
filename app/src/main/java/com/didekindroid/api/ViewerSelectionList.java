@@ -7,6 +7,7 @@ import android.widget.ArrayAdapter;
 import com.didekindroid.R;
 
 import java.io.Serializable;
+import java.util.List;
 
 import timber.log.Timber;
 
@@ -16,7 +17,7 @@ import timber.log.Timber;
  * Time: 13:56
  */
 @SuppressWarnings("AbstractClassExtendsConcreteClass")
-public abstract class ViewerSelectionList<T extends AdapterView, C extends CtrlerSelectionListIf<E>, E extends Serializable>
+public abstract class ViewerSelectionList<T extends AdapterView<? super ArrayAdapter<E>>, C extends CtrlerSelectionListIf<E>, E extends Serializable>
         extends Viewer<T, C>
         implements ViewerSelectionListIf<T, C, E> {
 
@@ -37,7 +38,7 @@ public abstract class ViewerSelectionList<T extends AdapterView, C extends Ctrle
         super(view, activity, parentViewer);
     }
 
-    protected static <H> ArrayAdapter<H> getArrayAdapterForSpinner(Class<H> adapterElementType, Activity activity)
+    ArrayAdapter<E> getArrayAdapterForSpinner(Activity activity)
     {
         Timber.d("getArrayAdapterForSpinner()");
         return new ArrayAdapter<>(activity, spinner_view_layout, spinner_text_view);
@@ -63,5 +64,15 @@ public abstract class ViewerSelectionList<T extends AdapterView, C extends Ctrle
     {
         Timber.d("getSelectedItemId()");
         return (int) itemId;
+    }
+
+    @Override
+    public void onSuccessLoadItems(List<E> incidCloseList)
+    {
+        Timber.d("onSuccessLoadItems()");
+        ArrayAdapter<E> adapter = getArrayAdapterForSpinner(activity);
+        adapter.addAll(incidCloseList);
+        view.setAdapter(adapter);
+        view.setSelection(getSelectedPositionFromItemId(itemSelectedId));
     }
 }

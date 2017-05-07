@@ -1,6 +1,7 @@
 package com.didekindroid.api;
 
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 
 import java.io.Serializable;
 import java.util.List;
@@ -16,7 +17,7 @@ import timber.log.Timber;
 public abstract class CtrlerSelectionList<E extends Serializable> extends Controller
         implements CtrlerSelectionListIf<E> {
 
-    private final ViewerSelectionList<? extends AdapterView, CtrlerSelectionList<E>, E> viewerCast;
+    private final ViewerSelectionList<? extends AdapterView<? super ArrayAdapter<E>>, CtrlerSelectionList<E>, E> viewerCast;
 
     protected CtrlerSelectionList(ViewerSelectionList<? extends AdapterView, CtrlerSelectionList<E>, E> viewer)
     {

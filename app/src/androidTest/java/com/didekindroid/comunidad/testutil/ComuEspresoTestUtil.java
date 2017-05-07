@@ -32,7 +32,7 @@ public final class ComuEspresoTestUtil {
     {
     }
 
-    public static void typeComunidadData() throws InterruptedException
+    public static void typeComunidadData()
     {
         typeComunidadData("Calle", "Valencia", "Alicante/Alacant", "Algueña", "Real", "5", "Bis");
     }
@@ -52,7 +52,7 @@ public final class ComuEspresoTestUtil {
     public static void validaTypedComunidadBean(final ComunidadBean comunidadBean, String tipoVia, short municipioProvId,
                                                 short municipioCodProv, String nombreVia, String numeroEnVia, String sufijoNumero)
     {
-        assertThat(comunidadBean.getTipoVia(), is(tipoVia));
+        assertThat(comunidadBean.getTipoVia().getTipoViaDesc(), is(tipoVia));
         assertThat(comunidadBean.getMunicipio().getProvincia().getProvinciaId(), is(municipioProvId));
         assertThat(comunidadBean.getMunicipio().getCodInProvincia(), is(municipioCodProv));
         assertThat(comunidadBean.getNombreVia(), is(nombreVia));

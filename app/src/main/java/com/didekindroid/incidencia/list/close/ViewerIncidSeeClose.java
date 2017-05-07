@@ -11,7 +11,7 @@ import android.widget.Spinner;
 
 import com.didekindroid.R;
 import com.didekindroid.api.CtrlerSelectableItemIf;
-import com.didekindroid.api.OnSpinnerClick;
+import com.didekindroid.api.SpinnerClickHandler;
 import com.didekindroid.api.ViewerSelectionList;
 import com.didekindroid.router.ComponentReplacerIf;
 import com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner;
@@ -34,7 +34,7 @@ import static com.didekindroid.util.UIutils.assertTrue;
  */
 public class ViewerIncidSeeClose extends
         ViewerSelectionList<ListView, CtrlerSelectableItemIf<IncidenciaUser, Bundle>, IncidenciaUser>
-        implements ComponentReplacerIf, OnSpinnerClick {
+        implements ComponentReplacerIf, SpinnerClickHandler {
 
     protected ViewerComuSpinner comuSpinnerViewer;
 
@@ -89,14 +89,14 @@ public class ViewerIncidSeeClose extends
 
     /**
      * comunidadesSpinner.doViewInViewer() --> comunidadesSpinner.loadItemsByEntitiyId() --> onSuccessLoadItems()
-     * --> view.setSelection() --> ComuSelectedListener --> onItemSelected() --> OnSpinnerClick.doOnClickItemId().
+     * --> view.setSelection() --> ComuSelectedListener --> onItemSelected() --> SpinnerClickHandler.doOnClickItemId().
      * <p>
      * This method is called after doOnClickItemId() --> controller.loadItemsByEntitiyId() are executed.
      */
-    public void onSuccessLoadItems(List<IncidenciaUser> incidCloseList)
+    public void onSuccessLoadItems(List<IncidenciaUser> itemsList)
     {
         Timber.d("onSuccessLoadItems()");
-        onSuccessLoadItems(incidCloseList, getNewViewAdapter());
+        onSuccessLoadItems(itemsList, getNewViewAdapter());
     }
 
     @Override
@@ -144,14 +144,14 @@ public class ViewerIncidSeeClose extends
         ComponentReplacerIf.class.cast(activity).replaceComponent(bundle);
     }
 
-    // ==================================  OnSpinnerClick  =================================
+    // ==================================  SpinnerClickHandler  =================================
 
     /**
      * This method is called when the comunidades spinner is loaded and one of them selected.
      * It loads the list data.
      */
     @Override
-    public long doOnClickItemId(long itemId)
+    public long doOnClickItemId(long itemId, Class<? extends ViewerSelectionList> viewerSourceEvent)
     {
         Timber.d("doOnClickItemId()");
         controller.loadItemsByEntitiyId(itemId);
@@ -163,11 +163,13 @@ public class ViewerIncidSeeClose extends
     @NonNull
     private ArrayAdapter<IncidenciaUser> getNewViewAdapter()
     {
+        Timber.d("getNewViewAdapter()");
         return new AdapterIncidSeeClosedByComu(activity);
     }
 
     protected void onSuccessLoadItems(List<IncidenciaUser> incidCloseList, ArrayAdapter<IncidenciaUser> adapter)
     {
+        Timber.d("onSuccessLoadItems_protected()");
         adapter.addAll(incidCloseList);
         view.setAdapter(adapter);
         if (view.getCount() > view.getHeaderViewsCount() && itemSelectedId > 0L) {

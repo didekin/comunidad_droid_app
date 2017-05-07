@@ -42,9 +42,9 @@ ext {
     espressoVersion = '2.2.2'
     testRunnerRulesVersion = '0.5'
 
-    didekinlib_model = ':didekinlib_model-a-0.1.14:@jar'
-    didekinlib_http = ':didekinlib_http-a-0.1.14:@jar'
-    didekinlib_gcm = ':didekinlib_gcm-a-0.1.14:@jar'
+    didekinlib_model = ':didekinlib_model-a-0.1.15:@jar'
+    didekinlib_http = ':didekinlib_http-a-0.1.15:@jar'
+    didekinlib_gcm = ':didekinlib_gcm-a-0.1.15:@jar'
 
     firebase_message = ['com.google.firebase:firebase-messaging:10.2.4']
 

@@ -119,10 +119,13 @@ public class ComuSearchAc extends AppCompatActivity {
     public boolean onPrepareOptionsMenu(Menu menu)
     {
         Timber.d("onPrepareOptionsMenu()");
+
         if (identityCacher.isRegisteredUser()) {
+            Timber.d("onPrepareOptionsMenu(), isRegisteredUser == true");
             menu.findItem(R.id.see_usercomu_by_user_ac_mn).setVisible(true).setEnabled(true);
             menu.findItem(R.id.user_data_ac_mn).setVisible(true).setEnabled(true);
         } else {
+            Timber.d("onPrepareOptionsMenu(), isRegisteredUser == false");
             menu.findItem(R.id.login_ac_mn).setVisible(true).setEnabled(true);
         }
         return true;

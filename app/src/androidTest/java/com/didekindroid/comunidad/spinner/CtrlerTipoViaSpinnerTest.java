@@ -1,4 +1,4 @@
-package com.didekindroid.incidencia.core;
+package com.didekindroid.comunidad.spinner;
 
 import android.app.Activity;
 import android.support.test.rule.ActivityTestRule;
@@ -8,6 +8,7 @@ import android.widget.Spinner;
 
 import com.didekindroid.api.ActivityMock;
 import com.didekindroid.api.ViewerMock;
+import com.didekindroid.comunidad.repository.ComunidadDataDb;
 
 import org.junit.After;
 import org.junit.Before;
@@ -21,10 +22,9 @@ import java.util.concurrent.atomic.AtomicReference;
 import io.reactivex.functions.Consumer;
 import io.reactivex.observers.TestObserver;
 
-import static com.didekindroid.incidencia.core.CtrlerAmbitoIncidSpinner.ambitoIncidList;
-import static com.didekindroid.incidencia.core.CtrlerAmbitoIncidSpinner.newCtrlerAmbitoIncidSpinner;
-import static com.didekindroid.incidencia.core.IncidenciaDataDb.AmbitoIncidencia.AMBITO_INCID_COUNT;
-import static com.didekindroid.incidencia.core.ViewerAmbitoIncidSpinner.newViewerAmbitoIncidSpinner;
+import static com.didekindroid.comunidad.spinner.CtrlerTipoViaSpinner.newCtrlerTipoViaSpinner;
+import static com.didekindroid.comunidad.spinner.CtrlerTipoViaSpinner.tipoViaList;
+import static com.didekindroid.comunidad.spinner.ViewerTipoViaSpinner.newViewerTipoViaSpinner;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSpinnerCtrlerLoadItems;
 import static com.didekindroid.testutil.RxSchedulersUtils.resetAllSchedulers;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -35,30 +35,30 @@ import static org.junit.Assert.assertThat;
 
 /**
  * User: pedro@didekin
- * Date: 30/03/17
- * Time: 16:31
+ * Date: 03/05/17
+ * Time: 11:03
  */
 @RunWith(AndroidJUnit4.class)
-public class CtrlerAmbitoIncidSpinnerTest {
+public class CtrlerTipoViaSpinnerTest {
 
     @Rule
     public ActivityTestRule<ActivityMock> activityRule = new ActivityTestRule<>(ActivityMock.class, true, true);
 
-    CtrlerAmbitoIncidSpinner controller;
+    CtrlerTipoViaSpinner controller;
 
     @Before
-    public void setUp()
+    public void setUp() throws Exception
     {
         final Activity activity = activityRule.getActivity();
-        final AtomicReference<CtrlerAmbitoIncidSpinner> atomicController = new AtomicReference<>(null);
+        final AtomicReference<CtrlerTipoViaSpinner> atomicController = new AtomicReference<>(null);
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run()
             {
                 atomicController.compareAndSet(
                         null,
-                        newCtrlerAmbitoIncidSpinner(
-                                newViewerAmbitoIncidSpinner(
+                        newCtrlerTipoViaSpinner(
+                                newViewerTipoViaSpinner(
                                         new Spinner(activity), activity, new ViewerMock<>(new View(activity), activity, null)
                                 )
                         )
@@ -70,21 +70,27 @@ public class CtrlerAmbitoIncidSpinnerTest {
     }
 
     @After
-    public void clear()
+    public void tearDown() throws Exception
     {
         controller.clearSubscriptions();
         resetAllSchedulers();
     }
 
     @Test
-    public void testAmbitoIncidList()
+    public void test_NewCtrlerTipoViaSpinner() throws Exception
     {
-        ambitoIncidList(controller.getViewer().getActivity()).test().assertOf(new Consumer<TestObserver<List<AmbitoIncidValueObj>>>() {
+        assertThat(controller.observerSpinner, notNullValue());
+    }
+
+    @Test
+    public void test_TipoViaList() throws Exception
+    {
+        tipoViaList(controller.getViewer().getActivity()).test().assertOf(new Consumer<TestObserver<List<TipoViaValueObj>>>() {
             @Override
-            public void accept(TestObserver<List<AmbitoIncidValueObj>> listTestObserver) throws Exception
+            public void accept(TestObserver<List<TipoViaValueObj>> listTestObserver) throws Exception
             {
-                assertThat(listTestObserver.values().get(0).size(), is(AMBITO_INCID_COUNT));
-                assertThat(listTestObserver.values().size(), is(1));
+                assertThat(listTestObserver.values().size(), is(1)); // Single.
+                assertThat(listTestObserver.values().get(0).size(), is(ComunidadDataDb.TipoVia.NUMBER_RECORDS));
             }
         });
     }

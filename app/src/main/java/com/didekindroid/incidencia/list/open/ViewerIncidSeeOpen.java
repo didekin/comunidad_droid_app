@@ -9,7 +9,6 @@ import android.widget.ListView;
 import android.widget.Spinner;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ViewerIf;
 import com.didekindroid.incidencia.list.close.ViewerIncidSeeClose;
 import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
 import com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner;
@@ -56,10 +55,10 @@ class ViewerIncidSeeOpen extends ViewerIncidSeeClose {
     /* ==================================  ViewerSelectionIf  =================================*/
 
     @Override
-    public void onSuccessLoadItems(List<IncidenciaUser> incidCloseList)
+    public void onSuccessLoadItems(List<IncidenciaUser> itemsList)
     {
         Timber.d("onSuccessLoadItems()");
-        onSuccessLoadItems(incidCloseList, getNewViewAdapter());
+        onSuccessLoadItems(itemsList, getNewViewAdapter());
     }
 
     /* ==================================  VIEWER  =================================*/
