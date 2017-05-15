@@ -47,6 +47,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import timber.log.Timber;
 
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.KITKAT;
@@ -397,6 +398,7 @@ public final class ActivityTestUtils {
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
+            Timber.d("checkSpinnerCtrlerLoadItems(), Thread: %s", Thread.currentThread().getName());
             assertThat(controller.loadItemsByEntitiyId(entityId), is(true));
         } finally {
             resetAllSchedulers();
@@ -470,7 +472,7 @@ public final class ActivityTestUtils {
         viewer.setItemSelectedId(18L);
         Bundle bundle = new Bundle(1);
         viewer.saveState(bundle);
-        assertThat(bundle.getLong(bundleKey.getKey()), CoreMatchers.is(18L));
+        assertThat(bundle.getLong(bundleKey.getKey()), is(18L));
     }
 }
 

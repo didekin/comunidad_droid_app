@@ -29,7 +29,7 @@ import static android.graphics.BitmapFactory.decodeResource;
 import static android.media.RingtoneManager.TYPE_NOTIFICATION;
 import static android.media.RingtoneManager.getDefaultUri;
 import static android.support.v4.app.NotificationCompat.PRIORITY_DEFAULT;
-import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekinlib.model.common.gcm.GcmKeyValueData.type_message_key;
 import static com.didekinlib.model.incidencia.gcm.GcmKeyValueIncidData.comunidadId_key;
 import static com.didekinlib.model.incidencia.gcm.GcmKeyValueIncidData.incidencia_closed_type;

@@ -8,19 +8,19 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.didekindroid.R;
-import com.didekindroid.incidencia.core.IncidenciaBean;
-import com.didekindroid.usuariocomunidad.spinner.ComuSpinnerBean;
+import com.didekindroid.usuariocomunidad.spinner.ComuSpinnerEventItemSelect;
+import com.didekinlib.model.comunidad.Comunidad;
 
 import timber.log.Timber;
 
-import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.list.close.ViewerIncidSeeClose.newViewerIncidSeeClose;
 
 /**
  * Preconditions:
  * A list of IncidenciaUser instances, whose incidencias are closed, are shown.
  */
-public class IncidSeeCloseByComuFr extends Fragment  {
+public class IncidSeeCloseByComuFr extends Fragment {
 
     View frView;
     ViewerIncidSeeClose viewer;
@@ -40,10 +40,10 @@ public class IncidSeeCloseByComuFr extends Fragment  {
         Timber.d("onViewCreated()");
         super.onViewCreated(view, savedState);
         /* Initialization of viewers.*/
-        ComuSpinnerBean spinnerBean = new IncidenciaBean();
-        spinnerBean.setComunidadId(getArguments().getLong(COMUNIDAD_ID.key));
+        ComuSpinnerEventItemSelect spinnerEventItemSelect =
+                new ComuSpinnerEventItemSelect(new Comunidad.ComunidadBuilder().c_id(getArguments().getLong(COMUNIDAD_ID.key)).build());
         viewer = newViewerIncidSeeClose(frView, getActivity());
-        viewer.doViewInViewer(savedState, spinnerBean);
+        viewer.doViewInViewer(savedState, spinnerEventItemSelect);
     }
 
     @Override

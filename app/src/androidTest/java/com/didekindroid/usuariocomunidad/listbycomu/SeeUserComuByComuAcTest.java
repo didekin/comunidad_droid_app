@@ -5,7 +5,7 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.comunidad.ComuBundleKey;
+import com.didekindroid.comunidad.utils.ComuBundleKey;
 import com.didekindroid.exception.UiException;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 

@@ -1,13 +1,20 @@
 package com.didekindroid.comunidad.spinner;
 
+import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.view.View;
 import android.widget.Spinner;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ActivityMock;
+import com.didekindroid.api.Controller;
+import com.didekindroid.api.SpinnerEventItemSelectIf;
+import com.didekindroid.api.SpinnerEventListener;
 import com.didekindroid.api.SpinnerMockFr;
+import com.didekindroid.api.ViewerMock;
 import com.didekinlib.model.comunidad.Provincia;
 
 import org.junit.Before;
@@ -15,19 +22,26 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static com.didekindroid.comunidad.ComuBundleKey.PROVINCIA_ID;
+import timber.log.Timber;
+
 import static com.didekindroid.comunidad.spinner.ViewerProvinciaSpinner.newViewerProvinciaSpinner;
 import static com.didekindroid.comunidad.spinner.ViewerTipoViaSpinner.newViewerTipoViaSpinner;
+import static com.didekindroid.comunidad.utils.ComuBundleKey.PROVINCIA_ID;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSavedStateWithItemSelected;
+import static com.didekindroid.testutil.ActivityTestUtils.getAdapter;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
+import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_B;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
@@ -40,7 +54,7 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class ViewerProvinciaSpinnerTest {
 
-    final AtomicReference<String> flagLocalExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
+    static final AtomicReference<String> flagLocalExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
 
     @Rule
     public ActivityTestRule<ActivityMock> activityRule = new ActivityTestRule<>(ActivityMock.class, true, true);
@@ -62,8 +76,8 @@ public class ViewerProvinciaSpinnerTest {
                 activity.getSupportFragmentManager().beginTransaction()
                         .add(R.id.mock_ac_layout, new SpinnerMockFr(), null)
                         .commitNow();
-                spinner = (Spinner) activity.findViewById(R.id.provincia_spinner);
-                atomicViewer.compareAndSet(null, newViewerProvinciaSpinner(spinner, activity, null));
+                spinner = (Spinner) activity.findViewById(R.id.provincia_mock_spinner);
+                atomicViewer.compareAndSet(null, newViewerProvinciaSpinner(spinner, activity, new ParentViewerForTest(activity)));
             }
         });
         waitAtMost(2, SECONDS).untilAtomic(atomicViewer, notNullValue());
@@ -74,6 +88,7 @@ public class ViewerProvinciaSpinnerTest {
     public void test_NewViewerProvinciaSpinner() throws Exception
     {
         assertThat(newViewerTipoViaSpinner(spinner, activity, null).getController(), notNullValue());
+        assertThat(viewer.eventListener, isA(SpinnerEventListener.class));
     }
 
     @Test
@@ -89,7 +104,7 @@ public class ViewerProvinciaSpinnerTest {
         viewer.initSelectedItemId(bundle);
         assertThat(viewer.getSelectedItemId(), is(23L));
         // Case 2: initialization in both savedState and comunidadBean
-        viewer.provinciaIn = new Provincia((short) 57);
+        viewer.spinnerEvent = new ProvinciaSpinnerEventItemSelect(new Provincia((short) 57));
         viewer.initSelectedItemId(bundle);
         assertThat(viewer.getSelectedItemId(), is(23L));
         // Case 3: initialization in comunidadBean
@@ -101,7 +116,18 @@ public class ViewerProvinciaSpinnerTest {
     @Test
     public void test_GetSelectedPositionFromItemId() throws Exception
     {
-        // TODO:
+        final List<Provincia> provincias = Arrays.asList(new Provincia((short) 22, "provincia_0"), new Provincia((short) 11, "provincia_1"), new Provincia((short) 33, "provincia_2"));
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                viewer.onSuccessLoadItems(provincias);
+                assertThat(viewer.getSelectedPositionFromItemId(11L), is(1));
+                assertThat(viewer.getSelectedPositionFromItemId(22L), is(0));
+                assertThat(viewer.getSelectedPositionFromItemId(33L), is(2));
+                assertThat(viewer.getSelectedPositionFromItemId(122L), is(0));
+            }
+        });
     }
 
     @Test
@@ -122,7 +148,7 @@ public class ViewerProvinciaSpinnerTest {
         });
         viewer.doViewInViewer(bundle, null);
 
-        assertThat(viewer.provinciaIn, nullValue());
+        assertThat(viewer.spinnerEvent, nullValue());
         assertThat(viewer.getSelectedItemId(), allOf(
                 is(bundle.getLong(keyBundle)),
                 is(11L)
@@ -133,9 +159,54 @@ public class ViewerProvinciaSpinnerTest {
         assertThat(viewer.getViewInViewer().getOnItemSelectedListener(), instanceOf(ViewerProvinciaSpinner.ProvinciaSelectedListener.class));
     }
 
+    /* Comunidad Autónoma: Canarias, ca_id: 5; nº de provincias: 2 */
+    @Test
+    public void test_ProvinciaSelectedListener()
+    {
+        // Initial state.
+        assertThat(viewer.spinnerEvent, nullValue());
+        assertThat(viewer.getSelectedItemId(), is(0L));
+        // Preconditions
+        final Provincia provincia = new Provincia((short) 35);
+        viewer.doViewInViewer(new Bundle(0), new ProvinciaSpinnerEventItemSelect(provincia));
+        assertThat(viewer.spinnerEvent.getSpinnerItemIdSelect(), is((long)provincia.getProvinciaId()));
+        // ItemSelectedId is initialized.
+        assertThat(viewer.getSelectedItemId(), is(35L));
+
+        // Check controller.loadItemsByEntitiyId() --> onSuccessLoadItems() --> view.setSelection() ... {--> ProvinciaSelectedListener.onItemSelected() }
+        // We initialize to 0 the itemSelectedId to chedk the call to ProvinciaSelectedListener.onItemSelected().
+        viewer.setItemSelectedId(38L); // Santa Cruz de Tenerife
+        viewer.getController().loadItemsByEntitiyId(5L);
+        waitAtMost(3, SECONDS).until(getAdapter(viewer.getViewInViewer()), notNullValue());
+        assertThat(viewer.getViewInViewer().getCount(), is(2));
+        // ProvinciaSelectedListener.onItemSelected() modify spinnerEvent.
+        assertThat(viewer.spinnerEvent.getSpinnerItemIdSelect(), is(38L));
+        // Call to SpinnerEventListener.doOnClickItemId()
+        waitAtMost(3, SECONDS).untilAtomic(flagLocalExec, is(AFTER_METHOD_EXEC_B));
+        flagLocalExec.compareAndSet(AFTER_METHOD_EXEC_B, BEFORE_METHOD_EXEC);
+    }
+
     @Test
     public void test_SaveState() throws Exception
     {
         checkSavedStateWithItemSelected(viewer, PROVINCIA_ID);
+    }
+
+    // ======================================= HELPERS ===============================================
+
+    static class ParentViewerForTest extends ViewerMock<View, Controller> implements
+            SpinnerEventListener {
+
+        public ParentViewerForTest(Activity activity)
+        {
+            super(activity);
+        }
+
+        @Override
+        public void doOnClickItemId(@Nullable SpinnerEventItemSelectIf spinnerEventItemSelect)
+        {
+            Timber.d("==================== doOnClickItemId =====================");
+            assertThat(flagLocalExec.getAndSet(AFTER_METHOD_EXEC_B), is(BEFORE_METHOD_EXEC));
+        }
     }
 }

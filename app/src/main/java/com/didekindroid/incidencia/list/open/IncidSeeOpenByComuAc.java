@@ -11,7 +11,7 @@ import com.didekindroid.router.ComponentReplacerIf;
 
 import timber.log.Timber;
 
-import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
 import static com.didekindroid.router.ActivityRouter.doUpMenu;
 import static com.didekindroid.util.UIutils.doToolBar;

@@ -1,7 +1,7 @@
 package com.didekindroid.usuariocomunidad.spinner;
 
 import com.didekindroid.api.CtrlerSelectionList;
-import com.didekindroid.api.ObserverSelectionList;
+import com.didekindroid.api.SingleObserverSelectionList;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import timber.log.Timber;
@@ -18,7 +18,7 @@ import static io.reactivex.schedulers.Schedulers.io;
 
 class CtrlerComuSpinner extends CtrlerSelectionList<Comunidad> {
 
-    private ObserverSelectionList<Comunidad> observerSpinner;
+    private SingleObserverSelectionList<Comunidad> observerSpinner;
 
     CtrlerComuSpinner(ViewerComuSpinner viewer)
     {
@@ -28,7 +28,7 @@ class CtrlerComuSpinner extends CtrlerSelectionList<Comunidad> {
     static CtrlerComuSpinner newControllerComuSpinner(ViewerComuSpinner viewerIn)
     {
         CtrlerComuSpinner controller = new CtrlerComuSpinner(viewerIn);
-        controller.observerSpinner = new ObserverSelectionList<>(controller);
+        controller.observerSpinner = new SingleObserverSelectionList<>(controller);
         return controller;
     }
 

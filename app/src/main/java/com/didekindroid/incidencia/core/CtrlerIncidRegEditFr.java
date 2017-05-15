@@ -1,7 +1,6 @@
 package com.didekindroid.incidencia.core;
 
 import com.didekindroid.api.Controller;
-import com.didekindroid.incidencia.IncidObservable;
 import com.didekindroid.security.IdentityCacher;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
@@ -9,6 +8,7 @@ import com.didekinlib.model.incidencia.dominio.Incidencia;
 import timber.log.Timber;
 
 import static com.didekindroid.incidencia.IncidObservable.incidImportanciaModified;
+import static com.didekindroid.incidencia.IncidObservable.incidImportanciaRegistered;
 import static com.didekindroid.incidencia.IncidObservable.incidenciaDeleted;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
@@ -41,7 +41,7 @@ public class CtrlerIncidRegEditFr extends Controller {
     {
         Timber.d("registerIncidImportancia()");
         return subscriptions.add(
-                IncidObservable.incidImportanciaRegistered(incidImportancia)
+                incidImportanciaRegistered(incidImportancia)
                         .subscribeOn(io())
                         .observeOn(mainThread())
                         .subscribeWith(new IncidRegEditObserver(this) {

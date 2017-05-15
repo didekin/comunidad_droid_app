@@ -10,6 +10,8 @@ import com.didekinlib.model.comunidad.Provincia;
 
 import java.io.Serializable;
 
+import timber.log.Timber;
+
 import static com.didekinlib.model.common.dominio.ValidDataPatterns.LINE_BREAK;
 import static com.didekinlib.model.common.dominio.ValidDataPatterns.NOMBRE_VIA;
 import static com.didekinlib.model.common.dominio.ValidDataPatterns.SUFIJO_NUMERO;
@@ -55,19 +57,9 @@ public class ComunidadBean implements Serializable {
 
     public boolean validate(Resources resources, StringBuilder errorMsg)
     {
-        boolean isValid;
+        Timber.d("validate()");
 
-        if ((tipoVia == null || tipoVia.getTipoViaDesc().isEmpty())
-                && (nombreVia == null || nombreVia.isEmpty())
-                && (numeroString == null || numeroString.isEmpty())
-                && (sufijoNumero == null || sufijoNumero.isEmpty())
-                && (municipio == null)
-                && comunidadId > 0) {
-            comunidad = new Comunidad.ComunidadBuilder().c_id(comunidadId).build();
-            return true;
-        }
-
-        isValid = validateTipoVia(resources, errorMsg)
+        boolean isValid = validateTipoVia(resources, errorMsg)
                 & validateNombreVia(resources.getText(R.string.nombre_via), errorMsg)
                 & validateNumeroEnVia(resources.getText(R.string.numero_en_via), errorMsg)
                 & validateSufijo(resources.getText(R.string.sufijo_numero), errorMsg)
@@ -133,7 +125,7 @@ public class ComunidadBean implements Serializable {
         return isValid;
     }
 
-    private boolean validateMunicipio(Resources resources, StringBuilder errorMsg)
+    boolean validateMunicipio(Resources resources, StringBuilder errorMsg)
     {
         if (municipio == null) {
             return false;

@@ -7,7 +7,7 @@ import android.widget.AdapterView;
 import android.widget.Spinner;
 
 import com.didekindroid.api.CtrlerSelectionList;
-import com.didekindroid.api.SpinnerClickHandler;
+import com.didekindroid.api.SpinnerEventListener;
 import com.didekindroid.api.ViewerIf;
 import com.didekindroid.api.ViewerSelectionList;
 import com.didekinlib.model.comunidad.Comunidad;
@@ -16,7 +16,7 @@ import java.io.Serializable;
 
 import timber.log.Timber;
 
-import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.usuariocomunidad.spinner.CtrlerComuSpinner.newControllerComuSpinner;
 
 /**
@@ -24,15 +24,17 @@ import static com.didekindroid.usuariocomunidad.spinner.CtrlerComuSpinner.newCon
  * Date: 16/02/17
  * Time: 10:49
  */
+@SuppressWarnings("WeakerAccess")
 public class ViewerComuSpinner extends
         ViewerSelectionList<Spinner, CtrlerSelectionList<Comunidad>, Comunidad> {
 
-    @SuppressWarnings("WeakerAccess")
-    ComuSpinnerBean spinnerBean;
+    final SpinnerEventListener eventListener;
+    ComuSpinnerEventItemSelect spinnerEvent;
 
     ViewerComuSpinner(Spinner view, Activity activity, ViewerIf parentViewer)
     {
         super(view, activity, parentViewer);
+        eventListener = (SpinnerEventListener) parentViewer;
     }
 
     public static ViewerComuSpinner newViewerComuSpinner(Spinner view, Activity activity, ViewerIf parentViewer)
@@ -52,8 +54,8 @@ public class ViewerComuSpinner extends
 
         if (savedState != null && savedState.containsKey(COMUNIDAD_ID.key)) {
             itemSelectedId = savedState.getLong(COMUNIDAD_ID.key, 0);
-        } else if (spinnerBean.getComunidadId() > 0) {
-            itemSelectedId = spinnerBean.getComunidadId();
+        } else if (spinnerEvent.getSpinnerItemIdSelect() > 0) {
+            itemSelectedId = spinnerEvent.getSpinnerItemIdSelect();
         } else {
             itemSelectedId = 0;
         }
@@ -62,6 +64,8 @@ public class ViewerComuSpinner extends
     @Override
     public int getSelectedPositionFromItemId(long itemId)
     {
+        Timber.d("getSelectedPositionFromItemId()");
+
         int position = 0;
         boolean isFound = false;
         if (itemId > 0L) {
@@ -84,7 +88,7 @@ public class ViewerComuSpinner extends
     public void doViewInViewer(Bundle savedState, Serializable viewBean)
     {
         Timber.d("doViewInViewer()");
-        spinnerBean = ComuSpinnerBean.class.cast(viewBean);
+        spinnerEvent = ComuSpinnerEventItemSelect.class.cast(viewBean);
         view.setOnItemSelectedListener(new ComuSelectedListener());
         initSelectedItemId(savedState);
         CtrlerSelectionList.class.cast(controller).loadItemsByEntitiyId();
@@ -109,11 +113,13 @@ public class ViewerComuSpinner extends
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
         {
             Timber.d("comunidadSpinner.onItemSelected()");
-            Comunidad comunidad = (Comunidad) parent.getItemAtPosition(position);
-            itemSelectedId = comunidad.getC_Id();
-            spinnerBean.setComunidadId(itemSelectedId);
+
+
+            Comunidad comunidadIn = ((Comunidad) parent.getItemAtPosition(position));
+            spinnerEvent.setSpinnerItemIdSelect(comunidadIn);
+            itemSelectedId = spinnerEvent.getSpinnerItemIdSelect();
             // Event passed to parent viewer for futher action.
-            SpinnerClickHandler.class.cast(parentViewer).doOnClickItemId(itemSelectedId, ViewerComuSpinner.this.getClass());
+            eventListener.doOnClickItemId(spinnerEvent);
         }
 
         @Override

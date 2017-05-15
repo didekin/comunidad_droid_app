@@ -26,7 +26,7 @@ import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtraWithKey;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_SEARCH;
+import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_SEARCH;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.typeComunidadData;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;

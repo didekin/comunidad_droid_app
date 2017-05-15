@@ -100,11 +100,12 @@ public class ComunidadDbHelperTest {
 
         List<ComunidadAutonoma> comunidades = dbHelper.getComunidadesAu();
         assertThat(comunidades.size(), is(NUMBER_RECORDS));
+        ComunidadAutonoma comunidad0 = new ComunidadAutonoma((short) 0, "comunidad autónoma");
         ComunidadAutonoma comunidad1 = new ComunidadAutonoma((short) 8, "Castilla - La Mancha");
         ComunidadAutonoma comunidad2 = new ComunidadAutonoma((short) 4, "Balears, Illes");
         ComunidadAutonoma comunidad3 = new ComunidadAutonoma((short) 7, "Castilla y León");
         ComunidadAutonoma comunidad4 = new ComunidadAutonoma((short) 17, "Rioja, La");
-        assertThat(comunidades, hasItems(comunidad1, comunidad2, comunidad3, comunidad4));
+        assertThat(comunidades, hasItems(comunidad0,comunidad1, comunidad2, comunidad3, comunidad4));
     }
 
     @Test
@@ -129,9 +130,19 @@ public class ComunidadDbHelperTest {
 
         List<Provincia> provincias = dbHelper.getProvinciasByCA((short) 11);
         assertThat(provincias.size(), is(2));
-        Provincia provincia1 = new Provincia((short) 6, "Badajoz");
-        Provincia provincia2 = new Provincia((short) 10, "Cáceres");
+        Provincia provincia1 = new Provincia(new ComunidadAutonoma((short) 11),(short) 6, "Badajoz");
+        Provincia provincia2 = new Provincia(new ComunidadAutonoma((short) 11),(short) 10, "Cáceres");
         assertThat(provincias, hasItems(provincia1, provincia2));
+    }
+
+    @Test
+    public void test_GetProvinciasByCA_0()
+    {
+        database = dbHelper.getReadableDatabase();
+
+        List<Provincia> provincias = dbHelper.getProvinciasByCA((short) 0);
+        assertThat(provincias.size(), is(1));
+        assertThat(provincias.get(0).getNombre(), is("provincia"));
     }
 
     @Test
@@ -144,6 +155,16 @@ public class ComunidadDbHelperTest {
         assertThat(municipios.size(), is(44));
         assertThat(municipios.get(0).getNombre(), is("Alcalá de los Gazules"));
         assertThat(municipios.get(2).getNombre(), is("Algar"));
+    }
+
+    @Test
+    public void test_GetMunicipioByProvincia_0() throws Exception
+    {
+        database = dbHelper.getReadableDatabase();
+
+        List<Municipio> municipios = dbHelper.getMunicipioByProvincia((short) 0);
+        assertThat(municipios.size(), is(1));
+        assertThat(municipios.get(0).getNombre(), is("municipio"));
     }
 
     @Test

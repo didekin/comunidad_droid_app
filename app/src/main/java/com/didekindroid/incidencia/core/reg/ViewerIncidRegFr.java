@@ -6,14 +6,15 @@ import android.view.View;
 import android.widget.Spinner;
 
 import com.didekindroid.R;
-import com.didekindroid.api.SpinnerClickHandler;
+import com.didekindroid.api.SpinnerEventItemSelectIf;
+import com.didekindroid.api.SpinnerEventListener;
 import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ViewerSelectionList;
 import com.didekindroid.incidencia.core.IncidImportanciaBean;
 import com.didekindroid.incidencia.core.IncidenciaBean;
 import com.didekindroid.incidencia.core.ViewerAmbitoIncidSpinner;
 import com.didekindroid.incidencia.core.ViewerImportanciaSpinner;
 import com.didekindroid.incidencia.core.ViewerIncidRegEdit;
+import com.didekindroid.usuariocomunidad.spinner.ComuSpinnerEventItemSelect;
 import com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
@@ -31,7 +32,7 @@ import static com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner.newVie
  * Date: 30/03/17
  * Time: 19:14
  */
-class ViewerIncidRegFr extends ViewerIncidRegEdit implements SpinnerClickHandler {
+class ViewerIncidRegFr extends ViewerIncidRegEdit implements SpinnerEventListener {
 
     AtomicReference<IncidenciaBean> atomIncidBean;
     AtomicReference<IncidImportanciaBean> atomIncidImportBean;
@@ -70,7 +71,7 @@ class ViewerIncidRegFr extends ViewerIncidRegEdit implements SpinnerClickHandler
         Timber.d("doViewInViewer()");
         atomIncidBean.compareAndSet(null, new IncidenciaBean());
         viewerAmbitoIncidSpinner.doViewInViewer(savedState, atomIncidBean.get());
-        viewerComuSpinner.doViewInViewer(savedState, atomIncidBean.get());
+        viewerComuSpinner.doViewInViewer(savedState, new ComuSpinnerEventItemSelect());
         atomIncidImportBean.compareAndSet(null, new IncidImportanciaBean());
         viewerImportanciaSpinner.doViewInViewer(savedState, atomIncidImportBean.get());
     }
@@ -104,10 +105,8 @@ class ViewerIncidRegFr extends ViewerIncidRegEdit implements SpinnerClickHandler
     }
 
     @Override
-    public long doOnClickItemId(long itemId, Class<? extends ViewerSelectionList> viewerSourceEvent)
+    public void doOnClickItemId(SpinnerEventItemSelectIf spinnerEventItemSelect)
     {
         Timber.d("doOnClickItemId()");
-        // do nothing.
-        return itemId;
     }
 }

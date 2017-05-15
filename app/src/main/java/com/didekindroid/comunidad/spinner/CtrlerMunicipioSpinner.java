@@ -4,11 +4,10 @@ import android.app.Activity;
 import android.widget.AdapterView;
 
 import com.didekindroid.api.CtrlerSelectionList;
-import com.didekindroid.api.ObserverSelectionList;
+import com.didekindroid.api.SingleObserverSelectionList;
 import com.didekindroid.api.ViewerSelectionList;
 import com.didekindroid.comunidad.repository.ComunidadDbHelper;
 import com.didekinlib.model.comunidad.Municipio;
-import com.didekinlib.model.comunidad.Provincia;
 
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -28,25 +27,23 @@ import static io.reactivex.schedulers.Schedulers.io;
 
 class CtrlerMunicipioSpinner extends CtrlerSelectionList<Municipio> {
 
-    ObserverSelectionList<Municipio> observerSpinner;
-
     CtrlerMunicipioSpinner(ViewerSelectionList<? extends AdapterView, CtrlerSelectionList<Municipio>, Municipio> viewer)
     {
         super(viewer);
     }
 
-    static CtrlerMunicipioSpinner newCtrlerMunicipioSpinner(ViewerMunicipioSpinner viewer){
+    static CtrlerMunicipioSpinner newCtrlerMunicipioSpinner(ViewerMunicipioSpinner viewer)
+    {
         Timber.d("newCtrlerMunicipioSpinner()");
-        CtrlerMunicipioSpinner controller = new CtrlerMunicipioSpinner(viewer);
-        controller.observerSpinner = new ObserverSelectionList<>(controller);
-        return controller;
+        return new CtrlerMunicipioSpinner(viewer);
     }
 
     // .................................... OBSERVABLE .......................................
 
-    static Single<List<Municipio>> municipiosByProvincia(final Activity activity, final short provinciaId){
+    static Single<List<Municipio>> municipiosByProvincia(final Activity activity, final short provinciaId)
+    {
         Timber.d("municipiosByProvincia()");
-        return Single.fromCallable(new Callable<List<Municipio>>() {
+        return Single.fromCallable((new Callable<List<Municipio>>() {
             @Override
             public List<Municipio> call() throws Exception
             {
@@ -55,7 +52,7 @@ class CtrlerMunicipioSpinner extends CtrlerSelectionList<Municipio> {
                 dbHelper.close();
                 return municipios;
             }
-        });
+        }));
     }
 
     // .................................... INSTANCE METHODS .....................................
@@ -63,12 +60,12 @@ class CtrlerMunicipioSpinner extends CtrlerSelectionList<Municipio> {
     @Override
     public boolean loadItemsByEntitiyId(Long... entityId)
     {
-       Timber.d("loadItemsByEntitiyId()");
+        Timber.d("loadItemsByEntitiyId()");
         assertTrue(entityId.length > 0, "length should be greater than zero");
         return subscriptions.add(municipiosByProvincia(viewer.getActivity(), entityId[0].shortValue())
                 .subscribeOn(io())
                 .observeOn(mainThread())
-                .subscribeWith(observerSpinner)
+                .subscribeWith(new SingleObserverSelectionList<>(this))
         );
     }
 }

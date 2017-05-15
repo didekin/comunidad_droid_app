@@ -5,10 +5,11 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.didekindroid.R;
-import com.didekindroid.usuariocomunidad.spinner.ComuSpinnerBean;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.AmbitoIncidencia;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
+
+import java.io.Serializable;
 
 import static com.didekindroid.incidencia.core.IncidenciaDataDb.AmbitoIncidencia.AMBITO_INCID_COUNT;
 import static com.didekinlib.model.common.dominio.ValidDataPatterns.LINE_BREAK;
@@ -19,7 +20,7 @@ import static com.didekinlib.model.incidencia.dominio.IncidDataPatterns.INCID_DE
  * Date: 16/11/15
  * Time: 11:19
  */
-public class IncidenciaBean implements ComuSpinnerBean {
+public class IncidenciaBean implements Serializable {
 
     private short codAmbitoIncid;
     private String descripcion;
@@ -51,13 +52,11 @@ public class IncidenciaBean implements ComuSpinnerBean {
         return this;
     }
 
-    @Override
     public long getComunidadId()
     {
         return comunidadId;
     }
 
-    @Override
     public IncidenciaBean setComunidadId(long comunidadId)
     {
         this.comunidadId = comunidadId;

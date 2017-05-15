@@ -1,4 +1,4 @@
-package com.didekindroid.comunidad;
+package com.didekindroid.comunidad.utils;
 
 import com.didekindroid.util.BundleKey;
 
@@ -16,7 +16,7 @@ public enum ComuBundleKey implements BundleKey {
     COMUNIDAD_ID,
     COMUNIDAD_SEARCH,
     COMUNIDAD_AUTONOMA_ID,
-    MUNICIPIO_ID,
+    MUNICIPIO_SPINNER_EVENT,
     PROVINCIA_ID,
     TIPO_VIA_ID,;
 

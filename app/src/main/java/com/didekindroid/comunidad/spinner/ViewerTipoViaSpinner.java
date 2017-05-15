@@ -10,15 +10,14 @@ import android.widget.Spinner;
 import com.didekindroid.api.CtrlerSelectionList;
 import com.didekindroid.api.ViewerIf;
 import com.didekindroid.api.ViewerSelectionList;
-import com.didekindroid.comunidad.ComunidadBean;
 
 import java.io.Serializable;
 import java.util.List;
 
 import timber.log.Timber;
 
-import static com.didekindroid.comunidad.ComuBundleKey.TIPO_VIA_ID;
 import static com.didekindroid.comunidad.spinner.CtrlerTipoViaSpinner.newCtrlerTipoViaSpinner;
+import static com.didekindroid.comunidad.utils.ComuBundleKey.TIPO_VIA_ID;
 
 /**
  * User: pedro@didekin
@@ -26,17 +25,17 @@ import static com.didekindroid.comunidad.spinner.CtrlerTipoViaSpinner.newCtrlerT
  * Time: 10:09
  */
 
-final class ViewerTipoViaSpinner extends
+public final class ViewerTipoViaSpinner extends
         ViewerSelectionList<Spinner, CtrlerSelectionList<TipoViaValueObj>, TipoViaValueObj> {
 
-    ComunidadBean comunidadBean;
+    TipoViaValueObj tipoViaValueObj;
 
     private ViewerTipoViaSpinner(Spinner view, Activity activity, ViewerIf parentViewer)
     {
         super(view, activity, parentViewer);
     }
 
-    static ViewerTipoViaSpinner newViewerTipoViaSpinner(Spinner spinner, Activity activity, ViewerIf parentViewer)
+    public static ViewerTipoViaSpinner newViewerTipoViaSpinner(Spinner spinner, Activity activity, ViewerIf parentViewer)
     {
         Timber.d("newViewerTipoViaSpinner()");
         ViewerTipoViaSpinner instance = new ViewerTipoViaSpinner(spinner, activity, parentViewer);
@@ -52,11 +51,38 @@ final class ViewerTipoViaSpinner extends
         Timber.d("initSelectedItemId()");
         if (savedState != null && savedState.containsKey(TIPO_VIA_ID.key)) {
             itemSelectedId = savedState.getLong(TIPO_VIA_ID.key, 0);
-        } else if (comunidadBean.getTipoVia() != null && comunidadBean.getTipoVia().getPk() > 0) {
-            itemSelectedId = comunidadBean.getTipoVia().getPk();
         } else {
             itemSelectedId = 0;
         }
+    }
+
+    @Override
+    public void onSuccessLoadItems(List<TipoViaValueObj> tiposVia)
+    {
+        Timber.d("onSuccessLoadItems()");
+        ArrayAdapter<TipoViaValueObj> adapter = getArrayAdapterForSpinner(activity);
+        adapter.addAll(tiposVia);
+        view.setAdapter(adapter);
+        view.setSelection(getSelectedPositionFromDesc(tipoViaValueObj != null ? tipoViaValueObj.getTipoViaDesc() : null));
+    }
+
+    int getSelectedPositionFromDesc(String tipoViaDesc)
+    {
+        Timber.d("getSelectedPositionFromDesc()");
+
+        int position = 0;
+        boolean isFound = false;
+        if (tipoViaDesc != null && !tipoViaDesc.isEmpty()) {
+            String tipoViaDescIn;
+            do {
+                tipoViaDescIn = ((TipoViaValueObj) view.getItemAtPosition(position)).getTipoViaDesc();
+                if (tipoViaDesc.equals(tipoViaDescIn)) {
+                    isFound = true;
+                    break;
+                }
+            } while (++position < view.getCount());
+        }
+        return isFound ? position : 0;
     }
 
     // ==================================== ViewerIf ====================================
@@ -65,7 +91,7 @@ final class ViewerTipoViaSpinner extends
     public void doViewInViewer(Bundle savedState, Serializable viewBean)
     {
         Timber.d("doViewInViewer()");
-        comunidadBean = viewBean == null ? new ComunidadBean() : ComunidadBean.class.cast(viewBean);
+        tipoViaValueObj = viewBean != null ? TipoViaValueObj.class.cast(viewBean) : null;
         initSelectedItemId(savedState);
         view.setOnItemSelectedListener(new TipoViaSelectedListener());
         CtrlerSelectionList.class.cast(controller).loadItemsByEntitiyId();
@@ -89,9 +115,8 @@ final class ViewerTipoViaSpinner extends
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
         {
             Timber.d("onItemSelected()");
-            TipoViaValueObj tipoViaObj = (TipoViaValueObj) parent.getItemAtPosition(position);
-            itemSelectedId = tipoViaObj.getPk();
-            comunidadBean.setTipoVia(tipoViaObj);
+            tipoViaValueObj = (TipoViaValueObj) parent.getItemAtPosition(position);
+            itemSelectedId = tipoViaValueObj.getPk();
         }
 
         @Override
@@ -99,5 +124,11 @@ final class ViewerTipoViaSpinner extends
         {
             Timber.d("In tipoViaSpinner.setOnItemSelectedListener, onNothingSelected()");
         }
+    }
+
+    public TipoViaValueObj getTipoViaValueObj()
+    {
+        Timber.d("getTipoViaValueObj()");
+        return tipoViaValueObj;
     }
 }

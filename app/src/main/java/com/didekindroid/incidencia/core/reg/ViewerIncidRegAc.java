@@ -8,9 +8,11 @@ import android.widget.Button;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ViewerIf;
+import com.didekindroid.api.ViewerParentInjectedIf;
 import com.didekindroid.incidencia.core.CtrlerIncidRegEditFr;
 import com.didekindroid.incidencia.core.ViewerIncidRegEdit;
 import com.didekindroid.router.ActivityInitiator;
+import com.didekindroid.router.ComponentReplacerIf;
 import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
@@ -31,9 +33,11 @@ import static com.didekindroid.util.UIutils.makeToast;
  * Time: 11:59
  */
 @SuppressWarnings("WeakerAccess")
-public class ViewerIncidRegAc extends ViewerIncidRegEdit {
+public class ViewerIncidRegAc extends ViewerIncidRegEdit implements ViewerParentInjectedIf,
+        ComponentReplacerIf {
 
     ViewerFirebaseTokenIf viewerFirebaseToken;
+    // Since initialization depends on fragment lifecycle, it is done in the activity and fragment through the ViewerParentInjectorIf interface.
     ViewerIncidRegFr viewerIncidRegFr;
 
     public ViewerIncidRegAc(IncidRegAc activity)
@@ -47,6 +51,7 @@ public class ViewerIncidRegAc extends ViewerIncidRegEdit {
         ViewerIncidRegAc instance = new ViewerIncidRegAc(activity);
         instance.viewerFirebaseToken = newViewerFirebaseToken(activity);
         instance.setController(new CtrlerIncidRegEditFr(instance));
+        // We initialize viewerIncidRegFr in its associated fragment.
         return instance;
     }
 
@@ -78,10 +83,11 @@ public class ViewerIncidRegAc extends ViewerIncidRegEdit {
         viewerFirebaseToken.saveState(savedState);
     }
 
-    void setChildViewer(@NonNull ViewerIf childViewer)
+    @Override
+    public void onSuccessRegisterIncidImportancia(int rowInserted)
     {
-        Timber.d("setChildViewer()");
-        viewerIncidRegFr = ViewerIncidRegFr.class.cast(childViewer);
+        Timber.d("onSuccessRegisterIncidImportancia()");
+        replaceComponent(new Bundle());
     }
 
     boolean registerIncidencia(@Nullable IncidImportancia incidImportancia, @NonNull StringBuilder errorMsg)
@@ -95,11 +101,22 @@ public class ViewerIncidRegAc extends ViewerIncidRegEdit {
         }
     }
 
+    // ==================================  ViewerParentInjectedIf  =================================
+
     @Override
-    public void onSuccessRegisterIncidImportancia(int rowInserted)
+    public void setChildViewer(@NonNull ViewerIf childViewer)
     {
-        Timber.d("onSuccessRegisterIncidImportancia()");
-        new ActivityInitiator(activity).initActivityWithBundle(new Bundle());
+        Timber.d("setChildViewer()");
+        viewerIncidRegFr = ViewerIncidRegFr.class.cast(childViewer);
+    }
+
+    // ==================================  ComponentReplacerIf  =================================
+
+    @Override
+    public void replaceComponent(@NonNull Bundle bundle)
+    {
+        Timber.d("replaceComponent()");
+        new ActivityInitiator(activity).initActivityWithBundle(bundle);
     }
 
 //  ................................... HELPERS ......................................

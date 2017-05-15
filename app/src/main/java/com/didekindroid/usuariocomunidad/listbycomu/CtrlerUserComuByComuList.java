@@ -2,7 +2,7 @@ package com.didekindroid.usuariocomunidad.listbycomu;
 
 import com.didekindroid.api.Controller;
 import com.didekindroid.api.CtrlerSelectionListIf;
-import com.didekindroid.api.ObserverSelectionList;
+import com.didekindroid.api.SingleObserverSelectionList;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
@@ -72,7 +72,7 @@ class CtrlerUserComuByComuList extends Controller implements
                 listByEntityId(entityId[0])
                         .subscribeOn(io())
                         .observeOn(mainThread())
-                        .subscribeWith(new ObserverSelectionList<>(this))
+                        .subscribeWith(new SingleObserverSelectionList<>(this))
         );
     }
 

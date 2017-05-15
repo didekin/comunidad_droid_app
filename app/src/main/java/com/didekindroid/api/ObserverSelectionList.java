@@ -3,28 +3,29 @@ package com.didekindroid.api;
 import java.io.Serializable;
 import java.util.List;
 
-import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.observers.DisposableObserver;
 import timber.log.Timber;
 
 /**
  * User: pedro@didekin
- * Date: 16/03/17
- * Time: 15:56
+ * Date: 11/05/17
+ * Time: 12:38
  */
-public class ObserverSelectionList<E extends Serializable> extends DisposableSingleObserver<List<E>> {
+class ObserverSelectionList<E extends Serializable> extends
+        DisposableObserver<List<E>> {
 
     private final CtrlerSelectionListIf<E> controller;
 
-    public ObserverSelectionList(CtrlerSelectionListIf<E> controller)
+    ObserverSelectionList(CtrlerSelectionListIf<E> controller)
     {
         this.controller = controller;
     }
 
     @Override
-    public void onSuccess(List<E> items)
+    public void onNext(List<E> municipios)
     {
-        Timber.d("onSuccess()");
-        controller.onSuccessLoadItemsInList(items);
+        Timber.d("onNext()");
+        controller.onSuccessLoadItemsInList(municipios);
     }
 
     @Override
@@ -32,5 +33,11 @@ public class ObserverSelectionList<E extends Serializable> extends DisposableSin
     {
         Timber.d("onErrorCtrl()");
         controller.onErrorCtrl(e);
+    }
+
+    @Override
+    public void onComplete()
+    {
+        Timber.d("onComplete()");
     }
 }

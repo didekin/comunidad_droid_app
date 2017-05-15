@@ -38,7 +38,7 @@ public abstract class ViewerSelectionList<T extends AdapterView<? super ArrayAda
         super(view, activity, parentViewer);
     }
 
-    ArrayAdapter<E> getArrayAdapterForSpinner(Activity activity)
+    protected ArrayAdapter<E> getArrayAdapterForSpinner(Activity activity)
     {
         Timber.d("getArrayAdapterForSpinner()");
         return new ArrayAdapter<>(activity, spinner_view_layout, spinner_text_view);
@@ -62,16 +62,16 @@ public abstract class ViewerSelectionList<T extends AdapterView<? super ArrayAda
     @Override
     public int getSelectedPositionFromItemId(long itemId)
     {
-        Timber.d("getSelectedItemId()");
+        Timber.d("getSelectedPositionFromItemId()");
         return (int) itemId;
     }
 
     @Override
-    public void onSuccessLoadItems(List<E> incidCloseList)
+    public void onSuccessLoadItems(List<E> itemsList)
     {
         Timber.d("onSuccessLoadItems()");
         ArrayAdapter<E> adapter = getArrayAdapterForSpinner(activity);
-        adapter.addAll(incidCloseList);
+        adapter.addAll(itemsList);
         view.setAdapter(adapter);
         view.setSelection(getSelectedPositionFromItemId(itemSelectedId));
     }

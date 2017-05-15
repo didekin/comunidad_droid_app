@@ -14,7 +14,7 @@ import com.didekindroid.router.FragmentInitiator;
 
 import timber.log.Timber;
 
-import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_resolucion_see_fr_tag;
 import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
 import static com.didekindroid.util.UIutils.doToolBar;

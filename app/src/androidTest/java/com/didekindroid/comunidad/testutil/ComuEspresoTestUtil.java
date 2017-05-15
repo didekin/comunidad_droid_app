@@ -2,22 +2,33 @@ package com.didekindroid.comunidad.testutil;
 
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComunidadBean;
+import com.didekindroid.comunidad.spinner.TipoViaValueObj;
 import com.didekinlib.model.comunidad.Comunidad;
+import com.didekinlib.model.comunidad.ComunidadAutonoma;
 import com.didekinlib.model.comunidad.Municipio;
+import com.didekinlib.model.comunidad.Provincia;
 
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.M;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static android.support.test.espresso.action.ViewActions.typeText;
-import static android.support.test.espresso.matcher.CursorMatchers.withRowString;
+import static android.support.test.espresso.action.ViewActions.replaceText;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withParent;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.testutil.ActivityTestUtils.isDataDisplayedAndClick;
+import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
+import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.core.AllOf.allOf;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -34,16 +45,18 @@ public final class ComuEspresoTestUtil {
 
     public static void typeComunidadData()
     {
-        typeComunidadData("Calle", "Valencia", "Alicante/Alacant", "Algueña", "Real", "5", "Bis");
+        Provincia provincia = new Provincia((short) 3, "Alicante/Alacant");
+        final ComunidadAutonoma comunidadAutonoma = new ComunidadAutonoma((short) 10, "Valencia");
+        final Municipio municipio = new Municipio((short) 13, "Algueña", provincia);
+        final TipoViaValueObj tipoVia = new TipoViaValueObj(52, "Calle");
+        typeComunidadData(comunidadAutonoma, provincia, municipio,tipoVia, "Real", "5", "Bis");
     }
 
-    public static void typeComunidadData(String tipoVia, String comunidadAuto, String provincia, String municipio, String nombreVia,
+    public static void typeComunidadData(ComunidadAutonoma comunidadAuto, Provincia provincia, Municipio municipio, TipoViaValueObj tipoVia, String nombreVia,
                                          String numeroEnVia, String sufijoNumero)
     {
         doTipoViaSpinner(tipoVia);
-        onView(withId(R.id.comunidad_nombre_via_editT)).perform(typeText(nombreVia));
-        onView(withId(R.id.comunidad_numero_editT)).perform(typeText(numeroEnVia));
-        onView(withId(R.id.comunidad_sufijo_numero_editT)).perform(typeText(sufijoNumero), closeSoftKeyboard());
+        typeComuCalleNumero(nombreVia, numeroEnVia, sufijoNumero);
         doComunAutonomaSpinner(comunidadAuto);
         doProvinciaSpinner(provincia);
         doMunicipioSpinner(municipio);
@@ -81,29 +94,145 @@ public final class ComuEspresoTestUtil {
         assertThat(comunidad.getMunicipio(), is(municipio));
     }
 
+    public static void checkRegComuFrView(Comunidad comunidad, String nombreComAutonoma)
+    {
+        checkNumeroEnVia(comunidad);
+        checkNumeroSufijo(comunidad);
+        checkTipoViaSpinner(comunidad);
+        checkComuAutonomaSpinner(nombreComAutonoma);
+        checkProvinciaSpinner(comunidad);
+        checkMunicipioSpinner(comunidad);
+    }
+
+    public static void checkNumeroEnVia(Comunidad comunidad)
+    {
+        waitAtMost(4, SECONDS).until(isViewDisplayed(
+                allOf(
+                        withId(R.id.comunidad_numero_editT),
+                        withText(containsString(String.valueOf(comunidad.getNumero())))
+                )
+        ));
+    }
+
+    public static void checkNumeroSufijo(Comunidad comunidad)
+    {
+        waitAtMost(4, SECONDS).until(isViewDisplayed(
+                allOf(
+                        withId(R.id.comunidad_sufijo_numero_editT),
+                        withText(containsString(String.valueOf(comunidad.getSufijoNumero())))
+                )
+        ));
+    }
+
     // ======================================  SPINNER  =========================================
 
-    public static void doTipoViaSpinner(String tipoVia)
+    public static void doTipoViaSpinner(TipoViaValueObj tipoVia)
     {
         onView(withId(R.id.tipo_via_spinner)).perform(click());
-        waitAtMost(2, SECONDS).until(isDataDisplayedAndClick(withRowString(1, tipoVia)));
+        waitAtMost(2, SECONDS).until(isDataDisplayedAndClick(
+                allOf(
+                        isA(TipoViaValueObj.class),
+                        is(tipoVia)
+                )));
+        onView(
+                allOf(
+                        withId(R.id.app_spinner_1_dropdown_item),
+                        withParent(withId(R.id.tipo_via_spinner)),
+                        withText(is(tipoVia.getTipoViaDesc()))
+                )
+        ).check(matches(isDisplayed()));
     }
 
-    public static void doComunAutonomaSpinner(String comunidadAutonoma)
+    public static void checkTipoViaSpinner(Comunidad comunidad)
+    {
+        waitAtMost(3, SECONDS).until(isViewDisplayed(
+                allOf(
+                        withId(R.id.app_spinner_1_dropdown_item),
+                        withParent(withId(R.id.tipo_via_spinner)),
+                        withText(comunidad.getTipoVia()))
+        ));
+    }
+
+    public static void doComunAutonomaSpinner(ComunidadAutonoma comunidadAutonoma)
     {
         onView(withId(R.id.autonoma_comunidad_spinner)).perform(click());
-        waitAtMost(2, SECONDS).until(isDataDisplayedAndClick(withRowString(1, comunidadAutonoma)));
+        waitAtMost(2, SECONDS).until(isDataDisplayedAndClick(
+                allOf(
+                        isA(ComunidadAutonoma.class),
+                        is(comunidadAutonoma)
+                )));
+        onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.autonoma_comunidad_spinner))))
+                .check(matches(withText(is(comunidadAutonoma.getNombre())))).check(matches(isDisplayed()));
     }
 
-    public static void doProvinciaSpinner(String provincia)
+    public static void checkComuAutonomaSpinner(String nombreComAutonoma)
+    {
+        waitAtMost(3, SECONDS).until(isViewDisplayed(
+                allOf(
+                        withId(R.id.app_spinner_1_dropdown_item),
+                        withParent(withId(R.id.autonoma_comunidad_spinner)),
+                        withText(nombreComAutonoma))
+        ));
+    }
+
+    public static void doProvinciaSpinner(Provincia provincia)
     {
         onView(withId(R.id.provincia_spinner)).perform(click());
-        waitAtMost(2, SECONDS).until(isDataDisplayedAndClick(withRowString(1, provincia)));
+        waitAtMost(3, SECONDS).until(isDataDisplayedAndClick(
+                allOf(
+                        isA(Provincia.class),
+                        is(provincia)
+                )));
+        onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.provincia_spinner))))
+                .check(matches(withText(is(provincia.getNombre())))).check(matches(isDisplayed()));
     }
 
-    public static void doMunicipioSpinner(String municipio)
+    public static void checkProvinciaSpinner(Comunidad comunidad)
+    {
+        checkProvinciaSpinner(comunidad.getMunicipio().getProvincia().getNombre());
+    }
+
+    public static void checkProvinciaSpinner(String provinciaNombre)
+    {
+        waitAtMost(3, SECONDS).until(isViewDisplayed(
+                allOf(
+                        withId(R.id.app_spinner_1_dropdown_item),
+                        withParent(withId(R.id.provincia_spinner)),
+                        withText(provinciaNombre))
+        ));
+    }
+
+    public static void doMunicipioSpinner(Municipio municipio)
     {
         onView(withId(R.id.municipio_spinner)).perform(click());
-        waitAtMost(4, SECONDS).until(isDataDisplayedAndClick(withRowString(3, municipio)));
+        waitAtMost(3, SECONDS).until(isDataDisplayedAndClick(
+                allOf(
+                        isA(Municipio.class),
+                        is(municipio)
+                )));
+        onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.municipio_spinner))))
+                .check(matches(withText(is(municipio.getNombre())))).check(matches(isDisplayed()));
+    }
+
+    public static void checkMunicipioSpinner(Comunidad comunidad)
+    {
+        checkMunicipioSpinner(comunidad.getMunicipio().getNombre());
+    }
+
+    public static void checkMunicipioSpinner(String municipioNombre)
+    {
+        waitAtMost(4, SECONDS).until(isViewDisplayed(
+                allOf(
+                        withId(R.id.app_spinner_1_dropdown_item),
+                        withParent(withId(R.id.municipio_spinner)),
+                        withText(municipioNombre))
+        ));
+    }
+
+    public static void typeComuCalleNumero(String nombreVia, String numero, String sufijo)
+    {
+        onView(withId(R.id.comunidad_nombre_via_editT)).perform(scrollTo(), replaceText(nombreVia));
+        onView(withId(R.id.comunidad_numero_editT)).perform(scrollTo(), replaceText(numero));
+        onView(withId(R.id.comunidad_sufijo_numero_editT)).perform(scrollTo(), replaceText(sufijo), closeSoftKeyboard());
     }
 }

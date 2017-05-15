@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.matcher.IntentMatchers;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
-import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
@@ -36,8 +35,8 @@ import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
-import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_SEARCH;
+import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
+import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_SEARCH;
 import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_LA_PLAZUELA_5;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;

@@ -14,7 +14,7 @@ import org.junit.runners.Suite;
         CtrlerSelectionListTest.class,
         ObserverMaybeListTest.class,
         ObserverSingleSelectedItemTest.class,
-        ObserverSelectionListTest.class,
+        SingleObserverSelectionListTest.class,
         ViewerSelectionListTest.class,
         ViewerTest.class,
 })

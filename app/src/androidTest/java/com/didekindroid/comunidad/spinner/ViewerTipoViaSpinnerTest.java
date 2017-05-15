@@ -8,7 +8,6 @@ import android.widget.Spinner;
 import com.didekindroid.R;
 import com.didekindroid.api.ActivityMock;
 import com.didekindroid.api.SpinnerMockFr;
-import com.didekindroid.comunidad.ComunidadBean;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -16,12 +15,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static com.didekindroid.comunidad.ComuBundleKey.TIPO_VIA_ID;
 import static com.didekindroid.comunidad.spinner.ViewerTipoViaSpinner.newViewerTipoViaSpinner;
+import static com.didekindroid.comunidad.utils.ComuBundleKey.TIPO_VIA_ID;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSavedStateWithItemSelected;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
@@ -31,6 +31,7 @@ import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -80,15 +81,32 @@ public class ViewerTipoViaSpinnerTest {
     }
 
     @Test
+    public void test_GetSelectedPositionFromDesc() throws Exception
+    {
+        final List<TipoViaValueObj> tiposVia = Arrays.asList(new TipoViaValueObj("tipo_4"), new TipoViaValueObj("tipo_1"), new TipoViaValueObj("tipo_99"));
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                // Necesito valor inicial para evitar NullPointer en onSuccessLoadItems(tiposVia).
+                viewer.tipoViaValueObj = new TipoViaValueObj("initialDesc");
+                viewer.onSuccessLoadItems(tiposVia);
+                assertThat(viewer.getSelectedPositionFromDesc("tipo_99"), is(2));
+                assertThat(viewer.getSelectedPositionFromDesc("tipo_4"), is(0));
+                assertThat(viewer.getSelectedPositionFromDesc("tipo_1"), is(1));
+            }
+        });
+    }
+
+    @Test
     public void test_OnSuccessLoadItems() throws Exception
     {
         final List<TipoViaValueObj> tiposVia = new ArrayList<>(3);
         tiposVia.add(new TipoViaValueObj(11, "tipo_11"));
         tiposVia.add(new TipoViaValueObj(22, "tipo_22"));
         tiposVia.add(new TipoViaValueObj(33, "tipo_33"));
-        long itemSelected = 2;
 
-        viewer.setItemSelectedId(itemSelected);
+        viewer.tipoViaValueObj = new TipoViaValueObj("tipo_22");
 
         final AtomicBoolean isExec = new AtomicBoolean(false);
         activity.runOnUiThread(new Runnable() {
@@ -101,14 +119,13 @@ public class ViewerTipoViaSpinnerTest {
         });
         waitAtMost(4, SECONDS).untilTrue(isExec);
         assertThat(viewer.getViewInViewer().getAdapter().getCount(), is(tiposVia.size()));
-        assertThat(viewer.getViewInViewer().getSelectedItemId(), is(itemSelected));
-        assertThat(viewer.getViewInViewer().getSelectedItemPosition(), is((int) itemSelected));
+        assertThat(viewer.getViewInViewer().getSelectedItemId(), is(1L));
+        assertThat(viewer.getViewInViewer().getSelectedItemPosition(), is(1));
     }
 
     @Test
     public void test_InitSelectedItemId() throws Exception
     {
-        viewer.comunidadBean = new ComunidadBean();
         Bundle bundle = new Bundle();
 
         // Case 0: no previous initialization
@@ -118,20 +135,11 @@ public class ViewerTipoViaSpinnerTest {
         bundle.putLong(TIPO_VIA_ID.key, 23);
         viewer.initSelectedItemId(bundle);
         assertThat(viewer.getSelectedItemId(), is(23L));
-        // Case 2: initialization in both savedState and comunidadBean
-        viewer.comunidadBean.setTipoVia(new TipoViaValueObj(45, "tipo_45"));
-        viewer.initSelectedItemId(bundle);
-        assertThat(viewer.getSelectedItemId(), is(23L));
-        // Case 3: initialization in comunidadBean
-        bundle = null;
-        viewer.initSelectedItemId(bundle);
-        assertThat(viewer.getSelectedItemId(), is(45L));
     }
 
     @Test
     public void test_DoViewInViewer() throws Exception
     {
-        // To check: comunidadBean not null, call to initSelectedItem, setOnItemSelectedListene() and call to controller.loadItemsByEntitiyId()
         // State
         final String keyBundle = TIPO_VIA_ID.key;
         Bundle bundle = new Bundle(1);
@@ -147,8 +155,8 @@ public class ViewerTipoViaSpinnerTest {
         });
         viewer.doViewInViewer(bundle, null);
 
-        // Check comunidadBean not null.
-        assertThat(viewer.comunidadBean, notNullValue());
+        // Check tipoViaValueObj null.
+        assertThat(viewer.tipoViaValueObj, nullValue());
         // Check call to initSelectedItemId().
         assertThat(viewer.getSelectedItemId(), allOf(
                 is(bundle.getLong(keyBundle)),
@@ -165,5 +173,4 @@ public class ViewerTipoViaSpinnerTest {
     {
         checkSavedStateWithItemSelected(viewer, TIPO_VIA_ID);
     }
-
 }

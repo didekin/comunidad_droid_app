@@ -22,8 +22,8 @@ import java.util.List;
 
 import timber.log.Timber;
 
-import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
-import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_SEARCH;
+import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
+import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_SEARCH;
 import static com.didekindroid.router.ActivityRouter.doUpMenu;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.usuariocomunidad.UserComuBundleKey.USERCOMU_LIST_OBJECT;

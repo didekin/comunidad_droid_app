@@ -11,13 +11,10 @@ import android.view.View;
 import android.widget.Button;
 
 import com.didekindroid.R;
-import com.didekindroid.comunidad.ComunidadBean;
 import com.didekindroid.comunidad.RegComuFr;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.usuario.RegUserFr;
-import com.didekindroid.usuario.UsuarioBean;
-import com.didekindroid.util.ConnectionUtils;
 import com.didekinlib.http.ErrorBean;
 import com.didekinlib.http.oauth2.SpringOauthToken;
 import com.didekinlib.model.usuario.Usuario;
@@ -34,9 +31,7 @@ import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.util.UIutils.doToolBar;
-import static com.didekindroid.util.UIutils.makeToast;
 import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
-import static com.didekinlib.model.common.dominio.ValidDataPatterns.LINE_BREAK;
 
 /**
  * Preconditions:
@@ -62,7 +57,7 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity {
         setContentView(R.layout.reg_comu_and_user_and_usercomu_ac);
         doToolBar(this, true);
 
-        mRegComuFrg = (RegComuFr) getFragmentManager().findFragmentById(R.id.reg_comunidad_frg);
+        mRegComuFrg = (RegComuFr) getSupportFragmentManager().findFragmentById(R.id.reg_comunidad_frg);
         mRegUserComuFrg = (RegUserComuFr) getFragmentManager().findFragmentById(R.id
                 .reg_usercomu_frg);
         mRegUserFr = (RegUserFr) getFragmentManager().findFragmentById(R.id.reg_user_frg);
@@ -82,7 +77,7 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity {
     {
         Timber.d("registerComuAndUsuarioComu()");
 
-        ComunidadBean comunidadBean = mRegComuFrg.getComunidadBean();
+        /*ComunidadBean comunidadBean = mRegComuFrg.getComunidadBean();    TODO: cambiar y descomentar.
         RegComuFr.makeComunidadBeanFromView(mRegComuFrg.getFragmentView(), comunidadBean);
         UsuarioBean usuarioBean = RegUserFr.makeUserBeanFromRegUserFrView(mRegUserFr.getFragmentView());
         UsuarioComunidadBean usuarioComunidadBean = RegUserComuFr.makeUserComuBeanFromView(mRegUserComuFrg
@@ -98,7 +93,7 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity {
             makeToast(this, R.string.no_internet_conn_toast);
         } else {
             new ComuAndUserComuAndUserRegister().execute(usuarioComunidadBean.getUsuarioComunidad());
-        }
+        }*/
     }
 
     @Override

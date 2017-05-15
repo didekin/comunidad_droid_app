@@ -27,7 +27,11 @@
         style="@style/spinnerBase"/>
 
     <Spinner
-        android:id="@+id/provincia_spinner"
+        android:id="@+id/provincia_mock_spinner"
+        style="@style/spinnerBase"/>
+
+    <Spinner
+        android:id="@+id/municipio_mock_spinner"
         style="@style/spinnerBase"/>
 
 </LinearLayout>

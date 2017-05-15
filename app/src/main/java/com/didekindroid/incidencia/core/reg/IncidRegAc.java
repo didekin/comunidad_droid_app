@@ -11,11 +11,8 @@ import com.didekindroid.api.ViewerParentInjectorIf;
 
 import timber.log.Timber;
 
-import static com.didekindroid.router.ActivityRouter.doUpMenu;
 import static com.didekindroid.incidencia.core.reg.ViewerIncidRegAc.newViewerIncidRegAc;
-import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
-import static com.didekindroid.util.CommonAssertionMsg.controller_should_be_initialized;
-import static com.didekindroid.util.UIutils.assertTrue;
+import static com.didekindroid.router.ActivityRouter.doUpMenu;
 import static com.didekindroid.util.UIutils.doToolBar;
 
 /**
@@ -45,7 +42,6 @@ public class IncidRegAc extends AppCompatActivity implements ViewerParentInjecto
         doToolBar(this, true);
 
         viewer = newViewerIncidRegAc(this);
-        //noinspection ConstantConditions
         viewer.doViewInViewer(savedInstanceState, null);
         mRegAcFragment = (IncidRegFr) getSupportFragmentManager().findFragmentById(R.id.incid_reg_frg);
     }
@@ -65,6 +61,8 @@ public class IncidRegAc extends AppCompatActivity implements ViewerParentInjecto
         super.onSaveInstanceState(outState);
         viewer.saveState(outState);
     }
+
+    // ==================================  ViewerParentInjectorIf  =================================
 
     @Override
     public ViewerIncidRegAc getViewerAsParent()

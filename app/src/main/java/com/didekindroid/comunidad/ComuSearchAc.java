@@ -1,6 +1,5 @@
 package com.didekindroid.comunidad;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -13,18 +12,12 @@ import com.didekindroid.R;
 import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.security.IdentityCacher;
 import com.didekindroid.security.OauthTokenReactorIf;
-import com.didekindroid.util.ConnectionUtils;
 
 import timber.log.Timber;
 
-import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_SEARCH;
-import static com.didekindroid.comunidad.RegComuFr.makeComunidadBeanFromView;
-import static com.didekindroid.router.ActivityRouter.acRouter;
 import static com.didekindroid.security.OauthTokenReactor.tokenReactor;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.util.UIutils.doToolBar;
-import static com.didekindroid.util.UIutils.makeToast;
-import static com.didekinlib.model.common.dominio.ValidDataPatterns.LINE_BREAK;
 
 /**
  * Postconditions:
@@ -53,7 +46,7 @@ public class ComuSearchAc extends AppCompatActivity {
         mainView = getLayoutInflater().inflate(R.layout.comu_search_ac, null);
         setContentView(mainView);
         doToolBar(this, false);
-        regComuFrg = (RegComuFr) getFragmentManager().findFragmentById(R.id.reg_comunidad_frg);
+        regComuFrg = (RegComuFr) getSupportFragmentManager().findFragmentById(R.id.reg_comunidad_frg);
 
         Button mSearchButton = (Button) findViewById(R.id.searchComunidad_Bton);
         mSearchButton.setOnClickListener(new View.OnClickListener() {
@@ -80,9 +73,9 @@ public class ComuSearchAc extends AppCompatActivity {
     {
         Timber.i("In searchComunidad()");
 
-        ComunidadBean comunidadBean = regComuFrg.getComunidadBean();
+        /*ComunidadBean comunidadBean = regComuFrg.getComunidadBean();    TODO: modificar y descomentar.
 
-        makeComunidadBeanFromView(regComuFrg.getFragmentView(), comunidadBean);
+        getComunidadFromViewer(regComuFrg.getFragmentView(), comunidadBean);
 
         // Validation of data.
         StringBuilder errorMsg = new StringBuilder(getResources().getText(R.string.error_validation_msg))
@@ -96,7 +89,7 @@ public class ComuSearchAc extends AppCompatActivity {
             Intent intent = new Intent(this, acRouter.nextActivity(getClass()));
             intent.putExtra(COMUNIDAD_SEARCH.key, comunidadBean.getComunidad());
             startActivity(intent);
-        }
+        }*/
     }
 
 //    ============================================================

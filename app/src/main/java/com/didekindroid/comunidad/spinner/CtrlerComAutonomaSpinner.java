@@ -3,7 +3,7 @@ package com.didekindroid.comunidad.spinner;
 import android.app.Activity;
 
 import com.didekindroid.api.CtrlerSelectionList;
-import com.didekindroid.api.ObserverSelectionList;
+import com.didekindroid.api.SingleObserverSelectionList;
 import com.didekindroid.comunidad.repository.ComunidadDbHelper;
 import com.didekinlib.model.comunidad.ComunidadAutonoma;
 
@@ -23,8 +23,6 @@ import timber.log.Timber;
 
 class CtrlerComAutonomaSpinner extends CtrlerSelectionList<ComunidadAutonoma> {
 
-    ObserverSelectionList<ComunidadAutonoma> observerSpinner;
-
     CtrlerComAutonomaSpinner(ViewerComuAutonomaSpinner viewer)
     {
         super(viewer);
@@ -33,9 +31,7 @@ class CtrlerComAutonomaSpinner extends CtrlerSelectionList<ComunidadAutonoma> {
     static CtrlerComAutonomaSpinner newCtrlerComAutonomaSpinner(ViewerComuAutonomaSpinner viewer)
     {
         Timber.d("newCtrlerComAutonomaSpinner()");
-        CtrlerComAutonomaSpinner controller = new CtrlerComAutonomaSpinner(viewer);
-        controller.observerSpinner = new ObserverSelectionList<>(controller);
-        return controller;
+        return new CtrlerComAutonomaSpinner(viewer);
     }
 
     // .................................... OBSERVABLE .......................................
@@ -65,7 +61,7 @@ class CtrlerComAutonomaSpinner extends CtrlerSelectionList<ComunidadAutonoma> {
         return subscriptions.add(comunidadesAutonomasList(viewer.getActivity())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(observerSpinner)
+                .subscribeWith(new SingleObserverSelectionList<>(this))
         );
     }
 }

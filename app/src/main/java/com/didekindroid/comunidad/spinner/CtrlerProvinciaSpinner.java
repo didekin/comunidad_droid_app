@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.widget.AdapterView;
 
 import com.didekindroid.api.CtrlerSelectionList;
-import com.didekindroid.api.ObserverSelectionList;
+import com.didekindroid.api.SingleObserverSelectionList;
 import com.didekindroid.api.ViewerSelectionList;
 import com.didekindroid.comunidad.repository.ComunidadDbHelper;
 import com.didekinlib.model.comunidad.Provincia;
@@ -27,8 +27,6 @@ import static io.reactivex.schedulers.Schedulers.io;
 
 class CtrlerProvinciaSpinner extends CtrlerSelectionList<Provincia> {
 
-    ObserverSelectionList<Provincia> observerSpinner;
-
     CtrlerProvinciaSpinner(ViewerSelectionList<? extends AdapterView, CtrlerSelectionList<Provincia>, Provincia> viewer)
     {
         super(viewer);
@@ -37,9 +35,7 @@ class CtrlerProvinciaSpinner extends CtrlerSelectionList<Provincia> {
     static CtrlerProvinciaSpinner newCtrlerProvinciaSpinner(ViewerProvinciaSpinner viewer)
     {
         Timber.d("newCtrlerProvinciaSpinner()");
-        CtrlerProvinciaSpinner controller = new CtrlerProvinciaSpinner(viewer);
-        controller.observerSpinner = new ObserverSelectionList<>(controller);
-        return controller;
+        return new CtrlerProvinciaSpinner(viewer);
     }
 
     // .................................... OBSERVABLE .......................................
@@ -69,7 +65,7 @@ class CtrlerProvinciaSpinner extends CtrlerSelectionList<Provincia> {
         return subscriptions.add(provinciasByComAutonoma(viewer.getActivity(), entityId[0].shortValue())
                 .subscribeOn(io())
                 .observeOn(mainThread())
-                .subscribeWith(observerSpinner)
+                .subscribeWith(new SingleObserverSelectionList<>(this))
         );
     }
 }

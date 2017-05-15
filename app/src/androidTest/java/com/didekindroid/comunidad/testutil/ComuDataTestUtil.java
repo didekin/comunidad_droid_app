@@ -1,6 +1,7 @@
 package com.didekindroid.comunidad.testutil;
 
 import com.didekinlib.model.comunidad.Comunidad;
+import com.didekinlib.model.comunidad.ComunidadAutonoma;
 import com.didekinlib.model.comunidad.Municipio;
 import com.didekinlib.model.comunidad.Provincia;
 
@@ -24,7 +25,7 @@ public final class ComuDataTestUtil {
             .tipoVia("Calle")
             .nombreVia("de la Fuente")
             .numero((short) 11)
-            .municipio(new Municipio((short) 66, new Provincia((short) 3)))
+            .municipio(new Municipio((short) 66, "Elda", new Provincia(new ComunidadAutonoma((short)10),(short) 3, "Alicante/Alacant")))
             .build();
     // Municipio: Alfoz   Provincia: Lugo
     public static final Comunidad COMU_LA_PLAZUELA_5 = new Comunidad.ComunidadBuilder()

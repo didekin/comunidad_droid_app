@@ -1,0 +1,15 @@
+package com.didekindroid.api;
+
+import android.support.annotation.NonNull;
+
+/**
+ * User: pedro@didekin
+ * Date: 17/04/17
+ * Time: 17:09
+ * <p>
+ * Implementations processes spinner selection events in futher related actions.
+ */
+public interface SpinnerEventListener {
+
+    void doOnClickItemId(@NonNull SpinnerEventItemSelectIf spinnerEventItemSelect);
+}

@@ -3,7 +3,7 @@ package com.didekindroid.comunidad.spinner;
 import android.app.Activity;
 
 import com.didekindroid.api.CtrlerSelectionList;
-import com.didekindroid.api.ObserverSelectionList;
+import com.didekindroid.api.SingleObserverSelectionList;
 import com.didekindroid.comunidad.repository.ComunidadDbHelper;
 
 import java.util.List;
@@ -23,8 +23,6 @@ import static io.reactivex.schedulers.Schedulers.io;
 
 class CtrlerTipoViaSpinner extends CtrlerSelectionList<TipoViaValueObj> {
 
-    ObserverSelectionList<TipoViaValueObj> observerSpinner;
-
     CtrlerTipoViaSpinner(ViewerTipoViaSpinner viewer)
     {
         super(viewer);
@@ -33,9 +31,7 @@ class CtrlerTipoViaSpinner extends CtrlerSelectionList<TipoViaValueObj> {
     static CtrlerTipoViaSpinner newCtrlerTipoViaSpinner(ViewerTipoViaSpinner viewer)
     {
         Timber.d("newCtrlerTipoViaSpinner()");
-        CtrlerTipoViaSpinner controller = new CtrlerTipoViaSpinner(viewer);
-        controller.observerSpinner = new ObserverSelectionList<>(controller);
-        return controller;
+        return new CtrlerTipoViaSpinner(viewer);
     }
 
     // .................................... OBSERVABLE .......................................
@@ -65,7 +61,7 @@ class CtrlerTipoViaSpinner extends CtrlerSelectionList<TipoViaValueObj> {
         return subscriptions.add(tipoViaList(viewer.getActivity())
                 .subscribeOn(io())
                 .observeOn(mainThread())
-                .subscribeWith(observerSpinner)
+                .subscribeWith(new SingleObserverSelectionList<>(this))
         );
     }
 }

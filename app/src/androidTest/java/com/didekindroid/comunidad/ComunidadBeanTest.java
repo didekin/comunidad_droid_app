@@ -9,7 +9,6 @@ import com.didekindroid.comunidad.spinner.TipoViaValueObj;
 import com.didekinlib.model.comunidad.Municipio;
 import com.didekinlib.model.comunidad.Provincia;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +16,7 @@ import org.junit.runner.RunWith;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
@@ -26,7 +26,7 @@ import static org.junit.Assert.assertThat;
  * Time: 11:50
  */
 @RunWith(AndroidJUnit4.class)
-public class ComunidadBeanValidaTests {
+public class ComunidadBeanTest {
 
     private static final String TIPO_VIA_ERROR = "errorTipoVia";
     private static final String ERROR_GENERIC = "genericError";
@@ -100,8 +100,21 @@ public class ComunidadBeanValidaTests {
         assertThat(comunidadBean.validateSufijo(TIPO_VIA_ERROR, errors), equalTo(false));
     }
 
-    @After
-    public void doAfter()
+    @Test
+    public void test_ValidateMunicipio_1() throws Exception
     {
+        ComunidadBean comunidadBean = new ComunidadBean(null, null, null, null, null);
+        assertThat(comunidadBean.validateMunicipio(resources, errors), is(false));
+        assertThat(errors.toString(), not(containsString(resources.getText(R.string.municipio).toString())));
+
+        Municipio municipio = new Municipio((short) 1, "Agolada", new Provincia((short) 36, "Pontevedra"));
+        comunidadBean.setMunicipio(municipio);
+        assertThat(comunidadBean.validateMunicipio(resources , errors), is(true));
+
+        // Municipio válido requiere provincia.
+        municipio = new Municipio((short) 1, "Agolada", null);
+        comunidadBean.setMunicipio(municipio);
+        assertThat(comunidadBean.validateMunicipio(resources , errors), is(false));
+        assertThat(errors.toString(), containsString(resources.getText(R.string.municipio).toString()));
     }
 }

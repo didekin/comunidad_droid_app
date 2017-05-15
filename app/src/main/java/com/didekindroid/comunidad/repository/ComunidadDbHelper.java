@@ -225,7 +225,7 @@ public class ComunidadDbHelper extends SQLiteOpenHelper {
         return municipios;
     }
 
-    public Cursor doMunicipiosByProvinciaCursor(short prId)
+    Cursor doMunicipiosByProvinciaCursor(short prId)
     {
         Timber.i("In doMunicipiosByProvinciaCursor()");
 
@@ -296,25 +296,27 @@ public class ComunidadDbHelper extends SQLiteOpenHelper {
 
     Cursor doProvinciasByCACursor(short caId)
     {
-        Timber.d("doProvinciasByCACursor()");
+        Timber.d("doProvinciasByCACursor( - entering)");
 
         if (mDataBase == null || mProvinciasCounter == 0) {
             mDataBase = getReadableDatabase();
         }
 
-        String[] columns = new String[]{_ID, pr_nombre};
+        String[] columns = new String[]{_ID, pr_nombre, ca_id};
         String whereClause = ca_id + " = ?";
         String[] wherClauseArgs = new String[]{String.valueOf(caId)};
 
         Cursor cursor = mDataBase.query(TB_PROVINCIA, columns, whereClause, wherClauseArgs, null, null, null);
 
         if (checkNullCursor(cursor)) return null;
+
+        Timber.d("doProvinciasByCACursor() - almost out");
         return cursor;
     }
 
     public List<Provincia> getProvinciasByCA(short caId)
     {
-        Timber.d("In getProvinciasByCA(), caId = %d%n", caId);
+        Timber.d("In getProvinciasByCA() - entering, caId = %d%n", caId);
 
         Cursor cursor = doProvinciasByCACursor(caId);
         if (cursor == null) {
@@ -323,15 +325,17 @@ public class ComunidadDbHelper extends SQLiteOpenHelper {
 
         int pkIndex = cursor.getColumnIndex(_ID);
         int nombreIndex = cursor.getColumnIndex(pr_nombre);
+        int comuAutonomaIndex = cursor.getColumnIndex(ca_id);
         Provincia provincia;
         List<Provincia> provincias = new ArrayList<>();
 
         do {
-            provincia = new Provincia(cursor.getShort(pkIndex), cursor.getString(nombreIndex));
+            provincia = new Provincia(new ComunidadAutonoma(cursor.getShort(comuAutonomaIndex)), cursor.getShort(pkIndex), cursor.getString(nombreIndex));
             provincias.add(provincia);
         } while (cursor.moveToNext());
 
         cursor.close();
+        Timber.d("In getProvinciasByCA() - cursor.close(), caId = %d%n", caId);
         return provincias;
     }
 

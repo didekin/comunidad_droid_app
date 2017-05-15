@@ -7,7 +7,7 @@ import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.comunidad.ComuBundleKey;
+import com.didekindroid.comunidad.utils.ComuBundleKey;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
 import com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil;
@@ -30,7 +30,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
+import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;

@@ -1,211 +1,73 @@
 package com.didekindroid.comunidad;
 
 
-import android.app.Fragment;
-import android.database.Cursor;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.CursorAdapter;
-import android.widget.EditText;
-import android.widget.SimpleCursorAdapter;
-import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 
 import com.didekindroid.R;
-import com.didekindroid.comunidad.repository.ComunidadDbHelper;
-import com.didekinlib.model.comunidad.Municipio;
-import com.didekinlib.model.comunidad.Provincia;
+import com.didekindroid.api.ViewerParentInjectorIf;
+import com.didekinlib.model.comunidad.Comunidad;
 
 import timber.log.Timber;
 
-import static com.didekindroid.comunidad.repository.ComunidadDataDb.Municipio.mu_nombre;
-import static com.didekindroid.util.UIutils.checkPostExecute;
+import static com.didekindroid.comunidad.ViewerRegComuFr.newViewerRegComuFr;
+import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 
+/**
+ * Preconditions:
+ * 1. The user is registered.
+ * 2. If the fragment is used for edition, an intent is passed with a comunidad ID.
+ * Postconditions:
+ * 1. If a intent is passed, the data of the comunidad are shown in the fragment.
+ * <p>
+ */
 public class RegComuFr extends Fragment {
 
-    ComunidadDbHelper dbHelper;
-    Spinner tipoViaSpinner;
-    Spinner mAutonomaComuSpinner;
-    Spinner provinciaSpinner;
-    Spinner municipioSpinner;
-    int mCApointer;
-    int mProvinciaPointer;
-    int mMunicipioPointer;
-    int mTipoViaPointer;
-    ComuDataControllerIf mComuDataController;
-    ComunidadBean comunidadBean;
-    private View mRegComunidadFrView;
-
-    public RegComuFr()
-    {
-    }
-
-    public static void makeComunidadBeanFromView(View comunidadSearchView, ComunidadBean comunidadBean)
-    {
-        comunidadBean.setNombreVia(((EditText) comunidadSearchView
-                .findViewById(R.id.comunidad_nombre_via_editT)).getText().toString());
-        comunidadBean.setNumeroString(((EditText) comunidadSearchView
-                .findViewById(R.id.comunidad_numero_editT)).getText().toString());
-        comunidadBean.setSufijoNumero(((EditText) comunidadSearchView
-                .findViewById(R.id.comunidad_sufijo_numero_editT)).getText().toString());
-    }
+    View frView;
+    ViewerRegComuFr viewer;
+    ViewerParentInjectorIf viewerInjector;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
         Timber.d("onCreateView()");
-        mRegComunidadFrView = inflater.inflate(R.layout.reg_comu_fr, container, false);
-        return mRegComunidadFrView;
+        frView = inflater.inflate(R.layout.reg_comu_fr, container, false);
+        return frView;
     }
 
-    @SuppressWarnings("ConstantConditions")
     @Override
-    public void onActivityCreated(Bundle savedInstanceState)
+    public void onActivityCreated(@Nullable Bundle savedInstanceState)
     {
-        super.onActivityCreated(savedInstanceState);
         Timber.d("onActivityCreated()");
+        super.onActivityCreated(savedInstanceState);
 
-        dbHelper = new ComunidadDbHelper(getActivity());
-        // Asynchronous call: initialize database if necessary.
+        // Check for intent with comunidad ID.
+        long comunidadId = getActivity().getIntent().getLongExtra(COMUNIDAD_ID.key, 0L);
 
-        tipoViaSpinner = (Spinner) getView().findViewById(R.id.tipo_via_spinner);
-//        tipoViaSpinner.setFocusable(true);
-//        tipoViaSpinner.setFocusableInTouchMode(true);
-//        tipoViaSpinner.requestFocus();
-        mAutonomaComuSpinner = (Spinner) getView().findViewById(R.id.autonoma_comunidad_spinner);
-        provinciaSpinner = (Spinner) getView().findViewById(R.id.provincia_spinner);
-        municipioSpinner = (Spinner) getView().findViewById(R.id.municipio_spinner);
-        comunidadBean = new ComunidadBean();
-
-        // ................................ LISTENERS ............................................
-
-        provinciaSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-            {
-                Timber.d("In provinciasSpinner.setOnItemSelectedListener, onItemSelected()");
-
-                comunidadBean.setMunicipio(null);
-                short prId = (short) id;
-                new SpinnerMunicipioLoader().execute(prId);
-                mProvinciaPointer = position;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent)
-            {
-                Timber.d("In provinciasSpinner.setOnItemSelectedListener, onNothingSelected");
-            }
-        });
-
-        municipioSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-            {
-                Timber.d("In municipiosSpinner.setOnItemSelectedListener, onItemSelected()");
-
-                Cursor cursor = ((CursorAdapter) parent.getAdapter()).getCursor();
-                cursor.moveToPosition(position);
-                Municipio municipio = new Municipio(cursor.getShort(2), new Provincia(cursor.getShort(1)));
-                comunidadBean.setMunicipio(municipio);
-                mMunicipioPointer = position;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent)
-            {
-                Timber.d("In municipiosSpinner.setOnItemSelectedListener, onNothingSelected()");
-            }
-        });
+        viewerInjector = (ViewerParentInjectorIf) getActivity();
+        viewer = newViewerRegComuFr(frView, viewerInjector.getViewerAsParent());
+        viewer.doViewInViewer(savedInstanceState, comunidadId > 0 ? new Comunidad.ComunidadBuilder().c_id(comunidadId).build() : null);
+        viewerInjector.setChildInViewer(viewer);
     }
 
-// ================ Interface to communicate with the Activity ================
-
-
-    void setmComuDataController(ComuDataControllerIf mComuDataController)
+    @Override
+    public void onSaveInstanceState(Bundle savedState)
     {
-        this.mComuDataController = mComuDataController;
+        Timber.d("onSaveInstanceState()");
+        super.onSaveInstanceState(savedState);
+        viewer.saveState(savedState);
     }
 
-//  ===================== STATIC HELPER METHODS ==========================
-
-    public View getFragmentView()
+    @Override
+    public void onStop()
     {
-        return mRegComunidadFrView;
+        Timber.d("onStop()");
+        super.onStop();
+        viewer.clearSubscriptions();
     }
-
-//    ============================================================
-//    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
-//    ============================================================
-
-    public ComunidadBean getComunidadBean()
-    {
-        return comunidadBean;
-    }
-
-    SpinnerAdapter doAdapterSpinner(Cursor cursor, String[] fromColDB)
-    {
-        Timber.d("In doAdapterSpinnerFromCursor()");
-
-        int[] toViews = new int[]{R.id.app_spinner_1_dropdown_item};
-        return new SimpleCursorAdapter(
-                getActivity(),
-                R.layout.app_spinner_1_dropdown_item,
-                cursor,
-                fromColDB,
-                toViews,
-                0);
-    }
-
-    //  --------------------------------------------------------------------
-//                               SPINNERS
-//  --------------------------------------------------------------------
-
-    interface ComuDataControllerIf {
-
-        void onCAutonomaSpinnerLoaded();
-
-        void onProvinciaSpinnerLoaded();
-
-        void onMunicipioSpinnerLoaded();
-
-        void onDestroyFragment();
-    }
-
-
-///   :::::::::::::::::  MUNICIPIO ::::::::::::::::::::
-
-    @SuppressWarnings("WeakerAccess")
-    class SpinnerMunicipioLoader extends AsyncTask<Short, Void, Cursor> {
-
-        @Override
-        protected Cursor doInBackground(Short... params)
-        {
-            Timber.d("In SpinnerMunicipioLoader.doInBackground()");
-            final Cursor municipiosCursor = dbHelper.doMunicipiosByProvinciaCursor(params[0]);
-            Timber.d("In SpinnerMunicipiosLoader.doInBackground() : cursor count = %d%n", municipiosCursor.getCount());
-            return municipiosCursor;
-        }
-
-        @Override
-        protected void onPostExecute(final Cursor municipiosCursor)
-        {
-            if (checkPostExecute(getActivity())) return;
-
-            Timber.d("In SpinnerMunicipioLoader.onPostExecute()");
-
-            String[] fromColDb = new String[]{mu_nombre};
-            municipioSpinner.setAdapter(doAdapterSpinner(municipiosCursor, fromColDb));
-
-            if (mComuDataController != null) {
-                mComuDataController.onMunicipioSpinnerLoaded();
-            }
-        }
-    }
-
 }

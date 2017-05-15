@@ -53,6 +53,7 @@ public class ActivityRouter implements ActivityRouterIf {
     private static final Map<Class<? extends View.OnClickListener>, Class<? extends Activity>> onClickRouterMap = new ArrayMap<>();
 
     static {
+        acRouterMap.put(ComuDataAc.class, SeeUserComuByUserAc.class);
         acRouterMap.put(ComuSearchAc.class, ComuSearchResultsAc.class);
         acRouterMap.put(DeleteMeAc.class, ComuSearchAc.class);
         acRouterMap.put(IncidEditAc.class, IncidSeeOpenByComuAc.class);

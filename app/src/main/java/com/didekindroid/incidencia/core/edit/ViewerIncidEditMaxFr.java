@@ -209,7 +209,4 @@ class ViewerIncidEditMaxFr extends ViewerIncidRegEdit implements
         viewerAmbitoIncidSpinner.saveState(savedState);
         viewerImportanciaSpinner.saveState(savedState);
     }
-
-    // ==================================== HELPERS ======================================
-
 }

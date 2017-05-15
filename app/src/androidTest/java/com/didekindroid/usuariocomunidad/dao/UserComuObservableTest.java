@@ -20,9 +20,10 @@ import io.reactivex.observers.TestObserver;
 import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_EL_ESCORIAL;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
+import static com.didekindroid.usuariocomunidad.dao.UserComuObservable.comunidadModificada;
 import static com.didekindroid.usuariocomunidad.dao.UserComuObservable.comunidadesByUser;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpWithTkGetComu;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -35,17 +36,18 @@ public class UserComuObservableTest {
 
     @Rule
     public ActivityTestRule<ActivityMock> activityRule = new ActivityTestRule<>(ActivityMock.class, true, true);
+    Comunidad comunidad;
 
     @Before
     public void doFixture() throws IOException, UiException
     {
-        signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
+        comunidad = signUpWithTkGetComu(COMU_ESCORIAL_PEPE);
     }
 
     @After
     public void unDoFixture() throws UiException
     {
-       cleanOneUser(USER_PEPE);
+        cleanOneUser(USER_PEPE);
     }
 
     @Test
@@ -60,5 +62,12 @@ public class UserComuObservableTest {
                 assertThat(list.get(0), is(COMU_EL_ESCORIAL));
             }
         });
+    }
+
+    @Test
+    public void test_ComunidadModificada() throws Exception
+    {
+        Comunidad newComunidad = new Comunidad.ComunidadBuilder().copyComunidadNonNullValues(comunidad).nombreVia("nuevo_nombre_via").build();
+        comunidadModificada(newComunidad).test().assertResult(1);
     }
 }

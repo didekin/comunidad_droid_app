@@ -24,6 +24,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.observers.TestObserver;
 
 import static com.didekindroid.comunidad.spinner.CtrlerComAutonomaSpinner.comunidadesAutonomasList;
+import static com.didekindroid.comunidad.spinner.CtrlerComAutonomaSpinner.newCtrlerComAutonomaSpinner;
 import static com.didekindroid.comunidad.spinner.ViewerComuAutonomaSpinner.newViewerComuAutonomaSpinner;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSpinnerCtrlerLoadItems;
 import static com.didekindroid.testutil.RxSchedulersUtils.resetAllSchedulers;
@@ -57,7 +58,7 @@ public class CtrlerComAutonomaSpinnerTest {
             {
                 atomicController.compareAndSet(
                         null,
-                        CtrlerComAutonomaSpinner.newCtrlerComAutonomaSpinner(
+                        newCtrlerComAutonomaSpinner(
                                 newViewerComuAutonomaSpinner(
                                         new Spinner(activity), activity, new ViewerMock<>(new View(activity), activity, null)
                                 )
@@ -79,7 +80,7 @@ public class CtrlerComAutonomaSpinnerTest {
     @Test
     public void test_NewCtrlerComAutonomaSpinner() throws Exception
     {
-        assertThat(controller.observerSpinner, notNullValue());
+        assertThat(controller, notNullValue());
     }
 
     @Test

@@ -19,6 +19,11 @@ public class TipoViaValueObj implements Serializable {
         this.tipoViaDesc = tipoViaDesc;
     }
 
+    public TipoViaValueObj(String tipoVia)
+    {
+        this(0, tipoVia);
+    }
+
     public int getPk()
     {
         return pk;

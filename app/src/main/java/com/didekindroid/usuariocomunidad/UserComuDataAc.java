@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.didekindroid.R;
-import com.didekindroid.comunidad.ComuBundleKey;
+import com.didekindroid.comunidad.utils.ComuBundleKey;
 import com.didekindroid.comunidad.ComuSearchAc;
 import com.didekindroid.comunidad.ComunidadBean;
 import com.didekindroid.exception.UiException;

@@ -46,7 +46,6 @@ public class IncidRegFr extends Fragment {
         viewerInjector = (ViewerParentInjectorIf) getActivity();
         ViewerIf parentViewer = viewerInjector.getViewerAsParent();
         viewer = newViewerIncidRegFr(rootFrgView, parentViewer);
-        //noinspection ConstantConditions
         viewer.doViewInViewer(savedInstanceState, null);
         viewerInjector.setChildInViewer(viewer);
     }

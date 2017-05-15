@@ -126,7 +126,7 @@ public class IncidEditAcMaxTest {
     }
 
     @Test
-    public void testModifyIncidenciaPressUp() throws InterruptedException   // TODO: failed.
+    public void testModifyIncidenciaPressUp() throws InterruptedException
     {
         // Caso OK. Modificamos: importancia, ámbito y descripción. Hacemos UP.
         short newImportancia = (short) 2;
@@ -166,7 +166,7 @@ public class IncidEditAcMaxTest {
     }
 
     @Test
-    public void testDeleteIncidenciaPressUp() throws InterruptedException     // TODO: failed
+    public void testDeleteIncidenciaPressUp() throws InterruptedException
     {
         // CASO OK: borramos la incidencia.
         onView(withId(R.id.incid_edit_fr_borrar_button)).perform(scrollTo(), click());
@@ -192,7 +192,7 @@ public class IncidEditAcMaxTest {
 
         // Intentamos borrar y verificamos error.
         onView(withId(R.id.incid_edit_fr_borrar_button)).check(matches(isDisplayed())).perform(click());
-        waitAtMost(4, SECONDS).until(isToastInView(R.string.incidencia_wrong_init, activity));   // TODO: failed
+        waitAtMost(4, SECONDS).until(isToastInView(R.string.incidencia_wrong_init, activity));
     }
 
     //  ======================================== UNIT TESTS  =======================================

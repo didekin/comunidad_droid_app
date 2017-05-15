@@ -3,7 +3,7 @@ package com.didekindroid.incidencia.core;
 import android.app.Activity;
 
 import com.didekindroid.api.CtrlerSelectionList;
-import com.didekindroid.api.ObserverSelectionList;
+import com.didekindroid.api.SingleObserverSelectionList;
 
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -22,7 +22,7 @@ import static io.reactivex.schedulers.Schedulers.io;
 
 class CtrlerAmbitoIncidSpinner extends CtrlerSelectionList<AmbitoIncidValueObj> {
 
-    private ObserverSelectionList<AmbitoIncidValueObj> observerSpinner;
+    private SingleObserverSelectionList<AmbitoIncidValueObj> observerSpinner;
 
     CtrlerAmbitoIncidSpinner(ViewerAmbitoIncidSpinner viewerIn)
     {
@@ -33,7 +33,7 @@ class CtrlerAmbitoIncidSpinner extends CtrlerSelectionList<AmbitoIncidValueObj> 
     {
         Timber.d("newCtrlerAmbitoIncidSpinner()");
         CtrlerAmbitoIncidSpinner controller = new CtrlerAmbitoIncidSpinner(viewerIn);
-        controller.observerSpinner = new ObserverSelectionList<>(controller);
+        controller.observerSpinner = new SingleObserverSelectionList<>(controller);
         return controller;
     }
 

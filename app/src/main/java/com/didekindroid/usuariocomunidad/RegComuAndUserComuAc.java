@@ -10,11 +10,11 @@ import android.view.View;
 import android.widget.Button;
 
 import com.didekindroid.R;
+import com.didekindroid.api.ViewerIf;
+import com.didekindroid.api.ViewerParentInjectorIf;
 import com.didekindroid.comunidad.ComuSearchAc;
-import com.didekindroid.comunidad.ComunidadBean;
 import com.didekindroid.comunidad.RegComuFr;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.util.ConnectionUtils;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import timber.log.Timber;
@@ -24,19 +24,17 @@ import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDa
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.util.UIutils.doToolBar;
-import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
-import static com.didekindroid.util.UIutils.makeToast;
 
 /**
  * Preconditions:
  * 1. The user is registered with a different comunidad.
  */
 @SuppressWarnings("ConstantConditions")
-public class RegComuAndUserComuAc extends AppCompatActivity {
+public class RegComuAndUserComuAc extends AppCompatActivity implements ViewerParentInjectorIf {
 
+    Button mRegistroButton;
     private RegComuFr mRegComuFrg;
     private RegUserComuFr mRegUserComuFrg;
-    Button mRegistroButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -47,7 +45,7 @@ public class RegComuAndUserComuAc extends AppCompatActivity {
         setContentView(R.layout.reg_comu_and_usercomu_ac);
         doToolBar(this, true);
 
-        mRegComuFrg = (RegComuFr) getFragmentManager().findFragmentById(R.id.reg_comunidad_frg);
+        mRegComuFrg = (RegComuFr) getSupportFragmentManager().findFragmentById(R.id.reg_comunidad_frg);
         mRegUserComuFrg = (RegUserComuFr) getFragmentManager().findFragmentById(R.id
                 .reg_usercomu_frg);
 
@@ -66,8 +64,8 @@ public class RegComuAndUserComuAc extends AppCompatActivity {
     {
         Timber.d("registerComuAndUserComu()");
 
-        ComunidadBean comunidadBean = mRegComuFrg.getComunidadBean();
-        RegComuFr.makeComunidadBeanFromView(mRegComuFrg.getFragmentView(), comunidadBean);
+        /*ComunidadBean comunidadBean = mRegComuFrg.getComunidadBean();     TODO: modificar y descomentar.
+        ViewerRegComuFr.makeComunidadBeanFromView(mRegComuFrg.getFragmentView(), comunidadBean);
         UsuarioComunidadBean usuarioComunidadBean = RegUserComuFr.makeUserComuBeanFromView(mRegUserComuFrg
                 .getFragmentView(), comunidadBean, null);
 
@@ -82,7 +80,22 @@ public class RegComuAndUserComuAc extends AppCompatActivity {
             new ComuAndUserComuRegister().execute(usuarioComunidadBean.getUsuarioComunidad());
             Intent intent = new Intent(this, SeeUserComuByUserAc.class);
             startActivity(intent);
-        }
+        }*/
+    }
+
+    // ==================================  ViewerParentInjectorIf  =================================
+
+    @Override
+    public ViewerIf getViewerAsParent()
+    {
+        Timber.d("getViewerAsParent()");
+        return null; // TODO.
+    }
+
+    @Override
+    public void setChildInViewer(ViewerIf childInViewer)
+    {
+        Timber.d("setChildInViewer()"); // TODO.
     }
 
 //    ============================================================

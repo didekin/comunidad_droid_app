@@ -21,8 +21,8 @@ import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import timber.log.Timber;
 
-import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
-import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
+import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
 import static com.didekindroid.usuariocomunidad.UserComuAssertionMsg.user_and_comunidad_should_be_registered;

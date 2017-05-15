@@ -27,7 +27,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.core.reg.ViewerIncidRegFr.newViewerIncidRegFr;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.AMBITO_INCIDENCIA_POSITION;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_NUMBER;
@@ -84,7 +84,7 @@ public class ViewerIncidRegFrTest {
     public void setUp()
     {
         activity = activityRule.getActivity();
-        frgView = activity.findViewById(R.id.incid_reg_frg);
+        frgView = activity.findViewById(fragmentLayoutId);
         viewer = newViewerIncidRegFr(frgView, new ViewerIncidRegAc(activity));
     }
 
@@ -186,11 +186,5 @@ public class ViewerIncidRegFrTest {
         viewer.atomIncidImportBean.get().setImportancia((short) 111);
         assertThat(viewer.doIncidImportanciaFromView(errors), nullValue());
         assertThat(errors.toString(), containsString(activity.getResources().getText(R.string.incid_reg_importancia).toString()));
-    }
-
-    @Test
-    public void testDoOnClickItemId() throws Exception
-    {
-        assertThat(viewer.doOnClickItemId(123L, null), is(123L));
     }
 }

@@ -25,7 +25,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_LA_PLAZUELA_5;
 import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_REAL;
 import static com.didekindroid.testutil.ActivityTestUtils.getAdapter;

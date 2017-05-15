@@ -13,7 +13,7 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         ComuDataAcTest.class,
-        ComunidadBeanValidaTests.class,
+        ComunidadBeanTest.class,
         ComunidadDaoTest.class,
         ComunidadDbHelperTest.class,
         ComuSearchAc_1_Test.class,

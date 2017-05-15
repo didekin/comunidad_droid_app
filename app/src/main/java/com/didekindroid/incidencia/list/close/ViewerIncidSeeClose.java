@@ -11,7 +11,8 @@ import android.widget.Spinner;
 
 import com.didekindroid.R;
 import com.didekindroid.api.CtrlerSelectableItemIf;
-import com.didekindroid.api.SpinnerClickHandler;
+import com.didekindroid.api.SpinnerEventItemSelectIf;
+import com.didekindroid.api.SpinnerEventListener;
 import com.didekindroid.api.ViewerSelectionList;
 import com.didekindroid.router.ComponentReplacerIf;
 import com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner;
@@ -34,7 +35,7 @@ import static com.didekindroid.util.UIutils.assertTrue;
  */
 public class ViewerIncidSeeClose extends
         ViewerSelectionList<ListView, CtrlerSelectableItemIf<IncidenciaUser, Bundle>, IncidenciaUser>
-        implements ComponentReplacerIf, SpinnerClickHandler {
+        implements ComponentReplacerIf, SpinnerEventListener {
 
     protected ViewerComuSpinner comuSpinnerViewer;
 
@@ -89,7 +90,7 @@ public class ViewerIncidSeeClose extends
 
     /**
      * comunidadesSpinner.doViewInViewer() --> comunidadesSpinner.loadItemsByEntitiyId() --> onSuccessLoadItems()
-     * --> view.setSelection() --> ComuSelectedListener --> onItemSelected() --> SpinnerClickHandler.doOnClickItemId().
+     * --> view.setSelection() --> ComuSelectedListener --> onItemSelected() --> SpinnerEventListener.doOnClickItemId().
      * <p>
      * This method is called after doOnClickItemId() --> controller.loadItemsByEntitiyId() are executed.
      */
@@ -144,18 +145,19 @@ public class ViewerIncidSeeClose extends
         ComponentReplacerIf.class.cast(activity).replaceComponent(bundle);
     }
 
-    // ==================================  SpinnerClickHandler  =================================
+    // ==================================  SpinnerEventListener  =================================
 
     /**
      * This method is called when the comunidades spinner is loaded and one of them selected.
      * It loads the list data.
+     *
+     * @param spinnerEventItemSelect: comunidad selected in comunidades spinner.
      */
     @Override
-    public long doOnClickItemId(long itemId, Class<? extends ViewerSelectionList> viewerSourceEvent)
+    public void doOnClickItemId(SpinnerEventItemSelectIf spinnerEventItemSelect)
     {
         Timber.d("doOnClickItemId()");
-        controller.loadItemsByEntitiyId(itemId);
-        return itemId;
+        controller.loadItemsByEntitiyId(spinnerEventItemSelect.getSpinnerItemIdSelect());
     }
 
     // ==================================  HELPERS  =================================

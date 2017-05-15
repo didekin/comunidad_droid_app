@@ -8,7 +8,7 @@ import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.comunidad.ComuBundleKey;
+import com.didekindroid.comunidad.utils.ComuBundleKey;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;

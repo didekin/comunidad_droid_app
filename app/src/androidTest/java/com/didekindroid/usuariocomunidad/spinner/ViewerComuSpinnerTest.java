@@ -11,10 +11,10 @@ import android.widget.Spinner;
 import com.didekindroid.R;
 import com.didekindroid.api.ActivityMock;
 import com.didekindroid.api.CtrlerSelectionListIf;
-import com.didekindroid.api.SpinnerClickHandler;
+import com.didekindroid.api.SpinnerEventItemSelectIf;
+import com.didekindroid.api.SpinnerEventListener;
 import com.didekindroid.api.SpinnerMockFr;
 import com.didekindroid.api.ViewerMock;
-import com.didekindroid.api.ViewerSelectionList;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.core.IncidenciaBean;
 import com.didekinlib.model.comunidad.Comunidad;
@@ -33,7 +33,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import timber.log.Timber;
 
-import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSavedStateWithItemSelected;
 import static com.didekindroid.testutil.ActivityTestUtils.getAdapter;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
@@ -137,20 +137,20 @@ public class ViewerComuSpinnerTest {
     @Test
     public void testInitSelectedItemId() throws Exception
     {
-        viewer.spinnerBean = new IncidenciaBean();
+        viewer.spinnerEvent = new ComuSpinnerEventItemSelect();
         Bundle savedState = new Bundle();
 
         viewer.initSelectedItemId(savedState);
         assertThat(viewer.getSelectedItemId(), is(0L));
 
         savedState = null;
-        viewer.spinnerBean.setComunidadId((short) 13);
+        viewer.spinnerEvent.setSpinnerItemIdSelect(new Comunidad.ComunidadBuilder().c_id(13L).build());
         viewer.initSelectedItemId(savedState);
         assertThat(viewer.getSelectedItemId(), is(13L));
 
         savedState = new Bundle();
         savedState.putLong(COMUNIDAD_ID.key, 8L);
-        assertThat(viewer.spinnerBean.getComunidadId(), is(13L));
+        assertThat(viewer.spinnerEvent.getSpinnerItemIdSelect(), is(13L));
         viewer.initSelectedItemId(savedState);
         assertThat(viewer.getSelectedItemId(), is(8L));
     }
@@ -210,7 +210,7 @@ public class ViewerComuSpinnerTest {
     public void testComuSelectedListener()
     {
         // Initial state:
-        assertThat(viewer.spinnerBean, nullValue());
+        assertThat(viewer.spinnerEvent, nullValue());
         assertThat(viewer.getSelectedItemId(), is(0L));
 
         // Action.
@@ -222,9 +222,9 @@ public class ViewerComuSpinnerTest {
         // Initialize itemId.
         assertThat(viewer.getSelectedItemId() > 1, is(true));
         assertThat(viewer.getSelectedPositionFromItemId(viewer.getSelectedItemId()), is(0));
-        // Initialize comunidadId in spinnerBean.
-        assertThat(viewer.spinnerBean.getComunidadId(), is(viewer.getSelectedItemId()));
-        // Call to SpinnerClickHandler.doOnClickItemId()
+        // Initialize comunidadId in spinnerEvent.
+        assertThat(viewer.spinnerEvent.getSpinnerItemIdSelect(), is(viewer.getSelectedItemId()));
+        // Call to SpinnerEventListener.doOnClickItemId()
         assertThat(flagLocalExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_B));
     }
 
@@ -255,7 +255,7 @@ public class ViewerComuSpinnerTest {
     }
 
     class ViewerForTest extends ViewerMock<View, CtrlerSelectionListIf> implements
-            SpinnerClickHandler {
+            SpinnerEventListener {
 
         public ViewerForTest(Activity activity)
         {
@@ -263,11 +263,10 @@ public class ViewerComuSpinnerTest {
         }
 
         @Override
-        public long doOnClickItemId(long itemId, Class<? extends ViewerSelectionList> spinnerEvents)
+        public void doOnClickItemId(SpinnerEventItemSelectIf spinnerEventsItemSelect)
         {
             Timber.d("==================== doOnClickItemId =====================");
             assertThat(flagLocalExec.getAndSet(AFTER_METHOD_EXEC_B), is(BEFORE_METHOD_EXEC));
-            return 0;
         }
     }
 }

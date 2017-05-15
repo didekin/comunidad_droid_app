@@ -79,7 +79,7 @@ public class CtrlerTipoViaSpinnerTest {
     @Test
     public void test_NewCtrlerTipoViaSpinner() throws Exception
     {
-        assertThat(controller.observerSpinner, notNullValue());
+        assertThat(controller, notNullValue());
     }
 
     @Test

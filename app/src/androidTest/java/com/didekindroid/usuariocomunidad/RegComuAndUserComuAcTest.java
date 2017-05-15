@@ -90,7 +90,7 @@ public class RegComuAndUserComuAcTest {
     public void testPreconditions() throws UiException
     {
         activity = mActivityRule.launchActivity(new Intent());
-        RegComuFr regComuFr = (RegComuFr) activity.getFragmentManager().findFragmentById(R.id.reg_comunidad_frg);
+        RegComuFr regComuFr = (RegComuFr) activity.getSupportFragmentManager().findFragmentById(R.id.reg_comunidad_frg);
         regUserComuFr = (RegUserComuFr) activity.getFragmentManager().findFragmentById(R.id
                 .reg_usercomu_frg);
 

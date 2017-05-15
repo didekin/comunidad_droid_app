@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.didekindroid.R;
-import com.didekindroid.comunidad.ComuBundleKey;
+import com.didekindroid.comunidad.utils.ComuBundleKey;
 import com.didekindroid.comunidad.ComunidadBean;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.router.ActivityInitiator;
@@ -31,7 +31,7 @@ import java.io.IOException;
 
 import timber.log.Timber;
 
-import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
+import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.security.Oauth2DaoRemote.Oauth2;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_not_be_registered;

@@ -41,7 +41,7 @@ import static com.didekindroid.R.string.gcm_message_generic_subtext;
 import static com.didekindroid.R.string.incid_gcm_incidencia_closed_body;
 import static com.didekindroid.R.string.incid_gcm_nueva_incidencia_body;
 import static com.didekindroid.R.string.incid_gcm_resolucion_open_body;
-import static com.didekindroid.comunidad.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.firebase.IncidFirebaseDownMsgHandler.INCIDENCIA_CLOSE;
 import static com.didekindroid.incidencia.firebase.IncidFirebaseDownMsgHandler.INCIDENCIA_OPEN;
 import static com.didekindroid.incidencia.firebase.IncidFirebaseDownMsgHandler.RESOLUCION_OPEN;
