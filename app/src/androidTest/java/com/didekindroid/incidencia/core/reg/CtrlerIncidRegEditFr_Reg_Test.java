@@ -95,7 +95,7 @@ public class CtrlerIncidRegEditFr_Reg_Test {
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
-            assertThat(controller.registerIncidImportancia(doIncidImportancia()), is(true));
+            assertThat(controller.registerIncidImportancia(, doIncidImportancia()), is(true));
         } finally {
             resetAllSchedulers();
         }

@@ -9,13 +9,18 @@ import android.widget.TextView;
 import com.didekindroid.R;
 import com.didekindroid.api.Viewer;
 import com.didekindroid.comunidad.ComunidadBean;
+import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
+import static android.R.id.list;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
 import static com.didekindroid.util.CommonAssertionMsg.intent_extra_should_be_initialized;
 import static com.didekindroid.util.UIutils.assertTrue;
@@ -32,7 +37,7 @@ class ViewerSeeUserComuByComu extends Viewer<ListView, CtrlerUserComuByComuList>
 
     ViewerSeeUserComuByComu(View frView, Activity activity)
     {
-        super((ListView) frView.findViewById(android.R.id.list), activity, null);
+        super((ListView) frView.findViewById(list), activity, null);
         nombreComuView = (TextView) frView.findViewById(R.id.see_usercomu_by_comu_list_header);
         // To get visible a divider on top of the list.
         view.addHeaderView(new View(activity), null, true);
@@ -42,7 +47,7 @@ class ViewerSeeUserComuByComu extends Viewer<ListView, CtrlerUserComuByComuList>
     {
         Timber.d("newViewerUserComuByComu()");
         ViewerSeeUserComuByComu instance = new ViewerSeeUserComuByComu(frView, activity);
-        instance.setController(new CtrlerUserComuByComuList(instance));
+        instance.setController(new CtrlerUserComuByComuList());
         return instance;
     }
 
@@ -57,15 +62,40 @@ class ViewerSeeUserComuByComu extends Viewer<ListView, CtrlerUserComuByComuList>
         long comunidadId = ComunidadBean.class.cast(comunidadBean).getComunidadId();
         assertTrue(comunidadId > 0L, intent_extra_should_be_initialized);
 
-        controller.loadItemsByEntitiyId(comunidadId);
-        controller.comunidadData(comunidadId);
+        controller.loadItemsByEntitiyId(
+                new UserComuByComuObserver<List<UsuarioComunidad>>() {
+                    @Override
+                    public void onSuccess(List<UsuarioComunidad> usuariosComunidad)
+                    {
+                        Timber.d("onSuccess()");
+                        List<UsuarioComunidad> newList;
+                        if (usuariosComunidad == null) {
+                            newList = new ArrayList<>(0);
+                        } else {
+                            newList = Collections.unmodifiableList(usuariosComunidad);
+                        }
+                        onSuccessLoadItems(newList);
+                    }
+                },
+                comunidadId);
+
+        controller.comunidadData(
+                new UserComuByComuObserver<Comunidad>() {
+                    @Override
+                    public void onSuccess(Comunidad comunidad)
+                    {
+                        Timber.d("onSuccess()");
+                        onSuccessComunidadData(comunidad.getNombreComunidad());
+                    }
+                },
+                comunidadId);
     }
 
     // =============================================================================
 
     void onSuccessLoadItems(List<UsuarioComunidad> itemList)
     {
-        Timber.d("onSuccessLoadItems()");
+        Timber.d("onSuccessLoadItemList()");
         SeeUserComuByComuListAdapter adapter = new SeeUserComuByComuListAdapter(activity);
         adapter.addAll(itemList);
         view.setAdapter(adapter);
@@ -75,5 +105,16 @@ class ViewerSeeUserComuByComu extends Viewer<ListView, CtrlerUserComuByComuList>
     {
         Timber.d("onSuccessComunidadData()");
         nombreComuView.setText(text);
+    }
+
+    // =================================== HELPERS ==========================================
+
+    abstract class UserComuByComuObserver<T> extends DisposableSingleObserver<T> {
+        @Override
+        public void onError(Throwable e)
+        {
+            Timber.d("onError()");
+            onErrorInObserver(e);
+        }
     }
 }

@@ -30,11 +30,4 @@ public class ComuSpinnerEventItemSelect implements SpinnerEventItemSelectIf<Comu
         Timber.d("getSpinnerItemIdSelect()");
         return comunidadSelect.getC_Id();
     }
-
-    @Override
-    public void setSpinnerItemIdSelect(Comunidad itemSelect)
-    {
-        Timber.d("setSpinnerItemIdSelect()");
-        comunidadSelect = new Comunidad.ComunidadBuilder().copyComunidadNonNullValues(itemSelect).build();
-    }
 }

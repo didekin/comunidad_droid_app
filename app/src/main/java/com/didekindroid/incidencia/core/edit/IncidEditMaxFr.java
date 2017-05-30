@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ViewerIf;
 import com.didekindroid.api.ViewerParentInjectorIf;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
@@ -59,9 +58,9 @@ public class IncidEditMaxFr extends Fragment {
         boolean flagResolucion = getArguments().getBoolean(INCID_RESOLUCION_FLAG.key);
 
         viewerInjector = (ViewerParentInjectorIf) getActivity();
-        ViewerIf parentViewer = viewerInjector.getViewerAsParent();
-        viewer = newViewerIncidEditMaxFr(frView, parentViewer, flagResolucion);
+        viewer = newViewerIncidEditMaxFr(frView, viewerInjector.getViewerAsParent(), flagResolucion);
         viewer.doViewInViewer(savedInstanceState, incidImportancia);
+        viewerInjector.setChildInViewer(viewer);
     }
 
     @Override

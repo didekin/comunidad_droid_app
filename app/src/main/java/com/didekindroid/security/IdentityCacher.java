@@ -35,8 +35,6 @@ public interface IdentityCacher {
 
     boolean isRegisteredUser();
 
-    void refreshAccessToken(OauthTokenReactorIf reactor);
-
     void updateIsRegistered(boolean isRegisteredUser);
 
     enum SharedPrefFiles {

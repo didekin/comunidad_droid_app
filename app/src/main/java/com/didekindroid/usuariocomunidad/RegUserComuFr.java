@@ -1,113 +1,53 @@
 package com.didekindroid.usuariocomunidad;
 
 
-import android.app.Fragment;
-import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import com.didekindroid.R;
-import com.didekindroid.comunidad.ComunidadBean;
-import com.didekindroid.usuario.UsuarioBean;
-import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
+import com.didekindroid.api.ViewerParentInjectorIf;
 
 import timber.log.Timber;
 
+import static com.didekindroid.usuariocomunidad.ViewerRegUserComuFr.newViewerRegUserComuFr;
+
 public class RegUserComuFr extends Fragment {
 
-    private View mRegUserComuFrView;
-
-    public RegUserComuFr()
-    {
-    }
-
-    public static UsuarioComunidadBean makeUserComuBeanFromView(View usuarioComunidadRegView
-            , ComunidadBean comunidadBean, UsuarioBean usuarioBean)
-    {
-        return new UsuarioComunidadBean(
-                comunidadBean,
-                usuarioBean,
-                ((TextView) usuarioComunidadRegView.findViewById(R.id.reg_usercomu_portal_ed)).getText()
-                        .toString(),
-                ((TextView) usuarioComunidadRegView.findViewById(R.id.reg_usercomu_escalera_ed)).getText()
-                        .toString(),
-                ((TextView) usuarioComunidadRegView.findViewById(R.id.reg_usercomu_planta_ed)).getText()
-                        .toString(),
-                ((TextView) usuarioComunidadRegView.findViewById(R.id.reg_usercomu_puerta_ed)).getText()
-                        .toString(),
-                ((CheckBox) usuarioComunidadRegView.findViewById(R.id.reg_usercomu_checbox_pre))
-                        .isChecked(),
-                ((CheckBox) usuarioComunidadRegView.findViewById(R.id.reg_usercomu_checbox_admin))
-                        .isChecked(),
-                ((CheckBox) usuarioComunidadRegView.findViewById(R.id.reg_usercomu_checbox_pro))
-                        .isChecked(),
-                ((CheckBox) usuarioComunidadRegView.findViewById(R.id.reg_usercomu_checbox_inq))
-                        .isChecked()
-        );
-    }
-
-    @Override
-    public void onAttach(Context context)
-    {
-        Timber.d("onAttach()");
-        super.onAttach(context);
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        Timber.d("onCreate()");
-        super.onCreate(savedInstanceState);
-    }
+    ViewerParentInjectorIf viewerInjector;
+    ViewerRegUserComuFr viewer;
+    private View regUserComuFrView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
         Timber.d("onCreateView()");
-        mRegUserComuFrView = inflater.inflate(R.layout.reg_usercomu_fr, container, false);
-        return mRegUserComuFrView;
+        regUserComuFrView = inflater.inflate(R.layout.reg_usercomu_fr, container, false);
+        return regUserComuFrView;
     }
 
-//  ===================== STATIC HELPER METHODS ==========================
-
     @Override
-    public void onActivityCreated(Bundle savedInstanceState)
+    public void onActivityCreated(@Nullable Bundle savedInstanceState)
     {
         Timber.d("onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
+
+        viewerInjector = (ViewerParentInjectorIf) getActivity();
+        viewer = newViewerRegUserComuFr(regUserComuFrView, viewerInjector.getViewerAsParent());
+        viewer.doViewInViewer(savedInstanceState, null);
+        viewerInjector.setChildInViewer(viewer);
     }
 
-//    ........... AUXILIARY METHODS ...........
-
-    public View getFragmentView()
+    @Override
+    public void onStop()
     {
-        Timber.d("getFragmentView()");
-        return mRegUserComuFrView;
-    }
-
-    void paintUserComuView(UsuarioComunidad initUserComu)
-    {
-        Timber.d("paintUserComuView()");
-
-        ((EditText) mRegUserComuFrView.findViewById(R.id.reg_usercomu_portal_ed)).setText(initUserComu.getPortal());
-        ((EditText) mRegUserComuFrView.findViewById(R.id.reg_usercomu_escalera_ed)).setText(initUserComu.getEscalera());
-        ((EditText) mRegUserComuFrView.findViewById(R.id.reg_usercomu_planta_ed)).setText(initUserComu.getPlanta());
-        ((EditText) mRegUserComuFrView.findViewById(R.id.reg_usercomu_puerta_ed)).setText(initUserComu.getPuerta());
-
-        ((CheckBox) mRegUserComuFrView.findViewById(R.id.reg_usercomu_checbox_pre))
-                .setChecked(initUserComu.getRoles().contains(RolUi.PRE.function));
-        ((CheckBox) mRegUserComuFrView.findViewById(R.id.reg_usercomu_checbox_admin))
-                .setChecked(initUserComu.getRoles().contains(RolUi.ADM.function));
-        ((CheckBox) mRegUserComuFrView.findViewById(R.id.reg_usercomu_checbox_pro))
-                .setChecked(initUserComu.getRoles().contains(RolUi.PRO.function));
-        ((CheckBox) mRegUserComuFrView.findViewById(R.id.reg_usercomu_checbox_inq))
-                .setChecked(initUserComu.getRoles().contains(RolUi.INQ.function));
+        Timber.d("onStop()");
+        super.onStop();
+        viewer.clearSubscriptions();
     }
 }
 

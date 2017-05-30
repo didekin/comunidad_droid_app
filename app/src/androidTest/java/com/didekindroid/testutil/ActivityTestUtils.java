@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.NoMatchingRootException;
 import android.support.test.espresso.NoMatchingViewException;
 import android.support.test.espresso.PerformException;
@@ -22,9 +21,9 @@ import android.widget.ListView;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ControllerIf;
-import com.didekindroid.api.CtrlerSelectionListIf;
+import com.didekindroid.api.CtrlerSelectListIf;
 import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ViewerSelectionListIf;
+import com.didekindroid.api.ViewerSelectListIf;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf.ActionForUiExceptionIf;
 import com.didekindroid.router.ComponentReplacerIf;
@@ -51,6 +50,7 @@ import timber.log.Timber;
 
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.KITKAT;
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
@@ -179,6 +179,11 @@ public final class ActivityTestUtils {
         return frView;
     }
 
+    public static View doFragmentView(int resourdeIdLayout)
+    {
+        return ((LayoutInflater) getTargetContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(resourdeIdLayout, null);
+    }
+
     public static ListView doListView(int resourdeIdLayout)
     {
         LayoutInflater inflater = (LayoutInflater) getTargetContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -218,12 +223,12 @@ public final class ActivityTestUtils {
         return controller.getSubscriptions();
     }
 
-    public static void checkSubscriptions(ControllerIf controller, Activity activity)
+    public static void checkSubscriptionsOnStop(ControllerIf controller, Activity activity)
     {
         AtomicInteger atomicInteger = new AtomicInteger(addSubscription(controller).size());
-        InstrumentationRegistry.getInstrumentation().callActivityOnStop(activity);
+        getInstrumentation().callActivityOnStop(activity);
         atomicInteger.set(controller.getSubscriptions().size());
-        waitAtMost(2, SECONDS).untilAtomic(atomicInteger, is(0));
+        waitAtMost(60, SECONDS).untilAtomic(atomicInteger, is(0));
     }
 
     public static Callable<Boolean> gcmTokenSentFlag(final CtrlerFirebaseTokenIf controller)
@@ -305,7 +310,7 @@ public final class ActivityTestUtils {
             {
                 assertThat(actionException.compareAndSet(
                         null,
-                        viewer.processControllerError(new UiException(new ErrorBean(exceptionMsg)))
+                        viewer.onErrorInObserver(new UiException(new ErrorBean(exceptionMsg)))
                         ),
                         is(true)
                 );
@@ -388,12 +393,12 @@ public final class ActivityTestUtils {
                 ComponentReplacerIf.class.cast(viewer).replaceComponent(finalBundle);
             }
         });
-        waitAtMost(2, SECONDS).until(isViewDisplayed(withId(resorceIdNextView)));
+        waitAtMost(4, SECONDS).until(isViewDisplayed(withId(resorceIdNextView)));
     }
 
     //    ============================ SPINNERS ============================
 
-    public static void checkSpinnerCtrlerLoadItems(CtrlerSelectionListIf controller, Long... entityId)
+    public static void checkSpinnerCtrlerLoadItems(CtrlerSelectListIf controller, Long... entityId)
     {
         try {
             trampolineReplaceIoScheduler();
@@ -467,7 +472,7 @@ public final class ActivityTestUtils {
 
     //    ============================ VIEWERS ============================
 
-    public static void checkSavedStateWithItemSelected(ViewerSelectionListIf viewer, BundleKey bundleKey)
+    public static void checkSavedStateWithItemSelected(ViewerSelectListIf viewer, BundleKey bundleKey)
     {
         viewer.setItemSelectedId(18L);
         Bundle bundle = new Bundle(1);

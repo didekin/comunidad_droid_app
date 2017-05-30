@@ -5,6 +5,7 @@ import com.didekindroid.usuariocomunidad.dao.UserComuObservableTest;
 import com.didekindroid.usuariocomunidad.listbycomu.CtrlerUserComuByComuTest;
 import com.didekindroid.usuariocomunidad.listbycomu.SeeUserComuByComuAcTest;
 import com.didekindroid.usuariocomunidad.listbycomu.ViewerSeeUserComuByComuTest;
+import com.didekindroid.usuariocomunidad.listbyuser.SeeUserComuByUserAcTest;
 import com.didekindroid.usuariocomunidad.spinner.CtrlerComuSpinnerTest;
 import com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinnerTest;
 

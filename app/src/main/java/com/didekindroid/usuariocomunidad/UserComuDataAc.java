@@ -13,11 +13,11 @@ import android.widget.Button;
 import com.didekindroid.R;
 import com.didekindroid.comunidad.utils.ComuBundleKey;
 import com.didekindroid.comunidad.ComuSearchAc;
-import com.didekindroid.comunidad.ComunidadBean;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.security.IdentityCacher;
-import com.didekindroid.util.ConnectionUtils;
+import com.didekindroid.usuariocomunidad.listbyuser.SeeUserComuByUserAc;
+import com.didekindroid.usuariocomunidad.util.UserComuBundleKey;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
@@ -27,14 +27,13 @@ import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
-import static com.didekindroid.usuariocomunidad.UserComuAssertionMsg.userComu_should_be_deleted;
-import static com.didekindroid.usuariocomunidad.UserComuAssertionMsg.userComu_should_be_modified;
+import static com.didekindroid.usuariocomunidad.util.UserComuAssertionMsg.userComu_should_be_deleted;
+import static com.didekindroid.usuariocomunidad.util.UserComuAssertionMsg.userComu_should_be_modified;
 import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.router.ActivityRouter.doUpMenu;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.util.UIutils.doToolBar;
-import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.util.CommonAssertionMsg.intent_extra_should_be_initialized;
 import static com.didekindroid.util.UIutils.makeToast;
 import static com.didekinlib.http.UsuarioServConstant.IS_USER_DELETED;
@@ -79,8 +78,8 @@ public class UserComuDataAc extends AppCompatActivity {
         mAcView = getLayoutInflater().inflate(R.layout.usercomu_data_ac_layout, null);
         setContentView(mAcView);
         doToolBar(this, true);
-        mRegUserComuFr = (RegUserComuFr) getFragmentManager().findFragmentById(R.id.reg_usercomu_frg);
-        mRegUserComuFr.paintUserComuView(mOldUserComu);
+        mRegUserComuFr = (RegUserComuFr) getSupportFragmentManager().findFragmentById(R.id.reg_usercomu_frg);
+//        mRegUserComuFr.paintUserComuView(mOldUserComu);
 
         Button mModifyButton = (Button) findViewById(R.id.usercomu_data_ac_modif_button);
         mModifyButton.setOnClickListener(new View.OnClickListener() {
@@ -107,8 +106,8 @@ public class UserComuDataAc extends AppCompatActivity {
     {
         Timber.d("modifyUserComuData()");
 
-        // ComunidaBean initialized only with comunidadId. UsuarioBean is not initialized.
-        UsuarioComunidadBean userComuBean = RegUserComuFr.makeUserComuBeanFromView(mAcView,
+        /*// ComunidaBean initialized only with comunidadId. UsuarioBean is not initialized.
+        UsuarioComunidadBean userComuBean = ViewerRegUserComuFr.getUserComuFromViewer(mAcView,
                 new ComunidadBean(mOldUserComu.getComunidad().getC_Id(), null, null, null, null, null),
                 null);
         StringBuilder errorBuilder = getErrorMsgBuilder(this);
@@ -120,7 +119,7 @@ public class UserComuDataAc extends AppCompatActivity {
         } else {
             UsuarioComunidad newUserComu = userComuBean.getUsuarioComunidad();
             new UserComuModifyer().execute(newUserComu);
-        }
+        }*/
     }
 
     void deleteUserComuData()

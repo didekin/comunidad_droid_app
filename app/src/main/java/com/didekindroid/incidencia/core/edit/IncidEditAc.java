@@ -10,6 +10,7 @@ import android.view.View;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ViewerIf;
+import com.didekindroid.api.ViewerParentInjectedIf;
 import com.didekindroid.api.ViewerParentInjectorIf;
 import com.didekindroid.router.ActivityInitiator;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
@@ -110,7 +111,7 @@ public class IncidEditAc extends AppCompatActivity implements ViewerParentInject
     // ==================================  ViewerParentInjectorIf  =================================
 
     @Override
-    public ViewerIf getViewerAsParent()
+    public ViewerParentInjectedIf getViewerAsParent()
     {
         Timber.d("getViewerAsParent()");
         return viewer;
@@ -120,7 +121,8 @@ public class IncidEditAc extends AppCompatActivity implements ViewerParentInject
     public void setChildInViewer(ViewerIf childInViewer)
     {
         Timber.d("setChildInViewer()");
-        throw new UnsupportedOperationException();
+//        throw new UnsupportedOperationException();
+        viewer.setChildViewer(childInViewer);
     }
 
 //    ......................... HELPERS ..........................

@@ -4,5 +4,5 @@
           android:choiceMode="singleChoice"
           xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
-          tools:context="com.didekindroid.usuariocomunidad.SeeUserComuByUserFr">
+          tools:context="com.didekindroid.usuariocomunidad.listbyuser.SeeUserComuByUserFr">
 </ListView>

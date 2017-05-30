@@ -6,9 +6,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
-import com.didekindroid.api.CtrlerSelectionList;
+import com.didekindroid.api.ObserverSingleSelectList;
 import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ViewerSelectionList;
+import com.didekindroid.api.ViewerSelectList;
 
 import java.io.Serializable;
 
@@ -23,7 +23,7 @@ import static com.didekindroid.incidencia.utils.IncidBundleKey.AMBITO_INCIDENCIA
  */
 
 public final class ViewerAmbitoIncidSpinner extends
-        ViewerSelectionList<Spinner, CtrlerSelectionList<AmbitoIncidValueObj>, AmbitoIncidValueObj> {
+        ViewerSelectList<Spinner, CtrlerAmbitoIncidSpinner, AmbitoIncidValueObj> {
 
     @SuppressWarnings("WeakerAccess")
     IncidenciaBean incidenciaBean;
@@ -37,11 +37,11 @@ public final class ViewerAmbitoIncidSpinner extends
     {
         Timber.d("newViewerAmbitoIncidSpinner()");
         ViewerAmbitoIncidSpinner viewer = new ViewerAmbitoIncidSpinner(view, activity, parentViewer);
-        viewer.setController(CtrlerAmbitoIncidSpinner.newCtrlerAmbitoIncidSpinner(viewer));
+        viewer.setController(new CtrlerAmbitoIncidSpinner());
         return viewer;
     }
 
-    // ==================================== ViewerSelectionListIf ====================================
+    // ==================================== ViewerSelectListIf ====================================
 
     @Override
     public void initSelectedItemId(Bundle savedState)
@@ -65,7 +65,7 @@ public final class ViewerAmbitoIncidSpinner extends
         incidenciaBean = IncidenciaBean.class.cast(viewBean);
         initSelectedItemId(savedState);
         view.setOnItemSelectedListener(new ViewerAmbitoIncidSpinner.AmbitoIncidSelectedListener());
-        CtrlerSelectionList.class.cast(controller).loadItemsByEntitiyId();
+        CtrlerAmbitoIncidSpinner.class.cast(controller).loadItemsByEntitiyId(new ObserverSingleSelectList<>(this));
     }
 
     @Override

@@ -5,9 +5,6 @@ import com.didekinlib.model.comunidad.Municipio;
 
 import timber.log.Timber;
 
-import static com.didekindroid.util.CommonAssertionMsg.bean_fromView_should_be_initialized;
-import static com.didekindroid.util.UIutils.assertTrue;
-
 /**
  * User: pedro@didekin
  * Date: 12/05/17
@@ -34,17 +31,26 @@ public class MunicipioSpinnerEventItemSelect implements SpinnerEventItemSelectIf
         return municipio.getCodInProvincia();
     }
 
-    @Override
-    public void setSpinnerItemIdSelect(Municipio itemSelect)
-    {
-        Timber.d("setSpinnerItemIdSelect()");
-        assertTrue(itemSelect.getProvincia() != null, bean_fromView_should_be_initialized);
-        municipio = new Municipio(itemSelect.getCodInProvincia(), itemSelect.getProvincia());
-    }
-
     public Municipio getMunicipio()
     {
         Timber.d("getMunicipio()");
         return municipio;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        Timber.d("hashCode()");
+        return municipio.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        Timber.d("equals()");
+
+        if (obj == null || getClass() != obj.getClass()) return false;
+        MunicipioSpinnerEventItemSelect that = (MunicipioSpinnerEventItemSelect) obj;
+        return municipio.equals(that.getMunicipio());
     }
 }

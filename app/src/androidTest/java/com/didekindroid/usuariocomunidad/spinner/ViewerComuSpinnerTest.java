@@ -10,7 +10,7 @@ import android.widget.Spinner;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ActivityMock;
-import com.didekindroid.api.CtrlerSelectionListIf;
+import com.didekindroid.api.CtrlerSelectListIf;
 import com.didekindroid.api.SpinnerEventItemSelectIf;
 import com.didekindroid.api.SpinnerEventListener;
 import com.didekindroid.api.SpinnerMockFr;
@@ -144,7 +144,7 @@ public class ViewerComuSpinnerTest {
         assertThat(viewer.getSelectedItemId(), is(0L));
 
         savedState = null;
-        viewer.spinnerEvent.setSpinnerItemIdSelect(new Comunidad.ComunidadBuilder().c_id(13L).build());
+        viewer.spinnerEvent = new ComuSpinnerEventItemSelect(new Comunidad.ComunidadBuilder().c_id(13L).build());
         viewer.initSelectedItemId(savedState);
         assertThat(viewer.getSelectedItemId(), is(13L));
 
@@ -169,7 +169,7 @@ public class ViewerComuSpinnerTest {
             @Override
             public void run()
             {
-                viewer.onSuccessLoadItems(makeListComu());
+                viewer.onSuccessLoadItemList(makeListComu());
                 assertThat(viewer.getSelectedPositionFromItemId(33L), is(1));
                 assertThat(viewer.getSelectedPositionFromItemId(22L), is(2));
                 assertThat(viewer.getSelectedPositionFromItemId(122L), is(0));
@@ -215,7 +215,7 @@ public class ViewerComuSpinnerTest {
 
         // Action.
         viewer.doViewInViewer(new Bundle(0), new IncidenciaBean());
-        /* doViewInViewer() --> loadItemsByEntitiyId() --> onSuccessLoadItems() --> view.setSelection() --> ComuSelectedListener.onItemSelected() */
+        /* doViewInViewer() --> loadItemsByEntitiyId() --> onSuccessLoadItemList() --> view.setSelection() --> ComuSelectedListener.onItemSelected() */
         // Check
         waitAtMost(2, SECONDS).until(getAdapter(viewer.getViewInViewer()), notNullValue());
         assertThat(viewer.getViewInViewer().getCount(), is(2));
@@ -247,14 +247,14 @@ public class ViewerComuSpinnerTest {
             @Override
             public void run()
             {
-                viewer.onSuccessLoadItems(makeListComu());
+                viewer.onSuccessLoadItemList(makeListComu());
                 isExec.compareAndSet(false, true);
             }
         });
         waitAtMost(2, SECONDS).untilTrue(isExec);
     }
 
-    class ViewerForTest extends ViewerMock<View, CtrlerSelectionListIf> implements
+    class ViewerForTest extends ViewerMock<View, CtrlerSelectListIf> implements
             SpinnerEventListener {
 
         public ViewerForTest(Activity activity)

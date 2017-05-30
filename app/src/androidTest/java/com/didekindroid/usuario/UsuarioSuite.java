@@ -10,7 +10,7 @@ import com.didekindroid.usuario.login.ViewerLoginTest;
 import com.didekindroid.usuario.password.CtrlerPasswordChangeTest;
 import com.didekindroid.usuario.password.PasswordChangeAcTest;
 import com.didekindroid.usuario.password.ViewerPasswordChangeTest;
-import com.didekindroid.usuario.userdata.CtrlerUserDataTest;
+import com.didekindroid.usuario.userdata.CtrlerUserModifiedTest;
 import com.didekindroid.usuario.userdata.UserDataAcTest;
 import com.didekindroid.usuario.userdata.ViewerUserDataTest;
 
@@ -29,7 +29,7 @@ import org.junit.runners.Suite;
         CtrlerFirebaseTokenTest.class,
         CtrlerLoginTest.class,
         CtrlerPasswordChangeTest.class,
-        CtrlerUserDataTest.class,
+        CtrlerUserModifiedTest.class,
         DeleteMeAcTest.class,
         LoginAcTest.class,
         PasswordChangeAcTest.class,

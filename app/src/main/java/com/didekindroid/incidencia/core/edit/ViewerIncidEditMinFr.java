@@ -9,11 +9,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.didekindroid.R;
+import com.didekindroid.api.Viewer;
 import com.didekindroid.api.ViewerIf;
 import com.didekindroid.incidencia.core.CtrlerIncidRegEditFr;
 import com.didekindroid.incidencia.core.IncidImportanciaBean;
 import com.didekindroid.incidencia.core.ViewerImportanciaSpinner;
-import com.didekindroid.incidencia.core.ViewerIncidRegEdit;
+import com.didekindroid.incidencia.core.reg.RegIncidImportanciaCallableBack;
+import com.didekindroid.incidencia.core.reg.RegIncidImportanciaObserver;
 import com.didekindroid.router.ActivityInitiator;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
@@ -34,8 +36,8 @@ import static com.didekindroid.util.UIutils.makeToast;
  * Date: 04/04/17
  * Time: 15:06
  */
-final class ViewerIncidEditMinFr extends ViewerIncidRegEdit implements
-        LinkToImportanciaUsersClickable {
+final class ViewerIncidEditMinFr extends Viewer<View, CtrlerIncidRegEditFr> implements
+        LinkToImportanciaUsersClickable, RegIncidImportanciaCallableBack, ModIncidImportanciaCallableBack {
 
     IncidImportancia incidImportancia;
     IncidImportanciaBean incidImportanciaBean;
@@ -55,7 +57,7 @@ final class ViewerIncidEditMinFr extends ViewerIncidRegEdit implements
 
         instance.viewerImportanciaSpinner =
                 newViewerImportanciaSpinner((Spinner) frView.findViewById(R.id.incid_reg_importancia_spinner), activity, instance);
-        instance.setController(new CtrlerIncidRegEditFr(instance));
+        instance.setController(new CtrlerIncidRegEditFr());
         return instance;
     }
 
@@ -119,9 +121,9 @@ final class ViewerIncidEditMinFr extends ViewerIncidRegEdit implements
             if (checkInternetConnected(getActivity())) {
                 if (incidImportancia.getImportancia() == 0) {
                     // New IncidImportancia instance to be persisted.
-                    controller.registerIncidImportancia(newIncidImportancia);
+                    controller.registerIncidImportancia(new RegIncidImportanciaObserver<>(this), newIncidImportancia);
                 } else {
-                    controller.modifyIncidImportancia(newIncidImportancia);
+                    controller.modifyIncidImportancia(new ModIncidImportanciaObserver<>(this), newIncidImportancia);
                 }
             }
         } catch (IllegalStateException e) {
@@ -137,6 +139,7 @@ final class ViewerIncidEditMinFr extends ViewerIncidRegEdit implements
         new ActivityInitiator(activity).initActivityWithBundle(new Bundle());
     }
 
+    @Override
     public void onSuccessModifyIncidImportancia(int rowInserted)
     {
         Timber.d("onSuccessModifyIncidImportancia()");

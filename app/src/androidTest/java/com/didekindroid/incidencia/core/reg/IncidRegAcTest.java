@@ -1,8 +1,6 @@
 package com.didekindroid.incidencia.core.reg;
 
-import android.app.Instrumentation;
 import android.os.Bundle;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -21,6 +19,7 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
@@ -29,8 +28,8 @@ import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_LA_FUENT
 import static com.didekindroid.incidencia.testutils.IncidUiTestUtils.doAmbitoAndDescripcion;
 import static com.didekindroid.incidencia.testutils.IncidUiTestUtils.doComunidadSpinner;
 import static com.didekindroid.incidencia.testutils.IncidUiTestUtils.doImportanciaSpinner;
-import static com.didekindroid.testutil.ActivityTestUtils.addSubscription;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
+import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
@@ -155,10 +154,7 @@ public class IncidRegAcTest {
     @Test
     public void testOnStop()
     {
-        Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
-        addSubscription(activity.viewer.getController());
-        instrumentation.callActivityOnStop(activity);
-        assertThat(activity.viewer.getController().getSubscriptions().size(), is(0));
+        checkSubscriptionsOnStop(activity.viewer.getController(), activity);
     }
 
     @Test
@@ -181,7 +177,7 @@ public class IncidRegAcTest {
             @Override
             public void run()
             {
-                InstrumentationRegistry.getInstrumentation().callActivityOnSaveInstanceState(activity, new Bundle(0));
+                getInstrumentation().callActivityOnSaveInstanceState(activity, new Bundle(0));
             }
         });
         waitAtMost(1, SECONDS).untilAtomic(flagMethodExec_1, is(AFTER_METHOD_EXEC_A));

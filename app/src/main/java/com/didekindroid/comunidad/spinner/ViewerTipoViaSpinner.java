@@ -7,16 +7,15 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-import com.didekindroid.api.CtrlerSelectionList;
+import com.didekindroid.api.ObserverSingleSelectList;
 import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ViewerSelectionList;
+import com.didekindroid.api.ViewerSelectList;
 
 import java.io.Serializable;
 import java.util.List;
 
 import timber.log.Timber;
 
-import static com.didekindroid.comunidad.spinner.CtrlerTipoViaSpinner.newCtrlerTipoViaSpinner;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.TIPO_VIA_ID;
 
 /**
@@ -26,7 +25,7 @@ import static com.didekindroid.comunidad.utils.ComuBundleKey.TIPO_VIA_ID;
  */
 
 public final class ViewerTipoViaSpinner extends
-        ViewerSelectionList<Spinner, CtrlerSelectionList<TipoViaValueObj>, TipoViaValueObj> {
+        ViewerSelectList<Spinner, CtrlerTipoViaSpinner, TipoViaValueObj> {
 
     TipoViaValueObj tipoViaValueObj;
 
@@ -39,11 +38,11 @@ public final class ViewerTipoViaSpinner extends
     {
         Timber.d("newViewerTipoViaSpinner()");
         ViewerTipoViaSpinner instance = new ViewerTipoViaSpinner(spinner, activity, parentViewer);
-        instance.setController(newCtrlerTipoViaSpinner(instance));
+        instance.setController(new CtrlerTipoViaSpinner());
         return instance;
     }
 
-    // ==================================== ViewerSelectionListIf ====================================
+    // ==================================== ViewerSelectListIf ====================================
 
     @Override
     public void initSelectedItemId(Bundle savedState)
@@ -57,9 +56,9 @@ public final class ViewerTipoViaSpinner extends
     }
 
     @Override
-    public void onSuccessLoadItems(List<TipoViaValueObj> tiposVia)
+    public void onSuccessLoadItemList(List<TipoViaValueObj> tiposVia)
     {
-        Timber.d("onSuccessLoadItems()");
+        Timber.d("onSuccessLoadItemList()");
         ArrayAdapter<TipoViaValueObj> adapter = getArrayAdapterForSpinner(activity);
         adapter.addAll(tiposVia);
         view.setAdapter(adapter);
@@ -94,7 +93,7 @@ public final class ViewerTipoViaSpinner extends
         tipoViaValueObj = viewBean != null ? TipoViaValueObj.class.cast(viewBean) : null;
         initSelectedItemId(savedState);
         view.setOnItemSelectedListener(new TipoViaSelectedListener());
-        CtrlerSelectionList.class.cast(controller).loadItemsByEntitiyId();
+        CtrlerTipoViaSpinner.class.cast(controller).loadItemsByEntitiyId(new ObserverSingleSelectList<>(this));
     }
 
     @Override
@@ -108,6 +107,12 @@ public final class ViewerTipoViaSpinner extends
     }
 
     //  ===================================== HELPERS ============================================
+
+    public TipoViaValueObj getTipoViaValueObj()
+    {
+        Timber.d("getTipoViaValueObj()");
+        return tipoViaValueObj;
+    }
 
     @SuppressWarnings("WeakerAccess")
     class TipoViaSelectedListener implements AdapterView.OnItemSelectedListener {
@@ -124,11 +129,5 @@ public final class ViewerTipoViaSpinner extends
         {
             Timber.d("In tipoViaSpinner.setOnItemSelectedListener, onNothingSelected()");
         }
-    }
-
-    public TipoViaValueObj getTipoViaValueObj()
-    {
-        Timber.d("getTipoViaValueObj()");
-        return tipoViaValueObj;
     }
 }

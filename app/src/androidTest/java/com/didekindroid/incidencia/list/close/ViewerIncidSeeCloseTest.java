@@ -8,8 +8,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.didekindroid.api.CtrlerSelectableItemIf;
-import com.didekindroid.api.ViewerSelectionListIf;
+import com.didekindroid.api.ViewerSelectListIf;
 import com.didekindroid.exception.UiException;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
@@ -123,7 +122,7 @@ public class ViewerIncidSeeCloseTest {
     }
 
     public static void checkOnSuccessLoadItems(IncidImportancia incidImportancia, Activity activity,
-                                               final ViewerSelectionListIf<ListView, CtrlerSelectableItemIf<IncidenciaUser, Bundle>, IncidenciaUser> viewer)
+                                               final ViewerSelectListIf<ListView, CtrlerSelectableItemIf<IncidenciaUser, Bundle>, IncidenciaUser> viewer)
     {
         final List<IncidenciaUser> list = doIncidenciaUsers(incidImportancia);
 
@@ -132,7 +131,7 @@ public class ViewerIncidSeeCloseTest {
             public void run()
             {
                 viewer.setItemSelectedId(22L);
-                viewer.onSuccessLoadItems(list);
+                viewer.onSuccessLoadItemList(list);
                 assertThat(viewer.getViewInViewer().getHeaderViewsCount(), is(1));
                 // ListView.getCount() and Adapter.getCount() take into account header views.
                 assertThat(viewer.getViewInViewer().getCount(), is(4));
@@ -149,7 +148,7 @@ public class ViewerIncidSeeCloseTest {
             public void run()
             {
                 viewer.setItemSelectedId(0L);
-                viewer.onSuccessLoadItems(list);
+                viewer.onSuccessLoadItemList(list);
                 // When itemSelectedId == 0, no checkedItem.
                 assertThat(viewer.getViewInViewer().getCheckedItemPosition() < 0, is(true));
 
@@ -162,7 +161,7 @@ public class ViewerIncidSeeCloseTest {
             public void run()
             {
                 viewer.setItemSelectedId(22L);
-                viewer.onSuccessLoadItems(listEmpty);
+                viewer.onSuccessLoadItemList(listEmpty);
                 // No se cumple la condición view.getCount() > view.getHeaderViewsCount(): no se llama  view.setItemChecked().
                 assertThat(viewer.getViewInViewer().getCount() <= viewer.getViewInViewer().getHeaderViewsCount(), is(true));
                 // When list is empty, no checkedItem.
@@ -265,7 +264,7 @@ public class ViewerIncidSeeCloseTest {
             @Override
             public void run()
             {
-                fragment.viewer.onSuccessLoadItems(list);
+                fragment.viewer.onSuccessLoadItemList(list);
                 assertThat(fragment.viewer.getSelectedPositionFromItemId(33L), is(1));
                 assertThat(fragment.viewer.getSelectedPositionFromItemId(11L), is(2));
                 assertThat(fragment.viewer.getSelectedPositionFromItemId(22L), is(3));

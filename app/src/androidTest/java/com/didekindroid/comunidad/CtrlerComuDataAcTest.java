@@ -77,7 +77,7 @@ public class CtrlerComuDataAcTest {
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
-            assertThat(controller.modifyComunidadData(newComunidad), is(true));
+            assertThat(controller.modifyComunidadData(, newComunidad), is(true));
         } finally {
             resetAllSchedulers();
         }

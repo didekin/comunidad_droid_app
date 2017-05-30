@@ -3,9 +3,8 @@ package com.didekindroid.usuariocomunidad;
 import android.content.res.Resources;
 
 import com.didekindroid.R;
-import com.didekindroid.comunidad.ComunidadBean;
-import com.didekindroid.usuario.UsuarioBean;
 import com.didekinlib.model.common.dominio.ValidDataPatterns;
+import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuario.Usuario;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
@@ -28,18 +27,18 @@ public final class UsuarioComunidadBean {
     private final String escalera;
     private final String planta;
     private final String puerta;
-    private final UsuarioBean usuarioBean;
-    private final ComunidadBean comunidadBean;
+    private final Usuario usuario;
+    private final Comunidad comunidad;
 
     private UsuarioComunidad usuarioComunidad;
 
-    public UsuarioComunidadBean(ComunidadBean comunidadBean, UsuarioBean usuarioBean,
+    public UsuarioComunidadBean(Comunidad comunidad, Usuario usuario,
                                 String portal, String escalera, String planta, String puerta,
                                 boolean isPresidente, boolean isAdministrador, boolean isPropietario,
                                 boolean isInquilino)
     {
-        this.comunidadBean = comunidadBean;
-        this.usuarioBean = usuarioBean;
+        this.comunidad = comunidad;
+        this.usuario = usuario;
         this.portal = portal;
         this.escalera = escalera;
         this.planta = planta;
@@ -91,29 +90,11 @@ public final class UsuarioComunidadBean {
 
     public boolean validate(Resources resources, StringBuilder errorMsg)
     {
-        boolean isValid = validatePortal(resources, errorMsg)
-                & validateEscalera(resources, errorMsg)
-                & validatePlanta(resources, errorMsg)
-                & validatePuerta(resources, errorMsg)
-                & validateRoles(resources, errorMsg)
-                & validateUsuario(resources, errorMsg)
-                & validateComunidad(resources, errorMsg);
-
-        if (isValid) {
-
-            Usuario usuario = usuarioBean != null ? usuarioBean.getUsuario() : null;
-
-            usuarioComunidad = new UsuarioComunidad
-                    .UserComuBuilder(comunidadBean.getComunidad(), usuario)
-                    .portal(portal)
-                    .escalera(escalera)
-                    .planta(planta)
-                    .puerta(puerta)
-                    .roles(rolesInBean())
-                    .build();
+        if (checkUserComuData(resources, errorMsg)) {
+            usuarioComunidad = makeUsuarioComunidad();
+            return true;
         }
-
-        return isValid;
+        return false;
     }
 
     /*  [\\w_ñÑáéíóúüÜ\\.\\-\\s]{1,10}  */
@@ -177,26 +158,6 @@ public final class UsuarioComunidadBean {
         return isValid;
     }
 
-    private boolean validateUsuario(Resources resources, StringBuilder errorMsg)
-    {
-        // The user is authenticated by an accessToken. usuarioBean may be null.
-        if (usuarioBean == null) {
-            return true;
-        }
-        // In this point the instance of userComu in usuarioBean is created.
-        return usuarioBean.validate(resources, errorMsg);
-    }
-
-    private boolean validateComunidad(Resources resources, StringBuilder errorMsg)
-    {
-        if (comunidadBean == null) {
-            errorMsg.append(resources.getText(R.string.reg_usercomu_comunidad_null)).append(ValidDataPatterns.LINE_BREAK.getRegexp());
-            return false;
-        }
-        // In this point the instance of comunidad in usuarioBean is created.
-        return comunidadBean.validate(resources, errorMsg);
-    }
-
     public String getEscalera()
     {
         return escalera;
@@ -249,16 +210,37 @@ public final class UsuarioComunidadBean {
         if (o == null || getClass() != o.getClass()) return false;
 
         UsuarioComunidadBean that = (UsuarioComunidadBean) o;
-
-        return usuarioBean.equals(that.usuarioBean) && comunidadBean.equals(that.comunidadBean);
-
+        return usuario.equals(that.usuario) && comunidad.equals(that.comunidad);
     }
 
     @Override
     public int hashCode()
     {
-        int result = usuarioBean.hashCode();
-        result = 31 * result + comunidadBean.hashCode();
+        int result = usuario.hashCode();
+        result = 31 * result + comunidad.hashCode();
         return result;
+    }
+
+    // ............................. HELPERS ....................................
+
+    private boolean checkUserComuData(Resources resources, StringBuilder errorMsg)
+    {
+        return validatePortal(resources, errorMsg)
+                & validateEscalera(resources, errorMsg)
+                & validatePlanta(resources, errorMsg)
+                & validatePuerta(resources, errorMsg)
+                & validateRoles(resources, errorMsg);
+    }
+
+    private UsuarioComunidad makeUsuarioComunidad()
+    {
+        return new UsuarioComunidad
+                .UserComuBuilder(comunidad, usuario)
+                .portal(portal)
+                .escalera(escalera)
+                .planta(planta)
+                .puerta(puerta)
+                .roles(rolesInBean())
+                .build();
     }
 }

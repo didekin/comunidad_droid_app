@@ -13,11 +13,7 @@ public interface ControllerIf {
 
     CompositeDisposable getSubscriptions();
 
-    void onErrorCtrl(Throwable e);
-
     int clearSubscriptions();
-
-    ViewerIf getViewer();
 
     boolean isRegisteredUser();
 

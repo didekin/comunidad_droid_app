@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static com.didekindroid.comunidad.spinner.ViewerMunicipioSpinner.newViewerMunicipioSpinner;
+import static com.didekindroid.comunidad.spinner.ViewerMunicipioSpinner.spinnerEvent_default;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.MUNICIPIO_SPINNER_EVENT;
 import static com.didekindroid.testutil.ActivityTestUtils.getAdapter;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
@@ -30,7 +31,6 @@ import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -111,7 +111,7 @@ public class ViewerMunicipioSpinnerTest {
             @Override
             public void run()
             {
-                viewer.onSuccessLoadItems(municipios);
+                viewer.onSuccessLoadItemList(municipios);
                 assertThat(viewer.getSelectedPositionFromItemId(11L), is(0));
                 assertThat(viewer.getSelectedPositionFromItemId(33L), is(1));
                 assertThat(viewer.getSelectedPositionFromItemId(22L), is(2));
@@ -138,7 +138,7 @@ public class ViewerMunicipioSpinnerTest {
         });
         viewer.doViewInViewer(bundle, null);
 
-        assertThat(viewer.spinnerEvent, nullValue());
+        assertThat(viewer.spinnerEvent, is(spinnerEvent_default));
         assertThat(viewer.getSelectedItemId(), is(11L));
         // Check NO call to controller.loadItemsByEntitiyId();
         assertThat(flagLocalExec.get(), is(BEFORE_METHOD_EXEC));
@@ -152,7 +152,7 @@ public class ViewerMunicipioSpinnerTest {
     public void test_MunicipioSelectedListener()
     {
         // Initial state.
-        assertThat(viewer.spinnerEvent, nullValue());
+        assertThat(viewer.spinnerEvent, is(spinnerEvent_default));
         assertThat(viewer.getSelectedItemId(), is(0L));
         // Preconditions
         final Municipio municipio = new Municipio((short) 11, new Provincia((short) 35));
@@ -160,23 +160,23 @@ public class ViewerMunicipioSpinnerTest {
         assertThat(viewer.spinnerEvent.getMunicipio(), is(municipio));
         // ItemId is initialized.
         assertThat(viewer.getSelectedItemId(), is(11L));
-        // Check controller.loadItemsByEntitiyId() --> onSuccessLoadItems() --> view.setSelection() ... {--> MunicipioSelectedListener.onItemSelected() }
+        // Check controller.loadItemsByEntitiyId() --> onSuccessLoadItemList() --> view.setSelection() ... {--> MunicipioSelectedListener.onItemSelected() }
         // We initialize to 0 the itemSelectedId to chedk the call to MunicipioSelectedListener.onItemSelected().
         viewer.setItemSelectedId(2L);
         viewer.getController().loadItemsByEntitiyId(35L);
         waitAtMost(3, SECONDS).until(getAdapter(viewer.getViewInViewer()), notNullValue());
         assertThat(viewer.getViewInViewer().getCount(), is(34));
         // MunicipioSelectedListener.onItemSelected() modify municipioIn.
-        assertThat(viewer.spinnerEvent.getMunicipio().getProvincia().getProvinciaId(), is((short)35));
-        assertThat(viewer.spinnerEvent.getMunicipio().getCodInProvincia(), is((short)2));
+        assertThat(viewer.spinnerEvent.getMunicipio().getProvincia().getProvinciaId(), is((short) 35));
+        assertThat(viewer.spinnerEvent.getMunicipio().getCodInProvincia(), is((short) 2));
     }
 
     @Test
-    public void test_SaveState() throws Exception  // Failed
+    public void test_SaveState() throws Exception
     {
         Bundle bundle = new Bundle(1);
         viewer.saveState(bundle);
-        assertThat(bundle.containsKey(MUNICIPIO_SPINNER_EVENT.key), is(false));
+        assertThat(bundle.getLong(MUNICIPIO_SPINNER_EVENT.key), is(0L));
 
         viewer.spinnerEvent = new MunicipioSpinnerEventItemSelect(new Municipio((short) 11, new Provincia((short) 1)));
         viewer.saveState(bundle);

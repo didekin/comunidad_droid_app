@@ -5,6 +5,9 @@ import android.view.View;
 
 import com.didekindroid.api.Viewer;
 
+import io.reactivex.observers.DisposableSingleObserver;
+import timber.log.Timber;
+
 /**
  * User: pedro@didekin
  * Date: 09/03/17
@@ -21,14 +24,39 @@ public class ViewerFirebaseToken extends Viewer<View, CtrlerFirebaseTokenIf> imp
 
     public static ViewerFirebaseTokenIf<View> newViewerFirebaseToken(Activity activity)
     {
+        Timber.d("newViewerFirebaseToken()");
         ViewerFirebaseTokenIf<View> viewer = new ViewerFirebaseToken(activity);
-        viewer.setController(new CtrlerFirebaseToken(viewer));
+        viewer.setController(new CtrlerFirebaseToken());
         return viewer;
     }
 
     @Override
     public void checkGcmTokenAsync()
     {
-        controller.checkGcmToken();
+        Timber.d("checkGcmTokenAsync()");
+        controller.checkGcmToken(new RegGcmTokenObserver());
+    }
+
+    // ............................ SUBSCRIBERS ..................................
+
+    @SuppressWarnings("WeakerAccess")
+    class RegGcmTokenObserver extends DisposableSingleObserver<Integer> {
+
+        @Override
+        public void onSuccess(Integer isUpdated)
+        {
+            Timber.d("onSuccess(%d)", isUpdated);
+            if (isUpdated > 0) {
+                controller.updateIsGcmTokenSentServer(true);
+            }
+        }
+
+        @Override
+        public void onError(Throwable error)
+        {
+            Timber.d("onErrorObserver(): %s", error.getMessage());
+            controller.updateIsGcmTokenSentServer(false);
+            onErrorInObserver(error);
+        }
     }
 }

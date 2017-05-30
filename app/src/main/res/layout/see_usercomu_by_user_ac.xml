@@ -5,7 +5,7 @@
 
     <fragment
         android:id="@+id/see_usercomu_by_user_frg"
-        android:name="com.didekindroid.usuariocomunidad.SeeUserComuByUserFr"
+        android:name="com.didekindroid.usuariocomunidad.listbyuser.SeeUserComuByUserFr"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/app_bar_bottom_margin" />

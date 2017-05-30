@@ -46,7 +46,7 @@ class ViewerIncidSeeOpen extends ViewerIncidSeeClose {
     {
         Timber.d("newViewerIncidSeeOpen()");
         ViewerIncidSeeOpen parentInstance = new ViewerIncidSeeOpen(view, activity);
-        parentInstance.setController(new CtrlerIncidSeeOpenByComu(parentInstance));
+        parentInstance.setController(new CtrlerIncidSeeOpenByComu());
         parentInstance.viewerFirebaseToken = newViewerFirebaseToken(activity);
         parentInstance.comuSpinnerViewer = newViewerComuSpinner((Spinner) view.findViewById(R.id.incid_reg_comunidad_spinner), activity, parentInstance);
         return parentInstance;
@@ -55,9 +55,9 @@ class ViewerIncidSeeOpen extends ViewerIncidSeeClose {
     /* ==================================  ViewerSelectionIf  =================================*/
 
     @Override
-    public void onSuccessLoadItems(List<IncidenciaUser> itemsList)
+    public void onSuccessLoadItemList(List<IncidenciaUser> itemsList)
     {
-        Timber.d("onSuccessLoadItems()");
+        Timber.d("onSuccessLoadItemList()");
         onSuccessLoadItems(itemsList, getNewViewAdapter());
     }
 

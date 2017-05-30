@@ -8,11 +8,13 @@ import android.support.test.runner.AndroidJUnit4;
 import android.view.View;
 
 import com.didekindroid.R;
+import com.didekindroid.api.ViewerIf;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.core.CtrlerIncidRegEditFr;
 import com.didekindroid.incidencia.core.IncidenciaDataDbHelper;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -125,7 +127,7 @@ public class ViewerIncidEditMaxFrTest {
         assertThat(viewer.hasResolucion, is(false));
         assertThat(viewer.getViewInViewer(), is(frView));
         assertThat(viewer.getController(), instanceOf(CtrlerIncidRegEditFr.class));
-        assertThat(viewer.getParentViewer(), is(activity.getViewerAsParent()));
+        assertThat(viewer.getParentViewer(), CoreMatchers.<ViewerIf>is(activity.getViewerAsParent()));
         assertThat(viewer.viewerAmbitoIncidSpinner, notNullValue());
         assertThat(viewer.viewerImportanciaSpinner, notNullValue());
     }

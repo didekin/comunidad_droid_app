@@ -18,6 +18,8 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
+import io.reactivex.observers.DisposableSingleObserver;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
@@ -99,7 +101,7 @@ public class ViewerIncidEditAcTest {
     {
         CtrlerIncidEditAc controllerLocal = new CtrlerIncidEditAc(viewer) {
             @Override
-            boolean seeResolucion(long incidenciaId, int resourceIdItemMn)
+            boolean seeResolucion(DisposableSingleObserver<Resolucion> observer, long incidenciaId, int resourceIdItemMn)
             {
                 assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
                 return false;

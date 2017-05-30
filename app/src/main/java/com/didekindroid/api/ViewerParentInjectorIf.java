@@ -8,7 +8,7 @@ package com.didekindroid.api;
 
 public interface ViewerParentInjectorIf {
 
-    ViewerIf getViewerAsParent();
+    ViewerParentInjectedIf getViewerAsParent();
 
     void setChildInViewer(ViewerIf childInViewer);
 }

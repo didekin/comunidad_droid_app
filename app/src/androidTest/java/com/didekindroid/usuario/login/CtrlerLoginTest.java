@@ -171,7 +171,7 @@ public class CtrlerLoginTest {
     @Test
     public void testValidateLogin() throws Exception
     {
-        assertThat(controller.validateLogin(USER_PEPE), is(true));
+        assertThat(controller.validateLogin(, USER_PEPE), is(true));
         assertThat(controller.getSubscriptions().size(), is(1));
     }
 
@@ -192,7 +192,7 @@ public class CtrlerLoginTest {
     @Test
     public void testDoDialogPositiveClick() throws Exception
     {
-        assertThat(controller.doDialogPositiveClick(USER_JUAN), is(true));
+        assertThat(controller.doDialogPositiveClick(, USER_JUAN), is(true));
         assertThat(controller.getSubscriptions().size(), is(1));
     }
 

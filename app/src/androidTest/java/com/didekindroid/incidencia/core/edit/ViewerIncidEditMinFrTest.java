@@ -8,12 +8,14 @@ import android.support.test.runner.AndroidJUnit4;
 import android.view.View;
 
 import com.didekindroid.R;
+import com.didekindroid.api.ViewerIf;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.core.CtrlerIncidRegEditFr;
 import com.didekindroid.incidencia.core.IncidenciaDataDbHelper;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -151,7 +153,7 @@ public class ViewerIncidEditMinFrTest {
     {
         assertThat(fragment.viewer.getViewInViewer(), is(frView));
         assertThat(fragment.viewer.getController(), instanceOf(CtrlerIncidRegEditFr.class));
-        assertThat(fragment.viewer.getParentViewer(), is(activity.getViewerAsParent()));
+        assertThat(fragment.viewer.getParentViewer(), CoreMatchers.<ViewerIf>is(activity.getViewerAsParent()));
         assertThat(fragment.viewer.viewerImportanciaSpinner, notNullValue());
     }
 

@@ -1,14 +1,12 @@
 package com.didekindroid.incidencia.core;
 
-import android.app.Activity;
-
-import com.didekindroid.api.CtrlerSelectionList;
-import com.didekindroid.api.SingleObserverSelectionList;
+import com.didekindroid.api.CtrlerSelectList;
 
 import java.util.List;
 import java.util.concurrent.Callable;
 
 import io.reactivex.Single;
+import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
@@ -20,26 +18,11 @@ import static io.reactivex.schedulers.Schedulers.io;
  * Time: 13:20
  */
 
-class CtrlerAmbitoIncidSpinner extends CtrlerSelectionList<AmbitoIncidValueObj> {
-
-    private SingleObserverSelectionList<AmbitoIncidValueObj> observerSpinner;
-
-    CtrlerAmbitoIncidSpinner(ViewerAmbitoIncidSpinner viewerIn)
-    {
-        super(viewerIn);
-    }
-
-    static CtrlerAmbitoIncidSpinner newCtrlerAmbitoIncidSpinner(ViewerAmbitoIncidSpinner viewerIn)
-    {
-        Timber.d("newCtrlerAmbitoIncidSpinner()");
-        CtrlerAmbitoIncidSpinner controller = new CtrlerAmbitoIncidSpinner(viewerIn);
-        controller.observerSpinner = new SingleObserverSelectionList<>(controller);
-        return controller;
-    }
+class CtrlerAmbitoIncidSpinner extends CtrlerSelectList<AmbitoIncidValueObj> {
 
     // .................................... OBSERVABLE .......................................
 
-    static Single<List<AmbitoIncidValueObj>> ambitoIncidList(final Activity activity)
+    Single<List<AmbitoIncidValueObj>> ambitoIncidList()
     {
 
         Timber.d("ambitoIncidList()");
@@ -47,7 +30,7 @@ class CtrlerAmbitoIncidSpinner extends CtrlerSelectionList<AmbitoIncidValueObj> 
             @Override
             public List<AmbitoIncidValueObj> call() throws Exception
             {
-                IncidenciaDataDbHelper dbHelper = new IncidenciaDataDbHelper(activity);
+                IncidenciaDataDbHelper dbHelper = new IncidenciaDataDbHelper(getIdentityCacher().getContext());
                 List<AmbitoIncidValueObj> list = dbHelper.getAmbitoIncidList();
                 dbHelper.close();
                 return list;
@@ -58,13 +41,13 @@ class CtrlerAmbitoIncidSpinner extends CtrlerSelectionList<AmbitoIncidValueObj> 
     // .................................... INSTANCE METHODS .....................................
 
     @Override
-    public boolean loadItemsByEntitiyId(Long... entityId)
+    public boolean loadItemsByEntitiyId(DisposableSingleObserver<List<AmbitoIncidValueObj>> observer, Long... entityId)
     {
         Timber.d("loadItemsByEntitiyId()");
-        return subscriptions.add(ambitoIncidList(viewer.getActivity())
+        return subscriptions.add(ambitoIncidList()
                 .subscribeOn(io())
                 .observeOn(mainThread())
-                .subscribeWith(observerSpinner)
+                .subscribeWith(observer)
         );
     }
 }

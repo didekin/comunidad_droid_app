@@ -55,7 +55,28 @@ public final class TokenIdentityCacher implements IdentityCacher {
             return isDeletedUser;
         }
     };
+    public static final Consumer<SpringOauthToken> initTokenAction = new Consumer<SpringOauthToken>() {
+        @Override
+        public void accept(SpringOauthToken token)
+        {
+            Timber.d("accept(), Thread: %s", Thread.currentThread().getName());
+            TKhandler.initIdentityCache(token);
+        }
+    };
 
+    //  ======================================================================================
+    //    .................................... ACTIONS .................................
+    //  ======================================================================================
+
+    static final Consumer<SpringOauthToken> initTokenUpdateRegisterAction = new Consumer<SpringOauthToken>() {
+        @Override
+        public void accept(SpringOauthToken token)
+        {
+            Timber.d("accept(), Thread: %s", Thread.currentThread().getName());
+            TKhandler.initIdentityCache(token);
+            TKhandler.updateIsRegistered(true);
+        }
+    };
     static final BiFunction<Boolean, SpringOauthToken, Boolean> initTokenAndRegisterFunc
             = new BiFunction<Boolean, SpringOauthToken, Boolean>() {
 
@@ -73,20 +94,6 @@ public final class TokenIdentityCacher implements IdentityCacher {
             return isUpdatedTokenData;
         }
     };
-
-    //  ======================================================================================
-    //    .................................... ACTIONS .................................
-    //  ======================================================================================
-
-    public static final Consumer<SpringOauthToken> initTokenAction = new Consumer<SpringOauthToken>() {
-        @Override
-        public void accept(SpringOauthToken token)
-        {
-            Timber.d("accept(), Thread: %s", Thread.currentThread().getName());
-            TKhandler.initIdentityCache(token);
-        }
-    };
-
     static final Consumer<Integer> cleanTokenCacheAction = new Consumer<Integer>() {
         @Override
         public void accept(Integer modifiedUser)
@@ -124,11 +131,13 @@ public final class TokenIdentityCacher implements IdentityCacher {
      */
     private TokenIdentityCacher(File refreshTkFile, Context inContext)
     {
+        Timber.d("TokenIdentityCacher(File refreshTkFile, Context inContext)");
         refreshTokenFile = refreshTkFile;
         context = inContext;
         String refreshTokenValue = refreshTokenFile.exists() ? readStringFromFile(refreshTokenFile) : null;
         tokenCache = (refreshTokenValue != null && !refreshTokenValue.isEmpty()) ?
-                new AtomicReference<>(new SpringOauthToken(refreshTokenValue)) : new AtomicReference<SpringOauthToken>();
+                new AtomicReference<>(new SpringOauthToken(refreshTokenValue)) :
+                new AtomicReference<SpringOauthToken>();
     }
 
     /**
@@ -161,26 +170,6 @@ public final class TokenIdentityCacher implements IdentityCacher {
         tokenCache.set(null);
     }
 
-    /**
-     * Preconditions:
-     * 1. This method will be called in Schedulers.io() thread.
-     * Postconditions:
-     * If tokenCache != null, but tokenCache.get().getValue() is null (no access token in cache,
-     * but there exists a refresh token file), the access token is remotely retrieved and updated in
-     * cache.
-     */
-    @Override
-    public final void refreshAccessToken(OauthTokenReactorIf reactor)
-    {
-        Timber.d("refreshAccessToken()");
-
-        if (isRegisteredUser()
-                && (tokenCache.get() == null || tokenCache.get().getValue() == null || tokenCache.get().getValue().isEmpty())
-                && refreshTokenFile.exists()) {
-            reactor.updateTkCacheFromRefreshTk(getRefreshTokenValue());
-        }
-    }
-
     //  ======================================================================================
     //    ............................... SHARED PREFERENCES .................................
     //  ======================================================================================
@@ -199,7 +188,7 @@ public final class TokenIdentityCacher implements IdentityCacher {
      * Invariants:
      * 1. If a user is not registered (no record in database), she cannot be her gcm token recorded in database.
      * 2. If a user is registered, his gcm token can or cannot been updated in database. Gcm token is not updated
-     * when a user is registered. // TODO: cambiar esta posibilidad?
+     * when a user is registered.
      */
     @Override
     public void updateIsRegistered(boolean isRegisteredUser)

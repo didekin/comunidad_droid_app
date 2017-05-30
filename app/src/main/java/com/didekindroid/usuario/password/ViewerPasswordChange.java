@@ -8,7 +8,6 @@ import android.widget.EditText;
 
 import com.didekindroid.R;
 import com.didekindroid.api.Viewer;
-import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf;
 import com.didekindroid.router.ComponentReplacerIf;
 import com.didekindroid.usuario.UsuarioBean;
@@ -16,6 +15,7 @@ import com.didekindroid.usuario.UsuarioBean;
 import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicReference;
 
+import io.reactivex.observers.DisposableCompletableObserver;
 import timber.log.Timber;
 
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
@@ -24,6 +24,7 @@ import static com.didekindroid.util.CommonAssertionMsg.bean_fromView_should_be_i
 import static com.didekindroid.util.ConnectionUtils.isInternetConnected;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
+import static com.didekindroid.util.UIutils.getUiExceptionFromThrowable;
 import static com.didekindroid.util.UIutils.makeToast;
 import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOUND;
 
@@ -51,7 +52,7 @@ class ViewerPasswordChange extends Viewer<View, CtrlerPasswordChangeIf>
     static ViewerPasswordChangeIf newViewerPswdChange(PasswordChangeAc activity)
     {
         ViewerPasswordChangeIf instance = new ViewerPasswordChange(activity);
-        instance.setController(new CtrlerPasswordChange(instance));
+        instance.setController(new CtrlerPasswordChange());
         return instance;
     }
 
@@ -69,7 +70,7 @@ class ViewerPasswordChange extends Viewer<View, CtrlerPasswordChangeIf>
                 Timber.d("onClick()");
                 if (checkLoginData()) {
                     assertTrue(usuarioBean.get() != null, bean_fromView_should_be_initialized);
-                    controller.changePasswordInRemote(usuarioBean.get().getUsuario());
+                    controller.changePasswordInRemote(new PswdChangeSingleObserver(), usuarioBean.get().getUsuario());
                 }
             }
         });
@@ -105,15 +106,15 @@ class ViewerPasswordChange extends Viewer<View, CtrlerPasswordChangeIf>
     }
 
     @Override
-    public UiExceptionIf.ActionForUiExceptionIf processControllerError(UiException ui)
+    public UiExceptionIf.ActionForUiExceptionIf onErrorInObserver(Throwable error)
     {
-        Timber.d("processControllerError()");
+        Timber.d("onErrorInObserver()");
         UiExceptionIf.ActionForUiExceptionIf action = null;
 
-        if (ui.getErrorBean().getMessage().equals(USER_NAME_NOT_FOUND.getHttpMessage())) {
+        if (getUiExceptionFromThrowable(error).getErrorBean().getMessage().equals(USER_NAME_NOT_FOUND.getHttpMessage())) {
             makeToast(activity, R.string.username_wrong_in_login);
         } else {
-            action = super.processControllerError(ui);
+            action = super.onErrorInObserver(error);
         }
         return action;
     }
@@ -123,5 +124,24 @@ class ViewerPasswordChange extends Viewer<View, CtrlerPasswordChangeIf>
     {
         Timber.d("initActivityWithBundle()");
         ComponentReplacerIf.class.cast(activity).replaceComponent(bundle);
+    }
+
+    // ............................ SUBSCRIBERS ..................................
+
+    class PswdChangeSingleObserver extends DisposableCompletableObserver {
+
+        @Override
+        public void onComplete()
+        {
+            Timber.d("onComplete(), Thread: %s", Thread.currentThread().getName());
+            replaceComponent(new Bundle());
+        }
+
+        @Override
+        public void onError(Throwable e)
+        {
+            Timber.d("onErrorObserver, Thread: %s", Thread.currentThread().getName());
+            onErrorInObserver(e);
+        }
     }
 }

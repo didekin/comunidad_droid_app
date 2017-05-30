@@ -25,7 +25,7 @@ public final class ComuDataTestUtil {
             .tipoVia("Calle")
             .nombreVia("de la Fuente")
             .numero((short) 11)
-            .municipio(new Municipio((short) 66, "Elda", new Provincia(new ComunidadAutonoma((short)10),(short) 3, "Alicante/Alacant")))
+            .municipio(new Municipio((short) 66, "Elda", new Provincia(new ComunidadAutonoma((short) 10), (short) 3, "Alicante/Alacant")))
             .build();
     // Municipio: Alfoz   Provincia: Lugo
     public static final Comunidad COMU_LA_PLAZUELA_5 = new Comunidad.ComunidadBuilder()
@@ -47,8 +47,9 @@ public final class ComuDataTestUtil {
             .nombreVia("Real")
             .numero((short) 5)
             .sufijoNumero("Bis")
-            .municipio(new Municipio((short) 13, new Provincia((short) 3)))
+            .municipio(new Municipio((short) 13, "Algueña", new Provincia((short) 3, "Alicante/Alacant")))
             .build();
+
     private ComuDataTestUtil()
     {
     }

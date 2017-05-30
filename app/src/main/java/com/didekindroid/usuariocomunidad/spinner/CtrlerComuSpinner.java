@@ -1,9 +1,11 @@
 package com.didekindroid.usuariocomunidad.spinner;
 
-import com.didekindroid.api.CtrlerSelectionList;
-import com.didekindroid.api.SingleObserverSelectionList;
+import com.didekindroid.api.CtrlerSelectList;
 import com.didekinlib.model.comunidad.Comunidad;
 
+import java.util.List;
+
+import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
 import static com.didekindroid.usuariocomunidad.dao.UserComuObservable.comunidadesByUser;
@@ -16,29 +18,16 @@ import static io.reactivex.schedulers.Schedulers.io;
  * Time: 15:11
  */
 
-class CtrlerComuSpinner extends CtrlerSelectionList<Comunidad> {
-
-    private SingleObserverSelectionList<Comunidad> observerSpinner;
-
-    CtrlerComuSpinner(ViewerComuSpinner viewer)
-    {
-        super(viewer);
-    }
-
-    static CtrlerComuSpinner newControllerComuSpinner(ViewerComuSpinner viewerIn)
-    {
-        CtrlerComuSpinner controller = new CtrlerComuSpinner(viewerIn);
-        controller.observerSpinner = new SingleObserverSelectionList<>(controller);
-        return controller;
-    }
+class CtrlerComuSpinner extends CtrlerSelectList<Comunidad> {
 
     @Override
-    public boolean loadItemsByEntitiyId(Long... entityId)
+    public boolean loadItemsByEntitiyId(DisposableSingleObserver<List<Comunidad>> observer, Long... entityId)
     {
+
         Timber.d("loadItemsByEntitiyId()");
         return subscriptions.add(comunidadesByUser()
                 .subscribeOn(io())
                 .observeOn(mainThread())
-                .subscribeWith(observerSpinner));
+                .subscribeWith(observer));
     }
 }

@@ -1,9 +1,6 @@
 package com.didekindroid.comunidad.spinner;
 
-import android.app.Activity;
-
-import com.didekindroid.api.CtrlerSelectionList;
-import com.didekindroid.api.SingleObserverSelectionList;
+import com.didekindroid.api.CtrlerSelectList;
 import com.didekindroid.comunidad.repository.ComunidadDbHelper;
 import com.didekinlib.model.comunidad.ComunidadAutonoma;
 
@@ -11,9 +8,11 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import io.reactivex.Single;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
+
+import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
+import static io.reactivex.schedulers.Schedulers.io;
 
 /**
  * User: pedro@didekin
@@ -21,29 +20,18 @@ import timber.log.Timber;
  * Time: 18:51
  */
 
-class CtrlerComAutonomaSpinner extends CtrlerSelectionList<ComunidadAutonoma> {
-
-    CtrlerComAutonomaSpinner(ViewerComuAutonomaSpinner viewer)
-    {
-        super(viewer);
-    }
-
-    static CtrlerComAutonomaSpinner newCtrlerComAutonomaSpinner(ViewerComuAutonomaSpinner viewer)
-    {
-        Timber.d("newCtrlerComAutonomaSpinner()");
-        return new CtrlerComAutonomaSpinner(viewer);
-    }
+class CtrlerComAutonomaSpinner extends CtrlerSelectList<ComunidadAutonoma> {
 
     // .................................... OBSERVABLE .......................................
 
-    static Single<List<ComunidadAutonoma>> comunidadesAutonomasList(final Activity activity)
+    Single<List<ComunidadAutonoma>> comunidadesAutonomasList()
     {
         Timber.d("comunidadesAutonomasList()");
         return Single.fromCallable(new Callable<List<ComunidadAutonoma>>() {
             @Override
             public List<ComunidadAutonoma> call() throws Exception
             {
-                ComunidadDbHelper dbHelper = new ComunidadDbHelper(activity);
+                ComunidadDbHelper dbHelper = new ComunidadDbHelper(getIdentityCacher().getContext());
                 List<ComunidadAutonoma> comunidades = dbHelper.getComunidadesAu();
                 dbHelper.close();
                 return comunidades;
@@ -51,17 +39,19 @@ class CtrlerComAutonomaSpinner extends CtrlerSelectionList<ComunidadAutonoma> {
         });
     }
 
-    // .................................... INSTANCE METHODS .....................................
-
     @Override
-    public boolean loadItemsByEntitiyId(Long... entityId)
+    public boolean loadItemsByEntitiyId(DisposableSingleObserver<List<ComunidadAutonoma>> observer, Long... entityId)
     {
         Timber.d("loadItemsByEntitiyId()");
 
-        return subscriptions.add(comunidadesAutonomasList(viewer.getActivity())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new SingleObserverSelectionList<>(this))
+        return subscriptions.add(comunidadesAutonomasList()
+                .subscribeOn(io())
+                .observeOn(mainThread())
+                .subscribeWith(observer)
         );
     }
+
+    // .................................... INSTANCE METHODS .....................................
+
+
 }

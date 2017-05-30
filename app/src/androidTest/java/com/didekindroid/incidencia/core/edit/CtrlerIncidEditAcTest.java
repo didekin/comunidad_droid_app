@@ -99,7 +99,7 @@ public class CtrlerIncidEditAcTest {
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
-            assertThat(controller.seeResolucion(resolucionBd.getIncidencia().getIncidenciaId(), resorceMnId), is(true));
+            assertThat(controller.seeResolucion(, resolucionBd.getIncidencia().getIncidenciaId(), resorceMnId), is(true));
         } finally {
             resetAllSchedulers();
         }

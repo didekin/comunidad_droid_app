@@ -92,7 +92,7 @@ public class CtrlerIncidRegEditFr_Edit_Test {
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
-            assertThat(controller.modifyIncidImportancia(
+            assertThat(controller.modifyIncidImportancia(,
                     new IncidImportancia.IncidImportanciaBuilder(incidImportancia.getIncidencia())
                             .copyIncidImportancia(incidImportancia)
                             .importancia((short) 1)
@@ -115,7 +115,7 @@ public class CtrlerIncidRegEditFr_Edit_Test {
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
-            assertThat(controller.eraseIncidencia(incidImportancia.getIncidencia()), is(true));
+            assertThat(controller.eraseIncidencia(, incidImportancia.getIncidencia()), is(true));
         } finally {
             resetAllSchedulers();
         }

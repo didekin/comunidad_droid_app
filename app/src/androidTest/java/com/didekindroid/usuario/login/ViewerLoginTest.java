@@ -17,6 +17,8 @@ import org.junit.Test;
 
 import java.util.concurrent.atomic.AtomicReference;
 
+import io.reactivex.observers.DisposableSingleObserver;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -176,7 +178,7 @@ public class ViewerLoginTest {
     {
         viewerLogin.setController(new CtrlerLogin(viewerLogin) {
             @Override
-            public boolean doDialogPositiveClick(@NonNull Usuario usuario)
+            public boolean doDialogPositiveClick(DisposableSingleObserver<Boolean> observer, @NonNull Usuario usuario)
             {
                 assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
                 return false;
@@ -206,7 +208,7 @@ public class ViewerLoginTest {
             @Override
             public void run()
             {
-                viewerLogin.processControllerError(new UiException(new ErrorBean(USER_NAME_NOT_FOUND)));
+                viewerLogin.onErrorInObserver(new UiException(new ErrorBean(USER_NAME_NOT_FOUND)));
             }
         });
         waitAtMost(3, SECONDS).until(isToastInView(R.string.username_wrong_in_login, activity));

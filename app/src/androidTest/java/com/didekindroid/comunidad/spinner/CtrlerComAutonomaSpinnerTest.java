@@ -1,6 +1,7 @@
 package com.didekindroid.comunidad.spinner;
 
 import android.app.Activity;
+import android.content.Context;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.view.View;
@@ -86,7 +87,7 @@ public class CtrlerComAutonomaSpinnerTest {
     @Test
     public void test_ComunidadesAutonomasList() throws Exception
     {
-        comunidadesAutonomasList(controller.getViewer().getActivity()).test().assertOf(new Consumer<TestObserver<List<ComunidadAutonoma>>>() {
+        controller.comunidadesAutonomasList().test().assertOf(new Consumer<TestObserver<List<ComunidadAutonoma>>>() {
             @Override
             public void accept(TestObserver<List<ComunidadAutonoma>> listTestObserver) throws Exception
             {

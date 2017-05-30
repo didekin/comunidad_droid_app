@@ -3,8 +3,6 @@ package com.didekindroid.usuario.login;
 import android.support.annotation.NonNull;
 
 import com.didekindroid.api.Controller;
-import com.didekindroid.exception.UiException;
-import com.didekindroid.security.IdentityCacher;
 import com.didekinlib.model.usuario.Usuario;
 
 import java.util.concurrent.Callable;
@@ -14,8 +12,7 @@ import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
-import static com.didekindroid.security.OauthTokenReactor.oauthTokenAndInitCache;
-import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.security.OauthTokenObservable.oauthTokenAndInitCache;
 import static com.didekindroid.security.TokenIdentityCacher.cleanTkCacheActionBoolean;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
 import static io.reactivex.Single.fromCallable;
@@ -30,19 +27,6 @@ import static io.reactivex.schedulers.Schedulers.io;
  */
 @SuppressWarnings({"AnonymousInnerClassMayBeStatic", "WeakerAccess"})
 class CtrlerLogin extends Controller implements CtrlerLoginIf {
-
-    private final ViewerLoginIf viewerLogin;
-
-    CtrlerLogin(ViewerLoginIf viewer)
-    {
-        this(viewer, TKhandler);
-    }
-
-    CtrlerLogin(ViewerLoginIf viewer, IdentityCacher identityCacher)
-    {
-        super(viewer);
-        viewerLogin = viewer;
-    }
 
     //    .................................... OBSERVABLES .................................
 
@@ -82,33 +66,19 @@ class CtrlerLogin extends Controller implements CtrlerLoginIf {
     //    ................................. INSTANCE METHODS .................................
 
     @Override
-    public boolean validateLogin(@NonNull Usuario usuario)
+    public boolean validateLogin(DisposableSingleObserver<Boolean> observer, @NonNull Usuario usuario)
     {
         Timber.i("validateLogin()");
         return subscriptions.add(
                 loginUpdateTkCache(usuario)
                         .subscribeOn(io())
                         .observeOn(mainThread())
-                        .subscribeWith(new LoginObserver(this) {
-                            @Override
-                            public void onSuccess(Boolean isLoginOk)
-                            {
-                                Timber.d("onSuccess");
-                                controller.onSuccessValidateLogin(isLoginOk);
-                            }
-                        })
+                        .subscribeWith(observer)
         );
     }
 
     @Override
-    public void onSuccessValidateLogin(Boolean isLoginOk)
-    {
-        Timber.d("onSuccessValidateLogin()");
-        viewerLogin.processLoginBackInView(isLoginOk);
-    }
-
-    @Override
-    public boolean doDialogPositiveClick(@NonNull final Usuario usuario)
+    public boolean doDialogPositiveClick(DisposableSingleObserver<Boolean> observer, @NonNull final Usuario usuario)
     {
         Timber.d("doDialogPositiveClick()");
         Callable<Boolean> sendPswdCallable = new Callable<Boolean>() {
@@ -122,43 +92,7 @@ class CtrlerLogin extends Controller implements CtrlerLoginIf {
                 loginPswdSendSingle(sendPswdCallable)
                         .subscribeOn(io())
                         .observeOn(mainThread())
-                        .subscribeWith(new LoginObserver(this) {
-                            @Override
-                            public void onSuccess(Boolean isSendPassword)
-                            {
-                                Timber.d("onSuccess");
-                                controller.onSuccessDialogPositiveClick(isSendPassword);
-                            }
-                        })
+                        .subscribeWith(observer)
         );
-    }
-
-    @Override
-    public void onSuccessDialogPositiveClick(Boolean isSendPassword)
-    {
-        Timber.d("onSuccessDialogPositiveClick()");
-        viewerLogin.processBackSendPswdInView(isSendPassword);
-    }
-
-    // ............................ SUBSCRIBERS ..................................
-
-    abstract static class LoginObserver extends DisposableSingleObserver<Boolean> {
-
-        final CtrlerLoginIf controller;
-
-        LoginObserver(final CtrlerLoginIf controller)
-        {
-            this.controller = controller;
-        }
-
-        @Override
-        public void onError(Throwable e)
-        {
-            Timber.d("onErrorCtrl, message: %s", e.getMessage());
-            if (e instanceof UiException) {
-                Timber.d("UiException message: %s", ((UiException) e).getErrorBean().getMessage());
-            }
-            controller.onErrorCtrl(e);
-        }
     }
 }

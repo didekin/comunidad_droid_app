@@ -88,9 +88,9 @@ public class ViewerTipoViaSpinnerTest {
             @Override
             public void run()
             {
-                // Necesito valor inicial para evitar NullPointer en onSuccessLoadItems(tiposVia).
+                // Necesito valor inicial para evitar NullPointer en onSuccessLoadItemList(tiposVia).
                 viewer.tipoViaValueObj = new TipoViaValueObj("initialDesc");
-                viewer.onSuccessLoadItems(tiposVia);
+                viewer.onSuccessLoadItemList(tiposVia);
                 assertThat(viewer.getSelectedPositionFromDesc("tipo_99"), is(2));
                 assertThat(viewer.getSelectedPositionFromDesc("tipo_4"), is(0));
                 assertThat(viewer.getSelectedPositionFromDesc("tipo_1"), is(1));
@@ -113,7 +113,7 @@ public class ViewerTipoViaSpinnerTest {
             @Override
             public void run()
             {
-                viewer.onSuccessLoadItems(tiposVia);
+                viewer.onSuccessLoadItemList(tiposVia);
                 isExec.compareAndSet(false, true);
             }
         });

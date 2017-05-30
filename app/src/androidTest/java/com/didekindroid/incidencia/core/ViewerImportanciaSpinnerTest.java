@@ -9,7 +9,6 @@ import com.didekindroid.R;
 import com.didekindroid.api.ActivityMock;
 import com.didekindroid.api.SpinnerMockFr;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -87,7 +86,7 @@ public class ViewerImportanciaSpinnerTest {
             @Override
             public void run()
             {
-                viewer.onSuccessLoadItems(importancias);
+                viewer.onSuccessLoadItemList(importancias);
                 isExec.compareAndSet(false, true);
             }
         });
@@ -130,15 +129,6 @@ public class ViewerImportanciaSpinnerTest {
         IncidImportanciaBean incidImportanciaBean = new IncidImportanciaBean();
         Bundle bundle = new Bundle();
         bundle.putLong(keyBundle, (short) 93);
-
-        viewer.setController(new CtrlerImportanciaSpinner(viewer) {
-            @Override
-            public boolean loadItemsByEntitiyId(Long... entityId)
-            {
-                assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), CoreMatchers.is(BEFORE_METHOD_EXEC));
-                return false;
-            }
-        });
         viewer.doViewInViewer(bundle, incidImportanciaBean);
 
         // Check call to initSelectedItemId().
@@ -146,10 +136,10 @@ public class ViewerImportanciaSpinnerTest {
                 is(bundle.getLong(keyBundle)),
                 is(93L)
         ));
-        // Check call to controller.loadDataInSpinner();
-        assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_A));
         // Check call to view.setOnItemSelectedListener().
         ViewerImportanciaSpinner.ImportanciaSelectedListener listener =
                 (ViewerImportanciaSpinner.ImportanciaSelectedListener) viewer.getViewInViewer().getOnItemSelectedListener();
+        // Check importanciaSpinner data are shown.
+        // TODO: chech with onView and onDat of the spinner.
     }
 }

@@ -1,14 +1,12 @@
 package com.didekindroid.usuario.testutil;
 
-import android.support.test.espresso.action.ViewActions;
-import android.support.test.espresso.matcher.ViewMatchers;
-
 import com.didekindroid.R;
 import com.didekinlib.model.usuario.Usuario;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.replaceText;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.isDialog;
@@ -40,10 +38,10 @@ public final class UserEspressoTestUtil {
 
     public static void typeUserDataFull(String email, String alias, String password, String passwordConfirm)
     {
-        onView(ViewMatchers.withId(R.id.reg_usuario_password_ediT)).perform(ViewActions.scrollTo(), ViewActions.typeText(password));
-        onView(ViewMatchers.withId(R.id.reg_usuario_password_confirm_ediT)).perform(ViewActions.scrollTo(), ViewActions.typeText(passwordConfirm));
-        onView(ViewMatchers.withId(R.id.reg_usuario_email_editT)).perform(ViewActions.scrollTo(), ViewActions.typeText(email));
-        onView(ViewMatchers.withId(R.id.reg_usuario_alias_ediT)).perform(ViewActions.scrollTo(), ViewActions.typeText(alias), ViewActions.closeSoftKeyboard());
+        onView(withId(R.id.reg_usuario_password_ediT)).perform(scrollTo(), replaceText(password));
+        onView(withId(R.id.reg_usuario_password_confirm_ediT)).perform(scrollTo(), replaceText(passwordConfirm));
+        onView(withId(R.id.reg_usuario_email_editT)).perform(scrollTo(), replaceText(email));
+        onView(withId(R.id.reg_usuario_alias_ediT)).perform(scrollTo(), replaceText(alias), closeSoftKeyboard());
     }
 
     public static void typeUserData(String userName, String alias, String password)

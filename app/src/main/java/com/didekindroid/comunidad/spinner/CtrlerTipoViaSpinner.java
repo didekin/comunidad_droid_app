@@ -1,15 +1,13 @@
 package com.didekindroid.comunidad.spinner;
 
-import android.app.Activity;
-
-import com.didekindroid.api.CtrlerSelectionList;
-import com.didekindroid.api.SingleObserverSelectionList;
+import com.didekindroid.api.CtrlerSelectList;
 import com.didekindroid.comunidad.repository.ComunidadDbHelper;
 
 import java.util.List;
 import java.util.concurrent.Callable;
 
 import io.reactivex.Single;
+import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
@@ -21,22 +19,11 @@ import static io.reactivex.schedulers.Schedulers.io;
  * Time: 10:08
  */
 
-class CtrlerTipoViaSpinner extends CtrlerSelectionList<TipoViaValueObj> {
-
-    CtrlerTipoViaSpinner(ViewerTipoViaSpinner viewer)
-    {
-        super(viewer);
-    }
-
-    static CtrlerTipoViaSpinner newCtrlerTipoViaSpinner(ViewerTipoViaSpinner viewer)
-    {
-        Timber.d("newCtrlerTipoViaSpinner()");
-        return new CtrlerTipoViaSpinner(viewer);
-    }
+class CtrlerTipoViaSpinner extends CtrlerSelectList<TipoViaValueObj> {
 
     // .................................... OBSERVABLE .......................................
 
-    static Single<List<TipoViaValueObj>> tipoViaList(final Activity activity)
+    Single<List<TipoViaValueObj>> tipoViaList()
     {
         Timber.d("tipoViaList()");
 
@@ -44,7 +31,7 @@ class CtrlerTipoViaSpinner extends CtrlerSelectionList<TipoViaValueObj> {
             @Override
             public List<TipoViaValueObj> call() throws Exception
             {
-                ComunidadDbHelper dbHelper = new ComunidadDbHelper(activity);
+                ComunidadDbHelper dbHelper = new ComunidadDbHelper(getIdentityCacher().getContext());
                 List<TipoViaValueObj> tiposVia = dbHelper.getTiposVia();
                 dbHelper.close();
                 return tiposVia;
@@ -52,16 +39,17 @@ class CtrlerTipoViaSpinner extends CtrlerSelectionList<TipoViaValueObj> {
         });
     }
 
-    // .................................... INSTANCE METHODS .....................................
-
     @Override
-    public boolean loadItemsByEntitiyId(Long... entityId)
+    public boolean loadItemsByEntitiyId(DisposableSingleObserver<List<TipoViaValueObj>> observer, Long... entityId)
     {
         Timber.d("loadItemsByEntitiyId()");
-        return subscriptions.add(tipoViaList(viewer.getActivity())
+        return subscriptions.add(tipoViaList()
                 .subscribeOn(io())
                 .observeOn(mainThread())
-                .subscribeWith(new SingleObserverSelectionList<>(this))
+                .subscribeWith(observer)
         );
     }
+
+    // .................................... INSTANCE METHODS .....................................
+
 }

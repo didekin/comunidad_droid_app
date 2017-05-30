@@ -18,8 +18,14 @@ public class InstanceIdService extends FirebaseInstanceIdService {
     public void onTokenRefresh()
     {
         Timber.d("onTokenRefresh()");
-        CtrlerFirebaseTokenIf controller = new CtrlerFirebaseToken(null);
-        controller.checkGcmTokenSync();
+        CtrlerFirebaseTokenIf controller = new CtrlerFirebaseToken();
+        controller.checkGcmTokenSync(new ViewerFirebaseToken(null).new RegGcmTokenObserver(){
+            @Override
+            public void onError(Throwable error)
+            {
+                Timber.d("onError()");
+            }
+        });
         controller.clearSubscriptions();
     }
 }

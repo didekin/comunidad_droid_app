@@ -18,6 +18,7 @@ import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.security.IdentityCacher;
 import com.didekindroid.usuario.RegUserFr;
 import com.didekindroid.usuario.UsuarioBean;
+import com.didekindroid.usuario.ViewerRegUserFr;
 import com.didekindroid.usuariocomunidad.listbycomu.SeeUserComuByComuAc;
 import com.didekindroid.util.ConnectionUtils;
 import com.didekindroid.util.UIutils;
@@ -86,9 +87,9 @@ public class RegUserAndUserComuAc extends AppCompatActivity {
         setContentView(R.layout.reg_user_and_usercomu_ac);
         doToolBar(this, true);
 
-        mRegUserComuFrg = (RegUserComuFr) getFragmentManager().findFragmentById(R.id
+        mRegUserComuFrg = (RegUserComuFr) getSupportFragmentManager().findFragmentById(R.id
                 .reg_usercomu_frg);
-        mRegUserFr = (RegUserFr) getFragmentManager().findFragmentById(R.id.reg_user_frg);
+        mRegUserFr = (RegUserFr) getSupportFragmentManager().findFragmentById(R.id.reg_user_frg);
 
         Button mRegistroButton = (Button) findViewById(R.id.reg_user_usercomu_button);
         mRegistroButton.setOnClickListener(new View.OnClickListener() {
@@ -105,8 +106,8 @@ public class RegUserAndUserComuAc extends AppCompatActivity {
     {
         Timber.d("registerComuAndUsuarioComu()");
 
-        UsuarioBean usuarioBean = RegUserFr.makeUserBeanFromRegUserFrView(mRegUserFr.getFragmentView());
-        UsuarioComunidadBean usuarioComunidadBean = RegUserComuFr.makeUserComuBeanFromView(
+        /*UsuarioBean usuarioBean = ViewerRegUserFr.getUserFromViewer(mRegUserFr.getFragmentView());
+        UsuarioComunidadBean usuarioComunidadBean = RegUserComuFr.getUserComuFromViewer(
                 mRegUserComuFrg.getFragmentView(),
                 new ComunidadBean(mComunidad.getC_Id(), null, null, null, null, null),
                 usuarioBean);
@@ -119,7 +120,7 @@ public class RegUserAndUserComuAc extends AppCompatActivity {
             UIutils.makeToast(this, R.string.no_internet_conn_toast);
         } else {
             new UserAndUserComuRegister().execute(usuarioComunidadBean.getUsuarioComunidad());
-        }
+        }*/
     }
 
     @Override

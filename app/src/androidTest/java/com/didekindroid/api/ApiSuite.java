@@ -11,11 +11,9 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         ControllerTest.class,
-        CtrlerSelectionListTest.class,
-        ObserverMaybeListTest.class,
-        ObserverSingleSelectedItemTest.class,
-        SingleObserverSelectionListTest.class,
-        ViewerSelectionListTest.class,
+        ObserverSingleSelectListTest.class,
+        ViewerParentTest.class,
+        ViewerSelectListTest.class,
         ViewerTest.class,
 })
 public class ApiSuite {

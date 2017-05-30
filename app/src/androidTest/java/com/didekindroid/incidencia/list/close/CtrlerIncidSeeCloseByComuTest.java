@@ -173,7 +173,7 @@ public class CtrlerIncidSeeCloseByComuTest {
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
-            assertThat(controllerLocal.selectItem(incidenciaUser), is(true));
+            assertThat(controllerLocal.selectItem(, incidenciaUser), is(true));
         } finally {
             resetAllSchedulers();
         }
@@ -220,7 +220,7 @@ public class CtrlerIncidSeeCloseByComuTest {
         }
 
         @Override
-        public void onSuccessLoadItems(List<IncidenciaUser> itemsList)
+        public void onSuccessLoadItemList(List<IncidenciaUser> itemsList)
         {
             assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_D), is(BEFORE_METHOD_EXEC));
         }

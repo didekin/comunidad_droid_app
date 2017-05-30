@@ -41,11 +41,6 @@ public class IdentityCacherMock implements IdentityCacher {
     }
 
     @Override
-    public void refreshAccessToken(OauthTokenReactorIf reactor)
-    {
-    }
-
-    @Override
     public Context getContext()
     {
         return null;

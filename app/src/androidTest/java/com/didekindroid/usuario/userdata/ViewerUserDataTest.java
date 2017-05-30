@@ -99,7 +99,7 @@ public class ViewerUserDataTest {
         assertThat(viewer.emailView, notNullValue());
         assertThat(viewer.aliasView, notNullValue());
         assertThat(viewer.passwordView, notNullValue());
-        assertThat(viewer.getController(), instanceOf(CtrlerUserData.class));
+        assertThat(viewer.getController(), instanceOf(CtrlerUserModified.class));
         assertThat(viewer.usuarioBean, notNullValue());
         assertThat(viewer.oldUser, notNullValue());
         assertThat(viewer.newUser, notNullValue());
@@ -199,7 +199,7 @@ public class ViewerUserDataTest {
             @Override
             public void run()
             {
-                viewer.processControllerError(new UiException(new ErrorBean(BAD_REQUEST)));
+                viewer.onErrorInObserver(new UiException(new ErrorBean(BAD_REQUEST)));
             }
         });
         waitAtMost(3, SECONDS).until(isToastInView(R.string.password_wrong, activity));

@@ -10,18 +10,19 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.didekindroid.R;
+import com.didekindroid.api.Viewer;
 import com.didekindroid.api.ViewerIf;
 import com.didekindroid.incidencia.core.CtrlerIncidRegEditFr;
 import com.didekindroid.incidencia.core.IncidImportanciaBean;
 import com.didekindroid.incidencia.core.IncidenciaBean;
 import com.didekindroid.incidencia.core.ViewerAmbitoIncidSpinner;
 import com.didekindroid.incidencia.core.ViewerImportanciaSpinner;
-import com.didekindroid.incidencia.core.ViewerIncidRegEdit;
 import com.didekindroid.router.ActivityInitiator;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
 import java.io.Serializable;
 
+import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
 import static android.view.View.GONE;
@@ -30,7 +31,7 @@ import static com.didekindroid.incidencia.core.ViewerImportanciaSpinner.newViewe
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.incid_importancia_should_be_modified;
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.incidencia_should_be_deleted;
-import static com.didekindroid.usuariocomunidad.UserComuAssertionMsg.usercomu_should_have_admAuthority;
+import static com.didekindroid.usuariocomunidad.util.UserComuAssertionMsg.usercomu_should_have_admAuthority;
 import static com.didekindroid.util.ConnectionUtils.checkInternetConnected;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
@@ -41,8 +42,8 @@ import static com.didekindroid.util.UIutils.makeToast;
  * Date: 04/04/17
  * Time: 15:06
  */
-class ViewerIncidEditMaxFr extends ViewerIncidRegEdit implements
-        LinkToImportanciaUsersClickable {
+class ViewerIncidEditMaxFr extends Viewer<View, CtrlerIncidRegEditFr> implements
+        LinkToImportanciaUsersClickable, ModIncidImportanciaCallableBack {
 
     final boolean hasResolucion;
     IncidImportancia incidImportancia;
@@ -69,7 +70,7 @@ class ViewerIncidEditMaxFr extends ViewerIncidRegEdit implements
                 newViewerAmbitoIncidSpinner((Spinner) frView.findViewById(R.id.incid_reg_ambito_spinner), activity, instance);
         instance.viewerImportanciaSpinner =
                 newViewerImportanciaSpinner((Spinner) frView.findViewById(R.id.incid_reg_importancia_spinner), activity, instance);
-        instance.setController(new CtrlerIncidRegEditFr(instance));
+        instance.setController(new CtrlerIncidRegEditFr());
         return instance;
     }
 
@@ -159,7 +160,7 @@ class ViewerIncidEditMaxFr extends ViewerIncidRegEdit implements
                     incidImportancia.getIncidencia()
             );
             if (checkInternetConnected(getActivity())) {
-                controller.modifyIncidImportancia(newIncidImportancia);
+                controller.modifyIncidImportancia(new ModIncidImportanciaObserver<>(this), newIncidImportancia);
             }
         } catch (IllegalStateException e) {
             Timber.e(e.getMessage());
@@ -174,10 +175,11 @@ class ViewerIncidEditMaxFr extends ViewerIncidRegEdit implements
         assertTrue(incidImportancia.getUserComu().hasAdministradorAuthority(), usercomu_should_have_admAuthority);
 
         if (checkInternetConnected(getActivity())) {
-            controller.eraseIncidencia(incidImportancia.getIncidencia());
+            controller.eraseIncidencia(new EraseIncidenciaObserver(), incidImportancia.getIncidencia());
         }
     }
 
+    @Override
     public void onSuccessModifyIncidImportancia(int rowInserted)
     {
         Timber.d("onSuccessModifyIncidImportancia()");
@@ -208,5 +210,25 @@ class ViewerIncidEditMaxFr extends ViewerIncidRegEdit implements
         Timber.d("saveState()");
         viewerAmbitoIncidSpinner.saveState(savedState);
         viewerImportanciaSpinner.saveState(savedState);
+    }
+
+    // =======================================  HELPERS  =======================================
+
+    @SuppressWarnings("WeakerAccess")
+    class EraseIncidenciaObserver extends DisposableSingleObserver<Integer> {
+
+        @Override
+        public void onSuccess(Integer rowDeleted)
+        {
+            Timber.d("onSuccess()");
+            onSuccessEraseIncidencia(rowDeleted);
+        }
+
+        @Override
+        public void onError(Throwable e)
+        {
+            Timber.d("onError()");
+            onErrorInObserver(e);
+        }
     }
 }

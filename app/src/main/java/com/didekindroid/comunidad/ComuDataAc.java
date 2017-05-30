@@ -9,6 +9,7 @@ import android.view.View;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ViewerIf;
+import com.didekindroid.api.ViewerParentInjectedIf;
 import com.didekindroid.api.ViewerParentInjectorIf;
 import com.didekindroid.router.ActivityInitiator;
 import com.didekinlib.model.comunidad.Comunidad;
@@ -72,17 +73,17 @@ public class ComuDataAc extends AppCompatActivity implements ViewerParentInjecto
 // ==================================  ViewerParentInjectorIf  =================================
 
     @Override
-    public ViewerIf getViewerAsParent()
+    public ViewerParentInjectedIf getViewerAsParent()
     {
         Timber.d("getViewerAsParent()");
         return viewer;
     }
 
     @Override
-    public void setChildInViewer(ViewerIf childInViewer)
+    public void setChildInViewer(ViewerIf viewerChild)
     {
         Timber.d("setChildInViewer()");
-        viewer.setChildViewer(childInViewer);
+        viewer.setChildViewer(viewerChild);
     }
 
 //    =========================================  MENU  =============================================
@@ -100,7 +101,6 @@ public class ComuDataAc extends AppCompatActivity implements ViewerParentInjecto
     {
         Timber.d("onOptionsItemSelected()");
 
-        ActivityInitiator activityInitiator = new ActivityInitiator(this);
         int resourceId = item.getItemId();
         switch (resourceId) {
             case android.R.id.home:
@@ -110,7 +110,7 @@ public class ComuDataAc extends AppCompatActivity implements ViewerParentInjecto
                 Intent intent = new Intent();
                 intent.putExtra(COMUNIDAD_ID.key, getIntent().getLongExtra(COMUNIDAD_ID.key, 0L));
                 setIntent(intent);
-                activityInitiator.initActivityFromMn(resourceId);
+                new ActivityInitiator(this).initActivityFromMn(resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -62,7 +62,7 @@ public class CtrlerDeleteMeTest {
     {
         Activity activity = activityRule.getActivity();
         controller = new CtrlerDeleteMe(activity);
-        assertThat(controller.rootViewReplacer, instanceOf(DeleteMeAc.class));
+        assertThat(controller.activity, instanceOf(DeleteMeAc.class));
         assertThat(TKhandler.isRegisteredUser(), is(true));
     }
 

@@ -5,7 +5,6 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ViewerMock;
 import com.didekindroid.comunidad.spinner.TipoViaValueObj;
 import com.didekindroid.exception.UiException;
 import com.didekinlib.model.comunidad.Comunidad;
@@ -19,12 +18,15 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
+import io.reactivex.observers.DisposableSingleObserver;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static com.didekindroid.comunidad.ViewerComuDataAc.newViewerComuDataAc;
 import static com.didekindroid.comunidad.ViewerRegComuFr.newViewerRegComuFr;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkMunicipioSpinner;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.doTipoViaSpinner;
@@ -44,6 +46,7 @@ import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
@@ -95,6 +98,8 @@ public class ViewerComuDataAcTest {
         cleanOptions(CLEAN_JUAN);
     }
 
+    //    ==================================== TESTS =========================================
+
     @Test
     public void test_NewViewerComuDataAc() throws Exception
     {
@@ -117,14 +122,11 @@ public class ViewerComuDataAcTest {
     @Test
     public void test_SetChildViewer() throws Exception
     {
-        try {
-            viewer.setChildViewer(new ViewerMock(activity));
-            fail();
-        } catch (ClassCastException ce) {
-        }
-
+        viewer = newViewerComuDataAc(activity);
+        assertThat(viewer.getChildViewer(ViewerRegComuFr.class), nullValue());
+        // After.
         viewer.setChildViewer(newViewerRegComuFr(activity.regComuFrg.getView(), viewer));
-        assertThat(viewer.viewerRegComuFr, notNullValue());
+        assertThat(viewer.getChildViewer(ViewerRegComuFr.class), notNullValue());
     }
 
     @Test
@@ -141,7 +143,7 @@ public class ViewerComuDataAcTest {
         checkMunicipioSpinner(comunidad.getMunicipio().getNombre()); // Esperamos por los viejos datos.
         viewer.setController(new CtrlerComuDataAc(viewer) {
             @Override
-            boolean modifyComunidadData(Comunidad comunidad)
+            boolean modifyComunidadData(DisposableSingleObserver<Integer> observer, Comunidad comunidad)
             {
                 assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
                 return false;

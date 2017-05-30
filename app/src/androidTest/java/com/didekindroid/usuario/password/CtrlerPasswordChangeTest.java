@@ -82,7 +82,7 @@ public class CtrlerPasswordChangeTest {
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
-            assertThat(controller.changePasswordInRemote(USER_PEPE), is(true));
+            assertThat(controller.changePasswordInRemote(, USER_PEPE), is(true));
         } finally {
             resetAllSchedulers();
         }

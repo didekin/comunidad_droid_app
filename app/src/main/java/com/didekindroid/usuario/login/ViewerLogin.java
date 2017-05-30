@@ -11,9 +11,9 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.didekindroid.R;
+import com.didekindroid.exception.UiException;
 import com.didekindroid.router.ComponentReplacerIf;
 import com.didekindroid.api.Viewer;
-import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf;
 import com.didekindroid.usuario.UsuarioBean;
 import com.didekinlib.model.usuario.Usuario;
@@ -22,6 +22,7 @@ import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
+import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
 import static com.didekindroid.usuario.UsuarioBundleKey.login_counter_atomic_int;
@@ -29,6 +30,7 @@ import static com.didekindroid.usuario.UsuarioBundleKey.usuario_object;
 import static com.didekindroid.usuario.login.LoginAc.PasswordMailDialog.newInstance;
 import static com.didekindroid.util.ConnectionUtils.isInternetConnected;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
+import static com.didekindroid.util.UIutils.getUiExceptionFromThrowable;
 import static com.didekindroid.util.UIutils.makeToast;
 import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOUND;
 
@@ -55,7 +57,7 @@ class ViewerLogin extends Viewer<View, CtrlerLoginIf> implements ViewerLoginIf, 
     {
         Timber.d("newViewerLogin()");
         ViewerLoginIf instance = new ViewerLogin(activity);
-        instance.setController(new CtrlerLogin(instance));
+        instance.setController(new CtrlerLogin());
         return instance;
     }
 
@@ -166,7 +168,14 @@ class ViewerLogin extends Viewer<View, CtrlerLoginIf> implements ViewerLoginIf, 
     public void doDialogPositiveClick(Usuario usuario)
     {
         Timber.d("doDialogPositiveClick()");
-        controller.doDialogPositiveClick(usuario);
+        controller.doDialogPositiveClick(new LoginObserver() {
+            @Override
+            public void onSuccess(Boolean isSentPassword)
+            {
+                Timber.d("onSuccess()");
+                processBackSendPswdInView(isSentPassword);
+            }
+        }, usuario);
     }
 
     @Override
@@ -180,14 +189,14 @@ class ViewerLogin extends Viewer<View, CtrlerLoginIf> implements ViewerLoginIf, 
     }
 
     @Override
-    public UiExceptionIf.ActionForUiExceptionIf processControllerError(UiException ui)
+    public UiExceptionIf.ActionForUiExceptionIf onErrorInObserver(Throwable error)
     {
-        Timber.d("processControllerError()");
+        Timber.d("onErrorInObserver()");
         UiExceptionIf.ActionForUiExceptionIf action = null;
-        if (ui.getErrorBean().getMessage().equals(USER_NAME_NOT_FOUND.getHttpMessage())) {
+        if (getUiExceptionFromThrowable(error).getErrorBean().getMessage().equals(USER_NAME_NOT_FOUND.getHttpMessage())) {
             makeToast(activity, R.string.username_wrong_in_login);
         } else {
-            action = super.processControllerError(ui);
+            action = super.onErrorInObserver(error);
         }
         return action;
     }
@@ -226,8 +235,30 @@ class ViewerLogin extends Viewer<View, CtrlerLoginIf> implements ViewerLoginIf, 
         {
             Timber.d("View.OnClickListener().onClickLinkToImportanciaUsers()");
             if (checkLoginData()) {
-                controller.validateLogin(usuarioBean.get().getUsuario());
+                controller.validateLogin(new LoginObserver() {
+                    @Override
+                    public void onSuccess(Boolean isLoginOk)
+                    {
+                        Timber.d("onSuccess()");
+                        processLoginBackInView(isLoginOk);
+                    }
+                }, usuarioBean.get().getUsuario());
             }
+        }
+    }
+
+    // ............................ SUBSCRIBERS ..................................
+
+    abstract class LoginObserver extends DisposableSingleObserver<Boolean> {
+
+        @Override
+        public void onError(Throwable e)
+        {
+            Timber.d("onErrorObserver, message: %s", e.getMessage());
+            if (e instanceof UiException) {
+                Timber.d("UiException message: %s", ((UiException) e).getErrorBean().getMessage());
+            }
+            onErrorInObserver(e);
         }
     }
 }

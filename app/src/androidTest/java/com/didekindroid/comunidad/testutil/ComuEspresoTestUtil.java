@@ -49,7 +49,7 @@ public final class ComuEspresoTestUtil {
         final ComunidadAutonoma comunidadAutonoma = new ComunidadAutonoma((short) 10, "Valencia");
         final Municipio municipio = new Municipio((short) 13, "Algueña", provincia);
         final TipoViaValueObj tipoVia = new TipoViaValueObj(52, "Calle");
-        typeComunidadData(comunidadAutonoma, provincia, municipio,tipoVia, "Real", "5", "Bis");
+        typeComunidadData(comunidadAutonoma, provincia, municipio, tipoVia, "Real", "5", "Bis");
     }
 
     public static void typeComunidadData(ComunidadAutonoma comunidadAuto, Provincia provincia, Municipio municipio, TipoViaValueObj tipoVia, String nombreVia,
@@ -94,6 +94,41 @@ public final class ComuEspresoTestUtil {
         assertThat(comunidad.getMunicipio(), is(municipio));
     }
 
+    public static void checkRegComuFrViewEmpty()
+    {
+        waitAtMost(4, SECONDS).until(isViewDisplayed(
+                allOf(
+                        withId(R.id.app_spinner_1_dropdown_item),
+                        withParent(withId(R.id.tipo_via_spinner)),
+                        withText(R.string.tipoVia_spinner_default)
+                )
+        ));
+
+        waitAtMost(4, SECONDS).until(isViewDisplayed(
+                allOf(
+                        withId(R.id.app_spinner_1_dropdown_item),
+                        withParent(withId(R.id.autonoma_comunidad_spinner)),
+                        withText(R.string.comAutonoma_spinner_default)
+                )
+        ));
+
+        waitAtMost(4, SECONDS).until(isViewDisplayed(
+                allOf(
+                        withId(R.id.app_spinner_1_dropdown_item),
+                        withParent(withId(R.id.provincia_spinner)),
+                        withText(R.string.provincia_spinner_default)
+                )
+        ));
+
+        waitAtMost(4, SECONDS).until(isViewDisplayed(
+                allOf(
+                        withId(R.id.app_spinner_1_dropdown_item),
+                        withParent(withId(R.id.municipio_spinner)),
+                        withText(R.string.municipio_spinner_default)
+                )
+        ));
+    }
+
     public static void checkRegComuFrView(Comunidad comunidad, String nombreComAutonoma)
     {
         checkNumeroEnVia(comunidad);
@@ -128,7 +163,7 @@ public final class ComuEspresoTestUtil {
 
     public static void doTipoViaSpinner(TipoViaValueObj tipoVia)
     {
-        onView(withId(R.id.tipo_via_spinner)).perform(click());
+        onView(withId(R.id.tipo_via_spinner)).perform(scrollTo(), click());
         waitAtMost(2, SECONDS).until(isDataDisplayedAndClick(
                 allOf(
                         isA(TipoViaValueObj.class),

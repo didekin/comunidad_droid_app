@@ -82,7 +82,7 @@ public class CtrlerRegComuFrTest {
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
-            assertThat(controller.loadComunidadData(comunidad.getC_Id(), bundle), is(true));
+            assertThat(controller.loadComunidadData(, comunidad.getC_Id(), bundle), is(true));
         } finally {
             resetAllSchedulers();
         }

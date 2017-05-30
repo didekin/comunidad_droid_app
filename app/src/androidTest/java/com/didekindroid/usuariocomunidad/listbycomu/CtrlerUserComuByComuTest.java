@@ -133,7 +133,7 @@ public class CtrlerUserComuByComuTest {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
 
-            assertThat(controller.comunidadData(comunidad.getC_Id()), is(true));
+            assertThat(controller.comunidadData(, comunidad.getC_Id()), is(true));
             assertThat(controller.getSubscriptions().size(), is(1));
             assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_B));
         } finally {

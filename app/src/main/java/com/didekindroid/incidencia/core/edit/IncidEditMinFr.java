@@ -60,6 +60,7 @@ public class IncidEditMinFr extends Fragment {
         ViewerIf parentViewer = viewerInjector.getViewerAsParent();
         viewer = ViewerIncidEditMinFr.newViewerIncidEditMinFr(frView, parentViewer);
         viewer.doViewInViewer(savedInstanceState, incidImportancia);
+        viewerInjector.setChildInViewer(viewer);
     }
 
     @Override

@@ -43,7 +43,6 @@ import org.junit.runners.Suite;
         ViewerIncidRegFrTest.class,
         // Controllers
         CtrlerAmbitoIncidSpinnerTest.class,
-        CtrlerImportanciaSpinnerTest.class,
         CtrlerIncidEditAcTest.class,
         CtrlerIncidRegEditFr_Edit_Test.class,
         CtrlerIncidRegEditFr_Reg_Test.class,

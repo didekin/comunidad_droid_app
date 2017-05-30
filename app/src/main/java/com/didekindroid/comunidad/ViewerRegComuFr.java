@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.didekindroid.R;
+import com.didekindroid.api.ObserverSingleSelectList;
 import com.didekindroid.api.SpinnerEventItemSelectIf;
 import com.didekindroid.api.SpinnerEventListener;
 import com.didekindroid.api.Viewer;
@@ -27,6 +28,7 @@ import com.didekinlib.model.comunidad.Provincia;
 
 import java.io.Serializable;
 
+import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.spinner.ViewerComuAutonomaSpinner.newViewerComuAutonomaSpinner;
@@ -41,7 +43,7 @@ import static com.didekindroid.util.UIutils.assertTrue;
  * Date: 04/05/17
  * Time: 12:28
  */
-class ViewerRegComuFr extends Viewer<View, CtrlerRegComuFr> implements
+public class ViewerRegComuFr extends Viewer<View, CtrlerRegComuFr> implements
         SpinnerEventListener {
 
     ViewerTipoViaSpinner tipoViaSpinner;
@@ -58,7 +60,7 @@ class ViewerRegComuFr extends Viewer<View, CtrlerRegComuFr> implements
     {
         Timber.d("newViewerRegComuFr()");
         ViewerRegComuFr instance = new ViewerRegComuFr(view, parentViewer.getActivity(), parentViewer);
-        instance.setController(new CtrlerRegComuFr(instance));
+        instance.setController(new CtrlerRegComuFr());
         instance.tipoViaSpinner =
                 newViewerTipoViaSpinner((Spinner) instance.getViewInViewer().findViewById(R.id.tipo_via_spinner), parentViewer.getActivity(), instance);
         instance.comuAutonomaSpinner =
@@ -81,7 +83,7 @@ class ViewerRegComuFr extends Viewer<View, CtrlerRegComuFr> implements
             // Precondition.
             assertTrue(controller.isRegisteredUser(), user_should_be_registered);
             Comunidad comunidad = Comunidad.class.cast(viewBean);
-            CtrlerRegComuFr.class.cast(controller).loadComunidadData(comunidad.getC_Id(), savedState);
+            CtrlerRegComuFr.class.cast(controller).loadComunidadData(new RegComuFrObserver(savedState), comunidad.getC_Id());
         } else {
             tipoViaSpinner.doViewInViewer(savedState, null);
             comuAutonomaSpinner.doViewInViewer(savedState, null);
@@ -97,7 +99,8 @@ class ViewerRegComuFr extends Viewer<View, CtrlerRegComuFr> implements
         return tipoViaSpinner.clearSubscriptions()
                 + comuAutonomaSpinner.clearSubscriptions()
                 + provinciaSpinner.clearSubscriptions()
-                + municipioSpinner.clearSubscriptions();
+                + municipioSpinner.clearSubscriptions()
+                + controller.clearSubscriptions();
     }
 
     @Override
@@ -125,7 +128,8 @@ class ViewerRegComuFr extends Viewer<View, CtrlerRegComuFr> implements
             if (!comunidadAutonomaOld.equals(comunidadInEvent.getComunidadAutonoma())) {
                 provinciaSpinner.setItemSelectedId(0L);
             }
-            provinciaSpinner.getController().loadItemsByEntitiyId(comunidadInEvent.getSpinnerItemIdSelect());
+            provinciaSpinner.getController()
+                    .loadItemsByEntitiyId(new ObserverSingleSelectList<>(provinciaSpinner), comunidadInEvent.getSpinnerItemIdSelect());
         }
         if (ProvinciaSpinnerEventItemSelect.class.isInstance(spinnerEventItemSelect)) {
             Timber.d("ProvinciaSpinnerEventItemSelect");
@@ -135,7 +139,8 @@ class ViewerRegComuFr extends Viewer<View, CtrlerRegComuFr> implements
             if (!municipioOld.getProvincia().equals(provinciaInEvent.getProvincia())) {
                 municipioSpinner.setItemSelectedId(0L);
             }
-            municipioSpinner.getController().loadItemsByEntitiyId(spinnerEventItemSelect.getSpinnerItemIdSelect());
+            municipioSpinner.getController()
+                    .loadItemsByEntitiyId(new ObserverSingleSelectList<>(municipioSpinner), spinnerEventItemSelect.getSpinnerItemIdSelect());
         }
     }
 
@@ -155,7 +160,7 @@ class ViewerRegComuFr extends Viewer<View, CtrlerRegComuFr> implements
         comuAutonomaSpinner.doViewInViewer(savedState, new ComuAutonomaSpinnerEventItemSelect(comunidad.getMunicipio().getProvincia().getComunidadAutonoma()));
     }
 
-    Comunidad getComunidadFromViewer(StringBuilder errorMessages)
+    public Comunidad getComunidadFromViewer(StringBuilder errorMessages)
     {
         Timber.d("getComunidadFromViewer()");
 
@@ -174,5 +179,30 @@ class ViewerRegComuFr extends Viewer<View, CtrlerRegComuFr> implements
             return bean.getComunidad();
         }
         return null;
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    class RegComuFrObserver extends DisposableSingleObserver<Comunidad> {
+
+        private final Bundle savedState;
+
+        RegComuFrObserver(Bundle savedState)
+        {
+            this.savedState = savedState;
+        }
+
+        @Override
+        public void onSuccess(Comunidad comunidad)
+        {
+            Timber.d("onSuccess()");
+            onSuccessLoadComunidad(comunidad, savedState);
+        }
+
+        @Override
+        public void onError(Throwable e)
+        {
+            Timber.d("onError()");
+            onErrorInObserver(e);
+        }
     }
 }

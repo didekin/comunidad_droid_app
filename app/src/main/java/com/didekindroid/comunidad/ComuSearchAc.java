@@ -6,17 +6,16 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 
 import com.didekindroid.R;
+import com.didekindroid.api.ViewerIf;
+import com.didekindroid.api.ViewerParentInjectedIf;
+import com.didekindroid.api.ViewerParentInjectorIf;
 import com.didekindroid.router.ActivityInitiator;
-import com.didekindroid.security.IdentityCacher;
-import com.didekindroid.security.OauthTokenReactorIf;
 
 import timber.log.Timber;
 
-import static com.didekindroid.security.OauthTokenReactor.tokenReactor;
-import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.comunidad.ViewerComuSearch.newViewerComuSearch;
 import static com.didekindroid.util.UIutils.doToolBar;
 
 /**
@@ -30,66 +29,57 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * -- municipio with codInProvincia and provinciaId.
  */
 @SuppressWarnings("ConstantConditions")
-public class ComuSearchAc extends AppCompatActivity {
+public class ComuSearchAc extends AppCompatActivity implements ViewerParentInjectorIf {
 
-    protected View mainView;
+    View acView;
     RegComuFr regComuFrg;
-    IdentityCacher identityCacher;
-    OauthTokenReactorIf reactor;
+    ViewerComuSearch viewer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        super.onCreate(savedInstanceState);
         Timber.d("In onCreate()");
+        super.onCreate(savedInstanceState);
 
-        mainView = getLayoutInflater().inflate(R.layout.comu_search_ac, null);
-        setContentView(mainView);
+        acView = getLayoutInflater().inflate(R.layout.comu_search_ac, null);
+        setContentView(acView);
         doToolBar(this, false);
-        regComuFrg = (RegComuFr) getSupportFragmentManager().findFragmentById(R.id.reg_comunidad_frg);
 
-        Button mSearchButton = (Button) findViewById(R.id.searchComunidad_Bton);
-        mSearchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                Timber.d("View.OnClickListener().onClickLinkToImportanciaUsers()");
-                searchComunidad();
-            }
-        });
+        viewer = newViewerComuSearch(this);
+        viewer.doViewInViewer(savedInstanceState, null);
+        regComuFrg = (RegComuFr) getSupportFragmentManager().findFragmentById(R.id.reg_comunidad_frg);
     }
 
     @Override
-    protected void onStart()
+    public void onStop()
     {
-        super.onStart();
-        identityCacher = TKhandler;
-        reactor = tokenReactor;
-        // To initialize the token cache. This is the launch activity.
-        identityCacher.refreshAccessToken(reactor);
+        Timber.d("onStop()");
+        super.onStop();
+        viewer.clearSubscriptions();
     }
 
-    void searchComunidad()
+    @Override
+    protected void onSaveInstanceState(Bundle outState)
     {
-        Timber.i("In searchComunidad()");
+        Timber.d("onSaveInstanceState()");
+        super.onSaveInstanceState(outState);
+        viewer.saveState(outState);
+    }
 
-        /*ComunidadBean comunidadBean = regComuFrg.getComunidadBean();    TODO: modificar y descomentar.
+    // ==================================  ViewerParentInjectorIf  =================================
 
-        getComunidadFromViewer(regComuFrg.getFragmentView(), comunidadBean);
+    @Override
+    public ViewerParentInjectedIf getViewerAsParent()
+    {
+        Timber.d("getViewerAsParent()");
+        return viewer;
+    }
 
-        // Validation of data.
-        StringBuilder errorMsg = new StringBuilder(getResources().getText(R.string.error_validation_msg))
-                .append(LINE_BREAK.getRegexp());
-
-        if (!comunidadBean.validate(getResources(), errorMsg)) {
-            makeToast(this, errorMsg.toString());
-        } else if (!ConnectionUtils.isInternetConnected(this)) {
-            makeToast(this, R.string.no_internet_conn_toast);
-        } else {
-            Intent intent = new Intent(this, acRouter.nextActivity(getClass()));
-            intent.putExtra(COMUNIDAD_SEARCH.key, comunidadBean.getComunidad());
-            startActivity(intent);
-        }*/
+    @Override
+    public void setChildInViewer(ViewerIf viewerChild)
+    {
+        Timber.d("setChildInViewer()");
+        viewer.setChildViewer(viewerChild);
     }
 
 //    ============================================================
@@ -113,7 +103,7 @@ public class ComuSearchAc extends AppCompatActivity {
     {
         Timber.d("onPrepareOptionsMenu()");
 
-        if (identityCacher.isRegisteredUser()) {
+        if (viewer.getController().isRegisteredUser()) {
             Timber.d("onPrepareOptionsMenu(), isRegisteredUser == true");
             menu.findItem(R.id.see_usercomu_by_user_ac_mn).setVisible(true).setEnabled(true);
             menu.findItem(R.id.user_data_ac_mn).setVisible(true).setEnabled(true);

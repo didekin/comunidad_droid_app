@@ -88,7 +88,7 @@ public class CtrlerFirebaseTokenTest {
             {
                 Single.<Integer>error(new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR)))
                         .subscribeWith(new RegGcmTokenObserver(controller));
-                // Check call-back to onErrorCtrl change the status to false.
+                // Check call-back to onErrorObserver change the status to false.
                 assertThat(controller.isGcmTokenSentServer(), is(false));
             }
         });

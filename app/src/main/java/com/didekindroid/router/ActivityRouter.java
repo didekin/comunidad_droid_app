@@ -25,7 +25,7 @@ import com.didekindroid.usuario.password.PasswordChangeAc;
 import com.didekindroid.usuario.userdata.UserDataAc;
 import com.didekindroid.usuariocomunidad.RegComuAndUserAndUserComuAc;
 import com.didekindroid.usuariocomunidad.RegComuAndUserComuAc;
-import com.didekindroid.usuariocomunidad.SeeUserComuByUserAc;
+import com.didekindroid.usuariocomunidad.listbyuser.SeeUserComuByUserAc;
 import com.didekindroid.usuariocomunidad.listbycomu.SeeUserComuByComuAc;
 
 import java.util.Map;
@@ -61,6 +61,7 @@ public class ActivityRouter implements ActivityRouterIf {
         acRouterMap.put(IncidSeeOpenByComuAc.class, IncidEditAc.class);
         acRouterMap.put(LoginAc.class, ComuSearchAc.class);
         acRouterMap.put(PasswordChangeAc.class, UserDataAc.class);
+        acRouterMap.put(RegComuAndUserAndUserComuAc.class, SeeUserComuByUserAc.class);
         acRouterMap.put(UserDataAc.class, SeeUserComuByUserAc.class);
     }
 

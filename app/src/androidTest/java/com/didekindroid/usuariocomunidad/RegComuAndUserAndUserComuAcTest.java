@@ -6,20 +6,17 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.view.View;
 
 import com.didekindroid.R;
 import com.didekindroid.comunidad.RegComuFr;
 import com.didekindroid.comunidad.spinner.TipoViaValueObj;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.usuario.RegUserFr;
-import com.didekindroid.usuario.UsuarioBean;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
 import com.didekinlib.model.comunidad.ComunidadAutonoma;
 import com.didekinlib.model.comunidad.Municipio;
 import com.didekinlib.model.comunidad.Provincia;
-import com.didekinlib.model.usuario.Usuario;
 
 import org.junit.After;
 import org.junit.Before;
@@ -39,9 +36,7 @@ import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.typeComuni
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
-import static com.didekindroid.usuario.RegUserFr.makeUserBeanFromRegUserFrView;
 import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typeUserDataFull;
-import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.validaTypedUserData;
 import static com.didekindroid.usuario.testutil.UserItemMenuTestUtils.LOGIN_AC;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_NOTHING;
@@ -113,34 +108,11 @@ public class RegComuAndUserAndUserComuAcTest {
 
         onView(ViewMatchers.withId(R.id.reg_comu_usuario_usuariocomu_layout)).check(matches(isDisplayed()));
         onView(ViewMatchers.withId(R.id.reg_comunidad_frg)).check(matches(isDisplayed()));
-        onView(ViewMatchers.withId(R.id.tipo_via_spinner)).check(matches(isDisplayed()));
         onView(ViewMatchers.withId(R.id.reg_usercomu_frg)).check(matches(isDisplayed()));
         onView(ViewMatchers.withId(R.id.reg_user_frg)).perform(scrollTo()).check(matches(isDisplayed()));
 
         onView(ViewMatchers.withId(R.id.appbar)).perform(scrollTo()).check(matches(isDisplayed()));
         clickNavigateUp();
-    }
-
-    @Test
-    public void testMakeUsuarioBeanFromView_OK() throws Exception
-    {
-        mActivity = mActivityRule.launchActivity(new Intent());
-        // Data for Usuario.
-        typeUserDataFull("yo@email.com", "alias1", "password1", "password1");
-
-        View usuarioRegView = mActivity.findViewById(R.id.reg_user_frg);
-
-        // Test assertions about UsuarioBean.
-        UsuarioBean usuarioBean = makeUserBeanFromRegUserFrView(usuarioRegView);
-        assertThat(usuarioBean.getUserName(), is("yo@email.com"));
-        assertThat(usuarioBean.getAlias(), is("alias1"));
-        assertThat(usuarioBean.getPassword(), is("password1"));
-        assertThat(usuarioBean.getVerificaPassword(), is("password1"));
-
-        // Test assertions about Usuario.
-        usuarioBean.validate(resources, new StringBuilder(resources.getText(R.string.error_validation_msg)));
-        Usuario usuario = usuarioBean.getUsuario();
-        validaTypedUserData(usuario, "yo@email.com", "alias1", "password1");
     }
 
     @Test
@@ -158,13 +130,13 @@ public class RegComuAndUserAndUserComuAcTest {
         typeUserDataFull("yo@email.com", "alias1", "password1", "password1");
 
         // Make ComunidadBean.
-        /*ComunidadBean comunidadBean = mRegComuFrg.getComunidadBean();
-        getComunidadFromViewer(mRegComuFrg.getFragmentView(), comunidadBean);
+        /*ComunidadBean comunidadBean = regComuFr.getComunidadBean();
+        getComunidadFromViewer(regComuFr.getFragmentView(), comunidadBean);
         // Make UsuarioBean.
-        UsuarioBean usuarioBean = makeUserBeanFromRegUserFrView(mRegUserFr.getFragmentView());
+        UsuarioBean usuarioBean = getUserFromViewer(regUserFr.getFragmentView());
         // Make UsuarioComunidadBean.
         UsuarioComunidadBean usuarioComunidadBean =
-                makeUserComuBeanFromView(mRegUserComuFrg.getFragmentView(), comunidadBean, usuarioBean);
+                getUserComuFromViewer(regUserComuFr.getFragmentView(), comunidadBean, usuarioBean);
 
         // Validate UsuarioComunidadBean.
         StringBuilder errors = new StringBuilder("");
@@ -175,7 +147,7 @@ public class RegComuAndUserAndUserComuAcTest {
         UsuarioComunidad usuarioComunidad = usuarioComunidadBean.getUsuarioComunidad();
         ComuEspresoTestUtil.validaTypedComunidad(usuarioComunidad.getComunidad(), "Callejon", (short) 12, (short) 53, "nombre via One", (short) 123, "Tris");
         validaTypedUserData(usuarioComunidad.getUsuario(), "yo@email.com", "alias1", "password1");
-        validaTypedUsuarioComunidad(usuarioComunidad, "port2", "escale_b", "planta-N", "puerta5", "pre,inq");*/    // TODO: modificar y descomentar.
+        validaTypedUsuarioComunidad(usuarioComunidad, "port2", "escale_b", "planta-N", "puerta5", "pre,inq");*/
     }
 
     @Test
@@ -184,22 +156,22 @@ public class RegComuAndUserAndUserComuAcTest {
         initActivityAndFragments();
 
         // Empty ComunidadBean: no input data. ComunidadBean is not null.
-        /*ComunidadBean comunidadBean = mRegComuFrg.getComunidadBean();
+        /*ComunidadBean comunidadBean = regComuFr.getComunidadBean();
         assertThat(comunidadBean, notNullValue());
 
         // Make ComunidadBean: Comunidad is null.
-        getComunidadFromViewer(mRegComuFrg.getFragmentView(), comunidadBean);
+        getComunidadFromViewer(regComuFr.getFragmentView(), comunidadBean);
         StringBuilder errors = new StringBuilder(resources.getString(R.string.error_validation_msg));
         assertThat(comunidadBean.getComunidad(), nullValue());
 
         // Empty UsuarioBean: no input data. UsuarioBean is not null. Usuario is null.
-        UsuarioBean usuarioBean = makeUserBeanFromRegUserFrView(mRegUserFr.getFragmentView());
+        UsuarioBean usuarioBean = getUserFromViewer(regUserFr.getFragmentView());
         assertThat(usuarioBean, notNullValue());
         assertThat(usuarioBean.getUsuario(), nullValue());
 
         // Empty UsuarioComunidadBean: UsuarioBean not null. Usuario, Comunidad and UsuarioComunidad null.
         UsuarioComunidadBean usuarioComunidadBean =
-                makeUserComuBeanFromView(mRegUserComuFrg.getFragmentView(), comunidadBean, usuarioBean);
+                getUserComuFromViewer(regUserComuFr.getFragmentView(), comunidadBean, usuarioBean);
         assertThat(usuarioComunidadBean.validate(resources, errors), is(false));
         assertThat(usuarioComunidadBean, notNullValue());
         assertThat(usuarioComunidadBean.getUsuarioComunidad(), nullValue());
@@ -280,16 +252,16 @@ public class RegComuAndUserAndUserComuAcTest {
     {
         mActivity = mActivityRule.launchActivity(new Intent());
         mRegComuFrg = (RegComuFr) mActivity.getSupportFragmentManager().findFragmentById(R.id.reg_comunidad_frg);
-        mRegUserComuFrg = (RegUserComuFr) mActivity.getFragmentManager().findFragmentById(R.id
-                .reg_usercomu_frg);
-        mRegUserFr = (RegUserFr) mActivity.getFragmentManager().findFragmentById(R.id.reg_user_frg);
+        mRegUserComuFrg = (RegUserComuFr) mActivity.getSupportFragmentManager().findFragmentById(R.id.reg_usercomu_frg);
+        mRegUserFr = (RegUserFr) mActivity.getSupportFragmentManager().findFragmentById(R.id.reg_user_frg);
     }
 
-    private void helpTypeComunidadData(){
-        final ComunidadAutonoma comunidadAutonoma = new ComunidadAutonoma((short) 10, "Valencia");
-        final Provincia provincia = new Provincia((short) 12, "Castellón/Castelló");
-        final Municipio municipio = new Municipio((short) 53,"Chilches/Xilxes" ,provincia);
-        final TipoViaValueObj tipoVia = new TipoViaValueObj(54, "Callejon");
-        typeComunidadData(comunidadAutonoma, provincia, municipio, tipoVia, "nombre via One", "123", "Tris");
+    private void helpTypeComunidadData()
+    {
+        typeComunidadData(new ComunidadAutonoma((short) 10, "Valencia"),
+                new Provincia((short) 12, "Castellón/Castelló"),
+                new Municipio((short) 53, "Chilches/Xilxes", new Provincia((short) 12, "Castellón/Castelló")),
+                new TipoViaValueObj(54, "Callejon"),
+                "nombre via One", "123", "Tris");
     }
 }

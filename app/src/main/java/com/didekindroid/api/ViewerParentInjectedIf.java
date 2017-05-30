@@ -1,6 +1,7 @@
 package com.didekindroid.api;
 
 import android.support.annotation.NonNull;
+import android.view.View;
 
 /**
  * User: pedro@didekin
@@ -8,6 +9,7 @@ import android.support.annotation.NonNull;
  * Time: 14:29
  */
 
-public interface ViewerParentInjectedIf {
+public interface ViewerParentInjectedIf<T extends View,C extends ControllerIf> extends ViewerIf<T,C>{
     void setChildViewer(@NonNull ViewerIf childViewer);
+    <H extends ViewerIf> H getChildViewer(Class<H> viewerChildClass);
 }

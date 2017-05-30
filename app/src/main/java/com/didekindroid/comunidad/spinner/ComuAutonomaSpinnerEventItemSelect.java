@@ -13,11 +13,7 @@ import timber.log.Timber;
 
 public class ComuAutonomaSpinnerEventItemSelect implements SpinnerEventItemSelectIf<ComunidadAutonoma> {
 
-    private ComunidadAutonoma comunidadAutonoma;
-
-    public ComuAutonomaSpinnerEventItemSelect()
-    {
-    }
+    private final ComunidadAutonoma comunidadAutonoma;
 
     public ComuAutonomaSpinnerEventItemSelect(ComunidadAutonoma comunidadAutonoma)
     {
@@ -31,16 +27,28 @@ public class ComuAutonomaSpinnerEventItemSelect implements SpinnerEventItemSelec
         return comunidadAutonoma.getCuId();
     }
 
-    @Override
-    public void setSpinnerItemIdSelect(ComunidadAutonoma itemSelect)
-    {
-        Timber.d("setSpinnerItemIdSelect()");
-        comunidadAutonoma = new ComunidadAutonoma(itemSelect.getCuId());
-    }
-
     public ComunidadAutonoma getComunidadAutonoma()
     {
         Timber.d("getComunidadAutonoma()");
         return comunidadAutonoma;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        Timber.d("hashCode()");
+        return comunidadAutonoma.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        Timber.d("equals()");
+
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        ComuAutonomaSpinnerEventItemSelect that = (ComuAutonomaSpinnerEventItemSelect) obj;
+
+        return comunidadAutonoma.equals(that.getComunidadAutonoma());
     }
 }

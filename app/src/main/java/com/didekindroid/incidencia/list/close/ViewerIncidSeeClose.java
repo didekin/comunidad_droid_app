@@ -10,10 +10,12 @@ import android.widget.ListView;
 import android.widget.Spinner;
 
 import com.didekindroid.R;
-import com.didekindroid.api.CtrlerSelectableItemIf;
+import com.didekindroid.api.CtrlerSelectListIf;
+import com.didekindroid.api.ObserverSingleSelectItem;
+import com.didekindroid.api.ObserverSingleSelectList;
 import com.didekindroid.api.SpinnerEventItemSelectIf;
 import com.didekindroid.api.SpinnerEventListener;
-import com.didekindroid.api.ViewerSelectionList;
+import com.didekindroid.api.ViewerSelectList;
 import com.didekindroid.router.ComponentReplacerIf;
 import com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
@@ -34,7 +36,7 @@ import static com.didekindroid.util.UIutils.assertTrue;
  * Time: 11:01
  */
 public class ViewerIncidSeeClose extends
-        ViewerSelectionList<ListView, CtrlerSelectableItemIf<IncidenciaUser, Bundle>, IncidenciaUser>
+        ViewerSelectList<ListView, CtrlerSelectListIf<IncidenciaUser>, IncidenciaUser>
         implements ComponentReplacerIf, SpinnerEventListener {
 
     protected ViewerComuSpinner comuSpinnerViewer;
@@ -51,7 +53,7 @@ public class ViewerIncidSeeClose extends
     {
         Timber.d("newViewerIncidSeeClose()");
         ViewerIncidSeeClose parentInstance = new ViewerIncidSeeClose(view, activity);
-        parentInstance.setController(new CtrlerIncidSeeCloseByComu(parentInstance));
+        parentInstance.setController(new CtrlerIncidSeeCloseByComu());
         parentInstance.comuSpinnerViewer = newViewerComuSpinner((Spinner) view.findViewById(R.id.incid_reg_comunidad_spinner), activity, parentInstance);
         return parentInstance;
     }
@@ -88,18 +90,6 @@ public class ViewerIncidSeeClose extends
 
     /* ==================================  ViewerSelectionIf  =================================*/
 
-    /**
-     * comunidadesSpinner.doViewInViewer() --> comunidadesSpinner.loadItemsByEntitiyId() --> onSuccessLoadItems()
-     * --> view.setSelection() --> ComuSelectedListener --> onItemSelected() --> SpinnerEventListener.doOnClickItemId().
-     * <p>
-     * This method is called after doOnClickItemId() --> controller.loadItemsByEntitiyId() are executed.
-     */
-    public void onSuccessLoadItems(List<IncidenciaUser> itemsList)
-    {
-        Timber.d("onSuccessLoadItems()");
-        onSuccessLoadItems(itemsList, getNewViewAdapter());
-    }
-
     @Override
     public void initSelectedItemId(Bundle savedState)
     {
@@ -132,6 +122,26 @@ public class ViewerIncidSeeClose extends
         return isFound ? position : 0;
     }
 
+    /**
+     * comunidadesSpinner.doViewInViewer() --> comunidadesSpinner.loadItemsByEntitiyId() --> onSuccessLoadItemList()
+     * --> view.setSelection() --> ComuSelectedListener --> onItemSelected() --> SpinnerEventListener.doOnClickItemId().
+     * <p>
+     * This method is called after doOnClickItemId() --> controller.loadItemsByEntitiyId() are executed.
+     */
+    public void onSuccessLoadItemList(List<IncidenciaUser> itemsList)
+    {
+        Timber.d("onSuccessLoadItemList()");
+        onSuccessLoadItems(itemsList, getNewViewAdapter());
+    }
+
+
+    @Override
+    public void onSuccessLoadSelectedItem(@NonNull Bundle bundle)
+    {
+        Timber.d("onSuccessLoadSelectedItem()");
+        replaceComponent(bundle);
+    }
+
     // ==================================  ComponentReplaceIF  =================================
 
     /**
@@ -157,7 +167,7 @@ public class ViewerIncidSeeClose extends
     public void doOnClickItemId(SpinnerEventItemSelectIf spinnerEventItemSelect)
     {
         Timber.d("doOnClickItemId()");
-        controller.loadItemsByEntitiyId(spinnerEventItemSelect.getSpinnerItemIdSelect());
+        controller.loadItemsByEntitiyId(new ObserverSingleSelectList<>(this),spinnerEventItemSelect.getSpinnerItemIdSelect());
     }
 
     // ==================================  HELPERS  =================================
@@ -190,7 +200,7 @@ public class ViewerIncidSeeClose extends
             viewClick.setSelected(true);
             IncidenciaUser incidenciaUser = (IncidenciaUser) view.getItemAtPosition(position);
             itemSelectedId = incidenciaUser.getIncidencia().getIncidenciaId();
-            controller.selectItem(incidenciaUser);
+            controller.selectItem(new ObserverSingleSelectItem<>(ViewerIncidSeeClose.this), incidenciaUser);
         }
     }
 }

@@ -6,12 +6,13 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 
-import com.didekindroid.exception.UiException;
-import com.didekindroid.exception.UiExceptionIf;
+import com.didekindroid.exception.UiExceptionIf.ActionForUiExceptionIf;
 
 import java.io.Serializable;
 
 import timber.log.Timber;
+
+import static com.didekindroid.util.UIutils.getUiExceptionFromThrowable;
 
 /**
  * User: pedro@didekin
@@ -40,11 +41,12 @@ public class Viewer<T extends View, C extends ControllerIf> implements ViewerIf<
         return activity;
     }
 
+    @SuppressWarnings("ThrowableResultOfMethodCallIgnored")
     @Override
-    public UiExceptionIf.ActionForUiExceptionIf processControllerError(UiException ui)
+    public ActionForUiExceptionIf onErrorInObserver(Throwable error)
     {
-        Timber.d("processControllerError()");
-        return ui.processMe(activity, new Intent());
+        Timber.d("onErrorInObserver()");
+        return getUiExceptionFromThrowable(error).processMe(activity, new Intent());
     }
 
     @Override

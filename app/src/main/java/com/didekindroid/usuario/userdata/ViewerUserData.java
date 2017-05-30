@@ -10,8 +10,7 @@ import android.widget.EditText;
 
 import com.didekindroid.R;
 import com.didekindroid.api.Viewer;
-import com.didekindroid.exception.UiException;
-import com.didekindroid.exception.UiExceptionIf;
+import com.didekindroid.exception.UiExceptionIf.ActionForUiExceptionIf;
 import com.didekindroid.router.ComponentReplacerIf;
 import com.didekindroid.usuario.UsuarioBean;
 import com.didekindroid.util.UIutils;
@@ -20,8 +19,10 @@ import com.didekinlib.model.usuario.Usuario;
 import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicReference;
 
+import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
+import static com.didekindroid.usuario.UsuarioAssertionMsg.user_name_uID_should_be_initialized;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
 import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
 import static com.didekindroid.usuario.userdata.ViewerUserDataIf.UserChangeToMake.alias_only;
@@ -29,6 +30,7 @@ import static com.didekindroid.usuario.userdata.ViewerUserDataIf.UserChangeToMak
 import static com.didekindroid.usuario.userdata.ViewerUserDataIf.UserChangeToMake.userName;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
+import static com.didekindroid.util.UIutils.getUiExceptionFromThrowable;
 import static com.didekindroid.util.UIutils.makeToast;
 import static com.didekinlib.http.GenericExceptionMsg.BAD_REQUEST;
 
@@ -65,7 +67,7 @@ class ViewerUserData extends Viewer<View, CtrlerUserDataIf> implements ViewerUse
     {
         Timber.d("newViewerUserData()");
         ViewerUserDataIf instance = new ViewerUserData(activity.acView, activity);
-        instance.setController(new CtrlerUserData(instance));
+        instance.setController(new CtrlerUserModified());
         return instance;
     }
 
@@ -74,7 +76,15 @@ class ViewerUserData extends Viewer<View, CtrlerUserDataIf> implements ViewerUse
     {
         Timber.d("doViewInViewer()");
         assertTrue(controller.isRegisteredUser(), user_should_be_registered);
-        controller.loadUserData();
+        controller.loadUserData(new UserDataObserver<Usuario>() {
+            @Override
+            public void onSuccess(Usuario usuario)
+            {
+                Timber.d("onSuccess(), Thread for subscriber: %s", Thread.currentThread().getName());
+                assertTrue(usuario.getuId() > 0L && usuario.getUserName() != null, user_name_uID_should_be_initialized);
+                processBackUserDataLoaded(usuario);
+            }
+        });
     }
 
     @Override
@@ -186,21 +196,29 @@ class ViewerUserData extends Viewer<View, CtrlerUserDataIf> implements ViewerUse
                 return false;
             case userName:
             case alias_only:
-                return controller.modifyUser(oldUser.get(), newUser.get());
+                return controller.modifyUser(new UserDataObserver<Boolean>() {
+                    @Override
+                    public void onSuccess(Boolean isCompleted)
+                    {
+                        Timber.d("onSuccess(), isCompleted == %s", isCompleted.toString());
+                        assertTrue(isCompleted, "UserDataObserver.onSuccess() should be TRUE");
+                        replaceComponent(new Bundle());
+                    }
+                }, oldUser.get(), newUser.get());
             default:
                 return false;
         }
     }
 
     @Override
-    public UiExceptionIf.ActionForUiExceptionIf processControllerError(UiException ui)
+    public ActionForUiExceptionIf onErrorInObserver(Throwable error)
     {
-        Timber.d("processControllerError()");
-        if (ui.getErrorBean().getMessage().equals(BAD_REQUEST.getHttpMessage())) {
+        Timber.d("onErrorInObserver()");
+        if (getUiExceptionFromThrowable(error).getErrorBean().getMessage().equals(BAD_REQUEST.getHttpMessage())) {
             makeToast(activity, R.string.password_wrong);
             return null;
         }
-        return super.processControllerError(ui);
+        return super.onErrorInObserver(error);
     }
 
     @Override
@@ -208,5 +226,17 @@ class ViewerUserData extends Viewer<View, CtrlerUserDataIf> implements ViewerUse
     {
         Timber.d("initActivityWithBundle()");
         ComponentReplacerIf.class.cast(activity).replaceComponent(bundle);
+    }
+
+    // .............................. SUBSCRIBERS ..................................
+
+    abstract class UserDataObserver<T> extends DisposableSingleObserver<T> {
+
+        @Override
+        public void onError(Throwable e)
+        {
+            Timber.d("onErrorObserver(), Thread for subscriber: %s", Thread.currentThread().getName());
+            onErrorInObserver(e);
+        }
     }
 }

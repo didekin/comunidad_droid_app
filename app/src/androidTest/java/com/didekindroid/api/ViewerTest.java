@@ -1,16 +1,12 @@
 package com.didekindroid.api;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.view.View;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf;
-import com.didekindroid.router.ComponentReplacerIf;
 import com.didekinlib.http.ErrorBean;
 
 import org.junit.Before;
@@ -27,10 +23,8 @@ import static android.support.test.espresso.intent.matcher.IntentMatchers.hasFla
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
-import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_B;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekinlib.http.GenericExceptionMsg.BAD_REQUEST;
-import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -57,7 +51,7 @@ public class ViewerTest {
         activity = activityRule.getActivity();
         parentViewer = new ViewerMock<>(new View(activity), activity, null);
         viewInViewer = new View(activity);
-        viewer = new ViewerForTest(viewInViewer, activity, parentViewer);
+        viewer = new Viewer<>(viewInViewer, activity, parentViewer);
     }
 
     @Test
@@ -67,17 +61,7 @@ public class ViewerTest {
     }
 
     @Test
-    public void testReplaceComponent() throws Exception
-    {
-        assertThat(viewer, instanceOf(ComponentReplacerIf.class));
-        ComponentReplacerIf rootViewReplacer = (ComponentReplacerIf) viewer;
-        rootViewReplacer.replaceComponent(new Bundle(0));
-        onView(withId(R.id.next_mock_ac_layout)).check(matches(isDisplayed()));
-        assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_B));
-    }
-
-    @Test
-    public void testProcessControllerError() throws Exception
+    public void test_OnErrorInObserver() throws Exception
     {
         UiException uiException = new UiException(
                 new ErrorBean(BAD_REQUEST),
@@ -102,7 +86,7 @@ public class ViewerTest {
                 }
         );
 
-        viewer.processControllerError(uiException);
+        viewer.onErrorInObserver(uiException);
         onView(withId(R.id.next_mock_ac_layout)).check(matches(isDisplayed()));
         intended(hasFlag(FLAG_ACTIVITY_NEW_TASK));
     }
@@ -110,7 +94,7 @@ public class ViewerTest {
     @Test
     public void clearSubscriptions() throws Exception
     {
-        ControllerIf controller = new Controller(viewer) {
+        ControllerIf controller = new Controller() {
             @Override
             public int clearSubscriptions()
             {
@@ -132,7 +116,7 @@ public class ViewerTest {
     @Test
     public void testGetController() throws Exception
     {
-        final ControllerIf controllerLocal = new Controller(viewer);
+        final ControllerIf controllerLocal = new Controller();
         viewer.setController(controllerLocal);
         assertThat(viewer.getController(), is(controllerLocal));
     }
@@ -141,22 +125,5 @@ public class ViewerTest {
     public void setController() throws Exception
     {
         testGetController();
-    }
-
-    //    ============================  HELPERS  ===================================
-
-    static class ViewerForTest extends Viewer<View, ControllerIf> implements ComponentReplacerIf {
-
-        protected ViewerForTest(View view, Activity activity, ViewerIf parentViewer)
-        {
-            super(view, activity, parentViewer);
-        }
-
-        @Override
-        public void replaceComponent(@NonNull Bundle bundle)
-        {
-            activity.startActivity(new Intent(activity, ActivityNextMock.class));
-            assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_B), is(BEFORE_METHOD_EXEC));
-        }
     }
 }

@@ -4,13 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.didekindroid.api.Viewer;
+import com.didekindroid.api.ViewerParent;
 import com.didekindroid.router.ActivityInitiator;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 
 import java.io.Serializable;
 
+import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
@@ -23,20 +24,20 @@ import static com.didekindroid.util.UIutils.assertTrue;
  * Date: 04/04/17
  * Time: 15:06
  */
-class ViewerIncidEditAc extends Viewer<View, CtrlerIncidEditAc> {
+class ViewerIncidEditAc extends ViewerParent<View, CtrlerIncidEditAc> {
 
     private IncidImportancia incidImportancia;
 
     ViewerIncidEditAc(IncidEditAc activity)
     {
-        super(activity.acView, activity, null);
+        super(activity.acView, activity);
     }
 
     static ViewerIncidEditAc newViewerIncidEditAc(IncidEditAc activity, View frView)
     {
         Timber.d("newViewerIncidEditAc()");
         ViewerIncidEditAc instance = new ViewerIncidEditAc(activity);
-        instance.setController(new CtrlerIncidEditAc(instance));
+        instance.setController(new CtrlerIncidEditAc());
         return instance;
     }
 
@@ -52,7 +53,7 @@ class ViewerIncidEditAc extends Viewer<View, CtrlerIncidEditAc> {
     boolean checkResolucion(int resourceIdItemMn)
     {
         Timber.d("checkResolucion()");
-        return controller.seeResolucion(incidImportancia.getIncidencia().getIncidenciaId(), resourceIdItemMn);
+        return controller.seeResolucion(new ResolucionObserver(resourceIdItemMn), incidImportancia.getIncidencia().getIncidenciaId(), resourceIdItemMn);
     }
 
     void onSuccessSeeResolucion(Resolucion resolucion, int resourceIdItemMn)
@@ -65,5 +66,32 @@ class ViewerIncidEditAc extends Viewer<View, CtrlerIncidEditAc> {
         }
         activity.setIntent(intent0);
         new ActivityInitiator(activity).initActivityFromMn(resourceIdItemMn);
+    }
+
+    // .................................... HELPERS .................................
+
+    @SuppressWarnings("WeakerAccess")
+    class ResolucionObserver extends DisposableSingleObserver<Resolucion>{
+
+        private final int idItemMenu;
+
+        ResolucionObserver(int idItemMenu)
+        {
+            this.idItemMenu = idItemMenu;
+        }
+
+        @Override
+        public void onSuccess(Resolucion resolucion)
+        {
+            Timber.d("onSuccess()");
+            onSuccessSeeResolucion(resolucion, idItemMenu);
+        }
+
+        @Override
+        public void onError(Throwable e)
+        {
+            Timber.d("onError()");
+            onErrorInObserver(e);
+        }
     }
 }

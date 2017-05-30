@@ -33,7 +33,7 @@ import static com.didekindroid.incidencia.testutils.IncidUiTestUtils.checkIncidC
 import static com.didekindroid.incidencia.testutils.IncidUiTestUtils.doComunidadSpinner;
 import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
-import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptions;
+import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.incidencia.testutils.IncidUiTestUtils.isComuSpinnerWithText;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
@@ -183,7 +183,7 @@ public class IncidSeeClosedByComuAcTest {
     @Test
     public void testOnStop()
     {
-        checkSubscriptions(fragment.viewer.getController(), activity);
+        checkSubscriptionsOnStop(fragment.viewer.getController(), activity);
     }
 
     //    ===================================== HELPERS =====================================

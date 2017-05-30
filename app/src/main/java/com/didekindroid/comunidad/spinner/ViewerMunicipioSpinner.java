@@ -6,18 +6,19 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
-import com.didekindroid.api.CtrlerSelectionList;
 import com.didekindroid.api.SpinnerEventListener;
 import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ViewerSelectionList;
+import com.didekindroid.api.ViewerSelectList;
 import com.didekinlib.model.comunidad.Municipio;
+import com.didekinlib.model.comunidad.Provincia;
 
 import java.io.Serializable;
 
 import timber.log.Timber;
 
-import static com.didekindroid.comunidad.spinner.CtrlerMunicipioSpinner.newCtrlerMunicipioSpinner;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.MUNICIPIO_SPINNER_EVENT;
+import static com.didekindroid.util.CommonAssertionMsg.bean_fromView_should_be_initialized;
+import static com.didekindroid.util.UIutils.assertTrue;
 
 /**
  * User: pedro@didekin
@@ -30,8 +31,9 @@ import static com.didekindroid.comunidad.utils.ComuBundleKey.MUNICIPIO_SPINNER_E
 
 @SuppressWarnings("WeakerAccess")
 public final class ViewerMunicipioSpinner extends
-        ViewerSelectionList<Spinner, CtrlerSelectionList<Municipio>, Municipio> {
+        ViewerSelectList<Spinner, CtrlerMunicipioSpinner, Municipio> {
 
+    public final static MunicipioSpinnerEventItemSelect spinnerEvent_default = new MunicipioSpinnerEventItemSelect(new Municipio((short) 0, new Provincia((short) 0)));
     final SpinnerEventListener eventListener;
     MunicipioSpinnerEventItemSelect spinnerEvent;
 
@@ -39,17 +41,18 @@ public final class ViewerMunicipioSpinner extends
     {
         super(view, activity, parentViewer);
         eventListener = (SpinnerEventListener) parentViewer;
+        spinnerEvent = spinnerEvent_default;
     }
 
     public static ViewerMunicipioSpinner newViewerMunicipioSpinner(Spinner spinner, Activity activity, ViewerIf parentViewer)
     {
         Timber.d("newViewerMunicipioSpinner()");
         ViewerMunicipioSpinner instance = new ViewerMunicipioSpinner(spinner, activity, parentViewer);
-        instance.setController(newCtrlerMunicipioSpinner(instance));
+        instance.setController(new CtrlerMunicipioSpinner());
         return instance;
     }
 
-    // ==================================== ViewerSelectionListIf ====================================
+    // ==================================== ViewerSelectListIf ====================================
 
     @Override
     public void initSelectedItemId(Bundle savedState)
@@ -57,10 +60,8 @@ public final class ViewerMunicipioSpinner extends
         Timber.d("initSelectedItemId()");
         if (savedState != null && savedState.containsKey(MUNICIPIO_SPINNER_EVENT.key)) {
             itemSelectedId = MunicipioSpinnerEventItemSelect.class.cast(savedState.getSerializable(MUNICIPIO_SPINNER_EVENT.key)).getSpinnerItemIdSelect();
-        } else if (spinnerEvent != null && spinnerEvent.getSpinnerItemIdSelect() > 0) {
-            itemSelectedId = spinnerEvent.getSpinnerItemIdSelect();
         } else {
-            itemSelectedId = 0;
+            itemSelectedId = spinnerEvent.getSpinnerItemIdSelect();
         }
     }
 
@@ -91,7 +92,9 @@ public final class ViewerMunicipioSpinner extends
     public void doViewInViewer(Bundle savedState, Serializable viewBean)
     {
         Timber.d("doViewInViewer()");
-        spinnerEvent = viewBean != null ? MunicipioSpinnerEventItemSelect.class.cast(viewBean) : null;
+        if (viewBean != null) {
+            spinnerEvent = MunicipioSpinnerEventItemSelect.class.cast(viewBean);
+        }
         initSelectedItemId(savedState);
         view.setOnItemSelectedListener(new MunicipioSelectedListener());
         // No cargamos datos hasta saber provincia.
@@ -105,23 +108,24 @@ public final class ViewerMunicipioSpinner extends
         if (savedState == null) {
             savedState = new Bundle(1);
         }
-        if (spinnerEvent != null) {
+        if (spinnerEvent.getSpinnerItemIdSelect() > 0L) {
             savedState.putSerializable(MUNICIPIO_SPINNER_EVENT.key, spinnerEvent);
         }
     }
 
     //  ===================================== HELPERS ============================================
 
-    public void setSpinnerEvent(Municipio municipio)
-    {
-        Timber.d("getMunicipioIn()");
-        spinnerEvent.setSpinnerItemIdSelect(municipio);
-    }
-
     public MunicipioSpinnerEventItemSelect getSpinnerEvent()
     {
         Timber.d("getSpinnerEvent()");
         return spinnerEvent;
+    }
+
+    public void setSpinnerEvent(Municipio municipio)
+    {
+        Timber.d("getMunicipioIn()");
+        assertTrue(municipio.getProvincia() != null, bean_fromView_should_be_initialized);
+        spinnerEvent = new MunicipioSpinnerEventItemSelect(municipio);
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -131,7 +135,7 @@ public final class ViewerMunicipioSpinner extends
         {
             Timber.d("onItemSelected()");
             Municipio municipioIn = (Municipio) parent.getItemAtPosition(position);
-            spinnerEvent.setSpinnerItemIdSelect(municipioIn);
+            spinnerEvent = new MunicipioSpinnerEventItemSelect(municipioIn);
             itemSelectedId = spinnerEvent.getSpinnerItemIdSelect();
         }
 

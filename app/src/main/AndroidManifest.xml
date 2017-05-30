@@ -125,7 +125,7 @@
                 android:value="com.didekindroid.usuariocomunidad.UserComuDataAc"/>
         </activity>
         <activity
-            android:name="com.didekindroid.usuariocomunidad.SeeUserComuByUserAc"
+            android:name="com.didekindroid.usuariocomunidad.listbyuser.SeeUserComuByUserAc"
             android:label="@string/see_usercomu_by_user_ac_label"
             android:parentActivityName="com.didekindroid.comunidad.ComuSearchResultsAc">
             <meta-data
@@ -135,19 +135,19 @@
         <activity
             android:name="com.didekindroid.usuariocomunidad.UserComuDataAc"
             android:label="@string/usercomu_data_ac_label"
-            android:parentActivityName="com.didekindroid.usuariocomunidad.SeeUserComuByUserAc"
+            android:parentActivityName="com.didekindroid.usuariocomunidad.listbyuser.SeeUserComuByUserAc"
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.didekindroid.usuariocomunidad.SeeUserComuByUserAc"/>
+                android:value="com.didekindroid.usuariocomunidad.listbyuser.SeeUserComuByUserAc"/>
         </activity>
         <activity
             android:name=".usuario.userdata.UserDataAc"
             android:label="@string/user_data_ac_label"
-            android:parentActivityName=".usuariocomunidad.SeeUserComuByUserAc">
+            android:parentActivityName=".usuariocomunidad.listbyuser.SeeUserComuByUserAc">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".usuariocomunidad.SeeUserComuByUserAc"/>
+                android:value=".usuariocomunidad.listbyuser.SeeUserComuByUserAc"/>
         </activity>
 
         <!-- .......... GCM services ......... -->

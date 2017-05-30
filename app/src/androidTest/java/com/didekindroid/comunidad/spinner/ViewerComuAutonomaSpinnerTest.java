@@ -28,6 +28,7 @@ import timber.log.Timber;
 
 import static com.didekindroid.comunidad.repository.ComunidadDataDb.ComunidadAutonoma.NUMBER_RECORDS;
 import static com.didekindroid.comunidad.spinner.ViewerComuAutonomaSpinner.newViewerComuAutonomaSpinner;
+import static com.didekindroid.comunidad.spinner.ViewerComuAutonomaSpinner.spinnerEvent_default;
 import static com.didekindroid.comunidad.spinner.ViewerTipoViaSpinner.newViewerTipoViaSpinner;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_AUTONOMA_ID;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSavedStateWithItemSelected;
@@ -42,7 +43,6 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -132,8 +132,8 @@ public class ViewerComuAutonomaSpinnerTest {
         });
         viewer.doViewInViewer(bundle, null);
 
-        // Check comunidadIntent is null.
-        assertThat(viewer.spinnerEvent, nullValue());
+        // Check comunidadIntent is default.
+        assertThat(viewer.spinnerEvent, is(spinnerEvent_default));
         // Check call to initSelectedItemId().
         assertThat(viewer.getSelectedItemId(), allOf(
                 is(bundle.getLong(keyBundle)),
@@ -149,12 +149,12 @@ public class ViewerComuAutonomaSpinnerTest {
     public void testComuAutonomaSelectedListener()
     {
         // Initial state.
-        assertThat(viewer.spinnerEvent, nullValue());
+        assertThat(viewer.spinnerEvent, is(spinnerEvent_default));
         assertThat(viewer.getSelectedItemId(), is(0L));
 
         // Action.
         viewer.doViewInViewer(new Bundle(0), new ComuAutonomaSpinnerEventItemSelect(new ComunidadAutonoma((short) 9)));
-         /* doViewInViewer() --> loadItemsByEntitiyId() --> onSuccessLoadItems() --> view.setSelection() --> ComuAutonomaSelectedListener.onItemSelected() */
+         /* doViewInViewer() --> loadItemsByEntitiyId() --> onSuccessLoadItemList() --> view.setSelection() --> ComuAutonomaSelectedListener.onItemSelected() */
         // Check
         waitAtMost(2, SECONDS).until(getAdapter(viewer.getViewInViewer()), notNullValue());
         assertThat(viewer.getViewInViewer().getCount(), is(NUMBER_RECORDS));

@@ -11,19 +11,26 @@ import android.widget.Button;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ViewerIf;
+import com.didekindroid.api.ViewerParentInjectedIf;
 import com.didekindroid.api.ViewerParentInjectorIf;
 import com.didekindroid.comunidad.ComuSearchAc;
+import com.didekindroid.comunidad.ComunidadBean;
 import com.didekindroid.comunidad.RegComuFr;
+import com.didekindroid.comunidad.ViewerRegComuFr;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.usuariocomunidad.listbyuser.SeeUserComuByUserAc;
+import com.didekindroid.util.ConnectionUtils;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import timber.log.Timber;
 
-import static com.didekindroid.usuariocomunidad.UserComuAssertionMsg.user_and_comunidad_should_be_registered;
+import static com.didekindroid.usuariocomunidad.util.UserComuAssertionMsg.user_and_comunidad_should_be_registered;
 import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.util.UIutils.doToolBar;
+import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
+import static com.didekindroid.util.UIutils.makeToast;
 
 /**
  * Preconditions:
@@ -46,7 +53,7 @@ public class RegComuAndUserComuAc extends AppCompatActivity implements ViewerPar
         doToolBar(this, true);
 
         mRegComuFrg = (RegComuFr) getSupportFragmentManager().findFragmentById(R.id.reg_comunidad_frg);
-        mRegUserComuFrg = (RegUserComuFr) getFragmentManager().findFragmentById(R.id
+        mRegUserComuFrg = (RegUserComuFr) getSupportFragmentManager().findFragmentById(R.id
                 .reg_usercomu_frg);
 
         mRegistroButton = (Button) findViewById(R.id.reg_comu_usuariocomunidad_button);
@@ -64,9 +71,9 @@ public class RegComuAndUserComuAc extends AppCompatActivity implements ViewerPar
     {
         Timber.d("registerComuAndUserComu()");
 
-        /*ComunidadBean comunidadBean = mRegComuFrg.getComunidadBean();     TODO: modificar y descomentar.
-        ViewerRegComuFr.makeComunidadBeanFromView(mRegComuFrg.getFragmentView(), comunidadBean);
-        UsuarioComunidadBean usuarioComunidadBean = RegUserComuFr.makeUserComuBeanFromView(mRegUserComuFrg
+        /*ComunidadBean comunidadBean = regComuFr.getComunidadBean();
+        ViewerRegComuFr.makeComunidadBeanFromView(regComuFr.getFragmentView(), comunidadBean);
+        UsuarioComunidadBean usuarioComunidadBean = RegUserComuFr.getUserComuFromViewer(regUserComuFr
                 .getFragmentView(), comunidadBean, null);
 
         // Validation of data.
@@ -86,7 +93,7 @@ public class RegComuAndUserComuAc extends AppCompatActivity implements ViewerPar
     // ==================================  ViewerParentInjectorIf  =================================
 
     @Override
-    public ViewerIf getViewerAsParent()
+    public ViewerParentInjectedIf getViewerAsParent()
     {
         Timber.d("getViewerAsParent()");
         return null; // TODO.

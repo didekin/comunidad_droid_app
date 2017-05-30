@@ -3,6 +3,8 @@ package com.didekindroid.usuario.login;
 import com.didekindroid.api.ControllerIf;
 import com.didekinlib.model.usuario.Usuario;
 
+import io.reactivex.observers.DisposableSingleObserver;
+
 /**
  * User: pedro@didekin
  * Date: 29/11/16
@@ -10,11 +12,7 @@ import com.didekinlib.model.usuario.Usuario;
  */
 interface CtrlerLoginIf extends ControllerIf {
 
-    void onSuccessValidateLogin(Boolean isLoginOk);
+    boolean doDialogPositiveClick(DisposableSingleObserver<Boolean> observer, Usuario usuario);
 
-    void onSuccessDialogPositiveClick(Boolean isSendPassword);
-
-    boolean doDialogPositiveClick(Usuario usuario);
-
-    boolean validateLogin(Usuario usuario);
+    boolean validateLogin(DisposableSingleObserver<Boolean> observer, Usuario usuario);
 }

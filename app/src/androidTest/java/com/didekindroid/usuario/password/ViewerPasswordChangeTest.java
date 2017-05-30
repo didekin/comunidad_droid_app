@@ -141,7 +141,7 @@ public class ViewerPasswordChangeTest {
             @Override
             public void run()
             {
-                viewer.processControllerError(new UiException(new ErrorBean(USER_NAME_NOT_FOUND)));
+                viewer.onErrorInObserver(new UiException(new ErrorBean(USER_NAME_NOT_FOUND)));
             }
         });
         waitAtMost(3, SECONDS).until(isToastInView(R.string.username_wrong_in_login, activity));

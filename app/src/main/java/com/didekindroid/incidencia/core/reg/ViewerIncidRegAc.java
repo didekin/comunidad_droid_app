@@ -7,10 +7,8 @@ import android.view.View;
 import android.widget.Button;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ViewerParentInjectedIf;
+import com.didekindroid.api.ViewerParent;
 import com.didekindroid.incidencia.core.CtrlerIncidRegEditFr;
-import com.didekindroid.incidencia.core.ViewerIncidRegEdit;
 import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.router.ComponentReplacerIf;
 import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
@@ -33,16 +31,15 @@ import static com.didekindroid.util.UIutils.makeToast;
  * Time: 11:59
  */
 @SuppressWarnings("WeakerAccess")
-public class ViewerIncidRegAc extends ViewerIncidRegEdit implements ViewerParentInjectedIf,
-        ComponentReplacerIf {
+public class ViewerIncidRegAc extends ViewerParent<View, CtrlerIncidRegEditFr> implements
+        ComponentReplacerIf, RegIncidImportanciaCallableBack {
 
     ViewerFirebaseTokenIf viewerFirebaseToken;
-    // Since initialization depends on fragment lifecycle, it is done in the activity and fragment through the ViewerParentInjectorIf interface.
-    ViewerIncidRegFr viewerIncidRegFr;
+
 
     public ViewerIncidRegAc(IncidRegAc activity)
     {
-        super(activity.acView, activity, null);
+        super(activity.acView, activity);
     }
 
     static ViewerIncidRegAc newViewerIncidRegAc(IncidRegAc activity)
@@ -50,7 +47,7 @@ public class ViewerIncidRegAc extends ViewerIncidRegEdit implements ViewerParent
         Timber.d("newViewerIncidRegAc()");
         ViewerIncidRegAc instance = new ViewerIncidRegAc(activity);
         instance.viewerFirebaseToken = newViewerFirebaseToken(activity);
-        instance.setController(new CtrlerIncidRegEditFr(instance));
+        instance.setController(new CtrlerIncidRegEditFr());
         // We initialize viewerIncidRegFr in its associated fragment.
         return instance;
     }
@@ -79,7 +76,6 @@ public class ViewerIncidRegAc extends ViewerIncidRegEdit implements ViewerParent
     public void saveState(Bundle savedState)
     {
         Timber.d("saveState()");
-        viewerIncidRegFr.saveState(savedState);
         viewerFirebaseToken.saveState(savedState);
     }
 
@@ -97,17 +93,8 @@ public class ViewerIncidRegAc extends ViewerIncidRegEdit implements ViewerParent
             makeToast(activity, errorMsg);
             return false;
         } else {
-            return checkInternetConnected(activity) && controller.registerIncidImportancia(incidImportancia);
+            return checkInternetConnected(activity) && controller.registerIncidImportancia(new RegIncidImportanciaObserver<>(this), incidImportancia);
         }
-    }
-
-    // ==================================  ViewerParentInjectedIf  =================================
-
-    @Override
-    public void setChildViewer(@NonNull ViewerIf childViewer)
-    {
-        Timber.d("setChildViewer()");
-        viewerIncidRegFr = ViewerIncidRegFr.class.cast(childViewer);
     }
 
     // ==================================  ComponentReplacerIf  =================================
@@ -129,7 +116,7 @@ public class ViewerIncidRegAc extends ViewerIncidRegEdit implements ViewerParent
         {
             Timber.d("View.OnClickListener().onClickLinkToImportanciaUsers()");
             StringBuilder errorMsg = getErrorMsgBuilder(activity);
-            IncidImportancia incidImportancia = viewerIncidRegFr.doIncidImportanciaFromView(errorMsg);
+            IncidImportancia incidImportancia = getChildViewer(ViewerIncidRegFr.class).doIncidImportanciaFromView(errorMsg);
             registerIncidencia(incidImportancia, errorMsg);
         }
     }

@@ -92,7 +92,7 @@ public class ViewerAmbitoIncidSpinnerTest {
             @Override
             public void run()
             {
-                viewer.onSuccessLoadItems(ambitos);
+                viewer.onSuccessLoadItemList(ambitos);
                 isExec.compareAndSet(false, true);
             }
         });

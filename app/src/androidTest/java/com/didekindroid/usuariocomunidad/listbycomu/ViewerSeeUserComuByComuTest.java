@@ -10,6 +10,7 @@ import android.widget.ListView;
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComunidadBean;
 import com.didekindroid.exception.UiException;
+import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.junit.After;
@@ -22,6 +23,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+
+import io.reactivex.observers.DisposableSingleObserver;
 
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -136,7 +139,7 @@ public class ViewerSeeUserComuByComuTest {
             }
 
             @Override
-            boolean comunidadData(long comunidadId)
+            boolean comunidadData(DisposableSingleObserver<Comunidad> observer, long comunidadId)
             {
                 assertThat(flagMethod2.getAndSet(AFTER_METHOD_EXEC_B), is(BEFORE_METHOD_EXEC));
                 return true;

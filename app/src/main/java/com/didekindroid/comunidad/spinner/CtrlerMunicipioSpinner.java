@@ -1,11 +1,6 @@
 package com.didekindroid.comunidad.spinner;
 
-import android.app.Activity;
-import android.widget.AdapterView;
-
-import com.didekindroid.api.CtrlerSelectionList;
-import com.didekindroid.api.SingleObserverSelectionList;
-import com.didekindroid.api.ViewerSelectionList;
+import com.didekindroid.api.CtrlerSelectList;
 import com.didekindroid.comunidad.repository.ComunidadDbHelper;
 import com.didekinlib.model.comunidad.Municipio;
 
@@ -13,6 +8,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import io.reactivex.Single;
+import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
 import static com.didekindroid.util.UIutils.assertTrue;
@@ -25,29 +21,20 @@ import static io.reactivex.schedulers.Schedulers.io;
  * Time: 16:32
  */
 
-class CtrlerMunicipioSpinner extends CtrlerSelectionList<Municipio> {
+@SuppressWarnings("WeakerAccess")
+public class CtrlerMunicipioSpinner extends CtrlerSelectList<Municipio> {
 
-    CtrlerMunicipioSpinner(ViewerSelectionList<? extends AdapterView, CtrlerSelectionList<Municipio>, Municipio> viewer)
-    {
-        super(viewer);
-    }
-
-    static CtrlerMunicipioSpinner newCtrlerMunicipioSpinner(ViewerMunicipioSpinner viewer)
-    {
-        Timber.d("newCtrlerMunicipioSpinner()");
-        return new CtrlerMunicipioSpinner(viewer);
-    }
 
     // .................................... OBSERVABLE .......................................
 
-    static Single<List<Municipio>> municipiosByProvincia(final Activity activity, final short provinciaId)
+    Single<List<Municipio>> municipiosByProvincia(final short provinciaId)
     {
         Timber.d("municipiosByProvincia()");
         return Single.fromCallable((new Callable<List<Municipio>>() {
             @Override
             public List<Municipio> call() throws Exception
             {
-                ComunidadDbHelper dbHelper = new ComunidadDbHelper(activity);
+                ComunidadDbHelper dbHelper = new ComunidadDbHelper(getIdentityCacher().getContext());
                 List<Municipio> municipios = dbHelper.getMunicipioByProvincia(provinciaId);
                 dbHelper.close();
                 return municipios;
@@ -55,17 +42,19 @@ class CtrlerMunicipioSpinner extends CtrlerSelectionList<Municipio> {
         }));
     }
 
-    // .................................... INSTANCE METHODS .....................................
-
     @Override
-    public boolean loadItemsByEntitiyId(Long... entityId)
+    public boolean loadItemsByEntitiyId(DisposableSingleObserver<List<Municipio>> observer, Long... entityId)
     {
         Timber.d("loadItemsByEntitiyId()");
         assertTrue(entityId.length > 0, "length should be greater than zero");
-        return subscriptions.add(municipiosByProvincia(viewer.getActivity(), entityId[0].shortValue())
+        return subscriptions.add(municipiosByProvincia(entityId[0].shortValue())
                 .subscribeOn(io())
                 .observeOn(mainThread())
-                .subscribeWith(new SingleObserverSelectionList<>(this))
+                .subscribeWith(observer)
         );
     }
+
+    // .................................... INSTANCE METHODS .....................................
+
+
 }

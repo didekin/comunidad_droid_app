@@ -1,5 +1,6 @@
 package com.didekindroid.usuario.delete;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -7,17 +8,20 @@ import android.view.View;
 import android.widget.Button;
 
 import com.didekindroid.R;
-import com.didekindroid.router.ComponentReplacerIf;
 import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.router.ActivityRouter;
+import com.didekindroid.router.ComponentReplacerIf;
 
+import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
+import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_have_been_deleted;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.doToolBar;
+import static com.didekindroid.util.UIutils.getUiExceptionFromThrowable;
 
 /**
  * Preconditions:
@@ -46,7 +50,7 @@ public class DeleteMeAc extends AppCompatActivity implements ComponentReplacerIf
             public void onClick(View v)
             {
                 Timber.d("mUnregisterButton.OnClickListener().onClickLinkToImportanciaUsers()");
-                controller.deleteMeRemote();
+                controller.deleteMeRemote(new DeleteMeSingleObserver());
             }
         });
     }
@@ -57,7 +61,7 @@ public class DeleteMeAc extends AppCompatActivity implements ComponentReplacerIf
         Timber.d("onStart()");
         super.onStart();
         // Controller initialization.
-        controller = new CtrlerDeleteMe(this);
+        controller = new CtrlerDeleteMe();
         // Preconditions.
         assertTrue(controller.isRegisteredUser(), user_should_be_registered);
     }
@@ -94,6 +98,27 @@ public class DeleteMeAc extends AppCompatActivity implements ComponentReplacerIf
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    // .............................. HELPERS ..................................
+
+    class DeleteMeSingleObserver extends DisposableSingleObserver<Boolean> {
+
+        @Override
+        public void onSuccess(Boolean isDeleted)
+        {
+            Timber.d("onSuccess(), Thread: %s", Thread.currentThread().getName());
+            assertTrue(isDeleted, user_should_have_been_deleted);
+            replaceComponent(new Bundle());
+        }
+
+        @SuppressWarnings("ThrowableResultOfMethodCallIgnored")
+        @Override
+        public void onError(Throwable e)
+        {
+            Timber.d("onErrorObserver, Thread: %s", Thread.currentThread().getName());
+            getUiExceptionFromThrowable(e).processMe(DeleteMeAc.this, new Intent());
         }
     }
 }

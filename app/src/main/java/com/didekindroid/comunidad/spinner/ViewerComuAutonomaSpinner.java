@@ -6,17 +6,16 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
-import com.didekindroid.api.CtrlerSelectionList;
+import com.didekindroid.api.ObserverSingleSelectList;
 import com.didekindroid.api.SpinnerEventListener;
 import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ViewerSelectionList;
+import com.didekindroid.api.ViewerSelectList;
 import com.didekinlib.model.comunidad.ComunidadAutonoma;
 
 import java.io.Serializable;
 
 import timber.log.Timber;
 
-import static com.didekindroid.comunidad.spinner.CtrlerComAutonomaSpinner.newCtrlerComAutonomaSpinner;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_AUTONOMA_ID;
 
 /**
@@ -27,7 +26,9 @@ import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_AUTONOMA_
 
 @SuppressWarnings("WeakerAccess")
 public final class ViewerComuAutonomaSpinner extends
-        ViewerSelectionList<Spinner, CtrlerSelectionList<ComunidadAutonoma>, ComunidadAutonoma> {
+        ViewerSelectList<Spinner, CtrlerComAutonomaSpinner, ComunidadAutonoma> {
+
+    static final ComuAutonomaSpinnerEventItemSelect spinnerEvent_default = new ComuAutonomaSpinnerEventItemSelect(new ComunidadAutonoma((short) 0));
 
     final SpinnerEventListener eventListener;
     ComuAutonomaSpinnerEventItemSelect spinnerEvent;
@@ -36,17 +37,18 @@ public final class ViewerComuAutonomaSpinner extends
     {
         super(view, activity, parentViewer);
         eventListener = (SpinnerEventListener) parentViewer;
+        spinnerEvent = spinnerEvent_default;
     }
 
     public static ViewerComuAutonomaSpinner newViewerComuAutonomaSpinner(Spinner spinner, Activity activity, ViewerIf parentViewer)
     {
         Timber.d("newViewerComuAutonomaSpinner()");
         ViewerComuAutonomaSpinner instance = new ViewerComuAutonomaSpinner(spinner, activity, parentViewer);
-        instance.setController(newCtrlerComAutonomaSpinner(instance));
+        instance.setController(new CtrlerComAutonomaSpinner());
         return instance;
     }
 
-    // ==================================== ViewerSelectionListIf ====================================
+    // ==================================== ViewerSelectListIf ====================================
 
     @Override
     public void initSelectedItemId(Bundle savedState)
@@ -54,10 +56,8 @@ public final class ViewerComuAutonomaSpinner extends
         Timber.d("initSelectedItemId()");
         if (savedState != null && savedState.containsKey(COMUNIDAD_AUTONOMA_ID.key)) {
             itemSelectedId = savedState.getLong(COMUNIDAD_AUTONOMA_ID.key, 0);
-        } else if (spinnerEvent != null && spinnerEvent.getSpinnerItemIdSelect() > 0) {
-            itemSelectedId = spinnerEvent.getSpinnerItemIdSelect();
         } else {
-            itemSelectedId = 0;
+            itemSelectedId = spinnerEvent.getSpinnerItemIdSelect();
         }
     }
 
@@ -67,10 +67,12 @@ public final class ViewerComuAutonomaSpinner extends
     public void doViewInViewer(Bundle savedState, Serializable viewBean)
     {
         Timber.d("doViewInViewer()");
-        spinnerEvent = viewBean != null ? ComuAutonomaSpinnerEventItemSelect.class.cast(viewBean) : null;
+        if (viewBean != null) {
+            spinnerEvent = ComuAutonomaSpinnerEventItemSelect.class.cast(viewBean);
+        }
         initSelectedItemId(savedState);
         view.setOnItemSelectedListener(new ComuAutonomaSelectedListener());
-        CtrlerSelectionList.class.cast(controller).loadItemsByEntitiyId();
+        CtrlerComAutonomaSpinner.class.cast(controller).loadItemsByEntitiyId(new ObserverSingleSelectList<>(this));
     }
 
     @Override
@@ -92,7 +94,7 @@ public final class ViewerComuAutonomaSpinner extends
         {
             Timber.d("onItemSelected()");
             ComunidadAutonoma comuAutonomaIn = (ComunidadAutonoma) parent.getItemAtPosition(position);
-            spinnerEvent.setSpinnerItemIdSelect(comuAutonomaIn);
+            spinnerEvent = new ComuAutonomaSpinnerEventItemSelect(comuAutonomaIn);
             itemSelectedId = spinnerEvent.getSpinnerItemIdSelect();
             // Event passed to parent viewer for futher action.
             eventListener.doOnClickItemId(spinnerEvent);

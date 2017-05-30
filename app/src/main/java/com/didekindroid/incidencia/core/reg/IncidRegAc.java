@@ -7,6 +7,7 @@ import android.view.View;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ViewerIf;
+import com.didekindroid.api.ViewerParentInjectedIf;
 import com.didekindroid.api.ViewerParentInjectorIf;
 
 import timber.log.Timber;
@@ -65,7 +66,7 @@ public class IncidRegAc extends AppCompatActivity implements ViewerParentInjecto
     // ==================================  ViewerParentInjectorIf  =================================
 
     @Override
-    public ViewerIncidRegAc getViewerAsParent()
+    public ViewerParentInjectedIf getViewerAsParent()
     {
         Timber.d("getViewerAsParent()");
         return viewer;

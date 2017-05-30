@@ -1,13 +1,9 @@
 package com.didekindroid.incidencia.list.open;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 
 import com.didekindroid.api.Controller;
-import com.didekindroid.api.CtrlerSelectableItemIf;
-import com.didekindroid.api.ObserverMaybeList;
-import com.didekindroid.api.ObserverSingleSelectedItem;
-import com.didekindroid.security.IdentityCacher;
+import com.didekindroid.api.CtrlerSelectListIf;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
@@ -15,15 +11,14 @@ import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import io.reactivex.Maybe;
 import io.reactivex.Single;
 import io.reactivex.functions.Function;
+import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
-import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static io.reactivex.Single.fromCallable;
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
@@ -36,23 +31,13 @@ import static io.reactivex.schedulers.Schedulers.io;
  */
 @SuppressWarnings({"WeakerAccess", "AnonymousInnerClassMayBeStatic", "TypeMayBeWeakened"})
 class CtrlerIncidSeeOpenByComu extends Controller implements
-        CtrlerSelectableItemIf<IncidenciaUser, Bundle> {
-
-    CtrlerIncidSeeOpenByComu(ViewerIncidSeeOpen incidViewer)
-    {
-        this(incidViewer, TKhandler);
-    }
-
-    CtrlerIncidSeeOpenByComu(ViewerIncidSeeOpen viewer, IdentityCacher identityCacher)
-    {
-        super(viewer, identityCacher);
-    }
+        CtrlerSelectListIf<IncidenciaUser> {
 
     /* .................................... OBSERVABLES .................................*/
 
-    static Maybe<List<IncidenciaUser>> incidOpenList(final long comunidadId)
+    static Single<List<IncidenciaUser>> incidOpenList(final long comunidadId)
     {
-        return Maybe.fromCallable(new Callable<List<IncidenciaUser>>() {
+        return Single.fromCallable(new Callable<List<IncidenciaUser>>() {
             @Override
             public List<IncidenciaUser> call() throws Exception
             {
@@ -84,42 +69,28 @@ class CtrlerIncidSeeOpenByComu extends Controller implements
     // .................................... INSTANCE METHODS .................................
 
     @Override
-    public boolean loadItemsByEntitiyId(Long... comunidadId)
+    public boolean loadItemsByEntitiyId(DisposableSingleObserver<List<IncidenciaUser>> observer, Long... entityId)
     {
         Timber.d("loadItemsByEntitiyId()");
-        assertTrue(comunidadId[0] > 0L, "Comunidad ID should be greater than 0");
+        assertTrue(entityId[0] > 0L, "Comunidad ID should be greater than 0");
         return subscriptions.add(
-                incidOpenList(comunidadId[0])
+                incidOpenList(entityId[0])
                         .subscribeOn(io())
                         .observeOn(mainThread())
-                        .subscribeWith(new ObserverMaybeList<>(this))
+                        .subscribeWith(observer)
         );
     }
 
     @Override
-    public void onSuccessLoadItemsInList(List<IncidenciaUser> incidOpenList)
-    {
-        Timber.d("onSuccessLoadItemsInList()");
-        ViewerIncidSeeOpen.class.cast(viewer).onSuccessLoadItems(incidOpenList);
-    }
-
-    @Override
-    public boolean selectItem(@NonNull IncidenciaUser incidenciaUser)
+    public boolean selectItem(DisposableSingleObserver<Bundle> observer, IncidenciaUser item)
     {
         Timber.d("selectItem()");
-        final Incidencia incidencia = incidenciaUser.getIncidencia();
+        final Incidencia incidencia = item.getIncidencia();
         return subscriptions.add(
                 incidImportancia(incidencia)
                         .subscribeOn(io())
                         .observeOn(mainThread())
-                        .subscribeWith(new ObserverSingleSelectedItem<>(this))
+                        .subscribeWith(observer)
         );
-    }
-
-    @Override
-    public void onSuccessSelectedItem(@NonNull Bundle bundle)
-    {
-        Timber.d("onSuccessSelectedItem()");
-        ViewerIncidSeeOpen.class.cast(viewer).replaceComponent(bundle);
     }
 }

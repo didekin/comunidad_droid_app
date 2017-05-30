@@ -9,29 +9,23 @@ import android.view.View;
 import android.widget.Button;
 
 import com.didekindroid.R;
-import com.didekindroid.comunidad.ComunidadBean;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.router.ActivityRouter;
 import com.didekindroid.security.IdentityCacher;
-import com.didekindroid.usuariocomunidad.listbycomu.SeeUserComuByComuAc;
-import com.didekindroid.util.ConnectionUtils;
-import com.didekindroid.util.UIutils;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import timber.log.Timber;
 
-import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
-import static com.didekindroid.usuariocomunidad.UserComuAssertionMsg.user_and_comunidad_should_be_registered;
+import static com.didekindroid.usuariocomunidad.util.UserComuAssertionMsg.user_and_comunidad_should_be_registered;
 import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.util.UIutils.doToolBar;
 import static com.didekindroid.util.UIutils.makeToast;
-import static com.didekinlib.model.common.dominio.ValidDataPatterns.LINE_BREAK;
 
 /**
  * User: pedro@didekin
@@ -72,7 +66,7 @@ public class RegUserComuAc extends AppCompatActivity {
 
         setContentView(R.layout.reg_usercomu_ac);
         doToolBar(this, true);
-        mRegUserComuFr = (RegUserComuFr) getFragmentManager().findFragmentById(R.id.reg_usercomu_frg);
+        mRegUserComuFr = (RegUserComuFr) getSupportFragmentManager().findFragmentById(R.id.reg_usercomu_frg);
 
         Button mRegisterButton = (Button) findViewById(R.id.reg_usercomu_button);
         mRegisterButton.setOnClickListener(new View.OnClickListener() {
@@ -90,7 +84,7 @@ public class RegUserComuAc extends AppCompatActivity {
         Timber.d("doOnclick()");
 
         // We don't need the user: it is already registered. As to comunidad, it is enough with its id in DB.
-        UsuarioComunidadBean usuarioComunidadBean = RegUserComuFr.makeUserComuBeanFromView(
+        /*UsuarioComunidadBean usuarioComunidadBean = ViewerRegUserComuFr.getUserComuFromViewer(
                 mRegUserComuFr.getFragmentView(),
                 new ComunidadBean(mComunidad.getC_Id(),
                         null, null, null, null, null),
@@ -109,7 +103,7 @@ public class RegUserComuAc extends AppCompatActivity {
             Intent intent = new Intent(this, SeeUserComuByComuAc.class);
             intent.putExtra(COMUNIDAD_ID.key, mComunidad.getC_Id());
             startActivity(intent);
-        }
+        }*/
     }
 
 

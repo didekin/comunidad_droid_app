@@ -207,7 +207,7 @@ public class CtrlerIncidSeeOpenByComuTest {
         }
 
         @Override
-        public void onSuccessLoadItems(List<IncidenciaUser> itemsList)
+        public void onSuccessLoadItemList(List<IncidenciaUser> itemsList)
         {
             assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_D), is(BEFORE_METHOD_EXEC));
         }

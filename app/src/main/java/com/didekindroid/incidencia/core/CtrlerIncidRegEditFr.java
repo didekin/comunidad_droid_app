@@ -1,16 +1,15 @@
 package com.didekindroid.incidencia.core;
 
 import com.didekindroid.api.Controller;
-import com.didekindroid.security.IdentityCacher;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 
+import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
 import static com.didekindroid.incidencia.IncidObservable.incidImportanciaModified;
 import static com.didekindroid.incidencia.IncidObservable.incidImportanciaRegistered;
 import static com.didekindroid.incidencia.IncidObservable.incidenciaDeleted;
-import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 import static io.reactivex.schedulers.Schedulers.io;
 
@@ -21,80 +20,45 @@ import static io.reactivex.schedulers.Schedulers.io;
  */
 public class CtrlerIncidRegEditFr extends Controller {
 
-    @SuppressWarnings("WeakerAccess")
-    ViewerIncidRegEdit viewerIncidRegEdit;
-
-    public CtrlerIncidRegEditFr(ViewerIncidRegEdit viewer)
-    {
-        this(viewer, TKhandler);
-    }
-
-    private CtrlerIncidRegEditFr(ViewerIncidRegEdit viewer, IdentityCacher identityCacher)
-    {
-        super(viewer, identityCacher);
-        viewerIncidRegEdit = viewer;
-    }
-
     // .................................... INSTANCE METHODS .................................
 
-    public boolean registerIncidImportancia(IncidImportancia incidImportancia)
+    public boolean registerIncidImportancia(DisposableSingleObserver<Integer> observer, IncidImportancia incidImportancia)
     {
         Timber.d("registerIncidImportancia()");
         return subscriptions.add(
                 incidImportanciaRegistered(incidImportancia)
                         .subscribeOn(io())
                         .observeOn(mainThread())
-                        .subscribeWith(new IncidRegEditObserver(this) {
-                            @Override
-                            public void onSuccess(Integer rowInserted)
-                            {
-                                Timber.d("onSuccess()");
-                                viewerIncidRegEdit.onSuccessRegisterIncidImportancia(rowInserted);
-                            }
-                        })
+                        .subscribeWith(observer)
         );
     }
 
-    public boolean modifyIncidImportancia(IncidImportancia newIncidImportancia)
+    public boolean modifyIncidImportancia(DisposableSingleObserver<Integer> observer, IncidImportancia newIncidImportancia)
     {
         Timber.d("modifyIncidImportancia()");
         return subscriptions.add(
                 incidImportanciaModified(newIncidImportancia)
                         .subscribeOn(io())
                         .observeOn(mainThread())
-                        .subscribeWith(new IncidRegEditObserver(this) {
-                            @Override
-                            public void onSuccess(Integer rowsModified)
-                            {
-                                Timber.d("onSuccess()");
-                                viewerIncidRegEdit.onSuccessModifyIncidImportancia(rowsModified);
-                            }
-                        })
+                        .subscribeWith(observer)
         );
     }
 
-    public boolean eraseIncidencia(Incidencia incidencia)
+    public boolean eraseIncidencia(DisposableSingleObserver<Integer> observer, Incidencia incidencia)
     {
         Timber.d("eraseIncidencia()");
         return subscriptions.add(
                 incidenciaDeleted(incidencia)
                         .subscribeOn(io())
                         .observeOn(mainThread())
-                        .subscribeWith(new IncidRegEditObserver(this) {
-                            @Override
-                            public void onSuccess(Integer rowsDeleted)
-                            {
-                                Timber.d("onSuccess()");
-                                viewerIncidRegEdit.onSuccessEraseIncidencia(rowsDeleted);
-                            }
-                        })
+                        .subscribeWith(observer)
         );
     }
 
     public String getAmbitoIncidDesc(short ambitoId)
     {
         Timber.d("getAmbitoIncidDesc()");
-        IncidenciaDataDbHelper dbHelper = new IncidenciaDataDbHelper(viewer.getActivity());
+        IncidenciaDataDbHelper dbHelper = new IncidenciaDataDbHelper(getIdentityCacher().getContext());
         String ambitoDesc = dbHelper.getAmbitoDescByPk(ambitoId);
         dbHelper.close();
         return ambitoDesc;

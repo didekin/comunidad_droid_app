@@ -7,9 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.didekindroid.R;
-import com.didekindroid.api.Viewer;
-import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ViewerParentInjectedIf;
+import com.didekindroid.api.ViewerParent;
 import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.router.ComponentReplacerIf;
 import com.didekindroid.util.ConnectionUtils;
@@ -17,8 +15,10 @@ import com.didekinlib.model.comunidad.Comunidad;
 
 import java.io.Serializable;
 
+import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
+import static com.didekindroid.comunidad.utils.ComunidadAssertionMsg.comuData_should_be_modified;
 import static com.didekindroid.comunidad.utils.ComunidadAssertionMsg.comunidadId_should_be_initialized;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
@@ -29,24 +29,18 @@ import static com.didekindroid.util.UIutils.makeToast;
  * Date: 08/05/17
  * Time: 14:09
  */
-class ViewerComuDataAc extends Viewer<View, CtrlerComuDataAc> implements ComponentReplacerIf,
-        ViewerParentInjectedIf {
-
-    // Since initialization depends on fragment lifecycle, it is done in the activity and
-    // in the fragment through the ViewerParentInjectorIf interface.
-    @SuppressWarnings("WeakerAccess")
-    ViewerRegComuFr viewerRegComuFr;
+class ViewerComuDataAc extends ViewerParent<View, CtrlerComuDataAc> implements ComponentReplacerIf {
 
     ViewerComuDataAc(View view, Activity activity)
     {
-        super(view, activity, null);
+        super(view, activity);
     }
 
     static ViewerComuDataAc newViewerComuDataAc(@NonNull ComuDataAc activity)
     {
         Timber.d("newViewerComuDataAc()");
         ViewerComuDataAc instance = new ViewerComuDataAc(activity.acView, activity);
-        instance.setController(new CtrlerComuDataAc(instance));
+        instance.setController(new CtrlerComuDataAc());
         // We initialize viewerRegComuFr in its associated fragment.
         return instance;
     }
@@ -69,15 +63,6 @@ class ViewerComuDataAc extends Viewer<View, CtrlerComuDataAc> implements Compone
     {
         Timber.d("replaceComponent()");
         new ActivityInitiator(activity).initActivityWithBundle(bundle);
-    }
-
-    // ==================================  ViewerParentInjectedIf  =================================
-
-    @Override
-    public void setChildViewer(@NonNull ViewerIf childViewer)
-    {
-        Timber.d("setChildViewer()");
-        viewerRegComuFr = ViewerRegComuFr.class.cast(childViewer);
     }
 
     // ==================================  HELPERS =================================
@@ -103,7 +88,7 @@ class ViewerComuDataAc extends Viewer<View, CtrlerComuDataAc> implements Compone
         {
             Timber.d("onClick()");
             StringBuilder errorBuilder = getErrorMsgBuilder(activity);
-            Comunidad comunidadFromViewer = viewerRegComuFr.getComunidadFromViewer(errorBuilder);
+            Comunidad comunidadFromViewer = getChildViewer(ViewerRegComuFr.class).getComunidadFromViewer(errorBuilder);
             if (comunidadFromViewer == null) {
                 makeToast(activity, errorBuilder.toString());
             } else if (!ConnectionUtils.isInternetConnected(activity)) {
@@ -113,8 +98,27 @@ class ViewerComuDataAc extends Viewer<View, CtrlerComuDataAc> implements Compone
                         .c_id(comunidadIn.getC_Id())
                         .copyComunidadNonNullValues(comunidadFromViewer)
                         .build();
-                controller.modifyComunidadData(comunidadOut);
+                controller.modifyComunidadData(new ComuDataAcObserver(), comunidadOut);
             }
+        }
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    class ComuDataAcObserver extends DisposableSingleObserver<Integer> {
+
+        @Override
+        public void onSuccess(Integer rowsUpdated)
+        {
+            Timber.d("onSuccess()");
+            assertTrue(rowsUpdated == 1, comuData_should_be_modified);
+            onSuccessModifyComunidad();
+        }
+
+        @Override
+        public void onError(Throwable e)
+        {
+            Timber.d("onError()");
+            onErrorInObserver(e);
         }
     }
 }

@@ -1,8 +1,6 @@
 package com.didekindroid.usuariocomunidad.listbycomu;
 
-import com.didekindroid.api.Controller;
-import com.didekindroid.api.CtrlerSelectionListIf;
-import com.didekindroid.api.SingleObserverSelectionList;
+import com.didekindroid.api.CtrlerSelectList;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
@@ -24,17 +22,7 @@ import static io.reactivex.schedulers.Schedulers.io;
  * Time: 10:59
  */
 @SuppressWarnings({"AnonymousInnerClassMayBeStatic"})
-class CtrlerUserComuByComuList extends Controller implements
-        CtrlerSelectionListIf<UsuarioComunidad> {
-
-    @SuppressWarnings("WeakerAccess")
-    final ViewerSeeUserComuByComu viewerList;
-
-    CtrlerUserComuByComuList(ViewerSeeUserComuByComu viewer)
-    {
-        super(viewer);
-        viewerList = viewer;
-    }
+class CtrlerUserComuByComuList extends CtrlerSelectList<UsuarioComunidad> {
 
     // .................................... OBSERVABLES .................................
 
@@ -65,46 +53,25 @@ class CtrlerUserComuByComuList extends Controller implements
     // .................................... INSTANCE METHODS .................................
 
     @Override
-    public boolean loadItemsByEntitiyId(final Long... entityId)
+    public boolean loadItemsByEntitiyId(DisposableSingleObserver<List<UsuarioComunidad>> observer, Long... entityId)
     {
         Timber.d("loadItemsByEntitiyId()");
         return subscriptions.add(
                 listByEntityId(entityId[0])
                         .subscribeOn(io())
                         .observeOn(mainThread())
-                        .subscribeWith(new SingleObserverSelectionList<>(this))
+                        .subscribeWith(observer)
         );
     }
 
-    @Override
-    public void onSuccessLoadItemsInList(List<UsuarioComunidad> itemList)
-    {
-        Timber.d("onSuccessLoadItemsInList()");
-        viewerList.onSuccessLoadItems(itemList);
-    }
-
-    boolean comunidadData(long comunidadId)
+    boolean comunidadData(DisposableSingleObserver<Comunidad> observer, long comunidadId)
     {
         Timber.d("getNombreComunidad()");
         return subscriptions.add(
                 comunidad(comunidadId)
                         .subscribeOn(io())
                         .observeOn(mainThread())
-                        .subscribeWith(new DisposableSingleObserver<Comunidad>() {
-                            @Override
-                            public void onSuccess(Comunidad comunidad)
-                            {
-                                Timber.d("onSuccess()");
-                                viewerList.onSuccessComunidadData(comunidad.getNombreComunidad());
-                            }
-
-                            @Override
-                            public void onError(Throwable e)
-                            {
-                                Timber.d("onErrorCtrl()");
-                                onErrorCtrl(e);
-                            }
-                        })
+                        .subscribeWith(observer)
         );
     }
 }

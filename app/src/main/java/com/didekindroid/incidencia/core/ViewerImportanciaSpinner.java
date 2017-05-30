@@ -7,11 +7,13 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
-import com.didekindroid.api.CtrlerSelectionList;
+import com.didekindroid.R;
+import com.didekindroid.api.CtrlerSelectList;
 import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ViewerSelectionList;
+import com.didekindroid.api.ViewerSelectList;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 import timber.log.Timber;
 
@@ -24,12 +26,12 @@ import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA
  */
 
 public final class ViewerImportanciaSpinner extends
-        ViewerSelectionList<Spinner, CtrlerSelectionList<String>, String> {
+        ViewerSelectList<Spinner, CtrlerSelectList<String>, String> {
 
     @SuppressWarnings("WeakerAccess")
     IncidImportanciaBean bean;
 
-    ViewerImportanciaSpinner(@NonNull Spinner view, @NonNull Activity activity, @NonNull ViewerIf parentViewer)
+    private ViewerImportanciaSpinner(@NonNull Spinner view, @NonNull Activity activity, @NonNull ViewerIf parentViewer)
     {
         super(view, activity, parentViewer);
     }
@@ -37,12 +39,10 @@ public final class ViewerImportanciaSpinner extends
     public static ViewerImportanciaSpinner newViewerImportanciaSpinner(@NonNull Spinner view, @NonNull Activity activity, @NonNull ViewerIf parentViewer)
     {
         Timber.d("newViewerImportanciaSpinner()");
-        ViewerImportanciaSpinner instance = new ViewerImportanciaSpinner(view, activity, parentViewer);
-        instance.setController(new CtrlerImportanciaSpinner(instance));
-        return instance;
+        return new ViewerImportanciaSpinner(view, activity, parentViewer);
     }
 
-    // ==================================== ViewerSelectionListIf ====================================
+    // ==================================== ViewerSelectListIf ====================================
 
     @Override
     public void initSelectedItemId(Bundle savedState)
@@ -67,7 +67,8 @@ public final class ViewerImportanciaSpinner extends
         bean = IncidImportanciaBean.class.cast(viewBean);
         view.setOnItemSelectedListener(new ImportanciaSelectedListener());
         initSelectedItemId(savedState);
-        CtrlerSelectionList.class.cast(controller).loadItemsByEntitiyId();
+        onSuccessLoadItemList(Arrays.asList(activity.getResources().getStringArray(R.array.IncidImportanciaArray)));
+        // TODO: testar en viewer carga del array anterior.
     }
 
     @Override

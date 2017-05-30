@@ -2,6 +2,8 @@ package com.didekindroid.usuario.delete;
 
 import com.didekindroid.api.ControllerIf;
 
+import io.reactivex.observers.DisposableSingleObserver;
+
 /**
  * User: pedro@didekin
  * Date: 23/12/16
@@ -9,7 +11,5 @@ import com.didekindroid.api.ControllerIf;
  */
 interface CtrlerDeleteMeIf extends ControllerIf {
 
-    boolean deleteMeRemote();
-
-    void onSuccessDeleteMeRemote(boolean isDeleted);
+    boolean deleteMeRemote(DisposableSingleObserver<Boolean> observer);
 }

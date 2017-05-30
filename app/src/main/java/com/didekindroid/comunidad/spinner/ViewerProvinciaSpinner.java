@@ -6,17 +6,16 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
-import com.didekindroid.api.CtrlerSelectionList;
 import com.didekindroid.api.SpinnerEventListener;
 import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ViewerSelectionList;
+import com.didekindroid.api.ViewerSelectList;
+import com.didekinlib.model.comunidad.ComunidadAutonoma;
 import com.didekinlib.model.comunidad.Provincia;
 
 import java.io.Serializable;
 
 import timber.log.Timber;
 
-import static com.didekindroid.comunidad.spinner.CtrlerProvinciaSpinner.newCtrlerProvinciaSpinner;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.PROVINCIA_ID;
 
 /**
@@ -26,8 +25,10 @@ import static com.didekindroid.comunidad.utils.ComuBundleKey.PROVINCIA_ID;
  */
 @SuppressWarnings("WeakerAccess")
 public final class ViewerProvinciaSpinner extends
-        ViewerSelectionList<Spinner, CtrlerSelectionList<Provincia>, Provincia> {
+        ViewerSelectList<Spinner, CtrlerProvinciaSpinner, Provincia> {
 
+    static final ProvinciaSpinnerEventItemSelect default_spinnerEvent =
+            new ProvinciaSpinnerEventItemSelect(new Provincia(new ComunidadAutonoma((short) 0), (short) 0, null));
     final SpinnerEventListener eventListener;
     ProvinciaSpinnerEventItemSelect spinnerEvent;
 
@@ -36,17 +37,18 @@ public final class ViewerProvinciaSpinner extends
     {
         super(view, activity, parentViewer);
         eventListener = (SpinnerEventListener) parentViewer;
+        spinnerEvent = default_spinnerEvent;
     }
 
     public static ViewerProvinciaSpinner newViewerProvinciaSpinner(Spinner spinner, Activity activity, ViewerIf parentViewer)
     {
         Timber.d("newViewerProvinciaSpinner()");
         ViewerProvinciaSpinner instance = new ViewerProvinciaSpinner(spinner, activity, parentViewer);
-        instance.setController(newCtrlerProvinciaSpinner(instance));
+        instance.setController(new CtrlerProvinciaSpinner());
         return instance;
     }
 
-    // ==================================== ViewerSelectionListIf ====================================
+    // ==================================== ViewerSelectListIf ====================================
 
     @Override
     public void initSelectedItemId(Bundle savedState)
@@ -54,10 +56,8 @@ public final class ViewerProvinciaSpinner extends
         Timber.d("initSelectedItemId()");
         if (savedState != null && savedState.containsKey(PROVINCIA_ID.key)) {
             itemSelectedId = savedState.getLong(PROVINCIA_ID.key, 0);
-        } else if (spinnerEvent != null && spinnerEvent.getSpinnerItemIdSelect() > 0) {
-            itemSelectedId = spinnerEvent.getSpinnerItemIdSelect();
         } else {
-            itemSelectedId = 0;
+            itemSelectedId = spinnerEvent.getSpinnerItemIdSelect();
         }
     }
 
@@ -87,7 +87,9 @@ public final class ViewerProvinciaSpinner extends
     public void doViewInViewer(Bundle savedState, Serializable viewBean)
     {
         Timber.d("doViewInViewer()");
-        spinnerEvent = viewBean != null ? ProvinciaSpinnerEventItemSelect.class.cast(viewBean) : null;
+        if (viewBean != null) {
+            spinnerEvent = ProvinciaSpinnerEventItemSelect.class.cast(viewBean);
+        }
         initSelectedItemId(savedState);
         view.setOnItemSelectedListener(new ProvinciaSelectedListener());
         // No cargamos datos hasta saber comunidad autónoma.
@@ -118,7 +120,7 @@ public final class ViewerProvinciaSpinner extends
         {
             Timber.d("onItemSelected()");
             Provincia provinciaIn = (Provincia) parent.getItemAtPosition(position);
-            spinnerEvent.setSpinnerItemIdSelect(provinciaIn);
+            spinnerEvent = new ProvinciaSpinnerEventItemSelect(provinciaIn);
             itemSelectedId = spinnerEvent.getSpinnerItemIdSelect();
             eventListener.doOnClickItemId(spinnerEvent);
         }

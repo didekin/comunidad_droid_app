@@ -4,4 +4,9 @@
     <string name="mock_next_DefaultActivity_label" translatable="false">MockNextDefaultActivity</string>
     <!-- To be used in a test in  UiUtilsTest -->
     <string name="incid_resolucion_fecha_default_txt">>> Elige una fecha</string>
+    <!-- To be used in a test in ComuEspressoTestUtil -->
+    <string name="tipoVia_spinner_default">tipo de vía</string>
+    <string name="comAutonoma_spinner_default">comunidad autónoma</string>
+    <string name="provincia_spinner_default">provincia</string>
+    <string name="municipio_spinner_default">municipio</string>
 </resources>
