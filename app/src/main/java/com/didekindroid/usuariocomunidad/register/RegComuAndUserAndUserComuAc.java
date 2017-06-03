@@ -1,4 +1,4 @@
-package com.didekindroid.usuariocomunidad;
+package com.didekindroid.usuariocomunidad.register;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,7 +20,7 @@ import timber.log.Timber;
 
 import static com.didekindroid.router.ActivityRouter.acRouter;
 import static com.didekindroid.router.ActivityRouter.doUpMenuWithIntent;
-import static com.didekindroid.usuariocomunidad.ViewerRegComuUserUserComuAc.newViewerRegComuUserUserComuAc;
+import static com.didekindroid.usuariocomunidad.register.ViewerRegComuUserUserComuAc.newViewerRegComuUserUserComuAc;
 import static com.didekindroid.util.UIutils.doToolBar;
 
 /**
@@ -30,8 +30,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * 3. There is not extras in the activity intent.
  */
 // TODO: añadir un campo de número de vecinos en la comunidad (aprox.).
-public class RegComuAndUserAndUserComuAc extends AppCompatActivity implements
-        ViewerParentInjectorIf {
+public class RegComuAndUserAndUserComuAc extends AppCompatActivity implements ViewerParentInjectorIf {
 
     RegComuFr regComuFr;
     RegUserComuFr regUserComuFr;
@@ -42,8 +41,8 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        super.onCreate(savedInstanceState);
         Timber.d("onCreate()");
+        super.onCreate(savedInstanceState);
 
         acView = getLayoutInflater().inflate(R.layout.reg_comu_and_user_and_usercomu_ac, null);
         setContentView(acView);

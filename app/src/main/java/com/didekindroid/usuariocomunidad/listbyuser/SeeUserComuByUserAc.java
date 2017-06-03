@@ -9,7 +9,7 @@ import android.view.MenuItem;
 import com.didekindroid.R;
 import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.security.IdentityCacher;
-import com.didekindroid.usuariocomunidad.UserComuDataAc;
+import com.didekindroid.usuariocomunidad.data.UserComuDataAc;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import timber.log.Timber;

@@ -226,17 +226,6 @@ public class ViewerIncidEditMinFrTest {
     }
 
     @Test
-    public void testOnSuccessEraseIncidencia() throws Exception
-    {
-        try {
-            fragment.viewer.onSuccessEraseIncidencia(1);
-            fail();
-        } catch (Exception ue) {
-            assertThat(ue, instanceOf(UnsupportedOperationException.class));
-        }
-    }
-
-    @Test
     public void testClearSubscriptions() throws Exception
     {
         addSubscription(fragment.viewer.viewerImportanciaSpinner.getController());

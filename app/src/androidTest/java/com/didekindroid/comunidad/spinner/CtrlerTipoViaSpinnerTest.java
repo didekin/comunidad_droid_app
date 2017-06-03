@@ -3,11 +3,8 @@ package com.didekindroid.comunidad.spinner;
 import android.app.Activity;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.view.View;
-import android.widget.Spinner;
 
 import com.didekindroid.api.ActivityMock;
-import com.didekindroid.api.ViewerMock;
 import com.didekindroid.comunidad.repository.ComunidadDataDb;
 
 import org.junit.After;
@@ -17,20 +14,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 import io.reactivex.functions.Consumer;
 import io.reactivex.observers.TestObserver;
 
-import static com.didekindroid.comunidad.spinner.CtrlerTipoViaSpinner.newCtrlerTipoViaSpinner;
-import static com.didekindroid.comunidad.spinner.CtrlerTipoViaSpinner.tipoViaList;
-import static com.didekindroid.comunidad.spinner.ViewerTipoViaSpinner.newViewerTipoViaSpinner;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSpinnerCtrlerLoadItems;
 import static com.didekindroid.testutil.RxSchedulersUtils.resetAllSchedulers;
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -50,23 +40,7 @@ public class CtrlerTipoViaSpinnerTest {
     public void setUp() throws Exception
     {
         final Activity activity = activityRule.getActivity();
-        final AtomicReference<CtrlerTipoViaSpinner> atomicController = new AtomicReference<>(null);
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                atomicController.compareAndSet(
-                        null,
-                        newCtrlerTipoViaSpinner(
-                                newViewerTipoViaSpinner(
-                                        new Spinner(activity), activity, new ViewerMock<>(new View(activity), activity, null)
-                                )
-                        )
-                );
-            }
-        });
-        waitAtMost(2, SECONDS).untilAtomic(atomicController, notNullValue());
-        controller = atomicController.get();
+        controller = new CtrlerTipoViaSpinner();
     }
 
     @After
@@ -77,15 +51,9 @@ public class CtrlerTipoViaSpinnerTest {
     }
 
     @Test
-    public void test_NewCtrlerTipoViaSpinner() throws Exception
-    {
-        assertThat(controller, notNullValue());
-    }
-
-    @Test
     public void test_TipoViaList() throws Exception
     {
-        tipoViaList(controller.getViewer().getActivity()).test().assertOf(new Consumer<TestObserver<List<TipoViaValueObj>>>() {
+        controller.tipoViaList().test().assertOf(new Consumer<TestObserver<List<TipoViaValueObj>>>() {
             @Override
             public void accept(TestObserver<List<TipoViaValueObj>> listTestObserver) throws Exception
             {

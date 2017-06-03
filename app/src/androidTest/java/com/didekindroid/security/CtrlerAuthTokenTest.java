@@ -3,11 +3,9 @@ package com.didekindroid.security;
 import android.app.Activity;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.view.View;
 
 import com.didekindroid.api.ActivityMock;
 import com.didekindroid.api.ObserverCacheCleaner;
-import com.didekindroid.api.ViewerMock;
 import com.didekindroid.exception.UiException;
 import com.didekinlib.http.ErrorBean;
 import com.didekinlib.http.oauth2.SpringOauthToken;
@@ -77,7 +75,7 @@ public class CtrlerAuthTokenTest {
     public void setUp() throws Exception
     {
         activity = activityRule.getActivity();
-        controller = new CtrlerAuthToken(new ViewerMock<>(activity));
+        controller = new CtrlerAuthToken();
     }
 
     @After
@@ -177,7 +175,7 @@ public class CtrlerAuthTokenTest {
         assertThat(controller.getIdentityCacher().getTokenCache().get().getValue(), notNullValue());
         assertThat(controller.getIdentityCacher().getRefreshTokenFile().exists(), is(true));
 
-        controller = new CtrlerAuthToken(new ViewerMock<View, CtrlerAuthToken>(activity)) {
+        controller = new CtrlerAuthToken() {
             @Override
             public boolean updateTkCacheFromRefreshTk(String refreshToken)
             {
@@ -199,7 +197,7 @@ public class CtrlerAuthTokenTest {
         assertThat(controller.getIdentityCacher().isRegisteredUser(), is(true));
         assertThat(controller.getIdentityCacher().getTokenCache().get(), nullValue());
 
-        controller = new CtrlerAuthToken(new ViewerMock<View, CtrlerAuthToken>(activity)) {
+        controller = new CtrlerAuthToken() {
             @Override
             public boolean updateTkCacheFromRefreshTk(String refreshToken)
             {
@@ -224,7 +222,7 @@ public class CtrlerAuthTokenTest {
         assertThat(controller.getIdentityCacher().getTokenCache().get().getRefreshToken(), notNullValue());
         assertThat(controller.getIdentityCacher().getTokenCache().get().getValue(), nullValue());
 
-        controller = new CtrlerAuthToken(new ViewerMock<View, CtrlerAuthToken>(activity)) {
+        controller = new CtrlerAuthToken() {
             @Override
             public boolean updateTkCacheFromRefreshTk(String refreshToken)
             {

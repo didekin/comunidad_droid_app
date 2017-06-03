@@ -2,7 +2,7 @@
 <ScrollView style="@style/baseLayout.scroll"
             xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
-            tools:context="com.didekindroid.usuariocomunidad.RegComuAndUserComuAc">
+            tools:context="com.didekindroid.usuariocomunidad.register.RegComuAndUserComuAc">
 
     <android.support.design.widget.CoordinatorLayout style="@style/baseLayout">
 
@@ -21,7 +21,7 @@
 
             <fragment
                 android:id="@+id/reg_usercomu_frg"
-                android:name="com.didekindroid.usuariocomunidad.RegUserComuFr"
+                android:name="com.didekindroid.usuariocomunidad.register.RegUserComuFr"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:layout="@layout/reg_usercomu_fr"/>

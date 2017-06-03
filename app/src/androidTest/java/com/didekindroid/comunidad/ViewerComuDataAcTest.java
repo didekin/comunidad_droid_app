@@ -35,12 +35,14 @@ import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.nextComuD
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.testutil.ActivityTestUtils.checkViewerReplaceComponent;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
+import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpWithTkGetComu;
+import static io.reactivex.Single.just;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.is;
@@ -141,7 +143,7 @@ public class ViewerComuDataAcTest {
     public void testComuDataAcButtonListener()
     {
         checkMunicipioSpinner(comunidad.getMunicipio().getNombre()); // Esperamos por los viejos datos.
-        viewer.setController(new CtrlerComuDataAc(viewer) {
+        viewer.setController(new CtrlerComuDataAc() {
             @Override
             boolean modifyComunidadData(DisposableSingleObserver<Integer> observer, Comunidad comunidad)
             {
@@ -158,5 +160,13 @@ public class ViewerComuDataAcTest {
         onView(withId(R.id.comu_data_ac_button)).perform(scrollTo(), click());
         waitAtMost(6, SECONDS).until(isToastInView(R.string.error_validation_msg, activity, R.string.tipo_via));
         assertThat(flagMethodExec.get(), is(BEFORE_METHOD_EXEC));
+    }
+
+    @Test
+    public void test_ComuDataAcObserver()
+    {
+        ViewerComuDataAc.ComuDataAcObserver observer = viewer.new ComuDataAcObserver();
+        just(1).subscribeWith(observer);
+        waitAtMost(4, SECONDS).until(isViewDisplayed(withId(nextComuDataAcLayout)));
     }
 }

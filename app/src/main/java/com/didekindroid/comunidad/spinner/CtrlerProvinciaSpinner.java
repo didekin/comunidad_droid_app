@@ -21,6 +21,7 @@ import static io.reactivex.schedulers.Schedulers.io;
  * Time: 16:31
  */
 
+@SuppressWarnings("WeakerAccess")
 public class CtrlerProvinciaSpinner extends CtrlerSelectList<Provincia> {
 
     // .................................... OBSERVABLE .......................................

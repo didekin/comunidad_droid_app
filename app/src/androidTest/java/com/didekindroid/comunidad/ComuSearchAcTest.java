@@ -175,7 +175,7 @@ public class ComuSearchAcTest {
         activity = activityRule.launchActivity(new Intent());
         REG_COMU_USER_USERCOMU_AC.checkMenuItem_NTk(activity);
 
-        checkUp(comuSearchAcLayout);   // TODO: failed.
+        checkUp(comuSearchAcLayout);
     }
 
     @Test
@@ -186,6 +186,6 @@ public class ComuSearchAcTest {
         REG_COMU_USERCOMU_AC.checkMenuItem_WTk(activity);
 
         checkUp(comuSearchAcLayout);
-        cleanOneUser(USER_JUAN);       // TODO: failed.
+        cleanOneUser(USER_JUAN);
     }
 }

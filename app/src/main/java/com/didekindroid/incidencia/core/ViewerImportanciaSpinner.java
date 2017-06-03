@@ -68,7 +68,6 @@ public final class ViewerImportanciaSpinner extends
         view.setOnItemSelectedListener(new ImportanciaSelectedListener());
         initSelectedItemId(savedState);
         onSuccessLoadItemList(Arrays.asList(activity.getResources().getStringArray(R.array.IncidImportanciaArray)));
-        // TODO: testar en viewer carga del array anterior.
     }
 
     @Override

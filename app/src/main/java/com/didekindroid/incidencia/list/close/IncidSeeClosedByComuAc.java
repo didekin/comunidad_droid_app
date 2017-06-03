@@ -9,7 +9,6 @@ import android.view.MenuItem;
 import com.didekindroid.R;
 import com.didekindroid.incidencia.resolucion.IncidResolucionSeeFr;
 import com.didekindroid.router.ActivityInitiator;
-import com.didekindroid.router.ComponentReplacerIf;
 import com.didekindroid.router.FragmentInitiator;
 
 import timber.log.Timber;
@@ -35,7 +34,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * -- Arguments with incidImportancia, bundleWithResolucion and a toShowMenu flag are passed to the bundleWithResolucion
  * fragment.
  */
-public class IncidSeeClosedByComuAc extends AppCompatActivity implements ComponentReplacerIf {
+public class IncidSeeClosedByComuAc extends AppCompatActivity {
 
     IncidSeeCloseByComuFr fragmentList;
 

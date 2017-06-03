@@ -19,10 +19,15 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withParent;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.incidencia.core.ViewerImportanciaSpinner.newViewerImportanciaSpinner;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_NUMBER;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSavedStateWithItemSelected;
-import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
@@ -140,6 +145,10 @@ public class ViewerImportanciaSpinnerTest {
         ViewerImportanciaSpinner.ImportanciaSelectedListener listener =
                 (ViewerImportanciaSpinner.ImportanciaSelectedListener) viewer.getViewInViewer().getOnItemSelectedListener();
         // Check importanciaSpinner data are shown.
-        // TODO: chech with onView and onDat of the spinner.
+        onView(allOf(
+                withId(R.id.app_spinner_1_dropdown_item),
+                withParent(withId(R.id.incid_reg_importancia_spinner)),
+                withText(activity.getResources().getStringArray(R.array.IncidImportanciaArray)[0])
+        )).check(matches(isDisplayed()));
     }
 }

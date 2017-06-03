@@ -95,7 +95,7 @@ public class ViewerComuSearchTest {
     @Test
     public void test_DoViewInViewer_2() throws Exception
     {
-        activity.viewer.setController(new CtrlerAuthToken(activity.viewer) {
+        activity.viewer.setController(new CtrlerAuthToken() {
             @Override
             public void refreshAccessToken()
             {
@@ -143,7 +143,7 @@ public class ViewerComuSearchTest {
             }
         };
         activity.setChildInViewer(viewerRegComuFrOld);
-        activity.viewer.setController(new CtrlerAuthToken(activity.viewer));
+        activity.viewer.setController(new CtrlerAuthToken());
 
         Button button = (Button) activity.acView.findViewById(R.id.searchComunidad_Bton);
         button.setOnClickListener(activity.viewer.new ComuSearchButtonListener());

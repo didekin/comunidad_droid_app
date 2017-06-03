@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -26,7 +27,7 @@ import com.didekindroid.api.ViewerIf;
 import com.didekindroid.api.ViewerSelectListIf;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf.ActionForUiExceptionIf;
-import com.didekindroid.router.ComponentReplacerIf;
+import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.security.IdentityCacher;
 import com.didekindroid.usuario.firebase.CtrlerFirebaseTokenIf;
 import com.didekindroid.util.BundleKey;
@@ -37,15 +38,18 @@ import com.didekinlib.model.exception.ExceptionMsgIf;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matcher;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
 import static android.os.Build.VERSION.SDK_INT;
@@ -63,6 +67,7 @@ import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
+import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
@@ -80,6 +85,7 @@ import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -137,13 +143,13 @@ public final class ActivityTestUtils {
         };
     }
 
-    public static Callable<Boolean> isViewDisplayed(final Matcher<View> viewMatcher)
+    public static Callable<Boolean> isViewDisplayed(final Matcher<View> viewMatcher, final ViewAction... viewActions)
     {
         return new Callable<Boolean>() {
             public Boolean call() throws Exception
             {
                 try {
-                    onView(viewMatcher).check(matches(isDisplayed()));
+                    onView(viewMatcher).check(matches(isDisplayed())).perform(viewActions);
                     return true;
                 } catch (NoMatchingViewException ne) {
                     return false;
@@ -201,6 +207,24 @@ public final class ActivityTestUtils {
         };
     }
 
+    //    ============================== BUTTONS ============================
+
+    public static int focusOnButton(Activity activity, int buttonRsId)
+    {
+        final Button button = (Button) activity.findViewById(buttonRsId);
+
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                button.setFocusable(true);
+                button.setFocusableInTouchMode(true);
+                button.requestFocus();
+            }
+        });
+        return buttonRsId;
+    }
+
     //    ============================= CONTROLLER/Adapters ===================================
 
     public static CompositeDisposable addSubscription(ControllerIf controller)
@@ -228,7 +252,7 @@ public final class ActivityTestUtils {
         AtomicInteger atomicInteger = new AtomicInteger(addSubscription(controller).size());
         getInstrumentation().callActivityOnStop(activity);
         atomicInteger.set(controller.getSubscriptions().size());
-        waitAtMost(60, SECONDS).untilAtomic(atomicInteger, is(0));
+        waitAtMost(5, SECONDS).untilAtomic(atomicInteger, is(0));
     }
 
     public static Callable<Boolean> gcmTokenSentFlag(final CtrlerFirebaseTokenIf controller)
@@ -358,7 +382,7 @@ public final class ActivityTestUtils {
     public static void clickNavigateUp()
     {
         onView(allOf(
-                ViewMatchers.withContentDescription(R.string.navigate_up_txt),
+                withContentDescription(R.string.navigate_up_txt),
                 isClickable())
         ).check(matches(isDisplayed())).perform(click());
     }
@@ -367,7 +391,7 @@ public final class ActivityTestUtils {
     {
         clickNavigateUp();
         for (Integer layout : activityLayoutIds) {
-            onView(withId(layout)).check(matches(isDisplayed()));
+            isResourceIdDisplayed(layout);
         }
     }
 
@@ -375,7 +399,7 @@ public final class ActivityTestUtils {
     {
         viewInteraction.perform(closeSoftKeyboard()).perform(pressBack());
         for (Integer layout : activityLayoutIds) {
-            onView(withId(layout)).check(matches(isDisplayed()));
+            isResourceIdDisplayed(layout);
         }
     }
 
@@ -390,7 +414,7 @@ public final class ActivityTestUtils {
             @Override
             public void run()
             {
-                ComponentReplacerIf.class.cast(viewer).replaceComponent(finalBundle);
+                new ActivityInitiator(viewer.getActivity()).initActivityWithBundle(finalBundle);
             }
         });
         waitAtMost(4, SECONDS).until(isViewDisplayed(withId(resorceIdNextView)));
@@ -398,13 +422,24 @@ public final class ActivityTestUtils {
 
     //    ============================ SPINNERS ============================
 
-    public static void checkSpinnerCtrlerLoadItems(CtrlerSelectListIf controller, Long... entityId)
+    public static <E extends Serializable> void checkSpinnerCtrlerLoadItems(CtrlerSelectListIf<E> controller, Long... entityId)
     {
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
             Timber.d("checkSpinnerCtrlerLoadItems(), Thread: %s", Thread.currentThread().getName());
-            assertThat(controller.loadItemsByEntitiyId(entityId), is(true));
+            assertThat(controller.loadItemsByEntitiyId(new DisposableSingleObserver<List<E>>() {
+                @Override
+                public void onSuccess(List<E> es)
+                {
+                }
+
+                @Override
+                public void onError(Throwable e)
+                {
+                    fail();
+                }
+            }, entityId), is(true));
         } finally {
             resetAllSchedulers();
         }

@@ -25,7 +25,7 @@ import static org.junit.Assert.assertThat;
  * Time: 13:19
  */
 @RunWith(AndroidJUnit4.class)
-public class UsuarioComunidadBeanValidaTests {
+public class UsuarioComunidadBeanTests {
 
     private StringBuilder errors;
     private Resources resources;

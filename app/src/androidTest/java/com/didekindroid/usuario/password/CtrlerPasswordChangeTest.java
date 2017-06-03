@@ -17,6 +17,8 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
+import io.reactivex.observers.DisposableCompletableObserver;
+
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkInitTokenCache;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
@@ -68,7 +70,7 @@ public class CtrlerPasswordChangeTest {
     public void setUp()
     {
         viewer = new ViewerPswdChangeForTest((PasswordChangeAc) activityRule.getActivity());
-        controller = new CtrlerPasswordChange(viewer);
+        controller = new CtrlerPasswordChange();
         oldToken = TKhandler.getTokenCache().get();
     }
 
@@ -82,7 +84,19 @@ public class CtrlerPasswordChangeTest {
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
-            assertThat(controller.changePasswordInRemote(, USER_PEPE), is(true));
+            assertThat(controller.changePasswordInRemote(new DisposableCompletableObserver() {
+                @Override
+                public void onComplete()
+                {
+                    assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
+                }
+
+                @Override
+                public void onError(Throwable e)
+                {
+                  fail();
+                }
+            }, USER_PEPE), is(true));
         } finally {
             resetAllSchedulers();
         }
@@ -90,14 +104,6 @@ public class CtrlerPasswordChangeTest {
         // Final call to viewer.replaceComponent().
         assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_A));
         cleanOneUser(USER_PEPE);
-    }
-
-    @Test
-    public void testOnSuccessChangePswd() throws Exception
-    {
-        controller.onSuccessChangedPswd();
-        // Call to viewer.replaceComponent().
-        assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_A));
     }
 
     //  ============================================================================================

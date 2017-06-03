@@ -1,4 +1,4 @@
-package com.didekindroid.usuariocomunidad;
+package com.didekindroid.usuariocomunidad.register;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -13,6 +13,8 @@ import com.didekindroid.api.Controller;
 import com.didekindroid.api.Viewer;
 import com.didekindroid.api.ViewerIf;
 import com.didekindroid.security.CtrlerAuthToken;
+import com.didekindroid.usuariocomunidad.RolUi;
+import com.didekindroid.usuariocomunidad.UsuarioComunidadBean;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuario.Usuario;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;

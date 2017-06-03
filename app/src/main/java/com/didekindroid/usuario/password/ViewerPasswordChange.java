@@ -9,7 +9,7 @@ import android.widget.EditText;
 import com.didekindroid.R;
 import com.didekindroid.api.Viewer;
 import com.didekindroid.exception.UiExceptionIf;
-import com.didekindroid.router.ComponentReplacerIf;
+import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.usuario.UsuarioBean;
 
 import java.io.Serializable;
@@ -36,7 +36,7 @@ import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOU
 
 @SuppressWarnings("ClassWithOnlyPrivateConstructors")
 class ViewerPasswordChange extends Viewer<View, CtrlerPasswordChangeIf>
-        implements ViewerPasswordChangeIf, ComponentReplacerIf {
+        implements ViewerPasswordChangeIf {
 
     @SuppressWarnings("WeakerAccess")
     final AtomicReference<UsuarioBean> usuarioBean;
@@ -119,15 +119,15 @@ class ViewerPasswordChange extends Viewer<View, CtrlerPasswordChangeIf>
         return action;
     }
 
-    @Override
     public void replaceComponent(@NonNull Bundle bundle)
     {
         Timber.d("initActivityWithBundle()");
-        ComponentReplacerIf.class.cast(activity).replaceComponent(bundle);
+        new ActivityInitiator(activity).initActivityWithBundle(bundle);
     }
 
     // ............................ SUBSCRIBERS ..................................
 
+    @SuppressWarnings("WeakerAccess")
     class PswdChangeSingleObserver extends DisposableCompletableObserver {
 
         @Override

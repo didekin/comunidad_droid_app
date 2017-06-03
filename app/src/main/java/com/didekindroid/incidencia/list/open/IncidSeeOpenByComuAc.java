@@ -7,7 +7,6 @@ import android.view.MenuItem;
 
 import com.didekindroid.R;
 import com.didekindroid.router.ActivityInitiator;
-import com.didekindroid.router.ComponentReplacerIf;
 
 import timber.log.Timber;
 
@@ -28,7 +27,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * 1. A list of IncidenciaUSer instances are shown.
  * 2. An intent is passed with an IncidImportancia instance, where the selected incidencia is embedded.
  */
-public class IncidSeeOpenByComuAc extends AppCompatActivity implements ComponentReplacerIf {
+public class IncidSeeOpenByComuAc extends AppCompatActivity {
 
     IncidSeeOpenByComuFr fragment;
 
@@ -54,7 +53,6 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity implements Component
                 .commit();
     }
 
-    @Override
     public void replaceComponent(Bundle bundle)
     {
         Timber.d("replaceActionInView()");

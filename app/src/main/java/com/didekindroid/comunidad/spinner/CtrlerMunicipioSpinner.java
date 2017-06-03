@@ -53,8 +53,4 @@ public class CtrlerMunicipioSpinner extends CtrlerSelectList<Municipio> {
                 .subscribeWith(observer)
         );
     }
-
-    // .................................... INSTANCE METHODS .....................................
-
-
 }

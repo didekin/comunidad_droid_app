@@ -34,13 +34,13 @@ public class ViewerFirebaseToken extends Viewer<View, CtrlerFirebaseTokenIf> imp
     public void checkGcmTokenAsync()
     {
         Timber.d("checkGcmTokenAsync()");
-        controller.checkGcmToken(new RegGcmTokenObserver());
+        controller.checkGcmTokenAsync(new RegGcmTokenObserver());
     }
 
     // ............................ SUBSCRIBERS ..................................
 
     @SuppressWarnings("WeakerAccess")
-    class RegGcmTokenObserver extends DisposableSingleObserver<Integer> {
+    public class RegGcmTokenObserver extends DisposableSingleObserver<Integer> {
 
         @Override
         public void onSuccess(Integer isUpdated)

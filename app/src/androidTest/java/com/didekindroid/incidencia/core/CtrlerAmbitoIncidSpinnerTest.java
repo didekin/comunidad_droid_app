@@ -3,11 +3,8 @@ package com.didekindroid.incidencia.core;
 import android.app.Activity;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.view.View;
-import android.widget.Spinner;
 
 import com.didekindroid.api.ActivityMock;
-import com.didekindroid.api.ViewerMock;
 
 import org.junit.After;
 import org.junit.Before;
@@ -16,21 +13,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 import io.reactivex.functions.Consumer;
 import io.reactivex.observers.TestObserver;
 
-import static com.didekindroid.incidencia.core.CtrlerAmbitoIncidSpinner.ambitoIncidList;
-import static com.didekindroid.incidencia.core.CtrlerAmbitoIncidSpinner.newCtrlerAmbitoIncidSpinner;
 import static com.didekindroid.incidencia.core.IncidenciaDataDb.AmbitoIncidencia.AMBITO_INCID_COUNT;
-import static com.didekindroid.incidencia.core.ViewerAmbitoIncidSpinner.newViewerAmbitoIncidSpinner;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSpinnerCtrlerLoadItems;
 import static com.didekindroid.testutil.RxSchedulersUtils.resetAllSchedulers;
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -50,23 +40,7 @@ public class CtrlerAmbitoIncidSpinnerTest {
     public void setUp()
     {
         final Activity activity = activityRule.getActivity();
-        final AtomicReference<CtrlerAmbitoIncidSpinner> atomicController = new AtomicReference<>(null);
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                atomicController.compareAndSet(
-                        null,
-                        newCtrlerAmbitoIncidSpinner(
-                                newViewerAmbitoIncidSpinner(
-                                        new Spinner(activity), activity, new ViewerMock<>(new View(activity), activity, null)
-                                )
-                        )
-                );
-            }
-        });
-        waitAtMost(2, SECONDS).untilAtomic(atomicController, notNullValue());
-        controller = atomicController.get();
+        controller = new CtrlerAmbitoIncidSpinner();
     }
 
     @After
@@ -79,7 +53,7 @@ public class CtrlerAmbitoIncidSpinnerTest {
     @Test
     public void testAmbitoIncidList()
     {
-        ambitoIncidList(controller.getViewer().getActivity()).test().assertOf(new Consumer<TestObserver<List<AmbitoIncidValueObj>>>() {
+        controller.ambitoIncidList().test().assertOf(new Consumer<TestObserver<List<AmbitoIncidValueObj>>>() {
             @Override
             public void accept(TestObserver<List<AmbitoIncidValueObj>> listTestObserver) throws Exception
             {

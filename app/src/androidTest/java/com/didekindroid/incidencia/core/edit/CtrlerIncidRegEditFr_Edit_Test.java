@@ -19,6 +19,8 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
+import io.reactivex.observers.DisposableSingleObserver;
+
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
@@ -87,12 +89,25 @@ public class CtrlerIncidRegEditFr_Edit_Test {
     @Test
     public void testModifyIncidImportancia() throws Exception
     {
-        doCtrlerForViewerMax();
+        controller = new CtrlerIncidRegEditFr();
 
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
-            assertThat(controller.modifyIncidImportancia(,
+            assertThat(controller.modifyIncidImportancia(
+                    new DisposableSingleObserver<Integer>() {
+                        @Override
+                        public void onSuccess(Integer integer)
+                        {
+                            assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
+                        }
+
+                        @Override
+                        public void onError(Throwable e)
+                        {
+                            fail();
+                        }
+                    },
                     new IncidImportancia.IncidImportanciaBuilder(incidImportancia.getIncidencia())
                             .copyIncidImportancia(incidImportancia)
                             .importancia((short) 1)
@@ -106,16 +121,27 @@ public class CtrlerIncidRegEditFr_Edit_Test {
         assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_A));
     }
 
-
     @Test
     public void testEraseIncidencia() throws Exception
     {
-        doCtrlerForViewerMax();
+        controller = new CtrlerIncidRegEditFr();
 
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
-            assertThat(controller.eraseIncidencia(, incidImportancia.getIncidencia()), is(true));
+            assertThat(controller.eraseIncidencia(new DisposableSingleObserver<Integer>() {
+                @Override
+                public void onSuccess(Integer integer)
+                {
+                    assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_B), is(BEFORE_METHOD_EXEC));
+                }
+
+                @Override
+                public void onError(Throwable e)
+                {
+                    fail();
+                }
+            }, incidImportancia.getIncidencia()), is(true));
         } finally {
             resetAllSchedulers();
         }
@@ -126,28 +152,10 @@ public class CtrlerIncidRegEditFr_Edit_Test {
     @Test
     public void testGetAmbitoIncidDesc() throws Exception
     {
-        controller = new CtrlerIncidRegEditFr(new ViewerIncidEditMaxFr(null, activity, null, false));
+        controller = new CtrlerIncidRegEditFr();
         assertThat(controller.getAmbitoIncidDesc((short) 9), is("Buzones"));
     }
 
     //    ============================= Helpers ===============================
 
-    private void doCtrlerForViewerMax()
-    {
-        controller = new CtrlerIncidRegEditFr(new ViewerIncidEditMaxFr(null, activity, null, false) {
-            @Override
-            public void onSuccessModifyIncidImportancia(int rowInserted)
-            {
-                assertThat(rowInserted >= 1, is(true));
-                assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
-            }
-
-            @Override
-            public void onSuccessEraseIncidencia(int rowsDeleted)
-            {
-                assertThat(rowsDeleted, is(1));
-                assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_B), is(BEFORE_METHOD_EXEC));
-            }
-        });
-    }
 }

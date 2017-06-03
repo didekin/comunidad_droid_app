@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.support.test.rule.ActivityTestRule;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ViewerMock;
 import com.didekindroid.exception.UiException;
 import com.didekinlib.model.usuario.Usuario;
 
@@ -23,7 +22,6 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.testutil.ActivityTestUtils.checkViewerReplaceComponent;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.nextDeleteMeAcRsId;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
@@ -32,7 +30,6 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.CO
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.awaitility.Awaitility.await;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -75,7 +72,7 @@ public class DeleteMeAcTest {
     {
         activity = (DeleteMeAc) mActivityRule.getActivity();
         // Default initialization.
-        controller = new CtrlerDeleteMe(activity);
+        controller = new CtrlerDeleteMe();
     }
 
     //    =====================================  TESTS  ==========================================

@@ -34,7 +34,7 @@ public final class UsuarioDataTestUtils {
             .build();
     public static final Usuario USER_PEPE = new Usuario.UsuarioBuilder()
             .userName("pepe@pepe.org")
-            .alias("pepe")
+            .alias("alias_pepe")
             .password("psw_pepe")
             .build();
 

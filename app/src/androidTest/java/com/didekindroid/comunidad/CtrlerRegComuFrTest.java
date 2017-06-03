@@ -16,6 +16,8 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
+import io.reactivex.observers.DisposableSingleObserver;
+
 import static com.didekindroid.comunidad.utils.ComuBundleKey.TIPO_VIA_ID;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
@@ -66,15 +68,7 @@ public class CtrlerRegComuFrTest {
     @Test
     public void test_LoadComunidadData() throws Exception
     {
-        controller = new CtrlerRegComuFr(new ViewerRegComuFr(null, activityRule.getActivity(), null) {
-            @Override
-            void onSuccessLoadComunidad(Comunidad comunidad, Bundle savedState)
-            {
-                assertThat(comunidad, is(comunidad));
-                assertThat(savedState.getLong(TIPO_VIA_ID.key), is(999L));
-                assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
-            }
-        });
+        controller = new CtrlerRegComuFr();
 
         Bundle bundle = new Bundle(1);
         bundle.putLong(TIPO_VIA_ID.key, 999L);
@@ -82,7 +76,21 @@ public class CtrlerRegComuFrTest {
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
-            assertThat(controller.loadComunidadData(, comunidad.getC_Id(), bundle), is(true));
+            assertThat(controller.loadComunidadData(
+                    new DisposableSingleObserver<Comunidad>() {
+                        @Override
+                        public void onSuccess(Comunidad comunidad)
+                        {
+                            assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
+                        }
+
+                        @Override
+                        public void onError(Throwable e)
+                        {
+                            fail();
+                        }
+                    },
+                    comunidad.getC_Id()), is(true));
         } finally {
             resetAllSchedulers();
         }

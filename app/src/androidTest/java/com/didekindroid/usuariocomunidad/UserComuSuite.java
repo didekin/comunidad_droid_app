@@ -2,10 +2,16 @@ package com.didekindroid.usuariocomunidad;
 
 import com.didekindroid.usuariocomunidad.dao.UserComuDaoRemoteTest;
 import com.didekindroid.usuariocomunidad.dao.UserComuObservableTest;
+import com.didekindroid.usuariocomunidad.data.UserComuDataAc_1_Test;
+import com.didekindroid.usuariocomunidad.data.UserComuDataAc_2_Test;
 import com.didekindroid.usuariocomunidad.listbycomu.CtrlerUserComuByComuTest;
 import com.didekindroid.usuariocomunidad.listbycomu.SeeUserComuByComuAcTest;
 import com.didekindroid.usuariocomunidad.listbycomu.ViewerSeeUserComuByComuTest;
 import com.didekindroid.usuariocomunidad.listbyuser.SeeUserComuByUserAcTest;
+import com.didekindroid.usuariocomunidad.register.RegComuAndUserAndUserComuAcTest;
+import com.didekindroid.usuariocomunidad.register.RegComuAndUserComuAcTest;
+import com.didekindroid.usuariocomunidad.register.RegUserAndUserComuAcTest;
+import com.didekindroid.usuariocomunidad.register.RegUserComuAcTest;
 import com.didekindroid.usuariocomunidad.spinner.CtrlerComuSpinnerTest;
 import com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinnerTest;
 
@@ -31,7 +37,7 @@ import org.junit.runners.Suite;
         UserComuDataAc_2_Test.class,
         UserComuDaoRemoteTest.class,
         UserComuObservableTest.class,
-        UsuarioComunidadBeanValidaTests.class,
+        UsuarioComunidadBeanTests.class,
         ViewerComuSpinnerTest.class,
         ViewerSeeUserComuByComuTest.class,
 })

@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ViewerIf;
 import com.didekindroid.api.ViewerParentInjectorIf;
 
 import timber.log.Timber;
@@ -22,9 +21,6 @@ public class IncidRegFr extends Fragment {
 
     View rootFrgView;
     ViewerParentInjectorIf viewerInjector;
-    /**
-     * Instantiated by the activity (ViewerIncidRegAc).
-     */
     ViewerIncidRegFr viewer;
 
     @Override
@@ -44,8 +40,7 @@ public class IncidRegFr extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         viewerInjector = (ViewerParentInjectorIf) getActivity();
-        ViewerIf parentViewer = viewerInjector.getViewerAsParent();
-        viewer = newViewerIncidRegFr(rootFrgView, parentViewer);
+        viewer = newViewerIncidRegFr(rootFrgView, viewerInjector.getViewerAsParent());
         viewer.doViewInViewer(savedInstanceState, null);
         viewerInjector.setChildInViewer(viewer);
     }

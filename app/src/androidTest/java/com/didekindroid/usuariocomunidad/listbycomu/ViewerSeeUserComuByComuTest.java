@@ -28,9 +28,9 @@ import io.reactivex.observers.DisposableSingleObserver;
 
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_LA_PLAZUELA_5;
 import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_REAL;
+import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.testutil.ActivityTestUtils.getAdapter;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
@@ -130,9 +130,9 @@ public class ViewerSeeUserComuByComuTest {
     @Test
     public void test_DoViewInViewer() throws Exception
     {
-        viewer.setController(new CtrlerUserComuByComuList(viewer) {
+        viewer.setController(new CtrlerUserComuByComuList() {
             @Override
-            public boolean loadItemsByEntitiyId(Long... entityId)
+            public boolean loadItemsByEntitiyId(DisposableSingleObserver<List<UsuarioComunidad>> observer, Long... entityId)
             {
                 assertThat(flagMethod1.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
                 return true;

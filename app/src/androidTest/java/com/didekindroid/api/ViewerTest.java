@@ -9,6 +9,7 @@ import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf;
 import com.didekinlib.http.ErrorBean;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -114,7 +115,7 @@ public class ViewerTest {
     }
 
     @Test
-    public void testGetController() throws Exception
+    public void test_GetController() throws Exception
     {
         final ControllerIf controllerLocal = new Controller();
         viewer.setController(controllerLocal);
@@ -122,8 +123,8 @@ public class ViewerTest {
     }
 
     @Test
-    public void setController() throws Exception
+    public void test_GetParentViewer() throws Exception
     {
-        testGetController();
+       assertThat(viewer.getParentViewer(), CoreMatchers.<ViewerIf>is(parentViewer));
     }
 }

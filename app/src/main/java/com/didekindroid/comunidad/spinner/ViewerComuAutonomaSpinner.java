@@ -72,7 +72,7 @@ public final class ViewerComuAutonomaSpinner extends
         }
         initSelectedItemId(savedState);
         view.setOnItemSelectedListener(new ComuAutonomaSelectedListener());
-        CtrlerComAutonomaSpinner.class.cast(controller).loadItemsByEntitiyId(new ObserverSingleSelectList<>(this));
+        controller.loadItemsByEntitiyId(new ObserverSingleSelectList<>(this));
     }
 
     @Override

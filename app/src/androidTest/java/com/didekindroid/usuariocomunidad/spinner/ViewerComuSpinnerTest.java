@@ -16,7 +16,6 @@ import com.didekindroid.api.SpinnerEventListener;
 import com.didekindroid.api.SpinnerMockFr;
 import com.didekindroid.api.ViewerMock;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.incidencia.core.IncidenciaBean;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import org.junit.After;
@@ -31,6 +30,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
+import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
@@ -141,7 +141,7 @@ public class ViewerComuSpinnerTest {
         Bundle savedState = new Bundle();
 
         viewer.initSelectedItemId(savedState);
-        assertThat(viewer.getSelectedItemId(), is(0L));
+        assertThat(viewer.getSelectedItemId(), is(0L)); // Default initialization.
 
         savedState = null;
         viewer.spinnerEvent = new ComuSpinnerEventItemSelect(new Comunidad.ComunidadBuilder().c_id(13L).build());
@@ -181,19 +181,18 @@ public class ViewerComuSpinnerTest {
     public void testDoViewInViewer() throws Exception
     {
         final String keyBundle = COMUNIDAD_ID.key;
-        IncidenciaBean incidenciaBean = new IncidenciaBean();
         Bundle bundleTest = new Bundle(1);
         bundleTest.putLong(keyBundle, 122L);
 
-        viewer.setController(new CtrlerComuSpinner(viewer) {
+        viewer.setController(new CtrlerComuSpinner() {
             @Override
-            public boolean loadItemsByEntitiyId(Long... entityId)
+            public boolean loadItemsByEntitiyId(DisposableSingleObserver<List<Comunidad>> observer, Long... entityId)
             {
                 assertThat(flagLocalExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
                 return false;
             }
         });
-        viewer.doViewInViewer(bundleTest, incidenciaBean);
+        viewer.doViewInViewer(bundleTest, null);
 
         // Check call to initSelectedItemId().
         assertThat(viewer.getSelectedItemId(), allOf(
@@ -214,10 +213,10 @@ public class ViewerComuSpinnerTest {
         assertThat(viewer.getSelectedItemId(), is(0L));
 
         // Action.
-        viewer.doViewInViewer(new Bundle(0), new IncidenciaBean());
+        viewer.doViewInViewer(new Bundle(0), new ComuSpinnerEventItemSelect());
         /* doViewInViewer() --> loadItemsByEntitiyId() --> onSuccessLoadItemList() --> view.setSelection() --> ComuSelectedListener.onItemSelected() */
         // Check
-        waitAtMost(2, SECONDS).until(getAdapter(viewer.getViewInViewer()), notNullValue());
+        waitAtMost(4, SECONDS).until(getAdapter(viewer.getViewInViewer()), notNullValue());
         assertThat(viewer.getViewInViewer().getCount(), is(2));
         // Initialize itemId.
         assertThat(viewer.getSelectedItemId() > 1, is(true));

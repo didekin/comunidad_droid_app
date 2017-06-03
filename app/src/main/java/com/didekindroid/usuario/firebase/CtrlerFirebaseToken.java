@@ -9,7 +9,6 @@ import java.util.concurrent.Callable;
 
 import io.reactivex.Single;
 import io.reactivex.observers.DisposableSingleObserver;
-import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -18,6 +17,7 @@ import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_regist
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
+import static io.reactivex.schedulers.Schedulers.io;
 
 /**
  * User: pedro@didekin
@@ -70,14 +70,14 @@ public class CtrlerFirebaseToken extends Controller implements CtrlerFirebaseTok
     }
 
     @Override
-    public boolean checkGcmToken(DisposableSingleObserver<Integer> observer)
+    public boolean checkGcmTokenAsync(DisposableSingleObserver<Integer> observer)
     {
-        Timber.d("checkGcmToken()");
+        Timber.d("checkGcmTokenAsync()");
         return identityCacher.isRegisteredUser()
                 && !isGcmTokenSentServer()
                 && subscriptions.add(
                 updatedGcmTkSingle()
-                        .subscribeOn(Schedulers.io())
+                        .subscribeOn(io())
                         .observeOn(mainThread())
                         .subscribeWith(observer));
     }
@@ -85,6 +85,7 @@ public class CtrlerFirebaseToken extends Controller implements CtrlerFirebaseTok
     /**
      * Synchronous variant for the service InstanceIdService.
      * The method does not check if the gcmToken has been sent previously to database.
+     *
      * @param observer is instantiated by the viewer who calls the controller.
      */
     @Override

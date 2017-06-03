@@ -1,4 +1,4 @@
-package com.didekindroid.usuariocomunidad;
+package com.didekindroid.usuariocomunidad.data;
 
 import android.content.Intent;
 import android.support.test.espresso.ViewInteraction;
@@ -11,6 +11,7 @@ import com.didekindroid.R;
 import com.didekindroid.comunidad.utils.ComuBundleKey;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
+import com.didekindroid.usuariocomunidad.data.UserComuDataAc;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.junit.After;

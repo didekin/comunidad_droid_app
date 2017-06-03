@@ -13,8 +13,8 @@ import android.widget.ListView;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.usuariocomunidad.RegComuAndUserAndUserComuAc;
-import com.didekindroid.usuariocomunidad.RegComuAndUserComuAc;
+import com.didekindroid.usuariocomunidad.register.RegComuAndUserAndUserComuAc;
+import com.didekindroid.usuariocomunidad.register.RegComuAndUserComuAc;
 import com.didekinlib.http.ErrorBean;
 import com.didekinlib.model.comunidad.Comunidad;
 

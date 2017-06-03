@@ -187,7 +187,7 @@ class ViewerIncidEditMaxFr extends Viewer<View, CtrlerIncidRegEditFr> implements
         new ActivityInitiator(activity).initActivityWithBundle(new Bundle(0));
     }
 
-    public void onSuccessEraseIncidencia(int rowsDeleted)
+    void onSuccessEraseIncidencia(int rowsDeleted)
     {
         Timber.d("onSuccessEraseIncidencia()");
         assertTrue(rowsDeleted == 1, incidencia_should_be_deleted);

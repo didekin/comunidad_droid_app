@@ -1,8 +1,10 @@
 package com.didekindroid.usuariocomunidad.testutil;
 
 
+import android.app.Activity;
 import android.support.test.espresso.DataInteraction;
 import android.support.test.espresso.matcher.ViewMatchers;
+import android.widget.Button;
 
 import com.didekindroid.R;
 import com.didekindroid.usuariocomunidad.RolUi;

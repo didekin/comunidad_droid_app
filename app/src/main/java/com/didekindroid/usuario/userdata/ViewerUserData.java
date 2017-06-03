@@ -11,7 +11,7 @@ import android.widget.EditText;
 import com.didekindroid.R;
 import com.didekindroid.api.Viewer;
 import com.didekindroid.exception.UiExceptionIf.ActionForUiExceptionIf;
-import com.didekindroid.router.ComponentReplacerIf;
+import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.usuario.UsuarioBean;
 import com.didekindroid.util.UIutils;
 import com.didekinlib.model.usuario.Usuario;
@@ -39,8 +39,7 @@ import static com.didekinlib.http.GenericExceptionMsg.BAD_REQUEST;
  * Date: 22/03/17
  * Time: 10:27
  */
-class ViewerUserData extends Viewer<View, CtrlerUserDataIf> implements ViewerUserDataIf,
-        ComponentReplacerIf {
+final class ViewerUserData extends Viewer<View, CtrlerUserDataIf> implements ViewerUserDataIf {
 
     final EditText emailView;
     final EditText aliasView;
@@ -51,7 +50,7 @@ class ViewerUserData extends Viewer<View, CtrlerUserDataIf> implements ViewerUse
     final AtomicReference<Usuario> newUser;
 
 
-    ViewerUserData(View view, Activity activity)
+    private ViewerUserData(View view, Activity activity)
     {
         super(view, activity, null);
         emailView = (EditText) view.findViewById(R.id.reg_usuario_email_editT);
@@ -221,11 +220,10 @@ class ViewerUserData extends Viewer<View, CtrlerUserDataIf> implements ViewerUse
         return super.onErrorInObserver(error);
     }
 
-    @Override
     public void replaceComponent(Bundle bundle)
     {
         Timber.d("initActivityWithBundle()");
-        ComponentReplacerIf.class.cast(activity).replaceComponent(bundle);
+        new ActivityInitiator(activity).initActivityWithBundle(bundle);
     }
 
     // .............................. SUBSCRIBERS ..................................

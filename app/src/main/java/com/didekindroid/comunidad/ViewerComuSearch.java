@@ -9,7 +9,6 @@ import android.widget.Button;
 import com.didekindroid.R;
 import com.didekindroid.api.ViewerParent;
 import com.didekindroid.router.ActivityInitiator;
-import com.didekindroid.router.ComponentReplacerIf;
 import com.didekindroid.security.CtrlerAuthToken;
 import com.didekindroid.security.CtrlerAuthTokenIf;
 import com.didekinlib.model.comunidad.Comunidad;
@@ -29,8 +28,7 @@ import static com.didekindroid.util.UIutils.makeToast;
  * Time: 14:21
  */
 
-class ViewerComuSearch extends ViewerParent<View, CtrlerAuthTokenIf>
-        implements ComponentReplacerIf {
+class ViewerComuSearch extends ViewerParent<View, CtrlerAuthTokenIf> {
 
     ViewerComuSearch(View view, Activity activity)
     {
@@ -60,16 +58,13 @@ class ViewerComuSearch extends ViewerParent<View, CtrlerAuthTokenIf>
         mSearchButton.setOnClickListener(new ComuSearchButtonListener());
     }
 
-    // ==================================  ComponentReplaceIF  =================================
+    // ==================================  HELPERS =================================
 
-    @Override
     public void replaceComponent(@NonNull Bundle bundle)
     {
         Timber.d("replaceComponent()");
         new ActivityInitiator(activity).initActivityWithBundle(bundle);
     }
-
-    // ==================================  HELPERS =================================
 
     @SuppressWarnings("WeakerAccess")
     class ComuSearchButtonListener implements View.OnClickListener {

@@ -1,4 +1,4 @@
-package com.didekindroid.usuariocomunidad;
+package com.didekindroid.usuariocomunidad.register;
 
 import android.os.Bundle;
 import android.support.test.rule.ActivityTestRule;
@@ -8,6 +8,9 @@ import com.didekindroid.R;
 import com.didekindroid.api.ViewerIf;
 import com.didekindroid.api.ViewerParentInjectedIf;
 import com.didekindroid.api.ViewerParentInjectorIf;
+import com.didekindroid.usuariocomunidad.register.RegComuAndUserAndUserComuAc;
+import com.didekindroid.usuariocomunidad.register.RegUserComuFr;
+import com.didekindroid.usuariocomunidad.register.ViewerRegUserComuFr;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.hamcrest.CoreMatchers;

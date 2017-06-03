@@ -48,6 +48,7 @@ import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEn
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
+import static io.reactivex.Single.just;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.instanceOf;
@@ -236,14 +237,10 @@ public class ViewerIncidEditMaxFrTest {
     }
 
     @Test
-    public void testOnSuccessRegisterIncidencia()
+    public void test_EraseIncidenciaObserver()
     {
-        try {
-            viewer.onSuccessRegisterIncidImportancia(2);
-            fail();
-        } catch (Exception ue) {
-            assertThat(ue, instanceOf(UnsupportedOperationException.class));
-        }
+        just(1).subscribeWith(viewer.new EraseIncidenciaObserver());
+        waitAtMost(2, SECONDS).until(isResourceIdDisplayed(nextActivityId));
     }
 
     @Test

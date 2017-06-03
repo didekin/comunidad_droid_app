@@ -7,13 +7,12 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.router.ComponentReplacerIf;
 import com.didekindroid.router.ActivityInitiator;
 
 import timber.log.Timber;
 
-import static com.didekindroid.usuario.userdata.ViewerUserData.newViewerUserData;
 import static com.didekindroid.router.ActivityRouter.doUpMenu;
+import static com.didekindroid.usuario.userdata.ViewerUserData.newViewerUserData;
 import static com.didekindroid.util.UIutils.doToolBar;
 
 /**
@@ -23,7 +22,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * 1. Registered user with modified data.
  * 2. An intent is created for menu options with the old user data, once they have been loaded.
  */
-public class UserDataAc extends AppCompatActivity implements ComponentReplacerIf {
+public class UserDataAc extends AppCompatActivity {
 
     ViewerUserDataIf viewer;
     View acView;
@@ -49,7 +48,6 @@ public class UserDataAc extends AppCompatActivity implements ComponentReplacerIf
         viewer.clearSubscriptions();
     }
 
-    @Override
     public void replaceComponent(Bundle bundle)
     {
         Timber.d("initActivityWithBundle()");
@@ -73,7 +71,7 @@ public class UserDataAc extends AppCompatActivity implements ComponentReplacerIf
     {
         Timber.d("onPrepareOptionsMenu()");
         // Update intent in activity with user data.
-        if (viewer.getIntentForMenu().get() != null){
+        if (viewer.getIntentForMenu().get() != null) {
             setIntent(viewer.getIntentForMenu().getAndSet(null));
         }
         return super.onPrepareOptionsMenu(menu);

@@ -28,6 +28,6 @@ public class ComuSpinnerEventItemSelect implements SpinnerEventItemSelectIf<Comu
     public long getSpinnerItemIdSelect()
     {
         Timber.d("getSpinnerItemIdSelect()");
-        return comunidadSelect.getC_Id();
+        return comunidadSelect != null ? comunidadSelect.getC_Id() : 0L;
     }
 }

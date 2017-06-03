@@ -28,11 +28,11 @@
         <activity
             android:name="com.didekindroid.comunidad.ComuDataAc"
             android:label="@string/comu_data_ac_label"
-            android:parentActivityName="com.didekindroid.usuariocomunidad.UserComuDataAc"
+            android:parentActivityName="com.didekindroid.usuariocomunidad.data.UserComuDataAc"
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.didekindroid.usuariocomunidad.UserComuDataAc"/>
+                android:value="com.didekindroid.usuariocomunidad.data.UserComuDataAc"/>
         </activity>
         <activity
             android:name="com.didekindroid.comunidad.ComuSearchAc"
@@ -78,7 +78,7 @@
                 android:value=".usuario.userdata.UserDataAc"/>
         </activity>
         <activity
-            android:name="com.didekindroid.usuariocomunidad.RegComuAndUserAndUserComuAc"
+            android:name="com.didekindroid.usuariocomunidad.register.RegComuAndUserAndUserComuAc"
             android:label="@string/reg_comunidad_ac_label"
             android:launchMode="singleTask"
             android:parentActivityName="com.didekindroid.comunidad.ComuSearchAc"
@@ -88,7 +88,7 @@
                 android:value="com.didekindroid.comunidad.ComuSearchResultsAc"/>
         </activity>
         <activity
-            android:name="com.didekindroid.usuariocomunidad.RegComuAndUserComuAc"
+            android:name="com.didekindroid.usuariocomunidad.register.RegComuAndUserComuAc"
             android:label="@string/reg_comunidad_ac_label"
             android:launchMode="singleTask"
             android:parentActivityName="com.didekindroid.comunidad.ComuSearchAc"
@@ -98,7 +98,7 @@
                 android:value="com.didekindroid.comunidad.ComuSearchAc"/>
         </activity>
         <activity
-            android:name="com.didekindroid.usuariocomunidad.RegUserAndUserComuAc"
+            android:name="com.didekindroid.usuariocomunidad.register.RegUserAndUserComuAc"
             android:label="@string/reg_user_and_usercomu_ac_label"
             android:parentActivityName="com.didekindroid.comunidad.ComuSearchResultsAc"
             android:windowSoftInputMode="stateHidden">
@@ -107,7 +107,7 @@
                 android:value="com.didekindroid.comunidad.ComuSearchResultsAc"/>
         </activity>
         <activity
-            android:name="com.didekindroid.usuariocomunidad.RegUserComuAc"
+            android:name="com.didekindroid.usuariocomunidad.register.RegUserComuAc"
             android:label="@string/regusuario_comu_ac_label"
             android:launchMode="singleTask"
             android:parentActivityName="com.didekindroid.comunidad.ComuSearchResultsAc"
@@ -119,10 +119,10 @@
         <activity
             android:name="com.didekindroid.usuariocomunidad.listbycomu.SeeUserComuByComuAc"
             android:label="@string/see_usercomu_by_comu_ac_label"
-            android:parentActivityName="com.didekindroid.usuariocomunidad.UserComuDataAc">
+            android:parentActivityName="com.didekindroid.usuariocomunidad.data.UserComuDataAc">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.didekindroid.usuariocomunidad.UserComuDataAc"/>
+                android:value="com.didekindroid.usuariocomunidad.data.UserComuDataAc"/>
         </activity>
         <activity
             android:name="com.didekindroid.usuariocomunidad.listbyuser.SeeUserComuByUserAc"
@@ -133,7 +133,7 @@
                 android:value="com.didekindroid.comunidad.ComuSearchResultsAc"/>
         </activity>
         <activity
-            android:name="com.didekindroid.usuariocomunidad.UserComuDataAc"
+            android:name="com.didekindroid.usuariocomunidad.data.UserComuDataAc"
             android:label="@string/usercomu_data_ac_label"
             android:parentActivityName="com.didekindroid.usuariocomunidad.listbyuser.SeeUserComuByUserAc"
             android:windowSoftInputMode="stateHidden">
@@ -213,10 +213,10 @@
         <activity
             android:name=".incidencia.list.open.IncidSeeOpenByComuAc"
             android:label="@string/incid_see_by_user_ac_label"
-            android:parentActivityName=".usuariocomunidad.UserComuDataAc">
+            android:parentActivityName=".usuariocomunidad.data.UserComuDataAc">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".usuariocomunidad.UserComuDataAc"/>
+                android:value=".usuariocomunidad.data.UserComuDataAc"/>
         </activity>
         <activity
             android:name=".incidencia.list.importancia.IncidSeeUserComuImportanciaAc"

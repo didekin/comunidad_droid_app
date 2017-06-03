@@ -15,7 +15,7 @@ public interface CtrlerFirebaseTokenIf extends ControllerIf {
 
     String IS_GCM_TOKEN_SENT_TO_SERVER = "isGcmTokenSentToServer";
 
-    boolean checkGcmToken(DisposableSingleObserver<Integer> observer);
+    boolean checkGcmTokenAsync(DisposableSingleObserver<Integer> observer);
 
     boolean checkGcmTokenSync(DisposableSingleObserver<Integer> observer);
 

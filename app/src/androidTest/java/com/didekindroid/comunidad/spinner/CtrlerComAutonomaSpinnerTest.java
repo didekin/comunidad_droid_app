@@ -1,14 +1,10 @@
 package com.didekindroid.comunidad.spinner;
 
 import android.app.Activity;
-import android.content.Context;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.view.View;
-import android.widget.Spinner;
 
 import com.didekindroid.api.ActivityMock;
-import com.didekindroid.api.ViewerMock;
 import com.didekindroid.comunidad.repository.ComunidadDataDb;
 import com.didekinlib.model.comunidad.ComunidadAutonoma;
 
@@ -19,20 +15,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 import io.reactivex.functions.Consumer;
 import io.reactivex.observers.TestObserver;
 
-import static com.didekindroid.comunidad.spinner.CtrlerComAutonomaSpinner.comunidadesAutonomasList;
-import static com.didekindroid.comunidad.spinner.CtrlerComAutonomaSpinner.newCtrlerComAutonomaSpinner;
-import static com.didekindroid.comunidad.spinner.ViewerComuAutonomaSpinner.newViewerComuAutonomaSpinner;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSpinnerCtrlerLoadItems;
 import static com.didekindroid.testutil.RxSchedulersUtils.resetAllSchedulers;
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -52,23 +41,7 @@ public class CtrlerComAutonomaSpinnerTest {
     public void setUp() throws Exception
     {
         final Activity activity = activityRule.getActivity();
-        final AtomicReference<CtrlerComAutonomaSpinner> atomicController = new AtomicReference<>(null);
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                atomicController.compareAndSet(
-                        null,
-                        newCtrlerComAutonomaSpinner(
-                                newViewerComuAutonomaSpinner(
-                                        new Spinner(activity), activity, new ViewerMock<>(new View(activity), activity, null)
-                                )
-                        )
-                );
-            }
-        });
-        waitAtMost(2, SECONDS).untilAtomic(atomicController, notNullValue());
-        controller = atomicController.get();
+        controller = new CtrlerComAutonomaSpinner();
     }
 
     @After
@@ -76,12 +49,6 @@ public class CtrlerComAutonomaSpinnerTest {
     {
         controller.clearSubscriptions();
         resetAllSchedulers();
-    }
-
-    @Test
-    public void test_NewCtrlerComAutonomaSpinner() throws Exception
-    {
-        assertThat(controller, notNullValue());
     }
 
     @Test

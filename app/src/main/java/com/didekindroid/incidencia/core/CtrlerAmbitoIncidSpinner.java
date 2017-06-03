@@ -18,7 +18,7 @@ import static io.reactivex.schedulers.Schedulers.io;
  * Time: 13:20
  */
 
-class CtrlerAmbitoIncidSpinner extends CtrlerSelectList<AmbitoIncidValueObj> {
+public class CtrlerAmbitoIncidSpinner extends CtrlerSelectList<AmbitoIncidValueObj> {
 
     // .................................... OBSERVABLE .......................................
 

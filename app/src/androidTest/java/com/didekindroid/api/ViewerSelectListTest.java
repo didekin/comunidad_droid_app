@@ -1,5 +1,6 @@
 package com.didekindroid.api;
 
+import android.os.Bundle;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
@@ -29,14 +30,26 @@ public class ViewerSelectListTest {
     public IntentsTestRule<ActivityMock> activityRule = new IntentsTestRule<>(ActivityMock.class, true, true);
 
     ActivityMock activity;
-    ViewerSelectList<Spinner, Controller, String> viewer;
+    ViewerSelectList<Spinner, CtrlerSelectList<String>, String> viewer;
 
     @Before
     public void setUp() throws Exception
     {
         activity = activityRule.getActivity();
         final AtomicBoolean execFlag = new AtomicBoolean(false);
-        // TODO.
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                viewer = new ViewerSelectList<Spinner, CtrlerSelectList<String>, String>(new Spinner(activity), activity, null) {
+                    @Override
+                    public void initSelectedItemId(Bundle savedState)
+                    {
+                    }
+                };
+                execFlag.compareAndSet(false, true);
+            }
+        });
         waitAtMost(2, SECONDS).untilTrue(execFlag);
     }
 
@@ -63,7 +76,7 @@ public class ViewerSelectListTest {
     }
 
     @Test
-    public void test_OnSuccessLoadItems() throws Exception
+    public void test_OnSuccessLoadItemList() throws Exception
     {
         final List<String> stringList = Arrays.asList("string22", "string11", "string44", "string33");
         long itemSelected = 1;

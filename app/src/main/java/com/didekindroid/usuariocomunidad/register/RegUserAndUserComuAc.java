@@ -1,4 +1,4 @@
-package com.didekindroid.usuariocomunidad;
+package com.didekindroid.usuariocomunidad.register;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -12,16 +12,11 @@ import android.widget.Button;
 
 import com.didekindroid.R;
 import com.didekindroid.comunidad.utils.ComuBundleKey;
-import com.didekindroid.comunidad.ComunidadBean;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.security.IdentityCacher;
 import com.didekindroid.usuario.RegUserFr;
-import com.didekindroid.usuario.UsuarioBean;
-import com.didekindroid.usuario.ViewerRegUserFr;
 import com.didekindroid.usuariocomunidad.listbycomu.SeeUserComuByComuAc;
-import com.didekindroid.util.ConnectionUtils;
-import com.didekindroid.util.UIutils;
 import com.didekinlib.http.ErrorBean;
 import com.didekinlib.http.oauth2.SpringOauthToken;
 import com.didekinlib.model.comunidad.Comunidad;
@@ -41,7 +36,6 @@ import static com.didekindroid.router.ActivityRouter.doUpMenu;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.util.UIutils.doToolBar;
-import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
 import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
 
 /**

@@ -4,6 +4,7 @@ import com.didekindroid.usuario.dao.UsuarioDaoRemoteTest;
 import com.didekindroid.usuario.delete.CtrlerDeleteMeTest;
 import com.didekindroid.usuario.delete.DeleteMeAcTest;
 import com.didekindroid.usuario.firebase.CtrlerFirebaseTokenTest;
+import com.didekindroid.usuario.firebase.ViewerFirebaseTokenTest;
 import com.didekindroid.usuario.login.CtrlerLoginTest;
 import com.didekindroid.usuario.login.LoginAcTest;
 import com.didekindroid.usuario.login.ViewerLoginTest;
@@ -36,8 +37,10 @@ import org.junit.runners.Suite;
         UserDataAcTest.class,
         UsuarioBeanValidaTests.class,
         UsuarioDaoRemoteTest.class,
+        ViewerFirebaseTokenTest.class,
         ViewerLoginTest.class,
         ViewerPasswordChangeTest.class,
+        ViewerRegUserFrTest.class,
         ViewerUserDataTest.class,
 })
 public class UsuarioSuite {

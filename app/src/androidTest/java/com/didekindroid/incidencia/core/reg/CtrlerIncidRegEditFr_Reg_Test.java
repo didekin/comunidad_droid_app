@@ -19,6 +19,8 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
+import io.reactivex.observers.DisposableSingleObserver;
+
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doIncidencia;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
@@ -82,20 +84,25 @@ public class CtrlerIncidRegEditFr_Reg_Test {
     @Test
     public void testRegisterIncidencia() throws Exception
     {
-        controller = new CtrlerIncidRegEditFr(new ViewerIncidRegAc(activity) {
-            @Override
-            public void onSuccessRegisterIncidImportancia(int rowInserted)
-            {
-                assertThat(rowInserted, is(2));
-                assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
-            }
-        });
+        controller = new CtrlerIncidRegEditFr();
         assertThat(controller.getSubscriptions().size(), is(0));
 
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
-            assertThat(controller.registerIncidImportancia(, doIncidImportancia()), is(true));
+            assertThat(controller.registerIncidImportancia(new DisposableSingleObserver<Integer>() {
+                @Override
+                public void onSuccess(Integer integer)
+                {
+                    assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
+                }
+
+                @Override
+                public void onError(Throwable e)
+                {
+                    fail();
+                }
+            }, doIncidImportancia()), is(true));
         } finally {
             resetAllSchedulers();
         }

@@ -11,6 +11,7 @@ import android.widget.Spinner;
 import com.didekindroid.R;
 import com.didekindroid.api.ActivityMock;
 import com.didekindroid.api.Controller;
+import com.didekindroid.api.ObserverSingleSelectList;
 import com.didekindroid.api.SpinnerEventItemSelectIf;
 import com.didekindroid.api.SpinnerEventListener;
 import com.didekindroid.api.SpinnerMockFr;
@@ -26,6 +27,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
+import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.spinner.ViewerProvinciaSpinner.default_spinnerEvent;
@@ -138,9 +140,9 @@ public class ViewerProvinciaSpinnerTest {
         Bundle bundle = new Bundle(1);
         bundle.putLong(keyBundle, 11L);
 
-        viewer.setController(new CtrlerProvinciaSpinner(viewer) {
+        viewer.setController(new CtrlerProvinciaSpinner() {
             @Override
-            public boolean loadItemsByEntitiyId(Long... entityId)
+            public boolean loadItemsByEntitiyId(DisposableSingleObserver<List<Provincia>> observer, Long... entityId)
             {
                 assertThat(flagLocalExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
                 return false;
@@ -176,7 +178,7 @@ public class ViewerProvinciaSpinnerTest {
         // Check controller.loadItemsByEntitiyId() --> onSuccessLoadItemList() --> view.setSelection() ... {--> ProvinciaSelectedListener.onItemSelected() }
         // We initialize to 0 the itemSelectedId to chedk the call to ProvinciaSelectedListener.onItemSelected().
         viewer.setItemSelectedId(38L); // Santa Cruz de Tenerife
-        viewer.getController().loadItemsByEntitiyId(5L);
+        viewer.getController().loadItemsByEntitiyId(new ObserverSingleSelectList<>(viewer), 5L);
         waitAtMost(3, SECONDS).until(getAdapter(viewer.getViewInViewer()), notNullValue());
         assertThat(viewer.getViewInViewer().getCount(), is(2));
         // ProvinciaSelectedListener.onItemSelected() modify spinnerEvent.

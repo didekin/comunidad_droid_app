@@ -6,8 +6,8 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.api.ActivityMock;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.usuario.firebase.CtrlerFirebaseTokenIf;
 import com.didekindroid.usuario.firebase.CtrlerFirebaseToken;
+import com.didekindroid.usuario.firebase.CtrlerFirebaseTokenIf;
 import com.didekinlib.http.oauth2.SpringOauthToken;
 
 import org.junit.After;
@@ -22,7 +22,6 @@ import static com.didekindroid.security.TokenIdentityCacher.cleanTokenAndUnregis
 import static com.didekindroid.security.TokenIdentityCacher.cleanTokenCacheAction;
 import static com.didekindroid.security.TokenIdentityCacher.initTokenAction;
 import static com.didekindroid.security.TokenIdentityCacher.initTokenAndRegisterFunc;
-import static com.didekindroid.usuario.firebase.ViewerFirebaseToken.newViewerFirebaseToken;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_TK_HANDLER;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.util.IoHelper.readStringFromFile;
@@ -113,7 +112,7 @@ public class TokenIdentityCacherTest_1 {
     @Test
     public void testUpdateIsRegistered_2() throws Exception
     {
-        CtrlerFirebaseTokenIf controller = new CtrlerFirebaseToken(newViewerFirebaseToken(activity));
+        CtrlerFirebaseTokenIf controller = new CtrlerFirebaseToken();
         TKhandler.updateIsRegistered(false);
         // Actualiza a falso.
         assertThat(controller.isGcmTokenSentServer(), is(false));
@@ -125,7 +124,7 @@ public class TokenIdentityCacherTest_1 {
     @Test
     public void testUpdateIsRegistered() throws Exception
     {
-        CtrlerFirebaseTokenIf controller = new CtrlerFirebaseToken(newViewerFirebaseToken(activity));
+        CtrlerFirebaseTokenIf controller = new CtrlerFirebaseToken();
         TKhandler.updateIsRegistered(true);
         controller.updateIsGcmTokenSentServer(true);
 

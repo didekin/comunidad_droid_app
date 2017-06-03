@@ -8,6 +8,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.didekindroid.api.CtrlerSelectListIf;
 import com.didekindroid.api.ViewerSelectListIf;
 import com.didekindroid.exception.UiException;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
@@ -122,7 +123,7 @@ public class ViewerIncidSeeCloseTest {
     }
 
     public static void checkOnSuccessLoadItems(IncidImportancia incidImportancia, Activity activity,
-                                               final ViewerSelectListIf<ListView, CtrlerSelectableItemIf<IncidenciaUser, Bundle>, IncidenciaUser> viewer)
+                                               final ViewerSelectListIf<ListView, CtrlerSelectListIf<IncidenciaUser>, IncidenciaUser> viewer)
     {
         final List<IncidenciaUser> list = doIncidenciaUsers(incidImportancia);
 

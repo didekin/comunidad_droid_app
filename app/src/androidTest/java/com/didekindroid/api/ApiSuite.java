@@ -11,6 +11,8 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         ControllerTest.class,
+        ObserverCacheCleanerTest.class,
+        ObserverSingleSelectItemTest.class,
         ObserverSingleSelectListTest.class,
         ViewerParentTest.class,
         ViewerSelectListTest.class,

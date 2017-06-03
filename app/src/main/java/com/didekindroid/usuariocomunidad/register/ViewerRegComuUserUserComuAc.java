@@ -1,8 +1,7 @@
-package com.didekindroid.usuariocomunidad;
+package com.didekindroid.usuariocomunidad.register;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.Button;
 
@@ -11,7 +10,6 @@ import com.didekindroid.api.ObserverCacheCleaner;
 import com.didekindroid.api.ViewerParent;
 import com.didekindroid.comunidad.ViewerRegComuFr;
 import com.didekindroid.router.ActivityInitiator;
-import com.didekindroid.router.ComponentReplacerIf;
 import com.didekindroid.usuario.ViewerRegUserFr;
 import com.didekindroid.util.ConnectionUtils;
 import com.didekinlib.model.comunidad.Comunidad;
@@ -31,9 +29,7 @@ import static com.didekindroid.util.UIutils.makeToast;
  * Time: 11:59
  */
 
-public final class ViewerRegComuUserUserComuAc extends
-        ViewerParent<View, CtrlerUserReg> implements
-        ComponentReplacerIf {
+public final class ViewerRegComuUserUserComuAc extends ViewerParent<View, CtrlerUserReg> {
 
     private ViewerRegComuUserUserComuAc(View view, Activity activity)
     {
@@ -59,22 +55,13 @@ public final class ViewerRegComuUserUserComuAc extends
         mRegistroButton.setOnClickListener(new RegComuUserButtonListener());
     }
 
-    // ==================================  ComponentReplaceIF  =================================
-
-    @Override
-    public void replaceComponent(@NonNull Bundle bundle)
-    {
-        Timber.d("replaceComponent()");
-        new ActivityInitiator(activity).initActivityWithBundle(bundle);
-    }
-
     // ==================================  HELPERS =================================
 
     @SuppressWarnings("WeakerAccess")
     void onRegisterSuccess()
     {
         Timber.d("onRegisterSuccess()");
-        replaceComponent(new Bundle(0));
+        new ActivityInitiator(activity).initActivityWithBundle(new Bundle(0));
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -94,7 +81,7 @@ public final class ViewerRegComuUserUserComuAc extends
             } else if (!ConnectionUtils.isInternetConnected(activity)) {
                 makeToast(activity, R.string.no_internet_conn_toast);
             } else {
-                controller.registerComuAndUser(
+                controller.registerUserAndComu(
                         new ObserverCacheCleaner(controller) {
                             @Override
                             public void onComplete()

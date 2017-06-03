@@ -1,4 +1,4 @@
-package com.didekindroid.usuariocomunidad;
+package com.didekindroid.usuariocomunidad.register;
 
 import com.didekindroid.api.Controller;
 import com.didekindroid.api.ObserverCacheCleaner;
@@ -12,6 +12,7 @@ import io.reactivex.Completable;
 import io.reactivex.CompletableSource;
 import io.reactivex.Single;
 import io.reactivex.functions.Function;
+import io.reactivex.observers.DisposableSingleObserver;
 import retrofit2.Response;
 import timber.log.Timber;
 
@@ -20,6 +21,7 @@ import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDa
 import static com.didekindroid.util.DaoUtil.getResponseBody;
 import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_DATA_NOT_INSERTED;
 import static io.reactivex.Completable.error;
+import static io.reactivex.Single.fromCallable;
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 import static io.reactivex.schedulers.Schedulers.io;
 
@@ -29,13 +31,15 @@ import static io.reactivex.schedulers.Schedulers.io;
  * Time: 12:13
  */
 
-class CtrlerUserReg extends Controller {
+public class CtrlerUserReg extends Controller {
 
     // .................................... OBSERVABLES .................................
 
     static Completable userAndComuRegistered(final UsuarioComunidad usuarioComunidad)
     {
-        return Single.fromCallable(new Callable<Boolean>() {
+        Timber.d("userAndComuRegistered()");
+
+        return fromCallable(new Callable<Boolean>() {
             @Override
             public Boolean call() throws Exception
             {
@@ -55,15 +59,38 @@ class CtrlerUserReg extends Controller {
         });
     }
 
+    static Single<Boolean> userComuAndComuRegistered(final UsuarioComunidad usuarioComunidad)
+    {
+        Timber.d("userComuAndComuRegistered()");
+        return fromCallable(new Callable<Boolean>() {
+            @Override
+            public Boolean call() throws Exception
+            {
+                return userComuDaoRemote.regComuAndUserComu(usuarioComunidad);
+            }
+        });
+    }
+
     //  =======================================================================================
     // ............................ SUBSCRIPTIONS ..................................
     //  =======================================================================================
 
-    boolean registerComuAndUser(ObserverCacheCleaner observer, UsuarioComunidad usuarioComunidad)
+    boolean registerUserAndComu(ObserverCacheCleaner observer, UsuarioComunidad usuarioComunidad)
     {
-        Timber.d("registerComuAndUser()");
+        Timber.d("registerUserAndComu()");
         return subscriptions.add(
                 userAndComuRegistered(usuarioComunidad)
+                        .subscribeOn(io())
+                        .observeOn(mainThread())
+                        .subscribeWith(observer)
+        );
+    }
+
+    boolean registerUserComuAndComu(DisposableSingleObserver<Boolean> observer, UsuarioComunidad usuarioComunidad)
+    {
+        Timber.d("registerUserComuAndComu()");
+        return subscriptions.add(
+                userComuAndComuRegistered(usuarioComunidad)
                         .subscribeOn(io())
                         .observeOn(mainThread())
                         .subscribeWith(observer)

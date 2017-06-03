@@ -38,6 +38,7 @@ import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
+import static io.reactivex.Single.just;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -99,7 +100,7 @@ public class ViewerIncidEditAcTest {
     @Test
     public void testCheckResolucion() throws Exception
     {
-        CtrlerIncidEditAc controllerLocal = new CtrlerIncidEditAc(viewer) {
+        CtrlerIncidEditAc controllerLocal = new CtrlerIncidEditAc() {
             @Override
             boolean seeResolucion(DisposableSingleObserver<Resolucion> observer, long incidenciaId, int resourceIdItemMn)
             {
@@ -129,5 +130,13 @@ public class ViewerIncidEditAcTest {
                 hasExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia),
                 hasExtra(INCID_RESOLUCION_OBJECT.key, resolucion)
         ));
+    }
+
+    @Test
+    public void test_ResolucionObserver() throws UiException
+    {
+        Resolucion resolucion = insertGetResolucionNoAdvances(incidImportancia);
+        just(resolucion).subscribeWith(viewer.new ResolucionObserver(R.id.incid_resolucion_reg_ac_mn));
+        onView(withId(R.id.incid_resolucion_fragment_container_ac)).check(matches(isDisplayed()));
     }
 }

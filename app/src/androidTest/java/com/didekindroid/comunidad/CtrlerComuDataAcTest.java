@@ -15,6 +15,8 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
+import io.reactivex.observers.DisposableSingleObserver;
+
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekindroid.testutil.RxSchedulersUtils.resetAllSchedulers;
@@ -63,13 +65,7 @@ public class CtrlerComuDataAcTest {
     @Test
     public void test_ModifyComunidadData() throws Exception
     {
-        controller = new CtrlerComuDataAc(new ViewerComuDataAc(null, activityRule.getActivity()){
-            @Override
-            void onSuccessModifyComunidad()
-            {
-                assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
-            }
-        });
+        controller = new CtrlerComuDataAc();
 
         Comunidad newComunidad = new Comunidad.ComunidadBuilder()
                 .copyComunidadNonNullValues(comunidad).nombreVia("nuevo_nombre_via").build();
@@ -77,7 +73,19 @@ public class CtrlerComuDataAcTest {
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
-            assertThat(controller.modifyComunidadData(, newComunidad), is(true));
+            assertThat(controller.modifyComunidadData(new DisposableSingleObserver<Integer>() {
+                @Override
+                public void onSuccess(Integer integer)
+                {
+                    assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
+                }
+
+                @Override
+                public void onError(Throwable e)
+                {
+                    fail();
+                }
+            }, newComunidad), is(true));
         } finally {
             resetAllSchedulers();
         }

@@ -176,7 +176,7 @@ public class ViewerLoginTest {
     @Test
     public void testDoDialogPositiveClick() throws Exception
     {
-        viewerLogin.setController(new CtrlerLogin(viewerLogin) {
+        viewerLogin.setController(new CtrlerLogin() {
             @Override
             public boolean doDialogPositiveClick(DisposableSingleObserver<Boolean> observer, @NonNull Usuario usuario)
             {

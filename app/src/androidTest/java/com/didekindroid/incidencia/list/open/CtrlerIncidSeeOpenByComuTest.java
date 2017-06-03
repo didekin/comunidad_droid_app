@@ -2,10 +2,8 @@ package com.didekindroid.incidencia.list.open;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.test.rule.ActivityTestRule;
 
-import com.didekindroid.R;
 import com.didekindroid.api.ActivityMock;
 import com.didekindroid.exception.UiException;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
@@ -19,11 +17,11 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import io.reactivex.functions.Consumer;
+import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.observers.TestObserver;
 
 import static com.didekindroid.incidencia.list.open.CtrlerIncidSeeOpenByComu.incidImportancia;
@@ -32,11 +30,8 @@ import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.INCID_DEF
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
-import static com.didekindroid.testutil.ActivityTestUtils.doListView;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_B;
-import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_C;
-import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_D;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekindroid.testutil.RxSchedulersUtils.resetAllSchedulers;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceAndroidMain;
@@ -46,8 +41,8 @@ import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -72,7 +67,7 @@ public class CtrlerIncidSeeOpenByComuTest {
     public void setUp() throws UiException, IOException
     {
         activity = activityRule.getActivity();
-        controller = new CtrlerIncidSeeOpenByComu(new ViewerIncidSeeForTest(activity));
+        controller = new CtrlerIncidSeeOpenByComu();
         incidImportancia = insertGetIncidImportancia(COMU_ESCORIAL_PEPE);
         incidencia = incidImportancia.getIncidencia();
     }
@@ -122,63 +117,53 @@ public class CtrlerIncidSeeOpenByComuTest {
     @Test
     public void testLoadItemsByEntitiyId()
     {
-        CtrlerIncidSeeOpenByComu controllerLocal = new CtrlerIncidSeeOpenByComu(new ViewerIncidSeeForTest(activity)) {
-            @Override
-            public void onSuccessLoadItemsInList(List<IncidenciaUser> incidOpenList)
-            {
-                assertThat(incidOpenList, notNullValue());
-                assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
-            }
-        };
-
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
-            assertThat(controllerLocal.loadItemsByEntitiyId(incidencia.getComunidadId()), is(true));
+            assertThat(controller.loadItemsByEntitiyId(new DisposableSingleObserver<List<IncidenciaUser>>() {
+                @Override
+                public void onSuccess(List<IncidenciaUser> incidenciaUsers)
+                {
+                    assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
+                }
+
+                @Override
+                public void onError(Throwable e)
+                {
+                    fail();
+                }
+            }, incidencia.getComunidadId()), is(true));
         } finally {
             resetAllSchedulers();
         }
-        assertThat(controllerLocal.getSubscriptions().size(), is(1));
+        assertThat(controller.getSubscriptions().size(), is(1));
         assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_A));
-    }
-
-    @Test
-    public void testOnSuccessLoadItemsById() throws Exception
-    {
-        // Execute
-        controller.onSuccessLoadItemsInList(new ArrayList<IncidenciaUser>());
-        // Check
-        assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_D));
     }
 
     @Test
     public void testSelectItem() throws Exception
     {
-        CtrlerIncidSeeOpenByComu controllerLocal = new CtrlerIncidSeeOpenByComu(new ViewerIncidSeeForTest(activity)) {
-            @Override
-            public void onSuccessSelectedItem(@NonNull Bundle bundle)
-            {
-                checkBundle(bundle);
-                assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_B), is(BEFORE_METHOD_EXEC));
-            }
-        };
-
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
-            assertThat(controllerLocal.selectItem(new IncidenciaUser.IncidenciaUserBuilder(incidencia).usuario(USER_PEPE).build()), is(true));
+            assertThat(controller.selectItem(new DisposableSingleObserver<Bundle>() {
+                @Override
+                public void onSuccess(Bundle bundle)
+                {
+                    assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_B), is(BEFORE_METHOD_EXEC));
+                }
+
+                @Override
+                public void onError(Throwable e)
+                {
+                    fail();
+                }
+            }, new IncidenciaUser.IncidenciaUserBuilder(incidencia).usuario(USER_PEPE).build()), is(true));
         } finally {
             resetAllSchedulers();
         }
         assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_B));
-        assertThat(controllerLocal.getSubscriptions().size(), is(1));
-    }
-
-    @Test
-    public void testOnSuccessSelectedItem() throws Exception
-    {
-        controller.onSuccessSelectedItem(new Bundle());
-        assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_C));
+        assertThat(controller.getSubscriptions().size(), is(1));
     }
 
     //  ============================================================================================
@@ -191,25 +176,5 @@ public class CtrlerIncidSeeOpenByComuTest {
         assertThat(incidImportancia.getImportancia(), is((short) 3));
         assertThat(incidImportancia.getUserComu(), is(this.incidImportancia.getUserComu()));
         assertThat(bundle.getBoolean(INCID_RESOLUCION_FLAG.key), is(false));
-    }
-
-    class ViewerIncidSeeForTest extends ViewerIncidSeeOpen {
-
-        ViewerIncidSeeForTest(Activity activity)
-        {
-            super(doListView(R.layout.mock_list_fr), activity);
-        }
-
-        @Override
-        public void replaceComponent(@NonNull Bundle bundle)
-        {
-            assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_C), is(BEFORE_METHOD_EXEC));
-        }
-
-        @Override
-        public void onSuccessLoadItemList(List<IncidenciaUser> itemsList)
-        {
-            assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_D), is(BEFORE_METHOD_EXEC));
-        }
     }
 }

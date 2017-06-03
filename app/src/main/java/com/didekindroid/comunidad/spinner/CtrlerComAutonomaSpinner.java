@@ -20,7 +20,8 @@ import static io.reactivex.schedulers.Schedulers.io;
  * Time: 18:51
  */
 
-class CtrlerComAutonomaSpinner extends CtrlerSelectList<ComunidadAutonoma> {
+@SuppressWarnings("WeakerAccess")
+public class CtrlerComAutonomaSpinner extends CtrlerSelectList<ComunidadAutonoma> {
 
     // .................................... OBSERVABLE .......................................
 

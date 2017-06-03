@@ -10,7 +10,6 @@ import android.widget.Button;
 import com.didekindroid.R;
 import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.router.ActivityRouter;
-import com.didekindroid.router.ComponentReplacerIf;
 
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
@@ -29,7 +28,7 @@ import static com.didekindroid.util.UIutils.getUiExceptionFromThrowable;
  * Postconditions:
  * 1. Unregistered user, if she chooses so. ComuSearchAc is to be showed.
  */
-public class DeleteMeAc extends AppCompatActivity implements ComponentReplacerIf {
+public class DeleteMeAc extends AppCompatActivity {
 
     View acView;
     CtrlerDeleteMeIf controller;
@@ -74,7 +73,6 @@ public class DeleteMeAc extends AppCompatActivity implements ComponentReplacerIf
         controller.clearSubscriptions();
     }
 
-    @Override
     public void replaceComponent(Bundle bundle)
     {
         Timber.d("initActivityWithBundle()");
@@ -103,6 +101,7 @@ public class DeleteMeAc extends AppCompatActivity implements ComponentReplacerIf
 
     // .............................. HELPERS ..................................
 
+    @SuppressWarnings("WeakerAccess")
     class DeleteMeSingleObserver extends DisposableSingleObserver<Boolean> {
 
         @Override

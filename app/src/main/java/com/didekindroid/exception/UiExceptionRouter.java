@@ -35,6 +35,7 @@ import static com.didekinlib.model.incidencia.dominio.IncidenciaExceptionMsg.INC
 import static com.didekinlib.model.incidencia.dominio.IncidenciaExceptionMsg.INCID_IMPORTANCIA_WRONG_INIT;
 import static com.didekinlib.model.incidencia.dominio.IncidenciaExceptionMsg.RESOLUCION_DUPLICATE;
 import static com.didekinlib.model.incidencia.dominio.IncidenciaExceptionMsg.RESOLUCION_WRONG_INIT;
+import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_DATA_NOT_INSERTED;
 import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_DATA_NOT_MODIFIED;
 import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_DUPLICATE;
 import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOUND;
@@ -89,10 +90,11 @@ public final class UiExceptionRouter implements UiExceptionRouterIf {
         router.put(USERCOMU_WRONG_INIT.getHttpMessage(), LOGIN_ACC);
         router.put(USER_COMU_NOT_FOUND.getHttpMessage(), LOGIN_ACC);
         router.put(USER_DATA_NOT_MODIFIED.getHttpMessage(), new ActionForUiException(UserDataAc.class, R.string.user_data_not_modified_msg));
+        router.put(USER_DATA_NOT_INSERTED.getHttpMessage(), LOGIN_ACC);
+        router.put(USER_NAME_DUPLICATE.getHttpMessage(), LOGIN_ACC);
+        router.put(USER_NAME_NOT_FOUND.getHttpMessage(), LOGIN_ACC);
         router.put(USER_NOT_COMPARABLE.getHttpMessage(), LOGIN_ACC);
         router.put(USER_NOT_EQUAL_ABLE.getHttpMessage(), LOGIN_ACC);
-        router.put(USER_NAME_NOT_FOUND.getHttpMessage(), LOGIN_ACC);
-        router.put(USER_NAME_DUPLICATE.getHttpMessage(), LOGIN_ACC);
         router.put(USER_NOT_HASHABLE.getHttpMessage(), LOGIN_ACC);
         router.put(USER_WRONG_INIT.getHttpMessage(), LOGIN_ACC);
     }

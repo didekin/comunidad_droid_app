@@ -18,7 +18,8 @@ import static io.reactivex.schedulers.Schedulers.io;
  * Time: 15:11
  */
 
-class CtrlerComuSpinner extends CtrlerSelectList<Comunidad> {
+@SuppressWarnings("WeakerAccess")
+public class CtrlerComuSpinner extends CtrlerSelectList<Comunidad> {
 
     @Override
     public boolean loadItemsByEntitiyId(DisposableSingleObserver<List<Comunidad>> observer, Long... entityId)

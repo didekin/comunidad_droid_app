@@ -44,7 +44,6 @@ import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
 import static com.didekinlib.model.common.dominio.ValidDataPatterns.LINE_BREAK;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
-import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -169,28 +168,6 @@ public class ViewerIncidRegAcTest {
     }
 
     @Test
-    public void testOnSuccessModifyIncidImportancia() throws Exception
-    {
-        try {
-            viewer.onSuccessModifyIncidImportancia(2);
-            fail();
-        } catch (Exception ue) {
-            assertThat(ue, instanceOf(UnsupportedOperationException.class));
-        }
-    }
-
-    @Test
-    public void testOnSuccessEraseIncidencia() throws Exception
-    {
-        try {
-            viewer.onSuccessEraseIncidencia(1);
-            fail();
-        } catch (Exception ue) {
-            assertThat(ue, instanceOf(UnsupportedOperationException.class));
-        }
-    }
-
-    @Test
     public void testSaveState()
     {
         ViewerIncidRegFr viewerIncidRegFr = new ViewerIncidRegFr(null, activity, viewer) {
@@ -207,8 +184,7 @@ public class ViewerIncidRegAcTest {
                 assertThat(flagMethodExec_2.getAndSet(AFTER_METHOD_EXEC_B), is(BEFORE_METHOD_EXEC));
             }
         };
-        viewerFirebaseToken.setController(new CtrlerFirebaseToken(viewerFirebaseToken));
-        viewer.viewerIncidRegFr = viewerIncidRegFr;
+        viewerFirebaseToken.setController(new CtrlerFirebaseToken());
         viewer.viewerFirebaseToken = viewerFirebaseToken;
         viewer.saveState(new Bundle());
         assertThat(flagMethodExec_1.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_A));

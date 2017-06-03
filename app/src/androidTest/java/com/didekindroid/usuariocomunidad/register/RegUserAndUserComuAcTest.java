@@ -1,4 +1,4 @@
-package com.didekindroid.usuariocomunidad;
+package com.didekindroid.usuariocomunidad.register;
 
 import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
@@ -10,6 +10,7 @@ import com.didekindroid.security.TokenIdentityCacher;
 import com.didekindroid.usuario.testutil.UserEspressoTestUtil;
 import com.didekindroid.usuario.testutil.UserItemMenuTestUtils;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
+import com.didekindroid.usuariocomunidad.register.RegUserAndUserComuAc;
 import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
 import com.didekinlib.model.comunidad.Comunidad;
 

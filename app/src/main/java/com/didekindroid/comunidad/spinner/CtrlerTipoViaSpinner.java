@@ -19,7 +19,8 @@ import static io.reactivex.schedulers.Schedulers.io;
  * Time: 10:08
  */
 
-class CtrlerTipoViaSpinner extends CtrlerSelectList<TipoViaValueObj> {
+@SuppressWarnings("WeakerAccess")
+public class CtrlerTipoViaSpinner extends CtrlerSelectList<TipoViaValueObj> {
 
     // .................................... OBSERVABLE .......................................
 
@@ -49,7 +50,4 @@ class CtrlerTipoViaSpinner extends CtrlerSelectList<TipoViaValueObj> {
                 .subscribeWith(observer)
         );
     }
-
-    // .................................... INSTANCE METHODS .....................................
-
 }

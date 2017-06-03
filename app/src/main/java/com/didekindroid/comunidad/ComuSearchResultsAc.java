@@ -11,9 +11,9 @@ import android.view.MenuItem;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.router.ActivityInitiator;
-import com.didekindroid.usuariocomunidad.RegUserAndUserComuAc;
-import com.didekindroid.usuariocomunidad.RegUserComuAc;
-import com.didekindroid.usuariocomunidad.UserComuDataAc;
+import com.didekindroid.usuariocomunidad.register.RegUserAndUserComuAc;
+import com.didekindroid.usuariocomunidad.register.RegUserComuAc;
+import com.didekindroid.usuariocomunidad.data.UserComuDataAc;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 

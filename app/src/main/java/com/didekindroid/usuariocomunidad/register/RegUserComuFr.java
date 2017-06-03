@@ -1,4 +1,4 @@
-package com.didekindroid.usuariocomunidad;
+package com.didekindroid.usuariocomunidad.register;
 
 
 import android.os.Bundle;
@@ -13,11 +13,8 @@ import com.didekindroid.api.ViewerParentInjectorIf;
 
 import timber.log.Timber;
 
-import static com.didekindroid.usuariocomunidad.ViewerRegUserComuFr.newViewerRegUserComuFr;
-
 public class RegUserComuFr extends Fragment {
 
-    ViewerParentInjectorIf viewerInjector;
     ViewerRegUserComuFr viewer;
     private View regUserComuFrView;
 
@@ -36,8 +33,8 @@ public class RegUserComuFr extends Fragment {
         Timber.d("onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
 
-        viewerInjector = (ViewerParentInjectorIf) getActivity();
-        viewer = newViewerRegUserComuFr(regUserComuFrView, viewerInjector.getViewerAsParent());
+        ViewerParentInjectorIf viewerInjector = (ViewerParentInjectorIf) getActivity();
+        viewer = ViewerRegUserComuFr.newViewerRegUserComuFr(regUserComuFrView, viewerInjector.getViewerAsParent());
         viewer.doViewInViewer(savedInstanceState, null);
         viewerInjector.setChildInViewer(viewer);
     }

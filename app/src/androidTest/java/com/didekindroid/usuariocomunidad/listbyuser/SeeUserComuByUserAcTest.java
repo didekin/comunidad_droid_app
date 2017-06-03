@@ -4,15 +4,11 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 
-
-import com.didekindroid.exception.UiException;
-import com.didekindroid.usuario.testutil.UserItemMenuTestUtils;
 import com.didekindroid.R;
 import com.didekindroid.comunidad.testutil.ComuDataTestUtil;
+import com.didekindroid.exception.UiException;
+import com.didekindroid.usuario.testutil.UserItemMenuTestUtils;
 import com.didekindroid.usuariocomunidad.RolUi;
-import com.didekindroid.usuariocomunidad.listbyuser.SeeUserComuByUserAc;
-import com.didekindroid.usuariocomunidad.listbyuser.SeeUserComuByUserAdapter;
-import com.didekindroid.usuariocomunidad.listbyuser.SeeUserComuByUserFr;
 import com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil;
 
 import org.hamcrest.Matchers;
@@ -33,15 +29,16 @@ import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.didekindroid.comunidad.testutil.ComuMenuTestUtil.COMU_SEARCH_AC;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
-
-import static com.didekindroid.comunidad.testutil.ComuMenuTestUtil.COMU_SEARCH_AC;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_LA_FUENTE_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.userComuDataLayout;
 import static external.LongListMatchers.withAdaptedData;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -56,10 +53,6 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class SeeUserComuByUserAcTest {
 
-    SeeUserComuByUserAc mActivity;
-    SeeUserComuByUserFr mFragment;
-    private int fragmentLayoutId = R.id.see_usercomu_by_user_frg;
-
     @Rule
     public IntentsTestRule<SeeUserComuByUserAc> intentRule = new IntentsTestRule<SeeUserComuByUserAc>(SeeUserComuByUserAc.class) {
 
@@ -73,6 +66,8 @@ public class SeeUserComuByUserAcTest {
             }
         }
     };
+    SeeUserComuByUserAc mActivity;
+    SeeUserComuByUserFr mFragment;
 
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
@@ -84,7 +79,7 @@ public class SeeUserComuByUserAcTest {
     public void setUp() throws Exception
     {
         mActivity = intentRule.getActivity();
-        mFragment = (SeeUserComuByUserFr) mActivity.getSupportFragmentManager().findFragmentById(R.id.see_usercomu_by_user_frg);
+        mFragment = (SeeUserComuByUserFr) mActivity.getSupportFragmentManager().findFragmentById(seeUserComuByUserFrRsId);
     }
 
     @After
@@ -103,13 +98,13 @@ public class SeeUserComuByUserAcTest {
         assertThat(TKhandler.isRegisteredUser(), is(true));
         assertThat(mFragment.getFragmentView(), notNullValue());
 
-        onView(withId(fragmentLayoutId)).check(matches(isDisplayed()));
-        onView(ViewMatchers.withId(R.id.appbar)).check(matches(isDisplayed()));
+        onView(withId(seeUserComuByUserFrRsId)).check(matches(isDisplayed()));
+        onView(withId(R.id.appbar)).check(matches(isDisplayed()));
 
         // Verificamos navegación en ambas direcciones.
-        onData(Matchers.is(COMU_LA_FUENTE_PEPE)).check(matches(isDisplayed())).perform(click());
-        onView(ViewMatchers.withId(R.id.usercomu_data_ac_layout)).check(matches(isDisplayed()));
-        checkUp(fragmentLayoutId);
+        onData(is(COMU_LA_FUENTE_PEPE)).check(matches(isDisplayed())).perform(click());
+        onView(withId(userComuDataLayout)).check(matches(isDisplayed()));
+        checkUp(seeUserComuByUserFrRsId);
     }
 
     @Test
@@ -119,9 +114,9 @@ public class SeeUserComuByUserAcTest {
         SeeUserComuByUserAdapter adapter = mFragment.mAdapter;
         assertThat(adapter.getCount(), is(3));
         // Orden es provinciaId, municipioCd.
-        assertThat(adapter.getItem(0), Matchers.is(COMU_LA_FUENTE_PEPE));
-        assertThat(adapter.getItem(1), Matchers.is(COMU_ESCORIAL_PEPE));
-        assertThat(adapter.getItem(2), Matchers.is(COMU_PLAZUELA5_PEPE));
+        assertThat(adapter.getItem(0), is(COMU_LA_FUENTE_PEPE));
+        assertThat(adapter.getItem(1), is(COMU_ESCORIAL_PEPE));
+        assertThat(adapter.getItem(2), is(COMU_PLAZUELA5_PEPE));
 
         for (int i = 0; i < adapter.getCount(); ++i) {
             onView(withAdaptedData(Matchers.<Object>is(adapter.getItem(i)))).check(matches(isDisplayed()));
@@ -131,52 +126,52 @@ public class SeeUserComuByUserAcTest {
     @Test
     public void testViewData_2()
     {
-        onData(Matchers.is(COMU_LA_FUENTE_PEPE))
+        onData(is(COMU_LA_FUENTE_PEPE))
                 .onChildView(
                         allOf(
-                                ViewMatchers.withId(R.id.nombreComunidad_view),
+                                withId(R.id.nombreComunidad_view),
                                 ViewMatchers.withText(ComuDataTestUtil.COMU_LA_FUENTE.getNombreComunidad())
                         )
                 )
                 .check(matches(isDisplayed()));
-        onData(Matchers.is(COMU_LA_FUENTE_PEPE))
+        onData(is(COMU_LA_FUENTE_PEPE))
                 .onChildView(
                         allOf(
-                                ViewMatchers.withId(R.id.usercomu_item_roles_txt),
+                                withId(R.id.usercomu_item_roles_txt),
                                 ViewMatchers.withText(RolUi.formatRolToString(COMU_LA_FUENTE_PEPE.getRoles(), mActivity.getResources()))
                         )
                 )
                 .check(matches(isDisplayed()));
 
-        onData(Matchers.is(COMU_ESCORIAL_PEPE))
+        onData(is(COMU_ESCORIAL_PEPE))
                 .onChildView(
                         allOf(
-                                ViewMatchers.withId(R.id.nombreComunidad_view),
+                                withId(R.id.nombreComunidad_view),
                                 ViewMatchers.withText(ComuDataTestUtil.COMU_EL_ESCORIAL.getNombreComunidad())
                         )
                 )
                 .check(matches(isDisplayed()));
-        onData(Matchers.is(COMU_ESCORIAL_PEPE))
+        onData(is(COMU_ESCORIAL_PEPE))
                 .onChildView(
                         allOf(
-                                ViewMatchers.withId(R.id.usercomu_item_roles_txt),
+                                withId(R.id.usercomu_item_roles_txt),
                                 withText(RolUi.formatRolToString(COMU_ESCORIAL_PEPE.getRoles(), mActivity.getResources()))
                         )
                 )
                 .check(matches(isDisplayed()));
 
-        onData(Matchers.is(COMU_PLAZUELA5_PEPE))
+        onData(is(COMU_PLAZUELA5_PEPE))
                 .onChildView(
                         allOf(
-                                ViewMatchers.withId(R.id.nombreComunidad_view),
+                                withId(R.id.nombreComunidad_view),
                                 ViewMatchers.withText(ComuDataTestUtil.COMU_LA_PLAZUELA_5.getNombreComunidad())
                         )
                 )
                 .check(matches(isDisplayed()));
-        onData(Matchers.is(COMU_PLAZUELA5_PEPE))
+        onData(is(COMU_PLAZUELA5_PEPE))
                 .onChildView(
                         allOf(
-                                ViewMatchers.withId(R.id.usercomu_item_roles_txt),
+                                withId(R.id.usercomu_item_roles_txt),
                                 withText(RolUi.formatRolToString(COMU_PLAZUELA5_PEPE.getRoles(), mActivity.getResources()))
                         )
                 )
@@ -184,27 +179,27 @@ public class SeeUserComuByUserAcTest {
 
         onView(allOf(
                 withText("Elda"),
-                ViewMatchers.withId(R.id.municipio_view),
+                withId(R.id.municipio_view),
                 hasSibling(allOf(
-                        ViewMatchers.withId(R.id.provincia_view),
+                        withId(R.id.provincia_view),
                         withText("Alicante/Alacant")
                 ))
         )).check(matches(isDisplayed()));
 
         onView(allOf(
                 withText("Alfoz"),
-                ViewMatchers.withId(R.id.municipio_view),
+                withId(R.id.municipio_view),
                 hasSibling(allOf(
-                        ViewMatchers.withId(R.id.provincia_view),
+                        withId(R.id.provincia_view),
                         withText("Lugo")
                 ))
         )).check(matches(isDisplayed()));
 
         onView(allOf(
                 withText("Benizalón"),
-                ViewMatchers.withId(R.id.municipio_view),
+                withId(R.id.municipio_view),
                 hasSibling(allOf(
-                        ViewMatchers.withId(R.id.provincia_view),
+                        withId(R.id.provincia_view),
                         withText("Almería")
                 ))
         )).check(matches(isDisplayed()));
@@ -214,7 +209,7 @@ public class SeeUserComuByUserAcTest {
     public void testUserDataMn_withToken() throws InterruptedException
     {
         UserItemMenuTestUtils.USER_DATA_AC.checkMenuItem_WTk(mActivity);
-        checkUp(fragmentLayoutId);
+        checkUp(seeUserComuByUserFrRsId);
     }
 
     @Test

@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
+import io.reactivex.observers.DisposableSingleObserver;
+
 import static com.didekindroid.comunidad.spinner.ViewerTipoViaSpinner.newViewerTipoViaSpinner;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.TIPO_VIA_ID;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSavedStateWithItemSelected;
@@ -145,9 +147,9 @@ public class ViewerTipoViaSpinnerTest {
         Bundle bundle = new Bundle(1);
         bundle.putLong(keyBundle, 112L);
 
-        viewer.setController(new CtrlerTipoViaSpinner(viewer) {
+        viewer.setController(new CtrlerTipoViaSpinner() {
             @Override
-            public boolean loadItemsByEntitiyId(Long... entityId)
+            public boolean loadItemsByEntitiyId(DisposableSingleObserver<List<TipoViaValueObj>> observer, Long... entityId)
             {
                 assertThat(flagLocalExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
                 return false;

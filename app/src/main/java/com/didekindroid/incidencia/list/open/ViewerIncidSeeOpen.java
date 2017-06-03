@@ -37,7 +37,7 @@ class ViewerIncidSeeOpen extends ViewerIncidSeeClose {
         super(new ListView(activity), activity);
     }
 
-    ViewerIncidSeeOpen(View frView, Activity activity)
+    private ViewerIncidSeeOpen(View frView, Activity activity)
     {
         super(frView, activity);
     }

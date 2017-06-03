@@ -16,7 +16,7 @@ import com.didekindroid.api.ObserverSingleSelectList;
 import com.didekindroid.api.SpinnerEventItemSelectIf;
 import com.didekindroid.api.SpinnerEventListener;
 import com.didekindroid.api.ViewerSelectList;
-import com.didekindroid.router.ComponentReplacerIf;
+import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 
@@ -37,7 +37,7 @@ import static com.didekindroid.util.UIutils.assertTrue;
  */
 public class ViewerIncidSeeClose extends
         ViewerSelectList<ListView, CtrlerSelectListIf<IncidenciaUser>, IncidenciaUser>
-        implements ComponentReplacerIf, SpinnerEventListener {
+        implements SpinnerEventListener {
 
     protected ViewerComuSpinner comuSpinnerViewer;
 
@@ -128,6 +128,7 @@ public class ViewerIncidSeeClose extends
      * <p>
      * This method is called after doOnClickItemId() --> controller.loadItemsByEntitiyId() are executed.
      */
+    @Override
     public void onSuccessLoadItemList(List<IncidenciaUser> itemsList)
     {
         Timber.d("onSuccessLoadItemList()");
@@ -142,19 +143,6 @@ public class ViewerIncidSeeClose extends
         replaceComponent(bundle);
     }
 
-    // ==================================  ComponentReplaceIF  =================================
-
-    /**
-     * This method is called after the controller loads the data related with the incidencia selected (its resolucion, mainly).
-     * Data are passed in a bundle to the next component.
-     */
-    @Override
-    public void replaceComponent(@NonNull Bundle bundle)
-    {
-        Timber.d("initActivityWithBundle()");
-        ComponentReplacerIf.class.cast(activity).replaceComponent(bundle);
-    }
-
     // ==================================  SpinnerEventListener  =================================
 
     /**
@@ -167,10 +155,20 @@ public class ViewerIncidSeeClose extends
     public void doOnClickItemId(SpinnerEventItemSelectIf spinnerEventItemSelect)
     {
         Timber.d("doOnClickItemId()");
-        controller.loadItemsByEntitiyId(new ObserverSingleSelectList<>(this),spinnerEventItemSelect.getSpinnerItemIdSelect());
+        controller.loadItemsByEntitiyId(new ObserverSingleSelectList<>(this), spinnerEventItemSelect.getSpinnerItemIdSelect());
     }
 
     // ==================================  HELPERS  =================================
+
+    /**
+     * This method is called after the controller loads the data related with the incidencia selected (its resolucion, mainly).
+     * Data are passed in a bundle to the next component.
+     */
+    public void replaceComponent(@NonNull Bundle bundle)
+    {
+        Timber.d("initActivityWithBundle()");
+        new ActivityInitiator(activity).initActivityWithBundle(bundle);
+    }
 
     @NonNull
     private ArrayAdapter<IncidenciaUser> getNewViewAdapter()

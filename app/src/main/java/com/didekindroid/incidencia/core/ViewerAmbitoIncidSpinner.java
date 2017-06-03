@@ -65,7 +65,7 @@ public final class ViewerAmbitoIncidSpinner extends
         incidenciaBean = IncidenciaBean.class.cast(viewBean);
         initSelectedItemId(savedState);
         view.setOnItemSelectedListener(new ViewerAmbitoIncidSpinner.AmbitoIncidSelectedListener());
-        CtrlerAmbitoIncidSpinner.class.cast(controller).loadItemsByEntitiyId(new ObserverSingleSelectList<>(this));
+        controller.loadItemsByEntitiyId(new ObserverSingleSelectList<>(this));
     }
 
     @Override

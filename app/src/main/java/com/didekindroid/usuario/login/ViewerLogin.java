@@ -11,10 +11,10 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.didekindroid.R;
-import com.didekindroid.exception.UiException;
-import com.didekindroid.router.ComponentReplacerIf;
 import com.didekindroid.api.Viewer;
+import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf;
+import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.usuario.UsuarioBean;
 import com.didekinlib.model.usuario.Usuario;
 
@@ -40,13 +40,13 @@ import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOU
  * Time: 12:05
  */
 
-class ViewerLogin extends Viewer<View, CtrlerLoginIf> implements ViewerLoginIf, ComponentReplacerIf {
+final class ViewerLogin extends Viewer<View, CtrlerLoginIf> implements ViewerLoginIf {
 
     @SuppressWarnings("WeakerAccess")
     final AtomicReference<UsuarioBean> usuarioBean;
     private AtomicInteger counterWrong;
 
-    ViewerLogin(LoginAc activity)
+    private ViewerLogin(LoginAc activity)
     {
         super(activity.acView, activity, null);
         counterWrong = new AtomicInteger(0);
@@ -205,7 +205,7 @@ class ViewerLogin extends Viewer<View, CtrlerLoginIf> implements ViewerLoginIf, 
     public void saveState(Bundle savedState)
     {
         Timber.d("saveState()");
-        if (savedState == null){
+        if (savedState == null) {
             savedState = new Bundle(1);
         }
         savedState.putInt(login_counter_atomic_int.key, counterWrong.get());
@@ -218,14 +218,13 @@ class ViewerLogin extends Viewer<View, CtrlerLoginIf> implements ViewerLoginIf, 
         return counterWrong;
     }
 
-    @Override
+    // ==================================  HELPERS  =================================
+
     public void replaceComponent(@NonNull Bundle bundle)
     {
         Timber.d("replaceComponent()");
-        ComponentReplacerIf.class.cast(activity).replaceComponent(bundle);
+        new ActivityInitiator(activity).initActivityWithBundle(bundle);
     }
-
-    // ==================================  HELPERS  =================================
 
     @SuppressWarnings("WeakerAccess")
     class LoginButtonListener implements View.OnClickListener {

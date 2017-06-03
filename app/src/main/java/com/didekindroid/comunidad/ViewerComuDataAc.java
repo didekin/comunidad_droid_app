@@ -9,7 +9,6 @@ import android.widget.Button;
 import com.didekindroid.R;
 import com.didekindroid.api.ViewerParent;
 import com.didekindroid.router.ActivityInitiator;
-import com.didekindroid.router.ComponentReplacerIf;
 import com.didekindroid.util.ConnectionUtils;
 import com.didekinlib.model.comunidad.Comunidad;
 
@@ -29,7 +28,7 @@ import static com.didekindroid.util.UIutils.makeToast;
  * Date: 08/05/17
  * Time: 14:09
  */
-class ViewerComuDataAc extends ViewerParent<View, CtrlerComuDataAc> implements ComponentReplacerIf {
+class ViewerComuDataAc extends ViewerParent<View, CtrlerComuDataAc> {
 
     ViewerComuDataAc(View view, Activity activity)
     {
@@ -56,16 +55,13 @@ class ViewerComuDataAc extends ViewerParent<View, CtrlerComuDataAc> implements C
         modifyButton.setOnClickListener(new ComuDataAcButtonListener(Comunidad.class.cast(viewBean)));
     }
 
-    // ==================================  ComponentReplaceIF  =================================
+    // ==================================  HELPERS =================================
 
-    @Override
     public void replaceComponent(@NonNull Bundle bundle)
     {
         Timber.d("replaceComponent()");
         new ActivityInitiator(activity).initActivityWithBundle(bundle);
     }
-
-    // ==================================  HELPERS =================================
 
     void onSuccessModifyComunidad()
     {

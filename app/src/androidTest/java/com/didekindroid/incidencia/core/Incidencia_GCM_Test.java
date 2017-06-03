@@ -25,7 +25,6 @@ import java.util.concurrent.Callable;
 import static android.content.Context.NOTIFICATION_SERVICE;
 import static com.didekindroid.incidencia.testutils.GcmConstantForTests.PACKAGE_TEST;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
-import static com.didekindroid.usuario.firebase.ViewerFirebaseToken.newViewerFirebaseToken;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -39,7 +38,7 @@ import static org.junit.Assert.assertThat;
  * User: pedro@didekin
  * Date: 27/11/15
  * Time: 16:38
- *
+ * <p>
  * Integration tests for Firebase messages:
  * 1. We check that the firebase token is sent to server when the activity is created.
  * 2. We check that after a task which produces a notification, a notification is received in the phone.
@@ -47,6 +46,8 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public abstract class Incidencia_GCM_Test {
 
+    @Rule
+    public IntentsTestRule<? extends Activity> intentRule = doIntentsTestRule();
     Activity mActivity;
     NotificationManager notificationManager;
     String firebaseToken;
@@ -55,9 +56,6 @@ public abstract class Incidencia_GCM_Test {
      * To be implemented in subclasses.
      */
     protected abstract IntentsTestRule<? extends Activity> doIntentsTestRule();
-
-    @Rule
-    public IntentsTestRule<? extends Activity> intentRule = doIntentsTestRule();
 
     @Before
     public void setUp() throws Exception
@@ -77,7 +75,7 @@ public abstract class Incidencia_GCM_Test {
 
     protected void checkToken() throws InterruptedException, UiException
     {
-        CtrlerFirebaseTokenIf controller = new CtrlerFirebaseToken(newViewerFirebaseToken(mActivity));
+        CtrlerFirebaseTokenIf controller = new CtrlerFirebaseToken();
         firebaseToken = FirebaseInstanceId.getInstance().getToken();
         await().atMost(6, SECONDS).until(getGcmToken(), allOf(
                 notNullValue(),
@@ -101,18 +99,22 @@ public abstract class Incidencia_GCM_Test {
     /* ........................Awaitility helpers ................ */
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    private Callable<Integer> notificationsSize() {
+    private Callable<Integer> notificationsSize()
+    {
         return new Callable<Integer>() {
-            public Integer call() throws Exception {
+            public Integer call() throws Exception
+            {
                 notificationManager = (NotificationManager) mActivity.getSystemService(NOTIFICATION_SERVICE);
                 return notificationManager.getActiveNotifications().length;
             }
         };
     }
 
-    private Callable<String> getGcmToken() {
+    private Callable<String> getGcmToken()
+    {
         return new Callable<String>() {
-            public String call() throws Exception {
+            public String call() throws Exception
+            {
                 return usuarioDao.getGcmToken();
             }
         };

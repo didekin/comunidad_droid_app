@@ -1,10 +1,7 @@
 package com.didekindroid.usuario.userdata;
 
 import android.app.Activity;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.test.rule.ActivityTestRule;
-import android.view.View;
 
 import com.didekindroid.api.ActivityMock;
 import com.didekindroid.exception.UiException;
@@ -17,8 +14,9 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
+import io.reactivex.observers.DisposableSingleObserver;
+
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_B;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekindroid.testutil.RxSchedulersUtils.resetAllSchedulers;
@@ -34,6 +32,7 @@ import static com.didekindroid.usuario.userdata.CtrlerUserModified.userModifiedW
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static java.util.concurrent.TimeUnit.SECONDS;
+import static junit.framework.Assert.fail;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -55,7 +54,7 @@ public class CtrlerUserModifiedTest {
     public void setUp() throws Exception
     {
         Activity activity = activityRule.getActivity();
-        controller = new CtrlerUserModified(new ViewerUserDataForTest(new View(activity), activity));
+        controller = new CtrlerUserModified();
     }
 
     // ..................................... OBSERVABLES ..........................................
@@ -100,12 +99,12 @@ public class CtrlerUserModifiedTest {
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
-            assertThat(controller.loadUserData(), is(true));
+            assertThat(controller.loadUserData(new TestDisposableSingleObserver<Usuario>()), is(true));
         } finally {
             resetAllSchedulers();
         }
         assertThat(controller.getSubscriptions().size(), is(1));
-        assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_A));
+        assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_B));
 
         cleanOneUser(USER_PEPE);
     }
@@ -118,7 +117,7 @@ public class CtrlerUserModifiedTest {
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
-            assertThat(controller.modifyUser(, oldUser, doNewUser(oldUser)), is(true));
+            assertThat(controller.modifyUser(new TestDisposableSingleObserver<Boolean>(), oldUser, doNewUser(oldUser)), is(true));
         } finally {
             resetAllSchedulers();
         }
@@ -131,26 +130,6 @@ public class CtrlerUserModifiedTest {
 
     // ..................................... HELPERS ..........................................
 
-    static class ViewerUserDataForTest extends ViewerUserData {
-
-        ViewerUserDataForTest(View view, Activity activity)
-        {
-            super(view, activity);
-        }
-
-        @Override
-        public void processBackUserDataLoaded(@NonNull Usuario usuario)
-        {
-            assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
-        }
-
-        @Override
-        public void replaceComponent(Bundle bundle)
-        {
-            assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_B), is(BEFORE_METHOD_EXEC));
-        }
-    }
-
     public Usuario doNewUser(Usuario oldUsuario)
     {
         return new Usuario.UsuarioBuilder()
@@ -160,4 +139,17 @@ public class CtrlerUserModifiedTest {
                 .build();
     }
 
+    static class TestDisposableSingleObserver<T> extends DisposableSingleObserver<T> {
+        @Override
+        public void onSuccess(T item)
+        {
+            assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_B), is(BEFORE_METHOD_EXEC));
+        }
+
+        @Override
+        public void onError(Throwable e)
+        {
+            fail();
+        }
+    }
 }

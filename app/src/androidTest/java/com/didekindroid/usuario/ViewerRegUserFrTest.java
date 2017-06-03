@@ -7,8 +7,8 @@ import com.didekindroid.R;
 import com.didekindroid.api.ViewerIf;
 import com.didekindroid.api.ViewerParentInjectedIf;
 import com.didekindroid.api.ViewerParentInjectorIf;
-import com.didekindroid.usuariocomunidad.RegComuAndUserAndUserComuAc;
-import com.didekindroid.usuariocomunidad.ViewerRegComuUserUserComuAc;
+import com.didekindroid.usuariocomunidad.register.RegComuAndUserAndUserComuAc;
+import com.didekindroid.usuariocomunidad.register.ViewerRegComuUserUserComuAc;
 import com.didekinlib.model.usuario.Usuario;
 
 import org.hamcrest.CoreMatchers;

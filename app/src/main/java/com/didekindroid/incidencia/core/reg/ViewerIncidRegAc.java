@@ -10,7 +10,6 @@ import com.didekindroid.R;
 import com.didekindroid.api.ViewerParent;
 import com.didekindroid.incidencia.core.CtrlerIncidRegEditFr;
 import com.didekindroid.router.ActivityInitiator;
-import com.didekindroid.router.ComponentReplacerIf;
 import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
@@ -32,10 +31,9 @@ import static com.didekindroid.util.UIutils.makeToast;
  */
 @SuppressWarnings("WeakerAccess")
 public class ViewerIncidRegAc extends ViewerParent<View, CtrlerIncidRegEditFr> implements
-        ComponentReplacerIf, RegIncidImportanciaCallableBack {
+        RegIncidImportanciaCallableBack {
 
     ViewerFirebaseTokenIf viewerFirebaseToken;
-
 
     public ViewerIncidRegAc(IncidRegAc activity)
     {
@@ -97,16 +95,13 @@ public class ViewerIncidRegAc extends ViewerParent<View, CtrlerIncidRegEditFr> i
         }
     }
 
-    // ==================================  ComponentReplacerIf  =================================
+//  ................................... HELPERS ......................................
 
-    @Override
     public void replaceComponent(@NonNull Bundle bundle)
     {
         Timber.d("replaceComponent()");
         new ActivityInitiator(activity).initActivityWithBundle(bundle);
     }
-
-//  ................................... HELPERS ......................................
 
     @SuppressWarnings("WeakerAccess")
     class RegButtonOnClickListener implements View.OnClickListener {

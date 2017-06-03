@@ -1,4 +1,4 @@
-package com.didekindroid.usuariocomunidad;
+package com.didekindroid.usuariocomunidad.data;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -11,12 +11,16 @@ import android.view.View;
 import android.widget.Button;
 
 import com.didekindroid.R;
-import com.didekindroid.comunidad.utils.ComuBundleKey;
+import com.didekindroid.api.ViewerIf;
+import com.didekindroid.api.ViewerParentInjectedIf;
+import com.didekindroid.api.ViewerParentInjectorIf;
 import com.didekindroid.comunidad.ComuSearchAc;
+import com.didekindroid.comunidad.utils.ComuBundleKey;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.security.IdentityCacher;
 import com.didekindroid.usuariocomunidad.listbyuser.SeeUserComuByUserAc;
+import com.didekindroid.usuariocomunidad.register.RegUserComuFr;
 import com.didekindroid.usuariocomunidad.util.UserComuBundleKey;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
@@ -25,17 +29,16 @@ import timber.log.Timber;
 
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+import static com.didekindroid.router.ActivityRouter.doUpMenu;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
+import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.util.UserComuAssertionMsg.userComu_should_be_deleted;
 import static com.didekindroid.usuariocomunidad.util.UserComuAssertionMsg.userComu_should_be_modified;
-import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
-import static com.didekindroid.router.ActivityRouter.doUpMenu;
+import static com.didekindroid.util.CommonAssertionMsg.intent_extra_should_be_initialized;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.util.UIutils.doToolBar;
-import static com.didekindroid.util.CommonAssertionMsg.intent_extra_should_be_initialized;
-import static com.didekindroid.util.UIutils.makeToast;
 import static com.didekinlib.http.UsuarioServConstant.IS_USER_DELETED;
 
 /**
@@ -54,9 +57,10 @@ import static com.didekinlib.http.UsuarioServConstant.IS_USER_DELETED;
  * ComuSearchAc.
  */
 @SuppressWarnings("ConstantConditions")
-public class UserComuDataAc extends AppCompatActivity {
+public class UserComuDataAc extends AppCompatActivity implements ViewerParentInjectorIf {
 
-    public RegUserComuFr mRegUserComuFr;
+    ViewerUserComuDataAc viewer;
+    RegUserComuFr mRegUserComuFr;
     UsuarioComunidad mOldUserComu;
     MenuItem mComuDataItem;
     IdentityCacher identityCacher;
@@ -126,6 +130,22 @@ public class UserComuDataAc extends AppCompatActivity {
     {
         Timber.d("deleteUserComuData()");
         new UserComuEraser().execute(mOldUserComu.getComunidad());
+    }
+
+    // ==================================  ViewerParentInjectorIf  =================================
+
+    @Override
+    public ViewerParentInjectedIf getViewerAsParent()
+    {
+        Timber.d("getViewerAsParent()");
+        return viewer;
+    }
+
+    @Override
+    public void setChildInViewer(ViewerIf childInViewer)
+    {
+        Timber.d("setChildInViewer()");
+        viewer.setChildViewer(childInViewer);
     }
 
 

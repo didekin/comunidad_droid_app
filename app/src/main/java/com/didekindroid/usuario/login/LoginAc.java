@@ -8,7 +8,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.router.ComponentReplacerIf;
 import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.router.ActivityRouter;
 import com.didekinlib.model.usuario.Usuario;
@@ -32,7 +31,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * 1c. If the userName exists, but the passowrd is not correct, after three failed intents,  a new passord is sent
  * by mail, after her confirmation.
  */
-public class LoginAc extends AppCompatActivity implements ComponentReplacerIf {
+public class LoginAc extends AppCompatActivity {
 
     View acView;
     ViewerLoginIf viewerLogin;
@@ -67,7 +66,6 @@ public class LoginAc extends AppCompatActivity implements ComponentReplacerIf {
         viewerLogin.clearSubscriptions();
     }
 
-    @Override
     public void replaceComponent(Bundle bundle)
     {
         Timber.d("initActivityWithBundle()");

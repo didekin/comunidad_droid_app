@@ -22,8 +22,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
+import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.repository.ComunidadDataDb.ComunidadAutonoma.NUMBER_RECORDS;
@@ -122,9 +124,9 @@ public class ViewerComuAutonomaSpinnerTest {
         Bundle bundle = new Bundle(1);
         bundle.putLong(keyBundle, 11L);
 
-        viewer.setController(new CtrlerComAutonomaSpinner(viewer) {
+        viewer.setController(new CtrlerComAutonomaSpinner() {
             @Override
-            public boolean loadItemsByEntitiyId(Long... entityId)
+            public boolean loadItemsByEntitiyId(DisposableSingleObserver<List<ComunidadAutonoma>> observer, Long... entityId)
             {
                 assertThat(flagLocalExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
                 return false;

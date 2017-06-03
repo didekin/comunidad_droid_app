@@ -22,6 +22,7 @@ import java.util.List;
 import retrofit2.Response;
 
 import static com.didekindroid.AppInitializer.creator;
+import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_EL_ESCORIAL;
 import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_LA_PLAZUELA_5;
 import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_REAL;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
@@ -39,6 +40,7 @@ import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanWithTk
 import static com.didekindroid.usuariocomunidad.RolUi.PRE;
 import static com.didekindroid.usuariocomunidad.RolUi.PRO;
 import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_LA_FUENTE_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_PEPE;
@@ -207,16 +209,21 @@ public class UserComuDaoRemoteTest {
     }
 
     @Test
-    public void testRegComuAndUserComu() throws Exception
+    public void testRegComuAndUserComu_1() throws Exception
     {
         whatClean = CLEAN_JUAN;
 
-        assertThat(refreshTkFile.exists(), is(false));
-        //Inserta userComu, comunidad, usuariocomunidad y actuliza tokenCache.
         signUpAndUpdateTk(COMU_REAL_JUAN);
+        assertThat(userComuDaoRemote.regComuAndUserComu(COMU_PLAZUELA5_JUAN), is(true));
+    }
 
-        boolean isRegistered = userComuDaoRemote.regComuAndUserComu(COMU_PLAZUELA5_JUAN);
-        assertThat(isRegistered, is(true));
+    @Test
+    public void testRegComuAndUserComu_2() throws Exception
+    {
+        whatClean = CLEAN_JUAN;
+
+        Usuario juan = signUpAndUpdateTk(COMU_REAL_JUAN);
+        assertThat(userComuDaoRemote.regComuAndUserComu(new UsuarioComunidad.UserComuBuilder(COMU_EL_ESCORIAL, juan).planta("uno").build()), is(true));
     }
 
     @Test

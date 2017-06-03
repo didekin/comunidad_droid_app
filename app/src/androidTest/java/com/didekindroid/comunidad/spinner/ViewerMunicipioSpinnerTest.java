@@ -7,6 +7,7 @@ import android.widget.Spinner;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ActivityMock;
+import com.didekindroid.api.ObserverSingleSelectList;
 import com.didekindroid.api.SpinnerMockFr;
 import com.didekinlib.model.comunidad.Municipio;
 import com.didekinlib.model.comunidad.Provincia;
@@ -19,6 +20,8 @@ import org.junit.runner.RunWith;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+
+import io.reactivex.observers.DisposableSingleObserver;
 
 import static com.didekindroid.comunidad.spinner.ViewerMunicipioSpinner.newViewerMunicipioSpinner;
 import static com.didekindroid.comunidad.spinner.ViewerMunicipioSpinner.spinnerEvent_default;
@@ -128,9 +131,9 @@ public class ViewerMunicipioSpinnerTest {
         Bundle bundle = new Bundle(1);
         bundle.putSerializable(keyBundle, new MunicipioSpinnerEventItemSelect(new Municipio((short) 11, new Provincia((short) 3))));
 
-        viewer.setController(new CtrlerMunicipioSpinner(viewer) {
+        viewer.setController(new CtrlerMunicipioSpinner() {
             @Override
-            public boolean loadItemsByEntitiyId(Long... entityId)
+            public boolean loadItemsByEntitiyId(DisposableSingleObserver<List<Municipio>> observer, Long... entityId)
             {
                 assertThat(flagLocalExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
                 return false;
@@ -161,9 +164,9 @@ public class ViewerMunicipioSpinnerTest {
         // ItemId is initialized.
         assertThat(viewer.getSelectedItemId(), is(11L));
         // Check controller.loadItemsByEntitiyId() --> onSuccessLoadItemList() --> view.setSelection() ... {--> MunicipioSelectedListener.onItemSelected() }
-        // We initialize to 0 the itemSelectedId to chedk the call to MunicipioSelectedListener.onItemSelected().
+        // We initialize to 0 the itemSelectedId to check the call to MunicipioSelectedListener.onItemSelected().
         viewer.setItemSelectedId(2L);
-        viewer.getController().loadItemsByEntitiyId(35L);
+        viewer.getController().loadItemsByEntitiyId(new ObserverSingleSelectList<>(viewer), 35L);
         waitAtMost(3, SECONDS).until(getAdapter(viewer.getViewInViewer()), notNullValue());
         assertThat(viewer.getViewInViewer().getCount(), is(34));
         // MunicipioSelectedListener.onItemSelected() modify municipioIn.

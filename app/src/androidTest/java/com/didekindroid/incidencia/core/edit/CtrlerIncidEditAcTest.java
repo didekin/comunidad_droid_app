@@ -17,6 +17,8 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
+import io.reactivex.observers.DisposableSingleObserver;
+
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
@@ -71,15 +73,7 @@ public class CtrlerIncidEditAcTest {
     public void setUp() throws Exception
     {
         IncidEditAc activity = activityRule.getActivity();
-        controller = new CtrlerIncidEditAc(new ViewerIncidEditAc(activity) {
-            @Override
-            void onSuccessSeeResolucion(Resolucion resolucion, int resourceIdItemMn)
-            {
-                assertThat(resolucion, is(resolucionBd));
-                assertThat(resourceIdItemMn, is(resorceMnId));
-                assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
-            }
-        });
+        controller = new CtrlerIncidEditAc();
     }
 
     @After
@@ -99,7 +93,19 @@ public class CtrlerIncidEditAcTest {
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
-            assertThat(controller.seeResolucion(, resolucionBd.getIncidencia().getIncidenciaId(), resorceMnId), is(true));
+            assertThat(controller.seeResolucion(new DisposableSingleObserver<Resolucion>() {
+                @Override
+                public void onSuccess(Resolucion resolucion)
+                {
+                    assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
+                }
+
+                @Override
+                public void onError(Throwable e)
+                {
+                    fail();
+                }
+            }, resolucionBd.getIncidencia().getIncidenciaId(), resorceMnId), is(true));
         } finally {
             resetAllSchedulers();
         }

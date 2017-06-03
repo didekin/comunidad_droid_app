@@ -15,18 +15,14 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
+import io.reactivex.observers.DisposableSingleObserver;
+
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
+import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekindroid.usuario.delete.CtrlerDeleteMe.getDeleteMeSingle;
-import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.nextDeleteMeAcRsId;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_DROID;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_DROID;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.awaitility.Awaitility.waitAtMost;
-import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
@@ -61,8 +57,7 @@ public class CtrlerDeleteMeTest {
     public void setUp() throws IOException, UiException
     {
         Activity activity = activityRule.getActivity();
-        controller = new CtrlerDeleteMe(activity);
-        assertThat(controller.activity, instanceOf(DeleteMeAc.class));
+        controller = new CtrlerDeleteMe();
         assertThat(TKhandler.isRegisteredUser(), is(true));
     }
 
@@ -87,19 +82,21 @@ public class CtrlerDeleteMeTest {
     @Test
     public void testDeleteMeRemote() throws Exception
     {
-        assertThat(controller.deleteMeRemote(), is(true));
-        assertThat(controller.getSubscriptions().size(), is(1));
-    }
+        assertThat(controller.deleteMeRemote(new DisposableSingleObserver<Boolean>() {
+            @Override
+            public void onSuccess(Boolean aBoolean)
+            {
+                assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
+            }
 
-    /*
-    *  Test for the activity replaceComponent(Bundle bundle) method.
-    */
-    @Test
-    public void testOnSuccessDeleteMeRemote() throws Exception
-    {
-        controller.onSuccessDeleteMeRemote(true);
-        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(nextDeleteMeAcRsId));
-        cleanOneUser(USER_DROID);
+            @Override
+            public void onError(Throwable e)
+            {
+                fail();
+            }
+        }), is(true));
+        assertThat(controller.getSubscriptions().size(), is(1));
+        assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_A));
     }
 
     //  ============================================================================================

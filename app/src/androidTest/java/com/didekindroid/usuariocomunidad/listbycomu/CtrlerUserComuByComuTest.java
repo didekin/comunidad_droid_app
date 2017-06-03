@@ -1,13 +1,10 @@
 package com.didekindroid.usuariocomunidad.listbycomu;
 
-import android.app.Activity;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.didekindroid.R;
 import com.didekindroid.api.ActivityMock;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.testutil.ActivityTestUtils;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuario.Usuario;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
@@ -23,10 +20,10 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import io.reactivex.functions.Consumer;
+import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.observers.TestObserver;
 
 import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_LA_PLAZUELA_5;
-import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_B;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekindroid.testutil.RxSchedulersUtils.resetAllSchedulers;
@@ -109,16 +106,16 @@ public class CtrlerUserComuByComuTest {
     @Test
     public void testLoadItemsByEntitiyId() throws IOException, UiException
     {
-        controller = new CtrlerUserComuByComuList(new ViewerSeeUserComuByComuForTest(activity));
+        controller = new CtrlerUserComuByComuList();
 
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
 
-            assertThat(controller.loadItemsByEntitiyId(comunidad.getC_Id()), is(true));
+            assertThat(controller.loadItemsByEntitiyId(new TestDisposableSingleObserver<List<UsuarioComunidad>>(), comunidad.getC_Id()), is(true));
             assertThat(controller.getSubscriptions().size(), is(1));
             // We test here controller.onSuccessLoadItemsInList() indirectly:
-            assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_A));
+            assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_B));
         } finally {
             resetAllSchedulers();
         }
@@ -127,13 +124,13 @@ public class CtrlerUserComuByComuTest {
     @Test
     public void testComunidadData()
     {
-        controller = new CtrlerUserComuByComuList(new ViewerSeeUserComuByComuForTest(activity));
+        controller = new CtrlerUserComuByComuList();
 
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
 
-            assertThat(controller.comunidadData(, comunidad.getC_Id()), is(true));
+            assertThat(controller.comunidadData(new TestDisposableSingleObserver<Comunidad>(), comunidad.getC_Id()), is(true));
             assertThat(controller.getSubscriptions().size(), is(1));
             assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_B));
         } finally {
@@ -143,25 +140,17 @@ public class CtrlerUserComuByComuTest {
 
     // .................................... HELPERS .................................
 
-    static final class ViewerSeeUserComuByComuForTest extends ViewerSeeUserComuByComu {
-
-        ViewerSeeUserComuByComuForTest(Activity activity)
-        {
-            super(ActivityTestUtils.doListView(R.layout.mock_list_fr), activity);
-        }
-
+    static class TestDisposableSingleObserver<T> extends DisposableSingleObserver<T> {
         @Override
-            // Used for controller.onSuccessLoadItemsInList().
-        void onSuccessLoadItems(List<UsuarioComunidad> itemList)
+        public void onSuccess(T item)
         {
-            assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
-        }
-
-        @Override
-        void onSuccessComunidadData(String text)
-        {
-            assertThat(text.isEmpty(), is(false));
             assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_B), is(BEFORE_METHOD_EXEC));
+        }
+
+        @Override
+        public void onError(Throwable e)
+        {
+            fail();
         }
     }
 }

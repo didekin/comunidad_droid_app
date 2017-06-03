@@ -153,7 +153,6 @@ public final class IncidUiTestUtils {
         onView(allOf(
                 withId(R.id.app_spinner_1_dropdown_item),
                 withParent(withId(R.id.incid_reg_importancia_spinner)),
-                // We adjust the array counter: android seems to add 1 to the counter passed to the method getStringArray().
                 withText(activity.getResources().getStringArray(R.array.IncidImportanciaArray)[incidImportancia.getImportancia()])
         )).check(matches(isDisplayed()));
 

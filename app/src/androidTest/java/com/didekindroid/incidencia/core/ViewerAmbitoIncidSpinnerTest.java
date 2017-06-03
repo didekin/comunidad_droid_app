@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
+import io.reactivex.observers.DisposableSingleObserver;
+
 import static com.didekindroid.incidencia.core.ViewerAmbitoIncidSpinner.newViewerAmbitoIncidSpinner;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.AMBITO_INCIDENCIA_POSITION;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSavedStateWithItemSelected;
@@ -138,9 +140,9 @@ public class ViewerAmbitoIncidSpinnerTest {
         Bundle bundle = new Bundle();
         bundle.putLong(keyBundle, 111);
 
-        viewer.setController(new CtrlerAmbitoIncidSpinner(viewer) {
+        viewer.setController(new CtrlerAmbitoIncidSpinner() {
             @Override
-            public boolean loadItemsByEntitiyId(Long... entityId)
+            public boolean loadItemsByEntitiyId(DisposableSingleObserver<List<AmbitoIncidValueObj>> observer, Long... entityId)
             {
                 assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), CoreMatchers.is(BEFORE_METHOD_EXEC));
                 return false;
