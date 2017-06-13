@@ -192,11 +192,6 @@ public class UsuarioDaoRemoteTest {
     public void testPasswordSend() throws UiException, IOException
     {
         // No puede borrarse el usuario de prueba, porque ignoramos el nuevo password.
-
-        /*signUpAndUpdateTk(COMU_REAL_DROID);
-        assertThat(usuarioDao.sendPassword(USER_DROID.getUserName()), is(true));
-        usuarioDao.deleteUser();
-        cleanWithTkhandler();*/
     }
 
 //    ====================== NON INTERFACE TESTS =========================

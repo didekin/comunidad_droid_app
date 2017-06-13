@@ -1,8 +1,8 @@
 package com.didekindroid.incidencia.core;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
@@ -14,7 +14,9 @@ import com.didekindroid.api.ViewerSelectList;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.List;
 
+import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_NUMBER;
@@ -31,15 +33,23 @@ public final class ViewerImportanciaSpinner extends
     @SuppressWarnings("WeakerAccess")
     IncidImportanciaBean bean;
 
-    private ViewerImportanciaSpinner(@NonNull Spinner view, @NonNull Activity activity, @NonNull ViewerIf parentViewer)
+    private ViewerImportanciaSpinner(@NonNull Spinner view, @NonNull AppCompatActivity activity, @NonNull ViewerIf parentViewer)
     {
         super(view, activity, parentViewer);
     }
 
-    public static ViewerImportanciaSpinner newViewerImportanciaSpinner(@NonNull Spinner view, @NonNull Activity activity, @NonNull ViewerIf parentViewer)
+    public static ViewerImportanciaSpinner newViewerImportanciaSpinner(@NonNull Spinner view, @NonNull AppCompatActivity activity, @NonNull ViewerIf parentViewer)
     {
         Timber.d("newViewerImportanciaSpinner()");
-        return new ViewerImportanciaSpinner(view, activity, parentViewer);
+        ViewerImportanciaSpinner instance = new ViewerImportanciaSpinner(view, activity, parentViewer);
+        instance.setController(new CtrlerSelectList<String>() {
+            @Override
+            public boolean loadItemsByEntitiyId(DisposableSingleObserver<List<String>> observer, Long... entityId)
+            {
+                throw new UnsupportedOperationException();
+            }
+        });
+        return instance;
     }
 
     // ==================================== ViewerSelectListIf ====================================

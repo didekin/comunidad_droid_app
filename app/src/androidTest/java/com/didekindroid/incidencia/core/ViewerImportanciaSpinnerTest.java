@@ -130,16 +130,28 @@ public class ViewerImportanciaSpinnerTest {
     @Test
     public void testDoViewInViewer() throws Exception
     {
+        short importanciaArrItem = (short) (activity.getResources().getStringArray(R.array.IncidImportanciaArray).length - 2);
+
         final String keyBundle = INCID_IMPORTANCIA_NUMBER.key;
-        IncidImportanciaBean incidImportanciaBean = new IncidImportanciaBean();
-        Bundle bundle = new Bundle();
-        bundle.putLong(keyBundle, (short) 93);
-        viewer.doViewInViewer(bundle, incidImportanciaBean);
+        final IncidImportanciaBean incidImportanciaBean = new IncidImportanciaBean();
+        final Bundle bundle = new Bundle();
+        bundle.putLong(keyBundle, importanciaArrItem);
+
+        final AtomicBoolean isRun = new AtomicBoolean(false);
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                viewer.doViewInViewer(bundle, incidImportanciaBean);
+                isRun.compareAndSet(false, true);
+            }
+        });
+        waitAtMost(4, SECONDS).untilTrue(isRun);
 
         // Check call to initSelectedItemId().
         assertThat(viewer.getSelectedItemId(), allOf(
                 is(bundle.getLong(keyBundle)),
-                is(93L)
+                is((long)importanciaArrItem)
         ));
         // Check call to view.setOnItemSelectedListener().
         ViewerImportanciaSpinner.ImportanciaSelectedListener listener =
@@ -147,8 +159,8 @@ public class ViewerImportanciaSpinnerTest {
         // Check importanciaSpinner data are shown.
         onView(allOf(
                 withId(R.id.app_spinner_1_dropdown_item),
-                withParent(withId(R.id.incid_reg_importancia_spinner)),
-                withText(activity.getResources().getStringArray(R.array.IncidImportanciaArray)[0])
+                withParent(withId(R.id.importancia_spinner)),
+                withText(activity.getResources().getStringArray(R.array.IncidImportanciaArray)[importanciaArrItem])
         )).check(matches(isDisplayed()));
     }
 }

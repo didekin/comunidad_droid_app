@@ -33,10 +33,10 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
-import static com.didekindroid.incidencia.testutils.IncidUiTestUtils.checkDataEditMaxPowerFr;
-import static com.didekindroid.incidencia.testutils.IncidUiTestUtils.checkScreenEditMaxPowerFr;
-import static com.didekindroid.incidencia.testutils.IncidUiTestUtils.doAmbitoAndDescripcion;
-import static com.didekindroid.incidencia.testutils.IncidUiTestUtils.doImportanciaSpinner;
+import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkDataEditMaxPowerFr;
+import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkScreenEditMaxPowerFr;
+import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.doAmbitoAndDescripcion;
+import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.doImportanciaSpinner;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_edit_ac_frgs_tag;
@@ -234,6 +234,6 @@ public class IncidEditAcMaxTest {
     @Test
     public void testOnStop()
     {
-        checkSubscriptionsOnStop(activity.viewer.getController(), activity);
+        checkSubscriptionsOnStop(activity, activity.viewer.getController());
     }
 }

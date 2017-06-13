@@ -1,7 +1,7 @@
 package com.didekindroid.comunidad.spinner;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
@@ -37,14 +37,14 @@ public final class ViewerMunicipioSpinner extends
     final SpinnerEventListener eventListener;
     MunicipioSpinnerEventItemSelect spinnerEvent;
 
-    private ViewerMunicipioSpinner(Spinner view, Activity activity, ViewerIf parentViewer)
+    private ViewerMunicipioSpinner(Spinner view, AppCompatActivity activity, ViewerIf parentViewer)
     {
         super(view, activity, parentViewer);
         eventListener = (SpinnerEventListener) parentViewer;
         spinnerEvent = spinnerEvent_default;
     }
 
-    public static ViewerMunicipioSpinner newViewerMunicipioSpinner(Spinner spinner, Activity activity, ViewerIf parentViewer)
+    public static ViewerMunicipioSpinner newViewerMunicipioSpinner(Spinner spinner, AppCompatActivity activity, ViewerIf parentViewer)
     {
         Timber.d("newViewerMunicipioSpinner()");
         ViewerMunicipioSpinner instance = new ViewerMunicipioSpinner(spinner, activity, parentViewer);

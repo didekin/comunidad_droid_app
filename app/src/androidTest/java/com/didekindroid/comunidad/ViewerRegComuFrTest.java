@@ -46,7 +46,6 @@ import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.MUNICIPIO_SPINNER_EVENT;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.PROVINCIA_ID;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.TIPO_VIA_ID;
-import static com.didekindroid.testutil.ActivityTestUtils.addSubscription;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
@@ -132,17 +131,11 @@ public class ViewerRegComuFrTest {
     @Test
     public void test_ClearSubscriptions() throws Exception
     {
-        addSubscription(fragment.viewer.comuAutonomaSpinner.getController());
-        addSubscription(fragment.viewer.provinciaSpinner.getController());
-        addSubscription(fragment.viewer.municipioSpinner.getController());
-        addSubscription(fragment.viewer.tipoViaSpinner.getController());
-
-        assertThat(fragment.viewer.clearSubscriptions(), is(0));
-        assertThat(fragment.viewer.tipoViaSpinner.getController().getSubscriptions().size(), is(0));
-        assertThat(fragment.viewer.comuAutonomaSpinner.getController().getSubscriptions().size(), is(0));
-        assertThat(fragment.viewer.provinciaSpinner.getController().getSubscriptions().size(), is(0));
-        assertThat(fragment.viewer.municipioSpinner.getController().getSubscriptions().size(), is(0));
-        assertThat(fragment.viewer.getController().getSubscriptions().size(), is(0));
+        checkSubscriptionsOnStop(activity, fragment.viewer.tipoViaSpinner.getController(),
+                fragment.viewer.comuAutonomaSpinner.getController(),
+                fragment.viewer.provinciaSpinner.getController(),
+                fragment.viewer.municipioSpinner.getController(),
+                fragment.viewer.getController());
     }
 
     @Test
@@ -269,6 +262,6 @@ public class ViewerRegComuFrTest {
     @Test
     public void test_OnStop()
     {
-        checkSubscriptionsOnStop(fragment.viewer.getController(), activity);
+        checkSubscriptionsOnStop(activity, fragment.viewer.getController());
     }
 }

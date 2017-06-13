@@ -1,20 +1,16 @@
 package com.didekindroid.incidencia.list.close;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.didekindroid.R;
-import com.didekindroid.incidencia.resolucion.IncidResolucionSeeFr;
 import com.didekindroid.router.ActivityInitiator;
-import com.didekindroid.router.FragmentInitiator;
 
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
-import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_resolucion_see_fr_tag;
 import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
 import static com.didekindroid.util.UIutils.doToolBar;
 
@@ -59,15 +55,6 @@ public class IncidSeeClosedByComuAc extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.incid_see_closed_by_comu_ac, fragmentList, incid_see_by_comu_list_fr_tag)
                 .commit();
-    }
-
-    // ==================================  ComponentReplaceIF  =================================
-
-    public void replaceComponent(@NonNull Bundle bundle)
-    {
-        Timber.d("changeFragment()");
-        new FragmentInitiator(this, R.id.incid_see_closed_by_comu_ac)
-                .initFragment(bundle, new IncidResolucionSeeFr(), incid_resolucion_see_fr_tag);
     }
 
     // ============================================================

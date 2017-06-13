@@ -15,7 +15,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -27,17 +27,16 @@ import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
 import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typeUserData;
-import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.nextUserDataAcRsId;
 import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.userDataAcRsId;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
-import static com.didekindroid.usuario.userdata.ViewerUserData.newViewerUserData;
 import static com.didekindroid.usuario.userdata.ViewerUserDataIf.UserChangeToMake.alias_only;
 import static com.didekindroid.usuario.userdata.ViewerUserDataIf.UserChangeToMake.nothing;
 import static com.didekindroid.usuario.userdata.ViewerUserDataIf.UserChangeToMake.userName;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_TRAV_PLAZUELA_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static com.didekinlib.http.GenericExceptionMsg.BAD_REQUEST;
 import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -72,15 +71,16 @@ public class ViewerUserDataTest {
     };
 
     UserDataAc activity;
-    ViewerUserData viewer;
+//    ViewerUserData viewer;
 
     @Before
     public void setUp() throws Exception
     {
-        TimeUnit.SECONDS.sleep(2);
-
         activity = activityRule.getActivity();
-        viewer = (ViewerUserData) newViewerUserData(activity);
+        AtomicReference<ViewerUserData> atomicViewer = new AtomicReference<>(null);
+        atomicViewer.compareAndSet(null, activity.viewer);
+        waitAtMost(4, SECONDS).untilAtomic(atomicViewer, notNullValue());
+//        viewer = activity.viewer;
     }
 
     @After
@@ -96,27 +96,19 @@ public class ViewerUserDataTest {
     @Test
     public void test_NewViewerUserData() throws Exception
     {
-        assertThat(viewer.emailView, notNullValue());
-        assertThat(viewer.aliasView, notNullValue());
-        assertThat(viewer.passwordView, notNullValue());
-        assertThat(viewer.getController(), instanceOf(CtrlerUserModified.class));
-        assertThat(viewer.usuarioBean, notNullValue());
-        assertThat(viewer.oldUser, notNullValue());
-        assertThat(viewer.newUser, notNullValue());
-        assertThat(viewer.getIntentForMenu(), notNullValue());
+        assertThat(activity.viewer.emailView, notNullValue());
+        assertThat(activity.viewer.aliasView, notNullValue());
+        assertThat(activity.viewer.passwordView, notNullValue());
+        assertThat(activity.viewer.getController(), instanceOf(CtrlerUserModified.class));
+        assertThat(activity.viewer.usuarioBean, notNullValue());
+        assertThat(activity.viewer.oldUser, notNullValue());
+        assertThat(activity.viewer.newUser, notNullValue());
     }
 
     @Test
     public void testDoViewInViewer() throws Exception
     {
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                viewer.doViewInViewer(new Bundle(), null);
-            }
-        });
-        waitAtMost(4, SECONDS).untilAtomic(viewer.oldUser, is(usuario));
+        waitAtMost(4, SECONDS).untilAtomic(activity.viewer.oldUser, is(usuario));
         checkUserDataLoaded();
     }
 
@@ -127,16 +119,10 @@ public class ViewerUserDataTest {
             @Override
             public void run()
             {
-                viewer.processBackUserDataLoaded(usuario);
+                activity.viewer.processBackUserDataLoaded(usuario);
                 checkUserDataLoaded();
             }
         });
-    }
-
-    @Test
-    public void testGetIntentForMenu() throws Exception
-    {
-        assertThat(viewer.getIntentForMenu(), is(viewer.intentForMenu));
     }
 
     @Test
@@ -145,10 +131,10 @@ public class ViewerUserDataTest {
         typeUserData("newuser@user.com", USER_JUAN.getAlias(), USER_JUAN.getPassword());
 
         runCheckUserData(true);
-        waitAtMost(3, SECONDS).untilAtomic(viewer.usuarioBean, notNullValue());
-        assertThat(viewer.usuarioBean.get().getUserName(), is("newuser@user.com"));
-        assertThat(viewer.usuarioBean.get().getAlias(), is(USER_JUAN.getAlias()));
-        assertThat(viewer.usuarioBean.get().getPassword(), is(USER_JUAN.getPassword()));
+        waitAtMost(3, SECONDS).untilAtomic(activity.viewer.usuarioBean, notNullValue());
+        assertThat(activity.viewer.usuarioBean.get().getUserName(), is("newuser@user.com"));
+        assertThat(activity.viewer.usuarioBean.get().getAlias(), is(USER_JUAN.getAlias()));
+        assertThat(activity.viewer.usuarioBean.get().getPassword(), is(USER_JUAN.getPassword()));
     }
 
     @Test
@@ -163,7 +149,7 @@ public class ViewerUserDataTest {
     public void testWhatDataChangeToMake() throws Exception
     {
         // Caso 1: datos de entrada (usuarioBean) == oldUser.
-        viewer.oldUser.set(new Usuario.UsuarioBuilder().alias(USER_JUAN.getAlias()).userName(USER_JUAN.getUserName()).build());
+        activity.viewer.oldUser.set(new Usuario.UsuarioBuilder().alias(USER_JUAN.getAlias()).userName(USER_JUAN.getUserName()).build());
         typeUserData(USER_JUAN.getUserName(), USER_JUAN.getAlias(), USER_JUAN.getPassword());
         runWhatDataChange(nothing);
 
@@ -186,10 +172,10 @@ public class ViewerUserDataTest {
         waitAtMost(3, SECONDS).until(isToastInView(R.string.no_user_data_to_be_modified, activity));
 
         runModifyUser(userName);
-        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(nextUserDataAcRsId));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
 
         runModifyUser(alias_only);
-        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(nextUserDataAcRsId));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
     }
 
     @Test
@@ -199,7 +185,7 @@ public class ViewerUserDataTest {
             @Override
             public void run()
             {
-                viewer.onErrorInObserver(new UiException(new ErrorBean(BAD_REQUEST)));
+                activity.viewer.onErrorInObserver(new UiException(new ErrorBean(BAD_REQUEST)));
             }
         });
         waitAtMost(3, SECONDS).until(isToastInView(R.string.password_wrong, activity));
@@ -209,7 +195,7 @@ public class ViewerUserDataTest {
     @Test
     public void testProcessControllerError_2()
     {
-        assertThat(checkProcessCtrlError(viewer, GENERIC_INTERNAL_ERROR, GENERIC_APP_ACC), is(true));
+        assertThat(checkProcessCtrlError(activity.viewer, GENERIC_INTERNAL_ERROR, GENERIC_APP_ACC), is(true));
     }
 
     @Test
@@ -219,10 +205,10 @@ public class ViewerUserDataTest {
             @Override
             public void run()
             {
-                viewer.replaceComponent(new Bundle(0));
+                activity.viewer.replaceComponent(new Bundle(0));
             }
         });
-        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(nextUserDataAcRsId));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
     }
 
     // ============================================================
@@ -231,11 +217,10 @@ public class ViewerUserDataTest {
 
     public void checkUserDataLoaded()
     {
-        assertThat(viewer.oldUser.get(), is(usuario));
-        assertThat(viewer.emailView.getText().toString(), is(usuario.getUserName()));
-        assertThat(viewer.aliasView.getText().toString(), is(usuario.getAlias()));
-        assertThat(viewer.passwordView.getHint(), is(activity.getText(R.string.user_data_ac_password_hint)));
-        assertThat(viewer.intentForMenu.get().getStringExtra(user_name.key), is(usuario.getUserName()));
+        assertThat(activity.viewer.oldUser.get(), is(usuario));
+        assertThat(activity.viewer.emailView.getText().toString(), is(usuario.getUserName()));
+        assertThat(activity.viewer.aliasView.getText().toString(), is(usuario.getAlias()));
+        assertThat(activity.viewer.passwordView.getHint(), is(activity.getText(R.string.user_data_ac_password_hint)));
     }
 
     public void runModifyUser(final UserChangeToMake change)
@@ -244,7 +229,7 @@ public class ViewerUserDataTest {
             @Override
             public void run()
             {
-                viewer.modifyUserData(change);
+                activity.viewer.modifyUserData(change);
             }
         });
     }
@@ -255,7 +240,7 @@ public class ViewerUserDataTest {
             @Override
             public void run()
             {
-                assertThat(viewer.checkUserData(), is(isOk));
+                assertThat(activity.viewer.checkUserData(), is(isOk));
             }
         });
     }
@@ -266,8 +251,8 @@ public class ViewerUserDataTest {
             @Override
             public void run()
             {
-                assertThat(viewer.checkUserData(), is(true));
-                assertThat(viewer.whatDataChangeToMake(), is(changeToMake));
+                assertThat(activity.viewer.checkUserData(), is(true));
+                assertThat(activity.viewer.whatDataChangeToMake(), is(changeToMake));
             }
         });
     }

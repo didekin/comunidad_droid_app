@@ -2,6 +2,7 @@ package com.didekindroid.api;
 
 import android.app.Activity;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.didekindroid.R;
@@ -41,7 +42,7 @@ public class ViewerTest {
     @Rule
     public IntentsTestRule<ActivityMock> activityRule = new IntentsTestRule<>(ActivityMock.class, true, true);
 
-    Activity activity;
+    AppCompatActivity activity;
     Viewer<View, ControllerIf> viewer;
     ViewerMock<View, ControllerIf> parentViewer;
     private View viewInViewer;

@@ -29,10 +29,9 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekindroid.testutil.ActivityTestUtils.addSubscription;
+import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.gcmTokenSentFlag;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
-import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_B;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
@@ -84,7 +83,10 @@ public class ViewerIncidRegAcTest {
     public void setUp()
     {
         activity = activityRule.getActivity();
-        viewer = ViewerIncidRegAc.newViewerIncidRegAc(activity);
+        AtomicReference<ViewerIncidRegAc> atomicViewer = new AtomicReference<>(null);
+        atomicViewer.compareAndSet(null, activity.viewer);
+        waitAtMost(4, SECONDS).untilAtomic(atomicViewer, notNullValue());
+        viewer = atomicViewer.get();
         ctrlerFirebaseToken = (CtrlerFirebaseTokenIf) viewer.viewerFirebaseToken.getController();
     }
 
@@ -92,7 +94,6 @@ public class ViewerIncidRegAcTest {
     public void clearUp() throws UiException
     {
         viewer.clearSubscriptions();
-        activity.viewer.clearSubscriptions();
         cleanOptions(CLEAN_PEPE);
     }
 
@@ -110,19 +111,7 @@ public class ViewerIncidRegAcTest {
     @Test
     public void testDoViewInViewer() throws Exception
     {
-        // Activity onCreate() turns the flag to true.
-        waitAtMost(6, SECONDS).until(gcmTokenSentFlag(ctrlerFirebaseToken));
-        // Flag initialized to false.
-        ctrlerFirebaseToken.updateIsGcmTokenSentServer(false);
-
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                viewer.doViewInViewer(null, null);
-            }
-        });
-        // doViewInViewer turns again the flag to true.
+        // The flag should be turned to true.
         waitAtMost(6, SECONDS).until(gcmTokenSentFlag(ctrlerFirebaseToken));
         onView(withId(R.id.incid_reg_frg)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_reg_ac_button)).check(matches(isDisplayed()));
@@ -131,12 +120,7 @@ public class ViewerIncidRegAcTest {
     @Test
     public void testClearSubscriptions() throws Exception
     {
-        addSubscription(viewer.getController());
-        addSubscription(ctrlerFirebaseToken);
-
-        assertThat(viewer.clearSubscriptions(), is(0));
-        assertThat(viewer.getController().getSubscriptions().size(), is(0));
-        assertThat(ctrlerFirebaseToken.getSubscriptions().size(), is(0));
+        checkSubscriptionsOnStop(activity, viewer.getController(), ctrlerFirebaseToken);
     }
 
     @Test
@@ -170,13 +154,6 @@ public class ViewerIncidRegAcTest {
     @Test
     public void testSaveState()
     {
-        ViewerIncidRegFr viewerIncidRegFr = new ViewerIncidRegFr(null, activity, viewer) {
-            @Override
-            public void saveState(Bundle savedState)
-            {
-                assertThat(flagMethodExec_1.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
-            }
-        };
         ViewerFirebaseToken viewerFirebaseToken = new ViewerFirebaseToken(activity) {
             @Override
             public void saveState(Bundle savedState)
@@ -187,7 +164,6 @@ public class ViewerIncidRegAcTest {
         viewerFirebaseToken.setController(new CtrlerFirebaseToken());
         viewer.viewerFirebaseToken = viewerFirebaseToken;
         viewer.saveState(new Bundle());
-        assertThat(flagMethodExec_1.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_A));
         assertThat(flagMethodExec_2.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_B));
     }
 

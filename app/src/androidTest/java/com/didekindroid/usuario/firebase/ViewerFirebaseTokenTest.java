@@ -3,6 +3,7 @@ package com.didekindroid.usuario.firebase;
 import android.app.Activity;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.v7.app.AppCompatActivity;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ActivityMock;
@@ -46,12 +47,12 @@ public class ViewerFirebaseTokenTest {
     @Rule
     public ActivityTestRule<? extends Activity> activityRule = new ActivityTestRule<>(ActivityMock.class, true, true);
     ViewerFirebaseToken viewer;
-    Activity activity;
+    AppCompatActivity activity;
 
     @Before
     public void setUp() throws IOException, UiException
     {
-        activity = activityRule.getActivity();
+        activity = (AppCompatActivity) activityRule.getActivity();
         viewer = (ViewerFirebaseToken) newViewerFirebaseToken(activity);
         viewer.getController().getIdentityCacher().updateIsRegistered(false);
     }

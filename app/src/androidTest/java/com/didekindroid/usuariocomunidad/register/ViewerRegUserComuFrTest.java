@@ -8,9 +8,6 @@ import com.didekindroid.R;
 import com.didekindroid.api.ViewerIf;
 import com.didekindroid.api.ViewerParentInjectedIf;
 import com.didekindroid.api.ViewerParentInjectorIf;
-import com.didekindroid.usuariocomunidad.register.RegComuAndUserAndUserComuAc;
-import com.didekindroid.usuariocomunidad.register.RegUserComuFr;
-import com.didekindroid.usuariocomunidad.register.ViewerRegUserComuFr;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.hamcrest.CoreMatchers;
@@ -74,7 +71,7 @@ public class ViewerRegUserComuFrTest {
     @Test
     public void test_OnStop()
     {
-        checkSubscriptionsOnStop(fragment.viewer.getController(), activity);
+        checkSubscriptionsOnStop(activity, fragment.viewer.getController());
     }
 
     @Test

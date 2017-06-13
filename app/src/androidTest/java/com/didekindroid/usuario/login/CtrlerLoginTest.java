@@ -71,6 +71,7 @@ public class CtrlerLoginTest {
     public void cleanUp() throws UiException
     {
         controller.clearSubscriptions();
+        resetAllSchedulers();
     }
 
     //    .................................... OBSERVABLES .................................

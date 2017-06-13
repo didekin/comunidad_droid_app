@@ -1,9 +1,9 @@
 package com.didekindroid.api;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.didekindroid.exception.UiExceptionIf;
@@ -17,7 +17,7 @@ import java.io.Serializable;
  */
 public interface ViewerIf<T extends View, C extends ControllerIf> {
 
-    Activity getActivity();
+    AppCompatActivity getActivity();
 
     UiExceptionIf.ActionForUiExceptionIf onErrorInObserver(Throwable error);
 

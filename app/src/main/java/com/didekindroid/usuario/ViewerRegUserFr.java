@@ -1,6 +1,6 @@
 package com.didekindroid.usuario;
 
-import android.app.Activity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 
@@ -20,7 +20,7 @@ import timber.log.Timber;
 
 public class ViewerRegUserFr extends Viewer<View, Controller> {
 
-    ViewerRegUserFr(View view, Activity activity, ViewerIf parentViewer)
+    ViewerRegUserFr(View view, AppCompatActivity activity, ViewerIf parentViewer)
     {
         super(view, activity, parentViewer);
     }

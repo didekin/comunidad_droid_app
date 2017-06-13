@@ -65,7 +65,7 @@ public class ViewerRegComuUserUserComuAcTest {
     @Test
     public void test_NewViewerRegComuUserUserComuAc() throws Exception
     {
-        assertThat(activity.viewer.getController(), isA(CtrlerUserReg.class));
+        assertThat(activity.viewer.getController(), isA(CtrlerUsuarioComunidad.class));
     }
 
     @Test
@@ -111,6 +111,6 @@ public class ViewerRegComuUserUserComuAcTest {
     @Test
     public void test_OnStop()
     {
-        checkSubscriptionsOnStop(activity.viewer.getController(), activity);
+        checkSubscriptionsOnStop(activity, activity.viewer.getController());
     }
 }

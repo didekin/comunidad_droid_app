@@ -25,31 +25,29 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        // GCM
+        // core.edit
+        CtrlerIncidEditAcTest.class,
+        CtrlerIncidRegEditFr_Edit_Test.class,
         IncidCloseAc_GCM_Test.class,
-        IncidRegAc_GCM_Test.class,
-        // Activities.
         IncidEditAc_Mn_Test.class,
         IncidEditAcMaxTest.class,
         IncidEditAcMinTest.class,
-        IncidRegAcTest.class,
-        // Viewers
-        ViewerAmbitoIncidSpinnerTest.class,
-        ViewerImportanciaSpinnerTest.class,
         ViewerIncidEditAcTest.class,
         ViewerIncidEditMaxFrTest.class,
         ViewerIncidEditMinFrTest.class,
+        // core.reg
+        CtrlerIncidRegEditFr_Reg_Test.class,
+        IncidRegAc_GCM_Test.class,
+        IncidRegAcTest.class,
         ViewerIncidRegAcTest.class,
         ViewerIncidRegFrTest.class,
-        // Controllers
+        // core
         CtrlerAmbitoIncidSpinnerTest.class,
-        CtrlerIncidEditAcTest.class,
-        CtrlerIncidRegEditFr_Edit_Test.class,
-        CtrlerIncidRegEditFr_Reg_Test.class,
-        // Helpers
         IncidenciaBeanTest.class,
         IncidenciaDataDbHelperTest.class,
         IncidImportanciaBeanTest.class,
+        ViewerAmbitoIncidSpinnerTest.class,
+        ViewerImportanciaSpinnerTest.class,
 })
 public class IncidCoreSuite {
 }

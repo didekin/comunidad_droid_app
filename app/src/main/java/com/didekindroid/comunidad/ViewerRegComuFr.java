@@ -1,8 +1,8 @@
 package com.didekindroid.comunidad;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -51,7 +51,7 @@ public class ViewerRegComuFr extends Viewer<View, CtrlerRegComuFr> implements
     ViewerProvinciaSpinner provinciaSpinner;
     ViewerMunicipioSpinner municipioSpinner;
 
-    ViewerRegComuFr(View view, Activity activity, ViewerIf parentViewer)
+    ViewerRegComuFr(View view, AppCompatActivity activity, ViewerIf parentViewer)
     {
         super(view, activity, parentViewer);
     }

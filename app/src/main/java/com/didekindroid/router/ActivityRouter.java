@@ -23,10 +23,13 @@ import com.didekindroid.usuario.delete.DeleteMeAc;
 import com.didekindroid.usuario.login.LoginAc;
 import com.didekindroid.usuario.password.PasswordChangeAc;
 import com.didekindroid.usuario.userdata.UserDataAc;
+import com.didekindroid.usuariocomunidad.data.UserComuDataAc;
 import com.didekindroid.usuariocomunidad.register.RegComuAndUserAndUserComuAc;
 import com.didekindroid.usuariocomunidad.register.RegComuAndUserComuAc;
 import com.didekindroid.usuariocomunidad.listbyuser.SeeUserComuByUserAc;
 import com.didekindroid.usuariocomunidad.listbycomu.SeeUserComuByComuAc;
+import com.didekindroid.usuariocomunidad.register.RegUserAndUserComuAc;
+import com.didekindroid.usuariocomunidad.register.RegUserComuAc;
 
 import java.util.Map;
 
@@ -65,6 +68,9 @@ public class ActivityRouter implements ActivityRouterIf {
         acRouterMap.put(PasswordChangeAc.class, UserDataAc.class);
         acRouterMap.put(RegComuAndUserAndUserComuAc.class, SeeUserComuByUserAc.class);
         acRouterMap.put(RegComuAndUserComuAc.class, SeeUserComuByUserAc.class);
+        acRouterMap.put(RegUserAndUserComuAc.class, SeeUserComuByComuAc.class);
+        acRouterMap.put(RegUserComuAc.class, SeeUserComuByUserAc.class);
+        acRouterMap.put(UserComuDataAc.class, SeeUserComuByUserAc.class);
         acRouterMap.put(UserDataAc.class, SeeUserComuByUserAc.class);
     }
 
@@ -94,6 +100,7 @@ public class ActivityRouter implements ActivityRouterIf {
     }
 
     static {
+        // INCIDENCIAS.
         onClickRouterMap.put(LinkToImportanciaUsersListener.class, IncidSeeUserComuImportanciaAc.class);
     }
 

@@ -29,21 +29,21 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
 import static com.didekindroid.incidencia.core.IncidenciaDataDbHelper.DB_NAME;
-import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeGenericFrResourceId;
-import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeOpenAcResourceId;
-import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.nextIncidEditAcId;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeGenericLayout;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeOpenAcLayout;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidEditAcLayout;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.makeRegGetIncidImportancia;
-import static com.didekindroid.incidencia.testutils.IncidUiTestUtils.checkIncidOpenListView;
-import static com.didekindroid.incidencia.testutils.IncidUiTestUtils.checkIncidOpenListViewNoResol;
-import static com.didekindroid.incidencia.testutils.IncidUiTestUtils.doComunidadSpinner;
+import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkIncidOpenListView;
+import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkIncidOpenListViewNoResol;
+import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.doComunidadSpinner;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
-import static com.didekindroid.incidencia.testutils.IncidUiTestUtils.isComuSpinnerWithText;
+import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.isComuSpinnerWithText;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
@@ -131,8 +131,8 @@ public class IncidSeeOpenByComuAcTest {
     @Test
     public void testOnCreate_1()
     {
-        onView(withId(incidSeeOpenAcResourceId)).check(matches(isDisplayed()));
-        onView(withId(incidSeeGenericFrResourceId)).check(matches(isDisplayed()));
+        onView(withId(incidSeeOpenAcLayout)).check(matches(isDisplayed()));
+        onView(withId(incidSeeGenericLayout)).check(matches(isDisplayed()));
         // Inicializa correctamente fragment: 0, porque no hay intent en activity.
         assertThat(fragment.getArguments().getLong(COMUNIDAD_ID.key), is(0L));
 
@@ -157,7 +157,7 @@ public class IncidSeeOpenByComuAcTest {
                 .check(matches(isDisplayed()))
                 .perform(click());
         // Check next fragment.
-        waitAtMost(2, SECONDS).until(isViewDisplayed(withId(nextIncidEditAcId)));
+        waitAtMost(2, SECONDS).until(isViewDisplayed(withId(incidEditAcLayout)));
         intended(hasExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia1));
         intended(hasExtra(INCID_RESOLUCION_FLAG.key, true));
         // Up and check.
@@ -180,7 +180,7 @@ public class IncidSeeOpenByComuAcTest {
                 .perform(click());
 
         // Check next fragment.
-        waitAtMost(3, SECONDS).until(isViewDisplayed(withId(nextIncidEditAcId)));
+        waitAtMost(3, SECONDS).until(isViewDisplayed(withId(incidEditAcLayout)));
         intended(hasExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia2));
         intended(hasExtra(INCID_RESOLUCION_FLAG.key, false));
     }
@@ -195,9 +195,9 @@ public class IncidSeeOpenByComuAcTest {
                 .check(matches(isDisplayed()))
                 .perform(click());
         // Check next fragment.
-        waitAtMost(2, SECONDS).until(isViewDisplayed(withId(nextIncidEditAcId)));
+        waitAtMost(2, SECONDS).until(isViewDisplayed(withId(incidEditAcLayout)));
         // Back and check.
-        checkBack(onView(withId(nextIncidEditAcId)));
+        checkBack(onView(withId(incidEditAcLayout)));
         waitAtMost(3, SECONDS).until(isViewDisplayed(
                 checkIncidOpenListView(incidImportancia1, activity, incidenciaUser1.getFechaAltaResolucion())));
     }
@@ -207,6 +207,6 @@ public class IncidSeeOpenByComuAcTest {
     @Test
     public void testOnStop()
     {
-        checkSubscriptionsOnStop(fragment.viewer.getController(), activity);
+        checkSubscriptionsOnStop(activity, fragment.viewer.getController());
     }
 }

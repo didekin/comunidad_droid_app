@@ -3,6 +3,7 @@ package com.didekindroid.incidencia.list.close;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,10 +41,12 @@ public class IncidSeeCloseByComuFr extends Fragment {
         Timber.d("onViewCreated()");
         super.onViewCreated(view, savedState);
         /* Initialization of viewers.*/
-        ComuSpinnerEventItemSelect spinnerEventItemSelect =
-                new ComuSpinnerEventItemSelect(new Comunidad.ComunidadBuilder().c_id(getArguments().getLong(COMUNIDAD_ID.key)).build());
-        viewer = newViewerIncidSeeClose(frView, getActivity());
-        viewer.doViewInViewer(savedState, spinnerEventItemSelect);
+        final long comunidadId = getArguments().getLong(COMUNIDAD_ID.key);
+        ComuSpinnerEventItemSelect spinnerEvent = comunidadId > 0 ?
+                new ComuSpinnerEventItemSelect(new Comunidad.ComunidadBuilder().c_id(comunidadId).build()) :
+                new ComuSpinnerEventItemSelect();
+        viewer = newViewerIncidSeeClose(frView, (AppCompatActivity) getActivity());
+        viewer.doViewInViewer(savedState, spinnerEvent);
     }
 
     @Override

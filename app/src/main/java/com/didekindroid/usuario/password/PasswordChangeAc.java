@@ -47,11 +47,4 @@ public class PasswordChangeAc extends AppCompatActivity {
         super.onStop();
         viewer.clearSubscriptions();
     }
-
-    public void replaceComponent(Bundle bundle)
-    {
-        Timber.d("replaceComponent()");
-        makeToast(this, R.string.password_remote_change);
-        new ActivityInitiator(this).initActivityWithBundle(bundle);
-    }
 }

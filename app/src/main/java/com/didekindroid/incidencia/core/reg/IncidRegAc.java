@@ -19,7 +19,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
 /**
  * Preconditions:
  * 1. The user is registered.
- * 2. No intent received.
+ * 2. An intent may be received with the comunidadId where the incidencia will be open.
  * Postconditions:
  * 1. No intent passed.
  * <p>
@@ -28,7 +28,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  */
 public class IncidRegAc extends AppCompatActivity implements ViewerParentInjectorIf {
 
-    IncidRegFr mRegAcFragment;
+    IncidRegFr incidRegFr;
     ViewerIncidRegAc viewer;
     View acView;
 
@@ -44,7 +44,7 @@ public class IncidRegAc extends AppCompatActivity implements ViewerParentInjecto
 
         viewer = newViewerIncidRegAc(this);
         viewer.doViewInViewer(savedInstanceState, null);
-        mRegAcFragment = (IncidRegFr) getSupportFragmentManager().findFragmentById(R.id.incid_reg_frg);
+        incidRegFr = (IncidRegFr) getSupportFragmentManager().findFragmentById(R.id.incid_reg_frg);
     }
 
     @Override

@@ -26,19 +26,19 @@ import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekindroid.incidencia.core.edit.ViewerIncidEditAc.newViewerIncidEditAc;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_edit_ac_frgs_tag;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
 import static io.reactivex.Single.just;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -82,16 +82,18 @@ public class ViewerIncidEditAcTest {
     public void setUp() throws Exception
     {
         activity = activityRule.getActivity();
-        viewer = newViewerIncidEditAc(activity, activity.getSupportFragmentManager().findFragmentByTag(incid_edit_ac_frgs_tag).getView());
-        assertThat(viewer.getController(), notNullValue());
-        assertThat(viewer.getController().isRegisteredUser(), is(true));
+        AtomicReference<CtrlerIncidEditAc> atomicController = new AtomicReference<>(null);
+        atomicController.compareAndSet(null, activity.viewer.getController());
+        waitAtMost(4, SECONDS).untilAtomic(atomicController, notNullValue());
+        viewer = activity.viewer;
+
+//        viewer = newViewerIncidEditAc(activity, activity.getSupportFragmentManager().findFragmentByTag(incid_edit_ac_frgs_tag).getView());
     }
 
     @After
     public void tearDown() throws Exception
     {
         viewer.clearSubscriptions();
-        activity.viewer.clearSubscriptions();
         cleanOptions(CLEAN_JUAN);
     }
 
@@ -121,13 +123,13 @@ public class ViewerIncidEditAcTest {
     public void testOnSuccessSeeResolucion() throws Exception
     {
         // Preconditions.
-        viewer.doViewInViewer(null, incidImportancia);
+        assertThat(viewer.incidImportancia, notNullValue());
 
-        Resolucion resolucion = insertGetResolucionNoAdvances(incidImportancia);
+        Resolucion resolucion = insertGetResolucionNoAdvances(viewer.incidImportancia);
         viewer.onSuccessSeeResolucion(resolucion, R.id.incid_resolucion_reg_ac_mn);
         onView(withId(R.id.incid_resolucion_fragment_container_ac)).check(matches(isDisplayed()));
         intended(allOf(
-                hasExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia),
+                hasExtra(INCID_IMPORTANCIA_OBJECT.key, viewer.incidImportancia),
                 hasExtra(INCID_RESOLUCION_OBJECT.key, resolucion)
         ));
     }

@@ -1,9 +1,9 @@
 package com.didekindroid.api;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.Spinner;
 
 import com.didekindroid.exception.UiException;
@@ -49,7 +49,7 @@ public class ObserverSingleSelectListTest {
     @Before
     public void setUp()
     {
-        final Activity activity = activityRule.getActivity();
+        final AppCompatActivity activity = activityRule.getActivity();
         final AtomicReference<ObserverSingleSelectList<ViewerSelectList<Spinner, CtrlerSelectList<String>, String>, String>> atomicObserver = new AtomicReference<>(null);
         activity.runOnUiThread(new Runnable() {
             @Override

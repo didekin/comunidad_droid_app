@@ -16,14 +16,20 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
+        // comment
         IncidCommentSuite.class,
+        // core
         IncidCoreSuite.class,
+        // firebase
+        IncidFirebaseDownMsgHandlerTest.class,
+        // list
+        IncidListSuite.class,
+        // resolucion
+        IncidResolucionSuite.class,
+        // .
         IncidDaoRemoteTest_1.class,
         IncidDaoRemoteTest_2.class,
-        IncidFirebaseDownMsgHandlerTest.class,
-        IncidListSuite.class,
         IncidObservableTest.class,
-        IncidResolucionSuite.class,
 })
 public class IncidSuite {
 }

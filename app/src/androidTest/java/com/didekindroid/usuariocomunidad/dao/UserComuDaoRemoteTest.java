@@ -25,8 +25,8 @@ import static com.didekindroid.AppInitializer.creator;
 import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_EL_ESCORIAL;
 import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_LA_PLAZUELA_5;
 import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_REAL;
-import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.security.SecurityTestUtils.updateSecurityData;
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN2_AND_PEPE;
@@ -40,7 +40,6 @@ import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanWithTk
 import static com.didekindroid.usuariocomunidad.RolUi.PRE;
 import static com.didekindroid.usuariocomunidad.RolUi.PRO;
 import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_LA_FUENTE_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_PEPE;
@@ -52,6 +51,7 @@ import static com.didekinlib.http.GenericExceptionMsg.TOKEN_NULL;
 import static com.didekinlib.http.UsuarioServConstant.IS_USER_DELETED;
 import static com.didekinlib.model.comunidad.ComunidadExceptionMsg.COMUNIDAD_NOT_FOUND;
 import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_DUPLICATE;
+import static com.didekinlib.model.usuariocomunidad.Rol.INQUILINO;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.Matchers.is;
@@ -209,21 +209,13 @@ public class UserComuDaoRemoteTest {
     }
 
     @Test
-    public void testRegComuAndUserComu_1() throws Exception
-    {
-        whatClean = CLEAN_JUAN;
-
-        signUpAndUpdateTk(COMU_REAL_JUAN);
-        assertThat(userComuDaoRemote.regComuAndUserComu(COMU_PLAZUELA5_JUAN), is(true));
-    }
-
-    @Test
-    public void testRegComuAndUserComu_2() throws Exception
+    public void testRegComuAndUserComu() throws Exception
     {
         whatClean = CLEAN_JUAN;
 
         Usuario juan = signUpAndUpdateTk(COMU_REAL_JUAN);
-        assertThat(userComuDaoRemote.regComuAndUserComu(new UsuarioComunidad.UserComuBuilder(COMU_EL_ESCORIAL, juan).planta("uno").build()), is(true));
+        assertThat(userComuDaoRemote.regComuAndUserComu(
+                new UsuarioComunidad.UserComuBuilder(COMU_EL_ESCORIAL, juan).planta("uno").roles(INQUILINO.function).build()), is(true));
     }
 
     @Test

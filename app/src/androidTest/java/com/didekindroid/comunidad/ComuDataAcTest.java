@@ -28,15 +28,12 @@ import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkMunicipioSpinner;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.typeComuCalleNumero;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuDataAcLayout;
-import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.nextComuDataAcLayout;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.regComuFrLayout;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
@@ -49,6 +46,7 @@ import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOption
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpWithTkGetComu;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.SEE_USERCOMU_BY_COMU_AC;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.Matchers.isA;
@@ -106,7 +104,7 @@ public class ComuDataAcTest {
         // Modificamos.
         typeComuCalleNumero("nombre via One", "123", "Tris");
         onView(withId(R.id.comu_data_ac_button)).perform(scrollTo(), click());
-        onView(withId(nextComuDataAcLayout)).check(matches(isDisplayed()));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
 
         checkUp(comuDataAcLayout);
     }
@@ -118,8 +116,9 @@ public class ComuDataAcTest {
         // Modificamos.
         typeComuCalleNumero("nombre via One", "123", "Tris");
         onView(withId(R.id.comu_data_ac_button)).perform(scrollTo(), click());
-        waitAtMost(2, SECONDS).until(isResourceIdDisplayed(nextComuDataAcLayout));
-        checkBack(onView(withId(nextComuDataAcLayout)), comuDataAcLayout, regComuFrLayout);
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
+
+        checkBack(onView(withId(seeUserComuByUserFrRsId)), comuDataAcLayout, regComuFrLayout);
     }
 
     @Test
@@ -172,7 +171,7 @@ public class ComuDataAcTest {
     @Test
     public void testOnStop() throws Exception
     {
-        checkSubscriptionsOnStop(activity.viewer.getController(), activity);
+        checkSubscriptionsOnStop(activity, activity.viewer.getController());
     }
 
 //     ==================== MENU ====================

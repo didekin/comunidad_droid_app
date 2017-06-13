@@ -1,7 +1,7 @@
 package com.didekindroid.usuariocomunidad.spinner;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
@@ -30,13 +30,13 @@ public class ViewerComuSpinner extends
     final SpinnerEventListener eventListener;
     ComuSpinnerEventItemSelect spinnerEvent;
 
-    ViewerComuSpinner(Spinner view, Activity activity, ViewerIf parentViewer)
+    ViewerComuSpinner(Spinner view, AppCompatActivity activity, ViewerIf parentViewer)
     {
         super(view, activity, parentViewer);
         eventListener = (SpinnerEventListener) parentViewer;
     }
 
-    public static ViewerComuSpinner newViewerComuSpinner(Spinner view, Activity activity, ViewerIf parentViewer)
+    public static ViewerComuSpinner newViewerComuSpinner(Spinner view, AppCompatActivity activity, ViewerIf parentViewer)
     {
         Timber.d("newViewerComuSpinner()");
         ViewerComuSpinner instance = new ViewerComuSpinner(view, activity, parentViewer);

@@ -1,9 +1,9 @@
 package com.didekindroid.api;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.didekindroid.exception.UiExceptionIf.ActionForUiExceptionIf;
@@ -23,11 +23,11 @@ import static com.didekindroid.util.UIutils.getUiExceptionFromThrowable;
 public class Viewer<T extends View, C extends ControllerIf> implements ViewerIf<T, C> {
 
     protected final T view;
-    protected final Activity activity;
+    protected final AppCompatActivity activity;
     protected final ViewerIf parentViewer;
     protected C controller;
 
-    protected Viewer(T view, Activity activity, ViewerIf parentViewer)
+    protected Viewer(T view, AppCompatActivity activity, ViewerIf parentViewer)
     {
         this.view = view;
         this.activity = activity;
@@ -35,7 +35,7 @@ public class Viewer<T extends View, C extends ControllerIf> implements ViewerIf<
     }
 
     @Override
-    public Activity getActivity()
+    public AppCompatActivity getActivity()
     {
         Timber.d("getActivity()");
         return activity;

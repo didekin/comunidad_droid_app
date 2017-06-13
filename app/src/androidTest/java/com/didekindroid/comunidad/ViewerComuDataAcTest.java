@@ -31,7 +31,6 @@ import static com.didekindroid.comunidad.ViewerRegComuFr.newViewerRegComuFr;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkMunicipioSpinner;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.doTipoViaSpinner;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuDataAcLayout;
-import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.nextComuDataAcLayout;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.testutil.ActivityTestUtils.checkViewerReplaceComponent;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
@@ -42,6 +41,7 @@ import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEn
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpWithTkGetComu;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static io.reactivex.Single.just;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
@@ -118,7 +118,7 @@ public class ViewerComuDataAcTest {
     @Test
     public void test_ReplaceComponent() throws Exception
     {
-        checkViewerReplaceComponent(viewer, nextComuDataAcLayout, null);
+        checkViewerReplaceComponent(viewer, seeUserComuByUserFrRsId, null);
     }
 
     @Test
@@ -136,7 +136,7 @@ public class ViewerComuDataAcTest {
     {
         checkMunicipioSpinner(comunidad.getMunicipio().getNombre()); // Esperamos por los viejos datos.
         viewer.onSuccessModifyComunidad();
-        onView(withId(nextComuDataAcLayout)).check(matches(isDisplayed()));
+        onView(withId(seeUserComuByUserFrRsId)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -167,6 +167,6 @@ public class ViewerComuDataAcTest {
     {
         ViewerComuDataAc.ComuDataAcObserver observer = viewer.new ComuDataAcObserver();
         just(1).subscribeWith(observer);
-        waitAtMost(4, SECONDS).until(isViewDisplayed(withId(nextComuDataAcLayout)));
+        waitAtMost(4, SECONDS).until(isViewDisplayed(withId(seeUserComuByUserFrRsId)));
     }
 }

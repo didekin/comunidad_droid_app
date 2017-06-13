@@ -2,7 +2,7 @@
 <ScrollView style="@style/baseLayout.scroll"
             xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
-            tools:context="com.didekindroid.com.didekindroid.usuario.RegUserAndUserComuAc">
+            tools:context="com.didekindroid.usuariocomunidad.register.RegUserAndUserComuAc">
 
     <android.support.design.widget.CoordinatorLayout style="@style/baseLayout">
 
@@ -12,16 +12,7 @@
                       style="@style/baseLayout"
                       android:layout_marginTop="@dimen/app_bar_bottom_margin">
 
-            <TextView
-                android:id="@+id/rotulo_comunidad"
-                style="@style/textBase.textPageLabel1"
-                android:text="@string/rotulo_comunidad"/>
-
-            <TextView
-                android:id="@+id/descripcion_comunidad_text"
-                style="@style/textBase.textFieldLabel1"
-                android:layout_marginTop="0dp"
-            />
+            <include layout="@layout/nombre_comunidad_include"/>
 
             <fragment
                 android:id="@+id/reg_usercomu_frg"

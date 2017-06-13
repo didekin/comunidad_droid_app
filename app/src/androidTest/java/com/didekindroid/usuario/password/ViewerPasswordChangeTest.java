@@ -27,8 +27,8 @@ import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
 import static com.didekindroid.usuario.password.ViewerPasswordChange.newViewerPswdChange;
 import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typePswdData;
-import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.nextPswdChangeAcRsId;
 import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.pswdChangeAcRsId;
+import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.userDataAcRsId;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_TRAV_PLAZUELA_PEPE;
@@ -165,6 +165,6 @@ public class ViewerPasswordChangeTest {
             }
         });
         waitAtMost(3, SECONDS).until(isToastInView(R.string.password_remote_change, activity));
-        onView(withId(nextPswdChangeAcRsId)).check(matches(isDisplayed()));
+        onView(withId(userDataAcRsId)).check(matches(isDisplayed()));
     }
 }

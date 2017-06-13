@@ -1,8 +1,8 @@
 package com.didekindroid.incidencia.list.close;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -16,7 +16,8 @@ import com.didekindroid.api.ObserverSingleSelectList;
 import com.didekindroid.api.SpinnerEventItemSelectIf;
 import com.didekindroid.api.SpinnerEventListener;
 import com.didekindroid.api.ViewerSelectList;
-import com.didekindroid.router.ActivityInitiator;
+import com.didekindroid.incidencia.resolucion.IncidResolucionSeeFr;
+import com.didekindroid.router.FragmentInitiator;
 import com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 
@@ -26,6 +27,7 @@ import java.util.List;
 import timber.log.Timber;
 
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_ID_LIST_SELECTED;
+import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_resolucion_see_fr_tag;
 import static com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner.newViewerComuSpinner;
 import static com.didekindroid.util.CommonAssertionMsg.item_selected_in_list_should_not_be_zero;
 import static com.didekindroid.util.UIutils.assertTrue;
@@ -41,7 +43,7 @@ public class ViewerIncidSeeClose extends
 
     protected ViewerComuSpinner comuSpinnerViewer;
 
-    protected ViewerIncidSeeClose(View frView, Activity activity)
+    protected ViewerIncidSeeClose(View frView, AppCompatActivity activity)
     {
         super((ListView) frView.findViewById(android.R.id.list), activity, null);
         view.setEmptyView(frView.findViewById(android.R.id.empty));
@@ -49,7 +51,7 @@ public class ViewerIncidSeeClose extends
         view.addHeaderView(new View(activity), null, false);
     }
 
-    static ViewerIncidSeeClose newViewerIncidSeeClose(View view, Activity activity)
+    static ViewerIncidSeeClose newViewerIncidSeeClose(View view, AppCompatActivity activity)
     {
         Timber.d("newViewerIncidSeeClose()");
         ViewerIncidSeeClose parentInstance = new ViewerIncidSeeClose(view, activity);
@@ -167,7 +169,8 @@ public class ViewerIncidSeeClose extends
     public void replaceComponent(@NonNull Bundle bundle)
     {
         Timber.d("initActivityWithBundle()");
-        new ActivityInitiator(activity).initActivityWithBundle(bundle);
+        new FragmentInitiator(activity, R.id.incid_see_closed_by_comu_ac)
+                .initFragment(bundle, new IncidResolucionSeeFr(), incid_resolucion_see_fr_tag);
     }
 
     @NonNull

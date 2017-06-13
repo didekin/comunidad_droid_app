@@ -1,8 +1,8 @@
 package com.didekindroid.incidencia.core.edit;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -37,13 +37,14 @@ import static com.didekindroid.util.UIutils.makeToast;
  * Time: 15:06
  */
 final class ViewerIncidEditMinFr extends Viewer<View, CtrlerIncidRegEditFr> implements
-        LinkToImportanciaUsersClickable, RegIncidImportanciaCallableBack, ModIncidImportanciaCallableBack {
+        LinkToImportanciaUsersClickable, RegIncidImportanciaCallableBack,
+        ModIncidImportanciaCallableBack {
 
     IncidImportancia incidImportancia;
     IncidImportanciaBean incidImportanciaBean;
     ViewerImportanciaSpinner viewerImportanciaSpinner;
 
-    private ViewerIncidEditMinFr(View view, Activity activity, ViewerIf parentViewer)
+    private ViewerIncidEditMinFr(View view, AppCompatActivity activity, ViewerIf parentViewer)
     {
         super(view, activity, parentViewer);
     }
@@ -52,7 +53,7 @@ final class ViewerIncidEditMinFr extends Viewer<View, CtrlerIncidRegEditFr> impl
     {
         Timber.d("newViewerIncidEditMaxFr()");
 
-        Activity activity = parentViewer.getActivity();
+        AppCompatActivity activity = parentViewer.getActivity();
         ViewerIncidEditMinFr instance = new ViewerIncidEditMinFr(frView, activity, parentViewer);
 
         instance.viewerImportanciaSpinner =

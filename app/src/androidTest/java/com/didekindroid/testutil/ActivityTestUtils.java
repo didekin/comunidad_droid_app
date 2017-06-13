@@ -10,7 +10,7 @@ import android.support.test.espresso.PerformException;
 import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.contrib.PickerActions;
-import android.support.test.espresso.matcher.ViewMatchers;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Adapter;
@@ -24,6 +24,8 @@ import com.didekindroid.R;
 import com.didekindroid.api.ControllerIf;
 import com.didekindroid.api.CtrlerSelectListIf;
 import com.didekindroid.api.ViewerIf;
+import com.didekindroid.api.ViewerMock;
+import com.didekindroid.api.ViewerParentInjectorIf;
 import com.didekindroid.api.ViewerSelectListIf;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf.ActionForUiExceptionIf;
@@ -247,12 +249,20 @@ public final class ActivityTestUtils {
         return controller.getSubscriptions();
     }
 
-    public static void checkSubscriptionsOnStop(ControllerIf controller, Activity activity)
+    public static void checkSubscriptionsOnStop(Activity activity, ControllerIf... controllers)
     {
-        AtomicInteger atomicInteger = new AtomicInteger(addSubscription(controller).size());
+        AtomicInteger atomicInteger = new AtomicInteger(0);
+        for (ControllerIf controller : controllers) {
+            atomicInteger.addAndGet(addSubscription(controller).size());
+        }
+        assertThat(atomicInteger.get() >= controllers.length, is(true));
+
         getInstrumentation().callActivityOnStop(activity);
-        atomicInteger.set(controller.getSubscriptions().size());
-        waitAtMost(5, SECONDS).untilAtomic(atomicInteger, is(0));
+        atomicInteger.set(0);
+        for (ControllerIf controller : controllers) {
+            atomicInteger.addAndGet(controller.getSubscriptions().size());
+        }
+        waitAtMost(4, SECONDS).untilAtomic(atomicInteger, is(0));
     }
 
     public static Callable<Boolean> gcmTokenSentFlag(final CtrlerFirebaseTokenIf controller)
@@ -391,7 +401,11 @@ public final class ActivityTestUtils {
     {
         clickNavigateUp();
         for (Integer layout : activityLayoutIds) {
-            isResourceIdDisplayed(layout);
+            try {
+                isResourceIdDisplayed(layout).call();
+            } catch (Exception e) {
+                fail();
+            }
         }
     }
 
@@ -399,7 +413,11 @@ public final class ActivityTestUtils {
     {
         viewInteraction.perform(closeSoftKeyboard()).perform(pressBack());
         for (Integer layout : activityLayoutIds) {
-            isResourceIdDisplayed(layout);
+            try {
+                isResourceIdDisplayed(layout).call();
+            } catch (Exception e) {
+                fail();
+            }
         }
     }
 
@@ -513,6 +531,13 @@ public final class ActivityTestUtils {
         Bundle bundle = new Bundle(1);
         viewer.saveState(bundle);
         assertThat(bundle.getLong(bundleKey.getKey()), is(18L));
+    }
+
+    public static <T extends AppCompatActivity & ViewerParentInjectorIf> void checkChildInViewer(T activity)
+    {
+        final ViewerMock viewerChild = new ViewerMock(activity);
+        activity.setChildInViewer(viewerChild);
+        assertThat(activity.getViewerAsParent().getChildViewer(ViewerMock.class), CoreMatchers.<ViewerIf>is(viewerChild));
     }
 }
 

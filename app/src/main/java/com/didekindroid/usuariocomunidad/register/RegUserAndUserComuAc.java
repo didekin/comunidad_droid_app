@@ -1,48 +1,32 @@
 package com.didekindroid.usuariocomunidad.register;
 
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 
 import com.didekindroid.R;
-import com.didekindroid.comunidad.utils.ComuBundleKey;
-import com.didekindroid.exception.UiException;
+import com.didekindroid.api.ViewerIf;
+import com.didekindroid.api.ViewerParentInjectedIf;
+import com.didekindroid.api.ViewerParentInjectorIf;
 import com.didekindroid.router.ActivityInitiator;
-import com.didekindroid.security.IdentityCacher;
 import com.didekindroid.usuario.RegUserFr;
-import com.didekindroid.usuariocomunidad.listbycomu.SeeUserComuByComuAc;
-import com.didekinlib.http.ErrorBean;
-import com.didekinlib.http.oauth2.SpringOauthToken;
 import com.didekinlib.model.comunidad.Comunidad;
-import com.didekinlib.model.usuario.Usuario;
-import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
-
-import java.io.IOException;
 
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
-import static com.didekindroid.security.Oauth2DaoRemote.Oauth2;
-import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_not_be_registered;
-import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.router.ActivityRouter.doUpMenu;
-import static com.didekindroid.util.UIutils.assertTrue;
-import static com.didekindroid.util.UIutils.checkPostExecute;
+import static com.didekindroid.usuariocomunidad.register.ViewerRegUserAndUserComuAc.newViewerRegUserAndUserComuAc;
 import static com.didekindroid.util.UIutils.doToolBar;
-import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
 
 /**
  * User: pedro@didekin
  * Date: 11/05/15
  * Time: 19:13
- *
+ * <p>
  * Preconditions:
  * 1. The user is not registered.
  * 2. The activity receives a comunidad object, as an intent key, with the following fields:
@@ -57,71 +41,56 @@ import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
  * 2. The activity SeeUserComuByComuAc is started.
  */
 @SuppressWarnings("ConstantConditions")
-public class RegUserAndUserComuAc extends AppCompatActivity {
+public class RegUserAndUserComuAc extends AppCompatActivity implements ViewerParentInjectorIf {
 
-    RegUserComuFr mRegUserComuFrg;
-    RegUserFr mRegUserFr;
-    Comunidad mComunidad;
-    IdentityCacher identityCacher;
+    View acView;
+    ViewerRegUserAndUserComuAc viewer;
+    RegUserComuFr regUserComuFr;
+    RegUserFr regUserFr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        super.onCreate(savedInstanceState);
         Timber.d("onCreate()");
-        identityCacher = TKhandler;
-
-        // Preconditions.
-        if (savedInstanceState == null) { // To allow for navigate-up.
-            assertTrue(!identityCacher.isRegisteredUser(), user_should_not_be_registered);
-        }
-        Comunidad comunidad = (Comunidad) getIntent().getExtras().getSerializable(COMUNIDAD_LIST_OBJECT.key);
-        mComunidad = comunidad != null ? comunidad : null;
-
-        setContentView(R.layout.reg_user_and_usercomu_ac);
+        super.onCreate(savedInstanceState);
+        acView = getLayoutInflater().inflate(R.layout.reg_user_and_usercomu_ac, null);
+        setContentView(acView);
         doToolBar(this, true);
 
-        mRegUserComuFrg = (RegUserComuFr) getSupportFragmentManager().findFragmentById(R.id
-                .reg_usercomu_frg);
-        mRegUserFr = (RegUserFr) getSupportFragmentManager().findFragmentById(R.id.reg_user_frg);
+        viewer = newViewerRegUserAndUserComuAc(this);
+        viewer.doViewInViewer(savedInstanceState,
+                new Comunidad.ComunidadBuilder()
+                        .copyComunidadNonNullValues(
+                                (Comunidad) getIntent().getExtras().getSerializable(COMUNIDAD_LIST_OBJECT.key)
+                        )
+                        .build());
 
-        Button mRegistroButton = (Button) findViewById(R.id.reg_user_usercomu_button);
-        mRegistroButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                Timber.d("View.OnClickListener().onClickLinkToImportanciaUsers()");
-                registerUserAndUserComu();
-            }
-        });
-    }
-
-    void registerUserAndUserComu()
-    {
-        Timber.d("registerComuAndUsuarioComu()");
-
-        /*UsuarioBean usuarioBean = ViewerRegUserFr.getUserFromViewer(mRegUserFr.getFragmentView());
-        UsuarioComunidadBean usuarioComunidadBean = RegUserComuFr.getUserComuFromViewer(
-                mRegUserComuFrg.getFragmentView(),
-                new ComunidadBean(mComunidad.getC_Id(), null, null, null, null, null),
-                usuarioBean);
-
-        StringBuilder errorBuilder = getErrorMsgBuilder(this);
-
-        if (!usuarioComunidadBean.validate(getResources(), errorBuilder)) {
-            UIutils.makeToast(this, errorBuilder.toString());
-        } else if (!ConnectionUtils.isInternetConnected(this)) {
-            UIutils.makeToast(this, R.string.no_internet_conn_toast);
-        } else {
-            new UserAndUserComuRegister().execute(usuarioComunidadBean.getUsuarioComunidad());
-        }*/
+        regUserComuFr = (RegUserComuFr) getSupportFragmentManager().findFragmentById(R.id.reg_usercomu_frg);
+        regUserFr = (RegUserFr) getSupportFragmentManager().findFragmentById(R.id.reg_user_frg);
     }
 
     @Override
-    protected void onDestroy()
+    public void onStop()
     {
-        Timber.d("onDestroy()");
-        super.onDestroy();
+        Timber.d("onStop()");
+        super.onStop();
+        viewer.clearSubscriptions();
+    }
+
+    // ==================================  ViewerParentInjectorIf  =================================
+
+    @Override
+    public ViewerParentInjectedIf getViewerAsParent()
+    {
+        Timber.d("getViewerAsParent()");
+        return viewer;
+    }
+
+    @Override
+    public void setChildInViewer(ViewerIf viewerChild)
+    {
+        Timber.d("setChildInViewer()");
+        viewer.setChildViewer(viewerChild);
     }
 
 //    ============================================================
@@ -153,54 +122,6 @@ public class RegUserAndUserComuAc extends AppCompatActivity {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
-        }
-    }
-
-    //    ============================================================
-    //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
-    //    ============================================================
-
-    @SuppressWarnings("WeakerAccess")
-    class UserAndUserComuRegister extends AsyncTask<UsuarioComunidad, Void, Void> {
-
-        UiException uiException;
-
-        @Override
-        protected Void doInBackground(UsuarioComunidad... usuarioComunidad)
-        {
-            Timber.d("UserAndUserComuRegister.doInBackground()");
-            Usuario newUser = usuarioComunidad[0].getUsuario();
-            try {
-                userComuDaoRemote.regUserAndUserComu(usuarioComunidad[0]).execute();
-            } catch (IOException e) {
-                uiException = new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
-                return null;
-            }
-            SpringOauthToken token;
-            try {
-                token = Oauth2.getPasswordUserToken(newUser.getUserName(), newUser.getPassword());
-                identityCacher.initIdentityCache(token);
-            } catch (UiException e) {
-                uiException = e;
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid)
-        {
-            if (checkPostExecute(RegUserAndUserComuAc.this)) return;
-
-            Timber.d("UserAndUserComuRegister.onPostExecute()");
-
-            if (uiException != null) {
-                uiException.processMe(RegUserAndUserComuAc.this, new Intent());
-            } else {
-                Intent intent = new Intent(RegUserAndUserComuAc.this, SeeUserComuByComuAc.class);
-                intent.putExtra(ComuBundleKey.COMUNIDAD_ID.key, mComunidad.getC_Id());
-                startActivity(intent);
-                identityCacher.updateIsRegistered(true);
-            }
 
         }
     }

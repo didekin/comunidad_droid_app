@@ -1,7 +1,7 @@
 package com.didekindroid.comunidad.spinner;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
@@ -23,8 +23,6 @@ import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_AUTONOMA_
  * Date: 03/05/17
  * Time: 18:53
  */
-
-@SuppressWarnings("WeakerAccess")
 public final class ViewerComuAutonomaSpinner extends
         ViewerSelectList<Spinner, CtrlerComAutonomaSpinner, ComunidadAutonoma> {
 
@@ -33,14 +31,14 @@ public final class ViewerComuAutonomaSpinner extends
     final SpinnerEventListener eventListener;
     ComuAutonomaSpinnerEventItemSelect spinnerEvent;
 
-    private ViewerComuAutonomaSpinner(Spinner view, Activity activity, ViewerIf parentViewer)
+    private ViewerComuAutonomaSpinner(Spinner view, AppCompatActivity activity, ViewerIf parentViewer)
     {
         super(view, activity, parentViewer);
         eventListener = (SpinnerEventListener) parentViewer;
         spinnerEvent = spinnerEvent_default;
     }
 
-    public static ViewerComuAutonomaSpinner newViewerComuAutonomaSpinner(Spinner spinner, Activity activity, ViewerIf parentViewer)
+    public static ViewerComuAutonomaSpinner newViewerComuAutonomaSpinner(Spinner spinner, AppCompatActivity activity, ViewerIf parentViewer)
     {
         Timber.d("newViewerComuAutonomaSpinner()");
         ViewerComuAutonomaSpinner instance = new ViewerComuAutonomaSpinner(spinner, activity, parentViewer);

@@ -53,12 +53,6 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity {
                 .commit();
     }
 
-    public void replaceComponent(Bundle bundle)
-    {
-        Timber.d("replaceActionInView()");
-        new ActivityInitiator(this).initActivityWithBundle(bundle);
-    }
-
     // ============================================================
     //    ..... ACTION BAR ....
     // ============================================================

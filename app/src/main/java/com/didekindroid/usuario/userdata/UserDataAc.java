@@ -24,7 +24,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  */
 public class UserDataAc extends AppCompatActivity {
 
-    ViewerUserDataIf viewer;
+    ViewerUserData viewer;
     View acView;
 
     @Override
@@ -70,10 +70,6 @@ public class UserDataAc extends AppCompatActivity {
     public boolean onPrepareOptionsMenu(Menu menu)
     {
         Timber.d("onPrepareOptionsMenu()");
-        // Update intent in activity with user data.
-        if (viewer.getIntentForMenu().get() != null) {
-            setIntent(viewer.getIntentForMenu().getAndSet(null));
-        }
         return super.onPrepareOptionsMenu(menu);
     }
 

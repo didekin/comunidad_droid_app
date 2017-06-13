@@ -5,6 +5,7 @@ import com.didekindroid.comunidad.ComunidadSuite;
 import com.didekindroid.exception.UiExceptionTest;
 import com.didekindroid.incidencia.IncidSuite;
 import com.didekindroid.router.ActivityInitiatorTest;
+import com.didekindroid.router.ActivityRouterTest;
 import com.didekindroid.security.SecuritySuite;
 import com.didekindroid.usuario.UsuarioSuite;
 import com.didekindroid.usuariocomunidad.UserComuSuite;
@@ -21,16 +22,26 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        ActivityInitiatorTest.class,
+        // api.
         ApiSuite.class,
+        // comunidad
         ComunidadSuite.class,
-        IncidSuite.class,
-        IoHelperTest.class,
-        SecuritySuite.class,
+        // exception
         UiExceptionTest.class,
-        UIutilsTest.class,
-        UserComuSuite.class,
+        // incidencia
+        IncidSuite.class,
+        // router.
+        ActivityInitiatorTest.class,
+        ActivityRouterTest.class,
+        // security
+        SecuritySuite.class,
+        /* usuario*/
         UsuarioSuite.class,
+        // usuariocomunidad
+        UserComuSuite.class,
+        // utils
+        IoHelperTest.class,
+        UIutilsTest.class,
 })
 public class AppFullSuite {
 }

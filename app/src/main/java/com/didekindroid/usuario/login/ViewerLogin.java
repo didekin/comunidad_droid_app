@@ -25,6 +25,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static com.didekindroid.usuario.UsuarioBundleKey.login_counter_atomic_int;
 import static com.didekindroid.usuario.UsuarioBundleKey.usuario_object;
 import static com.didekindroid.usuario.login.LoginAc.PasswordMailDialog.newInstance;
@@ -223,7 +224,8 @@ final class ViewerLogin extends Viewer<View, CtrlerLoginIf> implements ViewerLog
     public void replaceComponent(@NonNull Bundle bundle)
     {
         Timber.d("replaceComponent()");
-        new ActivityInitiator(activity).initActivityWithBundle(bundle);
+        new ActivityInitiator(activity).initActivityWithFlag(bundle, FLAG_ACTIVITY_NEW_TASK);
+        activity.finish();
     }
 
     @SuppressWarnings("WeakerAccess")

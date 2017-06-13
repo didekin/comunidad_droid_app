@@ -1,9 +1,9 @@
 package com.didekindroid.usuario.userdata;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -45,12 +45,11 @@ final class ViewerUserData extends Viewer<View, CtrlerUserDataIf> implements Vie
     final EditText aliasView;
     final EditText passwordView;
     final AtomicReference<UsuarioBean> usuarioBean;
-    final AtomicReference<Intent> intentForMenu;
     final AtomicReference<Usuario> oldUser;
     final AtomicReference<Usuario> newUser;
 
 
-    private ViewerUserData(View view, Activity activity)
+    private ViewerUserData(View view, AppCompatActivity activity)
     {
         super(view, activity, null);
         emailView = (EditText) view.findViewById(R.id.reg_usuario_email_editT);
@@ -59,13 +58,12 @@ final class ViewerUserData extends Viewer<View, CtrlerUserDataIf> implements Vie
         oldUser = new AtomicReference<>(null);
         newUser = new AtomicReference<>(null);
         usuarioBean = new AtomicReference<>(null);
-        intentForMenu = new AtomicReference<>(null);
     }
 
-    static ViewerUserDataIf newViewerUserData(UserDataAc activity)
+    static ViewerUserData newViewerUserData(UserDataAc activity)
     {
         Timber.d("newViewerUserData()");
-        ViewerUserDataIf instance = new ViewerUserData(activity.acView, activity);
+        ViewerUserData instance = new ViewerUserData(activity.acView, activity);
         instance.setController(new CtrlerUserModified());
         return instance;
     }
@@ -108,18 +106,7 @@ final class ViewerUserData extends Viewer<View, CtrlerUserDataIf> implements Vie
         emailView.setText(oldUser.get().getUserName());
         aliasView.setText(oldUser.get().getAlias());
         passwordView.setHint(R.string.user_data_ac_password_hint);
-        intentForMenu.compareAndSet(
-                null,
-                new Intent().putExtra(user_name.key, oldUser.get().getUserName())
-        );
-        activity.invalidateOptionsMenu();
-    }
-
-    @Override
-    public AtomicReference<Intent> getIntentForMenu()
-    {
-        Timber.d("getIntentForMenu()");
-        return intentForMenu;
+        activity.setIntent(new Intent().putExtra(user_name.key, oldUser.get().getUserName()));
     }
 
     /**

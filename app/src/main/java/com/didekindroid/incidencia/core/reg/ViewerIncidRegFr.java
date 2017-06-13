@@ -1,11 +1,12 @@
 package com.didekindroid.incidencia.core.reg;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Spinner;
 
 import com.didekindroid.R;
+import com.didekindroid.api.Controller;
 import com.didekindroid.api.ControllerIf;
 import com.didekindroid.api.SpinnerEventItemSelectIf;
 import com.didekindroid.api.SpinnerEventListener;
@@ -17,6 +18,7 @@ import com.didekindroid.incidencia.core.ViewerAmbitoIncidSpinner;
 import com.didekindroid.incidencia.core.ViewerImportanciaSpinner;
 import com.didekindroid.usuariocomunidad.spinner.ComuSpinnerEventItemSelect;
 import com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner;
+import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
 import java.io.Serializable;
@@ -43,10 +45,9 @@ class ViewerIncidRegFr extends Viewer<View, ControllerIf> implements SpinnerEven
 
 
     @SuppressWarnings("WeakerAccess")
-    ViewerIncidRegFr(View view, Activity activity, ViewerIf parentViewer)
+    ViewerIncidRegFr(View view, AppCompatActivity activity, ViewerIf parentViewer)
     {
         super(view, activity, parentViewer);
-        controller = null;  // Just for documentation.
         atomIncidBean = new AtomicReference<>(null);
         atomIncidImportBean = new AtomicReference<>(null);
     }
@@ -55,8 +56,9 @@ class ViewerIncidRegFr extends Viewer<View, ControllerIf> implements SpinnerEven
     {
         Timber.d("newViewerIncidRegFr()");
 
-        Activity activity = parentViewer.getActivity();
+        AppCompatActivity activity = parentViewer.getActivity();
         ViewerIncidRegFr instance = new ViewerIncidRegFr(view, activity, parentViewer);
+        instance.setController(new Controller());
         instance.viewerAmbitoIncidSpinner =
                 newViewerAmbitoIncidSpinner((Spinner) instance.getViewInViewer().findViewById(R.id.incid_reg_ambito_spinner), activity, instance);
         instance.viewerImportanciaSpinner =
@@ -72,7 +74,9 @@ class ViewerIncidRegFr extends Viewer<View, ControllerIf> implements SpinnerEven
         Timber.d("doViewInViewer()");
         atomIncidBean.compareAndSet(null, new IncidenciaBean());
         viewerAmbitoIncidSpinner.doViewInViewer(savedState, atomIncidBean.get());
-        viewerComuSpinner.doViewInViewer(savedState, new ComuSpinnerEventItemSelect());
+        // Initialize comunidadId in ComuSpinnerInstance.
+        Comunidad comunidadIntent = viewBean != null ? Comunidad.class.cast(viewBean) : null;
+        viewerComuSpinner.doViewInViewer(savedState, new ComuSpinnerEventItemSelect(comunidadIntent));
         atomIncidImportBean.compareAndSet(null, new IncidImportanciaBean());
         viewerImportanciaSpinner.doViewInViewer(savedState, atomIncidImportBean.get());
     }
@@ -81,7 +85,8 @@ class ViewerIncidRegFr extends Viewer<View, ControllerIf> implements SpinnerEven
     public int clearSubscriptions()
     {
         Timber.d("clearSubscriptions()");
-        return viewerComuSpinner.clearSubscriptions()
+        return controller.clearSubscriptions() +
+                viewerComuSpinner.clearSubscriptions()
                 + viewerImportanciaSpinner.clearSubscriptions()
                 + viewerAmbitoIncidSpinner.clearSubscriptions();
     }
@@ -109,5 +114,8 @@ class ViewerIncidRegFr extends Viewer<View, ControllerIf> implements SpinnerEven
     public void doOnClickItemId(SpinnerEventItemSelectIf spinnerEventItemSelect)
     {
         Timber.d("doOnClickItemId()");
+        if (ComuSpinnerEventItemSelect.class.isInstance(spinnerEventItemSelect)) {
+            atomIncidBean.get().setComunidadId(spinnerEventItemSelect.getSpinnerItemIdSelect());
+        }
     }
 }

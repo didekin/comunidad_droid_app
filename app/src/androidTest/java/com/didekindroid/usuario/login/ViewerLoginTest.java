@@ -23,6 +23,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
 import static com.didekindroid.exception.UiExceptionRouter.GENERIC_APP_ACC;
 import static com.didekindroid.testutil.ActivityTestUtils.checkProcessCtrlError;
 import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
@@ -36,7 +37,6 @@ import static com.didekindroid.usuario.login.ViewerLogin.newViewerLogin;
 import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.checkPswdSendByMailDialog;
 import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typeLoginData;
 import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.loginAcResourceId;
-import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.nextLoginAcRsId;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_DROID;
 import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
 import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOUND;
@@ -170,7 +170,7 @@ public class ViewerLoginTest {
         });
 
         await().atMost(3, SECONDS).until(isActivityDying(activity), is(true));
-        onView(withId(nextLoginAcRsId)).check(matches(isDisplayed()));
+        onView(withId(comuSearchAcLayout)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -239,7 +239,7 @@ public class ViewerLoginTest {
     public void testReplaceRootView() throws Exception
     {
         viewerLogin.replaceComponent(new Bundle(0));
-        waitAtMost(3, SECONDS).until(isResourceIdDisplayed(nextLoginAcRsId));
+        waitAtMost(3, SECONDS).until(isResourceIdDisplayed(comuSearchAcLayout));
         assertThat(activity.isFinishing() || activity.isDestroyed(), is(true));
     }
 }

@@ -26,12 +26,13 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.R.id.login_ac_button;
 import static com.didekindroid.R.id.reg_usuario_email_editT;
 import static com.didekindroid.R.id.reg_usuario_password_ediT;
+import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
 import static com.didekindroid.testutil.ActivityTestUtils.isActivityDying;
+import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.checkPswdSendByMailDialog;
 import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typeLoginData;
 import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.loginAcResourceId;
-import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.nextLoginAcRsId;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_DROID;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_DROID;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
@@ -114,8 +115,8 @@ public class LoginAcTest {
         typeLoginData(USER_DROID.getUserName(), USER_DROID.getPassword());
         onView(withId(login_ac_button)).check(matches(isDisplayed())).perform(click());
 
-        waitAtMost(3, SECONDS).until(isActivityDying(activity), is(true));
-        onView(withId(nextLoginAcRsId)).check(matches(isDisplayed()));
+        waitAtMost(4,SECONDS).until(isResourceIdDisplayed(comuSearchAcLayout));
+        waitAtMost(2, SECONDS).until(isActivityDying(activity), is(true));
     }
 
     @Test   // Login NOT OK, counterWrong > 3.

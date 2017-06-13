@@ -67,7 +67,7 @@ public class ViewerRegComuUserComuAcTest {
     @Test
     public void test_NewViewerRegComuUserComuAc() throws Exception
     {
-        assertThat(activity.viewer.getController(), isA(CtrlerUserReg.class));
+        assertThat(activity.viewer.getController(), isA(CtrlerUsuarioComunidad.class));
     }
 
     @Test
@@ -104,17 +104,18 @@ public class ViewerRegComuUserComuAcTest {
     //  =========================  TESTS FOR ACTIVITY/FRAGMENT LIFECYCLE  ===========================
 
     @Test
-    public void test_OnCreate()
+    public void test_OnCreate() throws Exception
     {
         // Check for initialization of fragments viewers.
         ViewerParentInjectedIf viewerParent = activity.viewer;
         assertThat(viewerParent.getChildViewer(ViewerRegComuFr.class), notNullValue());
         assertThat(viewerParent.getChildViewer(ViewerRegUserComuFr.class), notNullValue());
+        test_DoViewInViewer();
     }
 
     @Test
     public void test_OnStop()
     {
-        checkSubscriptionsOnStop(activity.viewer.getController(), activity);
+        checkSubscriptionsOnStop(activity, activity.viewer.getController());
     }
 }

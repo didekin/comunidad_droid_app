@@ -17,7 +17,7 @@ public enum AppBundleKey implements BundleKey {
 
     AppBundleKey()
     {
-        key = intentPackage.concat(this.name());
+        key = intentPackage.concat(name());
     }
 
     @Override

@@ -6,21 +6,21 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 
 import com.didekindroid.R;
+import com.didekindroid.api.ViewerIf;
+import com.didekindroid.api.ViewerParentInjectedIf;
+import com.didekindroid.api.ViewerParentInjectorIf;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.router.ActivityRouter;
-import com.didekindroid.security.IdentityCacher;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
-import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
+import static com.didekindroid.router.ActivityRouter.doUpMenu;
 import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
+import static com.didekindroid.usuariocomunidad.register.ViewerRegUserComuAc.newViewerRegUserComuAc;
 import static com.didekindroid.usuariocomunidad.util.UserComuAssertionMsg.user_and_comunidad_should_be_registered;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.checkPostExecute;
@@ -42,69 +42,61 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * <p/>
  * Postconditions:
  * 1. A long comunidadId is passed as an intent key.
- * 2. The activity SeeUserComuByComuAc is started.
+ * 2. The activity SeeUserComuByUserAc is started.
  */
 @SuppressWarnings("ConstantConditions")
-public class RegUserComuAc extends AppCompatActivity {
+public class RegUserComuAc extends AppCompatActivity implements ViewerParentInjectorIf {
 
-    RegUserComuFr mRegUserComuFr;
-    IdentityCacher identityCacher;
-    private Comunidad mComunidad;
+    RegUserComuFr regUserComuFr;
+    View acView;
+    ViewerRegUserComuAc viewer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        super.onCreate(savedInstanceState);
         Timber.i("onCreate()");
-        identityCacher = TKhandler;
+        super.onCreate(savedInstanceState);
 
-        assertTrue(identityCacher.isRegisteredUser(), user_should_be_registered);
         Comunidad coomunidadIntent = (Comunidad) getIntent().getExtras()
                 .getSerializable(COMUNIDAD_LIST_OBJECT.key);
-        mComunidad = coomunidadIntent != null ? coomunidadIntent : null;
 
-        setContentView(R.layout.reg_usercomu_ac);
+        acView = getLayoutInflater().inflate(R.layout.reg_usercomu_ac, null);
+        setContentView(acView);
         doToolBar(this, true);
-        mRegUserComuFr = (RegUserComuFr) getSupportFragmentManager().findFragmentById(R.id.reg_usercomu_frg);
 
-        Button mRegisterButton = (Button) findViewById(R.id.reg_usercomu_button);
-        mRegisterButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                Timber.d("View.OnClickListener().onClickLinkToImportanciaUsers()");
-                doOnclick();
-            }
-        });
+        viewer = newViewerRegUserComuAc(this);
+        viewer.doViewInViewer(savedInstanceState,
+                new Comunidad.ComunidadBuilder().copyComunidadNonNullValues(
+                        (Comunidad) getIntent().getExtras()
+                                .getSerializable(COMUNIDAD_LIST_OBJECT.key)
+                ).build());
+
+        regUserComuFr = (RegUserComuFr) getSupportFragmentManager().findFragmentById(R.id.reg_usercomu_frg);
     }
 
-    void doOnclick()
+    @Override
+    public void onStop()
     {
-        Timber.d("doOnclick()");
-
-        // We don't need the user: it is already registered. As to comunidad, it is enough with its id in DB.
-        /*UsuarioComunidadBean usuarioComunidadBean = ViewerRegUserComuFr.getUserComuFromViewer(
-                mRegUserComuFr.getFragmentView(),
-                new ComunidadBean(mComunidad.getC_Id(),
-                        null, null, null, null, null),
-                null);
-
-        StringBuilder errorMsg = new StringBuilder(getResources().getText(R.string.error_validation_msg))
-                .append(LINE_BREAK.getRegexp());
-
-        if (!usuarioComunidadBean.validate(getResources(), errorMsg)) {  // error validation.
-            makeToast(this, errorMsg.toString());
-        } else if (!ConnectionUtils.isInternetConnected(this)) {
-            UIutils.makeToast(this, R.string.no_internet_conn_toast);
-        } else {
-            // Insert usuarioComunidad and go to SeeUserComuByComuAc activity.
-            new UserComuRegister().execute(usuarioComunidadBean.getUsuarioComunidad());
-            Intent intent = new Intent(this, SeeUserComuByComuAc.class);
-            intent.putExtra(COMUNIDAD_ID.key, mComunidad.getC_Id());
-            startActivity(intent);
-        }*/
+        Timber.d("onStop()");
+        super.onStop();
+        viewer.clearSubscriptions();
     }
 
+    // ==================================  ViewerParentInjectorIf  =================================
+
+    @Override
+    public ViewerParentInjectedIf getViewerAsParent()
+    {
+        Timber.d("getViewerAsParent()");
+        return viewer;
+    }
+
+    @Override
+    public void setChildInViewer(ViewerIf viewerChild)
+    {
+        Timber.d("setChildInViewer()");
+        viewer.setChildViewer(viewerChild);
+    }
 
     // ============================================================
     //    ..... ACTION BAR ....
@@ -118,7 +110,7 @@ public class RegUserComuAc extends AppCompatActivity {
         int resourceId = item.getItemId();
         switch (resourceId) {
             case android.R.id.home:
-                ActivityRouter.doUpMenu(this);
+                doUpMenu(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -1,8 +1,8 @@
 package com.didekindroid.incidencia.list.open;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -10,6 +10,7 @@ import android.widget.Spinner;
 
 import com.didekindroid.R;
 import com.didekindroid.incidencia.list.close.ViewerIncidSeeClose;
+import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
 import com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
@@ -32,17 +33,17 @@ class ViewerIncidSeeOpen extends ViewerIncidSeeClose {
 
     ViewerFirebaseTokenIf viewerFirebaseToken;
 
-    ViewerIncidSeeOpen(Activity activity)
+    ViewerIncidSeeOpen(AppCompatActivity activity)
     {
         super(new ListView(activity), activity);
     }
 
-    private ViewerIncidSeeOpen(View frView, Activity activity)
+    private ViewerIncidSeeOpen(View frView, AppCompatActivity activity)
     {
         super(frView, activity);
     }
 
-    static ViewerIncidSeeOpen newViewerIncidSeeOpen(View view, Activity activity)
+    static ViewerIncidSeeOpen newViewerIncidSeeOpen(View view, AppCompatActivity activity)
     {
         Timber.d("newViewerIncidSeeOpen()");
         ViewerIncidSeeOpen parentInstance = new ViewerIncidSeeOpen(view, activity);
@@ -80,6 +81,14 @@ class ViewerIncidSeeOpen extends ViewerIncidSeeClose {
     }
 
     // ==================================  HELPERS  =================================
+
+
+    @Override
+    public void replaceComponent(@NonNull Bundle bundle)
+    {
+        Timber.d("replaceComponent()");
+        new ActivityInitiator(activity).initActivityWithBundle(bundle);
+    }
 
     ViewerComuSpinner getComuSpinner()
     {

@@ -1,10 +1,8 @@
 package com.didekindroid.usuariocomunidad.testutil;
 
 
-import android.app.Activity;
 import android.support.test.espresso.DataInteraction;
 import android.support.test.espresso.matcher.ViewMatchers;
-import android.widget.Button;
 
 import com.didekindroid.R;
 import com.didekindroid.usuariocomunidad.RolUi;
@@ -92,7 +90,7 @@ public final class UserComuEspressoTestUtil {
         assertThat(usuarioComunidad.getRoles(), is(roles));
     }
 
-    public static DataInteraction checkUserComuByComuCommon(UsuarioComunidad userComuRow)
+    public static DataInteraction checkUserComuByComuRol(UsuarioComunidad userComuRow)
     {
         return onData(is(userComuRow))
                 .inAdapterView(withId(android.R.id.list))
@@ -102,9 +100,9 @@ public final class UserComuEspressoTestUtil {
                 ));
     }
 
-    public static DataInteraction checkUserComuPortalEscalera(UsuarioComunidad userComuRow, DataInteraction parent)
+    public static DataInteraction checkUserComuPortalEscalera(UsuarioComunidad userComuRow, DataInteraction parentDataInteraction)
     {
-        return parent.onChildView(allOf(
+        return parentDataInteraction.onChildView(allOf(
                 withId(R.id.usercomu_portal_escalera_block),
                 withChild(allOf(
                         withId(R.id.usercomu_item_portal_txt),
@@ -117,9 +115,9 @@ public final class UserComuEspressoTestUtil {
         ));
     }
 
-    public static DataInteraction checkUserComuPortalNoEscalera(UsuarioComunidad userComuRow, DataInteraction parent)
+    public static DataInteraction checkUserComuPortalNoEscalera(UsuarioComunidad userComuRow, DataInteraction parentDataInteraction)
     {
-        return parent.onChildView(allOf(
+        return parentDataInteraction.onChildView(allOf(
                 withId(R.id.usercomu_portal_escalera_block),
                 withChild(allOf(
                         withId(R.id.usercomu_item_portal_txt),
@@ -178,9 +176,9 @@ public final class UserComuEspressoTestUtil {
         ));
     }
 
-    public static void runFinalCheckUserComuByComu(DataInteraction parent)
+    public static void runFinalCheckUserComuByComu(DataInteraction parentDataInteraction)
     {
-        parent.check(matches(isDisplayed()));
+        parentDataInteraction.check(matches(isDisplayed()));
     }
 
     public static void checkUserComuData(UsuarioComunidad userComu)

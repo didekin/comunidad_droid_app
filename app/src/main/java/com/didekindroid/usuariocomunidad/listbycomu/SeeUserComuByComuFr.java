@@ -3,6 +3,7 @@ package com.didekindroid.usuariocomunidad.listbycomu;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,7 +51,7 @@ public class SeeUserComuByComuFr extends Fragment {
         assertTrue(getActivity().getIntent().hasExtra(COMUNIDAD_ID.key), intent_extra_should_be_initialized);
         ComunidadBean comunidadBean = new ComunidadBean();
         comunidadBean.setComunidadId(getActivity().getIntent().getLongExtra(COMUNIDAD_ID.key, 0L));
-        viewer = ViewerSeeUserComuByComu.newViewerUserComuByComu(frView, getActivity());
+        viewer = ViewerSeeUserComuByComu.newViewerUserComuByComu(frView, (AppCompatActivity) getActivity());
         viewer.doViewInViewer(savedInstanceState, comunidadBean);
     }
 

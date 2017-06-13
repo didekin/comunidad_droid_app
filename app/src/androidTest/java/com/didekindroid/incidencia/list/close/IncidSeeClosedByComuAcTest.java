@@ -11,6 +11,7 @@ import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -24,18 +25,18 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
-import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeCloseAcResourceId;
-import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeGenericFrResourceId;
-import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.nextResolucionFrResourceId;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeCloseAcLayout;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeGenericLayout;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidResolucionSeeFrLayout;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.makeRegGetIncidImportancia;
-import static com.didekindroid.incidencia.testutils.IncidUiTestUtils.checkIncidClosedListView;
-import static com.didekindroid.incidencia.testutils.IncidUiTestUtils.doComunidadSpinner;
+import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkIncidClosedListView;
+import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.doComunidadSpinner;
 import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
-import static com.didekindroid.incidencia.testutils.IncidUiTestUtils.isComuSpinnerWithText;
+import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.isComuSpinnerWithText;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
@@ -109,6 +110,12 @@ public class IncidSeeClosedByComuAcTest {
     IncidSeeClosedByComuAc activity;
     private IncidSeeCloseByComuFr fragment;
 
+    @BeforeClass
+    public static void relax() throws InterruptedException
+    {
+        SECONDS.sleep(2);
+    }
+
     @Before
     public void setUp() throws Exception
     {
@@ -135,8 +142,8 @@ public class IncidSeeClosedByComuAcTest {
         assertThat(fragment.getArguments().getLong(COMUNIDAD_ID.key), is(incidImportancia1.getIncidencia().getComunidadId()));
 
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
-        onView(withId(incidSeeCloseAcResourceId)).check(matches(isDisplayed()));
-        onView(withId(incidSeeGenericFrResourceId)).check(matches(isDisplayed()));
+        onView(withId(incidSeeCloseAcLayout)).check(matches(isDisplayed()));
+        onView(withId(incidSeeGenericLayout)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_reg_comunidad_spinner)).check(matches(isDisplayed()));
 
         // Data
@@ -157,7 +164,7 @@ public class IncidSeeClosedByComuAcTest {
                 .check(matches(isDisplayed()))
                 .perform(click());
         // Check next fragment.
-        waitAtMost(2, SECONDS).until(isViewDisplayed(withId(nextResolucionFrResourceId)));
+        waitAtMost(2, SECONDS).until(isViewDisplayed(withId(incidResolucionSeeFrLayout)));
         // Up and check.
         checkUp();
         waitAtMost(2, SECONDS).until(isViewDisplayed(checkIncidClosedListView(incidImportancia1, activity)));
@@ -172,9 +179,9 @@ public class IncidSeeClosedByComuAcTest {
                 .check(matches(isDisplayed()))
                 .perform(click());
         // Check next fragment.
-        waitAtMost(4, SECONDS).until(isViewDisplayed(withId(nextResolucionFrResourceId)));
+        waitAtMost(4, SECONDS).until(isViewDisplayed(withId(incidResolucionSeeFrLayout)));
         // Back and check.
-        checkBack(onView(withId(nextResolucionFrResourceId)));
+        checkBack(onView(withId(incidResolucionSeeFrLayout)));
         waitAtMost(4, SECONDS).until(isViewDisplayed(checkIncidClosedListView(incidImportancia1, activity)));
     }
 
@@ -183,7 +190,7 @@ public class IncidSeeClosedByComuAcTest {
     @Test
     public void testOnStop()
     {
-        checkSubscriptionsOnStop(fragment.viewer.getController(), activity);
+        checkSubscriptionsOnStop(activity, fragment.viewer.getController());
     }
 
     //    ===================================== HELPERS =====================================

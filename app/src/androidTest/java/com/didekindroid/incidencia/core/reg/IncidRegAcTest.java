@@ -25,9 +25,9 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_LA_FUENTE;
-import static com.didekindroid.incidencia.testutils.IncidUiTestUtils.doAmbitoAndDescripcion;
-import static com.didekindroid.incidencia.testutils.IncidUiTestUtils.doComunidadSpinner;
-import static com.didekindroid.incidencia.testutils.IncidUiTestUtils.doImportanciaSpinner;
+import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.doAmbitoAndDescripcion;
+import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.doComunidadSpinner;
+import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.doImportanciaSpinner;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
@@ -100,7 +100,7 @@ public class IncidRegAcTest {
         doAmbitoAndDescripcion(ambitoObj, "descripcion = not valid");
         onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
 
-        waitAtMost(2, SECONDS).until(isToastInView(R.string.error_validation_msg, activity, R.string.incid_reg_descripcion));
+        waitAtMost(4, SECONDS).until(isToastInView(R.string.error_validation_msg, activity, R.string.incid_reg_descripcion));
     }
 
     @Test
@@ -154,7 +154,7 @@ public class IncidRegAcTest {
     @Test
     public void testOnStop()
     {
-        checkSubscriptionsOnStop(activity.viewer.getController(), activity);
+        checkSubscriptionsOnStop(activity, activity.viewer.getController());
     }
 
     @Test

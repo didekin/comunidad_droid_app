@@ -16,10 +16,14 @@ import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
 import io.reactivex.observers.DisposableSingleObserver;
+import timber.log.Timber;
 
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
+import static com.didekindroid.testutil.RxSchedulersUtils.resetAllSchedulers;
+import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceAndroidMain;
+import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceIoScheduler;
 import static com.didekindroid.usuario.delete.CtrlerDeleteMe.getDeleteMeSingle;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_DROID;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
@@ -82,19 +86,26 @@ public class CtrlerDeleteMeTest {
     @Test
     public void testDeleteMeRemote() throws Exception
     {
-        assertThat(controller.deleteMeRemote(new DisposableSingleObserver<Boolean>() {
-            @Override
-            public void onSuccess(Boolean aBoolean)
-            {
-                assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
-            }
+        try {
+            trampolineReplaceIoScheduler();
+            trampolineReplaceAndroidMain();
+            Timber.d("checkSpinnerCtrlerLoadItems(), Thread: %s", Thread.currentThread().getName());
+            assertThat(controller.deleteMeRemote(new DisposableSingleObserver<Boolean>() {
+                @Override
+                public void onSuccess(Boolean aBoolean)
+                {
+                    assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
+                }
 
-            @Override
-            public void onError(Throwable e)
-            {
-                fail();
-            }
-        }), is(true));
+                @Override
+                public void onError(Throwable e)
+                {
+                    fail();
+                }
+            }), is(true));
+        } finally {
+            resetAllSchedulers();
+        }
         assertThat(controller.getSubscriptions().size(), is(1));
         assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_A));
     }

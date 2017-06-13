@@ -1,8 +1,8 @@
 package com.didekindroid.comunidad;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
@@ -30,7 +30,7 @@ import static com.didekindroid.util.UIutils.makeToast;
  */
 class ViewerComuDataAc extends ViewerParent<View, CtrlerComuDataAc> {
 
-    ViewerComuDataAc(View view, Activity activity)
+    ViewerComuDataAc(View view, AppCompatActivity activity)
     {
         super(view, activity);
     }

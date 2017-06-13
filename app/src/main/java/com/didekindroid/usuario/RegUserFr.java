@@ -4,6 +4,7 @@ package com.didekindroid.usuario;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +36,7 @@ public class RegUserFr extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         viewerInjector = (ViewerParentInjectorIf) getActivity();
-        viewer = new ViewerRegUserFr(regUserFrView, getActivity(), viewerInjector.getViewerAsParent());
+        viewer = new ViewerRegUserFr(regUserFrView, (AppCompatActivity) getActivity(), viewerInjector.getViewerAsParent());
         viewer.doViewInViewer(savedInstanceState, null);
         viewerInjector.setChildInViewer(viewer);
     }

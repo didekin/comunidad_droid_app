@@ -1,6 +1,6 @@
 package com.didekindroid.usuario.firebase;
 
-import android.app.Activity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.didekindroid.api.Viewer;
@@ -17,12 +17,12 @@ public class ViewerFirebaseToken extends Viewer<View, CtrlerFirebaseTokenIf> imp
         ViewerFirebaseTokenIf<View> {
 
 
-    protected ViewerFirebaseToken(Activity activity)
+    protected ViewerFirebaseToken(AppCompatActivity activity)
     {
         super(null, activity, null);
     }
 
-    public static ViewerFirebaseTokenIf<View> newViewerFirebaseToken(Activity activity)
+    public static ViewerFirebaseTokenIf<View> newViewerFirebaseToken(AppCompatActivity activity)
     {
         Timber.d("newViewerFirebaseToken()");
         ViewerFirebaseTokenIf<View> viewer = new ViewerFirebaseToken(activity);

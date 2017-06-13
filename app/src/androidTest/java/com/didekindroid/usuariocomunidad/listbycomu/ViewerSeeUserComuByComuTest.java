@@ -47,7 +47,7 @@ import static com.didekindroid.usuariocomunidad.RolUi.PRO;
 import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.checkUserComuByComuCommon;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.checkUserComuByComuRol;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.checkUserComuNoPortalNoEscalera;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.checkUserComuPlantaNoPuerta;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.checkUserComuPlantaPuerta;
@@ -203,7 +203,7 @@ public class ViewerSeeUserComuByComuTest {
                         usuarioComunidad1,
                         checkUserComuPlantaPuerta(
                                 usuarioComunidad1,
-                                checkUserComuByComuCommon(usuarioComunidad1)
+                                checkUserComuByComuRol(usuarioComunidad1)
                         )
                 )
         );
@@ -213,7 +213,7 @@ public class ViewerSeeUserComuByComuTest {
                         usuarioComunidad2,
                         checkUserComuPlantaNoPuerta(
                                 usuarioComunidad2,
-                                checkUserComuByComuCommon(usuarioComunidad2)
+                                checkUserComuByComuRol(usuarioComunidad2)
                         )
                 )
         );
@@ -223,7 +223,7 @@ public class ViewerSeeUserComuByComuTest {
                         usuarioComunidad3,
                         checkUserComuNoPortalNoEscalera(
                                 usuarioComunidad3,
-                                checkUserComuByComuCommon(usuarioComunidad3)
+                                checkUserComuByComuRol(usuarioComunidad3)
                         )
                 )
         );

@@ -1,7 +1,7 @@
 package com.didekindroid.usuariocomunidad.register;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
@@ -29,9 +29,9 @@ import static com.didekindroid.util.UIutils.makeToast;
  * Time: 11:59
  */
 
-public final class ViewerRegComuUserUserComuAc extends ViewerParent<View, CtrlerUserReg> {
+public final class ViewerRegComuUserUserComuAc extends ViewerParent<View, CtrlerUsuarioComunidad> {
 
-    private ViewerRegComuUserUserComuAc(View view, Activity activity)
+    private ViewerRegComuUserUserComuAc(View view, AppCompatActivity activity)
     {
         super(view, activity);
     }
@@ -40,7 +40,7 @@ public final class ViewerRegComuUserUserComuAc extends ViewerParent<View, Ctrler
     {
         Timber.d("newViewerRegComuUserUserComuAc()");
         ViewerRegComuUserUserComuAc instance = new ViewerRegComuUserUserComuAc(activity.acView, activity);
-        instance.setController(new CtrlerUserReg());
+        instance.setController(new CtrlerUsuarioComunidad());
         // We initialize each fragment viewer in its associated fragment.
         return instance;
     }

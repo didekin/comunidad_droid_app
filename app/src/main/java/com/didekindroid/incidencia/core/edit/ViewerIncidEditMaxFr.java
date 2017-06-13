@@ -1,8 +1,8 @@
 package com.didekindroid.incidencia.core.edit;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -53,7 +53,7 @@ class ViewerIncidEditMaxFr extends Viewer<View, CtrlerIncidRegEditFr> implements
     ViewerImportanciaSpinner viewerImportanciaSpinner;
 
     @SuppressWarnings("WeakerAccess")
-    public ViewerIncidEditMaxFr(View view, Activity activity, ViewerIf parentViewer, boolean flagResolucion)
+    public ViewerIncidEditMaxFr(View view, AppCompatActivity activity, ViewerIf parentViewer, boolean flagResolucion)
     {
         super(view, activity, parentViewer);
         hasResolucion = flagResolucion;
@@ -63,7 +63,7 @@ class ViewerIncidEditMaxFr extends Viewer<View, CtrlerIncidRegEditFr> implements
     {
         Timber.d("newViewerIncidEditMaxFr()");
 
-        Activity activity = parentViewer.getActivity();
+        AppCompatActivity activity = parentViewer.getActivity();
         ViewerIncidEditMaxFr instance = new ViewerIncidEditMaxFr(frView, activity, parentViewer, flagResolucion);
 
         instance.viewerAmbitoIncidSpinner =

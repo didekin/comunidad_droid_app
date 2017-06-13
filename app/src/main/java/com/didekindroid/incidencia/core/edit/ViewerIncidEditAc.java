@@ -26,7 +26,7 @@ import static com.didekindroid.util.UIutils.assertTrue;
  */
 class ViewerIncidEditAc extends ViewerParent<View, CtrlerIncidEditAc> {
 
-    private IncidImportancia incidImportancia;
+    IncidImportancia incidImportancia;
 
     ViewerIncidEditAc(IncidEditAc activity)
     {

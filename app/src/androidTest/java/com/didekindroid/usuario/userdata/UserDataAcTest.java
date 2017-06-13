@@ -11,7 +11,6 @@ import com.didekinlib.model.usuario.Usuario;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -44,13 +43,13 @@ import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
 import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typeUserData;
 import static com.didekindroid.usuario.testutil.UserItemMenuTestUtils.DELETE_ME_AC;
 import static com.didekindroid.usuario.testutil.UserItemMenuTestUtils.PASSWORD_CHANGE_AC;
-import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.nextUserDataAcRsId;
 import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.userDataAcRsId;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanWithTkhandler;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.SEE_USERCOMU_BY_USER_AC;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
@@ -142,7 +141,7 @@ public class UserDataAcTest {
     public void testModifyUserDataAndBack() throws UiException
     {
         typeClickWait();
-        checkBack(onView(withId(nextUserDataAcRsId)).check(matches(isDisplayed())), userDataAcRsId);
+        checkBack(onView(withId(seeUserComuByUserFrRsId)).check(matches(isDisplayed())), userDataAcRsId);
     }
 
     @Test
@@ -156,7 +155,7 @@ public class UserDataAcTest {
     @Test
     public void testReplaceRootView()
     {
-        checkViewerReplaceComponent(activity.viewer, nextUserDataAcRsId, null);
+        checkViewerReplaceComponent(activity.viewer, seeUserComuByUserFrRsId, null);
     }
 
     //    =================================  MENU TESTS ==================================
@@ -215,6 +214,6 @@ public class UserDataAcTest {
         onView(withId(user_data_modif_button)).perform(scrollTo())
                 .check(matches(isDisplayed())).perform(click());
 
-        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(nextUserDataAcRsId));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
     }
 }

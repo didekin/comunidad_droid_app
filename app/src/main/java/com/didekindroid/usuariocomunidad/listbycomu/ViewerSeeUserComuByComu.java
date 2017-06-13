@@ -1,7 +1,7 @@
 package com.didekindroid.usuariocomunidad.listbycomu;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -35,7 +35,7 @@ class ViewerSeeUserComuByComu extends Viewer<ListView, CtrlerUserComuByComuList>
 
     final TextView nombreComuView;
 
-    ViewerSeeUserComuByComu(View frView, Activity activity)
+    private ViewerSeeUserComuByComu(View frView, AppCompatActivity activity)
     {
         super((ListView) frView.findViewById(list), activity, null);
         nombreComuView = (TextView) frView.findViewById(R.id.see_usercomu_by_comu_list_header);
@@ -43,7 +43,7 @@ class ViewerSeeUserComuByComu extends Viewer<ListView, CtrlerUserComuByComuList>
         view.addHeaderView(new View(activity), null, true);
     }
 
-    static ViewerSeeUserComuByComu newViewerUserComuByComu(View frView, Activity activity)
+    static ViewerSeeUserComuByComu newViewerUserComuByComu(View frView, AppCompatActivity activity)
     {
         Timber.d("newViewerUserComuByComu()");
         ViewerSeeUserComuByComu instance = new ViewerSeeUserComuByComu(frView, activity);

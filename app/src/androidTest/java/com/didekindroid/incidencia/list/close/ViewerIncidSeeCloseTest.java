@@ -37,15 +37,14 @@ import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doSimpleIncidenciaUser;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.makeRegGetIncidImportancia;
-import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.nextResolucionFrResourceId;
-import static com.didekindroid.incidencia.testutils.IncidUiTestUtils.checkIncidClosedListView;
-import static com.didekindroid.incidencia.testutils.IncidUiTestUtils.isComuSpinnerWithText;
+import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkIncidClosedListView;
+import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.isComuSpinnerWithText;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidResolucionSeeFrLayout;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_ID_LIST_SELECTED;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
-import static com.didekindroid.testutil.ActivityTestUtils.addSubscription;
-import static com.didekindroid.testutil.ActivityTestUtils.checkViewerReplaceComponent;
+import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
@@ -209,7 +208,7 @@ public class ViewerIncidSeeCloseTest {
                 .check(matches(isDisplayed()))
                 .perform(click());
         assertThat(fragment.viewer.getSelectedItemId(), is(incidImportancia1.getIncidencia().getIncidenciaId()));
-        waitAtMost(2, SECONDS).until(isViewDisplayed(withId(nextResolucionFrResourceId)));
+        waitAtMost(2, SECONDS).until(isViewDisplayed(withId(incidResolucionSeeFrLayout)));
     }
 
     @Test
@@ -221,7 +220,8 @@ public class ViewerIncidSeeCloseTest {
         bundle.putSerializable(INCIDENCIA_OBJECT.key, resolucion.getIncidencia());
         bundle.putSerializable(INCID_RESOLUCION_OBJECT.key, resolucion);
 
-        checkViewerReplaceComponent(fragment.viewer, nextResolucionFrResourceId, bundle);
+        fragment.viewer.replaceComponent(bundle);
+        waitAtMost(2, SECONDS).until(isViewDisplayed(withId(incidResolucionSeeFrLayout)));
     }
 
     //    ============================  TESTS  ===================================
@@ -278,12 +278,8 @@ public class ViewerIncidSeeCloseTest {
     @Test
     public void testClearSubscriptions() throws Exception
     {
-        addSubscription(fragment.viewer.comuSpinnerViewer.getController());
-        addSubscription(fragment.viewer.getController());
-
-        assertThat(fragment.viewer.clearSubscriptions(), is(0));
-        assertThat(fragment.viewer.comuSpinnerViewer.getController().getSubscriptions().size(), is(0));
-        assertThat(fragment.viewer.getController().getSubscriptions().size(), is(0));
+        checkSubscriptionsOnStop(activity, fragment.viewer.comuSpinnerViewer.getController(),
+                fragment.viewer.getController());
     }
 
     @Test

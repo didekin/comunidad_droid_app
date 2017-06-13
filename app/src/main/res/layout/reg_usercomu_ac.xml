@@ -12,6 +12,8 @@
                       android:layout_marginTop="@dimen/app_bar_bottom_margin"
                       tools:context="com.didekindroid.com.didekindroid.usuario.RegUserComuAc">
 
+            <include layout="@layout/nombre_comunidad_include"/>
+
             <fragment
                 android:id="@+id/reg_usercomu_frg"
                 android:name="com.didekindroid.usuariocomunidad.register.RegUserComuFr"

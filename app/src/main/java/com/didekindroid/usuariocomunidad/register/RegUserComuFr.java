@@ -13,6 +13,8 @@ import com.didekindroid.api.ViewerParentInjectorIf;
 
 import timber.log.Timber;
 
+import static com.didekindroid.usuariocomunidad.util.UserComuBundleKey.USERCOMU_LIST_OBJECT;
+
 public class RegUserComuFr extends Fragment {
 
     ViewerRegUserComuFr viewer;
@@ -35,7 +37,7 @@ public class RegUserComuFr extends Fragment {
 
         ViewerParentInjectorIf viewerInjector = (ViewerParentInjectorIf) getActivity();
         viewer = ViewerRegUserComuFr.newViewerRegUserComuFr(regUserComuFrView, viewerInjector.getViewerAsParent());
-        viewer.doViewInViewer(savedInstanceState, null);
+        viewer.doViewInViewer(savedInstanceState, getActivity().getIntent().getSerializableExtra(USERCOMU_LIST_OBJECT.key));
         viewerInjector.setChildInViewer(viewer);
     }
 

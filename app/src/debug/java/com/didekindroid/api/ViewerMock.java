@@ -1,7 +1,7 @@
 package com.didekindroid.api;
 
-import android.app.Activity;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import timber.log.Timber;
@@ -11,14 +11,15 @@ import timber.log.Timber;
  * Date: 24/02/17
  * Time: 17:23
  */
-public class ViewerMock<T extends View, C extends ControllerIf> extends Viewer<T, C> implements SpinnerEventListener {
+public class ViewerMock<T extends View, C extends ControllerIf> extends Viewer<T, C> implements
+        SpinnerEventListener {
 
-    public ViewerMock(Activity activity)
+    public ViewerMock(AppCompatActivity activity)
     {
-        this(null, activity,null);
+        this(null, activity, null);
     }
 
-    public ViewerMock(T view, Activity activity, ViewerIf<T, C> parentViewer)
+    ViewerMock(T view, AppCompatActivity activity, ViewerIf<T, C> parentViewer)
     {
         super(view, activity, null);
     }

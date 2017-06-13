@@ -46,9 +46,9 @@ import static org.junit.Assert.assertThat;
  * Time: 18:29
  */
 
-public final class IncidUiTestUtils {
+public final class IncidEspressoTestUtils {
 
-    private IncidUiTestUtils()
+    private IncidEspressoTestUtils()
     {
     }
 
@@ -264,7 +264,7 @@ public final class IncidUiTestUtils {
     public static void doComunidadSpinner(Comunidad comunidad, int resourceId)
     {
         onView(withId(resourceId)).perform(click());
-        waitAtMost(2, SECONDS).until(isDataDisplayedAndClick(
+        waitAtMost(4, SECONDS).until(isDataDisplayedAndClick(
                 allOf(
                         is(instanceOf(Comunidad.class)),
                         is(comunidad),
@@ -296,7 +296,7 @@ public final class IncidUiTestUtils {
     public static void doImportanciaSpinner(Activity activity, int i)
     {
         onView(withId(R.id.incid_reg_importancia_spinner)).perform(click());
-        waitAtMost(2, SECONDS).until(isDataDisplayedAndClick(
+        waitAtMost(4, SECONDS).until(isDataDisplayedAndClick(
                 allOf(
                         is(instanceOf(String.class)),
                         is(activity.getResources().getStringArray(R.array.IncidImportanciaArray)[i]),
@@ -309,7 +309,7 @@ public final class IncidUiTestUtils {
     public static void doAmbitoAndDescripcion(AmbitoIncidValueObj ambito, String descripcion)
     {
         onView(withId(R.id.incid_reg_ambito_spinner)).perform(click());
-        waitAtMost(2, SECONDS).until(isDataDisplayedAndClick(
+        waitAtMost(4, SECONDS).until(isDataDisplayedAndClick(
                 allOf(
                         is(instanceOf(AmbitoIncidValueObj.class)),
                         is(ambito),

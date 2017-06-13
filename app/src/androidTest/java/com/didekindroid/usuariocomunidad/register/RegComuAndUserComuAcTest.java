@@ -20,10 +20,13 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.typeComunidadData;
+import static com.didekindroid.testutil.ActivityTestUtils.checkChildInViewer;
+import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.testutil.ActivityTestUtils.focusOnButton;
+import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
 import static com.didekindroid.usuariocomunidad.RolUi.ADM;
@@ -35,6 +38,8 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.si
 import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.typeUserComuData;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.regComu_UserComuAcLayout;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -93,7 +98,7 @@ public class RegComuAndUserComuAcTest {
         typeComunidadData();
         onView(withId(buttonId)).perform(scrollTo(), click());
 
-        onView(withId(seeUserComuByUserFrRsId)).check(matches(isDisplayed()));
+        waitAtMost(4,SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
         checkUp(regComu_UserComuAcLayout);
     }
 
@@ -114,5 +119,17 @@ public class RegComuAndUserComuAcTest {
 
         onView(withId(R.id.appbar)).perform(scrollTo()).check(matches(isDisplayed()));
         clickNavigateUp();
+    }
+
+    @Test
+    public void test_OnStop() throws Exception
+    {
+        checkSubscriptionsOnStop(activity, activity.viewer.getController());
+    }
+
+    @Test
+    public void test_SetChildInViewer()
+    {
+        checkChildInViewer(activity);
     }
 }

@@ -26,7 +26,7 @@ import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
  * Time: 15:06
  */
 @SuppressWarnings("WeakerAccess")
-public final class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDao {
+public class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDao {
 
     public static final UsuarioDao usuarioDao = new UsuarioDaoRemote(creator.get().getRetrofitHandler().getService(UsuarioEndPoints.class));
     private final UsuarioEndPoints endPoint;

@@ -1,10 +1,10 @@
 package com.didekindroid.comunidad.spinner;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Spinner;
 
@@ -179,7 +179,7 @@ public class ViewerComuAutonomaSpinnerTest {
     static class ParentViewerForTest extends ViewerMock<View, Controller> implements
             SpinnerEventListener {
 
-        public ParentViewerForTest(Activity activity)
+        public ParentViewerForTest(AppCompatActivity activity)
         {
             super(activity);
         }

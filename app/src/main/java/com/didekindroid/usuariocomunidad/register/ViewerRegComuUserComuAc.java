@@ -1,7 +1,7 @@
 package com.didekindroid.usuariocomunidad.register;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
@@ -29,9 +29,9 @@ import static com.didekindroid.util.UIutils.makeToast;
  * Time: 14:31
  */
 
-final class ViewerRegComuUserComuAc extends ViewerParent<View, CtrlerUserReg> {
+final class ViewerRegComuUserComuAc extends ViewerParent<View, CtrlerUsuarioComunidad> {
 
-    private ViewerRegComuUserComuAc(View view, Activity activity)
+    private ViewerRegComuUserComuAc(View view, AppCompatActivity activity)
     {
         super(view, activity);
     }
@@ -40,7 +40,7 @@ final class ViewerRegComuUserComuAc extends ViewerParent<View, CtrlerUserReg> {
     {
         Timber.d("newViewerRegComuUserComuAc()");
         ViewerRegComuUserComuAc instance = new ViewerRegComuUserComuAc(activity.acView, activity);
-        instance.setController(new CtrlerUserReg());
+        instance.setController(new CtrlerUsuarioComunidad());
         return instance;
     }
 

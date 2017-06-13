@@ -1,10 +1,10 @@
 package com.didekindroid.usuariocomunidad.spinner;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Spinner;
 
@@ -256,7 +256,7 @@ public class ViewerComuSpinnerTest {
     class ViewerForTest extends ViewerMock<View, CtrlerSelectListIf> implements
             SpinnerEventListener {
 
-        public ViewerForTest(Activity activity)
+        public ViewerForTest(AppCompatActivity activity)
         {
             super(activity);
         }

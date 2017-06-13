@@ -54,7 +54,7 @@ public final class UIutils {
 
     public static final Locale SPAIN_LOCALE = new Locale("es", "ES");
 
-    private static final int APPBAR_ID = R.id.appbar;
+    public static final int APPBAR_ID = R.id.appbar;
 
     private UIutils()
     {

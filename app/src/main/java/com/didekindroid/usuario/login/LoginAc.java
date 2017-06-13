@@ -8,13 +8,11 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.router.ActivityRouter;
 import com.didekinlib.model.usuario.Usuario;
 
 import timber.log.Timber;
 
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static com.didekindroid.usuario.UsuarioBundleKey.usuario_object;
 import static com.didekindroid.util.UIutils.doToolBar;
 
@@ -64,13 +62,6 @@ public class LoginAc extends AppCompatActivity {
         Timber.d("onStop()");
         super.onStop();
         viewerLogin.clearSubscriptions();
-    }
-
-    public void replaceComponent(Bundle bundle)
-    {
-        Timber.d("initActivityWithBundle()");
-        new ActivityInitiator(this).initActivityWithFlag(bundle, FLAG_ACTIVITY_NEW_TASK);
-        finish();
     }
 
     // ============================================================

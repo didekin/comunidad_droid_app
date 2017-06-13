@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView
+        android:id="@+id/rotulo_comunidad"
+        style="@style/textBase.textPageLabel1"
+        android:padding="4dp"
+        android:text="@string/rotulo_comunidad"/>
+
+    <TextView
+        android:id="@+id/descripcion_comunidad_text"
+        style="@style/textBase.textFieldLabel1"
+        android:layout_marginTop="0dp"
+        android:padding="4dp"
+    />
+</merge>
