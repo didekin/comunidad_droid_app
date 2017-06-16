@@ -11,14 +11,11 @@ import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.contrib.PickerActions;
 import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.ListView;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ControllerIf;
@@ -57,7 +54,6 @@ import timber.log.Timber;
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.KITKAT;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
-import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -178,37 +174,6 @@ public final class ActivityTestUtils {
         };
     }
 
-    public static View doFragmentTextView(int resourdeIdLayout, String description)
-    {
-        LayoutInflater inflater = (LayoutInflater) getTargetContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View frView = inflater.inflate(resourdeIdLayout, null);
-        EditText editText = (EditText) frView.findViewById(R.id.incid_reg_desc_ed);
-        editText.setText(description);
-        return frView;
-    }
-
-    public static View doFragmentView(int resourdeIdLayout)
-    {
-        return ((LayoutInflater) getTargetContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(resourdeIdLayout, null);
-    }
-
-    public static ListView doListView(int resourdeIdLayout)
-    {
-        LayoutInflater inflater = (LayoutInflater) getTargetContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View frView = inflater.inflate(resourdeIdLayout, null);
-        return (ListView) frView.findViewById(android.R.id.list);
-    }
-
-    public static Callable<Long> getLongInBundle(final Bundle bundleIn, final BundleKey bundleKey)
-    {
-        return new Callable<Long>() {
-            public Long call() throws Exception
-            {
-                return bundleIn.getLong(bundleKey.getKey());
-            }
-        };
-    }
-
     //    ============================== BUTTONS ============================
 
     public static int focusOnButton(Activity activity, int buttonRsId)
@@ -271,16 +236,6 @@ public final class ActivityTestUtils {
             public Boolean call() throws Exception
             {
                 return controller.isGcmTokenSentServer();
-            }
-        };
-    }
-
-    public static Callable<Integer> getAdapterCount(final Adapter adapter)
-    {
-        return new Callable<Integer>() {
-            public Integer call() throws Exception
-            {
-                return adapter.getCount();
             }
         };
     }

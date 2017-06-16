@@ -1,9 +1,12 @@
 package com.didekindroid.incidencia.testutils;
 
 import android.app.Activity;
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.test.espresso.NoMatchingViewException;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 
 import com.didekindroid.R;
 import com.didekindroid.incidencia.core.AmbitoIncidValueObj;
@@ -17,6 +20,7 @@ import org.hamcrest.Matcher;
 import java.sql.Timestamp;
 import java.util.concurrent.Callable;
 
+import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.replaceText;
@@ -50,6 +54,15 @@ public final class IncidEspressoTestUtils {
 
     private IncidEspressoTestUtils()
     {
+    }
+
+    public static View doFragmentTextView(int resourdeIdLayout, String description)
+    {
+        LayoutInflater inflater = (LayoutInflater) getTargetContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View frView = inflater.inflate(resourdeIdLayout, null);
+        EditText editText = (EditText) frView.findViewById(R.id.incid_reg_desc_ed);
+        editText.setText(description);
+        return frView;
     }
 
     public static void checkScreenEditMaxPowerFr(IncidImportancia incidImportanciaIntent, boolean flagResolucionIntent)

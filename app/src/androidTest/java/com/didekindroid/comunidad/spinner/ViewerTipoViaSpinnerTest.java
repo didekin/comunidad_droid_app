@@ -66,7 +66,7 @@ public class ViewerTipoViaSpinnerTest {
                 activity.getSupportFragmentManager().beginTransaction()
                         .add(R.id.mock_ac_layout, new SpinnerMockFr(), null)
                         .commitNow();
-                spinner = (Spinner) activity.findViewById(R.id.tipovia_spinner);
+                spinner = (Spinner) activity.findViewById(R.id.tipo_via_spinner);
                 atomicViewer.compareAndSet(null, newViewerTipoViaSpinner(spinner, activity, null));
             }
         });

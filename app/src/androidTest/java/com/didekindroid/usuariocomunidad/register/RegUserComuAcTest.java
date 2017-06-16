@@ -24,9 +24,10 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.testutil.ActivityTestUtils.checkChildInViewer;
-import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
+import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
+import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.RolUi.PRE;
@@ -38,6 +39,8 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.si
 import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.typeUserComuData;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.regUserComuAcLayout;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -89,9 +92,12 @@ public class RegUserComuAcTest {
         typeUserComuData("portal?", "select *", "planta!", "puerta_1");
         onView(withId(R.id.reg_usercomu_button)).check(matches(isDisplayed())).perform(click());
 
-        checkToastInTest(R.string.error_validation_msg, activity, R.string.reg_usercomu_portal_rot,
+        waitAtMost(4, SECONDS).until(isToastInView(
+                R.string.error_validation_msg,
+                activity, R.string.reg_usercomu_portal_rot,
                 R.string.reg_usercomu_escalera_rot,
-                R.string.reg_usercomu_planta_rot, R.string.reg_usercomu_role_rot);
+                R.string.reg_usercomu_planta_rot,
+                R.string.reg_usercomu_role_rot));
     }
 
     @Test
@@ -102,7 +108,7 @@ public class RegUserComuAcTest {
         typeUserComuData("portalA", "escC", "plantaB", "puerta_1", PRO, PRE);
         onView(withId(R.id.reg_usercomu_button)).check(matches(isDisplayed())).perform(click());
 
-        onView(withId(seeUserComuByUserFrRsId)).check(matches(isDisplayed()));
+        waitAtMost(6, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
         checkUp(regUserComuAcLayout);
     }
 

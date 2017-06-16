@@ -66,7 +66,7 @@ public class ViewerMunicipioSpinnerTest {
                 activity.getSupportFragmentManager().beginTransaction()
                         .add(R.id.mock_ac_layout, new SpinnerMockFr(), null)
                         .commitNow();
-                spinner = (Spinner) activity.findViewById(R.id.municipio_mock_spinner);
+                spinner = (Spinner) activity.findViewById(R.id.municipio_spinner);
                 atomicViewer.compareAndSet(null, newViewerMunicipioSpinner(spinner, activity, null));
             }
         });

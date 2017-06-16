@@ -1,7 +1,6 @@
 package com.didekindroid.usuario.userdata;
 
 import android.app.Activity;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.widget.EditText;
 
@@ -16,6 +15,7 @@ import org.junit.Test;
 
 import java.util.concurrent.TimeUnit;
 
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
@@ -147,7 +147,7 @@ public class UserDataAcTest {
     @Test
     public final void testOnStop() throws Exception
     {
-        InstrumentationRegistry.getInstrumentation().callActivityOnStop(activity);
+        getInstrumentation().callActivityOnStop(activity);
         // Check.
         assertThat(activity.viewer.getController().getSubscriptions().size(), is(0));
     }

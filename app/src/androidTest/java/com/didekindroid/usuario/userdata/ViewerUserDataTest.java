@@ -15,6 +15,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -71,7 +72,7 @@ public class ViewerUserDataTest {
     };
 
     UserDataAc activity;
-//    ViewerUserData viewer;
+    AtomicBoolean isRun;
 
     @Before
     public void setUp() throws Exception
@@ -80,12 +81,13 @@ public class ViewerUserDataTest {
         AtomicReference<ViewerUserData> atomicViewer = new AtomicReference<>(null);
         atomicViewer.compareAndSet(null, activity.viewer);
         waitAtMost(4, SECONDS).untilAtomic(atomicViewer, notNullValue());
-//        viewer = activity.viewer;
+        isRun = new AtomicBoolean(false);
     }
 
     @After
     public void cleanUp() throws UiException
     {
+        isRun.set(false);
         cleanOneUser(USER_PEPE);
     }
 
@@ -128,10 +130,11 @@ public class ViewerUserDataTest {
     @Test
     public void testCheckUserData_1() throws Exception
     {
+        SECONDS.sleep(3);
         typeUserData("newuser@user.com", USER_JUAN.getAlias(), USER_JUAN.getPassword());
 
         runCheckUserData(true);
-        waitAtMost(3, SECONDS).untilAtomic(activity.viewer.usuarioBean, notNullValue());
+        waitAtMost(4, SECONDS).untilAtomic(activity.viewer.usuarioBean, notNullValue());
         assertThat(activity.viewer.usuarioBean.get().getUserName(), is("newuser@user.com"));
         assertThat(activity.viewer.usuarioBean.get().getAlias(), is(USER_JUAN.getAlias()));
         assertThat(activity.viewer.usuarioBean.get().getPassword(), is(USER_JUAN.getPassword()));
@@ -148,6 +151,8 @@ public class ViewerUserDataTest {
     @Test
     public void testWhatDataChangeToMake() throws Exception
     {
+       SECONDS.sleep(3);
+
         // Caso 1: datos de entrada (usuarioBean) == oldUser.
         activity.viewer.oldUser.set(new Usuario.UsuarioBuilder().alias(USER_JUAN.getAlias()).userName(USER_JUAN.getUserName()).build());
         typeUserData(USER_JUAN.getUserName(), USER_JUAN.getAlias(), USER_JUAN.getPassword());
@@ -230,8 +235,11 @@ public class ViewerUserDataTest {
             public void run()
             {
                 activity.viewer.modifyUserData(change);
+                isRun.compareAndSet(false, true);
             }
         });
+        waitAtMost(4, SECONDS).untilTrue(isRun);
+        isRun.compareAndSet(true,false);
     }
 
     public void runCheckUserData(final boolean isOk)
@@ -241,8 +249,11 @@ public class ViewerUserDataTest {
             public void run()
             {
                 assertThat(activity.viewer.checkUserData(), is(isOk));
+                isRun.compareAndSet(false, true);
             }
         });
+        waitAtMost(4, SECONDS).untilTrue(isRun);
+        isRun.compareAndSet(true,false);
     }
 
     public void runWhatDataChange(final UserChangeToMake changeToMake)
@@ -253,7 +264,10 @@ public class ViewerUserDataTest {
             {
                 assertThat(activity.viewer.checkUserData(), is(true));
                 assertThat(activity.viewer.whatDataChangeToMake(), is(changeToMake));
+                isRun.compareAndSet(false, true);
             }
         });
+        waitAtMost(4, SECONDS).untilTrue(isRun);
+        isRun.compareAndSet(true,false);
     }
 }

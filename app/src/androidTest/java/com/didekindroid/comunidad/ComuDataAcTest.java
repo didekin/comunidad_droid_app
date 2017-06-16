@@ -140,6 +140,8 @@ public class ComuDataAcTest {
         assertThat(activity.viewer, isA(ViewerParentInjectedIf.class));
         assertThat(activity.regComuFrg.viewerInjector, CoreMatchers.<ViewerParentInjectorIf>is(activity));
         assertThat(activity.regComuFrg.viewer.getParentViewer(), CoreMatchers.<ViewerIf>is(activity.viewer));
+
+
     }
 
     @Test

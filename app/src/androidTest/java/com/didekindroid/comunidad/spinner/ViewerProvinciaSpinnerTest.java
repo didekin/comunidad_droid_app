@@ -78,7 +78,7 @@ public class ViewerProvinciaSpinnerTest {
                 activity.getSupportFragmentManager().beginTransaction()
                         .add(R.id.mock_ac_layout, new SpinnerMockFr(), null)
                         .commitNow();
-                spinner = (Spinner) activity.findViewById(R.id.provincia_mock_spinner);
+                spinner = (Spinner) activity.findViewById(R.id.provincia_spinner);
                 atomicViewer.compareAndSet(null, newViewerProvinciaSpinner(spinner, activity, new ParentViewerForTest(activity)));
             }
         });

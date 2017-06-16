@@ -104,4 +104,10 @@ public final class ViewerComuAutonomaSpinner extends
             Timber.d("onNothingSelected()");
         }
     }
+
+    public ComuAutonomaSpinnerEventItemSelect getSpinnerEvent()
+    {
+        Timber.d("getSpinnerEvent()");
+        return spinnerEvent;
+    }
 }

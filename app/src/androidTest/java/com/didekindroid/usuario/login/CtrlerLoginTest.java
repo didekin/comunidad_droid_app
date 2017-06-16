@@ -18,6 +18,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import io.reactivex.functions.Predicate;
 import io.reactivex.observers.DisposableSingleObserver;
+import timber.log.Timber;
 
 import static com.didekindroid.security.Oauth2DaoRemote.Oauth2;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
@@ -25,6 +26,7 @@ import static com.didekindroid.testutil.ActivityTestUtils.checkInitTokenCache;
 import static com.didekindroid.testutil.ActivityTestUtils.checkNoInitCache;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekindroid.testutil.RxSchedulersUtils.resetAllSchedulers;
+import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceAndroidMain;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceIoScheduler;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
 import static com.didekindroid.usuario.login.CtrlerLogin.loginPswdSendSingle;
@@ -149,7 +151,7 @@ public class CtrlerLoginTest {
      * We use a mock callable to avoid changing user password in database: it would make impossible to delete user afterwards.
      */
     @Test
-    public void testLoginPswdSendSingle() throws UiException, IOException
+    public void testLoginPswdSendSingle() throws UiException, IOException, InterruptedException
     {
         signUpAndUpdateTk(COMU_REAL_DROID);
 
@@ -176,14 +178,26 @@ public class CtrlerLoginTest {
     @Test
     public void testValidateLogin() throws Exception
     {
-        assertThat(controller.validateLogin(new TestDisposableSingleObserver(), USER_PEPE), is(true));
+        try {
+            trampolineReplaceIoScheduler();
+            trampolineReplaceAndroidMain();
+            assertThat(controller.validateLogin(new TestDisposableSingleObserver(), USER_PEPE), is(true));
+        } finally {
+            resetAllSchedulers();
+        }
         assertThat(controller.getSubscriptions().size(), is(1));
     }
 
     @Test
     public void testDoDialogPositiveClick() throws Exception
     {
-        assertThat(controller.doDialogPositiveClick(new TestDisposableSingleObserver(), USER_JUAN), is(true));
+        try {
+            trampolineReplaceIoScheduler();
+            trampolineReplaceAndroidMain();
+            assertThat(controller.doDialogPositiveClick(new TestDisposableSingleObserver(), USER_JUAN), is(true));
+        } finally {
+            resetAllSchedulers();
+        }
         assertThat(controller.getSubscriptions().size(), is(1));
     }
 
@@ -202,6 +216,7 @@ public class CtrlerLoginTest {
         public void onError(Throwable e)
         {
             dispose();
+            Timber.d("============= %s =============", e.getMessage());
             fail();
         }
     }

@@ -93,7 +93,7 @@ public final class ViewerTipoViaSpinner extends
         tipoViaValueObj = viewBean != null ? TipoViaValueObj.class.cast(viewBean) : null;
         initSelectedItemId(savedState);
         view.setOnItemSelectedListener(new TipoViaSelectedListener());
-        CtrlerTipoViaSpinner.class.cast(controller).loadItemsByEntitiyId(new ObserverSingleSelectList<>(this));
+        controller.loadItemsByEntitiyId(new ObserverSingleSelectList<>(this));
     }
 
     @Override

@@ -11,9 +11,9 @@ import android.view.MenuItem;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.router.ActivityInitiator;
+import com.didekindroid.usuariocomunidad.data.UserComuDataAc;
 import com.didekindroid.usuariocomunidad.register.RegUserAndUserComuAc;
 import com.didekindroid.usuariocomunidad.register.RegUserComuAc;
-import com.didekindroid.usuariocomunidad.data.UserComuDataAc;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
@@ -26,14 +26,20 @@ import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_LIST_OBJE
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_SEARCH;
 import static com.didekindroid.router.ActivityRouter.doUpMenu;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.usuariocomunidad.util.UserComuBundleKey.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
+import static com.didekindroid.usuariocomunidad.util.UserComuBundleKey.USERCOMU_LIST_OBJECT;
 import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.util.UIutils.doToolBar;
 
 /**
  * Preconditions:
- * 1. An intent extra with a comunidad object encapsulating the comunidad to search is received.
+ * 1. An intent extra with a comunidad object encapsulating the comunidad to search is received,
+ * with the following fields:
+ * -- tipoVia.
+ * -- nombreVia.
+ * -- numero.
+ * -- sufijoNumero (it can be an empty string).
+ * -- municipio with codInProvincia and provinciaId.
  * <p/>
  * Postconditions:
  * <p/>

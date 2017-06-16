@@ -24,6 +24,7 @@ import java.util.List;
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.ComunidadDao.comunidadDao;
+import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_SEARCH;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.util.UIutils.makeToast;
@@ -38,16 +39,9 @@ import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
  * -- municipio, with codInProvincia and nombre.
  * -- provincia, with provinciaId and nombre.
  * <p/>
- * 2. An object comunidad, used as search criterium, is received as an intent key with the following fields:
- * -- tipoVia.
- * -- nombreVia.
- * -- numero.
- * -- sufijoNumero (it can be an empty string).
- * -- municipio with codInProvincia and provinciaId.
- * <p/>
  * Postconditions for comunidad selection:
  * <p/>
- * 1. An object comunidad is passed to the listener activity with the fields:
+ * 1. An object comunidad is passed to the activity with the fields:
  * -- comunidadId.
  * -- nombreComunidad (with tipoVia,nombreVia, numero and sufijoNumero).
  * -- municipio, with codInProvincia and nombre.
@@ -155,7 +149,6 @@ public class ComuSearchResultsListFr extends Fragment {
                 mListView.setAdapter(mAdapter);
             } else {
                 makeToast(mComuListListener.getActivity(), R.string.no_result_search_comunidad);
-                // TODO: pasar un intent con los datos de la comunidad buscada, y cubrirlos en el formulario de registro.
                 Intent intent;
                 Activity myActivity = mComuListListener.getActivity();
                 if (TKhandler.isRegisteredUser()) {
@@ -163,6 +156,7 @@ public class ComuSearchResultsListFr extends Fragment {
                 } else {
                     intent = new Intent(myActivity, RegComuAndUserAndUserComuAc.class);
                 }
+                intent.putExtra(COMUNIDAD_SEARCH.key, mComuListListener.getComunidadToSearch());
                 myActivity.startActivity(intent);
                 myActivity.finish();
             }

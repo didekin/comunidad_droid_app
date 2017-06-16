@@ -77,7 +77,7 @@ public class ViewerComuAutonomaSpinnerTest {
                 activity.getSupportFragmentManager().beginTransaction()
                         .add(R.id.mock_ac_layout, new SpinnerMockFr(), null)
                         .commitNow();
-                spinner = (Spinner) activity.findViewById(R.id.comunidadAutonoma_spinner);
+                spinner = (Spinner) activity.findViewById(R.id.autonoma_comunidad_spinner);
                 atomicViewer.compareAndSet(null,
                         newViewerComuAutonomaSpinner(spinner, activity, new ParentViewerForTest(activity))
                 );

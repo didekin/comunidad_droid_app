@@ -69,7 +69,6 @@ public class ComuSearchResultsAc_2_Test {
     @Before
     public void getFixture() throws Exception
     {
-//        Thread.sleep(2000);
         whatClean = CLEAN_NOTHING;
     }
 

@@ -11,7 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.InstrumentationRegistry.getTargetContext;
-import static com.didekindroid.testutil.ActivityTestUtils.doFragmentTextView;
+import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.doFragmentTextView;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;

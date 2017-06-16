@@ -2,6 +2,7 @@ package com.didekindroid.comunidad.testutil;
 
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComunidadBean;
+import com.didekindroid.comunidad.ViewerRegComuFr;
 import com.didekindroid.comunidad.spinner.TipoViaValueObj;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.comunidad.ComunidadAutonoma;
@@ -26,6 +27,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.AllOf.allOf;
@@ -41,6 +43,15 @@ public final class ComuEspresoTestUtil {
 
     private ComuEspresoTestUtil()
     {
+    }
+
+    // ======================================  TYPING  =========================================
+
+    public static void typeComuCalleNumero(String nombreVia, String numero, String sufijo)
+    {
+        onView(withId(R.id.comunidad_nombre_via_editT)).perform(scrollTo(), replaceText(nombreVia));
+        onView(withId(R.id.comunidad_numero_editT)).perform(scrollTo(), replaceText(numero));
+        onView(withId(R.id.comunidad_sufijo_numero_editT)).perform(scrollTo(), replaceText(sufijo), closeSoftKeyboard());
     }
 
     public static void typeComunidadData()
@@ -161,6 +172,45 @@ public final class ComuEspresoTestUtil {
 
     // ======================================  SPINNER  =========================================
 
+    /**
+     * Utility for checking ViewerRegComuFr.initializeSpinnersFromComunidad method when viewBean != null.
+     */
+    public static void checkSpinnersOff(ViewerRegComuFr viewer, Comunidad comunidad)
+    {
+        assertThat(viewer.getTipoViaSpinner().getTipoViaValueObj().getTipoViaDesc(), is(comunidad.getTipoVia()));
+        assertThat(viewer.getComuAutonomaSpinner().getSpinnerEvent().getComunidadAutonoma(), is(comunidad.getMunicipio().getProvincia().getComunidadAutonoma()));
+        assertThat(viewer.getProvinciaSpinner().getProvinciaEventSelect().getProvincia(), is(comunidad.getMunicipio().getProvincia()));
+        assertThat(viewer.getMunicipioSpinner().getSpinnerEvent().getMunicipio(), is(comunidad.getMunicipio()));
+    }
+
+    /**
+     * Utility for checking ViewerRegComuFr.initializeSpinnersFromComunidad method when viewBean == null.
+     */
+    public static void checkSpinnersOffNull(ViewerRegComuFr viewer)
+    {
+        assertThat(viewer.getTipoViaSpinner().getTipoViaValueObj(), nullValue());
+        checkSubsetSpinnersOff(viewer);
+    }
+
+    /**
+     * Utility for checking ViewerRegComuFr.doInViewer method when viewBean == null.
+     */
+    public static void checkSpinnersDoInViewerOffNull(ViewerRegComuFr viewer)
+    {
+        assertThat(viewer.getTipoViaSpinner().getTipoViaValueObj(), notNullValue());
+        checkSubsetSpinnersOff(viewer);
+    }
+
+    public static void checkSubsetSpinnersOff(ViewerRegComuFr viewer)
+    {
+        assertThat(viewer.getTipoViaSpinner().getSelectedItemId(), is(0L));
+        assertThat(viewer.getComuAutonomaSpinner().getSpinnerEvent().getComunidadAutonoma().getCuId(), is((short) 0));
+        assertThat(viewer.getProvinciaSpinner().getProvinciaEventSelect().getProvincia().getProvinciaId(), is((short) 0));
+        assertThat(viewer.getMunicipioSpinner().getSpinnerEvent().getMunicipio().getCodInProvincia(), is((short) 0));
+    }
+
+    // ................................................................................................
+
     public static void doTipoViaSpinner(TipoViaValueObj tipoVia)
     {
         onView(withId(R.id.tipo_via_spinner)).perform(scrollTo(), click());
@@ -262,12 +312,5 @@ public final class ComuEspresoTestUtil {
                         withParent(withId(R.id.municipio_spinner)),
                         withText(municipioNombre))
         ));
-    }
-
-    public static void typeComuCalleNumero(String nombreVia, String numero, String sufijo)
-    {
-        onView(withId(R.id.comunidad_nombre_via_editT)).perform(scrollTo(), replaceText(nombreVia));
-        onView(withId(R.id.comunidad_numero_editT)).perform(scrollTo(), replaceText(numero));
-        onView(withId(R.id.comunidad_sufijo_numero_editT)).perform(scrollTo(), replaceText(sufijo), closeSoftKeyboard());
     }
 }

@@ -18,7 +18,7 @@ public final class ComuDataTestUtil {
             .tipoVia("Calle")
             .nombreVia("de El Escorial")
             .numero((short) 2)
-            .municipio(new Municipio((short) 27, new Provincia((short) 4)))
+            .municipio(new Municipio((short) 27, new Provincia(new ComunidadAutonoma((short) 1), (short) 4, "Almería")))
             .build();
     // Municipio: Elda   Provincia: Alicante/Alacant
     public static final Comunidad COMU_LA_FUENTE = new Comunidad.ComunidadBuilder()
@@ -32,14 +32,14 @@ public final class ComuDataTestUtil {
             .tipoVia("Ronda")
             .nombreVia("de la Plazuela")
             .numero((short) 5)
-            .municipio(new Municipio((short) 2, new Provincia((short) 27)))
+            .municipio(new Municipio((short) 2, new Provincia(new ComunidadAutonoma((short) 12), (short) 27, "Lugo")))
             .build();
     // Municipio:  Algueña   Provincia: Alicante/Alacant
     public static final Comunidad COMU_TRAV_PLAZUELA_11 = new Comunidad.ComunidadBuilder()
             .tipoVia("Travesía")
             .nombreVia("de la Plazuela")
             .numero((short) 11)
-            .municipio(new Municipio((short) 13, new Provincia((short) 3)))
+            .municipio(new Municipio((short) 13, new Provincia(new ComunidadAutonoma((short) 10), (short) 3, "Alicante/Alacant")))
             .build();
     // Municipio: Algueña  Provincia: Alicante/Alacant
     public static final Comunidad COMU_REAL = new Comunidad.ComunidadBuilder()
@@ -47,7 +47,7 @@ public final class ComuDataTestUtil {
             .nombreVia("Real")
             .numero((short) 5)
             .sufijoNumero("Bis")
-            .municipio(new Municipio((short) 13, "Algueña", new Provincia((short) 3, "Alicante/Alacant")))
+            .municipio(new Municipio((short) 13, "Algueña", new Provincia(new ComunidadAutonoma((short) 10), (short) 3, "Alicante/Alacant")))
             .build();
 
     private ComuDataTestUtil()

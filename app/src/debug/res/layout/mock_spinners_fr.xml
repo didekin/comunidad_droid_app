@@ -19,19 +19,19 @@
         style="@style/spinnerBase"/>
 
     <Spinner
-        android:id="@+id/tipovia_spinner"
+        android:id="@+id/tipo_via_spinner"
         style="@style/spinnerBase"/>
 
     <Spinner
-        android:id="@+id/comunidadAutonoma_spinner"
+        android:id="@+id/autonoma_comunidad_spinner"
         style="@style/spinnerBase"/>
 
     <Spinner
-        android:id="@+id/provincia_mock_spinner"
+        android:id="@+id/provincia_spinner"
         style="@style/spinnerBase"/>
 
     <Spinner
-        android:id="@+id/municipio_mock_spinner"
+        android:id="@+id/municipio_spinner"
         style="@style/spinnerBase"/>
 
 </LinearLayout>

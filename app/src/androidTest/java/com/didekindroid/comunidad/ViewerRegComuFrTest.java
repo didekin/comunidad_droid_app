@@ -203,7 +203,10 @@ public class ViewerRegComuFrTest {
         doProvinciaSpinner(comunidad.getMunicipio().getProvincia());
         doMunicipioSpinner(comunidad.getMunicipio());
 
-        assertThat(fragment.viewer.getComunidadFromViewer(new StringBuilder(activity.getText(R.string.error_validation_msg))), is(comunidad));
+        Comunidad comunidadFromView = fragment.viewer.getComunidadFromViewer(new StringBuilder(activity.getText(R.string.error_validation_msg)));
+        assertThat(comunidadFromView, is(comunidad));
+        // Check explicitly for comunidadAutonoma.
+        assertThat(comunidadFromView.getMunicipio().getProvincia().getComunidadAutonoma(), is(new ComunidadAutonoma((short) 12, "Galicia")));
     }
 
     @Test
@@ -216,6 +219,12 @@ public class ViewerRegComuFrTest {
         final StringBuilder errors = new StringBuilder(activity.getText(R.string.error_validation_msg));
         assertThat(fragment.viewer.getComunidadFromViewer(errors), nullValue());
         assertThat(errors.toString(), containsString(activity.getText(R.string.tipo_via).toString()));
+    }
+
+    @Test
+    public void test_InitializeSpinnersFromComunidad() throws Exception
+    {
+
     }
 
     //  =========================  TESTS FOR ACTIVITY/FRAGMENT LIFECYCLE  ===========================
