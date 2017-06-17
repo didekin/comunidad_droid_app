@@ -66,7 +66,7 @@ class CtrlerLogin extends Controller implements CtrlerLoginIf {
     //    ................................. INSTANCE METHODS .................................
 
     @Override
-    public boolean validateLogin(DisposableSingleObserver<Boolean> observer, @NonNull Usuario usuario)
+    public boolean validateLogin(@NonNull DisposableSingleObserver<Boolean> observer, @NonNull Usuario usuario)
     {
         Timber.i("validateLogin()");
         return subscriptions.add(
@@ -78,7 +78,7 @@ class CtrlerLogin extends Controller implements CtrlerLoginIf {
     }
 
     @Override
-    public boolean doDialogPositiveClick(DisposableSingleObserver<Boolean> observer, @NonNull final Usuario usuario)
+    public boolean doDialogPositiveClick(@NonNull DisposableSingleObserver<Boolean> observer, @NonNull final Usuario usuario)
     {
         Timber.d("doDialogPositiveClick()");
         Callable<Boolean> sendPswdCallable = new Callable<Boolean>() {
@@ -88,8 +88,21 @@ class CtrlerLogin extends Controller implements CtrlerLoginIf {
                 return usuarioDao.sendPassword(usuario.getUserName());
             }
         };
+        return doDialogPositiveClick(sendPswdCallable, observer, usuario);
+    }
+
+    /**
+     *  Test friendly variant.
+     */
+    @Override
+    public boolean doDialogPositiveClick(@NonNull Callable<Boolean> sendPswdCall,
+                                         @NonNull DisposableSingleObserver<Boolean> observer,
+                                         @NonNull final Usuario usuario)
+    {
+        Timber.d("doDialogPositiveClick()");
+
         return subscriptions.add(
-                loginPswdSendSingle(sendPswdCallable)
+                loginPswdSendSingle(sendPswdCall)
                         .subscribeOn(io())
                         .observeOn(mainThread())
                         .subscribeWith(observer)

@@ -96,7 +96,7 @@ final class ViewerUserData extends Viewer<View, CtrlerUserDataIf> implements Vie
             @Override
             public void onClick(View v)
             {
-                Timber.d("mModifyButton.OnClickListener().onClickLinkToImportanciaUsers()");
+                Timber.d("modifyButton.OnClickListener().onClick()");
                 if (checkUserData()) {
                     modifyUserData(whatDataChangeToMake());
                 }
@@ -124,6 +124,8 @@ final class ViewerUserData extends Viewer<View, CtrlerUserDataIf> implements Vie
                 passwordView.getText().toString(),
                 null)
         );
+        Timber.d("email: %s", usuarioBean.get().getUserName());
+        Timber.d("alias: %s", usuarioBean.get().getAlias());
 
         StringBuilder errorBuilder = getErrorMsgBuilder(activity);
         if (!usuarioBean.get().validateLoginData(activity.getResources(), errorBuilder)) {

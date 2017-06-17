@@ -99,6 +99,7 @@ public class ViewerRegComuUserComuAcTest {
         ViewerRegComuUserComuAc.RegComuAndUserComuObserver observer = activity.viewer.new RegComuAndUserComuObserver();
         just(true).subscribeWith(observer);
         waitAtMost(4, SECONDS).until(isViewDisplayed(withId(seeUserComuByUserFrRsId)));
+        cleanOptions(CLEAN_PEPE);
     }
 
     //  =========================  TESTS FOR ACTIVITY/FRAGMENT LIFECYCLE  ===========================

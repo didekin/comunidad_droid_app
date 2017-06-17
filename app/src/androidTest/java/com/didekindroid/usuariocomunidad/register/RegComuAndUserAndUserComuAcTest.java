@@ -162,10 +162,10 @@ public class RegComuAndUserAndUserComuAcTest {
 
     public void typeComunidad()
     {
-        typeComunidadData(new ComunidadAutonoma((short) 10, "Valencia"),
-                new Provincia((short) 12, "Castellón/Castelló"),
-                new Municipio((short) 53, "Chilches/Xilxes", new Provincia((short) 12, "Castellón/Castelló")),
-                new TipoViaValueObj(54, "Callejon"),
-                "nombre via One", "123", "Tris");
+        final ComunidadAutonoma comunidadAutonoma = new ComunidadAutonoma((short) 10, "Valencia");
+        final Provincia provincia = new Provincia(comunidadAutonoma,(short) 12, "Castellón/Castelló");
+        final Municipio municipio = new Municipio((short) 53, "Chilches/Xilxes", provincia);
+        final TipoViaValueObj tipoVia = new TipoViaValueObj(54, "Callejon");
+        typeComunidadData(municipio, tipoVia, "nombre via One", "123", "Tris");
     }
 }

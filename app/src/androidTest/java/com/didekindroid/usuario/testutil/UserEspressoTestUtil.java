@@ -13,10 +13,8 @@ import static android.support.test.espresso.matcher.RootMatchers.isDialog;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.R.id.reg_usuario_alias_ediT;
 import static com.didekindroid.R.id.reg_usuario_email_editT;
 import static com.didekindroid.R.id.reg_usuario_password_ediT;
-import static com.didekindroid.R.id.user_data_ac_password_ediT;
 import static com.didekindroid.R.string.send_password_by_mail_NO;
 import static com.didekindroid.R.string.send_password_by_mail_YES;
 import static com.didekindroid.R.string.send_password_by_mail_dialog;
@@ -46,9 +44,9 @@ public final class UserEspressoTestUtil {
 
     public static void typeUserData(String userName, String alias, String password)
     {
-        onView(withId(reg_usuario_email_editT)).perform(replaceText(userName), closeSoftKeyboard());
-        onView(withId(reg_usuario_alias_ediT)).perform(replaceText(alias));
-        onView(withId(user_data_ac_password_ediT)).perform(replaceText(password), closeSoftKeyboard());
+        onView(withId(R.id.reg_usuario_email_editT)).perform(replaceText(userName));
+        onView(withId(R.id.reg_usuario_alias_ediT)).perform(replaceText(alias));
+        onView(withId(R.id.user_data_ac_password_ediT)).perform(replaceText(password), closeSoftKeyboard());
     }
 
     public static void validaTypedUserData(Usuario usuario, String email, String alias1, String password)
@@ -69,7 +67,6 @@ public final class UserEspressoTestUtil {
     {
         onView(withId(reg_usuario_email_editT)).perform(typeText(userName));
         onView(withId(reg_usuario_password_ediT)).perform(typeText(password));
-        /*onView(withId(login_ac_button)).check(matches(isDisplayed())).perform(click());*/
     }
 
     public static void checkPswdSendByMailDialog()

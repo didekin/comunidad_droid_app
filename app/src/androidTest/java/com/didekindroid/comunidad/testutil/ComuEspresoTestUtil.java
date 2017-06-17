@@ -56,20 +56,20 @@ public final class ComuEspresoTestUtil {
 
     public static void typeComunidadData()
     {
-        Provincia provincia = new Provincia((short) 3, "Alicante/Alacant");
         final ComunidadAutonoma comunidadAutonoma = new ComunidadAutonoma((short) 10, "Valencia");
+        final Provincia provincia = new Provincia(comunidadAutonoma,(short) 3, "Alicante/Alacant");
         final Municipio municipio = new Municipio((short) 13, "Algueña", provincia);
         final TipoViaValueObj tipoVia = new TipoViaValueObj(52, "Calle");
-        typeComunidadData(comunidadAutonoma, provincia, municipio, tipoVia, "Real", "5", "Bis");
+        typeComunidadData(municipio, tipoVia, "Real", "5", "Bis");
     }
 
-    public static void typeComunidadData(ComunidadAutonoma comunidadAuto, Provincia provincia, Municipio municipio, TipoViaValueObj tipoVia, String nombreVia,
+    public static void typeComunidadData(Municipio municipio, TipoViaValueObj tipoVia, String nombreVia,
                                          String numeroEnVia, String sufijoNumero)
     {
         doTipoViaSpinner(tipoVia);
         typeComuCalleNumero(nombreVia, numeroEnVia, sufijoNumero);
-        doComunAutonomaSpinner(comunidadAuto);
-        doProvinciaSpinner(provincia);
+        doComunAutonomaSpinner(municipio.getProvincia().getComunidadAutonoma());
+        doProvinciaSpinner(municipio.getProvincia());
         doMunicipioSpinner(municipio);
     }
 

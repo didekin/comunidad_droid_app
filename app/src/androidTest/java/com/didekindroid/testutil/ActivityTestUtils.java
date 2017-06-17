@@ -111,28 +111,15 @@ public final class ActivityTestUtils {
         };
     }
 
-    public static Callable<Boolean> isResourceIdDisplayed(final int resourceStringId)
+    public static Callable<Boolean> isResourceIdDisplayed(final Integer... resourceStringIds)
     {
         return new Callable<Boolean>() {
             public Boolean call() throws Exception
             {
                 try {
-                    onView(withId(resourceStringId)).check(matches(isDisplayed()));
-                    return true;
-                } catch (NoMatchingViewException ne) {
-                    return false;
-                }
-            }
-        };
-    }
-
-    public static Callable<Boolean> isRsIdDisplayedAndPerform(final int resourceStringId, final ViewAction... viewActions)
-    {
-        return new Callable<Boolean>() {
-            public Boolean call() throws Exception
-            {
-                try {
-                    onView(withId(resourceStringId)).check(matches(isDisplayed())).perform(viewActions);
+                    for (int resourceId : resourceStringIds){
+                        onView(withId(resourceId)).check(matches(isDisplayed()));
+                    }
                     return true;
                 } catch (NoMatchingViewException ne) {
                     return false;

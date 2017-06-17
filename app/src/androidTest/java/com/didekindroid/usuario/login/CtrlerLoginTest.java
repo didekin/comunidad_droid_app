@@ -34,8 +34,6 @@ import static com.didekindroid.usuario.login.CtrlerLogin.loginSingle;
 import static com.didekindroid.usuario.login.CtrlerLogin.loginUpdateTkCache;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_DROID;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_DROID;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanWithTkhandler;
 import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
@@ -120,13 +118,7 @@ public class CtrlerLoginTest {
     public void testLoginUpdateTkCache_1() throws UiException, IOException
     {
         TKhandler.updateIsRegistered(userComuDaoRemote.regComuAndUserAndUserComu(COMU_REAL_DROID).execute().body());
-
-        try {
-            trampolineReplaceIoScheduler();
-            loginUpdateTkCache(USER_DROID).test().assertResult(true);
-        } finally {
-            resetAllSchedulers();
-        }
+        loginUpdateTkCache(USER_DROID).test().assertResult(true);
         checkInitTokenCache();
         cleanOptions(CLEAN_DROID);
     }
@@ -135,14 +127,8 @@ public class CtrlerLoginTest {
     public void testLoginUpdateTkCache_2() throws UiException, IOException
     {
         userComuDaoRemote.regComuAndUserAndUserComu(COMU_REAL_DROID).execute().body();
-
-        try {
-            trampolineReplaceIoScheduler();
-            loginUpdateTkCache(new Usuario.UsuarioBuilder().userName(USER_DROID.getUserName()).password("password_wrong").build())
-                    .test().assertResult(false);
-        } finally {
-            resetAllSchedulers();
-        }
+        loginUpdateTkCache(new Usuario.UsuarioBuilder().userName(USER_DROID.getUserName()).password("password_wrong").build())
+                .test().assertResult(false);
         checkNoInitCache();
         cleanOptions(CLEAN_DROID);
     }
@@ -155,15 +141,7 @@ public class CtrlerLoginTest {
     {
         signUpAndUpdateTk(COMU_REAL_DROID);
 
-        Callable<Boolean> mockCallable = new Callable<Boolean>() {
-            @Override
-            public Boolean call() throws Exception
-            {
-                return true;
-            }
-        };
-
-        loginPswdSendSingle(mockCallable).test().assertResult(true);
+        loginPswdSendSingle(new SendPswdCallable()).test().assertResult(true);
         // Check cache cleaning.
         checkNoInitCache();
 
@@ -178,14 +156,17 @@ public class CtrlerLoginTest {
     @Test
     public void testValidateLogin() throws Exception
     {
+        signUpAndUpdateTk(COMU_REAL_DROID);
+
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
-            assertThat(controller.validateLogin(new TestDisposableSingleObserver(), USER_PEPE), is(true));
+            assertThat(controller.validateLogin(new TestDisposableSingleObserver(), USER_DROID), is(true));
         } finally {
             resetAllSchedulers();
         }
         assertThat(controller.getSubscriptions().size(), is(1));
+        cleanOptions(CLEAN_DROID);
     }
 
     @Test
@@ -194,7 +175,7 @@ public class CtrlerLoginTest {
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
-            assertThat(controller.doDialogPositiveClick(new TestDisposableSingleObserver(), USER_JUAN), is(true));
+            assertThat(controller.doDialogPositiveClick(new SendPswdCallable(), new TestDisposableSingleObserver(), USER_DROID), is(true));
         } finally {
             resetAllSchedulers();
         }
@@ -216,8 +197,16 @@ public class CtrlerLoginTest {
         public void onError(Throwable e)
         {
             dispose();
-            Timber.d("============= %s =============", e.getMessage());
+            Timber.d("============= %s =============", e.getClass().getName());
             fail();
+        }
+    }
+
+    static class SendPswdCallable implements Callable<Boolean> {
+        @Override
+        public Boolean call() throws Exception
+        {
+            return true;
         }
     }
 }
