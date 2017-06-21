@@ -105,7 +105,7 @@ public class ViewerComuDataAcTest {
     @Test
     public void test_NewViewerComuDataAc() throws Exception
     {
-        assertThat(viewer.getController(), isA(CtrlerComuDataAc.class));
+        assertThat(viewer.getController(), isA(CtrlerComunidad.class));
     }
 
     @Test
@@ -143,7 +143,7 @@ public class ViewerComuDataAcTest {
     public void testComuDataAcButtonListener()
     {
         checkMunicipioSpinner(comunidad.getMunicipio().getNombre()); // Esperamos por los viejos datos.
-        viewer.setController(new CtrlerComuDataAc() {
+        viewer.setController(new CtrlerComunidad() {
             @Override
             boolean modifyComunidadData(DisposableSingleObserver<Integer> observer, Comunidad comunidad)
             {

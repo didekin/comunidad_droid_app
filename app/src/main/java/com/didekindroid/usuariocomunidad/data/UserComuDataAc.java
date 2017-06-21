@@ -120,7 +120,7 @@ public class UserComuDataAc extends AppCompatActivity implements ViewerParentInj
                 Intent intent = new Intent();
                 intent.putExtra(COMUNIDAD_ID.key, oldUserComu.getComunidad().getC_Id());
                 setIntent(intent);
-                new ActivityInitiator(this).initActivityFromMn(resourceId);
+                new ActivityInitiator(this).initAcFromMnKeepIntent(resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

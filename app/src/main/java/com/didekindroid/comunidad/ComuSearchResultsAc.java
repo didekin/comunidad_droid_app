@@ -1,34 +1,21 @@
 package com.didekindroid.comunidad;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.exception.UiException;
 import com.didekindroid.router.ActivityInitiator;
-import com.didekindroid.usuariocomunidad.data.UserComuDataAc;
-import com.didekindroid.usuariocomunidad.register.RegUserAndUserComuAc;
-import com.didekindroid.usuariocomunidad.register.RegUserComuAc;
-import com.didekinlib.model.comunidad.Comunidad;
-import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
-
-import java.util.Collections;
-import java.util.List;
 
 import timber.log.Timber;
 
-import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
+import static com.didekindroid.comunidad.ViewerComuSearchResultAc.newViewerComuSearchResultAc;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_SEARCH;
 import static com.didekindroid.router.ActivityRouter.doUpMenu;
-import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
-import static com.didekindroid.usuariocomunidad.util.UserComuBundleKey.USERCOMU_LIST_OBJECT;
-import static com.didekindroid.util.UIutils.checkPostExecute;
+import static com.didekindroid.util.CommonAssertionMsg.intent_extra_should_be_initialized;
+import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.doToolBar;
 
 /**
@@ -63,43 +50,35 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * ------ provincia: provinciaId, nombre.
  * -- usuarioComunidad: portal, escalera, planta, puerta, roles.
  */
-public class ComuSearchResultsAc extends AppCompatActivity implements
-        ComuSearchResultsListFr.ComuListListener {
+public class ComuSearchResultsAc extends AppCompatActivity {
 
-    // The fragment where the summary data are displayed.
-    ComuSearchResultsListFr mComunidadesSummaryFrg;
-    // The comunidad searched.
-    Comunidad mComunidad;
-    List<Comunidad> mResultsList;
+    ViewerComuSearchResultAc viewer;
+    ComuSearchResultsListFr comuSearchResultListFr;
+    View acView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         Timber.d("onCreate().");
         super.onCreate(savedInstanceState);
+        // Precondition
+        assertTrue(getIntent().getSerializableExtra(COMUNIDAD_SEARCH.key) != null, intent_extra_should_be_initialized);
 
-        mComunidad = (Comunidad) getIntent().getSerializableExtra(COMUNIDAD_SEARCH.key);
-        setContentView(R.layout.comu_search_results_layout);
+        acView = getLayoutInflater().inflate(R.layout.comu_search_results_layout, null);
+        setContentView(acView);
         doToolBar(this, true);
 
-        mComunidadesSummaryFrg = (ComuSearchResultsListFr) getSupportFragmentManager().findFragmentById(R.id.comu_list_fragment);
+        viewer = newViewerComuSearchResultAc(this);
+        viewer.doViewInViewer(savedInstanceState, null);
+        comuSearchResultListFr = (ComuSearchResultsListFr) getSupportFragmentManager().findFragmentById(R.id.comu_list_fragment);
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle savedInstanceState)
+    public void onStop()
     {
-        Timber.d("onSaveInstanceState()");
-        savedInstanceState.putSerializable(COMUNIDAD_SEARCH.key, mComunidad);
-        super.onSaveInstanceState(savedInstanceState);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState)
-    {
-        Timber.d("onRestoreInstanceState()");
-        if (savedInstanceState != null && mComunidad == null) {
-            mComunidad = (Comunidad) savedInstanceState.getSerializable(COMUNIDAD_SEARCH.key);
-        }
+        Timber.d("onStop()");
+        super.onStop();
+        viewer.clearSubscriptions();
     }
 
     // ============================================================
@@ -118,9 +97,7 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
     public boolean onPrepareOptionsMenu(Menu menu)
     {
         Timber.d("onPrepareOptionsMenu()");
-        if (TKhandler.isRegisteredUser()) {
-            menu.findItem(R.id.see_usercomu_by_user_ac_mn).setVisible(true).setEnabled(true);
-        }
+        viewer.updateActivityMenu(menu);
         return true;
     }
 
@@ -136,96 +113,10 @@ public class ComuSearchResultsAc extends AppCompatActivity implements
                 return true;
             case R.id.see_usercomu_by_user_ac_mn:
             case R.id.reg_nueva_comunidad_ac_mn:
-                activityInitiator.initActivityFromMn(resourceId);
+                activityInitiator.initAcFromMnNewIntent(resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
-        }
-    }
-
-    //===========================================
-    //  .... COMMUNICATION INTERFACES ....
-    //===========================================
-
-    @Override
-    public void onComunidadSelected(Comunidad comunidad, int lineItemIndex)
-    {
-        Timber.d("loadItemsByEntitiyId().");
-
-        if (!TKhandler.isRegisteredUser()) {
-            Timber.d("loadItemsByEntitiyId(). User is not registered.");
-            Intent intent = new Intent(this, RegUserAndUserComuAc.class);
-            intent.putExtra(COMUNIDAD_LIST_OBJECT.key, comunidad);
-            startActivity(intent);
-        } else {
-            new UsuarioComunidadGetter().execute(comunidad);
-        }
-    }
-
-    @Override
-    public List<Comunidad> getResultsList()
-    {
-        Timber.d("getResultsList()");
-        return Collections.unmodifiableList(mResultsList);
-    }
-
-    @Override
-    public Comunidad getComunidadToSearch()
-    {
-        return mComunidad;
-    }
-
-    @Override
-    public Activity getActivity()
-    {
-        return this;
-    }
-
-//    ============================================================
-//    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
-/*    ============================================================*/
-
-    @SuppressWarnings("WeakerAccess")
-    class UsuarioComunidadGetter extends AsyncTask<Comunidad, Void, UsuarioComunidad> {
-
-        UiException uiException;
-        private Comunidad comunidadSelected;
-
-        @Override
-        protected UsuarioComunidad doInBackground(Comunidad... comunidades)
-        {
-            Timber.d("doInBackground()");
-
-            comunidadSelected = comunidades[0];
-            UsuarioComunidad userComuByUserAndComu = null;
-            try {
-                userComuByUserAndComu = userComuDaoRemote.getUserComuByUserAndComu(comunidadSelected.getC_Id());
-            } catch (UiException e) {
-                uiException = e;
-            }
-            return userComuByUserAndComu;
-        }
-
-        @Override
-        protected void onPostExecute(UsuarioComunidad userComu)
-        {
-            if (checkPostExecute(ComuSearchResultsAc.this)) return;
-
-            boolean isUserComuNull = (userComu == null);
-
-            Timber.d(".UsuarioComunidadGetter.onPostExecute(), isUserComu == null : %b%n", isUserComuNull);
-
-            if (uiException != null) {
-                uiException.processMe(ComuSearchResultsAc.this, new Intent());
-            } else if (isUserComuNull) {
-                Intent intent = new Intent(ComuSearchResultsAc.this, RegUserComuAc.class);
-                intent.putExtra(COMUNIDAD_LIST_OBJECT.key, comunidadSelected);
-                startActivity(intent);
-            } else {
-                Intent intent = new Intent(ComuSearchResultsAc.this, UserComuDataAc.class);
-                intent.putExtra(USERCOMU_LIST_OBJECT.key, userComu);
-                startActivity(intent);
-            }
         }
     }
 }

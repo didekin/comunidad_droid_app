@@ -11,10 +11,10 @@
         android:choiceMode="singleChoice"
         android:listSelector="@color/transparent">
     </ListView>
-    <TextView
+    <!--<TextView
         android:id="@id/android:empty"
         style="@style/textBase.no_item_list_message"
         android:text="@string/comu_list_no_result_txt"
         android:visibility="gone">
-    </TextView>
+    </TextView>-->
 </LinearLayout>

@@ -86,7 +86,7 @@ public class IncidResolucionSeeFr extends Fragment {
                 Intent intent = new Intent();
                 intent.putExtra(INCIDENCIA_OBJECT.key, getArguments().getSerializable(INCIDENCIA_OBJECT.key));
                 getActivity().setIntent(intent);
-                new ActivityInitiator(getActivity()).initActivityFromMn(resourceId);
+                new ActivityInitiator(getActivity()).initAcFromMnKeepIntent(resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

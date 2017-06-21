@@ -50,8 +50,8 @@ public class UserDataAc extends AppCompatActivity {
 
     public void replaceComponent(Bundle bundle)
     {
-        Timber.d("initActivityWithBundle()");
-        new ActivityInitiator(this).initActivityWithBundle(bundle);
+        Timber.d("initAcWithBundle()");
+        new ActivityInitiator(this).initAcWithBundle(bundle);
     }
 
 //    ============================================================
@@ -88,7 +88,7 @@ public class UserDataAc extends AppCompatActivity {
             case R.id.see_usercomu_by_user_ac_mn:
             case R.id.comu_search_ac_mn:
             case R.id.incid_see_open_by_comu_ac_mn:
-                new ActivityInitiator(this).initActivityFromMn(resourceId);
+                new ActivityInitiator(this).initAcFromMnKeepIntent(resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -65,7 +65,7 @@ class ViewerIncidEditAc extends ViewerParent<View, CtrlerIncidEditAc> {
             intent0.putExtra(INCID_RESOLUCION_OBJECT.key, resolucion);
         }
         activity.setIntent(intent0);
-        new ActivityInitiator(activity).initActivityFromMn(resourceIdItemMn);
+        new ActivityInitiator(activity).initAcFromMnKeepIntent(resourceIdItemMn);
     }
 
     // .................................... HELPERS .................................

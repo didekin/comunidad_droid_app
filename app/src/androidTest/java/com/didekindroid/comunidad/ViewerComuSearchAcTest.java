@@ -61,7 +61,7 @@ import static org.junit.Assert.assertThat;
  * Time: 16:42
  */
 @RunWith(AndroidJUnit4.class)
-public class ViewerComuSearchTest {
+public class ViewerComuSearchAcTest {
 
     final AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
 
@@ -73,7 +73,7 @@ public class ViewerComuSearchTest {
     public void setUp()
     {
         activity = activityRule.getActivity();
-        AtomicReference<ViewerComuSearch> viewerAtomic = new AtomicReference<>(null);
+        AtomicReference<ViewerComuSearchAc> viewerAtomic = new AtomicReference<>(null);
         viewerAtomic.compareAndSet(null, activity.viewer);
         waitAtMost(4, SECONDS).untilAtomic(viewerAtomic, notNullValue());
     }
@@ -134,7 +134,7 @@ public class ViewerComuSearchTest {
         doMunicipioSpinner(COMU_REAL.getMunicipio());
 
         ViewerRegComuFr viewerRegComuFrOld = activity.viewer.getChildViewer(ViewerRegComuFr.class);
-        activity.viewer = new ViewerComuSearch(activity.acView, activity) {
+        activity.viewer = new ViewerComuSearchAc(activity.acView, activity) {
             @Override
             public void replaceComponent(@NonNull Bundle bundle)
             {
@@ -162,7 +162,7 @@ public class ViewerComuSearchTest {
     @Test
     public void test_OnSaveInstanceState()
     {
-        activity.viewer = new ViewerComuSearch(activity.viewer.getViewInViewer(), activity) {
+        activity.viewer = new ViewerComuSearchAc(activity.viewer.getViewInViewer(), activity) {
             @Override
             public void saveState(Bundle savedState)
             {

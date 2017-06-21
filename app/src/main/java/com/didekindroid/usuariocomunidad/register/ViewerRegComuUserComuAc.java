@@ -85,7 +85,7 @@ final class ViewerRegComuUserComuAc extends ViewerParent<View, CtrlerUsuarioComu
         {
             Timber.d("onSuccess()");
             assertTrue(rowInserted, user_and_comunidad_should_be_registered);
-            new ActivityInitiator(activity).initActivityWithBundle(new Bundle(0));
+            new ActivityInitiator(activity).initAcWithBundle(new Bundle(0));
             dispose();
         }
 

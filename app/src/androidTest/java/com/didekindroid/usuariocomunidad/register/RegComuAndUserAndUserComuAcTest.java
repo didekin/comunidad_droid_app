@@ -160,7 +160,7 @@ public class RegComuAndUserAndUserComuAcTest {
 
     //    =================================== HELPERS ===================================
 
-    public void typeComunidad()
+    public void typeComunidad() throws InterruptedException
     {
         final ComunidadAutonoma comunidadAutonoma = new ComunidadAutonoma((short) 10, "Valencia");
         final Provincia provincia = new Provincia(comunidadAutonoma,(short) 12, "Castellón/Castelló");

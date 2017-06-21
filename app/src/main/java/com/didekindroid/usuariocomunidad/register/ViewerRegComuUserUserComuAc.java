@@ -61,7 +61,7 @@ public final class ViewerRegComuUserUserComuAc extends ViewerParent<View, Ctrler
     void onRegisterSuccess()
     {
         Timber.d("onRegisterSuccess()");
-        new ActivityInitiator(activity).initActivityWithBundle(new Bundle(0));
+        new ActivityInitiator(activity).initAcWithBundle(new Bundle(0));
     }
 
     @SuppressWarnings("WeakerAccess")

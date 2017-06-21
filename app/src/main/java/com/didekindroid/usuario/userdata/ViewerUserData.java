@@ -211,8 +211,8 @@ final class ViewerUserData extends Viewer<View, CtrlerUserDataIf> implements Vie
 
     public void replaceComponent(Bundle bundle)
     {
-        Timber.d("initActivityWithBundle()");
-        new ActivityInitiator(activity).initActivityWithBundle(bundle);
+        Timber.d("initAcWithBundle()");
+        new ActivityInitiator(activity).initAcWithBundle(bundle);
     }
 
     // .............................. SUBSCRIBERS ..................................

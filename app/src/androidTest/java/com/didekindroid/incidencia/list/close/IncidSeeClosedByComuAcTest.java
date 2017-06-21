@@ -165,7 +165,7 @@ public class IncidSeeClosedByComuAcTest {
                 .perform(click());
         // Check next fragment.
         waitAtMost(2, SECONDS).until(isViewDisplayed(withId(incidResolucionSeeFrLayout)));
-        // Up and check.
+        // Up and checkMenu.
         checkUp();
         waitAtMost(2, SECONDS).until(isViewDisplayed(checkIncidClosedListView(incidImportancia1, activity)));
     }
@@ -180,7 +180,7 @@ public class IncidSeeClosedByComuAcTest {
                 .perform(click());
         // Check next fragment.
         waitAtMost(4, SECONDS).until(isViewDisplayed(withId(incidResolucionSeeFrLayout)));
-        // Back and check.
+        // Back and checkMenu.
         checkBack(onView(withId(incidResolucionSeeFrLayout)));
         waitAtMost(4, SECONDS).until(isViewDisplayed(checkIncidClosedListView(incidImportancia1, activity)));
     }

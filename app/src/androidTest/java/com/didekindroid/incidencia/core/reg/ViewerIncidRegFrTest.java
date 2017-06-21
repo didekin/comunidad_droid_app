@@ -183,12 +183,12 @@ public class ViewerIncidRegFrTest {
 
         // Errors container.
         StringBuilder errors = getErrorMsgBuilder(getTargetContext());
-        // Exec and check for OK case.
+        // Exec and checkMenu for OK case.
         assertThat(viewer.doIncidImportanciaFromView(errors).getImportancia(), is((short) 1));
 
         // Data for test NOT ok.
         viewer.atomIncidImportBean.get().setImportancia((short) 111);
-        // Exec and check for NOT ok case.
+        // Exec and checkMenu for NOT ok case.
         assertThat(viewer.doIncidImportanciaFromView(errors), nullValue());
         assertThat(errors.toString(), containsString(activity.getResources().getText(R.string.incid_reg_importancia).toString()));
     }

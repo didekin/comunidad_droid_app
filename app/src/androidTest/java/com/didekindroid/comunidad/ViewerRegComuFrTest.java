@@ -113,7 +113,7 @@ public class ViewerRegComuFrTest {
     @Test
     public void test_NewViewerRegComuFr() throws Exception
     {
-        assertThat(CtrlerRegComuFr.class.cast(fragment.viewer.getController()), notNullValue());
+        assertThat(CtrlerComunidad.class.cast(fragment.viewer.getController()), notNullValue());
         assertThat(fragment.viewer.tipoViaSpinner, notNullValue());
         assertThat(fragment.viewer.comuAutonomaSpinner, notNullValue());
         assertThat(fragment.viewer.provinciaSpinner, notNullValue());
@@ -199,8 +199,11 @@ public class ViewerRegComuFrTest {
 
         doTipoViaSpinner(new TipoViaValueObj(275, "Ronda"));
         typeComuCalleNumero(comunidad.getNombreVia(), String.valueOf(comunidad.getNumero()), comunidad.getSufijoNumero());
+        SECONDS.sleep(1);
         doComunAutonomaSpinner(new ComunidadAutonoma((short) 12, "Galicia"));
+        SECONDS.sleep(1);
         doProvinciaSpinner(comunidad.getMunicipio().getProvincia());
+        SECONDS.sleep(1);
         doMunicipioSpinner(comunidad.getMunicipio());
 
         Comunidad comunidadFromView = fragment.viewer.getComunidadFromViewer(new StringBuilder(activity.getText(R.string.error_validation_msg)));

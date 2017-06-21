@@ -5,6 +5,9 @@ import com.didekinlib.model.comunidad.ComunidadAutonoma;
 
 import timber.log.Timber;
 
+import static com.didekindroid.util.CommonAssertionMsg.bean_fromView_should_be_initialized;
+import static com.didekindroid.util.UIutils.assertTrue;
+
 /**
  * User: pedro@didekin
  * Date: 12/05/17
@@ -17,6 +20,7 @@ public class ComuAutonomaSpinnerEventItemSelect implements SpinnerEventItemSelec
 
     public ComuAutonomaSpinnerEventItemSelect(ComunidadAutonoma comunidadAutonoma)
     {
+        assertTrue(comunidadAutonoma != null, bean_fromView_should_be_initialized);
         this.comunidadAutonoma = comunidadAutonoma;
     }
 

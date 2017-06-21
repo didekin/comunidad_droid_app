@@ -27,7 +27,7 @@ public class FragmentInitiator {
     public void initFragment(@NonNull Bundle bundle, Fragment fragment, String fragmentTag)
     {
         {
-            Timber.d("initActivityWithBundle()");
+            Timber.d("initAcWithBundle()");
             fragment.setArguments(bundle);
             activity.getSupportFragmentManager().beginTransaction()
                     .replace(containerId, fragment, fragmentTag)

@@ -20,26 +20,30 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
+        // .
         ComuDataAcTest.class,
         ComunidadBeanTest.class,
         ComunidadDaoTest.class,
-        ComunidadDbHelperTest.class,
         ComunidadObservableTest.class,
         ComuSearchAcTest.class,
-        ComuSearchResultsAc_1_Test.class,
-        ComuSearchResultsAc_2_Test.class,
+        ComuSearchResultsAcTest.class,
+        CtrlerComunidadTest.class,
+        ViewerComuDataAcTest.class,
+        ViewerComuSearchAcTest.class,
+        ViewerComuSearchResultAcTest.class,
+        ViewerComuSearchResultsFrTest.class,
+        ViewerRegComuFr_Mock_Test.class,
+        ViewerRegComuFrTest.class,
+        // repository
+        ComunidadDbHelperTest.class,
+        // spinner
         CtrlerComAutonomaSpinnerTest.class,
-        CtrlerComuDataAcTest.class,
         CtrlerMunicipioSpinnerTest.class,
         CtrlerProvinciaSpinnerTest.class,
-        CtrlerRegComuFrTest.class,
         CtrlerTipoViaSpinnerTest.class,
         ViewerComuAutonomaSpinnerTest.class,
-        ViewerComuDataAcTest.class,
-        ViewerComuSearchTest.class,
         ViewerMunicipioSpinnerTest.class,
         ViewerProvinciaSpinnerTest.class,
-        ViewerRegComuFrTest.class,
         ViewerTipoViaSpinnerTest.class,
 })
 public class ComunidadSuite {

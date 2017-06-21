@@ -28,17 +28,17 @@ import static com.didekindroid.util.UIutils.makeToast;
  * Time: 14:21
  */
 
-class ViewerComuSearch extends ViewerParent<View, CtrlerAuthTokenIf> {
+class ViewerComuSearchAc extends ViewerParent<View, CtrlerAuthTokenIf> {
 
-    ViewerComuSearch(View view, AppCompatActivity activity)
+    ViewerComuSearchAc(View view, AppCompatActivity activity)
     {
         super(view, activity);
     }
 
-    static ViewerComuSearch newViewerComuSearch(ComuSearchAc activity)
+    static ViewerComuSearchAc newViewerComuSearch(ComuSearchAc activity)
     {
         Timber.d("newViewerComuSearch()");
-        ViewerComuSearch instance = new ViewerComuSearch(activity.acView, activity);
+        ViewerComuSearchAc instance = new ViewerComuSearchAc(activity.acView, activity);
         instance.setController(new CtrlerAuthToken());
         // We initialize viewerRegComuFr in its associated fragment.
         return instance;
@@ -63,7 +63,7 @@ class ViewerComuSearch extends ViewerParent<View, CtrlerAuthTokenIf> {
     public void replaceComponent(@NonNull Bundle bundle)
     {
         Timber.d("replaceComponent()");
-        new ActivityInitiator(activity).initActivityWithBundle(bundle);
+        new ActivityInitiator(activity).initAcWithBundle(bundle);
     }
 
     @SuppressWarnings("WeakerAccess")

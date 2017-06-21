@@ -2,6 +2,7 @@ package com.didekindroid.comunidad;
 
 import com.didekinlib.model.comunidad.Comunidad;
 
+import java.util.List;
 import java.util.concurrent.Callable;
 
 import io.reactivex.Single;
@@ -27,6 +28,18 @@ class ComunidadObservable {
             {
                 Timber.d("call()");
                 return comunidadDao.getComuData(comunidadId);
+            }
+        });
+    }
+
+    static Single<List<Comunidad>> comunidadesFound(final Comunidad comunidad)
+    {
+        Timber.d("comunidadesFound()");
+        return fromCallable(new Callable<List<Comunidad>>() {
+            @Override
+            public List<Comunidad> call() throws Exception
+            {
+                return comunidadDao.searchComunidades(comunidad).execute().body();
             }
         });
     }

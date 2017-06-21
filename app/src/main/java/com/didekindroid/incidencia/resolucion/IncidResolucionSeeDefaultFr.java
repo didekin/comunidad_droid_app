@@ -80,7 +80,7 @@ public class IncidResolucionSeeDefaultFr extends Fragment {
                 Intent intent = new Intent();
                 intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, getArguments().getSerializable(INCID_IMPORTANCIA_OBJECT.key));
                 getActivity().setIntent(intent);
-                new ActivityInitiator(getActivity()).initActivityFromMn(resourceId);
+                new ActivityInitiator(getActivity()).initAcFromMnKeepIntent(resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

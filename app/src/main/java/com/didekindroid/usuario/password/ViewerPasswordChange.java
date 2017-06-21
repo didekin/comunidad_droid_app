@@ -123,7 +123,7 @@ class ViewerPasswordChange extends Viewer<View, CtrlerPasswordChangeIf>
     {
         Timber.d("replaceComponent()");
         makeToast(activity, R.string.password_remote_change);
-        new ActivityInitiator(activity).initActivityWithBundle(bundle);
+        new ActivityInitiator(activity).initAcWithBundle(bundle);
     }
 
     // ............................ SUBSCRIBERS ..................................

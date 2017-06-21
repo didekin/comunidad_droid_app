@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import com.didekindroid.R;
 import com.didekindroid.api.ViewerParentInjectorIf;
 import com.didekindroid.comunidad.utils.ComuBundleKey;
+import com.didekindroid.util.CommonAssertionMsg;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import timber.log.Timber;
@@ -18,6 +19,7 @@ import timber.log.Timber;
 import static com.didekindroid.comunidad.ViewerRegComuFr.newViewerRegComuFr;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_SEARCH;
+import static com.didekindroid.util.UIutils.assertTrue;
 
 /**
  * Preconditions:
@@ -61,6 +63,7 @@ public class RegComuFr extends Fragment {
             comunidad = new Comunidad.ComunidadBuilder().c_id(comunidadId).build();
         } else if (getActivity().getIntent().hasExtra(ComuBundleKey.COMUNIDAD_SEARCH.key)){
             comunidad = (Comunidad) getActivity().getIntent().getSerializableExtra(COMUNIDAD_SEARCH.key);
+            assertTrue(comunidad.getMunicipio().getProvincia().getComunidadAutonoma() != null, CommonAssertionMsg.intent_extra_should_be_initialized);
         } else {
             comunidad = null;
         }

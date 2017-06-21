@@ -178,7 +178,7 @@ public class IncidFirebaseDownMsgHandlerTest {
 
     /**
      * 1. We build a RemoteMessage instancea and we pass it to the handler.
-     * 2. We check that a notification is received.
+     * 2. We checkMenu that a notification is received.
      */
     @Test
     public void testProcessMsgWithHandler_INCIDENCIA_OPEN()

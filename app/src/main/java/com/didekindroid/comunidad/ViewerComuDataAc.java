@@ -28,7 +28,7 @@ import static com.didekindroid.util.UIutils.makeToast;
  * Date: 08/05/17
  * Time: 14:09
  */
-class ViewerComuDataAc extends ViewerParent<View, CtrlerComuDataAc> {
+class ViewerComuDataAc extends ViewerParent<View, CtrlerComunidad> {
 
     ViewerComuDataAc(View view, AppCompatActivity activity)
     {
@@ -39,7 +39,7 @@ class ViewerComuDataAc extends ViewerParent<View, CtrlerComuDataAc> {
     {
         Timber.d("newViewerComuDataAc()");
         ViewerComuDataAc instance = new ViewerComuDataAc(activity.acView, activity);
-        instance.setController(new CtrlerComuDataAc());
+        instance.setController(new CtrlerComunidad());
         // We initialize viewerRegComuFr in its associated fragment.
         return instance;
     }
@@ -60,7 +60,7 @@ class ViewerComuDataAc extends ViewerParent<View, CtrlerComuDataAc> {
     public void replaceComponent(@NonNull Bundle bundle)
     {
         Timber.d("replaceComponent()");
-        new ActivityInitiator(activity).initActivityWithBundle(bundle);
+        new ActivityInitiator(activity).initAcWithBundle(bundle);
     }
 
     void onSuccessModifyComunidad()

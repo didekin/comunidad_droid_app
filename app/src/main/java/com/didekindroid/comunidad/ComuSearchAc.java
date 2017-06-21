@@ -15,7 +15,7 @@ import com.didekindroid.router.ActivityInitiator;
 
 import timber.log.Timber;
 
-import static com.didekindroid.comunidad.ViewerComuSearch.newViewerComuSearch;
+import static com.didekindroid.comunidad.ViewerComuSearchAc.newViewerComuSearch;
 import static com.didekindroid.util.UIutils.doToolBar;
 
 /**
@@ -33,7 +33,7 @@ public class ComuSearchAc extends AppCompatActivity implements ViewerParentInjec
 
     View acView;
     RegComuFr regComuFrg;
-    ViewerComuSearch viewer;
+    ViewerComuSearchAc viewer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -126,7 +126,7 @@ public class ComuSearchAc extends AppCompatActivity implements ViewerParentInjec
             case R.id.see_usercomu_by_user_ac_mn:
             case R.id.login_ac_mn:
             case R.id.reg_nueva_comunidad_ac_mn:
-                activityInitiator.initActivityFromMn(resourceId);
+                activityInitiator.initAcFromMnKeepIntent(resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

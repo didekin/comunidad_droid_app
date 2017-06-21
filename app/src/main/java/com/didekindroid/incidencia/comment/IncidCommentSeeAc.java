@@ -88,7 +88,7 @@ public class IncidCommentSeeAc extends AppCompatActivity {
             case R.id.incid_comment_reg_ac_mn:
                 Intent intent = new Intent();
                 intent.putExtra(INCIDENCIA_OBJECT.key, mIncidencia);
-                activityInitiator.initActivityFromMn(resourceId);
+                activityInitiator.initAcFromMnKeepIntent(resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

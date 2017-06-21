@@ -7,7 +7,7 @@ import io.reactivex.disposables.Disposable;
  * Date: 03/04/17
  * Time: 10:39
  */
-public class MockDisposable implements Disposable {
+public class DisposableMock implements Disposable {
     @Override
     public void dispose()
     {

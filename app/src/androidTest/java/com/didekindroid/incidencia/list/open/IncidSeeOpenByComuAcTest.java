@@ -160,7 +160,7 @@ public class IncidSeeOpenByComuAcTest {
         waitAtMost(2, SECONDS).until(isViewDisplayed(withId(incidEditAcLayout)));
         intended(hasExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia1));
         intended(hasExtra(INCID_RESOLUCION_FLAG.key, true));
-        // Up and check.
+        // Up and checkMenu.
         checkUp();
         waitAtMost(3, SECONDS).until(isViewDisplayed(
                 checkIncidOpenListView(incidImportancia1, activity, incidenciaUser1.getFechaAltaResolucion())));
@@ -196,7 +196,7 @@ public class IncidSeeOpenByComuAcTest {
                 .perform(click());
         // Check next fragment.
         waitAtMost(2, SECONDS).until(isViewDisplayed(withId(incidEditAcLayout)));
-        // Back and check.
+        // Back and checkMenu.
         checkBack(onView(withId(incidEditAcLayout)));
         waitAtMost(3, SECONDS).until(isViewDisplayed(
                 checkIncidOpenListView(incidImportancia1, activity, incidenciaUser1.getFechaAltaResolucion())));

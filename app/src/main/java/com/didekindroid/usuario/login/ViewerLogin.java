@@ -224,7 +224,7 @@ final class ViewerLogin extends Viewer<View, CtrlerLoginIf> implements ViewerLog
     public void replaceComponent(@NonNull Bundle bundle)
     {
         Timber.d("replaceComponent()");
-        new ActivityInitiator(activity).initActivityWithFlag(bundle, FLAG_ACTIVITY_NEW_TASK);
+        new ActivityInitiator(activity).initAcWithFlag(bundle, FLAG_ACTIVITY_NEW_TASK);
         activity.finish();
     }
 

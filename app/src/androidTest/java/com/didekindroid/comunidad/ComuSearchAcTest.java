@@ -34,6 +34,7 @@ import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuListF
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
+import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.usuario.testutil.UserItemMenuTestUtils.LOGIN_AC;
 import static com.didekindroid.usuario.testutil.UserItemMenuTestUtils.USER_DATA_AC;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
@@ -43,6 +44,8 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.si
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.REG_COMU_USERCOMU_AC;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.REG_COMU_USER_USERCOMU_AC;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.SEE_USERCOMU_BY_USER_AC;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.junit.Assert.assertThat;
@@ -91,7 +94,7 @@ public class ComuSearchAcTest {
 
         onView(withId(R.id.searchComunidad_Bton)).perform(ViewActions.click());
         // Check the view for comunidades list fragment.
-        onView(withId(comuListFrLayout)).check(matches(isDisplayed()));
+        waitAtMost(4,SECONDS).until(isResourceIdDisplayed(comuListFrLayout));
 
         checkUp(comuSearchAcLayout);
 
@@ -107,7 +110,7 @@ public class ComuSearchAcTest {
 
         onView(withId(R.id.searchComunidad_Bton)).perform(ViewActions.click());
         // Check the view for comunidades list fragment.
-        onView(withId(comuListFrLayout)).check(matches(isDisplayed()));
+        waitAtMost(4,SECONDS).until(isResourceIdDisplayed(comuListFrLayout));
         // Back.
         checkBack(onView(withId(comuListFrLayout)), comuSearchAcLayout);
 

@@ -5,6 +5,7 @@ import android.support.test.rule.ActivityTestRule;
 import com.didekindroid.api.ActivityMock;
 import com.didekindroid.exception.UiException;
 import com.didekinlib.model.comunidad.Comunidad;
+import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.junit.After;
 import org.junit.Before;
@@ -20,6 +21,7 @@ import io.reactivex.observers.TestObserver;
 import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_EL_ESCORIAL;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
+import static com.didekindroid.usuariocomunidad.dao.UserComuObservable.comunidadByUserAndComu;
 import static com.didekindroid.usuariocomunidad.dao.UserComuObservable.comunidadModificada;
 import static com.didekindroid.usuariocomunidad.dao.UserComuObservable.comunidadesByUser;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
@@ -69,5 +71,12 @@ public class UserComuObservableTest {
     {
         Comunidad newComunidad = new Comunidad.ComunidadBuilder().copyComunidadNonNullValues(comunidad).nombreVia("nuevo_nombre_via").build();
         comunidadModificada(newComunidad).test().assertResult(1);
+    }
+
+    @Test
+    public void test_ComunidadByUserAndComu() throws Exception
+    {
+        UsuarioComunidad userComuBack = new UsuarioComunidad.UserComuBuilder(comunidad, USER_PEPE).userComuRest(COMU_ESCORIAL_PEPE).build();
+        comunidadByUserAndComu(comunidad).test().assertResult(userComuBack);
     }
 }

@@ -41,7 +41,7 @@ import static com.didekindroid.comunidad.spinner.ViewerTipoViaSpinner.newViewerT
  * Date: 04/05/17
  * Time: 12:28
  */
-public class ViewerRegComuFr extends Viewer<View, CtrlerRegComuFr> implements
+public class ViewerRegComuFr extends Viewer<View, CtrlerComunidad> implements
         SpinnerEventListener {
 
     ViewerTipoViaSpinner tipoViaSpinner;
@@ -71,7 +71,7 @@ public class ViewerRegComuFr extends Viewer<View, CtrlerRegComuFr> implements
     @NonNull
     private static ViewerRegComuFr initInstanceViewer(@NonNull AppCompatActivity activity, ViewerRegComuFr instance)
     {
-        instance.setController(new CtrlerRegComuFr());
+        instance.setController(new CtrlerComunidad());
         instance.tipoViaSpinner =
                 newViewerTipoViaSpinner((Spinner) instance.getViewInViewer().findViewById(R.id.tipo_via_spinner), activity, instance);
         instance.comuAutonomaSpinner =

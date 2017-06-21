@@ -162,7 +162,7 @@ public class IncidEditAc extends AppCompatActivity implements ViewerParentInject
                 Intent intent = new Intent();
                 intent.putExtra(INCIDENCIA_OBJECT.key, incidImportancia.getIncidencia());
                 setIntent(intent);
-                new ActivityInitiator(this).initActivityFromMn(resourceId);
+                new ActivityInitiator(this).initAcFromMnKeepIntent(resourceId);
                 return true;
             case R.id.incid_resolucion_reg_ac_mn:
                 // We don't reuse flag for resolucion: the state might have changed. We checked DB.

@@ -78,7 +78,7 @@ public class IncidSeeOpenByComuAc extends AppCompatActivity {
                 return true;
             case R.id.incid_see_closed_by_comu_ac_mn:
             case R.id.incid_reg_ac_mn:
-                new ActivityInitiator(this).initActivityFromMn(resourceId);
+                new ActivityInitiator(this).initAcFromMnKeepIntent(resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -168,7 +168,7 @@ public class ViewerIncidSeeClose extends
      */
     public void replaceComponent(@NonNull Bundle bundle)
     {
-        Timber.d("initActivityWithBundle()");
+        Timber.d("initAcWithBundle()");
         new FragmentInitiator(activity, R.id.incid_see_closed_by_comu_ac)
                 .initFragment(bundle, new IncidResolucionSeeFr(), incid_resolucion_see_fr_tag);
     }
@@ -195,7 +195,7 @@ public class ViewerIncidSeeClose extends
         @Override
         public void onItemClick(AdapterView<?> parent, View viewClick, int position, long id)
         {
-            Timber.d("onListItemClick()");
+            Timber.d("onItemClick()");
             // List header increases position in 1: no problems with that, because we use itemSelectedId in saveState.
             view.setItemChecked(position, true);
             viewClick.setSelected(true);

@@ -141,7 +141,7 @@ class ViewerIncidEditMaxFr extends Viewer<View, CtrlerIncidRegEditFr> implements
         Timber.d("LinkToImportanciaUsersListener.onClickLinkToImportanciaUsers()");
         Bundle bundle = new Bundle(1);
         bundle.putSerializable(INCIDENCIA_OBJECT.key, incidImportancia.getIncidencia());
-        new ActivityInitiator(activity).initActivityFromListener(bundle, listener);
+        new ActivityInitiator(activity).initAcFromListener(bundle, listener.getClass());
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -184,14 +184,14 @@ class ViewerIncidEditMaxFr extends Viewer<View, CtrlerIncidRegEditFr> implements
     {
         Timber.d("onSuccessModifyIncidImportancia()");
         assertTrue(rowInserted >= 1, incid_importancia_should_be_modified);
-        new ActivityInitiator(activity).initActivityWithBundle(new Bundle(0));
+        new ActivityInitiator(activity).initAcWithBundle(new Bundle(0));
     }
 
     void onSuccessEraseIncidencia(int rowsDeleted)
     {
         Timber.d("onSuccessEraseIncidencia()");
         assertTrue(rowsDeleted == 1, incidencia_should_be_deleted);
-        new ActivityInitiator(activity).initActivityWithBundle(new Bundle(0));
+        new ActivityInitiator(activity).initAcWithBundle(new Bundle(0));
     }
 
     @SuppressWarnings("ConstantConditions")

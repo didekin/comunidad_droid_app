@@ -106,7 +106,7 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity implements Vi
                 doUpMenuWithIntent(this, intent);
                 return true;
             case R.id.login_ac_mn:
-                new ActivityInitiator(this).initActivityFromMn(resourceId);
+                new ActivityInitiator(this).initAcFromMnKeepIntent(resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

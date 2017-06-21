@@ -56,6 +56,7 @@ import static android.os.Build.VERSION_CODES.KITKAT;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.pressBack;
@@ -329,7 +330,20 @@ public final class ActivityTestUtils {
         };
     }
 
-    //    ============================= NAVIGATION ===================================
+    //    ============================= MENU ===================================
+
+    public static void checkMenu(Activity activity, int menuResourceId, int actionResourceId)
+    {
+        try {
+            onView(withText(menuResourceId)).check(doesNotExist());
+            openActionBarOverflowOrOptionsMenu(activity);
+            Thread.sleep(1000);
+        } catch (Throwable e) {}
+        finally {
+            onView(withText(menuResourceId)).check(matches(isDisplayed())).perform(click());
+            waitAtMost(4,SECONDS).until(isResourceIdDisplayed(actionResourceId));
+        }
+    }
 
     public static void clickNavigateUp()
     {
@@ -350,6 +364,8 @@ public final class ActivityTestUtils {
             }
         }
     }
+
+    //    ============================= NAVIGATION ===================================
 
     public static void checkBack(ViewInteraction viewInteraction, Integer... activityLayoutIds)
     {
@@ -374,7 +390,7 @@ public final class ActivityTestUtils {
             @Override
             public void run()
             {
-                new ActivityInitiator(viewer.getActivity()).initActivityWithBundle(finalBundle);
+                new ActivityInitiator(viewer.getActivity()).initAcWithBundle(finalBundle);
             }
         });
         waitAtMost(4, SECONDS).until(isViewDisplayed(withId(resorceIdNextView)));

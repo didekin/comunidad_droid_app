@@ -110,7 +110,7 @@ public class ComuDataAc extends AppCompatActivity implements ViewerParentInjecto
                 Intent intent = new Intent();
                 intent.putExtra(COMUNIDAD_ID.key, getIntent().getLongExtra(COMUNIDAD_ID.key, 0L));
                 setIntent(intent);
-                new ActivityInitiator(this).initActivityFromMn(resourceId);
+                new ActivityInitiator(this).initAcFromMnKeepIntent(resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -75,8 +75,8 @@ public class DeleteMeAc extends AppCompatActivity {
 
     public void replaceComponent(Bundle bundle)
     {
-        Timber.d("initActivityWithBundle()");
-        new ActivityInitiator(this).initActivityWithFlag(bundle, FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TOP);
+        Timber.d("initAcWithBundle()");
+        new ActivityInitiator(this).initAcWithFlag(bundle, FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TOP);
     }
 
     // ============================================================

@@ -16,8 +16,8 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
+import static android.support.test.espresso.matcher.ViewMatchers.withChild;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -32,6 +32,7 @@ import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * User: pedro@didekin
@@ -57,19 +58,26 @@ public final class ComuEspresoTestUtil {
     public static void typeComunidadData()
     {
         final ComunidadAutonoma comunidadAutonoma = new ComunidadAutonoma((short) 10, "Valencia");
-        final Provincia provincia = new Provincia(comunidadAutonoma,(short) 3, "Alicante/Alacant");
+        final Provincia provincia = new Provincia(comunidadAutonoma, (short) 3, "Alicante/Alacant");
         final Municipio municipio = new Municipio((short) 13, "Algueña", provincia);
         final TipoViaValueObj tipoVia = new TipoViaValueObj(52, "Calle");
-        typeComunidadData(municipio, tipoVia, "Real", "5", "Bis");
+        try {
+            typeComunidadData(municipio, tipoVia, "Real", "5", "Bis");
+        } catch (InterruptedException e) {
+            fail("InterruptedException");
+        }
     }
 
     public static void typeComunidadData(Municipio municipio, TipoViaValueObj tipoVia, String nombreVia,
-                                         String numeroEnVia, String sufijoNumero)
+                                         String numeroEnVia, String sufijoNumero) throws InterruptedException
     {
         doTipoViaSpinner(tipoVia);
+        SECONDS.sleep(1);
         typeComuCalleNumero(nombreVia, numeroEnVia, sufijoNumero);
         doComunAutonomaSpinner(municipio.getProvincia().getComunidadAutonoma());
+        SECONDS.sleep(1);
         doProvinciaSpinner(municipio.getProvincia());
+        SECONDS.sleep(1);
         doMunicipioSpinner(municipio);
     }
 
@@ -104,6 +112,8 @@ public final class ComuEspresoTestUtil {
         assertThat(comunidad.getNombreComunidad(), is(nombreComunidad));
         assertThat(comunidad.getMunicipio(), is(municipio));
     }
+
+    // ======================================  CHECKING  =========================================
 
     public static void checkRegComuFrViewEmpty()
     {
@@ -170,6 +180,23 @@ public final class ComuEspresoTestUtil {
         ));
     }
 
+    public static void checkComuData(Comunidad comunidad){
+        onView(allOf(
+                withId(R.id.nombreComunidad_view),
+                withText(comunidad.getNombreComunidad()),
+                hasSibling(allOf(
+                        withChild(allOf(
+                                withId(R.id.municipio_view),
+                                withText(comunidad.getMunicipio().getNombre())
+                        )),
+                        withChild(allOf(
+                            withId(R.id.provincia_view),
+                                withText(comunidad.getMunicipio().getProvincia().getNombre())
+                        ))
+                ))
+        ));
+    }
+
     // ======================================  SPINNER  =========================================
 
     /**
@@ -219,13 +246,13 @@ public final class ComuEspresoTestUtil {
                         isA(TipoViaValueObj.class),
                         is(tipoVia)
                 )));
-        onView(
+
+        waitAtMost(2, SECONDS).until(isViewDisplayed(
                 allOf(
                         withId(R.id.app_spinner_1_dropdown_item),
                         withParent(withId(R.id.tipo_via_spinner)),
                         withText(is(tipoVia.getTipoViaDesc()))
-                )
-        ).check(matches(isDisplayed()));
+                )));
     }
 
     public static void checkTipoViaSpinner(Comunidad comunidad)
@@ -246,8 +273,11 @@ public final class ComuEspresoTestUtil {
                         isA(ComunidadAutonoma.class),
                         is(comunidadAutonoma)
                 )));
-        onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.autonoma_comunidad_spinner))))
-                .check(matches(withText(is(comunidadAutonoma.getNombre())))).check(matches(isDisplayed()));
+        waitAtMost(2, SECONDS).until(isViewDisplayed(allOf(
+                withId(R.id.app_spinner_1_dropdown_item),
+                withParent(withId(R.id.autonoma_comunidad_spinner)),
+                withText(is(comunidadAutonoma.getNombre()))
+        )));
     }
 
     public static void checkComuAutonomaSpinner(String nombreComAutonoma)
@@ -268,8 +298,12 @@ public final class ComuEspresoTestUtil {
                         isA(Provincia.class),
                         is(provincia)
                 )));
-        onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.provincia_spinner))))
-                .check(matches(withText(is(provincia.getNombre())))).check(matches(isDisplayed()));
+        waitAtMost(2, SECONDS).until(isViewDisplayed(
+                allOf(withId(R.id.app_spinner_1_dropdown_item),
+                        withParent(withId(R.id.provincia_spinner)),
+                        withText(is(provincia.getNombre()))
+                )
+        ));
     }
 
     public static void checkProvinciaSpinner(Comunidad comunidad)
@@ -295,8 +329,12 @@ public final class ComuEspresoTestUtil {
                         isA(Municipio.class),
                         is(municipio)
                 )));
-        onView(allOf(withId(R.id.app_spinner_1_dropdown_item), withParent(withId(R.id.municipio_spinner))))
-                .check(matches(withText(is(municipio.getNombre())))).check(matches(isDisplayed()));
+        waitAtMost(2, SECONDS).until(isViewDisplayed(
+                allOf(withId(R.id.app_spinner_1_dropdown_item),
+                        withParent(withId(R.id.municipio_spinner)),
+                        withText(is(municipio.getNombre()))
+                )
+        ));
     }
 
     public static void checkMunicipioSpinner(Comunidad comunidad)

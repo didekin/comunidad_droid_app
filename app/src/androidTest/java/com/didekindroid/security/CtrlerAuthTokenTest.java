@@ -131,7 +131,7 @@ public class CtrlerAuthTokenTest {
 
     /**
      * Synchronous execution: we use RxJavaPlugins to replace io scheduler; everything runs in the test runner thread.
-     * We register a new user, check the cache is null, call the disposable and check cache is initialized.
+     * We register a new user, checkMenu the cache is null, call the disposable and checkMenu cache is initialized.
      */
     @Test
     public void test_UpdateTkAndCacheFromUser() throws IOException, UiException

@@ -1,8 +1,6 @@
 package com.didekindroid.usuariocomunidad.register;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,7 +9,6 @@ import com.didekindroid.R;
 import com.didekindroid.api.ViewerIf;
 import com.didekindroid.api.ViewerParentInjectedIf;
 import com.didekindroid.api.ViewerParentInjectorIf;
-import com.didekindroid.comunidad.ComuSearchAc;
 import com.didekindroid.comunidad.RegComuFr;
 import com.didekindroid.router.ActivityRouter;
 
@@ -88,9 +85,6 @@ public class RegComuAndUserComuAc extends AppCompatActivity implements ViewerPar
         switch (resourceId) {
             case android.R.id.home:
                 ActivityRouter.doUpMenu(this);
-                /*Intent intent = new Intent(this, ComuSearchAc.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                NavUtils.navigateUpTo(this, intent);*/
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

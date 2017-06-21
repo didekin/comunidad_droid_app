@@ -25,23 +25,30 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-
-        CtrlerDeleteMeTest.class,
-        CtrlerFirebaseTokenTest.class,
-        CtrlerLoginTest.class,
-        CtrlerPasswordChangeTest.class,
-        CtrlerUserModifiedTest.class,
-        DeleteMeAcTest.class,
-        LoginAcTest.class,
-        PasswordChangeAcTest.class,
-        UserDataAcTest.class,
-        UsuarioBeanValidaTests.class,
+        // dao
         UsuarioDaoRemoteTest.class,
+        // delete
+        CtrlerDeleteMeTest.class,
+        DeleteMeAcTest.class,
+        // firebase
+        CtrlerFirebaseTokenTest.class,
         ViewerFirebaseTokenTest.class,
+        // login
+        CtrlerLoginTest.class,
+        LoginAcTest.class,
         ViewerLoginTest.class,
+        // password
+        CtrlerPasswordChangeTest.class,
+        PasswordChangeAcTest.class,
         ViewerPasswordChangeTest.class,
-        ViewerRegUserFrTest.class,
+        // userdata
+        CtrlerUserModifiedTest.class,
+        UserDataAcTest.class,
         ViewerUserDataTest.class,
+        // .
+        UsuarioBeanValidaTests.class,
+        ViewerRegUserFrTest.class,
+
 })
 public class UsuarioSuite {
 }

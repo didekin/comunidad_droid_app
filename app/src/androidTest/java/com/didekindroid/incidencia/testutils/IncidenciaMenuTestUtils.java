@@ -3,14 +3,12 @@ package com.didekindroid.incidencia.testutils;
 import android.app.Activity;
 
 import com.didekindroid.R;
+import com.didekindroid.testutil.ActivityTestUtils;
 
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -27,7 +25,7 @@ public enum IncidenciaMenuTestUtils {
         @Override
         public void checkMenuItem_WTk(Activity activity)
         {
-            check(activity, R.string.incid_comment_reg_ac_mn, R.id.incid_comment_reg_ac_layout);
+            ActivityTestUtils.checkMenu(activity, R.string.incid_comment_reg_ac_mn, R.id.incid_comment_reg_ac_layout);
         }
     },
 
@@ -35,7 +33,7 @@ public enum IncidenciaMenuTestUtils {
         @Override
         public void checkMenuItem_WTk(Activity activity)
         {
-            check(activity, R.string.incid_comments_see_ac_mn, R.id.incid_comments_see_fr_layout);
+            ActivityTestUtils.checkMenu(activity, R.string.incid_comments_see_ac_mn, R.id.incid_comments_see_fr_layout);
         }
     },
 
@@ -43,7 +41,7 @@ public enum IncidenciaMenuTestUtils {
         @Override
         public void checkMenuItem_WTk(Activity activity)
         {
-            check(activity, R.string.incid_reg_ac_mn, R.id.incid_reg_ac_layout);
+            ActivityTestUtils.checkMenu(activity, R.string.incid_reg_ac_mn, R.id.incid_reg_ac_layout);
         }
     },
 
@@ -60,7 +58,7 @@ public enum IncidenciaMenuTestUtils {
         @Override
         public void checkMenuItem_WTk(Activity activity)
         {
-            check(activity, R.string.incid_see_by_comu_ac_mn, R.id.incid_see_open_by_comu_ac);
+            ActivityTestUtils.checkMenu(activity, R.string.incid_see_by_comu_ac_mn, R.id.incid_see_open_by_comu_ac);
         }
     },
 
@@ -68,24 +66,10 @@ public enum IncidenciaMenuTestUtils {
         @Override
         public void checkMenuItem_WTk(Activity activity)
         {
-            check(activity, R.string.incid_closed_see_by_usercomu_ac_mn, R.id.incid_see_closed_by_comu_ac);
+            ActivityTestUtils.checkMenu(activity, R.string.incid_closed_see_by_usercomu_ac_mn, R.id.incid_see_closed_by_comu_ac);
         }
     },;
 
     public abstract void checkMenuItem_WTk(Activity activity) throws InterruptedException;
 
-//    ============================= HELPER METHODS ==========================
-
-    static void check(Activity activity, int menuResourceId, int actionResourceId)
-    {
-        try {
-            onView(withText(menuResourceId)).check(doesNotExist());
-            openActionBarOverflowOrOptionsMenu(activity);
-            Thread.sleep(1000);
-        } catch (Throwable e) {}
-        finally {
-            onView(withText(menuResourceId)).check(matches(isDisplayed())).perform(click());
-            onView(withId(actionResourceId)).check(matches(isDisplayed()));
-        }
-    }
 }

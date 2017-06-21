@@ -104,7 +104,7 @@ public class ComuDataAcTest {
         // Modificamos.
         typeComuCalleNumero("nombre via One", "123", "Tris");
         onView(withId(R.id.comu_data_ac_button)).perform(scrollTo(), click());
-        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
+        waitAtMost(5, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
 
         checkUp(comuDataAcLayout);
     }
@@ -116,7 +116,7 @@ public class ComuDataAcTest {
         // Modificamos.
         typeComuCalleNumero("nombre via One", "123", "Tris");
         onView(withId(R.id.comu_data_ac_button)).perform(scrollTo(), click());
-        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
+        waitAtMost(5, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
 
         checkBack(onView(withId(seeUserComuByUserFrRsId)), comuDataAcLayout, regComuFrLayout);
     }

@@ -104,7 +104,7 @@ final class ViewerIncidEditMinFr extends Viewer<View, CtrlerIncidRegEditFr> impl
         Timber.d("onClickLinkImportanciaUsers()");
         Bundle bundle = new Bundle(1);
         bundle.putSerializable(INCIDENCIA_OBJECT.key, incidImportancia.getIncidencia());
-        new ActivityInitiator(activity).initActivityFromListener(bundle, listener);
+        new ActivityInitiator(activity).initAcFromListener(bundle, listener.getClass());
     }
 
     void onClickButtonModify()
@@ -137,7 +137,7 @@ final class ViewerIncidEditMinFr extends Viewer<View, CtrlerIncidRegEditFr> impl
     public void onSuccessRegisterIncidImportancia(int rowInserted)
     {
         Timber.d("onSuccessRegisterIncidImportancia()");
-        new ActivityInitiator(activity).initActivityWithBundle(new Bundle());
+        new ActivityInitiator(activity).initAcWithBundle(new Bundle());
     }
 
     @Override
@@ -145,7 +145,7 @@ final class ViewerIncidEditMinFr extends Viewer<View, CtrlerIncidRegEditFr> impl
     {
         Timber.d("onSuccessModifyIncidImportancia()");
         assertTrue(rowInserted >= 1, incid_importancia_should_be_modified);
-        new ActivityInitiator(activity).initActivityWithBundle(new Bundle(0));
+        new ActivityInitiator(activity).initAcWithBundle(new Bundle(0));
     }
 
     @SuppressWarnings("ConstantConditions")

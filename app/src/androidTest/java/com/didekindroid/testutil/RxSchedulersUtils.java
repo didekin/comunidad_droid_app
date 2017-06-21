@@ -1,7 +1,5 @@
 package com.didekindroid.testutil;
 
-import java.util.concurrent.Callable;
-
 import io.reactivex.Scheduler;
 import io.reactivex.android.plugins.RxAndroidPlugins;
 import io.reactivex.functions.Function;
@@ -38,6 +36,12 @@ public class RxSchedulersUtils {
                 return trampoline();
             }
         });
+    }
+
+    public static void trampolineReplaceIoMain()
+    {
+        trampolineReplaceAndroidMain();
+        trampolineReplaceIoScheduler();
     }
 
     public static void singleReplaceAndroidMain()

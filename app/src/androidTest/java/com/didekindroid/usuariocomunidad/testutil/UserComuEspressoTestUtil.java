@@ -9,8 +9,6 @@ import com.didekindroid.usuariocomunidad.RolUi;
 import com.didekindroid.usuariocomunidad.UsuarioComunidadBean;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
-import org.hamcrest.CoreMatchers;
-
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -184,46 +182,46 @@ public final class UserComuEspressoTestUtil {
     public static void checkUserComuData(UsuarioComunidad userComu)
     {
         if (userComu.getPortal() != null) {
-            waitAtMost(2, SECONDS).until(isViewDisplayed(CoreMatchers.allOf(
+            waitAtMost(2, SECONDS).until(isViewDisplayed(allOf(
                     withId(R.id.reg_usercomu_portal_ed),
                     withText(containsString(userComu.getPortal())))));
         }
         if (userComu.getEscalera() != null) {
-            waitAtMost(2, SECONDS).until(isViewDisplayed(CoreMatchers.allOf(
+            waitAtMost(2, SECONDS).until(isViewDisplayed(allOf(
                     withId(R.id.reg_usercomu_escalera_ed),
                     withText(containsString(userComu.getEscalera())))));
         }
         if (userComu.getPlanta() != null) {
-            waitAtMost(2, SECONDS).until(isViewDisplayed(CoreMatchers.allOf(
+            waitAtMost(2, SECONDS).until(isViewDisplayed(allOf(
                     withId(R.id.reg_usercomu_planta_ed),
                     withText(containsString(userComu.getPlanta())))));
         }
         if (userComu.getPuerta() != null) {
-            waitAtMost(2, SECONDS).until(isViewDisplayed(CoreMatchers.allOf(
+            waitAtMost(2, SECONDS).until(isViewDisplayed(allOf(
                     withId(R.id.reg_usercomu_puerta_ed),
                     withText(containsString(userComu.getPuerta())))));
         }
 
         if (userComu.getRoles().contains(PRESIDENTE.function)) {
-            onView(CoreMatchers.allOf(
+            onView(allOf(
                     withId(R.id.reg_usercomu_checbox_pre),
                     isChecked()
             )).check(matches(isDisplayed()));
         }
         if (userComu.getRoles().contains(PROPIETARIO.function)) {
-            onView(CoreMatchers.allOf(
+            onView(allOf(
                     withId(R.id.reg_usercomu_checbox_pro),
                     isChecked()
             )).check(matches(isDisplayed()));
         }
         if (userComu.getRoles().contains(ADMINISTRADOR.function)) {
-            onView(CoreMatchers.allOf(
+            onView(allOf(
                     withId(R.id.reg_usercomu_checbox_admin),
                     isChecked()
             )).check(matches(isDisplayed()));
         }
         if (userComu.getRoles().contains(INQUILINO.function)) {
-            onView(CoreMatchers.allOf(
+            onView(allOf(
                     withId(R.id.reg_usercomu_checbox_inq),
                     isChecked()
             )).check(matches(isDisplayed()));

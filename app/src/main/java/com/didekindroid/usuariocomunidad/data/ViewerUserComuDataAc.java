@@ -153,7 +153,7 @@ final class ViewerUserComuDataAc extends ViewerParent<View, CtrlerUsuarioComunid
         {
             Timber.d("onSuccess()");
             assertTrue(rowsUpdated == 1, userComu_should_be_modified);
-            new ActivityInitiator(activity).initActivityWithBundle(new Bundle(0));
+            new ActivityInitiator(activity).initAcWithBundle(new Bundle(0));
         }
     }
 
@@ -172,7 +172,7 @@ final class ViewerUserComuDataAc extends ViewerParent<View, CtrlerUsuarioComunid
                 activity.startActivity(intent);
                 activity.finish();
             } else {
-                new ActivityInitiator(activity).initActivityWithBundle(new Bundle(0));
+                new ActivityInitiator(activity).initAcWithBundle(new Bundle(0));
             }
         }
     }

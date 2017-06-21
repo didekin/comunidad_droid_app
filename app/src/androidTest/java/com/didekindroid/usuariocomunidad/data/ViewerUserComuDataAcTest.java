@@ -2,6 +2,7 @@ package com.didekindroid.usuariocomunidad.data;
 
 import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
+import android.support.test.runner.AndroidJUnit4;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -17,6 +18,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -67,6 +69,7 @@ import static org.junit.Assert.fail;
  * Date: 07/06/17
  * Time: 12:29
  */
+@RunWith(AndroidJUnit4.class)
 public class ViewerUserComuDataAcTest {
 
     final AtomicReference<String> flagLocalExec = new AtomicReference<>(BEFORE_METHOD_EXEC);

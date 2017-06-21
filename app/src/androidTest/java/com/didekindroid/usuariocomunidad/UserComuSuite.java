@@ -3,6 +3,7 @@ package com.didekindroid.usuariocomunidad;
 import com.didekindroid.usuariocomunidad.dao.UserComuDaoRemoteTest;
 import com.didekindroid.usuariocomunidad.dao.UserComuObservableTest;
 import com.didekindroid.usuariocomunidad.data.UserComuDataAcTest;
+import com.didekindroid.usuariocomunidad.data.ViewerUserComuDataAcTest;
 import com.didekindroid.usuariocomunidad.listbycomu.CtrlerUserComuByComuTest;
 import com.didekindroid.usuariocomunidad.listbycomu.SeeUserComuByComuAcTest;
 import com.didekindroid.usuariocomunidad.listbycomu.ViewerSeeUserComuByComuTest;
@@ -35,6 +36,7 @@ import org.junit.runners.Suite;
         UserComuObservableTest.class,
         // data.
         UserComuDataAcTest.class,
+        ViewerUserComuDataAcTest.class,
         // listbycomu
         CtrlerUserComuByComuTest.class,
         SeeUserComuByComuAcTest.class,

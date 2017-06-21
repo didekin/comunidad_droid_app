@@ -100,7 +100,7 @@ public class ViewerIncidRegAc extends ViewerParent<View, CtrlerIncidRegEditFr> i
     public void replaceComponent(@NonNull Bundle bundle)
     {
         Timber.d("replaceComponent()");
-        new ActivityInitiator(activity).initActivityWithBundle(bundle);
+        new ActivityInitiator(activity).initAcWithBundle(bundle);
     }
 
     @SuppressWarnings("WeakerAccess")

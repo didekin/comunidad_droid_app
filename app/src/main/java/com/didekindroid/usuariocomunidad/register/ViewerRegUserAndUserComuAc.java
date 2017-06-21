@@ -65,7 +65,7 @@ final class ViewerRegUserAndUserComuAc extends ViewerParent<View, CtrlerUsuarioC
         Timber.d("onRegisterSuccess()");
         Bundle bundle = new Bundle(1);
         bundle.putLong(COMUNIDAD_ID.key, c_id);
-        new ActivityInitiator(activity).initActivityWithBundle(bundle);
+        new ActivityInitiator(activity).initAcWithBundle(bundle);
     }
 
     @SuppressWarnings("WeakerAccess")

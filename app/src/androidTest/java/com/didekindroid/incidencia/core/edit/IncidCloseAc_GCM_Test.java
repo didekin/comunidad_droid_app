@@ -48,11 +48,11 @@ public class IncidCloseAc_GCM_Test extends Incidencia_GCM_Test {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return;
         }
-        // We check that the activity has sent Firebase token to BD.
+        // We checkMenu that the activity has sent Firebase token to BD.
         checkToken();
 
         assertThat(incidenciaDao.closeIncidencia(resolucion), is(2));
-        // We check that the notification is received.
+        // We checkMenu that the notification is received.
         checkNotification(INCIDENCIA_CLOSE.getBarNotificationId());
     }
 

@@ -118,7 +118,7 @@ public class RegUserAndUserComuAc extends AppCompatActivity implements ViewerPar
                 doUpMenu(this);
                 return true;
             case R.id.login_ac_mn:
-                new ActivityInitiator(this).initActivityFromMn(resourceId);
+                new ActivityInitiator(this).initAcFromMnKeepIntent(resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

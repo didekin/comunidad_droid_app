@@ -87,7 +87,7 @@ class ViewerIncidSeeOpen extends ViewerIncidSeeClose {
     public void replaceComponent(@NonNull Bundle bundle)
     {
         Timber.d("replaceComponent()");
-        new ActivityInitiator(activity).initActivityWithBundle(bundle);
+        new ActivityInitiator(activity).initAcWithBundle(bundle);
     }
 
     ViewerComuSpinner getComuSpinner()

@@ -106,7 +106,7 @@ final class ViewerRegUserComuAc extends ViewerParent<View, CtrlerUsuarioComunida
             assertTrue(rowInserted == 1, user_and_comunidad_should_be_registered);
             Bundle bundle = new Bundle(1);
             bundle.putLong(COMUNIDAD_ID.key, comunidad.getC_Id());
-            new ActivityInitiator(activity).initActivityWithBundle(bundle);
+            new ActivityInitiator(activity).initAcWithBundle(bundle);
             dispose();
         }
 

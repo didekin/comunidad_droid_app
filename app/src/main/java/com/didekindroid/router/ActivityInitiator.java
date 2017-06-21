@@ -32,9 +32,9 @@ public class ActivityInitiator {
         this.router = router;
     }
 
-    public void initActivityFromMn(int resourceId)
+    public void initAcFromMnKeepIntent(int resourceId)
     {
-        Timber.d("initActivityFromMn()");
+        Timber.d("initAcFromMnKeepIntent()");
         Intent intent = activity.getIntent();
         if (intent == null) {
             intent = new Intent();
@@ -43,23 +43,41 @@ public class ActivityInitiator {
         activity.startActivity(intent);
     }
 
-    public void initActivityFromListener(Bundle bundle, View.OnClickListener listener)
+    public void initAcFromMnNewIntent(int resourceId)
     {
-        Timber.d("initActivityFromListener()");
-        Intent intent = new Intent(activity, router.nextActivityFromClick(listener.getClass()));
+        Timber.d("initAcFromMnKeepIntent()");
+        Intent intent = new Intent();
+        intent.setClass(activity, router.nextActivityFromMn(resourceId));
+        activity.startActivity(intent);
+    }
+
+    public void initAcFromListener(Bundle bundle, Class<? extends View.OnClickListener> listener)
+    {
+        Timber.d("initAcFromListener()");
+        Intent intent = new Intent(activity, router.nextActivityFromClick(listener));
         intent.putExtras(bundle);
         activity.startActivity(intent);
     }
 
-    public void initActivityWithBundle(@NonNull Bundle bundle)
+    public void initAcWithBundle(@NonNull Bundle bundle)
     {
-        Timber.d("initActivityWithBundle()");
+        Timber.d("initAcWithBundle()");
         Intent intent = new Intent(activity, router.nextActivity(activity.getClass()));
         intent.putExtras(bundle);
         activity.startActivity(intent);
     }
 
-    public void initActivityWithFlag(@NonNull Bundle bundle, @NonNull int flags)
+    public <T extends Activity> void initAcWithBundle(Bundle bundle, @NonNull Class<T> nextActivityClass)
+    {
+        Timber.d("initAcWithBundle()");
+        Intent intent = new Intent(activity, nextActivityClass);
+        if (bundle != null){
+            intent.putExtras(bundle);
+        }
+        activity.startActivity(intent);
+    }
+
+    public void initAcWithFlag(@NonNull Bundle bundle, @NonNull int flags)
     {
         Intent intent = new Intent(activity, router.nextActivity(activity.getClass()));
         intent.putExtras(bundle);
