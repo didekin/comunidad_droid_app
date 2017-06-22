@@ -7,11 +7,9 @@ import android.support.test.runner.AndroidJUnit4;
 import android.widget.Button;
 
 import com.didekindroid.R;
-import com.didekindroid.comunidad.spinner.TipoViaValueObj;
 import com.didekindroid.security.CtrlerAuthToken;
 import com.didekindroid.security.CtrlerAuthTokenIf;
 import com.didekinlib.model.comunidad.Comunidad;
-import com.didekinlib.model.comunidad.ComunidadAutonoma;
 
 import org.hamcrest.Matchers;
 import org.junit.Before;
@@ -30,13 +28,9 @@ import static com.didekindroid.comunidad.ViewerRegComuFr.newViewerRegComuFr;
 import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_REAL;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkMunicipioSpinner;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkRegComuFrViewEmpty;
-import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.doComunAutonomaSpinner;
-import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.doMunicipioSpinner;
-import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.doProvinciaSpinner;
-import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.doTipoViaSpinner;
-import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.typeComuCalleNumero;
-import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
+import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.typeComunidadData;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuListFrLayout;
+import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_SEARCH;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.checkViewerReplaceComponent;
@@ -103,7 +97,7 @@ public class ViewerComuSearchAcTest {
             }
         });
         activity.viewer.doViewInViewer(null, null);
-        waitAtMost(4,SECONDS).untilAtomic(flagMethodExec, is(AFTER_METHOD_EXEC_A));
+        waitAtMost(4, SECONDS).untilAtomic(flagMethodExec, is(AFTER_METHOD_EXEC_A));
     }
 
     @Test
@@ -125,13 +119,8 @@ public class ViewerComuSearchAcTest {
     @Test
     public void test_ComuSearchButtonListener()
     {
-        checkMunicipioSpinner("municipio"); // Esperamos por los viejos datos.
-
-        doTipoViaSpinner(new TipoViaValueObj(52, "Calle"));
-        typeComuCalleNumero(COMU_REAL.getNombreVia(), String.valueOf(COMU_REAL.getNumero()), COMU_REAL.getSufijoNumero());
-        doComunAutonomaSpinner(new ComunidadAutonoma((short) 10, "Valencia"));
-        doProvinciaSpinner(COMU_REAL.getMunicipio().getProvincia());
-        doMunicipioSpinner(COMU_REAL.getMunicipio());
+        checkMunicipioSpinner("municipio"); /* Esperamos por los viejos datos.*/
+        typeComunidadData();
 
         ViewerRegComuFr viewerRegComuFrOld = activity.viewer.getChildViewer(ViewerRegComuFr.class);
         activity.viewer = new ViewerComuSearchAc(activity.acView, activity) {
