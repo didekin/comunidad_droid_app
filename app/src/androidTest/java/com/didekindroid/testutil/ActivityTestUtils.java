@@ -129,6 +129,23 @@ public final class ActivityTestUtils {
         };
     }
 
+    public static Callable<Boolean> isResourceIdNonExist(final Integer... resourceStringIds)
+    {
+        return new Callable<Boolean>() {
+            public Boolean call() throws Exception
+            {
+                try {
+                    for (int resourceId : resourceStringIds){
+                        onView(withId(resourceId)).check(doesNotExist());
+                    }
+                    return true;
+                } catch (NoMatchingViewException ne) {
+                    return false;
+                }
+            }
+        };
+    }
+
     public static Callable<Boolean> isViewDisplayed(final Matcher<View> viewMatcher, final ViewAction... viewActions)
     {
         return new Callable<Boolean>() {
@@ -136,6 +153,21 @@ public final class ActivityTestUtils {
             {
                 try {
                     onView(viewMatcher).check(matches(isDisplayed())).perform(viewActions);
+                    return true;
+                } catch (NoMatchingViewException ne) {
+                    return false;
+                }
+            }
+        };
+    }
+
+    public static Callable<Boolean> viewNonExist(final Matcher<View> viewMatcher)
+    {
+        return new Callable<Boolean>() {
+            public Boolean call() throws Exception
+            {
+                try {
+                    onView(viewMatcher).check(matches(not(isDisplayed())));
                     return true;
                 } catch (NoMatchingViewException ne) {
                     return false;

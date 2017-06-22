@@ -241,7 +241,8 @@ public class ViewerUserDataTest {
             @Override
             public void run()
             {
-                isChecked.compareAndSet(!isOk, activity.viewer.checkUserData());
+                boolean isUserDataOk = activity.viewer.checkUserData();
+                isChecked.compareAndSet(!isOk, isUserDataOk);
             }
         });
         waitAtMost(4, SECONDS).untilAtomic(isChecked, is(isOk));

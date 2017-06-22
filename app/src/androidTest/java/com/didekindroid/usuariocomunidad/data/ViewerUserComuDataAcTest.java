@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.view.Menu;
-import android.view.MenuItem;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ViewerParentInjectedIf;
@@ -21,7 +20,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import io.reactivex.observers.DisposableSingleObserver;
@@ -29,9 +27,7 @@ import io.reactivex.observers.DisposableSingleObserver;
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasFlags;
@@ -39,9 +35,9 @@ import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
+import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_B;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
@@ -126,20 +122,6 @@ public class ViewerUserComuDataAcTest {
     }
 
     @Test
-    public void test_UpdateActivityMenu() throws Exception
-    {
-        // Precondition.
-        waitForMenu();
-        // Usuario inquilino, pero es el usuario más antiguo.
-        MenuItem comuDataItem = activity.viewer.acMenu.findItem(R.id.comu_data_ac_mn);
-        assertThat(comuDataItem.isEnabled(), is(true));
-        assertThat(comuDataItem.isVisible(), is(true));
-        // Check in the overflow menu.
-        openActionBarOverflowOrOptionsMenu(activity);
-        onView(withText(activity.getString(R.string.comu_data_ac_mn))).check(matches(isDisplayed()));
-    }
-
-    @Test
     public void test_SetAcMenu() throws Exception
     {
         // Mock test.
@@ -170,7 +152,8 @@ public class ViewerUserComuDataAcTest {
 
         onView(withId(R.id.usercomu_data_ac_modif_button)).perform(click());
         // Verificación.
-        onView(withId(seeUserComuByUserFrRsId)).check(matches(isDisplayed()));
+        waitAtMost(6, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
+
     }
 
     @Test
@@ -192,76 +175,6 @@ public class ViewerUserComuDataAcTest {
     }
 
     // .............................. SUBSCRIBERS ..................................
-
-    @Test
-    public void test_AcMenuObserver_1()
-    {
-        // Precondition.
-        waitForMenu();
-        // Turn to false the initial values.
-        final MenuItem comuDataItem = activity.viewer.acMenu.findItem(R.id.comu_data_ac_mn);
-        final AtomicBoolean isRun = new AtomicBoolean(false);
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                comuDataItem.setVisible(false);
-                comuDataItem.setEnabled(false);
-                activity.onPrepareOptionsMenu(activity.viewer.acMenu);
-                isRun.compareAndSet(false, true);
-            }
-        });
-        waitAtMost(2, SECONDS).untilTrue(isRun);
-        openActionBarOverflowOrOptionsMenu(activity);
-        onView(withText(R.string.comu_data_ac_mn)).check(doesNotExist());
-
-        ViewerUserComuDataAc.AcMenuObserver observer = activity.viewer.new AcMenuObserver();
-        just(false).subscribeWith(observer);
-        MenuItem newComuDataItem = activity.viewer.acMenu.findItem(R.id.comu_data_ac_mn);
-        assertThat(comuDataItem.isEnabled(), is(false));
-        assertThat(comuDataItem.isVisible(), is(false));
-    }
-
-    @Test
-    public void test_AcMenuObserver_2()
-    {
-        // Precondition.
-        waitForMenu();
-        // Turn to false the initial values.
-        final MenuItem comuDataItem = activity.viewer.acMenu.findItem(R.id.comu_data_ac_mn);
-        final AtomicBoolean isRun = new AtomicBoolean(false);
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                comuDataItem.setVisible(false);
-                comuDataItem.setEnabled(false);
-                activity.onPrepareOptionsMenu(activity.viewer.acMenu);
-                isRun.compareAndSet(false, true);
-            }
-        });
-        waitAtMost(2, SECONDS).untilTrue(isRun);
-        openActionBarOverflowOrOptionsMenu(activity);
-        onView(withText(R.string.comu_data_ac_mn)).check(doesNotExist());
-
-        final ViewerUserComuDataAc.AcMenuObserver observer = activity.viewer.new AcMenuObserver();
-        isRun.compareAndSet(true, false);
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                just(true).subscribeWith(observer);
-                MenuItem newComuDataItem = activity.viewer.acMenu.findItem(R.id.comu_data_ac_mn);
-                assertThat(comuDataItem.isEnabled(), is(true));
-                assertThat(comuDataItem.isVisible(), is(true));
-                activity.onPrepareOptionsMenu(activity.viewer.acMenu);
-                isRun.compareAndSet(false, true);
-            }
-        });
-        waitAtMost(2, SECONDS).untilTrue(isRun);
-        // No es necesario abrir el menú: sigue abierto.
-        onView(withText(R.string.comu_data_ac_mn)).check(matches(isDisplayed()));
-    }
 
     @Test
     public void test_ModifyUserComuObserver()

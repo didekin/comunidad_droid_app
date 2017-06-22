@@ -29,6 +29,7 @@ import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEn
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
+import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -88,7 +89,7 @@ public abstract class Incidencia_GCM_Test {
     protected void checkNotification(int notificationId) throws InterruptedException
     {
         // Verifico recepción de notificación.
-        await().atMost(5, SECONDS).until(notificationsSize(), is(1));
+        waitAtMost(8, SECONDS).until(notificationsSize(), is(1));
 
         StatusBarNotification barNotification = notificationManager.getActiveNotifications()[0];
         assertThat(barNotification.getId(), is(notificationId));

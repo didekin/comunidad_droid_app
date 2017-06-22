@@ -24,6 +24,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.typeComunidadData;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
+import static com.didekindroid.testutil.ActivityTestUtils.focusOnButton;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
@@ -83,8 +84,10 @@ public class ViewerRegComuUserComuAcTest {
         signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
 
         typeUserComuData("port2", "escale_b", "planta-N", "puerta5", PRE, INQ);
+        int buttonId = R.id.reg_comu_usuariocomunidad_button;
+        focusOnButton(activity, buttonId);
         typeComunidadData();
-        onView(withId(R.id.reg_comu_usuariocomunidad_button)).perform(scrollTo(), click());
+        onView(withId(buttonId)).perform(scrollTo(), click());
 
         waitAtMost(4, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
         cleanOptions(CLEAN_PEPE);

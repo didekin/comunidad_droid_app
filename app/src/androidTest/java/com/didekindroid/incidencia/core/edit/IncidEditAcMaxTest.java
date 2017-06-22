@@ -160,7 +160,7 @@ public class IncidEditAcMaxTest {
         // Caso OK. No cambiamos nada. Hacemos BACK.
         onView(withId(R.id.incid_edit_fr_modif_button)).perform(scrollTo(), click());
 
-        waitAtMost(2, SECONDS).until(isResourceIdDisplayed(R.id.incid_see_open_by_comu_ac));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(R.id.incid_see_open_by_comu_ac));
         checkBack(onView(withId(R.id.incid_see_open_by_comu_ac)));
         checkScreenEditMaxPowerFr(incidImportancia, flagResolucion);
     }

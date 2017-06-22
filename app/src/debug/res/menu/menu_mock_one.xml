@@ -2,17 +2,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto"
 >
+    <!--ViewerComuSearchResultAcTest-->
     <item
-            android:id="@+id/see_usercomu_by_user_ac_mn"
-            android:title="@string/see_usercomu_by_user_ac_mn"
-            android:orderInCategory="100"
-            android:visible="false"
-            android:enabled="false"
-            app:showAsAction="never|withText"/>
+        android:id="@+id/see_usercomu_by_user_ac_mn"
+        android:enabled="false"
+        android:orderInCategory="100"
+        android:title="@string/see_usercomu_by_user_ac_mn"
+        android:visible="false"
+        app:showAsAction="never|withText"/>
+    <!--ViewerUserComuDataAc_Mock_Test-->
     <item
-            android:id="@+id/reg_nueva_comunidad_ac_mn"
-            android:title="@string/reg_nueva_comunidad_ac_mn"
-            android:orderInCategory="100"
-            app:showAsAction="never|withText"/>
+        android:id="@+id/comu_data_ac_mn"
+        android:enabled="false"
+        android:orderInCategory="100"
+        android:title="@string/comu_data_ac_mn"
+        android:visible="false"
+        app:showAsAction="never|withText"/>
 </menu>
-    <!--Used in ViewerComuSearchResultAcTest-->
