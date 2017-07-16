@@ -28,13 +28,14 @@ adb uninstall com.didekindroid
 
 case "$SUITE" in
 
-    api) ./gradlew --info app:cAT \
+    api) ./gradlew app:test -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.AppUnitSuite
+        ./gradlew --info app:cAT \
         -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.api.ApiSuite
         ;;
     co) ./gradlew --info app:cAT \
         -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.comunidad.ComunidadSuite
         ;;
-    in) ./gradlew --info app:cAT \
+    in) ./gradlew app:cAT \
         -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.incidencia.IncidSuite
         ;;
     se) ./gradlew --info app:cAT \
@@ -46,7 +47,7 @@ case "$SUITE" in
     usco) ./gradlew --info app:cAT \
         -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.usuariocomunidad.UserComuSuite
         ;;
-    all) ./gradlew app:cAT -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.AppFullSuite,com.didekindroid.AppUnitSuite
+    all) ./gradlew app:cAT -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.AppFullSuite
         ;;
     *) echo "Invalid suite"
         ;;

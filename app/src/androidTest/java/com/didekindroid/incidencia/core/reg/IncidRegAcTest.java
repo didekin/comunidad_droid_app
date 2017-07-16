@@ -93,10 +93,11 @@ public class IncidRegAcTest {
     /*  ================================ INTEGRATION ===================================*/
 
     @Test
-    public void testRegisterIncidencia_1()
+    public void testRegisterIncidencia_1() throws InterruptedException
     {
         /* Caso NOT OK: descripción de incidencia no válida.*/
         doImportanciaSpinner(activity, 4);
+        SECONDS.sleep(1);
         doAmbitoAndDescripcion(ambitoObj, "descripcion = not valid");
         onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
 
@@ -104,10 +105,11 @@ public class IncidRegAcTest {
     }
 
     @Test
-    public void testRegisterIncidencia_2() throws UiException
+    public void testRegisterIncidencia_2() throws UiException, InterruptedException
     {
         // Caso OK: incidencia con datos de importancia.
         doImportanciaSpinner(activity, 4);
+        SECONDS.sleep(1);
         doAmbitoAndDescripcion(ambitoObj, "descripcion es valida");
 
         onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
@@ -127,12 +129,14 @@ public class IncidRegAcTest {
     }
 
     @Test
-    public void testRegisterIncidencia_4() throws UiException
+    public void testRegisterIncidencia_4() throws UiException, InterruptedException
     {
         // Probamos cambio de comunidad en spinner: Calle La Fuente.
         doComunidadSpinner(COMU_LA_FUENTE);
+        SECONDS.sleep(1);
         // Registro de incidencia con importancia.
         doImportanciaSpinner(activity, 4);
+        SECONDS.sleep(1);
         doAmbitoAndDescripcion(ambitoObj, "Incidencia La Fuente");
         onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
 

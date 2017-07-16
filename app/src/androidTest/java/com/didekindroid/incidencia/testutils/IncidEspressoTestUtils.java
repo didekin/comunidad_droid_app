@@ -60,7 +60,7 @@ public final class IncidEspressoTestUtils {
     {
         LayoutInflater inflater = (LayoutInflater) getTargetContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View frView = inflater.inflate(resourdeIdLayout, null);
-        EditText editText = (EditText) frView.findViewById(R.id.incid_reg_desc_ed);
+        EditText editText = frView.findViewById(R.id.incid_reg_desc_ed);
         editText.setText(description);
         return frView;
     }
