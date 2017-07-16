@@ -46,7 +46,7 @@ case "$SUITE" in
     usco) ./gradlew --info app:cAT \
         -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.usuariocomunidad.UserComuSuite
         ;;
-    all) ./gradlew app:cAT -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.AppFullSuite
+    all) ./gradlew app:cAT -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.AppFullSuite,com.didekindroid.AppUnitSuite
         ;;
     *) echo "Invalid suite"
         ;;
