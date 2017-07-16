@@ -86,6 +86,7 @@ dependencies {
     compile rootProject.ext.didekinlib_model
     compile rootProject.ext.didekinlib_http
     compile rootProject.ext.timber
+    compile rootProject.ext.retrofit2
     compile rootProject.ext.rxjava
     compile rootProject.ext.android_support
 

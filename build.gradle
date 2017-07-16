@@ -51,6 +51,10 @@ ext {
 
     firebase_message = ['com.google.firebase:firebase-messaging:11.0.0']
 
+    retrofit2 = ['com.squareup.retrofit2:retrofit:2.3.0',
+                 'com.squareup.retrofit2:converter-gson:2.3.0',
+                 'com.squareup.okhttp3:logging-interceptor:3.8.1']
+
     timber = 'com.jakewharton.timber:timber:4.5.1'
 
     rxjava = ['io.reactivex.rxjava2:rxjava:2.1.0',
