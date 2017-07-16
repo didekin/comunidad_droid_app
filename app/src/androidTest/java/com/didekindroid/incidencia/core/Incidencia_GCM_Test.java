@@ -78,7 +78,7 @@ public abstract class Incidencia_GCM_Test {
     {
         CtrlerFirebaseTokenIf controller = new CtrlerFirebaseToken();
         firebaseToken = FirebaseInstanceId.getInstance().getToken();
-        await().atMost(6, SECONDS).until(getGcmToken(), allOf(
+        await().atMost(8, SECONDS).until(getGcmToken(), allOf(
                 notNullValue(),
                 is(firebaseToken)
         ));
@@ -89,7 +89,7 @@ public abstract class Incidencia_GCM_Test {
     protected void checkNotification(int notificationId) throws InterruptedException
     {
         // Verifico recepción de notificación.
-        waitAtMost(8, SECONDS).until(notificationsSize(), is(1));
+        waitAtMost(10, SECONDS).until(notificationsSize(), is(1));
 
         StatusBarNotification barNotification = notificationManager.getActiveNotifications()[0];
         assertThat(barNotification.getId(), is(notificationId));
