@@ -32,7 +32,7 @@ case "$SUITE" in
         ./gradlew --info app:cAT \
         -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.api.ApiSuite
         ;;
-    co) ./gradlew --info app:cAT \
+    co) ./gradlew app:cAT \
         -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.comunidad.ComunidadSuite
         ;;
     in) ./gradlew app:cAT \
@@ -41,10 +41,10 @@ case "$SUITE" in
     se) ./gradlew --info app:cAT \
         -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.security.SecuritySuite
         ;;
-    us) ./gradlew --info app:cAT \
+    us) ./gradlew app:cAT \
         -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.usuario.UsuarioSuite
         ;;
-    usco) ./gradlew --info app:cAT \
+    usco) ./gradlew app:cAT \
         -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.usuariocomunidad.UserComuSuite
         ;;
     all) ./gradlew app:cAT -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.AppFullSuite
