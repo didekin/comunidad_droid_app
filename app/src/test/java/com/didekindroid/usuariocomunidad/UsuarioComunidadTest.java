@@ -82,7 +82,7 @@ public class UsuarioComunidadTest {
                 .portal("portalA")
                 .roles(INQUILINO.function)
                 .build();
-        assertThat(usuarioComunidad_1.hasAdministradorAuthority(), is(false));
+        assertThat(usuarioComunidad_1.hasAdministradorAuthority(), is(true));
 
         usuarioComunidad_1 = new UsuarioComunidad.UserComuBuilder(comunidad, usuario)
                 .portal("portal B")

@@ -28,7 +28,7 @@ adb uninstall com.didekindroid
 
 case "$SUITE" in
 
-    api) ./gradlew app:test -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.AppUnitSuite
+    api) ./gradlew app:test
         # ./gradlew --info app:cAT \
         # -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.api.ApiSuite
         ;;
