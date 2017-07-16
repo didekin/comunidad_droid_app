@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- ========= Preproducción ======== -->
-    <string name="didekinspring_host" translatable="false">https://didekinspring-web-pre.eu-central-1.elasticbeanstalk.com</string>
+    <string name="didekin_web_host" translatable="false">https://didekin-web-pre.eu-central-1.elasticbeanstalk.com</string>
 </resources>

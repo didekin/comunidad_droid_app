@@ -51,7 +51,7 @@ export -f setArgsCloseEnv
 function setArgsInitEnvironments() {
     checkEnvironmentArgs "$1"
     export GITREMOTE=didekindroid
-    export DIDEKINSPRING_HOME=/Users/pedro/Documents/git_projects/didekinspring/releases/local
+    export DIDEKIN_WEB_HOME=/Users/pedro/Documents/git_projects/didekin_web/releases/local
 }
 
 export -f setArgsInitEnvironments

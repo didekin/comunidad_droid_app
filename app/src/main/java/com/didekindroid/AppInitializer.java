@@ -52,7 +52,7 @@ public final class AppInitializer {
     {
         atomicRefRetrofit.compareAndSet(null,
                 new RetrofitHandler(
-                        mContext.getString(R.string.didekinspring_host) + mContext.getString(R.string.didekinspring_port),
+                        mContext.getString(R.string.didekin_web_host) + mContext.getString(R.string.didekin_web_port),
                         initJksInAndroidApp(),
                         parseInt(mContext.getString(R.string.timeOut))
                 ));

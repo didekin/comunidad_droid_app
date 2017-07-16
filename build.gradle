@@ -34,23 +34,23 @@ ext {
     minSdkVersion = 19
     targetSdkVersion = 25
     compileSdkVersion = 25
-    buildToolsVersion = '25.0.2'
+    buildToolsVersion = '26.0.0'
+
     sourceCompatibilityVersion = JavaVersion.VERSION_1_7
     targetCompatibilityVersion = JavaVersion.VERSION_1_7
-    testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
-    androidSupportVersion = '25.3.1'
-    espressoVersion = '2.2.2'
-    testRunnerRulesVersion = '0.5'
 
-    didekinlib_model = ':didekinlib_model-a-0.1.17:@jar'
-    didekinlib_http = ':didekinlib_http-a-0.1.17:@jar'
-    didekinlib_gcm = ':didekinlib_gcm-a-0.1.17:@jar'
+    testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
+    androidSupportVersion = '26.0.0-alpha1'
+    espressoVersion = '2.3-alpha'
+    testRunnerRulesVersion = '0.6-aplpha'
+    didekinlibsVersion = 'a-0.1.18'
+
+    didekinlib_model = ":didekinlib_model-$rootProject.ext.didekinlibsVersion:@jar"
+    didekinlib_http = ":didekinlib_http-$rootProject.ext.didekinlibsVersion:@jar"
+    didekinlib_gcm = ":didekinlib_gcm-$rootProject.ext.didekinlibsVersion:@jar"
 
     firebase_message = ['com.google.firebase:firebase-messaging:11.0.0']
 
-    retrofit2 = ['com.squareup.retrofit2:retrofit:2.3.0',
-                 'com.squareup.retrofit2:converter-gson:2.3.0',
-                 'com.squareup.okhttp3:logging-interceptor:3.8.0']
     timber = 'com.jakewharton.timber:timber:4.5.1'
 
     rxjava = ['io.reactivex.rxjava2:rxjava:2.1.0',
