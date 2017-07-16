@@ -51,7 +51,7 @@ case "$SUITE" in
     *) echo "Invalid suite"
         ;;
 esac
-echo "gradlew exit = $?"
+echo "======= gradlew exit = $? ========="
 
 # Branch is initialized in env_init.sh.
 echo "pushing code to $BRANCH"
