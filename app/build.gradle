@@ -45,7 +45,8 @@ android {
         }
         pre {
             initWith release
-            signingConfig signingConfigs.release
+//            signingConfig signingConfigs.release
+            debuggable true
         }
         local {
             applicationIdSuffix ""

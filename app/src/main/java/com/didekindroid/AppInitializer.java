@@ -45,7 +45,7 @@ public final class AppInitializer {
     }
 
     /**
-     * This method is called asynchronously from the (http) services classes, to avoid running it in the main thread,
+     * This method is called asynchronously from the observable classes, to avoid running it in the main thread,
      * since it reads from disk (raw resources).
      */
     public RetrofitHandler getRetrofitHandler()

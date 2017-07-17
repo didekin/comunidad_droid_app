@@ -20,6 +20,8 @@ gradle.properties
 # ENTORNOS y PRUEBAS
 # Certificate stores
 **/res/raw/*.bks
+# Parámetro PRO
+**/res/values/app_parameters.xml
 # Parámetros redundantes
 /**/res/values/geny*.xml
 /**/res/values/local*.xml

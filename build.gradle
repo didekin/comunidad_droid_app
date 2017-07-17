@@ -49,7 +49,7 @@ ext {
     didekinlib_http = ":didekinlib_http-$rootProject.ext.didekinlibsVersion:@jar"
     didekinlib_gcm = ":didekinlib_gcm-$rootProject.ext.didekinlibsVersion:@jar"
 
-    firebase_message = ['com.google.firebase:firebase-messaging:11.0.0']
+    firebase_message = ['com.google.firebase:firebase-messaging:11.0.2']
 
     retrofit2 = ['com.squareup.retrofit2:retrofit:2.3.0',
                  'com.squareup.retrofit2:converter-gson:2.3.0',
