@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network_security_config>
     <domain-config cleartextTrafficPermitted="false">
-        <domain includeSubdomains="false">didekinspring.pagekite.me</domain>
+        <domain includeSubdomains="false">@string/didekin_web_host</domain>
         <pin-set>
             <!-- pin: intermediate CA-->
             <pin digest="SHA-256">29f10781f45515ce2773561d237724c0fbe034b972175da2f2c37d48ed90192f</pin>
