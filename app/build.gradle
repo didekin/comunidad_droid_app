@@ -42,10 +42,14 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
+            resValue "string", "didekin_web_host", '"https://didekinspring.pagekite.me"'
+            resValue "string", "didekin_web_port", '":443"'
         }
         pre {
             initWith release
             signingConfig signingConfigs.release
+            resValue "string", "didekin_web_host", '"https://didekin-web-pre.eu-central-1.elasticbeanstalk.com"'
+            resValue "string", "didekin_web_port", '":443"'
         }
         local {
             applicationIdSuffix ""
@@ -53,11 +57,15 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
+            resValue "string", "didekin_web_host", '"https://didekinspring.pagekite.me"'
+            resValue "string", "didekin_web_port", '""'
         }
         debug {
             debuggable true
             versionNameSuffix ''
             applicationIdSuffix ""
+            resValue "string", "didekin_web_host", '"https://didekinspring.pagekite.me"'
+            resValue "string", "didekin_web_port", '""'
         }
     }
 
