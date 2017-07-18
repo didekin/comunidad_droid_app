@@ -24,7 +24,7 @@ case "$SUITE" in
 
     api)
 #    ./gradlew app:test
-        ./gradlew --info app:check \
+        ./gradlew --info app:cC \
         -Pandroid.testInstrumentationRunnerArguments.class=com.didekindroid.api.ApiSuite
         ;;
     co) ./gradlew app:cAT \
