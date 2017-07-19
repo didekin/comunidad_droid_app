@@ -64,8 +64,7 @@ android {
         debug {
             debuggable true
             versionNameSuffix ''
-            final String test_host = System.getenv('TEST_HOST')
-            resValue "string", "didekin_web_host", "${test_host}"
+            resValue "string", "didekin_web_host", "$System.env.TEST_HOST"
             resValue "string", "didekin_web_port", "$System.env.TEST_PORT"
         }
     }
