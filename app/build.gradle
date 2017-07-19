@@ -9,7 +9,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 5
-        versionName "a-0.4.11"
+        versionName "a-0.4.12"
         testInstrumentationRunner rootProject.ext.testInstrumentationRunner
         resConfigs "es" /* Añadir nuevos idiomas según hagan falta.*/
     }
@@ -64,12 +64,15 @@ android {
         debug {
             debuggable true
             versionNameSuffix ''
-            // Variables for android_studio default local run-debug configuration.
+            // Variables for android_studio default LOCAL run-debug configuration.
             //noinspection GrEqualsBetweenInconvertibleTypes
             if ("$System.env.TEST_HOST" == "null" || "$System.env.TEST_PORT" == "null"){
-                resValue "string", "didekin_web_host", '"https://didekinspring.pagekite.me"'
-                resValue "string", "didekin_web_port", '""'
-            } else { // Variables defined in buildtest.sh for local and awspre environments.
+//                resValue "string", "didekin_web_host", '"https://didekinspring.pagekite.me"'
+//                resValue "string", "didekin_web_port", '""'
+                resValue "string", "didekin_web_host", '"https://didekin-web-pre.eu-central-1.elasticbeanstalk.com"'
+                resValue "string", "didekin_web_port", '":443"'
+            } else {
+                // Variables defined in buildtest.sh for local and awspre environments.
                 resValue "string", "didekin_web_host", "$System.env.TEST_HOST"
                 resValue "string", "didekin_web_port", "$System.env.TEST_PORT"
             }
