@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <!-- Http client timeOut-->
-    <string name="timeOut" translatable="false">60</string>
-    <string name="didekin_web_port" translatable="false">:8080</string>
-    <!--Google emulator localhost address-->
-    <string name="didekin_web_host" translatable="false">http://10.0.2.2</string>
-</resources>
-<!--NOT USED-->

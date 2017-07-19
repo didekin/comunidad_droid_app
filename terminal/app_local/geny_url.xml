@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="didekin_web_port" translatable="false">:8080</string>
-    <!-- Http client timeOut-->
-    <string name="timeOut" translatable="false">60</string>
-    <!--Genymotion emulator localhost address-->
-    <string name="didekin_web_host" translatable="false">http://192.168.57.1</string>
-</resources>
-<!--NOT USED-->
