@@ -3,6 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
+
     defaultConfig {
         applicationId "com.didekindroid"
         minSdkVersion rootProject.ext.minSdkVersion
@@ -63,9 +64,9 @@ android {
         debug {
             debuggable true
             versionNameSuffix ''
-            applicationIdSuffix ""
-            resValue "string", "didekin_web_host", '"https://didekinspring.pagekite.me"'
-            resValue "string", "didekin_web_port", '""'
+            final String test_host = System.getenv('TEST_HOST')
+            resValue "string", "didekin_web_host", "${test_host}"
+            resValue "string", "didekin_web_port", "$System.env.TEST_PORT"
         }
     }
 
@@ -94,7 +95,7 @@ dependencies {
     compile rootProject.ext.didekinlib_model
     compile rootProject.ext.didekinlib_http
     compile rootProject.ext.timber
-    compile rootProject.ext.retrofit2
+    apk rootProject.ext.retrofit2
     compile rootProject.ext.rxjava
     compile rootProject.ext.android_support
 

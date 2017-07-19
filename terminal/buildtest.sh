@@ -17,6 +17,7 @@ if [ ${ENV} == "local" ] ; then
     git commit -m "version $VERSION"
 fi
 
+echo "TEST_HOST:$TEST_HOST ======="
 echo "Uninstalling com.didekindroid ..."
 adb uninstall com.didekindroid
 

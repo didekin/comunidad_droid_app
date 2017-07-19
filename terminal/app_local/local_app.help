@@ -30,9 +30,12 @@ CERTIFICADOS
 
     -- Copiar keyStore en debug resources.
        $ cp didekindroid_dev_bks /Users/pedro/Documents/git_projects/didekindroid/app/src/debug/res/raw
-
-    -- Actualizar valores en /Users/pedro/Documents/git_projects/didekindroid/app/src/debug/res/values/local_app_parameters.xml:
 }
+
+REMOTE SERVICES
+===============
+
+-- Actualizar valores en terminal/app_pre/buildtest.sh (HOST & PORT)
 
 
 NETWORK_SECURITY_CONFIG
