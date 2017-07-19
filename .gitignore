@@ -27,11 +27,7 @@ gradle.properties
 /**/res/values/local*.xml
 /**/res/values/physical*.xml
 # Configuración de entornos
-terminal/app_pro
-terminal/app_pre
-!terminal/app_pre/*.xml
-terminal/env_init.sh
-terminal/env_close.sh
+terminal/*
 
 # Releases
 /**/releases
