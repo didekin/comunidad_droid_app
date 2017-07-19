@@ -64,9 +64,15 @@ android {
         debug {
             debuggable true
             versionNameSuffix ''
-            // Variables defined in buildtest.sh
-            resValue "string", "didekin_web_host", "$System.env.TEST_HOST"
-            resValue "string", "didekin_web_port", "$System.env.TEST_PORT"
+            // Variables for android_studio default local run-debug configuration.
+            //noinspection GrEqualsBetweenInconvertibleTypes
+            if ("$System.env.TEST_HOST" == "null" || "$System.env.TEST_PORT" == "null"){
+                resValue "string", "didekin_web_host", '"https://didekinspring.pagekite.me"'
+                resValue "string", "didekin_web_port", '""'
+            } else { // Variables defined in buildtest.sh
+                resValue "string", "didekin_web_host", "$System.env.TEST_HOST"
+                resValue "string", "didekin_web_port", "$System.env.TEST_PORT"
+            }
         }
     }
 

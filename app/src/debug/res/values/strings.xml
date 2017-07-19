@@ -9,7 +9,4 @@
     <string name="comAutonoma_spinner_default">comunidad autónoma</string>
     <string name="provincia_spinner_default">provincia</string>
     <string name="municipio_spinner_default">municipio</string>
-    <!-- To be used services in localhost -->
-    <!--<string name="didekin_web_host" translatable="false">https://didekinspring.pagekite.me</string>-->
-    <!--<string name="didekin_web_port" translatable="false">:</string>-->
 </resources>
