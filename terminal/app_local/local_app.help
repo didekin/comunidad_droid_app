@@ -35,7 +35,7 @@ CERTIFICADOS
 REMOTE SERVICES
 ===============
 
--- Actualizar valores en terminal/app_pre/buildtest.sh (HOST & PORT)
+-- Actualizar valores en terminal/app_pre/buildtest.sh (HOST & PORT)  and app:build.gradle
 
 
 NETWORK_SECURITY_CONFIG
