@@ -69,7 +69,7 @@ android {
             if ("$System.env.TEST_HOST" == "null" || "$System.env.TEST_PORT" == "null"){
                 resValue "string", "didekin_web_host", '"https://didekinspring.pagekite.me"'
                 resValue "string", "didekin_web_port", '""'
-            } else { // Variables defined in buildtest.sh
+            } else { // Variables defined in buildtest.sh for local and awspre environments.
                 resValue "string", "didekin_web_host", "$System.env.TEST_HOST"
                 resValue "string", "didekin_web_port", "$System.env.TEST_PORT"
             }
