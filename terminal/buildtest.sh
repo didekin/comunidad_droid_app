@@ -15,9 +15,17 @@ if [ ${ENV} == "local" ] ; then
     echo "Git: add to localdev branch"
     git add .
     git commit -m "version $VERSION"
+    export TEST_HOST="https://didekinspring.pagekite.me"
+    export TEST_PORT=""
+fi
+
+if [ ${ENV} = "awspre" ] ; then
+    export TEST_HOST="https://didekin-web-pre.eu-central-1.elasticbeanstalk.com"
+    export TEST_PORT=":443"
 fi
 
 echo "TEST_HOST:$TEST_HOST ======="
+
 echo "Uninstalling com.didekindroid ..."
 adb uninstall com.didekindroid
 

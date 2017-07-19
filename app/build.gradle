@@ -64,6 +64,7 @@ android {
         debug {
             debuggable true
             versionNameSuffix ''
+            // Variables defined in buildtest.sh or in the run/debug configuration of android_studio.
             resValue "string", "didekin_web_host", "$System.env.TEST_HOST"
             resValue "string", "didekin_web_port", "$System.env.TEST_PORT"
         }
