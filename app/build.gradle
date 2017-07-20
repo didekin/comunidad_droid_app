@@ -67,6 +67,7 @@ android {
             // Variables for android_studio default LOCAL run-debug configuration.
             //noinspection GrEqualsBetweenInconvertibleTypes
             if ("$System.env.TEST_HOST" == "null" || "$System.env.TEST_PORT" == "null"){
+            // LOCAL url's
 //                resValue "string", "didekin_web_host", '"https://didekinspring.pagekite.me"'
 //                resValue "string", "didekin_web_port", '""'
                 resValue "string", "didekin_web_host", '"https://didekin-web-pre.eu-central-1.elasticbeanstalk.com"'
