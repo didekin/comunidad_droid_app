@@ -26,10 +26,10 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doIncidencia;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
+import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
@@ -42,6 +42,8 @@ import static com.didekinlib.model.incidencia.dominio.IncidenciaExceptionMsg.INC
 import static com.didekinlib.model.incidencia.dominio.IncidenciaExceptionMsg.RESOLUCION_DUPLICATE;
 import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_DATA_NOT_MODIFIED;
 import static com.didekinlib.model.usuariocomunidad.UsuarioComunidadExceptionMsg.ROLES_NOT_FOUND;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -127,7 +129,7 @@ public class UiExceptionTest {
             }
         });
 
-        checkToastInTest(R.string.exception_generic_app_message, mActivity);
+        waitAtMost(5, SECONDS).until(isToastInView(R.string.exception_generic_app_message, mActivity));
         onView(withId(R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));
     }
 
@@ -144,7 +146,7 @@ public class UiExceptionTest {
             }
         });
 
-        checkToastInTest(R.string.user_without_signedUp, mActivity);
+        waitAtMost(5, SECONDS).until(isToastInView(R.string.user_without_signedUp, mActivity));
         onView(withId(R.id.login_ac_layout)).check(matches(isDisplayed()));
     }
 
@@ -164,7 +166,7 @@ public class UiExceptionTest {
             }
         });
 
-        checkToastInTest(R.string.user_data_not_modified_msg, mActivity);
+        waitAtMost(5, SECONDS).until(isToastInView(R.string.user_data_not_modified_msg, mActivity));
         onView(withId(R.id.user_data_ac_layout)).check(matches(isDisplayed()));
     }
 
@@ -181,7 +183,7 @@ public class UiExceptionTest {
                 ue.processMe(mActivity, new Intent());
             }
         });
-        checkToastInTest(R.string.comunidad_not_found_message, mActivity);
+        waitAtMost(5, SECONDS).until(isToastInView(R.string.comunidad_not_found_message, mActivity));
         onView(withId(R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));
     }
 
@@ -201,7 +203,7 @@ public class UiExceptionTest {
             }
         });
 
-        checkToastInTest(R.string.incidencia_not_registered, mActivity);
+        waitAtMost(5, SECONDS).until(isToastInView(R.string.incidencia_not_registered, mActivity));
         onView(withId(R.id.incid_reg_ac_layout)).check(matches(isDisplayed()));
     }
 
@@ -218,7 +220,7 @@ public class UiExceptionTest {
             }
         });
 
-        checkToastInTest(R.string.user_without_powers, mActivity);
+        waitAtMost(5, SECONDS).until(isToastInView(R.string.user_without_powers, mActivity));
         onView(withId(R.id.login_ac_layout)).check(matches(isDisplayed()));
     }
 
@@ -238,7 +240,7 @@ public class UiExceptionTest {
             }
         });
 
-        checkToastInTest(R.string.incidencia_wrong_init, mActivity);
+        waitAtMost(5, SECONDS).until(isToastInView(R.string.incidencia_wrong_init, mActivity));
         onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed()));
     }
 
@@ -258,7 +260,7 @@ public class UiExceptionTest {
                 ue.processMe(mActivity, intentIn);
             }
         });
-        checkToastInTest(R.string.resolucion_duplicada, mActivity);
+        waitAtMost(5, SECONDS).until(isToastInView(R.string.resolucion_duplicada, mActivity));
         onView(withId(R.id.incid_edit_fragment_container_ac)).check(matches(isDisplayed()));
     }
 
