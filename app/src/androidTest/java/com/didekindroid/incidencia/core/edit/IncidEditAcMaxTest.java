@@ -184,7 +184,7 @@ public class IncidEditAcMaxTest {
         onView(withId(R.id.incid_edit_fr_borrar_button)).perform(scrollTo(), click());
 
         // BACK y verificamos que hemos vuelto.
-        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(R.id.incid_see_open_by_comu_ac));
+        waitAtMost(5, SECONDS).until(isResourceIdDisplayed(R.id.incid_see_open_by_comu_ac));
         checkBack(onView(withId(R.id.incid_see_open_by_comu_ac)));
 
         checkScreenEditMaxPowerFr(incidImportancia, flagResolucion);
@@ -192,7 +192,7 @@ public class IncidEditAcMaxTest {
 
         // Intentamos borrar y verificamos error.
         onView(withId(R.id.incid_edit_fr_borrar_button)).check(matches(isDisplayed())).perform(click());
-        waitAtMost(4, SECONDS).until(isToastInView(R.string.incidencia_wrong_init, activity));
+        waitAtMost(5, SECONDS).until(isToastInView(R.string.incidencia_wrong_init, activity));
     }
 
     //  ======================================== UNIT TESTS  =======================================
