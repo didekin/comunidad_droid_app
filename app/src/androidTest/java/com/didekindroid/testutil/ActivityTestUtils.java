@@ -118,7 +118,7 @@ public final class ActivityTestUtils {
             public Boolean call() throws Exception
             {
                 try {
-                    for (int resourceId : resourceStringIds){
+                    for (int resourceId : resourceStringIds) {
                         onView(withId(resourceId)).check(matches(isDisplayed()));
                     }
                     return true;
@@ -135,7 +135,7 @@ public final class ActivityTestUtils {
             public Boolean call() throws Exception
             {
                 try {
-                    for (int resourceId : resourceStringIds){
+                    for (int resourceId : resourceStringIds) {
                         onView(withId(resourceId)).check(doesNotExist());
                     }
                     return true;
@@ -198,7 +198,7 @@ public final class ActivityTestUtils {
 
     public static int focusOnButton(Activity activity, int buttonRsId)
     {
-        final Button button = (Button) activity.findViewById(buttonRsId);
+        final Button button = activity.findViewById(buttonRsId);
 
         activity.runOnUiThread(new Runnable() {
             @Override
@@ -370,10 +370,10 @@ public final class ActivityTestUtils {
             onView(withText(menuResourceId)).check(doesNotExist());
             openActionBarOverflowOrOptionsMenu(activity);
             Thread.sleep(1000);
-        } catch (Throwable e) {}
-        finally {
+        } catch (Throwable e) {
+        } finally {
             onView(withText(menuResourceId)).check(matches(isDisplayed())).perform(click());
-            waitAtMost(4,SECONDS).until(isResourceIdDisplayed(actionResourceId));
+            waitAtMost(4, SECONDS).until(isResourceIdDisplayed(actionResourceId));
         }
     }
 
