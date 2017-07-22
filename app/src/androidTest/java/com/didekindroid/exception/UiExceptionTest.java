@@ -6,7 +6,6 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ActivityMock;
-import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekinlib.http.ErrorBean;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
@@ -30,6 +29,7 @@ import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doInciden
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
@@ -105,7 +105,7 @@ public class UiExceptionTest {
     @After
     public void tearDown() throws Exception
     {
-        cleanOptions(UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN);
+        cleanOptions(CLEAN_JUAN);
     }
 
     //  ===========================================================================
