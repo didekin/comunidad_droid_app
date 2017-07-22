@@ -43,7 +43,7 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
-            resValue "string", "didekin_web_host", '"https://didekinspring.pagekite.me"'
+            resValue "string", "didekin_web_host", '"https://didekin-web-pro.eu-central-1.elasticbeanstalk.com"'
             resValue "string", "didekin_web_port", '":443"'
         }
         pre {
@@ -64,7 +64,7 @@ android {
         debug {
             debuggable true
             versionNameSuffix ''
-            // Variables for android_studio default LOCAL run-debug configuration.
+            // Variables for android_studio default run-debug configuration.
             //noinspection GrEqualsBetweenInconvertibleTypes
             if ("$System.env.TEST_HOST" == "null" || "$System.env.TEST_PORT" == "null"){
             // LOCAL url's
