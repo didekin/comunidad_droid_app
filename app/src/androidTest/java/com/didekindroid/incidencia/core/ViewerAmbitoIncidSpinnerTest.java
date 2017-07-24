@@ -7,7 +7,7 @@ import android.widget.Spinner;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ActivityMock;
-import com.didekindroid.api.SpinnerMockFr;
+import com.didekindroid.api.SpinnerTextMockFr;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
@@ -62,7 +62,7 @@ public class ViewerAmbitoIncidSpinnerTest {
             public void run()
             {
                 activity.getSupportFragmentManager().beginTransaction()
-                        .add(R.id.mock_ac_layout, new SpinnerMockFr(), null)
+                        .add(R.id.mock_ac_layout, new SpinnerTextMockFr(), null)
                         .commitNow();
                 spinner = (Spinner) activity.findViewById(R.id.ambito_spinner);
                 atomicViewer.compareAndSet(null, newViewerAmbitoIncidSpinner(spinner, activity, null));

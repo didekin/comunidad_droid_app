@@ -18,12 +18,13 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
-import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.observers.DisposableMaybeObserver;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtraWithKey;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
@@ -36,11 +37,12 @@ import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
-import static io.reactivex.Single.just;
+import static io.reactivex.Maybe.just;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
@@ -86,8 +88,6 @@ public class ViewerIncidEditAcTest {
         atomicController.compareAndSet(null, activity.viewer.getController());
         waitAtMost(4, SECONDS).untilAtomic(atomicController, notNullValue());
         viewer = activity.viewer;
-
-//        viewer = newViewerIncidEditAc(activity, activity.getSupportFragmentManager().findFragmentByTag(incid_edit_ac_frgs_tag).getView());
     }
 
     @After
@@ -104,7 +104,7 @@ public class ViewerIncidEditAcTest {
     {
         CtrlerIncidEditAc controllerLocal = new CtrlerIncidEditAc() {
             @Override
-            boolean seeResolucion(DisposableSingleObserver<Resolucion> observer, long incidenciaId, int resourceIdItemMn)
+            boolean seeResolucion(DisposableMaybeObserver<Resolucion> observer, long incidenciaId, int resourceIdItemMn)
             {
                 assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
                 return false;
@@ -120,7 +120,7 @@ public class ViewerIncidEditAcTest {
     }
 
     @Test
-    public void testOnSuccessSeeResolucion() throws Exception
+    public void test_OnSuccessSeeResolucion() throws Exception
     {
         // Preconditions.
         assertThat(viewer.incidImportancia, notNullValue());
@@ -131,6 +131,20 @@ public class ViewerIncidEditAcTest {
         intended(allOf(
                 hasExtra(INCID_IMPORTANCIA_OBJECT.key, viewer.incidImportancia),
                 hasExtra(INCID_RESOLUCION_OBJECT.key, resolucion)
+        ));
+    }
+
+    @Test
+    public void test_OnCompleteSeeResolucion() throws Exception
+    {
+        // Preconditions.
+        assertThat(viewer.incidImportancia, notNullValue());
+
+        viewer.onCompleteSeeResolucion(R.id.incid_resolucion_reg_ac_mn);
+        onView(withId(R.id.incid_resolucion_fragment_container_ac)).check(matches(isDisplayed()));
+        intended(allOf(
+                hasExtra(INCID_IMPORTANCIA_OBJECT.key, viewer.incidImportancia),
+                not(hasExtraWithKey(INCID_RESOLUCION_OBJECT.key))
         ));
     }
 

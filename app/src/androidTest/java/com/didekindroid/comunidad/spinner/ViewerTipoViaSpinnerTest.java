@@ -7,7 +7,7 @@ import android.widget.Spinner;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ActivityMock;
-import com.didekindroid.api.SpinnerMockFr;
+import com.didekindroid.api.SpinnerTextMockFr;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -64,7 +64,7 @@ public class ViewerTipoViaSpinnerTest {
             public void run()
             {
                 activity.getSupportFragmentManager().beginTransaction()
-                        .add(R.id.mock_ac_layout, new SpinnerMockFr(), null)
+                        .add(R.id.mock_ac_layout, new SpinnerTextMockFr(), null)
                         .commitNow();
                 spinner = (Spinner) activity.findViewById(R.id.tipo_via_spinner);
                 atomicViewer.compareAndSet(null, newViewerTipoViaSpinner(spinner, activity, null));

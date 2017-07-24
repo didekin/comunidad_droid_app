@@ -42,7 +42,7 @@
     <!-- ============================== MENUS ================================= -->
     <string name="incid_closed_see_by_usercomu_ac_mn">Incidencias cerradas</string>
     <string name="incid_comment_reg_ac_mn">Comentar</string>
-    <string name="incid_comments_see_ac_mn">Ver comentarios</string>
+    <string name="incid_comments_see_ac_mn">Comentarios</string>
     <string name="incid_reg_ac_mn">Nueva incidencia</string>
     <string name="incid_see_by_comu_ac_mn">Incidencias abiertas</string>
     <string name="incid_resolucion_ac_mn">Resolución</string>

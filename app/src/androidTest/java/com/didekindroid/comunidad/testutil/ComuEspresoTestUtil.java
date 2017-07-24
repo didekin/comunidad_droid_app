@@ -1,5 +1,8 @@
 package com.didekindroid.comunidad.testutil;
 
+import android.view.View;
+import android.widget.EditText;
+
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComunidadBean;
 import com.didekindroid.comunidad.ViewerRegComuFr;
@@ -81,6 +84,8 @@ public final class ComuEspresoTestUtil {
         doMunicipioSpinner(municipio);
     }
 
+    // ======================================  VALIDATING TYPED DATA  =========================================
+
     public static void validaTypedComunidadBean(final ComunidadBean comunidadBean, String tipoVia, short municipioProvId,
                                                 short municipioCodProv, String nombreVia, String numeroEnVia, String sufijoNumero)
     {
@@ -113,7 +118,7 @@ public final class ComuEspresoTestUtil {
         assertThat(comunidad.getMunicipio(), is(municipio));
     }
 
-    // ======================================  CHECKING  =========================================
+    // ======================================  CHECKING IN VIEW =========================================
 
     public static void checkRegComuFrViewEmpty()
     {
@@ -180,7 +185,8 @@ public final class ComuEspresoTestUtil {
         ));
     }
 
-    public static void checkComuData(Comunidad comunidad){
+    public static void checkComuData(Comunidad comunidad)
+    {
         onView(allOf(
                 withId(R.id.nombreComunidad_view),
                 withText(comunidad.getNombreComunidad()),
@@ -190,19 +196,29 @@ public final class ComuEspresoTestUtil {
                                 withText(comunidad.getMunicipio().getNombre())
                         )),
                         withChild(allOf(
-                            withId(R.id.provincia_view),
+                                withId(R.id.provincia_view),
                                 withText(comunidad.getMunicipio().getProvincia().getNombre())
                         ))
                 ))
         ));
     }
 
-    // ======================================  SPINNER  =========================================
+    // ======================================  TEXTS OFF ViEW  =========================================
+
+    public static void checkComunidadTextsOffView(ViewerRegComuFr viewer, Comunidad comunidad)
+    {
+        View viewFr = viewer.getViewInViewer();
+        assertThat(((EditText) viewFr.findViewById(R.id.comunidad_nombre_via_editT)).getText().toString(), is(comunidad.getNombreVia()));
+        assertThat(((EditText) viewFr.findViewById(R.id.comunidad_numero_editT)).getText().toString(), is(String.valueOf(comunidad.getNumero())));
+        assertThat(((EditText) viewFr.findViewById(R.id.comunidad_sufijo_numero_editT)).getText().toString(), is(comunidad.getSufijoNumero()));
+    }
+
+    // ======================================  SPINNERS OFF ViEW  =========================================
 
     /**
      * Utility for checking ViewerRegComuFr.initializeSpinnersFromComunidad method when viewBean != null.
      */
-    public static void checkSpinnersOff(ViewerRegComuFr viewer, Comunidad comunidad)
+    public static void checkSpinnersOffView(ViewerRegComuFr viewer, Comunidad comunidad)
     {
         assertThat(viewer.getTipoViaSpinner().getTipoViaValueObj().getTipoViaDesc(), is(comunidad.getTipoVia()));
         assertThat(viewer.getComuAutonomaSpinner().getSpinnerEvent().getComunidadAutonoma(), is(comunidad.getMunicipio().getProvincia().getComunidadAutonoma()));
@@ -213,7 +229,7 @@ public final class ComuEspresoTestUtil {
     /**
      * Utility for checking ViewerRegComuFr.initializeSpinnersFromComunidad method when viewBean == null.
      */
-    public static void checkSpinnersOffNull(ViewerRegComuFr viewer)
+    public static void checkSpinnersOffViewNull(ViewerRegComuFr viewer)
     {
         assertThat(viewer.getTipoViaSpinner().getTipoViaValueObj(), nullValue());
         checkSubsetSpinnersOff(viewer);
@@ -236,7 +252,7 @@ public final class ComuEspresoTestUtil {
         assertThat(viewer.getMunicipioSpinner().getSpinnerEvent().getMunicipio().getCodInProvincia(), is((short) 0));
     }
 
-    // ................................................................................................
+    // ======================================  SPINNERS ON ViEW  =========================================
 
     public static void doTipoViaSpinner(TipoViaValueObj tipoVia)
     {

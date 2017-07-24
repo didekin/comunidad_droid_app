@@ -4,7 +4,7 @@ import com.didekindroid.api.Controller;
 import com.didekindroid.incidencia.IncidObservable;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 
-import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.observers.DisposableMaybeObserver;
 import timber.log.Timber;
 
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
@@ -21,7 +21,7 @@ class CtrlerIncidEditAc extends Controller {
 
     // .................................... INSTANCE METHODS .................................
 
-    boolean seeResolucion(DisposableSingleObserver<Resolucion> observer, final long incidenciaId, final int resourceIdItemMn)
+    boolean seeResolucion(DisposableMaybeObserver<Resolucion> observer, final long incidenciaId, final int resourceIdItemMn)
     {
         Timber.d("checkResolucion()");
         return subscriptions.add(

@@ -130,13 +130,15 @@ public class ViewerUserDataTest {
         typeUserData("newuser@user.com", USER_JUAN.getAlias(), USER_JUAN.getPassword());
 
         runCheckUserData(true);
-        assertThat(activity.viewer.usuarioBean.get().getUserName(), is("newuser@user.com"));
-        assertThat(activity.viewer.usuarioBean.get().getAlias(), is(USER_JUAN.getAlias()));
-        assertThat(activity.viewer.usuarioBean.get().getPassword(), is(USER_JUAN.getPassword()));
+        Usuario usuario = activity.viewer.usuarioBean.get().getUsuario();
+
+        assertThat(usuario.getUserName(), is("newuser@user.com"));
+        assertThat(usuario.getAlias(), is(USER_JUAN.getAlias()));
+        assertThat(usuario.getPassword(), is(USER_JUAN.getPassword()));
     }
 
     @Test
-    public void testCheckUserData_2() throws InterruptedException
+    public void testCheckUserData_3() throws InterruptedException
     {
         typeUserData("wrong_newuser.com", USER_JUAN.getAlias(), USER_JUAN.getPassword());
         runCheckUserData(false);

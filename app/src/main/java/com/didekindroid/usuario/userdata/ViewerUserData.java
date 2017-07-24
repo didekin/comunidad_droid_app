@@ -52,9 +52,9 @@ final class ViewerUserData extends Viewer<View, CtrlerUserDataIf> implements Vie
     private ViewerUserData(View view, AppCompatActivity activity)
     {
         super(view, activity, null);
-        emailView = (EditText) view.findViewById(R.id.reg_usuario_email_editT);
-        aliasView = (EditText) view.findViewById(R.id.reg_usuario_alias_ediT);
-        passwordView = (EditText) view.findViewById(R.id.user_data_ac_password_ediT);
+        emailView = view.findViewById(R.id.reg_usuario_email_editT);
+        aliasView = view.findViewById(R.id.reg_usuario_alias_ediT);
+        passwordView = view.findViewById(R.id.user_data_ac_password_ediT);
         oldUser = new AtomicReference<>(null);
         newUser = new AtomicReference<>(null);
         usuarioBean = new AtomicReference<>(null);
@@ -91,7 +91,7 @@ final class ViewerUserData extends Viewer<View, CtrlerUserDataIf> implements Vie
 
         oldUser.set(usuario);
 
-        Button modifyButton = (Button) view.findViewById(R.id.user_data_modif_button);
+        Button modifyButton = view.findViewById(R.id.user_data_modif_button);
         modifyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
@@ -128,7 +128,7 @@ final class ViewerUserData extends Viewer<View, CtrlerUserDataIf> implements Vie
         Timber.d("alias: %s", usuarioBean.get().getAlias());
 
         StringBuilder errorBuilder = getErrorMsgBuilder(activity);
-        if (!usuarioBean.get().validateLoginData(activity.getResources(), errorBuilder)) {
+        if (!usuarioBean.get().validateWithOnePassword(activity.getResources(), errorBuilder)) {
             Timber.d("checkUserData(): %s", errorBuilder.toString());
             makeToast(activity, errorBuilder.toString());
             return false;

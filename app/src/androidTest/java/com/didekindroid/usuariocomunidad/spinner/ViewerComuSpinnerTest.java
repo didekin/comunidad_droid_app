@@ -13,7 +13,7 @@ import com.didekindroid.api.ActivityMock;
 import com.didekindroid.api.CtrlerSelectListIf;
 import com.didekindroid.api.SpinnerEventItemSelectIf;
 import com.didekindroid.api.SpinnerEventListener;
-import com.didekindroid.api.SpinnerMockFr;
+import com.didekindroid.api.SpinnerTextMockFr;
 import com.didekindroid.api.ViewerMock;
 import com.didekindroid.exception.UiException;
 import com.didekinlib.model.comunidad.Comunidad;
@@ -93,7 +93,7 @@ public class ViewerComuSpinnerTest {
             public void run()
             {
                 activity.getSupportFragmentManager().beginTransaction()
-                        .add(R.id.mock_ac_layout, new SpinnerMockFr(), null)
+                        .add(R.id.mock_ac_layout, new SpinnerTextMockFr(), null)
                         .commitNow();
                 spinner = (Spinner) activity.findViewById(R.id.comunidad_spinner);
                 atomicViewer.compareAndSet(null, newViewerComuSpinner(spinner, activity, new ViewerForTest(activity)));

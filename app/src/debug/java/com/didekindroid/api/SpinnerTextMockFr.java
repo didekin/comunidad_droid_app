@@ -16,7 +16,7 @@ import timber.log.Timber;
  * Time: 10:47
  */
 
-public class SpinnerMockFr extends Fragment {
+public class SpinnerTextMockFr extends Fragment {
 
     View rootFrgView;
 
@@ -25,7 +25,7 @@ public class SpinnerMockFr extends Fragment {
                              Bundle savedState)
     {
         Timber.d("onCreateView()");
-        rootFrgView = inflater.inflate(R.layout.mock_spinners_fr, container, false);
+        rootFrgView = inflater.inflate(R.layout.mock_spinners_texts_fr, container, false);
         return rootFrgView;
     }
 }

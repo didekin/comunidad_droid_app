@@ -14,6 +14,7 @@ import com.didekindroid.router.ActivityRouter;
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
+import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
@@ -76,7 +77,7 @@ public class DeleteMeAc extends AppCompatActivity {
     public void replaceComponent(Bundle bundle)
     {
         Timber.d("initAcWithBundle()");
-        new ActivityInitiator(this).initAcWithFlag(bundle, FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TOP);
+        new ActivityInitiator(this).initAcWithFlag(bundle, FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TASK);
     }
 
     // ============================================================

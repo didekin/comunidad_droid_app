@@ -102,6 +102,8 @@ public class ViewerRegComuFr extends Viewer<View, CtrlerComunidad> implements
             if (comunidad.getC_Id() > 0L) {
                 controller.loadComunidadData(new RegComuFrObserver(savedState), comunidad.getC_Id());
                 return;
+            } else {
+                setTextFields(comunidad);
             }
         }
         initializeSpinnersFromComunidad(comunidad, savedState);
@@ -165,11 +167,15 @@ public class ViewerRegComuFr extends Viewer<View, CtrlerComunidad> implements
     {
         Timber.d("onSuccessLoadComunidad()");
 
+        setTextFields(comunidad);
+        initializeSpinnersFromComunidad(comunidad, savedState);
+    }
+
+    private void setTextFields(Comunidad comunidad)
+    {
         ((EditText) view.findViewById(R.id.comunidad_nombre_via_editT)).setText(comunidad.getNombreVia());
         ((EditText) view.findViewById(R.id.comunidad_numero_editT)).setText(String.valueOf(comunidad.getNumero()));
         ((EditText) view.findViewById(R.id.comunidad_sufijo_numero_editT)).setText(comunidad.getSufijoNumero());
-
-        initializeSpinnersFromComunidad(comunidad, savedState);
     }
 
     void initializeSpinnersFromComunidad(Comunidad comunidad, Bundle savedState)

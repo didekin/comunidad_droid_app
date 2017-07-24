@@ -76,7 +76,7 @@ public class IncidResolucionRegEditSeeAc extends AppCompatActivity{
             } else {
                 fragmentToAdd = new IncidResolucionRegFr();
             }
-        } else { // User without authority 'adm'
+        } else { // User WITHOUT authority 'adm'
             if (mResolucion != null) {
                 fragmentToAdd = new IncidResolucionSeeFr();
             } else {

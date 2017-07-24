@@ -5,6 +5,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.exception.UiException;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
+import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
@@ -16,8 +17,8 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 
 import static com.didekindroid.incidencia.IncidObservable.incidImportanciaModified;
-import static com.didekindroid.incidencia.IncidObservable.incidenciaDeleted;
 import static com.didekindroid.incidencia.IncidObservable.incidImportanciaRegistered;
+import static com.didekindroid.incidencia.IncidObservable.incidenciaDeleted;
 import static com.didekindroid.incidencia.IncidObservable.resolucion;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doIncidencia;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetDefaultResolucion;
@@ -86,6 +87,13 @@ public class IncidObservableTest {
     {
         Resolucion resolucion = insertGetDefaultResolucion(pepeUserComu);
         resolucion(resolucion.getIncidencia().getIncidenciaId()).test().assertResult(resolucion);
+    }
+
+    @Test
+    public void testSeeResolucion_NULL() throws Exception
+    {
+        IncidenciaUser incidenciaUser = insertGetIncidenciaUser(pepeUserComu, 3);
+        resolucion(incidenciaUser.getIncidencia().getIncidenciaId()).test().assertComplete();
     }
 
     // =================================== HELPERS ====================================

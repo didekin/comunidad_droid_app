@@ -17,7 +17,8 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
-import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.observers.DisposableMaybeObserver;
 
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
@@ -67,8 +68,6 @@ public class CtrlerIncidEditAcTest {
         }
     };
 
-    Resolucion resolucionBd;
-
     @Before
     public void setUp() throws Exception
     {
@@ -89,23 +88,60 @@ public class CtrlerIncidEditAcTest {
     @Test
     public void testSeeResolucion() throws Exception
     {
-        resolucionBd = insertGetResolucionNoAdvances(incidImportancia);
+        insertGetResolucionNoAdvances(incidImportancia);
+        executeTest(new DisposableMaybeObserver<Resolucion>() {
+            @Override
+            public void onSuccess(@NonNull Resolucion resolucion)
+            {
+                assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e)
+            {
+                fail();
+            }
+
+            @Override
+            public void onComplete()
+            {
+                fail();
+            }
+        });
+    }
+
+    @Test
+    public void testSeeResolucion_NULL() throws Exception
+    {
+        executeTest(new DisposableMaybeObserver<Resolucion>() {
+            @Override
+            public void onSuccess(@NonNull Resolucion resolucion)
+            {
+                fail();
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e)
+            {
+                fail();
+            }
+
+            @Override
+            public void onComplete()
+            {
+                assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
+            }
+        });
+    }
+
+    //    ============================= HELPERS ===============================
+
+    void executeTest(DisposableMaybeObserver<Resolucion> observer)
+    {
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
-            assertThat(controller.seeResolucion(new DisposableSingleObserver<Resolucion>() {
-                @Override
-                public void onSuccess(Resolucion resolucion)
-                {
-                    assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
-                }
-
-                @Override
-                public void onError(Throwable e)
-                {
-                    fail();
-                }
-            }, resolucionBd.getIncidencia().getIncidenciaId(), resorceMnId), is(true));
+            assertThat(controller.seeResolucion(observer, incidImportancia.getIncidencia().getIncidenciaId(), resorceMnId), is(true));
         } finally {
             resetAllSchedulers();
         }

@@ -6,6 +6,7 @@ import com.didekinlib.model.incidencia.dominio.Resolucion;
 
 import java.util.concurrent.Callable;
 
+import io.reactivex.Maybe;
 import io.reactivex.Single;
 import timber.log.Timber;
 
@@ -32,18 +33,20 @@ public class IncidObservable {
         });
     }
 
-    public static Single<Integer> incidImportanciaModified(final IncidImportancia incidImportancia){
+    public static Single<Integer> incidImportanciaModified(final IncidImportancia incidImportancia)
+    {
         Timber.d("incidImportanciaModified()");
         return fromCallable(new Callable<Integer>() {
             @Override
             public Integer call() throws Exception
             {
-                 return incidenciaDao.modifyIncidImportancia(incidImportancia);
+                return incidenciaDao.modifyIncidImportancia(incidImportancia);
             }
         });
     }
 
-    public static Single<Integer> incidenciaDeleted(final Incidencia incidencia){
+    public static Single<Integer> incidenciaDeleted(final Incidencia incidencia)
+    {
         Timber.d("incidImportanciaModified()");
         return fromCallable(new Callable<Integer>() {
             @Override
@@ -54,9 +57,9 @@ public class IncidObservable {
         });
     }
 
-    public static Single<Resolucion> resolucion(final long incidenciaId)
+    public static Maybe<Resolucion> resolucion(final long incidenciaId)
     {
-        return fromCallable(new Callable<Resolucion>() {
+        return Maybe.fromCallable(new Callable<Resolucion>() {
             @Override
             public Resolucion call() throws Exception
             {

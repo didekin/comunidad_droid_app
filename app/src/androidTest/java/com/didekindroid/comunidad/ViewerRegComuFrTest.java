@@ -224,12 +224,6 @@ public class ViewerRegComuFrTest {
         assertThat(errors.toString(), containsString(activity.getText(R.string.tipo_via).toString()));
     }
 
-    @Test
-    public void test_InitializeSpinnersFromComunidad() throws Exception
-    {
-
-    }
-
     //  =========================  TESTS FOR ACTIVITY/FRAGMENT LIFECYCLE  ===========================
 
     @Test

@@ -11,7 +11,8 @@ import com.didekinlib.model.incidencia.dominio.Resolucion;
 
 import java.io.Serializable;
 
-import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.observers.DisposableMaybeObserver;
 import timber.log.Timber;
 
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
@@ -59,6 +60,20 @@ class ViewerIncidEditAc extends ViewerParent<View, CtrlerIncidEditAc> {
     void onSuccessSeeResolucion(Resolucion resolucion, int resourceIdItemMn)
     {
         Timber.d("onSuccessSeeResolucion()");
+        onAfterSeeResolucion(resolucion, resourceIdItemMn);
+    }
+
+    void onCompleteSeeResolucion(int resourceIdItemMn)
+    {
+        Timber.d("onCompleteSeeResolucion()");
+        onAfterSeeResolucion(null, resourceIdItemMn);
+    }
+
+    // .................................... HELPERS .................................
+
+    private void onAfterSeeResolucion(Resolucion resolucion, int resourceIdItemMn)
+    {
+        Timber.d("onAfterSeeResolucion()");
         Intent intent0 = new Intent();
         intent0.putExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia);
         if (resolucion != null) {
@@ -68,10 +83,8 @@ class ViewerIncidEditAc extends ViewerParent<View, CtrlerIncidEditAc> {
         new ActivityInitiator(activity).initAcFromMnKeepIntent(resourceIdItemMn);
     }
 
-    // .................................... HELPERS .................................
-
     @SuppressWarnings("WeakerAccess")
-    class ResolucionObserver extends DisposableSingleObserver<Resolucion>{
+    class ResolucionObserver extends DisposableMaybeObserver<Resolucion> {
 
         private final int idItemMenu;
 
@@ -81,17 +94,24 @@ class ViewerIncidEditAc extends ViewerParent<View, CtrlerIncidEditAc> {
         }
 
         @Override
-        public void onSuccess(Resolucion resolucion)
+        public void onSuccess(@NonNull Resolucion resolucion)
         {
             Timber.d("onSuccess()");
             onSuccessSeeResolucion(resolucion, idItemMenu);
         }
 
         @Override
-        public void onError(Throwable e)
+        public void onError(@NonNull Throwable e)
         {
             Timber.d("onError()");
             onErrorInObserver(e);
+        }
+
+        @Override
+        public void onComplete()
+        {
+            Timber.d("onComplete()");
+            onCompleteSeeResolucion(idItemMenu);
         }
     }
 }

@@ -108,7 +108,7 @@ public class IncidResolucionSeeFr extends Fragment {
         // Plan.
         ((TextView) mFragmentView.findViewById(R.id.incid_resolucion_txt)).setText(mResolucion.getDescripcion());
         // Lista de avances.
-        ListView mListView = (ListView) mFragmentView.findViewById(android.R.id.list);
+        ListView mListView = mFragmentView.findViewById(android.R.id.list);
         mListView.setEmptyView(mFragmentView.findViewById(android.R.id.empty));
         mListView.setAdapter(mAdapter);
     }
