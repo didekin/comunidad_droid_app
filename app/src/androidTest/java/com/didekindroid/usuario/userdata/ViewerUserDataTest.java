@@ -138,11 +138,11 @@ public class ViewerUserDataTest {
     }
 
     @Test
-    public void testCheckUserData_3() throws InterruptedException
+    public void testCheckUserData_2() throws InterruptedException
     {
         typeUserData("wrong_newuser.com", USER_JUAN.getAlias(), USER_JUAN.getPassword());
         runCheckUserData(false);
-        waitAtMost(3, SECONDS).until(isToastInView(R.string.email_hint, activity));
+        waitAtMost(6, SECONDS).until(isToastInView(R.string.email_hint, activity));
     }
 
     @Test
