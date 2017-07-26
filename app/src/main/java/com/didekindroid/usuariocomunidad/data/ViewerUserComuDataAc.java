@@ -23,7 +23,7 @@ import java.io.Serializable;
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
-import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
+import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
 import static com.didekindroid.usuariocomunidad.util.UserComuAssertionMsg.userComu_should_be_deleted;
@@ -66,10 +66,10 @@ final class ViewerUserComuDataAc extends ViewerParent<View, CtrlerUsuarioComunid
         assertTrue(controller.isRegisteredUser(), user_should_be_registered);
         userComuIntent = UsuarioComunidad.class.cast(viewBean);
 
-        Button mModifyButton = (Button) view.findViewById(R.id.usercomu_data_ac_modif_button);
+        Button mModifyButton = view.findViewById(R.id.usercomu_data_ac_modif_button);
         mModifyButton.setOnClickListener(new ModifyButtonListener());
 
-        Button mDeleteButton = (Button) view.findViewById(R.id.usercomu_data_ac_delete_button);
+        Button mDeleteButton = view.findViewById(R.id.usercomu_data_ac_delete_button);
         mDeleteButton.setOnClickListener(new DeleteButtonListener());
     }
 
@@ -168,7 +168,7 @@ final class ViewerUserComuDataAc extends ViewerParent<View, CtrlerUsuarioComunid
             assertTrue(isUserDeleted || isUserComuDeleted, userComu_should_be_deleted);
             if (isUserDeleted) {
                 Intent intent = new Intent(activity, ComuSearchAc.class);
-                intent.setFlags(FLAG_ACTIVITY_CLEAR_TOP | FLAG_ACTIVITY_NEW_TASK);
+                intent.setFlags(FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TASK);
                 activity.startActivity(intent);
                 activity.finish();
             } else {
