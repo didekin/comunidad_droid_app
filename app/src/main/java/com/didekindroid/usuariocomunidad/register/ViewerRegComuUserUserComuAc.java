@@ -76,7 +76,8 @@ public final class ViewerRegComuUserUserComuAc extends ViewerParent<View, Ctrler
             Usuario usuarioFromViewer = getChildViewer(ViewerRegUserFr.class).getUserFromViewer(errorBuilder);
             UsuarioComunidad usuarioComunidad = getChildViewer(ViewerRegUserComuFr.class).getUserComuFromViewer(errorBuilder, comunidadFromViewer, usuarioFromViewer);
 
-            if (usuarioComunidad == null) {
+            // Nullity for comunidad in controlled in UsuarioComunidad builder.
+            if (usuarioComunidad == null || usuarioFromViewer == null) {
                 makeToast(activity, errorBuilder.toString());
             } else if (!ConnectionUtils.isInternetConnected(activity)) {
                 makeToast(activity, R.string.no_internet_conn_toast);
