@@ -15,7 +15,6 @@ import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
-import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_have_been_deleted;

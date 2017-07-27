@@ -27,7 +27,7 @@ public class Viewer<T extends View, C extends ControllerIf> implements ViewerIf<
     protected final ViewerIf parentViewer;
     protected C controller;
 
-    protected Viewer(T view, AppCompatActivity activity, ViewerIf parentViewer)
+    public Viewer(T view, AppCompatActivity activity, ViewerIf parentViewer)
     {
         this.view = view;
         this.activity = activity;

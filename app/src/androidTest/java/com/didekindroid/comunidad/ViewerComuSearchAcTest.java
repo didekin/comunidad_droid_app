@@ -7,6 +7,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.widget.Button;
 
 import com.didekindroid.R;
+import com.didekindroid.api.Viewer;
 import com.didekindroid.security.CtrlerAuthToken;
 import com.didekindroid.security.CtrlerAuthTokenIf;
 import com.didekinlib.model.comunidad.Comunidad;
@@ -91,7 +92,7 @@ public class ViewerComuSearchAcTest {
     {
         activity.viewer.setController(new CtrlerAuthToken() {
             @Override
-            public void refreshAccessToken()
+            public void refreshAccessToken(Viewer viewer)
             {
                 assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
             }
@@ -134,7 +135,7 @@ public class ViewerComuSearchAcTest {
         activity.setChildInViewer(viewerRegComuFrOld);
         activity.viewer.setController(new CtrlerAuthToken());
 
-        Button button = (Button) activity.acView.findViewById(R.id.searchComunidad_Bton);
+        Button button = activity.acView.findViewById(R.id.searchComunidad_Bton);
         button.setOnClickListener(activity.viewer.new ComuSearchButtonListener());
         button.callOnClick();
         waitAtMost(4, SECONDS).untilAtomic(flagMethodExec, is(AFTER_METHOD_EXEC_B));

@@ -51,7 +51,7 @@ public final class ViewerRegComuUserUserComuAc extends ViewerParent<View, Ctrler
     public void doViewInViewer(Bundle savedState, Serializable viewBean)
     {
         Timber.d("doViewInViewer()");
-        Button mRegistroButton = (Button) view.findViewById(R.id.reg_com_usuario_usuariocomu_button);
+        Button mRegistroButton = view.findViewById(R.id.reg_com_usuario_usuariocomu_button);
         mRegistroButton.setOnClickListener(new RegComuUserButtonListener());
     }
 
@@ -83,7 +83,7 @@ public final class ViewerRegComuUserUserComuAc extends ViewerParent<View, Ctrler
                 makeToast(activity, R.string.no_internet_conn_toast);
             } else {
                 controller.registerUserAndComu(
-                        new ObserverCacheCleaner(controller) {
+                        new ObserverCacheCleaner(ViewerRegComuUserUserComuAc.this) {
                             @Override
                             public void onComplete()
                             {

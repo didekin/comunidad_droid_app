@@ -1,11 +1,15 @@
 package com.didekindroid.api;
 
+import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.view.View;
 
 import com.didekindroid.exception.UiException;
-import com.didekindroid.security.IdentityCacherMock;
+import com.didekindroid.exception.UiExceptionIf;
 import com.didekinlib.http.ErrorBean;
 
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -18,6 +22,7 @@ import static io.reactivex.Completable.error;
 import static io.reactivex.Completable.fromSingle;
 import static io.reactivex.Single.just;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -29,26 +34,46 @@ import static org.junit.Assert.assertThat;
 public class ObserverCacheCleanerTest {
 
     final AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
-    ControllerIf controller;
+    @Rule
+    public ActivityTestRule<ActivityMock> activityRule = new ActivityTestRule<>(ActivityMock.class, true, true);
+
+    ActivityMock activity;
+    Viewer<?, Controller> viewer;
+
+    @Before
+    public void setUp()
+    {
+        activity = activityRule.getActivity();
+        viewer = new Viewer<View, Controller>(null, activity, null) {
+            @Override
+            public UiExceptionIf.ActionForUiExceptionIf onErrorInObserver(Throwable error)
+            {
+                assertThat(flagMethodExec.getAndSet(AFTER_METHOD_WITH_EXCEPTION_EXEC), is(BEFORE_METHOD_EXEC));
+                return super.onErrorInObserver(error);
+            }
+        };
+        viewer.setController(new Controller());
+    }
 
     @Test
     public void test_OnComplete() throws Exception
     {
-        controller = new Controller();
-        assertThat(fromSingle(just("hola")).subscribeWith(new ObserverCacheCleaner(controller)).isDisposed(), is(true));
+        assertThat(fromSingle(just("hola")).subscribeWith(new ObserverCacheCleaner(viewer)).isDisposed(), is(true));
     }
 
     @Test
     public void test_OnError() throws Exception
     {
-        controller = new Controller(new IdentityCacherMock() {
+        assertThat(viewer.getController().getIdentityCacher().getTokenCache().get(), nullValue());
+        assertThat(viewer.getController().getIdentityCacher().getRefreshTokenFile().exists(), is(false));
+
+        activity.runOnUiThread(new Runnable() {
             @Override
-            public void cleanIdentityCache()
+            public void run()
             {
-                assertThat(flagMethodExec.getAndSet(AFTER_METHOD_WITH_EXCEPTION_EXEC), is(BEFORE_METHOD_EXEC));
+                assertThat(error(new UiException(new ErrorBean(BAD_REQUEST))).subscribeWith(new ObserverCacheCleaner(viewer)).isDisposed(), is(true));
+                assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_WITH_EXCEPTION_EXEC));
             }
         });
-        assertThat(error(new UiException(new ErrorBean(BAD_REQUEST))).subscribeWith(new ObserverCacheCleaner(controller)).isDisposed(), is(true));
-        assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_WITH_EXCEPTION_EXEC));
     }
 }

@@ -5,6 +5,7 @@ import android.support.test.rule.ActivityTestRule;
 import com.didekindroid.api.ActivityMock;
 import com.didekindroid.api.ObserverCacheCleaner;
 import com.didekindroid.api.SingleObserverMock;
+import com.didekindroid.api.Viewer;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuario.Usuario;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
@@ -68,6 +69,7 @@ public class CtrlerUsuarioComunidadTest {
     @Rule
     public ActivityTestRule<ActivityMock> activityRule = new ActivityTestRule<>(ActivityMock.class, true, true);
 
+    Viewer<?, CtrlerUsuarioComunidad> viewer;
     CtrlerUsuarioComunidad controller;
     ActivityMock activity;
     boolean cleanJuanAndPepe;
@@ -77,7 +79,9 @@ public class CtrlerUsuarioComunidadTest {
     public void setUp() throws Exception
     {
         activity = activityRule.getActivity();
-        controller = new CtrlerUsuarioComunidad();
+        viewer = new Viewer<>(null, activity, null);
+        viewer.setController(new CtrlerUsuarioComunidad());
+        controller = viewer.getController();
         cleanJuanAndPepe = false;
     }
 
@@ -158,7 +162,7 @@ public class CtrlerUsuarioComunidadTest {
     public void test_UserComuDeleted() throws Exception
     {
         userAndComuRegistered(COMU_LA_FUENTE_PEPE)
-                .subscribeWith(new ObserverCacheCleaner(controller));
+                .subscribeWith(new ObserverCacheCleaner(viewer));
         controller.userComuDeleted(userComuDaoRemote.seeUserComusByUser().get(0).getComunidad()).test().assertResult(IS_USER_DELETED);
         noClean = true;
     }
@@ -174,7 +178,7 @@ public class CtrlerUsuarioComunidadTest {
             @Override
             public boolean test(CtrlerUsuarioComunidad controller) throws Exception
             {
-                return controller.registerUserAndComu(new ObserverCacheCleaner(controller), COMU_LA_FUENTE_PEPE);
+                return controller.registerUserAndComu(new ObserverCacheCleaner(viewer), COMU_LA_FUENTE_PEPE);
             }
         });
     }
@@ -214,7 +218,7 @@ public class CtrlerUsuarioComunidadTest {
             @Override
             public boolean test(CtrlerUsuarioComunidad controller) throws Exception
             {
-                return controller.registerUserAndUserComu(new ObserverCacheCleaner(controller),
+                return controller.registerUserAndUserComu(new ObserverCacheCleaner(viewer),
                         new UsuarioComunidad.UserComuBuilder(comunidad, USER_PEPE).roles(PRESIDENTE.function).build());
             }
         });

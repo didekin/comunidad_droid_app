@@ -1,12 +1,14 @@
 package com.didekindroid.security;
 
-import android.app.Activity;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.view.View;
 
 import com.didekindroid.api.ActivityMock;
 import com.didekindroid.api.ObserverCacheCleaner;
+import com.didekindroid.api.Viewer;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.exception.UiExceptionIf;
 import com.didekinlib.http.ErrorBean;
 import com.didekinlib.http.oauth2.SpringOauthToken;
 
@@ -25,16 +27,14 @@ import io.reactivex.observers.DisposableCompletableObserver;
 import static com.didekindroid.testutil.ActivityTestUtils.checkInitTokenCache;
 import static com.didekindroid.testutil.ActivityTestUtils.checkNoInitCache;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
+import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_WITH_EXCEPTION_EXEC;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekindroid.testutil.RxSchedulersUtils.resetAllSchedulers;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceAndroidMain;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceIoScheduler;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
 import static io.reactivex.Completable.error;
@@ -68,20 +68,30 @@ public class CtrlerAuthTokenTest {
         }
     };
 
+    ActivityMock activity;
+    Viewer<?, CtrlerAuthToken> viewer;
     CtrlerAuthToken controller;
-    Activity activity;
 
     @Before
     public void setUp() throws Exception
     {
         activity = activityRule.getActivity();
-        controller = new CtrlerAuthToken();
+        viewer = new Viewer<View, CtrlerAuthToken>(null, activity, null) {
+            @Override
+            public UiExceptionIf.ActionForUiExceptionIf onErrorInObserver(Throwable error)
+            {
+                assertThat(flagMethodExec.getAndSet(AFTER_METHOD_WITH_EXCEPTION_EXEC), is(BEFORE_METHOD_EXEC));
+                return super.onErrorInObserver(error);
+            }
+        };
+        viewer.setController(new CtrlerAuthToken());
+        controller = viewer.getController();
     }
 
     @After
     public void tearDown() throws Exception
     {
-        controller.clearSubscriptions();
+        viewer.getController().clearSubscriptions();
         resetAllSchedulers();
         cleanOptions(CLEAN_PEPE);
     }
@@ -98,10 +108,17 @@ public class CtrlerAuthTokenTest {
     public void testOauthUpdateTokenCacheObserver_1() throws UiException
     {
         checkInitTokenCache();
-        DisposableCompletableObserver disposable = error(new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR)))
-                .subscribeWith(new ObserverCacheCleaner(controller));
-        checkNoInitCache();
-        assertThat(disposable.isDisposed(), is(true));
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                DisposableCompletableObserver disposable = error(new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR)))
+                        .subscribeWith(new ObserverCacheCleaner(viewer));
+                checkNoInitCache();
+                assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_WITH_EXCEPTION_EXEC));
+                assertThat(disposable.isDisposed(), is(true));
+            }
+        });
     }
 
     /**
@@ -119,7 +136,7 @@ public class CtrlerAuthTokenTest {
             {
                 return null;
             }
-        }).subscribeWith(new ObserverCacheCleaner(controller));
+        }).subscribeWith(new ObserverCacheCleaner(viewer));
 
         checkInitTokenCache();
         assertThat(disposable.isDisposed(), is(true));
@@ -129,35 +146,13 @@ public class CtrlerAuthTokenTest {
     // ............................ SUBSCRIPTIONS ..................................
     //  =======================================================================================
 
-    /**
-     * Synchronous execution: we use RxJavaPlugins to replace io scheduler; everything runs in the test runner thread.
-     * We register a new user, checkMenu the cache is null, call the disposable and checkMenu cache is initialized.
-     */
-    @Test
-    public void test_UpdateTkAndCacheFromUser() throws IOException, UiException
-    {
-        // Borramos el usario dado de alta por defecto.
-        cleanOptions(CLEAN_PEPE);
-
-        userComuDaoRemote.regComuAndUserAndUserComu(COMU_REAL_PEPE).execute().body();
-        checkNoInitCache();
-        try {
-            trampolineReplaceIoScheduler();
-            trampolineReplaceAndroidMain();
-            controller.updateTkAndCacheFromUser(USER_PEPE);
-        } finally {
-            resetAllSchedulers();
-        }
-        checkInitTokenCache();
-    }
-
     @Test
     public void test_UpdateTkCacheFromRefreshTk() throws Exception
     {
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
-            assertThat(controller.updateTkCacheFromRefreshTk(controller.getIdentityCacher().getRefreshTokenValue()), is(true));
+            assertThat(controller.updateTkCacheFromRefreshTk(controller.getIdentityCacher().getRefreshTokenValue(), viewer), is(true));
         } finally {
             resetAllSchedulers();
         }
@@ -177,14 +172,14 @@ public class CtrlerAuthTokenTest {
 
         controller = new CtrlerAuthToken() {
             @Override
-            public boolean updateTkCacheFromRefreshTk(String refreshToken)
+            public boolean updateTkCacheFromRefreshTk(String refreshToken, Viewer viewer)
             {
                 // No hay llamada al método del controller.
                 fail();
                 return false;
             }
         };
-        controller.refreshAccessToken();
+        controller.refreshAccessToken(viewer);
     }
 
     @Test
@@ -199,14 +194,14 @@ public class CtrlerAuthTokenTest {
 
         controller = new CtrlerAuthToken() {
             @Override
-            public boolean updateTkCacheFromRefreshTk(String refreshToken)
+            public boolean updateTkCacheFromRefreshTk(String refreshToken, Viewer viewer)
             {
                 // No hay llamada al método del controller.
                 fail();
                 return false;
             }
         };
-        controller.refreshAccessToken();
+        controller.refreshAccessToken(viewer);
     }
 
     @Test
@@ -224,14 +219,14 @@ public class CtrlerAuthTokenTest {
 
         controller = new CtrlerAuthToken() {
             @Override
-            public boolean updateTkCacheFromRefreshTk(String refreshToken)
+            public boolean updateTkCacheFromRefreshTk(String refreshToken, Viewer viewer)
             {
                 assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
                 return false;
             }
         };
 
-        controller.refreshAccessToken();
+        controller.refreshAccessToken(viewer);
         // Hay llamada al método del controller.
         assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_A));
     }

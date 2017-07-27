@@ -3,6 +3,8 @@ package com.didekindroid.api;
 import io.reactivex.observers.DisposableCompletableObserver;
 import timber.log.Timber;
 
+import static com.didekindroid.util.UIutils.assertTrue;
+
 /**
  * User: pedro@didekin
  * Date: 25/05/17
@@ -11,11 +13,12 @@ import timber.log.Timber;
 @SuppressWarnings("WeakerAccess")
 public class ObserverCacheCleaner extends DisposableCompletableObserver {
 
-    private final ControllerIf controller;
+    private final Viewer<?,?> viewer;
 
-    public ObserverCacheCleaner(ControllerIf controller)
+    public ObserverCacheCleaner(Viewer<?,?> viewer)
     {
-        this.controller = controller;
+        this.viewer = viewer;
+        assertTrue(viewer.getController() != null, "Controller not null");
     }
 
     @Override
@@ -29,11 +32,13 @@ public class ObserverCacheCleaner extends DisposableCompletableObserver {
      * If there is an error, the cache for auth tokens is cleared. The user will be forced to
      * login in the next access to a restricted activity.
      */
+    @SuppressWarnings("ConstantConditions")
     @Override
     public void onError(Throwable e)
     {
-        Timber.d("onErrorObserver(), Thread for subscriber: %s", Thread.currentThread().getName());
-        controller.getIdentityCacher().cleanIdentityCache();
+        Timber.d("onError, Thread for subscriber: %s", Thread.currentThread().getName());
+        viewer.getController().getIdentityCacher().cleanIdentityCache();
         dispose();
+        viewer.onErrorInObserver(e);
     }
 }

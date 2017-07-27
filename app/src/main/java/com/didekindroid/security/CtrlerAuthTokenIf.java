@@ -2,6 +2,7 @@ package com.didekindroid.security;
 
 
 import com.didekindroid.api.ControllerIf;
+import com.didekindroid.api.Viewer;
 import com.didekinlib.model.usuario.Usuario;
 
 /**
@@ -11,9 +12,7 @@ import com.didekinlib.model.usuario.Usuario;
  */
 public interface CtrlerAuthTokenIf extends ControllerIf {
 
-    void updateTkAndCacheFromUser(Usuario newUser);
+    boolean updateTkCacheFromRefreshTk(String refreshToken, Viewer viewer);
 
-    boolean updateTkCacheFromRefreshTk(String refreshToken);
-
-    void refreshAccessToken();
+    void refreshAccessToken(Viewer viewer);
 }

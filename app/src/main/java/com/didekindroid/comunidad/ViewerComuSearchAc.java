@@ -52,9 +52,9 @@ class ViewerComuSearchAc extends ViewerParent<View, CtrlerAuthTokenIf> {
         Timber.d("doViewInViewer()");
 
         // Check token cache.
-        controller.refreshAccessToken();
+        controller.refreshAccessToken(this);
 
-        Button mSearchButton = (Button) view.findViewById(R.id.searchComunidad_Bton);
+        Button mSearchButton = view.findViewById(R.id.searchComunidad_Bton);
         mSearchButton.setOnClickListener(new ComuSearchButtonListener());
     }
 

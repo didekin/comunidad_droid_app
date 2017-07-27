@@ -1,5 +1,7 @@
 package com.didekindroid.api;
 
+import android.support.annotation.NonNull;
+
 import com.didekindroid.security.IdentityCacher;
 
 import io.reactivex.disposables.CompositeDisposable;
@@ -57,7 +59,7 @@ public class Controller implements ControllerIf {
         identityCacher.updateIsRegistered(isRegisteredUser);
     }
 
-    @Override
+    @Override @NonNull
     public IdentityCacher getIdentityCacher()
     {
         Timber.d("getIdentityCacher()");
