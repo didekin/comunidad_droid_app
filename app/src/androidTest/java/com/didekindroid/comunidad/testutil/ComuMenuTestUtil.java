@@ -25,13 +25,13 @@ public enum  ComuMenuTestUtil implements MenuTestUtilIf {
     COMU_DATA_AC {
 
         @Override
-        public void checkMenuItem_NTk(Activity activity)
+        public void checkItemNoRegisterUser(Activity activity)
         {
             throw new UnsupportedOperationException(COMU_DATA_AC.name() + REGISTERED_USER);
         }
 
         @Override
-        public void checkMenuItem_WTk(Activity activity) throws InterruptedException
+        public void checkItemRegisterUser(Activity activity) throws InterruptedException
         {
             onView(ViewMatchers.withText(R.string.comu_data_ac_mn)).check(doesNotExist());
             openActionBarOverflowOrOptionsMenu(activity);
@@ -43,13 +43,13 @@ public enum  ComuMenuTestUtil implements MenuTestUtilIf {
 
     COMU_SEARCH_AC {
         @Override
-        public void checkMenuItem_NTk(Activity activity) throws InterruptedException
+        public void checkItemNoRegisterUser(Activity activity) throws InterruptedException
         {
-            checkMenuItem_WTk(activity);
+            checkItemRegisterUser(activity);
         }
 
         @Override
-        public void checkMenuItem_WTk(Activity activity) throws InterruptedException
+        public void checkItemRegisterUser(Activity activity) throws InterruptedException
         {
             onView(ViewMatchers.withText(R.string.comu_search_ac_mn)).check(doesNotExist());
             Thread.sleep(1000);

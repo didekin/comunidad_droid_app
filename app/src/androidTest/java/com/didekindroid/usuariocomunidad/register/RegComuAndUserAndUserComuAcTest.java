@@ -46,9 +46,9 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestC
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -152,9 +152,9 @@ public class RegComuAndUserAndUserComuAcTest {
     @Test
     public void testLoginMn_NoToken() throws InterruptedException, UiException
     {
-        assertThat(TKhandler.getTokenCache().get(), nullValue());
+        assertThat(activity.viewer.getController().isRegisteredUser(), is(false));
 
-        LOGIN_AC.checkMenuItem_NTk(activity);
+        LOGIN_AC.checkItemNoRegisterUser(activity);
         checkUp(regComu_User_UserComuAcLayout);
     }
 
@@ -163,7 +163,7 @@ public class RegComuAndUserAndUserComuAcTest {
     public void typeComunidad() throws InterruptedException
     {
         final ComunidadAutonoma comunidadAutonoma = new ComunidadAutonoma((short) 10, "Valencia");
-        final Provincia provincia = new Provincia(comunidadAutonoma,(short) 12, "Castellón/Castelló");
+        final Provincia provincia = new Provincia(comunidadAutonoma, (short) 12, "Castellón/Castelló");
         final Municipio municipio = new Municipio((short) 53, "Chilches/Xilxes", provincia);
         final TipoViaValueObj tipoVia = new TipoViaValueObj(54, "Callejon");
         typeComunidadData(municipio, tipoVia, "nombre via One", "123", "Tris");

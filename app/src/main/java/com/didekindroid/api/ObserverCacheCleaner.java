@@ -24,7 +24,7 @@ public class ObserverCacheCleaner extends DisposableCompletableObserver {
     @Override
     public void onComplete()
     {
-        Timber.d("onComplete(), Thread for subscriber: %s", Thread.currentThread().getName());
+        Timber.d("onComplete()");
         dispose();
     }
 
@@ -38,7 +38,7 @@ public class ObserverCacheCleaner extends DisposableCompletableObserver {
     {
         Timber.d("onError, Thread for subscriber: %s", Thread.currentThread().getName());
         viewer.getController().getIdentityCacher().cleanIdentityCache();
-        dispose();
         viewer.onErrorInObserver(e);
+        dispose();
     }
 }

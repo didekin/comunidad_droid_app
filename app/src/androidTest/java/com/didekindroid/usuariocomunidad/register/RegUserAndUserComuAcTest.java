@@ -177,7 +177,7 @@ public class RegUserAndUserComuAcTest {
         cleanOptions(CLEAN_JUAN);
         isClean = true;
 
-        LOGIN_AC.checkMenuItem_NTk(activity);
+        LOGIN_AC.checkItemNoRegisterUser(activity);
         checkUp(regUser_UserComuAcLayout);
     }
 
@@ -185,7 +185,7 @@ public class RegUserAndUserComuAcTest {
     public void testLoginMn_WithToken() throws InterruptedException, UiException, IOException
     {
         assertThat(TKhandler.isRegisteredUser(), is(true));
-        LOGIN_AC.checkMenuItem_WTk(activity);
+        LOGIN_AC.checkItemRegisterUser(activity);
         checkBack(onView(withId(loginAcResourceId)), regUser_UserComuAcLayout);
     }
 }

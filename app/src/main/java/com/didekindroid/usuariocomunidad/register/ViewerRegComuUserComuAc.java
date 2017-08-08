@@ -50,7 +50,7 @@ final class ViewerRegComuUserComuAc extends ViewerParent<View, CtrlerUsuarioComu
     public void doViewInViewer(Bundle savedState, Serializable viewBean)
     {
         Timber.d("doViewInViewer()");
-        Button mRegistroButton = (Button) view.findViewById(R.id.reg_comu_usuariocomunidad_button);
+        Button mRegistroButton = view.findViewById(R.id.reg_comu_usuariocomunidad_button);
         mRegistroButton.setOnClickListener(new RegComuAndUserComuButtonListener());
     }
 

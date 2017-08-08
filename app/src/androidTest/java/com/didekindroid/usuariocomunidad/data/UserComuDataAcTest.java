@@ -165,7 +165,7 @@ public class UserComuDataAcTest {
     @Test
     public void testSeeUserComuByComuMn() throws InterruptedException
     {
-        SEE_USERCOMU_BY_COMU_AC.checkMenuItem_WTk(activity);
+        SEE_USERCOMU_BY_COMU_AC.checkItemRegisterUser(activity);
         intended(IntentMatchers.hasExtra(ComuBundleKey.COMUNIDAD_ID.key, usuarioComunidad.getComunidad().getC_Id()));
         checkUp(userComuDataLayout);
     }
@@ -174,7 +174,7 @@ public class UserComuDataAcTest {
     public void testComuDataMn() throws InterruptedException
     {
         // Only one user associated to the comunidad: the menu shows the item.
-        COMU_DATA_AC.checkMenuItem_WTk(activity);
+        COMU_DATA_AC.checkItemRegisterUser(activity);
         intended(IntentMatchers.hasExtra(ComuBundleKey.COMUNIDAD_ID.key, usuarioComunidad.getComunidad().getC_Id()));
         checkUp(userComuDataLayout);
     }

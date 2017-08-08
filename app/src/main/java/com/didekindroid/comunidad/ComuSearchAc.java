@@ -3,7 +3,6 @@ package com.didekindroid.comunidad;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -91,26 +90,18 @@ public class ComuSearchAc extends AppCompatActivity implements ViewerParentInjec
     public boolean onCreateOptionsMenu(Menu menu)
     {
         Timber.d("onCreateOptionsMenu()");
-        super.onCreateOptionsMenu(menu);
-
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.comu_search_ac_menu, menu);
-        return true;
+        getMenuInflater().inflate(R.menu.comu_search_ac_menu, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu)
     {
         Timber.d("onPrepareOptionsMenu()");
-
-        if (viewer.getController().isRegisteredUser()) {
-            Timber.d("onPrepareOptionsMenu(), isRegisteredUser == true");
-            menu.findItem(R.id.see_usercomu_by_user_ac_mn).setVisible(true).setEnabled(true);
-            menu.findItem(R.id.user_data_ac_mn).setVisible(true).setEnabled(true);
-        } else {
-            Timber.d("onPrepareOptionsMenu(), isRegisteredUser == false");
-            menu.findItem(R.id.login_ac_mn).setVisible(true).setEnabled(true);
-        }
+        boolean isRegistered = viewer.getController().isRegisteredUser();
+        menu.findItem(R.id.see_usercomu_by_user_ac_mn).setVisible(isRegistered).setEnabled(isRegistered);
+        menu.findItem(R.id.user_data_ac_mn).setVisible(isRegistered).setEnabled(isRegistered);
+        menu.findItem(R.id.login_ac_mn).setVisible(!isRegistered).setEnabled(!isRegistered);
         return true;
     }
 
@@ -118,7 +109,6 @@ public class ComuSearchAc extends AppCompatActivity implements ViewerParentInjec
     public boolean onOptionsItemSelected(MenuItem item)
     {
         Timber.d("onOptionsItemSelected()");
-        ActivityInitiator activityInitiator = new ActivityInitiator(this);
         int resourceId = item.getItemId();
 
         switch (resourceId) {
@@ -126,7 +116,7 @@ public class ComuSearchAc extends AppCompatActivity implements ViewerParentInjec
             case R.id.see_usercomu_by_user_ac_mn:
             case R.id.login_ac_mn:
             case R.id.reg_nueva_comunidad_ac_mn:
-                activityInitiator.initAcFromMnKeepIntent(resourceId);
+                new ActivityInitiator(this).initAcFromMnKeepIntent(resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

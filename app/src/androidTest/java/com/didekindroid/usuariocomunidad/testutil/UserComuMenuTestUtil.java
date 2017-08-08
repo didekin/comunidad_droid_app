@@ -19,13 +19,13 @@ public enum UserComuMenuTestUtil implements MenuTestUtilIf {
 
     REG_COMU_USERCOMU_AC {
         @Override
-        public void checkMenuItem_NTk(Activity activity)
+        public void checkItemNoRegisterUser(Activity activity)
         {
             throw new UnsupportedOperationException(REGISTERED_USER);
         }
 
         @Override
-        public void checkMenuItem_WTk(Activity activity)
+        public void checkItemRegisterUser(Activity activity)
         {
             checkMenu(activity, R.string.reg_nueva_comunidad_ac_mn, R.id.reg_comu_and_usercomu_layout);
         }
@@ -33,13 +33,13 @@ public enum UserComuMenuTestUtil implements MenuTestUtilIf {
 
     REG_COMU_USER_USERCOMU_AC {
         @Override
-        public void checkMenuItem_NTk(Activity activity)
+        public void checkItemNoRegisterUser(Activity activity)
         {
             checkMenu(activity, R.string.reg_nueva_comunidad_ac_mn, R.id.reg_comu_usuario_usuariocomu_layout);
         }
 
         @Override
-        public void checkMenuItem_WTk(Activity activity)
+        public void checkItemRegisterUser(Activity activity)
         {
             throw new UnsupportedOperationException(REQUIRES_USER_NO_TOKEN);
         }
@@ -47,13 +47,13 @@ public enum UserComuMenuTestUtil implements MenuTestUtilIf {
 
     SEE_USERCOMU_BY_COMU_AC {
         @Override
-        public void checkMenuItem_NTk(Activity activity)
+        public void checkItemNoRegisterUser(Activity activity)
         {
             throw new UnsupportedOperationException(SEE_USERCOMU_BY_COMU_AC.name() + REGISTERED_USER);
         }
 
         @Override
-        public void checkMenuItem_WTk(Activity activity)
+        public void checkItemRegisterUser(Activity activity)
         {
             checkMenu(activity, R.string.see_usercomu_by_comu_ac_mn, R.id.see_usercomu_by_comu_frg);
         }
@@ -61,13 +61,13 @@ public enum UserComuMenuTestUtil implements MenuTestUtilIf {
 
     SEE_USERCOMU_BY_USER_AC {
         @Override
-        public void checkMenuItem_NTk(Activity activity)
+        public void checkItemNoRegisterUser(Activity activity)
         {
             throw new UnsupportedOperationException(SEE_USERCOMU_BY_USER_AC + " without token");
         }
 
         @Override
-        public void checkMenuItem_WTk(Activity activity)
+        public void checkItemRegisterUser(Activity activity)
         {
             checkMenu(activity, R.string.see_usercomu_by_user_ac_mn, R.id.see_usercomu_by_user_frg);
         }

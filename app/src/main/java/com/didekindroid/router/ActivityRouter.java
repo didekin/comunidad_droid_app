@@ -1,7 +1,6 @@
 package com.didekindroid.router;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.util.ArrayMap;
 import android.view.View;
 
@@ -33,10 +32,9 @@ import com.didekindroid.usuariocomunidad.register.RegUserComuAc;
 
 import java.util.Map;
 
-import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
-import static android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP;
-import static android.support.v4.app.NavUtils.getParentActivityIntent;
-import static android.support.v4.app.NavUtils.navigateUpTo;
+import timber.log.Timber;
+
+import static android.support.v4.app.NavUtils.navigateUpFromSameTask;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 
 /**
@@ -47,7 +45,7 @@ import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 
 public class ActivityRouter implements ActivityRouterIf {
 
-    public static final ActivityRouter acRouter = new ActivityRouter();
+    static final ActivityRouter acRouter = new ActivityRouter();
 
     static final Class<? extends Activity> acByDefaultRegUser = LoginAc.class;
     static final Class<? extends Activity> acByDefaultNoRegUser = ComuSearchAc.class;
@@ -95,7 +93,6 @@ public class ActivityRouter implements ActivityRouterIf {
 
         /* USUARIO NO REGISTRADO.*/
         noUserRegMenuIdMap.put(R.id.reg_nueva_comunidad_ac_mn, RegComuAndUserAndUserComuAc.class);
-        noUserRegMenuIdMap.put(android.R.id.home, ComuSearchAc.class);
         noUserRegMenuIdMap.put(R.id.login_ac_mn, LoginAc.class);
     }
 
@@ -118,26 +115,17 @@ public class ActivityRouter implements ActivityRouterIf {
 
     public static void doUpMenu(Activity activity)
     {
-        Intent intent = getParentActivityIntent(activity);
-        finishNavigateUp(activity, intent);
-    }
-
-    public static void doUpMenuWithIntent(Activity activity, Intent parentIntent)
-    {
-        finishNavigateUp(activity, parentIntent);
-    }
-
-    private static void finishNavigateUp(Activity activity, Intent intent)
-    {
-        // We need both flags to reuse the intent of the parent activity.
-        intent.setFlags(FLAG_ACTIVITY_CLEAR_TOP | FLAG_ACTIVITY_SINGLE_TOP);
-        navigateUpTo(activity, intent);
+        Timber.d("doUpMenu()");
+        navigateUpFromSameTask(activity);
     }
 
     @Override
     public Class<? extends Activity> nextActivityFromMn(int resourceId)
     {
-        if (identityCacher.isRegisteredUser()) {
+        boolean isRegistered = identityCacher.isRegisteredUser();
+        Timber.d("nextActivityFromMn(), isRegisteredUser = %b", isRegistered);
+
+        if (isRegistered) {
             return menuIdMap.get(resourceId) != null ? menuIdMap.get(resourceId) : acByDefaultRegUser;
         } else {
             return noUserRegMenuIdMap.get(resourceId) != null ? noUserRegMenuIdMap.get(resourceId) : acByDefaultNoRegUser;
@@ -147,12 +135,14 @@ public class ActivityRouter implements ActivityRouterIf {
     @Override
     public Class<? extends Activity> nextActivity(Class<? extends Activity> previousActivity)
     {
+        Timber.d("nextActivity()");
         return acRouterMap.get(previousActivity);
     }
 
     @Override
     public Class<? extends Activity> nextActivityFromClick(Class<? extends View.OnClickListener> clickListener)
     {
+        Timber.d("nextActivityFromClick()");
         return onClickRouterMap.get(clickListener);
     }
 }

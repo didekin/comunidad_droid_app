@@ -10,8 +10,6 @@ import com.didekindroid.api.ViewerIf;
 import com.didekindroid.api.ViewerParentInjectorIf;
 import com.didekindroid.exception.UiException;
 
-import junit.framework.AssertionFailedError;
-
 import org.hamcrest.CoreMatchers;
 import org.junit.Rule;
 import org.junit.Test;
@@ -20,15 +18,14 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkSpinnersDoInViewerOffNull;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkRegComuFrViewEmpty;
+import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkSpinnersDoInViewerOffNull;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.typeComunidadData;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuListFrLayout;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
@@ -46,6 +43,7 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.RE
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.SEE_USERCOMU_BY_USER_AC;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.junit.Assert.assertThat;
@@ -94,7 +92,7 @@ public class ComuSearchAcTest {
 
         onView(withId(R.id.searchComunidad_Bton)).perform(ViewActions.click());
         // Check the view for comunidades list fragment.
-        waitAtMost(4,SECONDS).until(isResourceIdDisplayed(comuListFrLayout));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(comuListFrLayout));
 
         checkUp(comuSearchAcLayout);
 
@@ -110,7 +108,7 @@ public class ComuSearchAcTest {
 
         onView(withId(R.id.searchComunidad_Bton)).perform(ViewActions.click());
         // Check the view for comunidades list fragment.
-        waitAtMost(4,SECONDS).until(isResourceIdDisplayed(comuListFrLayout));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(comuListFrLayout));
         // Back.
         checkBack(onView(withId(comuListFrLayout)), comuSearchAcLayout);
 
@@ -122,75 +120,67 @@ public class ComuSearchAcTest {
     {
         signUpAndUpdateTk(COMU_REAL_JUAN);
         activity = activityRule.launchActivity(new Intent());
-        SEE_USERCOMU_BY_USER_AC.checkMenuItem_WTk(activity);
+        SEE_USERCOMU_BY_USER_AC.checkItemRegisterUser(activity);
 
         checkUp(comuSearchAcLayout);
         cleanOneUser(USER_JUAN);
     }
 
     @Test
-    public void testLogin_withToken() throws InterruptedException, UiException, IOException
+    public void testLogin_Registered() throws InterruptedException, UiException, IOException
     {
         signUpAndUpdateTk(COMU_REAL_JUAN);
         activity = activityRule.launchActivity(new Intent());
 
-        // No hay opción de LOGIN en pantalla.
-        onView(withId(R.id.login_ac_mn)).check(doesNotExist());
-        openActionBarOverflowOrOptionsMenu(activity);
-        onView(withId(R.id.login_ac_mn)).check(doesNotExist());
-
+        LOGIN_AC.checkItemRegisterUser(activity);
         cleanOneUser(USER_JUAN);
     }
 
     @Test
-    public void testLogin_withoutToken() throws InterruptedException
+    public void testLogin_Unregistered() throws InterruptedException
     {
         activity = activityRule.launchActivity(new Intent());
+        assertThat(activity.viewer.getController().isRegisteredUser(), is(false));
 
-        try {
-            onView(withId(R.id.login_ac_mn)).check(matches(isDisplayed()));
-        } catch (AssertionFailedError e) {
-            openActionBarOverflowOrOptionsMenu(activity);
-            onView(withId(R.id.login_ac_mn)).check(matches(isDisplayed()));
-        }
-
-        LOGIN_AC.checkMenuItem_NTk(activity);
+        LOGIN_AC.checkItemNoRegisterUser(activity);
         checkUp(comuSearchAcLayout);
     }
 
     @Test
-    public void testGetDataUserNotRegistered() throws InterruptedException
+    public void testGetDataUser_NotRegistered() throws InterruptedException
     {
         activity = activityRule.launchActivity(new Intent());
-        USER_DATA_AC.checkMenuItem_NTk(activity);
+        assertThat(activity.viewer.getController().isRegisteredUser(), is(false));
+        USER_DATA_AC.checkItemNoRegisterUser(activity);
     }
 
     @Test
-    public void testGetDataUserRegistered() throws InterruptedException, UiException, IOException
+    public void testGetDataUser_Registered() throws InterruptedException, UiException, IOException
     {
         signUpAndUpdateTk(COMU_REAL_JUAN);
         activity = activityRule.launchActivity(new Intent());
-        USER_DATA_AC.checkMenuItem_WTk(activity);
+        USER_DATA_AC.checkItemRegisterUser(activity);
 
         checkUp(comuSearchAcLayout);
         cleanOneUser(USER_JUAN);
     }
 
     @Test
-    public void testMenuNuevaComunidad_noToken() throws InterruptedException
+    public void testMenuNuevaComunidad_NotRegistered() throws InterruptedException
     {
         activity = activityRule.launchActivity(new Intent());
-        REG_COMU_USER_USERCOMU_AC.checkMenuItem_NTk(activity);
+        assertThat(activity.viewer.getController().isRegisteredUser(), is(false));
+        REG_COMU_USER_USERCOMU_AC.checkItemNoRegisterUser(activity);
 
         checkUp(comuSearchAcLayout);
     }
 
     @Test
-    public void testMenuNuevaComunidad_withToken() throws InterruptedException, UiException, IOException
+    public void testMenuNuevaComunidad_Registered() throws InterruptedException, UiException, IOException
     {
         signUpAndUpdateTk(COMU_REAL_JUAN);
         activity = activityRule.launchActivity(new Intent());
-        REG_COMU_USERCOMU_AC.checkMenuItem_WTk(activity);
+        REG_COMU_USERCOMU_AC.checkItemRegisterUser(activity);
 
         checkUp(comuSearchAcLayout);
         cleanOneUser(USER_JUAN);

@@ -169,7 +169,7 @@ public class ComuSearchResultsAcTest {
     public void testMenuNuevaComunidad_RegUser() throws InterruptedException, UiException, IOException
     {
         // Usuario registrado.
-        REG_COMU_USERCOMU_AC.checkMenuItem_WTk(activity);
+        REG_COMU_USERCOMU_AC.checkItemRegisterUser(activity);
         checkUp(comuSearchAcLayout);
     }
 
@@ -178,7 +178,7 @@ public class ComuSearchResultsAcTest {
     {
         // Usuario no registrado.
         activity.viewer.getController().updateIsRegistered(false);
-        REG_COMU_USER_USERCOMU_AC.checkMenuItem_NTk(activity);
+        REG_COMU_USER_USERCOMU_AC.checkItemNoRegisterUser(activity);
         checkBack(onView(withId(regComu_User_UserComuAcLayout)), comuSearchAcLayout);
     }
 
@@ -186,7 +186,7 @@ public class ComuSearchResultsAcTest {
     public void testComunidadesByUsuario() throws InterruptedException, UiException, IOException
     {
         // La consulta muestra las comunidades del usuario.
-        SEE_USERCOMU_BY_USER_AC.checkMenuItem_WTk(activity);
+        SEE_USERCOMU_BY_USER_AC.checkItemRegisterUser(activity);
         checkUp(comuSearchAcLayout);
     }
 }

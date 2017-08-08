@@ -181,7 +181,7 @@ public class ComuDataAcTest {
     @Test
     public void testSeeUserComuByComuMn() throws InterruptedException
     {
-        SEE_USERCOMU_BY_COMU_AC.checkMenuItem_WTk(activity);
+        SEE_USERCOMU_BY_COMU_AC.checkItemRegisterUser(activity);
         intended(hasExtra(ComuBundleKey.COMUNIDAD_ID.key, comunidad.getC_Id()));
         checkUp(comuDataAcLayout);
     }

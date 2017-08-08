@@ -1,6 +1,5 @@
 package com.didekindroid.usuariocomunidad.register;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -18,8 +17,7 @@ import com.didekindroid.usuario.RegUserFr;
 
 import timber.log.Timber;
 
-import static com.didekindroid.router.ActivityRouter.acRouter;
-import static com.didekindroid.router.ActivityRouter.doUpMenuWithIntent;
+import static com.didekindroid.router.ActivityRouter.doUpMenu;
 import static com.didekindroid.usuariocomunidad.register.ViewerRegComuUserUserComuAc.newViewerRegComuUserUserComuAc;
 import static com.didekindroid.util.UIutils.doToolBar;
 
@@ -30,7 +28,8 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * 3. There is not extras in the activity intent.
  */
 // TODO: añadir un campo de número de vecinos en la comunidad (aprox.).
-public class RegComuAndUserAndUserComuAc extends AppCompatActivity implements ViewerParentInjectorIf {
+public class RegComuAndUserAndUserComuAc extends AppCompatActivity implements
+        ViewerParentInjectorIf {
 
     RegComuFr regComuFr;
     RegUserComuFr regUserComuFr;
@@ -102,8 +101,7 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity implements Vi
         int resourceId = item.getItemId();
         switch (resourceId) {
             case android.R.id.home:
-                Intent intent = new Intent(this, acRouter.nextActivityFromMn(resourceId));
-                doUpMenuWithIntent(this, intent);
+                doUpMenu(this);
                 return true;
             case R.id.login_ac_mn:
                 new ActivityInitiator(this).initAcFromMnKeepIntent(resourceId);

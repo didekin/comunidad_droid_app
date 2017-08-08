@@ -146,6 +146,23 @@ public final class ActivityTestUtils {
         };
     }
 
+    public static Callable<Boolean> isTextIdNonExist(final Integer... stringId)
+    {
+        return new Callable<Boolean>() {
+            public Boolean call() throws Exception
+            {
+                try {
+                    for (int resourceId : stringId) {
+                        onView(withText(resourceId)).check(doesNotExist());
+                    }
+                    return true;
+                } catch (NoMatchingViewException ne) {
+                    return false;
+                }
+            }
+        };
+    }
+
     public static Callable<Boolean> isViewDisplayed(final Matcher<View> viewMatcher, final ViewAction... viewActions)
     {
         return new Callable<Boolean>() {

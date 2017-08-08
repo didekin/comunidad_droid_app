@@ -8,7 +8,7 @@
         android:title="@string/login_ac_mn"
         android:visible="false"
         android:enabled="false"
-        app:showAsAction="always" tools:ignore="AlwaysShowAction"/>
+        app:showAsAction="never|withText"/>
     <item
         android:id="@+id/see_usercomu_by_user_ac_mn"
         android:title="@string/see_usercomu_by_user_ac_mn"

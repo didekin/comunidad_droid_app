@@ -96,7 +96,7 @@ final class ViewerRegUserAndUserComuAc extends ViewerParent<View, CtrlerUsuarioC
                             @Override
                             public void onComplete()
                             {
-                                Timber.d("onComplete()");
+                                super.onComplete();
                                 onRegisterSuccess(comunidadIntent.getC_Id());
                             }
                         },

@@ -208,14 +208,14 @@ public class SeeUserComuByUserAcTest {
     @Test
     public void testUserDataMn_withToken() throws InterruptedException
     {
-        UserItemMenuTestUtils.USER_DATA_AC.checkMenuItem_WTk(mActivity);
+        UserItemMenuTestUtils.USER_DATA_AC.checkItemRegisterUser(mActivity);
         checkUp(seeUserComuByUserFrRsId);
     }
 
     @Test
     public void testComuSearchMn_withToken() throws InterruptedException
     {
-        COMU_SEARCH_AC.checkMenuItem_WTk(mActivity);
+        COMU_SEARCH_AC.checkItemRegisterUser(mActivity);
         // NO hay opción de navigate-up.
     }
 }

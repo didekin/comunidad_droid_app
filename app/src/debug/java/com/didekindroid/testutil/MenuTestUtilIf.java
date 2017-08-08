@@ -9,6 +9,6 @@ import android.app.Activity;
  */
 
 public interface MenuTestUtilIf {
-    void checkMenuItem_NTk(Activity activity) throws InterruptedException;
-    void checkMenuItem_WTk(Activity activity) throws InterruptedException;
+    void checkItemNoRegisterUser(Activity activity) throws InterruptedException;
+    void checkItemRegisterUser(Activity activity) throws InterruptedException;
 }

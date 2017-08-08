@@ -132,21 +132,21 @@ public class SeeUserComuByComuAcTest {
     @Test
     public void testUserComuByUserMn() throws InterruptedException
     {
-        SEE_USERCOMU_BY_USER_AC.checkMenuItem_WTk(activity);
+        SEE_USERCOMU_BY_USER_AC.checkItemRegisterUser(activity);
         checkUp(seeUserComuByComuFrRsId);
     }
 
     @Test
     public void testUserDataMn() throws InterruptedException
     {
-        USER_DATA_AC.checkMenuItem_WTk(activity);
+        USER_DATA_AC.checkItemRegisterUser(activity);
         checkUp(seeUserComuByComuFrRsId);
     }
 
     @Test
     public void testComuSearchMn() throws InterruptedException
     {
-        COMU_SEARCH_AC.checkMenuItem_WTk(activity);
+        COMU_SEARCH_AC.checkItemRegisterUser(activity);
         // En este caso no hay opción de 'navigate-up'.
     }
 }

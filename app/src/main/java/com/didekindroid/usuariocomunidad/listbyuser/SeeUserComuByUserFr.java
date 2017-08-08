@@ -39,10 +39,6 @@ public class SeeUserComuByUserFr extends Fragment {
     SeeUserComuByUserFrListener mListener;
     ListView fragmentView;
 
-    public SeeUserComuByUserFr()
-    {
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState)
     {

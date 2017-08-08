@@ -87,7 +87,7 @@ public final class ViewerRegComuUserUserComuAc extends ViewerParent<View, Ctrler
                             @Override
                             public void onComplete()
                             {
-                                Timber.d("onComplete()");
+                                super.onComplete();
                                 onRegisterSuccess();
                             }
                         },

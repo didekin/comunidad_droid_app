@@ -163,7 +163,7 @@ public class UserDataAcTest {
     @Test
     public void testComuSearchMn() throws InterruptedException
     {
-        COMU_SEARCH_AC.checkMenuItem_WTk(activity);
+        COMU_SEARCH_AC.checkItemRegisterUser(activity);
         intended(hasExtra(user_name.key, oldUsuario.getUserName()));
         // NO navigate-up.
     }
@@ -171,7 +171,7 @@ public class UserDataAcTest {
     @Test
     public void testDeleteMeMn() throws InterruptedException
     {
-        DELETE_ME_AC.checkMenuItem_WTk(activity);
+        DELETE_ME_AC.checkItemRegisterUser(activity);
         intended(hasExtra(user_name.key, oldUsuario.getUserName()));
         checkUp(userDataAcRsId);
     }
@@ -179,7 +179,7 @@ public class UserDataAcTest {
     @Test
     public void testPasswordChangeMn() throws InterruptedException
     {
-        PASSWORD_CHANGE_AC.checkMenuItem_WTk(activity);
+        PASSWORD_CHANGE_AC.checkItemRegisterUser(activity);
         intended(hasExtra(user_name.key, oldUsuario.getUserName()));
         checkUp(userDataAcRsId);
     }
@@ -187,7 +187,7 @@ public class UserDataAcTest {
     @Test
     public void testUserComuByUserMn() throws InterruptedException
     {
-        SEE_USERCOMU_BY_USER_AC.checkMenuItem_WTk(activity);
+        SEE_USERCOMU_BY_USER_AC.checkItemRegisterUser(activity);
         intended(hasExtra(user_name.key, oldUsuario.getUserName()));
         checkUp(userDataAcRsId);
     }
