@@ -19,7 +19,7 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
-import static com.didekindroid.incidencia.firebase.IncidFirebaseDownMsgHandler.INCIDENCIA_CLOSE;
+import static com.didekindroid.incidencia.firebase.IncidDownStreamMsgHandler.INCIDENCIA_CLOSE;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;

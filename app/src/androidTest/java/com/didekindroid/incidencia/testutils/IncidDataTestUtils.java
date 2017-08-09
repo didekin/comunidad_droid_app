@@ -19,7 +19,7 @@ import java.util.Date;
 import java.util.List;
 
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
-import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
+import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static com.didekindroid.util.UIutils.getStringFromInteger;
 import static org.hamcrest.CoreMatchers.is;

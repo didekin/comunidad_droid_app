@@ -1,4 +1,4 @@
-package com.didekindroid.usuariocomunidad.dao;
+package com.didekindroid.usuariocomunidad.repository;
 
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
@@ -10,7 +10,7 @@ import io.reactivex.Maybe;
 import io.reactivex.Single;
 import timber.log.Timber;
 
-import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
+import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
 import static io.reactivex.Single.fromCallable;
 
 /**

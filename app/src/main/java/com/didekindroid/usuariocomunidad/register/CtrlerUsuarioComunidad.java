@@ -18,7 +18,7 @@ import retrofit2.Response;
 import timber.log.Timber;
 
 import static com.didekindroid.security.OauthTokenObservable.oauthTokenInitCacheUpdateRegister;
-import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
+import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.util.DaoUtil.getResponseBody;
 import static com.didekinlib.http.UsuarioServConstant.IS_USER_DELETED;
 import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_DATA_NOT_INSERTED;

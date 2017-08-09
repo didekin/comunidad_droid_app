@@ -12,8 +12,8 @@ import timber.log.Timber;
 
 import static com.didekindroid.comunidad.ComunidadObservable.comunidad;
 import static com.didekindroid.comunidad.ComunidadObservable.comunidadesFound;
-import static com.didekindroid.usuariocomunidad.dao.UserComuObservable.comunidadByUserAndComu;
-import static com.didekindroid.usuariocomunidad.dao.UserComuObservable.comunidadModificada;
+import static com.didekindroid.usuariocomunidad.repository.UserComuObservable.comunidadByUserAndComu;
+import static com.didekindroid.usuariocomunidad.repository.UserComuObservable.comunidadModificada;
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 import static io.reactivex.schedulers.Schedulers.io;
 

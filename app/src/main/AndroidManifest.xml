@@ -77,7 +77,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".usuario.userdata.UserDataAc"/>
         </activity>
-        <!-- TODO: ¿Hace falta singleTask?-->
         <activity
             android:name="com.didekindroid.usuariocomunidad.register.RegComuAndUserAndUserComuAc"
             android:label="@string/reg_comunidad_ac_label"
@@ -85,13 +84,11 @@
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.didekindroid.comunidad.ComuSearchResultsAc"/>
+                android:value="com.didekindroid.comunidad.ComuSearchAc"/>
         </activity>
-        <!-- TODO: ¿Hace falta singleTask?-->
         <activity
             android:name="com.didekindroid.usuariocomunidad.register.RegComuAndUserComuAc"
             android:label="@string/reg_comunidad_ac_label"
-            android:launchMode="singleTask"
             android:parentActivityName="com.didekindroid.comunidad.ComuSearchAc"
             android:windowSoftInputMode="stateHidden">
             <meta-data
@@ -128,10 +125,10 @@
         <activity
             android:name="com.didekindroid.usuariocomunidad.listbyuser.SeeUserComuByUserAc"
             android:label="@string/see_usercomu_by_user_ac_label"
-            android:parentActivityName="com.didekindroid.comunidad.ComuSearchResultsAc">
+            android:parentActivityName="com.didekindroid.comunidad.ComuSearchAc">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.didekindroid.comunidad.ComuSearchResultsAc"/>
+                android:value="com.didekindroid.comunidad.ComuSearchAc"/>
         </activity>
         <activity
             android:name="com.didekindroid.usuariocomunidad.data.UserComuDataAc"

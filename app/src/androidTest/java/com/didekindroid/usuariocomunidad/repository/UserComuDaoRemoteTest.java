@@ -1,4 +1,4 @@
-package com.didekindroid.usuariocomunidad.dao;
+package com.didekindroid.usuariocomunidad.repository;
 
 import android.support.test.runner.AndroidJUnit4;
 
@@ -39,7 +39,7 @@ import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOption
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanWithTkhandler;
 import static com.didekindroid.usuariocomunidad.RolUi.PRE;
 import static com.didekindroid.usuariocomunidad.RolUi.PRO;
-import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
+import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_PEPE;

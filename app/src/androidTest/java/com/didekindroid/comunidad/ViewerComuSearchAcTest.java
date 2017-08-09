@@ -30,7 +30,7 @@ import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_REAL;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkMunicipioSpinner;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkRegComuFrViewEmpty;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.typeComunidadData;
-import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuListFrLayout;
+import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchResultsListLayout;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_SEARCH;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
@@ -113,7 +113,7 @@ public class ViewerComuSearchAcTest {
     {
         Bundle bundle = new Bundle(1);
         bundle.putSerializable(COMUNIDAD_SEARCH.key, signUpWithTkGetComu(COMU_REAL_PEPE));
-        checkViewerReplaceComponent(activity.viewer, comuListFrLayout, bundle);
+        checkViewerReplaceComponent(activity.viewer, comuSearchResultsListLayout, bundle);
         cleanOptions(CLEAN_PEPE);
     }
 

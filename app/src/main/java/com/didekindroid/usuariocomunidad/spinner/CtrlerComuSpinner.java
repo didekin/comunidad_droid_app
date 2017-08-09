@@ -8,7 +8,7 @@ import java.util.List;
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
-import static com.didekindroid.usuariocomunidad.dao.UserComuObservable.comunidadesByUser;
+import static com.didekindroid.usuariocomunidad.repository.UserComuObservable.comunidadesByUser;
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 import static io.reactivex.schedulers.Schedulers.io;
 

@@ -35,7 +35,7 @@ import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanWithTkhandler;
 import static com.didekindroid.usuariocomunidad.RolUi.PRO;
-import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
+import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.register.CtrlerUsuarioComunidad.isOldestAdmonUser;
 import static com.didekindroid.usuariocomunidad.register.CtrlerUsuarioComunidad.userAndComuRegistered;
 import static com.didekindroid.usuariocomunidad.register.CtrlerUsuarioComunidad.userAndUserComuRegistered;

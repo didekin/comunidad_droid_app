@@ -27,7 +27,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkRegComuFrViewEmpty;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkSpinnersDoInViewerOffNull;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.typeComunidadData;
-import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuListFrLayout;
+import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchResultsListLayout;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
@@ -92,7 +92,7 @@ public class ComuSearchAcTest {
 
         onView(withId(R.id.searchComunidad_Bton)).perform(ViewActions.click());
         // Check the view for comunidades list fragment.
-        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(comuListFrLayout));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(comuSearchResultsListLayout));
 
         checkUp(comuSearchAcLayout);
 
@@ -108,9 +108,9 @@ public class ComuSearchAcTest {
 
         onView(withId(R.id.searchComunidad_Bton)).perform(ViewActions.click());
         // Check the view for comunidades list fragment.
-        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(comuListFrLayout));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(comuSearchResultsListLayout));
         // Back.
-        checkBack(onView(withId(comuListFrLayout)), comuSearchAcLayout);
+        checkBack(onView(withId(comuSearchResultsListLayout)), comuSearchAcLayout);
 
         cleanOneUser(USER_JUAN);
     }

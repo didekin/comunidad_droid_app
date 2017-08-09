@@ -12,7 +12,11 @@
         <activity
             android:name=".api.ActivityNextMock"
             android:label="@string/mock_next_DefaultActivity_label"
-            android:launchMode="singleTask">
+            android:parentActivityName=".api.ActivityMock"
+            android:launchMode="standard">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".api.ActivityMock"/>
         </activity>
     </application>
 </manifest>

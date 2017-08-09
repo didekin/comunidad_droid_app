@@ -19,7 +19,7 @@ import java.util.List;
 import timber.log.Timber;
 
 import static com.didekindroid.usuariocomunidad.util.UserComuAssertionMsg.usercomu_list_should_be_initialized;
-import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
+import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.checkPostExecute;
 

@@ -12,7 +12,7 @@ import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.ComunidadDao.comunidadDao;
-import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
+import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 import static io.reactivex.schedulers.Schedulers.io;
 

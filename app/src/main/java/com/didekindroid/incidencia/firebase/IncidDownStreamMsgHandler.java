@@ -42,7 +42,7 @@ import static java.lang.Long.parseLong;
  * Date: 14/01/17
  * Time: 10:31
  */
-public enum IncidFirebaseDownMsgHandler implements FirebaseDownstreamMsgHandler {
+public enum IncidDownStreamMsgHandler implements FirebaseDownstreamMsgHandler {
 
     INCIDENCIA_OPEN {
         @Override
@@ -112,10 +112,10 @@ public enum IncidFirebaseDownMsgHandler implements FirebaseDownstreamMsgHandler 
 
     // ======================= STATIC METHODS =========================
 
-    private static final Map<String, IncidFirebaseDownMsgHandler> typeToHandler = new HashMap<>();
+    private static final Map<String, IncidDownStreamMsgHandler> typeToHandler = new HashMap<>();
 
     static {
-        for (IncidFirebaseDownMsgHandler handler : values()) {
+        for (IncidDownStreamMsgHandler handler : values()) {
             typeToHandler.put(handler.getType(), handler);
         }
     }

@@ -1,4 +1,4 @@
-package com.didekindroid.usuariocomunidad.dao;
+package com.didekindroid.usuariocomunidad.repository;
 
 import com.didekindroid.exception.UiException;
 import com.didekindroid.security.IdentityCacher;

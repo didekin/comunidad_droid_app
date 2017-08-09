@@ -27,7 +27,7 @@ import static com.didekindroid.security.SecurityTestUtils.updateSecurityData;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
-import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
+import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_JUAN;
 import static com.didekinlib.model.usuariocomunidad.Rol.PRESIDENTE;
 import static org.hamcrest.CoreMatchers.allOf;

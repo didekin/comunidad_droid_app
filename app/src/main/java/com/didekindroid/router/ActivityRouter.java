@@ -1,6 +1,7 @@
 package com.didekindroid.router;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.util.ArrayMap;
 import android.view.View;
 
@@ -34,7 +35,11 @@ import java.util.Map;
 
 import timber.log.Timber;
 
-import static android.support.v4.app.NavUtils.navigateUpFromSameTask;
+import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
+import static android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP;
+import static android.support.v4.app.NavUtils.getParentActivityIntent;
+import static android.support.v4.app.NavUtils.navigateUpTo;
+import static android.support.v4.app.NavUtils.shouldUpRecreateTask;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 
 /**
@@ -49,7 +54,10 @@ public class ActivityRouter implements ActivityRouterIf {
 
     static final Class<? extends Activity> acByDefaultRegUser = LoginAc.class;
     static final Class<? extends Activity> acByDefaultNoRegUser = ComuSearchAc.class;
-
+    /**
+     * This constant is used as non-existent itemMenu. For example, when wanting to get the default menu router options.
+     */
+    static final int NULL_MENU_ITEM = -1;
     private static final Map<Integer, Class<? extends Activity>> menuIdMap = new ArrayMap<>();
     private static final Map<Integer, Class<? extends Activity>> noUserRegMenuIdMap = new ArrayMap<>();
     private static final Map<Class<? extends Activity>, Class<? extends Activity>> acRouterMap = new ArrayMap<>();
@@ -116,7 +124,16 @@ public class ActivityRouter implements ActivityRouterIf {
     public static void doUpMenu(Activity activity)
     {
         Timber.d("doUpMenu()");
-        navigateUpFromSameTask(activity);
+        if (shouldUpRecreateTask(activity, getParentActivityIntent(activity))) {
+            new ActivityInitiator(activity).initDefaultAcFromUp();
+            return;
+        }
+
+        Intent intent = getParentActivityIntent(activity);
+        // We need both flags to reuse the parent activity.
+        intent.setFlags(FLAG_ACTIVITY_CLEAR_TOP | FLAG_ACTIVITY_SINGLE_TOP);
+        activity.setIntent(intent);
+        navigateUpTo(activity, intent);
     }
 
     @Override

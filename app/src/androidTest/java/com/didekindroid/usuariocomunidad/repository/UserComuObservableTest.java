@@ -1,4 +1,4 @@
-package com.didekindroid.usuariocomunidad.dao;
+package com.didekindroid.usuariocomunidad.repository;
 
 import android.support.test.rule.ActivityTestRule;
 
@@ -21,9 +21,9 @@ import io.reactivex.observers.TestObserver;
 import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_EL_ESCORIAL;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
-import static com.didekindroid.usuariocomunidad.dao.UserComuObservable.comunidadByUserAndComu;
-import static com.didekindroid.usuariocomunidad.dao.UserComuObservable.comunidadModificada;
-import static com.didekindroid.usuariocomunidad.dao.UserComuObservable.comunidadesByUser;
+import static com.didekindroid.usuariocomunidad.repository.UserComuObservable.comunidadByUserAndComu;
+import static com.didekindroid.usuariocomunidad.repository.UserComuObservable.comunidadModificada;
+import static com.didekindroid.usuariocomunidad.repository.UserComuObservable.comunidadesByUser;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpWithTkGetComu;
 import static org.hamcrest.CoreMatchers.is;

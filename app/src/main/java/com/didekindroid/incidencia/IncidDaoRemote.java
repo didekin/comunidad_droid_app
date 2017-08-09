@@ -22,7 +22,7 @@ import timber.log.Timber;
 
 import static com.didekindroid.AppInitializer.creator;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
+import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.util.DaoUtil.getResponseBody;
 import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
 

@@ -23,7 +23,7 @@ import static com.didekindroid.usuariocomunidad.RolUi.ADM;
 import static com.didekindroid.usuariocomunidad.RolUi.INQ;
 import static com.didekindroid.usuariocomunidad.RolUi.PRE;
 import static com.didekindroid.usuariocomunidad.RolUi.PRO;
-import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
+import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekinlib.model.usuariocomunidad.Rol.PRESIDENTE;
 import static com.didekinlib.model.usuariocomunidad.Rol.PROPIETARIO;
 import static org.hamcrest.CoreMatchers.is;

@@ -22,7 +22,6 @@ public final class CommonAssertionMsg {
     static final String subscriptions_should_not_be_null = "subscriptions_should_not_be_null";
     public static final String viewer_should_be_initialized = "Viewer should be initialized";
 
-
     private CommonAssertionMsg()
     {
     }

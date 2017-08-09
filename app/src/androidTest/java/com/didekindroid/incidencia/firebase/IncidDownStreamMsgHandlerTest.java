@@ -42,10 +42,10 @@ import static com.didekindroid.R.string.incid_gcm_incidencia_closed_body;
 import static com.didekindroid.R.string.incid_gcm_nueva_incidencia_body;
 import static com.didekindroid.R.string.incid_gcm_resolucion_open_body;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
-import static com.didekindroid.incidencia.firebase.IncidFirebaseDownMsgHandler.INCIDENCIA_CLOSE;
-import static com.didekindroid.incidencia.firebase.IncidFirebaseDownMsgHandler.INCIDENCIA_OPEN;
-import static com.didekindroid.incidencia.firebase.IncidFirebaseDownMsgHandler.RESOLUCION_OPEN;
-import static com.didekindroid.incidencia.firebase.IncidFirebaseDownMsgHandler.processMsgWithHandler;
+import static com.didekindroid.incidencia.firebase.IncidDownStreamMsgHandler.INCIDENCIA_CLOSE;
+import static com.didekindroid.incidencia.firebase.IncidDownStreamMsgHandler.INCIDENCIA_OPEN;
+import static com.didekindroid.incidencia.firebase.IncidDownStreamMsgHandler.RESOLUCION_OPEN;
+import static com.didekindroid.incidencia.firebase.IncidDownStreamMsgHandler.processMsgWithHandler;
 import static com.didekindroid.incidencia.testutils.GcmConstantForTests.PACKAGE_TEST;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
@@ -70,7 +70,7 @@ import static org.junit.Assert.assertThat;
  */
 @SuppressWarnings("ConstantConditions")
 @RunWith(AndroidJUnit4.class)
-public class IncidFirebaseDownMsgHandlerTest {
+public class IncidDownStreamMsgHandlerTest {
 
     ActivityMock mActivity;
     long comunidadId;
@@ -274,7 +274,7 @@ public class IncidFirebaseDownMsgHandlerTest {
 
     @NonNull
     @RequiresApi(api = Build.VERSION_CODES.M)
-    private StatusBarNotification checkBarNotification(IncidFirebaseDownMsgHandler handler)
+    private StatusBarNotification checkBarNotification(IncidDownStreamMsgHandler handler)
     {
         waitAtMost(6, SECONDS).until(notificationsSize(), is(1));
         StatusBarNotification barNotification = notificationManager.getActiveNotifications()[0];

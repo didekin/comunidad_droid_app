@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 
 import com.didekindroid.R;
+import com.didekindroid.api.ActivityMock;
 import com.didekindroid.api.ControllerIf;
 import com.didekindroid.api.CtrlerSelectListIf;
 import com.didekindroid.api.ViewerIf;
@@ -40,9 +41,11 @@ import org.hamcrest.Matcher;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.concurrent.FutureTask;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -69,6 +72,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static android.support.test.runner.lifecycle.ActivityLifecycleMonitorRegistry.getInstance;
+import static android.support.test.runner.lifecycle.Stage.RESUMED;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.RxSchedulersUtils.resetAllSchedulers;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceAndroidMain;
@@ -112,13 +117,13 @@ public final class ActivityTestUtils {
         };
     }
 
-    public static Callable<Boolean> isResourceIdDisplayed(final Integer... resourceStringIds)
+    public static Callable<Boolean> isResourceIdDisplayed(final Integer... resourceIds)
     {
         return new Callable<Boolean>() {
             public Boolean call() throws Exception
             {
                 try {
-                    for (int resourceId : resourceStringIds) {
+                    for (int resourceId : resourceIds) {
                         onView(withId(resourceId)).check(matches(isDisplayed()));
                     }
                     return true;
@@ -379,7 +384,7 @@ public final class ActivityTestUtils {
         };
     }
 
-    //    ============================= MENU ===================================
+    //    ============================= NAVIGATION ===================================
 
     public static void checkMenu(Activity activity, int menuResourceId, int actionResourceId)
     {
@@ -405,23 +410,40 @@ public final class ActivityTestUtils {
     public static void checkUp(Integer... activityLayoutIds)
     {
         clickNavigateUp();
-        for (Integer layout : activityLayoutIds) {
+        for (Integer layout : activityLayoutIds)
             try {
-                isResourceIdDisplayed(layout).call();
+                waitAtMost(4, SECONDS).until(isResourceIdDisplayed(layout));
             } catch (Exception e) {
                 fail();
             }
-        }
     }
 
-    //    ============================= NAVIGATION ===================================
+    public static void checkIntentParentActivity() throws InterruptedException, java.util.concurrent.ExecutionException
+    {
+        Timber.d("============= Checking parent activity =================");
+
+        final FutureTask<Collection<Activity>> taskGetActivities = new FutureTask<>(new Callable<Collection<Activity>>() {
+            @Override
+            public Collection<Activity> call() throws Exception
+            {
+                return getInstance().getActivitiesInStage(RESUMED);
+            }
+        });
+        getInstrumentation().runOnMainSync(taskGetActivities);
+        Collection<Activity> activities = taskGetActivities.get();
+        assertThat(activities.size(), CoreMatchers.is(1));
+        for (Activity next : activities) {
+            assertThat(next.getComponentName().getClassName(), CoreMatchers.is(ActivityMock.class.getCanonicalName()));
+            assertThat(next.getIntent().getStringExtra("keyTest_2"), CoreMatchers.is("Value_keyTest_2"));
+        }
+    }
 
     public static void checkBack(ViewInteraction viewInteraction, Integer... activityLayoutIds)
     {
         viewInteraction.perform(closeSoftKeyboard()).perform(pressBack());
         for (Integer layout : activityLayoutIds) {
             try {
-                isResourceIdDisplayed(layout).call();
+                waitAtMost(4, SECONDS).until(isResourceIdDisplayed(layout));
             } catch (Exception e) {
                 fail();
             }

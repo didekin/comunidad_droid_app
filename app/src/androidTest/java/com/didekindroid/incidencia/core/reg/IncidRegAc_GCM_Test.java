@@ -18,10 +18,10 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
-import static com.didekindroid.incidencia.firebase.IncidFirebaseDownMsgHandler.INCIDENCIA_OPEN;
+import static com.didekindroid.incidencia.firebase.IncidDownStreamMsgHandler.INCIDENCIA_OPEN;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doIncidencia;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
-import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
+import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static org.hamcrest.CoreMatchers.is;

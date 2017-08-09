@@ -19,7 +19,7 @@ import timber.log.Timber;
 
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.router.ActivityRouter.doUpMenu;
-import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
+import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.register.ViewerRegUserComuAc.newViewerRegUserComuAc;
 import static com.didekindroid.usuariocomunidad.util.UserComuAssertionMsg.user_and_comunidad_should_be_registered;
 import static com.didekindroid.util.UIutils.assertTrue;
