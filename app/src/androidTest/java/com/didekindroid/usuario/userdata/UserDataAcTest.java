@@ -20,8 +20,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import java.util.concurrent.TimeUnit;
-
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
@@ -105,7 +103,6 @@ public class UserDataAcTest {
     public void setUp() throws Exception
     {
         activity = (UserDataAc) mActivityRule.getActivity();
-        TimeUnit.MILLISECONDS.sleep(2000);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
