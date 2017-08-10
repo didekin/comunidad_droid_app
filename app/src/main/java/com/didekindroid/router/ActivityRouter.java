@@ -74,7 +74,7 @@ public class ActivityRouter implements ActivityRouterIf {
         acRouterMap.put(PasswordChangeAc.class, UserDataAc.class);
         acRouterMap.put(RegComuAndUserAndUserComuAc.class, SeeUserComuByUserAc.class);
         acRouterMap.put(RegComuAndUserComuAc.class, SeeUserComuByUserAc.class);
-        acRouterMap.put(RegUserAndUserComuAc.class, SeeUserComuByComuAc.class);
+        acRouterMap.put(RegUserAndUserComuAc.class, SeeUserComuByUserAc.class);
         acRouterMap.put(RegUserComuAc.class, SeeUserComuByUserAc.class);
         acRouterMap.put(UserComuDataAc.class, SeeUserComuByUserAc.class);
         acRouterMap.put(UserDataAc.class, SeeUserComuByUserAc.class);

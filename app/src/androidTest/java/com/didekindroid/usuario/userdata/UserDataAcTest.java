@@ -1,12 +1,19 @@
 package com.didekindroid.usuario.userdata;
 
 import android.app.Activity;
+import android.app.TaskStackBuilder;
+import android.content.Intent;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.widget.EditText;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.usuariocomunidad.data.UserComuDataAc;
+import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuario.Usuario;
+import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.junit.After;
 import org.junit.Before;
@@ -16,6 +23,7 @@ import org.junit.Test;
 import java.util.concurrent.TimeUnit;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
+import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
@@ -31,11 +39,12 @@ import static com.didekindroid.R.id.reg_usuario_email_editT;
 import static com.didekindroid.R.id.user_data_ac_password_ediT;
 import static com.didekindroid.R.id.user_data_modif_button;
 import static com.didekindroid.comunidad.testutil.ComuMenuTestUtil.COMU_SEARCH_AC;
+import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_OPEN_BY_COMU_AC;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.checkViewerReplaceComponent;
-import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
+import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
@@ -46,10 +55,13 @@ import static com.didekindroid.usuario.testutil.UserItemMenuTestUtils.PASSWORD_C
 import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.userDataAcRsId;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanWithTkhandler;
+import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.SEE_USERCOMU_BY_USER_AC;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.userComuDataLayout;
+import static com.didekindroid.usuariocomunidad.util.UserComuBundleKey.USERCOMU_LIST_OBJECT;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
@@ -68,6 +80,7 @@ public class UserDataAcTest {
 
     UserDataAc activity;
     Usuario oldUsuario;
+    Comunidad comunidad;
 
     @Rule
     public IntentsTestRule<? extends Activity> mActivityRule = new IntentsTestRule<UserDataAc>(UserDataAc.class) {
@@ -76,10 +89,15 @@ public class UserDataAcTest {
         {
             try {
                 oldUsuario = signUpAndUpdateTk(COMU_REAL_JUAN);
+                comunidad = userComuDaoRemote.getComusByUser().get(0);
                 assertThat(oldUsuario, notNullValue());
             } catch (Exception e) {
                 fail();
             }
+            Intent intent = new Intent(getTargetContext(), UserComuDataAc.class);
+            intent.putExtra(USERCOMU_LIST_OBJECT.key,
+                    new UsuarioComunidad.UserComuBuilder(comunidad, oldUsuario).userComuRest(COMU_REAL_JUAN).build());
+            TaskStackBuilder.create(getTargetContext()).addNextIntent(intent).addParentStack(UserDataAc.class).startActivities();
         }
     };
 
@@ -90,11 +108,13 @@ public class UserDataAcTest {
         TimeUnit.MILLISECONDS.sleep(2000);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @After
     public void tearDown() throws Exception
     {
         usuarioDao.deleteUser();
         cleanWithTkhandler();
+        cleanTasks(activity);
     }
 
     // ============================================================
@@ -118,7 +138,8 @@ public class UserDataAcTest {
 
         onView(withId(user_data_modif_button)).check(matches(isDisplayed()));
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
-        clickNavigateUp();
+
+        checkUp(seeUserComuByUserFrRsId);
     }
 
     @Test  // Wrong password.
@@ -134,7 +155,7 @@ public class UserDataAcTest {
     {
         typeClickWait();
         // Verificamos navegación.
-        checkUp(userDataAcRsId);
+        checkUp(comuSearchAcLayout);
     }
 
     @Test  // Modify user OK.
@@ -189,15 +210,17 @@ public class UserDataAcTest {
     {
         SEE_USERCOMU_BY_USER_AC.checkItemRegisterUser(activity);
         intended(hasExtra(user_name.key, oldUsuario.getUserName()));
-        checkUp(userDataAcRsId);
+        checkUp(comuSearchAcLayout);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Test
     public void testIncidSeeByComuMn() throws InterruptedException
     {
         INCID_SEE_OPEN_BY_COMU_AC.checkMenuItem_WTk(activity);
         intended(hasExtra(user_name.key, oldUsuario.getUserName()));
-        checkUp(userDataAcRsId);
+
+        checkUp(userComuDataLayout);
     }
 
     /*    =================================  HELPERS ==================================*/

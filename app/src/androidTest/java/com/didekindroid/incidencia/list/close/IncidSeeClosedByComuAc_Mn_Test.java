@@ -22,7 +22,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeCloseAcLayout;
-import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeGenericLayout;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeGenericFrLayout;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_REG_AC;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_OPEN_BY_COMU_AC;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
@@ -96,13 +96,13 @@ public class IncidSeeClosedByComuAc_Mn_Test {
     public void testIncidSeeOpenByComuMn() throws InterruptedException
     {
         INCID_SEE_OPEN_BY_COMU_AC.checkMenuItem_WTk(activity);
-        checkUp(incidSeeCloseAcLayout, incidSeeGenericLayout);
+        checkUp(incidSeeCloseAcLayout, incidSeeGenericFrLayout);
     }
 
     @Test
     public void testIncidRegMn() throws InterruptedException
     {
         INCID_REG_AC.checkMenuItem_WTk(activity);
-        checkUp(incidSeeCloseAcLayout, incidSeeGenericLayout);
+        checkUp(incidSeeCloseAcLayout, incidSeeGenericFrLayout);
     }
 }

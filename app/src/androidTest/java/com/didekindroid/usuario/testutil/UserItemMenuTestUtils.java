@@ -1,6 +1,7 @@
 package com.didekindroid.usuario.testutil;
 
 import android.app.Activity;
+import android.support.test.espresso.NoMatchingViewException;
 
 import com.didekindroid.R;
 import com.didekindroid.testutil.MenuTestUtilIf;
@@ -95,7 +96,10 @@ public enum UserItemMenuTestUtils implements MenuTestUtilIf {
     static void checkItemNotExists(Activity activity, int menuResourceId)
     {
         onView(withText(menuResourceId)).check(doesNotExist());
-        openActionBarOverflowOrOptionsMenu(activity);
+        try {
+            openActionBarOverflowOrOptionsMenu(activity);
+        } catch (NoMatchingViewException e) {
+        }
         waitAtMost(4, SECONDS).until(isTextIdNonExist(menuResourceId));
     }
 }

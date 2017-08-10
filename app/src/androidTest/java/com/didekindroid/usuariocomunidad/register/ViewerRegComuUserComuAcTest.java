@@ -89,7 +89,7 @@ public class ViewerRegComuUserComuAcTest {
         typeComunidadData();
         onView(withId(buttonId)).perform(scrollTo(), click());
 
-        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
+        waitAtMost(5, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
         cleanOptions(CLEAN_PEPE);
     }
 

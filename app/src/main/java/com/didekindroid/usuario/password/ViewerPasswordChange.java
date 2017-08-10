@@ -62,7 +62,7 @@ class ViewerPasswordChange extends Viewer<View, CtrlerPasswordChangeIf>
         // Precondition.
         assertTrue(controller.isRegisteredUser(), user_should_be_registered);
 
-        Button mModifyButton = (Button) view.findViewById(R.id.password_change_ac_button);
+        Button mModifyButton = view.findViewById(R.id.password_change_ac_button);
         mModifyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)

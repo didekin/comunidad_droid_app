@@ -22,6 +22,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.isComuSpinnerWithText;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeGenericFrLayout;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeOpenAcLayout;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_REG_AC;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_CLOSED_BY_COMU_AC;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
@@ -43,9 +45,8 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class IncidSeeOpenByComuAc_Mn_Test {
 
-    int activityLayoutId = R.id.incid_see_open_by_comu_ac;
-    int secondLayoutId = R.id.incid_see_generic_layout;
     Comunidad comunidadInIntent;
+
     @Rule
     public IntentsTestRule<IncidSeeOpenByComuAc> activityRule = new IntentsTestRule<IncidSeeOpenByComuAc>(IncidSeeOpenByComuAc.class) {
 
@@ -88,15 +89,13 @@ public class IncidSeeOpenByComuAc_Mn_Test {
     {
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
 
-        onView(withId(activityLayoutId)).check(matches(isDisplayed()));
-        onView(withId(secondLayoutId)).check(matches(isDisplayed()));
+        onView(withId(incidSeeOpenAcLayout)).check(matches(isDisplayed()));
+        onView(withId(incidSeeGenericFrLayout)).check(matches(isDisplayed()));
         // No hay incidencias registradas.
         onView(withId(android.R.id.list)).check(matches(not(isDisplayed())));
         onView(withId(android.R.id.empty)).check(matches(isDisplayed()));
 
-        waitAtMost(3, SECONDS).until(
-                isComuSpinnerWithText(comunidadInIntent.getNombreComunidad())
-        );
+        waitAtMost(3, SECONDS).until(isComuSpinnerWithText(comunidadInIntent.getNombreComunidad()));
 
         clickNavigateUp();
     }
@@ -107,13 +106,13 @@ public class IncidSeeOpenByComuAc_Mn_Test {
     public void testIncidSeeClosedByComuMn() throws InterruptedException
     {
         INCID_SEE_CLOSED_BY_COMU_AC.checkMenuItem_WTk(activity);
-        checkUp(activityLayoutId, secondLayoutId);
+        checkUp(incidSeeOpenAcLayout, incidSeeGenericFrLayout);
     }
 
     @Test
     public void testIncidRegMn() throws InterruptedException
     {
         INCID_REG_AC.checkMenuItem_WTk(activity);
-        checkUp(activityLayoutId, secondLayoutId);
+        checkUp(incidSeeOpenAcLayout, incidSeeGenericFrLayout);
     }
 }

@@ -47,6 +47,7 @@ public class RegUserAndUserComuAc extends AppCompatActivity implements ViewerPar
     ViewerRegUserAndUserComuAc viewer;
     RegUserComuFr regUserComuFr;
     RegUserFr regUserFr;
+    Menu acMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -104,7 +105,17 @@ public class RegUserAndUserComuAc extends AppCompatActivity implements ViewerPar
 
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.reg_user_activities_mn, menu);
+        acMenu = menu;
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu)
+    {
+        Timber.d("onPrepareOptionsMenu()");
+        boolean isRegistered = viewer.getController().isRegisteredUser();
+        menu.findItem(R.id.login_ac_mn).setVisible(!isRegistered).setEnabled(!isRegistered);
+        return true;
     }
 
     @Override
@@ -122,7 +133,6 @@ public class RegUserAndUserComuAc extends AppCompatActivity implements ViewerPar
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
-
         }
     }
 }

@@ -7,6 +7,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.usuariocomunidad.data.UserComuDataAc;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.comunidad.Municipio;
 import com.didekinlib.model.comunidad.Provincia;
@@ -19,7 +20,6 @@ import org.junit.runner.RunWith;
 
 import java.io.IOException;
 
-import static android.support.test.InstrumentationRegistry.getContext;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
@@ -31,6 +31,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_LA_PLAZUELA_5;
 import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.makeComunidad;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkComuData;
+import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchResultsListLayout;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_SEARCH;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
@@ -49,13 +50,14 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.RE
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.SEE_USERCOMU_BY_USER_AC;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.regComu_UserComuAcLayout;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.regComu_User_UserComuAcLayout;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.regUser_UserComuAcLayout;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.userComuDataLayout;
 import static com.didekinlib.model.usuariocomunidad.Rol.INQUILINO;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.core.AllOf.allOf;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
@@ -68,6 +70,7 @@ import static org.junit.Assert.fail;
 public class ComuSearchResultsAcTest {
 
     ComuSearchResultsAc activity;
+    Intent intent;
     Comunidad comuRondaDelNorte;
 
     @Rule
@@ -94,7 +97,7 @@ public class ComuSearchResultsAcTest {
                 {
                     Comunidad comunidadToSearch = makeComunidad("Ronda", "de la Plazuela del Norte", (short) 5, "",
                             new Municipio((short) 2, new Provincia((short) 27)));
-                    Intent intent = new Intent();
+                    intent = new Intent();
                     intent.putExtra(COMUNIDAD_SEARCH.key, comunidadToSearch);
                     return intent;
                 }
@@ -128,32 +131,35 @@ public class ComuSearchResultsAcTest {
     }
 
     @Test
-    public void testSearchComunidades_1() throws UiException, IOException, InterruptedException
+    public void testSearchComunidades_Up() throws UiException, IOException, InterruptedException
     {
         // Caso: existen dos comunidades para el criterio de búsqueda.
         checkComuData(COMU_LA_PLAZUELA_5);
         checkComuData(comuRondaDelNorte);
+        checkUp(comuSearchAcLayout);
     }
 
     @Test
-    public void testSelectComunidad_1() throws UiException, IOException, InterruptedException
+    public void testSelectComunidad_RegUser_Back() throws UiException, IOException, InterruptedException
     {
-        waitAtMost(4, SECONDS).until(isViewDisplayed(allOf(
-                withId(R.id.nombreComunidad_view),
-                withText(comuRondaDelNorte.getNombreComunidad())), click()));
-        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(userComuDataLayout));
-        checkUp(comuSearchResultsListLayout);
-
-    }
-
-    @Test
-    public void testSelectComunidad_2() throws UiException, IOException, InterruptedException
-    {
-        waitAtMost(4, SECONDS).until(isViewDisplayed(allOf(
-                withId(R.id.nombreComunidad_view),
-                withText(COMU_LA_PLAZUELA_5.getNombreComunidad())), click()));
-        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(userComuDataLayout));
+        doSelectComunidadRegUser();
         checkBack(onView(withId(userComuDataLayout)), comuSearchResultsListLayout);
+    }
+
+    @Test
+    public void testSelectComunidad_RegUser_Up() throws UiException, IOException, InterruptedException
+    {
+        TaskStackBuilder.create(getTargetContext()).addParentStack(UserComuDataAc.class).startActivities();
+        doSelectComunidadRegUser();
+        checkUp(seeUserComuByUserFrRsId);
+    }
+
+    @Test
+    public void testSelectComunidad_UnRegUser_Up() throws UiException, IOException, InterruptedException
+    {
+        activity.viewer.getController().updateIsRegistered(false);
+        doSelectComunidadNotRegUser();
+        checkUp(comuSearchResultsListLayout);
     }
 
     //    ======================= MENU =========================
@@ -173,7 +179,7 @@ public class ComuSearchResultsAcTest {
     {
         // Usuario registrado.
         REG_COMU_USERCOMU_AC.checkItemRegisterUser(activity);
-        checkUp(comuSearchResultsListLayout);   // TODO: no valen para nada estas comprobaciones. Hay que construir un stack con las parent activities.
+        checkUp(comuSearchAcLayout);
     }
 
     @Test
@@ -190,7 +196,7 @@ public class ComuSearchResultsAcTest {
         // Usuario no registrado.
         activity.viewer.getController().updateIsRegistered(false);
         REG_COMU_USER_USERCOMU_AC.checkItemNoRegisterUser(activity);
-        checkUp(comuSearchResultsListLayout);
+        checkUp(comuSearchAcLayout);
     }
 
     @Test
@@ -203,10 +209,32 @@ public class ComuSearchResultsAcTest {
     }
 
     @Test
-    public void testSeeUserComuByUser() throws InterruptedException, UiException, IOException
+    public void testSeeUserComuByUser_Up() throws InterruptedException, UiException, IOException
     {
         // La consulta muestra las comunidades del usuario.
         SEE_USERCOMU_BY_USER_AC.checkItemRegisterUser(activity);
-        checkUp(comuSearchResultsListLayout);   // ComuSearchAc
+        checkUp(comuSearchAcLayout);
+    }
+
+    @Test
+    public void testSeeUserComuByUser_Back() throws InterruptedException, UiException, IOException
+    {
+        // La consulta muestra las comunidades del usuario.
+        SEE_USERCOMU_BY_USER_AC.checkItemRegisterUser(activity);
+        checkBack(onView(withId(seeUserComuByUserFrRsId)), comuSearchResultsListLayout);
+    }
+
+    //    ======================= HELPERS =========================
+
+    private void doSelectComunidadRegUser()
+    {
+        waitAtMost(4, SECONDS).until(isViewDisplayed(withText(COMU_LA_PLAZUELA_5.getNombreComunidad()), click()));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(userComuDataLayout));
+    }
+
+    private void doSelectComunidadNotRegUser()
+    {
+        waitAtMost(4, SECONDS).until(isViewDisplayed(withText(COMU_LA_PLAZUELA_5.getNombreComunidad()), click()));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(regUser_UserComuAcLayout));
     }
 }

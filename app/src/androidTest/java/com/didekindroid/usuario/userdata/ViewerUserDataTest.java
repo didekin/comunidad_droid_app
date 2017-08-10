@@ -230,7 +230,7 @@ public class ViewerUserDataTest {
             @Override
             public void run()
             {
-                isModified.compareAndSet(false,activity.viewer.modifyUserData(change));
+                isModified.compareAndSet(false, activity.viewer.modifyUserData(change));
             }
         });
         waitAtMost(4, SECONDS).untilTrue(isModified);

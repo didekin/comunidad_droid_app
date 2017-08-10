@@ -63,7 +63,7 @@
         <activity
             android:name=".usuario.login.LoginAc"
             android:label="@string/login_label"
-            android:launchMode="singleInstance"
+            android:launchMode="singleTop"
             android:parentActivityName=".comunidad.ComuSearchAc">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -107,7 +107,6 @@
         <activity
             android:name="com.didekindroid.usuariocomunidad.register.RegUserComuAc"
             android:label="@string/regusuario_comu_ac_label"
-            android:launchMode="singleTask"
             android:parentActivityName="com.didekindroid.comunidad.ComuSearchResultsAc"
             android:windowSoftInputMode="stateHidden">
             <meta-data
@@ -117,10 +116,10 @@
         <activity
             android:name="com.didekindroid.usuariocomunidad.listbycomu.SeeUserComuByComuAc"
             android:label="@string/see_usercomu_by_comu_ac_label"
-            android:parentActivityName="com.didekindroid.usuariocomunidad.data.UserComuDataAc">
+            android:parentActivityName="com.didekindroid.usuariocomunidad.listbyuser.SeeUserComuByUserAc">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.didekindroid.usuariocomunidad.data.UserComuDataAc"/>
+                android:value="com.didekindroid.usuariocomunidad.listbyuser.SeeUserComuByUserAc"/>
         </activity>
         <activity
             android:name="com.didekindroid.usuariocomunidad.listbyuser.SeeUserComuByUserAc"

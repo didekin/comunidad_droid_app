@@ -29,21 +29,21 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
 import static com.didekindroid.incidencia.core.IncidenciaDataDbHelper.DB_NAME;
-import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeGenericLayout;
-import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeOpenAcLayout;
-import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidEditAcLayout;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.makeRegGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkIncidOpenListView;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkIncidOpenListViewNoResol;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.doComunidadSpinner;
+import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.isComuSpinnerWithText;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidEditAcLayout;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeGenericFrLayout;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeOpenAcLayout;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
-import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.isComuSpinnerWithText;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
@@ -129,10 +129,10 @@ public class IncidSeeOpenByComuAcTest {
     //  ==================================== INTEGRATION TESTS  ====================================
 
     @Test
-    public void testOnCreate_1()
+    public void testOnCreate()
     {
         onView(withId(incidSeeOpenAcLayout)).check(matches(isDisplayed()));
-        onView(withId(incidSeeGenericLayout)).check(matches(isDisplayed()));
+        onView(withId(incidSeeGenericFrLayout)).check(matches(isDisplayed()));
         // Inicializa correctamente fragment: 0, porque no hay intent en activity.
         assertThat(fragment.getArguments().getLong(COMUNIDAD_ID.key), is(0L));
 
@@ -148,7 +148,7 @@ public class IncidSeeOpenByComuAcTest {
     }
 
     @Test
-    public void testOnSelectedWithUp() throws UiException
+    public void testOnSelected_Up() throws Exception
     {
         waitAtMost(3, SECONDS).until(isViewDisplayed(
                 checkIncidOpenListView(incidImportancia1, activity, incidenciaUser1.getFechaAltaResolucion())));
@@ -161,9 +161,8 @@ public class IncidSeeOpenByComuAcTest {
         intended(hasExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia1));
         intended(hasExtra(INCID_RESOLUCION_FLAG.key, true));
         // Up and checkMenu.
-        checkUp();
-        waitAtMost(3, SECONDS).until(isViewDisplayed(
-                checkIncidOpenListView(incidImportancia1, activity, incidenciaUser1.getFechaAltaResolucion())));
+        checkUp(incidSeeOpenAcLayout);
+        isViewDisplayed(checkIncidOpenListView(incidImportancia1, activity, incidenciaUser1.getFechaAltaResolucion())).call();
     }
 
     @Test
@@ -186,7 +185,7 @@ public class IncidSeeOpenByComuAcTest {
     }
 
     @Test
-    public void testOnSelectedWithBack() throws UiException
+    public void testOnSelected_Back() throws UiException
     {
         waitAtMost(3, SECONDS).until(isViewDisplayed(
                 checkIncidOpenListView(incidImportancia1, activity, incidenciaUser1.getFechaAltaResolucion())));

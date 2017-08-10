@@ -99,6 +99,7 @@ public class UserComuDataAc extends AppCompatActivity implements ViewerParentInj
     {
         Timber.d("onCreateOptionsMenu()");
         getMenuInflater().inflate(R.menu.usercomu_data_ac_mn, menu);
+        // comu_data_ac_mn is shown only to adm/pre rol and to oldest user.
         viewer.setAcMenu(menu);
         return true;
     }

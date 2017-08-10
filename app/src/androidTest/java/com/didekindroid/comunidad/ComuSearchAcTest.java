@@ -1,5 +1,6 @@
 package com.didekindroid.comunidad;
 
+import android.app.TaskStackBuilder;
 import android.content.Intent;
 import android.support.test.espresso.action.ViewActions;
 import android.support.test.rule.ActivityTestRule;
@@ -9,6 +10,7 @@ import com.didekindroid.R;
 import com.didekindroid.api.ViewerIf;
 import com.didekindroid.api.ViewerParentInjectorIf;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.usuario.userdata.UserDataAc;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Rule;
@@ -17,6 +19,7 @@ import org.junit.runner.RunWith;
 
 import java.io.IOException;
 
+import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -27,8 +30,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkRegComuFrViewEmpty;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkSpinnersDoInViewerOffNull;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.typeComunidadData;
-import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchResultsListLayout;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
+import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchResultsListLayout;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
@@ -41,6 +44,7 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.si
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.REG_COMU_USERCOMU_AC;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.REG_COMU_USER_USERCOMU_AC;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.SEE_USERCOMU_BY_USER_AC;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.is;
@@ -115,6 +119,8 @@ public class ComuSearchAcTest {
         cleanOneUser(USER_JUAN);
     }
 
+    //    ============================ MENU ==============================
+
     @Test
     public void testComunidadesByUsuario() throws InterruptedException, UiException, IOException
     {
@@ -159,9 +165,12 @@ public class ComuSearchAcTest {
     {
         signUpAndUpdateTk(COMU_REAL_JUAN);
         activity = activityRule.launchActivity(new Intent());
+
+        TaskStackBuilder.create(getTargetContext()).addParentStack(UserDataAc.class).startActivities();
         USER_DATA_AC.checkItemRegisterUser(activity);
 
-        checkUp(comuSearchAcLayout);
+        checkUp(seeUserComuByUserFrRsId);
+
         cleanOneUser(USER_JUAN);
     }
 
@@ -183,6 +192,7 @@ public class ComuSearchAcTest {
         REG_COMU_USERCOMU_AC.checkItemRegisterUser(activity);
 
         checkUp(comuSearchAcLayout);
+
         cleanOneUser(USER_JUAN);
     }
 }

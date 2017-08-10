@@ -1,7 +1,10 @@
 package com.didekindroid.usuario.password;
 
 import android.app.Activity;
+import android.app.TaskStackBuilder;
 import android.content.Intent;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -9,14 +12,16 @@ import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekinlib.model.usuario.Usuario;
 
+import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
+import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -27,7 +32,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
-import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
+import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
@@ -39,6 +44,7 @@ import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOneUse
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanWithTkhandler;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_TRAV_PLAZUELA_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.Matchers.containsString;
@@ -56,6 +62,13 @@ public class PasswordChangeAcTest {
     public ActivityTestRule<? extends Activity> mActivityRule = new ActivityTestRule<PasswordChangeAc>(PasswordChangeAc.class) {
 
         @Override
+        protected void beforeActivityLaunched()
+        {
+            TaskStackBuilder.create(getTargetContext())
+                    .addParentStack(PasswordChangeAc.class).startActivities();
+        }
+
+        @Override
         protected Intent getActivityIntent()
         {
             Usuario usuario = null;
@@ -69,17 +82,22 @@ public class PasswordChangeAcTest {
     };
 
     PasswordChangeAc activity;
-
-    @BeforeClass
-    public static void relax() throws InterruptedException
-    {
-        TimeUnit.MILLISECONDS.sleep(2000);
-    }
+    AtomicBoolean isClean = new AtomicBoolean(false);
 
     @Before
     public void setUp() throws Exception
     {
         activity = (PasswordChangeAc) mActivityRule.getActivity();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    @After
+    public void clean() throws UiException, ExecutionException, InterruptedException
+    {
+        if (!isClean.get()) {
+            cleanOneUser(USER_PEPE);
+        }
+        cleanTasks(activity);
     }
 
     //    ============================  TESTS  ===================================
@@ -99,44 +117,47 @@ public class PasswordChangeAcTest {
                 .check(matches(isDisplayed()));
 
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
-        clickNavigateUp();
 
-        cleanOneUser(USER_PEPE);
+        checkUp(userDataAcRsId);
     }
 
     @Test
-    public void testPasswordChangeAndUp() throws UiException, InterruptedException
+    public void testPasswordChange_Up() throws UiException, InterruptedException
     {
         typePswdData("new_pepe_password", "new_pepe_password");
         onView(withId(R.id.password_change_ac_button)).check(matches(isDisplayed())).perform(click());
 
         waitAtMost(4, SECONDS).until(isToastInView(R.string.password_remote_change, activity));
         onView(withId(userDataAcRsId)).check(matches(isDisplayed()));
-        checkUp(pswdChangeAcRsId);
+
+        checkUp(seeUserComuByUserFrRsId);
 
         usuarioDao.deleteUser();
         cleanWithTkhandler();
+
+        isClean.set(true);
     }
 
     @Test
-    public void testPasswordChangeAndBack() throws UiException, InterruptedException
+    public void testPasswordChange_Back() throws UiException, InterruptedException
     {
         typePswdData("new_pepe_password", "new_pepe_password");
         onView(withId(R.id.password_change_ac_button)).check(matches(isDisplayed())).perform(click());
 
         waitAtMost(4, SECONDS).until(isToastInView(R.string.password_remote_change, activity));
         onView(withId(userDataAcRsId)).check(matches(isDisplayed()));
+
         checkBack(onView(withId(userDataAcRsId)).check(matches(isDisplayed())), pswdChangeAcRsId);
 
         usuarioDao.deleteUser();
         cleanWithTkhandler();
+
+        isClean.set(true);
     }
 
     @Test
     public final void testOnStop() throws Exception
     {
         checkSubscriptionsOnStop(activity, activity.viewer.getController());
-
-        cleanOneUser(USER_PEPE);
     }
 }

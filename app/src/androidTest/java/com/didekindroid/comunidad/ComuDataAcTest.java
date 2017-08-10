@@ -1,5 +1,6 @@
 package com.didekindroid.comunidad;
 
+import android.app.TaskStackBuilder;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
@@ -11,6 +12,7 @@ import com.didekindroid.api.ViewerParentInjectedIf;
 import com.didekindroid.api.ViewerParentInjectorIf;
 import com.didekindroid.comunidad.utils.ComuBundleKey;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.usuariocomunidad.listbycomu.SeeUserComuByComuAc;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import org.hamcrest.CoreMatchers;
@@ -25,6 +27,7 @@ import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
+import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
@@ -34,6 +37,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkMunicipioSpinner;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.typeComuCalleNumero;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuDataAcLayout;
+import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.regComuFrLayout;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
@@ -67,6 +71,13 @@ public class ComuDataAcTest {
 
     @Rule
     public IntentsTestRule<ComuDataAc> intentRule = new IntentsTestRule<ComuDataAc>(ComuDataAc.class) {
+
+        @Override
+        protected void beforeActivityLaunched()
+        {
+            TaskStackBuilder.create(getTargetContext()).addParentStack(SeeUserComuByComuAc.class).startActivities();
+        }
+
         @Override
         protected Intent getActivityIntent()
         {
@@ -106,7 +117,7 @@ public class ComuDataAcTest {
         onView(withId(R.id.comu_data_ac_button)).perform(scrollTo(), click());
         waitAtMost(5, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
 
-        checkUp(comuDataAcLayout);
+        checkUp(comuSearchAcLayout);
     }
 
     @Test
@@ -183,6 +194,6 @@ public class ComuDataAcTest {
     {
         SEE_USERCOMU_BY_COMU_AC.checkItemRegisterUser(activity);
         intended(hasExtra(ComuBundleKey.COMUNIDAD_ID.key, comunidad.getC_Id()));
-        checkUp(comuDataAcLayout);
+        checkUp(seeUserComuByUserFrRsId);
     }
 }

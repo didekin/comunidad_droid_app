@@ -1,15 +1,19 @@
 package com.didekindroid.testutil;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.test.espresso.NoMatchingRootException;
 import android.support.test.espresso.NoMatchingViewException;
 import android.support.test.espresso.PerformException;
 import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.contrib.PickerActions;
+import android.support.test.runner.lifecycle.Stage;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Adapter;
@@ -18,7 +22,6 @@ import android.widget.Button;
 import android.widget.DatePicker;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ActivityMock;
 import com.didekindroid.api.ControllerIf;
 import com.didekindroid.api.CtrlerSelectListIf;
 import com.didekindroid.api.ViewerIf;
@@ -45,6 +48,7 @@ import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -54,6 +58,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
+import static android.content.Context.ACTIVITY_SERVICE;
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.KITKAT;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
@@ -73,7 +78,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withContentDesc
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static android.support.test.runner.lifecycle.ActivityLifecycleMonitorRegistry.getInstance;
-import static android.support.test.runner.lifecycle.Stage.RESUMED;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.RxSchedulersUtils.resetAllSchedulers;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceAndroidMain;
@@ -269,7 +273,7 @@ public final class ActivityTestUtils {
         for (ControllerIf controller : controllers) {
             atomicInteger.addAndGet(controller.getSubscriptions().size());
         }
-        waitAtMost(4, SECONDS).untilAtomic(atomicInteger, is(0));
+        waitAtMost(5, SECONDS).untilAtomic(atomicInteger, is(0));
     }
 
     public static Callable<Boolean> gcmTokenSentFlag(final CtrlerFirebaseTokenIf controller)
@@ -418,23 +422,43 @@ public final class ActivityTestUtils {
             }
     }
 
-    public static void checkIntentParentActivity() throws InterruptedException, java.util.concurrent.ExecutionException
+    public static Stage getStageByActivity(final Activity activity) throws ExecutionException, InterruptedException
     {
-        Timber.d("============= Checking parent activity =================");
+        Timber.d("============= getStageByActivity() =================");
+
+        final FutureTask<Stage> taskGetActivities = new FutureTask<>(new Callable<Stage>() {
+            @Override
+            public Stage call() throws Exception
+            {
+                return getInstance().getLifecycleStageOf(activity);
+            }
+        });
+        getInstrumentation().runOnMainSync(taskGetActivities);
+        return taskGetActivities.get();
+    }
+
+    public static Collection<Activity> getActivitesInTaskByStage(final Stage stage) throws ExecutionException, InterruptedException
+    {
+        Timber.d("============= getActivitesInTaskByStage() =================");
 
         final FutureTask<Collection<Activity>> taskGetActivities = new FutureTask<>(new Callable<Collection<Activity>>() {
             @Override
             public Collection<Activity> call() throws Exception
             {
-                return getInstance().getActivitiesInStage(RESUMED);
+                return getInstance().getActivitiesInStage(stage);
             }
         });
         getInstrumentation().runOnMainSync(taskGetActivities);
-        Collection<Activity> activities = taskGetActivities.get();
-        assertThat(activities.size(), CoreMatchers.is(1));
-        for (Activity next : activities) {
-            assertThat(next.getComponentName().getClassName(), CoreMatchers.is(ActivityMock.class.getCanonicalName()));
-            assertThat(next.getIntent().getStringExtra("keyTest_2"), CoreMatchers.is("Value_keyTest_2"));
+        return taskGetActivities.get();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public static void cleanTasks(Activity activity)
+    {
+        ActivityManager manager = (ActivityManager) activity.getSystemService(ACTIVITY_SERVICE);
+        List<ActivityManager.AppTask> tasks = manager.getAppTasks();
+        for (ActivityManager.AppTask task : tasks) {
+            task.finishAndRemoveTask();
         }
     }
 
