@@ -3,6 +3,7 @@ package com.didekindroid.usuario.userdata;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.test.rule.ActivityTestRule;
+import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
@@ -12,8 +13,10 @@ import com.didekinlib.model.usuario.Usuario;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -54,6 +57,7 @@ import static org.junit.Assert.fail;
  * Date: 25/03/17
  * Time: 14:16
  */
+@RunWith(AndroidJUnit4.class)
 public class ViewerUserDataTest {
 
     Usuario usuario;
@@ -64,7 +68,6 @@ public class ViewerUserDataTest {
         protected Intent getActivityIntent()
         {
             try {
-                TimeUnit.SECONDS.sleep(2);
                 usuario = signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
             } catch (Exception e) {
                 fail();
@@ -74,6 +77,12 @@ public class ViewerUserDataTest {
     };
 
     UserDataAc activity;
+
+    @BeforeClass
+    public static void calm() throws InterruptedException
+    {
+        TimeUnit.SECONDS.sleep(3);
+    }
 
     @Before
     public void setUp() throws Exception
@@ -129,8 +138,9 @@ public class ViewerUserDataTest {
     @Test
     public void testCheckUserData_1() throws Exception
     {
-        typeUserData("newuser@user.com", USER_JUAN.getAlias(), USER_JUAN.getPassword());
+        TimeUnit.SECONDS.sleep(2);
 
+        typeUserData("newuser@user.com", USER_JUAN.getAlias(), USER_JUAN.getPassword());
         runCheckUserData(true);
         Usuario usuario = activity.viewer.usuarioBean.get().getUsuario();
 
@@ -142,6 +152,8 @@ public class ViewerUserDataTest {
     @Test
     public void testCheckUserData_2() throws InterruptedException
     {
+        TimeUnit.SECONDS.sleep(2);
+
         typeUserData("wrong_newuser.com", USER_JUAN.getAlias(), USER_JUAN.getPassword());
         runCheckUserData(false);
         waitAtMost(6, SECONDS).until(isToastInView(R.string.email_hint, activity));
