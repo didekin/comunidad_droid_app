@@ -44,6 +44,7 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.CO
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpWithTkGetComu;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.typeUserComuData;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByComuFrRsId;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
@@ -119,7 +120,7 @@ public class ViewerRegUserAndUserComuAcTest {
     public void test_OnRegisterSuccess() throws Exception
     {
         activity.viewer.onRegisterSuccess(comunidad.getC_Id());
-        waitAtMost(4, SECONDS).until(isViewDisplayed(withId(seeUserComuByComuFrRsId)));
+        waitAtMost(4, SECONDS).until(isViewDisplayed(withId(seeUserComuByUserFrRsId)));
         intended(hasExtra(COMUNIDAD_ID.key, comunidad.getC_Id()));
     }
 
@@ -130,7 +131,7 @@ public class ViewerRegUserAndUserComuAcTest {
         typeUserComuData("port2", "escale_b", "planta-N", "puerta5", PRE, INQ);
         onView(withId(R.id.reg_user_usercomu_button)).perform(scrollTo(), click());
 
-        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(seeUserComuByComuFrRsId));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
         cleanOptions(CLEAN_JUAN_AND_PEPE);
         isCleaned = true;
     }
