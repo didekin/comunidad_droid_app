@@ -34,9 +34,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withHint;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.R.id.reg_usuario_alias_ediT;
-import static com.didekindroid.R.id.reg_usuario_email_editT;
-import static com.didekindroid.R.id.user_data_ac_password_ediT;
 import static com.didekindroid.R.id.user_data_modif_button;
 import static com.didekindroid.comunidad.testutil.ComuMenuTestUtil.COMU_SEARCH_AC;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
@@ -47,6 +44,7 @@ import static com.didekindroid.testutil.ActivityTestUtils.checkViewerReplaceComp
 import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
+import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
 import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
 import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typeUserData;
@@ -125,19 +123,17 @@ public class UserDataAcTest {
     public void testOncreate()
     {
         assertThat(activity.viewer, notNullValue());
-
-        onView(withId(userDataAcRsId)).check(matches(isDisplayed()));
-
-        onView(withId(reg_usuario_email_editT))
-                .check(matches(withText(containsString(oldUsuario.getUserName()))));
-        onView(withId(reg_usuario_alias_ediT))
-                .check(matches(withText(containsString(oldUsuario.getAlias()))));
-        onView(allOf(withId(user_data_ac_password_ediT),
-                withHint(R.string.user_data_ac_password_hint)))
-                .check(matches(withText(containsString(""))));
-
-        onView(withId(user_data_modif_button)).check(matches(isDisplayed()));
-        onView(withId(R.id.appbar)).check(matches(isDisplayed()));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(userDataAcRsId));
+        waitAtMost(4, SECONDS).until(isViewDisplayed(allOf(withId(R.id.reg_usuario_email_editT), withText(containsString(oldUsuario.getUserName())))));
+        waitAtMost(4, SECONDS).until(isViewDisplayed(allOf(withId(R.id.reg_usuario_alias_ediT), withText(containsString(oldUsuario.getAlias())))));
+        waitAtMost(4, SECONDS).until(isViewDisplayed(
+                allOf(
+                        withId(R.id.user_data_ac_password_ediT),
+                        withText(containsString("")),
+                        withHint(R.string.user_data_ac_password_hint)
+                )));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(R.id.user_data_modif_button));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(R.id.appbar));
 
         checkUp(seeUserComuByUserFrRsId);
     }
@@ -151,7 +147,7 @@ public class UserDataAcTest {
     }
 
     @Test  // Modify user OK.
-    public void testModifyUserDataAndUp() throws UiException
+    public void testModifyUserData_Up() throws UiException
     {
         typeClickWait();
         // Verificamos navegación.
@@ -159,7 +155,7 @@ public class UserDataAcTest {
     }
 
     @Test  // Modify user OK.
-    public void testModifyUserDataAndBack() throws UiException
+    public void testModifyUserData_Back() throws UiException
     {
         typeClickWait();
         checkBack(onView(withId(seeUserComuByUserFrRsId)).check(matches(isDisplayed())), userDataAcRsId);
@@ -219,7 +215,6 @@ public class UserDataAcTest {
     {
         INCID_SEE_OPEN_BY_COMU_AC.checkMenuItem_WTk(activity);
         intended(hasExtra(user_name.key, oldUsuario.getUserName()));
-
         checkUp(userComuDataLayout);
     }
 
@@ -237,6 +232,6 @@ public class UserDataAcTest {
         onView(withId(user_data_modif_button)).perform(scrollTo())
                 .check(matches(isDisplayed())).perform(click());
 
-        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
+        waitAtMost(6, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
     }
 }
