@@ -20,6 +20,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.util.concurrent.TimeUnit;
+
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
@@ -86,6 +88,7 @@ public class UserDataAcTest {
         protected void beforeActivityLaunched()
         {
             try {
+                TimeUnit.SECONDS.sleep(2);
                 oldUsuario = signUpAndUpdateTk(COMU_REAL_JUAN);
                 comunidad = userComuDaoRemote.getComusByUser().get(0);
                 assertThat(oldUsuario, notNullValue());

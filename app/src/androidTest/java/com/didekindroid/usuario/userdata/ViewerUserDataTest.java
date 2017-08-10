@@ -15,6 +15,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -63,6 +64,7 @@ public class ViewerUserDataTest {
         protected Intent getActivityIntent()
         {
             try {
+                TimeUnit.SECONDS.sleep(2);
                 usuario = signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
             } catch (Exception e) {
                 fail();
@@ -243,11 +245,11 @@ public class ViewerUserDataTest {
             @Override
             public void run()
             {
-//                boolean isUserDataOk = activity.viewer.checkUserData();
-                isChecked.compareAndSet(!isOk, activity.viewer.checkUserData());
+                boolean isUserDataOk = activity.viewer.checkUserData();
+                isChecked.compareAndSet(!isOk, isUserDataOk);
             }
         });
-        waitAtMost(5, SECONDS).untilAtomic(isChecked, is(isOk));
+        waitAtMost(6, SECONDS).untilAtomic(isChecked, is(isOk));
     }
 
     public void runWhatDataChange(final UserChangeToMake changeToMake)
@@ -262,6 +264,6 @@ public class ViewerUserDataTest {
                 atomicChange.compareAndSet(null, changeToMake);
             }
         });
-        waitAtMost(4, SECONDS).untilAtomic(atomicChange, is(changeToMake));
+        waitAtMost(6, SECONDS).untilAtomic(atomicChange, is(changeToMake));
     }
 }
