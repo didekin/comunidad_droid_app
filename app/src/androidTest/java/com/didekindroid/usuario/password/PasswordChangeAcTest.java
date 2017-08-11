@@ -30,6 +30,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withHint;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
+import static com.didekindroid.testutil.ActivityTestUtils.checkIsRegistered;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
@@ -88,6 +89,7 @@ public class PasswordChangeAcTest {
     public void setUp() throws Exception
     {
         activity = (PasswordChangeAc) mActivityRule.getActivity();
+        checkIsRegistered(activity.viewer);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)

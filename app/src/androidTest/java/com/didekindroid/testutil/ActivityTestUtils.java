@@ -24,7 +24,6 @@ import android.widget.DatePicker;
 import com.didekindroid.R;
 import com.didekindroid.api.ControllerIf;
 import com.didekindroid.api.CtrlerSelectListIf;
-import com.didekindroid.api.Viewer;
 import com.didekindroid.api.ViewerIf;
 import com.didekindroid.api.ViewerMock;
 import com.didekindroid.api.ViewerParentInjectorIf;
@@ -359,7 +358,7 @@ public final class ActivityTestUtils {
 
     //    ============================= IDENTITY ===================================
 
-    public static void checkIsRegistered(Viewer<?, ?> viewer)
+    public static void checkIsRegistered(ViewerIf<?, ?> viewer)
     {
         AtomicBoolean isRegistered = new AtomicBoolean(false);
         isRegistered.compareAndSet(false, viewer.getController().isRegisteredUser());
