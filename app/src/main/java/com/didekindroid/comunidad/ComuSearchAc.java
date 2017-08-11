@@ -116,7 +116,7 @@ public class ComuSearchAc extends AppCompatActivity implements ViewerParentInjec
             case R.id.see_usercomu_by_user_ac_mn:
             case R.id.login_ac_mn:
             case R.id.reg_nueva_comunidad_ac_mn:
-                new ActivityInitiator(this).initAcFromMnKeepIntent(resourceId);
+                new ActivityInitiator(this).initAcFromMnNewIntent(resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
