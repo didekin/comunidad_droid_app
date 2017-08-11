@@ -40,6 +40,7 @@ import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuDataA
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.regComuFrLayout;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
+import static com.didekindroid.testutil.ActivityTestUtils.checkIsRegistered;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
@@ -98,6 +99,7 @@ public class ComuDataAcTest {
     public void setUp() throws Exception
     {
         activity = intentRule.getActivity();
+        checkIsRegistered(activity.viewer);
     }
 
     @After

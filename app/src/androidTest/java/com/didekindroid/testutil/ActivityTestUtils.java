@@ -24,6 +24,7 @@ import android.widget.DatePicker;
 import com.didekindroid.R;
 import com.didekindroid.api.ControllerIf;
 import com.didekindroid.api.CtrlerSelectListIf;
+import com.didekindroid.api.Viewer;
 import com.didekindroid.api.ViewerIf;
 import com.didekindroid.api.ViewerMock;
 import com.didekindroid.api.ViewerParentInjectorIf;
@@ -50,6 +51,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -355,7 +357,14 @@ public final class ActivityTestUtils {
         return actionException.get().getActivityToGoClass().equals(actionToExpect.getActivityToGoClass());
     }
 
-    //    ============================= IDENTITY CACHE ===================================
+    //    ============================= IDENTITY ===================================
+
+    public static void checkIsRegistered(Viewer<?, ?> viewer)
+    {
+        AtomicBoolean isRegistered = new AtomicBoolean(false);
+        isRegistered.compareAndSet(false, viewer.getController().isRegisteredUser());
+        waitAtMost(4, SECONDS).untilTrue(isRegistered);
+    }
 
     public static void checkUpdateTokenCache(SpringOauthToken oldToken)
     {
