@@ -2,7 +2,9 @@ package com.didekindroid.comunidad;
 
 import android.app.TaskStackBuilder;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -43,6 +45,7 @@ import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtils.checkIsRegistered;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
+import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_B;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
@@ -102,10 +105,12 @@ public class ComuDataAcTest {
         checkIsRegistered(activity.viewer);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @After
     public void tearDown() throws Exception
     {
         cleanOptions(CLEAN_JUAN);
+        cleanTasks(activity);
     }
 
 //    =============================================================================================
