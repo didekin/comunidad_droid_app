@@ -165,7 +165,7 @@ public final class IncidDaoRemote implements IncidenciaServEndPoints {
 
     int modifyIncidImportancia(IncidImportancia incidImportancia) throws UiException
     {
-        Timber.d("modifyUser()");
+        Timber.d("modifyIncidImportancia()");
         try {
             Response<Integer> response = modifyIncidImportancia(identityCacher.checkBearerTokenInCache(), incidImportancia).execute();
             return getResponseBody(response);

@@ -1,7 +1,6 @@
 package com.didekindroid.usuario.testutil;
 
 import com.didekindroid.R;
-import com.didekinlib.model.usuario.Usuario;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -18,9 +17,6 @@ import static com.didekindroid.R.id.reg_usuario_password_ediT;
 import static com.didekindroid.R.string.send_password_by_mail_NO;
 import static com.didekindroid.R.string.send_password_by_mail_YES;
 import static com.didekindroid.R.string.send_password_by_mail_dialog;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * User: pedro@didekin
@@ -46,21 +42,20 @@ public final class UserEspressoTestUtil {
     {
         onView(withId(R.id.reg_usuario_email_editT)).perform(replaceText(userName));
         onView(withId(R.id.reg_usuario_alias_ediT)).perform(replaceText(alias));
-        onView(withId(R.id.user_data_ac_password_ediT)).perform(replaceText(password), closeSoftKeyboard());
-    }
-
-    public static void validaTypedUserData(Usuario usuario, String email, String alias1, String password)
-    {
-        assertThat(usuario, notNullValue());
-        assertThat(usuario.getUserName(), is(email));
-        assertThat(usuario.getAlias(), is(alias1));
-        assertThat(usuario.getPassword(), is(password));
+        onView(withId(R.id.password_validation_ediT)).perform(replaceText(password), closeSoftKeyboard());
     }
 
     public static void typePswdData(String password, String confirmation)
     {
         onView(withId(R.id.reg_usuario_password_ediT)).perform(replaceText(password));
         onView(withId(R.id.reg_usuario_password_confirm_ediT)).perform(replaceText(confirmation), closeSoftKeyboard());
+    }
+
+    public static void typePswdDataWithPswdValidation(String password, String confirmation, String currentPassword)
+    {
+        onView(withId(R.id.reg_usuario_password_ediT)).perform(replaceText(password));
+        onView(withId(R.id.reg_usuario_password_confirm_ediT)).perform(replaceText(confirmation));
+        onView(withId(R.id.password_validation_ediT)).perform(replaceText(currentPassword), closeSoftKeyboard());
     }
 
     public static void typeLoginData(String userName, String password)

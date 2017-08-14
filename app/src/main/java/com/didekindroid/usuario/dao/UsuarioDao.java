@@ -27,11 +27,9 @@ public interface UsuarioDao {
 
     int modifyUserGcmToken(String gcmToken) throws UiException;
 
-    int modifyUser(Usuario usuario) throws UiException;
-
     int modifyUserWithToken(SpringOauthToken oauthToken, Usuario usuario) throws UiException;
 
-    int passwordChange(String newPassword) throws UiException;
+    int passwordChange(SpringOauthToken oldOauthToken, String newPassword) throws UiException;
 
     boolean sendPassword(String email) throws UiException;
 }

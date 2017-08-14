@@ -8,19 +8,17 @@ import java.util.concurrent.Callable;
 
 import io.reactivex.Completable;
 import io.reactivex.Single;
-import io.reactivex.SingleSource;
 import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
+import static com.didekindroid.security.OauthTokenObservable.oauthTokenAndInitCache;
 import static com.didekindroid.security.OauthTokenObservable.oauthTokenFromUserPswd;
-import static com.didekindroid.security.TokenIdentityCacher.initTokenAction;
-import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_have_been_modified;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
-import static com.didekindroid.util.UIutils.assertTrue;
 import static io.reactivex.Single.fromCallable;
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 import static io.reactivex.schedulers.Schedulers.io;
+import static java.lang.Boolean.TRUE;
 
 /**
  * User: pedro@didekin
@@ -34,6 +32,7 @@ class CtrlerUserModified extends Controller implements CtrlerUserDataIf {
 
     static Single<Usuario> userDataLoaded()
     {
+        Timber.d("userDataLoaded()");
         return fromCallable(new Callable<Usuario>() {
             @Override
             public Usuario call() throws Exception
@@ -45,30 +44,25 @@ class CtrlerUserModified extends Controller implements CtrlerUserDataIf {
 
     static Completable userModifiedTkUpdated(final SpringOauthToken oldUserToken, final Usuario newUser)
     {
-        return fromCallable(new Callable<Integer>() {
+        Timber.d("userModifiedTkUpdated()");
+        return Completable.fromCallable(new Callable<Integer>() {
             @Override
             public Integer call() throws Exception
             {
                 return usuarioDao.modifyUserWithToken(oldUserToken, newUser);
             }
-        }).flatMap(new Function<Integer, SingleSource<SpringOauthToken>>() {
-            @Override
-            public SingleSource<SpringOauthToken> apply(Integer modifiedUser) throws Exception
-            {
-                assertTrue(modifiedUser == 1, user_should_have_been_modified);
-                return oauthTokenFromUserPswd(newUser);
-            }
-        }).doOnSuccess(initTokenAction).toCompletable();
+        }).andThen(oauthTokenAndInitCache(newUser));
     }
 
     static Single<Boolean> userModifiedWithPswdValidation(Usuario oldUser, final Usuario newUser)
     {
+        Timber.d("userModifiedWithPswdValidation()");
         return oauthTokenFromUserPswd(oldUser)
                 .flatMap(new Function<SpringOauthToken, Single<Boolean>>() {
                     @Override
                     public Single<Boolean> apply(SpringOauthToken oldUserToken) throws Exception
                     {
-                        return userModifiedTkUpdated(oldUserToken, newUser).toSingleDefault(Boolean.TRUE);
+                        return userModifiedTkUpdated(oldUserToken, newUser).toSingleDefault(TRUE);
                     }
                 });
     }

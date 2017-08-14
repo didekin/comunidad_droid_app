@@ -5,7 +5,7 @@
         <xliff:g id="time" example="5 days>%1$s</xliff:g>until holiday
     </string>
     -->
-    <string name="app_name" translatable="false">didekin</string>
+    <string name="app_name" translatable="false">Dídekin</string>
     <!--*****************************************************************************-->
     <!--                                 GENERIC                                     -->
     <!--*****************************************************************************-->
@@ -143,7 +143,7 @@
     <string name="comu_data_ac_label">Datos comunidad</string>
     <string name="comu_data_ac_button_txt">Modificar datos</string>
     <!-- ================= ComuSearchAc ================= -->
-    <string name="comu_search_ac_label">Buscar comunidad</string>
+    <string name="comu_search_ac_label">Dídekin: buscar comunidad</string>
     <!-- =============== ComuSearchResultsAc ============ -->
     <string name="comu_search_results_ac_label">Buscar comunidad: resultados</string>
     <!-- ........ ComuSearchResultsListFr ......... -->
@@ -160,6 +160,8 @@
     <string name="password_change_ac_label">Didekin</string>
     <string name="password_change_ac_rotulo">Nueva contraseña</string>
     <string name="password_change_ac_button_txt">Cambia tu contraseña</string>
+    <string name="password_send_txt">Si no recuerdas tu contraseña, podemos enviarte una nueva.</string>
+    <string name="password_send_button_txt">Envío de nueva contraseña</string>
     <string name="password_remote_change">Ya está modificada tu contraseña.</string>
     <!-- ================ RegUserAndUserComuAc =========== -->
     <string name="reg_user_and_usercomu_ac_label">Registro en comunidad</string>
@@ -223,7 +225,7 @@
     <!-- ================= UserDataAc ===================== -->
     <string name="user_data_ac_label">Tus datos</string>
     <string name="user_data_ac_cambios_text">Sobrescribe el dato a modificar</string>
-    <string name="user_data_ac_password_txt">Valida los cambios introduciendo tu contraseña</string>
+    <string name="user_data_ac_password_txt">Valida los cambios.</string>
     <string name="user_data_ac_password_hint">Contraseña actual</string>
     <string name="user_data_modif_button_rot">Modifica tus datos</string>
     <string name="no_user_data_to_be_modified">No hay datos a modificar</string>

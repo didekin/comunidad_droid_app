@@ -37,13 +37,13 @@ import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
-import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typePswdData;
+import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typePswdDataWithPswdValidation;
 import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.pswdChangeAcRsId;
 import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.userDataAcRsId;
-import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_DROID;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanWithTkhandler;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_TRAV_PLAZUELA_PEPE;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_DROID;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -74,7 +74,7 @@ public class PasswordChangeAcTest {
         {
             Usuario usuario = null;
             try {
-                usuario = signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
+                usuario = signUpAndUpdateTk(COMU_REAL_DROID);
             } catch (Exception e) {
                 fail();
             }
@@ -97,7 +97,7 @@ public class PasswordChangeAcTest {
     public void clean() throws UiException, ExecutionException, InterruptedException
     {
         if (!isClean.get()) {
-            cleanOneUser(USER_PEPE);
+            cleanOneUser(USER_DROID);
         }
         cleanTasks(activity);
     }
@@ -115,7 +115,13 @@ public class PasswordChangeAcTest {
         onView(withId(R.id.reg_usuario_password_confirm_ediT)).check(matches(withText(containsString(""))))
                 .check(matches(withHint(R.string.usuario_password_confirm_hint)))
                 .check(matches(isDisplayed()));
+        onView(withId(R.id.password_validation_ediT)).check(matches(withText(containsString(""))))
+                .check(matches(withHint(R.string.user_data_ac_password_hint)))
+                .check(matches(isDisplayed()));
         onView(withId(R.id.password_change_ac_button)).check(matches(withText(R.string.password_change_ac_button_txt)))
+                .check(matches(isDisplayed()));
+
+        onView(withId(R.id.password_send_ac_button)).check(matches(withText(R.string.password_send_button_txt)))
                 .check(matches(isDisplayed()));
 
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
@@ -126,7 +132,7 @@ public class PasswordChangeAcTest {
     @Test
     public void testPasswordChange_Up() throws UiException, InterruptedException
     {
-        typePswdData("new_pepe_password", "new_pepe_password");
+        typePswdDataWithPswdValidation("new_pepe_password", "new_pepe_password", USER_DROID.getPassword());
         onView(withId(R.id.password_change_ac_button)).check(matches(isDisplayed())).perform(click());
 
         waitAtMost(4, SECONDS).until(isToastInView(R.string.password_remote_change, activity));
@@ -143,7 +149,7 @@ public class PasswordChangeAcTest {
     @Test
     public void testPasswordChange_Back() throws UiException, InterruptedException
     {
-        typePswdData("new_pepe_password", "new_pepe_password");
+        typePswdDataWithPswdValidation("new_pepe_password", "new_pepe_password", USER_DROID.getPassword());
         onView(withId(R.id.password_change_ac_button)).check(matches(isDisplayed())).perform(click());
 
         waitAtMost(4, SECONDS).until(isToastInView(R.string.password_remote_change, activity));

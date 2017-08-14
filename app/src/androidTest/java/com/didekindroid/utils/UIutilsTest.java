@@ -121,7 +121,7 @@ public class UIutilsTest {
         Locale locale = getLocale();
 
         if (locale.equals(ENGLISH) || locale.equals(ENGLISH)) {
-            assertThat(formatDoubleZeroDecimal(12.34, context), is("12"));
+            assertThat(formatDoubleZeroDecimal(12.34), is("12"));
         }
     }
 

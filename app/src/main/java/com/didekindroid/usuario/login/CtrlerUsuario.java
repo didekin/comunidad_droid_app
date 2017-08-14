@@ -3,16 +3,21 @@ package com.didekindroid.usuario.login;
 import android.support.annotation.NonNull;
 
 import com.didekindroid.api.Controller;
+import com.didekinlib.http.oauth2.SpringOauthToken;
 import com.didekinlib.model.usuario.Usuario;
 
 import java.util.concurrent.Callable;
 
+import io.reactivex.Completable;
+import io.reactivex.CompletableSource;
 import io.reactivex.Single;
 import io.reactivex.functions.Function;
+import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
 import static com.didekindroid.security.OauthTokenObservable.oauthTokenAndInitCache;
+import static com.didekindroid.security.OauthTokenObservable.oauthTokenFromUserPswd;
 import static com.didekindroid.security.TokenIdentityCacher.cleanTkCacheActionBoolean;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
 import static io.reactivex.Single.fromCallable;
@@ -26,7 +31,7 @@ import static io.reactivex.schedulers.Schedulers.io;
  * Time: 12:53
  */
 @SuppressWarnings({"AnonymousInnerClassMayBeStatic", "WeakerAccess"})
-class CtrlerLogin extends Controller implements CtrlerLoginIf {
+public class CtrlerUsuario extends Controller {
 
     //    .................................... OBSERVABLES .................................
 
@@ -56,16 +61,47 @@ class CtrlerLogin extends Controller implements CtrlerLoginIf {
     }
 
     /**
-     * It has a mock test implementation.
+     * It has a mock test implementation. It clears token in cache.
      */
     static Single<Boolean> loginPswdSendSingle(final Callable<Boolean> sendPswdCall)
     {
         return fromCallable(sendPswdCall).doOnSuccess(cleanTkCacheActionBoolean);
     }
 
+    /**
+     *  Password change submitting the current password.
+     */
+    public static Completable passwordChangeWithPswdValidation(final Usuario oldUser, final Usuario newUser)
+    {
+        Timber.d("passwordChangeWithPswdValidation()");
+        return oauthTokenFromUserPswd(oldUser)
+
+                .flatMapCompletable(new Function<SpringOauthToken, CompletableSource>() {
+                    @Override
+                    public CompletableSource apply(@io.reactivex.annotations.NonNull final SpringOauthToken oldOauthToken) throws Exception
+                    {
+                        Timber.d("passwordChangeWithPswdValidation()");
+                        return fromCallable(new Callable<Integer>() {
+                            @Override
+                            public Integer call() throws Exception
+                            {
+                                return usuarioDao.passwordChange(oldOauthToken, newUser.getPassword());
+                            }
+                        })
+                                .flatMapCompletable(new Function<Integer, CompletableSource>() {
+                                    @Override
+                                    public CompletableSource apply(Integer passwordUpdated) throws Exception
+                                    {
+                                        Timber.d("apply()");
+                                        return oauthTokenAndInitCache(newUser);
+                                    }
+                                });
+                    }
+                });
+    }
+
     //    ................................. INSTANCE METHODS .................................
 
-    @Override
     public boolean validateLogin(@NonNull DisposableSingleObserver<Boolean> observer, @NonNull Usuario usuario)
     {
         Timber.i("validateLogin()");
@@ -77,10 +113,9 @@ class CtrlerLogin extends Controller implements CtrlerLoginIf {
         );
     }
 
-    @Override
-    public boolean doDialogPositiveClick(@NonNull DisposableSingleObserver<Boolean> observer, @NonNull final Usuario usuario)
+    public boolean sendNewPassword(@NonNull DisposableSingleObserver<Boolean> observer, @NonNull final Usuario usuario)
     {
-        Timber.d("doDialogPositiveClick()");
+        Timber.d("sendNewPassword()");
         Callable<Boolean> sendPswdCallable = new Callable<Boolean>() {
             @Override
             public Boolean call() throws Exception
@@ -88,21 +123,30 @@ class CtrlerLogin extends Controller implements CtrlerLoginIf {
                 return usuarioDao.sendPassword(usuario.getUserName());
             }
         };
-        return doDialogPositiveClick(sendPswdCallable, observer, usuario);
+        return sendNewPassword(sendPswdCallable, observer);
     }
 
     /**
-     *  Test friendly variant.
+     * Test friendly variant.
      */
-    @Override
-    public boolean doDialogPositiveClick(@NonNull Callable<Boolean> sendPswdCall,
-                                         @NonNull DisposableSingleObserver<Boolean> observer,
-                                         @NonNull final Usuario usuario)
+    public boolean sendNewPassword(@NonNull Callable<Boolean> sendPswdCall,
+                                   @NonNull DisposableSingleObserver<Boolean> observer)
     {
-        Timber.d("doDialogPositiveClick()");
+        Timber.d("sendNewPassword()");
 
         return subscriptions.add(
-                loginPswdSendSingle(sendPswdCall)
+                loginPswdSendSingle(sendPswdCall)    // Borra token in cache.
+                        .subscribeOn(io())
+                        .observeOn(mainThread())
+                        .subscribeWith(observer)
+        );
+    }
+
+    public boolean changePasswordInRemote(DisposableCompletableObserver observer, final Usuario oldUser, final Usuario newUser)
+    {
+        Timber.d("changePasswordInRemote()");
+        return subscriptions.add(
+                passwordChangeWithPswdValidation(oldUser, newUser)
                         .subscribeOn(io())
                         .observeOn(mainThread())
                         .subscribeWith(observer)

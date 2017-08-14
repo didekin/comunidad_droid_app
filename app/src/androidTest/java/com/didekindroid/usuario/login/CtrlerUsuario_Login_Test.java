@@ -1,6 +1,5 @@
 package com.didekindroid.usuario.login;
 
-import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.exception.UiException;
@@ -8,13 +7,11 @@ import com.didekinlib.model.usuario.Usuario;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
 import java.util.concurrent.Callable;
-import java.util.concurrent.atomic.AtomicReference;
 
 import io.reactivex.functions.Predicate;
 import io.reactivex.observers.DisposableSingleObserver;
@@ -24,14 +21,14 @@ import static com.didekindroid.security.Oauth2DaoRemote.Oauth2;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkInitTokenCache;
 import static com.didekindroid.testutil.ActivityTestUtils.checkNoInitCache;
-import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
+import static com.didekindroid.testutil.ActivityTestUtils.checkUpdatedCacheAfterPswd;
 import static com.didekindroid.testutil.RxSchedulersUtils.resetAllSchedulers;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceAndroidMain;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceIoScheduler;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
-import static com.didekindroid.usuario.login.CtrlerLogin.loginPswdSendSingle;
-import static com.didekindroid.usuario.login.CtrlerLogin.loginSingle;
-import static com.didekindroid.usuario.login.CtrlerLogin.loginUpdateTkCache;
+import static com.didekindroid.usuario.login.CtrlerUsuario.loginPswdSendSingle;
+import static com.didekindroid.usuario.login.CtrlerUsuario.loginSingle;
+import static com.didekindroid.usuario.login.CtrlerUsuario.loginUpdateTkCache;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_DROID;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_DROID;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
@@ -50,21 +47,14 @@ import static org.junit.Assert.fail;
  * Time: 14:17
  */
 @RunWith(AndroidJUnit4.class)
-public class CtrlerLoginTest {
+public class CtrlerUsuario_Login_Test {
 
-    final static AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
-
-    @Rule
-    public ActivityTestRule<LoginAc> activityRule = new ActivityTestRule<>(LoginAc.class, true, true);
-
-    CtrlerLoginIf controller;
-    LoginAc activity;
+    CtrlerUsuario controller;
 
     @Before
     public void setUp() throws Exception
     {
-        activity = activityRule.getActivity();
-        controller = new CtrlerLogin();
+        controller = new CtrlerUsuario();
     }
 
     @After
@@ -79,9 +69,7 @@ public class CtrlerLoginTest {
     public void testLoginSingle_1() throws UiException, IOException
     {
         signUpAndUpdateTk(COMU_REAL_DROID);
-
         loginSingle(USER_DROID).test().assertResult(true);
-
         cleanOptions(CLEAN_DROID);
     }
 
@@ -115,21 +103,23 @@ public class CtrlerLoginTest {
     }
 
     @Test
-    public void testLoginUpdateTkCache_1() throws UiException, IOException
+    public void test_LoginUpdateTkCache_1() throws UiException, IOException
     {
         TKhandler.updateIsRegistered(userComuDaoRemote.regComuAndUserAndUserComu(COMU_REAL_DROID).execute().body());
+        checkNoInitCache(); // Precondition.
         loginUpdateTkCache(USER_DROID).test().assertResult(true);
         checkInitTokenCache();
         cleanOptions(CLEAN_DROID);
     }
 
     @Test
-    public void testLoginUpdateTkCache_2() throws UiException, IOException
+    public void test_LoginUpdateTkCache_2() throws UiException, IOException
     {
-        userComuDaoRemote.regComuAndUserAndUserComu(COMU_REAL_DROID).execute().body();
+        signUpAndUpdateTk(COMU_REAL_DROID);
+        checkInitTokenCache(); // Precondition.
         loginUpdateTkCache(new Usuario.UsuarioBuilder().userName(USER_DROID.getUserName()).password("password_wrong").build())
                 .test().assertResult(false);
-        checkNoInitCache();
+        checkUpdatedCacheAfterPswd(false, TKhandler.getTokenCache().get());
         cleanOptions(CLEAN_DROID);
     }
 
@@ -137,10 +127,10 @@ public class CtrlerLoginTest {
      * We use a mock callable to avoid changing user password in database: it would make impossible to delete user afterwards.
      */
     @Test
-    public void testLoginPswdSendSingle() throws UiException, IOException, InterruptedException
+    public void test_LoginPswdSendSingle() throws UiException, IOException, InterruptedException
     {
         signUpAndUpdateTk(COMU_REAL_DROID);
-
+        checkInitTokenCache(); // Precondition.
         loginPswdSendSingle(new SendPswdCallable()).test().assertResult(true);
         // Check cache cleaning.
         checkNoInitCache();
@@ -169,13 +159,13 @@ public class CtrlerLoginTest {
         cleanOptions(CLEAN_DROID);
     }
 
-    @Test
-    public void testDoDialogPositiveClick() throws Exception
+    @Test   // With mock callable to avoid change identity data in cache.
+    public void test_SendNewPassword() throws Exception
     {
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
-            assertThat(controller.doDialogPositiveClick(new SendPswdCallable(), new TestDisposableSingleObserver(), USER_DROID), is(true));
+            assertThat(controller.sendNewPassword(new SendPswdCallable(), new TestDisposableSingleObserver()), is(true));
         } finally {
             resetAllSchedulers();
         }

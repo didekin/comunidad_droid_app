@@ -1,11 +1,8 @@
 package com.didekindroid.util;
 
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
@@ -14,10 +11,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
-import android.widget.CursorAdapter;
-import android.widget.SimpleCursorAdapter;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -87,23 +80,7 @@ public final class UIutils {
         }
     }
 
-//    ================================== ADAPTERS ======================================
-
-    public static SpinnerAdapter doAdapterSpinnerFromCursor(Cursor cursor, String[] fromColDB, Activity activity)
-    {
-        Timber.d("In doAdapterSpinnerFromCursor()");
-
-        int[] toViews = new int[]{R.id.app_spinner_1_dropdown_item};
-        return new SimpleCursorAdapter(
-                activity,
-                R.layout.app_spinner_1_dropdown_item,
-                cursor,
-                fromColDB,
-                toViews,
-                0);
-    }
-
-//    ================================== ASSERTIONS ======================================
+    //    ================================== ASSERTIONS ======================================
 
     public static void assertTrue(boolean assertion, String message)
     {
@@ -124,27 +101,7 @@ public final class UIutils {
         return subscriptions.size();
     }
 
-    public static void closeCursor(Adapter adapter)
-    {
-        Timber.d("closeCursor()");
-
-        CursorAdapter cursorAdapter;
-        Cursor cursor;
-        if (adapter != null) {
-            try {
-                cursorAdapter = (CursorAdapter) adapter;
-                cursor = cursorAdapter.getCursor();
-                if (cursor != null) {
-                    cursor.close();
-                    assertTrue(cursor.isClosed(), CommonAssertionMsg.cursor_should_be_closed);
-                }
-            } catch (ClassCastException e) {
-                throw new IllegalStateException("Illegal NON cursorAdapter", e);
-            }
-        }
-    }
-
-//    ================================ DATA FORMATS ==========================================
+    //    ================================ DATA FORMATS ==========================================
 
     public static String formatTimeStampToString(Timestamp timestamp)
     {
@@ -156,7 +113,7 @@ public final class UIutils {
         return DateFormat.getDateInstance(MEDIUM, getDefault()).format(new Date(time));
     }
 
-    public static String formatDoubleZeroDecimal(Double myDouble, Context context)
+    public static String formatDoubleZeroDecimal(Double myDouble)
     {
         NumberFormat myFormatter = NumberFormat.getInstance(SPAIN_LOCALE);
         return myFormatter.format(myDouble);
@@ -258,15 +215,7 @@ public final class UIutils {
         doToolBar(activity, APPBAR_ID, hasParentAc);
     }
 
-    public ActivityManager getActivityManager(Context context)
-    {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            return context.getSystemService(ActivityManager.class);
-        }
-        return (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-    }
-
-/*
+    /*
     When inflating anything to be displayed on the action bar (such as a SpinnerAdapter for
     list navigation in the toolbar), make sure you use the action bar’s themed context, retrieved
     via getSupportActionBar().getThemedContext().

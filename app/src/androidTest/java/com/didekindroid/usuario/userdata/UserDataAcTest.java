@@ -138,7 +138,7 @@ public class UserDataAcTest {
         waitAtMost(4, SECONDS).until(isViewDisplayed(allOf(withId(R.id.reg_usuario_alias_ediT), withText(containsString(oldUsuario.getAlias())))));
         waitAtMost(4, SECONDS).until(isViewDisplayed(
                 allOf(
-                        withId(R.id.user_data_ac_password_ediT),
+                        withId(R.id.password_validation_ediT),
                         withText(containsString("")),
                         withHint(R.string.user_data_ac_password_hint)
                 )));

@@ -190,13 +190,6 @@ public class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDao {
     }
 
     @Override
-    public int modifyUser(Usuario usuario) throws UiException
-    {
-        Timber.d("modifyUser(), Thread: %s", Thread.currentThread().getName());
-        return modifyUserWithToken(TKhandler.getTokenCache().get(), usuario);
-    }
-
-    @Override
     public int modifyUserWithToken(SpringOauthToken oauthToken, Usuario usuario) throws UiException
     {
         Timber.d("modifyUserWithToken(), Thread: %s", Thread.currentThread().getName());
@@ -208,11 +201,11 @@ public class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDao {
     }
 
     @Override
-    public int passwordChange(String newPassword) throws UiException
+    public int passwordChange(SpringOauthToken oldOauthToken, String newPassword) throws UiException
     {
         Timber.d("passwordChange(), Thread: %s", Thread.currentThread().getName());
         try {
-            Response<Integer> response = passwordChange(identityCacher.checkBearerTokenInCache(), newPassword).execute();
+            Response<Integer> response = passwordChange(identityCacher.checkBearerToken(oldOauthToken), newPassword).execute();
             return getResponseBody(response);
         } catch (IOException e) {
             throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));

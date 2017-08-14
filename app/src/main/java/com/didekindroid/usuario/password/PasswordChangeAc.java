@@ -21,7 +21,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  */
 public class PasswordChangeAc extends AppCompatActivity {
 
-    ViewerPasswordChangeIf viewer;
+    ViewerPasswordChange viewer;
     View acView;
 
     @Override

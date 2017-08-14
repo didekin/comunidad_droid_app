@@ -31,7 +31,6 @@ import com.didekindroid.api.ViewerSelectListIf;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf.ActionForUiExceptionIf;
 import com.didekindroid.router.ActivityInitiator;
-import com.didekindroid.security.IdentityCacher;
 import com.didekindroid.usuario.firebase.CtrlerFirebaseTokenIf;
 import com.didekindroid.util.BundleKey;
 import com.didekinlib.http.ErrorBean;
@@ -42,7 +41,6 @@ import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matcher;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.GregorianCalendar;
@@ -104,8 +102,6 @@ import static org.junit.Assert.fail;
 
 public final class ActivityTestUtils {
 
-    public static final long LONG_DEFAULT_EXTRA_VALUE = 0L;
-
     private ActivityTestUtils()
     {
     }
@@ -139,23 +135,6 @@ public final class ActivityTestUtils {
         };
     }
 
-    public static Callable<Boolean> isResourceIdNonExist(final Integer... resourceStringIds)
-    {
-        return new Callable<Boolean>() {
-            public Boolean call() throws Exception
-            {
-                try {
-                    for (int resourceId : resourceStringIds) {
-                        onView(withId(resourceId)).check(doesNotExist());
-                    }
-                    return true;
-                } catch (NoMatchingViewException ne) {
-                    return false;
-                }
-            }
-        };
-    }
-
     public static Callable<Boolean> isTextIdNonExist(final Integer... stringId)
     {
         return new Callable<Boolean>() {
@@ -180,21 +159,6 @@ public final class ActivityTestUtils {
             {
                 try {
                     onView(viewMatcher).check(matches(isDisplayed())).perform(viewActions);
-                    return true;
-                } catch (NoMatchingViewException ne) {
-                    return false;
-                }
-            }
-        };
-    }
-
-    public static Callable<Boolean> viewNonExist(final Matcher<View> viewMatcher)
-    {
-        return new Callable<Boolean>() {
-            public Boolean call() throws Exception
-            {
-                try {
-                    onView(viewMatcher).check(matches(not(isDisplayed())));
                     return true;
                 } catch (NoMatchingViewException ne) {
                     return false;
@@ -297,16 +261,6 @@ public final class ActivityTestUtils {
         };
     }
 
-    //    ============================= DATES ===================================
-
-    public static Timestamp doTimeStampFromCalendar(int daysToAdd)
-    {
-        Calendar fCierre = new GregorianCalendar();
-        fCierre.add(DAY_OF_MONTH, daysToAdd);
-        return new Timestamp(fCierre.getTimeInMillis());
-    }
-
-
     //    ============================= DATE PICKERS ===================================
 
     public static Calendar reSetDatePicker(long fechaInicial, int monthsToAdd)
@@ -335,7 +289,7 @@ public final class ActivityTestUtils {
 
     //    ============================= EXCEPTIONS/ERRORS ===================================
 
-    public static boolean checkProcessCtrlError(final ViewerIf viewer, final ExceptionMsgIf exceptionMsg, ActionForUiExceptionIf actionToExpect)
+    public static boolean checkOnErrorInObserver(final ViewerIf viewer, final ExceptionMsgIf exceptionMsg, ActionForUiExceptionIf actionToExpect)
     {
         final Activity activityError = viewer.getActivity();
         final AtomicReference<ActionForUiExceptionIf> actionException = new AtomicReference<>(null);
@@ -367,8 +321,7 @@ public final class ActivityTestUtils {
 
     public static void checkUpdateTokenCache(SpringOauthToken oldToken)
     {
-        assertThat(TKhandler.getTokenCache().get(), not(is(oldToken)));
-        checkInitTokenCache();
+        checkUpdatedCacheAfterPswd(true, oldToken);
     }
 
     public static void checkInitTokenCache()
@@ -385,15 +338,14 @@ public final class ActivityTestUtils {
         assertThat(TKhandler.getRefreshTokenFile().exists(), is(false));
     }
 
-    public static Callable<String> getRefreshTokenValue(final IdentityCacher identityCacher)
+    public static void checkUpdatedCacheAfterPswd(boolean isPswdUpdated, SpringOauthToken oldToken)
     {
-        return new Callable<String>() {
-            @Override
-            public String call() throws Exception
-            {
-                return identityCacher.getRefreshTokenValue();
-            }
-        };
+        checkInitTokenCache();
+        if (isPswdUpdated) {
+            assertThat(TKhandler.getTokenCache().get(), not(is(oldToken)));
+        } else {
+            assertThat(TKhandler.getTokenCache().get(), is(oldToken));
+        }
     }
 
     //    ============================= NAVIGATION ===================================
@@ -430,6 +382,7 @@ public final class ActivityTestUtils {
             }
     }
 
+    @SuppressWarnings("unused")
     public static Stage getStageByActivity(final Activity activity) throws ExecutionException, InterruptedException
     {
         Timber.d("============= getStageByActivity() =================");
@@ -543,16 +496,6 @@ public final class ActivityTestUtils {
         }
     }
 
-    public static void checkNoToastInTest(int resourceStringId, Activity activity)
-    {
-        Resources resources = activity.getResources();
-
-        onView(
-                withText(containsString(resources.getText(resourceStringId).toString())))
-                .inRoot(withDecorView(not(activity.getWindow().getDecorView())))
-                .check(doesNotExist());
-    }
-
     public static Callable<Boolean> isToastInView(final int resourceStringId, final Activity activity, final int... resorceErrorId)
     {
         return new Callable<Boolean>() {
@@ -560,22 +503,6 @@ public final class ActivityTestUtils {
             {
                 try {
                     checkToastInTest(resourceStringId, activity, resorceErrorId);
-                    return true;
-                } catch (NoMatchingViewException | NoMatchingRootException ne) {
-                    return false;
-                }
-            }
-        };
-    }
-
-    public static Callable<Boolean> isNotToastInView(final int resourceStringId, final Activity activity)
-    {
-        return new Callable<Boolean>() {
-            @Override
-            public Boolean call() throws Exception
-            {
-                try {
-                    checkNoToastInTest(resourceStringId, activity);
                     return true;
                 } catch (NoMatchingViewException | NoMatchingRootException ne) {
                     return false;

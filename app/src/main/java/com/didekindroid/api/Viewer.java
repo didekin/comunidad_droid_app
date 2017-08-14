@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf.ActionForUiExceptionIf;
 
 import java.io.Serializable;
@@ -46,6 +47,9 @@ public class Viewer<T extends View, C extends ControllerIf> implements ViewerIf<
     public ActionForUiExceptionIf onErrorInObserver(Throwable error)
     {
         Timber.d("onErrorInObserver()");
+        if (error instanceof UiException) {
+            Timber.d("UiException message: %s", ((UiException) error).getErrorBean().getMessage());
+        }
         return getUiExceptionFromThrowable(error).processMe(activity, new Intent());
     }
 

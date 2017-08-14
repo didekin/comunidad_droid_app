@@ -25,7 +25,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
 import static com.didekindroid.exception.UiExceptionRouter.GENERIC_APP_ACC;
-import static com.didekindroid.testutil.ActivityTestUtils.checkProcessCtrlError;
+import static com.didekindroid.testutil.ActivityTestUtils.checkOnErrorInObserver;
 import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtils.isActivityDying;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
@@ -76,7 +76,7 @@ public class ViewerLoginTest {
     public void testNewViewerLogin() throws Exception
     {
         assertThat(viewerLogin, notNullValue());
-        assertThat(viewerLogin.getController(), instanceOf(CtrlerLogin.class));
+        assertThat(viewerLogin.getController(), instanceOf(CtrlerUsuario.class));
     }
 
     @Test
@@ -176,9 +176,9 @@ public class ViewerLoginTest {
     @Test
     public void testDoDialogPositiveClick() throws Exception
     {
-        viewerLogin.setController(new CtrlerLogin() {
+        viewerLogin.setController(new CtrlerUsuario() {
             @Override
-            public boolean doDialogPositiveClick(DisposableSingleObserver<Boolean> observer, @NonNull Usuario usuario)
+            public boolean sendNewPassword(DisposableSingleObserver<Boolean> observer, @NonNull Usuario usuario)
             {
                 assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
                 return false;
@@ -198,11 +198,11 @@ public class ViewerLoginTest {
                 viewerLogin.processBackSendPswdInView(true);
             }
         });
-        await().atMost(3, SECONDS).until(isToastInView(R.string.password_new_in_login, activity));
+        waitAtMost(4, SECONDS).until(isToastInView(R.string.password_new_in_login, activity));
     }
 
     @Test
-    public void testProcessControllerError_1() throws Exception
+    public void testOnErrorInObserver_1() throws Exception
     {
         activity.runOnUiThread(new Runnable() {
             @Override
@@ -216,9 +216,9 @@ public class ViewerLoginTest {
     }
 
     @Test
-    public void testProcessControllerError_2()
+    public void testOnErrorInObserver_2()
     {
-        assertThat(checkProcessCtrlError(viewerLogin, GENERIC_INTERNAL_ERROR, GENERIC_APP_ACC), is(true));
+        assertThat(checkOnErrorInObserver(viewerLogin, GENERIC_INTERNAL_ERROR, GENERIC_APP_ACC), is(true));
     }
 
     @Test

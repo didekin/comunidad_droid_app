@@ -54,7 +54,7 @@ final class ViewerUserData extends Viewer<View, CtrlerUserDataIf> implements Vie
         super(view, activity, null);
         emailView = view.findViewById(R.id.reg_usuario_email_editT);
         aliasView = view.findViewById(R.id.reg_usuario_alias_ediT);
-        passwordView = view.findViewById(R.id.user_data_ac_password_ediT);
+        passwordView = view.findViewById(R.id.password_validation_ediT);
         oldUser = new AtomicReference<>(null);
         newUser = new AtomicReference<>(null);
         usuarioBean = new AtomicReference<>(null);
@@ -184,15 +184,18 @@ final class ViewerUserData extends Viewer<View, CtrlerUserDataIf> implements Vie
                 return false;
             case userName:
             case alias_only:
-                return controller.modifyUser(new UserDataObserver<Boolean>() {
-                    @Override
-                    public void onSuccess(Boolean isCompleted)
-                    {
-                        Timber.d("onSuccess(), isCompleted == %s", isCompleted.toString());
-                        assertTrue(isCompleted, "UserDataObserver.onSuccess() should be TRUE");
-                        replaceComponent(new Bundle());
-                    }
-                }, oldUser.get(), newUser.get());
+                return controller.modifyUser(
+                        new UserDataObserver<Boolean>() {
+                            @Override
+                            public void onSuccess(Boolean isCompleted)
+                            {
+                                Timber.d("onSuccess(), isCompleted == %s", isCompleted.toString());
+                                assertTrue(isCompleted, "UserDataObserver.onSuccess() should be TRUE");
+                                replaceComponent(new Bundle());
+                            }
+                        },
+                        oldUser.get(),
+                        newUser.get());
             default:
                 return false;
         }
