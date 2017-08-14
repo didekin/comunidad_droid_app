@@ -26,7 +26,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
 import static com.didekindroid.exception.UiExceptionRouter.GENERIC_APP_ACC;
 import static com.didekindroid.testutil.ActivityTestUtils.checkOnErrorInObserver;
-import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtils.isActivityDying;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
@@ -41,7 +40,6 @@ import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_DROID;
 import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
 import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOUND;
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.awaitility.Awaitility.await;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.instanceOf;
@@ -136,7 +134,7 @@ public class ViewerLoginTest {
             }
         });
 
-        await().atMost(3, SECONDS).untilAtomic(viewerLogin.getCounterWrong(), equalTo(4));
+        waitAtMost(3, SECONDS).untilAtomic(viewerLogin.getCounterWrong(), equalTo(4));
         checkPswdSendByMailDialog();
     }
 
@@ -153,8 +151,8 @@ public class ViewerLoginTest {
             }
         });
 
-        await().atMost(3, SECONDS).untilAtomic(viewerLogin.getCounterWrong(), equalTo(3));
-        checkToastInTest(R.string.password_wrong, activity);
+        waitAtMost(5, SECONDS).untilAtomic(viewerLogin.getCounterWrong(), equalTo(3));
+        waitAtMost(5, SECONDS).until(isToastInView(R.string.password_wrong, activity));
         onView(withId(loginAcResourceId)).check(matches(isDisplayed()));
     }
 
@@ -169,7 +167,7 @@ public class ViewerLoginTest {
             }
         });
 
-        await().atMost(3, SECONDS).until(isActivityDying(activity), is(true));
+        waitAtMost(3, SECONDS).until(isActivityDying(activity), is(true));
         onView(withId(comuSearchAcLayout)).check(matches(isDisplayed()));
     }
 
