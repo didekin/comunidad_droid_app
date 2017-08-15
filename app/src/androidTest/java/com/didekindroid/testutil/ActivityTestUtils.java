@@ -238,7 +238,7 @@ public final class ActivityTestUtils {
         for (ControllerIf controller : controllers) {
             atomicInteger.addAndGet(controller.getSubscriptions().size());
         }
-        waitAtMost(5, SECONDS).untilAtomic(atomicInteger, is(0));
+        waitAtMost(6, SECONDS).untilAtomic(atomicInteger, is(0));
     }
 
     public static Callable<Boolean> gcmTokenSentFlag(final CtrlerFirebaseTokenIf controller)

@@ -43,7 +43,7 @@ ext {
     androidSupportVersion = '26.0.0-alpha1'
     espressoVersion = '2.3-alpha'
     testRunnerRulesVersion = '0.6-aplpha'
-    didekinlibsVersion = 'a-0.1.18'
+    didekinlibsVersion = 'a-0.1.19'
 
     didekinlib_model = ":didekinlib_model-$rootProject.ext.didekinlibsVersion:@jar"
     didekinlib_http = ":didekinlib_http-$rootProject.ext.didekinlibsVersion:@jar"

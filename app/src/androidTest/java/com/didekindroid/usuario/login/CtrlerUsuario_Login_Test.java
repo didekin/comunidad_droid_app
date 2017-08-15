@@ -3,6 +3,7 @@ package com.didekindroid.usuario.login;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.exception.UiException;
+import com.didekinlib.http.ErrorBean;
 import com.didekinlib.model.usuario.Usuario;
 
 import org.junit.After;
@@ -36,6 +37,7 @@ import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanWithTk
 import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_DROID;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
 import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOUND;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -127,18 +129,26 @@ public class CtrlerUsuario_Login_Test {
      * We use a mock callable to avoid changing user password in database: it would make impossible to delete user afterwards.
      */
     @Test
-    public void test_LoginPswdSendSingle() throws UiException, IOException, InterruptedException
+    public void test_LoginPswdSendSingle_1() throws UiException, IOException, InterruptedException
     {
         signUpAndUpdateTk(COMU_REAL_DROID);
         checkInitTokenCache(); // Precondition.
         loginPswdSendSingle(new SendPswdCallable()).test().assertResult(true);
         // Check cache cleaning.
-        checkNoInitCache();
+        finishLoginPswdSendSingle();
+    }
 
-        // Es necesario conseguir un nuevo token.
-        TKhandler.initIdentityCache(Oauth2.getPasswordUserToken(USER_DROID.getUserName(), USER_DROID.getPassword()));
-        usuarioDao.deleteUser();
-        cleanWithTkhandler();
+    /**
+     * We use a mock callable to avoid changing user password in database: it would make impossible to delete user afterwards.
+     */
+    @Test
+    public void test_LoginPswdSendSingle_2() throws UiException, IOException, InterruptedException
+    {
+        signUpAndUpdateTk(COMU_REAL_DROID);
+        checkInitTokenCache(); // Precondition.
+        loginPswdSendSingle(new SendPswdCallableError()).test().assertFailure(UiException.class);
+        finishLoginPswdSendSingle();
+
     }
 
     //    .................................... INSTANCE METHODS .................................
@@ -176,6 +186,17 @@ public class CtrlerUsuario_Login_Test {
     //    .................................... HELPERS .................................
     //  ============================================================================================
 
+    private void finishLoginPswdSendSingle() throws UiException
+    {
+        // Check cache cleaning.
+        checkNoInitCache();
+
+        // Es necesario conseguir un nuevo token.
+        TKhandler.initIdentityCache(Oauth2.getPasswordUserToken(USER_DROID.getUserName(), USER_DROID.getPassword()));
+        usuarioDao.deleteUser();
+        cleanWithTkhandler();
+    }
+
     static class TestDisposableSingleObserver extends DisposableSingleObserver<Boolean> {
         @Override
         public void onSuccess(Boolean aBoolean)
@@ -197,6 +218,14 @@ public class CtrlerUsuario_Login_Test {
         public Boolean call() throws Exception
         {
             return true;
+        }
+    }
+
+    static class SendPswdCallableError implements Callable<Boolean> {
+        @Override
+        public Boolean call() throws Exception
+        {
+            throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
         }
     }
 }

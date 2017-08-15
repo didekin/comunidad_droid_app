@@ -19,7 +19,7 @@ import org.junit.runner.RunWith;
 import static com.didekindroid.security.SecurityTestUtils.doSpringOauthToken;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.security.TokenIdentityCacher.cleanTokenAndUnregisterFunc;
-import static com.didekindroid.security.TokenIdentityCacher.cleanTokenCacheAction;
+import static com.didekindroid.security.TokenIdentityCacher.cleanTkCacheConsumer;
 import static com.didekindroid.security.TokenIdentityCacher.initTokenAction;
 import static com.didekindroid.security.TokenIdentityCacher.initTokenAndRegisterFunc;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_TK_HANDLER;
@@ -151,7 +151,7 @@ public class TokenIdentityCacherTest_1 {
     public void testCleanTokenCacheAction() throws Exception
     {
         // No user registered. We test for the non-nullity of refreshTokenFile.
-        cleanTokenCacheAction.accept(1);
+        cleanTkCacheConsumer.accept(1);
         checkNoCacheAndFile();
     }
 

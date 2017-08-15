@@ -11,6 +11,7 @@ import com.didekinlib.http.oauth2.SpringOauthToken;
 import java.io.File;
 import java.util.concurrent.atomic.AtomicReference;
 
+import io.reactivex.functions.Action;
 import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
@@ -38,7 +39,7 @@ public final class TokenIdentityCacher implements IdentityCacher {
     public static final IdentityCacher TKhandler = new TokenIdentityCacher(creator.get().getContext());
 
     //  ======================================================================================
-    //    .................................... FUNCTIONS .................................
+    //    .................................... ACTIONS AND FUNCTIONS .................................
     //  ======================================================================================
 
     public static final Function<Boolean, Boolean> cleanTokenAndUnregisterFunc = new Function<Boolean, Boolean>() {
@@ -53,6 +54,30 @@ public final class TokenIdentityCacher implements IdentityCacher {
                 TKhandler.updateIsRegistered(false);
             }
             return isDeletedUser;
+        }
+    };
+    public static final Consumer<Integer> cleanTkCacheConsumer = new Consumer<Integer>() {
+        @Override
+        public void accept(Integer modifiedUser)
+        {
+            if (modifiedUser > 0) {
+                TKhandler.cleanIdentityCache();
+            }
+        }
+    };
+    public static final Action cleanTkCacheAction = new Action() {
+        @Override
+        public void run() throws Exception
+        {
+            TKhandler.cleanIdentityCache();
+        }
+    };
+    static final Consumer<SpringOauthToken> initTokenAction = new Consumer<SpringOauthToken>() {
+        @Override
+        public void accept(SpringOauthToken token)
+        {
+            Timber.d("accept(), Thread: %s", Thread.currentThread().getName());
+            TKhandler.initIdentityCache(token);
         }
     };
 
@@ -73,20 +98,6 @@ public final class TokenIdentityCacher implements IdentityCacher {
             return isUpdatedTokenData;
         }
     };
-
-    //  ======================================================================================
-    //    .................................... ACTIONS .................................
-    //  ======================================================================================
-
-    public static final Consumer<SpringOauthToken> initTokenAction = new Consumer<SpringOauthToken>() {
-        @Override
-        public void accept(SpringOauthToken token)
-        {
-            Timber.d("accept(), Thread: %s", Thread.currentThread().getName());
-            TKhandler.initIdentityCache(token);
-        }
-    };
-
     static final Consumer<SpringOauthToken> initTokenUpdateRegisterAction = new Consumer<SpringOauthToken>() {
         @Override
         public void accept(SpringOauthToken token)
@@ -97,28 +108,9 @@ public final class TokenIdentityCacher implements IdentityCacher {
         }
     };
 
-    static final Consumer<Integer> cleanTokenCacheAction = new Consumer<Integer>() {
-        @Override
-        public void accept(Integer modifiedUser)
-        {
-            if (modifiedUser > 0) {
-                TKhandler.cleanIdentityCache();
-            }
-        }
-    };
-
-    public static final Consumer<Boolean> cleanTkCacheActionBoolean = new Consumer<Boolean>() {
-        @Override
-        public void accept(Boolean isToClean) throws Exception
-        {
-            cleanTokenCacheAction.accept(isToClean ? 1 : 0);
-        }
-    };
-
     //  ======================================================================================
     //    ............................... TOKEN CACHE .................................
     //  ======================================================================================
-
     static final String refresh_token_filename = "tk_file";
     private final AtomicReference<SpringOauthToken> tokenCache;
     private final File refreshTokenFile;
@@ -180,11 +172,11 @@ public final class TokenIdentityCacher implements IdentityCacher {
     @Override
     public boolean isRegisteredUser()
     {
-        Timber.d("isRegisteredUser()");
-
         SharedPreferences sharedPref = context.getSharedPreferences
                 (app_preferences_file.toString(), MODE_PRIVATE);
-        return sharedPref.getBoolean(IS_USER_REG, false);
+        boolean isRegistered = sharedPref.getBoolean(IS_USER_REG, false);
+        Timber.d("isRegisteredUser() = %b", isRegistered);
+        return isRegistered;
     }
 
     /**
@@ -210,12 +202,6 @@ public final class TokenIdentityCacher implements IdentityCacher {
     //  ======================================================================================
     //    .................................... UTILITIES .................................
     //  ======================================================================================
-
-    public String doHttpAuthHeaderFromTkInCache()
-    {
-        Timber.d("doHttpAuthHeader()");
-        return doHttpAuthHeader(getTokenCache().get());
-    }
 
     @Nullable
     private String doHttpAuthHeader(SpringOauthToken oauthToken)

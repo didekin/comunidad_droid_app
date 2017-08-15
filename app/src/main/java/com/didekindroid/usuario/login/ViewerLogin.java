@@ -12,7 +12,6 @@ import android.widget.EditText;
 
 import com.didekindroid.R;
 import com.didekindroid.api.Viewer;
-import com.didekindroid.exception.UiException;
 import com.didekindroid.exception.UiExceptionIf;
 import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.usuario.UsuarioBean;

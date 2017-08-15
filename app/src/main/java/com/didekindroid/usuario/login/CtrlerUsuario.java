@@ -18,7 +18,7 @@ import timber.log.Timber;
 
 import static com.didekindroid.security.OauthTokenObservable.oauthTokenAndInitCache;
 import static com.didekindroid.security.OauthTokenObservable.oauthTokenFromUserPswd;
-import static com.didekindroid.security.TokenIdentityCacher.cleanTkCacheActionBoolean;
+import static com.didekindroid.security.TokenIdentityCacher.cleanTkCacheAction;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
 import static io.reactivex.Single.fromCallable;
 import static io.reactivex.Single.just;
@@ -65,11 +65,11 @@ public class CtrlerUsuario extends Controller {
      */
     static Single<Boolean> loginPswdSendSingle(final Callable<Boolean> sendPswdCall)
     {
-        return fromCallable(sendPswdCall).doOnSuccess(cleanTkCacheActionBoolean);
+        return fromCallable(sendPswdCall).doFinally(cleanTkCacheAction);
     }
 
     /**
-     *  Password change submitting the current password.
+     * Password change submitting the current password.
      */
     public static Completable passwordChangeWithPswdValidation(final Usuario oldUser, final Usuario newUser)
     {

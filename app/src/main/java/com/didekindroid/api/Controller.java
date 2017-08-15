@@ -48,8 +48,9 @@ public class Controller implements ControllerIf {
     @Override
     public boolean isRegisteredUser()
     {
-        Timber.d("isRegisteredUser()");
-        return identityCacher.isRegisteredUser();
+        boolean isRegistered = identityCacher.isRegisteredUser();
+        Timber.d("isRegisteredUser() = %b", isRegistered);
+        return isRegistered;
     }
 
     @Override
