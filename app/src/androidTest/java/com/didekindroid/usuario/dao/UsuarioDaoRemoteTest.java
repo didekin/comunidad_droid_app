@@ -30,6 +30,7 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.CO
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static com.didekinlib.model.usuario.UsuarioExceptionMsg.PASSWORD_NOT_SENT;
 import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOUND;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
@@ -191,7 +192,15 @@ public class UsuarioDaoRemoteTest {
     @Test
     public void testPasswordSend() throws UiException, IOException
     {
-        // No puede borrarse el usuario de prueba, porque ignoramos el nuevo password.
+        // If exception, login data are not changed.
+        signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
+        try {
+            usuarioDao.sendPassword(USER_JUAN.getUserName());
+            fail();
+        } catch (UiException ue) {
+            assertThat(ue.getErrorBean().getMessage(), is(PASSWORD_NOT_SENT.getHttpMessage()));
+        }
+        assertThat(usuarioDao.loginInternal(USER_JUAN.getUserName(), USER_JUAN.getPassword()), is(true));
     }
 
 //    ====================== NON INTERFACE TESTS =========================
