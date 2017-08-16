@@ -135,6 +135,7 @@ public class CtrlerUsuario_Login_Test {
         checkInitTokenCache(); // Precondition.
         loginPswdSendSingle(new SendPswdCallable()).test().assertResult(true);
         // Check cache cleaning.
+        checkNoInitCache();
         finishLoginPswdSendSingle();
     }
 
@@ -147,8 +148,9 @@ public class CtrlerUsuario_Login_Test {
         signUpAndUpdateTk(COMU_REAL_DROID);
         checkInitTokenCache(); // Precondition.
         loginPswdSendSingle(new SendPswdCallableError()).test().assertFailure(UiException.class);
+        // Check cache hasn't changed.
+        checkInitTokenCache();
         finishLoginPswdSendSingle();
-
     }
 
     //    .................................... INSTANCE METHODS .................................
@@ -188,9 +190,6 @@ public class CtrlerUsuario_Login_Test {
 
     private void finishLoginPswdSendSingle() throws UiException
     {
-        // Check cache cleaning.
-        checkNoInitCache();
-
         // Es necesario conseguir un nuevo token.
         TKhandler.initIdentityCache(Oauth2.getPasswordUserToken(USER_DROID.getUserName(), USER_DROID.getPassword()));
         usuarioDao.deleteUser();

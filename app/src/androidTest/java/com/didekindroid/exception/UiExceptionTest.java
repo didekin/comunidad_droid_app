@@ -28,6 +28,7 @@ import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doIncidencia;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
@@ -35,6 +36,7 @@ import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.use
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
+import static com.didekinlib.http.GenericExceptionMsg.TOKEN_NULL;
 import static com.didekinlib.model.comunidad.ComunidadExceptionMsg.COMUNIDAD_NOT_FOUND;
 import static com.didekinlib.model.incidencia.dominio.IncidenciaExceptionMsg.INCIDENCIA_COMMENT_WRONG_INIT;
 import static com.didekinlib.model.incidencia.dominio.IncidenciaExceptionMsg.INCIDENCIA_NOT_REGISTERED;
@@ -131,6 +133,22 @@ public class UiExceptionTest {
 
         waitAtMost(5, SECONDS).until(isToastInView(R.string.exception_generic_app_message, mActivity));
         onView(withId(R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void test_TokenNull() throws Exception
+    {
+        final UiException ue = new UiException(new ErrorBean(TOKEN_NULL));
+
+        mActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                ue.processMe(mActivity, new Intent());
+            }
+        });
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed((R.id.login_ac_layout)));
+        waitAtMost(4, SECONDS).until(isToastInView(R.string.user_without_signedUp, mActivity));
     }
 
     @Test

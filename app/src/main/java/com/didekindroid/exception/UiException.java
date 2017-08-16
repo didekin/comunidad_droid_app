@@ -11,7 +11,6 @@ import timber.log.Timber;
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static com.didekindroid.AppInitializer.creator;
-import static com.didekindroid.util.UIutils.finishActivity;
 import static com.didekindroid.util.UIutils.makeToast;
 
 /**
@@ -29,7 +28,8 @@ public class UiException extends Exception implements UiExceptionIf {
         this(errorBean, creator.get().getUiExceptionRouter());
     }
 
-    public UiException(ErrorBean errorBean, UiExceptionRouterIf exceptionRouter){
+    public UiException(ErrorBean errorBean, UiExceptionRouterIf exceptionRouter)
+    {
         this.errorBean = errorBean;
         this.exceptionRouter = exceptionRouter;
     }
@@ -47,7 +47,6 @@ public class UiException extends Exception implements UiExceptionIf {
             intent.setAction(Intent.ACTION_MAIN);
             intent.setFlags(FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TOP);
             activity.startActivity(intent);
-            finishActivity(activity, intent);
         } else {
             if (action.getToastResourceId() > 0) {
                 makeToast(activity, action.getToastResourceId());
@@ -56,7 +55,6 @@ public class UiException extends Exception implements UiExceptionIf {
                 intent.setClass(activity, action.getActivityToGoClass());
                 intent.setFlags(FLAG_ACTIVITY_NEW_TASK);
                 activity.startActivity(intent);
-                finishActivity(activity, intent);
             }
         }
         return action;

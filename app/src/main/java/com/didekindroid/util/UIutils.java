@@ -2,7 +2,6 @@ package com.didekindroid.util;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
@@ -71,13 +70,6 @@ public final class UIutils {
             return true;
         }
         return false;
-    }
-
-    public static void finishActivity(Activity activity, Intent intent)
-    {
-        if (!activity.getClass().getCanonicalName().equals(intent.getComponent().getClassName())) {
-            activity.finish();
-        }
     }
 
     //    ================================== ASSERTIONS ======================================

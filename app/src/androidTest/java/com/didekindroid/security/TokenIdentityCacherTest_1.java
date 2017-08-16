@@ -151,7 +151,7 @@ public class TokenIdentityCacherTest_1 {
     public void testCleanTokenCacheAction() throws Exception
     {
         // No user registered. We test for the non-nullity of refreshTokenFile.
-        cleanTkCacheConsumer.accept(1);
+        cleanTkCacheConsumer.accept(true);
         checkNoCacheAndFile();
     }
 

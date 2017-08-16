@@ -62,7 +62,7 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
         mResolucionBean = new ResolucionBean();
         mFechaView = initFechaSpinnerView(this, (TextView) mFragmentView.findViewById(R.id.incid_resolucion_fecha_view));
 
-        Button mModifyButton = (Button) mFragmentView.findViewById(R.id.incid_resolucion_fr_modif_button);
+        Button mModifyButton = mFragmentView.findViewById(R.id.incid_resolucion_fr_modif_button);
         mModifyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
@@ -71,7 +71,7 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
                 modifyResolucion(false);
             }
         });
-        Button mCloseIncidButton = (Button) mFragmentView.findViewById(R.id.incid_resolucion_edit_fr_close_button);
+        Button mCloseIncidButton = mFragmentView.findViewById(R.id.incid_resolucion_edit_fr_close_button);
         mCloseIncidButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
@@ -102,7 +102,7 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
         mAdapter.clear();
         mAdapter.addAll(mResolucion.getAvances());
 
-        ListView mListView = (ListView) mFragmentView.findViewById(android.R.id.list);
+        ListView mListView = mFragmentView.findViewById(android.R.id.list);
         mListView.setEmptyView(mFragmentView.findViewById(android.R.id.empty));
         /* To get visible a divider on top of the list.*/
         mListView.addHeaderView(new View(getContext()), null, true);
@@ -253,8 +253,7 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
             Timber.d("onPostExecute()");
 
             if (uiException != null) {
-                Intent intent = new Intent();
-                uiException.processMe(getActivity(), intent);
+                uiException.processMe(getActivity(), new Intent());
             } else {
                 assertTrue(incidenciaCancelled >= 2, incidencia_should_be_cancelled);
                 Intent intent = new Intent(getActivity(), IncidSeeClosedByComuAc.class);

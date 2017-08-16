@@ -18,7 +18,7 @@ import timber.log.Timber;
 
 import static com.didekindroid.security.OauthTokenObservable.oauthTokenAndInitCache;
 import static com.didekindroid.security.OauthTokenObservable.oauthTokenFromUserPswd;
-import static com.didekindroid.security.TokenIdentityCacher.cleanTkCacheAction;
+import static com.didekindroid.security.TokenIdentityCacher.cleanTkCacheConsumer;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
 import static io.reactivex.Single.fromCallable;
 import static io.reactivex.Single.just;
@@ -37,6 +37,7 @@ public class CtrlerUsuario extends Controller {
 
     static Single<Boolean> loginSingle(final Usuario usuario)
     {
+        Timber.d("loginSingle()");
         return fromCallable(new Callable<Boolean>() {
             @Override
             public Boolean call() throws Exception
@@ -48,6 +49,7 @@ public class CtrlerUsuario extends Controller {
 
     static Single<Boolean> loginUpdateTkCache(final Usuario usuario)
     {
+        Timber.d("loginUpdateTkCache()");
         return loginSingle(usuario).flatMap(new Function<Boolean, Single<Boolean>>() {
             @Override
             public Single<Boolean> apply(Boolean isLoginValid) throws Exception
@@ -65,7 +67,8 @@ public class CtrlerUsuario extends Controller {
      */
     static Single<Boolean> loginPswdSendSingle(final Callable<Boolean> sendPswdCall)
     {
-        return fromCallable(sendPswdCall).doFinally(cleanTkCacheAction);
+        Timber.d("loginPswdSendSingle()");
+        return fromCallable(sendPswdCall).doOnSuccess(cleanTkCacheConsumer);
     }
 
     /**

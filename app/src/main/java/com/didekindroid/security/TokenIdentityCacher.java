@@ -11,7 +11,6 @@ import com.didekinlib.http.oauth2.SpringOauthToken;
 import java.io.File;
 import java.util.concurrent.atomic.AtomicReference;
 
-import io.reactivex.functions.Action;
 import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
@@ -56,22 +55,17 @@ public final class TokenIdentityCacher implements IdentityCacher {
             return isDeletedUser;
         }
     };
-    public static final Consumer<Integer> cleanTkCacheConsumer = new Consumer<Integer>() {
+
+    public static final Consumer<Boolean> cleanTkCacheConsumer = new Consumer<Boolean>() {
         @Override
-        public void accept(Integer modifiedUser)
+        public void accept(Boolean isUserModified)
         {
-            if (modifiedUser > 0) {
+            if (isUserModified) {
                 TKhandler.cleanIdentityCache();
             }
         }
     };
-    public static final Action cleanTkCacheAction = new Action() {
-        @Override
-        public void run() throws Exception
-        {
-            TKhandler.cleanIdentityCache();
-        }
-    };
+
     static final Consumer<SpringOauthToken> initTokenAction = new Consumer<SpringOauthToken>() {
         @Override
         public void accept(SpringOauthToken token)
