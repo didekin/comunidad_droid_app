@@ -28,14 +28,10 @@ import com.didekindroid.api.ViewerIf;
 import com.didekindroid.api.ViewerMock;
 import com.didekindroid.api.ViewerParentInjectorIf;
 import com.didekindroid.api.ViewerSelectListIf;
-import com.didekindroid.exception.UiException;
-import com.didekindroid.exception.UiExceptionIf.ActionForUiExceptionIf;
 import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.usuario.firebase.CtrlerFirebaseTokenIf;
 import com.didekindroid.util.BundleKey;
-import com.didekinlib.http.ErrorBean;
 import com.didekinlib.http.oauth2.SpringOauthToken;
-import com.didekinlib.model.exception.ExceptionMsgIf;
 
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matcher;
@@ -50,7 +46,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
 
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -288,27 +283,6 @@ public final class ActivityTestUtils {
     }
 
     //    ============================= EXCEPTIONS/ERRORS ===================================
-
-    public static boolean checkOnErrorInObserver(final ViewerIf viewer, final ExceptionMsgIf exceptionMsg, ActionForUiExceptionIf actionToExpect)
-    {
-        final Activity activityError = viewer.getActivity();
-        final AtomicReference<ActionForUiExceptionIf> actionException = new AtomicReference<>(null);
-
-        activityError.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                assertThat(actionException.compareAndSet(
-                        null,
-                        viewer.onErrorInObserver(new UiException(new ErrorBean(exceptionMsg)))
-                        ),
-                        is(true)
-                );
-            }
-        });
-        waitAtMost(1, SECONDS).untilAtomic(actionException, notNullValue());
-        return actionException.get().getActivityToGoClass().equals(actionToExpect.getActivityToGoClass());
-    }
 
     //    ============================= IDENTITY ===================================
 

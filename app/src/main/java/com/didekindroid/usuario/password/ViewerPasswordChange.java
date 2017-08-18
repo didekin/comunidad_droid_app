@@ -8,10 +8,12 @@ import android.widget.EditText;
 
 import com.didekindroid.R;
 import com.didekindroid.api.Viewer;
-import com.didekindroid.exception.UiExceptionIf;
+import com.didekindroid.exception.ActionForUiException;
+import com.didekindroid.exception.UiException;
 import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.usuario.UsuarioBean;
 import com.didekindroid.usuario.login.CtrlerUsuario;
+import com.didekindroid.usuario.userdata.UserDataAc;
 import com.didekinlib.model.usuario.Usuario;
 
 import java.io.Serializable;
@@ -30,6 +32,7 @@ import static com.didekindroid.util.UIutils.getUiExceptionFromThrowable;
 import static com.didekindroid.util.UIutils.makeToast;
 import static com.didekinlib.http.GenericExceptionMsg.BAD_REQUEST;
 import static com.didekinlib.model.common.dominio.ValidDataPatterns.PASSWORD;
+import static com.didekinlib.model.usuario.UsuarioExceptionMsg.PASSWORD_NOT_SENT;
 import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOUND;
 
 /**
@@ -130,20 +133,20 @@ class ViewerPasswordChange extends Viewer<View, CtrlerUsuario> {
     }
 
     @Override
-    public UiExceptionIf.ActionForUiExceptionIf onErrorInObserver(Throwable error)
+    public void onErrorInObserver(Throwable error)
     {
         Timber.d("onErrorInObserver()");
-        UiExceptionIf.ActionForUiExceptionIf action = null;
-        String errorMsg = getUiExceptionFromThrowable(error).getErrorBean().getMessage();
+        UiException uiException = getUiExceptionFromThrowable(error);
+        String errorMsg = uiException.getErrorBean().getMessage();
 
-        if (errorMsg.equals(USER_NAME_NOT_FOUND.getHttpMessage())) {
-            makeToast(activity, R.string.username_wrong_in_login);
+        if (errorMsg.equals(USER_NAME_NOT_FOUND.getHttpMessage())
+                || errorMsg.equals(PASSWORD_NOT_SENT.getHttpMessage())) {
+            uiException.processMe(activity, new ActionForUiException(UserDataAc.class, R.string.user_email_wrong));
         } else if (errorMsg.equals(BAD_REQUEST.getHttpMessage())) {
             makeToast(activity, R.string.password_wrong);
         } else {
-            action = super.onErrorInObserver(error);
+            uiException.processMe(activity);
         }
-        return action;
     }
 
     public void replaceComponent(@NonNull Bundle bundle)
@@ -174,7 +177,7 @@ class ViewerPasswordChange extends Viewer<View, CtrlerUsuario> {
     }
 
     @SuppressWarnings("WeakerAccess")
-    class PswdSendSingleObserver extends DisposableSingleObserver<Boolean>{
+    class PswdSendSingleObserver extends DisposableSingleObserver<Boolean> {
 
         @Override
         public void onSuccess(@io.reactivex.annotations.NonNull Boolean isSendPassword)

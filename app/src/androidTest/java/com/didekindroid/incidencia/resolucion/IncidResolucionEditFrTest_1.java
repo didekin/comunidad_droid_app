@@ -29,6 +29,7 @@ import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExt
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
@@ -132,7 +133,7 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
         onView(withId(R.id.incid_resolucion_fecha_view)).perform(click());
         Calendar newFechaPrev = reSetDatePicker(resolucion.getFechaPrev().getTime(), 1);
 
-        ActivityTestUtils.closeDatePicker(mActivity);
+        ActivityTestUtils.closeDatePicker(activity);
 
         if (Locale.getDefault().equals(SPAIN_LOCALE)) {
             onView(allOf(
@@ -173,7 +174,7 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
         onView(withId(R.id.incid_resolucion_coste_prev_ed)).perform(replaceText("-1234,5"));
         onView(withId(R.id.incid_resolucion_fr_modif_button)).perform(click());
 
-        checkToastInTest(R.string.error_validation_msg, mActivity, R.string.incid_resolucion_avance_rot);
+        checkToastInTest(R.string.error_validation_msg, activity, R.string.incid_resolucion_avance_rot);
         Thread.sleep(2000);
     }
 
@@ -190,7 +191,7 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
         Thread.sleep(3000);
         onView(withId(R.id.incid_see_closed_by_comu_ac)).check(matches(isDisplayed())).perform(pressBack());
         onView(withId(R.id.incid_resolucion_fr_modif_button)).perform(click());
-        checkToastInTest(R.string.incidencia_wrong_init, mActivity);
+        checkToastInTest(R.string.incidencia_wrong_init, activity);
         onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed()));
     }
 
@@ -207,9 +208,11 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
         checkUp();
         checkScreenResolucionEditFr();
         checkDataResolucionEditFr();
+
         // Intentamos modificar la incidencia: error nos manda a la consulta.
         onView(withId(R.id.incid_resolucion_fr_modif_button)).perform(click());
-        checkToastInTest(R.string.incidencia_wrong_init, mActivity);
+        intended(hasExtra(COMUNIDAD_ID.key, incidImportancia.getIncidencia().getComunidadId()));
+        checkToastInTest(R.string.incidencia_wrong_init, activity);
         onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed()));
         Thread.sleep(2000);
     }

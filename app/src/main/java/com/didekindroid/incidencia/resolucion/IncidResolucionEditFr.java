@@ -15,6 +15,7 @@ import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.core.edit.IncidEditAc;
 import com.didekindroid.incidencia.list.close.IncidSeeClosedByComuAc;
+import com.didekindroid.incidencia.list.open.IncidSeeOpenByComuAc;
 import com.didekindroid.util.ConnectionUtils;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.Avance;
@@ -28,6 +29,7 @@ import java.util.List;
 
 import timber.log.Timber;
 
+import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
@@ -214,8 +216,8 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
             Timber.d("onPostExecute()");
 
             if (uiException != null) {
-                Intent intent = new Intent();
-                intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, mIncidImportancia);
+                Intent intent = new Intent(getActivity(), IncidSeeOpenByComuAc.class);
+                intent.putExtra(COMUNIDAD_ID.key, mIncidImportancia.getIncidencia().getComunidadId());
                 uiException.processMe(getActivity(), intent);
             } else {
                 assertTrue(rowModified >= 1, resolucion_should_be_modified);
@@ -253,7 +255,9 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
             Timber.d("onPostExecute()");
 
             if (uiException != null) {
-                uiException.processMe(getActivity(), new Intent());
+                Intent intent = new Intent(getActivity(), IncidSeeOpenByComuAc.class);
+                intent.putExtra(COMUNIDAD_ID.key, mIncidImportancia.getIncidencia().getComunidadId());
+                uiException.processMe(getActivity(), intent);
             } else {
                 assertTrue(incidenciaCancelled >= 2, incidencia_should_be_cancelled);
                 Intent intent = new Intent(getActivity(), IncidSeeClosedByComuAc.class);

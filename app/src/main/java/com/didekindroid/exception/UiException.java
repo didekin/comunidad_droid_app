@@ -2,6 +2,7 @@ package com.didekindroid.exception;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 
 import com.didekindroid.R;
 import com.didekinlib.http.ErrorBean;
@@ -11,6 +12,7 @@ import timber.log.Timber;
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static com.didekindroid.AppInitializer.creator;
+import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.makeToast;
 
 /**
@@ -20,6 +22,7 @@ import static com.didekindroid.util.UIutils.makeToast;
  */
 public class UiException extends Exception implements UiExceptionIf {
 
+    private static final String actionForException_notNull = "ActionForException not null";
     private final ErrorBean errorBean;
     private final UiExceptionRouterIf exceptionRouter;
 
@@ -35,29 +38,50 @@ public class UiException extends Exception implements UiExceptionIf {
     }
 
     @Override
-    public ActionForUiExceptionIf processMe(Activity activity, Intent intent)
+    public void processMe(@NonNull Activity activity)
     {
-        Timber.d("processMe(): %s%n", errorBean.getMessage());
+        Timber.d("processMe(Activity activity): %s%n", errorBean.getMessage());
 
         ActionForUiExceptionIf action = exceptionRouter.getActionForException(this);
-
         if (action == null) { // NO entry in exceptions dealer's table for error bean message.
             makeToast(activity, R.string.exception_generic_message);
+            Intent intent = new Intent();
             intent.addCategory(Intent.CATEGORY_LAUNCHER);
             intent.setAction(Intent.ACTION_MAIN);
             intent.setFlags(FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TOP);
             activity.startActivity(intent);
         } else {
-            if (action.getToastResourceId() > 0) {
-                makeToast(activity, action.getToastResourceId());
-            }
-            if (action.getActivityToGoClass() != null) {
-                intent.setClass(activity, action.getActivityToGoClass());
-                intent.setFlags(FLAG_ACTIVITY_NEW_TASK);
-                activity.startActivity(intent);
-            }
+            processMe(activity, action);
         }
-        return action;
+    }
+
+    @Override
+    public void processMe(@NonNull Activity activity, @NonNull Intent intent)
+    {
+        Timber.d("processMe(Activity activity, Intent intent): %s%n", errorBean.getMessage());
+
+        ActionForUiExceptionIf actionForException = exceptionRouter.getActionForException(this);
+        assertTrue(actionForException != null, actionForException_notNull);
+
+        if (actionForException.getToastResourceId() > 0) {
+            makeToast(activity, actionForException.getToastResourceId());
+        }
+        activity.startActivity(intent);
+    }
+
+    @Override
+    public void processMe(@NonNull Activity activity, @NonNull ActionForUiExceptionIf actionForException)
+    {
+        Timber.d("processMe(Activity activity, ActionForUiExceptionIf actionForException): %s%n", errorBean.getMessage());
+
+        if (actionForException.getToastResourceId() > 0) {
+            makeToast(activity, actionForException.getToastResourceId());
+        }
+        if (actionForException.getActivityToGoClass() != null) {
+            Intent intent = new Intent(activity, actionForException.getActivityToGoClass());
+            intent.setFlags(FLAG_ACTIVITY_NEW_TASK);
+            activity.startActivity(intent);
+        }
     }
 
     @Override
@@ -65,5 +89,4 @@ public class UiException extends Exception implements UiExceptionIf {
     {
         return errorBean;
     }
-
 }

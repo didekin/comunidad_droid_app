@@ -23,9 +23,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekindroid.exception.UiExceptionRouter.GENERIC_APP_ACC;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.testutil.ActivityTestUtils.checkOnErrorInObserver;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
@@ -39,7 +37,7 @@ import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOneUse
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_TRAV_PLAZUELA_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static com.didekinlib.http.GenericExceptionMsg.BAD_REQUEST;
-import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
+import static com.didekinlib.model.usuario.UsuarioExceptionMsg.PASSWORD_NOT_SENT;
 import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOUND;
 import static io.reactivex.Single.just;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -169,12 +167,26 @@ public class ViewerPasswordChangeTest {
                 viewer.onErrorInObserver(new UiException(new ErrorBean(USER_NAME_NOT_FOUND)));
             }
         });
-        waitAtMost(3, SECONDS).until(isToastInView(R.string.username_wrong_in_login, activity));
-        onView(withId(pswdChangeAcRsId)).check(matches(isDisplayed()));
+        waitAtMost(3, SECONDS).until(isToastInView(R.string.user_email_wrong, activity));
+        onView(withId(userDataAcRsId)).check(matches(isDisplayed()));
     }
 
     @Test
     public void testOnErrorInObserver_2() throws Exception
+    {
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                viewer.onErrorInObserver(new UiException(new ErrorBean(PASSWORD_NOT_SENT)));
+            }
+        });
+        waitAtMost(3, SECONDS).until(isToastInView(R.string.user_email_wrong, activity));
+        onView(withId(userDataAcRsId)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void testOnErrorInObserver_3() throws Exception
     {
         activity.runOnUiThread(new Runnable() {
             @Override
@@ -185,12 +197,6 @@ public class ViewerPasswordChangeTest {
         });
         waitAtMost(4, SECONDS).until(isToastInView(R.string.password_wrong, activity));
         onView(withId(pswdChangeAcRsId)).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void testOnErrorInObserver_3()
-    {
-        assertThat(checkOnErrorInObserver(viewer, GENERIC_INTERNAL_ERROR, GENERIC_APP_ACC), is(true));
     }
 
     @Test

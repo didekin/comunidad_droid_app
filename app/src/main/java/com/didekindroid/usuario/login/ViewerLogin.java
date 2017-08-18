@@ -12,7 +12,6 @@ import android.widget.EditText;
 
 import com.didekindroid.R;
 import com.didekindroid.api.Viewer;
-import com.didekindroid.exception.UiExceptionIf;
 import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.usuario.UsuarioBean;
 import com.didekinlib.model.usuario.Usuario;
@@ -189,16 +188,14 @@ final class ViewerLogin extends Viewer<View, CtrlerUsuario> implements ViewerLog
     }
 
     @Override
-    public UiExceptionIf.ActionForUiExceptionIf onErrorInObserver(Throwable error)
+    public void onErrorInObserver(Throwable error)
     {
         Timber.d("onErrorInObserver()");
-        UiExceptionIf.ActionForUiExceptionIf action = null;
         if (getUiExceptionFromThrowable(error).getErrorBean().getMessage().equals(USER_NAME_NOT_FOUND.getHttpMessage())) {
             makeToast(activity, R.string.username_wrong_in_login);
         } else {
-            action = super.onErrorInObserver(error);
+            super.onErrorInObserver(error);
         }
-        return action;
     }
 
     @Override

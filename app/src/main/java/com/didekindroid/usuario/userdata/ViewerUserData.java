@@ -10,7 +10,6 @@ import android.widget.EditText;
 
 import com.didekindroid.R;
 import com.didekindroid.api.Viewer;
-import com.didekindroid.exception.UiExceptionIf.ActionForUiExceptionIf;
 import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.usuario.UsuarioBean;
 import com.didekindroid.util.UIutils;
@@ -202,14 +201,13 @@ final class ViewerUserData extends Viewer<View, CtrlerUserDataIf> implements Vie
     }
 
     @Override
-    public ActionForUiExceptionIf onErrorInObserver(Throwable error)
+    public void onErrorInObserver(Throwable error)
     {
         Timber.d("onErrorInObserver()");
         if (getUiExceptionFromThrowable(error).getErrorBean().getMessage().equals(BAD_REQUEST.getHttpMessage())) {
             makeToast(activity, R.string.password_wrong);
-            return null;
         }
-        return super.onErrorInObserver(error);
+        super.onErrorInObserver(error);
     }
 
     public void replaceComponent(Bundle bundle)

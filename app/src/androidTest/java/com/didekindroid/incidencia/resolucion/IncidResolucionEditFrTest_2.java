@@ -167,7 +167,7 @@ public class IncidResolucionEditFrTest_2 extends IncidResolucionAbstractTest {
         onView(withId(R.id.incid_see_closed_by_comu_ac)).check(matches(isDisplayed())).perform(pressBack());
 
         onView(withId(R.id.incid_resolucion_edit_fr_close_button)).perform(click());
-        checkToastInTest(R.string.incidencia_wrong_init, mActivity);
+        checkToastInTest(R.string.incidencia_wrong_init, activity);
         onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed()));
 
         Thread.sleep(2000);

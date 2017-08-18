@@ -6,8 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import com.didekindroid.exception.UiExceptionIf;
-
 import java.io.Serializable;
 
 /**
@@ -19,7 +17,7 @@ public interface ViewerIf<T extends View, C extends ControllerIf> {
 
     AppCompatActivity getActivity();
 
-    UiExceptionIf.ActionForUiExceptionIf onErrorInObserver(Throwable error);
+    void onErrorInObserver(Throwable error);
 
     int clearSubscriptions();
 

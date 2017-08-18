@@ -8,7 +8,6 @@ import com.didekindroid.api.ActivityMock;
 import com.didekindroid.api.ObserverCacheCleaner;
 import com.didekindroid.api.Viewer;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.exception.UiExceptionIf;
 import com.didekinlib.http.ErrorBean;
 import com.didekinlib.http.oauth2.SpringOauthToken;
 
@@ -78,10 +77,10 @@ public class CtrlerAuthTokenTest {
         activity = activityRule.getActivity();
         viewer = new Viewer<View, CtrlerAuthToken>(null, activity, null) {
             @Override
-            public UiExceptionIf.ActionForUiExceptionIf onErrorInObserver(Throwable error)
+            public void onErrorInObserver(Throwable error)
             {
                 assertThat(flagMethodExec.getAndSet(AFTER_METHOD_WITH_EXCEPTION_EXEC), is(BEFORE_METHOD_EXEC));
-                return super.onErrorInObserver(error);
+                super.onErrorInObserver(error);
             }
         };
         viewer.setController(new CtrlerAuthToken());

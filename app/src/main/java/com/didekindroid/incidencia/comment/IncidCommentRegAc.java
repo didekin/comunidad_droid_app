@@ -138,7 +138,7 @@ public class IncidCommentRegAc extends AppCompatActivity {
             Timber.d("onPostExecute()");
 
             if (uiException != null) {
-                uiException.processMe(IncidCommentRegAc.this, new Intent());
+                uiException.processMe(IncidCommentRegAc.this);
             } else if (!(isDestroyed() || isChangingConfigurations())) {
                 assertTrue(rowInserted == 1, comment_should_be_registered);
                 Intent intent = new Intent(IncidCommentRegAc.this, IncidCommentSeeAc.class);

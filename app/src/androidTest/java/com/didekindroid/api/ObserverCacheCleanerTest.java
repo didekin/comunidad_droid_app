@@ -5,7 +5,6 @@ import android.support.test.runner.AndroidJUnit4;
 import android.view.View;
 
 import com.didekindroid.exception.UiException;
-import com.didekindroid.exception.UiExceptionIf;
 import com.didekinlib.http.ErrorBean;
 
 import org.junit.Before;
@@ -46,10 +45,10 @@ public class ObserverCacheCleanerTest {
         activity = activityRule.getActivity();
         viewer = new Viewer<View, Controller>(null, activity, null) {
             @Override
-            public UiExceptionIf.ActionForUiExceptionIf onErrorInObserver(Throwable error)
+            public void onErrorInObserver(Throwable error)
             {
                 assertThat(flagMethodExec.getAndSet(AFTER_METHOD_WITH_EXCEPTION_EXEC), is(BEFORE_METHOD_EXEC));
-                return super.onErrorInObserver(error);
+                super.onErrorInObserver(error);
             }
         };
         viewer.setController(new Controller());

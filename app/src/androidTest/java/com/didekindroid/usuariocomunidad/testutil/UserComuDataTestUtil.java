@@ -80,14 +80,6 @@ public final class UserComuDataTestUtil {
         userComuDaoRemote.regComuAndUserComu(usuarioComunidadList.get(1));
     }
 
-    public static void regThreeUserComuSameUser(List<UsuarioComunidad> usuarioComunidadList, Comunidad comunidad) throws IOException, UiException
-    {
-        regTwoUserComuSameUser(usuarioComunidadList);
-        UsuarioComunidad usuarioComunidad = makeUsuarioComunidad(comunidad, usuarioComunidadList.get(0).getUsuario(),
-                null, null, "plan-5", null, ADM.function);
-        userComuDaoRemote.regComuAndUserComu(usuarioComunidad);
-    }
-
     public static void regSeveralUserComuSameUser(UsuarioComunidad... userComus) throws IOException, UiException
     {
         assertThat(userComus.length > 0, is(true));

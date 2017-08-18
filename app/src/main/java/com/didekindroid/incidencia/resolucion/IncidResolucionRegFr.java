@@ -50,7 +50,7 @@ public class IncidResolucionRegFr extends IncidResolucionFrAbstract {
         mResolucionBean = new ResolucionBean();
         mFechaView = initFechaSpinnerView(this, (TextView) mFragmentView.findViewById(R.id.incid_resolucion_fecha_view));
 
-        Button mConfirmButton = (Button) mFragmentView.findViewById(R.id.incid_resolucion_reg_ac_button);
+        Button mConfirmButton = mFragmentView.findViewById(R.id.incid_resolucion_reg_ac_button);
         mConfirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
@@ -161,7 +161,7 @@ public class IncidResolucionRegFr extends IncidResolucionFrAbstract {
             Timber.d("onPostExecute()");
 
             if (uiException != null) {
-                Intent intent = new Intent();
+                Intent intent = new Intent(getActivity(), IncidEditAc.class);
                 // Para el caso resolución duplicada y acceder a IncidEditAc/Resolución.
                 intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, mIncidImportancia);
                 uiException.processMe(getActivity(), intent);

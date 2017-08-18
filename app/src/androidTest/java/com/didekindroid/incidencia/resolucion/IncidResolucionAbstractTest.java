@@ -45,7 +45,7 @@ public abstract class IncidResolucionAbstractTest {
 
     @Rule
     public IntentsTestRule<IncidResolucionRegEditSeeAc> intentRule = doIntentRule();
-    IncidResolucionRegEditSeeAc mActivity;
+    IncidResolucionRegEditSeeAc activity;
     Fragment incidEditFr;
     IncidImportancia incidImportancia;
     Resolucion resolucion;
@@ -55,14 +55,14 @@ public abstract class IncidResolucionAbstractTest {
     @Before
     public void setUp() throws Exception
     {
-        mActivity = intentRule.getActivity();
-        assertThat(mActivity, notNullValue());
+        activity = intentRule.getActivity();
+        assertThat(activity, notNullValue());
         onView(withId(R.id.incid_resolucion_fragment_container_ac)).check(matches(isDisplayed()));
-        incidEditFr = mActivity.getSupportFragmentManager().findFragmentByTag(incid_resolucion_ac_frgs_tag);
+        incidEditFr = activity.getSupportFragmentManager().findFragmentByTag(incid_resolucion_ac_frgs_tag);
         assertThat(incidEditFr, notNullValue());
         // Intent extras in activity.
-        mIncidImportanciaIntent = (IncidImportancia) mActivity.getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.key);
-        mResolucionIntent = (Resolucion) mActivity.getIntent().getSerializableExtra(INCID_RESOLUCION_OBJECT.key);
+        mIncidImportanciaIntent = (IncidImportancia) activity.getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.key);
+        mResolucionIntent = (Resolucion) activity.getIntent().getSerializableExtra(INCID_RESOLUCION_OBJECT.key);
 
         // Premisas.
         if (mIncidImportanciaIntent.getUserComu().hasAdministradorAuthority() && mResolucionIntent != null) {
@@ -105,7 +105,7 @@ public abstract class IncidResolucionAbstractTest {
         onView(withId(R.id.incid_resolucion_edit_fr_close_button)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_resolucion_txt)).check(matches(isDisplayed()));
 
-        if (mResolucionIntent != null && mResolucionIntent.getAvances().size() > 0) {
+        if (mResolucionIntent != null && !mResolucionIntent.getAvances().isEmpty()) {
             // Lista NO vacía.
             onView(withId(android.R.id.list)).check(matches(isDisplayed()));
             onView(withId(android.R.id.empty)).check(matches(not(isDisplayed())));
@@ -158,7 +158,7 @@ public abstract class IncidResolucionAbstractTest {
         onView(withId(R.id.incid_resolucion_coste_prev_view)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_resolucion_txt)).check(matches(isDisplayed()));
 
-        if (mResolucionIntent != null && mResolucionIntent.getAvances().size() > 0) {
+        if (mResolucionIntent != null && !mResolucionIntent.getAvances().isEmpty()) {
             // Lista NO vacía.
             onView(withId(android.R.id.list)).check(matches(isDisplayed()));
             onView(withId(android.R.id.empty)).check(matches(not(isDisplayed())));

@@ -1,6 +1,5 @@
 package com.didekindroid.usuariocomunidad.listbyuser;
 
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,8 +17,8 @@ import java.util.List;
 
 import timber.log.Timber;
 
-import static com.didekindroid.usuariocomunidad.util.UserComuAssertionMsg.usercomu_list_should_be_initialized;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
+import static com.didekindroid.usuariocomunidad.util.UserComuAssertionMsg.usercomu_list_should_be_initialized;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.checkPostExecute;
 
@@ -124,7 +123,7 @@ public class SeeUserComuByUserFr extends Fragment {
             if (uiException != null) {  // action: LOGIN.
                 Timber.d("UserComuByUserLoader.onPostExecute(): uiException != null");
                 assertTrue(usuarioComunidades == null, usercomu_list_should_be_initialized);
-                uiException.processMe(getActivity(), new Intent());
+                uiException.processMe(getActivity());
             }
             if (usuarioComunidades != null) {
                 Timber.d("UserComuByUserLoader.onPostExecute(): usuarioComunidades != null");

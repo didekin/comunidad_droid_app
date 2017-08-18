@@ -1,13 +1,9 @@
 package com.didekindroid.api;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-
-import com.didekindroid.exception.UiException;
-import com.didekindroid.exception.UiExceptionIf.ActionForUiExceptionIf;
 
 import java.io.Serializable;
 
@@ -44,13 +40,10 @@ public class Viewer<T extends View, C extends ControllerIf> implements ViewerIf<
 
     @SuppressWarnings("ThrowableResultOfMethodCallIgnored")
     @Override
-    public ActionForUiExceptionIf onErrorInObserver(Throwable error)
+    public void onErrorInObserver(Throwable error)
     {
         Timber.d("onErrorInObserver()");
-        if (error instanceof UiException) {
-            Timber.d("UiException message: %s", ((UiException) error).getErrorBean().getMessage());
-        }
-        return getUiExceptionFromThrowable(error).processMe(activity, new Intent());
+        getUiExceptionFromThrowable(error).processMe(activity);
     }
 
     @Override

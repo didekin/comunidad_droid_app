@@ -1,6 +1,5 @@
 package com.didekindroid.usuario.delete;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -117,7 +116,7 @@ public class DeleteMeAc extends AppCompatActivity {
         public void onError(Throwable e)
         {
             Timber.d("onErrorObserver, Thread: %s", Thread.currentThread().getName());
-            getUiExceptionFromThrowable(e).processMe(DeleteMeAc.this, new Intent());
+            getUiExceptionFromThrowable(e).processMe(DeleteMeAc.this);
         }
     }
 }

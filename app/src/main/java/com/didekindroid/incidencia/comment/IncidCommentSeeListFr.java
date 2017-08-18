@@ -1,7 +1,6 @@
 package com.didekindroid.incidencia.comment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -78,7 +77,7 @@ public class IncidCommentSeeListFr extends Fragment {
         mAdapter = new IncidCommentSeeAdapter(getActivity());
         mIncidencia = (Incidencia) getArguments().getSerializable(INCIDENCIA_OBJECT.key);
         new IncidCommentLoader().execute(mIncidencia);
-        mListView = (ListView) mView.findViewById(android.R.id.list);
+        mListView = mView.findViewById(android.R.id.list);
     }
 
     @Override
@@ -168,9 +167,9 @@ public class IncidCommentSeeListFr extends Fragment {
 
             if (uiException != null) {
                 Timber.d("onPostExecute(): uiException != null");
-                uiException.processMe(getActivity(), new Intent());
+                uiException.processMe(getActivity());
             }
-            if (incidComments != null && incidComments.size() > 0) {
+            if (incidComments != null && !incidComments.isEmpty()) {
                 Timber.d("onPostExecute(): incidComments != null");
                 mAdapter.clear();
                 mAdapter.addAll(incidComments);
