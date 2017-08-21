@@ -2,7 +2,6 @@ package com.didekindroid.usuario.password;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.test.rule.ActivityTestRule;
 
 import com.didekindroid.R;
@@ -30,15 +29,18 @@ import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
 import static com.didekindroid.usuario.password.ViewerPasswordChange.newViewerPswdChange;
 import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typePswdData;
 import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typePswdDataWithPswdValidation;
+import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.loginAcResourceId;
 import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.pswdChangeAcRsId;
 import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.userDataAcRsId;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_TRAV_PLAZUELA_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static com.didekinlib.http.GenericExceptionMsg.BAD_REQUEST;
 import static com.didekinlib.model.usuario.UsuarioExceptionMsg.PASSWORD_NOT_SENT;
 import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOUND;
+import static io.reactivex.Completable.complete;
 import static io.reactivex.Single.just;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
@@ -199,33 +201,33 @@ public class ViewerPasswordChangeTest {
         onView(withId(pswdChangeAcRsId)).check(matches(isDisplayed()));
     }
 
-    @Test
-    public void testReplaceComponent() throws Exception
-    {
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                viewer.replaceComponent(new Bundle(0));
-            }
-        });
-        waitAtMost(3, SECONDS).until(isToastInView(R.string.password_remote_change, activity));
-        onView(withId(userDataAcRsId)).check(matches(isDisplayed()));
-    }
-
     //    ============================  TESTS OBSERVERS  ===================================
 
     @Test
-    public void test_PswdChangeSingleObserver_Succcess()
+    public void test_PswdChangeCompletableObserver_Complete()
     {
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run()
             {
-                just(true).subscribeWith(viewer.new PswdSendSingleObserver());
+                complete().subscribeWith(viewer.new PswdChangeCompletableObserver(viewer.new ModifyPswdButtonListener()));
+            }
+        });
+        waitAtMost(2, SECONDS).until(isToastInView(R.string.password_remote_change, activity));
+        waitAtMost(2, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
+    }
+
+    @Test
+    public void test_PswdSendSingleObserver_Succcess()
+    {
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                just(true).subscribeWith(viewer.new PswdSendSingleObserver(viewer.new SendNewPswdButtonListener()));
             }
         });
         waitAtMost(2, SECONDS).until(isToastInView(R.string.password_new_in_login, activity));
-        waitAtMost(2, SECONDS).until(isResourceIdDisplayed(userDataAcRsId));
+        waitAtMost(2, SECONDS).until(isResourceIdDisplayed(loginAcResourceId));
     }
 }

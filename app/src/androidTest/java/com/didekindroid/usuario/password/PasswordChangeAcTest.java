@@ -9,6 +9,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
+import com.didekindroid.comunidad.testutil.ComunidadNavConstant;
 import com.didekindroid.exception.UiException;
 import com.didekinlib.model.usuario.Usuario;
 
@@ -29,6 +30,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withHint;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtils.checkIsRegistered;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
@@ -132,13 +134,9 @@ public class PasswordChangeAcTest {
     @Test
     public void testPasswordChange_Up() throws UiException, InterruptedException
     {
-        typePswdDataWithPswdValidation("new_pepe_password", "new_pepe_password", USER_DROID.getPassword());
-        onView(withId(R.id.password_change_ac_button)).check(matches(isDisplayed())).perform(click());
+        doPswdChange();
 
-        waitAtMost(4, SECONDS).until(isToastInView(R.string.password_remote_change, activity));
-        onView(withId(userDataAcRsId)).check(matches(isDisplayed()));
-
-        checkUp(seeUserComuByUserFrRsId);
+        checkUp(comuSearchAcLayout);
 
         usuarioDao.deleteUser();
         cleanWithTkhandler();
@@ -149,13 +147,9 @@ public class PasswordChangeAcTest {
     @Test
     public void testPasswordChange_Back() throws UiException, InterruptedException
     {
-        typePswdDataWithPswdValidation("new_pepe_password", "new_pepe_password", USER_DROID.getPassword());
-        onView(withId(R.id.password_change_ac_button)).check(matches(isDisplayed())).perform(click());
+        doPswdChange();
 
-        waitAtMost(4, SECONDS).until(isToastInView(R.string.password_remote_change, activity));
-        onView(withId(userDataAcRsId)).check(matches(isDisplayed()));
-
-        checkBack(onView(withId(userDataAcRsId)).check(matches(isDisplayed())), pswdChangeAcRsId);
+        checkBack(onView(withId(seeUserComuByUserFrRsId)).check(matches(isDisplayed())), pswdChangeAcRsId);
 
         usuarioDao.deleteUser();
         cleanWithTkhandler();
@@ -167,5 +161,16 @@ public class PasswordChangeAcTest {
     public final void testOnStop() throws Exception
     {
         checkSubscriptionsOnStop(activity, activity.viewer.getController());
+    }
+
+    //    ============================  HELPERS  ===================================
+
+    private void doPswdChange()
+    {
+        typePswdDataWithPswdValidation("new_pepe_password", "new_pepe_password", USER_DROID.getPassword());
+        onView(withId(R.id.password_change_ac_button)).check(matches(isDisplayed())).perform(click());
+
+        waitAtMost(4, SECONDS).until(isToastInView(R.string.password_remote_change, activity));
+        onView(withId(seeUserComuByUserFrRsId)).check(matches(isDisplayed()));
     }
 }

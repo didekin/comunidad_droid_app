@@ -206,8 +206,9 @@ final class ViewerUserData extends Viewer<View, CtrlerUserDataIf> implements Vie
         Timber.d("onErrorInObserver()");
         if (getUiExceptionFromThrowable(error).getErrorBean().getMessage().equals(BAD_REQUEST.getHttpMessage())) {
             makeToast(activity, R.string.password_wrong);
+        } else {
+            super.onErrorInObserver(error);
         }
-        super.onErrorInObserver(error);
     }
 
     public void replaceComponent(Bundle bundle)

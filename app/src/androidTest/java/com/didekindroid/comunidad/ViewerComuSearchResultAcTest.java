@@ -38,15 +38,14 @@ public class ViewerComuSearchResultAcTest {
     @Before
     public void setUp()
     {
+        cleanWithTkhandler();
+
         Intent intent = new Intent(getTargetContext(), ComuSearchResultsAc.class);
         intent.putExtra(COMUNIDAD_SEARCH.key, COMU_REAL);
         intent.setFlags(FLAG_ACTIVITY_NEW_TASK);
         activity = (AppCompatActivity) getInstrumentation().startActivitySync(intent);
-
-        cleanWithTkhandler();
         viewer = newViewerComuSearchResultAc((ComuSearchResultsAc) activity);
     }
-
 
     @Test
     public void test_NewViewerComuSearchResultAc() throws Exception

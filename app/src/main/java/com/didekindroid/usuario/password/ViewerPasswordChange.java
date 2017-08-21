@@ -42,7 +42,7 @@ import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOU
  */
 
 @SuppressWarnings("ClassWithOnlyPrivateConstructors")
-class ViewerPasswordChange extends Viewer<View, CtrlerUsuario> {
+public class ViewerPasswordChange extends Viewer<View, CtrlerUsuario> {
 
     @SuppressWarnings("WeakerAccess")
     final AtomicReference<UsuarioBean> usuarioBean;
@@ -72,30 +72,10 @@ class ViewerPasswordChange extends Viewer<View, CtrlerUsuario> {
         assertTrue(controller.isRegisteredUser(), user_should_be_registered);
 
         Button modifyButton = view.findViewById(R.id.password_change_ac_button);
-        modifyButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                Timber.d("onClick()");
-                if (checkLoginData()) {
-                    controller.changePasswordInRemote(
-                            new PswdChangeCompletableObserver(),
-                            oldUserPswd.get(),
-                            usuarioBean.get().getUsuario()
-                    );
-                }
-            }
-        });
+        modifyButton.setOnClickListener(new ModifyPswdButtonListener());
 
         Button sendPswdButton = view.findViewById(R.id.password_send_ac_button);
-        sendPswdButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view)     // TODO: test in action.
-            {
-                Timber.d("onClick()");
-                controller.sendNewPassword(new PswdSendSingleObserver(), new Usuario.UsuarioBuilder().userName(userName).build());
-            }
-        });
+        sendPswdButton.setOnClickListener(new SendNewPswdButtonListener());
     }
 
     boolean checkLoginData()
@@ -149,23 +129,24 @@ class ViewerPasswordChange extends Viewer<View, CtrlerUsuario> {
         }
     }
 
-    public void replaceComponent(@NonNull Bundle bundle)
-    {
-        Timber.d("replaceComponent()");
-        makeToast(activity, R.string.password_remote_change);
-        new ActivityInitiator(activity).initAcWithBundle(bundle);
-    }
-
     // ............................ SUBSCRIBERS ..................................
 
     @SuppressWarnings("WeakerAccess")
     class PswdChangeCompletableObserver extends DisposableCompletableObserver {
 
+        View.OnClickListener listener;
+
+        public PswdChangeCompletableObserver(ModifyPswdButtonListener modifyPswdButtonListener)
+        {
+            listener = modifyPswdButtonListener;
+        }
+
         @Override
         public void onComplete()
         {
             Timber.d("onComplete(), Thread: %s", Thread.currentThread().getName());
-            replaceComponent(new Bundle());
+            makeToast(activity, R.string.password_remote_change);
+            new ActivityInitiator(activity).initAcFromListener(new Bundle(0), listener.getClass());
         }
 
         @Override
@@ -179,6 +160,13 @@ class ViewerPasswordChange extends Viewer<View, CtrlerUsuario> {
     @SuppressWarnings("WeakerAccess")
     class PswdSendSingleObserver extends DisposableSingleObserver<Boolean> {
 
+        View.OnClickListener listener;
+
+        public PswdSendSingleObserver(SendNewPswdButtonListener sendNewPswdButtonListener)
+        {
+            listener = sendNewPswdButtonListener;
+        }
+
         @Override
         public void onSuccess(@io.reactivex.annotations.NonNull Boolean isSendPassword)
         {
@@ -186,7 +174,7 @@ class ViewerPasswordChange extends Viewer<View, CtrlerUsuario> {
             if (isSendPassword) {
                 makeToast(activity, R.string.password_new_in_login);
             }
-            replaceComponent(new Bundle());
+            new ActivityInitiator(activity).initAcFromListener(new Bundle(0), listener.getClass());
         }
 
         @Override
@@ -194,6 +182,36 @@ class ViewerPasswordChange extends Viewer<View, CtrlerUsuario> {
         {
             Timber.d("onError");
             onErrorInObserver(e);
+        }
+    }
+
+    // ............................ HELPER CLASSES AND METHODS ..................................
+
+    @SuppressWarnings("WeakerAccess")
+    public class ModifyPswdButtonListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v)
+        {
+            Timber.d("onClick()");
+            if (checkLoginData()) {
+                controller.changePasswordInRemote(
+                        new PswdChangeCompletableObserver(this),
+                        oldUserPswd.get(),
+                        usuarioBean.get().getUsuario()
+                );
+            }
+        }
+    }
+
+    @SuppressWarnings("WeakerAccess")
+    public class SendNewPswdButtonListener implements View.OnClickListener {
+        @Override
+        public void onClick(View view)
+        {
+            Timber.d("onClick()");
+            controller.sendNewPassword(
+                    new PswdSendSingleObserver(this),
+                    new Usuario.UsuarioBuilder().userName(userName).build());
         }
     }
 }

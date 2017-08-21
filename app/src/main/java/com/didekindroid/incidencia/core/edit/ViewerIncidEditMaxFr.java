@@ -93,10 +93,10 @@ class ViewerIncidEditMaxFr extends Viewer<View, CtrlerIncidRegEditFr> implements
         ((TextView) view.findViewById(R.id.incid_comunidad_txt)).setText(incidImportancia.getIncidencia().getComunidad().getNombreComunidad());
         ((EditText) view.findViewById(R.id.incid_reg_desc_ed)).setText(incidImportancia.getIncidencia().getDescripcion());
 
-        TextView linkToImportanciaUsersView = (TextView) view.findViewById(R.id.incid_importancia_otros_view);
+        TextView linkToImportanciaUsersView = view.findViewById(R.id.incid_importancia_otros_view);
         linkToImportanciaUsersView.setOnClickListener(new LinkToImportanciaUsersListener(this));
 
-        Button buttonModify = (Button) view.findViewById(R.id.incid_edit_fr_modif_button);
+        Button buttonModify = view.findViewById(R.id.incid_edit_fr_modif_button);
         buttonModify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
@@ -106,7 +106,7 @@ class ViewerIncidEditMaxFr extends Viewer<View, CtrlerIncidRegEditFr> implements
             }
         });
 
-        Button buttonErase = (Button) view.findViewById(R.id.incid_edit_fr_borrar_button);
+        Button buttonErase = view.findViewById(R.id.incid_edit_fr_borrar_button);
         if (hasResolucion || !incidImportancia.getUserComu().hasAdministradorAuthority()) {
             buttonErase.setVisibility(GONE);
             view.findViewById(R.id.incid_edit_fr_borrar_txt).setVisibility(GONE);

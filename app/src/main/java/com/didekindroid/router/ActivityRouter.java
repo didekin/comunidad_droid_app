@@ -22,6 +22,7 @@ import com.didekindroid.security.IdentityCacher;
 import com.didekindroid.usuario.delete.DeleteMeAc;
 import com.didekindroid.usuario.login.LoginAc;
 import com.didekindroid.usuario.password.PasswordChangeAc;
+import com.didekindroid.usuario.password.ViewerPasswordChange;
 import com.didekindroid.usuario.userdata.UserDataAc;
 import com.didekindroid.usuariocomunidad.data.UserComuDataAc;
 import com.didekindroid.usuariocomunidad.listbycomu.SeeUserComuByComuAc;
@@ -63,6 +64,7 @@ public class ActivityRouter implements ActivityRouterIf {
     private static final Map<Class<? extends Activity>, Class<? extends Activity>> acRouterMap = new ArrayMap<>();
     private static final Map<Class<? extends View.OnClickListener>, Class<? extends Activity>> onClickRouterMap = new ArrayMap<>();
 
+    // Activities
     static {
         acRouterMap.put(ComuDataAc.class, SeeUserComuByUserAc.class);
         acRouterMap.put(ComuSearchAc.class, ComuSearchResultsAc.class);
@@ -71,7 +73,6 @@ public class ActivityRouter implements ActivityRouterIf {
         acRouterMap.put(IncidRegAc.class, IncidSeeOpenByComuAc.class);
         acRouterMap.put(IncidSeeOpenByComuAc.class, IncidEditAc.class);
         acRouterMap.put(LoginAc.class, ComuSearchAc.class);
-        acRouterMap.put(PasswordChangeAc.class, UserDataAc.class);
         acRouterMap.put(RegComuAndUserAndUserComuAc.class, SeeUserComuByUserAc.class);
         acRouterMap.put(RegComuAndUserComuAc.class, SeeUserComuByUserAc.class);
         acRouterMap.put(RegUserAndUserComuAc.class, SeeUserComuByUserAc.class);
@@ -80,6 +81,7 @@ public class ActivityRouter implements ActivityRouterIf {
         acRouterMap.put(UserDataAc.class, SeeUserComuByUserAc.class);
     }
 
+    // Menu options.
     static {
         // INCIDENCIAS.
         menuIdMap.put(R.id.incid_comment_reg_ac_mn, IncidCommentRegAc.class);
@@ -104,9 +106,13 @@ public class ActivityRouter implements ActivityRouterIf {
         noUserRegMenuIdMap.put(R.id.login_ac_mn, LoginAc.class);
     }
 
+    // Links and buttons.
     static {
         // INCIDENCIAS.
         onClickRouterMap.put(LinkToImportanciaUsersListener.class, IncidSeeUserComuImportanciaAc.class);
+        // USUARIOS.
+        onClickRouterMap.put(ViewerPasswordChange.ModifyPswdButtonListener.class, SeeUserComuByUserAc.class);
+        onClickRouterMap.put(ViewerPasswordChange.SendNewPswdButtonListener.class, LoginAc.class);
     }
 
     private final IdentityCacher identityCacher;
