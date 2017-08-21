@@ -26,7 +26,7 @@ import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.resolucion_should_be_registered;
 import static com.didekindroid.util.ConnectionUtils.checkInternetConnected;
-import static com.didekindroid.util.FechaPickerFr.FechaPickerHelper.initFechaSpinnerView;
+import static com.didekindroid.util.FechaPickerFr.FechaPickerHelper.initFechaViewForPicker;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
@@ -39,18 +39,18 @@ import static com.didekindroid.util.UIutils.makeToast;
  */
 public class IncidResolucionRegFr extends IncidResolucionFrAbstract {
 
-    IncidImportancia mIncidImportancia;
+    IncidImportancia incidImportancia;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
         Timber.d("onCreateView()");
-        mFragmentView = inflater.inflate(R.layout.incid_resolucion_reg_frg, container, false);
-        mResolucionBean = new ResolucionBean();
-        mFechaView = initFechaSpinnerView(this, (TextView) mFragmentView.findViewById(R.id.incid_resolucion_fecha_view));
+        frView = inflater.inflate(R.layout.incid_resolucion_reg_frg, container, false);
+        resolucionBean = new ResolucionBean();
+        fechaViewForPicker = initFechaViewForPicker(this, (TextView) frView.findViewById(R.id.incid_resolucion_fecha_view));
 
-        Button mConfirmButton = mFragmentView.findViewById(R.id.incid_resolucion_reg_ac_button);
+        Button mConfirmButton = frView.findViewById(R.id.incid_resolucion_reg_ac_button);
         mConfirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
@@ -59,7 +59,7 @@ public class IncidResolucionRegFr extends IncidResolucionFrAbstract {
                 registerResolucion();
             }
         });
-        return mFragmentView;
+        return frView;
     }
 
     @Override
@@ -67,7 +67,7 @@ public class IncidResolucionRegFr extends IncidResolucionFrAbstract {
     {
         Timber.d("onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
-        mIncidImportancia = (IncidImportancia) getArguments().getSerializable(INCID_IMPORTANCIA_OBJECT.key);
+        incidImportancia = (IncidImportancia) getArguments().getSerializable(INCID_IMPORTANCIA_OBJECT.key);
     }
 
     //  ================================ HELPER METHODS =======================================
@@ -92,37 +92,33 @@ public class IncidResolucionRegFr extends IncidResolucionFrAbstract {
     {
         Timber.d("makeResolucionFromBean()");
 
-        makeResolucionBeanFromView(errorMsg);
-
-        if (mResolucionBean == null) {
+        if (!makeResolucionBeanFromView(errorMsg)) {
             return null;
         }
 
         final Incidencia incidencia = new Incidencia.IncidenciaBuilder()
-                .incidenciaId(mIncidImportancia.getIncidencia().getIncidenciaId())
+                .incidenciaId(incidImportancia.getIncidencia().getIncidenciaId())
                 .comunidad(new Comunidad.ComunidadBuilder()
-                        .c_id(mIncidImportancia.getIncidencia().getComunidad().getC_Id())
+                        .c_id(incidImportancia.getIncidencia().getComunidad().getC_Id())
                         .build())
                 .build();
         return new Resolucion.ResolucionBuilder(incidencia)
-                .descripcion(mResolucionBean.getPlan())
-                .fechaPrevista(new Timestamp(mResolucionBean.getFechaPrevista()))
-                .costeEstimado(mResolucionBean.getCostePrev())
+                .descripcion(resolucionBean.getPlan())
+                .fechaPrevista(new Timestamp(resolucionBean.getFechaPrevista().getTimeInMillis()))
+                .costeEstimado(resolucionBean.getCostePrev())
                 .build();
     }
 
-    void makeResolucionBeanFromView(StringBuilder errorMsg)
+    boolean makeResolucionBeanFromView(StringBuilder errorMsg)
     {
         Timber.d("makeResolucionBeanFromView()");
 
-        mResolucionBean.setPlan(((EditText) mFragmentView.findViewById(R.id.incid_resolucion_desc_ed)).getText().toString());
-        mResolucionBean.setCostePrevText(((EditText) mFragmentView.findViewById(R.id.incid_resolucion_coste_prev_ed)).getText().toString());
-        mResolucionBean.setFechaPrevistaText(mFechaView.getText().toString());
+        resolucionBean.setPlan(((EditText) frView.findViewById(R.id.incid_resolucion_desc_ed)).getText().toString());
+        resolucionBean.setCostePrevText(((EditText) frView.findViewById(R.id.incid_resolucion_coste_prev_ed)).getText().toString());
+        resolucionBean.setFechaPrevistaText(fechaViewForPicker.getText().toString());
         // La fecha se inicializa en FechaPickerFr.onDateSet().
 
-        if (!mResolucionBean.validateBeanPlan(errorMsg, getResources(), mIncidImportancia)) {
-            mResolucionBean = null;
-        }
+        return resolucionBean.validateBeanPlan(errorMsg, getResources(), incidImportancia);
     }
 
 //    ============================================================================================
@@ -163,12 +159,12 @@ public class IncidResolucionRegFr extends IncidResolucionFrAbstract {
             if (uiException != null) {
                 Intent intent = new Intent(getActivity(), IncidEditAc.class);
                 // Para el caso resolución duplicada y acceder a IncidEditAc/Resolución.
-                intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, mIncidImportancia);
+                intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia);
                 uiException.processMe(getActivity(), intent);
             } else {
                 assertTrue(rowInserted == 1, resolucion_should_be_registered);
                 Intent intent = new Intent(getActivity(), IncidEditAc.class);
-                intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, mIncidImportancia);
+                intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia);
                 startActivity(intent);
             }
         }

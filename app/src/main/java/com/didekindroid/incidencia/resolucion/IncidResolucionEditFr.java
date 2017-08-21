@@ -37,10 +37,11 @@ import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.incidenci
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.resolucion_fechaPrev_should_be_initialized;
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.resolucion_should_be_initialized;
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.resolucion_should_be_modified;
-import static com.didekindroid.util.FechaPickerFr.FechaPickerHelper.initFechaSpinnerView;
+import static com.didekindroid.util.FechaPickerFr.FechaPickerHelper.initFechaViewForPicker;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.util.UIutils.formatTimeStampToString;
+import static com.didekindroid.util.UIutils.getCalendarFromTimeMillis;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.util.UIutils.getStringFromInteger;
 import static com.didekindroid.util.UIutils.makeToast;
@@ -60,11 +61,11 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
                              Bundle savedInstanceState)
     {
         Timber.d("onCreateView()");
-        mFragmentView = inflater.inflate(R.layout.incid_resolucion_edit_fr, container, false);
-        mResolucionBean = new ResolucionBean();
-        mFechaView = initFechaSpinnerView(this, (TextView) mFragmentView.findViewById(R.id.incid_resolucion_fecha_view));
+        frView = inflater.inflate(R.layout.incid_resolucion_edit_fr, container, false);
+        resolucionBean = new ResolucionBean();
+        fechaViewForPicker = initFechaViewForPicker(this, (TextView) frView.findViewById(R.id.incid_resolucion_fecha_view));
 
-        Button mModifyButton = mFragmentView.findViewById(R.id.incid_resolucion_fr_modif_button);
+        Button mModifyButton = frView.findViewById(R.id.incid_resolucion_fr_modif_button);
         mModifyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
@@ -73,7 +74,7 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
                 modifyResolucion(false);
             }
         });
-        Button mCloseIncidButton = mFragmentView.findViewById(R.id.incid_resolucion_edit_fr_close_button);
+        Button mCloseIncidButton = frView.findViewById(R.id.incid_resolucion_edit_fr_close_button);
         mCloseIncidButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
@@ -83,7 +84,7 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
             }
         });
 
-        return mFragmentView;
+        return frView;
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -98,23 +99,23 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
         assertTrue(mResolucion != null, resolucion_should_be_initialized);
         // Inicialización de la fecha en BD en el bean, para manternela si no la modifica.
         assertTrue(mResolucion.getFechaPrev() != null, resolucion_fechaPrev_should_be_initialized);
-        mResolucionBean.setFechaPrevista(mResolucion.getFechaPrev().getTime());
+        resolucionBean.setFechaPrevista(getCalendarFromTimeMillis(mResolucion.getFechaPrev().getTime()));
 
         IncidAvanceSeeAdapter mAdapter = new IncidAvanceSeeAdapter(getActivity());
         mAdapter.clear();
         mAdapter.addAll(mResolucion.getAvances());
 
-        ListView mListView = mFragmentView.findViewById(android.R.id.list);
-        mListView.setEmptyView(mFragmentView.findViewById(android.R.id.empty));
+        ListView mListView = frView.findViewById(android.R.id.list);
+        mListView.setEmptyView(frView.findViewById(android.R.id.empty));
         /* To get visible a divider on top of the list.*/
         mListView.addHeaderView(new View(getContext()), null, true);
         mListView.setAdapter(mAdapter);
 
         // Plan (modo lectura).
-        ((TextView) mFragmentView.findViewById(R.id.incid_resolucion_txt)).setText(mResolucion.getDescripcion());
-        ((EditText) mFragmentView.findViewById(R.id.incid_resolucion_coste_prev_ed)).setText(getStringFromInteger(mResolucion.getCosteEstimado()));
+        ((TextView) frView.findViewById(R.id.incid_resolucion_txt)).setText(mResolucion.getDescripcion());
+        ((EditText) frView.findViewById(R.id.incid_resolucion_coste_prev_ed)).setText(getStringFromInteger(mResolucion.getCosteEstimado()));
         // Fecha texto que se corresponde con la que he utilizado para inicializar el bean.
-        mFechaView.setText(formatTimeStampToString(mResolucion.getFechaPrev()));
+        fechaViewForPicker.setText(formatTimeStampToString(mResolucion.getFechaPrev()));
     }
 
     //  ================================ HELPER METHODS =======================================
@@ -144,7 +145,7 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
 
         makeResolucionBeanFromView(errorMsg);
 
-        if (mResolucionBean == null) {
+        if (resolucionBean == null) {
             return null;
         }
 
@@ -157,17 +158,17 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
 
         List<Avance> avances = null;
 
-        if (mResolucionBean.getAvanceDesc() != null && !mResolucionBean.getAvanceDesc().trim().isEmpty()) {
+        if (resolucionBean.getAvanceDesc() != null && !resolucionBean.getAvanceDesc().trim().isEmpty()) {
             avances = new ArrayList<>(1);
             final Avance avance = new Avance.AvanceBuilder()
-                    .avanceDesc(mResolucionBean.getAvanceDesc())
+                    .avanceDesc(resolucionBean.getAvanceDesc())
                     .build();
             avances.add(avance);
         }
 
         return new Resolucion.ResolucionBuilder(incidencia)
-                .fechaPrevista(new Timestamp(mResolucionBean.getFechaPrevista()))
-                .costeEstimado(mResolucionBean.getCostePrev())
+                .fechaPrevista(new Timestamp(resolucionBean.getFechaPrevista().getTimeInMillis()))
+                .costeEstimado(resolucionBean.getCostePrev())
                 .avances(avances)
                 .buildAsFk();
     }
@@ -176,12 +177,12 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
     {
         Timber.d("makeResolucionBeanFromView()");
 
-        mResolucionBean.setAvanceDesc(((EditText) mFragmentView.findViewById(R.id.incid_resolucion_avance_ed)).getText().toString());
-        mResolucionBean.setCostePrevText(((EditText) mFragmentView.findViewById(R.id.incid_resolucion_coste_prev_ed)).getText().toString());
-        mResolucionBean.setFechaPrevistaText(mFechaView.getText().toString());
+        resolucionBean.setAvanceDesc(((EditText) frView.findViewById(R.id.incid_resolucion_avance_ed)).getText().toString());
+        resolucionBean.setCostePrevText(((EditText) frView.findViewById(R.id.incid_resolucion_coste_prev_ed)).getText().toString());
+        resolucionBean.setFechaPrevistaText(fechaViewForPicker.getText().toString());
 
-        if (!mResolucionBean.validateBeanAvance(errorMsg, getResources(), mIncidImportancia)) {
-            mResolucionBean = null;
+        if (!resolucionBean.validateBeanAvance(errorMsg, getResources(), mIncidImportancia)) {
+            resolucionBean = null;
         }
     }
 

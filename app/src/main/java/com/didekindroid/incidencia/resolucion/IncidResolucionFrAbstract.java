@@ -17,9 +17,9 @@ import timber.log.Timber;
 @SuppressWarnings("AbstractClassExtendsConcreteClass")
 public abstract class IncidResolucionFrAbstract extends Fragment implements FechaPickerUser {
 
-    ResolucionBean mResolucionBean;
-    View mFragmentView;
-    TextView mFechaView;
+    ResolucionBean resolucionBean;
+    View frView;
+    TextView fechaViewForPicker;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState)
@@ -33,12 +33,12 @@ public abstract class IncidResolucionFrAbstract extends Fragment implements Fech
     @Override
     public TextView getFechaView()
     {
-        return mFechaView;
+        return fechaViewForPicker;
     }
 
     @Override
     public ResolucionBean getBean()
     {
-        return mResolucionBean;
+        return resolucionBean;
     }
 }

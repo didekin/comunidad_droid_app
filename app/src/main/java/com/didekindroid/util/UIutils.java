@@ -21,6 +21,7 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -34,6 +35,9 @@ import static com.didekindroid.util.CommonAssertionMsg.subscriptions_should_not_
 import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
 import static com.didekinlib.model.common.dominio.ValidDataPatterns.LINE_BREAK;
 import static java.text.DateFormat.MEDIUM;
+import static java.util.Calendar.DAY_OF_MONTH;
+import static java.util.Calendar.MONTH;
+import static java.util.Calendar.YEAR;
 import static java.util.Locale.getDefault;
 
 /**
@@ -132,6 +136,36 @@ public final class UIutils {
     public static String getStringFromInteger(int number)
     {
         return NumberFormat.getIntegerInstance().format(number);
+    }
+
+    //    ================================ DATES ==========================================
+
+    @SuppressWarnings("SimplifiableIfStatement")
+    public static boolean isCalendarPreviousTimeStamp(Calendar calendar, Timestamp timestamp)
+    {
+        Calendar timeStampCalendar = Calendar.getInstance();
+        timeStampCalendar.setTimeInMillis(timestamp.getTime());
+
+        if (calendar.get(YEAR) < timeStampCalendar.get(YEAR)) {
+            return true;
+        }
+        if (calendar.get(YEAR) > timeStampCalendar.get(YEAR)) {
+            return false;
+        }
+        if (calendar.get(MONTH) < timeStampCalendar.get(MONTH)) {
+            return true;
+        }
+        if (calendar.get(MONTH) > timeStampCalendar.get(MONTH)) {
+            return false;
+        }
+        return calendar.get(DAY_OF_MONTH) < timeStampCalendar.get(DAY_OF_MONTH);
+    }
+
+    public static Calendar getCalendarFromTimeMillis(long time)
+    {
+        Calendar timeCalendar = Calendar.getInstance();
+        timeCalendar.setTimeInMillis(time);
+        return timeCalendar;
     }
 
     //    ================================== EXCEPTIONS ===================================

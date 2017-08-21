@@ -267,7 +267,7 @@ public final class ActivityTestUtils {
         // Aumentamos la fecha estimada en un número de meses.
         newCalendar.add(MONTH, monthsToAdd);
         // Android PickerActions substract 1 from the month passed to setDate(), so we increased the month parameter value in 1 before passing it.
-        onView(withClassName(CoreMatchers.is(DatePicker.class.getName())))
+        onView(withClassName(is(DatePicker.class.getName())))
                 .perform(PickerActions.setDate(newCalendar.get(Calendar.YEAR), newCalendar.get(MONTH) + 1, newCalendar.get(DAY_OF_MONTH)));
         return newCalendar;
     }

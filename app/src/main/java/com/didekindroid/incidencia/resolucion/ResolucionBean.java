@@ -7,9 +7,12 @@ import com.didekindroid.util.FechaPickerBean;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
 import java.text.ParseException;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import static com.didekindroid.util.UIutils.formatTimeToString;
 import static com.didekindroid.util.UIutils.getIntFromStringDecimal;
+import static com.didekindroid.util.UIutils.isCalendarPreviousTimeStamp;
 import static com.didekinlib.model.common.dominio.ValidDataPatterns.LINE_BREAK;
 import static com.didekinlib.model.incidencia.dominio.IncidDataPatterns.INCID_RESOLUCION_DESC;
 import static com.didekinlib.model.incidencia.dominio.IncidDataPatterns.INCID_RES_AVANCE_DESC;
@@ -21,7 +24,7 @@ import static com.didekinlib.model.incidencia.dominio.IncidDataPatterns.INCID_RE
  */
 class ResolucionBean implements FechaPickerBean {
 
-    private long fechaPrevista;
+    private Calendar fechaPrevista;
     private String fechaPrevistaText;
     private String plan;
     private String avanceDesc;
@@ -32,13 +35,15 @@ class ResolucionBean implements FechaPickerBean {
     {
     }
 
-    long getFechaPrevista()
+    Calendar getFechaPrevista()
     {
-        return fechaPrevista;
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTimeInMillis(fechaPrevista.getTimeInMillis());
+        return calendar;
     }
 
     @Override
-    public void setFechaPrevista(long fechaPrevista)
+    public void setFechaPrevista(Calendar fechaPrevista)
     {
         this.fechaPrevista = fechaPrevista;
     }
@@ -105,12 +110,13 @@ class ResolucionBean implements FechaPickerBean {
 
     private boolean validateFechaPrev(StringBuilder errorMsg, Resources resources, IncidImportancia incidImportancia)
     {
-        if (fechaPrevista < incidImportancia.getIncidencia().getFechaAlta().getTime()) {
+        if (fechaPrevista == null
+                || isCalendarPreviousTimeStamp(fechaPrevista, incidImportancia.getIncidencia().getFechaAlta())){
             errorMsg.append(resources.getString(R.string.incid_resolucion_fecha_prev_msg)).append(LINE_BREAK.getRegexp());
             return false;
         }
         // Aquí controlamos que no ha dejado el texto por defecto en fechaPrevista view.
-        return fechaPrevistaText.equals(formatTimeToString(fechaPrevista));
+        return fechaPrevistaText.equals(formatTimeToString(fechaPrevista.getTimeInMillis()));
     }
 
     private boolean validatePlan(StringBuilder errorMsg, Resources resources)

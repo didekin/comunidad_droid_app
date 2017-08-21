@@ -217,7 +217,7 @@ public final class TokenIdentityCacher implements IdentityCacher {
     @Override
     public String checkBearerToken(SpringOauthToken oauthToken) throws UiException
     {
-        Timber.d("checkBearerTokenInCache()");
+        Timber.d("checkBearerTokenInCache(SpringOauthToken oauthToken)");
         String bearerAccessTkHeader = doHttpAuthHeader(oauthToken);
 
         if (bearerAccessTkHeader == null) {

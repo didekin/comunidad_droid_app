@@ -23,7 +23,7 @@ class CtrlerIncidEditAc extends Controller {
 
     boolean seeResolucion(DisposableMaybeObserver<Resolucion> observer, final long incidenciaId, final int resourceIdItemMn)
     {
-        Timber.d("checkResolucion()");
+        Timber.d("seeResolucion()");
         return subscriptions.add(
                 IncidObservable.resolucion(incidenciaId)
                         .subscribeOn(io())
