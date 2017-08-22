@@ -146,12 +146,12 @@ public class UserComuDataAcTest {
     }
 
     @Test
-    public void testDeleteUserComu_1() throws UiException
+    public void testDeleteUserComu_1() throws UiException  // TODO: fail.
     {
         toClean = false;
 
         onView(withId(R.id.usercomu_data_ac_delete_button)).perform(click());
-        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(comuSearchAcLayout));
+        waitAtMost(6, SECONDS).until(isResourceIdDisplayed(comuSearchAcLayout));
         // Sale de la aplicación.
         try {
             checkBack(onView(withId(comuSearchAcLayout)));

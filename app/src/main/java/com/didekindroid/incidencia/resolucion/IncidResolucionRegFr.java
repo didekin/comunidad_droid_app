@@ -24,6 +24,7 @@ import timber.log.Timber;
 
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.resolucion_should_be_registered;
 import static com.didekindroid.util.ConnectionUtils.checkInternetConnected;
 import static com.didekindroid.util.FechaPickerFr.FechaPickerHelper.initFechaViewForPicker;
@@ -165,6 +166,7 @@ public class IncidResolucionRegFr extends IncidResolucionFrAbstract {
                 assertTrue(rowInserted == 1, resolucion_should_be_registered);
                 Intent intent = new Intent(getActivity(), IncidEditAc.class);
                 intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia);
+                intent.putExtra(INCID_RESOLUCION_FLAG.key, true);
                 startActivity(intent);
             }
         }

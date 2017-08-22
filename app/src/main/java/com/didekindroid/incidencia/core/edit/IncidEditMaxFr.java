@@ -49,8 +49,8 @@ public class IncidEditMaxFr extends Fragment {
         Timber.d("onViewCreated()");
         super.onViewCreated(view, savedInstanceState);
 
-        IncidImportancia incidImportancia = (IncidImportancia) getArguments().getSerializable(INCID_IMPORTANCIA_OBJECT.key);
         // Preconditions.
+        IncidImportancia incidImportancia = (IncidImportancia) getArguments().getSerializable(INCID_IMPORTANCIA_OBJECT.key);
         assertTrue(incidImportancia.getUserComu() != null
                 && incidImportancia.getIncidencia().getIncidenciaId() > 0, incid_importancia_should_be_initialized);
         assertTrue(getArguments().containsKey(INCID_RESOLUCION_FLAG.key), intent_extra_should_be_initialized);
