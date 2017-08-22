@@ -13,11 +13,13 @@ import com.didekinlib.model.comunidad.Comunidad;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
@@ -104,6 +106,12 @@ public class RegUserAndUserComuAcTest {
     RegUserAndUserComuAc activity;
     boolean isClean;
 
+    @BeforeClass
+    public static void slowDown() throws InterruptedException
+    {
+        TimeUnit.SECONDS.sleep(2);
+    }
+
     @Before
     public void setUp() throws Exception
     {
@@ -120,8 +128,10 @@ public class RegUserAndUserComuAcTest {
     }
 
     @Test
-    public void testRegisterUserAndUserComu_1() throws UiException
+    public void testRegisterUserAndUserComu_1() throws UiException, InterruptedException
     {
+        TimeUnit.SECONDS.sleep(2);
+
         // Usuario data.
         typeUserDataFull(
                 USER_PEPE.getUserName(),
