@@ -6,7 +6,6 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.testutil.ActivityTestUtils;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 
@@ -20,31 +19,33 @@ import java.util.Locale;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.pressBack;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtraWithKey;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
-import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
+import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
+import static com.didekindroid.testutil.ActivityTestUtils.closeDatePicker;
+import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.testutil.ActivityTestUtils.reSetDatePicker;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
 import static com.didekindroid.util.UIutils.SPAIN_LOCALE;
 import static com.didekindroid.util.UIutils.formatTimeToString;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -132,8 +133,7 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
 
         onView(withId(R.id.incid_resolucion_fecha_view)).perform(click());
         Calendar newFechaPrev = reSetDatePicker(resolucion.getFechaPrev().getTime(), 1);
-
-        ActivityTestUtils.closeDatePicker(activity);
+        closeDatePicker(activity);
 
         if (Locale.getDefault().equals(SPAIN_LOCALE)) {
             onView(allOf(
@@ -174,8 +174,7 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
         onView(withId(R.id.incid_resolucion_coste_prev_ed)).perform(replaceText("-1234,5"));
         onView(withId(R.id.incid_resolucion_fr_modif_button)).perform(click());
 
-        checkToastInTest(R.string.error_validation_msg, activity, R.string.incid_resolucion_avance_rot);
-        Thread.sleep(2000);
+        waitAtMost(4, SECONDS).until(isToastInView(R.string.error_validation_msg, activity, R.string.incid_resolucion_avance_rot));
     }
 
     @Test
@@ -183,15 +182,12 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
     {
         // Caso OK: cerramos incidencia sin cambiar datos en pantalla.
         onView(withId(R.id.incid_resolucion_edit_fr_close_button)).perform(click());
-
         onView(withId(R.id.incid_see_closed_by_comu_ac)).check(matches(isDisplayed()));
-        intended(not(hasExtraWithKey(INCID_IMPORTANCIA_OBJECT.key)));
 
         // Damos back e intentamos modificar la incidencia. Nos da error.
-        Thread.sleep(3000);
-        onView(withId(R.id.incid_see_closed_by_comu_ac)).check(matches(isDisplayed())).perform(pressBack());
+        checkBack(onView(withId(R.id.incid_see_closed_by_comu_ac)), R.id.incid_resolucion_fr_modif_button);
         onView(withId(R.id.incid_resolucion_fr_modif_button)).perform(click());
-        checkToastInTest(R.string.incidencia_wrong_init, activity);
+        waitAtMost(4, SECONDS).until(isToastInView(R.string.incidencia_wrong_init, activity));
         onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed()));
     }
 
@@ -200,9 +196,7 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
     {
         // Caso OK: cerramos incidencia sin cambiar datos en pantalla.
         onView(withId(R.id.incid_resolucion_edit_fr_close_button)).perform(click());
-
         onView(withId(R.id.incid_see_closed_by_comu_ac)).check(matches(isDisplayed()));
-        intended(not(hasExtraWithKey(INCID_IMPORTANCIA_OBJECT.key)));
 
         // Up Navigate.
         checkUp();
@@ -212,9 +206,8 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
         // Intentamos modificar la incidencia: error nos manda a la consulta.
         onView(withId(R.id.incid_resolucion_fr_modif_button)).perform(click());
         intended(hasExtra(COMUNIDAD_ID.key, incidImportancia.getIncidencia().getComunidadId()));
-        checkToastInTest(R.string.incidencia_wrong_init, activity);
+        waitAtMost(4, SECONDS).until(isToastInView(R.string.incidencia_wrong_init, activity));
         onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed()));
-        Thread.sleep(2000);
     }
 
 //    ============================= HELPER METHODS ===========================
@@ -224,5 +217,6 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
         onView(withId(R.id.incid_edit_fragment_container_ac)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_edit_maxpower_fr_layout)).check(matches(isDisplayed()));
         intended(hasExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia));
+        intended(hasExtra(INCID_RESOLUCION_FLAG.key, true));
     }
 }

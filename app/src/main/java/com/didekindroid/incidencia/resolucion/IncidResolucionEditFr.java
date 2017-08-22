@@ -32,6 +32,7 @@ import timber.log.Timber;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.incidencia_should_be_cancelled;
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.resolucion_fechaPrev_should_be_initialized;
@@ -224,6 +225,7 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
                 assertTrue(rowModified >= 1, resolucion_should_be_modified);
                 Intent intent = new Intent(getActivity(), IncidEditAc.class);
                 intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, mIncidImportancia);
+                intent.putExtra(INCID_RESOLUCION_FLAG.key, true);
                 startActivity(intent);
             }
         }

@@ -282,8 +282,6 @@ public final class ActivityTestUtils {
         }
     }
 
-    //    ============================= EXCEPTIONS/ERRORS ===================================
-
     //    ============================= IDENTITY ===================================
 
     public static void checkIsRegistered(ViewerIf<?, ?> viewer)
@@ -345,6 +343,18 @@ public final class ActivityTestUtils {
         ).check(matches(isDisplayed())).perform(click());
     }
 
+    public static void checkBack(ViewInteraction viewInteraction, Integer... activityLayoutIds)
+    {
+        viewInteraction.perform(closeSoftKeyboard()).perform(pressBack());
+        for (Integer layout : activityLayoutIds) {
+            try {
+                waitAtMost(4, SECONDS).until(isResourceIdDisplayed(layout));
+            } catch (Exception e) {
+                fail();
+            }
+        }
+    }
+
     public static void checkUp(Integer... activityLayoutIds)
     {
         clickNavigateUp();
@@ -394,18 +404,6 @@ public final class ActivityTestUtils {
         List<ActivityManager.AppTask> tasks = manager.getAppTasks();
         for (ActivityManager.AppTask task : tasks) {
             task.finishAndRemoveTask();
-        }
-    }
-
-    public static void checkBack(ViewInteraction viewInteraction, Integer... activityLayoutIds)
-    {
-        viewInteraction.perform(closeSoftKeyboard()).perform(pressBack());
-        for (Integer layout : activityLayoutIds) {
-            try {
-                waitAtMost(4, SECONDS).until(isResourceIdDisplayed(layout));
-            } catch (Exception e) {
-                fail();
-            }
         }
     }
 
