@@ -18,9 +18,11 @@ import com.didekindroid.incidencia.core.IncidenciaBean;
 import com.didekindroid.incidencia.core.ViewerAmbitoIncidSpinner;
 import com.didekindroid.incidencia.core.ViewerImportanciaSpinner;
 import com.didekindroid.router.ActivityInitiator;
+import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
 import java.io.Serializable;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
@@ -45,27 +47,30 @@ import static com.didekindroid.util.UIutils.makeToast;
 class ViewerIncidEditMaxFr extends Viewer<View, CtrlerIncidRegEditFr> implements
         LinkToImportanciaUsersClickable, ModIncidImportanciaCallableBack {
 
-    final boolean hasResolucion;
-    IncidImportancia incidImportancia;
+    /**
+     *  Its state is changed in two ways:
+     *  1. when resolBundle.hasResolucion() is true.
+     *  2. when activated the option menu to see/edit a resolucion in the parent activity.
+     */
+    AtomicBoolean hasResolucion = new AtomicBoolean(false);
+    IncidAndResolBundle resolBundle;
     IncidenciaBean incidenciaBean;
     IncidImportanciaBean incidImportanciaBean;
     ViewerAmbitoIncidSpinner viewerAmbitoIncidSpinner;
     ViewerImportanciaSpinner viewerImportanciaSpinner;
 
     @SuppressWarnings("WeakerAccess")
-    public ViewerIncidEditMaxFr(View view, AppCompatActivity activity, ViewerIf parentViewer, boolean flagResolucion)
+    public ViewerIncidEditMaxFr(View view, AppCompatActivity activity, ViewerIf parentViewer)
     {
         super(view, activity, parentViewer);
-        hasResolucion = flagResolucion;
     }
 
-    static ViewerIncidEditMaxFr newViewerIncidEditMaxFr(@NonNull View frView, @NonNull ViewerIf parentViewer, boolean flagResolucion)
+    static ViewerIncidEditMaxFr newViewerIncidEditMaxFr(@NonNull View frView, @NonNull ViewerIf parentViewer)
     {
         Timber.d("newViewerIncidEditMaxFr()");
 
         AppCompatActivity activity = parentViewer.getActivity();
-        ViewerIncidEditMaxFr instance = new ViewerIncidEditMaxFr(frView, activity, parentViewer, flagResolucion);
-
+        ViewerIncidEditMaxFr instance = new ViewerIncidEditMaxFr(frView, activity, parentViewer);
         instance.viewerAmbitoIncidSpinner =
                 newViewerAmbitoIncidSpinner((Spinner) frView.findViewById(R.id.incid_reg_ambito_spinner), activity, instance);
         instance.viewerImportanciaSpinner =
@@ -84,7 +89,10 @@ class ViewerIncidEditMaxFr extends Viewer<View, CtrlerIncidRegEditFr> implements
     {
         Timber.d("doViewInViewer()");
 
-        incidImportancia = IncidImportancia.class.cast(viewBean);
+        resolBundle = IncidAndResolBundle.class.cast(viewBean);
+        // HasResolucion can change only from false --> true.
+        hasResolucion.compareAndSet(false, resolBundle.hasResolucion());
+        IncidImportancia incidImportancia = resolBundle.getIncidImportancia();
         doViewBeans();
 
         viewerAmbitoIncidSpinner.doViewInViewer(savedState, incidenciaBean);
@@ -107,7 +115,10 @@ class ViewerIncidEditMaxFr extends Viewer<View, CtrlerIncidRegEditFr> implements
         });
 
         Button buttonErase = view.findViewById(R.id.incid_edit_fr_borrar_button);
-        if (hasResolucion || !incidImportancia.getUserComu().hasAdministradorAuthority()) {
+        // Se puede borrar incidencia si no tiene resolución y el usuario tiene rol ADM o dio de alta la incidencia.
+        boolean canUserEraseIncid =  !hasResolucion.get()
+                && (incidImportancia.getUserComu().hasAdministradorAuthority() || incidImportancia.isIniciadorIncidencia());
+        if (!canUserEraseIncid) {
             buttonErase.setVisibility(GONE);
             view.findViewById(R.id.incid_edit_fr_borrar_txt).setVisibility(GONE);
         } else {
@@ -129,6 +140,8 @@ class ViewerIncidEditMaxFr extends Viewer<View, CtrlerIncidRegEditFr> implements
     void doViewBeans()
     {
         Timber.d("doViewBeans()");
+        IncidImportancia incidImportancia = resolBundle.getIncidImportancia();
+
         incidenciaBean = new IncidenciaBean();
         incidImportanciaBean = new IncidImportanciaBean();
         incidenciaBean.setCodAmbitoIncid(incidImportancia.getIncidencia().getAmbitoIncidencia().getAmbitoId());
@@ -140,7 +153,7 @@ class ViewerIncidEditMaxFr extends Viewer<View, CtrlerIncidRegEditFr> implements
     {
         Timber.d("LinkToImportanciaUsersListener.onClickLinkToImportanciaUsers()");
         Bundle bundle = new Bundle(1);
-        bundle.putSerializable(INCIDENCIA_OBJECT.key, incidImportancia.getIncidencia());
+        bundle.putSerializable(INCIDENCIA_OBJECT.key, resolBundle.getIncidImportancia().getIncidencia());
         new ActivityInitiator(activity).initAcFromListener(bundle, listener.getClass());
     }
 
@@ -157,7 +170,7 @@ class ViewerIncidEditMaxFr extends Viewer<View, CtrlerIncidRegEditFr> implements
                     activity.getResources(),
                     view,
                     incidenciaBean,
-                    incidImportancia.getIncidencia()
+                    resolBundle.getIncidImportancia().getIncidencia()
             );
             if (checkInternetConnected(getActivity())) {
                 controller.modifyIncidImportancia(new ModIncidImportanciaObserver<>(this), newIncidImportancia);
@@ -172,7 +185,8 @@ class ViewerIncidEditMaxFr extends Viewer<View, CtrlerIncidRegEditFr> implements
     void onClickButtonErase()
     {
         Timber.d("onClickButtonErase()");
-        assertTrue(incidImportancia.getUserComu().hasAdministradorAuthority(), usercomu_should_have_admAuthority);
+        IncidImportancia incidImportancia = resolBundle.getIncidImportancia();
+        assertTrue(incidImportancia.getUserComu().hasAdministradorAuthority() || incidImportancia.isIniciadorIncidencia(), usercomu_should_have_admAuthority);
 
         if (checkInternetConnected(getActivity())) {
             controller.eraseIncidencia(new EraseIncidenciaObserver(), incidImportancia.getIncidencia());
@@ -213,6 +227,13 @@ class ViewerIncidEditMaxFr extends Viewer<View, CtrlerIncidRegEditFr> implements
     }
 
     // =======================================  HELPERS  =======================================
+
+
+    void setHasResolucion()
+    {
+        Timber.d("setHasResolucion()");
+        hasResolucion.set(true);
+    }
 
     @SuppressWarnings("WeakerAccess")
     class EraseIncidenciaObserver extends DisposableSingleObserver<Integer> {

@@ -50,8 +50,8 @@ class AdapterIncidImportanciaSee extends ArrayAdapter<ImportanciaUser> {
 
         ImportanciaUserHolder(View convertView)
         {
-            aliasView = (TextView) convertView.findViewById(R.id.incid_importancia_alias_view);
-            ratingView = (TextView) convertView.findViewById(R.id.incid_importancia_rating_view);
+            aliasView = convertView.findViewById(R.id.incid_importancia_alias_view);
+            ratingView = convertView.findViewById(R.id.incid_importancia_rating_view);
         }
 
         void initializeTextInViews(ImportanciaUser importanciaUser)

@@ -179,7 +179,7 @@ public class ViewerIncidEditMinFrTest {
     }
 
     /*
-    *  Case: importancia > 0. Also, the incidImportancia instance has not been saved in BD previously.
+    *  Case: importancia > 0. Also, the resolBundle instance has not been saved in BD previously.
     *  Importancia is modified to 3.
     */
     @Test

@@ -13,14 +13,14 @@ import com.didekindroid.api.ViewerIf;
 import com.didekindroid.api.ViewerParentInjectedIf;
 import com.didekindroid.api.ViewerParentInjectorIf;
 import com.didekindroid.router.ActivityInitiator;
+import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
 import timber.log.Timber;
 
 import static com.didekindroid.incidencia.core.edit.ViewerIncidEditAc.newViewerIncidEditAc;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_edit_ac_frgs_tag;
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.incid_importancia_should_be_initialized;
 import static com.didekindroid.router.ActivityRouter.doUpMenu;
@@ -44,7 +44,7 @@ public class IncidEditAc extends AppCompatActivity implements ViewerParentInject
 
     View acView;
     ViewerIncidEditAc viewer;
-    IncidImportancia incidImportancia;
+    IncidAndResolBundle resolBundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -53,11 +53,10 @@ public class IncidEditAc extends AppCompatActivity implements ViewerParentInject
         super.onCreate(savedInstanceState);
 
         // Extras in intent.
-        incidImportancia = (IncidImportancia) getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.key);
-        boolean flagResolucion = getIntent().getBooleanExtra(INCID_RESOLUCION_FLAG.key, false);
+        resolBundle = (IncidAndResolBundle) getIntent().getSerializableExtra(INCID_RESOLUCION_BUNDLE.key);
+        IncidImportancia incidImportancia = resolBundle.getIncidImportancia();
         // Preconditions.
-        assertTrue(incidImportancia.getUserComu() != null
-                && incidImportancia.getIncidencia().getIncidenciaId() > 0, incid_importancia_should_be_initialized);
+        assertTrue(incidImportancia.getUserComu() != null && incidImportancia.getIncidencia().getIncidenciaId() > 0, incid_importancia_should_be_initialized);
 
         acView = getLayoutInflater().inflate(R.layout.incid_edit_ac, null);
         setContentView(acView);
@@ -68,8 +67,8 @@ public class IncidEditAc extends AppCompatActivity implements ViewerParentInject
         if (savedInstanceState != null) {
             fragmentToAdd = getSupportFragmentManager().findFragmentByTag(incid_edit_ac_frgs_tag);
             assertTrue(fragmentToAdd != null, fragment_should_be_initialized);
-            if(viewer == null){
-                initViewer(fragmentToAdd);
+            if (viewer == null) {
+                initViewer();
             }
             return;
         }
@@ -77,19 +76,18 @@ public class IncidEditAc extends AppCompatActivity implements ViewerParentInject
         Bundle argsFragment = new Bundle();
 
         if (incidImportancia.isIniciadorIncidencia() || incidImportancia.getUserComu().hasAdministradorAuthority()) {
-            argsFragment.putBoolean(INCID_RESOLUCION_FLAG.key, flagResolucion);
             fragmentToAdd = new IncidEditMaxFr();
         } else {
             fragmentToAdd = new IncidEditMinFr();
         }
 
-        argsFragment.putSerializable(INCID_IMPORTANCIA_OBJECT.key, incidImportancia);
+        argsFragment.putSerializable(INCID_RESOLUCION_BUNDLE.key, resolBundle); // TODO: testar que ambos tipos de fragmentos reciben un IncidenciaResolBundle.
         fragmentToAdd.setArguments(argsFragment);
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.incid_edit_fragment_container_ac, fragmentToAdd, incid_edit_ac_frgs_tag)
                 .commit();
 
-        initViewer(fragmentToAdd);
+        initViewer();
     }
 
     @Override
@@ -121,16 +119,15 @@ public class IncidEditAc extends AppCompatActivity implements ViewerParentInject
     public void setChildInViewer(ViewerIf childInViewer)
     {
         Timber.d("setChildInViewer()");
-//        throw new UnsupportedOperationException();
         viewer.setChildViewer(childInViewer);
     }
 
 //    ......................... HELPERS ..........................
 
-    private void initViewer(Fragment fragmentToAdd)
+    private void initViewer()
     {
-        viewer = newViewerIncidEditAc(this, fragmentToAdd.getView());
-        viewer.doViewInViewer(null, incidImportancia);
+        viewer = newViewerIncidEditAc(this);
+        viewer.doViewInViewer(null, resolBundle);
     }
 
 //    ============================================================
@@ -160,7 +157,7 @@ public class IncidEditAc extends AppCompatActivity implements ViewerParentInject
             case R.id.incid_comment_reg_ac_mn:
             case R.id.incid_comments_see_ac_mn:
                 Intent intent = new Intent();
-                intent.putExtra(INCIDENCIA_OBJECT.key, incidImportancia.getIncidencia());
+                intent.putExtra(INCIDENCIA_OBJECT.key, resolBundle.getIncidImportancia().getIncidencia());
                 setIntent(intent);
                 new ActivityInitiator(this).initAcFromMnKeepIntent(resourceId);
                 return true;

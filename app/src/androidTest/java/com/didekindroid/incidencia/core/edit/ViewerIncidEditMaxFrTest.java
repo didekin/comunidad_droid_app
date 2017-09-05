@@ -10,6 +10,7 @@ import com.didekindroid.api.ViewerIf;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.core.CtrlerIncidRegEditFr;
 import com.didekindroid.incidencia.core.IncidenciaDataDbHelper;
+import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
 import org.hamcrest.CoreMatchers;
@@ -31,14 +32,14 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkDataEditMaxPowerFr;
-import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkScreenEditMaxPowerFr;
+import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkScreenEditMaxPowerFrErase;
+import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkScreenEditMaxPowerFrNotErase;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeOpenAcLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeUserComuImportanciaAcLayout;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.AMBITO_INCIDENCIA_POSITION;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_NUMBER;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_edit_ac_frgs_tag;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
@@ -65,8 +66,7 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class ViewerIncidEditMaxFrTest {
 
-    IncidImportancia incidImportancia;
-    boolean flagResolucion;
+    IncidAndResolBundle resolBundle;
 
     @Rule
     public IntentsTestRule<IncidEditAc> activityRule = new IntentsTestRule<IncidEditAc>(IncidEditAc.class) {
@@ -75,15 +75,13 @@ public class ViewerIncidEditMaxFrTest {
         {
             try {
                 // Perfil pro, inicidador de la incidencia.
-                incidImportancia = insertGetIncidImportancia(COMU_REAL_JUAN);
-                flagResolucion = false;
+                resolBundle = new IncidAndResolBundle(insertGetIncidImportancia(COMU_REAL_JUAN), false);
             } catch (IOException | UiException e) {
                 fail();
             }
 
             Intent intent = new Intent();
-            intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia);
-            intent.putExtra(INCID_RESOLUCION_FLAG.key, flagResolucion);
+            intent.putExtra(INCID_RESOLUCION_BUNDLE.key, resolBundle);
             return intent;
         }
     };
@@ -117,7 +115,6 @@ public class ViewerIncidEditMaxFrTest {
     @Test
     public void testNewViewerIncidEditMaxFr() throws Exception
     {
-        assertThat(viewer.hasResolucion, is(false));
         assertThat(viewer.getController(), instanceOf(CtrlerIncidRegEditFr.class));
         assertThat(viewer.getParentViewer(), CoreMatchers.<ViewerIf>is(activity.getViewerAsParent()));
         assertThat(viewer.viewerAmbitoIncidSpinner, notNullValue());
@@ -125,14 +122,36 @@ public class ViewerIncidEditMaxFrTest {
     }
 
     @Test
-    public void testDoViewInViewer() throws Exception
+    public void testDoViewInViewer_1() throws Exception
     {
-        assertThat(viewer.incidImportancia, is(incidImportancia));
+        // Preconditions.
+        assertThat(viewer.hasResolucion.get(), is(false));
+
+        IncidImportancia incidImportancia = viewer.resolBundle.getIncidImportancia();
+        assertThat(incidImportancia, is(resolBundle.getIncidImportancia()));
         assertThat(viewer.incidenciaBean.getCodAmbitoIncid(), is(incidImportancia.getIncidencia().getAmbitoIncidencia().getAmbitoId()));
         assertThat(viewer.incidImportanciaBean.getImportancia(), is(incidImportancia.getImportancia()));
 
-        checkScreenEditMaxPowerFr(incidImportancia, flagResolucion);
+        checkScreenEditMaxPowerFrErase(resolBundle);
         checkDataEditMaxPowerFr(dbHelper, activity, incidImportancia);
+    }
+
+    @Test
+    public void testDoViewInViewer_2() throws Exception
+    {
+        // Preconditions.
+        final IncidAndResolBundle newResolBundle = new IncidAndResolBundle(resolBundle.getIncidImportancia(), true);
+        // Exec.
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                viewer.doViewInViewer(new Bundle(0), newResolBundle);
+            }
+        });
+        // Checks: NOT erase button.
+        waitAtMost(4,SECONDS).untilTrue(viewer.hasResolucion);
+        checkScreenEditMaxPowerFrNotErase(newResolBundle);
     }
 
     @Test
@@ -140,7 +159,7 @@ public class ViewerIncidEditMaxFrTest {
     {
         viewer.onClickLinkToImportanciaUsers(new LinkToImportanciaUsersListener(viewer));
         onView(withId(incidSeeUserComuImportanciaAcLayout)).check(matches(isDisplayed()));
-        intended(hasExtra(INCIDENCIA_OBJECT.key, incidImportancia.getIncidencia()));
+        intended(hasExtra(INCIDENCIA_OBJECT.key, activity.resolBundle.getIncidImportancia().getIncidencia()));
     }
 
     @Test
@@ -172,36 +191,21 @@ public class ViewerIncidEditMaxFrTest {
     }
 
     @Test
-    public void testOnClickButtonErase_1() throws Exception
-    {
-        // Usuario iniciador de incidencia.
-        assertThat(incidImportancia.getIncidencia().getUserName(), is(incidImportancia.getUserComu().getUsuario().getUserName()));
-        // No usuario adm.
-        assertThat(incidImportancia.getUserComu().hasAdministradorAuthority(), is(false));
-
-        onView(withId(R.id.incid_edit_fr_borrar_txt)).check(matches(not(isDisplayed())));
-        onView(withId(R.id.incid_edit_fr_borrar_button)).check(matches(not(isDisplayed())));
-    }
-
-    @Test
-    public void testOnClickButtonErase_2() throws Exception
+    public void testOnClickButtonErase() throws Exception     // TODO: seguir aquí. En el servidor no admite el usuario que da de alta la incidencia.
     {
         // Preconditions.
-        cleanOptions(CLEAN_JUAN);
-        incidImportancia = insertGetIncidImportancia(COMU_PLAZUELA5_JUAN);
-        // Usuario adm.
-        assertThat(incidImportancia.getUserComu().hasAdministradorAuthority(), is(true));
-
-        execDoInViewer();
+        checkScreenEditMaxPowerFrErase(activity.resolBundle);
+        final AtomicBoolean isRun = new AtomicBoolean(false);
 
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run()
             {
                 viewer.onClickButtonErase();
+                isRun.compareAndSet(false, true);
             }
         });
-        waitAtMost(2, SECONDS).until(isResourceIdDisplayed(incidSeeOpenAcLayout));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidSeeOpenAcLayout));
     }
 
     @Test
@@ -255,17 +259,4 @@ public class ViewerIncidEditMaxFrTest {
 
     //    ............................... HELPERS .................................
 
-    private void execDoInViewer()
-    {
-        final AtomicBoolean isRun = new AtomicBoolean(false);
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                viewer.doViewInViewer(null, incidImportancia);
-                isRun.compareAndSet(false, true);
-            }
-        });
-        waitAtMost(2, SECONDS).untilTrue(isRun);
-    }
 }

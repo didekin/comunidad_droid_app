@@ -15,9 +15,7 @@ import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import timber.log.Timber;
 
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.incid_importancia_should_be_initialized;
-import static com.didekindroid.util.CommonAssertionMsg.intent_extra_should_not_be_initialized;
 import static com.didekindroid.util.UIutils.assertTrue;
 
 /**
@@ -50,11 +48,11 @@ public class IncidEditMinFr extends Fragment {
         Timber.d("onViewCreated()");
 
         super.onViewCreated(view, savedInstanceState);
+        // TODO: ¿añadir? IncidAndResolBundle resolBundle = (IncidAndResolBundle) getArguments().getSerializable(INCID_RESOLUCION_BUNDLE.key); TEST.
         IncidImportancia incidImportancia = (IncidImportancia) getArguments().getSerializable(INCID_IMPORTANCIA_OBJECT.key);
         // Preconditions.
         assertTrue(incidImportancia.getUserComu() != null
                 && incidImportancia.getIncidencia().getIncidenciaId() > 0, incid_importancia_should_be_initialized);
-        assertTrue(!getArguments().containsKey(INCID_RESOLUCION_FLAG.key), intent_extra_should_not_be_initialized);
 
         viewerInjector = (ViewerParentInjectorIf) getActivity();
         ViewerIf parentViewer = viewerInjector.getViewerAsParent();

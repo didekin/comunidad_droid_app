@@ -6,7 +6,7 @@ import android.view.View;
 
 import com.didekindroid.api.ViewerParent;
 import com.didekindroid.router.ActivityInitiator;
-import com.didekinlib.model.incidencia.dominio.IncidImportancia;
+import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 
 import java.io.Serializable;
@@ -27,14 +27,14 @@ import static com.didekindroid.util.UIutils.assertTrue;
  */
 class ViewerIncidEditAc extends ViewerParent<View, CtrlerIncidEditAc> {
 
-    IncidImportancia incidImportancia;
+    IncidAndResolBundle resolBundle;
 
     ViewerIncidEditAc(IncidEditAc activity)
     {
         super(activity.acView, activity);
     }
 
-    static ViewerIncidEditAc newViewerIncidEditAc(IncidEditAc activity, View frView)
+    static ViewerIncidEditAc newViewerIncidEditAc(IncidEditAc activity)
     {
         Timber.d("newViewerIncidEditAc()");
         ViewerIncidEditAc instance = new ViewerIncidEditAc(activity);
@@ -48,24 +48,27 @@ class ViewerIncidEditAc extends ViewerParent<View, CtrlerIncidEditAc> {
         Timber.d("doViewInViewer()");
         // Preconditions.
         assertTrue(controller.isRegisteredUser(), user_should_be_registered);
-        incidImportancia = IncidImportancia.class.cast(viewBean);
+        resolBundle = IncidAndResolBundle.class.cast(viewBean);
     }
 
     boolean checkResolucion(int resourceIdItemMn)
     {
         Timber.d("checkResolucion()");
-        return controller.seeResolucion(new ResolucionObserver(resourceIdItemMn), incidImportancia.getIncidencia().getIncidenciaId(), resourceIdItemMn);
+        return controller.seeResolucion(
+                new ResolucionObserver(resourceIdItemMn),
+                resolBundle.getIncidImportancia().getIncidencia().getIncidenciaId(),
+                resourceIdItemMn);
     }
 
-    void onSuccessSeeResolucion(Resolucion resolucion, int resourceIdItemMn)
+    void onSuccessCheckResolucion(Resolucion resolucion, int resourceIdItemMn)
     {
-        Timber.d("onSuccessSeeResolucion()");
+        Timber.d("onSuccessCheckResolucion()");
         onAfterSeeResolucion(resolucion, resourceIdItemMn);
     }
 
-    void onCompleteSeeResolucion(int resourceIdItemMn)
+    void onCompleteCheckResolucion(int resourceIdItemMn)
     {
-        Timber.d("onCompleteSeeResolucion()");
+        Timber.d("onCompleteCheckResolucion()");
         onAfterSeeResolucion(null, resourceIdItemMn);
     }
 
@@ -74,12 +77,17 @@ class ViewerIncidEditAc extends ViewerParent<View, CtrlerIncidEditAc> {
     private void onAfterSeeResolucion(Resolucion resolucion, int resourceIdItemMn)
     {
         Timber.d("onAfterSeeResolucion()");
-        Intent intent0 = new Intent();
-        intent0.putExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia);
+
+        Intent intent = new Intent();
+        intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, resolBundle.getIncidImportancia());
         if (resolucion != null) {
-            intent0.putExtra(INCID_RESOLUCION_OBJECT.key, resolucion);
+            intent.putExtra(INCID_RESOLUCION_OBJECT.key, resolucion);
+            ViewerIncidEditMaxFr childViewer = getChildViewer(ViewerIncidEditMaxFr.class);
+            if (childViewer != null) {
+                childViewer.setHasResolucion();
+            }
         }
-        activity.setIntent(intent0);
+        activity.setIntent(intent);
         new ActivityInitiator(activity).initAcFromMnKeepIntent(resourceIdItemMn);
     }
 
@@ -97,7 +105,7 @@ class ViewerIncidEditAc extends ViewerParent<View, CtrlerIncidEditAc> {
         public void onSuccess(@NonNull Resolucion resolucion)
         {
             Timber.d("onSuccess()");
-            onSuccessSeeResolucion(resolucion, idItemMenu);
+            onSuccessCheckResolucion(resolucion, idItemMenu);
         }
 
         @Override
@@ -111,7 +119,7 @@ class ViewerIncidEditAc extends ViewerParent<View, CtrlerIncidEditAc> {
         public void onComplete()
         {
             Timber.d("onComplete()");
-            onCompleteSeeResolucion(idItemMenu);
+            onCompleteCheckResolucion(idItemMenu);
         }
     }
 }

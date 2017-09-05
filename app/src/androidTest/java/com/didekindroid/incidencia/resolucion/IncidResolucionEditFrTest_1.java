@@ -31,7 +31,6 @@ import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
@@ -217,6 +216,6 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
         onView(withId(R.id.incid_edit_fragment_container_ac)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_edit_maxpower_fr_layout)).check(matches(isDisplayed()));
         intended(hasExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia));
-        intended(hasExtra(INCID_RESOLUCION_FLAG.key, true));
+//        intended(hasExtra(INCID_RESOLUCION_FLAG.key, true));     //  TODO: ¿eliminar?
     }
 }

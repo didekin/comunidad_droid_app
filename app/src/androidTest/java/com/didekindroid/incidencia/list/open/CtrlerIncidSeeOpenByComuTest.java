@@ -6,10 +6,10 @@ import android.support.test.rule.ActivityTestRule;
 
 import com.didekindroid.api.ActivityMock;
 import com.didekindroid.exception.UiException;
+import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
-import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.junit.After;
 import org.junit.Before;
@@ -28,8 +28,7 @@ import static com.didekindroid.incidencia.list.open.CtrlerIncidSeeOpenByComu.inc
 import static com.didekindroid.incidencia.list.open.CtrlerIncidSeeOpenByComu.incidOpenList;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.INCID_DEFAULT_DESC;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_B;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
@@ -60,7 +59,6 @@ public class CtrlerIncidSeeOpenByComuTest {
     Activity activity;
     Incidencia incidencia;
     CtrlerIncidSeeOpenByComu controller;
-    UsuarioComunidad pepeUserComu;
     IncidImportancia incidImportancia;
 
     @Before
@@ -172,9 +170,9 @@ public class CtrlerIncidSeeOpenByComuTest {
 
     void checkBundle(Bundle bundle)
     {
-        final IncidImportancia incidImportancia = (IncidImportancia) bundle.getSerializable(INCID_IMPORTANCIA_OBJECT.key);
+        final IncidAndResolBundle resolBundle = (IncidAndResolBundle) bundle.getSerializable(INCID_RESOLUCION_BUNDLE.key);
+        final IncidImportancia incidImportancia = resolBundle.getIncidImportancia();
         assertThat(incidImportancia.getImportancia(), is((short) 3));
         assertThat(incidImportancia.getUserComu(), is(this.incidImportancia.getUserComu()));
-        assertThat(bundle.getBoolean(INCID_RESOLUCION_FLAG.key), is(false));
     }
 }

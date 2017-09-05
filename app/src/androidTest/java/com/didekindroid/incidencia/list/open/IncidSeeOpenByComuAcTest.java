@@ -6,7 +6,6 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekindroid.exception.UiException;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
-import com.didekinlib.model.incidencia.dominio.Resolucion;
 
 import org.junit.After;
 import org.junit.Before;
@@ -16,7 +15,6 @@ import org.junit.runner.RunWith;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
@@ -39,13 +37,11 @@ import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeGenericFrLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeOpenAcLayout;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
-import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
@@ -79,11 +75,8 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class IncidSeeOpenByComuAcTest {
 
-    final static AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
-
     IncidImportancia incidImportancia1;
     IncidImportancia incidImportancia2;
-    Resolucion resolucion;
     IncidenciaUser incidenciaUser1;
     IncidenciaUser incidenciaUser2;
 
@@ -97,7 +90,7 @@ public class IncidSeeOpenByComuAcTest {
                 incidImportancia1 = makeRegGetIncidImportancia(userComuDaoRemote.seeUserComusByUser().get(0), (short) 1);
                 incidImportancia2 = makeRegGetIncidImportancia(userComuDaoRemote.seeUserComusByUser().get(1), (short) 4);
                 // Resolución para incidencia1.
-                Resolucion resolucion = insertGetResolucionNoAdvances(incidImportancia1);
+                insertGetResolucionNoAdvances(incidImportancia1);
                 incidenciaUser1 = incidenciaDao.seeIncidsOpenByComu(incidImportancia1.getIncidencia().getComunidadId()).get(0);
                 incidenciaUser2 = incidenciaDao.seeIncidsOpenByComu(incidImportancia2.getIncidencia().getComunidadId()).get(0);
 
@@ -144,7 +137,7 @@ public class IncidSeeOpenByComuAcTest {
         // CASO NO visibilidad del bloque de datos de resolución.
         // Cambiamos la comunidad en el spinner y revisamos los datos.
         doComunidadSpinner(incidImportancia2.getIncidencia().getComunidad());
-        waitAtMost(2, SECONDS).until(isViewDisplayed(checkIncidOpenListViewNoResol(incidImportancia2, activity)));
+        waitAtMost(2, SECONDS).until(isViewDisplayed(checkIncidOpenListViewNoResol()));
     }
 
     @Test
@@ -159,7 +152,7 @@ public class IncidSeeOpenByComuAcTest {
         // Check next fragment.
         waitAtMost(2, SECONDS).until(isViewDisplayed(withId(incidEditAcLayout)));
         intended(hasExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia1));
-        intended(hasExtra(INCID_RESOLUCION_FLAG.key, true));
+//        intended(hasExtra(INCID_RESOLUCION_FLAG.key, true));    //  TODO: ¿eliminar?
         // Up and checkMenu.
         checkUp(incidSeeOpenAcLayout);
         isViewDisplayed(checkIncidOpenListView(incidImportancia1, activity, incidenciaUser1.getFechaAltaResolucion())).call();
@@ -181,7 +174,7 @@ public class IncidSeeOpenByComuAcTest {
         // Check next fragment.
         waitAtMost(3, SECONDS).until(isViewDisplayed(withId(incidEditAcLayout)));
         intended(hasExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia2));
-        intended(hasExtra(INCID_RESOLUCION_FLAG.key, false));
+//        intended(hasExtra(INCID_RESOLUCION_FLAG.key, false));    //  TODO: ¿eliminar?
     }
 
     @Test

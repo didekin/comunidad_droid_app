@@ -9,15 +9,14 @@ import android.view.ViewGroup;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ViewerParentInjectorIf;
+import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
 import timber.log.Timber;
 
 import static com.didekindroid.incidencia.core.edit.ViewerIncidEditMaxFr.newViewerIncidEditMaxFr;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.incid_importancia_should_be_initialized;
-import static com.didekindroid.util.CommonAssertionMsg.intent_extra_should_be_initialized;
 import static com.didekindroid.util.UIutils.assertTrue;
 
 /**
@@ -50,16 +49,14 @@ public class IncidEditMaxFr extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // Preconditions.
-        IncidImportancia incidImportancia = (IncidImportancia) getArguments().getSerializable(INCID_IMPORTANCIA_OBJECT.key);
+        IncidAndResolBundle resolBundle = (IncidAndResolBundle) getArguments().getSerializable(INCID_RESOLUCION_BUNDLE.key);
+        IncidImportancia incidImportancia = resolBundle.getIncidImportancia();
         assertTrue(incidImportancia.getUserComu() != null
                 && incidImportancia.getIncidencia().getIncidenciaId() > 0, incid_importancia_should_be_initialized);
-        assertTrue(getArguments().containsKey(INCID_RESOLUCION_FLAG.key), intent_extra_should_be_initialized);
-
-        boolean flagResolucion = getArguments().getBoolean(INCID_RESOLUCION_FLAG.key);
 
         viewerInjector = (ViewerParentInjectorIf) getActivity();
-        viewer = newViewerIncidEditMaxFr(frView, viewerInjector.getViewerAsParent(), flagResolucion);
-        viewer.doViewInViewer(savedInstanceState, incidImportancia);
+        viewer = newViewerIncidEditMaxFr(frView, viewerInjector.getViewerAsParent());
+        viewer.doViewInViewer(savedInstanceState, resolBundle);
         viewerInjector.setChildInViewer(viewer);
     }
 

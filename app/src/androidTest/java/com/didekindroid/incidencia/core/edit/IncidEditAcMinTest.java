@@ -34,7 +34,6 @@ import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGet
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkDataEditMinFr;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.doImportanciaSpinner;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
 import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_edit_ac_frgs_tag;
 import static com.didekindroid.security.SecurityTestUtils.updateSecurityData;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
@@ -92,7 +91,7 @@ public class IncidEditAcMinTest {
             }
             Intent intent = new Intent();
             intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportanciaIntent);
-            intent.putExtra(INCID_RESOLUCION_FLAG.key, false);
+//            intent.putExtra(INCID_RESOLUCION_FLAG.key, false);    //  TODO: ¿eliminar?
             return intent;
         }
     };
@@ -104,7 +103,7 @@ public class IncidEditAcMinTest {
     {
         activity = activityRule.getActivity();
         dbHelper = new IncidenciaDataDbHelper(activity);
-        // Usuario sin registro previo de incidImportancia.
+        // Usuario sin registro previo de resolBundle.
         assertThat(incidImportanciaIntent.getImportancia(), is((short) 0));
     }
 

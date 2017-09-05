@@ -146,7 +146,7 @@ public class UserComuDataAcTest {
     }
 
     @Test
-    public void testDeleteUserComu_1() throws UiException  // TODO: fail.
+    public void testDeleteUserComu_1() throws UiException
     {
         toClean = false;
 

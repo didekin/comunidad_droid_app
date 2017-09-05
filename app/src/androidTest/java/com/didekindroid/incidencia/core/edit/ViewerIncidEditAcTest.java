@@ -6,7 +6,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
-import com.didekinlib.model.incidencia.dominio.IncidImportancia;
+import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 
 import org.junit.After;
@@ -30,7 +30,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
@@ -56,7 +56,7 @@ import static org.junit.Assert.fail;
 public class ViewerIncidEditAcTest {
 
     final static AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
-    IncidImportancia incidImportancia;
+    IncidAndResolBundle resolBundle;
 
     @Rule
     public IntentsTestRule<IncidEditAc> activityRule = new IntentsTestRule<IncidEditAc>(IncidEditAc.class) {
@@ -65,14 +65,13 @@ public class ViewerIncidEditAcTest {
         {
             try {
                 // Perfil adm.
-                incidImportancia = insertGetIncidImportancia(COMU_PLAZUELA5_JUAN);
+                resolBundle = new IncidAndResolBundle(insertGetIncidImportancia(COMU_PLAZUELA5_JUAN), false);
             } catch (IOException | UiException e) {
                 fail();
             }
 
             Intent intent = new Intent();
-            intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia);
-            intent.putExtra(INCID_RESOLUCION_FLAG.key, false);
+            intent.putExtra(INCID_RESOLUCION_BUNDLE.key, resolBundle);
             return intent;
         }
     };
@@ -100,6 +99,12 @@ public class ViewerIncidEditAcTest {
     //    ============================  TESTS  ===================================
 
     @Test
+    public void test_DoViewInViewer() throws Exception
+    {
+        assertThat(viewer.resolBundle.getIncidImportancia().equals(resolBundle.getIncidImportancia()), is(true));
+    }
+
+    @Test
     public void testCheckResolucion() throws Exception
     {
         CtrlerIncidEditAc controllerLocal = new CtrlerIncidEditAc() {
@@ -112,7 +117,6 @@ public class ViewerIncidEditAcTest {
         };
         // Preconditions.
         viewer.setController(controllerLocal);
-        viewer.doViewInViewer(null, incidImportancia);
         // Execute.
         viewer.checkResolucion(123);
         // Check.
@@ -122,36 +126,37 @@ public class ViewerIncidEditAcTest {
     @Test
     public void test_OnSuccessSeeResolucion() throws Exception
     {
-        // Preconditions.
-        assertThat(viewer.incidImportancia, notNullValue());
+        Resolucion resolucion = insertGetResolucionNoAdvances(viewer.resolBundle.getIncidImportancia());
+        viewer.onSuccessCheckResolucion(resolucion, R.id.incid_resolucion_reg_ac_mn);
 
-        Resolucion resolucion = insertGetResolucionNoAdvances(viewer.incidImportancia);
-        viewer.onSuccessSeeResolucion(resolucion, R.id.incid_resolucion_reg_ac_mn);
-        onView(withId(R.id.incid_resolucion_fragment_container_ac)).check(matches(isDisplayed()));
         intended(allOf(
-                hasExtra(INCID_IMPORTANCIA_OBJECT.key, viewer.incidImportancia),
+                hasExtra(INCID_IMPORTANCIA_OBJECT.key, viewer.resolBundle.getIncidImportancia()),
                 hasExtra(INCID_RESOLUCION_OBJECT.key, resolucion)
         ));
+        assertThat(viewer.getChildViewer(ViewerIncidEditMaxFr.class).hasResolucion.get(), is(true));
+        onView(withId(R.id.incid_resolucion_fragment_container_ac)).check(matches(isDisplayed()));
     }
 
     @Test
     public void test_OnCompleteSeeResolucion() throws Exception
     {
         // Preconditions.
-        assertThat(viewer.incidImportancia, notNullValue());
+        assertThat(viewer.resolBundle, notNullValue());
 
-        viewer.onCompleteSeeResolucion(R.id.incid_resolucion_reg_ac_mn);
-        onView(withId(R.id.incid_resolucion_fragment_container_ac)).check(matches(isDisplayed()));
+        viewer.onCompleteCheckResolucion(R.id.incid_resolucion_reg_ac_mn);
+
+        assertThat(viewer.getChildViewer(ViewerIncidEditMaxFr.class).hasResolucion.get(), is(false));
         intended(allOf(
-                hasExtra(INCID_IMPORTANCIA_OBJECT.key, viewer.incidImportancia),
+                hasExtra(INCID_IMPORTANCIA_OBJECT.key, viewer.resolBundle.getIncidImportancia()),
                 not(hasExtraWithKey(INCID_RESOLUCION_OBJECT.key))
         ));
+        onView(withId(R.id.incid_resolucion_fragment_container_ac)).check(matches(isDisplayed()));
     }
 
     @Test
     public void test_ResolucionObserver() throws UiException
     {
-        Resolucion resolucion = insertGetResolucionNoAdvances(incidImportancia);
+        Resolucion resolucion = insertGetResolucionNoAdvances(resolBundle.getIncidImportancia());
         just(resolucion).subscribeWith(viewer.new ResolucionObserver(R.id.incid_resolucion_reg_ac_mn));
         onView(withId(R.id.incid_resolucion_fragment_container_ac)).check(matches(isDisplayed()));
     }

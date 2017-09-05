@@ -5,7 +5,8 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.exception.UiException;
-import com.didekinlib.model.incidencia.dominio.IncidImportancia;
+import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
+import com.didekinlib.model.incidencia.dominio.Incidencia;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 
 import org.junit.After;
@@ -22,8 +23,7 @@ import io.reactivex.observers.DisposableMaybeObserver;
 
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekindroid.testutil.RxSchedulersUtils.resetAllSchedulers;
@@ -48,22 +48,20 @@ public class CtrlerIncidEditAcTest {
 
     CtrlerIncidEditAc controller;
     int resorceMnId = 77;
-    IncidImportancia incidImportancia;
+    IncidAndResolBundle resolBundle;
 
     @Rule
     public IntentsTestRule<IncidEditAc> activityRule = new IntentsTestRule<IncidEditAc>(IncidEditAc.class) {
         @Override
         protected Intent getActivityIntent()
         {
-            incidImportancia = null;
             try {
-                incidImportancia = insertGetIncidImportancia(COMU_ESCORIAL_PEPE);
+                resolBundle = new IncidAndResolBundle(insertGetIncidImportancia(COMU_ESCORIAL_PEPE), false);
             } catch (IOException | UiException e) {
                 fail();
             }
             Intent intent = new Intent();
-            intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia);
-            intent.putExtra(INCID_RESOLUCION_FLAG.key, false);
+            intent.putExtra(INCID_RESOLUCION_BUNDLE.key, resolBundle);
             return intent;
         }
     };
@@ -71,7 +69,6 @@ public class CtrlerIncidEditAcTest {
     @Before
     public void setUp() throws Exception
     {
-        IncidEditAc activity = activityRule.getActivity();
         controller = new CtrlerIncidEditAc();
     }
 
@@ -88,7 +85,7 @@ public class CtrlerIncidEditAcTest {
     @Test
     public void testSeeResolucion() throws Exception
     {
-        insertGetResolucionNoAdvances(incidImportancia);
+        insertGetResolucionNoAdvances(resolBundle.getIncidImportancia());
         executeTest(new DisposableMaybeObserver<Resolucion>() {
             @Override
             public void onSuccess(@NonNull Resolucion resolucion)
@@ -138,10 +135,11 @@ public class CtrlerIncidEditAcTest {
 
     void executeTest(DisposableMaybeObserver<Resolucion> observer)
     {
+        Incidencia incidencia = resolBundle.getIncidImportancia().getIncidencia();
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
-            assertThat(controller.seeResolucion(observer, incidImportancia.getIncidencia().getIncidenciaId(), resorceMnId), is(true));
+            assertThat(controller.seeResolucion(observer, incidencia.getIncidenciaId(), resorceMnId), is(true));
         } finally {
             resetAllSchedulers();
         }

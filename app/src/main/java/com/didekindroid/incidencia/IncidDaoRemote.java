@@ -270,8 +270,6 @@ public final class IncidDaoRemote implements IncidenciaServEndPoints {
         try {
             Response<Resolucion> response = seeResolucion(identityCacher.checkBearerTokenInCache(), resolucionId).execute();
             return getResponseBody(response);
-        } catch (EOFException eo) { // No resolucion in BD.
-            return null;
         } catch (IOException e) {
             throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
         }

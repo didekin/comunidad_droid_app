@@ -67,6 +67,7 @@ final class ViewerIncidEditMinFr extends Viewer<View, CtrlerIncidRegEditFr> impl
     {
         Timber.d("doViewInViewer()");
 
+        // TODO: testar que viewBean no es instancia de IncidenciaResolBundle. ESto puede estar mal.
         incidImportancia = IncidImportancia.class.cast(viewBean);
         doViewBeans();
 
@@ -77,10 +78,10 @@ final class ViewerIncidEditMinFr extends Viewer<View, CtrlerIncidRegEditFr> impl
         ((TextView) view.findViewById(R.id.incid_ambito_view))
                 .setText(controller.getAmbitoIncidDesc(incidImportancia.getIncidencia().getAmbitoIncidencia().getAmbitoId()));
 
-        TextView linkToImportanciaUsersView = (TextView) view.findViewById(R.id.incid_importancia_otros_view);
+        TextView linkToImportanciaUsersView = view.findViewById(R.id.incid_importancia_otros_view);
         linkToImportanciaUsersView.setOnClickListener(new LinkToImportanciaUsersListener(this));
 
-        Button buttonModify = (Button) view.findViewById(R.id.incid_edit_fr_modif_button);
+        Button buttonModify = view.findViewById(R.id.incid_edit_fr_modif_button);
         buttonModify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)

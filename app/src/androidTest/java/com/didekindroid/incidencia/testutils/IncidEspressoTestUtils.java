@@ -13,6 +13,7 @@ import com.didekindroid.incidencia.core.AmbitoIncidValueObj;
 import com.didekindroid.incidencia.core.IncidenciaDataDbHelper;
 import com.didekindroid.incidencia.core.edit.IncidEditAc;
 import com.didekinlib.model.comunidad.Comunidad;
+import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
 import org.hamcrest.Matcher;
@@ -65,11 +66,34 @@ public final class IncidEspressoTestUtils {
         return frView;
     }
 
-    public static void checkScreenEditMaxPowerFr(IncidImportancia incidImportanciaIntent, boolean flagResolucionIntent)
+    public static void checkScreenEditMaxPowerFrErase(IncidAndResolBundle resolBundle)
     {
         // Precondiditions:
-        assertThat(incidImportanciaIntent.isIniciadorIncidencia() || incidImportanciaIntent.getUserComu().hasAdministradorAuthority(), is(true));
+        assertThat(resolBundle.getIncidImportancia().isIniciadorIncidencia()
+                || resolBundle.getIncidImportancia().getUserComu().hasAdministradorAuthority(), is(true));
+        assertThat(resolBundle.hasResolucion(), is(false));
 
+        checkScreenEditMaxPowerFr();
+
+        onView(withId(R.id.incid_edit_fr_borrar_txt)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_edit_fr_borrar_button)).check(matches(isDisplayed()));
+    }
+
+    public static void checkScreenEditMaxPowerFrNotErase(IncidAndResolBundle resolBundle)
+    {
+        // Precondiditions:
+        assertThat(resolBundle.getIncidImportancia().isIniciadorIncidencia()
+                || resolBundle.getIncidImportancia().getUserComu().hasAdministradorAuthority(), is(true));
+        assertThat(resolBundle.hasResolucion(), is(true));
+
+        checkScreenEditMaxPowerFr();
+
+        onView(withId(R.id.incid_edit_fr_borrar_txt)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.incid_edit_fr_borrar_button)).check(matches(not(isDisplayed())));
+    }
+
+    private static void checkScreenEditMaxPowerFr()
+    {
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_edit_fragment_container_ac)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_edit_maxpower_fr_layout)).check(matches(isDisplayed()));
@@ -80,14 +104,6 @@ public final class IncidEspressoTestUtils {
         onView(withId(R.id.incid_reg_importancia_spinner)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_edit_fr_modif_button)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_comunidad_txt)).check(matches(isDisplayed()));
-
-        if (incidImportanciaIntent.getUserComu().hasAdministradorAuthority() && !flagResolucionIntent) {
-            onView(withId(R.id.incid_edit_fr_borrar_txt)).check(matches(isDisplayed()));
-            onView(withId(R.id.incid_edit_fr_borrar_button)).check(matches(isDisplayed()));
-        } else {
-            onView(withId(R.id.incid_edit_fr_borrar_txt)).check(matches(not(isDisplayed())));
-            onView(withId(R.id.incid_edit_fr_borrar_button)).check(matches(not(isDisplayed())));
-        }
     }
 
     public static void checkDataEditMaxPowerFr(IncidenciaDataDbHelper dbHelper, IncidEditAc activity, IncidImportancia incidImportancia)
@@ -207,7 +223,7 @@ public final class IncidEspressoTestUtils {
     }
 
     @SuppressWarnings("unchecked")
-    public static Matcher<View> checkIncidOpenListViewNoResol(IncidImportancia incidImportancia, Activity activity)
+    public static Matcher<View> checkIncidOpenListViewNoResol()
     {
         return allOf(
                 withId(R.id.incid_see_apertura_block),
