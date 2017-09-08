@@ -30,8 +30,7 @@ import static com.didekindroid.util.UIutils.makeToast;
  * Time: 11:59
  */
 @SuppressWarnings("WeakerAccess")
-public class ViewerIncidRegAc extends ViewerParent<View, CtrlerIncidRegEditFr> implements
-        RegIncidImportanciaCallableBack {
+public class ViewerIncidRegAc extends ViewerParent<View, CtrlerIncidRegEditFr> {
 
     ViewerFirebaseTokenIf viewerFirebaseToken;
 
@@ -77,8 +76,7 @@ public class ViewerIncidRegAc extends ViewerParent<View, CtrlerIncidRegEditFr> i
         viewerFirebaseToken.saveState(savedState);
     }
 
-    @Override
-    public void onSuccessRegisterIncidImportancia(int rowInserted)
+    public void onSuccessRegisterIncidImportancia()
     {
         Timber.d("onSuccessRegisterIncidImportancia()");
         replaceComponent(new Bundle());

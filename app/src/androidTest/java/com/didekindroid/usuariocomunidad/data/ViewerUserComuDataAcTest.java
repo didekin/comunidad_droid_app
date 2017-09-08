@@ -6,7 +6,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.view.Menu;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ViewerParentInjectedIf;
+import com.didekindroid.api.ParentViewerInjectedIf;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.usuariocomunidad.register.CtrlerUsuarioComunidad;
 import com.didekindroid.usuariocomunidad.register.ViewerRegUserComuFr;
@@ -207,7 +207,7 @@ public class ViewerUserComuDataAcTest {
     public void test_OnCreate() throws Exception
     {
         // Check for initialization of fragments viewers.
-        ViewerParentInjectedIf viewerParent = activity.viewer;
+        ParentViewerInjectedIf viewerParent = activity.viewer;
         assertThat(viewerParent.getChildViewer(ViewerRegUserComuFr.class), notNullValue());
     }
 

@@ -5,7 +5,7 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ViewerParentInjectedIf;
+import com.didekindroid.api.ParentViewerInjectedIf;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.usuario.ViewerRegUserFr;
 import com.didekinlib.model.comunidad.Comunidad;
@@ -43,7 +43,6 @@ import static com.didekindroid.usuariocomunidad.RolUi.PRE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpWithTkGetComu;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.typeUserComuData;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByComuFrRsId;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
@@ -142,7 +141,7 @@ public class ViewerRegUserAndUserComuAcTest {
     public void test_OnCreate()
     {
         // Check for initialization of fragments viewers.
-        ViewerParentInjectedIf viewerParent = activity.viewer;
+        ParentViewerInjectedIf viewerParent = activity.viewer;
         assertThat(viewerParent.getChildViewer(ViewerRegUserFr.class), notNullValue());
         assertThat(viewerParent.getChildViewer(ViewerRegUserComuFr.class), notNullValue());
     }

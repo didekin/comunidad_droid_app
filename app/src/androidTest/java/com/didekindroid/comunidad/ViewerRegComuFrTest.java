@@ -6,8 +6,8 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
+import com.didekindroid.api.ChildViewersInjectorIf;
 import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ViewerParentInjectorIf;
 import com.didekindroid.comunidad.spinner.MunicipioSpinnerEventItemSelect;
 import com.didekindroid.comunidad.spinner.TipoViaValueObj;
 import com.didekindroid.exception.UiException;
@@ -231,11 +231,11 @@ public class ViewerRegComuFrTest {
     {
         AtomicReference<ViewerRegComuFr> viewerFrAtomic = new AtomicReference<>(null);
         viewerFrAtomic.compareAndSet(null, fragment.viewer);
-        AtomicReference<ViewerParentInjectorIf> viewerParentAtomic = new AtomicReference<>(null);
+        AtomicReference<ChildViewersInjectorIf> viewerParentAtomic = new AtomicReference<>(null);
         viewerParentAtomic.compareAndSet(null, fragment.viewerInjector);
         waitAtMost(4, SECONDS).untilAtomic(viewerFrAtomic, notNullValue());
         waitAtMost(2, SECONDS).untilAtomic(viewerParentAtomic, notNullValue());
-        assertThat(fragment.viewerInjector.getViewerAsParent().getChildViewer(fragment.viewer.getClass()),
+        assertThat(fragment.viewerInjector.getParentViewer().getChildViewer(fragment.viewer.getClass()),
                 Matchers.<ViewerIf>is(fragment.viewer));
     }
 

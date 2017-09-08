@@ -47,7 +47,6 @@ public class CtrlerIncidEditAcTest {
     final static AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
 
     CtrlerIncidEditAc controller;
-    int resorceMnId = 77;
     IncidAndResolBundle resolBundle;
 
     @Rule
@@ -139,7 +138,7 @@ public class CtrlerIncidEditAcTest {
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
-            assertThat(controller.seeResolucion(observer, incidencia.getIncidenciaId(), resorceMnId), is(true));
+            assertThat(controller.seeResolucion(observer, incidencia.getIncidenciaId()), is(true));
         } finally {
             resetAllSchedulers();
         }

@@ -151,6 +151,9 @@ public final class IncidEspressoTestUtils {
                 withText(R.string.incid_importancia_reg_edit_button_rot)
         )).check(matches(isDisplayed()));
 
+        onView(withId(R.id.incid_edit_fr_borrar_txt)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.incid_edit_fr_borrar_button)).check(matches(not(isDisplayed())));
+
         isDone = true;
         return isDone;
     }

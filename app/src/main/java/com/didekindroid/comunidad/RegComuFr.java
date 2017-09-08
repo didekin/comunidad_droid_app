@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ViewerParentInjectorIf;
+import com.didekindroid.api.ChildViewersInjectorIf;
 import com.didekindroid.comunidad.utils.ComuBundleKey;
 import com.didekindroid.util.CommonAssertionMsg;
 import com.didekinlib.model.comunidad.Comunidad;
@@ -39,7 +39,7 @@ public class RegComuFr extends Fragment {
 
     View frView;
     ViewerRegComuFr viewer;
-    ViewerParentInjectorIf viewerInjector;
+    ChildViewersInjectorIf viewerInjector;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -68,10 +68,10 @@ public class RegComuFr extends Fragment {
             comunidad = null;
         }
 
-        viewerInjector = (ViewerParentInjectorIf) getActivity();
-        viewer = newViewerRegComuFr(frView, viewerInjector.getViewerAsParent());
+        viewerInjector = (ChildViewersInjectorIf) getActivity();
+        viewer = newViewerRegComuFr(frView, viewerInjector.getParentViewer());
         viewer.doViewInViewer(savedInstanceState, comunidad);
-        viewerInjector.setChildInViewer(viewer);
+        viewerInjector.setChildInParentViewer(viewer);
     }
 
     @Override

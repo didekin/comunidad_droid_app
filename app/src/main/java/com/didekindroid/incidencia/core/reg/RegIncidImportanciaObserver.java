@@ -1,7 +1,5 @@
 package com.didekindroid.incidencia.core.reg;
 
-import com.didekindroid.api.ViewerIf;
-
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
@@ -10,7 +8,7 @@ import timber.log.Timber;
  * Date: 29/05/17
  * Time: 17:17
  */
-public class RegIncidImportanciaObserver<T extends ViewerIf & RegIncidImportanciaCallableBack> extends
+public class RegIncidImportanciaObserver<T extends ViewerIncidRegAc> extends
         DisposableSingleObserver<Integer> {
 
     private final T viewerCallBack;
@@ -24,7 +22,7 @@ public class RegIncidImportanciaObserver<T extends ViewerIf & RegIncidImportanci
     public void onSuccess(Integer rowInserted)
     {
         Timber.d("onSuccess()");
-        viewerCallBack.onSuccessRegisterIncidImportancia(rowInserted);
+        viewerCallBack.onSuccessRegisterIncidImportancia();
     }
 
     @Override

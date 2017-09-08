@@ -8,6 +8,7 @@ import com.didekindroid.R;
 import com.didekindroid.api.ActivityMock;
 import com.didekindroid.incidencia.core.edit.IncidEditAc;
 import com.didekinlib.http.ErrorBean;
+import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -22,7 +23,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.makeRegGetIncidImportancia;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
@@ -39,7 +40,7 @@ import static com.didekinlib.model.incidencia.dominio.IncidenciaExceptionMsg.INC
 import static com.didekinlib.model.incidencia.dominio.IncidenciaExceptionMsg.INCIDENCIA_USER_WRONG_INIT;
 import static com.didekinlib.model.incidencia.dominio.IncidenciaExceptionMsg.RESOLUCION_DUPLICATE;
 import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_DATA_NOT_MODIFIED;
-import static com.didekinlib.model.usuariocomunidad.UsuarioComunidadExceptionMsg.ROLES_NOT_FOUND;
+import static com.didekinlib.model.usuariocomunidad.UsuarioComunidadExceptionMsg.USERCOMU_WRONG_INIT;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -109,44 +110,6 @@ public class UiExceptionTest {
         });
         waitAtMost(4, SECONDS).until(isResourceIdDisplayed((R.id.login_ac_layout)));
         waitAtMost(4, SECONDS).until(isToastInView(R.string.user_without_signedUp, activity));
-    }
-
-    @Test
-    public void test_ROLES_NOT_FOUND() throws Exception
-    {
-        final UiException ue = new UiException(new ErrorBean(ROLES_NOT_FOUND));
-
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                ue.processMe(activity);
-            }
-        });
-
-        waitAtMost(5, SECONDS).until(isToastInView(R.string.user_without_signedUp, activity));
-        onView(withId(R.id.login_ac_layout)).check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void test_USER_DATA_NOT_MODIFIED() throws Exception
-    {
-        // Preconditions.
-        signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
-
-        final UiException ue = new UiException(new ErrorBean(USER_DATA_NOT_MODIFIED));
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                ue.processMe(activity);
-            }
-        });
-
-        waitAtMost(5, SECONDS).until(isToastInView(R.string.user_data_not_modified_msg, activity));
-        onView(withId(R.id.user_data_ac_layout)).check(matches(isDisplayed()));
-
-        cleanOptions(CLEAN_JUAN);
     }
 
     @Test
@@ -251,7 +214,8 @@ public class UiExceptionTest {
         // Preconditions.
         signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
         final Intent intentIn = new Intent(activity, IncidEditAc.class);
-        intentIn.putExtra(INCID_IMPORTANCIA_OBJECT.key, makeRegGetIncidImportancia(userComuDaoRemote.seeUserComusByUser().get(0), (short) 3));
+        IncidAndResolBundle resolBundle = new IncidAndResolBundle(makeRegGetIncidImportancia(userComuDaoRemote.seeUserComusByUser().get(0), (short) 3), false);
+        intentIn.putExtra(INCID_RESOLUCION_BUNDLE.key, resolBundle);
 
         final UiException ue = new UiException(new ErrorBean(RESOLUCION_DUPLICATE));
 
@@ -268,5 +232,41 @@ public class UiExceptionTest {
         cleanOptions(CLEAN_JUAN);
     }
 
-    //  ============================== HELPERS  ===================================
+    @Test
+    public void test_USERCOMU_WRONG_INIT() throws Exception
+    {
+        final UiException ue = new UiException(new ErrorBean(USERCOMU_WRONG_INIT));
+
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                ue.processMe(activity);
+            }
+        });
+
+        waitAtMost(5, SECONDS).until(isToastInView(R.string.user_without_signedUp, activity));
+        onView(withId(R.id.login_ac_layout)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void test_USER_DATA_NOT_MODIFIED() throws Exception
+    {
+        // Preconditions.
+        signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
+
+        final UiException ue = new UiException(new ErrorBean(USER_DATA_NOT_MODIFIED));
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                ue.processMe(activity);
+            }
+        });
+
+        waitAtMost(5, SECONDS).until(isToastInView(R.string.user_data_not_modified_msg, activity));
+        onView(withId(R.id.user_data_ac_layout)).check(matches(isDisplayed()));
+
+        cleanOptions(CLEAN_JUAN);
+    }
 }

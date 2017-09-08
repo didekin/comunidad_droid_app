@@ -21,7 +21,7 @@ class CtrlerIncidEditAc extends Controller {
 
     // .................................... INSTANCE METHODS .................................
 
-    boolean seeResolucion(DisposableMaybeObserver<Resolucion> observer, final long incidenciaId, final int resourceIdItemMn)
+    boolean seeResolucion(DisposableMaybeObserver<Resolucion> observer, final long incidenciaId)
     {
         Timber.d("seeResolucion()");
         return subscriptions.add(

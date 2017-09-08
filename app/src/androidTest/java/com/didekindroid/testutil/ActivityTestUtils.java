@@ -22,11 +22,11 @@ import android.widget.Button;
 import android.widget.DatePicker;
 
 import com.didekindroid.R;
+import com.didekindroid.api.ChildViewersInjectorIf;
 import com.didekindroid.api.ControllerIf;
 import com.didekindroid.api.CtrlerSelectListIf;
 import com.didekindroid.api.ViewerIf;
 import com.didekindroid.api.ViewerMock;
-import com.didekindroid.api.ViewerParentInjectorIf;
 import com.didekindroid.api.ViewerSelectListIf;
 import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.usuario.firebase.CtrlerFirebaseTokenIf;
@@ -493,11 +493,11 @@ public final class ActivityTestUtils {
         assertThat(bundle.getLong(bundleKey.getKey()), is(18L));
     }
 
-    public static <T extends AppCompatActivity & ViewerParentInjectorIf> void checkChildInViewer(T activity)
+    public static <T extends AppCompatActivity & ChildViewersInjectorIf> void checkChildInViewer(T activity)
     {
         final ViewerMock viewerChild = new ViewerMock(activity);
-        activity.setChildInViewer(viewerChild);
-        assertThat(activity.getViewerAsParent().getChildViewer(ViewerMock.class), CoreMatchers.<ViewerIf>is(viewerChild));
+        activity.setChildInParentViewer(viewerChild);
+        assertThat(activity.getParentViewer().getChildViewer(ViewerMock.class), CoreMatchers.<ViewerIf>is(viewerChild));
     }
 }
 

@@ -27,6 +27,7 @@ import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.INCID_DEFAULT_DESC;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.RESOLUCION_DEFAULT_DESC;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doResolucion;
+import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidenciaUser;
 import static com.didekindroid.security.SecurityTestUtils.updateSecurityData;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
@@ -46,6 +47,7 @@ import static com.didekinlib.http.GenericExceptionMsg.UNAUTHORIZED_TX_TO_USER;
 import static com.didekinlib.model.incidencia.dominio.IncidenciaExceptionMsg.INCID_IMPORTANCIA_WRONG_INIT;
 import static com.didekinlib.model.usuariocomunidad.UsuarioComunidadExceptionMsg.USERCOMU_WRONG_INIT;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
@@ -95,16 +97,11 @@ public class IncidDaoRemoteTest_2 {
     }
 
     @Test
-    public void testDeleteIncidencia_1() throws InterruptedException, IOException
+    public void testDeleteIncidencia_1() throws InterruptedException, IOException, UiException
     {
-        try {
-            // Caso 1: usuario iniciador sin autoridad adm.
-            signPepeWithIncidImportancia();
-            incidenciaDao.deleteIncidencia(incidImportancia_1.getIncidencia().getIncidenciaId());
-            fail();
-        } catch (UiException ue) {
-            assertThat(ue.getErrorBean().getMessage(), is(UNAUTHORIZED_TX_TO_USER.getHttpMessage()));
-        }
+        // Caso 1: usuario iniciador sin autoridad adm.
+        signPepeWithIncidImportancia();
+        assertThat(incidenciaDao.deleteIncidencia(incidImportancia_1.getIncidencia().getIncidenciaId()), is(1));
     }
 
     @Test
@@ -224,16 +221,6 @@ public class IncidDaoRemoteTest_2 {
     }
 
     @Test
-    public void testSeeResolucion_1() throws InterruptedException, IOException, UiException
-    {
-        whatClean = CLEAN_JUAN_AND_PEPE;
-
-        Resolucion resolucion = signPepeWithResolucion();
-        assertThat(resolucion.getDescripcion(), CoreMatchers.is(RESOLUCION_DEFAULT_DESC));
-        assertThat(resolucion.getCosteEstimado(), is(1122));
-    }
-
-    @Test
     public void testSeeIncidClosedByComu() throws InterruptedException, IOException, UiException
     {
         // CASO OK: consulta por usuario no 'adm'.
@@ -251,6 +238,26 @@ public class IncidDaoRemoteTest_2 {
         List<IncidenciaUser> incidenciaUsers = incidenciaDao.seeIncidsClosedByComu(juanUserComu.getComunidad().getC_Id());
         assertThat(incidenciaUsers.size(), is(1));
         assertThat(incidenciaUsers.get(0).getIncidencia(), is(resolucion.getIncidencia()));
+    }
+
+    @Test
+    public void testSeeResolucion_1() throws InterruptedException, IOException, UiException
+    {
+        whatClean = CLEAN_JUAN_AND_PEPE;
+
+        Resolucion resolucion = signPepeWithResolucion();
+        assertThat(resolucion.getDescripcion(), is(RESOLUCION_DEFAULT_DESC));
+        assertThat(resolucion.getCosteEstimado(), is(1122));
+    }
+
+    @Test
+    public void testSeeResolucion_2() throws InterruptedException, IOException, UiException
+    {
+        whatClean = CLEAN_PEPE;
+
+        // Caso: la incidencia no tiene abierta resolución.
+        Incidencia incidencia = insertGetIncidImportancia(COMU_ESCORIAL_PEPE).getIncidencia();
+        assertThat(incidenciaDao.seeResolucion(incidencia.getIncidenciaId()), nullValue());
     }
 
     @Test

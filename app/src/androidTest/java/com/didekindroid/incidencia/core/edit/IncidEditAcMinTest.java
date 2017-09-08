@@ -9,6 +9,7 @@ import com.didekindroid.R;
 import com.didekindroid.api.ViewerIf;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.core.IncidenciaDataDbHelper;
+import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
@@ -33,7 +34,7 @@ import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkDataEditMinFr;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.doImportanciaSpinner;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_edit_ac_frgs_tag;
 import static com.didekindroid.security.SecurityTestUtils.updateSecurityData;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
@@ -78,6 +79,7 @@ public class IncidEditAcMinTest {
         @Override
         protected Intent getActivityIntent()
         {
+            IncidAndResolBundle resolBundle = null;
             try {
                 IncidImportancia incidImportancia_0 = insertGetIncidImportancia(COMU_REAL_PEPE);
                 // Registro userComu en misma comunidad.
@@ -86,12 +88,12 @@ public class IncidEditAcMinTest {
                 userComuDaoRemote.regUserAndUserComu(userComuJuan).execute();
                 updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
                 incidImportanciaIntent = incidenciaDao.seeIncidImportancia(incidImportancia_0.getIncidencia().getIncidenciaId()).getIncidImportancia();
+                resolBundle = new IncidAndResolBundle(incidImportanciaIntent, false);
             } catch (IOException | UiException e) {
                 fail();
             }
             Intent intent = new Intent();
-            intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportanciaIntent);
-//            intent.putExtra(INCID_RESOLUCION_FLAG.key, false);    //  TODO: ¿eliminar?
+            intent.putExtra(INCID_RESOLUCION_BUNDLE.key, resolBundle);
             return intent;
         }
     };

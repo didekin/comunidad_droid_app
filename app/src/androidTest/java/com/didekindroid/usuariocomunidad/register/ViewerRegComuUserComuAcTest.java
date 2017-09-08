@@ -4,7 +4,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ViewerParentInjectedIf;
+import com.didekindroid.api.ParentViewerInjectedIf;
 import com.didekindroid.comunidad.ViewerRegComuFr;
 import com.didekindroid.exception.UiException;
 
@@ -111,7 +111,7 @@ public class ViewerRegComuUserComuAcTest {
     public void test_OnCreate() throws Exception
     {
         // Check for initialization of fragments viewers.
-        ViewerParentInjectedIf viewerParent = activity.viewer;
+        ParentViewerInjectedIf viewerParent = activity.viewer;
         assertThat(viewerParent.getChildViewer(ViewerRegComuFr.class), notNullValue());
         assertThat(viewerParent.getChildViewer(ViewerRegUserComuFr.class), notNullValue());
         test_DoViewInViewer();

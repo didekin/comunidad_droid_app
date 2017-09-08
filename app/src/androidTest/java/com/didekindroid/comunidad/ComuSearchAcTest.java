@@ -8,7 +8,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ViewerParentInjectorIf;
+import com.didekindroid.api.ChildViewersInjectorIf;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.usuario.userdata.UserDataAc;
 
@@ -80,7 +80,7 @@ public class ComuSearchAcTest {
                 withContentDescription(R.string.navigate_up_txt),
                 isClickable())).check(doesNotExist());
         checkRegComuFrViewEmpty();
-        assertThat(activity.regComuFrg.viewerInjector, CoreMatchers.<ViewerParentInjectorIf>is(activity));
+        assertThat(activity.regComuFrg.viewerInjector, CoreMatchers.<ChildViewersInjectorIf>is(activity));
         assertThat(activity.regComuFrg.viewer.getParentViewer(), CoreMatchers.<ViewerIf>is(activity.viewer));
 
         // Check spinners in fragment.viewer, after calling doInViewer.

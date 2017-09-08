@@ -109,7 +109,7 @@ public class ViewerIncidEditAcTest {
     {
         CtrlerIncidEditAc controllerLocal = new CtrlerIncidEditAc() {
             @Override
-            boolean seeResolucion(DisposableMaybeObserver<Resolucion> observer, long incidenciaId, int resourceIdItemMn)
+            boolean seeResolucion(DisposableMaybeObserver<Resolucion> observer, long incidenciaId)
             {
                 assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
                 return false;

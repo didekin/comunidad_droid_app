@@ -9,9 +9,9 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
+import com.didekindroid.api.ChildViewersInjectorIf;
 import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ViewerParentInjectedIf;
-import com.didekindroid.api.ViewerParentInjectorIf;
+import com.didekindroid.api.ParentViewerInjectedIf;
 import com.didekindroid.comunidad.utils.ComuBundleKey;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.usuariocomunidad.listbycomu.SeeUserComuByComuAc;
@@ -142,7 +142,7 @@ public class ComuDataAcTest {
     @Test
     public void test_GetViewerAsParent() throws Exception
     {
-        assertThat(activity.getViewerAsParent(), Matchers.<ViewerIf>is(activity.viewer));
+        assertThat(activity.getParentViewer(), Matchers.<ViewerIf>is(activity.viewer));
     }
 
     //  =========================  TESTS FOR ACTIVITY LIFECYCLE  ===========================
@@ -150,13 +150,13 @@ public class ComuDataAcTest {
     @Test
     public void test_OnCreate() throws Exception
     {
-        assertThat(activity, isA(ViewerParentInjectorIf.class));
+        assertThat(activity, isA(ChildViewersInjectorIf.class));
         assertThat(activity.acView, notNullValue());
         assertThat(activity.viewer, notNullValue());
         assertThat(activity.regComuFrg, notNullValue());
 
-        assertThat(activity.viewer, isA(ViewerParentInjectedIf.class));
-        assertThat(activity.regComuFrg.viewerInjector, CoreMatchers.<ViewerParentInjectorIf>is(activity));
+        assertThat(activity.viewer, isA(ParentViewerInjectedIf.class));
+        assertThat(activity.regComuFrg.viewerInjector, CoreMatchers.<ChildViewersInjectorIf>is(activity));
         assertThat(activity.regComuFrg.viewer.getParentViewer(), CoreMatchers.<ViewerIf>is(activity.viewer));
 
 

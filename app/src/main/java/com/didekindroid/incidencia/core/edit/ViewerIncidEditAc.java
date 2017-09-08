@@ -56,8 +56,7 @@ class ViewerIncidEditAc extends ViewerParent<View, CtrlerIncidEditAc> {
         Timber.d("checkResolucion()");
         return controller.seeResolucion(
                 new ResolucionObserver(resourceIdItemMn),
-                resolBundle.getIncidImportancia().getIncidencia().getIncidenciaId(),
-                resourceIdItemMn);
+                resolBundle.getIncidImportancia().getIncidencia().getIncidenciaId());
     }
 
     void onSuccessCheckResolucion(Resolucion resolucion, int resourceIdItemMn)
@@ -82,7 +81,7 @@ class ViewerIncidEditAc extends ViewerParent<View, CtrlerIncidEditAc> {
         intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, resolBundle.getIncidImportancia());
         if (resolucion != null) {
             intent.putExtra(INCID_RESOLUCION_OBJECT.key, resolucion);
-            ViewerIncidEditMaxFr childViewer = getChildViewer(ViewerIncidEditMaxFr.class);
+            ViewerIncidEditFr childViewer = getChildViewer(ViewerIncidEditFr.class);
             if (childViewer != null) {
                 childViewer.setHasResolucion();
             }

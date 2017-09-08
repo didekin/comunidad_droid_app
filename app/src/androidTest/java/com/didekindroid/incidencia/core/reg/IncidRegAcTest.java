@@ -149,7 +149,7 @@ public class IncidRegAcTest {
     @Test
     public void testOnCreate()
     {
-        assertThat(activity.getViewerAsParent(), notNullValue());
+        assertThat(activity.getParentViewer(), notNullValue());
         IncidRegFr fragment = (IncidRegFr) activity.getSupportFragmentManager().findFragmentById(R.id.incid_reg_frg);
         assertThat(fragment.viewerInjector, instanceOf(IncidRegAc.class));
         assertThat(fragment.viewer.getParentViewer(), CoreMatchers.<ViewerIf>is(activity.viewer));

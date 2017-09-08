@@ -43,7 +43,6 @@ import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NOT_COMPARAB
 import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NOT_EQUAL_ABLE;
 import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NOT_HASHABLE;
 import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_WRONG_INIT;
-import static com.didekinlib.model.usuariocomunidad.UsuarioComunidadExceptionMsg.ROLES_NOT_FOUND;
 import static com.didekinlib.model.usuariocomunidad.UsuarioComunidadExceptionMsg.USERCOMU_WRONG_INIT;
 import static com.didekinlib.model.usuariocomunidad.UsuarioComunidadExceptionMsg.USER_COMU_NOT_FOUND;
 
@@ -83,7 +82,6 @@ public final class UiExceptionRouter implements UiExceptionRouterIf {
         router.put(PASSWORD_NOT_SENT.getHttpMessage(), new ActionForUiException(UserDataAc.class, R.string.user_email_wrong));
         router.put(RESOLUCION_DUPLICATE.getHttpMessage(), new ActionForUiException(R.string.resolucion_duplicada));
         router.put(RESOLUCION_WRONG_INIT.getHttpMessage(), INCID_SEE_BY_COMU_ACC);
-        router.put(ROLES_NOT_FOUND.getHttpMessage(), LOGIN_ACC);
         router.put(SUFIJO_NUM_IN_COMUNIDAD_NULL.getHttpMessage(), GENERIC_APP_ACC);
 //        router.put(TOKEN_NOT_DELETED.getHttpMessage(), TOKEN_TO_ERASE);  // TODO: qué hago con el borrado en servidor de token inservibles.
         router.put(TOKEN_NULL.getHttpMessage(), LOGIN_ACC);

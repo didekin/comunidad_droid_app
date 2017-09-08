@@ -7,8 +7,8 @@ import android.view.View;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ViewerParentInjectedIf;
-import com.didekindroid.api.ViewerParentInjectorIf;
+import com.didekindroid.api.ParentViewerInjectedIf;
+import com.didekindroid.api.ChildViewersInjectorIf;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import timber.log.Timber;
@@ -37,7 +37,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * 2. The activity SeeUserComuByUserAc is started.
  */
 @SuppressWarnings("ConstantConditions")
-public class RegUserComuAc extends AppCompatActivity implements ViewerParentInjectorIf {
+public class RegUserComuAc extends AppCompatActivity implements ChildViewersInjectorIf {
 
     RegUserComuFr regUserComuFr;
     View acView;
@@ -71,19 +71,19 @@ public class RegUserComuAc extends AppCompatActivity implements ViewerParentInje
         viewer.clearSubscriptions();
     }
 
-    // ==================================  ViewerParentInjectorIf  =================================
+    // ==================================  ChildViewersInjectorIf  =================================
 
     @Override
-    public ViewerParentInjectedIf getViewerAsParent()
+    public ParentViewerInjectedIf getParentViewer()
     {
-        Timber.d("getViewerAsParent()");
+        Timber.d("getParentViewer()");
         return viewer;
     }
 
     @Override
-    public void setChildInViewer(ViewerIf viewerChild)
+    public void setChildInParentViewer(ViewerIf viewerChild)
     {
-        Timber.d("setChildInViewer()");
+        Timber.d("setChildInParentViewer()");
         viewer.setChildViewer(viewerChild);
     }
 

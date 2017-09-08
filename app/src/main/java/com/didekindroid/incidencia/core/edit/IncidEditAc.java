@@ -2,16 +2,15 @@ package com.didekindroid.incidencia.core.edit;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
+import com.didekindroid.api.ChildViewersInjectorIf;
 import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ViewerParentInjectedIf;
-import com.didekindroid.api.ViewerParentInjectorIf;
+import com.didekindroid.api.ParentViewerInjectedIf;
 import com.didekindroid.router.ActivityInitiator;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
@@ -31,16 +30,16 @@ import static com.didekindroid.util.UIutils.doToolBar;
 /**
  * Preconditions:
  * 1. An intent key is received with the IncidImportancia instance to be edited.
- * -- Users with maximum powers can modify description and ambito of the incidencia. Users with max powers
+ * -- Users with maximum powers can modify description and ambito of the incidencia; they can also
+ * erase an incidencia if there is not resolucion open. Users with max powers
  * are those with adm function or users who register the incidencia in the first time.
- * Users with adm function can also erase an incidencia if there is not resolucion open.
  * -- Users with minimum powers can only modify the importance assigned by them.
  * 2. An intent key is received with a flag signalling if the incidencia has an open resolucion.
  * Postconditions:
  * 1. An incidencia is updated in BD, once edited.
  * 3. An updated incidencias list of the comunidad is showed.
  */
-public class IncidEditAc extends AppCompatActivity implements ViewerParentInjectorIf {
+public class IncidEditAc extends AppCompatActivity implements ChildViewersInjectorIf {
 
     View acView;
     ViewerIncidEditAc viewer;
@@ -62,10 +61,10 @@ public class IncidEditAc extends AppCompatActivity implements ViewerParentInject
         setContentView(acView);
         doToolBar(this, true);
 
-        Fragment fragmentToAdd;
+        IncidEditFr fragmentToAdd;
 
         if (savedInstanceState != null) {
-            fragmentToAdd = getSupportFragmentManager().findFragmentByTag(incid_edit_ac_frgs_tag);
+            fragmentToAdd = (IncidEditFr) getSupportFragmentManager().findFragmentByTag(incid_edit_ac_frgs_tag);
             assertTrue(fragmentToAdd != null, fragment_should_be_initialized);
             if (viewer == null) {
                 initViewer();
@@ -81,7 +80,7 @@ public class IncidEditAc extends AppCompatActivity implements ViewerParentInject
             fragmentToAdd = new IncidEditMinFr();
         }
 
-        argsFragment.putSerializable(INCID_RESOLUCION_BUNDLE.key, resolBundle); // TODO: testar que ambos tipos de fragmentos reciben un IncidenciaResolBundle.
+        argsFragment.putSerializable(INCID_RESOLUCION_BUNDLE.key, resolBundle);
         fragmentToAdd.setArguments(argsFragment);
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.incid_edit_fragment_container_ac, fragmentToAdd, incid_edit_ac_frgs_tag)
@@ -106,20 +105,20 @@ public class IncidEditAc extends AppCompatActivity implements ViewerParentInject
         viewer.saveState(outState);
     }
 
-    // ==================================  ViewerParentInjectorIf  =================================
+    // ==================================  ChildViewersInjectorIf  =================================
 
     @Override
-    public ViewerParentInjectedIf getViewerAsParent()
+    public ParentViewerInjectedIf getParentViewer()
     {
-        Timber.d("getViewerAsParent()");
+        Timber.d("getParentViewer()");
         return viewer;
     }
 
     @Override
-    public void setChildInViewer(ViewerIf childInViewer)
+    public void setChildInParentViewer(ViewerIf childViewer)
     {
-        Timber.d("setChildInViewer()");
-        viewer.setChildViewer(childInViewer);
+        Timber.d("setChildInParentViewer()");
+        viewer.setChildViewer(childViewer);
     }
 
 //    ......................... HELPERS ..........................

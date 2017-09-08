@@ -7,9 +7,9 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
+import com.didekindroid.api.ChildViewersInjectorIf;
 import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ViewerParentInjectedIf;
-import com.didekindroid.api.ViewerParentInjectorIf;
+import com.didekindroid.api.ParentViewerInjectedIf;
 import com.didekindroid.router.ActivityInitiator;
 
 import timber.log.Timber;
@@ -28,7 +28,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * -- municipio with codInProvincia and provinciaId.
  */
 @SuppressWarnings("ConstantConditions")
-public class ComuSearchAc extends AppCompatActivity implements ViewerParentInjectorIf {
+public class ComuSearchAc extends AppCompatActivity implements ChildViewersInjectorIf {
 
     View acView;
     RegComuFr regComuFrg;
@@ -65,19 +65,19 @@ public class ComuSearchAc extends AppCompatActivity implements ViewerParentInjec
         viewer.saveState(outState);
     }
 
-    // ==================================  ViewerParentInjectorIf  =================================
+    // ==================================  ChildViewersInjectorIf  =================================
 
     @Override
-    public ViewerParentInjectedIf getViewerAsParent()
+    public ParentViewerInjectedIf getParentViewer()
     {
-        Timber.d("getViewerAsParent()");
+        Timber.d("getParentViewer()");
         return viewer;
     }
 
     @Override
-    public void setChildInViewer(ViewerIf viewerChild)
+    public void setChildInParentViewer(ViewerIf viewerChild)
     {
-        Timber.d("setChildInViewer()");
+        Timber.d("setChildInParentViewer()");
         viewer.setChildViewer(viewerChild);
     }
 

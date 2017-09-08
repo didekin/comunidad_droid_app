@@ -9,8 +9,8 @@ import android.view.View;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ViewerParentInjectedIf;
-import com.didekindroid.api.ViewerParentInjectorIf;
+import com.didekindroid.api.ParentViewerInjectedIf;
+import com.didekindroid.api.ChildViewersInjectorIf;
 import com.didekindroid.comunidad.RegComuFr;
 import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.usuario.RegUserFr;
@@ -29,7 +29,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  */
 // TODO: añadir un campo de número de vecinos en la comunidad (aprox.).
 public class RegComuAndUserAndUserComuAc extends AppCompatActivity implements
-        ViewerParentInjectorIf {
+        ChildViewersInjectorIf {
 
     RegComuFr regComuFr;
     RegUserComuFr regUserComuFr;
@@ -63,19 +63,19 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity implements
         viewer.clearSubscriptions();
     }
 
-    // ==================================  ViewerParentInjectorIf  =================================
+    // ==================================  ChildViewersInjectorIf  =================================
 
     @Override
-    public ViewerParentInjectedIf getViewerAsParent()
+    public ParentViewerInjectedIf getParentViewer()
     {
-        Timber.d("getViewerAsParent()");
+        Timber.d("getParentViewer()");
         return viewer;
     }
 
     @Override
-    public void setChildInViewer(ViewerIf viewerChild)
+    public void setChildInParentViewer(ViewerIf viewerChild)
     {
-        Timber.d("setChildInViewer()");
+        Timber.d("setChildInParentViewer()");
         viewer.setChildViewer(viewerChild);
     }
 

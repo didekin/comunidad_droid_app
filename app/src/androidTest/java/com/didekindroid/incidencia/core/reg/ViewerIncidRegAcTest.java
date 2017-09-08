@@ -146,7 +146,7 @@ public class ViewerIncidRegAcTest {
     @Test
     public void testOnSuccessRegisterIncidencia() throws Exception
     {
-        viewer.onSuccessRegisterIncidImportancia(2);
+        viewer.onSuccessRegisterIncidImportancia();
         // Check change of activity.
         waitAtMost(3, SECONDS).until(isViewDisplayed(withId(R.id.incid_see_open_by_comu_ac)));
     }

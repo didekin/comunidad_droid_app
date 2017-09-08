@@ -132,7 +132,7 @@ public class ViewerComuSearchAcTest {
                 assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_B), is(BEFORE_METHOD_EXEC));
             }
         };
-        activity.setChildInViewer(viewerRegComuFrOld);
+        activity.setChildInParentViewer(viewerRegComuFrOld);
         activity.viewer.setController(new CtrlerAuthToken());
 
         Button button = activity.acView.findViewById(R.id.searchComunidad_Bton);

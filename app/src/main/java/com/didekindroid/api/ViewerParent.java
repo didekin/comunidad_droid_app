@@ -1,6 +1,5 @@
 package com.didekindroid.api;
 
-import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -17,7 +16,7 @@ import timber.log.Timber;
  */
 
 public class ViewerParent<T extends View, C extends ControllerIf> extends Viewer<T, C> implements
-        ViewerParentInjectedIf<T, C> {
+        ParentViewerInjectedIf<T, C> {
 
     private final Map<Class<? extends ViewerIf>, ViewerIf> childViewers;
 

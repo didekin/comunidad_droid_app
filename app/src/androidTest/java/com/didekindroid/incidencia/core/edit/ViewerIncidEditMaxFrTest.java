@@ -2,6 +2,7 @@ package com.didekindroid.incidencia.core.edit;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -10,8 +11,12 @@ import com.didekindroid.api.ViewerIf;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.core.CtrlerIncidRegEditFr;
 import com.didekindroid.incidencia.core.IncidenciaDataDbHelper;
+import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
+import com.didekinlib.model.incidencia.dominio.Incidencia;
+import com.didekinlib.model.usuario.Usuario;
+import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.After;
@@ -46,14 +51,14 @@ import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
+import static com.didekinlib.model.usuariocomunidad.Rol.ADMINISTRADOR;
+import static com.didekinlib.model.usuariocomunidad.Rol.PROPIETARIO;
 import static io.reactivex.Single.just;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
@@ -66,6 +71,9 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class ViewerIncidEditMaxFrTest {
 
+    IncidEditAc activity;
+    ViewerIncidEditMaxFr viewer;
+    IncidenciaDataDbHelper dbHelper;
     IncidAndResolBundle resolBundle;
 
     @Rule
@@ -74,7 +82,7 @@ public class ViewerIncidEditMaxFrTest {
         protected Intent getActivityIntent()
         {
             try {
-                // Perfil pro, inicidador de la incidencia.
+                // Perfil pro, iniciador de la incidencia. Incidencia sin resolución abierta.
                 resolBundle = new IncidAndResolBundle(insertGetIncidImportancia(COMU_REAL_JUAN), false);
             } catch (IOException | UiException e) {
                 fail();
@@ -86,16 +94,12 @@ public class ViewerIncidEditMaxFrTest {
         }
     };
 
-    IncidEditAc activity;
-    ViewerIncidEditMaxFr viewer;
-    IncidenciaDataDbHelper dbHelper;
-
     @Before
     public void setUp() throws Exception
     {
         activity = activityRule.getActivity();
-        dbHelper = new IncidenciaDataDbHelper(activity);
         IncidEditMaxFr fragment = (IncidEditMaxFr) activity.getSupportFragmentManager().findFragmentByTag(incid_edit_ac_frgs_tag);
+        dbHelper = new IncidenciaDataDbHelper(activity);
 
         AtomicReference<ViewerIncidEditMaxFr> viewerAtomic = new AtomicReference<>(null);
         viewerAtomic.compareAndSet(null, fragment.viewer);
@@ -116,7 +120,7 @@ public class ViewerIncidEditMaxFrTest {
     public void testNewViewerIncidEditMaxFr() throws Exception
     {
         assertThat(viewer.getController(), instanceOf(CtrlerIncidRegEditFr.class));
-        assertThat(viewer.getParentViewer(), CoreMatchers.<ViewerIf>is(activity.getViewerAsParent()));
+        assertThat(viewer.getParentViewer(), CoreMatchers.<ViewerIf>is(activity.getParentViewer()));
         assertThat(viewer.viewerAmbitoIncidSpinner, notNullValue());
         assertThat(viewer.viewerImportanciaSpinner, notNullValue());
     }
@@ -150,7 +154,7 @@ public class ViewerIncidEditMaxFrTest {
             }
         });
         // Checks: NOT erase button.
-        waitAtMost(4,SECONDS).untilTrue(viewer.hasResolucion);
+        waitAtMost(4, SECONDS).untilTrue(viewer.hasResolucion);
         checkScreenEditMaxPowerFrNotErase(newResolBundle);
     }
 
@@ -191,7 +195,7 @@ public class ViewerIncidEditMaxFrTest {
     }
 
     @Test
-    public void testOnClickButtonErase() throws Exception     // TODO: seguir aquí. En el servidor no admite el usuario que da de alta la incidencia.
+    public void testOnClickButtonErase() throws Exception
     {
         // Preconditions.
         checkScreenEditMaxPowerFrErase(activity.resolBundle);
@@ -257,6 +261,38 @@ public class ViewerIncidEditMaxFrTest {
                 viewer.viewerImportanciaSpinner.getController());
     }
 
+    @Test
+    public void test_CanUserEraseIRncidencia() throws Exception
+    {
+        viewer.hasResolucion.set(false);
+        assertThat(viewer.canUserEraseIncidencia(doIncidImportancia("noAdm_name", PROPIETARIO.function)), is(false));
+        assertThat(viewer.canUserEraseIncidencia(doIncidImportancia("initiator_name", PROPIETARIO.function)), is(true));
+        assertThat(viewer.canUserEraseIncidencia(doIncidImportancia("adm_name", ADMINISTRADOR.function)), is(true));
+
+        viewer.hasResolucion.set(true);
+        assertThat(viewer.canUserEraseIncidencia(doIncidImportancia("noAdm_name", PROPIETARIO.function)), is(false));
+        assertThat(viewer.canUserEraseIncidencia(doIncidImportancia("initiator_name", PROPIETARIO.function)), is(false));
+        assertThat(viewer.canUserEraseIncidencia(doIncidImportancia("adm_name", ADMINISTRADOR.function)), is(false));
+
+    }
+
     //    ............................... HELPERS .................................
+
+    @NonNull
+    private IncidImportancia doIncidImportancia(String ratingUserName, String rol)
+    {
+        return new IncidImportancia.IncidImportanciaBuilder(
+                new Incidencia.IncidenciaBuilder()
+                        .incidenciaId(999L)
+                        .comunidad(new Comunidad.ComunidadBuilder().c_id(111L).build())
+                        .userName("initiator_name").build())
+                .usuarioComunidad(
+                        new UsuarioComunidad.UserComuBuilder(
+                                new Comunidad.ComunidadBuilder().c_id(111L).build(),
+                                new Usuario.UsuarioBuilder().userName(ratingUserName).build())
+                                .roles(rol)
+                                .build())
+                .build();
+    }
 
 }
