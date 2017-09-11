@@ -1,7 +1,6 @@
 package com.didekindroid.incidencia.core.edit;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -21,9 +20,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicReference;
 
-import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
@@ -38,12 +35,9 @@ import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_
 import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_edit_ac_frgs_tag;
 import static com.didekindroid.security.SecurityTestUtils.updateSecurityData;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
-import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
-import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
-import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
@@ -67,11 +61,8 @@ import static org.junit.Assert.fail;
  * Usuario inicial en sesión SIN permisos para modificar o borrar una incidencia.
  */
 @RunWith(AndroidJUnit4.class)
-public class IncidEditAcMinTest {
+public class IncidEditAcMinTest extends IncidEditAcTest {
 
-    final static AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
-
-    IncidEditAc activity;
     IncidImportancia incidImportanciaIntent;
 
     @Rule
@@ -187,37 +178,5 @@ public class IncidEditAcMinTest {
         IncidEditMinFr fragment = (IncidEditMinFr) activity.getSupportFragmentManager().findFragmentByTag(incid_edit_ac_frgs_tag);
         assertThat(fragment.viewerInjector, instanceOf(IncidEditAc.class));
         assertThat(fragment.viewer.getParentViewer(), CoreMatchers.<ViewerIf>is(activity.viewer));
-    }
-
-    @Test
-    public void testOnSaveInstanceState()
-    {
-        activity.viewer = new ViewerIncidEditAc(activity) {
-            @Override
-            public void saveState(Bundle savedState)
-            {
-                assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
-            }
-
-            @Override
-            public int clearSubscriptions()  // It is called from onStop() and gives problems.
-            {
-                return 0;
-            }
-        };
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                getInstrumentation().callActivityOnSaveInstanceState(activity, new Bundle(0));
-            }
-        });
-        waitAtMost(1, SECONDS).untilAtomic(flagMethodExec, is(AFTER_METHOD_EXEC_A));
-    }
-
-    @Test
-    public void testOnStop()
-    {
-        checkSubscriptionsOnStop(activity, activity.viewer.getController());
     }
 }

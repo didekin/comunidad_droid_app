@@ -14,7 +14,6 @@ import static com.didekindroid.util.UIutils.doToolBar;
 public class ActivityMock extends AppCompatActivity {
 
     Class<? extends Activity> defaultActivityClassToGo;
-    volatile short counter;
     View acView;
 
     @Override
@@ -30,13 +29,4 @@ public class ActivityMock extends AppCompatActivity {
         defaultActivityClassToGo = ActivityNextMock.class;
     }
 
-    public short getCounter()
-    {
-        return counter;
-    }
-
-    public void setCounter(short counter)
-    {
-        this.counter = counter;
-    }
 }

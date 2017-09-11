@@ -25,6 +25,7 @@ import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.replaceText;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.Visibility.GONE;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
@@ -151,8 +152,8 @@ public final class IncidEspressoTestUtils {
                 withText(R.string.incid_importancia_reg_edit_button_rot)
         )).check(matches(isDisplayed()));
 
-        onView(withId(R.id.incid_edit_fr_borrar_txt)).check(matches(not(isDisplayed())));
-        onView(withId(R.id.incid_edit_fr_borrar_button)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.incid_edit_fr_borrar_txt)).check(doesNotExist());
+        onView(withId(R.id.incid_edit_fr_borrar_button)).check(doesNotExist());
 
         isDone = true;
         return isDone;

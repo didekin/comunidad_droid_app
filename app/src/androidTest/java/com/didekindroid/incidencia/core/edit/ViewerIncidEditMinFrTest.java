@@ -181,15 +181,6 @@ public class ViewerIncidEditMinFrTest {
         waitAtMost(3, SECONDS).until(isViewDisplayed(withId(incidSeeOpenAcLayout)));
     }
 
-    //    ============================  LIFE CYCLE TESTS  ===================================
-
-    @Test
-    public void testClearSubscriptions() throws Exception
-    {
-        checkSubscriptionsOnStop(activity, viewer.viewerImportanciaSpinner.getController(),
-                viewer.getController());    // TODO: sobra?  Son diferentes: uno es para el fragment y el otro para el viewer. Poner rótulos diferenciadores.
-    }
-
     @Test
     public void test_saveState() throws Exception
     {
@@ -197,15 +188,16 @@ public class ViewerIncidEditMinFrTest {
         viewer.viewerImportanciaSpinner.setItemSelectedId((short) 31);
 
         viewer.saveState(bundleTest);
-
         assertThat(bundleTest.getLong(INCID_IMPORTANCIA_NUMBER.key), is(31L));
     }
 
-    @Test
-    public void testOnStop()
-    {
-        checkSubscriptionsOnStop(activity, viewer.getController());   // TODO: sobra?
-    }
+    //    ============================  LIFE CYCLE TESTS  ===================================
 
-    // TODO: onCreateView, onViewCreated, onSaveInstanceState,  getViewerIncidEdit().    LO mismo para ViewerIncidEditMax.
+    /* We check that all the viewers' controllers are invoked, as the result of invoking the method viewer.clearSubscriptions.
+     * It serves also as a test on the activity's onStop() method. */
+    @Test
+    public void testClearSubscriptions() throws Exception
+    {
+        checkSubscriptionsOnStop(activity, viewer.viewerImportanciaSpinner.getController(), viewer.getController());
+    }
 }

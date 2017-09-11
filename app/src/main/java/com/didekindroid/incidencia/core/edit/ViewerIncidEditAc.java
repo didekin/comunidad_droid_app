@@ -81,9 +81,8 @@ class ViewerIncidEditAc extends ViewerParent<View, CtrlerIncidEditAc> {
         intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, resolBundle.getIncidImportancia());
         if (resolucion != null) {
             intent.putExtra(INCID_RESOLUCION_OBJECT.key, resolucion);
-            ViewerIncidEditFr childViewer = getChildViewer(ViewerIncidEditFr.class);
-            if (childViewer != null) {
-                childViewer.setHasResolucion();
+            for (ViewerIncidEditFr child : getChildViewersFromSuperClass(ViewerIncidEditFr.class)) {
+                child.setHasResolucion();
             }
         }
         activity.setIntent(intent);

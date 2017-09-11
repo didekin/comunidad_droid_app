@@ -117,13 +117,13 @@ final class ViewerIncidEditMaxFr extends ViewerIncidEditFr {
         new ActivityInitiator(activity).initAcWithBundle(new Bundle(0));
     }
 
+    //    ============================  LIFE CYCLE   ===================================
+
     @SuppressWarnings("ConstantConditions")
     @Override
     public int clearSubscriptions()
     {
-        Timber.d("clearSubscriptions()");
-        return getController().clearSubscriptions()
-                + viewerImportanciaSpinner.clearSubscriptions()
+        return super.clearSubscriptions()
                 + viewerAmbitoIncidSpinner.clearSubscriptions();
     }
 

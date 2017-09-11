@@ -116,12 +116,14 @@ abstract class ViewerIncidEditFr extends Viewer<View, CtrlerIncidRegEditFr> impl
         new ActivityInitiator(activity).initAcWithBundle(new Bundle(0));
     }
 
+    //    ============================  LIFE CYCLE   ===================================
+
     @SuppressWarnings("ConstantConditions")
     @Override
     public int clearSubscriptions()
     {
         Timber.d("clearSubscriptions()");
-        return getController().clearSubscriptions()
+        return controller.clearSubscriptions()
                 + viewerImportanciaSpinner.clearSubscriptions();
     }
 

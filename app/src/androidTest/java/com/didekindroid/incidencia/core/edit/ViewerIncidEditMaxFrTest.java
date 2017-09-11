@@ -234,11 +234,18 @@ public class ViewerIncidEditMaxFrTest {
     }
 
     @Test
-    public void testClearSubscriptions() throws Exception
+    public void test_CanUserEraseIRncidencia() throws Exception
     {
-        checkSubscriptionsOnStop(activity, viewer.viewerAmbitoIncidSpinner.getController(),
-                viewer.viewerImportanciaSpinner.getController(),
-                viewer.getController());
+        viewer.hasResolucion.set(false);
+        assertThat(viewer.canUserEraseIncidencia(doIncidImportancia("noAdm_name", PROPIETARIO.function)), is(false));
+        assertThat(viewer.canUserEraseIncidencia(doIncidImportancia("initiator_name", PROPIETARIO.function)), is(true));
+        assertThat(viewer.canUserEraseIncidencia(doIncidImportancia("adm_name", ADMINISTRADOR.function)), is(true));
+
+        viewer.hasResolucion.set(true);
+        assertThat(viewer.canUserEraseIncidencia(doIncidImportancia("noAdm_name", PROPIETARIO.function)), is(false));
+        assertThat(viewer.canUserEraseIncidencia(doIncidImportancia("initiator_name", PROPIETARIO.function)), is(false));
+        assertThat(viewer.canUserEraseIncidencia(doIncidImportancia("adm_name", ADMINISTRADOR.function)), is(false));
+
     }
 
     @Test
@@ -253,27 +260,16 @@ public class ViewerIncidEditMaxFrTest {
         assertThat(bundleTest.getLong(INCID_IMPORTANCIA_NUMBER.key), is(31L));
     }
 
+    //    ============================  LIFE CYCLE TESTS  ===================================
+
+    /* We check that all the viewers' controllers are invoked, as the result of invoking the method viewer.clearSubscriptions.
+     * It serves also as a test on the activity's onStop() method. */
     @Test
-    public void testOnStop()
+    public void testClearSubscriptions() throws Exception
     {
-        checkSubscriptionsOnStop(activity, viewer.getController(),
-                viewer.viewerAmbitoIncidSpinner.getController(),
-                viewer.viewerImportanciaSpinner.getController());
-    }
-
-    @Test
-    public void test_CanUserEraseIRncidencia() throws Exception
-    {
-        viewer.hasResolucion.set(false);
-        assertThat(viewer.canUserEraseIncidencia(doIncidImportancia("noAdm_name", PROPIETARIO.function)), is(false));
-        assertThat(viewer.canUserEraseIncidencia(doIncidImportancia("initiator_name", PROPIETARIO.function)), is(true));
-        assertThat(viewer.canUserEraseIncidencia(doIncidImportancia("adm_name", ADMINISTRADOR.function)), is(true));
-
-        viewer.hasResolucion.set(true);
-        assertThat(viewer.canUserEraseIncidencia(doIncidImportancia("noAdm_name", PROPIETARIO.function)), is(false));
-        assertThat(viewer.canUserEraseIncidencia(doIncidImportancia("initiator_name", PROPIETARIO.function)), is(false));
-        assertThat(viewer.canUserEraseIncidencia(doIncidImportancia("adm_name", ADMINISTRADOR.function)), is(false));
-
+        checkSubscriptionsOnStop(activity, viewer.viewerAmbitoIncidSpinner.getController(),
+                viewer.viewerImportanciaSpinner.getController(),
+                viewer.getController());
     }
 
     //    ............................... HELPERS .................................
@@ -294,5 +290,4 @@ public class ViewerIncidEditMaxFrTest {
                                 .build())
                 .build();
     }
-
 }
