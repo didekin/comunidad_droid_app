@@ -8,6 +8,7 @@ import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekinlib.model.incidencia.dominio.Avance;
+import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 
 import org.junit.BeforeClass;
@@ -34,6 +35,7 @@ import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
@@ -113,7 +115,7 @@ public class IncidResolucionEditFrTest_2 extends IncidResolucionAbstractTest {
     @Test
     public void testOnCreate_1() throws Exception
     {
-        assertThat(mResolucionIntent.getAvances().size(), is(1));
+        assertThat(resolucionIntent.getAvances().size(), is(1));
         checkScreenResolucionEditFr();
     }
 
@@ -147,7 +149,7 @@ public class IncidResolucionEditFrTest_2 extends IncidResolucionAbstractTest {
         // Verificamos pantalla de llegada, intent y BD.
         onView(withId(R.id.incid_edit_fragment_container_ac)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_edit_maxpower_fr_layout)).check(matches(isDisplayed()));
-        intended(hasExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia));
+        intended(hasExtra(INCID_RESOLUCION_BUNDLE.key, new IncidAndResolBundle(incidImportancia, resolucion != null)));
         Resolucion resolucionDb = incidenciaDao.seeResolucion(resolucion.getIncidencia().getIncidenciaId());
         assertThat(resolucionDb.getAvances().size(), is(2));
         assertThat(resolucionDb.getAvances().get(1).getAvanceDesc(), is("avance2_desc_válida"));

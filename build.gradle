@@ -12,7 +12,9 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
-        mavenCentral()
+        maven {
+            url "https://maven.google.com"
+        }
         flatDir {
             dirs '/Users/pedro/Documents/git_projects/didekinlibs/didekinlib_model/releases/master/',
                     '/Users/pedro/Documents/git_projects/didekinlibs/didekinlib_gcm/releases/master/',
@@ -34,16 +36,15 @@ ext {
     minSdkVersion = 19
     targetSdkVersion = 26
     compileSdkVersion = 26
-    buildToolsVersion = '26.0.0'
+    buildToolsVersion = '26.0.1'
 
     sourceCompatibilityVersion = JavaVersion.VERSION_1_7
     targetCompatibilityVersion = JavaVersion.VERSION_1_7
 
-    testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
-    androidSupportVersion = '26.0.0-alpha1'
-    espressoVersion = '2.3-alpha'
-    testRunnerRulesVersion = '0.6-aplpha'
-    didekinlibsVersion = 'a-0.1.30'
+    androidSupportVersion = '26.0.2'
+    espressoVersion = '3.0.1'
+    testRunnerRulesVersion = '1.0.1'
+    didekinlibsVersion = 'a-0.1.34'
 
     didekinlib_model = ":didekinlib_model-$rootProject.ext.didekinlibsVersion:@jar"
     didekinlib_http = ":didekinlib_http-$rootProject.ext.didekinlibsVersion:@jar"
@@ -69,10 +70,13 @@ ext {
                        "com.android.support:gridlayout-v7:$rootProject.ext.androidSupportVersion"]
 
     junit = ["junit:junit:4.12"]
+    testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
 
-    espresso = ["com.android.support.test:runner:$rootProject.ext.testRunnerRulesVersion",
-                "com.android.support.test:rules:$rootProject.ext.testRunnerRulesVersion",
-                "com.android.support.test.espresso:espresso-core:$rootProject.ext.espressoVersion",
+    testOrchestrator =["com.android.support.test:orchestrator:$rootProject.ext.testRunnerRulesVersion"]
+
+    testRunner = ["com.android.support.test:runner:$rootProject.ext.testRunnerRulesVersion"]
+    testRuler = ["com.android.support.test:rules:$rootProject.ext.testRunnerRulesVersion"]
+    espresso = ["com.android.support.test.espresso:espresso-core:$rootProject.ext.espressoVersion",
                 "com.android.support.test.espresso:espresso-intents:$rootProject.ext.espressoVersion",
                 "com.android.support.test.espresso:espresso-contrib:$rootProject.ext.espressoVersion",
                 "com.android.support.test.espresso:espresso-idling-resource:$rootProject.ext.espressoVersion"]

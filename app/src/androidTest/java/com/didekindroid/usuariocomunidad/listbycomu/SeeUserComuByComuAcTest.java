@@ -80,8 +80,6 @@ public class SeeUserComuByComuAcTest {
         }
     };
 
-    Intent intent;
-
     @Before
     public void setUp() throws Exception
     {
@@ -123,8 +121,14 @@ public class SeeUserComuByComuAcTest {
     @Test
     public void testOnStop() throws Exception
     {
-       getInstrumentation().callActivityOnStop(activity);
-        assertThat(fragment.viewer.getController().getSubscriptions().size(), is(0));
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                getInstrumentation().callActivityOnStop(activity);
+                assertThat(fragment.viewer.getController().getSubscriptions().size(), is(0));
+            }
+        });
     }
 
     //    =====================================  MENU TESTS  =======================================

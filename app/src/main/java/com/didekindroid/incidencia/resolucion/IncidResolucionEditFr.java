@@ -19,6 +19,7 @@ import com.didekindroid.incidencia.list.open.IncidSeeOpenByComuAc;
 import com.didekindroid.util.ConnectionUtils;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.Avance;
+import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
@@ -32,6 +33,7 @@ import timber.log.Timber;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.incidencia_should_be_cancelled;
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.resolucion_fechaPrev_should_be_initialized;
@@ -53,8 +55,8 @@ import static com.didekindroid.util.UIutils.makeToast;
  */
 public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
 
-    Resolucion mResolucion;
-    IncidImportancia mIncidImportancia;
+    Resolucion resolucion;
+    IncidImportancia incidImportancia;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -94,16 +96,16 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
         Timber.d("onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
 
-        mIncidImportancia = (IncidImportancia) getArguments().getSerializable(INCID_IMPORTANCIA_OBJECT.key);
-        mResolucion = (Resolucion) getArguments().getSerializable(INCID_RESOLUCION_OBJECT.key);
-        assertTrue(mResolucion != null, resolucion_should_be_initialized);
+        incidImportancia = (IncidImportancia) getArguments().getSerializable(INCID_IMPORTANCIA_OBJECT.key);
+        resolucion = (Resolucion) getArguments().getSerializable(INCID_RESOLUCION_OBJECT.key);
+        assertTrue(resolucion != null, resolucion_should_be_initialized);
         // Inicialización de la fecha en BD en el bean, para manternela si no la modifica.
-        assertTrue(mResolucion.getFechaPrev() != null, resolucion_fechaPrev_should_be_initialized);
-        resolucionBean.setFechaPrevista(getCalendarFromTimeMillis(mResolucion.getFechaPrev().getTime()));
+        assertTrue(resolucion.getFechaPrev() != null, resolucion_fechaPrev_should_be_initialized);
+        resolucionBean.setFechaPrevista(getCalendarFromTimeMillis(resolucion.getFechaPrev().getTime()));
 
         IncidAvanceSeeAdapter mAdapter = new IncidAvanceSeeAdapter(getActivity());
         mAdapter.clear();
-        mAdapter.addAll(mResolucion.getAvances());
+        mAdapter.addAll(resolucion.getAvances());
 
         ListView mListView = frView.findViewById(android.R.id.list);
         mListView.setEmptyView(frView.findViewById(android.R.id.empty));
@@ -112,10 +114,10 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
         mListView.setAdapter(mAdapter);
 
         // Plan (modo lectura).
-        ((TextView) frView.findViewById(R.id.incid_resolucion_txt)).setText(mResolucion.getDescripcion());
-        ((EditText) frView.findViewById(R.id.incid_resolucion_coste_prev_ed)).setText(getStringFromInteger(mResolucion.getCosteEstimado()));
+        ((TextView) frView.findViewById(R.id.incid_resolucion_txt)).setText(resolucion.getDescripcion());
+        ((EditText) frView.findViewById(R.id.incid_resolucion_coste_prev_ed)).setText(getStringFromInteger(resolucion.getCosteEstimado()));
         // Fecha texto que se corresponde con la que he utilizado para inicializar el bean.
-        fechaViewForPicker.setText(formatTimeStampToString(mResolucion.getFechaPrev()));
+        fechaViewForPicker.setText(formatTimeStampToString(resolucion.getFechaPrev()));
     }
 
     //  ================================ HELPER METHODS =======================================
@@ -150,9 +152,9 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
         }
 
         final Incidencia incidencia = new Incidencia.IncidenciaBuilder()
-                .incidenciaId(mIncidImportancia.getIncidencia().getIncidenciaId())
+                .incidenciaId(incidImportancia.getIncidencia().getIncidenciaId())
                 .comunidad(new Comunidad.ComunidadBuilder()
-                        .c_id(mIncidImportancia.getIncidencia().getComunidad().getC_Id())
+                        .c_id(incidImportancia.getIncidencia().getComunidad().getC_Id())
                         .build())
                 .build();
 
@@ -181,7 +183,7 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
         resolucionBean.setCostePrevText(((EditText) frView.findViewById(R.id.incid_resolucion_coste_prev_ed)).getText().toString());
         resolucionBean.setFechaPrevistaText(fechaViewForPicker.getText().toString());
 
-        if (!resolucionBean.validateBeanAvance(errorMsg, getResources(), mIncidImportancia)) {
+        if (!resolucionBean.validateBeanAvance(errorMsg, getResources(), incidImportancia)) {
             resolucionBean = null;
         }
     }
@@ -218,12 +220,12 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
 
             if (uiException != null) {
                 Intent intent = new Intent(getActivity(), IncidSeeOpenByComuAc.class);
-                intent.putExtra(COMUNIDAD_ID.key, mIncidImportancia.getIncidencia().getComunidadId());
+                intent.putExtra(COMUNIDAD_ID.key, incidImportancia.getIncidencia().getComunidadId());
                 uiException.processMe(getActivity(), intent);
             } else {
                 assertTrue(rowModified >= 1, resolucion_should_be_modified);
                 Intent intent = new Intent(getActivity(), IncidEditAc.class);
-                intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, mIncidImportancia);
+                intent.putExtra(INCID_RESOLUCION_BUNDLE.key, new IncidAndResolBundle(incidImportancia, true));
                 startActivity(intent);
             }
         }
@@ -257,7 +259,7 @@ public class IncidResolucionEditFr extends IncidResolucionFrAbstract {
 
             if (uiException != null) {
                 Intent intent = new Intent(getActivity(), IncidSeeOpenByComuAc.class);
-                intent.putExtra(COMUNIDAD_ID.key, mIncidImportancia.getIncidencia().getComunidadId());
+                intent.putExtra(COMUNIDAD_ID.key, incidImportancia.getIncidencia().getComunidadId());
                 uiException.processMe(getActivity(), intent);
             } else {
                 assertTrue(incidenciaCancelled >= 2, incidencia_should_be_cancelled);

@@ -1,7 +1,6 @@
 package com.didekindroid.usuario.login;
 
 import android.app.Activity;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -16,6 +15,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -104,7 +104,13 @@ public class LoginAcTest {
     @Test
     public final void testOnStop() throws Exception
     {
-        InstrumentationRegistry.getInstrumentation().callActivityOnStop(activity);
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                getInstrumentation().callActivityOnStop(activity);
+            }
+        });
         // Check.
         assertThat(activity.viewerLogin.getController().getSubscriptions().size(), is(0));
     }
@@ -115,7 +121,7 @@ public class LoginAcTest {
         typeLoginData(USER_DROID.getUserName(), USER_DROID.getPassword());
         onView(withId(login_ac_button)).check(matches(isDisplayed())).perform(click());
 
-        waitAtMost(4,SECONDS).until(isResourceIdDisplayed(comuSearchAcLayout));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(comuSearchAcLayout));
         waitAtMost(2, SECONDS).until(isActivityDying(activity), is(true));
     }
 

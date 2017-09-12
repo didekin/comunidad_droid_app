@@ -4,6 +4,7 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.exception.UiException;
+import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 
@@ -21,7 +22,8 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
+import static android.support.test.espresso.intent.matcher.BundleMatchers.hasEntry;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtras;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
@@ -36,7 +38,7 @@ import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.isCom
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidEditAcLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeGenericFrLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeOpenAcLayout;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
@@ -50,6 +52,8 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.CO
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.regSeveralUserComuSameUser;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
+import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -151,8 +155,15 @@ public class IncidSeeOpenByComuAcTest {
                 .perform(click());
         // Check next fragment.
         waitAtMost(2, SECONDS).until(isViewDisplayed(withId(incidEditAcLayout)));
-        intended(hasExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia1));
-//        intended(hasExtra(INCID_RESOLUCION_FLAG.key, true));    //  TODO: ¿eliminar?
+        // Check intent.
+        intended(hasExtras(
+                hasEntry(INCID_RESOLUCION_BUNDLE.key,
+                        allOf(
+                                isA(IncidAndResolBundle.class),
+                                equalTo(new IncidAndResolBundle(incidImportancia1, true))
+                        )
+                )
+        ));
         // Up and checkMenu.
         checkUp(incidSeeOpenAcLayout);
         isViewDisplayed(checkIncidOpenListView(incidImportancia1, activity, incidenciaUser1.getFechaAltaResolucion())).call();
@@ -173,8 +184,16 @@ public class IncidSeeOpenByComuAcTest {
 
         // Check next fragment.
         waitAtMost(3, SECONDS).until(isViewDisplayed(withId(incidEditAcLayout)));
-        intended(hasExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia2));
-//        intended(hasExtra(INCID_RESOLUCION_FLAG.key, false));    //  TODO: ¿eliminar?
+        // Check intent.
+        // Check intent.
+        intended(hasExtras(
+                hasEntry(INCID_RESOLUCION_BUNDLE.key,
+                        allOf(
+                                isA(IncidAndResolBundle.class),
+                                equalTo(new IncidAndResolBundle(incidImportancia2, false))
+                        )
+                )
+        ));
     }
 
     @Test

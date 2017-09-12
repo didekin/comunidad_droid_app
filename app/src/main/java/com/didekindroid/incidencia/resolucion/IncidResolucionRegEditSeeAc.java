@@ -65,22 +65,15 @@ public class IncidResolucionRegEditSeeAc extends AppCompatActivity {
 
         Bundle argsFragment = new Bundle();
         argsFragment.putSerializable(INCID_IMPORTANCIA_OBJECT.key, incidImportancia);
-        argsFragment.putSerializable(INCID_RESOLUCION_OBJECT.key, resolucion);
         Fragment fragmentToAdd;
 
-        if (incidImportancia.getUserComu().hasAdministradorAuthority()) {
-            if (resolucion != null) {
-                fragmentToAdd = new IncidResolucionEditFr();
-            } else {
-                fragmentToAdd = new IncidResolucionRegFr();
-            }
-        } else { // User WITHOUT authority 'adm'
-            if (resolucion != null) {
-                fragmentToAdd = new IncidResolucionSeeFr();
-            } else {
-                fragmentToAdd = new IncidResolucionSeeDefaultFr();
-            }
+        if(resolucion != null){
+            argsFragment.putSerializable(INCID_RESOLUCION_OBJECT.key, resolucion);
+            fragmentToAdd = incidImportancia.getUserComu().hasAdministradorAuthority() ?  new IncidResolucionEditFr() : new IncidResolucionSeeFr();
+        } else {
+            fragmentToAdd = incidImportancia.getUserComu().hasAdministradorAuthority() ? new IncidResolucionRegFr() : new IncidResolucionSeeDefaultFr();
         }
+
         fragmentToAdd.setArguments(argsFragment);
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.incid_resolucion_fragment_container_ac, fragmentToAdd, incid_resolucion_ac_frgs_tag)

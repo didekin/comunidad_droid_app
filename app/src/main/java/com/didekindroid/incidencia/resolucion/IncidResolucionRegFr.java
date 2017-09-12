@@ -14,6 +14,7 @@ import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.core.edit.IncidEditAc;
 import com.didekinlib.model.comunidad.Comunidad;
+import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
@@ -24,6 +25,7 @@ import timber.log.Timber;
 
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.resolucion_should_be_registered;
 import static com.didekindroid.util.ConnectionUtils.checkInternetConnected;
 import static com.didekindroid.util.FechaPickerFr.FechaPickerHelper.initFechaViewForPicker;
@@ -31,6 +33,7 @@ import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.util.UIutils.makeToast;
+import static com.didekinlib.model.incidencia.dominio.IncidenciaExceptionMsg.RESOLUCION_DUPLICATE;
 
 /**
  * User: pedro@didekin
@@ -157,14 +160,16 @@ public class IncidResolucionRegFr extends IncidResolucionFrAbstract {
             Timber.d("onPostExecute()");
 
             if (uiException != null) {
-                Intent intent = new Intent(getActivity(), IncidEditAc.class);
-                // Para el caso resolución duplicada y acceder a IncidEditAc/Resolución.
-                intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia);
-                uiException.processMe(getActivity(), intent);
+                Intent intent = null;
+                if (uiException.getErrorBean().getMessage().equals(RESOLUCION_DUPLICATE.getHttpMessage())){
+                    intent = new Intent(getActivity(), IncidEditAc.class);
+                    intent.putExtra(INCID_RESOLUCION_BUNDLE.key, new IncidAndResolBundle(incidImportancia, resolucion != null));
+                }
+                uiException.processMe(getActivity(), intent == null ? new Intent() : intent);
             } else {
                 assertTrue(rowInserted == 1, resolucion_should_be_registered);
                 Intent intent = new Intent(getActivity(), IncidEditAc.class);
-                intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia);
+                intent.putExtra(INCID_RESOLUCION_BUNDLE.key, new IncidAndResolBundle(incidImportancia, true));
                 startActivity(intent);
             }
         }

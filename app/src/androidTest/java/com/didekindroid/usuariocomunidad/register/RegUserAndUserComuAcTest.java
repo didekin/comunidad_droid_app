@@ -109,7 +109,7 @@ public class RegUserAndUserComuAcTest {
     @BeforeClass
     public static void slowDown() throws InterruptedException
     {
-        TimeUnit.SECONDS.sleep(2);
+        SECONDS.sleep(2);
     }
 
     @Before
@@ -125,12 +125,13 @@ public class RegUserAndUserComuAcTest {
             return;
         }
         cleanOptions(CLEAN_JUAN);
+        SECONDS.sleep(1);
     }
 
     @Test
     public void testRegisterUserAndUserComu_1() throws UiException, InterruptedException
     {
-        TimeUnit.SECONDS.sleep(2);
+        SECONDS.sleep(2);
 
         // Usuario data.
         typeUserDataFull(

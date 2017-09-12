@@ -220,19 +220,26 @@ public final class ActivityTestUtils {
         return controller.getSubscriptions();
     }
 
-    public static void checkSubscriptionsOnStop(Activity activity, ControllerIf... controllers)
+    public static void checkSubscriptionsOnStop(final Activity activity, final ControllerIf... controllers)
     {
-        AtomicInteger atomicInteger = new AtomicInteger(0);
+        final AtomicInteger atomicInteger = new AtomicInteger(0);
         for (ControllerIf controller : controllers) {
             atomicInteger.addAndGet(addSubscription(controller).size());
         }
         assertThat(atomicInteger.get() >= controllers.length, is(true));
 
-        getInstrumentation().callActivityOnStop(activity);
-        atomicInteger.set(0);
-        for (ControllerIf controller : controllers) {
-            atomicInteger.addAndGet(controller.getSubscriptions().size());
-        }
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                getInstrumentation().callActivityOnStop(activity);
+                atomicInteger.set(0);
+                for (ControllerIf controller : controllers) {
+                    atomicInteger.addAndGet(controller.getSubscriptions().size());
+                }
+            }
+        });
+
         waitAtMost(6, SECONDS).untilAtomic(atomicInteger, is(0));
     }
 
@@ -360,7 +367,7 @@ public final class ActivityTestUtils {
         clickNavigateUp();
         for (Integer layout : activityLayoutIds)
             try {
-                waitAtMost(4, SECONDS).until(isResourceIdDisplayed(layout));
+                waitAtMost(6, SECONDS).until(isResourceIdDisplayed(layout));
             } catch (Exception e) {
                 fail();
             }

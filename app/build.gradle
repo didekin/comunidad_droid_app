@@ -18,6 +18,10 @@ android {
         targetCompatibility rootProject.ext.targetCompatibilityVersion
     }
 
+    /*testOptions {
+        execution 'ANDROID_TEST_ORCHESTRATOR'
+    }*/
+
     //noinspection GroovyAssignabilityCheck
     signingConfigs {
         release {
@@ -111,9 +115,14 @@ dependencies {
     compile rootProject.ext.rxjava
     compile rootProject.ext.android_support
 
+    androidTestCompile rootProject.ext.testRunner
+    androidTestCompile rootProject.ext.testRuler
     androidTestCompile rootProject.ext.espresso
     androidTestCompile rootProject.ext.didekinlib_gcm
     androidTestCompile rootProject.ext.awaitility
+
+    /*androidTestImplementation rootProject.ext.testRunner
+    androidTestUtil rootProject.ext.testOrchestrator*/
 
     testCompile rootProject.ext.junit
 }

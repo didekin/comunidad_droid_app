@@ -60,6 +60,7 @@ public class ViewerPasswordChange extends Viewer<View, CtrlerUsuario> {
 
     static ViewerPasswordChange newViewerPswdChange(PasswordChangeAc activity)
     {
+        Timber.d("newViewerPswdChange()");
         ViewerPasswordChange instance = new ViewerPasswordChange(activity);
         instance.setController(new CtrlerUsuario());
         return instance;
@@ -68,6 +69,7 @@ public class ViewerPasswordChange extends Viewer<View, CtrlerUsuario> {
     @Override
     public void doViewInViewer(Bundle savedState, Serializable viewBean)
     {
+        Timber.d("doViewInViewer()");
         // Precondition.
         assertTrue(controller.isRegisteredUser(), user_should_be_registered);
 

@@ -7,7 +7,6 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.widget.EditText;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
@@ -151,7 +150,7 @@ public class UserDataAcTest {
     @Test  // Wrong password.
     public void testModifyUserDataWrongPswd() throws InterruptedException
     {
-        TimeUnit.SECONDS.sleep(3);
+        TimeUnit.SECONDS.sleep(4);
         typeUserData("new_juan@juan.es", USER_JUAN.getAlias(), "wrong_password");
         onView(withId(user_data_modif_button)).perform(scrollTo()).check(matches(isDisplayed())).perform(click());
         waitAtMost(4, SECONDS).until(isToastInView(R.string.password_wrong, activity));
@@ -177,9 +176,15 @@ public class UserDataAcTest {
     @Test
     public final void testOnStop() throws Exception
     {
-        getInstrumentation().callActivityOnStop(activity);
-        // Check.
-        assertThat(activity.viewer.getController().getSubscriptions().size(), is(0));
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                getInstrumentation().callActivityOnStop(activity);
+                // Check.
+                assertThat(activity.viewer.getController().getSubscriptions().size(), is(0));
+            }
+        });
     }
 
     @Test
@@ -232,12 +237,6 @@ public class UserDataAcTest {
     }
 
     /*    =================================  HELPERS ==================================*/
-
-    private void checkInitialData(String userName, String alias)
-    {
-        assertThat(((EditText) activity.acView.findViewById(R.id.reg_usuario_email_editT)).getText().toString(), is(userName));
-        assertThat(((EditText) activity.acView.findViewById(R.id.reg_usuario_alias_ediT)).getText().toString(), is(alias));
-    }
 
     public void typeClickWait()
     {

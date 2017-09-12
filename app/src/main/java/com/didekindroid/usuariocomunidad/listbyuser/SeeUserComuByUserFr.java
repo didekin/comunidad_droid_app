@@ -118,6 +118,7 @@ public class SeeUserComuByUserFr extends Fragment {
         @Override
         protected void onPostExecute(List<UsuarioComunidad> usuarioComunidades)
         {
+            Timber.d("onPostExecute()");
             if (checkPostExecute(getActivity())) return;
 
             if (uiException != null) {  // action: LOGIN.

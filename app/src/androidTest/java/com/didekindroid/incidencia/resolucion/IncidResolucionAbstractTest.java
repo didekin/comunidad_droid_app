@@ -49,8 +49,8 @@ public abstract class IncidResolucionAbstractTest {
     Fragment incidEditFr;
     IncidImportancia incidImportancia;
     Resolucion resolucion;
-    IncidImportancia mIncidImportanciaIntent;
-    Resolucion mResolucionIntent;
+    IncidImportancia incidImportanciaIntent;
+    Resolucion resolucionIntent;
 
     @Before
     public void setUp() throws Exception
@@ -61,23 +61,23 @@ public abstract class IncidResolucionAbstractTest {
         incidEditFr = activity.getSupportFragmentManager().findFragmentByTag(incid_resolucion_ac_frgs_tag);
         assertThat(incidEditFr, notNullValue());
         // Intent extras in activity.
-        mIncidImportanciaIntent = (IncidImportancia) activity.getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.key);
-        mResolucionIntent = (Resolucion) activity.getIntent().getSerializableExtra(INCID_RESOLUCION_OBJECT.key);
+        incidImportanciaIntent = (IncidImportancia) activity.getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.key);
+        resolucionIntent = (Resolucion) activity.getIntent().getSerializableExtra(INCID_RESOLUCION_OBJECT.key);
 
         // Premisas.
-        if (mIncidImportanciaIntent.getUserComu().hasAdministradorAuthority() && mResolucionIntent != null) {
+        if (incidImportanciaIntent.getUserComu().hasAdministradorAuthority() && resolucionIntent != null) {
             assertThat(incidEditFr, instanceOf(IncidResolucionEditFr.class));
-        } else if (mIncidImportanciaIntent.getUserComu().hasAdministradorAuthority() && mResolucionIntent == null) {
+        } else if (incidImportanciaIntent.getUserComu().hasAdministradorAuthority() && resolucionIntent == null) {
             assertThat(incidEditFr, instanceOf(IncidResolucionRegFr.class));
-        } else if (!mIncidImportanciaIntent.getUserComu().hasAdministradorAuthority() && mResolucionIntent != null) {
+        } else if (!incidImportanciaIntent.getUserComu().hasAdministradorAuthority() && resolucionIntent != null) {
             assertThat(incidEditFr, instanceOf(IncidResolucionSeeFr.class));
         } else {
             assertThat(incidEditFr, instanceOf(IncidResolucionSeeDefaultFr.class));
         }
-        assertThat(incidEditFr.getArguments(), allOf(
-                hasEntry(INCID_IMPORTANCIA_OBJECT.key, is(mIncidImportanciaIntent)),
-                hasEntry(INCID_RESOLUCION_OBJECT.key, is(mResolucionIntent))
-        ));
+        assertThat(incidEditFr.getArguments(), hasEntry(INCID_IMPORTANCIA_OBJECT.key, is(incidImportanciaIntent)));
+        if (resolucion != null){
+            assertThat(incidEditFr.getArguments(), hasEntry(INCID_RESOLUCION_OBJECT.key, is(resolucionIntent)));
+        }
     }
 
     @After
@@ -105,7 +105,7 @@ public abstract class IncidResolucionAbstractTest {
         onView(withId(R.id.incid_resolucion_edit_fr_close_button)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_resolucion_txt)).check(matches(isDisplayed()));
 
-        if (mResolucionIntent != null && !mResolucionIntent.getAvances().isEmpty()) {
+        if (resolucionIntent != null && !resolucionIntent.getAvances().isEmpty()) {
             // Lista NO vacía.
             onView(withId(android.R.id.list)).check(matches(isDisplayed()));
             onView(withId(android.R.id.empty)).check(matches(not(isDisplayed())));
@@ -158,7 +158,7 @@ public abstract class IncidResolucionAbstractTest {
         onView(withId(R.id.incid_resolucion_coste_prev_view)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_resolucion_txt)).check(matches(isDisplayed()));
 
-        if (mResolucionIntent != null && !mResolucionIntent.getAvances().isEmpty()) {
+        if (resolucionIntent != null && !resolucionIntent.getAvances().isEmpty()) {
             // Lista NO vacía.
             onView(withId(android.R.id.list)).check(matches(isDisplayed()));
             onView(withId(android.R.id.empty)).check(matches(not(isDisplayed())));

@@ -62,7 +62,6 @@ public class UiException extends Exception implements UiExceptionIf {
 
         ActionForUiExceptionIf actionForException = exceptionRouter.getActionForException(this);
         assertTrue(actionForException != null, actionForException_notNull);
-
         if (actionForException.getToastResourceId() > 0) {
             makeToast(activity, actionForException.getToastResourceId());
         }

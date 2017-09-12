@@ -87,7 +87,13 @@ public class DeleteMeAcTest {
     @Test
     public final void testOnStop() throws Exception
     {
-        getInstrumentation().callActivityOnStop(activity);
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                getInstrumentation().callActivityOnStop(activity);
+            }
+        });
         // Check.
         assertThat(controller.getSubscriptions().size(), CoreMatchers.is(0));
         cleanOptions(CLEAN_PEPE);

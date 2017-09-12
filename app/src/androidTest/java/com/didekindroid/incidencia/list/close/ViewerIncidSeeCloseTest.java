@@ -259,7 +259,6 @@ public class ViewerIncidSeeCloseTest {
     public void test_GetSelectedPositionFromItemId() throws Exception
     {
         final List<IncidenciaUser> list = doIncidenciaUsers(incidImportancia1);
-//        viewer = newViewerIncidSeeClose(fragment.getView(), activity);
 
         activity.runOnUiThread(new Runnable() {
             @Override

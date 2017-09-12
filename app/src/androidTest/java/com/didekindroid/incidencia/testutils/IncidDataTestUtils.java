@@ -3,7 +3,6 @@ package com.didekindroid.incidencia.testutils;
 import com.didekindroid.exception.UiException;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.AmbitoIncidencia;
-import com.didekinlib.model.incidencia.dominio.Avance;
 import com.didekinlib.model.incidencia.dominio.IncidComment;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
@@ -14,9 +13,7 @@ import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
@@ -102,9 +99,11 @@ public final class IncidDataTestUtils {
 
     public static IncidenciaUser doSimpleIncidenciaUser(long incidenciaId, Timestamp incidAltaDate, long usuarioId, Timestamp resolucionDate)
     {
-        return new IncidenciaUser.IncidenciaUserBuilder(doSimpleIncidenciaWithId(incidenciaId, incidAltaDate, resolucionDate))
+        final Incidencia incidencia = doSimpleIncidenciaWithId(incidenciaId, incidAltaDate, resolucionDate);
+        return new IncidenciaUser.IncidenciaUserBuilder(incidencia)
                 .usuario(new Usuario.UsuarioBuilder()
                         .uId(usuarioId)
+                        .userName(incidencia.getUserName())
                         .build())
                 .fechaAltaResolucion(resolucionDate)
                 .build();
@@ -160,20 +159,6 @@ public final class IncidDataTestUtils {
                 .descripcion(descripcion)
                 .costeEstimado(costeEstimado)
                 .fechaPrevista(fechaPrev)
-                .build();
-    }
-
-    public static Resolucion doResolucionAvances(Incidencia incidencia, String descripcion, int costeEstimado, Timestamp fechaPrev)
-    {
-        Avance avance = new Avance.AvanceBuilder().avanceDesc("").userName(incidencia.getUserName()).build();
-        List<Avance> avances = new ArrayList<>(1);
-        avances.add(avance);
-
-        return new Resolucion.ResolucionBuilder(incidencia)
-                .descripcion(descripcion)
-                .costeEstimado(costeEstimado)
-                .fechaPrevista(fechaPrev)
-                .avances(avances)
                 .build();
     }
 

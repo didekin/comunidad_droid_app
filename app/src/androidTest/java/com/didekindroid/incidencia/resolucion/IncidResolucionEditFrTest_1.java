@@ -7,6 +7,7 @@ import android.support.test.runner.AndroidJUnit4;
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
+import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 
 import org.junit.BeforeClass;
@@ -31,6 +32,7 @@ import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
@@ -41,6 +43,7 @@ import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEn
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
 import static com.didekindroid.util.UIutils.SPAIN_LOCALE;
 import static com.didekindroid.util.UIutils.formatTimeToString;
+import static java.lang.Math.abs;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
@@ -118,7 +121,7 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
         checKOk();
         Resolucion resolucionDb = incidenciaDao.seeResolucion(resolucion.getIncidencia().getIncidenciaId());
         assertThat(resolucionDb.equals(resolucion), is(true));
-        assertThat(Math.abs(resolucionDb.getFechaPrev().getTime() - resolucion.getFechaPrev().getTime()) < 1000, is(true));
+        assertThat(abs(resolucionDb.getFechaPrev().getTime() - resolucion.getFechaPrev().getTime()) < 1000, is(true));
 
         checkUp();
         checkScreenResolucionEditFr();
@@ -215,7 +218,6 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
     {
         onView(withId(R.id.incid_edit_fragment_container_ac)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_edit_maxpower_fr_layout)).check(matches(isDisplayed()));
-        intended(hasExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia));
-//        intended(hasExtra(INCID_RESOLUCION_FLAG.key, true));     //  TODO: ¿eliminar?
+        intended(hasExtra(INCID_RESOLUCION_BUNDLE.key, new IncidAndResolBundle(incidImportancia, resolucion != null)));
     }
 }

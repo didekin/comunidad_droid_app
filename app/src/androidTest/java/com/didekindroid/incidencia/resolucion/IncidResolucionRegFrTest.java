@@ -10,6 +10,7 @@ import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.util.UIutils;
+import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -32,6 +33,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
@@ -234,7 +236,7 @@ public class IncidResolucionRegFrTest extends IncidResolucionAbstractTest {
 
         // Test de error resolución duplicada.
         onView(withId(R.id.incid_resolucion_reg_ac_button)).perform(click());
-        waitAtMost(5, SECONDS).until(isToastInView(R.string.resolucion_duplicada, activity));
+        waitAtMost(8, SECONDS).until(isToastInView(R.string.resolucion_duplicada, activity));
         onView(withId(R.id.incid_edit_fragment_container_ac)).check(matches(isDisplayed()));
     }
 
@@ -252,8 +254,8 @@ public class IncidResolucionRegFrTest extends IncidResolucionAbstractTest {
     {
         onView(withId(R.id.incid_edit_fragment_container_ac)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_edit_maxpower_fr_layout)).check(matches(isDisplayed()));
-        intended(hasExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia));
-//        intended(hasExtra(INCID_RESOLUCION_FLAG.key, true));   //  TODO: ¿eliminar?
+        // hasResolucion == true, because it has been registered.
+        intended(hasExtra(INCID_RESOLUCION_BUNDLE.key, new IncidAndResolBundle(incidImportancia, true)));
 
         checkUp();
         checkScreenResolucionRegFr();

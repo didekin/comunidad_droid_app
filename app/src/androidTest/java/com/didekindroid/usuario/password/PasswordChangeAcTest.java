@@ -1,7 +1,6 @@
 package com.didekindroid.usuario.password;
 
 import android.app.Activity;
-import android.app.TaskStackBuilder;
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -9,7 +8,6 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.comunidad.testutil.ComunidadNavConstant;
 import com.didekindroid.exception.UiException;
 import com.didekinlib.model.usuario.Usuario;
 
@@ -22,6 +20,7 @@ import org.junit.runner.RunWith;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static android.app.TaskStackBuilder.create;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -36,6 +35,7 @@ import static com.didekindroid.testutil.ActivityTestUtils.checkIsRegistered;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
+import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
@@ -67,8 +67,7 @@ public class PasswordChangeAcTest {
         @Override
         protected void beforeActivityLaunched()
         {
-            TaskStackBuilder.create(getTargetContext())
-                    .addParentStack(PasswordChangeAc.class).startActivities();
+            create(getTargetContext()).addParentStack(PasswordChangeAc.class).startActivities();
         }
 
         @Override
@@ -102,6 +101,7 @@ public class PasswordChangeAcTest {
             cleanOneUser(USER_DROID);
         }
         cleanTasks(activity);
+        SECONDS.sleep(2);
     }
 
     //    ============================  TESTS  ===================================
@@ -135,7 +135,6 @@ public class PasswordChangeAcTest {
     public void testPasswordChange_Up() throws UiException, InterruptedException
     {
         doPswdChange();
-
         checkUp(comuSearchAcLayout);
 
         usuarioDao.deleteUser();
@@ -169,8 +168,7 @@ public class PasswordChangeAcTest {
     {
         typePswdDataWithPswdValidation("new_pepe_password", "new_pepe_password", USER_DROID.getPassword());
         onView(withId(R.id.password_change_ac_button)).check(matches(isDisplayed())).perform(click());
-
+        waitAtMost(6, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
         waitAtMost(4, SECONDS).until(isToastInView(R.string.password_remote_change, activity));
-        onView(withId(seeUserComuByUserFrRsId)).check(matches(isDisplayed()));
     }
 }
