@@ -60,7 +60,7 @@ class IncidAvanceSeeAdapter extends ArrayAdapter<Avance> {
         void initializeTextInViews(Avance avance)
         {
             mFechaAltaView.setText(formatTimeStampToString(avance.getFechaAlta()));
-            mAliasView.setText(avance.getUserName());
+            mAliasView.setText(avance.getAlias() == null ? avance.getUserName() : avance.getAlias());
             mDescripcionView.setText(avance.getAvanceDesc());
         }
     }

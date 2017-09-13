@@ -92,7 +92,9 @@ public class IncidDaoRemoteTest_1 {
         Incidencia incidencia = incidenciaDao.seeIncidImportancia(resolucion.getIncidencia().getIncidenciaId()).getIncidImportancia().getIncidencia();
         assertThat(incidencia.getFechaCierre(), nullValue());
         // Nuevos datos.
-        Avance avance = new Avance.AvanceBuilder().avanceDesc("").userName(resolucion.getUserName()).build();
+        Avance avance = new Avance.AvanceBuilder().avanceDesc("")
+                .author(new Usuario.UsuarioBuilder().userName(resolucion.getUserName()).build())
+                .build();
         List<Avance> avances = new ArrayList<>(1);
         avances.add(avance);
         resolucion = new Resolucion.ResolucionBuilder(resolucion.getIncidencia())
@@ -169,7 +171,8 @@ public class IncidDaoRemoteTest_1 {
         assertThat(resolucion.getAvances().size(), is(0));
         // Nuevos datos.
         Avance avance = new Avance.AvanceBuilder().avanceDesc(AVANCE_DEFAULT_DES)
-                .userName(resolucion.getUserName()).build();
+                .author(new Usuario.UsuarioBuilder().userName(resolucion.getUserName()).build())
+                .build();
         List<Avance> avances = new ArrayList<>(1);
         avances.add(avance);
         resolucion = new Resolucion.ResolucionBuilder(resolucion.getIncidencia())

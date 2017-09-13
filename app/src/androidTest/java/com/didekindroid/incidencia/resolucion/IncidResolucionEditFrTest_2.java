@@ -6,6 +6,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.incidencia.testutils.IncidEspressoTestUtils;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekinlib.model.incidencia.dominio.Avance;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
@@ -34,6 +35,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
+import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkDataResolucionEditFr;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
@@ -116,13 +118,13 @@ public class IncidResolucionEditFrTest_2 extends IncidResolucionAbstractTest {
     public void testOnCreate_1() throws Exception
     {
         assertThat(resolucionIntent.getAvances().size(), is(1));
-        checkScreenResolucionEditFr();
+        IncidEspressoTestUtils.checkScreenResolucionEditFr(resolucionIntent);
     }
 
     @Test
     public void testOnData_1()
     {
-        checkDataResolucionEditFr();
+        checkDataResolucionEditFr(resolucion);
         // Avances.
         Avance avance = resolucion.getAvances().get(0);
         onData(is(avance)).inAdapterView(withId(android.R.id.list)).check(matches(isDisplayed()));
@@ -135,7 +137,7 @@ public class IncidResolucionEditFrTest_2 extends IncidResolucionAbstractTest {
                 withId(R.id.incid_avance_fecha_view),
                 hasSibling(allOf(
                         withId(R.id.incid_avance_aliasUser_view),
-                        withText(USER_JUAN.getUserName()) // usuario en sesión que modifica resolución.
+                        withText(USER_JUAN.getAlias()) // usuario en sesión que modifica resolución.
                 )))).check(matches(isDisplayed()));
     }
 
@@ -155,8 +157,8 @@ public class IncidResolucionEditFrTest_2 extends IncidResolucionAbstractTest {
         assertThat(resolucionDb.getAvances().get(1).getAvanceDesc(), is("avance2_desc_válida"));
 
         checkUp();
-        checkScreenResolucionEditFr();
-        checkDataResolucionEditFr();
+        IncidEspressoTestUtils.checkScreenResolucionEditFr(resolucionIntent);
+        checkDataResolucionEditFr(resolucion);
     }
 
     @Test

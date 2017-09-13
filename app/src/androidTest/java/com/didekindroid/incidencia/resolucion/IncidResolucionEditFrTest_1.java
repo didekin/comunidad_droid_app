@@ -31,6 +31,8 @@ import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
+import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkDataResolucionEditFr;
+import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkScreenResolucionEditFr;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
@@ -104,8 +106,8 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
     @Test
     public void testOnCreate_1() throws Exception
     {
-        checkScreenResolucionEditFr();
-        checkDataResolucionEditFr();
+        checkScreenResolucionEditFr(resolucionIntent);
+        checkDataResolucionEditFr(resolucion);
         // Avances.
         onView(allOf(
                 withId(android.R.id.empty),
@@ -124,8 +126,8 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
         assertThat(abs(resolucionDb.getFechaPrev().getTime() - resolucion.getFechaPrev().getTime()) < 1000, is(true));
 
         checkUp();
-        checkScreenResolucionEditFr();
-        checkDataResolucionEditFr();
+        checkScreenResolucionEditFr(resolucionIntent);
+        checkDataResolucionEditFr(resolucion);
     }
 
     @Test
@@ -147,7 +149,7 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
         checKOk();
 
         checkUp();
-        checkScreenResolucionEditFr();
+        checkScreenResolucionEditFr(resolucionIntent);
     }
 
     @Test
@@ -165,7 +167,7 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
         assertThat(resolucionDb.getCosteEstimado(), is(-1234));
 
         checkUp();
-        checkScreenResolucionEditFr();
+        checkScreenResolucionEditFr(resolucionIntent);
     }
 
     @Test
@@ -202,8 +204,8 @@ public class IncidResolucionEditFrTest_1 extends IncidResolucionAbstractTest {
 
         // Up Navigate.
         checkUp();
-        checkScreenResolucionEditFr();
-        checkDataResolucionEditFr();
+        checkScreenResolucionEditFr(resolucionIntent);
+        checkDataResolucionEditFr(resolucion);
 
         // Intentamos modificar la incidencia: error nos manda a la consulta.
         onView(withId(R.id.incid_resolucion_fr_modif_button)).perform(click());

@@ -15,15 +15,18 @@ import com.didekindroid.incidencia.core.edit.IncidEditAc;
 import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
+import com.didekinlib.model.incidencia.dominio.Resolucion;
 
 import org.hamcrest.Matcher;
 
 import java.sql.Timestamp;
+import java.util.Locale;
 import java.util.concurrent.Callable;
 
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -36,7 +39,10 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.incidencia.core.IncidenciaDataDbHelper.DB_NAME;
+import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.COSTE_ESTIM_DEFAULT_String;
+import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.RESOLUCION_DEFAULT_DESC;
 import static com.didekindroid.testutil.ActivityTestUtils.isDataDisplayedAndClick;
+import static com.didekindroid.util.UIutils.SPAIN_LOCALE;
 import static com.didekindroid.util.UIutils.formatTimeStampToString;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
@@ -285,6 +291,100 @@ public final class IncidEspressoTestUtils {
         dbHelper.close();
         activity.deleteDatabase(DB_NAME);
         return matcher;
+    }
+
+    // ====================================== RESOLUCION =========================================
+
+    public static void checkScreenResolucionEditFr(Resolucion resolucionIntent)
+    {
+        onView(withId(R.id.appbar)).check(matches(isDisplayed()));
+
+        onView(withId(R.id.incid_resolucion_fragment_container_ac)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_resolucion_edit_fr_layout)).check(matches(isDisplayed())).perform(closeSoftKeyboard());
+        onView(withId(R.id.incid_resolucion_fecha_view)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_resolucion_coste_prev_ed)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_resolucion_avance_ed)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_resolucion_fr_modif_button)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_resolucion_edit_fr_close_button)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_resolucion_txt)).check(matches(isDisplayed()));
+
+        checkAvancesList(resolucionIntent);
+    }
+
+    public static void checkDataResolucionEditFr(Resolucion resolucion)
+    {
+        // Caso: los datos que se muestran por defecto.
+        checkDataResolucion(resolucion, R.id.incid_resolucion_coste_prev_ed);
+    }
+
+    public static void checkScreenResolucionRegFr()
+    {
+        onView(withId(R.id.appbar)).check(matches(isDisplayed()));
+
+        onView(withId(R.id.incid_resolucion_fragment_container_ac)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_resolucion_reg_frg_layout)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_resolucion_reg_ac_button)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_resolucion_desc_ed)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_resolucion_coste_prev_ed)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_resolucion_fecha_view)).check(matches(isDisplayed()));
+    }
+
+    public static void checkScreenResolucionSeeFr(Resolucion resolucionIntent)
+    {
+        onView(withId(R.id.incid_resolucion_fragment_container_ac)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_resolucion_see_fr_layout)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_resolucion_fecha_view)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_resolucion_coste_prev_view)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_resolucion_txt)).check(matches(isDisplayed()));
+
+        checkAvancesList(resolucionIntent);
+    }
+
+    public static void checkDataResolucionSeeFr(Resolucion resolucion)
+    {
+        checkDataResolucion(resolucion, R.id.incid_resolucion_coste_prev_view);
+    }
+
+    public static void checkScreenResolucionSeeDefaultFr()
+    {
+        /* CASO OK: se muestra el fragmento/mensaje por defecto.*/
+        onView(withId(R.id.appbar)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_resolucion_fragment_container_ac)).check(matches(isDisplayed()));
+        onView(withId(R.id.incid_resolucion_see_default_fr)).check(matches(isDisplayed()));
+    }
+
+    private static void checkAvancesList(Resolucion resolucionIntent)
+    {
+        if (resolucionIntent != null && !resolucionIntent.getAvances().isEmpty()) {
+            // Lista NO vacía.
+            onView(withId(android.R.id.list)).check(matches(isDisplayed()));
+            onView(withId(android.R.id.empty)).check(matches(not(isDisplayed())));
+        } else {
+            // Lista de avances vacía.
+            onView(withId(android.R.id.list)).check(matches(not(isDisplayed())));
+            onView(withId(android.R.id.empty)).check(matches(isDisplayed()));
+        }
+    }
+
+    private static void checkDataResolucion(Resolucion resolucion, int costePrevRsId)
+    {
+        // Fecha.
+        if (Locale.getDefault().equals(SPAIN_LOCALE)) {  // TODO: internacionalizar.
+            onView(allOf(
+                    withId(R.id.incid_resolucion_fecha_view),
+                    withText(formatTimeStampToString(resolucion.getFechaPrev()))
+            )).check(matches(isDisplayed()));
+        }
+        // Coste.
+        onView(allOf(
+                withId(costePrevRsId),
+                withText(COSTE_ESTIM_DEFAULT_String)
+        )).check(matches(isDisplayed()));
+        // Resolución.
+        onView(allOf(
+                withId(R.id.incid_resolucion_txt),
+                withText(RESOLUCION_DEFAULT_DESC)
+        )).check(matches(isDisplayed()));
     }
 
     // ====================================== SPINNERS =========================================

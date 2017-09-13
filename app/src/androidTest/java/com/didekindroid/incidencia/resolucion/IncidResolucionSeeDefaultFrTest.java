@@ -5,6 +5,7 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.exception.UiException;
+import com.didekindroid.incidencia.testutils.IncidEspressoTestUtils;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 
 import org.junit.BeforeClass;
@@ -13,11 +14,13 @@ import org.junit.runner.RunWith;
 
 import java.io.IOException;
 
+import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkScreenResolucionSeeDefaultFr;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
+import static java.lang.Thread.sleep;
 
 /**
  * User: pedro@didekin
@@ -56,7 +59,7 @@ public class IncidResolucionSeeDefaultFrTest extends IncidResolucionAbstractTest
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
     {
-        Thread.sleep(3000);
+        sleep(3000);
     }
 
     @Override

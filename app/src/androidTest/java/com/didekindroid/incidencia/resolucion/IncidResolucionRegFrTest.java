@@ -8,6 +8,7 @@ import android.widget.DatePicker;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.incidencia.testutils.IncidEspressoTestUtils;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.util.UIutils;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
@@ -32,6 +33,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
+import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkScreenResolucionRegFr;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
@@ -44,6 +46,7 @@ import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEn
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
 import static com.didekindroid.util.UIutils.formatTimeToString;
 import static com.didekindroid.util.UIutils.isCalendarPreviousTimeStamp;
+import static java.lang.Thread.sleep;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
@@ -61,7 +64,7 @@ public class IncidResolucionRegFrTest extends IncidResolucionAbstractTest {
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
     {
-        Thread.sleep(3000);
+        sleep(3000);
     }
 
     @Override
@@ -135,7 +138,7 @@ public class IncidResolucionRegFrTest extends IncidResolucionAbstractTest {
         checkToastInTest(R.string.error_validation_msg, activity,
                 R.string.incid_resolucion_fecha_prev_msg, R.string.incid_resolucion_descrip_msg);
 
-        Thread.sleep(2000);
+        sleep(2000);
     }
 
     @Test
@@ -150,7 +153,7 @@ public class IncidResolucionRegFrTest extends IncidResolucionAbstractTest {
         checkToastInTest(R.string.error_validation_msg, activity,
                 R.string.incid_resolucion_descrip_msg);
 
-        Thread.sleep(2000);
+        sleep(2000);
     }
 
     @Test
@@ -166,7 +169,7 @@ public class IncidResolucionRegFrTest extends IncidResolucionAbstractTest {
         checkToastInTest(R.string.error_validation_msg, activity,
                 R.string.incid_resolucion_coste_prev_msg);
 
-        Thread.sleep(2000);
+        sleep(2000);
     }
 
 
@@ -183,7 +186,7 @@ public class IncidResolucionRegFrTest extends IncidResolucionAbstractTest {
                 R.string.incid_resolucion_coste_prev_msg,
                 R.string.incid_resolucion_descrip_msg);
 
-        Thread.sleep(2000);
+        sleep(2000);
     }
 
     @Test
@@ -198,7 +201,7 @@ public class IncidResolucionRegFrTest extends IncidResolucionAbstractTest {
                 R.string.incid_resolucion_fecha_prev_msg,
                 R.string.incid_resolucion_descrip_msg);
 
-        Thread.sleep(2000);
+        sleep(2000);
 
         // Intentamos corregir:
         onView(withId(R.id.incid_resolucion_desc_ed)).perform(replaceText("Desc válida"));

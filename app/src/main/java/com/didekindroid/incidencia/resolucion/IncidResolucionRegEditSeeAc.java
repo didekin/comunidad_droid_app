@@ -28,7 +28,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * 2. An intent key with a Resolucion instance MAY be received.
  * Postconditions:
  * 1. If NOT Resolucion intent is received and the user has authority 'adm':
- * 1.1. An incidencia resolution is registered in BD, associated to its editor.
+ * 1.1. An incidencia resolution is registered in BD, associated to its author.
  * 1.2. An intent is passed with the incidImportancia.
  * 1.3. The edited incidencia is shown.
  * 2. If a Resolucion intent is received and the user has authority 'adm':

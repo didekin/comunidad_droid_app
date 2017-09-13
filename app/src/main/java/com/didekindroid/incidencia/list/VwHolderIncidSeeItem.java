@@ -26,11 +26,11 @@ public class VwHolderIncidSeeItem {
 
     public VwHolderIncidSeeItem(View convertView)
     {
-        mDescripcionView = (TextView) convertView.findViewById(R.id.incid_descripcion_view);
-        mFechaAltaView = (TextView) convertView.findViewById(R.id.incid_fecha_alta_view);
-        mIniciador = (TextView) convertView.findViewById(R.id.incid_see_iniciador_view);
-        mAmbitoView = (TextView) convertView.findViewById(R.id.incid_ambito_view);
-        mImportanciaComuView = (TextView) convertView.findViewById(R.id.incid_importancia_comunidad_view);
+        mDescripcionView = convertView.findViewById(R.id.incid_descripcion_view);
+        mFechaAltaView = convertView.findViewById(R.id.incid_fecha_alta_view);
+        mIniciador = convertView.findViewById(R.id.incid_see_iniciador_view);
+        mAmbitoView = convertView.findViewById(R.id.incid_ambito_view);
+        mImportanciaComuView = convertView.findViewById(R.id.incid_importancia_comunidad_view);
         context = convertView.getContext();
     }
 

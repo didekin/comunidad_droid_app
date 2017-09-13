@@ -6,6 +6,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.incidencia.testutils.IncidEspressoTestUtils;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekinlib.model.incidencia.dominio.Avance;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
@@ -26,6 +27,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
+import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkDataResolucionSeeFr;
+import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkScreenResolucionSeeFr;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
@@ -110,8 +113,8 @@ public class IncidResolucionSeeFrTest_2 extends IncidResolucionAbstractTest {
     @Test
     public void testOnCreate_1() throws Exception
     {
-        checkScreenResolucionSeeFr();
-        checkDataResolucionSeeFr();
+        checkScreenResolucionSeeFr(resolucionIntent);
+        checkDataResolucionSeeFr(resolucion);
 
         // Avances.
         Avance avance = resolucion.getAvances().get(0);
@@ -125,7 +128,7 @@ public class IncidResolucionSeeFrTest_2 extends IncidResolucionAbstractTest {
                 withId(R.id.incid_avance_fecha_view),
                 hasSibling(allOf(
                         withId(R.id.incid_avance_aliasUser_view),
-                        withText(USER_PEPE.getUserName()) // usuario en sesión que modifica resolución.
+                        withText(USER_PEPE.getAlias()) // usuario en sesión que modifica resolución.
                 )))).check(matches(isDisplayed()));
     }
 }

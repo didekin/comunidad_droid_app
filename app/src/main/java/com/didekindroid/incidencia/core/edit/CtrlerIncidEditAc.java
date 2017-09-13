@@ -7,6 +7,7 @@ import com.didekinlib.model.incidencia.dominio.Resolucion;
 import io.reactivex.observers.DisposableMaybeObserver;
 import timber.log.Timber;
 
+import static com.didekindroid.incidencia.IncidObservable.resolucion;
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 import static io.reactivex.schedulers.Schedulers.io;
 
@@ -25,7 +26,7 @@ class CtrlerIncidEditAc extends Controller {
     {
         Timber.d("seeResolucion()");
         return subscriptions.add(
-                IncidObservable.resolucion(incidenciaId)
+                resolucion(incidenciaId)
                         .subscribeOn(io())
                         .observeOn(mainThread())
                         .subscribeWith(observer)
