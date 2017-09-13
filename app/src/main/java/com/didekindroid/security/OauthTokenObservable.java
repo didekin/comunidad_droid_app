@@ -70,13 +70,14 @@ public class OauthTokenObservable {
      * Preconditions:
      * 1. The user should be registered.
      *
-     * @return a Completable which calls oauthTokenFromUserPswd and initializes the token cache.
+     * @return a Completable which calls oauthTokenFromUserPswd, and initializes the token cache and
+     * update registered status (just in case, to keep consistency).
      */
     public static Completable oauthTokenAndInitCache(final Usuario usuario)
     {
         Timber.d("oauthTokenAndInitCache()");
         return oauthTokenFromUserPswd(usuario)
-                .doOnSuccess(initTokenAction)
+                .doOnSuccess(initTokenUpdateRegisterAction)
                 .toCompletable();
     }
 

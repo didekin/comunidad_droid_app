@@ -81,7 +81,7 @@
         <item name="android:maxEms">250</item>
         <item name="android:inputType">textNoSuggestions|textCapSentences|textMultiLine</item>
         <item name="android:layout_width">match_parent</item>
-        <item name="android:gravity">center</item>
+        <item name="android:gravity">left</item>
     </style>
 
     <!-- ................... Layouts .......... -->

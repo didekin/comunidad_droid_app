@@ -9,8 +9,6 @@ import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.concurrent.TimeUnit;
-
 import static com.didekindroid.security.OauthTokenObservable.oauthTokenAndInitCache;
 import static com.didekindroid.security.OauthTokenObservable.oauthTokenFromRefreshTk;
 import static com.didekindroid.security.OauthTokenObservable.oauthTokenFromUserPswd;
@@ -27,6 +25,7 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.CO
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static io.reactivex.plugins.RxJavaPlugins.reset;
 import static io.reactivex.schedulers.Schedulers.io;
+import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
@@ -115,7 +114,7 @@ public class OauthTokenObservableTest {
 
         SpringOauthToken oldToken = TKhandler.getTokenCache().get();
         oauthTokenAndInitCache(USER_PEPE).test()
-                .awaitDone(4L, TimeUnit.SECONDS)
+                .awaitDone(4L, SECONDS)
                 .assertValueCount(0)
                 .assertComplete()
                 .assertTerminated();
@@ -132,9 +131,13 @@ public class OauthTokenObservableTest {
         signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
 
         SpringOauthToken oldToken = TKhandler.getTokenCache().get();
+        // For completeness, to test the change in the registered status, we 'unregister' the user.
+        TKhandler.updateIsRegistered(false);
         oauthTokenAndInitCache(USER_PEPE)
                 .blockingAwait();
         checkUpdateTokenCache(oldToken);
+        // Check register status.
+        assertThat(TKhandler.isRegisteredUser(), is(true));
     }
 
     @Test
