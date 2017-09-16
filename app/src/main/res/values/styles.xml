@@ -164,4 +164,6 @@
         <item name="android:textColor">?attr/colorAccent</item>
         <item name="android:textStyle">bold</item>
     </style>
+    <style name="themeOne.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="themeOne.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 </resources>

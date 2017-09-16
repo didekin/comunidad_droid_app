@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.didekindroid"
+<manifest xmlns:tools="http://schemas.android.com/tools"
+          package="com.didekindroid"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!--All of the permissions are non-dangerous permission. No check online.-->
+    <!-- All of the permissions are non-dangerous permission. No check online. -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <!-- Permissions for GCM services -->
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -19,35 +20,49 @@
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:supportsRtl="false"
         android:theme="@style/themeOne"
-        android:networkSecurityConfig="@xml/network_security_config">
+        tools:ignore="UnusedAttribute">
+
+        <!-- **************************************************************** -->
+        <!-- ACCESORIO -->
+        <!-- **************************************************************** -->
+        <activity
+            android:name=".accesorio.ConfidencialidadAc"
+            android:label="@string/confidencialidad_ac_label"
+            android:parentActivityName=".comunidad.ComuSearchAc">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.didekindroid.comunidad.ComuSearchAc"/>
+        </activity>
         <!-- **************************************************************** -->
         <!-- USUARIO -->
         <!-- **************************************************************** -->
         <activity
-            android:name="com.didekindroid.comunidad.ComuDataAc"
+            android:name=".comunidad.ComuDataAc"
             android:label="@string/comu_data_ac_label"
-            android:parentActivityName="com.didekindroid.usuariocomunidad.data.UserComuDataAc"
+            android:parentActivityName=".usuariocomunidad.data.UserComuDataAc"
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.didekindroid.usuariocomunidad.data.UserComuDataAc"/>
         </activity>
         <activity
-            android:name="com.didekindroid.comunidad.ComuSearchAc"
+            android:name=".comunidad.ComuSearchAc"
             android:label="@string/comu_search_ac_label"
             android:launchMode="singleTop"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
+
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
-            android:name="com.didekindroid.comunidad.ComuSearchResultsAc"
+            android:name=".comunidad.ComuSearchResultsAc"
             android:label="@string/comu_search_results_ac_label"
-            android:parentActivityName="com.didekindroid.comunidad.ComuSearchAc">
+            android:parentActivityName=".comunidad.ComuSearchAc">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.didekindroid.comunidad.ComuSearchAc"/>
@@ -78,61 +93,61 @@
                 android:value=".usuario.userdata.UserDataAc"/>
         </activity>
         <activity
-            android:name="com.didekindroid.usuariocomunidad.register.RegComuAndUserAndUserComuAc"
+            android:name=".usuariocomunidad.register.RegComuAndUserAndUserComuAc"
             android:label="@string/reg_comunidad_ac_label"
-            android:parentActivityName="com.didekindroid.comunidad.ComuSearchAc"
+            android:parentActivityName=".comunidad.ComuSearchAc"
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.didekindroid.comunidad.ComuSearchAc"/>
         </activity>
         <activity
-            android:name="com.didekindroid.usuariocomunidad.register.RegComuAndUserComuAc"
+            android:name=".usuariocomunidad.register.RegComuAndUserComuAc"
             android:label="@string/reg_comunidad_ac_label"
-            android:parentActivityName="com.didekindroid.comunidad.ComuSearchAc"
+            android:parentActivityName=".comunidad.ComuSearchAc"
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.didekindroid.comunidad.ComuSearchAc"/>
         </activity>
         <activity
-            android:name="com.didekindroid.usuariocomunidad.register.RegUserAndUserComuAc"
+            android:name=".usuariocomunidad.register.RegUserAndUserComuAc"
             android:label="@string/reg_user_and_usercomu_ac_label"
-            android:parentActivityName="com.didekindroid.comunidad.ComuSearchResultsAc"
+            android:parentActivityName=".comunidad.ComuSearchResultsAc"
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.didekindroid.comunidad.ComuSearchResultsAc"/>
         </activity>
         <activity
-            android:name="com.didekindroid.usuariocomunidad.register.RegUserComuAc"
+            android:name=".usuariocomunidad.register.RegUserComuAc"
             android:label="@string/regusuario_comu_ac_label"
-            android:parentActivityName="com.didekindroid.comunidad.ComuSearchResultsAc"
+            android:parentActivityName=".comunidad.ComuSearchResultsAc"
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.didekindroid.comunidad.ComuSearchResultsAc"/>
         </activity>
         <activity
-            android:name="com.didekindroid.usuariocomunidad.listbycomu.SeeUserComuByComuAc"
+            android:name=".usuariocomunidad.listbycomu.SeeUserComuByComuAc"
             android:label="@string/see_usercomu_by_comu_ac_label"
-            android:parentActivityName="com.didekindroid.usuariocomunidad.listbyuser.SeeUserComuByUserAc">
+            android:parentActivityName=".usuariocomunidad.listbyuser.SeeUserComuByUserAc">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.didekindroid.usuariocomunidad.listbyuser.SeeUserComuByUserAc"/>
         </activity>
         <activity
-            android:name="com.didekindroid.usuariocomunidad.listbyuser.SeeUserComuByUserAc"
+            android:name=".usuariocomunidad.listbyuser.SeeUserComuByUserAc"
             android:label="@string/see_usercomu_by_user_ac_label"
-            android:parentActivityName="com.didekindroid.comunidad.ComuSearchAc">
+            android:parentActivityName=".comunidad.ComuSearchAc">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.didekindroid.comunidad.ComuSearchAc"/>
         </activity>
         <activity
-            android:name="com.didekindroid.usuariocomunidad.data.UserComuDataAc"
+            android:name=".usuariocomunidad.data.UserComuDataAc"
             android:label="@string/usercomu_data_ac_label"
-            android:parentActivityName="com.didekindroid.usuariocomunidad.listbyuser.SeeUserComuByUserAc"
+            android:parentActivityName=".usuariocomunidad.listbyuser.SeeUserComuByUserAc"
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -149,7 +164,8 @@
 
         <!-- .......... GCM services ......... -->
         <service
-            android:name=".usuario.firebase.InstanceIdService" android:exported="false">
+            android:name=".usuario.firebase.InstanceIdService"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
@@ -225,12 +241,12 @@
         </activity>
         <!-- .......... GCM services ......... -->
         <service
-            android:name=".incidencia.firebase.IncidFireBaseMsgService" android:exported="false">
+            android:name=".incidencia.firebase.IncidFireBaseMsgService"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
-
     </application>
 
 </manifest>

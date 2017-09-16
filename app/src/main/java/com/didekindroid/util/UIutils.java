@@ -8,6 +8,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -32,6 +33,7 @@ import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;
 import static com.didekindroid.util.CommonAssertionMsg.subscriptions_should_be_zero;
 import static com.didekindroid.util.CommonAssertionMsg.subscriptions_should_not_be_null;
+import static com.didekindroid.util.CommonAssertionMsg.wrong_option_menu;
 import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
 import static com.didekinlib.model.common.dominio.ValidDataPatterns.LINE_BREAK;
 import static java.text.DateFormat.MEDIUM;
@@ -189,6 +191,12 @@ public final class UIutils {
         return ui;
     }
 
+    public static void doWrongMenuItem(@NonNull MenuItem item)
+    {
+        Timber.d("Wrong menuItem: %s", item.getTitle().toString());
+        throw new IllegalArgumentException(wrong_option_menu);
+    }
+
     //    ================================== TOASTS ======================================
 
     public static void makeToast(Context context, int resourceStringId)
@@ -218,12 +226,12 @@ public final class UIutils {
 
 //    ================================== TOOL BAR ======================================
 
-    public static void doToolBar(AppCompatActivity activity, int resourceIdView, boolean hasParentAc)
+    public static ActionBar doToolBar(AppCompatActivity activity, int resourceIdView, boolean hasParentAc)
     {
 
         Timber.d("doToolBar()");
 
-        Toolbar myToolbar = (Toolbar) activity.findViewById(resourceIdView);
+        Toolbar myToolbar = activity.findViewById(resourceIdView);
         activity.setSupportActionBar(myToolbar);
         ActionBar actionBar = activity.getSupportActionBar();
         if (actionBar != null) {
@@ -233,18 +241,12 @@ public final class UIutils {
             /*actionBar.setDisplayUseLogoEnabled(true);
             actionBar.setLogo(R.mipmap.ic_launcher);*/
         }
+        return actionBar;
     }
 
-    public static void doToolBar(AppCompatActivity activity, boolean hasParentAc)
+    public static ActionBar doToolBar(AppCompatActivity activity, boolean hasParentAc)
     {
         Timber.d("doToolBar()");
-        doToolBar(activity, APPBAR_ID, hasParentAc);
+        return doToolBar(activity, APPBAR_ID, hasParentAc);
     }
-
-    /*
-    When inflating anything to be displayed on the action bar (such as a SpinnerAdapter for
-    list navigation in the toolbar), make sure you use the action bar’s themed context, retrieved
-    via getSupportActionBar().getThemedContext().
-    You must use the static methods in MenuItemCompat for any action-related calls on a MenuItem.
-*/
 }

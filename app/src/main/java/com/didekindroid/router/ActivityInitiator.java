@@ -54,6 +54,7 @@ public class ActivityInitiator {
         activity.startActivity(intent);
     }
 
+    @SuppressWarnings("ConstantConditions")
     public void initAcFromMnNewIntent(int resourceId)
     {
         Timber.d("initAcFromMnKeepIntent()");

@@ -10,9 +10,9 @@ import com.didekindroid.R;
 import com.didekindroid.api.Viewer;
 import com.didekindroid.security.CtrlerAuthToken;
 import com.didekindroid.security.CtrlerAuthTokenIf;
+import com.didekindroid.testutil.ViewerTestWrapper;
 import com.didekinlib.model.comunidad.Comunidad;
 
-import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -20,7 +20,6 @@ import org.junit.runner.RunWith;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -30,14 +29,12 @@ import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_REAL;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkMunicipioSpinner;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkRegComuFrViewEmpty;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.typeComunidadData;
-import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchResultsListLayout;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
+import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchResultsListLayout;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_SEARCH;
-import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.checkViewerReplaceComponent;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_B;
-import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_C;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
@@ -69,14 +66,14 @@ public class ViewerComuSearchAcTest {
     {
         activity = activityRule.getActivity();
         AtomicReference<ViewerComuSearchAc> viewerAtomic = new AtomicReference<>(null);
-        viewerAtomic.compareAndSet(null, activity.viewer);
+        viewerAtomic.compareAndSet(null, activity.viewerAc);
         waitAtMost(4, SECONDS).untilAtomic(viewerAtomic, notNullValue());
     }
 
     @Test
     public void test_NewViewerComuSearch() throws Exception
     {
-        assertThat(activity.viewer.getController(), isA(CtrlerAuthTokenIf.class));
+        assertThat(activity.viewerAc.getController(), isA(CtrlerAuthTokenIf.class));
     }
 
     @Test
@@ -90,22 +87,22 @@ public class ViewerComuSearchAcTest {
     @Test
     public void test_DoViewInViewer_2() throws Exception
     {
-        activity.viewer.setController(new CtrlerAuthToken() {
+        activity.viewerAc.setController(new CtrlerAuthToken() {
             @Override
             public void refreshAccessToken(Viewer viewer)
             {
                 assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
             }
         });
-        activity.viewer.doViewInViewer(null, null);
+        activity.viewerAc.doViewInViewer(null, null);
         waitAtMost(4, SECONDS).untilAtomic(flagMethodExec, is(AFTER_METHOD_EXEC_A));
     }
 
     @Test
     public void test_SetChildViewer() throws Exception
     {
-        activity.viewer.setChildViewer(newViewerRegComuFr(activity.regComuFrg.getView(), activity.viewer));
-        assertThat(activity.viewer.getChildViewer(ViewerRegComuFr.class), notNullValue());
+        activity.viewerAc.setChildViewer(newViewerRegComuFr(activity.regComuFrg.getView(), activity.viewerAc));
+        assertThat(activity.viewerAc.getChildViewer(ViewerRegComuFr.class), notNullValue());
     }
 
     @Test
@@ -113,7 +110,7 @@ public class ViewerComuSearchAcTest {
     {
         Bundle bundle = new Bundle(1);
         bundle.putSerializable(COMUNIDAD_SEARCH.key, signUpWithTkGetComu(COMU_REAL_PEPE));
-        checkViewerReplaceComponent(activity.viewer, comuSearchResultsListLayout, bundle);
+        checkViewerReplaceComponent(activity.viewerAc, comuSearchResultsListLayout, bundle);
         cleanOptions(CLEAN_PEPE);
     }
 
@@ -123,8 +120,8 @@ public class ViewerComuSearchAcTest {
         checkMunicipioSpinner("municipio"); /* Esperamos por los viejos datos.*/
         typeComunidadData();
 
-        ViewerRegComuFr viewerRegComuFrOld = activity.viewer.getChildViewer(ViewerRegComuFr.class);
-        activity.viewer = new ViewerComuSearchAc(activity.acView, activity) {
+        ViewerRegComuFr viewerRegComuFrOld = activity.viewerAc.getChildViewer(ViewerRegComuFr.class);
+        activity.viewerAc = new ViewerComuSearchAc(activity.acView, activity) {
             @Override
             public void replaceComponent(@NonNull Bundle bundle)
             {
@@ -133,10 +130,10 @@ public class ViewerComuSearchAcTest {
             }
         };
         activity.setChildInParentViewer(viewerRegComuFrOld);
-        activity.viewer.setController(new CtrlerAuthToken());
+        activity.viewerAc.setController(new CtrlerAuthToken());
 
         Button button = activity.acView.findViewById(R.id.searchComunidad_Bton);
-        button.setOnClickListener(activity.viewer.new ComuSearchButtonListener());
+        button.setOnClickListener(activity.viewerAc.new ComuSearchButtonListener());
         button.callOnClick();
         waitAtMost(4, SECONDS).untilAtomic(flagMethodExec, is(AFTER_METHOD_EXEC_B));
     }
@@ -144,34 +141,22 @@ public class ViewerComuSearchAcTest {
     //  =========================  TESTS FOR ACTIVITY/FRAGMENT LIFECYCLE  ===========================
 
     @Test
-    public void test_OnStop()
-    {
-        checkSubscriptionsOnStop(activity, activity.viewer.getController());
-    }
-
-    @Test
     public void test_OnSaveInstanceState()
     {
-        activity.viewer = new ViewerComuSearchAc(activity.viewer.getViewInViewer(), activity) {
+        final ViewerTestWrapper wrapper = new ViewerTestWrapper();
+        activity.viewerAc = new ViewerComuSearchAc(null, activity) {
             @Override
             public void saveState(Bundle savedState)
             {
-                assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_C), Matchers.is(BEFORE_METHOD_EXEC));
+                wrapper.saveState(savedState);
             }
 
             @Override
-            public int clearSubscriptions()  // It is called from onStop() and gives problems.
+            public int clearSubscriptions()
             {
-                return 0;
+                return wrapper.clearSubscriptions();
             }
         };
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                getInstrumentation().callActivityOnSaveInstanceState(activity, new Bundle(0));
-            }
-        });
-        waitAtMost(6, SECONDS).untilAtomic(flagMethodExec, Matchers.is(AFTER_METHOD_EXEC_C));
+        wrapper.checkOnSaveInstanceState(activity.viewerAc);
     }
 }

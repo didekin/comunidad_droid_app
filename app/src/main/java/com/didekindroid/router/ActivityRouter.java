@@ -6,6 +6,7 @@ import android.util.ArrayMap;
 import android.view.View;
 
 import com.didekindroid.R;
+import com.didekindroid.accesorio.ConfidencialidadAc;
 import com.didekindroid.comunidad.ComuDataAc;
 import com.didekindroid.comunidad.ComuSearchAc;
 import com.didekindroid.comunidad.ComuSearchResultsAc;
@@ -83,6 +84,8 @@ public class ActivityRouter implements ActivityRouterIf {
 
     // Menu options.
     static {
+        // ACCESORIO
+        menuIdMap.put(R.id.confidencialidad_ac_mn, ConfidencialidadAc.class);
         // INCIDENCIAS.
         menuIdMap.put(R.id.incid_comment_reg_ac_mn, IncidCommentRegAc.class);
         menuIdMap.put(R.id.incid_comments_see_ac_mn, IncidCommentSeeAc.class);
@@ -102,8 +105,9 @@ public class ActivityRouter implements ActivityRouterIf {
         menuIdMap.put(R.id.user_data_ac_mn, UserDataAc.class);
 
         /* USUARIO NO REGISTRADO.*/
-        noUserRegMenuIdMap.put(R.id.reg_nueva_comunidad_ac_mn, RegComuAndUserAndUserComuAc.class);
+        noUserRegMenuIdMap.put(R.id.confidencialidad_ac_mn, ConfidencialidadAc.class);
         noUserRegMenuIdMap.put(R.id.login_ac_mn, LoginAc.class);
+        noUserRegMenuIdMap.put(R.id.reg_nueva_comunidad_ac_mn, RegComuAndUserAndUserComuAc.class);
     }
 
     // Links and buttons.

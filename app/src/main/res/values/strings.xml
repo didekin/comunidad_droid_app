@@ -20,25 +20,53 @@
     <string name="decimal_separator">,</string>
     <string name="navigate_up_txt">Desplazarse hacia arriba</string>
     <!--Menús-->
+    <string name="confidencialiad_mn">Confidencialidad</string>
     <!--Messages-->
     <string name="no_internet_conn_toast">No hay conexión de red disponible.</string>
     <string name="exception_generic_message">No podemos continuar. Inténtalo en unos segundos nuevamente.</string>
-    <string name="error_validation_msg">Los siguientes datos no son válidos: </string>
+    <string name="error_validation_msg">Los siguientes datos no son válidos:</string>
     <!-- Google Cloud Messages -->
     <string name="gcm_message_generic_subtext">Pulsa aquí para ver los detalles.</string>
+    <!--******************************************************************************-->
+    <!--                                 ACCESORIOS                                   -->
+    <!--******************************************************************************-->
+    <!-- ============================= ACTIVITIES ============================= -->
+    <string name="confidencialidad_ac_label">Protección de datos</string>
+    <string name="proteccion_datos_txt">
+        "Material is the metaphor.\n\n"
+
+        "A material metaphor is the unifying theory of a rationalized space and a system of motion."
+        "The material is grounded in tactile reality, inspired by the study of paper and ink, yet "
+        "technologically advanced and open to imagination and magic.\n\n"
+
+        "Surfaces and edges of the material provide visual cues that are grounded in reality. The "
+        "use of familiar tactile attributes helps users quickly understand affordances. Yet the "
+        "flexibility of the material creates new affordances that supercede those in the physical "
+        "world, without breaking the rules of physics.\n\n"
+
+        "The fundamentals of light, surface, and movement are key to conveying how objects move, "
+        "interact, and exist in space and in relation to each other. Realistic lighting shows "
+        "seams, divides space, and indicates moving parts.\n\n"
+
+        "Bold, graphic, intentional.\n\n"
+    </string>
     <!--******************************************************************************-->
     <!--                                 INCIDENCIAS                                  -->
     <!--******************************************************************************-->
     <!-- ============================ MESSAGES ============================== -->
     <string name="no_incidencia_by_user">No hay incidencias que mostrar</string>
     <string name="incidencia_not_registered">Intenta nuevamente registrar la incidencia.</string>
-    <string name="incidencia_wrong_init">No podemos continuar. Verifica que sigue abierta la incidencia.</string>
+    <string name="incidencia_wrong_init">No podemos continuar. Verifica que sigue abierta la
+        incidencia.
+    </string>
     <string name="resolucion_duplicada">Ya existe resolución para esta incidencia</string>
     <string name="user_without_powers">Haz login y accede nuevamente a la incidencia.</string>
     <!-- ====================== Google Cloud Messages ====================== -->
     <string name="incid_gcm_nueva_incidencia_body">Nueva incidencia en tu comunidad.</string>
     <string name="incid_gcm_incidencia_closed_body">Incidencia resuelta en tu comunidad.</string>
-    <string name="incid_gcm_resolucion_open_body">Incidencia en tu comunidad en trámite de resolución.</string>
+    <string name="incid_gcm_resolucion_open_body">Incidencia en tu comunidad en trámite de
+        resolución.
+    </string>
     <!-- ============================== MENUS ================================= -->
     <string name="incid_closed_see_by_usercomu_ac_mn">Incidencias cerradas</string>
     <string name="incid_comment_reg_ac_mn">Comentar</string>
@@ -50,7 +78,7 @@
     <string name="incid_incidencia_rot">Incidencia:</string>
     <!-- =============== IncidCommentRegAc ========= -->
     <string name="incid_comment_reg_ac_label">Comentar una incidencia</string>
-    <string name="incid_comment_ed_hint"> ----- Comentario (max. 250 caracteres) ---- </string>
+    <string name="incid_comment_ed_hint">----- Comentario (max. 250 caracteres) ----</string>
     <string name="incid_comment_ed_button_rot">Comentar</string>
     <string name="incid_comment_label">Comentario</string>
     <!-- =============== IncidCommentSeeAc ========= -->
@@ -66,7 +94,7 @@
     <string name="no_importancia_by_user">No hay otras valoraciones en la comunidad</string>
     <!-- =============== IncidRegAc =============== -->
     <string name="incid_reg_ac_label">Nueva incidencia</string>
-    <string name="incid_reg_hint"> -- Describe la incidencia (max. 300 caracteres) -- </string>
+    <string name="incid_reg_hint">-- Describe la incidencia (max. 300 caracteres) --</string>
     <string name="incid_reg_ac_button_rot">Registrar incidencia</string>
     <string name="incid_reg_importancia">Importancia</string>
     <string name="incid_importancia_otros_txt">>> Ver comunidad</string>
@@ -88,7 +116,7 @@
     <string name="incid_resolucion_fecha_prev">Fecha estimada:</string>
     <string name="incid_resolucion_fecha_prev_msg">Fecha resolución</string>
     <string name="incid_resolucion_fecha_default_txt">>> Elige una fecha</string>
-    <string name="incid_resolucion_hint"> -- plan para resolver la incidencia -- </string>
+    <string name="incid_resolucion_hint">-- plan para resolver la incidencia --</string>
     <string name="incid_resolucion_reg_ac_button_rot">Registrar resolución</string>
     <string name="incid_resolucion_rot">Datos resolución</string>
     <string name="incid_resolucion_coste_prev_rot">Coste estimado EUR:</string>
@@ -117,7 +145,7 @@
     <!-- ============================ MESSAGES ============================== -->
     <string name="exception_generic_app_message">No podemos continuar. Busca tu comunidad o haz login.</string>
     <string name="comunidad_not_found_message">No podemos mostrarte esta comunidad. Búscala nuevamente.</string>
-    <string name="no_result_search_comunidad">No hemos encontrado tu comunidad.\nPuedes registrarla aquí. </string>
+    <string name="no_result_search_comunidad">No hemos encontrado tu comunidad.\nPuedes registrarla aquí.</string>
     <string name="login_wrong_no_mail">"Busca tu comunidad y regístrate.\nSi no existe, regístrala en 'Nueva comunidad'."</string>
     <string name="username_wrong_in_login">La dirección de correo electrónico no está registrada.</string>
     <string name="password_wrong">La contraseña no se corresponde con tu usuario.</string>
@@ -145,7 +173,8 @@
     <string name="comu_data_ac_label">Datos comunidad</string>
     <string name="comu_data_ac_button_txt">Modificar datos</string>
     <!-- ================= ComuSearchAc ================= -->
-    <string name="comu_search_ac_label">Dídekin: buscar comunidad</string>
+    <string name="comu_search_ac_label">Dídekin</string>
+    <string name="comu_search_ac_rotulo">Busca tu comunidad</string>
     <!-- =============== ComuSearchResultsAc ============ -->
     <string name="comu_search_results_ac_label">Buscar comunidad: resultados</string>
     <!-- ........ ComuSearchResultsListFr ......... -->
@@ -170,10 +199,10 @@
     <string name="reg_comunidad_ac_label">Nueva comunidad</string>
     <!-- .......... RegUserComuFr ....... -->
     <string name="reg_usercomu_vivienda_rot">Tu vivienda</string>
-    <string name="reg_usercomu_portal_hint"> -- Portal --</string>
-    <string name="reg_usercomu_escalera_hint"> -- Escalera --</string>
-    <string name="reg_usercomu_planta_hint"> -- Planta --</string>
-    <string name="reg_usercomu_puerta_hint"> -- Puerta --</string>
+    <string name="reg_usercomu_portal_hint">-- Portal --</string>
+    <string name="reg_usercomu_escalera_hint">-- Escalera --</string>
+    <string name="reg_usercomu_planta_hint">-- Planta --</string>
+    <string name="reg_usercomu_puerta_hint">-- Puerta --</string>
     <string name="reg_usercomu_portal_rot">Portal</string>
     <string name="reg_usercomu_escalera_rot">Escalera</string>
     <string name="reg_usercomu_planta_rot">Planta</string>
@@ -191,7 +220,8 @@
     <string name="municipio_spinner">municipio</string>
     <string name="municipio">Municipio</string>
     <string name="tipo_via">Tipo vía</string>
-    <string name="tipo_via_spinner">tipo de vía</string>   <!-- TODO: borrar cuando se internacionalicen las referencias a ella.-->
+    <string name="tipo_via_spinner">tipo de vía
+    </string>   <!-- TODO: borrar cuando se internacionalicen las referencias a ella.-->
     <string name="nombre_via_hint">Nombre de la vía, sin número</string>
     <string name="nombre_via">Nombre de la vía</string>
     <string name="numero_en_via">Número</string>
@@ -204,8 +234,8 @@
     <string name="reg_usuario_rotulo">Tus datos</string>
     <string name="alias">Nombre</string>
     <string name="password">Contraseña</string>
-    <string name="password_different"> (no coinciden)</string>
-    <string name="usuario_password_hint">Contraseña: 6–60 letras, números, _ </string>
+    <string name="password_different">(no coinciden)</string>
+    <string name="usuario_password_hint">Contraseña: 6–60 letras, números, _</string>
     <string name="usuario_password_confirm_hint">Confirmación contraseña</string>
     <string name="usuario_alias_hint">Nombre: 6–30 letras, números, _</string>
     <string name="email_hint">Correo electrónico</string>
@@ -215,14 +245,15 @@
     <string name="usercomu_escalera_rot">Escalera:</string>
     <string name="usercomu_planta_rot">Planta:</string>
     <string name="usercomu_puerta_rot">Puerta:</string>
-    <string name="usercomu_role_rot">Vínculo: </string>
+    <string name="usercomu_role_rot">Vínculo:</string>
     <!-- ================= SeeUserComuByUserAc ============ -->
     <string name="see_usercomu_by_user_ac_label">Tus comunidades</string>
     <!-- ================= UserComuDataAc ===================== -->
     <string name="usercomu_data_ac_label">En la comunidad</string>
     <string name="usercomu_data_ac_delete_txt">Para borrar tus datos en esta comunidad:</string>
     <string name="usercomu_data_ac_delete_button_txt">Date de baja en la comunidad</string>
-    <string name="comu_list_no_result_txt">No hemos encontrado ningún resultado para tu búsqueda</string>
+    <string name="comu_list_no_result_txt">No hemos encontrado ningún resultado para tu búsqueda
+    </string>
     <!-- ================= UserDataAc ===================== -->
     <string name="user_data_ac_label">Tus datos</string>
     <string name="user_data_ac_cambios_text">Sobrescribe el dato a modificar</string>
@@ -230,5 +261,4 @@
     <string name="user_data_ac_password_hint">Contraseña actual</string>
     <string name="user_data_modif_button_rot">Modifica tus datos</string>
     <string name="no_user_data_to_be_modified">No hay datos a modificar</string>
-
 </resources>

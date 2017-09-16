@@ -51,10 +51,10 @@ class ViewerIncidEditAc extends ViewerParent<View, CtrlerIncidEditAc> {
         resolBundle = IncidAndResolBundle.class.cast(viewBean);
     }
 
-    boolean checkResolucion(int resourceIdItemMn)
+    void checkResolucion(int resourceIdItemMn)
     {
         Timber.d("checkResolucion()");
-        return controller.seeResolucion(
+        controller.seeResolucion(
                 new ResolucionObserver(resourceIdItemMn),
                 resolBundle.getIncidImportancia().getIncidencia().getIncidenciaId());
     }
