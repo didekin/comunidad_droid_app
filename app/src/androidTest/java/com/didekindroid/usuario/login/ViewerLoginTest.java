@@ -219,7 +219,7 @@ public class ViewerLoginTest {
         viewerLogin.doViewInViewer(bundle, null);
         assertThat(viewerLogin.getCounterWrong().get(), is(2));
 
-        // Execute and checkMenu.
+        // Execute and checkAppBarMenu.
         viewerLogin.saveState(bundle);
         assertThat(bundle.getInt(login_counter_atomic_int.key), is(2));
     }

@@ -3,6 +3,8 @@ package com.didekindroid.accesorio;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import com.didekindroid.R;
 
@@ -21,6 +23,15 @@ public class ConfidencialidadAc extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.confidencialidad_ac);
         doToolBar(this, true);
+
+        Button okButton = findViewById(R.id.confidencialidad_ac_button);
+        okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                doUpMenu(ConfidencialidadAc.this);
+            }
+        });
     }
 
     @Override

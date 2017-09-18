@@ -1,9 +1,9 @@
 package com.didekindroid.usuariocomunidad.data;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.PopupMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -25,6 +25,7 @@ import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_TRAV_PLAZUELA_11;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.testutil.ActivityTestUtils.doMockMenu;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
@@ -76,11 +77,13 @@ public class ViewerUserComuDataAc_Mock_Test {
         assertThat(viewer.getController(), isA(CtrlerUsuarioComunidad.class));
     }
 
+    // .............................. SUBSCRIBERS ..................................
+
     @Test
     public void test_UpdateActivityMenu() throws Exception
     {
         // Preconditions.
-        Menu myMenu = doMenuPreconditions();
+        Menu myMenu = checkMockMenu(activity, R.menu.menu_mock_one);
         // Mock controller.
         viewer.setController(new CtrlerUsuarioComunidadTest());
         // Mock menu in viewer.
@@ -93,14 +96,12 @@ public class ViewerUserComuDataAc_Mock_Test {
         assertThat(comuDataItem.isVisible(), is(true));
     }
 
-    // .............................. SUBSCRIBERS ..................................
-
     @Test
     public void test_AcMenuObserver_1()
     {
         // Preconditions.
         boolean isOldest = false;
-        Menu myMenu = doMenuPreconditions();
+        Menu myMenu = checkMockMenu(activity, R.menu.menu_mock_one);
         // Exec and check.
         execCheck(myMenu, isOldest);
     }
@@ -110,7 +111,7 @@ public class ViewerUserComuDataAc_Mock_Test {
     {
         // Preconditions.
         boolean isOldest = true;
-        Menu myMenu = doMenuPreconditions();
+        Menu myMenu = checkMockMenu(activity, R.menu.menu_mock_one);
         // Mock menu in viewer.
         viewer.setAcMenu(myMenu);
         // Exec and check.
@@ -119,11 +120,9 @@ public class ViewerUserComuDataAc_Mock_Test {
 
     //  =========================  HELPERS  ===========================
 
-    Menu doMenuPreconditions()
+    Menu checkMockMenu(Activity activity, int menuMockRsId)
     {
-        PopupMenu popupMenu = new PopupMenu(getTargetContext(), null);
-        Menu menu = popupMenu.getMenu();
-        activity.getMenuInflater().inflate(R.menu.menu_mock_one, menu);
+        Menu menu = doMockMenu(activity, menuMockRsId);
         MenuItem menuItem = menu.findItem(R.id.comu_data_ac_mn);
         assertThat(menuItem.isEnabled(), is(false));
         assertThat(menuItem.isVisible(), is(false));

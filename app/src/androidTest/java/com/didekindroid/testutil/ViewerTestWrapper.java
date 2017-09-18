@@ -29,8 +29,7 @@ public class ViewerTestWrapper {
         return 0;
     }
 
-    @SuppressWarnings("unused")
-    public void saveState(Bundle savedState)
+    public void saveState()
     {
         flagMethod.set(AFTER_SaveState);
     }

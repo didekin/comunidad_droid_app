@@ -71,8 +71,7 @@ final class ViewerDrawerMain extends
         drawerMenu.findItem(R.id.incid_see_open_by_comu_ac_mn).setVisible(isRegistered).setEnabled(isRegistered);
     }
 
-    class DrawerMainMnItemSelListener implements
-            NavigationView.OnNavigationItemSelectedListener {
+    class DrawerMainMnItemSelListener implements NavigationView.OnNavigationItemSelectedListener {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item)

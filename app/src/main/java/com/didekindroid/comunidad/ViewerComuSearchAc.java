@@ -53,8 +53,8 @@ class ViewerComuSearchAc extends ViewerParent<View, CtrlerAuthTokenIf> {
 
         // Check token cache.
         controller.refreshAccessToken(this);
-        Button mSearchButton = view.findViewById(R.id.searchComunidad_Bton);
-        mSearchButton.setOnClickListener(new ComuSearchButtonListener());
+        Button searchButton = view.findViewById(R.id.searchComunidad_Bton);
+        searchButton.setOnClickListener(new ComuSearchButtonListener());
     }
 
     // ==================================  HELPERS =================================

@@ -10,10 +10,11 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ChildViewersInjectorIf;
-import com.didekindroid.api.ViewerIf;
 import com.didekindroid.api.ParentViewerInjectedIf;
+import com.didekindroid.api.ViewerIf;
 import com.didekindroid.comunidad.utils.ComuBundleKey;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.testutil.ViewerTestWrapper;
 import com.didekindroid.usuariocomunidad.listbycomu.SeeUserComuByComuAc;
 import com.didekinlib.model.comunidad.Comunidad;
 
@@ -26,9 +27,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicReference;
 
-import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -47,8 +46,6 @@ import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnSt
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
-import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_B;
-import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
@@ -70,8 +67,8 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class ComuDataAcTest {
 
-    final AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
     Comunidad comunidad;
+    ComuDataAc activity;
 
     @Rule
     public IntentsTestRule<ComuDataAc> intentRule = new IntentsTestRule<ComuDataAc>(ComuDataAc.class) {
@@ -95,8 +92,6 @@ public class ComuDataAcTest {
             return intent;
         }
     };
-
-    ComuDataAc activity;
 
     @Before
     public void setUp() throws Exception
@@ -158,34 +153,26 @@ public class ComuDataAcTest {
         assertThat(activity.viewer, isA(ParentViewerInjectedIf.class));
         assertThat(activity.regComuFrg.viewerInjector, CoreMatchers.<ChildViewersInjectorIf>is(activity));
         assertThat(activity.regComuFrg.viewer.getParentViewer(), CoreMatchers.<ViewerIf>is(activity.viewer));
-
-
     }
 
     @Test
     public void test_OnSaveInstanceState()
     {
-        activity.viewer = new ViewerComuDataAc(activity.acView, activity) {
+        final ViewerTestWrapper wrapper = new ViewerTestWrapper();
+        activity.viewer = new ViewerComuDataAc(null, activity) {
             @Override
             public void saveState(Bundle savedState)
             {
-                assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_B), Matchers.is(BEFORE_METHOD_EXEC));
+                wrapper.saveState();
             }
 
             @Override
-            public int clearSubscriptions()  // It is called from onStop() and gives problems.
+            public int clearSubscriptions()
             {
-                return 0;
+                return wrapper.clearSubscriptions();
             }
         };
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                getInstrumentation().callActivityOnSaveInstanceState(activity, new Bundle(0));
-            }
-        });
-        waitAtMost(6, SECONDS).untilAtomic(flagMethodExec, Matchers.is(AFTER_METHOD_EXEC_B));
+        wrapper.checkOnSaveInstanceState(activity.viewer);
     }
 
     @Test

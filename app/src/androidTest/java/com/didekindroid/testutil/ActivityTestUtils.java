@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.test.espresso.NoMatchingRootException;
 import android.support.test.espresso.NoMatchingViewException;
@@ -15,6 +16,9 @@ import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.contrib.PickerActions;
 import android.support.test.runner.lifecycle.Stage;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.PopupMenu;
+import android.view.Gravity;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.AdapterView;
@@ -56,6 +60,7 @@ import static android.content.Context.ACTIVITY_SERVICE;
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.KITKAT;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
+import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
@@ -64,6 +69,9 @@ import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard
 import static android.support.test.espresso.action.ViewActions.pressBack;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.contrib.DrawerActions.open;
+import static android.support.test.espresso.contrib.DrawerMatchers.isClosed;
+import static android.support.test.espresso.contrib.NavigationViewActions.navigateTo;
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -327,9 +335,18 @@ public final class ActivityTestUtils {
         }
     }
 
-    //    ============================= NAVIGATION ===================================
+    //    ============================= MENU ===================================
 
-    public static void checkMenu(Activity activity, int menuResourceId, int actionResourceId)
+    @NonNull
+    public static Menu doMockMenu(Activity activity, int menuMockRsId)
+    {
+        PopupMenu popupMenu = new PopupMenu(getTargetContext(), null);
+        Menu menu = popupMenu.getMenu();
+        activity.getMenuInflater().inflate(menuMockRsId, menu);
+        return menu;
+    }
+
+    public static void checkAppBarMenu(Activity activity, int menuResourceId, int actionResourceId)
     {
         try {
             onView(withText(menuResourceId)).check(doesNotExist());
@@ -341,6 +358,15 @@ public final class ActivityTestUtils {
             waitAtMost(4, SECONDS).until(isResourceIdDisplayed(actionResourceId));
         }
     }
+
+    public static void checkDrawerMenu(int drawerLayoutId, int navigationViewId, int menuResourceId, int actionResourceId)
+    {
+        onView(withId(drawerLayoutId)).check(matches(isClosed(Gravity.LEFT))).perform(open());
+        onView(withId(navigationViewId)).perform(navigateTo(menuResourceId));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(actionResourceId));
+    }
+
+    /*    ============================= NAVIGATION ===================================*/
 
     public static void clickNavigateUp()
     {

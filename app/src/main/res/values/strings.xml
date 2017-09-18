@@ -50,6 +50,7 @@
 
         "Bold, graphic, intentional.\n\n"
     </string>
+    <string name="confidencialidad_button_rot">Continuar</string>
     <!--******************************************************************************-->
     <!--                                 INCIDENCIAS                                  -->
     <!--******************************************************************************-->
@@ -64,9 +65,7 @@
     <!-- ====================== Google Cloud Messages ====================== -->
     <string name="incid_gcm_nueva_incidencia_body">Nueva incidencia en tu comunidad.</string>
     <string name="incid_gcm_incidencia_closed_body">Incidencia resuelta en tu comunidad.</string>
-    <string name="incid_gcm_resolucion_open_body">Incidencia en tu comunidad en trámite de
-        resolución.
-    </string>
+    <string name="incid_gcm_resolucion_open_body">Incidencia en tu comunidad en trámite de resolución.</string>
     <!-- ============================== MENUS ================================= -->
     <string name="incid_closed_see_by_usercomu_ac_mn">Incidencias cerradas</string>
     <string name="incid_comment_reg_ac_mn">Comentar</string>

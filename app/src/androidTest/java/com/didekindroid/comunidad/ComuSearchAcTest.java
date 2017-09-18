@@ -1,7 +1,6 @@
 package com.didekindroid.comunidad;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.test.espresso.action.ViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -12,16 +11,14 @@ import com.didekindroid.api.ViewerIf;
 import com.didekindroid.exception.UiException;
 
 import org.hamcrest.CoreMatchers;
-import org.hamcrest.Matchers;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicReference;
 
-import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.*;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -36,8 +33,6 @@ import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
-import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_C;
-import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekindroid.usuario.testutil.UserItemMenuTestUtils.LOGIN_AC;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
@@ -95,7 +90,7 @@ public class ComuSearchAcTest {
         activity = activityRule.launchActivity(new Intent());
         typeComunidadData();
 
-        onView(withId(R.id.searchComunidad_Bton)).perform(ViewActions.click());
+        onView(withId(R.id.searchComunidad_Bton)).perform(click());
         // Check the view for comunidades list fragment.
         waitAtMost(4, SECONDS).until(isResourceIdDisplayed(comuSearchResultsListLayout));
 
@@ -111,7 +106,7 @@ public class ComuSearchAcTest {
         activity = activityRule.launchActivity(new Intent());
         typeComunidadData();
 
-        onView(withId(R.id.searchComunidad_Bton)).perform(ViewActions.click());
+        onView(withId(R.id.searchComunidad_Bton)).perform(click());
         // Check the view for comunidades list fragment.
         waitAtMost(4, SECONDS).until(isResourceIdDisplayed(comuSearchResultsListLayout));
         // Back.

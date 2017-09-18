@@ -1,10 +1,7 @@
 # GRADLE
 .gradle
 local.properties
-gradle.properties
 **/build
-**/libs
-**/gen
 
 # IDEA
 .idea
@@ -15,26 +12,20 @@ gradle.properties
 
 # GOOGLE
 /**/google-services.json
-/**/google_services.txt
 
 # ENTORNOS y PRUEBAS
 # Certificate stores
-**/res/raw/*.bks
+**/res/raw/*bks
 # Parámetro PRO
 **/res/values/app_parameters.xml
-# Parámetros redundantes
-/**/res/values/geny*.xml
-/**/res/values/local*.xml
-/**/res/values/physical*.xml
 # Configuración de entornos
 terminal/*
+# Logs
+logs/
 
 # Releases
 /**/releases
 
 #  MISCELÁNEA
-logs/*.*
 administracion
-.navigation
-**/captures
 

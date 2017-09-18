@@ -148,7 +148,7 @@ public class ViewerComuSearchAcTest {
             @Override
             public void saveState(Bundle savedState)
             {
-                wrapper.saveState(savedState);
+                wrapper.saveState();
             }
 
             @Override
