@@ -4,7 +4,6 @@ import android.app.TaskStackBuilder;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -68,15 +67,15 @@ import static org.junit.Assert.fail;
 public class ComuDataAcTest {
 
     Comunidad comunidad;
-    ComuDataAc activity;
-
     @Rule
     public IntentsTestRule<ComuDataAc> intentRule = new IntentsTestRule<ComuDataAc>(ComuDataAc.class) {
 
         @Override
         protected void beforeActivityLaunched()
         {
-            TaskStackBuilder.create(getTargetContext()).addParentStack(SeeUserComuByComuAc.class).startActivities();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                TaskStackBuilder.create(getTargetContext()).addParentStack(SeeUserComuByComuAc.class).startActivities();
+            }
         }
 
         @Override
@@ -92,6 +91,7 @@ public class ComuDataAcTest {
             return intent;
         }
     };
+    ComuDataAc activity;
 
     @Before
     public void setUp() throws Exception
@@ -100,12 +100,13 @@ public class ComuDataAcTest {
         checkIsRegistered(activity.viewer);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @After
     public void tearDown() throws Exception
     {
         cleanOptions(CLEAN_JUAN);
-        cleanTasks(activity);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            cleanTasks(activity);
+        }
     }
 
 //    =============================================================================================
@@ -119,7 +120,9 @@ public class ComuDataAcTest {
         onView(withId(R.id.comu_data_ac_button)).perform(scrollTo(), click());
         waitAtMost(5, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
 
-        checkUp(comuSearchAcLayout);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            checkUp(comuSearchAcLayout);
+        }
     }
 
     @Test
@@ -188,6 +191,9 @@ public class ComuDataAcTest {
     {
         SEE_USERCOMU_BY_COMU_AC.checkItemRegisterUser(activity);
         intended(hasExtra(ComuBundleKey.COMUNIDAD_ID.key, comunidad.getC_Id()));
-        checkUp(seeUserComuByUserFrRsId);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            checkUp(seeUserComuByUserFrRsId);
+        }
     }
 }

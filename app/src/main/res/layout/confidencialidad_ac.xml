@@ -1,28 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    android:id="@+id/confidencialidad_ac_layout"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context="com.didekindroid.accesorio.ConfidencialidadAc">
+<ScrollView style="@style/baseLayout.scroll">
 
-    <include layout="@layout/appbar_include_design"/>
-
-    <android.support.v4.widget.NestedScrollView
-        android:id="@+id/confidencialidad_scroll_view"
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/confidencialidad_ac_layout"
         xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context="com.didekindroid.accesorio.ConfidencialidadAc"
-        tools:showIn="@layout/confidencialidad_ac">
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        tools:context="com.didekindroid.accesorio.ConfidencialidadAc">
 
-        <LinearLayout style="@style/baseLayout.withPadding">
+        <include layout="@layout/appbar_include_design"/>
+
+        <LinearLayout
+            style="@style/baseLayout.withPadding"
+            android:layout_marginTop="@dimen/app_bar_bottom_margin">
+
             <TextView
                 android:id="@+id/proteccion_datos_textview"
                 android:layout_width="wrap_content"
@@ -36,6 +29,18 @@
                 android:layout_gravity="center_horizontal"
                 android:text="@string/confidencialidad_button_rot"/>
         </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
 
-</android.support.design.widget.CoordinatorLayout>
+        <!--<android.support.v4.widget.NestedScrollView
+            android:id="@+id/confidencialidad_scroll_view"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:context="com.didekindroid.accesorio.ConfidencialidadAc"
+            tools:showIn="@layout/confidencialidad_ac">
+        </android.support.v4.widget.NestedScrollView>-->
+
+    </android.support.design.widget.CoordinatorLayout>
+</ScrollView>

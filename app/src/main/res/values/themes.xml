@@ -23,11 +23,17 @@
         <item name="selectableItemBackground">@color/deep_orange_200</item>-->
 
         <!-- Spinners and menu overflow items -->
+        <item name="dropDownListViewStyle">@style/dropDownMenu</item>
+        <item name="textAppearanceLargePopupMenu">@style/optionMenuTextLarge</item>
+        <item name="textAppearanceSmallPopupMenu">@style/optionMenuTextSmall</item>
+        <item name="listPreferredItemHeight">35dp</item>
+        <item name="listPreferredItemHeightSmall">30dp</item>
+        <item name="listPreferredItemHeightLarge">35dp</item>
         <item name="android:dropDownListViewStyle">@style/dropDownMenu</item>
         <item name="android:textAppearanceLargePopupMenu">@style/optionMenuTextLarge</item>
         <item name="android:textAppearanceSmallPopupMenu">@style/optionMenuTextSmall</item>
         <item name="android:listPreferredItemHeight">35dp</item>
         <item name="android:listPreferredItemHeightSmall">30dp</item>
-        <item name="android:listPreferredItemHeightLarge">35dp</item>>
+        <item name="android:listPreferredItemHeightLarge">35dp</item>
     </style>
 </resources>

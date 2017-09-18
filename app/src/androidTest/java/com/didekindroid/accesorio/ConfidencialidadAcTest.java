@@ -1,7 +1,6 @@
 package com.didekindroid.accesorio;
 
 import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -16,6 +15,7 @@ import static android.app.TaskStackBuilder.create;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -37,17 +37,23 @@ public class ConfidencialidadAcTest {
 
     @Rule
     public ActivityTestRule<ConfidencialidadAc> activityRule = new ActivityTestRule<ConfidencialidadAc>(ConfidencialidadAc.class) {
+
         @Override
         protected void beforeActivityLaunched()
         {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                return;
+            }
             create(getTargetContext()).addParentStack(ConfidencialidadAc.class).startActivities();
         }
     };
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @After
     public void tearDown() throws Exception
     {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            return;
+        }
         cleanTasks(activityRule.getActivity());
     }
 
@@ -55,13 +61,21 @@ public class ConfidencialidadAcTest {
     public void test_OnCreate_UP()
     {
         onView(withId(R.id.proteccion_datos_textview)).check(matches(withText(R.string.proteccion_datos_txt)));
+        onView(withId(R.id.confidencialidad_ac_button)).perform(scrollTo()).check(matches(isDisplayed()));
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            return;
+        }
         checkUp(comuSearchAcLayout);
     }
 
     @Test
     public void test_ButtonOk()
     {
-        onView(withId(R.id.confidencialidad_ac_button)).check(matches(isDisplayed())).perform(click());
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            return;
+        }
+        onView(withId(R.id.confidencialidad_ac_button)).perform(scrollTo(), click());
         waitAtMost(6, SECONDS).until(isResourceIdDisplayed(comuSearchAcLayout));
     }
 }

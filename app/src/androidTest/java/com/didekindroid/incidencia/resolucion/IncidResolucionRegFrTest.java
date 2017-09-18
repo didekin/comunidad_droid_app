@@ -8,7 +8,6 @@ import android.widget.DatePicker;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.incidencia.testutils.IncidEspressoTestUtils;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekindroid.util.UIutils;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
@@ -64,7 +63,7 @@ public class IncidResolucionRegFrTest extends IncidResolucionAbstractTest {
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
     {
-        sleep(3000);
+        sleep(2000);
     }
 
     @Override
@@ -245,6 +244,7 @@ public class IncidResolucionRegFrTest extends IncidResolucionAbstractTest {
 
 //    ============================= HELPER METHODS ===========================
 
+    @SuppressWarnings("SameParameterValue")
     private Calendar setFechaEnPicker(long fechaInicial, int monthsToAdd)
     {
         onView(withId(R.id.incid_resolucion_fecha_view)).perform(click());
