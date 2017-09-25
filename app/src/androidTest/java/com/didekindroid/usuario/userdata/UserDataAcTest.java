@@ -1,7 +1,6 @@
 package com.didekindroid.usuario.userdata;
 
 import android.app.Activity;
-import android.app.TaskStackBuilder;
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -24,6 +23,7 @@ import org.junit.runner.RunWith;
 
 import java.util.concurrent.TimeUnit;
 
+import static android.app.TaskStackBuilder.create;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
@@ -99,14 +99,16 @@ public class UserDataAcTest {
             Intent intent = new Intent(getTargetContext(), UserComuDataAc.class);
             intent.putExtra(USERCOMU_LIST_OBJECT.key,
                     new UsuarioComunidad.UserComuBuilder(comunidad, oldUsuario).userComuRest(COMU_REAL_JUAN).build());
-            TaskStackBuilder.create(getTargetContext()).addNextIntent(intent).addParentStack(UserDataAc.class).startActivities();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                create(getTargetContext()).addNextIntent(intent).addParentStack(UserDataAc.class).startActivities();
+            }
         }
     };
 
     @BeforeClass
     public static void calm() throws InterruptedException
     {
-        TimeUnit.SECONDS.sleep(4);
+        TimeUnit.SECONDS.sleep(3);
     }
 
     @Before
@@ -121,7 +123,9 @@ public class UserDataAcTest {
     {
         usuarioDao.deleteUser();
         cleanWithTkhandler();
-        cleanTasks(activity);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            cleanTasks(activity);
+        }
     }
 
     // ============================================================
@@ -144,7 +148,9 @@ public class UserDataAcTest {
         waitAtMost(4, SECONDS).until(isResourceIdDisplayed(R.id.user_data_modif_button));
         waitAtMost(4, SECONDS).until(isResourceIdDisplayed(R.id.appbar));
 
-        checkUp(seeUserComuByUserFrRsId);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            checkUp(seeUserComuByUserFrRsId);
+        }
     }
 
     @Test  // Wrong password.
@@ -162,7 +168,9 @@ public class UserDataAcTest {
         TimeUnit.SECONDS.sleep(2);
         typeClickWait();
         // Verificamos navegación.
-        checkUp(comuSearchAcLayout);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            checkUp(comuSearchAcLayout);
+        }
     }
 
     @Test  // Modify user OK.
@@ -224,7 +232,9 @@ public class UserDataAcTest {
     {
         SEE_USERCOMU_BY_USER_AC.checkItemRegisterUser(activity);
         intended(hasExtra(user_name.key, oldUsuario.getUserName()));
-        checkUp(comuSearchAcLayout);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            checkUp(comuSearchAcLayout);
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -233,7 +243,9 @@ public class UserDataAcTest {
     {
         INCID_SEE_OPEN_BY_COMU_AC.checkMenuItem_WTk(activity);
         intended(hasExtra(user_name.key, oldUsuario.getUserName()));
-        checkUp(userComuDataLayout);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            checkUp(userComuDataLayout);
+        }
     }
 
     /*    =================================  HELPERS ==================================*/

@@ -67,7 +67,9 @@ public class PasswordChangeAcTest {
         @Override
         protected void beforeActivityLaunched()
         {
-            create(getTargetContext()).addParentStack(PasswordChangeAc.class).startActivities();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                create(getTargetContext()).addParentStack(PasswordChangeAc.class).startActivities();
+            }
         }
 
         @Override
@@ -100,7 +102,9 @@ public class PasswordChangeAcTest {
         if (!isClean.get()) {
             cleanOneUser(USER_DROID);
         }
-        cleanTasks(activity);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            cleanTasks(activity);
+        }
         SECONDS.sleep(2);
     }
 
@@ -128,15 +132,18 @@ public class PasswordChangeAcTest {
 
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
 
-        checkUp(userDataAcRsId);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            checkUp(userDataAcRsId);
+        }
     }
 
     @Test
     public void testPasswordChange_Up() throws UiException, InterruptedException
     {
         doPswdChange();
-        checkUp(comuSearchAcLayout);
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            checkUp(comuSearchAcLayout);
+        }
         usuarioDao.deleteUser();
         cleanWithTkhandler();
 
