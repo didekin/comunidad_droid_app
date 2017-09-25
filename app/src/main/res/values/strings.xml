@@ -19,8 +19,6 @@
     <string name="euros_rot">EUR</string>
     <string name="decimal_separator">,</string>
     <string name="navigate_up_txt">Desplazarse hacia arriba</string>
-    <!--Menús-->
-    <string name="confidencialiad_mn">Confidencialidad</string>
     <!--Messages-->
     <string name="no_internet_conn_toast">No hay conexión de red disponible.</string>
     <string name="exception_generic_message">No podemos continuar. Inténtalo en unos segundos nuevamente.</string>
@@ -30,6 +28,8 @@
     <!--******************************************************************************-->
     <!--                                 ACCESORIOS                                   -->
     <!--******************************************************************************-->
+    <!--Menús-->
+    <string name="confidencialiad_mn">Privacidad</string>
     <!-- ============================= ACTIVITIES ============================= -->
     <string name="confidencialidad_ac_label">Protección de datos</string>
     <string name="proteccion_datos_txt">
