@@ -216,12 +216,12 @@ public class ViewerComuSpinnerTest {
         viewer.doViewInViewer(new Bundle(0), new ComuSpinnerEventItemSelect());
         /* doViewInViewer() --> loadItemsByEntitiyId() --> onSuccessLoadItemList() --> view.setSelection() --> ComuSelectedListener.onItemSelected() */
         // Check
-        waitAtMost(6, SECONDS).until(getAdapter(viewer.getViewInViewer()), notNullValue());
+        waitAtMost(8, SECONDS).until(getAdapter(viewer.getViewInViewer()), notNullValue());
         assertThat(viewer.getViewInViewer().getCount(), is(2));
         // Initialize itemId.
         AtomicBoolean isSelectedOne = new AtomicBoolean(false);
         isSelectedOne.compareAndSet(false, viewer.getSelectedItemId() > 1);
-        waitAtMost(6, SECONDS).untilTrue(isSelectedOne);
+        waitAtMost(8, SECONDS).untilTrue(isSelectedOne);
         assertThat(viewer.getSelectedPositionFromItemId(viewer.getSelectedItemId()), is(0));
         // Initialize comunidadId in spinnerEvent.
         assertThat(viewer.spinnerEvent.getSpinnerItemIdSelect(), is(viewer.getSelectedItemId()));

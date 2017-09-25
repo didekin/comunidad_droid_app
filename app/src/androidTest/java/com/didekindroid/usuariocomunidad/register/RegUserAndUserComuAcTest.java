@@ -1,7 +1,7 @@
 package com.didekindroid.usuariocomunidad.register;
 
-import android.app.TaskStackBuilder;
 import android.content.Intent;
+import android.os.Build;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -19,7 +19,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
@@ -29,6 +28,7 @@ import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.v4.app.TaskStackBuilder.create;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchResultsListLayout;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
@@ -83,10 +83,12 @@ public class RegUserAndUserComuAcTest {
             Intent intent = new Intent(getInstrumentation().getTargetContext(), ComuSearchResultsAc.class);
             intent.putExtra(COMUNIDAD_SEARCH.key, comunidad);
 
-            TaskStackBuilder.create(getTargetContext())
-                    .addParentStack(SeeUserComuByUserAc.class)  // Includes ComuSearchAc in stack.
-                    .addNextIntent(intent) // Includes ComuSearchResultsAc in stack.
-                    .startActivities();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                create(getTargetContext())
+                        .addParentStack(SeeUserComuByUserAc.class)  // Includes ComuSearchAc in stack.
+                        .addNextIntent(intent) // Includes ComuSearchResultsAc in stack.
+                        .startActivities();
+            }
         }
 
         @Override
@@ -171,7 +173,9 @@ public class RegUserAndUserComuAcTest {
         waitAtMost(4, SECONDS).until(isToastInView(R.string.error_validation_msg, activity,
                 R.string.reg_usercomu_portal_rot));
 
-        checkUp(comuSearchResultsListLayout);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            checkUp(comuSearchResultsListLayout);
+        }
     }
 
     //    =================================== Life cycle ===================================

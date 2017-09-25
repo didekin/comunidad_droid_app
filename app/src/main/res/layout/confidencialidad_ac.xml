@@ -18,9 +18,11 @@
 
             <TextView
                 android:id="@+id/proteccion_datos_textview"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/text_margin"
+                android:gravity="start"
+                android:textAlignment="gravity"
                 android:text="@string/proteccion_datos_txt"/>
 
             <Button
