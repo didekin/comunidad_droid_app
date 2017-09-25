@@ -3,14 +3,13 @@ package com.didekindroid.usuariocomunidad.register;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ParentViewerInjectedIf;
 import com.didekindroid.api.ChildViewersInjectorIf;
+import com.didekindroid.api.ParentViewerInjectedIf;
+import com.didekindroid.api.ViewerIf;
 import com.didekindroid.comunidad.RegComuFr;
 import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.usuario.RegUserFr;
@@ -88,7 +87,6 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity implements
     {
         Timber.d("onCreateOptionsMenu()");
 
-        MenuInflater inflater = getMenuInflater();
         getMenuInflater().inflate(R.menu.reg_user_activities_mn, menu);
         return super.onCreateOptionsMenu(menu);
     }
