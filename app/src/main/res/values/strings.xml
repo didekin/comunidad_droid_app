@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Para símbolos sin traducción : https://developer.android.com/distribute/tools/localization-checklist.html
     <string name="countdown">
         <xliff:g id="time" example="5 days>%1$s</xliff:g>until holiday
@@ -32,23 +32,73 @@
     <string name="confidencialiad_mn">Privacidad</string>
     <!-- ============================= ACTIVITIES ============================= -->
     <string name="confidencialidad_ac_label">Protección de datos</string>
-    <string name="proteccion_datos_txt">
-        "Material is the metaphor.\n\n"
+    <string name="proteccion_datos_txt" tools:ignore="Typos">
+        "La presente Política de Privacidad informa sobre el modo en que Pedro Nevado Raja, autor de la aplicación Dídekin,
+        recoge y trata la información recogida sobre usted, en cuanto usuario de la aplicación. Al registrarse en Dídekin, usted
+        acepta esta política de privacidad.\n\n
 
-        "A material metaphor is the unifying theory of a rationalized space and a system of motion."
-        "The material is grounded in tactile reality, inspired by the study of paper and ink, yet "
-        "technologically advanced and open to imagination and magic.\n\n"
+        1. OBJETIVO DE LA APLICACIÓN\n\n
 
-        "Surfaces and edges of the material provide visual cues that are grounded in reality. The "
-        "use of familiar tactile attributes helps users quickly understand affordances. Yet the "
-        "flexibility of the material creates new affordances that supercede those in the physical "
-        "world, without breaking the rules of physics.\n\n"
+        Dídekin tiene como objetivo recoger, presentar y compartir información sobre la administración de las comunidades de
+        propietarios que se registren. También puede ser utilizada por 'comunidades' de un solo propietario, en el caso de
+        viviendadas no integradas en una comunidad.\n\n
 
-        "The fundamentals of light, surface, and movement are key to conveying how objects move, "
-        "interact, and exist in space and in relation to each other. Realistic lighting shows "
-        "seams, divides space, and indicates moving parts.\n\n"
+        2. DATOS RECOGIDOS\n\n
 
-        "Bold, graphic, intentional.\n\n"
+        Los datos que registramos sobre usted son:\n\n
+        - Nombre y apellidos.
+        - Dirección de correo electrónico
+        - Domicilio: provincia, municipio, calle, número y, cuando los hubiere, portal, escalera, planta y puerta.
+        - Rol dentro de la comunidad: administrador, presidente, propietario o inquilino.\n\n
+
+        Los datos que recogemos sobre comunidades son:\n\n
+        - Domicilio.
+        - Datos sobre incidencias:
+          • Fechas: de inicio y de resolución.
+          • Descripción.
+          • Historial de avances.
+          • Valoración y comentarios por miembros de la comunidad.
+          • Opcional: coste estimado y coste real de la resolución. \n\n
+
+        3. UTILIZACIÓN DE LA INFORMACIÓN RECOGIDA\n\n
+
+        La información recogida se utiliza para confeccionar estadísticas de tiempo y coste de resolución de
+        incidencias, agregadas según dos criterios principales: \n\n
+        - Por ámbito geográfico: desde la propia comunidad hasta la comunidad autónoma en la que está radicada.
+        - Por tipo de incidencia.\n\n
+
+        4. ACCESO A LA INFORMACIÓN\n\n
+
+        Los datos personales que recogemos sobre usted sólo son accesibles a otros miembros de las comunidades de propietarios a las que
+        usted pertenece.
+
+        Los datos particulares sobre incidencias sólo son accesible dentro de la misma comunidad donde se produce la incidencia.
+
+        Los datos estadísticos elaborados a partir de incidencias particulares son accesibles por los usuarios de Dídekin.
+
+        5. MANTENIMIENTO Y BORRADO DE DATOS \n\n
+
+        En cualquier momento, usted puede modificar sus datos personales o borrarlos definitivamente, a través de la propia aplicación.
+
+        Los datos sobre incidencias pueden ser modificados y borrados, a través de la aplicación, por aquellos usuarios registrados con los
+        roles de presidente o administrador de una comunidad de propietarios.\n\n
+
+        6. MAYORÍA DE EDAD\n\n
+
+        Dídekin es una aplicación para personas mayores de 16 años. Cuando usted se registra, usted reconoce expresamente no tener una edad menor.
+        Si no se cumpliera este requerimiento, su datos de usuario podríamos borrarlos, una vez que tuviéramos conocimiento del hecho.\n\n
+
+        7. CAMBIOS EN NUESTRA POLÍTICA DE PRIVACIDAD\n\n
+
+        Cambios futuros en la aplicación podrían requerir cambios, a su vez, en nuestra política de protección de datos personales o de la comunidad.
+        En ese caso, se lo notificaríamos a través de la propia aplicación ('PRIVACIDAD', en el menú principal de Dídekin) o mediante correo electrónico,
+        según fueren las circunstancias.\n\n
+
+        8. OBLIGACIONES LEGALES\n\n
+
+        De conformidad con lo establecido por la Ley Orgánica 15/1999, de 13 de diciembre, de Protección de Datos de Carácter Personal,
+        Pedro Nevado Raja, propietario de Dídekin, le informa de la existencia de un fichero automatizado con los datos personales y de comunidades,
+        creado por él y bajo su responsabilidad.\n\n "
     </string>
     <string name="confidencialidad_button_rot">Continuar</string>
     <!--******************************************************************************-->
