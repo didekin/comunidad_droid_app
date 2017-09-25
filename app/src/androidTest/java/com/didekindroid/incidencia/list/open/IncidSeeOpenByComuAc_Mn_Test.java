@@ -34,7 +34,6 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.CO
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpWithTkGetComu;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
-import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.fail;
 
 /**
@@ -92,9 +91,8 @@ public class IncidSeeOpenByComuAc_Mn_Test {
         onView(withId(incidSeeOpenAcLayout)).check(matches(isDisplayed()));
         onView(withId(incidSeeGenericFrLayout)).check(matches(isDisplayed()));
         // No hay incidencias registradas.
-        onView(withId(android.R.id.list)).check(matches(not(isDisplayed())));
+        SECONDS.sleep(2);
         onView(withId(android.R.id.empty)).check(matches(isDisplayed()));
-
         waitAtMost(3, SECONDS).until(isComuSpinnerWithText(comunidadInIntent.getNombreComunidad()));
 
         clickNavigateUp();
