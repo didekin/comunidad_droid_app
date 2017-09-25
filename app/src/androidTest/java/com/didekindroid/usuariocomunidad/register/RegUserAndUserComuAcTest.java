@@ -130,6 +130,8 @@ public class RegUserAndUserComuAcTest {
         SECONDS.sleep(1);
     }
 
+    //    =================================== Tests ===================================
+
     @Test
     public void testRegisterUserAndUserComu_1() throws UiException, InterruptedException
     {
@@ -150,7 +152,9 @@ public class RegUserAndUserComuAcTest {
         waitAtMost(5, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
         waitAtMost(4, SECONDS).untilAtomic(TKhandler.getTokenCache(), notNullValue());
 
-        checkUp(comuSearchAcLayout);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            checkUp(comuSearchAcLayout);
+        }
 
         cleanOptions(CLEAN_JUAN_AND_PEPE);
         isClean = true;
@@ -214,7 +218,9 @@ public class RegUserAndUserComuAcTest {
     public void testLoginMn_UnRegUser_Up() throws InterruptedException, UiException
     {
         doLoginUnRegUser();
-        checkUp(comuSearchAcLayout);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            checkUp(comuSearchAcLayout);
+        }
     }
 
     @Test

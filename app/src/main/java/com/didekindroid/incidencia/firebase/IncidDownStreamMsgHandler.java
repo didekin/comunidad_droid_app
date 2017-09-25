@@ -6,8 +6,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
-import android.support.v7.app.NotificationCompat;
 
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ComuSearchAc;
@@ -30,6 +30,7 @@ import static android.media.RingtoneManager.TYPE_NOTIFICATION;
 import static android.media.RingtoneManager.getDefaultUri;
 import static android.support.v4.app.NotificationCompat.PRIORITY_DEFAULT;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
+import static com.didekindroid.firebase.NotificationChannelId.INCID_NOTIFICATION_CHANNEL;
 import static com.didekinlib.model.common.gcm.GcmKeyValueData.type_message_key;
 import static com.didekinlib.model.incidencia.gcm.GcmKeyValueIncidData.comunidadId_key;
 import static com.didekinlib.model.incidencia.gcm.GcmKeyValueIncidData.incidencia_closed_type;
@@ -151,13 +152,18 @@ public enum IncidDownStreamMsgHandler implements FirebaseDownstreamMsgHandler {
         Map<String, String> data = message.getData();
         PendingIntent resultPendingIntent = doStackBuilder(context, data).getPendingIntent(0, FLAG_UPDATE_CURRENT);
         NotificationManager mManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
-        mManager.notify(getContentTextRsc(), doNotification(context, resultPendingIntent));
+        if (mManager != null) {
+            mManager.notify(getBarNotificationId(), doNotification(context, resultPendingIntent));
+        }
 
         Timber.d("onMessageReceived(), notification sent with ID: %d%n", getBarNotificationId());
     }
 
     /* ===================== PACKAGE PRIVATE INSTANCE METHODS ==================*/
 
+    /**
+     *  We use as NotificationId the id for the resource string used as message, in the notification.
+     */
     @Override
     public int getBarNotificationId()
     {
@@ -180,7 +186,7 @@ public enum IncidDownStreamMsgHandler implements FirebaseDownstreamMsgHandler {
     Notification doNotification(Context context, PendingIntent resultPendingIntent)
     {
         Resources resources = context.getResources();
-        return new NotificationCompat.Builder(context)
+        return new NotificationCompat.Builder(context, INCID_NOTIFICATION_CHANNEL.name())
                 .setSmallIcon(R.drawable.ic_info_outline_white_36dp)
                 .setLargeIcon(decodeResource(resources, R.drawable.ic_launcher))
                 .setSound(getDefaultUri(TYPE_NOTIFICATION))
