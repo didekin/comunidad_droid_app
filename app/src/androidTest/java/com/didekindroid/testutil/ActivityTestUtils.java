@@ -67,6 +67,7 @@ import static android.support.test.espresso.Espresso.openActionBarOverflowOrOpti
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.pressBack;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.DrawerActions.open;
@@ -204,6 +205,22 @@ public final class ActivityTestUtils {
             }
         });
         return buttonRsId;
+    }
+
+    public static int focusOnView(Activity activity, int viewRsId)
+    {
+        final View view = activity.findViewById(viewRsId);
+
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                view.setFocusable(true);
+                view.setFocusableInTouchMode(true);
+                view.requestFocus();
+            }
+        });
+        return viewRsId;
     }
 
     //    ============================= CONTROLLER/Adapters ===================================
@@ -376,6 +393,14 @@ public final class ActivityTestUtils {
         ).check(matches(isDisplayed())).perform(click());
     }
 
+    public static void scrollClickNavigateUp()
+    {
+        onView(withContentDescription(R.string.navigate_up_txt))
+                .perform(scrollTo())
+                .check(matches(isDisplayed()))
+                .perform(click());
+    }
+
     public static void checkBack(ViewInteraction viewInteraction, Integer... activityLayoutIds)
     {
         viewInteraction.perform(closeSoftKeyboard()).perform(pressBack());
@@ -391,12 +416,13 @@ public final class ActivityTestUtils {
     public static void checkUp(Integer... activityLayoutIds)
     {
         clickNavigateUp();
-        for (Integer layout : activityLayoutIds)
-            try {
-                waitAtMost(6, SECONDS).until(isResourceIdDisplayed(layout));
-            } catch (Exception e) {
-                fail();
-            }
+        iterateLayouts(activityLayoutIds);
+    }
+
+    public static void checkScrollUp(Integer... activityLayoutIds)
+    {
+        scrollClickNavigateUp();
+        iterateLayouts(activityLayoutIds);
     }
 
     @SuppressWarnings("unused")
@@ -531,6 +557,19 @@ public final class ActivityTestUtils {
         final ViewerMock viewerChild = new ViewerMock(activity);
         activity.setChildInParentViewer(viewerChild);
         assertThat(activity.getParentViewer().getChildViewer(ViewerMock.class), CoreMatchers.<ViewerIf>is(viewerChild));
+    }
+
+    //    ============================ HELPERS ============================
+
+    private static void iterateLayouts(Integer[] activityLayoutIds)
+    {
+        for (Integer layout : activityLayoutIds) {
+            try {
+                waitAtMost(6, SECONDS).until(isResourceIdDisplayed(layout));
+            } catch (Exception e) {
+                fail();
+            }
+        }
     }
 }
 

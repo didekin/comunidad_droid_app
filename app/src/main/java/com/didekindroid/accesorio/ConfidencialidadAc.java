@@ -1,10 +1,10 @@
 package com.didekindroid.accesorio;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 
 import com.didekindroid.R;
 
@@ -24,8 +24,9 @@ public class ConfidencialidadAc extends AppCompatActivity {
         setContentView(R.layout.confidencialidad_ac);
         doToolBar(this, true);
 
-        Button okButton = findViewById(R.id.confidencialidad_ac_button);
-        okButton.setOnClickListener(new View.OnClickListener() {
+        // Adding Floating Action Button to bottom right of main view
+        FloatingActionButton fab = findViewById(R.id.confidencialidad_fab);
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
             {

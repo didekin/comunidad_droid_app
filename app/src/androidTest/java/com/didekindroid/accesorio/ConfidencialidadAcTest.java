@@ -15,7 +15,6 @@ import static android.app.TaskStackBuilder.create;
 import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -24,6 +23,7 @@ import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearc
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
+import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 
@@ -41,41 +41,37 @@ public class ConfidencialidadAcTest {
         @Override
         protected void beforeActivityLaunched()
         {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                return;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                create(getTargetContext()).addParentStack(ConfidencialidadAc.class).startActivities();
             }
-            create(getTargetContext()).addParentStack(ConfidencialidadAc.class).startActivities();
         }
     };
 
     @After
     public void tearDown() throws Exception
     {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            return;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            cleanTasks(activityRule.getActivity());
         }
-        cleanTasks(activityRule.getActivity());
     }
 
     @Test
     public void test_OnCreate_UP()
     {
         onView(withId(R.id.proteccion_datos_textview)).check(matches(withText(R.string.proteccion_datos_txt)));
-        onView(withId(R.id.confidencialidad_ac_button)).perform(scrollTo()).check(matches(isDisplayed()));
+        onView(withId(R.id.confidencialidad_fab)).check(matches(isDisplayed()));
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            return;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            checkUp(comuSearchAcLayout);
         }
-        checkUp(comuSearchAcLayout);
     }
 
     @Test
-    public void test_ButtonOk()
+    public void test_FabOk()
     {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            return;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            waitAtMost(6, SECONDS).until(isViewDisplayed(withId(R.id.confidencialidad_fab), click()));
+            waitAtMost(4, SECONDS).until(isResourceIdDisplayed(comuSearchAcLayout));
         }
-        onView(withId(R.id.confidencialidad_ac_button)).perform(scrollTo(), click());
-        waitAtMost(6, SECONDS).until(isResourceIdDisplayed(comuSearchAcLayout));
     }
 }

@@ -101,7 +101,7 @@ public class IncidRegAcTest {
         doAmbitoAndDescripcion(ambitoObj, "descripcion = not valid");
         onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
 
-        waitAtMost(4, SECONDS).until(isToastInView(R.string.error_validation_msg, activity, R.string.incid_reg_descripcion));
+        waitAtMost(6, SECONDS).until(isToastInView(R.string.error_validation_msg, activity, R.string.incid_reg_descripcion));
     }
 
     @Test
@@ -113,7 +113,7 @@ public class IncidRegAcTest {
         doAmbitoAndDescripcion(ambitoObj, "descripcion es valida");
 
         onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
-        waitAtMost(3, SECONDS).until(isViewDisplayed(withId(R.id.incid_see_open_by_comu_ac)));
+        waitAtMost(6, SECONDS).until(isViewDisplayed(withId(R.id.incid_see_open_by_comu_ac)));
         checkUp(activityLayoutId, fragmentLayoutId);
     }
 
@@ -124,7 +124,7 @@ public class IncidRegAcTest {
         doAmbitoAndDescripcion(ambitoObj, "descripcion is valid");
         onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
 
-        waitAtMost(3, SECONDS).until(isViewDisplayed(withId(R.id.incid_see_open_by_comu_ac)));
+        waitAtMost(6, SECONDS).until(isViewDisplayed(withId(R.id.incid_see_open_by_comu_ac)));
         checkBack(onView(withId(R.id.incid_see_open_by_comu_ac)), activityLayoutId, fragmentLayoutId);
     }
 
