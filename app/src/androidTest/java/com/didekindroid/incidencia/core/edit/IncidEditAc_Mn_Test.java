@@ -10,6 +10,7 @@ import com.didekindroid.incidencia.core.IncidenciaDataDbHelper;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.junit.After;
 import org.junit.Before;
@@ -124,7 +125,7 @@ public class IncidEditAc_Mn_Test {
         checkScreenEditMaxPowerFrNotErase(activity.resolBundle);
 
         INCID_RESOLUCION_REG_EDIT_AC.checkMenuItem_WTk(activity);
-        waitAtMost(2, SECONDS).until(isResourceIdDisplayed(R.id.incid_resolucion_edit_fr_layout));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(R.id.incid_resolucion_edit_fr_layout));
 
         // Extra con oldIncidImportancia.
         intended(hasExtra(INCID_IMPORTANCIA_OBJECT.key, activity.resolBundle.getIncidImportancia()));
