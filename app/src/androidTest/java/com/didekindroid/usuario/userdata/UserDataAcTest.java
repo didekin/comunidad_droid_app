@@ -159,7 +159,7 @@ public class UserDataAcTest {
         TimeUnit.SECONDS.sleep(4);
         typeUserData("new_juan@juan.es", USER_JUAN.getAlias(), "wrong_password");
         onView(withId(user_data_modif_button)).perform(scrollTo()).check(matches(isDisplayed())).perform(click());
-        waitAtMost(4, SECONDS).until(isToastInView(R.string.password_wrong, activity));
+        waitAtMost(6, SECONDS).until(isToastInView(R.string.password_wrong, activity));
     }
 
     @Test  // Modify user OK.

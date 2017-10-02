@@ -77,16 +77,14 @@ public class RegComuAndUserComuAcTest {
     @Test
     public void testRegisterComuAndUserComu_1()
     {
-        // Wrong data.
+        // Wrong data. UsuarioComunidad wrong data have no effect because its validation requires previous FULL comunidad data validation.
         typeUserComuData("port2", "escal ?? b", "planta-N", "puerta5", PRE, ADM, INQ, PRO);
         onView(withId(buttonId)).perform(scrollTo(), click());
 
         checkToastInTest(R.string.error_validation_msg, activity,
                 R.string.tipo_via,
                 R.string.nombre_via,
-                R.string.municipio,
-                R.string.reg_usercomu_role_rot,
-                R.string.reg_usercomu_escalera_rot);
+                R.string.municipio);
     }
 
     @Test
