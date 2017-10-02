@@ -5,7 +5,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    xmlns:android.support.design="http://schemas.android.com/tools">
     <ScrollView style="@style/baseLayout.scroll">
         <android.support.design.widget.CoordinatorLayout
             android:id="@+id/comu_search_ac_coordinatorlayout"
@@ -43,6 +44,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
+        app:itemTextColor="@color/black"
         app:headerLayout="@layout/drawer_main_header"
         app:menu="@menu/drawer_main_mn"/>
 </android.support.v4.widget.DrawerLayout>

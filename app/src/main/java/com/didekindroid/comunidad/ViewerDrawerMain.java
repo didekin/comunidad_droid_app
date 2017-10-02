@@ -29,9 +29,12 @@ import static com.didekindroid.util.UIutils.doWrongMenuItem;
 final class ViewerDrawerMain extends
         Viewer<DrawerLayout, CtrlerAuthToken> {
 
+    private NavigationView navView;
+
     private ViewerDrawerMain(DrawerLayout view, AppCompatActivity activity)
     {
         super(view, activity, null);
+        navView = view.findViewById(R.id.drawer_main_nav_view);
     }
 
     static ViewerDrawerMain newViewerDrawerMain(AppCompatActivity activity)
@@ -48,7 +51,6 @@ final class ViewerDrawerMain extends
     public void doViewInViewer(Bundle savedState, Serializable viewBean)
     {
         Timber.d("doViewInViewer()");
-        NavigationView navView = view.findViewById(R.id.drawer_main_nav_view);
         navView.setNavigationItemSelectedListener(new DrawerMainMnItemSelListener());
         buildMenu(navView);
     }
@@ -58,6 +60,7 @@ final class ViewerDrawerMain extends
     void openDrawer()
     {
         Timber.d("openDrawer()");
+        buildMenu(navView);
         view.openDrawer(GravityCompat.START);
     }
 

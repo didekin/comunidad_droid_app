@@ -74,10 +74,11 @@ public final class ViewerRegComuUserUserComuAc extends ViewerParent<View, Ctrler
             StringBuilder errorBuilder = getErrorMsgBuilder(activity);
             Comunidad comunidadFromViewer = getChildViewer(ViewerRegComuFr.class).getComunidadFromViewer(errorBuilder);
             Usuario usuarioFromViewer = getChildViewer(ViewerRegUserFr.class).getUserFromViewer(errorBuilder);
-            UsuarioComunidad usuarioComunidad = getChildViewer(ViewerRegUserComuFr.class).getUserComuFromViewer(errorBuilder, comunidadFromViewer, usuarioFromViewer);
+            UsuarioComunidad usuarioComunidad = comunidadFromViewer != null && usuarioFromViewer != null ?
+                    getChildViewer(ViewerRegUserComuFr.class).getUserComuFromViewer(errorBuilder, comunidadFromViewer, usuarioFromViewer) :
+                    null;
 
-            // Nullity for comunidad in controlled in UsuarioComunidad builder.
-            if (usuarioComunidad == null || usuarioFromViewer == null) {
+            if (usuarioComunidad == null) {
                 makeToast(activity, errorBuilder.toString());
             } else if (!ConnectionUtils.isInternetConnected(activity)) {
                 makeToast(activity, R.string.no_internet_conn_toast);

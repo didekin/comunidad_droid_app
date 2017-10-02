@@ -25,6 +25,7 @@ import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.typeComuni
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.focusOnButton;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
+import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
 import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typeUserDataFull;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
@@ -86,7 +87,7 @@ public class ViewerRegComuUserUserComuAcTest {
     }
 
     @Test
-    public void test_RegComuUserButtonListener() throws Exception
+    public void test_RegComuUserButtonListener_1() throws Exception
     {
         typeUserDataFull(USER_PEPE.getUserName(), USER_PEPE.getAlias(), USER_PEPE.getPassword(), USER_PEPE.getPassword());
         typeUserComuData("port2", "escale_b", "planta-N", "puerta5", PRE, INQ);
@@ -98,6 +99,35 @@ public class ViewerRegComuUserUserComuAcTest {
         waitAtMost(6, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
 
         cleanOptions(CLEAN_PEPE);
+    }
+
+    @Test
+    public void test_RegComuUserButtonListener_2() throws Exception
+    {
+        typeUserComuData("port2", "escale_b", "planta-N", "puerta5", PRE, INQ);
+        int buttonId = R.id.reg_com_usuario_usuariocomu_button;
+        focusOnButton(activity, buttonId);
+        typeComunidadData();
+
+        onView(withId(buttonId)).perform(scrollTo(), click());
+        waitAtMost(5, SECONDS).until(isToastInView(R.string.error_validation_msg, activity,
+                R.string.email_hint,
+                R.string.alias,
+                R.string.password));
+    }
+
+    @Test
+    public void test_RegComuUserButtonListener_3() throws Exception
+    {
+        typeUserDataFull(USER_PEPE.getUserName(), USER_PEPE.getAlias(), USER_PEPE.getPassword(), USER_PEPE.getPassword());
+        typeUserComuData("port2", "escale_b", "planta-N", "puerta5", PRE, INQ);
+        int buttonId = R.id.reg_com_usuario_usuariocomu_button;
+        focusOnButton(activity, buttonId);
+        onView(withId(buttonId)).perform(scrollTo(), click());
+        waitAtMost(5, SECONDS).until(isToastInView(R.string.error_validation_msg, activity,
+                R.string.tipo_via,
+                R.string.nombre_via,
+                R.string.municipio));
     }
 
     //  =========================  TESTS FOR ACTIVITY/FRAGMENT LIFECYCLE  ===========================

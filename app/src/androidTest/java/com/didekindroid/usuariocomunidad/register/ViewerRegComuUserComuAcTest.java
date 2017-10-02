@@ -26,8 +26,8 @@ import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.typeComuni
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.focusOnButton;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
+import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
-import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.RolUi.INQ;
@@ -51,7 +51,6 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class ViewerRegComuUserComuAcTest {
 
-    final AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
     @Rule
     public ActivityTestRule<RegComuAndUserComuAc> acActivityTestRule = new ActivityTestRule<>(RegComuAndUserComuAc.class, true, true);
     RegComuAndUserComuAc activity;
@@ -78,7 +77,7 @@ public class ViewerRegComuUserComuAcTest {
     }
 
     @Test
-    public void test_RegComuUserComuButtonListener() throws Exception
+    public void test_RegComuUserComuButtonListener_1() throws Exception
     {
         // Precondition: user is registered.
         signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
@@ -90,6 +89,25 @@ public class ViewerRegComuUserComuAcTest {
         onView(withId(buttonId)).perform(scrollTo(), click());
 
         waitAtMost(5, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
+        cleanOptions(CLEAN_PEPE);
+    }
+
+    @Test
+    public void test_RegComuUserComuButtonListener_2() throws Exception
+    {
+        // Precondition: user is registered.
+        signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
+
+        typeUserComuData("port2", "escale_b", "planta-N", "puerta5", PRE, INQ);
+        int buttonId = R.id.reg_comu_usuariocomunidad_button;
+        focusOnButton(activity, buttonId);
+        onView(withId(buttonId)).perform(scrollTo(), click());
+
+        // Error: no ha seleccionado municipio, ni tipo de vía, ni nombre de vía.
+        waitAtMost(5, SECONDS).until(isToastInView(R.string.error_validation_msg, activity,
+                R.string.municipio,
+                R.string.nombre_via,
+                R.string.tipo_via));
         cleanOptions(CLEAN_PEPE);
     }
 

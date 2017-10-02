@@ -9,19 +9,18 @@
         <item name="android:textColorSecondary">@color/black</item>
         <item name="android:textColorTertiary">@color/black</item>
         <item name="android:actionBarSize">@dimen/appBar_size</item>
-        <!-- Buttons -->
+        <!-- Buttons and drawer menu -->
         <item name="colorButtonNormal">?attr/colorPrimary</item>
-        <item name="colorControlHighlight">@color/purple_400</item>
+        <item name="colorControlHighlight">@color/purple_100</item>
         <!-- Dialogs -->
         <item name="android:alertDialogTheme">@style/alertDialogTheme</item>
         <item name="alertDialogTheme">@style/alertDialogTheme</item>
         <!-- Style for menu item in the action bar (login, p.e) -->
         <item name="actionMenuTextAppearance">@style/appBarMenuItem</item>
         <item name="android:actionMenuTextAppearance">@style/appBarMenuItem</item>
-        <!---->
-        <!--<item name="android:selectableItemBackground">@color/deep_orange_200</item>
-        <item name="selectableItemBackground">@color/deep_orange_200</item>-->
-
+        <!-- Lists and menus backgrounds-->
+        <item name="android:selectableItemBackground">@android:color/transparent</item>
+        <item name="selectableItemBackground">@android:color/transparent</item>
         <!-- Spinners and menu overflow items -->
         <item name="dropDownListViewStyle">@style/dropDownMenu</item>
         <item name="textAppearanceLargePopupMenu">@style/optionMenuTextLarge</item>
