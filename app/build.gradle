@@ -122,7 +122,7 @@ dependencies {
     androidTestImplementation rootProject.ext.testRunner
     androidTestUtil rootProject.ext.testOrchestrator
     testImplementation rootProject.ext.junit
-    androidTestCompile 'junit:junit:4.12'
+    androidTestImplementation 'junit:junit:4.12'
 }
 
 apply plugin: 'com.google.gms.google-services'
