@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
+    compileSdkVersion 26
     buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
@@ -15,8 +15,8 @@ android {
         vectorDrawables.useSupportLibrary = true
     }
     compileOptions {
-        sourceCompatibility rootProject.ext.sourceCompatibilityVersion
-        targetCompatibility rootProject.ext.targetCompatibilityVersion
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
     }
 
     testOptions {
@@ -115,16 +115,14 @@ dependencies {
     runtimeOnly rootProject.ext.retrofit2
     implementation rootProject.ext.rxjava
     implementation rootProject.ext.android_support
-
     androidTestImplementation rootProject.ext.testRuler
     androidTestImplementation rootProject.ext.espresso
     androidTestImplementation rootProject.ext.didekinlib_gcm
     androidTestImplementation rootProject.ext.awaitility
-
     androidTestImplementation rootProject.ext.testRunner
     androidTestUtil rootProject.ext.testOrchestrator
-
     testImplementation rootProject.ext.junit
+    androidTestCompile 'junit:junit:4.12'
 }
 
 apply plugin: 'com.google.gms.google-services'
