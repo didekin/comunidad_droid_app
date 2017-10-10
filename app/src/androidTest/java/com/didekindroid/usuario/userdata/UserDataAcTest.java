@@ -108,7 +108,7 @@ public class UserDataAcTest {
     @BeforeClass
     public static void calm() throws InterruptedException
     {
-        TimeUnit.SECONDS.sleep(3);
+        SECONDS.sleep(3);
     }
 
     @Before
@@ -156,7 +156,7 @@ public class UserDataAcTest {
     @Test  // Wrong password.
     public void testModifyUserDataWrongPswd() throws InterruptedException
     {
-        TimeUnit.SECONDS.sleep(4);
+        SECONDS.sleep(2);
         typeUserData("new_juan@juan.es", USER_JUAN.getAlias(), "wrong_password");
         onView(withId(user_data_modif_button)).perform(scrollTo()).check(matches(isDisplayed())).perform(click());
         waitAtMost(6, SECONDS).until(isToastInView(R.string.password_wrong, activity));
@@ -165,7 +165,7 @@ public class UserDataAcTest {
     @Test  // Modify user OK.
     public void testModifyUserData_Up() throws UiException, InterruptedException
     {
-        TimeUnit.SECONDS.sleep(2);
+        SECONDS.sleep(2);
         typeClickWait();
         // Verificamos navegación.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -176,7 +176,7 @@ public class UserDataAcTest {
     @Test  // Modify user OK.
     public void testModifyUserData_Back() throws UiException, InterruptedException
     {
-        TimeUnit.SECONDS.sleep(2);
+        SECONDS.sleep(2);
         typeClickWait();
         checkBack(onView(withId(seeUserComuByUserFrRsId)).check(matches(isDisplayed())), userDataAcRsId);
     }

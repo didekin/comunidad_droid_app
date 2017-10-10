@@ -118,10 +118,11 @@ public class IncidRegAcTest {
     }
 
     @Test
-    public void testRegisterIncidencia_3() throws UiException
+    public void testRegisterIncidencia_3() throws UiException, InterruptedException
     {
         // Caso OK: no cubro importancia.
         doAmbitoAndDescripcion(ambitoObj, "descripcion is valid");
+        SECONDS.sleep(1);
         onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
 
         waitAtMost(6, SECONDS).until(isViewDisplayed(withId(R.id.incid_see_open_by_comu_ac)));
