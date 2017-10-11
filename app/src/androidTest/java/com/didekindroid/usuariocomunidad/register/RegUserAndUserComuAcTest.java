@@ -13,7 +13,6 @@ import com.didekinlib.model.comunidad.Comunidad;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -68,7 +67,6 @@ import static org.junit.Assert.fail;
  * Date: 13/09/15
  * Time: 11:30
  */
-@SuppressWarnings("ConstantConditions")
 @RunWith(AndroidJUnit4.class)
 public class RegUserAndUserComuAcTest {
 
@@ -107,12 +105,6 @@ public class RegUserAndUserComuAcTest {
 
     RegUserAndUserComuAc activity;
     boolean isClean;
-
-    @BeforeClass
-    public static void slowDown() throws InterruptedException
-    {
-        SECONDS.sleep(2);
-    }
 
     @Before
     public void setUp() throws Exception
