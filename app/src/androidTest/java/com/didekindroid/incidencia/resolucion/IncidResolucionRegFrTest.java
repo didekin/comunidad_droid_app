@@ -237,6 +237,7 @@ public class IncidResolucionRegFrTest extends IncidResolucionAbstractTest {
         checkRegResolucionOk();
 
         // Test de error resolución duplicada.
+        setFechaEnPicker(0, 2);
         onView(withId(R.id.incid_resolucion_reg_ac_button)).perform(click());
         waitAtMost(8, SECONDS).until(isToastInView(R.string.resolucion_duplicada, activity));
         onView(withId(R.id.incid_edit_fragment_container_ac)).check(matches(isDisplayed()));
