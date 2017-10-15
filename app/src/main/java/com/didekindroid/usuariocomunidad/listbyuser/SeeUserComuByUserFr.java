@@ -1,5 +1,6 @@
 package com.didekindroid.usuariocomunidad.listbyuser;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -36,6 +37,7 @@ public class SeeUserComuByUserFr extends Fragment {
 
     public SeeUserComuByUserAdapter mAdapter;
     SeeUserComuByUserFrListener mListener;
+    Activity activity;
     ListView fragmentView;
 
     @Override
@@ -63,7 +65,8 @@ public class SeeUserComuByUserFr extends Fragment {
     {
         Timber.d("onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
-        mListener = (SeeUserComuByUserFrListener) getActivity();
+        activity = getActivity();
+        mListener = (SeeUserComuByUserFrListener) activity;
         fragmentView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
@@ -119,7 +122,7 @@ public class SeeUserComuByUserFr extends Fragment {
         protected void onPostExecute(List<UsuarioComunidad> usuarioComunidades)
         {
             Timber.d("onPostExecute()");
-            if (checkPostExecute(getActivity())) return;
+            if (checkPostExecute(activity)) return;
 
             if (uiException != null) {  // action: LOGIN.
                 Timber.d("UserComuByUserLoader.onPostExecute(): uiException != null");

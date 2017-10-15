@@ -71,7 +71,7 @@ public final class UIutils {
 
     public static boolean checkPostExecute(Activity activity)
     {
-        if (activity.isDestroyed() || activity.isChangingConfigurations()) {
+        if (activity == null || activity.isDestroyed() || activity.isChangingConfigurations()) {
             Timber.i("onPostExcecute(): activity is already destroyed");
             return true;
         }
