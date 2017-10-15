@@ -6,7 +6,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.view.Menu;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ViewerParentInjectedIf;
+import com.didekindroid.api.ParentViewerInjectedIf;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.usuariocomunidad.register.CtrlerUsuarioComunidad;
 import com.didekindroid.usuariocomunidad.register.ViewerRegUserComuFr;
@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import io.reactivex.observers.DisposableSingleObserver;
 
-import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
+import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -190,7 +190,7 @@ public class ViewerUserComuDataAcTest {
         ViewerUserComuDataAc.DeleteUserComuObserver observer = activity.viewer.new DeleteUserComuObserver();
         just(IS_USER_DELETED).subscribeWith(observer);
         onView(withId(comuSearchAcLayout)).check(matches(isDisplayed()));
-        intended(hasFlags(FLAG_ACTIVITY_CLEAR_TOP, FLAG_ACTIVITY_NEW_TASK));
+        intended(hasFlags(FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TASK));
     }
 
     @Test
@@ -207,7 +207,7 @@ public class ViewerUserComuDataAcTest {
     public void test_OnCreate() throws Exception
     {
         // Check for initialization of fragments viewers.
-        ViewerParentInjectedIf viewerParent = activity.viewer;
+        ParentViewerInjectedIf viewerParent = activity.viewer;
         assertThat(viewerParent.getChildViewer(ViewerRegUserComuFr.class), notNullValue());
     }
 

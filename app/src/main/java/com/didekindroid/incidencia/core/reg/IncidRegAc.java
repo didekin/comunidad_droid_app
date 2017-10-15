@@ -7,8 +7,8 @@ import android.view.View;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ViewerParentInjectedIf;
-import com.didekindroid.api.ViewerParentInjectorIf;
+import com.didekindroid.api.ParentViewerInjectedIf;
+import com.didekindroid.api.ChildViewersInjectorIf;
 
 import timber.log.Timber;
 
@@ -26,7 +26,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * This activity is a point of registration for receiving notifications of new incidencias.
  * TODO: añadir varios tags a la incidencia para facilitar búsquedas.
  */
-public class IncidRegAc extends AppCompatActivity implements ViewerParentInjectorIf {
+public class IncidRegAc extends AppCompatActivity implements ChildViewersInjectorIf {
 
     IncidRegFr incidRegFr;
     ViewerIncidRegAc viewer;
@@ -63,20 +63,20 @@ public class IncidRegAc extends AppCompatActivity implements ViewerParentInjecto
         viewer.saveState(outState);
     }
 
-    // ==================================  ViewerParentInjectorIf  =================================
+    // ==================================  ChildViewersInjectorIf  =================================
 
     @Override
-    public ViewerParentInjectedIf getViewerAsParent()
+    public ParentViewerInjectedIf getParentViewer()
     {
-        Timber.d("getViewerAsParent()");
+        Timber.d("getParentViewer()");
         return viewer;
     }
 
     @Override
-    public void setChildInViewer(ViewerIf childInViewer)
+    public void setChildInParentViewer(ViewerIf childViewer)
     {
-        Timber.d("setChildInViewer()");
-        viewer.setChildViewer(childInViewer);
+        Timber.d("setChildInParentViewer()");
+        viewer.setChildViewer(childViewer);
     }
 
     // ============================================================

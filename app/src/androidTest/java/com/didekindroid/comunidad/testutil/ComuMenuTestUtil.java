@@ -12,7 +12,10 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.usuario.testutil.UserItemMenuTestUtils.REGISTERED_USER;
+import static java.lang.Thread.sleep;
 
 /**
  * User: pedro@didekin
@@ -25,37 +28,37 @@ public enum  ComuMenuTestUtil implements MenuTestUtilIf {
     COMU_DATA_AC {
 
         @Override
-        public void checkMenuItem_NTk(Activity activity)
+        public void checkItemNoRegisterUser(Activity activity)
         {
             throw new UnsupportedOperationException(COMU_DATA_AC.name() + REGISTERED_USER);
         }
 
         @Override
-        public void checkMenuItem_WTk(Activity activity) throws InterruptedException
+        public void checkItemRegisterUser(Activity activity) throws InterruptedException
         {
-            onView(ViewMatchers.withText(R.string.comu_data_ac_mn)).check(doesNotExist());
+            onView(withText(R.string.comu_data_ac_mn)).check(doesNotExist());
             openActionBarOverflowOrOptionsMenu(activity);
-            Thread.sleep(1000);
-            onView(ViewMatchers.withText(R.string.comu_data_ac_mn)).check(matches(isDisplayed())).perform(click());
-            onView(ViewMatchers.withId(R.id.comu_data_ac_layout)).check(matches(isDisplayed()));
+            sleep(1000);
+            onView(withText(R.string.comu_data_ac_mn)).check(matches(isDisplayed())).perform(click());
+            onView(withId(R.id.comu_data_ac_layout)).check(matches(isDisplayed()));
         }
     },
 
     COMU_SEARCH_AC {
         @Override
-        public void checkMenuItem_NTk(Activity activity) throws InterruptedException
+        public void checkItemNoRegisterUser(Activity activity) throws InterruptedException
         {
-            checkMenuItem_WTk(activity);
+            checkItemRegisterUser(activity);
         }
 
         @Override
-        public void checkMenuItem_WTk(Activity activity) throws InterruptedException
+        public void checkItemRegisterUser(Activity activity) throws InterruptedException
         {
-            onView(ViewMatchers.withText(R.string.comu_search_ac_mn)).check(doesNotExist());
-            Thread.sleep(1000);
+            onView(withText(R.string.comu_search_ac_mn)).check(doesNotExist());
+            sleep(1000);
             openActionBarOverflowOrOptionsMenu(activity);
-            onView(ViewMatchers.withText(R.string.comu_search_ac_mn)).check(matches(isDisplayed())).perform(click());
-            onView(ViewMatchers.withId(R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));
+            onView(withText(R.string.comu_search_ac_mn)).check(matches(isDisplayed())).perform(click());
+            onView(withId(R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));
         }
     },
     ;

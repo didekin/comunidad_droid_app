@@ -1,21 +1,31 @@
 package com.didekindroid.usuario.userdata;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
-import android.widget.EditText;
+import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.usuariocomunidad.data.UserComuDataAc;
+import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.usuario.Usuario;
+import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.concurrent.TimeUnit;
 
+import static android.app.TaskStackBuilder.create;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
+import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
@@ -26,18 +36,18 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withHint;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.didekindroid.R.id.reg_usuario_alias_ediT;
-import static com.didekindroid.R.id.reg_usuario_email_editT;
-import static com.didekindroid.R.id.user_data_ac_password_ediT;
 import static com.didekindroid.R.id.user_data_modif_button;
 import static com.didekindroid.comunidad.testutil.ComuMenuTestUtil.COMU_SEARCH_AC;
+import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_OPEN_BY_COMU_AC;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.checkViewerReplaceComponent;
-import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
+import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
+import static com.didekindroid.testutil.ActivityTestUtils.focusOnButton;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
+import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
 import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
 import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typeUserData;
@@ -46,10 +56,13 @@ import static com.didekindroid.usuario.testutil.UserItemMenuTestUtils.PASSWORD_C
 import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.userDataAcRsId;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanWithTkhandler;
+import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.SEE_USERCOMU_BY_USER_AC;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.userComuDataLayout;
+import static com.didekindroid.usuariocomunidad.util.UserComuBundleKey.USERCOMU_LIST_OBJECT;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
@@ -64,10 +77,12 @@ import static org.junit.Assert.fail;
  * Date: 16/07/15
  * Time: 14:25
  */
+@RunWith(AndroidJUnit4.class)
 public class UserDataAcTest {
 
     UserDataAc activity;
     Usuario oldUsuario;
+    Comunidad comunidad;
 
     @Rule
     public IntentsTestRule<? extends Activity> mActivityRule = new IntentsTestRule<UserDataAc>(UserDataAc.class) {
@@ -76,25 +91,41 @@ public class UserDataAcTest {
         {
             try {
                 oldUsuario = signUpAndUpdateTk(COMU_REAL_JUAN);
+                comunidad = userComuDaoRemote.getComusByUser().get(0);
                 assertThat(oldUsuario, notNullValue());
             } catch (Exception e) {
                 fail();
             }
+            Intent intent = new Intent(getTargetContext(), UserComuDataAc.class);
+            intent.putExtra(USERCOMU_LIST_OBJECT.key,
+                    new UsuarioComunidad.UserComuBuilder(comunidad, oldUsuario).userComuRest(COMU_REAL_JUAN).build());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                create(getTargetContext()).addNextIntent(intent).addParentStack(UserDataAc.class).startActivities();
+            }
         }
     };
+
+    @BeforeClass
+    public static void calm() throws InterruptedException
+    {
+        SECONDS.sleep(3);
+    }
 
     @Before
     public void setUp() throws Exception
     {
         activity = (UserDataAc) mActivityRule.getActivity();
-        TimeUnit.MILLISECONDS.sleep(2000);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @After
     public void tearDown() throws Exception
     {
         usuarioDao.deleteUser();
         cleanWithTkhandler();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            cleanTasks(activity);
+        }
     }
 
     // ============================================================
@@ -105,41 +136,47 @@ public class UserDataAcTest {
     public void testOncreate()
     {
         assertThat(activity.viewer, notNullValue());
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(userDataAcRsId));
+        waitAtMost(4, SECONDS).until(isViewDisplayed(allOf(withId(R.id.reg_usuario_email_editT), withText(containsString(oldUsuario.getUserName())))));
+        waitAtMost(4, SECONDS).until(isViewDisplayed(allOf(withId(R.id.reg_usuario_alias_ediT), withText(containsString(oldUsuario.getAlias())))));
+        waitAtMost(4, SECONDS).until(isViewDisplayed(
+                allOf(
+                        withId(R.id.password_validation_ediT),
+                        withText(containsString("")),
+                        withHint(R.string.user_data_ac_password_hint)
+                )));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(R.id.user_data_modif_button));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(R.id.appbar));
 
-        onView(withId(userDataAcRsId)).check(matches(isDisplayed()));
-
-        onView(withId(reg_usuario_email_editT))
-                .check(matches(withText(containsString(oldUsuario.getUserName()))));
-        onView(withId(reg_usuario_alias_ediT))
-                .check(matches(withText(containsString(oldUsuario.getAlias()))));
-        onView(allOf(withId(user_data_ac_password_ediT),
-                withHint(R.string.user_data_ac_password_hint)))
-                .check(matches(withText(containsString(""))));
-
-        onView(withId(user_data_modif_button)).check(matches(isDisplayed()));
-        onView(withId(R.id.appbar)).check(matches(isDisplayed()));
-        clickNavigateUp();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            checkUp(seeUserComuByUserFrRsId);
+        }
     }
 
     @Test  // Wrong password.
     public void testModifyUserDataWrongPswd() throws InterruptedException
     {
+        SECONDS.sleep(2);
         typeUserData("new_juan@juan.es", USER_JUAN.getAlias(), "wrong_password");
         onView(withId(user_data_modif_button)).perform(scrollTo()).check(matches(isDisplayed())).perform(click());
-        waitAtMost(4, SECONDS).until(isToastInView(R.string.password_wrong, activity));
+        waitAtMost(6, SECONDS).until(isToastInView(R.string.password_wrong, activity));
     }
 
     @Test  // Modify user OK.
-    public void testModifyUserDataAndUp() throws UiException
+    public void testModifyUserData_Up() throws UiException, InterruptedException
     {
+        SECONDS.sleep(2);
         typeClickWait();
         // Verificamos navegación.
-        checkUp(userDataAcRsId);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            checkUp(comuSearchAcLayout);
+        }
     }
 
     @Test  // Modify user OK.
-    public void testModifyUserDataAndBack() throws UiException
+    public void testModifyUserData_Back() throws UiException, InterruptedException
     {
+        SECONDS.sleep(2);
         typeClickWait();
         checkBack(onView(withId(seeUserComuByUserFrRsId)).check(matches(isDisplayed())), userDataAcRsId);
     }
@@ -147,9 +184,15 @@ public class UserDataAcTest {
     @Test
     public final void testOnStop() throws Exception
     {
-        getInstrumentation().callActivityOnStop(activity);
-        // Check.
-        assertThat(activity.viewer.getController().getSubscriptions().size(), is(0));
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                getInstrumentation().callActivityOnStop(activity);
+                // Check.
+                assertThat(activity.viewer.getController().getSubscriptions().size(), is(0));
+            }
+        });
     }
 
     @Test
@@ -163,7 +206,7 @@ public class UserDataAcTest {
     @Test
     public void testComuSearchMn() throws InterruptedException
     {
-        COMU_SEARCH_AC.checkMenuItem_WTk(activity);
+        COMU_SEARCH_AC.checkItemRegisterUser(activity);
         intended(hasExtra(user_name.key, oldUsuario.getUserName()));
         // NO navigate-up.
     }
@@ -171,7 +214,7 @@ public class UserDataAcTest {
     @Test
     public void testDeleteMeMn() throws InterruptedException
     {
-        DELETE_ME_AC.checkMenuItem_WTk(activity);
+        DELETE_ME_AC.checkItemRegisterUser(activity);
         intended(hasExtra(user_name.key, oldUsuario.getUserName()));
         checkUp(userDataAcRsId);
     }
@@ -179,7 +222,7 @@ public class UserDataAcTest {
     @Test
     public void testPasswordChangeMn() throws InterruptedException
     {
-        PASSWORD_CHANGE_AC.checkMenuItem_WTk(activity);
+        PASSWORD_CHANGE_AC.checkItemRegisterUser(activity);
         intended(hasExtra(user_name.key, oldUsuario.getUserName()));
         checkUp(userDataAcRsId);
     }
@@ -187,33 +230,32 @@ public class UserDataAcTest {
     @Test
     public void testUserComuByUserMn() throws InterruptedException
     {
-        SEE_USERCOMU_BY_USER_AC.checkMenuItem_WTk(activity);
+        SEE_USERCOMU_BY_USER_AC.checkItemRegisterUser(activity);
         intended(hasExtra(user_name.key, oldUsuario.getUserName()));
-        checkUp(userDataAcRsId);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            checkUp(comuSearchAcLayout);
+        }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Test
     public void testIncidSeeByComuMn() throws InterruptedException
     {
         INCID_SEE_OPEN_BY_COMU_AC.checkMenuItem_WTk(activity);
         intended(hasExtra(user_name.key, oldUsuario.getUserName()));
-        checkUp(userDataAcRsId);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            checkUp(userComuDataLayout);
+        }
     }
 
     /*    =================================  HELPERS ==================================*/
 
-    private void checkInitialData(String userName, String alias)
-    {
-        assertThat(((EditText) activity.acView.findViewById(R.id.reg_usuario_email_editT)).getText().toString(), is(userName));
-        assertThat(((EditText) activity.acView.findViewById(R.id.reg_usuario_alias_ediT)).getText().toString(), is(alias));
-    }
-
     public void typeClickWait()
     {
         typeUserData("new@username.com", "new_alias", USER_JUAN.getPassword());
-        onView(withId(user_data_modif_button)).perform(scrollTo())
-                .check(matches(isDisplayed())).perform(click());
+        focusOnButton(activity, user_data_modif_button);
+        onView(withId(user_data_modif_button)).perform(scrollTo(), click());
 
-        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
+        waitAtMost(6, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
     }
 }

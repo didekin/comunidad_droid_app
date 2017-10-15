@@ -6,8 +6,10 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.incidencia.testutils.IncidEspressoTestUtils;
 import com.didekindroid.usuario.testutil.UsuarioDataTestUtils;
 import com.didekinlib.model.incidencia.dominio.Avance;
+import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 
 import org.junit.BeforeClass;
@@ -26,25 +28,27 @@ import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtraWithKey;
 import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
-import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
+import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkDataResolucionEditFr;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
+import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
 import static com.didekindroid.util.UIutils.formatTimeStampToString;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -113,14 +117,14 @@ public class IncidResolucionEditFrTest_2 extends IncidResolucionAbstractTest {
     @Test
     public void testOnCreate_1() throws Exception
     {
-        assertThat(mResolucionIntent.getAvances().size(), is(1));
-        checkScreenResolucionEditFr();
+        assertThat(resolucionIntent.getAvances().size(), is(1));
+        IncidEspressoTestUtils.checkScreenResolucionEditFr(resolucionIntent);
     }
 
     @Test
     public void testOnData_1()
     {
-        checkDataResolucionEditFr();
+        checkDataResolucionEditFr(resolucion);
         // Avances.
         Avance avance = resolucion.getAvances().get(0);
         onData(is(avance)).inAdapterView(withId(android.R.id.list)).check(matches(isDisplayed()));
@@ -133,7 +137,7 @@ public class IncidResolucionEditFrTest_2 extends IncidResolucionAbstractTest {
                 withId(R.id.incid_avance_fecha_view),
                 hasSibling(allOf(
                         withId(R.id.incid_avance_aliasUser_view),
-                        withText(USER_JUAN.getUserName()) // usuario en sesión que modifica resolución.
+                        withText(USER_JUAN.getAlias()) // usuario en sesión que modifica resolución.
                 )))).check(matches(isDisplayed()));
     }
 
@@ -147,14 +151,14 @@ public class IncidResolucionEditFrTest_2 extends IncidResolucionAbstractTest {
         // Verificamos pantalla de llegada, intent y BD.
         onView(withId(R.id.incid_edit_fragment_container_ac)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_edit_maxpower_fr_layout)).check(matches(isDisplayed()));
-        intended(hasExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia));
+        intended(hasExtra(INCID_RESOLUCION_BUNDLE.key, new IncidAndResolBundle(incidImportancia, resolucion != null)));
         Resolucion resolucionDb = incidenciaDao.seeResolucion(resolucion.getIncidencia().getIncidenciaId());
         assertThat(resolucionDb.getAvances().size(), is(2));
         assertThat(resolucionDb.getAvances().get(1).getAvanceDesc(), is("avance2_desc_válida"));
 
         checkUp();
-        checkScreenResolucionEditFr();
-        checkDataResolucionEditFr();
+        IncidEspressoTestUtils.checkScreenResolucionEditFr(resolucionIntent);
+        checkDataResolucionEditFr(resolucion);
     }
 
     @Test
@@ -162,15 +166,11 @@ public class IncidResolucionEditFrTest_2 extends IncidResolucionAbstractTest {
     {
         // Caso NOT OK: cerramos la incidencia, damos back y volvemos a intentar cerrarla.
         onView(withId(R.id.incid_resolucion_edit_fr_close_button)).perform(click());
-        intended(not(hasExtraWithKey(INCID_IMPORTANCIA_OBJECT.key)));
-
         onView(withId(R.id.incid_see_closed_by_comu_ac)).check(matches(isDisplayed())).perform(pressBack());
 
         onView(withId(R.id.incid_resolucion_edit_fr_close_button)).perform(click());
-        checkToastInTest(R.string.incidencia_wrong_init, mActivity);
+        waitAtMost(4, SECONDS).until(isToastInView(R.string.incidencia_wrong_init, activity));
         onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed()));
-
-        Thread.sleep(2000);
     }
 
 /*    ============================= HELPER METHODS ===========================*/

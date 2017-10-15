@@ -30,6 +30,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.testutil.ComuMenuTestUtil.COMU_DATA_AC;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
+import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_REG_AC;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_OPEN_BY_COMU_AC;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
@@ -151,7 +152,7 @@ public class UserComuDataAcTest {
         toClean = false;
 
         onView(withId(R.id.usercomu_data_ac_delete_button)).perform(click());
-        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(comuSearchAcLayout));
+        waitAtMost(6, SECONDS).until(isResourceIdDisplayed(comuSearchAcLayout));
         // Sale de la aplicación.
         try {
             checkBack(onView(withId(comuSearchAcLayout)));
@@ -165,8 +166,8 @@ public class UserComuDataAcTest {
     @Test
     public void testSeeUserComuByComuMn() throws InterruptedException
     {
-        SEE_USERCOMU_BY_COMU_AC.checkMenuItem_WTk(activity);
-        intended(IntentMatchers.hasExtra(ComuBundleKey.COMUNIDAD_ID.key, usuarioComunidad.getComunidad().getC_Id()));
+        SEE_USERCOMU_BY_COMU_AC.checkItemRegisterUser(activity);
+        intended(IntentMatchers.hasExtra(COMUNIDAD_ID.key, usuarioComunidad.getComunidad().getC_Id()));
         checkUp(userComuDataLayout);
     }
 
@@ -174,8 +175,8 @@ public class UserComuDataAcTest {
     public void testComuDataMn() throws InterruptedException
     {
         // Only one user associated to the comunidad: the menu shows the item.
-        COMU_DATA_AC.checkMenuItem_WTk(activity);
-        intended(IntentMatchers.hasExtra(ComuBundleKey.COMUNIDAD_ID.key, usuarioComunidad.getComunidad().getC_Id()));
+        COMU_DATA_AC.checkItemRegisterUser(activity);
+        intended(IntentMatchers.hasExtra(COMUNIDAD_ID.key, usuarioComunidad.getComunidad().getC_Id()));
         checkUp(userComuDataLayout);
     }
 

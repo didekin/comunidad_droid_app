@@ -56,8 +56,8 @@ class SeeUserComuByComuListAdapter extends ArrayAdapter<UsuarioComunidad> {
 
         UserVwHolder(View convertView)
         {
-            mUserName = (TextView) convertView.findViewById(R.id.usercomu_item_username_txt);
-            mUserAlias = (TextView) convertView.findViewById(R.id.usercomu_item_alias_txt);
+            mUserName = convertView.findViewById(R.id.usercomu_item_username_txt);
+            mUserAlias = convertView.findViewById(R.id.usercomu_item_alias_txt);
         }
 
         void initializeTextInViews(UsuarioComunidad userComu)

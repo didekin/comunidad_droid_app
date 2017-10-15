@@ -24,9 +24,6 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
-import static com.didekindroid.exception.UiExceptionRouter.GENERIC_APP_ACC;
-import static com.didekindroid.testutil.ActivityTestUtils.checkProcessCtrlError;
-import static com.didekindroid.testutil.ActivityTestUtils.checkToastInTest;
 import static com.didekindroid.testutil.ActivityTestUtils.isActivityDying;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
@@ -38,10 +35,8 @@ import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.checkPswdSe
 import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typeLoginData;
 import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.loginAcResourceId;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_DROID;
-import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
 import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOUND;
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.awaitility.Awaitility.await;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.instanceOf;
@@ -76,7 +71,7 @@ public class ViewerLoginTest {
     public void testNewViewerLogin() throws Exception
     {
         assertThat(viewerLogin, notNullValue());
-        assertThat(viewerLogin.getController(), instanceOf(CtrlerLogin.class));
+        assertThat(viewerLogin.getController(), instanceOf(CtrlerUsuario.class));
     }
 
     @Test
@@ -136,7 +131,7 @@ public class ViewerLoginTest {
             }
         });
 
-        await().atMost(3, SECONDS).untilAtomic(viewerLogin.getCounterWrong(), equalTo(4));
+        waitAtMost(3, SECONDS).untilAtomic(viewerLogin.getCounterWrong(), equalTo(4));
         checkPswdSendByMailDialog();
     }
 
@@ -153,8 +148,8 @@ public class ViewerLoginTest {
             }
         });
 
-        await().atMost(3, SECONDS).untilAtomic(viewerLogin.getCounterWrong(), equalTo(3));
-        checkToastInTest(R.string.password_wrong, activity);
+        waitAtMost(5, SECONDS).untilAtomic(viewerLogin.getCounterWrong(), equalTo(3));
+        waitAtMost(5, SECONDS).until(isToastInView(R.string.password_wrong, activity));
         onView(withId(loginAcResourceId)).check(matches(isDisplayed()));
     }
 
@@ -169,16 +164,16 @@ public class ViewerLoginTest {
             }
         });
 
-        await().atMost(3, SECONDS).until(isActivityDying(activity), is(true));
+        waitAtMost(3, SECONDS).until(isActivityDying(activity), is(true));
         onView(withId(comuSearchAcLayout)).check(matches(isDisplayed()));
     }
 
     @Test
     public void testDoDialogPositiveClick() throws Exception
     {
-        viewerLogin.setController(new CtrlerLogin() {
+        viewerLogin.setController(new CtrlerUsuario() {
             @Override
-            public boolean doDialogPositiveClick(DisposableSingleObserver<Boolean> observer, @NonNull Usuario usuario)
+            public boolean sendNewPassword(DisposableSingleObserver<Boolean> observer, @NonNull Usuario usuario)
             {
                 assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
                 return false;
@@ -198,11 +193,11 @@ public class ViewerLoginTest {
                 viewerLogin.processBackSendPswdInView(true);
             }
         });
-        await().atMost(3, SECONDS).until(isToastInView(R.string.password_new_in_login, activity));
+        waitAtMost(4, SECONDS).until(isToastInView(R.string.password_new_in_login, activity));
     }
 
     @Test
-    public void testProcessControllerError_1() throws Exception
+    public void testOnErrorInObserver_1() throws Exception
     {
         activity.runOnUiThread(new Runnable() {
             @Override
@@ -216,12 +211,6 @@ public class ViewerLoginTest {
     }
 
     @Test
-    public void testProcessControllerError_2()
-    {
-        assertThat(checkProcessCtrlError(viewerLogin, GENERIC_INTERNAL_ERROR, GENERIC_APP_ACC), is(true));
-    }
-
-    @Test
     public void testSaveState() throws Exception
     {
         // Previous state.
@@ -230,7 +219,7 @@ public class ViewerLoginTest {
         viewerLogin.doViewInViewer(bundle, null);
         assertThat(viewerLogin.getCounterWrong().get(), is(2));
 
-        // Execute and checkMenu.
+        // Execute and checkAppBarMenu.
         viewerLogin.saveState(bundle);
         assertThat(bundle.getInt(login_counter_atomic_int.key), is(2));
     }

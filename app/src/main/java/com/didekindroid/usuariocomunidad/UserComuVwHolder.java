@@ -35,18 +35,18 @@ public class UserComuVwHolder {
 
     public UserComuVwHolder(View convertView, Resources resources)
     {
-        mPortalEscaleraBlock = (LinearLayout) convertView.findViewById(R.id.usercomu_portal_escalera_block);
-        mPlantaPuertaBlock = (LinearLayout) convertView.findViewById(R.id.usercomu_planta_puerta_block);
+        mPortalEscaleraBlock = convertView.findViewById(R.id.usercomu_portal_escalera_block);
+        mPlantaPuertaBlock = convertView.findViewById(R.id.usercomu_planta_puerta_block);
 
-        mPortalRotView = (TextView) convertView.findViewById(R.id.usercomu_item_portal_rot);
-        mPortalView = (TextView) convertView.findViewById(R.id.usercomu_item_portal_txt);
-        mEscaleraRotView = (TextView) convertView.findViewById(R.id.usercomu_item_escalera_rot);
-        mEscaleraView = (TextView) convertView.findViewById(R.id.usercomu_item_escalera_txt);
-        mPlantaRotView = (TextView) convertView.findViewById(R.id.usercomu_item_planta_rot);
-        mPlantaView = (TextView) convertView.findViewById(R.id.usercomu_item_planta_txt);
-        mPuertaRotView = (TextView) convertView.findViewById(R.id.usercomu_item_puerta_rot);
-        mPuertaView = (TextView) convertView.findViewById(R.id.usercomu_item_puerta_txt);
-        mRolesView = (TextView) convertView.findViewById(R.id.usercomu_item_roles_txt);
+        mPortalRotView = convertView.findViewById(R.id.usercomu_item_portal_rot);
+        mPortalView = convertView.findViewById(R.id.usercomu_item_portal_txt);
+        mEscaleraRotView = convertView.findViewById(R.id.usercomu_item_escalera_rot);
+        mEscaleraView = convertView.findViewById(R.id.usercomu_item_escalera_txt);
+        mPlantaRotView = convertView.findViewById(R.id.usercomu_item_planta_rot);
+        mPlantaView = convertView.findViewById(R.id.usercomu_item_planta_txt);
+        mPuertaRotView = convertView.findViewById(R.id.usercomu_item_puerta_rot);
+        mPuertaView = convertView.findViewById(R.id.usercomu_item_puerta_txt);
+        mRolesView = convertView.findViewById(R.id.usercomu_item_roles_txt);
 
         this.resources = resources;
     }

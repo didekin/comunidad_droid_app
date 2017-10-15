@@ -1,16 +1,24 @@
 package com.didekindroid.testutil;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.test.espresso.NoMatchingRootException;
 import android.support.test.espresso.NoMatchingViewException;
 import android.support.test.espresso.PerformException;
 import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.contrib.PickerActions;
+import android.support.test.runner.lifecycle.Stage;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.PopupMenu;
+import android.view.Gravity;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.AdapterView;
@@ -18,50 +26,53 @@ import android.widget.Button;
 import android.widget.DatePicker;
 
 import com.didekindroid.R;
+import com.didekindroid.api.ChildViewersInjectorIf;
 import com.didekindroid.api.ControllerIf;
 import com.didekindroid.api.CtrlerSelectListIf;
 import com.didekindroid.api.ViewerIf;
 import com.didekindroid.api.ViewerMock;
-import com.didekindroid.api.ViewerParentInjectorIf;
 import com.didekindroid.api.ViewerSelectListIf;
-import com.didekindroid.exception.UiException;
-import com.didekindroid.exception.UiExceptionIf.ActionForUiExceptionIf;
 import com.didekindroid.router.ActivityInitiator;
-import com.didekindroid.security.IdentityCacher;
 import com.didekindroid.usuario.firebase.CtrlerFirebaseTokenIf;
 import com.didekindroid.util.BundleKey;
-import com.didekinlib.http.ErrorBean;
 import com.didekinlib.http.oauth2.SpringOauthToken;
-import com.didekinlib.model.exception.ExceptionMsgIf;
 
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matcher;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
 
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
+import static android.content.Context.ACTIVITY_SERVICE;
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.KITKAT;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
+import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.pressBack;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.contrib.DrawerActions.open;
+import static android.support.test.espresso.contrib.DrawerMatchers.isClosed;
+import static android.support.test.espresso.contrib.NavigationViewActions.navigateTo;
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -69,6 +80,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static android.support.test.runner.lifecycle.ActivityLifecycleMonitorRegistry.getInstance;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.RxSchedulersUtils.resetAllSchedulers;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceAndroidMain;
@@ -94,8 +106,6 @@ import static org.junit.Assert.fail;
 
 public final class ActivityTestUtils {
 
-    public static final long LONG_DEFAULT_EXTRA_VALUE = 0L;
-
     private ActivityTestUtils()
     {
     }
@@ -112,13 +122,13 @@ public final class ActivityTestUtils {
         };
     }
 
-    public static Callable<Boolean> isResourceIdDisplayed(final Integer... resourceStringIds)
+    public static Callable<Boolean> isResourceIdDisplayed(final Integer... resourceIds)
     {
         return new Callable<Boolean>() {
             public Boolean call() throws Exception
             {
                 try {
-                    for (int resourceId : resourceStringIds) {
+                    for (int resourceId : resourceIds) {
                         onView(withId(resourceId)).check(matches(isDisplayed()));
                     }
                     return true;
@@ -129,14 +139,14 @@ public final class ActivityTestUtils {
         };
     }
 
-    public static Callable<Boolean> isResourceIdNonExist(final Integer... resourceStringIds)
+    public static Callable<Boolean> isTextIdNonExist(final Integer... stringId)
     {
         return new Callable<Boolean>() {
             public Boolean call() throws Exception
             {
                 try {
-                    for (int resourceId : resourceStringIds) {
-                        onView(withId(resourceId)).check(doesNotExist());
+                    for (int resourceId : stringId) {
+                        onView(withText(resourceId)).check(doesNotExist());
                     }
                     return true;
                 } catch (NoMatchingViewException ne) {
@@ -153,21 +163,6 @@ public final class ActivityTestUtils {
             {
                 try {
                     onView(viewMatcher).check(matches(isDisplayed())).perform(viewActions);
-                    return true;
-                } catch (NoMatchingViewException ne) {
-                    return false;
-                }
-            }
-        };
-    }
-
-    public static Callable<Boolean> viewNonExist(final Matcher<View> viewMatcher)
-    {
-        return new Callable<Boolean>() {
-            public Boolean call() throws Exception
-            {
-                try {
-                    onView(viewMatcher).check(matches(not(isDisplayed())));
                     return true;
                 } catch (NoMatchingViewException ne) {
                     return false;
@@ -212,6 +207,22 @@ public final class ActivityTestUtils {
         return buttonRsId;
     }
 
+    public static int focusOnView(Activity activity, int viewRsId)
+    {
+        final View view = activity.findViewById(viewRsId);
+
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                view.setFocusable(true);
+                view.setFocusableInTouchMode(true);
+                view.requestFocus();
+            }
+        });
+        return viewRsId;
+    }
+
     //    ============================= CONTROLLER/Adapters ===================================
 
     public static CompositeDisposable addSubscription(ControllerIf controller)
@@ -234,20 +245,27 @@ public final class ActivityTestUtils {
         return controller.getSubscriptions();
     }
 
-    public static void checkSubscriptionsOnStop(Activity activity, ControllerIf... controllers)
+    public static void checkSubscriptionsOnStop(final Activity activity, final ControllerIf... controllers)
     {
-        AtomicInteger atomicInteger = new AtomicInteger(0);
+        final AtomicInteger atomicInteger = new AtomicInteger(0);
         for (ControllerIf controller : controllers) {
             atomicInteger.addAndGet(addSubscription(controller).size());
         }
         assertThat(atomicInteger.get() >= controllers.length, is(true));
 
-        getInstrumentation().callActivityOnStop(activity);
-        atomicInteger.set(0);
-        for (ControllerIf controller : controllers) {
-            atomicInteger.addAndGet(controller.getSubscriptions().size());
-        }
-        waitAtMost(4, SECONDS).untilAtomic(atomicInteger, is(0));
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                getInstrumentation().callActivityOnStop(activity);
+                atomicInteger.set(0);
+                for (ControllerIf controller : controllers) {
+                    atomicInteger.addAndGet(controller.getSubscriptions().size());
+                }
+            }
+        });
+
+        waitAtMost(6, SECONDS).untilAtomic(atomicInteger, is(0));
     }
 
     public static Callable<Boolean> gcmTokenSentFlag(final CtrlerFirebaseTokenIf controller)
@@ -270,16 +288,6 @@ public final class ActivityTestUtils {
         };
     }
 
-    //    ============================= DATES ===================================
-
-    public static Timestamp doTimeStampFromCalendar(int daysToAdd)
-    {
-        Calendar fCierre = new GregorianCalendar();
-        fCierre.add(DAY_OF_MONTH, daysToAdd);
-        return new Timestamp(fCierre.getTimeInMillis());
-    }
-
-
     //    ============================= DATE PICKERS ===================================
 
     public static Calendar reSetDatePicker(long fechaInicial, int monthsToAdd)
@@ -291,7 +299,7 @@ public final class ActivityTestUtils {
         // Aumentamos la fecha estimada en un número de meses.
         newCalendar.add(MONTH, monthsToAdd);
         // Android PickerActions substract 1 from the month passed to setDate(), so we increased the month parameter value in 1 before passing it.
-        onView(withClassName(CoreMatchers.is(DatePicker.class.getName())))
+        onView(withClassName(is(DatePicker.class.getName())))
                 .perform(PickerActions.setDate(newCalendar.get(Calendar.YEAR), newCalendar.get(MONTH) + 1, newCalendar.get(DAY_OF_MONTH)));
         return newCalendar;
     }
@@ -306,35 +314,18 @@ public final class ActivityTestUtils {
         }
     }
 
-    //    ============================= EXCEPTIONS/ERRORS ===================================
+    //    ============================= IDENTITY ===================================
 
-    public static boolean checkProcessCtrlError(final ViewerIf viewer, final ExceptionMsgIf exceptionMsg, ActionForUiExceptionIf actionToExpect)
+    public static void checkIsRegistered(ViewerIf<?, ?> viewer)
     {
-        final Activity activityError = viewer.getActivity();
-        final AtomicReference<ActionForUiExceptionIf> actionException = new AtomicReference<>(null);
-
-        activityError.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                assertThat(actionException.compareAndSet(
-                        null,
-                        viewer.onErrorInObserver(new UiException(new ErrorBean(exceptionMsg)))
-                        ),
-                        is(true)
-                );
-            }
-        });
-        waitAtMost(1, SECONDS).untilAtomic(actionException, notNullValue());
-        return actionException.get().getActivityToGoClass().equals(actionToExpect.getActivityToGoClass());
+        AtomicBoolean isRegistered = new AtomicBoolean(false);
+        isRegistered.compareAndSet(false, viewer.getController().isRegisteredUser());
+        waitAtMost(4, SECONDS).untilTrue(isRegistered);
     }
-
-    //    ============================= IDENTITY CACHE ===================================
 
     public static void checkUpdateTokenCache(SpringOauthToken oldToken)
     {
-        assertThat(TKhandler.getTokenCache().get(), not(is(oldToken)));
-        checkInitTokenCache();
+        checkUpdatedCacheAfterPswd(true, oldToken);
     }
 
     public static void checkInitTokenCache()
@@ -351,20 +342,28 @@ public final class ActivityTestUtils {
         assertThat(TKhandler.getRefreshTokenFile().exists(), is(false));
     }
 
-    public static Callable<String> getRefreshTokenValue(final IdentityCacher identityCacher)
+    public static void checkUpdatedCacheAfterPswd(boolean isPswdUpdated, SpringOauthToken oldToken)
     {
-        return new Callable<String>() {
-            @Override
-            public String call() throws Exception
-            {
-                return identityCacher.getRefreshTokenValue();
-            }
-        };
+        checkInitTokenCache();
+        if (isPswdUpdated) {
+            assertThat(TKhandler.getTokenCache().get(), not(is(oldToken)));
+        } else {
+            assertThat(TKhandler.getTokenCache().get(), is(oldToken));
+        }
     }
 
     //    ============================= MENU ===================================
 
-    public static void checkMenu(Activity activity, int menuResourceId, int actionResourceId)
+    @NonNull
+    public static Menu doMockMenu(Activity activity, int menuMockRsId)
+    {
+        PopupMenu popupMenu = new PopupMenu(getTargetContext(), null);
+        Menu menu = popupMenu.getMenu();
+        activity.getMenuInflater().inflate(menuMockRsId, menu);
+        return menu;
+    }
+
+    public static void checkAppBarMenu(Activity activity, int menuResourceId, int actionResourceId)
     {
         try {
             onView(withText(menuResourceId)).check(doesNotExist());
@@ -377,6 +376,15 @@ public final class ActivityTestUtils {
         }
     }
 
+    public static void checkDrawerMenu(int drawerLayoutId, int navigationViewId, int menuResourceId, int actionResourceId)
+    {
+        onView(withId(drawerLayoutId)).check(matches(isClosed(Gravity.LEFT))).perform(open());
+        onView(withId(navigationViewId)).perform(navigateTo(menuResourceId));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(actionResourceId));
+    }
+
+    /*    ============================= NAVIGATION ===================================*/
+
     public static void clickNavigateUp()
     {
         onView(allOf(
@@ -385,29 +393,76 @@ public final class ActivityTestUtils {
         ).check(matches(isDisplayed())).perform(click());
     }
 
-    public static void checkUp(Integer... activityLayoutIds)
+    public static void scrollClickNavigateUp()
     {
-        clickNavigateUp();
-        for (Integer layout : activityLayoutIds) {
-            try {
-                isResourceIdDisplayed(layout).call();
-            } catch (Exception e) {
-                fail();
-            }
-        }
+        onView(withContentDescription(R.string.navigate_up_txt))
+                .perform(scrollTo())
+                .check(matches(isDisplayed()))
+                .perform(click());
     }
-
-    //    ============================= NAVIGATION ===================================
 
     public static void checkBack(ViewInteraction viewInteraction, Integer... activityLayoutIds)
     {
         viewInteraction.perform(closeSoftKeyboard()).perform(pressBack());
         for (Integer layout : activityLayoutIds) {
             try {
-                isResourceIdDisplayed(layout).call();
+                waitAtMost(4, SECONDS).until(isResourceIdDisplayed(layout));
             } catch (Exception e) {
                 fail();
             }
+        }
+    }
+
+    public static void checkUp(Integer... activityLayoutIds)
+    {
+        clickNavigateUp();
+        iterateLayouts(activityLayoutIds);
+    }
+
+    public static void checkScrollUp(Integer... activityLayoutIds)
+    {
+        scrollClickNavigateUp();
+        iterateLayouts(activityLayoutIds);
+    }
+
+    @SuppressWarnings("unused")
+    public static Stage getStageByActivity(final Activity activity) throws ExecutionException, InterruptedException
+    {
+        Timber.d("============= getStageByActivity() =================");
+
+        final FutureTask<Stage> taskGetActivities = new FutureTask<>(new Callable<Stage>() {
+            @Override
+            public Stage call() throws Exception
+            {
+                return getInstance().getLifecycleStageOf(activity);
+            }
+        });
+        getInstrumentation().runOnMainSync(taskGetActivities);
+        return taskGetActivities.get();
+    }
+
+    public static Collection<Activity> getActivitesInTaskByStage(final Stage stage) throws ExecutionException, InterruptedException
+    {
+        Timber.d("============= getActivitesInTaskByStage() =================");
+
+        final FutureTask<Collection<Activity>> taskGetActivities = new FutureTask<>(new Callable<Collection<Activity>>() {
+            @Override
+            public Collection<Activity> call() throws Exception
+            {
+                return getInstance().getActivitiesInStage(stage);
+            }
+        });
+        getInstrumentation().runOnMainSync(taskGetActivities);
+        return taskGetActivities.get();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public static void cleanTasks(Activity activity)
+    {
+        ActivityManager manager = (ActivityManager) activity.getSystemService(ACTIVITY_SERVICE);
+        List<ActivityManager.AppTask> tasks = manager.getAppTasks();
+        for (ActivityManager.AppTask task : tasks) {
+            task.finishAndRemoveTask();
         }
     }
 
@@ -472,16 +527,6 @@ public final class ActivityTestUtils {
         }
     }
 
-    public static void checkNoToastInTest(int resourceStringId, Activity activity)
-    {
-        Resources resources = activity.getResources();
-
-        onView(
-                withText(containsString(resources.getText(resourceStringId).toString())))
-                .inRoot(withDecorView(not(activity.getWindow().getDecorView())))
-                .check(doesNotExist());
-    }
-
     public static Callable<Boolean> isToastInView(final int resourceStringId, final Activity activity, final int... resorceErrorId)
     {
         return new Callable<Boolean>() {
@@ -489,22 +534,6 @@ public final class ActivityTestUtils {
             {
                 try {
                     checkToastInTest(resourceStringId, activity, resorceErrorId);
-                    return true;
-                } catch (NoMatchingViewException | NoMatchingRootException ne) {
-                    return false;
-                }
-            }
-        };
-    }
-
-    public static Callable<Boolean> isNotToastInView(final int resourceStringId, final Activity activity)
-    {
-        return new Callable<Boolean>() {
-            @Override
-            public Boolean call() throws Exception
-            {
-                try {
-                    checkNoToastInTest(resourceStringId, activity);
                     return true;
                 } catch (NoMatchingViewException | NoMatchingRootException ne) {
                     return false;
@@ -523,11 +552,24 @@ public final class ActivityTestUtils {
         assertThat(bundle.getLong(bundleKey.getKey()), is(18L));
     }
 
-    public static <T extends AppCompatActivity & ViewerParentInjectorIf> void checkChildInViewer(T activity)
+    public static <T extends AppCompatActivity & ChildViewersInjectorIf> void checkChildInViewer(T activity)
     {
         final ViewerMock viewerChild = new ViewerMock(activity);
-        activity.setChildInViewer(viewerChild);
-        assertThat(activity.getViewerAsParent().getChildViewer(ViewerMock.class), CoreMatchers.<ViewerIf>is(viewerChild));
+        activity.setChildInParentViewer(viewerChild);
+        assertThat(activity.getParentViewer().getChildViewer(ViewerMock.class), CoreMatchers.<ViewerIf>is(viewerChild));
+    }
+
+    //    ============================ HELPERS ============================
+
+    private static void iterateLayouts(Integer[] activityLayoutIds)
+    {
+        for (Integer layout : activityLayoutIds) {
+            try {
+                waitAtMost(6, SECONDS).until(isResourceIdDisplayed(layout));
+            } catch (Exception e) {
+                fail();
+            }
+        }
     }
 }
 

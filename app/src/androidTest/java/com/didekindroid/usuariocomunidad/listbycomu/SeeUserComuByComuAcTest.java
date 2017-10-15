@@ -31,7 +31,7 @@ import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
 import static com.didekindroid.usuario.testutil.UserItemMenuTestUtils.USER_DATA_AC;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
+import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.checkUserComuByComuRol;
@@ -80,8 +80,6 @@ public class SeeUserComuByComuAcTest {
         }
     };
 
-    Intent intent;
-
     @Before
     public void setUp() throws Exception
     {
@@ -123,8 +121,14 @@ public class SeeUserComuByComuAcTest {
     @Test
     public void testOnStop() throws Exception
     {
-       getInstrumentation().callActivityOnStop(activity);
-        assertThat(fragment.viewer.getController().getSubscriptions().size(), is(0));
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                getInstrumentation().callActivityOnStop(activity);
+                assertThat(fragment.viewer.getController().getSubscriptions().size(), is(0));
+            }
+        });
     }
 
     //    =====================================  MENU TESTS  =======================================
@@ -132,21 +136,21 @@ public class SeeUserComuByComuAcTest {
     @Test
     public void testUserComuByUserMn() throws InterruptedException
     {
-        SEE_USERCOMU_BY_USER_AC.checkMenuItem_WTk(activity);
+        SEE_USERCOMU_BY_USER_AC.checkItemRegisterUser(activity);
         checkUp(seeUserComuByComuFrRsId);
     }
 
     @Test
     public void testUserDataMn() throws InterruptedException
     {
-        USER_DATA_AC.checkMenuItem_WTk(activity);
+        USER_DATA_AC.checkItemRegisterUser(activity);
         checkUp(seeUserComuByComuFrRsId);
     }
 
     @Test
     public void testComuSearchMn() throws InterruptedException
     {
-        COMU_SEARCH_AC.checkMenuItem_WTk(activity);
+        COMU_SEARCH_AC.checkItemRegisterUser(activity);
         // En este caso no hay opción de 'navigate-up'.
     }
 }

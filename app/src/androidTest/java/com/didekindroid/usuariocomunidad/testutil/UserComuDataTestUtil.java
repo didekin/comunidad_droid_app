@@ -23,7 +23,7 @@ import static com.didekindroid.usuariocomunidad.RolUi.ADM;
 import static com.didekindroid.usuariocomunidad.RolUi.INQ;
 import static com.didekindroid.usuariocomunidad.RolUi.PRE;
 import static com.didekindroid.usuariocomunidad.RolUi.PRO;
-import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
+import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekinlib.model.usuariocomunidad.Rol.PRESIDENTE;
 import static com.didekinlib.model.usuariocomunidad.Rol.PROPIETARIO;
 import static org.hamcrest.CoreMatchers.is;
@@ -78,14 +78,6 @@ public final class UserComuDataTestUtil {
     {
         signUpAndUpdateTk(usuarioComunidadList.get(0));
         userComuDaoRemote.regComuAndUserComu(usuarioComunidadList.get(1));
-    }
-
-    public static void regThreeUserComuSameUser(List<UsuarioComunidad> usuarioComunidadList, Comunidad comunidad) throws IOException, UiException
-    {
-        regTwoUserComuSameUser(usuarioComunidadList);
-        UsuarioComunidad usuarioComunidad = makeUsuarioComunidad(comunidad, usuarioComunidadList.get(0).getUsuario(),
-                null, null, "plan-5", null, ADM.function);
-        userComuDaoRemote.regComuAndUserComu(usuarioComunidad);
     }
 
     public static void regSeveralUserComuSameUser(UsuarioComunidad... userComus) throws IOException, UiException

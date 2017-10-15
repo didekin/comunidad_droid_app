@@ -9,7 +9,6 @@ import com.didekinlib.model.usuario.Usuario;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -28,7 +27,6 @@ import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEn
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.Matchers.is;
@@ -61,12 +59,6 @@ public class DeleteMeAcTest {
     };
     CtrlerDeleteMeIf controller;
 
-    @BeforeClass
-    public static void relax() throws InterruptedException
-    {
-        MILLISECONDS.sleep(2000);
-    }
-
     @Before
     public void setUp() throws Exception
     {
@@ -95,7 +87,13 @@ public class DeleteMeAcTest {
     @Test
     public final void testOnStop() throws Exception
     {
-        getInstrumentation().callActivityOnStop(activity);
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                getInstrumentation().callActivityOnStop(activity);
+            }
+        });
         // Check.
         assertThat(controller.getSubscriptions().size(), CoreMatchers.is(0));
         cleanOptions(CLEAN_PEPE);

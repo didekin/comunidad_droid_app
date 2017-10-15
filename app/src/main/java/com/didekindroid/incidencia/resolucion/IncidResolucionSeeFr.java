@@ -33,16 +33,16 @@ import static com.didekindroid.util.UIutils.getStringFromInteger;
  */
 public class IncidResolucionSeeFr extends Fragment {
 
-    View mFragmentView;
-    Resolucion mResolucion;
+    View frView;
+    Resolucion resolucion;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
         Timber.d("onCreateView()");
-        mFragmentView = inflater.inflate(R.layout.incid_resolucion_see_fr, container, false);
-        return mFragmentView;
+        frView = inflater.inflate(R.layout.incid_resolucion_see_fr, container, false);
+        return frView;
     }
 
     @Override
@@ -51,8 +51,8 @@ public class IncidResolucionSeeFr extends Fragment {
         Timber.d("onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
 
-        mResolucion = (Resolucion) getArguments().getSerializable(INCID_RESOLUCION_OBJECT.key);
-        assertTrue(mResolucion != null, resolucion_should_be_initialized);
+        resolucion = (Resolucion) getArguments().getSerializable(INCID_RESOLUCION_OBJECT.key);
+        assertTrue(resolucion != null, resolucion_should_be_initialized);
         // Activamos el menú.
         setHasOptionsMenu(getArguments().getBoolean(IS_MENU_IN_FRAGMENT_FLAG.key, false));
         paintViewData();
@@ -99,17 +99,17 @@ public class IncidResolucionSeeFr extends Fragment {
     {
         IncidAvanceSeeAdapter mAdapter = new IncidAvanceSeeAdapter(getActivity());
         mAdapter.clear();
-        mAdapter.addAll(mResolucion.getAvances());
+        mAdapter.addAll(resolucion.getAvances());
 
         // Fecha estimada.
-        ((TextView) mFragmentView.findViewById(R.id.incid_resolucion_fecha_view)).setText(formatTimeStampToString(mResolucion.getFechaPrev()));
+        ((TextView) frView.findViewById(R.id.incid_resolucion_fecha_view)).setText(formatTimeStampToString(resolucion.getFechaPrev()));
         // Coste estimado.
-        ((TextView) mFragmentView.findViewById(R.id.incid_resolucion_coste_prev_view)).setText(getStringFromInteger(mResolucion.getCosteEstimado()));
+        ((TextView) frView.findViewById(R.id.incid_resolucion_coste_prev_view)).setText(getStringFromInteger(resolucion.getCosteEstimado()));
         // Plan.
-        ((TextView) mFragmentView.findViewById(R.id.incid_resolucion_txt)).setText(mResolucion.getDescripcion());
+        ((TextView) frView.findViewById(R.id.incid_resolucion_txt)).setText(resolucion.getDescripcion());
         // Lista de avances.
-        ListView mListView = (ListView) mFragmentView.findViewById(android.R.id.list);
-        mListView.setEmptyView(mFragmentView.findViewById(android.R.id.empty));
+        ListView mListView = frView.findViewById(android.R.id.list);
+        mListView.setEmptyView(frView.findViewById(android.R.id.empty));
         mListView.setAdapter(mAdapter);
     }
 }

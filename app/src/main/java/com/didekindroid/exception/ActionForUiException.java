@@ -9,12 +9,17 @@ import com.didekindroid.exception.UiExceptionIf.ActionForUiExceptionIf;
  * Date: 13/01/17
  * Time: 18:33
  */
-class ActionForUiException implements ActionForUiExceptionIf {
+public class ActionForUiException implements ActionForUiExceptionIf {
 
     private final Class<? extends Activity> activityToGoClass;
     private final int toastResourceId;
 
-    ActionForUiException(Class<? extends Activity> activityToGoClass, int toastResourceId)
+    ActionForUiException(int toastResourceId)
+    {
+        this(null, toastResourceId);
+    }
+
+    public ActionForUiException(Class<? extends Activity> activityToGoClass, int toastResourceId)
     {
         this.activityToGoClass = activityToGoClass;
         this.toastResourceId = toastResourceId;

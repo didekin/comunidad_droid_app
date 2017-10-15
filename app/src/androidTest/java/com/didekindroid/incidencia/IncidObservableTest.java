@@ -5,6 +5,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.exception.UiException;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
+import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
@@ -16,15 +17,15 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 
 import static com.didekindroid.incidencia.IncidObservable.incidImportanciaModified;
-import static com.didekindroid.incidencia.IncidObservable.incidenciaDeleted;
 import static com.didekindroid.incidencia.IncidObservable.incidImportanciaRegistered;
+import static com.didekindroid.incidencia.IncidObservable.incidenciaDeleted;
 import static com.didekindroid.incidencia.IncidObservable.resolucion;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doIncidencia;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetDefaultResolucion;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidenciaUser;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
+import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static org.junit.Assert.fail;
@@ -86,6 +87,13 @@ public class IncidObservableTest {
     {
         Resolucion resolucion = insertGetDefaultResolucion(pepeUserComu);
         resolucion(resolucion.getIncidencia().getIncidenciaId()).test().assertResult(resolucion);
+    }
+
+    @Test
+    public void testSeeResolucion_NULL() throws Exception
+    {
+        IncidenciaUser incidenciaUser = insertGetIncidenciaUser(pepeUserComu, 3);
+        resolucion(incidenciaUser.getIncidencia().getIncidenciaId()).test().assertComplete();
     }
 
     // =================================== HELPERS ====================================

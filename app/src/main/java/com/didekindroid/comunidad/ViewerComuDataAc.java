@@ -51,7 +51,7 @@ class ViewerComuDataAc extends ViewerParent<View, CtrlerComunidad> {
     {
         Timber.d("doViewInViewer()");
         assertTrue(controller.isRegisteredUser() && viewBean != null, comunidadId_should_be_initialized);
-        Button modifyButton = (Button) view.findViewById(R.id.comu_data_ac_button);
+        Button modifyButton = view.findViewById(R.id.comu_data_ac_button);
         modifyButton.setOnClickListener(new ComuDataAcButtonListener(Comunidad.class.cast(viewBean)));
     }
 

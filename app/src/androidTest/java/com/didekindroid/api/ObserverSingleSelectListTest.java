@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Spinner;
 
 import com.didekindroid.exception.UiException;
-import com.didekindroid.exception.UiExceptionIf;
 import com.didekinlib.http.ErrorBean;
 
 import org.junit.Before;
@@ -70,10 +69,9 @@ public class ObserverSingleSelectListTest {
                                     }
 
                                     @Override
-                                    public UiExceptionIf.ActionForUiExceptionIf onErrorInObserver(Throwable error)
+                                    public void onErrorInObserver(Throwable error)
                                     {
                                         assertThat(flagMethodExec.getAndSet(AFTER_METHOD_WITH_EXCEPTION_EXEC), is(BEFORE_METHOD_EXEC));
-                                        return null;
                                     }
                                 }
                         ));

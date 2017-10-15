@@ -1,6 +1,5 @@
 package com.didekindroid.usuario.delete;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -14,7 +13,7 @@ import com.didekindroid.router.ActivityRouter;
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
-import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
+import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_be_registered;
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_should_have_been_deleted;
@@ -76,7 +75,7 @@ public class DeleteMeAc extends AppCompatActivity {
     public void replaceComponent(Bundle bundle)
     {
         Timber.d("initAcWithBundle()");
-        new ActivityInitiator(this).initAcWithFlag(bundle, FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TOP);
+        new ActivityInitiator(this).initAcWithFlag(bundle, FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TASK);
     }
 
     // ============================================================
@@ -117,7 +116,7 @@ public class DeleteMeAc extends AppCompatActivity {
         public void onError(Throwable e)
         {
             Timber.d("onErrorObserver, Thread: %s", Thread.currentThread().getName());
-            getUiExceptionFromThrowable(e).processMe(DeleteMeAc.this, new Intent());
+            getUiExceptionFromThrowable(e).processMe(DeleteMeAc.this);
         }
     }
 }

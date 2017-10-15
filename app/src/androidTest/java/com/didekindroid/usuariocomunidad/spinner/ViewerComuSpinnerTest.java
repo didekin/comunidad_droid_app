@@ -13,7 +13,7 @@ import com.didekindroid.api.ActivityMock;
 import com.didekindroid.api.CtrlerSelectListIf;
 import com.didekindroid.api.SpinnerEventItemSelectIf;
 import com.didekindroid.api.SpinnerEventListener;
-import com.didekindroid.api.SpinnerMockFr;
+import com.didekindroid.api.SpinnerTextMockFr;
 import com.didekindroid.api.ViewerMock;
 import com.didekindroid.exception.UiException;
 import com.didekinlib.model.comunidad.Comunidad;
@@ -93,9 +93,9 @@ public class ViewerComuSpinnerTest {
             public void run()
             {
                 activity.getSupportFragmentManager().beginTransaction()
-                        .add(R.id.mock_ac_layout, new SpinnerMockFr(), null)
+                        .add(R.id.mock_ac_layout, new SpinnerTextMockFr(), null)
                         .commitNow();
-                spinner = (Spinner) activity.findViewById(R.id.comunidad_spinner);
+                spinner = activity.findViewById(R.id.comunidad_spinner);
                 atomicViewer.compareAndSet(null, newViewerComuSpinner(spinner, activity, new ViewerForTest(activity)));
             }
         });
@@ -216,12 +216,12 @@ public class ViewerComuSpinnerTest {
         viewer.doViewInViewer(new Bundle(0), new ComuSpinnerEventItemSelect());
         /* doViewInViewer() --> loadItemsByEntitiyId() --> onSuccessLoadItemList() --> view.setSelection() --> ComuSelectedListener.onItemSelected() */
         // Check
-        waitAtMost(5, SECONDS).until(getAdapter(viewer.getViewInViewer()), notNullValue());
+        waitAtMost(8, SECONDS).until(getAdapter(viewer.getViewInViewer()), notNullValue());
         assertThat(viewer.getViewInViewer().getCount(), is(2));
         // Initialize itemId.
         AtomicBoolean isSelectedOne = new AtomicBoolean(false);
         isSelectedOne.compareAndSet(false, viewer.getSelectedItemId() > 1);
-        waitAtMost(5, SECONDS).untilTrue(isSelectedOne);
+        waitAtMost(8, SECONDS).untilTrue(isSelectedOne);
         assertThat(viewer.getSelectedPositionFromItemId(viewer.getSelectedItemId()), is(0));
         // Initialize comunidadId in spinnerEvent.
         assertThat(viewer.spinnerEvent.getSpinnerItemIdSelect(), is(viewer.getSelectedItemId()));

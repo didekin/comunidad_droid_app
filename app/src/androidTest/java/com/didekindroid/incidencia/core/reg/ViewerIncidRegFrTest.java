@@ -37,7 +37,7 @@ import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
+import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
@@ -163,7 +163,7 @@ public class ViewerIncidRegFrTest {
                 isRun.compareAndSet(false, true);
             }
         });
-        waitAtMost(1, SECONDS).untilTrue(isRun);
+        waitAtMost(4, SECONDS).untilTrue(isRun);
 
         // Data for test OK.
         viewer.atomIncidBean.get().setComunidadId(2L);
@@ -174,7 +174,7 @@ public class ViewerIncidRegFrTest {
             @Override
             public void run()
             {
-                EditText editText = (EditText) frgView.findViewById(R.id.incid_reg_desc_ed);
+                EditText editText = frgView.findViewById(R.id.incid_reg_desc_ed);
                 editText.setText("Descripción válida");
                 isRun.compareAndSet(false, true);
             }

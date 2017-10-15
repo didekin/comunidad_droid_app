@@ -9,8 +9,8 @@ import android.view.View;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ViewerParentInjectedIf;
-import com.didekindroid.api.ViewerParentInjectorIf;
+import com.didekindroid.api.ParentViewerInjectedIf;
+import com.didekindroid.api.ChildViewersInjectorIf;
 import com.didekindroid.router.ActivityInitiator;
 import com.didekinlib.model.comunidad.Comunidad;
 
@@ -29,7 +29,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * Postconditions:
  * 1.
  */
-public class ComuDataAc extends AppCompatActivity implements ViewerParentInjectorIf {
+public class ComuDataAc extends AppCompatActivity implements ChildViewersInjectorIf {
 
     View acView;
     RegComuFr regComuFrg;
@@ -70,19 +70,19 @@ public class ComuDataAc extends AppCompatActivity implements ViewerParentInjecto
         viewer.saveState(outState);
     }
 
-// ==================================  ViewerParentInjectorIf  =================================
+// ==================================  ChildViewersInjectorIf  =================================
 
     @Override
-    public ViewerParentInjectedIf getViewerAsParent()
+    public ParentViewerInjectedIf getParentViewer()
     {
-        Timber.d("getViewerAsParent()");
+        Timber.d("getParentViewer()");
         return viewer;
     }
 
     @Override
-    public void setChildInViewer(ViewerIf viewerChild)
+    public void setChildInParentViewer(ViewerIf viewerChild)
     {
-        Timber.d("setChildInViewer()");
+        Timber.d("setChildInParentViewer()");
         viewer.setChildViewer(viewerChild);
     }
 

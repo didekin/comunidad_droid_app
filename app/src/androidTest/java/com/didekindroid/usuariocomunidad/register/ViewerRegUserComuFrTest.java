@@ -6,8 +6,8 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ViewerParentInjectedIf;
-import com.didekindroid.api.ViewerParentInjectorIf;
+import com.didekindroid.api.ParentViewerInjectedIf;
+import com.didekindroid.api.ChildViewersInjectorIf;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.hamcrest.CoreMatchers;
@@ -63,8 +63,8 @@ public class ViewerRegUserComuFrTest {
     public void test_OnActivityCreated() throws Exception
     {
         assertThat(fragment.viewer.getController(), notNullValue());
-        assertThat(ViewerParentInjectorIf.class.isInstance(activity), is(true));
-        ViewerParentInjectedIf parentViewer = (ViewerParentInjectedIf) fragment.viewer.getParentViewer();
+        assertThat(ChildViewersInjectorIf.class.isInstance(activity), is(true));
+        ParentViewerInjectedIf parentViewer = (ParentViewerInjectedIf) fragment.viewer.getParentViewer();
         assertThat(parentViewer.getChildViewer(ViewerRegUserComuFr.class), CoreMatchers.<ViewerIf>is(fragment.viewer));
     }
 

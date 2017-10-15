@@ -13,7 +13,7 @@ import com.didekindroid.api.ActivityMock;
 import com.didekindroid.api.Controller;
 import com.didekindroid.api.SpinnerEventItemSelectIf;
 import com.didekindroid.api.SpinnerEventListener;
-import com.didekindroid.api.SpinnerMockFr;
+import com.didekindroid.api.SpinnerTextMockFr;
 import com.didekindroid.api.ViewerMock;
 import com.didekinlib.model.comunidad.ComunidadAutonoma;
 
@@ -75,15 +75,15 @@ public class ViewerComuAutonomaSpinnerTest {
             public void run()
             {
                 activity.getSupportFragmentManager().beginTransaction()
-                        .add(R.id.mock_ac_layout, new SpinnerMockFr(), null)
+                        .add(R.id.mock_ac_layout, new SpinnerTextMockFr(), null)
                         .commitNow();
-                spinner = (Spinner) activity.findViewById(R.id.autonoma_comunidad_spinner);
+                spinner = activity.findViewById(R.id.autonoma_comunidad_spinner);
                 atomicViewer.compareAndSet(null,
                         newViewerComuAutonomaSpinner(spinner, activity, new ParentViewerForTest(activity))
                 );
             }
         });
-        waitAtMost(2, SECONDS).untilAtomic(atomicViewer, notNullValue());
+        waitAtMost(4, SECONDS).untilAtomic(atomicViewer, notNullValue());
         viewer = atomicViewer.get();
     }
 
@@ -158,13 +158,13 @@ public class ViewerComuAutonomaSpinnerTest {
         viewer.doViewInViewer(new Bundle(0), new ComuAutonomaSpinnerEventItemSelect(new ComunidadAutonoma((short) 9)));
          /* doViewInViewer() --> loadItemsByEntitiyId() --> onSuccessLoadItemList() --> view.setSelection() --> ComuAutonomaSelectedListener.onItemSelected() */
         // Check
-        waitAtMost(2, SECONDS).until(getAdapter(viewer.getViewInViewer()), notNullValue());
+        waitAtMost(6, SECONDS).until(getAdapter(viewer.getViewInViewer()), notNullValue());
         assertThat(viewer.getViewInViewer().getCount(), is(NUMBER_RECORDS));
         // Initialize itemId.
         assertThat(viewer.getSelectedItemId(), is(9L));
         assertThat(viewer.getSelectedPositionFromItemId(viewer.getSelectedItemId()), is(9));
         // Call to SpinnerEventListener.doOnClickItemId()
-        waitAtMost(3, SECONDS).untilAtomic(flagLocalExec, is(AFTER_METHOD_EXEC_B));
+        waitAtMost(4, SECONDS).untilAtomic(flagLocalExec, is(AFTER_METHOD_EXEC_B));
         flagLocalExec.compareAndSet(AFTER_METHOD_EXEC_B, BEFORE_METHOD_EXEC);
     }
 

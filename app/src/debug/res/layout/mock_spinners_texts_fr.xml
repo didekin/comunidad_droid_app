@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:id="@+id/mock_spinners_fr"
+              style="@style/baseLayout.withPadding"
+              xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              tools:context="com.didekindroid.api.ActivityMock"
+              tools:showIn="@layout/mock_ac"
+              android:layout_marginTop="@dimen/app_bar_bottom_margin">
+    <Spinner
+        android:id="@+id/comunidad_spinner"
+        style="@style/spinnerBase"/>
+
+    <Spinner
+        android:id="@+id/tipo_via_spinner"
+        style="@style/spinnerBase"/>
+
+    <Spinner
+        android:id="@+id/autonoma_comunidad_spinner"
+        style="@style/spinnerBase"/>
+
+    <Spinner
+        android:id="@+id/provincia_spinner"
+        style="@style/spinnerBase"/>
+
+    <Spinner
+        android:id="@+id/municipio_spinner"
+        style="@style/spinnerBase"/>
+
+    <Spinner
+        android:id="@+id/ambito_spinner"
+        style="@style/spinnerBase"/>
+
+    <Spinner
+        android:id="@+id/importancia_spinner"
+        style="@style/spinnerBase"/>
+
+    <EditText
+        android:id="@+id/comunidad_nombre_via_editT"
+        style="@style/textBase.editField"
+        android:hint="@string/nombre_via_hint"
+        android:inputType="textCapWords|textNoSuggestions"
+        android:maxEms="80"/>
+
+    <EditText
+        android:id="@+id/comunidad_numero_editT"
+        style="@style/textBase.editField"
+        android:hint="@string/numero_en_via"
+        android:inputType="number"
+        android:maxEms="6"
+    />
+
+    <EditText
+        android:id="@+id/comunidad_sufijo_numero_editT"
+        style="@style/textBase.editField"
+        android:hint="@string/sufijo_numero_en_via_hint"
+        android:inputType="textNoSuggestions"
+        android:maxEms="6"
+    />
+
+</LinearLayout>

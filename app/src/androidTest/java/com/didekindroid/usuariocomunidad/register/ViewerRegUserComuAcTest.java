@@ -5,7 +5,7 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ViewerParentInjectedIf;
+import com.didekindroid.api.ParentViewerInjectedIf;
 import com.didekindroid.exception.UiException;
 import com.didekinlib.model.comunidad.Comunidad;
 
@@ -137,7 +137,7 @@ public class ViewerRegUserComuAcTest {
     public void test_OnCreate() throws Exception
     {
         // Check for initialization of fragments viewers.
-        ViewerParentInjectedIf viewerParent = activity.viewer;
+        ParentViewerInjectedIf viewerParent = activity.viewer;
         assertThat(viewerParent.getChildViewer(ViewerRegUserComuFr.class), notNullValue());
     }
 

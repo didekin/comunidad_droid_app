@@ -52,15 +52,15 @@ class IncidAvanceSeeAdapter extends ArrayAdapter<Avance> {
 
         AvanceViewHolder(View convertView)
         {
-            mFechaAltaView = (TextView) convertView.findViewById(R.id.incid_avance_fecha_view);
-            mAliasView = (TextView) convertView.findViewById(R.id.incid_avance_aliasUser_view);
-            mDescripcionView = (TextView) convertView.findViewById(R.id.incid_avance_desc_view);
+            mFechaAltaView = convertView.findViewById(R.id.incid_avance_fecha_view);
+            mAliasView = convertView.findViewById(R.id.incid_avance_aliasUser_view);
+            mDescripcionView = convertView.findViewById(R.id.incid_avance_desc_view);
         }
 
         void initializeTextInViews(Avance avance)
         {
             mFechaAltaView.setText(formatTimeStampToString(avance.getFechaAlta()));
-            mAliasView.setText(avance.getUserName());
+            mAliasView.setText(avance.getAlias() == null ? avance.getUserName() : avance.getAlias());
             mDescripcionView.setText(avance.getAvanceDesc());
         }
     }

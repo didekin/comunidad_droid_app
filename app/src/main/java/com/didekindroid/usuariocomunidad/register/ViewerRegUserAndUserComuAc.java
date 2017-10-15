@@ -52,9 +52,9 @@ final class ViewerRegUserAndUserComuAc extends ViewerParent<View, CtrlerUsuarioC
     {
         Timber.d("doViewInViewer()");
         Comunidad comunidad = Comunidad.class.cast(viewBean);
-        TextView nombreComunidad = (TextView) view.findViewById(R.id.descripcion_comunidad_text);
+        TextView nombreComunidad = view.findViewById(R.id.descripcion_comunidad_text);
         nombreComunidad.setText(comunidad.getNombreComunidad());
-        Button registroButton = (Button) view.findViewById(R.id.reg_user_usercomu_button);
+        Button registroButton = view.findViewById(R.id.reg_user_usercomu_button);
         registroButton.setOnClickListener(new RegUserAndUserComuButtonListener(comunidad));
     }
 
@@ -92,11 +92,11 @@ final class ViewerRegUserAndUserComuAc extends ViewerParent<View, CtrlerUsuarioC
                 makeToast(activity, R.string.no_internet_conn_toast);
             } else {
                 controller.registerUserAndUserComu(
-                        new ObserverCacheCleaner(controller) {
+                        new ObserverCacheCleaner(ViewerRegUserAndUserComuAc.this) {
                             @Override
                             public void onComplete()
                             {
-                                Timber.d("onComplete()");
+                                super.onComplete();
                                 onRegisterSuccess(comunidadIntent.getC_Id());
                             }
                         },

@@ -20,6 +20,7 @@ import static com.didekindroid.comunidad.ViewerComuSearchResultAc.newViewerComuS
 import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_REAL;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_SEARCH;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanWithTkhandler;
+import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -36,17 +37,17 @@ public class ViewerComuSearchResultAcTest {
     ViewerComuSearchResultAc viewer;
 
     @Before
-    public void setUp()
+    public void setUp() throws InterruptedException
     {
+        cleanWithTkhandler();
+        SECONDS.sleep(2);
+
         Intent intent = new Intent(getTargetContext(), ComuSearchResultsAc.class);
         intent.putExtra(COMUNIDAD_SEARCH.key, COMU_REAL);
         intent.setFlags(FLAG_ACTIVITY_NEW_TASK);
         activity = (AppCompatActivity) getInstrumentation().startActivitySync(intent);
-
-        cleanWithTkhandler();
         viewer = newViewerComuSearchResultAc((ComuSearchResultsAc) activity);
     }
-
 
     @Test
     public void test_NewViewerComuSearchResultAc() throws Exception

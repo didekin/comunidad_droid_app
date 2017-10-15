@@ -4,9 +4,8 @@ import com.didekindroid.R;
 import com.didekindroid.comunidad.ComuSearchAc;
 import com.didekindroid.exception.UiExceptionIf.ActionForUiExceptionIf;
 import com.didekindroid.exception.UiExceptionIf.UiExceptionRouterIf;
-import com.didekindroid.incidencia.core.edit.IncidEditAc;
-import com.didekindroid.incidencia.list.open.IncidSeeOpenByComuAc;
 import com.didekindroid.incidencia.core.reg.IncidRegAc;
+import com.didekindroid.incidencia.list.open.IncidSeeOpenByComuAc;
 import com.didekindroid.usuario.login.LoginAc;
 import com.didekindroid.usuario.userdata.UserDataAc;
 
@@ -35,6 +34,7 @@ import static com.didekinlib.model.incidencia.dominio.IncidenciaExceptionMsg.INC
 import static com.didekinlib.model.incidencia.dominio.IncidenciaExceptionMsg.INCID_IMPORTANCIA_WRONG_INIT;
 import static com.didekinlib.model.incidencia.dominio.IncidenciaExceptionMsg.RESOLUCION_DUPLICATE;
 import static com.didekinlib.model.incidencia.dominio.IncidenciaExceptionMsg.RESOLUCION_WRONG_INIT;
+import static com.didekinlib.model.usuario.UsuarioExceptionMsg.PASSWORD_NOT_SENT;
 import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_DATA_NOT_INSERTED;
 import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_DATA_NOT_MODIFIED;
 import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_DUPLICATE;
@@ -43,7 +43,6 @@ import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NOT_COMPARAB
 import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NOT_EQUAL_ABLE;
 import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NOT_HASHABLE;
 import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_WRONG_INIT;
-import static com.didekinlib.model.usuariocomunidad.UsuarioComunidadExceptionMsg.ROLES_NOT_FOUND;
 import static com.didekinlib.model.usuariocomunidad.UsuarioComunidadExceptionMsg.USERCOMU_WRONG_INIT;
 import static com.didekinlib.model.usuariocomunidad.UsuarioComunidadExceptionMsg.USER_COMU_NOT_FOUND;
 
@@ -55,10 +54,11 @@ import static com.didekinlib.model.usuariocomunidad.UsuarioComunidadExceptionMsg
 
 public final class UiExceptionRouter implements UiExceptionRouterIf {
 
-    public static final ActionForUiExceptionIf GENERIC_APP_ACC = new ActionForUiException(ComuSearchAc.class, R.string.exception_generic_app_message);
+    private static final ActionForUiExceptionIf GENERIC_APP_ACC = new ActionForUiException(ComuSearchAc.class, R.string.exception_generic_app_message);
+    private static final ActionForUiExceptionIf INCID_SEE_BY_COMU_ACC = new ActionForUiException(IncidSeeOpenByComuAc.class, R.string.incidencia_wrong_init);
     private static final ActionForUiExceptionIf LOGIN_ACC = new ActionForUiException(LoginAc.class, R.string.user_without_signedUp);
     private static final ActionForUiExceptionIf SEARCH_COMU_ACC = new ActionForUiException(ComuSearchAc.class, R.string.comunidad_not_found_message);
-    private static final ActionForUiExceptionIf INCID_SEE_BY_COMU_ACC = new ActionForUiException(IncidSeeOpenByComuAc.class, R.string.incidencia_wrong_init);
+
 
     private static final Map<String, ActionForUiExceptionIf> router = new HashMap<>();
 
@@ -79,9 +79,9 @@ public final class UiExceptionRouter implements UiExceptionRouterIf {
         router.put(INCIDENCIA_NOT_REGISTERED.getHttpMessage(), new ActionForUiException(IncidRegAc.class, R.string.incidencia_not_registered));
         router.put(INCID_IMPORTANCIA_WRONG_INIT.getHttpMessage(), INCID_SEE_BY_COMU_ACC);
         router.put(NOT_FOUND.getHttpMessage(), GENERIC_APP_ACC);
-        router.put(RESOLUCION_DUPLICATE.getHttpMessage(), new ActionForUiException(IncidEditAc.class, R.string.resolucion_duplicada));
+        router.put(PASSWORD_NOT_SENT.getHttpMessage(), new ActionForUiException(UserDataAc.class, R.string.user_email_wrong));
+        router.put(RESOLUCION_DUPLICATE.getHttpMessage(), new ActionForUiException(R.string.resolucion_duplicada));
         router.put(RESOLUCION_WRONG_INIT.getHttpMessage(), INCID_SEE_BY_COMU_ACC);
-        router.put(ROLES_NOT_FOUND.getHttpMessage(), LOGIN_ACC);
         router.put(SUFIJO_NUM_IN_COMUNIDAD_NULL.getHttpMessage(), GENERIC_APP_ACC);
 //        router.put(TOKEN_NOT_DELETED.getHttpMessage(), TOKEN_TO_ERASE);  // TODO: qué hago con el borrado en servidor de token inservibles.
         router.put(TOKEN_NULL.getHttpMessage(), LOGIN_ACC);

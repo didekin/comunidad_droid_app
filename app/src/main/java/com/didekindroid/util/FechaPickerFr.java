@@ -4,13 +4,10 @@ package com.didekindroid.util;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TextView;
-
 
 import com.didekindroid.R;
 
@@ -18,6 +15,10 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import timber.log.Timber;
+
+import static android.graphics.Typeface.DEFAULT;
+import static android.support.v4.content.ContextCompat.getColor;
+import static com.didekindroid.util.UIutils.formatTimeToString;
 
 public class FechaPickerFr extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
@@ -51,12 +52,11 @@ public class FechaPickerFr extends DialogFragment implements DatePickerDialog.On
         Timber.d("onDateSet()");
 
         Calendar calendar = new GregorianCalendar(year, monthOfYear, dayOfMonth);
-        long timeFecha = calendar.getTimeInMillis();
 
-        fechaFragment.getFechaView().setText(UIutils.formatTimeToString(timeFecha));
-        fechaFragment.getFechaView().setTextColor(ContextCompat.getColor(getActivity(), R.color.black));
-        fechaFragment.getFechaView().setTypeface(Typeface.DEFAULT);
-        fechaFragment.getBean().setFechaPrevista(timeFecha);
+        fechaFragment.getFechaView().setText(formatTimeToString(calendar.getTimeInMillis()));
+        fechaFragment.getFechaView().setTextColor(getColor(getActivity(), R.color.black));
+        fechaFragment.getFechaView().setTypeface(DEFAULT);
+        fechaFragment.getBean().setFechaPrevista(calendar);
     }
 
 //    ===========================================================================================
@@ -65,16 +65,16 @@ public class FechaPickerFr extends DialogFragment implements DatePickerDialog.On
 
     public static class FechaPickerHelper {
 
-        public static TextView initFechaSpinnerView(final FechaPickerUser fechaPickerUser, TextView fechaView)
+        public static TextView initFechaViewForPicker(final FechaPickerUser fechaPickerUser, TextView fechaView)
         {
-            Timber.d("initFechaSpinnerView()");
+            Timber.d("initFechaViewForPicker()");
 
             fechaView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v)
                 {
                     Timber.d("onClickLinkToImportanciaUsers()");
-                    FechaPickerFr fechaPicker = FechaPickerFr.newInstance(fechaPickerUser);
+                    FechaPickerFr fechaPicker = newInstance(fechaPickerUser);
                     fechaPicker.show(fechaPickerUser.getActivity().getFragmentManager(), "fechaPicker");
                 }
             });

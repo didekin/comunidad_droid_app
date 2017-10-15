@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Spinner;
 
 import com.didekindroid.R;
@@ -29,14 +28,9 @@ import static com.didekindroid.usuariocomunidad.spinner.ViewerComuSpinner.newVie
  * Time: 12:33
  */
 
-class ViewerIncidSeeOpen extends ViewerIncidSeeClose {
+final class ViewerIncidSeeOpen extends ViewerIncidSeeClose {
 
     ViewerFirebaseTokenIf viewerFirebaseToken;
-
-    ViewerIncidSeeOpen(AppCompatActivity activity)
-    {
-        super(new ListView(activity), activity);
-    }
 
     private ViewerIncidSeeOpen(View frView, AppCompatActivity activity)
     {

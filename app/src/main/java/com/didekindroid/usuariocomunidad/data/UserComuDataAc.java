@@ -10,8 +10,8 @@ import android.view.View;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ViewerParentInjectedIf;
-import com.didekindroid.api.ViewerParentInjectorIf;
+import com.didekindroid.api.ParentViewerInjectedIf;
+import com.didekindroid.api.ChildViewersInjectorIf;
 import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.usuariocomunidad.register.RegUserComuFr;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
@@ -40,7 +40,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * ComuSearchAc.
  */
 @SuppressWarnings("ConstantConditions")
-public class UserComuDataAc extends AppCompatActivity implements ViewerParentInjectorIf {
+public class UserComuDataAc extends AppCompatActivity implements ChildViewersInjectorIf {
 
     ViewerUserComuDataAc viewer;
     RegUserComuFr regUserComuFr;
@@ -74,20 +74,20 @@ public class UserComuDataAc extends AppCompatActivity implements ViewerParentInj
         viewer.clearSubscriptions();
     }
 
-    // ==================================  ViewerParentInjectorIf  =================================
+    // ==================================  ChildViewersInjectorIf  =================================
 
     @Override
-    public ViewerParentInjectedIf getViewerAsParent()
+    public ParentViewerInjectedIf getParentViewer()
     {
-        Timber.d("getViewerAsParent()");
+        Timber.d("getParentViewer()");
         return viewer;
     }
 
     @Override
-    public void setChildInViewer(ViewerIf childInViewer)
+    public void setChildInParentViewer(ViewerIf childViewer)
     {
-        Timber.d("setChildInViewer()");
-        viewer.setChildViewer(childInViewer);
+        Timber.d("setChildInParentViewer()");
+        viewer.setChildViewer(childViewer);
     }
 
     // ============================================================
@@ -99,6 +99,7 @@ public class UserComuDataAc extends AppCompatActivity implements ViewerParentInj
     {
         Timber.d("onCreateOptionsMenu()");
         getMenuInflater().inflate(R.menu.usercomu_data_ac_mn, menu);
+        // comu_data_ac_mn is shown only to adm/pre rol and to oldest user.
         viewer.setAcMenu(menu);
         return true;
     }

@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ViewerParentInjectorIf;
+import com.didekindroid.api.ChildViewersInjectorIf;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import timber.log.Timber;
@@ -22,7 +22,7 @@ import static com.didekindroid.incidencia.core.reg.ViewerIncidRegFr.newViewerInc
 public class IncidRegFr extends Fragment {
 
     View rootFrgView;
-    ViewerParentInjectorIf viewerInjector;
+    ChildViewersInjectorIf viewerInjector;
     ViewerIncidRegFr viewer;
 
     @Override
@@ -42,11 +42,11 @@ public class IncidRegFr extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         /* Initialization of viewers.*/
-        viewerInjector = (ViewerParentInjectorIf) getActivity();
-        viewer = newViewerIncidRegFr(rootFrgView, viewerInjector.getViewerAsParent());
+        viewerInjector = (ChildViewersInjectorIf) getActivity();
+        viewer = newViewerIncidRegFr(rootFrgView, viewerInjector.getParentViewer());
         final long comunidadId = getActivity().getIntent().getLongExtra(COMUNIDAD_ID.key, 0);
         viewer.doViewInViewer(savedInstanceState, comunidadId > 0 ? new Comunidad.ComunidadBuilder().c_id(comunidadId).build() : null);
-        viewerInjector.setChildInViewer(viewer);
+        viewerInjector.setChildInParentViewer(viewer);
     }
 
     @Override

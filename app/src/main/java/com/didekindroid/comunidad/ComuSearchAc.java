@@ -1,16 +1,17 @@
 package com.didekindroid.comunidad;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
+import com.didekindroid.api.ChildViewersInjectorIf;
+import com.didekindroid.api.ParentViewerInjectedIf;
 import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ViewerParentInjectedIf;
-import com.didekindroid.api.ViewerParentInjectorIf;
+import com.didekindroid.api.ViewerManagerIf;
 import com.didekindroid.router.ActivityInitiator;
 
 import timber.log.Timber;
@@ -29,24 +30,26 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * -- municipio with codInProvincia and provinciaId.
  */
 @SuppressWarnings("ConstantConditions")
-public class ComuSearchAc extends AppCompatActivity implements ViewerParentInjectorIf {
+public class ComuSearchAc extends AppCompatActivity implements ChildViewersInjectorIf,
+        ViewerManagerIf {
 
     View acView;
     RegComuFr regComuFrg;
-    ViewerComuSearchAc viewer;
+    ViewerComuSearchAc viewerAc;
+    ViewerDrawerMain viewerDrawer;
 
+    @SuppressLint("InflateParams")
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         Timber.d("In onCreate()");
         super.onCreate(savedInstanceState);
 
-        acView = getLayoutInflater().inflate(R.layout.comu_search_ac, null);
+        acView = getLayoutInflater().inflate(R.layout.comu_search_ac, null, false);
         setContentView(acView);
-        doToolBar(this, false);
+        doToolBar(this, true).setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
 
-        viewer = newViewerComuSearch(this);
-        viewer.doViewInViewer(savedInstanceState, null);
+        initViewers(savedInstanceState);
         regComuFrg = (RegComuFr) getSupportFragmentManager().findFragmentById(R.id.reg_comunidad_frg);
     }
 
@@ -55,7 +58,7 @@ public class ComuSearchAc extends AppCompatActivity implements ViewerParentInjec
     {
         Timber.d("onStop()");
         super.onStop();
-        viewer.clearSubscriptions();
+        clearViewersSubscr();
     }
 
     @Override
@@ -63,23 +66,51 @@ public class ComuSearchAc extends AppCompatActivity implements ViewerParentInjec
     {
         Timber.d("onSaveInstanceState()");
         super.onSaveInstanceState(outState);
-        viewer.saveState(outState);
+        savedStateViewers(outState);
     }
 
-    // ==================================  ViewerParentInjectorIf  =================================
+    // ==================================  ChildViewersInjectorIf  =================================
 
     @Override
-    public ViewerParentInjectedIf getViewerAsParent()
+    public ParentViewerInjectedIf getParentViewer()
     {
-        Timber.d("getViewerAsParent()");
-        return viewer;
+        Timber.d("getParentViewer()");
+        return viewerAc;
     }
 
     @Override
-    public void setChildInViewer(ViewerIf viewerChild)
+    public void setChildInParentViewer(ViewerIf viewerChild)
     {
-        Timber.d("setChildInViewer()");
-        viewer.setChildViewer(viewerChild);
+        Timber.d("setChildInParentViewer()");
+        viewerAc.setChildViewer(viewerChild);
+    }
+
+    /* ==================================== ViewerManagerIf ====================================*/
+
+    @Override
+    public void initViewers(Bundle savedInstanceState)
+    {
+        Timber.d("initViewers()");
+        viewerAc = newViewerComuSearch(this);
+        viewerAc.doViewInViewer(savedInstanceState, null);
+        viewerDrawer = ViewerDrawerMain.newViewerDrawerMain(this);
+        viewerDrawer.doViewInViewer(savedInstanceState, null);
+    }
+
+    @Override
+    public void clearViewersSubscr()
+    {
+        Timber.d("clearViewersSubscr()");
+        viewerAc.clearSubscriptions();
+        viewerDrawer.clearSubscriptions();
+    }
+
+    @Override
+    public void savedStateViewers(Bundle outState)
+    {
+        Timber.d("savedStateViewers()");
+        viewerAc.saveState(outState);
+        viewerDrawer.saveState(outState);
     }
 
 //    ============================================================
@@ -91,26 +122,16 @@ public class ComuSearchAc extends AppCompatActivity implements ViewerParentInjec
     public boolean onCreateOptionsMenu(Menu menu)
     {
         Timber.d("onCreateOptionsMenu()");
-        super.onCreateOptionsMenu(menu);
-
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.comu_search_ac_menu, menu);
-        return true;
+        getMenuInflater().inflate(R.menu.comu_search_ac_menu, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu)
     {
         Timber.d("onPrepareOptionsMenu()");
-
-        if (viewer.getController().isRegisteredUser()) {
-            Timber.d("onPrepareOptionsMenu(), isRegisteredUser == true");
-            menu.findItem(R.id.see_usercomu_by_user_ac_mn).setVisible(true).setEnabled(true);
-            menu.findItem(R.id.user_data_ac_mn).setVisible(true).setEnabled(true);
-        } else {
-            Timber.d("onPrepareOptionsMenu(), isRegisteredUser == false");
-            menu.findItem(R.id.login_ac_mn).setVisible(true).setEnabled(true);
-        }
+        boolean isRegistered = viewerAc.getController().isRegisteredUser();
+        menu.findItem(R.id.login_ac_mn).setVisible(!isRegistered).setEnabled(!isRegistered);
         return true;
     }
 
@@ -118,15 +139,15 @@ public class ComuSearchAc extends AppCompatActivity implements ViewerParentInjec
     public boolean onOptionsItemSelected(MenuItem item)
     {
         Timber.d("onOptionsItemSelected()");
-        ActivityInitiator activityInitiator = new ActivityInitiator(this);
         int resourceId = item.getItemId();
 
         switch (resourceId) {
-            case R.id.user_data_ac_mn:
-            case R.id.see_usercomu_by_user_ac_mn:
+            case android.R.id.home:
+                viewerDrawer.openDrawer();
+                return true;
             case R.id.login_ac_mn:
             case R.id.reg_nueva_comunidad_ac_mn:
-                activityInitiator.initAcFromMnKeepIntent(resourceId);
+                new ActivityInitiator(this).initAcFromMnNewIntent(resourceId);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

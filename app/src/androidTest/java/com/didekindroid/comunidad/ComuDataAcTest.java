@@ -1,16 +1,20 @@
 package com.didekindroid.comunidad;
 
+import android.app.TaskStackBuilder;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
+import com.didekindroid.api.ChildViewersInjectorIf;
+import com.didekindroid.api.ParentViewerInjectedIf;
 import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ViewerParentInjectedIf;
-import com.didekindroid.api.ViewerParentInjectorIf;
 import com.didekindroid.comunidad.utils.ComuBundleKey;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.testutil.ViewerTestWrapper;
+import com.didekindroid.usuariocomunidad.listbycomu.SeeUserComuByComuAc;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import org.hamcrest.CoreMatchers;
@@ -22,9 +26,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicReference;
 
-import static android.support.test.InstrumentationRegistry.getInstrumentation;
+import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
@@ -34,13 +37,14 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkMunicipioSpinner;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.typeComuCalleNumero;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuDataAcLayout;
+import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.regComuFrLayout;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
+import static com.didekindroid.testutil.ActivityTestUtils.checkIsRegistered;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
+import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
-import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_B;
-import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
@@ -62,11 +66,18 @@ import static org.junit.Assert.fail;
 @RunWith(AndroidJUnit4.class)
 public class ComuDataAcTest {
 
-    final AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
     Comunidad comunidad;
-
     @Rule
     public IntentsTestRule<ComuDataAc> intentRule = new IntentsTestRule<ComuDataAc>(ComuDataAc.class) {
+
+        @Override
+        protected void beforeActivityLaunched()
+        {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                TaskStackBuilder.create(getTargetContext()).addParentStack(SeeUserComuByComuAc.class).startActivities();
+            }
+        }
+
         @Override
         protected Intent getActivityIntent()
         {
@@ -80,19 +91,22 @@ public class ComuDataAcTest {
             return intent;
         }
     };
-
     ComuDataAc activity;
 
     @Before
     public void setUp() throws Exception
     {
         activity = intentRule.getActivity();
+        checkIsRegistered(activity.viewer);
     }
 
     @After
     public void tearDown() throws Exception
     {
         cleanOptions(CLEAN_JUAN);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            cleanTasks(activity);
+        }
     }
 
 //    =============================================================================================
@@ -106,7 +120,9 @@ public class ComuDataAcTest {
         onView(withId(R.id.comu_data_ac_button)).perform(scrollTo(), click());
         waitAtMost(5, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
 
-        checkUp(comuDataAcLayout);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            checkUp(comuSearchAcLayout);
+        }
     }
 
     @Test
@@ -124,7 +140,7 @@ public class ComuDataAcTest {
     @Test
     public void test_GetViewerAsParent() throws Exception
     {
-        assertThat(activity.getViewerAsParent(), Matchers.<ViewerIf>is(activity.viewer));
+        assertThat(activity.getParentViewer(), Matchers.<ViewerIf>is(activity.viewer));
     }
 
     //  =========================  TESTS FOR ACTIVITY LIFECYCLE  ===========================
@@ -132,42 +148,34 @@ public class ComuDataAcTest {
     @Test
     public void test_OnCreate() throws Exception
     {
-        assertThat(activity, isA(ViewerParentInjectorIf.class));
+        assertThat(activity, isA(ChildViewersInjectorIf.class));
         assertThat(activity.acView, notNullValue());
         assertThat(activity.viewer, notNullValue());
         assertThat(activity.regComuFrg, notNullValue());
 
-        assertThat(activity.viewer, isA(ViewerParentInjectedIf.class));
-        assertThat(activity.regComuFrg.viewerInjector, CoreMatchers.<ViewerParentInjectorIf>is(activity));
+        assertThat(activity.viewer, isA(ParentViewerInjectedIf.class));
+        assertThat(activity.regComuFrg.viewerInjector, CoreMatchers.<ChildViewersInjectorIf>is(activity));
         assertThat(activity.regComuFrg.viewer.getParentViewer(), CoreMatchers.<ViewerIf>is(activity.viewer));
-
-
     }
 
     @Test
     public void test_OnSaveInstanceState()
     {
-        activity.viewer = new ViewerComuDataAc(activity.acView, activity) {
+        final ViewerTestWrapper wrapper = new ViewerTestWrapper();
+        activity.viewer = new ViewerComuDataAc(null, activity) {
             @Override
             public void saveState(Bundle savedState)
             {
-                assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_B), Matchers.is(BEFORE_METHOD_EXEC));
+                wrapper.saveState();
             }
 
             @Override
-            public int clearSubscriptions()  // It is called from onStop() and gives problems.
+            public int clearSubscriptions()
             {
-                return 0;
+                return wrapper.clearSubscriptions();
             }
         };
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                getInstrumentation().callActivityOnSaveInstanceState(activity, new Bundle(0));
-            }
-        });
-        waitAtMost(6, SECONDS).untilAtomic(flagMethodExec, Matchers.is(AFTER_METHOD_EXEC_B));
+        wrapper.checkOnSaveInstanceState(activity.viewer);
     }
 
     @Test
@@ -181,8 +189,11 @@ public class ComuDataAcTest {
     @Test
     public void testSeeUserComuByComuMn() throws InterruptedException
     {
-        SEE_USERCOMU_BY_COMU_AC.checkMenuItem_WTk(activity);
+        SEE_USERCOMU_BY_COMU_AC.checkItemRegisterUser(activity);
         intended(hasExtra(ComuBundleKey.COMUNIDAD_ID.key, comunidad.getC_Id()));
-        checkUp(comuDataAcLayout);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            checkUp(seeUserComuByUserFrRsId);
+        }
     }
 }

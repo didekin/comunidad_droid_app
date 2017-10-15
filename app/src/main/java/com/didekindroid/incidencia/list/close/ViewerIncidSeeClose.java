@@ -42,13 +42,14 @@ public class ViewerIncidSeeClose extends
         implements SpinnerEventListener {
 
     protected ViewerComuSpinner comuSpinnerViewer;
+    private View emptyListView;
 
     protected ViewerIncidSeeClose(View frView, AppCompatActivity activity)
     {
         super((ListView) frView.findViewById(android.R.id.list), activity, null);
-        view.setEmptyView(frView.findViewById(android.R.id.empty));
-        // To get visible a divider on top of the list.
-        view.addHeaderView(new View(activity), null, false);
+        emptyListView = frView.findViewById(android.R.id.empty);
+        // To get visible a divider on top of the list: true.
+        view.addHeaderView(new View(activity), null, true);
     }
 
     static ViewerIncidSeeClose newViewerIncidSeeClose(View view, AppCompatActivity activity)
@@ -185,6 +186,7 @@ public class ViewerIncidSeeClose extends
         Timber.d("onSuccessLoadItems_protected()");
         adapter.addAll(incidCloseList);
         view.setAdapter(adapter);
+        view.setEmptyView(emptyListView);
         if (view.getCount() > view.getHeaderViewsCount() && itemSelectedId > 0L) {
             view.setItemChecked(getSelectedPositionFromItemId(itemSelectedId), true);
         }

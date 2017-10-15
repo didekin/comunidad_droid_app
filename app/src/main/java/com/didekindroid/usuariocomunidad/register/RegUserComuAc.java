@@ -1,7 +1,5 @@
 package com.didekindroid.usuariocomunidad.register;
 
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -9,21 +7,15 @@ import android.view.View;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ViewerParentInjectedIf;
-import com.didekindroid.api.ViewerParentInjectorIf;
-import com.didekindroid.exception.UiException;
+import com.didekindroid.api.ParentViewerInjectedIf;
+import com.didekindroid.api.ChildViewersInjectorIf;
 import com.didekinlib.model.comunidad.Comunidad;
-import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import timber.log.Timber;
 
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.router.ActivityRouter.doUpMenu;
-import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.register.ViewerRegUserComuAc.newViewerRegUserComuAc;
-import static com.didekindroid.usuariocomunidad.util.UserComuAssertionMsg.user_and_comunidad_should_be_registered;
-import static com.didekindroid.util.UIutils.assertTrue;
-import static com.didekindroid.util.UIutils.checkPostExecute;
 import static com.didekindroid.util.UIutils.doToolBar;
 
 /**
@@ -45,7 +37,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * 2. The activity SeeUserComuByUserAc is started.
  */
 @SuppressWarnings("ConstantConditions")
-public class RegUserComuAc extends AppCompatActivity implements ViewerParentInjectorIf {
+public class RegUserComuAc extends AppCompatActivity implements ChildViewersInjectorIf {
 
     RegUserComuFr regUserComuFr;
     View acView;
@@ -56,9 +48,6 @@ public class RegUserComuAc extends AppCompatActivity implements ViewerParentInje
     {
         Timber.i("onCreate()");
         super.onCreate(savedInstanceState);
-
-        Comunidad coomunidadIntent = (Comunidad) getIntent().getExtras()
-                .getSerializable(COMUNIDAD_LIST_OBJECT.key);
 
         acView = getLayoutInflater().inflate(R.layout.reg_usercomu_ac, null);
         setContentView(acView);
@@ -82,19 +71,19 @@ public class RegUserComuAc extends AppCompatActivity implements ViewerParentInje
         viewer.clearSubscriptions();
     }
 
-    // ==================================  ViewerParentInjectorIf  =================================
+    // ==================================  ChildViewersInjectorIf  =================================
 
     @Override
-    public ViewerParentInjectedIf getViewerAsParent()
+    public ParentViewerInjectedIf getParentViewer()
     {
-        Timber.d("getViewerAsParent()");
+        Timber.d("getParentViewer()");
         return viewer;
     }
 
     @Override
-    public void setChildInViewer(ViewerIf viewerChild)
+    public void setChildInParentViewer(ViewerIf viewerChild)
     {
-        Timber.d("setChildInViewer()");
+        Timber.d("setChildInParentViewer()");
         viewer.setChildViewer(viewerChild);
     }
 
@@ -114,43 +103,6 @@ public class RegUserComuAc extends AppCompatActivity implements ViewerParentInje
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
-        }
-    }
-
-    //    ============================================================
-    //    .......... ASYNC TASKS CLASSES AND AUXILIARY METHODS .......
-    //    ============================================================
-
-    @SuppressWarnings("WeakerAccess")
-    class UserComuRegister extends AsyncTask<UsuarioComunidad, Void, Integer> {
-
-        UiException uiException;
-
-        @Override
-        protected Integer doInBackground(UsuarioComunidad... usuarioComunidad)
-        {
-            Timber.d("doInBackground()");
-
-            int i = 0;
-            try {
-                i = userComuDaoRemote.regUserComu(usuarioComunidad[0]);
-            } catch (UiException e) {
-                uiException = e;
-            }
-            return i;
-        }
-
-        @Override
-        protected void onPostExecute(Integer rowInserted)
-        {
-            if (checkPostExecute(RegUserComuAc.this)) return;
-
-            Timber.d("onPostExecute()");
-            if (uiException != null) {
-                uiException.processMe(RegUserComuAc.this, new Intent());
-            } else {
-                assertTrue(rowInserted == 1, user_and_comunidad_should_be_registered);
-            }
         }
     }
 }

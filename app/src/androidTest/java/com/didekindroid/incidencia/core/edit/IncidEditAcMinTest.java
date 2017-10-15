@@ -1,7 +1,6 @@
 package com.didekindroid.incidencia.core.edit;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -9,6 +8,7 @@ import com.didekindroid.R;
 import com.didekindroid.api.ViewerIf;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.core.IncidenciaDataDbHelper;
+import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
@@ -20,9 +20,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicReference;
 
-import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
@@ -33,21 +31,17 @@ import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkDataEditMinFr;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.doImportanciaSpinner;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_edit_ac_frgs_tag;
 import static com.didekindroid.security.SecurityTestUtils.updateSecurityData;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
-import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
-import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
-import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
+import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.makeUsuarioComunidad;
 import static com.didekinlib.model.usuariocomunidad.Rol.PROPIETARIO;
@@ -67,11 +61,8 @@ import static org.junit.Assert.fail;
  * Usuario inicial en sesión SIN permisos para modificar o borrar una incidencia.
  */
 @RunWith(AndroidJUnit4.class)
-public class IncidEditAcMinTest {
+public class IncidEditAcMinTest extends IncidEditAcTest {
 
-    final static AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
-
-    IncidEditAc activity;
     IncidImportancia incidImportanciaIntent;
 
     @Rule
@@ -79,6 +70,7 @@ public class IncidEditAcMinTest {
         @Override
         protected Intent getActivityIntent()
         {
+            IncidAndResolBundle resolBundle = null;
             try {
                 IncidImportancia incidImportancia_0 = insertGetIncidImportancia(COMU_REAL_PEPE);
                 // Registro userComu en misma comunidad.
@@ -87,12 +79,12 @@ public class IncidEditAcMinTest {
                 userComuDaoRemote.regUserAndUserComu(userComuJuan).execute();
                 updateSecurityData(USER_JUAN.getUserName(), USER_JUAN.getPassword());
                 incidImportanciaIntent = incidenciaDao.seeIncidImportancia(incidImportancia_0.getIncidencia().getIncidenciaId()).getIncidImportancia();
+                resolBundle = new IncidAndResolBundle(incidImportanciaIntent, false);
             } catch (IOException | UiException e) {
                 fail();
             }
             Intent intent = new Intent();
-            intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportanciaIntent);
-            intent.putExtra(INCID_RESOLUCION_FLAG.key, false);
+            intent.putExtra(INCID_RESOLUCION_BUNDLE.key, resolBundle);
             return intent;
         }
     };
@@ -104,7 +96,7 @@ public class IncidEditAcMinTest {
     {
         activity = activityRule.getActivity();
         dbHelper = new IncidenciaDataDbHelper(activity);
-        // Usuario sin registro previo de incidImportancia.
+        // Usuario sin registro previo de resolBundle.
         assertThat(incidImportanciaIntent.getImportancia(), is((short) 0));
     }
 
@@ -186,37 +178,5 @@ public class IncidEditAcMinTest {
         IncidEditMinFr fragment = (IncidEditMinFr) activity.getSupportFragmentManager().findFragmentByTag(incid_edit_ac_frgs_tag);
         assertThat(fragment.viewerInjector, instanceOf(IncidEditAc.class));
         assertThat(fragment.viewer.getParentViewer(), CoreMatchers.<ViewerIf>is(activity.viewer));
-    }
-
-    @Test
-    public void testOnSaveInstanceState()
-    {
-        activity.viewer = new ViewerIncidEditAc(activity) {
-            @Override
-            public void saveState(Bundle savedState)
-            {
-                assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
-            }
-
-            @Override
-            public int clearSubscriptions()  // It is called from onStop() and gives problems.
-            {
-                return 0;
-            }
-        };
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                getInstrumentation().callActivityOnSaveInstanceState(activity, new Bundle(0));
-            }
-        });
-        waitAtMost(1, SECONDS).untilAtomic(flagMethodExec, is(AFTER_METHOD_EXEC_A));
-    }
-
-    @Test
-    public void testOnStop()
-    {
-        checkSubscriptionsOnStop(activity, activity.viewer.getController());
     }
 }

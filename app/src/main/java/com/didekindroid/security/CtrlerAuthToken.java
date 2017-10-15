@@ -2,6 +2,7 @@ package com.didekindroid.security;
 
 import com.didekindroid.api.Controller;
 import com.didekindroid.api.ObserverCacheCleaner;
+import com.didekindroid.api.Viewer;
 import com.didekinlib.model.usuario.Usuario;
 
 import timber.log.Timber;
@@ -29,7 +30,7 @@ public class CtrlerAuthToken extends Controller implements CtrlerAuthTokenIf {
      * but there exists a refresh token), the access token is remotely retrieved and updated in cache.
      */
     @Override
-    public void refreshAccessToken()
+    public void refreshAccessToken(Viewer viewer)
     {
         Timber.d("refreshAccessToken()");
 
@@ -38,33 +39,19 @@ public class CtrlerAuthToken extends Controller implements CtrlerAuthTokenIf {
                 && identityCacher.getTokenCache().get().getRefreshToken() != null
                 && (identityCacher.getTokenCache().get().getValue() == null || identityCacher.getTokenCache().get().getValue().isEmpty())
                 ) {
-            updateTkCacheFromRefreshTk(identityCacher.getRefreshTokenValue());
+            updateTkCacheFromRefreshTk(identityCacher.getRefreshTokenValue(), viewer);
         }
     }
 
-    /**
-     * Convenience disposable which relates a Completable oauthTokenAndInitCache and a
-     * oauthUpdateTokenCacheObserver.
-     */
     @Override
-    public void updateTkAndCacheFromUser(Usuario newUser)
-    {
-        Timber.d("updateTkAndCacheFromUser()");
-        oauthTokenAndInitCache(newUser)
-                .subscribeOn(io())
-                .observeOn(mainThread())
-                .subscribeWith(new ObserverCacheCleaner(this));
-    }
-
-    @Override
-    public boolean updateTkCacheFromRefreshTk(final String refreshToken)
+    public boolean updateTkCacheFromRefreshTk(final String refreshToken, Viewer viewer)
     {
         Timber.d("updateTkCacheFromRefreshTk()");
         return subscriptions.add(
                 oauthTokenFromRefreshTk(refreshToken)
                         .subscribeOn(io())
                         .observeOn(mainThread())
-                        .subscribeWith(new ObserverCacheCleaner(this))
+                        .subscribeWith(new ObserverCacheCleaner(viewer))
         );
     }
 }

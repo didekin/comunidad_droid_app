@@ -2,39 +2,32 @@ package com.didekindroid.incidencia.core.edit;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ViewerParentInjectorIf;
-import com.didekinlib.model.incidencia.dominio.IncidImportancia;
+import com.didekindroid.api.ChildViewersInjectorIf;
 
 import timber.log.Timber;
 
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
-import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.incid_importancia_should_be_initialized;
-import static com.didekindroid.util.CommonAssertionMsg.intent_extra_should_not_be_initialized;
-import static com.didekindroid.util.UIutils.assertTrue;
+import static com.didekindroid.incidencia.core.edit.ViewerIncidEditMinFr.newViewerIncidEditMinFr;
 
 /**
  * User: pedro@didekin
  * Date: 22/01/16
  * Time: 16:16
  */
+public class IncidEditMinFr extends IncidEditFr {
 
-@SuppressWarnings("ConstantConditions")
-public class IncidEditMinFr extends Fragment {
-
-    View frView;
-    ViewerParentInjectorIf viewerInjector;
-    /**
-     * Instantiated by the activity (ViewerIncidEditAc).
-     */
     ViewerIncidEditMinFr viewer;
+
+    @Override
+    protected ViewerIncidEditFr getViewerIncidEdit()
+    {
+        Timber.d("getViewerIncidEdit()");
+        return viewer;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -47,35 +40,11 @@ public class IncidEditMinFr extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
     {
-        Timber.d("onViewCreated()");
-
         super.onViewCreated(view, savedInstanceState);
-        IncidImportancia incidImportancia = (IncidImportancia) getArguments().getSerializable(INCID_IMPORTANCIA_OBJECT.key);
-        // Preconditions.
-        assertTrue(incidImportancia.getUserComu() != null
-                && incidImportancia.getIncidencia().getIncidenciaId() > 0, incid_importancia_should_be_initialized);
-        assertTrue(!getArguments().containsKey(INCID_RESOLUCION_FLAG.key), intent_extra_should_not_be_initialized);
 
-        viewerInjector = (ViewerParentInjectorIf) getActivity();
-        ViewerIf parentViewer = viewerInjector.getViewerAsParent();
-        viewer = ViewerIncidEditMinFr.newViewerIncidEditMinFr(frView, parentViewer);
-        viewer.doViewInViewer(savedInstanceState, incidImportancia);
-        viewerInjector.setChildInViewer(viewer);
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState)
-    {
-        Timber.d("onSaveInstanceState()");
-        super.onSaveInstanceState(outState);
-        viewer.saveState(outState);
-    }
-
-    @Override
-    public void onStop()
-    {
-        Timber.d("onStop()");
-        viewer.clearSubscriptions();
-        super.onStop();
+        viewerInjector = (ChildViewersInjectorIf) getActivity();
+        viewer = newViewerIncidEditMinFr(frView, viewerInjector.getParentViewer());
+        viewer.doViewInViewer(savedInstanceState, resolBundle);
+        viewerInjector.setChildInParentViewer(viewer);
     }
 }

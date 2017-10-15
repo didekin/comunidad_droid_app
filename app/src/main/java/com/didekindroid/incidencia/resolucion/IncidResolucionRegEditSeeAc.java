@@ -1,6 +1,5 @@
 package com.didekindroid.incidencia.resolucion;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -8,7 +7,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
-import com.didekindroid.incidencia.utils.IncidBundleKey;
 import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
@@ -18,8 +16,8 @@ import timber.log.Timber;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_resolucion_ac_frgs_tag;
-import static com.didekindroid.usuario.firebase.ViewerFirebaseToken.newViewerFirebaseToken;
 import static com.didekindroid.router.ActivityRouter.doUpMenu;
+import static com.didekindroid.usuario.firebase.ViewerFirebaseToken.newViewerFirebaseToken;
 import static com.didekindroid.util.UIutils.doToolBar;
 
 /**
@@ -30,7 +28,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * 2. An intent key with a Resolucion instance MAY be received.
  * Postconditions:
  * 1. If NOT Resolucion intent is received and the user has authority 'adm':
- * 1.1. An incidencia resolution is registered in BD, associated to its editor.
+ * 1.1. An incidencia resolution is registered in BD, associated to its author.
  * 1.2. An intent is passed with the incidImportancia.
  * 1.3. The edited incidencia is shown.
  * 2. If a Resolucion intent is received and the user has authority 'adm':
@@ -42,10 +40,10 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * 4. If a Resolucion intent is received and the user hasn't got authority 'adm':
  * 4.1 The data are shown.
  */
-public class IncidResolucionRegEditSeeAc extends AppCompatActivity{
+public class IncidResolucionRegEditSeeAc extends AppCompatActivity {
 
-    IncidImportancia mIncidImportancia;
-    Resolucion mResolucion;
+    IncidImportancia incidImportancia;
+    Resolucion resolucion;
     ViewerFirebaseTokenIf viewerFirebaseToken;
 
     @Override
@@ -54,8 +52,8 @@ public class IncidResolucionRegEditSeeAc extends AppCompatActivity{
         Timber.d("onCreate()");
         super.onCreate(savedInstanceState);
 
-        mIncidImportancia = (IncidImportancia) getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.key);
-        mResolucion = (Resolucion) getIntent().getSerializableExtra(IncidBundleKey.INCID_RESOLUCION_OBJECT.key);
+        incidImportancia = (IncidImportancia) getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.key);
+        resolucion = (Resolucion) getIntent().getSerializableExtra(INCID_RESOLUCION_OBJECT.key);
 
         View mAcView = getLayoutInflater().inflate(R.layout.incid_resolucion_reg_ac, null);
         setContentView(mAcView);
@@ -66,23 +64,16 @@ public class IncidResolucionRegEditSeeAc extends AppCompatActivity{
         }
 
         Bundle argsFragment = new Bundle();
-        argsFragment.putSerializable(INCID_IMPORTANCIA_OBJECT.key, mIncidImportancia);
-        argsFragment.putSerializable(INCID_RESOLUCION_OBJECT.key, mResolucion);
+        argsFragment.putSerializable(INCID_IMPORTANCIA_OBJECT.key, incidImportancia);
         Fragment fragmentToAdd;
 
-        if (mIncidImportancia.getUserComu().hasAdministradorAuthority()) {
-            if (mResolucion != null) {
-                fragmentToAdd = new IncidResolucionEditFr();
-            } else {
-                fragmentToAdd = new IncidResolucionRegFr();
-            }
-        } else { // User without authority 'adm'
-            if (mResolucion != null) {
-                fragmentToAdd = new IncidResolucionSeeFr();
-            } else {
-                fragmentToAdd = new IncidResolucionSeeDefaultFr();
-            }
+        if(resolucion != null){
+            argsFragment.putSerializable(INCID_RESOLUCION_OBJECT.key, resolucion);
+            fragmentToAdd = incidImportancia.getUserComu().hasAdministradorAuthority() ?  new IncidResolucionEditFr() : new IncidResolucionSeeFr();
+        } else {
+            fragmentToAdd = incidImportancia.getUserComu().hasAdministradorAuthority() ? new IncidResolucionRegFr() : new IncidResolucionSeeDefaultFr();
         }
+
         fragmentToAdd.setArguments(argsFragment);
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.incid_resolucion_fragment_container_ac, fragmentToAdd, incid_resolucion_ac_frgs_tag)
@@ -93,10 +84,10 @@ public class IncidResolucionRegEditSeeAc extends AppCompatActivity{
     protected void onSaveInstanceState(Bundle outState)
     {
         Timber.d("onSaveInstanceState()");
-        if (mResolucion != null) {
-            outState.putSerializable(INCID_RESOLUCION_OBJECT.key, mResolucion);
+        if (resolucion != null) {
+            outState.putSerializable(INCID_RESOLUCION_OBJECT.key, resolucion);
         }
-        outState.putSerializable(INCID_IMPORTANCIA_OBJECT.key, mIncidImportancia);
+        outState.putSerializable(INCID_IMPORTANCIA_OBJECT.key, incidImportancia);
         super.onSaveInstanceState(outState);
     }
 
@@ -104,8 +95,8 @@ public class IncidResolucionRegEditSeeAc extends AppCompatActivity{
     protected void onRestoreInstanceState(Bundle savedInstanceState)
     {
         Timber.d("onRestoreInstanceState()");
-        mResolucion = (Resolucion) savedInstanceState.getSerializable(INCID_RESOLUCION_OBJECT.key);
-        mIncidImportancia = (IncidImportancia) savedInstanceState.getSerializable(INCID_IMPORTANCIA_OBJECT.key);
+        resolucion = (Resolucion) savedInstanceState.getSerializable(INCID_RESOLUCION_OBJECT.key);
+        incidImportancia = (IncidImportancia) savedInstanceState.getSerializable(INCID_IMPORTANCIA_OBJECT.key);
         super.onRestoreInstanceState(savedInstanceState);
     }
 
@@ -136,7 +127,6 @@ public class IncidResolucionRegEditSeeAc extends AppCompatActivity{
         Timber.d("onOptionsItemSelected()");
 
         int resourceId = item.getItemId();
-        Intent intent;
 
         switch (resourceId) {
             case android.R.id.home:

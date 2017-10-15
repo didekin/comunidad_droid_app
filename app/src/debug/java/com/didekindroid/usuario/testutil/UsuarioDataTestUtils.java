@@ -42,15 +42,6 @@ public final class UsuarioDataTestUtils {
     {
     }
 
-    public static Usuario makeUsuario(String userName, String alias, String password)
-    {
-        return new Usuario.UsuarioBuilder()
-                .userName(userName)
-                .alias(alias)
-                .password(password)
-                .build();
-    }
-
     //  ======================================= CLEANING METHODS  ==========================================
 
     public static void cleanOneUser(Usuario usuario) throws UiException
@@ -60,7 +51,7 @@ public final class UsuarioDataTestUtils {
         cleanWithTkhandler();
     }
 
-    public static void cleanTwoUsers(Usuario usuarioOne, Usuario usuarioTwo) throws UiException
+    private static void cleanTwoUsers(Usuario usuarioOne, Usuario usuarioTwo) throws UiException
     {
         cleanOneUser(usuarioOne);
         cleanOneUser(usuarioTwo);

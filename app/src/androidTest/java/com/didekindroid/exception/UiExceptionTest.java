@@ -6,12 +6,10 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ActivityMock;
+import com.didekindroid.incidencia.core.edit.IncidEditAc;
 import com.didekinlib.http.ErrorBean;
-import com.didekinlib.model.incidencia.dominio.IncidImportancia;
-import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
-import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
+import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -24,27 +22,27 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doIncidencia;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.makeRegGetIncidImportancia;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
+import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
+import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
+import static com.didekinlib.http.GenericExceptionMsg.TOKEN_NULL;
 import static com.didekinlib.model.comunidad.ComunidadExceptionMsg.COMUNIDAD_NOT_FOUND;
 import static com.didekinlib.model.incidencia.dominio.IncidenciaExceptionMsg.INCIDENCIA_COMMENT_WRONG_INIT;
+import static com.didekinlib.model.incidencia.dominio.IncidenciaExceptionMsg.INCIDENCIA_NOT_FOUND;
 import static com.didekinlib.model.incidencia.dominio.IncidenciaExceptionMsg.INCIDENCIA_NOT_REGISTERED;
 import static com.didekinlib.model.incidencia.dominio.IncidenciaExceptionMsg.INCIDENCIA_USER_WRONG_INIT;
 import static com.didekinlib.model.incidencia.dominio.IncidenciaExceptionMsg.RESOLUCION_DUPLICATE;
 import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_DATA_NOT_MODIFIED;
-import static com.didekinlib.model.usuariocomunidad.UsuarioComunidadExceptionMsg.ROLES_NOT_FOUND;
+import static com.didekinlib.model.usuariocomunidad.UsuarioComunidadExceptionMsg.USERCOMU_WRONG_INIT;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
@@ -57,38 +55,9 @@ import static org.junit.Assert.assertThat;
 @RunWith(AndroidJUnit4.class)
 public class UiExceptionTest {
 
-    IncidImportancia mIncidJuanPlazuelas;
     @Rule
-    public IntentsTestRule<ActivityMock> intentRule = new IntentsTestRule<ActivityMock>(ActivityMock.class) {
-
-        @Override
-        protected Intent getActivityIntent()
-        {
-            try {
-                signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
-                UsuarioComunidad juanPlazuelas = userComuDaoRemote.seeUserComusByUser().get(0);
-                mIncidJuanPlazuelas = new IncidImportancia.IncidImportanciaBuilder(
-                        doIncidencia(juanPlazuelas.getUsuario().getUserName(), "Incidencia Plazueles", juanPlazuelas.getComunidad().getC_Id(), (short) 43))
-                        .usuarioComunidad(juanPlazuelas)
-                        .importancia((short) 3).build();
-                incidenciaDao.regIncidImportancia(mIncidJuanPlazuelas);
-                IncidenciaUser incidenciaUserDb = incidenciaDao.seeIncidsOpenByComu(juanPlazuelas.getComunidad().getC_Id()).get(0);
-                mIncidJuanPlazuelas = incidenciaDao.seeIncidImportancia(incidenciaUserDb.getIncidencia().getIncidenciaId()).getIncidImportancia();
-            } catch (IOException | UiException e) {
-                e.printStackTrace();
-            }
-            Intent intent = new Intent();
-            intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, mIncidJuanPlazuelas);
-            return intent;
-        }
-
-        @Override
-        protected void beforeActivityLaunched()
-        {
-            super.beforeActivityLaunched();
-        }
-    };
-    ActivityMock mActivity;
+    public IntentsTestRule<ActivityMock> intentRule = new IntentsTestRule<>(ActivityMock.class, true, true);
+    ActivityMock activity;
 
     @BeforeClass
     public static void slowSeconds() throws InterruptedException
@@ -99,13 +68,7 @@ public class UiExceptionTest {
     @Before
     public void setUp() throws Exception
     {
-        mActivity = intentRule.getActivity();
-    }
-
-    @After
-    public void tearDown() throws Exception
-    {
-        cleanOptions(CLEAN_JUAN);
+        activity = intentRule.getActivity();
     }
 
     //  ===========================================================================
@@ -113,156 +76,197 @@ public class UiExceptionTest {
     @Test
     public void testSetUp()
     {
-        assertThat(mActivity, notNullValue());
+        assertThat(activity, notNullValue());
     }
 
     @Test
-    public void testGeneric() throws Exception
+    public void test_GENERIC_INTERNAL_ERROR() throws Exception
     {
         final UiException ue = new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
 
-        mActivity.runOnUiThread(new Runnable() {
+        activity.runOnUiThread(new Runnable() {
             @Override
             public void run()
             {
-                ue.processMe(mActivity, new Intent());
+                ue.processMe(activity);
             }
         });
 
-        waitAtMost(5, SECONDS).until(isToastInView(R.string.exception_generic_app_message, mActivity));
+        waitAtMost(5, SECONDS).until(isToastInView(R.string.exception_generic_app_message, activity));
         onView(withId(R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));
     }
 
     @Test
-    public void testLogin() throws Exception
+    public void test_TOKEN_NULL() throws Exception
     {
-        final UiException ue = new UiException(new ErrorBean(ROLES_NOT_FOUND));
+        final UiException ue = new UiException(new ErrorBean(TOKEN_NULL));
 
-        mActivity.runOnUiThread(new Runnable() {
+        activity.runOnUiThread(new Runnable() {
             @Override
             public void run()
             {
-                ue.processMe(mActivity, new Intent());
+                ue.processMe(activity);
             }
         });
-
-        waitAtMost(5, SECONDS).until(isToastInView(R.string.user_without_signedUp, mActivity));
-        onView(withId(R.id.login_ac_layout)).check(matches(isDisplayed()));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed((R.id.login_ac_layout)));
+        waitAtMost(4, SECONDS).until(isToastInView(R.string.user_without_signedUp, activity));
     }
 
     @Test
-    public void testUserDataAc() throws Exception
-    {
-        // Preconditions.
-        assertThat(TKhandler.isRegisteredUser(), is(true));
-        assertThat(TKhandler.getTokenCache().get(), notNullValue());
-
-        final UiException ue = new UiException(new ErrorBean(USER_DATA_NOT_MODIFIED));
-        mActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                ue.processMe(mActivity, new Intent());
-            }
-        });
-
-        waitAtMost(5, SECONDS).until(isToastInView(R.string.user_data_not_modified_msg, mActivity));
-        onView(withId(R.id.user_data_ac_layout)).check(matches(isDisplayed()));
-    }
-
-
-    @Test
-    public void testSearchComu() throws Exception
+    public void test_COMUNIDAD_NOT_FOUND() throws Exception
     {
         final UiException ue = new UiException(new ErrorBean(COMUNIDAD_NOT_FOUND));
 
-        mActivity.runOnUiThread(new Runnable() {
+        activity.runOnUiThread(new Runnable() {
             @Override
             public void run()
             {
-                ue.processMe(mActivity, new Intent());
+                ue.processMe(activity);
             }
         });
-        waitAtMost(5, SECONDS).until(isToastInView(R.string.comunidad_not_found_message, mActivity));
+        waitAtMost(5, SECONDS).until(isToastInView(R.string.comunidad_not_found_message, activity));
         onView(withId(R.id.comu_search_ac_linearlayout)).check(matches(isDisplayed()));
     }
 
     @Test
-    public void testIncidReg() throws UiException
+    public void test_INCIDENCIA_NOT_FOUND() throws UiException, IOException
     {
         // Preconditions.
-        assertThat(TKhandler.isRegisteredUser(), is(true));
-        assertThat(TKhandler.getTokenCache().get(), notNullValue());
+        signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
 
-        final UiException ue = new UiException(new ErrorBean(INCIDENCIA_NOT_REGISTERED));
-        mActivity.runOnUiThread(new Runnable() {
+        final UiException ue = new UiException(new ErrorBean(INCIDENCIA_NOT_FOUND));
+        activity.runOnUiThread(new Runnable() {
             @Override
             public void run()
             {
-                ue.processMe(mActivity, new Intent());
+                ue.processMe(activity);
             }
         });
 
-        waitAtMost(5, SECONDS).until(isToastInView(R.string.incidencia_not_registered, mActivity));
-        onView(withId(R.id.incid_reg_ac_layout)).check(matches(isDisplayed()));
+        waitAtMost(5, SECONDS).until(isToastInView(R.string.incidencia_wrong_init, activity));
+        onView(withId(R.id.incid_see_generic_layout)).check(matches(isDisplayed())); // Lista de incidencias abiertas.
+
+        cleanOptions(CLEAN_JUAN);
     }
 
     @Test
-    public void testLoginIncid() throws Exception
+    public void test_INCIDENCIA_NOT_REGISTERED() throws UiException, IOException
     {
-        final UiException ue = new UiException(new ErrorBean(INCIDENCIA_USER_WRONG_INIT));
+        // Preconditions.
+        signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
 
-        mActivity.runOnUiThread(new Runnable() {
+        final UiException ue = new UiException(new ErrorBean(INCIDENCIA_NOT_REGISTERED));
+        activity.runOnUiThread(new Runnable() {
             @Override
             public void run()
             {
-                ue.processMe(mActivity, new Intent());
+                ue.processMe(activity);
             }
         });
 
-        waitAtMost(5, SECONDS).until(isToastInView(R.string.user_without_powers, mActivity));
+        waitAtMost(5, SECONDS).until(isToastInView(R.string.incidencia_not_registered, activity));
+        onView(withId(R.id.incid_reg_ac_layout)).check(matches(isDisplayed()));
+
+        cleanOptions(CLEAN_JUAN);
+    }
+
+    @Test
+    public void test_INCIDENCIA_USER_WRONG_INIT() throws Exception
+    {
+        final UiException ue = new UiException(new ErrorBean(INCIDENCIA_USER_WRONG_INIT));
+
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                ue.processMe(activity);
+            }
+        });
+
+        waitAtMost(5, SECONDS).until(isToastInView(R.string.user_without_powers, activity));
         onView(withId(R.id.login_ac_layout)).check(matches(isDisplayed()));
     }
 
     @Test
-    public void testIncidSeeByComu() throws Exception
+    public void test_INCIDENCIA_COMMENT_WRONG_INIT() throws Exception
     {
         // Preconditions.
-        assertThat(TKhandler.isRegisteredUser(), is(true));
-        assertThat(TKhandler.getTokenCache().get(), notNullValue());
+        signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
 
         final UiException ue = new UiException(new ErrorBean(INCIDENCIA_COMMENT_WRONG_INIT));
-        mActivity.runOnUiThread(new Runnable() {
+        activity.runOnUiThread(new Runnable() {
             @Override
             public void run()
             {
-                ue.processMe(mActivity, new Intent());
+                ue.processMe(activity);
             }
         });
 
-        waitAtMost(5, SECONDS).until(isToastInView(R.string.incidencia_wrong_init, mActivity));
+        waitAtMost(5, SECONDS).until(isToastInView(R.string.incidencia_wrong_init, activity));
         onView(withId(R.id.incid_see_open_by_comu_ac)).check(matches(isDisplayed()));
+
+        cleanOptions(CLEAN_JUAN);
     }
 
     @Test
-    public void testResolucionDup() throws Exception
+    public void test_RESOLUCION_DUPLICATE() throws Exception
     {
         // Preconditions.
-        final Intent intentIn = new Intent();
-        intentIn.putExtra(INCID_IMPORTANCIA_OBJECT.key, mActivity.getIntent().getSerializableExtra(INCID_IMPORTANCIA_OBJECT.key));
+        signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
+        final Intent intentIn = new Intent(activity, IncidEditAc.class);
+        IncidAndResolBundle resolBundle = new IncidAndResolBundle(makeRegGetIncidImportancia(userComuDaoRemote.seeUserComusByUser().get(0), (short) 3), false);
+        intentIn.putExtra(INCID_RESOLUCION_BUNDLE.key, resolBundle);
 
         final UiException ue = new UiException(new ErrorBean(RESOLUCION_DUPLICATE));
 
-        mActivity.runOnUiThread(new Runnable() {
+        activity.runOnUiThread(new Runnable() {
             @Override
             public void run()
             {
-                ue.processMe(mActivity, intentIn);
+                ue.processMe(activity, intentIn);
             }
         });
-        waitAtMost(5, SECONDS).until(isToastInView(R.string.resolucion_duplicada, mActivity));
+        waitAtMost(5, SECONDS).until(isToastInView(R.string.resolucion_duplicada, activity));
         onView(withId(R.id.incid_edit_fragment_container_ac)).check(matches(isDisplayed()));
+
+        cleanOptions(CLEAN_JUAN);
     }
 
-    //  ============================== HELPERS  ===================================
+    @Test
+    public void test_USERCOMU_WRONG_INIT() throws Exception
+    {
+        final UiException ue = new UiException(new ErrorBean(USERCOMU_WRONG_INIT));
+
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                ue.processMe(activity);
+            }
+        });
+
+        waitAtMost(5, SECONDS).until(isToastInView(R.string.user_without_signedUp, activity));
+        onView(withId(R.id.login_ac_layout)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void test_USER_DATA_NOT_MODIFIED() throws Exception
+    {
+        // Preconditions.
+        signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
+
+        final UiException ue = new UiException(new ErrorBean(USER_DATA_NOT_MODIFIED));
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                ue.processMe(activity);
+            }
+        });
+
+        waitAtMost(5, SECONDS).until(isToastInView(R.string.user_data_not_modified_msg, activity));
+        onView(withId(R.id.user_data_ac_layout)).check(matches(isDisplayed()));
+
+        cleanOptions(CLEAN_JUAN);
+    }
 }

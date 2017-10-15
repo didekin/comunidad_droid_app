@@ -1,6 +1,5 @@
 package com.didekindroid.incidencia.list.importancia;
 
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -56,7 +55,7 @@ public class IncidSeeUserComuImportanciaFr extends Fragment {
         mIncidencia = (Incidencia) getActivity().getIntent().getSerializableExtra(INCIDENCIA_OBJECT.key);
         new IncidImportanciaLoader().execute(mIncidencia);
 
-        mListView = (ListView) mFrView.findViewById(android.R.id.list);
+        mListView = mFrView.findViewById(android.R.id.list);
     }
 
     //    ============================================================
@@ -92,7 +91,7 @@ public class IncidSeeUserComuImportanciaFr extends Fragment {
             if (uiException != null) {
                 Timber.d("onPostExecute(): uiException != null");
                 assertTrue(importanciaUsers == null, incidImportanciaUsers_list_should_be_initialized);
-                uiException.processMe(getActivity(), new Intent());
+                uiException.processMe(getActivity());
             }
             if (importanciaUsers != null && !importanciaUsers.isEmpty()) {
                 Timber.d("onPostExecute(): importanciaUsers != null");

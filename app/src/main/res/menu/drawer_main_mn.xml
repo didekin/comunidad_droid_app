@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+    <group
+        android:checkableBehavior="single"
+        android:enabled="false"
+        android:visible="false">
+        <item
+            android:id="@+id/user_data_ac_mn"
+            android:title="@string/user_data_ac_mn"
+            />
+        <item
+            android:id="@+id/see_usercomu_by_user_ac_mn"
+            android:title="@string/see_usercomu_by_user_ac_mn"
+            />
+        <item
+            android:id="@+id/incid_see_open_by_comu_ac_mn"
+            android:title="@string/incid_see_by_comu_ac_mn"
+            />
+    </group>
+    <item
+        android:id="@+id/confidencialidad_ac_mn"
+        android:checkable="true"
+        android:enabled="true"
+        android:title="@string/confidencialiad_mn"
+        android:visible="true"/>
+</menu>

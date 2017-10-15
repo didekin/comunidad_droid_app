@@ -1,6 +1,7 @@
 package com.didekindroid.util;
 
 import java.io.Serializable;
+import java.util.Calendar;
 
 /**
  * User: pedro@didekin
@@ -9,5 +10,5 @@ import java.io.Serializable;
  */
 
 public interface FechaPickerBean extends Serializable {
-    void setFechaPrevista(long fechaPrevista);
+    void setFechaPrevista(Calendar fechaPrevista);
 }

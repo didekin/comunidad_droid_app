@@ -21,7 +21,7 @@ class VwHolderIncidSeeOpenItem extends VwHolderIncidSeeItem {
     VwHolderIncidSeeOpenItem(View convertView)
     {
         super(convertView);
-        mFechaAltaResolucion = (TextView) convertView.findViewById(R.id.incid_see_fecha_alta_resolucion_view);
+        mFechaAltaResolucion = convertView.findViewById(R.id.incid_see_fecha_alta_resolucion_view);
     }
 
     public void initializeTextInViews(IncidenciaUser incidenciaUser)

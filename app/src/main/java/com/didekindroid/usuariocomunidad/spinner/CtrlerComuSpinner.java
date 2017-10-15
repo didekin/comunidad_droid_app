@@ -8,7 +8,7 @@ import java.util.List;
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
-import static com.didekindroid.usuariocomunidad.dao.UserComuObservable.comunidadesByUser;
+import static com.didekindroid.usuariocomunidad.repository.UserComuObservable.comunidadesByUser;
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 import static io.reactivex.schedulers.Schedulers.io;
 
@@ -24,11 +24,11 @@ public class CtrlerComuSpinner extends CtrlerSelectList<Comunidad> {
     @Override
     public boolean loadItemsByEntitiyId(DisposableSingleObserver<List<Comunidad>> observer, Long... entityId)
     {
-
         Timber.d("loadItemsByEntitiyId()");
-        return subscriptions.add(comunidadesByUser()
-                .subscribeOn(io())
+        return subscriptions
+                .add(comunidadesByUser().subscribeOn(io())
                 .observeOn(mainThread())
-                .subscribeWith(observer));
+                .subscribeWith(observer)
+        );
     }
 }

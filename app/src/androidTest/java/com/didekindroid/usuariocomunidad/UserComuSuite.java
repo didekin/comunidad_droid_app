@@ -1,7 +1,7 @@
 package com.didekindroid.usuariocomunidad;
 
-import com.didekindroid.usuariocomunidad.dao.UserComuDaoRemoteTest;
-import com.didekindroid.usuariocomunidad.dao.UserComuObservableTest;
+import com.didekindroid.usuariocomunidad.repository.UserComuDaoRemoteTest;
+import com.didekindroid.usuariocomunidad.repository.UserComuObservableTest;
 import com.didekindroid.usuariocomunidad.data.UserComuDataAcTest;
 import com.didekindroid.usuariocomunidad.data.ViewerUserComuDataAcTest;
 import com.didekindroid.usuariocomunidad.listbycomu.CtrlerUserComuByComuTest;

@@ -6,9 +6,9 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
+import com.didekindroid.api.ChildViewersInjectorIf;
 import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ViewerParentInjectedIf;
-import com.didekindroid.api.ViewerParentInjectorIf;
+import com.didekindroid.api.ParentViewerInjectedIf;
 import com.didekindroid.comunidad.RegComuFr;
 import com.didekindroid.router.ActivityRouter;
 
@@ -22,7 +22,7 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * 1. The user is registered with a different comunidad.
  */
 @SuppressWarnings("ConstantConditions")
-public class RegComuAndUserComuAc extends AppCompatActivity implements ViewerParentInjectorIf {
+public class RegComuAndUserComuAc extends AppCompatActivity implements ChildViewersInjectorIf {
 
     ViewerRegComuUserComuAc viewer;
     View acView;
@@ -55,19 +55,19 @@ public class RegComuAndUserComuAc extends AppCompatActivity implements ViewerPar
         viewer.clearSubscriptions();
     }
 
-    // ==================================  ViewerParentInjectorIf  =================================
+    // ==================================  ChildViewersInjectorIf  =================================
 
     @Override
-    public ViewerParentInjectedIf getViewerAsParent()
+    public ParentViewerInjectedIf getParentViewer()
     {
-        Timber.d("getViewerAsParent()");
+        Timber.d("getParentViewer()");
         return viewer;
     }
 
     @Override
-    public void setChildInViewer(ViewerIf viewerChild)
+    public void setChildInParentViewer(ViewerIf viewerChild)
     {
-        Timber.d("setChildInViewer()");
+        Timber.d("setChildInParentViewer()");
         viewer.setChildViewer(viewerChild);
     }
 

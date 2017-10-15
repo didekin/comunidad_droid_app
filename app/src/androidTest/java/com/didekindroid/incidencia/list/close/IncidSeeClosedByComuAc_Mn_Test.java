@@ -22,18 +22,15 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeCloseAcLayout;
-import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeGenericLayout;
+import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeGenericFrLayout;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_REG_AC;
 import static com.didekindroid.incidencia.testutils.IncidenciaMenuTestUtils.INCID_SEE_OPEN_BY_COMU_AC;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
-import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_DROID;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_DROID;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpWithTkGetComu;
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.awaitility.Awaitility.waitAtMost;
-import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.fail;
 
 /**
@@ -86,23 +83,21 @@ public class IncidSeeClosedByComuAc_Mn_Test {
     {
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_reg_comunidad_spinner)).check(matches(isDisplayed()));
-
-        waitAtMost(3, SECONDS).until(isViewDisplayed(withId(android.R.id.empty)));
-        // No hay incidencias cerradas.
-        onView(withId(android.R.id.list)).check(matches(not(isDisplayed())));
+        SECONDS.sleep(2);
+        onView(withId(android.R.id.empty)).check(matches(isDisplayed()));
     }
 
     @Test
     public void testIncidSeeOpenByComuMn() throws InterruptedException
     {
         INCID_SEE_OPEN_BY_COMU_AC.checkMenuItem_WTk(activity);
-        checkUp(incidSeeCloseAcLayout, incidSeeGenericLayout);
+        checkUp(incidSeeCloseAcLayout, incidSeeGenericFrLayout);
     }
 
     @Test
     public void testIncidRegMn() throws InterruptedException
     {
         INCID_REG_AC.checkMenuItem_WTk(activity);
-        checkUp(incidSeeCloseAcLayout, incidSeeGenericLayout);
+        checkUp(incidSeeCloseAcLayout, incidSeeGenericFrLayout);
     }
 }

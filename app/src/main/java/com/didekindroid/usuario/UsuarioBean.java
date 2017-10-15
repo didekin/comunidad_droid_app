@@ -63,7 +63,7 @@ public final class UsuarioBean implements Serializable {
         return isValide;
     }
 
-    boolean validateWithOnePassword(Resources resources, StringBuilder errorMsg)
+    public boolean validateWithOnePassword(Resources resources, StringBuilder errorMsg)
     {
         boolean isValid = validateAlias(resources.getText(R.string.alias), errorMsg)
                 & validateUserName(resources.getText(R.string.email_hint), errorMsg)

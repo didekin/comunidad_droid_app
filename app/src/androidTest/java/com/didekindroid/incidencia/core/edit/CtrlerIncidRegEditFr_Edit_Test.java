@@ -7,8 +7,8 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.core.CtrlerIncidRegEditFr;
+import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
-import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.junit.After;
 import org.junit.Before;
@@ -22,8 +22,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import io.reactivex.observers.DisposableSingleObserver;
 
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_B;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
@@ -48,8 +47,8 @@ public class CtrlerIncidRegEditFr_Edit_Test {
     final static AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
 
     CtrlerIncidRegEditFr controller;
-    UsuarioComunidad pepeUserComu;
     IncidImportancia incidImportancia;
+    IncidAndResolBundle resolBundle;
 
     @Rule
     public IntentsTestRule<IncidEditAc> activityRule = new IntentsTestRule<IncidEditAc>(IncidEditAc.class) {
@@ -58,12 +57,12 @@ public class CtrlerIncidRegEditFr_Edit_Test {
         {
             try {
                 incidImportancia = insertGetIncidImportancia(COMU_ESCORIAL_PEPE);
+                resolBundle = new IncidAndResolBundle(incidImportancia, false);
             } catch (IOException | UiException e) {
                 fail();
             }
             Intent intent = new Intent();
-            intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia);
-            intent.putExtra(INCID_RESOLUCION_FLAG.key, false);
+            intent.putExtra(INCID_RESOLUCION_BUNDLE.key, resolBundle);
             return intent;
         }
     };

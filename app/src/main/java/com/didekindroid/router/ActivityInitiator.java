@@ -8,6 +8,8 @@ import android.view.View;
 
 import timber.log.Timber;
 
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+import static com.didekindroid.router.ActivityRouter.NULL_MENU_ITEM;
 import static com.didekindroid.router.ActivityRouter.acRouter;
 
 /**
@@ -32,6 +34,14 @@ public class ActivityInitiator {
         this.router = router;
     }
 
+    void initDefaultAcFromUp()
+    {
+        Timber.d("initDefaultAcFromUp()");
+        Intent intent = new Intent(activity, router.nextActivityFromMn(NULL_MENU_ITEM));
+        intent.setFlags(FLAG_ACTIVITY_NEW_TASK);
+        activity.startActivity(intent);
+    }
+
     public void initAcFromMnKeepIntent(int resourceId)
     {
         Timber.d("initAcFromMnKeepIntent()");
@@ -40,14 +50,17 @@ public class ActivityInitiator {
             intent = new Intent();
         }
         intent.setClass(activity, router.nextActivityFromMn(resourceId));
+        Timber.d("Go to: %s", intent.getComponent().toString());
         activity.startActivity(intent);
     }
 
+    @SuppressWarnings("ConstantConditions")
     public void initAcFromMnNewIntent(int resourceId)
     {
         Timber.d("initAcFromMnKeepIntent()");
         Intent intent = new Intent();
         intent.setClass(activity, router.nextActivityFromMn(resourceId));
+        Timber.d("Go to: %s", intent.getComponent().toString());
         activity.startActivity(intent);
     }
 

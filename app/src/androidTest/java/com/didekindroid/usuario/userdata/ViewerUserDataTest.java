@@ -3,6 +3,7 @@ package com.didekindroid.usuario.userdata;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.test.rule.ActivityTestRule;
+import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
@@ -12,9 +13,12 @@ import com.didekinlib.model.usuario.Usuario;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -22,8 +26,6 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekindroid.exception.UiExceptionRouter.GENERIC_APP_ACC;
-import static com.didekindroid.testutil.ActivityTestUtils.checkProcessCtrlError;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
@@ -39,7 +41,6 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.CO
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static com.didekinlib.http.GenericExceptionMsg.BAD_REQUEST;
-import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.instanceOf;
@@ -53,6 +54,7 @@ import static org.junit.Assert.fail;
  * Date: 25/03/17
  * Time: 14:16
  */
+@RunWith(AndroidJUnit4.class)
 public class ViewerUserDataTest {
 
     Usuario usuario;
@@ -72,6 +74,12 @@ public class ViewerUserDataTest {
     };
 
     UserDataAc activity;
+
+    @BeforeClass
+    public static void calm() throws InterruptedException
+    {
+        TimeUnit.SECONDS.sleep(3);
+    }
 
     @Before
     public void setUp() throws Exception
@@ -127,20 +135,25 @@ public class ViewerUserDataTest {
     @Test
     public void testCheckUserData_1() throws Exception
     {
-        typeUserData("newuser@user.com", USER_JUAN.getAlias(), USER_JUAN.getPassword());
+        TimeUnit.SECONDS.sleep(2);
 
+        typeUserData("newuser@user.com", USER_JUAN.getAlias(), USER_JUAN.getPassword());
         runCheckUserData(true);
-        assertThat(activity.viewer.usuarioBean.get().getUserName(), is("newuser@user.com"));
-        assertThat(activity.viewer.usuarioBean.get().getAlias(), is(USER_JUAN.getAlias()));
-        assertThat(activity.viewer.usuarioBean.get().getPassword(), is(USER_JUAN.getPassword()));
+        Usuario usuario = activity.viewer.usuarioBean.get().getUsuario();
+
+        assertThat(usuario.getUserName(), is("newuser@user.com"));
+        assertThat(usuario.getAlias(), is(USER_JUAN.getAlias()));
+        assertThat(usuario.getPassword(), is(USER_JUAN.getPassword()));
     }
 
     @Test
     public void testCheckUserData_2() throws InterruptedException
     {
+        TimeUnit.SECONDS.sleep(2);
+
         typeUserData("wrong_newuser.com", USER_JUAN.getAlias(), USER_JUAN.getPassword());
         runCheckUserData(false);
-        waitAtMost(3, SECONDS).until(isToastInView(R.string.email_hint, activity));
+        waitAtMost(6, SECONDS).until(isToastInView(R.string.email_hint, activity));
     }
 
     @Test
@@ -191,12 +204,6 @@ public class ViewerUserDataTest {
     }
 
     @Test
-    public void testProcessControllerError_2()
-    {
-        assertThat(checkProcessCtrlError(activity.viewer, GENERIC_INTERNAL_ERROR, GENERIC_APP_ACC), is(true));
-    }
-
-    @Test
     public void test_ReplaceComponent() throws Exception
     {
         activity.runOnUiThread(new Runnable() {
@@ -228,7 +235,7 @@ public class ViewerUserDataTest {
             @Override
             public void run()
             {
-                isModified.compareAndSet(false,activity.viewer.modifyUserData(change));
+                isModified.compareAndSet(false, activity.viewer.modifyUserData(change));
             }
         });
         waitAtMost(4, SECONDS).untilTrue(isModified);
@@ -245,7 +252,7 @@ public class ViewerUserDataTest {
                 isChecked.compareAndSet(!isOk, isUserDataOk);
             }
         });
-        waitAtMost(4, SECONDS).untilAtomic(isChecked, is(isOk));
+        waitAtMost(6, SECONDS).untilAtomic(isChecked, is(isOk));
     }
 
     public void runWhatDataChange(final UserChangeToMake changeToMake)
@@ -260,6 +267,6 @@ public class ViewerUserDataTest {
                 atomicChange.compareAndSet(null, changeToMake);
             }
         });
-        waitAtMost(4, SECONDS).untilAtomic(atomicChange, is(changeToMake));
+        waitAtMost(6, SECONDS).untilAtomic(atomicChange, is(changeToMake));
     }
 }

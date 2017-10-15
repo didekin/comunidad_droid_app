@@ -10,6 +10,7 @@ import android.view.View;
 import com.didekindroid.R;
 import com.didekindroid.api.ActivityMock;
 import com.didekindroid.api.ActivityNextMock;
+import com.didekindroid.security.IdentityCacher;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -25,7 +26,11 @@ import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExt
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasFlag;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static com.didekindroid.router.ActivityRouter.acRouter;
+import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
+import static org.junit.Assert.assertThat;
 
 /**
  * User: pedro@didekin
@@ -34,6 +39,9 @@ import static org.hamcrest.CoreMatchers.not;
  */
 @RunWith(AndroidJUnit4.class)
 public class ActivityInitiatorTest {
+
+    final int defaultUpUnregisterAcLayout = R.id.comu_search_ac_linearlayout;
+    final int defaultUpRegisterAcLayout = R.id.login_ac_layout;
 
     @Rule
     public IntentsTestRule<ActivityMock> activityRule = new IntentsTestRule<ActivityMock>(ActivityMock.class) {
@@ -48,10 +56,12 @@ public class ActivityInitiatorTest {
 
     ActivityInitiator activityInitiator;
     Activity activity;
+    final IdentityCacher identityCacher = TKhandler;
 
     @Before
     public void setUp()
     {
+        identityCacher.updateIsRegistered(false);
         activity = activityRule.getActivity();
         activityInitiator = new ActivityInitiator(activity, new ActivityRouterIf() {
 
@@ -73,6 +83,28 @@ public class ActivityInitiatorTest {
                 return null;
             }
         });
+    }
+
+    @Test
+    public void test_InitDefaultAcFromUp_Unregister() throws Exception
+    {
+        ActivityInitiator initiator = new ActivityInitiator(activity, acRouter);
+        assertThat(identityCacher.isRegisteredUser(), is(false));
+        initiator.initDefaultAcFromUp();
+        onView(withId(defaultUpUnregisterAcLayout)).check(matches(isDisplayed()));
+        intended(hasFlag(FLAG_ACTIVITY_NEW_TASK));
+
+        identityCacher.updateIsRegistered(true);
+    }
+
+    @Test
+    public void test_InitDefaultAcFromUp_Register() throws Exception
+    {
+        ActivityInitiator initiator = new ActivityInitiator(activity, acRouter);
+        identityCacher.updateIsRegistered(true);
+        initiator.initDefaultAcFromUp();
+        onView(withId(defaultUpRegisterAcLayout)).check(matches(isDisplayed()));
+        intended(hasFlag(FLAG_ACTIVITY_NEW_TASK));
     }
 
     @Test
@@ -120,5 +152,4 @@ public class ActivityInitiatorTest {
         intended(hasExtra("mock_key", 12));
         intended(hasFlag(FLAG_ACTIVITY_NEW_TASK));
     }
-
 }

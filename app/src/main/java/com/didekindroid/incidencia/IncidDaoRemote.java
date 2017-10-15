@@ -4,7 +4,6 @@ import com.didekindroid.exception.UiException;
 import com.didekindroid.security.IdentityCacher;
 import com.didekinlib.http.ErrorBean;
 import com.didekinlib.http.retrofit.IncidenciaServEndPoints;
-import com.didekinlib.model.comunidad.Comunidad;
 import com.didekinlib.model.incidencia.dominio.ImportanciaUser;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidComment;
@@ -22,7 +21,6 @@ import timber.log.Timber;
 
 import static com.didekindroid.AppInitializer.creator;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
-import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.util.DaoUtil.getResponseBody;
 import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
 
@@ -117,9 +115,9 @@ public final class IncidDaoRemote implements IncidenciaServEndPoints {
     }
 
     @Override
-    public Call<Resolucion> seeResolucion(String accessToken, long resolucionId)
+    public Call<Resolucion> seeResolucion(String accessToken, long incidenciaId)
     {
-        return endPoint.seeResolucion(accessToken, resolucionId);
+        return endPoint.seeResolucion(accessToken, incidenciaId);
     }
 
     @Override
@@ -154,18 +152,9 @@ public final class IncidDaoRemote implements IncidenciaServEndPoints {
         }
     }
 
-    /**
-     * This method encapsulates the call to the UsuarioDaoRemote.userComuDaoRemote method.
-     */
-    public List<Comunidad> getComusByUser() throws UiException
-    {
-        Timber.d("getComusByUser()");
-        return userComuDaoRemote.getComusByUser();
-    }
-
     int modifyIncidImportancia(IncidImportancia incidImportancia) throws UiException
     {
-        Timber.d("modifyUser()");
+        Timber.d("modifyIncidImportancia()");
         try {
             Response<Integer> response = modifyIncidImportancia(identityCacher.checkBearerTokenInCache(), incidImportancia).execute();
             return getResponseBody(response);
@@ -264,13 +253,13 @@ public final class IncidDaoRemote implements IncidenciaServEndPoints {
         }
     }
 
-    public Resolucion seeResolucion(long resolucionId) throws UiException
+    public Resolucion seeResolucion(long incidenciaId) throws UiException
     {
         Timber.d("checkResolucion()");
         try {
-            Response<Resolucion> response = seeResolucion(identityCacher.checkBearerTokenInCache(), resolucionId).execute();
+            Response<Resolucion> response = seeResolucion(identityCacher.checkBearerTokenInCache(), incidenciaId).execute();
             return getResponseBody(response);
-        } catch (EOFException eo) { // No resolucion in BD.
+        } catch (EOFException eo) {
             return null;
         } catch (IOException e) {
             throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));

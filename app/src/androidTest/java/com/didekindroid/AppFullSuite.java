@@ -1,5 +1,6 @@
 package com.didekindroid;
 
+import com.didekindroid.accesorio.ConfidencialidadAcTest;
 import com.didekindroid.api.ApiSuite;
 import com.didekindroid.comunidad.ComunidadSuite;
 import com.didekindroid.exception.UiExceptionTest;
@@ -22,26 +23,18 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        // api.
-        ApiSuite.class,
         // comunidad
         ComunidadSuite.class,
-        // exception
-        UiExceptionTest.class,
         // incidencia
         IncidSuite.class,
-        // router.
-        ActivityInitiatorTest.class,
-        ActivityRouterTest.class,
         // security
         SecuritySuite.class,
         /* usuario*/
         UsuarioSuite.class,
         // usuariocomunidad
         UserComuSuite.class,
-        // utils
-        IoHelperTest.class,
-        UIutilsTest.class,
+        // miscelánea: api, accesorio, exception, ...
+        MiscSuite.class,
 })
 public class AppFullSuite {
 }

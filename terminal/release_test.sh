@@ -1,4 +1,4 @@
-# It must be executed after 'cddroid' with terminal/release.sh buildType
+# It must be executed after 'cddroid' with terminal/release.sh buildType version
 # buildTypes: local, pre
 
 #!/bin/bash
@@ -12,21 +12,23 @@ if ! [ -d ${FUNC_DROID_DIR} ]
         . ${FUNC_DROID_DIR}/env_functions.sh
 fi
 
-[ $# -ne 1 ] && { echo "args count should be 1" 1>&2; exit 1;}
+[ $# -ne 2 ] && { echo "args count should be 2" 1>&2; exit 1;}
 
 export BUILD_TYPE="$1"
+export VERSION="$2"
 
 if ! [ ${BUILD_TYPE} = "local" ] && ! [ ${BUILD_TYPE} = "pre" ] ; then
     echo "Wrong buildType: $BUILD_TYPE" 1>&2; exit 1;
 fi
 
-assembleBuildType ${BUILD_TYPE}
+assembleBuildType ${BUILD_TYPE} ${VERSION}
+echo "==== AssembleBuildType exit code = $?"
 
-echo "Uninstalling com.didekindroid ..."
 adb uninstall com.didekindroid
+echo "==== Uninstalling com.didekindroid exit code = $?"
 
-echo "Installing apk ..."
-adb  install app/releases/${BUILD_TYPE}/app-${BUILD_TYPE}.apk
+adb  install app/releases/${BUILD_TYPE}/app-${VERSION}-${BUILD_TYPE}.apk
+echo "==== Installing new APK exit code = $?"
 
 echo "SALIENDO..."
 exit 0

@@ -14,9 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Date: 29/11/16
  * Time: 11:11
  */
-interface ViewerLoginIf extends ViewerIf<View,CtrlerLoginIf> {
-
-    String EMAIL_DIALOG_ARG = "email";
+interface ViewerLoginIf extends ViewerIf<View,CtrlerUsuario> {
 
     boolean checkLoginData();
 

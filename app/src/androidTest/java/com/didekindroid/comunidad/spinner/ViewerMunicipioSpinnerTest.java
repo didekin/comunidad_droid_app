@@ -8,7 +8,7 @@ import android.widget.Spinner;
 import com.didekindroid.R;
 import com.didekindroid.api.ActivityMock;
 import com.didekindroid.api.ObserverSingleSelectList;
-import com.didekindroid.api.SpinnerMockFr;
+import com.didekindroid.api.SpinnerTextMockFr;
 import com.didekinlib.model.comunidad.Municipio;
 import com.didekinlib.model.comunidad.Provincia;
 
@@ -64,7 +64,7 @@ public class ViewerMunicipioSpinnerTest {
             public void run()
             {
                 activity.getSupportFragmentManager().beginTransaction()
-                        .add(R.id.mock_ac_layout, new SpinnerMockFr(), null)
+                        .add(R.id.mock_ac_layout, new SpinnerTextMockFr(), null)
                         .commitNow();
                 spinner = (Spinner) activity.findViewById(R.id.municipio_spinner);
                 atomicViewer.compareAndSet(null, newViewerMunicipioSpinner(spinner, activity, null));

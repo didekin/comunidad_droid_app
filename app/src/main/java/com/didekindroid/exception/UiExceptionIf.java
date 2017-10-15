@@ -13,7 +13,11 @@ import com.didekinlib.http.ErrorBean;
 
 public interface UiExceptionIf {
 
-    ActionForUiExceptionIf processMe(Activity activity, Intent intent) throws UiException;
+    void processMe(Activity activity);
+
+    void processMe(Activity activity, Intent intent);
+
+    void processMe(Activity activity, ActionForUiExceptionIf actionForUiException);
 
     ErrorBean getErrorBean();
 
@@ -22,6 +26,7 @@ public interface UiExceptionIf {
     }
 
     interface ActionForUiExceptionIf {
+
         Class<? extends Activity> getActivityToGoClass();
 
         int getToastResourceId();

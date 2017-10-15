@@ -5,7 +5,7 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import timber.log.Timber;
 
-import static com.didekindroid.incidencia.firebase.IncidFirebaseDownMsgHandler.processMsgWithHandler;
+import static com.didekindroid.incidencia.firebase.IncidDownStreamMsgHandler.processMsgWithHandler;
 import static com.didekinlib.model.common.gcm.GcmKeyValueData.type_message_key;
 
 public class IncidFireBaseMsgService extends FirebaseMessagingService {

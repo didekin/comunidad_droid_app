@@ -40,7 +40,7 @@ import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEn
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
-import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
+import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
@@ -50,7 +50,6 @@ import static com.didekinlib.model.incidencia.dominio.IncidenciaExceptionMsg.INC
 import static com.didekinlib.model.incidencia.dominio.IncidenciaExceptionMsg.INCID_IMPORTANCIA_WRONG_INIT;
 import static com.didekinlib.model.incidencia.dominio.IncidenciaExceptionMsg.RESOLUCION_DUPLICATE;
 import static com.didekinlib.model.usuariocomunidad.Rol.PROPIETARIO;
-import static com.didekinlib.model.usuariocomunidad.UsuarioComunidadExceptionMsg.ROLES_NOT_FOUND;
 import static com.didekinlib.model.usuariocomunidad.UsuarioComunidadExceptionMsg.USERCOMU_WRONG_INIT;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -93,7 +92,9 @@ public class IncidDaoRemoteTest_1 {
         Incidencia incidencia = incidenciaDao.seeIncidImportancia(resolucion.getIncidencia().getIncidenciaId()).getIncidImportancia().getIncidencia();
         assertThat(incidencia.getFechaCierre(), nullValue());
         // Nuevos datos.
-        Avance avance = new Avance.AvanceBuilder().avanceDesc("").userName(resolucion.getUserName()).build();
+        Avance avance = new Avance.AvanceBuilder().avanceDesc("")
+                .author(new Usuario.UsuarioBuilder().userName(resolucion.getUserName()).build())
+                .build();
         List<Avance> avances = new ArrayList<>(1);
         avances.add(avance);
         resolucion = new Resolucion.ResolucionBuilder(resolucion.getIncidencia())
@@ -170,7 +171,8 @@ public class IncidDaoRemoteTest_1 {
         assertThat(resolucion.getAvances().size(), is(0));
         // Nuevos datos.
         Avance avance = new Avance.AvanceBuilder().avanceDesc(AVANCE_DEFAULT_DES)
-                .userName(resolucion.getUserName()).build();
+                .author(new Usuario.UsuarioBuilder().userName(resolucion.getUserName()).build())
+                .build();
         List<Avance> avances = new ArrayList<>(1);
         avances.add(avance);
         resolucion = new Resolucion.ResolucionBuilder(resolucion.getIncidencia())
@@ -278,7 +280,7 @@ public class IncidDaoRemoteTest_1 {
             incidenciaDao.regResolucion(resolucion);
             fail();
         } catch (UiException ue) {
-            assertThat(ue.getErrorBean().getMessage(), is(ROLES_NOT_FOUND.getHttpMessage()));
+            assertThat(ue.getErrorBean().getMessage(), is(USERCOMU_WRONG_INIT.getHttpMessage()));
         }
     }
 
@@ -405,7 +407,7 @@ public class IncidDaoRemoteTest_1 {
             incidenciaDao.seeIncidImportancia(incidencia.getIncidenciaId());
             fail();
         } catch (UiException ue) {
-            assertThat(ue.getErrorBean().getMessage(), is(ROLES_NOT_FOUND.getHttpMessage()));
+            assertThat(ue.getErrorBean().getMessage(), is(USERCOMU_WRONG_INIT.getHttpMessage()));
         }
     }
 

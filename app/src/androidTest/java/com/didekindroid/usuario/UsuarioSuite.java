@@ -5,10 +5,10 @@ import com.didekindroid.usuario.delete.CtrlerDeleteMeTest;
 import com.didekindroid.usuario.delete.DeleteMeAcTest;
 import com.didekindroid.usuario.firebase.CtrlerFirebaseTokenTest;
 import com.didekindroid.usuario.firebase.ViewerFirebaseTokenTest;
-import com.didekindroid.usuario.login.CtrlerLoginTest;
+import com.didekindroid.usuario.login.CtrlerUsuario_Login_Test;
 import com.didekindroid.usuario.login.LoginAcTest;
 import com.didekindroid.usuario.login.ViewerLoginTest;
-import com.didekindroid.usuario.password.CtrlerPasswordChangeTest;
+import com.didekindroid.usuario.password.CtrlerUsuario_PasswordChange_Test;
 import com.didekindroid.usuario.password.PasswordChangeAcTest;
 import com.didekindroid.usuario.password.ViewerPasswordChangeTest;
 import com.didekindroid.usuario.userdata.CtrlerUserModifiedTest;
@@ -34,11 +34,11 @@ import org.junit.runners.Suite;
         CtrlerFirebaseTokenTest.class,
         ViewerFirebaseTokenTest.class,
         // login
-        CtrlerLoginTest.class,
+        CtrlerUsuario_Login_Test.class,
         LoginAcTest.class,
         ViewerLoginTest.class,
         // password
-        CtrlerPasswordChangeTest.class,
+        CtrlerUsuario_PasswordChange_Test.class,
         PasswordChangeAcTest.class,
         ViewerPasswordChangeTest.class,
         // userdata

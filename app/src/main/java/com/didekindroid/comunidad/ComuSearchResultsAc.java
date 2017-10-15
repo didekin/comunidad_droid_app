@@ -111,8 +111,8 @@ public class ComuSearchResultsAc extends AppCompatActivity {
             case android.R.id.home:
                 doUpMenu(this);
                 return true;
-            case R.id.see_usercomu_by_user_ac_mn:
             case R.id.reg_nueva_comunidad_ac_mn:
+            case R.id.see_usercomu_by_user_ac_mn:
                 activityInitiator.initAcFromMnNewIntent(resourceId);
                 return true;
             default:

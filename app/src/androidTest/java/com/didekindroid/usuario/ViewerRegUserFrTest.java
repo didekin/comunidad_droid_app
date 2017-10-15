@@ -5,8 +5,8 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ViewerParentInjectedIf;
-import com.didekindroid.api.ViewerParentInjectorIf;
+import com.didekindroid.api.ParentViewerInjectedIf;
+import com.didekindroid.api.ChildViewersInjectorIf;
 import com.didekindroid.usuariocomunidad.register.RegComuAndUserAndUserComuAc;
 import com.didekindroid.usuariocomunidad.register.ViewerRegComuUserUserComuAc;
 import com.didekinlib.model.usuario.Usuario;
@@ -57,8 +57,8 @@ public class ViewerRegUserFrTest {
     {
         assertThat(fragment.viewer.getController(), nullValue());
         assertThat(ViewerRegComuUserUserComuAc.class.isInstance(fragment.viewer.getParentViewer()), is(true));
-        assertThat(ViewerParentInjectorIf.class.isInstance(activity), is(true));
-        ViewerParentInjectedIf parentViewer = (ViewerParentInjectedIf) fragment.viewer.getParentViewer();
+        assertThat(ChildViewersInjectorIf.class.isInstance(activity), is(true));
+        ParentViewerInjectedIf parentViewer = (ParentViewerInjectedIf) fragment.viewer.getParentViewer();
         assertThat(parentViewer.getChildViewer(ViewerRegUserFr.class), CoreMatchers.<ViewerIf>is(fragment.viewer));
     }
 

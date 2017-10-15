@@ -10,13 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ViewerParentInjectorIf;
+import com.didekindroid.api.ChildViewersInjectorIf;
 
 import timber.log.Timber;
 
 public class RegUserFr extends Fragment {
 
-    ViewerParentInjectorIf viewerInjector;
+    ChildViewersInjectorIf viewerInjector;
     ViewerRegUserFr viewer;
     private View regUserFrView;
 
@@ -35,9 +35,9 @@ public class RegUserFr extends Fragment {
         Timber.d("onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
 
-        viewerInjector = (ViewerParentInjectorIf) getActivity();
-        viewer = new ViewerRegUserFr(regUserFrView, (AppCompatActivity) getActivity(), viewerInjector.getViewerAsParent());
+        viewerInjector = (ChildViewersInjectorIf) getActivity();
+        viewer = new ViewerRegUserFr(regUserFrView, (AppCompatActivity) getActivity(), viewerInjector.getParentViewer());
         viewer.doViewInViewer(savedInstanceState, null);
-        viewerInjector.setChildInViewer(viewer);
+        viewerInjector.setChildInParentViewer(viewer);
     }
 }

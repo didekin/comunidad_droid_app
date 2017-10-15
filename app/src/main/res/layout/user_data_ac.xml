@@ -25,17 +25,9 @@
                 android:layout_height="wrap_content"
             />
 
-            <TextView
-                android:id="@+id/user_data_ac_password_rot"
-                style="@style/textBase.textFieldLabel2"
-                android:layout_marginBottom="2dp"
-                android:layout_marginTop="@dimen/vertical_margin"
-                android:text="@string/user_data_ac_password_txt"/>
-
-            <EditText
-                android:id="@+id/user_data_ac_password_ediT"
-                style="@style/textBase.editField.password"
-                android:hint="@string/user_data_ac_password_hint"/>
+            <include
+                layout="@layout/password_validation_include"
+            />
 
             <Button
                 android:id="@+id/user_data_modif_button"

@@ -17,8 +17,7 @@ import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.util.UIutils.assertTrue;
 import static io.reactivex.Single.fromCallable;
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
@@ -59,8 +58,7 @@ class CtrlerIncidSeeOpenByComu extends Controller implements
             public Bundle apply(IncidAndResolBundle incidResol) throws Exception
             {
                 Bundle bundle = new Bundle();
-                bundle.putSerializable(INCID_IMPORTANCIA_OBJECT.key, incidResol.getIncidImportancia());
-                bundle.putBoolean(INCID_RESOLUCION_FLAG.key, incidResol.hasResolucion());
+                bundle.putSerializable(INCID_RESOLUCION_BUNDLE.key, incidResol);
                 return bundle;
             }
         });

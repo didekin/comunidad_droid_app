@@ -51,7 +51,7 @@ public final class ViewerRegComuUserUserComuAc extends ViewerParent<View, Ctrler
     public void doViewInViewer(Bundle savedState, Serializable viewBean)
     {
         Timber.d("doViewInViewer()");
-        Button mRegistroButton = (Button) view.findViewById(R.id.reg_com_usuario_usuariocomu_button);
+        Button mRegistroButton = view.findViewById(R.id.reg_com_usuario_usuariocomu_button);
         mRegistroButton.setOnClickListener(new RegComuUserButtonListener());
     }
 
@@ -74,7 +74,9 @@ public final class ViewerRegComuUserUserComuAc extends ViewerParent<View, Ctrler
             StringBuilder errorBuilder = getErrorMsgBuilder(activity);
             Comunidad comunidadFromViewer = getChildViewer(ViewerRegComuFr.class).getComunidadFromViewer(errorBuilder);
             Usuario usuarioFromViewer = getChildViewer(ViewerRegUserFr.class).getUserFromViewer(errorBuilder);
-            UsuarioComunidad usuarioComunidad = getChildViewer(ViewerRegUserComuFr.class).getUserComuFromViewer(errorBuilder, comunidadFromViewer, usuarioFromViewer);
+            UsuarioComunidad usuarioComunidad = comunidadFromViewer != null && usuarioFromViewer != null ?
+                    getChildViewer(ViewerRegUserComuFr.class).getUserComuFromViewer(errorBuilder, comunidadFromViewer, usuarioFromViewer) :
+                    null;
 
             if (usuarioComunidad == null) {
                 makeToast(activity, errorBuilder.toString());
@@ -82,11 +84,11 @@ public final class ViewerRegComuUserUserComuAc extends ViewerParent<View, Ctrler
                 makeToast(activity, R.string.no_internet_conn_toast);
             } else {
                 controller.registerUserAndComu(
-                        new ObserverCacheCleaner(controller) {
+                        new ObserverCacheCleaner(ViewerRegComuUserUserComuAc.this) {
                             @Override
                             public void onComplete()
                             {
-                                Timber.d("onComplete()");
+                                super.onComplete();
                                 onRegisterSuccess();
                             }
                         },

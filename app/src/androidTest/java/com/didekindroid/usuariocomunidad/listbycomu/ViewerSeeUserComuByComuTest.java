@@ -44,7 +44,7 @@ import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOption
 import static com.didekindroid.usuariocomunidad.RolUi.ADM;
 import static com.didekindroid.usuariocomunidad.RolUi.INQ;
 import static com.didekindroid.usuariocomunidad.RolUi.PRO;
-import static com.didekindroid.usuariocomunidad.dao.UserComuDaoRemote.userComuDaoRemote;
+import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.checkUserComuByComuRol;
@@ -247,10 +247,10 @@ public class ViewerSeeUserComuByComuTest {
 
     public void checkAdapterAndHeader(int count)
     {
-        waitAtMost(3, SECONDS).until(getAdapter(viewer.getViewInViewer()), notNullValue());
+        waitAtMost(6, SECONDS).until(getAdapter(viewer.getViewInViewer()), notNullValue());
         SeeUserComuByComuListAdapter adapter = (SeeUserComuByComuListAdapter) HeaderViewListAdapter.class.cast(viewer.getViewInViewer().getAdapter()).getWrappedAdapter();
         assertThat(adapter.getCount(), is(count));
-        waitAtMost(2, SECONDS).until(isViewDisplayed(allOf(withId(R.id.see_usercomu_by_comu_list_header), withText(containsString(COMU_REAL.getNombreComunidad())))));
+        waitAtMost(6, SECONDS).until(isViewDisplayed(allOf(withId(R.id.see_usercomu_by_comu_list_header), withText(containsString(COMU_REAL.getNombreComunidad())))));
     }
 
     public void runAndCheckAdapterAndHeader(final List<UsuarioComunidad> list, int rowCount)

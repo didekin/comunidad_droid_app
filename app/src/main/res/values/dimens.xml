@@ -4,20 +4,29 @@
     <dimen name="double_horizontal_margin">24dp</dimen>
     <dimen name="vertical_margin">4dp</dimen>
     <dimen name="vertical_double_margin">16dp</dimen>
+    <!-- APP BAR -->
+    <dimen name="appBar_size">45dp</dimen>
+    <!-- margin to include after appbar to account for its size in the activity layout-->
+    <dimen name="app_bar_bottom_margin">55dp</dimen>
+    <dimen name="appBar_title">17sp</dimen>
+    <!-- Drawer -->
+    <dimen name="vertical_drawer_margin">10dp</dimen>
+    <dimen name="drawer_padding">16dp</dimen>
+    <!-- Layout -->
     <!-- Lists -->
     <dimen name="divider_heigth">1dp</dimen>
     <dimen name="list_padding">4dp</dimen>
     <dimen name="item_list_padding">4dp</dimen>
     <!-- Widgets -->
     <dimen name="spinner_horizontal_margin">0dp</dimen>
-    <!-- margin to include after appbar to account for its size in the activity layout-->
-    <dimen name="app_bar_bottom_margin">55dp</dimen>
     <!-- Texts -->
     <dimen name="text_hint_size">15sp</dimen>
     <dimen name="text_rotulo_list">16sp</dimen>
     <dimen name="text_rotulo_fragment">17sp</dimen>
     <dimen name="text_decription_widget">16sp</dimen>
-    <dimen name="appBar_title">17sp</dimen>
     <!-- Toasts -->
     <dimen name="toast_text_size">10sp</dimen>
+    <dimen name="app_bar_height">180dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
 </resources>

@@ -5,7 +5,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ActivityMock;
-import com.didekindroid.api.SpinnerMockFr;
+import com.didekindroid.api.SpinnerTextMockFr;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -16,8 +16,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.didekindroid.comunidad.ViewerRegComuFr.newViewerRegComuFr;
 import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_TRAV_PLAZUELA_11;
-import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkSpinnersOff;
-import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkSpinnersOffNull;
+import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkComunidadTextsOffView;
+import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkSpinnersOffView;
+import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkSpinnersOffViewNull;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkSubsetSpinnersOff;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
@@ -36,22 +37,22 @@ public class ViewerRegComuFr_Mock_Test {
     public ActivityTestRule<ActivityMock> activityRule = new ActivityTestRule<>(ActivityMock.class, false, true);
     ViewerRegComuFr viewer;
     ActivityMock activity;
-    SpinnerMockFr spinnerMockFr;
+    SpinnerTextMockFr spinnerTextMockFr;
 
     @Before
     public void setUp()
     {
         activity = activityRule.getActivity();
-        spinnerMockFr = new SpinnerMockFr();
+        spinnerTextMockFr = new SpinnerTextMockFr();
         final AtomicBoolean isRun = new AtomicBoolean(false);
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run()
             {
                 activity.getSupportFragmentManager().beginTransaction()
-                        .add(R.id.mock_ac_layout, spinnerMockFr, "spinnerMockFr")
+                        .add(R.id.mock_ac_layout, spinnerTextMockFr, "spinnerTextMockFr")
                         .commitNow();
-                spinnerMockFr = (SpinnerMockFr) activity.getSupportFragmentManager().findFragmentByTag("spinnerMockFr");
+                spinnerTextMockFr = (SpinnerTextMockFr) activity.getSupportFragmentManager().findFragmentByTag("spinnerTextMockFr");
                 isRun.compareAndSet(false, true);
             }
         });
@@ -70,9 +71,9 @@ public class ViewerRegComuFr_Mock_Test {
             @Override
             public void run()
             {
-                viewer = newViewerRegComuFr(spinnerMockFr.getView(), activity);
+                viewer = newViewerRegComuFr(spinnerTextMockFr.getView(), activity);
                 viewer.initializeSpinnersFromComunidad(COMU_TRAV_PLAZUELA_11, null);
-                checkSpinnersOff(viewer, COMU_TRAV_PLAZUELA_11);
+                checkSpinnersOffView(viewer, COMU_TRAV_PLAZUELA_11);
             }
         });
     }
@@ -86,9 +87,9 @@ public class ViewerRegComuFr_Mock_Test {
             @Override
             public void run()
             {
-                viewer = newViewerRegComuFr(spinnerMockFr.getView(), activity);
+                viewer = newViewerRegComuFr(spinnerTextMockFr.getView(), activity);
                 viewer.initializeSpinnersFromComunidad(null, null);
-                checkSpinnersOffNull(viewer);
+                checkSpinnersOffViewNull(viewer);
             }
         });
     }
@@ -101,9 +102,10 @@ public class ViewerRegComuFr_Mock_Test {
             @Override
             public void run()
             {
-                viewer = newViewerRegComuFr(spinnerMockFr.getView(), activity);
+                viewer = newViewerRegComuFr(spinnerTextMockFr.getView(), activity);
                 viewer.doViewInViewer(null, COMU_TRAV_PLAZUELA_11);
-                checkSpinnersOff(viewer, COMU_TRAV_PLAZUELA_11);
+                checkComunidadTextsOffView(viewer, COMU_TRAV_PLAZUELA_11);
+                checkSpinnersOffView(viewer, COMU_TRAV_PLAZUELA_11);
             }
         });
     }
@@ -116,7 +118,7 @@ public class ViewerRegComuFr_Mock_Test {
             @Override
             public void run()
             {
-                viewer = newViewerRegComuFr(spinnerMockFr.getView(), activity);
+                viewer = newViewerRegComuFr(spinnerTextMockFr.getView(), activity);
                 viewer.doViewInViewer(null, null);
                 checkSubsetSpinnersOff(viewer);
             }

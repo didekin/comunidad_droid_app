@@ -2,7 +2,7 @@ package com.didekindroid.incidencia;
 
 import com.didekindroid.incidencia.comment.IncidCommentSuite;
 import com.didekindroid.incidencia.core.IncidCoreSuite;
-import com.didekindroid.incidencia.firebase.IncidFirebaseDownMsgHandlerTest;
+import com.didekindroid.incidencia.firebase.IncidDownStreamMsgHandlerTest;
 import com.didekindroid.incidencia.list.IncidListSuite;
 import com.didekindroid.incidencia.resolucion.IncidResolucionSuite;
 
@@ -21,7 +21,7 @@ import org.junit.runners.Suite;
         // core
         IncidCoreSuite.class,
         // firebase
-        IncidFirebaseDownMsgHandlerTest.class,
+        IncidDownStreamMsgHandlerTest.class,
         // list
         IncidListSuite.class,
         // resolucion

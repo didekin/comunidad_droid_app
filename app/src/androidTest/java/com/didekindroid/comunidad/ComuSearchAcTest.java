@@ -6,11 +6,9 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
+import com.didekindroid.api.ChildViewersInjectorIf;
 import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ViewerParentInjectorIf;
 import com.didekindroid.exception.UiException;
-
-import junit.framework.AssertionFailedError;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Rule;
@@ -20,32 +18,31 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
-import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
+import static android.support.test.espresso.action.ViewActions.*;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkSpinnersDoInViewerOffNull;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkRegComuFrViewEmpty;
+import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.checkSpinnersDoInViewerOffNull;
 import static com.didekindroid.comunidad.testutil.ComuEspresoTestUtil.typeComunidadData;
-import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuListFrLayout;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
+import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchResultsListLayout;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
+import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.usuario.testutil.UserItemMenuTestUtils.LOGIN_AC;
-import static com.didekindroid.usuario.testutil.UserItemMenuTestUtils.USER_DATA_AC;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.REG_COMU_USERCOMU_AC;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.REG_COMU_USER_USERCOMU_AC;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuMenuTestUtil.SEE_USERCOMU_BY_USER_AC;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.junit.Assert.assertThat;
@@ -61,7 +58,7 @@ public class ComuSearchAcTest {
     @Rule
     public ActivityTestRule<ComuSearchAc> activityRule = new ActivityTestRule<>(ComuSearchAc.class, true, false);
 
-    private ComuSearchAc activity;
+    ComuSearchAc activity;
 
     @Test
     public void test_OnCreate()
@@ -69,19 +66,20 @@ public class ComuSearchAcTest {
         activity = activityRule.launchActivity(new Intent());
 
         assertThat(activity.acView, notNullValue());
-        assertThat(activity.viewer, notNullValue());
+        assertThat(activity.viewerAc, notNullValue());
+        assertThat(activity.viewerDrawer, notNullValue());
         assertThat(activity.regComuFrg, notNullValue());
 
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
-        // Es la actividad inicial de la aplicación.
         onView(allOf(
                 withContentDescription(R.string.navigate_up_txt),
-                isClickable())).check(doesNotExist());
-        checkRegComuFrViewEmpty();
-        assertThat(activity.regComuFrg.viewerInjector, CoreMatchers.<ViewerParentInjectorIf>is(activity));
-        assertThat(activity.regComuFrg.viewer.getParentViewer(), CoreMatchers.<ViewerIf>is(activity.viewer));
+                isClickable())).check(matches(isDisplayed()));
 
-        // Check spinners in fragment.viewer, after calling doInViewer.
+        checkRegComuFrViewEmpty();
+
+        // Parent injection.
+        assertThat(activity.regComuFrg.viewerInjector, CoreMatchers.<ChildViewersInjectorIf>is(activity));
+        assertThat(activity.regComuFrg.viewer.getParentViewer(), CoreMatchers.<ViewerIf>is(activity.viewerAc));
         checkSpinnersDoInViewerOffNull(activity.regComuFrg.viewer);
     }
 
@@ -92,9 +90,9 @@ public class ComuSearchAcTest {
         activity = activityRule.launchActivity(new Intent());
         typeComunidadData();
 
-        onView(withId(R.id.searchComunidad_Bton)).perform(ViewActions.click());
+        onView(withId(R.id.searchComunidad_Bton)).perform(click());
         // Check the view for comunidades list fragment.
-        waitAtMost(4,SECONDS).until(isResourceIdDisplayed(comuListFrLayout));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(comuSearchResultsListLayout));
 
         checkUp(comuSearchAcLayout);
 
@@ -108,91 +106,64 @@ public class ComuSearchAcTest {
         activity = activityRule.launchActivity(new Intent());
         typeComunidadData();
 
-        onView(withId(R.id.searchComunidad_Bton)).perform(ViewActions.click());
+        onView(withId(R.id.searchComunidad_Bton)).perform(click());
         // Check the view for comunidades list fragment.
-        waitAtMost(4,SECONDS).until(isResourceIdDisplayed(comuListFrLayout));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(comuSearchResultsListLayout));
         // Back.
-        checkBack(onView(withId(comuListFrLayout)), comuSearchAcLayout);
+        checkBack(onView(withId(comuSearchResultsListLayout)), comuSearchAcLayout);
 
         cleanOneUser(USER_JUAN);
     }
 
-    @Test
-    public void testComunidadesByUsuario() throws InterruptedException, UiException, IOException
-    {
-        signUpAndUpdateTk(COMU_REAL_JUAN);
-        activity = activityRule.launchActivity(new Intent());
-        SEE_USERCOMU_BY_USER_AC.checkMenuItem_WTk(activity);
-
-        checkUp(comuSearchAcLayout);
-        cleanOneUser(USER_JUAN);
-    }
+    //    ============================ MENU ==============================
 
     @Test
-    public void testLogin_withToken() throws InterruptedException, UiException, IOException
+    public void testLogin_Registered() throws InterruptedException, UiException, IOException
     {
         signUpAndUpdateTk(COMU_REAL_JUAN);
         activity = activityRule.launchActivity(new Intent());
 
-        // No hay opción de LOGIN en pantalla.
-        onView(withId(R.id.login_ac_mn)).check(doesNotExist());
-        openActionBarOverflowOrOptionsMenu(activity);
-        onView(withId(R.id.login_ac_mn)).check(doesNotExist());
-
+        LOGIN_AC.checkItemRegisterUser(activity);
         cleanOneUser(USER_JUAN);
     }
 
     @Test
-    public void testLogin_withoutToken() throws InterruptedException
+    public void testLogin_Unregistered() throws InterruptedException
     {
         activity = activityRule.launchActivity(new Intent());
+        assertThat(activity.viewerAc.getController().isRegisteredUser(), is(false));
 
-        try {
-            onView(withId(R.id.login_ac_mn)).check(matches(isDisplayed()));
-        } catch (AssertionFailedError e) {
-            openActionBarOverflowOrOptionsMenu(activity);
-            onView(withId(R.id.login_ac_mn)).check(matches(isDisplayed()));
-        }
-
-        LOGIN_AC.checkMenuItem_NTk(activity);
+        LOGIN_AC.checkItemNoRegisterUser(activity);
         checkUp(comuSearchAcLayout);
     }
 
     @Test
-    public void testGetDataUserNotRegistered() throws InterruptedException
+    public void testMenuNuevaComunidad_NotRegistered() throws InterruptedException
     {
         activity = activityRule.launchActivity(new Intent());
-        USER_DATA_AC.checkMenuItem_NTk(activity);
+        assertThat(activity.viewerAc.getController().isRegisteredUser(), is(false));
+        REG_COMU_USER_USERCOMU_AC.checkItemNoRegisterUser(activity);
+
+        checkUp(comuSearchAcLayout);
     }
 
     @Test
-    public void testGetDataUserRegistered() throws InterruptedException, UiException, IOException
+    public void testMenuNuevaComunidad_Registered() throws InterruptedException, UiException, IOException
     {
         signUpAndUpdateTk(COMU_REAL_JUAN);
         activity = activityRule.launchActivity(new Intent());
-        USER_DATA_AC.checkMenuItem_WTk(activity);
+        REG_COMU_USERCOMU_AC.checkItemRegisterUser(activity);
 
         checkUp(comuSearchAcLayout);
         cleanOneUser(USER_JUAN);
     }
 
-    @Test
-    public void testMenuNuevaComunidad_noToken() throws InterruptedException
-    {
-        activity = activityRule.launchActivity(new Intent());
-        REG_COMU_USER_USERCOMU_AC.checkMenuItem_NTk(activity);
-
-        checkUp(comuSearchAcLayout);
-    }
+    //  =========================  TESTS FOR ACTIVITY/FRAGMENT LIFECYCLE  ===========================
 
     @Test
-    public void testMenuNuevaComunidad_withToken() throws InterruptedException, UiException, IOException
+    public void test_OnStop()
     {
-        signUpAndUpdateTk(COMU_REAL_JUAN);
         activity = activityRule.launchActivity(new Intent());
-        REG_COMU_USERCOMU_AC.checkMenuItem_WTk(activity);
-
-        checkUp(comuSearchAcLayout);
-        cleanOneUser(USER_JUAN);
+        checkSubscriptionsOnStop(activity, activity.viewerAc.getController(), activity.viewerDrawer.getController());
     }
 }

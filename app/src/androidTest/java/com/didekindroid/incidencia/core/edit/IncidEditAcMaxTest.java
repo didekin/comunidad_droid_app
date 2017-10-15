@@ -1,8 +1,6 @@
 package com.didekindroid.incidencia.core.edit;
 
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -12,6 +10,7 @@ import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.core.AmbitoIncidValueObj;
 import com.didekindroid.incidencia.core.IncidenciaDataDbHelper;
 import com.didekinlib.model.incidencia.dominio.AmbitoIncidencia;
+import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 
@@ -23,7 +22,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -34,26 +32,21 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkDataEditMaxPowerFr;
-import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkScreenEditMaxPowerFr;
+import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkScreenEditMaxPowerFrErase;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.doAmbitoAndDescripcion;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.doImportanciaSpinner;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_edit_ac_frgs_tag;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
-import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
-import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
-import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
@@ -63,13 +56,9 @@ import static org.junit.Assert.fail;
  * Time: 15:51
  */
 @RunWith(AndroidJUnit4.class)
-public class IncidEditAcMaxTest {
+public class IncidEditAcMaxTest extends IncidEditAcTest {
 
-    final static AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
-
-    IncidEditAc activity;
-    IncidImportancia incidImportancia;
-    boolean flagResolucion;
+    IncidAndResolBundle resolBundle;
 
     @Rule
     public IntentsTestRule<IncidEditAc> activityRule = new IntentsTestRule<IncidEditAc>(IncidEditAc.class) {
@@ -77,16 +66,14 @@ public class IncidEditAcMaxTest {
         protected Intent getActivityIntent()
         {
             try {
-                // Perfil adm, inicidador de la incidencia.
-                incidImportancia = insertGetIncidImportancia(COMU_PLAZUELA5_JUAN);
-                flagResolucion = false;
+                // Perfil adm, inicidador de la incidencia.  NO resolución.
+                resolBundle = new IncidAndResolBundle(insertGetIncidImportancia(COMU_PLAZUELA5_JUAN), false);
             } catch (IOException | UiException e) {
                 fail();
             }
 
             Intent intent = new Intent();
-            intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia);
-            intent.putExtra(INCID_RESOLUCION_FLAG.key, flagResolucion);
+            intent.putExtra(INCID_RESOLUCION_BUNDLE.key, resolBundle);
             return intent;
         }
     };
@@ -112,8 +99,8 @@ public class IncidEditAcMaxTest {
     @Test
     public void testOnCreate_1() throws Exception
     {
-        checkScreenEditMaxPowerFr(incidImportancia, flagResolucion);
-        checkDataEditMaxPowerFr(dbHelper, activity, incidImportancia);
+        checkScreenEditMaxPowerFrErase(activity.resolBundle);
+        checkDataEditMaxPowerFr(dbHelper, activity, activity.resolBundle.getIncidImportancia());
     }
 
     @Test
@@ -129,28 +116,33 @@ public class IncidEditAcMaxTest {
     public void testModifyIncidenciaPressUp() throws InterruptedException
     {
         // Caso OK. Modificamos: importancia, ámbito y descripción. Hacemos UP.
+
+        // Preconditions
+        IncidImportancia incidImportanciaOld = activity.resolBundle.getIncidImportancia();
+        // Changes.
         short newImportancia = (short) 2;
         String newDesc = "descripcion es valida";
         doImportanciaSpinner(activity, newImportancia);
         AmbitoIncidValueObj ambitoObj = new AmbitoIncidValueObj((short) 10, "Calefacción comunitaria");
         doAmbitoAndDescripcion(ambitoObj, newDesc);
-
+        // Exec.
         onView(withId(R.id.incid_edit_fr_modif_button)).perform(scrollTo(), click());
 
+        // Check.
         waitAtMost(4, SECONDS).until(isResourceIdDisplayed(R.id.incid_see_open_by_comu_ac));
         checkUp();
         IncidImportancia newIncidImportancia = new IncidImportancia.IncidImportanciaBuilder
                 (
                         new Incidencia.IncidenciaBuilder()
-                                .copyIncidencia(incidImportancia.getIncidencia())
+                                .copyIncidencia(incidImportanciaOld.getIncidencia())
                                 .descripcion(newDesc)
                                 .ambitoIncid(new AmbitoIncidencia(ambitoObj.get_ID()))
                                 .build()
                 )
-                .copyIncidImportancia(incidImportancia)
+                .copyIncidImportancia(incidImportanciaOld)
                 .importancia(newImportancia)
                 .build();
-        checkScreenEditMaxPowerFr(newIncidImportancia, flagResolucion);
+        checkScreenEditMaxPowerFrErase(new IncidAndResolBundle(newIncidImportancia, false));
         checkDataEditMaxPowerFr(dbHelper, activity, newIncidImportancia);
     }
 
@@ -162,7 +154,7 @@ public class IncidEditAcMaxTest {
 
         waitAtMost(4, SECONDS).until(isResourceIdDisplayed(R.id.incid_see_open_by_comu_ac));
         checkBack(onView(withId(R.id.incid_see_open_by_comu_ac)));
-        checkScreenEditMaxPowerFr(incidImportancia, flagResolucion);
+        checkScreenEditMaxPowerFrErase(activity.resolBundle);
     }
 
     @Test
@@ -173,8 +165,8 @@ public class IncidEditAcMaxTest {
 
         waitAtMost(4, SECONDS).until(isResourceIdDisplayed(R.id.incid_see_open_by_comu_ac));
         checkUp();
-        checkScreenEditMaxPowerFr(incidImportancia, flagResolucion);
-        checkDataEditMaxPowerFr(dbHelper, activity, incidImportancia);
+        checkScreenEditMaxPowerFrErase(activity.resolBundle);
+        checkDataEditMaxPowerFr(dbHelper, activity, activity.resolBundle.getIncidImportancia());
     }
 
     @Test
@@ -187,8 +179,8 @@ public class IncidEditAcMaxTest {
         waitAtMost(5, SECONDS).until(isResourceIdDisplayed(R.id.incid_see_open_by_comu_ac));
         checkBack(onView(withId(R.id.incid_see_open_by_comu_ac)));
 
-        checkScreenEditMaxPowerFr(incidImportancia, flagResolucion);
-        checkDataEditMaxPowerFr(dbHelper, activity, incidImportancia);
+        checkScreenEditMaxPowerFrErase(resolBundle);
+        checkDataEditMaxPowerFr(dbHelper, activity, activity.resolBundle.getIncidImportancia());
 
         // Intentamos borrar y verificamos error.
         onView(withId(R.id.incid_edit_fr_borrar_button)).check(matches(isDisplayed())).perform(click());
@@ -203,37 +195,5 @@ public class IncidEditAcMaxTest {
         IncidEditMaxFr fragment = (IncidEditMaxFr) activity.getSupportFragmentManager().findFragmentByTag(incid_edit_ac_frgs_tag);
         assertThat(fragment.viewerInjector, instanceOf(IncidEditAc.class));
         assertThat(fragment.viewer.getParentViewer(), CoreMatchers.<ViewerIf>is(activity.viewer));
-    }
-
-    @Test
-    public void testOnSaveInstanceState()
-    {
-        activity.viewer = new ViewerIncidEditAc(activity) {
-            @Override
-            public void saveState(Bundle savedState)
-            {
-                assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
-            }
-
-            @Override
-            public int clearSubscriptions()  // It is called from onStop() and gives problems.
-            {
-                return 0;
-            }
-        };
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                InstrumentationRegistry.getInstrumentation().callActivityOnSaveInstanceState(activity, new Bundle(0));
-            }
-        });
-        waitAtMost(1, SECONDS).untilAtomic(flagMethodExec, is(AFTER_METHOD_EXEC_A));
-    }
-
-    @Test
-    public void testOnStop()
-    {
-        checkSubscriptionsOnStop(activity, activity.viewer.getController());
     }
 }

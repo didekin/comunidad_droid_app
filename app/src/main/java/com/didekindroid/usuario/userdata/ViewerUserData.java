@@ -10,7 +10,6 @@ import android.widget.EditText;
 
 import com.didekindroid.R;
 import com.didekindroid.api.Viewer;
-import com.didekindroid.exception.UiExceptionIf.ActionForUiExceptionIf;
 import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.usuario.UsuarioBean;
 import com.didekindroid.util.UIutils;
@@ -52,9 +51,9 @@ final class ViewerUserData extends Viewer<View, CtrlerUserDataIf> implements Vie
     private ViewerUserData(View view, AppCompatActivity activity)
     {
         super(view, activity, null);
-        emailView = (EditText) view.findViewById(R.id.reg_usuario_email_editT);
-        aliasView = (EditText) view.findViewById(R.id.reg_usuario_alias_ediT);
-        passwordView = (EditText) view.findViewById(R.id.user_data_ac_password_ediT);
+        emailView = view.findViewById(R.id.reg_usuario_email_editT);
+        aliasView = view.findViewById(R.id.reg_usuario_alias_ediT);
+        passwordView = view.findViewById(R.id.password_validation_ediT);
         oldUser = new AtomicReference<>(null);
         newUser = new AtomicReference<>(null);
         usuarioBean = new AtomicReference<>(null);
@@ -91,7 +90,7 @@ final class ViewerUserData extends Viewer<View, CtrlerUserDataIf> implements Vie
 
         oldUser.set(usuario);
 
-        Button modifyButton = (Button) view.findViewById(R.id.user_data_modif_button);
+        Button modifyButton = view.findViewById(R.id.user_data_modif_button);
         modifyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
@@ -128,7 +127,7 @@ final class ViewerUserData extends Viewer<View, CtrlerUserDataIf> implements Vie
         Timber.d("alias: %s", usuarioBean.get().getAlias());
 
         StringBuilder errorBuilder = getErrorMsgBuilder(activity);
-        if (!usuarioBean.get().validateLoginData(activity.getResources(), errorBuilder)) {
+        if (!usuarioBean.get().validateWithOnePassword(activity.getResources(), errorBuilder)) {
             Timber.d("checkUserData(): %s", errorBuilder.toString());
             makeToast(activity, errorBuilder.toString());
             return false;
@@ -184,29 +183,32 @@ final class ViewerUserData extends Viewer<View, CtrlerUserDataIf> implements Vie
                 return false;
             case userName:
             case alias_only:
-                return controller.modifyUser(new UserDataObserver<Boolean>() {
-                    @Override
-                    public void onSuccess(Boolean isCompleted)
-                    {
-                        Timber.d("onSuccess(), isCompleted == %s", isCompleted.toString());
-                        assertTrue(isCompleted, "UserDataObserver.onSuccess() should be TRUE");
-                        replaceComponent(new Bundle());
-                    }
-                }, oldUser.get(), newUser.get());
+                return controller.modifyUser(
+                        new UserDataObserver<Boolean>() {
+                            @Override
+                            public void onSuccess(Boolean isCompleted)
+                            {
+                                Timber.d("onSuccess(), isCompleted == %s", isCompleted.toString());
+                                assertTrue(isCompleted, "UserDataObserver.onSuccess() should be TRUE");
+                                replaceComponent(new Bundle());
+                            }
+                        },
+                        oldUser.get(),
+                        newUser.get());
             default:
                 return false;
         }
     }
 
     @Override
-    public ActionForUiExceptionIf onErrorInObserver(Throwable error)
+    public void onErrorInObserver(Throwable error)
     {
         Timber.d("onErrorInObserver()");
         if (getUiExceptionFromThrowable(error).getErrorBean().getMessage().equals(BAD_REQUEST.getHttpMessage())) {
             makeToast(activity, R.string.password_wrong);
-            return null;
+        } else {
+            super.onErrorInObserver(error);
         }
-        return super.onErrorInObserver(error);
     }
 
     public void replaceComponent(Bundle bundle)

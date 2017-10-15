@@ -1,11 +1,14 @@
 package com.didekindroid.usuariocomunidad.register;
 
 import android.content.Intent;
+import android.os.Build;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
+import com.didekindroid.comunidad.ComuSearchResultsAc;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.usuariocomunidad.listbyuser.SeeUserComuByUserAc;
 import com.didekinlib.model.comunidad.Comunidad;
 
 import org.junit.After;
@@ -16,18 +19,25 @@ import org.junit.runner.RunWith;
 
 import java.io.IOException;
 
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
+import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.v4.app.TaskStackBuilder.create;
+import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
+import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchResultsListLayout;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
+import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_SEARCH;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtils.checkChildInViewer;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
+import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
@@ -44,7 +54,7 @@ import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.CO
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpWithTkGetComu;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuEspressoTestUtil.typeUserComuData;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.regUser_UserComuAcLayout;
-import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByComuFrRsId;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.isA;
@@ -58,7 +68,6 @@ import static org.junit.Assert.fail;
  * Date: 13/09/15
  * Time: 11:30
  */
-@SuppressWarnings("ConstantConditions")
 @RunWith(AndroidJUnit4.class)
 public class RegUserAndUserComuAcTest {
 
@@ -66,6 +75,21 @@ public class RegUserAndUserComuAcTest {
 
     @Rule
     public IntentsTestRule<RegUserAndUserComuAc> intentRule = new IntentsTestRule<RegUserAndUserComuAc>(RegUserAndUserComuAc.class) {
+
+        @Override
+        protected void beforeActivityLaunched()
+        {
+            Intent intent = new Intent(getInstrumentation().getTargetContext(), ComuSearchResultsAc.class);
+            intent.putExtra(COMUNIDAD_SEARCH.key, comunidad);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                create(getTargetContext())
+                        .addParentStack(SeeUserComuByUserAc.class)  // Includes ComuSearchAc in stack.
+                        .addNextIntent(intent) // Includes ComuSearchResultsAc in stack.
+                        .startActivities();
+            }
+        }
+
         @Override
         protected Intent getActivityIntent()
         {
@@ -95,12 +119,20 @@ public class RegUserAndUserComuAcTest {
         if (isClean) {
             return;
         }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            cleanTasks(activity);
+        }
         cleanOptions(CLEAN_JUAN);
+        SECONDS.sleep(1);
     }
 
+    //    =================================== Tests ===================================
+
     @Test
-    public void testRegisterUserAndUserComu_1() throws UiException
+    public void testRegisterUserAndUserComu_1() throws UiException, InterruptedException
     {
+        SECONDS.sleep(2);
+
         // Usuario data.
         typeUserDataFull(
                 USER_PEPE.getUserName(),
@@ -113,9 +145,12 @@ public class RegUserAndUserComuAcTest {
         onView(withId(R.id.reg_user_usercomu_button)).perform(scrollTo())
                 .check(matches(isDisplayed())).perform(click());
 
-        waitAtMost(5, SECONDS).until(isResourceIdDisplayed(seeUserComuByComuFrRsId));
+        waitAtMost(5, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
         waitAtMost(4, SECONDS).untilAtomic(TKhandler.getTokenCache(), notNullValue());
-        checkUp(regUser_UserComuAcLayout);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            checkUp(comuSearchAcLayout);
+        }
 
         cleanOptions(CLEAN_JUAN_AND_PEPE);
         isClean = true;
@@ -137,6 +172,10 @@ public class RegUserAndUserComuAcTest {
 
         waitAtMost(4, SECONDS).until(isToastInView(R.string.error_validation_msg, activity,
                 R.string.reg_usercomu_portal_rot));
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            checkUp(comuSearchResultsListLayout);
+        }
     }
 
     //    =================================== Life cycle ===================================
@@ -172,21 +211,42 @@ public class RegUserAndUserComuAcTest {
     //    =================================== MENU ===================================
 
     @Test
-    public void testLoginMn_NoToken() throws InterruptedException, UiException
+    public void testLoginMn_UnRegUser_Up() throws InterruptedException, UiException
     {
-        cleanOptions(CLEAN_JUAN);
-        isClean = true;
-
-        LOGIN_AC.checkMenuItem_NTk(activity);
-        checkUp(regUser_UserComuAcLayout);
+        doLoginUnRegUser();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            checkUp(comuSearchAcLayout);
+        }
     }
 
     @Test
-    public void testLoginMn_WithToken() throws InterruptedException, UiException, IOException
+    public void testLoginMn_UnRegUser_Back() throws InterruptedException, UiException
+    {
+        doLoginUnRegUser();
+        checkBack(onView(withId(loginAcResourceId)), regUser_UserComuAcLayout);
+    }
+
+    @Test
+    public void testLoginMn_RegUser() throws InterruptedException, UiException, IOException
     {
         assertThat(TKhandler.isRegisteredUser(), is(true));
-        LOGIN_AC.checkMenuItem_WTk(activity);
-        checkBack(onView(withId(loginAcResourceId)), regUser_UserComuAcLayout);
+        LOGIN_AC.checkItemRegisterUser(activity);
+    }
+
+    //    =================================== HELPERS ===================================
+
+    @SuppressWarnings("RedundantThrowsDeclaration")
+    private void doLoginUnRegUser() throws InterruptedException
+    {
+        activity.viewer.getController().updateIsRegistered(false);
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                activity.onPrepareOptionsMenu(activity.acMenu);
+            }
+        });
+        LOGIN_AC.checkItemNoRegisterUser(activity);
     }
 }
 

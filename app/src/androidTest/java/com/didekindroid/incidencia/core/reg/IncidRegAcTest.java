@@ -101,7 +101,7 @@ public class IncidRegAcTest {
         doAmbitoAndDescripcion(ambitoObj, "descripcion = not valid");
         onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
 
-        waitAtMost(4, SECONDS).until(isToastInView(R.string.error_validation_msg, activity, R.string.incid_reg_descripcion));
+        waitAtMost(6, SECONDS).until(isToastInView(R.string.error_validation_msg, activity, R.string.incid_reg_descripcion));
     }
 
     @Test
@@ -113,18 +113,19 @@ public class IncidRegAcTest {
         doAmbitoAndDescripcion(ambitoObj, "descripcion es valida");
 
         onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
-        waitAtMost(3, SECONDS).until(isViewDisplayed(withId(R.id.incid_see_open_by_comu_ac)));
+        waitAtMost(6, SECONDS).until(isViewDisplayed(withId(R.id.incid_see_open_by_comu_ac)));
         checkUp(activityLayoutId, fragmentLayoutId);
     }
 
     @Test
-    public void testRegisterIncidencia_3() throws UiException
+    public void testRegisterIncidencia_3() throws UiException, InterruptedException
     {
         // Caso OK: no cubro importancia.
         doAmbitoAndDescripcion(ambitoObj, "descripcion is valid");
+        SECONDS.sleep(1);
         onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
 
-        waitAtMost(3, SECONDS).until(isViewDisplayed(withId(R.id.incid_see_open_by_comu_ac)));
+        waitAtMost(6, SECONDS).until(isViewDisplayed(withId(R.id.incid_see_open_by_comu_ac)));
         checkBack(onView(withId(R.id.incid_see_open_by_comu_ac)), activityLayoutId, fragmentLayoutId);
     }
 
@@ -149,7 +150,7 @@ public class IncidRegAcTest {
     @Test
     public void testOnCreate()
     {
-        assertThat(activity.getViewerAsParent(), notNullValue());
+        assertThat(activity.getParentViewer(), notNullValue());
         IncidRegFr fragment = (IncidRegFr) activity.getSupportFragmentManager().findFragmentById(R.id.incid_reg_frg);
         assertThat(fragment.viewerInjector, instanceOf(IncidRegAc.class));
         assertThat(fragment.viewer.getParentViewer(), CoreMatchers.<ViewerIf>is(activity.viewer));

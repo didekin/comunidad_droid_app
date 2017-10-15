@@ -12,8 +12,6 @@ import android.widget.EditText;
 
 import com.didekindroid.R;
 import com.didekindroid.api.Viewer;
-import com.didekindroid.exception.UiException;
-import com.didekindroid.exception.UiExceptionIf;
 import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.usuario.UsuarioBean;
 import com.didekinlib.model.usuario.Usuario;
@@ -41,7 +39,7 @@ import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOU
  * Time: 12:05
  */
 
-final class ViewerLogin extends Viewer<View, CtrlerLoginIf> implements ViewerLoginIf {
+final class ViewerLogin extends Viewer<View, CtrlerUsuario> implements ViewerLoginIf {
 
     @SuppressWarnings("WeakerAccess")
     final AtomicReference<UsuarioBean> usuarioBean;
@@ -58,7 +56,7 @@ final class ViewerLogin extends Viewer<View, CtrlerLoginIf> implements ViewerLog
     {
         Timber.d("newViewerLogin()");
         ViewerLoginIf instance = new ViewerLogin(activity);
-        instance.setController(new CtrlerLogin());
+        instance.setController(new CtrlerUsuario());
         return instance;
     }
 
@@ -67,7 +65,7 @@ final class ViewerLogin extends Viewer<View, CtrlerLoginIf> implements ViewerLog
     {
         Timber.d("doViewInViewer()");
 
-        Button mLoginButton = (Button) view.findViewById(R.id.login_ac_button);
+        Button mLoginButton = view.findViewById(R.id.login_ac_button);
         mLoginButton.setOnClickListener(new LoginButtonListener());
         if (savedState != null) {
             counterWrong.set(savedState.getInt(login_counter_atomic_int.key));
@@ -113,14 +111,14 @@ final class ViewerLogin extends Viewer<View, CtrlerLoginIf> implements ViewerLog
             int counter = counterWrong.addAndGet(1);
             Timber.d("Password wrong, counterWrong = %d%n", counter - 1);
             if (counter > 3) { /* Password wrong*/
-                showDialogAfterErrors(usuarioBean.get().getUserName());
+                showDialogAfterErrors();
             } else {
                 makeToast(activity, R.string.password_wrong);
             }
         }
     }
 
-    private void showDialogAfterErrors(String userName)
+    private void showDialogAfterErrors()
     {
         Timber.d("showDialogAfterErrors()");
         DialogFragment newFragment = newInstance(usuarioBean.get().getUsuario());
@@ -168,8 +166,8 @@ final class ViewerLogin extends Viewer<View, CtrlerLoginIf> implements ViewerLog
     @Override
     public void doDialogPositiveClick(Usuario usuario)
     {
-        Timber.d("doDialogPositiveClick()");
-        controller.doDialogPositiveClick(new LoginObserver() {
+        Timber.d("sendNewPassword()");
+        controller.sendNewPassword(new LoginObserver() {
             @Override
             public void onSuccess(Boolean isSentPassword)
             {
@@ -190,16 +188,14 @@ final class ViewerLogin extends Viewer<View, CtrlerLoginIf> implements ViewerLog
     }
 
     @Override
-    public UiExceptionIf.ActionForUiExceptionIf onErrorInObserver(Throwable error)
+    public void onErrorInObserver(Throwable error)
     {
         Timber.d("onErrorInObserver()");
-        UiExceptionIf.ActionForUiExceptionIf action = null;
         if (getUiExceptionFromThrowable(error).getErrorBean().getMessage().equals(USER_NAME_NOT_FOUND.getHttpMessage())) {
             makeToast(activity, R.string.username_wrong_in_login);
         } else {
-            action = super.onErrorInObserver(error);
+            super.onErrorInObserver(error);
         }
-        return action;
     }
 
     @Override
@@ -255,10 +251,7 @@ final class ViewerLogin extends Viewer<View, CtrlerLoginIf> implements ViewerLog
         @Override
         public void onError(Throwable e)
         {
-            Timber.d("onErrorObserver, message: %s", e.getMessage());
-            if (e instanceof UiException) {
-                Timber.d("UiException message: %s", ((UiException) e).getErrorBean().getMessage());
-            }
+            Timber.d("onError, message: %s", e.getMessage());
             onErrorInObserver(e);
         }
     }

@@ -1,25 +1,22 @@
 package com.didekindroid.usuariocomunidad.register;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.didekindroid.R;
+import com.didekindroid.api.ChildViewersInjectorIf;
+import com.didekindroid.api.ParentViewerInjectedIf;
 import com.didekindroid.api.ViewerIf;
-import com.didekindroid.api.ViewerParentInjectedIf;
-import com.didekindroid.api.ViewerParentInjectorIf;
 import com.didekindroid.comunidad.RegComuFr;
 import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.usuario.RegUserFr;
 
 import timber.log.Timber;
 
-import static com.didekindroid.router.ActivityRouter.acRouter;
-import static com.didekindroid.router.ActivityRouter.doUpMenuWithIntent;
+import static com.didekindroid.router.ActivityRouter.doUpMenu;
 import static com.didekindroid.usuariocomunidad.register.ViewerRegComuUserUserComuAc.newViewerRegComuUserUserComuAc;
 import static com.didekindroid.util.UIutils.doToolBar;
 
@@ -30,7 +27,8 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * 3. There is not extras in the activity intent.
  */
 // TODO: añadir un campo de número de vecinos en la comunidad (aprox.).
-public class RegComuAndUserAndUserComuAc extends AppCompatActivity implements ViewerParentInjectorIf {
+public class RegComuAndUserAndUserComuAc extends AppCompatActivity implements
+        ChildViewersInjectorIf {
 
     RegComuFr regComuFr;
     RegUserComuFr regUserComuFr;
@@ -64,19 +62,19 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity implements Vi
         viewer.clearSubscriptions();
     }
 
-    // ==================================  ViewerParentInjectorIf  =================================
+    // ==================================  ChildViewersInjectorIf  =================================
 
     @Override
-    public ViewerParentInjectedIf getViewerAsParent()
+    public ParentViewerInjectedIf getParentViewer()
     {
-        Timber.d("getViewerAsParent()");
+        Timber.d("getParentViewer()");
         return viewer;
     }
 
     @Override
-    public void setChildInViewer(ViewerIf viewerChild)
+    public void setChildInParentViewer(ViewerIf viewerChild)
     {
-        Timber.d("setChildInViewer()");
+        Timber.d("setChildInParentViewer()");
         viewer.setChildViewer(viewerChild);
     }
 
@@ -89,7 +87,6 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity implements Vi
     {
         Timber.d("onCreateOptionsMenu()");
 
-        MenuInflater inflater = getMenuInflater();
         getMenuInflater().inflate(R.menu.reg_user_activities_mn, menu);
         return super.onCreateOptionsMenu(menu);
     }
@@ -102,8 +99,7 @@ public class RegComuAndUserAndUserComuAc extends AppCompatActivity implements Vi
         int resourceId = item.getItemId();
         switch (resourceId) {
             case android.R.id.home:
-                Intent intent = new Intent(this, acRouter.nextActivityFromMn(resourceId));
-                doUpMenuWithIntent(this, intent);
+                doUpMenu(this);
                 return true;
             case R.id.login_ac_mn:
                 new ActivityInitiator(this).initAcFromMnKeepIntent(resourceId);

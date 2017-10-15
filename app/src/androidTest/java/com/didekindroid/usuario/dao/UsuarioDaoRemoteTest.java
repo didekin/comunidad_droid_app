@@ -128,7 +128,7 @@ public class UsuarioDaoRemoteTest {
     }
 
     @Test
-    public void testModifyUser_1() throws UiException, IOException
+    public void testModifyUserWithToken_1() throws UiException, IOException
     {
         whatClean = CLEAN_JUAN;
 
@@ -139,12 +139,12 @@ public class UsuarioDaoRemoteTest {
                 .uId(usuario_1.getuId())
                 .build();
 
-        int rowUpdated = usuarioDao.modifyUser(usuarioIn);
+        int rowUpdated = usuarioDao.modifyUserWithToken(TKhandler.getTokenCache().get(), usuarioIn);
         assertThat(rowUpdated, is(1));
     }
 
     @Test
-    public void testModifyUser_2() throws UiException, IOException
+    public void testModifyUserWithToken_2() throws UiException, IOException
     {
         whatClean = CLEAN_NOTHING;
 
@@ -156,7 +156,7 @@ public class UsuarioDaoRemoteTest {
                 .uId(usuario_1.getuId())
                 .build();
 
-        int rowUpdated = usuarioDao.modifyUser(usuarioIn);
+        int rowUpdated = usuarioDao.modifyUserWithToken(TKhandler.getTokenCache().get(), usuarioIn);
         assertThat(rowUpdated, is(1));
 
         cleanOneUser(new Usuario.UsuarioBuilder()
@@ -179,19 +179,27 @@ public class UsuarioDaoRemoteTest {
     public void testPasswordChange() throws UiException, IOException
     {
         signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
-        String passwordClear_2 = "new_juan_password";
-        assertThat(usuarioDao.passwordChange(passwordClear_2), is(1));
+        String newPassword = "new_juan_password";
+        assertThat(usuarioDao.passwordChange(TKhandler.getTokenCache().get(), newPassword), is(1));
 
         cleanOneUser(new Usuario.UsuarioBuilder()
                 .userName(USER_JUAN.getUserName())
-                .password(passwordClear_2)
+                .password(newPassword)
                 .build());
     }
 
     @Test
     public void testPasswordSend() throws UiException, IOException
     {
-        // No puede borrarse el usuario de prueba, porque ignoramos el nuevo password.
+        // If exception, login data are not changed.
+        signUpAndUpdateTk(COMU_PLAZUELA5_JUAN);
+        try {
+            usuarioDao.sendPassword("wrong_userName");
+            fail();
+        } catch (UiException ue) {
+            assertThat(ue.getErrorBean().getMessage(), is(USER_NAME_NOT_FOUND.getHttpMessage()));
+        }
+        assertThat(usuarioDao.loginInternal(USER_JUAN.getUserName(), USER_JUAN.getPassword()), is(true));
     }
 
 //    ====================== NON INTERFACE TESTS =========================

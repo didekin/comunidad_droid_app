@@ -5,7 +5,8 @@ import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.exception.UiException;
-import com.didekinlib.model.incidencia.dominio.IncidImportancia;
+import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
+import com.didekinlib.model.incidencia.dominio.Incidencia;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 
 import org.junit.After;
@@ -17,12 +18,12 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
-import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.observers.DisposableMaybeObserver;
 
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_FLAG;
+import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekindroid.testutil.RxSchedulersUtils.resetAllSchedulers;
@@ -46,33 +47,27 @@ public class CtrlerIncidEditAcTest {
     final static AtomicReference<String> flagMethodExec = new AtomicReference<>(BEFORE_METHOD_EXEC);
 
     CtrlerIncidEditAc controller;
-    int resorceMnId = 77;
-    IncidImportancia incidImportancia;
+    IncidAndResolBundle resolBundle;
 
     @Rule
     public IntentsTestRule<IncidEditAc> activityRule = new IntentsTestRule<IncidEditAc>(IncidEditAc.class) {
         @Override
         protected Intent getActivityIntent()
         {
-            incidImportancia = null;
             try {
-                incidImportancia = insertGetIncidImportancia(COMU_ESCORIAL_PEPE);
+                resolBundle = new IncidAndResolBundle(insertGetIncidImportancia(COMU_ESCORIAL_PEPE), false);
             } catch (IOException | UiException e) {
                 fail();
             }
             Intent intent = new Intent();
-            intent.putExtra(INCID_IMPORTANCIA_OBJECT.key, incidImportancia);
-            intent.putExtra(INCID_RESOLUCION_FLAG.key, false);
+            intent.putExtra(INCID_RESOLUCION_BUNDLE.key, resolBundle);
             return intent;
         }
     };
 
-    Resolucion resolucionBd;
-
     @Before
     public void setUp() throws Exception
     {
-        IncidEditAc activity = activityRule.getActivity();
         controller = new CtrlerIncidEditAc();
     }
 
@@ -89,23 +84,61 @@ public class CtrlerIncidEditAcTest {
     @Test
     public void testSeeResolucion() throws Exception
     {
-        resolucionBd = insertGetResolucionNoAdvances(incidImportancia);
+        insertGetResolucionNoAdvances(resolBundle.getIncidImportancia());
+        executeTest(new DisposableMaybeObserver<Resolucion>() {
+            @Override
+            public void onSuccess(@NonNull Resolucion resolucion)
+            {
+                assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e)
+            {
+                fail();
+            }
+
+            @Override
+            public void onComplete()
+            {
+                fail();
+            }
+        });
+    }
+
+    @Test
+    public void testSeeResolucion_NULL() throws Exception
+    {
+        executeTest(new DisposableMaybeObserver<Resolucion>() {
+            @Override
+            public void onSuccess(@NonNull Resolucion resolucion)
+            {
+                fail();
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e)
+            {
+                fail();
+            }
+
+            @Override
+            public void onComplete()
+            {
+                assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
+            }
+        });
+    }
+
+    //    ============================= HELPERS ===============================
+
+    void executeTest(DisposableMaybeObserver<Resolucion> observer)
+    {
+        Incidencia incidencia = resolBundle.getIncidImportancia().getIncidencia();
         try {
             trampolineReplaceIoScheduler();
             trampolineReplaceAndroidMain();
-            assertThat(controller.seeResolucion(new DisposableSingleObserver<Resolucion>() {
-                @Override
-                public void onSuccess(Resolucion resolucion)
-                {
-                    assertThat(flagMethodExec.getAndSet(AFTER_METHOD_EXEC_A), is(BEFORE_METHOD_EXEC));
-                }
-
-                @Override
-                public void onError(Throwable e)
-                {
-                    fail();
-                }
-            }, resolucionBd.getIncidencia().getIncidenciaId(), resorceMnId), is(true));
+            assertThat(controller.seeResolucion(observer, incidencia.getIncidenciaId()), is(true));
         } finally {
             resetAllSchedulers();
         }
