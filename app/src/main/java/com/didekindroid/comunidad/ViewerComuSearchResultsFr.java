@@ -72,7 +72,6 @@ final class ViewerComuSearchResultsFr extends Viewer<ListView, CtrlerComunidad> 
         new ActivityInitiator(activity).initAcWithBundle(bundle, nextActivity);
     }
 
-    @SuppressWarnings("WeakerAccess")
     void onSuccessLoadList(@NonNull List<Comunidad> comunidades)
     {
         Timber.d("onSuccessLoadList()");
@@ -81,7 +80,6 @@ final class ViewerComuSearchResultsFr extends Viewer<ListView, CtrlerComunidad> 
         view.setAdapter(adapter);
     }
 
-    @SuppressWarnings("WeakerAccess")
     void onSuccessEmptyList(Comunidad comunidad)
     {
         Timber.d("onSuccessEmptyList()");
