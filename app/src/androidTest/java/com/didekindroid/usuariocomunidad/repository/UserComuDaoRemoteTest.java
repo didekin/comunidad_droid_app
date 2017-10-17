@@ -51,7 +51,6 @@ import static com.didekinlib.http.GenericExceptionMsg.TOKEN_NULL;
 import static com.didekinlib.http.UsuarioServConstant.IS_USER_DELETED;
 import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_DUPLICATE;
 import static com.didekinlib.model.usuariocomunidad.Rol.INQUILINO;
-import static com.didekinlib.model.usuariocomunidad.UsuarioComunidadExceptionMsg.USERCOMU_WRONG_INIT;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.Matchers.is;
@@ -137,12 +136,7 @@ public class UserComuDaoRemoteTest {
         signUpAndUpdateTk(COMU_REAL_JUAN);
         // La comunidad no existe en BD.
         Comunidad comunidad = new Comunidad.ComunidadBuilder().c_id(999L).build();
-        try {
-            userComuDaoRemote.getUserComuByUserAndComu(comunidad.getC_Id());
-            fail();
-        } catch (UiException e) {
-            assertThat(e.getErrorBean().getMessage(), is(USERCOMU_WRONG_INIT.getHttpMessage()));
-        }
+        assertThat(userComuDaoRemote.getUserComuByUserAndComu(comunidad.getC_Id()), nullValue());
     }
 
     @Test
