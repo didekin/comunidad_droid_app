@@ -283,8 +283,7 @@
     <string name="municipio_spinner">municipio</string>
     <string name="municipio">Municipio</string>
     <string name="tipo_via">Tipo vía</string>
-    <string name="tipo_via_spinner">tipo de vía
-    </string>   <!-- TODO: borrar cuando se internacionalicen las referencias a ella.-->
+    <string name="tipo_via_spinner">tipo de vía </string>   <!-- TODO: borrar cuando se internacionalicen las referencias a ella.-->
     <string name="nombre_via_hint">Nombre de la vía, sin número</string>
     <string name="nombre_via">Nombre de la vía</string>
     <string name="numero_en_via">Número</string>
