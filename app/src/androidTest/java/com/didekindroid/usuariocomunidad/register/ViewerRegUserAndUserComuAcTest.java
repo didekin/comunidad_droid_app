@@ -32,6 +32,7 @@ import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
+import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
 import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typeUserDataFull;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
@@ -124,7 +125,7 @@ public class ViewerRegUserAndUserComuAcTest {
     }
 
     @Test
-    public void test_RegUserAndUserComuButtonListener() throws Exception
+    public void test_RegUserAndUserComuButtonListener_1() throws Exception
     {
         typeUserDataFull(USER_PEPE.getUserName(), USER_PEPE.getAlias(), USER_PEPE.getPassword(), USER_PEPE.getPassword());
         typeUserComuData("port2", "escale_b", "planta-N", "puerta5", PRE, INQ);
@@ -133,6 +134,18 @@ public class ViewerRegUserAndUserComuAcTest {
         waitAtMost(4, SECONDS).until(isResourceIdDisplayed(seeUserComuByUserFrRsId));
         cleanOptions(CLEAN_JUAN_AND_PEPE);
         isCleaned = true;
+    }
+
+    @Test
+    public void test_RegUserAndUserComuButtonListener_2() throws Exception
+    {
+        typeUserDataFull(USER_PEPE.getUserName(), USER_PEPE.getAlias(), USER_PEPE.getPassword(), "password_error");
+        typeUserComuData("port2", "escale_b", "planta-N", "puerta5", PRE, INQ);
+        onView(withId(R.id.reg_user_usercomu_button)).perform(scrollTo(), click());
+
+        waitAtMost(5, SECONDS).until(isToastInView(R.string.error_validation_msg, activity,
+                R.string.password_different,
+                R.string.password));
     }
 
     //  =========================  TESTS FOR ACTIVITY/FRAGMENT LIFECYCLE  ===========================

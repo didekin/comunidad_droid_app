@@ -84,7 +84,9 @@ final class ViewerRegUserAndUserComuAc extends ViewerParent<View, CtrlerUsuarioC
             Timber.d("onClick()");
             StringBuilder errorBuilder = getErrorMsgBuilder(activity);
             Usuario usuarioFromViewer = getChildViewer(ViewerRegUserFr.class).getUserFromViewer(errorBuilder);
-            UsuarioComunidad usuarioComunidad = getChildViewer(ViewerRegUserComuFr.class).getUserComuFromViewer(errorBuilder, comunidadIntent, usuarioFromViewer);
+            UsuarioComunidad usuarioComunidad = usuarioFromViewer != null ?
+                    getChildViewer(ViewerRegUserComuFr.class).getUserComuFromViewer(errorBuilder, comunidadIntent, usuarioFromViewer) :
+                    null;
 
             if (usuarioComunidad == null) {
                 makeToast(activity, errorBuilder.toString());
