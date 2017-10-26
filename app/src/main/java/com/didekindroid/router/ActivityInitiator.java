@@ -50,7 +50,6 @@ public class ActivityInitiator {
             intent = new Intent();
         }
         intent.setClass(activity, router.nextActivityFromMn(resourceId));
-        Timber.d("Go to: %s", intent.getComponent().toString());
         activity.startActivity(intent);
     }
 

@@ -9,7 +9,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ViewerIf;
+import com.didekindroid.api.ParentViewerInjectedIf;
 import com.didekindroid.incidencia.core.CtrlerIncidRegEditFr;
 import com.didekindroid.incidencia.core.ViewerAmbitoIncidSpinner;
 import com.didekindroid.router.ActivityInitiator;
@@ -41,12 +41,12 @@ final class ViewerIncidEditMaxFr extends ViewerIncidEditFr {
 
     ViewerAmbitoIncidSpinner viewerAmbitoIncidSpinner;
 
-    private ViewerIncidEditMaxFr(View view, AppCompatActivity activity, ViewerIf parentViewer)
+    private ViewerIncidEditMaxFr(View view, AppCompatActivity activity, ParentViewerInjectedIf parentViewer)
     {
         super(view, activity, parentViewer);
     }
 
-    static ViewerIncidEditMaxFr newViewerIncidEditMaxFr(@NonNull View frView, @NonNull ViewerIf parentViewer)
+    static ViewerIncidEditMaxFr newViewerIncidEditMaxFr(@NonNull View frView, @NonNull ParentViewerInjectedIf parentViewer)
     {
         Timber.d("newViewerIncidEditMaxFr()");
 
@@ -72,7 +72,6 @@ final class ViewerIncidEditMaxFr extends ViewerIncidEditFr {
         Button buttonErase = view.findViewById(R.id.incid_edit_fr_borrar_button);
         if (!canUserEraseIncidencia(resolBundle.getIncidImportancia())) {
             buttonErase.setVisibility(GONE);
-            view.findViewById(R.id.incid_edit_fr_borrar_txt).setVisibility(GONE);
         } else {
             buttonErase.setOnClickListener(new View.OnClickListener() {
                 @Override

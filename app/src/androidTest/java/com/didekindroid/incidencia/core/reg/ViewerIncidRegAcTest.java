@@ -31,7 +31,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.gcmTokenSentFlag;
-import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
+import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_B;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
@@ -147,7 +147,7 @@ public class ViewerIncidRegAcTest {
     {
         viewer.onSuccessRegisterIncidImportancia();
         // Check change of activity.
-        waitAtMost(3, SECONDS).until(isViewDisplayed(withId(R.id.incid_see_open_by_comu_ac)));
+        waitAtMost(3, SECONDS).until(isViewDisplayedAndPerform(withId(R.id.incid_see_open_by_comu_ac)));
     }
 
     @Test

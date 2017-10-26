@@ -22,7 +22,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import timber.log.Timber;
 
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.incid_importancia_should_be_modified;
 import static com.didekindroid.util.ConnectionUtils.checkInternetConnected;
 import static com.didekindroid.util.UIutils.assertTrue;
@@ -36,7 +35,7 @@ import static com.didekindroid.util.UIutils.makeToast;
  */
 @SuppressWarnings("AbstractClassExtendsConcreteClass")
 abstract class ViewerIncidEditFr extends Viewer<View, CtrlerIncidRegEditFr> implements
-        LinkToImportanciaUsersClickable, ModIncidImportanciaCallableBack {
+        ModIncidImportanciaCallableBack {
 
     IncidAndResolBundle resolBundle;
     IncidenciaBean incidenciaBean;
@@ -68,10 +67,6 @@ abstract class ViewerIncidEditFr extends Viewer<View, CtrlerIncidRegEditFr> impl
         viewerImportanciaSpinner.doViewInViewer(savedState, incidImportanciaBean);
         ((TextView) view.findViewById(R.id.incid_comunidad_txt)).setText(resolBundle.getIncidImportancia().getIncidencia().getComunidad().getNombreComunidad());
 
-
-        TextView linkToImportanciaUsersView = view.findViewById(R.id.incid_importancia_otros_view);
-        linkToImportanciaUsersView.setOnClickListener(new LinkToImportanciaUsersListener(this));
-
         Button buttonModify = view.findViewById(R.id.incid_edit_fr_modif_button);
         buttonModify.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,14 +76,6 @@ abstract class ViewerIncidEditFr extends Viewer<View, CtrlerIncidRegEditFr> impl
                 onClickButtonModify();
             }
         });
-    }
-
-    public void onClickLinkToImportanciaUsers(LinkToImportanciaUsersListener listener)
-    {
-        Timber.d("LinkToImportanciaUsersListener.onClickLinkToImportanciaUsers()");
-        Bundle bundle = new Bundle(1);
-        bundle.putSerializable(INCIDENCIA_OBJECT.key, resolBundle.getIncidImportancia().getIncidencia());
-        new ActivityInitiator(activity).initAcFromListener(bundle, listener.getClass());
     }
 
     @SuppressWarnings("WeakerAccess")

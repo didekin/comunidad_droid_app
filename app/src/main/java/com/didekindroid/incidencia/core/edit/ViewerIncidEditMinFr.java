@@ -2,13 +2,12 @@ package com.didekindroid.incidencia.core.edit;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ViewerIf;
+import com.didekindroid.api.ParentViewerInjectedIf;
 import com.didekindroid.incidencia.core.CtrlerIncidRegEditFr;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 
@@ -25,19 +24,17 @@ import static com.didekindroid.incidencia.core.ViewerImportanciaSpinner.newViewe
  */
 final class ViewerIncidEditMinFr extends ViewerIncidEditFr {
 
-    private ViewerIncidEditMinFr(View view, AppCompatActivity activity, ViewerIf parentViewer)
+    private ViewerIncidEditMinFr(View view, ParentViewerInjectedIf parentViewer)
     {
-        super(view, activity, parentViewer);
+        super(view, parentViewer.getActivity(), parentViewer);
     }
 
-    static ViewerIncidEditMinFr newViewerIncidEditMinFr(@NonNull View frView, @NonNull ViewerIf parentViewer)
+    static ViewerIncidEditMinFr newViewerIncidEditMinFr(@NonNull View frView, @NonNull ParentViewerInjectedIf parentViewer)
     {
         Timber.d("newViewerIncidEditMaxFr()");
-
-        AppCompatActivity activity = parentViewer.getActivity();
-        ViewerIncidEditMinFr instance = new ViewerIncidEditMinFr(frView, activity, parentViewer);
+        ViewerIncidEditMinFr instance = new ViewerIncidEditMinFr(frView, parentViewer);
         instance.viewerImportanciaSpinner =
-                newViewerImportanciaSpinner((Spinner) frView.findViewById(R.id.incid_reg_importancia_spinner), activity, instance);
+                newViewerImportanciaSpinner((Spinner) frView.findViewById(R.id.incid_reg_importancia_spinner), parentViewer.getActivity(), instance);
         instance.setController(new CtrlerIncidRegEditFr());
         return instance;
     }

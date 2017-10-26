@@ -13,6 +13,7 @@ import com.didekindroid.incidencia.core.AmbitoIncidValueObj;
 import com.didekindroid.incidencia.core.IncidenciaDataDbHelper;
 import com.didekindroid.incidencia.core.edit.IncidEditAc;
 import com.didekinlib.model.comunidad.Comunidad;
+import com.didekinlib.model.incidencia.dominio.ImportanciaUser;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
@@ -42,6 +43,7 @@ import static com.didekindroid.incidencia.core.IncidenciaDataDbHelper.DB_NAME;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.COSTE_ESTIM_DEFAULT_String;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.RESOLUCION_DEFAULT_DESC;
 import static com.didekindroid.testutil.ActivityTestUtils.isDataDisplayedAndClick;
+import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
 import static com.didekindroid.util.UIutils.SPAIN_LOCALE;
 import static com.didekindroid.util.UIutils.formatTimeStampToString;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -73,6 +75,8 @@ public final class IncidEspressoTestUtils {
         return frView;
     }
 
+    // ====================================== INCIDENCIA EDIT =========================================
+
     public static void checkScreenEditMaxPowerFrErase(IncidAndResolBundle resolBundle)
     {
         // Precondiditions:
@@ -81,8 +85,6 @@ public final class IncidEspressoTestUtils {
         assertThat(resolBundle.hasResolucion(), is(false));
 
         checkScreenEditMaxPowerFr();
-
-        onView(withId(R.id.incid_edit_fr_borrar_txt)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_edit_fr_borrar_button)).check(matches(isDisplayed()));
     }
 
@@ -94,8 +96,6 @@ public final class IncidEspressoTestUtils {
         assertThat(resolBundle.hasResolucion(), is(true));
 
         checkScreenEditMaxPowerFr();
-
-        onView(withId(R.id.incid_edit_fr_borrar_txt)).check(matches(not(isDisplayed())));
         onView(withId(R.id.incid_edit_fr_borrar_button)).check(matches(not(isDisplayed())));
     }
 
@@ -141,28 +141,22 @@ public final class IncidEspressoTestUtils {
         )).check(matches(isDisplayed()));
     }
 
-    public static boolean checkScreenEditMinFr()
+    public static void checkScreenEditMinFr()
     {
-        boolean isDone;
-
         onView(withId(R.id.appbar)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_edit_nopower_fr_layout)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_comunidad_rot)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_comunidad_txt)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_reg_desc_txt)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_ambito_view)).check(matches(isDisplayed()));
-        onView(withId(R.id.incid_importancia_otros_view)).check(matches(isDisplayed()));
         onView(withId(R.id.incid_reg_importancia_spinner)).check(matches(isDisplayed()));
         onView(allOf(
                 withId(R.id.incid_edit_fr_modif_button),
-                withText(R.string.incid_importancia_reg_edit_button_rot)
+                withText(R.string.modif_button_rot)
         )).check(matches(isDisplayed()));
 
-        onView(withId(R.id.incid_edit_fr_borrar_txt)).check(doesNotExist());
         onView(withId(R.id.incid_edit_fr_borrar_button)).check(doesNotExist());
 
-        isDone = true;
-        return isDone;
     }
 
     public static boolean checkDataEditMinFr(IncidenciaDataDbHelper dbHelper, IncidEditAc activity, IncidImportancia incidImportancia)
@@ -198,6 +192,8 @@ public final class IncidEspressoTestUtils {
         isDone = true;
         return isDone;
     }
+
+    // ====================================== INCIDENCIA LIST =========================================
 
     @SuppressWarnings("unchecked")
     public static Matcher<View> checkIncidClosedListView(IncidImportancia incidImportancia, Activity activity)
@@ -254,6 +250,8 @@ public final class IncidEspressoTestUtils {
         );
     }
 
+    // ====================================== INCIDENCIA =========================================
+
     @NonNull
     private static Matcher<View> addIncidCommonMatcher(IncidImportancia incidImportancia, Activity activity)
     {
@@ -291,6 +289,22 @@ public final class IncidEspressoTestUtils {
         dbHelper.close();
         activity.deleteDatabase(DB_NAME);
         return matcher;
+    }
+
+    // =================================== IMPORTANCIA USER ======================================
+
+    public static void checkImportanciaUser(ImportanciaUser importanciaUser, Activity activity)
+    {
+        waitAtMost(4, SECONDS).until(isViewDisplayed(
+                allOf(
+                        withId(R.id.incid_importancia_alias_view),
+                        withText(importanciaUser.getUserAlias()),
+                        hasSibling(allOf(
+                                withId(R.id.incid_importancia_rating_view),
+                                withText(activity.getResources().getStringArray(R.array.IncidImportanciaArray)[importanciaUser.getImportancia()])
+                        ))
+                )
+        ));
     }
 
     // ====================================== RESOLUCION =========================================

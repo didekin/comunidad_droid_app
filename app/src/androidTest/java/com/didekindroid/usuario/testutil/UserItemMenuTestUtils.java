@@ -15,7 +15,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.testutil.ActivityTestUtils.isTextIdNonExist;
-import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
+import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 
@@ -89,7 +89,7 @@ public enum UserItemMenuTestUtils implements MenuTestUtilIf {
     {
         onView(withText(menuResourceId)).check(doesNotExist());
         openActionBarOverflowOrOptionsMenu(activity);
-        waitAtMost(4, SECONDS).until(isViewDisplayed(withText(menuResourceId), click()));
+        waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(withText(menuResourceId), click()));
         onView(withId(nextLayoutId)).check(matches(isDisplayed()));
     }
 

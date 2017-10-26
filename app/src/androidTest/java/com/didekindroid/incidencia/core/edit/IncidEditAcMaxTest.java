@@ -1,6 +1,7 @@
 package com.didekindroid.incidencia.core.edit;
 
 import android.content.Intent;
+import android.os.Build;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -9,10 +10,14 @@ import com.didekindroid.api.ViewerIf;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.core.AmbitoIncidValueObj;
 import com.didekindroid.incidencia.core.IncidenciaDataDbHelper;
+import com.didekindroid.usuario.userdata.UserDataAc;
+import com.didekindroid.usuariocomunidad.data.UserComuDataAc;
 import com.didekinlib.model.incidencia.dominio.AmbitoIncidencia;
+import com.didekinlib.model.incidencia.dominio.ImportanciaUser;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
+import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.After;
@@ -23,15 +28,17 @@ import org.junit.runner.RunWith;
 
 import java.io.IOException;
 
+import static android.app.TaskStackBuilder.create;
+import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.replaceText;
-import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkDataEditMaxPowerFr;
+import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkImportanciaUser;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkScreenEditMaxPowerFrErase;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.doAmbitoAndDescripcion;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.doImportanciaSpinner;
@@ -39,11 +46,14 @@ import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_
 import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_edit_ac_frgs_tag;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
+import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_JUAN;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
+import static com.didekindroid.usuariocomunidad.util.UserComuBundleKey.USERCOMU_LIST_OBJECT;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
 import static org.hamcrest.CoreMatchers.instanceOf;
@@ -72,6 +82,17 @@ public class IncidEditAcMaxTest extends IncidEditAcTest {
                 fail();
             }
 
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                Intent intentStack = new Intent(getTargetContext(), UserComuDataAc.class);
+                intentStack.putExtra(USERCOMU_LIST_OBJECT.key,
+                        new UsuarioComunidad.UserComuBuilder(
+                                resolBundle.getIncidImportancia().getUserComu().getComunidad(),
+                                resolBundle.getIncidImportancia().getUserComu().getUsuario()
+                        ).userComuRest(COMU_REAL_JUAN)
+                                .build());
+                create(getTargetContext()).addNextIntent(intentStack).addParentStack(UserDataAc.class).startActivities();
+            }
+
             Intent intent = new Intent();
             intent.putExtra(INCID_RESOLUCION_BUNDLE.key, resolBundle);
             return intent;
@@ -92,6 +113,9 @@ public class IncidEditAcMaxTest extends IncidEditAcTest {
     {
         dbHelper.close();
         cleanOptions(CLEAN_JUAN);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            cleanTasks(activity);
+        }
     }
 
 //  ======================================= INTEGRATION TESTS  =====================================
@@ -101,6 +125,9 @@ public class IncidEditAcMaxTest extends IncidEditAcTest {
     {
         checkScreenEditMaxPowerFrErase(activity.resolBundle);
         checkDataEditMaxPowerFr(dbHelper, activity, activity.resolBundle.getIncidImportancia());
+        checkImportanciaUser(new ImportanciaUser(
+                resolBundle.getIncidImportancia().getUserComu().getUsuario().getAlias(),
+                resolBundle.getIncidImportancia().getImportancia()), activity);
     }
 
     @Test
@@ -108,7 +135,7 @@ public class IncidEditAcMaxTest extends IncidEditAcTest {
     {
         // Cason NOT OK: descripción de incidencia no válida.
         onView(withId(R.id.incid_reg_desc_ed)).perform(replaceText("descripcion = not valid"));
-        onView(withId(R.id.incid_edit_fr_modif_button)).perform(scrollTo(), click());
+        onView(withId(R.id.incid_edit_fr_modif_button)).perform(click());
         waitAtMost(2, SECONDS).until(isToastInView(R.string.error_validation_msg, activity, R.string.incid_reg_descripcion));
     }
 
@@ -126,7 +153,7 @@ public class IncidEditAcMaxTest extends IncidEditAcTest {
         AmbitoIncidValueObj ambitoObj = new AmbitoIncidValueObj((short) 10, "Calefacción comunitaria");
         doAmbitoAndDescripcion(ambitoObj, newDesc);
         // Exec.
-        onView(withId(R.id.incid_edit_fr_modif_button)).perform(scrollTo(), click());
+        onView(withId(R.id.incid_edit_fr_modif_button)).perform(click());
 
         // Check.
         waitAtMost(4, SECONDS).until(isResourceIdDisplayed(R.id.incid_see_open_by_comu_ac));
@@ -150,7 +177,7 @@ public class IncidEditAcMaxTest extends IncidEditAcTest {
     public void testModifyIncidenciaPressBack() throws InterruptedException
     {
         // Caso OK. No cambiamos nada. Hacemos BACK.
-        onView(withId(R.id.incid_edit_fr_modif_button)).perform(scrollTo(), click());
+        onView(withId(R.id.incid_edit_fr_modif_button)).perform(click());
 
         waitAtMost(4, SECONDS).until(isResourceIdDisplayed(R.id.incid_see_open_by_comu_ac));
         checkBack(onView(withId(R.id.incid_see_open_by_comu_ac)));
@@ -161,30 +188,35 @@ public class IncidEditAcMaxTest extends IncidEditAcTest {
     public void testDeleteIncidenciaPressUp() throws InterruptedException
     {
         // CASO OK: borramos la incidencia.
-        onView(withId(R.id.incid_edit_fr_borrar_button)).perform(scrollTo(), click());
+        onView(withId(R.id.incid_edit_fr_borrar_button)).perform(click());
 
         waitAtMost(4, SECONDS).until(isResourceIdDisplayed(R.id.incid_see_open_by_comu_ac));
-        checkUp();
-        checkScreenEditMaxPowerFrErase(activity.resolBundle);
-        checkDataEditMaxPowerFr(dbHelper, activity, activity.resolBundle.getIncidImportancia());
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            checkUp();
+            checkScreenEditMaxPowerFrErase(activity.resolBundle);   // TODO: failed.
+            checkDataEditMaxPowerFr(dbHelper, activity, activity.resolBundle.getIncidImportancia());
+        }
     }
 
     @Test
     public void testDeleteAndPressBack() throws InterruptedException
     {
         //CASO NOT OK: intentamos borrar una incidencia ya borrada, volviendo con back.
-        onView(withId(R.id.incid_edit_fr_borrar_button)).perform(scrollTo(), click());
+        onView(withId(R.id.incid_edit_fr_borrar_button)).perform(click());
 
         // BACK y verificamos que hemos vuelto.
         waitAtMost(5, SECONDS).until(isResourceIdDisplayed(R.id.incid_see_open_by_comu_ac));
-        checkBack(onView(withId(R.id.incid_see_open_by_comu_ac)));
 
-        checkScreenEditMaxPowerFrErase(resolBundle);
-        checkDataEditMaxPowerFr(dbHelper, activity, activity.resolBundle.getIncidImportancia());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            checkBack(onView(withId(R.id.incid_see_open_by_comu_ac)));
+            checkScreenEditMaxPowerFrErase(resolBundle);      // TODO: failed.
+            checkDataEditMaxPowerFr(dbHelper, activity, activity.resolBundle.getIncidImportancia());
 
-        // Intentamos borrar y verificamos error.
-        onView(withId(R.id.incid_edit_fr_borrar_button)).check(matches(isDisplayed())).perform(click());
-        waitAtMost(5, SECONDS).until(isToastInView(R.string.incidencia_wrong_init, activity));
+            // Intentamos borrar y verificamos error.
+            onView(withId(R.id.incid_edit_fr_borrar_button)).check(matches(isDisplayed())).perform(click());
+            waitAtMost(5, SECONDS).until(isToastInView(R.string.incidencia_wrong_init, activity));
+        }
     }
 
     //  ======================================== UNIT TESTS  =======================================

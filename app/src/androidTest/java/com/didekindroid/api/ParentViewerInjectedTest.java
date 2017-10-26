@@ -18,26 +18,36 @@ import static org.junit.Assert.assertThat;
  * Time: 15:34
  */
 @RunWith(AndroidJUnit4.class)
-public class ViewerParentTest {
+public class ParentViewerInjectedTest {
 
     @Rule
     public IntentsTestRule<ActivityMock> activityRule = new IntentsTestRule<>(ActivityMock.class, true, true);
 
     ActivityMock activity;
-    ViewerParent<View, Controller> viewerParent;
+    ParentViewerInjected<View, Controller> parentViewerInjected;
 
     @Before
     public void setUp()
     {
         activity = activityRule.getActivity();
-        viewerParent = new ViewerParent<>(null, activity);
+        parentViewerInjected = new ParentViewerInjected<>(null, activity);
     }
 
     @Test
     public void test_SetChildViewer() throws Exception
     {
         final ViewerMock childViewer = new ViewerMock(activity);
-        viewerParent.setChildViewer(childViewer);
-        assertThat(viewerParent.getChildViewer(ViewerMock.class), is(childViewer));
+        parentViewerInjected.setChildViewer(childViewer);
+        assertThat(parentViewerInjected.getChildViewer(ViewerMock.class), is(childViewer));
+    }
+
+    @Test
+    public void test_GetChildViewersFromSuperClass() throws Exception
+    {
+        final ViewerMock childViewer = new ViewerMock(activity);
+        parentViewerInjected.setChildViewer(childViewer);
+        final Viewer<View, Controller> childViewer2 = new Viewer<>(null, activity, null);
+        parentViewerInjected.setChildViewer(childViewer2);
+        assertThat(parentViewerInjected.getChildViewersFromSuperClass(ViewerIf.class).size(), is(2));
     }
 }

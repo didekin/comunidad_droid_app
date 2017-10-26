@@ -13,10 +13,8 @@ import com.didekindroid.comunidad.ComuSearchResultsAc;
 import com.didekindroid.incidencia.comment.IncidCommentRegAc;
 import com.didekindroid.incidencia.comment.IncidCommentSeeAc;
 import com.didekindroid.incidencia.core.edit.IncidEditAc;
-import com.didekindroid.incidencia.core.edit.LinkToImportanciaUsersListener;
 import com.didekindroid.incidencia.core.reg.IncidRegAc;
 import com.didekindroid.incidencia.list.close.IncidSeeClosedByComuAc;
-import com.didekindroid.incidencia.list.importancia.IncidSeeUserComuImportanciaAc;
 import com.didekindroid.incidencia.list.open.IncidSeeOpenByComuAc;
 import com.didekindroid.incidencia.resolucion.IncidResolucionRegEditSeeAc;
 import com.didekindroid.security.IdentityCacher;
@@ -113,7 +111,6 @@ public class ActivityRouter implements ActivityRouterIf {
     // Links and buttons.
     static {
         // INCIDENCIAS.
-        onClickRouterMap.put(LinkToImportanciaUsersListener.class, IncidSeeUserComuImportanciaAc.class);
         // USUARIOS.
         onClickRouterMap.put(ViewerPasswordChange.ModifyPswdButtonListener.class, SeeUserComuByUserAc.class);
         onClickRouterMap.put(ViewerPasswordChange.SendNewPswdButtonListener.class, LoginAc.class);

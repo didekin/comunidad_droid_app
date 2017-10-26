@@ -7,7 +7,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ViewerParent;
+import com.didekindroid.api.ParentViewerInjected;
 import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.util.ConnectionUtils;
 import com.didekinlib.model.comunidad.Comunidad;
@@ -31,7 +31,7 @@ import static com.didekindroid.util.UIutils.makeToast;
  * Time: 13:39
  */
 
-final class ViewerRegUserComuAc extends ViewerParent<View, CtrlerUsuarioComunidad> {
+final class ViewerRegUserComuAc extends ParentViewerInjected<View, CtrlerUsuarioComunidad> {
 
     private ViewerRegUserComuAc(View view, AppCompatActivity activity)
     {

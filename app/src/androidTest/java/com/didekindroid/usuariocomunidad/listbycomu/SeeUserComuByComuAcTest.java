@@ -27,7 +27,7 @@ import static com.didekindroid.comunidad.testutil.ComuMenuTestUtil.COMU_SEARCH_A
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.testutil.ActivityTestUtils.getAdapter;
-import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
+import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
 import static com.didekindroid.usuario.testutil.UserItemMenuTestUtils.USER_DATA_AC;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
@@ -86,7 +86,7 @@ public class SeeUserComuByComuAcTest {
         activity = mActivityRule.getActivity();
         fragment = (SeeUserComuByComuFr) activity.getSupportFragmentManager().findFragmentById(seeUserComuByComuFrRsId);
         // Wait until the screen data are there.
-        waitAtMost(4, SECONDS).until(isViewDisplayed(allOf(withId(R.id.see_usercomu_by_comu_list_header),
+        waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(allOf(withId(R.id.see_usercomu_by_comu_list_header),
                 withText(containsString(usuarioComunidad.getComunidad().getNombreComunidad())))));
         waitAtMost(4, SECONDS).until(getAdapter(fragment.viewer.getViewInViewer()), notNullValue());
     }

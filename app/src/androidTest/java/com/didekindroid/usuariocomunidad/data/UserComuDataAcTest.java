@@ -25,6 +25,7 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -167,7 +168,7 @@ public class UserComuDataAcTest {
     public void testSeeUserComuByComuMn() throws InterruptedException
     {
         SEE_USERCOMU_BY_COMU_AC.checkItemRegisterUser(activity);
-        intended(IntentMatchers.hasExtra(COMUNIDAD_ID.key, usuarioComunidad.getComunidad().getC_Id()));
+        intended(hasExtra(COMUNIDAD_ID.key, usuarioComunidad.getComunidad().getC_Id()));
         checkUp(userComuDataLayout);
     }
 
@@ -176,7 +177,7 @@ public class UserComuDataAcTest {
     {
         // Only one user associated to the comunidad: the menu shows the item.
         COMU_DATA_AC.checkItemRegisterUser(activity);
-        intended(IntentMatchers.hasExtra(COMUNIDAD_ID.key, usuarioComunidad.getComunidad().getC_Id()));
+        intended(hasExtra(COMUNIDAD_ID.key, usuarioComunidad.getComunidad().getC_Id()));
         checkUp(userComuDataLayout);
     }
 

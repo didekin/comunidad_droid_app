@@ -34,7 +34,7 @@ import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuDataA
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.testutil.ActivityTestUtils.checkViewerReplaceComponent;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
-import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
+import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
@@ -167,6 +167,6 @@ public class ViewerComuDataAcTest {
     {
         ViewerComuDataAc.ComuDataAcObserver observer = viewer.new ComuDataAcObserver();
         just(1).subscribeWith(observer);
-        waitAtMost(4, SECONDS).until(isViewDisplayed(withId(seeUserComuByUserFrRsId)));
+        waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(withId(seeUserComuByUserFrRsId)));
     }
 }

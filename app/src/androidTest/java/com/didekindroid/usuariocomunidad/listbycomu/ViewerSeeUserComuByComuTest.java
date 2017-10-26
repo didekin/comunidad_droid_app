@@ -32,7 +32,7 @@ import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_LA_PLAZU
 import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_REAL;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.testutil.ActivityTestUtils.getAdapter;
-import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
+import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_B;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
@@ -250,7 +250,7 @@ public class ViewerSeeUserComuByComuTest {
         waitAtMost(6, SECONDS).until(getAdapter(viewer.getViewInViewer()), notNullValue());
         SeeUserComuByComuListAdapter adapter = (SeeUserComuByComuListAdapter) HeaderViewListAdapter.class.cast(viewer.getViewInViewer().getAdapter()).getWrappedAdapter();
         assertThat(adapter.getCount(), is(count));
-        waitAtMost(6, SECONDS).until(isViewDisplayed(allOf(withId(R.id.see_usercomu_by_comu_list_header), withText(containsString(COMU_REAL.getNombreComunidad())))));
+        waitAtMost(6, SECONDS).until(isViewDisplayedAndPerform(allOf(withId(R.id.see_usercomu_by_comu_list_header), withText(containsString(COMU_REAL.getNombreComunidad())))));
     }
 
     public void runAndCheckAdapterAndHeader(final List<UsuarioComunidad> list, int rowCount)

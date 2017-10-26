@@ -10,8 +10,8 @@ import android.widget.TextView;
 
 import com.didekindroid.R;
 import com.didekindroid.api.Controller;
+import com.didekindroid.api.ParentViewerInjectedIf;
 import com.didekindroid.api.Viewer;
-import com.didekindroid.api.ViewerIf;
 import com.didekindroid.security.CtrlerAuthToken;
 import com.didekindroid.usuariocomunidad.RolUi;
 import com.didekindroid.usuariocomunidad.UsuarioComunidadBean;
@@ -33,12 +33,12 @@ import static com.didekindroid.util.UIutils.assertTrue;
  */
 public final class ViewerRegUserComuFr extends Viewer<View, Controller> {
 
-    private ViewerRegUserComuFr(View view, AppCompatActivity activity, ViewerIf parentViewer)
+    private ViewerRegUserComuFr(View view, AppCompatActivity activity, ParentViewerInjectedIf parentViewer)
     {
         super(view, activity, parentViewer);
     }
 
-    static ViewerRegUserComuFr newViewerRegUserComuFr(@NonNull View view, @NonNull ViewerIf parentViewer)
+    static ViewerRegUserComuFr newViewerRegUserComuFr(@NonNull View view, @NonNull ParentViewerInjectedIf parentViewer)
     {
         Timber.d("newViewerRegUserComuFr()");
         ViewerRegUserComuFr instance = new ViewerRegUserComuFr(view, parentViewer.getActivity(), parentViewer);

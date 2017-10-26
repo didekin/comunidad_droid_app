@@ -27,7 +27,7 @@ import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnSt
 import static com.didekindroid.testutil.ActivityTestUtils.focusOnButton;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
-import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
+import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.RolUi.INQ;
@@ -119,7 +119,7 @@ public class ViewerRegComuUserComuAcTest {
 
         ViewerRegComuUserComuAc.RegComuAndUserComuObserver observer = activity.viewer.new RegComuAndUserComuObserver();
         just(true).subscribeWith(observer);
-        waitAtMost(4, SECONDS).until(isViewDisplayed(withId(seeUserComuByUserFrRsId)));
+        waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(withId(seeUserComuByUserFrRsId)));
         cleanOptions(CLEAN_PEPE);
     }
 

@@ -2,12 +2,17 @@ package com.didekindroid.incidencia.core.edit;
 
 import android.os.Bundle;
 
+import com.didekindroid.api.ControllerIf;
+import com.didekindroid.api.ViewerIf;
+
 import org.junit.Test;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_edit_ac_frgs_tag;
+import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -70,5 +75,17 @@ abstract class IncidEditAcTest {
             }
         });
         waitAtMost(4, SECONDS).untilAtomic(flagMethodExec, is(AFTER_METHOD_EXEC_A));
+    }
+
+    @Test
+    public void testOnStop()
+    {
+        List<ViewerIf> viewers = activity.viewer.getChildViewersFromSuperClass(ViewerIf.class);
+        viewers.add(activity.viewer);
+        ControllerIf[] controllers = new ControllerIf[viewers.size()];
+        for (int i = 0; i < controllers.length; ++i) {
+            controllers[i] = viewers.get(i).getController();
+        }
+        checkSubscriptionsOnStop(activity, controllers);
     }
 }

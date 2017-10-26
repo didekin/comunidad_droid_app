@@ -9,10 +9,10 @@ import android.widget.Spinner;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ObserverSingleSelectList;
+import com.didekindroid.api.ParentViewerInjectedIf;
 import com.didekindroid.api.SpinnerEventItemSelectIf;
 import com.didekindroid.api.SpinnerEventListener;
 import com.didekindroid.api.Viewer;
-import com.didekindroid.api.ViewerIf;
 import com.didekindroid.comunidad.spinner.ComuAutonomaSpinnerEventItemSelect;
 import com.didekindroid.comunidad.spinner.MunicipioSpinnerEventItemSelect;
 import com.didekindroid.comunidad.spinner.ProvinciaSpinnerEventItemSelect;
@@ -48,39 +48,48 @@ public class ViewerRegComuFr extends Viewer<View, CtrlerComunidad> implements
     ViewerComuAutonomaSpinner comuAutonomaSpinner;
     ViewerProvinciaSpinner provinciaSpinner;
     ViewerMunicipioSpinner municipioSpinner;
+    private EditText editNombreVia;
+    private EditText editNumero;
+    private EditText editSufijoNumero;
 
-    ViewerRegComuFr(View view, AppCompatActivity activity, ViewerIf parentViewer)
+    ViewerRegComuFr(View view, AppCompatActivity activity, ParentViewerInjectedIf parentViewer)
     {
         super(view, activity, parentViewer);
     }
 
-    static ViewerRegComuFr newViewerRegComuFr(@NonNull View view, @NonNull ViewerIf parentViewer)
+    static ViewerRegComuFr newViewerRegComuFr(@NonNull View view, @NonNull ParentViewerInjectedIf parentViewer)
     {
         Timber.d("newViewerRegComuFr()");
         ViewerRegComuFr instance = new ViewerRegComuFr(view, parentViewer.getActivity(), parentViewer);
-        return initInstanceViewer(parentViewer.getActivity(), instance);
+        return instance.initInstanceViewer(parentViewer.getActivity());
     }
 
     static ViewerRegComuFr newViewerRegComuFr(@NonNull View frView, @NonNull AppCompatActivity activity)
     {
         Timber.d("newViewerRegComuFr()");
         ViewerRegComuFr instance = new ViewerRegComuFr(frView, activity, null);
-        return initInstanceViewer(activity, instance);
+        return instance.initInstanceViewer(activity);
     }
 
     @NonNull
-    private static ViewerRegComuFr initInstanceViewer(@NonNull AppCompatActivity activity, ViewerRegComuFr instance)
+    private ViewerRegComuFr initInstanceViewer(@NonNull AppCompatActivity activity)
     {
-        instance.setController(new CtrlerComunidad());
-        instance.tipoViaSpinner =
-                newViewerTipoViaSpinner((Spinner) instance.getViewInViewer().findViewById(R.id.tipo_via_spinner), activity, instance);
-        instance.comuAutonomaSpinner =
-                newViewerComuAutonomaSpinner((Spinner) instance.getViewInViewer().findViewById(R.id.autonoma_comunidad_spinner), activity, instance);
-        instance.provinciaSpinner =
-                newViewerProvinciaSpinner((Spinner) instance.getViewInViewer().findViewById(R.id.provincia_spinner), activity, instance);
-        instance.municipioSpinner =
-                newViewerMunicipioSpinner((Spinner) instance.getViewInViewer().findViewById(R.id.municipio_spinner), activity, instance);
-        return instance;
+        setController(new CtrlerComunidad());
+
+        editSufijoNumero = view.findViewById(R.id.comunidad_sufijo_numero_editT);
+        editNumero = view.findViewById(R.id.comunidad_numero_editT);
+        editNombreVia = view.findViewById(R.id.comunidad_nombre_via_editT);
+
+        tipoViaSpinner =
+                newViewerTipoViaSpinner((Spinner) view.findViewById(R.id.tipo_via_spinner), activity, this);
+        comuAutonomaSpinner =
+                newViewerComuAutonomaSpinner((Spinner) view.findViewById(R.id.autonoma_comunidad_spinner), activity, this);
+        provinciaSpinner =
+                newViewerProvinciaSpinner((Spinner) view.findViewById(R.id.provincia_spinner), activity, this);
+        municipioSpinner =
+                newViewerMunicipioSpinner((Spinner) view.findViewById(R.id.municipio_spinner), activity, this);
+
+        return this;
     }
 
     // ==================================== ViewerIf ====================================
@@ -173,9 +182,9 @@ public class ViewerRegComuFr extends Viewer<View, CtrlerComunidad> implements
 
     private void setTextFields(Comunidad comunidad)
     {
-        ((EditText) view.findViewById(R.id.comunidad_nombre_via_editT)).setText(comunidad.getNombreVia());
-        ((EditText) view.findViewById(R.id.comunidad_numero_editT)).setText(String.valueOf(comunidad.getNumero()));
-        ((EditText) view.findViewById(R.id.comunidad_sufijo_numero_editT)).setText(comunidad.getSufijoNumero());
+        editNombreVia.setText(comunidad.getNombreVia());
+        editNumero.setText(String.valueOf(comunidad.getNumero()));
+        editSufijoNumero.setText(comunidad.getSufijoNumero());
     }
 
     void initializeSpinnersFromComunidad(Comunidad comunidad, Bundle savedState)
@@ -196,9 +205,9 @@ public class ViewerRegComuFr extends Viewer<View, CtrlerComunidad> implements
 
         ComunidadBean bean = new ComunidadBean();
         bean.setTipoVia(tipoViaSpinner.getTipoViaValueObj());
-        bean.setNombreVia(((EditText) view.findViewById(R.id.comunidad_nombre_via_editT)).getText().toString());
-        bean.setNumeroString(((EditText) view.findViewById(R.id.comunidad_numero_editT)).getText().toString());
-        bean.setSufijoNumero(((EditText) view.findViewById(R.id.comunidad_sufijo_numero_editT)).getText().toString());
+        bean.setNombreVia(editNombreVia.getText().toString());
+        bean.setNumeroString(editNumero.getText().toString());
+        bean.setSufijoNumero(editSufijoNumero.getText().toString());
         bean.setMunicipio(
                 new Municipio(
                         (short) municipioSpinner.getSelectedItemId(),
@@ -216,6 +225,28 @@ public class ViewerRegComuFr extends Viewer<View, CtrlerComunidad> implements
     }
 
     /* ===================================  Observers  =================================*/
+
+    public ViewerTipoViaSpinner getTipoViaSpinner()
+    {
+        return tipoViaSpinner;
+    }
+
+    /* ===================================  Getters  =================================*/
+
+    public ViewerComuAutonomaSpinner getComuAutonomaSpinner()
+    {
+        return comuAutonomaSpinner;
+    }
+
+    public ViewerProvinciaSpinner getProvinciaSpinner()
+    {
+        return provinciaSpinner;
+    }
+
+    public ViewerMunicipioSpinner getMunicipioSpinner()
+    {
+        return municipioSpinner;
+    }
 
     @SuppressWarnings("WeakerAccess")
     class RegComuFrObserver extends DisposableSingleObserver<Comunidad> {
@@ -240,27 +271,5 @@ public class ViewerRegComuFr extends Viewer<View, CtrlerComunidad> implements
             Timber.d("onError()");
             onErrorInObserver(e);
         }
-    }
-
-    /* ===================================  Getters  =================================*/
-
-    public ViewerTipoViaSpinner getTipoViaSpinner()
-    {
-        return tipoViaSpinner;
-    }
-
-    public ViewerComuAutonomaSpinner getComuAutonomaSpinner()
-    {
-        return comuAutonomaSpinner;
-    }
-
-    public ViewerProvinciaSpinner getProvinciaSpinner()
-    {
-        return provinciaSpinner;
-    }
-
-    public ViewerMunicipioSpinner getMunicipioSpinner()
-    {
-        return municipioSpinner;
     }
 }

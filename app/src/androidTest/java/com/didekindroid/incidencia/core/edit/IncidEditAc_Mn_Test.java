@@ -10,7 +10,6 @@ import com.didekindroid.incidencia.core.IncidenciaDataDbHelper;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
-import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.junit.After;
 import org.junit.Before;

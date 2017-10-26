@@ -31,7 +31,7 @@ import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_LIST_OBJECT;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
-import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
+import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.RolUi.INQ;
@@ -126,7 +126,7 @@ public class ViewerRegUserComuAcTest {
     {
         ViewerRegUserComuAc.RegUserComuObserver observer = activity.viewer.new RegUserComuObserver(comunidad);
         just(1).subscribeWith(observer);
-        waitAtMost(4, SECONDS).until(isViewDisplayed(withId(seeUserComuByUserFrRsId)));
+        waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(withId(seeUserComuByUserFrRsId)));
         intended(hasExtra(COMUNIDAD_ID.key, comunidad.getC_Id()));
         assertThat(observer.isDisposed(), is(true));
     }

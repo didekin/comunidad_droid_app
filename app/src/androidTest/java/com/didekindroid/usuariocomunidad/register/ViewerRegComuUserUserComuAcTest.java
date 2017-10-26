@@ -26,7 +26,7 @@ import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnSt
 import static com.didekindroid.testutil.ActivityTestUtils.focusOnButton;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
-import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
+import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
 import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typeUserDataFull;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
@@ -82,7 +82,7 @@ public class ViewerRegComuUserUserComuAcTest {
         // Precondition: the user is registered and the cache is initialized.
         signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
         activity.viewer.onRegisterSuccess();
-        waitAtMost(4, SECONDS).until(isViewDisplayed(withId(seeUserComuByUserFrRsId)));
+        waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(withId(seeUserComuByUserFrRsId)));
         cleanOptions(CLEAN_PEPE);
     }
 

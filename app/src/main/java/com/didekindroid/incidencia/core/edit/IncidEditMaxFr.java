@@ -11,6 +11,8 @@ import com.didekindroid.api.ChildViewersInjectorIf;
 
 import timber.log.Timber;
 
+import static com.didekindroid.incidencia.core.edit.ViewerIncidEditMaxFr.newViewerIncidEditMaxFr;
+
 /**
  * User: pedro@didekin
  * Date: 22/01/16
@@ -41,8 +43,11 @@ public class IncidEditMaxFr extends IncidEditFr {
         super.onViewCreated(view, savedInstanceState);
 
         viewerInjector = (ChildViewersInjectorIf) getActivity();
-        viewer = ViewerIncidEditMaxFr.newViewerIncidEditMaxFr(frView, viewerInjector.getParentViewer());
+
+        viewer = newViewerIncidEditMaxFr(frView, viewerInjector.getParentViewer());
         viewer.doViewInViewer(savedInstanceState, resolBundle);
         viewerInjector.setChildInParentViewer(viewer);
+
+        initViewerImportancia(savedInstanceState); // TODO: test.
     }
 }

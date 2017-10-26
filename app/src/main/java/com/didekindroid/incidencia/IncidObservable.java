@@ -1,9 +1,11 @@
 package com.didekindroid.incidencia;
 
+import com.didekinlib.model.incidencia.dominio.ImportanciaUser;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
 
+import java.util.List;
 import java.util.concurrent.Callable;
 
 import io.reactivex.Maybe;
@@ -53,6 +55,18 @@ public class IncidObservable {
             public Integer call() throws Exception
             {
                 return incidenciaDao.deleteIncidencia(incidencia.getIncidenciaId());
+            }
+        });
+    }
+
+    public static Single<List<ImportanciaUser>> incidImportanciaByUsers(final long incidenciaId)
+    {
+        Timber.d("incidImportanciaByUsers()");
+        return fromCallable(new Callable<List<ImportanciaUser>>() {
+            @Override
+            public List<ImportanciaUser> call() throws Exception
+            {
+                return incidenciaDao.seeUserComusImportancia(incidenciaId);
             }
         });
     }

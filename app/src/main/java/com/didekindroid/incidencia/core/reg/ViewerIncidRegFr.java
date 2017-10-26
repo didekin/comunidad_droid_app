@@ -8,10 +8,10 @@ import android.widget.Spinner;
 import com.didekindroid.R;
 import com.didekindroid.api.Controller;
 import com.didekindroid.api.ControllerIf;
+import com.didekindroid.api.ParentViewerInjectedIf;
 import com.didekindroid.api.SpinnerEventItemSelectIf;
 import com.didekindroid.api.SpinnerEventListener;
 import com.didekindroid.api.Viewer;
-import com.didekindroid.api.ViewerIf;
 import com.didekindroid.incidencia.core.IncidImportanciaBean;
 import com.didekindroid.incidencia.core.IncidenciaBean;
 import com.didekindroid.incidencia.core.ViewerAmbitoIncidSpinner;
@@ -45,14 +45,14 @@ class ViewerIncidRegFr extends Viewer<View, ControllerIf> implements SpinnerEven
 
 
     @SuppressWarnings("WeakerAccess")
-    ViewerIncidRegFr(View view, AppCompatActivity activity, ViewerIf parentViewer)
+    ViewerIncidRegFr(View view, AppCompatActivity activity, ParentViewerInjectedIf parentViewer)
     {
         super(view, activity, parentViewer);
         atomIncidBean = new AtomicReference<>(null);
         atomIncidImportBean = new AtomicReference<>(null);
     }
 
-    static ViewerIncidRegFr newViewerIncidRegFr(View view, ViewerIf parentViewer)
+    static ViewerIncidRegFr newViewerIncidRegFr(View view, ParentViewerInjectedIf parentViewer)
     {
         Timber.d("newViewerIncidRegFr()");
 

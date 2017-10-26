@@ -37,7 +37,7 @@ import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_see_by_c
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
-import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
+import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
@@ -147,42 +147,42 @@ public class IncidSeeClosedByComuAcTest {
         onView(withId(R.id.incid_reg_comunidad_spinner)).check(matches(isDisplayed()));
 
         // Data
-        waitAtMost(2, SECONDS).until(isViewDisplayed(checkIncidClosedListView(incidImportancia1, activity)));
+        waitAtMost(2, SECONDS).until(isViewDisplayedAndPerform(checkIncidClosedListView(incidImportancia1, activity)));
         waitAtMost(2, SECONDS).until(isComuSpinnerWithText(incidImportancia1.getIncidencia().getComunidad().getNombreComunidad()));
 
         // Cambiamos la comunidad en el spinner y revisamos los datos.
         doComunidadSpinner(incidImportancia2.getIncidencia().getComunidad());
-        waitAtMost(2, SECONDS).until(isViewDisplayed(checkIncidClosedListView(incidImportancia2, activity)));
+        waitAtMost(2, SECONDS).until(isViewDisplayedAndPerform(checkIncidClosedListView(incidImportancia2, activity)));
     }
 
     @Test
     public void testOnSelectedWithUp() throws UiException
     {
-        waitAtMost(4, SECONDS).until(isViewDisplayed(checkIncidClosedListView(incidImportancia1, activity)));
+        waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(checkIncidClosedListView(incidImportancia1, activity)));
         // Seleccionamos incidencia.
         onData(isA(IncidenciaUser.class)).inAdapterView(withId(android.R.id.list))
                 .check(matches(isDisplayed()))
                 .perform(click());
         // Check next fragment.
-        waitAtMost(4, SECONDS).until(isViewDisplayed(withId(incidResolucionSeeFrLayout)));
+        waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(withId(incidResolucionSeeFrLayout)));
         // Up and checkMenu.
         checkUp();
-        waitAtMost(4, SECONDS).until(isViewDisplayed(checkIncidClosedListView(incidImportancia1, activity)));
+        waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(checkIncidClosedListView(incidImportancia1, activity)));
     }
 
     @Test
     public void testOnSelectedWithBack() throws UiException
     {
-        waitAtMost(4, SECONDS).until(isViewDisplayed(checkIncidClosedListView(incidImportancia1, activity)));
+        waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(checkIncidClosedListView(incidImportancia1, activity)));
         // Seleccionamos incidencia.
         onData(isA(IncidenciaUser.class)).inAdapterView(withId(android.R.id.list))
                 .check(matches(isDisplayed()))
                 .perform(click());
         // Check next fragment.
-        waitAtMost(4, SECONDS).until(isViewDisplayed(withId(incidResolucionSeeFrLayout)));
+        waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(withId(incidResolucionSeeFrLayout)));
         // Back and checkMenu.
         checkBack(onView(withId(incidResolucionSeeFrLayout)));
-        waitAtMost(4, SECONDS).until(isViewDisplayed(checkIncidClosedListView(incidImportancia1, activity)));
+        waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(checkIncidClosedListView(incidImportancia1, activity)));
     }
 
     //  ======================================== UNIT TESTS  =======================================

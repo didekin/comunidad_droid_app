@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView style="@style/baseLayout.scroll">
-    <android.support.design.widget.CoordinatorLayout
-        android:id="@+id/incid_edit_fragment_container_ac"
-        style="@style/baseLayout"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        tools:context=".incidencia.core.edit.IncidEditAc">
+<android.support.design.widget.CoordinatorLayout
+    android:id="@+id/incid_edit_fragment_container_ac"
+    style="@style/baseLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:fitsSystemWindows="true"
+    tools:context=".incidencia.core.edit.IncidEditAc">
 
-        <include layout="@layout/appbar_include_design"/>
+    <include layout="@layout/appbar_include_design"/>
 
-    </android.support.design.widget.CoordinatorLayout>
-</ScrollView>
+</android.support.design.widget.CoordinatorLayout>

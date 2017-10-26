@@ -14,7 +14,7 @@ import org.junit.runners.Suite;
         ObserverCacheCleanerTest.class,
         ObserverSingleSelectItemTest.class,
         ObserverSingleSelectListTest.class,
-        ViewerParentTest.class,
+        ParentViewerInjectedTest.class,
         ViewerSelectListTest.class,
         ViewerTest.class,
 })

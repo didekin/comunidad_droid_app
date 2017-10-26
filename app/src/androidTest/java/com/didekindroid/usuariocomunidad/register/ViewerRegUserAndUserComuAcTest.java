@@ -33,7 +33,7 @@ import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_LIST_OBJE
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
-import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
+import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
 import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typeUserDataFull;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
@@ -120,7 +120,7 @@ public class ViewerRegUserAndUserComuAcTest {
     public void test_OnRegisterSuccess() throws Exception
     {
         activity.viewer.onRegisterSuccess(comunidad.getC_Id());
-        waitAtMost(4, SECONDS).until(isViewDisplayed(withId(seeUserComuByUserFrRsId)));
+        waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(withId(seeUserComuByUserFrRsId)));
         intended(hasExtra(COMUNIDAD_ID.key, comunidad.getC_Id()));
     }
 

@@ -38,7 +38,7 @@ import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
-import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
+import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
@@ -228,13 +228,13 @@ public class ComuSearchResultsAcTest {
 
     private void doSelectComunidadRegUser()
     {
-        waitAtMost(4, SECONDS).until(isViewDisplayed(withText(COMU_LA_PLAZUELA_5.getNombreComunidad()), click()));
+        waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(withText(COMU_LA_PLAZUELA_5.getNombreComunidad()), click()));
         waitAtMost(4, SECONDS).until(isResourceIdDisplayed(userComuDataLayout));
     }
 
     private void doSelectComunidadNotRegUser()
     {
-        waitAtMost(4, SECONDS).until(isViewDisplayed(withText(COMU_LA_PLAZUELA_5.getNombreComunidad()), click()));
+        waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(withText(COMU_LA_PLAZUELA_5.getNombreComunidad()), click()));
         waitAtMost(4, SECONDS).until(isResourceIdDisplayed(regUser_UserComuAcLayout));
     }
 }

@@ -19,6 +19,8 @@
     <string name="euros_rot">EUR</string>
     <string name="decimal_separator">,</string>
     <string name="navigate_up_txt">Desplazarse hacia arriba</string>
+    <string name="modif_button_rot">Modificar</string>
+    <string name="borrar_button_rot">Borrar</string>
     <!--Messages-->
     <string name="no_internet_conn_toast">No hay conexión de red disponible.</string>
     <string name="exception_generic_message">No podemos continuar. Inténtalo en unos segundos nuevamente.</string>
@@ -150,17 +152,13 @@
     <string name="incid_comments_see_no_comments">No hay comentarios.</string>
     <!-- =============== IncidEditAc =============== -->
     <string name="incid_edit_ac_label">Incidencia</string>
-    <string name="incid_edit_modif_button_rot">Modificar incidencia</string>
-    <string name="incid_edit_borrar_txt">Para borrar definitivamente la incidencia:</string>
-    <string name="incid_edit_borrar_button_rot">Borrar</string>
-    <string name="incid_importancia_reg_edit_button_rot">Confirmar</string>
     <string name="no_importancia_by_user">No hay otras valoraciones en la comunidad</string>
+    <string name="incid_incidencia_importancia_rot">Importancia en la comunidad:</string>
     <!-- =============== IncidRegAc =============== -->
     <string name="incid_reg_ac_label">Nueva incidencia</string>
     <string name="incid_reg_hint">-- Describe la incidencia (max. 300 caracteres) --</string>
     <string name="incid_reg_ac_button_rot">Registrar incidencia</string>
     <string name="incid_reg_importancia">Importancia</string>
-    <string name="incid_importancia_otros_txt">>> Ver comunidad</string>
     <string name="incid_reg_ambitoIncidencia">Ámbito de incidencia</string>
     <string name="incid_reg_descripcion">Descripcion</string>
     <!-- =============== IncidResolucionRegEditSeeAc =============== -->
@@ -200,8 +198,6 @@
     <string name="incid_see_resolucion_fecha_alta_label">iniciada</string>
     <!-- ============ IncidSeeClosedByComuAc ========== -->
     <string name="incid_closed_by_user_ac_label">Incidencias cerradas</string>
-    <!-- ============ IncidSeeUserComuImportanciaFr ========== -->
-    <string name="incid_incidencia_importancia_rot">Importancia en la comunidad:</string>
     <!--******************************************************************************-->
     <!--                                  USUARIO                                     -->
     <!--******************************************************************************-->

@@ -22,7 +22,7 @@ import static io.reactivex.schedulers.Schedulers.io;
  * Time: 10:59
  */
 @SuppressWarnings({"AnonymousInnerClassMayBeStatic"})
-class CtrlerUserComuByComuList extends CtrlerSelectList<UsuarioComunidad> {
+public class CtrlerUserComuByComuList extends CtrlerSelectList<UsuarioComunidad> {
 
     // .................................... OBSERVABLES .................................
 

@@ -104,6 +104,21 @@ public class UserComuDataAc extends AppCompatActivity implements ChildViewersInj
         return true;
     }
 
+    /**
+     * Option 'comu_data_ac_mn' is only visible if the user is the oldest (oldest fecha_alta) UsuarioComunidad in
+     * this comunidad, or has the roles adm or pre.
+     * <p/>
+     */
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu)
+    {
+        Timber.d("onPrepareOptionsMenu()");
+        MenuItem comuDataItem = menu.findItem(R.id.comu_data_ac_mn);
+        comuDataItem.setVisible(viewer.showComuDataMn.get());
+        comuDataItem.setEnabled(viewer.showComuDataMn.get());
+        return super.onPrepareOptionsMenu(menu);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {

@@ -23,23 +23,16 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.intent.Intents.intended;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.makeRegGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkDataEditMinFr;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeOpenAcLayout;
-import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeUserComuImportanciaAcLayout;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_NUMBER;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_edit_ac_frgs_tag;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
-import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
+import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
@@ -60,7 +53,7 @@ import static org.junit.Assert.fail;
  * User: pedro@didekin
  * Date: 09/04/17
  * Time: 14:42
- *
+ * <p>
  * This test used a only one user in DB: pepe.
  * User Juan is used only to launch the behavior imposed by the internal structure of the IncidenciaResolBundle
  * received in the activity.
@@ -149,14 +142,6 @@ public class ViewerIncidEditMinFrTest {
         checkDataEditMinFr(dbHelper, activity, incidImportancia);
     }
 
-    @Test
-    public void testOnClickLinkImportanciaUsers() throws Exception
-    {
-        viewer.onClickLinkToImportanciaUsers(new LinkToImportanciaUsersListener(viewer));
-        onView(withId(incidSeeUserComuImportanciaAcLayout)).check(matches(isDisplayed()));
-        intended(hasExtra(INCIDENCIA_OBJECT.key, activity.resolBundle.getIncidImportancia().getIncidencia()));
-    }
-
     /*
     *  Case: importancia == 0. Importancia is modified to 1.
     */
@@ -178,7 +163,7 @@ public class ViewerIncidEditMinFrTest {
     public void testOnSuccessModifyIncidImportancia() throws Exception
     {
         viewer.onSuccessModifyIncidImportancia(1);
-        waitAtMost(3, SECONDS).until(isViewDisplayed(withId(incidSeeOpenAcLayout)));
+        waitAtMost(3, SECONDS).until(isViewDisplayedAndPerform(withId(incidSeeOpenAcLayout)));
     }
 
     @Test

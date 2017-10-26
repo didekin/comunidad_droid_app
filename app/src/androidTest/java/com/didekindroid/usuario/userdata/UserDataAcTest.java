@@ -1,6 +1,7 @@
 package com.didekindroid.usuario.userdata;
 
 import android.app.Activity;
+import android.app.TaskStackBuilder;
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -21,7 +22,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.concurrent.TimeUnit;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import static android.app.TaskStackBuilder.create;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
@@ -47,7 +50,7 @@ import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
 import static com.didekindroid.testutil.ActivityTestUtils.focusOnButton;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
-import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
+import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
 import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
 import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typeUserData;
@@ -83,6 +86,7 @@ public class UserDataAcTest {
     UserDataAc activity;
     Usuario oldUsuario;
     Comunidad comunidad;
+    TaskStackBuilder stackBuilder;
 
     @Rule
     public IntentsTestRule<? extends Activity> mActivityRule = new IntentsTestRule<UserDataAc>(UserDataAc.class) {
@@ -96,11 +100,13 @@ public class UserDataAcTest {
             } catch (Exception e) {
                 fail();
             }
-            Intent intent = new Intent(getTargetContext(), UserComuDataAc.class);
-            intent.putExtra(USERCOMU_LIST_OBJECT.key,
-                    new UsuarioComunidad.UserComuBuilder(comunidad, oldUsuario).userComuRest(COMU_REAL_JUAN).build());
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                create(getTargetContext()).addNextIntent(intent).addParentStack(UserDataAc.class).startActivities();
+                Intent intent = new Intent(getTargetContext(), UserComuDataAc.class);
+                intent.putExtra(USERCOMU_LIST_OBJECT.key,
+                        new UsuarioComunidad.UserComuBuilder(comunidad, oldUsuario).userComuRest(COMU_REAL_JUAN).build());
+                stackBuilder = create(getTargetContext());
+                // Intent con UserComuDataAc y USERCOMU_LIST_OBJECT hace falta para checkUp en opción menú INCID_SEE_OPEN_BY_COMU_AC.
+                stackBuilder.addNextIntent(intent).addParentStack(UserDataAc.class).startActivities();
             }
         }
     };
@@ -133,13 +139,22 @@ public class UserDataAcTest {
     // ============================================================
 
     @Test
+    public void testBackStack() throws ExecutionException, InterruptedException
+    {
+        List<Intent> intents = Arrays.asList(stackBuilder.getIntents());
+        assertThat(intents.size(), is(3));
+        // El intent con posición inferior es el primero que hemos añadido.
+        assertThat(intents.get(0).getComponent().getClassName(), is("com.didekindroid.usuariocomunidad.data.UserComuDataAc"));
+    }
+
+    @Test
     public void testOncreate()
     {
         assertThat(activity.viewer, notNullValue());
         waitAtMost(4, SECONDS).until(isResourceIdDisplayed(userDataAcRsId));
-        waitAtMost(4, SECONDS).until(isViewDisplayed(allOf(withId(R.id.reg_usuario_email_editT), withText(containsString(oldUsuario.getUserName())))));
-        waitAtMost(4, SECONDS).until(isViewDisplayed(allOf(withId(R.id.reg_usuario_alias_ediT), withText(containsString(oldUsuario.getAlias())))));
-        waitAtMost(4, SECONDS).until(isViewDisplayed(
+        waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(allOf(withId(R.id.reg_usuario_email_editT), withText(containsString(oldUsuario.getUserName())))));
+        waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(allOf(withId(R.id.reg_usuario_alias_ediT), withText(containsString(oldUsuario.getAlias())))));
+        waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(
                 allOf(
                         withId(R.id.password_validation_ediT),
                         withText(containsString("")),

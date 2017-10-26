@@ -43,7 +43,7 @@ import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_see_by_c
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
-import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
+import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
@@ -134,27 +134,27 @@ public class IncidSeeOpenByComuAcTest {
         assertThat(fragment.getArguments().getLong(COMUNIDAD_ID.key), is(0L));
 
         // CASO Visibilidad del bloque de datos de resolución.
-        waitAtMost(4, SECONDS).until(isViewDisplayed(
+        waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(
                 checkIncidOpenListView(incidImportancia1, activity, incidenciaUser1.getFechaAltaResolucion())));
         waitAtMost(2, SECONDS).until(isComuSpinnerWithText(incidImportancia1.getIncidencia().getComunidad().getNombreComunidad()));
 
         // CASO NO visibilidad del bloque de datos de resolución.
         // Cambiamos la comunidad en el spinner y revisamos los datos.
         doComunidadSpinner(incidImportancia2.getIncidencia().getComunidad());
-        waitAtMost(2, SECONDS).until(isViewDisplayed(checkIncidOpenListViewNoResol()));
+        waitAtMost(2, SECONDS).until(isViewDisplayedAndPerform(checkIncidOpenListViewNoResol()));
     }
 
     @Test
     public void testOnSelected_Up() throws Exception
     {
-        waitAtMost(3, SECONDS).until(isViewDisplayed(
+        waitAtMost(3, SECONDS).until(isViewDisplayedAndPerform(
                 checkIncidOpenListView(incidImportancia1, activity, incidenciaUser1.getFechaAltaResolucion())));
         // Seleccionamos incidencia.
         onData(isA(IncidenciaUser.class)).inAdapterView(withId(android.R.id.list))
                 .check(matches(isDisplayed()))
                 .perform(click());
         // Check next fragment.
-        waitAtMost(2, SECONDS).until(isViewDisplayed(withId(incidEditAcLayout)));
+        waitAtMost(2, SECONDS).until(isViewDisplayedAndPerform(withId(incidEditAcLayout)));
         // Check intent.
         intended(hasExtras(
                 hasEntry(INCID_RESOLUCION_BUNDLE.key,
@@ -166,13 +166,13 @@ public class IncidSeeOpenByComuAcTest {
         ));
         // Up and checkMenu.
         checkUp(incidSeeOpenAcLayout);
-        isViewDisplayed(checkIncidOpenListView(incidImportancia1, activity, incidenciaUser1.getFechaAltaResolucion())).call();
+        isViewDisplayedAndPerform(checkIncidOpenListView(incidImportancia1, activity, incidenciaUser1.getFechaAltaResolucion())).call();
     }
 
     @Test
     public void testOnSelectedNoResolucion() throws UiException, InterruptedException
     {
-        waitAtMost(3, SECONDS).until(isViewDisplayed(
+        waitAtMost(3, SECONDS).until(isViewDisplayedAndPerform(
                 checkIncidOpenListView(incidImportancia1, activity, incidenciaUser1.getFechaAltaResolucion())));
 
         // Cambiamos la comunidad en el spinner.
@@ -183,7 +183,7 @@ public class IncidSeeOpenByComuAcTest {
                 .perform(click());
 
         // Check next fragment.
-        waitAtMost(3, SECONDS).until(isViewDisplayed(withId(incidEditAcLayout)));
+        waitAtMost(3, SECONDS).until(isViewDisplayedAndPerform(withId(incidEditAcLayout)));
         // Check intent.
         // Check intent.
         intended(hasExtras(
@@ -199,17 +199,17 @@ public class IncidSeeOpenByComuAcTest {
     @Test
     public void testOnSelected_Back() throws UiException
     {
-        waitAtMost(3, SECONDS).until(isViewDisplayed(
+        waitAtMost(3, SECONDS).until(isViewDisplayedAndPerform(
                 checkIncidOpenListView(incidImportancia1, activity, incidenciaUser1.getFechaAltaResolucion())));
         // Seleccionamos incidencia.
         onData(isA(IncidenciaUser.class)).inAdapterView(withId(android.R.id.list))
                 .check(matches(isDisplayed()))
                 .perform(click());
         // Check next fragment.
-        waitAtMost(2, SECONDS).until(isViewDisplayed(withId(incidEditAcLayout)));
+        waitAtMost(2, SECONDS).until(isViewDisplayedAndPerform(withId(incidEditAcLayout)));
         // Back and checkMenu.
         checkBack(onView(withId(incidEditAcLayout)));
-        waitAtMost(3, SECONDS).until(isViewDisplayed(
+        waitAtMost(3, SECONDS).until(isViewDisplayedAndPerform(
                 checkIncidOpenListView(incidImportancia1, activity, incidenciaUser1.getFechaAltaResolucion())));
     }
 

@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.didekindroid.R;
 import com.didekindroid.api.ObserverCacheCleaner;
-import com.didekindroid.api.ViewerParent;
+import com.didekindroid.api.ParentViewerInjected;
 import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.usuario.ViewerRegUserFr;
 import com.didekindroid.util.ConnectionUtils;
@@ -30,7 +30,7 @@ import static com.didekindroid.util.UIutils.makeToast;
  * Time: 10:37
  */
 
-final class ViewerRegUserAndUserComuAc extends ViewerParent<View, CtrlerUsuarioComunidad> {
+final class ViewerRegUserAndUserComuAc extends ParentViewerInjected<View, CtrlerUsuarioComunidad> {
 
     private ViewerRegUserAndUserComuAc(View view, AppCompatActivity activity)
     {

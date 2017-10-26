@@ -1,4 +1,4 @@
-package com.didekindroid.incidencia.list.importancia;
+package com.didekindroid.incidencia.core.edit.importancia;
 
 import android.content.Context;
 import android.content.res.Resources;

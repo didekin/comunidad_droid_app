@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.didekindroid.api.ViewerParent;
+import com.didekindroid.api.ParentViewerInjected;
 import com.didekindroid.router.ActivityInitiator;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.Resolucion;
@@ -25,7 +25,7 @@ import static com.didekindroid.util.UIutils.assertTrue;
  * Date: 04/04/17
  * Time: 15:06
  */
-class ViewerIncidEditAc extends ViewerParent<View, CtrlerIncidEditAc> {
+class ViewerIncidEditAc extends ParentViewerInjected<View, CtrlerIncidEditAc> {
 
     IncidAndResolBundle resolBundle;
 

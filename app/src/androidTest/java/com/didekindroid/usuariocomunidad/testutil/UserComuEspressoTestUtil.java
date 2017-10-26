@@ -23,7 +23,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withEffectiveVi
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.AppInitializer.creator;
-import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
+import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
 import static com.didekindroid.usuariocomunidad.RolUi.formatRolToString;
 import static com.didekinlib.model.usuariocomunidad.Rol.ADMINISTRADOR;
 import static com.didekinlib.model.usuariocomunidad.Rol.INQUILINO;
@@ -182,22 +182,22 @@ public final class UserComuEspressoTestUtil {
     public static void checkUserComuData(UsuarioComunidad userComu)
     {
         if (userComu.getPortal() != null) {
-            waitAtMost(2, SECONDS).until(isViewDisplayed(allOf(
+            waitAtMost(2, SECONDS).until(isViewDisplayedAndPerform(allOf(
                     withId(R.id.reg_usercomu_portal_ed),
                     withText(containsString(userComu.getPortal())))));
         }
         if (userComu.getEscalera() != null) {
-            waitAtMost(2, SECONDS).until(isViewDisplayed(allOf(
+            waitAtMost(2, SECONDS).until(isViewDisplayedAndPerform(allOf(
                     withId(R.id.reg_usercomu_escalera_ed),
                     withText(containsString(userComu.getEscalera())))));
         }
         if (userComu.getPlanta() != null) {
-            waitAtMost(2, SECONDS).until(isViewDisplayed(allOf(
+            waitAtMost(2, SECONDS).until(isViewDisplayedAndPerform(allOf(
                     withId(R.id.reg_usercomu_planta_ed),
                     withText(containsString(userComu.getPlanta())))));
         }
         if (userComu.getPuerta() != null) {
-            waitAtMost(2, SECONDS).until(isViewDisplayed(allOf(
+            waitAtMost(2, SECONDS).until(isViewDisplayedAndPerform(allOf(
                     withId(R.id.reg_usercomu_puerta_ed),
                     withText(containsString(userComu.getPuerta())))));
         }

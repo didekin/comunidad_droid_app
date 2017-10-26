@@ -13,7 +13,9 @@ import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
@@ -72,7 +74,7 @@ public final class IncidDataTestUtils {
                 .build();
     }
 
-    public static int makeAndRegIncidImportancia(UsuarioComunidad userComu, short importancia) throws UiException
+    public static void makeAndRegIncidImportancia(UsuarioComunidad userComu, short importancia) throws UiException
     {
         IncidImportancia incidImportancia = new IncidImportancia.IncidImportanciaBuilder(
                 doIncidencia(userComu.getUsuario().getUserName(), INCID_DEFAULT_DESC, userComu.getComunidad().getC_Id(), (short) 43))
@@ -80,7 +82,7 @@ public final class IncidDataTestUtils {
                 .importancia(importancia)
                 .build();
 
-        return incidenciaDao.regIncidImportancia(incidImportancia);
+        incidenciaDao.regIncidImportancia(incidImportancia);
     }
 
     public static IncidImportancia makeRegGetIncidImportancia(UsuarioComunidad userComu, short importancia) throws UiException
@@ -107,6 +109,20 @@ public final class IncidDataTestUtils {
                         .build())
                 .fechaAltaResolucion(resolucionDate)
                 .build();
+    }
+
+    public static List<IncidenciaUser> doIncidenciaUsers(IncidImportancia incidImportancia)
+    {
+        final List<IncidenciaUser> list = new ArrayList<>(3);
+        Timestamp resolucionDate = incidImportancia.getIncidencia().getFechaCierre();
+        Timestamp altaIncidDate = incidImportancia.getIncidencia().getFechaAlta();
+        IncidenciaUser iu_1 = doSimpleIncidenciaUser(33L, altaIncidDate, 34L, resolucionDate);
+        IncidenciaUser iu_2 = doSimpleIncidenciaUser(11L, altaIncidDate, 14L, resolucionDate);
+        IncidenciaUser iu_3 = doSimpleIncidenciaUser(22L, altaIncidDate, 24L, resolucionDate);
+        list.add(iu_1);
+        list.add(iu_2);
+        list.add(iu_3);
+        return list;
     }
 
     public static IncidenciaUser insertGetIncidenciaUser(UsuarioComunidad userComu, int importancia) throws UiException

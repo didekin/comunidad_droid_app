@@ -231,14 +231,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".usuariocomunidad.data.UserComuDataAc"/>
         </activity>
-        <activity
-            android:name=".incidencia.list.importancia.IncidSeeUserComuImportanciaAc"
-            android:label="@string/incid_incidencia_importancia_rot"
-            android:parentActivityName=".incidencia.core.edit.IncidEditAc">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".incidencia.core.edit.IncidEditAc"/>
-        </activity>
         <!-- .......... GCM services ......... -->
         <service
             android:name=".incidencia.firebase.IncidFireBaseMsgService"

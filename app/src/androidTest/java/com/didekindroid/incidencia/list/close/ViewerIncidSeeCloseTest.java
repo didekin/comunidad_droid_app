@@ -2,7 +2,6 @@ package com.didekindroid.incidencia.list.close;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.widget.ListView;
@@ -11,6 +10,7 @@ import android.widget.TextView;
 import com.didekindroid.api.CtrlerSelectListIf;
 import com.didekindroid.api.ViewerSelectListIf;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.incidencia.testutils.IncidDataTestUtils;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.incidencia.dominio.Incidencia;
 import com.didekinlib.model.incidencia.dominio.IncidenciaUser;
@@ -23,7 +23,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +33,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.comunidad.utils.ComuBundleKey.COMUNIDAD_ID;
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
-import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.doSimpleIncidenciaUser;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.makeRegGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkIncidClosedListView;
@@ -45,7 +43,7 @@ import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_see_by_comu_list_fr_tag;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
-import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
+import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
@@ -106,25 +104,10 @@ public class ViewerIncidSeeCloseTest {
 
     //    ============================  STATIC UTILITIES  ===================================
 
-    @NonNull
-    public static List<IncidenciaUser> doIncidenciaUsers(IncidImportancia incidImportancia)
-    {
-        final List<IncidenciaUser> list = new ArrayList<>(3);
-        Timestamp resolucionDate = incidImportancia.getIncidencia().getFechaCierre();
-        Timestamp altaIncidDate = incidImportancia.getIncidencia().getFechaAlta();
-        IncidenciaUser iu_1 = doSimpleIncidenciaUser(33L, altaIncidDate, 34L, resolucionDate);
-        IncidenciaUser iu_2 = doSimpleIncidenciaUser(11L, altaIncidDate, 14L, resolucionDate);
-        IncidenciaUser iu_3 = doSimpleIncidenciaUser(22L, altaIncidDate, 24L, resolucionDate);
-        list.add(iu_1);
-        list.add(iu_2);
-        list.add(iu_3);
-        return list;
-    }
-
     public static void checkOnSuccessLoadItems(IncidImportancia incidImportancia, Activity activity,
                                                final ViewerSelectListIf<ListView, CtrlerSelectListIf<IncidenciaUser>, IncidenciaUser> viewer)
     {
-        final List<IncidenciaUser> list = doIncidenciaUsers(incidImportancia);
+        final List<IncidenciaUser> list = IncidDataTestUtils.doIncidenciaUsers(incidImportancia);
 
         activity.runOnUiThread(new Runnable() {
             @Override
@@ -178,7 +161,7 @@ public class ViewerIncidSeeCloseTest {
         activity = activityRule.getActivity();
         fragment = (IncidSeeCloseByComuFr) activity.getSupportFragmentManager().findFragmentByTag(incid_see_by_comu_list_fr_tag);
         // Wait until list is made.
-        waitAtMost(3, SECONDS).until(isViewDisplayed(checkIncidClosedListView(incidImportancia1, activity)));
+        waitAtMost(3, SECONDS).until(isViewDisplayedAndPerform(checkIncidClosedListView(incidImportancia1, activity)));
     }
 
     @After
@@ -208,7 +191,7 @@ public class ViewerIncidSeeCloseTest {
                 .check(matches(isDisplayed()))
                 .perform(click());
         assertThat(fragment.viewer.getSelectedItemId(), is(incidImportancia1.getIncidencia().getIncidenciaId()));
-        waitAtMost(2, SECONDS).until(isViewDisplayed(withId(incidResolucionSeeFrLayout)));
+        waitAtMost(2, SECONDS).until(isViewDisplayedAndPerform(withId(incidResolucionSeeFrLayout)));
     }
 
     @Test
@@ -221,7 +204,7 @@ public class ViewerIncidSeeCloseTest {
         bundle.putSerializable(INCID_RESOLUCION_OBJECT.key, resolucion);
 
         fragment.viewer.replaceComponent(bundle);
-        waitAtMost(2, SECONDS).until(isViewDisplayed(withId(incidResolucionSeeFrLayout)));
+        waitAtMost(2, SECONDS).until(isViewDisplayedAndPerform(withId(incidResolucionSeeFrLayout)));
     }
 
     //    ============================  TESTS  ===================================
@@ -258,7 +241,7 @@ public class ViewerIncidSeeCloseTest {
     @Test
     public void test_GetSelectedPositionFromItemId() throws Exception
     {
-        final List<IncidenciaUser> list = doIncidenciaUsers(incidImportancia1);
+        final List<IncidenciaUser> list = IncidDataTestUtils.doIncidenciaUsers(incidImportancia1);
 
         activity.runOnUiThread(new Runnable() {
             @Override

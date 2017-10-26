@@ -24,8 +24,6 @@ import java.io.IOException;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
@@ -36,7 +34,6 @@ import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_edit_ac_
 import static com.didekindroid.security.SecurityTestUtils.updateSecurityData;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
-import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
@@ -112,30 +109,6 @@ public class IncidEditAcMinTest extends IncidEditAcTest {
     @Test
     public void testOnCreate_1() throws Exception
     {
-        checkDataEditMinFr(dbHelper, activity, incidImportanciaIntent);
-    }
-
-    @Test
-    public void testPressBack()
-    {
-        // CASO: presionamos TextView para ver la importancia dada por otros miembros, y luego hacemos BACK.
-        onView(withId(R.id.incid_importancia_otros_view)).check(matches(isDisplayed())).perform(click());
-        // BACK.
-        waitAtMost(1, SECONDS).until(isResourceIdDisplayed(R.id.incid_see_usercomu_importancia_frg));
-        checkBack(onView(withId(R.id.incid_see_usercomu_importancia_frg)));
-        // Datos a la vista.
-        checkDataEditMinFr(dbHelper, activity, incidImportanciaIntent);
-    }
-
-    @Test
-    public void testUpNavigate()
-    {
-        /* CASO: presionamos TextView para ver la importancia dada por otros miembros, y luego Up (Volver).*/
-        onView(withId(R.id.incid_importancia_otros_view)).check(matches(isDisplayed())).perform(click());
-        // Up Navigate.
-        waitAtMost(1, SECONDS).until(isResourceIdDisplayed(R.id.incid_see_usercomu_importancia_frg));
-        clickNavigateUp();
-        // Datos a la vista.
         checkDataEditMinFr(dbHelper, activity, incidImportanciaIntent);
     }
 

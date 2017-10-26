@@ -29,20 +29,12 @@ import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.intent.Intents.intended;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkDataEditMaxPowerFr;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkScreenEditMaxPowerFrErase;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkScreenEditMaxPowerFrNotErase;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeOpenAcLayout;
-import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeUserComuImportanciaAcLayout;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.AMBITO_INCIDENCIA_POSITION;
-import static com.didekindroid.incidencia.utils.IncidBundleKey.INCIDENCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_NUMBER;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_edit_ac_frgs_tag;
@@ -156,14 +148,6 @@ public class ViewerIncidEditMaxFrTest {
         // Checks: NOT erase button.
         waitAtMost(4, SECONDS).untilTrue(viewer.hasResolucion);
         checkScreenEditMaxPowerFrNotErase(newResolBundle);
-    }
-
-    @Test
-    public void testOnClickLinkImportanciaUsers() throws Exception
-    {
-        viewer.onClickLinkToImportanciaUsers(new LinkToImportanciaUsersListener(viewer));
-        onView(withId(incidSeeUserComuImportanciaAcLayout)).check(matches(isDisplayed()));
-        intended(hasExtra(INCIDENCIA_OBJECT.key, activity.resolBundle.getIncidImportancia().getIncidencia()));
     }
 
     @Test

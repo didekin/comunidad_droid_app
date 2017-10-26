@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.didekindroid.R;
-import com.didekindroid.api.ViewerParent;
+import com.didekindroid.api.ParentViewerInjected;
 import com.didekindroid.incidencia.core.CtrlerIncidRegEditFr;
 import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.usuario.firebase.ViewerFirebaseTokenIf;
@@ -30,7 +30,7 @@ import static com.didekindroid.util.UIutils.makeToast;
  * Time: 11:59
  */
 @SuppressWarnings("WeakerAccess")
-public class ViewerIncidRegAc extends ViewerParent<View, CtrlerIncidRegEditFr> {
+public class ViewerIncidRegAc extends ParentViewerInjected<View, CtrlerIncidRegEditFr> {
 
     ViewerFirebaseTokenIf viewerFirebaseToken;
 

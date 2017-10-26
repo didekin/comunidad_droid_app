@@ -32,7 +32,7 @@ import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
-import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
+import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
 import static com.didekindroid.testutil.ConstantExecution.AFTER_METHOD_EXEC_A;
 import static com.didekindroid.testutil.ConstantExecution.BEFORE_METHOD_EXEC;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
@@ -113,7 +113,7 @@ public class IncidRegAcTest {
         doAmbitoAndDescripcion(ambitoObj, "descripcion es valida");
 
         onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
-        waitAtMost(6, SECONDS).until(isViewDisplayed(withId(R.id.incid_see_open_by_comu_ac)));
+        waitAtMost(6, SECONDS).until(isViewDisplayedAndPerform(withId(R.id.incid_see_open_by_comu_ac)));
         checkUp(activityLayoutId, fragmentLayoutId);
     }
 
@@ -125,7 +125,7 @@ public class IncidRegAcTest {
         SECONDS.sleep(1);
         onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
 
-        waitAtMost(6, SECONDS).until(isViewDisplayed(withId(R.id.incid_see_open_by_comu_ac)));
+        waitAtMost(6, SECONDS).until(isViewDisplayedAndPerform(withId(R.id.incid_see_open_by_comu_ac)));
         checkBack(onView(withId(R.id.incid_see_open_by_comu_ac)), activityLayoutId, fragmentLayoutId);
     }
 
@@ -141,7 +141,7 @@ public class IncidRegAcTest {
         doAmbitoAndDescripcion(ambitoObj, "Incidencia La Fuente");
         onView(withId(R.id.incid_reg_ac_button)).perform(scrollTo(), click());
 
-        waitAtMost(4, SECONDS).until(isViewDisplayed(withId(R.id.incid_see_open_by_comu_ac)));
+        waitAtMost(4, SECONDS).until(isViewDisplayedAndPerform(withId(R.id.incid_see_open_by_comu_ac)));
         checkUp(activityLayoutId, fragmentLayoutId);
     }
 

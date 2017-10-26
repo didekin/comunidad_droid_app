@@ -27,7 +27,8 @@ import static com.didekindroid.util.UIutils.doToolBar;
  * 2. Oldest user in the comunidad (to be changed in the future).
  * 3. An intent with a comunidad id key.
  * Postconditions:
- * 1.
+ * 1. If the user has comunidad modification power, the comunidad data may have changed in DB.
+ * 2. If user hasn't power, the data are merely shown.
  */
 public class ComuDataAc extends AppCompatActivity implements ChildViewersInjectorIf {
 
