@@ -1,6 +1,7 @@
 package com.didekindroid.incidencia.core.edit;
 
 import android.content.Intent;
+import android.os.Build;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -8,6 +9,9 @@ import com.didekindroid.R;
 import com.didekindroid.api.ViewerIf;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.incidencia.core.IncidenciaDataDbHelper;
+import com.didekindroid.usuario.userdata.UserDataAc;
+import com.didekindroid.usuariocomunidad.data.UserComuDataAc;
+import com.didekinlib.model.incidencia.dominio.ImportanciaUser;
 import com.didekinlib.model.incidencia.dominio.IncidAndResolBundle;
 import com.didekinlib.model.incidencia.dominio.IncidImportancia;
 import com.didekinlib.model.usuariocomunidad.UsuarioComunidad;
@@ -20,27 +24,35 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
+import static android.app.TaskStackBuilder.create;
+import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.didekindroid.incidencia.IncidDaoRemote.incidenciaDao;
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetIncidImportancia;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkDataEditMinFr;
+import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkImportanciaUser;
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.doImportanciaSpinner;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.incidencia.utils.IncidFragmentTags.incid_edit_ac_frgs_tag;
 import static com.didekindroid.security.SecurityTestUtils.updateSecurityData;
 import static com.didekindroid.testutil.ActivityTestUtils.checkBack;
 import static com.didekindroid.testutil.ActivityTestUtils.checkUp;
+import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN_AND_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
+import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_JUAN;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.makeUsuarioComunidad;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.userComuDataLayout;
+import static com.didekindroid.usuariocomunidad.util.UserComuBundleKey.USERCOMU_LIST_OBJECT;
 import static com.didekinlib.model.usuariocomunidad.Rol.PROPIETARIO;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.waitAtMost;
@@ -54,13 +66,13 @@ import static org.junit.Assert.fail;
  * Date: 19/01/16
  * Time: 16:57
  * <p>
- * Dos incidImportancias registradas en BD, para la misma incidencia.
  * Usuario inicial en sesión SIN permisos para modificar o borrar una incidencia.
  */
 @RunWith(AndroidJUnit4.class)
 public class IncidEditAcMinTest extends IncidEditAcTest {
 
     IncidImportancia incidImportanciaIntent;
+    IncidImportancia incidImportancia_0;
 
     @Rule
     public IntentsTestRule<IncidEditAc> activityRule = new IntentsTestRule<IncidEditAc>(IncidEditAc.class) {
@@ -69,7 +81,7 @@ public class IncidEditAcMinTest extends IncidEditAcTest {
         {
             IncidAndResolBundle resolBundle = null;
             try {
-                IncidImportancia incidImportancia_0 = insertGetIncidImportancia(COMU_REAL_PEPE);
+                incidImportancia_0 = insertGetIncidImportancia(COMU_REAL_PEPE);
                 // Registro userComu en misma comunidad.
                 UsuarioComunidad userComuJuan = makeUsuarioComunidad(incidImportancia_0.getIncidencia().getComunidad(), USER_JUAN,
                         "portal", "esc", "plantaX", "door12", PROPIETARIO.function);
@@ -80,6 +92,18 @@ public class IncidEditAcMinTest extends IncidEditAcTest {
             } catch (IOException | UiException e) {
                 fail();
             }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                Intent intentStack = new Intent(getTargetContext(), UserComuDataAc.class);
+                intentStack.putExtra(USERCOMU_LIST_OBJECT.key,
+                        new UsuarioComunidad.UserComuBuilder(
+                                incidImportanciaIntent.getUserComu().getComunidad(),
+                                incidImportanciaIntent.getUserComu().getUsuario()
+                        ).userComuRest(COMU_REAL_JUAN)
+                                .build());
+                create(getTargetContext()).addNextIntent(intentStack).addParentStack(UserDataAc.class).startActivities();
+            }
+
             Intent intent = new Intent();
             intent.putExtra(INCID_RESOLUCION_BUNDLE.key, resolBundle);
             return intent;
@@ -102,6 +126,9 @@ public class IncidEditAcMinTest extends IncidEditAcTest {
     {
         dbHelper.close();
         cleanOptions(CLEAN_JUAN_AND_PEPE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            cleanTasks(activity);
+        }
     }
 
 //  ======================================= INTEGRATION TESTS  =====================================
@@ -110,6 +137,10 @@ public class IncidEditAcMinTest extends IncidEditAcTest {
     public void testOnCreate_1() throws Exception
     {
         checkDataEditMinFr(dbHelper, activity, incidImportanciaIntent);
+        AtomicBoolean isChecked = new AtomicBoolean(false);
+        isChecked.compareAndSet(false,
+                checkImportanciaUser(new ImportanciaUser(USER_PEPE.getAlias(), incidImportancia_0.getImportancia()), activity));
+        waitAtMost(4, SECONDS).untilTrue(isChecked);
     }
 
     @Test
@@ -119,28 +150,30 @@ public class IncidEditAcMinTest extends IncidEditAcTest {
         short newImportancia = 1;
         doImportanciaSpinner(activity, newImportancia);
         // Modify.
-        onView(withId(R.id.incid_edit_fr_modif_button)).perform(scrollTo(), click());
+        onView(withId(R.id.incid_edit_fr_modif_button)).perform(click());
         // Check.
         waitAtMost(2, SECONDS).until(isResourceIdDisplayed(R.id.incid_see_open_by_comu_ac));
 
-        checkUp();
-        IncidImportancia newIncidImportancia = new IncidImportancia.IncidImportanciaBuilder(incidImportanciaIntent.getIncidencia())
-                .copyIncidImportancia(incidImportanciaIntent)
-                .importancia(newImportancia)
-                .build();
-        checkDataEditMinFr(dbHelper, activity, newIncidImportancia);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            checkUp(userComuDataLayout);
+        }
     }
 
     @Test
-    public void testModifyIncidImportanciaPressBack()
+    public void testModifyIncidImportanciaPressBack() throws InterruptedException
     {
         // Modify.
-        onView(withId(R.id.incid_edit_fr_modif_button)).perform(scrollTo(), click());
+        onView(withId(R.id.incid_edit_fr_modif_button)).perform(click());
         // Check.
         waitAtMost(2, SECONDS).until(isResourceIdDisplayed(R.id.incid_see_open_by_comu_ac));
 
-        checkBack(onView(withId(R.id.incid_see_open_by_comu_ac)));
-        checkDataEditMinFr(dbHelper, activity, incidImportanciaIntent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            checkBack(onView(withId(R.id.incid_see_open_by_comu_ac)));
+            AtomicBoolean isChecked = new AtomicBoolean(false);
+            isChecked.compareAndSet(false, checkDataEditMinFr(dbHelper, activity, incidImportanciaIntent));
+            waitAtMost(4, SECONDS).untilTrue(isChecked);
+            checkImportanciaUser(new ImportanciaUser(USER_PEPE.getAlias(), incidImportancia_0.getImportancia()), activity);
+        }
     }
 
     //  ======================================== UNIT TESTS  =======================================

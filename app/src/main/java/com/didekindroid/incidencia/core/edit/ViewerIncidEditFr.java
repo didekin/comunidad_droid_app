@@ -22,9 +22,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import timber.log.Timber;
 
-import static com.didekindroid.incidencia.utils.IncidenciaAssertionMsg.incid_importancia_should_be_modified;
 import static com.didekindroid.util.ConnectionUtils.checkInternetConnected;
-import static com.didekindroid.util.UIutils.assertTrue;
 import static com.didekindroid.util.UIutils.getErrorMsgBuilder;
 import static com.didekindroid.util.UIutils.makeToast;
 
@@ -99,7 +97,6 @@ abstract class ViewerIncidEditFr extends Viewer<View, CtrlerIncidRegEditFr> impl
     public void onSuccessModifyIncidImportancia(int rowInserted)
     {
         Timber.d("onSuccessModifyIncidImportancia()");
-        assertTrue(rowInserted >= 1, incid_importancia_should_be_modified);
         new ActivityInitiator(activity).initAcWithBundle(new Bundle(0));
     }
 

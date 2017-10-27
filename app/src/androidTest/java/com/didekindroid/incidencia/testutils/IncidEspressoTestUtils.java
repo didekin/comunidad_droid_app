@@ -293,7 +293,7 @@ public final class IncidEspressoTestUtils {
 
     // =================================== IMPORTANCIA USER ======================================
 
-    public static void checkImportanciaUser(ImportanciaUser importanciaUser, Activity activity)
+    public static boolean checkImportanciaUser(ImportanciaUser importanciaUser, Activity activity)
     {
         waitAtMost(4, SECONDS).until(isViewDisplayed(
                 allOf(
@@ -305,6 +305,7 @@ public final class IncidEspressoTestUtils {
                         ))
                 )
         ));
+        return true;
     }
 
     // ====================================== RESOLUCION =========================================

@@ -52,7 +52,7 @@ public abstract class IncidEditFr extends Fragment {
         Timber.d("onSaveInstanceState()");
         super.onSaveInstanceState(outState);
         getViewerIncidEdit().saveState(outState);
-        viewerIncidImportancia.saveState(outState);   // TODO: test.
+        viewerIncidImportancia.saveState(outState);
     }
 
     @Override
@@ -60,13 +60,13 @@ public abstract class IncidEditFr extends Fragment {
     {
         Timber.d("onStop()");
         getViewerIncidEdit().clearSubscriptions();
-        viewerIncidImportancia.clearSubscriptions();   // TODO: test.
+        viewerIncidImportancia.clearSubscriptions();
         super.onStop();
     }
 
      /* =======================================  HELPERS  =======================================*/
 
-    void initViewerImportancia(@Nullable Bundle savedInstanceState)   // TODO: test.
+    void initViewerImportancia(@Nullable Bundle savedInstanceState)
     {
         viewerIncidImportancia = newViewerIncidSeeUserComuImportancia(frView, viewerInjector.getParentViewer());
         viewerIncidImportancia.doViewInViewer(savedInstanceState, resolBundle.getIncidImportancia().getIncidencia());

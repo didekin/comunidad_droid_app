@@ -12,7 +12,6 @@ import com.didekindroid.api.ChildViewersInjectorIf;
 import timber.log.Timber;
 
 import static com.didekindroid.incidencia.core.edit.ViewerIncidEditMinFr.newViewerIncidEditMinFr;
-import static com.didekindroid.incidencia.core.edit.importancia.ViewerIncidSeeUserComuImportancia.newViewerIncidSeeUserComuImportancia;
 
 /**
  * User: pedro@didekin
@@ -50,6 +49,6 @@ public class IncidEditMinFr extends IncidEditFr {
         viewer.doViewInViewer(savedInstanceState, resolBundle);
         viewerInjector.setChildInParentViewer(viewer);
 
-        initViewerImportancia(savedInstanceState);   // TODO: test.
+        initViewerImportancia(savedInstanceState);
     }
 }

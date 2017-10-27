@@ -407,7 +407,13 @@ public final class ActivityTestUtils {
     public static void checkUp(Integer... activityLayoutIds)
     {
         clickNavigateUp();
-        iterateLayouts(activityLayoutIds);
+        for (Integer layout : activityLayoutIds) {
+            try {
+                waitAtMost(6, SECONDS).until(isResourceIdDisplayed(layout));
+            } catch (Exception e) {
+                fail();
+            }
+        }
     }
 
     @SuppressWarnings("unused")
@@ -545,16 +551,5 @@ public final class ActivityTestUtils {
     }
 
     //    ============================ HELPERS ============================
-
-    private static void iterateLayouts(Integer[] activityLayoutIds)
-    {
-        for (Integer layout : activityLayoutIds) {
-            try {
-                waitAtMost(6, SECONDS).until(isResourceIdDisplayed(layout));
-            } catch (Exception e) {
-                fail();
-            }
-        }
-    }
 }
 

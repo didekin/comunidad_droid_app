@@ -8,10 +8,10 @@ android {
         applicationId "com.didekindroid"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 5
-        versionName "a-0.5.2"
+        versionCode 6
+        versionName "a-0.6"
         testInstrumentationRunner rootProject.ext.testInstrumentationRunner
-        resConfigs "es" /* Añadir nuevos idiomas según hagan falta.*/
+        resConfigs "es", "en" /* Añadir nuevos idiomas según hagan falta.*/
         vectorDrawables.useSupportLibrary = true
     }
     compileOptions {
@@ -75,7 +75,6 @@ android {
             debuggable true
             versionNameSuffix ''
             // Variables for android_studio default run-debug configuration.
-            //noinspection GrEqualsBetweenInconvertibleTypes
             if ("$System.env.TEST_HOST" == "null" || "$System.env.TEST_PORT" == "null"){
             // LOCAL url's
                 resValue "string", "didekin_web_host", '"https://didekinspring.pagekite.me"'

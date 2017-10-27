@@ -161,7 +161,7 @@ public class ViewerIncidEditMaxFrTest {
                 viewer.onClickButtonModify();
             }
         });
-        waitAtMost(2, SECONDS).until(isToastInView(R.string.error_validation_msg, activity, R.string.incid_reg_importancia));
+        waitAtMost(4, SECONDS).until(isToastInView(R.string.error_validation_msg, activity, R.string.incid_reg_importancia));
     }
 
     @Test
@@ -175,7 +175,7 @@ public class ViewerIncidEditMaxFrTest {
                 viewer.onClickButtonModify();
             }
         });
-        waitAtMost(2, SECONDS).until(isResourceIdDisplayed(incidSeeOpenAcLayout));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidSeeOpenAcLayout));
     }
 
     @Test
@@ -200,21 +200,21 @@ public class ViewerIncidEditMaxFrTest {
     public void testOnSuccessModifyIncidImportancia() throws Exception
     {
         viewer.onSuccessModifyIncidImportancia(1);
-        waitAtMost(2, SECONDS).until(isResourceIdDisplayed(incidSeeOpenAcLayout));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidSeeOpenAcLayout));
     }
 
     @Test
     public void testOnSuccessEraseIncidencia() throws Exception
     {
         viewer.onSuccessEraseIncidencia(1);
-        waitAtMost(2, SECONDS).until(isResourceIdDisplayed(incidSeeOpenAcLayout));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidSeeOpenAcLayout));
     }
 
     @Test
     public void test_EraseIncidenciaObserver()
     {
         just(1).subscribeWith(viewer.new EraseIncidenciaObserver());
-        waitAtMost(2, SECONDS).until(isResourceIdDisplayed(incidSeeOpenAcLayout));
+        waitAtMost(4, SECONDS).until(isResourceIdDisplayed(incidSeeOpenAcLayout));
     }
 
     @Test

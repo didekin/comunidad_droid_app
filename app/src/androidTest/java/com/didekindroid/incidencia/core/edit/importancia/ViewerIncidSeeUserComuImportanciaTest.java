@@ -30,6 +30,7 @@ import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGet
 import static com.didekindroid.incidencia.testutils.IncidEspressoTestUtils.checkImportanciaUser;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_BUNDLE;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
+import static com.didekindroid.testutil.ActivityTestUtils.checkSubscriptionsOnStop;
 import static com.didekindroid.testutil.ActivityTestUtils.getAdapter;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
@@ -126,5 +127,13 @@ public class ViewerIncidSeeUserComuImportanciaTest {
         assertThat(viewer.getViewInViewer().getAdapter().getCount(), is(2));
         checkImportanciaUser(listUsers.get(0), activity);
         checkImportanciaUser(listUsers.get(1), activity);
+    }
+
+    //    ============================  LIFE CYCLE TESTS  ===================================
+
+    @Test
+    public void testClearSubscriptions() throws Exception
+    {
+        checkSubscriptionsOnStop(activity, viewer.getController());
     }
 }

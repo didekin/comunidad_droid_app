@@ -48,6 +48,6 @@ public class IncidEditMaxFr extends IncidEditFr {
         viewer.doViewInViewer(savedInstanceState, resolBundle);
         viewerInjector.setChildInParentViewer(viewer);
 
-        initViewerImportancia(savedInstanceState); // TODO: test.
+        initViewerImportancia(savedInstanceState);
     }
 }
