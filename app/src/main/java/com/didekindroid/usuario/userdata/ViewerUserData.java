@@ -11,7 +11,9 @@ import android.widget.EditText;
 import com.didekindroid.R;
 import com.didekindroid.api.Viewer;
 import com.didekindroid.router.ActivityInitiator;
+import com.didekindroid.usuario.dao.CtrlerUsuarioIf;
 import com.didekindroid.usuario.UsuarioBean;
+import com.didekindroid.usuario.dao.CtrlerUsuario;
 import com.didekindroid.util.UIutils;
 import com.didekinlib.model.usuario.Usuario;
 
@@ -38,7 +40,7 @@ import static com.didekinlib.http.GenericExceptionMsg.BAD_REQUEST;
  * Date: 22/03/17
  * Time: 10:27
  */
-final class ViewerUserData extends Viewer<View, CtrlerUserDataIf> implements ViewerUserDataIf {
+final class ViewerUserData extends Viewer<View, CtrlerUsuarioIf> implements ViewerUserDataIf {
 
     final EditText emailView;
     final EditText aliasView;
@@ -63,7 +65,7 @@ final class ViewerUserData extends Viewer<View, CtrlerUserDataIf> implements Vie
     {
         Timber.d("newViewerUserData()");
         ViewerUserData instance = new ViewerUserData(activity.acView, activity);
-        instance.setController(new CtrlerUserModified());
+        instance.setController(new CtrlerUsuario());
         return instance;
     }
 
@@ -200,6 +202,7 @@ final class ViewerUserData extends Viewer<View, CtrlerUserDataIf> implements Vie
         }
     }
 
+    @SuppressWarnings("ThrowableNotThrown")
     @Override
     public void onErrorInObserver(Throwable error)
     {

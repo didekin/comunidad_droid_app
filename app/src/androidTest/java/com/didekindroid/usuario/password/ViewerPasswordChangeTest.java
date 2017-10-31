@@ -6,7 +6,7 @@ import android.support.test.rule.ActivityTestRule;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
-import com.didekindroid.usuario.login.CtrlerUsuario;
+import com.didekindroid.usuario.dao.CtrlerUsuario;
 import com.didekinlib.http.ErrorBean;
 import com.didekinlib.http.oauth2.SpringOauthToken;
 import com.didekinlib.model.usuario.Usuario;

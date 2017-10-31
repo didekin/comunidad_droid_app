@@ -9,6 +9,8 @@ import android.widget.Button;
 import com.didekindroid.R;
 import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.router.ActivityRouter;
+import com.didekindroid.usuario.dao.CtrlerUsuarioIf;
+import com.didekindroid.usuario.dao.CtrlerUsuario;
 
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
@@ -30,7 +32,7 @@ import static com.didekindroid.util.UIutils.getUiExceptionFromThrowable;
 public class DeleteMeAc extends AppCompatActivity {
 
     View acView;
-    CtrlerDeleteMeIf controller;
+    CtrlerUsuarioIf controller;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -42,13 +44,13 @@ public class DeleteMeAc extends AppCompatActivity {
         setContentView(acView);
         doToolBar(this, true);
 
-        Button mUnregisterButton = (Button) findViewById(R.id.delete_me_ac_unreg_button);
+        Button mUnregisterButton = findViewById(R.id.delete_me_ac_unreg_button);
         mUnregisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
             {
                 Timber.d("mUnregisterButton.OnClickListener().onClickLinkToImportanciaUsers()");
-                controller.deleteMeRemote(new DeleteMeSingleObserver());
+                controller.deleteMe(new DeleteMeSingleObserver());
             }
         });
     }
@@ -59,7 +61,7 @@ public class DeleteMeAc extends AppCompatActivity {
         Timber.d("onStart()");
         super.onStart();
         // Controller initialization.
-        controller = new CtrlerDeleteMe();
+        controller = new CtrlerUsuario();
         // Preconditions.
         assertTrue(controller.isRegisteredUser(), user_should_be_registered);
     }

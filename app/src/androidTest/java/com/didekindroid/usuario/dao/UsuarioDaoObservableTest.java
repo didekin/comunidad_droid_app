@@ -1,8 +1,9 @@
 package com.didekindroid.usuario.dao;
 
 import com.didekindroid.exception.UiException;
-import com.didekindroid.usuario.testutil.UsuarioDaoTestUtil.SendPswdCallable;
-import com.didekindroid.usuario.testutil.UsuarioDaoTestUtil.SendPswdCallableError;
+import com.didekindroid.usuario.dao.UsuarioDaoTestUtil.SendPswdCallable;
+import com.didekindroid.usuario.dao.UsuarioDaoTestUtil.SendPswdCallableError;
+import com.didekinlib.http.oauth2.SpringOauthToken;
 import com.didekinlib.model.usuario.Usuario;
 
 import org.junit.Test;
@@ -20,6 +21,7 @@ import static com.didekindroid.usuario.dao.UsuarioDaoObservable.deleteMeSingle;
 import static com.didekindroid.usuario.dao.UsuarioDaoObservable.loginPswdSendSingle;
 import static com.didekindroid.usuario.dao.UsuarioDaoObservable.loginSingle;
 import static com.didekindroid.usuario.dao.UsuarioDaoObservable.loginUpdateTkCache;
+import static com.didekindroid.usuario.dao.UsuarioDaoObservable.passwordChangeWithPswdValidation;
 import static com.didekindroid.usuario.dao.UsuarioDaoObservable.userDataLoaded;
 import static com.didekindroid.usuario.dao.UsuarioDaoObservable.userModifiedTkUpdated;
 import static com.didekindroid.usuario.dao.UsuarioDaoObservable.userModifiedWithPswdValidation;
@@ -33,6 +35,7 @@ import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanWithTk
 import static com.didekindroid.usuariocomunidad.repository.UserComuDaoRemote.userComuDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_ESCORIAL_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_REAL_DROID;
+import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_TRAV_PLAZUELA_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static com.didekinlib.model.usuario.UsuarioExceptionMsg.USER_NAME_NOT_FOUND;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -145,6 +148,20 @@ public class UsuarioDaoObservableTest {
         // Check cache hasn't changed.
         checkInitTokenCache();
         finishLoginPswdSendSingle();
+    }
+
+    // ..................................... PASSWORD ..........................................
+
+    @Test
+    public void test_PasswordChangeWithPswdValidation() throws Exception
+    {
+        signUpAndUpdateTk(COMU_TRAV_PLAZUELA_PEPE);
+        final SpringOauthToken oldToken = TKhandler.getTokenCache().get();
+
+        Usuario newUser = new Usuario.UsuarioBuilder().userName(USER_PEPE.getUserName()).password("new_password").build();
+        passwordChangeWithPswdValidation(USER_PEPE, newUser).test().assertComplete();
+        checkUpdatedCacheAfterPswd(true, oldToken);
+        usuarioDaoRemote.deleteUser();
     }
 
     // ..................................... USER DATA ..........................................

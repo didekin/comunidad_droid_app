@@ -12,7 +12,7 @@ import com.didekindroid.exception.ActionForUiException;
 import com.didekindroid.exception.UiException;
 import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.usuario.UsuarioBean;
-import com.didekindroid.usuario.login.CtrlerUsuario;
+import com.didekindroid.usuario.dao.CtrlerUsuario;
 import com.didekindroid.usuario.userdata.UserDataAc;
 import com.didekinlib.model.usuario.Usuario;
 
@@ -196,7 +196,7 @@ public class ViewerPasswordChange extends Viewer<View, CtrlerUsuario> {
         {
             Timber.d("onClick()");
             if (checkLoginData()) {
-                controller.changePasswordInRemote(
+                controller.changePassword(
                         new PswdChangeCompletableObserver(this),
                         oldUserPswd.get(),
                         usuarioBean.get().getUsuario()

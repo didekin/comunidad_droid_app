@@ -7,6 +7,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.didekindroid.R;
 import com.didekindroid.exception.UiException;
+import com.didekindroid.usuario.dao.CtrlerUsuario;
 import com.didekindroid.usuario.userdata.ViewerUserDataIf.UserChangeToMake;
 import com.didekinlib.http.ErrorBean;
 import com.didekinlib.model.usuario.Usuario;
@@ -106,7 +107,7 @@ public class ViewerUserDataTest {
         assertThat(activity.viewer.emailView, notNullValue());
         assertThat(activity.viewer.aliasView, notNullValue());
         assertThat(activity.viewer.passwordView, notNullValue());
-        assertThat(activity.viewer.getController(), instanceOf(CtrlerUserModified.class));
+        assertThat(activity.viewer.getController(), instanceOf(CtrlerUsuario.class));
         assertThat(activity.viewer.usuarioBean, notNullValue());
         assertThat(activity.viewer.oldUser, notNullValue());
         assertThat(activity.viewer.newUser, notNullValue());

@@ -13,6 +13,7 @@ import android.widget.EditText;
 import com.didekindroid.R;
 import com.didekindroid.api.Viewer;
 import com.didekindroid.router.ActivityInitiator;
+import com.didekindroid.usuario.dao.CtrlerUsuario;
 import com.didekindroid.usuario.UsuarioBean;
 import com.didekinlib.model.usuario.Usuario;
 

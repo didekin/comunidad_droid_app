@@ -3,6 +3,7 @@ package com.didekindroid.usuario.userdata;
 import android.view.View;
 
 import com.didekindroid.api.ViewerIf;
+import com.didekindroid.usuario.dao.CtrlerUsuarioIf;
 import com.didekinlib.model.usuario.Usuario;
 
 /**
@@ -11,7 +12,7 @@ import com.didekinlib.model.usuario.Usuario;
  * Time: 17:25
  */
 
-interface ViewerUserDataIf extends ViewerIf<View, CtrlerUserDataIf> {
+interface ViewerUserDataIf extends ViewerIf<View, CtrlerUsuarioIf> {
 
     boolean checkUserData();
 

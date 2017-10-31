@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatDialog;
 import android.view.View;
 
 import com.didekindroid.api.ViewerIf;
+import com.didekindroid.usuario.dao.CtrlerUsuario;
 import com.didekinlib.model.usuario.Usuario;
 
 import java.util.concurrent.atomic.AtomicInteger;
