@@ -24,7 +24,7 @@ import java.util.concurrent.Callable;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
 import static com.didekindroid.incidencia.testutils.GcmConstantForTests.PACKAGE_TEST;
-import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
+import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDaoRemote;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.CleanUserEnum.CLEAN_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOptions;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -116,7 +116,7 @@ public abstract class Incidencia_GCM_Test {
         return new Callable<String>() {
             public String call() throws Exception
             {
-                return usuarioDao.getGcmToken();
+                return usuarioDaoRemote.getGcmToken();
             }
         };
     }

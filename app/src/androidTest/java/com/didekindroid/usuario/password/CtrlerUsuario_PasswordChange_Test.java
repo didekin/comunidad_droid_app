@@ -27,8 +27,8 @@ import static com.didekindroid.testutil.RxSchedulersUtils.resetAllSchedulers;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceAndroidMain;
 import static com.didekindroid.testutil.RxSchedulersUtils.trampolineReplaceIoScheduler;
 import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
-import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
-import static com.didekindroid.usuario.login.CtrlerUsuario.passwordChangeWithPswdValidation;
+import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDaoRemote;
+import static com.didekindroid.usuario.dao.UsuarioDaoObservable.passwordChangeWithPswdValidation;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_DROID;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_TRAV_PLAZUELA_PEPE;
@@ -103,7 +103,7 @@ public class CtrlerUsuario_PasswordChange_Test {
         // onComplete()
         assertThat(flagMethodExec.getAndSet(BEFORE_METHOD_EXEC), is(AFTER_METHOD_EXEC_B));
         checkUpdatedCacheAfterPswd(true, oldToken);
-        usuarioDao.deleteUser();
+        usuarioDaoRemote.deleteUser();
     }
 
     //  ============================================================================================
@@ -116,6 +116,6 @@ public class CtrlerUsuario_PasswordChange_Test {
         Usuario newUser = new Usuario.UsuarioBuilder().userName(USER_PEPE.getUserName()).password("new_password").build();
         passwordChangeWithPswdValidation(USER_PEPE, newUser).test().assertComplete();
         checkUpdatedCacheAfterPswd(true, oldToken);
-        usuarioDao.deleteUser();
+        usuarioDaoRemote.deleteUser();
     }
 }

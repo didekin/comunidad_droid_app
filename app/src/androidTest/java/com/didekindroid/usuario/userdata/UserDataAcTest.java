@@ -52,7 +52,7 @@ import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayedAndPerform;
 import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
-import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
+import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDaoRemote;
 import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typeUserData;
 import static com.didekindroid.usuario.testutil.UserItemMenuTestUtils.DELETE_ME_AC;
 import static com.didekindroid.usuario.testutil.UserItemMenuTestUtils.PASSWORD_CHANGE_AC;
@@ -127,7 +127,7 @@ public class UserDataAcTest {
     @After
     public void tearDown() throws Exception
     {
-        usuarioDao.deleteUser();
+        usuarioDaoRemote.deleteUser();
         cleanWithTkhandler();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             cleanTasks(activity);

@@ -133,11 +133,11 @@
     <string name="incid_gcm_incidencia_closed_body">Incidencia resuelta en tu comunidad.</string>
     <string name="incid_gcm_resolucion_open_body">Incidencia en tu comunidad en trámite de resolución.</string>
     <!-- ============================== MENUS ================================= -->
-    <string name="incid_closed_see_by_usercomu_ac_mn">Incidencias cerradas</string>
+    <string name="incid_closed_see_by_comu_ac_mn">Incidencias cerradas</string>
     <string name="incid_comment_reg_ac_mn">Comentar</string>
     <string name="incid_comments_see_ac_mn">Comentarios</string>
     <string name="incid_reg_ac_mn">Nueva incidencia</string>
-    <string name="incid_see_by_comu_ac_mn">Incidencias abiertas</string>
+    <string name="incid_open_see_by_comu_ac_mn">Incidencias abiertas</string>
     <string name="incid_resolucion_ac_mn">Resolución</string>
     <!-- ============================= ACTIVITIES ============================= -->
     <string name="incid_incidencia_rot">Incidencia:</string>

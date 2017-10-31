@@ -2,7 +2,6 @@ package com.didekindroid.usuario.dao;
 
 import com.didekindroid.exception.UiException;
 import com.didekinlib.http.oauth2.SpringOauthToken;
-import com.didekinlib.http.retrofit.UsuarioEndPoints;
 import com.didekinlib.model.usuario.Usuario;
 
 /**
@@ -11,9 +10,7 @@ import com.didekinlib.model.usuario.Usuario;
  * Time: 17:23
  */
 @SuppressWarnings("WeakerAccess")
-public interface UsuarioDao {
-
-    UsuarioEndPoints getEndPoint();
+public interface UsuarioDaoIf {
 
     boolean deleteAccessToken(String oldAccessToken) throws UiException;
 

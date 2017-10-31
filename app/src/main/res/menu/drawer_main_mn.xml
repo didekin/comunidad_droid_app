@@ -15,7 +15,11 @@
             />
         <item
             android:id="@+id/incid_see_open_by_comu_ac_mn"
-            android:title="@string/incid_see_by_comu_ac_mn"
+            android:title="@string/incid_open_see_by_comu_ac_mn"
+            />
+        <item
+            android:id="@+id/incid_see_closed_by_comu_ac_mn"
+            android:title="@string/incid_closed_see_by_comu_ac_mn"
             />
     </group>
     <item

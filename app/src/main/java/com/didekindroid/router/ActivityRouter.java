@@ -110,7 +110,6 @@ public class ActivityRouter implements ActivityRouterIf {
 
     // Links and buttons.
     static {
-        // INCIDENCIAS.
         // USUARIOS.
         onClickRouterMap.put(ViewerPasswordChange.ModifyPswdButtonListener.class, SeeUserComuByUserAc.class);
         onClickRouterMap.put(ViewerPasswordChange.SendNewPswdButtonListener.class, LoginAc.class);

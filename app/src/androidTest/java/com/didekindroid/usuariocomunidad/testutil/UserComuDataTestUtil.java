@@ -15,7 +15,7 @@ import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_LA_PLAZU
 import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_REAL;
 import static com.didekindroid.comunidad.testutil.ComuDataTestUtil.COMU_TRAV_PLAZUELA_11;
 import static com.didekindroid.security.SecurityTestUtils.updateSecurityData;
-import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
+import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDaoRemote;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_DROID;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_JUAN;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
@@ -64,7 +64,7 @@ public final class UserComuDataTestUtil {
     {
         userComuDaoRemote.regComuAndUserAndUserComu(usuarioComunidad).execute().body();
         updateSecurityData(usuarioComunidad.getUsuario().getUserName(), usuarioComunidad.getUsuario().getPassword());
-        return usuarioDao.getUserData();
+        return usuarioDaoRemote.getUserData();
     }
 
     public static Comunidad signUpWithTkGetComu(UsuarioComunidad usuarioComunidad) throws IOException, UiException

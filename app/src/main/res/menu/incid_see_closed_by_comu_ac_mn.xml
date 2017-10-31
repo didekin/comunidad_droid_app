@@ -4,7 +4,7 @@
       tools:context=".incidencia.list.close.IncidSeeClosedByComuAc">
       <item
           android:id="@+id/incid_see_open_by_comu_ac_mn"
-          android:title="@string/incid_see_by_comu_ac_mn"
+          android:title="@string/incid_open_see_by_comu_ac_mn"
           android:orderInCategory="100"
           app:showAsAction="never|withText"/>
       <item

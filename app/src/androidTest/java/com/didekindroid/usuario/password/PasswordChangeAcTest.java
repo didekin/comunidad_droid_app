@@ -38,7 +38,7 @@ import static com.didekindroid.testutil.ActivityTestUtils.cleanTasks;
 import static com.didekindroid.testutil.ActivityTestUtils.isResourceIdDisplayed;
 import static com.didekindroid.testutil.ActivityTestUtils.isToastInView;
 import static com.didekindroid.usuario.UsuarioBundleKey.user_name;
-import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
+import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDaoRemote;
 import static com.didekindroid.usuario.testutil.UserEspressoTestUtil.typePswdDataWithPswdValidation;
 import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.pswdChangeAcRsId;
 import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.userDataAcRsId;
@@ -144,7 +144,7 @@ public class PasswordChangeAcTest {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             checkUp(comuSearchAcLayout);
         }
-        usuarioDao.deleteUser();
+        usuarioDaoRemote.deleteUser();
         cleanWithTkhandler();
 
         isClean.set(true);
@@ -157,7 +157,7 @@ public class PasswordChangeAcTest {
 
         checkBack(onView(withId(seeUserComuByUserFrRsId)).check(matches(isDisplayed())), pswdChangeAcRsId);
 
-        usuarioDao.deleteUser();
+        usuarioDaoRemote.deleteUser();
         cleanWithTkhandler();
 
         isClean.set(true);

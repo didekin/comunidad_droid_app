@@ -24,7 +24,7 @@ import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGet
 import static com.didekindroid.incidencia.testutils.IncidDataTestUtils.insertGetResolucionNoAdvances;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_IMPORTANCIA_OBJECT;
 import static com.didekindroid.incidencia.utils.IncidBundleKey.INCID_RESOLUCION_OBJECT;
-import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDao;
+import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDaoRemote;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_PEPE;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -77,7 +77,7 @@ public class IncidCloseAc_GCM_Test extends Incidencia_GCM_Test {
                     incidImportancia = insertGetIncidImportancia(COMU_PLAZUELA5_PEPE);
                     resolucion = insertGetResolucionNoAdvances(incidImportancia);
                     // We'll test that the gcmToken has not been updated in server.
-                    assertThat(usuarioDao.getGcmToken(), nullValue());
+                    assertThat(usuarioDaoRemote.getGcmToken(), nullValue());
                 } catch ( IOException | UiException e) {
                     e.printStackTrace();
                 }

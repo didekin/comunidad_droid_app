@@ -3,7 +3,6 @@ package com.didekindroid.incidencia.testutils;
 import android.app.Activity;
 
 import com.didekindroid.R;
-import com.didekindroid.testutil.ActivityTestUtils;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -59,7 +58,7 @@ public enum IncidenciaMenuTestUtils {
         @Override
         public void checkMenuItem_WTk(Activity activity)
         {
-            checkAppBarMenu(activity, R.string.incid_see_by_comu_ac_mn, R.id.incid_see_open_by_comu_ac);
+            checkAppBarMenu(activity, R.string.incid_open_see_by_comu_ac_mn, R.id.incid_see_open_by_comu_ac);
         }
     },
 
@@ -67,7 +66,7 @@ public enum IncidenciaMenuTestUtils {
         @Override
         public void checkMenuItem_WTk(Activity activity)
         {
-            checkAppBarMenu(activity, R.string.incid_closed_see_by_usercomu_ac_mn, R.id.incid_see_closed_by_comu_ac);
+            checkAppBarMenu(activity, R.string.incid_closed_see_by_comu_ac_mn, R.id.incid_see_closed_by_comu_ac);
         }
     },;
 

@@ -47,6 +47,17 @@
         <item name="android:textColorPrimary">@color/purple_900</item>
     </style>
 
+    <!-- ............... Drawers ................-->
+    <style name="drawerMainHeaderLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">69dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:background">?attr/colorPrimaryDark</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:paddingEnd">@dimen/drawer_padding</item>
+        <item name="android:paddingStart">@dimen/drawer_padding</item>
+    </style>
+
     <!-- .............. EditTextFields ......... -->
     <style name="textBase.editField">
         <item name="android:textSize">@dimen/text_hint_size</item>
