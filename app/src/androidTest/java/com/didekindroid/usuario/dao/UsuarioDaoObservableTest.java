@@ -22,7 +22,7 @@ import static com.didekindroid.usuario.dao.UsuarioDaoObservable.loginPswdSendSin
 import static com.didekindroid.usuario.dao.UsuarioDaoObservable.loginSingle;
 import static com.didekindroid.usuario.dao.UsuarioDaoObservable.loginUpdateTkCache;
 import static com.didekindroid.usuario.dao.UsuarioDaoObservable.passwordChangeWithPswdValidation;
-import static com.didekindroid.usuario.dao.UsuarioDaoObservable.userDataLoaded;
+import static com.didekindroid.usuario.dao.UsuarioDaoObservable.userData;
 import static com.didekindroid.usuario.dao.UsuarioDaoObservable.userModifiedTkUpdated;
 import static com.didekindroid.usuario.dao.UsuarioDaoObservable.userModifiedWithPswdValidation;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDaoRemote;
@@ -172,7 +172,7 @@ public class UsuarioDaoObservableTest {
 
         signUpAndUpdateTk(COMU_ESCORIAL_PEPE);
         // Caso OK.
-        userDataLoaded().test().assertResult(USER_PEPE);
+        userData().test().assertResult(USER_PEPE);
         cleanOneUser(USER_PEPE);
     }
 

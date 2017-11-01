@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.didekindroid.R;
+import com.didekindroid.api.AbstractSingleObserver;
 import com.didekindroid.api.Viewer;
 import com.didekindroid.router.ActivityInitiator;
 import com.didekindroid.usuario.dao.CtrlerUsuarioIf;
@@ -20,7 +21,6 @@ import com.didekinlib.model.usuario.Usuario;
 import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicReference;
 
-import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
 import static com.didekindroid.usuario.UsuarioAssertionMsg.user_name_uID_should_be_initialized;
@@ -74,7 +74,7 @@ final class ViewerUserData extends Viewer<View, CtrlerUsuarioIf> implements View
     {
         Timber.d("doViewInViewer()");
         assertTrue(controller.isRegisteredUser(), user_should_be_registered);
-        controller.loadUserData(new UserDataObserver<Usuario>() {
+        controller.loadUserData(new AbstractSingleObserver<Usuario>(this) {
             @Override
             public void onSuccess(Usuario usuario)
             {
@@ -186,12 +186,12 @@ final class ViewerUserData extends Viewer<View, CtrlerUsuarioIf> implements View
             case userName:
             case alias_only:
                 return controller.modifyUser(
-                        new UserDataObserver<Boolean>() {
+                        new AbstractSingleObserver<Boolean>(this) {
                             @Override
                             public void onSuccess(Boolean isCompleted)
                             {
                                 Timber.d("onSuccess(), isCompleted == %s", isCompleted.toString());
-                                assertTrue(isCompleted, "UserDataObserver.onSuccess() should be TRUE");
+                                assertTrue(isCompleted, "AbstractSingleObserver.onSuccess() should be TRUE");
                                 replaceComponent(new Bundle());
                             }
                         },
@@ -218,17 +218,5 @@ final class ViewerUserData extends Viewer<View, CtrlerUsuarioIf> implements View
     {
         Timber.d("initAcWithBundle()");
         new ActivityInitiator(activity).initAcWithBundle(bundle);
-    }
-
-    // .............................. SUBSCRIBERS ..................................
-
-    abstract class UserDataObserver<T> extends DisposableSingleObserver<T> {
-
-        @Override
-        public void onError(Throwable e)
-        {
-            Timber.d("onErrorObserver(), Thread for subscriber: %s", Thread.currentThread().getName());
-            onErrorInObserver(e);
-        }
     }
 }

@@ -13,17 +13,21 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.didekindroid.R;
+import com.didekindroid.api.AbstractSingleObserver;
 import com.didekindroid.api.Viewer;
 import com.didekindroid.router.ActivityInitiator;
-import com.didekindroid.security.CtrlerAuthToken;
+import com.didekindroid.usuario.dao.CtrlerUsuario;
+import com.didekinlib.model.usuario.Usuario;
 
 import java.io.Serializable;
 
 import timber.log.Timber;
 
 import static android.view.Gravity.START;
+import static android.view.View.VISIBLE;
 import static com.didekindroid.comunidad.ViewerDrawerMain.DynamicMenuItem.default_menu;
 import static com.didekindroid.comunidad.ViewerDrawerMain.DynamicMenuItem.rsIdToMenuItem;
+import static com.didekindroid.usuario.UsuarioBundleKey.user_alias;
 import static com.didekindroid.util.UIutils.doWrongMenuItem;
 
 /**
@@ -32,24 +36,24 @@ import static com.didekindroid.util.UIutils.doWrongMenuItem;
  * Time: 18:58
  */
 
-final class ViewerDrawerMain extends
-        Viewer<DrawerLayout, CtrlerAuthToken> {
+final class ViewerDrawerMain extends Viewer<DrawerLayout, CtrlerUsuario> {
 
-    private NavigationView navView;
-    private TextView drawerHeaderRot;
+    @SuppressWarnings("WeakerAccess")
+    TextView drawerHeaderRot;
+    NavigationView navView;
 
     private ViewerDrawerMain(DrawerLayout view, AppCompatActivity activity)
     {
         super(view, activity, null);
         navView = view.findViewById(R.id.drawer_main_nav_view);
-        drawerHeaderRot = view.findViewById(R.id.drawer_main_header_text);
+        drawerHeaderRot = navView.getHeaderView(0).findViewById(R.id.drawer_main_header_text);
     }
 
     static ViewerDrawerMain newViewerDrawerMain(AppCompatActivity activity)
     {
         Timber.d("newViewerDrawerMain()");
         ViewerDrawerMain instance = new ViewerDrawerMain(activity.<DrawerLayout>findViewById(R.id.drawer_main_layout), activity);
-        instance.setController(new CtrlerAuthToken());
+        instance.setController(new CtrlerUsuario());
         return instance;
     }
 
@@ -59,16 +63,41 @@ final class ViewerDrawerMain extends
     public void doViewInViewer(Bundle savedState, Serializable viewBean)
     {
         Timber.d("doViewInViewer()");
-//        drawerHeaderRot.setText();
+
+        if (controller.isRegisteredUser()) {
+            doViewForRegUser(savedState);
+        } else {
+            drawerHeaderRot.setVisibility(VISIBLE);
+            drawerHeaderRot.setText(R.string.app_name);
+        }
+
         navView.setNavigationItemSelectedListener(new DrawerMainMnItemSelListener());
         buildMenu(navView);
+    }
+
+    void doViewForRegUser(Bundle savedState)
+    {
+        if (savedState != null && savedState.containsKey(user_alias.key)) {
+            drawerHeaderRot.setText(savedState.getString(user_alias.key));
+        } else {
+            controller.loadUserData(new AbstractSingleObserver<Usuario>(this) {
+                @Override
+                public void onSuccess(Usuario usuario)
+                {
+                    drawerHeaderRot.setText(usuario.getAlias());
+                    drawerHeaderRot.setVisibility(VISIBLE);
+                }
+            });
+        }
     }
 
     @Override
     public void saveState(Bundle savedState)
     {
         super.saveState(savedState);
-
+        if (controller.isRegisteredUser()) {
+            savedState.putString(user_alias.key, drawerHeaderRot.getText().toString());
+        }
     }
 
     /* ==================================== Helpers ====================================*/

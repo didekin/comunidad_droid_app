@@ -26,12 +26,12 @@ import static java.lang.Boolean.TRUE;
  * Time: 11:19
  */
 
-public class UsuarioDaoObservable {
+class UsuarioDaoObservable {
 
     @SuppressWarnings("WeakerAccess")
     static final UsuarioDaoIf usuarioDao = usuarioDaoRemote;
 
-    public static Single<Boolean> deleteMeSingle()
+    static Single<Boolean> deleteMeSingle()
     {
         Timber.d("deleteMeSingle()");
 
@@ -44,7 +44,7 @@ public class UsuarioDaoObservable {
         }).map(cleanTokenAndUnregisterFunc);
     }
 
-    public static Single<Boolean> loginSingle(final Usuario usuario)
+    static Single<Boolean> loginSingle(final Usuario usuario)
     {
         Timber.d("loginSingle()");
         return fromCallable(new Callable<Boolean>() {
@@ -59,13 +59,13 @@ public class UsuarioDaoObservable {
     /**
      * It has a mock test implementation. It clears token in cache.
      */
-    public static Single<Boolean> loginPswdSendSingle(final Callable<Boolean> sendPswdCall)
+    static Single<Boolean> loginPswdSendSingle(final Callable<Boolean> sendPswdCall)
     {
         Timber.d("loginPswdSendSingle()");
         return fromCallable(sendPswdCall).doOnSuccess(cleanTkCacheConsumer);
     }
 
-    public static Single<Boolean> loginUpdateTkCache(final Usuario usuario)
+    static Single<Boolean> loginUpdateTkCache(final Usuario usuario)
     {
         Timber.d("loginUpdateTkCache()");
         return loginSingle(usuario).flatMap(new Function<Boolean, Single<Boolean>>() {
@@ -83,7 +83,7 @@ public class UsuarioDaoObservable {
     /**
      * Password change submitting the current password.
      */
-    public static Completable passwordChangeWithPswdValidation(final Usuario oldUser, final Usuario newUser)
+    static Completable passwordChangeWithPswdValidation(final Usuario oldUser, final Usuario newUser)
     {
         Timber.d("passwordChangeWithPswdValidation()");
         return oauthTokenFromUserPswd(oldUser)
@@ -112,9 +112,9 @@ public class UsuarioDaoObservable {
                 });
     }
 
-    public static Single<Usuario> userDataLoaded()
+    static Single<Usuario> userData()
     {
-        Timber.d("userDataLoaded()");
+        Timber.d("userData()");
         return fromCallable(new Callable<Usuario>() {
             @Override
             public Usuario call() throws Exception
@@ -124,7 +124,7 @@ public class UsuarioDaoObservable {
         });
     }
 
-    public static Completable userModifiedTkUpdated(final SpringOauthToken oldUserToken, final Usuario newUser)
+    static Completable userModifiedTkUpdated(final SpringOauthToken oldUserToken, final Usuario newUser)
     {
         Timber.d("userModifiedTkUpdated()");
         return Completable.fromCallable(new Callable<Integer>() {
@@ -136,7 +136,7 @@ public class UsuarioDaoObservable {
         }).andThen(oauthTokenAndInitCache(newUser));
     }
 
-    public static Single<Boolean> userModifiedWithPswdValidation(Usuario oldUser, final Usuario newUser)
+    static Single<Boolean> userModifiedWithPswdValidation(Usuario oldUser, final Usuario newUser)
     {
         Timber.d("userModifiedWithPswdValidation()");
         return oauthTokenFromUserPswd(oldUser)

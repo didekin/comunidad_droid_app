@@ -11,6 +11,12 @@ import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.observers.DisposableSingleObserver;
 import timber.log.Timber;
 
+import static com.didekindroid.usuario.dao.UsuarioDaoObservable.deleteMeSingle;
+import static com.didekindroid.usuario.dao.UsuarioDaoObservable.loginPswdSendSingle;
+import static com.didekindroid.usuario.dao.UsuarioDaoObservable.loginUpdateTkCache;
+import static com.didekindroid.usuario.dao.UsuarioDaoObservable.passwordChangeWithPswdValidation;
+import static com.didekindroid.usuario.dao.UsuarioDaoObservable.userData;
+import static com.didekindroid.usuario.dao.UsuarioDaoObservable.userModifiedWithPswdValidation;
 import static com.didekindroid.usuario.dao.UsuarioDaoRemote.usuarioDaoRemote;
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 import static io.reactivex.schedulers.Schedulers.io;
@@ -27,7 +33,7 @@ public class CtrlerUsuario extends Controller implements CtrlerUsuarioIf {
     {
         Timber.d("changePassword()");
         return subscriptions.add(
-                UsuarioDaoObservable.passwordChangeWithPswdValidation(oldUser, newUser)
+                passwordChangeWithPswdValidation(oldUser, newUser)
                         .subscribeOn(io())
                         .observeOn(mainThread())
                         .subscribeWith(observer)
@@ -38,7 +44,7 @@ public class CtrlerUsuario extends Controller implements CtrlerUsuarioIf {
     public boolean deleteMe(DisposableSingleObserver<Boolean> observer)
     {
         Timber.d("deleteMe()");
-        return subscriptions.add(UsuarioDaoObservable.deleteMeSingle()
+        return subscriptions.add(deleteMeSingle()
                 .subscribeOn(io())
                 .observeOn(mainThread())
                 .subscribeWith(observer));
@@ -49,7 +55,7 @@ public class CtrlerUsuario extends Controller implements CtrlerUsuarioIf {
     {
         Timber.d("loadUserData()");
         return subscriptions.add(
-                UsuarioDaoObservable.userDataLoaded()
+                userData()
                         .subscribeOn(io())
                         .observeOn(mainThread())
                         .subscribeWith(observer)
@@ -61,7 +67,7 @@ public class CtrlerUsuario extends Controller implements CtrlerUsuarioIf {
     {
         Timber.d("modifyUser()");
         return subscriptions.add(
-                UsuarioDaoObservable.userModifiedWithPswdValidation(oldUser, newUser)
+                userModifiedWithPswdValidation(oldUser, newUser)
                         .subscribeOn(io())
                         .observeOn(mainThread())
                         .subscribeWith(observer));
@@ -91,7 +97,7 @@ public class CtrlerUsuario extends Controller implements CtrlerUsuarioIf {
         Timber.d("sendNewPassword()");
 
         return subscriptions.add(
-                UsuarioDaoObservable.loginPswdSendSingle(sendPswdCall)    // Borra token in cache.
+                loginPswdSendSingle(sendPswdCall)    // Borra token in cache.
                         .subscribeOn(io())
                         .observeOn(mainThread())
                         .subscribeWith(observer)
@@ -103,7 +109,7 @@ public class CtrlerUsuario extends Controller implements CtrlerUsuarioIf {
     {
         Timber.i("validateLogin()");
         return subscriptions.add(
-                UsuarioDaoObservable.loginUpdateTkCache(usuario)
+                loginUpdateTkCache(usuario)
                         .subscribeOn(io())
                         .observeOn(mainThread())
                         .subscribeWith(observer)

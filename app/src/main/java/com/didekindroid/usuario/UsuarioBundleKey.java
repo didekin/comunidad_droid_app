@@ -12,6 +12,7 @@ public enum UsuarioBundleKey implements BundleKey {
 
     login_counter_atomic_int,
     user_name,
+    user_alias,
     usuario_object,
     ;
 
@@ -19,7 +20,7 @@ public enum UsuarioBundleKey implements BundleKey {
 
     UsuarioBundleKey()
     {
-        key = UsuarioBundleKey.class.getName().concat(this.name());
+        key = UsuarioBundleKey.class.getName().concat(name());
     }
 
     @Override

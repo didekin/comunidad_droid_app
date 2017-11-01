@@ -4,6 +4,7 @@ import android.support.design.widget.NavigationView;
 import android.support.test.espresso.assertion.ViewAssertions;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.didekindroid.R;
 import com.didekindroid.comunidad.ViewerDrawerMain.DynamicMenuItem;
@@ -31,13 +32,12 @@ abstract class ViewerDrawerMainTest {
 
     final int drawer_main_layout = R.id.drawer_main_layout;
     final int drawer_nav_view = R.id.drawer_main_nav_view;
-    NavigationView navView;
-    ComuSearchAc activity;
+    final int drawer_header_view = R.id.drawer_main_header_text;
     ViewerDrawerMain viewerDrawer;
 
     void checkMenuItems(boolean isVisibleEnabled)
     {
-        Menu drawerMn = navView.getMenu();
+        Menu drawerMn = viewerDrawer.navView.getMenu();
         MenuItem item;
         for (DynamicMenuItem menuItem : menuItemsToDraw) {
             item = drawerMn.findItem(menuItem.resourceId);

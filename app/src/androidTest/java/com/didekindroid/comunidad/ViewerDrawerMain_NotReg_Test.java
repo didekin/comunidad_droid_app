@@ -1,10 +1,12 @@
 package com.didekindroid.comunidad;
 
+import android.support.test.espresso.assertion.ViewAssertions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.view.Gravity;
 
-import com.didekindroid.security.CtrlerAuthToken;
+import com.didekindroid.R;
+import com.didekindroid.usuario.dao.CtrlerUsuario;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -15,11 +17,14 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.DrawerMatchers.isClosed;
 import static android.support.test.espresso.contrib.DrawerMatchers.isOpen;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.comunidad.ViewerDrawerMain.DynamicMenuItem.confidencialidad;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearchAcLayout;
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.confidencialidadLayout;
 import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
+import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.isA;
 import static org.junit.Assert.assertThat;
@@ -38,10 +43,8 @@ public class ViewerDrawerMain_NotReg_Test extends ViewerDrawerMainTest {
     @Before
     public void setUp()
     {
-        activity = activityRule.getActivity();
-        viewerDrawer = activity.viewerDrawer;
+        viewerDrawer = activityRule.getActivity().viewerDrawer;
         assertThat(viewerDrawer.getController().isRegisteredUser(), is(false));
-        navView = viewerDrawer.getViewInViewer().findViewById(drawer_nav_view);
     }
 
     //    ============================ TESTS ==============================
@@ -49,7 +52,17 @@ public class ViewerDrawerMain_NotReg_Test extends ViewerDrawerMainTest {
     @Test
     public void test_NewViewerDrawerMain() throws Exception
     {
-        assertThat(viewerDrawer.getController(), isA(CtrlerAuthToken.class));
+        assertThat(viewerDrawer.getController(), isA(CtrlerUsuario.class));
+    }
+
+    @Test
+    public void testDoViewInViewer()
+    {
+        clickNavigateUp();
+        onView(allOf(
+                withText(R.string.app_name),
+                withId(drawer_header_view)
+        )).check(ViewAssertions.matches(isDisplayed()));
     }
 
     @Test

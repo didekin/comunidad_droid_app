@@ -1,6 +1,7 @@
 package com.didekindroid.comunidad;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -13,7 +14,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.didekindroid.comunidad.ViewerDrawerMain.DynamicMenuItem.confidencialidad;
 import static com.didekindroid.comunidad.ViewerDrawerMain.DynamicMenuItem.incid_closed;
 import static com.didekindroid.comunidad.ViewerDrawerMain.DynamicMenuItem.incid_open;
@@ -23,12 +27,18 @@ import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.comuSearc
 import static com.didekindroid.comunidad.testutil.ComunidadNavConstant.confidencialidadLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeCloseAcLayout;
 import static com.didekindroid.incidencia.testutils.IncidNavigationTestConstant.incidSeeOpenAcLayout;
+import static com.didekindroid.testutil.ActivityTestUtils.clickNavigateUp;
+import static com.didekindroid.testutil.ActivityTestUtils.isViewDisplayed;
+import static com.didekindroid.usuario.UsuarioBundleKey.user_alias;
 import static com.didekindroid.usuario.testutil.UserNavigationTestConstant.userDataAcRsId;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.USER_PEPE;
 import static com.didekindroid.usuario.testutil.UsuarioDataTestUtils.cleanOneUser;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.COMU_PLAZUELA5_PEPE;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuDataTestUtil.signUpAndUpdateTk;
 import static com.didekindroid.usuariocomunidad.testutil.UserComuNavigationTestConstant.seeUserComuByUserFrRsId;
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.awaitility.Awaitility.waitAtMost;
+import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
@@ -59,10 +69,8 @@ public class ViewerDrawerMain_Reg_Test extends ViewerDrawerMainTest {
     @Before
     public void setUp()
     {
-        activity = intentRule.getActivity();
-        viewerDrawer = activity.viewerDrawer;
+        viewerDrawer = intentRule.getActivity().viewerDrawer;
         assertThat(viewerDrawer.getController().isRegisteredUser(), is(true));
-        navView = viewerDrawer.getViewInViewer().findViewById(drawer_nav_view);
     }
 
     @After
@@ -72,6 +80,51 @@ public class ViewerDrawerMain_Reg_Test extends ViewerDrawerMainTest {
     }
 
     //    ============================ TESTS ==============================
+
+    @Test
+    public void testDoViewInViewer()
+    {
+        clickNavigateUp();
+        waitAtMost(6, SECONDS).until(isViewDisplayed(
+                allOf(
+                        withText(USER_PEPE.getAlias()),
+                        withId(drawer_header_view)
+                )
+        ));
+    }
+
+    @Test
+    public void testDoViewForRegUser() throws InterruptedException
+    {
+        // Preconditions.
+        final Bundle bundleState = new Bundle(1);
+        bundleState.putString(user_alias.key, "MOCK_ALIAS");
+
+        // Exec.
+        intentRule.getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run()
+            {
+                viewerDrawer.doViewForRegUser(bundleState);
+            }
+        });
+        // Check.
+        clickNavigateUp();
+        waitAtMost(6, SECONDS).until(isViewDisplayed(
+                allOf(
+                        withText("MOCK_ALIAS"),
+                        withId(drawer_header_view)
+                )
+        ));
+    }
+
+    @Test
+    public void testSaveState()
+    {
+        Bundle bundleState = new Bundle(1);
+        viewerDrawer.saveState(bundleState);
+        assertThat(bundleState.getString(user_alias.key), is(USER_PEPE.getAlias()));
+    }
 
     /**
      * It tests implicitly ViewerDrawerMain.doViewInViewer() and  explicitly ViewerDrawerMain.buildMenu().
