@@ -124,7 +124,7 @@ public class PasswordChangeAcTest {
         onView(withId(R.id.password_validation_ediT)).check(matches(withText(containsString(""))))
                 .check(matches(withHint(R.string.user_data_ac_password_hint)))
                 .check(matches(isDisplayed()));
-        onView(withId(R.id.password_change_ac_button)).check(matches(withText(R.string.password_change_ac_button_txt)))
+        onView(withId(R.id.password_change_ac_button)).check(matches(withText(R.string.modif_button_rot)))
                 .check(matches(isDisplayed()));
 
         onView(withId(R.id.password_send_ac_button)).check(matches(withText(R.string.password_send_button_txt)))

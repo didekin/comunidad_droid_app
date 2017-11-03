@@ -20,6 +20,7 @@
     <string name="decimal_separator">,</string>
     <string name="navigate_up_txt">Desplazarse hacia arriba</string>
     <string name="modif_button_rot">Modificar</string>
+    <string name="continuar_button_rot">Continuar</string>
     <string name="borrar_button_rot">Borrar</string>
     <!--Messages-->
     <string name="no_internet_conn_toast">No hay conexión de red disponible.</string>
@@ -246,14 +247,14 @@
     <string name="login_label">Login</string>
     <string name="login_ac_rotulo">Inicio de sesión</string>
     <string name="login_ac_button_txt">Valida tus datos</string>
-
-    <string name="password_change_ac_label">Didekin</string>
+    <!-- ================== PasswordChangeAc ============== -->
     <string name="password_change_ac_rotulo">Nueva contraseña</string>
-    <string name="password_change_ac_button_txt">Cambia tu contraseña</string>
     <string name="password_send_txt">Si no recuerdas tu contraseña, podemos enviarte una nueva.</string>
     <string name="password_send_button_txt">Envío de nueva contraseña</string>
-    <!-- ================== PasswordChangeAc ============== -->
-    <string name="password_set_ac_label">Tu contraseña</string>
+    <!-- ================== PasswordSetAc ============== -->
+    <string name="password_ac_label">Tu contraseña</string>
+    <string name="cod_checkmail_text">Escribe el código de cuatro cifras que acabamos de enviarte por correo electrónico.</string>
+    <string name="cod_checkmail_hint">código</string>
     <!-- ================ RegUserAndUserComuAc =========== -->
     <string name="reg_user_and_usercomu_ac_label">Registro en comunidad</string>
     <!-- =========== RegComuAndUserAndUserComuAc ========= -->

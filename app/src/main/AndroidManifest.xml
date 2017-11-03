@@ -86,7 +86,7 @@
         </activity>
         <activity
             android:name=".usuario.password.PasswordChangeAc"
-            android:label="@string/password_change_ac_label"
+            android:label="@string/password_ac_label"
             android:parentActivityName=".usuario.userdata.UserDataAc">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -94,7 +94,7 @@
         </activity>
         <activity
             android:name=".usuario.password.PasswordSetAc"
-            android:label="@string/password_set_ac_label"
+            android:label="@string/password_ac_label"
             android:parentActivityName=".usuario.userdata.UserDataAc">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

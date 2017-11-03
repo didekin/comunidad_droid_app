@@ -1,7 +1,11 @@
-package com.didekindroid.testutil;
+package com.didekindroid.utils;
 
 import android.app.Activity;
+import android.content.res.Resources;
+import android.os.Build;
 import android.util.DisplayMetrics;
+
+import java.util.Locale;
 
 /**
  * User: pedro@didekin
@@ -9,7 +13,7 @@ import android.util.DisplayMetrics;
  * Time: 17:39
  */
 @SuppressWarnings("unused")
-public class DeviceTestUtils {
+public class DeviceUtil {
 
     private static int getWidthDevice(Activity activity)
     {
@@ -28,6 +32,21 @@ public class DeviceTestUtils {
     public static boolean is768by1232device(Activity activity)
     {
         return (getWidthDevice(activity) == 768 && getHightDevice(activity) == 1232);
+    }
+
+    static String getAppLanguage()
+    {
+        return Locale.getDefault().getLanguage();
+    }
+
+    static String getDeviceLanguage()
+    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return Resources.getSystem().getConfiguration().getLocales().get(0).toString();
+        } else {
+            //noinspection deprecation
+            return Resources.getSystem().getConfiguration().locale.toString();
+        }
     }
 }
 

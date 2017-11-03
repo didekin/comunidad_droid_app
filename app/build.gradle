@@ -11,12 +11,12 @@ android {
         versionCode 6
         versionName "a-0.6"
         testInstrumentationRunner rootProject.ext.testInstrumentationRunner
-        resConfigs "es", "en" /* Añadir nuevos idiomas según hagan falta.*/
+        resConfigs "es" /* , "en"  Añadir nuevos idiomas según hagan falta.*/
         vectorDrawables.useSupportLibrary = true
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     testOptions {

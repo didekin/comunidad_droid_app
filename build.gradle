@@ -40,10 +40,10 @@ ext {
     compileSdkVersion = 26
     buildToolsVersion = '26.0.2'
 
-    sourceCompatibilityVersion = JavaVersion.VERSION_1_7
-    targetCompatibilityVersion = JavaVersion.VERSION_1_7
+    sourceCompatibilityVersion = JavaVersion.VERSION_1_8
+    targetCompatibilityVersion = JavaVersion.VERSION_1_8
 
-    didekinlibsVersion = 'a-0.1.35'
+    didekinlibsVersion = 'a-0.2'
 
     didekinlib_model = ":didekinlib_model-$rootProject.ext.didekinlibsVersion:@jar"
     didekinlib_http = ":didekinlib_http-$rootProject.ext.didekinlibsVersion:@jar"

@@ -63,8 +63,13 @@
         <item name="android:textSize">@dimen/text_hint_size</item>
         <item name="android:textStyle">normal</item>
         <item name="android:imeOptions">actionNext</item>
-        <!--?attr/android:textColorPrimary-->
         <item name="android:textColor">?attr/colorPrimaryDark</item>
+    </style>
+
+    <style name="textBase.editField.codCheckMail">
+        <item name="android:maxEms">4</item>
+        <item name="android:inputType">number</item>
+        <item name="android:hint">@string/cod_checkmail_hint</item>
     </style>
 
     <style name="textBase.editField.email">
