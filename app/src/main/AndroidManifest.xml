@@ -93,14 +93,6 @@
                 android:value=".usuario.userdata.UserDataAc"/>
         </activity>
         <activity
-            android:name=".usuario.password.PasswordSetAc"
-            android:label="@string/password_ac_label"
-            android:parentActivityName=".usuario.userdata.UserDataAc">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".usuario.userdata.UserDataAc"/>
-        </activity>
-        <activity
             android:name=".usuariocomunidad.register.RegComuAndUserAndUserComuAc"
             android:label="@string/reg_comunidad_ac_label"
             android:parentActivityName=".comunidad.ComuSearchAc"
@@ -163,7 +155,7 @@
         </activity>
         <activity
             android:name=".usuario.userdata.UserDataAc"
-            android:label="@string/user_data_ac_label"
+            android:label="@string/user_data_ac_mn"
             android:parentActivityName=".usuariocomunidad.listbyuser.SeeUserComuByUserAc">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

@@ -2,6 +2,8 @@ package com.didekindroid.utils;
 
 import android.support.test.runner.AndroidJUnit4;
 
+import com.didekindroid.util.Device;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -24,6 +26,6 @@ public class DeviceUtilTest {
     @Test
     public void test_GetDeviceLanguage() throws Exception
     {
-        Timber.d("==================== Device language: %s ============================", DeviceUtil.getDeviceLanguage());
+        Timber.d("==================== Device language: %s ============================", Device.getDeviceLanguage());
     }
 }

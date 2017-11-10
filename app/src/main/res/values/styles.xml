@@ -66,12 +66,6 @@
         <item name="android:textColor">?attr/colorPrimaryDark</item>
     </style>
 
-    <style name="textBase.editField.codCheckMail">
-        <item name="android:maxEms">4</item>
-        <item name="android:inputType">number</item>
-        <item name="android:hint">@string/cod_checkmail_hint</item>
-    </style>
-
     <style name="textBase.editField.email">
         <item name="android:maxEms">60</item>
         <item name="android:inputType">textEmailAddress|textNoSuggestions</item>

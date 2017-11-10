@@ -1,11 +1,9 @@
 package com.didekindroid.utils;
 
 import android.app.Activity;
-import android.content.res.Resources;
-import android.os.Build;
 import android.util.DisplayMetrics;
 
-import java.util.Locale;
+import static java.util.Locale.getDefault;
 
 /**
  * User: pedro@didekin
@@ -36,18 +34,9 @@ public class DeviceUtil {
 
     static String getAppLanguage()
     {
-        return Locale.getDefault().getLanguage();
+        return getDefault().getLanguage();
     }
 
-    static String getDeviceLanguage()
-    {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            return Resources.getSystem().getConfiguration().getLocales().get(0).toString();
-        } else {
-            //noinspection deprecation
-            return Resources.getSystem().getConfiguration().locale.toString();
-        }
-    }
 }
 
 /* To get the screen size in inches, one we get width and height:

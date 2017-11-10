@@ -18,6 +18,7 @@ import timber.log.Timber;
 import static com.didekindroid.AppInitializer.creator;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.util.DaoUtil.getResponseBody;
+import static com.didekindroid.util.Device.getDeviceLanguage;
 import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
 
 /**
@@ -94,10 +95,10 @@ public class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDaoIf {
     }
 
     @Override
-    public Call<Boolean> passwordSend(String userName)
+    public Call<Boolean> passwordSend(String deviceLanguage, String userName)
     {
         Timber.d("passwordSend()");
-        return endPoint.passwordSend(userName);
+        return endPoint.passwordSend(deviceLanguage, userName);       // TODO: test.
     }
 
 //  =============================================================================
@@ -211,7 +212,7 @@ public class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDaoIf {
     {
         Timber.d("sendPassword(), Thread: %s", Thread.currentThread().getName());
         try {
-            return getResponseBody(passwordSend(email).execute());
+            return getResponseBody(passwordSend(getDeviceLanguage(), email).execute());  // TODO: test.
         } catch (IOException e) {
             throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
         }

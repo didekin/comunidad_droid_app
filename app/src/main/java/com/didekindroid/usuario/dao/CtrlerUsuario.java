@@ -77,13 +77,7 @@ public class CtrlerUsuario extends Controller implements CtrlerUsuarioIf {
     public boolean sendNewPassword(@NonNull DisposableSingleObserver<Boolean> observer, @NonNull final Usuario usuario)
     {
         Timber.d("sendNewPassword()");
-        Callable<Boolean> sendPswdCallable = new Callable<Boolean>() {
-            @Override
-            public Boolean call() throws Exception
-            {
-                return usuarioDaoRemote.sendPassword(usuario.getUserName());
-            }
-        };
+        Callable<Boolean> sendPswdCallable = () -> usuarioDaoRemote.sendPassword(usuario.getUserName());
         return sendNewPassword(sendPswdCallable, observer);
     }
 
