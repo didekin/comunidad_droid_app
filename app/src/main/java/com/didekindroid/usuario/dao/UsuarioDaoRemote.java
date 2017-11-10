@@ -212,7 +212,7 @@ public class UsuarioDaoRemote implements UsuarioEndPoints, UsuarioDaoIf {
     {
         Timber.d("sendPassword(), Thread: %s", Thread.currentThread().getName());
         try {
-            return getResponseBody(passwordSend(getDeviceLanguage(), email).execute());  // TODO: test.
+            return getResponseBody(passwordSend(getDeviceLanguage(), email).execute());
         } catch (IOException e) {
             throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
         }

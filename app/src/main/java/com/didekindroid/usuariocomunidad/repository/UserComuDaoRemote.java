@@ -18,6 +18,7 @@ import timber.log.Timber;
 import static com.didekindroid.AppInitializer.creator;
 import static com.didekindroid.security.TokenIdentityCacher.TKhandler;
 import static com.didekindroid.util.DaoUtil.getResponseBody;
+import static com.didekindroid.util.Device.getDeviceLanguage;
 import static com.didekinlib.http.GenericExceptionMsg.GENERIC_INTERNAL_ERROR;
 
 /**
@@ -83,10 +84,10 @@ public final class UserComuDaoRemote implements UsuarioComunidadEndPoints {
     }
 
     @Override
-    public Call<Boolean> regComuAndUserAndUserComu(UsuarioComunidad usuarioCom)
+    public Call<Boolean> regComuAndUserAndUserComu(String localeToStr, UsuarioComunidad usuarioCom)
     {
         Timber.d(("regComuAndUserAndUserComu()"));
-        return endPoint.regComuAndUserAndUserComu(usuarioCom);
+        return endPoint.regComuAndUserAndUserComu(localeToStr, usuarioCom);
     }
 
     @Override
@@ -96,10 +97,10 @@ public final class UserComuDaoRemote implements UsuarioComunidadEndPoints {
     }
 
     @Override
-    public Call<Boolean> regUserAndUserComu(UsuarioComunidad userCom)
+    public Call<Boolean> regUserAndUserComu(String localeToStr, UsuarioComunidad userCom)
     {
         Timber.d("regUserAndUserComu()");
-        return endPoint.regUserAndUserComu(userCom);
+        return endPoint.regUserAndUserComu(localeToStr, userCom);
     }
 
     @Override
@@ -191,6 +192,11 @@ public final class UserComuDaoRemote implements UsuarioComunidadEndPoints {
             throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
         }
     }
+    public Call<Boolean> regComuAndUserAndUserComu(UsuarioComunidad usuarioCom)
+    {
+        Timber.d(("regComuAndUserAndUserComu()"));
+        return endPoint.regComuAndUserAndUserComu(getDeviceLanguage(), usuarioCom);
+    }
 
     public boolean regComuAndUserComu(UsuarioComunidad usuarioComunidad) throws UiException
     {
@@ -202,6 +208,12 @@ public final class UserComuDaoRemote implements UsuarioComunidadEndPoints {
             throw new UiException(new ErrorBean(GENERIC_INTERNAL_ERROR));
         }
 
+    }
+
+    public Call<Boolean> regUserAndUserComu(UsuarioComunidad userCom)
+    {
+        Timber.d("regUserAndUserComu()");
+        return endPoint.regUserAndUserComu(getDeviceLanguage(), userCom);
     }
 
     public int regUserComu(UsuarioComunidad usuarioComunidad) throws UiException

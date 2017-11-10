@@ -11,7 +11,7 @@ import static java.util.Locale.getDefault;
  * Time: 17:39
  */
 @SuppressWarnings("unused")
-public class DeviceUtil {
+public class DeviceDebugUtil {
 
     private static int getWidthDevice(Activity activity)
     {
@@ -36,7 +36,6 @@ public class DeviceUtil {
     {
         return getDefault().getLanguage();
     }
-
 }
 
 /* To get the screen size in inches, one we get width and height:
